@@ -1,0 +1,34 @@
+# See http://help.github.com/ignore-files/ for more about ignoring files.
+
+# dependencies
+**/node_modules
+
+# IDEs and editors
+/.idea
+.project
+.classpath
+.c9/
+*.launch
+.settings/
+
+# IDE - VSCode
+.vscode/*
+!.vscode/tasks.json
+!.vscode/launch.json
+!.vscode/extensions.json
+.chrome
+
+# misc
+/connect.lock
+/coverage
+/typings
+npm-debug.log
+roller-debug.log
+testem.log
+
+# System Files
+.DS_Store
+Thumbs.db
+
+# Distribution folders
+dist

@@ -1,0 +1,28 @@
+{
+  "name": "ws-conventional-version-roller",
+  "version": "0.0.1",
+  "author": "Ghislain B.",
+  "license": "MIT",
+  "private": true,
+  "scripts": {
+    "clean": "rimraf --maxBusyTries=10 packages/*/dist dist",
+    "prebundle": "npm run clean",
+    "bundle": "npm run bundle --ws"
+  },
+  "engines": {
+    "node": ">=16.0.0",
+    "npm": ">=8.0.0"
+  },
+  "devDependencies": {
+    "@types/node": "^17.0.8",
+    "rimraf": "^3.0.2",
+    "ts-node": "^10.4.0",
+    "typescript": "^4.5.4"
+  },
+  "workspaces": [
+    "./packages/core",
+    "./packages/version",
+    "./packages/publish",
+    "./packages/cli"
+  ]
+}

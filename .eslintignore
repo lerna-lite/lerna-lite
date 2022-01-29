@@ -1,0 +1,16 @@
+*.css
+*.scss
+*.html
+*.png
+*.json
+*.js
+*.d.ts
+*.map
+*.md
+*.zip
+*.spec.ts
+**/**/*.json
+**/**/*.js
+**/__tests__/*.*
+**/dist/**/*.*
+**/packages/**/*.js

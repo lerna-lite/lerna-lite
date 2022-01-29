@@ -1,0 +1,21 @@
+{
+  "packages": [
+    "packages/*"
+  ],
+  "version": "0.0.1",
+  "command": {
+    "publish": {
+      "conventionalCommits": true
+    },
+    "version": {
+      "conventionalCommits": true,
+      "message": "chore(release): publish new version %v",
+      "changelog": true,
+      "gitDryRun": true,
+      "gitTagVersion": true,
+      "push": true,
+      "yes": false
+    }
+  },
+  "loglevel": "info"
+}
