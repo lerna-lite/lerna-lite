@@ -11,7 +11,7 @@
       "conventionalCommits": true,
       "message": "chore(release): publish new version %v",
       "changelog": true,
-      "gitDryRun": true,
+      "gitDryRun": false,
       "gitTagVersion": true,
       "push": true,
       "yes": false
