@@ -13,8 +13,8 @@ export interface BaseChangelogOptions {
 }
 
 export interface CommandOptions {
-  runPublish?: boolean;
-  runVersion?: boolean;
+  rollPublish?: boolean;
+  rollVersion?: boolean;
 }
 
 /** Provided to any execa-based call */
