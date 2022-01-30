@@ -9,7 +9,7 @@
       "program": "${workspaceFolder}/node_modules/@ws-conventional-version-roller/cli/dist/index.js",
       "args": [
         "${relativeFile}",
-        "--run-version"
+        "--roll-version"
       ],
       "request": "launch",
       "skipFiles": [
@@ -23,7 +23,7 @@
       "request": "launch",
       "args": [
         "${relativeFile}",
-        "--run-publish"
+        "--roll-publish"
       ],
       "runtimeArgs": [
         "-r",

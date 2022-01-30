@@ -1,7 +1,4 @@
 {
-  "packages": [
-    "packages/*"
-  ],
   "version": "0.1.1",
   "command": {
     "publish": {
@@ -10,8 +7,12 @@
     },
     "version": {
       "conventionalCommits": true,
-      "message": "chore(release): publish new version %v"
+      "message": "chore(release): publish new version %v",
+      "changelogHeaderMessage": "Automate your Workspace Version & Publish via [ws-conventional-version-roller](https://github.com/ghiscoding/ws-conventional-version-roller)"
     }
   },
+  "packages": [
+    "packages/*"
+  ],
   "loglevel": "info"
 }
