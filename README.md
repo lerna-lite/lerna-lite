@@ -26,7 +26,10 @@ The vast majority of the code come from [Lerna](https://github.com/lerna/lerna) 
 ### Usage
 Open a shell in the root of your monorepo workspace project and run the following NodeJS command
 ```bash
+# roll a version
  node ./node_modules/@ws-conventional-version-roller/cli/dist/index.js --run-version
+# roll a publish
+ node ./node_modules/@ws-conventional-version-roller/cli/dist/index.js --run-publish
 ```
 **NOTE** I wish to eventually add a CLI to make this easier, but for now that will do
 
