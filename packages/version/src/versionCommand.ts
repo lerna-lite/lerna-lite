@@ -548,6 +548,8 @@ export class VersionCommand extends Command {
           changelogPreset,
           rootPath,
           tagPrefix: this.tagPrefix,
+          changelogHeaderMessage: this.options.changelogHeaderMessage,
+          changelogVersionMessage: this.options.changelogVersionMessage,
         }).then(({ logPath, newEntry }) => {
           // commit the updated changelog
           changedFiles.add(logPath);
@@ -584,6 +586,8 @@ export class VersionCommand extends Command {
             rootPath,
             tagPrefix: this.tagPrefix,
             version: this.globalVersion,
+            changelogHeaderMessage: this.options.changelogHeaderMessage,
+            changelogVersionMessage: this.options.changelogVersionMessage,
           }).then(({ logPath, newEntry }) => {
             // commit the updated changelog
             changedFiles.add(logPath);

@@ -6,8 +6,9 @@
     },
     "version": {
       "conventionalCommits": true,
+      "gitDryRun": false,
       "message": "chore(release): publish new version %v",
-      "changelogHeaderMessage": "Automate your Workspace Version & Publish via [ws-conventional-version-roller](https://github.com/ghiscoding/ws-conventional-version-roller)"
+      "changelogHeaderMessage": "Automate your Workspace Versions, Changelogs & Publish via [ws-conventional-version-roller](https://github.com/ghiscoding/ws-conventional-version-roller) 🚀"
     }
   },
   "packages": [
