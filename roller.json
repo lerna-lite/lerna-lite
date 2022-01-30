@@ -2,8 +2,7 @@
   "version": "0.1.1",
   "command": {
     "publish": {
-      "conventionalCommits": true,
-      "bump": "from-package"
+      "conventionalCommits": true
     },
     "version": {
       "conventionalCommits": true,

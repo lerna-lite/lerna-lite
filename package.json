@@ -10,7 +10,7 @@
     "bundle": "npm run bundle --ws",
     "preroll-version": "npm run bundle",
     "roll-version": "node ./packages/cli/dist/index.js --roll-version",
-    "roll-publish": "node ./packages/cli/dist/index.js --roll-publish"
+    "roll-publish": "node ./packages/cli/dist/index.js --roll-publish --bump from-package"
   },
   "homepage": "https://github.com/ghiscoding/ws-conventional-version-roller",
   "repository": {
