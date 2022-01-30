@@ -9,6 +9,9 @@
 ### Why and when to use this lib?
 You would use this lib when your project is an NPM/Yarn Workspace monorepo structure and you wish to automate Versioning and Publishing of all your packages by following the [Conventional Commits](https://www.conventionalcommits.org/) and also automatically create [Conventional-Changelog](https://github.com/conventional-changelog/conventional-changelog) for each of your package (and also a main changelog in the root).
 
+### Demo?
+You want to see a demo project? You're looking at it ;) Yes indeed, this lib was created as an NPM Workspace for that exact purpose of testing its own code and you can also see that it has its own [roller.json](/ghiscoding/ws-conventional-version-roller/blob/main/roller.json) as well.
+
 ### Inspiration
 The vast majority of the code come from [Lerna](https://github.com/lerna/lerna) and only 2 commands ([version](https://github.com/lerna/lerna/tree/main/commands/version#readme) and [publish](https://github.com/lerna/lerna/tree/main/commands/publish#readme)) were extracted from Lerna. This lib was mainly created to migrate Lerna projects to plain NPM/Yarn Workspace (also because Lerna is no longer maintained). Lerna is a fairly large library with lots of dependencies, however we no longer need all the features of Lerna especially so since NPM released their recent [NPM Workspaces](https://docs.npmjs.com/cli/v7/using-npm/workspaces) directly in NPM. However NPM/Yarn Workspace will never provide ways to automate versioning & publishing and this lib was created for that purpose.
 
@@ -28,7 +31,7 @@ Open a shell in the root of your monorepo workspace project and run the followin
 **NOTE** I wish to eventually add a CLI to make this easier, but for now that will do
 
 ### Configuration
-This lib requires a config file in order to do its job properly. It could come from a separate file `roller.json` in the root of your project OR a `"roller": {}` property directly under your `package.json`. 
+This lib requires a config file in order to do its job properly. It could come from a separate file `roller.json` (recommended) in the root of your project OR a `"roller": {}` property directly under your `package.json`. 
 
 #### Command Options
 - `version` same as Lerna [version options](https://github.com/lerna/lerna/tree/main/commands/version#readme)
