@@ -1,6 +1,6 @@
 {
   "name": "@ws-conventional-version-roller/cli",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "typings": "dist/index.d.ts",
@@ -26,9 +26,9 @@
     "npm": ">=8.0.0"
   },
   "dependencies": {
-    "@ws-conventional-version-roller/core": "^0.1.0",
-    "@ws-conventional-version-roller/publish": "^0.1.0",
-    "@ws-conventional-version-roller/version": "^0.1.0",
+    "@ws-conventional-version-roller/core": "^0.1.1",
+    "@ws-conventional-version-roller/publish": "^0.1.1",
+    "@ws-conventional-version-roller/version": "^0.1.1",
     "npmlog": "^6.0.0",
     "yargs": "^17.3.1"
   },
