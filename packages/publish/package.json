@@ -1,6 +1,6 @@
 {
   "name": "@ws-conventional-version-roller/publish",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "typings": "dist/index.d.ts",
@@ -29,8 +29,8 @@
     "npm": ">=8.0.0"
   },
   "dependencies": {
-    "@ws-conventional-version-roller/core": "^0.1.1",
-    "@ws-conventional-version-roller/version": "^0.1.1",
+    "@ws-conventional-version-roller/core": "^0.1.2",
+    "@ws-conventional-version-roller/version": "^0.1.2",
     "byte-size": "^8.1.0",
     "columnify": "^1.5.4",
     "crypto": "^1.0.1",
