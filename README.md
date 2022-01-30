@@ -39,6 +39,7 @@ This lib requires a config file in order to do its job properly. It could come f
 #### Command Options
 - `version` same as Lerna [version options](https://github.com/lerna/lerna/tree/main/commands/version#readme)
 - `publish` same as Lerna [publish options](https://github.com/lerna/lerna/tree/main/commands/publish#readme)
+   - if it's your first time publishing your monorepo, you might want to double-check your [publishConfig](https://docs.npmjs.com/cli/v6/configuring-npm/package-json#publishconfig) access
 #### New Options
 On top of Lerna's options, we added a few more options that might be useful
 - `--git-dry-run` (shell) OR `"gitDryRun": true` (config file)

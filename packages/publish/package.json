@@ -7,6 +7,9 @@
   "files": [
     "/dist"
   ],
+  "publishConfig": {
+    "access": "public"
+  },
   "scripts": {
     "bundle": "tsc --project tsconfig.bundle.json"
   },
