@@ -10,6 +10,21 @@
   "scripts": {
     "bundle": "tsc --project tsconfig.bundle.json"
   },
+  "license": "MIT",
+  "author": "Ghislain B.",
+  "homepage": "https://github.com/ghiscoding/ws-conventional-version-roller",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/ghiscoding/ws-conventional-version-roller.git",
+    "directory": "packages/core"
+  },
+  "bugs": {
+    "url": "https://github.com/ghiscoding/ws-conventional-version-roller/issues"
+  },
+  "engines": {
+    "node": ">=16.0.0",
+    "npm": ">=8.0.0"
+  },
   "dependencies": {
     "@octokit/rest": "^18.12.0",
     "async": "^3.2.3",

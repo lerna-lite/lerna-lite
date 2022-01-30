@@ -9,6 +9,14 @@
     "prebundle": "npm run clean",
     "bundle": "npm run bundle --ws"
   },
+  "homepage": "https://github.com/ghiscoding/ws-conventional-version-roller",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/ghiscoding/ws-conventional-version-roller.git"
+  },
+  "bugs": {
+    "url": "https://github.com/ghiscoding/ws-conventional-version-roller/issues"
+  },
   "engines": {
     "node": ">=16.0.0",
     "npm": ">=8.0.0"
