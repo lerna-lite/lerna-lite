@@ -7,7 +7,9 @@
   "scripts": {
     "clean": "rimraf --maxBusyTries=10 packages/*/dist dist",
     "prebundle": "npm run clean",
-    "bundle": "npm run bundle --ws"
+    "bundle": "npm run bundle --ws",
+    "new-version": "node ./packages/cli/dist/index.js --run-version",
+    "publish": "node ./packages/cli/dist/index.js --run-publish"
   },
   "homepage": "https://github.com/ghiscoding/ws-conventional-version-roller",
   "repository": {
