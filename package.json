@@ -1,6 +1,5 @@
 {
   "name": "ws-conventional-version-roller",
-  "version": "0.0.1",
   "author": "Ghislain B.",
   "license": "MIT",
   "private": true,
