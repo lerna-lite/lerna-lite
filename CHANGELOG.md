@@ -1,7 +1,15 @@
 # Change Log
+Automate your Workspace Versions, Changelogs & Publish via [ws-conventional-version-roller](https://github.com/ghiscoding/ws-conventional-version-roller) 🚀
 
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
+
+## [0.1.3](https://github.com/ghiscoding/ws-conventional-version-roller/compare/v0.1.2...v0.1.3) (2022-01-30)
+
+### Bug Fixes
+
+* **changelog:** add missing options for changelog header msg ([506505e](https://github.com/ghiscoding/ws-conventional-version-roller/commit/506505ed330869c1792d2a4f9cbf345f4aa9731c))
+
 
 ## [0.1.2](https://github.com/ghiscoding/ws-conventional-version-roller/compare/v0.1.1...v0.1.2) (2022-01-30)
 
