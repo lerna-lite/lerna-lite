@@ -86,7 +86,7 @@ export function npmPublish(pkg, tarFilePath, options = {}, otpCache) {
 
       return otplease((innerOpts) => publish(manifest, tarData, innerOpts), opts, otpCache).catch((err) => {
         opts.log.silly('', err);
-        opts.log.error(err.code, (err.body && err.body.error) || err.message);
+        opts.log.error(err.code, err.body?.error ?? err.message);
 
         // avoid dumping logs, this isn't a lerna problem
         err.name = 'ValidationError';

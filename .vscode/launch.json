@@ -23,7 +23,7 @@
       "request": "launch",
       "args": [
         "${relativeFile}",
-        "--run-version"
+        "--run-publish"
       ],
       "runtimeArgs": [
         "-r",

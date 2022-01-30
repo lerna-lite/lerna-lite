@@ -598,9 +598,7 @@ export class PublishCommand extends Command {
 
     return Promise.resolve()
       .then(() => getOneTimePassword('Enter OTP:'))
-      .then((otp) => {
-        this.otpCache.otp = otp;
-      });
+      .then((otp) => this.otpCache.otp = otp);
   }
 
   topoMapPackages(mapper) {
