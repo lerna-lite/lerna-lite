@@ -10,13 +10,15 @@
 ### Why and when to use this lib?
 You would use this lib when your project is an NPM/Yarn Workspace monorepo structure and you wish to automate Versioning and Publishing of all your packages by following the [Conventional Commits](https://www.conventionalcommits.org/) and also automatically create [Conventional-Changelog](https://github.com/conventional-changelog/conventional-changelog) for each of your package (and also a main changelog in the root).
 
-This lib will help to
+This lib will help you to
 - Automate rolling new Versions for all your packages
 - Automate the creations of Changelog by reading all [Conventional Commits](https://www.conventionalcommits.org/)
 - Automate the Publish of your new versions for all your packages
 
 ### Demo?
-You want to see a demo project? Well, you're looking at it ;) Yes indeed, this lib was created specifically as an NPM Workspace for the exact purpose of testing and demoing its own code. How sweet is that? You will also find that it has its own [roller.json](/ghiscoding/ws-conventional-version-roller/blob/main/roller.json) config file as well (the same as you).
+You want to see a demo project? Well, you're looking at it 😉 
+
+Yes indeed, this lib was created as an NPM Workspace specifically to test and demo the use of its own code. How sweet is that? You will also find that it has its own [roller.json](/ghiscoding/ws-conventional-version-roller/blob/main/roller.json) config file as well (which you will also need).
 
 ### Inspiration
 The vast majority of the code come from [Lerna](https://github.com/lerna/lerna) and only 2 commands ([version](https://github.com/lerna/lerna/tree/main/commands/version#readme) and [publish](https://github.com/lerna/lerna/tree/main/commands/publish#readme)) were extracted from Lerna (thanks to the Lerna maintainers for all their great work). 
@@ -31,14 +33,14 @@ This lib was mainly created to migrate Lerna projects to plain NPM/Yarn Workspac
 - [Q] Coming from Lerna, can I use my `lerna.json` file without any changes?
    - [A] Yes you can, the settings are the same but we still recommend to renaming the config file to `roller.json`
 
-### Installation
+## Installation
 ```bash
 npm install @ws-conventional-version-roller/cli
 ```
-**NOTE** the `cli` name might be confusing since that is not really a CLI (not yet) but that should come very soon and it will be located under the same package, for now it is still the lib entry point.
+**Note:** the `cli` name might be confusing since that is not really a CLI (well not yet) but should come very soon and it will be located under the same package, for now it is still the lib entry point.
 
 ### Usage
-Add the following NPM Scripts or simply run the following NodeJS command in a shell.
+Add the following NPM Scripts or simply run the following NodeJS command in your shell.
 ```js
 // package.json / npm scripts
 "scripts": {
@@ -53,21 +55,24 @@ This lib requires a config file in order to do its job properly. It could come f
 #### Command Options
 - `version` same as Lerna [version options](https://github.com/lerna/lerna/tree/main/commands/version#readme)
 - `publish` same as Lerna [publish options](https://github.com/lerna/lerna/tree/main/commands/publish#readme)
-   - if it's your first time publishing your monorepo, you might want to double-check your [publishConfig](https://docs.npmjs.com/cli/v6/configuring-npm/package-json#publishconfig) access
+   - make sure to double-check your [publishConfig](https://docs.npmjs.com/cli/v6/configuring-npm/package-json#publishconfig access before publishing
 
-#### For Lerna Users
-If you are migrating from Lerna, it will also work with a `lerna.json` but it is recommended to eventually rename that file to `roller.json` since Lerna config file might be deprecated in the future. However please note that `"lerna": {}` will **not** work.
+**Note:** I did not personally try all options, Lerna added so many options over the years but they should all work. Take a look at Lerna's [issues](https://github.com/lerna/lerna/issues) if you have any problem with your setup.
+
+#### For [Lerna](https://github.com/lerna/lerna) Users
+If you are migrating from Lerna, it will also work with a `lerna.json` **but** it is strongly recommended to eventually rename that file to `roller.json` since Lerna config file might be deprecated in the future. However please note that `"lerna": {}` will **not** work.
 
 #### New Options
 On top of Lerna's existing options, we added a few more options that might be useful
 - `--git-dry-run` (shell) OR `"gitDryRun": true` (config file)
   - will run the version/publish command and log (info) all the git commands but without executing them
   - Note: it will still create the changelogs (if you have the option enabled), so it could be useful to see what get created (homewever, make sure to discard the changes after you're done)
-- Version onlyy options
+- "Version" only options
   - `--changelog-header-message "My Custom Header Message"` (shell) OR `"changelogHeaderMessage": "My Custom Header Message"`
     - this will be written, only once, at the top of all your changelog files (e.g.: a good example is to add reference to your website)
+    - you can see a live example from our very own [changelog](https://github.com/ghiscoding/ws-conventional-version-roller/blob/main/CHANGELOG.md)
   - `--changelog-version-message "My custom message for each version"` (shell) OR `"changelogHeaderMessage": "My custom message for each version"`
     - this will be written as a prefix to your version change (e.g.: for example, provide more info about the new version changes)
 
 ### Troubleshooting
-If you have problems running the lib, you should first look at the `--git-dry-run` option to see if that helps in finding the error. Another great, and possibly much more useful suggestion, is to search in the Lerna [issues](https://github.com/lerna/lerna/issues) because most of the code came originally from that library. Lastly if it that is not enough and you wish to troubleshoot yourself, then read this [Troubleshooting - Wiki](https://github.com/ghiscoding/ws-conventional-version-roller/wiki/Troubleshooting)
+If you have problems running the lib and your problems are with Git then you should first try the `--git-dry-run` option to see if that helps in finding the error. Another great, and possibly much more useful suggestion, is to search in the Lerna [issues](https://github.com/lerna/lerna/issues) because most of the code came from that library. Lastly if it that is not enough and you wish to troubleshoot yourself, then read this [Troubleshooting - Wiki](https://github.com/ghiscoding/ws-conventional-version-roller/wiki/Troubleshooting)
