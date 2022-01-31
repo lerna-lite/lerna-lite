@@ -1,0 +1,46 @@
+name: CI Build
+on:
+  # Trigger the workflow on push or pull request,
+  # but only for the main branch on Push and any branches on PR
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - '**'
+env:
+  CI: true
+  PREFERRED_WORKSPACE_MANAGER: npm
+
+jobs:
+  run:
+    name: Node ${{ matrix.node }}
+    runs-on: ubuntu-latest
+
+    strategy:
+      fail-fast: false
+      matrix:
+        node: [14]
+
+    steps:
+      - name: Clone repository
+        uses: actions/checkout@v2
+        with:
+          fetch-depth: 3
+
+      - name: Cache multiple paths
+        uses: actions/cache@v2
+        with:
+          path: |
+            ~/cache
+            !~/cache/exclude
+          key: ${{ runner.os }}-${{ hashFiles('**/lockfiles') }}
+
+      - run: node --version
+      - run: npm --version
+
+      - name: Install NPM dependencies
+        run: npm install
+
+      - name: Run Full Workspace Build
+        run: npm run build

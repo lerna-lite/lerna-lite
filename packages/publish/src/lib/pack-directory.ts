@@ -16,7 +16,7 @@ import { getPacked } from './get-packed';
 export function packDirectory(_pkg: Package, dir: string, options: PackConfig) {
   const pkg = Package.lazy(_pkg, dir);
   const opts = {
-    //@ts-ignore
+    // @ts-ignore
     log,
     ...options,
   };
