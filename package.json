@@ -5,9 +5,10 @@
   "private": true,
   "scripts": {
     "clean": "rimraf --maxBusyTries=10 packages/*/dist dist",
-    "prebundle": "npm run clean",
-    "bundle": "npm run bundle --ws",
-    "preroll-version": "npm run bundle",
+    "prebuild": "run-s clean lint",
+    "build": "npm run build --ws",
+    "lint": "eslint packages/** --ext .ts",
+    "preroll-version": "echo MAKE SURE TO RUN A BUILD BEFORE RELEASING A NEW VERSION",
     "roll-version": "node ./packages/cli/dist/index.js --roll-version",
     "roll-publish": "node ./packages/cli/dist/index.js --roll-publish --bump from-package"
   },
@@ -25,6 +26,12 @@
   },
   "devDependencies": {
     "@types/node": "^17.0.8",
+    "@typescript-eslint/eslint-plugin": "^5.8.1",
+    "@typescript-eslint/parser": "^5.8.1",
+    "eslint": "^8.6.0",
+    "eslint-plugin-import": "^2.25.3",
+    "eslint-plugin-prefer-arrow": "^1.2.3",
+    "npm-run-all": "^4.1.5",
     "rimraf": "^3.0.2",
     "ts-node": "^10.4.0",
     "typescript": "^4.5.4"
