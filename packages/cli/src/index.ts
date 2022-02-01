@@ -1,3 +1,4 @@
+import 'dotenv/config';
 import { argv } from 'yargs';
 import log from 'npmlog';
 

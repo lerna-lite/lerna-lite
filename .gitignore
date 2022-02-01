@@ -32,3 +32,6 @@ Thumbs.db
 
 # Distribution folders
 dist
+
+# Environment variables
+.env
