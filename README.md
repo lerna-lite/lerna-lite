@@ -13,21 +13,21 @@ You would use this lib when your project is an NPM/Yarn Workspace monorepo struc
 
 This lib will help you to
 - Automate the rolling of new Versions (independent or fixed) for all your packages
-  - it will create Git tags & commits
+  - it will automatically add Commit & Tag your new version in Git and even create a new release in GitHub if you want it to
 - Automate the creation of Changelogs for all your packages by reading all [Conventional Commits](https://www.conventionalcommits.org/)
   - each package will get its own changelog and a combined changelog will also be created in the root
 - Automate the repository Publish of your new versions for all your packages
-  - it could push to NPM or any other repository
+  - it could push to NPM or any other repository type
 
 ### Demo?
 You want to see a demo project? Well, you're looking at it 😉 
 
-Yes indeed, this lib was created as an NPM Workspace specifically for the purpose of demoing and testing its own own code. All changelogs and published versions were created by the lib itself, how sweet is that? You will also find that it has its own [roller.json](https://github.com/ghiscoding/ws-conventional-version-roller/blob/main/roller.json) config file just as well as you will. 
+Yes indeed, this lib was created as an NPM Workspace specifically for the purpose of demoing and testing its own own code. All changelogs and published versions were created by the lib itself, how sweet is that? You will also find that it has its own [roller.json](https://github.com/ghiscoding/ws-conventional-version-roller/blob/main/roller.json) config file just as well as you when you start using it. 
 
 ### Inspiration
 The vast majority of the code comes from [Lerna](https://github.com/lerna/lerna), however only 2 of these commands were of interest ([version](https://github.com/lerna/lerna/tree/main/commands/version#readme) and [publish](https://github.com/lerna/lerna/tree/main/commands/publish#readme)) and all related code were extracted from Lerna (thanks to the [Lerna](https://github.com/lerna/lerna) maintainers for all their great work). 
 
-This creation of this lib came from a desire of migrating Lerna projects to plain NPM/Yarn Workspace (also because Lerna is no longer maintained). Lerna is a fairly large library with lots of outdated dependencies, however with the recent addition of [NPM Workspaces](https://docs.npmjs.com/cli/v7/using-npm/workspaces) we no longer need all the features of Lerna, however NPM/Yarn Workspace will never provide scripts for automating the process of versioning & publishing and that is what this lib will help you with.
+This creation of this lib came from a desire of migrating Lerna projects to plain NPM/Yarn Workspace (also because Lerna is no longer maintained). Lerna is a fairly large library with lots of outdated dependencies, however with the recent addition of [NPM Workspaces](https://docs.npmjs.com/cli/v7/using-npm/workspaces) we no longer need all the features of Lerna but even then NPM/Yarn Workspace will never provide scripts for automating the process of versioning & publishing and that is what this lib will help you with.
 
 #### Questions & Answers
 - [Q] Coming from Lerna, can I use my `lerna.json` config file without any changes?
