@@ -40,7 +40,7 @@ jobs:
       - run: npm --version
 
       - name: Install NPM dependencies
-        run: npm install
+        run: npm ci
 
       - name: Run Full Workspace Build
         run: npm run build
