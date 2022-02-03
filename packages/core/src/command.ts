@@ -30,7 +30,7 @@ export class Command {
   composed;
   logger!: Logger;
   options: any;
-  project?: Project;
+  project!: Project;
   packageGraph?: PackageGraph;
   runner?: Promise<any>;
 
@@ -86,7 +86,7 @@ export class Command {
 
           // ValidationError does not trigger a log dump, nor do external package errors
           if (err.name !== 'ValidationError' && !err.pkg) {
-            writeLogFile(this.project?.rootPath);
+            writeLogFile(this.project.rootPath);
           }
 
           warnIfHanging();
@@ -175,7 +175,7 @@ export class Command {
 
   configureOptions() {
     // Command config object normalized to 'command' namespace
-    const commandConfig = this.project?.config.command || {};
+    const commandConfig = this.project.config.command || {};
 
     // The current command always overrides otherCommandConfigs
     const overrides = [this.name, ...this.otherCommandConfigs].map((key) => (commandConfig as any)[key]);
@@ -186,7 +186,7 @@ export class Command {
       // Namespaced command options from `roller.json` or `lerna.json`
       ...overrides,
       // Global options from `roller.json` or `lerna.json`
-      this.project?.config,
+      this.project.config,
       // Environmental defaults prepared in previous step
       this.envDefaults
     );
@@ -199,7 +199,7 @@ export class Command {
     this.toposort = sort === undefined || sort;
 
     this.execOpts = {
-      cwd: this.project?.rootPath ?? '',
+      cwd: this.project.rootPath ?? '',
       maxBuffer,
     };
   }
@@ -232,7 +232,7 @@ export class Command {
 
   gitInitialized() {
     const opts: execa.SyncOptions<string> = {
-      cwd: this.project?.rootPath ?? '',
+      cwd: this.project.rootPath ?? '',
       // don't throw, just want boolean
       reject: false,
       // only return code, no stdio needed
@@ -259,11 +259,11 @@ export class Command {
       throw new ValidationError('ENOGIT', 'The git binary was not found, or this is not a git repository.');
     }
 
-    if (!this.project?.manifest) {
+    if (!this.project.manifest) {
       throw new ValidationError('ENOPKG', 'No `package.json` file found, make sure it exist in the root of your project.');
     }
 
-    if (!this.project?.version) {
+    if (!this.project.version) {
       throw new ValidationError('ENOLERNA', 'Neither a `roller.json` file nor `lerna.json` exist, please create one in the root of your project.');
     }
 
@@ -280,7 +280,7 @@ export class Command {
   }
 
   async runPreparations() {
-    if (!this.composed && this.project?.isIndependent()) {
+    if (!this.composed && this.project.isIndependent()) {
       // composed commands have already logged the independent status
       log.info('versioning', 'independent');
     }
@@ -289,7 +289,7 @@ export class Command {
       log.info('ci', 'enabled');
     }
 
-    const packages = await this.project?.getPackages();
+    const packages = await this.project.getPackages();
     this.packageGraph = new PackageGraph(packages);
   }
 
