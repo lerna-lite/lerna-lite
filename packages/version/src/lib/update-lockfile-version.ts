@@ -10,7 +10,7 @@ import { Package, Project } from '@ws-conventional-version-roller/core';
  * @param {Object} project
  * @returns Promise
  */
-export async function updateLockfileVersion(pkg: Package, project: Project): Promise<string> {
+export async function updateLockfileVersion(pkg: Package, project: Project): Promise<string | null> {
   try {
     // "lockfileVersion" = 1, package lock file might be located in the package folder
     const lockFilePath = path.join(pkg.location, 'package-lock.json');
@@ -40,8 +40,9 @@ export async function updateLockfileVersion(pkg: Package, project: Project): Pro
       return projFilePath;
     }
   } catch (error) {
-    return '';
+    return null;
   }
+  return null;
 }
 
 /**
