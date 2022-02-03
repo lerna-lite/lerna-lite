@@ -11,8 +11,6 @@ import { Package, Project } from '@ws-conventional-version-roller/core';
  * @returns Promise
  */
 export async function updateLockfileVersion(pkg: Package, project: Project): Promise<string> {
-  let output = '';
-
   try {
     // "lockfileVersion" = 1, package lock file might be located in the package folder
     const lockFilePath = path.join(pkg.location, 'package-lock.json');
@@ -24,7 +22,7 @@ export async function updateLockfileVersion(pkg: Package, project: Project): Pro
         detectIndent: true,
         indent: 2,
       });
-      output = lockFilePath;
+      return lockFilePath;
     }
   } catch (error) { } // eslint-disable-line
 
@@ -39,12 +37,11 @@ export async function updateLockfileVersion(pkg: Package, project: Project): Pro
         detectIndent: true,
         indent: 2,
       });
+      return projFilePath;
     }
   } catch (error) {
-    return output;
+    return '';
   }
-
-  return output;
 }
 
 /**
