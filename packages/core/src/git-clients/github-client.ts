@@ -31,16 +31,13 @@ export function createGitHubClient() {
 
 export function parseGitRepo(remote = 'origin', opts, gitDryRun = false) {
   log.silly('parseGitRepo', '');
-
   const args = ['config', '--get', `remote.${remote}.url`];
-
   log.verbose('git', args.join(' '));
-
   const url = execSync('git', args, opts, gitDryRun);
 
-  if (!url) {
+  if (!url && !gitDryRun) {
     throw new Error(`Git remote URL could not be found using '${remote}'.`);
   }
 
-  return parseGitUrl(url);
+  return gitDryRun ? {} : parseGitUrl(url);
 }

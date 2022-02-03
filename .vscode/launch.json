@@ -35,12 +35,29 @@
       "type": "pwa-node"
     },
     {
-      "name": "Current TS File",
+      "name": "Current TS File (roll Publish)",
       "type": "node",
       "request": "launch",
       "args": [
         "${relativeFile}",
         "--roll-publish"
+      ],
+      "runtimeArgs": [
+        "-r",
+        "ts-node/register"
+      ],
+      "cwd": "${workspaceRoot}",
+      "protocol": "inspector",
+      "console": "integratedTerminal",
+      "internalConsoleOptions": "openOnSessionStart"
+    },
+    {
+      "name": "Current TS File (roll Version)",
+      "type": "node",
+      "request": "launch",
+      "args": [
+        "${relativeFile}",
+        "--roll-version"
       ],
       "runtimeArgs": [
         "-r",

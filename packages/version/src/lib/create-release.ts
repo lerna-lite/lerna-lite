@@ -1,3 +1,4 @@
+import log from 'npmlog';
 import semver from 'semver';
 
 import { createGitHubClient, createGitLabClient, parseGitRepo, ValidationError } from '@ws-conventional-version-roller/core';
@@ -22,8 +23,8 @@ export function createReleaseClient(type: string) {
  * @param {{ tags: string[]; releaseNotes: { name: string; notes: string; }[] }} commandProps
  * @param {{ gitRemote: string; execOpts: import('@lerna/child-process').ExecOpts }} opts
  */
-export function createRelease(client, { tags, releaseNotes }, { gitRemote, execOpts }) {
-  const repo = parseGitRepo(gitRemote, execOpts);
+export function createRelease(client, { tags, releaseNotes }, { gitRemote, execOpts }, gitDryRun = false) {
+  const repo = parseGitRepo(gitRemote, execOpts, gitDryRun);
 
   return Promise.all(
     releaseNotes.map(({ notes, name }) => {
@@ -35,6 +36,11 @@ export function createRelease(client, { tags, releaseNotes }, { gitRemote, execO
       }
 
       const prereleaseParts = semver.prerelease(tag.replace(`${name}@`, '')) || [];
+
+      if (gitDryRun) {
+        log.info('dry-run>', `Release Created`);
+        return {};
+      }
 
       return client.repos.createRelease({
         owner: repo.owner,

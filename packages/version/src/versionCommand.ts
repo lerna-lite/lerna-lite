@@ -119,8 +119,8 @@ export class VersionCommand extends Command {
   }
 
   async initialize() {
-    if (!this.project?.isIndependent()) {
-      this.logger.info('current project version', this.project?.version ?? '');
+    if (!this.project.isIndependent()) {
+      this.logger.info('current project version', this.project.version ?? '');
     }
 
     if (this.requiresGit) {
@@ -205,8 +205,8 @@ export class VersionCommand extends Command {
       );
     }
 
-    if (!this.project?.isIndependent()) {
-      this.logger.info('', `Looking for changed packages since ${this.tagPrefix}${this.project?.version}`);
+    if (!this.project.isIndependent()) {
+      this.logger.info('', `Looking for changed packages since ${this.tagPrefix}${this.project.version}`);
     }
     this.updates = Array.from(this.packageGraph?.values() ?? [])
       .filter((node) => {
@@ -289,7 +289,8 @@ export class VersionCommand extends Command {
       await createRelease(
         this.releaseClient,
         { tags: this.tags, releaseNotes: this.releaseNotes },
-        { gitRemote: this.options.gitRemote, execOpts: this.execOpts }
+        { gitRemote: this.options.gitRemote, execOpts: this.execOpts },
+        this.options.gitDryRun
       );
     } else {
       this.logger.info('execute', 'Skipping releases');
@@ -306,7 +307,7 @@ export class VersionCommand extends Command {
   }
 
   getVersionsForUpdates() {
-    const independentVersions = this.project?.isIndependent();
+    const independentVersions = this.project.isIndependent();
     const { bump, conventionalCommits, preid } = this.options;
     const repoVersion = bump ? semver.clean(bump) : '';
     const increment = bump && !semver.valid(bump) ? bump : '';
@@ -329,8 +330,8 @@ export class VersionCommand extends Command {
       predicate = (node) => semver.inc(node.version, increment, resolvePrereleaseId(node.prereleaseId));
     } else if (increment) {
       // compute potential prerelease ID once for all fixed updates
-      const prereleaseId = prereleaseIdFromVersion(this.project?.version);
-      const nextVersion = semver.inc(this.project?.version, increment, resolvePrereleaseId(prereleaseId));
+      const prereleaseId = prereleaseIdFromVersion(this.project.version);
+      const nextVersion = semver.inc(this.project.version, increment, resolvePrereleaseId(prereleaseId));
 
       predicate = makeGlobalVersionPredicate(nextVersion);
     } else if (conventionalCommits) {
@@ -341,8 +342,8 @@ export class VersionCommand extends Command {
       predicate = makePromptVersion(resolvePrereleaseId);
     } else {
       // prompt once with potential prerelease ID
-      const prereleaseId = prereleaseIdFromVersion(this.project?.version);
-      const node = { version: this.project?.version, prereleaseId };
+      const prereleaseId = prereleaseIdFromVersion(this.project.version);
+      const node = { version: this.project.version, prereleaseId };
 
       predicate = makePromptVersion(resolvePrereleaseId);
       predicate = predicate(node).then(makeGlobalVersionPredicate);
@@ -361,7 +362,7 @@ export class VersionCommand extends Command {
   }
 
   setUpdatesForVersions(versions: Map<string, string>) {
-    if (this.project?.isIndependent()) {
+    if (this.project.isIndependent()) {
       // only partial fixed versions need to be checked
       this.updatesVersions = versions;
     } else {
@@ -427,9 +428,9 @@ export class VersionCommand extends Command {
   }
 
   async recommendVersions(resolvePrereleaseId) {
-    const independentVersions = this.project?.isIndependent();
+    const independentVersions = this.project.isIndependent();
     const { changelogPreset, conventionalGraduate } = this.options;
-    const rootPath = this.project?.manifest.location;
+    const rootPath = this.project.manifest.location;
     const type = independentVersions ? 'independent' : 'fixed';
     const prereleasePackageNames = this.getPrereleasePackageNames();
     const graduatePackageNames = Array.from(this.getPackagesForOption(conventionalGraduate));
@@ -490,8 +491,8 @@ export class VersionCommand extends Command {
 
   updatePackageVersions() {
     const { conventionalCommits, changelogPreset, changelog = true } = this.options;
-    const independentVersions = this.project?.isIndependent();
-    const rootPath = this.project?.manifest.location;
+    const independentVersions = this.project.isIndependent();
+    const rootPath = this.project.manifest.location;
     const changedFiles = new Set();
 
     let chain: Promise<any> = Promise.resolve();
@@ -524,7 +525,7 @@ export class VersionCommand extends Command {
           }
         }
 
-        return Promise.all([updateLockfileVersion(pkg), pkg.serialize()]).then(([lockfilePath]) => {
+        return Promise.all([updateLockfileVersion(pkg, this.project), pkg.serialize()]).then(([lockfilePath]) => {
           // commit the updated manifest
           changedFiles.add(pkg.manifestLocation);
 
@@ -577,11 +578,11 @@ export class VersionCommand extends Command {
     );
 
     if (!independentVersions) {
-      this.project!.version = this.globalVersion;
+      this.project.version = this.globalVersion;
 
       if (conventionalCommits && changelog) {
         chain = chain.then(() =>
-          updateChangelog(this.project?.manifest, 'root', {
+          updateChangelog(this.project.manifest, 'root', {
             changelogPreset,
             rootPath,
             tagPrefix: this.tagPrefix,
@@ -602,7 +603,7 @@ export class VersionCommand extends Command {
       }
 
       chain = chain.then(() =>
-        this.project?.serializeConfig().then((lernaConfigLocation) => {
+        this.project.serializeConfig().then((lernaConfigLocation) => {
           // commit the version update
           changedFiles.add(lernaConfigLocation);
         })
@@ -623,7 +624,7 @@ export class VersionCommand extends Command {
 
 
   async commitAndTagUpdates() {
-    if (this.project?.isIndependent()) {
+    if (this.project.isIndependent()) {
       this.tags = await this.gitCommitAndTagVersionForUpdates();
     } else {
       this.tags = await this.gitCommitAndTagVersion();
@@ -669,7 +670,7 @@ export class VersionCommand extends Command {
   }
 
   setGlobalVersionFloor() {
-    const globalVersion = this.project?.version;
+    const globalVersion = this.project.version;
 
     for (const node of this.updates) {
       if (semver.lt(node.version, globalVersion)) {
@@ -684,7 +685,7 @@ export class VersionCommand extends Command {
   }
 
   setGlobalVersionCeiling(versions) {
-    let highestVersion = this.project?.version;
+    let highestVersion = this.project.version;
 
     versions.forEach((bump) => {
       if (bump && semver.gt(bump, highestVersion)) {
