@@ -1,6 +1,6 @@
 {
   "name": "@ws-conventional-version-roller/version",
-  "version": "0.1.7",
+  "version": "0.1.8",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "typings": "dist/index.d.ts",
@@ -29,7 +29,7 @@
     "npm": ">=8.0.0"
   },
   "dependencies": {
-    "@ws-conventional-version-roller/core": "^0.1.7",
+    "@ws-conventional-version-roller/core": "^0.1.8",
     "chalk": "^4.1.2",
     "dedent": "^0.7.0",
     "load-json-file": "^6.2.0",
