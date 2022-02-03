@@ -1,8 +1,15 @@
 # Change Log
-#### Automate your Workspace Versions, Changelogs & Publish with [ws-conventional-version-roller](https://github.com/ghiscoding/ws-conventional-version-roller) 🚀
+## Automate your Workspace Versions, Changelogs & Publish with [ws-conventional-version-roller](https://github.com/ghiscoding/ws-conventional-version-roller) 🚀
 
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
+
+## [0.1.7](https://github.com/ghiscoding/ws-conventional-version-roller/compare/v0.1.6...v0.1.7) (2022-02-03)
+
+### Bug Fixes
+
+* **version:** should update npm root lock file when lockfileVersion>=2 ([8bd41fc](https://github.com/ghiscoding/ws-conventional-version-roller/commit/8bd41fc76dea4e025b89380a5ef98c327f23368e))
+
 
 ## [0.1.4](https://github.com/ghiscoding/ws-conventional-version-roller/compare/v0.1.3...v0.1.4) (2022-02-01)
 
