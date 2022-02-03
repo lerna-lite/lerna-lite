@@ -19,10 +19,13 @@ This lib will help you to
 - Automate the repository Publish of your new versions for all your packages
   - it could push to NPM or any other repository type
 
-### Demo?
+### Project Demo?
 You want to see a demo project? Well, you're looking at it 😉 
 
 Yes indeed, this lib was created as an NPM Workspace specifically for the purpose of demoing and testing its own own code. All changelogs and published versions were created by the lib itself, how sweet is that? You will also find that it has its own [roller.json](https://github.com/ghiscoding/ws-conventional-version-roller/blob/main/roller.json) config file just as well as you when you start using it. 
+
+#### See it in Action 🎦
+You can see a small video of a new version release on this [Release Demo - Wiki](https://github.com/ghiscoding/ws-conventional-version-roller/wiki/Release-Demo)
 
 ### Inspiration
 The vast majority of the code comes from [Lerna](https://github.com/lerna/lerna), however only 2 of these commands were of interest ([version](https://github.com/lerna/lerna/tree/main/commands/version#readme) and [publish](https://github.com/lerna/lerna/tree/main/commands/publish#readme)) and all related code were extracted from Lerna (thanks to the [Lerna](https://github.com/lerna/lerna) maintainers for all their great work). 
