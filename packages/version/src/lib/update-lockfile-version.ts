@@ -18,6 +18,12 @@ export async function updateLockfileVersion(pkg: Package, project: Project): Pro
 
     if (pkgLockFileObj) {
       pkgLockFileObj.version = pkg.version;
+
+      // update version for a npm lockfile v2 format
+      if (pkgLockFileObj.packages?.['']) {
+        pkgLockFileObj.packages[''].version = pkg.version;
+      }
+
       await writeJsonFile(lockFilePath, pkgLockFileObj, {
         detectIndent: true,
         indent: 2,
