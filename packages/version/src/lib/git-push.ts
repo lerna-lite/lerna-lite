@@ -15,8 +15,8 @@ export function gitPush(remote: string, branch: string, opts: ExecOpts, gitDryRu
       // the error message _should_ be on stderr except when GIT_REDIRECT_STDERR has been configured to redirect
       // to stdout. More details in https://git-scm.com/docs/git#Documentation/git.txt-codeGITREDIRECTSTDERRcode
       if (
-        /atomic/.test(error.stderr) ||
-        (process.env.GIT_REDIRECT_STDERR === '2>&1' && /atomic/.test(error.stdout))
+        /does not support --atomic/.test(error.stderr) ||
+        (process.env.GIT_REDIRECT_STDERR === '2>&1' && /does not support --atomic/.test(error.stdout))
       ) {
         // childProcess.exec has propagated the error code to the process exit code --
         // we'll clear it here as it will not propagate a success code
