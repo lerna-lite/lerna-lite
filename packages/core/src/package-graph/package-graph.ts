@@ -1,12 +1,8 @@
 import npa from 'npm-package-arg';
 
-import { CyclicPackageGraphNode } from './lib/cyclic-package-graph-node';
-import { PackageGraphNode } from './lib/package-graph-node';
-import { reportCycles } from './lib/report-cycles';
-import { ValidationError } from '../validation-error';
+import { CyclicPackageGraphNode, PackageGraphNode, reportCycles } from './lib';
 import { Package } from '../package';
-
-/** @typedef {import("./lib/package-graph-node").PackageGraphNode} PackageGraphNode */
+import { ValidationError } from '../validation-error';
 
 /**
  * A graph of packages in the current project.
@@ -216,6 +212,9 @@ export class PackageGraph extends Map {
     /** @type {Set<CyclicPackageGraphNode>} */
     const cycles = new Set();
 
+    /** @type {Set<PackageGraphNode>} */
+    const alreadyVisited = new Set();
+
     /** @type {(PackageGraphNode | CyclicPackageGraphNode)[]} */
     const walkStack = [];
 
@@ -228,6 +227,12 @@ export class PackageGraph extends Map {
       while (nodeToCycle.has(topLevelDependent)) {
         topLevelDependent = nodeToCycle.get(topLevelDependent);
       }
+
+      // Otherwise the same node is checked multiple times which is very wasteful in a large repository
+      if (alreadyVisited.has(topLevelDependent)) {
+        return;
+      }
+      alreadyVisited.add(topLevelDependent);
 
       if (
         topLevelDependent === baseNode ||
