@@ -252,7 +252,7 @@ export class PublishCommand extends Command {
 
     const taggedPackageNames = await getCurrentTags(this.execOpts, matchingPattern, this.options.gitDryRun);
     if (!taggedPackageNames.length) {
-      this.logger.notice('from-git', 'No tagged release found');
+      this.logger.notice('from-git', 'No tagged release found. You might not have fetched tags.');
 
       return [];
     }
