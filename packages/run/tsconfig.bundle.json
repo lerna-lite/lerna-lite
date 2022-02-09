@@ -1,0 +1,14 @@
+{
+  "extends": "../tsconfig.bundle.json",
+  "compilerOptions": {
+    "typeRoots": [
+      "../typings",
+      "../../node_modules/@types"
+    ],
+    "outDir": "dist"
+  },
+  "include": [
+    "../typings",
+    "**/*"
+  ]
+}

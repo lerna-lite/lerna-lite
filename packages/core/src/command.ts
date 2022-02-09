@@ -19,7 +19,7 @@ const DEFAULT_CONCURRENCY = os.cpus().length;
 
 export class Command {
   argv: any;
-  concurrency?: number;
+  concurrency!: number;
   envDefaults: any;
   libVersion = '';
   sort: any;
