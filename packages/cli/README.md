@@ -3,7 +3,7 @@
 [![npm](https://img.shields.io/npm/v/@ws-conventional-version-roller/cli.svg?color=forest)](https://www.npmjs.com/package/@ws-conventional-version-roller/cli)
 [![npm](https://img.shields.io/npm/dy/@ws-conventional-version-roller/cli?color=forest)](https://www.npmjs.com/package/@ws-conventional-version-roller/cli)
 
-## Roller CLI
+## Roller Version/Publish comands CLI
 #### @ws-conventional-version-roller/cli
 
 This will eventually be a real CLI but for now it is the library main entry point to roll a new Version or Publish.

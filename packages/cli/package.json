@@ -1,5 +1,6 @@
 {
   "name": "@ws-conventional-version-roller/cli",
+  "description": "CLI for Version/Publish roller commands",
   "version": "0.1.8",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",

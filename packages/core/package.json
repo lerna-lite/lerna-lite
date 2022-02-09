@@ -1,5 +1,6 @@
 {
   "name": "@ws-conventional-version-roller/core",
+  "description": "ws-conventional-version-roller core implementation module",
   "version": "0.1.8",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
