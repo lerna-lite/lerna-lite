@@ -1,0 +1,50 @@
+{
+  "name": "@ws-conventional-version-roller/run",
+  "description": "ws-runner CLI to help running npm script in each package workspace that contains that script",
+  "version": "0.1.8",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "typings": "dist/index.d.ts",
+  "bin": {
+    "ws-runner": "dist/cli.js"
+  },
+  "files": [
+    "/dist"
+  ],
+  "publishConfig": {
+    "access": "public"
+  },
+  "scripts": {
+    "build": "tsc --project tsconfig.bundle.json"
+  },
+  "license": "MIT",
+  "author": "Ghislain B.",
+  "homepage": "https://github.com/ghiscoding/ws-conventional-version-roller",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/ghiscoding/ws-conventional-version-roller.git",
+    "directory": "packages/run"
+  },
+  "bugs": {
+    "url": "https://github.com/ghiscoding/ws-conventional-version-roller/issues"
+  },
+  "engines": {
+    "node": ">=16.11.0",
+    "npm": ">=8.0.0"
+  },
+  "dependencies": {
+    "@ws-conventional-version-roller/core": "^0.1.8",
+    "fs-extra": "^10.0.0",
+    "multimatch": "^5.0.0",
+    "npmlog": "^6.0.0",
+    "p-map": "^4.0.0",
+    "upath": "^2.0.1",
+    "yargs": "^17.3.1"
+  },
+  "devDependencies": {
+    "@types/execa": "^2.0.0",
+    "@types/node": "^17.0.8",
+    "@types/npmlog": "^4.1.4",
+    "@types/p-map": "^2.0.0"
+  }
+}

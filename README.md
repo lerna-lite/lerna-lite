@@ -12,13 +12,16 @@
 ### Why and when to use this lib?
 You would use this lib when your project is an NPM/Yarn Workspace monorepo structure and you wish to automate Versioning and Publishing of all your packages by following the [Conventional Commits](https://www.conventionalcommits.org/) and also automatically create [Conventional-Changelog](https://github.com/conventional-changelog/conventional-changelog) for each of your package (and also a main changelog in the root).
 
-This lib will help you to
+#### This lib will help you to:
 - Automate the rolling of new Versions (independent or fixed) for all your packages
   - it will automatically add Commit & Tag your new Version in Git & create new Release in GitHub when enabled
 - Automate the creation of Changelogs for all your packages by reading all [Conventional Commits](https://www.conventionalcommits.org/)
   - each package will get its own changelog and a combined changelog will also be created in the root
 - Automate the repository Publish of your new versions for all your packages
   - it could push to NPM or any other repository platform
+
+#### Extras:
+- [@ws-conventional-version-roller/run](https://github.com/ghiscoding/ws-conventional-version-roller/tree/main/packages/run) is an optional package that will help you run npm script in parallel and in topological order.
 
 ### Project Demo?
 You want to see a demo project? Well, you're looking at it 😉
@@ -60,8 +63,6 @@ Add the following NPM Scripts or simply run the following NodeJS command in your
 ### Configuration
 This lib requires a config file in order to do its job properly. It could come from a separate file (read [`roller.json` - Wiki](https://github.com/ghiscoding/ws-conventional-version-roller/wiki/Roller.json), recommended approach) in the root of your project OR a `"roller": {}` property directly under your `package.json`.
 
-**Note:** make sure to reference your workspace packages via the `packages: []` in the [roller.json](https://github.com/ghiscoding/ws-conventional-version-roller/blob/main/roller.json) config file, because at the moment the lib will **not** read the `workspaces` property yet (it might, probably will, in the future).
-
 #### Command Options
 - `version` same as Lerna [version options](https://github.com/lerna/lerna/tree/main/commands/version#readme)
 - `publish` same as Lerna [publish options](https://github.com/lerna/lerna/tree/main/commands/publish#readme)
@@ -88,3 +89,13 @@ On top of Lerna's existing options, we added a few more options that might be us
 
 ### Troubleshooting
 If you have problems running the lib and your problems are with Git then you should first try the `--git-dry-run` option to see if that helps in finding the error. Another great, and possibly much more useful suggestion, is to search in the Lerna [issues](https://github.com/lerna/lerna/issues) because most of the code came from that library. Lastly if it that is not enough and you wish to troubleshoot yourself, then read this [Troubleshooting - Wiki](https://github.com/ghiscoding/ws-conventional-version-roller/wiki/Troubleshooting)
+
+### Available Public Packages
+
+| Package Name | Version | Description | Changes |
+| -------------| ------- | ----------- | ------- |
+| [@ws-conventional-version-roller/cli](https://github.com/ghiscoding/ws-conventional-version-roller/tree/main/packages/cli) | [![npm](https://img.shields.io/npm/v/@ws-conventional-version-roller/cli.svg?color=forest)](https://www.npmjs.com/package/@ws-conventional-version-roller/cli) | Roller Version/Publish comands CLI | [changelog](https://github.com/ghiscoding/ws-conventional-version-roller/blob/main/packages/cli/CHANGELOG.md) |
+| [@ws-conventional-version-roller/core](https://github.com/ghiscoding/ws-conventional-version-roller/tree/main/packages/core) | [![npm](https://img.shields.io/npm/v/@ws-conventional-version-roller/core.svg?color=forest)](https://www.npmjs.com/package/@ws-conventional-version-roller/core) | Roller core & utils methods | [changelog](https://github.com/ghiscoding/ws-conventional-version-roller/blob/main/packages/core/CHANGELOG.md) |
+| [@ws-conventional-version-roller/publish](https://github.com/ghiscoding/ws-conventional-version-roller/tree/main/packages/publish) | [![npm](https://img.shields.io/npm/v/@ws-conventional-version-roller/publish.svg?color=forest)](https://www.npmjs.com/package/@ws-conventional-version-roller/publish) | Publish packages in the current workspace | [changelog](https://github.com/ghiscoding/ws-conventional-version-roller/blob/main/packages/publish/CHANGELOG.md) |
+| [@ws-conventional-version-roller/run](https://github.com/ghiscoding/ws-conventional-version-roller/tree/main/packages/run) | [![npm](https://img.shields.io/npm/v/@ws-conventional-version-roller/run.svg?color=forest)](https://www.npmjs.com/package/@ws-conventional-version-roller/run) | CLI to help running npm script in the workspace | [changelog](https://github.com/ghiscoding/ws-conventional-version-roller/blob/main/packages/run/CHANGELOG.md) |
+| [@ws-conventional-version-roller/version](https://github.com/ghiscoding/ws-conventional-version-roller/tree/main/packages/version) | [![npm](https://img.shields.io/npm/v/@ws-conventional-version-roller/version.svg?color=forest)](https://www.npmjs.com/package/@ws-conventional-version-roller/version) | Bump Version & write Changelogs | [changelog](https://github.com/ghiscoding/ws-conventional-version-roller/blob/main/packages/version/CHANGELOG.md) |

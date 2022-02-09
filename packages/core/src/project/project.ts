@@ -114,9 +114,11 @@ export class Project {
         );
       }
 
+      log.verbose('project workspaces packages', (workspaces.packages || workspaces).join(' '));
       return workspaces.packages || workspaces;
     }
 
+    log.verbose('project packages', (this.config.packages || [Project.PACKAGE_GLOB]).join(' '));
     return this.config.packages || [Project.PACKAGE_GLOB];
   }
 

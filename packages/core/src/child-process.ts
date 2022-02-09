@@ -14,11 +14,11 @@ const NUM_COLORS = colorWheel.length;
 // ever-increasing index ensures colors are always sequential
 let currentColor = 0;
 
-export function exec(command, args, opts, gitDryRun = false) {
+export function exec(command, args, opts, cmdDryRun = false) {
   const options = Object.assign({ stdio: 'pipe' }, opts);
-  const spawned = spawnProcess(command, args, options, gitDryRun);
+  const spawned = spawnProcess(command, args, options, cmdDryRun);
 
-  return gitDryRun ? Promise.resolve() : wrapError(spawned);
+  return cmdDryRun ? Promise.resolve() : wrapError(spawned);
 }
 
 // resultCallback?: (processResult: ChildProcessResult) => void
@@ -28,19 +28,19 @@ export function execSync(command: string, args?: string[], opts?: any, cmdDryRun
     : execa.sync(command, args, opts).stdout;
 }
 
-export function spawn(command, args, opts) {
+export function spawn(command, args, opts, cmdDryRun = false) {
   const options = Object.assign({}, opts, { stdio: 'inherit' });
-  const spawned = spawnProcess(command, args, options);
+  const spawned = spawnProcess(command, args, options, cmdDryRun);
 
   return wrapError(spawned);
 }
 
 // istanbul ignore next
-export function spawnStreaming(command, args, opts, prefix) {
+export function spawnStreaming(command, args, opts, prefix, cmdDryRun = false) {
   const options = Object.assign({}, opts);
   options.stdio = ['ignore', 'pipe', 'pipe'];
 
-  const spawned = spawnProcess(command, args, options) as execa.ExecaChildProcess<string>;
+  const spawned = spawnProcess(command, args, options, cmdDryRun) as execa.ExecaChildProcess<string>;
 
   const stdoutOpts: any = {};
   const stderrOpts: any = {}; // mergeMultiline causes escaped newlines :P
@@ -87,8 +87,8 @@ export function getExitCode(result) {
   throw new TypeError(`Received unexpected exit code value ${JSON.stringify(result.code)}`);
 }
 
-export function spawnProcess(command, args, opts, gitDryRun = false) {
-  if (gitDryRun) {
+export function spawnProcess(command, args, opts, cmdDryRun = false) {
+  if (cmdDryRun) {
     return logExecCommand(command, args);
   }
   const child: any = execa(command, args, opts);

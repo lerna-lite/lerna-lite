@@ -1,5 +1,8 @@
 {
   "version": "0.1.8",
+  "loglevel": "info",
+  "npmClient": "npm",
+  "useWorkspaces": true,
   "command": {
     "publish": {
       "conventionalCommits": true
@@ -12,9 +15,5 @@
       "message": "chore(release): publish new version %v",
       "changelogHeaderMessage": "### Automate your Workspace Versions, Changelogs & Publish with [ws-conventional-version-roller](https://github.com/ghiscoding/ws-conventional-version-roller) 🚀"
     }
-  },
-  "packages": [
-    "packages/*"
-  ],
-  "loglevel": "info"
+  }
 }
