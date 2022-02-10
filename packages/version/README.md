@@ -223,14 +223,14 @@ ws-roller version --conventional-commits --conventional-prerelease
 
 When run with this flag, `ws-roller version` will release with prerelease versions the specified packages (comma-separated) or all packages using `*`. Releases all unreleased changes as pre(patch/minor/major/release) by prefixing the version recommendation from `conventional-commits` with `pre`, eg. if present changes include a feature commit, the recommended bump will be `minor`, so this flag will result in a `preminor` release. If changes are present for packages that are not specified (if specifying packages), or for packages that are already in prerelease, those packages will be versioned as they normally would using `--conventional-commits`.
 
-### `changelog-header-message <msg>`
+### `--changelog-header-message <msg>`
 Add a custom message at the top of your "changelog.md" which is located in the root of your project. This option only works when using `--conventional-commits` and will only impact your project root "changelog.md".
 
 ```sh
 ws-roller version --changelog-header-message "My Custom Header Message"
 ```
 
-### `changelog-version-message <msg>`
+### `--changelog-version-message <msg>`
 Add a custom message as a prefix to your new version in your "changelog.md" which is located in the root of your project. This option only works when using `--conventional-commits` and will only impact your project root "changelog.md".
 
 ```sh
@@ -281,7 +281,7 @@ When run with this flag, `ws-roller version` will force publish the specified pa
 
 > This will skip the `ws-roller changed` check for changed packages and forces a package that didn't have a `git diff` change to be updated.
 
-### `git-dry-run`
+### `--git-dry-run`
 
 Displays the git command that would be performed without actually executing it, however please note that it will still create all the changelogs. This could be helpful for troubleshooting and also to see changelog changes without commiting them to Git.
 
