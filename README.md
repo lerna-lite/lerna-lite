@@ -12,7 +12,13 @@
 ### Why and when to use this lib?
 You would use this lib when your project is an NPM/Yarn Workspace monorepo structure and you wish to automate Versioning and Publishing of all your packages by following the [Conventional Commits](https://www.conventionalcommits.org/) and also automatically create [Conventional-Changelog](https://github.com/conventional-changelog/conventional-changelog) for each of your package (and also a main changelog in the root).
 
-#### This lib will help you to:
+### CLIs currently available
+| cli         | description |
+|-------------|-------------|
+| [ws-roller](https://github.com/ghiscoding/ws-conventional-version-roller/tree/main/packages/cli#installation) | create, publish new version in the workspace |
+| [ws-runner](https://github.com/ghiscoding/ws-conventional-version-roller/tree/main/packages/run#installation) | run npm script in each package of the workspace |
+
+### This lib will help you to:
 - Automate the rolling of new Versions (independent or fixed) for all your packages
   - it will automatically add Commit & Tag your new Version in Git & create new Release in GitHub when enabled
 - Automate the creation of Changelogs for all your packages by reading all [Conventional Commits](https://www.conventionalcommits.org/)
@@ -48,15 +54,15 @@ The creation of this lib came from a desire of migrating Lerna projects to plain
 ```bash
 npm install @ws-conventional-version-roller/cli
 ```
-**Note:** the `cli` name might be confusing since that is not really a CLI (well not yet) but should come very soon and it will be located under the same package but for now it is still the lib entry point.
+**Note:** the `ws-roller` CLI only has 2 commands available `publish` and `version`
 
 ### Usage
 Add the following NPM Scripts or simply run the following NodeJS command in your shell.
 ```js
 // package.json / npm scripts
 "scripts": {
-  "roll-version": "node ./node_modules/@ws-conventional-version-roller/cli/dist/index.js --roll-version",
-  "roll-publish": "node ./node_modules/@ws-conventional-version-roller/cli/dist/index.js --roll-publish"
+  "roll-version": "ws-roller version",
+  "roll-publish": "ws-roller publish from-package"
 }
 ```
 

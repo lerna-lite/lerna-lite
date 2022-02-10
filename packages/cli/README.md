@@ -14,5 +14,16 @@ This will eventually be a real CLI but for now it is the library main entry poin
 - [@ws-conventional-version-roller/publish](https://github.com/ghiscoding/ws-conventional-version-roller/tree/main/packages/publish)
 - [@ws-conventional-version-roller/version](https://github.com/ghiscoding/ws-conventional-version-roller/tree/main/packages/version)
 
-### Installation
-Follow the instruction provided in the main [README](https://github.com/ghiscoding/ws-conventional-version-roller#installation) page.
+## Installation 
+```sh
+# install globally
+npm install -g @ws-conventional-version-roller/cli
+
+# then use it `ws-roller <command>`
+ws-roller publish
+ws-roller version
+
+# OR use npx
+npx ws-roller publish
+npx ws-roller version
+```
