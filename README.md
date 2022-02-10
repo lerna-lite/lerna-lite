@@ -12,12 +12,6 @@
 ### Why and when to use this lib?
 You would use this lib when your project is an NPM/Yarn Workspace monorepo structure and you wish to automate Versioning and Publishing of all your packages by following the [Conventional Commits](https://www.conventionalcommits.org/) and also automatically create [Conventional-Changelog](https://github.com/conventional-changelog/conventional-changelog) for each of your package (and also a main changelog in the root).
 
-### CLIs currently available
-| cli         | description |
-|-------------|-------------|
-| [ws-roller](https://github.com/ghiscoding/ws-conventional-version-roller/tree/main/packages/cli#installation) | create, publish new version in the workspace |
-| [ws-runner](https://github.com/ghiscoding/ws-conventional-version-roller/tree/main/packages/run#installation) | run npm script in each package of the workspace |
-
 ### This lib will help you to:
 - Automate the rolling of new Versions (independent or fixed) for all your packages
   - it will automatically add Commit & Tag your new Version in Git & create new Release in GitHub when enabled
@@ -70,30 +64,29 @@ Add the following NPM Scripts or simply run the following NodeJS command in your
 This lib requires a config file in order to do its job properly. It could come from a separate file (read [`roller.json` - Wiki](https://github.com/ghiscoding/ws-conventional-version-roller/wiki/Roller.json), recommended approach) in the root of your project OR a `"roller": {}` property directly under your `package.json`.
 
 #### Command Options
-- `version` same as Lerna [version options](https://github.com/lerna/lerna/tree/main/commands/version#readme)
-- `publish` same as Lerna [publish options](https://github.com/lerna/lerna/tree/main/commands/publish#readme)
+- [version](https://github.com/ghiscoding/ws-conventional-version-roller/blob/main/packages/version/README.md)
+- [publish](https://github.com/ghiscoding/ws-conventional-version-roller/blob/main/packages/publish/README.md)
    - make sure to double-check your [publishConfig](https://docs.npmjs.com/cli/v6/configuring-npm/package-json#publishconfig) access of each package before publishing
 
-**Note:** I did not personally try all options, Lerna added so many options over the years that it would be impossible to test them all but they should all work just the same. For any problems, please first take a look at Lerna's [issues](https://github.com/lerna/lerna/issues) and you might find what you need (since all the code originally came from that lib).
+**Note:** These commands were extracted from [Lerna](https://github.com/lerna) and I did not personally try all options, Lerna added so many options over the years that it would be impossible to test them all but they should all work just the same. For any problems, please first take a look at Lerna's [issues](https://github.com/lerna/lerna/issues) and you might find what you need (since all the code originally came from that lib).
 
 #### For [Lerna](https://github.com/lerna/lerna) Users
 If you are migrating from Lerna, it will also work with a `lerna.json` config file **but** it is strongly recommended to eventually rename your config file to `roller.json` since that might get deprecated in the future. However please note that `"lerna": {}` defined in the `package.json` will **not** work.
 
 #### New Options
 On top of Lerna's existing options, we added a few more options that might be useful
-- `--git-dry-run`
-  - will run the version/publish commands and log (info) all the git commands without actually executing them
-  - Note: it will still create the changelogs (when enabled), so it could be useful to see what gets created (however, make sure to discard the changes and roll back your version in `roller.json` once you're done)
-- "Version" command only options
-  - `--changelog-header-message "My Custom Header Message"`
-    - this will be written, only once, at the top of your changelog file located in the root (e.g.: a good example is to add reference to your website)
-    - you can see a live example from our very own [changelog](https://github.com/ghiscoding/ws-conventional-version-roller/blob/main/CHANGELOG.md)
-  - `--changelog-version-message "My custom version message"`
-    - only writes to the root changelog (sub-packages will not receive this text)
-    - this will be written as a prefix to your each new version change (e.g.: for example, provide more info about the new version changes)
+- [`--git-dry-run`](https://github.com/ghiscoding/ws-conventional-version-roller/blob/main/packages/version/README.md#--git-dry-run)
+- [`--changelog-header-message <msg>`](https://github.com/ghiscoding/ws-conventional-version-roller/blob/main/packages/version/README.md#--changelog-header-message-msg)
+- [`--changelog-version-message <msg>`](https://github.com/ghiscoding/ws-conventional-version-roller/blob/main/packages/version/README.md#--changelog-version-message-msg)
 
 ### Troubleshooting
 If you have problems running the lib and your problems are with Git then you should first try the `--git-dry-run` option to see if that helps in finding the error. Another great, and possibly much more useful suggestion, is to search in the Lerna [issues](https://github.com/lerna/lerna/issues) because most of the code came from that library. Lastly if it that is not enough and you wish to troubleshoot yourself, then read this [Troubleshooting - Wiki](https://github.com/ghiscoding/ws-conventional-version-roller/wiki/Troubleshooting)
+
+### CLIs currently available
+| cli         | description |
+|-------------|-------------|
+| [ws-roller](https://github.com/ghiscoding/ws-conventional-version-roller/tree/main/packages/cli#installation) | create, publish new version for each workspace package |
+| [ws-runner](https://github.com/ghiscoding/ws-conventional-version-roller/tree/main/packages/run#installation) | run npm script in each package of the workspace |
 
 ### Available Public Packages
 

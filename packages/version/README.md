@@ -285,6 +285,8 @@ When run with this flag, `ws-roller version` will force publish the specified pa
 
 Displays the git command that would be performed without actually executing it, however please note that it will still create all the changelogs. This could be helpful for troubleshooting and also to see changelog changes without commiting them to Git.
 
+**Note:** it will still create the changelogs (when enabled), so it could be useful to see what gets created (however, make sure to discard the changes and roll back your version in `roller.json` once you're done)
+
 ```sh
 $ ws-runner run watch --git-dry-run
 ```
