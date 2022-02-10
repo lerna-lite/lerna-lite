@@ -15,7 +15,8 @@
     "access": "public"
   },
   "scripts": {
-    "build": "tsc --project tsconfig.bundle.json"
+    "build": "tsc --project tsconfig.bundle.json",
+    "pack-tarball": "npm pack"
   },
   "license": "MIT",
   "author": "Ghislain B.",
@@ -34,6 +35,7 @@
   },
   "dependencies": {
     "@ws-conventional-version-roller/core": "^0.1.8",
+    "dedent": "^0.7.0",
     "fs-extra": "^10.0.0",
     "multimatch": "^5.0.0",
     "npmlog": "^6.0.0",

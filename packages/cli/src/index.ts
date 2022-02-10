@@ -9,6 +9,7 @@ import { VersionCommand } from '@ws-conventional-version-roller/version';
 try {
   const pkg = require('../package.json');
   log.notice('cli', `version ${pkg?.version ?? ''}`);
+  log.warn('deprecated', 'Calling publish or version command this way is now deprecated and will be removed in the next version. Please use "ws-roller" CLI instead.');
 
   if ((argv as CommandOptions).rollPublish) {
     new PublishCommand(argv);

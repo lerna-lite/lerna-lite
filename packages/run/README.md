@@ -19,12 +19,12 @@ This package was added mainly because NPM Workspaces don't yet support running N
 ## Installation 
 ```sh
 # install globally
-npm install -g
+npm install -g @ws-conventional-version-roller/run
 # then use it (see usage below)
-ws-roller run <script>
+ws-runner run <script>
 
 # OR use npx
-npx ws-roller run <script>
+npx ws-runner run <script>
 ```
 
 ## Usage
@@ -67,6 +67,14 @@ May also be configured in `roller.json`:
     }
   }
 }
+```
+
+### `run-dry-run`
+
+Displays the process command that would be performed without actually executing it. This could be helpful for troubleshooting.
+
+```sh
+$ ws-runner run watch --run-dry-run
 ```
 
 ### `--stream`

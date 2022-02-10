@@ -80,12 +80,11 @@ On top of Lerna's existing options, we added a few more options that might be us
   - Note: it will still create the changelogs (when enabled), so it could be useful to see what gets created (however, make sure to discard the changes and roll back your version in `roller.json` once you're done)
 - "Version" command only options
   - `--changelog-header-message "My Custom Header Message"`
-    - only writes to the root changelog (sub-packages will not receive this text)
-    - this will be written, only once, at the top of all your changelog files (e.g.: a good example is to add reference to your website)
+    - this will be written, only once, at the top of your changelog file located in the root (e.g.: a good example is to add reference to your website)
     - you can see a live example from our very own [changelog](https://github.com/ghiscoding/ws-conventional-version-roller/blob/main/CHANGELOG.md)
   - `--changelog-version-message "My custom version message"`
     - only writes to the root changelog (sub-packages will not receive this text)
-    - this will be written as a prefix to your version change (e.g.: for example, provide more info about the new version changes)
+    - this will be written as a prefix to your each new version change (e.g.: for example, provide more info about the new version changes)
 
 ### Troubleshooting
 If you have problems running the lib and your problems are with Git then you should first try the `--git-dry-run` option to see if that helps in finding the error. Another great, and possibly much more useful suggestion, is to search in the Lerna [issues](https://github.com/lerna/lerna/issues) because most of the code came from that library. Lastly if it that is not enough and you wish to troubleshoot yourself, then read this [Troubleshooting - Wiki](https://github.com/ghiscoding/ws-conventional-version-roller/wiki/Troubleshooting)
