@@ -152,7 +152,7 @@ export class Command {
     let progress;
 
     /* istanbul ignore next */
-    if (ci || !process.stderr.isTTY) {
+    if (ci || !process.stderr.isTTY || process.env.TERM === 'dumb') {
       log.disableColor();
       progress = false;
     } else if (!process.stdout.isTTY) {
