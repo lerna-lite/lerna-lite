@@ -444,7 +444,7 @@ bumps using the specified [prerelease identifier](http://semver.org/#spec-item-9
 
 ### `--signoff-git-commit`
 
-Adds the `--signoff` flag to the git commit done by lerna version when executed.
+Adds the `--signoff` flag to the git commit done by ws-roller version when executed.
 
 > Note: This is different from `--sign-git-commit` which is about gpg signatures.
 
