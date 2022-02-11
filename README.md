@@ -40,7 +40,7 @@ The creation of this lib came from a desire of migrating Lerna projects to plain
 - [Q] Coming from Lerna, can I use my `lerna.json` config file without any changes?
    - [A] Yes you can, the settings are the same but we still recommend to eventually rename to `roller.json`
 - [Q] Why do I see Lerna mentioned so many times? Do I need a Lerna project to use this lib?
-   - [A] Not at all, however the code originally came from that project and if you used Lerna before then it will be extremely easy for you to get started
+   - [A] Not at all, however since most of the code came from Lerna it will be extremely easy if you are migrating.
 - [Q] What is the minimum that I need to get started
    - [A] read the [configurations](https://github.com/ghiscoding/ws-conventional-version-roller#configuration) below, the short answer is to create a `roller.json` config file, some NPM scripts and that's about it
 
@@ -69,8 +69,7 @@ This lib requires a config file in order to do its job properly. It could come f
 
 #### Command Options (`ws-roller`)
 - [version](https://github.com/ghiscoding/ws-conventional-version-roller/blob/main/packages/version/README.md)
-- [publish](https://github.com/ghiscoding/ws-conventional-version-roller/blob/main/packages/publish/README.md)
-   - make sure to double-check your [publishConfig](https://docs.npmjs.com/cli/v6/configuring-npm/package-json#publishconfig) access of each package before publishing
+- [publish](https://github.com/ghiscoding/ws-conventional-version-roller/blob/main/packages/publish/README.md) (make sure to double-check your [publishConfig](https://docs.npmjs.com/cli/v6/configuring-npm/package-json#publishconfig) access of each package before publishing)
 
 **Note:** These commands were extracted from [Lerna](https://github.com/lerna) and I did not personally try all options, Lerna added so many options over the years that it would be impossible to test them all but they should all work just the same. For any problems, please first take a look at Lerna's [issues](https://github.com/lerna/lerna/issues) and you might find what you need (since all the code originally came from that lib).
 
