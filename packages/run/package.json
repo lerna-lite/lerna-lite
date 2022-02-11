@@ -1,7 +1,7 @@
 {
   "name": "@ws-conventional-version-roller/run",
   "description": "ws-runner CLI to help running npm script in each package workspace that contains that script",
-  "version": "0.2.1",
+  "version": "0.2.2",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "typings": "dist/index.d.ts",
@@ -34,7 +34,7 @@
     "npm": ">=8.0.0"
   },
   "dependencies": {
-    "@ws-conventional-version-roller/core": "^0.2.1",
+    "@ws-conventional-version-roller/core": "^0.2.2",
     "dedent": "^0.7.0",
     "fs-extra": "^10.0.0",
     "multimatch": "^5.0.0",

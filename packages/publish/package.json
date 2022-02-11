@@ -1,7 +1,7 @@
 {
   "name": "@ws-conventional-version-roller/publish",
   "description": "Publish packages in the current workspace",
-  "version": "0.2.1",
+  "version": "0.2.2",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "typings": "dist/index.d.ts",
@@ -31,8 +31,8 @@
     "npm": ">=8.0.0"
   },
   "dependencies": {
-    "@ws-conventional-version-roller/core": "^0.2.1",
-    "@ws-conventional-version-roller/version": "^0.2.1",
+    "@ws-conventional-version-roller/core": "^0.2.2",
+    "@ws-conventional-version-roller/version": "^0.2.2",
     "byte-size": "^8.1.0",
     "columnify": "^1.5.4",
     "fs-extra": "^10.0.0",
