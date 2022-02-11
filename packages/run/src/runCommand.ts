@@ -107,13 +107,24 @@ export class RunCommand extends Command {
           const exitCode = Math.max(...codes, 1);
 
           this.logger.error('', 'Received non-zero exit code %d during execution', exitCode);
+          if (!this.options.stream) {
+            results
+              .filter((result) => result.failed)
+              .forEach((result) => {
+                this.logger.error('', result.pkg.name, result.stderr);
+              });
+          }
           process.exitCode = exitCode;
         }
+        return results;
       });
     }
 
-    return chain.then(() => {
-      this.logger.success(
+    return chain.then((results) => {
+      const someFailed = results.some((result) => result.failed);
+      const logType = someFailed ? 'error' : 'success';
+
+      this.logger[logType](
         'run',
         `Ran npm script '%s' in %d %s in %ss:`,
         this.script,
@@ -121,7 +132,18 @@ export class RunCommand extends Command {
         this.packagePlural,
         (getElapsed() / 1000).toFixed(1)
       );
-      this.logger.success('', this.packagesWithScript.map((pkg) => `- ${pkg.name}`).join('\n'));
+
+      if (!this.bail) {
+        results.forEach((result) => {
+          if (result.failed) {
+            this.logger.error('', `- ${result.pkg.name}`);
+          } else {
+            this.logger.success('', ` - ${result.pkg.name}`);
+          }
+        });
+      } else {
+        this.logger.success('', this.packagesWithScript.map((pkg) => `- ${pkg.name}`).join('\n'));
+      }
     });
   }
 
@@ -184,7 +206,13 @@ export class RunCommand extends Command {
       return this.dryRunScript(this.script, pkg.name);
     }
 
-    return npmRunScriptStreaming(this.script, this.getOpts(pkg));
+    const chain = npmRunScriptStreaming(this.script, this.getOpts(pkg));
+    if (!this.bail) {
+      chain.then((result) => {
+        return { ...result, pkg };
+      });
+    }
+    return chain;
   }
 
   runScriptInPackageCapturing(pkg) {
@@ -203,7 +231,9 @@ export class RunCommand extends Command {
         (getElapsed() / 1000).toFixed(1)
       );
       output(result.stdout);
-
+      if (!this.bail) {
+        return { ...result, pkg };
+      }
       return result;
     });
   }
