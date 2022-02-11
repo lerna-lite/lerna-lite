@@ -173,6 +173,10 @@ export const versionCommandOptions = {
     group: 'Version Command Options:',
     type: 'boolean',
   },
+  'signoff-git-commit': {
+    describe: 'Pass the `--signoff` flag to `git commit`.',
+    type: 'boolean',
+  },
   'sign-git-tag': {
     describe: 'Pass the `--sign` flag to `git tag`.',
     group: 'Version Command Options:',
