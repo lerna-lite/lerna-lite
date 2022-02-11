@@ -388,14 +388,14 @@ When using `conventional-commits`, do not generate any `CHANGELOG.md` files.
 By default, `ws-roller version` will allow git commit hooks to run when committing version changes.
 Pass `--no-commit-hooks` to disable this behavior.
 
-This option is analogous to the `npm version` option [`--commit-hooks`](https://docs.npmjs.com/misc/config#commit-hooks), just inverted.
+This option is analogous to the `npm version` option [`--commit-hooks`](https://docs.npmjs.com/cli/v8/using-npm/config#commit-hooks), just inverted.
 
 ### `--no-git-tag-version`
 
 By default, `ws-roller version` will commit changes to package.json files and tag the release.
 Pass `--no-git-tag-version` to disable the behavior.
 
-This option is analogous to the `npm version` option [`--git-tag-version`](https://docs.npmjs.com/misc/config#git-tag-version), just inverted.
+This option is analogous to the `npm version` option [`--git-tag-version`](https://docs.npmjs.com/cli/v8/using-npm/config#git-tag-version), just inverted.
 
 ### `--no-granular-pathspec`
 
@@ -419,7 +419,7 @@ The root-level configuration is intentional, as this also covers the [identicall
 By default, `ws-roller version` will include private packages when choosing versions, making commits, and tagging releases.
 Pass `--no-private` to disable this behavior.
 
-Note that this option does _not_ exclude [private scoped packages](https://docs.npmjs.com/about-private-packages), only those with a [`"private": true` field](https://docs.npmjs.com/configuring-npm/package-json.html#private) in their package.json file.
+Note that this option does _not_ exclude [private scoped packages](https://docs.npmjs.com/about-private-packages), only those with a [`"private": true` field](https://docs.npmjs.com/cli/v8/configuring-npm/package-json#private) in their package.json file.
 
 ### `--no-push`
 
@@ -443,11 +443,11 @@ bumps using the specified [prerelease identifier](http://semver.org/#spec-item-9
 
 ### `--sign-git-commit`
 
-This option is analogous to the `npm version` [option](https://docs.npmjs.com/misc/config#sign-git-commit) of the same name.
+This option is analogous to the `npm version` [option](https://docs.npmjs.com/cli/v8/using-npm/config#sign-git-commit) of the same name.
 
 ### `--sign-git-tag`
 
-This option is analogous to the `npm version` [option](https://docs.npmjs.com/misc/config#sign-git-tag) of the same name.
+This option is analogous to the `npm version` [option](https://docs.npmjs.com/cli/v8/using-npm/config#sign-git-tag) of the same name.
 
 ### `--force-git-tag`
 
@@ -484,7 +484,7 @@ Useful in [Continuous integration (CI)](https://en.wikipedia.org/wiki/Continuous
 // postversion: Run AFTER bumping the package version, and AFTER commit.
 ```
 
-ws-roller will run [npm lifecycle scripts](https://docs.npmjs.com/misc/scripts#description) during `ws-roller version` in the following order:
+ws-roller will run [npm lifecycle scripts](https://docs.npmjs.com/cli/v8/using-npm/scripts#life-cycle-scripts) during `ws-roller version` in the following order:
 
 1. Detect changed packages, choose version bump(s)
 2. Run `preversion` lifecycle in root

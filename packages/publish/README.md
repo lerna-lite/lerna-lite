@@ -134,7 +134,7 @@ as the generated package.json is used during package upload (_after_ `postpack`)
 ws-roller publish --dist-tag next
 ```
 
-When run with this flag, `ws-roller publish` will publish to npm with the given npm [dist-tag](https://docs.npmjs.com/cli/dist-tag) (defaults to `latest`).
+When run with this flag, `ws-roller publish` will publish to npm with the given npm [dist-tag](https://docs.npmjs.com/cli/v8/commands/npm-dist-tag) (defaults to `latest`).
 
 This option can be used to publish a [`prerelease`](http://carrot.is/coding/npm_prerelease) or `beta` version under a non-`latest` dist-tag, helping consumers avoid automatically upgrading to prerelease-quality code.
 
@@ -315,11 +315,11 @@ Useful in [Continuous integration (CI)](https://en.wikipedia.org/wiki/Continuous
 
 ## Per-Package Configuration
 
-A leaf package can be configured with special [`publishConfig`](https://docs.npmjs.com/files/package.json#publishconfig) that in _certain_ circumstances changes the behavior of `ws-roller publish`.
+A leaf package can be configured with special [`publishConfig`](https://docs.npmjs.com/cli/v8/configuring-npm/package-json#publishconfig) that in _certain_ circumstances changes the behavior of `ws-roller publish`.
 
 ### `publishConfig.access`
 
-To publish packages with a scope (e.g., `@mycompany/rocks`), you must set [`access`](https://docs.npmjs.com/misc/config#access):
+To publish packages with a scope (e.g., `@mycompany/rocks`), you must set [`access`](https://docs.npmjs.com/cli/v8/using-npm/config#access):
 
 ```json
   "publishConfig": {
@@ -334,7 +334,7 @@ To publish packages with a scope (e.g., `@mycompany/rocks`), you must set [`acce
 
 ### `publishConfig.registry`
 
-You can customize the registry on a per-package basis by setting [`registry`](https://docs.npmjs.com/misc/config#registry):
+You can customize the registry on a per-package basis by setting [`registry`](https://docs.npmjs.com/cli/v8/using-npm/config#registry):
 
 ```json
   "publishConfig": {
@@ -346,7 +346,7 @@ You can customize the registry on a per-package basis by setting [`registry`](ht
 
 ### `publishConfig.tag`
 
-You can customize the dist-tag on a per-package basis by setting [`tag`](https://docs.npmjs.com/misc/config#tag):
+You can customize the dist-tag on a per-package basis by setting [`tag`](https://docs.npmjs.com/cli/v8/using-npm/config#tag):
 
 ```json
   "publishConfig": {
@@ -381,7 +381,7 @@ This _non-standard_ field allows you to customize the published subdirectory jus
 // postpublish: Run AFTER the package is published.
 ```
 
-ws-roller will run [npm lifecycle scripts](https://docs.npmjs.com/misc/scripts#description) during `ws-roller publish` in the following order:
+ws-roller will run [npm lifecycle scripts](https://docs.npmjs.com/cli/v8/using-npm/scripts#description) during `ws-roller publish` in the following order:
 
 1. If versioning implicitly, run all [version lifecycle scripts](https://github.com/ws-roller/ws-roller/tree/main/commands/version#lifecycle-scripts)
 2. Run `prepublish` lifecycle in root, if [enabled](#--ignore-prepublish)
