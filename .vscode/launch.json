@@ -40,7 +40,7 @@
       "request": "launch",
       "args": [
         "${relativeFile}",
-        "--roll-publish"
+        "publish"
       ],
       "runtimeArgs": [
         "-r",
@@ -49,6 +49,7 @@
       "cwd": "${workspaceRoot}",
       "protocol": "inspector",
       "console": "integratedTerminal",
+      "stopOnEntry": true,
       "internalConsoleOptions": "openOnSessionStart"
     },
     {
@@ -57,7 +58,7 @@
       "request": "launch",
       "args": [
         "${relativeFile}",
-        "--roll-version"
+        "version"
       ],
       "runtimeArgs": [
         "-r",
@@ -66,6 +67,7 @@
       "cwd": "${workspaceRoot}",
       "protocol": "inspector",
       "console": "integratedTerminal",
+      "stopOnEntry": true,
       "internalConsoleOptions": "openOnSessionStart"
     }
   ]
