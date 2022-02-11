@@ -11,7 +11,7 @@
     "pack-tarball": "npm run pack-tarball --ws --if-present",
     "preroll-version": "echo MAKE SURE TO RUN A BUILD BEFORE RELEASING A NEW VERSION",
     "roll-version": "ws-roller version",
-    "roll-publish": "ws-roller publish from-package"
+    "roll-publish": "ws-roller publish --bump from-package"
   },
   "homepage": "https://github.com/ghiscoding/ws-conventional-version-roller",
   "repository": {
