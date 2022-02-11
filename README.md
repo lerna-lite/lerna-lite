@@ -10,21 +10,21 @@
 [MIT License](LICENSE)
 
 ### Why and when to use this lib?
-You would use this lib when your project is an NPM/Yarn Workspace monorepo structure and you wish to automate Versioning and Publishing of all your packages by following the [Conventional Commits](https://www.conventionalcommits.org/) and also automatically create [Conventional-Changelog](https://github.com/conventional-changelog/conventional-changelog) for each of your package (and also a main changelog in the root).
+You would use this lib when your project is an NPM/Yarn Workspace monorepo structure and you wish to automate Versioning and Publishing of all your workspace packages by following the [Conventional Commits](https://www.conventionalcommits.org/) and also automatically create [Conventional-Changelog](https://github.com/conventional-changelog/conventional-changelog) for each package (+ merged changelog in the root). Nearly all the code came from [Lerna](https://github.com/lerna/lerna).
 
-### This lib will help you to:
+### This lib will help you with
+##### [Version](https://github.com/ghiscoding/ws-conventional-version-roller/tree/main/packages/version) & [Publish](https://github.com/ghiscoding/ws-conventional-version-roller/tree/main/packages/publish) commands (`ws-roller`)
 - Automate the rolling of new Versions (independent or fixed) for all your packages
   - it will automatically add Commit & Tag your new Version in Git & create new Release in GitHub when enabled
 - Automate the creation of Changelogs for all your packages by reading all [Conventional Commits](https://www.conventionalcommits.org/)
   - each package will get its own changelog and a combined changelog will also be created in the root
 - Automate the repository Publish of your new versions for all your packages
   - it could push to NPM or any other repository platform
-
-#### Extras:
-- [@ws-conventional-version-roller/run](https://github.com/ghiscoding/ws-conventional-version-roller/tree/main/packages/run) is an optional package that will help you run npm script in parallel and in topological order.
+##### [Run](https://github.com/ghiscoding/ws-conventional-version-roller/tree/main/packages/run) command (`ws-runner`)
+- [Run](https://github.com/ghiscoding/ws-conventional-version-roller/tree/main/packages/run) is an optional package that will help you run npm script in parallel and in topological order.
 
 ### Project Demo?
-You want to see a demo project? Well, you're looking at it 😉
+You want to see a demo project? Sure, you're looking at it 😉
 
 Yes indeed, this lib was created as an NPM Workspace specifically for the purpose of demoing and testing of its own code. All changelogs and published versions were created by the lib itself, how sweet is that? You will also find that it has its own [roller.json](https://github.com/ghiscoding/ws-conventional-version-roller/blob/main/roller.json) config file just as well as you would when using the lib.
 
@@ -42,11 +42,15 @@ The creation of this lib came from a desire of migrating Lerna projects to plain
 - [Q] Why do I see Lerna mentioned so many times? Do I need a Lerna project to use this lib?
    - [A] Not at all, however the code originally came from that project and if you used Lerna before then it will be extremely easy for you to get started
 - [Q] What is the minimum that I need to get started
-   - [A] read the [configurations](https://github.com/ghiscoding/ws-conventional-version-roller#configuration) below, the short answer is that you will need a `roller.json` config file, some NPM scripts and that's about it
+   - [A] read the [configurations](https://github.com/ghiscoding/ws-conventional-version-roller#configuration) below, the short answer is to create a `roller.json` config file, some NPM scripts and that's about it
 
 ## Installation
 ```bash
+# publish/version commands CLI
 npm install @ws-conventional-version-roller/cli
+
+# run command CLI
+npm install @ws-conventional-version-roller/run
 ```
 **Note:** the `ws-roller` CLI only has 2 commands available `publish` and `version`
 
@@ -63,7 +67,7 @@ Add the following NPM Scripts or simply run the following NodeJS command in your
 ### Configuration
 This lib requires a config file in order to do its job properly. It could come from a separate file (read [`roller.json` - Wiki](https://github.com/ghiscoding/ws-conventional-version-roller/wiki/Roller.json), recommended approach) in the root of your project OR a `"roller": {}` property directly under your `package.json`.
 
-#### Command Options
+#### Command Options (`ws-roller`)
 - [version](https://github.com/ghiscoding/ws-conventional-version-roller/blob/main/packages/version/README.md)
 - [publish](https://github.com/ghiscoding/ws-conventional-version-roller/blob/main/packages/publish/README.md)
    - make sure to double-check your [publishConfig](https://docs.npmjs.com/cli/v6/configuring-npm/package-json#publishconfig) access of each package before publishing
