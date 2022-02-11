@@ -116,7 +116,7 @@ export const publishCommandOptions = {
   },
   // y: {
   //   describe: 'Skip all confirmation prompts.',
-  group: 'Version Command Options:',
+  //   group: 'Version Command Options:',
   //   alias: 'yes',
   //   type: 'boolean',
   // },
