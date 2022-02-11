@@ -1,5 +1,6 @@
 #!/usr/bin/env node
 
+import 'dotenv/config';
 import dedent from 'dedent';
 import log from 'npmlog';
 import yargs from 'yargs/yargs';

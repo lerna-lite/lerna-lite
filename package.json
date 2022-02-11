@@ -9,7 +9,7 @@
     "build": "npm run build --ws",
     "lint": "eslint packages/** --ext .ts",
     "pack-tarball": "npm run pack-tarball --ws --if-present",
-    "preroll-version": "echo MAKE SURE TO RUN A BUILD BEFORE RELEASING A NEW VERSION",
+    "preroll-version": "echo \"⚠️  Make sure to run a Build & change cli.js line ending to LF before releasing a new version\"",
     "roll-version": "ws-roller version",
     "roll-publish": "ws-roller publish --bump from-package"
   },
