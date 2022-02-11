@@ -9,7 +9,7 @@ import { exec } from '@ws-conventional-version-roller/core';
  * @param {{ amend: boolean; commitHooks: boolean; signGitCommit: boolean; }} gitOpts
  * @param {import('@lerna/child-process').ExecOpts} opts
  */
-export function gitCommit(message, { amend, commitHooks, signGitCommit }, opts, gitDryRun = false) {
+export function gitCommit(message, { amend, commitHooks, signGitCommit, signoffGitCommit }, opts, gitDryRun = false) {
   log.silly('gitCommit', message);
   const args = ['commit'];
 
@@ -19,6 +19,10 @@ export function gitCommit(message, { amend, commitHooks, signGitCommit }, opts, 
 
   if (signGitCommit) {
     args.push('--gpg-sign');
+  }
+
+  if (signoffGitCommit) {
+    args.push('--signoff');
   }
 
   if (amend) {
