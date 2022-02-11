@@ -72,6 +72,7 @@ This is useful when a previous `ws-roller publish` failed to publish all package
 - [`--canary`](#--canary)
 - [`--contents <dir>`](#--contents-dir)
 - [`--dist-tag <tag>`](#--dist-tag-tag)
+- [`--force-publish`](#--force-publish)
 - [`--git-head <sha>`](#--git-head-sha)
 - [`--graph-type <all|dependencies>`](#--graph-type-alldependencies)
 - [`--ignore-scripts`](#--ignore-scripts)
@@ -140,6 +141,13 @@ This option can be used to publish a [`prerelease`](http://carrot.is/coding/npm_
 
 > Note: the `latest` tag is the one that is used when a user runs `npm install my-package`.
 > To install a different tag, a user can run `npm install my-package@prerelease`.
+
+### `--force-publish`
+
+To be used with [`--canary`](#--canary) to publish a canary version of all packages in your monorepo. This flag can be helpful when you need to make canary releases of packages beyond what was changed in the most recent commit. 
+
+```
+ws-roller publish --canary --force-publish
 
 ### `--git-head <sha>`
 
