@@ -101,15 +101,15 @@ export class RunCommand extends Command {
       // detect error (if any) from collected results
       chain = chain.then((results: Array<{ exitCode: number; failed?: boolean; pkg: Package; stderr: any; }>) => {
         /* istanbul ignore else */
-        if (results.some((result: { failed?: boolean; }) => result.failed)) {
+        if (results.some((result?: { failed?: boolean; }) => result?.failed)) {
           // propagate 'highest' error code, it's probably the most useful
-          const codes = results.filter((result) => result.failed).map((result) => result.exitCode);
+          const codes = results.filter((result) => result?.failed).map((result) => result.exitCode);
           const exitCode = Math.max(...codes, 1);
 
           this.logger.error('', 'Received non-zero exit code %d during execution', exitCode);
           if (!this.options.stream) {
             results
-              .filter((result) => result.failed)
+              .filter((result) => result?.failed)
               .forEach((result) => {
                 this.logger.error('', result.pkg.name, result.stderr);
               });
@@ -121,7 +121,7 @@ export class RunCommand extends Command {
     }
 
     return chain.then((results: Array<{ exitCode: number; failed?: boolean; pkg: Package; stderr: any; }>) => {
-      const someFailed = results.some((result) => result.failed);
+      const someFailed = results.some((result) => result?.failed);
       const logType = someFailed ? 'error' : 'success';
 
       this.logger[logType](
@@ -135,7 +135,7 @@ export class RunCommand extends Command {
 
       if (!this.bail) {
         results.forEach((result) => {
-          if (result.failed) {
+          if (result?.failed) {
             this.logger.error('', `- ${result.pkg.name}`);
           } else {
             this.logger.success('', ` - ${result.pkg.name}`);
