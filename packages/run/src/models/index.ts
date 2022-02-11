@@ -29,10 +29,12 @@ export interface TraceEvent {
   dur: number;
 }
 
-export interface ScriptStreamingOption {
+export interface RunScriptOption {
   args: any;
   npmClient: string;
   pkg: Package;
-  prefix: boolean;
   reject?: boolean;
+}
+export interface ScriptStreamingOption extends RunScriptOption {
+  prefix: boolean;
 }

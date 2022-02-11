@@ -3,7 +3,7 @@ import path from 'path';
 import os from 'os';
 import writeFileAtomic from 'write-file-atomic';
 
-export function writeLogFile(cwd) {
+export function writeLogFile(cwd: string) {
   let logOutput = '';
 
   log.record.forEach((m) => {

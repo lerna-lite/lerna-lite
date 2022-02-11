@@ -1,6 +1,7 @@
 import { PackageGraph } from '../package-graph/package-graph';
 import { QueryGraphConfig } from '../models';
 import { Package } from '../package';
+import { PackageGraphNode } from '../package-graph';
 
 /**
  * A mutable PackageGraph used to query for next available packages.
@@ -41,7 +42,7 @@ export class QueryGraph {
    * @param {import("@lerna/package").Package[]} packages An array of Packages to build the graph out of
    * @param {QueryGraphConfig} [options]
    */
-  constructor(packages, { graphType = 'allDependencies', rejectCycles } = {} as QueryGraphConfig) {
+  constructor(packages: Package[], { graphType = 'allDependencies', rejectCycles } = {} as QueryGraphConfig) {
     // Create dependency graph
     this.graph = new PackageGraph(packages, graphType);
 
@@ -65,7 +66,7 @@ export class QueryGraph {
     return cycle.flatten();
   }
 
-  getAvailablePackages(): Package[] {
+  getAvailablePackages(): PackageGraphNode[] {
     // Get the next leaf nodes
     const availablePackages = this._getNextLeaf();
 
@@ -79,14 +80,14 @@ export class QueryGraph {
   /**
    * @param {string} name
    */
-  markAsTaken(name) {
+  markAsTaken(name: string) {
     this.graph.delete(name);
   }
 
   /**
    * @param {import("@lerna/package-graph").PackageGraphNode} candidateNode
    */
-  markAsDone(candidateNode) {
+  markAsDone(candidateNode: PackageGraphNode) {
     this.graph.remove(candidateNode);
 
     for (const cycle of this.cycles) {

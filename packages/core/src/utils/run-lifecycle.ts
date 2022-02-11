@@ -3,24 +3,15 @@ import log from 'npmlog';
 import runScript from 'npm-lifecycle';
 
 import { npmConf } from '../utils/npm-conf';
-
-/**
- * @typedef {object} LifecycleConfig
- * @property {typeof log} [log]
- * @property {boolean} [ignorePrepublish]
- * @property {boolean} [ignoreScripts]
- * @property {string} [nodeOptions]
- * @property {string} [scriptShell]
- * @property {boolean} [scriptsPrependNodePath]
- * @property {boolean} [unsafePerm=true]
- */
+import { LifecycleConfig } from '../models';
+import { Package } from '../package';
 
 /**
  * Alias dash-cased npmConf to camelCase
  * @param {LifecycleConfig} obj
  * @returns {LifecycleConfig}
  */
-function flattenOptions(obj) {
+function flattenOptions(obj: any) {
   return {
     ignorePrepublish: obj['ignore-prepublish'],
     ignoreScripts: obj['ignore-scripts'],
@@ -38,7 +29,7 @@ function flattenOptions(obj) {
  * @param {string} stage
  * @param {LifecycleConfig} options
  */
-export function runLifecycle(pkg, stage, options): Promise<void> {
+export function runLifecycle(pkg: Package, stage: string, options: LifecycleConfig): Promise<void> {
   // back-compat for @lerna/npm-conf instances
   // https://github.com/isaacs/proto-list/blob/27764cd/proto-list.js#L14
   if ('root' in options) {
@@ -86,7 +77,7 @@ export function runLifecycle(pkg, stage, options): Promise<void> {
     // To ensure npm-lifecycle creates the correct npm_package_* env vars,
     // we must pass the _actual_ JSON instead of our fancy Package thingy
     // eslint-disable-next-line no-param-reassign
-    pkg = pkg.toJSON();
+    pkg = pkg.toJSON() as Package;
   }
 
   // TODO: remove pkg._id when npm-lifecycle no longer relies on it
@@ -108,7 +99,7 @@ export function runLifecycle(pkg, stage, options): Promise<void> {
     () => {
       opts.log.silly('lifecycle', '%j finished in %j', stage, pkg.name);
     },
-    (err) => {
+    (err: any) => {
       // propagate the exit code
       const exitCode = err.errno || 1;
 
@@ -128,8 +119,8 @@ export function runLifecycle(pkg, stage, options): Promise<void> {
   );
 }
 
-export function createRunner(commandOptions) {
+export function createRunner(commandOptions: any) {
   const cfg = (npmConf(commandOptions) as any).snapshot;
 
-  return (pkg, stage) => runLifecycle(pkg, stage, cfg);
+  return (pkg: Package, stage: string) => runLifecycle(pkg, stage, cfg);
 }

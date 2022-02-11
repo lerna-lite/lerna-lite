@@ -1,7 +1,7 @@
 import conventionalRecommendedBump from 'conventional-recommended-bump';
 import conventionalChangelogCore from 'conventional-changelog-core';
 import log from 'npmlog';
-import semver from 'semver';
+import semver, { ReleaseType } from 'semver';
 
 import { BaseChangelogOptions, VersioningStrategy } from '../models';
 import { Package } from '../package';
@@ -28,7 +28,7 @@ export async function recommendVersion(pkg: Package, type: VersioningStrategy, r
     options.tagPrefix = tagPrefix;
   }
 
-  const shouldBumpPrerelease = (releaseType, version) => {
+  const shouldBumpPrerelease = (releaseType: ReleaseType, version: string) => {
     if (!semver.prerelease(version)) {
       return true;
     }
@@ -58,7 +58,7 @@ export async function recommendVersion(pkg: Package, type: VersioningStrategy, r
 
       if (prereleaseId) {
         const shouldBump = shouldBumpPrerelease(releaseType, pkg.version);
-        const prereleaseType = shouldBump ? `pre${releaseType}` : 'prerelease';
+        const prereleaseType: ReleaseType = shouldBump ? `pre${releaseType}` : 'prerelease';
         log.verbose(type, 'increment %s by %s - %s', pkg.version, prereleaseType, pkg.name);
         resolve(semver.inc(pkg.version, prereleaseType, prereleaseId));
       } else {

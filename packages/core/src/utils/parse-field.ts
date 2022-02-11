@@ -3,7 +3,7 @@ import { envReplace } from './env-replace';
 import { types } from './types';
 
 // https://github.com/npm/npm/blob/latest/lib/config/core.js#L362-L407
-export function parseField(input, key): any {
+export function parseField(input: any, key: string): any {
   if (typeof input !== 'string') {
     return input;
   }

@@ -2,7 +2,7 @@
 import log from 'npmlog';
 
 // istanbul ignore next
-export function output(...args) {
+export function output(...args: string[]) {
   log.clearProgress();
   console.log(...args);
   log.showProgress();

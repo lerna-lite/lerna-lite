@@ -4,7 +4,7 @@ import log from 'npmlog';
  * @param {import('execa').ExecaError & { pkg: import('@lerna/package').Package }} err
  * @param {boolean} stream
  */
-export function logPackageError(err, stream = false) {
+export function logPackageError(err: any, stream = false) {
   log.error(err.command, `exited ${err.exitCode} in '${err.pkg.name}'`);
 
   if (stream) {
@@ -27,7 +27,7 @@ export function logPackageError(err, stream = false) {
 }
 
 /** @param {string} message */
-function directLog(message) {
+function directLog(message: string) {
   log.pause();
   console.error(message); // eslint-disable-line no-console
   log.resume();

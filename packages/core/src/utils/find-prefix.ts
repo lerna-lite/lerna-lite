@@ -2,7 +2,7 @@ import fs from 'fs';
 import path from 'path';
 
 // https://github.com/npm/npm/blob/876f0c8/lib/config/find-prefix.js
-export function findPrefix(start) {
+export function findPrefix(start: string) {
   let dir = path.resolve(start);
   let walkedUp = false;
 
@@ -18,7 +18,7 @@ export function findPrefix(start) {
   return find(dir, dir);
 }
 
-export function find(name, original) {
+export function find(name: string, original: string) {
   if (name === '/' || (process.platform === 'win32' && /^[a-zA-Z]:(\\|\/)?$/.test(name))) {
     return original;
   }

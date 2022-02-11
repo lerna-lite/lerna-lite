@@ -1,10 +1,10 @@
 import log from 'npmlog';
-import { exec, spawnStreaming } from '@ws-conventional-version-roller/core';
+import { exec, Package, spawnStreaming } from '@ws-conventional-version-roller/core';
 
 import { getNpmExecOpts } from './get-npm-exec-opts';
-import { ScriptStreamingOption } from '../models';
+import { RunScriptOption, ScriptStreamingOption } from '../models';
 
-export function npmRunScript(script, { args, npmClient, pkg, reject = true }, cmdDryRun = false) {
+export function npmRunScript(script: string, { args, npmClient, pkg, reject = true }: RunScriptOption, cmdDryRun = false) {
   log.silly('npmRunScript', script, args, pkg.name);
 
   const argv = ['run', script, ...args];
@@ -22,7 +22,7 @@ export function npmRunScriptStreaming(script: string, { args, npmClient, pkg, pr
   return spawnStreaming(npmClient, argv, opts, prefix && pkg.name, cmdDryRun);
 }
 
-function makeOpts(pkg, reject) {
+function makeOpts(pkg: Package, reject: boolean) {
   return Object.assign(getNpmExecOpts(pkg), {
     windowsHide: false,
     reject,

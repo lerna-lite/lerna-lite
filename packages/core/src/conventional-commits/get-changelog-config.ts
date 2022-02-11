@@ -10,7 +10,7 @@ export class GetChangelogConfig {
     return Object.prototype.toString.call(config) === '[object Function]';
   }
 
-  static resolveConfigPromise(presetPackageName, presetConfig) {
+  static resolveConfigPromise(presetPackageName: string, presetConfig: any) {
     log.verbose('getChangelogConfig', 'Attempting to resolve preset %j', presetPackageName);
 
     let config = require(presetPackageName);
@@ -29,7 +29,7 @@ export class GetChangelogConfig {
    * @param {import('..').ChangelogPresetConfig} [changelogPreset]
    * @param {string} [rootPath]
    */
-  static getChangelogConfig(changelogPreset: string | { name: string; } = 'conventional-changelog-angular', rootPath) {
+  static getChangelogConfig(changelogPreset: string | { name: string; } = 'conventional-changelog-angular', rootPath: string) {
     const presetName = typeof changelogPreset === 'string' ? changelogPreset : changelogPreset.name;
     const presetConfig = typeof changelogPreset === 'object' ? changelogPreset : {};
 

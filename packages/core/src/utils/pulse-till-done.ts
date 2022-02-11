@@ -1,9 +1,9 @@
 import log from 'npmlog';
 
 let pulsers = 0;
-let pulse;
+let pulse: any;
 
-function pulseStart(prefix) {
+function pulseStart(prefix: string | Promise<string>) {
   pulsers += 1;
 
   if (pulsers > 1) {
@@ -23,7 +23,7 @@ function pulseStop() {
   clearInterval(pulse);
 }
 
-export function pulseTillDone(prefix: string | Promise<any>, promise?: Promise<any> | string) {
+export function pulseTillDone(prefix: string | Promise<string>, promise?: Promise<any> | string) {
   if (!promise) {
     /* eslint-disable no-param-reassign */
     promise = prefix;

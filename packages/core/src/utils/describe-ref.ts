@@ -1,36 +1,15 @@
 
 import log from 'npmlog';
 
+import { DescribeRefOptions } from '../models';
 import { exec, execSync } from '../child-process';
-
-/**
- * @typedef {object} DescribeRefOptions
- * @property {string} [cwd] Defaults to `process.cwd()`
- * @property {string} [match] Glob passed to `--match` flag
- */
-
-/**
- * @typedef {object} DescribeRefFallbackResult When annotated release tags are missing
- * @property {boolean} isDirty
- * @property {string} refCount
- * @property {string} sha
- */
-
-/**
- * @typedef {object} DescribeRefDetailedResult When annotated release tags are present
- * @property {string} lastTagName
- * @property {string} lastVersion
- * @property {boolean} isDirty
- * @property {string} refCount
- * @property {string} sha
- */
 
 /**
  * Build `git describe` args.
  * @param {DescribeRefOptions} options
  * @param {boolean} [includeMergedTags]
  */
-function getArgs(options, includeMergedTags) {
+function getArgs(options: DescribeRefOptions, includeMergedTags?: boolean) {
   let args = [
     'describe',
     // fallback to short sha if no tags located
@@ -60,7 +39,7 @@ function getArgs(options, includeMergedTags) {
  * @param {boolean} [includeMergedTags]
  * @returns {Promise<DescribeRefFallbackResult|DescribeRefDetailedResult>}
  */
-export function describeRef(options: any = {}, includeMergedTags?: boolean, gitDryRun = false) {
+export function describeRef(options: DescribeRefOptions = {}, includeMergedTags?: boolean, gitDryRun = false) {
   const promise = exec('git', getArgs(options, includeMergedTags), options, gitDryRun);
 
   return promise.then(({ stdout } = { stdout: '' }) => {
