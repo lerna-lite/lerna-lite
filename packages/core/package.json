@@ -12,7 +12,8 @@
     "/dist"
   ],
   "scripts": {
-    "build": "tsc --project tsconfig.bundle.json"
+    "build": "tsc --project tsconfig.bundle.json",
+    "pack-tarball": "npm pack"
   },
   "license": "MIT",
   "author": "Ghislain B.",
@@ -96,5 +97,9 @@
     "@types/write-json-file": "^3.2.1",
     "@types/write-pkg": "^4.0.0",
     "@types/yargs": "^17.0.8"
+  },
+  "funding": {
+    "type": "ko_fi",
+    "url": "https://ko-fi.com/N4N679OT"
   }
 }

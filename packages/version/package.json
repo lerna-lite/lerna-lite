@@ -12,7 +12,8 @@
     "access": "public"
   },
   "scripts": {
-    "build": "tsc --project tsconfig.bundle.json"
+    "build": "tsc --project tsconfig.bundle.json",
+    "pack-tarball": "npm pack"
   },
   "license": "MIT",
   "author": "Ghislain B.",

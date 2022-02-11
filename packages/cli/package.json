@@ -1,10 +1,13 @@
 {
   "name": "@ws-conventional-version-roller/cli",
-  "description": "CLI for Version/Publish roller commands",
+  "description": "Roller CLI for the Version/Publish commands",
   "version": "0.1.8",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "typings": "dist/index.d.ts",
+  "bin": {
+    "ws-roller": "dist/cli.js"
+  },
   "files": [
     "/dist"
   ],
@@ -33,6 +36,7 @@
     "@ws-conventional-version-roller/core": "^0.1.8",
     "@ws-conventional-version-roller/publish": "^0.1.8",
     "@ws-conventional-version-roller/version": "^0.1.8",
+    "dedent": "^0.7.0",
     "dotenv": "^14.2.0",
     "npmlog": "^6.0.0",
     "yargs": "^17.3.1"
