@@ -1,4 +1,5 @@
 #!/usr/bin/env node
+
 import dedent from 'dedent';
 import log from 'npmlog';
 import yargs from 'yargs/yargs';
