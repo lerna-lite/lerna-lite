@@ -1,7 +1,7 @@
 {
   "name": "@ws-conventional-version-roller/version",
   "description": "Bump version & write changelog of packages changed since the last release",
-  "version": "0.2.0",
+  "version": "0.2.1",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "typings": "dist/index.d.ts",
@@ -31,7 +31,7 @@
     "npm": ">=8.0.0"
   },
   "dependencies": {
-    "@ws-conventional-version-roller/core": "^0.2.0",
+    "@ws-conventional-version-roller/core": "^0.2.1",
     "chalk": "^4.1.2",
     "dedent": "^0.7.0",
     "load-json-file": "^6.2.0",
