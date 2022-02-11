@@ -48,6 +48,18 @@ Run an [npm script](https://docs.npmjs.com/misc/scripts) in each package of the 
 $ ws-runner run --scope my-component test
 ```
 
+- [`@ws-roller/version`](#ws-rollerversion)
+  - [Usage](#usage)
+  - [Options](#options)
+    - [`--npm-client <client>`](#--npm-client-client)
+    - [`--run-dry-run`](#--run-dry-run) (new)
+    - [`--stream`](#--stream)
+    - [`--parallel`](#--parallel)
+    - [`--no-bail`](#--no-bail)
+    - [`--no-prefix`](#--no-prefix)
+    - [`--profile`](#--profile)
+    - [`--profile-location <location>`](#--profile-location-location)
+
 ### `--npm-client <client>`
 
 Must be an executable that knows how to run npm lifecycle scripts.
@@ -69,7 +81,7 @@ May also be configured in `roller.json`:
 }
 ```
 
-### `run-dry-run`
+### `--run-dry-run`
 
 Displays the process command that would be performed without actually executing it. This could be helpful for troubleshooting.
 
