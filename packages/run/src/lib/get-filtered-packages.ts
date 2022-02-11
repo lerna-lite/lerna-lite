@@ -1,4 +1,4 @@
-import { collectUpdates, ExecOpts, PackageGraph } from '@ws-conventional-version-roller/core';
+import { collectUpdates, ExecOpts, Package, PackageGraph } from '@ws-conventional-version-roller/core';
 import { log } from 'npmlog';
 
 import { filterPackages } from './filter-packages';
@@ -46,7 +46,7 @@ export async function getFilteredPackages(packageGraph: PackageGraph, execOpts: 
       options.log.notice('filter', 'including merged tags');
     }
 
-    chain = chain.then((/** @type {ReturnType<typeof filterPackages>} */ filteredPackages) =>
+    chain = chain.then((filteredPackages: Package[]) =>
       Promise.resolve(collectUpdates(filteredPackages, packageGraph, execOpts, opts)).then((updates) => {
         const updated = new Set(updates.map(({ pkg }) => pkg.name));
 

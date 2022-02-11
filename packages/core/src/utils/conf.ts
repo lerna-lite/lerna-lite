@@ -22,13 +22,13 @@ export class Conf extends ConfigChain {
   list: any;
 
   // https://github.com/npm/npm/blob/latest/lib/config/core.js#L208-L222
-  constructor(base) {
+  constructor(base: any) {
     super(base);
     this.root = base;
   }
 
   // https://github.com/npm/npm/blob/latest/lib/config/core.js#L332-L342
-  add(data, marker) {
+  add(data: any, marker: any) {
     try {
       /* eslint-disable no-param-reassign */
       for (const x of Object.keys(data)) {
@@ -48,7 +48,7 @@ export class Conf extends ConfigChain {
   }
 
   // https://github.com/npm/npm/blob/latest/lib/config/core.js#L312-L325
-  addFile(file, name = file) {
+  addFile(file: string, name: string = file) {
     const marker = { __source__: name };
 
     this.sources[name] = { path: file, type: 'ini' };
@@ -66,7 +66,7 @@ export class Conf extends ConfigChain {
   }
 
   // https://github.com/npm/npm/blob/latest/lib/config/core.js#L344-L360
-  addEnv(env = process.env) {
+  addEnv(env: any = process.env) {
     const conf = {};
 
     Object.keys(env)
@@ -137,7 +137,7 @@ export class Conf extends ConfigChain {
   }
 
   // https://github.com/npm/npm/blob/latest/lib/config/load-cafile.js
-  loadCAFile(file) {
+  loadCAFile(file: string) {
     if (!file) {
       return;
     }
@@ -188,7 +188,7 @@ export class Conf extends ConfigChain {
   }
 
   // https://github.com/npm/npm/blob/24ec9f2/lib/config/get-credentials-by-uri.js
-  getCredentialsByURI(uri) {
+  getCredentialsByURI(uri: string) {
     assert(uri && typeof uri === 'string', 'registry URL is required');
 
     const nerfed = toNerfDart(uri);

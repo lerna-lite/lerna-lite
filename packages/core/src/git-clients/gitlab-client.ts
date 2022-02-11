@@ -1,3 +1,4 @@
+// @ts-ignore
 import fetch from 'node-fetch';
 import log from 'npmlog';
 import path from 'path';

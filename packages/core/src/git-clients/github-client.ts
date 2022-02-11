@@ -1,4 +1,5 @@
 import { Octokit } from '@octokit/rest';
+import { SyncOptions } from 'execa';
 import parseGitUrl from 'git-url-parse';
 import log from 'npmlog';
 
@@ -29,7 +30,7 @@ export function createGitHubClient() {
   return new Octokit(options);
 }
 
-export function parseGitRepo(remote = 'origin', opts, gitDryRun = false) {
+export function parseGitRepo(remote = 'origin', opts: SyncOptions<string>, gitDryRun = false): parseGitUrl.GitUrl {
   log.silly('parseGitRepo', '');
   const args = ['config', '--get', `remote.${remote}.url`];
   log.verbose('git', args.join(' '));
@@ -39,5 +40,5 @@ export function parseGitRepo(remote = 'origin', opts, gitDryRun = false) {
     throw new Error(`Git remote URL could not be found using '${remote}'.`);
   }
 
-  return gitDryRun ? {} : parseGitUrl(url);
+  return gitDryRun ? {} as parseGitUrl.GitUrl : parseGitUrl(url);
 }

@@ -1,5 +1,5 @@
 // https://github.com/npm/npm/blob/latest/lib/config/core.js#L409-L423
-export function envReplace(str) {
+export function envReplace(str: any): string {
   if (typeof str !== 'string' || !str) {
     return str;
   }

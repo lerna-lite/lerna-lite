@@ -57,6 +57,7 @@
     "@types/node": "^17.0.8",
     "@types/npmlog": "^4.1.4",
     "@types/p-map": "^2.0.0",
+    "@types/semver": "^7.3.9",
     "@types/write-json-file": "^3.2.1",
     "@types/write-pkg": "^4.0.0"
   }

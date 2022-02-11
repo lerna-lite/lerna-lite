@@ -7,7 +7,7 @@ const defaults = require('./defaults');
 module.exports.defaults = Object.assign({}, defaults.defaults);
 
 // https://github.com/npm/npm/blob/latest/lib/config/core.js#L101-L200
-export function npmConf(opts) {
+export function npmConf(opts: any) {
   const conf = new Conf(Object.assign({}, defaults.defaults));
 
   // prevent keys with undefined values from obscuring defaults

@@ -58,6 +58,7 @@ function shallowCopy(json) {
  * many values resolved directly from the original JSON.
  */
 export class Package {
+  _id = '';
   name: string;
   licensePath = '';
   localDependencies = new Map<string, any>();

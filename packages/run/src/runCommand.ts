@@ -45,7 +45,7 @@ export class RunCommand extends Command {
     let chain: Promise<any> = Promise.resolve();
 
     chain = chain.then(() => getFilteredPackages(this.packageGraph!, this.execOpts, this.options));
-    chain = chain.then((filteredPackages) => {
+    chain = chain.then((filteredPackages: Package[]) => {
       this.packagesWithScript =
         script === 'env'
           ? filteredPackages
@@ -99,9 +99,9 @@ export class RunCommand extends Command {
       });
     } else {
       // detect error (if any) from collected results
-      chain = chain.then((results) => {
+      chain = chain.then((results: Array<{ exitCode: number; failed?: boolean; pkg: Package; stderr: any; }>) => {
         /* istanbul ignore else */
-        if (results.some((result) => result.failed)) {
+        if (results.some((result: { failed?: boolean; }) => result.failed)) {
           // propagate 'highest' error code, it's probably the most useful
           const codes = results.filter((result) => result.failed).map((result) => result.exitCode);
           const exitCode = Math.max(...codes, 1);
@@ -120,7 +120,7 @@ export class RunCommand extends Command {
       });
     }
 
-    return chain.then((results) => {
+    return chain.then((results: Array<{ exitCode: number; failed?: boolean; pkg: Package; stderr: any; }>) => {
       const someFailed = results.some((result) => result.failed);
       const logType = someFailed ? 'error' : 'success';
 
@@ -160,13 +160,13 @@ export class RunCommand extends Command {
 
   getRunner() {
     return this.options.stream
-      ? (pkg) => this.runScriptInPackageStreaming(pkg)
-      : (pkg) => this.runScriptInPackageCapturing(pkg);
+      ? (pkg: Package) => this.runScriptInPackageStreaming(pkg)
+      : (pkg: Package) => this.runScriptInPackageCapturing(pkg);
   }
 
   runScriptInPackagesTopological() {
-    let profiler;
-    let runner;
+    let profiler: Profiler;
+    let runner: any;
 
     if (this.options.profile) {
       profiler = new Profiler({
@@ -176,7 +176,7 @@ export class RunCommand extends Command {
       });
 
       const callback = this.getRunner();
-      runner = (pkg) => profiler.run(() => callback(pkg), pkg.name);
+      runner = (pkg: Package) => profiler.run(() => callback(pkg), pkg.name);
     } else {
       runner = this.getRunner();
     }
@@ -186,6 +186,7 @@ export class RunCommand extends Command {
       rejectCycles: this.options.rejectCycles,
     });
 
+    // @ts-ignore
     if (profiler) {
       chain = chain.then((results) => profiler.output().then(() => results));
     }
@@ -194,7 +195,7 @@ export class RunCommand extends Command {
   }
 
   runScriptInPackagesParallel() {
-    return pMap(this.packagesWithScript, (pkg) => this.runScriptInPackageStreaming(pkg));
+    return pMap(this.packagesWithScript, (pkg: Package) => this.runScriptInPackageStreaming(pkg));
   }
 
   runScriptInPackagesLexical() {
@@ -208,21 +209,21 @@ export class RunCommand extends Command {
 
     const chain = npmRunScriptStreaming(this.script, this.getOpts(pkg));
     if (!this.bail) {
-      chain.then((result) => {
+      chain.then((result: { exitCode: number; failed?: boolean; pkg: Package; stderr: any; }) => {
         return { ...result, pkg };
       });
     }
     return chain;
   }
 
-  runScriptInPackageCapturing(pkg) {
+  runScriptInPackageCapturing(pkg: Package) {
     const getElapsed = timer();
 
     if (this.options.runDryRun) {
       return this.dryRunScript(this.script, pkg.name);
     }
 
-    return npmRunScript(this.script, this.getOpts(pkg)).then((result) => {
+    return npmRunScript(this.script, this.getOpts(pkg)).then((result: { exitCode: number; failed?: boolean; pkg: Package; stderr: any; stdout: any; }) => {
       this.logger.info(
         'run',
         `Ran npm script '%s' in '%s' in %ss:`,
@@ -238,7 +239,7 @@ export class RunCommand extends Command {
     });
   }
 
-  dryRunScript(scriptName, pkgName): Promise<any> {
+  dryRunScript(scriptName: string, pkgName: string): Promise<any> {
     this.logger.info(
       'dry-run>',
       `Run npm script '%s' in '%s'`,

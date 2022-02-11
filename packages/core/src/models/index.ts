@@ -17,10 +17,45 @@ export interface CommandOptions {
   rollVersion?: boolean;
 }
 
+export interface DescribeRefOptions {
+  /* Defaults to `process.cwd()` */
+  cwd?: string;
+
+  /* Glob passed to `--match` flag */
+  match?: string;
+}
+
+/* When annotated release tags are missing */
+export interface DescribeRefFallbackResult {
+  isDirty: boolean;
+  refCount: string;
+  sha: string;
+}
+
+/* When annotated release tags are present */
+export interface DescribeRefDetailedResult {
+  lastTagName: string;
+  lastVersion: string;
+  isDirty: boolean;
+  refCount: string;
+  sha: string;
+}
+
 /** Provided to any execa-based call */
 export interface ExecOpts {
   cwd: string;
   maxBuffer?: number;
+}
+
+export interface LifecycleConfig {
+  log?: typeof log;
+  ignorePrepublish?: boolean;
+  ignoreScripts?: boolean;
+  nodeOptions?: string;
+  scriptShell?: string;
+  scriptsPrependNodePath?: boolean;
+  snapshot?: any;
+  unsafePerm?: boolean;
 }
 
 export interface Manifest {
@@ -34,7 +69,7 @@ export interface UpdateChangelogOption {
   changelogHeaderMessage?: string;
   changelogVersionMessage?: string;
   changelogPreset?: string;
-  rootPath?: string;
+  rootPath: string;
   tagPrefix?: string;
   version?: string;
 }

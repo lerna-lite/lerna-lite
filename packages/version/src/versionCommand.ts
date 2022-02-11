@@ -706,5 +706,5 @@ export class VersionCommand extends Command {
  * @returns {string|undefined}
  */
 function prereleaseIdFromVersion(version) {
-  return (semver.prerelease(version) || []).shift();
+  return ((semver.prerelease(version) || []) as string[]).shift();
 }

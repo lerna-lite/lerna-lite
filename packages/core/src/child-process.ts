@@ -3,6 +3,7 @@ import execa from 'execa';
 import log from 'npmlog';
 import os from 'os';
 import logTransformer from 'strong-log-transformer';
+import { Package } from '.';
 
 // bookkeeping for spawned processes
 const children = new Set();
@@ -14,7 +15,7 @@ const NUM_COLORS = colorWheel.length;
 // ever-increasing index ensures colors are always sequential
 let currentColor = 0;
 
-export function exec(command, args, opts, cmdDryRun = false) {
+export function exec(command: string, args: string[], opts: any, cmdDryRun = false) {
   const options = Object.assign({ stdio: 'pipe' }, opts);
   const spawned = spawnProcess(command, args, options, cmdDryRun);
 
@@ -28,7 +29,7 @@ export function execSync(command: string, args?: string[], opts?: any, cmdDryRun
     : execa.sync(command, args, opts).stdout;
 }
 
-export function spawn(command, args, opts, cmdDryRun = false) {
+export function spawn(command: string, args: string[], opts: any, cmdDryRun = false) {
   const options = Object.assign({}, opts, { stdio: 'inherit' });
   const spawned = spawnProcess(command, args, options, cmdDryRun);
 
@@ -36,8 +37,8 @@ export function spawn(command, args, opts, cmdDryRun = false) {
 }
 
 // istanbul ignore next
-export function spawnStreaming(command, args, opts, prefix, cmdDryRun = false) {
-  const options = Object.assign({}, opts);
+export function spawnStreaming(command: string, args: string[], opts: any, prefix?: string | boolean, cmdDryRun = false) {
+  const options: any = Object.assign({}, opts);
   options.stdio = ['ignore', 'pipe', 'pipe'];
 
   const spawned = spawnProcess(command, args, options, cmdDryRun) as execa.ExecaChildProcess<string>;
@@ -71,7 +72,7 @@ export function getChildProcessCount() {
   return children.size;
 }
 
-export function getExitCode(result) {
+export function getExitCode(result: any) {
   // https://nodejs.org/docs/latest-v6.x/api/child_process.html#child_process_event_close
   if (typeof result.code === 'number') {
     return result.code;
@@ -87,7 +88,7 @@ export function getExitCode(result) {
   throw new TypeError(`Received unexpected exit code value ${JSON.stringify(result.code)}`);
 }
 
-export function spawnProcess(command, args, opts, cmdDryRun = false) {
+export function spawnProcess(command: string, args: string[], opts: execa.SyncOptions<string> & { pkg: Package }, cmdDryRun = false) {
   if (cmdDryRun) {
     return logExecCommand(command, args);
   }

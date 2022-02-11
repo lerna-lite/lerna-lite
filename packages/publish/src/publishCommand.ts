@@ -47,7 +47,7 @@ export class PublishCommand extends Command {
   tagPrefix = '';
   hasRootedLeaf = false;
   npmSession = '';
-  packagesToPublish?: Package[] = [];
+  packagesToPublish: Package[] = [];
   packagesToBeLicensed?: Package[] = [];
   runPackageLifecycle: any;
   runRootLifecycle!: (stage: string) => Promise<void> | void;

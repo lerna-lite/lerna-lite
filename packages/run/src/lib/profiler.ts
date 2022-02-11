@@ -5,11 +5,11 @@ import upath from 'upath';
 
 import { ProfilerConfig, TraceEvent } from '../models';
 
-const hrtimeToMicroseconds = (hrtime) => {
+const hrtimeToMicroseconds = (hrtime: any) => {
   return (hrtime[0] * 1e9 + hrtime[1]) / 1000;
 };
 
-const range = (len) => {
+const range = (len: number) => {
   return Array(len)
     // @ts-ignore
     .fill()
@@ -42,14 +42,14 @@ export class Profiler {
     this.threads = range(concurrency);
   }
 
-  run(fn, name) {
-    let startTime;
-    let threadId;
+  run(fn: () => void, name: string) {
+    let startTime: any;
+    let threadId!: number;
 
     return Promise.resolve()
       .then(() => {
         startTime = process.hrtime();
-        threadId = this.threads.shift();
+        threadId = this.threads.shift() as number;
       })
       .then(() => fn())
       .then((value) => {
@@ -64,7 +64,7 @@ export class Profiler {
           pid: 1,
           tid: threadId,
           dur: hrtimeToMicroseconds(duration),
-        };
+        } as TraceEvent;
 
         this.events.push(event);
 
