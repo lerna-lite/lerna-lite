@@ -245,34 +245,46 @@ export class PublishCommand extends Command {
   }
 
   async detectFromGit() {
-    const matchingPattern = this.project?.isIndependent() ? '*@*' : `${this.tagPrefix}*.*.*`;
+    try {
+      const matchingPattern = this.project?.isIndependent() ? '*@*' : `${this.tagPrefix}*.*.*`;
 
-    // attempting to publish a tagged release with local changes is not allowed
-    await this.verifyWorkingTreeClean();
+      // attempting to publish a tagged release with local changes is not allowed
+      await this.verifyWorkingTreeClean();
 
-    const taggedPackageNames = await getCurrentTags(this.execOpts, matchingPattern, this.options.gitDryRun);
-    if (!taggedPackageNames.length) {
-      this.logger.notice('from-git', 'No tagged release found. You might not have fetched tags.');
+      const taggedPackageNames = await getCurrentTags(this.execOpts, matchingPattern, this.options.gitDryRun);
+      if (!taggedPackageNames.length) {
+        this.logger.notice('from-git', 'No tagged release found. You might not have fetched tags.');
 
-      return [];
+        return [];
+      }
+
+      if (this.project?.isIndependent()) {
+        return taggedPackageNames.map((name) => this.packageGraph?.get(name));
+      }
+
+      const updates = await getTaggedPackages(this.packageGraph, this.project?.rootPath, this.execOpts, this.options.gitDryRun);
+
+      // private packages are never published, full stop.
+      updates.filter((node) => !node.pkg.private);
+
+      const updatesVersions = updates.map((node) => [node.name, node.version]);
+
+      return {
+        updates,
+        updatesVersions,
+        needsConfirmation: true,
+      };
+    } catch (err: any) {
+      // an execa error is thrown when git suffers a fatal error (such as no git repository present)
+      if (err.failed && /git describe/.test(err.command)) {
+        // (we tried)
+        this.logger.silly('EWORKINGTREE', err.message);
+        this.logger.notice('FYI', 'Unable to verify working tree, proceed at your own risk');
+      } else {
+        // validation errors should be preserved
+        throw err;
+      }
     }
-
-    if (this.project?.isIndependent()) {
-      return taggedPackageNames.map((name) => this.packageGraph?.get(name));
-    }
-
-    const updates = await getTaggedPackages(this.packageGraph, this.project?.rootPath, this.execOpts, this.options.gitDryRun);
-
-    // private packages are never published, full stop.
-    updates.filter((node) => !node.pkg.private);
-
-    const updatesVersions = updates.map((node) => [node.name, node.version]);
-
-    return {
-      updates,
-      updatesVersions,
-      needsConfirmation: true,
-    };
   }
 
   async detectFromPackage() {
@@ -321,7 +333,19 @@ export class PublishCommand extends Command {
     let chain: Promise<any> = Promise.resolve();
 
     // attempting to publish a canary release with local changes is not allowed
-    chain = chain.then(() => this.verifyWorkingTreeClean());
+    chain = chain
+      .then(() => this.verifyWorkingTreeClean())
+      .catch((err) => {
+        // an execa error is thrown when git suffers a fatal error (such as no git repository present)
+        if (err.failed && /git describe/.test(err.command)) {
+          // (we tried)
+          this.logger.silly('EWORKINGTREE', err.message);
+          this.logger.notice('FYI', 'Unable to verify working tree, proceed at your own risk');
+        } else {
+          // validation errors should be preserved
+          throw err;
+        }
+      });
 
     // find changed packages since last release, if any
     chain = chain.then(() =>
