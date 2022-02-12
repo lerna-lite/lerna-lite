@@ -3,6 +3,14 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [0.3.1](https://github.com/ghiscoding/lerna-lite/compare/v0.3.0...v0.3.1) (2022-02-12)
+
+### Bug Fixes
+
+* **publish:** skip publish when using gitDryRun ([ea97c92](https://github.com/ghiscoding/lerna-lite/commit/ea97c9289ba690c47713d7feb75f0c760b601a15))
+* **publish:** skip publish when using gitDryRun ([9408167](https://github.com/ghiscoding/lerna-lite/commit/9408167d0dbd8a8c962a166bd71c86220610acfd))
+
+
 # [0.3.0](https://github.com/ghiscoding/lerna-lite/compare/v0.2.3...v0.3.0) (2022-02-12)
 
 ## BREAKING CHANGE 

@@ -1,7 +1,7 @@
 {
   "name": "@lerna-lite/publish",
   "description": "Publish packages in the current workspace",
-  "version": "0.3.0",
+  "version": "0.3.1",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "typings": "dist/index.d.ts",
@@ -31,8 +31,8 @@
     "npm": ">=8.0.0"
   },
   "dependencies": {
-    "@lerna-lite/core": "^0.3.0",
-    "@lerna-lite/version": "^0.3.0",
+    "@lerna-lite/core": "^0.3.1",
+    "@lerna-lite/version": "^0.3.1",
     "byte-size": "^8.1.0",
     "columnify": "^1.5.4",
     "fs-extra": "^10.0.0",
