@@ -22,8 +22,8 @@
 /connect.lock
 /coverage
 /typings
+lerna-debug.log
 npm-debug.log
-roller-debug.log
 testem.log
 
 # System Files

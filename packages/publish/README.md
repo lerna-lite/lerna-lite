@@ -1,24 +1,24 @@
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![TypeScript](https://img.shields.io/badge/%3C%2F%3E-TypeScript-%230074c1.svg)](http://www.typescriptlang.org/)
-[![npm](https://img.shields.io/npm/v/@ws-conventional-version-roller/publish.svg?color=forest)](https://www.npmjs.com/package/@ws-conventional-version-roller/publish)
-[![npm](https://img.shields.io/npm/dy/@ws-conventional-version-roller/publish?color=forest)](https://www.npmjs.com/package/@ws-conventional-version-roller/publish)
-[![Actions Status](https://github.com/ghiscoding/ws-conventional-version-roller/workflows/CI%20Build/badge.svg)](https://github.com/ghiscoding/ws-conventional-version-roller/actions)
+[![npm](https://img.shields.io/npm/v/@lerna-lite/publish.svg?color=forest)](https://www.npmjs.com/package/@lerna-lite/publish)
+[![npm](https://img.shields.io/npm/dy/@lerna-lite/publish?color=forest)](https://www.npmjs.com/package/@lerna-lite/publish)
+[![Actions Status](https://github.com/ghiscoding/lerna-lite/workflows/CI%20Build/badge.svg)](https://github.com/ghiscoding/lerna-lite/actions)
 
-# @ws-conventional-version-roller/publish
+# @lerna-lite/publish
 ## (`ws-roller publish`) Publish command
 
-The roller Publish command, publish packages in the current project
+Lerna-Lite Publish command, publish packages in the current project
 
 ### Internal Dependencies
-- [@ws-conventional-version-roller/core](https://github.com/ghiscoding/ws-conventional-version-roller/tree/main/packages/core)
-- [@ws-conventional-version-roller/version](https://github.com/ghiscoding/ws-conventional-version-roller/tree/main/packages/version)
+- [@lerna-lite/core](https://github.com/ghiscoding/lerna-lite/tree/main/packages/core)
+- [@lerna-lite/version](https://github.com/ghiscoding/lerna-lite/tree/main/packages/version)
 
 ---
 
 ## Installation 
 ```sh
 # install globally
-npm install -g @ws-conventional-version-roller/cli
+npm install -g @lerna-lite/cli
 # then use it (see usage below)
 ws-roller publish
 
@@ -36,7 +36,7 @@ ws-roller publish from-package # explicitly publish packages where the latest ve
 
 When run, this command does one of the following things:
 
-- Publish packages updated since the last release (calling [`ws-roller version`](https://github.com/ghiscoding/ws-conventional-version-roller/blob/main/packages/version/README.md) behind the scenes).
+- Publish packages updated since the last release (calling [`ws-roller version`](https://github.com/ghiscoding/lerna-lite/blob/main/packages/version/README.md) behind the scenes).
   - This is the legacy behavior of ws-roller 2.x
 - Publish packages tagged in the current commit (`from-git`).
 - Publish packages in the latest commit where the version is not present in the registry (`from-package`).
@@ -172,7 +172,7 @@ When using traditional peer + dev dependency pairs, this option should be config
 ws-roller publish --graph-type all
 ```
 
-Configured via `roller.json`:
+Configured via `lerna.json`:
 
 ```json
 {
@@ -216,7 +216,7 @@ By default, `ws-roller publish` will attempt (if enabled) to `git checkout` _onl
 
 If you **know** you need different behavior, you'll understand: Pass `--no-granular-pathspec` to make the git command _literally_ `git checkout -- .`. By opting into this [pathspec](https://git-scm.com/docs/gitglossary#Documentation/gitglossary.txt-aiddefpathspecapathspec), you must have all intentionally unversioned content properly ignored.
 
-This option makes the most sense configured in `roller.json`, as you really don't want to mess it up:
+This option makes the most sense configured in `lerna.json`, as you really don't want to mess it up:
 
 ```json
 {
@@ -231,7 +231,7 @@ The root-level configuration is intentional, as this also covers the [identicall
 
 By default, `ws-roller` will verify the logged-in npm user's access to the packages about to be published. Passing this flag will disable that check.
 
-If you are using a third-party registry that does not support `npm access ls-packages`, you will need to pass this flag (or set `command.publish.verifyAccess` to `false` in `roller.json`).
+If you are using a third-party registry that does not support `npm access ls-packages`, you will need to pass this flag (or set `command.publish.verifyAccess` to `false` in `lerna.json`).
 
 > Please use with caution
 
@@ -292,7 +292,7 @@ ws-roller version --tag-version-prefix=''
 ws-roller publish from-git --tag-version-prefix=''
 ```
 
-You could also configure this at the root level of `roller.json`, applying to both commands equally:
+You could also configure this at the root level of `lerna.json`, applying to both commands equally:
 
 ```json
 {
@@ -401,11 +401,11 @@ ws-roller will run [npm lifecycle scripts](https://docs.npmjs.com/cli/v8/using-n
    2. Run `prepare` lifecycle
    3. Run `prepublishOnly` lifecycle
    4. Run `prepack` lifecycle
-   5. Create package tarball in temp directory via [JS API](https://github.com/ghiscoding/ws-conventional-version-roller/blob/main/packages/publish/src/lib/pack-directory.ts)
+   5. Create package tarball in temp directory via [JS API](https://github.com/ghiscoding/lerna-lite/blob/main/packages/publish/src/lib/pack-directory.ts)
    6. Run `postpack` lifecycle
 7. Run `postpack` lifecycle in root
 8. For each changed package, in topological order (all dependencies before dependents):
-   1. Publish package to configured [registry](#--registry-url) via [JS API](https://github.com/ghiscoding/ws-conventional-version-roller/blob/main/packages/publish/src/lib/npm-publish.ts)
+   1. Publish package to configured [registry](#--registry-url) via [JS API](https://github.com/ghiscoding/lerna-lite/blob/main/packages/publish/src/lib/npm-publish.ts)
    2. Run `publish` lifecycle
    3. Run `postpublish` lifecycle
 9. Run `publish` lifecycle in root

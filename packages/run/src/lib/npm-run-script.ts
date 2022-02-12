@@ -1,5 +1,5 @@
 import log from 'npmlog';
-import { exec, Package, spawnStreaming } from '@ws-conventional-version-roller/core';
+import { exec, Package, spawnStreaming } from '@lerna-lite/core';
 
 import { getNpmExecOpts } from './get-npm-exec-opts';
 import { RunScriptOption, ScriptStreamingOption } from '../models';

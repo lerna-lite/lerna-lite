@@ -1,5 +1,5 @@
 {
-  "name": "@ws-conventional-version-roller/version",
+  "name": "@lerna-lite/version",
   "description": "Bump version & write changelog of packages changed since the last release",
   "version": "0.2.3",
   "main": "dist/index.js",
@@ -17,21 +17,21 @@
   },
   "license": "MIT",
   "author": "Ghislain B.",
-  "homepage": "https://github.com/ghiscoding/ws-conventional-version-roller",
+  "homepage": "https://github.com/ghiscoding/lerna-lite",
   "repository": {
     "type": "git",
-    "url": "https://github.com/ghiscoding/ws-conventional-version-roller.git",
+    "url": "https://github.com/ghiscoding/lerna-lite.git",
     "directory": "packages/version"
   },
   "bugs": {
-    "url": "https://github.com/ghiscoding/ws-conventional-version-roller/issues"
+    "url": "https://github.com/ghiscoding/lerna-lite/issues"
   },
   "engines": {
     "node": ">=16.11.0",
     "npm": ">=8.0.0"
   },
   "dependencies": {
-    "@ws-conventional-version-roller/core": "^0.2.3",
+    "@lerna-lite/core": "^0.2.3",
     "chalk": "^4.1.2",
     "dedent": "^0.7.0",
     "load-json-file": "^6.2.0",

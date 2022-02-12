@@ -2,7 +2,7 @@ import { EOL } from 'os';
 import log from 'npmlog';
 import tempWrite from 'temp-write';
 
-import { exec } from '@ws-conventional-version-roller/core';
+import { exec } from '@lerna-lite/core';
 
 /**
  * @param {string} message

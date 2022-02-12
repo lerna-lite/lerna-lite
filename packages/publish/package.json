@@ -1,5 +1,5 @@
 {
-  "name": "@ws-conventional-version-roller/publish",
+  "name": "@lerna-lite/publish",
   "description": "Publish packages in the current workspace",
   "version": "0.2.3",
   "main": "dist/index.js",
@@ -17,22 +17,22 @@
   },
   "license": "MIT",
   "author": "Ghislain B.",
-  "homepage": "https://github.com/ghiscoding/ws-conventional-version-roller",
+  "homepage": "https://github.com/ghiscoding/lerna-lite",
   "repository": {
     "type": "git",
-    "url": "https://github.com/ghiscoding/ws-conventional-version-roller.git",
+    "url": "https://github.com/ghiscoding/lerna-lite.git",
     "directory": "packages/publish"
   },
   "bugs": {
-    "url": "https://github.com/ghiscoding/ws-conventional-version-roller/issues"
+    "url": "https://github.com/ghiscoding/lerna-lite/issues"
   },
   "engines": {
     "node": ">=16.11.0",
     "npm": ">=8.0.0"
   },
   "dependencies": {
-    "@ws-conventional-version-roller/core": "^0.2.3",
-    "@ws-conventional-version-roller/version": "^0.2.3",
+    "@lerna-lite/core": "^0.2.3",
+    "@lerna-lite/version": "^0.2.3",
     "byte-size": "^8.1.0",
     "columnify": "^1.5.4",
     "fs-extra": "^10.0.0",

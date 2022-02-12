@@ -1,5 +1,5 @@
 import log from 'npmlog';
-import { ExecOpts, execSync } from '@ws-conventional-version-roller/core';
+import { ExecOpts, execSync } from '@lerna-lite/core';
 
 /**
  * Retrieve current SHA from git.

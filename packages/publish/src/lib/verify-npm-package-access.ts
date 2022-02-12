@@ -1,6 +1,6 @@
 import access from 'libnpmaccess';
 
-import { FetchConfig, Package, pulseTillDone, ValidationError } from '@ws-conventional-version-roller/core';
+import { FetchConfig, Package, pulseTillDone, ValidationError } from '@lerna-lite/core';
 import { getFetchConfig } from './fetch-config';
 
 /**

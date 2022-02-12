@@ -1,5 +1,5 @@
 import log from 'npmlog';
-import { exec, ExecOpts } from '@ws-conventional-version-roller/core';
+import { exec, ExecOpts } from '@lerna-lite/core';
 
 /**
  * @param {string} remote

@@ -1,4 +1,4 @@
-# ws-conventional-version-roller Code of Conduct
+# Lerna-Lite Code of Conduct
 
 ## Our Pledge
 

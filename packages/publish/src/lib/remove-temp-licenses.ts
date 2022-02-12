@@ -1,7 +1,7 @@
 import fs from 'fs-extra';
 import pMap from 'p-map';
 
-import { Package } from '@ws-conventional-version-roller/core';
+import { Package } from '@lerna-lite/core';
 
 /**
  * Remove temporary license files.

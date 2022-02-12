@@ -2,7 +2,7 @@ import multimatch from 'multimatch';
 import util from 'util';
 import log from 'npmlog';
 
-import { Package, ValidationError } from '@ws-conventional-version-roller/core';
+import { Package, ValidationError } from '@lerna-lite/core';
 
 /**
  * Filters a list of packages, returning all packages that match the `include` glob[s]

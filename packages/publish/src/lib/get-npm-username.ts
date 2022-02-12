@@ -1,7 +1,7 @@
 import { getFetchConfig } from './fetch-config';
 import { getProfileData } from './get-profile-data';
 import { getWhoAmI } from './get-whoami';
-import { FetchConfig, ValidationError } from '@ws-conventional-version-roller/core';
+import { FetchConfig, ValidationError } from '@lerna-lite/core';
 
 /**
  * Retrieve username of logged-in user.

@@ -22,7 +22,7 @@ Thanks for filing a General issue! However, before you submit, please read the f
 <!--- Include as many relevant details as possible about the environment you experienced the bug in -->
 | Software             | Version(s) |
 | -------------------- | ---------- |
-| Roller               | x.y        |
+| Lerna-Lite           | x.y        |
 | NodeJS               | x.y        |
 | TypeScript           | x.y        |
 

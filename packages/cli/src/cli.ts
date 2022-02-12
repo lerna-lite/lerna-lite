@@ -4,8 +4,8 @@ import 'dotenv/config';
 import dedent from 'dedent';
 import log from 'npmlog';
 import yargs from 'yargs/yargs';
-import { PublishCommand } from '@ws-conventional-version-roller/publish';
-import { VersionCommand } from '@ws-conventional-version-roller/version';
+import { PublishCommand } from '@lerna-lite/publish';
+import { VersionCommand } from '@lerna-lite/version';
 import { publishCommandOptions } from './publishCommandOptions';
 import { versionCommandOptions } from './versionCommandOptions';
 
@@ -59,18 +59,18 @@ yargs(process.argv.slice(2))
     if (actual.name !== 'ValidationError' && !actual.pkg) {
       // the recommendCommands() message is too terse
       if (/Did you mean/.test(actual.message)) {
-        log.error('roller', `Unknown command "${(cli.parsed as any).argv._[0]}"`);
+        log.error('lerna', `Unknown command "${(cli.parsed as any).argv._[0]}"`);
       }
 
-      log.error('roller', actual.message);
+      log.error('lerna', actual.message);
     }
 
     // exit non-zero so the CLI can be usefully chained
     cli.exit(actual.exitCode > 0 ? actual.exitCode : 1, actual);
   })
   .wrap(cli.terminalWidth()).epilogue(dedent`
-    When a command fails, all logs are written to roller-debug.log in the current working directory.
-    For more information, find our manual at https://github.com/ghiscoding/ws-conventional-version-roller
+    When a command fails, all logs are written to lerna-debug.log in the current working directory.
+    For more information, find our manual at https://github.com/ghiscoding/lerna-lite
   `)
   .argv;
 

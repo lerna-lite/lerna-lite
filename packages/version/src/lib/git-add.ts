@@ -2,7 +2,7 @@ import log from 'npmlog';
 import path from 'path';
 import slash from 'slash';
 
-import { exec } from '@ws-conventional-version-roller/core';
+import { exec } from '@lerna-lite/core';
 
 /**
  * @param {string[]} changedFiles
@@ -10,7 +10,7 @@ import { exec } from '@ws-conventional-version-roller/core';
  * @param {import('@lerna/child-process').ExecOpts} execOpts
  */
 export function gitAdd(changedFiles, gitOpts, execOpts, gitDryRun = false) {
-  // granular pathspecs should be relative to the git root, but that isn't necessarily where lerna lives
+  // granular pathspecs should be relative to the git root, but that isn't necessarily where lerna-lite lives
   const files = gitOpts.granularPathspec
     ? changedFiles.map((file) => slash(path.relative(execOpts.cwd, path.resolve(execOpts.cwd, file))))
     : '.';

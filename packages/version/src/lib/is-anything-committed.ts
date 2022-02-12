@@ -1,6 +1,6 @@
 import log from 'npmlog';
 
-import { execSync } from '@ws-conventional-version-roller/core';
+import { execSync } from '@lerna-lite/core';
 
 export function isAnythingCommitted(opts, gitDryRun = false) {
   log.silly('isAnythingCommitted', '');

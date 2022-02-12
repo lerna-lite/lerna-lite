@@ -3,7 +3,7 @@ import path from 'path';
 import ssri from 'ssri';
 import tar from 'tar';
 
-import { Package } from '@ws-conventional-version-roller/core';
+import { Package } from '@lerna-lite/core';
 
 export function getPacked(pkg: Package, tarFilePath: string) {
   const bundledWanted = new Set<string>(/* pkg.bundleDependencies || pkg.bundledDependencies || */[]);

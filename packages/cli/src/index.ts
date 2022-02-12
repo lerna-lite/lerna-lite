@@ -2,9 +2,9 @@ import 'dotenv/config';
 import { argv } from 'yargs';
 import log from 'npmlog';
 
-import { formatError, CommandOptions } from '@ws-conventional-version-roller/core';
-import { PublishCommand } from '@ws-conventional-version-roller/publish';
-import { VersionCommand } from '@ws-conventional-version-roller/version';
+import { formatError, CommandOptions } from '@lerna-lite/core';
+import { PublishCommand } from '@lerna-lite/publish';
+import { VersionCommand } from '@lerna-lite/version';
 
 try {
   const pkg = require('../package.json');

@@ -22,7 +22,7 @@ Thanks for filing a Bug Report! However, before you submit, please read the foll
 <!--- Include as many relevant details as possible about the library versions -->
 | Software             | Version(s) |
 | -------------------- | ---------- |
-| Roller               | x.y        |
+| Lerna-Lite           | x.y        |
 | NodeJS               | x.y        |
 | TypeScript           | x.y        |
 

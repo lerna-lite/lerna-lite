@@ -6,7 +6,7 @@ import pify from 'pify';
 import { publish } from 'libnpmpublish';
 import readJSON from 'read-package-json';
 
-import { otplease, runLifecycle } from '@ws-conventional-version-roller/core';
+import { otplease, runLifecycle } from '@lerna-lite/core';
 
 const readJSONAsync = pify(readJSON);
 
@@ -88,7 +88,7 @@ export function npmPublish(pkg, tarFilePath, options = {}, otpCache) {
         opts.log.silly('', err);
         opts.log.error(err.code, err.body?.error ?? err.message);
 
-        // avoid dumping logs, this isn't a lerna problem
+        // avoid dumping logs, this isn't a lerna-lite problem
         err.name = 'ValidationError';
 
         // ensure process exits non-zero

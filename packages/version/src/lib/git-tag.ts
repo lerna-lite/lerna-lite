@@ -1,6 +1,6 @@
 import log from 'npmlog';
 
-import { exec } from '@ws-conventional-version-roller/core';
+import { exec } from '@lerna-lite/core';
 
 /**
  * @param {string} tag

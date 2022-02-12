@@ -1,4 +1,4 @@
-import { collectUpdates, ExecOpts, Package, PackageGraph } from '@ws-conventional-version-roller/core';
+import { collectUpdates, ExecOpts, Package, PackageGraph } from '@lerna-lite/core';
 import { log } from 'npmlog';
 
 import { filterPackages } from './filter-packages';

@@ -1,7 +1,7 @@
 import path from 'path';
 import loadJsonFile from 'load-json-file';
 import writeJsonFile from 'write-json-file';
-import { Package, Project } from '@ws-conventional-version-roller/core';
+import { Package, Project } from '@lerna-lite/core';
 
 /**
  * Update NPM Lock File (when found), the lock file might be version 1 (exist in package folder) or version 2 (exist in workspace root)
@@ -64,11 +64,11 @@ export function updateNpmLockFileVersion2(obj: any, pkgName: string, newVersion:
         updateNpmLockFileVersion2(obj[k], pkgName, newVersion);
       } else {
         if (k === pkgName) {
-          // e.g.: "@ws-conventional-version-roller/core": "^0.1.2",
+          // e.g.: "@lerna-lite/core": "^0.1.2",
           const [_, versionPrefix, _versionStr] = obj[k].match(/^([\^~])?(.*)$/);
           obj[k] = `${versionPrefix}${newVersion}`;
         } else if (k === 'name' && obj[k] === pkgName && obj['version'] !== undefined) {
-          // e.g. "packages/version": { "name": "@ws-conventional-version-roller/version", "version": "0.1.2" }
+          // e.g. "packages/version": { "name": "@lerna-lite/version", "version": "0.1.2" }
           if (obj['version'] !== undefined) {
             obj['version'] = newVersion;
           }

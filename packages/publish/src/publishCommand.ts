@@ -5,7 +5,7 @@ import pMap from 'p-map';
 import pPipe from 'p-pipe';
 import semver from 'semver';
 
-import { VersionCommand } from '@ws-conventional-version-roller/version';
+import { VersionCommand } from '@lerna-lite/version';
 import {
   collectUpdates,
   createRunner,
@@ -20,7 +20,7 @@ import {
   runTopologically,
   throwIfUncommitted,
   ValidationError,
-} from '@ws-conventional-version-roller/core';
+} from '@lerna-lite/core';
 import { getCurrentTags } from './lib/get-current-tags';
 import { getTaggedPackages } from './lib/get-tagged-packages';
 import { getUnpublishedPackages } from './lib/get-unpublished-packages';
@@ -62,7 +62,7 @@ export class PublishCommand extends Command {
   }
 
   get requiresGit() {
-    // `lerna publish from-package` doesn't _need_ git, per se
+    // `ws-roller publish from-package` doesn't _need_ git, per se
     return this.options.bump !== 'from-package';
   }
 
@@ -651,7 +651,7 @@ export class PublishCommand extends Command {
       // despite being deprecated for years...
       chain = chain.then(() => this.runRootLifecycle('prepublish'));
 
-      // these lifecycles _should_ never be employed to run `lerna publish`...
+      // these lifecycles _should_ never be employed to run `ws-roller publish`...
       chain = chain.then(() => this.runPackageLifecycle(this.project?.manifest, 'prepare'));
       chain = chain.then(() => this.runPackageLifecycle(this.project?.manifest, 'prepublishOnly'));
       chain = chain.then(() => this.runPackageLifecycle(this.project?.manifest, 'prepack'));
