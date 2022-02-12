@@ -25,7 +25,7 @@ function flattenOptions(obj) {
   return {
     // eslint-disable-next-line dot-notation -- (npm v7 compat)
     defaultTag: obj['tag'] || 'latest',
-    dryRun: obj['dry-run'],
+    dryRun: obj['dry-run'] || obj['git-dry-run'],
     ...obj,
   };
 }
