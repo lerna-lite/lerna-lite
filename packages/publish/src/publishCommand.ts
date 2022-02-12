@@ -615,6 +615,11 @@ export class PublishCommand extends Command {
   }
 
   requestOneTimePassword() {
+    if (this.options.gitDryRun) {
+      this.logger.info('dry-run>', 'will ask OTP');
+      return;
+    }
+
     // if OTP has already been provided, skip prompt
     if (this.otpCache.otp) {
       return;
@@ -706,6 +711,7 @@ export class PublishCommand extends Command {
       // distTag defaults to 'latest' OR whatever is in pkg.publishConfig.tag
       // if we skip temp tags we should tag with the proper value immediately
       tag: this.options.tempTag ? 'lerna-temp' : this.conf.get('tag'),
+      'git-dry-run': this.options.gitDryRun || false,
     });
 
     const mapper = pPipe(
