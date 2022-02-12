@@ -50,7 +50,7 @@ Check out [Per-Package Configuration](#per-package-configuration) for more detai
 
 ## Positionals
 
-### bump `from-git`
+### semver `--bump from-git`
 
 In addition to the semver keywords supported by [`ws-roller version`](https://github.com/ws-roller/ws-roller/tree/main/commands/version#positionals),
 `ws-roller publish` also supports the `from-git` keyword.
@@ -58,7 +58,7 @@ This will identify packages tagged by `ws-roller version` and publish them to np
 This is useful in CI scenarios where you wish to manually increment versions,
 but have the package contents themselves consistently published by an automated process.
 
-### bump `from-package`
+### semver `--bump from-package`
 
 Similar to the `from-git` keyword except the list of packages to publish is determined by inspecting each `package.json`
 and determining if any package version is not present in the registry. Any versions not present in the registry will
@@ -68,26 +68,30 @@ This is useful when a previous `ws-roller publish` failed to publish all package
 ## Options
 
 `ws-roller publish` supports all of the options provided by [`ws-roller version`](https://github.com/ws-roller/ws-roller/tree/main/commands/version#options) in addition to the following:
-
-- [`--canary`](#--canary)
-- [`--contents <dir>`](#--contents-dir)
-- [`--dist-tag <tag>`](#--dist-tag-tag)
-- [`--force-publish`](#--force-publish)
-- [`--git-head <sha>`](#--git-head-sha)
-- [`--graph-type <all|dependencies>`](#--graph-type-alldependencies)
-- [`--ignore-scripts`](#--ignore-scripts)
-- [`--ignore-prepublish`](#--ignore-prepublish)
-- [`--legacy-auth`](#--legacy-auth)
-- [`--no-git-reset`](#--no-git-reset)
-- [`--no-granular-pathspec`](#--no-granular-pathspec)
-- [`--no-verify-access`](#--no-verify-access)
-- [`--otp`](#--otp)
-- [`--preid`](#--preid)
-- [`--pre-dist-tag <tag>`](#--pre-dist-tag-tag)
-- [`--registry <url>`](#--registry-url)
-- [`--tag-version-prefix`](#--tag-version-prefix)
-- [`--temp-tag`](#--temp-tag)
-- [`--yes`](#--yes)
+- [`@ws-roller/version`](#ws-rollerversion)
+  - [Positionals](#positionals)
+    - [semver `--bump from-git`](#semver--bump-from-git)
+    - [semver `--bump from-package`](#semver--bump-from-package)
+  - [Options](#options)
+    - [`--canary`](#--canary)
+    - [`--contents <dir>`](#--contents-dir)
+    - [`--dist-tag <tag>`](#--dist-tag-tag)
+    - [`--force-publish`](#--force-publish)
+    - [`--git-head <sha>`](#--git-head-sha)
+    - [`--graph-type <all|dependencies>`](#--graph-type-alldependencies)
+    - [`--ignore-scripts`](#--ignore-scripts)
+    - [`--ignore-prepublish`](#--ignore-prepublish)
+    - [`--legacy-auth`](#--legacy-auth)
+    - [`--no-git-reset`](#--no-git-reset)
+    - [`--no-granular-pathspec`](#--no-granular-pathspec)
+    - [`--no-verify-access`](#--no-verify-access)
+    - [`--otp`](#--otp)
+    - [`--preid`](#--preid)
+    - [`--pre-dist-tag <tag>`](#--pre-dist-tag-tag)
+    - [`--registry <url>`](#--registry-url)
+    - [`--tag-version-prefix`](#--tag-version-prefix)
+    - [`--temp-tag`](#--temp-tag)
+    - [`--yes`](#--yes)
 
 ### `--canary`
 
