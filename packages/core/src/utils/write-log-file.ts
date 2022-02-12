@@ -23,7 +23,7 @@ export function writeLogFile(cwd: string) {
   });
 
   // this must be synchronous because it is called before process exit
-  writeFileAtomic.sync(path.join(cwd, 'roller-debug.log'), logOutput);
+  writeFileAtomic.sync(path.join(cwd, 'lerna-debug.log'), logOutput);
 
   // truncate log after writing
   log.record.length = 0;

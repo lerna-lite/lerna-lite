@@ -4,7 +4,7 @@ export function formatError(err: { code?: string; body?: any; message?: string; 
   log.silly('', err.toString());
   log.error(err?.code ?? '', (err.body && err.body.error) || err.message);
 
-  // avoid dumping logs, this isn't a lerna problem
+  // avoid dumping logs, this isn't a lerna-lite problem
   err.name = 'ValidationError';
 
   // ensure process exits non-zero

@@ -3,7 +3,7 @@ import {
   Package,
   runTopologically,
   ValidationError,
-} from '@ws-conventional-version-roller/core';
+} from '@lerna-lite/core';
 import pMap from 'p-map';
 
 import { getFilteredPackages, npmRunScript, npmRunScriptStreaming, output, Profiler, timer } from './lib';

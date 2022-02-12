@@ -2,7 +2,7 @@ import log from 'npmlog';
 import npa from 'npm-package-arg';
 import fetch from 'npm-registry-fetch';
 
-import { otplease } from '@ws-conventional-version-roller/core';
+import { otplease } from '@lerna-lite/core';
 
 /**
  * @typedef {fetch.FetchOptions & { defaultTag?: string; dryRun?: boolean; }} DistTagOptions

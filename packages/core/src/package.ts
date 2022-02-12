@@ -39,7 +39,7 @@ function shallowCopy(json) {
 }
 
 /**
- * @typedef {object} RawManifest The subset of package.json properties that Lerna uses
+ * @typedef {object} RawManifest The subset of package.json properties that Lerna-Lite uses
  * @property {string} name
  * @property {string} version
  * @property {boolean} [private]

@@ -23,7 +23,7 @@ interface ProjectConfig {
 /**
  * A representation of the entire project managed by Lerna.
  *
- * Wherever the roller.json or lerna.json file is located, that is the project root.
+ * Wherever the lerna.json file is located, that is the project root.
  * All package globs are rooted from this location.
  */
 export class Project {
@@ -37,8 +37,8 @@ export class Project {
    * @param {string} [cwd] Defaults to process.cwd()
    */
   constructor(cwd: string) {
-    const explorer = cosmiconfigSync('roller', {
-      searchPlaces: ['roller.json', 'lerna.json', 'package.json'],
+    const explorer = cosmiconfigSync('lerna', {
+      searchPlaces: ['lerna.json', 'package.json'],
       transform(obj) {
         // cosmiconfig returns null when nothing is found
         if (!obj) {
@@ -47,7 +47,7 @@ export class Project {
             // saves a lot of noisy guards elsewhere
             config: {},
             // path.resolve(".", ...) starts from process.cwd()
-            filepath: path.resolve(cwd || '.', 'roller.json', 'lerna.json'),
+            filepath: path.resolve(cwd || '.', 'lerna.json'),
           };
         }
 

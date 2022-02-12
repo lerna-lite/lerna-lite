@@ -13,7 +13,7 @@
       "gitDryRun": false,
       "noPrivate": true,
       "message": "chore(release): publish new version %v",
-      "changelogHeaderMessage": "### Automate your Workspace Versions, Changelogs & Publish with [ws-conventional-version-roller](https://github.com/ghiscoding/ws-conventional-version-roller) 🚀"
+      "changelogHeaderMessage": "### Automate your Workspace Versions, Changelogs & Publish with [Lerna-Lite](https://github.com/ghiscoding/lerna-lite) 🚀"
     }
   }
 }

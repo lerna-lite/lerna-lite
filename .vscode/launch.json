@@ -6,7 +6,7 @@
   "configurations": [
     {
       "name": "Launch (roll Version)",
-      "program": "${workspaceFolder}/node_modules/@ws-conventional-version-roller/cli/dist/index.js",
+      "program": "${workspaceFolder}/node_modules/@lerna-lite/cli/dist/index.js",
       "args": [
         "${relativeFile}",
         "--roll-version"
@@ -21,7 +21,7 @@
     },
     {
       "name": "Launch (roll Publish)",
-      "program": "${workspaceFolder}/node_modules/@ws-conventional-version-roller/cli/dist/index.js",
+      "program": "${workspaceFolder}/node_modules/@lerna-lite/cli/dist/index.js",
       "args": [
         "${relativeFile}",
         "--roll-publish"

@@ -1,10 +1,10 @@
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![TypeScript](https://img.shields.io/badge/%3C%2F%3E-TypeScript-%230074c1.svg)](http://www.typescriptlang.org/)
-[![npm](https://img.shields.io/npm/v/@ws-conventional-version-roller/run.svg?color=forest)](https://www.npmjs.com/package/@ws-conventional-version-roller/run)
-[![npm](https://img.shields.io/npm/dy/@ws-conventional-version-roller/run?color=forest)](https://www.npmjs.com/package/@ws-conventional-version-roller/run)
-[![Actions Status](https://github.com/ghiscoding/ws-conventional-version-roller/workflows/CI%20Build/badge.svg)](https://github.com/ghiscoding/ws-conventional-version-roller/actions)
+[![npm](https://img.shields.io/npm/v/@lerna-lite/run.svg?color=forest)](https://www.npmjs.com/package/@lerna-lite/run)
+[![npm](https://img.shields.io/npm/dy/@lerna-lite/run?color=forest)](https://www.npmjs.com/package/@lerna-lite/run)
+[![Actions Status](https://github.com/ghiscoding/lerna-lite/workflows/CI%20Build/badge.svg)](https://github.com/ghiscoding/lerna-lite/actions)
 
-# @ws-conventional-version-roller/run
+# @lerna-lite/run
 ## (`ws-runner`) Run command CLI
 
 **Optional package** extracted from Lerna [run command](https://github.com/lerna/lerna/tree/main/commands/run) that will give us the ability to run [npm script](https://docs.npmjs.com/misc/scripts) in each package of the workspace that contains that script. 
@@ -12,14 +12,14 @@
 This package was added mainly because NPM Workspaces don't yet support running NPM scripts in parallel (they do have this [RFC](https://github.com/npm/rfcs/issues/190), so perhaps someday this package would become irrelevant :)).
 
 ### Internal Dependencies
-- [@ws-conventional-version-roller/core](https://github.com/ghiscoding/ws-conventional-version-roller/tree/main/packages/core)
+- [@lerna-lite/core](https://github.com/ghiscoding/lerna-lite/tree/main/packages/core)
 
 ---
 
 ## Installation 
 ```sh
 # install globally
-npm install -g @ws-conventional-version-roller/run
+npm install -g @lerna-lite/run
 # then use it (see usage below)
 ws-runner run <script>
 
@@ -69,7 +69,7 @@ The default `--npm-client` is `npm`.
 $ ws-runner run build --npm-client=yarn
 ```
 
-May also be configured in `roller.json`:
+May also be configured in `lerna.json`:
 
 ```json
 {
@@ -140,7 +140,7 @@ The default location of the performance profile output is at the root of your pr
 $ ws-runner run build --profile
 ```
 
-> **Note:** Roller will only profile when topological sorting is enabled (i.e. without `--parallel` and `--no-sort`).
+> **Note:** Lerna-Lite will only profile when topological sorting is enabled (i.e. without `--parallel` and `--no-sort`).
 
 ### `--profile-location <location>`
 

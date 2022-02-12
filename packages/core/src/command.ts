@@ -36,7 +36,7 @@ export class Command {
 
   constructor(_argv: any) {
     log.pause();
-    log.heading = 'roller';
+    log.heading = 'lerna';
 
     const argv = cloneDeep(_argv);
     log.silly('argv', argv);
@@ -183,9 +183,9 @@ export class Command {
     this.options = defaultOptions(
       // CLI flags, which if defined overrule subsequent values
       this.argv,
-      // Namespaced command options from `roller.json` or `lerna.json`
+      // Namespaced command options from `lerna.json`
       ...overrides,
-      // Global options from `roller.json` or `lerna.json`
+      // Global options from `lerna.json`
       this.project.config,
       // Environmental defaults prepared in previous step
       this.envDefaults
@@ -264,15 +264,15 @@ export class Command {
     }
 
     if (!this.project.version) {
-      throw new ValidationError('ENOLERNA', 'Neither a `roller.json` file nor `lerna.json` exist, please create one in the root of your project.');
+      throw new ValidationError('ENOLERNA', 'No `lerna.json` file exist, please create one in the root of your project.');
     }
 
     if (this.options.independent && !this.project.isIndependent()) {
       throw new ValidationError(
         'EVERSIONMODE',
         dedent`
-          You ran lerna with --independent or -i, but the repository is not set to independent mode.
-          To use independent mode you need to set roller.json's or "lerna.json's "version" property to "independent".
+          You ran lerna-lite with --independent or -i, but the repository is not set to independent mode.
+          To use independent mode you need to set lerna.json's "version" property to "independent".
           Then you won't need to pass the --independent or -i flags.
         `
       );

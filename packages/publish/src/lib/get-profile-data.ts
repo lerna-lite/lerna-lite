@@ -1,6 +1,6 @@
 import fetch from 'npm-registry-fetch';
 
-import { ProfileData, pulseTillDone } from '@ws-conventional-version-roller/core';
+import { ProfileData, pulseTillDone } from '@lerna-lite/core';
 
 
 /**

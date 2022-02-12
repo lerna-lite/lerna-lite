@@ -1,4 +1,4 @@
-import { Package } from '@ws-conventional-version-roller/core';
+import { Package } from '@lerna-lite/core';
 import npmlog from 'npmlog';
 
 export interface FilterOptions {

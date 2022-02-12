@@ -20,7 +20,7 @@ import {
   throwIfUncommitted,
   updateChangelog,
   ValidationError,
-} from '@ws-conventional-version-roller/core';
+} from '@lerna-lite/core';
 
 import { getCurrentBranch } from './lib/get-current-branch';
 import { createRelease, createReleaseClient } from './lib/create-release';
@@ -243,7 +243,7 @@ export class VersionCommand extends Command {
       return false;
     }
 
-    // a "rooted leaf" is the regrettable pattern of adding "." to the "packages" config in roller.json/lerna.json
+    // a "rooted leaf" is the regrettable pattern of adding "." to the "packages" config in lerna.json
     this.hasRootedLeaf = this.packageGraph?.has(this.options.packages) ?? false;
 
     if (this.hasRootedLeaf && !this.composed) {
@@ -483,7 +483,7 @@ export class VersionCommand extends Command {
       return true;
     }
 
-    // When composed from `lerna publish`, use this opportunity to confirm publishing
+    // When composed from `ws-roller publish`, use this opportunity to confirm publishing
     const message = this.composed
       ? 'Are you sure you want to publish these packages?'
       : 'Are you sure you want to create these versions?';

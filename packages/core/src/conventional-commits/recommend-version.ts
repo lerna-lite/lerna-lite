@@ -53,7 +53,7 @@ export async function recommendVersion(pkg: Package, type: VersioningStrategy, r
       }
 
       // result might be undefined because some presets are not consistent with angular
-      // we still need to bump _something_ because lerna saw a change here
+      // we still need to bump _something_ because lerna-lite saw a change here
       let releaseType = data.releaseType || 'patch';
 
       if (prereleaseId) {

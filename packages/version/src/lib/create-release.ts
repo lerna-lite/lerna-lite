@@ -1,7 +1,7 @@
 import log from 'npmlog';
 import semver from 'semver';
 
-import { createGitHubClient, createGitLabClient, parseGitRepo, ValidationError } from '@ws-conventional-version-roller/core';
+import { createGitHubClient, createGitLabClient, parseGitRepo, ValidationError } from '@lerna-lite/core';
 
 /**
  * @param {'github' | 'gitlab'} type

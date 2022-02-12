@@ -1,6 +1,6 @@
 import semver from 'semver';
 
-import { PromptUtilities } from '@ws-conventional-version-roller/core';
+import { PromptUtilities } from '@lerna-lite/core';
 
 export function makePromptVersion(resolvePrereleaseId) {
   return node => promptVersion(node.version, node.name, resolvePrereleaseId(node.prereleaseId));

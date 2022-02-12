@@ -1,5 +1,5 @@
 import path from 'path';
-import { Package, Project } from '@ws-conventional-version-roller/core';
+import { Package, Project } from '@lerna-lite/core';
 
 /**
  * Retrieve a list of packages that lack a license file.

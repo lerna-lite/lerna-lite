@@ -1,5 +1,5 @@
 {
-  "name": "ws-conventional-version-roller",
+  "name": "lerna-lite",
   "author": "Ghislain B.",
   "license": "MIT",
   "private": true,
@@ -8,18 +8,22 @@
     "prebuild": "run-s clean lint",
     "build": "npm run build --ws",
     "lint": "eslint packages/** --ext .ts",
-    "pack-tarball": "npm run pack-tarball --ws --if-present",
+    "predist-roll-version": "npm run preroll-version",
+    "dist-roll-version": "node ./packages/cli/dist/cli.js version",
+    "dist-roll-publish": "node ./packages/cli/dist/cli.js publish --bump from-package",
+    "dist-pack-tarball": "node ./packages/run/dist/cli.js run pack-tarball",
     "preroll-version": "echo \"⚠️  Make sure to run a Build & change cli.js line ending to LF before releasing a new version\"",
     "roll-version": "ws-roller version",
-    "roll-publish": "ws-roller publish --bump from-package"
+    "roll-publish": "ws-roller publish --bump from-package",
+    "pack-tarball": "ws-runner run pack-tarball"
   },
-  "homepage": "https://github.com/ghiscoding/ws-conventional-version-roller",
+  "homepage": "https://github.com/ghiscoding/lerna-lite",
   "repository": {
     "type": "git",
-    "url": "https://github.com/ghiscoding/ws-conventional-version-roller.git"
+    "url": "https://github.com/ghiscoding/lerna-lite.git"
   },
   "bugs": {
-    "url": "https://github.com/ghiscoding/ws-conventional-version-roller/issues"
+    "url": "https://github.com/ghiscoding/lerna-lite/issues"
   },
   "engines": {
     "node": ">=16.11.0",

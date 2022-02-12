@@ -1,6 +1,6 @@
 import path from 'path';
 import log from 'npmlog';
-import { exec } from '@ws-conventional-version-roller/core';
+import { exec } from '@lerna-lite/core';
 
 /**
  * Retrieve a list of graph nodes for packages that were tagged in a non-independent release.

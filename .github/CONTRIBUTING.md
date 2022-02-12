@@ -1,6 +1,6 @@
 # Contributing
 
-We'd love for you to contribute and to make this project even better than it is today! If this interests you, please begin by reading the project [Wiki documentation](https://github.com/ghiscoding/ws-conventional-version-roller/wiki). Once you consulted them and you believe that you can help us with new features, improvement or even fixes then go ahead and submit a Pull Request.
+We'd love for you to contribute and to make this project even better than it is today! If this interests you, please begin by reading the project [Wiki documentation](https://github.com/ghiscoding/lerna-lite/wiki). Once you consulted them and you believe that you can help us with new features, improvement or even fixes then go ahead and submit a Pull Request.
 
 When we mention `VSCode`, we mean `Visual Studio Code` editor which can be downloaded [here](https://code.visualstudio.com)
 

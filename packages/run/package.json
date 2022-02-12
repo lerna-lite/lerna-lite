@@ -1,5 +1,5 @@
 {
-  "name": "@ws-conventional-version-roller/run",
+  "name": "@lerna-lite/run",
   "description": "ws-runner CLI to help running npm script in each package workspace that contains that script",
   "version": "0.2.3",
   "main": "dist/index.js",
@@ -20,21 +20,21 @@
   },
   "license": "MIT",
   "author": "Ghislain B.",
-  "homepage": "https://github.com/ghiscoding/ws-conventional-version-roller",
+  "homepage": "https://github.com/ghiscoding/lerna-lite",
   "repository": {
     "type": "git",
-    "url": "https://github.com/ghiscoding/ws-conventional-version-roller.git",
+    "url": "https://github.com/ghiscoding/lerna-lite.git",
     "directory": "packages/run"
   },
   "bugs": {
-    "url": "https://github.com/ghiscoding/ws-conventional-version-roller/issues"
+    "url": "https://github.com/ghiscoding/lerna-lite/issues"
   },
   "engines": {
     "node": ">=16.11.0",
     "npm": ">=8.0.0"
   },
   "dependencies": {
-    "@ws-conventional-version-roller/core": "^0.2.3",
+    "@lerna-lite/core": "^0.2.3",
     "dedent": "^0.7.0",
     "fs-extra": "^10.0.0",
     "multimatch": "^5.0.0",

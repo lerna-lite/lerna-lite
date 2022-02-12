@@ -1,23 +1,23 @@
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![TypeScript](https://img.shields.io/badge/%3C%2F%3E-TypeScript-%230074c1.svg)](http://www.typescriptlang.org/)
-[![npm](https://img.shields.io/npm/v/@ws-conventional-version-roller/version.svg?color=forest)](https://www.npmjs.com/package/@ws-conventional-version-roller/version)
-[![npm](https://img.shields.io/npm/dy/@ws-conventional-version-roller/version?color=forest)](https://www.npmjs.com/package/@ws-conventional-version-roller/version)
-[![Actions Status](https://github.com/ghiscoding/ws-conventional-version-roller/workflows/CI%20Build/badge.svg)](https://github.com/ghiscoding/ws-conventional-version-roller/actions)
+[![npm](https://img.shields.io/npm/v/@lerna-lite/version.svg?color=forest)](https://www.npmjs.com/package/@lerna-lite/version)
+[![npm](https://img.shields.io/npm/dy/@lerna-lite/version?color=forest)](https://www.npmjs.com/package/@lerna-lite/version)
+[![Actions Status](https://github.com/ghiscoding/lerna-lite/workflows/CI%20Build/badge.svg)](https://github.com/ghiscoding/lerna-lite/actions)
 
-# @ws-conventional-version-roller/version
+# @lerna-lite/version
 ## (`ws-roller version`) Version command
 
-The roller Version command, bump version of packages changed since the last release
+Lerna-Lite Version command, bump version of packages changed since the last release
 
 ### Internal Dependencies
-- [@ws-conventional-version-roller/core](https://github.com/ghiscoding/ws-conventional-version-roller/tree/main/packages/core)
+- [@lerna-lite/core](https://github.com/ghiscoding/lerna-lite/tree/main/packages/core)
 
 ---
 
 ## Installation 
 ```sh
 # install globally
-npm install -g @ws-conventional-version-roller/cli
+npm install -g @lerna-lite/cli
 # then use it (see usage below)
 ws-roller version
 
@@ -109,7 +109,7 @@ Running `ws-roller version --conventional-commits` without the above flags will 
 ### `--allow-branch <glob>`
 
 A whitelist of globs that match git branches where `ws-roller version` is enabled.
-It is easiest (and recommended) to configure in `roller.json`, but it is possible to pass as a CLI option as well.
+It is easiest (and recommended) to configure in `lerna.json`, but it is possible to pass as a CLI option as well.
 
 ```json
 {
@@ -169,7 +169,7 @@ Presets are names of built-in or installable configuration for conventional chan
 Presets may be passed as the full name of the package, or the auto-expanded suffix
 (e.g., `angular` is expanded to `conventional-changelog-angular`).
 
-This option is can also be specified in `roller.json` configuration:
+This option is can also be specified in `lerna.json` configuration:
 
 ```json
 {
@@ -286,7 +286,7 @@ When run with this flag, `ws-roller version` will force publish the specified pa
 
 Displays the git command that would be performed without actually executing it, however please note that it will still create all the changelogs. This could be helpful for troubleshooting and also to see changelog changes without commiting them to Git.
 
-**Note:** it will still create the changelogs (when enabled), so it could be useful to see what gets created (however, make sure to discard the changes and roll back your version in `roller.json` once you're done)
+**Note:** it will still create the changelogs (when enabled), so it could be useful to see what gets created (however, make sure to discard the changes and roll back your version in `lerna.json` once you're done)
 
 ```sh
 $ ws-runner run watch --git-dry-run
@@ -308,7 +308,7 @@ Ignore changes in files matched by glob(s) when detecting changed packages.
 ws-roller version --ignore-changes '**/*.md' '**/__tests__/**'
 ```
 
-This option is best specified as root `roller.json` configuration, both to avoid premature shell evaluation of the globs and to share the config with `ws-roller diff` and `ws-roller changed`:
+This option is best specified as root `lerna.json` configuration, both to avoid premature shell evaluation of the globs and to share the config with `ws-roller diff` and `ws-roller changed`:
 
 ```json
 {
@@ -362,7 +362,7 @@ If the message contains `%s`, it will be replaced with the new global version ve
 If the message contains `%v`, it will be replaced with the new global version version number without the leading "v".
 Note that this placeholder interpolation only applies when using the default "fixed" versioning mode, as there is no "global" version to interpolate when versioning independently.
 
-This can be configured in roller.json, as well:
+This can be configured in `lerna.json`, as well:
 
 ```json
 {
@@ -404,7 +404,7 @@ By default, `ws-roller version` will `git add` _only_ the leaf package manifests
 
 If you **know** you need different behavior, you'll understand: Pass `--no-granular-pathspec` to make the git command _literally_ `git add -- .`. By opting into this [pathspec](https://git-scm.com/docs/gitglossary#Documentation/gitglossary.txt-aiddefpathspecapathspec), you **MUST HAVE _ALL_ SECRETS AND BUILD OUTPUT PROPERLY IGNORED, _OR IT WILL BE COMMITTED AND PUSHED_**.
 
-This option makes the most sense configured in roller.json, as you really don't want to mess it up:
+This option makes the most sense configured in `lerna.json`, as you really don't want to mess it up:
 
 ```json
 {
@@ -413,7 +413,7 @@ This option makes the most sense configured in roller.json, as you really don't 
 }
 ```
 
-The root-level configuration is intentional, as this also covers the [identically-named option in `ws-roller publish`](https://github.com/ghiscoding/ws-conventional-version-roller/blob/main/packages/publish/README.md#--no-granular-pathspec).
+The root-level configuration is intentional, as this also covers the [identically-named option in `ws-roller publish`](https://github.com/ghiscoding/lerna-lite/blob/main/packages/publish/README.md#--no-granular-pathspec).
 
 ### `--no-private`
 
