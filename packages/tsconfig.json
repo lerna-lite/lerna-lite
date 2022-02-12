@@ -8,6 +8,8 @@
       "dom"
     ],
     "types": [
+      "jest",
+      "jest-extended",
       "node"
     ],
     "allowSyntheticDefaultImports": true,
