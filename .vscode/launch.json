@@ -5,70 +5,71 @@
   "version": "0.2.0",
   "configurations": [
     {
-      "name": "Launch (roll Version)",
-      "program": "${workspaceFolder}/node_modules/@lerna-lite/cli/dist/index.js",
-      "args": [
-        "${relativeFile}",
-        "--roll-version"
-      ],
-      "request": "launch",
-      "skipFiles": [
-        "<node_internals>/**"
-      ],
-      "console": "integratedTerminal",
-      "internalConsoleOptions": "openOnSessionStart",
-      "type": "pwa-node"
-    },
-    {
-      "name": "Launch (roll Publish)",
-      "program": "${workspaceFolder}/node_modules/@lerna-lite/cli/dist/index.js",
-      "args": [
-        "${relativeFile}",
-        "--roll-publish"
-      ],
-      "request": "launch",
-      "skipFiles": [
-        "<node_internals>/**"
-      ],
-      "console": "integratedTerminal",
-      "internalConsoleOptions": "openOnSessionStart",
-      "type": "pwa-node"
-    },
-    {
-      "name": "Current TS File (roll Publish)",
+      "name": "Version command debugger",
       "type": "node",
       "request": "launch",
-      "args": [
-        "${relativeFile}",
-        "publish"
-      ],
+      "runtimeExecutable": "node",
       "runtimeArgs": [
+        "--nolazy",
         "-r",
-        "ts-node/register"
+        "ts-node/register/transpile-only"
       ],
-      "cwd": "${workspaceRoot}",
-      "protocol": "inspector",
-      "console": "integratedTerminal",
-      "stopOnEntry": true,
-      "internalConsoleOptions": "openOnSessionStart"
-    },
-    {
-      "name": "Current TS File (roll Version)",
-      "type": "node",
-      "request": "launch",
       "args": [
-        "${relativeFile}",
+        "packages/cli/src/cli.ts",
         "version"
       ],
+      "cwd": "${workspaceRoot}",
+      "console": "integratedTerminal",
+      "internalConsoleOptions": "openOnSessionStart",
+      "skipFiles": [
+        "<node_internals>/**",
+        "node_modules/**"
+      ]
+    },
+    {
+      "name": "Publish command debugger",
+      "type": "node",
+      "request": "launch",
+      "runtimeExecutable": "node",
       "runtimeArgs": [
+        "--nolazy",
         "-r",
-        "ts-node/register"
+        "ts-node/register/transpile-only"
+      ],
+      "args": [
+        "packages/cli/src/cli.ts",
+        "publish"
       ],
       "cwd": "${workspaceRoot}",
-      "protocol": "inspector",
       "console": "integratedTerminal",
-      "stopOnEntry": true,
-      "internalConsoleOptions": "openOnSessionStart"
+      "internalConsoleOptions": "openOnSessionStart",
+      "skipFiles": [
+        "<node_internals>/**",
+        "node_modules/**"
+      ]
+    },
+    {
+      "name": "Run command debugger",
+      "type": "node",
+      "request": "launch",
+      "runtimeExecutable": "node",
+      "runtimeArgs": [
+        "--nolazy",
+        "-r",
+        "ts-node/register/transpile-only"
+      ],
+      "args": [
+        "packages/run/src/cli.ts",
+        "run",
+        "dist-pack-tarball"
+      ],
+      "cwd": "${workspaceRoot}",
+      "console": "integratedTerminal",
+      "internalConsoleOptions": "openOnSessionStart",
+      "skipFiles": [
+        "<node_internals>/**",
+        "node_modules/**"
+      ]
     }
   ]
 }
