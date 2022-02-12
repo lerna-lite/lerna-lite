@@ -39,6 +39,7 @@ export const types = {
   'fetch-retry-mintimeout': Number,
   'fetch-retry-maxtimeout': Number,
   git: String,
+  'git-dry-run': Boolean,
   'git-tag-version': Boolean,
   'commit-hooks': Boolean,
   global: Boolean,

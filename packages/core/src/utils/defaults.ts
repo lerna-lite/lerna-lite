@@ -84,6 +84,7 @@ Object.defineProperty(exports, 'defaults', {
       'fetch-retry-mintimeout': 10000,
       'fetch-retry-maxtimeout': 60000,
       git: 'git',
+      'git-dry-run': false,
       'git-tag-version': true,
       'commit-hooks': true,
       global: false,
