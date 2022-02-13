@@ -42,16 +42,15 @@ export class Command {
     log.silly('argv', argv);
 
     // 'FooCommand' => 'foo'
-    // this.name = this.constructor.name.replace(/Command$/, '').toLowerCase();
+    this.name = this.constructor.name.replace(/Command$/, '').toLowerCase();
 
     // composed commands are called from other commands, like publish -> version
     this.composed = typeof argv.composed === 'string' && argv.composed !== this.name;
     this.libVersion = this.project?.version ?? '';
 
     if (!this.composed) {
-      // const pkg = require('../../../package.json');
-      // this.libVersion = pkg?.version ?? '';
-      // log.notice('cli', `v${this.libVersion}`);
+      // composed commands have already logged the lerna version
+      log.notice('cli', `v${argv.lernaVersion}`);
     }
 
     // launch the command

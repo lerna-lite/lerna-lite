@@ -38,7 +38,8 @@ module.exports = {
     '<rootDir>/node_modules'
   ],
   preset: 'ts-jest',
-  setupFilesAfterEnv: ['jest-extended/all'],
+  setupFiles: ['<rootDir>/helpers/silence-logging', '<rootDir>/helpers/set-npm-userconfig'],
+  setupFilesAfterEnv: ['jest-extended/all', '<rootDir>/jest/setup-unit-test-timeout.js'],
   transform: {
     '^.+\\.(ts|html)$': 'ts-jest'
   },
@@ -53,4 +54,22 @@ module.exports = {
   testPathIgnorePatterns: [
     '<rootDir>/node_modules/',
   ],
+  verbose: !!process.env.CI,
 };
+
+// split tests into smaller chunks because windows is agonizingly slow
+if (process.env.LERNA_CI_TYPE) {
+  module.exports.testMatch =
+    process.env.LERNA_CI_TYPE === 'publish'
+      ? [
+        // these tests tend to be longer than any others
+        '<rootDir>/commands/publish/**/*.test.js',
+        '<rootDir>/commands/version/**/*.test.js',
+      ]
+      : [
+        // NOTE: import is NOT TESTED in windows because pain and suffering
+        '<rootDir>/commands/!(publish|version|import)/**/*.test.js',
+        '<rootDir>/core/**/*.test.js',
+        '<rootDir>/utils/**/*.test.js',
+      ];
+}

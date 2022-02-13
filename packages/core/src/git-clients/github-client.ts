@@ -30,14 +30,14 @@ export function createGitHubClient() {
   return new Octokit(options);
 }
 
-export function parseGitRepo(remote = 'origin', opts: SyncOptions<string>, gitDryRun = false): parseGitUrl.GitUrl {
+export function parseGitRepo(remote = 'origin', opts?: SyncOptions<string>, gitDryRun = false): parseGitUrl.GitUrl {
   log.silly('parseGitRepo', '');
   const args = ['config', '--get', `remote.${remote}.url`];
   log.verbose('git', args.join(' '));
   const url = execSync('git', args, opts, gitDryRun);
 
   if (!url && !gitDryRun) {
-    throw new Error(`Git remote URL could not be found using '${remote}'.`);
+    throw new Error(`Git remote URL could not be found using "${remote}".`);
   }
 
   return gitDryRun ? {} as parseGitUrl.GitUrl : parseGitUrl(url);

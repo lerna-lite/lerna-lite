@@ -6,6 +6,30 @@
       "type": "shell",
       "command": "npm run build",
       "problemMatcher": []
+    },
+    {
+      "label": "Run Jest Unit Tests (watch)",
+      "type": "shell",
+      "command": "npm run jest:watch",
+      "problemMatcher": []
+    },
+    {
+      "label": "Run Jest Test Coverage",
+      "type": "shell",
+      "command": "npm run jest",
+      "problemMatcher": []
+    },
+    {
+      "label": "Roll new Version (from dist)",
+      "type": "shell",
+      "command": "npm run dist-roll-version",
+      "problemMatcher": []
+    },
+    {
+      "label": "Roll Publish Version (from dist)",
+      "type": "shell",
+      "command": "npm run dist-roll-publish",
+      "problemMatcher": []
     }
   ]
 }

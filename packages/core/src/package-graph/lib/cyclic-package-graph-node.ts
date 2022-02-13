@@ -1,3 +1,5 @@
+import { PackageGraphNode } from '../../package-graph';
+
 let lastCollapsedNodeId = 0;
 
 /**
@@ -8,7 +10,7 @@ let lastCollapsedNodeId = 0;
  *
  * @extends {Map<string, import('..').PackageGraphNode | CyclicPackageGraphNode>}
  */
-export class CyclicPackageGraphNode extends Map {
+export class CyclicPackageGraphNode extends Map<string, PackageGraphNode | CyclicPackageGraphNode> {
   name: string;
   localDependencies: Map<string, any>;
   localDependents: Map<string, any>;
@@ -35,7 +37,7 @@ export class CyclicPackageGraphNode extends Map {
    */
   toString() {
     const parts = Array.from(this, ([key, node]) =>
-      node.isCycle ? `(nested cycle: ${node.toString()})` : key
+      (node as CyclicPackageGraphNode).isCycle ? `(nested cycle: ${node.toString()})` : key
     );
 
     // start from the origin
@@ -52,8 +54,8 @@ export class CyclicPackageGraphNode extends Map {
     const result: any[] = [];
 
     for (const node of this.values()) {
-      if (node.isCycle) {
-        result.push(...node.flatten());
+      if ((node as CyclicPackageGraphNode).isCycle) {
+        result.push(...(node as CyclicPackageGraphNode).flatten());
       } else {
         result.push(node);
       }
@@ -70,8 +72,8 @@ export class CyclicPackageGraphNode extends Map {
    */
   contains(name) {
     for (const [currentName, currentNode] of this) {
-      if (currentNode.isCycle) {
-        if (currentNode.contains(name)) {
+      if ((currentNode as CyclicPackageGraphNode).isCycle) {
+        if ((currentNode as CyclicPackageGraphNode).contains(name)) {
           return true;
         }
       } else if (currentName === name) {

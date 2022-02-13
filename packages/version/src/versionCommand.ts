@@ -16,6 +16,8 @@ import {
   Package,
   PromptUtilities,
   recommendVersion,
+  ReleaseClient,
+  ReleaseNote,
   runTopologically,
   throwIfUncommitted,
   updateChangelog,
@@ -48,13 +50,13 @@ export class VersionCommand extends Command {
   commitAndTag = true;
   pushToRemote = true;
   hasRootedLeaf = false;
-  releaseClient?: { repos: { createRelease: any; }; };
-  releaseNotes: { name: string; notes?: string; }[] = [];
+  releaseClient?: ReleaseClient;
+  releaseNotes: ReleaseNote[] = [];
   gitOpts: any;
   runPackageLifecycle: any;
   runRootLifecycle!: (stage: string) => Promise<void>;
   savePrefix = '';
-  tags?: string[];
+  tags: string[] = [];
   updates: any[] = [];
 
   get otherCommandConfigs(): string[] {

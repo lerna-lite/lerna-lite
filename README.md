@@ -5,8 +5,10 @@
 [![TypeScript](https://img.shields.io/badge/%3C%2F%3E-TypeScript-%230074c1.svg)](http://www.typescriptlang.org/)
 [![npm](https://img.shields.io/npm/v/@lerna-lite/core.svg?color=forest)](https://www.npmjs.com/package/@lerna-lite/core)
 [![NPM downloads](https://img.shields.io/npm/dy/@lerna-lite/core.svg)](https://www.npmjs.com/package/@lerna-lite/core)
-[![Actions Status](https://github.com/ghiscoding/lerna-lite/workflows/CI%20Build/badge.svg)](https://github.com/ghiscoding/lerna-lite/actions)
+
+[![PR](https://img.shields.io/badge/PR-Welcome-1abc9c.svg)](https://github.com/ghiscoding/lerna-lite/pulls)
 [![jest](https://jestjs.io/img/jest-badge.svg)](https://github.com/facebook/jest)
+[![Actions Status](https://github.com/ghiscoding/lerna-lite/workflows/CI%20Build/badge.svg)](https://github.com/ghiscoding/lerna-lite/actions)
 
 ### License
 [MIT License](LICENSE)
@@ -24,7 +26,7 @@ A super light fork of Lerna, only 3 commands were extracted from the original [L
 
 ## Why create this lib/fork?
 Mainly for the following reasons:
-1. the original Lerna was no longer maintained 
+1. the original Lerna was no longer maintained (dependencies are out of date)
 2. create a lighter lib that still provide Lerna's approach of Versioning and Publishing by following the [Conventional Commits](https://www.conventionalcommits.org/) and also automatically create [Conventional-Changelog](https://github.com/conventional-changelog/conventional-changelog) for each package of the workspace
 3. add some little extras
 
@@ -118,6 +120,11 @@ npm install
 ```sh
 npm run jest # or npm run jest:watch
 ```
+
+## Need your Help
+Anyone willing to help, please create a Pull Request. I am trying to add as much as Jest unit tests as possible, it would be great to have your help with this and/or anything else. PRs are welcome. 👷👷‍♀️
+
+Also please note that I'm just a simpler developer & user of this lib, the same as you are, my knowledge of the library is also probably similar to yours, but together we can make it better (and lighter).
 
 ## Troubleshooting
 If you have problems running the lib and your problems are with Git then you should first try the `--git-dry-run` option to see if that helps in finding the error. Another great, and possibly much more useful suggestion, is to search in the Lerna [issues](https://github.com/lerna/lerna/issues) because most of the code came from that library. Lastly if it that is not enough and you wish to troubleshoot yourself, then read this [Troubleshooting - Wiki](https://github.com/ghiscoding/lerna-lite/wiki/Troubleshooting)
