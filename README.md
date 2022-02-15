@@ -5,13 +5,18 @@
 [![TypeScript](https://img.shields.io/badge/%3C%2F%3E-TypeScript-%230074c1.svg)](http://www.typescriptlang.org/)
 [![npm](https://img.shields.io/npm/v/@lerna-lite/core.svg?color=forest)](https://www.npmjs.com/package/@lerna-lite/core)
 [![NPM downloads](https://img.shields.io/npm/dy/@lerna-lite/core.svg)](https://www.npmjs.com/package/@lerna-lite/core)
+[![lerna--lite](https://img.shields.io/badge/maintained%20with-lerna--lite-d428ff)](https://github.com/ghiscoding/lerna-lite)
+
+[![PR](https://img.shields.io/badge/PR-Welcome-1abc9c.svg)](https://github.com/ghiscoding/lerna-lite/pulls)
+[![jest](https://jestjs.io/img/jest-badge.svg)](https://github.com/facebook/jest)
+[![codecov](https://codecov.io/gh/ghiscoding/lerna-lite/branch/master/graph/badge.svg)](https://codecov.io/gh/ghiscoding/lerna-lite)
 [![Actions Status](https://github.com/ghiscoding/lerna-lite/workflows/CI%20Build/badge.svg)](https://github.com/ghiscoding/lerna-lite/actions)
 
 ### License
 [MIT License](LICENSE)
 
 ## Lerna-Lite
-A super light fork of Lerna, only 3 commands were extracted from the original [Lerna](https://github.com/lerna/lerna) (as shown below).
+A super lite fork of Lerna, only 3 commands were extracted from the original [Lerna](https://github.com/lerna/lerna) (as shown below).
 
 **Note:** Since the [Run](https://github.com/ghiscoding/lerna-lite/tree/main/packages/run) command is totally optional, we created separate CLIs to handle each commands, see below.
 
@@ -23,7 +28,7 @@ A super light fork of Lerna, only 3 commands were extracted from the original [L
 
 ## Why create this lib/fork?
 Mainly for the following reasons:
-1. the original Lerna was no longer maintained 
+1. the original Lerna was no longer maintained (dependencies are out of date)
 2. create a lighter lib that still provide Lerna's approach of Versioning and Publishing by following the [Conventional Commits](https://www.conventionalcommits.org/) and also automatically create [Conventional-Changelog](https://github.com/conventional-changelog/conventional-changelog) for each package of the workspace
 3. add some little extras
 
@@ -76,20 +81,25 @@ Add the following NPM Scripts or simply run the following NodeJS command in your
 ```
 
 ### Configuration
-This lib requires a config file in order to do its job properly. It could come from a separate file (read [`lerna.json` - Wiki](https://github.com/ghiscoding/lerna-lite/wiki/lerna.json), recommended approach) in the root of your project OR a `"lerna": {}` property directly under your `package.json`.
+This lib requires a config file in order to do its job properly. It could come from a separate config file in the root (read [`lerna.json` - Wiki](https://github.com/ghiscoding/lerna-lite/wiki/lerna.json) OR a `"lerna": {}` property directly under your `package.json`.
 
 #### Command Options (`ws-roller`)
 - [version](https://github.com/ghiscoding/lerna-lite/blob/main/packages/version/README.md)
 - [publish](https://github.com/ghiscoding/lerna-lite/blob/main/packages/publish/README.md) (make sure to double-check your [publishConfig](https://docs.npmjs.com/cli/v6/configuring-npm/package-json#publishconfig) access of each package before publishing)
 
-#### Migration for [Lerna](https://github.com/lerna/lerna) Users
+### Migration for [Lerna](https://github.com/lerna/lerna) Users
 If you are migrating from Lerna, it is pretty easy and you have to do the following steps to use Lerna-Lite
 1. remove Lerna from your dependencies
 ```sh
-# example with Yarn
-yarn remove lerna
+npm uninstall lerna # OR yarn remove lerna
 ```
-2. change your npm scripts `lerna <command>` to `ws-roller` (or `ws-runner`)
+2. install Lerna-Lite CLI(s)
+```sh
+npm install @lerna-lite/cli
+# and/or run CLI
+npm install @lerna-lite/run
+```
+3. change your npm scripts `lerna <command>` to `ws-roller` (or `ws-runner`)
 ```diff
 - "roll-version": "lerna version",
 + "roll-version": "ws-roller version",
@@ -101,11 +111,29 @@ yarn remove lerna
 + "build": "ws-runner run build"
 ```
 
-### New Options
-On top of Lerna's existing options, we added a few more options that might be useful
-- [`--git-dry-run`](https://github.com/ghiscoding/lerna-lite/blob/main/packages/version/README.md#--git-dry-run)
-- [`--changelog-header-message <msg>`](https://github.com/ghiscoding/lerna-lite/blob/main/packages/version/README.md#--changelog-header-message-msg)
-- [`--changelog-version-message <msg>`](https://github.com/ghiscoding/lerna-lite/blob/main/packages/version/README.md#--changelog-version-message-msg)
+### Development / Contributions
+If you wish to contribute to the project, follow these steps
+1. install with NPM
+```sh
+npm install
+```
+2. you can debug your code with the already defined launch configs
+3. add/run Jest unit tests
+```sh
+npm run jest # or npm run jest:watch
+```
+
+README Badge
+Using Lerna? Add a README badge to show it off: [![lerna--lite](https://img.shields.io/badge/maintained%20with-lerna--lite-d428ff)](https://github.com/ghiscoding/lerna-lite)
+
+```sh
+[![lerna--lite](https://img.shields.io/badge/maintained%20with-lerna--lite-cc00ff)](https://github.com/ghiscoding/lerna-lite)
+```
+
+## Need your Help
+Anyone willing to help, please create a Pull Request. I am trying to add as much as Jest unit tests as possible, it would be great to have your help with this and/or anything else. PRs are welcome. 👷👷‍♀️
+
+Also please note that I'm just a simpler developer & user of this lib, the same as you are, my knowledge of the library is also probably similar to yours, but together we can make it better (and lighter).
 
 ## Troubleshooting
 If you have problems running the lib and your problems are with Git then you should first try the `--git-dry-run` option to see if that helps in finding the error. Another great, and possibly much more useful suggestion, is to search in the Lerna [issues](https://github.com/lerna/lerna/issues) because most of the code came from that library. Lastly if it that is not enough and you wish to troubleshoot yourself, then read this [Troubleshooting - Wiki](https://github.com/ghiscoding/lerna-lite/wiki/Troubleshooting)

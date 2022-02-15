@@ -33,6 +33,10 @@ Thumbs.db
 # Distribution folders
 dist
 
+# Tests Report & Coverage
+**/coverage
+**/jest-coverage
+
 # Environment variables
 .env
 

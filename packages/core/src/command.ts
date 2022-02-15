@@ -42,16 +42,15 @@ export class Command {
     log.silly('argv', argv);
 
     // 'FooCommand' => 'foo'
-    // this.name = this.constructor.name.replace(/Command$/, '').toLowerCase();
+    this.name = this.constructor.name.replace(/Command$/, '').toLowerCase();
 
     // composed commands are called from other commands, like publish -> version
     this.composed = typeof argv.composed === 'string' && argv.composed !== this.name;
     this.libVersion = this.project?.version ?? '';
 
     if (!this.composed) {
-      // const pkg = require('../../../package.json');
-      // this.libVersion = pkg?.version ?? '';
-      // log.notice('cli', `v${this.libVersion}`);
+      // composed commands have already logged the lerna version
+      // log.notice('cli', `v${argv.lernaVersion}`);
     }
 
     // launch the command
@@ -294,18 +293,21 @@ export class Command {
   }
 
   async runCommand() {
-    const proceed: any = await this.initialize();
-    if (proceed !== false) {
-      return this.execute();
-    }
-    // early exits set their own exitCode (if non-zero)
+    return Promise.resolve()
+      .then(() => this.initialize())
+      .then((proceed) => {
+        if (proceed !== false) {
+          return this.execute();
+        }
+        // early exits set their own exitCode (if non-zero)
+      });
   }
 
-  initialize() {
+  initialize(): any | Promise<any> {
     throw new ValidationError(this.name, 'initialize() needs to be implemented.');
   }
 
-  execute() {
+  execute(): any | Promise<any> {
     throw new ValidationError(this.name, 'execute() needs to be implemented.');
   }
 }

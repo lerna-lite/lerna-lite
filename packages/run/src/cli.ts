@@ -18,7 +18,7 @@ const cli = yargs(process.argv, process.cwd());
 yargs(process.argv.slice(2))
   .example('$0 run build -- --silent', '# `npm run build --silent` in all packages with a build script')
   .command({
-    command: 'run [script]',
+    command: 'run <script>',
     describe: 'Run an npm script in each package that contains that script',
     handler,
   })

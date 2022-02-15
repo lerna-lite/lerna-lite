@@ -39,7 +39,7 @@ function getArgs(options: DescribeRefOptions, includeMergedTags?: boolean) {
  * @param {boolean} [includeMergedTags]
  * @returns {Promise<DescribeRefFallbackResult|DescribeRefDetailedResult>}
  */
-export function describeRef(options: DescribeRefOptions = {}, includeMergedTags?: boolean, gitDryRun = false) {
+function describeRef(options: DescribeRefOptions = {}, includeMergedTags?: boolean, gitDryRun = false) {
   const promise = exec('git', getArgs(options, includeMergedTags), options, gitDryRun);
 
   return promise.then(({ stdout } = { stdout: '' }) => {
@@ -56,7 +56,7 @@ export function describeRef(options: DescribeRefOptions = {}, includeMergedTags?
  * @param {DescribeRefOptions} [options]
  * @param {boolean} [includeMergedTags]
  */
-export function describeRefSync(options: any = {}, includeMergedTags, gitDryRun = false) {
+function describeRefSync(options: any = {}, includeMergedTags, gitDryRun = false) {
   const stdout = execSync('git', getArgs(options, includeMergedTags), options, gitDryRun);
   const result = parse(stdout, options.cwd);
 
@@ -90,3 +90,8 @@ function parse(stdout, cwd) {
 
   return { lastTagName, lastVersion, refCount, sha, isDirty: Boolean(isDirty) };
 }
+
+export {
+  describeRef,
+  describeRefSync,
+};

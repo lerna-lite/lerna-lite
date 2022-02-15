@@ -1,12 +1,19 @@
 import log from 'npmlog';
 import semver from 'semver';
 
-import { createGitHubClient, createGitLabClient, parseGitRepo, ValidationError } from '@lerna-lite/core';
+import {
+  createGitHubClient,
+  createGitLabClient,
+  parseGitRepo,
+  ReleaseCommandProps,
+  ReleaseOptions,
+  ValidationError
+} from '@lerna-lite/core';
 
 /**
  * @param {'github' | 'gitlab'} type
  */
-export function createReleaseClient(type: string) {
+export function createReleaseClient(type: 'github' | 'gitlab') {
   switch (type) {
     case 'gitlab':
       return createGitLabClient();
@@ -23,7 +30,7 @@ export function createReleaseClient(type: string) {
  * @param {{ tags: string[]; releaseNotes: { name: string; notes: string; }[] }} commandProps
  * @param {{ gitRemote: string; execOpts: import('@lerna/child-process').ExecOpts }} opts
  */
-export function createRelease(client, { tags, releaseNotes }, { gitRemote, execOpts }, gitDryRun = false) {
+export function createRelease(client, { tags, releaseNotes }: ReleaseCommandProps, { gitRemote, execOpts }: ReleaseOptions, gitDryRun = false) {
   const repo = parseGitRepo(gitRemote, execOpts, gitDryRun);
 
   return Promise.all(

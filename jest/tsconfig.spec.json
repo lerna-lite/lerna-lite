@@ -1,0 +1,24 @@
+{
+  "compilerOptions": {
+    "outDir": "../out-tsc/spec",
+    "allowSyntheticDefaultImports": true,
+    "esModuleInterop": true,
+    "baseUrl": "./",
+    "target": "es2018",
+    "module": "commonjs",
+    "lib": [
+      "es2018"
+    ],
+    "types": [
+      "jest",
+      "jest-extended",
+      "jquery",
+      "node"
+    ]
+  },
+  "include": [
+    "**/*.spec.ts",
+    "src/typings/**/*.ts",
+    "**/*.d.ts"
+  ]
+}

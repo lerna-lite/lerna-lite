@@ -114,3 +114,44 @@ export interface QueryGraphConfig {
 export interface TopologicalConfig extends QueryGraphConfig {
   concurrency?: number;
 }
+
+export interface GitClientRelease {
+  owner: string;
+  repo: string;
+  tag_name: string;
+  name: string;
+  body: string;
+  draft?: boolean;
+  prerelease?: boolean;
+}
+
+export type GitCreateReleaseFn = () => Promise<{
+  ok: boolean;
+  status: string;
+  statusText: string;
+}>;
+
+export interface GitClient {
+  createRelease: (opts: GitClientRelease) => Promise<void>;
+}
+
+export interface ReleaseClient {
+  repos: {
+    createRelease: GitCreateReleaseFn;
+  }
+}
+
+export interface ReleaseCommandProps {
+  tags: string[];
+  releaseNotes: ReleaseNote[];
+}
+
+export interface ReleaseOptions {
+  gitRemote: string;
+  execOpts: ExecOpts;
+}
+
+export interface ReleaseNote {
+  name: string;
+  notes?: string;
+}
