@@ -43,6 +43,9 @@ export class RunCommand extends Command {
     this.prefix = this.options.prefix !== false;
 
     let chain: Promise<any> = Promise.resolve();
+    if (!this.options.log) {
+      this.options.log = this.logger;
+    }
 
     chain = chain.then(() => getFilteredPackages(this.packageGraph!, this.execOpts, this.options));
     chain = chain.then((filteredPackages: Package[]) => {
@@ -58,7 +61,7 @@ export class RunCommand extends Command {
       this.joinedCommand = [this.npmClient, 'run', this.script].concat(this.args).join(' ');
 
       if (!this.count) {
-        this.logger.success('run', `No packages found with the lifecycle script '${script}'`);
+        this.logger.success('run', `No packages found with the lifecycle script "${script}"`);
 
         // still exits zero, aka 'ok'
         return false;

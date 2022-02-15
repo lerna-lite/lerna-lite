@@ -72,8 +72,8 @@ export function packDirectory(_pkg: Package, dir: string, options: PackConfig) {
 function getTarballName(pkg) {
   const name =
     pkg.name[0] === '@'
-      ? // scoped packages get special treatment
-      pkg.name.substr(1).replace(/\//g, '-')
+      // scoped packages get special treatment
+      ? pkg.name.substr(1).replace(/\//g, '-')
       : pkg.name;
 
   return `${name}-${pkg.version}.tgz`;

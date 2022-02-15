@@ -50,7 +50,7 @@ export class Command {
 
     if (!this.composed) {
       // composed commands have already logged the lerna version
-      log.notice('cli', `v${argv.lernaVersion}`);
+      // log.notice('cli', `v${argv.lernaVersion}`);
     }
 
     // launch the command
@@ -293,18 +293,21 @@ export class Command {
   }
 
   async runCommand() {
-    const proceed: any = await this.initialize();
-    if (proceed !== false) {
-      return this.execute();
-    }
-    // early exits set their own exitCode (if non-zero)
+    return Promise.resolve()
+      .then(() => this.initialize())
+      .then((proceed) => {
+        if (proceed !== false) {
+          return this.execute();
+        }
+        // early exits set their own exitCode (if non-zero)
+      });
   }
 
-  initialize() {
+  initialize(): any | Promise<any> {
     throw new ValidationError(this.name, 'initialize() needs to be implemented.');
   }
 
-  execute() {
+  execute(): any | Promise<any> {
     throw new ValidationError(this.name, 'execute() needs to be implemented.');
   }
 }

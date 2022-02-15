@@ -79,7 +79,8 @@
       "args": [
         "packages/run/src/cli.ts",
         "run",
-        "dist-pack-tarball"
+        "pack-tarball",
+        "--stream"
       ],
       "cwd": "${workspaceRoot}",
       "console": "integratedTerminal",

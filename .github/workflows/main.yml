@@ -42,7 +42,7 @@ jobs:
       - name: Install NPM dependencies
         run: npm ci
 
-      - name: Run Full Workspace Build
+      - name: Run all workspace TSC builds
         run: npm run build
 
       - name: Run Jest unit tests

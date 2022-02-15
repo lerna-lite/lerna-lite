@@ -8,6 +8,7 @@ module.exports = {
       stringifyContentPathRegex: '\\.html$'
     },
   },
+  clearMocks: true,
   collectCoverage: false,
   collectCoverageFrom: [
     'packages/**/*.ts',
@@ -28,6 +29,7 @@ module.exports = {
     'text',
     'html'
   ],
+  modulePathIgnorePatterns: ["/__fixtures__/"],
   moduleFileExtensions: [
     'json',
     'js',
