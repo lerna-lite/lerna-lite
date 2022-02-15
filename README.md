@@ -1,4 +1,4 @@
-# Lerna-Lite 🚀
+# Lerna-Lite 🐉
 ### Previously known as "ws-conventional-version-roller"
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
