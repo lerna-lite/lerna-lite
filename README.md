@@ -9,7 +9,7 @@
 
 [![PR](https://img.shields.io/badge/PR-Welcome-1abc9c.svg)](https://github.com/ghiscoding/lerna-lite/pulls)
 [![jest](https://jestjs.io/img/jest-badge.svg)](https://github.com/facebook/jest)
-[![codecov](https://codecov.io/gh/ghiscoding/lerna-lite/branch/master/graph/badge.svg)](https://codecov.io/gh/ghiscoding/lerna-lite)
+[![codecov](https://codecov.io/gh/ghiscoding/lerna-lite/branch/main/graph/badge.svg)](https://codecov.io/gh/ghiscoding/lerna-lite)
 [![Actions Status](https://github.com/ghiscoding/lerna-lite/workflows/CI%20Build/badge.svg)](https://github.com/ghiscoding/lerna-lite/actions)
 
 ### License
