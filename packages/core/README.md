@@ -7,10 +7,7 @@
 ## Lerna-Lite Core
 #### @lerna-lite/core
 
-The Lerna-Lite core & utils functions, basically the shared code used by the Version & Publish commands.
-
-### Internal Dependencies
-none
+The Lerna-Lite core & utils, basically the shared code used by all commands.
 
 ### Installation
 Follow the instruction provided in the main [README](https://github.com/ghiscoding/lerna-lite#installation) page.

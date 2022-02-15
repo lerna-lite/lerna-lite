@@ -20,16 +20,16 @@ A super lite fork of Lerna, only 3 commands were extracted from the original [Le
 
 **Note:** Since the [Run](https://github.com/ghiscoding/lerna-lite/tree/main/packages/run) command is totally optional, we created separate CLIs to handle each commands, see below.
 
-| Command | CLI         | Description |
-|---------|-------------|-------------|
-| [version](https://github.com/ghiscoding/lerna-lite/tree/main/packages/version) | [ws-roller](https://github.com/ghiscoding/lerna-lite/tree/main/packages/cli#installation) | create new version for each workspace package |
-| [publish](https://github.com/ghiscoding/lerna-lite/tree/main/packages/publish) | [ws-roller](https://github.com/ghiscoding/lerna-lite/tree/main/packages/cli#installation) | publish each workspace package
-| [run](https://github.com/ghiscoding/lerna-lite/tree/main/packages/run) | [ws-runner](https://github.com/ghiscoding/lerna-lite/tree/main/packages/run#installation) | run npm script in each workspace package |
+| Command | CLI         | Description | Included |
+|---------|-------------|-------------| ---------|
+| [version](https://github.com/ghiscoding/lerna-lite/tree/main/packages/version) | [ws-roller](https://github.com/ghiscoding/lerna-lite/tree/main/packages/cli#installation) | create new version for each workspace package | Yes |
+| [publish](https://github.com/ghiscoding/lerna-lite/tree/main/packages/publish) | [ws-roller](https://github.com/ghiscoding/lerna-lite/tree/main/packages/cli#installation) | publish each workspace package | Yes |
+| [run](https://github.com/ghiscoding/lerna-lite/tree/main/packages/run) | [ws-runner](https://github.com/ghiscoding/lerna-lite/tree/main/packages/run#installation) | run npm script in each workspace package | Optional |
 
 ## Why create this lib/fork?
 Mainly for the following reasons:
-1. the original Lerna was no longer maintained (dependencies are out of date)
-2. create a lighter lib that still provide Lerna's approach of Versioning and Publishing by following the [Conventional Commits](https://www.conventionalcommits.org/) and also automatically create [Conventional-Changelog](https://github.com/conventional-changelog/conventional-changelog) for each package of the workspace
+1. the original Lerna is no longer maintained (dependencies are out of date)
+2. create a lighter lib that still provide Lerna's approach of Versioning and Publishing by following the [Conventional Commits](https://www.conventionalcommits.org/) and also automatically create [Conventional-Changelog](https://github.com/conventional-changelog/conventional-changelog) for each package of the workspace. We don't all packages of Lerna anymore since NPM Workspaces came out.
 3. add some little extras
 
 ### This lib will help you with
@@ -59,6 +59,13 @@ Yes indeed, this lib was created as an NPM Workspace specifically for the purpos
 
 ### See it in Action 🎦
 You can see a small video of a new version release on this [Release Demo - Wiki](https://github.com/ghiscoding/lerna-lite/wiki/Release-Demo) - Confused with all the options? You can watch this great YouTube video [How to Use Lerna](https://www.youtube.com/watch?v=p6qoJ4apCjA), the Lerna-Lite Options are all the same as Lerna + extras as shown below.
+
+### README Badge
+Using Lerna? Add a README badge to show it off: [![lerna--lite](https://img.shields.io/badge/maintained%20with-lerna--lite-d428ff)](https://github.com/ghiscoding/lerna-lite)
+
+```sh
+[![lerna--lite](https://img.shields.io/badge/maintained%20with-lerna--lite-cc00ff)](https://github.com/ghiscoding/lerna-lite)
+```
 
 ## Installation
 ```bash
@@ -123,15 +130,8 @@ npm install
 npm run jest # or npm run jest:watch
 ```
 
-README Badge
-Using Lerna? Add a README badge to show it off: [![lerna--lite](https://img.shields.io/badge/maintained%20with-lerna--lite-d428ff)](https://github.com/ghiscoding/lerna-lite)
-
-```sh
-[![lerna--lite](https://img.shields.io/badge/maintained%20with-lerna--lite-cc00ff)](https://github.com/ghiscoding/lerna-lite)
-```
-
 ## Need your Help
-Anyone willing to help, please create a Pull Request. I am trying to add as much as Jest unit tests as possible, it would be great to have your help with this and/or anything else. PRs are welcome. 👷👷‍♀️
+Anyone willing to help, please create Pull Request. I am trying to add as much Jest unit tests as possible (from the original Lerna) but really any type of PRs are welcome. 👷👷‍♀️
 
 Also please note that I'm just a simpler developer & user of this lib, the same as you are, my knowledge of the library is also probably similar to yours, but together we can make it better (and lighter).
 
