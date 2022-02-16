@@ -1,4 +1,5 @@
 import log from 'npmlog';
+import pify from 'pify';
 import npa from 'npm-package-arg';
 
 import { ValidationError } from '../validation-error';
@@ -18,8 +19,13 @@ export class GetChangelogConfig {
     log.info('getChangelogConfig', 'Successfully resolved preset %j', presetPackageName);
 
     if (this.isFunction(config)) {
-      // try assuming config builder function first
-      config = config(presetConfig);
+      try {
+        // try assuming config builder function first
+        config = config(presetConfig);
+      } catch (_) {
+        // legacy presets export an errback function instead of Q.all()
+        config = pify(config)();
+      }
     }
 
     return config;
@@ -29,7 +35,7 @@ export class GetChangelogConfig {
    * @param {import('..').ChangelogPresetConfig} [changelogPreset]
    * @param {string} [rootPath]
    */
-  static getChangelogConfig(changelogPreset: string | { name: string; } = 'conventional-changelog-angular', rootPath: string) {
+  static getChangelogConfig(changelogPreset: string | { name: string; } = 'conventional-changelog-angular', rootPath?: string) {
     const presetName = typeof changelogPreset === 'string' ? changelogPreset : changelogPreset.name;
     const presetConfig = typeof changelogPreset === 'object' ? changelogPreset : {};
 
@@ -97,7 +103,7 @@ export class GetChangelogConfig {
 
         throw new ValidationError(
           'EPRESET',
-          `Unable to load conventional-changelog preset '${presetName}'${presetName !== presetPackageName ? ` (${presetPackageName})` : ''
+          `Unable to load conventional-changelog preset "${presetName}"${presetName !== presetPackageName ? ` (${presetPackageName})` : ''
           }`
         );
       }
