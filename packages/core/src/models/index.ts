@@ -7,9 +7,9 @@ export type ChangelogType = 'fixed' | 'independent' | 'root';
 export type ChangelogPresetConfig = string | { name: string;[key: string]: unknown };
 
 export interface BaseChangelogOptions {
-  changelogPreset: ChangelogPresetConfig;
-  rootPath: string;
-  tagPrefix: string;
+  changelogPreset?: ChangelogPresetConfig;
+  rootPath?: string;
+  tagPrefix?: string;
 }
 
 export interface CommandOptions {
@@ -69,7 +69,7 @@ export interface UpdateChangelogOption {
   changelogHeaderMessage?: string;
   changelogVersionMessage?: string;
   changelogPreset?: string;
-  rootPath: string;
+  rootPath?: string;
   tagPrefix?: string;
   version?: string;
 }
