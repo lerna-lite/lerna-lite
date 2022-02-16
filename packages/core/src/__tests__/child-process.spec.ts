@@ -6,7 +6,7 @@ import { Package } from '../package';
 describe('childProcess', () => {
   describe('.execSync()', () => {
     it('should execute a command in a child process and return the result', () => {
-      expect(execSync('echo', ['execSync'])).toBe(`"execSync"`);
+      expect(execSync('echo', ['execSync'])).toContain(`execSync`);
     });
 
     it('should execute a command in dry-run and log the command', () => {
@@ -25,7 +25,7 @@ describe('childProcess', () => {
       const { stderr, stdout } = await exec('echo', ['foo']) as any;
 
       expect(stderr).toBe('');
-      expect(stdout).toBe(`"foo"`);
+      expect(stdout).toContain(`foo`);
     });
 
     it('should execute a command in dry-run and log the command', () => {
@@ -49,8 +49,8 @@ describe('childProcess', () => {
       expect(getChildProcessCount()).toBe(2);
 
       const [one, two] = await Promise.all([echoOne, echoTwo]) as any;
-      expect(one.stdout).toBe(`"one"`);
-      expect(two.stdout).toBe(`"two"`);
+      expect(one.stdout).toContain(`one`);
+      expect(two.stdout).toContain(`two`);
     });
 
     it('decorates opts.pkg on error if caught', async () => {
