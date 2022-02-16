@@ -28,6 +28,12 @@ describe('childProcess', () => {
       expect(stdout).toBe(`"foo"`);
     });
 
+    it('should execute a command in dry-run and log the command', () => {
+      const logSpy = jest.spyOn(npmlog, 'info');
+      exec('echo', ['exec'], undefined, true);
+      expect(logSpy).toHaveBeenCalledWith('dry-run>', 'echo exec');
+    });
+
     it('rejects on undefined command', async () => {
       const result = exec('nowImTheModelOfAModernMajorGeneral', undefined);
 
@@ -47,7 +53,7 @@ describe('childProcess', () => {
       expect(two.stdout).toBe(`"two"`);
     });
 
-    xit('decorates opts.pkg on error if caught', async () => {
+    it('decorates opts.pkg on error if caught', async () => {
       const result = exec(
         'theVeneratedVirginianVeteranWhoseMenAreAll',
         ['liningUpToPutMeUpOnAPedestal'],
@@ -70,6 +76,12 @@ describe('childProcess', () => {
       const { exitCode, signal } = await child;
       expect(exitCode).toBe(0);
       expect(signal).toBe(undefined);
+    });
+
+    it('should execute a command in dry-run and log the command', () => {
+      const logSpy = jest.spyOn(npmlog, 'info');
+      spawn('echo', ['-n'], undefined, true);
+      expect(logSpy).toHaveBeenCalledWith('dry-run>', 'echo -n');
     });
 
     it('decorates opts.pkg on error if caught', async () => {
