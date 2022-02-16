@@ -27,3 +27,8 @@ ws-roller version
 npx ws-roller publish
 npx ws-roller version
 ```
+
+## Usage
+For all available options, refer to each command below
+- [version](https://github.com/ghiscoding/lerna-lite/blob/main/packages/version/README.md)
+- [publish](https://github.com/ghiscoding/lerna-lite/blob/main/packages/publish/README.md)

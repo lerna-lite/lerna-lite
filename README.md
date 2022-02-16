@@ -16,7 +16,7 @@
 [MIT License](LICENSE)
 
 ## Lerna-Lite
-A super lite fork of Lerna, only 3 commands were extracted from the original [Lerna](https://github.com/lerna/lerna) (as shown below).
+A super light fork of Lerna, only 3 commands were extracted from the original [Lerna](https://github.com/lerna/lerna) (as shown below).
 
 **Note:** Since the [Run](https://github.com/ghiscoding/lerna-lite/tree/main/packages/run) command is totally optional, we created separate CLIs to handle each commands, see below.
 
@@ -29,7 +29,7 @@ A super lite fork of Lerna, only 3 commands were extracted from the original [Le
 ## Why create this lib/fork?
 Mainly for the following reasons:
 1. the original Lerna is no longer maintained (dependencies are out of date)
-2. create a lighter lib that still provide Lerna's approach of Versioning and Publishing by following the [Conventional Commits](https://www.conventionalcommits.org/) and also automatically create [Conventional-Changelog](https://github.com/conventional-changelog/conventional-changelog) for each package of the workspace. We don't all packages of Lerna anymore since NPM Workspaces came out.
+2. create a lighter lib that still provide Lerna's approach of Versioning and Publishing by following the [Conventional Commits](https://www.conventionalcommits.org/) and also automatically create [Conventional-Changelog](https://github.com/conventional-changelog/conventional-changelog) for each package of the workspace. We don't need all packages of Lerna anymore since NPM Workspaces came out.
 3. add some little extras
 
 ### This lib will help you with
@@ -47,9 +47,9 @@ Mainly for the following reasons:
 | Package Name | Version | Description | Changes |
 | -------------| ------- | ----------- | ------- |
 | [@lerna-lite/cli](https://github.com/ghiscoding/lerna-lite/tree/main/packages/cli) | [![npm](https://img.shields.io/npm/v/@lerna-lite/cli.svg?color=forest)](https://www.npmjs.com/package/@lerna-lite/cli) | Lerna-Lite Version/Publish comands CLI | [changelog](https://github.com/ghiscoding/lerna-lite/blob/main/packages/cli/CHANGELOG.md) |
-| [@lerna-lite/core](https://github.com/ghiscoding/lerna-lite/tree/main/packages/core) | [![npm](https://img.shields.io/npm/v/@lerna-lite/core.svg?color=forest)](https://www.npmjs.com/package/@lerna-lite/core) | Lerna-Lite core & utils methods | [changelog](https://github.com/ghiscoding/lerna-lite/blob/main/packages/core/CHANGELOG.md) |
+| [@lerna-lite/core](https://github.com/ghiscoding/lerna-lite/tree/main/packages/core) | [![npm](https://img.shields.io/npm/v/@lerna-lite/core.svg?color=forest)](https://www.npmjs.com/package/@lerna-lite/core) | Lerna-Lite core & shared methods | [changelog](https://github.com/ghiscoding/lerna-lite/blob/main/packages/core/CHANGELOG.md) |
 | [@lerna-lite/publish](https://github.com/ghiscoding/lerna-lite/tree/main/packages/publish) | [![npm](https://img.shields.io/npm/v/@lerna-lite/publish.svg?color=forest)](https://www.npmjs.com/package/@lerna-lite/publish) | Publish packages in the current workspace | [changelog](https://github.com/ghiscoding/lerna-lite/blob/main/packages/publish/CHANGELOG.md) |
-| [@lerna-lite/run](https://github.com/ghiscoding/lerna-lite/tree/main/packages/run) | [![npm](https://img.shields.io/npm/v/@lerna-lite/run.svg?color=forest)](https://www.npmjs.com/package/@lerna-lite/run) | CLI to help running npm script in the workspace | [changelog](https://github.com/ghiscoding/lerna-lite/blob/main/packages/run/CHANGELOG.md) |
+| [@lerna-lite/run](https://github.com/ghiscoding/lerna-lite/tree/main/packages/run) | [![npm](https://img.shields.io/npm/v/@lerna-lite/run.svg?color=forest)](https://www.npmjs.com/package/@lerna-lite/run) | Run command and CLI to run npm scripts in the workspace | [changelog](https://github.com/ghiscoding/lerna-lite/blob/main/packages/run/CHANGELOG.md) |
 | [@lerna-lite/version](https://github.com/ghiscoding/lerna-lite/tree/main/packages/version) | [![npm](https://img.shields.io/npm/v/@lerna-lite/version.svg?color=forest)](https://www.npmjs.com/package/@lerna-lite/version) | Bump Version & write Changelogs | [changelog](https://github.com/ghiscoding/lerna-lite/blob/main/packages/version/CHANGELOG.md) |
 
 ### Project Demo?
@@ -58,10 +58,10 @@ You want to see a demo project? Sure, you're looking at it 😉
 Yes indeed, this lib was created as an NPM Workspace specifically for the purpose of demoing and testing of its own code. All changelogs and published versions were created by the lib itself, how sweet is that? You will also find that it has its own [lerna.json](https://github.com/ghiscoding/lerna-lite/blob/main/lerna.json) config file just as well as you would when using the lib.
 
 ### See it in Action 🎦
-You can see a small video of a new version release on this [Release Demo - Wiki](https://github.com/ghiscoding/lerna-lite/wiki/Release-Demo) - Confused with all the options? You can watch this great YouTube video [How to Use Lerna](https://www.youtube.com/watch?v=p6qoJ4apCjA), the Lerna-Lite Options are all the same as Lerna + extras as shown below.
+You can see a small video of a new version release on this [Release Demo - Wiki](https://github.com/ghiscoding/lerna-lite/wiki/Release-Demo) - Confused with all the options? You can watch this great YouTube video [How to Use Lerna](https://www.youtube.com/watch?v=p6qoJ4apCjA), the Lerna-Lite Options are all the same as Lerna + extras.
 
 ### README Badge
-Using Lerna? Add a README badge to show it off: [![lerna--lite](https://img.shields.io/badge/maintained%20with-lerna--lite-d428ff)](https://github.com/ghiscoding/lerna-lite)
+Using Lerna-Lite? Add a README badge to show it off: [![lerna--lite](https://img.shields.io/badge/maintained%20with-lerna--lite-d428ff)](https://github.com/ghiscoding/lerna-lite)
 
 ```sh
 [![lerna--lite](https://img.shields.io/badge/maintained%20with-lerna--lite-cc00ff)](https://github.com/ghiscoding/lerna-lite)
@@ -75,7 +75,7 @@ npm install @lerna-lite/cli
 # run command CLI
 npm install @lerna-lite/run
 ```
-**Note:** the `ws-roller` CLI only has 2 commands available `publish` and `version`
+**Note:** the `ws-roller` CLI only has 2 commands available `publish` and `version`, while `ws-runner` CLI has the `run` command.
 
 ### Usage
 Add the following NPM Scripts or simply run the following NodeJS command in your shell.
@@ -83,16 +83,19 @@ Add the following NPM Scripts or simply run the following NodeJS command in your
 // package.json / npm scripts
 "scripts": {
   "roll-version": "ws-roller version",
-  "roll-publish": "ws-roller publish from-package"
+  "roll-publish": "ws-roller publish --bump from-package"
 }
 ```
 
 ### Configuration
 This lib requires a config file in order to do its job properly. It could come from a separate config file in the root (read [`lerna.json` - Wiki](https://github.com/ghiscoding/lerna-lite/wiki/lerna.json) OR a `"lerna": {}` property directly under your `package.json`.
 
-#### Command Options (`ws-roller`)
-- [version](https://github.com/ghiscoding/lerna-lite/blob/main/packages/version/README.md)
-- [publish](https://github.com/ghiscoding/lerna-lite/blob/main/packages/publish/README.md) (make sure to double-check your [publishConfig](https://docs.npmjs.com/cli/v6/configuring-npm/package-json#publishconfig) access of each package before publishing)
+#### Command Options
+- `ws-roller`
+  - [version](https://github.com/ghiscoding/lerna-lite/blob/main/packages/version/README.md)
+  - [publish](https://github.com/ghiscoding/lerna-lite/blob/main/packages/publish/README.md) (make sure to double-check your [publishConfig](https://docs.npmjs.com/cli/v6/configuring-npm/package-json#publishconfig) access of each package before publishing)
+- `ws-runner`
+  - [run](https://github.com/ghiscoding/lerna-lite/blob/main/packages/run/README.md)
 
 ### Migration for [Lerna](https://github.com/lerna/lerna) Users
 If you are migrating from Lerna, it is pretty easy and you have to do the following steps to use Lerna-Lite
@@ -102,8 +105,10 @@ npm uninstall lerna # OR yarn remove lerna
 ```
 2. install Lerna-Lite CLI(s)
 ```sh
+# ws-roller CLI (version/publish commands)
 npm install @lerna-lite/cli
-# and/or run CLI
+
+# ws-runner CLI (run command)
 npm install @lerna-lite/run
 ```
 3. change your npm scripts `lerna <command>` to `ws-roller` (or `ws-runner`)
