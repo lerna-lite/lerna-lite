@@ -16,29 +16,53 @@ const NUM_COLORS = colorWheel.length;
 // ever-increasing index ensures colors are always sequential
 let currentColor = 0;
 
-export function exec(command: string, args: string[], opts?: execa.Options & { pkg?: Package }, cmdDryRun = false) {
+/**
+ * Execute a command asynchronously, piping stdio by default.
+ * @param {string} command
+ * @param {string[]} args
+ * @param {import("execa").Options} [opts]
+ */
+export function exec(command: string, args: string[], opts?: execa.Options & { pkg?: Package }, cmdDryRun = false): Promise<any> {
   const options = Object.assign({ stdio: 'pipe' }, opts);
   const spawned = spawnProcess(command, args, options, cmdDryRun);
 
   return cmdDryRun ? Promise.resolve() : wrapError(spawned);
 }
 
-// resultCallback?: (processResult: ChildProcessResult) => void
+/**
+ * Execute a command synchronously.
+ * @param {string} command
+ * @param {string[]} args
+ * @param {import("execa").SyncOptions} [opts]
+ */
 export function execSync(command: string, args?: string[], opts?: execa.SyncOptions<string>, cmdDryRun = false) {
   return cmdDryRun
     ? logExecCommand(command, args)
     : execa.sync(command, args, opts).stdout;
 }
 
-export function spawn(command: string, args: string[], opts?: execa.Options & { pkg?: Package }, cmdDryRun = false) {
+/**
+ * Spawn a command asynchronously, _always_ inheriting stdio.
+ * @param {string} command
+ * @param {string[]} args
+ * @param {import("execa").Options} [opts]
+ */
+export function spawn(command: string, args: string[], opts?: execa.Options & { pkg?: Package }, cmdDryRun = false): Promise<any> {
   const options = Object.assign({}, opts, { stdio: 'inherit' });
   const spawned = spawnProcess(command, args, options, cmdDryRun);
 
   return wrapError(spawned);
 }
 
+/**
+ * Spawn a command asynchronously, streaming stdio with optional prefix.
+ * @param {string} command
+ * @param {string[]} args
+ * @param {import("execa").Options} [opts]
+ * @param {string} [prefix]
+ */
 // istanbul ignore next
-export function spawnStreaming(command: string, args: string[], opts?: execa.Options & { pkg?: Package }, prefix?: string | boolean, cmdDryRun = false) {
+export function spawnStreaming(command: string, args: string[], opts?: execa.Options & { pkg?: Package }, prefix?: string | boolean, cmdDryRun = false): Promise<any> {
   const options: any = Object.assign({}, opts);
   options.stdio = ['ignore', 'pipe', 'pipe'];
 
@@ -69,7 +93,7 @@ export function spawnStreaming(command: string, args: string[], opts?: execa.Opt
   return wrapError(spawned);
 }
 
-export function getChildProcessCount() {
+export function getChildProcessCount(): number {
   return children.size;
 }
 
@@ -89,6 +113,11 @@ export function getExitCode(result: any) {
   throw new TypeError(`Received unexpected exit code value ${JSON.stringify(result.code ?? result.exitCode)}`);
 }
 
+/**
+ * @param {string} command
+ * @param {string[]} args
+ * @param {import("execa").Options} opts
+ */
 export function spawnProcess(command: string, args: string[], opts: execa.Options & { pkg?: Package }, cmdDryRun = false) {
   if (cmdDryRun) {
     return logExecCommand(command, args);
@@ -115,6 +144,12 @@ export function spawnProcess(command: string, args: string[], opts: execa.Option
   return child;
 }
 
+/**
+ * Spawn a command asynchronously, _always_ inheriting stdio.
+ * @param {string} command
+ * @param {string[]} args
+ * @param {import("execa").Options} [opts]
+ */
 export function wrapError(spawned: execa.ExecaChildProcess & { pkg?: Package }) {
   if (spawned.pkg) {
     return spawned.catch((err: any) => {
@@ -131,6 +166,11 @@ export function wrapError(spawned: execa.ExecaChildProcess & { pkg?: Package }) 
   return spawned;
 }
 
+/**
+ * Log the child-process command and its arguments as dry-run (without executing the process)
+ * @param {string} command
+ * @param {string[]} args
+ */
 export function logExecCommand(command: string, args?: string[]) {
   const argStr = (Array.isArray(args) ? args.join(' ') : args) ?? '';
 

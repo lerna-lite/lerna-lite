@@ -20,6 +20,7 @@ import {
   runTopologically,
   throwIfUncommitted,
   ValidationError,
+  PackageGraphNode,
 } from '@lerna-lite/core';
 import { getCurrentTags } from './lib/get-current-tags';
 import { getTaggedPackages } from './lib/get-tagged-packages';
@@ -262,7 +263,7 @@ export class PublishCommand extends Command {
         return taggedPackageNames.map((name) => this.packageGraph?.get(name));
       }
 
-      const updates = await getTaggedPackages(this.packageGraph, this.project?.rootPath, this.execOpts, this.options.gitDryRun);
+      const updates = await getTaggedPackages(this.packageGraph, this.project?.rootPath, this.execOpts, this.options.gitDryRun) as PackageGraphNode[];
 
       // private packages are never published, full stop.
       updates.filter((node) => !node.pkg.private);

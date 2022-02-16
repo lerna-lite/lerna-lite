@@ -3,7 +3,7 @@ import { describeRef } from './describe-ref';
 import { ValidationError } from '../validation-error';
 
 export function checkWorkingTree({ cwd } = {} as any, gitDryRun = false) {
-  let chain = Promise.resolve();
+  let chain: Promise<any> = Promise.resolve();
 
   chain = chain.then(() => describeRef({ cwd }, undefined, gitDryRun));
 
