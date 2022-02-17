@@ -40,7 +40,6 @@ See [Conventional Commits](https://conventionalcommits.org) for commit guideline
 
 * A second commit for our CHANGELOG ([SHA](https://github.com/lerna/conventional-commits-fixed/commit/GIT_HEAD))
 
-
 <a name="1.0.0"></a>
 
 # 1.0.0 (YYYY-MM-DD)
@@ -62,7 +61,6 @@ See [Conventional Commits](https://conventionalcommits.org) for commit guideline
 ### Bug Fixes
 
 * A second commit for our CHANGELOG ([SHA](https://github.com/lerna/conventional-commits-fixed/commit/GIT_HEAD))
-
 
 <a name="1.0.0"></a>
 
