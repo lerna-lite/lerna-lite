@@ -1,6 +1,6 @@
 import semver from 'semver';
 
-import { PromptUtilities } from '@lerna-lite/core';
+import { promptSelectOne, promptTextInput } from '@lerna-lite/core';
 
 export function makePromptVersion(resolvePrereleaseId) {
   return node => promptVersion(node.version, node.name, resolvePrereleaseId(node.prereleaseId));
@@ -25,7 +25,7 @@ export function promptVersion(currentVersion, name, prereleaseId) {
 
   const message = `Select a new version ${name ? `for ${name} ` : ''}(currently ${currentVersion})`;
 
-  return PromptUtilities.select(message, {
+  return promptSelectOne(message, {
     choices: [
       { value: patch, name: `Patch (${patch})` },
       { value: minor, name: `Minor (${minor})` },
@@ -38,7 +38,7 @@ export function promptVersion(currentVersion, name, prereleaseId) {
     ],
   }).then(choice => {
     if (choice === 'CUSTOM') {
-      return PromptUtilities.input('Enter a custom version', {
+      return promptTextInput('Enter a custom version', {
         filter: semver.valid,
         // semver.valid() always returns null with invalid input
         validate: v => v !== null || 'Must be a valid semver version',
@@ -49,7 +49,7 @@ export function promptVersion(currentVersion, name, prereleaseId) {
       const defaultVersion = semver.inc(currentVersion, 'prerelease', prereleaseId);
       const prompt = `(default: '${prereleaseId}', yielding ${defaultVersion})`;
 
-      return PromptUtilities.input(`Enter a prerelease identifier ${prompt}`, {
+      return promptTextInput(`Enter a prerelease identifier ${prompt}`, {
         filter: v => semver.inc(currentVersion, 'prerelease', v || prereleaseId),
       });
     }

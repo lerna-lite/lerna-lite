@@ -1,4 +1,4 @@
-import { PromptUtilities } from './prompt';
+import { promptTextInput } from './prompt';
 
 /**
  * @typedef {object} OneTimePasswordCache - Passed between concurrent executions
@@ -58,14 +58,14 @@ function attempt(fn, opts, otpCache) {
       throw err;
     } else {
       // check the cache in case a concurrent caller has already updated the otp.
-      if (otpCache !== null && otpCache.otp !== null && otpCache.otp !== opts.otp) {
+      if (!isNullOrUndefined(otpCache) && !isNullOrUndefined(otpCache.otp) && otpCache.otp !== opts.otp) {
         return attempt(fn, { ...opts, ...otpCache }, otpCache);
       }
       // only allow one getOneTimePassword attempt at a time to reuse the value
       // from the preceeding prompt
       return semaphore.wait().then(() => {
         // check the cache again in case a previous waiter already updated it.
-        if (otpCache !== null && otpCache.otp !== null && otpCache.otp !== opts.otp) {
+        if (!isNullOrUndefined(otpCache) && !isNullOrUndefined(otpCache.otp) && otpCache.otp !== opts.otp) {
           semaphore.release();
           return attempt(fn, { ...opts, ...otpCache }, otpCache);
         }
@@ -74,7 +74,7 @@ function attempt(fn, opts, otpCache) {
             (otp) => {
               // update the otp and release the lock so that waiting
               // callers can see the updated otp.
-              if (otpCache !== null) {
+              if (!isNullOrUndefined(otpCache)) {
                 // eslint-disable-next-line no-param-reassign
                 otpCache.otp = otp;
               }
@@ -101,11 +101,15 @@ function attempt(fn, opts, otpCache) {
  */
 export function getOneTimePassword(message = 'This operation requires a one-time password:') {
   // Logic taken from npm internals: https://git.io/fNoMe
-  return PromptUtilities.input(message, {
+  return promptTextInput(message, {
     filter: (otp) => otp.replace(/\s+/g, ''),
     validate: (otp) =>
       (otp && /^[\d ]+$|^[A-Fa-f0-9]{64,64}$/.test(otp)) ||
       'Must be a valid one-time-password. ' +
       'See https://docs.npmjs.com/getting-started/using-two-factor-authentication',
   });
+}
+
+function isNullOrUndefined(val: any) {
+  return val === null || val === undefined;
 }
