@@ -36,5 +36,5 @@ export interface RunScriptOption {
   reject?: boolean;
 }
 export interface ScriptStreamingOption extends RunScriptOption {
-  prefix: boolean;
+  prefix?: boolean;
 }
