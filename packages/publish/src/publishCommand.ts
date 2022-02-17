@@ -14,9 +14,9 @@ import {
   getOneTimePassword,
   npmConf,
   Package,
-  PromptUtilities,
-  pulseTillDone,
+  promptConfirmation,
   prereleaseIdFromVersion,
+  pulseTillDone,
   runTopologically,
   throwIfUncommitted,
   ValidationError,
@@ -439,7 +439,7 @@ export class PublishCommand extends Command {
       return true;
     }
 
-    return PromptUtilities.confirm('Are you sure you want to publish these packages?');
+    return promptConfirmation('Are you sure you want to publish these packages?');
   }
 
   prepareLicenseActions() {

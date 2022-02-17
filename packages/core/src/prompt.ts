@@ -1,65 +1,74 @@
-import inquirer from 'inquirer';
+import inquirer, { ListChoiceOptions, Question } from 'inquirer';
 import log from 'npmlog';
 
-export class PromptUtilities {
-  static async confirm(message): Promise<string> {
-    log.pause();
-    const answers = await inquirer.prompt([
-      {
-        type: 'expand',
-        name: 'confirm',
-        message,
-        default: 2, // default to help in order to avoid clicking straight through
-        choices: [
-          { key: 'y', name: 'Yes', value: true },
-          { key: 'n', name: 'No', value: false },
-        ],
-      },
-    ]);
-    log.resume();
+/**
+ * Prompt for confirmation
+ * @param {string} message
+ * @returns {Promise<boolean>}
+ */
+export async function promptConfirmation(message): Promise<boolean> {
+  log.pause();
+  const answers = await inquirer.prompt([
+    {
+      type: 'expand',
+      name: 'confirm',
+      message,
+      default: 2, // default to help in order to avoid clicking straight through
+      choices: [
+        { key: 'y', name: 'Yes', value: true },
+        { key: 'n', name: 'No', value: false },
+      ],
+    },
+  ]);
+  log.resume();
 
-    return answers.confirm;
-  }
+  return answers.confirm;
+}
 
-  static select(message, { choices, filter, validate } = {} as any): Promise<string> {
-    log.pause();
+/**
+ * Prompt for selection
+ * @param {string} message
+ * @param {{ choices: import("inquirer").ListChoiceOptions[] } & Pick<import("inquirer").Question, 'filter' | 'validate'>} [options]
+ * @returns {Promise<string>}
+ */
+export async function promptSelectOne(message, { choices, filter, validate } = {} as { choices: ListChoiceOptions[] } & Pick<Question, 'filter' | 'validate'>): Promise<string> {
+  log.pause();
 
-    return inquirer
-      .prompt([
-        {
-          type: 'list',
-          name: 'prompt',
-          message,
-          choices,
-          pageSize: choices.length,
-          filter,
-          validate,
-        },
-      ])
-      .then(answers => {
-        log.resume();
+  const answers = await inquirer.prompt([
+    {
+      type: 'list',
+      name: 'prompt',
+      message,
+      choices,
+      pageSize: choices.length,
+      filter,
+      validate,
+    },
+  ]);
+  log.resume();
 
-        return answers.prompt;
-      });
-  }
+  return answers.prompt;
+}
 
-  static input(message, { filter, validate } = {} as any): Promise<string> {
-    log.pause();
+/**
+ * Prompt for input
+ * @param {string} message
+ * @param {Pick<import("inquirer").Question, 'filter' | 'validate'>} [options]
+ * @returns {Promise<string>}
+ */
+export async function promptTextInput(message, { filter, validate } = {} as Pick<Question, 'filter' | 'validate'>): Promise<string> {
+  log.pause();
 
-    return inquirer
-      .prompt([
-        {
-          type: 'input',
-          name: 'input',
-          message,
-          filter,
-          validate,
-        },
-      ])
-      .then(answers => {
-        log.resume();
+  const answers = await inquirer.prompt([
+    {
+      type: 'input',
+      name: 'input',
+      message,
+      filter,
+      validate,
+    },
+  ]);
+  log.resume();
 
-        return answers.input;
-      });
-  }
+  return answers.input;
 }

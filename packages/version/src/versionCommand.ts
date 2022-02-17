@@ -14,7 +14,7 @@ import {
   Command,
   createRunner,
   Package,
-  PromptUtilities,
+  promptConfirmation,
   recommendVersion,
   ReleaseClient,
   ReleaseNote,
@@ -466,7 +466,7 @@ export class VersionCommand extends Command {
     return versions;
   }
 
-  confirmVersions(): Promise<string> | boolean {
+  confirmVersions(): Promise<boolean> | boolean {
     const changes = this.packagesToVersion.map((pkg) => {
       let line = ` - ${pkg.name}: ${pkg.version} => ${chalk.cyan(this.updatesVersions?.get(pkg.name))}`;
       if (pkg.private) {
@@ -490,7 +490,7 @@ export class VersionCommand extends Command {
       ? 'Are you sure you want to publish these packages?'
       : 'Are you sure you want to create these versions?';
 
-    return PromptUtilities.confirm(message);
+    return promptConfirmation(message);
   }
 
   updatePackageVersions() {
