@@ -1,0 +1,17 @@
+coverage:
+  precision: 2
+  round: up
+  range: "50...95"
+
+  status:
+    project:
+      default:
+        target: auto
+        # Fail the status if coverage drops by >= 3%
+        threshold: 3%
+        branches: null
+    patch:
+      default:
+        threshold: 5%
+github_checks:
+  annotations: false

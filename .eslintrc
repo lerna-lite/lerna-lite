@@ -18,8 +18,9 @@
   "ignorePatterns": [
     "**/dist/**/*.*",
     "**/packages/**/*.js",
-    "**/**/*.json",
-    "**/**/*.tgz",
+    "**/*.json",
+    "**/*.tgz",
+    "**/__fixtures__/**",
     "**/__tests__/*.ts"
   ],
   "rules": {
