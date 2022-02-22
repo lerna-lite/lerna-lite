@@ -10,7 +10,7 @@ import { Package, Project } from '@lerna-lite/core';
  * @param {Object} project
  * @returns Promise
  */
-export async function updateLockfileVersion(pkg: Package, project: Project): Promise<string | null> {
+export async function updateLockfileVersion(pkg: Package, project: Project): Promise<string | undefined> {
   try {
     // "lockfileVersion" = 1, package lock file might be located in the package folder
     const lockFilePath = path.join(pkg.location, 'package-lock.json');
@@ -46,9 +46,9 @@ export async function updateLockfileVersion(pkg: Package, project: Project): Pro
       return projFilePath;
     }
   } catch (error) {
-    return null;
+    return undefined;
   }
-  return null;
+  return undefined;
 }
 
 /**
