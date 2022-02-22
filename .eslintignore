@@ -8,6 +8,9 @@
 *.map
 *.md
 *.zip
+*.test.js
+*.test.ts
+*.spec.js
 *.spec.ts
 **/**/*.json
 **/**/*.js

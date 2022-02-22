@@ -2,14 +2,14 @@ import { EOL } from 'os';
 import log from 'npmlog';
 import tempWrite from 'temp-write';
 
-import { exec } from '@lerna-lite/core';
+import { exec, ExecOpts } from '@lerna-lite/core';
 
 /**
  * @param {string} message
  * @param {{ amend: boolean; commitHooks: boolean; signGitCommit: boolean; }} gitOpts
  * @param {import('@lerna/child-process').ExecOpts} opts
  */
-export function gitCommit(message, { amend, commitHooks, signGitCommit, signoffGitCommit }, opts, gitDryRun = false) {
+export function gitCommit(message: string, { amend, commitHooks, signGitCommit, signoffGitCommit }: any, opts: ExecOpts, gitDryRun = false) {
   log.silly('gitCommit', message);
   const args = ['commit'];
 
