@@ -1,7 +1,7 @@
 {
   "name": "@lerna-lite/core",
   "description": "Lerna-Lite core implementation module",
-  "version": "0.3.1",
+  "version": "0.3.2",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "typings": "dist/index.d.ts",
@@ -31,8 +31,8 @@
     "npm": ">=8.0.0"
   },
   "dependencies": {
-    "@octokit/rest": "^18.12.0",
     "@octokit/plugin-enterprise-rest": "^6.0.1",
+    "@octokit/rest": "^18.12.0",
     "async": "^3.2.3",
     "chalk": "^4.1.2",
     "clone-deep": "^4.0.1",
