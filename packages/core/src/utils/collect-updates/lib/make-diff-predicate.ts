@@ -4,13 +4,14 @@ import path from 'path';
 import slash from 'slash';
 
 import { execSync } from '../../../child-process';
+import { ExecOpts } from '../../../models';
 
 /**
  * @param {string} committish
  * @param {import("@lerna/child-process").ExecOpts} execOpts
  * @param {string[]} ignorePatterns
  */
-export function makeDiffPredicate(committish, execOpts, ignorePatterns = []) {
+export function makeDiffPredicate(committish: string, execOpts: ExecOpts, ignorePatterns: string[] = []) {
   const ignoreFilters = new Set(
     ignorePatterns.map((p) =>
       minimatch.filter(`!${p}`, {

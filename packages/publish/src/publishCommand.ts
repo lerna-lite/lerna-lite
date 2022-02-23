@@ -14,6 +14,7 @@ import {
   getOneTimePassword,
   npmConf,
   Package,
+  PackageGraph,
   promptConfirmation,
   prereleaseIdFromVersion,
   pulseTillDone,
@@ -351,7 +352,7 @@ export class PublishCommand extends Command {
     // find changed packages since last release, if any
     chain = chain.then(() =>
       collectUpdates(
-        this.packageGraph?.rawPackageList,
+        this.packageGraph?.rawPackageList ?? [],
         this.packageGraph,
         this.execOpts,
         {

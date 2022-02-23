@@ -33,7 +33,7 @@ export function verifyNpmPackageAccess(packages: Package[], username: string, op
         if (pkg.name in result && result[pkg.name] !== 'read-write') {
           throw new ValidationError(
             'EACCESS',
-            `You do not have write permission required to publish '${pkg.name}'`
+            `You do not have write permission required to publish "${pkg.name}"`
           );
         }
       }
