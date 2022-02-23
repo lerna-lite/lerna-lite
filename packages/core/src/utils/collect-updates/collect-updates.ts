@@ -1,4 +1,7 @@
 import log from 'npmlog';
+import { ExecOpts, UpdateCollectorOptions } from '../../models';
+import { Package } from '../../package';
+import { PackageGraph } from '../../package-graph';
 
 import { describeRefSync } from '../describe-ref';
 import { collectPackages } from './lib/collect-packages';
@@ -7,36 +10,18 @@ import { hasTags } from './lib/has-tags';
 import { makeDiffPredicate } from './lib/make-diff-predicate';
 
 /**
- * @typedef {object} UpdateCollectorOptions
- * @property {string} [bump] The semver bump keyword (patch/minor/major) or explicit version used
- * @property {boolean} [canary] Whether or not to use a "nightly" range (`ref^..ref`) for commits
- * @property {string[]} [ignoreChanges]
- *  A list of globs that match files/directories whose changes
- *  should not be considered when identifying changed packages
- * @property {boolean} [includeMergedTags]
- *  Whether or not to include the --first-parent flag when calling `git describe`
- *  (awkwardly, pass `true` to _omit_ the flag, the default is to include it)
- * @property {boolean | string[]} [forcePublish] Which packages, if any, to always include
- *  Force all packages to be versioned with `true`, or pass a list of globs that match package names
- * @property {string} [since] Ref to use when querying git, defaults to most recent annotated tag
- * @property {boolean} [conventionalCommits]
- * @property {boolean} [conventionalGraduate]
- * @property {boolean} [excludeDependents]
- */
-
-/**
  * Create a list of graph nodes representing packages changed since the previous release, tagged or otherwise.
  * @param {import("@lerna/package").Package[]} filteredPackages
  * @param {import("@lerna/package-graph").PackageGraph} packageGraph
  * @param {import("@lerna/child-process").ExecOpts} execOpts
  * @param {UpdateCollectorOptions} commandOptions
  */
-export function collectUpdates(filteredPackages, packageGraph, execOpts, commandOptions, gitDryRun = false) {
+export function collectUpdates(filteredPackages: Package[], packageGraph: PackageGraph, execOpts: ExecOpts, commandOptions: UpdateCollectorOptions, gitDryRun = false) {
   const { forcePublish, conventionalCommits, conventionalGraduate, excludeDependents } = commandOptions;
 
   // If --conventional-commits and --conventional-graduate are both set, ignore --force-publish
   const useConventionalGraduate = conventionalCommits && conventionalGraduate;
-  const forced = getPackagesForOption(useConventionalGraduate ? conventionalGraduate : forcePublish);
+  const forced = getPackagesForOption(useConventionalGraduate ? conventionalGraduate : forcePublish as boolean | string[]);
 
   const packages =
     filteredPackages.length === packageGraph.size
@@ -94,7 +79,7 @@ export function collectUpdates(filteredPackages, packageGraph, execOpts, command
 
   log.info('', `Looking for changed packages since ${committish}`);
 
-  const hasDiff = makeDiffPredicate(committish, execOpts, commandOptions.ignoreChanges);
+  const hasDiff = makeDiffPredicate(committish as string, execOpts, commandOptions.ignoreChanges as string[]);
   const needsBump =
     !commandOptions.bump || commandOptions.bump.startsWith('pre')
       ? () => false
