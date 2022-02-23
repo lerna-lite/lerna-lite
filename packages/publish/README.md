@@ -5,7 +5,7 @@
 [![Actions Status](https://github.com/ghiscoding/lerna-lite/workflows/CI%20Build/badge.svg)](https://github.com/ghiscoding/lerna-lite/actions)
 
 # @lerna-lite/publish
-## (`ws-roller publish`) Publish command
+## (`ws-roller publish`) Publish command 📰
 
 Lerna-Lite Publish command, publish packages in the current project
 

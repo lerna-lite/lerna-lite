@@ -22,9 +22,9 @@ A super light fork of Lerna, only 3 commands were extracted from the original [L
 
 | Command | CLI         | Description | Included |
 |---------|-------------|-------------| ---------|
-| [version](https://github.com/ghiscoding/lerna-lite/tree/main/packages/version) | [ws-roller](https://github.com/ghiscoding/lerna-lite/tree/main/packages/cli#installation) | create new version for each workspace package | Yes |
-| [publish](https://github.com/ghiscoding/lerna-lite/tree/main/packages/publish) | [ws-roller](https://github.com/ghiscoding/lerna-lite/tree/main/packages/cli#installation) | publish each workspace package | Yes |
-| [run](https://github.com/ghiscoding/lerna-lite/tree/main/packages/run) | [ws-runner](https://github.com/ghiscoding/lerna-lite/tree/main/packages/run#installation) | run npm script in each workspace package | Optional |
+| [version](https://github.com/ghiscoding/lerna-lite/tree/main/packages/version) | [ws-roller](https://github.com/ghiscoding/lerna-lite/tree/main/packages/cli#installation) 📰 | create new version for each workspace package | Yes |
+| [publish](https://github.com/ghiscoding/lerna-lite/tree/main/packages/publish) | [ws-roller](https://github.com/ghiscoding/lerna-lite/tree/main/packages/cli#installation) 📰 | publish each workspace package | Yes |
+| [run](https://github.com/ghiscoding/lerna-lite/tree/main/packages/run) | [ws-runner](https://github.com/ghiscoding/lerna-lite/tree/main/packages/run#installation) 🏃 | run npm script in each workspace package | Optional |
 
 ## Why create this lib/fork?
 Mainly for the following reasons:
@@ -129,7 +129,7 @@ If you wish to contribute to the project, follow these steps
 ```sh
 npm install
 ```
-2. you can debug your code with the already defined launch configs
+2. you can troubleshoot/debug the code the launch configs that are already defined
 3. add/run Jest unit tests
 ```sh
 npm run jest # or npm run jest:watch

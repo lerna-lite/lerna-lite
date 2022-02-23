@@ -4,7 +4,7 @@
 [![npm](https://img.shields.io/npm/dy/@lerna-lite/cli?color=forest)](https://www.npmjs.com/package/@lerna-lite/cli)
 [![Actions Status](https://github.com/ghiscoding/lerna-lite/workflows/CI%20Build/badge.svg)](https://github.com/ghiscoding/lerna-lite/actions)
 
-## Lerna-Lite Version/Publish comands CLI
+## Lerna-Lite Version/Publish comands CLI 📰
 #### @lerna-lite/cli
 
 CLI for the `publish` and `version` commands, the CLI must be called with `ws-roller <command>` (where command is either `publish` or `version`). You can see some more usage samples below.
