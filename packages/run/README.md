@@ -48,7 +48,7 @@ Run an [npm script](https://docs.npmjs.com/misc/scripts) in each package of the 
 $ ws-runner run --scope my-component test
 ```
 
-- [`@ws-runner/version`](#ws-runnerversion)
+- [`@ws-runner/run`](#ws-runnerrun)
   - [Usage](#usage)
   - [Options](#options)
     - [`--npm-client <client>`](#--npm-client-client)

@@ -68,7 +68,7 @@ This is useful when a previous `ws-roller publish` failed to publish all package
 ## Options
 
 `ws-roller publish` supports all of the options provided by [`ws-roller version`](https://github.com/ws-roller/ws-roller/tree/main/commands/version#options) in addition to the following:
-- [`@ws-roller/version`](#ws-rollerversion)
+- [`@ws-roller/publish`](#ws-rollerpublish)
   - [Positionals](#positionals)
     - [semver `--bump from-git`](#semver--bump-from-git)
     - [semver `--bump from-package`](#semver--bump-from-package)
