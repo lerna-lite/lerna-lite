@@ -37,8 +37,8 @@
     "@lerna-lite/publish": "^0.3.2",
     "@lerna-lite/version": "^0.3.2",
     "dedent": "^0.7.0",
-    "dotenv": "^14.2.0",
-    "npmlog": "^6.0.0",
+    "dotenv": "^14.3.2",
+    "npmlog": "^6.0.1",
     "yargs": "^17.3.1"
   },
   "devDependencies": {
