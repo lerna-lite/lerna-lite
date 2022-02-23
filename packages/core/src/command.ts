@@ -31,7 +31,7 @@ export class Command {
   logger!: Logger;
   options: any;
   project!: Project;
-  packageGraph?: PackageGraph;
+  packageGraph!: PackageGraph;
   runner?: Promise<any>;
 
   constructor(_argv: any) {
