@@ -35,7 +35,7 @@ export function getTwoFactorAuthRequired(options: FetchConfig) {
       // most likely a private registry (npm Enterprise, verdaccio, etc)
       opts.log.warn(
         'EREGISTRY',
-        `Registry '${opts.registry}' does not support 'npm profile get', skipping two-factor auth check...`
+        `Registry "${opts.registry}" does not support 'npm profile get', skipping two-factor auth check...`
       );
 
       // don't log redundant errors

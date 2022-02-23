@@ -86,7 +86,7 @@ export async function updateChangelog(pkg: Package, type: 'root' | 'independent'
     const content = [changelogHeader, changelogVersion, newEntry, changelogContents]
       .join(BLANK_LINE)
       .trim()
-      .replace(/[\n]{2,}/gm, '\n\n');
+      .replace(/[\r\n]{2,}/gm, '\n\n');
 
     return fs.writeFile(changelogFileLoc, content + EOL).then(() => {
       log.verbose(type, 'wrote', changelogFileLoc);
