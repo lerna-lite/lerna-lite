@@ -18,6 +18,8 @@
   },
   "include": [
     "**/*.spec.ts",
+    "**/*.spec.js",
+    "**/*.test.js",
     "src/typings/**/*.ts",
     "**/*.d.ts"
   ]

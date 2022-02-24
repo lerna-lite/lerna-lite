@@ -1,20 +1,42 @@
 import yargs from 'yargs/yargs';
+
+import { PublishCommand } from '../packages/publish/src/publishCommand';
+import { VersionCommand } from '../packages/version/src/versionCommand';
 import { RunCommand } from '../packages/run/src/runCommand';
 
-const commandHandler = (argv) => new RunCommand(argv);
+export function commandRunner(cwd: string, commandType: 'run' | 'publish' | 'version' = 'run') {
+  let command = '';
+  let describe = '';
+  let handler: any;
 
-export function commandRunner(cwd: string) {
+  switch (commandType) {
+    case 'publish':
+      command = 'publish [script]';
+      describe = 'publish a new version';
+      handler = (argv) => new PublishCommand(argv);
+      break;
+    case 'version':
+      command = 'version [script]';
+      describe = 'roll a new version';
+      handler = (argv) => new VersionCommand(argv);
+      break;
+    case 'run':
+      command = 'run <script>';
+      describe = 'Run an npm script in each package that contains that script';
+      handler = (argv) => new RunCommand(argv);
+      break;
+  }
+
   // create a _new_ yargs instance every time cwd changes to avoid singleton pollution
   const cli = yargs([], cwd)
-    // const cli = lernaCLI([], cwd)
     .exitProcess(false)
     .detectLocale(false)
     .showHelpOnFail(false)
     .wrap(null)
     .command({
-      command: 'run <script>',
-      describe: 'Run an npm script in each package that contains that script',
-      handler: commandHandler as any,
+      command,
+      describe,
+      handler,
     });
 
   return (...args) => new Promise((resolve, reject) => {

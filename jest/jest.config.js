@@ -11,10 +11,8 @@ module.exports = {
   clearMocks: true,
   collectCoverage: false,
   collectCoverageFrom: [
-    'packages/**/*.ts',
+    'packages/**/*.+(js|ts)',
     '!**/dist/**',
-    '!src/assets/**',
-    '!examples/webpack-demo-vanilla-bundle/**',
     '!**/node_modules/**',
     '!**/jest/**',
   ],
@@ -56,22 +54,6 @@ module.exports = {
   testPathIgnorePatterns: [
     '<rootDir>/node_modules/',
   ],
-  verbose: !!process.env.CI,
+  // verbose: !!process.env.CI,
+  verbose: false,
 };
-
-// split tests into smaller chunks because windows is agonizingly slow
-if (process.env.LERNA_CI_TYPE) {
-  module.exports.testMatch =
-    process.env.LERNA_CI_TYPE === 'publish'
-      ? [
-        // these tests tend to be longer than any others
-        '<rootDir>/commands/publish/**/*.test.js',
-        '<rootDir>/commands/version/**/*.test.js',
-      ]
-      : [
-        // NOTE: import is NOT TESTED in windows because pain and suffering
-        '<rootDir>/commands/!(publish|version|import)/**/*.test.js',
-        '<rootDir>/core/**/*.test.js',
-        '<rootDir>/utils/**/*.test.js',
-      ];
-}

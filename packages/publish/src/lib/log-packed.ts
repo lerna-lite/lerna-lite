@@ -1,7 +1,7 @@
 import byteSize from 'byte-size';
 import columnify from 'columnify';
-const hasUnicode = require('has-unicode')();
 import log from 'npmlog';
+const hasUnicode = require('has-unicode')();
 
 export function logPacked(tarball) {
   log.notice('', '');

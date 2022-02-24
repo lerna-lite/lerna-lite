@@ -445,7 +445,7 @@ export class PublishCommand extends Command {
 
   prepareLicenseActions() {
     return Promise.resolve()
-      .then(() => getPackagesWithoutLicense(this.project!, this.packagesToPublish ?? []))
+      .then(() => getPackagesWithoutLicense(this.project, this.packagesToPublish ?? []))
       .then((packagesWithoutLicense) => {
         if (packagesWithoutLicense.length && !this.project?.licensePath) {
           this.packagesToBeLicensed = [];
