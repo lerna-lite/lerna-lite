@@ -28,7 +28,7 @@
     "strict": true
   },
   "exclude": [
-    "**/*.spec.(js|ts)",
+    "**/*.spec.ts",
     "**/*.test.js"
   ]
 }
