@@ -13,6 +13,7 @@ import {
   collectPackages,
   Command,
   createRunner,
+  logOutput,
   Package,
   promptConfirmation,
   recommendVersion,
@@ -475,10 +476,10 @@ export class VersionCommand extends Command {
       return line;
     });
 
-    this.logOutput('');
-    this.logOutput(`Changes (${changes.length} packages):`);
-    this.logOutput(changes.join(EOL));
-    this.logOutput('');
+    logOutput('');
+    logOutput(`Changes (${changes.length} packages):`);
+    logOutput(changes.join(EOL));
+    logOutput('');
 
     if (this.options.yes) {
       this.logger.info('auto-confirmed', '');

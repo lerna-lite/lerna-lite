@@ -12,6 +12,7 @@ import {
   Command,
   describeRef,
   getOneTimePassword,
+  logOutput,
   npmConf,
   Package,
   PackageGraph,
@@ -236,8 +237,8 @@ export class PublishCommand extends Command {
     const count = this.packagesToPublish?.length;
     const message: string[] = this.packagesToPublish?.map((pkg) => ` - ${pkg.name}@${pkg.version}`) ?? [];
 
-    this.logOutput('Successfully published:');
-    this.logOutput(message.join(os.EOL));
+    logOutput('Successfully published:');
+    logOutput(message.join(os.EOL));
 
     this.logger.success('published', '%d %s', count, count === 1 ? 'package' : 'packages');
   }
@@ -430,10 +431,10 @@ export class PublishCommand extends Command {
       (pkg) => ` - ${pkg.name} => ${this.updatesVersions?.get(pkg.name)}`
     ) ?? [];
 
-    this.logOutput('');
-    this.logOutput(`Found ${count} ${count === 1 ? 'package' : 'packages'} to publish:`);
-    this.logOutput(message.join(os.EOL));
-    this.logOutput('');
+    logOutput('');
+    logOutput(`Found ${count} ${count === 1 ? 'package' : 'packages'} to publish:`);
+    logOutput(message.join(os.EOL));
+    logOutput('');
 
     if (this.options.yes) {
       this.logger.info('auto-confirmed', '');

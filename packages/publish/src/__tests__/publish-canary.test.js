@@ -4,6 +4,7 @@
 jest.mock('@lerna-lite/core', () => ({
   ...jest.requireActual('@lerna-lite/core'), // return the other real methods, below we'll mock only 2 of the methods
   // collectUpdates: jest.requireActual('@lerna-lite/core').collectUpdates,
+  logOutput: jest.requireActual('../../../core/src/__mocks__/output').logOutput,
   promptConfirmation: jest.requireActual('../../../core/src/__mocks__/prompt').promptConfirmation,
   throwIfUncommitted: jest.requireActual('../../../core/src/__mocks__/check-working-tree').throwIfUncommitted,
 }));
@@ -167,11 +168,11 @@ Object {
 `);
 });
 
-xtest("publish --canary --independent", async () => {
+test("publish --canary --independent", async () => {
   const cwd = await initTaggedFixture("independent");
 
   await setupChanges(cwd, ["packages/package-1/all-your-base.js", "belong to us"]);
-  await new PublishCommand(createArgv(cwd, "--canary", "preminor"));
+  await new PublishCommand(createArgv(cwd, "--canary", "--bump", "preminor"));
   // await lernaPublish(cwd)("--canary", "preminor");
 
   expect(writePkg.updatedVersions()).toMatchInlineSnapshot(`
@@ -183,7 +184,7 @@ Object {
 `);
 });
 
-xtest("publish --canary addresses unpublished package", async () => {
+test("publish --canary addresses unpublished package", async () => {
   const cwd = await initTaggedFixture("independent");
 
   await setupChanges(
@@ -199,7 +200,7 @@ xtest("publish --canary addresses unpublished package", async () => {
     ],
     ["packages/package-6/new-kids.js", "on the block"]
   );
-  await new PublishCommand(createArgv(cwd, "--canary", "premajor"));
+  await new PublishCommand(createArgv(cwd, "--canary", "--bump", "premajor"));
   // await lernaPublish(cwd)("--canary", "premajor");
 
   // there have been two commits since the beginning of the repo
@@ -229,11 +230,11 @@ Object {
 `);
   });
 
-  xtest("internal", async () => {
+  test("internal", async () => {
     const cwd = await initTaggedFixture("snake-graph");
 
     await setupChanges(cwd, ["packages/package-3/malcolm.js", "in the middle"]);
-    await new PublishCommand(createArgv(cwd, "--canary", "minor"));
+    await new PublishCommand(createArgv(cwd, "--canary", "--bump", "minor"));
     // await lernaPublish(cwd)("--canary", "minor");
 
     expect(writePkg.updatedVersions()).toMatchInlineSnapshot(`
@@ -245,11 +246,11 @@ Object {
 `);
   });
 
-  xtest("pendant", async () => {
+  test("pendant", async () => {
     const cwd = await initTaggedFixture("snake-graph");
 
     await setupChanges(cwd, ["packages/package-5/celine-dion.js", "all by myself"]);
-    await new PublishCommand(createArgv(cwd, "--canary", "major"));
+    await new PublishCommand(createArgv(cwd, "--canary", "--bump", "major"));
     // await lernaPublish(cwd)("--canary", "major");
 
     expect(writePkg.updatedVersions()).toMatchInlineSnapshot(`
