@@ -45,7 +45,7 @@ describe("version --allow-branch", () => {
       // const command = commandRunner(testDir, 'version')('--allow-branch', 'main');
       // const command = lernaVersion(testDir)("--allow-branch", "main");
 
-      await expect(command).rejects.toThrow("Branch 'unmatched' is restricted from versioning");
+      await expect(command).rejects.toThrow(`Branch "unmatched" is restricted from versioning`);
     });
 
     xit("accepts an exactly matching branch", async () => {
@@ -85,7 +85,7 @@ describe("version --allow-branch", () => {
       await changeBranch(testDir, "unmatched");
       const command = lernaVersion(testDir)();
 
-      await expect(command).rejects.toThrow("Branch 'unmatched' is restricted from versioning");
+      await expect(command).rejects.toThrow(`Branch "unmatched" is restricted from versioning`);
     });
 
     xit("accepts a matching branch", async () => {

@@ -72,5 +72,9 @@ yargs(process.argv.slice(2))
     When a command fails, all logs are written to lerna-debug.log in the current working directory.
     For more information, find our manual at https://github.com/ghiscoding/lerna-lite
   `)
+  // workaround yargs bug that re-interprets unknown arguments in argv._
+  .parserConfiguration({
+    'populate--': true,
+  })
   .argv;
 

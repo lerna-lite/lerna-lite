@@ -3,7 +3,6 @@
 // mocked modules, mock only 2 methods from core
 jest.mock('@lerna-lite/core', () => ({
   ...jest.requireActual('@lerna-lite/core'), // return the other real methods, below we'll mock only 2 of the methods
-  // collectUpdates: jest.requireActual('@lerna-lite/core').collectUpdates,
   logOutput: jest.requireActual('../../../core/src/__mocks__/output').logOutput,
   promptConfirmation: jest.requireActual('../../../core/src/__mocks__/prompt').promptConfirmation,
   throwIfUncommitted: jest.requireActual('../../../core/src/__mocks__/check-working-tree').throwIfUncommitted,
@@ -35,19 +34,12 @@ const { loggingOutput } = require("../../../../helpers/logging-output");
 // test command
 const { PublishCommand } = require("../index");
 const { commandRunner } = require('../../../../helpers/command-runner');
-// const lernaPublish = require("@lerna-test/command-runner")(require("../command"));
 
 // stabilize commit SHA
 expect.addSnapshotSerializer(require("../../../../helpers/serialize-git-sha"));
 
-const { exec } = require('@lerna-lite/core');
-jest.mock('@lerna-lite/core', () => {
-  const { exec } = jest.requireActual('@lerna-lite/core')
-  return {
-    __esModule: true,
-    exec: jest.fn(exec)
-  }
-});
+// const { exec } = require('@lerna-lite/core');
+const coreModule = require('@lerna-lite/core');
 
 const createArgv = (cwd, ...args) => {
   args.unshift('publish');
@@ -140,7 +132,6 @@ test("publish --canary --tag-version-prefix='abc'", async () => {
 
   await setupChanges(cwd, ["packages/package-1/all-your-base.js", "belong to us"]);
   await new PublishCommand(createArgv(cwd, "--canary", "--tag-version-prefix", "abc"));
-  // await lernaPublish(cwd)("--canary", "--tag-version-prefix", "abc");
 
   expect(writePkg.updatedVersions()).toMatchInlineSnapshot(`
 Object {
@@ -156,7 +147,6 @@ test("publish --canary <semver>", async () => {
 
   await setupChanges(cwd, ["packages/package-1/all-your-base.js", "belong to us"]);
   await new PublishCommand(createArgv(cwd, "--canary", "prerelease"));
-  // await lernaPublish(cwd)("--canary", "prerelease");
   // prerelease === prepatch, which is the default
 
   expect(writePkg.updatedVersions()).toMatchInlineSnapshot(`
@@ -173,7 +163,6 @@ test("publish --canary --independent", async () => {
 
   await setupChanges(cwd, ["packages/package-1/all-your-base.js", "belong to us"]);
   await new PublishCommand(createArgv(cwd, "--canary", "--bump", "preminor"));
-  // await lernaPublish(cwd)("--canary", "preminor");
 
   expect(writePkg.updatedVersions()).toMatchInlineSnapshot(`
 Object {
@@ -201,7 +190,6 @@ test("publish --canary addresses unpublished package", async () => {
     ["packages/package-6/new-kids.js", "on the block"]
   );
   await new PublishCommand(createArgv(cwd, "--canary", "--bump", "premajor"));
-  // await lernaPublish(cwd)("--canary", "premajor");
 
   // there have been two commits since the beginning of the repo
   expect(writePkg.updatedVersions()).toMatchInlineSnapshot(`
@@ -217,7 +205,6 @@ describe("publish --canary differential", () => {
 
     await setupChanges(cwd, ["packages/package-1/all-your-base.js", "belong to us"]);
     await new PublishCommand(createArgv(cwd, "--canary", "patch"));
-    // await lernaPublish(cwd)("--canary", "patch");
 
     expect(writePkg.updatedVersions()).toMatchInlineSnapshot(`
 Object {
@@ -235,7 +222,6 @@ Object {
 
     await setupChanges(cwd, ["packages/package-3/malcolm.js", "in the middle"]);
     await new PublishCommand(createArgv(cwd, "--canary", "--bump", "minor"));
-    // await lernaPublish(cwd)("--canary", "minor");
 
     expect(writePkg.updatedVersions()).toMatchInlineSnapshot(`
 Object {
@@ -251,7 +237,6 @@ Object {
 
     await setupChanges(cwd, ["packages/package-5/celine-dion.js", "all by myself"]);
     await new PublishCommand(createArgv(cwd, "--canary", "--bump", "major"));
-    // await lernaPublish(cwd)("--canary", "major");
 
     expect(writePkg.updatedVersions()).toMatchInlineSnapshot(`
 Object {
@@ -271,7 +256,6 @@ describe("publish --canary sequential", () => {
   test("1. pendant", async () => {
     await setupChanges(cwd, ["packages/package-5/celine-dion.js", "all by myself"]);
     await new PublishCommand(createArgv(cwd, "--canary"));
-    // await lernaPublish(cwd)("--canary");
 
     expect(writePkg.updatedVersions()).toMatchInlineSnapshot(`
 Object {
@@ -283,7 +267,6 @@ Object {
   test("2. internal", async () => {
     await setupChanges(cwd, ["packages/package-3/malcolm.js", "in the middle"]);
     await new PublishCommand(createArgv(cwd, "--canary"));
-    // await lernaPublish(cwd)("--canary");
 
     expect(writePkg.updatedVersions()).toMatchInlineSnapshot(`
 Object {
@@ -297,7 +280,6 @@ Object {
   test("3. source", async () => {
     await setupChanges(cwd, ["packages/package-1/all-your-base.js", "belong to us"]);
     await new PublishCommand(createArgv(cwd, "--canary"));
-    // await lernaPublish(cwd)("--canary");
 
     expect(writePkg.updatedVersions()).toMatchInlineSnapshot(`
 Object {
@@ -313,7 +295,6 @@ Object {
   test("4. internal", async () => {
     await setupChanges(cwd, ["packages/package-3/malcolm.js", "tucker"]);
     await new PublishCommand(createArgv(cwd, "--canary"));
-    // await lernaPublish(cwd)("--canary");
 
     expect(writePkg.updatedVersions()).toMatchInlineSnapshot(`
 Object {
@@ -327,7 +308,6 @@ Object {
   test("5. pendant", async () => {
     await setupChanges(cwd, ["packages/package-5/celine-dion.js", "my heart will go on"]);
     await new PublishCommand(createArgv(cwd, "--canary"));
-    // await lernaPublish(cwd)("--canary");
 
     expect(writePkg.updatedVersions()).toMatchInlineSnapshot(`
 Object {
@@ -341,7 +321,6 @@ test("publish --canary on tagged release exits early", async () => {
   const cwd = await initTaggedFixture("normal");
 
   await new PublishCommand(createArgv(cwd, "--canary"));
-  // await lernaPublish(cwd)("--canary");
 
   const logMessages = loggingOutput("success");
   expect(logMessages).toContain("Current HEAD is already released, skipping change detection.");
@@ -352,7 +331,6 @@ test("publish --canary --force-publish on tagged release avoids early exit", asy
   const cwd = await initTaggedFixture("normal");
 
   await new PublishCommand(createArgv(cwd, "--canary", "--force-publish"));
-  // await lernaPublish(cwd)("--canary", "--force-publish");
 
   const logMessages = loggingOutput("warn");
   expect(logMessages).toContain("all packages");
@@ -377,7 +355,6 @@ test("publish --canary --force-publish <arg> on tagged release avoids early exit
 
   // there are no _actual_ changes to package-2 or any of its dependencies
   await new PublishCommand(createArgv(cwd, "--canary", "--force-publish", "package-2"));
-  // await lernaPublish(cwd)("--canary", "--force-publish", "package-2");
 
   const logMessages = loggingOutput("warn");
   expect(logMessages).toContain("package-2");
@@ -398,7 +375,6 @@ xtest("publish --canary with dirty tree throws error", async () => {
 
   const cwd = await initTaggedFixture("normal");
   await new PublishCommand(createArgv(cwd, "--canary"));
-  // const command = lernaPublish(cwd)("--canary");
 
   await expect(command).rejects.toThrow("uncommitted");
   // notably different than the actual message, but good enough here
@@ -407,7 +383,6 @@ xtest("publish --canary with dirty tree throws error", async () => {
 test("publish --canary --git-head <sha> throws an error", async () => {
   const cwd = await initFixture("normal");
   const command = new PublishCommand(createArgv(cwd, "--canary", "--git-head", "deadbeef"));
-  // const command = lernaPublish(cwd)("--canary", "--git-head", "deadbeef");
 
   await expect(command).rejects.toThrow(
     expect.objectContaining({
@@ -417,12 +392,12 @@ test("publish --canary --git-head <sha> throws an error", async () => {
 });
 
 xtest("publish --canary --include-merged-tags calls git describe correctly", async () => {
+  const execSpy = jest.spyOn(coreModule, 'exec');
   const cwd = await initTaggedFixture("normal");
 
   await new PublishCommand(createArgv(cwd, "--canary", "--include-merged-tags"));
-  // await lernaPublish(cwd)("--canary", "--include-merged-tags");
 
-  expect(exec).toHaveBeenCalledWith(
+  expect(execSpy).toHaveBeenCalledWith(
     "git",
     // notably lacking "--first-parent"
     ["describe", "--always", "--long", "--dirty", "--match", "v*.*.*"],
@@ -434,7 +409,6 @@ xtest("publish --canary --include-merged-tags calls git describe correctly", asy
 test("publish --canary without _any_ tags", async () => {
   const cwd = await initFixture("normal");
   await new PublishCommand(createArgv(cwd, "--canary"));
-  // await lernaPublish(cwd)("--canary");
 
   expect(writePkg.updatedVersions()).toMatchInlineSnapshot(`
     Object {
@@ -449,7 +423,6 @@ test("publish --canary without _any_ tags", async () => {
 test("publish --canary without _any_ tags (independent)", async () => {
   const cwd = await initFixture("independent");
   await new PublishCommand(createArgv(cwd, "--canary"));
-  // await lernaPublish(cwd)("--canary");
 
   expect(writePkg.updatedVersions()).toMatchInlineSnapshot(`
     Object {
@@ -479,7 +452,6 @@ test("publish --canary --no-private", async () => {
   );
 
   await new PublishCommand(createArgv(cwd, "--canary", "--no-private"));
-  // await lernaPublish(cwd)("--canary", "--no-private");
 
   expect(writePkg.updatedVersions()).toMatchInlineSnapshot(`
     Object {

@@ -15,7 +15,6 @@ import {
   logOutput,
   npmConf,
   Package,
-  PackageGraph,
   promptConfirmation,
   prereleaseIdFromVersion,
   pulseTillDone,
@@ -84,7 +83,7 @@ export class PublishCommand extends Command {
     } = this.options;
 
     if (this.requiresGit && gitHead) {
-      throw new ValidationError('EGITHEAD', '--git-head is only allowed with "from - package" positional');
+      throw new ValidationError('EGITHEAD', '--git-head is only allowed with "from-package" positional');
     }
 
     // https://docs.npmjs.com/misc/config#save-prefix

@@ -150,7 +150,7 @@ export class VersionCommand extends Command {
         throw new ValidationError(
           'ENOREMOTEBRANCH',
           dedent`
-            Branch '${this.currentBranch}' doesn't exist in remote '${this.gitRemote}'.
+            Branch "${this.currentBranch}" doesn't exist in remote "${this.gitRemote}".
             If this is a new branch, please make sure you push it to the remote first.
           `
         );
@@ -163,7 +163,7 @@ export class VersionCommand extends Command {
         throw new ValidationError(
           'ENOTALLOWED',
           dedent`
-            Branch '${this.currentBranch}' is restricted from versioning due to allowBranch config.
+            Branch "${this.currentBranch}" is restricted from versioning due to allowBranch config.
             Please consider the reasons for this restriction before overriding the option.
           `
         );
@@ -175,7 +175,7 @@ export class VersionCommand extends Command {
         isBehindUpstream(this.gitRemote, this.currentBranch, this.execOpts, this.options.gitDryRun)
       ) {
         // eslint-disable-next-line max-len
-        const message = `Local branch '${this.currentBranch}' is behind remote upstream ${this.gitRemote}/${this.currentBranch}`;
+        const message = `Local branch "${this.currentBranch}" is behind remote upstream ${this.gitRemote}/${this.currentBranch}`;
 
         if (!this.options.ci) {
           // interrupt interactive execution
@@ -183,7 +183,7 @@ export class VersionCommand extends Command {
             'EBEHIND',
             dedent`
               ${message}
-              Please merge remote changes into '${this.currentBranch}' with 'git pull'
+              Please merge remote changes into "${this.currentBranch}" with "git pull"
             `
           );
         }

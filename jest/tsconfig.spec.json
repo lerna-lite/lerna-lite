@@ -20,6 +20,7 @@
     "**/*.spec.ts",
     "**/*.spec.js",
     "**/*.test.js",
+    "**/__mocks__/**/*.*",
     "src/typings/**/*.ts",
     "**/*.d.ts"
   ]
