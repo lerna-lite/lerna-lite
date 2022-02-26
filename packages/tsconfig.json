@@ -30,6 +30,7 @@
     "strict": true
   },
   "exclude": [
-    "**/*.spec.ts"
+    "**/*.spec.ts",
+    "**/*.test.js"
   ]
 }

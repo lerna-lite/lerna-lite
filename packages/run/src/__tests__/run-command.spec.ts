@@ -57,13 +57,13 @@ describe('RunCommand', () => {
 
     it('should complain if invoked with an empty script', async () => {
       // const command = new RunCommand(createArgv(testDir));
-      const command = commandRunner(testDir)('');
+      const command = commandRunner(testDir, 'run')('');
 
       await expect(command).rejects.toThrow('You must specify a lifecycle script to run');
     });
 
     it('runs a script in packages', async () => {
-      await commandRunner(testDir)('my-script');
+      await commandRunner(testDir, 'run')('my-script');
       // await new RunCommand(createArgv(testDir, 'my-script'));
 
       const logLines = (output as any).logged().split('\n');
@@ -78,7 +78,7 @@ describe('RunCommand', () => {
     });
 
     it('omits package prefix with --stream --no-prefix', async () => {
-      await commandRunner(testDir)('my-script', '--stream', '--no-prefix');
+      await commandRunner(testDir, 'run')('my-script', '--stream', '--no-prefix');
       // await new RunCommand(createArgv(testDir, 'my-script', '--stream', '--no-prefix'));
 
       expect(ranInPackagesStreaming(testDir)).toMatchSnapshot();
@@ -86,13 +86,13 @@ describe('RunCommand', () => {
 
     it('always runs env script', async () => {
       // await new RunCommand(createArgv(testDir, 'env'));
-      await commandRunner(testDir)('env');
+      await commandRunner(testDir, 'run')('env');
 
       expect((output as any).logged().split('\n')).toEqual(['package-1', 'package-4', 'package-2', 'package-3']);
     });
 
     it('runs a script only in scoped packages', async () => {
-      await commandRunner(testDir)('my-script', '--scope', 'package-1');
+      await commandRunner(testDir, 'run')('my-script', '--scope', 'package-1');
       // await new RunCommand(createArgv(testDir, 'my-script', '--scope', 'package-1'));
       expect((output as any).logged()).toBe('package-1');
     });
@@ -168,7 +168,7 @@ describe('RunCommand', () => {
   xdescribe('with --include-filtered-dependencies', () => {
     it('runs scoped command including filtered deps', async () => {
       const testDir = await initFixture('include-filtered-dependencies');
-      // await commandRunner(testDir)();
+      // await commandRunner(testDir,'run')();
       await new RunCommand(createArgv(testDir,
         'my-script',
         '--scope',

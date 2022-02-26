@@ -247,12 +247,6 @@ export class Command {
     return execa.sync(gitCommand, gitArgs, opts).exitCode === 0;
   }
 
-  logOutput(...args: any) {
-    this.logger.clearProgress();
-    console.log(...args);
-    this.logger.showProgress();
-  }
-
   runValidations() {
     if ((this.options.since !== undefined || this.requiresGit) && !this.gitInitialized()) {
       throw new ValidationError('ENOGIT', 'The git binary was not found, or this is not a git repository.');

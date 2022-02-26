@@ -33,7 +33,7 @@
   "dependencies": {
     "@lerna-lite/core": "^0.3.2",
     "@lerna-lite/version": "^0.3.2",
-    "byte-size": "^8.1.0",
+    "byte-size": "^7.0.1",
     "columnify": "^1.6.0",
     "fs-extra": "^10.0.1",
     "has-unicode": "^2.0.1",

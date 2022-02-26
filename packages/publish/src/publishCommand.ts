@@ -12,9 +12,9 @@ import {
   Command,
   describeRef,
   getOneTimePassword,
+  logOutput,
   npmConf,
   Package,
-  PackageGraph,
   promptConfirmation,
   prereleaseIdFromVersion,
   pulseTillDone,
@@ -83,7 +83,7 @@ export class PublishCommand extends Command {
     } = this.options;
 
     if (this.requiresGit && gitHead) {
-      throw new ValidationError('EGITHEAD', '--git-head is only allowed with "from - package" positional');
+      throw new ValidationError('EGITHEAD', '--git-head is only allowed with "from-package" positional');
     }
 
     // https://docs.npmjs.com/misc/config#save-prefix
@@ -236,8 +236,8 @@ export class PublishCommand extends Command {
     const count = this.packagesToPublish?.length;
     const message: string[] = this.packagesToPublish?.map((pkg) => ` - ${pkg.name}@${pkg.version}`) ?? [];
 
-    this.logOutput('Successfully published:');
-    this.logOutput(message.join(os.EOL));
+    logOutput('Successfully published:');
+    logOutput(message.join(os.EOL));
 
     this.logger.success('published', '%d %s', count, count === 1 ? 'package' : 'packages');
   }
@@ -430,10 +430,10 @@ export class PublishCommand extends Command {
       (pkg) => ` - ${pkg.name} => ${this.updatesVersions?.get(pkg.name)}`
     ) ?? [];
 
-    this.logOutput('');
-    this.logOutput(`Found ${count} ${count === 1 ? 'package' : 'packages'} to publish:`);
-    this.logOutput(message.join(os.EOL));
-    this.logOutput('');
+    logOutput('');
+    logOutput(`Found ${count} ${count === 1 ? 'package' : 'packages'} to publish:`);
+    logOutput(message.join(os.EOL));
+    logOutput('');
 
     if (this.options.yes) {
       this.logger.info('auto-confirmed', '');
@@ -445,7 +445,7 @@ export class PublishCommand extends Command {
 
   prepareLicenseActions() {
     return Promise.resolve()
-      .then(() => getPackagesWithoutLicense(this.project!, this.packagesToPublish ?? []))
+      .then(() => getPackagesWithoutLicense(this.project, this.packagesToPublish ?? []))
       .then((packagesWithoutLicense) => {
         if (packagesWithoutLicense.length && !this.project?.licensePath) {
           this.packagesToBeLicensed = [];

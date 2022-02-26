@@ -12,6 +12,7 @@ export * from './format-error';
 export * from './log-package-error';
 export * from './nerf-dart';
 export * from './npm-conf';
+export * from './output';
 export * from './parse-field';
 export * from './prerelease-id-from-version';
 export * from './pulse-till-done';

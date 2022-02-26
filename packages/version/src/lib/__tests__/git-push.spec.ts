@@ -1,7 +1,6 @@
 "use strict";
 
 const execa = require("execa");
-import { exec } from '@lerna-lite/core';
 
 const cloneFixture = require("../../../../../helpers/clone-fixture")(__dirname);
 const { gitPush } = require("../git-push");
@@ -10,6 +9,7 @@ async function listRemoteTags(cwd) {
   return execa("git", ["ls-remote", "--tags", "--refs", "--quiet"], { cwd }).then((result) => result.stdout);
 }
 
+import { exec } from '@lerna-lite/core';
 jest.mock('@lerna-lite/core', () => {
   const { exec } = jest.requireActual('@lerna-lite/core')
   return {
