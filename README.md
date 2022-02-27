@@ -83,7 +83,7 @@ Add the following NPM Scripts or simply run the following NodeJS command in your
 // package.json / npm scripts
 "scripts": {
   "roll-version": "ws-roller version",
-  "roll-publish": "ws-roller publish --bump from-package"
+  "roll-publish": "ws-roller publish from-package"
 }
 ```
 
@@ -117,7 +117,7 @@ npm install @lerna-lite/run
 + "roll-version": "ws-roller version",
 
 - "roll-publish": "lerna publish from-package"
-+ "roll-publish": "ws-roller publish --bump from-package"
++ "roll-publish": "ws-roller publish from-package"
 
 - "build": "lerna run build"
 + "build": "ws-runner run build"

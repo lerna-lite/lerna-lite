@@ -29,12 +29,12 @@ const cli = yargs(process.argv, process.cwd());
 yargs(process.argv.slice(2))
   .example('$0 version build -- --silent', '# `npm version build --silent` in all packages with a build script')
   .command({
-    command: 'publish [script]',
+    command: 'publish [bump]',
     describe: 'publish a new version',
     handler: publishHandler,
   })
   .command({
-    command: 'version [script]',
+    command: 'version [bump]',
     describe: 'roll a new version',
     handler: versionHandler,
   })
