@@ -56,7 +56,8 @@
       ],
       "args": [
         "packages/cli/src/cli.ts",
-        "publish"
+        "publish",
+        "from-package"
       ],
       "cwd": "${workspaceRoot}",
       "console": "integratedTerminal",
