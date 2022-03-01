@@ -1,6 +1,6 @@
 const execa = require('execa');
-const cloneFixture = require('../../../../../helpers/clone-fixture')(__dirname);
-const { remoteBranchExists } = require('../remote-branch-exists');
+const cloneFixture = require('../../../../helpers/clone-fixture')(__dirname);
+const { remoteBranchExists } = require('../lib/remote-branch-exists');
 
 test('remoteBranchExists', async () => {
   const { cwd } = await cloneFixture('root-manifest-only');

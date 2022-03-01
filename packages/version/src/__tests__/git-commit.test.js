@@ -6,7 +6,7 @@ jest.mock("@lerna-lite/core");
 const { EOL } = require("os");
 const tempWrite = require("temp-write");
 const childProcess = require("@lerna-lite/core");
-const { gitCommit } = require("../git-commit");
+const { gitCommit } = require("../lib/git-commit");
 
 describe("git commit", () => {
   childProcess.exec.mockResolvedValue();

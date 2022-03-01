@@ -3,12 +3,12 @@ import semver from 'semver';
 // mocked modules, mock only 2 methods from core
 jest.mock('@lerna-lite/core', () => ({
   ...jest.requireActual('@lerna-lite/core') as any, // return the other real methods, below we'll mock only 2 of the methods
-  promptSelectOne: jest.requireActual('../../../../core/src/__mocks__/prompt').promptSelectOne,
-  promptTextInput: jest.requireActual('../../../../core/src/__mocks__/prompt').promptTextInput,
+  promptSelectOne: jest.requireActual('../../../core/src/__mocks__/prompt').promptSelectOne,
+  promptTextInput: jest.requireActual('../../../core/src/__mocks__/prompt').promptTextInput,
 }));
 
 import { promptSelectOne, promptTextInput, prereleaseIdFromVersion, PackageGraphNode } from '@lerna-lite/core';
-import { makePromptVersion } from '../prompt-version';
+import { makePromptVersion } from '../lib/prompt-version';
 
 const resolvePrereleaseId = jest.fn(() => "alpha");
 const versionPrompt = makePromptVersion(resolvePrereleaseId);
@@ -163,4 +163,3 @@ describe('custom prerelease', () => {
       expect(inputFilter('rc')).toBe('1.0.1-rc.0');
     });
   });
-});

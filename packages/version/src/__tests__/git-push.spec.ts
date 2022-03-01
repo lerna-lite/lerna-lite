@@ -2,8 +2,8 @@
 
 const execa = require("execa");
 
-const cloneFixture = require("../../../../../helpers/clone-fixture")(__dirname);
-const { gitPush } = require("../git-push");
+const cloneFixture = require("../../../../helpers/clone-fixture")(__dirname);
+const { gitPush } = require("../lib/git-push");
 
 async function listRemoteTags(cwd) {
   return execa("git", ["ls-remote", "--tags", "--refs", "--quiet"], { cwd }).then((result) => result.stdout);

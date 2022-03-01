@@ -1,8 +1,8 @@
 "use strict";
 
 const execa = require("execa");
-const cloneFixture = require("../../../../../helpers/clone-fixture")(__dirname);
-const { isBehindUpstream } = require("../is-behind-upstream");
+const cloneFixture = require("../../../../helpers/clone-fixture")(__dirname);
+const { isBehindUpstream } = require("../lib/is-behind-upstream");
 
 test("isBehindUpstream", async () => {
   const { cwd } = await cloneFixture("root-manifest-only");
