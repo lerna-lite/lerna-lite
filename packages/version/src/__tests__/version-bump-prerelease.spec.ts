@@ -6,7 +6,7 @@ jest.mock("../lib/remote-branch-exists", () => jest.requireActual('../lib/__mock
 
 // mocked modules, mock only 2 methods from core
 jest.mock('@lerna-lite/core', () => ({
-  ...jest.requireActual('@lerna-lite/core'), // return the other real methods, below we'll mock only 2 of the methods
+  ...jest.requireActual('@lerna-lite/core') as any, // return the other real methods, below we'll mock only 2 of the methods
   logOutput: jest.requireActual('../../../core/src/__mocks__/output').logOutput,
   promptConfirmation: jest.requireActual('../../../core/src/__mocks__/prompt').promptConfirmation,
   promptSelectOne: jest.requireActual('../../../core/src/__mocks__/prompt').promptSelectOne,
@@ -175,7 +175,6 @@ xtest("independent version prerelease does not bump on every unrelated change", 
   );
 
   await new VersionCommand(createArgv(cwd));
-  // await lernaVersion(cwd)();
 
   const first = await getCommitMessage(cwd);
   expect(first).toMatchInlineSnapshot(`
@@ -190,7 +189,6 @@ Publish
   await gitCommit(cwd, "feat: hello world");
 
   // all of this just to say...
-  // await lernaVersion(cwd)();
   await new VersionCommand(createArgv(cwd));
 
   const second = await getCommitMessage(cwd);
@@ -238,7 +236,6 @@ xtest("independent version prerelease respects --no-private", async () => {
   await gitCommit(cwd, "init");
 
   // TODO: (major) make --no-private the default
-  // await lernaVersion(cwd)("prerelease", "--no-private");
   await new VersionCommand(createArgv(cwd, "--bump", "prerelease", "--no-private"));
 
   const changedFiles = await showCommit(cwd, "--name-only");
