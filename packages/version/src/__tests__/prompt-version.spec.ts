@@ -163,3 +163,4 @@ describe('custom prerelease', () => {
       expect(inputFilter('rc')).toBe('1.0.1-rc.0');
     });
   });
+});
