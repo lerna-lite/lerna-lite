@@ -11,6 +11,8 @@ jest.mock('@lerna-lite/core', () => ({
   ...jest.requireActual('@lerna-lite/core') as any, // return the other real methods, below we'll mock only 2 of the methods
   logOutput: jest.requireActual('../../../core/src/__mocks__/output').logOutput,
   promptConfirmation: jest.requireActual('../../../core/src/__mocks__/prompt').promptConfirmation,
+  promptSelectOne: jest.requireActual('../../../core/src/__mocks__/prompt').promptSelectOne,
+  promptTextInput: jest.requireActual('../../../core/src/__mocks__/prompt').promptTextInput,
   throwIfUncommitted: jest.requireActual('../../../core/src/__mocks__/check-working-tree').throwIfUncommitted,
 }));
 

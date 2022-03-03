@@ -80,7 +80,6 @@ export class VersionCommand extends Command {
     const {
       amend,
       commitHooks = true,
-      conventionalCommits = true,
       gitRemote = 'origin',
       gitTagVersion = true,
       granularPathspec = true,
@@ -92,7 +91,6 @@ export class VersionCommand extends Command {
       tagVersionPrefix = 'v',
     } = this.options;
 
-    this.options.conventionalCommits = conventionalCommits;
     this.gitRemote = gitRemote;
     this.tagPrefix = tagVersionPrefix;
     this.commitAndTag = gitTagVersion;
