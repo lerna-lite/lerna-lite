@@ -7,7 +7,7 @@ jest.mock("fs-extra");
 jest.mock('@lerna-lite/core', () => ({
   ...jest.requireActual('@lerna-lite/core'), // return the other real methods, below we'll mock only 2 of the methods
   otplease: (cb, opts) => Promise.resolve(cb(opts)),
-  runLifecycle: jest.requireActual('../../../core/src/__mocks__/run-lifecycle').runLifecycle,
+  runLifecycle: jest.requireActual('../../../core/src/__mocks__/utils/run-lifecycle').runLifecycle,
 }));
 
 // mocked modules
