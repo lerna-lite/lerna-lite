@@ -2,7 +2,7 @@
 
 import { exec } from '@lerna-lite/core';
 
-const { gitTag } = require("../index");
+const { gitTag } = require("../lib/git-tag");
 
 jest.mock('@lerna-lite/core', () => {
   const { exec } = jest.requireActual('@lerna-lite/core')

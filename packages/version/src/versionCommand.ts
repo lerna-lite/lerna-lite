@@ -11,6 +11,7 @@ import {
   EOL,
   checkWorkingTree,
   collectPackages,
+  collectUpdates,
   Command,
   createRunner,
   logOutput,
@@ -79,7 +80,6 @@ export class VersionCommand extends Command {
     const {
       amend,
       commitHooks = true,
-      conventionalCommits = true,
       gitRemote = 'origin',
       gitTagVersion = true,
       granularPathspec = true,
@@ -91,7 +91,6 @@ export class VersionCommand extends Command {
       tagVersionPrefix = 'v',
     } = this.options;
 
-    this.options.conventionalCommits = conventionalCommits;
     this.gitRemote = gitRemote;
     this.tagPrefix = tagVersionPrefix;
     this.commitAndTag = gitTagVersion;
@@ -210,34 +209,35 @@ export class VersionCommand extends Command {
       );
     }
 
-    if (!this.project.isIndependent()) {
-      this.logger.info('', `Looking for changed packages since ${this.tagPrefix}${this.project.version}`);
-    }
-    this.updates = Array.from(this.packageGraph?.values() ?? [])
-      .filter((node) => {
-        // --no-private completely removes private packages from consideration
-        if (node.pkg.private && this.options.private === false) {
-          // TODO: (major) make --no-private the default
-          return false;
-        }
+    this.updates = collectUpdates(
+      this.packageGraph.rawPackageList,
+      this.packageGraph,
+      this.execOpts,
+      this.options
+    ).filter((node) => {
+      // --no-private completely removes private packages from consideration
+      if (node.pkg.private && this.options.private === false) {
+        // TODO: (major) make --no-private the default
+        return false;
+      }
 
-        if (!node.version) {
-          // a package may be unversioned only if it is private
-          if (node.pkg.private) {
-            this.logger.info('version', 'Skipping unversioned private package %j', node.name);
-          } else {
-            throw new ValidationError(
-              'ENOVERSION',
-              dedent`
+      if (!node.version) {
+        // a package may be unversioned only if it is private
+        if (node.pkg.private) {
+          this.logger.info('version', 'Skipping unversioned private package %j', node.name);
+        } else {
+          throw new ValidationError(
+            'ENOVERSION',
+            dedent`
               A version field is required in ${node.name}'s package.json file.
               If you wish to keep the package unversioned, it must be made private.
             `
-            );
-          }
+          );
         }
+      }
 
-        return !!node.version;
-      });
+      return !!node.version;
+    });
 
     if (!this.updates.length) {
       this.logger.success(`No changed packages to ${this.composed ? 'publish' : 'version'}`);
@@ -247,7 +247,7 @@ export class VersionCommand extends Command {
     }
 
     // a "rooted leaf" is the regrettable pattern of adding "." to the "packages" config in lerna.json
-    this.hasRootedLeaf = this.packageGraph?.has(this.options.packages) ?? false;
+    this.hasRootedLeaf = this.packageGraph.has(this.options.packages);
 
     if (this.hasRootedLeaf && !this.composed) {
       this.logger.info('version', 'rooted leaf detected, skipping synthetic root lifecycles');

@@ -7,10 +7,10 @@ const fs = require("fs-extra");
 const loadJsonFile = require("load-json-file");
 
 // helpers
-const { getPackages } = require('../../../../core/src/project');
-const initFixture = require("../../../../../helpers/init-fixture")(__dirname);
+const { getPackages } = require('../../../core/src/project');
+const initFixture = require("../../../../helpers/init-fixture")(__dirname);
 
-const { updateLockfileVersion } = require("../update-lockfile-version");
+const { updateLockfileVersion } = require("../lib/update-lockfile-version");
 
 test("updateLockfileVersion", async () => {
   const cwd = await initFixture("lockfile-leaf");

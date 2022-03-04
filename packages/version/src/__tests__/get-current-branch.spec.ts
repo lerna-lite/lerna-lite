@@ -1,5 +1,5 @@
-const initFixture = require('../../../../../helpers/init-fixture')(__dirname);
-const { getCurrentBranch } = require('../get-current-branch');
+const initFixture = require('../../../../helpers/init-fixture')(__dirname);
+const { getCurrentBranch } = require('../lib/get-current-branch');
 
 test('getCurrentBranch', async () => {
   const cwd = await initFixture('root-manifest-only');
