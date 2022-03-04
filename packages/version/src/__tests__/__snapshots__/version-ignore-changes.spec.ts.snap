@@ -8,25 +8,3 @@ HEAD -> main, tag: v1.0.1
 lerna.json
 packages/package-4/package.json"
 `;
-
-exports[`version --ignore-changes is mapped from deprecated --ignore 1`] = `
-"v1.0.1
-
-HEAD -> main, tag: v1.0.1
-
-lerna.json
-packages/package-4/package.json"
-`;
-
-exports[`version --ignore-changes is mapped from deprecated --ignore 2`] = `
-"v1.0.1
-
-HEAD -> main, tag: v1.0.1
-
-lerna.json
-packages/package-1/package.json
-packages/package-2/package.json
-packages/package-3/package.json
-packages/package-4/package.json
-packages/package-5/package.json"
-`;
