@@ -11,12 +11,12 @@ export function commandRunner(cwd: string, commandType: 'run' | 'publish' | 'ver
 
   switch (commandType) {
     case 'publish':
-      command = 'publish [script]';
+      command = 'publish [bump]';
       describe = 'publish a new version';
       handler = (argv) => new PublishCommand(argv);
       break;
     case 'version':
-      command = 'version [script]';
+      command = 'version [bump]';
       describe = 'roll a new version';
       handler = (argv) => new VersionCommand(argv);
       break;
