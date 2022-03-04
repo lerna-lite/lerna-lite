@@ -56,7 +56,7 @@ export class VersionCommand extends Command {
   releaseNotes: ReleaseNote[] = [];
   gitOpts: any;
   runPackageLifecycle: any;
-  runRootLifecycle!: (stage: string) => Promise<void>;
+  runRootLifecycle!: (stage: string) => Promise<void> | void;
   savePrefix = '';
   tags: string[] = [];
   updates: any[] = [];
@@ -247,7 +247,7 @@ export class VersionCommand extends Command {
     }
 
     // a "rooted leaf" is the regrettable pattern of adding "." to the "packages" config in lerna.json
-    this.hasRootedLeaf = this.packageGraph.has(this.options.packages);
+    this.hasRootedLeaf = this.packageGraph.has(this.project.manifest.name);
 
     if (this.hasRootedLeaf && !this.composed) {
       this.logger.info('version', 'rooted leaf detected, skipping synthetic root lifecycles');
@@ -255,9 +255,12 @@ export class VersionCommand extends Command {
 
     this.runPackageLifecycle = createRunner(this.options);
 
-    this.runRootLifecycle = (stage) => {
-      return this.runPackageLifecycle(this.project, stage);
-    };
+    // don't execute recursively if run from a poorly-named script
+    this.runRootLifecycle = /^(pre|post)?version$/.test(process.env.npm_lifecycle_event as string)
+      ? (stage) => {
+        this.logger.warn('lifecycle', 'Skipping root %j because it has already been called', stage);
+      }
+      : (stage) => this.runPackageLifecycle(this.project.manifest, stage);
 
     // amending a commit probably means the working tree is dirty
     if (this.commitAndTag && this.gitOpts.amend !== true) {

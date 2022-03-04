@@ -149,7 +149,7 @@ export class PublishCommand extends Command {
     }
 
     // a 'rooted leaf' is the regrettable pattern of adding '.' to the 'packages' config in lerna.json
-    this.hasRootedLeaf = this.packageGraph?.has(this.project?.manifest.name) ?? false;
+    this.hasRootedLeaf = this.packageGraph.has(this.project.manifest.name);
 
     if (this.hasRootedLeaf) {
       this.logger.info('publish', 'rooted leaf detected, skipping synthetic root lifecycles');
