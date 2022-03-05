@@ -1,7 +1,6 @@
 export * from './collect-updates';
 export * from './check-working-tree';
 export * from './clean-stack';
-export * from './collect-dependents';
 export * from './collect-uncommitted';
 export * from './conf';
 export * from './defaults';
