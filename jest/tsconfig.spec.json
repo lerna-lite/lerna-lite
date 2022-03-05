@@ -18,8 +18,8 @@
   },
   "include": [
     "**/*.spec.ts",
-    "**/*.spec.js",
     "**/*.test.js",
+    "**/*.test.ts",
     "**/__mocks__/**/*.*",
     "src/typings/**/*.ts",
     "**/*.d.ts"

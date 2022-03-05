@@ -1,5 +1,3 @@
-"use strict";
-
 // local modules _must_ be explicitly mocked
 jest.mock("../lib/git-push", () => jest.requireActual('../lib/__mocks__/git-push'));
 jest.mock("../lib/is-anything-committed", () => jest.requireActual('../lib/__mocks__/is-anything-committed'));
