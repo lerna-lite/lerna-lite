@@ -54,7 +54,7 @@
     "@types/execa": "^2.0.0",
     "@types/fs-extra": "^9.0.13",
     "@types/load-json-file": "^5.1.0",
-    "@types/node": "^17.0.19",
+    "@types/node": "^17.0.21",
     "@types/npmlog": "^4.1.4",
     "@types/p-map": "^2.0.0",
     "@types/semver": "^7.3.9",

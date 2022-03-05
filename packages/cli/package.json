@@ -43,6 +43,6 @@
   },
   "devDependencies": {
     "@types/npmlog": "^4.1.4",
-    "@types/yargs": "^17.0.8"
+    "@types/yargs": "^17.0.9"
   }
 }
