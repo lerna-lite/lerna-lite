@@ -1,13 +1,11 @@
 import path from 'path';
 
 import { Conf } from '../utils/conf';
+import { toNerfDart } from './nerf-dart';
 const defaults = require('./defaults');
-// import {defaults} from 'defaults';
-
-module.exports.defaults = Object.assign({}, defaults.defaults);
 
 // https://github.com/npm/npm/blob/latest/lib/config/core.js#L101-L200
-export function npmConf(opts: any) {
+function npmConf(opts: any) {
   const conf = new Conf(Object.assign({}, defaults.defaults));
 
   // prevent keys with undefined values from obscuring defaults
@@ -57,3 +55,11 @@ export function npmConf(opts: any) {
 
   return conf;
 }
+
+module.exports.defaults = Object.assign({}, defaults.defaults);
+
+export {
+  Conf,
+  npmConf,
+  toNerfDart,
+};
