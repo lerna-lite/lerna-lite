@@ -20,8 +20,7 @@ jest.mock('@lerna-lite/core', () => ({
   throwIfReleased: jest.requireActual('../../../core/src/__mocks__/check-working-tree').throwIfReleased,
   throwIfUncommitted: jest.requireActual('../../../core/src/__mocks__/check-working-tree').throwIfUncommitted,
 }));
-// require("../../../core/src/utils/collect-updates")
-// import {collectUpdates} from "../../../core/src/__mocks__/utils/collect-updates"
+
 const path = require("path");
 const semver = require("semver");
 
