@@ -1,5 +1,4 @@
 import log from 'npmlog';
-// @ts-ignore
 import runScript from 'npm-lifecycle';
 
 import { npmConf } from '../utils/npm-conf';
