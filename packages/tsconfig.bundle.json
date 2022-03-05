@@ -29,6 +29,7 @@
   },
   "exclude": [
     "**/*.spec.ts",
-    "**/*.test.js"
+    "**/*.test.js",
+    "**/*.test.ts"
   ]
 }
