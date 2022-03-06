@@ -1,3 +1,4 @@
+import { FetchConfig, PackageGraph, PackageGraphNode } from '@lerna-lite/core';
 import log from 'npmlog';
 import pMap from 'p-map';
 import pacote from 'pacote';
@@ -8,7 +9,7 @@ import pacote from 'pacote';
  * @param {import("./fetch-config").FetchConfig} opts
  * @returns {Promise<import("@lerna/package-graph").PackageGraphNode[]>}
  */
-export function getUnpublishedPackages(packageGraph, opts): Promise<any> {
+export function getUnpublishedPackages(packageGraph: PackageGraph, opts: FetchConfig): Promise<PackageGraphNode> {
   log.silly('getUnpublishedPackages', '');
 
   let chain: Promise<any> = Promise.resolve();
