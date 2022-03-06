@@ -246,29 +246,32 @@ export class PublishCommand extends Command {
     return describeRef(this.execOpts, undefined, this.options.gitDryRun).then(throwIfUncommitted);
   }
 
-  async detectFromGit() {
-    try {
-      const matchingPattern = this.project?.isIndependent() ? '*@*' : `${this.tagPrefix}*.*.*`;
+  detectFromGit() {
+    const matchingPattern = this.project.isIndependent() ? `*@*` : `${this.tagPrefix}*.*.*`;
 
-      // attempting to publish a tagged release with local changes is not allowed
-      await this.verifyWorkingTreeClean();
+    let chain: Promise<any> = Promise.resolve();
 
-      const taggedPackageNames = await getCurrentTags(this.execOpts, matchingPattern, this.options.gitDryRun);
+    // attempting to publish a tagged release with local changes is not allowed
+    chain = chain.then(() => this.verifyWorkingTreeClean());
+
+    chain = chain.then(() => getCurrentTags(this.execOpts, matchingPattern));
+    chain = chain.then((taggedPackageNames) => {
       if (!taggedPackageNames.length) {
         this.logger.notice('from-git', 'No tagged release found. You might not have fetched tags.');
-
         return [];
       }
 
-      if (this.project?.isIndependent()) {
-        return taggedPackageNames.map((name) => this.packageGraph?.get(name));
+      if (this.project.isIndependent()) {
+        return taggedPackageNames.map((name) => this.packageGraph.get(name));
       }
 
-      const updates = await getTaggedPackages(this.packageGraph, this.project?.rootPath, this.execOpts, this.options.gitDryRun) as PackageGraphNode[];
+      return getTaggedPackages(this.packageGraph, this.project.rootPath, this.execOpts);
+    });
 
-      // private packages are never published, full stop.
-      updates.filter((node) => !node.pkg.private);
+    // private packages are never published, full stop.
+    chain = chain.then((updates) => updates.filter((node) => !node.pkg.private));
 
+    return chain.then((updates) => {
       const updatesVersions = updates.map((node) => [node.name, node.version]);
 
       return {
@@ -276,48 +279,46 @@ export class PublishCommand extends Command {
         updatesVersions,
         needsConfirmation: true,
       };
-    } catch (err: any) {
-      // an execa error is thrown when git suffers a fatal error (such as no git repository present)
-      if (err.failed && /git describe/.test(err.command)) {
-        // (we tried)
-        this.logger.silly('EWORKINGTREE', err.message);
-        this.logger.notice('FYI', 'Unable to verify working tree, proceed at your own risk');
-      } else {
-        // validation errors should be preserved
-        throw err;
-      }
-    }
+    });
   }
 
-  async detectFromPackage() {
-    try {
-      // attempting to publish a release with local changes is not allowed
-      await this.verifyWorkingTreeClean();
-    } catch (err: any) {
-      // an execa error is thrown when git suffers a fatal error (such as no git repository present)
-      if (err.failed && /git describe/.test(err.command)) {
-        // (we tried)
-        this.logger.silly('EWORKINGTREE', err.message);
-        this.logger.notice('FYI', 'Unable to verify working tree, proceed at your own risk');
-      } else {
-        // validation errors should be preserved
-        throw err;
-      }
-    }
+  detectFromPackage() {
+    let chain: Promise<any> = Promise.resolve();
+
+    // attempting to publish a release with local changes is not allowed
+    chain = chain
+      .then(() => this.verifyWorkingTreeClean())
+      .catch((err: any) => {
+        // an execa error is thrown when git suffers a fatal error (such as no git repository present)
+        if (err.failed && /git describe/.test(err.command)) {
+          // (we tried)
+          this.logger.silly('EWORKINGTREE', err.message);
+          this.logger.notice('FYI', 'Unable to verify working tree, proceed at your own risk');
+        } else {
+          // validation errors should be preserved
+          throw err;
+        }
+      });
 
     // private packages are already omitted by getUnpublishedPackages()
-    const unpublishedUpdates = await getUnpublishedPackages(this.packageGraph, this.conf.snapshot);
-    if (!unpublishedUpdates.length) {
-      this.logger.notice('from-package', 'No unpublished release found');
-    }
+    chain = chain.then(() => getUnpublishedPackages(this.packageGraph, this.conf.snapshot));
+    chain = chain.then((unpublished) => {
+      if (!unpublished.length) {
+        this.logger.notice('from-package', 'No unpublished release found');
+      }
 
-    const updatesVersions = unpublishedUpdates.map((node) => [node.name, node.version]);
+      return unpublished;
+    });
 
-    return {
-      updates: unpublishedUpdates,
-      updatesVersions,
-      needsConfirmation: true,
-    };
+    return chain.then((updates) => {
+      const updatesVersions = updates.map((node: PackageGraphNode) => [node.name, node.version]);
+
+      return {
+        updates,
+        updatesVersions,
+        needsConfirmation: true,
+      };
+    });
   }
 
   detectCanaryVersions() {
