@@ -357,9 +357,7 @@ export class VersionCommand extends Command {
       predicate = predicate(node).then(makeGlobalVersionPredicate);
     }
 
-    return Promise.resolve(predicate).then((getVersion) => {
-      return this.reduceVersions(getVersion);
-    });
+    return Promise.resolve(predicate).then((getVersion) => this.reduceVersions(getVersion));
   }
 
   reduceVersions(getVersion) {
