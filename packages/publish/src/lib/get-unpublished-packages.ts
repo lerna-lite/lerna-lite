@@ -19,7 +19,7 @@ export function getUnpublishedPackages(packageGraph: PackageGraph, opts: FetchCo
   const graphNodesToCheck = Array.from(packageGraph.values()).filter(({ pkg }) => !pkg.private);
 
   const mapper = (pkg) =>
-    pacote.packument(pkg.name, opts).then(
+    pacote.packument(pkg?.name ?? '', opts).then(
       (packument) => {
         if (packument.versions === undefined || packument.versions[pkg.version] === undefined) {
           return pkg;

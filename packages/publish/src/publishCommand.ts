@@ -106,7 +106,7 @@ export class PublishCommand extends Command {
     return `lerna/${this.options.libVersion}/node@${process.version}+${process.arch} (${process.platform})`;
   }
 
-  async initialize() {
+  initialize() {
     if (this.options.canary) {
       this.logger.info('canary', 'enabled');
     }
@@ -162,50 +162,53 @@ export class PublishCommand extends Command {
       ? (stage) => this.logger.warn('lifecycle', 'Skipping root %j because it has already been called', stage)
       : (stage) => this.runPackageLifecycle(this.project?.manifest, stage);
 
-    let promiseResult;
+    let chain: Promise<any> = Promise.resolve();
+
     if (this.options.bump === 'from-git') {
-      promiseResult = await this.detectFromGit();
+      chain = chain.then(() => this.detectFromGit());
     } else if (this.options.bump === 'from-package') {
-      promiseResult = await this.detectFromPackage();
+      chain = chain.then(() => this.detectFromPackage());
     } else if (this.options.canary) {
-      promiseResult = await this.detectCanaryVersions();
+      chain = chain.then(() => this.detectCanaryVersions());
     } else {
-      promiseResult = new VersionCommand(this.argv);
+      chain = chain.then(() => new VersionCommand(this.argv));
     }
 
-    if (!promiseResult) {
-      // early return from nested VersionCommand
-      return false;
-    }
-
-    if (!promiseResult.updates.length) {
-      this.logger.success('No changed packages to publish');
-
-      // still exits zero, aka 'ok'
-      return false;
-    }
-
-    // (occasionally) redundant private filtering necessary to handle nested VersionCommand
-    this.updates = promiseResult.updates.filter((node) => !node.pkg.private);
-    this.updatesVersions = new Map(promiseResult.updatesVersions);
-
-    this.packagesToPublish = this.updates.map((node) => node.pkg);
-
-    if (this.options.contents) {
-      // globally override directory to publish
-      for (const pkg of this.packagesToPublish) {
-        pkg.contents = this.options.contents;
+    return chain.then((result) => {
+      if (!result) {
+        // early return from nested VersionCommand
+        return false;
       }
-    }
 
-    if (promiseResult.needsConfirmation) {
-      // only confirm for --canary, bump === 'from-git',
-      // or bump === 'from-package', as VersionCommand
-      // has its own confirmation prompt
-      return this.confirmPublish();
-    }
+      if (!result.updates.length) {
+        this.logger.success('No changed packages to publish');
 
-    return true;
+        // still exits zero, aka 'ok'
+        return false;
+      }
+
+      // (occasionally) redundant private filtering necessary to handle nested VersionCommand
+      this.updates = result.updates.filter((node) => !node.pkg.private);
+      this.updatesVersions = new Map(result.updatesVersions);
+
+      this.packagesToPublish = this.updates.map((node) => node.pkg);
+
+      if (this.options.contents) {
+        // globally override directory to publish
+        for (const pkg of this.packagesToPublish) {
+          pkg.contents = this.options.contents;
+        }
+      }
+
+      if (result.needsConfirmation) {
+        // only confirm for --canary, bump === 'from-git',
+        // or bump === 'from-package', as VersionCommand
+        // has its own confirmation prompt
+        return this.confirmPublish();
+      }
+
+      return true;
+    });
   }
 
   async execute() {

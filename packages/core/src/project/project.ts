@@ -202,9 +202,9 @@ export class Project {
   /**
    * @returns {Promise<Package[]>} A promise resolving to a list of Package instances
    */
-  getPackages(): Promise<any> {
+  getPackages(): Promise<any[]> {
     const mapper = (packageConfigPath: string) =>
-      loadJsonFile(packageConfigPath).then(
+      loadJsonFile(packageConfigPath)?.then(
         (packageJson: any) => new Package(packageJson, path.dirname(packageConfigPath), this.rootPath)
       );
 
