@@ -19,7 +19,7 @@ export class PackageGraph extends Map {
    */
   constructor(packages: Package[], graphType = 'allDependencies', forceLocal?: boolean) {
     // @ts-ignore
-    super(packages.map((pkg: Package) => [pkg.name, new PackageGraphNode(pkg)]));
+    super(packages.map((pkg: Package) => [pkg?.name ?? '', new PackageGraphNode(pkg)]));
 
     if (packages.length !== this.size) {
       // weed out the duplicates

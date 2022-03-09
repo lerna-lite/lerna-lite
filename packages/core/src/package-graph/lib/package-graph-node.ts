@@ -17,7 +17,7 @@ export class PackageGraphNode {
    * @param {import("@lerna/package").Package} pkg
    */
   constructor(pkg) {
-    this.name = pkg.name;
+    this.name = pkg?.name ?? '';
     this[PKG] = pkg;
 
     // omit raw pkg from default util.inspect() output

@@ -36,11 +36,11 @@ export function filterPackages(packagesToFilter: Package[], include: string[] = 
       patterns.unshift('**');
     }
 
-    const pnames = Array.from(filtered).map((pkg) => pkg.name);
+    const pnames = Array.from(filtered).map((pkg) => pkg?.name ?? '');
     const chosen = new Set(multimatch(pnames, patterns));
 
     for (const pkg of filtered) {
-      if (!chosen.has(pkg.name)) {
+      if (!chosen.has(pkg?.name ?? '')) {
         filtered.delete(pkg);
       }
     }

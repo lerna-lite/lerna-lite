@@ -405,7 +405,7 @@ export class VersionCommand extends Command {
       ? () => true
       : (_node, name) => prereleasePackageNames.has(name);
 
-    return collectPackages(this.packageGraph, { isCandidate }).map((pkg) => pkg.name);
+    return collectPackages(this.packageGraph, { isCandidate }).map((pkg) => pkg?.name ?? '');
   }
 
   /**
@@ -472,7 +472,7 @@ export class VersionCommand extends Command {
 
   confirmVersions(): Promise<boolean> | boolean {
     const changes = this.packagesToVersion.map((pkg) => {
-      let line = ` - ${pkg.name}: ${pkg.version} => ${chalk.cyan(this.updatesVersions?.get(pkg.name))}`;
+      let line = ` - ${pkg.name ?? '[n/a]'}: ${pkg.version} => ${chalk.cyan(this.updatesVersions?.get(pkg?.name ?? ''))}`;
       if (pkg.private) {
         line += ` (${chalk.red('private')})`;
       }
@@ -521,7 +521,7 @@ export class VersionCommand extends Command {
       (pkg) => pkg.refresh(),
       (pkg) => {
         // set new version
-        pkg.set('version', this.updatesVersions?.get(pkg.name));
+        pkg.set('version', this.updatesVersions?.get(pkg?.name ?? ''));
 
         // update pkg dependencies
         for (const [depName, resolved] of this.packageGraph?.get(pkg.name).localDependencies) {

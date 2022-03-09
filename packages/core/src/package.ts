@@ -93,9 +93,9 @@ export class Package {
    */
   constructor(pkg: Package, location: string, rootPath = location) {
     // npa will throw an error if the name is invalid
-    const resolved = npa.resolve(pkg.name, `file:${path.relative(rootPath, location)}`, rootPath);
+    const resolved = npa.resolve(pkg?.name ?? '', `file:${path.relative(rootPath, location)}`, rootPath);
 
-    this.name = pkg.name;
+    this.name = pkg?.name ?? '';
     this[PKG] = pkg;
 
     // omit raw pkg from default util.inspect() output, but preserve internal mutability

@@ -136,7 +136,7 @@ npm run jest # or npm run jest:watch
 ```
 
 ## Need your Help
-Anyone willing to help, please create Pull Request. I am trying to add as much Jest unit tests as possible (from the original Lerna) but really any type of PRs are welcome. 👷👷‍♀️
+Anyone willing to help, please create a Pull Request, really any type of PRs are welcome. 👷👷‍♀️
 
 Also please note that I'm just a simpler developer & user of this lib, the same as you are, my knowledge of the library is also probably similar to yours, but together we can make it better (and lighter).
 

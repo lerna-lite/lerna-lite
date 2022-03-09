@@ -272,7 +272,7 @@ export class Command {
     }
   }
 
-  async runPreparations() {
+  runPreparations() {
     if (!this.composed && this.project.isIndependent()) {
       // composed commands have already logged the independent status
       log.info('versioning', 'independent');
@@ -282,8 +282,14 @@ export class Command {
       log.info('ci', 'enabled');
     }
 
-    const packages = await this.project.getPackages();
-    this.packageGraph = new PackageGraph(packages);
+    let chain: Promise<any> = Promise.resolve();
+
+    chain = chain.then(() => this.project.getPackages());
+    chain = chain.then((packages) => {
+      this.packageGraph = new PackageGraph(packages || []);
+    });
+
+    return chain;
   }
 
   async runCommand() {
