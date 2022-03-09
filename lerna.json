@@ -1,5 +1,5 @@
 {
-  "version": "0.3.6",
+  "version": "0.3.7",
   "loglevel": "info",
   "npmClient": "npm",
   "useWorkspaces": true,
