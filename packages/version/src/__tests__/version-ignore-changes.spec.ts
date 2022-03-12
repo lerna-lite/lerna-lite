@@ -19,14 +19,14 @@ const path = require("path");
 const yargParser = require('yargs-parser');
 
 // helpers
-const initFixture = require("../../../../helpers/init-fixture")(path.resolve(__dirname, "../../../publish/src/__tests__"));
+const initFixture = require("@lerna-test/init-fixture")(path.resolve(__dirname, "../../../publish/src/__tests__"));
 const { gitAdd } = require("../../../../helpers/git-add");
 const { gitCommit } = require("../../../../helpers/git-commit");
 const { gitTag } = require("../../../../helpers/git-tag");
 const { showCommit } = require("../../../../helpers/show-commit");
 
 // test command
-import { VersionCommand } from '../versionCommand';
+import { VersionCommand } from '../version-command';
 
 // stabilize commit SHA
 expect.addSnapshotSerializer(require("../../../../helpers/serialize-git-sha"));

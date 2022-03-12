@@ -1,2 +1,2 @@
 export * from './lib';
-export * from './publishCommand';
+export * from './publish-command';

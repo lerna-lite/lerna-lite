@@ -21,6 +21,9 @@ jest.mock('@lerna-lite/core', () => ({
   throwIfUncommitted: jest.requireActual('../../../core/src/__mocks__/check-working-tree').throwIfUncommitted,
 }));
 
+// also point to the local version command so that all mocks are properly used even by the command-runner
+jest.mock('@lerna-lite/version', () => jest.requireActual('../version-command'));
+
 const fs = require("fs-extra");
 const path = require("path");
 const execa = require("execa");
@@ -41,12 +44,15 @@ const { loggingOutput } = require("../../../../helpers/logging-output");
 const { gitAdd } = require("../../../../helpers/git-add");
 const { gitTag } = require("../../../../helpers/git-tag");
 const { gitCommit } = require("../../../../helpers/git-commit");
-const initFixture = require("../../../../helpers/init-fixture")(path.resolve(__dirname, "../../../publish/src/__tests__"));
+const initFixture = require("@lerna-test/init-fixture")(path.resolve(__dirname, "../../../publish/src/__tests__"));
 const { showCommit } = require("../../../../helpers/show-commit");
-const { getCommitMessage } = require("../../../../helpers/get-commit-message");
+const { getCommitMessage } = require("@lerna-test/get-commit-message");
+
+// test command
+import { VersionCommand } from '../version-command';
+const lernaVersion = require("@lerna-test/command-runner")(require("../../../cli/src/cli-commands/cli-version-commands"));
 
 // file under test
-import { VersionCommand } from '../versionCommand';
 const yargParser = require('yargs-parser');
 
 const createArgv = (cwd, ...args) => {
@@ -54,6 +60,7 @@ const createArgv = (cwd, ...args) => {
   const parserArgs = args.map(String);
   const argv = yargParser(parserArgs);
   argv['$0'] = cwd;
+  argv['loglevel'] = 'silent';
   return argv;
 };
 
@@ -299,10 +306,9 @@ describe("VersionCommand", () => {
       expect(logMessages).toContain("Skipping git tag/commit");
     });
 
-    xit("is implied by --skip-git", async () => {
-      // TODO: perhaps remove test since deprecated code is removed
+    it("is implied by --skip-git", async () => {
       const testDir = await initFixture("normal");
-      await new VersionCommand(createArgv(testDir, "--skip-git"));
+      await lernaVersion(testDir)("--skip-git");
 
       const logMessages = loggingOutput();
       expect(logMessages).toContain("Skipping git tag/commit");
@@ -432,10 +438,9 @@ describe("VersionCommand", () => {
       expect(logMessages).toContain("Skipping git push");
     });
 
-    xit("is implied by --skip-git", async () => {
-      // TODO: perhaps remove test since deprecated code is removed
+    it("is implied by --skip-git", async () => {
       const testDir = await initFixture("normal");
-      await new VersionCommand(createArgv(testDir, "--skip-git"));
+      await lernaVersion(testDir)("--skip-git");
 
       const logMessages = loggingOutput();
       expect(logMessages).toContain("Skipping git push");
@@ -798,10 +803,9 @@ describe("VersionCommand", () => {
   });
 
   describe("with spurious -- arguments", () => {
-    xit("ignores the extra arguments with cheesy parseConfiguration()", async () => {
-      // TODO: perhaps remove test since deprecated code is removed
+    it("ignores the extra arguments with cheesy parseConfiguration()", async () => {
       const cwd = await initFixture("lifecycle");
-      await new VersionCommand(createArgv(cwd, "--yes", "--", "--loglevel", "ignored", "--blah"));
+      await lernaVersion(cwd)("--yes", "--", "--loglevel", "ignored", "--blah");
 
       const logMessages = loggingOutput("warn");
       expect(logMessages).toContain("Arguments after -- are no longer passed to subprocess executions.");

@@ -1,5 +1,4 @@
 # Lerna-Lite 🐉
-### Previously known as "ws-conventional-version-roller"
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![TypeScript](https://img.shields.io/badge/%3C%2F%3E-TypeScript-%230074c1.svg)](http://www.typescriptlang.org/)
@@ -18,13 +17,13 @@
 ## Lerna-Lite
 A super light fork of Lerna, only 3 commands were extracted from the original [Lerna](https://github.com/lerna/lerna) (as shown below).
 
-**Note:** Since the [Run](https://github.com/ghiscoding/lerna-lite/tree/main/packages/run) command is totally optional, we created separate CLIs to handle each commands, see below.
+**Note:** Since the **[Run](https://github.com/ghiscoding/lerna-lite/tree/main/packages/run) command** is totally **optional**, we created separate CLIs to handle each commands, see below.
 
-| Command | CLI         | Description | Included |
+| Command | Install         | Description | Included |
 |---------|-------------|-------------| ---------|
-| [version](https://github.com/ghiscoding/lerna-lite/tree/main/packages/version) | [ws-roller](https://github.com/ghiscoding/lerna-lite/tree/main/packages/cli#installation) 📰 | create new version for each workspace package | Yes |
-| [publish](https://github.com/ghiscoding/lerna-lite/tree/main/packages/publish) | [ws-roller](https://github.com/ghiscoding/lerna-lite/tree/main/packages/cli#installation) 📰 | publish each workspace package | Yes |
-| [run](https://github.com/ghiscoding/lerna-lite/tree/main/packages/run) | [ws-runner](https://github.com/ghiscoding/lerna-lite/tree/main/packages/run#installation) 🏃 | run npm script in each workspace package | Optional |
+| 📰 [version](https://github.com/ghiscoding/lerna-lite/tree/main/packages/version) | `npm i @lerna-lite/cli` | create new version for each workspace package | Yes |
+| 📰 [publish](https://github.com/ghiscoding/lerna-lite/tree/main/packages/publish) | `npm i @lerna-lite/cli` | publish each workspace package | Yes |
+| 🏃 [run](https://github.com/ghiscoding/lerna-lite/tree/main/packages/run) | `npm i @lerna-lite/run` | run npm script in each workspace package | Optional |
 
 ## Why create this lib/fork?
 Mainly for the following reasons:
@@ -33,15 +32,16 @@ Mainly for the following reasons:
 3. add some little extras
 
 ### This lib will help you with
-##### [Version](https://github.com/ghiscoding/lerna-lite/tree/main/packages/version) & [Publish](https://github.com/ghiscoding/lerna-lite/tree/main/packages/publish) commands (`ws-roller`)
+##### [Version](https://github.com/ghiscoding/lerna-lite/tree/main/packages/version) & [Publish](https://github.com/ghiscoding/lerna-lite/tree/main/packages/publish) commands
 - Automate the rolling of new Versions (independent or fixed) for all your packages
   - it will automatically add Commit & Tag your new Version in Git & create new Release in GitHub when enabled
 - Automate the creation of Changelogs for all your packages by reading all [Conventional Commits](https://www.conventionalcommits.org/)
   - each package will get its own changelog and a combined changelog will also be created in the root
 - Automate the repository Publish of your new versions for all your packages
   - it could push to NPM or any other repository platform
-##### [Run](https://github.com/ghiscoding/lerna-lite/tree/main/packages/run) command (`ws-runner`)
+##### [Run](https://github.com/ghiscoding/lerna-lite/tree/main/packages/run) command (optional)
 - [Run](https://github.com/ghiscoding/lerna-lite/tree/main/packages/run) is an optional package that will help you run npm script in parallel and in topological order.
+
 ## Lerna-Lite Packages
 
 | Package Name | Version | Description | Changes |
@@ -69,21 +69,21 @@ Using Lerna-Lite? Add a README badge to show it off: [![lerna--lite](https://img
 
 ## Installation
 ```bash
-# publish/version commands CLI
+# Lerna CLI which includes publish/version commands
 npm install @lerna-lite/cli
 
-# run command CLI
+# optional run command
 npm install @lerna-lite/run
 ```
-**Note:** the `ws-roller` CLI only has 2 commands available `publish` and `version`, while `ws-runner` CLI has the `run` command.
+**Note:** the `lerna` CLI only has 2 built-in commands available `publish` and `version`, while `run` command is optional and must be installed separately.
 
 ### Usage
 Add the following NPM Scripts or simply run the following NodeJS command in your shell.
 ```js
 // package.json / npm scripts
 "scripts": {
-  "roll-version": "ws-roller version",
-  "roll-publish": "ws-roller publish from-package"
+  "roll-version": "lerna version",
+  "roll-publish": "lerna publish from-package"
 }
 ```
 
@@ -91,10 +91,10 @@ Add the following NPM Scripts or simply run the following NodeJS command in your
 This lib requires a config file in order to do its job properly. It could come from a separate config file in the root (read [`lerna.json` - Wiki](https://github.com/ghiscoding/lerna-lite/wiki/lerna.json) OR a `"lerna": {}` property directly under your `package.json`.
 
 #### Command Options
-- `ws-roller`
+- `lerna`
   - [version](https://github.com/ghiscoding/lerna-lite/blob/main/packages/version/README.md)
   - [publish](https://github.com/ghiscoding/lerna-lite/blob/main/packages/publish/README.md) (make sure to double-check your [publishConfig](https://docs.npmjs.com/cli/v6/configuring-npm/package-json#publishconfig) access of each package before publishing)
-- `ws-runner`
+- `lerna` (optional command)
   - [run](https://github.com/ghiscoding/lerna-lite/blob/main/packages/run/README.md)
 
 ### Migration for [Lerna](https://github.com/lerna/lerna) Users
@@ -105,22 +105,11 @@ npm uninstall lerna # OR yarn remove lerna
 ```
 2. install Lerna-Lite CLI(s)
 ```sh
-# ws-roller CLI (version/publish commands)
+# Lerna CLI (`version`/`publish` commands)
 npm install @lerna-lite/cli
 
-# ws-runner CLI (run command)
+# optionally install the `run` command
 npm install @lerna-lite/run
-```
-3. change your npm scripts `lerna <command>` to `ws-roller` (or `ws-runner`)
-```diff
-- "roll-version": "lerna version",
-+ "roll-version": "ws-roller version",
-
-- "roll-publish": "lerna publish from-package"
-+ "roll-publish": "ws-roller publish from-package"
-
-- "build": "lerna run build"
-+ "build": "ws-runner run build"
 ```
 
 ### Development / Contributions

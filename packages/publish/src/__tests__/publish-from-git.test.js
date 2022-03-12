@@ -29,13 +29,13 @@ const { npmPublish } = require("../lib/npm-publish");
 const { logOutput, promptConfirmation, throwIfUncommitted } = require("@lerna-lite/core");
 
 // helpers
-const initFixture = require("../../../../helpers/init-fixture")(__dirname);
+const initFixture = require("@lerna-test/init-fixture")(__dirname);
 const { gitTag } = require("../../../../helpers/git-tag");
 const { loggingOutput } = require("../../../../helpers/logging-output");
 
 // test command
 const yargParser = require('yargs-parser');
-const { PublishCommand } = require("../publishCommand");
+const { PublishCommand } = require("../publish-command");
 
 const createArgv = (cwd, ...args) => {
   args.unshift('publish');

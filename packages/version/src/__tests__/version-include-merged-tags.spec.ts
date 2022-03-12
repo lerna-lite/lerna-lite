@@ -16,7 +16,7 @@ const yargParser = require('yargs-parser');
 const { logOutput } = require("@lerna-lite/core");
 
 // helpers
-const initFixture = require("../../../../helpers/init-fixture")(__dirname);
+const initFixture = require("@lerna-test/init-fixture")(__dirname);
 const { gitAdd } = require("../../../../helpers/git-add");
 const { gitCheckout } = require("../../../../helpers/git-checkout");
 const { gitCommit } = require("../../../../helpers/git-commit");
@@ -24,7 +24,7 @@ const { gitMerge } = require("../../../../helpers/git-merge");
 const { gitTag } = require("../../../../helpers/git-tag");
 
 // file under test
-import { VersionCommand } from '../versionCommand';
+import { VersionCommand } from '../version-command';
 
 // remove quotes around top-level strings
 expect.addSnapshotSerializer({

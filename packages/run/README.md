@@ -5,7 +5,7 @@
 [![Actions Status](https://github.com/ghiscoding/lerna-lite/workflows/CI%20Build/badge.svg)](https://github.com/ghiscoding/lerna-lite/actions)
 
 # @lerna-lite/run
-## (`ws-runner`) Run command CLI 🏃
+## (`lerna`) Run command CLI 🏃
 
 **Optional package** extracted from Lerna [run command](https://github.com/lerna/lerna/tree/main/commands/run) that will give us the ability to run [npm script](https://docs.npmjs.com/misc/scripts) in each package of the workspace that contains that script. 
 
@@ -21,34 +21,34 @@ This package was added mainly because NPM Workspaces don't yet support running N
 # install globally
 npm install -g @lerna-lite/run
 # then use it (see usage below)
-ws-runner run <script>
+lerna run <script>
 
 # OR use npx
-npx ws-runner run <script>
+npx lerna run <script>
 ```
 
 ## Usage
 
 ```sh
-$ ws-runner run <script> -- [..args] # runs npm run my-script in all packages that have it
-$ ws-runner run test
-$ ws-runner run build
+$ lerna run <script> -- [..args] # runs npm run my-script in all packages that have it
+$ lerna run test
+$ lerna run build
 
 # watch all packages and transpile on change, streaming prefixed output
-$ ws-runner run --parallel watch
+$ lerna run --parallel watch
 ```
 
 Run an [npm script](https://docs.npmjs.com/misc/scripts) in each package of the workspace that contains that script. A double-dash (`--`) is necessary to pass dashed arguments to the script execution.
 
 ## Options
 
-`ws-runner run` accepts all [filter flags](https://www.npmjs.com/package/@lerna/filter-options).
+`lerna run` accepts all [filter flags](https://www.npmjs.com/package/@lerna/filter-options).
 
 ```sh
-$ ws-runner run --scope my-component test
+$ lerna run --scope my-component test
 ```
 
-- [`@ws-runner/run`](#ws-runnerrun)
+- [`@lerna/run`](#lernarun)
   - [Usage](#usage)
   - [Options](#options)
     - [`--npm-client <client>`](#--npm-client-client)
@@ -66,7 +66,7 @@ Must be an executable that knows how to run npm lifecycle scripts.
 The default `--npm-client` is `npm`.
 
 ```sh
-$ ws-runner run build --npm-client=yarn
+$ lerna run build --npm-client=yarn
 ```
 
 May also be configured in `lerna.json`:
@@ -86,7 +86,7 @@ May also be configured in `lerna.json`:
 Displays the process command that would be performed without actually executing it. This could be helpful for troubleshooting.
 
 ```sh
-$ ws-runner run watch --run-dry-run
+$ lerna run watch --run-dry-run
 ```
 
 ### `--stream`
@@ -95,7 +95,7 @@ Stream output from child processes immediately, prefixed with the originating
 package name. This allows output from different packages to be interleaved.
 
 ```sh
-$ ws-runner run watch --stream
+$ lerna run watch --stream
 ```
 
 ### `--parallel`
@@ -103,7 +103,7 @@ $ ws-runner run watch --stream
 Similar to `--stream`, but completely disregards concurrency and topological sorting, running a given command or script immediately in all matching packages with prefixed streaming output. This is the preferred flag for long-running processes such as `npm run watch` run over many packages.
 
 ```sh
-$ ws-runner run watch --parallel
+$ lerna run watch --parallel
 ```
 
 > **Note:** It is advised to constrain the scope of this command when using
@@ -115,10 +115,10 @@ $ ws-runner run watch --parallel
 
 ```sh
 # Run an npm script in all packages that contain it, ignoring non-zero (error) exit codes
-$ ws-runner run --no-bail test
+$ lerna run --no-bail test
 ```
 
-By default, `ws-runner run` will exit with an error if _any_ script run returns a non-zero exit code.
+By default, `lerna run` will exit with an error if _any_ script run returns a non-zero exit code.
 Pass `--no-bail` to disable this behavior, running the script in _all_ packages that contain it regardless of exit code.
 
 ### `--no-prefix`
@@ -137,7 +137,7 @@ operations. The end result is a visualization of the parallel execution of your 
 The default location of the performance profile output is at the root of your project.
 
 ```sh
-$ ws-runner run build --profile
+$ lerna run build --profile
 ```
 
 > **Note:** Lerna-Lite will only profile when topological sorting is enabled (i.e. without `--parallel` and `--no-sort`).
@@ -147,5 +147,5 @@ $ ws-runner run build --profile
 You can provide a custom location for the performance profile output. The path provided will be resolved relative to the current working directory.
 
 ```sh
-$ ws-runner run build --profile --profile-location=logs/profile/
+$ lerna run build --profile --profile-location=logs/profile/
 ```

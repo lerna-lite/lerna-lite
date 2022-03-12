@@ -1,21 +1,29 @@
+jest.mock('../lib/npm-run-script');
+
+jest.mock('@lerna-lite/core', () => ({
+  ...jest.requireActual('@lerna-lite/core') as any, // return the other real methods, below we'll mock only 2 of the methods
+  logOutput: jest.requireActual('../../../core/src/__mocks__/output').logOutput,
+}));
+
+// also point to the local run command so that all mocks are properly used even by the command-runner
+jest.mock('@lerna-lite/run', () => jest.requireActual('../run-command'));
+
 import fs from 'fs-extra';
 import globby from 'globby';
 import yargParser from 'yargs-parser';
 
 // make sure to import the output mock
-import { output } from '../lib/output';
-import { commandRunner } from '../../../../helpers/command-runner';
-jest.mock('../lib/output', () => jest.requireActual('../lib/__mocks__/output'));
+import { logOutput } from '@lerna-lite/core';
 
 // mocked modules
-jest.mock('../lib/npm-run-script');
 const { npmRunScript, npmRunScriptStreaming } = require('../lib/npm-run-script');
 
 // helpers
-const initFixture = require('../../../../helpers/init-fixture')(__dirname);
-const { loggingOutput } = require('../../../../helpers/logging-output');
-const { normalizeRelativeDir } = require('../../../../helpers/normalize-relative-dir');
-import { RunCommand } from '../runCommand';
+const initFixture = require('@lerna-test/init-fixture')(__dirname);
+const { loggingOutput } = require('@lerna-test/logging-output');
+const { normalizeRelativeDir } = require('@lerna-test/normalize-relative-dir');
+import { RunCommand } from '../run-command';
+const lernaRun = require("@lerna-test/command-runner")(require("../../../cli/src/cli-commands/cli-run-commands"));
 
 // assertion helpers
 const ranInPackagesStreaming = (testDir: string) =>
@@ -27,8 +35,6 @@ const ranInPackagesStreaming = (testDir: string) =>
   }, []);
 
 const createArgv = (cwd: string, script?: string, ...args: string[]) => {
-  const p = args.join(' ');
-  // const parserArgs = 'run ' + (args.join(' '));
   args.unshift('run');
   const parserArgs = args.join(' ');
   const argv = yargParser(parserArgs);
@@ -36,6 +42,7 @@ const createArgv = (cwd: string, script?: string, ...args: string[]) => {
   if (script) {
     argv.script = script;
   }
+  args['logLevel'] = 'silent';
   return argv;
 };
 
@@ -56,51 +63,50 @@ describe('RunCommand', () => {
     });
 
     it('should complain if invoked with an empty script', async () => {
-      // const command = new RunCommand(createArgv(testDir));
-      const command = commandRunner(testDir, 'run')('');
+      const command = lernaRun(testDir)('');
 
       await expect(command).rejects.toThrow('You must specify a lifecycle script to run');
     });
 
     it('runs a script in packages', async () => {
-      await commandRunner(testDir, 'run')('my-script');
-      // await new RunCommand(createArgv(testDir, 'my-script'));
+      await lernaRun(testDir)('my-script');
 
-      const logLines = (output as any).logged().split('\n');
+      const logLines = (logOutput as any).logged().split('\n');
       expect(logLines).toContain('package-1');
       expect(logLines).toContain('package-3');
     });
 
     it('runs a script in packages with --stream', async () => {
-      await new RunCommand(createArgv(testDir, 'my-script', '--stream'));
+      await lernaRun(testDir)('my-script', '--stream');
+      // await new RunCommand(createArgv(testDir, 'my-script', '--stream'));
 
       expect(ranInPackagesStreaming(testDir)).toMatchSnapshot();
     });
 
     it('omits package prefix with --stream --no-prefix', async () => {
-      await commandRunner(testDir, 'run')('my-script', '--stream', '--no-prefix');
-      // await new RunCommand(createArgv(testDir, 'my-script', '--stream', '--no-prefix'));
+      // await lernaRun(testDir)('my-script', '--stream', '--no-prefix');
+      await new RunCommand(createArgv(testDir, 'my-script', '--stream', '--no-prefix'));
 
       expect(ranInPackagesStreaming(testDir)).toMatchSnapshot();
     });
 
     it('always runs env script', async () => {
-      // await new RunCommand(createArgv(testDir, 'env'));
-      await commandRunner(testDir, 'run')('env');
+      await new RunCommand(createArgv(testDir, 'env'));
+      // await lernaRun(testDir)('env');
 
-      expect((output as any).logged().split('\n')).toEqual(['package-1', 'package-4', 'package-2', 'package-3']);
+      expect((logOutput as any).logged().split('\n')).toEqual(['package-1', 'package-4', 'package-2', 'package-3']);
     });
 
     it('runs a script only in scoped packages', async () => {
-      await commandRunner(testDir, 'run')('my-script', '--scope', 'package-1');
-      // await new RunCommand(createArgv(testDir, 'my-script', '--scope', 'package-1'));
-      expect((output as any).logged()).toBe('package-1');
+      // await lernaRun(testDir)('my-script', '--scope', 'package-1');
+      await new RunCommand(createArgv(testDir, 'my-script', '--scope', 'package-1'));
+      expect((logOutput as any).logged()).toBe('package-1');
     });
 
     it('does not run a script in ignored packages', async () => {
       await new RunCommand(createArgv(testDir, 'my-script', '--ignore', 'package-@(2|3|4)'));
 
-      expect((output as any).logged()).toBe('package-1');
+      expect((logOutput as any).logged()).toBe('package-1');
     });
 
     it('does not error when no packages match', async () => {
@@ -126,7 +132,7 @@ describe('RunCommand', () => {
     it('supports alternate npmClient configuration', async () => {
       await new RunCommand(createArgv(testDir, 'env', '--npm-client', 'yarn'));
 
-      expect((output as any).logged().split('\n')).toEqual(['package-1', 'package-4', 'package-2', 'package-3']);
+      expect((logOutput as any).logged().split('\n')).toEqual(['package-1', 'package-4', 'package-2', 'package-3']);
     });
 
     it('reports script errors with early exit', async () => {
@@ -159,26 +165,23 @@ describe('RunCommand', () => {
       await new RunCommand(createArgv(testDir, 'my-script', '--no-bail'));
 
       expect(process.exitCode).toBe(456);
-      expect((output as any).logged().split('\n')).toEqual(['package-1', 'package-3']);
+      expect((logOutput as any).logged().split('\n')).toEqual(['package-1', 'package-3']);
     });
   });
 
-  // Lerna tagged it as to remove in next major, so we won't deal with it
-  // ref https://github.com/lerna/lerna/blob/6cb8ab2d4af7ce25c812e8fb05cd04650105705f/core/filter-options/index.js#L83
-  xdescribe('with --include-filtered-dependencies', () => {
+  describe('with --include-filtered-dependencies', () => {
     it('runs scoped command including filtered deps', async () => {
       const testDir = await initFixture('include-filtered-dependencies');
-      // await commandRunner(testDir,'run')();
-      await new RunCommand(createArgv(testDir,
+      await lernaRun(testDir)(
         'my-script',
         '--scope',
         '@test/package-2',
         '--include-filtered-dependencies',
         '--',
         '--silent'
-      ));
+      );
 
-      const logLines = (output as any).logged().split('\n');
+      const logLines = (logOutput as any).logged().split('\n');
       expect(logLines).toContain('@test/package-1');
       expect(logLines).toContain('@test/package-2');
     });
@@ -226,7 +229,7 @@ describe('RunCommand', () => {
 
       await new RunCommand(createArgv(testDir, 'env', '--concurrency', '1', '--no-sort'));
 
-      expect((output as any).logged().split('\n')).toEqual([
+      expect((logOutput as any).logged().split('\n')).toEqual([
         'package-cycle-1',
         'package-cycle-2',
         'package-cycle-extraneous-1',
@@ -270,7 +273,7 @@ describe('RunCommand', () => {
       expect(logMessage).toMatch('Dependency cycles detected, you should fix these!');
       expect(logMessage).toMatch('package-cycle-1 -> package-cycle-2 -> package-cycle-1');
 
-      expect((output as any).logged().split('\n')).toEqual([
+      expect((logOutput as any).logged().split('\n')).toEqual([
         'package-dag-1',
         'package-standalone',
         'package-dag-2a',
@@ -293,7 +296,7 @@ describe('RunCommand', () => {
       expect(logMessage).toMatch('b -> c -> d -> e -> b');
       expect(logMessage).toMatch('f -> g -> (nested cycle: b -> c -> d -> e -> b) -> f');
 
-      expect((output as any).logged().split('\n')).toEqual(['f', 'b', 'e', 'd', 'c', 'g', 'a']);
+      expect((logOutput as any).logged().split('\n')).toEqual(['f', 'b', 'e', 'd', 'c', 'g', 'a']);
     });
 
     it('works with separate cycles', async () => {
@@ -306,7 +309,7 @@ describe('RunCommand', () => {
       expect(logMessage).toMatch('b -> c -> d -> b');
       expect(logMessage).toMatch('e -> f -> g -> e');
 
-      expect((output as any).logged().split('\n')).toEqual(['e', 'g', 'f', 'h', 'b', 'd', 'c', 'a']);
+      expect((logOutput as any).logged().split('\n')).toEqual(['e', 'g', 'f', 'h', 'b', 'd', 'c', 'a']);
     });
 
     it('should throw an error with --reject-cycles', async () => {

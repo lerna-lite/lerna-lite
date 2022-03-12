@@ -1,7 +1,7 @@
 "use strict";
 
 const execa = require("execa");
-const initFixture = require("../../../../helpers/init-fixture")(__dirname);
+const initFixture = require("@lerna-test/init-fixture")(__dirname);
 const { isAnythingCommitted } = require("../lib/is-anything-committed");
 
 import { execSync } from '@lerna-lite/core';

@@ -21,7 +21,7 @@ import execa from 'execa';
 import yargParser from 'yargs-parser';
 
 // helpers
-const initFixture = require("../../../../helpers/init-fixture")(path.resolve(__dirname, "../../../publish/src/__tests__"));
+const initFixture = require("@lerna-test/init-fixture")(path.resolve(__dirname, "../../../publish/src/__tests__"));
 
 // test command
 import { VersionCommand } from '../index';

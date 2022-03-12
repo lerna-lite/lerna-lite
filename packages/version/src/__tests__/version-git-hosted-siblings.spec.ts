@@ -22,10 +22,10 @@ const yargParser = require('yargs-parser');
 const writePkg = require("write-pkg");
 
 // helpers
-const initFixture = require("../../../../helpers/init-fixture")(path.resolve(__dirname, "../../../publish/src/__tests__"));
+const initFixture = require("@lerna-test/init-fixture")(path.resolve(__dirname, "../../../publish/src/__tests__"));
 
 // test command
-import { VersionCommand } from '../versionCommand';
+import { VersionCommand } from '../version-command';
 
 const createArgv = (cwd, ...args) => {
   args.unshift('version');

@@ -72,7 +72,7 @@ export class Package {
   static lazy(ref, dir = '.') {
     if (typeof ref === 'string') {
       const location = path.resolve(path.basename(ref) === 'package.json' ? path.dirname(ref) : ref);
-      const manifest = loadJsonFile.sync(path.join(location, 'package.json')) as Package;
+      const manifest = loadJsonFile.sync<Package>(path.join(location, 'package.json'));
 
       return new Package(manifest, location);
     }

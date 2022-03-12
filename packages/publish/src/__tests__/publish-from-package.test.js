@@ -36,12 +36,12 @@ const { logOutput, promptConfirmation, throwIfUncommitted } = require("@lerna-li
 const { getUnpublishedPackages } = require("../lib/get-unpublished-packages");
 
 // helpers
-const initFixture = require("../../../../helpers/init-fixture")(__dirname);
+const initFixture = require("@lerna-test/init-fixture")(__dirname);
 const { loggingOutput } = require("../../../../helpers/logging-output");
 
 // file under test
 const yargParser = require('yargs-parser');
-const { PublishCommand } = require("../publishCommand");
+const { PublishCommand } = require("../publish-command");
 
 const createArgv = (cwd, ...args) => {
   args.unshift('publish');

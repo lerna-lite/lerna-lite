@@ -1,6 +1,6 @@
 "use strict";
 
-const initFixture = require("../../../../helpers/init-fixture")(__dirname);
+const initFixture = require("@lerna-test/init-fixture")(__dirname);
 const { getCurrentSHA } = require("../lib/get-current-sha");
 
 test("getCurrentSHA", async () => {

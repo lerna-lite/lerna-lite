@@ -18,6 +18,9 @@ jest.mock('@lerna-lite/core', () => ({
   promptTextInput: jest.requireActual('../../../core/src/__mocks__/prompt').promptTextInput,
 }));
 
+// also point to the local publish command so that all mocks are properly used even by the command-runner
+jest.mock('@lerna-lite/publish', () => jest.requireActual('../publish-command'));
+
 // local modules _must_ be explicitly mocked
 jest.mock("../lib/get-packages-without-license", () => jest.requireActual('../lib/__mocks__/get-packages-without-license'));
 jest.mock("../lib/verify-npm-package-access", () => jest.requireActual('../lib/__mocks__/verify-npm-package-access'));
@@ -33,13 +36,15 @@ const fs = require("fs-extra");
 const path = require("path");
 
 // helpers
-const initFixture = require("../../../../helpers/init-fixture")(__dirname);
+const initFixture = require("@lerna-test/init-fixture")(__dirname);
 const { loggingOutput } = require("../../../../helpers/logging-output");
 const { commitChangeToPackage } = require("../../../../helpers/commit-change-to-package");
 
 // test command
-const yargParser = require('yargs-parser');
 const { PublishCommand } = require("../index");
+const lernaPublish = require("@lerna-test/command-runner")(require("../../../cli/src/cli-commands/cli-publish-commands"));
+
+const yargParser = require('yargs-parser');
 
 // mocked or stubbed modules
 const { npmPublish } = require("../lib/npm-publish");
@@ -57,6 +62,7 @@ const createArgv = (cwd, ...args) => {
   const parserArgs = args.join(' ');
   const argv = yargParser(parserArgs);
   argv['$0'] = cwd;
+  argv['loglevel'] = 'silent';
   argv.composed = 'composed';
   return argv;
 };
@@ -82,9 +88,8 @@ describe("PublishCommand", () => {
       expect(verifyNpmPackageAccess).not.toHaveBeenCalled();
     });
 
-    xit("exits non-zero with --scope", async () => {
-      const command = new PublishCommand(createArgv(cwd, "--scope", "package-1"));
-      // const command = lernaPublish(cwd)("--scope", "package-1");
+    it("exits non-zero with --scope", async () => {
+      const command = lernaPublish(cwd)("--scope", "package-1");
 
       await expect(command).rejects.toThrow(
         expect.objectContaining({
@@ -94,9 +99,8 @@ describe("PublishCommand", () => {
       );
     });
 
-    xit("exits non-zero with --since", async () => {
-      const command = new PublishCommand(createArgv(cwd, "--since", "main"));
-      // const command = lernaPublish(cwd)("--since", "main");
+    it("exits non-zero with --since", async () => {
+      const command = lernaPublish(cwd)("--since", "main");
 
       await expect(command).rejects.toThrow(
         expect.objectContaining({
@@ -219,10 +223,9 @@ Map {
       ]);
     });
 
-    xit("throws an error when value is _not_ 'all' or 'dependencies'", async () => {
+    it("throws an error when value is _not_ 'all' or 'dependencies'", async () => {
       const testDir = await initFixture("normal");
-      // const command = lernaPublish(testDir)("--graph-type", "poopy-pants");
-      const command = new PublishCommand(createArgv(testDir, "--graph-type", "poopy-pants"));
+      const command = lernaPublish(testDir)("--graph-type", "poopy-pants");
 
       await expect(command).rejects.toThrow("poopy-pants");
     });
@@ -368,17 +371,17 @@ Map {
 
   // TODO: (major) make --no-granular-pathspec the default
   describe("--no-granular-pathspec", () => {
-    xit("resets staged changes globally", async () => {
+    it("resets staged changes globally", async () => {
       const cwd = await initFixture("normal");
 
-      // await lernaPublish(cwd)("--no-granular-pathspec");
-      await new PublishCommand(createArgv(cwd, "--no-granular-pathspec"));
+      await lernaPublish(cwd)("--no-granular-pathspec");
 
       expect(gitCheckout).toHaveBeenCalledWith(
         // the list of changed files has been asserted many times already
         expect.any(Array),
         { granularPathspec: false },
-        { cwd }
+        { cwd },
+        undefined
       );
     });
 
@@ -389,14 +392,14 @@ Map {
         version: "1.0.0",
         granularPathspec: false,
       });
-      // await lernaPublish(cwd)();
-      await new PublishCommand(createArgv(cwd));
+      await lernaPublish(cwd)();
 
       expect(gitCheckout).toHaveBeenCalledWith(
         // the list of changed files has been asserted many times already
         expect.any(Array),
         { granularPathspec: false },
-        { cwd }
+        { cwd },
+        undefined
       );
     });
   });

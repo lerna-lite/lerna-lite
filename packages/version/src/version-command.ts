@@ -39,6 +39,10 @@ import { gitPush } from './lib/git-push';
 import { makePromptVersion } from './lib/prompt-version';
 import { updateLockfileVersion } from './lib/update-lockfile-version';
 
+export function factory(argv) {
+  return new VersionCommand(argv);
+}
+
 export class VersionCommand extends Command {
   /** command name */
   name = 'version';
@@ -70,6 +74,10 @@ export class VersionCommand extends Command {
     return (
       this.commitAndTag || this.pushToRemote || this.options.allowBranch || this.options.conventionalCommits
     );
+  }
+
+  constructor(argv: any) {
+    super(argv);
   }
 
   configureProperties() {
@@ -487,7 +495,7 @@ export class VersionCommand extends Command {
       return true;
     }
 
-    // When composed from `ws-roller publish`, use this opportunity to confirm publishing
+    // When composed from `lerna publish`, use this opportunity to confirm publishing
     const message = this.composed
       ? 'Are you sure you want to publish these packages?'
       : 'Are you sure you want to create these versions?';

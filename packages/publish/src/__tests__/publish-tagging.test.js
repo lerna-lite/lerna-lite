@@ -29,17 +29,22 @@ jest.mock("../lib/pack-directory", () => jest.requireActual('../lib/__mocks__/pa
 jest.mock("../lib/npm-publish", () => jest.requireActual('../lib/__mocks__/npm-publish'));
 jest.mock("../lib/npm-dist-tag", () => jest.requireActual('../lib/__mocks__/npm-dist-tag'));
 
+// also point to the local publish command so that all mocks are properly used even by the command-runner
+jest.mock('@lerna-lite/publish', () => jest.requireActual('../publish-command'));
+
 // mocked modules
 const { collectUpdates } = require("@lerna-lite/core");
 const npmDistTag = require("../lib/npm-dist-tag");
 const { npmPublish } = require("../lib/npm-publish");
 
 // helpers
-const initFixture = require("../../../../helpers/init-fixture")(__dirname);
+const initFixture = require("@lerna-test/init-fixture")(__dirname);
 
 // test command
-const yargParser = require('yargs-parser');
 const { PublishCommand } = require("../index");
+const lernaPublish = require("@lerna-test/command-runner")(require("../../../cli/src/cli-commands/cli-publish-commands"));
+
+const yargParser = require('yargs-parser');
 
 const createArgv = (cwd, ...args) => {
   args.unshift('publish');
@@ -72,12 +77,12 @@ test("publish --dist-tag nightly --canary", async () => {
   expect(npmDistTag.remove).not.toHaveBeenCalled();
 });
 
-xtest("publish --npm-tag deprecated", async () => {
+test("publish --npm-tag deprecated", async () => {
   const cwd = await initFixture("normal");
 
   collectUpdates.setUpdated(cwd, "package-3");
 
-  await new PublishCommand(createArgv(cwd, "--npm-tag", "deprecated"));
+  await lernaPublish(cwd)("--npm-tag", "deprecated");
 
   expect(npmPublish.registry.get("package-3")).toBe("deprecated");
   expect(npmDistTag.remove).not.toHaveBeenCalled();
