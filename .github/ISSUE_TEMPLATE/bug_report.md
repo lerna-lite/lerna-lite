@@ -18,19 +18,49 @@ Thanks for filing a Bug Report! However, before you submit, please read the foll
 
 ## I'm submitting a Bug report
 
-### Your Environment
-<!--- Include as many relevant details as possible about the library versions -->
-| Software             | Version(s) |
-| -------------------- | ---------- |
-| Lerna-Lite           | x.y        |
-| NodeJS               | x.y        |
-| TypeScript           | x.y        |
+## Your Environment
+<!--- Include as many relevant details about the environment you experienced the bug in -->
+
+| Executable        | Version |
+| ----------------- | ------- |
+| `lerna --version` | VERSION |
+| `npm --version`   | VERSION |
+| `yarn --version`  | VERSION |
+| `node --version`  | VERSION |
+
+| OS   | Version |
+| ---- | ------- |
+| NAME | VERSION |
+<!-- For example:
+| macOS      | 10.12.3 |
+| Windows 10 | 1607    |
+-->
 
 ### Describe the Bug
 <!-- REQUIRED - could you explain a bit what the Bug is -->
 
-### Steps to Reproduce
-<!-- REQUIRED - please provide steps to reproduce the bug -->
+### Steps to Reproduce (for bugs)
+<!--- Provide a link to a live example, or an unambiguous set of steps to -->
+<!--- reproduce this bug. Include code to reproduce, if relevant -->
+1.
+2.
+
+<details><summary>lerna.json</summary><p>
+<!-- browsers demand the next line be empty -->
+
+```json
+<!-- Please paste your `lerna.json` here -->
+```
+</p></details>
+
+<details><summary>lerna-debug.log</summary><p>
+<!-- browsers demand the next line be empty -->
+
+```txt
+<!-- If you have a `lerna-debug.log` available, please paste it here -->
+<!-- Otherwise, feel free to delete this <details> block -->
+```
+</p></details>
 
 ### Expected Behavior
 <!-- REQUIRED - Tell us what should happen in normal use -->
