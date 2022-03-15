@@ -38,6 +38,7 @@
     "@lerna-lite/version": "^1.0.0",
     "dedent": "^0.7.0",
     "dotenv": "^14.3.2",
+    "import-local": "^3.0.2",
     "npmlog": "^6.0.1",
     "yargs": "^17.3.1"
   },
