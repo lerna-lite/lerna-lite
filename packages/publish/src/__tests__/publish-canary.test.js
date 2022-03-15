@@ -15,6 +15,9 @@ jest.mock("../lib/get-npm-username", () => jest.requireActual('../lib/__mocks__/
 jest.mock("../lib/get-two-factor-auth-required", () => jest.requireActual('../lib/__mocks__/get-two-factor-auth-required'));
 jest.mock("../lib/npm-publish", () => jest.requireActual('../lib/__mocks__/npm-publish'));
 
+// also point to the local publish command so that all mocks are properly used even by the command-runner
+jest.mock('@lerna-lite/publish', () => jest.requireActual('../publish-command'));
+
 const fs = require("fs-extra");
 const path = require("path");
 const yargParser = require('yargs-parser');
@@ -25,18 +28,18 @@ const { npmPublish } = require("../lib/npm-publish");
 const { promptConfirmation, throwIfUncommitted } = require("@lerna-lite/core");
 
 // helpers
-const initFixture = require("../../../../helpers/init-fixture")(__dirname);
-const { gitAdd } = require("../../../../helpers/git-add");
-const { gitTag } = require("../../../../helpers/git-tag");
-const { gitCommit } = require("../../../../helpers/git-commit");
-const { loggingOutput } = require("../../../../helpers/logging-output");
+const initFixture = require("@lerna-test/init-fixture")(__dirname);
+const { gitAdd } = require("@lerna-test/git-add");
+const { gitTag } = require("@lerna-test/git-tag");
+const { gitCommit } = require("@lerna-test/git-commit");
+const { loggingOutput } = require("@lerna-test/logging-output");
 
 // test command
 const { PublishCommand } = require("../index");
-const { commandRunner } = require('../../../../helpers/command-runner');
+const lernaPublish = require("@lerna-test/command-runner")(require("../../../cli/src/cli-commands/cli-publish-commands"));
 
 // stabilize commit SHA
-expect.addSnapshotSerializer(require("../../../../helpers/serialize-git-sha"));
+expect.addSnapshotSerializer(require("@lerna-test/serialize-git-sha"));
 
 // const { exec } = require('@lerna-lite/core');
 const coreModule = require('@lerna-lite/core');
@@ -91,7 +94,6 @@ test("publish --canary", async () => {
     ["packages/package-4/non-matching-semver.js", "senpai noticed me"]
   );
   await new PublishCommand(createArgv(cwd, '--canary'));
-  // await commandRunner(cwd, 'publish')("--canary");
 
   expect(promptConfirmation).toHaveBeenLastCalledWith("Are you sure you want to publish these packages?");
   expect(npmPublish.registry).toMatchInlineSnapshot(`
@@ -368,13 +370,13 @@ Object {
 `);
 });
 
-xtest("publish --canary with dirty tree throws error", async () => {
+test("publish --canary with dirty tree throws error", async () => {
   throwIfUncommitted.mockImplementationOnce(() => {
     throw new Error("uncommitted");
   });
 
   const cwd = await initTaggedFixture("normal");
-  await new PublishCommand(createArgv(cwd, "--canary"));
+  const command = lernaPublish(cwd)("--canary");
 
   await expect(command).rejects.toThrow("uncommitted");
   // notably different than the actual message, but good enough here
@@ -395,7 +397,7 @@ xtest("publish --canary --include-merged-tags calls git describe correctly", asy
   const execSpy = jest.spyOn(coreModule, 'exec');
   const cwd = await initTaggedFixture("normal");
 
-  await new PublishCommand(createArgv(cwd, "--canary", "--include-merged-tags"));
+  await lernaPublish(cwd)("--canary", "--include-merged-tags");
 
   expect(execSpy).toHaveBeenCalledWith(
     "git",
@@ -408,7 +410,7 @@ xtest("publish --canary --include-merged-tags calls git describe correctly", asy
 
 test("publish --canary without _any_ tags", async () => {
   const cwd = await initFixture("normal");
-  await new PublishCommand(createArgv(cwd, "--canary"));
+  await lernaPublish(cwd)("--canary");
 
   expect(writePkg.updatedVersions()).toMatchInlineSnapshot(`
     Object {

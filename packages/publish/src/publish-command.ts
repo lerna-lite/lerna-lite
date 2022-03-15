@@ -39,6 +39,10 @@ import { removeTempLicenses } from './lib/remove-temp-licenses';
 import { createTempLicenses } from './lib/create-temp-licenses';
 import { getPackagesWithoutLicense } from './lib/get-packages-without-license';
 
+export function factory(argv) {
+  return new PublishCommand(argv);
+}
+
 export class PublishCommand extends Command {
   /** command name */
   name = 'publish';
@@ -64,8 +68,12 @@ export class PublishCommand extends Command {
   }
 
   get requiresGit() {
-    // `ws-roller publish from-package` doesn't _need_ git, per se
+    // `lerna publish from-package` doesn't _need_ git, per se
     return this.options.bump !== 'from-package';
+  }
+
+  constructor(argv: any) {
+    super(argv);
   }
 
   configureProperties() {
@@ -103,7 +111,7 @@ export class PublishCommand extends Command {
 
   get userAgent() {
     // consumed by npm-registry-fetch (via libnpmpublish)
-    return `lerna/${this.options.libVersion}/node@${process.version}+${process.arch} (${process.platform})`;
+    return `lerna/${this.options.lernaVersion}/node@${process.version}+${process.arch} (${process.platform})`;
   }
 
   initialize() {
@@ -662,7 +670,7 @@ export class PublishCommand extends Command {
       // despite being deprecated for years...
       chain = chain.then(() => this.runRootLifecycle('prepublish'));
 
-      // these lifecycles _should_ never be employed to run `ws-roller publish`...
+      // these lifecycles _should_ never be employed to run `lerna publish`...
       chain = chain.then(() => this.runPackageLifecycle(this.project?.manifest, 'prepare'));
       chain = chain.then(() => this.runPackageLifecycle(this.project?.manifest, 'prepublishOnly'));
       chain = chain.then(() => this.runPackageLifecycle(this.project?.manifest, 'prepack'));

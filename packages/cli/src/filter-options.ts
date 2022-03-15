@@ -1,13 +1,10 @@
-const log = require('npmlog');
-const dedent = require('dedent');
-const { getFilteredPackages } = require('./get-filtered-packages');
+import log from 'npmlog';
+import dedent from 'dedent';
+import { Argv } from 'yargs';
 
-module.exports.filterOptions = filterOptions;
-module.exports.getFilteredPackages = getFilteredPackages;
-
-function filterOptions(yargs) {
-  // Only for 'run', 'exec', 'clean', 'ls', and 'bootstrap' commands
-  const opts = {
+export function filterOptions(yargs: Argv<any>) {
+  // Only for 'run' command
+  const opts: any = {
     scope: {
       describe: 'Include only packages with names matching the given glob.',
       type: 'string',

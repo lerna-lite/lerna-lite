@@ -18,6 +18,9 @@ jest.mock('@lerna-lite/core', () => ({
   promptTextInput: jest.requireActual('../../../core/src/__mocks__/prompt').promptTextInput,
 }));
 
+// also point to the local publish command so that all mocks are properly used even by the command-runner
+jest.mock('@lerna-lite/publish', () => jest.requireActual('../publish-command'));
+
 // local modules _must_ be explicitly mocked
 jest.mock("../lib/verify-npm-package-access", () => jest.requireActual('../lib/__mocks__/verify-npm-package-access'));
 jest.mock("../lib/get-npm-username", () => jest.requireActual('../lib/__mocks__/get-npm-username'));
@@ -36,12 +39,14 @@ const { createTempLicenses } = require("../lib/create-temp-licenses");
 const { removeTempLicenses } = require("../lib/remove-temp-licenses");
 
 // helpers
-const initFixture = require("../../../../helpers/init-fixture")(__dirname);
-const { loggingOutput } = require("../../../../helpers/logging-output");
+const initFixture = require("@lerna-test/init-fixture")(__dirname);
+const { loggingOutput } = require("@lerna-test/logging-output");
 
 // test command
-const yargParser = require('yargs-parser');
 const { PublishCommand } = require("../index");
+const lernaPublish = require("@lerna-test/command-runner")(require("../../../cli/src/cli-commands/cli-publish-commands"));
+
+const yargParser = require('yargs-parser');
 
 const createArgv = (cwd, ...args) => {
   args.unshift('publish');
@@ -88,7 +93,7 @@ describe("licenses", () => {
   it("warns when packages need a license and the root license file is missing", async () => {
     const cwd = await initFixture("licenses-missing");
 
-    await new PublishCommand(createArgv(cwd));
+    await lernaPublish(cwd)();
 
     const [warning] = loggingOutput("warn");
     expect(warning).toMatchInlineSnapshot(`
@@ -108,8 +113,7 @@ describe("licenses", () => {
     // remove root license so warning is triggered
     await fs.remove(path.join(cwd, "LICENSE"));
 
-    // await lernaPublish(cwd)();
-    await new PublishCommand(createArgv(cwd));
+    await lernaPublish(cwd)();
 
     const [warning] = loggingOutput("warn");
     expect(warning).toMatch("Package package-1 is missing a license.");
@@ -121,8 +125,7 @@ describe("licenses", () => {
     // simulate _all_ packages missing a license
     await fs.remove(path.join(cwd, "packages/package-2/LICENSE"));
 
-    await new PublishCommand(createArgv(cwd));
-    // await lernaPublish(cwd)();
+    await lernaPublish(cwd)();
 
     const [warning] = loggingOutput("warn");
     expect(warning).toMatch("Packages package-1, package-2, and package-3 are missing a license.");

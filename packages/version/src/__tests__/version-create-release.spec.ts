@@ -21,16 +21,21 @@ jest.mock('@lerna-lite/core', () => ({
   throwIfUncommitted: jest.requireActual('../../../core/src/__mocks__/check-working-tree').throwIfUncommitted,
 }));
 
+// also point to the local version command so that all mocks are properly used even by the command-runner
+jest.mock('@lerna-lite/version', () => jest.requireActual('../version-command'));
+
 // mocked modules
 const { createGitHubClient } = require("@lerna-lite/core");
 const { createGitLabClient } = require("@lerna-lite/core");
 const { recommendVersion } = require("@lerna-lite/core");
 
 // helpers
-const initFixture = require("../../../../helpers/init-fixture")(__dirname);
+const initFixture = require("@lerna-test/init-fixture")(__dirname);
 
 // test command
-import { VersionCommand } from '../versionCommand';
+import { VersionCommand } from '../version-command';
+const lernaVersion = require("@lerna-test/command-runner")(require("../../../cli/src/cli-commands/cli-version-commands"));
+
 const yargParser = require('yargs-parser');
 
 const createArgv = (cwd, ...args) => {
@@ -38,6 +43,7 @@ const createArgv = (cwd, ...args) => {
   const parserArgs = args.map(String);
   const argv = yargParser(parserArgs);
   argv['$0'] = cwd;
+  argv['loglevel'] = 'silent';
   return argv;
 };
 
@@ -153,10 +159,10 @@ describe.each([
 });
 
 describe("legacy option --github-release", () => {
-  xit("is translated into --create-release=github", async () => {
+  it("is translated into --create-release=github", async () => {
     const cwd = await initFixture("normal");
 
-    await new VersionCommand(createArgv(cwd, "--github-release", "--conventional-commits"));
+    await lernaVersion(cwd)("--github-release", "--conventional-commits");
 
     expect(createGitHubClient.releases.size).toBe(1);
   });

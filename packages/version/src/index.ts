@@ -1,2 +1,2 @@
 export * from './lib';
-export * from './versionCommand';
+export * from './version-command';

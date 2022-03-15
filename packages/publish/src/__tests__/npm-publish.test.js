@@ -56,7 +56,7 @@ describe("npm-publish", () => {
     );
   });
 
-  xit("defaults opts.tag to 'latest'", async () => {
+  it("defaults opts.tag to 'latest'", async () => {
     await npmPublish(pkg, tarFilePath);
 
     expect(publish).toHaveBeenCalledWith(
@@ -68,7 +68,7 @@ describe("npm-publish", () => {
     );
   });
 
-  xit("overrides pkg.publishConfig.tag when opts.tag is explicitly configured", async () => {
+  it("overrides pkg.publishConfig.tag when opts.tag is explicitly configured", async () => {
     readJSON.mockImplementationOnce((file, cb) =>
       cb(null, {
         publishConfig: {
@@ -93,7 +93,7 @@ describe("npm-publish", () => {
     );
   });
 
-  xit("respects pkg.publishConfig.tag when opts.defaultTag matches default", async () => {
+  it("respects pkg.publishConfig.tag when opts.defaultTag matches default", async () => {
     readJSON.mockImplementationOnce((file, cb) =>
       cb(null, {
         publishConfig: {
@@ -117,7 +117,7 @@ describe("npm-publish", () => {
     );
   });
 
-  xit("uses pkg.contents manifest when pkg.publishConfig.directory is defined", async () => {
+  it("uses pkg.contents manifest when pkg.publishConfig.directory is defined", async () => {
     const fancyPkg = new Package(
       {
         name: "fancy",
@@ -154,7 +154,7 @@ describe("npm-publish", () => {
     );
   });
 
-  xit("merges pkg.publishConfig.registry into options", async () => {
+  it("merges pkg.publishConfig.registry into options", async () => {
     readJSON.mockImplementationOnce((file, cb) =>
       cb(null, {
         publishConfig: {
@@ -179,7 +179,7 @@ describe("npm-publish", () => {
     );
   });
 
-  xit("respects opts.dryRun", async () => {
+  it("respects opts.dryRun", async () => {
     const opts = { dryRun: true };
 
     await npmPublish(pkg, tarFilePath, opts);
@@ -188,7 +188,7 @@ describe("npm-publish", () => {
     expect(runLifecycle).toHaveBeenCalledTimes(2);
   });
 
-  xit("calls publish lifecycles", async () => {
+  it("calls publish lifecycles", async () => {
     const options = expect.objectContaining({
       projectScope: "@scope",
     });
@@ -199,7 +199,7 @@ describe("npm-publish", () => {
     expect(runLifecycle).toHaveBeenLastCalledWith(pkg, "postpublish", options);
   });
 
-  xit("catches libnpm errors", async () => {
+  it("catches libnpm errors", async () => {
     publish.mockImplementationOnce(() => {
       const err = new Error("whoopsy");
       err.code = "E401";

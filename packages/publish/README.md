@@ -5,7 +5,7 @@
 [![Actions Status](https://github.com/ghiscoding/lerna-lite/workflows/CI%20Build/badge.svg)](https://github.com/ghiscoding/lerna-lite/actions)
 
 # @lerna-lite/publish
-## (`ws-roller publish`) Publish command 📰
+## (`lerna publish`) Publish command 📰
 
 Lerna-Lite Publish command, publish packages in the current project
 
@@ -20,29 +20,29 @@ Lerna-Lite Publish command, publish packages in the current project
 # install globally
 npm install -g @lerna-lite/cli
 # then use it (see usage below)
-ws-roller publish
+lerna publish
 
 # OR use npx
-npx ws-roller publish
+npx lerna publish
 ```
 
 ## Usage
 
 ```sh
-ws-roller publish              # publish packages that have changed since the last release
-ws-roller publish from-git     # explicitly publish packages tagged in the current commit
-ws-roller publish from-package # explicitly publish packages where the latest version is not present in the registry
+lerna publish              # publish packages that have changed since the last release
+lerna publish from-git     # explicitly publish packages tagged in the current commit
+lerna publish from-package # explicitly publish packages where the latest version is not present in the registry
 ```
 
 When run, this command does one of the following things:
 
-- Publish packages updated since the last release (calling [`ws-roller version`](https://github.com/ghiscoding/lerna-lite/blob/main/packages/version/README.md) behind the scenes).
-  - This is the legacy behavior of ws-roller 2.x
+- Publish packages updated since the last release (calling [`lerna version`](https://github.com/ghiscoding/lerna-lite/blob/main/packages/version/README.md) behind the scenes).
+  - This is the legacy behavior of lerna 2.x
 - Publish packages tagged in the current commit (`from-git`).
 - Publish packages in the latest commit where the version is not present in the registry (`from-package`).
 - Publish an unversioned "canary" release of packages (and their dependents) updated in the previous commit.
 
-> ws-roller will never publish packages which are marked as private (`"private": true` in the `package.json`).
+> lerna will never publish packages which are marked as private (`"private": true` in the `package.json`).
 
 During all publish operations, appropriate [lifecycle scripts](#lifecycle-scripts) are called in the root and per-package (unless disabled by [`--ignore-scripts](#--ignore-scripts)).
 
@@ -52,9 +52,9 @@ Check out [Per-Package Configuration](#per-package-configuration) for more detai
 
 ### semver `--bump from-git`
 
-In addition to the semver keywords supported by [`ws-roller version`](https://github.com/ws-roller/ws-roller/tree/main/commands/version#positionals),
-`ws-roller publish` also supports the `from-git` keyword.
-This will identify packages tagged by `ws-roller version` and publish them to npm.
+In addition to the semver keywords supported by [`lerna version`](https://github.com/lerna/lerna/tree/main/commands/version#positionals),
+`lerna publish` also supports the `from-git` keyword.
+This will identify packages tagged by `lerna version` and publish them to npm.
 This is useful in CI scenarios where you wish to manually increment versions,
 but have the package contents themselves consistently published by an automated process.
 
@@ -63,12 +63,12 @@ but have the package contents themselves consistently published by an automated 
 Similar to the `from-git` keyword except the list of packages to publish is determined by inspecting each `package.json`
 and determining if any package version is not present in the registry. Any versions not present in the registry will
 be published.
-This is useful when a previous `ws-roller publish` failed to publish all packages to the registry.
+This is useful when a previous `lerna publish` failed to publish all packages to the registry.
 
 ## Options
 
-`ws-roller publish` supports all of the options provided by [`ws-roller version`](https://github.com/ws-roller/ws-roller/tree/main/commands/version#options) in addition to the following:
-- [`@ws-roller/publish`](#ws-rollerpublish)
+`lerna publish` supports all of the options provided by [`lerna version`](https://github.com/lerna/lerna/tree/main/commands/version#options) in addition to the following:
+- [`@lerna/publish`](#lernapublish)
   - [Positionals](#positionals)
     - [semver `--bump from-git`](#semver--bump-from-git)
     - [semver `--bump from-package`](#semver--bump-from-package)
@@ -96,20 +96,20 @@ This is useful when a previous `ws-roller publish` failed to publish all package
 ### `--canary`
 
 ```sh
-ws-roller publish --canary
+lerna publish --canary
 # 1.0.0 => 1.0.1-alpha.0+${SHA} of packages changed since the previous commit
 # a subsequent canary publish will yield 1.0.1-alpha.1+${SHA}, etc
 
-ws-roller publish --canary --preid beta
+lerna publish --canary --preid beta
 # 1.0.0 => 1.0.1-beta.0+${SHA}
 
 # The following are equivalent:
-ws-roller publish --canary minor
-ws-roller publish --canary preminor
+lerna publish --canary minor
+lerna publish --canary preminor
 # 1.0.0 => 1.1.0-alpha.0+${SHA}
 ```
 
-When run with this flag, `ws-roller publish` publishes packages in a more granular way (per commit).
+When run with this flag, `lerna publish` publishes packages in a more granular way (per commit).
 Before publishing to npm, it creates the new `version` tag by taking the current `version`, bumping it to the next _minor_ version, adding the provided meta suffix (defaults to `alpha`) and appending the current git sha (ex: `1.0.0` becomes `1.1.0-alpha.0+81e3b443`).
 
 If you have publish canary releases from multiple active development branches in CI,
@@ -126,8 +126,8 @@ You should probably use one of those lifecycles (`prepare`, `prepublishOnly`, or
 If you're into unnecessarily complicated publishing, this will give you joy.
 
 ```sh
-ws-roller publish --contents dist
-# publish the "dist" subfolder of every ws-roller-managed leaf package
+lerna publish --contents dist
+# publish the "dist" subfolder of every lerna-managed leaf package
 ```
 
 **NOTE:** You should wait until the `postpublish` lifecycle phase (root or leaf) to clean up this generated subdirectory,
@@ -136,10 +136,10 @@ as the generated package.json is used during package upload (_after_ `postpack`)
 ### `--dist-tag <tag>`
 
 ```sh
-ws-roller publish --dist-tag next
+lerna publish --dist-tag next
 ```
 
-When run with this flag, `ws-roller publish` will publish to npm with the given npm [dist-tag](https://docs.npmjs.com/cli/v8/commands/npm-dist-tag) (defaults to `latest`).
+When run with this flag, `lerna publish` will publish to npm with the given npm [dist-tag](https://docs.npmjs.com/cli/v8/commands/npm-dist-tag) (defaults to `latest`).
 
 This option can be used to publish a [`prerelease`](http://carrot.is/coding/npm_prerelease) or `beta` version under a non-`latest` dist-tag, helping consumers avoid automatically upgrading to prerelease-quality code.
 
@@ -151,7 +151,7 @@ This option can be used to publish a [`prerelease`](http://carrot.is/coding/npm_
 To be used with [`--canary`](#--canary) to publish a canary version of all packages in your monorepo. This flag can be helpful when you need to make canary releases of packages beyond what was changed in the most recent commit. 
 
 ```
-ws-roller publish --canary --force-publish
+lerna publish --canary --force-publish
 
 ### `--git-head <sha>`
 
@@ -161,7 +161,7 @@ For example, when publishing from AWS CodeBuild (where `git` is not available),
 you could use this option to pass the appropriate [environment variable](https://docs.aws.amazon.com/codebuild/latest/userguide/build-env-ref-env-vars.html) to use for this package metadata:
 
 ```sh
-ws-roller publish from-package --git-head ${CODEBUILD_RESOLVED_SOURCE_VERSION}
+lerna publish from-package --git-head ${CODEBUILD_RESOLVED_SOURCE_VERSION}
 ```
 
 Under all other circumstances, this value is derived from a local `git` command.
@@ -173,7 +173,7 @@ Set which kind of dependencies to use when building a package graph. The default
 When using traditional peer + dev dependency pairs, this option should be configured to `all` so the peers are always published before their dependents.
 
 ```sh
-ws-roller publish --graph-type all
+lerna publish --graph-type all
 ```
 
 Configured via `lerna.json`:
@@ -190,33 +190,33 @@ Configured via `lerna.json`:
 
 ### `--ignore-scripts`
 
-When passed, this flag will disable running [lifecycle scripts](#lifecycle-scripts) during `ws-roller publish`.
+When passed, this flag will disable running [lifecycle scripts](#lifecycle-scripts) during `lerna publish`.
 
 ### `--ignore-prepublish`
 
-When passed, this flag will disable running [deprecated](https://docs.npmjs.com/misc/scripts#prepublish-and-prepare) [`prepublish` scripts](#lifecycle-scripts) during `ws-roller publish`.
+When passed, this flag will disable running [deprecated](https://docs.npmjs.com/misc/scripts#prepublish-and-prepare) [`prepublish` scripts](#lifecycle-scripts) during `lerna publish`.
 
 ### `--legacy-auth`
 
 When publishing packages that require authentication but you are working with an internally hosted NPM Registry that only uses the legacy Base64 version of username:password. This is the same as the NPM publish `_auth` flag.
 
 ```sh
-ws-roller publish --legacy-auth aGk6bW9t
+lerna publish --legacy-auth aGk6bW9t
 ```
 
 ### `--no-git-reset`
 
-By default, `ws-roller publish` ensures any changes to the working tree have been reset.
+By default, `lerna publish` ensures any changes to the working tree have been reset.
 
 To avoid this, pass `--no-git-reset`. This can be especially useful when used as part of a CI pipeline in conjunction with the `--canary` flag. For instance, the `package.json` version numbers which have been bumped may need to be used in subsequent CI pipeline steps (such as Docker builds).
 
 ```sh
-ws-roller publish --no-git-reset
+lerna publish --no-git-reset
 ```
 
 ### `--no-granular-pathspec`
 
-By default, `ws-roller publish` will attempt (if enabled) to `git checkout` _only_ the leaf package manifests that are temporarily modified during the publishing process. This yields the equivalent of `git checkout -- packages/*/package.json`, but tailored to _exactly_ what changed.
+By default, `lerna publish` will attempt (if enabled) to `git checkout` _only_ the leaf package manifests that are temporarily modified during the publishing process. This yields the equivalent of `git checkout -- packages/*/package.json`, but tailored to _exactly_ what changed.
 
 If you **know** you need different behavior, you'll understand: Pass `--no-granular-pathspec` to make the git command _literally_ `git checkout -- .`. By opting into this [pathspec](https://git-scm.com/docs/gitglossary#Documentation/gitglossary.txt-aiddefpathspecapathspec), you must have all intentionally unversioned content properly ignored.
 
@@ -229,11 +229,11 @@ This option makes the most sense configured in `lerna.json`, as you really don't
 }
 ```
 
-The root-level configuration is intentional, as this also covers the [identically-named option in `ws-roller version`](https://github.com/ws-roller/ws-roller/tree/main/commands/version#--no-granular-pathspec).
+The root-level configuration is intentional, as this also covers the [identically-named option in `lerna version`](https://github.com/lerna/lerna/tree/main/commands/version#--no-granular-pathspec).
 
 ### `--no-verify-access`
 
-By default, `ws-roller` will verify the logged-in npm user's access to the packages about to be published. Passing this flag will disable that check.
+By default, `lerna` will verify the logged-in npm user's access to the packages about to be published. Passing this flag will disable that check.
 
 If you are using a third-party registry that does not support `npm access ls-packages`, you will need to pass this flag (or set `command.publish.verifyAccess` to `false` in `lerna.json`).
 
@@ -244,32 +244,32 @@ If you are using a third-party registry that does not support `npm access ls-pac
 When publishing packages that require two-factor authentication, you can specify a [one-time password](https://docs.npmjs.com/about-two-factor-authentication) using `--otp`:
 
 ```sh
-ws-roller publish --otp 123456
+lerna publish --otp 123456
 ```
 
 > Please keep in mind that one-time passwords expire within 30 seconds of their generation. If it expires during publish operations, a prompt will request a refreshed value before continuing.
 
 ### `--preid`
 
-Unlike the `ws-roller version` option of the same name, this option only applies to [`--canary`](#--canary) version calculation.
+Unlike the `lerna version` option of the same name, this option only applies to [`--canary`](#--canary) version calculation.
 
 ```sh
-ws-roller publish --canary
+lerna publish --canary
 # uses the next semantic prerelease version, e.g.
 # 1.0.0 => 1.0.1-alpha.0
 
-ws-roller publish --canary --preid next
+lerna publish --canary --preid next
 # uses the next semantic prerelease version with a specific prerelease identifier, e.g.
 # 1.0.0 => 1.0.1-next.0
 ```
 
-When run with this flag, `ws-roller publish --canary` will increment `premajor`, `preminor`, `prepatch`, or `prerelease` semver
+When run with this flag, `lerna publish --canary` will increment `premajor`, `preminor`, `prepatch`, or `prerelease` semver
 bumps using the specified [prerelease identifier](http://semver.org/#spec-item-9).
 
 ### `--pre-dist-tag <tag>`
 
 ```sh
-ws-roller publish --pre-dist-tag next
+lerna publish --pre-dist-tag next
 ```
 
 Works the same as [`--dist-tag`](#--dist-tag-tag), except only applies to packages being released with a prerelease version.
@@ -286,14 +286,14 @@ private registries.
 
 This option allows to provide custom prefix instead of the default one: `v`.
 
-Keep in mind, if splitting `ws-roller version` and `ws-roller publish`, you need to pass it to both commands:
+Keep in mind, if splitting `lerna version` and `lerna publish`, you need to pass it to both commands:
 
 ```bash
 # locally
-ws-roller version --tag-version-prefix=''
+lerna version --tag-version-prefix=''
 
 # on ci
-ws-roller publish from-git --tag-version-prefix=''
+lerna publish from-git --tag-version-prefix=''
 ```
 
 You could also configure this at the root level of `lerna.json`, applying to both commands equally:
@@ -309,25 +309,25 @@ You could also configure this at the root level of `lerna.json`, applying to bot
 ### `--temp-tag`
 
 When passed, this flag will alter the default publish process by first publishing
-all changed packages to a temporary dist-tag (`ws-roller-temp`) and then moving the
+all changed packages to a temporary dist-tag (`lerna-temp`) and then moving the
 new version(s) to the dist-tag configured by [`--dist-tag`](#--dist-tag-tag) (default `latest`).
 
-This is not generally necessary, as ws-roller will publish packages in topological
+This is not generally necessary, as lerna will publish packages in topological
 order (all dependencies before dependents) by default.
 
 ### `--yes`
 
 ```sh
-ws-roller publish --canary --yes
+lerna publish --canary --yes
 # skips `Are you sure you want to publish the above changes?`
 ```
 
-When run with this flag, `ws-roller publish` will skip all confirmation prompts.
+When run with this flag, `lerna publish` will skip all confirmation prompts.
 Useful in [Continuous integration (CI)](https://en.wikipedia.org/wiki/Continuous_integration) to automatically answer the publish confirmation prompt.
 
 ## Per-Package Configuration
 
-A leaf package can be configured with special [`publishConfig`](https://docs.npmjs.com/cli/v8/configuring-npm/package-json#publishconfig) that in _certain_ circumstances changes the behavior of `ws-roller publish`.
+A leaf package can be configured with special [`publishConfig`](https://docs.npmjs.com/cli/v8/configuring-npm/package-json#publishconfig) that in _certain_ circumstances changes the behavior of `lerna publish`.
 
 ### `publishConfig.access`
 
@@ -393,9 +393,9 @@ This _non-standard_ field allows you to customize the published subdirectory jus
 // postpublish: Run AFTER the package is published.
 ```
 
-ws-roller will run [npm lifecycle scripts](https://docs.npmjs.com/cli/v8/using-npm/scripts#description) during `ws-roller publish` in the following order:
+lerna will run [npm lifecycle scripts](https://docs.npmjs.com/cli/v8/using-npm/scripts#description) during `lerna publish` in the following order:
 
-1. If versioning implicitly, run all [version lifecycle scripts](https://github.com/ws-roller/ws-roller/tree/main/commands/version#lifecycle-scripts)
+1. If versioning implicitly, run all [version lifecycle scripts](https://github.com/lerna/lerna/tree/main/commands/version#lifecycle-scripts)
 2. Run `prepublish` lifecycle in root, if [enabled](#--ignore-prepublish)
 3. Run `prepare` lifecycle in root
 4. Run `prepublishOnly` lifecycle in root
@@ -413,7 +413,7 @@ ws-roller will run [npm lifecycle scripts](https://docs.npmjs.com/cli/v8/using-n
    2. Run `publish` lifecycle
    3. Run `postpublish` lifecycle
 9. Run `publish` lifecycle in root
-   - To avoid recursive calls, don't use this root lifecycle to run `ws-roller publish`
+   - To avoid recursive calls, don't use this root lifecycle to run `lerna publish`
 10. Run `postpublish` lifecycle in root
 11. Update temporary dist-tag to latest, if [enabled](#--temp-tag)
 

@@ -21,7 +21,6 @@ export class Command {
   argv: any;
   concurrency!: number;
   envDefaults: any;
-  libVersion = '';
   sort: any;
   toposort?: number;
 
@@ -46,11 +45,10 @@ export class Command {
 
     // composed commands are called from other commands, like publish -> version
     this.composed = typeof argv.composed === 'string' && argv.composed !== this.name;
-    this.libVersion = this.project?.version ?? '';
 
     if (!this.composed) {
       // composed commands have already logged the lerna version
-      // log.notice('cli', `v${argv.lernaVersion}`);
+      log.notice('cli', `v${argv.lernaVersion}`);
     }
 
     // launch the command

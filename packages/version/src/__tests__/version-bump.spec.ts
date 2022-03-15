@@ -13,6 +13,9 @@ jest.mock('@lerna-lite/core', () => ({
   throwIfUncommitted: jest.requireActual('../../../core/src/__mocks__/check-working-tree').throwIfUncommitted,
 }));
 
+// also point to the local version command so that all mocks are properly used even by the command-runner
+jest.mock('@lerna-lite/version', () => jest.requireActual('../version-command'));
+
 const path = require("path");
 const yargParser = require('yargs-parser');
 
@@ -20,17 +23,19 @@ const yargParser = require('yargs-parser');
 const { promptSelectOne } = require("@lerna-lite/core");
 
 // helpers
-const initFixture = require("../../../../helpers/init-fixture")(path.resolve(__dirname, "../../../publish/src/__tests__"));
-const { getCommitMessage } = require("../../../../helpers/get-commit-message");
+const initFixture = require("@lerna-test/init-fixture")(path.resolve(__dirname, "../../../publish/src/__tests__"));
+const { getCommitMessage } = require("@lerna-test/get-commit-message");
 
 // test command
-import { VersionCommand } from '../versionCommand';
+import { VersionCommand } from '../version-command';
+const lernaVersion = require("@lerna-test/command-runner")(require("../../../cli/src/cli-commands/cli-version-commands"));
 
 const createArgv = (cwd, ...args) => {
   args.unshift('version');
   const parserArgs = args.map(String);
   const argv = yargParser(parserArgs);
   argv['$0'] = cwd;
+  argv['loglevel'] = 'silent';
   return argv;
 };
 
@@ -45,24 +50,25 @@ describe("version bump", () => {
     expect(message).toBe("v1.0.1-beta.25");
   });
 
-  xit("receives --repo-version <value> as explicit [bump]", async () => {
+  it("receives --repo-version <value> as explicit [bump]", async () => {
     const testDir = await initFixture("normal");
-    await new VersionCommand(createArgv(testDir, "--repo-version", "1.0.1-beta.25"));
+    await lernaVersion(testDir)("--repo-version", "1.0.1-beta.25");
 
     const message = await getCommitMessage(testDir);
     expect(message).toBe("v1.0.1-beta.25");
   });
 
-  xit("errors when --repo-version and [bump] positional passed", async () => {
+  it("errors when --repo-version and [bump] positional passed", async () => {
     const testDir = await initFixture("normal");
-    const command = await new VersionCommand(createArgv(testDir, "--bump", "v1.0.1-beta.25", "--repo-version", "v1.0.1-beta.25"));
+    const command = lernaVersion(testDir)("v1.0.1-beta.25", "--repo-version", "v1.0.1-beta.25");
 
     await expect(command).rejects.toThrow("Arguments repo-version and bump are mutually exclusive");
   });
 
   it("strips invalid semver information from explicit value", async () => {
     const testDir = await initFixture("normal");
-    await new VersionCommand(createArgv(testDir, "--bump", "v1.2.0-beta.1+deadbeef"));
+    // await new VersionCommand(createArgv(testDir, "--bump", "v1.2.0-beta.1+deadbeef"));
+    await lernaVersion(testDir)("v1.2.0-beta.1+deadbeef");
 
     const message = await getCommitMessage(testDir);
     expect(message).toBe("v1.2.0-beta.1");
@@ -70,7 +76,8 @@ describe("version bump", () => {
 
   it("accepts semver keywords", async () => {
     const testDir = await initFixture("normal");
-    await new VersionCommand(createArgv(testDir, "--bump", "minor"));
+    // await new VersionCommand(createArgv(testDir, "--bump", "minor"));
+    await lernaVersion(testDir)("minor");
 
     expect(promptSelectOne).not.toHaveBeenCalled();
 
@@ -78,24 +85,25 @@ describe("version bump", () => {
     expect(message).toBe("v1.1.0");
   });
 
-  xit("receives --cd-version <bump>", async () => {
+  it("receives --cd-version <bump>", async () => {
     const testDir = await initFixture("normal");
-    await new VersionCommand(createArgv(testDir, "--cd-version", "premajor"));
+    await lernaVersion(testDir)("--cd-version", "premajor");
 
     const message = await getCommitMessage(testDir);
     expect(message).toBe("v2.0.0-alpha.0");
   });
 
-  xit("errors when --cd-version and [bump] positional passed", async () => {
+  it("errors when --cd-version and [bump] positional passed", async () => {
     const testDir = await initFixture("normal");
-    const command = await new VersionCommand(createArgv(testDir, "--bump", "minor", "--cd-version", "minor"));
+    const command = lernaVersion(testDir)("minor", "--cd-version", "minor");
 
     await expect(command).rejects.toThrow("Arguments cd-version and bump are mutually exclusive");
   });
 
   xit("throws an error when an invalid semver keyword is used", async () => {
     const testDir = await initFixture("normal");
-    const command = await new VersionCommand(createArgv(testDir, "--bump", "poopypants"));
+    // const command = await new VersionCommand(createArgv(testDir, "--bump", "poopypants"));
+    const command = lernaVersion(testDir)("poopypants");
 
     await expect(command).rejects.toThrow(
       "bump must be an explicit version string _or_ one of: " +

@@ -30,11 +30,11 @@ const { collectUpdates } = require("@lerna-lite/core");
 const { recommendVersion, updateChangelog } = require("@lerna-lite/core");
 
 // helpers
-const initFixture = require("../../../../helpers/init-fixture")(path.resolve(__dirname, "../../../publish/src/__tests__"));
-const { showCommit } = require("../../../../helpers/show-commit");
+const initFixture = require("@lerna-test/init-fixture")(path.resolve(__dirname, "../../../publish/src/__tests__"));
+const { showCommit } = require("@lerna-test/show-commit");
 
 // test command
-import { VersionCommand } from '../versionCommand';
+import { VersionCommand } from '../version-command';
 const yargParser = require('yargs-parser');
 
 const createArgv = (cwd, ...args) => {

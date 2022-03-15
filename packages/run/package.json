@@ -1,13 +1,10 @@
 {
   "name": "@lerna-lite/run",
-  "description": "ws-runner CLI to help running npm script in each package workspace that contains that script",
+  "description": "Lerna-Lite Run command will help to run npm script in each package workspace that contains that script",
   "version": "0.3.7",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "typings": "dist/index.d.ts",
-  "bin": {
-    "ws-runner": "dist/cli.js"
-  },
   "files": [
     "/dist"
   ],

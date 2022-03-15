@@ -1,13 +1,18 @@
 import {
   Command,
+  logOutput,
   Package,
   runTopologically,
   ValidationError,
 } from '@lerna-lite/core';
 import pMap from 'p-map';
 
-import { getFilteredPackages, npmRunScript, npmRunScriptStreaming, output, Profiler, timer } from './lib';
+import { getFilteredPackages, npmRunScript, npmRunScriptStreaming, Profiler, timer } from './lib';
 import { ScriptStreamingOption } from './models';
+
+export function factory(argv) {
+  return new RunCommand(argv);
+}
 
 export class RunCommand extends Command {
   /** command name */
@@ -25,6 +30,10 @@ export class RunCommand extends Command {
 
   get requiresGit() {
     return false;
+  }
+
+  constructor(argv: any) {
+    super(argv);
   }
 
   initialize() {
@@ -61,7 +70,7 @@ export class RunCommand extends Command {
       this.joinedCommand = [this.npmClient, 'run', this.script].concat(this.args).join(' ');
 
       if (!this.count) {
-        this.logger.success('run', `No packages found with the lifecycle script "${script}"`);
+        this.logger.info('run', `No packages found with the lifecycle script "${script}"`);
 
         // still exits zero, aka 'ok'
         return false;
@@ -234,7 +243,7 @@ export class RunCommand extends Command {
         pkg.name,
         (getElapsed() / 1000).toFixed(1)
       );
-      output(result.stdout);
+      logOutput(result.stdout);
       if (!this.bail) {
         return { ...result, pkg };
       }

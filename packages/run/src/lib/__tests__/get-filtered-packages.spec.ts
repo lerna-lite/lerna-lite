@@ -24,12 +24,12 @@ const { collectUpdates } = require("@lerna-lite/core");
 
 // helpers
 // const initFixture = require("@lerna-test/init-fixture")(path.resolve(__dirname, "../../command"));
-const initFixture = require("../../../../../helpers/init-fixture")(path.resolve(__dirname, "../.."));
+const initFixture = require("@lerna-test/init-fixture")(path.resolve(__dirname, "../.."));
 
 import { Project, PackageGraph } from '@lerna-lite/core';
 
 const { getFilteredPackages } = require("../get-filtered-packages");
-const { filterOptions } = require("../filter-options");
+const { filterOptions } = require("../../../../cli/src/filter-options");
 
 async function buildGraph(cwd) {
   const packages = await Project.getPackages(cwd);

@@ -2,7 +2,7 @@
 
 const execa = require("execa");
 
-const cloneFixture = require("../../../../helpers/clone-fixture")(__dirname);
+const cloneFixture = require("@lerna-test/clone-fixture")(__dirname);
 const { gitPush } = require("../lib/git-push");
 
 async function listRemoteTags(cwd) {

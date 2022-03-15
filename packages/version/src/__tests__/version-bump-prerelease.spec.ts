@@ -14,6 +14,9 @@ jest.mock('@lerna-lite/core', () => ({
   throwIfUncommitted: jest.requireActual('../../../core/src/__mocks__/check-working-tree').throwIfUncommitted,
 }));
 
+// also point to the local version command so that all mocks are properly used even by the command-runner
+jest.mock('@lerna-lite/version', () => jest.requireActual('../version-command'));
+
 const fs = require("fs-extra");
 const path = require("path");
 const yargParser = require('yargs-parser');
@@ -21,15 +24,13 @@ const yargParser = require('yargs-parser');
 const { promptTextInput, promptSelectOne } = require("@lerna-lite/core");
 
 // helpers
-const initFixture = require("../../../../helpers/init-fixture")(path.resolve(__dirname, "../../../publish/src/__tests__"));
-const { showCommit } = require("../../../../helpers/show-commit");
-const { gitAdd } = require("../../../../helpers/git-add");
-const { gitCommit } = require("../../../../helpers/git-commit");
-const { gitInit } = require("../../../../helpers/git-init");
-const { gitTag } = require("../../../../helpers/git-tag");
-const { getCommitMessage } = require("../../../../helpers/get-commit-message");
-
-// test command
+const initFixture = require("@lerna-test/init-fixture")(path.resolve(__dirname, "../../../publish/src/__tests__"));
+const { showCommit } = require("@lerna-test/show-commit");
+const { gitAdd } = require("@lerna-test/git-add");
+const { gitCommit } = require("@lerna-test/git-commit");
+const { gitInit } = require("@lerna-test/git-init");
+const { gitTag } = require("@lerna-test/git-tag");
+const { getCommitMessage } = require("@lerna-test/get-commit-message");
 
 const Tacks = require("tacks");
 const tempy = require("tempy");
@@ -37,7 +38,8 @@ const tempy = require("tempy");
 const { File, Dir } = Tacks;
 
 // test command
-import { VersionCommand } from '../versionCommand';
+import { VersionCommand } from '../version-command';
+const lernaVersion = require("@lerna-test/command-runner")(require("../../../cli/src/cli-commands/cli-version-commands"));
 
 // remove quotes around top-level strings
 expect.addSnapshotSerializer({
@@ -51,7 +53,7 @@ expect.addSnapshotSerializer({
 });
 
 // stabilize commit SHA
-expect.addSnapshotSerializer(require("../../../../helpers/serialize-changelog"));
+expect.addSnapshotSerializer(require("@lerna-test/serialize-changelog"));
 
 const createArgv = (cwd, ...args) => {
   args.unshift('version');
@@ -131,7 +133,7 @@ test("version prerelease with immediate graduation", async () => {
   expect(secondDiff).toMatchSnapshot();
 });
 
-xtest("independent version prerelease does not bump on every unrelated change", async () => {
+test("independent version prerelease does not bump on every unrelated change", async () => {
   const cwd = tempy.directory();
   const fixture = new Tacks(
     Dir({
@@ -174,7 +176,7 @@ xtest("independent version prerelease does not bump on every unrelated change", 
     Promise.resolve(cfg.filter())
   );
 
-  await new VersionCommand(createArgv(cwd));
+  await lernaVersion(cwd)();
 
   const first = await getCommitMessage(cwd);
   expect(first).toMatchInlineSnapshot(`
@@ -189,7 +191,7 @@ Publish
   await gitCommit(cwd, "feat: hello world");
 
   // all of this just to say...
-  await new VersionCommand(createArgv(cwd));
+  await lernaVersion(cwd)();
 
   const second = await getCommitMessage(cwd);
   expect(second).toMatchInlineSnapshot(`
@@ -199,7 +201,7 @@ Publish
   `);
 });
 
-xtest("independent version prerelease respects --no-private", async () => {
+test("independent version prerelease respects --no-private", async () => {
   const cwd = tempy.directory();
   const fixture = new Tacks(
     Dir({
@@ -236,7 +238,7 @@ xtest("independent version prerelease respects --no-private", async () => {
   await gitCommit(cwd, "init");
 
   // TODO: (major) make --no-private the default
-  await new VersionCommand(createArgv(cwd, "--bump", "prerelease", "--no-private"));
+  await lernaVersion(cwd)("prerelease", "--no-private");
 
   const changedFiles = await showCommit(cwd, "--name-only");
   expect(changedFiles).toMatchInlineSnapshot(`

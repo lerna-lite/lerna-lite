@@ -1,3 +1,3 @@
 export * from './lib';
 export * from './models';
-export * from './runCommand';
+export * from './run-command';
