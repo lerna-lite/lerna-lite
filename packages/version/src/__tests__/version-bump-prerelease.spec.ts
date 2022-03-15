@@ -25,11 +25,11 @@ const { promptTextInput, promptSelectOne } = require("@lerna-lite/core");
 
 // helpers
 const initFixture = require("@lerna-test/init-fixture")(path.resolve(__dirname, "../../../publish/src/__tests__"));
-const { showCommit } = require("../../../../helpers/show-commit");
-const { gitAdd } = require("../../../../helpers/git-add");
-const { gitCommit } = require("../../../../helpers/git-commit");
-const { gitInit } = require("../../../../helpers/git-init");
-const { gitTag } = require("../../../../helpers/git-tag");
+const { showCommit } = require("@lerna-test/show-commit");
+const { gitAdd } = require("@lerna-test/git-add");
+const { gitCommit } = require("@lerna-test/git-commit");
+const { gitInit } = require("@lerna-test/git-init");
+const { gitTag } = require("@lerna-test/git-tag");
 const { getCommitMessage } = require("@lerna-test/get-commit-message");
 
 const Tacks = require("tacks");
@@ -53,7 +53,7 @@ expect.addSnapshotSerializer({
 });
 
 // stabilize commit SHA
-expect.addSnapshotSerializer(require("../../../../helpers/serialize-changelog"));
+expect.addSnapshotSerializer(require("@lerna-test/serialize-changelog"));
 
 const createArgv = (cwd, ...args) => {
   args.unshift('version');

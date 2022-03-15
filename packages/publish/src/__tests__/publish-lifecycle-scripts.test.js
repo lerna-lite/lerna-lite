@@ -38,7 +38,7 @@ const { packDirectory } = require("../lib/pack-directory");
 const { runLifecycle } = require("@lerna-lite/core");
 
 // helpers
-const initFixture = require("../../../../helpers/init-fixture")(__dirname);
+const initFixture = require("@lerna-test/init-fixture")(__dirname);
 const path = require("path");
 
 // test command

@@ -17,11 +17,11 @@ const { logOutput } = require("@lerna-lite/core");
 
 // helpers
 const initFixture = require("@lerna-test/init-fixture")(__dirname);
-const { gitAdd } = require("../../../../helpers/git-add");
-const { gitCheckout } = require("../../../../helpers/git-checkout");
-const { gitCommit } = require("../../../../helpers/git-commit");
-const { gitMerge } = require("../../../../helpers/git-merge");
-const { gitTag } = require("../../../../helpers/git-tag");
+const { gitAdd } = require("@lerna-test/git-add");
+const { gitCheckout } = require("@lerna-test/git-checkout");
+const { gitCommit } = require("@lerna-test/git-commit");
+const { gitMerge } = require("@lerna-test/git-merge");
+const { gitTag } = require("@lerna-test/git-tag");
 
 // file under test
 import { VersionCommand } from '../version-command';
@@ -38,8 +38,8 @@ expect.addSnapshotSerializer({
 });
 
 // normalize temp directory paths in snapshots
-expect.addSnapshotSerializer(require("../../../../helpers/serialize-windows-paths"));
-expect.addSnapshotSerializer(require("../../../../helpers/serialize-tempdir"));
+expect.addSnapshotSerializer(require("@lerna-test/serialize-windows-paths"));
+expect.addSnapshotSerializer(require("@lerna-test/serialize-tempdir"));
 
 const createArgv = (cwd, ...args) => {
   args.unshift('version');

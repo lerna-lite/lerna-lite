@@ -37,8 +37,8 @@ const path = require("path");
 
 // helpers
 const initFixture = require("@lerna-test/init-fixture")(__dirname);
-const { loggingOutput } = require("../../../../helpers/logging-output");
-const { commitChangeToPackage } = require("../../../../helpers/commit-change-to-package");
+const { loggingOutput } = require("@lerna-test/logging-output");
+const { commitChangeToPackage } = require("@lerna-test/commit-change-to-package");
 
 // test command
 const { PublishCommand } = require("../index");

@@ -29,17 +29,17 @@ const { promptConfirmation, throwIfUncommitted } = require("@lerna-lite/core");
 
 // helpers
 const initFixture = require("@lerna-test/init-fixture")(__dirname);
-const { gitAdd } = require("../../../../helpers/git-add");
-const { gitTag } = require("../../../../helpers/git-tag");
-const { gitCommit } = require("../../../../helpers/git-commit");
-const { loggingOutput } = require("../../../../helpers/logging-output");
+const { gitAdd } = require("@lerna-test/git-add");
+const { gitTag } = require("@lerna-test/git-tag");
+const { gitCommit } = require("@lerna-test/git-commit");
+const { loggingOutput } = require("@lerna-test/logging-output");
 
 // test command
 const { PublishCommand } = require("../index");
 const lernaPublish = require("@lerna-test/command-runner")(require("../../../cli/src/cli-commands/cli-publish-commands"));
 
 // stabilize commit SHA
-expect.addSnapshotSerializer(require("../../../../helpers/serialize-git-sha"));
+expect.addSnapshotSerializer(require("@lerna-test/serialize-git-sha"));
 
 // const { exec } = require('@lerna-lite/core');
 const coreModule = require('@lerna-lite/core');

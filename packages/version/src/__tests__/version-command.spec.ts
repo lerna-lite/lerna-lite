@@ -40,12 +40,12 @@ const { isBehindUpstream } = require("../lib/is-behind-upstream");
 const { remoteBranchExists } = require("../lib/remote-branch-exists");
 
 // helpers
-const { loggingOutput } = require("../../../../helpers/logging-output");
-const { gitAdd } = require("../../../../helpers/git-add");
-const { gitTag } = require("../../../../helpers/git-tag");
-const { gitCommit } = require("../../../../helpers/git-commit");
+const { loggingOutput } = require("@lerna-test/logging-output");
+const { gitAdd } = require("@lerna-test/git-add");
+const { gitTag } = require("@lerna-test/git-tag");
+const { gitCommit } = require("@lerna-test/git-commit");
 const initFixture = require("@lerna-test/init-fixture")(path.resolve(__dirname, "../../../publish/src/__tests__"));
-const { showCommit } = require("../../../../helpers/show-commit");
+const { showCommit } = require("@lerna-test/show-commit");
 const { getCommitMessage } = require("@lerna-test/get-commit-message");
 
 // test command
@@ -75,7 +75,7 @@ const listDirty = (cwd) =>
   );
 
 // stabilize commit SHA
-expect.addSnapshotSerializer(require("../../../../helpers/serialize-git-sha"));
+expect.addSnapshotSerializer(require("@lerna-test/serialize-git-sha"));
 
 describe("VersionCommand", () => {
   describe("normal mode", () => {

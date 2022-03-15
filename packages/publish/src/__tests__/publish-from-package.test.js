@@ -37,7 +37,7 @@ const { getUnpublishedPackages } = require("../lib/get-unpublished-packages");
 
 // helpers
 const initFixture = require("@lerna-test/init-fixture")(__dirname);
-const { loggingOutput } = require("../../../../helpers/logging-output");
+const { loggingOutput } = require("@lerna-test/logging-output");
 
 // file under test
 const yargParser = require('yargs-parser');

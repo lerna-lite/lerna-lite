@@ -20,16 +20,16 @@ const yargParser = require('yargs-parser');
 
 // helpers
 const initFixture = require("@lerna-test/init-fixture")(path.resolve(__dirname, "../../../publish/src/__tests__"));
-const { gitAdd } = require("../../../../helpers/git-add");
-const { gitCommit } = require("../../../../helpers/git-commit");
-const { gitTag } = require("../../../../helpers/git-tag");
-const { showCommit } = require("../../../../helpers/show-commit");
+const { gitAdd } = require("@lerna-test/git-add");
+const { gitCommit } = require("@lerna-test/git-commit");
+const { gitTag } = require("@lerna-test/git-tag");
+const { showCommit } = require("@lerna-test/show-commit");
 
 // test command
 import { VersionCommand } from '../version-command';
 
 // stabilize commit SHA
-expect.addSnapshotSerializer(require("../../../../helpers/serialize-git-sha"));
+expect.addSnapshotSerializer(require("@lerna-test/serialize-git-sha"));
 
 const createArgv = (cwd, ...args) => {
   args.unshift('version');

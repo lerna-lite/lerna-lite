@@ -40,7 +40,7 @@ const { removeTempLicenses } = require("../lib/remove-temp-licenses");
 
 // helpers
 const initFixture = require("@lerna-test/init-fixture")(__dirname);
-const { loggingOutput } = require("../../../../helpers/logging-output");
+const { loggingOutput } = require("@lerna-test/logging-output");
 
 // test command
 const { PublishCommand } = require("../index");

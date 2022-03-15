@@ -112,7 +112,7 @@ describe('RunCommand', () => {
     it('does not error when no packages match', async () => {
       await new RunCommand(createArgv(testDir, 'missing-script'));
 
-      expect(loggingOutput('success')).toContain(
+      expect(loggingOutput('info')).toContain(
         'No packages found with the lifecycle script "missing-script"'
       );
     });

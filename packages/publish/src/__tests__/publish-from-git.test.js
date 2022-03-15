@@ -30,8 +30,8 @@ const { logOutput, promptConfirmation, throwIfUncommitted } = require("@lerna-li
 
 // helpers
 const initFixture = require("@lerna-test/init-fixture")(__dirname);
-const { gitTag } = require("../../../../helpers/git-tag");
-const { loggingOutput } = require("../../../../helpers/logging-output");
+const { gitTag } = require("@lerna-test/git-tag");
+const { loggingOutput } = require("@lerna-test/logging-output");
 
 // test command
 const yargParser = require('yargs-parser');

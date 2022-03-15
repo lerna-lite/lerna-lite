@@ -4,8 +4,8 @@ import chalk from 'chalk';
 
 // helpers
 const { getPackages } = require('../../project');
-const { gitAdd } = require('../../../../../helpers/git-add');
-const initFixture = require('../../../../../helpers/init-fixture')(__dirname);
+const { gitAdd } = require('@lerna-test/git-add');
+const initFixture = require('@lerna-test/init-fixture')(__dirname);
 
 // file under test
 import { collectUncommitted, collectUncommittedSync } from '../collect-uncommitted';

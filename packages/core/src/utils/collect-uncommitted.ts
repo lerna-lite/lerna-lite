@@ -43,7 +43,7 @@ export function collectUncommitted({ cwd, log = npmlog }, gitDryRun = false) {
  * @param {UncommittedConfig} options
  * @returns {string[]} A list of uncommitted files
  */
-export function collectUncommittedSync({ cwd, log = npmlog }: { cwd: string; log: typeof npmlog }, gitDryRun = false) {
+export function collectUncommittedSync({ cwd, log = npmlog }: { cwd: string; log?: typeof npmlog }, gitDryRun = false) {
   log.silly('collect-uncommitted', 'git status --porcelain (sync)');
 
   const stdout = execSync('git', ['status', '--porcelain'], { cwd }, gitDryRun);

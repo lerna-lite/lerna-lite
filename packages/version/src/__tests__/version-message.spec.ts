@@ -26,7 +26,7 @@ const { getCommitMessage } = require("@lerna-test/get-commit-message");
 import { VersionCommand } from '../version-command';
 
 // stabilize commit SHA
-expect.addSnapshotSerializer(require("../../../../helpers/serialize-git-sha"));
+expect.addSnapshotSerializer(require("@lerna-test/serialize-git-sha"));
 
 const createArgv = (cwd: string, ...args: string[]) => {
   args.unshift('version');

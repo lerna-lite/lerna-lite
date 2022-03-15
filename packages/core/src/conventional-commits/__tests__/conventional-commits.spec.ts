@@ -5,10 +5,10 @@ import path from 'path';
 const { getPackages } = require('../../project');
 
 // helpers
-const initFixture = require('../../../../../helpers/init-fixture')(__dirname);
-const { gitAdd } = require('../../../../../helpers/git-add');
-const { gitCommit } = require('../../../../../helpers/git-commit');
-const { gitTag } = require('../../../../../helpers/git-tag');
+const initFixture = require('@lerna-test/init-fixture')(__dirname);
+const { gitAdd } = require('@lerna-test/git-add');
+const { gitCommit } = require('@lerna-test/git-commit');
+const { gitTag } = require('@lerna-test/git-tag');
 
 // file under test
 import { recommendVersion, updateChangelog } from '../../conventional-commits';
@@ -17,7 +17,7 @@ import { GetChangelogConfig } from '../get-changelog-config';
 // const { getChangelogConfig } = require('../lib/get-changelog-config');
 
 // stabilize changelog commit SHA and datestamp
-expect.addSnapshotSerializer(require('../../../../../helpers/serialize-changelog'));
+expect.addSnapshotSerializer(require('@lerna-test/serialize-changelog'));
 
 describe('conventional-commits', () => {
   describe('recommendVersion()', () => {
