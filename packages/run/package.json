@@ -34,7 +34,7 @@
     "@lerna-lite/core": "^1.0.0",
     "dedent": "^0.7.0",
     "fs-extra": "^10.0.1",
-    "multimatch": "^5.0.0",
+    "multimatch": "^6.0.0",
     "npmlog": "^6.0.1",
     "p-map": "^4.0.0",
     "upath": "^2.0.1",
