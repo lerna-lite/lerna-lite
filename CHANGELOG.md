@@ -4,6 +4,12 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.0.1](https://github.com/ghiscoding/lerna-lite/compare/v1.0.0...v1.0.1) (2022-03-15)
+
+### Bug Fixes
+
+* **cli:** add mising import-local dependency ([d1942e6](https://github.com/ghiscoding/lerna-lite/commit/d1942e600de03a1337f29e12dfa926a135d72bad))
+
 # [1.0.0](https://github.com/ghiscoding/lerna-lite/compare/v0.3.7...v1.0.0) (2022-03-15)
 
 * **BREAKING CHANGE:** use lerna CLI for all commands, fixes #28
@@ -13,6 +19,7 @@ See [Conventional Commits](https://conventionalcommits.org) for commit guideline
 ### Bug Fixes
 
 * **core:** better handling of possible missing pkg name ([ef9633d](https://github.com/ghiscoding/lerna-lite/commit/ef9633dfe623e1aca3e9350739317b9c57872b54))
+
 * **publish:** use Lerna code for `detectFromGit` and `detectFromPackage` ([811111f](https://github.com/ghiscoding/lerna-lite/commit/811111fbc0cdd7a91f45da03c8dcd729bb34fa35))
 
 ## [0.3.6](https://github.com/ghiscoding/lerna-lite/compare/v0.3.4...v0.3.6) (2022-03-05)
@@ -20,6 +27,7 @@ See [Conventional Commits](https://conventionalcommits.org) for commit guideline
 ### Bug Fixes
 
 * **deps:** update few npm dependencies ([9175d48](https://github.com/ghiscoding/lerna-lite/commit/9175d48002ba7efb1b6b69506c3f6e864898b8a0))
+
 * **deps:** update npm dependencies ([32da06c](https://github.com/ghiscoding/lerna-lite/commit/32da06cdcea86e38561740e95a1782f09a7add00))
 
 ## [0.3.5](https://github.com/ghiscoding/lerna-lite/compare/v0.3.4...v0.3.5) (2022-03-05)
