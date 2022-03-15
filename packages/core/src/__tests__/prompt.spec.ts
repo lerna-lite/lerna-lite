@@ -31,6 +31,20 @@ describe('Prompt', () => {
     expect(output).toBeTruthy();
   });
 
+  it('should prompt confirmation return false', async () => {
+    jest.spyOn(inquirer, 'prompt').mockResolvedValue({ confirm: false });
+
+    const logPauseSpy = jest.spyOn(npmlog, 'pause');
+    const logResumeSpy = jest.spyOn(npmlog, 'resume');
+    const inqSpy = jest.spyOn(inquirer, 'prompt');
+
+    const output = await promptConfirmation('Choose something.');
+    expect(logPauseSpy).toHaveBeenCalled();
+    expect(logResumeSpy).toHaveBeenCalled();
+    expect(inqSpy).toHaveBeenCalled();
+    expect(output).toBeFalsy();
+  });
+
   it('should prompt confirmation', async () => {
     jest.spyOn(inquirer, 'prompt').mockResolvedValue({ confirm: true });
 
@@ -43,6 +57,20 @@ describe('Prompt', () => {
     expect(logResumeSpy).toHaveBeenCalled();
     expect(inqSpy).toHaveBeenCalled();
     expect(output).toBeTruthy();
+  });
+
+  it('should prompt confirmation return false', async () => {
+    jest.spyOn(inquirer, 'prompt').mockResolvedValue({ confirm: false });
+
+    const logPauseSpy = jest.spyOn(npmlog, 'pause');
+    const logResumeSpy = jest.spyOn(npmlog, 'resume');
+    const inqSpy = jest.spyOn(inquirer, 'prompt');
+
+    const output = await promptConfirmation('Choose something.');
+    expect(logPauseSpy).toHaveBeenCalled();
+    expect(logResumeSpy).toHaveBeenCalled();
+    expect(inqSpy).toHaveBeenCalled();
+    expect(output).toBeFalsy();
   });
 
   it('should prompt select one', async () => {
@@ -89,6 +117,27 @@ describe('Prompt', () => {
     expect(output).toBeTruthy();
   });
 
+  it('should prompt select one return false', async () => {
+    jest.spyOn(inquirer, 'prompt').mockResolvedValue({ prompt: false });
+
+    const logPauseSpy = jest.spyOn(npmlog, 'pause');
+    const logResumeSpy = jest.spyOn(npmlog, 'resume');
+    const inqSpy = jest.spyOn(inquirer, 'prompt');
+
+    const output = await promptSelectOne(
+      'Choose something.', {
+      choices: [
+        { value: 'patch', name: 'Patch' },
+        { value: 'minor', name: 'Minor' },
+        { value: 'major', name: 'Major' },
+      ],
+    });
+    expect(logPauseSpy).toHaveBeenCalled();
+    expect(logResumeSpy).toHaveBeenCalled();
+    expect(inqSpy).toHaveBeenCalled();
+    expect(output).toBeFalsy();
+  });
+
   it('should prompt text input', async () => {
     jest.spyOn(inquirer, 'prompt').mockResolvedValue({ input: true });
 
@@ -114,3 +163,22 @@ describe('Prompt', () => {
     ]);
     expect(output).toBeTruthy();
   });
+
+  it('should prompt text input return false', async () => {
+    jest.spyOn(inquirer, 'prompt').mockResolvedValue({ input: false });
+
+    const logPauseSpy = jest.spyOn(npmlog, 'pause');
+    const logResumeSpy = jest.spyOn(npmlog, 'resume');
+    const inqSpy = jest.spyOn(inquirer, 'prompt');
+
+    const output = await promptTextInput(
+      'Choose something...', {
+      filter: () => true,
+      validate: () => false,
+    });
+    expect(logPauseSpy).toHaveBeenCalled();
+    expect(logResumeSpy).toHaveBeenCalled();
+    expect(inqSpy).toHaveBeenCalled();
+    expect(output).toBeFalsy();
+  });
+});
