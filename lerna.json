@@ -9,7 +9,6 @@
     },
     "version": {
       "conventionalCommits": true,
-      "createRelease": "github",
       "gitDryRun": false,
       "noPrivate": true,
       "message": "chore(release): publish new version %v",
