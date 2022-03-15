@@ -10,7 +10,7 @@
     "version": {
       "conventionalCommits": true,
       "createRelease": "github",
-      "gitDryRun": true,
+      "gitDryRun": false,
       "noPrivate": true,
       "message": "chore(release): publish new version %v",
       "changelogHeaderMessage": "### Automate your Workspace Versions, Changelogs & Publish with [Lerna-Lite](https://github.com/ghiscoding/lerna-lite) 🚀"
