@@ -7,7 +7,6 @@ export * from './defaults';
 export * from './describe-ref';
 export * from './env-replace';
 export * from './find-prefix';
-export * from './format-error';
 export * from './log-package-error';
 export * from './nerf-dart';
 export * from './npm-conf';
