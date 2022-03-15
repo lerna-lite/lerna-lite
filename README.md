@@ -88,7 +88,7 @@ Using Lerna-Lite? Add a README badge to show it off: [![lerna--lite](https://img
 | 📰 [publish](https://github.com/ghiscoding/lerna-lite/tree/main/packages/publish) | `npm i @lerna-lite/cli` | publish each workspace package | Yes |
 | 🏃 [run](https://github.com/ghiscoding/lerna-lite/tree/main/packages/run) | `npm i @lerna-lite/run` | run npm script in each workspace package | Optional |
 
-**Note:** the default `lerna` CLI is only including 2 built-in commands which are the `publish` and `version`, while `run` command is optional and must be installed separately.
+**Note:** the default `lerna` CLI is only including 2 built-in commands which are the `publish` and `version`, while `run` command is optional and must be installed separately (see below).
 
 ```bash
 # Lerna CLI which includes publish/version commands
