@@ -71,7 +71,7 @@
     "eslint": "^8.10.0",
     "eslint-plugin-import": "^2.25.4",
     "eslint-plugin-prefer-arrow": "^1.2.3",
-    "file-url": "^3.0.0",
+    "file-url": "^4.0.0",
     "jest": "^27.5.1",
     "jest-cli": "^27.5.1",
     "jest-extended": "^2.0.0",
