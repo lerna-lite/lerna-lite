@@ -15,7 +15,7 @@ Lerna-Lite Publish command, publish packages in the current project
 
 ---
 
-## Installation 
+## Installation
 ```sh
 # install globally
 npm install -g @lerna-lite/cli
@@ -148,10 +148,11 @@ This option can be used to publish a [`prerelease`](http://carrot.is/coding/npm_
 
 ### `--force-publish`
 
-To be used with [`--canary`](#--canary) to publish a canary version of all packages in your monorepo. This flag can be helpful when you need to make canary releases of packages beyond what was changed in the most recent commit. 
+To be used with [`--canary`](#--canary) to publish a canary version of all packages in your monorepo. This flag can be helpful when you need to make canary releases of packages beyond what was changed in the most recent commit.
 
-```
+```sh
 lerna publish --canary --force-publish
+```
 
 ### `--git-head <sha>`
 
