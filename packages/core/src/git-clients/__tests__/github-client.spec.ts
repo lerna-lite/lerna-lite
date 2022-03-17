@@ -62,8 +62,7 @@ describe('parseGitRepo', () => {
     expect(childProcess.execSync).toHaveBeenCalledWith(
       'git',
       ['config', '--get', 'remote.origin.url'],
-      undefined,
-      false
+      undefined
     );
 
     expect(repo).toEqual(
@@ -82,8 +81,7 @@ describe('parseGitRepo', () => {
     expect(childProcess.execSync).toHaveBeenCalledWith(
       'git',
       ['config', '--get', 'remote.upstream.url'],
-      undefined,
-      false
+      undefined
     );
   });
 

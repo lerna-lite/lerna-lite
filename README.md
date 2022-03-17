@@ -38,17 +38,17 @@ Lerna-Lite differs from the original [Lerna](https://github.com/lerna/lerna) in 
 Mainly for the following reasons:
 1. the original Lerna is no longer maintained (dependencies are out of date)
 2. create a lighter lib that still provide Lerna's approach of Versioning and Publishing by following the [Conventional Commits](https://www.conventionalcommits.org/) and also automatically create [Conventional-Changelog](https://github.com/conventional-changelog/conventional-changelog) for each package of the workspace. We don't need all packages of Lerna anymore since NPM Workspaces came out.
-3. add some little extras
+3. add some little extras while keeping the lib light.
 
 ### This lib will help you with
-##### [Version](https://github.com/ghiscoding/lerna-lite/tree/main/packages/version) & [Publish](https://github.com/ghiscoding/lerna-lite/tree/main/packages/publish) commands
-- Automate the rolling of new Versions (independent or fixed) for all your workspace packages
-  - it will automatically add Commit & Tag your new Version in Git & create new Release in GitHub when enabled
+#### [Version](https://github.com/ghiscoding/lerna-lite/tree/main/packages/version) & [Publish](https://github.com/ghiscoding/lerna-lite/tree/main/packages/publish) commands
+- Automate the rolling of new Versions (`independent` or `fixed`) for all your workspace packages
+  - it will automatically add Commit & Tag your new Version in Git & create new GitHub or GitLab Release when enabled
 - Automate the creation of Changelogs for all your packages by reading all [Conventional Commits](https://www.conventionalcommits.org/)
   - each package will get its own changelog and a combined changelog will also be created in the root
 - Automate the repository Publish of your new versions for all your packages (NPM or other platform)
 
-##### [Run](https://github.com/ghiscoding/lerna-lite/tree/main/packages/run) command (optional)
+#### [Run](https://github.com/ghiscoding/lerna-lite/tree/main/packages/run) command (optional)
 - [Run](https://github.com/ghiscoding/lerna-lite/tree/main/packages/run) is an optional package that will help you run npm script in parallel and in topological order.
 
 ## Lerna-Lite Packages
@@ -94,7 +94,7 @@ Using Lerna-Lite? Add a README badge to show it off: [![lerna--lite](https://img
 # Lerna CLI which includes publish/version commands
 npm install @lerna-lite/cli # OR yard add @lerna-lite/cli
 
-# optional run command
+# install optional `run` command
 npm install @lerna-lite/run # OR yarn add @lerna-lite/run
 ```
 
@@ -110,7 +110,7 @@ Add custom NPM Scripts or simply run the following NodeJS commands in a shell.
 ```
 
 ### Configuration
-This lib requires a config file in order to do its job properly. It could come from a separate config file in the root (read [`lerna.json` - Wiki](https://github.com/ghiscoding/lerna-lite/wiki/lerna.json) OR a `"lerna": {}` property directly under your `package.json`.
+You could configure Lerna via a `lerna.json` file, via a `"lerna": {}` property directly under your `package.json` or lastly by passing arguments directly when calling the shell commands. You can read the [`lerna.json` - Wiki](https://github.com/ghiscoding/lerna-lite/wiki/lerna.json) for more info.
 
 ### Migration for [Lerna](https://github.com/lerna/lerna) Users
 If you are migrating from Lerna, it should be fairly easy to just replace Lerna with Lerna-Lite and that should be it, the CLI commands are the same, take a look at the quick steps below:
@@ -125,7 +125,7 @@ npm uninstall -g lerna # OR yarn global remove lerna
 # Lerna CLI (`version`/`publish` commands)
 npm install @lerna-lite/cli
 
-# optionally install the `run` command
+# install optional `run` command
 npm install @lerna-lite/run
 ```
 
