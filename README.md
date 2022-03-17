@@ -22,9 +22,9 @@
 - [Migration for Lerna users](https://github.com/ghiscoding/lerna-lite#migration-for-lerna-users)
 - [Troubleshooting](https://github.com/ghiscoding/lerna-lite/wiki/Troubleshooting)
 - Commands
-   - [`publish`](https://github.com/ghiscoding/lerna-lite/tree/main/packages/publish#readme) - publish each workspace package (included with CLI)
-   - [`version`](https://github.com/ghiscoding/lerna-lite/tree/main/packages/version#readme) - create new version for each workspace package (included with CLI)
-   - [`run`](https://github.com/ghiscoding/lerna-lite/tree/main/packages/run#readme) - run npm script in each workspace package (separate install)
+   - [`publish`](https://github.com/ghiscoding/lerna-lite/tree/main/packages/publish#readme) - publish workspace packages (included with CLI)
+   - [`version`](https://github.com/ghiscoding/lerna-lite/tree/main/packages/version#readme) - create new version for each workspace packages (included with CLI)
+   - [`run`](https://github.com/ghiscoding/lerna-lite/tree/main/packages/run#readme) - run npm script in each workspace packages (separate install)
 
 ---
 
