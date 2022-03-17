@@ -31,7 +31,7 @@ export function createReleaseClient(type: 'github' | 'gitlab') {
  * @param {{ gitRemote: string; execOpts: import('@lerna/child-process').ExecOpts }} opts
  */
 export function createRelease(client, { tags, releaseNotes }: ReleaseCommandProps, { gitRemote, execOpts }: ReleaseOptions, gitDryRun = false) {
-  const repo = parseGitRepo(gitRemote, execOpts, gitDryRun);
+  const repo = parseGitRepo(gitRemote, execOpts);
 
   return Promise.all(
     releaseNotes.map(({ notes, name }) => {
@@ -43,13 +43,7 @@ export function createRelease(client, { tags, releaseNotes }: ReleaseCommandProp
       }
 
       const prereleaseParts = semver.prerelease(tag.replace(`${name}@`, '')) || [];
-
-      if (gitDryRun) {
-        log.info('dry-run>', `Release Created`);
-        return {};
-      }
-
-      return client.repos.createRelease({
+      const releaseOptions = {
         owner: repo.owner,
         repo: repo.name,
         tag_name: tag,
@@ -57,7 +51,14 @@ export function createRelease(client, { tags, releaseNotes }: ReleaseCommandProp
         body: notes,
         draft: false,
         prerelease: prereleaseParts.length > 0,
-      });
+      };
+
+      if (gitDryRun) {
+        log.info('dry-run>', `Create Release with repo options: `, JSON.stringify(releaseOptions));
+        return Promise.resolve();
+      }
+
+      return client.repos.createRelease(releaseOptions);
     })
   );
 }

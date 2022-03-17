@@ -286,7 +286,7 @@ When run with this flag, `lerna version` will force publish the specified packag
 
 Displays the git command that would be performed without actually executing it, however please note that it will still create all the changelogs. This could be helpful for troubleshooting and also to see changelog changes without commiting them to Git.
 
-**Note:** it will still create the changelogs (when enabled), so it could be useful to see what gets created (however, make sure to discard the changes and roll back your version in `lerna.json` once you're done)
+**Note:** changelogs will still be created (when enabled) even in dry-run mode, so it could be useful to see what gets created without them being committed (however, make sure to discard the changes and roll back your version in `lerna.json` once you're done).
 
 ```sh
 $ lerna run watch --git-dry-run
