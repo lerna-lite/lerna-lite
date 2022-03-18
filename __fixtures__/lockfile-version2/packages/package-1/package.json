@@ -1,0 +1,7 @@
+{
+  "name": "@my-workspace/package-1",
+  "version": "2.3.4",
+  "dependencies": {
+    "tiny-tarball": "^2.3.4"
+  }
+}

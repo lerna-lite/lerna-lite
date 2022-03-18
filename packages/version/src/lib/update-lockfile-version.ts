@@ -10,7 +10,7 @@ import { Package, Project } from '@lerna-lite/core';
  * @param {Object} project
  * @returns Promise
  */
-export async function updateLockfileVersion(pkg: Package, project: Project): Promise<string | undefined> {
+export async function updateClassicLockfileVersion(pkg: Package): Promise<string | undefined> {
   try {
     // "lockfileVersion" = 1, package lock file might be located in the package folder
     const lockFilePath = path.join(pkg.location, 'package-lock.json');
@@ -31,9 +31,11 @@ export async function updateLockfileVersion(pkg: Package, project: Project): Pro
       return lockFilePath;
     }
   } catch (error) { } // eslint-disable-line
+}
 
+export async function updateModernLockfileVersion(pkg: Package, project: Project): Promise<string | undefined> {
   try {
-    // OR "lockfileVersion" >= 2, will have a global package lock file located in the root folder and is formatted
+    // OR "lockfileVersion" >= 2 in the project root, will have a global package lock file located in the root folder and is formatted
     const projFilePath = path.join(project.rootPath, 'package-lock.json');
     const projLockFileObj: any = await loadJsonFile(projFilePath);
 
@@ -45,10 +47,7 @@ export async function updateLockfileVersion(pkg: Package, project: Project): Pro
       });
       return projFilePath;
     }
-  } catch (error) {
-    return undefined;
-  }
-  return undefined;
+  } catch (error) { } // eslint-disable-line
 }
 
 /**
