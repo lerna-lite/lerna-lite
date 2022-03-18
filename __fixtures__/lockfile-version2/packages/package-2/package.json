@@ -1,0 +1,7 @@
+{
+  "name": "@my-workspace/package-2",
+  "version": "2.3.4",
+  "dependencies": {
+    "@my-workspace/package-1": "^2.3.4"
+  }
+}

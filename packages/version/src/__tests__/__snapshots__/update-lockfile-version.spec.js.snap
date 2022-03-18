@@ -1,0 +1,59 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`npm modern lock file updateModernLockfileVersion v2 in project root 1`] = `
+Object {
+  "dependencies": Object {
+    "@my-workspace/package-1": Object {
+      "requires": Object {
+        "tiny-tarball": "^1.0.0",
+      },
+      "version": "file:packages/package-1",
+    },
+    "@my-workspace/package-2": Object {
+      "requires": Object {
+        "@my-workspace/package-1": "^2.4.0",
+      },
+      "version": "file:packages/package-2",
+    },
+  },
+  "lockfileVersion": 2,
+  "name": "my-workspace",
+  "packages": Object {
+    "": Object {
+      "license": "MIT",
+      "name": "my-workspace",
+      "workspaces": Array [
+        "./packages/package-1",
+        "./packages/package-2",
+      ],
+    },
+    "node_modules/package-1": Object {
+      "link": true,
+      "resolved": "packages/package-1",
+    },
+    "node_modules/package-2": Object {
+      "link": true,
+      "resolved": "packages/package-2",
+    },
+    "packages/package-1": Object {
+      "license": "MIT",
+      "name": "@my-workspace/package-1",
+      "tiny-tarball": Object {
+        "integrity": "sha1-u/EC1a5zr+LFUyleD7AiMCFvZbE=",
+        "resolved": "https://registry.npmjs.org/tiny-tarball/-/tiny-tarball-1.0.0.tgz",
+        "version": "1.0.0",
+      },
+      "version": "2.4.0",
+    },
+    "packages/package-2": Object {
+      "dependencies": Object {
+        "@my-workspace/package-1": "^2.4.0",
+      },
+      "license": "MIT",
+      "name": "@my-workspace/package-2",
+      "version": "2.4.0",
+    },
+  },
+  "requires": true,
+}
+`;

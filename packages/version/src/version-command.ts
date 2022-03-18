@@ -37,7 +37,7 @@ import { gitCommit } from './lib/git-commit';
 import { gitTag } from './lib/git-tag';
 import { gitPush } from './lib/git-push';
 import { makePromptVersion } from './lib/prompt-version';
-import { updateLockfileVersion } from './lib/update-lockfile-version';
+import { updateClassicLockfileVersion, updateModernLockfileVersion } from './lib/update-lockfile-version';
 
 export function factory(argv) {
   return new VersionCommand(argv);
@@ -539,12 +539,19 @@ export class VersionCommand extends Command {
           }
         }
 
-        return Promise.all([updateLockfileVersion(pkg, this.project), pkg.serialize()]).then(([lockfilePath]) => {
+        return Promise.all([
+          updateClassicLockfileVersion(pkg),
+          updateModernLockfileVersion(pkg, this.project),
+          pkg.serialize()
+        ]).then(([lockfilePath, rootLockfilePath]) => {
           // commit the updated manifest
           changedFiles.add(pkg.manifestLocation);
 
           if (lockfilePath) {
             changedFiles.add(lockfilePath);
+          }
+          if (rootLockfilePath) {
+            changedFiles.add(rootLockfilePath);
           }
 
           return pkg;
