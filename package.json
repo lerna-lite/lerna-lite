@@ -10,6 +10,7 @@
     "lint": "eslint packages/** --ext .ts",
     "predist-roll-version": "npm run preroll-version",
     "dist-roll-version": "node ./packages/cli/dist/cli.js version",
+    "dist-roll-version-dry-run": "node ./packages/cli/dist/cli.js version --git-dry-run",
     "dist-roll-publish": "node ./packages/cli/dist/cli.js publish from-package",
     "dist-pack-tarball": "node ./packages/cli/dist/cli.js run pack-tarball",
     "preroll-version": "echo \"⚠️  Make sure to run a Build & change cli.js line ending to LF before releasing a new version\"",
