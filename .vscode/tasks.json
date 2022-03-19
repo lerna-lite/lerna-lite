@@ -20,7 +20,7 @@
       "problemMatcher": []
     },
     {
-      "label": "Dry-Run new Version (from dist)",
+      "label": "[dry-run] new Version (from dist)",
       "type": "shell",
       "command": "npm run dist-roll-version-dry-run",
       "problemMatcher": []
