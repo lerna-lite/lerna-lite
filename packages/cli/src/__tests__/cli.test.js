@@ -12,7 +12,7 @@ const bin = (cwd) => (...args) => execa(CLI, args, { cwd });
 
 jest.setTimeout(30e3);
 
-describe("cli", () => {
+xdescribe("cli", () => {
   it("should throw without command", async () => {
     await expect(bin()()).rejects.toThrow("Pass --help to see all available commands and options.");
   });
