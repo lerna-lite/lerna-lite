@@ -168,7 +168,7 @@ export class PublishCommand extends Command {
     // don't execute recursively if run from a poorly-named script
     this.runRootLifecycle = /^(pre|post)?publish$/.test(process.env.npm_lifecycle_event || '')
       ? (stage) => this.logger.warn('lifecycle', 'Skipping root %j because it has already been called', stage)
-      : (stage) => this.runPackageLifecycle(this.project?.manifest, stage);
+      : (stage) => this.runPackageLifecycle(this.project.manifest, stage);
 
     let chain: Promise<any> = Promise.resolve();
 
@@ -388,7 +388,7 @@ export class PublishCommand extends Command {
       return `${nextVersion}-${preid}.${Math.max(0, refCount - 1)}+${sha}`;
     };
 
-    if (this.project?.isIndependent()) {
+    if (this.project.isIndependent()) {
       // each package is described against its tags only
       chain = chain.then((updates) =>
         pMap(updates, (node: Package) =>
@@ -420,7 +420,7 @@ export class PublishCommand extends Command {
           this.options.gitDryRun,
         )
           // a repo with no tags should default to whatever lerna.json claims
-          .then(makeVersion(this.project?.version))
+          .then(makeVersion(this.project.version))
           .then((version) => updates.map((node) => [node.name, version]))
           .then((updatesVersions) => ({
             updates,
@@ -459,7 +459,7 @@ export class PublishCommand extends Command {
     return Promise.resolve()
       .then(() => getPackagesWithoutLicense(this.project, this.packagesToPublish ?? []))
       .then((packagesWithoutLicense) => {
-        if (packagesWithoutLicense.length && !this.project?.licensePath) {
+        if (packagesWithoutLicense.length && !this.project.licensePath) {
           this.packagesToBeLicensed = [];
 
           const names = packagesWithoutLicense.map((pkg) => pkg.name);
@@ -589,7 +589,7 @@ export class PublishCommand extends Command {
     const gitOpts = {
       granularPathspec: this.options.granularPathspec !== false,
     };
-    const dirtyManifests = [this.project?.manifest]
+    const dirtyManifests = [this.project.manifest]
       .concat(this.packagesToPublish)
       .map((pkg) => path.relative(cwd, pkg.manifestLocation));
 
@@ -664,16 +664,16 @@ export class PublishCommand extends Command {
 
     let chain: Promise<any> = Promise.resolve();
 
-    chain = chain.then(() => createTempLicenses(this.project?.licensePath, this.packagesToBeLicensed ?? []));
+    chain = chain.then(() => createTempLicenses(this.project.licensePath, this.packagesToBeLicensed ?? []));
 
     if (!this.hasRootedLeaf) {
       // despite being deprecated for years...
       chain = chain.then(() => this.runRootLifecycle('prepublish'));
 
       // these lifecycles _should_ never be employed to run `lerna publish`...
-      chain = chain.then(() => this.runPackageLifecycle(this.project?.manifest, 'prepare'));
-      chain = chain.then(() => this.runPackageLifecycle(this.project?.manifest, 'prepublishOnly'));
-      chain = chain.then(() => this.runPackageLifecycle(this.project?.manifest, 'prepack'));
+      chain = chain.then(() => this.runPackageLifecycle(this.project.manifest, 'prepare'));
+      chain = chain.then(() => this.runPackageLifecycle(this.project.manifest, 'prepublishOnly'));
+      chain = chain.then(() => this.runPackageLifecycle(this.project.manifest, 'prepack'));
     }
 
     const opts = this.conf.snapshot;
@@ -683,7 +683,7 @@ export class PublishCommand extends Command {
 
         (pkg: any) =>
           pulseTillDone(packDirectory(pkg, pkg.location, opts)).then((packed: any) => {
-            tracker.verbose('packed', path.relative(this.project?.rootPath ?? '', pkg.contents));
+            tracker.verbose('packed', path.relative(this.project.rootPath ?? '', pkg.contents));
             tracker.completeWork(1);
 
             // store metadata for use in this.publishPacked()
@@ -703,7 +703,7 @@ export class PublishCommand extends Command {
     chain = chain.catch((error) => this.removeTempLicensesOnError(error));
 
     if (!this.hasRootedLeaf) {
-      chain = chain.then(() => this.runPackageLifecycle(this.project?.manifest, 'postpack'));
+      chain = chain.then(() => this.runPackageLifecycle(this.project.manifest, 'postpack'));
     }
 
     return chain.finally(() => tracker.finish());

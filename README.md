@@ -135,9 +135,11 @@ If you wish to contribute to the project, please follow these steps
    - `git clone https://github.com/ghiscoding/lerna-lite`
 2. install with NPM:
    - `npm install`
-3. add/run Jest unit tests:
+3. run a TypeScript (TSC) build
+   - `npm run build`
+4. add/run Jest unit tests (make sure to run the previous step first):
    - `npm run jest # OR npm run jest:watch`
-4. you can troubleshoot/debug the code via the VSCode debugger launch configs that are already setup
+5. you can troubleshoot/debug the code via the VSCode debugger launch configs that are already setup
 
 ## Contributions
 Feel free to contribute any Pull Request, PRs are very welcome. 👷👷‍♀️

@@ -12,7 +12,7 @@ jest.mock('@lerna-lite/core', () => ({
   recommendVersion: jest.requireActual('../../../core/src/__mocks__/conventional-commits').recommendVersion,
   updateChangelog: jest.requireActual('../../../core/src/__mocks__/conventional-commits').updateChangelog,
   logOutput: jest.requireActual('../../../core/src/__mocks__/output').logOutput,
-  collectUpdates: jest.requireActual("../../../core/src/__mocks__/utils/collect-updates").collectUpdates,
+  collectUpdates: jest.requireActual("../../../core/src/__mocks__/collect-updates").collectUpdates,
   promptConfirmation: jest.requireActual('../../../core/src/__mocks__/prompt').promptConfirmation,
   promptSelectOne: jest.requireActual('../../../core/src/__mocks__/prompt').promptSelectOne,
   promptTextInput: jest.requireActual('../../../core/src/__mocks__/prompt').promptTextInput,
