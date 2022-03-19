@@ -1,7 +1,7 @@
 {
   "name": "@lerna-lite/core",
   "description": "Lerna-Lite core implementation module",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "typings": "dist/index.d.ts",
