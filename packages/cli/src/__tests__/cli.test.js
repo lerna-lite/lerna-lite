@@ -7,6 +7,7 @@ const tempy = require("tempy");
 // git init is not necessary
 const { copyFixture } = require("@lerna-test/copy-fixture");
 
+// FIXME: this is only working locally but fails in CI, so skip all tessts for now
 const CLI = path.join(__dirname, "../../dist/cli");
 const bin = (cwd) => (...args) => execa(CLI, args, { cwd });
 
