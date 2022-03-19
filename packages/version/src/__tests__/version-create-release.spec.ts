@@ -28,6 +28,7 @@ jest.mock('@lerna-lite/version', () => jest.requireActual('../version-command'))
 const { createGitHubClient } = require("@lerna-lite/core");
 const { createGitLabClient } = require("@lerna-lite/core");
 const { recommendVersion } = require("@lerna-lite/core");
+const { logOutput } = require("@lerna-lite/core");
 
 // helpers
 const initFixture = require("@lerna-test/init-fixture")(__dirname);
@@ -37,6 +38,7 @@ import { VersionCommand } from '../version-command';
 const lernaVersion = require("@lerna-test/command-runner")(require("../../../cli/src/cli-commands/cli-version-commands"));
 
 const yargParser = require('yargs-parser');
+const dedent = require("dedent");
 
 const createArgv = (cwd, ...args) => {
   args.unshift('version');
@@ -155,6 +157,23 @@ describe.each([
       draft: false,
       prerelease: false,
     });
+  });
+
+  it("creates a single fixed release in git dry-run mode", async () => {
+    const cwd = await initFixture("normal");
+
+    recommendVersion.mockResolvedValueOnce("1.1.0");
+
+    await new VersionCommand(createArgv(cwd, "--create-release", type, "--conventional-commits", "--git-dry-run"));
+
+    expect(logOutput.logged()).toMatch(dedent`
+    Changes (5 packages):
+     - package-1: 1.0.0 => 1.1.0
+     - package-2: 1.0.0 => 1.1.0
+     - package-3: 1.0.0 => 1.1.0
+     - package-4: 1.0.0 => 1.1.0
+     - package-5: 1.0.0 => 1.1.0 (private)
+    `);
   });
 });
 

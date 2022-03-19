@@ -9,7 +9,7 @@ jest.mock("../../../version/src/lib/remote-branch-exists", () => jest.requireAct
 // mocked modules, mock only certain methods from core
 jest.mock('@lerna-lite/core', () => ({
   ...jest.requireActual('@lerna-lite/core'), // return the other real methods, below we'll mock only 2 of the methods
-  collectUpdates: jest.requireActual('../../../core/src/__mocks__/utils/collect-updates').collectUpdates,
+  collectUpdates: jest.requireActual('../../../core/src/__mocks__/collect-updates').collectUpdates,
   getOneTimePassword: () => Promise.resolve("654321"),
   logOutput: jest.requireActual('../../../core/src/__mocks__/output').logOutput,
   promptConfirmation: jest.requireActual("../../../core/src/__mocks__/prompt").promptConfirmation,

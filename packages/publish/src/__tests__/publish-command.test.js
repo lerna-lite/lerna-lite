@@ -6,10 +6,10 @@ jest.mock("../../../version/dist/lib/is-anything-committed", () => jest.requireA
 jest.mock("../../../version/dist/lib/is-behind-upstream", () => jest.requireActual("../../../version/src/lib/__mocks__/is-behind-upstream"));
 jest.mock("../../../version/dist/lib/remote-branch-exists", () => jest.requireActual("../../../version/src/lib/__mocks__/remote-branch-exists"));
 
-// mocked modules, mock only 2 methods from core
+// mocked modules of @lerna-lite/core
 jest.mock('@lerna-lite/core', () => ({
   ...jest.requireActual('@lerna-lite/core'), // return the other real methods, below we'll mock only 2 of the methods
-  collectUpdates: jest.requireActual('../../../core/src/__mocks__/utils/collect-updates').collectUpdates,
+  collectUpdates: jest.requireActual('../../../core/src/__mocks__/collect-updates').collectUpdates,
   throwIfUncommitted: jest.requireActual('../../../core/src/__mocks__/check-working-tree').throwIfUncommitted,
   getOneTimePassword: jest.fn(),
   logOutput: jest.requireActual('../../../core/src/__mocks__/output').logOutput,

@@ -12,8 +12,8 @@ jest.mock('@lerna-lite/core', () => ({
   promptConfirmation: jest.requireActual('../../../core/src/__mocks__/prompt').promptConfirmation,
   promptSelectOne: jest.requireActual('../../../core/src/__mocks__/prompt').promptSelectOne,
   promptTextInput: jest.requireActual('../../../core/src/__mocks__/prompt').promptTextInput,
-  createRunner: jest.requireActual('../../../core/src/__mocks__/utils/run-lifecycle').createRunner,
-  runLifecycle: jest.requireActual('../../../core/src/__mocks__/utils/run-lifecycle').runLifecycle,
+  createRunner: jest.requireActual('../../../core/src/__mocks__/run-lifecycle').createRunner,
+  runLifecycle: jest.requireActual('../../../core/src/__mocks__/run-lifecycle').runLifecycle,
   throwIfUncommitted: jest.requireActual('../../../core/src/__mocks__/check-working-tree').throwIfUncommitted,
 }));
 

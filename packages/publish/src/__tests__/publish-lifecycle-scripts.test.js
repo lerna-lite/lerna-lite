@@ -9,9 +9,10 @@ jest.mock("../../../version/dist/lib/remote-branch-exists", () => jest.requireAc
 // mocked modules of @lerna-lite/core
 jest.mock('@lerna-lite/core', () => ({
   ...jest.requireActual('@lerna-lite/core'), // return the other real methods, below we'll mock only 2 of the methods
-  collectUpdates: jest.requireActual('../../../core/src/__mocks__/utils/collect-updates').collectUpdates,
+  collectUpdates: jest.requireActual('../../../core/src/__mocks__/collect-updates').collectUpdates,
   getOneTimePassword: () => Promise.resolve("654321"),
   logOutput: jest.requireActual('../../../core/src/__mocks__/output').logOutput,
+  createRunner: jest.requireActual('../../../core/src/__mocks__/run-lifecycle').createRunner,
   runLifecycle: jest.requireActual("../../../core/src/__mocks__/run-lifecycle").runLifecycle,
   promptConfirmation: jest.requireActual("../../../core/src/__mocks__/prompt").promptConfirmation,
   promptSelectOne: jest.requireActual('../../../core/src/__mocks__/prompt').promptSelectOne,
@@ -29,11 +30,10 @@ jest.mock("../lib/get-npm-username", () => jest.requireActual('../lib/__mocks__/
 jest.mock("../lib/get-two-factor-auth-required", () => jest.requireActual('../lib/__mocks__/get-two-factor-auth-required'));
 jest.mock("../lib/pack-directory", () => jest.requireActual('../lib/__mocks__/pack-directory'));
 jest.mock("../lib/npm-publish", () => jest.requireActual('../lib/__mocks__/npm-publish'));
-// jest.mock("load-json-file", jest.requireActual("../../../version/src/lib/__mocks__/load-json-file"));
-jest.mock("load-json-file");
+jest.mock("load-json-file", () => jest.requireActual("../../../version/src/lib/__mocks__/load-json-file"));
 
 // mocked modules
-// const loadJsonFile = require("load-json-file");
+const loadJsonFile = require("load-json-file");
 const { packDirectory } = require("../lib/pack-directory");
 const { runLifecycle } = require("@lerna-lite/core");
 
@@ -42,19 +42,7 @@ const initFixture = require("@lerna-test/init-fixture")(__dirname);
 const path = require("path");
 
 // test command
-const { PublishCommand } = require("../index");
 const lernaPublish = require("@lerna-test/command-runner")(require("../../../cli/src/cli-commands/cli-publish-commands"));
-
-const yargParser = require('yargs-parser');
-
-const createArgv = (cwd, ...args) => {
-  args.unshift('publish');
-  const parserArgs = args.join(' ');
-  const argv = yargParser(parserArgs);
-  argv['$0'] = cwd;
-  argv.cwd = cwd;
-  return argv;
-};
 
 describe("lifecycle scripts", () => {
   const npmLifecycleEvent = process.env.npm_lifecycle_event;
@@ -63,7 +51,7 @@ describe("lifecycle scripts", () => {
     process.env.npm_lifecycle_event = npmLifecycleEvent;
   });
 
-  xit("calls publish lifecycle scripts for root and packages", async () => {
+  it("calls publish lifecycle scripts for root and packages", async () => {
     const cwd = await initFixture("lifecycle");
 
     await lernaPublish(cwd)();
@@ -104,13 +92,14 @@ describe("lifecycle scripts", () => {
       ["lifecycle", "postpublish"],
     ]);
 
-    // expect(Array.from(loadJsonFile.registry.keys())).toStrictEqual([
-    //   "/packages/package-1",
-    //   "/packages/package-2",
-    // ]);
+    expect(Array.from(loadJsonFile.registry.keys())).toStrictEqual([
+      "/packages/package-1",
+      "/packages/package-2",
+      "/"
+    ]);
   });
 
-  xit("does not execute recursive root scripts", async () => {
+  it("does not execute recursive root scripts", async () => {
     const cwd = await initFixture("lifecycle");
 
     process.env.npm_lifecycle_event = "prepublish";
@@ -133,7 +122,7 @@ describe("lifecycle scripts", () => {
     ]);
   });
 
-  xit("does not duplicate rooted leaf scripts", async () => {
+  it("does not duplicate rooted leaf scripts", async () => {
     const cwd = await initFixture("lifecycle-rooted-leaf");
 
     await lernaPublish(cwd)();
@@ -168,7 +157,7 @@ describe("lifecycle scripts", () => {
     // but it does not actually execute, and is tested elsewhere
   });
 
-  xit("respects --ignore-scripts", async () => {
+  it("respects --ignore-scripts", async () => {
     const cwd = await initFixture("lifecycle");
 
     await lernaPublish(cwd)("--ignore-scripts");

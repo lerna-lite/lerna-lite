@@ -1,6 +1,6 @@
 import semver from 'semver';
 
-// mocked modules, mock only 2 methods from core
+// mocked modules of @lerna-lite/core
 jest.mock('@lerna-lite/core', () => ({
   ...jest.requireActual('@lerna-lite/core') as any, // return the other real methods, below we'll mock only 2 of the methods
   promptSelectOne: jest.requireActual('../../../core/src/__mocks__/prompt').promptSelectOne,
