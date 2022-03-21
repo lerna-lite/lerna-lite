@@ -61,7 +61,7 @@
     "whatwg-url": "^11.0.0",
     "write-file-atomic": "^4.0.1",
     "write-json-file": "^4.3.0",
-    "write-pkg": "^4.0.0",
+    "write-pkg": "^5.1.0",
     "yargs": "^17.3.1"
   },
   "devDependencies": {
