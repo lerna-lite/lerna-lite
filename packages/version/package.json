@@ -43,7 +43,7 @@
     "p-reduce": "^2.1.0",
     "path": "^0.12.7",
     "semver": "^7.3.5",
-    "slash": "^3.0.0",
+    "slash": "^4.0.0",
     "temp-write": "^4.0.0",
     "write-json-file": "^4.3.0",
     "yargs": "^17.3.1"
