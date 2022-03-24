@@ -3,6 +3,12 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.0.4](https://github.com/ghiscoding/lerna-lite/compare/v1.0.3...v1.0.4) (2022-03-24)
+
+### Bug Fixes
+
+* **version:** load & write project root lockfile v2 only once ([7ad805a](https://github.com/ghiscoding/lerna-lite/commit/7ad805aaeadc2b7646e4e0aa3186830df7448242))
+
 ## [1.0.3](https://github.com/ghiscoding/lerna-lite/compare/v1.0.2...v1.0.3) (2022-03-19)
 
 ### Bug Fixes
