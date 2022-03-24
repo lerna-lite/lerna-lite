@@ -37,7 +37,12 @@ import { gitCommit } from './lib/git-commit';
 import { gitTag } from './lib/git-tag';
 import { gitPush } from './lib/git-push';
 import { makePromptVersion } from './lib/prompt-version';
-import { updateClassicLockfileVersion, updateModernLockfileVersion } from './lib/update-lockfile-version';
+import {
+  loadPackageLockFileWhenExists,
+  updateClassicLockfileVersion,
+  updateTempModernLockfileVersion,
+  saveUpdatedLockJsonFile
+} from './lib/update-lockfile-version';
 
 export function factory(argv) {
   return new VersionCommand(argv);
@@ -541,17 +546,13 @@ export class VersionCommand extends Command {
 
         return Promise.all([
           updateClassicLockfileVersion(pkg),
-          updateModernLockfileVersion(pkg, this.project),
           pkg.serialize()
-        ]).then(([lockfilePath, rootLockfilePath]) => {
+        ]).then(([lockfilePath]) => {
           // commit the updated manifest
           changedFiles.add(pkg.manifestLocation);
 
           if (lockfilePath) {
             changedFiles.add(lockfilePath);
-          }
-          if (rootLockfilePath) {
-            changedFiles.add(rootLockfilePath);
           }
 
           return pkg;
@@ -597,6 +598,27 @@ export class VersionCommand extends Command {
         rejectCycles: this.options.rejectCycles,
       })
     );
+
+    chain = chain.then(() => {
+      // update modern lockfile (version 2 or higher) when exist in the project root
+      loadPackageLockFileWhenExists(rootPath)
+        .then(lockFileResponse => {
+          if (lockFileResponse && lockFileResponse.lockfileVersion >= 2) {
+            for (const pkg of this.packagesToVersion) {
+              this.logger.silly(`lock`, `updating root "package-lock-json" for package "${pkg.name}"`);
+              updateTempModernLockfileVersion(pkg, lockFileResponse.json);
+            }
+
+            // save the lockfile, only once, after all package versions were updated
+            saveUpdatedLockJsonFile(lockFileResponse.path, lockFileResponse.json)
+              .then((lockfilePath) => {
+                if (lockfilePath) {
+                  changedFiles.add(lockfilePath);
+                }
+              });
+          }
+        });
+    });
 
     if (!independentVersions) {
       this.project.version = this.globalVersion;

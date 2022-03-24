@@ -82,7 +82,7 @@ describe("lifecycle scripts", () => {
     expect(Array.from(loadJsonFile.registry.keys())).toStrictEqual([
       "/packages/package-1",
       "/packages/package-2",
-      "/" // TODO: investigate why the original Lerna doesn't have this extra one in the root
+      "/" // `package-lock.json` project root location
     ]);
   });
 

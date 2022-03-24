@@ -51,6 +51,7 @@ const { getCommitMessage } = require("@lerna-test/get-commit-message");
 // test command
 import { VersionCommand } from '../version-command';
 const lernaVersion = require("@lerna-test/command-runner")(require("../../../cli/src/cli-commands/cli-version-commands"));
+import { loadPackageLockFileWhenExists } from '../lib/update-lockfile-version';
 
 // file under test
 const yargParser = require('yargs-parser');
@@ -799,6 +800,32 @@ describe("VersionCommand", () => {
 
       const changedFiles = await showCommit(cwd, "--name-only");
       expect(changedFiles).toContain("packages/package-1/package-lock.json");
+    });
+  });
+
+  describe('with lockfile version 2', () => {
+    it("should have updated project root lockfile version 2 for every necessary properties", async () => {
+      const cwd = await initFixture("lockfile-version2");
+      await new VersionCommand(createArgv(cwd, "--bump", "major", "--yes"));
+
+      expect(writePkg.updatedVersions()).toEqual({
+        "@my-workspace/package-1": "3.0.0",
+        "@my-workspace/package-2": "3.0.0",
+      });
+
+      const lockfileResponse = await loadPackageLockFileWhenExists(cwd);
+
+      expect(lockfileResponse.json.lockfileVersion).toBe(2);
+      expect(lockfileResponse.json.dependencies['@my-workspace/package-2'].requires).toMatchObject({
+        '@my-workspace/package-1': '^3.0.0',
+      });
+      expect(lockfileResponse.json.packages['packages/package-1'].version).toBe('3.0.0');
+      expect(lockfileResponse.json.packages['packages/package-2'].version).toBe('3.0.0');
+      expect(lockfileResponse.json.packages['packages/package-2'].dependencies).toMatchObject({
+        '@my-workspace/package-1': '^3.0.0',
+      });
+
+      expect(lockfileResponse.json).toMatchSnapshot();
     });
   });
 

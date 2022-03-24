@@ -10,7 +10,7 @@ const loadJsonFile = require("load-json-file");
 const { getPackages } = require('../../../core/src/project');
 const initFixture = require("@lerna-test/init-fixture")(__dirname);
 
-const { updateClassicLockfileVersion, updateModernLockfileVersion } = require("../lib/update-lockfile-version");
+const { loadPackageLockFileWhenExists, updateClassicLockfileVersion, updateTempModernLockfileVersion, saveUpdatedLockJsonFile } = require("../lib/update-lockfile-version");
 
 describe('npm classic lock file', () => {
   test("updateLockfileVersion with lockfile v1", async () => {
@@ -63,10 +63,13 @@ describe('npm modern lock file', () => {
     const rootLockFilePath = path.join(cwd, "package-lock.json");
     const packages = await getPackages(cwd);
 
-    for (const pkg of packages) {
-      pkg.version = mockVersion;
-      const returnedLockfilePath = await updateModernLockfileVersion(pkg, { rootPath: cwd });
-      expect(returnedLockfilePath).toBe(rootLockFilePath);
+    const lockFileOutput = await loadPackageLockFileWhenExists(cwd);
+    if (lockFileOutput.json) {
+      for (const pkg of packages) {
+        pkg.version = mockVersion;
+        await updateTempModernLockfileVersion(pkg, lockFileOutput.json);
+      }
+      await saveUpdatedLockJsonFile(lockFileOutput.path, lockFileOutput.json);
     }
 
     expect(Array.from(loadJsonFile.registry.keys())).toStrictEqual(["/packages/package-1", "/packages/package-2", "/"]);
