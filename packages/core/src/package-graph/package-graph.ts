@@ -17,7 +17,7 @@ export class PackageGraph extends Map {
    *    excluding the devDependencies that would normally be included.
    * @param {boolean} [forceLocal] Force all local dependencies to be linked.
    */
-  constructor(packages: Package[], graphType = 'allDependencies', forceLocal?: boolean) {
+  constructor(packages: Package[], graphType: 'allDependencies' | 'dependencies' = 'allDependencies', forceLocal?: boolean) {
     // @ts-ignore
     super(packages.map((pkg: Package) => [pkg?.name ?? '', new PackageGraphNode(pkg)]));
 
@@ -90,7 +90,7 @@ export class PackageGraph extends Map {
    *
    * @param {import("@lerna/package").Package[]} filteredPackages The packages to include dependencies for.
    */
-  addDependencies(filteredPackages) {
+  addDependencies(filteredPackages: Package[]) {
     return this.extendList(filteredPackages, 'localDependencies');
   }
 
@@ -101,7 +101,7 @@ export class PackageGraph extends Map {
    *
    * @param {import("@lerna/package").Package[]} filteredPackages The packages to include dependents for.
    */
-  addDependents(filteredPackages) {
+  addDependents(filteredPackages: Package[]) {
     return this.extendList(filteredPackages, 'localDependents');
   }
 
@@ -113,7 +113,7 @@ export class PackageGraph extends Map {
    * @param {import("@lerna/package").Package[]} packageList The list of packages to extend
    * @param {'localDependencies'|'localDependents'} nodeProp The property on `PackageGraphNode` used to traverse
    */
-  extendList(packageList, nodeProp) {
+  extendList(packageList: Package[], nodeProp: 'localDependencies' | 'localDependents') {
     // the current list of packages we are expanding using breadth-first-search
     const search = new Set<PackageGraphNode>(packageList.map(({ name }) => this.get(name)));
 
@@ -146,14 +146,14 @@ export class PackageGraph extends Map {
    * @param {boolean} rejectCycles Whether or not to reject cycles
    * @returns {[Set<string[]>, Set<PackageGraphNode>]}
    */
-  partitionCycles(rejectCycles) {
-    const cyclePaths = new Set();
-    const cycleNodes = new Set();
+  partitionCycles(rejectCycles?: boolean) {
+    const cyclePaths = new Set<string[]>();
+    const cycleNodes = new Set<PackageGraphNode>();
 
-    this.forEach((currentNode, currentName) => {
-      const seen = new Set();
+    this.forEach((currentNode: PackageGraphNode, currentName: string) => {
+      const seen = new Set<PackageGraphNode>();
 
-      const visits = (walk) => (dependentNode, dependentName, siblingDependents) => {
+      const visits = (walk) => (dependentNode: PackageGraphNode, dependentName: string, siblingDependents: any) => {
         const step = walk.concat(dependentName);
 
         if (seen.has(dependentNode)) {
@@ -188,7 +188,7 @@ export class PackageGraph extends Map {
     });
 
     reportCycles(
-      Array.from(cyclePaths, (cycle: any) => cycle.join(' -> ')),
+      Array.from(cyclePaths, (cycle) => cycle.join(' -> ')),
       rejectCycles
     );
 
@@ -202,21 +202,12 @@ export class PackageGraph extends Map {
    * @param {boolean} rejectCycles Whether or not to reject cycles
    * @returns {Set<CyclicPackageGraphNode>}
    */
-  collapseCycles(rejectCycles) {
-    /** @type {string[]} */
-    const cyclePaths = [];
-
-    /** @type {Map<PackageGraphNode, CyclicPackageGraphNode>} */
-    const nodeToCycle = new Map();
-
-    /** @type {Set<CyclicPackageGraphNode>} */
-    const cycles = new Set();
-
-    /** @type {Set<PackageGraphNode>} */
-    const alreadyVisited = new Set();
-
-    /** @type {(PackageGraphNode | CyclicPackageGraphNode)[]} */
-    const walkStack = [];
+  collapseCycles(rejectCycles?: boolean) {
+    const cyclePaths: string[] = [];
+    const nodeToCycle = new Map<PackageGraphNode, CyclicPackageGraphNode>();
+    const cycles = new Set<CyclicPackageGraphNode>();
+    const alreadyVisited = new Set<PackageGraphNode>();
+    const walkStack: Array<PackageGraphNode | CyclicPackageGraphNode> = [];
 
     function visits(baseNode, dependentNode) {
       if (nodeToCycle.has(baseNode)) {
@@ -240,10 +231,10 @@ export class PackageGraph extends Map {
       ) {
         const cycle: any = new CyclicPackageGraphNode();
 
-        walkStack.forEach((nodeInCycle) => {
-          nodeToCycle.set(nodeInCycle, cycle);
+        walkStack.forEach((nodeInCycle: PackageGraphNode | CyclicPackageGraphNode) => {
+          nodeToCycle.set(nodeInCycle as PackageGraphNode, cycle);
           cycle.insert(nodeInCycle);
-          cycles.delete(nodeInCycle);
+          cycles.delete(nodeInCycle as CyclicPackageGraphNode);
         });
 
         cycles.add(cycle);
@@ -253,7 +244,6 @@ export class PackageGraph extends Map {
         return;
       }
 
-      // @ts-ignore
       if (walkStack.indexOf(topLevelDependent) === -1) {
         // eslint-disable-next-line no-use-before-define
         visitWithStack(baseNode, topLevelDependent);
@@ -261,7 +251,6 @@ export class PackageGraph extends Map {
     }
 
     function visitWithStack(baseNode, currentNode = baseNode) {
-      // @ts-ignore
       walkStack.push(currentNode);
       currentNode.localDependents.forEach(visits.bind(null, baseNode));
       walkStack.pop();
@@ -282,7 +271,7 @@ export class PackageGraph extends Map {
    *
    * @param {Set<PackageGraphNode>} cycleNodes
    */
-  pruneCycleNodes(cycleNodes) {
+  pruneCycleNodes(cycleNodes: Set<PackageGraphNode>) {
     return this.prune(...cycleNodes);
   }
 
@@ -290,7 +279,7 @@ export class PackageGraph extends Map {
    * Remove all candidate nodes.
    * @param {PackageGraphNode[]} candidates
    */
-  prune(...candidates) {
+  prune(...candidates: PackageGraphNode[]) {
     if (candidates.length === this.size) {
       return this.clear();
     }
@@ -303,10 +292,10 @@ export class PackageGraph extends Map {
    * to itself in the other node's internal collections.
    * @param {PackageGraphNode} candidateNode instance to remove
    */
-  remove(candidateNode) {
+  remove(candidateNode: PackageGraphNode) {
     this.delete(candidateNode.name);
 
-    this.forEach((node) => {
+    this.forEach((node: PackageGraphNode) => {
       // remove incoming edges ("indegree")
       node.localDependencies.delete(candidateNode.name);
 

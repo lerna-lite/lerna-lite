@@ -19,12 +19,8 @@ export class CyclicPackageGraphNode extends Map<string, PackageGraphNode | Cycli
     super();
 
     this.name = `(cycle) ${(lastCollapsedNodeId += 1)}`;
-
-    /** @type {Map<string, import('..').PackageGraphNode | CyclicPackageGraphNode>} */
-    this.localDependencies = new Map();
-
-    /** @type {Map<string, import('..').PackageGraphNode | CyclicPackageGraphNode>} */
-    this.localDependents = new Map();
+    this.localDependencies = new Map<string, PackageGraphNode | CyclicPackageGraphNode>();
+    this.localDependents = new Map<string, PackageGraphNode | CyclicPackageGraphNode>();
   }
 
   // eslint-disable-next-line class-methods-use-this
@@ -35,7 +31,7 @@ export class CyclicPackageGraphNode extends Map<string, PackageGraphNode | Cycli
   /**
    * @returns {string} A representation of a cycle, like like `A -> B -> C -> A`.
    */
-  toString() {
+  toString(): string {
     const parts = Array.from(this, ([key, node]) =>
       (node as CyclicPackageGraphNode).isCycle ? `(nested cycle: ${node.toString()})` : key
     );
@@ -50,14 +46,13 @@ export class CyclicPackageGraphNode extends Map<string, PackageGraphNode | Cycli
    * Flattens a CyclicPackageGraphNode (which can have multiple level of cycles).
    */
   flatten() {
-    /** @type {import('..').PackageGraphNode[]} */
-    const result: any[] = [];
+    const result: PackageGraphNode[] = [];
 
     for (const node of this.values()) {
       if ((node as CyclicPackageGraphNode).isCycle) {
         result.push(...(node as CyclicPackageGraphNode).flatten());
       } else {
-        result.push(node);
+        result.push(node as PackageGraphNode);
       }
     }
 
@@ -70,7 +65,7 @@ export class CyclicPackageGraphNode extends Map<string, PackageGraphNode | Cycli
    * @param {string} name The name of the package to search in this cycle
    * @returns {boolean}
    */
-  contains(name) {
+  contains(name: string): boolean {
     for (const [currentName, currentNode] of this) {
       if ((currentNode as CyclicPackageGraphNode).isCycle) {
         if ((currentNode as CyclicPackageGraphNode).contains(name)) {
@@ -88,7 +83,7 @@ export class CyclicPackageGraphNode extends Map<string, PackageGraphNode | Cycli
    *
    * @param {import('..').PackageGraphNode | CyclicPackageGraphNode} node
    */
-  insert(node) {
+  insert(node: PackageGraphNode | CyclicPackageGraphNode) {
     this.set(node.name, node);
     this.unlink(node);
 
@@ -109,7 +104,7 @@ export class CyclicPackageGraphNode extends Map<string, PackageGraphNode | Cycli
    * Remove pointers to candidate node from internal collections.
    * @param {import('..').PackageGraphNode | CyclicPackageGraphNode} candidateNode instance to unlink
    */
-  unlink(candidateNode) {
+  unlink(candidateNode: PackageGraphNode | CyclicPackageGraphNode) {
     // remove incoming edges ("indegree")
     this.localDependencies.delete(candidateNode.name);
 
