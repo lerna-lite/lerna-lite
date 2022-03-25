@@ -5,13 +5,13 @@
 [![Actions Status](https://github.com/ghiscoding/lerna-lite/workflows/CI%20Build/badge.svg)](https://github.com/ghiscoding/lerna-lite/actions)
 
 # @lerna-lite/run
-## (`lerna run`) Run command CLI 🏃
+## (`lerna run`) - Run command CLI 🏃
 
 **Optional package** extracted from Lerna [run command](https://github.com/lerna/lerna/tree/main/commands/run) that will give us the ability to run [npm script](https://docs.npmjs.com/misc/scripts) in each package of the workspace that contains that script. 
 
 This package was added mainly because NPM Workspaces don't yet support running NPM scripts in parallel and in topological order (they do have this [RFC](https://github.com/npm/rfcs/issues/190), so perhaps someday this package would become irrelevant :)).
 
-### Internal Dependencies
+#### Internal Dependencies
 - [@lerna-lite/core](https://github.com/ghiscoding/lerna-lite/tree/main/packages/core)
 
 ---
@@ -20,6 +20,7 @@ This package was added mainly because NPM Workspaces don't yet support running N
 ```sh
 # install globally
 npm install -g @lerna-lite/run
+
 # then use it (see usage below)
 lerna run <script>
 
@@ -30,7 +31,7 @@ npx lerna run <script>
 ## Usage
 
 ```sh
-$ lerna run <script> -- [..args] # runs npm run my-script in all packages that have it
+$ lerna run <script> -- [..args]  # runs npm run my-script in all packages that have it
 $ lerna run test
 $ lerna run build
 

@@ -5,11 +5,11 @@
 [![Actions Status](https://github.com/ghiscoding/lerna-lite/workflows/CI%20Build/badge.svg)](https://github.com/ghiscoding/lerna-lite/actions)
 
 # @lerna-lite/version
-## (`lerna version`) Version command 📰
+## (`lerna version`) - Version command 📰
 
 Lerna-Lite Version command, bump version of packages changed since the last release.
 
-### Internal Dependencies
+#### Internal Dependencies
 - [@lerna-lite/core](https://github.com/ghiscoding/lerna-lite/tree/main/packages/core)
 
 ---
@@ -18,6 +18,7 @@ Lerna-Lite Version command, bump version of packages changed since the last rele
 ```sh
 # install globally
 npm install -g @lerna-lite/cli
+
 # then use it (see usage below)
 lerna version
 
@@ -28,9 +29,9 @@ npx lerna version
 ## Usage
 
 ```sh
-lerna version 1.0.1 # explicit
-lerna version patch # semver keyword
-lerna version       # select from prompt(s)
+lerna version 1.0.1   # explicit
+lerna version patch   # semver keyword
+lerna version         # select from prompt(s)
 ```
 
 When run, this command does the following:
@@ -486,9 +487,9 @@ Useful in [Continuous integration (CI)](https://en.wikipedia.org/wiki/Continuous
 ## Lifecycle Scripts
 
 ```js
-// preversion:  Run BEFORE bumping the package version.
-// version:     Run AFTER bumping the package version, but BEFORE commit.
-// postversion: Run AFTER bumping the package version, and AFTER commit.
+// preversion:    Run BEFORE bumping the package version.
+// version:       Run AFTER bumping the package version, but BEFORE commit.
+// postversion:   Run AFTER bumping the package version, and AFTER commit.
 ```
 
 lerna will run [npm lifecycle scripts](https://docs.npmjs.com/cli/v8/using-npm/scripts#life-cycle-scripts) during `lerna version` in the following order:

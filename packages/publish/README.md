@@ -5,11 +5,11 @@
 [![Actions Status](https://github.com/ghiscoding/lerna-lite/workflows/CI%20Build/badge.svg)](https://github.com/ghiscoding/lerna-lite/actions)
 
 # @lerna-lite/publish
-## (`lerna publish`) Publish command 📰
+## (`lerna publish`) - Publish command 📰
 
-Lerna-Lite Publish command, publish packages in the current project
+Lerna-Lite Publish command, publish package(s) in the current project
 
-### Internal Dependencies
+#### Internal Dependencies
 - [@lerna-lite/core](https://github.com/ghiscoding/lerna-lite/tree/main/packages/core)
 - [@lerna-lite/version](https://github.com/ghiscoding/lerna-lite/tree/main/packages/version)
 
@@ -19,6 +19,7 @@ Lerna-Lite Publish command, publish packages in the current project
 ```sh
 # install globally
 npm install -g @lerna-lite/cli
+
 # then use it (see usage below)
 lerna publish
 
@@ -29,9 +30,9 @@ npx lerna publish
 ## Usage
 
 ```sh
-lerna publish              # publish packages that have changed since the last release
-lerna publish from-git     # explicitly publish packages tagged in the current commit
-lerna publish from-package # explicitly publish packages where the latest version is not present in the registry
+lerna publish               # publish packages that have changed since the last release
+lerna publish from-git      # explicitly publish packages tagged in the current commit
+lerna publish from-package  # explicitly publish packages where the latest version is not present in the registry
 ```
 
 When run, this command does one of the following things:
@@ -388,10 +389,10 @@ This _non-standard_ field allows you to customize the published subdirectory jus
 // prepublish:      Run BEFORE the package is packed and published.
 // prepare:         Run BEFORE the package is packed and published, AFTER prepublish, BEFORE prepublishOnly.
 // prepublishOnly:  Run BEFORE the package is packed and published, ONLY on npm publish.
-// prepack:     Run BEFORE a tarball is packed.
-// postpack:    Run AFTER the tarball has been generated and moved to its final destination.
-// publish:     Run AFTER the package is published.
-// postpublish: Run AFTER the package is published.
+// prepack:         Run BEFORE a tarball is packed.
+// postpack:        Run AFTER the tarball has been generated and moved to its final destination.
+// publish:         Run AFTER the package is published.
+// postpublish:     Run AFTER the package is published.
 ```
 
 lerna will run [npm lifecycle scripts](https://docs.npmjs.com/cli/v8/using-npm/scripts#description) during `lerna publish` in the following order:
