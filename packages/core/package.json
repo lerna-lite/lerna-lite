@@ -74,7 +74,6 @@
     "strong-log-transformer": "^2.1.0",
     "tar": "^6.1.11",
     "temp-write": "^4.0.0",
-    "ts-node": "^10.6.0",
     "whatwg-url": "^11.0.0",
     "write-file-atomic": "^4.0.1",
     "write-json-file": "^4.3.0",
@@ -102,7 +101,8 @@
     "@types/write-file-atomic": "^4.0.0",
     "@types/write-json-file": "^3.2.1",
     "@types/write-pkg": "^4.0.0",
-    "@types/yargs": "^17.0.9"
+    "@types/yargs": "^17.0.9",
+    "ts-node": "^10.6.0"
   },
   "funding": {
     "type": "ko_fi",
