@@ -20,7 +20,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        node: [14]
+        node: [14, 16]
 
     steps:
       - name: Clone repository
@@ -28,13 +28,14 @@ jobs:
         with:
           fetch-depth: 3
 
-      - name: Cache multiple paths
-        uses: actions/cache@v2
+      - uses: actions/setup-node@v2
         with:
-          path: |
-            ~/cache
-            !~/cache/exclude
-          key: ${{ runner.os }}-${{ hashFiles('**/lockfiles') }}
+          node-version: ${{ matrix.node }}
+          cache: 'npm'
+          cache-dependency-path: '**/package-lock.json'
+
+      - if: matrix.node == '14'
+        run: npm install --global npm@8
 
       - run: node --version
       - run: npm --version

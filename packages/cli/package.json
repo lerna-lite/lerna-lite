@@ -29,7 +29,7 @@
     "url": "https://github.com/ghiscoding/lerna-lite/issues"
   },
   "engines": {
-    "node": ">=16.11.0",
+    "node": ">=14.13.1",
     "npm": ">=8.0.0"
   },
   "dependencies": {
