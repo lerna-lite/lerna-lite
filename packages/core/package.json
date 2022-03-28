@@ -54,7 +54,7 @@
     "libnpmpublish": "^5.0.1",
     "load-json-file": "^6.2.0",
     "minimatch": "^3.1.2",
-    "node-fetch": "^2.6.7",
+    "node-fetch": "^3.2.3",
     "npm-lifecycle": "^3.1.5",
     "npm-package-arg": "^9.0.1",
     "npm-packlist": "^4.0.0",
