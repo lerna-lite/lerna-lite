@@ -38,12 +38,12 @@
     "@lerna-lite/version": "^1.0.4",
     "dedent": "^0.7.0",
     "dotenv": "^16.0.0",
-    "import-local": "^3.0.2",
+    "import-local": "^3.1.0",
     "npmlog": "^6.0.1",
     "yargs": "^17.4.0"
   },
   "devDependencies": {
     "@types/npmlog": "^4.1.4",
-    "@types/yargs": "^17.0.9"
+    "@types/yargs": "^17.0.10"
   }
 }
