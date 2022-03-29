@@ -50,7 +50,7 @@
     "globby": "^11.1.0",
     "inquirer": "^8.2.2",
     "is-ci": "^3.0.1",
-    "libnpmaccess": "^6.0.1",
+    "libnpmaccess": "^6.0.2",
     "libnpmpublish": "^5.0.1",
     "load-json-file": "^6.2.0",
     "minimatch": "^3.1.2",
@@ -101,8 +101,8 @@
     "@types/write-file-atomic": "^4.0.0",
     "@types/write-json-file": "^3.2.1",
     "@types/write-pkg": "^4.0.0",
-    "@types/yargs": "^17.0.9",
-    "ts-node": "^10.6.0"
+    "@types/yargs": "^17.0.10",
+    "ts-node": "^10.7.0"
   },
   "funding": {
     "type": "ko_fi",
