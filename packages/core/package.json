@@ -53,7 +53,7 @@
     "libnpmaccess": "^6.0.2",
     "libnpmpublish": "^5.0.1",
     "load-json-file": "^6.2.0",
-    "minimatch": "^3.1.2",
+    "minimatch": "^5.0.1",
     "node-fetch": "^2.6.7",
     "npm-lifecycle": "^3.1.5",
     "npm-package-arg": "^9.0.2",
