@@ -45,7 +45,7 @@
     "semver": "^7.3.5",
     "slash": "^3.0.0",
     "temp-write": "^4.0.0",
-    "write-json-file": "^4.3.0",
+    "write-json-file": "^5.0.0",
     "yargs": "^17.4.0"
   },
   "devDependencies": {
