@@ -38,7 +38,7 @@
     "fs-extra": "^10.0.1",
     "has-unicode": "^2.0.1",
     "libnpmaccess": "^6.0.2",
-    "libnpmpublish": "^5.0.1",
+    "libnpmpublish": "^6.0.2",
     "npm-package-arg": "^9.0.2",
     "npm-packlist": "^4.0.0",
     "npm-registry-fetch": "^13.1.0",
