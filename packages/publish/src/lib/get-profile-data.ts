@@ -1,6 +1,6 @@
 import fetch from 'npm-registry-fetch';
 
-import { ProfileData, pulseTillDone } from '@lerna-lite/core';
+import { FetchConfig, ProfileData, pulseTillDone } from '@lerna-lite/core';
 
 
 /**
@@ -8,7 +8,7 @@ import { ProfileData, pulseTillDone } from '@lerna-lite/core';
  * @param {import("./fetch-config").FetchConfig} opts
  * @returns {Promise<ProfileData>}
  */
-export async function getProfileData(opts): Promise<ProfileData> {
+export async function getProfileData(opts: FetchConfig): Promise<ProfileData> {
   opts.log.verbose('', 'Retrieving npm user profile');
 
   const data: ProfileData = await pulseTillDone(await fetch.json('/-/npm/v1/user', opts));
