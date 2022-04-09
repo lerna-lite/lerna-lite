@@ -35,7 +35,7 @@ export class Command {
 
   constructor(_argv: any) {
     log.pause();
-    log.heading = 'lerna';
+    log.heading = 'lerna-lite';
 
     const argv = cloneDeep(_argv);
     log.silly('argv', argv);
