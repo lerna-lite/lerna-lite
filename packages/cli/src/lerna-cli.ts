@@ -28,10 +28,10 @@ function lernaCLI(argv: any[], cwd: string) {
       if (actual.name !== 'ValidationError' && !actual.pkg) {
         // the recommendCommands() message is too terse
         if (/Did you mean/.test(actual.message)) {
-          log.error('lerna', `Unknown command "${(cli.parsed as any).argv._[0]}"`);
+          log.error('lerna-lite', `Unknown command "${(cli.parsed as any).argv._[0]}"`);
         }
 
-        log.error('lerna', actual.message);
+        log.error('lerna-lite', actual.message);
       }
 
       // exit non-zero so the CLI can be usefully chained
