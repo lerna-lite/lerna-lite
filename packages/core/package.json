@@ -101,8 +101,7 @@
     "@types/write-file-atomic": "^4.0.0",
     "@types/write-json-file": "^3.2.1",
     "@types/write-pkg": "^4.0.0",
-    "@types/yargs": "^17.0.10",
-    "ts-node": "^10.7.0"
+    "@types/yargs": "^17.0.10"
   },
   "funding": {
     "type": "ko_fi",

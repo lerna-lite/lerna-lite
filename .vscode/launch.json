@@ -30,7 +30,7 @@
       "runtimeArgs": [
         "--nolazy",
         "-r",
-        "ts-node/register/transpile-only"
+        "tsm"
       ],
       "args": [
         "packages/cli/src/cli.ts",
@@ -52,7 +52,7 @@
       "runtimeArgs": [
         "--nolazy",
         "-r",
-        "ts-node/register/transpile-only"
+        "tsm"
       ],
       "args": [
         "packages/cli/src/cli.ts",
@@ -75,7 +75,7 @@
       "runtimeArgs": [
         "--nolazy",
         "-r",
-        "ts-node/register/transpile-only"
+        "tsm"
       ],
       "args": [
         "packages/run/src/cli.ts",
