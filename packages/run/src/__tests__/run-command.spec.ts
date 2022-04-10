@@ -22,7 +22,7 @@ const { npmRunScript, npmRunScriptStreaming } = require('../lib/npm-run-script')
 const initFixture = require('@lerna-test/init-fixture')(__dirname);
 const { loggingOutput } = require('@lerna-test/logging-output');
 const { normalizeRelativeDir } = require('@lerna-test/normalize-relative-dir');
-import { RunCommand } from '../run-command';
+import { factory, RunCommand } from '../run-command';
 const lernaRun = require("@lerna-test/command-runner")(require("../../../cli/src/cli-commands/cli-run-commands"));
 
 // assertion helpers
@@ -91,7 +91,7 @@ describe('RunCommand', () => {
     });
 
     it('always runs env script', async () => {
-      await new RunCommand(createArgv(testDir, 'env'));
+      await factory(createArgv(testDir, 'env'));
       // await lernaRun(testDir)('env');
 
       expect((logOutput as any).logged().split('\n')).toEqual(['package-1', 'package-4', 'package-2', 'package-3']);
@@ -260,6 +260,25 @@ describe('RunCommand', () => {
           "packages/package-standalone npm run env (prefixed: true)",
         ]
       `);
+    });
+
+    it('optionally streams output in run-dry-run mode and expect them all to be logged', async () => {
+      const testDir = await initFixture('toposort');
+
+      await new RunCommand(createArgv(testDir, 'env', '--concurrency', '1', '--no-sort', '--stream', '--run-dry-run'));
+
+      const logLines = (logOutput as any).logged().split('\n');
+      expect(logLines).toEqual([
+        'dry-run> package-cycle-1',
+        'dry-run> package-cycle-2',
+        'dry-run> package-cycle-extraneous-1',
+        'dry-run> package-cycle-extraneous-2',
+        'dry-run> package-dag-1',
+        'dry-run> package-dag-2a',
+        'dry-run> package-dag-2b',
+        'dry-run> package-dag-3',
+        'dry-run> package-standalone',
+      ]);
     });
   });
 
