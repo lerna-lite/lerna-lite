@@ -258,7 +258,7 @@ describe("PackageGraph", () => {
   });
 
   describe(".partitionCycles()", () => {
-    it("does not mutate a graph with no cycles", () => {
+    it("does not mutate or collapse a graph with no cycles", () => {
       const pkgs = [
         new Package(
           {
@@ -281,10 +281,12 @@ describe("PackageGraph", () => {
       const graph = new PackageGraph(pkgs);
       // deepInspect(graph);
       const [paths, nodes] = graph.partitionCycles();
+      const cycles = graph.collapseCycles();
 
       expect(graph.size).toBe(2);
       expect(paths.size).toBe(0);
       expect(nodes.size).toBe(0);
+      expect(Array.from(cycles).length).toBe(0);
     });
   });
 
@@ -313,6 +315,8 @@ describe("PackageGraph", () => {
         ),
       ];
       const graph = new PackageGraph(pkgs);
+      const cycles = graph.collapseCycles();
+
       // deepInspect(graph);
       const [paths, nodes] = graph.partitionCycles();
       graph.pruneCycleNodes(nodes);
@@ -320,6 +324,7 @@ describe("PackageGraph", () => {
 
       expect(graph.size).toBe(0);
       expect(nodes.size).toBe(2);
+      expect(Array.from(cycles).length).toBe(1);
       expect(paths).toMatchInlineSnapshot(`
 Set {
   Array [
