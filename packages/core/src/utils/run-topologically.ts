@@ -3,6 +3,7 @@ import PQueue from 'p-queue';
 import { QueryGraph } from './query-graph';
 import { TopologicalConfig } from '../models';
 import { Package } from '../package';
+import { PackageGraphNode } from '../package-graph';
 
 /**
  * Run callback in maximally-saturated topological order.
@@ -28,7 +29,7 @@ export function runTopologically<T = any>(packages: Package[], runner: (pkg: Pac
           .add(() =>
             runner(pkg)
               .then((value: any) => returnValues.push(value))
-              .then(() => graph.markAsDone(pkg))
+              .then(() => graph.markAsDone(pkg as unknown as PackageGraphNode))
               .then(() => queueNextAvailablePackages())
           )
           .catch(reject);

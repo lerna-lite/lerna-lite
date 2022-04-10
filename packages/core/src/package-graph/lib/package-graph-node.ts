@@ -1,5 +1,7 @@
+import { Result } from 'npm-package-arg';
 import semver from 'semver';
 
+import { Package } from '../../package';
 import { prereleaseIdFromVersion } from '../../utils/prerelease-id-from-version';
 
 const PKG = Symbol('pkg');
@@ -16,28 +18,23 @@ export class PackageGraphNode {
   /**
    * @param {import("@lerna/package").Package} pkg
    */
-  constructor(pkg) {
+  constructor(pkg: Package) {
     this.name = pkg?.name ?? '';
     this[PKG] = pkg;
 
     // omit raw pkg from default util.inspect() output
     Object.defineProperty(this, PKG, { enumerable: false });
 
-    /** @type {Map<string, import("npm-package-arg").Result>} */
-    this.externalDependencies = new Map();
-
-    /** @type {Map<string, import("npm-package-arg").Result>} */
-    this.localDependencies = new Map();
-
-    /** @type {Map<string, PackageGraphNode>} */
-    this.localDependents = new Map();
+    this.externalDependencies = new Map<string, Result>();
+    this.localDependencies = new Map<string, Result>();
+    this.localDependents = new Map<string, PackageGraphNode>();
   }
 
-  get location() {
+  get location(): string {
     return this[PKG].location;
   }
 
-  get pkg() {
+  get pkg(): Package {
     return this[PKG];
   }
 
@@ -45,7 +42,7 @@ export class PackageGraphNode {
     return prereleaseIdFromVersion(this.version);
   }
 
-  get version() {
+  get version(): string {
     return this[PKG].version;
   }
 
@@ -56,8 +53,8 @@ export class PackageGraphNode {
    * @param {!Result} resolved npm-package-arg Result object
    * @returns {Boolean}
    */
-  satisfies({ gitCommittish, gitRange, fetchSpec }) {
-    return semver.satisfies(this.version, gitCommittish || gitRange || fetchSpec);
+  satisfies({ gitCommittish, gitRange, fetchSpec }: Partial<Result>): boolean {
+    return semver.satisfies(this.version, (gitCommittish || gitRange || fetchSpec) as string | semver.Range);
   }
 
   /**
@@ -65,7 +62,7 @@ export class PackageGraphNode {
    *
    * @returns {String}
    */
-  toString() {
+  toString(): string {
     return this.name;
   }
 }

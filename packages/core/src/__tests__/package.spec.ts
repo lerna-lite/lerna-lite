@@ -1,3 +1,4 @@
+import 'jest-extended';
 import os from 'os';
 import path from 'path';
 import loadJsonFile from 'load-json-file';
