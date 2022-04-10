@@ -139,7 +139,7 @@ describe('Package', () => {
         name: 'obj-bin',
         bin: { 'custom-bin': 'bin.js' },
       });
-      expect(pkg.binLocation).toInclude('obj-bin\\');
+      expect(pkg.binLocation).toInclude('obj-bin');
     });
   });
 
@@ -149,7 +149,7 @@ describe('Package', () => {
         name: 'obj-bin',
         bin: { 'custom-bin': 'bin.js' },
       });
-      expect(pkg.nodeModulesLocation).toInclude('\\node_modules');
+      expect(pkg.nodeModulesLocation).toInclude('node_modules');
     });
   });
 
