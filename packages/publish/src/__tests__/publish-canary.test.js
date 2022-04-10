@@ -35,7 +35,7 @@ const { gitCommit } = require("@lerna-test/git-commit");
 const { loggingOutput } = require("@lerna-test/logging-output");
 
 // test command
-const { PublishCommand } = require("../index");
+const { factory, PublishCommand } = require("../index");
 const lernaPublish = require("@lerna-test/command-runner")(require("../../../cli/src/cli-commands/cli-publish-commands"));
 
 // stabilize commit SHA
@@ -118,7 +118,8 @@ test("publish --canary --preid beta", async () => {
   const cwd = await initTaggedFixture("normal");
 
   await setupChanges(cwd, ["packages/package-1/all-your-base.js", "belong to us"]);
-  await new PublishCommand(createArgv(cwd, '--canary', '--preid', 'beta'));
+  // await new PublishCommand(createArgv(cwd, '--canary', '--preid', 'beta'));
+  await factory(createArgv(cwd, '--canary', '--preid', 'beta'));
 
   expect(writePkg.updatedVersions()).toMatchInlineSnapshot(`
 Object {

@@ -258,6 +258,7 @@ export class RunCommand extends Command {
       scriptName,
       pkgName
     );
+    logOutput(`dry-run> ${pkgName}`);
     return Promise.resolve();
   }
 }

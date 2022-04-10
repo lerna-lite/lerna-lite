@@ -97,6 +97,16 @@ describe('Package', () => {
     });
   });
 
+  describe('get .pkg', () => {
+    it('should return the same package name', () => {
+      const pkg = factory({
+        name: 'obj-bin',
+        bin: { 'custom-bin': 'bin.js' },
+      });
+      expect(pkg.pkg.name).toBe('obj-bin');
+    });
+  });
+
   describe('get .bin', () => {
     it('should return the bin object', () => {
       const pkg = factory({
@@ -120,6 +130,26 @@ describe('Package', () => {
         bin: 'bin.js',
       });
       expect(pkg.bin).toEqual({ 'string-bin': 'bin.js' });
+    });
+  });
+
+  describe('get .binLocation', () => {
+    it('should return the bin location', () => {
+      const pkg = factory({
+        name: 'obj-bin',
+        bin: { 'custom-bin': 'bin.js' },
+      });
+      expect(pkg.binLocation).toInclude('obj-bin\\');
+    });
+  });
+
+  describe('get .nodeModulesLocation', () => {
+    it('should return the bin location', () => {
+      const pkg = factory({
+        name: 'obj-bin',
+        bin: { 'custom-bin': 'bin.js' },
+      });
+      expect(pkg.nodeModulesLocation).toInclude('\\node_modules');
     });
   });
 

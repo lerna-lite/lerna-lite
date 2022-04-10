@@ -27,7 +27,7 @@ const initFixture = require("@lerna-test/init-fixture")(path.resolve(__dirname, 
 const { getCommitMessage } = require("@lerna-test/get-commit-message");
 
 // test command
-import { VersionCommand } from '../version-command';
+import { factory, VersionCommand } from '../version-command';
 const lernaVersion = require("@lerna-test/command-runner")(require("../../../cli/src/cli-commands/cli-version-commands"));
 
 const createArgv = (cwd, ...args) => {
@@ -111,10 +111,29 @@ describe("version bump", () => {
     );
   });
 
+  it('should call getPackagesForOption() with a csv string and expect it to return a Set of the split csv string', async () => {
+    const testDir = await initFixture("independent");
+
+    const command = new VersionCommand(createArgv(testDir, "--bump", "prerelease"));
+    const pkgNames = command.getPackagesForOption('foo,bar');
+
+    expect(pkgNames).toEqual(new Set(['foo', 'bar']));
+  });
+
+  it('should call getPackagesForOption() with the same option called twice and expect it to return a Set of these 2 options', async () => {
+    const testDir = await initFixture("independent");
+
+    const command = new VersionCommand(createArgv(testDir, "--bump", "prerelease"));
+    const pkgNames = command.getPackagesForOption(['--force-publish foo', '--force-publish baz']);
+
+    expect(pkgNames).toEqual(new Set(['--force-publish foo', '--force-publish baz']));
+  });
+
   test("prerelease increments version with default --preid", async () => {
     const testDir = await initFixture("independent");
 
-    await new VersionCommand(createArgv(testDir, "--bump", "prerelease"));
+    // await new VersionCommand(createArgv(testDir, "--bump", "prerelease"));
+    await factory(createArgv(testDir, "--bump", "prerelease"));
 
     const message = await getCommitMessage(testDir);
     expect(message).toContain("package-1@1.0.1-alpha.0");
