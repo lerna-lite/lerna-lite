@@ -10,11 +10,13 @@ describe('CyclicPackageGraphNode class', () => {
     const cwd = await initFixture("cycle-parent");
     const packages = await getPackages(cwd);
     const pkgCyclic = new CyclicPackageGraphNode();
-    expect(pkgCyclic.name).toBe('(cycle) 1');
 
     for (const pkg of packages) {
       pkgCyclic.insert(new PackageGraphNode(pkg));
     }
+
+    expect(pkgCyclic.name).toBe('(cycle) 1');
+    expect(pkgCyclic.isCycle).toBeTruthy();
     expect(Array.from(pkgCyclic.localDependents).length).toBe(0);
     expect(Array.from(pkgCyclic.localDependencies).length).toBe(0);
     expect(pkgCyclic.toString()).toBe('a -> d -> c -> b -> a');
@@ -24,11 +26,12 @@ describe('CyclicPackageGraphNode class', () => {
     const cwd = await initFixture("cycle-parent");
     const packages = await getPackages(cwd);
     const pkgCyclic = new CyclicPackageGraphNode();
-    expect(pkgCyclic.name).toBe('(cycle) 2');
 
     for (const pkg of packages) {
       pkgCyclic.insert(new PackageGraphNode(pkg));
     }
+
+    expect(pkgCyclic.name).toBe('(cycle) 2');
     expect(Array.from(pkgCyclic.localDependents).length).toBe(0);
     expect(Array.from(pkgCyclic.localDependencies).length).toBe(0);
     expect(pkgCyclic.flatten()).toEqual([
@@ -43,7 +46,6 @@ describe('CyclicPackageGraphNode class', () => {
     const cwd = await initFixture("cycle-parent");
     const packages = await getPackages(cwd);
     const pkgCyclic = new CyclicPackageGraphNode();
-    expect(pkgCyclic.name).toBe('(cycle) 3');
 
     for (const pkg of packages) {
       const pkgNode = new PackageGraphNode(pkg);
@@ -53,6 +55,7 @@ describe('CyclicPackageGraphNode class', () => {
       pkgCyclic.insert(pkgNode);
     }
 
+    expect(pkgCyclic.name).toBe('(cycle) 3');
     expect(Array.from(pkgCyclic.localDependents).length).toBe(1);
     expect(pkgCyclic.toString()).toBe('a -> d -> c -> b -> a');
     expect(pkgCyclic.contains('a')).toBeTruthy();
@@ -62,7 +65,6 @@ describe('CyclicPackageGraphNode class', () => {
     const cwd = await initFixture("cycle-parent");
     const packages = await getPackages(cwd);
     const pkgCyclic = new CyclicPackageGraphNode();
-    expect(pkgCyclic.name).toBe('(cycle) 4');
 
     for (const pkg of packages) {
       const pkgNode = new PackageGraphNode(pkg);
@@ -73,6 +75,7 @@ describe('CyclicPackageGraphNode class', () => {
       pkgCyclic.insert(pkgNode);
     }
 
+    expect(pkgCyclic.name).toBe('(cycle) 4');
     expect(Array.from(pkgCyclic.localDependencies).length).toBe(2);
     expect(pkgCyclic.toString()).toBe('a -> d -> c -> b -> a');
     expect(pkgCyclic.contains('a')).toBeTruthy();
