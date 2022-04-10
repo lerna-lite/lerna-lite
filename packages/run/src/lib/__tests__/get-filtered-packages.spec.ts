@@ -213,6 +213,18 @@ test("--include-dependents", async () => {
   expect(collectUpdates).not.toHaveBeenCalled();
 });
 
+test("--no-private", async () => {
+  const packageGraph = await buildGraph(cwd);
+  const execOpts = { cwd };
+  const options = parseOptions("--scope", "package-1", "package-5", "--no-private");
+  options.log = { notice: mockNotice };
+
+  const result = await getFilteredPackages(packageGraph, execOpts, options);
+
+  expect(result.map((pkg) => pkg.name)).toEqual(["package-1"]); // pkg-5 is private and excluded
+  expect(collectUpdates).not.toHaveBeenCalled();
+});
+
 test("--include-dependencies", async () => {
   const packageGraph = await buildGraph(cwd);
   const execOpts = { cwd };
