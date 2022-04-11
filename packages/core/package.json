@@ -68,7 +68,7 @@
     "pacote": "^13.1.1",
     "path": "^0.12.7",
     "resolve-from": "^5.0.0",
-    "semver": "^7.3.5",
+    "semver": "^7.3.6",
     "slash": "^3.0.0",
     "ssri": "^9.0.0",
     "strong-log-transformer": "^2.1.0",
