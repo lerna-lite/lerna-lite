@@ -35,7 +35,7 @@
     "@lerna-lite/version": "^1.0.5",
     "byte-size": "^7.0.1",
     "columnify": "^1.6.0",
-    "fs-extra": "^10.0.1",
+    "fs-extra": "^10.1.0",
     "has-unicode": "^2.0.1",
     "libnpmaccess": "^6.0.3",
     "libnpmpublish": "^6.0.3",
