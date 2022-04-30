@@ -8,7 +8,6 @@ jest.mock('@lerna-lite/core', () => ({
 
 // also point to the local exec command so that all mocks are properly used even by the command-runner
 jest.mock('@lerna-lite/exec', () => jest.requireActual('../exec-command'));
-jest.mock('@lerna-lite/exec-run-common', () => jest.requireActual('../../../exec-run-common'));
 
 import path from 'path';
 import fs from 'fs-extra';
@@ -267,7 +266,7 @@ describe('ExecCommand', () => {
       await lernaExec(cwd)('--profile', '--profile-location', 'foo/bar', '--', 'ls');
 
       const [profileLocation] = await globby('foo/bar/Lerna-Profile-*.json', { cwd, absolute: true });
-      const exists = await (fs as any).exists(profileLocation);
+      const exists = await fs.exists(profileLocation, null);
 
       expect(exists).toBe(true);
     });
