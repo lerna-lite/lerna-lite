@@ -12,8 +12,10 @@
     "dist-roll-version": "node ./packages/cli/dist/cli.js version",
     "dist-roll-version-dry-run": "node ./packages/cli/dist/cli.js version --git-dry-run",
     "dist-roll-publish": "node ./packages/cli/dist/cli.js publish from-package",
+    "dist-exec-win": "node ./packages/cli/dist/cli.js exec -- echo hello from package: %LERNA_PACKAGE_NAME%",
+    "dist-exec-unix": "node ./packages/cli/dist/cli.js exec -- echo hello from package: ${LERNA_PACKAGE_NAME}",
     "dist-pack-tarball": "node ./packages/cli/dist/cli.js run pack-tarball",
-    "preroll-version": "echo \"⚠️  Make sure to run a Build & change cli.js line ending to LF before releasing a new version\"",
+    "preroll-version": "echo \"⚠️ - Make sure to run a Build & change cli.js line ending to LF before releasing a new version on Win platform.\"",
     "roll-version": "lerna version",
     "roll-publish": "lerna publish from-package",
     "pack-tarball": "lerna run pack-tarball",
@@ -90,6 +92,8 @@
     "./packages/core",
     "./packages/version",
     "./packages/publish",
+    "./packages/exec-run-common",
+    "./packages/exec",
     "./packages/run",
     "./packages/cli"
   ]

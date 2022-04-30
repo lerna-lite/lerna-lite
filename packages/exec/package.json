@@ -1,6 +1,6 @@
 {
-  "name": "@lerna-lite/run",
-  "description": "Lerna-Lite Run command will help to run npm script in each package workspace that contains that script",
+  "name": "@lerna-lite/exec",
+  "description": "Lerna-Lite Exec command will execute an arbitrary command in each package",
   "version": "1.0.5",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
@@ -21,7 +21,7 @@
   "repository": {
     "type": "git",
     "url": "https://github.com/ghiscoding/lerna-lite.git",
-    "directory": "packages/run"
+    "directory": "packages/exec"
   },
   "bugs": {
     "url": "https://github.com/ghiscoding/lerna-lite/issues"

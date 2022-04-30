@@ -1,6 +1,6 @@
 {
-  "name": "@lerna-lite/run",
-  "description": "Lerna-Lite Run command will help to run npm script in each package workspace that contains that script",
+  "name": "@lerna-lite/exec-run-common",
+  "description": "Lerna-Lite Exec/Run common util code",
   "version": "1.0.5",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
@@ -21,7 +21,7 @@
   "repository": {
     "type": "git",
     "url": "https://github.com/ghiscoding/lerna-lite.git",
-    "directory": "packages/run"
+    "directory": "packages/exec-run-common"
   },
   "bugs": {
     "url": "https://github.com/ghiscoding/lerna-lite/issues"
@@ -32,7 +32,6 @@
   },
   "dependencies": {
     "@lerna-lite/core": "^1.0.5",
-    "@lerna-lite/exec-run-common": "^1.0.5",
     "fs-extra": "^10.1.0",
     "multimatch": "^5.0.0",
     "npmlog": "^6.0.2",

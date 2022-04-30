@@ -5,9 +5,10 @@ import {
   runTopologically,
   ValidationError,
 } from '@lerna-lite/core';
+import { getFilteredPackages, Profiler } from '@lerna-lite/exec-run-common';
 import pMap from 'p-map';
 
-import { getFilteredPackages, npmRunScript, npmRunScriptStreaming, Profiler, timer } from './lib';
+import { npmRunScript, npmRunScriptStreaming, timer } from './lib';
 import { ScriptStreamingOption } from './models';
 
 export function factory(argv) {
@@ -193,13 +194,12 @@ export class RunCommand extends Command {
       runner = this.getRunner();
     }
 
-    let chain = runTopologically(this.packagesWithScript, runner, {
+    let chain: Promise<any> = runTopologically(this.packagesWithScript, runner, {
       concurrency: this.concurrency,
       rejectCycles: this.options.rejectCycles,
     });
 
-    // @ts-ignore
-    if (profiler) {
+    if (profiler!) {
       chain = chain.then((results) => profiler.output().then(() => results));
     }
 
