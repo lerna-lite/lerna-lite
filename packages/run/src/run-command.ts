@@ -179,7 +179,7 @@ export class RunCommand extends Command {
 
   runScriptInPackagesTopological() {
     let profiler: Profiler;
-    let runner: any;
+    let runner: (pkg: Package) => Promise<any>;
 
     if (this.options.profile) {
       profiler = new Profiler({
@@ -219,7 +219,7 @@ export class RunCommand extends Command {
       return this.dryRunScript(this.script, pkg.name);
     }
 
-    const chain = npmRunScriptStreaming(this.script, this.getOpts(pkg));
+    const chain: Promise<any> = npmRunScriptStreaming(this.script, this.getOpts(pkg));
     if (!this.bail) {
       chain.then((result: { exitCode: number; failed?: boolean; pkg: Package; stderr: any; }) => {
         return { ...result, pkg };

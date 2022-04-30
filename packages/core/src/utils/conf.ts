@@ -66,7 +66,7 @@ export class Conf extends ConfigChain {
   }
 
   // https://github.com/npm/npm/blob/latest/lib/config/core.js#L344-L360
-  addEnv(env: any = process.env) {
+  addEnv(env: { [key: string]: string | undefined } = process.env) {
     const conf = {};
 
     Object.keys(env)

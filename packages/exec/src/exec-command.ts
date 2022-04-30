@@ -24,7 +24,7 @@ export class ExecCommand extends Command {
   args: string[] = [];
   bail = false;
   count?: number;
-  env: any = {};
+  env: { [key: string]: string | undefined } = {};
   filteredPackages: Package[] = [];
   packagePlural?: 'package' | 'packages';
   joinedCommand?: string;
@@ -147,7 +147,7 @@ export class ExecCommand extends Command {
 
   runCommandInPackagesTopological() {
     let profiler: Profiler;
-    let runner: any;
+    let runner: (pkg: Package) => Promise<any>;
 
     if (this.options.profile) {
       profiler = new Profiler({

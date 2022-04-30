@@ -1,12 +1,12 @@
 import { Package } from '@lerna-lite/core';
 
 export interface ExecScriptOption {
-  args?: any;
+  args?: string[];
   cwd: string;
   pkg: Package;
   shell: boolean;
   extendEnv: boolean;
-  env: any;
+  env: { [key: string]: string | undefined };
   reject: boolean;
 }
 export interface ExecStreamingOption extends ExecScriptOption {
