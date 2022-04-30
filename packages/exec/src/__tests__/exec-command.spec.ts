@@ -8,6 +8,7 @@ jest.mock('@lerna-lite/core', () => ({
 
 // also point to the local exec command so that all mocks are properly used even by the command-runner
 jest.mock('@lerna-lite/exec', () => jest.requireActual('../exec-command'));
+jest.mock('@lerna-lite/exec-run-common', () => jest.requireActual('../../../exec-run-common'));
 
 import path from 'path';
 import fs from 'fs-extra';
@@ -153,6 +154,18 @@ describe('ExecCommand', () => {
 
       expect(spawn).toHaveBeenCalledTimes(2);
       expect(calledInPackages()).toEqual(['package-1', 'package-2']);
+    });
+
+    it('should run a command in dry-run mode and expect them all to be logged', async () => {
+      await lernaExec(testDir)('ls', '--exec-dry-run');
+
+      // expect(spawn).toHaveBeenCalledTimes(2);
+      // expect(calledInPackages()).toEqual(['package-1', 'package-2']);
+      const logLines = (logOutput as any).logged().split('\n');
+      expect(logLines).toEqual([
+        'dry-run> package-1',
+        'dry-run> package-2',
+      ]);
     });
 
     it('should run a command with parameters', async () => {

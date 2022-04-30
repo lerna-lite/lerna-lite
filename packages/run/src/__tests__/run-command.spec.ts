@@ -7,6 +7,7 @@ jest.mock('@lerna-lite/core', () => ({
 
 // also point to the local run command so that all mocks are properly used even by the command-runner
 jest.mock('@lerna-lite/run', () => jest.requireActual('../run-command'));
+jest.mock('@lerna-lite/exec-run-common', () => jest.requireActual('../../../exec-run-common'));
 
 import fs from 'fs-extra';
 import globby from 'globby';
