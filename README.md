@@ -36,14 +36,14 @@
 [MIT License](LICENSE)
 
 ## About Lerna-Lite
-Lerna-Lite differs from the original [Lerna](https://github.com/lerna/lerna) in the sense that it only includes 4 commands (2 are optional) out of 15 commands that the original Lerna has. It also assume that you have already setup a Workspace through NPM, pnPM, Yarn or any other technology that will take care of the symlinks (Lerna-Lite does **not include** the `bootstrap` command hence the need for a workspace pre-setup), so make sure that your workspace is properly setup before installing Lerna-Lite.
+Lerna-Lite differs from the original [Lerna](https://github.com/lerna/lerna) in the sense that it only includes 5 commands (2 are optional) out of 15 commands that the original Lerna has. It also assume that you have already setup a Workspace through NPM, pnPM, Yarn or any other technology that will take care of the symlinks (Lerna-Lite does **not include** the `bootstrap` command hence the need for a workspace pre-setup), so make sure that your workspace is properly setup before installing Lerna-Lite.
 
 ## Why create this lib/fork?
 Mainly for the following reasons:
 1. the original Lerna is no longer maintained (dependencies are out of date)
 2. create a lighter lib that still provide Lerna's approach of Versioning and Publishing by following the [Conventional Commits](https://www.conventionalcommits.org/) and also automatically create [Conventional-Changelog](https://github.com/conventional-changelog/conventional-changelog) for each package of the workspace. We don't need all packages of Lerna anymore since NPM Workspaces (or other technologies) came out.
 3. add some little extras while keeping the lib small.
-   - the lib is smaller since we only copied 4 out of 15 commands from Lerna (some are optional)
+   - the lib is smaller since we only copied 5 out of 15 commands from Lerna (some are optional)
 4. rewrite the lib with TypeScript 
 
 ### This lib will help you with
