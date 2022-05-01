@@ -57,7 +57,7 @@ body:
         Browser(s)
         System OS
         ---
-        also run the `lerna info` command
+        OR simply run the `npx lerna info` command
     validations:
       required: true
   - type: dropdown
