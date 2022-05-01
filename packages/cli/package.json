@@ -34,6 +34,7 @@
   },
   "dependencies": {
     "@lerna-lite/core": "^1.1.0",
+    "@lerna-lite/info": "^1.1.0",
     "@lerna-lite/publish": "^1.1.0",
     "@lerna-lite/version": "^1.1.0",
     "dedent": "^0.7.0",
