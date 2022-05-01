@@ -5,7 +5,7 @@
 [![Actions Status](https://github.com/ghiscoding/lerna-lite/workflows/CI%20Build/badge.svg)](https://github.com/ghiscoding/lerna-lite/actions)
 
 # @lerna-lite/version
-## (`lerna version`) - Version command 📰
+## (`lerna version`) - Version command 📑
 
 Lerna-Lite Version command, bump version of packages changed since the last release.
 

@@ -5,7 +5,7 @@
 [![Actions Status](https://github.com/ghiscoding/lerna-lite/workflows/CI%20Build/badge.svg)](https://github.com/ghiscoding/lerna-lite/actions)
 
 # @lerna-lite/publish
-## (`lerna publish`) - Publish command 📰
+## (`lerna publish`) - Publish command ✉️
 
 Lerna-Lite Publish command, publish package(s) in the current project
 

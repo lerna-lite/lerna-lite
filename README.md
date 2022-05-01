@@ -88,8 +88,8 @@ Run the following commands to install Lerna-Lite in your project and/or install 
 
 | Command | Install         | Description | Included |
 |---------|-------------|-------------| ---------|
-| 📰 [version](https://github.com/ghiscoding/lerna-lite/tree/main/packages/version) | `npm install @lerna-lite/cli` | create new version for each workspace package | Yes |
-| 📰 [publish](https://github.com/ghiscoding/lerna-lite/tree/main/packages/publish) | `npm install @lerna-lite/cli` | publish each workspace package | Yes |
+| 📑 [version](https://github.com/ghiscoding/lerna-lite/tree/main/packages/version) | `npm install @lerna-lite/cli` | create new version for each workspace package | Yes |
+| ✉️ [publish](https://github.com/ghiscoding/lerna-lite/tree/main/packages/publish) | `npm install @lerna-lite/cli` | publish each workspace package | Yes |
 | 🏃 [run](https://github.com/ghiscoding/lerna-lite/tree/main/packages/run) | `npm install @lerna-lite/run` | run npm script in each workspace package | Optional |
 
 **Note:** the default `lerna` CLI is only including 2 built-in commands (`publish` and `version`), while the (`run`) command is optional and must be installed separately as shown below.
