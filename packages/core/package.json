@@ -48,10 +48,10 @@
     "git-url-parse": "^11.6.0",
     "glob-parent": "^6.0.2",
     "globby": "^11.1.0",
-    "inquirer": "^8.2.2",
+    "inquirer": "^8.2.4",
     "is-ci": "^3.0.1",
     "libnpmaccess": "^6.0.3",
-    "libnpmpublish": "^6.0.3",
+    "libnpmpublish": "^6.0.4",
     "load-json-file": "^6.2.0",
     "minimatch": "^5.0.1",
     "node-fetch": "^2.6.7",
@@ -81,7 +81,7 @@
     "yargs": "^17.4.1"
   },
   "devDependencies": {
-    "@types/async": "^3.2.12",
+    "@types/async": "^3.2.13",
     "@types/clone-deep": "^4.0.1",
     "@types/conventional-changelog-core": "^4.2.1",
     "@types/conventional-recommended-bump": "^6.1.0",
@@ -92,16 +92,13 @@
     "@types/glob-parent": "^5.1.1",
     "@types/inquirer": "^8.2.1",
     "@types/load-json-file": "^5.1.0",
-    "@types/node": "^17.0.26",
     "@types/npm-package-arg": "^6.1.1",
-    "@types/npmlog": "^4.1.4",
     "@types/p-map": "^2.0.0",
     "@types/semver": "^7.3.9",
     "@types/strong-log-transformer": "^1.0.0",
     "@types/write-file-atomic": "^4.0.0",
     "@types/write-json-file": "^3.2.1",
-    "@types/write-pkg": "^4.0.0",
-    "@types/yargs": "^17.0.10"
+    "@types/write-pkg": "^4.0.0"
   },
   "funding": {
     "type": "ko_fi",
