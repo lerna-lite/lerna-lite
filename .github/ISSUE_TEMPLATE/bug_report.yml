@@ -27,20 +27,6 @@ body:
       attributes:
         label: Lerna config, error files
         description: provide your `lerna.json` config and `lerna-debug.log`
-        value: |
-          <details><summary>lerna.json</summary><p>
-          <!-- browsers demand the next line be empty -->
-          ```json
-          <!-- Please paste your `lerna.json` here -->
-          ```
-          </p></details>
-          <details><summary>lerna-debug.log</summary><p>
-          <!-- browsers demand the next line be empty -->
-          ```txt
-          <!-- If you have a `lerna-debug.log` available, please paste it here -->
-          <!-- Otherwise, feel free to delete this <details> block -->
-          ```
-          </p></details>
   - type: textarea
     id: system-info
     attributes:
