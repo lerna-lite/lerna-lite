@@ -131,34 +131,34 @@ npm uninstall -g lerna  # OR yarn global remove lerna
 2. install Lerna-Lite CLI to get access to `info`, `version` and `publish` commands
    - `exec` and `run` commands are **optional** and can be installed separately as shown below
 ```sh
-# Lerna CLI (`info, `version` and `publish` commands)
+# Lerna CLI (includes `info`, `version` and `publish` commands)
 npm install @lerna-lite/cli
 ```
 3. optionally install `exec` and/or `run` commands
 ```sh
-# optional install of `exec` command
+# optionally install `exec` command
 npm install @lerna-lite/exec
 
-# optional install of `run` command
+# optionally install `run` command
 npm install @lerna-lite/run
 ```
+
+## Contributions
+Feel free to contribute any Pull Request, PRs are very welcome. 👷👷‍♀️
+
+Also please note that I'm just a simple developer & user of this lib, the same as you are, my knowledge of the library is also probably similar to yours but together we can make it better (and lighter).
 
 ### Development / Contributions
 If you wish to contribute to the project, please follow these steps
 1. clone the lib:
    - `git clone https://github.com/ghiscoding/lerna-lite`
-2. install with **NPM**:
+2. install with **NPM 8+**:
    - `npm install`
 3. run a TypeScript (TSC) build
    - `npm run build`
 4. add/run Jest unit tests (make sure to run the previous steps first):
    - `npm run jest  # OR npm run jest:watch`
 5. you can troubleshoot/debug the code via the VSCode debugger launch configs that were setup
-
-## Contributions
-Feel free to contribute any Pull Request, PRs are very welcome. 👷👷‍♀️
-
-Also please note that I'm just a simple developer & user of this lib, the same as you are, my knowledge of the library is also probably similar to yours but together we can make it better (and lighter).
 
 ## Troubleshooting
 If you have problems running the lib and your problems are related to Git commands that were executed, then we suggest to first try with the `--git-dry-run` option to see if it helps in finding the error(s) you may have. Another great, and possibly much more useful suggestion, is to search in the original Lerna [issues](https://github.com/lerna/lerna/issues) list and see if any solution could help you (remember that Lerna-Lite is a fork of the original code from Lerna and it works the same way). Lastly, if that is not enough and you wish to troubleshoot yourself, then read this [Troubleshooting - Wiki](https://github.com/ghiscoding/lerna-lite/wiki/Troubleshooting) to possibly troubleshoot yourself in your own environment.
