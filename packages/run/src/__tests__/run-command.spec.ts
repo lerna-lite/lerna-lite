@@ -68,6 +68,18 @@ describe('RunCommand', () => {
       await expect(command).rejects.toThrow('You must specify a lifecycle script to run');
     });
 
+    it('should complain if invoked with an empty script using factory', async () => {
+      const command = factory(createArgv(testDir, ''));
+
+      await expect(command).rejects.toThrow('You must specify a lifecycle script to run');
+    });
+
+    it('should complain if invoked with an empty script using RunCommand class', async () => {
+      const command = new RunCommand(createArgv(testDir, ''));
+
+      await expect(command).rejects.toThrow('You must specify a lifecycle script to run');
+    });
+
     it('runs a script in packages', async () => {
       await lernaRun(testDir)('my-script');
 
@@ -78,7 +90,6 @@ describe('RunCommand', () => {
 
     it('runs a script in packages with --stream', async () => {
       await lernaRun(testDir)('my-script', '--stream');
-      // await new RunCommand(createArgv(testDir, 'my-script', '--stream'));
 
       expect(ranInPackagesStreaming(testDir)).toMatchSnapshot();
     });
@@ -191,7 +202,7 @@ describe('RunCommand', () => {
     it('executes a profiled command in all packages', async () => {
       const cwd = await initFixture('basic');
 
-      await new RunCommand(createArgv(cwd, 'my-script', '--profile'));
+      await lernaRun(cwd)('my-script', '--profile');
 
       const [profileLocation] = await globby('Lerna-Profile-*.json', { cwd, absolute: true });
       const json = await fs.readJson(profileLocation);

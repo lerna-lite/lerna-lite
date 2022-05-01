@@ -5,9 +5,10 @@ import {
   runTopologically,
   ValidationError,
 } from '@lerna-lite/core';
+import { getFilteredPackages, Profiler } from '@lerna-lite/exec-run-common';
 import pMap from 'p-map';
 
-import { getFilteredPackages, npmRunScript, npmRunScriptStreaming, Profiler, timer } from './lib';
+import { npmRunScript, npmRunScriptStreaming, timer } from './lib';
 import { ScriptStreamingOption } from './models';
 
 export function factory(argv) {
@@ -178,7 +179,7 @@ export class RunCommand extends Command {
 
   runScriptInPackagesTopological() {
     let profiler: Profiler;
-    let runner: any;
+    let runner: (pkg: Package) => Promise<any>;
 
     if (this.options.profile) {
       profiler = new Profiler({
@@ -193,13 +194,12 @@ export class RunCommand extends Command {
       runner = this.getRunner();
     }
 
-    let chain = runTopologically(this.packagesWithScript, runner, {
+    let chain: Promise<any> = runTopologically(this.packagesWithScript, runner, {
       concurrency: this.concurrency,
       rejectCycles: this.options.rejectCycles,
     });
 
-    // @ts-ignore
-    if (profiler) {
+    if (profiler!) {
       chain = chain.then((results) => profiler.output().then(() => results));
     }
 
@@ -219,7 +219,7 @@ export class RunCommand extends Command {
       return this.dryRunScript(this.script, pkg.name);
     }
 
-    const chain = npmRunScriptStreaming(this.script, this.getOpts(pkg));
+    const chain: Promise<any> = npmRunScriptStreaming(this.script, this.getOpts(pkg));
     if (!this.bail) {
       chain.then((result: { exitCode: number; failed?: boolean; pkg: Package; stderr: any; }) => {
         return { ...result, pkg };

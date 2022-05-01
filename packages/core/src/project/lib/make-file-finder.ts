@@ -1,4 +1,4 @@
-import globby from 'globby';
+import globby, { GlobbyOptions } from 'globby';
 import path from 'path';
 import pMap from 'p-map';
 
@@ -7,12 +7,12 @@ import { ValidationError } from '../../validation-error';
 /**
  * @param {string[]} results
  */
-function normalize(results) {
+function normalize(results: string[]) {
   return results.map((fp) => path.normalize(fp));
 }
 
-function getGlobOpts(rootPath, packageConfigs) {
-  const globOpts: any = {
+function getGlobOpts(rootPath: string, packageConfigs: string[]) {
+  const globOpts: GlobbyOptions = {
     cwd: rootPath,
     absolute: true,
     expandDirectories: false,
@@ -37,15 +37,15 @@ function getGlobOpts(rootPath, packageConfigs) {
   return globOpts;
 }
 
-export function makeFileFinder(rootPath, packageConfigs) {
+export function makeFileFinder(rootPath: string, packageConfigs: string[]) {
   const globOpts = getGlobOpts(rootPath, packageConfigs);
 
   return (fileName: string, fileMapper: any, customGlobOpts?: any) => {
     const options = Object.assign({}, customGlobOpts, globOpts);
     const promise = pMap(
       Array.from(packageConfigs).sort(),
-      (globPath: any) => {
-        let chain = globby(path.posix.join(globPath, fileName), options);
+      (globPath: string) => {
+        let chain: Promise<any> = globby(path.posix.join(globPath, fileName), options);
 
         // fast-glob does not respect pattern order, so we re-sort by absolute path
         chain = chain.then((results) => results.sort());
@@ -67,14 +67,14 @@ export function makeFileFinder(rootPath, packageConfigs) {
   };
 }
 
-export function makeSyncFileFinder(rootPath, packageConfigs) {
-  const globOpts = getGlobOpts(rootPath, packageConfigs);
+export function makeSyncFileFinder(rootPath: string, packageConfigs: string[]) {
+  const globOpts: GlobbyOptions = getGlobOpts(rootPath, packageConfigs);
 
-  return (fileName, fileMapper, customGlobOpts?: any) => {
-    const options = Object.assign({}, customGlobOpts, globOpts);
+  return (fileName: string, fileMapper: (value: string, index: number, array: string[]) => any, customGlobOpts?: GlobbyOptions) => {
+    const options: GlobbyOptions = Object.assign({}, customGlobOpts, globOpts);
     const patterns = packageConfigs.map((globPath) => path.posix.join(globPath, fileName)).sort();
 
-    let results = globby.sync(patterns, options);
+    let results: string[] = globby.sync(patterns, options);
 
     // POSIX results always need to be normalized
     results = normalize(results);

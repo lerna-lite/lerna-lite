@@ -1,0 +1,48 @@
+{
+  "name": "@lerna-lite/exec-run-common",
+  "description": "Lerna-Lite Exec/Run common util code",
+  "version": "1.0.5",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "typings": "dist/index.d.ts",
+  "files": [
+    "/dist"
+  ],
+  "publishConfig": {
+    "access": "public"
+  },
+  "scripts": {
+    "build": "tsc --project tsconfig.bundle.json",
+    "pack-tarball": "npm pack"
+  },
+  "license": "MIT",
+  "author": "Ghislain B.",
+  "homepage": "https://github.com/ghiscoding/lerna-lite",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/ghiscoding/lerna-lite.git",
+    "directory": "packages/exec-run-common"
+  },
+  "bugs": {
+    "url": "https://github.com/ghiscoding/lerna-lite/issues"
+  },
+  "engines": {
+    "node": ">=14.13.1",
+    "npm": ">=8.0.0"
+  },
+  "dependencies": {
+    "@lerna-lite/core": "^1.0.5",
+    "fs-extra": "^10.1.0",
+    "multimatch": "^5.0.0",
+    "npmlog": "^6.0.2",
+    "p-map": "^4.0.0",
+    "upath": "^2.0.1",
+    "yargs": "^17.4.1"
+  },
+  "devDependencies": {
+    "@types/execa": "^2.0.0",
+    "@types/node": "^17.0.26",
+    "@types/npmlog": "^4.1.4",
+    "@types/p-map": "^2.0.0"
+  }
+}

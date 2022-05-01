@@ -9,10 +9,6 @@
 
 Lerna-Lite Publish command, publish package(s) in the current project
 
-#### Internal Dependencies
-- [@lerna-lite/core](https://github.com/ghiscoding/lerna-lite/tree/main/packages/core)
-- [@lerna-lite/version](https://github.com/ghiscoding/lerna-lite/tree/main/packages/version)
-
 ---
 
 ## Installation

@@ -9,9 +9,6 @@
 
 Lerna-Lite Version command, bump version of packages changed since the last release.
 
-#### Internal Dependencies
-- [@lerna-lite/core](https://github.com/ghiscoding/lerna-lite/tree/main/packages/core)
-
 ---
 
 ## Installation 
