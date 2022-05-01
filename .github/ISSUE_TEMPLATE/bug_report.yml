@@ -50,14 +50,16 @@ body:
       label: Environment Info
       description: versions number of each systems and libs (Lerna-Lite/[packageName], TypeScript)
       render: shell
-      placeholder: |
-        Framework used (x.y)
-        Lerna-Lite/[packageName] (x.y)
-        TypeScript (x.y)
-        Browser(s)
-        System OS
+      value: |
+        | Executable        | Version |
+        | ----------------- | ------- |
+        | `lerna --version` | VERSION |
+        | `npm --version`   | VERSION |
+        | `yarn --version`  | VERSION |
+        | `node --version`  | VERSION |
+
         ---
-        OR simply run the `npx lerna info` command
+        OR simply run `npx lerna info` command
     validations:
       required: true
   - type: dropdown
