@@ -156,7 +156,7 @@ describe('ExecCommand', () => {
     });
 
     it('should run a command in dry-run mode and expect them all to be logged', async () => {
-      await lernaExec(testDir)('ls', '--exec-dry-run');
+      await lernaExec(testDir)('ls', '--cmd-dry-run');
 
       // expect(spawn).toHaveBeenCalledTimes(2);
       // expect(calledInPackages()).toEqual(['package-1', 'package-2']);
