@@ -183,14 +183,14 @@ export class ExecCommand extends Command {
   }
 
   runCommandInPackageStreaming(pkg: Package) {
-    if (this.options.execDryRun) {
+    if (this.options.cmdDryRun) {
       return this.dryRunExec(this.command, pkg.name);
     }
     return spawnStreaming(this.command, this.args, this.getOpts(pkg), this.prefix && pkg.name);
   }
 
   runCommandInPackageCapturing(pkg: Package) {
-    if (this.options.execDryRun) {
+    if (this.options.cmdDryRun) {
       return this.dryRunExec(this.command, pkg.name);
     }
     return spawn(this.command, this.args, this.getOpts(pkg));

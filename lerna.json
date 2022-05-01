@@ -16,7 +16,7 @@
       "changelogHeaderMessage": "### Automate your Workspace Versions, Changelogs & Publish with [Lerna-Lite](https://github.com/ghiscoding/lerna-lite) 🚀"
     },
     "run": {
-      "runDryRun": false
+      "cmdDryRun": false
     }
   }
 }

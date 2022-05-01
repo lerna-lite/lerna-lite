@@ -67,7 +67,7 @@ exports.builder = (yargs) => {
         describe: 'Output performance profile to custom location instead of default project root.',
         type: 'string',
       },
-      'run-dry-run': {
+      'cmd-dry-run': {
         group: 'Command Options:',
         describe: 'Displays the process command that would be performed without executing it.',
         type: 'boolean',

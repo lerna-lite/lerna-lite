@@ -273,10 +273,10 @@ describe('RunCommand', () => {
       `);
     });
 
-    it('optionally streams output in run-dry-run mode and expect them all to be logged', async () => {
+    it('optionally streams output in cmd-dry-run mode and expect them all to be logged', async () => {
       const testDir = await initFixture('toposort');
 
-      await new RunCommand(createArgv(testDir, 'env', '--concurrency', '1', '--no-sort', '--stream', '--run-dry-run'));
+      await new RunCommand(createArgv(testDir, 'env', '--concurrency', '1', '--no-sort', '--stream', '--cmd-dry-run'));
 
       const logLines = (logOutput as any).logged().split('\n');
       expect(logLines).toEqual([
