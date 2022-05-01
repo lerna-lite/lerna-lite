@@ -23,10 +23,10 @@ body:
     validations:
       required: true
   - type: textarea
-      id: lerna-log
-      attributes:
-        label: Lerna config, error files
-        description: provide your `lerna.json` config and `lerna-debug.log`
+    id: lerna-log
+    attributes:
+      label: Lerna config, error files
+      description: provide your `lerna.json` config and `lerna-debug.log`
   - type: textarea
     id: system-info
     attributes:
