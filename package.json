@@ -9,6 +9,7 @@
     "build": "npm run build --ws",
     "lint": "eslint packages/** --ext .ts",
     "predist-roll-version": "npm run preroll-version",
+    "dist-info-cmd": "node ./packages/cli/dist/cli.js info",
     "dist-roll-version": "node ./packages/cli/dist/cli.js version",
     "dist-roll-version-dry-run": "node ./packages/cli/dist/cli.js version --git-dry-run",
     "dist-roll-publish": "node ./packages/cli/dist/cli.js publish from-package",
@@ -90,6 +91,7 @@
   },
   "workspaces": [
     "./packages/core",
+    "./packages/info",
     "./packages/version",
     "./packages/publish",
     "./packages/exec-run-common",

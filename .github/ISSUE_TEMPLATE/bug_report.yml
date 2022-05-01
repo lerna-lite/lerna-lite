@@ -23,6 +23,26 @@ body:
     validations:
       required: true
   - type: textarea
+    label: Lerna config, error files
+    description: provide your `lerna.json` config
+    value: |
+        <details><summary>lerna.json</summary><p>
+        <!-- browsers demand the next line be empty -->
+
+        ```json
+        <!-- Please paste your `lerna.json` here -->
+        ```
+        </p></details>
+
+        <details><summary>lerna-debug.log</summary><p>
+        <!-- browsers demand the next line be empty -->
+
+        ```txt
+        <!-- If you have a `lerna-debug.log` available, please paste it here -->
+        <!-- Otherwise, feel free to delete this <details> block -->
+        ```
+        </p></details>
+  - type: textarea
     id: system-info
     attributes:
       label: Environment Info
@@ -34,6 +54,8 @@ body:
         TypeScript (x.y)
         Browser(s)
         System OS
+        ---
+        also run the `lerna info` command
     validations:
       required: true
   - type: dropdown
