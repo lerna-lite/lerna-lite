@@ -81,7 +81,7 @@ export class Project {
   /**
    * @param {string} [cwd] Defaults to process.cwd()
    */
-  static getPackages(cwd: string) {
+  static getPackages(cwd: string): Promise<Package[]> {
     return new Project(cwd).getPackages();
   }
 
@@ -115,7 +115,7 @@ export class Project {
       }
 
       log.verbose('project workspaces packages', (workspaces.packages || workspaces).join(' '));
-      return workspaces.packages || workspaces;
+      return (workspaces.packages || workspaces) as string[];
     }
 
     log.verbose('project packages', (this.config.packages || [Project.PACKAGE_GLOB]).join(' '));
@@ -123,7 +123,7 @@ export class Project {
   }
 
   get packageParentDirs() {
-    return this.packageConfigs.map(globParent).map((parentDir: string) => path.resolve(this.rootPath, parentDir));
+    return (this.packageConfigs as any).map(globParent).map((parentDir: string) => path.resolve(this.rootPath, parentDir));
   }
 
   get manifest() {

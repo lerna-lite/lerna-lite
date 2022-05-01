@@ -168,7 +168,7 @@ describe('npm-run-script', () => {
         npmClient: 'npm',
         reject: false,
         windowsHide: false,
-      } as ScriptStreamingOption;
+      } as unknown as ScriptStreamingOption;
 
       await npmRunScriptStreaming(script, config);
 

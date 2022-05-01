@@ -3,7 +3,7 @@ import dedent from 'dedent';
 import { Argv } from 'yargs';
 
 export function filterOptions(yargs: Argv<any>) {
-  // Only for 'run' command
+  // Only for `exec` and 'run' commands
   const opts: any = {
     scope: {
       describe: 'Include only packages with names matching the given glob.',
