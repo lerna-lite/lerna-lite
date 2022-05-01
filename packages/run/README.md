@@ -84,7 +84,7 @@ May also be configured in `lerna.json`:
 Displays the process command that would be performed without actually executing it. This could be helpful for troubleshooting.
 
 ```sh
-$ lerna run watch --cmd-dry-run
+$ lerna run test:coverage --cmd-dry-run
 ```
 
 ### `--stream`

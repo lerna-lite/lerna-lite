@@ -80,7 +80,7 @@ $ lerna exec --concurrency 1 -- ls -la
 Displays the execution command that would be performed without actually executing it. This could be helpful for troubleshooting.
 
 ```sh
-$ lerna exec watch --cmd-dry-run
+$ lerna exec echo hello world --cmd-dry-run
 ```
 
 ### `--stream`
