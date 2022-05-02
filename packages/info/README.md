@@ -11,10 +11,9 @@ Print local environment information
 
 ---
 
-## Installation 
+## Installation
 ```sh
-# install globally
-npm install -g @lerna-lite/cli
+npm install @lerna-lite/cli
 
 # then use it (see usage below)
 lerna info

@@ -11,10 +11,10 @@ Lerna-Lite Version command, bump version of packages changed since the last rele
 
 ---
 
-## Installation 
+## Installation
 ```sh
-# install globally
-npm install -g @lerna-lite/cli
+# simple install or install it globally with -g
+npm install @lerna-lite/cli
 
 # then use it (see usage below)
 lerna version

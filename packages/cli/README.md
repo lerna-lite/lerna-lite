@@ -18,10 +18,10 @@ CLI for the `publish`, `version` and optional `exec`, `run` commands, the CLI mu
 - [@lerna-lite/exec](https://github.com/ghiscoding/lerna-lite/tree/main/packages/exec) (optional)
 - [@lerna-lite/run](https://github.com/ghiscoding/lerna-lite/tree/main/packages/run) (optional)
 
-## Installation 
+## Installation
 ```sh
-# install globally
-npm install -g @lerna-lite/cli
+# simple install or install it globally with -g
+npm install @lerna-lite/cli
 
 # then use it `lerna <command>`
 lerna version

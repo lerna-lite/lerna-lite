@@ -13,10 +13,9 @@ This package was added mainly because NPM Workspaces don't yet support executing
 
 ---
 
-## Installation 
+## Installation
 ```sh
-# install globally
-npm install -g @lerna-lite/exec
+npm install @lerna-lite/exec
 
 # then use it (see usage below)
 lerna exec <command>

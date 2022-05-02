@@ -44,7 +44,7 @@ Mainly for the following reasons:
 2. create a lighter lib that still provide Lerna's approach of Versioning and Publishing by following the [Conventional Commits](https://www.conventionalcommits.org/) and also automatically create [Conventional-Changelog](https://github.com/conventional-changelog/conventional-changelog) for each package of the workspace. We don't need all packages of Lerna anymore since NPM Workspaces (or other technologies) came out.
 3. add some little extras while keeping the lib small.
    - the lib is smaller since we only copied 5 out of 15 commands from Lerna (some are optional)
-4. rewrite the lib with TypeScript 
+4. rewrite the lib with TypeScript
 
 ### This lib will help you with
 #### [Version](https://github.com/ghiscoding/lerna-lite/tree/main/packages/version) and [Publish](https://github.com/ghiscoding/lerna-lite/tree/main/packages/publish) commands
@@ -55,8 +55,8 @@ Mainly for the following reasons:
 - Automate the repository Publish of your new versions for all your packages (NPM or other platform).
 
 #### [Exec](https://github.com/ghiscoding/lerna-lite/tree/main/packages/exec) and [Run](https://github.com/ghiscoding/lerna-lite/tree/main/packages/run) commands (optional)
-- [Exec](https://github.com/ghiscoding/lerna-lite/tree/main/packages/exec) is an optional package that will help you execute shell commands in parallel and in topological order.
-- [Run](https://github.com/ghiscoding/lerna-lite/tree/main/packages/run) is an optional package that will help you run npm script in parallel and in topological order.
+- [Exec](https://github.com/ghiscoding/lerna-lite/tree/main/packages/exec#readme) is an optional package that will help you execute shell commands in parallel and in topological order.
+- [Run](https://github.com/ghiscoding/lerna-lite/tree/main/packages/run#readme) is an optional package that will help you run npm script in parallel and in topological order.
 
 ### Project Demo?
 You want to see a project demo? Sure, you're looking at it 😉
@@ -79,23 +79,23 @@ Using Lerna-Lite? Add a README badge to show it off: [![lerna--lite](https://img
 ```
 
 ## Installation
-Run the following commands to install Lerna-Lite in your project and/or install it globally with the `-g` option.
+Run the following commands to install Lerna-Lite in your project and/or install it globally by adding the `-g` option.
 
 | Command | Install         | Description | Included |
 |---------|-------------|-------------| ---------|
-| 💻 [info](https://github.com/ghiscoding/lerna-lite/tree/main/packages/info) | `npm install @lerna-lite/cli` | print local environment information | Yes |
-| 📑 [version](https://github.com/ghiscoding/lerna-lite/tree/main/packages/version) | `npm install @lerna-lite/cli` | create new version for each workspace package | Yes |
-| ✉️ [publish](https://github.com/ghiscoding/lerna-lite/tree/main/packages/publish) | `npm install @lerna-lite/cli` | publish each workspace package | Yes |
-| 👷 [exec](https://github.com/ghiscoding/lerna-lite/tree/main/packages/exec) | `npm install @lerna-lite/exec` | execute an command in each workspace package | Optional |
-| 🏃 [run](https://github.com/ghiscoding/lerna-lite/tree/main/packages/run) | `npm install @lerna-lite/run` | run npm script in each workspace package | Optional |
+| 💻 [info](https://github.com/ghiscoding/lerna-lite/tree/main/packages/info#readme) | `npm install @lerna-lite/cli` | print local environment information | Yes |
+| 📑 [version](https://github.com/ghiscoding/lerna-lite/tree/main/packages/version#readme) | `npm install @lerna-lite/cli` | create new version for each workspace package | Yes |
+| 📡 [publish](https://github.com/ghiscoding/lerna-lite/tree/main/packages/publish#readme) | `npm install @lerna-lite/cli` | publish each workspace package | Yes |
+| 👷 [exec](https://github.com/ghiscoding/lerna-lite/tree/main/packages/exec#readme) | `npm install @lerna-lite/exec` | execute an command in each workspace package | Optional |
+| 🏃 [run](https://github.com/ghiscoding/lerna-lite/tree/main/packages/run#readme) | `npm install @lerna-lite/run` | run npm script in each workspace package | Optional |
 
-**Note:** the default `lerna` CLI is only including 2 built-in commands (`publish`/`version`), while the (`exec`/`run`) commands are optional and must be installed separately as shown below.
+**Note:** the default `lerna` CLI is only including 3 built-in commands (`info`,`publish`,`version`), while the (`exec`,`run`) commands are optional and must be installed separately as shown below.
 
 ```bash
 # Lerna CLI which includes `info`, `publish` and `version` commands
 npm install @lerna-lite/cli  # OR yard add @lerna-lite/cli
 
-# install optional `exec`, `run` commands
+# optionally install `exec` and/or `run` commands
 npm install @lerna-lite/exec  # OR yarn add @lerna-lite/exec
 npm install @lerna-lite/run  # OR yarn add @lerna-lite/run
 ```
@@ -114,10 +114,10 @@ Add custom NPM Scripts or simply run the commands in a shell with Lerna-Lite CLI
 ```
 
 ### Configuration
-You could configure and run Lerna in 3 different ways: 
+You could configure and run Lerna in 3 different ways:
 1. via a `lerna.json` file
-2. via a `"lerna": {}` property directly under your `package.json` 
-3. or by passing arguments directly directly in the shell when executing the command. 
+2. via a `"lerna": {}` property directly under your `package.json`
+3. or by passing arguments directly directly in the shell when executing the command.
 
 You can find more info by reading about the [`lerna.json` - Wiki](https://github.com/ghiscoding/lerna-lite/wiki/lerna.json).
 
