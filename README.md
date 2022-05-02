@@ -36,7 +36,9 @@
 [MIT License](LICENSE)
 
 ## About Lerna-Lite
-Lerna-Lite differs from the original [Lerna](https://github.com/lerna/lerna) in the sense that it only includes 5 commands (2 are optional) out of 15 commands that the original Lerna has. It also assume that you have already setup a Workspace through NPM, pnPM, Yarn or any other technology that will take care of the symlinks (Lerna-Lite does **not include** the `bootstrap` command hence the need for a workspace pre-setup), so make sure that your workspace is properly setup before installing Lerna-Lite.
+Lerna-Lite differs from the original [Lerna](https://github.com/lerna/lerna) in the sense that it only includes 5 commands (2 are optional) out of the 15 commands than the original Lerna has. Lerna was originally built as an all-in-one tool, however nowadays Workspaces became available in all dependency manager (npm, yarn, pnpm) and the need for an all-in-one tool that includes built-in workspaces functionality is no longer required. Lerna-Lite is built around that fact and its CLI only includes the Publish & Version commands, while there are other commands available (like Exec & Run) they are totally optional and you won’t download them unless you opt-in. So in summary it is more modularized than the original Lerna and it may seem like a small change but it does make it more versatile (and smaller downloads) to use with other tools like Turborepo, pnpm and others...
+
+ As a summary, we assume that you have already setup a Workspace through NPM, pnPM, Yarn or any other technology that will take care of the symlinks (Lerna-Lite does **not include** the `bootstrap` command hence the need for a workspace pre-setup), so make sure that your workspace is properly setup before installing Lerna-Lite.
 
 ## Why create this lib/fork?
 Mainly for the following reasons:
@@ -83,21 +85,21 @@ Run the following commands to install Lerna-Lite in your project and/or install 
 
 | Command | Install         | Description | Included |
 |---------|-------------|-------------| ---------|
-| 💻 [info](https://github.com/ghiscoding/lerna-lite/tree/main/packages/info#readme) | `npm install @lerna-lite/cli` | print local environment information | Yes |
-| 📑 [version](https://github.com/ghiscoding/lerna-lite/tree/main/packages/version#readme) | `npm install @lerna-lite/cli` | create new version for each workspace package | Yes |
-| 📡 [publish](https://github.com/ghiscoding/lerna-lite/tree/main/packages/publish#readme) | `npm install @lerna-lite/cli` | publish each workspace package | Yes |
-| 👷 [exec](https://github.com/ghiscoding/lerna-lite/tree/main/packages/exec#readme) | `npm install @lerna-lite/exec` | execute an command in each workspace package | Optional |
-| 🏃 [run](https://github.com/ghiscoding/lerna-lite/tree/main/packages/run#readme) | `npm install @lerna-lite/run` | run npm script in each workspace package | Optional |
+| 💻 [info](https://github.com/ghiscoding/lerna-lite/tree/main/packages/info#readme) | `npm i @lerna-lite/cli -D -W` | print local environment information | Yes |
+| 📑 [version](https://github.com/ghiscoding/lerna-lite/tree/main/packages/version#readme) | `npm i @lerna-lite/cli -D -W` | create new version for each workspace package | Yes |
+| 📡 [publish](https://github.com/ghiscoding/lerna-lite/tree/main/packages/publish#readme) | `npm i @lerna-lite/cli -D -W` | publish each workspace package | Yes |
+| 👷 [exec](https://github.com/ghiscoding/lerna-lite/tree/main/packages/exec#readme) | `npm i @lerna-lite/exec -D -W` | execute an command in each workspace package | Optional |
+| 🏃 [run](https://github.com/ghiscoding/lerna-lite/tree/main/packages/run#readme) | `npm i @lerna-lite/run -D -W` | run npm script in each workspace package | Optional |
 
 **Note:** the default `lerna` CLI is only including 3 built-in commands (`info`,`publish`,`version`), while the (`exec`,`run`) commands are optional and must be installed separately as shown below.
 
 ```bash
 # Lerna CLI which includes `info`, `publish` and `version` commands
-npm install @lerna-lite/cli  # OR yard add @lerna-lite/cli
+npm install @lerna-lite/cli -D -W  # OR yard add @lerna-lite/cli -D -W
 
 # optionally install `exec` and/or `run` commands
-npm install @lerna-lite/exec  # OR yarn add @lerna-lite/exec
-npm install @lerna-lite/run  # OR yarn add @lerna-lite/run
+npm install @lerna-lite/exec -D -W  # OR yarn add @lerna-lite/exec -D -W
+npm install @lerna-lite/run -D -W  # OR yarn add @lerna-lite/run -D -W
 ```
 
 ### Usage
@@ -125,22 +127,22 @@ You can find more info by reading about the [`lerna.json` - Wiki](https://github
 If you are migrating from Lerna, it should be fairly easy to just replace Lerna with Lerna-Lite in your dependencies and that's about it, the CLI commands are the same, take a look at the quick steps shown below:
 1. remove Lerna from your local & global dependencies
 ```sh
-npm uninstall lerna     # OR yarn remove lerna
+npm uninstall lerna -W     # OR yarn remove lerna -W
 npm uninstall -g lerna  # OR yarn global remove lerna
 ```
 2. install Lerna-Lite CLI to get access to `info`, `version` and `publish` commands
    - `exec` and `run` commands are **optional** and can be installed separately as shown below
 ```sh
 # Lerna CLI (includes `info`, `version` and `publish` commands)
-npm install @lerna-lite/cli
+npm install @lerna-lite/cli -D -W
 ```
 3. optionally install `exec` and/or `run` commands
 ```sh
 # optionally install `exec` command
-npm install @lerna-lite/exec
+npm install @lerna-lite/exec -D -W
 
 # optionally install `run` command
-npm install @lerna-lite/run
+npm install @lerna-lite/run -D -W
 ```
 
 ## Contributions

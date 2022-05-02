@@ -13,7 +13,7 @@ Print local environment information
 
 ## Installation
 ```sh
-npm install @lerna-lite/cli
+npm install @lerna-lite/cli -D -W
 
 # then use it (see usage below)
 lerna info

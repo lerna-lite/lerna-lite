@@ -14,7 +14,7 @@ Lerna-Lite Version command, bump version of packages changed since the last rele
 ## Installation
 ```sh
 # simple install or install it globally with -g
-npm install @lerna-lite/cli
+npm install @lerna-lite/cli -D -W
 
 # then use it (see usage below)
 lerna version

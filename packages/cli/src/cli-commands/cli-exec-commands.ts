@@ -81,7 +81,7 @@ exports.handler = async function handler(argv) {
     new ExecCommand(argv);
   } catch (e) {
     console.error(
-      '"@lerna-lite/exec" is optional and was not found. Please install it with `npm install @lerna-lite/exec`'
+      '"@lerna-lite/exec" is optional and was not found. Please install it with `npm install @lerna-lite/exec -D -W`'
     );
   }
 };

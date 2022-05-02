@@ -21,7 +21,7 @@ CLI for the `publish`, `version` and optional `exec`, `run` commands, the CLI mu
 ## Installation
 ```sh
 # simple install or install it globally with -g
-npm install @lerna-lite/cli
+npm install @lerna-lite/cli -D -W
 
 # then use it `lerna <command>`
 lerna version

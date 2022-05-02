@@ -15,7 +15,7 @@ This package was added mainly because NPM Workspaces don't yet support running N
 
 ## Installation
 ```sh
-npm install @lerna-lite/run
+npm install @lerna-lite/run -D -W
 
 # then use it (see usage below)
 lerna run <script>
