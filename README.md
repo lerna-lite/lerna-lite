@@ -9,7 +9,7 @@
 [![codecov](https://codecov.io/gh/ghiscoding/lerna-lite/branch/main/graph/badge.svg)](https://codecov.io/gh/ghiscoding/lerna-lite)
 [![jest](https://jestjs.io/img/jest-badge.svg)](https://github.com/facebook/jest)
 [![NPM downloads](https://img.shields.io/npm/dm/@lerna-lite/cli.svg)](https://www.npmjs.com/package/@lerna-lite/cli)
-[![npm](https://img.shields.io/npm/v/@lerna-lite/core.svg?color=forest)](https://www.npmjs.com/package/@lerna-lite/core)
+[![npm](https://img.shields.io/npm/v/@lerna-lite/cli.svg?color=forest)](https://www.npmjs.com/package/@lerna-lite/cli)
 
 ## Lerna-Lite is a super light version of the original [Lerna](https://github.com/lerna/lerna)
 
@@ -23,12 +23,12 @@
 - [Troubleshooting](https://github.com/ghiscoding/lerna-lite/wiki/Troubleshooting)
 - Commands
    - included
-      - [`info`](https://github.com/ghiscoding/lerna-lite/tree/main/packages/info#readme) - print local environment information when opening new issue (included with CLI)
-      - [`publish`](https://github.com/ghiscoding/lerna-lite/tree/main/packages/publish#readme) - publish workspace packages (included with CLI)
-      - [`version`](https://github.com/ghiscoding/lerna-lite/tree/main/packages/version#readme) - create new version for each workspace packages (included with CLI)
+      - 💻 [`info`](https://github.com/ghiscoding/lerna-lite/tree/main/packages/info#readme) - print local environment information when opening new issue (included with CLI)
+      - 📡 [`publish`](https://github.com/ghiscoding/lerna-lite/tree/main/packages/publish#readme) - publish workspace packages (included with CLI)
+      - 📑 [`version`](https://github.com/ghiscoding/lerna-lite/tree/main/packages/version#readme) - create new version for each workspace packages (included with CLI)
    - optional
-      - [`exec`](https://github.com/ghiscoding/lerna-lite/tree/main/packages/exec#readme) - execute an command in each workspace package (separate install)
-      - [`run`](https://github.com/ghiscoding/lerna-lite/tree/main/packages/run#readme) - run npm script in each workspace packages (separate install)
+      - 👷 [`exec`](https://github.com/ghiscoding/lerna-lite/tree/main/packages/exec#readme) - execute an command in each workspace package (separate install)
+      - 🏃 [`run`](https://github.com/ghiscoding/lerna-lite/tree/main/packages/run#readme) - run npm script in each workspace packages (separate install)
 
 ---
 
