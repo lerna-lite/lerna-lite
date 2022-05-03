@@ -220,7 +220,7 @@ describe("createRunner", () => {
     runScript.mockImplementationOnce(({ scripts }, stage) => {
       const err = new Error("boom");
 
-      // https://git.io/fAE3f
+      // https://github.com/npm/npm-lifecycle/blob/d7a014f9393da76ee0ecf6701be84ed1ea613b83/index.js#L302
       err.errno = 123;
       err.script = scripts[stage];
 
