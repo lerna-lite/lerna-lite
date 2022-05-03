@@ -37,6 +37,12 @@ $ lerna run --parallel watch
 
 Run an [npm script](https://docs.npmjs.com/misc/scripts) in each package of the workspace that contains that script. A double-dash (`--`) is necessary to pass dashed arguments to the script execution.
 
+The name of the current package is available through the environment variable `LERNA_PACKAGE_NAME`:
+
+```sh
+$ lerna run build \$LERNA_PACKAGE_NAME
+```
+
 ## Options
 
 `lerna run` accepts all [filter flags](https://www.npmjs.com/package/@lerna/filter-options).
