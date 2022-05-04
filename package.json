@@ -7,7 +7,7 @@
     "clean": "rimraf --maxBusyTries=10 packages/*/dist dist",
     "prebuild": "run-s clean lint",
     "build": "npm run build --ws",
-    "lint": "eslint packages/** --ext .ts",
+    "lint": "eslint packages --ext .ts",
     "predist-roll-version": "npm run preroll-version",
     "dist-info-cmd": "node ./packages/cli/dist/cli.js info",
     "dist-roll-version": "node ./packages/cli/dist/cli.js version",

@@ -1,5 +1,5 @@
-import npa from 'npm-package-arg';
 import log from 'npmlog';
+import npa from 'npm-package-arg';
 
 import { Package } from '../package';
 
