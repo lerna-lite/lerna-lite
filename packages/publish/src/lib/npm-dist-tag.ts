@@ -2,11 +2,8 @@ import log from 'npmlog';
 import npa from 'npm-package-arg';
 import fetch from 'npm-registry-fetch';
 
-import { otplease } from '@lerna-lite/core';
-
-/**
- * @typedef {fetch.FetchOptions & { defaultTag?: string; dryRun?: boolean; }} DistTagOptions
- */
+import { OneTimePasswordCache, otplease } from '@lerna-lite/core';
+import { DistTagOptions } from '../models';
 
 /**
  * Add a dist-tag to a package.
@@ -15,7 +12,7 @@ import { otplease } from '@lerna-lite/core';
  * @param {DistTagOptions} options
  * @param {import("@lerna/otplease").OneTimePasswordCache} otpCache
  */
-export function add(spec, tag, options, otpCache) {
+export function add(spec: string, tag = '', options: DistTagOptions, otpCache: OneTimePasswordCache) {
   const opts = {
     log,
     ...options,
