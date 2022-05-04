@@ -1,3 +1,4 @@
+import npa from 'npm-package-arg';
 import log from 'npmlog';
 
 import { Package } from '../package';
@@ -107,6 +108,9 @@ export interface QueryGraphConfig {
   /** "dependencies" excludes devDependencies from graph */
   graphType?: 'allDependencies' | 'dependencies';
 
+  /** Treatment of local sibling dependencies, default "auto" */
+  localDependencies?: 'auto' | 'force' | 'explicit';
+
   /** Whether or not to reject dependency cycles */
   rejectCycles?: boolean;
 }
@@ -133,6 +137,38 @@ export type GitCreateReleaseFn = () => Promise<{
 
 export interface GitClient {
   createRelease: (opts: GitClientRelease) => Promise<void>;
+}
+
+export type NpaResolveResult = (npa.FileResult | npa.HostedGitResult | npa.URLResult | npa.AliasResult | npa.RegistryResult) & {
+  explicitWorkspace?: boolean;
+}
+
+/** Passed between concurrent executions */
+export interface OneTimePasswordCache {
+  /* The one-time password, passed as an option or received via prompt */
+  otp?: string;
+}
+
+export interface ProjectConfig {
+  command?: string;
+  packages: string[];
+  useWorkspaces: boolean;
+  version: string;
+}
+
+/** The subset of package.json properties that Lerna-Lite uses */
+export interface RawManifest {
+  name: string;
+  version: string;
+  private?: boolean;
+  bin?: Record<string, string> | string;
+  scripts?: Record<string, string>;
+  dependencies?: Record<string, string>;
+  devDependencies?: Record<string, string>;
+  optionalDependencies?: Record<string, string>;
+  peerDependencies?: Record<string, string>;
+  publishConfig?: Record<'directory' | 'registry' | 'tag', string>;
+  workspaces?: string[] | { packages: string[] };
 }
 
 export interface ReleaseClient {

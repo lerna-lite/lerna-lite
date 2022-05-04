@@ -3,6 +3,8 @@ import path from 'path';
 import loadJsonFile from 'load-json-file';
 import writePkg from 'write-pkg';
 
+import { NpaResolveResult, RawManifest } from './models';
+
 // symbol used to 'hide' internal state
 const PKG = Symbol('pkg');
 
@@ -16,14 +18,14 @@ const _contents = Symbol('contents');
 /**
  * @param {import('npm-package-arg').Result} result
  */
-function binSafeName({ name, scope }) {
-  return scope ? name.substring(scope.length + 1) : name;
+function binSafeName({ name, scope }: npa.Result) {
+  return scope ? name!.substring(scope.length + 1) : name;
 }
 
 // package.json files are not that complicated, so this is intentionally naïve
-function shallowCopy(json) {
+function shallowCopy(json: any) {
   return Object.keys(json).reduce((obj, key) => {
-    const val = json[key];
+    const val: any = json[key];
 
     /* istanbul ignore if */
     if (Array.isArray(val)) {
@@ -37,21 +39,6 @@ function shallowCopy(json) {
     return obj;
   }, {});
 }
-
-/**
- * @typedef {object} RawManifest The subset of package.json properties that Lerna-Lite uses
- * @property {string} name
- * @property {string} version
- * @property {boolean} [private]
- * @property {Record<string, string>|string} [bin]
- * @property {Record<string, string>} [scripts]
- * @property {Record<string, string>} [dependencies]
- * @property {Record<string, string>} [devDependencies]
- * @property {Record<string, string>} [optionalDependencies]
- * @property {Record<string, string>} [peerDependencies]
- * @property {Record<'directory' | 'registry' | 'tag', string>} [publishConfig]
- * @property {string[] | { packages: string[] }} [workspaces]
- */
 
 /**
  * Lerna's internal representation of a local package, with
@@ -69,10 +56,10 @@ export class Package {
    * @param {string} [dir] If `ref` is a JSON object, this is the location of the manifest
    * @returns {Package}
    */
-  static lazy(ref, dir = '.') {
+  static lazy(ref: string | Package | RawManifest, dir = '.'): Package {
     if (typeof ref === 'string') {
       const location = path.resolve(path.basename(ref) === 'package.json' ? path.dirname(ref) : ref);
-      const manifest = loadJsonFile.sync<Package>(path.join(location, 'package.json'));
+      const manifest = loadJsonFile.sync<RawManifest>(path.join(location, 'package.json'));
 
       return new Package(manifest, location);
     }
@@ -91,7 +78,7 @@ export class Package {
    * @param {string} location
    * @param {string} [rootPath]
    */
-  constructor(pkg: Package, location: string, rootPath = location) {
+  constructor(pkg: RawManifest, location: string, rootPath = location) {
     // npa will throw an error if the name is invalid
     const resolved = npa.resolve(pkg?.name ?? '', `file:${path.relative(rootPath, location)}`, rootPath);
 
@@ -131,7 +118,7 @@ export class Package {
   get bin() {
     const pkg = this[PKG];
     return typeof pkg.bin === 'string'
-      ? { [binSafeName(this.resolved)]: pkg.bin, }
+      ? { [binSafeName(this.resolved as unknown as npa.Result) as string]: pkg.bin, }
       : Object.assign({}, pkg.bin);
   }
 
@@ -177,7 +164,7 @@ export class Package {
     return this.location;
   }
 
-  set contents(subDirectory) {
+  set contents(subDirectory: string) {
     this[_contents] = path.join(this.location, subDirectory);
   }
 
@@ -208,7 +195,7 @@ export class Package {
    * @param {K} key field name to retrieve value
    * @returns {RawManifest[K]} value stored under key, if present
    */
-  get(key) {
+  get(key: keyof RawManifest) {
     return this[PKG][key];
   }
 
@@ -219,7 +206,7 @@ export class Package {
    * @param {RawManifest[K]} val value to store
    * @returns {Package} instance for chaining
    */
-  set(key: string, val: any) {
+  set(key: string, val: RawManifest[keyof RawManifest]): Package {
     this[PKG][key] = val;
 
     return this;
@@ -258,8 +245,8 @@ export class Package {
    * @param {String} depVersion semver
    * @param {String} savePrefix npm_config_save_prefix
    */
-  updateLocalDependency(resolved, depVersion, savePrefix) {
-    const depName = resolved.name;
+  updateLocalDependency(resolved: NpaResolveResult, depVersion: string, savePrefix: string) {
+    const depName = resolved.name as string;
 
     // first, try runtime dependencies
     let depCollection = this.dependencies;
@@ -279,19 +266,22 @@ export class Package {
       if (resolved.registry || resolved.type === 'directory') {
         // a version (1.2.3) OR range (^1.2.3) OR directory (file:../foo-pkg)
         depCollection[depName] = `${savePrefix}${depVersion}`;
+        if (resolved.explicitWorkspace) {
+          depCollection[depName] = `workspace:${depCollection[depName]}`;
+        }
       } else if (resolved.gitCommittish) {
         // a git url with matching committish (#v1.2.3 or #1.2.3)
         const [tagPrefix] = /^\D*/.exec(resolved.gitCommittish) as RegExpExecArray;
 
         // update committish
-        const { hosted } = resolved; // take that, lint!
+        const { hosted } = resolved as any; // take that, lint!
         hosted.committish = `${tagPrefix}${depVersion}`;
 
         // always serialize the full url (identical to previous resolved.saveSpec)
         depCollection[depName] = hosted.toString({ noGitPlus: false, noCommittish: false });
       } else if (resolved.gitRange) {
         // a git url with matching gitRange (#semver:^1.2.3)
-        const { hosted } = resolved; // take that, lint!
+        const { hosted } = resolved as any; // take that, lint!
         hosted.committish = `semver:${savePrefix}${depVersion}`;
 
         // always serialize the full url (identical to previous resolved.saveSpec)
