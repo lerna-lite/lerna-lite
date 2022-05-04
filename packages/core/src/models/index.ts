@@ -1,4 +1,5 @@
 import log from 'npmlog';
+import npa from 'npm-package-arg';
 
 import { Package } from '../package';
 
@@ -133,6 +134,16 @@ export type GitCreateReleaseFn = () => Promise<{
 
 export interface GitClient {
   createRelease: (opts: GitClientRelease) => Promise<void>;
+}
+
+export type NpaResolveResult = (npa.FileResult | npa.HostedGitResult | npa.URLResult | npa.AliasResult | npa.RegistryResult) & {
+  explicitWorkspace?: boolean;
+}
+
+/** Passed between concurrent executions */
+export interface OneTimePasswordCache {
+  /* The one-time password, passed as an option or received via prompt */
+  otp?: string;
 }
 
 export interface ReleaseClient {

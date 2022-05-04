@@ -6,22 +6,17 @@ import pify from 'pify';
 import { publish } from 'libnpmpublish';
 import readJSON from 'read-package-json';
 
-import { otplease, runLifecycle } from '@lerna-lite/core';
+import { OneTimePasswordCache, otplease, Package, runLifecycle } from '@lerna-lite/core';
+import { LibNpmPublishOptions, PackagePublishConfig } from '../models';
 
 const readJSONAsync = pify(readJSON);
-
-/**
- * @typedef {object} NpmPublishOptions
- * @property {boolean} [dryRun]
- * @property {string} [tag] Passed to libnpmpublish as `opts.defaultTag` to preserve npm v6 back-compat
- */
 
 /**
  * Alias dash-cased npmConf to camelCase
  * @param {NpmPublishOptions} obj
  * @returns {NpmPublishOptions}
  */
-function flattenOptions(obj) {
+function flattenOptions(obj: LibNpmPublishOptions): LibNpmPublishOptions {
   return {
     // eslint-disable-next-line dot-notation -- (npm v7 compat)
     defaultTag: obj['tag'] || 'latest',
@@ -31,17 +26,13 @@ function flattenOptions(obj) {
 }
 
 /**
- * @typedef {import('npm-registry-fetch').FetchOptions & { access?: 'public' | 'restricted'; defaultTag?: string; }} LibNpmPublishOptions https://github.com/npm/libnpmpublish#opts
- */
-
-/**
  * Publish a package to the configured registry.
  * @param {import("@lerna/package").Package} pkg
  * @param {string} tarFilePath
  * @param {LibNpmPublishOptions & NpmPublishOptions} [options]
  * @param {import("@lerna/otplease").OneTimePasswordCache} [otpCache]
  */
-export function npmPublish(pkg, tarFilePath, options = {}, otpCache) {
+export function npmPublish(pkg: Package, tarFilePath: string, options: LibNpmPublishOptions = {}, otpCache: OneTimePasswordCache) {
   const { dryRun, ...remainingOptions } = flattenOptions(options);
   const { scope } = npa(pkg?.name ?? '');
   // pass only the package scope to libnpmpublish
@@ -107,18 +98,11 @@ export function npmPublish(pkg, tarFilePath, options = {}, otpCache) {
 }
 
 /**
- * @typedef {object} PackagePublishConfig
- * @property {'public' | 'restricted'} [access]
- * @property {string} [registry]
- * @property {string} [tag]
- */
-
-/**
  * Obtain an object suitable for assignment onto existing options from `pkg.publishConfig`.
  * @param {PackagePublishConfig} publishConfig
  * @returns {Omit<PackagePublishConfig, 'tag'> & { defaultTag?: string }}
  */
-function publishConfigToOpts(publishConfig) {
+function publishConfigToOpts(publishConfig: PackagePublishConfig): Omit<PackagePublishConfig, 'tag'> & { defaultTag?: string } {
   const opts = { ...publishConfig };
 
   // npm v7 renamed tag internally

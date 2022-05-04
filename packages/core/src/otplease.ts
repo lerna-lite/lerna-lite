@@ -1,10 +1,5 @@
+import { OneTimePasswordCache } from './models';
 import { promptTextInput } from './prompt';
-
-/**
- * @typedef {object} OneTimePasswordCache - Passed between concurrent executions
- * @property {string} [otp] The one-time password, passed as an option or received via prompt
- */
-
 
 // basic single-entry semaphore
 const semaphore: any = {
@@ -41,14 +36,14 @@ const semaphore: any = {
  * @param {T} _opts The options to be passed to `fn`
  * @param {OneTimePasswordCache} otpCache
  */
-export function otplease(fn, _opts, otpCache) {
+export function otplease<T extends Record<string, unknown>>(fn: (opts: T) => Promise<unknown>, _opts: T, otpCache: OneTimePasswordCache) {
   // always prefer explicit config (if present) to cache
   const opts = { ...otpCache, ..._opts };
   return attempt(fn, opts, otpCache);
 }
 
 /** @returns {Promise<unknown>} */
-function attempt(fn, opts, otpCache) {
+function attempt<T extends Record<string, unknown>>(fn: (opts: T) => Promise<unknown>, opts: T, otpCache: OneTimePasswordCache): Promise<unknown> {
   return new Promise((resolve) => {
     resolve(fn(opts));
   }).catch((err) => {
@@ -99,7 +94,7 @@ function attempt(fn, opts, otpCache) {
  * Prompt user for one-time password.
  * @returns {Promise<string>}
  */
-export function getOneTimePassword(message = 'This operation requires a one-time password:') {
+export function getOneTimePassword(message = 'This operation requires a one-time password:'): Promise<string> {
   // Logic taken from npm internals: https://github.com/npm/cli/blob/4f801d8a476f7ca52b0f182bf4e17a80db12b4e2/lib/utils/read-user-info.js#L21-L35
   return promptTextInput(message, {
     filter: (otp) => otp.replace(/\s+/g, ''),
@@ -110,6 +105,6 @@ export function getOneTimePassword(message = 'This operation requires a one-time
   });
 }
 
-function isNullOrUndefined(val: any) {
+function isNullOrUndefined(val: any): boolean {
   return val === null || val === undefined;
 }
