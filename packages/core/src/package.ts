@@ -195,7 +195,7 @@ export class Package {
    * @param {K} key field name to retrieve value
    * @returns {RawManifest[K]} value stored under key, if present
    */
-  get(key: keyof RawManifest) {
+  get<K extends keyof RawManifest>(key: string): K {
     return this[PKG][key];
   }
 
