@@ -16,6 +16,7 @@ import {
   createRunner,
   logOutput,
   Package,
+  PackageGraphNode,
   promptConfirmation,
   recommendVersion,
   ReleaseClient,
@@ -68,14 +69,14 @@ export class VersionCommand extends Command {
   runRootLifecycle!: (stage: string) => Promise<void> | void;
   savePrefix = '';
   tags: string[] = [];
-  updates: any[] = [];
+  updates: PackageGraphNode[] = [];
 
   get otherCommandConfigs(): string[] {
     // back-compat
     return ['publish'];
   }
 
-  get requiresGit() {
+  get requiresGit(): boolean {
     return (
       this.commitAndTag || this.pushToRemote || this.options.allowBranch || this.options.conventionalCommits
     );
@@ -330,31 +331,31 @@ export class VersionCommand extends Command {
   getVersionsForUpdates() {
     const independentVersions = this.project.isIndependent();
     const { bump, conventionalCommits, preid } = this.options;
-    const repoVersion = bump ? semver.clean(bump) : '';
-    const increment = bump && !semver.valid(bump) ? bump : '';
+    const repoVersion = (bump ? semver.clean(bump) : '') as string;
+    const increment = (bump && !semver.valid(bump) ? bump : '') as semver.ReleaseType;
 
-    const resolvePrereleaseId = (existingPreid) => preid || existingPreid || 'alpha';
+    const resolvePrereleaseId = (existingPreid?: string) => preid || existingPreid || 'alpha';
 
-    const makeGlobalVersionPredicate = (nextVersion) => {
+    const makeGlobalVersionPredicate = (nextVersion: string) => {
       this.globalVersion = nextVersion;
 
       return () => nextVersion;
     };
 
     // decide the predicate in the conditionals below
-    let predicate;
+    let predicate: (s: any) => any;
 
     if (repoVersion) {
       predicate = makeGlobalVersionPredicate(repoVersion);
     } else if (increment && independentVersions) {
       // compute potential prerelease ID for each independent update
-      predicate = (node) => semver.inc(node.version, increment, resolvePrereleaseId(node.prereleaseId));
+      predicate = (node: { version: string; prereleaseId: string; }) => semver.inc(node.version, increment, resolvePrereleaseId(node.prereleaseId));
     } else if (increment) {
       // compute potential prerelease ID once for all fixed updates
       const prereleaseId = prereleaseIdFromVersion(this.project.version);
       const nextVersion = semver.inc(this.project.version, increment, resolvePrereleaseId(prereleaseId));
 
-      predicate = makeGlobalVersionPredicate(nextVersion);
+      predicate = makeGlobalVersionPredicate(nextVersion as string);
     } else if (conventionalCommits) {
       // it's a bit weird to have a return here, true
       return this.recommendVersions(resolvePrereleaseId);
@@ -370,12 +371,12 @@ export class VersionCommand extends Command {
       predicate = predicate(node).then(makeGlobalVersionPredicate);
     }
 
-    return Promise.resolve(predicate).then((getVersion) => this.reduceVersions(getVersion));
+    return Promise.resolve(predicate).then((getVersion: (s: PackageGraphNode) => string) => this.reduceVersions(getVersion));
   }
 
-  reduceVersions(getVersion) {
-    const iterator = (versionMap, node) =>
-      Promise.resolve(getVersion(node)).then((version) => versionMap.set(node.name, version));
+  reduceVersions(getVersion: (s: PackageGraphNode) => string) {
+    const iterator = (versionMap: Map<string, string>, node: PackageGraphNode) =>
+      Promise.resolve(getVersion(node)).then((version: string) => versionMap.set(node.name, version));
 
     return pReduce(this.updates, iterator, new Map());
   }
@@ -385,7 +386,7 @@ export class VersionCommand extends Command {
       // only partial fixed versions need to be checked
       this.updatesVersions = versions;
     } else {
-      let hasBreakingChange;
+      let hasBreakingChange = false;
 
       for (const [name, bump] of versions) {
         hasBreakingChange = hasBreakingChange || isBreakingChange(this.packageGraph?.get(name).version, bump);
@@ -471,7 +472,7 @@ export class VersionCommand extends Command {
         rootPath,
         tagPrefix: this.tagPrefix,
         prereleaseId: getPrereleaseId(node),
-      })
+      }) as any
     );
 
     if (type === 'fixed') {
@@ -527,10 +528,10 @@ export class VersionCommand extends Command {
     }
 
     const actions = [
-      (pkg) => this.runPackageLifecycle(pkg, 'preversion').then(() => pkg),
+      (pkg: Package) => this.runPackageLifecycle(pkg, 'preversion').then(() => pkg),
       // manifest may be mutated by any previous lifecycle
-      (pkg) => pkg.refresh(),
-      (pkg) => {
+      (pkg: Package) => pkg.refresh(),
+      (pkg: Package) => {
         // set new version
         pkg.set('version', this.updatesVersions?.get(pkg?.name ?? ''));
 
@@ -558,7 +559,7 @@ export class VersionCommand extends Command {
           return pkg;
         });
       },
-      (pkg) => this.runPackageLifecycle(pkg, 'version').then(() => pkg),
+      (pkg: Package) => this.runPackageLifecycle(pkg, 'version').then(() => pkg),
     ];
 
     if (conventionalCommits && changelog) {
@@ -566,7 +567,7 @@ export class VersionCommand extends Command {
       // the updated version that we're about to release.
       const type = independentVersions ? 'independent' : 'fixed';
 
-      actions.push((pkg) =>
+      actions.push((pkg: Package) =>
         updateChangelog(pkg, type, {
           changelogPreset,
           rootPath,
@@ -727,10 +728,10 @@ export class VersionCommand extends Command {
     }
   }
 
-  setGlobalVersionCeiling(versions) {
+  setGlobalVersionCeiling(versions: Map<string, string>) {
     let highestVersion = this.project.version;
 
-    versions.forEach((bump) => {
+    versions.forEach((bump: string) => {
       if (bump && semver.gt(bump, highestVersion)) {
         highestVersion = bump;
       }
