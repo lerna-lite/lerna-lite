@@ -68,7 +68,7 @@ export function add(spec: string, tag = '', options: DistTagOptions, otpCache: O
  * @param {DistTagOptions} options
  * @param {import("@lerna/otplease").OneTimePasswordCache} otpCache
  */
-export function remove(spec, tag, options, otpCache) {
+export function remove(spec: string, tag: string, options: DistTagOptions, otpCache: OneTimePasswordCache) {
   const opts = {
     log,
     ...options,
@@ -83,7 +83,7 @@ export function remove(spec, tag, options, otpCache) {
     return Promise.resolve();
   }
 
-  return fetchTags(opts).then((tags) => {
+  return fetchTags(opts).then((tags: string[]) => {
     const version = tags[tag];
 
     if (!version) {
@@ -115,7 +115,7 @@ export function remove(spec, tag, options, otpCache) {
  * @param {string} spec
  * @param {DistTagOptions} options
  */
-export function list(spec, options) {
+export function list(spec: string, options: DistTagOptions) {
   const opts = {
     log,
     ...options,
@@ -135,14 +135,14 @@ export function list(spec, options) {
  * Retrieve list of dist-tags for a package.
  * @param {Omit<fetch.FetchOptions, 'spec'> & { spec: npa.Result }} opts
  */
-export function fetchTags(opts) {
+export function fetchTags(opts: Omit<fetch.FetchOptions, 'spec'> & { spec: npa.Result }) {
   return fetch
-    .json(`/-/package/${opts.spec.escapedName}/dist-tags`, {
+    .json(`/-/package/${opts.spec.escapedName ?? ''}/dist-tags`, {
       ...opts,
       preferOnline: true,
       spec: opts.spec,
     })
-    .then((data) => {
+    .then((data: any) => {
       if (data && typeof data === 'object') {
         // eslint-disable-next-line no-param-reassign, no-underscore-dangle
         delete data._etag;

@@ -6,7 +6,7 @@ import pify from 'pify';
 import { publish } from 'libnpmpublish';
 import readJSON from 'read-package-json';
 
-import { OneTimePasswordCache, otplease, Package, runLifecycle } from '@lerna-lite/core';
+import { OneTimePasswordCache, otplease, Package, RawManifest, runLifecycle } from '@lerna-lite/core';
 import { LibNpmPublishOptions, PackagePublishConfig } from '../models';
 
 const readJSONAsync = pify(readJSON);
@@ -16,7 +16,7 @@ const readJSONAsync = pify(readJSON);
  * @param {NpmPublishOptions} obj
  * @returns {NpmPublishOptions}
  */
-function flattenOptions(obj: LibNpmPublishOptions): LibNpmPublishOptions {
+function flattenOptions(obj: Omit<LibNpmPublishOptions, 'defaultTag'>): LibNpmPublishOptions {
   return {
     // eslint-disable-next-line dot-notation -- (npm v7 compat)
     defaultTag: obj['tag'] || 'latest',
@@ -32,7 +32,7 @@ function flattenOptions(obj: LibNpmPublishOptions): LibNpmPublishOptions {
  * @param {LibNpmPublishOptions & NpmPublishOptions} [options]
  * @param {import("@lerna/otplease").OneTimePasswordCache} [otpCache]
  */
-export function npmPublish(pkg: Package, tarFilePath: string, options: LibNpmPublishOptions = {}, otpCache: OneTimePasswordCache) {
+export function npmPublish(pkg: Package, tarFilePath: string, options: Omit<LibNpmPublishOptions, 'defaultTag'> = {}, otpCache: OneTimePasswordCache) {
   const { dryRun, ...remainingOptions } = flattenOptions(options);
   const { scope } = npa(pkg?.name ?? '');
   // pass only the package scope to libnpmpublish
@@ -55,9 +55,9 @@ export function npmPublish(pkg: Package, tarFilePath: string, options: LibNpmPub
         manifestLocation = path.join(pkg.contents, 'package.json');
       }
 
-      return Promise.all([fs.readFile(tarFilePath), readJSONAsync(manifestLocation)]);
+      return Promise.all([fs.readFile(tarFilePath), readJSONAsync(manifestLocation) as RawManifest]);
     });
-    chain = chain.then(([tarData, manifest]) => {
+    chain = chain.then(([tarData, manifest]: [any, RawManifest]) => {
       // non-default tag needs to override publishConfig.tag,
       // which is merged into opts below if necessary
       if (
@@ -67,7 +67,7 @@ export function npmPublish(pkg: Package, tarFilePath: string, options: LibNpmPub
         manifest.publishConfig.tag !== opts.defaultTag
       ) {
         // eslint-disable-next-line no-param-reassign
-        manifest.publishConfig.tag = opts.defaultTag;
+        manifest.publishConfig.tag = opts.defaultTag as string;
       }
 
       // publishConfig is no longer consumed in n-r-f, so merge here

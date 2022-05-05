@@ -17,7 +17,7 @@ export function getNpmUsername(options: FetchConfig): Promise<string | undefined
   opts.log.info('', 'Verifying npm credentials');
 
   return getProfileData(opts)
-    .catch((err) => {
+    .catch((err: any) => {
       // Many third-party registries do not implement the user endpoint
       // Legacy npm Enterprise returns E500 instead of E404
       if (err.code === 'E500' || err.code === 'E404') {
@@ -29,7 +29,7 @@ export function getNpmUsername(options: FetchConfig): Promise<string | undefined
     })
     .then(success, failure);
 
-  function success(result) {
+  function success(result: any) {
     opts.log.silly('get npm username', 'received %j', result);
 
     if (!result.username) {
@@ -43,7 +43,7 @@ export function getNpmUsername(options: FetchConfig): Promise<string | undefined
   }
 
   // catch request errors, not auth expired errors
-  function failure(err) {
+  function failure(err: any) {
     // Log the error cleanly to stderr
     opts.log.pause();
     console.error(err.message); // eslint-disable-line no-console

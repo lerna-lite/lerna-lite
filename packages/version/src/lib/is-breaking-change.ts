@@ -1,6 +1,6 @@
 import semver from 'semver';
 
-export function isBreakingChange(currentVersion: string, nextVersion: string) {
+export function isBreakingChange(currentVersion: string, nextVersion: string): boolean {
   const releaseType = semver.diff(currentVersion, nextVersion);
   let breaking;
 

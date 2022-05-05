@@ -114,19 +114,20 @@ export class Project {
         );
       }
 
-      log.verbose('project workspaces packages', (workspaces.packages || workspaces).join(' '));
-      return (workspaces.packages || workspaces) as string[];
+      const workspaceList = ((workspaces as { packages?: string[] }).packages || workspaces) as string[];
+      log.verbose('project workspaces packages', workspaceList.join(' '));
+      return workspaceList;
     }
 
     log.verbose('project packages', (this.config.packages || [Project.PACKAGE_GLOB]).join(' '));
     return this.config.packages || [Project.PACKAGE_GLOB];
   }
 
-  get packageParentDirs() {
+  get packageParentDirs(): Promise<string[]> {
     return (this.packageConfigs as any).map(globParent).map((parentDir: string) => path.resolve(this.rootPath, parentDir));
   }
 
-  get manifest() {
+  get manifest(): Package {
     let manifest;
 
     try {
@@ -157,8 +158,8 @@ export class Project {
     return manifest;
   }
 
-  get licensePath() {
-    let licensePath;
+  get licensePath(): string {
+    let licensePath: string | undefined;
 
     try {
       const search = globby.sync(Project.LICENSE_GLOB, {
@@ -185,7 +186,7 @@ export class Project {
       throw new ValidationError(err.name, err.message);
     }
 
-    return licensePath;
+    return licensePath as string;
   }
 
   get fileFinder() {
@@ -202,7 +203,7 @@ export class Project {
   /**
    * @returns {Promise<Package[]>} A promise resolving to a list of Package instances
    */
-  getPackages(): Promise<any[]> {
+  getPackages(): Promise<Package[]> {
     const mapper = (packageConfigPath: string) =>
       loadJsonFile(packageConfigPath)?.then(
         (packageJson: any) => new Package(packageJson, path.dirname(packageConfigPath), this.rootPath)
@@ -221,10 +222,10 @@ export class Project {
         path.dirname(packageConfigPath),
         this.rootPath
       );
-    });
+    }) as string[];
   }
 
-  getPackageLicensePaths() {
+  getPackageLicensePaths(): Promise<string[]> {
     return this.fileFinder(Project.LICENSE_GLOB, null, { caseSensitiveMatch: false });
   }
 
