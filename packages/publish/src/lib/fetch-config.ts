@@ -1,3 +1,4 @@
+import { FetchConfig } from '@lerna-lite/core';
 import log from 'npmlog';
 
 /**
@@ -6,10 +7,10 @@ import log from 'npmlog';
  * @param {Partial<FetchConfig>} [extra]
  * @returns {FetchConfig}
  */
-export function getFetchConfig(options, extra) {
+export function getFetchConfig(options: { [key: string]: any }, extra: Partial<FetchConfig>) {
   return {
     log,
     ...options,
     ...extra,
-  };
+  } as FetchConfig;
 }

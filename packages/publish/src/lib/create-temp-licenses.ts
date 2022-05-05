@@ -9,7 +9,7 @@ import { Package } from '@lerna-lite/core';
  * @param {string} srcLicensePath
  * @param {Packages[]} packagesToBeLicensed
  */
-export function createTempLicenses(srcLicensePath, packagesToBeLicensed: Package[]): Promise<any> {
+export function createTempLicenses(srcLicensePath: string, packagesToBeLicensed: Package[]): Promise<any> {
   if (!srcLicensePath || !packagesToBeLicensed.length) {
     return Promise.resolve();
   }

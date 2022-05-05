@@ -159,6 +159,7 @@ export interface ProjectConfig {
 /** The subset of package.json properties that Lerna-Lite uses */
 export interface RawManifest {
   name: string;
+  location: string;
   version: string;
   private?: boolean;
   bin?: Record<string, string> | string;
@@ -169,6 +170,7 @@ export interface RawManifest {
   peerDependencies?: Record<string, string>;
   publishConfig?: Record<'directory' | 'registry' | 'tag', string>;
   workspaces?: string[] | { packages: string[] };
+  get: (str: string) => { packages?: string[] } | string[];
 }
 
 export interface ReleaseClient {

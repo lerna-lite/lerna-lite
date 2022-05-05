@@ -38,6 +38,7 @@ import { add, remove } from './lib/npm-dist-tag';
 import { removeTempLicenses } from './lib/remove-temp-licenses';
 import { createTempLicenses } from './lib/create-temp-licenses';
 import { getPackagesWithoutLicense } from './lib/get-packages-without-license';
+import { Tarball } from './models';
 
 export function factory(argv) {
   return new PublishCommand(argv);
@@ -182,7 +183,7 @@ export class PublishCommand extends Command {
       chain = chain.then(() => new VersionCommand(this.argv));
     }
 
-    return chain.then((result) => {
+    return chain.then((result: { updates: Package[]; updatesVersions: Map<string, any>; needsConfirmation: boolean; }) => {
       if (!result) {
         // early return from nested VersionCommand
         return false;
@@ -266,7 +267,7 @@ export class PublishCommand extends Command {
     chain = chain.then(() => this.verifyWorkingTreeClean());
 
     chain = chain.then(() => getCurrentTags(this.execOpts, matchingPattern));
-    chain = chain.then((taggedPackageNames) => {
+    chain = chain.then((taggedPackageNames: string[]) => {
       if (!taggedPackageNames.length) {
         this.logger.notice('from-git', 'No tagged release found. You might not have fetched tags.');
         return [];
@@ -280,9 +281,9 @@ export class PublishCommand extends Command {
     });
 
     // private packages are never published, full stop.
-    chain = chain.then((updates) => updates.filter((node) => !node.pkg.private));
+    chain = chain.then((updates: Package[]) => updates.filter((node) => !node.pkg.private));
 
-    return chain.then((updates) => {
+    return chain.then((updates: Package[]) => {
       const updatesVersions = updates.map((node) => [node.name, node.version]);
 
       return {
@@ -349,7 +350,7 @@ export class PublishCommand extends Command {
     // attempting to publish a canary release with local changes is not allowed
     chain = chain
       .then(() => this.verifyWorkingTreeClean())
-      .catch((err) => {
+      .catch((err: any) => {
         // an execa error is thrown when git suffers a fatal error (such as no git repository present)
         if (err.failed && /git describe/.test(err.command)) {
           // (we tried)
@@ -524,7 +525,7 @@ export class PublishCommand extends Command {
   }
 
   updateCanaryVersions() {
-    return pMap(this.updates, (node) => {
+    return pMap(this.updates, (node: PackageGraphNode) => {
       node.pkg.set('version', this.updatesVersions?.get(node.name));
 
       for (const [depName, resolved] of node.localDependencies) {
@@ -541,11 +542,11 @@ export class PublishCommand extends Command {
 
   resolveLocalDependencyLinks() {
     // resolve relative file: links to their actual version range
-    const updatesWithLocalLinks = this.updates.filter((node) =>
+    const updatesWithLocalLinks = this.updates.filter((node: PackageGraphNode) =>
       Array.from(node.localDependencies.values()).some((resolved: any) => resolved.type === 'directory')
     );
 
-    return pMap(updatesWithLocalLinks, (node) => {
+    return pMap(updatesWithLocalLinks, (node: PackageGraphNode) => {
       for (const [depName, resolved] of node.localDependencies) {
         // regardless of where the version comes from, we can't publish 'file:../sibling-pkg' specs
         const depVersion = this.updatesVersions?.get(depName) || this.packageGraph?.get(depName).pkg.version;
@@ -599,7 +600,7 @@ export class PublishCommand extends Command {
     });
   }
 
-  execScript(pkg, script) {
+  execScript(pkg: Package, script: string) {
     const scriptLocation = path.join(pkg.location, 'scripts', script);
 
     try {
@@ -611,7 +612,7 @@ export class PublishCommand extends Command {
     return pkg;
   }
 
-  removeTempLicensesOnError(error) {
+  removeTempLicensesOnError(error: any) {
     return Promise.resolve()
       .then(() =>
         removeTempLicenses(this.packagesToBeLicensed ?? []).catch((removeError) => {
@@ -644,7 +645,7 @@ export class PublishCommand extends Command {
       .then((otp) => this.otpCache.otp = otp);
   }
 
-  topoMapPackages(mapper) {
+  topoMapPackages(mapper: (pkg: Package) => Promise<any>) {
     // we don't respect --no-sort here, sorry
     return runTopologically(this.packagesToPublish, mapper, {
       concurrency: this.concurrency,
@@ -679,7 +680,7 @@ export class PublishCommand extends Command {
     const opts = this.conf.snapshot;
     const mapper = pPipe(
       ...[
-        this.options.requireScripts && ((pkg) => this.execScript(pkg, 'prepublish')),
+        this.options.requireScripts && ((pkg: Package) => this.execScript(pkg, 'prepublish')),
 
         (pkg: any) =>
           pulseTillDone(packDirectory(pkg, pkg.location, opts)).then((packed: any) => {
@@ -730,7 +731,7 @@ export class PublishCommand extends Command {
 
     const mapper = pPipe(
       ...[
-        (pkg) => {
+        (pkg: Package & { packed: Tarball; }) => {
           const preDistTag = this.getPreDistTag(pkg);
           const tag = !this.options.tempTag && preDistTag ? preDistTag : opts.tag;
           const pkgOpts = Object.assign({}, opts, { tag });
@@ -745,7 +746,7 @@ export class PublishCommand extends Command {
           });
         },
 
-        this.options.requireScripts && ((pkg) => this.execScript(pkg, 'postpublish')),
+        this.options.requireScripts && ((pkg: Package) => this.execScript(pkg, 'postpublish')),
       ].filter(Boolean)
     );
 
@@ -776,7 +777,7 @@ export class PublishCommand extends Command {
 
       return opts.tag;
     };
-    const mapper = (pkg) => {
+    const mapper = (pkg: Package) => {
       const spec = `${pkg.name}@${pkg.version}`;
       const preDistTag = this.getPreDistTag(pkg);
       const distTag = preDistTag || getDistTag(pkg.get('publishConfig'));
@@ -799,7 +800,7 @@ export class PublishCommand extends Command {
 
   getDistTag() {
     if (this.options.distTag) {
-      return this.options.distTag;
+      return this.options.distTag as string;
     }
 
     if (this.options.canary) {
@@ -809,7 +810,7 @@ export class PublishCommand extends Command {
     // undefined defaults to 'latest' OR whatever is in pkg.publishConfig.tag
   }
 
-  getPreDistTag(pkg) {
+  getPreDistTag(pkg: Package) {
     if (!this.options.preDistTag) {
       return;
     }

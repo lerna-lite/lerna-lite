@@ -4,15 +4,16 @@ import log from 'npmlog';
 import semver, { ReleaseType } from 'semver';
 
 import { BaseChangelogOptions, VersioningStrategy } from '../models';
-import { Package } from '../package';
 import { GetChangelogConfig } from './get-changelog-config';
+import { Package } from '../package';
+import { PackageGraphNode } from '../package-graph';
 
 /**
  * @param {import('@lerna/package').Package} pkg
  * @param {import('..').VersioningStrategy} type
  * @param {import('..').BaseChangelogOptions & { prereleaseId?: string }} commandOptions
  */
-export async function recommendVersion(pkg: Package, type: VersioningStrategy, recommendationOptions: BaseChangelogOptions & { prereleaseId?: string; }): Promise<any> {
+export async function recommendVersion(pkg: Package | PackageGraphNode, type: VersioningStrategy, recommendationOptions: BaseChangelogOptions & { prereleaseId?: string; }): Promise<string | null> {
   const { changelogPreset, rootPath, tagPrefix, prereleaseId } = recommendationOptions;
 
   log.silly(type, 'for %s at %s', pkg.name, pkg.location);
