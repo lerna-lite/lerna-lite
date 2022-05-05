@@ -46,7 +46,7 @@ export function otplease<T extends Record<string, unknown>>(fn: (opts: T) => Pro
 function attempt<T extends Record<string, unknown>>(fn: (opts: T) => Promise<unknown>, opts: T, otpCache: OneTimePasswordCache): Promise<unknown> {
   return new Promise((resolve) => {
     resolve(fn(opts));
-  }).catch((err) => {
+  }).catch((err: any) => {
     if (err.code !== 'EOTP' && !(err.code === 'E401' && /one-time pass/.test(err.body))) {
       throw err;
     } else if (!process.stdin.isTTY || !process.stdout.isTTY) {
@@ -97,8 +97,8 @@ function attempt<T extends Record<string, unknown>>(fn: (opts: T) => Promise<unk
 export function getOneTimePassword(message = 'This operation requires a one-time password:'): Promise<string> {
   // Logic taken from npm internals: https://github.com/npm/cli/blob/4f801d8a476f7ca52b0f182bf4e17a80db12b4e2/lib/utils/read-user-info.js#L21-L35
   return promptTextInput(message, {
-    filter: (otp) => otp.replace(/\s+/g, ''),
-    validate: (otp) =>
+    filter: (otp: string) => otp.replace(/\s+/g, ''),
+    validate: (otp?: string) =>
       (otp && /^[\d ]+$|^[A-Fa-f0-9]{64,64}$/.test(otp)) ||
       'Must be a valid one-time-password. ' +
       'See https://docs.npmjs.com/getting-started/using-two-factor-authentication',

@@ -40,7 +40,7 @@ export function packDirectory(_pkg: Package, dir: string, options: PackConfig) {
   chain = chain.then(() => runLifecycle(pkg, 'prepack', opts));
   chain = chain.then(() => pkg.refresh());
   chain = chain.then(() => packlist({ path: pkg.contents }));
-  chain = chain.then((files) =>
+  chain = chain.then((files: string[]) =>
     tar.create(
       {
         cwd: pkg.contents,
@@ -69,11 +69,11 @@ export function packDirectory(_pkg: Package, dir: string, options: PackConfig) {
   return chain;
 }
 
-function getTarballName(pkg) {
+function getTarballName(pkg: Package) {
   const name =
     pkg.name[0] === '@'
       // scoped packages get special treatment
-      ? pkg.name.substr(1).replace(/\//g, '-')
+      ? pkg.name.substring(1).replace(/\//g, '-')
       : pkg.name;
 
   return `${name}-${pkg.version}.tgz`;

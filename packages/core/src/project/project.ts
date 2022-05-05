@@ -157,7 +157,7 @@ export class Project {
     return manifest;
   }
 
-  get licensePath() {
+  get licensePath(): string {
     let licensePath;
 
     try {

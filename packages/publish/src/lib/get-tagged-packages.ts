@@ -1,6 +1,6 @@
 import path from 'path';
 import log from 'npmlog';
-import { exec } from '@lerna-lite/core';
+import { exec, ExecOpts, PackageGraph } from '@lerna-lite/core';
 
 /**
  * Retrieve a list of graph nodes for packages that were tagged in a non-independent release.
@@ -9,7 +9,7 @@ import { exec } from '@lerna-lite/core';
  * @param {import("@lerna/child-process").ExecOpts} execOpts
  * @returns {Promise<import("@lerna/package-graph").PackageGraphNode[]>}
  */
-export function getTaggedPackages(packageGraph, rootPath, execOpts, gitDryRun = false) {
+export function getTaggedPackages(packageGraph: PackageGraph, rootPath: string, execOpts: ExecOpts, gitDryRun = false) {
   log.silly('getTaggedPackages', '');
 
   // @see https://stackoverflow.com/a/424142/5707

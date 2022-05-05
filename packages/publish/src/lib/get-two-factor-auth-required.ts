@@ -18,8 +18,8 @@ export function getTwoFactorAuthRequired(options: FetchConfig) {
 
   return getProfileData(opts).then(success, failure);
 
-  function success(result) {
-    opts.log.silly('2FA', result.tfa);
+  function success(result: { tfa: { pending: boolean; mode: string; } }) {
+    opts.log.silly('2FA', result.tfa.toString());
 
     if (result.tfa.pending) {
       // if 2FA is pending, it is disabled
@@ -29,7 +29,7 @@ export function getTwoFactorAuthRequired(options: FetchConfig) {
     return result.tfa.mode === 'auth-and-writes';
   }
 
-  function failure(err) {
+  function failure(err: any) {
     // pass if registry does not support profile endpoint
     if (err.code === 'E500' || err.code === 'E404') {
       // most likely a private registry (npm Enterprise, verdaccio, etc)

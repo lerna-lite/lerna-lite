@@ -1,11 +1,13 @@
 import byteSize from 'byte-size';
 import columnify from 'columnify';
 import log from 'npmlog';
-const hasUnicode = require('has-unicode')();
+import hasUnicode from 'has-unicode';
 
-export function logPacked(tarball) {
+import { Tarball } from '../models';
+
+export function logPacked(tarball: Tarball) {
   log.notice('', '');
-  log.notice('', `${hasUnicode ? '📦 ' : 'package:'} ${tarball.name}@${tarball.version}`);
+  log.notice('', `${hasUnicode() ? '📦 ' : 'package:'} ${tarball.name}@${tarball.version}`);
 
   if (tarball.files && tarball.files.length) {
     log.notice('=== Tarball Contents ===', '');
@@ -72,7 +74,7 @@ export function logPacked(tarball) {
   log.notice('', '');
 }
 
-function elideIntegrity(integrity) {
+function elideIntegrity(integrity: any) {
   const str = integrity.toString();
 
   return `${str.substr(0, 20)}[...]${str.substr(80)}`;

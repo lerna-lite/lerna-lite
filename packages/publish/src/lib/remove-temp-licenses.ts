@@ -7,7 +7,7 @@ import { Package } from '@lerna-lite/core';
  * Remove temporary license files.
  * @param {Package[]} packagesToBeLicensed
  */
-export function removeTempLicenses(packagesToBeLicensed: Package[]): Promise<any> {
+export function removeTempLicenses(packagesToBeLicensed: Package[]): Promise<void | void[]> {
   if (!packagesToBeLicensed.length) {
     return Promise.resolve();
   }
