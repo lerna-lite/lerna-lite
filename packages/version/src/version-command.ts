@@ -600,7 +600,7 @@ export class VersionCommand extends Command {
       })
     );
 
-    chain = chain.then(() => {
+    chain = chain.then(() =>
       // update modern lockfile (version 2 or higher) when exist in the project root
       loadPackageLockFileWhenExists(rootPath)
         .then(lockFileResponse => {
@@ -611,15 +611,15 @@ export class VersionCommand extends Command {
             }
 
             // save the lockfile, only once, after all package versions were updated
-            saveUpdatedLockJsonFile(lockFileResponse.path, lockFileResponse.json)
+            return saveUpdatedLockJsonFile(lockFileResponse.path, lockFileResponse.json)
               .then((lockfilePath) => {
                 if (lockfilePath) {
                   changedFiles.add(lockfilePath);
                 }
               });
           }
-        });
-    });
+        })
+    );
 
     if (!independentVersions) {
       this.project.version = this.globalVersion;
