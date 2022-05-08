@@ -236,7 +236,7 @@ export class PublishCommand extends Command {
     }
 
     await this.resolveLocalDependencyLinks();
-    await this.resolveLocalDependencyWorkspaces();
+    await this.resolveLocalDependencyWorkspaceProtocols();
     await this.annotateGitHead();
     await this.serializeChanges();
     await this.packUpdated();
@@ -564,7 +564,7 @@ export class PublishCommand extends Command {
     });
   }
 
-  resolveLocalDependencyWorkspaces() {
+  resolveLocalDependencyWorkspaceProtocols() {
     // resolve workspace protocol: translates to their actual version target/range
     const updatesWithLocalWorkspaces = this.updates.filter((node: PackageGraphNode) =>
       Array.from(node.localDependencies.values()).some((resolved: NpaResolveResult) => resolved.explicitWorkspace)
