@@ -18,6 +18,8 @@ export interface CommandOptions {
   rollVersion?: boolean;
 }
 
+export type CommandType = '' | 'exec' | 'info' | 'publish' | 'version' | 'run';
+
 export interface DescribeRefOptions {
   /* Defaults to `process.cwd()` */
   cwd?: string;
@@ -141,6 +143,7 @@ export interface GitClient {
 
 export type NpaResolveResult = (npa.FileResult | npa.HostedGitResult | npa.URLResult | npa.AliasResult | npa.RegistryResult) & {
   explicitWorkspace?: boolean;
+  workspaceTarget?: string;
 }
 
 /** Passed between concurrent executions */

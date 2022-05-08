@@ -1,4 +1,4 @@
-import { Command, logOutput, } from '@lerna-lite/core';
+import { Command, CommandType, logOutput, } from '@lerna-lite/core';
 import envinfo from 'envinfo';
 
 export function factory(argv) {
@@ -7,7 +7,7 @@ export function factory(argv) {
 
 export class InfoCommand extends Command {
   /** command name */
-  name = 'info';
+  name = 'info' as CommandType;
 
   constructor(argv: any) {
     super(argv);

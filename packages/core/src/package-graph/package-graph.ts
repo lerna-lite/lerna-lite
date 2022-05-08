@@ -70,12 +70,27 @@ export class PackageGraph extends Map {
         // npa doesn't support the explicit workspace: protocol, supported by
         // pnpm and Yarn.
         const explicitWorkspace = /^workspace:/.test(spec);
+        let workspaceTarget: string | undefined;
         if (explicitWorkspace) {
+          workspaceTarget = spec;
           spec = spec.replace(/^workspace:/, '');
+
+          // when dependency is defined as target workspace, like `workspace:*`,
+          // we'll have to pull the version from its parent package version property
+          // example with `1.5.0`, ws:* => "1.5.0", ws:^ => "^1.5.0", ws:~ => "~1.5.0", ws:^1.5.0 => "^1.5.0"
+          if (spec === '*' || spec === '^' || spec === '~') {
+            const depPkg = packages.find(pkg => pkg.name === depName);
+            const version = depPkg?.version;
+            const specTarget = spec === '*' ? '' : spec;
+            spec = depPkg ? `${specTarget}${version}` : '';
+          }
         }
 
         const resolved: NpaResolveResult = npa.resolve(depName, spec, currentNode.location);
         resolved.explicitWorkspace = explicitWorkspace;
+        if (resolved.explicitWorkspace) {
+          resolved.workspaceTarget = workspaceTarget;
+        }
 
         if (!depNode) {
           // it's an external dependency, store the resolution and bail

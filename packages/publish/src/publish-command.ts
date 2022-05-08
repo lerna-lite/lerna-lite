@@ -8,20 +8,24 @@ import semver from 'semver';
 import { VersionCommand } from '@lerna-lite/version';
 import {
   collectUpdates,
-  createRunner,
   Command,
+  CommandType,
+  Conf,
+  createRunner,
   describeRef,
   getOneTimePassword,
   logOutput,
+  NpaResolveResult,
   npmConf,
+  OneTimePasswordCache,
   Package,
-  promptConfirmation,
+  PackageGraphNode,
   prereleaseIdFromVersion,
+  promptConfirmation,
   pulseTillDone,
   runTopologically,
   throwIfUncommitted,
   ValidationError,
-  PackageGraphNode,
 } from '@lerna-lite/core';
 import { getCurrentTags } from './lib/get-current-tags';
 import { getTaggedPackages } from './lib/get-tagged-packages';
@@ -46,9 +50,9 @@ export function factory(argv) {
 
 export class PublishCommand extends Command {
   /** command name */
-  name = 'publish';
-  conf: any;
-  otpCache: any;
+  name = 'publish' as CommandType;
+  conf!: Conf & { snapshot?: any; };
+  otpCache!: OneTimePasswordCache;
   gitReset = false;
   savePrefix = '';
   tagPrefix = '';
@@ -56,11 +60,11 @@ export class PublishCommand extends Command {
   npmSession = '';
   packagesToPublish: Package[] = [];
   packagesToBeLicensed?: Package[] = [];
-  runPackageLifecycle: any;
+  runPackageLifecycle!: (pkg: Package, stage: string) => Promise<void>;
   runRootLifecycle!: (stage: string) => Promise<void> | void;
   verifyAccess = false;
   twoFactorAuthRequired = false;
-  updates: any[] = [];
+  updates: PackageGraphNode[] = [];
   updatesVersions?: Map<string, any>;
 
   get otherCommandConfigs() {
@@ -183,7 +187,7 @@ export class PublishCommand extends Command {
       chain = chain.then(() => new VersionCommand(this.argv));
     }
 
-    return chain.then((result: { updates: Package[]; updatesVersions: Map<string, any>; needsConfirmation: boolean; }) => {
+    return chain.then((result: { updates: PackageGraphNode[]; updatesVersions: Map<string, any>; needsConfirmation: boolean; }) => {
       if (!result) {
         // early return from nested VersionCommand
         return false;
@@ -232,6 +236,7 @@ export class PublishCommand extends Command {
     }
 
     await this.resolveLocalDependencyLinks();
+    await this.resolveLocalDependencyWorkspaces();
     await this.annotateGitHead();
     await this.serializeChanges();
     await this.packUpdated();
@@ -533,7 +538,7 @@ export class PublishCommand extends Command {
         const depVersion = this.updatesVersions?.get(depName) || this.packageGraph?.get(depName).pkg.version;
 
         // it no longer matters if we mutate the shared Package instance
-        node.pkg.updateLocalDependency(resolved, depVersion, this.savePrefix);
+        node.pkg.updateLocalDependency(resolved, depVersion, this.savePrefix, this.commandName);
       }
 
       // writing changes to disk handled in serializeChanges()
@@ -543,7 +548,7 @@ export class PublishCommand extends Command {
   resolveLocalDependencyLinks() {
     // resolve relative file: links to their actual version range
     const updatesWithLocalLinks = this.updates.filter((node: PackageGraphNode) =>
-      Array.from(node.localDependencies.values()).some((resolved: any) => resolved.type === 'directory')
+      Array.from(node.localDependencies.values()).some((resolved: NpaResolveResult) => resolved.type === 'directory')
     );
 
     return pMap(updatesWithLocalLinks, (node: PackageGraphNode) => {
@@ -552,7 +557,26 @@ export class PublishCommand extends Command {
         const depVersion = this.updatesVersions?.get(depName) || this.packageGraph?.get(depName).pkg.version;
 
         // it no longer matters if we mutate the shared Package instance
-        node.pkg.updateLocalDependency(resolved, depVersion, this.savePrefix);
+        node.pkg.updateLocalDependency(resolved, depVersion, this.savePrefix, this.commandName);
+      }
+
+      // writing changes to disk handled in serializeChanges()
+    });
+  }
+
+  resolveLocalDependencyWorkspaces() {
+    // resolve workspace protocol: translates to their actual version target/range
+    const updatesWithLocalWorkspaces = this.updates.filter((node: PackageGraphNode) =>
+      Array.from(node.localDependencies.values()).some((resolved: NpaResolveResult) => resolved.explicitWorkspace)
+    );
+
+    return pMap(updatesWithLocalWorkspaces, (node: PackageGraphNode) => {
+      for (const [depName, resolved] of node.localDependencies) {
+        // regardless of where the version comes from, we can't publish 'workspace:*' specs
+        const depVersion = this.updatesVersions?.get(depName) || this.packageGraph?.get(depName).pkg.version;
+
+        // it no longer matters if we mutate the shared Package instance
+        node.pkg.updateLocalDependency(resolved, depVersion, this.savePrefix, this.commandName);
       }
 
       // writing changes to disk handled in serializeChanges()
@@ -660,7 +684,6 @@ export class PublishCommand extends Command {
 
   packUpdated() {
     const tracker = this.logger.newItem('npm pack');
-
     tracker.addWork(this.packagesToPublish?.length);
 
     let chain: Promise<any> = Promise.resolve();
@@ -682,8 +705,8 @@ export class PublishCommand extends Command {
       ...[
         this.options.requireScripts && ((pkg: Package) => this.execScript(pkg, 'prepublish')),
 
-        (pkg: any) =>
-          pulseTillDone(packDirectory(pkg, pkg.location, opts)).then((packed: any) => {
+        (pkg: Package & { packed: Tarball; }) =>
+          pulseTillDone(packDirectory(pkg, pkg.location, opts)).then((packed: Tarball) => {
             tracker.verbose('packed', path.relative(this.project.rootPath ?? '', pkg.contents));
             tracker.completeWork(1);
 
@@ -712,7 +735,6 @@ export class PublishCommand extends Command {
 
   publishPacked() {
     const tracker = this.logger.newItem('publish');
-
     tracker.addWork(this.packagesToPublish?.length);
 
     let chain: Promise<any> = Promise.resolve();

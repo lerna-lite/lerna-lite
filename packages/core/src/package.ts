@@ -3,7 +3,7 @@ import path from 'path';
 import loadJsonFile from 'load-json-file';
 import writePkg from 'write-pkg';
 
-import { NpaResolveResult, RawManifest } from './models';
+import { CommandType, NpaResolveResult, RawManifest } from './models';
 
 // symbol used to 'hide' internal state
 const PKG = Symbol('pkg');
@@ -244,8 +244,9 @@ export class Package {
    * @param {Object} resolved npa metadata
    * @param {String} depVersion semver
    * @param {String} savePrefix npm_config_save_prefix
+   * @param {String} updatedByCommand - which command called this update?
    */
-  updateLocalDependency(resolved: NpaResolveResult, depVersion: string, savePrefix: string) {
+  updateLocalDependency(resolved: NpaResolveResult, depVersion: string, savePrefix: string, updatedByCommand?: CommandType) {
     const depName = resolved.name as string;
 
     // first, try runtime dependencies
@@ -266,8 +267,14 @@ export class Package {
       if (resolved.registry || resolved.type === 'directory') {
         // a version (1.2.3) OR range (^1.2.3) OR directory (file:../foo-pkg)
         depCollection[depName] = `${savePrefix}${depVersion}`;
-        if (resolved.explicitWorkspace) {
-          depCollection[depName] = `workspace:${depCollection[depName]}`;
+
+        // when using explicit workspace protocol and we're not doing a Publish
+        // if we are publishing, we will skip this and so we'll keep regular semver range, e.g.: "workspace:*"" will be converted to "^1.2.3"
+        if (resolved.explicitWorkspace && updatedByCommand !== 'publish') {
+          // keep target workspace or bump when it's a workspace semver range (like `workspace:^1.2.3`)
+          depCollection[depName] = /^workspace:[*|^|~]{1}$/.test(resolved?.workspaceTarget ?? '')
+            ? resolved.workspaceTarget               // target like `workspace:*`
+            : `workspace:${depCollection[depName]}`; // range like `workspace:^1.2.3`
         }
       } else if (resolved.gitCommittish) {
         // a git url with matching committish (#v1.2.3 or #1.2.3)
