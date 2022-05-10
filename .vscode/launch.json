@@ -107,7 +107,8 @@
         "packages/cli/src/cli.ts",
         "run",
         "pack-tarball",
-        "--stream"
+        "--stream",
+        "--no-bail"
       ],
       "cwd": "${workspaceRoot}",
       "console": "integratedTerminal",
