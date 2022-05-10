@@ -22,13 +22,15 @@
 - [Migration for Lerna users](https://github.com/ghiscoding/lerna-lite#migration-for-lerna-users)
 - [Troubleshooting](https://github.com/ghiscoding/lerna-lite/wiki/Troubleshooting)
 - Commands
-   - included
-      - 💻 [`info`](https://github.com/ghiscoding/lerna-lite/tree/main/packages/info#readme) - print local environment information when opening new issue (included with CLI)
-      - 📡 [`publish`](https://github.com/ghiscoding/lerna-lite/tree/main/packages/publish#readme) - publish workspace packages (included with CLI)
-      - 📑 [`version`](https://github.com/ghiscoding/lerna-lite/tree/main/packages/version#readme) - create new version for each workspace packages (included with CLI)
-   - optional
-      - 👷 [`exec`](https://github.com/ghiscoding/lerna-lite/tree/main/packages/exec#readme) - execute an command in each workspace package (separate install)
-      - 🏃 [`run`](https://github.com/ghiscoding/lerna-lite/tree/main/packages/run#readme) - run npm script in each workspace packages (separate install)
+   - included with CLI
+      - 💻 [`info`](https://github.com/ghiscoding/lerna-lite/tree/main/packages/info#readme) - print local environment information when opening new issue
+      - ☁️ [`publish`](https://github.com/ghiscoding/lerna-lite/tree/main/packages/publish#readme) - publish workspace packages
+      - 📑 [`version`](https://github.com/ghiscoding/lerna-lite/tree/main/packages/version#readme) - create new version for each workspace packages
+   - optional (separate install)
+      - 👷 [`exec`](https://github.com/ghiscoding/lerna-lite/tree/main/packages/exec#readme) - execute an command in each workspace package
+      - 🏃 [`run`](https://github.com/ghiscoding/lerna-lite/tree/main/packages/run#readme) - run npm script in each workspace packages
+
+### 📢 Lerna-Lite also support yarn/pnpm `workspace:` protocol (original Lerna does not)
 
 ---
 
@@ -36,17 +38,18 @@
 [MIT License](LICENSE)
 
 ## About Lerna-Lite
-Lerna-Lite differs from the original [Lerna](https://github.com/lerna/lerna) in the sense that it only includes 5 commands (2 are optional) out of the 15 commands than the original Lerna has. Lerna was originally built as an all-in-one tool, however nowadays Workspaces became available in all dependency manager (npm, yarn, pnpm) and the need for an all-in-one tool that includes built-in workspaces functionality is no longer required. Lerna-Lite is built around that fact and its CLI only includes the Publish & Version commands, while there are other commands available (like Exec & Run) they are totally optional and you won’t download them unless you opt-in. So in summary it is more modularized than the original Lerna and it may seem like a small change but it does make it more versatile (and smaller downloads) to use with other tools like Turborepo, pnpm and others...
+Lerna-Lite differs from the original [Lerna](https://github.com/lerna/lerna) in the sense that it only has a limited set of commands from Lerna, Lerna itself has 15 commands while Lerna-Lite only includes 5 of these commands (and 2 of them are even optional). Lerna was originally built as an all-in-one tool, however nowadays Workspaces became available in all dependency managers (npm, yarn, pnpm) and the need for an all-in-one tool that includes built-in workspaces functionality is no longer required. Lerna-Lite is built around that fact and its CLI only includes the `publish` and `version` commands, while there are other commands available (like `exec` and `run`) they are totally optional and you won't download them unless you opt-in. So in summary it is more modular than the original Lerna and it may seem like a small change but it does make it more versatile (with smaller downloads and less dependencies) to use with other tools like Turborepo, pnpm and others...
 
- As a summary, we assume that you have already setup a Workspace through NPM, pnPM, Yarn or any other technology that will take care of the symlinks (Lerna-Lite does **not include** the `bootstrap` command hence the need for a workspace pre-setup), so make sure that your workspace is properly setup before installing Lerna-Lite.
+ As a summary, Lerna-Lite assumes, and requires, that you have already setup a Workspace either through NPM, pnpm, Yarn or any other technology that will take care of the symlinks (Lerna-Lite does **not include** the `bootstrap` command hence the need for a workspace pre-setup), so make sure that your workspace is properly setup before installing Lerna-Lite.
 
 ## Why create this lib/fork?
 Mainly for the following reasons:
-1. the original Lerna is no longer maintained (dependencies are out of date)
-2. create a lighter lib that still provide Lerna's approach of Versioning and Publishing by following the [Conventional Commits](https://www.conventionalcommits.org/) and also automatically create [Conventional-Changelog](https://github.com/conventional-changelog/conventional-changelog) for each package of the workspace. We don't need all packages of Lerna anymore since NPM Workspaces (or other technologies) came out.
-3. add some little extras while keeping the lib small.
-   - the lib is smaller since we only copied 5 out of 15 commands from Lerna (some are optional)
-4. rewrite the lib with TypeScript
+1. the original Lerna was no longer maintained (dependencies were out of date)
+2. create a smaller lib that is more modular than the original Lerna
+   - the lib is smaller since we only copied 5 out of 15 commands from Lerna (some are optional). We don't need all packages of Lerna anymore since NPM Workspaces (or other technologies) came out.
+   - the main goal of this fork is to keep `version` and `publish` commands and make anything else as optional packages
+3. rewrite the lib with TypeScript
+4. replicate a few opened PR from Lerna and add some new feature (like the new support for `workspace:` protocol)
 
 ### This lib will help you with
 #### [Version](https://github.com/ghiscoding/lerna-lite/tree/main/packages/version) and [Publish](https://github.com/ghiscoding/lerna-lite/tree/main/packages/publish) commands
@@ -87,7 +90,7 @@ Run the following commands to install Lerna-Lite in your project and/or install 
 |---------|-------------|-------------| ---------|
 | 💻 [info](https://github.com/ghiscoding/lerna-lite/tree/main/packages/info#readme) | `npm i @lerna-lite/cli -D -W` | print local environment information | Yes |
 | 📑 [version](https://github.com/ghiscoding/lerna-lite/tree/main/packages/version#readme) | `npm i @lerna-lite/cli -D -W` | create new version for each workspace package | Yes |
-| 📡 [publish](https://github.com/ghiscoding/lerna-lite/tree/main/packages/publish#readme) | `npm i @lerna-lite/cli -D -W` | publish each workspace package | Yes |
+| ☁️ [publish](https://github.com/ghiscoding/lerna-lite/tree/main/packages/publish#readme) | `npm i @lerna-lite/cli -D -W` | publish each workspace package | Yes |
 | 👷 [exec](https://github.com/ghiscoding/lerna-lite/tree/main/packages/exec#readme) | `npm i @lerna-lite/exec -D -W` | execute an command in each workspace package | Optional |
 | 🏃 [run](https://github.com/ghiscoding/lerna-lite/tree/main/packages/run#readme) | `npm i @lerna-lite/run -D -W` | run npm script in each workspace package | Optional |
 
