@@ -418,12 +418,12 @@ lerna will run [npm lifecycle scripts](https://docs.npmjs.com/cli/v8/using-npm/s
 
 
 ## `workspace:` protocol
-The `workspace:` protocol (yarn/pnpm), is also supported by Lerna-Lite. When publishing we will replace any `workspace:` dependency by:
+The `workspace:` protocol (yarn/pnpm), is also supported by Lerna-Lite. When publishing, we will replace any `workspace:` dependency by:
 
 - the corresponding version in the target workspace (if you use `workspace:*`, `workspace:~`, or `workspace:^`)
 - the associated semver range (for any other range type)
 
-So for example, if we have `foo`, `bar`, `qar`, `zoo` in the workspace and they all are at version `1.5.0`, the following:
+So for example, if we have `foo`, `bar`, `qar`, `zoo` in the workspace and they all are at version `1.5.0` (before publishing), the following:
 ```json
 {
     "dependencies": {

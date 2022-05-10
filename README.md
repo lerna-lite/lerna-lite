@@ -117,7 +117,7 @@ Add custom NPM Scripts or simply run the commands in a shell with Lerna-Lite CLI
   "new-publish": "lerna publish from-package",
 
   "exec-echo": "lerna exec echo hello", // optional `exec` command
-  "run-tests": "lerna run test", // optional `run` command
+  "run-tests": "lerna run test",        // optional `run` command
 }
 ```
 
