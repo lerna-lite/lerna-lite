@@ -26,7 +26,7 @@
       - 💻 [`info`](https://github.com/ghiscoding/lerna-lite/tree/main/packages/info#readme) - print local environment information when opening new issue
       - ☁️ [`publish`](https://github.com/ghiscoding/lerna-lite/tree/main/packages/publish#readme) - publish workspace packages
       - 📑 [`version`](https://github.com/ghiscoding/lerna-lite/tree/main/packages/version#readme) - create new version for each workspace packages
-   - optional (separate install)
+   - optional (**separate install**)
       - 👷 [`exec`](https://github.com/ghiscoding/lerna-lite/tree/main/packages/exec#readme) - execute an command in each workspace package
       - 🏃 [`run`](https://github.com/ghiscoding/lerna-lite/tree/main/packages/run#readme) - run npm script in each workspace packages
 
@@ -38,9 +38,9 @@
 [MIT License](LICENSE)
 
 ## About Lerna-Lite
-Lerna-Lite differs from the original [Lerna](https://github.com/lerna/lerna) in the sense that it only has a limited set of commands from Lerna, Lerna itself has 15 commands while Lerna-Lite only includes 5 of these commands (and 2 of them are even optional). Lerna was originally built as an all-in-one tool, however nowadays Workspaces became available in all dependency managers (npm, yarn, pnpm) and the need for an all-in-one tool that includes built-in workspaces functionality is no longer required. Lerna-Lite is built around that fact and its CLI only includes the `publish` and `version` commands, while there are other commands available (like `exec` and `run`) they are totally optional and you won't download them unless you opt-in. So in summary it is more modular than the original Lerna and it may seem like a small change but it does make it more versatile (with smaller downloads and less dependencies) to use with other tools like Turborepo, pnpm and others...
+Lerna-Lite differs from the original [Lerna](https://github.com/lerna/lerna) in the sense that it only has a limited set of commands from Lerna which itself has 15 commands while Lerna-Lite only includes 5 of them (and 2 of them are even optional). Lerna was originally built as an all-in-one tool, however nowadays Workspaces are available in all dependency managers (npm, yarn, pnpm) and the need for that all-in-one tool including built-in workspaces functionality is no longer needed. Lerna-Lite is built around that new fact and its CLI only includes the `publish` and `version` commands, while there are other commands available (like `exec` and `run`) they are totally optional and you won't download them unless you opt-in. So in summary it is more modular than the original Lerna and it may seem like a small change but it does make it more versatile (with smaller downloads and less dependencies) to use with other tools like Turborepo, pnpm and others...
 
- As a summary, Lerna-Lite assumes, and requires, that you have already setup a Workspace either through NPM, pnpm, Yarn or any other technology that will take care of the symlinks (Lerna-Lite does **not include** the `bootstrap` command hence the need for a workspace pre-setup), so make sure that your workspace is properly setup before installing Lerna-Lite.
+ As a summary, Lerna-Lite assumes, and requires, to pre-setup a Workspace either through NPM, pnpm, Yarn or any other technology that will take care of the symlinks (Lerna-Lite does **not include** the `bootstrap`, neither `link` commands hence the need for a workspace pre-setup), so make sure that your workspace is properly setup before installing Lerna-Lite. For workspace setup, take a look at: [Yarn 1.x workspaces](https://classic.yarnpkg.com/en/docs/workspaces) / [Yarn 2+ workspaces](https://yarnpkg.com/features/workspaces) / [pnpm workspaces](https://pnpm.io/workspaces),
 
 ## Why create this lib/fork?
 Mainly for the following reasons:
@@ -121,8 +121,7 @@ Add custom NPM Scripts or simply run the commands in a shell with Lerna-Lite CLI
 ### Configuration
 You could configure and run Lerna in 3 different ways:
 1. via a `lerna.json` file
-2. via a `"lerna": {}` property directly under your `package.json`
-3. or by passing arguments directly directly in the shell when executing the command.
+2. or by passing arguments directly directly in the shell when executing the command.
 
 You can find more info by reading about the [`lerna.json` - Wiki](https://github.com/ghiscoding/lerna-lite/wiki/lerna.json).
 
