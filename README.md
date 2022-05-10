@@ -40,7 +40,7 @@
 ## About Lerna-Lite
 Lerna-Lite differs from the original [Lerna](https://github.com/lerna/lerna) in the sense that it only has a limited set of commands from Lerna which itself has 15 commands while Lerna-Lite only includes 5 of them (and 2 of them are even optional). Lerna was originally built as an all-in-one tool, however nowadays Workspaces are available in all dependency managers (npm, yarn, pnpm) and the need for that all-in-one tool including built-in workspaces functionality is no longer needed. Lerna-Lite is built around that new fact and its CLI only includes the `publish` and `version` commands, while there are other commands available (like `exec` and `run`) they are totally optional and you won't download them unless you opt-in. So in summary it is more modular than the original Lerna and it may seem like a small change but it does make it more versatile (with smaller downloads and less dependencies) to use with other tools like Turborepo, pnpm and others...
 
- As a summary, Lerna-Lite assumes, and requires, to pre-setup a Workspace either through NPM, pnpm, Yarn or any other technology that will take care of the symlinks (Lerna-Lite does **not include** the `bootstrap`, neither `link` commands hence the need for a workspace pre-setup), so make sure that your workspace is properly setup before installing Lerna-Lite. For workspace setup, take a look at: [Yarn 1.x workspaces](https://classic.yarnpkg.com/en/docs/workspaces) / [Yarn 2+ workspaces](https://yarnpkg.com/features/workspaces) / [pnpm workspaces](https://pnpm.io/workspaces),
+ As a summary, Lerna-Lite assumes, and requires, to pre-setup a Workspace through your favorite package manager (NPM, pnpm, Yarn) that will take care of the symlinks (Lerna-Lite does **not include** the `bootstrap`, neither `link` commands hence the need for a workspace pre-setup), so make sure that your workspace is properly setup before installing Lerna-Lite. For workspace setup, take a look at these Workspace docs: [Yarn 1.x](https://classic.yarnpkg.com/en/docs/workspaces) / [Yarn 2+](https://yarnpkg.com/features/workspaces) / [pnpm](https://pnpm.io/workspaces) / [npm](https://docs.npmjs.com/cli/v8/using-npm/workspaces),
 
 ## Why create this lib/fork?
 Mainly for the following reasons:
@@ -98,11 +98,11 @@ Run the following commands to install Lerna-Lite in your project and/or install 
 
 ```bash
 # Lerna CLI which includes `info`, `publish` and `version` commands
-npm install @lerna-lite/cli -D -W  # OR yard add @lerna-lite/cli -D -W
+npm install @lerna-lite/cli -D -W   # OR yard add @lerna-lite/cli -D -W
 
 # optionally install `exec` and/or `run` commands
 npm install @lerna-lite/exec -D -W  # OR yarn add @lerna-lite/exec -D -W
-npm install @lerna-lite/run -D -W  # OR yarn add @lerna-lite/run -D -W
+npm install @lerna-lite/run -D -W   # OR yarn add @lerna-lite/run -D -W
 ```
 
 ### Usage
@@ -129,8 +129,8 @@ You can find more info by reading about the [`lerna.json` - Wiki](https://github
 If you are migrating from Lerna, it should be fairly easy to just replace Lerna with Lerna-Lite in your dependencies and that's about it, the CLI commands are the same, take a look at the quick steps shown below:
 1. remove Lerna from your local & global dependencies
 ```sh
-npm uninstall lerna -W     # OR yarn remove lerna -W
-npm uninstall -g lerna  # OR yarn global remove lerna
+npm uninstall lerna -W   # OR yarn remove lerna -W
+npm uninstall -g lerna   # OR yarn global remove lerna
 ```
 2. install Lerna-Lite CLI to get access to `info`, `version` and `publish` commands
    - `exec` and `run` commands are **optional** and can be installed separately as shown below
