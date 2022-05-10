@@ -112,7 +112,7 @@ export class RunCommand extends Command {
       });
     } else {
       // detect error (if any) from collected results
-      chain = chain.then((results: Array<{ exitCode: number; failed?: boolean; pkg: Package; stderr: any; }>) => {
+      chain = chain.then((results: Array<{ exitCode: number; failed?: boolean; pkg?: Package; stderr: any; }>) => {
         /* istanbul ignore else */
         if (results.some((result?: { failed?: boolean; }) => result?.failed)) {
           // propagate 'highest' error code, it's probably the most useful
@@ -133,7 +133,7 @@ export class RunCommand extends Command {
       });
     }
 
-    return chain.then((results: Array<{ exitCode: number; failed?: boolean; pkg: Package; stderr: any; }>) => {
+    return chain.then((results: Array<{ exitCode: number; failed?: boolean; pkg?: Package; stderr: any; }>) => {
       const someFailed = results.some((result) => result?.failed);
       const logType = someFailed ? 'error' : 'success';
 
@@ -149,7 +149,7 @@ export class RunCommand extends Command {
       if (!this.bail && !this.options.stream) {
         results.forEach((result) => {
           if (result?.failed) {
-            this.logger.error('', `- ${result.pkg?.name ?? ''}`);
+            this.logger.error('', ` - ${result.pkg?.name ?? ''}`);
           } else {
             this.logger.success('', ` - ${result.pkg?.name ?? ''}`);
           }
