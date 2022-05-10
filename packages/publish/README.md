@@ -439,10 +439,11 @@ Will be transformed and publish the following:
 ```json
 {
     "dependencies": {
-        "foo": "1.5.0",
+        "foo": "^1.5.0",
         "bar": "~1.5.0",
         "qar": "^1.5.0",
         "zoo": "^1.5.0"
     }
 }
 ```
+**NOTE:* you might have noticed that `foo` is at `^1.5.0` instead of `1.5.0` and that is expected because Lerna automatically adds the caret `^` unless the [version --exact](https://github.com/ghiscoding/lerna-lite/tree/main/packages/version#--exact) option is provided.
