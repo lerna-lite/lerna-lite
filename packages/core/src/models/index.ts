@@ -18,6 +18,8 @@ export interface CommandOptions {
   rollVersion?: boolean;
 }
 
+export type CommandType = '' | 'exec' | 'info' | 'publish' | 'version' | 'run';
+
 export interface DescribeRefOptions {
   /* Defaults to `process.cwd()` */
   cwd?: string;
@@ -108,6 +110,9 @@ export interface QueryGraphConfig {
   /** "dependencies" excludes devDependencies from graph */
   graphType?: 'allDependencies' | 'dependencies';
 
+  /** Treatment of local sibling dependencies, default "auto" */
+  localDependencies?: 'auto' | 'force' | 'explicit';
+
   /** Whether or not to reject dependency cycles */
   rejectCycles?: boolean;
 }
@@ -138,12 +143,20 @@ export interface GitClient {
 
 export type NpaResolveResult = (npa.FileResult | npa.HostedGitResult | npa.URLResult | npa.AliasResult | npa.RegistryResult) & {
   explicitWorkspace?: boolean;
+  workspaceTarget?: string;
 }
 
 /** Passed between concurrent executions */
 export interface OneTimePasswordCache {
   /* The one-time password, passed as an option or received via prompt */
   otp?: string;
+}
+
+export interface ProjectConfig {
+  command?: string;
+  packages: string[];
+  useWorkspaces: boolean;
+  version: string;
 }
 
 /** The subset of package.json properties that Lerna-Lite uses */

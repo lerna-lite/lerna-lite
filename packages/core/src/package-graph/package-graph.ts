@@ -3,6 +3,7 @@ import npa from 'npm-package-arg';
 import { CyclicPackageGraphNode, PackageGraphNode, reportCycles } from './lib';
 import { Package } from '../package';
 import { ValidationError } from '../validation-error';
+import { NpaResolveResult } from '../models';
 
 /**
  * A graph of packages in the current project.
@@ -15,9 +16,14 @@ export class PackageGraph extends Map {
    * @param {'allDependencies'|'dependencies'} [graphType]
    *    Pass "dependencies" to create a graph of only dependencies,
    *    excluding the devDependencies that would normally be included.
-   * @param {boolean} [forceLocal] Force all local dependencies to be linked.
+   * @param {boolean|'auto'|'force'|'explicit'} [localDependencies] Treatment of local sibling dependencies, default "auto"
    */
-  constructor(packages: Package[], graphType: 'allDependencies' | 'dependencies' = 'allDependencies', forceLocal?: boolean) {
+  constructor(packages: Package[], graphType: 'allDependencies' | 'dependencies' = 'allDependencies', localDependencies: boolean | 'auto' | 'force' | 'explicit' | 'forceLocal' = 'auto') {
+    // For backward compatibility
+    if (localDependencies === true || localDependencies === 'forceLocal') {
+      localDependencies = 'force'; // eslint-disable-line
+    }
+
     // @ts-ignore
     super(packages.map((pkg: Package) => [pkg?.name ?? '', new PackageGraphNode(pkg)]));
 
@@ -59,16 +65,45 @@ export class PackageGraph extends Map {
         // Yarn decided to ignore https://github.com/npm/npm/pull/15900 and implemented "link:"
         // As they apparently have no intention of being compatible, we have to do it for them.
         // @see https://github.com/yarnpkg/yarn/issues/4212
-        const spec = graphDependencies[depName].replace(/^link:/, 'file:');
-        const resolved = npa.resolve(depName, spec, currentNode.location);
+        let spec = graphDependencies[depName].replace(/^link:/, 'file:');
+
+        // npa doesn't support the explicit workspace: protocol, supported by
+        // pnpm and Yarn.
+        const explicitWorkspace = /^workspace:/.test(spec);
+        let workspaceTarget: string | undefined;
+        if (explicitWorkspace) {
+          workspaceTarget = spec;
+          spec = spec.replace(/^workspace:/, '');
+
+          // when dependency is defined as target workspace, like `workspace:*`,
+          // we'll have to pull the version from its parent package version property
+          // example with `1.5.0`, ws:* => "1.5.0", ws:^ => "^1.5.0", ws:~ => "~1.5.0", ws:^1.5.0 => "^1.5.0"
+          if (spec === '*' || spec === '^' || spec === '~') {
+            const depPkg = packages.find(pkg => pkg.name === depName);
+            const version = depPkg?.version;
+            const specTarget = spec === '*' ? '' : spec;
+            spec = depPkg ? `${specTarget}${version}` : '';
+          }
+        }
+
+        const resolved: NpaResolveResult = npa.resolve(depName, spec, currentNode.location);
+        resolved.explicitWorkspace = explicitWorkspace;
+        if (resolved.explicitWorkspace) {
+          resolved.workspaceTarget = workspaceTarget;
+        }
 
         if (!depNode) {
           // it's an external dependency, store the resolution and bail
           return currentNode.externalDependencies.set(depName, resolved);
         }
 
-        if (forceLocal || resolved.fetchSpec === depNode.location || depNode.satisfies(resolved)) {
-          // a local file: specifier OR a matching semver
+        if (
+          explicitWorkspace ||
+          localDependencies === 'force' ||
+          resolved.fetchSpec === depNode.location ||
+          (localDependencies !== 'explicit' && depNode.satisfies(resolved))
+        ) {
+          // a local file: specifier, a matching semver or a workspace: version
           currentNode.localDependencies.set(depName, resolved);
           depNode.localDependents.set(currentName, currentNode);
         } else {

@@ -2,6 +2,7 @@ import 'dotenv/config';
 import pMap from 'p-map';
 import {
   Command,
+  CommandType,
   logOutput,
   Package,
   runTopologically,
@@ -19,7 +20,7 @@ export function factory(argv) {
 
 export class ExecCommand extends Command {
   /** command name */
-  name = 'exec';
+  name = 'exec' as CommandType;
 
   args: string[] = [];
   bail = false;

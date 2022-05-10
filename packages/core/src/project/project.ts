@@ -12,13 +12,7 @@ import { Package } from '../package';
 import { applyExtends } from './lib/apply-extends';
 import { ValidationError } from '../validation-error';
 import { makeFileFinder, makeSyncFileFinder } from './lib/make-file-finder';
-
-interface ProjectConfig {
-  command?: string;
-  packages: string[];
-  useWorkspaces: boolean;
-  version: string;
-}
+import { ProjectConfig, RawManifest } from '../models';
 
 /**
  * A representation of the entire project managed by Lerna.
@@ -132,7 +126,7 @@ export class Project {
 
     try {
       const manifestLocation = path.join(this.rootPath, 'package.json');
-      const packageJson = loadJsonFile.sync(manifestLocation) as Package;
+      const packageJson = loadJsonFile.sync(manifestLocation) as RawManifest;
 
       if (!packageJson.name) {
         // npm-lifecycle chokes if this is missing, so default like npm init does

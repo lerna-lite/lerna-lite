@@ -2,6 +2,7 @@ import 'jest-extended';
 import os from 'os';
 import path from 'path';
 import loadJsonFile from 'load-json-file';
+import npa from 'npm-package-arg';
 import writePkg from 'write-pkg';
 
 jest.mock('load-json-file');
@@ -9,6 +10,7 @@ jest.mock('write-pkg');
 
 // file under test
 import { Package } from '../package';
+import { NpaResolveResult, RawManifest } from '../models';
 
 describe('Package', () => {
   const factory = (json) =>
@@ -297,6 +299,109 @@ describe('Package', () => {
       );
     });
   });
+
+  describe(".updateLocalDependency()", () => {
+    it("works with `workspace:` protocol range", () => {
+      const pkg = factory({
+        dependencies: {
+          a: "workspace:^1.0.0",
+          b: "workspace:^1.0.0",
+          c: "workspace:./foo",
+          d: "file:./foo",
+          e: "^1.0.0",
+        },
+      });
+
+      const resolved: NpaResolveResult = npa.resolve("a", "^1.0.0", ".");
+      resolved.explicitWorkspace = true;
+
+      pkg.updateLocalDependency(resolved, "2.0.0", "^");
+
+      expect(pkg.toJSON()).toMatchInlineSnapshot(`
+        Object {
+          "dependencies": Object {
+            "a": "workspace:^2.0.0",
+            "b": "workspace:^1.0.0",
+            "c": "workspace:./foo",
+            "d": "file:./foo",
+            "e": "^1.0.0",
+          },
+        }
+      `);
+    });
+
+    it("works with star workspace target `workspace:*` and will keep same output target", () => {
+      const pkg = factory({
+        dependencies: {
+          a: "workspace:*",
+          b: "workspace:^1.0.0",
+        },
+      });
+
+      const resolved: NpaResolveResult = npa.resolve("a", "^1.0.0", ".");
+      resolved.explicitWorkspace = true;
+      resolved.workspaceTarget = 'workspace:*';
+
+      pkg.updateLocalDependency(resolved, "2.0.0", "^");
+
+      expect(pkg.toJSON()).toMatchInlineSnapshot(`
+        Object {
+          "dependencies": Object {
+            "a": "workspace:*",
+            "b": "workspace:^1.0.0",
+          },
+        }
+      `);
+    });
+
+    it("works with caret workspace target `workspace:^` and will keep same output target", () => {
+      const pkg = factory({
+        dependencies: {
+          a: "workspace:^",
+          b: "workspace:^1.0.0",
+        },
+      });
+
+      const resolved: NpaResolveResult = npa.resolve("a", "^1.0.0", ".");
+      resolved.explicitWorkspace = true;
+      resolved.workspaceTarget = 'workspace:^';
+
+      pkg.updateLocalDependency(resolved, "2.0.0", "^");
+
+      expect(pkg.toJSON()).toMatchInlineSnapshot(`
+        Object {
+          "dependencies": Object {
+            "a": "workspace:^",
+            "b": "workspace:^1.0.0",
+          },
+        }
+      `);
+    });
+
+    it("works with tilde workspace target `workspace:~` and will keep same output target", () => {
+      const pkg = factory({
+        dependencies: {
+          a: "workspace:~",
+          b: "workspace:^1.0.0",
+        },
+      });
+
+      const resolved: NpaResolveResult = npa.resolve("a", "^1.0.0", ".");
+      resolved.explicitWorkspace = true;
+      resolved.workspaceTarget = 'workspace:~';
+
+      pkg.updateLocalDependency(resolved, "2.0.0", "^");
+
+      expect(pkg.toJSON()).toMatchInlineSnapshot(`
+        Object {
+          "dependencies": Object {
+            "a": "workspace:~",
+            "b": "workspace:^1.0.0",
+          },
+        }
+      `);
+    });
+  });
 });
 
 describe('Package.lazy()', () => {
@@ -324,7 +429,7 @@ describe('Package.lazy()', () => {
   });
 
   it('returns existing package instance', () => {
-    const existing = new Package({ name: 'existing' } as Package, '/foo/bar', '/foo');
+    const existing = new Package({ name: 'existing' } as RawManifest, '/foo/bar', '/foo');
     const pkg = Package.lazy(existing);
 
     expect(pkg).toBe(existing);

@@ -90,6 +90,73 @@ describe("PackageGraph", () => {
       expect(pkg1.localDependents.has("pkg-2")).toBe(true);
       expect(pkg2.localDependencies.has("pkg-1")).toBe(true);
     });
+
+    it("only localizes workspace: siblings when it must be explicit", () => {
+      const pkgs = [
+        new Package(
+          {
+            name: "pkg-1",
+            version: "1.0.0",
+          },
+          "/test/pkg-1"
+        ),
+        new Package(
+          {
+            name: "pkg-2",
+            version: "1.0.0",
+            dependencies: {
+              "pkg-1": "^1.0.0",
+            },
+          },
+          "/test/pkg-2"
+        ),
+        new Package(
+          {
+            name: "pkg-3",
+            version: "1.0.0",
+            dependencies: {
+              "pkg-1": "workspace:^1.0.0",
+            },
+          },
+          "/test/pkg-3"
+        ),
+        new Package(
+          {
+            name: "pkg-4",
+            version: "1.0.0",
+            dependencies: {
+              "pkg-1": "workspace:*",
+            },
+          },
+          "/test/pkg-4"
+        ),
+        new Package(
+          {
+            name: "pkg-5",
+            version: "1.0.0",
+            dependencies: {
+              "pkg-1": "workspace:^",
+              "pkg-2": "workspace:~",
+            },
+          },
+          "/test/pkg-5"
+        ),
+      ];
+
+      const graph = new PackageGraph(pkgs, "allDependencies", "explicit");
+      const [pkg1, pkg2, pkg3, pkg4, pkg5] = graph.values();
+
+      expect(pkg1.localDependents.has('pkg-2')).toBe(false);
+      expect(pkg2.localDependencies.has('pkg-1')).toBe(false);
+      expect(pkg1.localDependents.has('pkg-3')).toBe(true);
+      expect(pkg3.localDependencies.has('pkg-1')).toBe(true);
+      expect(pkg4.localDependencies.has('pkg-1')).toBe(true);
+      expect(pkg4.localDependencies.get('pkg-1').workspaceTarget).toBe('workspace:*');
+      expect(pkg5.localDependencies.has('pkg-1')).toBe(true);
+      expect(pkg5.localDependencies.has('pkg-2')).toBe(true);
+      expect(pkg5.localDependencies.get('pkg-1').workspaceTarget).toBe('workspace:^');
+      expect(pkg5.localDependencies.get('pkg-2').workspaceTarget).toBe('workspace:~');
+    });
   });
 
   describe("Node", () => {

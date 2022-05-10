@@ -5,7 +5,7 @@
 [![Actions Status](https://github.com/ghiscoding/lerna-lite/workflows/CI%20Build/badge.svg)](https://github.com/ghiscoding/lerna-lite/actions)
 
 # @lerna-lite/publish
-## (`lerna publish`) - Publish command 📡
+## (`lerna publish`) - Publish command ☁️
 
 Lerna-Lite Publish command, publish package(s) in the current project
 
@@ -69,6 +69,7 @@ This is useful when a previous `lerna publish` failed to publish all packages to
   - [Positionals](#positionals)
     - [semver `--bump from-git`](#semver--bump-from-git)
     - [semver `--bump from-package`](#semver--bump-from-package)
+  - [`workspace:` protocol](#workspace-protocol)
   - [Options](#options)
     - [`--canary`](#--canary)
     - [`--contents <dir>`](#--contents-dir)
@@ -415,3 +416,34 @@ lerna will run [npm lifecycle scripts](https://docs.npmjs.com/cli/v8/using-npm/s
 10. Run `postpublish` lifecycle in root
 11. Update temporary dist-tag to latest, if [enabled](#--temp-tag)
 
+
+## `workspace:` protocol
+The `workspace:` protocol (yarn/pnpm), is also supported by Lerna-Lite. When publishing, we will replace any `workspace:` dependency by:
+
+- the corresponding version in the target workspace (if you use `workspace:*`, `workspace:~`, or `workspace:^`)
+- the associated semver range (for any other range type)
+
+So for example, if we have `foo`, `bar`, `qar`, `zoo` in the workspace and they all are at version `1.5.0` (before publishing), the following:
+```json
+{
+    "dependencies": {
+        "foo": "workspace:*",
+        "bar": "workspace:~",
+        "qar": "workspace:^",
+        "zoo": "workspace:^1.5.0"
+    }
+}
+```
+
+Will be transformed and publish the following:
+```json
+{
+    "dependencies": {
+        "foo": "^1.5.0",
+        "bar": "~1.5.0",
+        "qar": "^1.5.0",
+        "zoo": "^1.5.0"
+    }
+}
+```
+**NOTE:** you might have noticed that `foo` is at `^1.5.0` instead of `1.5.0` and that is expected because Lerna automatically adds the caret `^` when not specified, unless the [version --exact](https://github.com/ghiscoding/lerna-lite/tree/main/packages/version#--exact) option is provided.

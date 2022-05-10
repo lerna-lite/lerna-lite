@@ -1,5 +1,6 @@
 import {
   Command,
+  CommandType,
   logOutput,
   Package,
   runTopologically,
@@ -17,7 +18,7 @@ export function factory(argv) {
 
 export class RunCommand extends Command {
   /** command name */
-  name = 'run';
+  name = 'run' as CommandType;
 
   args: string[] = [];
   bail = false;

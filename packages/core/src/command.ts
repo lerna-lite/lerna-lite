@@ -10,7 +10,7 @@ import { warnIfHanging } from './utils/warn-if-hanging';
 import { writeLogFile } from './utils/write-log-file';
 import { Project } from './project/project';
 import { ValidationError } from './validation-error';
-import { ExecOpts } from './models';
+import { CommandType, ExecOpts } from './models';
 import { PackageGraph } from './package-graph/package-graph';
 import { logExecCommand } from './child-process';
 
@@ -25,7 +25,7 @@ export class Command {
   toposort?: number;
 
   execOpts!: ExecOpts;
-  name = '';
+  commandName: CommandType = '';
   composed;
   logger!: Logger;
   options: any;
@@ -41,10 +41,10 @@ export class Command {
     log.silly('argv', argv);
 
     // 'FooCommand' => 'foo'
-    this.name = this.constructor.name.replace(/Command$/, '').toLowerCase();
+    this.commandName = (this.constructor.name.replace(/Command$/, '').toLowerCase()) as CommandType;
 
     // composed commands are called from other commands, like publish -> version
-    this.composed = typeof argv.composed === 'string' && argv.composed !== this.name;
+    this.composed = typeof argv.composed === 'string' && argv.composed !== this.commandName;
 
     if (!this.composed) {
       // composed commands have already logged the lerna version
@@ -175,7 +175,7 @@ export class Command {
     const commandConfig = this.project.config.command || {};
 
     // The current command always overrides otherCommandConfigs
-    const overrides = [this.name, ...this.otherCommandConfigs].map((key) => (commandConfig as any)[key]);
+    const overrides = [this.commandName, ...this.otherCommandConfigs].map((key) => (commandConfig as any)[key]);
 
     this.options = defaultOptions(
       // CLI flags, which if defined overrule subsequent values
@@ -213,7 +213,7 @@ export class Command {
 
     // create logger that subclasses use
     Object.defineProperty(this, 'logger', {
-      value: log.newGroup(this.name),
+      value: log.newGroup(this.commandName),
     });
 
     // emit all buffered logs at configured level and higher
@@ -302,11 +302,11 @@ export class Command {
   }
 
   initialize(): any | Promise<any> {
-    throw new ValidationError(this.name, 'initialize() needs to be implemented.');
+    throw new ValidationError(this.commandName, 'initialize() needs to be implemented.');
   }
 
   execute(): any | Promise<any> {
-    throw new ValidationError(this.name, 'execute() needs to be implemented.');
+    throw new ValidationError(this.commandName, 'execute() needs to be implemented.');
   }
 }
 

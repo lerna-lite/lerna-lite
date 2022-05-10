@@ -13,6 +13,7 @@ import {
   collectPackages,
   collectUpdates,
   Command,
+  CommandType,
   createRunner,
   logOutput,
   Package,
@@ -51,7 +52,7 @@ export function factory(argv) {
 
 export class VersionCommand extends Command {
   /** command name */
-  name = 'version';
+  name = 'version' as CommandType;
 
   globalVersion = '';
   packagesToVersion: Package[] = [];
@@ -541,7 +542,7 @@ export class VersionCommand extends Command {
 
           if (depVersion && resolved.type !== 'directory') {
             // don't overwrite local file: specifiers, they only change during publish
-            pkg.updateLocalDependency(resolved, depVersion, this.savePrefix);
+            pkg.updateLocalDependency(resolved, depVersion, this.savePrefix, this.commandName);
           }
         }
 
