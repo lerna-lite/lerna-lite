@@ -23,7 +23,7 @@
 - [Troubleshooting](https://github.com/ghiscoding/lerna-lite/wiki/Troubleshooting)
 - Commands
    - included with CLI
-      - 💻 [`info`](https://github.com/ghiscoding/lerna-lite/tree/main/packages/info#readme) - print local environment information when opening new issue
+      - 💻 [`info`](https://github.com/ghiscoding/lerna-lite/tree/main/packages/info#readme) - print local environment information (useful when opening new issue)
       - ☁️ [`publish`](https://github.com/ghiscoding/lerna-lite/tree/main/packages/publish#readme) - publish workspace packages
       - 📑 [`version`](https://github.com/ghiscoding/lerna-lite/tree/main/packages/version#readme) - create new version for each workspace packages
    - optional (**separate install**)
@@ -40,16 +40,19 @@
 ## About Lerna-Lite
 Lerna-Lite differs from the original [Lerna](https://github.com/lerna/lerna) in the sense that it only has a limited set of commands from Lerna which itself has 15 commands while Lerna-Lite only includes 5 of them (and 2 of them are even optional). Lerna was originally built as an all-in-one tool, however nowadays Workspaces are available in all dependency managers (npm, yarn, pnpm) and the need for that all-in-one tool including built-in workspaces functionality is no longer needed. Lerna-Lite is built around that new fact and its CLI only includes the `publish` and `version` commands, while there are other commands available (like `exec` and `run`) they are totally optional and you won't download them unless you opt-in. So in summary it is more modular than the original Lerna and it may seem like a small change but it does make it more versatile (with smaller downloads and less dependencies) to use with other tools like Turborepo, pnpm and others...
 
- As a summary, Lerna-Lite assumes, and requires, to pre-setup a Workspace through your favorite package manager (NPM, pnpm, Yarn) that will take care of the symlinks (Lerna-Lite does **not include** the `bootstrap`, neither `link` commands hence the need for a workspace pre-setup), so make sure that your workspace is properly setup before installing Lerna-Lite. For workspace setup, take a look at these Workspace docs: [Yarn 1.x](https://classic.yarnpkg.com/en/docs/workspaces) / [Yarn 2+](https://yarnpkg.com/features/workspaces) / [pnpm](https://pnpm.io/workspaces) / [npm](https://docs.npmjs.com/cli/v8/using-npm/workspaces),
+ As a summary, Lerna-Lite assumes, and requires, to pre-setup a Workspace through your favorite package manager (NPM, pnpm, Yarn) that will take care of the symlinks (Lerna-Lite does **not include** the `bootstrap`, neither `link` commands hence the need for a workspace pre-setup), so make sure that your workspace is properly setup before installing Lerna-Lite.
+
+ Info on how to setup a workspace, can be found at these links: [Yarn classic](https://classic.yarnpkg.com/en/docs/workspaces) / [Yarn 2+](https://yarnpkg.com/features/workspaces) / [pnpm](https://pnpm.io/workspaces) / [npm](https://docs.npmjs.com/cli/v8/using-npm/workspaces),
 
 ## Why create this lib/fork?
 Mainly for the following reasons:
 1. the original Lerna was no longer maintained (dependencies were out of date)
 2. create a smaller lib that is more modular than the original Lerna
-   - the lib is smaller since we only copied 5 out of 15 commands from Lerna (some are optional). We don't need all packages of Lerna anymore since NPM Workspaces (or other technologies) came out.
-   - the main goal of this fork is to keep `version` and `publish` commands and make anything else as optional packages
-3. rewrite the lib with TypeScript
-4. replicate a few opened PR from Lerna and add some new feature (like the new support for `workspace:` protocol)
+  - the lib is smaller since we only copied 5 out of 15 commands from Lerna (some are optional). We don't need all packages of Lerna anymore since NPM Workspaces (or other technologies) came out.
+  - the main goal of this fork is to keep `version` and `publish` commands and make anything else as optional packages
+3. rewritten the lib in TypeScript
+4. replicate a few opened PR from Lerna and also add new feature
+  - like the new support for `workspace:` protocol and `dry-run` options
 
 ### This lib will help you with
 #### [Version](https://github.com/ghiscoding/lerna-lite/tree/main/packages/version) and [Publish](https://github.com/ghiscoding/lerna-lite/tree/main/packages/publish) commands
@@ -165,7 +168,7 @@ If you wish to contribute to the project, please follow these steps
 5. you can troubleshoot/debug the code via the VSCode debugger launch configs that were setup
 
 ## Troubleshooting
-If you have problems running the lib and your problems are related to Git commands that were executed, then we suggest to first try with the `--git-dry-run` option to see if it helps in finding the error(s) you may have. Another great, and possibly much more useful suggestion, is to search in the original Lerna [issues](https://github.com/lerna/lerna/issues) list and see if any solution could help you (remember that Lerna-Lite is a fork of the original code from Lerna and it works the same way). Lastly, if that is not enough and you wish to troubleshoot yourself, then read this [Troubleshooting - Wiki](https://github.com/ghiscoding/lerna-lite/wiki/Troubleshooting) to possibly troubleshoot yourself in your own environment.
+If you have problems running the lib and your problems are related to Git commands that were executed, then we suggest to first try with the `--git-dry-run` (or `--cmd-dry-run`) option to see if it helps in finding the error(s) you may have. Another great, and possibly much more useful suggestion, is to search in the original Lerna [issues](https://github.com/lerna/lerna/issues) list and see if any solution could help you (remember that Lerna-Lite is a fork of the original code from Lerna and it works the same way). Lastly, if that is not enough and you wish to troubleshoot yourself, then read this [Troubleshooting - Wiki](https://github.com/ghiscoding/lerna-lite/wiki/Troubleshooting) to possibly troubleshoot yourself in your own environment.
 
 ## Lerna-Lite Packages
 
