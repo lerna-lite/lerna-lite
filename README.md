@@ -30,7 +30,11 @@
       - 👷 [`exec`](https://github.com/ghiscoding/lerna-lite/tree/main/packages/exec#readme) - execute an command in each workspace package
       - 🏃 [`run`](https://github.com/ghiscoding/lerna-lite/tree/main/packages/run#readme) - run npm script in each workspace packages
 
-### 📢 Lerna-Lite also support yarn/pnpm `workspace:` protocol (original Lerna does not)
+---
+
+### 📢 Lerna-Lite also supports yarn/pnpm `workspace:` protocol (original Lerna does not yet)
+#### this new feature was introduced with version [1.2.0](https://github.com/ghiscoding/lerna-lite/releases/tag/v1.2.0) of Lerna-Lite.
+If you use this new feature, please take 30sec. to fill in this small [poll #156](https://github.com/ghiscoding/lerna-lite/discussions/156) survey just to see which package manager is the most popular to use with this new `workspace:` protocol.
 
 ---
 
