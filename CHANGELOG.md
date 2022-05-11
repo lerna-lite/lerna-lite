@@ -4,6 +4,20 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [1.2.0](https://github.com/ghiscoding/lerna-lite/compare/v1.1.1...v1.2.0) (2022-05-11)
+
+### Bug Fixes
+
+* **run:** display pkg name only when not streaming, fixes [#149](https://github.com/ghiscoding/lerna-lite/issues/149) ([bf60bf0](https://github.com/ghiscoding/lerna-lite/commit/bf60bf09f6eaa206378fccf4ba4b3e551fc8eb3c))
+* **url:** deprecation notice of git.io ([816b7cb](https://github.com/ghiscoding/lerna-lite/commit/816b7cbdaca6eb4411097c517c6e29c6a7008cdd)), closes [#3116](https://github.com/ghiscoding/lerna-lite/issues/3116)
+* **version:** include the updated root package-lock.json file in commits ([d6dbc9a](https://github.com/ghiscoding/lerna-lite/commit/d6dbc9a3aec1f4460546582fad92c1e5d6ee901e))
+
+### Features
+
+* **core:** add version/publish `workspace:` protocol ([ee57dfb](https://github.com/ghiscoding/lerna-lite/commit/ee57dfbb3ad26cd4bd722e1b54941360ec22f698))
+* **core:** Support the `workspace:` protocol ([67d8ba1](https://github.com/ghiscoding/lerna-lite/commit/67d8ba18be5ba915547b8d8eda2c46b13f6410d2))
+* **run:** add `LERNA_PACKAGE_NAME` env var to `run` command ([ae88a0a](https://github.com/ghiscoding/lerna-lite/commit/ae88a0a9169ebc9937455062d4e856a1e612dce0)), closes [#3107](https://github.com/ghiscoding/lerna-lite/issues/3107)
+
 ## [1.1.1](https://github.com/ghiscoding/lerna-lite/compare/v1.1.0...v1.1.1) (2022-05-01)
 
 ### Bug Fixes
@@ -19,7 +33,9 @@ See [Conventional Commits](https://conventionalcommits.org) for commit guideline
 ### Features
 
 * **cmd:** breaking, rename dry-run option to `cmd-dry-run` ([01e4777](https://github.com/ghiscoding/lerna-lite/commit/01e47776454bed89db320c17fae0c5c408af4940))
+
 * **exec:** add Lerna `exec` command ([8e87ea1](https://github.com/ghiscoding/lerna-lite/commit/8e87ea1f3a9987e2700b07886e4f600af090f344))
+
 * **info:** add `info` command to CLI ([6fa1154](https://github.com/ghiscoding/lerna-lite/commit/6fa1154a9412c78f26585f41d5612ad083d4494a))
 
 ## [1.0.5](https://github.com/ghiscoding/lerna-lite/compare/v1.0.4...v1.0.5) (2022-03-29)
