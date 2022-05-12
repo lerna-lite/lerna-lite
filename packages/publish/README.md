@@ -436,8 +436,9 @@ So for example, if we have `foo`, `bar`, `qar`, `zoo` in the workspace and they 
 }
 ```
 
-### with `--workspace-strict-match` (default)
-#### When using strict match (default), it will be transformed and publish with the following:
+#### with `--workspace-strict-match` (default)
+When using strict match (default), it will be transformed and publish with the following:
+
 _this is the default and is usually what most user will want to use since it will stricly adhere to pnpm/yarn workspace protocol._
 ```json
 {
@@ -450,8 +451,9 @@ _this is the default and is usually what most user will want to use since it wil
 }
 ```
 
-### with `--no-workspace-strict-match` 
-#### When strict match is disabled, it will be transformed and publish with the following:
+#### with `--no-workspace-strict-match` 
+When strict match is disabled, it will be transformed and publish with the following:
+
 _you would rarely want to disable the strict match, if you do so then in most use case Lerna will use the caret (^) unless the option [--exact](https://github.com/ghiscoding/lerna-lite/tree/main/packages/version#--exact) is provided._
 ```json
 {
