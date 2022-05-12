@@ -9,7 +9,7 @@
 [![codecov](https://codecov.io/gh/ghiscoding/lerna-lite/branch/main/graph/badge.svg)](https://codecov.io/gh/ghiscoding/lerna-lite)
 [![jest](https://jestjs.io/img/jest-badge.svg)](https://github.com/facebook/jest)
 [![NPM downloads](https://img.shields.io/npm/dm/@lerna-lite/cli.svg)](https://www.npmjs.com/package/@lerna-lite/cli)
-[![npm](https://img.shields.io/npm/v/@lerna-lite/cli.svg?color=forest)](https://www.npmjs.com/package/@lerna-lite/cli)
+[![npm](https://img.shields.io/npm/v/@lerna-lite/cli.svg?logo=npm&logoColor=fff&label=npm&color=limegreen)](https://www.npmjs.com/package/@lerna-lite/cli)
 
 ## Lerna-Lite is a super light version of the original [Lerna](https://github.com/lerna/lerna)
 
