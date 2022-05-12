@@ -184,7 +184,7 @@ describe("workspace protocol 'workspace:' specifiers", () => {
 
       await gitTag(cwd, "v1.0.0");
       await setupChanges(cwd);
-      await new PublishCommand(createArgv(cwd, "--bump", "major", "--yes", "--workspace-strict-match"));
+      await new PublishCommand(createArgv(cwd, "--bump", "major", "--yes"));
 
       expect(writePkg.updatedVersions()).toEqual({
         "package-1": "2.0.0",
