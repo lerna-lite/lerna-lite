@@ -276,19 +276,22 @@ export class Package {
           // e.g.: considering version is `1.2.3` and we have `workspace:*` it will be converted to "^1.2.3" or to "1.2.3" with strict match range enabled
           if (workspaceStrictMatch) {
             if (workspaceTarget === 'workspace:*') {
-              depCollection[depName] = depVersion;      // exact range
+              depCollection[depName] = depVersion;       // (*) exact range, "1.5.0"
             } else if (workspaceTarget === 'workspace:~') {
-              depCollection[depName] = `~${depVersion}`; // patch range (~)
+              depCollection[depName] = `~${depVersion}`; // (~) patch range, "~1.5.0"
+            } else if (workspaceTarget === 'workspace:^') {
+              depCollection[depName] = `^${depVersion}`; // (^) minor range, "^1.5.0"
             }
-            // anything else will fall under minor range (^)
           }
+          // anything else will fall under what Lerna previously found to be the version,
+          // typically by this line: depCollection[depName] = `${savePrefix}${depVersion}`;
         } else {
           // when versioning we'll only bump workspace protocol that have semver range like `workspace:^1.2.3`
           // any other workspace will remain the same in `package.json` file, for example `workspace:^`
           // keep target workspace or bump when it's a workspace semver range (like `workspace:^1.2.3`)
           depCollection[depName] = /^workspace:[*|^|~]{1}$/.test(workspaceTarget)
-            ? resolved.workspaceTarget               // target like `workspace:^`
-            : `workspace:${depCollection[depName]}`; // range like `workspace:^1.2.3`
+            ? resolved.workspaceTarget               // target like `workspace:^` => `workspace:^` (remains untouched in package.json)
+            : `workspace:${depCollection[depName]}`; // range like `workspace:^1.2.3` => `workspace:^1.3.3` (bump minor example)
         }
       }
     } else if (resolved.gitCommittish) {
