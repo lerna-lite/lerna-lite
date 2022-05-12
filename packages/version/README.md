@@ -507,7 +507,7 @@ lerna will run [npm lifecycle scripts](https://docs.npmjs.com/cli/v8/using-npm/s
 9. Push commit and tag(s) to remote, if [enabled](#--no-push)
 10. Create release, if [enabled](#--create-release-type)
 
-## `workspace:` protocol
+# `workspace:` protocol
 The `workspace:` protocol (pnpm/yarn) is also supported by Lerna-Lite. When versioning `workspace:` dependency, it will do the following:
 - fixed target workspace will remain untouched (if you use `workspace:*`, `workspace:~`, or `workspace:^`)
 - semver range workspace will be bumped (if you use `workspace:^1.2.3`)

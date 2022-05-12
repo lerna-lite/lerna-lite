@@ -70,8 +70,8 @@ This is useful when a previous `lerna publish` failed to publish all packages to
     - [semver `--bump from-git`](#semver--bump-from-git)
     - [semver `--bump from-package`](#semver--bump-from-package)
   - [`workspace:` protocol](#workspace-protocol)
-     - [`--workspace-strict-match (default)`](#--workspace-strict-match-default)
-     - [`--no-workspace-strict-match`](#--workspace-strict-match-default)
+     - [`--workspace-strict-match (default)`](#with---workspace-strict-match-default)
+     - [`--no-workspace-strict-match`](#with---no-workspace-strict-match)
   - [Options](#options)
     - [`--canary`](#--canary)
     - [`--contents <dir>`](#--contents-dir)
@@ -419,7 +419,7 @@ lerna will run [npm lifecycle scripts](https://docs.npmjs.com/cli/v8/using-npm/s
 11. Update temporary dist-tag to latest, if [enabled](#--temp-tag)
 
 
-## `workspace:` protocol
+# `workspace:` protocol
 The `workspace:` protocol (pnpm/yarn) is also supported by Lerna-Lite. When publishing, it will replace any `workspace:` dependency by:
 - the corresponding version in the target workspace (if you use `workspace:*`, `workspace:~`, or `workspace:^`)
 - the associated semver range (for any other range type)
