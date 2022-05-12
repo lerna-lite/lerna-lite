@@ -422,7 +422,7 @@ describe('Package.lazy()', () => {
   });
 
   it('returns package instance from json and dir arguments', () => {
-    const pkg = Package.lazy({ name: 'bar', version: '1.2.3' }, '/foo/bar');
+    const pkg = Package.lazy({ name: 'bar', version: '1.2.3' } as RawManifest, '/foo/bar');
 
     expect(pkg).toBeInstanceOf(Package);
     expect(pkg.version).toBe('1.2.3');
