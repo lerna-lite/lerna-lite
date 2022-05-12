@@ -454,7 +454,7 @@ _this is the default and is usually what most user will want to use since it wil
 #### with `--no-workspace-strict-match` 
 When strict match is disabled, it will be transformed and publish with the following:
 
-_you would rarely want to disable the strict match, if you do so then in most use case Lerna will use the caret (^) unless the option [--exact](https://github.com/ghiscoding/lerna-lite/tree/main/packages/version#--exact) is provided._
+_you would rarely want to disable the strict match, in fact it should be removed altogether from the code (probably in future releases) but it's here for the sole purpose of making it compatible with previous Lerna-Lite version `1.2.0`. When disabled, in most use case, Lerna will use the caret (^) unless the option [--exact](https://github.com/ghiscoding/lerna-lite/tree/main/packages/version#--exact) is provided._
 ```json
 {
     "dependencies": {
