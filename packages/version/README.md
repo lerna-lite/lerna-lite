@@ -506,13 +506,12 @@ lerna will run [npm lifecycle scripts](https://docs.npmjs.com/cli/v8/using-npm/s
 9. Push commit and tag(s) to remote, if [enabled](#--no-push)
 10. Create release, if [enabled](#--create-release-type)
 
-## `workspace:` protocol
-The `workspace:` protocol (yarn/pnpm), is also supported by Lerna-Lite. When versioning `workspace:` dependency, we will do the following:
-
+# `workspace:` protocol
+The `workspace:` protocol (pnpm/yarn) is also supported by Lerna-Lite. When versioning `workspace:` dependency, it will do the following:
 - fixed target workspace will remain untouched (if you use `workspace:*`, `workspace:~`, or `workspace:^`)
 - semver range workspace will be bumped (if you use `workspace:^1.2.3`)
 
-So for example, if we have `foo`, `bar`, `qar`, `zoo` in the workspace and they all are at version `1.5.0` with a `minor` bump request, then the following:
+So for example, if we have `foo`, `bar`, `qar`, `zoo` in the workspace and they all are at version `1.5.0` and a `minor` bump is requested, then the following:
 ```json
 {
     "dependencies": {
@@ -524,7 +523,7 @@ So for example, if we have `foo`, `bar`, `qar`, `zoo` in the workspace and they 
 }
 ```
 
-Will update your `package.json` with the following versions when a `minor` version is requested:
+Will update your `package.json` with the following versions with a `minor` version requested:
 ```json
 {
     "dependencies": {

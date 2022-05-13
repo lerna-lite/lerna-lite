@@ -244,9 +244,10 @@ export class Package {
    * @param {Object} resolved npa metadata
    * @param {String} depVersion semver
    * @param {String} savePrefix npm_config_save_prefix
+   * @param {Boolean} workspaceStrictMatch - are we using strict match with `workspace:` protocol
    * @param {String} updatedByCommand - which command called this update?
    */
-  updateLocalDependency(resolved: NpaResolveResult, depVersion: string, savePrefix: string, updatedByCommand?: CommandType) {
+  updateLocalDependency(resolved: NpaResolveResult, depVersion: string, savePrefix: string, workspaceStrictMatch = true, updatedByCommand?: CommandType) {
     const depName = resolved.name as string;
 
     // first, try runtime dependencies
@@ -262,38 +263,54 @@ export class Package {
       depCollection = this.devDependencies;
     }
 
-    if (depCollection) {
+    if (depCollection && (resolved.registry || resolved.type === 'directory')) {
+      // a version (1.2.3) OR range (^1.2.3) OR directory (file:../foo-pkg)
+      depCollection[depName] = `${savePrefix}${depVersion}`;
 
-      if (resolved.registry || resolved.type === 'directory') {
-        // a version (1.2.3) OR range (^1.2.3) OR directory (file:../foo-pkg)
-        depCollection[depName] = `${savePrefix}${depVersion}`;
+      // when using explicit `workspace:` protocol
+      if (resolved.explicitWorkspace) {
+        const workspaceTarget = resolved?.workspaceTarget ?? '';
 
-        // when using explicit workspace protocol and we're not doing a Publish
-        // if we are publishing, we will skip this and so we'll keep regular semver range, e.g.: "workspace:*"" will be converted to "^1.2.3"
-        if (resolved.explicitWorkspace && updatedByCommand !== 'publish') {
+        if (updatedByCommand === 'publish') {
+          // when publishing, workspace protocol will be transformed to semver range
+          // e.g.: considering version is `1.2.3` and we have `workspace:*` it will be converted to "^1.2.3" or to "1.2.3" with strict match range enabled
+          if (workspaceStrictMatch) {
+            if (workspaceTarget === 'workspace:*') {
+              depCollection[depName] = depVersion;       // (*) exact range, "1.5.0"
+            } else if (workspaceTarget === 'workspace:~') {
+              depCollection[depName] = `~${depVersion}`; // (~) patch range, "~1.5.0"
+            } else if (workspaceTarget === 'workspace:^') {
+              depCollection[depName] = `^${depVersion}`; // (^) minor range, "^1.5.0"
+            }
+          }
+          // anything else will fall under what Lerna previously found to be the version,
+          // typically by this line: depCollection[depName] = `${savePrefix}${depVersion}`;
+        } else {
+          // when versioning we'll only bump workspace protocol that have semver range like `workspace:^1.2.3`
+          // any other workspace will remain the same in `package.json` file, for example `workspace:^`
           // keep target workspace or bump when it's a workspace semver range (like `workspace:^1.2.3`)
-          depCollection[depName] = /^workspace:[*|^|~]{1}$/.test(resolved?.workspaceTarget ?? '')
-            ? resolved.workspaceTarget               // target like `workspace:*`
-            : `workspace:${depCollection[depName]}`; // range like `workspace:^1.2.3`
+          depCollection[depName] = /^workspace:[*|^|~]{1}$/.test(workspaceTarget)
+            ? resolved.workspaceTarget               // target like `workspace:^` => `workspace:^` (remains untouched in package.json)
+            : `workspace:${depCollection[depName]}`; // range like `workspace:^1.2.3` => `workspace:^1.3.3` (bump minor example)
         }
-      } else if (resolved.gitCommittish) {
-        // a git url with matching committish (#v1.2.3 or #1.2.3)
-        const [tagPrefix] = /^\D*/.exec(resolved.gitCommittish) as RegExpExecArray;
-
-        // update committish
-        const { hosted } = resolved as any; // take that, lint!
-        hosted.committish = `${tagPrefix}${depVersion}`;
-
-        // always serialize the full url (identical to previous resolved.saveSpec)
-        depCollection[depName] = hosted.toString({ noGitPlus: false, noCommittish: false });
-      } else if (resolved.gitRange) {
-        // a git url with matching gitRange (#semver:^1.2.3)
-        const { hosted } = resolved as any; // take that, lint!
-        hosted.committish = `semver:${savePrefix}${depVersion}`;
-
-        // always serialize the full url (identical to previous resolved.saveSpec)
-        depCollection[depName] = hosted.toString({ noGitPlus: false, noCommittish: false });
       }
+    } else if (resolved.gitCommittish) {
+      // a git url with matching committish (#v1.2.3 or #1.2.3)
+      const [tagPrefix] = /^\D*/.exec(resolved.gitCommittish) as RegExpExecArray;
+
+      // update committish
+      const { hosted } = resolved as any; // take that, lint!
+      hosted.committish = `${tagPrefix}${depVersion}`;
+
+      // always serialize the full url (identical to previous resolved.saveSpec)
+      depCollection[depName] = hosted.toString({ noGitPlus: false, noCommittish: false });
+    } else if (resolved.gitRange) {
+      // a git url with matching gitRange (#semver:^1.2.3)
+      const { hosted } = resolved as any; // take that, lint!
+      hosted.committish = `semver:${savePrefix}${depVersion}`;
+
+      // always serialize the full url (identical to previous resolved.saveSpec)
+      depCollection[depName] = hosted.toString({ noGitPlus: false, noCommittish: false });
     }
   }
 }

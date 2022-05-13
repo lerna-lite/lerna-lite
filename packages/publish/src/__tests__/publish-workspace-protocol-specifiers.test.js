@@ -62,79 +62,159 @@ describe("workspace protocol 'workspace:' specifiers", () => {
     await gitCommit(cwd, "setup");
   };
 
-  it("overwrites workspace protocol with local minor bump version before npm publish but after git commit", async () => {
-    const cwd = await initFixture("workspace-protocol-specs");
+  describe('workspace-strict-match disabled', () => {
+    it("overwrites workspace protocol with local patch bump version before npm publish but after git commit", async () => {
+      const cwd = await initFixture("workspace-protocol-specs");
 
-    await gitTag(cwd, "v1.0.0");
-    await setupChanges(cwd);
-    await new PublishCommand(createArgv(cwd, "--bump", "minor", "--yes"));
+      await gitTag(cwd, "v1.0.0");
+      await setupChanges(cwd);
+      await new PublishCommand(createArgv(cwd, "--bump", "patch", "--yes", "--no-workspace-strict-match"));
 
-    expect(writePkg.updatedVersions()).toEqual({
-      "package-1": "1.1.0",
-      "package-2": "1.1.0",
-      "package-3": "1.1.0",
-      "package-4": "1.1.0",
-      "package-5": "1.1.0",
-      "package-6": "1.1.0",
-      "package-7": "1.1.0",
+      expect(writePkg.updatedVersions()).toEqual({
+        "package-1": "1.0.1",
+        "package-2": "1.0.1",
+        "package-3": "1.0.1",
+        "package-4": "1.0.1",
+        "package-5": "1.0.1",
+        "package-6": "1.0.1",
+        "package-7": "1.0.1",
+      });
+
+      // notably missing is package-1, which has no relative file: dependencies
+      expect(writePkg.updatedManifest("package-2").dependencies).toMatchObject({
+        "package-1": "^1.0.1", // workspace:*
+      });
+      expect(writePkg.updatedManifest("package-3").dependencies).toMatchObject({
+        "package-2": "^1.0.1", // workspace:^
+      });
+      expect(writePkg.updatedManifest("package-4").optionalDependencies).toMatchObject({
+        "package-3": "^1.0.1", // workspace:~
+      });
+      expect(writePkg.updatedManifest("package-5").dependencies).toMatchObject({
+        // all fixed versions are bumped when major
+        "package-4": "^1.0.1", // workspace:^1.0.0
+        "package-6": "^1.0.1", // workspace:^1.0.0
+      });
+      // private packages do not need local version resolution
+      expect(writePkg.updatedManifest("package-7").dependencies).toMatchObject({
+        "package-1": "^1.0.1", // ^1.0.0
+      });
     });
 
-    // notably missing is package-1, which has no relative file: dependencies
-    expect(writePkg.updatedManifest("package-2").dependencies).toMatchObject({
-      "package-1": "^1.1.0",
-    });
-    expect(writePkg.updatedManifest("package-3").dependencies).toMatchObject({
-      "package-2": "^1.1.0",
-    });
-    expect(writePkg.updatedManifest("package-4").optionalDependencies).toMatchObject({
-      "package-3": "^1.1.0",
-    });
-    expect(writePkg.updatedManifest("package-5").dependencies).toMatchObject({
-      "package-4": "^1.1.0",
-      // all fixed versions are bumped when major
-      "package-6": "^1.1.0",
-    });
-    // private packages do not need local version resolution
-    expect(writePkg.updatedManifest("package-7").dependencies).toMatchObject({
-      "package-1": "^1.1.0",
+    it("overwrites workspace protocol with local minor bump version before npm publish but after git commit", async () => {
+      const cwd = await initFixture("workspace-protocol-specs");
+
+      await gitTag(cwd, "v1.0.0");
+      await setupChanges(cwd);
+      await new PublishCommand(createArgv(cwd, "--bump", "minor", "--yes", "--no-workspace-strict-match"));
+
+      expect(writePkg.updatedVersions()).toEqual({
+        "package-1": "1.1.0",
+        "package-2": "1.1.0",
+        "package-3": "1.1.0",
+        "package-4": "1.1.0",
+        "package-5": "1.1.0",
+        "package-6": "1.1.0",
+        "package-7": "1.1.0",
+      });
+
+      // notably missing is package-1, which has no relative file: dependencies
+      expect(writePkg.updatedManifest("package-2").dependencies).toMatchObject({
+        "package-1": "^1.1.0", // workspace:*
+      });
+      expect(writePkg.updatedManifest("package-3").dependencies).toMatchObject({
+        "package-2": "^1.1.0", // workspace:^
+      });
+      expect(writePkg.updatedManifest("package-4").optionalDependencies).toMatchObject({
+        "package-3": "^1.1.0", // workspace:~
+      });
+      expect(writePkg.updatedManifest("package-5").dependencies).toMatchObject({
+        // all fixed versions are bumped when major
+        "package-4": "^1.1.0", // workspace:^1.0.0
+        "package-6": "^1.1.0", // workspace:^1.0.0
+      });
+      // private packages do not need local version resolution
+      expect(writePkg.updatedManifest("package-7").dependencies).toMatchObject({
+        "package-1": "^1.1.0", // ^1.0.0
+      });
     });
   });
 
-  it("overwrites workspace protocol with local major bump version before npm publish but after git commit", async () => {
-    const cwd = await initFixture("workspace-protocol-specs");
+  describe('workspace-strict-match enabled', () => {
+    it("overwrites workspace protocol with local minor bump version before npm publish but after git commit", async () => {
+      const cwd = await initFixture("workspace-protocol-specs");
 
-    await gitTag(cwd, "v1.0.0");
-    await setupChanges(cwd);
-    await new PublishCommand(createArgv(cwd, "--bump", "major", "--yes"));
+      await gitTag(cwd, "v1.0.0");
+      await setupChanges(cwd);
+      await new PublishCommand(createArgv(cwd, "--bump", "minor", "--yes", "--workspace-strict-match"));
 
-    expect(writePkg.updatedVersions()).toEqual({
-      "package-1": "2.0.0",
-      "package-2": "2.0.0",
-      "package-3": "2.0.0",
-      "package-4": "2.0.0",
-      "package-5": "2.0.0",
-      "package-6": "2.0.0",
-      "package-7": "2.0.0",
+      expect(writePkg.updatedVersions()).toEqual({
+        "package-1": "1.1.0",
+        "package-2": "1.1.0",
+        "package-3": "1.1.0",
+        "package-4": "1.1.0",
+        "package-5": "1.1.0",
+        "package-6": "1.1.0",
+        "package-7": "1.1.0",
+      });
+
+      // notably missing is package-1, which has no relative file: dependencies
+      expect(writePkg.updatedManifest("package-2").dependencies).toMatchObject({
+        "package-1": "1.1.0", // workspace:*
+      });
+      expect(writePkg.updatedManifest("package-3").dependencies).toMatchObject({
+        "package-2": "^1.1.0", // workspace:^
+      });
+      expect(writePkg.updatedManifest("package-4").optionalDependencies).toMatchObject({
+        "package-3": "~1.1.0", // workspace:~
+      });
+      expect(writePkg.updatedManifest("package-5").dependencies).toMatchObject({
+        // all fixed versions are bumped when major
+        "package-4": "^1.1.0", // workspace:^1.0.0
+        "package-6": "^1.1.0", // workspace:^1.0.0
+      });
+      // private packages do not need local version resolution
+      expect(writePkg.updatedManifest("package-7").dependencies).toMatchObject({
+        "package-1": "^1.1.0", // ^1.0.0
+      });
     });
 
-    // notably missing is package-1, which has no relative file: dependencies
-    expect(writePkg.updatedManifest("package-2").dependencies).toMatchObject({
-      "package-1": "^2.0.0",
-    });
-    expect(writePkg.updatedManifest("package-3").dependencies).toMatchObject({
-      "package-2": "^2.0.0",
-    });
-    expect(writePkg.updatedManifest("package-4").optionalDependencies).toMatchObject({
-      "package-3": "^2.0.0",
-    });
-    expect(writePkg.updatedManifest("package-5").dependencies).toMatchObject({
-      "package-4": "^2.0.0",
-      // all fixed versions are bumped when major
-      "package-6": "^2.0.0",
-    });
-    // private packages do not need local version resolution
-    expect(writePkg.updatedManifest("package-7").dependencies).toMatchObject({
-      "package-1": "^2.0.0",
+    it("overwrites workspace protocol with local major bump version before npm publish but after git commit", async () => {
+      const cwd = await initFixture("workspace-protocol-specs");
+
+      await gitTag(cwd, "v1.0.0");
+      await setupChanges(cwd);
+      await new PublishCommand(createArgv(cwd, "--bump", "major", "--yes"));
+
+      expect(writePkg.updatedVersions()).toEqual({
+        "package-1": "2.0.0",
+        "package-2": "2.0.0",
+        "package-3": "2.0.0",
+        "package-4": "2.0.0",
+        "package-5": "2.0.0",
+        "package-6": "2.0.0",
+        "package-7": "2.0.0",
+      });
+
+      // notably missing is package-1, which has no relative file: dependencies
+      expect(writePkg.updatedManifest("package-2").dependencies).toMatchObject({
+        "package-1": "2.0.0", // workspace:*
+      });
+      expect(writePkg.updatedManifest("package-3").dependencies).toMatchObject({
+        "package-2": "^2.0.0", // workspace:^
+      });
+      expect(writePkg.updatedManifest("package-4").optionalDependencies).toMatchObject({
+        "package-3": "~2.0.0", // workspace:~
+      });
+      expect(writePkg.updatedManifest("package-5").dependencies).toMatchObject({
+        // all fixed versions are bumped when major
+        "package-4": "^2.0.0", // workspace:^1.0.0
+        "package-6": "^2.0.0", // workspace:^1.0.0
+      });
+      // private packages do not need local version resolution
+      expect(writePkg.updatedManifest("package-7").dependencies).toMatchObject({
+        "package-1": "^2.0.0", // ^1.0.0
+      });
     });
   });
 });

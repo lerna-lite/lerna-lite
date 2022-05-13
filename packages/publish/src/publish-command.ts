@@ -538,7 +538,7 @@ export class PublishCommand extends Command {
         const depVersion = this.updatesVersions?.get(depName) || this.packageGraph?.get(depName).pkg.version;
 
         // it no longer matters if we mutate the shared Package instance
-        node.pkg.updateLocalDependency(resolved, depVersion, this.savePrefix, this.commandName);
+        node.pkg.updateLocalDependency(resolved, depVersion, this.savePrefix, this.options.workspaceStrictMatch, this.commandName);
       }
 
       // writing changes to disk handled in serializeChanges()
@@ -557,7 +557,7 @@ export class PublishCommand extends Command {
         const depVersion = this.updatesVersions?.get(depName) || this.packageGraph?.get(depName).pkg.version;
 
         // it no longer matters if we mutate the shared Package instance
-        node.pkg.updateLocalDependency(resolved, depVersion, this.savePrefix, this.commandName);
+        node.pkg.updateLocalDependency(resolved, depVersion, this.savePrefix, this.options.workspaceStrictMatch, this.commandName);
       }
 
       // writing changes to disk handled in serializeChanges()
@@ -572,11 +572,12 @@ export class PublishCommand extends Command {
 
     return pMap(updatesWithLocalWorkspaces, (node: PackageGraphNode) => {
       for (const [depName, resolved] of node.localDependencies) {
-        // regardless of where the version comes from, we can't publish 'workspace:*' specs
+        // regardless of where the version comes from, we can't publish 'workspace:*' specs, it has to be transformed
+        // e.g. considering version is `1.2.3` and we have `workspace:*` it will be converted to "^1.2.3" or to "1.2.3" with strict match range enabled
         const depVersion = this.updatesVersions?.get(depName) || this.packageGraph?.get(depName).pkg.version;
 
         // it no longer matters if we mutate the shared Package instance
-        node.pkg.updateLocalDependency(resolved, depVersion, this.savePrefix, this.commandName);
+        node.pkg.updateLocalDependency(resolved, depVersion, this.savePrefix, this.options.workspaceStrictMatch, this.commandName);
       }
 
       // writing changes to disk handled in serializeChanges()

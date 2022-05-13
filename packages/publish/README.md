@@ -69,6 +69,8 @@ This is useful when a previous `lerna publish` failed to publish all packages to
     - [semver `--bump from-git`](#semver--bump-from-git)
     - [semver `--bump from-package`](#semver--bump-from-package)
   - [`workspace:` protocol](#workspace-protocol)
+     - [`--workspace-strict-match (default)`](#with---workspace-strict-match-default)
+     - [`--no-workspace-strict-match`](#with---no-workspace-strict-match)
   - [Options](#options)
     - [`--canary`](#--canary)
     - [`--contents <dir>`](#--contents-dir)
@@ -416,9 +418,8 @@ lerna will run [npm lifecycle scripts](https://docs.npmjs.com/cli/v8/using-npm/s
 11. Update temporary dist-tag to latest, if [enabled](#--temp-tag)
 
 
-## `workspace:` protocol
-The `workspace:` protocol (yarn/pnpm), is also supported by Lerna-Lite. When publishing, we will replace any `workspace:` dependency by:
-
+# `workspace:` protocol
+The `workspace:` protocol (pnpm/yarn) is also supported by Lerna-Lite. When publishing, it will replace any `workspace:` dependency by:
 - the corresponding version in the target workspace (if you use `workspace:*`, `workspace:~`, or `workspace:^`)
 - the associated semver range (for any other range type)
 
@@ -434,15 +435,32 @@ So for example, if we have `foo`, `bar`, `qar`, `zoo` in the workspace and they 
 }
 ```
 
-Will be transformed and publish the following:
+#### with `--workspace-strict-match` (default)
+When using strict match (default), it will be transformed and publish with the following:
+
+_this is the default and is usually what most user will want to use since it will stricly adhere to pnpm/yarn workspace protocol._
 ```json
 {
     "dependencies": {
-        "foo": "^1.5.0",
+        "foo": "1.5.0",
         "bar": "~1.5.0",
         "qar": "^1.5.0",
         "zoo": "^1.5.0"
     }
 }
 ```
-**NOTE:** you might have noticed that `foo` is at `^1.5.0` instead of `1.5.0` and that is expected because Lerna automatically adds the caret `^` when not specified, unless the [version --exact](https://github.com/ghiscoding/lerna-lite/tree/main/packages/version#--exact) option is provided.
+
+#### with `--no-workspace-strict-match` 
+When strict match is disabled, it will be transformed and publish with the following:
+
+_you would rarely want to disable the strict match, in fact it should be removed altogether from the code (probably in future releases) but it's here for the sole purpose of making it compatible with previous Lerna-Lite version `1.2.0`. When disabled, in most use case, Lerna will use the caret (^) unless the option [--exact](https://github.com/ghiscoding/lerna-lite/tree/main/packages/version#--exact) is provided._
+```json
+{
+    "dependencies": {
+        "foo": "^1.5.0",
+        "bar": "^1.5.0",
+        "qar": "^1.5.0",
+        "zoo": "^1.5.0"
+    }
+}
+```
