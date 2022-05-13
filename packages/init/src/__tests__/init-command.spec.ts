@@ -33,8 +33,10 @@ describe('Init Command', () => {
     const ensureLernaConfSpy = jest.spyOn(InitCommand.prototype, 'ensureLernaConfig');
     const ensurePkgDirSpy = jest.spyOn(InitCommand.prototype, 'ensurePackagesDir');
 
-    await new InitCommand(createArgv(testDir, ""));
+    const cmd = new InitCommand(createArgv(testDir, ""));
+    await cmd;
 
+    expect(cmd.requiresGit).toBe(false);
     expect(ensurePkgJsonSpy).toHaveBeenCalled();
     expect(ensureLernaConfSpy).toHaveBeenCalled();
     expect(ensurePkgDirSpy).toHaveBeenCalled();
@@ -51,6 +53,33 @@ describe('Init Command', () => {
     expect(ensurePkgJsonSpy).toHaveBeenCalled();
     expect(ensureLernaConfSpy).toHaveBeenCalled();
     expect(ensurePkgDirSpy).toHaveBeenCalled();
+  });
+
+  it('should ensure lerna config changes to "independent" when provided as argument', async () => {
+    const testDir = await initFixture("empty");
+
+    const cmd = new InitCommand(createArgv(testDir, "--independent"));
+    await cmd;
+
+    expect(cmd.project.config.version).toEqual('independent');
+  });
+
+  it('should ensure lerna config changes version to "0.0.0" when no version found in project package', async () => {
+    const testDir = await initFixture("empty");
+
+    const cmd = new InitCommand(createArgv(testDir, ""));
+    await cmd;
+
+    expect(cmd.project.config.version).toEqual('0.0.0');
+  });
+
+  it('should ensure lerna config changes version to what is found in project package version', async () => {
+    const testDir = await initFixture("updates");
+
+    const cmd = new InitCommand(createArgv(testDir, "--exact"));
+    await cmd;
+
+    expect(cmd.project.config.version).toEqual('1.0.0');
   });
 
   describe("in an empty directory", () => {
