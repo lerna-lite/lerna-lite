@@ -9,9 +9,49 @@ const initFixture = require('@lerna-test/init-fixture')(__dirname);
 
 // file under test
 const lernaInit = require('@lerna-test/command-runner')(require('../../../cli/src/cli-commands/cli-init-commands'));
+import { InitCommand } from '../index';
+import { factory } from '../init-command';
+
+// file under test
+const yargParser = require('yargs-parser');
+
+const createArgv = (cwd, ...args) => {
+  args.unshift('init');
+  const parserArgs = args.map(String);
+  const argv = yargParser(parserArgs);
+  argv['$0'] = cwd;
+  argv['loglevel'] = 'silent';
+  return argv;
+};
 
 describe('Init Command', () => {
   const lernaVersion = "__TEST_VERSION__";
+
+  it('should execute methods when initializing the command via its class', async () => {
+    const testDir = await initFixture("empty");
+    const ensurePkgJsonSpy = jest.spyOn(InitCommand.prototype, 'ensurePackageJSON');
+    const ensureLernaConfSpy = jest.spyOn(InitCommand.prototype, 'ensureLernaConfig');
+    const ensurePkgDirSpy = jest.spyOn(InitCommand.prototype, 'ensurePackagesDir');
+
+    await new InitCommand(createArgv(testDir, ""));
+
+    expect(ensurePkgJsonSpy).toHaveBeenCalled();
+    expect(ensureLernaConfSpy).toHaveBeenCalled();
+    expect(ensurePkgDirSpy).toHaveBeenCalled();
+  });
+
+  it('should execute methods when initializing the command via a factory', async () => {
+    const testDir = await initFixture("empty");
+    const ensurePkgJsonSpy = jest.spyOn(InitCommand.prototype, 'ensurePackageJSON');
+    const ensureLernaConfSpy = jest.spyOn(InitCommand.prototype, 'ensureLernaConfig');
+    const ensurePkgDirSpy = jest.spyOn(InitCommand.prototype, 'ensurePackagesDir');
+
+    await factory(createArgv(testDir, ""));
+
+    expect(ensurePkgJsonSpy).toHaveBeenCalled();
+    expect(ensureLernaConfSpy).toHaveBeenCalled();
+    expect(ensurePkgDirSpy).toHaveBeenCalled();
+  });
 
   describe("in an empty directory", () => {
     it("initializes git repo with lerna files", async () => {
