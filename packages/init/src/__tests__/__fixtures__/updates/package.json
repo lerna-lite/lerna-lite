@@ -1,0 +1,6 @@
+{
+  "name": "updates",
+  "devDependencies": {
+    "@lerna-lite/cli": "__OVERWRITTEN__"
+  }
+}
