@@ -270,7 +270,7 @@ export class Command {
     }
   }
 
-  runPreparations() {
+  runPreparations(): Promise<any> | void {
     if (!this.composed && this.project.isIndependent()) {
       // composed commands have already logged the independent status
       log.info('versioning', 'independent');

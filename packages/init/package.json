@@ -1,13 +1,10 @@
 {
-  "name": "@lerna-lite/cli",
-  "description": "Lerna-Lite CLI for the Version/Publish commands",
+  "name": "@lerna-lite/init",
+  "description": "Lerna-Lite init commmand - Create a new Lerna repo or upgrade an existing repo to the current version of Lerna",
   "version": "1.2.0",
-  "main": "dist/cli.js",
+  "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "typings": "dist/index.d.ts",
-  "bin": {
-    "lerna": "dist/cli.js"
-  },
   "files": [
     "/dist"
   ],
@@ -15,7 +12,8 @@
     "access": "public"
   },
   "scripts": {
-    "build": "tsc --project tsconfig.bundle.json"
+    "build": "tsc --project tsconfig.bundle.json",
+    "pack-tarball": "npm pack"
   },
   "license": "MIT",
   "author": "Ghislain B.",
@@ -23,7 +21,7 @@
   "repository": {
     "type": "git",
     "url": "https://github.com/ghiscoding/lerna-lite.git",
-    "directory": "packages/cli"
+    "directory": "packages/init"
   },
   "bugs": {
     "url": "https://github.com/ghiscoding/lerna-lite/issues"
@@ -34,14 +32,13 @@
   },
   "dependencies": {
     "@lerna-lite/core": "^1.2.0",
-    "@lerna-lite/info": "^1.2.0",
-    "@lerna-lite/init": "^1.2.0",
-    "@lerna-lite/publish": "^1.2.0",
-    "@lerna-lite/version": "^1.2.0",
-    "dedent": "^0.7.0",
-    "dotenv": "^16.0.0",
-    "import-local": "^3.1.0",
-    "npmlog": "^6.0.2",
-    "yargs": "^17.4.1"
+    "fs-extra": "^10.1.0",
+    "p-map": "^4.0.0",
+    "write-json-file": "^4.3.0"
+  },
+  "devDependencies": {
+    "@types/fs-extra": "^9.0.13",
+    "@types/p-map": "^2.0.0",
+    "@types/write-json-file": "^3.2.1"
   }
 }
