@@ -17,6 +17,7 @@
 - [Why create this lib/fork?](https://github.com/ghiscoding/lerna-lite#why-create-this-libfork)
 - [See it in Action](https://github.com/ghiscoding/lerna-lite/wiki/Release-Demo)
 - [README Badge](https://github.com/ghiscoding/lerna-lite#readme-badge)
+- [Getting Started](#getting-started)
 - [Installation](https://github.com/ghiscoding/lerna-lite#installation)
 - [`lerna.json` config file](https://github.com/ghiscoding/lerna-lite/wiki/Lerna.json)
 - [Migration for Lerna users](https://github.com/ghiscoding/lerna-lite#migration-for-lerna-users)
@@ -91,8 +92,28 @@ Using Lerna-Lite? Add a README badge to show it off: [![lerna--lite](https://img
 [![lerna--lite](https://img.shields.io/badge/maintained%20with-lerna--lite-cc00ff)](https://github.com/ghiscoding/lerna-lite)
 ```
 
+## Getting Started
+
+Let's start by installing Lerna as a dev dependency of your project with [npm](https://www.npmjs.com/).
+
+```sh
+$ mkdir lerna-repo && cd $_
+$ npx lerna init
+```
+
+This will create a `lerna.json` configuration file as well as a `packages` folder, so your folder should now look like this:
+
+```
+lerna-repo/
+  packages/
+  package.json
+  lerna.json
+```
+
 ## Installation
-Run the following commands to install Lerna-Lite in your project and/or install it globally by adding the `-g` option. If you are new to Lerna-Lite, you could also use Lerna-Lite [init](https://github.com/ghiscoding/lerna-lite/tree/main/packages/init#readme) command.
+Run the following commands to install Lerna-Lite in your project and/or install it globally by adding the `-g` option. 
+
+If you are new to Lerna-Lite, you could also run the [lerna init](https://github.com/ghiscoding/lerna-lite/tree/main/packages/init#readme) command which will create the `lerna.json` for you.
 
 | Command | Install         | Description | Included |
 |---------|-------------|-------------| ---------|
