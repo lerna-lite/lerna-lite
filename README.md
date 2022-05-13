@@ -92,7 +92,7 @@ Using Lerna-Lite? Add a README badge to show it off: [![lerna--lite](https://img
 ```
 
 ## Installation
-Run the following commands to install Lerna-Lite in your project and/or install it globally by adding the `-g` option.
+Run the following commands to install Lerna-Lite in your project and/or install it globally by adding the `-g` option. If you are new to Lerna-Lite, you could also use Lerna-Lite [init](https://github.com/ghiscoding/lerna-lite/tree/main/packages/init#readme) command.
 
 | Command | Install         | Description | Included |
 |---------|-------------|-------------| ---------|
@@ -103,7 +103,7 @@ Run the following commands to install Lerna-Lite in your project and/or install 
 | 👷 [exec](https://github.com/ghiscoding/lerna-lite/tree/main/packages/exec#readme) | `npm i @lerna-lite/exec -D -W` | execute an command in each workspace package | Optional |
 | 🏃 [run](https://github.com/ghiscoding/lerna-lite/tree/main/packages/run#readme) | `npm i @lerna-lite/run -D -W` | run npm script in each workspace package | Optional |
 
-**Note:** the default `lerna` CLI is only including 3 built-in commands (`info`,`publish`,`version`), while the (`exec`,`run`) commands are optional and must be installed separately as shown below.
+**Note:** the default `lerna` CLI is only including 4 built-in commands (`init`,`info`,`publish`,`version`), while the (`exec`,`run`) commands are optional and must be installed separately as shown below.
 
 ```bash
 # Lerna CLI which includes `info`, `init`, `publish` and `version` commands
@@ -182,7 +182,7 @@ If you have problems running the lib and your problems are related to Git comman
 | -------------| ------- | ----------- | ------- |
 | [@lerna-lite/cli](https://github.com/ghiscoding/lerna-lite/tree/main/packages/cli) | [![npm](https://img.shields.io/npm/v/@lerna-lite/cli.svg?color=forest)](https://www.npmjs.com/package/@lerna-lite/cli) | Lerna-Lite Info/Version/Publish comands CLI | [changelog](https://github.com/ghiscoding/lerna-lite/blob/main/packages/cli/CHANGELOG.md) |
 | [@lerna-lite/info](https://github.com/ghiscoding/lerna-lite/tree/main/packages/info) | [![npm](https://img.shields.io/npm/v/@lerna-lite/info.svg?color=forest)](https://www.npmjs.com/package/@lerna-lite/info) | Print local environment information | [changelog](https://github.com/ghiscoding/lerna-lite/blob/main/packages/info/CHANGELOG.md) |
-| [@lerna-lite/info](https://github.com/ghiscoding/lerna-lite/tree/main/packages/init) | [![npm](https://img.shields.io/npm/v/@lerna-lite/init.svg?color=forest)](https://www.npmjs.com/package/@lerna-lite/init) | create a new Lerna-Lite repo | [changelog](https://github.com/ghiscoding/lerna-lite/blob/main/packages/init/CHANGELOG.md) |
+| [@lerna-lite/init](https://github.com/ghiscoding/lerna-lite/tree/main/packages/init) | [![npm](https://img.shields.io/npm/v/@lerna-lite/init.svg?color=forest)](https://www.npmjs.com/package/@lerna-lite/init) | create a new Lerna-Lite repo | [changelog](https://github.com/ghiscoding/lerna-lite/blob/main/packages/init/CHANGELOG.md) |
 | [@lerna-lite/core](https://github.com/ghiscoding/lerna-lite/tree/main/packages/core) | [![npm](https://img.shields.io/npm/v/@lerna-lite/core.svg?color=forest)](https://www.npmjs.com/package/@lerna-lite/core) | Lerna-Lite core & shared methods | [changelog](https://github.com/ghiscoding/lerna-lite/blob/main/packages/core/CHANGELOG.md) |
 | [@lerna-lite/exec-run-common](https://github.com/ghiscoding/lerna-lite/tree/main/packages/exec-run-common) | [![npm](https://img.shields.io/npm/v/@lerna-lite/exec-run-common.svg?color=forest)](https://www.npmjs.com/package/@lerna-lite/exec-run-common) | Lerna-Lite Exec/Run commands common code | [changelog](https://github.com/ghiscoding/lerna-lite/blob/main/packages/exec-run-common/CHANGELOG.md) |
 | [@lerna-lite/publish](https://github.com/ghiscoding/lerna-lite/tree/main/packages/publish) | [![npm](https://img.shields.io/npm/v/@lerna-lite/publish.svg?color=forest)](https://www.npmjs.com/package/@lerna-lite/publish) | Publish packages in the current workspace | [changelog](https://github.com/ghiscoding/lerna-lite/blob/main/packages/publish/CHANGELOG.md) |
