@@ -15,7 +15,7 @@
     "access": "public"
   },
   "scripts": {
-    "build": "tsc --project tsconfig.bundle.json"
+    "build": "tsc --project tsconfig.bundle.json --newLine LF"
   },
   "license": "MIT",
   "author": "Ghislain B.",

@@ -12,7 +12,7 @@
     "/dist"
   ],
   "scripts": {
-    "build": "tsc --project tsconfig.bundle.json",
+    "build": "tsc --project tsconfig.bundle.json --newLine LF",
     "pack-tarball": "npm pack"
   },
   "license": "MIT",
