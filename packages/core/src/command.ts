@@ -194,7 +194,7 @@ export class Command<T extends AvailableCommandOption> {
   configureProperties() {
     const { concurrency, sort, maxBuffer } = this.options;
 
-    this.concurrency = Math.max(1, +(concurrency || DEFAULT_CONCURRENCY));
+    this.concurrency = Math.max(1, +concurrency || DEFAULT_CONCURRENCY);
     this.toposort = sort === undefined || sort;
 
     this.execOpts = {
