@@ -1,11 +1,11 @@
 import { Command, CommandType, logOutput, } from '@lerna-lite/core';
 import envinfo from 'envinfo';
 
-export function factory(argv) {
+export function factory(argv: any) {
   return new InfoCommand(argv);
 }
 
-export class InfoCommand extends Command {
+export class InfoCommand extends Command<any> {
   /** command name */
   name = 'info' as CommandType;
 

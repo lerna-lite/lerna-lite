@@ -3,6 +3,7 @@ import pMap from 'p-map';
 import {
   Command,
   CommandType,
+  ExecCommandOption,
   logOutput,
   Package,
   runTopologically,
@@ -10,15 +11,15 @@ import {
   spawnStreaming,
   ValidationError,
 } from '@lerna-lite/core';
-import { getFilteredPackages, Profiler } from '@lerna-lite/exec-run-common';
+import { FilterOptions, getFilteredPackages, Profiler } from '@lerna-lite/exec-run-common';
 
 import { ExecStreamingOption } from './models';
 
-export function factory(argv) {
+export function factory(argv: ExecCommandOption) {
   return new ExecCommand(argv);
 }
 
-export class ExecCommand extends Command {
+export class ExecCommand extends Command<ExecCommandOption & FilterOptions> {
   /** command name */
   name = 'exec' as CommandType;
 
@@ -36,7 +37,7 @@ export class ExecCommand extends Command {
     return false;
   }
 
-  constructor(argv: any) {
+  constructor(argv: ExecCommandOption) {
     super(argv);
   }
 
