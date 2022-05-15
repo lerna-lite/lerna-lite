@@ -1,4 +1,4 @@
-import { Command, CommandType, exec } from '@lerna-lite/core';
+import { Command, CommandType, exec, InitCommandOption } from '@lerna-lite/core';
 import fs from 'fs-extra';
 import path from 'path';
 import pMap from 'p-map';
@@ -6,7 +6,7 @@ import writeJsonFile from 'write-json-file';
 
 const LERNA_CLI_PKG_NAME = '@lerna-lite/cli';
 
-export function factory(argv: any) {
+export function factory(argv: InitCommandOption) {
   return new InitCommand(argv);
 }
 
@@ -16,7 +16,7 @@ export class InitCommand extends Command {
   exact = false;
   lernaVersion = '';
 
-  constructor(argv: any) {
+  constructor(argv: InitCommandOption) {
     super(argv);
   }
 
@@ -106,7 +106,7 @@ export class InitCommand extends Command {
     // config already defaulted to empty object in Project constructor
     const { config, version: projectVersion } = this.project;
 
-    let version;
+    let version = '';
 
     if (this.options.independent) {
       version = 'independent';

@@ -26,6 +26,7 @@ import {
   throwIfUncommitted,
   updateChangelog,
   ValidationError,
+  VersionCommandOption,
 } from '@lerna-lite/core';
 
 import { getCurrentBranch } from './lib/get-current-branch';
@@ -46,7 +47,7 @@ import {
   saveUpdatedLockJsonFile
 } from './lib/update-lockfile-version';
 
-export function factory(argv) {
+export function factory(argv: VersionCommandOption) {
   return new VersionCommand(argv);
 }
 
@@ -83,7 +84,7 @@ export class VersionCommand extends Command {
     );
   }
 
-  constructor(argv: any) {
+  constructor(argv: VersionCommandOption) {
     super(argv);
   }
 

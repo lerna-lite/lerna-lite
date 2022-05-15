@@ -3,6 +3,7 @@ import {
   CommandType,
   logOutput,
   Package,
+  RunCommandOption,
   runTopologically,
   ValidationError,
 } from '@lerna-lite/core';
@@ -12,7 +13,7 @@ import pMap from 'p-map';
 import { npmRunScript, npmRunScriptStreaming, timer } from './lib';
 import { ScriptStreamingOption } from './models';
 
-export function factory(argv) {
+export function factory(argv: RunCommandOption) {
   return new RunCommand(argv);
 }
 
@@ -34,7 +35,7 @@ export class RunCommand extends Command {
     return false;
   }
 
-  constructor(argv: any) {
+  constructor(argv: RunCommandOption) {
     super(argv);
   }
 

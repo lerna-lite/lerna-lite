@@ -10,12 +10,21 @@ import { warnIfHanging } from './utils/warn-if-hanging';
 import { writeLogFile } from './utils/write-log-file';
 import { Project } from './project/project';
 import { ValidationError } from './validation-error';
-import { CommandType, ExecOpts } from './models';
+import { CommandType, ExecCommandOption, ExecOpts, InitCommandOption, ProjectConfig, PublishCommandOption, VersionCommandOption } from './models';
 import { PackageGraph } from './package-graph/package-graph';
 import { logExecCommand } from './child-process';
 
 // maxBuffer value for running exec
 const DEFAULT_CONCURRENCY = os.cpus().length;
+
+type AvailableCommandOption = ExecCommandOption | InitCommandOption | PublishCommandOption | VersionCommandOption;
+type CommandOption = AvailableCommandOption & ProjectConfig & {
+  cwd: string;
+  composed?: boolean;
+  lernaVersion: string;
+  onRejected?: (result: any) => void;
+  onResolved?: (result: any) => void;
+};
 
 export class Command {
   argv: any;
@@ -33,12 +42,12 @@ export class Command {
   packageGraph!: PackageGraph;
   runner?: Promise<any>;
 
-  constructor(_argv: any) {
+  constructor(_argv: AvailableCommandOption) {
     log.pause();
     log.heading = 'lerna-lite';
 
-    const argv = cloneDeep(_argv);
-    log.silly('argv', argv);
+    const argv = cloneDeep(_argv) as CommandOption;
+    log.silly('argv', argv.toString());
 
     // 'FooCommand' => 'foo'
     this.commandName = (this.constructor.name.replace(/Command$/, '').toLowerCase()) as CommandType;

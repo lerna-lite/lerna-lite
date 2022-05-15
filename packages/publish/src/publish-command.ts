@@ -22,6 +22,7 @@ import {
   PackageGraphNode,
   prereleaseIdFromVersion,
   promptConfirmation,
+  PublishCommandOption,
   pulseTillDone,
   runTopologically,
   throwIfUncommitted,
@@ -44,7 +45,7 @@ import { createTempLicenses } from './lib/create-temp-licenses';
 import { getPackagesWithoutLicense } from './lib/get-packages-without-license';
 import { Tarball } from './models';
 
-export function factory(argv) {
+export function factory(argv: PublishCommandOption) {
   return new PublishCommand(argv);
 }
 
@@ -77,7 +78,7 @@ export class PublishCommand extends Command {
     return this.options.bump !== 'from-package';
   }
 
-  constructor(argv: any) {
+  constructor(argv: PublishCommandOption) {
     super(argv);
   }
 
