@@ -44,8 +44,7 @@ export class QueryGraph {
    */
   constructor(packages: Package[], { graphType = 'allDependencies', localDependencies = 'auto', rejectCycles } = {} as QueryGraphConfig) {
     // Create dependency graph
-    const graphTypeInput = graphType === 'all' ? 'allDependencies' : 'dependencies';
-    this.graph = new PackageGraph(packages, graphTypeInput, localDependencies);
+    this.graph = new PackageGraph(packages, graphType as 'allDependencies' | 'dependencies', localDependencies);
 
     // Evaluate cycles
     this.cycles = this.graph.collapseCycles(rejectCycles);
