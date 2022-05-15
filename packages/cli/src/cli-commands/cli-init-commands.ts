@@ -16,6 +16,11 @@ exports.builder = {
     alias: 'i',
     type: 'boolean',
   },
+  'use-workspaces': {
+    group: 'Command Options:',
+    describe: 'Enable integration with Yarn workspaces.',
+    type: 'boolean',
+  },
 };
 
 exports.handler = function handler(argv) {

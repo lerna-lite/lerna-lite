@@ -191,22 +191,8 @@ export interface ProjectConfig extends LernaConfig, QueryGraphConfig {
 }
 
 /** The subset of package.json properties that Lerna-Lite uses */
-export interface RawManifest {
-  name: string;
-  location: string;
-  version: string;
-  private?: boolean;
-  bin?: Record<string, string> | string;
-  scripts?: Record<string, string>;
-  dependencies?: Record<string, string>;
-  devDependencies?: Record<string, string>;
-  optionalDependencies?: Record<string, string>;
-  peerDependencies?: Record<string, string>;
+export interface RawManifest extends Package {
   publishConfig?: Record<'directory' | 'registry' | 'tag', string>;
-
-  /** workspace package globs when `useWorkspaces` is enabled */
-  workspaces?: string[] | { packages: string[] };
-  get: (str: string) => { packages?: string[] } | string[];
 }
 
 export interface ReleaseClient {

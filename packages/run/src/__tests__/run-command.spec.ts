@@ -13,7 +13,7 @@ import globby from 'globby';
 import yargParser from 'yargs-parser';
 
 // make sure to import the output mock
-import { logOutput } from '@lerna-lite/core';
+import { logOutput, RunCommandOption } from '@lerna-lite/core';
 
 // mocked modules
 const { npmRunScript, npmRunScriptStreaming } = require('../lib/npm-run-script');
@@ -34,7 +34,7 @@ const ranInPackagesStreaming = (testDir: string) =>
     return arr;
   }, []);
 
-const createArgv = (cwd: string, script?: string, ...args: string[]) => {
+const createArgv = (cwd: string, script?: string, ...args: any[]) => {
   args.unshift('run');
   const parserArgs = args.join(' ');
   const argv = yargParser(parserArgs);
@@ -43,7 +43,7 @@ const createArgv = (cwd: string, script?: string, ...args: string[]) => {
     argv.script = script;
   }
   args['logLevel'] = 'silent';
-  return argv;
+  return argv as unknown as RunCommandOption;
 };
 
 describe('RunCommand', () => {

@@ -41,6 +41,9 @@ export interface InitCommandOption {
 
   /** version packages independently */
   independent?: boolean;
+
+  /** enables integration with Yarn or other package manager that use `workspaces` property in `package.json` */
+  useWorkspaces?: boolean;
 }
 
 export interface PublishCommandOption extends VersionCommandOption {
