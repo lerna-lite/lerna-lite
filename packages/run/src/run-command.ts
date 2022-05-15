@@ -7,7 +7,7 @@ import {
   runTopologically,
   ValidationError,
 } from '@lerna-lite/core';
-import { getFilteredPackages, Profiler } from '@lerna-lite/exec-run-common';
+import { FilterOptions, getFilteredPackages, Profiler } from '@lerna-lite/exec-run-common';
 import pMap from 'p-map';
 
 import { npmRunScript, npmRunScriptStreaming, timer } from './lib';
@@ -17,7 +17,7 @@ export function factory(argv: RunCommandOption) {
   return new RunCommand(argv);
 }
 
-export class RunCommand extends Command {
+export class RunCommand extends Command<RunCommandOption & FilterOptions> {
   /** command name */
   name = 'run' as CommandType;
 

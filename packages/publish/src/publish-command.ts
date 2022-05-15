@@ -3,7 +3,7 @@ import path from 'path';
 import crypto from 'crypto';
 import pMap from 'p-map';
 import pPipe from 'p-pipe';
-import semver from 'semver';
+import semver, { ReleaseType } from 'semver';
 
 import { VersionCommand } from '@lerna-lite/version';
 import {
@@ -26,6 +26,7 @@ import {
   pulseTillDone,
   runTopologically,
   throwIfUncommitted,
+  UpdateCollectorOptions,
   ValidationError,
 } from '@lerna-lite/core';
 import { getCurrentTags } from './lib/get-current-tags';
@@ -49,7 +50,7 @@ export function factory(argv: PublishCommandOption) {
   return new PublishCommand(argv);
 }
 
-export class PublishCommand extends Command {
+export class PublishCommand extends Command<PublishCommandOption> {
   /** command name */
   name = 'publish' as CommandType;
   conf!: Conf & { snapshot?: any; };
@@ -381,14 +382,14 @@ export class PublishCommand extends Command {
           forcePublish,
           includeMergedTags,
           // private packages are never published, don't bother describing their refs.
-        },
+        } as UpdateCollectorOptions,
         this.options.gitDryRun
       ).filter((node) => !node.pkg.private)
     );
 
     const makeVersion = (fallback) => ({ lastVersion = fallback, refCount, sha }) => {
       // the next version is bumped without concern for preid or current index
-      const nextVersion = semver.inc(lastVersion.replace(this.tagPrefix, ''), release.replace('pre', ''));
+      const nextVersion = semver.inc(lastVersion.replace(this.tagPrefix, ''), release.replace('pre', '') as semver.ReleaseType);
 
       // semver.inc() starts a new prerelease at .0, git describe starts at .1
       // and build metadata is always ignored when comparing dependency ranges
@@ -704,7 +705,7 @@ export class PublishCommand extends Command {
 
     const opts = this.conf.snapshot;
     const mapper = pPipe(
-      ...[
+      ...([
         this.options.requireScripts && ((pkg: Package) => this.execScript(pkg, 'prepublish')),
 
         (pkg: Package & { packed: Tarball; }) =>
@@ -718,7 +719,7 @@ export class PublishCommand extends Command {
             // manifest may be mutated by any previous lifecycle
             return pkg.refresh();
           }),
-      ].filter(Boolean)
+      ] as pPipe.UnaryFunction<any, unknown>[]).filter(Boolean)
     );
 
     chain = chain.then(() => this.topoMapPackages(mapper));
@@ -754,7 +755,7 @@ export class PublishCommand extends Command {
     });
 
     const mapper = pPipe(
-      ...[
+      ...([
         (pkg: Package & { packed: Tarball; }) => {
           const preDistTag = this.getPreDistTag(pkg);
           const tag = !this.options.tempTag && preDistTag ? preDistTag : opts.tag;
@@ -771,7 +772,7 @@ export class PublishCommand extends Command {
         },
 
         this.options.requireScripts && ((pkg: Package) => this.execScript(pkg, 'postpublish')),
-      ].filter(Boolean)
+      ] as pPipe.UnaryFunction<any, unknown>[]).filter(Boolean)
     );
 
     chain = chain.then(() => this.topoMapPackages(mapper));

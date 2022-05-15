@@ -114,7 +114,7 @@ export interface ProfileData {
 
 export interface QueryGraphConfig {
   /** "dependencies" excludes devDependencies from graph */
-  graphType?: 'allDependencies' | 'dependencies';
+  graphType?: 'all' | 'allDependencies' | 'dependencies';
 
   /** Treatment of local sibling dependencies, default "auto" */
   localDependencies?: 'auto' | 'force' | 'explicit';
@@ -158,7 +158,7 @@ export interface OneTimePasswordCache {
   otp?: string;
 }
 
-export interface ProjectConfig {
+export interface LernaConfig {
   command?: {
     init?: InitCommandOption;
     publish?: PublishCommandOption;
@@ -174,6 +174,20 @@ export interface ProjectConfig {
   /** enables integration with Yarn or other package manager that use `workspaces` property in `package.json` */
   useWorkspaces?: boolean;
   version: string;
+}
+
+export interface ProjectConfig extends LernaConfig, QueryGraphConfig {
+  ci?: boolean;
+  concurrency: number | string;
+  cwd: string;
+  composed?: boolean;
+  lernaVersion: string;
+  progress?: boolean;
+  since?: string;
+  sort?: any;
+  stream?: boolean;
+  onRejected?: (result: any) => void;
+  onResolved?: (result: any) => void;
 }
 
 /** The subset of package.json properties that Lerna-Lite uses */

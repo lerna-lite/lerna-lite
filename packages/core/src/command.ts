@@ -18,15 +18,8 @@ import { logExecCommand } from './child-process';
 const DEFAULT_CONCURRENCY = os.cpus().length;
 
 type AvailableCommandOption = ExecCommandOption | InitCommandOption | PublishCommandOption | VersionCommandOption;
-type CommandOption = AvailableCommandOption & ProjectConfig & {
-  cwd: string;
-  composed?: boolean;
-  lernaVersion: string;
-  onRejected?: (result: any) => void;
-  onResolved?: (result: any) => void;
-};
 
-export class Command {
+export class Command<T extends AvailableCommandOption> {
   argv: any;
   concurrency!: number;
   envDefaults: any;
@@ -37,7 +30,7 @@ export class Command {
   commandName: CommandType = '';
   composed;
   logger!: Logger;
-  options: any;
+  options!: T & ExecOpts & ProjectConfig;
   project!: Project;
   packageGraph!: PackageGraph;
   runner?: Promise<any>;
@@ -46,7 +39,7 @@ export class Command {
     log.pause();
     log.heading = 'lerna-lite';
 
-    const argv = cloneDeep(_argv) as CommandOption;
+    const argv = cloneDeep(_argv) as ProjectConfig;
     log.silly('argv', argv.toString());
 
     // 'FooCommand' => 'foo'
@@ -201,7 +194,7 @@ export class Command {
   configureProperties() {
     const { concurrency, sort, maxBuffer } = this.options;
 
-    this.concurrency = Math.max(1, +concurrency || DEFAULT_CONCURRENCY);
+    this.concurrency = Math.max(1, +(concurrency || DEFAULT_CONCURRENCY));
     this.toposort = sort === undefined || sort;
 
     this.execOpts = {
@@ -247,7 +240,7 @@ export class Command {
     const gitCommand = 'git';
     const gitArgs = ['rev-parse'];
 
-    if (this.options.gitDryRun) {
+    if ((this.options as unknown as PublishCommandOption).gitDryRun) {
       logExecCommand(gitCommand, gitArgs);
       return true;
     }
@@ -267,7 +260,7 @@ export class Command {
       throw new ValidationError('ENOLERNA', 'No `lerna.json` file exist, please create one in the root of your project.');
     }
 
-    if (this.options.independent && !this.project.isIndependent()) {
+    if ((this.options as InitCommandOption).independent && !this.project.isIndependent()) {
       throw new ValidationError(
         'EVERSIONMODE',
         dedent`

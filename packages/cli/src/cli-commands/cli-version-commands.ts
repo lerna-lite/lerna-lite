@@ -180,6 +180,10 @@ exports.builder = (yargs, composed) => {
       requiresArg: true,
       defaultDescription: 'v',
     },
+    'workspace-strict-match': {
+      describe: 'Strict match transform version numbers to an exact range (like "1.2.3") rather than with a caret (like ^1.2.3) when using `workspace:*`.',
+      type: 'boolean',
+    },
     y: {
       describe: 'Skip all confirmation prompts.',
       alias: 'yes',

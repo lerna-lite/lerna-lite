@@ -5,7 +5,7 @@ export function factory(argv: any) {
   return new InfoCommand(argv);
 }
 
-export class InfoCommand extends Command {
+export class InfoCommand extends Command<any> {
   /** command name */
   name = 'info' as CommandType;
 

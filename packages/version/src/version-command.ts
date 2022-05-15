@@ -27,6 +27,7 @@ import {
   updateChangelog,
   ValidationError,
   VersionCommandOption,
+  UpdateCollectorOptions,
 } from '@lerna-lite/core';
 
 import { getCurrentBranch } from './lib/get-current-branch';
@@ -51,7 +52,7 @@ export function factory(argv: VersionCommandOption) {
   return new VersionCommand(argv);
 }
 
-export class VersionCommand extends Command {
+export class VersionCommand extends Command<VersionCommandOption> {
   /** command name */
   name = 'version' as CommandType;
 
@@ -81,7 +82,7 @@ export class VersionCommand extends Command {
   get requiresGit(): boolean {
     return (
       this.commitAndTag || this.pushToRemote || this.options.allowBranch || this.options.conventionalCommits
-    );
+    ) as boolean;
   }
 
   constructor(argv: VersionCommandOption) {
@@ -113,7 +114,7 @@ export class VersionCommand extends Command {
     this.pushToRemote = gitTagVersion && amend !== true && push;
     // never automatically push to remote when amending a commit
 
-    this.releaseClient = this.pushToRemote && this.options.createRelease && createReleaseClient(this.options.createRelease);
+    this.releaseClient = (this.pushToRemote && this.options.createRelease && createReleaseClient(this.options.createRelease)) as ReleaseClient | undefined;
     this.releaseNotes = [];
 
     if (this.releaseClient && this.options.conventionalCommits !== true) {
@@ -173,7 +174,7 @@ export class VersionCommand extends Command {
 
       if (
         this.options.allowBranch &&
-        ![].concat(this.options.allowBranch).some((x) => minimatch(this.currentBranch, x))
+        !([] as string[]).concat(this.options.allowBranch).some((x) => minimatch(this.currentBranch, x))
       ) {
         throw new ValidationError(
           'ENOTALLOWED',
@@ -229,7 +230,7 @@ export class VersionCommand extends Command {
       this.packageGraph.rawPackageList,
       this.packageGraph,
       this.execOpts,
-      this.options
+      this.options as UpdateCollectorOptions
     ).filter((node) => {
       // --no-private completely removes private packages from consideration
       if (node.pkg.private && this.options.private === false) {
@@ -426,7 +427,7 @@ export class VersionCommand extends Command {
    * @param {boolean|string|string[]} option
    * @returns {Set<string>} A set of package names (or wildcard) derived from option value.
    */
-  getPackagesForOption(option: boolean | string | string[]) {
+  getPackagesForOption(option?: boolean | string | string[]) {
     // new Set(null) is equivalent to new Set([])
     // i.e., an empty Set
     let inputs: string[] | null = null;

@@ -1,4 +1,10 @@
 export interface ExecCommandOption {
+  /** command to execute by the command */
+  cmd?: string;
+
+  /** exec command arguments */
+  args?: any;
+
   /** Displays the execution command that would be performed without executing it. */
   cmdDryRun?: boolean;
 
@@ -37,7 +43,7 @@ export interface InitCommandOption {
   independent?: boolean;
 }
 
-export interface PublishCommandOption {
+export interface PublishCommandOption extends VersionCommandOption {
   /** alias to '--canary' */
   c?: boolean;
 
@@ -63,7 +69,7 @@ export interface PublishCommandOption {
   gitHead?: string;
 
   /** Type of dependency to use when determining package hierarchy. */
-  graphType?: 'all' | 'dependencies';
+  graphType: 'all' | 'dependencies';
 
   /** Disable deprecated "prepublish" lifecycle script */
   ignorePrepublish?: boolean;
@@ -102,9 +108,6 @@ export interface PublishCommandOption {
   /** proxy for --no-verify-access */
   verifyAccess?: boolean;
 
-  /** Strict match transform version numbers to an exact range (like "1.2.3") rather than with a caret (like ^1.2.3) when using `workspace:*`. */
-  workspaceStrictMatch?: boolean;
-
   /** alias to '--yes' */
   y?: boolean;
 
@@ -119,16 +122,17 @@ export interface VersionCommandOption {
   /** Amend the existing commit, instead of generating a new one. */
   amend?: boolean;
 
+  /** conventional commit version bump type */
+  bump: 'major' | 'minor' | 'patch' | 'premajor' | 'preminor' | 'prepatch' | 'prerelease' | 'from-git' | 'from-package';
+
   /** Use conventional-changelog to determine version bump and generate CHANGELOG. */
   conventionalCommits?: boolean;
 
   /** Version currently prereleased packages to a non-prerelease version. */
-  // type must remain ambiguous because it is overloaded (boolean _or_ string _or_ array)
-  conventionalGraduate?: boolean | string | string[];
+  conventionalGraduate?: boolean | string;
 
   /** Version changed packages as prereleases when using --conventional-commits. */
-  // type must remain ambiguous because it is overloaded (boolean _or_ string _or_ array)
-  conventionalPrerelease?: boolean | string | string[];
+  conventionalPrerelease?: boolean | string;
 
   /** Add a custom message at the top of your "changelog.md" which is located in the root of your project. This option only works when using --conventional-commits. */
   changelogHeaderMessage?: string;
@@ -143,14 +147,13 @@ export interface VersionCommandOption {
   exact?: boolean;
 
   /** Always include targeted packages in versioning operations, skipping default logic. */
-  // type must remain ambiguous because it is overloaded (boolean _or_ string _or_ array)
-  forcePublish?: boolean | string | string[];
+  forcePublish?: boolean | string;
 
   /** Displays the process command that would be performed without executing it. */
   gitDryRun?: boolean;
 
   /** Defaults to 'origin', push git changes to the specified remote. */
-  gitRemote?: string;
+  gitRemote: string;
 
   /** Create an official GitHub or GitLab release for every version. */
   createRelease?: 'gitlab' | 'github';
@@ -165,9 +168,7 @@ export interface VersionCommandOption {
   ignoreScripts?: boolean;
 
   /** Include tags from merged branches when detecting changed packages. */
-  'include-merged-tags': {
-    type: 'boolean',
-  },
+  includeMergedTags?: boolean;
 
   /** alias to '--message' */
   m?: string;
@@ -232,6 +233,9 @@ export interface VersionCommandOption {
   /** Defaults to 'v', customize the tag prefix. To remove entirely, pass an empty string. */
   tagVersionPrefix?: string;
 
+  /** Strict match transform version numbers to an exact range (like "1.2.3") rather than with a caret (like ^1.2.3) when using `workspace:*`. */
+  workspaceStrictMatch?: boolean;
+
   /** alias to '--yes' */
   y?: boolean;
 
@@ -272,4 +276,7 @@ export interface RunCommandOption {
 
   /** Output performance profile to custom location instead of default project root. */
   profileLocation?: string;
+
+  /** npm script to run by the command */
+  script: string;
 }

@@ -1,4 +1,4 @@
-import { Command, CommandType, exec, InitCommandOption } from '@lerna-lite/core';
+import { Command, CommandType, exec, InitCommandOption, } from '@lerna-lite/core';
 import fs from 'fs-extra';
 import path from 'path';
 import pMap from 'p-map';
@@ -10,11 +10,11 @@ export function factory(argv: InitCommandOption) {
   return new InitCommand(argv);
 }
 
-export class InitCommand extends Command {
+export class InitCommand extends Command<InitCommandOption> {
   /** command name */
   name = 'init' as CommandType;
-  exact = false;
-  lernaVersion = '';
+  exact?: boolean = false;
+  lernaVersion?: string = '';
 
   constructor(argv: InitCommandOption) {
     super(argv);
