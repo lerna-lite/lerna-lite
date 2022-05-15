@@ -70,6 +70,9 @@ describe('Init Command', () => {
     await cmd;
 
     expect(cmd.project.manifest.workspaces).toEqual(['packages/*']);
+
+    cmd.project.manifest.workspaces = ['modules/*'];
+    expect(cmd.project.manifest.workspaces).toEqual(['modules/*']);
   });
 
   it('should ensure lerna config changes version to "0.0.0" when no version found in project package', async () => {
