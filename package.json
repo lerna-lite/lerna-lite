@@ -67,7 +67,7 @@
     "@lerna-test/show-commit": "file:helpers/show-commit",
     "@lerna-test/silence-logging": "file:helpers/silence-logging",
     "@lerna-test/update-lerna-config": "file:helpers/update-lerna-config",
-    "@types/jest": "^27.5.0",
+    "@types/jest": "^27.5.1",
     "@types/node": "^17.0.31",
     "@types/npmlog": "^4.1.4",
     "@types/yargs": "^17.0.10",
