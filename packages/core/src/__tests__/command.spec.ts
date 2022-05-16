@@ -19,7 +19,7 @@ import { updateLernaConfig } from '@lerna-test/update-lerna-config';
 import { Command } from '../command';
 
 describe('core-command', () => {
-  let testDir;
+  let testDir = '';
 
   beforeAll(async () => {
     testDir = await initFixture('basic');
@@ -38,7 +38,7 @@ describe('core-command', () => {
   // swallow errors when passed in argv
   const onRejected = () => { };
 
-  class OkCommand extends Command {
+  class OkCommand extends Command<any> {
     initialize() {
       return true;
     }
@@ -49,7 +49,7 @@ describe('core-command', () => {
   }
 
   // convenience to avoid silly 'not implemented errors'
-  const testFactory = (argv = {}) => new OkCommand(Object.assign({ cwd: testDir }, argv));
+  const testFactory = (argv = {}) => new OkCommand(Object.assign({ cwd: testDir } as any, argv));
 
   describe('.logger', () => {
     it('should be added to the instance', async () => {
@@ -168,7 +168,7 @@ describe('core-command', () => {
     });
 
     it('logs stdout and stderr of error from package', async () => {
-      class PkgErrorCommand extends Command {
+      class PkgErrorCommand extends Command<any> {
         initialize() {
           return true;
         }
@@ -187,7 +187,7 @@ describe('core-command', () => {
         }
       }
 
-      const command = new PkgErrorCommand({ cwd: testDir });
+      const command = new PkgErrorCommand({ cwd: testDir } as any);
 
       await expect(command).rejects.toThrow(
         expect.objectContaining({
@@ -206,7 +206,7 @@ describe('core-command', () => {
     });
 
     it('does not log stdout/stderr after streaming ends', async () => {
-      class PkgErrorCommand extends Command {
+      class PkgErrorCommand extends Command<any> {
         initialize() {
           return true;
         }
@@ -225,7 +225,7 @@ describe('core-command', () => {
         }
       }
 
-      const command = new PkgErrorCommand({ cwd: testDir, stream: true });
+      const command = new PkgErrorCommand({ cwd: testDir, stream: true } as any);
 
       await expect(command).rejects.toThrow('message');
       expect(console.error).not.toHaveBeenCalled();
@@ -257,9 +257,9 @@ describe('core-command', () => {
   });
 
   describe('.options', () => {
-    class TestACommand extends Command { }
-    class TestBCommand extends Command { }
-    class TestCCommand extends Command {
+    class TestACommand extends Command<any> { }
+    class TestBCommand extends Command<any> { }
+    class TestCCommand extends Command<any> {
       get otherCommandConfigs() {
         return ['testb'];
       }
@@ -267,7 +267,7 @@ describe('core-command', () => {
 
     it('does not mutate argv parameter', async () => {
       const argv = { cwd: testDir, onRejected };
-      const instance = new TestACommand(argv);
+      const instance = new TestACommand(argv as any);
       await instance;
 
       expect(argv).toEqual({ cwd: testDir, onRejected });
@@ -275,28 +275,28 @@ describe('core-command', () => {
     });
 
     it('should pick up global options', async () => {
-      const instance = new TestACommand({ cwd: testDir, onRejected });
+      const instance = new TestACommand({ cwd: testDir, onRejected } as any);
       await instance;
 
       expect(instance.options.testOption).toBe('default');
     });
 
     it('should override global options with command-level options', async () => {
-      const instance = new TestBCommand({ cwd: testDir, onRejected });
+      const instance = new TestBCommand({ cwd: testDir, onRejected } as any);
       await instance;
 
       expect(instance.options.testOption).toBe('b');
     });
 
     it('should override global options with inherited command-level options', async () => {
-      const instance = new TestCCommand({ cwd: testDir, onRejected });
+      const instance = new TestCCommand({ cwd: testDir, onRejected } as any);
       await instance;
 
       expect(instance.options.testOption).toBe('b');
     });
 
     it('should override inherited command-level options with local command-level options', async () => {
-      const instance = new TestCCommand({ cwd: testDir, onRejected });
+      const instance = new TestCCommand({ cwd: testDir, onRejected } as any);
       await instance;
 
       expect(instance.options.testOption2).toBe('c');
@@ -307,7 +307,7 @@ describe('core-command', () => {
         cwd: testDir,
         onRejected,
         testOption2: 'f',
-      });
+      } as any);
       await instance;
 
       expect(instance.options.testOption2).toBe('f');
@@ -318,7 +318,7 @@ describe('core-command', () => {
         cwd: testDir,
         onRejected,
         testOption: undefined, // yargs does this when --test-option is not passed
-      });
+      } as any);
       await instance;
 
       expect(instance.options.testOption).toBe('b');
@@ -328,7 +328,7 @@ describe('core-command', () => {
   describe('subclass implementation', () => {
     ['initialize', 'execute'].forEach((method) => {
       it(`throws if ${method}() is not overridden`, () => {
-        const command = new Command({ cwd: testDir, onRejected });
+        const command = new Command({ cwd: testDir, onRejected } as any);
         expect(() => command[method]()).toThrow();
       });
     });

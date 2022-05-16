@@ -9,7 +9,7 @@
     "build": "npm run build --ws",
     "lint": "eslint packages --ext .ts",
     "dist-info-cmd": "node ./packages/cli/dist/cli.js info",
-    "dist-init-cmd": "node ./packages/cli/dist/cli.js init --independent --exact",
+    "dist-init-cmd": "node ./packages/cli/dist/cli.js init --independent --exact --use-workspaces",
     "dist-roll-version": "node ./packages/cli/dist/cli.js version",
     "dist-roll-version-dry-run": "node ./packages/cli/dist/cli.js version --git-dry-run",
     "dist-roll-publish": "node ./packages/cli/dist/cli.js publish from-package",

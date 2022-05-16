@@ -121,7 +121,7 @@ export class Project {
     return (this.packageConfigs as any).map(globParent).map((parentDir: string) => path.resolve(this.rootPath, parentDir));
   }
 
-  get manifest(): Package {
+  get manifest(): RawManifest {
     let manifest;
 
     try {

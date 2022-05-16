@@ -30,6 +30,16 @@ describe('Package', () => {
     });
   });
 
+  describe('get .workspaces', () => {
+    it('should return the workspaces', () => {
+      const pkg = factory({ name: 'get-workspaces' });
+      expect(pkg.workspaces).toBe(undefined);
+
+      pkg.workspaces = ['modules/*'];
+      expect(pkg.workspaces).toEqual(['modules/*']);
+    });
+  });
+
   describe('get .resolved', () => {
     it('returns npa.Result relative to rootPath, always posix', () => {
       const pkg = factory({ name: 'get-resolved' });
@@ -301,6 +311,50 @@ describe('Package', () => {
   });
 
   describe(".updateLocalDependency()", () => {
+    describe('gitCommittish', () => {
+      it("works with a resolved 'gitCommittish'", () => {
+        const pkg = factory({
+          dependencies: {
+            a: "^1.0.0",
+            b: "^1.0.0",
+          },
+        });
+
+        const resolved: NpaResolveResult = npa.resolve("a", "^1.0.0", ".");
+        resolved.explicitWorkspace = true;
+        resolved.type = undefined;
+        resolved.registry = undefined;
+        resolved.gitCommittish = '1.2.3';
+        resolved.hosted = { committish: '', domain: 'localhost', noGitPlus: false, noCommittish: false, saveSpec: true } as any;
+
+        pkg.updateLocalDependency(resolved, "2.0.0", "^");
+
+        expect((resolved.hosted as any).committish).toBe('2.0.0');
+      });
+    });
+
+    describe('gitRange', () => {
+      it("works with a resolved 'gitRange'", () => {
+        const pkg = factory({
+          dependencies: {
+            a: "^1.0.0",
+            b: "^1.0.0",
+          },
+        });
+
+        const resolved: NpaResolveResult = npa.resolve("a", "^1.0.0", ".");
+        resolved.explicitWorkspace = true;
+        resolved.type = undefined;
+        resolved.registry = undefined;
+        resolved.gitRange = '1.2.3';
+        resolved.hosted = { committish: '', domain: 'localhost', noGitPlus: false, noCommittish: false, saveSpec: true } as any;
+
+        pkg.updateLocalDependency(resolved, "2.0.0", "^");
+
+        expect((resolved.hosted as any).committish).toBe('semver:^2.0.0');
+      });
+    });
+
     describe('Version with `workspace:` protocol', () => {
       it("works with `workspace:` protocol range", () => {
         const pkg = factory({
@@ -333,7 +387,7 @@ describe('Package', () => {
 
       it("works with star workspace input target `workspace:*` and will keep same output target", () => {
         const pkg = factory({
-          dependencies: {
+          devDependencies: {
             a: "workspace:*",
             b: "workspace:^1.0.0",
           },
@@ -347,7 +401,7 @@ describe('Package', () => {
 
         expect(pkg.toJSON()).toMatchInlineSnapshot(`
           Object {
-            "dependencies": Object {
+            "devDependencies": Object {
               "a": "workspace:*",
               "b": "workspace:^1.0.0",
             },
@@ -357,7 +411,7 @@ describe('Package', () => {
 
       it("works with caret workspace input target `workspace:^` and will keep same output target", () => {
         const pkg = factory({
-          dependencies: {
+          optionalDependencies: {
             a: "workspace:^",
             b: "workspace:^1.0.0",
           },
@@ -371,7 +425,7 @@ describe('Package', () => {
 
         expect(pkg.toJSON()).toMatchInlineSnapshot(`
           Object {
-            "dependencies": Object {
+            "optionalDependencies": Object {
               "a": "workspace:^",
               "b": "workspace:^1.0.0",
             },
