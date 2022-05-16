@@ -111,6 +111,8 @@ lerna-repo/
   lerna.json
 ```
 
+Note that `package-a` will not be created, it is only shown shown here to help clarify the structure. For more info and full details about the `lerna.json` file, you can read the [lerna.json](https://github.com/ghiscoding/lerna-lite/wiki/lerna.json) Wiki.
+
 ## Installation
 Run the following commands to install Lerna-Lite in your project and/or install it globally by adding the `-g` option.
 
@@ -150,11 +152,11 @@ Add custom NPM Scripts or simply run the commands in a shell with Lerna-Lite CLI
 ```
 
 ### Configuration
-You could configure and run Lerna in 3 different ways:
+You could configure and run Lerna in different ways:
 1. via a `lerna.json` file
 2. or by passing arguments directly directly in the shell when executing the command.
 
-You can find complete details by reading about the [`lerna.json`](https://github.com/ghiscoding/lerna-lite/wiki/lerna.json) Wiki.
+You can find much more complete details by reading the [`lerna.json`](https://github.com/ghiscoding/lerna-lite/wiki/lerna.json) Wiki.
 
 ### Migration for [Lerna](https://github.com/lerna/lerna) Users
 If you are migrating from Lerna, it should be fairly easy to just replace Lerna with Lerna-Lite in your dependencies and that's about it, the CLI commands are the same, take a look at the quick steps shown below:
