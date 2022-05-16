@@ -94,7 +94,9 @@ It will configure `lerna.json` to enforce exact match for all subsequent executi
 $ lerna init --use-workspaces
 ```
 
-This flag tells Lerna-Lite to add a `workspaces` property in the project root `package.json` instead of the default `lerna.json` file, which is the workspace setup that Yarn/NPM now use (pnpm should use default `packages` in `lerna.json` file).
+This flag tells Lerna-Lite to add a `workspaces` property in the project root `package.json` instead of the default `lerna.json` file, which is the workspace setup that Yarn/NPM now use
+
+**Note:** pnpm users should **not** use this flag, they should simply use the default which is to have `packages` in `lerna.json` file (as shown in default [`lerna.json`](#lernajson) config).
 
 ##### `lerna.json`
 ```json
