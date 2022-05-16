@@ -19,7 +19,7 @@
 - [README Badge](https://github.com/ghiscoding/lerna-lite#readme-badge)
 - [Getting Started](#getting-started)
 - [Installation](https://github.com/ghiscoding/lerna-lite#installation)
-- [`lerna.json` config file](https://github.com/ghiscoding/lerna-lite/wiki/Lerna.json)
+- [`lerna.json` config file](https://github.com/ghiscoding/lerna-lite/wiki/lerna.json)
 - [Migration for Lerna users](https://github.com/ghiscoding/lerna-lite#migration-for-lerna-users)
 - [Troubleshooting](https://github.com/ghiscoding/lerna-lite/wiki/Troubleshooting)
 - Commands
@@ -154,7 +154,7 @@ You could configure and run Lerna in 3 different ways:
 1. via a `lerna.json` file
 2. or by passing arguments directly directly in the shell when executing the command.
 
-You can find more info by reading about the [`lerna.json` - Wiki](https://github.com/ghiscoding/lerna-lite/wiki/lerna.json).
+You can find complete details by reading about the [`lerna.json`](https://github.com/ghiscoding/lerna-lite/wiki/lerna.json) Wiki.
 
 ### Migration for [Lerna](https://github.com/lerna/lerna) Users
 If you are migrating from Lerna, it should be fairly easy to just replace Lerna with Lerna-Lite in your dependencies and that's about it, the CLI commands are the same, take a look at the quick steps shown below:

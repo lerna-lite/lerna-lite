@@ -27,7 +27,7 @@ npx lerna init
 $ lerna init
 ```
 
-Create/initialize a new Lerna-Lite repo or upgrade an existing repo to the current version of Lerna-Lite. 
+Create/initialize a new Lerna-Lite repo or upgrade an existing repo to the current version of Lerna-Lite.
 
 > Lerna assumes the repo has already been initialized with `git init`.
 
@@ -35,6 +35,7 @@ When run, this command will:
 
 1. Add `lerna` as a [`devDependency`](https://docs.npmjs.com/files/package.json#devdependencies) in `package.json` if it doesn't already exist.
 2. Create a `lerna.json` config file to store the `version` number and also add a `packages` property (unless you use the `--use-workspaces` flag)
+   - for more info and full details about the `lerna.json` file, you can read the [lerna.json](https://github.com/ghiscoding/lerna-lite/wiki/lerna.json) Wiki.
 
 Example output on a new git repo:
 
@@ -44,6 +45,14 @@ lerna info version v2.0.0
 lerna info Updating package.json
 lerna info Creating lerna.json
 lerna success Initialized Lerna files
+```
+
+##### `lerna.json`
+```json
+{
+  "version": "0.0.0",
+  "packages": ["packages/*"]
+}
 ```
 
 ## Options
@@ -85,25 +94,22 @@ It will configure `lerna.json` to enforce exact match for all subsequent executi
 $ lerna init --use-workspaces
 ```
 
-This flag tells Lerna-Lite to add a `workspaces` property in the root `package.json` instead of the default `lerna.json` file.
+This flag tells Lerna-Lite to add a `workspaces` property in the project root `package.json` instead of the default `lerna.json` file, which is the workspace setup that Yarn/NPM now use (pnpm should use default `packages` in `lerna.json` file).
 
-#### `lerna.json`
+##### `lerna.json`
 ```json
 {
   "version": "0.0.0"
 }
 ```
 
-#### `package.json`
+##### `package.json` (project root)
 ```json
 {
   "name": "monorepo",
   "devDependencies": {
-    "@lerna-lite/cli": "^1.3.0"
+    "@lerna-lite/cli": "^1.0.0"
   },
-  "workspaces": [
-    "./packages/a",
-    "./packages/a"
-  ]
+  "workspaces": ["packages/*"]
 }
 ```
