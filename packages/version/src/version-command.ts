@@ -42,10 +42,10 @@ import { gitTag } from './lib/git-tag';
 import { gitPush } from './lib/git-push';
 import { makePromptVersion } from './lib/prompt-version';
 import {
-  loadPackageLockFileWhenExists,
   updateClassicLockfileVersion,
   updateTempModernLockfileVersion,
-  saveUpdatedLockJsonFile
+  saveLockfile,
+  loadLockfile,
 } from './lib/update-lockfile-version';
 
 export function factory(argv: VersionCommandOption) {
@@ -80,9 +80,10 @@ export class VersionCommand extends Command<VersionCommandOption> {
   }
 
   get requiresGit(): boolean {
-    return (
-      this.commitAndTag || this.pushToRemote || this.options.allowBranch || this.options.conventionalCommits
-    ) as boolean;
+    return (this.commitAndTag ||
+      this.pushToRemote ||
+      this.options.allowBranch ||
+      this.options.conventionalCommits) as boolean;
   }
 
   constructor(argv: VersionCommandOption) {
@@ -114,7 +115,9 @@ export class VersionCommand extends Command<VersionCommandOption> {
     this.pushToRemote = gitTagVersion && amend !== true && push;
     // never automatically push to remote when amending a commit
 
-    this.releaseClient = (this.pushToRemote && this.options.createRelease && createReleaseClient(this.options.createRelease)) as ReleaseClient | undefined;
+    this.releaseClient = (this.pushToRemote &&
+      this.options.createRelease &&
+      createReleaseClient(this.options.createRelease)) as ReleaseClient | undefined;
     this.releaseNotes = [];
 
     if (this.releaseClient && this.options.conventionalCommits !== true) {
@@ -162,7 +165,10 @@ export class VersionCommand extends Command<VersionCommandOption> {
         );
       }
 
-      if (this.pushToRemote && !remoteBranchExists(this.gitRemote, this.currentBranch, this.execOpts, this.options.gitDryRun)) {
+      if (
+        this.pushToRemote &&
+        !remoteBranchExists(this.gitRemote, this.currentBranch, this.execOpts, this.options.gitDryRun)
+      ) {
         throw new ValidationError(
           'ENOREMOTEBRANCH',
           dedent`
@@ -352,7 +358,8 @@ export class VersionCommand extends Command<VersionCommandOption> {
       predicate = makeGlobalVersionPredicate(repoVersion);
     } else if (increment && independentVersions) {
       // compute potential prerelease ID for each independent update
-      predicate = (node: { version: string; prereleaseId: string; }) => semver.inc(node.version, increment, resolvePrereleaseId(node.prereleaseId));
+      predicate = (node: { version: string; prereleaseId: string }) =>
+        semver.inc(node.version, increment, resolvePrereleaseId(node.prereleaseId));
     } else if (increment) {
       // compute potential prerelease ID once for all fixed updates
       const prereleaseId = prereleaseIdFromVersion(this.project.version);
@@ -374,7 +381,9 @@ export class VersionCommand extends Command<VersionCommandOption> {
       predicate = predicate(node).then(makeGlobalVersionPredicate);
     }
 
-    return Promise.resolve(predicate).then((getVersion: (s: PackageGraphNode) => string) => this.reduceVersions(getVersion));
+    return Promise.resolve(predicate).then((getVersion: (s: PackageGraphNode) => string) =>
+      this.reduceVersions(getVersion)
+    );
   }
 
   reduceVersions(getVersion: (s: PackageGraphNode) => string) {
@@ -458,7 +467,8 @@ export class VersionCommand extends Command<VersionCommandOption> {
     const prereleasePackageNames = this.getPrereleasePackageNames();
     const graduatePackageNames = Array.from(this.getPackagesForOption(conventionalGraduate));
     const shouldPrerelease = (name) => prereleasePackageNames?.includes(name);
-    const shouldGraduate = (name) => graduatePackageNames.includes('*') || graduatePackageNames.includes(name);
+    const shouldGraduate = (name) =>
+      graduatePackageNames.includes('*') || graduatePackageNames.includes(name);
     const getPrereleaseId = (node) => {
       if (!shouldGraduate(node.name) && (shouldPrerelease(node.name) || node.prereleaseId)) {
         return resolvePrereleaseId(node.prereleaseId);
@@ -469,13 +479,14 @@ export class VersionCommand extends Command<VersionCommandOption> {
       this.setGlobalVersionFloor();
     }
 
-    const versions: Map<string, string> = await this.reduceVersions((node) =>
-      recommendVersion(node, type, {
-        changelogPreset,
-        rootPath,
-        tagPrefix: this.tagPrefix,
-        prereleaseId: getPrereleaseId(node),
-      }) as any
+    const versions: Map<string, string> = await this.reduceVersions(
+      (node) =>
+        recommendVersion(node, type, {
+          changelogPreset,
+          rootPath,
+          tagPrefix: this.tagPrefix,
+          prereleaseId: getPrereleaseId(node),
+        }) as any
     );
 
     if (type === 'fixed') {
@@ -487,7 +498,9 @@ export class VersionCommand extends Command<VersionCommandOption> {
 
   confirmVersions(): Promise<boolean> | boolean {
     const changes = this.packagesToVersion.map((pkg) => {
-      let line = ` - ${pkg.name ?? '[n/a]'}: ${pkg.version} => ${chalk.cyan(this.updatesVersions?.get(pkg?.name ?? ''))}`;
+      let line = ` - ${pkg.name ?? '[n/a]'}: ${pkg.version} => ${chalk.cyan(
+        this.updatesVersions?.get(pkg?.name ?? '')
+      )}`;
       if (pkg.private) {
         line += ` (${chalk.red('private')})`;
       }
@@ -544,14 +557,17 @@ export class VersionCommand extends Command<VersionCommandOption> {
 
           if (depVersion && resolved.type !== 'directory') {
             // don't overwrite local file: specifiers, they only change during publish
-            pkg.updateLocalDependency(resolved, depVersion, this.savePrefix, this.options.workspaceStrictMatch, this.commandName);
+            pkg.updateLocalDependency(
+              resolved,
+              depVersion,
+              this.savePrefix,
+              this.options.workspaceStrictMatch,
+              this.commandName
+            );
           }
         }
 
-        return Promise.all([
-          updateClassicLockfileVersion(pkg),
-          pkg.serialize()
-        ]).then(([lockfilePath]) => {
+        return Promise.all([updateClassicLockfileVersion(pkg), pkg.serialize()]).then(([lockfilePath]) => {
           // commit the updated manifest
           changedFiles.add(pkg.manifestLocation);
 
@@ -605,23 +621,23 @@ export class VersionCommand extends Command<VersionCommandOption> {
 
     chain = chain.then(() =>
       // update modern lockfile (version 2 or higher) when exist in the project root
-      loadPackageLockFileWhenExists(rootPath)
-        .then(lockFileResponse => {
-          if (lockFileResponse && lockFileResponse.lockfileVersion >= 2) {
-            for (const pkg of this.packagesToVersion) {
-              this.logger.silly(`lock`, `updating root "package-lock-json" for package "${pkg.name}"`);
-              updateTempModernLockfileVersion(pkg, lockFileResponse.json);
-            }
+      loadLockfile(rootPath).then((lockfile) => {
+        if (!lockfile || lockfile.version < 2) {
+          return;
+        }
 
-            // save the lockfile, only once, after all package versions were updated
-            return saveUpdatedLockJsonFile(lockFileResponse.path, lockFileResponse.json)
-              .then((lockfilePath) => {
-                if (lockfilePath) {
-                  changedFiles.add(lockfilePath);
-                }
-              });
+        for (const pkg of this.packagesToVersion) {
+          this.logger.silly(`lock`, `updating "${lockfile.path}" for package "${pkg.name}"`);
+          updateTempModernLockfileVersion(pkg, lockfile);
+        }
+
+        // save the lockfile, only once, after all package versions were updated
+        return saveLockfile(lockfile).then((lockfilePath) => {
+          if (lockfilePath) {
+            changedFiles.add(lockfilePath);
           }
-        })
+        });
+      })
     );
 
     if (!independentVersions) {
@@ -663,12 +679,13 @@ export class VersionCommand extends Command<VersionCommandOption> {
     }
 
     if (this.commitAndTag) {
-      chain = chain.then(() => gitAdd(Array.from(changedFiles), this.gitOpts, this.execOpts, this.options.gitDryRun));
+      chain = chain.then(() =>
+        gitAdd(Array.from(changedFiles), this.gitOpts, this.execOpts, this.options.gitDryRun)
+      );
     }
 
     return chain;
   }
-
 
   async commitAndTagUpdates() {
     if (this.project.isIndependent()) {

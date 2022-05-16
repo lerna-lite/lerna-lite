@@ -5,7 +5,7 @@ import { toNerfDart } from './nerf-dart';
 const defaults = require('./defaults');
 
 // https://github.com/npm/npm/blob/latest/lib/config/core.js#L101-L200
-function npmConf(opts: any) {
+export function npmConf(opts: any) {
   const conf = new Conf(Object.assign({}, defaults.defaults));
 
   // prevent keys with undefined values from obscuring defaults
@@ -57,9 +57,3 @@ function npmConf(opts: any) {
 }
 
 module.exports.defaults = Object.assign({}, defaults.defaults);
-
-export {
-  Conf,
-  npmConf,
-  toNerfDart,
-};

@@ -3,6 +3,7 @@ export * from './check-working-tree';
 export * from './clean-stack';
 export * from './collect-uncommitted';
 export * from './conf';
+// eslint-disable-next-line import/export
 export * from './defaults';
 export * from './describe-ref';
 export * from './env-replace';
