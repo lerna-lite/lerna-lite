@@ -38,7 +38,7 @@
     "npmlog": "^6.0.2",
     "p-map": "^4.0.0",
     "upath": "^2.0.1",
-    "yargs": "^17.4.1"
+    "yargs": "^17.5.1"
   },
   "devDependencies": {
     "@types/execa": "^2.0.0",
