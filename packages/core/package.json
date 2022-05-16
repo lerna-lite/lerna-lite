@@ -78,7 +78,7 @@
     "write-file-atomic": "^4.0.1",
     "write-json-file": "^4.3.0",
     "write-pkg": "^4.0.0",
-    "yargs": "^17.4.1"
+    "yargs": "^17.5.1"
   },
   "devDependencies": {
     "@types/async": "^3.2.13",
