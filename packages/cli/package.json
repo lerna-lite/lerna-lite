@@ -39,7 +39,7 @@
     "@lerna-lite/publish": "^1.2.0",
     "@lerna-lite/version": "^1.2.0",
     "dedent": "^0.7.0",
-    "dotenv": "^16.0.0",
+    "dotenv": "^16.0.1",
     "import-local": "^3.1.0",
     "npmlog": "^6.0.2",
     "yargs": "^17.4.1"
