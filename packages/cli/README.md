@@ -4,7 +4,9 @@
 [![npm](https://img.shields.io/npm/v/@lerna-lite/cli.svg?logo=npm&logoColor=fff&label=npm&color=limegreen)](https://www.npmjs.com/package/@lerna-lite/cli)
 [![Actions Status](https://github.com/ghiscoding/lerna-lite/workflows/CI%20Build/badge.svg)](https://github.com/ghiscoding/lerna-lite/actions)
 
-## Lerna-Lite Version/Publish/[Exec]/[Run] commands CLI
+## Lerna-Lite commands CLI
+### Available commands are: Init/Info/Version/Publish/[Exec]/[Run]
+---
 #### @lerna-lite/cli
 
 CLI for the `init`, `info`, `publish`, `version` and optional `exec`, `run` commands, the CLI must be called via `lerna <command>` (where command is any of the commands shown below). You can see some more usage samples below.
@@ -26,6 +28,7 @@ CLI for the `init`, `info`, `publish`, `version` and optional `exec`, `run` comm
 npm install @lerna-lite/cli -D -W
 
 # then use it `lerna <command>`
+lerna info
 lerna version
 lerna publish
 

@@ -41,5 +41,5 @@ Environment Info:
     Chrome: 74.0.3729.157
     Firefox: 66.0.5
   npmPackages:
-    lerna: 3.14.1
+    lerna: 1.3.0
 ```
