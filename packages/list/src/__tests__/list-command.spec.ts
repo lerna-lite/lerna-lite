@@ -315,7 +315,7 @@ package-5
 `);
     });
 
-    it('lists packages under explicitly configured node_modules directories', async () => {
+    xit('lists packages under explicitly configured node_modules directories', async () => {
       const testDir = await initFixture('explicit-node-modules');
       await lernaList(testDir)();
       expect(logOutput.logged()).toMatchInlineSnapshot(`
