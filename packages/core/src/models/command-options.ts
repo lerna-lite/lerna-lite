@@ -46,6 +46,29 @@ export interface InitCommandOption {
   useWorkspaces?: boolean;
 }
 
+export interface ListCommandOption {
+  /** Show private packages that are hidden by default. */
+  all?: boolean;
+
+  /** Show dependency graph as a JSON-formatted [adjacency list](https://en.wikipedia.org/wiki/Adjacency_list). */
+  graph?: boolean;
+
+  /** Show information as a JSON array. */
+  json?: boolean;
+
+  /** Show extended information. */
+  long?: boolean;
+
+  /** Show information as [newline-delimited JSON](http://ndjson.org/). */
+  ndjson?: boolean;
+
+  /** Show parseable output instead of columnified view. */
+  parseable?: boolean;
+
+  /** Sort packages in topological order (dependencies before dependents) instead of lexical by directory. */
+  toposort?: boolean;
+}
+
 export interface PublishCommandOption extends VersionCommandOption {
   /** alias to '--canary' */
   c?: boolean;

@@ -98,6 +98,7 @@
     "./packages/publish",
     "./packages/exec-run-common",
     "./packages/exec",
+    "./packages/list",
     "./packages/run",
     "./packages/cli"
   ]
