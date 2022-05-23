@@ -33,7 +33,7 @@
   "dependencies": {
     "@lerna-lite/core": "^1.2.0",
     "fs-extra": "^10.1.0",
-    "p-map": "^4.0.0",
+    "p-map": "^5.4.0",
     "write-json-file": "^4.3.0"
   },
   "devDependencies": {
