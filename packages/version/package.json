@@ -35,7 +35,7 @@
     "chalk": "^4.1.2",
     "dedent": "^0.7.0",
     "load-json-file": "^6.2.0",
-    "minimatch": "^5.0.1",
+    "minimatch": "^5.1.0",
     "npmlog": "^6.0.2",
     "os": "^0.1.2",
     "p-map": "^4.0.0",
