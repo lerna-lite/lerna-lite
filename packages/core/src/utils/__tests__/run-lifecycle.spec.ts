@@ -10,6 +10,10 @@ const { runLifecycle, createRunner } = require("../run-lifecycle");
 describe("runLifecycle()", () => {
   const consoleSpy = jest.spyOn(console, "log").mockImplementation(() => { });
 
+  beforeEach(() => {
+    log.level = 'silent';
+  });
+
   it("skips packages without scripts", async () => {
     const pkg = {
       name: "no-scripts",
@@ -67,6 +71,29 @@ describe("runLifecycle()", () => {
         args: [],
       })
     );
+  });
+
+  it("calls npm-lifecycle with prepared arguments and expect print banner be called and show a console log of the ran script", async () => {
+    log.level = 'info';
+    const pkg = new Package(
+      {
+        name: "test-name",
+        version: "1.0.0-test",
+        scripts: {
+          preversion: "test",
+        },
+        engines: {
+          node: ">= 8.9.0",
+        },
+      },
+      "/test/location"
+    );
+    const stage = "preversion";
+    const opts = npmConf({ "custom-cli-flag": true });
+
+    await runLifecycle(pkg, stage, opts);
+
+    expect(consoleSpy).toHaveBeenCalledWith(`\n> test-name@1.0.0-test preversion /test/location\n> test\n`);
   });
 
   it("passes through the value for script-shell from npm config", async () => {
