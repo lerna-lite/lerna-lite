@@ -19,23 +19,23 @@
 - [README Badge](https://github.com/ghiscoding/lerna-lite#readme-badge)
 - [Getting Started](#getting-started)
 - [Installation](https://github.com/ghiscoding/lerna-lite#installation)
-- [`lerna.json` config file](https://github.com/ghiscoding/lerna-lite/wiki/Lerna.json)
+- [`lerna.json` config file](https://github.com/ghiscoding/lerna-lite/wiki/lerna.json)
 - [Migration for Lerna users](https://github.com/ghiscoding/lerna-lite#migration-for-lerna-users)
 - [Troubleshooting](https://github.com/ghiscoding/lerna-lite/wiki/Troubleshooting)
 - Commands
    - included with CLI
-      - 🏁 [`init`](https://github.com/ghiscoding/lerna-lite/tree/main/packages/init#readme) - create/initialize a new Lerna-Lite repo
+      - 🧰 [`init`](https://github.com/ghiscoding/lerna-lite/tree/main/packages/init#readme) - create a new Lerna-Lite repo (creates `lerna.json` and a workspace structure)
       - 💻 [`info`](https://github.com/ghiscoding/lerna-lite/tree/main/packages/info#readme) - print local environment information (useful when opening new issue)
-      - ☁️ [`publish`](https://github.com/ghiscoding/lerna-lite/tree/main/packages/publish#readme) - publish workspace packages
+      - ☁️ [`publish`](https://github.com/ghiscoding/lerna-lite/tree/main/packages/publish#readme) - publish every workspace packages that changed
       - 📑 [`version`](https://github.com/ghiscoding/lerna-lite/tree/main/packages/version#readme) - create new version for each workspace packages
    - optional (**separate install**)
-      - 👷 [`exec`](https://github.com/ghiscoding/lerna-lite/tree/main/packages/exec#readme) - execute an command in each workspace package
+      - 👷 [`exec`](https://github.com/ghiscoding/lerna-lite/tree/main/packages/exec#readme) - execute shell command in each workspace package
       - 🏃 [`run`](https://github.com/ghiscoding/lerna-lite/tree/main/packages/run#readme) - run npm script in each workspace packages
 
 ---
 
-### 📢 Lerna-Lite now supports yarn/pnpm `workspace:` protocol 
-#### _this new feature was introduced with version [1.2.0](https://github.com/ghiscoding/lerna-lite/releases/tag/v1.2.0) of Lerna-Lite, however we recommend using [1.3.0](https://github.com/ghiscoding/lerna-lite/releases/tag/v1.3.0)._
+### 📢 Lerna-Lite now supports yarn/pnpm `workspace:` protocol
+#### _this new feature was introduced with release [1.2.0](https://github.com/ghiscoding/lerna-lite/releases/tag/v1.2.0) of Lerna-Lite, however we recommend using [1.3.0](https://github.com/ghiscoding/lerna-lite/releases/tag/v1.3.0)._
 If you use this new feature, please take 30sec. to fill in this small [poll #156](https://github.com/ghiscoding/lerna-lite/discussions/156) survey just to see which package manager is the most popular to use with this new `workspace:` protocol.
 
 ---
@@ -54,11 +54,11 @@ Lerna-Lite differs from the original [Lerna](https://github.com/lerna/lerna) in 
 Mainly for the following reasons:
 1. the original Lerna was no longer maintained (dependencies were out of date)
 2. create a smaller lib that is more modular than the original Lerna
-  - the lib is smaller since we only copied 6 out of 15 commands from Lerna (some are optional). We don't need all packages of Lerna anymore since NPM Workspaces (or other technologies) came out.
-  - the main goal of this fork is to keep `version` and `publish` commands and make anything else as optional packages
+   - the lib is smaller since we only copied 6 out of 15 commands from Lerna (some are optional). We don't need all packages of Lerna anymore since NPM Workspaces (or other technologies) came out.
+   - the main goal of this fork is to keep `version` and `publish` commands and make anything else as optional packages
 3. rewritten the lib in TypeScript
 4. replicate a few opened PR from Lerna and also add new feature
-  - like the new support for `workspace:` protocol and `dry-run` options
+   - like the new support for `workspace:` protocol and `dry-run` options
 
 ### This lib will help you with
 #### [Version](https://github.com/ghiscoding/lerna-lite/tree/main/packages/version) and [Publish](https://github.com/ghiscoding/lerna-lite/tree/main/packages/publish) commands
@@ -71,19 +71,6 @@ Mainly for the following reasons:
 #### [Exec](https://github.com/ghiscoding/lerna-lite/tree/main/packages/exec) and [Run](https://github.com/ghiscoding/lerna-lite/tree/main/packages/run) commands (optional)
 - [Exec](https://github.com/ghiscoding/lerna-lite/tree/main/packages/exec#readme) is an optional package that will help you execute shell commands in parallel and in topological order.
 - [Run](https://github.com/ghiscoding/lerna-lite/tree/main/packages/run#readme) is an optional package that will help you run npm script in parallel and in topological order.
-
-### Project Demo?
-You want to see a project demo? Sure, you're looking at it 😉
-
-Yes indeed, this lib was created specifically as an NPM Workspace for the sole purpose of demoing and testing its own code. All changelogs and published versions were created and pushed by the lib itself, how sweet is that? You will also find that it has its own [lerna.json](https://github.com/ghiscoding/lerna-lite/blob/main/lerna.json) config file to run properly.
-
-### See it in Action 🎦
-You can see a small video of a new version release on this [Release Demo - Wiki](https://github.com/ghiscoding/lerna-lite/wiki/Release-Demo) to demonstrate its usage. Are you confused with all the options? These following links might help you get started.
-
-##### References
-- [Release Demo - Wiki](https://github.com/ghiscoding/lerna-lite/wiki/Release-Demo) - Lerna-Lite demo (animated gif)
-- [How to Use Lerna](https://www.youtube.com/watch?v=p6qoJ4apCjA) - YouTube video
-- [Lerna Release Workflow](https://github.com/curiousNoob/lerna-release-workflow) - GitHub Template
 
 ### README Badge
 Using Lerna-Lite? Add a README badge to show it off: [![lerna--lite](https://img.shields.io/badge/maintained%20with-lerna--lite-d428ff)](https://github.com/ghiscoding/lerna-lite)
@@ -106,18 +93,21 @@ This will create a `lerna.json` configuration file as well as a `packages` folde
 ```
 lerna-repo/
   packages/
+    package-a
   package.json
   lerna.json
 ```
 
+Note that `package-a` will not be created, it is only shown shown here to help clarify the structure. For more info and full details about the `lerna.json` file, you can read the [lerna.json](https://github.com/ghiscoding/lerna-lite/wiki/lerna.json) Wiki.
+
 ## Installation
-Run the following commands to install Lerna-Lite in your project and/or install it globally by adding the `-g` option. 
+Run the following commands to install Lerna-Lite in your project and/or install it globally by adding the `-g` option.
 
 If you are new to Lerna-Lite, you could also run the [lerna init](https://github.com/ghiscoding/lerna-lite/tree/main/packages/init#readme) command which will create the `lerna.json` for you.
 
 | Command | Install         | Description | Included |
 |---------|-------------|-------------| ---------|
-| 🏁 [init](https://github.com/ghiscoding/lerna-lite/tree/main/packages/init#readme) | `npm i @lerna-lite/cli -D -W` | create/initialize a new Lerna-Lite repo | Yes |
+| 🧰 [init](https://github.com/ghiscoding/lerna-lite/tree/main/packages/init#readme) | `npm i @lerna-lite/cli -D -W` | create/initialize a new Lerna-Lite repo | Yes |
 | 💻 [info](https://github.com/ghiscoding/lerna-lite/tree/main/packages/info#readme) | `npm i @lerna-lite/cli -D -W` | print local environment information | Yes |
 | 📑 [version](https://github.com/ghiscoding/lerna-lite/tree/main/packages/version#readme) | `npm i @lerna-lite/cli -D -W` | create new version for each workspace package | Yes |
 | ☁️ [publish](https://github.com/ghiscoding/lerna-lite/tree/main/packages/publish#readme) | `npm i @lerna-lite/cli -D -W` | publish each workspace package | Yes |
@@ -127,7 +117,7 @@ If you are new to Lerna-Lite, you could also run the [lerna init](https://github
 **Note:** the default `lerna` CLI is only including 4 built-in commands (`init`,`info`,`publish`,`version`), while the (`exec`,`run`) commands are optional and must be installed separately as shown below.
 
 ```bash
-# Lerna CLI which includes `info`, `init`, `publish` and `version` commands
+# Lerna CLI which includes `init`, `info`, `publish` and `version` commands
 npm install @lerna-lite/cli -D -W   # OR yard add @lerna-lite/cli -D -W
 
 # optionally install `exec` and/or `run` commands
@@ -148,12 +138,18 @@ Add custom NPM Scripts or simply run the commands in a shell with Lerna-Lite CLI
 }
 ```
 
-### Configuration
-You could configure and run Lerna in 3 different ways:
-1. via a `lerna.json` file
-2. or by passing arguments directly directly in the shell when executing the command.
+### Project Demo?
+You want to see a project demo? Sure, you're looking at it 😉
 
-You can find more info by reading about the [`lerna.json` - Wiki](https://github.com/ghiscoding/lerna-lite/wiki/lerna.json).
+Yes indeed, this lib was created specifically as an NPM Workspace for the sole purpose of demoing and testing its own code. All changelogs and published versions were created and pushed by the lib itself, how sweet is that? You will also find that it has its own [lerna.json](https://github.com/ghiscoding/lerna-lite/blob/main/lerna.json) config file to run properly.
+
+### See it in Action 🎦
+You can see a small video of a new version release on this [Release Demo - Wiki](https://github.com/ghiscoding/lerna-lite/wiki/Release-Demo) to demonstrate its usage. Are you confused with all the options? Then take a look at the references shown below, it might help you get started.
+
+##### References
+- [Release Demo - Wiki](https://github.com/ghiscoding/lerna-lite/wiki/Release-Demo) - Lerna-Lite demo (animated gif)
+- [How to Use Lerna](https://www.youtube.com/watch?v=p6qoJ4apCjA) - YouTube video
+- [Lerna Release Workflow](https://github.com/curiousNoob/lerna-release-workflow) - GitHub Template
 
 ### Migration for [Lerna](https://github.com/lerna/lerna) Users
 If you are migrating from Lerna, it should be fairly easy to just replace Lerna with Lerna-Lite in your dependencies and that's about it, the CLI commands are the same, take a look at the quick steps shown below:
@@ -162,10 +158,10 @@ If you are migrating from Lerna, it should be fairly easy to just replace Lerna 
 npm uninstall lerna -W   # OR yarn remove lerna -W
 npm uninstall -g lerna   # OR yarn global remove lerna
 ```
-2. install Lerna-Lite CLI to get access to `info`, `version` and `publish` commands
+2. install Lerna-Lite CLI to get access to `init`, `info`, `version` and `publish` commands
    - `exec` and `run` commands are **optional** and can be installed separately as shown below
 ```sh
-# Lerna CLI (includes `info`, `version` and `publish` commands)
+# Lerna CLI (includes `init`, `info`, `version` and `publish` commands)
 npm install @lerna-lite/cli -D -W
 ```
 3. optionally install `exec` and/or `run` commands
@@ -201,7 +197,7 @@ If you have problems running the lib and your problems are related to Git comman
 
 | Package Name | Version | Description | Changes |
 | -------------| ------- | ----------- | ------- |
-| [@lerna-lite/cli](https://github.com/ghiscoding/lerna-lite/tree/main/packages/cli) | [![npm](https://img.shields.io/npm/v/@lerna-lite/cli.svg?color=forest)](https://www.npmjs.com/package/@lerna-lite/cli) | Lerna-Lite Info/Version/Publish comands CLI | [changelog](https://github.com/ghiscoding/lerna-lite/blob/main/packages/cli/CHANGELOG.md) |
+| [@lerna-lite/cli](https://github.com/ghiscoding/lerna-lite/tree/main/packages/cli) | [![npm](https://img.shields.io/npm/v/@lerna-lite/cli.svg?color=forest)](https://www.npmjs.com/package/@lerna-lite/cli) | Lerna-Lite Init/Info/Version/Publish comands CLI | [changelog](https://github.com/ghiscoding/lerna-lite/blob/main/packages/cli/CHANGELOG.md) |
 | [@lerna-lite/info](https://github.com/ghiscoding/lerna-lite/tree/main/packages/info) | [![npm](https://img.shields.io/npm/v/@lerna-lite/info.svg?color=forest)](https://www.npmjs.com/package/@lerna-lite/info) | Print local environment information | [changelog](https://github.com/ghiscoding/lerna-lite/blob/main/packages/info/CHANGELOG.md) |
 | [@lerna-lite/init](https://github.com/ghiscoding/lerna-lite/tree/main/packages/init) | [![npm](https://img.shields.io/npm/v/@lerna-lite/init.svg?color=forest)](https://www.npmjs.com/package/@lerna-lite/init) | create a new Lerna-Lite repo | [changelog](https://github.com/ghiscoding/lerna-lite/blob/main/packages/init/CHANGELOG.md) |
 | [@lerna-lite/core](https://github.com/ghiscoding/lerna-lite/tree/main/packages/core) | [![npm](https://img.shields.io/npm/v/@lerna-lite/core.svg?color=forest)](https://www.npmjs.com/package/@lerna-lite/core) | Lerna-Lite core & shared methods | [changelog](https://github.com/ghiscoding/lerna-lite/blob/main/packages/core/CHANGELOG.md) |

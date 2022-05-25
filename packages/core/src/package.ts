@@ -149,6 +149,14 @@ export class Package {
     this[PKG].version = version;
   }
 
+  get workspaces(): string[] | { packages: string[] } {
+    return this[PKG].workspaces;
+  }
+
+  set workspaces(workspaces: string[] | { packages: string[] }) {
+    this[PKG].workspaces = workspaces;
+  }
+
   get contents() {
     // if modified with setter, use that value
     if (this[_contents]) {

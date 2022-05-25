@@ -68,9 +68,6 @@ This is useful when a previous `lerna publish` failed to publish all packages to
   - [Positionals](#positionals)
     - [semver `--bump from-git`](#semver--bump-from-git)
     - [semver `--bump from-package`](#semver--bump-from-package)
-  - [`workspace:` protocol](#workspace-protocol)
-     - [`--workspace-strict-match (default)`](#with---workspace-strict-match-default)
-     - [`--no-workspace-strict-match`](#with---no-workspace-strict-match)
   - [Options](#options)
     - [`--canary`](#--canary)
     - [`--contents <dir>`](#--contents-dir)
@@ -91,6 +88,9 @@ This is useful when a previous `lerna publish` failed to publish all packages to
     - [`--tag-version-prefix`](#--tag-version-prefix)
     - [`--temp-tag`](#--temp-tag)
     - [`--yes`](#--yes)
+  - [`workspace:` protocol](#workspace-protocol)
+     - [`--workspace-strict-match (default)`](#with---workspace-strict-match-default)
+     - [`--no-workspace-strict-match`](#with---no-workspace-strict-match-deprecated)
 
 ### `--canary`
 
@@ -438,7 +438,7 @@ So for example, if we have `foo`, `bar`, `qar`, `zoo` in the workspace and they 
 #### with `--workspace-strict-match` (default)
 When using strict match (default), it will be transformed and publish with the following:
 
-_this is the default and is usually what most user will want to use since it will stricly adhere to pnpm/yarn workspace protocol._
+_this is the default and is usually what most user will want to use since it will strictly adhere to pnpm/yarn workspace protocol._
 ```json
 {
     "dependencies": {
@@ -450,10 +450,10 @@ _this is the default and is usually what most user will want to use since it wil
 }
 ```
 
-#### with `--no-workspace-strict-match` 
+#### with `--no-workspace-strict-match` (deprecated)
 When strict match is disabled, it will be transformed and publish with the following:
 
-_you would rarely want to disable the strict match, in fact it should be removed altogether from the code (probably in future releases) but it's here for the sole purpose of making it compatible with previous Lerna-Lite version `1.2.0`. When disabled, in most use case, Lerna will use the caret (^) unless the option [--exact](https://github.com/ghiscoding/lerna-lite/tree/main/packages/version#--exact) is provided._
+_you would rarely want to disable the strict match, in fact it will be removed from the code in future release, this flag was created for the sole purpose of making it compatible with previous Lerna-Lite version `1.2.0`. When disabled, in most cases Lerna will assume that the caret (^) is needed unless the option [--exact](https://github.com/ghiscoding/lerna-lite/tree/main/packages/version#--exact) is provided and by doing so is not strictly following pnpm/yarn workspace protocol and is not recommended for that reason._
 ```json
 {
     "dependencies": {

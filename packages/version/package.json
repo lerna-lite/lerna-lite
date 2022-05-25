@@ -36,7 +36,7 @@
     "dedent": "^0.7.0",
     "js-yaml": "^4.1.0",
     "load-json-file": "^6.2.0",
-    "minimatch": "^5.0.1",
+    "minimatch": "^5.1.0",
     "npmlog": "^6.0.2",
     "os": "^0.1.2",
     "p-map": "^4.0.0",
@@ -48,7 +48,7 @@
     "slash": "^3.0.0",
     "temp-write": "^4.0.0",
     "write-json-file": "^4.3.0",
-    "yargs": "^17.4.1"
+    "yargs": "^17.5.1"
   },
   "devDependencies": {
     "@npm/types": "^1.0.2",

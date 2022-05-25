@@ -68,7 +68,6 @@ Running `lerna version --conventional-commits` without the above flags will rele
   - [Positionals](#positionals)
     - [semver `bump`](#semver-bump)
   - [Prerelease](#prerelease)
-  - [`workspace:` protocol](#workspace-protocol)
   - [Options](#options)
     - [`--allow-branch <glob>`](#--allow-branch-glob)
     - [`--amend`](#--amend)
@@ -103,6 +102,7 @@ Running `lerna version --conventional-commits` without the above flags will rele
   - [Tips](#tips)
     - [Generating Initial Changelogs](#generating-initial-changelogs)
   - [Lifecycle Scripts](#lifecycle-scripts)
+  - [`workspace:` protocol](#workspace-protocol)
 
 ### `--allow-branch <glob>`
 
