@@ -50,7 +50,6 @@
   },
   "devDependencies": {
     "@npm/types": "^1.0.2",
-    "@pnpm/lockfile-types": "^4.0.1",
     "@types/conventional-changelog-core": "^4.2.1",
     "@types/conventional-recommended-bump": "^6.1.0",
     "@types/execa": "^2.0.0",
