@@ -39,7 +39,7 @@
 
 #### _this new feature was introduced with release [1.2.0](https://github.com/ghiscoding/lerna-lite/releases/tag/v1.2.0) of Lerna-Lite, however we recommend using [1.3.0](https://github.com/ghiscoding/lerna-lite/releases/tag/v1.3.0)._
 
-If you use this new feature, please take 30sec. to fill in this small [poll #156](https://github.com/ghiscoding/lerna-lite/discussions/156) poll survey just to see which package manager is the most popular to use with this new `workspace:` protocol and how many of you are using it. :wink:
+If you use this new feature, please take 30sec. to fill in this small [poll #156](https://github.com/ghiscoding/lerna-lite/discussions/156) survey just to see which package manager is the most popular to use with this new `workspace:` protocol and how many of you are using it. Thanks :wink:
 
 ---
 
@@ -61,11 +61,12 @@ Mainly for the following reasons:
 
 1. original Lerna was no longer maintained (dependencies were out of date)
 2. wanted to create a smaller lib that is more modular than the original Lerna
-   - the lib is smaller since we only copied half of Lerna's commands (few are optional). We don't need all packages of Lerna anymore since Workspaces now exists for all package managers (npm, pnpm, yarn).
-   - the main goal of this fork was to keep only `version` and `publish` commands in the core Iand make everything else as optional packages (install only what you need).
+   - the lib is smaller since we only copied half of Lerna's commands (few are optional).
+   - we don't need all packages of Lerna anymore since Workspaces now exists for all package managers (npm, pnpm, yarn).
+   - the main goal of this fork was to keep only `version` and `publish` commands in the core and make everything else as optional packages (install only what you need).
 3. rewrite the lib in TypeScript
 4. replicate a few opened PRs from Lerna and also add new features
-   - for example the support for `workspace:` protocol and `dry-run` options
+   - for example the new support of `workspace:` protocol and `dry-run` options
 
 ### This lib will help you with
 
@@ -79,9 +80,9 @@ Mainly for the following reasons:
 
 #### [Exec](https://github.com/ghiscoding/lerna-lite/tree/main/packages/exec) and [Run](https://github.com/ghiscoding/lerna-lite/tree/main/packages/run) commands (optional packages)
 
-- [Exec](https://github.com/ghiscoding/lerna-lite/tree/main/packages/exec#readme), when installed, will help you execute shell commands in parallel and in topological order.
-- [List](https://github.com/ghiscoding/lerna-lite/tree/main/packages/list#readme), when installed, will list all workspace local packages
-- [Run](https://github.com/ghiscoding/lerna-lite/tree/main/packages/run#readme), when installed, will help you run npm script in parallel and in topological order.
+- [Exec](https://github.com/ghiscoding/lerna-lite/tree/main/packages/exec#readme) command, when installed, will help you execute shell commands in parallel and in topological order.
+- [List](https://github.com/ghiscoding/lerna-lite/tree/main/packages/list#readme) command, when installed, will list all workspace local packages
+- [Run](https://github.com/ghiscoding/lerna-lite/tree/main/packages/run#readme) command, when installed, will help you run npm script in parallel and in topological order.
 
 ### README Badge
 
