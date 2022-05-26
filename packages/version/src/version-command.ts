@@ -25,9 +25,9 @@ import {
   runTopologically,
   throwIfUncommitted,
   updateChangelog,
+  UpdateCollectorOptions,
   ValidationError,
   VersionCommandOption,
-  UpdateCollectorOptions,
 } from '@lerna-lite/core';
 
 import { getCurrentBranch } from './lib/get-current-branch';
@@ -42,10 +42,10 @@ import { gitTag } from './lib/git-tag';
 import { gitPush } from './lib/git-push';
 import { makePromptVersion } from './lib/prompt-version';
 import {
+  loadLockfile,
+  saveLockfile,
   updateClassicLockfileVersion,
   updateTempModernLockfileVersion,
-  saveLockfile,
-  loadLockfile,
 } from './lib/update-lockfile-version';
 
 export function factory(argv: VersionCommandOption) {
