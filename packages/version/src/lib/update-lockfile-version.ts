@@ -3,7 +3,6 @@ import { PackageLock, LockDependency } from '@npm/types';
 import fs from 'fs';
 import yaml from 'js-yaml';
 import path from 'path';
-import preferredPM from 'preferred-pm';
 import loadJsonFile from 'load-json-file';
 import writeJsonFile from 'write-json-file';
 import { Package } from '@lerna-lite/core';
@@ -49,43 +48,43 @@ async function writeYamlFile(filePath: string, data: unknown) {
   } catch (e) {}
 }
 
-async function loadNpmLockfile(cwd: string): Promise<LockfileInformation> {
-  const lockfilePath = path.join(cwd, 'package-lock.json');
-  const json = await loadJsonFile<NpmLockfile>(lockfilePath);
-  const version = +(json?.['lockfileVersion'] ?? 1);
+async function loadNpmLockfile(cwd: string): Promise<LockfileInformation | undefined> {
+  try {
+    const lockfilePath = path.join(cwd, 'package-lock.json');
+    const json = await loadJsonFile<NpmLockfile>(lockfilePath);
+    const version = +(json?.['lockfileVersion'] ?? 1);
 
-  return {
-    json,
-    version,
-    path: lockfilePath,
-    packageManager: 'npm',
-  };
+    return {
+      json,
+      version,
+      path: lockfilePath,
+      packageManager: 'npm',
+    };
+  } catch (error) {} // eslint-disable-line
 }
 
-async function loadPnpmLockfile(cwd: string): Promise<LockfileInformation> {
-  const lockfilePath = path.join(cwd, 'pnpm-lock.yaml');
-  const json = (await loadYamlFile(lockfilePath)) as PnpmLockfile;
-  const version = +(json?.['lockfileVersion'] ?? 1);
+async function loadPnpmLockfile(cwd: string): Promise<LockfileInformation | undefined> {
+  try {
+    const lockfilePath = path.join(cwd, 'pnpm-lock.yaml');
+    const json = (await loadYamlFile(lockfilePath)) as PnpmLockfile;
+    const version = +(json?.['lockfileVersion'] ?? 1);
 
-  return {
-    json,
-    version,
-    path: lockfilePath,
-    packageManager: 'pnpm',
-  };
+    return {
+      json,
+      version,
+      path: lockfilePath,
+      packageManager: 'pnpm',
+    };
+  } catch (error) {} // eslint-disable-line
 }
 
-export async function loadLockfile(cwd: string) {
-  const pm = await preferredPM(cwd);
-
-  switch (pm?.name) {
-    case 'npm':
-      return loadNpmLockfile(cwd);
-    case 'pnpm':
-      return loadPnpmLockfile(cwd);
-    default:
-      return undefined;
+export async function loadLockfile(cwd: string): Promise<LockfileInformation | undefined> {
+  let lockFile = await loadNpmLockfile(cwd);
+  if (!lockFile) {
+    lockFile = await loadPnpmLockfile(cwd);
   }
+
+  return lockFile;
 }
 
 /**
@@ -151,24 +150,33 @@ export function updateNpmLockFileVersion2(
   pkgName: string,
   newVersion: string
 ) {
-  if (typeof lockfile.json === 'object' && pkgName && newVersion) {
-    for (const k in lockfile.json) {
-      if (typeof lockfile.json[k] === 'object' && lockfile.json[k] !== null) {
-        updateNpmLockFileVersion2(lockfile.json[k], pkgName, newVersion);
+  if (!lockfile.json || !pkgName || !newVersion || !isNpmLockfile(lockfile)) {
+    return;
+  }
+
+  const updateNpmLockPart = (part: unknown) => {
+    if (typeof part !== 'object') {
+      return;
+    }
+
+    for (const k in part) {
+      if (typeof part[k] === 'object' && part[k] !== null) {
+        updateNpmLockPart(part[k]);
       } else {
         if (k === pkgName) {
           // e.g.: "@lerna-lite/core": "^0.1.2",
-          const [_, versionPrefix, _versionStr] = lockfile.json[k].match(/^([\^~])?(.*)$/);
-          lockfile.json[k] = `${versionPrefix}${newVersion}`;
-        } else if (k === 'name' && lockfile.json[k] === pkgName && lockfile.json['version'] !== undefined) {
+          const [_, versionPrefix, _versionStr] = part[k].match(/^([\^~])?(.*)$/);
+          part[k] = `${versionPrefix}${newVersion}`;
+        } else if (k === 'name' && part[k] === pkgName && part['version'] !== undefined) {
           // e.g. "packages/version": { "name": "@lerna-lite/version", "version": "0.1.2" }
-          if (lockfile.json['version'] !== undefined) {
-            lockfile.json['version'] = newVersion;
+          if (part['version'] !== undefined) {
+            part['version'] = newVersion;
           }
         }
       }
     }
-  }
+  };
+  updateNpmLockPart(lockfile.json);
 }
 
 export function updatePnpmLockFile(lockfile: LockfileInformation, pkgName: string, newVersion: string) {
@@ -176,7 +184,7 @@ export function updatePnpmLockFile(lockfile: LockfileInformation, pkgName: strin
     return;
   }
 
-  const updatePart = (part: unknown) => {
+  const updatePnpmLockPart = (part: unknown) => {
     if (typeof part !== 'object') {
       return;
     }
@@ -192,10 +200,10 @@ export function updatePnpmLockFile(lockfile: LockfileInformation, pkgName: strin
         k !== 'specifiers' &&
         k !== 'dependencies'
       ) {
-        updatePart(part[k]);
+        updatePnpmLockPart(part[k]);
       }
     }
   };
 
-  updatePart(lockfile.json.importers);
+  updatePnpmLockPart(lockfile.json.importers);
 }

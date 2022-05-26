@@ -80,10 +80,13 @@ export class VersionCommand extends Command<VersionCommandOption> {
   }
 
   get requiresGit(): boolean {
-    return (this.commitAndTag ||
+    // prettier-ignore
+    return (
+      this.commitAndTag ||
       this.pushToRemote ||
       this.options.allowBranch ||
-      this.options.conventionalCommits) as boolean;
+      this.options.conventionalCommits
+    ) as boolean;
   }
 
   constructor(argv: VersionCommandOption) {
@@ -115,9 +118,12 @@ export class VersionCommand extends Command<VersionCommandOption> {
     this.pushToRemote = gitTagVersion && amend !== true && push;
     // never automatically push to remote when amending a commit
 
-    this.releaseClient = (this.pushToRemote &&
+    // prettier-ignore
+    this.releaseClient = (
+      this.pushToRemote &&
       this.options.createRelease &&
-      createReleaseClient(this.options.createRelease)) as ReleaseClient | undefined;
+      createReleaseClient(this.options.createRelease)
+    ) as ReleaseClient | undefined;
     this.releaseNotes = [];
 
     if (this.releaseClient && this.options.conventionalCommits !== true) {
@@ -280,9 +286,7 @@ export class VersionCommand extends Command<VersionCommandOption> {
 
     // don't execute recursively if run from a poorly-named script
     this.runRootLifecycle = /^(pre|post)?version$/.test(process.env.npm_lifecycle_event as string)
-      ? (stage) => {
-        this.logger.warn('lifecycle', 'Skipping root %j because it has already been called', stage);
-      }
+      ? (stage) => this.logger.warn('lifecycle', 'Skipping root %j because it has already been called', stage)
       : (stage) => this.runPackageLifecycle(this.project.manifest, stage);
 
     // amending a commit probably means the working tree is dirty

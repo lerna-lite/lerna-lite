@@ -5,8 +5,9 @@
   "private": true,
   "scripts": {
     "clean": "rimraf --maxBusyTries=10 packages/*/dist dist",
-    "prebuild": "run-s clean lint",
+    "prebuild": "npm run clean",
     "build": "npm run build --ws",
+    "postbuild": "npm run lint",
     "lint": "eslint packages --ext .ts",
     "dist-info-cmd": "node ./packages/cli/dist/cli.js info",
     "dist-init-cmd": "node ./packages/cli/dist/cli.js init --independent --exact --use-workspaces",

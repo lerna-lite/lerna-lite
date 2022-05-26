@@ -57,6 +57,7 @@ const lernaVersion = require('@lerna-test/command-runner')(
   require('../../../cli/src/cli-commands/cli-version-commands')
 );
 import { loadLockfile, NpmLockfile } from '../lib/update-lockfile-version';
+import { Lockfile as PnpmLockfile } from '@pnpm/lockfile-types';
 
 // file under test
 const yargParser = require('yargs-parser');
@@ -811,8 +812,8 @@ describe('VersionCommand', () => {
     });
   });
 
-  describe('with lockfile version 2', () => {
-    it('should have updated project root lockfile version 2 for every necessary properties', async () => {
+  describe('with npm lockfile version 2', () => {
+    it('should have updated npm project root lockfile version 2 for every necessary properties', async () => {
       const cwd = await initFixture('lockfile-version2');
       await new VersionCommand(createArgv(cwd, '--bump', 'major', '--yes'));
 
@@ -821,21 +822,44 @@ describe('VersionCommand', () => {
         '@my-workspace/package-2': '3.0.0',
       });
 
-      const lockfileResponse = await loadLockfile(cwd);
-
-      console.log(lockfileResponse)
-
-      const json = (lockfileResponse.json as NpmLockfile);
+      const lockfileResponse: any = await loadLockfile(cwd);
+      const json = lockfileResponse.json as NpmLockfile;
 
       expect(lockfileResponse.packageManager).toBe('npm');
       expect(lockfileResponse.json.lockfileVersion).toBe(2);
-      expect(json.dependencies['@my-workspace/package-2'].requires).toMatchObject({
+      expect(json.dependencies!['@my-workspace/package-2'].requires).toMatchObject({
         '@my-workspace/package-1': '^3.0.0',
       });
       expect(json.packages['packages/package-1'].version).toBe('3.0.0');
       expect(json.packages['packages/package-2'].version).toBe('3.0.0');
       expect(json.packages['packages/package-2'].dependencies).toMatchObject({
         '@my-workspace/package-1': '^3.0.0',
+      });
+
+      expect(lockfileResponse.json).toMatchSnapshot();
+    });
+  });
+
+  describe('with pnpm lockfile', () => {
+    it('should have updated pnpm project root lockfile for every necessary properties', async () => {
+      const cwd = await initFixture('lockfile-pnpm');
+      await new VersionCommand(createArgv(cwd, '--bump', 'major', '--yes'));
+
+      expect(writePkg.updatedVersions()).toEqual({
+        '@my-workspace/package-1': '3.0.0',
+        '@my-workspace/package-2': '3.0.0',
+      });
+
+      const lockfileResponse: any = await loadLockfile(cwd);
+      const json = lockfileResponse.json as PnpmLockfile;
+
+      expect(lockfileResponse.packageManager).toBe('pnpm');
+      expect(lockfileResponse.json.lockfileVersion).toBe(5.4);
+      expect(json.importers['packages/package-2'].dependencies).toMatchObject({
+        '@my-workspace/package-1': 'link:../package-1',
+      });
+      expect(json.importers['packages/package-2'].specifiers).toMatchObject({
+        '@my-workspace/package-1': 'workspace:^3.0.0',
       });
 
       expect(lockfileResponse.json).toMatchSnapshot();

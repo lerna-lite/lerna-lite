@@ -528,7 +528,7 @@ index SHA..SHA 100644
 +    \\"package-4\\": \\"^2.0.0\\""
 `;
 
-exports[`VersionCommand with lockfile version 2 should have updated project root lockfile version 2 for every necessary properties 1`] = `
+exports[`VersionCommand with npm lockfile version 2 should have updated npm project root lockfile version 2 for every necessary properties 1`] = `
 Object {
   "dependencies": Object {
     "@my-workspace/package-1": Object {
@@ -583,5 +583,40 @@ Object {
     },
   },
   "requires": true,
+}
+`;
+
+exports[`VersionCommand with pnpm lockfile should have updated pnpm project root lockfile for every necessary properties 1`] = `
+Object {
+  "importers": Object {
+    ".": Object {
+      "specifiers": Object {},
+    },
+    "packages/package-1": Object {
+      "dependencies": Object {
+        "tiny-tarball": "1.0.0",
+      },
+      "specifiers": Object {
+        "tiny-tarball": "^1.0.0",
+      },
+    },
+    "packages/package-2": Object {
+      "dependencies": Object {
+        "@my-workspace/package-1": "link:../package-1",
+      },
+      "specifiers": Object {
+        "@my-workspace/package-1": "workspace:^3.0.0",
+      },
+    },
+  },
+  "lockfileVersion": 5.4,
+  "packages": Object {
+    "/tiny-tarball/1.0.0": Object {
+      "dev": false,
+      "resolution": Object {
+        "integrity": "sha1-u/EC1a5zr+LFUyleD7AiMCFvZbE=",
+      },
+    },
+  },
 }
 `;

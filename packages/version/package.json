@@ -43,7 +43,6 @@
     "p-pipe": "^3.1.0",
     "p-reduce": "^2.1.0",
     "path": "^0.12.7",
-    "preferred-pm": "^3.0.3",
     "semver": "^7.3.7",
     "slash": "^3.0.0",
     "temp-write": "^4.0.0",

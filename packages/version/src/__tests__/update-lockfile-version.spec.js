@@ -14,8 +14,8 @@ const initFixture = require('@lerna-test/init-fixture')(__dirname);
 const {
   updateClassicLockfileVersion,
   updateTempModernLockfileVersion,
+  loadLockfile,
   saveLockfile,
-  loadLockfile
 } = require('../lib/update-lockfile-version');
 
 describe('npm classic lock file', () => {
@@ -63,7 +63,7 @@ describe('npm classic lock file', () => {
 });
 
 describe('npm modern lock file', () => {
-  test('updateModernLockfileVersion v2 in project root', async () => {
+  test('call updateNpmLockFileVersion2 for npm lock file in project root', async () => {
     const mockVersion = '2.4.0';
     const cwd = await initFixture('lockfile-version2');
     const rootLockFilePath = path.join(cwd, 'package-lock.json');
@@ -81,14 +81,14 @@ describe('npm modern lock file', () => {
     expect(Array.from(loadJsonFile.registry.keys())).toStrictEqual([
       '/packages/package-1',
       '/packages/package-2',
-      '/'
+      '/',
     ]);
     expect(fs.readJSONSync(rootLockFilePath)).toMatchSnapshot();
   });
 });
 
 describe('pnpm lock file', () => {
-  test('updateModernLockfileVersion v2 on pnpm lock file', async () => {
+  test('call updatePnpmLockFile for pnpm lock file in project root', async () => {
     const mockVersion = '2.5.0';
     const cwd = await initFixture('lockfile-pnpm');
     const packages = await getPackages(cwd);
@@ -105,6 +105,7 @@ describe('pnpm lock file', () => {
     expect(Array.from(loadJsonFile.registry.keys())).toStrictEqual([
       '/packages/package-1',
       '/packages/package-2',
+      '/',
     ]);
 
     expect(`${fs.readFileSync(lockFileOutput.path)}`).toMatchSnapshot();
