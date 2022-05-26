@@ -5,10 +5,11 @@ import { toNerfDart } from './nerf-dart';
 const defaults = require('./defaults');
 
 // https://github.com/npm/npm/blob/latest/lib/config/core.js#L101-L200
-export function npmConf(opts: any) {
+function npmConf(opts: any) {
   const conf = new Conf(Object.assign({}, defaults.defaults));
 
   // prevent keys with undefined values from obscuring defaults
+  // prettier-ignore
   const cleanOpts = opts
     ? Object.keys(opts).reduce((acc, key) => {
       if (opts[key] !== undefined) {
@@ -57,3 +58,5 @@ export function npmConf(opts: any) {
 }
 
 module.exports.defaults = Object.assign({}, defaults.defaults);
+
+export { Conf, npmConf, toNerfDart };
