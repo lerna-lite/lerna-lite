@@ -151,3 +151,26 @@ You can provide a custom location for the performance profile output. The path p
 ```sh
 $ lerna run build --profile --profile-location=logs/profile/
 ```
+
+### `useNx` (experimental)
+
+Enables integration with [Nx](https://nx.dev). Setting `"useNx": true` in `lerna.json` will tell Lerna to delegate
+running tasks to Nx instead of using `p-map` and `p-queue`. This only works if Nx is installed and `nx.json` is present.
+vsavkin marked this conversation as resolved.
+Show resolved
+
+Example of `nx.json`:
+
+```json
+{
+  "extends": "nx/presets/npm.json",
+  "tasksRunnerOptions": {
+    "default": {
+      "runner": "nx/tasks-runners/default",
+      "options": {
+        "cacheableOperations": ["build"]
+      }
+    }
+  }
+}
+```
