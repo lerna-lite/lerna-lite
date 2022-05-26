@@ -1,9 +1,9 @@
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
-[![TypeScript](https://img.shields.io/badge/%3C%2F%3E-TypeScript-%230074c1.svg)](http://www.typescriptlang.org/)
 [![npm](https://img.shields.io/npm/dy/@lerna-lite/info?color=forest)](https://www.npmjs.com/package/@lerna-lite/info)
-[![npm](https://img.shields.io/npm/v/@lerna-lite/info.svg?logo=npm&logoColor=fff&label=npm&color=limegreen)](https://www.npmjs.com/package/@lerna-lite/info)
+[![npm](https://img.shields.io/npm/v/@lerna-lite/info.svg?logo=npm&logoColor=fff&label=npm)](https://www.npmjs.com/package/@lerna-lite/info)
 
 # @lerna-lite/info
+
 ## (`lerna info`) - Info command 💻
 
 Print local environment information
@@ -11,6 +11,7 @@ Print local environment information
 ---
 
 ## Installation
+
 ```sh
 npm install @lerna-lite/cli -D -W
 

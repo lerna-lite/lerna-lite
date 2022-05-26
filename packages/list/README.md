@@ -4,13 +4,15 @@
 [![npm](https://img.shields.io/npm/v/@lerna-lite/list.svg?logo=npm&logoColor=fff)](https://www.npmjs.com/package/@lerna-lite/list)
 
 # @lerna-lite/list
-## (`lerna list`) - List command 📖
+
+## (`lerna list`) - List command [optional] 📖
 
 List local packages
 
 ---
 
 ## Installation
+
 ```sh
 npm install @lerna-lite/list -D -W
 
