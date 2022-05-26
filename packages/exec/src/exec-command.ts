@@ -11,7 +11,7 @@ import {
   spawnStreaming,
   ValidationError,
 } from '@lerna-lite/core';
-import { FilterOptions, getFilteredPackages, Profiler } from '@lerna-lite/exec-run-common';
+import { FilterOptions, getFilteredPackages, Profiler } from '@lerna-lite/optional-cmd-common';
 
 import { ExecStreamingOption } from './models';
 

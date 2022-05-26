@@ -32,7 +32,7 @@
   },
   "dependencies": {
     "@lerna-lite/core": "^1.2.0",
-    "@lerna-lite/exec-run-common": "^1.2.0",
+    "@lerna-lite/optional-cmd-common": "^1.2.0",
     "chalk": "^4.1.2",
     "columnify": "^1.6.0"
   }

@@ -32,7 +32,7 @@
   },
   "dependencies": {
     "@lerna-lite/core": "^1.2.0",
-    "@lerna-lite/exec-run-common": "^1.2.0",
+    "@lerna-lite/optional-cmd-common": "^1.2.0",
     "fs-extra": "^10.1.0",
     "multimatch": "^5.0.0",
     "npmlog": "^6.0.2",

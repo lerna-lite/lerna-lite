@@ -1,6 +1,6 @@
 {
-  "name": "@lerna-lite/exec-run-common",
-  "description": "Lerna-Lite Exec/Run common util code",
+  "name": "@lerna-lite/optional-cmd-common",
+  "description": "Lerna-Lite common utils for optional commands (Exec/List/Run)",
   "version": "1.2.0",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
@@ -21,7 +21,7 @@
   "repository": {
     "type": "git",
     "url": "https://github.com/ghiscoding/lerna-lite.git",
-    "directory": "packages/exec-run-common"
+    "directory": "packages/optional-cmd-common"
   },
   "bugs": {
     "url": "https://github.com/ghiscoding/lerna-lite/issues"

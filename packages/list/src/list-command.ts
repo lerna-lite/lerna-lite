@@ -1,6 +1,5 @@
 import { Command, CommandType, ListCommandOption, logOutput, } from '@lerna-lite/core';
-import { getFilteredPackages } from '@lerna-lite/exec-run-common';
-import { FilterOptions } from '@lerna-lite/exec-run-common/src';
+import { FilterOptions, getFilteredPackages } from '@lerna-lite/optional-cmd-common';
 import { listable } from './lib/index';
 
 export function factory(argv: ListCommandOption) {

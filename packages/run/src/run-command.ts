@@ -7,7 +7,7 @@ import {
   runTopologically,
   ValidationError,
 } from '@lerna-lite/core';
-import { FilterOptions, getFilteredPackages, Profiler } from '@lerna-lite/exec-run-common';
+import { FilterOptions, getFilteredPackages, Profiler } from '@lerna-lite/optional-cmd-common';
 import pMap from 'p-map';
 
 import { npmRunScript, npmRunScriptStreaming, timer } from './lib';
