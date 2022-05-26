@@ -69,9 +69,20 @@ async function loadPnpmLockfile(cwd: string): Promise<LockfileInformation | unde
   } catch (error) {} // eslint-disable-line
 }
 
-export async function loadLockfile(cwd: string): Promise<LockfileInformation | undefined> {
-  let lockFile = await loadNpmLockfile(cwd);
-  if (!lockFile) {
+export async function loadLockfile(
+  cwd: string,
+  npmClient?: 'npm' | 'pnpm' | 'yarn'
+): Promise<LockfileInformation | undefined> {
+  let lockFile;
+
+  // when client is defined as 'npm' or simply undefined, try loading npm lock file
+  if (!npmClient || npmClient === 'npm') {
+    lockFile = await loadNpmLockfile(cwd);
+  }
+
+  // when client is defined as 'pnpm' or if loading npm lock file did not return anything,
+  // we'll try loading pnpm lock file
+  if (npmClient === 'pnpm' || !lockFile) {
     lockFile = await loadPnpmLockfile(cwd);
   }
 

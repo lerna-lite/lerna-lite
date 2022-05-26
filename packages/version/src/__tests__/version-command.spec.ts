@@ -56,7 +56,8 @@ import { VersionCommand } from '../version-command';
 const lernaVersion = require('@lerna-test/command-runner')(
   require('../../../cli/src/cli-commands/cli-version-commands')
 );
-import { loadLockfile, NpmLockfile } from '../lib/update-lockfile-version';
+import { loadLockfile } from '../lib/update-lockfile-version';
+import { LockfileInformation, NpmLockfile } from '../types';
 import { Lockfile as PnpmLockfile } from '@pnpm/lockfile-types';
 
 // file under test
@@ -850,7 +851,11 @@ describe('VersionCommand', () => {
         '@my-workspace/package-2': '3.0.0',
       });
 
-      const lockfileResponse: any = await loadLockfile(cwd);
+      // loading lock file should work with/without providing npm client type (2nd arg)
+      let lockfileResponse = (await loadLockfile(cwd)) as LockfileInformation;
+      expect(lockfileResponse.packageManager).toBe('pnpm');
+
+      lockfileResponse = (await loadLockfile(cwd, 'pnpm')) as LockfileInformation;
       const json = lockfileResponse.json as PnpmLockfile;
 
       expect(lockfileResponse.packageManager).toBe('pnpm');

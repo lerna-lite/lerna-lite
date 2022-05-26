@@ -78,6 +78,7 @@ describe('npm modern lock file', () => {
       await saveLockfile(lockFileOutput);
     }
 
+    expect(lockFileOutput.packageManager).toBe('npm');
     expect(Array.from(loadJsonFile.registry.keys())).toStrictEqual([
       '/packages/package-1',
       '/packages/package-2',
@@ -93,8 +94,16 @@ describe('pnpm lock file', () => {
     const cwd = await initFixture('lockfile-pnpm');
     const packages = await getPackages(cwd);
 
-    const lockFileOutput = await loadLockfile(cwd);
-    if (lockFileOutput?.json) {
+    // loading lock file should work with/without providing npm client type (2nd arg)
+    let lockFileOutput = await loadLockfile(cwd);
+    expect(lockFileOutput).not.toBeUndefined();
+    expect(lockFileOutput.packageManager).toBe('pnpm');
+
+    lockFileOutput = await loadLockfile(cwd, 'pnpm');
+    expect(lockFileOutput).not.toBeUndefined();
+    expect(lockFileOutput.packageManager).toBe('pnpm');
+
+    if (lockFileOutput.json) {
       for (const pkg of packages) {
         pkg.version = mockVersion;
         await updateTempModernLockfileVersion(pkg, lockFileOutput);
