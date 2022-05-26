@@ -1,36 +1,23 @@
-// eslint-disable-next-line import/no-unresolved
-import { PackageLock, LockDependency } from '@npm/types';
+import { Package } from '@lerna-lite/core';
+import { Lockfile as PnpmLockfile } from '@pnpm/lockfile-types';
 import fs from 'fs';
 import yaml from 'js-yaml';
 import path from 'path';
 import loadJsonFile from 'load-json-file';
 import writeJsonFile from 'write-json-file';
-import { Package } from '@lerna-lite/core';
-import { Lockfile as PnpmLockfile } from '@pnpm/lockfile-types';
 
-export type NpmLockfile = PackageLock & { packages: { [moduleName: string]: LockDependency } };
-
-export type NpmLockfileInformation = {
-  json: NpmLockfile;
-  path: string;
-  version: number;
-  packageManager: 'npm';
-};
-
-export type PnpmLockfileInformation = {
-  json: PnpmLockfile;
-  path: string;
-  version: number;
-  packageManager: 'pnpm';
-};
-
-export type LockfileInformation = NpmLockfileInformation | PnpmLockfileInformation;
+import { LockfileInformation, NpmLockfile, NpmLockfileInformation, PnpmLockfileInformation } from '../types';
 
 export const isPnpmLockfile = (x: LockfileInformation): x is PnpmLockfileInformation =>
   x.packageManager === 'pnpm';
 export const isNpmLockfile = (x: LockfileInformation): x is NpmLockfileInformation =>
   x.packageManager === 'npm';
 
+/**
+ * From a folder path provided, try to load a `pnpm-lock.yaml` file if it exists.
+ * @param {String} lockFileFolderPath
+ * @returns Promise<{path: string; json: Object; lockFileVersion: number; }>
+ */
 async function loadYamlFile<T>(filePath: string) {
   try {
     const file = await fs.promises.readFile(filePath);
@@ -44,10 +31,14 @@ async function writeYamlFile(filePath: string, data: unknown) {
   try {
     const str = yaml.dump(data);
     await fs.promises.writeFile(filePath, str);
-    // eslint-disable-next-line no-empty
-  } catch (e) {}
+  } catch (e) {} // eslint-disable-line
 }
 
+/**
+ * From a folder path provided, try to load a `package-lock.json` file if it exists.
+ * @param {String} lockFileFolderPath
+ * @returns Promise<{path: string; json: Object; lockFileVersion: number; }>
+ */
 async function loadNpmLockfile(cwd: string): Promise<LockfileInformation | undefined> {
   try {
     const lockfilePath = path.join(cwd, 'package-lock.json');
@@ -145,65 +136,67 @@ export async function saveLockfile(lockfile: LockfileInformation) {
   } catch (error) {} // eslint-disable-line
 }
 
+/**
+ * Update NPM Lock File (when found), the lock file must be version 2 or higher and is considered as modern lockfile,
+ * its structure is different and all version properties will be updated accordingly.
+ * The json object will be updated through pointers,
+ * so it won't return anything but its input argument itself will be directly updated.
+ */
 export function updateNpmLockFileVersion2(
   lockfile: LockfileInformation,
   pkgName: string,
   newVersion: string
 ) {
-  if (!lockfile.json || !pkgName || !newVersion || !isNpmLockfile(lockfile)) {
-    return;
-  }
+  if (lockfile.json && pkgName && newVersion && isNpmLockfile(lockfile)) {
+    const updateNpmLockPart = (part: unknown) => {
+      if (typeof part !== 'object') {
+        return;
+      }
 
-  const updateNpmLockPart = (part: unknown) => {
-    if (typeof part !== 'object') {
-      return;
-    }
-
-    for (const k in part) {
-      if (typeof part[k] === 'object' && part[k] !== null) {
-        updateNpmLockPart(part[k]);
-      } else {
-        if (k === pkgName) {
-          // e.g.: "@lerna-lite/core": "^0.1.2",
-          const [_, versionPrefix, _versionStr] = part[k].match(/^([\^~])?(.*)$/);
-          part[k] = `${versionPrefix}${newVersion}`;
-        } else if (k === 'name' && part[k] === pkgName && part['version'] !== undefined) {
-          // e.g. "packages/version": { "name": "@lerna-lite/version", "version": "0.1.2" }
-          if (part['version'] !== undefined) {
-            part['version'] = newVersion;
+      for (const k in part) {
+        if (typeof part[k] === 'object' && part[k] !== null) {
+          updateNpmLockPart(part[k]);
+        } else {
+          if (k === pkgName) {
+            // e.g.: "@lerna-lite/core": "^0.1.2",
+            const [_, versionPrefix, _versionStr] = part[k].match(/^([\^~])?(.*)$/);
+            part[k] = `${versionPrefix}${newVersion}`;
+          } else if (k === 'name' && part[k] === pkgName && part['version'] !== undefined) {
+            // e.g. "packages/version": { "name": "@lerna-lite/version", "version": "0.1.2" }
+            if (part['version'] !== undefined) {
+              part['version'] = newVersion;
+            }
           }
         }
       }
-    }
-  };
-  updateNpmLockPart(lockfile.json);
+    };
+    updateNpmLockPart(lockfile.json);
+  }
 }
 
 export function updatePnpmLockFile(lockfile: LockfileInformation, pkgName: string, newVersion: string) {
-  if (!lockfile.json || !pkgName || !newVersion || !isPnpmLockfile(lockfile)) {
-    return;
-  }
-
-  const updatePnpmLockPart = (part: unknown) => {
-    if (typeof part !== 'object') {
-      return;
-    }
-
-    for (const k in part) {
-      if (k === 'specifiers' && !!part[k][pkgName]) {
-        const [_, versionPrefix] = part[k][pkgName].match(/^workspace:([\^~])?(.*)$/);
-        part[k][pkgName] = `workspace:${versionPrefix}${newVersion}`;
-      } else if (
-        typeof part[k] === 'object' &&
-        part[k] !== null &&
-        part[k] !== undefined &&
-        k !== 'specifiers' &&
-        k !== 'dependencies'
-      ) {
-        updatePnpmLockPart(part[k]);
+  if (lockfile.json && pkgName && newVersion && isPnpmLockfile(lockfile)) {
+    const updatePnpmLockPart = (part: unknown) => {
+      if (typeof part !== 'object') {
+        return;
       }
-    }
-  };
 
-  updatePnpmLockPart(lockfile.json.importers);
+      for (const k in part) {
+        if (k === 'specifiers' && !!part[k][pkgName]) {
+          const [_, versionPrefix] = part[k][pkgName].match(/^workspace:([\^~])?(.*)$/);
+          part[k][pkgName] = `workspace:${versionPrefix}${newVersion}`;
+        } else if (
+          typeof part[k] === 'object' &&
+          part[k] !== null &&
+          part[k] !== undefined &&
+          k !== 'specifiers' &&
+          k !== 'dependencies'
+        ) {
+          updatePnpmLockPart(part[k]);
+        }
+      }
+    };
+
+    updatePnpmLockPart(lockfile.json.importers);
+  }
 }
