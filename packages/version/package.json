@@ -44,7 +44,6 @@
     "path": "^0.12.7",
     "semver": "^7.3.7",
     "slash": "^3.0.0",
-    "temp-write": "^4.0.0",
     "write-json-file": "^4.3.0",
     "yargs": "^17.5.1"
   },

@@ -2,9 +2,8 @@ import path from 'path';
 import packlist from 'npm-packlist';
 import log from 'npmlog';
 import tar from 'tar';
-import tempWrite from 'temp-write';
 
-import { Package, PackConfig, runLifecycle } from '@lerna-lite/core';
+import { Package, PackConfig, runLifecycle, tempWrite } from '@lerna-lite/core';
 import { getPacked } from './get-packed';
 
 /**

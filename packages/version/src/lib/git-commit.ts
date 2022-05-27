@@ -1,8 +1,7 @@
 import { EOL } from 'os';
 import log from 'npmlog';
-import tempWrite from 'temp-write';
 
-import { exec, ExecOpts } from '@lerna-lite/core';
+import { exec, ExecOpts, tempWrite } from '@lerna-lite/core';
 
 /**
  * @param {string} message
