@@ -842,7 +842,42 @@ describe('VersionCommand', () => {
   });
 
   describe('with pnpm lockfile', () => {
-    it('should have updated pnpm project root lockfile for every necessary properties', async () => {
+    it('should not update pnpm project root lockfile (untouched) when "--no-update-root-lock-file" is provided', async () => {
+      const cwd = await initFixture('lockfile-pnpm');
+      await new VersionCommand(createArgv(cwd, '--bump', 'major', '--yes', '--no-update-root-lock-file'));
+
+      expect(writePkg.updatedVersions()).toEqual({
+        '@my-workspace/package-1': '3.0.0',
+        '@my-workspace/package-2': '3.0.0',
+        '@my-workspace/package-3': '3.0.0',
+        '@my-workspace/package-4': '3.0.0',
+      });
+
+      // loading lock file should work with/without providing npm client type (2nd arg)
+      let lockfileResponse = (await loadLockfile(cwd)) as LockfileInformation;
+      expect(lockfileResponse.packageManager).toBe('pnpm');
+
+      lockfileResponse = (await loadLockfile(cwd, 'pnpm')) as LockfileInformation;
+      const json = lockfileResponse.json as PnpmLockfile;
+
+      expect(lockfileResponse.packageManager).toBe('pnpm');
+      expect(lockfileResponse.json.lockfileVersion).toBe(5.4);
+      expect(json.importers['packages/package-2'].specifiers).toMatchObject({
+        '@my-workspace/package-1': 'workspace:^2.3.4',
+      });
+      expect(json.importers['packages/package-3'].specifiers).toMatchObject({
+        '@my-workspace/package-1': 'workspace:^',
+        '@my-workspace/package-2': 'workspace:*',
+      });
+      expect(json.importers['packages/package-4'].specifiers).toMatchObject({
+        '@my-workspace/package-1': 'workspace:2.3.4',
+        '@my-workspace/package-2': 'workspace:~',
+      });
+
+      expect(lockfileResponse.json).toMatchSnapshot();
+    });
+
+    it('should update pnpm project root lockfile to next major version on every necessary properties', async () => {
       const cwd = await initFixture('lockfile-pnpm');
       await new VersionCommand(createArgv(cwd, '--bump', 'major', '--yes'));
 
@@ -874,6 +909,44 @@ describe('VersionCommand', () => {
       });
       expect(json.importers['packages/package-4'].specifiers).toMatchObject({
         '@my-workspace/package-1': 'workspace:3.0.0',
+        '@my-workspace/package-2': 'workspace:~',
+      });
+
+      expect(lockfileResponse.json).toMatchSnapshot();
+    });
+
+    it('should update pnpm project root lockfile to next minor version on every necessary properties', async () => {
+      const cwd = await initFixture('lockfile-pnpm');
+      await new VersionCommand(createArgv(cwd, '--bump', 'minor', '--yes'));
+
+      expect(writePkg.updatedVersions()).toEqual({
+        '@my-workspace/package-1': '2.4.0',
+        '@my-workspace/package-2': '2.4.0',
+        '@my-workspace/package-3': '2.4.0',
+        '@my-workspace/package-4': '2.4.0',
+      });
+
+      // loading lock file should work with/without providing npm client type (2nd arg)
+      let lockfileResponse = (await loadLockfile(cwd)) as LockfileInformation;
+      expect(lockfileResponse.packageManager).toBe('pnpm');
+
+      lockfileResponse = (await loadLockfile(cwd, 'pnpm')) as LockfileInformation;
+      const json = lockfileResponse.json as PnpmLockfile;
+
+      expect(lockfileResponse.packageManager).toBe('pnpm');
+      expect(lockfileResponse.json.lockfileVersion).toBe(5.4);
+      expect(json.importers['packages/package-2'].dependencies).toMatchObject({
+        '@my-workspace/package-1': 'link:../package-1',
+      });
+      expect(json.importers['packages/package-2'].specifiers).toMatchObject({
+        '@my-workspace/package-1': 'workspace:^2.4.0',
+      });
+      expect(json.importers['packages/package-3'].specifiers).toMatchObject({
+        '@my-workspace/package-1': 'workspace:^',
+        '@my-workspace/package-2': 'workspace:*',
+      });
+      expect(json.importers['packages/package-4'].specifiers).toMatchObject({
+        '@my-workspace/package-1': 'workspace:2.4.0',
         '@my-workspace/package-2': 'workspace:~',
       });
 

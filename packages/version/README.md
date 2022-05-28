@@ -437,7 +437,7 @@ Pass `--no-push` to disable this behavior.
 lerna version --no-update-root-lock-file
 ```
 
-When using pnpm or npm >= 7, do not update the project root lock file (`package-lock.json` or `pnpm-lock.yaml`). By default it will update the root lock file, when found, for most use case this works correctly however if you find it to be problematic and/or prefer to update yourself then you use this flag.
+When using pnpm or npm >= 7, do not update the project root lock file (`package-lock.json` or `pnpm-lock.yaml`). By default it will update the root lock file, when found, for most use case this works correctly; however if you find it to be problematic and/or prefer to update yourself, then simply use this flag.
 
 ### `--preid`
 
