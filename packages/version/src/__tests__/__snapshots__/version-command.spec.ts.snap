@@ -608,6 +608,26 @@ Object {
         "@my-workspace/package-1": "workspace:^3.0.0",
       },
     },
+    "packages/package-3": Object {
+      "dependencies": Object {
+        "@my-workspace/package-1": "link:../package-1",
+        "@my-workspace/package-2": "link:../package-2",
+      },
+      "specifiers": Object {
+        "@my-workspace/package-1": "workspace:^",
+        "@my-workspace/package-2": "workspace:*",
+      },
+    },
+    "packages/package-4": Object {
+      "dependencies": Object {
+        "@my-workspace/package-1": "link:../package-1",
+        "@my-workspace/package-2": "link:../package-2",
+      },
+      "specifiers": Object {
+        "@my-workspace/package-1": "workspace:3.0.0",
+        "@my-workspace/package-2": "workspace:~",
+      },
+    },
   },
   "lockfileVersion": 5.4,
   "packages": Object {

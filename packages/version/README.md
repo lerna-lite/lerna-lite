@@ -4,6 +4,7 @@
 [![npm](https://img.shields.io/npm/v/@lerna-lite/version.svg?logo=npm&logoColor=fff&label=npm&color=limegreen)](https://www.npmjs.com/package/@lerna-lite/version)
 
 # @lerna-lite/version
+
 ## (`lerna version`) - Version command 📑
 
 Lerna-Lite Version command, bump version of packages changed since the last release.
@@ -11,6 +12,7 @@ Lerna-Lite Version command, bump version of packages changed since the last rele
 ---
 
 ## Installation
+
 ```sh
 # simple install or install it globally with -g
 npm install @lerna-lite/cli -D -W
@@ -92,6 +94,7 @@ Running `lerna version --conventional-commits` without the above flags will rele
     - [`--no-granular-pathspec`](#--no-granular-pathspec)
     - [`--no-private`](#--no-private)
     - [`--no-push`](#--no-push)
+    - [`--no-update-root-lock-file`](#--no-update-root-lock-file)
     - [`--preid`](#--preid)
     - [`--signoff-git-commit`](#--signoff-git-commit) (new)
     - [`--sign-git-commit`](#--sign-git-commit)
@@ -223,6 +226,7 @@ lerna version --conventional-commits --conventional-prerelease
 When run with this flag, `lerna version` will release with prerelease versions the specified packages (comma-separated) or all packages using `*`. Releases all unreleased changes as pre(patch/minor/major/release) by prefixing the version recommendation from `conventional-commits` with `pre`, eg. if present changes include a feature commit, the recommended bump will be `minor`, so this flag will result in a `preminor` release. If changes are present for packages that are not specified (if specifying packages), or for packages that are already in prerelease, those packages will be versioned as they normally would using `--conventional-commits`.
 
 ### `--changelog-header-message <msg>`
+
 Add a custom message at the top of your "changelog.md" which is located in the root of your project. This option only works when using `--conventional-commits` and will only impact your project root "changelog.md".
 
 ```sh
@@ -230,11 +234,13 @@ lerna version --changelog-header-message "My Custom Header Message"
 ```
 
 ### `--changelog-version-message <msg>`
+
 Add a custom message as a prefix to your new version in your "changelog.md" which is located in the root of your project. This option only works when using `--conventional-commits` and will only impact your project root "changelog.md".
 
 ```sh
 lerna version --changelog-version-message "My Great New Version Message"
 ```
+
 ### `--create-release <type>`
 
 ```sh
@@ -425,6 +431,14 @@ Note that this option does _not_ exclude [private scoped packages](https://docs.
 By default, `lerna version` will push the committed and tagged changes to the configured [git remote](#--git-remote-name).
 Pass `--no-push` to disable this behavior.
 
+### `--no-update-root-lock-file`
+
+```sh
+lerna version --no-update-root-lock-file
+```
+
+When using pnpm or npm >= 7, do not update the project root lock file (`package-lock.json` or `pnpm-lock.yaml`). By default it will update the root lock file correctly, when found, for most use case however if you find it to be problematic and/or prefer to update yourself then use this flag.
+
 ### `--preid`
 
 ```sh
@@ -507,30 +521,34 @@ lerna will run [npm lifecycle scripts](https://docs.npmjs.com/cli/v8/using-npm/s
 10. Create release, if [enabled](#--create-release-type)
 
 # `workspace:` protocol
+
 The `workspace:` protocol ([pnpm workspace](https://pnpm.io/workspaces), [yarn workspace](https://yarnpkg.com/features/workspaces#workspace-ranges-workspace)) is also supported by Lerna-Lite. When versioning `workspace:` dependency, it will do the following:
+
 - fixed target workspace will remain untouched (if you use `workspace:*`, `workspace:~`, or `workspace:^`)
 - semver range workspace will be bumped (if you use `workspace:^1.2.3`)
 
 So for example, if we have `foo`, `bar`, `qar`, `zoo` in the workspace and they all are at version `1.5.0` and a `minor` bump is requested, then the following:
+
 ```json
 {
-    "dependencies": {
-        "foo": "workspace:*",
-        "bar": "workspace:~",
-        "qar": "workspace:^",
-        "zoo": "workspace:^1.5.0"
-    }
+  "dependencies": {
+    "foo": "workspace:*",
+    "bar": "workspace:~",
+    "qar": "workspace:^",
+    "zoo": "workspace:^1.5.0"
+  }
 }
 ```
 
 Will update your `package.json` with the following versions with a `minor` version requested:
+
 ```json
 {
-    "dependencies": {
-        "foo": "workspace:*",
-        "bar": "workspace:~",
-        "qar": "workspace:^",
-        "zoo": "workspace:^1.6.0"
-    }
+  "dependencies": {
+    "foo": "workspace:*",
+    "bar": "workspace:~",
+    "qar": "workspace:^",
+    "zoo": "workspace:^1.6.0"
+  }
 }
 ```

@@ -114,6 +114,8 @@ describe('pnpm lock file', () => {
     expect(Array.from(loadJsonFile.registry.keys())).toStrictEqual([
       '/packages/package-1',
       '/packages/package-2',
+      '/packages/package-3',
+      '/packages/package-4',
       '/',
     ]);
 

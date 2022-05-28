@@ -849,6 +849,8 @@ describe('VersionCommand', () => {
       expect(writePkg.updatedVersions()).toEqual({
         '@my-workspace/package-1': '3.0.0',
         '@my-workspace/package-2': '3.0.0',
+        '@my-workspace/package-3': '3.0.0',
+        '@my-workspace/package-4': '3.0.0',
       });
 
       // loading lock file should work with/without providing npm client type (2nd arg)
@@ -865,6 +867,14 @@ describe('VersionCommand', () => {
       });
       expect(json.importers['packages/package-2'].specifiers).toMatchObject({
         '@my-workspace/package-1': 'workspace:^3.0.0',
+      });
+      expect(json.importers['packages/package-3'].specifiers).toMatchObject({
+        '@my-workspace/package-1': 'workspace:^',
+        '@my-workspace/package-2': 'workspace:*',
+      });
+      expect(json.importers['packages/package-4'].specifiers).toMatchObject({
+        '@my-workspace/package-1': 'workspace:3.0.0',
+        '@my-workspace/package-2': 'workspace:~',
       });
 
       expect(lockfileResponse.json).toMatchSnapshot();

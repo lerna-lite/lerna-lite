@@ -17,6 +17,22 @@ importers:
     dependencies:
       '@my-workspace/package-1': link:../package-1
 
+  packages/package-3:
+    specifiers:
+      '@my-workspace/package-1': workspace:^
+      '@my-workspace/package-2': workspace:*
+    dependencies:
+      '@my-workspace/package-1': link:../package-1
+      '@my-workspace/package-2': link:../package-2
+
+  packages/package-4:
+    specifiers:
+      '@my-workspace/package-1': workspace:2.3.4
+      '@my-workspace/package-2': workspace:~
+    dependencies:
+      '@my-workspace/package-1': link:../package-1
+      '@my-workspace/package-2': link:../package-2
+
 packages:
 
   /tiny-tarball/1.0.0:

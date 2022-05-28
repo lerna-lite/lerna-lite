@@ -126,6 +126,7 @@ export interface VersionCommandOption {
   amend?: boolean;
 
   /** conventional commit version bump type */
+  // prettier-ignore
   bump: 'major' | 'minor' | 'patch' | 'premajor' | 'preminor' | 'prepatch' | 'prerelease' | 'from-git' | 'from-package';
 
   /** Use conventional-changelog to determine version bump and generate CHANGELOG. */
@@ -235,6 +236,12 @@ export interface VersionCommandOption {
 
   /** Defaults to 'v', customize the tag prefix. To remove entirely, pass an empty string. */
   tagVersionPrefix?: string;
+
+  /** Do not update the project root lock file. */
+  noUpdateRootLockFile?: boolean;
+
+  /** Defaults to true when found, update the project root lock file. */
+  updateRootLockFile?: boolean;
 
   /** Strict match transform version numbers to an exact range (like "1.2.3") rather than with a caret (like ^1.2.3) when using `workspace:*`. */
   workspaceStrictMatch?: boolean;

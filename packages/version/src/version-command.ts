@@ -626,7 +626,7 @@ export class VersionCommand extends Command<VersionCommandOption> {
     chain = chain.then(() =>
       // update modern lockfile (version 2 or higher) when exist in the project root
       loadLockfile(rootPath, this.options.npmClient).then((lockfile) => {
-        if (!lockfile || lockfile.version < 2) {
+        if (!lockfile || lockfile.version < 2 || this.options.noUpdateRootLockFile) {
           return;
         }
 

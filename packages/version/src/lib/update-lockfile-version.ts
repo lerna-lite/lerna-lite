@@ -169,11 +169,11 @@ export function updateNpmLockFileVersion2(
           updateNpmLockPart(part[k]);
         } else {
           if (k === pkgName) {
-            // e.g.: "@lerna-lite/core": "^0.1.2",
+            // ie: "@lerna-lite/core": "^0.1.2",
             const [_, versionPrefix, _versionStr] = part[k].match(/^([\^~])?(.*)$/);
             part[k] = `${versionPrefix}${newVersion}`;
           } else if (k === 'name' && part[k] === pkgName && part['version'] !== undefined) {
-            // e.g. "packages/version": { "name": "@lerna-lite/version", "version": "0.1.2" }
+            // ie: "packages/version": { "name": "@lerna-lite/version", "version": "0.1.2" }
             if (part['version'] !== undefined) {
               part['version'] = newVersion;
             }
@@ -194,8 +194,14 @@ export function updatePnpmLockFile(lockfile: LockfileInformation, pkgName: strin
 
       for (const k in part) {
         if (k === 'specifiers' && !!part[k][pkgName]) {
-          const [_, versionPrefix] = part[k][pkgName].match(/^workspace:([\^~])?(.*)$/);
-          part[k][pkgName] = `workspace:${versionPrefix}${newVersion}`;
+          const [_, versionPrefix, previousVersion] = part[k][pkgName].match(/^workspace:([\^~*])?(.*)$/);
+
+          // update workspace version only when found to have a previous version
+          // ie case 1: "@lerna-lite/core": "workspace:^1.3.2" bump minor to "workspace:^1.4.2"
+          // ie case 2: "@lerna-lite/core": "workspace:^" bump minor to "workspace:^" (no old version found means no changes)
+          if (versionPrefix !== '*' && previousVersion) {
+            part[k][pkgName] = `workspace:${versionPrefix || ''}${newVersion}`;
+          }
         } else if (
           typeof part[k] === 'object' &&
           part[k] !== null &&
