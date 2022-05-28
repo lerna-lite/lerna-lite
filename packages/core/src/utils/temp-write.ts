@@ -4,18 +4,19 @@
  * Embedded here into lerna directly because we cannot yet migrate to ESM only, and we needed to bump outdated deps.
  */
 
-import { promisify } from 'util';
-import path from 'path';
 import fs from 'graceful-fs';
 import isStream from 'is-stream';
 import makeDir from 'make-dir';
-import { v4 as uuidv4 } from 'uuid';
+import path from 'path';
+import { Readable } from 'stream';
 import tempDir from 'temp-dir';
+import { promisify } from 'util';
+import { v4 as uuidv4 } from 'uuid';
 
 const writeFileP = promisify(fs.writeFile);
 const tempfile = (filePath?: string) => path.join(tempDir, uuidv4(), filePath || '');
 
-const writeStream = async (filePath: string, fileContent: any) =>
+const writeStream = async (filePath: string, fileContent: Readable) =>
   new Promise((resolve, reject) => {
     const writable = fs.createWriteStream(filePath);
 
@@ -33,17 +34,17 @@ const writeStream = async (filePath: string, fileContent: any) =>
       .on('finish', resolve);
   });
 
-export async function tempWrite(fileContent: any, filePath?: string) {
+export async function tempWrite(fileContent:  Readable | fs.PathOrFileDescriptor, filePath?: string) {
   const tempPath = tempfile(filePath);
   const write = isStream(fileContent) ? writeStream : writeFileP;
 
   await makeDir(path.dirname(tempPath));
-  await write(tempPath, fileContent);
+  await write(tempPath, fileContent as DataView & Readable);
 
   return tempPath;
 }
 
-tempWrite.sync = (fileContent: any, filePath?: string) => {
+tempWrite.sync = (fileContent: DataView & Readable | string, filePath?: string) => {
   const tempPath = tempfile(filePath);
 
   makeDir.sync(path.dirname(tempPath));
