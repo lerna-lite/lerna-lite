@@ -187,7 +187,7 @@ exports.builder = (yargs, composed) => {
       type: 'boolean',
     },
     'update-root-lock-file': {
-      // proxy for --no-changelog
+      // proxy for --no-update-root-lock-file
       hidden: true,
       type: 'boolean',
     },
