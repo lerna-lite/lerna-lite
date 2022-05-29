@@ -4,6 +4,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [1.4.0](https://github.com/ghiscoding/lerna-lite/compare/v1.3.0...v1.4.0) (2022-05-29)
+
+### Bug Fixes
+
+* **init:** add missing packages/workspaces ([f78860d](https://github.com/ghiscoding/lerna-lite/commit/f78860d158dc4e3772ca8e33113f79508c4fda83))
+* **version:** support for updating pnpm-lock.yaml ([509ca33](https://github.com/ghiscoding/lerna-lite/commit/509ca3308a76557891feefa5a0f69e350a0687b7))
+
+### Features
+
+* **version:** support for updating `pnpm-lock.yaml`, expand on [#168](https://github.com/ghiscoding/lerna-lite/issues/168) ([ee1a964](https://github.com/ghiscoding/lerna-lite/commit/ee1a96432675886c887544a59dc88185f5ebbd21))
+
 # [1.3.0](https://github.com/ghiscoding/lerna-lite/compare/v1.2.0...v1.3.0) (2022-05-13)
 
 ### Features
