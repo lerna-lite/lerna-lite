@@ -63,7 +63,7 @@ $ lerna run --scope my-component test
     - [`--profile`](#--profile)
     - [`--profile-location <location>`](#--profile-location-location)
   - Features
-    - [`useNx` (experimental)](#useNx--experimental)
+    - [`useNx` (experimental)](#usenx-experimental)
 
 ### `--npm-client <client>`
 
