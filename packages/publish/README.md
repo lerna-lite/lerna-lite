@@ -1,9 +1,9 @@
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
-[![TypeScript](https://img.shields.io/badge/%3C%2F%3E-TypeScript-%230074c1.svg)](http://www.typescriptlang.org/)
 [![npm](https://img.shields.io/npm/dy/@lerna-lite/publish?color=forest)](https://www.npmjs.com/package/@lerna-lite/publish)
-[![npm](https://img.shields.io/npm/v/@lerna-lite/publish.svg?logo=npm&logoColor=fff&label=npm&color=limegreen)](https://www.npmjs.com/package/@lerna-lite/publish)
+[![npm](https://img.shields.io/npm/v/@lerna-lite/publish.svg?logo=npm&logoColor=fff&label=npm)](https://www.npmjs.com/package/@lerna-lite/publish)
 
 # @lerna-lite/publish
+
 ## (`lerna publish`) - Publish command ☁️
 
 Lerna-Lite Publish command, publish package(s) in the current project
@@ -11,6 +11,7 @@ Lerna-Lite Publish command, publish package(s) in the current project
 ---
 
 ## Installation
+
 ```sh
 # simple install or install it globally with -g
 npm install @lerna-lite/cli -D -W
@@ -64,6 +65,7 @@ This is useful when a previous `lerna publish` failed to publish all packages to
 ## Options
 
 `lerna publish` supports all of the options provided by [`lerna version`](https://github.com/lerna/lerna/tree/main/commands/version#options) in addition to the following:
+
 - [`@lerna/publish`](#lernapublish)
   - [Positionals](#positionals)
     - [semver `--bump from-git`](#semver--bump-from-git)
@@ -89,8 +91,8 @@ This is useful when a previous `lerna publish` failed to publish all packages to
     - [`--temp-tag`](#--temp-tag)
     - [`--yes`](#--yes)
   - [`workspace:` protocol](#workspace-protocol)
-     - [`--workspace-strict-match (default)`](#with---workspace-strict-match-default)
-     - [`--no-workspace-strict-match`](#with---no-workspace-strict-match-deprecated)
+    - [`--workspace-strict-match (default)`](#with---workspace-strict-match-default)
+    - [`--no-workspace-strict-match`](#with---no-workspace-strict-match-deprecated)
 
 ### `--canary`
 
@@ -417,50 +419,56 @@ lerna will run [npm lifecycle scripts](https://docs.npmjs.com/cli/v8/using-npm/s
 10. Run `postpublish` lifecycle in root
 11. Update temporary dist-tag to latest, if [enabled](#--temp-tag)
 
-
 # `workspace:` protocol
+
 The `workspace:` protocol ([pnpm workspace](https://pnpm.io/workspaces), [yarn workspace](https://yarnpkg.com/features/workspaces#workspace-ranges-workspace)) is also supported by Lerna-Lite. When publishing, it will replace any `workspace:` dependency by:
+
 - the corresponding version in the target workspace (if you use `workspace:*`, `workspace:~`, or `workspace:^`)
 - the associated semver range (for any other range type)
 
 So for example, if we have `foo`, `bar`, `qar`, `zoo` in the workspace and they all are at version `1.5.0` (before publishing), the following:
+
 ```json
 {
-    "dependencies": {
-        "foo": "workspace:*",
-        "bar": "workspace:~",
-        "qar": "workspace:^",
-        "zoo": "workspace:^1.5.0"
-    }
+  "dependencies": {
+    "foo": "workspace:*",
+    "bar": "workspace:~",
+    "qar": "workspace:^",
+    "zoo": "workspace:^1.5.0"
+  }
 }
 ```
 
 #### with `--workspace-strict-match` (default)
+
 When using strict match (default), it will be transformed and publish with the following:
 
 _this is the default and is usually what most user will want to use since it will strictly adhere to pnpm/yarn workspace protocol._
+
 ```json
 {
-    "dependencies": {
-        "foo": "1.5.0",
-        "bar": "~1.5.0",
-        "qar": "^1.5.0",
-        "zoo": "^1.5.0"
-    }
+  "dependencies": {
+    "foo": "1.5.0",
+    "bar": "~1.5.0",
+    "qar": "^1.5.0",
+    "zoo": "^1.5.0"
+  }
 }
 ```
 
 #### with `--no-workspace-strict-match` (deprecated)
+
 When strict match is disabled, it will be transformed and publish with the following:
 
 _you would rarely want to disable the strict match, in fact it will be removed from the code in future release, this flag was created for the sole purpose of making it compatible with previous Lerna-Lite version `1.2.0`. When disabled, in most cases Lerna will assume that the caret (^) is needed unless the option [--exact](https://github.com/ghiscoding/lerna-lite/tree/main/packages/version#--exact) is provided and by doing so is not strictly following pnpm/yarn workspace protocol and is not recommended for that reason._
+
 ```json
 {
-    "dependencies": {
-        "foo": "^1.5.0",
-        "bar": "^1.5.0",
-        "qar": "^1.5.0",
-        "zoo": "^1.5.0"
-    }
+  "dependencies": {
+    "foo": "^1.5.0",
+    "bar": "^1.5.0",
+    "qar": "^1.5.0",
+    "zoo": "^1.5.0"
+  }
 }
 ```

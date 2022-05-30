@@ -1,0 +1,47 @@
+{
+  "name": "@lerna-lite/optional-cmd-common",
+  "description": "Lerna-Lite common utils for optional commands (Exec/List/Run)",
+  "version": "1.2.0",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "typings": "dist/index.d.ts",
+  "files": [
+    "/dist"
+  ],
+  "publishConfig": {
+    "access": "public"
+  },
+  "scripts": {
+    "build": "tsc --project tsconfig.bundle.json --newLine LF",
+    "pack-tarball": "npm pack"
+  },
+  "license": "MIT",
+  "author": "Ghislain B.",
+  "homepage": "https://github.com/ghiscoding/lerna-lite",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/ghiscoding/lerna-lite.git",
+    "directory": "packages/optional-cmd-common"
+  },
+  "bugs": {
+    "url": "https://github.com/ghiscoding/lerna-lite/issues"
+  },
+  "engines": {
+    "node": ">=14.13.1",
+    "npm": ">=8.0.0"
+  },
+  "dependencies": {
+    "@lerna-lite/core": "^1.2.0",
+    "fs-extra": "^10.1.0",
+    "multimatch": "^5.0.0",
+    "npmlog": "^6.0.2",
+    "p-map": "^4.0.0",
+    "upath": "^2.0.1",
+    "yargs": "^17.5.1"
+  },
+  "devDependencies": {
+    "@types/execa": "^2.0.0",
+    "@types/node": "^17.0.35",
+    "@types/p-map": "^2.0.0"
+  }
+}

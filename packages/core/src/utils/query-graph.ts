@@ -18,7 +18,7 @@ export class QueryGraph {
    *
    * @returns {import("@lerna/package").Package[]} A list of Package instances in topological order
    */
-  static toposort(packages: Package[], options: QueryGraphConfig) {
+  static toposort(packages: Package[], options?: QueryGraphConfig) {
     const graph = new QueryGraph(packages, options);
     const result = [];
 

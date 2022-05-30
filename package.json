@@ -96,8 +96,9 @@
     "./packages/init",
     "./packages/version",
     "./packages/publish",
-    "./packages/exec-run-common",
+    "./packages/optional-cmd-common",
     "./packages/exec",
+    "./packages/list",
     "./packages/run",
     "./packages/cli"
   ]
