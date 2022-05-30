@@ -17,6 +17,7 @@ export * from './pulse-till-done';
 export * from './query-graph';
 export * from './run-lifecycle';
 export * from './run-topologically';
+export * from './temp-write';
 export * from './types';
 export * from './warn-if-hanging';
 export * from './write-log-file';
