@@ -10,14 +10,14 @@ import { warnIfHanging } from './utils/warn-if-hanging';
 import { writeLogFile } from './utils/write-log-file';
 import { Project } from './project/project';
 import { ValidationError } from './validation-error';
-import { CommandType, ExecCommandOption, ExecOpts, InitCommandOption, ProjectConfig, PublishCommandOption, VersionCommandOption } from './models';
+import { CommandType, ExecCommandOption, ExecOpts, InitCommandOption, ListCommandOption, ProjectConfig, PublishCommandOption, VersionCommandOption } from './models';
 import { PackageGraph } from './package-graph/package-graph';
 import { logExecCommand } from './child-process';
 
 // maxBuffer value for running exec
 const DEFAULT_CONCURRENCY = os.cpus().length;
 
-type AvailableCommandOption = ExecCommandOption | InitCommandOption | PublishCommandOption | VersionCommandOption;
+type AvailableCommandOption = ExecCommandOption | InitCommandOption | ListCommandOption | PublishCommandOption | VersionCommandOption;
 
 export class Command<T extends AvailableCommandOption> {
   argv: any;

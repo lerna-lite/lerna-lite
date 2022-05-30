@@ -1,16 +1,17 @@
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
-[![TypeScript](https://img.shields.io/badge/%3C%2F%3E-TypeScript-%230074c1.svg)](http://www.typescriptlang.org/)
 [![npm](https://img.shields.io/npm/dy/@lerna-lite/init?color=forest)](https://www.npmjs.com/package/@lerna-lite/init)
-[![npm](https://img.shields.io/npm/v/@lerna-lite/init.svg?logo=npm&logoColor=fff&label=npm&color=limegreen)](https://www.npmjs.com/package/@lerna-lite/init)
+[![npm](https://img.shields.io/npm/v/@lerna-lite/init.svg?logo=npm&logoColor=fff)](https://www.npmjs.com/package/@lerna-lite/init)
 
 # @lerna-lite/init
-## (`lerna init`) - Init command 🧰
+
+## (`lerna init`) - Init command 🛠️
 
 Create/initialize a new Lerna-Lite repo or upgrade an existing repo to the current version of Lerna-Lite CLI
 
 ---
 
 ## Installation
+
 ```sh
 npm install @lerna-lite/cli -D -W
 
@@ -48,6 +49,7 @@ lerna success Initialized Lerna files
 ```
 
 ##### `lerna.json`
+
 ```json
 {
   "version": "0.0.0",
@@ -99,6 +101,7 @@ This flag tells Lerna-Lite to add a `workspaces` property in the project root `p
 **Note:** pnpm users should **not** use this flag, they should simply use the default which is to have `packages` in `lerna.json` file (as shown in default usage [`lerna.json`](#lernajson) config).
 
 ##### `lerna.json`
+
 ```json
 {
   "version": "0.0.0"
@@ -106,6 +109,7 @@ This flag tells Lerna-Lite to add a `workspaces` property in the project root `p
 ```
 
 ##### `package.json` (project root)
+
 ```json
 {
   "name": "monorepo",
