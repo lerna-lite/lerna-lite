@@ -305,4 +305,7 @@ export interface RunCommandOption {
 
   /** npm script to run by the command */
   script: string;
+
+  /** Enables integration with [Nx](https://nx.dev) */
+  useNx?: boolean;
 }
