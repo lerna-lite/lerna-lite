@@ -33,7 +33,7 @@ npx lerna version
 
 ## Usage
 
-For all available options of each command, follow any of command link below:
+For all available options of each command, follow any of the command link shown below:
 
 - included with CLI
   - [lerna init](https://github.com/ghiscoding/lerna-lite/blob/main/packages/init/README.md)

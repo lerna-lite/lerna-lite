@@ -13,14 +13,14 @@
 
 ## Lerna-Lite is a super light version of the original [Lerna](https://github.com/lerna/lerna)
 
-- [About Lerna-Lite](https://github.com/ghiscoding/lerna-lite#about-lerna-lite)
-- [Why create this lib/fork?](https://github.com/ghiscoding/lerna-lite#why-create-this-libfork)
+- [About Lerna-Lite](#about-lerna-lite)
+- [Why create this lib/fork?](#why-create-this-libfork)
 - [See it in Action](https://github.com/ghiscoding/lerna-lite/wiki/Release-Demo)
-- [README Badge](https://github.com/ghiscoding/lerna-lite#readme-badge)
+- [README Badge](#readme-badge)
 - [Getting Started](#getting-started)
-- [Installation](https://github.com/ghiscoding/lerna-lite#installation)
+- [Installation](#installation)
 - [`lerna.json` config file](https://github.com/ghiscoding/lerna-lite/wiki/lerna.json)
-- [Migration for Lerna users](https://github.com/ghiscoding/lerna-lite#migration-for-lerna-users)
+- [Migration for Lerna users](#migration-for-lerna-users)
 - [Troubleshooting](https://github.com/ghiscoding/lerna-lite/wiki/Troubleshooting)
 - Commands
   - included with CLI
@@ -33,15 +33,15 @@
     - 📖 [`list`](https://github.com/ghiscoding/lerna-lite/tree/main/packages/list#readme) - list local packages
     - 🏃 [`run`](https://github.com/ghiscoding/lerna-lite/tree/main/packages/run#readme) - run npm script in each workspace packages
 
-#### If a command that you wish to use is missing, simply reach out and we could potentially add them as optional command(s). However please note that the following commands (`bootstrap` and `link`) are totally out of the picture and the reason is simple, Lerna-Lite requires you to have a workspace setup already (via your favorite package manager) which completely removes the need for these 2 commands.
+_If a command that you wish to use is missing, simply reach out and we could potentially add it as an optional command. However please note that the following commands (`bootstrap` and `link`) are totally out of the picture._
 
 ---
 
-### 📢 Lerna-Lite now supports yarn/pnpm `workspace:` protocol
+## 📢 Lerna-Lite now supports yarn/pnpm `workspace:` protocol
 
 #### _this new feature was introduced with release [1.2.0](https://github.com/ghiscoding/lerna-lite/releases/tag/v1.2.0) of Lerna-Lite, however we recommend using [1.3.0](https://github.com/ghiscoding/lerna-lite/releases/tag/v1.3.0)._
 
-If you use this new feature, please take 30sec. to fill in this small [poll #156](https://github.com/ghiscoding/lerna-lite/discussions/156) survey just to see which package manager is the most popular to use with this new `workspace:` protocol and how many of you are using it. Thanks :wink:
+If you do use this new feature, please take 30sec. to fill in a small [poll #156](https://github.com/ghiscoding/lerna-lite/discussions/156) survey just to see which package manager is the most popular and how many of you are taking advantage of this new `workspace:` protocol. Thanks :wink:
 
 ---
 
@@ -133,20 +133,11 @@ If you are new to Lerna-Lite, you could also run the [lerna init](https://github
 | 📖 [list](https://github.com/ghiscoding/lerna-lite/tree/main/packages/list#readme)       | `npm i @lerna-lite/list -D -W` | list local packages                           | Optional |
 | 🏃 [run](https://github.com/ghiscoding/lerna-lite/tree/main/packages/run#readme)         | `npm i @lerna-lite/run -D -W`  | run npm script in each workspace package      | Optional |
 
-**Note:** the default `lerna` CLI is only including 4 built-in commands (`init`,`info`,`publish`,`version`), while the (`exec`,`run`) commands are optional and must be installed separately as shown below.
-
-```bash
-# Lerna CLI which includes `init`, `info`, `publish` and `version` commands
-npm install @lerna-lite/cli -D -W   # OR yard add @lerna-lite/cli -D -W
-
-# optionally install `exec` and/or `run` commands
-npm install @lerna-lite/exec -D -W  # OR yarn add @lerna-lite/exec -D -W
-npm install @lerna-lite/run -D -W   # OR yarn add @lerna-lite/run -D -W
-```
+**Note:** the default `lerna` CLI is only including 4 built-in commands (`init`,`info`,`publish`,`version`), while the (`exec`, `list` and `run`) commands are optional and must be installed separately as shown in the table.
 
 ### Usage
 
-Add custom NPM Scripts or simply run the commands in a shell with Lerna-Lite CLI.
+Add custom NPM Scripts or simply run the commands in a shell with Lerna-Lite CLI, below are a few very simple demo scripts.
 
 ```js
 // package.json / npm scripts
@@ -194,7 +185,7 @@ npm uninstall -g lerna   # OR yarn global remove lerna
 npm install @lerna-lite/cli -D -W
 ```
 
-3. optionally install `exec`, `list` and/or `run` commands
+3. optionally install `exec`, `list` and/or `run` commands (refer to [installation](#installation))
 
 ```sh
 # optionally install `exec`, `list` and/or `run` command(s)
