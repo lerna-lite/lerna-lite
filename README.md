@@ -33,6 +33,8 @@
     - 📖 [`list`](https://github.com/ghiscoding/lerna-lite/tree/main/packages/list#readme) - list local packages
     - 🏃 [`run`](https://github.com/ghiscoding/lerna-lite/tree/main/packages/run#readme) - run npm script in each workspace packages
 
+#### If a command that you wish to use is missing, simply reach out and we could potentially add them as optional command(s). However please note that the following commands (`bootstrap` and `link`) are totally out of the picture and the reason is simple, Lerna-Lite requires you to have a workspace setup already (via your favorite package manager) which completely removes the need for these 2 commands.
+
 ---
 
 ### 📢 Lerna-Lite now supports yarn/pnpm `workspace:` protocol
@@ -49,24 +51,25 @@ If you use this new feature, please take 30sec. to fill in this small [poll #156
 
 ## About Lerna-Lite
 
-Lerna-Lite differs from the original [Lerna](https://github.com/lerna/lerna) in the sense that it only has a limited set of commands from Lerna which itself has 15 commands while Lerna-Lite only includes half of them (and a few are optional). Lerna was originally built as an all-in-one tool, however nowadays Workspaces are available in all dependency managers (npm, yarn, pnpm) and the need for that all-in-one tool including built-in workspaces functionality is no longer needed. Lerna-Lite is built around that new fact and its CLI only includes the `publish` and `version` commands, while there are other commands available (like `exec`, `list` and `run`) they are totally optional and you won't download them unless you opt-in. So in summary it is more modular than the original Lerna and it may seem like a small change but it does make it more versatile (with smaller downloads and less dependencies) to use with other tools like Turborepo, pnpm and others...
+Lerna-Lite differs from the original [Lerna](https://github.com/lerna/lerna) in the sense that it only has a limited set of commands from Lerna which itself has 15 commands while Lerna-Lite only includes half of them (and a few are optional). Lerna was originally built as an all-in-one tool, however nowadays Workspaces are available in all package managers (npm, yarn, pnpm) and the need for that all-in-one tool including all built-in workspaces functionalities is no longer needed. Lerna-Lite is built around that new reality and its CLI only includes only the minimum commands `init`, `info`, `publish` and `version`, while there are other commands available (like `exec`, `list` and `run`) they are totally optional and you won't download them unless you opt-in. So in summary it is more modular than the original Lerna and it may seem like a small change but it does make it more versatile (with smaller downloads and less dependencies) to use with other tools like Turborepo, pnpm and others...
 
-As a summary, Lerna-Lite assumes, and requires, to pre-setup a Workspace through your favorite package manager (NPM, pnpm, Yarn) that will take care of the symlinks (Lerna-Lite does **not include** the `bootstrap`, neither `link` commands hence the need for a workspace pre-setup), so make sure that your workspace is properly setup before installing Lerna-Lite.
+As a summary, Lerna-Lite assumes, and requires, to pre-setup a Workspace through your favorite package manager (npm, pnpm, yarn) that will take care of the symlinks (Lerna-Lite does **not include** the `bootstrap`, neither `link` commands hence the need for a workspace pre-setup), so make sure that your workspace is properly setup **before** installing Lerna-Lite.
 
-For more info on how to setup a workspace, choose one of these links: [Yarn classic](https://classic.yarnpkg.com/en/docs/workspaces) / [Yarn 2+](https://yarnpkg.com/features/workspaces) / [pnpm](https://pnpm.io/workspaces) / [npm](https://docs.npmjs.com/cli/v8/using-npm/workspaces)
+For more info on how to setup a workspace, choose the best link according to your setup: [Yarn classic](https://classic.yarnpkg.com/en/docs/workspaces) / [Yarn 2+](https://yarnpkg.com/features/workspaces) / [pnpm](https://pnpm.io/workspaces) / [npm](https://docs.npmjs.com/cli/v8/using-npm/workspaces)
 
 ## Why create this lib/fork?
 
 Mainly for the following reasons:
 
 1. original Lerna was no longer maintained (dependencies were out of date)
+   - this is no longer true since Nrwl took ownership of Lerna, but the next few points are still valid
 2. wanted to create a smaller lib that is more modular than the original Lerna
-   - the lib is smaller since we only copied half of Lerna's commands (few are optional).
+   - the lib is smaller since we only copied half of Lerna's commands and a few are totally optional.
    - we don't need all packages of Lerna anymore since Workspaces now exists for all package managers (npm, pnpm, yarn).
-   - the main goal of this fork was to keep only `version` and `publish` commands in the core and make everything else as optional packages (install only what you need).
+   - the main goal of this fork was to keep only `version` and `publish` commands in the core and make everything else as optional packages (install and use only what you need).
 3. rewrite the lib in TypeScript
-4. replicate a few opened PRs from Lerna and also add new features
-   - for example the new support of `workspace:` protocol and `dry-run` options
+4. replicate a few opened PRs (fixes and features) from Lerna and also add extra features in Lerna-Lite
+   - for example we now support the `workspace:` protocol and `dry-run` options
 
 ### This lib will help you with
 
@@ -78,7 +81,7 @@ Mainly for the following reasons:
   - each package will get its own changelog and a merged changelog will also be created in the root.
 - Automate the repository Publishing of your new version for all your packages (NPM or other platform).
 
-#### [Exec](https://github.com/ghiscoding/lerna-lite/tree/main/packages/exec) and [Run](https://github.com/ghiscoding/lerna-lite/tree/main/packages/run) commands (optional packages)
+#### Other useful but optional commands
 
 - [Exec](https://github.com/ghiscoding/lerna-lite/tree/main/packages/exec#readme) command, when installed, will help you execute shell commands in parallel and in topological order.
 - [List](https://github.com/ghiscoding/lerna-lite/tree/main/packages/list#readme) command, when installed, will list all workspace local packages
