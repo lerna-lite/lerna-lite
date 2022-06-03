@@ -448,18 +448,22 @@ bumps using the specified [prerelease identifier](http://semver.org/#spec-item-9
 ### `--package-lockfile-only`
 
 This flag will run `npm install --package-lock-only` or associated command depending on the package manager defined in `npmClient` (npm, pnpm or yarn).
+Updating directly the lock file can be hard and this flag is one of two solutions to update the lock file. It might not be the best solution for your use case, just give it a try.
 
-> NOTE: updating directly the lock file can be hard and this flag is one of two solutions to update the lock file. It might not be the best solution for your use case, just give it a try. For pnpm users it is strongly suggested to use `workspace:` protocol or else this might fail.
+> `pnpm` users (possibly `yarn` as well): we recommend using `workspace:` protocol since it will prefer local package and will make it less likely to fetch packages from the registry accidentally.
+
+> `npm` users: we recommend having npm verion >=8.5.0 so that we can run `npm install --package-lock-only` or else it will run `npm shrinkwrap` which have a drawback of file renaming.
 
 ```sh
 lerna version --package-lockfile-only
 ```
 
-The command that will be executed for each client will be the following
+The command that will be performed for each client will be the following
 
 ```sh
 # npm with a lock file: `package-lock.json`
-npm shrinkwrap --package-lock-only
+npm install --package-lock-only     # npm client < 8.5.0
+npm shrinkwrap --package-lock-only  # npm client >= 8.5.0
 
 # pnpm with a lock file: `pnpm-lock.yaml`
 pnpm install --lockfile-only
@@ -467,8 +471,6 @@ pnpm install --lockfile-only
 # yarn with a lock file: `yarn.lock`
 yarn install --mode update-lockfile
 ```
-
-> NOTE: you might notice that it's not actually `npm install` but rather `npm shrinkwrap` being called and the reason is simply because running `install` will try to validate that the new package version does exist in the registry (even with `--offline` flag) and will fail. However using `shrinkwrap` comes with a side effect, it will delete and create a new file with a different name, we will simply rename the file internally, it's not ideal but it does the job. Also refer to npm docs [`package-lock.json` vs `npm-shrinkwrap.json`](https://docs.npmjs.com/cli/v8/configuring-npm/package-lock-json#package-lockjson-vs-npm-shrinkwrapjson)
 
 ### `--signoff-git-commit`
 
