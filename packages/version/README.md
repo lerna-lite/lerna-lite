@@ -450,9 +450,9 @@ bumps using the specified [prerelease identifier](http://semver.org/#spec-item-9
 This flag will run `npm install --package-lock-only` or associated command depending on the package manager defined in `npmClient` (npm, pnpm or yarn).
 Updating directly the lock file can be hard and this flag is one of two solutions to update the lock file. It might not be the best solution for your use case, just give it a try.
 
-> `pnpm` users (possibly `yarn` as well): we recommend using `workspace:` protocol since it will prefer local package and will make it less likely to fetch packages from the registry accidentally.
+> `npm` users: we recommend having npm verion >=8.5.0 installed, so that we can run `npm install --package-lock-only` instead of `npm shrinkwrap` with < 8.5.0 that have a drawback of file renaming. This might become an actual minimal requirement in a future release.
 
-> `npm` users: we recommend having npm verion >=8.5.0 so that we can run `npm install --package-lock-only` or else it will run `npm shrinkwrap` which have a drawback of file renaming.
+> `pnpm`/`yarn` users: we recommend using `workspace:` protocol since it will prefer local package and will make it less likely to fetch packages from the registry accidentally.
 
 ```sh
 lerna version --package-lockfile-only

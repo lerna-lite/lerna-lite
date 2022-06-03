@@ -669,6 +669,7 @@ export class VersionCommand extends Command<VersionCommandOption> {
               this.logger.verbose(`lock`, `updating lock file via "npm install --package-lock-only"`);
               await exec('npm', ['install', '--package-lock-only'], { cwd: this.project.manifest.location });
             } else {
+              // TODO: eventually remove in future and/or major release
               // with npm, we need to do update the lock file in 2 steps
               // 1. using shrinkwrap will delete current lock file and create new "npm-shrinkwrap.json" but will avoid npm retrieving package version info from registry
               this.logger.verbose(`lock`, `updating lock file via "npm shrinkwrap --package-lock-only".`);
