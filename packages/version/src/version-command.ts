@@ -659,6 +659,7 @@ export class VersionCommand extends Command<VersionCommandOption> {
             break;
           case 'npm':
           default:
+            lockFilename = 'package-lock.json';
             const localNpmVersion = execSync('npm', ['--version']);
             this.logger.silly(`npm`, `current local npm version is "${localNpmVersion}"`);
 
@@ -669,8 +670,7 @@ export class VersionCommand extends Command<VersionCommandOption> {
               await exec('npm', ['install', '--package-lock-only'], { cwd: this.project.manifest.location });
             } else {
               // with npm, we need to do update the lock file in 2 steps
-              // 1. use shrinkwrap will delete current lock file and create new "npm-shrinkwrap.json" but will avoid npm retrieving package version info from registry
-              lockFilename = 'package-lock.json';
+              // 1. using shrinkwrap will delete current lock file and create new "npm-shrinkwrap.json" but will avoid npm retrieving package version info from registry
               this.logger.verbose(`lock`, `updating lock file via "npm shrinkwrap --package-lock-only".`);
               this.logger.warn(`npm`, `Your npm version is lower than 8.5.0, we strongly suggest to upgrade your npm client to avoid the use of "npm shrinkwrap" instead of the regular "npm install --package-lock-only".`);
               await exec('npm', ['shrinkwrap', '--package-lock-only'], { cwd: this.project.manifest.location });
