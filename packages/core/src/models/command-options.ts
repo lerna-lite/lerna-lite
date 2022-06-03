@@ -244,6 +244,9 @@ export interface VersionCommandOption {
   /** Defaults to 'alpha', specify the prerelease identifier when versioning a prerelease */
   preid?: string;
 
+  /** Runs `npm install --package-lock-only` or associated command depending on the package manager defined in `npmClient` */
+  packageLockfileOnly?: boolean;
+
   /** Pass the `--gpg-sign` flag to `git commit`. */
   signGitCommit?: boolean;
 
@@ -258,6 +261,12 @@ export interface VersionCommandOption {
 
   /** Defaults to 'v', customize the tag prefix. To remove entirely, pass an empty string. */
   tagVersionPrefix?: string;
+
+  /** Do not update the project root lock file. */
+  noUpdateRootLockFile?: boolean;
+
+  /** Defaults to true when found, update the project root lock file, it will internally read and write back to the lock file. */
+  updateRootLockFile?: boolean;
 
   /** Strict match transform version numbers to an exact range (like "1.2.3") rather than with a caret (like ^1.2.3) when using `workspace:*`. */
   workspaceStrictMatch?: boolean;

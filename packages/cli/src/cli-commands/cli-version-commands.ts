@@ -151,6 +151,11 @@ exports.builder = (yargs, composed) => {
       hidden: true,
       type: 'boolean',
     },
+    'package-lockfile-only': {
+      describe: 'Runs `npm install --package-lock-only` or associated command depending on the package manager defined in `npmClient`.',
+      type: 'boolean',
+      choices: ['gitlab', 'github'],
+    },
     // preid is copied into ../publish/command because a whitelist for one option isn't worth it
     preid: {
       describe: 'Specify the prerelease identifier when versioning a prerelease',
@@ -179,6 +184,15 @@ exports.builder = (yargs, composed) => {
       type: 'string',
       requiresArg: true,
       defaultDescription: 'v',
+    },
+    'no-update-root-lock-file': {
+      describe: 'Do not update the project root lock file.',
+      type: 'boolean',
+    },
+    'update-root-lock-file': {
+      // proxy for --no-update-root-lock-file
+      hidden: true,
+      type: 'boolean',
     },
     'workspace-strict-match': {
       describe: 'Strict match transform version numbers to an exact range (like "1.2.3") rather than with a caret (like ^1.2.3) when using `workspace:*`.',

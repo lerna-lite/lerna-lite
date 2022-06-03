@@ -1,6 +1,7 @@
 import chalk from 'chalk';
 import dedent from 'dedent';
 import minimatch from 'minimatch';
+import { renameSync } from 'node:fs';
 import os from 'os';
 import pMap from 'p-map';
 import pPipe from 'p-pipe';
@@ -15,6 +16,7 @@ import {
   Command,
   CommandType,
   createRunner,
+  exec,
   logOutput,
   Package,
   PackageGraphNode,
@@ -222,6 +224,15 @@ export class VersionCommand extends Command<VersionCommandOption> {
         'ENOTALLOWED',
         dedent`
           --conventional-prerelease cannot be combined with --conventional-graduate.
+        `
+      );
+    }
+
+    if (this.options.updateRootLockFile && this.options.packageLockfileOnly) {
+      throw new ValidationError(
+        'ENOTALLOWED',
+        dedent`
+          --update-root-lock-file cannot be combined with --package-lockfile-only.
         `
       );
     }
@@ -603,26 +614,63 @@ export class VersionCommand extends Command<VersionCommandOption> {
       })
     );
 
-    chain = chain.then(() =>
-      // update modern lockfile (version 2 or higher) when exist in the project root
-      loadPackageLockFileWhenExists(rootPath)
-        .then(lockFileResponse => {
-          if (lockFileResponse && lockFileResponse.lockfileVersion >= 2) {
-            for (const pkg of this.packagesToVersion) {
-              this.logger.silly(`lock`, `updating root "package-lock-json" for package "${pkg.name}"`);
-              updateTempModernLockfileVersion(pkg, lockFileResponse.json);
-            }
+    // update the project root lock file, we will read and write back to the lock file
+    // this is currently the default update and if none of the flag are enabled (or all undefined) then we'll consider this as enabled
+    if (this.options.updateRootLockFile || (!this.options.packageLockfileOnly && !this.options.updateRootLockFile)) {
+      chain = chain.then(() =>
+        // update modern lockfile (version 2 or higher) when exist in the project root
+        loadPackageLockFileWhenExists(rootPath)
+          .then(lockFileResponse => {
+            if (lockFileResponse && lockFileResponse.lockfileVersion >= 2) {
+              for (const pkg of this.packagesToVersion) {
+                this.logger.verbose(`lock`, `updating root "package-lock-json" for package "${pkg.name}"`);
+                updateTempModernLockfileVersion(pkg, lockFileResponse.json);
+              }
 
-            // save the lockfile, only once, after all package versions were updated
-            return saveUpdatedLockJsonFile(lockFileResponse.path, lockFileResponse.json)
-              .then((lockfilePath) => {
-                if (lockfilePath) {
-                  changedFiles.add(lockfilePath);
-                }
-              });
-          }
-        })
-    );
+              // save the lockfile, only once, after all package versions were updated
+              return saveUpdatedLockJsonFile(lockFileResponse.path, lockFileResponse.json)
+                .then((lockfilePath) => {
+                  if (lockfilePath) {
+                    changedFiles.add(lockfilePath);
+                  }
+                });
+            }
+          })
+      );
+    }
+
+    // update lock file, with npm client defined when `--package-lock-only` is enabled
+    if (this.options.packageLockfileOnly) {
+      chain = chain.then(async () => {
+        let lockFilename = '';
+        switch (this.options.npmClient) {
+          case 'pnpm':
+            lockFilename = 'pnpm-lock.yaml';
+            this.logger.verbose(`lock`, `updating lock file via "pnpm install --lockfile-only"`);
+            await exec('pnpm', ['install', '--lockfile-only'], { cwd: this.project.manifest.location });
+            changedFiles.add(lockFilename);
+            break;
+          case 'yarn':
+            lockFilename = 'yarn.lock';
+            this.logger.verbose(`lock`, `updating lock file via "yarn install --mode update-lockfile"`);
+            await exec('yarn', ['install', '--mode', 'update-lockfile'], { cwd: this.project.manifest.location });
+            changedFiles.add(lockFilename);
+            break;
+          case 'npm':
+          default:
+            // with npm, we need to do update the lock file in 2 steps
+            // 1. use shrinkwrap will delete current lock file and create new "npm-shrinkwrap.json" but will avoid npm retrieving package version info from registry
+            lockFilename = 'package-lock.json';
+            this.logger.verbose(`lock`, `updating lock file via "npm shrinkwrap --package-lock-only"`);
+            await exec('npm', ['shrinkwrap', '--package-lock-only'], { cwd: this.project.manifest.location });
+
+            // 2. rename "npm-shrinkwrap.json" back to "package-lock.json"
+            this.logger.verbose(`lock`, `renaming "npm-shrinkwrap.json" file back to "package-lock.json"`);
+            renameSync('npm-shrinkwrap.json', 'package-lock.json');
+            changedFiles.add(lockFilename);
+        }
+      });
+    }
 
     if (!independentVersions) {
       this.project.version = this.globalVersion;
