@@ -449,7 +449,7 @@ bumps using the specified [prerelease identifier](http://semver.org/#spec-item-9
 
 This flag will run `npm install --package-lock-only` or associated command depending on the package manager defined in `npmClient` (npm, pnpm or yarn).
 
-> NOTE: updating directly the lock file can be hard and this flag is one of two solutions to update the lock file. It might not be the best solution for your use case, just give it a try.
+> NOTE: updating directly the lock file can be hard and this flag is one of two solutions to update the lock file. It might not be the best solution for your use case, just give it a try. For pnpm users it is strongly suggested to use `workspace:` protocol or else this might fail.
 
 ```sh
 lerna version --package-lockfile-only
