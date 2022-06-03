@@ -185,7 +185,7 @@ exports.builder = (yargs, composed) => {
       defaultDescription: 'v',
     },
     'no-update-root-lock-file': {
-      describe: 'Do not update the project root lock file.',
+      describe: 'Do not let Lerna-Lite update the project root lock file manually.',
       type: 'boolean',
     },
     'update-root-lock-file': {
