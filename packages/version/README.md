@@ -454,6 +454,8 @@ Updating directly the lock file can be hard and this flag is one of two solution
 
 > `pnpm`/`yarn` users: we recommend using the `workspace:` protocol since it will prefer local dependencies and will make it less likely to fetch packages accidentally from the registry (refer to version with [`workspace:` protocol](#workspace-protocol)).
 
+> `yarn` users: please note that this will only work with Yarn Berry 3.x and higher since it uses `yarn install --mode update-lockfile` (this will not work with yarn 1.x classic)
+
 ```sh
 lerna version --package-lockfile-only
 ```

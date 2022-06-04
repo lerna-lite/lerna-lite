@@ -615,9 +615,9 @@ export class VersionCommand extends Command<VersionCommandOption> {
       })
     );
 
-    // update the project root lock file, we will read and write back to the lock file
+    // update the project root npm lock file, we will read and write back to the lock file
     // this is currently the default update and if none of the flag are enabled (or all undefined) then we'll consider this as enabled
-    if (this.options.manuallyUpdateRootLockfile || (this.options.manuallyUpdateRootLockfile === undefined && !this.options.packageLockfileOnly)) {
+    if (this.options.npmClient === 'npm' && (this.options.manuallyUpdateRootLockfile || (this.options.manuallyUpdateRootLockfile === undefined && !this.options.packageLockfileOnly))) {
       chain = chain.then(() =>
         // update modern lockfile (version 2 or higher) when exist in the project root
         loadPackageLockFileWhenExists(rootPath)
@@ -666,7 +666,7 @@ export class VersionCommand extends Command<VersionCommandOption> {
             this.logger.silly(`npm`, `current local npm version is "${localNpmVersion}"`);
 
             // for npm version >=8.5.0 we can call "npm install --package-lock-only"
-            // when lower than we call "npm install --package-lock-only" and rename "npm-shrinkwrap.json" back to "package-lock.json"
+            // when lower then we call "npm shrinkwrap --package-lock-only" and rename "npm-shrinkwrap.json" back to "package-lock.json"
             if (semver.gte(localNpmVersion, '8.5.0')) {
               this.logger.verbose(`lock`, `updating lock file via "npm install --package-lock-only"`);
               await exec('npm', ['install', '--package-lock-only'], { cwd: this.project.manifest.location });
