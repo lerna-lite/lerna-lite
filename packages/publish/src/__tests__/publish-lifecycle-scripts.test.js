@@ -94,8 +94,7 @@ describe("lifecycle scripts", () => {
 
     expect(Array.from(loadJsonFile.registry.keys())).toStrictEqual([
       "/packages/package-1",
-      "/packages/package-2",
-      "/"
+      "/packages/package-2"
     ]);
   });
 

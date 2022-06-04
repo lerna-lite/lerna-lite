@@ -93,7 +93,7 @@ describe("licenses", () => {
   it("warns when packages need a license and the root license file is missing", async () => {
     const cwd = await initFixture("licenses-missing");
 
-    await lernaPublish(cwd)();
+    await lernaPublish(cwd)("--no-package-lockfile-only");
 
     const [warning] = loggingOutput("warn");
     expect(warning).toMatchInlineSnapshot(`

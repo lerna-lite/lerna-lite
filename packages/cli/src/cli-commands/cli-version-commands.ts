@@ -184,12 +184,12 @@ exports.builder = (yargs, composed) => {
       requiresArg: true,
       defaultDescription: 'v',
     },
-    'no-update-root-lock-file': {
-      describe: 'Do not let Lerna-Lite update the project root lock file manually.',
+    'no-manually-update-root-lockfile': {
+      describe: 'Do not manually update (read/write back to the lock file) the project root lock file.',
       type: 'boolean',
     },
-    'update-root-lock-file': {
-      // proxy for --no-update-root-lock-file
+    'manually-update-root-lockfile': {
+      // proxy for --no-manually-update-root-lockfile
       hidden: true,
       type: 'boolean',
     },

@@ -229,11 +229,11 @@ export class VersionCommand extends Command<VersionCommandOption> {
       );
     }
 
-    if (this.options.updateRootLockFile && this.options.packageLockfileOnly) {
+    if (this.options.manuallyUpdateRootLockfile && this.options.packageLockfileOnly) {
       throw new ValidationError(
         'ENOTALLOWED',
         dedent`
-          --update-root-lock-file cannot be combined with --package-lockfile-only.
+          --manually-update-root-lockfile cannot be combined with --package-lockfile-only.
         `
       );
     }
@@ -617,12 +617,14 @@ export class VersionCommand extends Command<VersionCommandOption> {
 
     // update the project root lock file, we will read and write back to the lock file
     // this is currently the default update and if none of the flag are enabled (or all undefined) then we'll consider this as enabled
-    if (this.options.updateRootLockFile || (!this.options.packageLockfileOnly && !this.options.updateRootLockFile)) {
+    if (this.options.manuallyUpdateRootLockfile) {
       chain = chain.then(() =>
         // update modern lockfile (version 2 or higher) when exist in the project root
         loadPackageLockFileWhenExists(rootPath)
           .then(lockFileResponse => {
             if (lockFileResponse && lockFileResponse.lockfileVersion >= 2) {
+              this.logger.verbose(`lock`, `start process loop of manually updating npm lock file`);
+
               for (const pkg of this.packagesToVersion) {
                 this.logger.verbose(`lock`, `updating root "package-lock-json" for package "${pkg.name}"`);
                 updateTempModernLockfileVersion(pkg, lockFileResponse.json);
@@ -641,7 +643,7 @@ export class VersionCommand extends Command<VersionCommandOption> {
     }
 
     // update lock file, with npm client defined when `--package-lock-only` is enabled
-    if (this.options.packageLockfileOnly) {
+    if (this.options.packageLockfileOnly || (this.options.packageLockfileOnly === undefined && !this.options.manuallyUpdateRootLockfile)) {
       chain = chain.then(async () => {
         let lockFilename = '';
         switch (this.options.npmClient) {

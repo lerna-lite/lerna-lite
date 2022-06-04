@@ -1,3 +1,6 @@
+const nodeFs = require("node:fs");
+jest.spyOn(nodeFs, 'renameSync');
+
 // local modules _must_ be explicitly mocked
 jest.mock("../lib/git-push", () => jest.requireActual('../lib/__mocks__/git-push'));
 jest.mock("../lib/is-anything-committed", () => jest.requireActual('../lib/__mocks__/is-anything-committed'));
@@ -60,6 +63,7 @@ describe("version --ignore-changes", () => {
 
     // await lernaVersion(cwd)(
     await new VersionCommand(createArgv(cwd,
+      "--no-package-lockfile-only",
       "--ignore-changes",
       "README.md",
 

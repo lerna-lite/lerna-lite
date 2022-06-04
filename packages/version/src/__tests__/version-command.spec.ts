@@ -27,6 +27,8 @@ jest.mock('@lerna-lite/version', () => jest.requireActual('../version-command'))
 const fs = require("fs-extra");
 const path = require("path");
 const execa = require("execa");
+const core = require('@lerna-lite/core');
+const nodeFs = require("node:fs");
 
 // mocked or stubbed modules
 const writePkg = require("write-pkg");
@@ -84,7 +86,7 @@ describe("VersionCommand", () => {
       const testDir = await initFixture("normal");
       // when --conventional-commits is absent,
       // --no-changelog should have _no_ effect
-      await new VersionCommand(createArgv(testDir, "--no-changelog"));
+      await new VersionCommand(createArgv(testDir, "--no-changelog", "--no-package-lockfile-only"));
 
       expect(checkWorkingTree).toHaveBeenCalled();
 
@@ -120,6 +122,15 @@ describe("VersionCommand", () => {
 
       await expect(command).rejects.toThrow(
         "--conventional-prerelease cannot be combined with --conventional-graduate."
+      );
+    });
+
+    it("throws an error if --manually-update-root-lockfile and --package-lockfile-only flags are both passed", async () => {
+      const testDir = await initFixture("normal");
+      const command = new VersionCommand(createArgv(testDir, "--manually-update-root-lockfile", "--package-lockfile-only"));
+
+      await expect(command).rejects.toThrow(
+        "--manually-update-root-lockfile cannot be combined with --package-lockfile-only."
       );
     });
 
@@ -170,7 +181,7 @@ describe("VersionCommand", () => {
       collectUpdates.setUpdated(testDir, "package-3");
       promptSelectOne.chooseBump("minor");
 
-      await new VersionCommand(createArgv(testDir));
+      await new VersionCommand(createArgv(testDir, "--no-package-lockfile-only"));
 
       const patch = await showCommit(testDir);
       expect(patch).toMatchSnapshot();
@@ -182,7 +193,7 @@ describe("VersionCommand", () => {
       collectUpdates.setUpdated(testDir, "package-3");
       promptSelectOne.chooseBump("major");
 
-      await new VersionCommand(createArgv(testDir));
+      await new VersionCommand(createArgv(testDir, "--no-package-lockfile-only"));
 
       const patch = await showCommit(testDir);
       expect(patch).toMatchSnapshot();
@@ -214,7 +225,7 @@ describe("VersionCommand", () => {
       promptSelectOne.chooseBump("patch");
 
       const testDir = await initFixture("independent");
-      await new VersionCommand(createArgv(testDir)); // --independent is only valid in InitCommand
+      await new VersionCommand(createArgv(testDir, "--no-package-lockfile-only")); // --independent is only valid in InitCommand
 
       expect(promptConfirmation).toHaveBeenCalled();
 
@@ -270,7 +281,7 @@ describe("VersionCommand", () => {
   describe("--no-git-tag-version", () => {
     it("versions changed packages without git commit or push", async () => {
       const testDir = await initFixture("normal");
-      await new VersionCommand(createArgv(testDir, "--no-git-tag-version"));
+      await new VersionCommand(createArgv(testDir, "--no-git-tag-version", "--no-package-lockfile-only"));
 
       expect(writePkg.updatedManifest("package-1")).toMatchSnapshot("gitHead");
 
@@ -408,7 +419,7 @@ describe("VersionCommand", () => {
   describe("--no-push", () => {
     it("versions changed packages without git push", async () => {
       const testDir = await initFixture("normal");
-      await new VersionCommand(createArgv(testDir, "--no-push"));
+      await new VersionCommand(createArgv(testDir, "--no-push", "--no-package-lockfile-only"));
 
       const patch = await showCommit(testDir);
       expect(patch).toMatchSnapshot();
@@ -500,15 +511,15 @@ describe("VersionCommand", () => {
   describe("--exact", () => {
     it("updates matching local dependencies of published packages with exact versions", async () => {
       const testDir = await initFixture("normal");
-      await new VersionCommand(createArgv(testDir, "--exact"));
+      await new VersionCommand(createArgv(testDir, "--exact", "--no-package-lockfile-only"));
 
       const patch = await showCommit(testDir);
       expect(patch).toMatchSnapshot();
     });
 
     it("updates existing exact versions", async () => {
-      const testDir = await initFixture("normal-exact");
-      await new VersionCommand(createArgv(testDir));
+      const testDir = await initFixture("normal-exact", "--no-package-lockfile-only");
+      await new VersionCommand(createArgv(testDir, "--no-package-lockfile-only"));
 
       const patch = await showCommit(testDir);
       expect(patch).toMatchSnapshot();
@@ -641,7 +652,7 @@ describe("VersionCommand", () => {
 
     it("does not throw for version --no-git-tag-version", async () => {
       const cwd = await detachedHEAD();
-      await new VersionCommand(createArgv(cwd, "--no-git-tag-version"));
+      await new VersionCommand(createArgv(cwd, "--no-git-tag-version", "--no-package-lockfile-only"));
       const unstaged = await listDirty(cwd);
       expect(unstaged).toEqual([
         "lerna.json",
@@ -704,7 +715,7 @@ describe("VersionCommand", () => {
 
     collectUpdates.mockImplementationOnce(collectUpdatesActual);
 
-    await new VersionCommand(createArgv(testDir, "--bump", "major", "--yes"));
+    await new VersionCommand(createArgv(testDir, "--bump", "major", "--yes", "--no-package-lockfile-only"));
 
     const patch = await showCommit(testDir);
     expect(patch).toMatchSnapshot();
@@ -723,7 +734,7 @@ describe("VersionCommand", () => {
 
     collectUpdates.mockImplementationOnce(collectUpdatesActual);
 
-    await new VersionCommand(createArgv(testDir, "--bump", "major", "--yes"));
+    await new VersionCommand(createArgv(testDir, "--bump", "major", "--yes", "--no-package-lockfile-only"));
 
     const patch = await showCommit(testDir, "--name-only");
     expect(patch).toMatchInlineSnapshot(`
@@ -793,7 +804,7 @@ describe("VersionCommand", () => {
     });
   });
 
-  describe("with leaf lockfiles", () => {
+  describe("with leaf lockfiles on npm lockFile version < 2", () => {
     it("updates lockfile version to new package version", async () => {
       const cwd = await initFixture("lockfile-leaf");
       await new VersionCommand(createArgv(cwd, "--yes", "--bump", "major"));
@@ -803,10 +814,10 @@ describe("VersionCommand", () => {
     });
   });
 
-  describe('with lockfile version 2', () => {
-    it("should have updated project root lockfile version 2 for every necessary properties", async () => {
+  describe('with root lockfile on npm lockfile version >=2', () => {
+    it("should update project root lockfile version 2 for every necessary properties by writing directly to the file", async () => {
       const cwd = await initFixture("lockfile-version2");
-      await new VersionCommand(createArgv(cwd, "--bump", "major", "--yes"));
+      await new VersionCommand(createArgv(cwd, "--bump", "major", "--yes", "--manually-update-root-lockfile"));
 
       expect(writePkg.updatedVersions()).toEqual({
         "@my-workspace/package-1": "3.0.0",
@@ -815,17 +826,39 @@ describe("VersionCommand", () => {
 
       const lockfileResponse = await loadPackageLockFileWhenExists(cwd);
 
-      expect(lockfileResponse.json.lockfileVersion).toBe(2);
-      expect(lockfileResponse.json.dependencies['@my-workspace/package-2'].requires).toMatchObject({
+      expect(lockfileResponse!.json.lockfileVersion).toBe(2);
+      expect(lockfileResponse!.json.dependencies['@my-workspace/package-2'].requires).toMatchObject({
         '@my-workspace/package-1': '^3.0.0',
       });
-      expect(lockfileResponse.json.packages['packages/package-1'].version).toBe('3.0.0');
-      expect(lockfileResponse.json.packages['packages/package-2'].version).toBe('3.0.0');
-      expect(lockfileResponse.json.packages['packages/package-2'].dependencies).toMatchObject({
+      expect(lockfileResponse!.json.packages['packages/package-1'].version).toBe('3.0.0');
+      expect(lockfileResponse!.json.packages['packages/package-2'].version).toBe('3.0.0');
+      expect(lockfileResponse!.json.packages['packages/package-2'].dependencies).toMatchObject({
         '@my-workspace/package-1': '^3.0.0',
       });
 
-      expect(lockfileResponse.json).toMatchSnapshot();
+      expect(lockfileResponse!.json).toMatchSnapshot();
+    });
+
+    it(`should update project root lockfile by calling npm script "npm install --package-lock-only" when npm version is >= 8.5.0`, async () => {
+      const execSpy = jest.spyOn(core, 'exec');
+      const execSyncSpy = jest.spyOn(core, 'execSync').mockReturnValue('8.5.0');
+      const cwd = await initFixture('lockfile-version2');
+      await new VersionCommand(createArgv(cwd, '--bump', 'major', '--yes', '--package-lockfile-only'));
+
+      expect(execSyncSpy).toHaveBeenCalled();
+      expect(execSpy).toHaveBeenCalledWith('npm', ['install', '--package-lock-only'], { cwd: expect.toBeString() });
+    });
+
+    it(`should update project root lockfile by calling npm script "npm shrinkwrap --package-lock-only" when npm version is below 8.5.0`, async () => {
+      const renameSpy = jest.spyOn(nodeFs, 'renameSync');
+      const execSpy = jest.spyOn(core, 'exec');
+      const execSyncSpy = jest.spyOn(core, 'execSync').mockReturnValue('8.4.0');
+      const cwd = await initFixture('lockfile-version2');
+      await new VersionCommand(createArgv(cwd, '--bump', 'major', '--yes', '--package-lockfile-only'));
+
+      expect(execSyncSpy).toHaveBeenCalled();
+      expect(execSpy).toHaveBeenCalledWith('npm', ['shrinkwrap', '--package-lock-only'], { cwd: expect.toBeString() });
+      expect(renameSpy).toHaveBeenCalledWith('npm-shrinkwrap.json', 'package-lock.json');
     });
   });
 

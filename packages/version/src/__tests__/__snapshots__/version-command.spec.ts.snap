@@ -528,7 +528,7 @@ index SHA..SHA 100644
 +    \\"package-4\\": \\"^2.0.0\\""
 `;
 
-exports[`VersionCommand with lockfile version 2 should have updated project root lockfile version 2 for every necessary properties 1`] = `
+exports[`VersionCommand with root lockfile on npm lockfile version >=2 should update project root lockfile version 2 for every necessary properties by writing directly to the file 1`] = `
 Object {
   "dependencies": Object {
     "@my-workspace/package-1": Object {

@@ -68,7 +68,7 @@ describe("--conventional-commits", () => {
 
       const cwd = await initFixture("independent");
 
-      await new VersionCommand(createArgv(cwd, "--conventional-commits"));
+      await new VersionCommand(createArgv(cwd, "--conventional-commits", "--no-package-lockfile-only"));
 
       const changedFiles = await showCommit(cwd, "--name-only");
       expect(changedFiles).toMatchSnapshot();
@@ -92,7 +92,7 @@ describe("--conventional-commits", () => {
       prereleaseVersionBumps.forEach((bump) => recommendVersion.mockResolvedValueOnce(bump));
       const cwd = await initFixture("prerelease-independent");
 
-      await new VersionCommand(createArgv(cwd, "--conventional-commits", "--conventional-prerelease"));
+      await new VersionCommand(createArgv(cwd, "--conventional-commits", "--conventional-prerelease", "--no-package-lockfile-only"));
 
       const changedFiles = await showCommit(cwd, "--name-only");
       expect(changedFiles).toMatchSnapshot();
@@ -117,7 +117,7 @@ describe("--conventional-commits", () => {
       versionBumps.forEach((bump) => recommendVersion.mockResolvedValueOnce(bump));
       const cwd = await initFixture("prerelease-independent");
 
-      await new VersionCommand(createArgv(cwd, "--conventional-commits", "--conventional-graduate"));
+      await new VersionCommand(createArgv(cwd, "--conventional-commits", "--conventional-graduate", "--no-package-lockfile-only"));
 
       const changedFiles = await showCommit(cwd, "--name-only");
       expect(changedFiles).toMatchSnapshot();
@@ -180,7 +180,7 @@ describe("--conventional-commits", () => {
 
       const cwd = await initFixture("normal");
 
-      await new VersionCommand(createArgv(cwd, "--conventional-commits"));
+      await new VersionCommand(createArgv(cwd, "--conventional-commits", "--no-package-lockfile-only"));
 
       const changedFiles = await showCommit(cwd, "--name-only");
       expect(changedFiles).toMatchSnapshot();
@@ -228,7 +228,7 @@ describe("--conventional-commits", () => {
 
       const cwd = await initFixture("normal");
 
-      await new VersionCommand(createArgv(cwd, "--conventional-commits", "--conventional-prerelease"));
+      await new VersionCommand(createArgv(cwd, "--conventional-commits", "--conventional-prerelease", "--no-package-lockfile-only"));
 
       const changedFiles = await showCommit(cwd, "--name-only");
       expect(changedFiles).toMatchSnapshot();

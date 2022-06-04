@@ -78,7 +78,7 @@ test("version patch with previous prerelease also graduates prereleased", async 
   // package 4 depends on package 5
 
   await setupChanges(testDir);
-  await new VersionCommand(createArgv(testDir, "--bump", "patch"));
+  await new VersionCommand(createArgv(testDir, "--bump", "patch", "--no-package-lockfile-only"));
 
   const patch = await showCommit(testDir);
   expect(patch).toMatchSnapshot();
@@ -89,7 +89,7 @@ test("version prerelease with previous prerelease bumps changed only", async () 
   // should republish only package 3, because only it changed
 
   await setupChanges(testDir);
-  await new VersionCommand(createArgv(testDir, "--bump", "prerelease"));
+  await new VersionCommand(createArgv(testDir, "--bump", "prerelease", "--no-package-lockfile-only"));
 
   const patch = await showCommit(testDir);
   expect(patch).toMatchSnapshot();
@@ -100,7 +100,7 @@ test("version prerelease with previous prerelease supersedes --conventional-comm
   // version bump should stay prepatch --preid beta because ---conventional-commits is ignored
 
   await setupChanges(testDir);
-  await new VersionCommand(createArgv(testDir, "--bump", "prerelease", "--conventional-commits"));
+  await new VersionCommand(createArgv(testDir, "--bump", "prerelease", "--conventional-commits", "--no-package-lockfile-only"));
 
   const patch = await showCommit(testDir);
   expect(patch).toMatchSnapshot();
@@ -110,7 +110,7 @@ test("version prerelease with existing preid bumps with the preid provide as arg
   const testDir = await initFixture("republish-prereleased");
   // Version bump should have the new rc preid
   await setupChanges(testDir);
-  await new VersionCommand(createArgv(testDir, "--bump", "prerelease", "--preid", "rc"));
+  await new VersionCommand(createArgv(testDir, "--bump", "prerelease", "--preid", "rc", "--no-package-lockfile-only"));
 
   const message = await getCommitMessage(testDir);
   expect(message).toBe("v1.0.1-rc.0");
@@ -120,14 +120,14 @@ test("version prerelease with immediate graduation", async () => {
   const testDir = await initFixture("republish-prereleased");
 
   await setupChanges(testDir);
-  await new VersionCommand(createArgv(testDir, "--bump", "prerelease", "--force-publish", "package-4"));
+  await new VersionCommand(createArgv(testDir, "--bump", "prerelease", "--force-publish", "package-4", "--no-package-lockfile-only"));
   // package-4 had no changes, but should still be included for some mysterious reason
 
   const firstDiff = await showCommit(testDir);
   expect(firstDiff).toMatchSnapshot();
 
   // no changes, but force everything because the previous prerelease passed QA
-  await new VersionCommand(createArgv(testDir, "--bump", "patch", "--force-publish"));
+  await new VersionCommand(createArgv(testDir, "--bump", "patch", "--force-publish", "--no-package-lockfile-only"));
 
   const secondDiff = await showCommit(testDir);
   expect(secondDiff).toMatchSnapshot();
@@ -176,7 +176,7 @@ test("independent version prerelease does not bump on every unrelated change", a
     Promise.resolve(cfg.filter())
   );
 
-  await lernaVersion(cwd)();
+  await lernaVersion(cwd)("--no-package-lockfile-only");
 
   const first = await getCommitMessage(cwd);
   expect(first).toMatchInlineSnapshot(`
@@ -191,7 +191,7 @@ Publish
   await gitCommit(cwd, "feat: hello world");
 
   // all of this just to say...
-  await lernaVersion(cwd)();
+  await lernaVersion(cwd)("--no-package-lockfile-only");
 
   const second = await getCommitMessage(cwd);
   expect(second).toMatchInlineSnapshot(`
@@ -238,7 +238,7 @@ test("independent version prerelease respects --no-private", async () => {
   await gitCommit(cwd, "init");
 
   // TODO: (major) make --no-private the default
-  await lernaVersion(cwd)("prerelease", "--no-private");
+  await lernaVersion(cwd)("prerelease", "--no-private", "--no-package-lockfile-only");
 
   const changedFiles = await showCommit(cwd, "--name-only");
   expect(changedFiles).toMatchInlineSnapshot(`

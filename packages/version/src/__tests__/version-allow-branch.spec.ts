@@ -34,7 +34,7 @@ const createArgv = (cwd: string, ...args: string[]) => {
   const parserArgs = args.map(String);
   const argv = yargParser(parserArgs, { array: args });
   argv['$0'] = cwd;
-  return argv;
+  return argv as any;
 };
 
 describe("version --allow-branch", () => {
@@ -56,7 +56,7 @@ describe("version --allow-branch", () => {
       await changeBranch(testDir, "exact-match");
       const result = await new VersionCommand(createArgv(testDir, "--allow-branch", "exact-match"));
 
-      expect((result as VersionCommand).updates).toHaveLength(5);
+      expect((result as any).updates).toHaveLength(5);
     });
 
     it("accepts a branch that matches by wildcard", async () => {
@@ -65,7 +65,7 @@ describe("version --allow-branch", () => {
       await changeBranch(testDir, "feature/awesome");
       const result = await new VersionCommand(createArgv(testDir, "--allow-branch", "feature/*"));
 
-      expect((result as VersionCommand).updates).toHaveLength(5);
+      expect((result as any).updates).toHaveLength(5);
     });
 
     it("accepts a branch that matches one of the items passed", async () => {
@@ -74,7 +74,7 @@ describe("version --allow-branch", () => {
       await changeBranch(testDir, "feature/awesome");
       const result = await new VersionCommand(createArgv(testDir, "--allow-branch", "main", "feature/*"));
 
-      expect((result as VersionCommand).updates).toHaveLength(5);
+      expect((result as any).updates).toHaveLength(5);
     });
   });
 
@@ -94,7 +94,7 @@ describe("version --allow-branch", () => {
       await changeBranch(testDir, "lerna");
       const result = await new VersionCommand(createArgv(testDir));
 
-      expect((result as VersionCommand).updates).toHaveLength(1);
+      expect((result as any).updates).toHaveLength(1);
     });
 
     it("should prioritize cli over defaults", async () => {
@@ -103,7 +103,7 @@ describe("version --allow-branch", () => {
       await changeBranch(testDir, "cli-override");
       const result = await new VersionCommand(createArgv(testDir, "--allow-branch", "cli-override"));
 
-      expect((result as VersionCommand).updates).toHaveLength(1);
+      expect((result as any).updates).toHaveLength(1);
     });
   });
 });

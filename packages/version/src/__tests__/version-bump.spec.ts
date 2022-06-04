@@ -1,3 +1,6 @@
+const nodeFs = require("node:fs");
+jest.spyOn(nodeFs, 'renameSync');
+
 // local modules _must_ be explicitly mocked
 jest.mock("../lib/git-push", () => jest.requireActual('../lib/__mocks__/git-push'));
 jest.mock("../lib/is-anything-committed", () => jest.requireActual('../lib/__mocks__/is-anything-committed'));
@@ -114,7 +117,7 @@ describe("version bump", () => {
   it('should call getPackagesForOption() with a csv string and expect it to return a Set of the split csv string', async () => {
     const testDir = await initFixture("independent");
 
-    const command = new VersionCommand(createArgv(testDir, "--bump", "prerelease"));
+    const command = new VersionCommand(createArgv(testDir, "--bump", "prerelease", "--no-package-lockfile-only"));
     const pkgNames = command.getPackagesForOption('foo,bar');
 
     expect(pkgNames).toEqual(new Set(['foo', 'bar']));
@@ -123,7 +126,7 @@ describe("version bump", () => {
   it('should call getPackagesForOption() with the same option called twice and expect it to return a Set of these 2 options', async () => {
     const testDir = await initFixture("independent");
 
-    const command = new VersionCommand(createArgv(testDir, "--bump", "prerelease"));
+    const command = new VersionCommand(createArgv(testDir, "--bump", "prerelease", "--no-package-lockfile-only"));
     const pkgNames = command.getPackagesForOption(['--force-publish foo', '--force-publish baz']);
 
     expect(pkgNames).toEqual(new Set(['--force-publish foo', '--force-publish baz']));
@@ -133,7 +136,7 @@ describe("version bump", () => {
     const testDir = await initFixture("independent");
 
     // await new VersionCommand(createArgv(testDir, "--bump", "prerelease"));
-    await factory(createArgv(testDir, "--bump", "prerelease"));
+    await factory(createArgv(testDir, "--bump", "prerelease", "--no-package-lockfile-only"));
 
     const message = await getCommitMessage(testDir);
     expect(message).toContain("package-1@1.0.1-alpha.0");
@@ -144,7 +147,7 @@ describe("version bump", () => {
   test("prerelease increments version with custom --preid", async () => {
     const testDir = await initFixture("independent");
 
-    await new VersionCommand(createArgv(testDir, "--bump", "prerelease", "--preid", "foo"));
+    await new VersionCommand(createArgv(testDir, "--bump", "prerelease", "--preid", "foo", "--no-package-lockfile-only"));
 
     const message = await getCommitMessage(testDir);
     expect(message).toContain("package-1@1.0.1-foo.0");
@@ -153,7 +156,7 @@ describe("version bump", () => {
   it("ignores private packages with --no-private", async () => {
     const testDir = await initFixture("independent");
 
-    await new VersionCommand(createArgv(testDir, "--bump", "patch", "--no-private"));
+    await new VersionCommand(createArgv(testDir, "--bump", "patch", "--no-private", "--no-package-lockfile-only"));
 
     const message = await getCommitMessage(testDir);
     // TODO: (major) make --no-private the default
