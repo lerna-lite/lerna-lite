@@ -8,6 +8,7 @@ const path = require("path");
 const fs = require("fs-extra");
 const core = require('@lerna-lite/core');
 const nodeFs = require("node:fs");
+const npmlog = require("npmlog");
 
 // mocked or stubbed modules
 const loadJsonFile = require("load-json-file");
@@ -105,6 +106,7 @@ describe('run install lockfile-only', () => {
       const execSpy = jest.spyOn(core, 'exec');
       const execSyncSpy = jest.spyOn(core, 'execSync').mockReturnValue('8.5.0');
       const cwd = await initFixture('lockfile-version2');
+
       const lockFileOutput = await runInstallLockFileOnly('npm', cwd);
 
       expect(execSyncSpy).toHaveBeenCalled();
@@ -117,6 +119,7 @@ describe('run install lockfile-only', () => {
       const execSpy = jest.spyOn(core, 'exec');
       const execSyncSpy = jest.spyOn(core, 'execSync').mockReturnValue('8.4.0');
       const cwd = await initFixture('lockfile-version2');
+
       const lockFileOutput = await runInstallLockFileOnly('npm', cwd);
 
       expect(execSyncSpy).toHaveBeenCalled();
@@ -127,12 +130,23 @@ describe('run install lockfile-only', () => {
   });
 
   describe('pnpm client', () => {
+    it('should log an error when lockfile is not located under project root', async () => {
+      const logSpy = jest.spyOn(npmlog, 'error');
+      const cwd = await initFixture('lockfile-version2');
+
+      const lockFileOutput = await runInstallLockFileOnly('pnpm', cwd);
+
+      expect(logSpy).toHaveBeenCalledWith('lock', expect.stringContaining('we could not sync or locate "pnpm-lock.yaml" from path'));
+      expect(lockFileOutput).toBe(undefined);
+    });
+
     it(`should update project root lockfile by calling client script "pnpm install --package-lock-only"`, async () => {
       jest.spyOn(nodeFs.promises, 'access').mockResolvedValue(true);
       nodeFs.renameSync.mockImplementation(() => true);
       core.exec.mockImplementation(() => true);
       const execSpy = jest.spyOn(core, 'exec');
       const cwd = await initFixture('lockfile-version2');
+
       const lockFileOutput = await runInstallLockFileOnly('pnpm', cwd);
 
       expect(execSpy).toHaveBeenCalledWith('pnpm', ['install', '--lockfile-only'], { cwd });
@@ -147,6 +161,7 @@ describe('run install lockfile-only', () => {
       core.exec.mockImplementation(() => true);
       const execSpy = jest.spyOn(core, 'exec');
       const cwd = await initFixture('lockfile-version2');
+
       const lockFileOutput = await runInstallLockFileOnly('yarn', cwd);
 
       expect(execSpy).toHaveBeenCalledWith('yarn', ['install', '--mode', 'update-lockfile'], { cwd });

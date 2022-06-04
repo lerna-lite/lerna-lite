@@ -168,6 +168,10 @@ export async function runInstallLockFileOnly(npmClient: 'npm' | 'pnpm' | 'yarn',
       }
       break;
   }
+
+  if (!outputLockfileName) {
+    log.error('lock', `we could not sync or locate "${inputLockfileName}" from path ${cwd}`);
+  }
   return outputLockfileName;
 }
 
