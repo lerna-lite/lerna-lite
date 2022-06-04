@@ -854,7 +854,7 @@ describe("VersionCommand", () => {
       const execSpy = jest.spyOn(core, 'exec');
       const execSyncSpy = jest.spyOn(core, 'execSync').mockReturnValue('8.4.0');
       const cwd = await initFixture('lockfile-version2');
-      await new VersionCommand(createArgv(cwd, '--bump', 'major', '--yes', '--package-lockfile-only'));
+      await new VersionCommand(createArgv(cwd, '--bump', 'major', '--yes', '--package-lockfile-only', '--npm-client', 'npm'));
 
       expect(execSyncSpy).toHaveBeenCalled();
       expect(execSpy).toHaveBeenCalledWith('npm', ['shrinkwrap', '--package-lock-only'], { cwd });
