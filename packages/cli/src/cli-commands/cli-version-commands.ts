@@ -151,14 +151,6 @@ exports.builder = (yargs, composed) => {
       hidden: true,
       type: 'boolean',
     },
-    'no-package-lockfile-only': {
-      describe: 'Do not run `npm install --package-lock-only` or equivalent depending on the package manager defined in `npmClient`.',
-      type: 'boolean',
-    },
-    'package-lockfile-only': {
-      describe: 'Runs `npm install --package-lock-only` or equivalent depending on the package manager defined in `npmClient`.',
-      type: 'boolean',
-    },
     // preid is copied into ../publish/command because a whitelist for one option isn't worth it
     preid: {
       describe: 'Specify the prerelease identifier when versioning a prerelease',
@@ -195,6 +187,14 @@ exports.builder = (yargs, composed) => {
     'manually-update-root-lockfile': {
       // proxy for --no-manually-update-root-lockfile
       hidden: true,
+      type: 'boolean',
+    },
+    'no-sync-workspace-lock': {
+      describe: 'Do not run `npm install --package-lock-only` or equivalent depending on the package manager defined in `npmClient`.',
+      type: 'boolean',
+    },
+    'sync-workspace-lock': {
+      describe: 'Runs `npm install --package-lock-only` or equivalent depending on the package manager defined in `npmClient`.',
       type: 'boolean',
     },
     'workspace-strict-match': {

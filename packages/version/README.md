@@ -94,12 +94,12 @@ Running `lerna version --conventional-commits` without the above flags will rele
     - [`--no-private`](#--no-private)
     - [`--no-push`](#--no-push)
     - [`--preid`](#--preid)
-    - [`--package-lockfile-only`](#--package-lockfile-only) (new)
     - [`--signoff-git-commit`](#--signoff-git-commit) (new)
     - [`--sign-git-commit`](#--sign-git-commit)
     - [`--sign-git-tag`](#--sign-git-tag)
     - [`--force-git-tag`](#--force-git-tag)
     - [`--tag-version-prefix`](#--tag-version-prefix)
+    - [`--sync-workspace-lock`](#--sync-workspace-lock) (new)
     - [`--yes`](#--yes)
   - [Tips](#tips)
     - [Generating Initial Changelogs](#generating-initial-changelogs)
@@ -445,35 +445,6 @@ lerna version prepatch --preid next
 When run with this flag, `lerna version` will increment `premajor`, `preminor`, `prepatch`, or `prerelease` semver
 bumps using the specified [prerelease identifier](http://semver.org/#spec-item-9).
 
-### `--package-lockfile-only`
-
-This flag will run `npm install --package-lock-only` or equivalent depending on the package manager defined in `npmClient` (npm, pnpm or yarn).
-Updating directly the lock file can be hard and this flag is one of two solutions to update the lock file. It might not be the best solution for your use case, just give it a try.
-
-> `npm` users: we recommend having npm verion >=8.5.0 installed with npm workspaces, so that we can run `npm install --package-lock-only` instead of `npm shrinkwrap` with < 8.5.0 that have a drawback of file renaming. This might become an actual minimal requirement in a future release to be >= 8.5.0.
-
-> `pnpm`/`yarn` users: we recommend using the `workspace:` protocol since it will prefer local dependencies and will make it less likely to fetch packages accidentally from the registry (refer to version with [`workspace:` protocol](#workspace-protocol)).
-
-> `yarn` users: please note that this will only work with Yarn Berry 3.x and higher since it uses `yarn install --mode update-lockfile` (this will not work with yarn 1.x classic)
-
-```sh
-lerna version --package-lockfile-only
-```
-
-The command that will be performed by each client will be the following
-
-```sh
-# npm assuming a `package-lock.json` lock file
-npm install --package-lock-only     # npm client >= 8.5.0
-npm shrinkwrap --package-lock-only  # npm client < 8.5.0 will execute a file rename behind the scene
-
-# pnpm assuming a `pnpm-lock.yaml` lock file
-pnpm install --lockfile-only
-
-# yarn assuming a `yarn.lock` lock file
-yarn install --mode update-lockfile
-```
-
 ### `--signoff-git-commit`
 
 Adds the `--signoff` flag to the git commit done by lerna version when executed.
@@ -503,6 +474,35 @@ Keep in mind that currently you have to supply it twice: for `version` command a
 lerna version --tag-version-prefix=''
 # on ci
 lerna publish from-git --tag-version-prefix=''
+```
+
+### `--sync-workspace-lock`
+
+This flag will run `npm install --package-lock-only` or equivalent depending on the package manager defined in `npmClient` (npm, pnpm or yarn).
+Updating directly the lock file can be hard and this flag is one of two solutions to update the lock file. It might not be the best solution for your use case, just give it a try.
+
+> `npm` users: we recommend having npm verion >=8.5.0 installed with npm workspaces, so that we can run `npm install --package-lock-only` instead of `npm shrinkwrap` with < 8.5.0 that have a drawback of file renaming. This might become an actual minimal requirement in a future release to be >= 8.5.0.
+
+> `pnpm`/`yarn` users: we recommend using the `workspace:` protocol since it will prefer local dependencies and will make it less likely to fetch packages accidentally from the registry (refer to version with [`workspace:` protocol](#workspace-protocol)).
+
+> `yarn` users: please note that this will only work with Yarn Berry 3.x and higher since it uses `yarn install --mode update-lockfile` (this will not work with yarn 1.x classic)
+
+```sh
+lerna version --sync-workspace-lock
+```
+
+The command that will be performed by each client will be the following
+
+```sh
+# npm assuming a `package-lock.json` lock file
+npm install --package-lock-only     # npm client >= 8.5.0
+npm shrinkwrap --package-lock-only  # npm client < 8.5.0 will execute a file rename behind the scene
+
+# pnpm assuming a `pnpm-lock.yaml` lock file
+pnpm install --lockfile-only
+
+# yarn assuming a `yarn.lock` lock file
+yarn install --mode update-lockfile
 ```
 
 ### `--yes`

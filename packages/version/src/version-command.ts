@@ -227,11 +227,11 @@ export class VersionCommand extends Command<VersionCommandOption> {
       );
     }
 
-    if (this.options.manuallyUpdateRootLockfile && this.options.packageLockfileOnly) {
+    if (this.options.manuallyUpdateRootLockfile && this.options.syncWorkspaceLock) {
       throw new ValidationError(
         'ENOTALLOWED',
         dedent`
-          --manually-update-root-lockfile cannot be combined with --package-lockfile-only.
+          --manually-update-root-lockfile cannot be combined with --sync-workspace-lock.
         `
       );
     }
@@ -616,7 +616,7 @@ export class VersionCommand extends Command<VersionCommandOption> {
 
     // update the project root npm lock file, we will read and write back to the lock file
     // this is currently the default update and if none of the flag are enabled (or all undefined) then we'll consider this as enabled
-    if (npmClient === 'npm' && (this.options.manuallyUpdateRootLockfile || (this.options.manuallyUpdateRootLockfile === undefined && !this.options.packageLockfileOnly))) {
+    if (npmClient === 'npm' && (this.options.manuallyUpdateRootLockfile || (this.options.manuallyUpdateRootLockfile === undefined && !this.options.syncWorkspaceLock))) {
       chain = chain.then(() =>
         // update modern lockfile (version 2 or higher) when exist in the project root
         loadPackageLockFileWhenExists(rootPath)
@@ -642,7 +642,7 @@ export class VersionCommand extends Command<VersionCommandOption> {
     }
 
     // update lock file, with npm client defined when `--package-lock-only` is enabled
-    if (this.options.packageLockfileOnly) {
+    if (this.options.syncWorkspaceLock) {
       chain = chain.then(() =>
         runInstallLockFileOnly(npmClient, this.project.manifest.location)
           .then((lockfilePath) => {

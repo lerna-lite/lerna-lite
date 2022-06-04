@@ -125,12 +125,12 @@ describe("VersionCommand", () => {
       );
     });
 
-    it("throws an error if --manually-update-root-lockfile and --package-lockfile-only flags are both passed", async () => {
+    it("throws an error if --manually-update-root-lockfile and --sync-workspace-lock flags are both passed", async () => {
       const testDir = await initFixture("normal");
-      const command = new VersionCommand(createArgv(testDir, "--manually-update-root-lockfile", "--package-lockfile-only"));
+      const command = new VersionCommand(createArgv(testDir, "--manually-update-root-lockfile", "--sync-workspace-lock"));
 
       await expect(command).rejects.toThrow(
-        "--manually-update-root-lockfile cannot be combined with --package-lockfile-only."
+        "--manually-update-root-lockfile cannot be combined with --sync-workspace-lock."
       );
     });
 
@@ -807,7 +807,7 @@ describe("VersionCommand", () => {
   describe("with leaf lockfiles on npm lockFile version < 2", () => {
     it("updates lockfile version to new package version", async () => {
       const cwd = await initFixture("lockfile-leaf");
-      await new VersionCommand(createArgv(cwd, '--yes', '--bump', 'major', '--no-package-lockfile-only'));
+      await new VersionCommand(createArgv(cwd, '--yes', '--bump', 'major', '--no-sync-workspace-lock'));
 
       const changedFiles = await showCommit(cwd, '--name-only');
       expect(changedFiles).toContain('packages/package-1/package-lock.json');
@@ -845,17 +845,17 @@ describe("VersionCommand", () => {
   describe('updating lockfile-only', () => {
     // test with npm client only since other clients are tested in separate file "update-lockfile-version.spec"
     describe('npm client', () => {
-      it(`should NOT call runInstallLockFileOnly() when --no-package-lockfile-only & --no-manually-update-root-lockfile are provided`, async () => {
+      it(`should NOT call runInstallLockFileOnly() when --no-sync-workspace-lock & --no-manually-update-root-lockfile are provided`, async () => {
         const cwd = await initFixture('lockfile-version2');
-        await new VersionCommand(createArgv(cwd, '--bump', 'major', '--yes', '--no-package-lockfile-only', '--no-manually-update-root-lockfile'));
+        await new VersionCommand(createArgv(cwd, '--bump', 'major', '--yes', '--no-sync-workspace-lock', '--no-manually-update-root-lockfile'));
 
         const changedFiles = await showCommit(cwd, '--name-only');
         expect(changedFiles).not.toContain('package-lock.json');
       });
 
-      it(`should call runInstallLockFileOnly() when --package-lockfile-only is provided and expect lockfile to be added to git`, async () => {
+      it(`should call runInstallLockFileOnly() when --sync-workspace-lock is provided and expect lockfile to be added to git`, async () => {
         const cwd = await initFixture('lockfile-version2');
-        await new VersionCommand(createArgv(cwd, '--bump', 'major', '--yes', '--package-lockfile-only', '--npm-client', 'npm'));
+        await new VersionCommand(createArgv(cwd, '--bump', 'major', '--yes', '--sync-workspace-lock', '--npm-client', 'npm'));
 
         const changedFiles = await showCommit(cwd, '--name-only');
         const lockfileResponse = await loadPackageLockFileWhenExists(cwd);
@@ -864,9 +864,9 @@ describe("VersionCommand", () => {
         expect(lockfileResponse!.json).toMatchSnapshot();
       });
 
-      it(`should call runInstallLockFileOnly() when --package-lockfile-only is provided and expect lockfile to be added to git even without npmClient`, async () => {
+      it(`should call runInstallLockFileOnly() when --sync-workspace-lock is provided and expect lockfile to be added to git even without npmClient`, async () => {
         const cwd = await initFixture('lockfile-version2');
-        await new VersionCommand(createArgv(cwd, '--bump', 'minor', '--yes', '--package-lockfile-only'));
+        await new VersionCommand(createArgv(cwd, '--bump', 'minor', '--yes', '--sync-workspace-lock'));
 
         const changedFiles = await showCommit(cwd, '--name-only');
         expect(changedFiles).toContain('package-lock.json');

@@ -467,7 +467,7 @@ Array [
 ]
 `;
 
-exports[`VersionCommand updating lockfile-only npm client should call runInstallLockFileOnly() when --package-lockfile-only is provided and expect lockfile to be added to git 1`] = `
+exports[`VersionCommand updating lockfile-only npm client should call runInstallLockFileOnly() when --sync-workspace-lock is provided and expect lockfile to be added to git 1`] = `
 Object {
   "dependencies": Object {
     "package-1": Object {
@@ -518,7 +518,7 @@ Object {
 }
 `;
 
-exports[`VersionCommand updating lockfile-only npm client should call runInstallLockFileOnly() when --package-lockfile-only is provided and expect lockfile to be added to git even without npmClient 1`] = `
+exports[`VersionCommand updating lockfile-only npm client should call runInstallLockFileOnly() when --sync-workspace-lock is provided and expect lockfile to be added to git even without npmClient 1`] = `
 Object {
   "dependencies": Object {
     "package-1": Object {
