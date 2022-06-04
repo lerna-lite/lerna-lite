@@ -861,7 +861,12 @@ describe("VersionCommand", () => {
         const lockfileResponse = await loadPackageLockFileWhenExists(cwd);
 
         expect(changedFiles).toContain('package-lock.json');
-        expect(lockfileResponse!.json).toMatchSnapshot();
+        expect(lockfileResponse!.json.lockfileVersion).toBe(2);
+        expect(lockfileResponse!.json.packages['packages/package-1'].version).toBe('3.0.0');
+        expect(lockfileResponse!.json.packages['packages/package-2'].version).toBe('3.0.0');
+        expect(lockfileResponse!.json.packages['packages/package-2'].dependencies).toMatchObject({
+          '@my-workspace/package-1': '^3.0.0',
+        });
       });
 
       it(`should call runInstallLockFileOnly() when --sync-workspace-lock is provided and expect lockfile to be added to git even without npmClient`, async () => {
@@ -883,8 +888,6 @@ describe("VersionCommand", () => {
         expect(lockfileResponse!.json.packages['packages/package-2'].dependencies).toMatchObject({
           '@my-workspace/package-1': '^2.4.0',
         });
-
-        expect(lockfileResponse!.json).toMatchSnapshot();
       });
     });
   });
