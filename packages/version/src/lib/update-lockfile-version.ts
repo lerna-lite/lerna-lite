@@ -119,29 +119,30 @@ export function updateNpmLockFileVersion2(obj: any, pkgName: string, newVersion:
  * @returns {Promise<string | undefined>} lockfile name if executed successfully
  */
 export async function runInstallLockFileOnly(npmClient: 'npm' | 'pnpm' | 'yarn', cwd: string): Promise<string | undefined> {
-  let lockFilename = '';
+  let inputLockfileName = '';
+  let outputLockfileName: string | undefined;
 
   switch (npmClient) {
     case 'pnpm':
-      lockFilename = 'pnpm-lock.yaml';
-      if (await validateFileExists(path.join(cwd, lockFilename))) {
+      inputLockfileName = 'pnpm-lock.yaml';
+      if (await validateFileExists(path.join(cwd, inputLockfileName))) {
         log.verbose(`lock`, `updating lock file via "pnpm install --lockfile-only"`);
         await exec('pnpm', ['install', '--lockfile-only'], { cwd });
-        return lockFilename;
+        outputLockfileName = inputLockfileName;
       }
       break;
     case 'yarn':
-      lockFilename = 'yarn.lock';
-      if (await validateFileExists(path.join(cwd, lockFilename))) {
+      inputLockfileName = 'yarn.lock';
+      if (await validateFileExists(path.join(cwd, inputLockfileName))) {
         log.verbose(`lock`, `updating lock file via "yarn install --mode update-lockfile"`);
         await exec('yarn', ['install', '--mode', 'update-lockfile'], { cwd });
-        return lockFilename;
+        outputLockfileName = inputLockfileName;
       }
       break;
     case 'npm':
     default:
-      lockFilename = 'package-lock.json';
-      if (await validateFileExists(path.join(cwd, lockFilename))) {
+      inputLockfileName = 'package-lock.json';
+      if (await validateFileExists(path.join(cwd, inputLockfileName))) {
         const localNpmVersion = execSync('npm', ['--version']);
         log.silly(`npm`, `current local npm version is "${localNpmVersion}"`);
 
@@ -163,11 +164,11 @@ export async function runInstallLockFileOnly(npmClient: 'npm' | 'pnpm' | 'yarn',
           renameSync('npm-shrinkwrap.json', 'package-lock.json');
         }
 
-        return lockFilename;
+        outputLockfileName = inputLockfileName;
       }
       break;
   }
-  return undefined;
+  return outputLockfileName;
 }
 
 /**
