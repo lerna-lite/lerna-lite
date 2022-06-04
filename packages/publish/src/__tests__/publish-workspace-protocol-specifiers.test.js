@@ -68,7 +68,7 @@ describe("workspace protocol 'workspace:' specifiers", () => {
 
       await gitTag(cwd, "v1.0.0");
       await setupChanges(cwd);
-      await new PublishCommand(createArgv(cwd, "--bump", "patch", "--yes", "--no-workspace-strict-match"));
+      await new PublishCommand(createArgv(cwd, "--bump", "patch", "--yes", "--no-workspace-strict-match", "--no-package-lockfile-only"));
 
       expect(writePkg.updatedVersions()).toEqual({
         "package-1": "1.0.1",
@@ -106,7 +106,7 @@ describe("workspace protocol 'workspace:' specifiers", () => {
 
       await gitTag(cwd, "v1.0.0");
       await setupChanges(cwd);
-      await new PublishCommand(createArgv(cwd, "--bump", "minor", "--yes", "--no-workspace-strict-match"));
+      await new PublishCommand(createArgv(cwd, "--bump", "minor", "--yes", "--no-workspace-strict-match", "--no-package-lockfile-only"));
 
       expect(writePkg.updatedVersions()).toEqual({
         "package-1": "1.1.0",
@@ -146,7 +146,7 @@ describe("workspace protocol 'workspace:' specifiers", () => {
 
       await gitTag(cwd, "v1.0.0");
       await setupChanges(cwd);
-      await new PublishCommand(createArgv(cwd, "--bump", "minor", "--yes", "--workspace-strict-match"));
+      await new PublishCommand(createArgv(cwd, "--bump", "minor", "--yes", "--workspace-strict-match", "--no-package-lockfile-only"));
 
       expect(writePkg.updatedVersions()).toEqual({
         "package-1": "1.1.0",
@@ -184,7 +184,7 @@ describe("workspace protocol 'workspace:' specifiers", () => {
 
       await gitTag(cwd, "v1.0.0");
       await setupChanges(cwd);
-      await new PublishCommand(createArgv(cwd, "--bump", "major", "--yes"));
+      await new PublishCommand(createArgv(cwd, "--bump", "major", "--yes", "--no-package-lockfile-only"));
 
       expect(writePkg.updatedVersions()).toEqual({
         "package-1": "2.0.0",
