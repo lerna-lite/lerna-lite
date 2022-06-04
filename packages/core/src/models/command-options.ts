@@ -244,7 +244,7 @@ export interface VersionCommandOption {
   /** Defaults to 'alpha', specify the prerelease identifier when versioning a prerelease */
   preid?: string;
 
-  /** Runs `npm install --package-lock-only` or associated command depending on the package manager defined in `npmClient` */
+  /** Runs `npm install --package-lock-only` or equivalent depending on the package manager defined in `npmClient` */
   packageLockfileOnly?: boolean;
 
   /** Pass the `--gpg-sign` flag to `git commit`. */

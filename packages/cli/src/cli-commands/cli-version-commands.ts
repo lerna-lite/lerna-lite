@@ -151,8 +151,12 @@ exports.builder = (yargs, composed) => {
       hidden: true,
       type: 'boolean',
     },
+    'no-package-lockfile-only': {
+      describe: 'Do not run `npm install --package-lock-only` or equivalent depending on the package manager defined in `npmClient`.',
+      type: 'boolean',
+    },
     'package-lockfile-only': {
-      describe: 'Runs `npm install --package-lock-only` or associated command depending on the package manager defined in `npmClient`.',
+      describe: 'Runs `npm install --package-lock-only` or equivalent depending on the package manager defined in `npmClient`.',
       type: 'boolean',
     },
     // preid is copied into ../publish/command because a whitelist for one option isn't worth it
