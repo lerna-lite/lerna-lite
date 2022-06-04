@@ -529,6 +529,7 @@ export class VersionCommand extends Command<VersionCommandOption> {
     const independentVersions = this.project.isIndependent();
     const rootPath = this.project.manifest.location;
     const changedFiles = new Set();
+    const npmClient = this.options.npmClient || 'npm';
 
     let chain: Promise<any> = Promise.resolve();
 
@@ -617,7 +618,7 @@ export class VersionCommand extends Command<VersionCommandOption> {
 
     // update the project root npm lock file, we will read and write back to the lock file
     // this is currently the default update and if none of the flag are enabled (or all undefined) then we'll consider this as enabled
-    if (this.options.npmClient === 'npm' && (this.options.manuallyUpdateRootLockfile || (this.options.manuallyUpdateRootLockfile === undefined && !this.options.packageLockfileOnly))) {
+    if (npmClient === 'npm' && (this.options.manuallyUpdateRootLockfile || (this.options.manuallyUpdateRootLockfile === undefined && !this.options.packageLockfileOnly))) {
       chain = chain.then(() =>
         // update modern lockfile (version 2 or higher) when exist in the project root
         loadPackageLockFileWhenExists(rootPath)
@@ -646,7 +647,7 @@ export class VersionCommand extends Command<VersionCommandOption> {
     if (this.options.packageLockfileOnly) {
       chain = chain.then(async () => {
         let lockFilename = '';
-        switch (this.options.npmClient) {
+        switch (npmClient) {
           case 'pnpm':
             lockFilename = 'pnpm-lock.yaml';
             this.logger.verbose(`lock`, `updating lock file via "pnpm install --lockfile-only"`);

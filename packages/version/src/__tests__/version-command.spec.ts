@@ -86,7 +86,7 @@ describe("VersionCommand", () => {
       const testDir = await initFixture("normal");
       // when --conventional-commits is absent,
       // --no-changelog should have _no_ effect
-      await new VersionCommand(createArgv(testDir, "--no-changelog", "--no-package-lockfile-only"));
+      await new VersionCommand(createArgv(testDir, "--no-changelog"));
 
       expect(checkWorkingTree).toHaveBeenCalled();
 
@@ -181,7 +181,7 @@ describe("VersionCommand", () => {
       collectUpdates.setUpdated(testDir, "package-3");
       promptSelectOne.chooseBump("minor");
 
-      await new VersionCommand(createArgv(testDir, "--no-package-lockfile-only"));
+      await new VersionCommand(createArgv(testDir));
 
       const patch = await showCommit(testDir);
       expect(patch).toMatchSnapshot();
@@ -193,7 +193,7 @@ describe("VersionCommand", () => {
       collectUpdates.setUpdated(testDir, "package-3");
       promptSelectOne.chooseBump("major");
 
-      await new VersionCommand(createArgv(testDir, "--no-package-lockfile-only"));
+      await new VersionCommand(createArgv(testDir));
 
       const patch = await showCommit(testDir);
       expect(patch).toMatchSnapshot();
@@ -206,7 +206,7 @@ describe("VersionCommand", () => {
       collectUpdates.setUpdated(testDir, "package-4");
       promptSelectOne.chooseBump("major");
 
-      await new VersionCommand(createArgv(testDir, "--no-private", "--no-package-lockfile-only"));
+      await new VersionCommand(createArgv(testDir, "--no-private"));
 
       const patch = await showCommit(testDir, "--name-only");
       expect(patch).not.toContain("package-5");
@@ -225,7 +225,7 @@ describe("VersionCommand", () => {
       promptSelectOne.chooseBump("patch");
 
       const testDir = await initFixture("independent");
-      await new VersionCommand(createArgv(testDir, "--no-package-lockfile-only")); // --independent is only valid in InitCommand
+      await new VersionCommand(createArgv(testDir)); // --independent is only valid in InitCommand
 
       expect(promptConfirmation).toHaveBeenCalled();
 
@@ -253,7 +253,7 @@ describe("VersionCommand", () => {
       const cwd = await initFixture("normal");
 
       await setupPreCommitHook(cwd);
-      await new VersionCommand(createArgv(cwd, "--no-commit-hooks", "--no-package-lockfile-only"));
+      await new VersionCommand(createArgv(cwd, "--no-commit-hooks"));
 
       const message = await getCommitMessage(cwd);
       expect(message).toBe("v1.0.1");
@@ -271,7 +271,7 @@ describe("VersionCommand", () => {
           },
         },
       });
-      await new VersionCommand(createArgv(cwd, "--no-package-lockfile-only"));
+      await new VersionCommand(createArgv(cwd));
 
       const message = await getCommitMessage(cwd);
       expect(message).toBe("v1.0.1");
@@ -281,7 +281,7 @@ describe("VersionCommand", () => {
   describe("--no-git-tag-version", () => {
     it("versions changed packages without git commit or push", async () => {
       const testDir = await initFixture("normal");
-      await new VersionCommand(createArgv(testDir, "--no-git-tag-version", "--no-package-lockfile-only"));
+      await new VersionCommand(createArgv(testDir, "--no-git-tag-version"));
 
       expect(writePkg.updatedManifest("package-1")).toMatchSnapshot("gitHead");
 
@@ -312,7 +312,7 @@ describe("VersionCommand", () => {
           },
         },
       });
-      await new VersionCommand(createArgv(testDir, "--no-package-lockfile-only"));
+      await new VersionCommand(createArgv(testDir));
 
       const logMessages = loggingOutput("info");
       expect(logMessages).toContain("Skipping git tag/commit");
@@ -320,7 +320,7 @@ describe("VersionCommand", () => {
 
     it("is implied by --skip-git", async () => {
       const testDir = await initFixture("normal");
-      await lernaVersion(testDir)('--skip-git', '--no-package-lockfile-only');
+      await lernaVersion(testDir)('--skip-git');
 
       const logMessages = loggingOutput();
       expect(logMessages).toContain("Skipping git tag/commit");
@@ -330,7 +330,7 @@ describe("VersionCommand", () => {
     it("skips dirty working tree validation", async () => {
       const testDir = await initFixture("normal");
       await fs.outputFile(path.join(testDir, "packages/package-1/hello.js"), "world");
-      await new VersionCommand(createArgv(testDir, "--no-git-tag-version", "--no-package-lockfile-only"));
+      await new VersionCommand(createArgv(testDir, "--no-git-tag-version"));
 
       expect(checkWorkingTree).not.toHaveBeenCalled();
 
@@ -355,7 +355,7 @@ describe("VersionCommand", () => {
         version: "1.0.0",
       });
       // a "dynamic", intentionally unversioned package must _always_ be forced
-      await new VersionCommand(createArgv(cwd, "--force-publish=dynamic", "--no-granular-pathspec", "--no-package-lockfile-only"));
+      await new VersionCommand(createArgv(cwd, "--force-publish=dynamic", "--no-granular-pathspec"));
 
       const leftover = await getLeftover(cwd);
       expect(leftover).toBe("packages/dynamic/package.json");
@@ -373,7 +373,7 @@ describe("VersionCommand", () => {
         granularPathspec: false,
       });
       // a "dynamic", intentionally unversioned package must _always_ be forced
-      await new VersionCommand(createArgv(cwd, '--force-publish=dynamic', '--no-package-lockfile-only'));
+      await new VersionCommand(createArgv(cwd, '--force-publish=dynamic'));
 
       const leftover = await getLeftover(cwd);
       expect(leftover).toBe("packages/dynamic/package.json");
@@ -384,7 +384,7 @@ describe("VersionCommand", () => {
   describe("--no-private", () => {
     it("does not universally version private packages", async () => {
       const testDir = await initFixture("normal");
-      await new VersionCommand(createArgv(testDir, '--no-private', '--no-package-lockfile-only'));
+      await new VersionCommand(createArgv(testDir, '--no-private'));
 
       const patch = await showCommit(testDir, "--name-only");
       expect(patch).not.toContain("package-5");
@@ -392,7 +392,7 @@ describe("VersionCommand", () => {
 
     it("does not independently version private packages", async () => {
       const testDir = await initFixture("independent");
-      await new VersionCommand(createArgv(testDir, '--no-private', '--no-package-lockfile-only'));
+      await new VersionCommand(createArgv(testDir, '--no-private'));
 
       const patch = await showCommit(testDir, "--name-only");
       expect(patch).not.toContain("package-5");
@@ -409,7 +409,7 @@ describe("VersionCommand", () => {
           },
         },
       });
-      await new VersionCommand(createArgv(testDir, '--no-package-lockfile-only'));
+      await new VersionCommand(createArgv(testDir));
 
       const patch = await showCommit(testDir, '--name-only');
       expect(patch).not.toContain("package-5");
@@ -419,7 +419,7 @@ describe("VersionCommand", () => {
   describe("--no-push", () => {
     it("versions changed packages without git push", async () => {
       const testDir = await initFixture("normal");
-      await new VersionCommand(createArgv(testDir, '--no-push', '--no-package-lockfile-only'));
+      await new VersionCommand(createArgv(testDir, '--no-push'));
 
       const patch = await showCommit(testDir);
       expect(patch).toMatchSnapshot();
@@ -444,7 +444,7 @@ describe("VersionCommand", () => {
           },
         },
       });
-      await new VersionCommand(createArgv(testDir, '--no-package-lockfile-only'));
+      await new VersionCommand(createArgv(testDir));
 
       const logMessages = loggingOutput("info");
       expect(logMessages).toContain("Skipping git push");
@@ -452,7 +452,7 @@ describe("VersionCommand", () => {
 
     it("is implied by --skip-git", async () => {
       const testDir = await initFixture("normal");
-      await lernaVersion(testDir)('--skip-git', '--no-package-lockfile-only');
+      await lernaVersion(testDir)('--skip-git');
 
       const logMessages = loggingOutput();
       expect(logMessages).toContain("Skipping git push");
@@ -463,7 +463,7 @@ describe("VersionCommand", () => {
   describe("--tag-version-prefix", () => {
     it("versions changed packages with custom tag prefix", async () => {
       const testDir = await initFixture("normal");
-      await new VersionCommand(createArgv(testDir, '--tag-version-prefix', 'rev', '--no-package-lockfile-only'));
+      await new VersionCommand(createArgv(testDir, '--tag-version-prefix', 'rev'));
 
       const patch = await showCommit(testDir);
       expect(patch).toContain("tag: rev1.0.1");
@@ -480,7 +480,7 @@ describe("VersionCommand", () => {
           },
         },
       });
-      await new VersionCommand(createArgv(testDir, '--no-package-lockfile-only'));
+      await new VersionCommand(createArgv(testDir));
 
       const patch = await showCommit(testDir);
       expect(patch).toContain("tag: durable1.0.1");
@@ -488,7 +488,7 @@ describe("VersionCommand", () => {
 
     it("omits tag prefix when passed empty string", async () => {
       const testDir = await initFixture("normal");
-      await new VersionCommand(createArgv(testDir, '--tag-version-prefix', '', '--no-package-lockfile-only'));
+      await new VersionCommand(createArgv(testDir, '--tag-version-prefix', ''));
 
       const patch = await showCommit(testDir);
       expect(patch).toContain("tag: 1.0.1");
@@ -498,7 +498,7 @@ describe("VersionCommand", () => {
   describe("--yes", () => {
     it("skips confirmation prompt", async () => {
       const testDir = await initFixture("normal");
-      await new VersionCommand(createArgv(testDir, '--bump', 'patch', '--yes', '--no-package-lockfile-only'));
+      await new VersionCommand(createArgv(testDir, '--bump', 'patch', '--yes'));
 
       expect(promptSelectOne).not.toHaveBeenCalled();
       expect(promptConfirmation).not.toHaveBeenCalled();
@@ -511,15 +511,15 @@ describe("VersionCommand", () => {
   describe('--exact', () => {
     it('updates matching local dependencies of published packages with exact versions', async () => {
       const testDir = await initFixture("normal");
-      await new VersionCommand(createArgv(testDir, '--exact', '--no-package-lockfile-only'));
+      await new VersionCommand(createArgv(testDir, '--exact'));
 
       const patch = await showCommit(testDir);
       expect(patch).toMatchSnapshot();
     });
 
     it("updates existing exact versions", async () => {
-      const testDir = await initFixture('normal-exact', '--no-package-lockfile-only');
-      await new VersionCommand(createArgv(testDir, '--no-package-lockfile-only'));
+      const testDir = await initFixture('normal-exact');
+      await new VersionCommand(createArgv(testDir));
 
       const patch = await showCommit(testDir);
       expect(patch).toMatchSnapshot();
@@ -529,7 +529,7 @@ describe("VersionCommand", () => {
   describe('--git-remote', () => {
     it('pushes tags to specified remote', async () => {
       const testDir = await initFixture('normal');
-      await new VersionCommand(createArgv(testDir, '--git-remote', 'upstream', '--no-package-lockfile-only'));
+      await new VersionCommand(createArgv(testDir, '--git-remote', 'upstream'));
 
       expect(libPush).toHaveBeenLastCalledWith(
         'upstream',
@@ -552,7 +552,7 @@ describe("VersionCommand", () => {
           },
         },
       });
-      await new VersionCommand(createArgv(testDir, '--no-package-lockfile-only'));
+      await new VersionCommand(createArgv(testDir));
 
       expect(libPush).toHaveBeenLastCalledWith(
         "durable",
@@ -568,7 +568,7 @@ describe("VersionCommand", () => {
   describe("--amend", () => {
     it("amends the previous commit", async () => {
       const testDir = await initFixture("normal", "previous");
-      await new VersionCommand(createArgv(testDir, "--amend", '--no-package-lockfile-only'));
+      await new VersionCommand(createArgv(testDir, "--amend"));
 
       const message = await getCommitMessage(testDir);
       expect(message).toBe("previous");
@@ -578,7 +578,7 @@ describe("VersionCommand", () => {
 
     it("ignores custom messages", async () => {
       const testDir = await initFixture("normal", "preserved");
-      await new VersionCommand(createArgv(testDir, "-m", "ignored", "--amend", '--no-package-lockfile-only'));
+      await new VersionCommand(createArgv(testDir, "-m", "ignored", "--amend"));
 
       const message = await getCommitMessage(testDir);
       expect(message).toBe("preserved");
@@ -588,7 +588,7 @@ describe("VersionCommand", () => {
   describe("--amend --independent", () => {
     it("amends the previous commit", async () => {
       const testDir = await initFixture("independent", "previous");
-      await new VersionCommand(createArgv(testDir, "--amend", '--no-package-lockfile-only'));
+      await new VersionCommand(createArgv(testDir, "--amend"));
 
       const message = await getCommitMessage(testDir);
       expect(message).toBe("previous");
@@ -600,7 +600,7 @@ describe("VersionCommand", () => {
       isBehindUpstream.mockReturnValueOnce(true);
 
       const testDir = await initFixture("normal");
-      const command = new VersionCommand(createArgv(testDir, "--no-ci", '--no-package-lockfile-only'));
+      const command = new VersionCommand(createArgv(testDir, "--no-ci"));
 
       await expect(command).rejects.toThrow("Please merge remote changes");
     });
@@ -610,7 +610,7 @@ describe("VersionCommand", () => {
 
       const testDir = await initFixture("normal");
 
-      await new VersionCommand(createArgv(testDir, "--ci", '--no-package-lockfile-only'));
+      await new VersionCommand(createArgv(testDir, "--ci"));
 
       const [warning] = loggingOutput("warn");
       expect(warning).toMatch("behind remote upstream");
@@ -621,14 +621,14 @@ describe("VersionCommand", () => {
   describe("unversioned packages", () => {
     it("exits with an error for non-private packages with no version", async () => {
       const testDir = await initFixture("not-versioned");
-      const command = new VersionCommand(createArgv(testDir, '--no-package-lockfile-only'));
+      const command = new VersionCommand(createArgv(testDir));
 
       await expect(command).rejects.toThrow("A version field is required in package-3's package.json file.");
     });
 
     it("ignores private packages with no version", async () => {
       const testDir = await initFixture("not-versioned-private");
-      await new VersionCommand(createArgv(testDir, '--no-package-lockfile-only'));
+      await new VersionCommand(createArgv(testDir));
       expect(Object.keys(writePkg.updatedVersions())).not.toContain("package-4");
     });
   });
@@ -643,7 +643,7 @@ describe("VersionCommand", () => {
 
     it("throws by default", async () => {
       const cwd = await detachedHEAD();
-      const command = new VersionCommand(createArgv(cwd, '--no-package-lockfile-only'));
+      const command = new VersionCommand(createArgv(cwd));
 
       await expect(command).rejects.toThrow(
         "Detached git HEAD, please checkout a branch to choose versions."
@@ -652,7 +652,7 @@ describe("VersionCommand", () => {
 
     it("does not throw for version --no-git-tag-version", async () => {
       const cwd = await detachedHEAD();
-      await new VersionCommand(createArgv(cwd, "--no-git-tag-version", "--no-package-lockfile-only"));
+      await new VersionCommand(createArgv(cwd, "--no-git-tag-version"));
       const unstaged = await listDirty(cwd);
       expect(unstaged).toEqual([
         "lerna.json",
@@ -666,7 +666,7 @@ describe("VersionCommand", () => {
 
     it("throws for version --conventional-commits", async () => {
       const cwd = await detachedHEAD();
-      const command = new VersionCommand(createArgv(cwd, "--no-git-tag-version", "--conventional-commits", '--no-package-lockfile-only'));
+      const command = new VersionCommand(createArgv(cwd, "--no-git-tag-version", "--conventional-commits"));
 
       await expect(command).rejects.toThrow(
         "Detached git HEAD, please checkout a branch to choose versions."
@@ -675,7 +675,7 @@ describe("VersionCommand", () => {
 
     it("throws for version --allow-branch", async () => {
       const cwd = await detachedHEAD();
-      const command = new VersionCommand(createArgv(cwd, "--no-git-tag-version", "--allow-branch", "main", '--no-package-lockfile-only'));
+      const command = new VersionCommand(createArgv(cwd, "--no-git-tag-version", "--allow-branch", "main"));
 
       await expect(command).rejects.toThrow(
         "Detached git HEAD, please checkout a branch to choose versions."
@@ -687,7 +687,7 @@ describe("VersionCommand", () => {
     isAnythingCommitted.mockReturnValueOnce(false);
 
     const testDir = await initFixture("normal", false);
-    const command = new VersionCommand(createArgv(testDir, '--no-package-lockfile-only'));
+    const command = new VersionCommand(createArgv(testDir));
 
     await expect(command).rejects.toThrow(
       "No commits in this repository. Please commit something before using version."
@@ -699,7 +699,7 @@ describe("VersionCommand", () => {
 
     collectUpdates.setUpdated(cwd);
 
-    await new VersionCommand(createArgv(cwd, '--no-package-lockfile-only'));
+    await new VersionCommand(createArgv(cwd));
 
     const logMessages = loggingOutput("success");
     expect(logMessages).toContain("No changed packages to version");
@@ -715,7 +715,7 @@ describe("VersionCommand", () => {
 
     collectUpdates.mockImplementationOnce(collectUpdatesActual);
 
-    await new VersionCommand(createArgv(testDir, "--bump", "major", "--yes", "--no-package-lockfile-only"));
+    await new VersionCommand(createArgv(testDir, "--bump", "major", "--yes"));
 
     const patch = await showCommit(testDir);
     expect(patch).toMatchSnapshot();
@@ -734,7 +734,7 @@ describe("VersionCommand", () => {
 
     collectUpdates.mockImplementationOnce(collectUpdatesActual);
 
-    await new VersionCommand(createArgv(testDir, "--bump", "major", "--yes", "--no-package-lockfile-only"));
+    await new VersionCommand(createArgv(testDir, "--bump", "major", "--yes"));
 
     const patch = await showCommit(testDir, "--name-only");
     expect(patch).toMatchInlineSnapshot(`
@@ -762,7 +762,7 @@ describe("VersionCommand", () => {
       const testDir = await initFixture("relative-file-specs");
 
       await setupChanges(testDir);
-      await new VersionCommand(createArgv(testDir, '--bump', 'major', '--yes', '--no-package-lockfile-only'));
+      await new VersionCommand(createArgv(testDir, '--bump', 'major', '--yes'));
 
       expect(writePkg.updatedVersions()).toEqual({
         "package-1": "2.0.0",
@@ -794,7 +794,7 @@ describe("VersionCommand", () => {
   describe("--include-merged-tags", () => {
     it("accepts --include-merged-tags", async () => {
       const testDir = await initFixture("normal");
-      await new VersionCommand(createArgv(testDir, '--include-merged-tags', '--yes', '--bump', 'patch', '--no-package-lockfile-only'));
+      await new VersionCommand(createArgv(testDir, '--include-merged-tags', '--yes', '--bump', 'patch'));
 
       expect(promptSelectOne).not.toHaveBeenCalled();
       expect(promptConfirmation).not.toHaveBeenCalled();
@@ -889,7 +889,7 @@ describe("VersionCommand", () => {
   describe('with spurious -- arguments', () => {
     it('ignores the extra arguments with cheesy parseConfiguration()', async () => {
       const cwd = await initFixture('lifecycle');
-      await lernaVersion(cwd)('--yes', '--', '--loglevel', 'ignored', '--blah', '--no-package-lockfile-only');
+      await lernaVersion(cwd)('--yes', '--', '--loglevel', 'ignored', '--blah');
 
       const logMessages = loggingOutput('warn');
       expect(logMessages).toContain('Arguments after -- are no longer passed to subprocess executions.');

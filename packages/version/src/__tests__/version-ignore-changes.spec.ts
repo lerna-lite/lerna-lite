@@ -63,7 +63,6 @@ describe("version --ignore-changes", () => {
 
     // await lernaVersion(cwd)(
     await new VersionCommand(createArgv(cwd,
-      "--no-package-lockfile-only",
       "--ignore-changes",
       "README.md",
 
