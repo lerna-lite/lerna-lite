@@ -819,6 +819,8 @@ describe("VersionCommand", () => {
       const cwd = await initFixture("lockfile-version2");
       await new VersionCommand(createArgv(cwd, '--bump', 'major', '--yes', '--manually-update-root-lockfile'));
 
+      const changedFiles = await showCommit(cwd, '--name-only');
+      expect(changedFiles).toContain('package-lock.json');
       expect(writePkg.updatedVersions()).toEqual({
         "@my-workspace/package-1": "3.0.0",
         "@my-workspace/package-2": "3.0.0",
@@ -838,51 +840,52 @@ describe("VersionCommand", () => {
 
       expect(lockfileResponse!.json).toMatchSnapshot();
     });
-
-    it(`should update project root lockfile by calling npm script "npm install --package-lock-only" when npm version is >= 8.5.0`, async () => {
-      const execSpy = jest.spyOn(core, 'exec');
-      const execSyncSpy = jest.spyOn(core, 'execSync').mockReturnValue('8.5.0');
-      const cwd = await initFixture('lockfile-version2');
-      await new VersionCommand(createArgv(cwd, '--bump', 'major', '--yes', '--package-lockfile-only'));
-
-      expect(execSyncSpy).toHaveBeenCalled();
-      expect(execSpy).toHaveBeenCalledWith('npm', ['install', '--package-lock-only'], { cwd });
-    });
-
-    it(`should update project root lockfile by calling npm script "npm shrinkwrap --package-lock-only" when npm version is below 8.5.0`, async () => {
-      const renameSpy = jest.spyOn(nodeFs, 'renameSync');
-      const execSpy = jest.spyOn(core, 'exec');
-      const execSyncSpy = jest.spyOn(core, 'execSync').mockReturnValue('8.4.0');
-      const cwd = await initFixture('lockfile-version2');
-      await new VersionCommand(createArgv(cwd, '--bump', 'major', '--yes', '--package-lockfile-only', '--npm-client', 'npm'));
-
-      expect(execSyncSpy).toHaveBeenCalled();
-      expect(execSpy).toHaveBeenCalledWith('npm', ['shrinkwrap', '--package-lock-only'], { cwd });
-      expect(renameSpy).toHaveBeenCalledWith('npm-shrinkwrap.json', 'package-lock.json');
-    });
   });
 
-  describe('with pnpm lock file', () => {
-    it(`should update project root lockfile by calling client script "pnpm install --package-lock-only"`, async () => {
-      nodeFs.renameSync.mockImplementation(() => true);
-      core.exec.mockImplementation(() => true);
-      const execSpy = jest.spyOn(core, 'exec');
-      const cwd = await initFixture('lockfile-version2');
-      await new VersionCommand(createArgv(cwd, '--bump', 'major', '--yes', '--package-lockfile-only', '--npm-client', 'pnpm'));
+  describe('updating lockfile-only', () => {
+    // test with npm client only since other clients are tested in separate file "update-lockfile-version.spec"
+    describe('npm client', () => {
+      it(`should NOT call runInstallLockFileOnly() when --no-package-lockfile-only & --no-manually-update-root-lockfile are provided`, async () => {
+        const cwd = await initFixture('lockfile-version2');
+        await new VersionCommand(createArgv(cwd, '--bump', 'major', '--yes', '--no-package-lockfile-only', '--no-manually-update-root-lockfile'));
 
-      expect(execSpy).toHaveBeenCalledWith('pnpm', ['install', '--lockfile-only'], { cwd });
-    });
-  });
+        const changedFiles = await showCommit(cwd, '--name-only');
+        expect(changedFiles).not.toContain('package-lock.json');
+      });
 
-  describe('with yarn lock file', () => {
-    it(`should update project root lockfile by calling client script "yarn install --package-lock-only"`, async () => {
-      nodeFs.renameSync.mockImplementation(() => true);
-      core.exec.mockImplementation(() => true);
-      const execSpy = jest.spyOn(core, 'exec');
-      const cwd = await initFixture('lockfile-version2');
-      await new VersionCommand(createArgv(cwd, '--bump', 'major', '--yes', '--package-lockfile-only', '--npm-client', 'yarn'));
+      it(`should call runInstallLockFileOnly() when --package-lockfile-only is provided and expect lockfile to be added to git`, async () => {
+        const cwd = await initFixture('lockfile-version2');
+        await new VersionCommand(createArgv(cwd, '--bump', 'major', '--yes', '--package-lockfile-only', '--npm-client', 'npm'));
 
-      expect(execSpy).toHaveBeenCalledWith('yarn', ['install', '--mode', 'update-lockfile'], { cwd });
+        const changedFiles = await showCommit(cwd, '--name-only');
+        const lockfileResponse = await loadPackageLockFileWhenExists(cwd);
+
+        expect(changedFiles).toContain('package-lock.json');
+        expect(lockfileResponse!.json).toMatchSnapshot();
+      });
+
+      it(`should call runInstallLockFileOnly() when --package-lockfile-only is provided and expect lockfile to be added to git even without npmClient`, async () => {
+        const cwd = await initFixture('lockfile-version2');
+        await new VersionCommand(createArgv(cwd, '--bump', 'minor', '--yes', '--package-lockfile-only'));
+
+        const changedFiles = await showCommit(cwd, '--name-only');
+        expect(changedFiles).toContain('package-lock.json');
+        expect(writePkg.updatedVersions()).toEqual({
+          "@my-workspace/package-1": "2.4.0",
+          "@my-workspace/package-2": "2.4.0",
+        });
+
+        const lockfileResponse = await loadPackageLockFileWhenExists(cwd);
+
+        expect(lockfileResponse!.json.lockfileVersion).toBe(2);
+        expect(lockfileResponse!.json.packages['packages/package-1'].version).toBe('2.4.0');
+        expect(lockfileResponse!.json.packages['packages/package-2'].version).toBe('2.4.0');
+        expect(lockfileResponse!.json.packages['packages/package-2'].dependencies).toMatchObject({
+          '@my-workspace/package-1': '^2.4.0',
+        });
+
+        expect(lockfileResponse!.json).toMatchSnapshot();
+      });
     });
   });
 

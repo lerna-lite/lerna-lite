@@ -1,7 +1,6 @@
 import chalk from 'chalk';
 import dedent from 'dedent';
 import minimatch from 'minimatch';
-import { renameSync } from 'node:fs';
 import os from 'os';
 import pMap from 'p-map';
 import pPipe from 'p-pipe';
@@ -16,8 +15,6 @@ import {
   Command,
   CommandType,
   createRunner,
-  exec,
-  execSync,
   logOutput,
   Package,
   PackageGraphNode,
@@ -48,6 +45,7 @@ import {
   loadPackageLockFileWhenExists,
   updateClassicLockfileVersion,
   updateTempModernLockfileVersion,
+  runInstallLockFileOnly,
   saveUpdatedLockJsonFile
 } from './lib/update-lockfile-version';
 
@@ -645,48 +643,14 @@ export class VersionCommand extends Command<VersionCommandOption> {
 
     // update lock file, with npm client defined when `--package-lock-only` is enabled
     if (this.options.packageLockfileOnly) {
-      chain = chain.then(async () => {
-        let lockFilename = '';
-        switch (npmClient) {
-          case 'pnpm':
-            lockFilename = 'pnpm-lock.yaml';
-            this.logger.verbose(`lock`, `updating lock file via "pnpm install --lockfile-only"`);
-            await exec('pnpm', ['install', '--lockfile-only'], { cwd: this.project.manifest.location });
-            changedFiles.add(lockFilename);
-            break;
-          case 'yarn':
-            lockFilename = 'yarn.lock';
-            this.logger.verbose(`lock`, `updating lock file via "yarn install --mode update-lockfile"`);
-            await exec('yarn', ['install', '--mode', 'update-lockfile'], { cwd: this.project.manifest.location });
-            changedFiles.add(lockFilename);
-            break;
-          case 'npm':
-          default:
-            lockFilename = 'package-lock.json';
-            const localNpmVersion = execSync('npm', ['--version']);
-            this.logger.silly(`npm`, `current local npm version is "${localNpmVersion}"`);
-
-            // for npm version >=8.5.0 we can call "npm install --package-lock-only"
-            // when lower then we call "npm shrinkwrap --package-lock-only" and rename "npm-shrinkwrap.json" back to "package-lock.json"
-            if (semver.gte(localNpmVersion, '8.5.0')) {
-              this.logger.verbose(`lock`, `updating lock file via "npm install --package-lock-only"`);
-              await exec('npm', ['install', '--package-lock-only'], { cwd: this.project.manifest.location });
-            } else {
-              // TODO: eventually remove in future and/or major release
-              // with npm, we need to do update the lock file in 2 steps
-              // 1. using shrinkwrap will delete current lock file and create new "npm-shrinkwrap.json" but will avoid npm retrieving package version info from registry
-              this.logger.verbose(`lock`, `updating lock file via "npm shrinkwrap --package-lock-only".`);
-              this.logger.warn(`npm`, `Your npm version is lower than 8.5.0, we recommend upgrading your npm client to avoid the use of "npm shrinkwrap" instead of the regular (better) "npm install --package-lock-only".`);
-              await exec('npm', ['shrinkwrap', '--package-lock-only'], { cwd: this.project.manifest.location });
-
-              // 2. rename "npm-shrinkwrap.json" back to "package-lock.json"
-              this.logger.verbose(`lock`, `renaming "npm-shrinkwrap.json" file back to "package-lock.json"`);
-              renameSync('npm-shrinkwrap.json', 'package-lock.json');
+      chain = chain.then(() =>
+        runInstallLockFileOnly(npmClient, this.project.manifest.location)
+          .then((lockfilePath) => {
+            if (lockfilePath) {
+              changedFiles.add(lockfilePath);
             }
-
-            changedFiles.add(lockFilename);
-        }
-      });
+          })
+      );
     }
 
     if (!independentVersions) {
