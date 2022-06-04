@@ -617,7 +617,7 @@ export class VersionCommand extends Command<VersionCommandOption> {
 
     // update the project root lock file, we will read and write back to the lock file
     // this is currently the default update and if none of the flag are enabled (or all undefined) then we'll consider this as enabled
-    if (this.options.manuallyUpdateRootLockfile) {
+    if (this.options.manuallyUpdateRootLockfile || (this.options.manuallyUpdateRootLockfile === undefined && !this.options.packageLockfileOnly)) {
       chain = chain.then(() =>
         // update modern lockfile (version 2 or higher) when exist in the project root
         loadPackageLockFileWhenExists(rootPath)
@@ -643,7 +643,7 @@ export class VersionCommand extends Command<VersionCommandOption> {
     }
 
     // update lock file, with npm client defined when `--package-lock-only` is enabled
-    if (this.options.packageLockfileOnly || (this.options.packageLockfileOnly === undefined && !this.options.manuallyUpdateRootLockfile)) {
+    if (this.options.packageLockfileOnly) {
       chain = chain.then(async () => {
         let lockFilename = '';
         switch (this.options.npmClient) {
