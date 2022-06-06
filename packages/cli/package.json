@@ -33,11 +33,11 @@
     "npm": ">=8.0.0"
   },
   "dependencies": {
-    "@lerna-lite/core": "workspace:^1.4.0",
-    "@lerna-lite/info": "workspace:1.4.0",
-    "@lerna-lite/init": "workspace:>=1.4.0",
-    "@lerna-lite/publish": "workspace:*",
-    "@lerna-lite/version": "workspace:^",
+    "@lerna-lite/core": "^1.4.0",
+    "@lerna-lite/info": "^1.4.0",
+    "@lerna-lite/init": "^1.4.0",
+    "@lerna-lite/publish": "^1.4.0",
+    "@lerna-lite/version": "^1.4.0",
     "dedent": "^0.7.0",
     "dotenv": "^16.0.1",
     "import-local": "^3.1.0",
