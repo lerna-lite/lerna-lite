@@ -180,7 +180,7 @@ test("independent version prerelease does not bump on every unrelated change", a
 
   const first = await getCommitMessage(cwd);
   expect(first).toMatchInlineSnapshot(`
-Publish
+chore: Publish new release
 
  - pkg-a@1.0.1
  - pkg-b@1.0.0-bumps.2
@@ -195,7 +195,7 @@ Publish
 
   const second = await getCommitMessage(cwd);
   expect(second).toMatchInlineSnapshot(`
-  Publish
+  chore: Publish new release
 
    - pkg-a@1.0.2
   `);
@@ -242,7 +242,7 @@ test("independent version prerelease respects --no-private", async () => {
 
   const changedFiles = await showCommit(cwd, "--name-only");
   expect(changedFiles).toMatchInlineSnapshot(`
-    Publish
+    chore: Publish new release
 
      - pkg-1@1.0.1-alpha.0
 

@@ -188,7 +188,7 @@ index SHA..SHA 100644
 `;
 
 exports[`VersionCommand independent mode versions changed packages: commit 1`] = `
-"Publish
+"chore: Publish new release
 
  - package-1@1.0.1
  - package-2@2.1.0
