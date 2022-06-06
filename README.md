@@ -28,7 +28,7 @@
     - 💻 [`info`](https://github.com/ghiscoding/lerna-lite/tree/main/packages/info#readme) - print local environment information (useful when opening new issue)
     - ☁️ [`publish`](https://github.com/ghiscoding/lerna-lite/tree/main/packages/publish#readme) - publish every workspace packages that changed
     - 📑 [`version`](https://github.com/ghiscoding/lerna-lite/tree/main/packages/version#readme) - create new version for each workspace packages
-  - optional (**separate install**)
+  - optional (**separate install**, see [installation](#installation) below)
     - 👷 [`exec`](https://github.com/ghiscoding/lerna-lite/tree/main/packages/exec#readme) - execute shell command in each workspace package
     - 📖 [`list`](https://github.com/ghiscoding/lerna-lite/tree/main/packages/list#readme) - list local packages
     - 🏃 [`run`](https://github.com/ghiscoding/lerna-lite/tree/main/packages/run#readme) - run npm script in each workspace packages
@@ -37,9 +37,9 @@ _If a command that you wish to use is missing, simply reach out and we could pot
 
 ---
 
-## 📢 Lerna-Lite now supports yarn/pnpm `workspace:` protocol
+## 📢 Lerna-Lite now supports pnpm/yarn `workspace:` protocol
 
-#### _this new feature was introduced with release [1.2.0](https://github.com/ghiscoding/lerna-lite/releases/tag/v1.2.0) of Lerna-Lite, however we recommend using [1.3.0](https://github.com/ghiscoding/lerna-lite/releases/tag/v1.3.0)._
+#### _this new feature was introduced with release [1.2.0](https://github.com/ghiscoding/lerna-lite/releases/tag/v1.2.0) of Lerna-Lite, however we recommend using >=[1.3.0](https://github.com/ghiscoding/lerna-lite/releases/tag/v1.3.0)._
 
 If you do use this new feature, please take 30sec. to fill in a small [poll #156](https://github.com/ghiscoding/lerna-lite/discussions/156) survey just to see which package manager is the most popular and how many of you are taking advantage of this new `workspace:` protocol. Thanks :wink:
 
@@ -55,17 +55,17 @@ Lerna-Lite differs from the original [Lerna](https://github.com/lerna/lerna) in 
 
 As a summary, Lerna-Lite assumes, and requires, to pre-setup a Workspace through your favorite package manager (npm, pnpm, yarn) that will take care of the symlinks (Lerna-Lite does **not include** the `bootstrap`, neither `link` commands hence the need for a workspace pre-setup), so make sure that your workspace is properly setup **before** installing Lerna-Lite.
 
-For more info on how to setup a workspace, choose the best option for you: [Yarn classic](https://classic.yarnpkg.com/en/docs/workspaces) / [Yarn 2+](https://yarnpkg.com/features/workspaces) / [pnpm](https://pnpm.io/workspaces) / [npm](https://docs.npmjs.com/cli/v8/using-npm/workspaces)
+For more info on how to setup a workspace, choose the best option for you: [Yarn classic](https://classic.yarnpkg.com/en/docs/workspaces) / [Yarn 2+](https://yarnpkg.com/features/workspaces) / [pnpm](https://pnpm.io/workspaces) / [npm 7+](https://docs.npmjs.com/cli/v8/using-npm/workspaces)
 
 ## Why create this lib/fork?
 
 Mainly for the following reasons:
 
 1. original Lerna was no longer maintained (dependencies were out of date)
-   - this is no longer true since Nrwl took ownership of Lerna, but the next few points are still valid
+   - this is no longer true since Nrwl took over ownership of Lerna, but the next few points are still valid
 2. wanted to create a smaller lib that is more modular than the original Lerna
    - the lib is smaller since we only copied half of Lerna's commands and a few are totally optional.
-   - we don't need all packages of Lerna anymore since Workspaces now exists for all package managers (npm, pnpm, yarn).
+   - we don't need all packages of Lerna anymore since Workspaces now exists for all package managers.
    - the main goal of this fork was to keep only `version` and `publish` commands in the core and make everything else as optional packages (install and use only what you need).
 3. rewrite the lib in TypeScript
 4. replicate a few opened PRs (fixes and features) from Lerna and also add extra features in Lerna-Lite
@@ -76,9 +76,9 @@ Mainly for the following reasons:
 #### [Version](https://github.com/ghiscoding/lerna-lite/tree/main/packages/version) and [Publish](https://github.com/ghiscoding/lerna-lite/tree/main/packages/publish) commands (included with the CLI)
 
 - Automate the rolling of new Versions (`independent` or `fixed`) of all your workspace packages.
-  - it will automatically Commit & Tag your new Version in Git & even create new GitHub/GitLab Release (when enabled).
+  - it will automatically Commit/Tag your new Version & create new GitHub/GitLab Release (when enabled).
 - Automate the creation of Changelogs for all your packages by reading all [Conventional Commits](https://www.conventionalcommits.org/).
-  - each package will get its own changelog and a merged changelog will also be created in the root.
+  - each package will get its own Changelog and a merged Changelog will also be created in the root.
 - Automate the repository Publishing of your new version for all your packages (NPM or other platform).
 
 #### Other useful but optional commands
