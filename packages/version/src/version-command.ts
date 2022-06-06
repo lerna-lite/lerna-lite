@@ -641,10 +641,8 @@ export class VersionCommand extends Command<VersionCommandOption> {
             }
           })
       );
-    }
-
-    // update lock file, with npm client defined when `--package-lock-only` is enabled
-    if (this.options.syncWorkspaceLock) {
+    } else if (this.options.syncWorkspaceLock) {
+      // update lock file, with npm client defined when `--package-lock-only` is enabled
       chain = chain.then(() =>
         runInstallLockFileOnly(npmClient, this.project.manifest.location)
           .then((lockfilePath) => {
