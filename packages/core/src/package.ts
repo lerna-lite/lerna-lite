@@ -252,8 +252,8 @@ export class Package {
    * @param {Object} resolved npa metadata
    * @param {String} depVersion semver
    * @param {String} savePrefix npm_config_save_prefix
-   * @param {Boolean} workspaceStrictMatch - are we using strict match with `workspace:` protocol
-   * @param {String} updatedByCommand - which command called this update?
+   * @param {Boolean} [workspaceStrictMatch] - are we using `workspace:` protocol strict match?
+   * @param {String} [updatedByCommand] - which command called this update?
    */
   updateLocalDependency(resolved: NpaResolveResult, depVersion: string, savePrefix: string, workspaceStrictMatch = true, updatedByCommand?: CommandType) {
     const depName = resolved.name as string;
@@ -278,6 +278,15 @@ export class Package {
       // when using explicit `workspace:` protocol
       if (resolved.explicitWorkspace) {
         const workspaceTarget = resolved?.workspaceTarget ?? '';
+        const [_, _wsTxt, operatorPrefix, rangePrefix] = workspaceTarget.match(/^(workspace:)?([\<\>\=]{0,2})?([*|^|~])?(.*)$/) as RegExpMatchArray;
+
+        if (operatorPrefix) {
+          // with workspace it might include an operator, if so use it like "workspace:>=1.2.3"
+          depCollection[depName] = `${operatorPrefix}${depVersion}`;
+        } else if (workspaceStrictMatch) {
+          // with workspace in strict mode we might have empty range prefix like "workspace:1.2.3"
+          depCollection[depName] = `${rangePrefix || ''}${depVersion}`;
+        }
 
         if (updatedByCommand === 'publish') {
           // when publishing, workspace protocol will be transformed to semver range
