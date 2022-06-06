@@ -67,7 +67,7 @@ body:
         | `node --version`  | VERSION |
 
         ---
-        OR simply run `npx lerna info` command
+        OR simply run `npx lerna info` command and copy+paste the result here
     validations:
       required: true
   - type: dropdown
