@@ -259,6 +259,15 @@ export interface VersionCommandOption {
   /** Defaults to 'v', customize the tag prefix. To remove entirely, pass an empty string. */
   tagVersionPrefix?: string;
 
+  /** Do not manually update (read/write back to the lock file) the project root lock file. */
+  noManuallyUpdateRootLockfile?: boolean;
+
+  /** Defaults to true when found, update the project root lock file, the lib will internally read/write back to the lock file. */
+  manuallyUpdateRootLockfile?: boolean;
+
+  /** Runs `npm install --package-lock-only` or equivalent depending on the package manager defined in `npmClient` */
+  syncWorkspaceLock?: boolean;
+
   /** Strict match transform version numbers to an exact range (like "1.2.3") rather than with a caret (like ^1.2.3) when using `workspace:*`. */
   workspaceStrictMatch?: boolean;
 

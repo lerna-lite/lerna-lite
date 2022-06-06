@@ -1,7 +1,10 @@
+import log from 'npmlog';
 import path from 'path';
 import loadJsonFile from 'load-json-file';
+import { promises as fsPromises, renameSync } from 'node:fs';
+import semver from 'semver';
 import writeJsonFile from 'write-json-file';
-import { Package } from '@lerna-lite/core';
+import { exec, execSync, Package } from '@lerna-lite/core';
 
 /**
  * From a folder path provided, try to load a `package-lock.json` file if it exists.
@@ -106,5 +109,82 @@ export function updateNpmLockFileVersion2(obj: any, pkgName: string, newVersion:
         }
       }
     }
+  }
+}
+
+/**
+ * Run `npm install --package-lock-only` or equivalent depending on the package manager defined in `npmClient`
+ * @param {'npm' | 'pnpm' | 'yarn'} npmClient
+ * @param {String} cwd
+ * @returns {Promise<string | undefined>} lockfile name if executed successfully
+ */
+export async function runInstallLockFileOnly(npmClient: 'npm' | 'pnpm' | 'yarn', cwd: string): Promise<string | undefined> {
+  let inputLockfileName = '';
+  let outputLockfileName: string | undefined;
+
+  switch (npmClient) {
+    case 'pnpm':
+      inputLockfileName = 'pnpm-lock.yaml';
+      if (await validateFileExists(path.join(cwd, inputLockfileName))) {
+        log.verbose(`lock`, `updating lock file via "pnpm install --lockfile-only"`);
+        await exec('pnpm', ['install', '--lockfile-only'], { cwd });
+        outputLockfileName = inputLockfileName;
+      }
+      break;
+    case 'yarn':
+      inputLockfileName = 'yarn.lock';
+      if (await validateFileExists(path.join(cwd, inputLockfileName))) {
+        log.verbose(`lock`, `updating lock file via "yarn install --mode update-lockfile"`);
+        await exec('yarn', ['install', '--mode', 'update-lockfile'], { cwd });
+        outputLockfileName = inputLockfileName;
+      }
+      break;
+    case 'npm':
+    default:
+      inputLockfileName = 'package-lock.json';
+      if (await validateFileExists(path.join(cwd, inputLockfileName))) {
+        const localNpmVersion = execSync('npm', ['--version']);
+        log.silly(`npm`, `current local npm version is "${localNpmVersion}"`);
+
+        // for npm version >=8.5.0 we can call "npm install --package-lock-only"
+        // when lower then we call "npm shrinkwrap --package-lock-only" and rename "npm-shrinkwrap.json" back to "package-lock.json"
+        if (semver.gte(localNpmVersion, '8.5.0')) {
+          log.verbose(`lock`, `updating lock file via "npm install --package-lock-only"`);
+          await exec('npm', ['install', '--package-lock-only'], { cwd });
+        } else {
+          // TODO: eventually remove in future and/or major release
+          // with npm, we need to do update the lock file in 2 steps
+          // 1. using shrinkwrap will delete current lock file and create new "npm-shrinkwrap.json" but will avoid npm retrieving package version info from registry
+          log.verbose(`lock`, `updating lock file via "npm shrinkwrap --package-lock-only".`);
+          log.warn(`npm`, `Your npm version is lower than 8.5.0, we recommend upgrading your npm client to avoid the use of "npm shrinkwrap" instead of the regular (better) "npm install --package-lock-only".`);
+          await exec('npm', ['shrinkwrap', '--package-lock-only'], { cwd });
+
+          // 2. rename "npm-shrinkwrap.json" back to "package-lock.json"
+          log.verbose(`lock`, `renaming "npm-shrinkwrap.json" file back to "package-lock.json"`);
+          renameSync('npm-shrinkwrap.json', 'package-lock.json');
+        }
+
+        outputLockfileName = inputLockfileName;
+      }
+      break;
+  }
+
+  if (!outputLockfileName) {
+    log.error('lock', `we could not sync or locate "${inputLockfileName}" from path ${cwd}`);
+  }
+  return outputLockfileName;
+}
+
+/**
+ * Simply validates if a file exists
+ * @param {String} filePath - file path
+ * @returns {Boolean}
+ */
+export async function validateFileExists(filePath: string) {
+  try {
+    await fsPromises.access(filePath);
+    return true;
+  } catch {
+    return false;
   }
 }

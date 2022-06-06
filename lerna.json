@@ -1,6 +1,6 @@
 {
   "version": "1.4.0",
-  "loglevel": "info",
+  "loglevel": "verbose",
   "npmClient": "npm",
   "useWorkspaces": true,
   "command": {
@@ -11,7 +11,7 @@
       "conventionalCommits": true,
       "createRelease": "github",
       "gitDryRun": false,
-      "noPrivate": true,
+      "syncWorkspaceLock": true,
       "message": "chore(release): publish new version %v",
       "changelogHeaderMessage": "### Automate your Workspace Versions, Changelogs & Publish with [Lerna-Lite](https://github.com/ghiscoding/lerna-lite) 🚀"
     },

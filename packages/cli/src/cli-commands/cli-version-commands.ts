@@ -180,6 +180,23 @@ exports.builder = (yargs, composed) => {
       requiresArg: true,
       defaultDescription: 'v',
     },
+    'no-manually-update-root-lockfile': {
+      describe: 'Do not manually update (read/write back to the lock file) the project root lock file.',
+      type: 'boolean',
+    },
+    'manually-update-root-lockfile': {
+      // proxy for --no-manually-update-root-lockfile
+      hidden: true,
+      type: 'boolean',
+    },
+    'no-sync-workspace-lock': {
+      describe: 'Do not run `npm install --package-lock-only` or equivalent depending on the package manager defined in `npmClient`.',
+      type: 'boolean',
+    },
+    'sync-workspace-lock': {
+      describe: 'Runs `npm install --package-lock-only` or equivalent depending on the package manager defined in `npmClient`.',
+      type: 'boolean',
+    },
     'workspace-strict-match': {
       describe: 'Strict match transform version numbers to an exact range (like "1.2.3") rather than with a caret (like ^1.2.3) when using `workspace:*`.',
       type: 'boolean',
