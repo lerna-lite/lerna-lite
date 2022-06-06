@@ -34,7 +34,8 @@
       ],
       "args": [
         "packages/cli/src/cli.ts",
-        "version"
+        "version",
+        "--git-dry-run"
       ],
       "cwd": "${workspaceRoot}",
       "console": "integratedTerminal",
@@ -57,7 +58,8 @@
       "args": [
         "packages/cli/src/cli.ts",
         "publish",
-        "from-package"
+        "from-package",
+        "--git-dry-run"
       ],
       "cwd": "${workspaceRoot}",
       "console": "integratedTerminal",

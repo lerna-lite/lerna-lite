@@ -3,7 +3,7 @@ import npmlog from 'npmlog';
 
 import { exec, execSync } from '../child-process';
 
-interface UncommittedConfig {
+export interface UncommittedConfig {
   cwd: string;
   log?: typeof npmlog;
 }
@@ -11,18 +11,11 @@ interface UncommittedConfig {
 const maybeColorize = (colorize: (color?: string) => string) => (s?: string) => (s !== ' ' ? colorize(s) : s);
 const cRed = maybeColorize(chalk.red);
 const cGreen = maybeColorize(chalk.green);
-
+const colorizeStats = (stats: string) => stats.replace(/^([^U]| )([A-Z]| )/gm, replaceStatus).replace(/^\?{2}|U{2}/gm, cRed('$&'));
 const replaceStatus = (_, maybeGreen?: string, maybeRed?: string) => `${cGreen(maybeGreen)}${cRed(maybeRed)}`;
-
-const colorizeStats = (stats: string) =>
-  stats.replace(/^([^U]| )([A-Z]| )/gm, replaceStatus).replace(/^\?{2}|U{2}/gm, cRed('$&'));
-
 const splitOnNewLine = (str: string) => str.split('\n');
-
 const filterEmpty = (lines: string[]) => lines.filter((line) => line.length);
-
 const o = (l: any, r: any) => (x) => l(r(x));
-
 const transformOutput = o(filterEmpty, o(splitOnNewLine, colorizeStats));
 
 /**

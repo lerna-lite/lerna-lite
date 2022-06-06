@@ -3,9 +3,11 @@ import columnify from 'columnify';
 import log from 'npmlog';
 import hasUnicode from 'has-unicode';
 
+import { Package } from '@lerna-lite/core';
 import { Tarball } from '../models';
 
-export function logPacked(tarball: Tarball) {
+export function logPacked(pkg: Package & { packed: Tarball; }, dryRun = false) {
+  const tarball = pkg.packed;
   log.notice('', '');
   log.notice('', `${hasUnicode() ? '📦 ' : 'package:'} ${tarball.name}@${tarball.version}`);
 
@@ -46,21 +48,9 @@ export function logPacked(tarball: Tarball) {
         tarball.unpackedSize && { name: 'unpacked size:', value: byteSize(tarball.unpackedSize) },
         tarball.shasum && { name: 'shasum:', value: tarball.shasum },
         tarball.integrity && { name: 'integrity:', value: elideIntegrity(tarball.integrity) },
-        tarball.bundled &&
-        tarball.bundled.length && {
-          name: 'bundled deps:',
-          value: tarball.bundled.length,
-        },
-        tarball.bundled &&
-        tarball.bundled.length && {
-          name: 'bundled files:',
-          value: tarball.entryCount - tarball.files.length,
-        },
-        tarball.bundled &&
-        tarball.bundled.length && {
-          name: 'own files:',
-          value: tarball.files.length,
-        },
+        tarball.bundled?.length && { name: 'bundled deps:', value: tarball.bundled.length, },
+        tarball.bundled?.length && { name: 'bundled files:', value: tarball.entryCount - tarball.files.length, },
+        tarball.bundled?.length && { name: 'own files:', value: tarball.files.length, },
         tarball.entryCount && { name: 'total files:', value: tarball.entryCount },
       ].filter((x) => x),
       {
@@ -69,6 +59,21 @@ export function logPacked(tarball: Tarball) {
       }
     )
   );
+
+  // in dry-run mode, show tarball temp location and dependencies, devDependencies
+  if (dryRun) {
+    log.notice('', '--- dry-run details ---');
+    log.notice('', `temp location: ${tarball.tarFilePath}`);
+    log.notice('', `package name: ${pkg.name}`);
+    if (pkg.dependencies) {
+      log.notice('dependencies:', '');
+      log.notice('', columnify(pkg.dependencies, { columnSplitter: ' | ', showHeaders: false }));
+    }
+    if (pkg.devDependencies) {
+      log.notice('devDependencies:', '');
+      log.notice('', columnify(pkg.devDependencies, { columnSplitter: ' | ', showHeaders: false }));
+    }
+  }
 
   // an empty line
   log.notice('', '');

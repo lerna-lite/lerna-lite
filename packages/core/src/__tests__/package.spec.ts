@@ -322,8 +322,8 @@ describe('Package', () => {
 
         const resolved: NpaResolveResult = npa.resolve("a", "^1.0.0", ".");
         resolved.explicitWorkspace = true;
-        resolved.type = undefined;
-        resolved.registry = undefined;
+        resolved.type = undefined as any;
+        resolved.registry = undefined as any;
         resolved.gitCommittish = '1.2.3';
         resolved.hosted = { committish: '', domain: 'localhost', noGitPlus: false, noCommittish: false, saveSpec: true } as any;
 
@@ -344,8 +344,8 @@ describe('Package', () => {
 
         const resolved: NpaResolveResult = npa.resolve("a", "^1.0.0", ".");
         resolved.explicitWorkspace = true;
-        resolved.type = undefined;
-        resolved.registry = undefined;
+        resolved.type = undefined as any;
+        resolved.registry = undefined as any;
         resolved.gitRange = '1.2.3';
         resolved.hosted = { committish: '', domain: 'localhost', noGitPlus: false, noCommittish: false, saveSpec: true } as any;
 
@@ -360,7 +360,7 @@ describe('Package', () => {
         const pkg = factory({
           dependencies: {
             a: "workspace:^1.0.0",
-            b: "workspace:^1.0.0",
+            b: "workspace:>=1.0.0",
             c: "workspace:./foo",
             d: "file:./foo",
             e: "^1.0.0",
@@ -375,8 +375,8 @@ describe('Package', () => {
         expect(pkg.toJSON()).toMatchInlineSnapshot(`
           Object {
             "dependencies": Object {
-              "a": "workspace:^2.0.0",
-              "b": "workspace:^1.0.0",
+              "a": "workspace:2.0.0",
+              "b": "workspace:>=1.0.0",
               "c": "workspace:./foo",
               "d": "file:./foo",
               "e": "^1.0.0",
@@ -451,6 +451,54 @@ describe('Package', () => {
           Object {
             "dependencies": Object {
               "a": "workspace:~",
+              "b": "workspace:^1.0.0",
+            },
+          }
+        `);
+      });
+
+      it("works with workspace fixed version input target `workspace:X.Y.Z` and will keep same output target", () => {
+        const pkg = factory({
+          dependencies: {
+            a: "workspace:1.0.0",
+            b: "workspace:^1.0.0",
+          },
+        });
+
+        const resolved: NpaResolveResult = npa.resolve("a", "^1.0.0", ".");
+        resolved.explicitWorkspace = true;
+        resolved.workspaceTarget = 'workspace:1.0.0';
+
+        pkg.updateLocalDependency(resolved, "2.0.0", "^");
+
+        expect(pkg.toJSON()).toMatchInlineSnapshot(`
+          Object {
+            "dependencies": Object {
+              "a": "workspace:2.0.0",
+              "b": "workspace:^1.0.0",
+            },
+          }
+        `);
+      });
+
+      it("works with operator symbols like >= and workspace input target `workspace:>=X.Y.Z` and will be bumped", () => {
+        const pkg = factory({
+          dependencies: {
+            a: "workspace:>=1.2.0",
+            b: "workspace:^1.0.0",
+          },
+        });
+
+        const resolved: NpaResolveResult = npa.resolve("a", "^1.0.0", ".");
+        resolved.explicitWorkspace = true;
+        resolved.workspaceTarget = 'workspace:>=1.2.0';
+
+        pkg.updateLocalDependency(resolved, "2.0.0", "^");
+
+        expect(pkg.toJSON()).toMatchInlineSnapshot(`
+          Object {
+            "dependencies": Object {
+              "a": "workspace:>=2.0.0",
               "b": "workspace:^1.0.0",
             },
           }

@@ -2,10 +2,11 @@ import fs from 'fs-extra';
 import path from 'path';
 import ssri from 'ssri';
 import tar from 'tar';
-
 import { Package } from '@lerna-lite/core';
 
-export function getPacked(pkg: Package, tarFilePath: string) {
+import { Tarball } from '../models';
+
+export function getPacked(pkg: Package, tarFilePath: string): Promise<Tarball> {
   const bundledWanted = new Set<string>(/* pkg.bundleDependencies || pkg.bundledDependencies || */[]);
   const bundled = new Set();
   const files: { path: string; size: string; mode: string; }[] = [];
@@ -63,6 +64,6 @@ export function getPacked(pkg: Package, tarFilePath: string) {
         entryCount: totalEntries,
         bundled: Array.from(bundled),
         tarFilePath,
-      };
+      } as Tarball;
     });
 }

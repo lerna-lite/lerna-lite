@@ -1,7 +1,7 @@
 
 import log from 'npmlog';
 
-import { DescribeRefOptions } from '../models';
+import { DescribeRefDetailedResult, DescribeRefFallbackResult, DescribeRefOptions } from '../models';
 import { exec, execSync } from '../child-process';
 
 /**
@@ -39,7 +39,7 @@ function getArgs(options: DescribeRefOptions, includeMergedTags?: boolean) {
  * @param {boolean} [includeMergedTags]
  * @returns {Promise<DescribeRefFallbackResult|DescribeRefDetailedResult>}
  */
-function describeRef(options: DescribeRefOptions = {}, includeMergedTags?: boolean, gitDryRun = false) {
+function describeRef(options: DescribeRefOptions = {}, includeMergedTags?: boolean, gitDryRun = false): Promise<DescribeRefFallbackResult | DescribeRefDetailedResult> {
   const promise = exec('git', getArgs(options, includeMergedTags), options, gitDryRun);
 
   return promise.then(({ stdout } = { stdout: '' }) => {
@@ -56,7 +56,7 @@ function describeRef(options: DescribeRefOptions = {}, includeMergedTags?: boole
  * @param {DescribeRefOptions} [options]
  * @param {boolean} [includeMergedTags]
  */
-function describeRefSync(options: any = {}, includeMergedTags, gitDryRun = false) {
+function describeRefSync(options: DescribeRefOptions = {}, includeMergedTags?: boolean, gitDryRun = false) {
   const stdout = execSync('git', getArgs(options, includeMergedTags), options, gitDryRun);
   const result = parse(stdout, options.cwd);
 
@@ -72,7 +72,7 @@ function describeRefSync(options: any = {}, includeMergedTags, gitDryRun = false
  * @param {string} [cwd] Defaults to `process.cwd()`
  * @returns {DescribeRefFallbackResult|DescribeRefDetailedResult}
  */
-function parse(stdout, cwd) {
+function parse(stdout: string, cwd?: string): DescribeRefFallbackResult | DescribeRefDetailedResult {
   const minimalShaRegex = /^([0-9a-f]{7,40})(-dirty)?$/;
   // when git describe fails to locate tags, it returns only the minimal sha
   if (minimalShaRegex.test(stdout)) {

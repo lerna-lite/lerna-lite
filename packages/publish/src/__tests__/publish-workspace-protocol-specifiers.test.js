@@ -91,7 +91,7 @@ describe("workspace protocol 'workspace:' specifiers", () => {
         "package-3": "^1.0.1", // workspace:~
       });
       expect(writePkg.updatedManifest("package-5").dependencies).toMatchObject({
-        // all fixed versions are bumped when major
+        // all fixed versions are bumped when patch
         "package-4": "^1.0.1", // workspace:^1.0.0
         "package-6": "^1.0.1", // workspace:^1.0.0
       });
@@ -129,7 +129,7 @@ describe("workspace protocol 'workspace:' specifiers", () => {
         "package-3": "^1.1.0", // workspace:~
       });
       expect(writePkg.updatedManifest("package-5").dependencies).toMatchObject({
-        // all fixed versions are bumped when major
+        // all fixed versions are bumped when minor
         "package-4": "^1.1.0", // workspace:^1.0.0
         "package-6": "^1.1.0", // workspace:^1.0.0
       });
@@ -169,9 +169,12 @@ describe("workspace protocol 'workspace:' specifiers", () => {
         "package-3": "~1.1.0", // workspace:~
       });
       expect(writePkg.updatedManifest("package-5").dependencies).toMatchObject({
-        // all fixed versions are bumped when major
+        // all fixed versions are bumped when minor
         "package-4": "^1.1.0", // workspace:^1.0.0
-        "package-6": "^1.1.0", // workspace:^1.0.0
+        "package-6": "~1.1.0", // workspace:~1.0.0
+      });
+      expect(writePkg.updatedManifest("package-6").dependencies).toMatchObject({
+        "package-1": ">=1.1.0", // workspace:>=1.0.0
       });
       // private packages do not need local version resolution
       expect(writePkg.updatedManifest("package-7").dependencies).toMatchObject({
@@ -209,7 +212,10 @@ describe("workspace protocol 'workspace:' specifiers", () => {
       expect(writePkg.updatedManifest("package-5").dependencies).toMatchObject({
         // all fixed versions are bumped when major
         "package-4": "^2.0.0", // workspace:^1.0.0
-        "package-6": "^2.0.0", // workspace:^1.0.0
+        "package-6": "~2.0.0", // workspace:~1.0.0
+      });
+      expect(writePkg.updatedManifest("package-6").dependencies).toMatchObject({
+        "package-1": ">=2.0.0", // workspace:>=1.0.0
       });
       // private packages do not need local version resolution
       expect(writePkg.updatedManifest("package-7").dependencies).toMatchObject({

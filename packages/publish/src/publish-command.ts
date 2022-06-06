@@ -3,7 +3,7 @@ import path from 'path';
 import crypto from 'crypto';
 import pMap from 'p-map';
 import pPipe from 'p-pipe';
-import semver, { ReleaseType } from 'semver';
+import semver from 'semver';
 
 import { VersionCommand } from '@lerna-lite/version';
 import {
@@ -387,7 +387,7 @@ export class PublishCommand extends Command<PublishCommandOption> {
       ).filter((node) => !node.pkg.private)
     );
 
-    const makeVersion = (fallback) => ({ lastVersion = fallback, refCount, sha }) => {
+    const makeVersion = (fallback: string) => ({ lastVersion = fallback, refCount, sha }) => {
       // the next version is bumped without concern for preid or current index
       const nextVersion = semver.inc(lastVersion.replace(this.tagPrefix, ''), release.replace('pre', '') as semver.ReleaseType);
 
@@ -723,7 +723,6 @@ export class PublishCommand extends Command<PublishCommandOption> {
     );
 
     chain = chain.then(() => this.topoMapPackages(mapper));
-
     chain = chain.then(() => removeTempLicenses(this.packagesToBeLicensed ?? []));
 
     // remove temporary license files if _any_ error occurs _anywhere_ in the promise chain
@@ -765,7 +764,7 @@ export class PublishCommand extends Command<PublishCommandOption> {
             tracker.success('published', pkg.name, pkg.version);
             tracker.completeWork(1);
 
-            logPacked(pkg.packed);
+            logPacked(pkg, this.options.gitDryRun);
 
             return pkg;
           });
@@ -796,10 +795,9 @@ export class PublishCommand extends Command<PublishCommandOption> {
 
     const opts = this.conf.snapshot;
     const getDistTag = (publishConfig) => {
-      if (opts.tag === 'latest' && publishConfig && publishConfig.tag) {
+      if (opts.tag === 'latest' && publishConfig?.tag) {
         return publishConfig.tag;
       }
-
       return opts.tag;
     };
     const mapper = (pkg: Package) => {
