@@ -278,7 +278,7 @@ export class Package {
       // when using explicit `workspace:` protocol
       if (resolved.explicitWorkspace) {
         const workspaceTarget = resolved?.workspaceTarget ?? '';
-        const [_, _wsTxt, operatorPrefix, rangePrefix] = workspaceTarget.match(/^(workspace:)?([\<\>\=]{0,2})?([*|^|~])?(.*)$/) as RegExpMatchArray;
+        const [_, _wsTxt, operatorPrefix, rangePrefix] = workspaceTarget.match(/^(workspace:)?([<>=]{0,2})?([*^~])?(.*)$/) as RegExpMatchArray;
 
         if (operatorPrefix) {
           // with workspace it might include an operator, if so use it like "workspace:>=1.2.3"
@@ -306,7 +306,7 @@ export class Package {
           // when versioning we'll only bump workspace protocol that have semver range like `workspace:^1.2.3`
           // any other workspace will remain the same in `package.json` file, for example `workspace:^`
           // keep target workspace or bump when it's a workspace semver range (like `workspace:^1.2.3`)
-          depCollection[depName] = /^workspace:[*|^|~]{1}$/.test(workspaceTarget)
+          depCollection[depName] = /^workspace:[*^~]{1}$/.test(workspaceTarget)
             ? resolved.workspaceTarget               // target like `workspace:^` => `workspace:^` (remains untouched in package.json)
             : `workspace:${depCollection[depName]}`; // range like `workspace:^1.2.3` => `workspace:^1.3.3` (bump minor example)
         }
