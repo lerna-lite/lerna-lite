@@ -15,6 +15,10 @@
       packageNames: ['tacks'],
       allowedVersions: '1.2.6',
     },
+    {
+      packageNames: ['node'],
+      allowedVersions: '14.13.1',
+    },
   ],
   schedule: ['on Friday', 'every weekend'],
   ignoreDeps: [
