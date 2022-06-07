@@ -46,7 +46,7 @@ import {
   updateClassicLockfileVersion,
   updateTempModernLockfileVersion,
   runInstallLockFileOnly,
-  saveUpdatedLockJsonFile
+  saveUpdatedLockJsonFile,
 } from './lib/update-lockfile-version';
 
 export function factory(argv: VersionCommandOption) {
@@ -81,8 +81,12 @@ export class VersionCommand extends Command<VersionCommandOption> {
   }
 
   get requiresGit(): boolean {
+    // prettier-ignore
     return (
-      this.commitAndTag || this.pushToRemote || this.options.allowBranch || this.options.conventionalCommits
+      this.commitAndTag ||
+      this.pushToRemote ||
+      this.options.allowBranch ||
+      this.options.conventionalCommits
     ) as boolean;
   }
 
@@ -115,7 +119,12 @@ export class VersionCommand extends Command<VersionCommandOption> {
     this.pushToRemote = gitTagVersion && amend !== true && push;
     // never automatically push to remote when amending a commit
 
-    this.releaseClient = (this.pushToRemote && this.options.createRelease && createReleaseClient(this.options.createRelease)) as ReleaseClient | undefined;
+    // prettier-ignore
+    this.releaseClient = (
+      this.pushToRemote &&
+      this.options.createRelease &&
+      createReleaseClient(this.options.createRelease)
+    ) as ReleaseClient | undefined;
     this.releaseNotes = [];
 
     if (this.releaseClient && this.options.conventionalCommits !== true) {
@@ -163,7 +172,10 @@ export class VersionCommand extends Command<VersionCommandOption> {
         );
       }
 
-      if (this.pushToRemote && !remoteBranchExists(this.gitRemote, this.currentBranch, this.execOpts, this.options.gitDryRun)) {
+      if (
+        this.pushToRemote &&
+        !remoteBranchExists(this.gitRemote, this.currentBranch, this.execOpts, this.options.gitDryRun)
+      ) {
         throw new ValidationError(
           'ENOREMOTEBRANCH',
           dedent`
@@ -284,9 +296,7 @@ export class VersionCommand extends Command<VersionCommandOption> {
 
     // don't execute recursively if run from a poorly-named script
     this.runRootLifecycle = /^(pre|post)?version$/.test(process.env.npm_lifecycle_event as string)
-      ? (stage) => {
-        this.logger.warn('lifecycle', 'Skipping root %j because it has already been called', stage);
-      }
+      ? (stage) => this.logger.warn('lifecycle', 'Skipping root %j because it has already been called', stage)
       : (stage) => this.runPackageLifecycle(this.project.manifest, stage);
 
     // amending a commit probably means the working tree is dirty
@@ -362,7 +372,8 @@ export class VersionCommand extends Command<VersionCommandOption> {
       predicate = makeGlobalVersionPredicate(repoVersion);
     } else if (increment && independentVersions) {
       // compute potential prerelease ID for each independent update
-      predicate = (node: { version: string; prereleaseId: string; }) => semver.inc(node.version, increment, resolvePrereleaseId(node.prereleaseId));
+      predicate = (node: { version: string; prereleaseId: string }) =>
+        semver.inc(node.version, increment, resolvePrereleaseId(node.prereleaseId));
     } else if (increment) {
       // compute potential prerelease ID once for all fixed updates
       const prereleaseId = prereleaseIdFromVersion(this.project.version);
@@ -384,7 +395,9 @@ export class VersionCommand extends Command<VersionCommandOption> {
       predicate = predicate(node).then(makeGlobalVersionPredicate);
     }
 
-    return Promise.resolve(predicate).then((getVersion: (s: PackageGraphNode) => string) => this.reduceVersions(getVersion));
+    return Promise.resolve(predicate).then((getVersion: (s: PackageGraphNode) => string) =>
+      this.reduceVersions(getVersion)
+    );
   }
 
   reduceVersions(getVersion: (s: PackageGraphNode) => string) {
@@ -468,7 +481,8 @@ export class VersionCommand extends Command<VersionCommandOption> {
     const prereleasePackageNames = this.getPrereleasePackageNames();
     const graduatePackageNames = Array.from(this.getPackagesForOption(conventionalGraduate));
     const shouldPrerelease = (name) => prereleasePackageNames?.includes(name);
-    const shouldGraduate = (name) => graduatePackageNames.includes('*') || graduatePackageNames.includes(name);
+    const shouldGraduate = (name) =>
+      graduatePackageNames.includes('*') || graduatePackageNames.includes(name);
     const getPrereleaseId = (node) => {
       if (!shouldGraduate(node.name) && (shouldPrerelease(node.name) || node.prereleaseId)) {
         return resolvePrereleaseId(node.prereleaseId);
@@ -479,13 +493,14 @@ export class VersionCommand extends Command<VersionCommandOption> {
       this.setGlobalVersionFloor();
     }
 
-    const versions: Map<string, string> = await this.reduceVersions((node) =>
-      recommendVersion(node, type, {
-        changelogPreset,
-        rootPath,
-        tagPrefix: this.tagPrefix,
-        prereleaseId: getPrereleaseId(node),
-      }) as any
+    const versions: Map<string, string> = await this.reduceVersions(
+      (node) =>
+        recommendVersion(node, type, {
+          changelogPreset,
+          rootPath,
+          tagPrefix: this.tagPrefix,
+          prereleaseId: getPrereleaseId(node),
+        }) as any
     );
 
     if (type === 'fixed') {
@@ -497,7 +512,9 @@ export class VersionCommand extends Command<VersionCommandOption> {
 
   confirmVersions(): Promise<boolean> | boolean {
     const changes = this.packagesToVersion.map((pkg) => {
-      let line = ` - ${pkg.name ?? '[n/a]'}: ${pkg.version} => ${chalk.cyan(this.updatesVersions?.get(pkg?.name ?? ''))}`;
+      let line = ` - ${pkg.name ?? '[n/a]'}: ${pkg.version} => ${chalk.cyan(
+        this.updatesVersions?.get(pkg?.name ?? '')
+      )}`;
       if (pkg.private) {
         line += ` (${chalk.red('private')})`;
       }
@@ -555,14 +572,17 @@ export class VersionCommand extends Command<VersionCommandOption> {
 
           if (depVersion && resolved.type !== 'directory') {
             // don't overwrite local file: specifiers, they only change during publish
-            pkg.updateLocalDependency(resolved, depVersion, this.savePrefix, this.options.workspaceStrictMatch, this.commandName);
+            pkg.updateLocalDependency(
+              resolved,
+              depVersion,
+              this.savePrefix,
+              this.options.workspaceStrictMatch,
+              this.commandName
+            );
           }
         }
 
-        return Promise.all([
-          updateClassicLockfileVersion(pkg),
-          pkg.serialize()
-        ]).then(([lockfilePath]) => {
+        return Promise.all([updateClassicLockfileVersion(pkg), pkg.serialize()]).then(([lockfilePath]) => {
           // commit the updated manifest
           changedFiles.add(pkg.manifestLocation);
 
@@ -616,40 +636,46 @@ export class VersionCommand extends Command<VersionCommandOption> {
 
     // update the project root npm lock file, we will read and write back to the lock file
     // this is currently the default update and if none of the flag are enabled (or all undefined) then we'll consider this as enabled
-    if (npmClient === 'npm' && (this.options.manuallyUpdateRootLockfile || (this.options.manuallyUpdateRootLockfile === undefined && !this.options.syncWorkspaceLock))) {
-      this.logger.warn('npm', 'we recommend using --sync-workspace-lock which will sync your lock file via your favorite npm client instead of relying on Lerna-Lite itself to update it.');
+    if (
+      npmClient === 'npm' &&
+      (this.options.manuallyUpdateRootLockfile ||
+        (this.options.manuallyUpdateRootLockfile === undefined && !this.options.syncWorkspaceLock))
+    ) {
+      this.logger.warn(
+        'npm',
+        'we recommend using --sync-workspace-lock which will sync your lock file via your favorite npm client instead of relying on Lerna-Lite itself to update it.'
+      );
 
       chain = chain.then(() =>
         // update modern lockfile (version 2 or higher) when exist in the project root
-        loadPackageLockFileWhenExists(rootPath)
-          .then(lockFileResponse => {
-            if (lockFileResponse && lockFileResponse.lockfileVersion >= 2) {
-              this.logger.verbose(`lock`, `start process loop of manually updating npm lock file`);
+        loadPackageLockFileWhenExists(rootPath).then((lockFileResponse) => {
+          if (lockFileResponse && lockFileResponse.lockfileVersion >= 2) {
+            this.logger.verbose(`lock`, `start process loop of manually updating npm lock file`);
 
-              for (const pkg of this.packagesToVersion) {
-                this.logger.verbose(`lock`, `updating root "package-lock-json" for package "${pkg.name}"`);
-                updateTempModernLockfileVersion(pkg, lockFileResponse.json);
-              }
-
-              // save the lockfile, only once, after all package versions were updated
-              return saveUpdatedLockJsonFile(lockFileResponse.path, lockFileResponse.json)
-                .then((lockfilePath) => {
-                  if (lockfilePath) {
-                    changedFiles.add(lockfilePath);
-                  }
-                });
+            for (const pkg of this.packagesToVersion) {
+              this.logger.verbose(`lock`, `updating root "package-lock-json" for package "${pkg.name}"`);
+              updateTempModernLockfileVersion(pkg, lockFileResponse.json);
             }
-          })
+
+            // save the lockfile, only once, after all package versions were updated
+            return saveUpdatedLockJsonFile(lockFileResponse.path, lockFileResponse.json).then(
+              (lockfilePath) => {
+                if (lockfilePath) {
+                  changedFiles.add(lockfilePath);
+                }
+              }
+            );
+          }
+        })
       );
     } else if (this.options.syncWorkspaceLock) {
       // update lock file, with npm client defined when `--package-lock-only` is enabled
       chain = chain.then(() =>
-        runInstallLockFileOnly(npmClient, this.project.manifest.location)
-          .then((lockfilePath) => {
-            if (lockfilePath) {
-              changedFiles.add(lockfilePath);
-            }
-          })
+        runInstallLockFileOnly(npmClient, this.project.manifest.location).then((lockfilePath) => {
+          if (lockfilePath) {
+            changedFiles.add(lockfilePath);
+          }
+        })
       );
     }
 
@@ -692,12 +718,13 @@ export class VersionCommand extends Command<VersionCommandOption> {
     }
 
     if (this.commitAndTag) {
-      chain = chain.then(() => gitAdd(Array.from(changedFiles), this.gitOpts, this.execOpts, this.options.gitDryRun));
+      chain = chain.then(() =>
+        gitAdd(Array.from(changedFiles), this.gitOpts, this.execOpts, this.options.gitDryRun)
+      );
     }
 
     return chain;
   }
-
 
   async commitAndTagUpdates() {
     if (this.project.isIndependent()) {

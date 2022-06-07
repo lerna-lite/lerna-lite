@@ -93,6 +93,7 @@ Running `lerna version --conventional-commits` without the above flags will rele
     - [`--no-granular-pathspec`](#--no-granular-pathspec)
     - [`--no-private`](#--no-private)
     - [`--no-push`](#--no-push)
+    - [`--no-manually-update-root-lockfile`](#--no-manually-update-root-lockfile)
     - [`--preid`](#--preid)
     - [`--signoff-git-commit`](#--signoff-git-commit) (new)
     - [`--sign-git-commit`](#--sign-git-commit)
@@ -429,6 +430,16 @@ Note that this option does _not_ exclude [private scoped packages](https://docs.
 
 By default, `lerna version` will push the committed and tagged changes to the configured [git remote](#--git-remote-name).
 Pass `--no-push` to disable this behavior.
+
+### `--no-manually-update-root-lockfile`
+
+When using pnpm or npm >= 7, the default config is to have Lerna-Lite update the npm `package-lock.json` directly and even though that does work, it came with some drawback and you can now disable this option via this flag
+
+```sh
+lerna version --no-manually-update-root-lockfile
+```
+
+A newer and better option is to this use instead the new flag [--sync-workspace-lock](#--sync-workspace-lock) which will to rely on your package manager client to do the workd (via `install lockfile-only`) which is a lot more reliable and requires a lot less code in Lerna-Lite itself.
 
 ### `--preid`
 

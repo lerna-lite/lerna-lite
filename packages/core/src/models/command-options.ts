@@ -149,6 +149,7 @@ export interface VersionCommandOption {
   amend?: boolean;
 
   /** conventional commit version bump type */
+  // prettier-ignore
   bump: 'major' | 'minor' | 'patch' | 'premajor' | 'preminor' | 'prepatch' | 'prerelease' | 'from-git' | 'from-package';
 
   /** Use conventional-changelog to determine version bump and generate CHANGELOG. */

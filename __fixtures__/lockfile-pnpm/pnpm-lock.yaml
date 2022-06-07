@@ -1,0 +1,40 @@
+lockfileVersion: 5.4
+
+importers:
+
+  .:
+    specifiers: {}
+
+  packages/package-1:
+    specifiers:
+      tiny-tarball: ^1.0.0
+    dependencies:
+      tiny-tarball: 1.0.0
+
+  packages/package-2:
+    specifiers:
+      '@my-workspace/package-1': workspace:^2.3.4
+    dependencies:
+      '@my-workspace/package-1': link:../package-1
+
+  packages/package-3:
+    specifiers:
+      '@my-workspace/package-1': workspace:^
+      '@my-workspace/package-2': workspace:*
+    dependencies:
+      '@my-workspace/package-1': link:../package-1
+      '@my-workspace/package-2': link:../package-2
+
+  packages/package-4:
+    specifiers:
+      '@my-workspace/package-1': workspace:2.3.4
+      '@my-workspace/package-2': workspace:~
+    dependencies:
+      '@my-workspace/package-1': link:../package-1
+      '@my-workspace/package-2': link:../package-2
+
+packages:
+
+  /tiny-tarball/1.0.0:
+    resolution: {integrity: sha1-u/EC1a5zr+LFUyleD7AiMCFvZbE=}
+    dev: false

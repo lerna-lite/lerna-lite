@@ -20,9 +20,9 @@ export async function loadPackageLockFileWhenExists<T = any>(lockFileFolderPath:
     return {
       path: lockFilePath,
       json: pkgLockFileObj,
-      lockfileVersion
+      lockfileVersion,
     };
-  } catch (error) { } // eslint-disable-line
+  } catch (error) {} // eslint-disable-line
 }
 
 /**
@@ -52,7 +52,7 @@ export async function updateClassicLockfileVersion(pkg: Package): Promise<string
       });
       return lockFilePath;
     }
-  } catch (error) { } // eslint-disable-line
+  } catch (error) {} // eslint-disable-line
 }
 
 /**
@@ -75,14 +75,17 @@ export function updateTempModernLockfileVersion(pkg: Package, projLockFileObj: a
  * @param {Object} updateLockFileObj
  * @returns Promise<String | undefined> - file path will be returned when it was found and updated
  */
-export async function saveUpdatedLockJsonFile(filePath: string, updateLockFileObj: any): Promise<string | undefined> {
+export async function saveUpdatedLockJsonFile(
+  filePath: string,
+  updateLockFileObj: any
+): Promise<string | undefined> {
   try {
     await writeJsonFile(filePath, updateLockFileObj, {
       detectIndent: true,
       indent: 2,
     });
     return filePath;
-  } catch (error) { } // eslint-disable-line
+  } catch (error) {} // eslint-disable-line
 }
 
 /**
@@ -118,7 +121,10 @@ export function updateNpmLockFileVersion2(obj: any, pkgName: string, newVersion:
  * @param {String} cwd
  * @returns {Promise<string | undefined>} lockfile name if executed successfully
  */
-export async function runInstallLockFileOnly(npmClient: 'npm' | 'pnpm' | 'yarn', cwd: string): Promise<string | undefined> {
+export async function runInstallLockFileOnly(
+  npmClient: 'npm' | 'pnpm' | 'yarn',
+  cwd: string
+): Promise<string | undefined> {
   let inputLockfileName = '';
   let outputLockfileName: string | undefined;
 
@@ -156,7 +162,10 @@ export async function runInstallLockFileOnly(npmClient: 'npm' | 'pnpm' | 'yarn',
           // with npm, we need to do update the lock file in 2 steps
           // 1. using shrinkwrap will delete current lock file and create new "npm-shrinkwrap.json" but will avoid npm retrieving package version info from registry
           log.verbose(`lock`, `updating lock file via "npm shrinkwrap --package-lock-only".`);
-          log.warn(`npm`, `Your npm version is lower than 8.5.0, we recommend upgrading your npm client to avoid the use of "npm shrinkwrap" instead of the regular (better) "npm install --package-lock-only".`);
+          log.warn(
+            `npm`,
+            `Your npm version is lower than 8.5.0, we recommend upgrading your npm client to avoid the use of "npm shrinkwrap" instead of the regular (better) "npm install --package-lock-only".`
+          );
           await exec('npm', ['shrinkwrap', '--package-lock-only'], { cwd });
 
           // 2. rename "npm-shrinkwrap.json" back to "package-lock.json"

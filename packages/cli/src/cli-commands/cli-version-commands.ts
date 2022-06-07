@@ -32,16 +32,18 @@ exports.builder = (yargs, composed) => {
       // type must remain ambiguous because it is overloaded (boolean _or_ string _or_ array)
     },
     'changelog-header-message': {
-      describe: 'Add a custom message at the top of your "changelog.md" which is located in the root of your project. This option only works when using --conventional-commits.',
+      describe:
+        'Add a custom message at the top of your "changelog.md" which is located in the root of your project. This option only works when using --conventional-commits.',
       group: 'Version Command Options:',
       requiresArg: true,
-      type: 'string'
+      type: 'string',
     },
     'changelog-version-message': {
-      describe: 'Add a custom message as a prefix to each new version in your "changelog.md" which is located in the root of your project. This option only works when using --conventional-commits.',
+      describe:
+        'Add a custom message as a prefix to each new version in your "changelog.md" which is located in the root of your project. This option only works when using --conventional-commits.',
       group: 'Version Command Options:',
       requiresArg: true,
-      type: 'string'
+      type: 'string',
     },
     'changelog-preset': {
       describe: 'Custom conventional-changelog preset.',
@@ -190,15 +192,18 @@ exports.builder = (yargs, composed) => {
       type: 'boolean',
     },
     'no-sync-workspace-lock': {
-      describe: 'Do not run `npm install --package-lock-only` or equivalent depending on the package manager defined in `npmClient`.',
+      describe:
+        'Do not run `npm install --package-lock-only` or equivalent depending on the package manager defined in `npmClient`.',
       type: 'boolean',
     },
     'sync-workspace-lock': {
-      describe: 'Runs `npm install --package-lock-only` or equivalent depending on the package manager defined in `npmClient`.',
+      describe:
+        'Runs `npm install --package-lock-only` or equivalent depending on the package manager defined in `npmClient`.',
       type: 'boolean',
     },
     'workspace-strict-match': {
-      describe: 'Strict match transform version numbers to an exact range (like "1.2.3") rather than with a caret (like ^1.2.3) when using `workspace:*`.',
+      describe:
+        'Strict match transform version numbers to an exact range (like "1.2.3") rather than with a caret (like ^1.2.3) when using `workspace:*`.',
       type: 'boolean',
     },
     y: {
@@ -319,7 +324,9 @@ exports.addBumpPositional = function addBumpPositional(yargs, additionalKeywords
   const semverKeywords = ['major', 'minor', 'patch', 'premajor', 'preminor', 'prepatch', 'prerelease'].concat(
     additionalKeywords
   );
-  const bumpOptionList = `'${semverKeywords.slice(0, -1).join(`', '`)}', or '${semverKeywords[semverKeywords.length - 1]}'.`;
+  const bumpOptionList = `'${semverKeywords.slice(0, -1).join(`', '`)}', or '${
+    semverKeywords[semverKeywords.length - 1]
+  }'.`;
 
   yargs.positional('bump', {
     describe: `Increment version(s) by explicit version _or_ semver keyword,\n${bumpOptionList}`,

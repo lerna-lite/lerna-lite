@@ -1,73 +1,80 @@
-"use strict";
+'use strict';
 
 jest.mock('@lerna-lite/core', () => ({
   ...jest.requireActual('@lerna-lite/core'), // return the other real methods, below we'll mock only 2 of the methods
 }));
 
-const path = require("path");
-const fs = require("fs-extra");
+const path = require('path');
+const fs = require('fs-extra');
 const core = require('@lerna-lite/core');
-const nodeFs = require("node:fs");
-const npmlog = require("npmlog");
+const nodeFs = require('node:fs');
+const npmlog = require('npmlog');
 
 // mocked or stubbed modules
-const loadJsonFile = require("load-json-file");
+const loadJsonFile = require('load-json-file');
 
 // helpers
 const { getPackages } = require('../../../core/src/project');
-const initFixture = require("@lerna-test/init-fixture")(__dirname);
+const initFixture = require('@lerna-test/init-fixture')(__dirname);
 
-const { loadPackageLockFileWhenExists, updateClassicLockfileVersion, updateTempModernLockfileVersion, saveUpdatedLockJsonFile, runInstallLockFileOnly, validateFileExists } = require("../lib/update-lockfile-version");
+const {
+  loadPackageLockFileWhenExists,
+  updateClassicLockfileVersion,
+  updateTempModernLockfileVersion,
+  saveUpdatedLockJsonFile,
+  runInstallLockFileOnly,
+  validateFileExists,
+} = require('../lib/update-lockfile-version');
 
 describe('npm classic lock file', () => {
-  test("updateLockfileVersion with lockfile v1", async () => {
-    const cwd = await initFixture("lockfile-leaf");
+  test('updateLockfileVersion with lockfile v1', async () => {
+    const cwd = await initFixture('lockfile-leaf');
     const [pkg] = await getPackages(cwd);
 
-    pkg.version = "2.0.0";
+    pkg.version = '2.0.0';
 
     const returnedLockfilePath = await updateClassicLockfileVersion(pkg);
 
-    expect(returnedLockfilePath).toBe(path.join(pkg.location, "package-lock.json"));
-    expect(Array.from(loadJsonFile.registry.keys())).toStrictEqual(["/packages/package-1"]);
-    expect(fs.readJSONSync(returnedLockfilePath)).toHaveProperty("version", "2.0.0");
+    expect(returnedLockfilePath).toBe(path.join(pkg.location, 'package-lock.json'));
+    expect(Array.from(loadJsonFile.registry.keys())).toStrictEqual(['/packages/package-1']);
+    expect(fs.readJSONSync(returnedLockfilePath)).toHaveProperty('version', '2.0.0');
   });
 
-  test("updateClassicLockfileVersion with lockfile v2", async () => {
-    const cwd = await initFixture("lockfile-leaf-v2");
+  test('updateClassicLockfileVersion with lockfile v2', async () => {
+    const cwd = await initFixture('lockfile-leaf-v2');
     const [pkg] = await getPackages(cwd);
 
-    pkg.version = "2.0.0";
+    pkg.version = '2.0.0';
 
     const returnedLockfilePath = await updateClassicLockfileVersion(pkg);
 
-    expect(returnedLockfilePath).toBe(path.join(pkg.location, "package-lock.json"));
-    expect(Array.from(loadJsonFile.registry.keys())).toStrictEqual(["/packages/package-1"]);
+    expect(returnedLockfilePath).toBe(path.join(pkg.location, 'package-lock.json'));
+    expect(Array.from(loadJsonFile.registry.keys())).toStrictEqual(['/packages/package-1']);
     const updatedLockfile = fs.readJSONSync(returnedLockfilePath);
-    expect(updatedLockfile).toHaveProperty("version", "2.0.0");
-    expect(updatedLockfile).toHaveProperty(["packages", "", "version"], "2.0.0");
+    expect(updatedLockfile).toHaveProperty('version', '2.0.0');
+    expect(updatedLockfile).toHaveProperty(['packages', '', 'version'], '2.0.0');
   });
 
-  test("updateClassicLockfileVersion without sibling lockfile", async () => {
-    const cwd = await initFixture("lifecycle", false);
+  test('updateClassicLockfileVersion without sibling lockfile', async () => {
+    const cwd = await initFixture('lifecycle', false);
     const [pkg] = await getPackages(cwd);
 
-    pkg.version = "1.1.0";
+    pkg.version = '1.1.0';
 
-    loadJsonFile.mockImplementationOnce(() => Promise.reject(new Error("file not found")));
+    loadJsonFile.mockImplementationOnce(() => Promise.reject(new Error('file not found')));
 
     const returnedLockfilePath = await updateClassicLockfileVersion(pkg);
 
     expect(returnedLockfilePath).toBeUndefined();
-    expect(fs.pathExistsSync(path.join(pkg.location, "package-lock.json"))).toBe(false);
+    expect(fs.pathExistsSync(path.join(pkg.location, 'package-lock.json'))).toBe(false);
   });
 });
 
 describe('npm modern lock file', () => {
-  test("updateModernLockfileVersion v2 in project root", async () => {
-    const mockVersion = "2.4.0";
-    const cwd = await initFixture("lockfile-version2");
-    const rootLockFilePath = path.join(cwd, "package-lock.json");
+  test('updateModernLockfileVersion v2 in project root', async () => {
+    const mockVersion = '2.4.0';
+    const cwd = await initFixture('lockfile-version2');
+    const rootLockFilePath = path.join(cwd, 'package-lock.json');
     const packages = await getPackages(cwd);
 
     const lockFileOutput = await loadPackageLockFileWhenExists(cwd);
@@ -79,7 +86,11 @@ describe('npm modern lock file', () => {
       await saveUpdatedLockJsonFile(lockFileOutput.path, lockFileOutput.json);
     }
 
-    expect(Array.from(loadJsonFile.registry.keys())).toStrictEqual(["/packages/package-1", "/packages/package-2", "/"]);
+    expect(Array.from(loadJsonFile.registry.keys())).toStrictEqual([
+      '/packages/package-1',
+      '/packages/package-2',
+      '/',
+    ]);
     expect(fs.readJSONSync(rootLockFilePath)).toMatchSnapshot();
   });
 });
@@ -136,7 +147,10 @@ describe('run install lockfile-only', () => {
 
       const lockFileOutput = await runInstallLockFileOnly('pnpm', cwd);
 
-      expect(logSpy).toHaveBeenCalledWith('lock', expect.stringContaining('we could not sync or locate "pnpm-lock.yaml" from path'));
+      expect(logSpy).toHaveBeenCalledWith(
+        'lock',
+        expect.stringContaining('we could not sync or locate "pnpm-lock.yaml" from path')
+      );
       expect(lockFileOutput).toBe(undefined);
     });
 

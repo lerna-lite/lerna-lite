@@ -9,6 +9,7 @@ function npmConf(opts: any) {
   const conf = new Conf(Object.assign({}, defaults.defaults));
 
   // prevent keys with undefined values from obscuring defaults
+  // prettier-ignore
   const cleanOpts = opts
     ? Object.keys(opts).reduce((acc, key) => {
       if (opts[key] !== undefined) {
@@ -58,8 +59,4 @@ function npmConf(opts: any) {
 
 module.exports.defaults = Object.assign({}, defaults.defaults);
 
-export {
-  Conf,
-  npmConf,
-  toNerfDart,
-};
+export { Conf, npmConf, toNerfDart };
