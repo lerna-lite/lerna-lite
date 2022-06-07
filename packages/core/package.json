@@ -31,7 +31,7 @@
     "npm": ">=8.12.1"
   },
   "dependencies": {
-    "@npmcli/run-script": "^3.0.3",
+    "@npmcli/run-script": "^4.0.0",
     "@octokit/plugin-enterprise-rest": "^6.0.1",
     "@octokit/rest": "^18.12.0",
     "async": "^3.2.4",
