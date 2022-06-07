@@ -11,7 +11,7 @@
       enabled: false,
     },
   ],
-  shedule: ['on Friday', 'every weekend'],
+  // shedule: ['on Friday', 'every weekend'],
   ignoreDeps: [
     // ESM Only => https://gist.github.com/sindresorhus/a39789f98801d908bbc7ff3ecc99d99c#how-can-i-move-my-commonjs-project-to-esm
     'byte-size',
