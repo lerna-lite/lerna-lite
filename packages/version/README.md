@@ -433,10 +433,6 @@ Pass `--no-push` to disable this behavior.
 
 ### `--no-manually-update-root-lockfile`
 
-```sh
-lerna version --no-manually-update-root-lockfile
-```
-
 When using pnpm or npm >= 7, the default config is to have Lerna-Lite update the npm `package-lock.json` directly and even though that does work, it came with some drawback and you can now disable this option via this flag
 
 ```sh
