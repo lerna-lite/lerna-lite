@@ -188,7 +188,7 @@ index SHA..SHA 100644
 `;
 
 exports[`VersionCommand independent mode versions changed packages: commit 1`] = `
-"Publish
+"chore: Publish new release
 
  - package-1@1.0.1
  - package-2@2.1.0
@@ -528,7 +528,7 @@ index SHA..SHA 100644
 +    \\"package-4\\": \\"^2.0.0\\""
 `;
 
-exports[`VersionCommand with npm lockfile version 2 should have updated npm project root lockfile version 2 for every necessary properties 1`] = `
+exports[`VersionCommand with root lockfile on npm lockfile version >=2 should update project root lockfile version 2 for every necessary properties by writing directly to the file 1`] = `
 Object {
   "dependencies": Object {
     "@my-workspace/package-1": Object {
@@ -583,170 +583,5 @@ Object {
     },
   },
   "requires": true,
-}
-`;
-
-exports[`VersionCommand with pnpm lockfile should not update pnpm project root lockfile (untouched) when "--no-update-root-lock-file" is provided 1`] = `
-Object {
-  "importers": Object {
-    ".": Object {
-      "specifiers": Object {},
-    },
-    "packages/package-1": Object {
-      "dependencies": Object {
-        "tiny-tarball": "1.0.0",
-      },
-      "specifiers": Object {
-        "tiny-tarball": "^1.0.0",
-      },
-    },
-    "packages/package-2": Object {
-      "dependencies": Object {
-        "@my-workspace/package-1": "link:../package-1",
-      },
-      "specifiers": Object {
-        "@my-workspace/package-1": "workspace:^2.3.4",
-      },
-    },
-    "packages/package-3": Object {
-      "dependencies": Object {
-        "@my-workspace/package-1": "link:../package-1",
-        "@my-workspace/package-2": "link:../package-2",
-      },
-      "specifiers": Object {
-        "@my-workspace/package-1": "workspace:^",
-        "@my-workspace/package-2": "workspace:*",
-      },
-    },
-    "packages/package-4": Object {
-      "dependencies": Object {
-        "@my-workspace/package-1": "link:../package-1",
-        "@my-workspace/package-2": "link:../package-2",
-      },
-      "specifiers": Object {
-        "@my-workspace/package-1": "workspace:2.3.4",
-        "@my-workspace/package-2": "workspace:~",
-      },
-    },
-  },
-  "lockfileVersion": 5.4,
-  "packages": Object {
-    "/tiny-tarball/1.0.0": Object {
-      "dev": false,
-      "resolution": Object {
-        "integrity": "sha1-u/EC1a5zr+LFUyleD7AiMCFvZbE=",
-      },
-    },
-  },
-}
-`;
-
-exports[`VersionCommand with pnpm lockfile should update pnpm project root lockfile to next major version on every necessary properties 1`] = `
-Object {
-  "importers": Object {
-    ".": Object {
-      "specifiers": Object {},
-    },
-    "packages/package-1": Object {
-      "dependencies": Object {
-        "tiny-tarball": "1.0.0",
-      },
-      "specifiers": Object {
-        "tiny-tarball": "^1.0.0",
-      },
-    },
-    "packages/package-2": Object {
-      "dependencies": Object {
-        "@my-workspace/package-1": "link:../package-1",
-      },
-      "specifiers": Object {
-        "@my-workspace/package-1": "workspace:^3.0.0",
-      },
-    },
-    "packages/package-3": Object {
-      "dependencies": Object {
-        "@my-workspace/package-1": "link:../package-1",
-        "@my-workspace/package-2": "link:../package-2",
-      },
-      "specifiers": Object {
-        "@my-workspace/package-1": "workspace:^",
-        "@my-workspace/package-2": "workspace:*",
-      },
-    },
-    "packages/package-4": Object {
-      "dependencies": Object {
-        "@my-workspace/package-1": "link:../package-1",
-        "@my-workspace/package-2": "link:../package-2",
-      },
-      "specifiers": Object {
-        "@my-workspace/package-1": "workspace:3.0.0",
-        "@my-workspace/package-2": "workspace:~",
-      },
-    },
-  },
-  "lockfileVersion": 5.4,
-  "packages": Object {
-    "/tiny-tarball/1.0.0": Object {
-      "dev": false,
-      "resolution": Object {
-        "integrity": "sha1-u/EC1a5zr+LFUyleD7AiMCFvZbE=",
-      },
-    },
-  },
-}
-`;
-
-exports[`VersionCommand with pnpm lockfile should update pnpm project root lockfile to next minor version on every necessary properties 1`] = `
-Object {
-  "importers": Object {
-    ".": Object {
-      "specifiers": Object {},
-    },
-    "packages/package-1": Object {
-      "dependencies": Object {
-        "tiny-tarball": "1.0.0",
-      },
-      "specifiers": Object {
-        "tiny-tarball": "^1.0.0",
-      },
-    },
-    "packages/package-2": Object {
-      "dependencies": Object {
-        "@my-workspace/package-1": "link:../package-1",
-      },
-      "specifiers": Object {
-        "@my-workspace/package-1": "workspace:^2.4.0",
-      },
-    },
-    "packages/package-3": Object {
-      "dependencies": Object {
-        "@my-workspace/package-1": "link:../package-1",
-        "@my-workspace/package-2": "link:../package-2",
-      },
-      "specifiers": Object {
-        "@my-workspace/package-1": "workspace:^",
-        "@my-workspace/package-2": "workspace:*",
-      },
-    },
-    "packages/package-4": Object {
-      "dependencies": Object {
-        "@my-workspace/package-1": "link:../package-1",
-        "@my-workspace/package-2": "link:../package-2",
-      },
-      "specifiers": Object {
-        "@my-workspace/package-1": "workspace:2.4.0",
-        "@my-workspace/package-2": "workspace:~",
-      },
-    },
-  },
-  "lockfileVersion": 5.4,
-  "packages": Object {
-    "/tiny-tarball/1.0.0": Object {
-      "dev": false,
-      "resolution": Object {
-        "integrity": "sha1-u/EC1a5zr+LFUyleD7AiMCFvZbE=",
-      },
-    },
-  },
 }
 `;

@@ -46,6 +46,29 @@ export interface InitCommandOption {
   useWorkspaces?: boolean;
 }
 
+export interface ListCommandOption {
+  /** Show private packages that are hidden by default. */
+  all?: boolean;
+
+  /** Show dependency graph as a JSON-formatted [adjacency list](https://en.wikipedia.org/wiki/Adjacency_list). */
+  graph?: boolean;
+
+  /** Show information as a JSON array. */
+  json?: boolean;
+
+  /** Show extended information. */
+  long?: boolean;
+
+  /** Show information as [newline-delimited JSON](http://ndjson.org/). */
+  ndjson?: boolean;
+
+  /** Show parseable output instead of columnified view. */
+  parseable?: boolean;
+
+  /** Sort packages in topological order (dependencies before dependents) instead of lexical by directory. */
+  toposort?: boolean;
+}
+
 export interface PublishCommandOption extends VersionCommandOption {
   /** alias to '--canary' */
   c?: boolean;
@@ -237,11 +260,14 @@ export interface VersionCommandOption {
   /** Defaults to 'v', customize the tag prefix. To remove entirely, pass an empty string. */
   tagVersionPrefix?: string;
 
-  /** Do not update the project root lock file. */
-  noUpdateRootLockFile?: boolean;
+  /** Do not manually update (read/write back to the lock file) the project root lock file. */
+  noManuallyUpdateRootLockfile?: boolean;
 
-  /** Defaults to true when found, update the project root lock file. */
-  updateRootLockFile?: boolean;
+  /** Defaults to true when found, update the project root lock file, the lib will internally read/write back to the lock file. */
+  manuallyUpdateRootLockfile?: boolean;
+
+  /** Runs `npm install --package-lock-only` or equivalent depending on the package manager defined in `npmClient` */
+  syncWorkspaceLock?: boolean;
 
   /** Strict match transform version numbers to an exact range (like "1.2.3") rather than with a caret (like ^1.2.3) when using `workspace:*`. */
   workspaceStrictMatch?: boolean;
@@ -289,4 +315,7 @@ export interface RunCommandOption {
 
   /** npm script to run by the command */
   script: string;
+
+  /** Enables integration with [Nx](https://nx.dev) */
+  useNx?: boolean;
 }

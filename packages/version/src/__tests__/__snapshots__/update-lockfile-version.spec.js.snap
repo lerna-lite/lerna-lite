@@ -1,6 +1,6 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`npm modern lock file call updateNpmLockFileVersion2 for npm lock file in project root 1`] = `
+exports[`npm modern lock file updateModernLockfileVersion v2 in project root 1`] = `
 Object {
   "dependencies": Object {
     "@my-workspace/package-1": Object {
@@ -56,41 +56,4 @@ Object {
   },
   "requires": true,
 }
-`;
-
-exports[`pnpm lock file call updatePnpmLockFile for pnpm lock file in project root 1`] = `
-"lockfileVersion: 5.4
-importers:
-  .:
-    specifiers: {}
-  packages/package-1:
-    specifiers:
-      tiny-tarball: ^1.0.0
-    dependencies:
-      tiny-tarball: 1.0.0
-  packages/package-2:
-    specifiers:
-      '@my-workspace/package-1': workspace:^2.5.0
-    dependencies:
-      '@my-workspace/package-1': link:../package-1
-  packages/package-3:
-    specifiers:
-      '@my-workspace/package-1': workspace:^
-      '@my-workspace/package-2': workspace:*
-    dependencies:
-      '@my-workspace/package-1': link:../package-1
-      '@my-workspace/package-2': link:../package-2
-  packages/package-4:
-    specifiers:
-      '@my-workspace/package-1': workspace:2.5.0
-      '@my-workspace/package-2': workspace:~
-    dependencies:
-      '@my-workspace/package-1': link:../package-1
-      '@my-workspace/package-2': link:../package-2
-packages:
-  /tiny-tarball/1.0.0:
-    resolution:
-      integrity: sha1-u/EC1a5zr+LFUyleD7AiMCFvZbE=
-    dev: false
-"
 `;

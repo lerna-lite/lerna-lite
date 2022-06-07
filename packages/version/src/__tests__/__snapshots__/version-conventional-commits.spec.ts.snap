@@ -39,7 +39,7 @@ packages/package-5/package.json"
 `;
 
 exports[`--conventional-commits independent should graduate prerelease version bumps and generate CHANGELOG 1`] = `
-"Publish
+"chore: Publish new release
 
  - package-1@1.0.1
  - package-2@2.1.0
@@ -62,7 +62,7 @@ packages/package-5/package.json"
 `;
 
 exports[`--conventional-commits independent should guess prerelease version bumps and generate CHANGELOG 1`] = `
-"Publish
+"chore: Publish new release
 
  - package-1@1.0.1-alpha.0
  - package-2@2.1.0-alpha.0
@@ -85,7 +85,7 @@ packages/package-5/package.json"
 `;
 
 exports[`--conventional-commits independent should use conventional-commits utility to guess version bump and generate CHANGELOG 1`] = `
-"Publish
+"chore: Publish new release
 
  - package-1@1.0.1
  - package-2@2.1.0

@@ -1,9 +1,9 @@
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
-[![TypeScript](https://img.shields.io/badge/%3C%2F%3E-TypeScript-%230074c1.svg)](http://www.typescriptlang.org/)
 [![npm](https://img.shields.io/npm/dy/@lerna-lite/run?color=forest)](https://www.npmjs.com/package/@lerna-lite/run)
 [![npm](https://img.shields.io/npm/v/@lerna-lite/run.svg?logo=npm&logoColor=fff&label=npm&color=limegreen)](https://www.npmjs.com/package/@lerna-lite/run)
 
 # @lerna-lite/run
+
 ## (`lerna run`) - Run command [optional] 🏃
 
 **Optional package** extracted from Lerna [run command](https://github.com/lerna/lerna/tree/main/commands/run) that will give us the ability to run [npm script](https://docs.npmjs.com/misc/scripts) in each package of the workspace that contains that script.
@@ -13,6 +13,7 @@ This package was added mainly because NPM Workspaces don't yet support running N
 ---
 
 ## Installation
+
 ```sh
 npm install @lerna-lite/run -D -W
 
@@ -61,6 +62,8 @@ $ lerna run --scope my-component test
     - [`--no-prefix`](#--no-prefix)
     - [`--profile`](#--profile)
     - [`--profile-location <location>`](#--profile-location-location)
+  - Features
+    - [`useNx` (experimental)](#usenx-experimental)
 
 ### `--npm-client <client>`
 
@@ -150,4 +153,27 @@ You can provide a custom location for the performance profile output. The path p
 
 ```sh
 $ lerna run build --profile --profile-location=logs/profile/
+```
+
+### `useNx` (experimental)
+
+Enables integration with [Nx](https://nx.dev). Setting `"useNx": true` in `lerna.json` will tell Lerna to delegate
+running tasks to Nx instead of using `p-map` and `p-queue`. This only works if Nx is installed and `nx.json` is present.
+vsavkin marked this conversation as resolved.
+Show resolved
+
+Example of `nx.json`:
+
+```json
+{
+  "extends": "nx/presets/npm.json",
+  "tasksRunnerOptions": {
+    "default": {
+      "runner": "nx/tasks-runners/default",
+      "options": {
+        "cacheableOperations": ["build"]
+      }
+    }
+  }
+}
 ```

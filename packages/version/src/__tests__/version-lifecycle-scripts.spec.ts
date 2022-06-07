@@ -46,7 +46,7 @@ describe("lifecycle scripts", () => {
   it("calls version lifecycle scripts for root and packages", async () => {
     const cwd = await initFixture("lifecycle");
 
-    await new VersionCommand(createArgv(cwd));
+    await new VersionCommand(createArgv(cwd, "--manually-update-root-lockfile"));
 
     expect(runLifecycle).toHaveBeenCalledTimes(6);
 

@@ -32,15 +32,15 @@ exports.builder = (yargs, composed) => {
       // type must remain ambiguous because it is overloaded (boolean _or_ string _or_ array)
     },
     'changelog-header-message': {
-      // prettier-ignore
-      describe: 'Add a custom message at the top of your "changelog.md" which is located in the root of your project. This option only works when using --conventional-commits.',
+      describe:
+        'Add a custom message at the top of your "changelog.md" which is located in the root of your project. This option only works when using --conventional-commits.',
       group: 'Version Command Options:',
       requiresArg: true,
       type: 'string',
     },
     'changelog-version-message': {
-      // prettier-ignore
-      describe: 'Add a custom message as a prefix to each new version in your "changelog.md" which is located in the root of your project. This option only works when using --conventional-commits.',
+      describe:
+        'Add a custom message as a prefix to each new version in your "changelog.md" which is located in the root of your project. This option only works when using --conventional-commits.',
       group: 'Version Command Options:',
       requiresArg: true,
       type: 'string',
@@ -182,18 +182,28 @@ exports.builder = (yargs, composed) => {
       requiresArg: true,
       defaultDescription: 'v',
     },
-    'no-update-root-lock-file': {
-      describe: 'Do not update the project root lock file.',
+    'no-manually-update-root-lockfile': {
+      describe: 'Do not manually update (read/write back to the lock file) the project root lock file.',
       type: 'boolean',
     },
-    'update-root-lock-file': {
-      // proxy for --no-update-root-lock-file
+    'manually-update-root-lockfile': {
+      // proxy for --no-manually-update-root-lockfile
       hidden: true,
       type: 'boolean',
     },
+    'no-sync-workspace-lock': {
+      describe:
+        'Do not run `npm install --package-lock-only` or equivalent depending on the package manager defined in `npmClient`.',
+      type: 'boolean',
+    },
+    'sync-workspace-lock': {
+      describe:
+        'Runs `npm install --package-lock-only` or equivalent depending on the package manager defined in `npmClient`.',
+      type: 'boolean',
+    },
     'workspace-strict-match': {
-      // prettier-ignore
-      describe: 'Strict match transform version numbers to an exact range (like "1.2.3") rather than with a caret (like ^1.2.3) when using `workspace:*`.',
+      describe:
+        'Strict match transform version numbers to an exact range (like "1.2.3") rather than with a caret (like ^1.2.3) when using `workspace:*`.',
       type: 'boolean',
     },
     y: {
@@ -314,8 +324,9 @@ exports.addBumpPositional = function addBumpPositional(yargs, additionalKeywords
   const semverKeywords = ['major', 'minor', 'patch', 'premajor', 'preminor', 'prepatch', 'prerelease'].concat(
     additionalKeywords
   );
-  // prettier-ignore
-  const bumpOptionList = `'${semverKeywords.slice(0, -1).join(`', '`)}', or '${semverKeywords[semverKeywords.length - 1]}'.`;
+  const bumpOptionList = `'${semverKeywords.slice(0, -1).join(`', '`)}', or '${
+    semverKeywords[semverKeywords.length - 1]
+  }'.`;
 
   yargs.positional('bump', {
     describe: `Increment version(s) by explicit version _or_ semver keyword,\n${bumpOptionList}`,

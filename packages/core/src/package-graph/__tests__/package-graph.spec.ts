@@ -137,6 +137,8 @@ describe("PackageGraph", () => {
             dependencies: {
               "pkg-1": "workspace:^",
               "pkg-2": "workspace:~",
+              "pkg-3": "workspace:^1.0.0",
+              "pkg-4": "workspace:>=1.0.0",
             },
           },
           "/test/pkg-5"
@@ -156,6 +158,8 @@ describe("PackageGraph", () => {
       expect(pkg5.localDependencies.has('pkg-2')).toBe(true);
       expect(pkg5.localDependencies.get('pkg-1').workspaceTarget).toBe('workspace:^');
       expect(pkg5.localDependencies.get('pkg-2').workspaceTarget).toBe('workspace:~');
+      expect(pkg5.localDependencies.get('pkg-3').workspaceTarget).toBe('workspace:^1.0.0');
+      expect(pkg5.localDependencies.get('pkg-4').workspaceTarget).toBe('workspace:>=1.0.0');
     });
   });
 

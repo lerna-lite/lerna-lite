@@ -2,10 +2,11 @@ import path from 'path';
 import packlist from 'npm-packlist';
 import log from 'npmlog';
 import tar from 'tar';
-import tempWrite from 'temp-write';
 
-import { Package, PackConfig, runLifecycle } from '@lerna-lite/core';
+import { Package, PackConfig, runLifecycle, tempWrite } from '@lerna-lite/core';
 import { getPacked } from './get-packed';
+import { Readable } from 'stream';
+import { Tarball } from '../models';
 
 /**
  * Pack a directory suitable for publishing, writing tarball to a tempfile.
@@ -57,9 +58,9 @@ export function packDirectory(_pkg: Package, dir: string, options: PackConfig) {
       files.map((f) => `./${f}`)
     )
   );
-  chain = chain.then((stream) => tempWrite(stream, getTarballName(pkg)));
+  chain = chain.then((stream: DataView & Readable) => tempWrite(stream, getTarballName(pkg)));
   chain = chain.then((tarFilePath) =>
-    getPacked(pkg, tarFilePath).then((packed) =>
+    getPacked(pkg, tarFilePath).then((packed: Tarball) =>
       Promise.resolve()
         .then(() => runLifecycle(pkg, 'postpack', opts))
         .then(() => packed)

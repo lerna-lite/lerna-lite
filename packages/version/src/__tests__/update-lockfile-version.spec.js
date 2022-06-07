@@ -1,8 +1,14 @@
 'use strict';
 
+jest.mock('@lerna-lite/core', () => ({
+  ...jest.requireActual('@lerna-lite/core'), // return the other real methods, below we'll mock only 2 of the methods
+}));
+
 const path = require('path');
 const fs = require('fs-extra');
-const yaml = require('js-yaml');
+const core = require('@lerna-lite/core');
+const nodeFs = require('node:fs');
+const npmlog = require('npmlog');
 
 // mocked or stubbed modules
 const loadJsonFile = require('load-json-file');
@@ -12,10 +18,12 @@ const { getPackages } = require('../../../core/src/project');
 const initFixture = require('@lerna-test/init-fixture')(__dirname);
 
 const {
+  loadPackageLockFileWhenExists,
   updateClassicLockfileVersion,
   updateTempModernLockfileVersion,
-  loadLockfile,
-  saveLockfile,
+  saveUpdatedLockJsonFile,
+  runInstallLockFileOnly,
+  validateFileExists,
 } = require('../lib/update-lockfile-version');
 
 describe('npm classic lock file', () => {
@@ -63,22 +71,21 @@ describe('npm classic lock file', () => {
 });
 
 describe('npm modern lock file', () => {
-  test('call updateNpmLockFileVersion2 for npm lock file in project root', async () => {
+  test('updateModernLockfileVersion v2 in project root', async () => {
     const mockVersion = '2.4.0';
     const cwd = await initFixture('lockfile-version2');
     const rootLockFilePath = path.join(cwd, 'package-lock.json');
     const packages = await getPackages(cwd);
 
-    const lockFileOutput = await loadLockfile(cwd);
+    const lockFileOutput = await loadPackageLockFileWhenExists(cwd);
     if (lockFileOutput.json) {
       for (const pkg of packages) {
         pkg.version = mockVersion;
-        await updateTempModernLockfileVersion(pkg, lockFileOutput);
+        await updateTempModernLockfileVersion(pkg, lockFileOutput.json);
       }
-      await saveLockfile(lockFileOutput);
+      await saveUpdatedLockJsonFile(lockFileOutput.path, lockFileOutput.json);
     }
 
-    expect(lockFileOutput.packageManager).toBe('npm');
     expect(Array.from(loadJsonFile.registry.keys())).toStrictEqual([
       '/packages/package-1',
       '/packages/package-2',
@@ -88,37 +95,91 @@ describe('npm modern lock file', () => {
   });
 });
 
-describe('pnpm lock file', () => {
-  test('call updatePnpmLockFile for pnpm lock file in project root', async () => {
-    const mockVersion = '2.5.0';
-    const cwd = await initFixture('lockfile-pnpm');
-    const packages = await getPackages(cwd);
+describe('validateFileExists() method', () => {
+  it(`should return true when file exist`, async () => {
+    const cwd = await initFixture('lockfile-version2');
+    const exists = await validateFileExists(path.join(cwd, 'package-lock.json'));
 
-    // loading lock file should work with/without providing npm client type (2nd arg)
-    let lockFileOutput = await loadLockfile(cwd);
-    expect(lockFileOutput).not.toBeUndefined();
-    expect(lockFileOutput.packageManager).toBe('pnpm');
+    expect(exists).toBe(true);
+  });
 
-    lockFileOutput = await loadLockfile(cwd, 'pnpm');
-    expect(lockFileOutput).not.toBeUndefined();
-    expect(lockFileOutput.packageManager).toBe('pnpm');
+  it(`should return false when file does not exist`, async () => {
+    const cwd = await initFixture('lockfile-version2');
+    const exists = await validateFileExists(path.join(cwd, 'wrong-file.json'));
 
-    if (lockFileOutput.json) {
-      for (const pkg of packages) {
-        pkg.version = mockVersion;
-        await updateTempModernLockfileVersion(pkg, lockFileOutput);
-      }
-      await saveLockfile(lockFileOutput);
-    }
+    expect(exists).toBe(false);
+  });
+});
 
-    expect(Array.from(loadJsonFile.registry.keys())).toStrictEqual([
-      '/packages/package-1',
-      '/packages/package-2',
-      '/packages/package-3',
-      '/packages/package-4',
-      '/',
-    ]);
+describe('run install lockfile-only', () => {
+  describe('npm client', () => {
+    it(`should update project root lockfile by calling npm script "npm install --package-lock-only" when npm version is >= 8.5.0`, async () => {
+      const execSpy = jest.spyOn(core, 'exec');
+      const execSyncSpy = jest.spyOn(core, 'execSync').mockReturnValue('8.5.0');
+      const cwd = await initFixture('lockfile-version2');
 
-    expect(`${fs.readFileSync(lockFileOutput.path)}`).toMatchSnapshot();
+      const lockFileOutput = await runInstallLockFileOnly('npm', cwd);
+
+      expect(execSyncSpy).toHaveBeenCalled();
+      expect(execSpy).toHaveBeenCalledWith('npm', ['install', '--package-lock-only'], { cwd });
+      expect(lockFileOutput).toBe('package-lock.json');
+    });
+
+    it(`should update project root lockfile by calling npm script "npm shrinkwrap --package-lock-only" when npm version is below 8.5.0`, async () => {
+      const renameSpy = jest.spyOn(nodeFs, 'renameSync');
+      const execSpy = jest.spyOn(core, 'exec');
+      const execSyncSpy = jest.spyOn(core, 'execSync').mockReturnValue('8.4.0');
+      const cwd = await initFixture('lockfile-version2');
+
+      const lockFileOutput = await runInstallLockFileOnly('npm', cwd);
+
+      expect(execSyncSpy).toHaveBeenCalled();
+      expect(execSpy).toHaveBeenCalledWith('npm', ['shrinkwrap', '--package-lock-only'], { cwd });
+      expect(renameSpy).toHaveBeenCalledWith('npm-shrinkwrap.json', 'package-lock.json');
+      expect(lockFileOutput).toBe('package-lock.json');
+    });
+  });
+
+  describe('pnpm client', () => {
+    it('should log an error when lockfile is not located under project root', async () => {
+      const logSpy = jest.spyOn(npmlog, 'error');
+      const cwd = await initFixture('lockfile-version2');
+
+      const lockFileOutput = await runInstallLockFileOnly('pnpm', cwd);
+
+      expect(logSpy).toHaveBeenCalledWith(
+        'lock',
+        expect.stringContaining('we could not sync or locate "pnpm-lock.yaml" from path')
+      );
+      expect(lockFileOutput).toBe(undefined);
+    });
+
+    it(`should update project root lockfile by calling client script "pnpm install --package-lock-only"`, async () => {
+      jest.spyOn(nodeFs.promises, 'access').mockResolvedValue(true);
+      nodeFs.renameSync.mockImplementation(() => true);
+      core.exec.mockImplementation(() => true);
+      const execSpy = jest.spyOn(core, 'exec');
+      const cwd = await initFixture('lockfile-version2');
+
+      const lockFileOutput = await runInstallLockFileOnly('pnpm', cwd);
+
+      expect(execSpy).toHaveBeenCalledWith('pnpm', ['install', '--lockfile-only'], { cwd });
+      expect(lockFileOutput).toBe('pnpm-lock.yaml');
+    });
+  });
+
+  describe('yarn client', () => {
+    it(`should update project root lockfile by calling client script "yarn install --package-lock-only"`, async () => {
+      jest.spyOn(nodeFs.promises, 'access').mockResolvedValue(true);
+      nodeFs.renameSync.mockImplementation(() => true);
+      core.exec.mockImplementation(() => true);
+      const execSpy = jest.spyOn(core, 'exec');
+      const cwd = await initFixture('lockfile-version2');
+
+      const lockFileOutput = await runInstallLockFileOnly('yarn', cwd);
+
+      expect(execSpy).toHaveBeenCalledWith('yarn', ['install', '--mode', 'update-lockfile'], { cwd });
+      expect(lockFileOutput).toBe('yarn.lock');
+    });
   });
 });

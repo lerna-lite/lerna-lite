@@ -25,9 +25,9 @@ import {
   runTopologically,
   throwIfUncommitted,
   updateChangelog,
-  UpdateCollectorOptions,
   ValidationError,
   VersionCommandOption,
+  UpdateCollectorOptions,
 } from '@lerna-lite/core';
 
 import { getCurrentBranch } from './lib/get-current-branch';
@@ -42,10 +42,11 @@ import { gitTag } from './lib/git-tag';
 import { gitPush } from './lib/git-push';
 import { makePromptVersion } from './lib/prompt-version';
 import {
-  loadLockfile,
-  saveLockfile,
+  loadPackageLockFileWhenExists,
   updateClassicLockfileVersion,
   updateTempModernLockfileVersion,
+  runInstallLockFileOnly,
+  saveUpdatedLockJsonFile,
 } from './lib/update-lockfile-version';
 
 export function factory(argv: VersionCommandOption) {
@@ -234,6 +235,15 @@ export class VersionCommand extends Command<VersionCommandOption> {
         'ENOTALLOWED',
         dedent`
           --conventional-prerelease cannot be combined with --conventional-graduate.
+        `
+      );
+    }
+
+    if (this.options.manuallyUpdateRootLockfile && this.options.syncWorkspaceLock) {
+      throw new ValidationError(
+        'ENOTALLOWED',
+        dedent`
+          --manually-update-root-lockfile cannot be combined with --sync-workspace-lock.
         `
       );
     }
@@ -534,6 +544,7 @@ export class VersionCommand extends Command<VersionCommandOption> {
     const independentVersions = this.project.isIndependent();
     const rootPath = this.project.manifest.location;
     const changedFiles = new Set();
+    const npmClient = this.options.npmClient || 'npm';
 
     let chain: Promise<any> = Promise.resolve();
 
@@ -623,26 +634,50 @@ export class VersionCommand extends Command<VersionCommandOption> {
       })
     );
 
-    chain = chain.then(() =>
-      // update modern lockfile (version 2 or higher) when exist in the project root
-      loadLockfile(rootPath, this.options.npmClient).then((lockfile) => {
-        if (!lockfile || lockfile.version < 2 || this.options.updateRootLockFile === false) {
-          return;
-        }
+    // update the project root npm lock file, we will read and write back to the lock file
+    // this is currently the default update and if none of the flag are enabled (or all undefined) then we'll consider this as enabled
+    if (
+      npmClient === 'npm' &&
+      (this.options.manuallyUpdateRootLockfile ||
+        (this.options.manuallyUpdateRootLockfile === undefined && !this.options.syncWorkspaceLock))
+    ) {
+      this.logger.warn(
+        'npm',
+        'we recommend using --sync-workspace-lock which will sync your lock file via your favorite npm client instead of relying on Lerna-Lite itself to update it.'
+      );
 
-        for (const pkg of this.packagesToVersion) {
-          this.logger.silly(`lock`, `updating "${lockfile.path}" for package "${pkg.name}"`);
-          updateTempModernLockfileVersion(pkg, lockfile);
-        }
+      chain = chain.then(() =>
+        // update modern lockfile (version 2 or higher) when exist in the project root
+        loadPackageLockFileWhenExists(rootPath).then((lockFileResponse) => {
+          if (lockFileResponse && lockFileResponse.lockfileVersion >= 2) {
+            this.logger.verbose(`lock`, `start process loop of manually updating npm lock file`);
 
-        // save the lockfile, only once, after all package versions were updated
-        return saveLockfile(lockfile).then((lockfilePath) => {
+            for (const pkg of this.packagesToVersion) {
+              this.logger.verbose(`lock`, `updating root "package-lock-json" for package "${pkg.name}"`);
+              updateTempModernLockfileVersion(pkg, lockFileResponse.json);
+            }
+
+            // save the lockfile, only once, after all package versions were updated
+            return saveUpdatedLockJsonFile(lockFileResponse.path, lockFileResponse.json).then(
+              (lockfilePath) => {
+                if (lockfilePath) {
+                  changedFiles.add(lockfilePath);
+                }
+              }
+            );
+          }
+        })
+      );
+    } else if (this.options.syncWorkspaceLock) {
+      // update lock file, with npm client defined when `--package-lock-only` is enabled
+      chain = chain.then(() =>
+        runInstallLockFileOnly(npmClient, this.project.manifest.location).then((lockfilePath) => {
           if (lockfilePath) {
             changedFiles.add(lockfilePath);
           }
-        });
-      })
-    );
+        })
+      );
+    }
 
     if (!independentVersions) {
       this.project.version = this.globalVersion;
@@ -709,7 +744,7 @@ export class VersionCommand extends Command<VersionCommandOption> {
 
   async gitCommitAndTagVersionForUpdates() {
     const tags = this.packagesToVersion.map((pkg) => `${pkg.name}@${this.updatesVersions?.get(pkg.name)}`);
-    const subject = this.options.message || 'Publish';
+    const subject = this.options.message || 'chore: Publish new release';
     const message = tags.reduce((msg, tag) => `${msg}${os.EOL} - ${tag}`, `${subject}${os.EOL}`);
 
     await gitCommit(message, this.gitOpts, this.execOpts, this.options.gitDryRun);

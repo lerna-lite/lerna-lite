@@ -1,7 +1,7 @@
 {
   "name": "@lerna-lite/publish",
   "description": "Publish packages in the current workspace",
-  "version": "1.3.0",
+  "version": "1.4.0",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "typings": "dist/index.d.ts",
@@ -31,8 +31,8 @@
     "npm": ">=8.0.0"
   },
   "dependencies": {
-    "@lerna-lite/core": "^1.3.0",
-    "@lerna-lite/version": "^1.3.0",
+    "@lerna-lite/core": "^1.4.0",
+    "@lerna-lite/version": "^1.4.0",
     "byte-size": "^7.0.1",
     "columnify": "^1.6.0",
     "fs-extra": "^10.1.0",
@@ -46,7 +46,7 @@
     "os": "^0.1.2",
     "p-map": "^4.0.0",
     "p-pipe": "^3.1.0",
-    "pacote": "^13.5.0",
+    "pacote": "^13.6.0",
     "path": "^0.12.7",
     "pify": "^5.0.0",
     "read-package-json": "^5.0.1",
@@ -56,7 +56,6 @@
     "ssri": "^9.0.1",
     "strong-log-transformer": "^2.1.0",
     "tar": "^6.1.11",
-    "temp-write": "^4.0.0",
     "whatwg-url": "^11.0.0",
     "write-file-atomic": "^4.0.1",
     "write-json-file": "^4.3.0",

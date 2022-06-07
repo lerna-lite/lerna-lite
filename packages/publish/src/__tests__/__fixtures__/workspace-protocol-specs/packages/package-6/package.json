@@ -2,6 +2,7 @@
   "name": "package-6",
   "version": "1.0.0",
   "dependencies": {
+    "package-1": "workspace:>=1.0.0",
     "tiny-tarball": "^1.0.0"
   }
 }

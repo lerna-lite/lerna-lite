@@ -7,8 +7,9 @@ import {
   runTopologically,
   ValidationError,
 } from '@lerna-lite/core';
-import { FilterOptions, getFilteredPackages, Profiler } from '@lerna-lite/exec-run-common';
+import { FilterOptions, getFilteredPackages, Profiler } from '@lerna-lite/optional-cmd-common';
 import pMap from 'p-map';
+import { performance } from 'perf_hooks';
 
 import { npmRunScript, npmRunScriptStreaming, timer } from './lib';
 import { ScriptStreamingOption } from './models';
@@ -82,18 +83,22 @@ export class RunCommand extends Command<RunCommandOption & FilterOptions> {
   }
 
   execute() {
-    this.logger.info(
-      '',
-      'Executing command in %d %s: %j',
-      this.count,
-      this.packagePlural,
-      this.joinedCommand
-    );
+    if (!this.options.useNx) {
+      this.logger.info(
+        '',
+        'Executing command in %d %s: %j',
+        this.count,
+        this.packagePlural,
+        this.joinedCommand
+      );
+    }
 
     let chain: Promise<any> = Promise.resolve();
     const getElapsed = timer();
 
-    if (this.options.parallel) {
+    if (this.options.useNx) {
+      chain = chain.then(() => this.runScriptsUsingNx());
+    } else if (this.options.parallel) {
       this.logger.verbose('Parallel', this.joinedCommand!);
       chain = chain.then(() => this.runScriptInPackagesParallel());
     } else if (this.toposort) {
@@ -116,7 +121,7 @@ export class RunCommand extends Command<RunCommandOption & FilterOptions> {
       // detect error (if any) from collected results
       chain = chain.then((results: Array<{ exitCode: number; failed?: boolean; pkg?: Package; stderr: any; }>) => {
         /* istanbul ignore else */
-        if (results.some((result?: { failed?: boolean; }) => result?.failed)) {
+        if (results?.some((result?: { failed?: boolean; }) => result?.failed)) {
           // propagate 'highest' error code, it's probably the most useful
           const codes = results.filter((result) => result?.failed).map((result) => result.exitCode);
           const exitCode = Math.max(...codes, 1);
@@ -136,7 +141,7 @@ export class RunCommand extends Command<RunCommandOption & FilterOptions> {
     }
 
     return chain.then((results: Array<{ exitCode: number; failed?: boolean; pkg?: Package; stderr: any; }>) => {
-      const someFailed = results.some((result) => result?.failed);
+      const someFailed = results?.some((result) => result?.failed);
       const logType = someFailed ? 'error' : 'success';
 
       this.logger[logType](
@@ -206,6 +211,24 @@ export class RunCommand extends Command<RunCommandOption & FilterOptions> {
     }
 
     return chain;
+  }
+
+  async runScriptsUsingNx() {
+    performance.mark('init-local');
+    const nxOutput = await import('nx/src/utils/output');
+    nxOutput.output.cliName = 'Lerna (powered by Nx)';
+    nxOutput.output.formatCommand = (message) => message.replace(':', ' ');
+    if (this.options.ci) {
+      process.env.CI = 'true';
+    }
+    const { runMany } = await import('nx/src/command-line/run-many');
+    return runMany({
+      projects: this.packagesWithScript.map((p) => p.name).join(','),
+      target: this.script,
+      outputStyle: this.options.stream ? 'stream' : 'static',
+      parallel: this.options.concurrency as number,
+      _: this.args,
+    } as any);
   }
 
   runScriptInPackagesParallel() {

@@ -24,7 +24,7 @@ export interface CommandOptions {
   rollVersion?: boolean;
 }
 
-export type CommandType = '' | 'exec' | 'info' | 'init' | 'publish' | 'version' | 'run';
+export type CommandType = '' | 'exec' | 'info' | 'init' | 'list' | 'publish' | 'run' | 'version';
 
 export interface DescribeRefOptions {
   /* Defaults to `process.cwd()` */
@@ -37,7 +37,8 @@ export interface DescribeRefOptions {
 /* When annotated release tags are missing */
 export interface DescribeRefFallbackResult {
   isDirty: boolean;
-  refCount: string;
+  lastTagName?: string;
+  refCount: number | string;
   sha: string;
 }
 
@@ -46,7 +47,7 @@ export interface DescribeRefDetailedResult {
   lastTagName: string;
   lastVersion: string;
   isDirty: boolean;
-  refCount: string;
+  refCount: number | string;
   sha: string;
 }
 

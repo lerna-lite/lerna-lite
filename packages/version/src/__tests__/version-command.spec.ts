@@ -27,6 +27,8 @@ jest.mock('@lerna-lite/version', () => jest.requireActual('../version-command'))
 const fs = require('fs-extra');
 const path = require('path');
 const execa = require('execa');
+const core = require('@lerna-lite/core');
+const nodeFs = require('node:fs');
 
 // mocked or stubbed modules
 const writePkg = require('write-pkg');
@@ -52,13 +54,10 @@ const { getCommitMessage } = require('@lerna-test/get-commit-message');
 
 // test command
 import { VersionCommand } from '../version-command';
-
 const lernaVersion = require('@lerna-test/command-runner')(
   require('../../../cli/src/cli-commands/cli-version-commands')
 );
-import { loadLockfile } from '../lib/update-lockfile-version';
-import { LockfileInformation, NpmLockfile } from '../types';
-import { Lockfile as PnpmLockfile } from '@pnpm/lockfile-types';
+import { loadPackageLockFileWhenExists } from '../lib/update-lockfile-version';
 
 // file under test
 const yargParser = require('yargs-parser');
@@ -129,6 +128,17 @@ describe('VersionCommand', () => {
 
       await expect(command).rejects.toThrow(
         '--conventional-prerelease cannot be combined with --conventional-graduate.'
+      );
+    });
+
+    it('throws an error if --manually-update-root-lockfile and --sync-workspace-lock flags are both passed', async () => {
+      const testDir = await initFixture('normal');
+      const command = new VersionCommand(
+        createArgv(testDir, '--manually-update-root-lockfile', '--sync-workspace-lock')
+      );
+
+      await expect(command).rejects.toThrow(
+        '--manually-update-root-lockfile cannot be combined with --sync-workspace-lock.'
       );
     });
 
@@ -803,154 +813,104 @@ describe('VersionCommand', () => {
     });
   });
 
-  describe('with leaf lockfiles', () => {
+  describe('with leaf lockfiles on npm lockFile version < 2', () => {
     it('updates lockfile version to new package version', async () => {
       const cwd = await initFixture('lockfile-leaf');
-      await new VersionCommand(createArgv(cwd, '--yes', '--bump', 'major'));
+      await new VersionCommand(createArgv(cwd, '--yes', '--bump', 'major', '--no-sync-workspace-lock'));
 
       const changedFiles = await showCommit(cwd, '--name-only');
       expect(changedFiles).toContain('packages/package-1/package-lock.json');
     });
   });
 
-  describe('with npm lockfile version 2', () => {
-    it('should have updated npm project root lockfile version 2 for every necessary properties', async () => {
+  describe('with root lockfile on npm lockfile version >=2', () => {
+    it('should update project root lockfile version 2 for every necessary properties by writing directly to the file', async () => {
       const cwd = await initFixture('lockfile-version2');
-      await new VersionCommand(createArgv(cwd, '--bump', 'major', '--yes'));
+      await new VersionCommand(
+        createArgv(cwd, '--bump', 'major', '--yes', '--manually-update-root-lockfile')
+      );
 
+      const changedFiles = await showCommit(cwd, '--name-only');
+      expect(changedFiles).toContain('package-lock.json');
       expect(writePkg.updatedVersions()).toEqual({
         '@my-workspace/package-1': '3.0.0',
         '@my-workspace/package-2': '3.0.0',
       });
 
-      const lockfileResponse: any = await loadLockfile(cwd);
-      const json = lockfileResponse.json as NpmLockfile;
+      const lockfileResponse = await loadPackageLockFileWhenExists(cwd);
 
-      expect(lockfileResponse.packageManager).toBe('npm');
-      expect(lockfileResponse.json.lockfileVersion).toBe(2);
-      expect(json.dependencies!['@my-workspace/package-2'].requires).toMatchObject({
+      expect(lockfileResponse!.json.lockfileVersion).toBe(2);
+      expect(lockfileResponse!.json.dependencies['@my-workspace/package-2'].requires).toMatchObject({
         '@my-workspace/package-1': '^3.0.0',
       });
-      expect(json.packages['packages/package-1'].version).toBe('3.0.0');
-      expect(json.packages['packages/package-2'].version).toBe('3.0.0');
-      expect(json.packages['packages/package-2'].dependencies).toMatchObject({
+      expect(lockfileResponse!.json.packages['packages/package-1'].version).toBe('3.0.0');
+      expect(lockfileResponse!.json.packages['packages/package-2'].version).toBe('3.0.0');
+      expect(lockfileResponse!.json.packages['packages/package-2'].dependencies).toMatchObject({
         '@my-workspace/package-1': '^3.0.0',
       });
 
-      expect(lockfileResponse.json).toMatchSnapshot();
+      expect(lockfileResponse!.json).toMatchSnapshot();
     });
   });
 
-  describe('with pnpm lockfile', () => {
-    it('should not update pnpm project root lockfile (untouched) when "--no-update-root-lock-file" is provided', async () => {
-      const cwd = await initFixture('lockfile-pnpm');
-      await new VersionCommand(createArgv(cwd, '--bump', 'major', '--yes', '--no-update-root-lock-file'));
+  describe('updating lockfile-only', () => {
+    // test with npm client only since other clients are tested in separate file "update-lockfile-version.spec"
+    describe('npm client', () => {
+      it(`should NOT call runInstallLockFileOnly() when --no-sync-workspace-lock & --no-manually-update-root-lockfile are provided`, async () => {
+        const cwd = await initFixture('lockfile-version2');
+        await new VersionCommand(
+          createArgv(
+            cwd,
+            '--bump',
+            'major',
+            '--yes',
+            '--no-sync-workspace-lock',
+            '--no-manually-update-root-lockfile'
+          )
+        );
 
-      expect(writePkg.updatedVersions()).toEqual({
-        '@my-workspace/package-1': '3.0.0',
-        '@my-workspace/package-2': '3.0.0',
-        '@my-workspace/package-3': '3.0.0',
-        '@my-workspace/package-4': '3.0.0',
+        const changedFiles = await showCommit(cwd, '--name-only');
+        expect(changedFiles).not.toContain('package-lock.json');
       });
 
-      // loading lock file should work with/without providing npm client type (2nd arg)
-      let lockfileResponse = (await loadLockfile(cwd)) as LockfileInformation;
-      expect(lockfileResponse.packageManager).toBe('pnpm');
+      it(`should call runInstallLockFileOnly() when --sync-workspace-lock is provided and expect lockfile to be added to git`, async () => {
+        const cwd = await initFixture('lockfile-version2');
+        await new VersionCommand(
+          createArgv(cwd, '--bump', 'major', '--yes', '--sync-workspace-lock', '--npm-client', 'npm')
+        );
 
-      lockfileResponse = (await loadLockfile(cwd, 'pnpm')) as LockfileInformation;
-      const json = lockfileResponse.json as PnpmLockfile;
+        const changedFiles = await showCommit(cwd, '--name-only');
+        const lockfileResponse = await loadPackageLockFileWhenExists(cwd);
 
-      expect(lockfileResponse.packageManager).toBe('pnpm');
-      expect(lockfileResponse.json.lockfileVersion).toBe(5.4);
-      expect(json.importers['packages/package-2'].specifiers).toMatchObject({
-        '@my-workspace/package-1': 'workspace:^2.3.4',
-      });
-      expect(json.importers['packages/package-3'].specifiers).toMatchObject({
-        '@my-workspace/package-1': 'workspace:^',
-        '@my-workspace/package-2': 'workspace:*',
-      });
-      expect(json.importers['packages/package-4'].specifiers).toMatchObject({
-        '@my-workspace/package-1': 'workspace:2.3.4',
-        '@my-workspace/package-2': 'workspace:~',
+        expect(changedFiles).toContain('package-lock.json');
+        expect(lockfileResponse!.json.lockfileVersion).toBe(2);
+        expect(lockfileResponse!.json.packages['packages/package-1'].version).toBe('3.0.0');
+        expect(lockfileResponse!.json.packages['packages/package-2'].version).toBe('3.0.0');
+        expect(lockfileResponse!.json.packages['packages/package-2'].dependencies).toMatchObject({
+          '@my-workspace/package-1': '^3.0.0',
+        });
       });
 
-      expect(lockfileResponse.json).toMatchSnapshot();
-    });
+      it(`should call runInstallLockFileOnly() when --sync-workspace-lock is provided and expect lockfile to be added to git even without npmClient`, async () => {
+        const cwd = await initFixture('lockfile-version2');
+        await new VersionCommand(createArgv(cwd, '--bump', 'minor', '--yes', '--sync-workspace-lock'));
 
-    it('should update pnpm project root lockfile to next major version on every necessary properties', async () => {
-      const cwd = await initFixture('lockfile-pnpm');
-      await new VersionCommand(createArgv(cwd, '--bump', 'major', '--yes'));
+        const changedFiles = await showCommit(cwd, '--name-only');
+        expect(changedFiles).toContain('package-lock.json');
+        expect(writePkg.updatedVersions()).toEqual({
+          '@my-workspace/package-1': '2.4.0',
+          '@my-workspace/package-2': '2.4.0',
+        });
 
-      expect(writePkg.updatedVersions()).toEqual({
-        '@my-workspace/package-1': '3.0.0',
-        '@my-workspace/package-2': '3.0.0',
-        '@my-workspace/package-3': '3.0.0',
-        '@my-workspace/package-4': '3.0.0',
+        const lockfileResponse = await loadPackageLockFileWhenExists(cwd);
+
+        expect(lockfileResponse!.json.lockfileVersion).toBe(2);
+        expect(lockfileResponse!.json.packages['packages/package-1'].version).toBe('2.4.0');
+        expect(lockfileResponse!.json.packages['packages/package-2'].version).toBe('2.4.0');
+        expect(lockfileResponse!.json.packages['packages/package-2'].dependencies).toMatchObject({
+          '@my-workspace/package-1': '^2.4.0',
+        });
       });
-
-      // loading lock file should work with/without providing npm client type (2nd arg)
-      let lockfileResponse = (await loadLockfile(cwd)) as LockfileInformation;
-      expect(lockfileResponse.packageManager).toBe('pnpm');
-
-      lockfileResponse = (await loadLockfile(cwd, 'pnpm')) as LockfileInformation;
-      const json = lockfileResponse.json as PnpmLockfile;
-
-      expect(lockfileResponse.packageManager).toBe('pnpm');
-      expect(lockfileResponse.json.lockfileVersion).toBe(5.4);
-      expect(json.importers['packages/package-2'].dependencies).toMatchObject({
-        '@my-workspace/package-1': 'link:../package-1',
-      });
-      expect(json.importers['packages/package-2'].specifiers).toMatchObject({
-        '@my-workspace/package-1': 'workspace:^3.0.0',
-      });
-      expect(json.importers['packages/package-3'].specifiers).toMatchObject({
-        '@my-workspace/package-1': 'workspace:^',
-        '@my-workspace/package-2': 'workspace:*',
-      });
-      expect(json.importers['packages/package-4'].specifiers).toMatchObject({
-        '@my-workspace/package-1': 'workspace:3.0.0',
-        '@my-workspace/package-2': 'workspace:~',
-      });
-
-      expect(lockfileResponse.json).toMatchSnapshot();
-    });
-
-    it('should update pnpm project root lockfile to next minor version on every necessary properties', async () => {
-      const cwd = await initFixture('lockfile-pnpm');
-      await new VersionCommand(createArgv(cwd, '--bump', 'minor', '--yes'));
-
-      expect(writePkg.updatedVersions()).toEqual({
-        '@my-workspace/package-1': '2.4.0',
-        '@my-workspace/package-2': '2.4.0',
-        '@my-workspace/package-3': '2.4.0',
-        '@my-workspace/package-4': '2.4.0',
-      });
-
-      // loading lock file should work with/without providing npm client type (2nd arg)
-      let lockfileResponse = (await loadLockfile(cwd)) as LockfileInformation;
-      expect(lockfileResponse.packageManager).toBe('pnpm');
-
-      lockfileResponse = (await loadLockfile(cwd, 'pnpm')) as LockfileInformation;
-      const json = lockfileResponse.json as PnpmLockfile;
-
-      expect(lockfileResponse.packageManager).toBe('pnpm');
-      expect(lockfileResponse.json.lockfileVersion).toBe(5.4);
-      expect(json.importers['packages/package-2'].dependencies).toMatchObject({
-        '@my-workspace/package-1': 'link:../package-1',
-      });
-      expect(json.importers['packages/package-2'].specifiers).toMatchObject({
-        '@my-workspace/package-1': 'workspace:^2.4.0',
-      });
-      expect(json.importers['packages/package-3'].specifiers).toMatchObject({
-        '@my-workspace/package-1': 'workspace:^',
-        '@my-workspace/package-2': 'workspace:*',
-      });
-      expect(json.importers['packages/package-4'].specifiers).toMatchObject({
-        '@my-workspace/package-1': 'workspace:2.4.0',
-        '@my-workspace/package-2': 'workspace:~',
-      });
-
-      expect(lockfileResponse.json).toMatchSnapshot();
     });
   });
 
