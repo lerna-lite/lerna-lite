@@ -10,6 +10,10 @@
       depTypeList: ['peerDependencies'],
       enabled: false,
     },
+    {
+      packageNames: ['tacks'],
+      allowedVersions: '1.2.6',
+    },
   ],
   schedule: ['on Friday', 'every weekend'],
   ignoreDeps: [
