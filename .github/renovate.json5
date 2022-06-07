@@ -11,6 +11,7 @@
       enabled: false,
     },
     {
+      // npm audit seems to prefer 1.2.6 for some reason
       packageNames: ['tacks'],
       allowedVersions: '1.2.6',
     },
