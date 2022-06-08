@@ -59,6 +59,8 @@ lerna success Initialized Lerna files
 
 **Note** that the `packages` is only useful for optional commands like `exec`, `list` or `run`. However, if you only care about the `publish` and `version` and run other commands via your package manager (like pnpm for example) or other tools, then you probably don't even need the `packages` property.
 
+If you are using a different client other than npm, then make sure to update the `npmClient` (acceptable options are `npm`, `yarn`, `pnpm`) property in `lerna.json` (for example: `"npmClient": "yarn"`). This property must be updated manually since there are no flag available for the `init` command.
+
 ## Options
 
 ### `--independent`

@@ -41,7 +41,7 @@ _If a command that you wish to use is missing, simply reach out and we could pot
 
 #### _this new feature was introduced with release [1.2.0](https://github.com/ghiscoding/lerna-lite/releases/tag/v1.2.0) of Lerna-Lite, however we recommend using >=[1.3.0](https://github.com/ghiscoding/lerna-lite/releases)._
 
-If you are using this new feature, please take 30sec. to fill in a small [poll survey](https://github.com/ghiscoding/lerna-lite/discussions/156) just to see which package manager is the most popular and how many of you are taking advantage of this new `workspace:` protocol. Thanks :wink:
+If you are using this new feature, please take 30sec. to fill in this small [poll survey](https://github.com/ghiscoding/lerna-lite/discussions/156) just to see which package manager is the most popular and how many of you are taking advantage of this new `workspace:` protocol. Thanks :wink:
 
 ---
 
@@ -121,7 +121,7 @@ Note that `package-a` will not be created, it is only shown shown here to help c
 
 Run the following commands to install Lerna-Lite in your project and/or install it globally by adding the `-g` option.
 
-If you are new to Lerna-Lite, you could also run the [lerna init](https://github.com/ghiscoding/lerna-lite/tree/main/packages/init#readme) command which will create the `lerna.json` for you.
+If you are new to Lerna-Lite, you could also run the [lerna init](https://github.com/ghiscoding/lerna-lite/tree/main/packages/init#readme) command which will create the `lerna.json` for you. If you are using a different client other than npm, then make sure to update the `npmClient` property in `lerna.json` (for example: `"npmClient": "yarn"`).
 
 | Command                                                                                  | Install                        | Description                                   | Included |
 | ---------------------------------------------------------------------------------------- | ------------------------------ | --------------------------------------------- | -------- |
