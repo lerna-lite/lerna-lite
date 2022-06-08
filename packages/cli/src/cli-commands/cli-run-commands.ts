@@ -18,6 +18,11 @@ exports.builder = (yargs) => {
       type: 'string',
     })
     .options({
+      'cmd-dry-run': {
+        group: 'Command Options:',
+        describe: 'Displays the process command that would be performed without executing it.',
+        type: 'boolean',
+      },
       'npm-client': {
         group: 'Command Options:',
         describe: 'Executable used to run scripts (npm, yarn, pnpm, ...).',
@@ -67,9 +72,8 @@ exports.builder = (yargs) => {
         describe: 'Output performance profile to custom location instead of default project root.',
         type: 'string',
       },
-      'cmd-dry-run': {
-        group: 'Command Options:',
-        describe: 'Displays the process command that would be performed without executing it.',
+      'skip-nx-cache': {
+        hidden: true,
         type: 'boolean',
       },
     });
