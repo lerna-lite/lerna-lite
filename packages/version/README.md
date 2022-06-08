@@ -439,7 +439,7 @@ When using pnpm or npm >= 7, the default config is to have Lerna-Lite update the
 lerna version --no-manually-update-root-lockfile
 ```
 
-A newer and better option is to this use instead the new flag [--sync-workspace-lock](#--sync-workspace-lock) which will to rely on your package manager client to do the workd (via `install lockfile-only`) which is a lot more reliable and requires a lot less code in Lerna-Lite itself.
+A newer and better option is to this use the new flag [--sync-workspace-lock](#--sync-workspace-lock) which will to rely on your package manager client to do the work (via `install lockfile-only`) which is a lot more reliable, future proof and requires a lot less code in Lerna-Lite itself.
 
 ### `--preid`
 
@@ -489,8 +489,7 @@ lerna publish from-git --tag-version-prefix=''
 
 ### `--sync-workspace-lock`
 
-This flag will run `npm install --package-lock-only` or equivalent depending on the package manager defined in `npmClient` (npm, pnpm or yarn).
-Updating directly the lock file can be hard and this flag is one of two solutions to update the lock file. It might not be the best solution for your use case, just give it a try.
+This flag will run `npm install --package-lock-only` or equivalent depending on the package manager defined in `npmClient` (npm, pnpm or yarn). This technique should be more future proof compare and better than having Lerna-Lite taking care of updating the lock file directly which can be hard, this flag is one of two solutions to update the lock file. It might not be the best solution for your use case, see notes below, just give it a try.
 
 > `npm` users: we recommend having npm verion >=8.5.0 installed with npm workspaces, so that we can run `npm install --package-lock-only` instead of `npm shrinkwrap` with < 8.5.0 that have a drawback of file renaming. This might become an actual minimal requirement in a future release to be >= 8.5.0.
 
