@@ -119,52 +119,56 @@ export class RunCommand extends Command<RunCommandOption & FilterOptions> {
       });
     } else {
       // detect error (if any) from collected results
-      chain = chain.then((results: Array<{ exitCode: number; failed?: boolean; pkg?: Package; stderr: any; }>) => {
-        /* istanbul ignore else */
-        if (results?.some((result?: { failed?: boolean; }) => result?.failed)) {
-          // propagate 'highest' error code, it's probably the most useful
-          const codes = results.filter((result) => result?.failed).map((result) => result.exitCode);
-          const exitCode = Math.max(...codes, 1);
+      chain = chain.then(
+        (results: Array<{ exitCode: number; failed?: boolean; pkg?: Package; stderr: any }>) => {
+          /* istanbul ignore else */
+          if (results?.some((result?: { failed?: boolean }) => result?.failed)) {
+            // propagate 'highest' error code, it's probably the most useful
+            const codes = results.filter((result) => result?.failed).map((result) => result.exitCode);
+            const exitCode = Math.max(...codes, 1);
 
-          this.logger.error('', 'Received non-zero exit code %d during execution', exitCode);
-          if (!this.options.stream) {
-            results
-              .filter((result) => result?.failed)
-              .forEach((result) => {
-                this.logger.error('', result.pkg?.name ?? '', result.stderr);
-              });
+            this.logger.error('', 'Received non-zero exit code %d during execution', exitCode);
+            if (!this.options.stream) {
+              results
+                .filter((result) => result?.failed)
+                .forEach((result) => {
+                  this.logger.error('', result.pkg?.name ?? '', result.stderr);
+                });
+            }
+            process.exitCode = exitCode;
           }
-          process.exitCode = exitCode;
+          return results;
         }
-        return results;
-      });
+      );
     }
 
-    return chain.then((results: Array<{ exitCode: number; failed?: boolean; pkg?: Package; stderr: any; }>) => {
-      const someFailed = results?.some((result) => result?.failed);
-      const logType = someFailed ? 'error' : 'success';
+    return chain.then(
+      (results: Array<{ exitCode: number; failed?: boolean; pkg?: Package; stderr: any }>) => {
+        const someFailed = results?.some((result) => result?.failed);
+        const logType = someFailed ? 'error' : 'success';
 
-      this.logger[logType](
-        'run',
-        `Ran npm script '%s' in %d %s in %ss:`,
-        this.script,
-        this.count,
-        this.packagePlural,
-        (getElapsed() / 1000).toFixed(1)
-      );
+        this.logger[logType](
+          'run',
+          `Ran npm script '%s' in %d %s in %ss:`,
+          this.script,
+          this.count,
+          this.packagePlural,
+          (getElapsed() / 1000).toFixed(1)
+        );
 
-      if (!this.bail && !this.options.stream) {
-        results.forEach((result) => {
-          if (result?.failed) {
-            this.logger.error('', ` - ${result.pkg?.name ?? ''}`);
-          } else {
-            this.logger.success('', ` - ${result.pkg?.name ?? ''}`);
-          }
-        });
-      } else {
-        this.logger.success('', this.packagesWithScript.map((pkg) => `- ${pkg.name}`).join('\n'));
+        if (!this.bail && !this.options.stream) {
+          results.forEach((result) => {
+            if (result?.failed) {
+              this.logger.error('', ` - ${result.pkg?.name ?? ''}`);
+            } else {
+              this.logger.success('', ` - ${result.pkg?.name ?? ''}`);
+            }
+          });
+        } else {
+          this.logger.success('', this.packagesWithScript.map((pkg) => `- ${pkg.name}`).join('\n'));
+        }
       }
-    });
+    );
   }
 
   getOpts(pkg: Package): ScriptStreamingOption {
@@ -214,21 +218,69 @@ export class RunCommand extends Command<RunCommandOption & FilterOptions> {
   }
 
   async runScriptsUsingNx() {
-    performance.mark('init-local');
-    const nxOutput = await import('nx/src/utils/output');
-    nxOutput.output.cliName = 'Lerna (powered by Nx)';
-    nxOutput.output.formatCommand = (message) => message.replace(':', ' ');
     if (this.options.ci) {
       process.env.CI = 'true';
     }
-    const { runMany } = await import('nx/src/command-line/run-many');
-    return runMany({
-      projects: this.packagesWithScript.map((p) => p.name).join(','),
-      target: this.script,
-      outputStyle: this.options.stream ? 'stream' : 'static',
-      parallel: this.options.concurrency as number,
+    performance.mark('init-local');
+    this.configureNxOutput();
+    const { targetDependencies, options } = await this.prepNxOptions();
+    if (this.packagesWithScript.length === 1) {
+      const { runOne } = await import('nx/src/command-line/run-one');
+      const fullQualifiedTarget = this.packagesWithScript.map((p) => p.name)[0] + ':' + this.script;
+      return (runOne as any)(
+        process.cwd(),
+        {
+          'project:target:configuration': fullQualifiedTarget,
+          ...options,
+        },
+        targetDependencies
+      );
+    } else {
+      const { runMany } = await import('nx/src/command-line/run-many');
+      const projects = this.packagesWithScript.map((p) => p.name).join(',');
+      return (runMany as any)(
+        {
+          projects,
+          target: this.script,
+          ...options,
+        },
+        targetDependencies
+      );
+    }
+  }
+
+  async prepNxOptions() {
+    const { readNxJson } = await import('nx/src/config/configuration');
+    const targetDependenciesAreDefined = Object.keys(readNxJson().targetDependencies || {}).length > 0;
+    const targetDependencies =
+      // prettier-ignore
+      this.toposort && !targetDependenciesAreDefined
+        ? {
+          [this.script]: [
+            {
+              projects: 'dependencies',
+              target: this.script,
+            },
+          ],
+        }
+        : {};
+
+    const outputStyle = this.options.stream
+      ? this.options.prefix !== false
+        ? 'stream'
+        : 'stream-without-prefixes'
+      : 'dynamic';
+
+    const options = {
+      outputStyle,
+      parallel: this.options.concurrency,
+      nxBail: this.bail,
+      nxIgnoreCycles: !this.options.rejectCycles,
+      skipNxCache: this.options.skipNxCache,
       _: this.args,
-    } as any);
+    };
+
+    return { targetDependencies, options };
   }
 
   runScriptInPackagesParallel() {
@@ -246,7 +298,7 @@ export class RunCommand extends Command<RunCommandOption & FilterOptions> {
 
     const chain: Promise<any> = npmRunScriptStreaming(this.script, this.getOpts(pkg));
     if (!this.bail) {
-      chain.then((result: { exitCode: number; failed?: boolean; pkg: Package; stderr: any; }) => {
+      chain.then((result: { exitCode: number; failed?: boolean; pkg: Package; stderr: any }) => {
         return { ...result, pkg };
       });
     }
@@ -260,29 +312,43 @@ export class RunCommand extends Command<RunCommandOption & FilterOptions> {
       return this.dryRunScript(this.script, pkg.name);
     }
 
-    return npmRunScript(this.script, this.getOpts(pkg)).then((result: { exitCode: number; failed?: boolean; pkg: Package; stderr: any; stdout: any; }) => {
-      this.logger.info(
-        'run',
-        `Ran npm script '%s' in '%s' in %ss:`,
-        this.script,
-        pkg.name,
-        (getElapsed() / 1000).toFixed(1)
-      );
-      logOutput(result.stdout);
-      if (!this.bail) {
-        return { ...result, pkg };
+    return npmRunScript(this.script, this.getOpts(pkg)).then(
+      (result: { exitCode: number; failed?: boolean; pkg: Package; stderr: any; stdout: any }) => {
+        this.logger.info(
+          'run',
+          `Ran npm script '%s' in '%s' in %ss:`,
+          this.script,
+          pkg.name,
+          (getElapsed() / 1000).toFixed(1)
+        );
+        logOutput(result.stdout);
+        if (!this.bail) {
+          return { ...result, pkg };
+        }
+        return result;
       }
-      return result;
-    });
+    );
+  }
+
+  async configureNxOutput() {
+    try {
+      const nxOutput = await import('nx/src/utils/output');
+      nxOutput.output.cliName = 'Lerna (powered by Nx)';
+      nxOutput.output.formatCommand = (taskId) => taskId;
+      return nxOutput as any;
+    } catch (e) {
+      this.logger.error(
+        '\n',
+        `You have set 'useNx: true' in lerna.json, but you haven't installed Nx as a dependency.\n` +
+          `To do it run 'npm install -D nx@latest' or 'yarn add -D -W nx@latest'.\n` +
+          `Optional: To configure the caching and distribution run 'npx nx init' after installing it.`
+      );
+      process.exit(1);
+    }
   }
 
   dryRunScript(scriptName: string, pkgName: string): Promise<any> {
-    this.logger.info(
-      'dry-run>',
-      `Run npm script '%s' in '%s'`,
-      scriptName,
-      pkgName
-    );
+    this.logger.info('dry-run>', `Run npm script '%s' in '%s'`, scriptName, pkgName);
     logOutput(`dry-run> ${pkgName}`);
     return Promise.resolve();
   }

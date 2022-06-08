@@ -1,7 +1,7 @@
 jest.mock('../lib/npm-run-script');
 
 jest.mock('@lerna-lite/core', () => ({
-  ...jest.requireActual('@lerna-lite/core') as any, // return the other real methods, below we'll mock only 2 of the methods
+  ...(jest.requireActual('@lerna-lite/core') as any), // return the other real methods, below we'll mock only 2 of the methods
   logOutput: jest.requireActual('../../../core/src/__mocks__/output').logOutput,
 }));
 
@@ -10,6 +10,7 @@ jest.mock('@lerna-lite/run', () => jest.requireActual('../run-command'));
 
 import fs from 'fs-extra';
 import globby from 'globby';
+import { afterEach, afterAll } from 'jest-circus';
 import yargParser from 'yargs-parser';
 
 // make sure to import the output mock
@@ -23,7 +24,9 @@ const initFixture = require('@lerna-test/init-fixture')(__dirname);
 const { loggingOutput } = require('@lerna-test/logging-output');
 const { normalizeRelativeDir } = require('@lerna-test/normalize-relative-dir');
 import { factory, RunCommand } from '../run-command';
-const lernaRun = require("@lerna-test/command-runner")(require("../../../cli/src/cli-commands/cli-run-commands"));
+const lernaRun = require('@lerna-test/command-runner')(
+  require('../../../cli/src/cli-commands/cli-run-commands')
+);
 
 // assertion helpers
 const ranInPackagesStreaming = (testDir: string) =>
@@ -105,7 +108,12 @@ describe('RunCommand', () => {
       await factory(createArgv(testDir, 'env'));
       // await lernaRun(testDir)('env');
 
-      expect((logOutput as any).logged().split('\n')).toEqual(['package-1', 'package-4', 'package-2', 'package-3']);
+      expect((logOutput as any).logged().split('\n')).toEqual([
+        'package-1',
+        'package-4',
+        'package-2',
+        'package-3',
+      ]);
     });
 
     it('runs a script only in scoped packages', async () => {
@@ -123,9 +131,7 @@ describe('RunCommand', () => {
     it('does not error when no packages match', async () => {
       await new RunCommand(createArgv(testDir, 'missing-script'));
 
-      expect(loggingOutput('info')).toContain(
-        'No packages found with the lifecycle script "missing-script"'
-      );
+      expect(loggingOutput('info')).toContain('No packages found with the lifecycle script "missing-script"');
     });
 
     it('runs a script in all packages with --parallel', async () => {
@@ -143,7 +149,12 @@ describe('RunCommand', () => {
     it('supports alternate npmClient configuration', async () => {
       await new RunCommand(createArgv(testDir, 'env', '--npm-client', 'yarn'));
 
-      expect((logOutput as any).logged().split('\n')).toEqual(['package-1', 'package-4', 'package-2', 'package-3']);
+      expect((logOutput as any).logged().split('\n')).toEqual([
+        'package-1',
+        'package-4',
+        'package-2',
+        'package-3',
+      ]);
     });
 
     it('reports script errors with early exit', async () => {
@@ -276,7 +287,9 @@ describe('RunCommand', () => {
     it('optionally streams output in cmd-dry-run mode and expect them all to be logged', async () => {
       const testDir = await initFixture('toposort');
 
-      await new RunCommand(createArgv(testDir, 'env', '--concurrency', '1', '--no-sort', '--stream', '--cmd-dry-run'));
+      await new RunCommand(
+        createArgv(testDir, 'env', '--concurrency', '1', '--no-sort', '--stream', '--cmd-dry-run')
+      );
 
       const logLines = (logOutput as any).logged().split('\n');
       expect(logLines).toEqual([
@@ -352,46 +365,72 @@ describe('RunCommand', () => {
 
   // this is a temporary set of tests, which will be replaced by verdacio-driven tests
   // once the required setup is fully set up
-  describe("in a repo powered by Nx", () => {
+  describe('in a repo powered by Nx', () => {
     let testDir;
-    let collectedOutput = "";
+    let collectedOutput = '';
+    let originalStdout;
 
     beforeAll(async () => {
-      testDir = await initFixture("powered-by-nx");
+      testDir = await initFixture('powered-by-nx');
       process.env.NX_WORKSPACE_ROOT_PATH = testDir;
-      // eslint-disable-next-line global-require
-      const nxOutput = require("nx/src/utils/output");
-      nxOutput.output.writeToStdOut = (v) => {
-        collectedOutput = `${collectedOutput}\n${v}`;
-      };
       // @ts-ignore
-      jest.spyOn(process, "exit").mockImplementation((code: any) => {
+      jest.spyOn(process, 'exit').mockImplementation((code: any) => {
         if (code !== 0) {
           throw new Error();
         }
       });
+      originalStdout = process.stdout.write;
+      (process.stdout as any).write = (v) => {
+        collectedOutput = `${collectedOutput}\n${v}`;
+      };
     });
 
-    it("runs a script in packages", async () => {
-      collectedOutput = "";
-      await lernaRun(testDir)("my-script");
-      expect(collectedOutput).toContain("package-1");
-      expect(collectedOutput).toContain("package-3");
-      expect(collectedOutput).toContain("Successfully ran target");
+    afterAll(() => {
+      process.stdout.write = originalStdout;
     });
 
-    it("runs a script only in scoped packages", async () => {
-      collectedOutput = "";
-      await lernaRun(testDir)("my-script", "--scope", "package-1");
-      expect(collectedOutput).toContain("package-1");
-      expect(collectedOutput).not.toContain("package-3");
+    it('runs a script in packages', async () => {
+      collectedOutput = '';
+      await lernaRun(testDir)('my-script');
+      expect(collectedOutput).toContain('package-1');
+      expect(collectedOutput).toContain('package-3');
+      expect(collectedOutput).toContain('Successfully ran target');
     });
 
-    it("does not run a script in ignored packages", async () => {
-      collectedOutput = "";
-      await lernaRun(testDir)("my-script", "--ignore", "package-@(2|3|4)");
-      expect(collectedOutput).toContain("package-1");
-      expect(collectedOutput).not.toContain("package-3");
+    it('runs a script only in scoped packages', async () => {
+      collectedOutput = '';
+      await lernaRun(testDir)('my-script', '--scope', 'package-1');
+      expect(collectedOutput).toContain('package-1');
+      expect(collectedOutput).not.toContain('package-3');
+    });
+
+    it('does not run a script in ignored packages', async () => {
+      collectedOutput = '';
+      await lernaRun(testDir)('my-script', '--ignore', 'package-@(2|3|4)');
+      expect(collectedOutput).toContain('package-1');
+      expect(collectedOutput).not.toContain('package-3');
+    });
+
+    it('runs a script in packages with --stream', async () => {
+      collectedOutput = '';
+      await lernaRun(testDir)('my-script', '--stream');
+
+      expect(collectedOutput).toContain('[package-1      ]');
+      expect(collectedOutput).toContain('[package-3      ]');
+    });
+
+    it('runs a cacheable script', async () => {
+      collectedOutput = '';
+      await lernaRun(testDir)('my-cacheable-script');
+      expect(collectedOutput).not.toContain('Nx read the output from the cache');
+
+      collectedOutput = '';
+      await lernaRun(testDir)('my-cacheable-script');
+      expect(collectedOutput).toContain('Nx read the output from the cache');
+
+      collectedOutput = '';
+      await lernaRun(testDir)('my-cacheable-script', '--skip-nx-cache');
+      expect(collectedOutput).not.toContain('Nx read the output from the cache');
     });
   });
 });
