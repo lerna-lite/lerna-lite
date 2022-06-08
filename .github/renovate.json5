@@ -15,10 +15,10 @@
       packageNames: ['tacks'],
       allowedVersions: '1.2.6',
     },
-    // allow Node14/npm8 until its EOL June 2023
+    // allow Node14/npm8 until it is EOL on June 2023
     {
       packageNames: ['node'],
-      allowedVersions: '14.13.1',
+      allowedVersions: '14.15.0',
     },
     {
       packageNames: ['npm'],

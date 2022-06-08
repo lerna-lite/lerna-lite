@@ -35,7 +35,7 @@
   },
   "engines": {
     "node": ">=14.13.1",
-    "npm": ">=8.12.1"
+    "npm": ">=8.0.0"
   },
   "devDependencies": {
     "@lerna-test/calls-back": "file:helpers/calls-back",
