@@ -1,7 +1,7 @@
 {
   "name": "@lerna-lite/optional-cmd-common",
   "description": "Lerna-Lite common utils for optional commands (Exec/List/Run)",
-  "version": "1.4.0",
+  "version": "1.5.0",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "typings": "dist/index.d.ts",
@@ -31,7 +31,7 @@
     "npm": ">=8.0.0"
   },
   "dependencies": {
-    "@lerna-lite/core": "^1.4.0",
+    "@lerna-lite/core": "^1.5.0",
     "fs-extra": "^10.1.0",
     "multimatch": "^5.0.0",
     "npmlog": "^6.0.2",
