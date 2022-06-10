@@ -24,9 +24,10 @@ jest.mock('@lerna-lite/core', () => ({
 // also point to the local version command so that all mocks are properly used even by the command-runner
 jest.mock('@lerna-lite/version', () => jest.requireActual('../version-command'));
 
-const fs = require('fs-extra');
-const path = require('path');
-const execa = require('execa');
+import fs from 'fs-extra';
+import path from 'path';
+import execa from 'execa';
+import yaml from 'js-yaml';
 
 // mocked or stubbed modules
 const writePkg = require('write-pkg');
@@ -68,6 +69,15 @@ const createArgv = (cwd, ...args) => {
   argv['loglevel'] = 'silent';
   return argv;
 };
+
+async function loadYamlFile<T>(filePath: string) {
+  try {
+    const file = await fs.promises.readFile(filePath);
+    return (await yaml.load(`${file}`)) as T;
+  } catch (e) {
+    return undefined;
+  }
+}
 
 // certain tests need to use the real thing
 const collectUpdatesActual = jest.requireActual('@lerna-lite/core').collectUpdates;
@@ -871,43 +881,52 @@ describe('VersionCommand', () => {
         expect(changedFiles).not.toContain('package-lock.json');
       });
 
-      xit(`should call runInstallLockFileOnly() when --sync-workspace-lock is provided and expect lockfile to be added to git`, async () => {
-        const cwd = await initFixture('lockfile-version2');
+      it(`should call runInstallLockFileOnly() when --sync-workspace-lock is provided and expect lockfile to be added to git`, async () => {
+        const cwd = await initFixture('lockfile-pnpm');
         await new VersionCommand(
-          createArgv(cwd, '--bump', 'major', '--yes', '--sync-workspace-lock', '--npm-client', 'npm')
+          createArgv(cwd, '--bump', 'major', '--yes', '--sync-workspace-lock', '--npm-client', 'pnpm')
         );
 
         const changedFiles = await showCommit(cwd, '--name-only');
-        const lockfileResponse = await loadPackageLockFileWhenExists(cwd);
+        expect(changedFiles).toContain('pnpm-lock.yaml');
 
-        expect(changedFiles).toContain('package-lock.json');
-        expect(lockfileResponse!.json.lockfileVersion).toBe(2);
-        expect(lockfileResponse!.json.packages['packages/package-1'].version).toBe('3.0.0');
-        expect(lockfileResponse!.json.packages['packages/package-2'].version).toBe('3.0.0');
-        expect(lockfileResponse!.json.packages['packages/package-2'].dependencies).toMatchObject({
-          '@my-workspace/package-1': '^3.0.0',
-        });
+        const lockfileResponse: any = await loadYamlFile(path.join(cwd, 'pnpm-lock.yaml'));
+        const { lockfileVersion, importers } = lockfileResponse;
+
+        expect(lockfileVersion).toBe(5.4);
+        expect(importers['packages/package-2'].specifiers['@my-workspace/package-1']).toBe(
+          'workspace:^3.0.0'
+        );
+        expect(importers['packages/package-3'].specifiers['@my-workspace/package-1']).toBe('workspace:^');
+        expect(importers['packages/package-3'].specifiers['@my-workspace/package-2']).toBe('workspace:*');
+        expect(importers['packages/package-4'].specifiers['@my-workspace/package-1']).toBe('workspace:3.0.0');
+        expect(importers['packages/package-4'].specifiers['@my-workspace/package-2']).toBe('workspace:~');
       });
 
-      xit(`should call runInstallLockFileOnly() when --sync-workspace-lock is provided and expect lockfile to be added to git even without npmClient`, async () => {
-        const cwd = await initFixture('lockfile-version2');
+      it(`should call runInstallLockFileOnly() when --sync-workspace-lock is provided and expect lockfile to be added to git even without npmClient`, async () => {
+        const cwd = await initFixture('lockfile-pnpm');
         await new VersionCommand(createArgv(cwd, '--bump', 'minor', '--yes', '--sync-workspace-lock'));
 
         const changedFiles = await showCommit(cwd, '--name-only');
-        expect(changedFiles).toContain('package-lock.json');
+        expect(changedFiles).toContain('pnpm-lock.yaml');
         expect(writePkg.updatedVersions()).toEqual({
           '@my-workspace/package-1': '2.4.0',
           '@my-workspace/package-2': '2.4.0',
+          '@my-workspace/package-3': '2.4.0',
+          '@my-workspace/package-4': '2.4.0',
         });
 
-        const lockfileResponse = await loadPackageLockFileWhenExists(cwd);
+        const lockfileResponse: any = await loadYamlFile(path.join(cwd, 'pnpm-lock.yaml'));
+        const { lockfileVersion, importers } = lockfileResponse;
 
-        expect(lockfileResponse!.json.lockfileVersion).toBe(2);
-        expect(lockfileResponse!.json.packages['packages/package-1'].version).toBe('2.4.0');
-        expect(lockfileResponse!.json.packages['packages/package-2'].version).toBe('2.4.0');
-        expect(lockfileResponse!.json.packages['packages/package-2'].dependencies).toMatchObject({
-          '@my-workspace/package-1': '^2.4.0',
-        });
+        expect(lockfileVersion).toBe(5.4);
+        expect(importers['packages/package-2'].specifiers['@my-workspace/package-1']).toBe(
+          'workspace:^2.4.0'
+        );
+        expect(importers['packages/package-3'].specifiers['@my-workspace/package-1']).toBe('workspace:^');
+        expect(importers['packages/package-3'].specifiers['@my-workspace/package-2']).toBe('workspace:*');
+        expect(importers['packages/package-4'].specifiers['@my-workspace/package-1']).toBe('workspace:2.4.0');
+        expect(importers['packages/package-4'].specifiers['@my-workspace/package-2']).toBe('workspace:~');
       });
     });
   });
