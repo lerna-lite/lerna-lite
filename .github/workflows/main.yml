@@ -10,45 +10,71 @@ on:
       - '**'
 env:
   CI: true
-  PREFERRED_WORKSPACE_MANAGER: npm
 
 jobs:
   run:
-    name: Node ${{ matrix.node }}
-    runs-on: ubuntu-latest
-
     strategy:
       fail-fast: false
       matrix:
         node: [14, 16]
+        platform:
+          - ubuntu-latest
+
+    name: '${{matrix.platform}} / NodeJS ${{ matrix.node }}'
+    runs-on: ${{matrix.platform}}
 
     steps:
-      - name: Clone repository
+      - name: Checkout
         uses: actions/checkout@v3
         with:
-          fetch-depth: 3
+          fetch-depth: 2 # codecov-bash seems to require this
 
-      - uses: actions/setup-node@v3
+      - name: Install pnpm itself
+        uses: pnpm/action-setup@v2.2.2
+        with:
+          version: 7
+
+      - name: Set NodeJS
+        uses: actions/setup-node@v3
         with:
           node-version: ${{ matrix.node }}
-          cache: 'npm'
-          cache-dependency-path: '**/package-lock.json'
-
-      - if: matrix.node == '14'
-        run: npm install --global npm@8
+          cache: 'pnpm'
 
       - run: node --version
-      - run: npm --version
+      - run: pnpm --version
 
-      - name: Install NPM dependencies
-        run: npm ci
+      - name: Get pnpm store directory
+        id: pnpm-cache
+        run: |
+          echo "::set-output name=pnpm_cache_dir::$(pnpm store path)"
 
-      - name: Run all workspace TSC builds
-        run: npm run build
+      - uses: actions/cache@v3
+        name: Setup pnpm cache
+        with:
+          path: ${{ steps.pnpm-cache.outputs.pnpm_cache_dir }}
+          key: ${{ runner.os }}-pnpm-store-${{ hashFiles('**/pnpm-lock.yaml') }}
+          restore-keys: |
+            ${{ runner.os }}-pnpm-store-
+
+      - name: Run pnpm install dependencies
+        run: pnpm install
+
+      - name: Cache TypeScript and Jest
+        uses: actions/cache@v3
+        with:
+          path: |
+            packages/*/lib
+            packages/*/tsconfig.tsbuildinfo
+            test/.jest-cache
+          key: ts-jest-${{ matrix.platform }}-${{ matrix.node }}-${{ github.run_id }}
+          restore-keys: ts-jest-${{ matrix.platform }}-${{ matrix.node }}-
+
+      - name: TSC Full Bundle (all Bundler types)
+        run: pnpm bundle
 
       - name: Run Jest unit tests
         if: "!contains(github.event.head_commit.message, 'chore(release)')"
-        run: npm run jest:ci
+        run: pnpm test:ci
 
       - name: Upload Jest coverage to Codecov
         if: "!contains(github.event.head_commit.message, 'chore(release)')"
