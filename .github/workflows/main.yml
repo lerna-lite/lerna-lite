@@ -69,12 +69,12 @@ jobs:
           key: ts-jest-${{ matrix.platform }}-${{ matrix.node }}-${{ github.run_id }}
           restore-keys: ts-jest-${{ matrix.platform }}-${{ matrix.node }}-
 
-      - name: TSC Full Bundle (all Bundler types)
-        run: pnpm bundle
+      - name: Run all workspace TSC builds
+        run: pnpm build
 
       - name: Run Jest unit tests
         if: "!contains(github.event.head_commit.message, 'chore(release)')"
-        run: pnpm test:ci
+        run: pnpm jest:ci
 
       - name: Upload Jest coverage to Codecov
         if: "!contains(github.event.head_commit.message, 'chore(release)')"
