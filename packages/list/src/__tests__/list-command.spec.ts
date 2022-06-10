@@ -1,5 +1,5 @@
 jest.mock('@lerna-lite/core', () => ({
-  ...jest.requireActual('@lerna-lite/core') as any, // return the other real methods, below we'll mock only 2 of the methods
+  ...(jest.requireActual('@lerna-lite/core') as any), // return the other real methods, below we'll mock only 2 of the methods
   logOutput: jest.requireActual('../../../core/src/__mocks__/output').logOutput,
   promptConfirmation: jest.requireActual('../../../core/src/__mocks__/prompt').promptConfirmation,
   promptSelectOne: jest.requireActual('../../../core/src/__mocks__/prompt').promptSelectOne,
@@ -9,15 +9,16 @@ jest.mock('@lerna-lite/core', () => ({
   PackageGraph: jest.requireActual('../../../core/src/package-graph').PackageGraph,
   getPackages: jest.requireActual('../../../core/src/project').getPackages,
 }));
-// import {} from '../../../core/src/__mocks__/output'
 
 // helpers
 const initFixture = require('@lerna-test/init-fixture')(__dirname);
 const { logOutput } = require('@lerna-lite/core');
-const { collectUpdates } = require("@lerna-lite/core");
+const { collectUpdates } = require('@lerna-lite/core');
 
 // file under test
-const lernaList = require('@lerna-test/command-runner')(require('../../../cli/src/cli-commands/cli-list-commands'));
+const lernaList = require('@lerna-test/command-runner')(
+  require('../../../cli/src/cli-commands/cli-list-commands')
+);
 import { ListCommand } from '../index';
 import { factory } from '../list-command';
 
@@ -213,7 +214,9 @@ package-2
     it('appends MISSING flag to long parseable output', async () => {
       const testDir = await initFixture('undefined-version');
       await lernaList(testDir)('--long', '--parseable');
-      expect(logOutput.logged()).toMatchInlineSnapshot(`__TEST_ROOTDIR__/packages/package-1:package-1:MISSING`);
+      expect(logOutput.logged()).toMatchInlineSnapshot(
+        `__TEST_ROOTDIR__/packages/package-1:package-1:MISSING`
+      );
     });
   });
 

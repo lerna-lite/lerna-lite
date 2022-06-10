@@ -27,8 +27,6 @@ jest.mock('@lerna-lite/version', () => jest.requireActual('../version-command'))
 const fs = require('fs-extra');
 const path = require('path');
 const execa = require('execa');
-const core = require('@lerna-lite/core');
-const nodeFs = require('node:fs');
 
 // mocked or stubbed modules
 const writePkg = require('write-pkg');
