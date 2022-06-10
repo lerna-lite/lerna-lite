@@ -489,9 +489,11 @@ lerna publish from-git --tag-version-prefix=''
 
 ### `--sync-workspace-lock`
 
-This flag will run `npm install --package-lock-only` or equivalent depending on the package manager defined in `npmClient` (npm, pnpm or yarn) in your `lerna.json` and also include the lock file as a git change once processed. This technique should be more future proof and safer than having Lerna-Lite taking care of updating the lock file directly which is not always ideal and is different for each client, this flag is one of two solutions (probably the best option) to update the lock file. It might not be the best solution for your use case, see notes below, just give it a try.
+This flag will leverage your package manager client to update the project lock file (ie `npm install --package-lock-only`) it is reliant on the [npmClient](https://github.com/ghiscoding/lerna-lite/wiki/lerna.json#concepts) defined in [lerna.json](https://github.com/ghiscoding/lerna-lite/wiki/lerna.json) (`pnpm`, `yarn` or `npm` which is default), this will also include the lock file as a git change once processed. This technique should be much more future proof and safer than having Lerna-Lite doing the work of updating the lock file which is not always ideal neither safe, this flag is one of two solutions (probably the best option) to update the lock file. It might not be the best solution for your use case, see notes below, just give it a try.
 
-> `npm` users: we recommend having npm verion >=8.5.0 installed with npm workspaces, so that we can run `npm install --package-lock-only` instead of `npm shrinkwrap` with < 8.5.0 that have a drawback of file renaming. This might become an actual minimal requirement in a future release to be >= 8.5.0.
+#### Notes for each client:
+
+> `npm` users: we recommend having npm client version >=8.5.0 installed, so that we can run `npm install --package-lock-only` instead of `npm shrinkwrap` with version < 8.5.0 which would require an extra negative step of lock file renaming. Also note that requiring >=8.5.0 might become an actual minimal requirement in a future release.
 
 > `pnpm`/`yarn` users: we recommend using the `workspace:` protocol since it will prefer local dependencies and will make it less likely to fetch packages accidentally from the registry (refer to version with [`workspace:` protocol](#workspace-protocol)).
 
@@ -501,17 +503,17 @@ This flag will run `npm install --package-lock-only` or equivalent depending on 
 lerna version --sync-workspace-lock
 ```
 
-The command that will be performed by each client will be the following
+The script performed for each client will be the following
 
 ```sh
 # npm assuming a `package-lock.json` lock file
 npm install --package-lock-only     # npm client >= 8.5.0
 npm shrinkwrap --package-lock-only  # npm client < 8.5.0 will execute a file rename behind the scene
 
-# pnpm assuming a `pnpm-lock.yaml` lock file
+# pnpm assuming a "pnpm-lock.yaml" lock file and "npmClient": "pnpm"
 pnpm install --lockfile-only
 
-# yarn assuming a `yarn.lock` lock file
+# yarn assuming a "yarn.lock" lock file and "npmClient": "yarn"
 yarn install --mode update-lockfile
 ```
 
