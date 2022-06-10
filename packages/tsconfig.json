@@ -3,15 +3,8 @@
     "module": "commonjs",
     "moduleResolution": "node",
     "target": "es2018",
-    "lib": [
-      "es2018",
-      "dom"
-    ],
-    "types": [
-      "jest",
-      "jest-extended",
-      "node"
-    ],
+    "lib": ["es2018", "dom"],
+    "types": ["jest", "jest-extended", "node"],
     "allowSyntheticDefaultImports": true,
     "esModuleInterop": true,
     "noImplicitAny": false,
@@ -25,14 +18,10 @@
     "forceConsistentCasingInFileNames": true,
     "experimentalDecorators": true,
     "noEmitHelpers": false,
+    "preserveSymlinks": true,
     "stripInternal": true,
     "sourceMap": true,
     "strict": true
   },
-  "exclude": [
-    "**/*.spec.js",
-    "**/*.spec.ts",
-    "**/*.test.js",
-    "**/*.test.ts"
-  ]
+  "exclude": ["**/*.spec.js", "**/*.spec.ts", "**/*.test.js", "**/*.test.ts"]
 }

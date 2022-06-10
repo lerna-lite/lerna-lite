@@ -57,6 +57,8 @@ exports.builder = (yargs) => {
 
 exports.handler = async function handler(argv) {
   try {
+    // @ts-ignore
+    // eslint-disable-next-line import/no-unresolved
     const { ListCommand } = await import('@lerna-lite/list');
     new ListCommand(argv);
   } catch (e) {

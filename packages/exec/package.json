@@ -31,8 +31,9 @@
     "npm": ">=8.0.0"
   },
   "dependencies": {
-    "@lerna-lite/core": "^1.5.0",
-    "@lerna-lite/optional-cmd-common": "^1.5.0",
+    "@lerna-lite/core": "workspace:*",
+    "@lerna-lite/optional-cmd-common": "workspace:*",
+    "dotenv": "^16.0.1",
     "fs-extra": "^10.1.0",
     "multimatch": "^5.0.0",
     "npmlog": "^6.0.2",

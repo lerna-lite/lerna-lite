@@ -63,6 +63,7 @@
     "npm-packlist": "^5.1.0",
     "npm-registry-fetch": "^13.1.1",
     "npmlog": "^6.0.2",
+    "pify": "^5.0.0",
     "os": "^0.1.2",
     "p-map": "^4.0.0",
     "p-pipe": "^3.1.0",

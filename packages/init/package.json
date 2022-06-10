@@ -31,7 +31,7 @@
     "npm": ">=8.0.0"
   },
   "dependencies": {
-    "@lerna-lite/core": "^1.5.0",
+    "@lerna-lite/core": "workspace:*",
     "fs-extra": "^10.1.0",
     "p-map": "^4.0.0",
     "write-json-file": "^4.3.0"
