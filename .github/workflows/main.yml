@@ -40,7 +40,7 @@ jobs:
           cache: 'pnpm'
 
       - name: Display Node & pnpm versions
-      - run: |
+        run: |
           node --version
           pnpm --version
 
