@@ -76,5 +76,5 @@ jobs:
         run: pnpm jest:ci
 
       - name: Upload Jest coverage to Codecov
-        if: "!contains(github.event.head_commit.message, 'chore(release)')"
+        if: "!contains(matrix.platform, 'windows') && !contains(github.event.head_commit.message, 'chore(release)')"
         run: bash <(curl -s https://codecov.io/bash)
