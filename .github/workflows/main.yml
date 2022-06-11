@@ -16,8 +16,8 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        node: [14, 16, 18]
-        platform: [ubuntu-latest]
+        node: [14, 16]
+        platform: [ubuntu-latest, windows-latest]
 
     name: '${{matrix.platform}} / NodeJS ${{ matrix.node }}'
     runs-on: ${{matrix.platform}}
