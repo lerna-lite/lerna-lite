@@ -39,10 +39,8 @@ jobs:
           node-version: ${{ matrix.node }}
           cache: 'pnpm'
 
-      - name: Display Node & pnpm versions
-        run: |
-          node --version
-          pnpm --version
+      - run: node --version
+      - run: npm --version
 
       - name: Get pnpm store directory
         id: pnpm-cache
