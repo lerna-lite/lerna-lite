@@ -933,10 +933,16 @@ describe('VersionCommand', () => {
 
   describe('with spurious -- arguments', () => {
     it('ignores the extra arguments with cheesy parseConfiguration()', async () => {
+      const logSpy = jest.spyOn(console, 'log').mockImplementation(() => {});
+
       const cwd = await initFixture('lifecycle');
       await lernaVersion(cwd)('--yes', '--', '--loglevel', 'ignored', '--blah');
-
       const logMessages = loggingOutput('warn');
+
+      expect(logSpy).toHaveBeenCalledWith('preversion-root');
+      expect(logSpy).toHaveBeenCalledWith('preversion-package-1');
+      expect(logSpy).toHaveBeenCalledWith('version-package-1');
+
       expect(logMessages).toContain('Arguments after -- are no longer passed to subprocess executions.');
     });
   });
