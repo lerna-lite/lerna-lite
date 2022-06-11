@@ -17,8 +17,7 @@ jobs:
       fail-fast: false
       matrix:
         node: [14, 16]
-        platform:
-          - ubuntu-latest
+        platform: [ubuntu-latest, windows-latest]
 
     name: '${{matrix.platform}} / NodeJS ${{ matrix.node }}'
     runs-on: ${{matrix.platform}}
@@ -40,8 +39,10 @@ jobs:
           node-version: ${{ matrix.node }}
           cache: 'pnpm'
 
-      - run: node --version
-      - run: pnpm --version
+      - Display Node & pnpm versions
+      - run: |
+          node --version
+          pnpm --version
 
       - name: Get pnpm store directory
         id: pnpm-cache
