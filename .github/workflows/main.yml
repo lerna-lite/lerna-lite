@@ -39,7 +39,7 @@ jobs:
           node-version: ${{ matrix.node }}
           cache: 'pnpm'
 
-      - Display Node & pnpm versions
+      - name: Display Node & pnpm versions
       - run: |
           node --version
           pnpm --version
