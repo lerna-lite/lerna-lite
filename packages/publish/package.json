@@ -31,8 +31,8 @@
     "npm": ">=8.0.0"
   },
   "dependencies": {
-    "@lerna-lite/core": "^1.5.0",
-    "@lerna-lite/version": "^1.5.0",
+    "@lerna-lite/core": "workspace:*",
+    "@lerna-lite/version": "workspace:*",
     "byte-size": "^7.0.1",
     "columnify": "^1.6.0",
     "fs-extra": "^10.1.0",

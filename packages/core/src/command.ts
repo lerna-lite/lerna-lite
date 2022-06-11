@@ -5,19 +5,33 @@ import log, { Logger } from 'npmlog';
 import os from 'os';
 
 import { cleanStack } from './utils/clean-stack';
+import { logExecCommand } from './child-process';
 import { logPackageError } from './utils/log-package-error';
 import { warnIfHanging } from './utils/warn-if-hanging';
 import { writeLogFile } from './utils/write-log-file';
 import { Project } from './project/project';
 import { ValidationError } from './validation-error';
-import { CommandType, ExecCommandOption, ExecOpts, InitCommandOption, ListCommandOption, ProjectConfig, PublishCommandOption, VersionCommandOption } from './models';
+import {
+  CommandType,
+  ExecCommandOption,
+  ExecOpts,
+  InitCommandOption,
+  ListCommandOption,
+  ProjectConfig,
+  PublishCommandOption,
+  VersionCommandOption,
+} from './models';
 import { PackageGraph } from './package-graph/package-graph';
-import { logExecCommand } from './child-process';
 
 // maxBuffer value for running exec
 const DEFAULT_CONCURRENCY = os.cpus().length;
 
-type AvailableCommandOption = ExecCommandOption | InitCommandOption | ListCommandOption | PublishCommandOption | VersionCommandOption;
+type AvailableCommandOption =
+  | ExecCommandOption
+  | InitCommandOption
+  | ListCommandOption
+  | PublishCommandOption
+  | VersionCommandOption;
 
 export class Command<T extends AvailableCommandOption> {
   argv: any;
@@ -43,7 +57,7 @@ export class Command<T extends AvailableCommandOption> {
     log.silly('argv', argv.toString());
 
     // 'FooCommand' => 'foo'
-    this.commandName = (this.constructor.name.replace(/Command$/, '').toLowerCase()) as CommandType;
+    this.commandName = this.constructor.name.replace(/Command$/, '').toLowerCase() as CommandType;
 
     // composed commands are called from other commands, like publish -> version
     this.composed = typeof argv.composed === 'string' && argv.composed !== this.commandName;
@@ -58,7 +72,7 @@ export class Command<T extends AvailableCommandOption> {
       // run everything inside a Promise chain
       let chain: Promise<any> = Promise.resolve();
 
-      chain = chain.then(() => this.project = new Project(argv.cwd));
+      chain = chain.then(() => (this.project = new Project(argv.cwd)));
       chain = chain.then(() => this.configureEnvironment());
       chain = chain.then(() => this.configureOptions());
       chain = chain.then(() => this.configureProperties());
@@ -177,7 +191,9 @@ export class Command<T extends AvailableCommandOption> {
     const commandConfig = this.project.config.command || {};
 
     // The current command always overrides otherCommandConfigs
-    const overrides = [this.commandName, ...this.otherCommandConfigs].map((key) => (commandConfig as any)[key]);
+    const overrides = [this.commandName, ...this.otherCommandConfigs].map(
+      (key) => (commandConfig as any)[key]
+    );
 
     this.options = defaultOptions(
       // CLI flags, which if defined overrule subsequent values
@@ -248,16 +264,26 @@ export class Command<T extends AvailableCommandOption> {
   }
 
   runValidations() {
+    if (this.commandName === 'info') {
+      return;
+    }
+
     if ((this.options.since !== undefined || this.requiresGit) && !this.gitInitialized()) {
       throw new ValidationError('ENOGIT', 'The git binary was not found, or this is not a git repository.');
     }
 
     if (!this.project.manifest) {
-      throw new ValidationError('ENOPKG', 'No `package.json` file found, make sure it exist in the root of your project.');
+      throw new ValidationError(
+        'ENOPKG',
+        'No `package.json` file found, make sure it exist in the root of your project.'
+      );
     }
 
     if (!this.project.version) {
-      throw new ValidationError('ENOLERNA', 'No `lerna.json` file exist, please create one in the root of your project.');
+      throw new ValidationError(
+        'ENOLERNA',
+        'No `lerna.json` file exist, please create one in the root of your project.'
+      );
     }
 
     if ((this.options as InitCommandOption).independent && !this.project.isIndependent()) {
@@ -284,10 +310,12 @@ export class Command<T extends AvailableCommandOption> {
 
     let chain: Promise<any> = Promise.resolve();
 
-    chain = chain.then(() => this.project.getPackages());
-    chain = chain.then((packages) => {
-      this.packageGraph = new PackageGraph(packages || []);
-    });
+    if (this.commandName !== 'info') {
+      chain = chain.then(() => this.project.getPackages());
+      chain = chain.then((packages) => {
+        this.packageGraph = new PackageGraph(packages || []);
+      });
+    }
 
     return chain;
   }
@@ -311,7 +339,6 @@ export class Command<T extends AvailableCommandOption> {
     throw new ValidationError(this.commandName, 'execute() needs to be implemented.');
   }
 }
-
 
 // _.defaults(), but simplified:
 //  * All inputs are plain objects

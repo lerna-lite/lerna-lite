@@ -123,7 +123,6 @@ export function runLifecycle(pkg: Package, stage: string, options: LifecycleConf
        */
       // eslint-disable-next-line no-console
       console.log(stdout.toString().trimEnd());
-
       opts.log.silly('lifecycle', '%j finished in %j', stage, pkg.name);
     },
     (err) => {

@@ -12,12 +12,12 @@ function normalize(results: string[]) {
 }
 
 function getGlobOpts(rootPath: string, packageConfigs: string[]) {
-  const globOpts: GlobbyOptions = {
+  const globOpts = {
     cwd: rootPath,
     absolute: true,
     expandDirectories: false,
     followSymbolicLinks: false,
-  };
+  } as GlobbyOptions;
 
   if (packageConfigs.some((cfg) => cfg.indexOf('**') > -1)) {
     if (packageConfigs.some((cfg) => cfg.indexOf('node_modules') > -1)) {
@@ -27,7 +27,7 @@ function getGlobOpts(rootPath: string, packageConfigs: string[]) {
       );
     }
 
-    globOpts.ignore = [
+    (globOpts as any).ignore = [
       // allow globs like "packages/**",
       // but avoid picking up node_modules/**/package.json
       '**/node_modules/**',
@@ -70,7 +70,11 @@ export function makeFileFinder(rootPath: string, packageConfigs: string[]) {
 export function makeSyncFileFinder(rootPath: string, packageConfigs: string[]) {
   const globOpts: GlobbyOptions = getGlobOpts(rootPath, packageConfigs);
 
-  return (fileName: string, fileMapper: (value: string, index: number, array: string[]) => any, customGlobOpts?: GlobbyOptions) => {
+  return (
+    fileName: string,
+    fileMapper: (value: string, index: number, array: string[]) => any,
+    customGlobOpts?: GlobbyOptions
+  ) => {
     const options: GlobbyOptions = Object.assign({}, customGlobOpts, globOpts);
     const patterns = packageConfigs.map((globPath) => path.posix.join(globPath, fileName)).sort();
 

@@ -1,0 +1,7 @@
+packages:
+  # workspace packages
+  - 'packages/**'
+
+  # exclude packages that are inside test directories
+  - '!**/__fixtures__/**'
+  - '!**/__test__/**'

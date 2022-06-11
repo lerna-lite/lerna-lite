@@ -1,6 +1,6 @@
 import { cosmiconfigSync } from 'cosmiconfig';
 import dedent from 'dedent';
-import globby from 'globby';
+import globby, { GlobbyOptions } from 'globby';
 import globParent from 'glob-parent';
 import log from 'npmlog';
 import path from 'path';
@@ -118,7 +118,9 @@ export class Project {
   }
 
   get packageParentDirs(): Promise<string[]> {
-    return (this.packageConfigs as any).map(globParent).map((parentDir: string) => path.resolve(this.rootPath, parentDir));
+    return (this.packageConfigs as any)
+      .map(globParent)
+      .map((parentDir: string) => path.resolve(this.rootPath, parentDir));
   }
 
   get manifest(): RawManifest {
@@ -162,7 +164,7 @@ export class Project {
         caseSensitiveMatch: false,
         // Project license is always a sibling of the root manifest
         deep: 0,
-      });
+      } as GlobbyOptions);
 
       licensePath = search.shift();
 
@@ -203,20 +205,25 @@ export class Project {
         (packageJson: any) => new Package(packageJson, path.dirname(packageConfigPath), this.rootPath)
       );
 
-    return this.fileFinder('package.json', (filePaths: string[]) => pMap(filePaths, mapper, { concurrency: 50 }));
+    return this.fileFinder('package.json', (filePaths: string[]) =>
+      pMap(filePaths, mapper, { concurrency: 50 })
+    );
   }
 
   /**
    * @returns {Package[]} A list of Package instances
    */
   getPackagesSync() {
-    return makeSyncFileFinder(this.rootPath, this.packageConfigs)('package.json', (packageConfigPath: string) => {
-      return new Package(
-        loadJsonFile.sync(packageConfigPath),
-        path.dirname(packageConfigPath),
-        this.rootPath
-      );
-    }) as string[];
+    return makeSyncFileFinder(this.rootPath, this.packageConfigs)(
+      'package.json',
+      (packageConfigPath: string) => {
+        return new Package(
+          loadJsonFile.sync(packageConfigPath),
+          path.dirname(packageConfigPath),
+          this.rootPath
+        );
+      }
+    ) as string[];
   }
 
   getPackageLicensePaths(): Promise<string[]> {

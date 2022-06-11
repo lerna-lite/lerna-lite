@@ -1,8 +1,7 @@
 {
   "version": "1.5.0",
   "loglevel": "verbose",
-  "npmClient": "npm",
-  "useWorkspaces": true,
+  "npmClient": "pnpm",
   "command": {
     "publish": {
       "conventionalCommits": true
@@ -18,5 +17,6 @@
     "run": {
       "cmdDryRun": false
     }
-  }
+  },
+  "packages": ["packages/*"]
 }

@@ -17,9 +17,9 @@
 /connect.lock
 /coverage
 /typings
+.pnpm-debug.log
+pnpm-debug.log
 lerna-debug.log
-npm-debug.log
-testem.log
 
 # System Files
 .DS_Store
@@ -30,6 +30,7 @@ dist
 
 # Tests Report & Coverage
 **/coverage
+**/.jest-cache
 **/jest-coverage
 
 # Environment variables

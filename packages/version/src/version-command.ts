@@ -669,7 +669,7 @@ export class VersionCommand extends Command<VersionCommandOption> {
         })
       );
     } else if (this.options.syncWorkspaceLock) {
-      // update lock file, with npm client defined when `--package-lock-only` is enabled
+      // update lock file, with npm client defined when `--sync-workspace-lock` is enabled
       chain = chain.then(() =>
         runInstallLockFileOnly(npmClient, this.project.manifest.location).then((lockfilePath) => {
           if (lockfilePath) {

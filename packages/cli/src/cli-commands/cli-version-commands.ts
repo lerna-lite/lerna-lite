@@ -1,5 +1,5 @@
 import log from 'npmlog';
-import semver from 'semver';
+// import semver from 'semver';
 import { VersionCommand } from '@lerna-lite/version';
 
 /**

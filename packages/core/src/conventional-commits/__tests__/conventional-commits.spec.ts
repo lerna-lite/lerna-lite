@@ -20,6 +20,10 @@ import { GetChangelogConfig } from '../get-changelog-config';
 expect.addSnapshotSerializer(require('@lerna-test/serialize-changelog'));
 
 describe('conventional-commits', () => {
+  beforeEach(() => {
+    jest.setTimeout(60000);
+  });
+
   describe('recommendVersion()', () => {
     it('returns next version bump', async () => {
       const cwd = await initFixture('fixed');
@@ -290,7 +294,7 @@ describe('conventional-commits', () => {
     const getFileContent = ({ logPath }) => fs.readFile(logPath, 'utf8');
 
     it('creates files if they do not exist', async () => {
-      const cwd = await initFixture('changelog-missing') as string;
+      const cwd = (await initFixture('changelog-missing')) as string;
 
       const [pkg1] = await getPackages(cwd);
       const rootPkg = {
@@ -502,11 +506,17 @@ describe('conventional-commits', () => {
     it('supports config builder presets', async () => {
       const cwd = await initFixture('fixed');
 
-      const configForPresetNameString = await GetChangelogConfig.getChangelogConfig('./scripts/config-builder-preset', cwd);
+      const configForPresetNameString = await GetChangelogConfig.getChangelogConfig(
+        './scripts/config-builder-preset',
+        cwd
+      );
       expect(configForPresetNameString).toBeDefined();
 
       const presetConfigObject = { name: './scripts/config-builder-preset', key: 'value' };
-      const configForPresetConfigObject = await GetChangelogConfig.getChangelogConfig(presetConfigObject, cwd);
+      const configForPresetConfigObject = await GetChangelogConfig.getChangelogConfig(
+        presetConfigObject,
+        cwd
+      );
 
       expect(configForPresetConfigObject).toBeDefined();
       expect(configForPresetConfigObject.key).toBe(presetConfigObject.key);
