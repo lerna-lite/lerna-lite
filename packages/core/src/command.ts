@@ -308,16 +308,14 @@ export class Command<T extends AvailableCommandOption> {
       log.info('ci', 'enabled');
     }
 
-    if (this.commandName === 'info') {
-      return;
-    }
-
     let chain: Promise<any> = Promise.resolve();
 
-    chain = chain.then(() => this.project.getPackages());
-    chain = chain.then((packages) => {
-      this.packageGraph = new PackageGraph(packages || []);
-    });
+    if (this.commandName !== 'info') {
+      chain = chain.then(() => this.project.getPackages());
+      chain = chain.then((packages) => {
+        this.packageGraph = new PackageGraph(packages || []);
+      });
+    }
 
     return chain;
   }
