@@ -3,6 +3,7 @@ import os from 'os';
 import path from 'path';
 import loadJsonFile from 'load-json-file';
 import npa from 'npm-package-arg';
+import npmlog from 'npmlog';
 import writePkg from 'write-pkg';
 
 jest.mock('load-json-file');
@@ -310,24 +311,30 @@ describe('Package', () => {
     });
   });
 
-  describe(".updateLocalDependency()", () => {
+  describe('.updateLocalDependency()', () => {
     describe('gitCommittish', () => {
       it("works with a resolved 'gitCommittish'", () => {
         const pkg = factory({
           dependencies: {
-            a: "^1.0.0",
-            b: "^1.0.0",
+            a: '^1.0.0',
+            b: '^1.0.0',
           },
         });
 
-        const resolved: NpaResolveResult = npa.resolve("a", "^1.0.0", ".");
+        const resolved: NpaResolveResult = npa.resolve('a', '^1.0.0', '.');
         resolved.explicitWorkspace = true;
         resolved.type = undefined as any;
         resolved.registry = undefined as any;
         resolved.gitCommittish = '1.2.3';
-        resolved.hosted = { committish: '', domain: 'localhost', noGitPlus: false, noCommittish: false, saveSpec: true } as any;
+        resolved.hosted = {
+          committish: '',
+          domain: 'localhost',
+          noGitPlus: false,
+          noCommittish: false,
+          saveSpec: true,
+        } as any;
 
-        pkg.updateLocalDependency(resolved, "2.0.0", "^");
+        pkg.updateLocalDependency(resolved, '2.0.0', '^');
 
         expect((resolved.hosted as any).committish).toBe('2.0.0');
       });
@@ -337,40 +344,46 @@ describe('Package', () => {
       it("works with a resolved 'gitRange'", () => {
         const pkg = factory({
           dependencies: {
-            a: "^1.0.0",
-            b: "^1.0.0",
+            a: '^1.0.0',
+            b: '^1.0.0',
           },
         });
 
-        const resolved: NpaResolveResult = npa.resolve("a", "^1.0.0", ".");
+        const resolved: NpaResolveResult = npa.resolve('a', '^1.0.0', '.');
         resolved.explicitWorkspace = true;
         resolved.type = undefined as any;
         resolved.registry = undefined as any;
         resolved.gitRange = '1.2.3';
-        resolved.hosted = { committish: '', domain: 'localhost', noGitPlus: false, noCommittish: false, saveSpec: true } as any;
+        resolved.hosted = {
+          committish: '',
+          domain: 'localhost',
+          noGitPlus: false,
+          noCommittish: false,
+          saveSpec: true,
+        } as any;
 
-        pkg.updateLocalDependency(resolved, "2.0.0", "^");
+        pkg.updateLocalDependency(resolved, '2.0.0', '^');
 
         expect((resolved.hosted as any).committish).toBe('semver:^2.0.0');
       });
     });
 
     describe('Version with `workspace:` protocol', () => {
-      it("works with `workspace:` protocol range", () => {
+      it('works with `workspace:` protocol range', () => {
         const pkg = factory({
           dependencies: {
-            a: "workspace:^1.0.0",
-            b: "workspace:>=1.0.0",
-            c: "workspace:./foo",
-            d: "file:./foo",
-            e: "^1.0.0",
+            a: 'workspace:^1.0.0',
+            b: 'workspace:>=1.0.0',
+            c: 'workspace:./foo',
+            d: 'file:./foo',
+            e: '^1.0.0',
           },
         });
 
-        const resolved: NpaResolveResult = npa.resolve("a", "^1.0.0", ".");
+        const resolved: NpaResolveResult = npa.resolve('a', '^1.0.0', '.');
         resolved.explicitWorkspace = true;
 
-        pkg.updateLocalDependency(resolved, "2.0.0", "^");
+        pkg.updateLocalDependency(resolved, '2.0.0', '^');
 
         expect(pkg.toJSON()).toMatchInlineSnapshot(`
           Object {
@@ -385,19 +398,19 @@ describe('Package', () => {
         `);
       });
 
-      it("works with star workspace input target `workspace:*` and will keep same output target", () => {
+      it('works with star workspace input target `workspace:*` and will keep same output target', () => {
         const pkg = factory({
           devDependencies: {
-            a: "workspace:*",
-            b: "workspace:^1.0.0",
+            a: 'workspace:*',
+            b: 'workspace:^1.0.0',
           },
         });
 
-        const resolved: NpaResolveResult = npa.resolve("a", "^1.0.0", ".");
+        const resolved: NpaResolveResult = npa.resolve('a', '^1.0.0', '.');
         resolved.explicitWorkspace = true;
         resolved.workspaceTarget = 'workspace:*';
 
-        pkg.updateLocalDependency(resolved, "2.0.0", "^");
+        pkg.updateLocalDependency(resolved, '2.0.0', '^');
 
         expect(pkg.toJSON()).toMatchInlineSnapshot(`
           Object {
@@ -409,19 +422,19 @@ describe('Package', () => {
         `);
       });
 
-      it("works with caret workspace input target `workspace:^` and will keep same output target", () => {
+      it('works with caret workspace input target `workspace:^` and will keep same output target', () => {
         const pkg = factory({
           optionalDependencies: {
-            a: "workspace:^",
-            b: "workspace:^1.0.0",
+            a: 'workspace:^',
+            b: 'workspace:^1.0.0',
           },
         });
 
-        const resolved: NpaResolveResult = npa.resolve("a", "^1.0.0", ".");
+        const resolved: NpaResolveResult = npa.resolve('a', '^1.0.0', '.');
         resolved.explicitWorkspace = true;
         resolved.workspaceTarget = 'workspace:^';
 
-        pkg.updateLocalDependency(resolved, "2.0.0", "^");
+        pkg.updateLocalDependency(resolved, '2.0.0', '^');
 
         expect(pkg.toJSON()).toMatchInlineSnapshot(`
           Object {
@@ -433,19 +446,19 @@ describe('Package', () => {
         `);
       });
 
-      it("works with tilde workspace input target `workspace:~` and will keep same output target", () => {
+      it('works with tilde workspace input target `workspace:~` and will keep same output target', () => {
         const pkg = factory({
           dependencies: {
-            a: "workspace:~",
-            b: "workspace:^1.0.0",
+            a: 'workspace:~',
+            b: 'workspace:^1.0.0',
           },
         });
 
-        const resolved: NpaResolveResult = npa.resolve("a", "^1.0.0", ".");
+        const resolved: NpaResolveResult = npa.resolve('a', '^1.0.0', '.');
         resolved.explicitWorkspace = true;
         resolved.workspaceTarget = 'workspace:~';
 
-        pkg.updateLocalDependency(resolved, "2.0.0", "^");
+        pkg.updateLocalDependency(resolved, '2.0.0', '^');
 
         expect(pkg.toJSON()).toMatchInlineSnapshot(`
           Object {
@@ -457,19 +470,19 @@ describe('Package', () => {
         `);
       });
 
-      it("works with workspace fixed version input target `workspace:X.Y.Z` and will keep same output target", () => {
+      it('works with workspace fixed version input target `workspace:X.Y.Z` and will keep same output target', () => {
         const pkg = factory({
           dependencies: {
-            a: "workspace:1.0.0",
-            b: "workspace:^1.0.0",
+            a: 'workspace:1.0.0',
+            b: 'workspace:^1.0.0',
           },
         });
 
-        const resolved: NpaResolveResult = npa.resolve("a", "^1.0.0", ".");
+        const resolved: NpaResolveResult = npa.resolve('a', '^1.0.0', '.');
         resolved.explicitWorkspace = true;
         resolved.workspaceTarget = 'workspace:1.0.0';
 
-        pkg.updateLocalDependency(resolved, "2.0.0", "^");
+        pkg.updateLocalDependency(resolved, '2.0.0', '^');
 
         expect(pkg.toJSON()).toMatchInlineSnapshot(`
           Object {
@@ -481,19 +494,19 @@ describe('Package', () => {
         `);
       });
 
-      it("works with operator symbols like >= and workspace input target `workspace:>=X.Y.Z` and will be bumped", () => {
+      it('works with operator symbols like >= and workspace input target `workspace:>=X.Y.Z` and will be bumped', () => {
         const pkg = factory({
           dependencies: {
-            a: "workspace:>=1.2.0",
-            b: "workspace:^1.0.0",
+            a: 'workspace:>=1.2.0',
+            b: 'workspace:^1.0.0',
           },
         });
 
-        const resolved: NpaResolveResult = npa.resolve("a", "^1.0.0", ".");
+        const resolved: NpaResolveResult = npa.resolve('a', '^1.0.0', '.');
         resolved.explicitWorkspace = true;
         resolved.workspaceTarget = 'workspace:>=1.2.0';
 
-        pkg.updateLocalDependency(resolved, "2.0.0", "^");
+        pkg.updateLocalDependency(resolved, '2.0.0', '^');
 
         expect(pkg.toJSON()).toMatchInlineSnapshot(`
           Object {
@@ -507,23 +520,23 @@ describe('Package', () => {
     });
 
     describe('Publish with `workspace:` protocol', () => {
-      it("should transform `workspace:*` protocol to exact range when calling a publish", () => {
+      it('should transform `workspace:*` protocol to exact range when calling a publish', () => {
         const pkg = factory({
           dependencies: {
-            a: "workspace:*",
-            b: "workspace:^1.0.0",
+            a: 'workspace:*',
+            b: 'workspace:^1.0.0',
           },
         });
 
-        const resolvedA: NpaResolveResult = npa.resolve("a", "^1.0.0", ".");
+        const resolvedA: NpaResolveResult = npa.resolve('a', '^1.0.0', '.');
         resolvedA.explicitWorkspace = true;
         resolvedA.workspaceTarget = 'workspace:*';
-        const resolvedB: NpaResolveResult = npa.resolve("b", "^1.0.0", ".");
+        const resolvedB: NpaResolveResult = npa.resolve('b', '^1.0.0', '.');
         resolvedB.explicitWorkspace = true;
         resolvedB.workspaceTarget = 'workspace:^1.0.0';
 
-        pkg.updateLocalDependency(resolvedA, "2.0.0", "^", true, 'publish');
-        pkg.updateLocalDependency(resolvedB, "1.1.0", "^", true, 'publish');
+        pkg.updateLocalDependency(resolvedA, '2.0.0', '^', true, 'publish');
+        pkg.updateLocalDependency(resolvedB, '1.1.0', '^', true, 'publish');
 
         expect(pkg.toJSON()).toMatchInlineSnapshot(`
           Object {
@@ -535,23 +548,23 @@ describe('Package', () => {
         `);
       });
 
-      it("should transform `workspace:^` protocol to semver range when calling a publish", () => {
+      it('should transform `workspace:^` protocol to semver range when calling a publish', () => {
         const pkg = factory({
           dependencies: {
-            a: "workspace:^",
-            b: "workspace:~1.0.0",
+            a: 'workspace:^',
+            b: 'workspace:~1.0.0',
           },
         });
 
-        const resolvedA: NpaResolveResult = npa.resolve("a", "^1.0.0", ".");
+        const resolvedA: NpaResolveResult = npa.resolve('a', '^1.0.0', '.');
         resolvedA.explicitWorkspace = true;
         resolvedA.workspaceTarget = 'workspace:^';
-        const resolvedB: NpaResolveResult = npa.resolve("b", "^1.0.0", ".");
+        const resolvedB: NpaResolveResult = npa.resolve('b', '^1.0.0', '.');
         resolvedB.explicitWorkspace = true;
         resolvedB.workspaceTarget = 'workspace:~1.0.0';
 
-        pkg.updateLocalDependency(resolvedA, "2.0.0", "^", true, 'publish');
-        pkg.updateLocalDependency(resolvedB, "1.1.0", "~", true, 'publish');
+        pkg.updateLocalDependency(resolvedA, '2.0.0', '^', true, 'publish');
+        pkg.updateLocalDependency(resolvedB, '1.1.0', '~', true, 'publish');
 
         expect(pkg.toJSON()).toMatchInlineSnapshot(`
           Object {
@@ -563,29 +576,66 @@ describe('Package', () => {
         `);
       });
 
-      it("should transform `workspace:~` protocol to semver range when calling a publish", () => {
+      it('should transform `workspace:~` protocol to semver range when calling a publish', () => {
         const pkg = factory({
           dependencies: {
-            a: "workspace:~",
-            b: "workspace:^1.0.0",
+            a: 'workspace:~',
+            b: 'workspace:^1.0.0',
           },
         });
 
-        const resolvedA: NpaResolveResult = npa.resolve("a", "^1.0.0", ".");
+        const resolvedA: NpaResolveResult = npa.resolve('a', '^1.0.0', '.');
         resolvedA.explicitWorkspace = true;
         resolvedA.workspaceTarget = 'workspace:~';
-        const resolvedB: NpaResolveResult = npa.resolve("b", "^1.0.0", ".");
+        const resolvedB: NpaResolveResult = npa.resolve('b', '^1.0.0', '.');
         resolvedB.explicitWorkspace = true;
         resolvedB.workspaceTarget = 'workspace:^1.0.0';
 
-        pkg.updateLocalDependency(resolvedA, "2.0.0", "^", true, 'publish');
-        pkg.updateLocalDependency(resolvedB, "1.1.0", "^", true, 'publish');
+        pkg.updateLocalDependency(resolvedA, '2.0.0', '^', true, 'publish');
+        pkg.updateLocalDependency(resolvedB, '1.1.0', '^', true, 'publish');
 
         expect(pkg.toJSON()).toMatchInlineSnapshot(`
           Object {
             "dependencies": Object {
               "a": "~2.0.0",
               "b": "^1.1.0",
+            },
+          }
+        `);
+      });
+
+      it('should remove `workspace:` prefix on external dependencies without any version bump applied', () => {
+        const logErrorSpy = jest.spyOn(npmlog, 'error');
+        const pkg = factory({
+          dependencies: {
+            a: 'workspace:*',
+            b: 'workspace:^2.2.4',
+          },
+        });
+
+        const resolvedA: NpaResolveResult = npa.resolve('a', '^1.0.0', '.');
+        resolvedA.explicitWorkspace = true;
+        resolvedA.workspaceTarget = 'workspace:*';
+        resolvedA.fetchSpec = 'latest';
+        const resolvedB: NpaResolveResult = npa.resolve('b', '^2.2.4', '.');
+        resolvedB.explicitWorkspace = true;
+        resolvedB.workspaceTarget = 'workspace:^2.2.4';
+
+        pkg.removeDependencyWorkspaceProtocolPrefix('package-1', resolvedA);
+        pkg.removeDependencyWorkspaceProtocolPrefix('package-2', resolvedB);
+
+        expect(logErrorSpy).toHaveBeenCalledWith(
+          'publish',
+          [
+            `Your package named "package-1" has external dependencies not handled by Lerna-Lite and without workspace version suffix, `,
+            `we recommend using defined versions with workspace protocol. Your dependency is currently being published with "a": "latest".`,
+          ].join('')
+        );
+        expect(pkg.toJSON()).toMatchInlineSnapshot(`
+          Object {
+            "dependencies": Object {
+              "a": "latest",
+              "b": "^2.2.4",
             },
           }
         `);
