@@ -53,7 +53,7 @@ export function factory(argv: PublishCommandOption) {
 export class PublishCommand extends Command<PublishCommandOption> {
   /** command name */
   name = 'publish' as CommandType;
-  conf!: Conf & { snapshot?: any; };
+  conf!: Conf & { snapshot?: any };
   otpCache!: OneTimePasswordCache;
   gitReset = false;
   savePrefix = '';
@@ -189,41 +189,47 @@ export class PublishCommand extends Command<PublishCommandOption> {
       chain = chain.then(() => new VersionCommand(this.argv));
     }
 
-    return chain.then((result: { updates: PackageGraphNode[]; updatesVersions: Map<string, any>; needsConfirmation: boolean; }) => {
-      if (!result) {
-        // early return from nested VersionCommand
-        return false;
-      }
-
-      if (!result.updates.length) {
-        this.logger.success('No changed packages to publish');
-
-        // still exits zero, aka 'ok'
-        return false;
-      }
-
-      // (occasionally) redundant private filtering necessary to handle nested VersionCommand
-      this.updates = result.updates.filter((node) => !node.pkg.private);
-      this.updatesVersions = new Map(result.updatesVersions);
-
-      this.packagesToPublish = this.updates.map((node) => node.pkg);
-
-      if (this.options.contents) {
-        // globally override directory to publish
-        for (const pkg of this.packagesToPublish) {
-          pkg.contents = this.options.contents;
+    return chain.then(
+      (result: {
+        updates: PackageGraphNode[];
+        updatesVersions: Map<string, any>;
+        needsConfirmation: boolean;
+      }) => {
+        if (!result) {
+          // early return from nested VersionCommand
+          return false;
         }
-      }
 
-      if (result.needsConfirmation) {
-        // only confirm for --canary, bump === 'from-git',
-        // or bump === 'from-package', as VersionCommand
-        // has its own confirmation prompt
-        return this.confirmPublish();
-      }
+        if (!result.updates.length) {
+          this.logger.success('No changed packages to publish');
 
-      return true;
-    });
+          // still exits zero, aka 'ok'
+          return false;
+        }
+
+        // (occasionally) redundant private filtering necessary to handle nested VersionCommand
+        this.updates = result.updates.filter((node) => !node.pkg.private);
+        this.updatesVersions = new Map(result.updatesVersions);
+
+        this.packagesToPublish = this.updates.map((node) => node.pkg);
+
+        if (this.options.contents) {
+          // globally override directory to publish
+          for (const pkg of this.packagesToPublish) {
+            pkg.contents = this.options.contents;
+          }
+        }
+
+        if (result.needsConfirmation) {
+          // only confirm for --canary, bump === 'from-git',
+          // or bump === 'from-package', as VersionCommand
+          // has its own confirmation prompt
+          return this.confirmPublish();
+        }
+
+        return true;
+      }
+    );
   }
 
   async execute() {
@@ -387,8 +393,10 @@ export class PublishCommand extends Command<PublishCommandOption> {
       ).filter((node) => !node.pkg.private)
     );
 
+    // prettier-ignore
     const makeVersion = (fallback: string) => ({ lastVersion = fallback, refCount, sha }) => {
       // the next version is bumped without concern for preid or current index
+      // prettier-ignore
       const nextVersion = semver.inc(lastVersion.replace(this.tagPrefix, ''), release.replace('pre', '') as semver.ReleaseType);
 
       // semver.inc() starts a new prerelease at .0, git describe starts at .1
@@ -406,7 +414,7 @@ export class PublishCommand extends Command<PublishCommandOption> {
               cwd,
             },
             includeMergedTags,
-            this.options.gitDryRun,
+            this.options.gitDryRun
           )
             // an unpublished package will have no reachable git tag
             .then(makeVersion(node.version))
@@ -425,7 +433,7 @@ export class PublishCommand extends Command<PublishCommandOption> {
             cwd,
           },
           includeMergedTags,
-          this.options.gitDryRun,
+          this.options.gitDryRun
         )
           // a repo with no tags should default to whatever lerna.json claims
           .then(makeVersion(this.project.version))
@@ -446,9 +454,8 @@ export class PublishCommand extends Command<PublishCommandOption> {
 
   confirmPublish() {
     const count = this.packagesToPublish?.length;
-    const message = this.packagesToPublish?.map(
-      (pkg) => ` - ${pkg.name} => ${this.updatesVersions?.get(pkg.name)}`
-    ) ?? [];
+    const message =
+      this.packagesToPublish?.map((pkg) => ` - ${pkg.name} => ${this.updatesVersions?.get(pkg.name)}`) ?? [];
 
     logOutput('');
     logOutput(`Found ${count} ${count === 1 ? 'package' : 'packages'} to publish:`);
@@ -474,6 +481,7 @@ export class PublishCommand extends Command<PublishCommandOption> {
           const noun = names.length > 1 ? 'Packages' : 'Package';
           const verb = names.length > 1 ? 'are' : 'is';
           const list =
+            // prettier-ignore
             names.length > 1
               ? `${names.slice(0, -1).join(', ')}${names.length > 2 ? ',' : ''} and ${names[names.length - 1] /* oxford commas _are_ that important */
               }`
@@ -540,7 +548,13 @@ export class PublishCommand extends Command<PublishCommandOption> {
         const depVersion = this.updatesVersions?.get(depName) || this.packageGraph?.get(depName).pkg.version;
 
         // it no longer matters if we mutate the shared Package instance
-        node.pkg.updateLocalDependency(resolved, depVersion, this.savePrefix, this.options.workspaceStrictMatch, this.commandName);
+        node.pkg.updateLocalDependency(
+          resolved,
+          depVersion,
+          this.savePrefix,
+          this.options.workspaceStrictMatch,
+          this.commandName
+        );
       }
 
       // writing changes to disk handled in serializeChanges()
@@ -550,7 +564,9 @@ export class PublishCommand extends Command<PublishCommandOption> {
   resolveLocalDependencyLinks() {
     // resolve relative file: links to their actual version range
     const updatesWithLocalLinks = this.updates.filter((node: PackageGraphNode) =>
-      Array.from(node.localDependencies.values()).some((resolved: NpaResolveResult) => resolved.type === 'directory')
+      Array.from(node.localDependencies.values()).some(
+        (resolved: NpaResolveResult) => resolved.type === 'directory'
+      )
     );
 
     return pMap(updatesWithLocalLinks, (node: PackageGraphNode) => {
@@ -559,7 +575,13 @@ export class PublishCommand extends Command<PublishCommandOption> {
         const depVersion = this.updatesVersions?.get(depName) || this.packageGraph?.get(depName).pkg.version;
 
         // it no longer matters if we mutate the shared Package instance
-        node.pkg.updateLocalDependency(resolved, depVersion, this.savePrefix, this.options.workspaceStrictMatch, this.commandName);
+        node.pkg.updateLocalDependency(
+          resolved,
+          depVersion,
+          this.savePrefix,
+          this.options.workspaceStrictMatch,
+          this.commandName
+        );
       }
 
       // writing changes to disk handled in serializeChanges()
@@ -568,18 +590,36 @@ export class PublishCommand extends Command<PublishCommandOption> {
 
   resolveLocalDependencyWorkspaceProtocols() {
     // resolve workspace protocol: translates to their actual version target/range
-    const updatesWithLocalWorkspaces = this.updates.filter((node: PackageGraphNode) =>
-      Array.from(node.localDependencies.values()).some((resolved: NpaResolveResult) => resolved.explicitWorkspace)
+    const publishingPackagesWithLocalWorkspaces = this.updates.filter((node: PackageGraphNode) =>
+      Array.from(node.localDependencies.values()).some(
+        (resolved: NpaResolveResult) => resolved.explicitWorkspace
+      )
     );
 
-    return pMap(updatesWithLocalWorkspaces, (node: PackageGraphNode) => {
+    return pMap(publishingPackagesWithLocalWorkspaces, (node: PackageGraphNode) => {
+      // regardless of where the version comes from, we can't publish 'workspace:*' specs, it has to be transformed for both local & external dependencies
+      // e.g. considering version is `1.2.3` and we have `workspace:*` it will be converted to "^1.2.3" or to "1.2.3" with strict match range enabled
+
+      // 1. update & bump version of local dependencies
       for (const [depName, resolved] of node.localDependencies) {
-        // regardless of where the version comes from, we can't publish 'workspace:*' specs, it has to be transformed
-        // e.g. considering version is `1.2.3` and we have `workspace:*` it will be converted to "^1.2.3" or to "1.2.3" with strict match range enabled
         const depVersion = this.updatesVersions?.get(depName) || this.packageGraph?.get(depName).pkg.version;
 
         // it no longer matters if we mutate the shared Package instance
-        node.pkg.updateLocalDependency(resolved, depVersion, this.savePrefix, this.options.workspaceStrictMatch, this.commandName);
+        node.pkg.updateLocalDependency(
+          resolved,
+          depVersion,
+          this.savePrefix,
+          this.options.workspaceStrictMatch,
+          this.commandName
+        );
+      }
+
+      // 2. remove any "workspace:" prefix from the package to be published any of external dependencies (without anything being bumped)
+      // we will only accept "workspace:" with semver version, for example "workspace:1.2.3" is ok but "workspace:*" will throw
+      for (const [_depName, resolved] of node.externalDependencies) {
+        if (/^(workspace:)+(.*)$/.test(resolved.workspaceTarget)) {
+          node.pkg.removeDependencyWorkspaceProtocolPrefix(node.name, resolved);
+        }
       }
 
       // writing changes to disk handled in serializeChanges()
@@ -669,7 +709,7 @@ export class PublishCommand extends Command<PublishCommandOption> {
 
     return Promise.resolve()
       .then(() => getOneTimePassword('Enter OTP:'))
-      .then((otp) => this.otpCache.otp = otp);
+      .then((otp) => (this.otpCache.otp = otp));
   }
 
   topoMapPackages(mapper: (pkg: Package) => Promise<any>) {
@@ -705,21 +745,23 @@ export class PublishCommand extends Command<PublishCommandOption> {
 
     const opts = this.conf.snapshot;
     const mapper = pPipe(
-      ...([
-        this.options.requireScripts && ((pkg: Package) => this.execScript(pkg, 'prepublish')),
+      ...(
+        [
+          this.options.requireScripts && ((pkg: Package) => this.execScript(pkg, 'prepublish')),
 
-        (pkg: Package & { packed: Tarball; }) =>
-          pulseTillDone(packDirectory(pkg, pkg.location, opts)).then((packed: Tarball) => {
-            tracker.verbose('packed', path.relative(this.project.rootPath ?? '', pkg.contents));
-            tracker.completeWork(1);
+          (pkg: Package & { packed: Tarball }) =>
+            pulseTillDone(packDirectory(pkg, pkg.location, opts)).then((packed: Tarball) => {
+              tracker.verbose('packed', path.relative(this.project.rootPath ?? '', pkg.contents));
+              tracker.completeWork(1);
 
-            // store metadata for use in this.publishPacked()
-            pkg.packed = packed;
+              // store metadata for use in this.publishPacked()
+              pkg.packed = packed;
 
-            // manifest may be mutated by any previous lifecycle
-            return pkg.refresh();
-          }),
-      ] as pPipe.UnaryFunction<any, unknown>[]).filter(Boolean)
+              // manifest may be mutated by any previous lifecycle
+              return pkg.refresh();
+            }),
+        ] as pPipe.UnaryFunction<any, unknown>[]
+      ).filter(Boolean)
     );
 
     chain = chain.then(() => this.topoMapPackages(mapper));
@@ -754,24 +796,26 @@ export class PublishCommand extends Command<PublishCommandOption> {
     });
 
     const mapper = pPipe(
-      ...([
-        (pkg: Package & { packed: Tarball; }) => {
-          const preDistTag = this.getPreDistTag(pkg);
-          const tag = !this.options.tempTag && preDistTag ? preDistTag : opts.tag;
-          const pkgOpts = Object.assign({}, opts, { tag });
+      ...(
+        [
+          (pkg: Package & { packed: Tarball }) => {
+            const preDistTag = this.getPreDistTag(pkg);
+            const tag = !this.options.tempTag && preDistTag ? preDistTag : opts.tag;
+            const pkgOpts = Object.assign({}, opts, { tag });
 
-          return pulseTillDone(npmPublish(pkg, pkg.packed.tarFilePath, pkgOpts, this.otpCache)).then(() => {
-            tracker.success('published', pkg.name, pkg.version);
-            tracker.completeWork(1);
+            return pulseTillDone(npmPublish(pkg, pkg.packed.tarFilePath, pkgOpts, this.otpCache)).then(() => {
+              tracker.success('published', pkg.name, pkg.version);
+              tracker.completeWork(1);
 
-            logPacked(pkg, this.options.gitDryRun);
+              logPacked(pkg, this.options.gitDryRun);
 
-            return pkg;
-          });
-        },
+              return pkg;
+            });
+          },
 
-        this.options.requireScripts && ((pkg: Package) => this.execScript(pkg, 'postpublish')),
-      ] as pPipe.UnaryFunction<any, unknown>[]).filter(Boolean)
+          this.options.requireScripts && ((pkg: Package) => this.execScript(pkg, 'postpublish')),
+        ] as pPipe.UnaryFunction<any, unknown>[]
+      ).filter(Boolean)
     );
 
     chain = chain.then(() => this.topoMapPackages(mapper));

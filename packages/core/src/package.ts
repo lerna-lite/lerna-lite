@@ -1,6 +1,8 @@
-import npa from 'npm-package-arg';
-import path from 'path';
 import loadJsonFile from 'load-json-file';
+import npa from 'npm-package-arg';
+import npmlog from 'npmlog';
+import os from 'os';
+import path from 'path';
 import writePkg from 'write-pkg';
 
 import { CommandType, NpaResolveResult, RawManifest } from './models';
@@ -103,7 +105,7 @@ export class Package {
     return Boolean(this[PKG].private);
   }
 
-  get resolved(): { name: string; bin: any; scope: any; } {
+  get resolved(): { name: string; bin: any; scope: any } {
     return this[_resolved];
   }
 
@@ -118,7 +120,7 @@ export class Package {
   get bin() {
     const pkg = this[PKG];
     return typeof pkg.bin === 'string'
-      ? { [binSafeName(this.resolved as unknown as npa.Result) as string]: pkg.bin, }
+      ? { [binSafeName(this.resolved as unknown as npa.Result) as string]: pkg.bin }
       : Object.assign({}, pkg.bin);
   }
 
@@ -248,6 +250,36 @@ export class Package {
   }
 
   /**
+   * Mutate given dependency (could be local/external) spec according to type
+   * @param {Object} resolved npa metadata
+   */
+  removeDependencyWorkspaceProtocolPrefix(pkgName: string, resolved: NpaResolveResult) {
+    const depName = resolved.name as string;
+    const depCollection = this.retrievePackageDependencies(depName);
+    const workspaceTarget = resolved?.workspaceTarget ?? '';
+
+    if (
+      depCollection &&
+      (resolved.registry || resolved.type === 'directory') &&
+      /^(workspace:)+(.*)$/.test(workspaceTarget)
+    ) {
+      if (workspaceTarget) {
+        if (resolved.fetchSpec === 'latest') {
+          npmlog.error(
+            `publish`,
+            [
+              `Your package named "${pkgName}" has external dependencies not handled by Lerna-Lite and without workspace version suffix, `,
+              `we recommend using defined versions with workspace protocol. `,
+              `Your dependency is currently being published with "${depName}": "${resolved.fetchSpec}".`,
+            ].join('')
+          );
+        }
+        depCollection[depName] = resolved.fetchSpec;
+      }
+    }
+  }
+
+  /**
    * Mutate local dependency spec according to type
    * @param {Object} resolved npa metadata
    * @param {String} depVersion semver
@@ -255,21 +287,15 @@ export class Package {
    * @param {Boolean} [workspaceStrictMatch] - are we using `workspace:` protocol strict match?
    * @param {String} [updatedByCommand] - which command called this update?
    */
-  updateLocalDependency(resolved: NpaResolveResult, depVersion: string, savePrefix: string, workspaceStrictMatch = true, updatedByCommand?: CommandType) {
+  updateLocalDependency(
+    resolved: NpaResolveResult,
+    depVersion: string,
+    savePrefix: string,
+    workspaceStrictMatch = true,
+    updatedByCommand?: CommandType
+  ) {
     const depName = resolved.name as string;
-
-    // first, try runtime dependencies
-    let depCollection = this.dependencies;
-
-    // try optionalDependencies if that didn't work
-    if (!depCollection || !depCollection[depName]) {
-      depCollection = this.optionalDependencies;
-    }
-
-    // fall back to devDependencies
-    if (!depCollection || !depCollection[depName]) {
-      depCollection = this.devDependencies;
-    }
+    const depCollection = this.retrievePackageDependencies(depName);
 
     if (depCollection && (resolved.registry || resolved.type === 'directory')) {
       // a version (1.2.3) OR range (^1.2.3) OR directory (file:../foo-pkg)
@@ -278,7 +304,9 @@ export class Package {
       // when using explicit `workspace:` protocol
       if (resolved.explicitWorkspace) {
         const workspaceTarget = resolved?.workspaceTarget ?? '';
-        const [_, _wsTxt, operatorPrefix, rangePrefix] = workspaceTarget.match(/^(workspace:)?([<>=]{0,2})?([*^~])?(.*)$/) as RegExpMatchArray;
+        const [_, _wsTxt, operatorPrefix, rangePrefix] = workspaceTarget.match(
+          /^(workspace:)?([<>=]{0,2})?([*^~])?(.*)$/
+        ) as RegExpMatchArray;
 
         if (operatorPrefix) {
           // with workspace it might include an operator, if so use it like "workspace:>=1.2.3"
@@ -293,7 +321,7 @@ export class Package {
           // e.g.: considering version is `1.2.3` and we have `workspace:*` it will be converted to "^1.2.3" or to "1.2.3" with strict match range enabled
           if (workspaceStrictMatch) {
             if (workspaceTarget === 'workspace:*') {
-              depCollection[depName] = depVersion;       // (*) exact range, "1.5.0"
+              depCollection[depName] = depVersion; // (*) exact range, "1.5.0"
             } else if (workspaceTarget === 'workspace:~') {
               depCollection[depName] = `~${depVersion}`; // (~) patch range, "~1.5.0"
             } else if (workspaceTarget === 'workspace:^') {
@@ -307,7 +335,7 @@ export class Package {
           // any other workspace will remain the same in `package.json` file, for example `workspace:^`
           // keep target workspace or bump when it's a workspace semver range (like `workspace:^1.2.3`)
           depCollection[depName] = /^workspace:[*^~]{1}$/.test(workspaceTarget)
-            ? resolved.workspaceTarget               // target like `workspace:^` => `workspace:^` (remains untouched in package.json)
+            ? resolved.workspaceTarget // target like `workspace:^` => `workspace:^` (remains untouched in package.json)
             : `workspace:${depCollection[depName]}`; // range like `workspace:^1.2.3` => `workspace:^1.3.3` (bump minor example)
         }
       }
@@ -329,5 +357,22 @@ export class Package {
       // always serialize the full url (identical to previous resolved.saveSpec)
       depCollection[depName] = hosted.toString({ noGitPlus: false, noCommittish: false });
     }
+  }
+
+  private retrievePackageDependencies(depName: string): string[] {
+    // first, try runtime dependencies
+    let depCollection = this.dependencies;
+
+    // try optionalDependencies if that didn't work
+    if (!depCollection || !depCollection[depName]) {
+      depCollection = this.optionalDependencies;
+    }
+
+    // fall back to devDependencies
+    if (!depCollection || !depCollection[depName]) {
+      depCollection = this.devDependencies;
+    }
+
+    return depCollection;
   }
 }
