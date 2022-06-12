@@ -3,6 +3,12 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.5.1](https://github.com/ghiscoding/lerna-lite/compare/v1.5.0...v1.5.1) (2022-06-12)
+
+### Bug Fixes
+
+* **version:** add better msg for missing `npmClient` with sync lock ([01e26b1](https://github.com/ghiscoding/lerna-lite/commit/01e26b1df86ed09bf090df1d18e38bbbdce1fc1a))
+
 # [1.5.0](https://github.com/ghiscoding/lerna-lite/compare/v1.4.0...v1.5.0) (2022-06-08)
 
 ### Bug Fixes

@@ -1,5 +1,5 @@
 {
-  "version": "1.5.0",
+  "version": "1.5.1",
   "loglevel": "verbose",
   "npmClient": "pnpm",
   "command": {
@@ -18,5 +18,7 @@
       "cmdDryRun": false
     }
   },
-  "packages": ["packages/*"]
+  "packages": [
+    "packages/*"
+  ]
 }
