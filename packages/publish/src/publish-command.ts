@@ -615,11 +615,9 @@ export class PublishCommand extends Command<PublishCommandOption> {
       }
 
       // 2. remove any "workspace:" prefix from the package to be published any of external dependencies (without anything being bumped)
-      // we will only accept "workspace:" with semver version, for example "workspace:1.2.3" is ok but "workspace:*" will throw
+      // we will only accept "workspace:" with semver version, for example "workspace:1.2.3" is ok but "workspace:*" will log an error
       for (const [_depName, resolved] of node.externalDependencies) {
-        if (/^(workspace:)+(.*)$/.test(resolved.workspaceTarget)) {
-          node.pkg.removeDependencyWorkspaceProtocolPrefix(node.name, resolved);
-        }
+        node.pkg.removeDependencyWorkspaceProtocolPrefix(node.name, resolved);
       }
 
       // writing changes to disk handled in serializeChanges()
