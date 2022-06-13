@@ -60,6 +60,8 @@ export class RunCommand extends Command<RunCommandOption & FilterOptions> {
       this.options.log = this.logger;
     }
 
+    this.options.isIndependent =  this.project.isIndependent();
+
     chain = chain.then(() => getFilteredPackages(this.packageGraph!, this.execOpts, this.options));
     chain = chain.then((filteredPackages: Package[]) => {
       this.packagesWithScript =

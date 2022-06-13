@@ -6,6 +6,7 @@ export interface FilterOptions {
   ignore: string[];
   private: boolean;
   since: string;
+  isIndependent: boolean;
   continueIfNoMatch: boolean;
   excludeDependents: boolean;
   includeDependents: boolean;

@@ -235,6 +235,8 @@ export interface UpdateCollectorOptions {
   /** Ref to use when querying git, defaults to most recent annotated tag */
   since?: string;
 
+  isIndependent?: boolean;
+
   conventionalCommits?: boolean;
   conventionalGraduate?: boolean;
   excludeDependents?: boolean;

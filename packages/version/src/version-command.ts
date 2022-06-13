@@ -150,7 +150,8 @@ export class VersionCommand extends Command<VersionCommandOption> {
   }
 
   async initialize() {
-    if (!this.project.isIndependent()) {
+    const isIndependent = this.project.isIndependent();
+    if (!isIndependent) {
       this.logger.info('current project version', this.project.version ?? '');
     }
 
@@ -252,7 +253,7 @@ export class VersionCommand extends Command<VersionCommandOption> {
       this.packageGraph.rawPackageList,
       this.packageGraph,
       this.execOpts,
-      this.options as UpdateCollectorOptions
+      { ...this.options, isIndependent} as UpdateCollectorOptions
     ).filter((node) => {
       // --no-private completely removes private packages from consideration
       if (node.pkg.private && this.options.private === false) {
