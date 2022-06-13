@@ -251,11 +251,12 @@ export class Package {
 
   /**
    * Mutate given dependency (could be local/external) spec according to type
+   * @param {String} pkgName - package name
    * @param {Object} resolved npa metadata
    */
   removeDependencyWorkspaceProtocolPrefix(pkgName: string, resolved: NpaResolveResult) {
     const depName = resolved.name as string;
-    const depCollection = this.retrievePackageDependencies(depName);
+    const depCollection = this.retrievePackageDependencies(depName, true);
     const workspaceTarget = resolved?.workspaceTarget ?? '';
 
     if (
@@ -359,7 +360,13 @@ export class Package {
     }
   }
 
-  private retrievePackageDependencies(depName: string): string[] {
+  /**
+   * Retrieve the dependencies collection which contain the dependency name provided, we'll search in all type of dependencies/devDependencies/...
+   * @param {String} depName - dependency name
+   * @param {Boolean} [includePeerDepsFallback] - should we include peerDependencies as fallback?
+   * @returns {Array<String>} - array of dependencies that contains the dependency name provided
+   */
+  private retrievePackageDependencies(depName: string, includePeerDepsFallback = false): string[] {
     // first, try runtime dependencies
     let depCollection = this.dependencies;
 
@@ -371,6 +378,11 @@ export class Package {
     // fall back to devDependencies
     if (!depCollection || !depCollection[depName]) {
       depCollection = this.devDependencies;
+    }
+
+    // fall back to peerDependencies (when enabled)
+    if (includePeerDepsFallback && (!depCollection || !depCollection[depName])) {
+      depCollection = this.peerDependencies;
     }
 
     return depCollection;
