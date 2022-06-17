@@ -99,7 +99,7 @@
     "@types/load-json-file": "^5.1.0",
     "@types/npm-package-arg": "^6.1.1",
     "@types/p-map": "^2.0.0",
-    "@types/semver": "^7.3.9",
+    "@types/semver": "^7.3.10",
     "@types/strong-log-transformer": "^1.0.0",
     "@types/write-file-atomic": "^4.0.0",
     "@types/write-json-file": "^3.2.1",
