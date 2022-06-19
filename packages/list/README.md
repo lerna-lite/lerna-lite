@@ -17,10 +17,10 @@ List local packages
 npm install @lerna-lite/list -D -W
 
 # then use it (see usage below)
-lerna list
+lerna ls
 
 # OR use npx
-npx lerna list
+npx lerna ls
 ```
 
 ## Usage
