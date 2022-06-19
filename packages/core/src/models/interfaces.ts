@@ -6,12 +6,12 @@ import {
   InitCommandOption,
   PublishCommandOption,
   RunCommandOption,
-  VersionCommandOption
+  VersionCommandOption,
 } from './command-options';
 
 export type VersioningStrategy = 'fixed' | 'independent';
 export type ChangelogType = 'fixed' | 'independent' | 'root';
-export type ChangelogPresetConfig = string | { name: string;[key: string]: unknown };
+export type ChangelogPresetConfig = string | { name: string; [key: string]: unknown };
 
 export interface BaseChangelogOptions {
   changelogPreset?: ChangelogPresetConfig;
@@ -148,10 +148,16 @@ export interface GitClient {
   createRelease: (opts: GitClientRelease) => Promise<void>;
 }
 
-export type NpaResolveResult = (npa.FileResult | npa.HostedGitResult | npa.URLResult | npa.AliasResult | npa.RegistryResult) & {
+export type NpaResolveResult = (
+  | npa.FileResult
+  | npa.HostedGitResult
+  | npa.URLResult
+  | npa.AliasResult
+  | npa.RegistryResult
+) & {
   explicitWorkspace?: boolean;
   workspaceTarget?: string;
-}
+};
 
 /** Passed between concurrent executions */
 export interface OneTimePasswordCache {
@@ -167,10 +173,10 @@ export interface LernaConfig {
     run?: RunCommandOption;
   };
   packages?: string[];
-  loglevel?: 'silent', 'error', 'warn', 'notice', 'http', 'timing', 'info', 'verbose', 'silly',
+  loglevel?: 'silent' | 'error' | 'warn' | 'notice' | 'http' | 'timing' | 'info' | 'verbose' | 'silly';
 
   /** executable used to install dependencies (npm, yarn, pnpm, ...) */
-  npmClient?: 'npm' | 'pnpm' | 'yarn',
+  npmClient?: 'npm' | 'pnpm' | 'yarn';
 
   /** enables integration with Yarn or other package manager that use `workspaces` property in `package.json` */
   useWorkspaces?: boolean;
@@ -187,6 +193,7 @@ export interface ProjectConfig extends LernaConfig, QueryGraphConfig {
   since?: string;
   sort?: any;
   stream?: boolean;
+  useNx?: boolean;
   onRejected?: (result: any) => void;
   onResolved?: (result: any) => void;
 }
@@ -199,7 +206,7 @@ export interface RawManifest extends Package {
 export interface ReleaseClient {
   repos: {
     createRelease: GitCreateReleaseFn;
-  }
+  };
 }
 
 export interface ReleaseCommandProps {
