@@ -251,7 +251,9 @@ export class RunCommand extends Command<RunCommandOption & FilterOptions> {
 
   async prepNxOptions() {
     const { readNxJson } = await import('nx/src/config/configuration');
-    const targetDependenciesAreDefined = Object.keys(readNxJson().targetDependencies || {}).length > 0;
+    const nxJson = readNxJson();
+    const targetDependenciesAreDefined =
+      Object.keys(nxJson.targetDependencies || nxJson.targetDefaults || {}).length > 0;
     const targetDependencies =
       // prettier-ignore
       this.toposort && !targetDependenciesAreDefined
@@ -277,7 +279,7 @@ export class RunCommand extends Command<RunCommandOption & FilterOptions> {
       nxBail: this.bail,
       nxIgnoreCycles: !this.options.rejectCycles,
       skipNxCache: this.options.skipNxCache,
-      _: this.args,
+      _: this.args.map((t) => t.toString()),
     };
 
     return { targetDependencies, options };

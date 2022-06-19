@@ -102,7 +102,7 @@ export class InitCommand extends Command<InitCommandOption> {
       version = '0.0.0';
     }
 
-    const logMessage = (!projectVersion) ? 'Creating lerna.json' : 'Updating lerna.json';
+    const logMessage = !projectVersion ? 'Creating lerna.json' : 'Updating lerna.json';
     this.logger.info('', logMessage);
 
     delete config[LERNA_CLI_PKG_NAME]; // no longer relevant
@@ -115,7 +115,7 @@ export class InitCommand extends Command<InitCommandOption> {
       initConfig.exact = true;
     }
 
-    const lernaConfig: Partial<ProjectConfig> = { version };
+    const lernaConfig: Partial<ProjectConfig> = { useNx: false, version };
     if (!this.options.useWorkspaces) {
       lernaConfig.packages = ['packages/*'];
     }
