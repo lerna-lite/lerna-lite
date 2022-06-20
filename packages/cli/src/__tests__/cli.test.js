@@ -16,9 +16,12 @@ const bin =
 
 jest.setTimeout(30e3);
 
-describe('cli', () => {
+xdescribe('cli', () => {
   it('should create CLI', () => {
+    const logSpy = jest.spyOn(npmlog, 'info');
+
     expect(bin()()).toBeTruthy();
+    expect(logSpy).toHaveBeenCalledWith('cli', 'using local version of lerna');
   });
 });
 
