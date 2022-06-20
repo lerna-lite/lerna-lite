@@ -146,6 +146,17 @@ package-4
     expect(logMessage).toBe('--force-publish superseded by --conventional-graduate');
   });
 
+  it('logger warns when --force-publish superseded by --conventional-graduate', async () => {
+    const cmd = new ChangedCommand(
+      createArgv(cwd, '--conventional-graduate', 'foo', '--force-publish', 'bar')
+    );
+    await cmd;
+    const loggerSpy = jest.spyOn(cmd.logger, 'warn');
+    cmd.initialize();
+
+    expect(loggerSpy).toHaveBeenCalledWith('option', '--force-publish superseded by --conventional-graduate');
+  });
+
   it('lists changed private packages with --all', async () => {
     collectUpdates.setUpdated(cwd, 'package-5');
 
