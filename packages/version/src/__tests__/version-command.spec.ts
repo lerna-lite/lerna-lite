@@ -335,6 +335,14 @@ describe('VersionCommand', () => {
       expect(logMessages).toContain('Skipping git tag/commit');
     });
 
+    it('is displaying a warning when using deprecated flag --ignore', async () => {
+      const testDir = await initFixture('normal');
+      await lernaVersion(testDir)('--ignore');
+
+      const logMessages = loggingOutput();
+      expect(logMessages).toContain('--ignore has been renamed --ignore-changes');
+    });
+
     it('is implied by --skip-git', async () => {
       const testDir = await initFixture('normal');
       await lernaVersion(testDir)('--skip-git');
