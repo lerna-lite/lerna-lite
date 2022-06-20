@@ -18,7 +18,6 @@
       "cmdDryRun": false
     }
   },
-  "packages": [
-    "packages/*"
-  ]
+  "ignoreChanges": ["**/__fixtures__/**", "**/__tests__/**", "**/helpers/**", "**/*.md"],
+  "packages": ["packages/*"]
 }
