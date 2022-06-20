@@ -61,8 +61,7 @@ describe('Changed Command', () => {
   it('lists changed packages', async () => {
     collectUpdates.setUpdated(cwd, 'package-2', 'package-3');
 
-    // await lernaChanged(cwd)();
-    await new ChangedCommand(createArgv(cwd, ''));
+    await factory(createArgv(cwd, ''));
 
     expect(logOutput.logged()).toMatchInlineSnapshot(`
 package-2
@@ -71,8 +70,7 @@ package-3
   });
 
   it('passes --force-publish to update collector', async () => {
-    // await lernaChanged(cwd)('--force-publish');
-    await factory(createArgv(cwd, '--force-publish'));
+    await new ChangedCommand(createArgv(cwd, '--force-publish'));
 
     expect(logOutput.logged()).toMatchInlineSnapshot(`
 package-1
