@@ -130,7 +130,8 @@ package-4
   });
 
   it('passes --conventional-graduate to update collector', async () => {
-    await lernaChanged(cwd)('--conventional-graduate=*');
+    await new ChangedCommand(createArgv(cwd, '--conventional-graduate=*'));
+    // await lernaChanged(cwd)('--conventional-graduate=*');
 
     expect(collectUpdates).toHaveBeenLastCalledWith(
       expect.any(Array),
@@ -158,7 +159,7 @@ package-4
   it('exits non-zero when there are no changed packages', async () => {
     collectUpdates.setUpdated(cwd);
 
-    await lernaChanged(cwd)();
+    await new ChangedCommand(createArgv(cwd, ''));
 
     expect(process.exitCode).toBe(1);
 
