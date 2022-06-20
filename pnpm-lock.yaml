@@ -4,6 +4,7 @@ importers:
 
   .:
     specifiers:
+      '@lerna-lite/changed': workspace:*
       '@lerna-lite/cli': workspace:*
       '@lerna-lite/core': workspace:*
       '@lerna-lite/exec': workspace:*
@@ -64,6 +65,7 @@ importers:
       tsm: ^2.2.1
       typescript: ^4.7.4
     devDependencies:
+      '@lerna-lite/changed': link:packages/changed
       '@lerna-lite/cli': link:packages/cli
       '@lerna-lite/core': link:packages/core
       '@lerna-lite/exec': link:packages/exec
@@ -123,6 +125,14 @@ importers:
       ts-jest: 28.0.5_zv2ltmnvcc5apkdaecods742je
       tsm: 2.2.1
       typescript: 4.7.4
+
+  packages/changed:
+    specifiers:
+      '@lerna-lite/core': workspace:*
+      '@lerna-lite/list': workspace:*
+    dependencies:
+      '@lerna-lite/core': link:../core
+      '@lerna-lite/list': link:../list
 
   packages/cli:
     specifiers:

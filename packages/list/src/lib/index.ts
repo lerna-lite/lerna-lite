@@ -1,8 +1,9 @@
+import { listableOptions } from '@lerna-lite/core';
+
 import { listableFormat } from './listable-format';
-import { listableOptions } from './listable-options';
 
 const listable = {
   format: listableFormat,
-  options: listableOptions
+  options: listableOptions,
 };
 export { listable };

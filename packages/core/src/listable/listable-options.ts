@@ -1,11 +1,14 @@
-import { YargListableOption } from '../types';
+import { YargListableOption } from './types';
 
 /**
  * Add list-related options to a Yargs instance.
  * @param {import('yargs').Argv} yargs
  * @param {string} [group]
  */
-export function listableOptions(yargs: { options: (opts: YargListableOption) => void }, group = 'Command Options:') {
+export function listableOptions(
+  yargs: { options: (opts: YargListableOption) => void },
+  group = 'Command Options:'
+) {
   return yargs.options({
     json: {
       group,
