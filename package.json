@@ -48,6 +48,7 @@
     "@lerna-lite/exec": "workspace:*",
     "@lerna-lite/info": "workspace:*",
     "@lerna-lite/list": "workspace:*",
+    "@lerna-lite/listable": "workspace:*",
     "@lerna-lite/optional-cmd-common": "workspace:*",
     "@lerna-lite/publish": "workspace:*",
     "@lerna-lite/run": "workspace:*",

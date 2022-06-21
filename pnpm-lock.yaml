@@ -10,6 +10,7 @@ importers:
       '@lerna-lite/exec': workspace:*
       '@lerna-lite/info': workspace:*
       '@lerna-lite/list': workspace:*
+      '@lerna-lite/listable': workspace:*
       '@lerna-lite/optional-cmd-common': workspace:*
       '@lerna-lite/publish': workspace:*
       '@lerna-lite/run': workspace:*
@@ -71,6 +72,7 @@ importers:
       '@lerna-lite/exec': link:packages/exec
       '@lerna-lite/info': link:packages/info
       '@lerna-lite/list': link:packages/list
+      '@lerna-lite/listable': link:packages/listable
       '@lerna-lite/optional-cmd-common': link:packages/optional-cmd-common
       '@lerna-lite/publish': link:packages/publish
       '@lerna-lite/run': link:packages/run
