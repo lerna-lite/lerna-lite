@@ -375,14 +375,10 @@ importers:
       '@lerna-lite/core': workspace:*
       '@lerna-lite/listable': workspace:*
       '@lerna-lite/optional-cmd-common': workspace:*
-      chalk: ^4.1.2
-      columnify: ^1.6.0
     dependencies:
       '@lerna-lite/core': link:../core
       '@lerna-lite/listable': link:../listable
       '@lerna-lite/optional-cmd-common': link:../optional-cmd-common
-      chalk: 4.1.2
-      columnify: 1.6.0
 
   packages/listable:
     specifiers:
