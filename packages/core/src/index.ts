@@ -1,7 +1,6 @@
 // folders
 export * from './conventional-commits';
 export * from './git-clients';
-export * from './listable';
 export * from './models';
 export * from './package-graph';
 export * from './project';

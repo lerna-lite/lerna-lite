@@ -33,6 +33,7 @@
   "dependencies": {
     "@lerna-lite/core": "workspace:*",
     "@lerna-lite/optional-cmd-common": "workspace:*",
+    "@lerna-lite/listable": "workspace:*",
     "chalk": "^4.1.2",
     "columnify": "^1.6.0"
   }

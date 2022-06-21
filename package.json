@@ -11,7 +11,7 @@
     "postbuild": "pnpm run lint",
     "dist-info-cmd": "node ./packages/cli/dist/cli.js info",
     "dist-init-cmd": "node ./packages/cli/dist/cli.js init --independent --exact --use-workspaces",
-    "dist-changed-cmd": "node ./packages/cli/dist/cli.js changed",
+    "dist-changed-cmd": "node ./packages/cli/dist/cli.js changed --all",
     "dist-list-cmd": "node ./packages/cli/dist/cli.js list --all",
     "dist-roll-version": "node ./packages/cli/dist/cli.js version",
     "dist-roll-publish": "node ./packages/cli/dist/cli.js publish from-package",

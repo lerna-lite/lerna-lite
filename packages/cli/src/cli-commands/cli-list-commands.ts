@@ -1,4 +1,4 @@
-import { listableOptions } from '@lerna-lite/core';
+import { listable } from '@lerna-lite/listable';
 
 import { filterOptions } from '../filter-options';
 
@@ -10,7 +10,7 @@ exports.aliases = ['ls', 'la', 'll'];
 exports.describe = 'List local packages';
 
 exports.builder = (yargs) => {
-  listableOptions(yargs);
+  listable.options(yargs);
 
   return filterOptions(yargs);
 };

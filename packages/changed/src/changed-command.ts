@@ -7,7 +7,7 @@ import {
   logOutput,
   UpdateCollectorOptions,
 } from '@lerna-lite/core';
-import { listable } from '@lerna-lite/list';
+import { listable } from '@lerna-lite/listable';
 
 export function factory(argv: ChangedCommandOption & ListCommandOption) {
   return new ChangedCommand(argv);

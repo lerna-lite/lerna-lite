@@ -1,4 +1,4 @@
-import { listableOptions } from '@lerna-lite/core';
+import { listable } from '@lerna-lite/listable';
 
 /**
  * @see https://github.com/yargs/yargs/blob/master/docs/advanced.md#providing-a-command-module
@@ -38,7 +38,7 @@ exports.builder = (yargs) => {
 
   yargs.options(opts).group(Object.keys(opts), 'Command Options:');
 
-  return listableOptions(yargs, 'Output Options:');
+  return listable.options(yargs, 'Output Options:');
 };
 
 exports.handler = async function handler(argv) {

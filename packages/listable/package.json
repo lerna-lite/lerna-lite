@@ -1,6 +1,6 @@
 {
-  "name": "@lerna-lite/changed",
-  "description": "Lerna-Lite changed commmand - List local packages that have changed since the last tagged release",
+  "name": "@lerna-lite/listable",
+  "description": "Lerna-Lite listable utils",
   "version": "1.5.1",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
@@ -21,7 +21,7 @@
   "repository": {
     "type": "git",
     "url": "https://github.com/ghiscoding/lerna-lite.git",
-    "directory": "packages/changed"
+    "directory": "packages/listable"
   },
   "bugs": {
     "url": "https://github.com/ghiscoding/lerna-lite/issues"
@@ -32,7 +32,7 @@
   },
   "dependencies": {
     "@lerna-lite/core": "workspace:*",
-    "@lerna-lite/list": "workspace:*",
-    "@lerna-lite/listable": "workspace:*"
+    "chalk": "^4.1.2",
+    "columnify": "^1.6.0"
   }
 }
