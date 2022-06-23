@@ -32,6 +32,22 @@ jobs:
           node-version: 18
           cache: 'pnpm'
 
+      - name: Get pnpm store directory
+        id: pnpm-cache
+        run: |
+          echo "::set-output name=pnpm_cache_dir::$(pnpm store path)"
+
+      - uses: actions/cache@v3
+        name: Setup pnpm cache
+        with:
+          path: ${{ steps.pnpm-cache.outputs.pnpm_cache_dir }}
+          key: ${{ runner.os }}-pnpm-store-${{ hashFiles('**/pnpm-lock.yaml') }}
+          restore-keys: |
+            ${{ runner.os }}-pnpm-store-
+
+      - name: Run pnpm install dependencies
+        run: pnpm install
+
       - run: pnpm run format:check
       - run: pnpm run ci:lint
 
@@ -63,7 +79,7 @@ jobs:
           cache: 'pnpm'
 
       - run: node --version
-      - run: npm --version
+      - run: pnpm --version
 
       - name: Get pnpm store directory
         id: pnpm-cache
