@@ -12,6 +12,25 @@ env:
   CI: true
 
 jobs:
+  lint:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+      - uses: actions/checkout@v3
+
+      - name: Install pnpm itself
+        uses: pnpm/action-setup@v2.2.2
+        with:
+          version: 7
+
+      - name: Set NodeJS
+        uses: actions/setup-node@v3
+        with:
+          node-version: 18
+          cache: 'pnpm'
+
+      - run: pnpm run format:check
+      - run: pnpm run ci:lint
   run:
     strategy:
       fail-fast: false
