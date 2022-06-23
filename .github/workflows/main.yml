@@ -15,6 +15,7 @@ concurrency:
 
 jobs:
   lint:
+    name: 'Lint: on ubuntu-latest'
     runs-on: ubuntu-latest
 
     steps:
@@ -51,14 +52,14 @@ jobs:
       - run: pnpm run format:check
       - run: pnpm run ci:lint
 
-  run:
+  tests:
     strategy:
       fail-fast: false
       matrix:
         node: [14, 16, 18]
         platform: [ubuntu-latest]
 
-    name: '${{matrix.platform}} / NodeJS ${{ matrix.node }}'
+    name: 'Build & Unit Tests: on ${{matrix.platform}} / NodeJS ${{ matrix.node }}'
     runs-on: ${{matrix.platform}}
 
     steps:
