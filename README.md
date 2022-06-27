@@ -39,13 +39,11 @@ _If a command that you wish to use is missing, simply reach out and we could pot
 
 ## 📢 Lerna-Lite now supports pnpm/yarn `workspace:` protocol
 
-#### _this feature was introduced with release [1.2.0](https://github.com/ghiscoding/lerna-lite/releases/tag/v1.2.0) of Lerna-Lite, however we recommend using `>=1.3.0`, see [releases](https://github.com/ghiscoding/lerna-lite/releases)._
-
-Are using this new feature? Please take 30sec. to fill in this 1 question [poll survey](https://github.com/ghiscoding/lerna-lite/discussions/156) to see which package manager is the most popular and how many of you are taking advantage of this new `workspace:` protocol. Thanks 😉
+Are you using this new feature? Please take 30sec. to fill in this 1 question [poll survey](https://github.com/ghiscoding/lerna-lite/discussions/156) to see which package manager is the most popular and how many of you are taking advantage of this new `workspace:` protocol. Thanks 😉
 
 Lerna-Lite itself is now also using [pnpm workspaces](https://pnpm.io/workspaces) with the `workspace:` protocol as well, woohoo 🎉
 
-We also strongly suggest that you use the new [--sync-workspace-lock](https://github.com/ghiscoding/lerna-lite/tree/main/packages/version#--sync-workspace-lock) flag to automatically update your lock file.
+We also strongly suggest that you use the new [--sync-workspace-lock](https://github.com/ghiscoding/lerna-lite/tree/main/packages/version#--sync-workspace-lock) flag to automatically update your lock file 🔒.
 
 ---
 
