@@ -33,6 +33,7 @@
     'execa',
     'file-url',
     'globby',
+    'inquirer',
     'is-stream',
     'multimatch',
     'node-fetch',

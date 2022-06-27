@@ -28,7 +28,7 @@
     - 💻 [`info`](https://github.com/ghiscoding/lerna-lite/tree/main/packages/info#readme) - print local environment information (useful when opening new issue)
     - ☁️ [`publish`](https://github.com/ghiscoding/lerna-lite/tree/main/packages/publish#readme) - publish every workspace packages that changed
     - 📑 [`version`](https://github.com/ghiscoding/lerna-lite/tree/main/packages/version#readme) - create new version for each workspace packages
-  - optional (**separate install**, see [installation](#installation) table below)
+  - optional (**separate install**, refer to [installation](#installation) table shown below)
     - 🕜 [`changed`](https://github.com/ghiscoding/lerna-lite/tree/main/packages/changed#readme) - list local packages that changed since last tagged release
     - 👷 [`exec`](https://github.com/ghiscoding/lerna-lite/tree/main/packages/exec#readme) - execute shell command in each workspace package
     - 📖 [`list`](https://github.com/ghiscoding/lerna-lite/tree/main/packages/list#readme) - list local packages
@@ -44,7 +44,9 @@ _If a command that you wish to use is missing, simply reach out and we could pot
 
 Are using this new feature? Please take 30sec. to fill in this 1 question [poll survey](https://github.com/ghiscoding/lerna-lite/discussions/156) to see which package manager is the most popular and how many of you are taking advantage of this new `workspace:` protocol. Thanks 😉
 
-Lerna-Lite itself is also using [pnpm workspaces](https://pnpm.io/workspaces) with the `workspace:` protocol as well, yay 🎉
+Lerna-Lite itself is now also using [pnpm workspaces](https://pnpm.io/workspaces) with the `workspace:` protocol as well, woohoo 🎉
+
+We also strongly suggest that you use the new [--sync-workspace-lock](https://github.com/ghiscoding/lerna-lite/tree/main/packages/version#--sync-workspace-lock) flag to automatically update your lock file.
 
 ---
 
@@ -209,7 +211,7 @@ Also please note that I'm just a simple developer & user of this lib, the same a
 
 If you wish to contribute to the project, please follow these steps:
 
-**Note**: this project uses [pnpm workspaces](https://pnpm.io/workspaces), you can install pnpm (follow their [installation](https://pnpm.io/installation)) or simply run `npx pnpm` to run any of the pnpm scripts shown below:
+**Note**: this project uses [pnpm workspaces](https://pnpm.io/workspaces), you can install pnpm by following their [installation](https://pnpm.io/installation) or simply run `npx pnpm` to run any of the pnpm scripts shown below:
 
 1. clone the lib:
    - `git clone https://github.com/ghiscoding/lerna-lite`
@@ -226,7 +228,7 @@ If you wish to contribute to the project, please follow these steps:
 
 If you have problems running the lib and your problems are related to Git commands that were executed, then we suggest to first try with the `--git-dry-run` (or `--cmd-dry-run`) option to see if it helps in finding the error(s) you may have. Another great, and possibly much more useful suggestion, is to search in the original Lerna [issues](https://github.com/lerna/lerna/issues) list and see if any solution could help you (remember that Lerna-Lite is a fork of the original code from Lerna and it works the same way). Lastly, if that is not enough and you wish to troubleshoot yourself, then read this [Troubleshooting - Wiki](https://github.com/ghiscoding/lerna-lite/wiki/Troubleshooting) to possibly troubleshoot yourself in your own environment.
 
-## Lerna-Lite Packages
+## Lerna-Lite Full List of Packages
 
 | Package Name                                                                                                       | Version                                                                                                                                                                    | Description                                                 | Changes                                                                                                   |
 | ------------------------------------------------------------------------------------------------------------------ | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ----------------------------------------------------------- | --------------------------------------------------------------------------------------------------------- |
