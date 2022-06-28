@@ -134,7 +134,7 @@ export async function runInstallLockFileOnly(
       inputLockfileName = 'pnpm-lock.yaml';
       if (await validateFileExists(path.join(cwd, inputLockfileName))) {
         log.verbose('lock', `updating lock file via "pnpm install --lockfile-only"`);
-        await exec('pnpm', ['install', '--lockfile-only'], { cwd });
+        await exec('pnpm', ['install', '--lockfile-only', '--fix-lockfile'], { cwd });
         outputLockfileName = inputLockfileName;
       }
       break;
