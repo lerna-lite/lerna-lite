@@ -22,7 +22,7 @@
     "new-publish": "lerna publish from-package",
     "pack-tarball": "lerna run pack-tarball",
     "jest": "jest --runInBand --coverage=true --config ./jest/jest.config.js",
-    "jest:ci": "jest --maxWorkers=2 --coverage=true --ci --config ./jest/jest.config.js",
+    "jest:ci": "jest --runInBand --coverage=true --ci --config ./jest/jest.config.js",
     "jest:watch": "jest --watch --coverage=false --config ./jest/jest.config.js",
     "outdated:ws": "pnpm -r --stream outdated"
   },

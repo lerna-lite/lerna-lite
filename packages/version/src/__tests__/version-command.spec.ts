@@ -888,7 +888,7 @@ describe('VersionCommand', () => {
         );
 
         const changedFiles = await showCommit(cwd, '--name-only');
-        // expect(changedFiles).toContain('pnpm-lock.yaml');
+        expect(changedFiles).toContain('pnpm-lock.yaml');
 
         const lockfileResponse: any = await loadYamlFile(path.join(cwd, 'pnpm-lock.yaml'));
         const { lockfileVersion, importers } = lockfileResponse;
@@ -908,7 +908,7 @@ describe('VersionCommand', () => {
         await new VersionCommand(createArgv(cwd, '--bump', 'minor', '--yes', '--sync-workspace-lock'));
 
         const changedFiles = await showCommit(cwd, '--name-only');
-        // expect(changedFiles).toContain('pnpm-lock.yaml');
+        expect(changedFiles).toContain('pnpm-lock.yaml');
         expect(writePkg.updatedVersions()).toEqual({
           '@my-workspace/package-1': '2.4.0',
           '@my-workspace/package-2': '2.4.0',
