@@ -881,7 +881,7 @@ describe('VersionCommand', () => {
         expect(changedFiles).not.toContain('package-lock.json');
       });
 
-      it(`should call runInstallLockFileOnly() when --sync-workspace-lock is provided and expect lockfile to be added to git`, async () => {
+      it.skip(`should call runInstallLockFileOnly() when --sync-workspace-lock is provided and expect lockfile to be added to git`, async () => {
         const cwd = await initFixture('lockfile-pnpm');
         await new VersionCommand(
           createArgv(cwd, '--bump', 'major', '--yes', '--sync-workspace-lock', '--npm-client', 'pnpm')
@@ -903,7 +903,7 @@ describe('VersionCommand', () => {
         expect(importers['packages/package-4'].specifiers['@my-workspace/package-2']).toBe('workspace:~');
       });
 
-      it(`should call runInstallLockFileOnly() when --sync-workspace-lock is provided and expect lockfile to be added to git even without npmClient`, async () => {
+      it.skip(`should call runInstallLockFileOnly() when --sync-workspace-lock is provided and expect lockfile to be added to git even without npmClient`, async () => {
         const cwd = await initFixture('lockfile-pnpm');
         await new VersionCommand(createArgv(cwd, '--bump', 'minor', '--yes', '--sync-workspace-lock'));
 
