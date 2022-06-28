@@ -40,7 +40,7 @@ jobs:
           cache: 'pnpm'
 
       - run: node --version
-      - run: npm --version
+      - run: pnpm --version
 
       - name: Get pnpm store directory
         id: pnpm-cache
