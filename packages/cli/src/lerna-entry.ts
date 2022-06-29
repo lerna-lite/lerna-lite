@@ -1,6 +1,7 @@
 const cli = require('./lerna-cli');
 const pkg = require('../package.json');
 
+const changedCmd = require('./cli-commands/cli-changed-commands');
 const execCmd = require('./cli-commands/cli-exec-commands');
 const initCmd = require('./cli-commands/cli-init-commands');
 const infoCmd = require('./cli-commands/cli-info-commands');
@@ -15,6 +16,7 @@ export function lerna(argv: any[]) {
   };
 
   return cli()
+    .command(changedCmd)
     .command(execCmd)
     .command(infoCmd)
     .command(initCmd)

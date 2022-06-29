@@ -1,6 +1,6 @@
-import { Command, CommandType, ListCommandOption, logOutput, } from '@lerna-lite/core';
+import { Command, CommandType, ListCommandOption, logOutput } from '@lerna-lite/core';
 import { FilterOptions, getFilteredPackages } from '@lerna-lite/optional-cmd-common';
-import { listable } from './lib/index';
+import { listable } from '@lerna-lite/listable';
 
 export function factory(argv: ListCommandOption) {
   return new ListCommand(argv);
@@ -9,7 +9,7 @@ export function factory(argv: ListCommandOption) {
 export class ListCommand extends Command<ListCommandOption & FilterOptions> {
   /** command name */
   name = 'list' as CommandType;
-  result?: { count: number; text: string; };
+  result?: { count: number; text: string };
 
   constructor(argv: ListCommandOption) {
     super(argv);

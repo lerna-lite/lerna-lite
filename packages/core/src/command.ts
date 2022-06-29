@@ -12,6 +12,7 @@ import { writeLogFile } from './utils/write-log-file';
 import { Project } from './project/project';
 import { ValidationError } from './validation-error';
 import {
+  ChangedCommandOption,
   CommandType,
   ExecCommandOption,
   ExecOpts,
@@ -27,6 +28,7 @@ import { PackageGraph } from './package-graph/package-graph';
 const DEFAULT_CONCURRENCY = os.cpus().length;
 
 type AvailableCommandOption =
+  | ChangedCommandOption
   | ExecCommandOption
   | InitCommandOption
   | ListCommandOption

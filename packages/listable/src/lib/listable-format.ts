@@ -97,9 +97,14 @@ function formatNDJSON(resultList: ReturnType<typeof filterResultList>) {
  * @param {ReturnType<typeof filterResultList>} resultList
  * @param {ReturnType<typeof parseViewOptions>} viewOptions
  */
-function formatJSONGraph(resultList: ReturnType<typeof filterResultList>, viewOptions: ReturnType<typeof parseViewOptions>) {
+function formatJSONGraph(
+  resultList: ReturnType<typeof filterResultList>,
+  viewOptions: ReturnType<typeof parseViewOptions>
+) {
   // https://en.wikipedia.org/wiki/Adjacency_list
   const graph = {};
+
+  // prettier-ignore
   const getNeighbors = viewOptions.showAll
     ? (pkg) =>
       Object.keys(
@@ -153,7 +158,10 @@ function makeParseable(pkg: Package) {
  * @param {ReturnType<typeof filterResultList>} resultList
  * @param {ReturnType<typeof parseViewOptions>} viewOptions
  */
-function formatParseable(resultList: ReturnType<typeof filterResultList>, viewOptions: ReturnType<typeof parseViewOptions>) {
+function formatParseable(
+  resultList: ReturnType<typeof filterResultList>,
+  viewOptions: ReturnType<typeof parseViewOptions>
+) {
   return resultList.map(viewOptions.showLong ? makeParseable : (pkg) => pkg.location).join('\n');
 }
 
@@ -178,7 +186,10 @@ function getColumnOrder(viewOptions: ReturnType<typeof parseViewOptions>) {
  * @param {ReturnType<typeof filterResultList>} resultList
  * @param {ReturnType<typeof parseViewOptions>} viewOptions
  */
-function trimmedColumns(formattedResults: ReturnType<typeof filterResultList>, viewOptions: ReturnType<typeof parseViewOptions>) {
+function trimmedColumns(
+  formattedResults: ReturnType<typeof filterResultList>,
+  viewOptions: ReturnType<typeof parseViewOptions>
+) {
   const str = columnify(formattedResults, {
     showHeaders: false,
     columns: getColumnOrder(viewOptions),
@@ -200,9 +211,12 @@ function trimmedColumns(formattedResults: ReturnType<typeof filterResultList>, v
  * @param {ReturnType<typeof filterResultList>} resultList
  * @param {ReturnType<typeof parseViewOptions>} viewOptions
  */
-function formatColumns(resultList: ReturnType<typeof filterResultList>, viewOptions: ReturnType<typeof parseViewOptions>) {
+function formatColumns(
+  resultList: ReturnType<typeof filterResultList>,
+  viewOptions: ReturnType<typeof parseViewOptions>
+) {
   const formattedResults = resultList.map((result) => {
-    const formatted: Partial<{ location: string; name: string; private: string; version: string; }> = {
+    const formatted: Partial<{ location: string; name: string; private: string; version: string }> = {
       name: result.name,
     };
 

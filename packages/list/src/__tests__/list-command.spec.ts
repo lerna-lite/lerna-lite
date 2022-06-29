@@ -10,10 +10,11 @@ jest.mock('@lerna-lite/core', () => ({
   getPackages: jest.requireActual('../../../core/src/project').getPackages,
 }));
 
+// mocked modules
+const { collectUpdates, logOutput } = require('@lerna-lite/core');
+
 // helpers
 const initFixture = require('@lerna-test/init-fixture')(__dirname);
-const { logOutput } = require('@lerna-lite/core');
-const { collectUpdates } = require('@lerna-lite/core');
 
 // file under test
 const lernaList = require('@lerna-test/command-runner')(

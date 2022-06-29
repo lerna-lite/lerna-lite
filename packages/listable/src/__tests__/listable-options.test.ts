@@ -1,4 +1,5 @@
 import yargs from 'yargs/yargs';
+
 import { listable } from '../index';
 
 describe('listable.options()', () => {

@@ -4,11 +4,13 @@ importers:
 
   .:
     specifiers:
+      '@lerna-lite/changed': workspace:*
       '@lerna-lite/cli': workspace:*
       '@lerna-lite/core': workspace:*
       '@lerna-lite/exec': workspace:*
       '@lerna-lite/info': workspace:*
       '@lerna-lite/list': workspace:*
+      '@lerna-lite/listable': workspace:*
       '@lerna-lite/optional-cmd-common': workspace:*
       '@lerna-lite/publish': workspace:*
       '@lerna-lite/run': workspace:*
@@ -64,11 +66,13 @@ importers:
       tsm: ^2.2.1
       typescript: ^4.7.4
     devDependencies:
+      '@lerna-lite/changed': link:packages/changed
       '@lerna-lite/cli': link:packages/cli
       '@lerna-lite/core': link:packages/core
       '@lerna-lite/exec': link:packages/exec
       '@lerna-lite/info': link:packages/info
       '@lerna-lite/list': link:packages/list
+      '@lerna-lite/listable': link:packages/listable
       '@lerna-lite/optional-cmd-common': link:packages/optional-cmd-common
       '@lerna-lite/publish': link:packages/publish
       '@lerna-lite/run': link:packages/run
@@ -124,11 +128,22 @@ importers:
       tsm: 2.2.1
       typescript: 4.7.4
 
+  packages/changed:
+    specifiers:
+      '@lerna-lite/core': workspace:*
+      '@lerna-lite/list': workspace:*
+      '@lerna-lite/listable': workspace:*
+    dependencies:
+      '@lerna-lite/core': link:../core
+      '@lerna-lite/list': link:../list
+      '@lerna-lite/listable': link:../listable
+
   packages/cli:
     specifiers:
       '@lerna-lite/core': workspace:*
       '@lerna-lite/info': workspace:*
       '@lerna-lite/init': workspace:*
+      '@lerna-lite/listable': workspace:*
       '@lerna-lite/publish': workspace:*
       '@lerna-lite/version': workspace:*
       dedent: ^0.7.0
@@ -140,6 +155,7 @@ importers:
       '@lerna-lite/core': link:../core
       '@lerna-lite/info': link:../info
       '@lerna-lite/init': link:../init
+      '@lerna-lite/listable': link:../listable
       '@lerna-lite/publish': link:../publish
       '@lerna-lite/version': link:../version
       dedent: 0.7.0
@@ -359,12 +375,20 @@ importers:
   packages/list:
     specifiers:
       '@lerna-lite/core': workspace:*
+      '@lerna-lite/listable': workspace:*
       '@lerna-lite/optional-cmd-common': workspace:*
+    dependencies:
+      '@lerna-lite/core': link:../core
+      '@lerna-lite/listable': link:../listable
+      '@lerna-lite/optional-cmd-common': link:../optional-cmd-common
+
+  packages/listable:
+    specifiers:
+      '@lerna-lite/core': workspace:*
       chalk: ^4.1.2
       columnify: ^1.6.0
     dependencies:
       '@lerna-lite/core': link:../core
-      '@lerna-lite/optional-cmd-common': link:../optional-cmd-common
       chalk: 4.1.2
       columnify: 1.6.0
 
@@ -6464,7 +6488,7 @@ packages:
     dev: true
 
   /wcwidth/1.0.1:
-    resolution: {integrity: sha1-8LDc+RW8X/FSivrbLA4XtTLaL+g=}
+    resolution: {integrity: sha512-XHPEwS0q6TaxcvG85+8EYkbiCux2XtWG2mkc47Ng2A77BQu9+DqIOJldST4HgPkuea7dvKSj5VgX3P1d4rW8Tg==}
     dependencies:
       defaults: 1.0.3
     dev: false

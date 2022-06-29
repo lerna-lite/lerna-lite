@@ -28,7 +28,8 @@
     - 💻 [`info`](https://github.com/ghiscoding/lerna-lite/tree/main/packages/info#readme) - print local environment information (useful when opening new issue)
     - ☁️ [`publish`](https://github.com/ghiscoding/lerna-lite/tree/main/packages/publish#readme) - publish every workspace packages that changed
     - 📑 [`version`](https://github.com/ghiscoding/lerna-lite/tree/main/packages/version#readme) - create new version for each workspace packages
-  - optional (**separate install**, refer to [installation](#installation) table below)
+  - optional (**separate install**, refer to [installation](#installation) table shown below)
+    - 🕜 [`changed`](https://github.com/ghiscoding/lerna-lite/tree/main/packages/changed#readme) - list local packages that changed since last tagged release
     - 👷 [`exec`](https://github.com/ghiscoding/lerna-lite/tree/main/packages/exec#readme) - execute shell command in each workspace package
     - 📖 [`list`](https://github.com/ghiscoding/lerna-lite/tree/main/packages/list#readme) - list local packages
     - 🏃 [`run`](https://github.com/ghiscoding/lerna-lite/tree/main/packages/run#readme) - run npm script in each workspace packages
@@ -83,8 +84,9 @@ Mainly for the following reasons:
   - each package will get its own Changelog and a merged Changelog will also be created in the root.
 - Automate the repository Publishing of your new version for all your packages (NPM or other platform).
 
-#### Other useful, but optional, commands
+#### Other useful, **but optional**, commands
 
+- [Changed](https://github.com/ghiscoding/lerna-lite/tree/main/packages/changed#readme) command, when installed, will list all local packages that have changed since the last tagged release
 - [Exec](https://github.com/ghiscoding/lerna-lite/tree/main/packages/exec#readme) command, when installed, will help you execute shell commands in parallel and in topological order.
 - [List](https://github.com/ghiscoding/lerna-lite/tree/main/packages/list#readme) command, when installed, will list all workspace local packages
 - [Run](https://github.com/ghiscoding/lerna-lite/tree/main/packages/run#readme) command, when installed, will help you run npm script in parallel and in topological order.
@@ -128,15 +130,16 @@ Run the following commands to install Lerna-Lite in your project and/or install 
 
 If you are new to Lerna-Lite, you could also run the [lerna init](https://github.com/ghiscoding/lerna-lite/tree/main/packages/init#readme) command which will create the `lerna.json` for you. If you are using a different client other than npm, then make sure to update the `npmClient` property in `lerna.json` (for example: `"npmClient": "yarn"`).
 
-| Command                                                                                  | Install                        | Description                                   | Included |
-| ---------------------------------------------------------------------------------------- | ------------------------------ | --------------------------------------------- | -------- |
-| 🛠️ [init](https://github.com/ghiscoding/lerna-lite/tree/main/packages/init#readme)       | `npm i @lerna-lite/cli -D -W`  | create/initialize a new Lerna-Lite repo       | Yes      |
-| 💻 [info](https://github.com/ghiscoding/lerna-lite/tree/main/packages/info#readme)       | `npm i @lerna-lite/cli -D -W`  | print local environment information           | Yes      |
-| 📑 [version](https://github.com/ghiscoding/lerna-lite/tree/main/packages/version#readme) | `npm i @lerna-lite/cli -D -W`  | create new version for each workspace package | Yes      |
-| ☁️ [publish](https://github.com/ghiscoding/lerna-lite/tree/main/packages/publish#readme) | `npm i @lerna-lite/cli -D -W`  | publish each workspace package                | Yes      |
-| 👷 [exec](https://github.com/ghiscoding/lerna-lite/tree/main/packages/exec#readme)       | `npm i @lerna-lite/exec -D -W` | execute an command in each workspace package  | Optional |
-| 📖 [list](https://github.com/ghiscoding/lerna-lite/tree/main/packages/list#readme)       | `npm i @lerna-lite/list -D -W` | list local packages                           | Optional |
-| 🏃 [run](https://github.com/ghiscoding/lerna-lite/tree/main/packages/run#readme)         | `npm i @lerna-lite/run -D -W`  | run npm script in each workspace package      | Optional |
+| Command                                                                                  | Install                           | Description                                    | Included |
+| ---------------------------------------------------------------------------------------- | --------------------------------- | ---------------------------------------------- | -------- |
+| 🛠️ [init](https://github.com/ghiscoding/lerna-lite/tree/main/packages/init#readme)       | `npm i @lerna-lite/cli -D -W`     | create/initialize a new Lerna-Lite repo        | Yes      |
+| 💻 [info](https://github.com/ghiscoding/lerna-lite/tree/main/packages/info#readme)       | `npm i @lerna-lite/cli -D -W`     | print local environment information            | Yes      |
+| 📑 [version](https://github.com/ghiscoding/lerna-lite/tree/main/packages/version#readme) | `npm i @lerna-lite/cli -D -W`     | create new version for each workspace package  | Yes      |
+| ☁️ [publish](https://github.com/ghiscoding/lerna-lite/tree/main/packages/publish#readme) | `npm i @lerna-lite/cli -D -W`     | publish each workspace package                 | Yes      |
+| 🕜 [changed](https://github.com/ghiscoding/lerna-lite/tree/main/packages/changed#readme) | `npm i @lerna-lite/changed -D -W` | list local packages changed since last release | Optional |
+| 👷 [exec](https://github.com/ghiscoding/lerna-lite/tree/main/packages/exec#readme)       | `npm i @lerna-lite/exec -D -W`    | execute an command in each workspace package   | Optional |
+| 📖 [list](https://github.com/ghiscoding/lerna-lite/tree/main/packages/list#readme)       | `npm i @lerna-lite/list -D -W`    | list local packages                            | Optional |
+| 🏃 [run](https://github.com/ghiscoding/lerna-lite/tree/main/packages/run#readme)         | `npm i @lerna-lite/run -D -W`     | run npm script in each workspace package       | Optional |
 
 **Note:** the default `lerna` CLI is including only 4 built-in commands (`init`,`info`,`publish`,`version`), all other commands are optional commands and must be installed separately as shown in the table.
 
@@ -173,10 +176,10 @@ npm uninstall -g lerna   # OR yarn global remove lerna
 npm install @lerna-lite/cli -D -W
 ```
 
-3. optionally install `exec`, `list` and/or `run` commands (refer to [installation](#installation) table)
+3. optionally install `changed`, `exec`, `list` and/or `run` commands (refer to [installation](#installation) table)
 
 ```sh
-# optionally install `exec`, `list` and/or `run` command(s)
+# install any of the optional commands (refer to installation table)
 npm install @lerna-lite/run -D -W
 ```
 
@@ -234,6 +237,8 @@ If you have problems running the lib and your problems are related to Git comman
 | [@lerna-lite/publish](https://github.com/ghiscoding/lerna-lite/tree/main/packages/publish)                         | [![npm](https://img.shields.io/npm/v/@lerna-lite/publish.svg?logo=npm&logoColor=fff&label=npm)](https://www.npmjs.com/package/@lerna-lite/publish)                         | Publish packages in the current workspace                   | [changelog](https://github.com/ghiscoding/lerna-lite/blob/main/packages/publish/CHANGELOG.md)             |
 | [@lerna-lite/version](https://github.com/ghiscoding/lerna-lite/tree/main/packages/version)                         | [![npm](https://img.shields.io/npm/v/@lerna-lite/version.svg?logo=npm&logoColor=fff&label=npm)](https://www.npmjs.com/package/@lerna-lite/version)                         | Bump Version & write Changelogs                             | [changelog](https://github.com/ghiscoding/lerna-lite/blob/main/packages/version/CHANGELOG.md)             |
 | [@lerna-lite/exec](https://github.com/ghiscoding/lerna-lite/tree/main/packages/exec)                               | [![npm](https://img.shields.io/npm/v/@lerna-lite/exec.svg?logo=npm&logoColor=fff&label=npm)](https://www.npmjs.com/package/@lerna-lite/exec)                               | Execute shell command in current workspace                  | [changelog](https://github.com/ghiscoding/lerna-lite/blob/main/packages/exec/CHANGELOG.md)                |
+| [@lerna-lite/changed](https://github.com/ghiscoding/lerna-lite/tree/main/packages/changed)                         | [![npm](https://img.shields.io/npm/v/@lerna-lite/changed.svg?logo=npm&logoColor=fff&label=npm)](https://www.npmjs.com/package/@lerna-lite/changed)                         | List local packages that changed since last release         | [changelog](https://github.com/ghiscoding/lerna-lite/blob/main/packages/changed/CHANGELOG.md)             |
 | [@lerna-lite/list](https://github.com/ghiscoding/lerna-lite/tree/main/packages/list)                               | [![npm](https://img.shields.io/npm/v/@lerna-lite/list.svg?logo=npm&logoColor=fff&label=npm)](https://www.npmjs.com/package/@lerna-lite/list)                               | List local packages                                         | [changelog](https://github.com/ghiscoding/lerna-lite/blob/main/packages/list/CHANGELOG.md)                |
+| [@lerna-lite/listable](https://github.com/ghiscoding/lerna-lite/tree/main/packages/listable)                       | [![npm](https://img.shields.io/npm/v/@lerna-lite/listable.svg?logo=npm&logoColor=fff&label=npm)](https://www.npmjs.com/package/@lerna-lite/listable)                       | Listable utils used by `list` and `changed` commands        | [changelog](https://github.com/ghiscoding/lerna-lite/blob/main/packages/listable/CHANGELOG.md)            |
 | [@lerna-lite/run](https://github.com/ghiscoding/lerna-lite/tree/main/packages/run)                                 | [![npm](https://img.shields.io/npm/v/@lerna-lite/run.svg?logo=npm&logoColor=fff&label=npm)](https://www.npmjs.com/package/@lerna-lite/run)                                 | Run npm scripts in current workspace                        | [changelog](https://github.com/ghiscoding/lerna-lite/blob/main/packages/run/CHANGELOG.md)                 |
 | [@lerna-lite/optional-cmd-common](https://github.com/ghiscoding/lerna-lite/tree/main/packages/optional-cmd-common) | [![npm](https://img.shields.io/npm/v/@lerna-lite/optional-cmd-common.svg?logo=npm&logoColor=fff&label=npm)](https://www.npmjs.com/package/@lerna-lite/optional-cmd-common) | Lerna-Lite common utils for optional commands Exec/List/Run (internal use) | [changelog](https://github.com/ghiscoding/lerna-lite/blob/main/packages/optional-cmd-common/CHANGELOG.md) |

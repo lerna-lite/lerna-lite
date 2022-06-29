@@ -5,7 +5,10 @@ import { YargListableOption } from '../types';
  * @param {import('yargs').Argv} yargs
  * @param {string} [group]
  */
-export function listableOptions(yargs: { options: (opts: YargListableOption) => void }, group = 'Command Options:') {
+export function listableOptions(
+  yargs: { options: (opts: YargListableOption) => void },
+  group = 'Command Options:'
+) {
   return yargs.options({
     json: {
       group,
