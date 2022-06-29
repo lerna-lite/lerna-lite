@@ -165,7 +165,7 @@ describe('run install lockfile-only', () => {
 
       const lockFileOutput = await runInstallLockFileOnly('pnpm', cwd);
 
-      expect(execSpy).toHaveBeenCalledWith('pnpm', ['install', '--lockfile-only'], { cwd });
+      expect(execSpy).toHaveBeenCalledWith('pnpm', ['install', '--lockfile-only', '--fix-lockfile'], { cwd });
       expect(lockFileOutput).toBe('pnpm-lock.yaml');
     });
   });
