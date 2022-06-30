@@ -67,7 +67,8 @@
         "node/no-extraneous-require": "off",
         "node/no-unpublished-require": "off",
         "no-await-in-loop": "off",
-        "no-console": "off"
+        "no-console": "off",
+        "no-param-reassign": "off"
       }
     },
     {
