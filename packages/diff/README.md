@@ -29,6 +29,7 @@ npx lerna diff
 $ lerna diff [package]
 
 $ lerna diff
+
 # diff a specific package
 $ lerna diff package-name
 ```
