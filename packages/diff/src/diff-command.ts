@@ -17,7 +17,7 @@ export class DiffCommand extends Command<DiffCommandOption> {
     super(argv);
   }
 
-  async initialize() {
+  initialize() {
     let targetPackage: Package | undefined = undefined;
     const packageName = this.options.pkgName;
 
@@ -38,7 +38,7 @@ export class DiffCommand extends Command<DiffCommandOption> {
     if (targetPackage) {
       args.push('--', targetPackage.location);
     } else {
-      args.push('--', ...(await this.project.packageParentDirs));
+      args.push('--', ...this.project.packageParentDirs);
     }
 
     if (this.options.ignoreChanges) {
