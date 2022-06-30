@@ -1,0 +1,36 @@
+{
+  "name": "@lerna-lite/diff",
+  "description": "Lerna-Lite diff commmand - Diff all packages or a single package since the last release",
+  "version": "1.5.1",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "typings": "dist/index.d.ts",
+  "files": [
+    "/dist"
+  ],
+  "publishConfig": {
+    "access": "public"
+  },
+  "scripts": {
+    "build": "tsc --project tsconfig.bundle.json --newLine LF",
+    "pack-tarball": "npm pack"
+  },
+  "license": "MIT",
+  "author": "Ghislain B.",
+  "homepage": "https://github.com/ghiscoding/lerna-lite",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/ghiscoding/lerna-lite.git",
+    "directory": "packages/diff"
+  },
+  "bugs": {
+    "url": "https://github.com/ghiscoding/lerna-lite/issues"
+  },
+  "engines": {
+    "node": ">=14.15.0",
+    "npm": ">=8.0.0"
+  },
+  "dependencies": {
+    "@lerna-lite/core": "workspace:*"
+  }
+}

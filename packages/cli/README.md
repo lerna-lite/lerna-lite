@@ -42,6 +42,7 @@ For all available options of each command, follow any of the command link shown 
   - [lerna version](https://github.com/ghiscoding/lerna-lite/blob/main/packages/version/README.md)
 - optional
   - [lerna changed](https://github.com/ghiscoding/lerna-lite/blob/main/packages/changed/README.md)
+  - [lerna diff](https://github.com/ghiscoding/lerna-lite/blob/main/packages/diff/README.md)
   - [lerna exec](https://github.com/ghiscoding/lerna-lite/blob/main/packages/exec/README.md)
   - [lerna list](https://github.com/ghiscoding/lerna-lite/blob/main/packages/list/README.md)
   - [lerna run](https://github.com/ghiscoding/lerna-lite/blob/main/packages/run/README.md)

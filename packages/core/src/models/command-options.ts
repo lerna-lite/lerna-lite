@@ -15,6 +15,14 @@ export interface ChangedCommandOption {
   includeMergedTags?: boolean;
 }
 
+export interface DiffCommandOption {
+  /** ignore changes in files matched by glob(s) when detecting changed packages. Pass --no-ignore-changes to completely disable. */
+  ignoreChanges: string[];
+
+  /** package name */
+  pkgName: string;
+}
+
 export interface ExecCommandOption {
   /** command to execute by the command */
   cmd?: string;

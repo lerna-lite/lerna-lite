@@ -7,6 +7,7 @@ importers:
       '@lerna-lite/changed': workspace:*
       '@lerna-lite/cli': workspace:*
       '@lerna-lite/core': workspace:*
+      '@lerna-lite/diff': workspace:*
       '@lerna-lite/exec': workspace:*
       '@lerna-lite/info': workspace:*
       '@lerna-lite/list': workspace:*
@@ -72,6 +73,7 @@ importers:
       '@lerna-lite/changed': link:packages/changed
       '@lerna-lite/cli': link:packages/cli
       '@lerna-lite/core': link:packages/core
+      '@lerna-lite/diff': link:packages/diff
       '@lerna-lite/exec': link:packages/exec
       '@lerna-lite/info': link:packages/info
       '@lerna-lite/list': link:packages/list
@@ -316,6 +318,12 @@ importers:
       '@types/write-file-atomic': 4.0.0
       '@types/write-json-file': 3.2.1
       '@types/write-pkg': 4.0.0
+
+  packages/diff:
+    specifiers:
+      '@lerna-lite/core': workspace:*
+    dependencies:
+      '@lerna-lite/core': link:../core
 
   packages/exec:
     specifiers:
