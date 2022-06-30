@@ -1,4 +1,4 @@
-"use strict";
+'use strict';
 
 const mockCheckWorkingTree = jest.fn(() => Promise.resolve());
 const mockThrowIfReleased = jest.fn(() => Promise.resolve());

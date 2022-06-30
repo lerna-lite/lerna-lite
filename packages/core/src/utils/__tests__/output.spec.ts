@@ -3,7 +3,7 @@ import log from 'npmlog';
 
 describe('logOutput method', () => {
   it('should console log output when called', () => {
-    const consoleSpy = jest.spyOn(console, 'log').mockImplementation(() => { });
+    const consoleSpy = jest.spyOn(console, 'log').mockImplementation(() => {});
     const clearSpy = jest.spyOn(log, 'clearProgress');
     const showSpy = jest.spyOn(log, 'showProgress');
 

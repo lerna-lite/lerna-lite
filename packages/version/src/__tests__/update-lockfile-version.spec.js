@@ -86,11 +86,7 @@ describe('npm modern lock file', () => {
       await saveUpdatedLockJsonFile(lockFileOutput.path, lockFileOutput.json);
     }
 
-    expect(Array.from(loadJsonFile.registry.keys())).toStrictEqual([
-      '/packages/package-1',
-      '/packages/package-2',
-      '/',
-    ]);
+    expect(Array.from(loadJsonFile.registry.keys())).toStrictEqual(['/packages/package-1', '/packages/package-2', '/']);
     expect(fs.readJSONSync(rootLockFilePath)).toMatchSnapshot();
   });
 });

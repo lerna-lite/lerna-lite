@@ -15,7 +15,11 @@ import { Package } from '../package';
  * @param {import("..").ChangelogType} type
  * @param {import("..").BaseChangelogOptions & { version?: string }} commandOptions
  */
-export async function updateChangelog(pkg: Package, type: 'root' | 'independent' | 'fixed', updateOptions: UpdateChangelogOption) {
+export async function updateChangelog(
+  pkg: Package,
+  type: 'root' | 'independent' | 'fixed',
+  updateOptions: UpdateChangelogOption
+) {
   log.silly(type, 'for %s at %s', pkg.name, pkg.location);
 
   const {
@@ -78,9 +82,9 @@ export async function updateChangelog(pkg: Package, type: 'root' | 'independent'
     log.silly(type, 'writing new entry: %j', newEntry);
 
     const changelogVersion = type === 'root' ? changelogVersionMessage : '';
-    const changelogHeader = CHANGELOG_HEADER.replace(/%s/g, type === 'root'
-      ? changelogHeaderMessage?.length > 0 ? changelogHeaderMessage + EOL : ''
-      : ''
+    const changelogHeader = CHANGELOG_HEADER.replace(
+      /%s/g,
+      type === 'root' ? (changelogHeaderMessage?.length > 0 ? changelogHeaderMessage + EOL : '') : ''
     );
 
     const content = [changelogHeader, changelogVersion, newEntry, changelogContents]

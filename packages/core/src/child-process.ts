@@ -22,7 +22,12 @@ let currentColor = 0;
  * @param {string[]} args
  * @param {import("execa").Options} [opts]
  */
-export function exec(command: string, args: string[], opts?: execa.Options & { pkg?: Package }, cmdDryRun = false): Promise<any> {
+export function exec(
+  command: string,
+  args: string[],
+  opts?: execa.Options & { pkg?: Package },
+  cmdDryRun = false
+): Promise<any> {
   const options = Object.assign({ stdio: 'pipe' }, opts);
   const spawned = spawnProcess(command, args, options, cmdDryRun);
 
@@ -36,9 +41,7 @@ export function exec(command: string, args: string[], opts?: execa.Options & { p
  * @param {import("execa").SyncOptions} [opts]
  */
 export function execSync(command: string, args?: string[], opts?: execa.SyncOptions<string>, cmdDryRun = false) {
-  return cmdDryRun
-    ? logExecCommand(command, args)
-    : execa.sync(command, args, opts).stdout;
+  return cmdDryRun ? logExecCommand(command, args) : execa.sync(command, args, opts).stdout;
 }
 
 /**
@@ -47,7 +50,12 @@ export function execSync(command: string, args?: string[], opts?: execa.SyncOpti
  * @param {string[]} args
  * @param {import("execa").Options} [opts]
  */
-export function spawn(command: string, args: string[], opts?: execa.Options & { pkg?: Package }, cmdDryRun = false): Promise<any> {
+export function spawn(
+  command: string,
+  args: string[],
+  opts?: execa.Options & { pkg?: Package },
+  cmdDryRun = false
+): Promise<any> {
   const options = Object.assign({}, opts, { stdio: 'inherit' });
   const spawned = spawnProcess(command, args, options, cmdDryRun);
 
@@ -62,7 +70,13 @@ export function spawn(command: string, args: string[], opts?: execa.Options & { 
  * @param {string} [prefix]
  */
 // istanbul ignore next
-export function spawnStreaming(command: string, args: string[], opts?: execa.Options & { pkg?: Package }, prefix?: string | boolean, cmdDryRun = false): Promise<any> {
+export function spawnStreaming(
+  command: string,
+  args: string[],
+  opts?: execa.Options & { pkg?: Package },
+  prefix?: string | boolean,
+  cmdDryRun = false
+): Promise<any> {
   const options: any = Object.assign({}, opts);
   options.stdio = ['ignore', 'pipe', 'pipe'];
 
@@ -118,7 +132,12 @@ export function getExitCode(result: any) {
  * @param {string[]} args
  * @param {import("execa").Options} opts
  */
-export function spawnProcess(command: string, args: string[], opts: execa.Options & { pkg?: Package }, cmdDryRun = false) {
+export function spawnProcess(
+  command: string,
+  args: string[],
+  opts: execa.Options & { pkg?: Package },
+  cmdDryRun = false
+) {
   if (cmdDryRun) {
     return logExecCommand(command, args);
   }
@@ -176,7 +195,7 @@ export function logExecCommand(command: string, args?: string[]) {
 
   const cmdList: string[] = [];
   for (const c of [command, argStr]) {
-    cmdList.push((Array.isArray(c) ? c.join(' ') : c));
+    cmdList.push(Array.isArray(c) ? c.join(' ') : c);
   }
 
   log.info('dry-run>', cmdList.join(' '));

@@ -1,11 +1,13 @@
 import { parseField } from '../parse-field';
 
-describe("parseField()", () => {
-  it("should throw when failing to parse property from the JSON input", () => {
-    const input = { name: 'test', version: "^1.0.0" };
+describe('parseField()', () => {
+  it('should throw when failing to parse property from the JSON input', () => {
+    const input = { name: 'test', version: '^1.0.0' };
     const inputJson = JSON.stringify(input);
 
-    expect(() => parseField(`'${inputJson}'`, 'version')).toThrow(`Failed parsing JSON config key version: '${inputJson}'`);
+    expect(() => parseField(`'${inputJson}'`, 'version')).toThrow(
+      `Failed parsing JSON config key version: '${inputJson}'`
+    );
   });
 
   it("should return True when input field is 'true'", () => {
@@ -36,7 +38,7 @@ describe("parseField()", () => {
     expect(output).toBeUndefined();
   });
 
-  it("should return number when key is found to be a Number in types.ts filed", () => {
+  it('should return number when key is found to be a Number in types.ts filed', () => {
     const input = 123;
     const output = parseField(`${input}`, 'searchlimit');
 

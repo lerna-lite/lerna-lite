@@ -1,11 +1,11 @@
-"use strict";
+'use strict';
 
-const { Project } = require("@lerna-lite/core");
-const initFixture = require("@lerna-test/init-fixture")(__dirname);
-const { getPackagesWithoutLicense } = require("../lib/get-packages-without-license");
+const { Project } = require('@lerna-lite/core');
+const initFixture = require('@lerna-test/init-fixture')(__dirname);
+const { getPackagesWithoutLicense } = require('../lib/get-packages-without-license');
 
-test("getPackagesWithoutLicense", async () => {
-  const cwd = await initFixture("licenses");
+test('getPackagesWithoutLicense', async () => {
+  const cwd = await initFixture('licenses');
   const project = new Project(cwd);
 
   const [pkg1, pkg2] = await project.getPackages();

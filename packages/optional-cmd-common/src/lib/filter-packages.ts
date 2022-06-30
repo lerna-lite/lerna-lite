@@ -15,7 +15,13 @@ import { Package, ValidationError } from '@lerna-lite/core';
  * @param {boolean} [continueIfNoMatch] When true, do not throw if no package is matched
  * @throws when a given glob would produce an empty list of packages and `continueIfNoMatch` is not set.
  */
-export function filterPackages(packagesToFilter: Package[], include: string[] = [], exclude: string[] = [], showPrivate?: boolean, continueIfNoMatch?: boolean) {
+export function filterPackages(
+  packagesToFilter: Package[],
+  include: string[] = [],
+  exclude: string[] = [],
+  showPrivate?: boolean,
+  continueIfNoMatch?: boolean
+) {
   const filtered = new Set(packagesToFilter);
   const patterns: string[] = ([] as string[]).concat(arrify(include), negate(exclude));
 

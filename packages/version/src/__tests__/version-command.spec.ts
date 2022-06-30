@@ -45,9 +45,7 @@ const { loggingOutput } = require('@lerna-test/logging-output');
 const { gitAdd } = require('@lerna-test/git-add');
 const { gitTag } = require('@lerna-test/git-tag');
 const { gitCommit } = require('@lerna-test/git-commit');
-const initFixture = require('@lerna-test/init-fixture')(
-  path.resolve(__dirname, '../../../publish/src/__tests__')
-);
+const initFixture = require('@lerna-test/init-fixture')(path.resolve(__dirname, '../../../publish/src/__tests__'));
 const { showCommit } = require('@lerna-test/show-commit');
 const { getCommitMessage } = require('@lerna-test/get-commit-message');
 
@@ -130,9 +128,7 @@ describe('VersionCommand', () => {
 
     it('throws an error if conventional prerelease and graduate flags are both passed', async () => {
       const testDir = await initFixture('normal');
-      const command = new VersionCommand(
-        createArgv(testDir, '--conventional-prerelease', '--conventional-graduate')
-      );
+      const command = new VersionCommand(createArgv(testDir, '--conventional-prerelease', '--conventional-graduate'));
 
       await expect(command).rejects.toThrow(
         '--conventional-prerelease cannot be combined with --conventional-graduate.'
@@ -369,8 +365,7 @@ describe('VersionCommand', () => {
 
   // TODO: (major) make --no-granular-pathspec the default
   describe('--no-granular-pathspec', () => {
-    const getLeftover = (cwd) =>
-      execa('git', ['ls-files', '--others'], { cwd }).then((result) => result.stdout);
+    const getLeftover = (cwd) => execa('git', ['ls-files', '--others'], { cwd }).then((result) => result.stdout);
 
     it('adds changed files globally', async () => {
       const cwd = await initFixture('normal');
@@ -670,9 +665,7 @@ describe('VersionCommand', () => {
       const cwd = await detachedHEAD();
       const command = new VersionCommand(createArgv(cwd));
 
-      await expect(command).rejects.toThrow(
-        'Detached git HEAD, please checkout a branch to choose versions.'
-      );
+      await expect(command).rejects.toThrow('Detached git HEAD, please checkout a branch to choose versions.');
     });
 
     it('does not throw for version --no-git-tag-version', async () => {
@@ -693,18 +686,14 @@ describe('VersionCommand', () => {
       const cwd = await detachedHEAD();
       const command = new VersionCommand(createArgv(cwd, '--no-git-tag-version', '--conventional-commits'));
 
-      await expect(command).rejects.toThrow(
-        'Detached git HEAD, please checkout a branch to choose versions.'
-      );
+      await expect(command).rejects.toThrow('Detached git HEAD, please checkout a branch to choose versions.');
     });
 
     it('throws for version --allow-branch', async () => {
       const cwd = await detachedHEAD();
       const command = new VersionCommand(createArgv(cwd, '--no-git-tag-version', '--allow-branch', 'main'));
 
-      await expect(command).rejects.toThrow(
-        'Detached git HEAD, please checkout a branch to choose versions.'
-      );
+      await expect(command).rejects.toThrow('Detached git HEAD, please checkout a branch to choose versions.');
     });
   });
 
@@ -842,9 +831,7 @@ describe('VersionCommand', () => {
   describe('with root lockfile on npm lockfile version >=2', () => {
     it('should update project root lockfile version 2 for every necessary properties by writing directly to the file', async () => {
       const cwd = await initFixture('lockfile-version2');
-      await new VersionCommand(
-        createArgv(cwd, '--bump', 'major', '--yes', '--manually-update-root-lockfile')
-      );
+      await new VersionCommand(createArgv(cwd, '--bump', 'major', '--yes', '--manually-update-root-lockfile'));
 
       const changedFiles = await showCommit(cwd, '--name-only');
       expect(changedFiles).toContain('package-lock.json');
@@ -875,14 +862,7 @@ describe('VersionCommand', () => {
       it(`should NOT call runInstallLockFileOnly() when --no-sync-workspace-lock & --no-manually-update-root-lockfile are provided`, async () => {
         const cwd = await initFixture('lockfile-version2');
         await new VersionCommand(
-          createArgv(
-            cwd,
-            '--bump',
-            'major',
-            '--yes',
-            '--no-sync-workspace-lock',
-            '--no-manually-update-root-lockfile'
-          )
+          createArgv(cwd, '--bump', 'major', '--yes', '--no-sync-workspace-lock', '--no-manually-update-root-lockfile')
         );
 
         const changedFiles = await showCommit(cwd, '--name-only');
@@ -902,9 +882,7 @@ describe('VersionCommand', () => {
         const { lockfileVersion, importers } = lockfileResponse;
 
         expect(lockfileVersion).toBe(5.4);
-        expect(importers['packages/package-2'].specifiers['@my-workspace/package-1']).toBe(
-          'workspace:^3.0.0'
-        );
+        expect(importers['packages/package-2'].specifiers['@my-workspace/package-1']).toBe('workspace:^3.0.0');
         expect(importers['packages/package-3'].specifiers['@my-workspace/package-1']).toBe('workspace:^');
         expect(importers['packages/package-3'].specifiers['@my-workspace/package-2']).toBe('workspace:*');
         expect(importers['packages/package-4'].specifiers['@my-workspace/package-1']).toBe('workspace:3.0.0');
@@ -928,9 +906,7 @@ describe('VersionCommand', () => {
         const { lockfileVersion, importers } = lockfileResponse;
 
         expect(lockfileVersion).toBe(5.4);
-        expect(importers['packages/package-2'].specifiers['@my-workspace/package-1']).toBe(
-          'workspace:^2.4.0'
-        );
+        expect(importers['packages/package-2'].specifiers['@my-workspace/package-1']).toBe('workspace:^2.4.0');
         expect(importers['packages/package-3'].specifiers['@my-workspace/package-1']).toBe('workspace:^');
         expect(importers['packages/package-3'].specifiers['@my-workspace/package-2']).toBe('workspace:*');
         expect(importers['packages/package-4'].specifiers['@my-workspace/package-1']).toBe('workspace:2.4.0');

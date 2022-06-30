@@ -80,8 +80,7 @@ describe('Prompt', () => {
     const logResumeSpy = jest.spyOn(npmlog, 'resume');
     const inqSpy = jest.spyOn(inquirer, 'prompt');
 
-    const output = await promptSelectOne(
-      'Choose something.', {
+    const output = await promptSelectOne('Choose something.', {
       choices: [
         { value: 'patch', name: 'Patch' },
         { value: 'minor', name: 'Minor' },
@@ -124,8 +123,7 @@ describe('Prompt', () => {
     const logResumeSpy = jest.spyOn(npmlog, 'resume');
     const inqSpy = jest.spyOn(inquirer, 'prompt');
 
-    const output = await promptSelectOne(
-      'Choose something.', {
+    const output = await promptSelectOne('Choose something.', {
       choices: [
         { value: 'patch', name: 'Patch' },
         { value: 'minor', name: 'Minor' },
@@ -145,8 +143,7 @@ describe('Prompt', () => {
     const logResumeSpy = jest.spyOn(npmlog, 'resume');
     const inqSpy = jest.spyOn(inquirer, 'prompt');
 
-    const output = await promptTextInput(
-      'Choose something...', {
+    const output = await promptTextInput('Choose something...', {
       filter: () => true,
       validate: () => false,
     });
@@ -155,9 +152,9 @@ describe('Prompt', () => {
     expect(inqSpy).toHaveBeenCalledWith([
       {
         filter: expect.toBeFunction(),
-        message: "Choose something...",
-        name: "input",
-        type: "input",
+        message: 'Choose something...',
+        name: 'input',
+        type: 'input',
         validate: expect.toBeFunction(),
       },
     ]);
@@ -171,8 +168,7 @@ describe('Prompt', () => {
     const logResumeSpy = jest.spyOn(npmlog, 'resume');
     const inqSpy = jest.spyOn(inquirer, 'prompt');
 
-    const output = await promptTextInput(
-      'Choose something...', {
+    const output = await promptTextInput('Choose something...', {
       filter: () => true,
       validate: () => false,
     });

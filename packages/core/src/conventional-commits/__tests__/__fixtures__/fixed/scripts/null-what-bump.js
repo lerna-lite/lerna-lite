@@ -1,4 +1,4 @@
-"use strict";
+'use strict';
 
 module.exports = whatBump;
 
@@ -11,12 +11,12 @@ function whatBump(commits) {
     if (commit.notes.length > 0) {
       breakings += commit.notes.length;
       level = 0;
-    } else if (commit.type === "feat") {
+    } else if (commit.type === 'feat') {
       features += 1;
       if (level === 2) {
         level = 1;
       }
-    } else if (commit.type === "fix") {
+    } else if (commit.type === 'fix') {
       level = 2;
     }
   });

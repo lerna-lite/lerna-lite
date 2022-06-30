@@ -1,4 +1,4 @@
-"use strict";
+'use strict';
 
 const mockAdd = jest.fn(() => Promise.resolve());
 const mockList = jest.fn(() => Promise.resolve({}));

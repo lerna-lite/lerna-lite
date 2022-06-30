@@ -36,7 +36,7 @@ describe('core-command', () => {
   childProcess.getChildProcessCount = jest.fn(() => 0);
 
   // swallow errors when passed in argv
-  const onRejected = () => { };
+  const onRejected = () => {};
 
   class OkCommand extends Command<any> {
     initialize() {
@@ -257,8 +257,8 @@ describe('core-command', () => {
   });
 
   describe('.options', () => {
-    class TestACommand extends Command<any> { }
-    class TestBCommand extends Command<any> { }
+    class TestACommand extends Command<any> {}
+    class TestBCommand extends Command<any> {}
     class TestCCommand extends Command<any> {
       get otherCommandConfigs() {
         return ['testb'];

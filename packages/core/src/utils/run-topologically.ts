@@ -14,7 +14,11 @@ import { PackageGraphNode } from '../package-graph';
  * @param {TopologicalConfig} [options]
  * @returns {Promise<T[]>} when all executions complete
  */
-export function runTopologically<T = any>(packages: Package[], runner: (pkg: Package) => Promise<T>, { concurrency, graphType, rejectCycles } = {} as TopologicalConfig) {
+export function runTopologically<T = any>(
+  packages: Package[],
+  runner: (pkg: Package) => Promise<T>,
+  { concurrency, graphType, rejectCycles } = {} as TopologicalConfig
+) {
   const queue = new PQueue({ concurrency });
   const graph = new QueryGraph(packages, { graphType, rejectCycles });
 

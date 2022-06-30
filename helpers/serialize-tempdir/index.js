@@ -1,7 +1,7 @@
-"use strict";
+'use strict';
 
-const path = require("path");
-const normalizePath = require("normalize-path");
+const path = require('path');
+const normalizePath = require('normalize-path');
 
 // tempy creates subdirectories with hexadecimal names that are 32 characters long
 const TEMP_DIR_REGEXP = /([^\s"]*[\\/][0-9a-f]{32})([^\s"]*)/g;
@@ -10,7 +10,7 @@ const TEMP_DIR_REGEXP = /([^\s"]*[\\/][0-9a-f]{32})([^\s"]*)/g;
 // expect.addSnapshotSerializer(require("@lerna-test/serialize-tempdir"));
 module.exports = {
   test(val) {
-    return typeof val === "string" && TEMP_DIR_REGEXP.test(val);
+    return typeof val === 'string' && TEMP_DIR_REGEXP.test(val);
   },
   serialize(val, config, indentation, depth) {
     const str = val.replace(TEMP_DIR_REGEXP, serializeProjectRoot);
@@ -21,5 +21,5 @@ module.exports = {
 };
 
 function serializeProjectRoot(match, cwd, subPath) {
-  return normalizePath(path.join("__TEST_ROOTDIR__", subPath));
+  return normalizePath(path.join('__TEST_ROOTDIR__', subPath));
 }

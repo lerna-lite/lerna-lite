@@ -18,7 +18,11 @@ export class PackageGraph extends Map {
    *    excluding the devDependencies that would normally be included.
    * @param {boolean|'auto'|'force'|'explicit'} [localDependencies] Treatment of local sibling dependencies, default "auto"
    */
-  constructor(packages: Package[], graphType: 'allDependencies' | 'dependencies' = 'allDependencies', localDependencies: boolean | 'auto' | 'force' | 'explicit' | 'forceLocal' = 'auto') {
+  constructor(
+    packages: Package[],
+    graphType: 'allDependencies' | 'dependencies' = 'allDependencies',
+    localDependencies: boolean | 'auto' | 'force' | 'explicit' | 'forceLocal' = 'auto'
+  ) {
     // For backward compatibility
     if (localDependencies === true || localDependencies === 'forceLocal') {
       localDependencies = 'force'; // eslint-disable-line
@@ -54,11 +58,11 @@ export class PackageGraph extends Map {
         graphType === 'dependencies'
           ? Object.assign({}, currentNode.pkg.optionalDependencies, currentNode.pkg.dependencies)
           : Object.assign(
-            {},
-            currentNode.pkg.devDependencies,
-            currentNode.pkg.optionalDependencies,
-            currentNode.pkg.dependencies
-          );
+              {},
+              currentNode.pkg.devDependencies,
+              currentNode.pkg.optionalDependencies,
+              currentNode.pkg.dependencies
+            );
 
       Object.keys(graphDependencies).forEach((depName) => {
         const depNode = this.get(depName);
@@ -79,7 +83,7 @@ export class PackageGraph extends Map {
           // we'll have to pull the version from its parent package version property
           // example with `1.5.0`, ws:* => "1.5.0", ws:^ => "^1.5.0", ws:~ => "~1.5.0", ws:^1.5.0 => "^1.5.0"
           if (spec === '*' || spec === '^' || spec === '~') {
-            const depPkg = packages.find(pkg => pkg.name === depName);
+            const depPkg = packages.find((pkg) => pkg.name === depName);
             const version = depPkg?.version;
             const specTarget = spec === '*' ? '' : spec;
             spec = depPkg ? `${specTarget}${version}` : '';
@@ -260,10 +264,7 @@ export class PackageGraph extends Map {
       }
       alreadyVisited.add(topLevelDependent);
 
-      if (
-        topLevelDependent === baseNode ||
-        (topLevelDependent.isCycle && topLevelDependent.has(baseNode.name))
-      ) {
+      if (topLevelDependent === baseNode || (topLevelDependent.isCycle && topLevelDependent.has(baseNode.name))) {
         const cycle: any = new CyclicPackageGraphNode();
 
         walkStack.forEach((nodeInCycle: PackageGraphNode | CyclicPackageGraphNode) => {

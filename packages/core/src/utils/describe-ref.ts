@@ -1,4 +1,3 @@
-
 import log from 'npmlog';
 
 import { DescribeRefDetailedResult, DescribeRefFallbackResult, DescribeRefOptions } from '../models';
@@ -39,7 +38,11 @@ function getArgs(options: DescribeRefOptions, includeMergedTags?: boolean) {
  * @param {boolean} [includeMergedTags]
  * @returns {Promise<DescribeRefFallbackResult|DescribeRefDetailedResult>}
  */
-function describeRef(options: DescribeRefOptions = {}, includeMergedTags?: boolean, gitDryRun = false): Promise<DescribeRefFallbackResult | DescribeRefDetailedResult> {
+function describeRef(
+  options: DescribeRefOptions = {},
+  includeMergedTags?: boolean,
+  gitDryRun = false
+): Promise<DescribeRefFallbackResult | DescribeRefDetailedResult> {
   const promise = exec('git', getArgs(options, includeMergedTags), options, gitDryRun);
 
   return promise.then(({ stdout } = { stdout: '' }) => {
@@ -91,7 +94,4 @@ function parse(stdout: string, cwd?: string): DescribeRefFallbackResult | Descri
   return { lastTagName, lastVersion, refCount, sha, isDirty: Boolean(isDirty) };
 }
 
-export {
-  describeRef,
-  describeRefSync,
-};
+export { describeRef, describeRefSync };

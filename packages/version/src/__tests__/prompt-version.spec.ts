@@ -2,7 +2,7 @@ import semver from 'semver';
 
 // mocked modules of @lerna-lite/core
 jest.mock('@lerna-lite/core', () => ({
-  ...jest.requireActual('@lerna-lite/core') as any, // return the other real methods, below we'll mock only 2 of the methods
+  ...(jest.requireActual('@lerna-lite/core') as any), // return the other real methods, below we'll mock only 2 of the methods
   promptSelectOne: jest.requireActual('../../../core/src/__mocks__/prompt').promptSelectOne,
   promptTextInput: jest.requireActual('../../../core/src/__mocks__/prompt').promptTextInput,
 }));
@@ -10,7 +10,7 @@ jest.mock('@lerna-lite/core', () => ({
 import { promptSelectOne, promptTextInput, prereleaseIdFromVersion, PackageGraphNode } from '@lerna-lite/core';
 import { makePromptVersion } from '../lib/prompt-version';
 
-const resolvePrereleaseId = jest.fn(() => "alpha");
+const resolvePrereleaseId = jest.fn(() => 'alpha');
 const versionPrompt = makePromptVersion(resolvePrereleaseId);
 
 describe('select', () => {

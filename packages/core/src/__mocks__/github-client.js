@@ -1,4 +1,4 @@
-"use strict";
+'use strict';
 
 const releases = new Map();
 
@@ -19,6 +19,6 @@ const client = {
 module.exports.createGitHubClient = jest.fn(() => client);
 module.exports.createGitHubClient.releases = releases;
 module.exports.parseGitRepo = () => ({
-  owner: "lerna",
-  name: "lerna",
+  owner: 'lerna',
+  name: 'lerna',
 });

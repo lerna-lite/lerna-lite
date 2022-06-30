@@ -147,9 +147,7 @@ package-4
   });
 
   it('logger warns when --force-publish superseded by --conventional-graduate', async () => {
-    const cmd = new ChangedCommand(
-      createArgv(cwd, '--conventional-graduate', 'foo', '--force-publish', 'bar')
-    );
+    const cmd = new ChangedCommand(createArgv(cwd, '--conventional-graduate', 'foo', '--force-publish', 'bar'));
     await cmd;
     const loggerSpy = jest.spyOn(cmd.logger, 'warn');
     cmd.initialize();

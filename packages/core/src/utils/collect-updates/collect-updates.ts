@@ -16,12 +16,20 @@ import { makeDiffPredicate } from './lib/make-diff-predicate';
  * @param {import("@lerna/child-process").ExecOpts} execOpts
  * @param {UpdateCollectorOptions} commandOptions
  */
-export function collectUpdates(filteredPackages: Package[], packageGraph: PackageGraph, execOpts: ExecOpts, commandOptions: UpdateCollectorOptions, gitDryRun = false) {
+export function collectUpdates(
+  filteredPackages: Package[],
+  packageGraph: PackageGraph,
+  execOpts: ExecOpts,
+  commandOptions: UpdateCollectorOptions,
+  gitDryRun = false
+) {
   const { forcePublish, conventionalCommits, conventionalGraduate, excludeDependents } = commandOptions;
 
   // If --conventional-commits and --conventional-graduate are both set, ignore --force-publish
   const useConventionalGraduate = conventionalCommits && conventionalGraduate;
-  const forced = getPackagesForOption(useConventionalGraduate ? conventionalGraduate : forcePublish as boolean | string[]);
+  const forced = getPackagesForOption(
+    useConventionalGraduate ? conventionalGraduate : (forcePublish as boolean | string[])
+  );
 
   const packages =
     filteredPackages.length === packageGraph.size
@@ -84,7 +92,7 @@ export function collectUpdates(filteredPackages: Package[], packageGraph: Packag
     !commandOptions.bump || commandOptions.bump.startsWith('pre')
       ? () => false
       : /* skip packages that have not been previously prereleased */
-      (node) => node.prereleaseId;
+        (node) => node.prereleaseId;
   const isForced = (node, name) =>
     (forced.has('*') || forced.has(name)) && (useConventionalGraduate ? node.prereleaseId : true);
 

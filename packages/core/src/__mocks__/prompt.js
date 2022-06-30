@@ -1,4 +1,4 @@
-"use strict";
+'use strict';
 
 let choiceIndices = [];
 afterEach(() => {
@@ -20,16 +20,10 @@ exports.promptSelectOne = mockSelect;
 exports.promptTextInput = mockInput;
 
 const semverIndex = new Map(
-  [
-    "patch",
-    "minor",
-    "major",
-    "prepatch",
-    "preminor",
-    "premajor",
-    "PRERELEASE",
-    "CUSTOM",
-  ].map((keyword, idx) => [keyword, idx])
+  ['patch', 'minor', 'major', 'prepatch', 'preminor', 'premajor', 'PRERELEASE', 'CUSTOM'].map((keyword, idx) => [
+    keyword,
+    idx,
+  ])
 );
 
 mockSelect.chooseBump = (keyword) => {

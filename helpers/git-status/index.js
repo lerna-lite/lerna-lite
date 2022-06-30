@@ -1,9 +1,9 @@
-"use strict";
+'use strict';
 
-const cp = require("child_process");
+const cp = require('child_process');
 
 module.exports.gitStatus = gitStatus;
 
 function gitStatus(cwd) {
-  return cp.spawnSync("git", ["status", "--porcelain"], { cwd, encoding: "utf8" });
+  return cp.spawnSync('git', ['status', '--porcelain'], { cwd, encoding: 'utf8' });
 }

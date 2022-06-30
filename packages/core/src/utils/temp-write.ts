@@ -34,7 +34,7 @@ const writeStream = async (filePath: string, fileContent: Readable) =>
       .on('finish', resolve);
   });
 
-export async function tempWrite(fileContent:  Readable | fs.PathOrFileDescriptor, filePath?: string) {
+export async function tempWrite(fileContent: Readable | fs.PathOrFileDescriptor, filePath?: string) {
   const tempPath = tempfile(filePath);
   const write = isStream(fileContent) ? writeStream : writeFileP;
 
@@ -44,7 +44,7 @@ export async function tempWrite(fileContent:  Readable | fs.PathOrFileDescriptor
   return tempPath;
 }
 
-tempWrite.sync = (fileContent: DataView & Readable | string, filePath?: string) => {
+tempWrite.sync = (fileContent: (DataView & Readable) | string, filePath?: string) => {
   const tempPath = tempfile(filePath);
 
   makeDir.sync(path.dirname(tempPath));

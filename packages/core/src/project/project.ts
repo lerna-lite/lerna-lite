@@ -205,25 +205,16 @@ export class Project {
         (packageJson: any) => new Package(packageJson, path.dirname(packageConfigPath), this.rootPath)
       );
 
-    return this.fileFinder('package.json', (filePaths: string[]) =>
-      pMap(filePaths, mapper, { concurrency: 50 })
-    );
+    return this.fileFinder('package.json', (filePaths: string[]) => pMap(filePaths, mapper, { concurrency: 50 }));
   }
 
   /**
    * @returns {Package[]} A list of Package instances
    */
   getPackagesSync() {
-    return makeSyncFileFinder(this.rootPath, this.packageConfigs)(
-      'package.json',
-      (packageConfigPath: string) => {
-        return new Package(
-          loadJsonFile.sync(packageConfigPath),
-          path.dirname(packageConfigPath),
-          this.rootPath
-        );
-      }
-    ) as string[];
+    return makeSyncFileFinder(this.rootPath, this.packageConfigs)('package.json', (packageConfigPath: string) => {
+      return new Package(loadJsonFile.sync(packageConfigPath), path.dirname(packageConfigPath), this.rootPath);
+    }) as string[];
   }
 
   getPackageLicensePaths(): Promise<string[]> {

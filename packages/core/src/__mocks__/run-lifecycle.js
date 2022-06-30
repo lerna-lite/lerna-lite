@@ -1,4 +1,4 @@
-"use strict";
+'use strict';
 
 const mockRunLifecycle = jest.fn((pkg) => Promise.resolve(pkg));
 const mockCreateRunner = jest.fn((opts) => (pkg, stage) => {

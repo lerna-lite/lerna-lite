@@ -31,7 +31,10 @@ export async function promptConfirmation(message: string): Promise<boolean> {
  * @param {{ choices: import("inquirer").ListChoiceOptions[] } & Pick<import("inquirer").Question, 'filter' | 'validate'>} [options]
  * @returns {Promise<string>}
  */
-export async function promptSelectOne(message: string, { choices, filter, validate } = {} as { choices: ListChoiceOptions[] } & Pick<Question, 'filter' | 'validate'>): Promise<string> {
+export async function promptSelectOne(
+  message: string,
+  { choices, filter, validate } = {} as { choices: ListChoiceOptions[] } & Pick<Question, 'filter' | 'validate'>
+): Promise<string> {
   log.pause();
 
   const answers = await inquirer.prompt([
@@ -56,7 +59,10 @@ export async function promptSelectOne(message: string, { choices, filter, valida
  * @param {Pick<import("inquirer").Question, 'filter' | 'validate'>} [options]
  * @returns {Promise<string>}
  */
-export async function promptTextInput(message: string, { filter, validate } = {} as Pick<Question, 'filter' | 'validate'>): Promise<string> {
+export async function promptTextInput(
+  message: string,
+  { filter, validate } = {} as Pick<Question, 'filter' | 'validate'>
+): Promise<string> {
   log.pause();
 
   const answers = await inquirer.prompt([

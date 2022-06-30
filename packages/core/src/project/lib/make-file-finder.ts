@@ -21,10 +21,7 @@ function getGlobOpts(rootPath: string, packageConfigs: string[]) {
 
   if (packageConfigs.some((cfg) => cfg.indexOf('**') > -1)) {
     if (packageConfigs.some((cfg) => cfg.indexOf('node_modules') > -1)) {
-      throw new ValidationError(
-        'EPKGCONFIG',
-        'An explicit node_modules package path does not allow globstars (**)'
-      );
+      throw new ValidationError('EPKGCONFIG', 'An explicit node_modules package path does not allow globstars (**)');
     }
 
     (globOpts as any).ignore = [

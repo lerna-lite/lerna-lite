@@ -1,6 +1,6 @@
 // mocked modules
 jest.mock('@lerna-lite/core', () => ({
-  ...jest.requireActual('@lerna-lite/core') as any, // return the other real methods, below we'll mock only 2 of the methods
+  ...(jest.requireActual('@lerna-lite/core') as any), // return the other real methods, below we'll mock only 2 of the methods
   logOutput: jest.requireActual('../../../core/src/__mocks__/output').logOutput,
   spawn: jest.fn(() => Promise.resolve({ exitCode: 0 })),
   spawnStreaming: jest.fn(() => Promise.resolve({ exitCode: 0 })),
@@ -161,10 +161,7 @@ describe('ExecCommand', () => {
       // expect(spawn).toHaveBeenCalledTimes(2);
       // expect(calledInPackages()).toEqual(['package-1', 'package-2']);
       const logLines = (logOutput as any).logged().split('\n');
-      expect(logLines).toEqual([
-        'dry-run> package-1',
-        'dry-run> package-2',
-      ]);
+      expect(logLines).toEqual(['dry-run> package-1', 'dry-run> package-2']);
     });
 
     it('should run a command with parameters', async () => {

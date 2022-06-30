@@ -76,10 +76,7 @@ export function updateTempModernLockfileVersion(pkg: Package, projLockFileObj: a
  * @param {Object} updateLockFileObj
  * @returns Promise<String | undefined> - file path will be returned when it was found and updated
  */
-export async function saveUpdatedLockJsonFile(
-  filePath: string,
-  updateLockFileObj: any
-): Promise<string | undefined> {
+export async function saveUpdatedLockJsonFile(filePath: string, updateLockFileObj: any): Promise<string | undefined> {
   try {
     await writeJsonFile(filePath, updateLockFileObj, {
       detectIndent: true,

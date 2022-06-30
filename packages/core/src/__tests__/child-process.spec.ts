@@ -22,7 +22,7 @@ describe('childProcess', () => {
 
   describe('.exec()', () => {
     it('returns an execa Promise', async () => {
-      const { stderr, stdout } = await exec('echo', ['foo']) as any;
+      const { stderr, stdout } = (await exec('echo', ['foo'])) as any;
 
       expect(stderr).toBe('');
       expect(stdout).toContain(`foo`);
@@ -48,17 +48,15 @@ describe('childProcess', () => {
       const echoTwo = exec('echo', ['two']);
       expect(getChildProcessCount()).toBe(2);
 
-      const [one, two] = await Promise.all([echoOne, echoTwo]) as any;
+      const [one, two] = (await Promise.all([echoOne, echoTwo])) as any;
       expect(one.stdout).toContain(`one`);
       expect(two.stdout).toContain(`two`);
     });
 
     it('decorates opts.pkg on error if caught', async () => {
-      const result = exec(
-        'theVeneratedVirginianVeteranWhoseMenAreAll',
-        ['liningUpToPutMeUpOnAPedestal'],
-        { pkg: { name: 'hamilton' } as Package }
-      );
+      const result = exec('theVeneratedVirginianVeteranWhoseMenAreAll', ['liningUpToPutMeUpOnAPedestal'], {
+        pkg: { name: 'hamilton' } as Package,
+      });
 
       await expect(result).rejects.toThrow(
         expect.objectContaining({

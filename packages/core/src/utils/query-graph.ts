@@ -42,7 +42,10 @@ export class QueryGraph {
    * @param {import("@lerna/package").Package[]} packages An array of Packages to build the graph out of
    * @param {QueryGraphConfig} [options]
    */
-  constructor(packages: Package[], { graphType = 'allDependencies', localDependencies = 'auto', rejectCycles } = {} as QueryGraphConfig) {
+  constructor(
+    packages: Package[],
+    { graphType = 'allDependencies', localDependencies = 'auto', rejectCycles } = {} as QueryGraphConfig
+  ) {
     // Create dependency graph
     this.graph = new PackageGraph(packages, graphType as 'allDependencies' | 'dependencies', localDependencies);
 

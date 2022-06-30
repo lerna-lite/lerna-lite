@@ -13,7 +13,6 @@ describe('conf', () => {
     });
 
     it('should be able to call GETTER/SETTER from object prefix property', () => {
-
       cli.prefix = 'v';
       expect(cli.prefix).toBe('v');
     });
@@ -36,5 +35,4 @@ describe('conf', () => {
     //   expect(cli.prefix).toBe('v');
     // });
   });
-
 });

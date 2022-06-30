@@ -9,12 +9,7 @@
       "request": "launch",
       "name": "Jest Current Spec File",
       "program": "${workspaceFolder}/node_modules/.bin/jest",
-      "args": [
-        "--runInBand",
-        "${fileBasename}",
-        "--config",
-        "${workspaceFolder}/jest/jest.config.js"
-      ],
+      "args": ["--runInBand", "${fileBasename}", "--config", "${workspaceFolder}/jest/jest.config.js"],
       "console": "internalConsole",
       "internalConsoleOptions": "neverOpen",
       "disableOptimisticBPs": true,
@@ -27,98 +22,48 @@
       "type": "node",
       "request": "launch",
       "runtimeExecutable": "node",
-      "runtimeArgs": [
-        "--nolazy",
-        "-r",
-        "tsm"
-      ],
-      "args": [
-        "packages/cli/src/cli.ts",
-        "version",
-        "--git-dry-run"
-      ],
+      "runtimeArgs": ["--nolazy", "-r", "tsm"],
+      "args": ["packages/cli/src/cli.ts", "version", "--git-dry-run"],
       "cwd": "${workspaceRoot}",
       "console": "integratedTerminal",
       "internalConsoleOptions": "openOnSessionStart",
-      "skipFiles": [
-        "<node_internals>/**",
-        "node_modules/**"
-      ]
+      "skipFiles": ["<node_internals>/**", "node_modules/**"]
     },
     {
       "name": "Publish command debugger",
       "type": "node",
       "request": "launch",
       "runtimeExecutable": "node",
-      "runtimeArgs": [
-        "--nolazy",
-        "-r",
-        "tsm"
-      ],
-      "args": [
-        "packages/cli/src/cli.ts",
-        "publish",
-        "from-package",
-        "--git-dry-run"
-      ],
+      "runtimeArgs": ["--nolazy", "-r", "tsm"],
+      "args": ["packages/cli/src/cli.ts", "publish", "from-package", "--git-dry-run"],
       "cwd": "${workspaceRoot}",
       "console": "integratedTerminal",
       "internalConsoleOptions": "openOnSessionStart",
-      "skipFiles": [
-        "<node_internals>/**",
-        "node_modules/**"
-      ]
+      "skipFiles": ["<node_internals>/**", "node_modules/**"]
     },
     {
       "name": "Exec command debugger",
       "type": "node",
       "request": "launch",
       "runtimeExecutable": "node",
-      "runtimeArgs": [
-        "--nolazy",
-        "-r",
-        "tsm"
-      ],
-      "args": [
-        "packages/cli/src/cli.ts",
-        "exec",
-        "--scope",
-        " @lerna-lite/core",
-        "echo",
-        "hello"
-      ],
+      "runtimeArgs": ["--nolazy", "-r", "tsm"],
+      "args": ["packages/cli/src/cli.ts", "exec", "--scope", " @lerna-lite/core", "echo", "hello"],
       "cwd": "${workspaceRoot}",
       "console": "integratedTerminal",
       "internalConsoleOptions": "openOnSessionStart",
-      "skipFiles": [
-        "<node_internals>/**",
-        "node_modules/**"
-      ]
+      "skipFiles": ["<node_internals>/**", "node_modules/**"]
     },
     {
       "name": "Run command debugger",
       "type": "node",
       "request": "launch",
       "runtimeExecutable": "node",
-      "runtimeArgs": [
-        "--nolazy",
-        "-r",
-        "tsm"
-      ],
-      "args": [
-        "packages/cli/src/cli.ts",
-        "run",
-        "pack-tarball",
-        "--stream",
-        "--no-bail"
-      ],
+      "runtimeArgs": ["--nolazy", "-r", "tsm"],
+      "args": ["packages/cli/src/cli.ts", "run", "pack-tarball", "--stream", "--no-bail"],
       "cwd": "${workspaceRoot}",
       "console": "integratedTerminal",
       "internalConsoleOptions": "openOnSessionStart",
-      "skipFiles": [
-        "<node_internals>/**",
-        "node_modules/**"
-      ]
+      "skipFiles": ["<node_internals>/**", "node_modules/**"]
     }
   ]
 }
