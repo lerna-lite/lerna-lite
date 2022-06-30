@@ -1,6 +1,7 @@
 'use strict';
 
 const execa = require('execa');
+const npmlog = require('npmlog');
 const path = require('path');
 const tempy = require('tempy');
 
@@ -16,7 +17,7 @@ const bin =
 
 jest.setTimeout(30e3);
 
-xdescribe('cli', () => {
+describe.skip('cli', () => {
   it('should create CLI', () => {
     const logSpy = jest.spyOn(npmlog, 'info');
 
@@ -25,7 +26,7 @@ xdescribe('cli', () => {
   });
 });
 
-xdescribe('cli', () => {
+describe.skip('cli test', () => {
   it('should throw without command', async () => {
     await expect(bin()()).rejects.toThrow('Pass --help to see all available commands and options.');
   });
