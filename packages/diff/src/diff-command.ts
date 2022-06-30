@@ -10,14 +10,13 @@ export function factory(argv: DiffCommandOption) {
 export class DiffCommand extends Command<DiffCommandOption> {
   /** command name */
   name = 'diff' as CommandType;
-
   args: string[] = [];
 
   constructor(argv: DiffCommandOption) {
     super(argv);
   }
 
-  async initialize() {
+  initialize() {
     let targetPackage: Package | undefined = undefined;
     const packageName = this.options.pkgName;
 
@@ -38,25 +37,25 @@ export class DiffCommand extends Command<DiffCommandOption> {
     if (targetPackage) {
       args.push('--', targetPackage.location);
     } else {
-      args.push('--', ...(await this.project.packageParentDirs));
+      args.push('--', ...this.project.packageParentDirs);
     }
 
-    if (this.options.ignoreChanges) {
-      this.options.ignoreChanges.forEach((ignorePattern) => {
-        // https://stackoverflow.com/a/21079437
-        args.push(`:(exclude,glob)${ignorePattern}`);
-      });
-    }
+    // https://stackoverflow.com/a/21079437
+    this.options.ignoreChanges?.forEach((ignorePattern) => {
+      args.push(`:(exclude,glob)${ignorePattern}`);
+    });
 
     this.args = args;
   }
 
   execute() {
-    return spawn('git', this.args, this.execOpts).catch((err) => {
+    try {
+      return spawn('git', this.args, this.execOpts);
+    } catch (err: any) {
       if (err.exitCode) {
         // quitting the diff viewer is not an error
         throw err;
       }
-    });
+    }
   }
 }
