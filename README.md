@@ -139,8 +139,8 @@ Minimum installation to get Lerna-Lite CLI `npm i @lerna-lite/cli -D -W` which i
 | ------- | ------- | ----------- |
 | 🛠️ [init](https://github.com/ghiscoding/lerna-lite/tree/main/packages/init#readme) | `npm i @lerna-lite/cli -D -W` | create/initialize a new Lerna-Lite repo |
 | 💻 [info](https://github.com/ghiscoding/lerna-lite/tree/main/packages/info#readme) | `npm i @lerna-lite/cli -D -W` | print local environment information |
-| 📑 [version](https://github.com/ghiscoding/lerna-lite/tree/main/packages/version#readme) | `npm i @lerna-lite/cli -D -W` | create new version for each workspace pkg |
-| ☁️ [publish](https://github.com/ghiscoding/lerna-lite/tree/main/packages/publish#readme) | `npm i @lerna-lite/cli -D -W` | publish each workspace pkg |
+| 📑 [version](https://github.com/ghiscoding/lerna-lite/tree/main/packages/version#readme) | `npm i @lerna-lite/cli -D -W` | create new version for each workspace package |
+| ☁️ [publish](https://github.com/ghiscoding/lerna-lite/tree/main/packages/publish#readme) | `npm i @lerna-lite/cli -D -W` | publish each workspace package |
 
 #### Separate / Optional Installs
 
@@ -148,9 +148,9 @@ Minimum installation to get Lerna-Lite CLI `npm i @lerna-lite/cli -D -W` which i
 | --------| --------| ----------- |
 | 🕜 [changed](https://github.com/ghiscoding/lerna-lite/tree/main/packages/changed#readme) | `npm i @lerna-lite/changed -D -W` | list local packages changed since last release |
 | 🌓 [diff](https://github.com/ghiscoding/lerna-lite/tree/main/packages/diff#readme)       | `npm i @lerna-lite/diff -D -W`    | git diff all packages since the last release   |
-| 👷 [exec](https://github.com/ghiscoding/lerna-lite/tree/main/packages/exec#readme)       | `npm i @lerna-lite/exec -D -W`    | execute an command in each workspace pkg       |
+| 👷 [exec](https://github.com/ghiscoding/lerna-lite/tree/main/packages/exec#readme)       | `npm i @lerna-lite/exec -D -W`    | execute an command in each workspace package       |
 | 📖 [list](https://github.com/ghiscoding/lerna-lite/tree/main/packages/list#readme)       | `npm i @lerna-lite/list -D -W`    | list local packages                            |
-| 🏃 [run](https://github.com/ghiscoding/lerna-lite/tree/main/packages/run#readme)         | `npm i @lerna-lite/run -D -W`     | run npm script in each workspace pkg           |
+| 🏃 [run](https://github.com/ghiscoding/lerna-lite/tree/main/packages/run#readme)         | `npm i @lerna-lite/run -D -W`     | run npm script in each workspace package           |
 
 **Note:** the default `lerna` CLI is including only 4 built-in commands (`init`,`info`,`publish`,`version`), all other commands are optional commands and must be installed separately as shown in the table.
 
