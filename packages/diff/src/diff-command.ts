@@ -10,7 +10,6 @@ export function factory(argv: DiffCommandOption) {
 export class DiffCommand extends Command<DiffCommandOption> {
   /** command name */
   name = 'diff' as CommandType;
-
   args: string[] = [];
 
   constructor(argv: DiffCommandOption) {
@@ -41,7 +40,7 @@ export class DiffCommand extends Command<DiffCommandOption> {
       args.push('--', ...this.project.packageParentDirs);
     }
 
-    if (this.options.ignoreChanges) {
+    if (Array.isArray(this.options.ignoreChanges)) {
       this.options.ignoreChanges.forEach((ignorePattern) => {
         // https://stackoverflow.com/a/21079437
         args.push(`:(exclude,glob)${ignorePattern}`);

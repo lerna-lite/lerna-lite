@@ -86,7 +86,8 @@ describe('Diff Command', () => {
     await gitAdd(cwd, '-A');
     await gitCommit(cwd, 'changed');
 
-    const { stdout } = await lernaDiff(cwd)();
+    // @ts-ignore
+    const { stdout } = await new DiffCommand(createArgv(cwd, ''));
     expect(stdout).toMatchSnapshot();
   });
 
@@ -116,11 +117,12 @@ describe('Diff Command', () => {
     await gitAdd(cwd, '-A');
     await gitCommit(cwd, 'changed');
 
-    const { stdout } = await lernaDiff(cwd)('package-2');
+    // @ts-ignore
+    const { stdout } = await new DiffCommand(createArgv(cwd, 'package-2'));
     expect(stdout).toMatchSnapshot();
   });
 
-  it('passes diff exclude globs configured with --ignored-changes', async () => {
+  it('passes diff exclude globs configured with --ignore-changes', async () => {
     const cwd = await initFixture('basic');
     const [pkg1] = await getPackages(cwd);
 
@@ -129,7 +131,8 @@ describe('Diff Command', () => {
     await gitAdd(cwd, '-A');
     await gitCommit(cwd, 'changed');
 
-    const { stdout } = await lernaDiff(cwd)('--ignore-changes', '**/README.md');
+    // @ts-ignore
+    const { stdout } = await new DiffCommand(createArgv(cwd, '--ignore-changes', '**/README.md'));
     expect(stdout).toMatchSnapshot();
   });
 
@@ -146,7 +149,7 @@ describe('Diff Command', () => {
     await fs.remove(path.join(cwd, '.git'));
     await gitInit(cwd);
 
-    const command = lernaDiff(cwd)('package-1');
+    const command = new DiffCommand(createArgv(cwd, 'package-1'));
     await expect(command).rejects.toThrow('Cannot diff, there are no commits in this repository yet.');
   });
 
@@ -160,7 +163,7 @@ describe('Diff Command', () => {
       throw nonZero;
     });
 
-    const command = lernaDiff(cwd)('package-1');
+    const command = new DiffCommand(createArgv(cwd, 'package-1'));
     await expect(command).rejects.toThrow('An actual non-zero, not git diff pager SIGPIPE');
   });
 });
