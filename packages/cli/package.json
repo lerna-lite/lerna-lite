@@ -36,6 +36,7 @@
     "@lerna-lite/core": "workspace:*",
     "@lerna-lite/info": "workspace:*",
     "@lerna-lite/init": "workspace:*",
+    "@lerna-lite/listable": "workspace:*",
     "@lerna-lite/publish": "workspace:*",
     "@lerna-lite/version": "workspace:*",
     "dedent": "^0.7.0",

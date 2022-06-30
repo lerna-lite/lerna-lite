@@ -24,7 +24,7 @@ export interface CommandOptions {
   rollVersion?: boolean;
 }
 
-export type CommandType = '' | 'exec' | 'info' | 'init' | 'list' | 'publish' | 'run' | 'version';
+export type CommandType = '' | 'changed' | 'exec' | 'info' | 'init' | 'list' | 'publish' | 'run' | 'version';
 
 export interface DescribeRefOptions {
   /* Defaults to `process.cwd()` */

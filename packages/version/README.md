@@ -554,7 +554,7 @@ lerna will run [npm lifecycle scripts](https://docs.npmjs.com/cli/v8/using-npm/s
 
 # `workspace:` protocol
 
-The `workspace:` protocol ([pnpm workspace](https://pnpm.io/workspaces), [yarn workspace](https://yarnpkg.com/features/workspaces#workspace-ranges-workspace)) is also supported by Lerna-Lite. When versioning `workspace:` dependency, it will do the following:
+The `workspace:` protocol ([pnpm workspace](https://pnpm.io/workspaces), [yarn workspace](https://yarnpkg.com/features/workspaces#workspace-ranges-workspace)) is also supported by Lerna-Lite. We also strongly suggest that you also use the new [`--sync-workspace-lock`](#--sync-workspace-lock) flag to properly update your lock file. When versioning `workspace:` dependency, it will do the following:
 
 - fixed target workspace will remain untouched (if you use `workspace:*`, `workspace:~`, or `workspace:^`)
 - semver range workspace will be bumped (if you use `workspace:^1.2.3`)
@@ -572,7 +572,7 @@ So for example, if we have `foo`, `bar`, `qar`, `zoo` in the workspace and they 
 }
 ```
 
-Will update your `package.json` with the following versions with a `minor` version requested:
+Will do the following update(s) to your `package.json` assuming a `minor` version requested:
 
 ```json
 {

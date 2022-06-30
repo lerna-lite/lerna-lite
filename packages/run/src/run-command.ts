@@ -275,7 +275,11 @@ export class RunCommand extends Command<RunCommandOption & FilterOptions> {
 
     const options = {
       outputStyle,
-      parallel: this.options.concurrency,
+      /**
+       * To match lerna's own behavior (via pMap's default concurrency), we set parallel to a very large number if
+       * the flag has been set (we can't use Infinity because that would cause issues with the task runner).
+       */
+      parallel: this.options.parallel ? 999 : this.concurrency,
       nxBail: this.bail,
       nxIgnoreCycles: !this.options.rejectCycles,
       skipNxCache: this.options.skipNxCache,
