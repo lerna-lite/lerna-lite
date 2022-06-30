@@ -7,7 +7,6 @@ jest.mock('@lerna-lite/core', () => ({
   logOutput: jest.requireActual('../../../core/src/__mocks__/output').logOutput,
   collectUpdates: jest.requireActual('../../../core/src/__mocks__/collect-updates').collectUpdates,
   getPackages: jest.requireActual('../../../core/src/project').getPackages,
-  spawn: jest.fn(() => Promise.resolve({ exitCode: 0 })),
 }));
 
 // mocked modules
@@ -31,7 +30,7 @@ const yargParser = require('yargs-parser');
 
 const createArgv = (cwd: string, ...args: string[]) => {
   args.unshift('diff');
-  if (args.length > 0 && args[1]?.length > 0 && !args[1].startsWith('--')) {
+  if (args.length > 0 && args[1]?.length > 0 && !args[1].startsWith('-')) {
     args[1] = `--pkgName=${args[1]}`;
   }
   const parserArgs = args.map(String);
@@ -46,8 +45,10 @@ expect.addSnapshotSerializer(require('@lerna-test/serialize-git-sha'));
 
 describe('Diff Command', () => {
   // overwrite spawn so we get piped stdout, not inherited
-  // @ts-ignore
-  coreChildProcess.spawn = jest.fn((...args) => execa(...args));
+  coreChildProcess.spawn = jest.fn((...args) => {
+    // @ts-ignore
+    return execa(...args);
+  });
 
   it('should diff packages from the first commit from DiffCommand class', async () => {
     const cwd = await initFixture('basic');
@@ -139,9 +140,16 @@ describe('Diff Command', () => {
     expect(stdout).toMatchSnapshot();
   });
 
-  it("should error when attempting to diff a package that doesn't exist", async () => {
+  it("should error when attempting to diff a package that doesn't exist from CLI", async () => {
     const cwd = await initFixture('basic');
     const command = lernaDiff(cwd)('missing');
+
+    await expect(command).rejects.toThrow("Cannot diff, the package 'missing' does not exist.");
+  });
+
+  it("should error when attempting to diff a package that doesn't exist from DiffCommand class", async () => {
+    const cwd = await initFixture('basic');
+    const command = new DiffCommand(createArgv(cwd, 'missing'));
 
     await expect(command).rejects.toThrow("Cannot diff, the package 'missing' does not exist.");
   });

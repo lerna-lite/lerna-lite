@@ -49,11 +49,13 @@ export class DiffCommand extends Command<DiffCommandOption> {
   }
 
   execute() {
-    return spawn('git', this.args, this.execOpts).catch((err) => {
+    try {
+      return spawn('git', this.args, this.execOpts);
+    } catch (err: any) {
       if (err.exitCode) {
         // quitting the diff viewer is not an error
         throw err;
       }
-    });
+    }
   }
 }
