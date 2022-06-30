@@ -37,7 +37,7 @@ expect.addSnapshotSerializer(require('@lerna-test/serialize-git-sha'));
 const createArgv = (cwd, ...args) => {
   args.unshift('version');
   const parserArgs = args.map(String);
-  const argv = yargParser(parserArgs);
+  const argv = yargParser(parserArgs, { array: [{ key: 'ignoreChanges' }] });
   argv['$0'] = cwd;
   return argv;
 };

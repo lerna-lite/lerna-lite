@@ -1,14 +1,6 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`Diff Command passes diff exclude globs configured with --ignore-changes 1`] = `
-diff --git a/packages/package-1/README.md b/packages/package-1/README.md
-new file mode 100644
-index SHA..SHA
---- /dev/null
-+++ b/packages/package-1/README.md
-@@ -0,0 +1 @@
-+ignored change
-\\ No newline at end of file
 diff --git a/packages/package-1/package.json b/packages/package-1/package.json
 index SHA..SHA 100644
 --- a/packages/package-1/package.json

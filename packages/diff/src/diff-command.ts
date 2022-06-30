@@ -40,12 +40,10 @@ export class DiffCommand extends Command<DiffCommandOption> {
       args.push('--', ...this.project.packageParentDirs);
     }
 
-    if (Array.isArray(this.options.ignoreChanges)) {
-      this.options.ignoreChanges.forEach((ignorePattern) => {
-        // https://stackoverflow.com/a/21079437
-        args.push(`:(exclude,glob)${ignorePattern}`);
-      });
-    }
+    // https://stackoverflow.com/a/21079437
+    this.options.ignoreChanges?.forEach((ignorePattern) => {
+      args.push(`:(exclude,glob)${ignorePattern}`);
+    });
 
     this.args = args;
   }

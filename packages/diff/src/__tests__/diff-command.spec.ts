@@ -32,7 +32,7 @@ const yargParser = require('yargs-parser');
 const createArgv = (cwd: string, ...args: string[]) => {
   args.unshift('diff');
   const parserArgs = args.map(String);
-  const argv = yargParser(parserArgs);
+  const argv = yargParser(parserArgs, { array: [{ key: 'ignoreChanges' }] });
   argv['$0'] = cwd;
   argv['loglevel'] = 'silent';
   return argv;
