@@ -1,4 +1,4 @@
-name: CI Build
+name: CI
 on:
   # Trigger the workflow on push or pull request,
   # but only for the main branch on Push and any branches on PR
@@ -8,18 +8,58 @@ on:
   pull_request:
     branches:
       - '**'
-env:
-  CI: true
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.event.number || github.ref }}
+  cancel-in-progress: true
 
 jobs:
-  run:
+  lint:
+    name: 'Lint: on Ubuntu'
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+
+      - name: Install pnpm itself
+        uses: pnpm/action-setup@v2.2.2
+        with:
+          version: 7
+
+      - name: Set NodeJS
+        uses: actions/setup-node@v3
+        with:
+          node-version: 18
+          cache: 'pnpm'
+
+      - name: Get pnpm store directory
+        id: pnpm-cache
+        run: |
+          echo "::set-output name=pnpm_cache_dir::$(pnpm store path)"
+
+      - uses: actions/cache@v3
+        name: Setup pnpm cache
+        with:
+          path: ${{ steps.pnpm-cache.outputs.pnpm_cache_dir }}
+          key: ${{ runner.os }}-pnpm-store-${{ hashFiles('**/pnpm-lock.yaml') }}
+          restore-keys: |
+            ${{ runner.os }}-pnpm-store-
+
+      - name: Run pnpm install dependencies
+        run: pnpm install
+
+      - run: pnpm run format:check
+      - run: pnpm run ci:lint
+
+  tests:
     strategy:
       fail-fast: false
       matrix:
         node: [14, 16, 18]
         platform: [ubuntu-latest]
 
-    name: '${{matrix.platform}} / NodeJS ${{ matrix.node }}'
+    name: 'Build & Unit Tests: on Ubuntu/Node${{ matrix.node }}'
     runs-on: ${{matrix.platform}}
 
     steps:
