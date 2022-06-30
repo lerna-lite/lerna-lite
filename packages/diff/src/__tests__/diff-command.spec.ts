@@ -31,6 +31,9 @@ const yargParser = require('yargs-parser');
 
 const createArgv = (cwd: string, ...args: string[]) => {
   args.unshift('diff');
+  if (args.length > 0 && args[1]?.length > 0 && !args[1].startsWith('--')) {
+    args[1] = `--pkgName=${args[1]}`;
+  }
   const parserArgs = args.map(String);
   const argv = yargParser(parserArgs, { array: [{ key: 'ignoreChanges' }] });
   argv['$0'] = cwd;
