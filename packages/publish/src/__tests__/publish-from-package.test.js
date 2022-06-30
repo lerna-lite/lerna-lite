@@ -55,6 +55,9 @@ const { PublishCommand } = require('../publish-command');
 
 const createArgv = (cwd, ...args) => {
   args.unshift('publish');
+  if (args.length > 0 && args[1]?.length > 0 && !args[1].startsWith('-')) {
+    args[1] = `--bump=${args[1]}`;
+  }
   const parserArgs = args.join(' ');
   const argv = yargParser(parserArgs);
   argv['$0'] = cwd;

@@ -37,6 +37,9 @@ const lernaVersion = require('@lerna-test/command-runner')(
 
 const createArgv = (cwd, ...args) => {
   args.unshift('version');
+  if (args.length > 0 && args[1]?.length > 0 && !args[1].startsWith('-')) {
+    args[1] = `--bump=${args[1]}`;
+  }
   const parserArgs = args.map(String);
   const argv = yargParser(parserArgs);
   argv['$0'] = cwd;
