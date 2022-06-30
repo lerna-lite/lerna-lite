@@ -10,7 +10,7 @@ describe('log-packed', () => {
       'tiny-tarball': '^1.0.0',
     },
     devDependencies: {
-      'eslint': '^8.16.0',
+      eslint: '^8.16.0',
     },
     location: '',
     manifestLocation: '',
@@ -25,11 +25,13 @@ describe('log-packed', () => {
       integrity: 'ABC123',
       unpackedSize: 340009,
       entryCount: 14,
-      bundled: [{
-        name: 'test'
-      }]
+      bundled: [
+        {
+          name: 'test',
+        },
+      ],
     },
-  }
+  };
 
   it('should display dry-run details', () => {
     const logSpy = jest.spyOn(npmlog, 'notice');

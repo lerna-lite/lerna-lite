@@ -44,8 +44,7 @@ exports.builder = (yargs) => {
       requiresArg: true,
     },
     'git-head': {
-      describe:
-        'Explicit SHA to set as gitHead when packing tarballs, only allowed with "from-package" positional.',
+      describe: 'Explicit SHA to set as gitHead when packing tarballs, only allowed with "from-package" positional.',
       type: 'string',
       requiresArg: true,
     },
@@ -110,7 +109,8 @@ exports.builder = (yargs) => {
       type: 'boolean',
     },
     'workspace-strict-match': {
-      describe: 'Strict match transform version numbers to an exact range (like "1.2.3") rather than with a caret (like ^1.2.3) when using `workspace:*`.',
+      describe:
+        'Strict match transform version numbers to an exact range (like "1.2.3") rather than with a caret (like ^1.2.3) when using `workspace:*`.',
       type: 'boolean',
     },
     // y: {

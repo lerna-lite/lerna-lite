@@ -10,10 +10,12 @@ const hrtimeToMicroseconds = (hrtime: any) => {
 };
 
 const range = (len: number) => {
-  return Array(len)
-    // @ts-ignore
-    .fill()
-    .map((_, idx) => idx);
+  return (
+    Array(len)
+      // @ts-ignore
+      .fill()
+      .map((_, idx) => idx)
+  );
 };
 
 const getTimeBasedFilename = () => {

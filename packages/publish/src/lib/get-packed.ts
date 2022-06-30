@@ -7,9 +7,9 @@ import { Package } from '@lerna-lite/core';
 import { Tarball } from '../models';
 
 export function getPacked(pkg: Package, tarFilePath: string): Promise<Tarball> {
-  const bundledWanted = new Set<string>(/* pkg.bundleDependencies || pkg.bundledDependencies || */[]);
+  const bundledWanted = new Set<string>(/* pkg.bundleDependencies || pkg.bundledDependencies || */ []);
   const bundled = new Set();
-  const files: { path: string; size: string; mode: string; }[] = [];
+  const files: { path: string; size: string; mode: string }[] = [];
 
   let totalEntries = 0;
   let totalEntrySize = 0;

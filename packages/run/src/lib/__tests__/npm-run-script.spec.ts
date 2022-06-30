@@ -1,4 +1,3 @@
-
 // mocked modules
 jest.mock('@lerna-lite/core');
 import { exec, spawnStreaming } from '@lerna-lite/core';
@@ -24,13 +23,18 @@ describe('npm-run-script', () => {
 
       await npmRunScript(script, config);
 
-      expect(exec).toHaveBeenLastCalledWith('npm', ['run', script, '--bar', 'baz'], {
-        cwd: config.pkg.location,
-        env: {},
-        pkg: config.pkg,
-        reject: true,
-        windowsHide: false,
-      }, false);
+      expect(exec).toHaveBeenLastCalledWith(
+        'npm',
+        ['run', script, '--bar', 'baz'],
+        {
+          cwd: config.pkg.location,
+          env: {},
+          pkg: config.pkg,
+          reject: true,
+          windowsHide: false,
+        },
+        false
+      );
     });
 
     it('runs of a dry-run an npm script in a directory', async () => {
@@ -45,13 +49,18 @@ describe('npm-run-script', () => {
 
       await npmRunScript(script, config, true);
 
-      expect(exec).toHaveBeenLastCalledWith('npm', ['run', script, '--bar', 'baz'], {
-        cwd: config.pkg.location,
-        env: {},
-        pkg: config.pkg,
-        reject: true,
-        windowsHide: false,
-      }, true);
+      expect(exec).toHaveBeenLastCalledWith(
+        'npm',
+        ['run', script, '--bar', 'baz'],
+        {
+          cwd: config.pkg.location,
+          env: {},
+          pkg: config.pkg,
+          reject: true,
+          windowsHide: false,
+        },
+        true
+      );
     });
 
     it('accepts opts.reject', async () => {
@@ -67,13 +76,18 @@ describe('npm-run-script', () => {
 
       await npmRunScript(script, config);
 
-      expect(exec).toHaveBeenLastCalledWith('npm', ['run', script], {
-        cwd: config.pkg.location,
-        env: {},
-        pkg: config.pkg,
-        reject: false,
-        windowsHide: false,
-      }, false);
+      expect(exec).toHaveBeenLastCalledWith(
+        'npm',
+        ['run', script],
+        {
+          cwd: config.pkg.location,
+          env: {},
+          pkg: config.pkg,
+          reject: false,
+          windowsHide: false,
+        },
+        false
+      );
     });
 
     it('supports a different npmClient', async () => {
@@ -88,13 +102,18 @@ describe('npm-run-script', () => {
 
       await npmRunScript(script, config);
 
-      expect(exec).toHaveBeenLastCalledWith('yarn', ['run', script, '--bar', 'baz'], {
-        cwd: config.pkg.location,
-        env: {},
-        pkg: config.pkg,
-        reject: true,
-        windowsHide: false,
-      }, false);
+      expect(exec).toHaveBeenLastCalledWith(
+        'yarn',
+        ['run', script, '--bar', 'baz'],
+        {
+          cwd: config.pkg.location,
+          env: {},
+          pkg: config.pkg,
+          reject: true,
+          windowsHide: false,
+        },
+        false
+      );
     });
   });
 
@@ -119,7 +138,7 @@ describe('npm-run-script', () => {
         {
           cwd: config.pkg.location,
           env: {
-            LERNA_PACKAGE_NAME: 'qux'
+            LERNA_PACKAGE_NAME: 'qux',
           },
           pkg: config.pkg,
           reject: true,
@@ -150,7 +169,7 @@ describe('npm-run-script', () => {
         {
           cwd: config.pkg.location,
           env: {
-            LERNA_PACKAGE_NAME: 'qux'
+            LERNA_PACKAGE_NAME: 'qux',
           },
           pkg: config.pkg,
           reject: true,
@@ -182,7 +201,7 @@ describe('npm-run-script', () => {
         {
           cwd: config.pkg.location,
           env: {
-            LERNA_PACKAGE_NAME: 'qux'
+            LERNA_PACKAGE_NAME: 'qux',
           },
           pkg: config.pkg,
           reject: false,

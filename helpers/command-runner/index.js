@@ -1,7 +1,7 @@
-"use strict";
+'use strict';
 
-const path = require("path");
-const lernaCLI = require("../../packages/cli/src/lerna-cli");
+const path = require('path');
+const lernaCLI = require('../../packages/cli/src/lerna-cli');
 
 module.exports = commandRunner;
 
@@ -14,10 +14,10 @@ module.exports = commandRunner;
  */
 function commandRunner(commandModule) {
   /* eslint-disable import/no-dynamic-require, global-require */
-  const cmd = commandModule.command.split(" ")[0];
+  const cmd = commandModule.command.split(' ')[0];
 
   // prime the pump so slow-as-molasses CI doesn't fail with delayed require()
-  require(path.resolve(require.main.filename, "../.."));
+  require(path.resolve(require.main.filename, '../..'));
 
   return (cwd) => {
     // create a _new_ yargs instance every time cwd changes to avoid singleton pollution
@@ -34,8 +34,8 @@ function commandRunner(commandModule) {
 
         const context = {
           cwd,
-          lernaVersion: "__TEST_VERSION__",
-          loglevel: "silent",
+          lernaVersion: '__TEST_VERSION__',
+          loglevel: 'silent',
           progress: false,
           onResolved: (result) => {
             // success resolves the result, if any, returned from execute()
@@ -60,7 +60,7 @@ function commandRunner(commandModule) {
             // _and_ yargs validation exceptions when using async command handlers
             const actual = err || new Error(msg);
             // backfill exitCode for test convenience
-            yargsMeta.exitCode = "exitCode" in actual ? actual.exitCode : 1;
+            yargsMeta.exitCode = 'exitCode' in actual ? actual.exitCode : 1;
             context.onRejected(actual);
           })
           .parse([cmd, ...args], context, parseFn);

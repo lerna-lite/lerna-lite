@@ -14,12 +14,16 @@ export function getTaggedPackages(packageGraph: PackageGraph, rootPath: string, 
 
   // @see https://stackoverflow.com/a/424142/5707
   // FIXME: --root is only necessary for tests :P
-  return exec('git', ['diff-tree', '--name-only', '--no-commit-id', '--root', '-r', '-c', 'HEAD'], execOpts, gitDryRun)
-    .then(({ stdout }) => {
-      const manifests = stdout.split('\n').filter((fp) => path.basename(fp) === 'package.json');
-      const locations = new Set<string>(manifests.map((fp) => path.join(rootPath, path.dirname(fp))));
+  return exec(
+    'git',
+    ['diff-tree', '--name-only', '--no-commit-id', '--root', '-r', '-c', 'HEAD'],
+    execOpts,
+    gitDryRun
+  ).then(({ stdout }) => {
+    const manifests = stdout.split('\n').filter((fp) => path.basename(fp) === 'package.json');
+    const locations = new Set<string>(manifests.map((fp) => path.join(rootPath, path.dirname(fp))));
 
-      // @ts-ignore
-      return Array.from(packageGraph.values()).filter((node: { location: string }) => locations.has(node.location));
-    });
+    // @ts-ignore
+    return Array.from(packageGraph.values()).filter((node: { location: string }) => locations.has(node.location));
+  });
 }

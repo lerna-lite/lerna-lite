@@ -1,8 +1,8 @@
-"use strict";
+'use strict';
 
-jest.mock("read-package-json");
-jest.mock("libnpmpublish");
-jest.mock("fs-extra");
+jest.mock('read-package-json');
+jest.mock('libnpmpublish');
+jest.mock('fs-extra');
 
 jest.mock('@lerna-lite/core', () => ({
   ...jest.requireActual('@lerna-lite/core'), // return the other real methods, below we'll mock only 2 of the methods
@@ -11,36 +11,36 @@ jest.mock('@lerna-lite/core', () => ({
 }));
 
 // mocked modules
-const fs = require("fs-extra");
-const { publish } = require("libnpmpublish");
-const readJSON = require("read-package-json");
-const { runLifecycle, Package } = require("@lerna-lite/core");
+const fs = require('fs-extra');
+const { publish } = require('libnpmpublish');
+const readJSON = require('read-package-json');
+const { runLifecycle, Package } = require('@lerna-lite/core');
 
 // helpers
-const path = require("path");
+const path = require('path');
 
 // file under test
-const { npmPublish } = require("../lib/npm-publish");
+const { npmPublish } = require('../lib/npm-publish');
 
-describe("npm-publish", () => {
-  const mockTarData = Buffer.from("MOCK");
+describe('npm-publish', () => {
+  const mockTarData = Buffer.from('MOCK');
   const mockManifest = { _normalized: true };
 
-  fs.readFile.mockName("fs.readFile").mockResolvedValue(mockTarData);
-  publish.mockName("libnpmpublish").mockResolvedValue();
-  readJSON.mockName("read-package-json").mockImplementation((file, cb) => cb(null, mockManifest));
-  runLifecycle.mockName("@lerna-lite/core").mockResolvedValue();
+  fs.readFile.mockName('fs.readFile').mockResolvedValue(mockTarData);
+  publish.mockName('libnpmpublish').mockResolvedValue();
+  readJSON.mockName('read-package-json').mockImplementation((file, cb) => cb(null, mockManifest));
+  runLifecycle.mockName('@lerna-lite/core').mockResolvedValue();
 
-  const tarFilePath = "/tmp/test-1.10.100.tgz";
-  const rootPath = path.normalize("/test");
+  const tarFilePath = '/tmp/test-1.10.100.tgz';
+  const rootPath = path.normalize('/test');
   const pkg = new Package(
-    { name: "@scope/test", version: "1.10.100" },
-    path.join(rootPath, "npmPublish/test"),
+    { name: '@scope/test', version: '1.10.100' },
+    path.join(rootPath, 'npmPublish/test'),
     rootPath
   );
 
-  it("calls external libraries with correct arguments", async () => {
-    const opts = { tag: "published-tag" };
+  it('calls external libraries with correct arguments', async () => {
+    const opts = { tag: 'published-tag' };
 
     await npmPublish(pkg, tarFilePath, opts);
 
@@ -50,8 +50,8 @@ describe("npm-publish", () => {
       mockManifest,
       mockTarData,
       expect.objectContaining({
-        defaultTag: "published-tag",
-        projectScope: "@scope",
+        defaultTag: 'published-tag',
+        projectScope: '@scope',
       })
     );
   });
@@ -63,41 +63,41 @@ describe("npm-publish", () => {
       mockManifest,
       mockTarData,
       expect.objectContaining({
-        defaultTag: "latest",
+        defaultTag: 'latest',
       })
     );
   });
 
-  it("overrides pkg.publishConfig.tag when opts.tag is explicitly configured", async () => {
+  it('overrides pkg.publishConfig.tag when opts.tag is explicitly configured', async () => {
     readJSON.mockImplementationOnce((file, cb) =>
       cb(null, {
         publishConfig: {
-          tag: "beta",
+          tag: 'beta',
         },
       })
     );
-    const opts = { tag: "temp-tag" };
+    const opts = { tag: 'temp-tag' };
 
     await npmPublish(pkg, tarFilePath, opts);
 
     expect(publish).toHaveBeenCalledWith(
       expect.objectContaining({
         publishConfig: {
-          tag: "temp-tag",
+          tag: 'temp-tag',
         },
       }),
       mockTarData,
       expect.objectContaining({
-        defaultTag: "temp-tag",
+        defaultTag: 'temp-tag',
       })
     );
   });
 
-  it("respects pkg.publishConfig.tag when opts.defaultTag matches default", async () => {
+  it('respects pkg.publishConfig.tag when opts.defaultTag matches default', async () => {
     readJSON.mockImplementationOnce((file, cb) =>
       cb(null, {
         publishConfig: {
-          tag: "beta",
+          tag: 'beta',
         },
       })
     );
@@ -107,79 +107,76 @@ describe("npm-publish", () => {
     expect(publish).toHaveBeenCalledWith(
       expect.objectContaining({
         publishConfig: {
-          tag: "beta",
+          tag: 'beta',
         },
       }),
       mockTarData,
       expect.objectContaining({
-        defaultTag: "beta",
+        defaultTag: 'beta',
       })
     );
   });
 
-  it("uses pkg.contents manifest when pkg.publishConfig.directory is defined", async () => {
+  it('uses pkg.contents manifest when pkg.publishConfig.directory is defined', async () => {
     const fancyPkg = new Package(
       {
-        name: "fancy",
-        version: "1.10.100",
+        name: 'fancy',
+        version: '1.10.100',
         publishConfig: {
-          directory: "dist",
+          directory: 'dist',
         },
       },
-      path.join(rootPath, "npmPublish/fancy"),
+      path.join(rootPath, 'npmPublish/fancy'),
       rootPath
     );
 
     readJSON.mockImplementationOnce((file, cb) =>
       cb(null, {
-        name: "fancy-fancy",
-        version: "1.10.100",
+        name: 'fancy-fancy',
+        version: '1.10.100',
       })
     );
 
     await npmPublish(fancyPkg, tarFilePath);
 
-    expect(readJSON).toHaveBeenCalledWith(
-      path.join(fancyPkg.location, "dist/package.json"),
-      expect.any(Function)
-    );
+    expect(readJSON).toHaveBeenCalledWith(path.join(fancyPkg.location, 'dist/package.json'), expect.any(Function));
     expect(publish).toHaveBeenCalledWith(
       expect.objectContaining({
-        name: "fancy-fancy",
+        name: 'fancy-fancy',
       }),
       mockTarData,
       expect.objectContaining({
-        defaultTag: "latest",
+        defaultTag: 'latest',
       })
     );
   });
 
-  it("merges pkg.publishConfig.registry into options", async () => {
+  it('merges pkg.publishConfig.registry into options', async () => {
     readJSON.mockImplementationOnce((file, cb) =>
       cb(null, {
         publishConfig: {
-          registry: "http://pkg-registry.com",
+          registry: 'http://pkg-registry.com',
         },
       })
     );
-    const opts = { registry: "https://global-registry.com" };
+    const opts = { registry: 'https://global-registry.com' };
 
     await npmPublish(pkg, tarFilePath, opts);
 
     expect(publish).toHaveBeenCalledWith(
       expect.objectContaining({
         publishConfig: {
-          registry: "http://pkg-registry.com",
+          registry: 'http://pkg-registry.com',
         },
       }),
       mockTarData,
       expect.objectContaining({
-        registry: "http://pkg-registry.com",
+        registry: 'http://pkg-registry.com',
       })
     );
   });
 
-  it("respects opts.dryRun", async () => {
+  it('respects opts.dryRun', async () => {
     const opts = { dryRun: true };
 
     await npmPublish(pkg, tarFilePath, opts);
@@ -188,23 +185,23 @@ describe("npm-publish", () => {
     expect(runLifecycle).toHaveBeenCalledTimes(2);
   });
 
-  it("calls publish lifecycles", async () => {
+  it('calls publish lifecycles', async () => {
     const options = expect.objectContaining({
-      projectScope: "@scope",
+      projectScope: '@scope',
     });
 
     await npmPublish(pkg, tarFilePath);
 
-    expect(runLifecycle).toHaveBeenCalledWith(pkg, "publish", options);
-    expect(runLifecycle).toHaveBeenLastCalledWith(pkg, "postpublish", options);
+    expect(runLifecycle).toHaveBeenCalledWith(pkg, 'publish', options);
+    expect(runLifecycle).toHaveBeenLastCalledWith(pkg, 'postpublish', options);
   });
 
-  it("catches libnpm errors", async () => {
+  it('catches libnpm errors', async () => {
     publish.mockImplementationOnce(() => {
-      const err = new Error("whoopsy");
-      err.code = "E401";
+      const err = new Error('whoopsy');
+      err.code = 'E401';
       err.body = {
-        error: "doodle",
+        error: 'doodle',
       };
       return Promise.reject(err);
     });
@@ -218,24 +215,24 @@ describe("npm-publish", () => {
 
     await expect(npmPublish(pkg, tarFilePath, opts)).rejects.toThrow(
       expect.objectContaining({
-        message: "whoopsy",
-        name: "ValidationError",
+        message: 'whoopsy',
+        name: 'ValidationError',
       })
     );
 
-    expect(log.error).toHaveBeenLastCalledWith("E401", "doodle");
+    expect(log.error).toHaveBeenLastCalledWith('E401', 'doodle');
     expect(process.exitCode).toBe(1);
 
     publish.mockImplementationOnce(() => {
-      const err = new Error("lolwut");
-      err.code = "E404";
+      const err = new Error('lolwut');
+      err.code = 'E404';
       err.errno = 9001;
       return Promise.reject(err);
     });
 
-    await expect(npmPublish(pkg, tarFilePath, opts)).rejects.toThrow("lolwut");
+    await expect(npmPublish(pkg, tarFilePath, opts)).rejects.toThrow('lolwut');
 
-    expect(log.error).toHaveBeenLastCalledWith("E404", "lolwut");
+    expect(log.error).toHaveBeenLastCalledWith('E404', 'lolwut');
     expect(process.exitCode).toBe(9001);
   });
 });

@@ -2,9 +2,9 @@ import path from 'path';
 import { Stream } from 'stream';
 import url from 'url';
 
-const Umask = () => { };
+const Umask = () => {};
 const getLocalAddresses = () => [];
-const semver = () => { };
+const semver = () => {};
 
 export const types = {
   access: [null, 'restricted', 'public'],

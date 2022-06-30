@@ -1,44 +1,44 @@
-"use strict";
+'use strict';
 
-jest.mock("pacote");
+jest.mock('pacote');
 
 // mocked module(s)
-const pacote = require("pacote");
+const pacote = require('pacote');
 
 // helpers
-const { getPackages, PackageGraph } = require("@lerna-lite/core");
-const initFixture = require("@lerna-test/init-fixture")(__dirname);
+const { getPackages, PackageGraph } = require('@lerna-lite/core');
+const initFixture = require('@lerna-test/init-fixture')(__dirname);
 
 // file under test
-const { getUnpublishedPackages } = require("../lib/get-unpublished-packages");
+const { getUnpublishedPackages } = require('../lib/get-unpublished-packages');
 
 pacote.packument.mockImplementation(async (pkg) => {
-  if (pkg === "package-1") {
+  if (pkg === 'package-1') {
     return {
       versions: {},
     };
   }
 
-  if (pkg === "package-2") {
+  if (pkg === 'package-2') {
     return {
       versions: {
-        "1.0.0": {},
+        '1.0.0': {},
       },
     };
   }
 
-  throw new Error("package does not exist");
+  throw new Error('package does not exist');
 });
 
-test("getUnpublishedPackages", async () => {
-  const cwd = await initFixture("licenses-names");
+test('getUnpublishedPackages', async () => {
+  const cwd = await initFixture('licenses-names');
   const packages = await getPackages(cwd);
   const packageGraph = new PackageGraph(packages);
 
   const opts = {};
   const pkgs = await getUnpublishedPackages(packageGraph, opts);
 
-  expect(pacote.packument).toHaveBeenCalledWith("package-1", opts);
+  expect(pacote.packument).toHaveBeenCalledWith('package-1', opts);
   expect(pkgs).toMatchInlineSnapshot(`
 Array [
   PackageGraphNode {
@@ -69,15 +69,15 @@ Array [
 `);
 });
 
-test("getUnpublishedPackages with private package", async () => {
-  const cwd = await initFixture("public-private");
+test('getUnpublishedPackages with private package', async () => {
+  const cwd = await initFixture('public-private');
   const packages = await getPackages(cwd);
   const packageGraph = new PackageGraph(packages);
 
   const opts = {};
   const pkgs = await getUnpublishedPackages(packageGraph, opts);
 
-  expect(pacote.packument).toHaveBeenCalledWith("package-1", opts);
+  expect(pacote.packument).toHaveBeenCalledWith('package-1', opts);
   expect(pkgs).toMatchInlineSnapshot(`
 Array [
   PackageGraphNode {

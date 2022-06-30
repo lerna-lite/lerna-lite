@@ -175,9 +175,7 @@ describe('conventional-commits', () => {
         recommendVersion(pkg1, 'fixed', {
           changelogPreset: 'garbage',
         })
-      ).rejects.toThrow(
-        'Unable to load conventional-changelog preset "garbage" (conventional-changelog-garbage)'
-      );
+      ).rejects.toThrow('Unable to load conventional-changelog preset "garbage" (conventional-changelog-garbage)');
     });
 
     it('throws an error when an implicit changelog preset with scope cannot be loaded', async () => {
@@ -513,10 +511,7 @@ describe('conventional-commits', () => {
       expect(configForPresetNameString).toBeDefined();
 
       const presetConfigObject = { name: './scripts/config-builder-preset', key: 'value' };
-      const configForPresetConfigObject = await GetChangelogConfig.getChangelogConfig(
-        presetConfigObject,
-        cwd
-      );
+      const configForPresetConfigObject = await GetChangelogConfig.getChangelogConfig(presetConfigObject, cwd);
 
       expect(configForPresetConfigObject).toBeDefined();
       expect(configForPresetConfigObject.key).toBe(presetConfigObject.key);

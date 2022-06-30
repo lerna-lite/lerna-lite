@@ -12,7 +12,10 @@ interface PackageCollectorOptions {
  * @param {Map<string, import("@lerna/package-graph").PackageGraphNode>} packages
  * @param {PackageCollectorOptions} options
  */
-export function collectPackages(packages, { isCandidate = () => true, onInclude, excludeDependents } = {} as PackageCollectorOptions) {
+export function collectPackages(
+  packages,
+  { isCandidate = () => true, onInclude, excludeDependents } = {} as PackageCollectorOptions
+) {
   /** @type {Set<import("@lerna/package-graph").PackageGraphNode>} */
   const candidates = new Set();
 

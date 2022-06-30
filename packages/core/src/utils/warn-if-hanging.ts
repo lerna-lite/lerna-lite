@@ -9,8 +9,8 @@ export function warnIfHanging() {
     log.warn(
       'complete',
       `Waiting for ${childProcessCount} child ` +
-      `process${childProcessCount === 1 ? '' : 'es'} to exit. ` +
-      'CTRL-C to exit immediately.'
+        `process${childProcessCount === 1 ? '' : 'es'} to exit. ` +
+        'CTRL-C to exit immediately.'
     );
   }
 }

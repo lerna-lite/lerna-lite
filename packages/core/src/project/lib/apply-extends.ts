@@ -9,7 +9,7 @@ import { ValidationError } from '../../validation-error';
  * @param {string} cwd
  * @param {Set<string>} seen
  */
-export function applyExtends(config: { [key: string]: any; }, cwd: string, seen = new Set<string>()) {
+export function applyExtends(config: { [key: string]: any }, cwd: string, seen = new Set<string>()) {
   let defaultConfig = {};
 
   if ('extends' in config) {

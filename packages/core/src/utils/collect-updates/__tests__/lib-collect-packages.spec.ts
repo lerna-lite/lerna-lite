@@ -1,16 +1,16 @@
-"use strict";
+'use strict';
 
 import { Package } from '../../../package';
 
 // helpers
-const buildGraph = require("../__helpers__/build-graph");
+const buildGraph = require('../__helpers__/build-graph');
 
 // file under test
-const { collectPackages } = require("../lib/collect-packages");
+const { collectPackages } = require('../lib/collect-packages');
 
 const toNamesList = (collection: Package[]) => Array.from(collection).map((pkg) => pkg.name);
 
-test("returns all packages", () => {
+test('returns all packages', () => {
   const graph = buildGraph();
   const result = collectPackages(graph);
 
@@ -29,9 +29,9 @@ Array [
 `);
 });
 
-test("filters packages through isCandidate, passing node and name", () => {
+test('filters packages through isCandidate, passing node and name', () => {
   const graph = buildGraph();
-  const packagesToInclude = ["package-cycle-1"];
+  const packagesToInclude = ['package-cycle-1'];
   const isCandidate = (node, name) => {
     return packagesToInclude.includes(node.name) && node.name === name;
   };
@@ -47,9 +47,9 @@ Array [
 `);
 });
 
-test("calls onInclude with included package name", () => {
+test('calls onInclude with included package name', () => {
   const graph = buildGraph();
-  const packagesToInclude = ["package-standalone"];
+  const packagesToInclude = ['package-standalone'];
   const isCandidate = (node, name) => packagesToInclude.includes(name);
   const onInclude = jest.fn();
   collectPackages(graph, { isCandidate, onInclude });

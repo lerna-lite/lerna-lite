@@ -193,9 +193,7 @@ export class Command<T extends AvailableCommandOption> {
     const commandConfig = this.project.config.command || {};
 
     // The current command always overrides otherCommandConfigs
-    const overrides = [this.commandName, ...this.otherCommandConfigs].map(
-      (key) => (commandConfig as any)[key]
-    );
+    const overrides = [this.commandName, ...this.otherCommandConfigs].map((key) => (commandConfig as any)[key]);
 
     this.options = defaultOptions(
       // CLI flags, which if defined overrule subsequent values

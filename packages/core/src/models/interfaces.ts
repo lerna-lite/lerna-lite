@@ -2,12 +2,7 @@ import log from 'npmlog';
 import npa from 'npm-package-arg';
 
 import { Package } from '../package';
-import {
-  InitCommandOption,
-  PublishCommandOption,
-  RunCommandOption,
-  VersionCommandOption,
-} from './command-options';
+import { InitCommandOption, PublishCommandOption, RunCommandOption, VersionCommandOption } from './command-options';
 
 export type VersioningStrategy = 'fixed' | 'independent';
 export type ChangelogType = 'fixed' | 'independent' | 'root';

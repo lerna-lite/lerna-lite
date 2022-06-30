@@ -33,9 +33,7 @@ jest.mock('@lerna-lite/publish', () => jest.requireActual('../publish-command'))
 jest.mock('../lib/get-packages-without-license', () =>
   jest.requireActual('../lib/__mocks__/get-packages-without-license')
 );
-jest.mock('../lib/verify-npm-package-access', () =>
-  jest.requireActual('../lib/__mocks__/verify-npm-package-access')
-);
+jest.mock('../lib/verify-npm-package-access', () => jest.requireActual('../lib/__mocks__/verify-npm-package-access'));
 jest.mock('../lib/get-npm-username', () => jest.requireActual('../lib/__mocks__/get-npm-username'));
 jest.mock('../lib/get-two-factor-auth-required', () =>
   jest.requireActual('../lib/__mocks__/get-two-factor-auth-required')

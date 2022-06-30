@@ -6,7 +6,7 @@ import hasUnicode from 'has-unicode';
 import { Package } from '@lerna-lite/core';
 import { Tarball } from '../models';
 
-export function logPacked(pkg: Package & { packed: Tarball; }, dryRun = false) {
+export function logPacked(pkg: Package & { packed: Tarball }, dryRun = false) {
   const tarball = pkg.packed;
   log.notice('', '');
   log.notice('', `${hasUnicode() ? '📦 ' : 'package:'} ${tarball.name}@${tarball.version}`);
@@ -48,9 +48,9 @@ export function logPacked(pkg: Package & { packed: Tarball; }, dryRun = false) {
         tarball.unpackedSize && { name: 'unpacked size:', value: byteSize(tarball.unpackedSize) },
         tarball.shasum && { name: 'shasum:', value: tarball.shasum },
         tarball.integrity && { name: 'integrity:', value: elideIntegrity(tarball.integrity) },
-        tarball.bundled?.length && { name: 'bundled deps:', value: tarball.bundled.length, },
-        tarball.bundled?.length && { name: 'bundled files:', value: tarball.entryCount - tarball.files.length, },
-        tarball.bundled?.length && { name: 'own files:', value: tarball.files.length, },
+        tarball.bundled?.length && { name: 'bundled deps:', value: tarball.bundled.length },
+        tarball.bundled?.length && { name: 'bundled files:', value: tarball.entryCount - tarball.files.length },
+        tarball.bundled?.length && { name: 'own files:', value: tarball.files.length },
         tarball.entryCount && { name: 'total files:', value: tarball.entryCount },
       ].filter((x) => x),
       {

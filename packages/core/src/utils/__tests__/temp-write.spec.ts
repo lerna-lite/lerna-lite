@@ -35,13 +35,13 @@ describe('utils/temp-write', () => {
 
   it('rejects when tempWrite(stream) throws an error', async () => {
     const mockWriteStream = {
-      pipe: jest.fn().mockImplementation(() =>({
-        on: jest.fn().mockImplementation(() =>({
+      pipe: jest.fn().mockImplementation(() => ({
+        on: jest.fn().mockImplementation(() => ({
           on: jest.fn(),
         })),
       })),
       unpipe: jest.fn(),
-      on: jest.fn().mockImplementation(function(this, event, handler) {
+      on: jest.fn().mockImplementation(function (this, event, handler) {
         if (event === 'error') {
           handler('some error');
         }
@@ -50,7 +50,7 @@ describe('utils/temp-write', () => {
     };
 
     try {
-      await tempWrite(mockWriteStream as any, 'test.png')
+      await tempWrite(mockWriteStream as any, 'test.png');
     } catch (err) {
       expect(err).toBe('some error');
     }

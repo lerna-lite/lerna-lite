@@ -26,9 +26,7 @@ describe('@lerna/npm-conf', () => {
     expect(toNerfDartMod).toBeDefined();
     expect(typeof toNerfDart).toBe('function');
     expect(toNerfDart('https://npm.example.com')).toBe('//npm.example.com/');
-    expect(toNerfDart('https://npm.example.com/some-api/npm-virtual/')).toBe(
-      '//npm.example.com/some-api/npm-virtual/'
-    );
+    expect(toNerfDart('https://npm.example.com/some-api/npm-virtual/')).toBe('//npm.example.com/some-api/npm-virtual/');
   });
 
   it('defaults cli parameter to empty object', () => {

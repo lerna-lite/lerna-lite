@@ -1,4 +1,3 @@
-
 // mocked modules
 const promptModule = require('../prompt');
 jest.mock('../prompt', () => jest.requireActual('../__mocks__/prompt'));

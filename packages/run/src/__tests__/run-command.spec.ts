@@ -24,9 +24,7 @@ const initFixture = require('@lerna-test/init-fixture')(__dirname);
 const { loggingOutput } = require('@lerna-test/logging-output');
 const { normalizeRelativeDir } = require('@lerna-test/normalize-relative-dir');
 import { factory, RunCommand } from '../run-command';
-const lernaRun = require('@lerna-test/command-runner')(
-  require('../../../cli/src/cli-commands/cli-run-commands')
-);
+const lernaRun = require('@lerna-test/command-runner')(require('../../../cli/src/cli-commands/cli-run-commands'));
 
 // assertion helpers
 const ranInPackagesStreaming = (testDir: string) =>
@@ -108,12 +106,7 @@ describe('RunCommand', () => {
       await factory(createArgv(testDir, 'env'));
       // await lernaRun(testDir)('env');
 
-      expect((logOutput as any).logged().split('\n')).toEqual([
-        'package-1',
-        'package-4',
-        'package-2',
-        'package-3',
-      ]);
+      expect((logOutput as any).logged().split('\n')).toEqual(['package-1', 'package-4', 'package-2', 'package-3']);
     });
 
     it('runs a script only in scoped packages', async () => {
@@ -149,12 +142,7 @@ describe('RunCommand', () => {
     it('supports alternate npmClient configuration', async () => {
       await new RunCommand(createArgv(testDir, 'env', '--npm-client', 'yarn'));
 
-      expect((logOutput as any).logged().split('\n')).toEqual([
-        'package-1',
-        'package-4',
-        'package-2',
-        'package-3',
-      ]);
+      expect((logOutput as any).logged().split('\n')).toEqual(['package-1', 'package-4', 'package-2', 'package-3']);
     });
 
     it('reports script errors with early exit', async () => {
@@ -287,9 +275,7 @@ describe('RunCommand', () => {
     it('optionally streams output in cmd-dry-run mode and expect them all to be logged', async () => {
       const testDir = await initFixture('toposort');
 
-      await new RunCommand(
-        createArgv(testDir, 'env', '--concurrency', '1', '--no-sort', '--stream', '--cmd-dry-run')
-      );
+      await new RunCommand(createArgv(testDir, 'env', '--concurrency', '1', '--no-sort', '--stream', '--cmd-dry-run'));
 
       const logLines = (logOutput as any).logged().split('\n');
       expect(logLines).toEqual([

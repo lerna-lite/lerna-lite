@@ -26,9 +26,7 @@ export function makeDiffPredicate(committish: string, execOpts: ExecOpts, ignore
     log.info('ignoring diff in paths matching', ignorePatterns.join(' '));
   }
 
-  return function hasDiffSinceThatIsntIgnored(
-    /** @type {import("@lerna/package-graph").PackageGraphNode} */ node
-  ) {
+  return function hasDiffSinceThatIsntIgnored(/** @type {import("@lerna/package-graph").PackageGraphNode} */ node) {
     const diff = diffSinceIn(committish, node.location, execOpts);
 
     if (diff === '') {
