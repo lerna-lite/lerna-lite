@@ -131,7 +131,7 @@ Run the following commands to install Lerna-Lite in your project and/or install 
 
 If you are new to Lerna-Lite, you could also run the [lerna init](https://github.com/ghiscoding/lerna-lite/tree/main/packages/init#readme) command which will create the `lerna.json` for you. If you are using a different client other than npm, then make sure to update the `npmClient` property in `lerna.json` (for example: `"npmClient": "yarn"`).
 
-### CLI Installation
+#### CLI Installation
 
 Minimum installation to get Lerna-Lite CLI `npm i @lerna-lite/cli -D -W` which includes the following:
 
@@ -142,7 +142,7 @@ Minimum installation to get Lerna-Lite CLI `npm i @lerna-lite/cli -D -W` which i
 | 📑 [version](https://github.com/ghiscoding/lerna-lite/tree/main/packages/version#readme) | `npm i @lerna-lite/cli -D -W` | create new version for each workspace pkg |
 | ☁️ [publish](https://github.com/ghiscoding/lerna-lite/tree/main/packages/publish#readme) | `npm i @lerna-lite/cli -D -W` | publish each workspace pkg |
 
-### Separate / Optional Installs
+#### Separate / Optional Installs
 
 | Command | Install | Description |
 | --------| --------| ----------- |
