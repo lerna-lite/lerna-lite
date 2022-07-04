@@ -117,7 +117,7 @@ export class Project {
     return this.config.packages || [Project.PACKAGE_GLOB];
   }
 
-  get packageParentDirs(): Promise<string[]> {
+  get packageParentDirs(): string[] {
     return (this.packageConfigs as any)
       .map(globParent)
       .map((parentDir: string) => path.resolve(this.rootPath, parentDir));

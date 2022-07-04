@@ -15,7 +15,7 @@ import globby from 'globby';
 import yargParser from 'yargs-parser';
 
 // make sure to import the output mock
-import { logOutput } from '@lerna-lite/core';
+import { ExecCommandOption, logOutput } from '@lerna-lite/core';
 
 // mocked modules
 import { spawn, spawnStreaming } from '@lerna-lite/core';
@@ -37,14 +37,14 @@ const execInPackagesStreaming = (testDir) =>
     return arr;
   }, []);
 
-const createArgv = (cwd: string, script?: string, ...args: string[]) => {
+const createArgv = (cwd: string, ...args: string[]) => {
   args.unshift('exec');
+  if (args.length > 0 && args[1]?.length > 0 && !args[1].startsWith('-')) {
+    args[1] = `--cmd=${args[1]}`;
+  }
   const parserArgs = args.join(' ');
   const argv = yargParser(parserArgs);
   argv['$0'] = cwd;
-  if (script) {
-    argv.script = script;
-  }
   args['logLevel'] = 'silent';
   return argv;
 };
@@ -69,13 +69,13 @@ describe('ExecCommand', () => {
     });
 
     it('should complain if invoked without command using factory', async () => {
-      const command = factory(createArgv(testDir, '--parallel'));
+      const command = factory(createArgv(testDir, '--parallel') as ExecCommandOption);
 
       await expect(command).rejects.toThrow('A command to execute is required');
     });
 
     it('should complain if invoked without command using ExecCommand class', async () => {
-      const command = new ExecCommand(createArgv(testDir, '--parallel'));
+      const command = new ExecCommand(createArgv(testDir, '--parallel') as ExecCommandOption);
 
       await expect(command).rejects.toThrow('A command to execute is required');
     });
@@ -263,7 +263,7 @@ describe('ExecCommand', () => {
       await lernaExec(cwd)('--profile', '--profile-location', 'foo/bar', '--', 'ls');
 
       const [profileLocation] = await globby('foo/bar/Lerna-Profile-*.json', { cwd, absolute: true });
-      const exists = await fs.exists(profileLocation, null);
+      const exists = await fs.exists(profileLocation, null as any);
 
       expect(exists).toBe(true);
     });

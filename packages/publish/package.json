@@ -40,7 +40,7 @@
     "libnpmaccess": "^6.0.3",
     "libnpmpublish": "^6.0.4",
     "npm-package-arg": "^9.1.0",
-    "npm-packlist": "^5.1.0",
+    "npm-packlist": "^5.1.1",
     "npm-registry-fetch": "^13.1.1",
     "npmlog": "^6.0.2",
     "os": "^0.1.2",
@@ -63,7 +63,7 @@
     "yargs": "^17.5.1"
   },
   "devDependencies": {
-    "@types/async": "^3.2.13",
+    "@types/async": "^3.2.14",
     "@types/conventional-changelog-core": "^4.2.1",
     "@types/conventional-recommended-bump": "^6.1.0",
     "@types/execa": "^2.0.0",

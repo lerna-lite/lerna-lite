@@ -47,11 +47,13 @@ const lernaPublish = require('@lerna-test/command-runner')(
 // stabilize commit SHA
 expect.addSnapshotSerializer(require('@lerna-test/serialize-git-sha'));
 
-// const { exec } = require('@lerna-lite/core');
 const coreModule = require('@lerna-lite/core');
 
 const createArgv = (cwd, ...args) => {
   args.unshift('publish');
+  if (args.length > 0 && args[1] && args[1].length > 0 && !args[1].startsWith('-')) {
+    args[1] = `--bump=${args[1]}`;
+  }
   const parserArgs = args.join(' ');
   const argv = yargParser(parserArgs);
   argv['$0'] = cwd;
@@ -100,6 +102,35 @@ test('publish --canary', async () => {
   await new PublishCommand(createArgv(cwd, '--canary'));
 
   expect(promptConfirmation).toHaveBeenLastCalledWith('Are you sure you want to publish these packages?');
+  expect(npmPublish.registry).toMatchInlineSnapshot(`
+  Map {
+    "package-1" => "canary",
+    "package-3" => "canary",
+    "package-4" => "canary",
+    "package-2" => "canary",
+  }
+  `);
+  expect(writePkg.updatedVersions()).toMatchInlineSnapshot(`
+  Object {
+    "package-1": 1.0.1-alpha.0+SHA,
+    "package-2": 1.0.1-alpha.0+SHA,
+    "package-3": 1.0.1-alpha.0+SHA,
+    "package-4": 1.0.1-alpha.0+SHA,
+  }
+  `);
+});
+
+test('publish --canary with auto-confirm --yes', async () => {
+  const cwd = await initTaggedFixture('normal');
+
+  await setupChanges(
+    cwd,
+    ['packages/package-1/all-your-base.js', 'belong to us'],
+    ['packages/package-4/non-matching-semver.js', 'senpai noticed me']
+  );
+  await new PublishCommand(createArgv(cwd, '--canary', '--yes'));
+
+  expect(promptConfirmation).not.toHaveBeenCalled();
   expect(npmPublish.registry).toMatchInlineSnapshot(`
   Map {
     "package-1" => "canary",
@@ -398,18 +429,19 @@ test('publish --canary --git-head <sha> throws an error', async () => {
   );
 });
 
-xtest('publish --canary --include-merged-tags calls git describe correctly', async () => {
-  const execSpy = jest.spyOn(coreModule, 'exec');
+test('publish --canary --include-merged-tags calls git describe correctly', async () => {
+  const describeSpy = jest.spyOn(coreModule, 'describeRef');
   const cwd = await initTaggedFixture('normal');
 
-  await lernaPublish(cwd)('--canary', '--include-merged-tags');
+  await new PublishCommand(createArgv(cwd, '--canary', '--include-merged-tags'));
 
-  expect(execSpy).toHaveBeenCalledWith(
-    'git',
-    // notably lacking "--first-parent"
-    ['describe', '--always', '--long', '--dirty', '--match', 'v*.*.*'],
-    expect.objectContaining({ cwd }),
-    false
+  expect(describeSpy).toHaveBeenCalledWith(
+    {
+      match: 'v*.*.*',
+      cwd,
+    },
+    true,
+    undefined
   );
 });
 

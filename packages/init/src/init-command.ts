@@ -124,9 +124,9 @@ export class InitCommand extends Command<InitCommandOption> {
     return this.project.serializeConfig();
   }
 
-  async ensurePackagesDir() {
+  ensurePackagesDir() {
     this.logger.info('', 'Creating packages directory');
 
-    return pMap(await this.project.packageParentDirs, (dir) => fs.mkdirp(dir));
+    return pMap(this.project.packageParentDirs, (dir) => fs.mkdirp(dir));
   }
 }

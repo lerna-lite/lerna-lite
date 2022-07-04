@@ -7,7 +7,6 @@ jest.mock('@lerna-lite/core', () => ({
   logOutput: jest.requireActual('../../../core/src/__mocks__/output').logOutput,
   collectUpdates: jest.requireActual('../../../core/src/__mocks__/collect-updates').collectUpdates,
   getPackages: jest.requireActual('../../../core/src/project').getPackages,
-  spawn: jest.fn(() => Promise.resolve({ exitCode: 0 })),
 }));
 
 // mocked modules
@@ -31,8 +30,11 @@ const yargParser = require('yargs-parser');
 
 const createArgv = (cwd: string, ...args: string[]) => {
   args.unshift('diff');
+  if (args.length > 0 && args[1]?.length > 0 && !args[1].startsWith('-')) {
+    args[1] = `--pkgName=${args[1]}`;
+  }
   const parserArgs = args.map(String);
-  const argv = yargParser(parserArgs);
+  const argv = yargParser(parserArgs, { array: [{ key: 'ignoreChanges' }] });
   argv['$0'] = cwd;
   argv['loglevel'] = 'silent';
   return argv;
@@ -43,8 +45,10 @@ expect.addSnapshotSerializer(require('@lerna-test/serialize-git-sha'));
 
 describe('Diff Command', () => {
   // overwrite spawn so we get piped stdout, not inherited
-  // @ts-ignore
-  coreChildProcess.spawn = jest.fn((...args) => execa(...args));
+  coreChildProcess.spawn = jest.fn((...args) => {
+    // @ts-ignore
+    return execa(...args);
+  });
 
   it('should diff packages from the first commit from DiffCommand class', async () => {
     const cwd = await initFixture('basic');
@@ -86,7 +90,8 @@ describe('Diff Command', () => {
     await gitAdd(cwd, '-A');
     await gitCommit(cwd, 'changed');
 
-    const { stdout } = await lernaDiff(cwd)();
+    // @ts-ignore
+    const { stdout } = await new DiffCommand(createArgv(cwd, ''));
     expect(stdout).toMatchSnapshot();
   });
 
@@ -116,11 +121,12 @@ describe('Diff Command', () => {
     await gitAdd(cwd, '-A');
     await gitCommit(cwd, 'changed');
 
-    const { stdout } = await lernaDiff(cwd)('package-2');
+    // @ts-ignore
+    const { stdout } = await new DiffCommand(createArgv(cwd, 'package-2'));
     expect(stdout).toMatchSnapshot();
   });
 
-  it('passes diff exclude globs configured with --ignored-changes', async () => {
+  it('passes diff exclude globs configured with --ignore-changes', async () => {
     const cwd = await initFixture('basic');
     const [pkg1] = await getPackages(cwd);
 
@@ -129,13 +135,21 @@ describe('Diff Command', () => {
     await gitAdd(cwd, '-A');
     await gitCommit(cwd, 'changed');
 
-    const { stdout } = await lernaDiff(cwd)('--ignore-changes', '**/README.md');
+    // @ts-ignore
+    const { stdout } = await new DiffCommand(createArgv(cwd, '--ignore-changes', '**/README.md'));
     expect(stdout).toMatchSnapshot();
   });
 
-  it("should error when attempting to diff a package that doesn't exist", async () => {
+  it("should error when attempting to diff a package that doesn't exist from CLI", async () => {
     const cwd = await initFixture('basic');
     const command = lernaDiff(cwd)('missing');
+
+    await expect(command).rejects.toThrow("Cannot diff, the package 'missing' does not exist.");
+  });
+
+  it("should error when attempting to diff a package that doesn't exist from DiffCommand class", async () => {
+    const cwd = await initFixture('basic');
+    const command = new DiffCommand(createArgv(cwd, 'missing'));
 
     await expect(command).rejects.toThrow("Cannot diff, the package 'missing' does not exist.");
   });
@@ -146,7 +160,7 @@ describe('Diff Command', () => {
     await fs.remove(path.join(cwd, '.git'));
     await gitInit(cwd);
 
-    const command = lernaDiff(cwd)('package-1');
+    const command = new DiffCommand(createArgv(cwd, 'package-1'));
     await expect(command).rejects.toThrow('Cannot diff, there are no commits in this repository yet.');
   });
 
@@ -160,7 +174,7 @@ describe('Diff Command', () => {
       throw nonZero;
     });
 
-    const command = lernaDiff(cwd)('package-1');
+    const command = new DiffCommand(createArgv(cwd, 'package-1'));
     await expect(command).rejects.toThrow('An actual non-zero, not git diff pager SIGPIPE');
   });
 });
