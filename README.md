@@ -133,11 +133,12 @@ If you are new to Lerna-Lite, you could also run the [lerna init](https://github
 
 ### CLI Installation
 
-Minimum installation to get started with Lerna-Lite and its CLI:
+Minimum installation to get started with Lerna-Lite and its CLI.
 
 ```sh
 npm i @lerna-lite/cli -D -W
 ```
+will give you access to the following list of commands:
 
 | Command | Description |
 | ------- | ----------- |
