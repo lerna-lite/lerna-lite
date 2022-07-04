@@ -139,8 +139,8 @@ Minimum installation to get started with Lerna-Lite and its CLI:
 npm i @lerna-lite/cli -D -W
 ```
 
-| Command | Install | Description |
-| ------- | ------- | ----------- |
+| Command | Description |
+| ------- | ----------- |
 | 🛠️ [init](https://github.com/ghiscoding/lerna-lite/tree/main/packages/init#readme) | create/initialize a new Lerna-Lite repo |
 | 💻 [info](https://github.com/ghiscoding/lerna-lite/tree/main/packages/info#readme) | print local environment information |
 | 📑 [version](https://github.com/ghiscoding/lerna-lite/tree/main/packages/version#readme) | create new version for each workspace package |
