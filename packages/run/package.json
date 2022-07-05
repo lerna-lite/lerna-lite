@@ -43,6 +43,7 @@
   "devDependencies": {
     "@types/execa": "^2.0.0",
     "@types/p-map": "^2.0.0",
-    "perf_hooks": "^0.0.1"
+    "perf_hooks": "^0.0.1",
+    "yargs-parser": "^21.0.1"
   }
 }

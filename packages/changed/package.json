@@ -34,5 +34,8 @@
     "@lerna-lite/core": "workspace:*",
     "@lerna-lite/list": "workspace:*",
     "@lerna-lite/listable": "workspace:*"
+  },
+  "devDependencies": {
+    "yargs-parser": "^21.0.1"
   }
 }
