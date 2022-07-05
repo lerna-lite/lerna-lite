@@ -59,6 +59,7 @@
     "@types/semver": "^7.3.10",
     "@types/write-json-file": "^3.2.1",
     "@types/write-pkg": "^4.0.0",
-    "js-yaml": "^4.1.0"
+    "js-yaml": "^4.1.0",
+    "yargs-parser": "^21.0.1"
   }
 }

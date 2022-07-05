@@ -141,10 +141,13 @@ importers:
       '@lerna-lite/core': workspace:*
       '@lerna-lite/list': workspace:*
       '@lerna-lite/listable': workspace:*
+      yargs-parser: ^21.0.1
     dependencies:
       '@lerna-lite/core': link:../core
       '@lerna-lite/list': link:../list
       '@lerna-lite/listable': link:../listable
+    devDependencies:
+      yargs-parser: 21.0.1
 
   packages/cli:
     specifiers:
@@ -159,6 +162,7 @@ importers:
       import-local: ^3.1.0
       npmlog: ^6.0.2
       yargs: ^17.5.1
+      yargs-parser: ^21.0.1
     dependencies:
       '@lerna-lite/core': link:../core
       '@lerna-lite/info': link:../info
@@ -171,6 +175,7 @@ importers:
       import-local: 3.1.0
       npmlog: 6.0.2
       yargs: 17.5.1
+      yargs-parser: 21.0.1
 
   packages/core:
     specifiers:
@@ -245,6 +250,7 @@ importers:
       write-json-file: ^4.3.0
       write-pkg: ^4.0.0
       yargs: ^17.5.1
+      yargs-parser: ^21.0.1
     dependencies:
       '@npmcli/run-script': 4.1.5
       '@octokit/plugin-enterprise-rest': 6.0.1
@@ -318,12 +324,20 @@ importers:
       '@types/write-file-atomic': 4.0.0
       '@types/write-json-file': 3.2.1
       '@types/write-pkg': 4.0.0
+      yargs-parser: 21.0.1
 
   packages/diff:
     specifiers:
       '@lerna-lite/core': workspace:*
+      execa: ^5.1.1
+      fs-extra: ^10.1.0
+      yargs-parser: ^21.0.1
     dependencies:
       '@lerna-lite/core': link:../core
+    devDependencies:
+      execa: 5.1.1
+      fs-extra: 10.1.0
+      yargs-parser: 21.0.1
 
   packages/exec:
     specifiers:
@@ -333,11 +347,13 @@ importers:
       '@types/p-map': ^2.0.0
       dotenv: ^16.0.1
       fs-extra: ^10.1.0
+      globby: ^11.1.0
       multimatch: ^5.0.0
       npmlog: ^6.0.2
       p-map: ^4.0.0
       upath: ^2.0.1
       yargs: ^17.5.1
+      yargs-parser: ^21.0.1
     dependencies:
       '@lerna-lite/core': link:../core
       '@lerna-lite/optional-cmd-common': link:../optional-cmd-common
@@ -348,9 +364,11 @@ importers:
       p-map: 4.0.0
       upath: 2.0.1
       yargs: 17.5.1
+      yargs-parser: 21.0.1
     devDependencies:
       '@types/execa': 2.0.0
       '@types/p-map': 2.0.0
+      globby: 11.1.0
 
   packages/info:
     specifiers:
@@ -376,6 +394,7 @@ importers:
       fs-extra: ^10.1.0
       p-map: ^4.0.0
       write-json-file: ^4.3.0
+      yargs-parser: ^21.0.1
     dependencies:
       '@lerna-lite/core': link:../core
       fs-extra: 10.1.0
@@ -385,16 +404,20 @@ importers:
       '@types/fs-extra': 9.0.13
       '@types/p-map': 2.0.0
       '@types/write-json-file': 3.2.1
+      yargs-parser: 21.0.1
 
   packages/list:
     specifiers:
       '@lerna-lite/core': workspace:*
       '@lerna-lite/listable': workspace:*
       '@lerna-lite/optional-cmd-common': workspace:*
+      yargs-parser: ^21.0.1
     dependencies:
       '@lerna-lite/core': link:../core
       '@lerna-lite/listable': link:../listable
       '@lerna-lite/optional-cmd-common': link:../optional-cmd-common
+    devDependencies:
+      yargs-parser: 21.0.1
 
   packages/listable:
     specifiers:
@@ -473,6 +496,7 @@ importers:
       write-json-file: ^4.3.0
       write-pkg: ^4.0.0
       yargs: ^17.5.1
+      yargs-parser: ^21.0.1
     dependencies:
       '@lerna-lite/core': link:../core
       '@lerna-lite/version': link:../version
@@ -515,6 +539,7 @@ importers:
       '@types/semver': 7.3.10
       '@types/write-json-file': 3.2.1
       '@types/write-pkg': 4.0.0
+      yargs-parser: 21.0.1
 
   packages/run:
     specifiers:
@@ -529,6 +554,7 @@ importers:
       perf_hooks: ^0.0.1
       upath: ^2.0.1
       yargs: ^17.5.1
+      yargs-parser: ^21.0.1
     dependencies:
       '@lerna-lite/core': link:../core
       '@lerna-lite/optional-cmd-common': link:../optional-cmd-common
@@ -542,6 +568,7 @@ importers:
       '@types/execa': 2.0.0
       '@types/p-map': 2.0.0
       perf_hooks: 0.0.1
+      yargs-parser: 21.0.1
 
   packages/version:
     specifiers:
@@ -572,6 +599,7 @@ importers:
       slash: ^3.0.0
       write-json-file: ^4.3.0
       yargs: ^17.5.1
+      yargs-parser: ^21.0.1
     dependencies:
       '@lerna-lite/core': link:../core
       chalk: 4.1.2
@@ -601,6 +629,7 @@ importers:
       '@types/write-json-file': 3.2.1
       '@types/write-pkg': 4.0.0
       js-yaml: 4.1.0
+      yargs-parser: 21.0.1
 
 packages:
 

@@ -158,8 +158,6 @@ describe('ExecCommand', () => {
     it('should run a command in dry-run mode and expect them all to be logged', async () => {
       await lernaExec(testDir)('ls', '--cmd-dry-run');
 
-      // expect(spawn).toHaveBeenCalledTimes(2);
-      // expect(calledInPackages()).toEqual(['package-1', 'package-2']);
       const logLines = (logOutput as any).logged().split('\n');
       expect(logLines).toEqual(['dry-run> package-1', 'dry-run> package-2']);
     });
@@ -208,6 +206,14 @@ describe('ExecCommand', () => {
         'packages/package-1 ls (prefix: package-1)',
         'packages/package-2 ls (prefix: package-2)',
       ]);
+    });
+
+    it('executes a command in all packages with --stream in dry-run mode and expect them all to be logged', async () => {
+      await lernaExec(testDir)('--stream', 'ls', '--cmd-dry-run');
+
+      const logLines = (logOutput as any).logged().split('\n');
+
+      expect(logLines).toEqual(['dry-run> package-1', 'dry-run> package-2']);
     });
 
     it('omits package prefix with --stream --no-prefix', async () => {
