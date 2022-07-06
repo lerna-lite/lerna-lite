@@ -549,6 +549,8 @@ importers:
       '@types/execa': ^2.0.0
       '@types/p-map': ^2.0.0
       fs-extra: ^10.1.0
+      globby: ^11.1.0
+      jest-circus: ^28.1.2
       multimatch: ^5.0.0
       npmlog: ^6.0.2
       p-map: ^4.0.0
@@ -568,6 +570,8 @@ importers:
     devDependencies:
       '@types/execa': 2.0.0
       '@types/p-map': 2.0.0
+      globby: 11.1.0
+      jest-circus: 28.1.2
       perf_hooks: 0.0.1
       yargs-parser: 21.0.1
 
@@ -6727,7 +6731,7 @@ packages:
       strip-ansi: 6.0.1
 
   /wrappy/1.0.2:
-    resolution: {integrity: sha1-tSQ9jz7BqjXxNkYFvA0QNuMKtp8=}
+    resolution: {integrity: sha512-l4Sp/DRseor9wL6EvV2+TuQn63dMkPjZ/sp9XkghTEbV9KlPS1xUsZ3u7/IQO4wxtcFB4bgpQPRcR3QCvezPcQ==}
 
   /write-file-atomic/2.4.3:
     resolution: {integrity: sha512-GaETH5wwsX+GcnzhPgKcKjJ6M2Cq3/iZp1WyY/X1CSqrW+jVNM9Y7D8EC2sM4ZG/V8wZlSniJnCKWPmBYAucRQ==}
