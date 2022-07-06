@@ -205,6 +205,11 @@ export class RunCommand extends Command<RunCommandOption & FilterOptions> {
     return chain;
   }
 
+  /** Nx requires quotes around script names of the form script:name*/
+  escapeScriptNameQuotes(scriptName: string) {
+    return scriptName.includes(':') ? `"${scriptName}"` : scriptName;
+  }
+
   async runScriptsUsingNx() {
     if (this.options.ci) {
       process.env.CI = 'true';
@@ -214,7 +219,8 @@ export class RunCommand extends Command<RunCommandOption & FilterOptions> {
     const { targetDependencies, options } = await this.prepNxOptions();
     if (this.packagesWithScript.length === 1) {
       const { runOne } = await import('nx/src/command-line/run-one');
-      const fullQualifiedTarget = this.packagesWithScript.map((p) => p.name)[0] + ':' + this.script;
+      const fullQualifiedTarget =
+        this.packagesWithScript.map((p) => p.name)[0] + ':' + this.escapeScriptNameQuotes(this.script);
       return (runOne as any)(
         process.cwd(),
         {
