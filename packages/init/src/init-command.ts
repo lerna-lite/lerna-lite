@@ -1,4 +1,4 @@
-import { Command, CommandType, exec, InitCommandOption, ProjectConfig, RawManifest } from '@lerna-lite/core';
+import { Command, CommandType, exec, InitCommandOption, ProjectConfig } from '@lerna-lite/core';
 import fs from 'fs-extra';
 import path from 'path';
 import pMap from 'p-map';
