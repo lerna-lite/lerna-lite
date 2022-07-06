@@ -175,6 +175,7 @@ importers:
       import-local: 3.1.0
       npmlog: 6.0.2
       yargs: 17.5.1
+    devDependencies:
       yargs-parser: 21.0.1
 
   packages/core:
@@ -363,12 +364,12 @@ importers:
       npmlog: 6.0.2
       p-map: 4.0.0
       upath: 2.0.1
-      yargs: 17.5.1
-      yargs-parser: 21.0.1
     devDependencies:
       '@types/execa': 2.0.0
       '@types/p-map': 2.0.0
       globby: 11.1.0
+      yargs: 17.5.1
+      yargs-parser: 21.0.1
 
   packages/info:
     specifiers:
