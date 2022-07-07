@@ -63,7 +63,7 @@
     "yargs": "^17.5.1"
   },
   "devDependencies": {
-    "@types/async": "^3.2.14",
+    "@types/async": "^3.2.15",
     "@types/conventional-changelog-core": "^4.2.1",
     "@types/conventional-recommended-bump": "^6.1.0",
     "@types/execa": "^2.0.0",
