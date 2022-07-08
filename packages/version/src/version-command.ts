@@ -602,6 +602,7 @@ export class VersionCommand extends Command<VersionCommandOption> {
           changelogPreset,
           rootPath,
           tagPrefix: this.tagPrefix,
+          changelogIncludeCommitAuthor: this.options.changelogIncludeCommitAuthor,
           changelogHeaderMessage: this.options.changelogHeaderMessage,
           changelogVersionMessage: this.options.changelogVersionMessage,
         }).then(({ logPath, newEntry }) => {
@@ -683,6 +684,7 @@ export class VersionCommand extends Command<VersionCommandOption> {
             rootPath,
             tagPrefix: this.tagPrefix,
             version: this.globalVersion,
+            changelogIncludeCommitAuthor: this.options.changelogIncludeCommitAuthor,
             changelogHeaderMessage: this.options.changelogHeaderMessage,
             changelogVersionMessage: this.options.changelogVersionMessage,
           }).then(({ logPath, newEntry }) => {

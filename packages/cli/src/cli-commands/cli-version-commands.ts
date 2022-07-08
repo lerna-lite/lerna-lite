@@ -38,6 +38,11 @@ exports.builder = (yargs, composed) => {
       requiresArg: true,
       type: 'string',
     },
+    'changelog-include-commit-author': {
+      describe: "Specify if we want to include the commit author's name when using conventional-commits with changelog",
+      group: 'Version Command Options:',
+      type: 'boolean',
+    },
     'changelog-version-message': {
       describe:
         'Add a custom message as a prefix to each new version in your "changelog.md" which is located in the root of your project. This option only works when using --conventional-commits.',
