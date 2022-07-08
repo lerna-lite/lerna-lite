@@ -27,6 +27,7 @@ export async function updateChangelog(
     rootPath,
     tagPrefix = 'v',
     version = undefined,
+    changelogIncludeCommitAuthor = false,
     changelogHeaderMessage = '',
     changelogVersionMessage = '',
   } = updateOptions;
@@ -46,6 +47,13 @@ export async function updateChangelog(
 
   // NOTE: must pass as positional argument due to weird bug in merge-config
   const gitRawCommitsOpts = Object.assign({}, options.config.gitRawCommitsOpts);
+
+  // when including commit author's name, we need to change the conventional commit format
+  // and later do string extract, of ">>author=%an<<", and replacement to get a commit string that would add (@authorName) to the end of the commit string, ie:
+  // **deps:** update all non-major dependencies ([ed1db35](https://github.com/ghiscoding/lerna-lite/commit/ed1db35)) (@Renovate-Bot)
+  if (changelogIncludeCommitAuthor) {
+    gitRawCommitsOpts.format = '%B%n-hash-%n%H>>author=%an<<';
+  }
 
   if (type === 'root') {
     context.version = version;
@@ -76,9 +84,13 @@ export async function updateChangelog(
   const changelogStream = conventionalChangelogCore(options, context, gitRawCommitsOpts);
 
   return Promise.all([
-    (getStream as any)(changelogStream).then(makeBumpOnlyFilter(pkg)),
+    // prettier-ignore
+    getStream(changelogStream).then(makeBumpOnlyFilter(pkg)),
     readExistingChangelog(pkg),
-  ]).then(([newEntry, [changelogFileLoc, changelogContents]]) => {
+  ]).then(([inputEntry, [changelogFileLoc, changelogContents]]) => {
+    // are we including commit author's name in changelog?
+    const newEntry = changelogIncludeCommitAuthor ? includeChangelogCommitAuthorName(inputEntry) : inputEntry;
+
     log.silly(type, 'writing new entry: %j', newEntry);
 
     const changelogVersion = type === 'root' ? changelogVersionMessage : '';
@@ -101,4 +113,34 @@ export async function updateChangelog(
       };
     });
   });
+}
+
+/**
+ * From an input entry string, ie
+ * deps: update all non-major dependencies ([ed1db35](https://github.com/ghiscoding/lerna-lite/commit/ed1db35>>author=Renovate Bot<<))
+ * we will extract the commit author's name and form a new string that will look like below
+ * deps: update all non-major dependencies ([ed1db35](https://github.com/ghiscoding/lerna-lite/commit/ed1db35)) (@Renovate-Bot)
+ * @param inputEntry
+ * @returns
+ */
+function includeChangelogCommitAuthorName(inputEntry: string) {
+  let author = '';
+
+  // the input entry string can contain multiple commits but at most 1 per line,
+  // so we can split for each line break and rejoin them once we're done
+  let lineEntries: string[] = [];
+
+  for (const entry of inputEntry.split('\n')) {
+    const authorStrMatches = entry.match(/(.*)(>>author=.*<<)(\)*)/);
+    if (Array.isArray(authorStrMatches) && authorStrMatches.length > 2) {
+      const escapedEntry = authorStrMatches[1] + (authorStrMatches.length >= 3 ? authorStrMatches[3] : '');
+
+      // commit author, it might include spaces and if it does we will replace by hypen (-)
+      author = authorStrMatches[2].replace(/(>>author=|<<)/g, '').replace(' ', '-') || '';
+      lineEntries.push(`${escapedEntry} (@${author})`);
+    } else {
+      lineEntries.push(entry);
+    }
+  }
+  return lineEntries.join('\n');
 }

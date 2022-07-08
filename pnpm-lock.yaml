@@ -194,6 +194,7 @@ importers:
       '@types/glob-parent': ^5.1.1
       '@types/inquirer': ^8.2.1
       '@types/load-json-file': ^5.1.0
+      '@types/minimatch': ^3.0.5
       '@types/npm-package-arg': ^6.1.1
       '@types/p-map': ^2.0.0
       '@types/semver': ^7.3.10
@@ -318,6 +319,7 @@ importers:
       '@types/glob-parent': 5.1.1
       '@types/inquirer': 8.2.1
       '@types/load-json-file': 5.1.0
+      '@types/minimatch': 3.0.5
       '@types/npm-package-arg': 6.1.1
       '@types/p-map': 2.0.0
       '@types/semver': 7.3.10
@@ -585,6 +587,7 @@ importers:
       '@types/fs-extra': ^9.0.13
       '@types/js-yaml': ^4.0.5
       '@types/load-json-file': ^5.1.0
+      '@types/minimatch': ^3.0.5
       '@types/p-map': ^2.0.0
       '@types/semver': ^7.3.10
       '@types/write-json-file': ^3.2.1
@@ -629,6 +632,7 @@ importers:
       '@types/fs-extra': 9.0.13
       '@types/js-yaml': 4.0.5
       '@types/load-json-file': 5.1.0
+      '@types/minimatch': 3.0.5
       '@types/p-map': 2.0.0
       '@types/semver': 7.3.10
       '@types/write-json-file': 3.2.1
@@ -1678,7 +1682,6 @@ packages:
 
   /@types/minimatch/3.0.5:
     resolution: {integrity: sha512-Klz949h02Gz2uZCMGwDUSDS1YBlTdDDgbWHi+81l29tQALUtvz4rAYi5uoVhE5Lagoq6DeqAUlbrHvW/mXDgdQ==}
-    dev: false
 
   /@types/minimist/1.2.2:
     resolution: {integrity: sha512-jhuKLIRrhvCPLqwPcx6INqmKeiA5EWrsCOPhrlFSrbrmU4ZMPjj5Ul/oLCMDO98XRUIwVm78xICz4EPCektzeQ==}
