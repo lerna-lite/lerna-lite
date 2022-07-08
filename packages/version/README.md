@@ -234,7 +234,7 @@ When run with this flag, `lerna version` will release with prerelease versions t
 Specify if we want to include the commit author's name when using `--conventional-commits` with changelogs.
 
 ```sh
-lerna version --changelog-include-commit-author
+lerna version --conventional-commits --changelog-include-commit-author
 ```
 
 ### `--changelog-header-message <msg>`
@@ -242,7 +242,7 @@ lerna version --changelog-include-commit-author
 Add a custom message at the top of your "changelog.md" which is located in the root of your project. This option only works when using `--conventional-commits` and will only impact your project root "changelog.md".
 
 ```sh
-lerna version --changelog-header-message "My Custom Header Message"
+lerna version --conventional-commits --changelog-header-message "My Custom Header Message"
 ```
 
 ### `--changelog-version-message <msg>`
@@ -250,7 +250,7 @@ lerna version --changelog-header-message "My Custom Header Message"
 Add a custom message as a prefix to your new version in your "changelog.md" which is located in the root of your project. This option only works when using `--conventional-commits` and will only impact your project root "changelog.md".
 
 ```sh
-lerna version --changelog-version-message "My Great New Version Message"
+lerna version --conventional-commits --changelog-version-message "My Great New Version Message"
 ```
 
 ### `--create-release <type>`
