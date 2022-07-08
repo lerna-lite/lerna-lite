@@ -116,19 +116,26 @@ export async function updateChangelog(
 }
 
 /**
- * From an input entry string, ie
- * deps: update all non-major dependencies ([ed1db35](https://github.com/ghiscoding/lerna-lite/commit/ed1db35>>author=Renovate Bot<<))
- * we will extract the commit author's name and form a new string that will look like below
- * deps: update all non-major dependencies ([ed1db35](https://github.com/ghiscoding/lerna-lite/commit/ed1db35)) (@Renovate-Bot)
+ * From an input entry string that most often, not always, include commit author's name within defined tokens ">>author=AUTHOR_NAME<<"
+ * We will want to extract the author's name from the commit url and recreate the commit url string and add its author to the end of the string.
+ * You might be wondering, WHY is the commit author part of the commit url?
+ * Mainly because it seems that adding a `format` to the `conventional-changelog-core` of `gitRawCommitsOpts`
+ * will always include it as part of the final commit url because of this line where it parses the template and always seems to include whatever we add into the commit url
+ * https://github.com/conventional-changelog/conventional-changelog/blob/master/packages/git-raw-commits/index.js#L27
+ *
+ * We will transform a string that looks like this:
+ *   "deps: update all non-major dependencies ([ed1db35](https://github.com/ghiscoding/lerna-lite/commit/ed1db35>>author=Renovate Bot<<))"
+ * then extract the commit author's name and transform it into a new string that will look like below
+ *   "deps: update all non-major dependencies ([ed1db35](https://github.com/ghiscoding/lerna-lite/commit/ed1db35)) (@Renovate-Bot)"
  * @param inputEntry
  * @returns
  */
 function parseChangelogCommitAuthorName(inputEntry: string) {
   // to transform the string into what we want, we need to move the substring outside of the url and remove extra search tokens
-  // transform this
-  //   ed1db35>>author=Renovate Bot<<))
-  // into this
-  //   ed1db35)) (@Renovate Bot)
+  // from this:
+  //   "...ed1db35>>author=Renovate Bot<<))"
+  // into this:
+  //   "...ed1db35)) (@Renovate-Bot)"
   return inputEntry.replace(
     /(.*)(>>author=)(.*)(<<)(.*)/g,
     (
