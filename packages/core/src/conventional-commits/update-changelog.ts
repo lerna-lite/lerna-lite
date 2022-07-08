@@ -127,26 +127,20 @@ export async function updateChangelog(
  *   "deps: update all non-major dependencies ([ed1db35](https://github.com/ghiscoding/lerna-lite/commit/ed1db35>>author=Renovate Bot<<))"
  * then extract the commit author's name and transform it into a new string that will look like below
  *   "deps: update all non-major dependencies ([ed1db35](https://github.com/ghiscoding/lerna-lite/commit/ed1db35)) (@Renovate-Bot)"
- * @param inputEntry
+ * @param changelogEntry - changelog entry of a version being released which can contain multiple line entries
  * @returns
  */
-function parseChangelogCommitAuthorName(inputEntry: string) {
+function parseChangelogCommitAuthorName(changelogEntry: string) {
   // to transform the string into what we want, we need to move the substring outside of the url and remove extra search tokens
   // from this:
   //   "...ed1db35>>author=Renovate Bot<<))"
   // into this:
   //   "...ed1db35)) (@Renovate-Bot)"
-  return inputEntry.replace(
+  return changelogEntry.replace(
     /(.*)(>>author=)(.*)(<<)(.*)/g,
-    (
-      _haystack: string,
-      commitStrStart: string,
-      _authorOpenToken?: string,
-      author?: string,
-      _authorClosingToken?: string,
-      commitStrEnd?: string
-    ) => {
-      return `${commitStrStart}${commitStrEnd || ''} (@${author?.replace(/\s/g, '-') ?? ''})`;
+    (_: string, lineStart: string, _tokenStart?: string, author?: string, _tokenEnd?: string, lineEnd?: string) => {
+      // rebuild the commit string, we'll also replace any whitespaces to hypen in author's name to make it a valid "@" user ref
+      return `${lineStart}${lineEnd || ''} (@${author?.replace(/\s/g, '-') ?? ''})`;
     }
   );
 }
