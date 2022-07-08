@@ -124,6 +124,33 @@ describe('VersionCommand', () => {
       expect(logOutput.logged()).toMatchSnapshot('console output');
     });
 
+    it('versions changed packages with publish prompt', async () => {
+      const testDir = await initFixture('normal');
+      // when --conventional-commits is absent,
+      // --no-changelog should have _no_ effect
+      await new VersionCommand({ ...createArgv(testDir, '--no-changelog'), composed: 'composed' });
+
+      expect(checkWorkingTree).toHaveBeenCalled();
+
+      expect(promptSelectOne.mock.calls).toMatchSnapshot('prompt');
+      expect(promptConfirmation).toHaveBeenLastCalledWith('Are you sure you want to publish these packages?');
+
+      expect(writePkg.updatedManifest('package-1')).toMatchSnapshot('gitHead');
+
+      const patch = await showCommit(testDir);
+      expect(patch).toMatchSnapshot('commit');
+
+      expect(libPush).toHaveBeenLastCalledWith(
+        'origin',
+        'main',
+        expect.objectContaining({
+          cwd: testDir,
+        }),
+        undefined
+      );
+      expect(logOutput.logged()).toMatchSnapshot('console output');
+    });
+
     it('throws an error when --independent is passed', async () => {
       const testDir = await initFixture('normal');
       const command = new VersionCommand(createArgv(testDir, '--independent'));
