@@ -89,7 +89,7 @@ export async function updateChangelog(
     readExistingChangelog(pkg),
   ]).then(([inputEntry, [changelogFileLoc, changelogContents]]) => {
     // are we including commit author's name in changelog?
-    const newEntry = changelogIncludeCommitAuthor ? includeChangelogCommitAuthorName(inputEntry) : inputEntry;
+    const newEntry = changelogIncludeCommitAuthor ? parseChangelogCommitAuthorName(inputEntry) : inputEntry;
 
     log.silly(type, 'writing new entry: %j', newEntry);
 
@@ -123,24 +123,23 @@ export async function updateChangelog(
  * @param inputEntry
  * @returns
  */
-function includeChangelogCommitAuthorName(inputEntry: string) {
-  let author = '';
-
-  // the input entry string can contain multiple commits but at most 1 per line,
-  // so we can split for each line break and rejoin them once we're done
-  let lineEntries: string[] = [];
-
-  for (const entry of inputEntry.split('\n')) {
-    const authorStrMatches = entry.match(/(.*)(>>author=.*<<)(\)*)/);
-    if (Array.isArray(authorStrMatches) && authorStrMatches.length > 2) {
-      const escapedEntry = authorStrMatches[1] + (authorStrMatches.length >= 3 ? authorStrMatches[3] : '');
-
-      // commit author, it might include spaces and if it does we will replace by hypen (-)
-      author = authorStrMatches[2].replace(/(>>author=|<<)/g, '').replace(' ', '-') || '';
-      lineEntries.push(`${escapedEntry} (@${author})`);
-    } else {
-      lineEntries.push(entry);
+function parseChangelogCommitAuthorName(inputEntry: string) {
+  // to transform the string into what we want, we need to move the substring outside of the url and remove extra search tokens
+  // transform this
+  //   ed1db35>>author=Renovate Bot<<))
+  // into this
+  //   ed1db35)) (@Renovate Bot)
+  return inputEntry.replace(
+    /(.*)(>>author=)(.*)(<<)(.*)/g,
+    (
+      _haystack: string,
+      commitStrStart: string,
+      _authorOpenToken?: string,
+      author?: string,
+      _authorClosingToken?: string,
+      commitStrEnd?: string
+    ) => {
+      return `${commitStrStart}${commitStrEnd || ''} (@${author?.replace(/\s/g, '-') ?? ''})`;
     }
-  }
-  return lineEntries.join('\n');
+  );
 }
