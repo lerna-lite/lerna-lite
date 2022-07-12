@@ -15,7 +15,7 @@ const loadJsonFile = require('load-json-file');
 
 // helpers
 const { getPackages } = require('../../../core/src/project');
-const initFixture = require('@lerna-test/init-fixture')(__dirname);
+const initFixture = require('@lerna-test/helpers').initFixtureFactory(__dirname);
 
 const {
   loadPackageLockFileWhenExists,

@@ -30,8 +30,10 @@ const { collectUpdates } = require('@lerna-lite/core');
 const { recommendVersion, updateChangelog } = require('@lerna-lite/core');
 
 // helpers
-const initFixture = require('@lerna-test/init-fixture')(path.resolve(__dirname, '../../../publish/src/__tests__'));
-const { showCommit } = require('@lerna-test/show-commit');
+const initFixture = require('@lerna-test/helpers').initFixtureFactory(
+  path.resolve(__dirname, '../../../publish/src/__tests__')
+);
+const { showCommit } = require('@lerna-test/helpers');
 
 // test command
 import { VersionCommand } from '../version-command';

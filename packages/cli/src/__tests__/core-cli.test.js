@@ -1,8 +1,8 @@
 'use strict';
 
 const { ValidationError } = require('@lerna-lite/core');
-const { loggingOutput } = require('@lerna-test/logging-output');
-const initFixture = require('@lerna-test/init-fixture')(__dirname);
+const { loggingOutput } = require('@lerna-test/helpers/logging-output');
+const initFixture = require('@lerna-test/helpers').initFixtureFactory(__dirname);
 const coreCLI = require('../lerna-cli');
 
 function prepare(cwd) {

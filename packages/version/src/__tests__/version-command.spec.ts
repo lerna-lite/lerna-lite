@@ -41,17 +41,19 @@ const { isBehindUpstream } = require('../lib/is-behind-upstream');
 const { remoteBranchExists } = require('../lib/remote-branch-exists');
 
 // helpers
-const { loggingOutput } = require('@lerna-test/logging-output');
-const { gitAdd } = require('@lerna-test/git-add');
-const { gitTag } = require('@lerna-test/git-tag');
-const { gitCommit } = require('@lerna-test/git-commit');
-const initFixture = require('@lerna-test/init-fixture')(path.resolve(__dirname, '../../../publish/src/__tests__'));
-const { showCommit } = require('@lerna-test/show-commit');
-const { getCommitMessage } = require('@lerna-test/get-commit-message');
+const { loggingOutput } = require('@lerna-test/helpers/logging-output');
+const { gitAdd } = require('@lerna-test/helpers');
+const { gitTag } = require('@lerna-test/helpers');
+const { gitCommit } = require('@lerna-test/helpers');
+const initFixture = require('@lerna-test/helpers').initFixtureFactory(
+  path.resolve(__dirname, '../../../publish/src/__tests__')
+);
+const { showCommit } = require('@lerna-test/helpers');
+const { getCommitMessage } = require('@lerna-test/helpers');
 
 // test command
 import { VersionCommand } from '../version-command';
-const lernaVersion = require('@lerna-test/command-runner')(
+const lernaVersion = require('@lerna-test/helpers').commandRunner(
   require('../../../cli/src/cli-commands/cli-version-commands')
 );
 import { loadPackageLockFileWhenExists } from '../lib/update-lockfile-version';
@@ -91,7 +93,7 @@ const listDirty = (cwd) =>
   );
 
 // stabilize commit SHA
-expect.addSnapshotSerializer(require('@lerna-test/serialize-git-sha'));
+expect.addSnapshotSerializer(require('@lerna-test/helpers/serializers/serialize-git-sha'));
 
 describe('VersionCommand', () => {
   describe('normal mode', () => {

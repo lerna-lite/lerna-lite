@@ -26,12 +26,14 @@ const yargParser = require('yargs-parser');
 const { promptSelectOne } = require('@lerna-lite/core');
 
 // helpers
-const initFixture = require('@lerna-test/init-fixture')(path.resolve(__dirname, '../../../publish/src/__tests__'));
-const { getCommitMessage } = require('@lerna-test/get-commit-message');
+const initFixture = require('@lerna-test/helpers').initFixtureFactory(
+  path.resolve(__dirname, '../../../publish/src/__tests__')
+);
+const { getCommitMessage } = require('@lerna-test/helpers');
 
 // test command
 import { factory, VersionCommand } from '../version-command';
-const lernaVersion = require('@lerna-test/command-runner')(
+const lernaVersion = require('@lerna-test/helpers').commandRunner(
   require('../../../cli/src/cli-commands/cli-version-commands')
 );
 

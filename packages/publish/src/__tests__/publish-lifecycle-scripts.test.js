@@ -50,11 +50,11 @@ const { packDirectory } = require('../lib/pack-directory');
 const { runLifecycle } = require('@lerna-lite/core');
 
 // helpers
-const initFixture = require('@lerna-test/init-fixture')(__dirname);
+const initFixture = require('@lerna-test/helpers').initFixtureFactory(__dirname);
 const path = require('path');
 
 // test command
-const lernaPublish = require('@lerna-test/command-runner')(
+const lernaPublish = require('@lerna-test/helpers').commandRunner(
   require('../../../cli/src/cli-commands/cli-publish-commands')
 );
 

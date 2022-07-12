@@ -16,31 +16,7 @@ importers:
       '@lerna-lite/publish': workspace:*
       '@lerna-lite/run': workspace:*
       '@lerna-lite/version': workspace:*
-      '@lerna-test/clone-fixture': link:helpers/clone-fixture
-      '@lerna-test/command-runner': link:helpers/command-runner
-      '@lerna-test/commit-change-to-package': link:helpers/commit-change-to-package
-      '@lerna-test/copy-fixture': link:helpers/copy-fixture
-      '@lerna-test/find-fixture': link:helpers/find-fixture
-      '@lerna-test/get-commit-message': link:helpers/get-commit-message
-      '@lerna-test/git-add': link:helpers/git-add
-      '@lerna-test/git-checkout': link:helpers/git-checkout
-      '@lerna-test/git-commit': link:helpers/git-commit
-      '@lerna-test/git-init': link:helpers/git-init
-      '@lerna-test/git-merge': link:helpers/git-merge
-      '@lerna-test/git-status': link:helpers/git-status
-      '@lerna-test/git-tag': link:helpers/git-tag
-      '@lerna-test/init-fixture': link:helpers/init-fixture
-      '@lerna-test/logging-output': link:helpers/logging-output
-      '@lerna-test/multi-line-trim-right': link:helpers/multi-line-trim-right
-      '@lerna-test/normalize-relative-dir': link:helpers/normalize-relative-dir
-      '@lerna-test/serialize-changelog': link:helpers/serialize-changelog
-      '@lerna-test/serialize-git-sha': link:helpers/serialize-git-sha
-      '@lerna-test/serialize-tempdir': link:helpers/serialize-tempdir
-      '@lerna-test/serialize-windows-paths': link:helpers/serialize-windows-paths
-      '@lerna-test/set-npm-userconfig': link:helpers/set-npm-userconfig
-      '@lerna-test/show-commit': link:helpers/show-commit
-      '@lerna-test/silence-logging': link:helpers/silence-logging
-      '@lerna-test/update-lerna-config': link:helpers/update-lerna-config
+      '@lerna-test/helpers': link:helpers
       '@types/jest': ^28.1.4
       '@types/node': ^18.0.0
       '@types/npmlog': ^4.1.4
@@ -54,6 +30,7 @@ importers:
       eslint-plugin-jest: ^26.5.3
       eslint-plugin-node: ^11.1.0
       eslint-plugin-prefer-arrow: ^1.2.3
+      execa: ^5.1.1
       file-url: ^3.0.0
       jest: ^28.1.2
       jest-cli: ^28.1.2
@@ -82,31 +59,7 @@ importers:
       '@lerna-lite/publish': link:packages/publish
       '@lerna-lite/run': link:packages/run
       '@lerna-lite/version': link:packages/version
-      '@lerna-test/clone-fixture': link:helpers/clone-fixture
-      '@lerna-test/command-runner': link:helpers/command-runner
-      '@lerna-test/commit-change-to-package': link:helpers/commit-change-to-package
-      '@lerna-test/copy-fixture': link:helpers/copy-fixture
-      '@lerna-test/find-fixture': link:helpers/find-fixture
-      '@lerna-test/get-commit-message': link:helpers/get-commit-message
-      '@lerna-test/git-add': link:helpers/git-add
-      '@lerna-test/git-checkout': link:helpers/git-checkout
-      '@lerna-test/git-commit': link:helpers/git-commit
-      '@lerna-test/git-init': link:helpers/git-init
-      '@lerna-test/git-merge': link:helpers/git-merge
-      '@lerna-test/git-status': link:helpers/git-status
-      '@lerna-test/git-tag': link:helpers/git-tag
-      '@lerna-test/init-fixture': link:helpers/init-fixture
-      '@lerna-test/logging-output': link:helpers/logging-output
-      '@lerna-test/multi-line-trim-right': link:helpers/multi-line-trim-right
-      '@lerna-test/normalize-relative-dir': link:helpers/normalize-relative-dir
-      '@lerna-test/serialize-changelog': link:helpers/serialize-changelog
-      '@lerna-test/serialize-git-sha': link:helpers/serialize-git-sha
-      '@lerna-test/serialize-tempdir': link:helpers/serialize-tempdir
-      '@lerna-test/serialize-windows-paths': link:helpers/serialize-windows-paths
-      '@lerna-test/set-npm-userconfig': link:helpers/set-npm-userconfig
-      '@lerna-test/show-commit': link:helpers/show-commit
-      '@lerna-test/silence-logging': link:helpers/silence-logging
-      '@lerna-test/update-lerna-config': link:helpers/update-lerna-config
+      '@lerna-test/helpers': link:helpers
       '@types/jest': 28.1.4
       '@types/node': 18.0.0
       '@types/npmlog': 4.1.4
@@ -120,6 +73,7 @@ importers:
       eslint-plugin-jest: 26.5.3_cbxtyx3d4qwpnm7p4q4ovvhj5y
       eslint-plugin-node: 11.1.0_eslint@8.19.0
       eslint-plugin-prefer-arrow: 1.2.3_eslint@8.19.0
+      execa: 5.1.1
       file-url: 3.0.0
       jest: 28.1.2_@types+node@18.0.0
       jest-cli: 28.1.2_@types+node@18.0.0

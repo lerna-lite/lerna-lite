@@ -42,12 +42,11 @@ const path = require('path');
 const writePkg = require('write-pkg');
 const { npmPublish } = require('../lib/npm-publish');
 const { logOutput, promptConfirmation, throwIfUncommitted } = require('@lerna-lite/core');
-// const { throwIfUncommitted } = require("@lerna/check-working-tree");
 const { getUnpublishedPackages } = require('../lib/get-unpublished-packages');
 
 // helpers
-const initFixture = require('@lerna-test/init-fixture')(__dirname);
-const { loggingOutput } = require('@lerna-test/logging-output');
+const initFixture = require('@lerna-test/helpers').initFixtureFactory(__dirname);
+const { loggingOutput } = require('@lerna-test/helpers/logging-output');
 
 // file under test
 const yargParser = require('yargs-parser');

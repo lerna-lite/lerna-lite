@@ -22,7 +22,9 @@ const yargParser = require('yargs-parser');
 const writePkg = require('write-pkg');
 
 // helpers
-const initFixture = require('@lerna-test/init-fixture')(path.resolve(__dirname, '../../../publish/src/__tests__'));
+const initFixture = require('@lerna-test/helpers').initFixtureFactory(
+  path.resolve(__dirname, '../../../publish/src/__tests__')
+);
 
 // test command
 import { VersionCommand } from '../version-command';

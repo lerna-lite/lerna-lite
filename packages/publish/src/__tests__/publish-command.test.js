@@ -48,13 +48,13 @@ const fs = require('fs-extra');
 const path = require('path');
 
 // helpers
-const initFixture = require('@lerna-test/init-fixture')(__dirname);
-const { loggingOutput } = require('@lerna-test/logging-output');
-const { commitChangeToPackage } = require('@lerna-test/commit-change-to-package');
+const initFixture = require('@lerna-test/helpers').initFixtureFactory(__dirname);
+const { loggingOutput } = require('@lerna-test/helpers/logging-output');
+const { commitChangeToPackage } = require('@lerna-test/helpers');
 
 // test command
 const { PublishCommand } = require('../index');
-const lernaPublish = require('@lerna-test/command-runner')(
+const lernaPublish = require('@lerna-test/helpers').commandRunner(
   require('../../../cli/src/cli-commands/cli-publish-commands')
 );
 

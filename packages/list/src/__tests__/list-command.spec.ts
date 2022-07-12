@@ -14,10 +14,12 @@ jest.mock('@lerna-lite/core', () => ({
 const { collectUpdates, logOutput } = require('@lerna-lite/core');
 
 // helpers
-const initFixture = require('@lerna-test/init-fixture')(__dirname);
+const initFixture = require('@lerna-test/helpers').initFixtureFactory(__dirname);
 
 // file under test
-const lernaList = require('@lerna-test/command-runner')(require('../../../cli/src/cli-commands/cli-list-commands'));
+const lernaList = require('@lerna-test/helpers').commandRunner(
+  require('../../../cli/src/cli-commands/cli-list-commands')
+);
 import { ListCommand } from '../index';
 import { factory } from '../list-command';
 
@@ -45,8 +47,8 @@ expect.addSnapshotSerializer({
 });
 
 // normalize temp directory paths in snapshots
-expect.addSnapshotSerializer(require('@lerna-test/serialize-windows-paths'));
-expect.addSnapshotSerializer(require('@lerna-test/serialize-tempdir'));
+expect.addSnapshotSerializer(require('@lerna-test/helpers/serializers/serialize-windows-paths'));
+expect.addSnapshotSerializer(require('@lerna-test/helpers/serializers/serialize-tempdir'));
 
 describe('List Command', () => {
   describe('in a basic repo', () => {

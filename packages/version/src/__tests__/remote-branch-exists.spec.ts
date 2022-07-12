@@ -1,5 +1,5 @@
 const execa = require('execa');
-const cloneFixture = require('@lerna-test/clone-fixture')(__dirname);
+const cloneFixture = require('@lerna-test/helpers').cloneFixtureFactory(__dirname);
 const { remoteBranchExists } = require('../lib/remote-branch-exists');
 
 test('remoteBranchExists', async () => {

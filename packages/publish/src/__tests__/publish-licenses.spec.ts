@@ -49,12 +49,12 @@ const { createTempLicenses } = require('../lib/create-temp-licenses');
 const { removeTempLicenses } = require('../lib/remove-temp-licenses');
 
 // helpers
-const initFixture = require('@lerna-test/init-fixture')(__dirname);
-const { loggingOutput } = require('@lerna-test/logging-output');
+const initFixture = require('@lerna-test/helpers').initFixtureFactory(__dirname);
+const { loggingOutput } = require('@lerna-test/helpers/logging-output');
 
 // test command
 const { PublishCommand } = require('../index');
-const lernaPublish = require('@lerna-test/command-runner')(
+const lernaPublish = require('@lerna-test/helpers').commandRunner(
   require('../../../cli/src/cli-commands/cli-publish-commands')
 );
 

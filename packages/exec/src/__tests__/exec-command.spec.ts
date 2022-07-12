@@ -21,11 +21,13 @@ import { ExecCommandOption, logOutput } from '@lerna-lite/core';
 import { spawn, spawnStreaming } from '@lerna-lite/core';
 
 // helpers
-const initFixture = require('@lerna-test/init-fixture')(__dirname);
-const { loggingOutput } = require('@lerna-test/logging-output');
-const { normalizeRelativeDir } = require('@lerna-test/normalize-relative-dir');
+const initFixture = require('@lerna-test/helpers').initFixtureFactory(__dirname);
+const { loggingOutput } = require('@lerna-test/helpers/logging-output');
+const { normalizeRelativeDir } = require('@lerna-test/helpers');
 import { factory, ExecCommand } from '../exec-command';
-const lernaExec = require('@lerna-test/command-runner')(require('../../../cli/src/cli-commands/cli-exec-commands'));
+const lernaExec = require('@lerna-test/helpers').commandRunner(
+  require('../../../cli/src/cli-commands/cli-exec-commands')
+);
 
 // assertion helpers
 const calledInPackages = () => (spawn as any).mock.calls.map(([, , opts]) => path.basename(opts.cwd));
