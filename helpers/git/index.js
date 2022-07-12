@@ -2,7 +2,7 @@
 
 const execa = require('execa');
 const os = require('os');
-const tempWrite = require('@lerna-lite/core');
+const { tempWrite } = require('@lerna-lite/core');
 const path = require('path');
 const cp = require('child_process');
 const loadJsonFile = require('load-json-file');
