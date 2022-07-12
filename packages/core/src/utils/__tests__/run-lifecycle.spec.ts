@@ -1,7 +1,7 @@
 jest.mock('@npmcli/run-script', () => jest.fn(() => Promise.resolve({ stdout: '' })));
 
 const log = require('npmlog');
-const { loggingOutput } = require('@lerna-test/logging-output');
+const { loggingOutput } = require('@lerna-test/helpers/logging-output');
 const runScript = require('@npmcli/run-script');
 const { npmConf } = require('../npm-conf');
 const { Package } = require('../../package');

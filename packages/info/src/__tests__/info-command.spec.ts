@@ -14,7 +14,9 @@ jest.mock('@lerna-lite/core', () => ({
 const { logOutput } = require('@lerna-lite/core');
 
 // file under test
-const lernaInfo = require('@lerna-test/command-runner')(require('../../../cli/src/cli-commands/cli-info-commands'));
+const lernaInfo = require('@lerna-test/helpers').commandRunner(
+  require('../../../cli/src/cli-commands/cli-info-commands')
+);
 import { InfoCommand } from '../index';
 import { factory } from '../info-command';
 

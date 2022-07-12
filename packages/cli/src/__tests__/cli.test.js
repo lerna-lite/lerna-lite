@@ -6,7 +6,7 @@ const path = require('path');
 const tempy = require('tempy');
 
 // git init is not necessary
-const { copyFixture } = require('@lerna-test/copy-fixture');
+const { copyFixture } = require('@lerna-test/helpers');
 
 // FIXME: this is only working locally but fails in CI, so skip all tests for now
 const CLI = path.join(__dirname, '../cli');

@@ -49,10 +49,10 @@ const npmlog = require('npmlog');
 const writePkg = require('write-pkg');
 
 // helpers
-const initFixture = require('@lerna-test/init-fixture')(__dirname);
-const { gitAdd } = require('@lerna-test/git-add');
-const { gitTag } = require('@lerna-test/git-tag');
-const { gitCommit } = require('@lerna-test/git-commit');
+const initFixture = require('@lerna-test/helpers').initFixtureFactory(__dirname);
+const { gitAdd } = require('@lerna-test/helpers');
+const { gitTag } = require('@lerna-test/helpers');
+const { gitCommit } = require('@lerna-test/helpers');
 
 // test command
 const { PublishCommand } = require('../index');

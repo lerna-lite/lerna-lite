@@ -1,6 +1,6 @@
 import 'jest-extended';
 import { getPackages } from '../project';
-const initFixture = require('@lerna-test/init-fixture')(__dirname);
+const initFixture = require('@lerna-test/helpers').initFixtureFactory(__dirname);
 
 import { CyclicPackageGraphNode } from '../package-graph/lib/cyclic-package-graph-node';
 import { PackageGraphNode } from '../package-graph';

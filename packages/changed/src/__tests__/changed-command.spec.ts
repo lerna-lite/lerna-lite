@@ -14,12 +14,12 @@ jest.mock('@lerna-lite/core', () => ({
 const { collectUpdates, logOutput } = require('@lerna-lite/core');
 
 // helpers
-const initFixture = require('@lerna-test/init-fixture')(__dirname);
-const { loggingOutput } = require('@lerna-test/logging-output');
-const { updateLernaConfig } = require('@lerna-test/update-lerna-config');
+const initFixture = require('@lerna-test/helpers').initFixtureFactory(__dirname);
+const { loggingOutput } = require('@lerna-test/helpers/logging-output');
+const { updateLernaConfig } = require('@lerna-test/helpers');
 
 // file under test
-const lernaChanged = require('@lerna-test/command-runner')(
+const lernaChanged = require('@lerna-test/helpers').commandRunner(
   require('../../../cli/src/cli-commands/cli-changed-commands')
 );
 import { ChangedCommand } from '../index';
@@ -49,7 +49,7 @@ expect.addSnapshotSerializer({
 });
 
 // normalize temp directory paths in snapshots
-expect.addSnapshotSerializer(require('@lerna-test/serialize-tempdir'));
+expect.addSnapshotSerializer(require('@lerna-test/helpers/serializers/serialize-tempdir'));
 
 describe('Changed Command', () => {
   let cwd;

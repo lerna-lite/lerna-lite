@@ -46,8 +46,8 @@ const { logOutput, promptConfirmation, throwIfUncommitted } = require('@lerna-li
 const { getUnpublishedPackages } = require('../lib/get-unpublished-packages');
 
 // helpers
-const initFixture = require('@lerna-test/init-fixture')(__dirname);
-const { loggingOutput } = require('@lerna-test/logging-output');
+const initFixture = require('@lerna-test/helpers').initFixtureFactory(__dirname);
+const { loggingOutput } = require('@lerna-test/helpers/logging-output');
 
 // file under test
 const yargParser = require('yargs-parser');

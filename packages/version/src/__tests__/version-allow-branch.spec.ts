@@ -21,13 +21,15 @@ import execa from 'execa';
 import yargParser from 'yargs-parser';
 
 // helpers
-const initFixture = require('@lerna-test/init-fixture')(path.resolve(__dirname, '../../../publish/src/__tests__'));
+const initFixture = require('@lerna-test/helpers').initFixtureFactory(
+  path.resolve(__dirname, '../../../publish/src/__tests__')
+);
 
 // test command
 import { VersionCommand } from '../index';
 
 // stabilize commit SHA
-expect.addSnapshotSerializer(require('@lerna-test/serialize-git-sha'));
+expect.addSnapshotSerializer(require('@lerna-test/helpers/serializers/serialize-git-sha'));
 
 const createArgv = (cwd: string, ...args: string[]) => {
   args.unshift('version');

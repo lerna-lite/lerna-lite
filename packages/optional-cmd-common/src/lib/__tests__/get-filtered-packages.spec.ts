@@ -24,7 +24,7 @@ const { collectUpdates } = require('@lerna-lite/core');
 
 // helpers
 // const initFixture = require("@lerna-test/init-fixture")(path.resolve(__dirname, "../../command"));
-const initFixture = require('@lerna-test/init-fixture')(path.resolve(__dirname, '../..'));
+const initFixture = require('@lerna-test/helpers').initFixtureFactory(path.resolve(__dirname, '../..'));
 
 import { Project, PackageGraph } from '@lerna-lite/core';
 

@@ -24,13 +24,15 @@ const yargParser = require('yargs-parser');
 const { promptTextInput, promptSelectOne } = require('@lerna-lite/core');
 
 // helpers
-const initFixture = require('@lerna-test/init-fixture')(path.resolve(__dirname, '../../../publish/src/__tests__'));
-const { showCommit } = require('@lerna-test/show-commit');
-const { gitAdd } = require('@lerna-test/git-add');
-const { gitCommit } = require('@lerna-test/git-commit');
-const { gitInit } = require('@lerna-test/git-init');
-const { gitTag } = require('@lerna-test/git-tag');
-const { getCommitMessage } = require('@lerna-test/get-commit-message');
+const initFixture = require('@lerna-test/helpers').initFixtureFactory(
+  path.resolve(__dirname, '../../../publish/src/__tests__')
+);
+const { showCommit } = require('@lerna-test/helpers');
+const { gitAdd } = require('@lerna-test/helpers');
+const { gitCommit } = require('@lerna-test/helpers');
+const { gitInit } = require('@lerna-test/helpers');
+const { gitTag } = require('@lerna-test/helpers');
+const { getCommitMessage } = require('@lerna-test/helpers');
 
 const Tacks = require('tacks');
 const tempy = require('tempy');
@@ -39,7 +41,7 @@ const { File, Dir } = Tacks;
 
 // test command
 import { VersionCommand } from '../version-command';
-const lernaVersion = require('@lerna-test/command-runner')(
+const lernaVersion = require('@lerna-test/helpers').commandRunner(
   require('../../../cli/src/cli-commands/cli-version-commands')
 );
 
@@ -55,7 +57,7 @@ expect.addSnapshotSerializer({
 });
 
 // stabilize commit SHA
-expect.addSnapshotSerializer(require('@lerna-test/serialize-changelog'));
+expect.addSnapshotSerializer(require('@lerna-test/helpers/serializers/serialize-changelog'));
 
 const createArgv = (cwd, ...args) => {
   args.unshift('version');

@@ -2,7 +2,7 @@ import chalk from 'chalk';
 import tempy from 'tempy';
 import Tacks from 'tacks';
 import { Project } from '@lerna-lite/core';
-import { loggingOutput } from '@lerna-test/logging-output';
+import { loggingOutput } from '@lerna-test/helpers/logging-output';
 
 import { listable } from '../index';
 
@@ -23,8 +23,8 @@ expect.addSnapshotSerializer({
 });
 
 // normalize temp directory paths in snapshots
-expect.addSnapshotSerializer(require('@lerna-test/serialize-windows-paths'));
-expect.addSnapshotSerializer(require('@lerna-test/serialize-tempdir'));
+expect.addSnapshotSerializer(require('@lerna-test/helpers/serializers/serialize-windows-paths'));
+expect.addSnapshotSerializer(require('@lerna-test/helpers/serializers/serialize-tempdir'));
 
 describe('listable.format()', () => {
   let packages;

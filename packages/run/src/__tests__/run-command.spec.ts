@@ -20,11 +20,13 @@ import { logOutput, RunCommandOption } from '@lerna-lite/core';
 const { npmRunScript, npmRunScriptStreaming } = require('../lib/npm-run-script');
 
 // helpers
-const initFixture = require('@lerna-test/init-fixture')(__dirname);
-const { loggingOutput } = require('@lerna-test/logging-output');
-const { normalizeRelativeDir } = require('@lerna-test/normalize-relative-dir');
+const initFixture = require('@lerna-test/helpers').initFixtureFactory(__dirname);
+const { loggingOutput } = require('@lerna-test/helpers/logging-output');
+const { normalizeRelativeDir } = require('@lerna-test/helpers');
 import { factory, RunCommand } from '../run-command';
-const lernaRun = require('@lerna-test/command-runner')(require('../../../cli/src/cli-commands/cli-run-commands'));
+const lernaRun = require('@lerna-test/helpers').commandRunner(
+  require('../../../cli/src/cli-commands/cli-run-commands')
+);
 
 // assertion helpers
 const ranInPackagesStreaming = (testDir: string) =>

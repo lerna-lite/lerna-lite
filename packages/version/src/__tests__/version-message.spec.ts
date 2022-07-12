@@ -19,14 +19,16 @@ const path = require('path');
 const yargParser = require('yargs-parser');
 
 // helpers
-const initFixture = require('@lerna-test/init-fixture')(path.resolve(__dirname, '../../../publish/src/__tests__'));
-const { getCommitMessage } = require('@lerna-test/get-commit-message');
+const initFixture = require('@lerna-test/helpers').initFixtureFactory(
+  path.resolve(__dirname, '../../../publish/src/__tests__')
+);
+const { getCommitMessage } = require('@lerna-test/helpers');
 
 // test command
 import { VersionCommand } from '../version-command';
 
 // stabilize commit SHA
-expect.addSnapshotSerializer(require('@lerna-test/serialize-git-sha'));
+expect.addSnapshotSerializer(require('@lerna-test/helpers/serializers/serialize-git-sha'));
 
 const createArgv = (cwd: string, ...args: string[]) => {
   args.unshift('version');

@@ -31,11 +31,11 @@ const { recommendVersion } = require('@lerna-lite/core');
 const { logOutput } = require('@lerna-lite/core');
 
 // helpers
-const initFixture = require('@lerna-test/init-fixture')(__dirname);
+const initFixture = require('@lerna-test/helpers').initFixtureFactory(__dirname);
 
 // test command
 import { VersionCommand } from '../version-command';
-const lernaVersion = require('@lerna-test/command-runner')(
+const lernaVersion = require('@lerna-test/helpers').commandRunner(
   require('../../../cli/src/cli-commands/cli-version-commands')
 );
 

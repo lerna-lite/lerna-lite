@@ -32,20 +32,20 @@ const { npmPublish } = require('../lib/npm-publish');
 const { promptConfirmation, throwIfUncommitted } = require('@lerna-lite/core');
 
 // helpers
-const initFixture = require('@lerna-test/init-fixture')(__dirname);
-const { gitAdd } = require('@lerna-test/git-add');
-const { gitTag } = require('@lerna-test/git-tag');
-const { gitCommit } = require('@lerna-test/git-commit');
-const { loggingOutput } = require('@lerna-test/logging-output');
+const initFixture = require('@lerna-test/helpers').initFixtureFactory(__dirname);
+const { gitAdd } = require('@lerna-test/helpers');
+const { gitTag } = require('@lerna-test/helpers');
+const { gitCommit } = require('@lerna-test/helpers');
+const { loggingOutput } = require('@lerna-test/helpers/logging-output');
 
 // test command
 const { factory, PublishCommand } = require('../index');
-const lernaPublish = require('@lerna-test/command-runner')(
+const lernaPublish = require('@lerna-test/helpers').commandRunner(
   require('../../../cli/src/cli-commands/cli-publish-commands')
 );
 
 // stabilize commit SHA
-expect.addSnapshotSerializer(require('@lerna-test/serialize-git-sha'));
+expect.addSnapshotSerializer(require('@lerna-test/helpers/serializers/serialize-git-sha'));
 
 const coreModule = require('@lerna-lite/core');
 
