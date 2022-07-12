@@ -6,8 +6,7 @@
   "private": true,
   "license": "MIT",
   "dependencies": {
-    "@lerna/cli": "workspace:*",
-    "@lerna/package": "workspace:*",
-    "@lerna/temp-write": "workspace:*"
+    "@lerna-lite/cli": "workspace:*",
+    "@lerna-lite/core": "workspace:*"
   }
 }

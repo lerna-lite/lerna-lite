@@ -42,7 +42,6 @@ const path = require('path');
 const writePkg = require('write-pkg');
 const { npmPublish } = require('../lib/npm-publish');
 const { logOutput, promptConfirmation, throwIfUncommitted } = require('@lerna-lite/core');
-// const { throwIfUncommitted } = require("@lerna/check-working-tree");
 const { getUnpublishedPackages } = require('../lib/get-unpublished-packages');
 
 // helpers

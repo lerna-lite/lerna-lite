@@ -51,7 +51,7 @@ describe.skip('cli test', () => {
 
       const { stdout } = await bin(cwd)('--verbose');
       expect(stdout).toContain('__fixtures__/local-install/node_modules/lerna/cli.js');
-      expect(stdout).toContain('__fixtures__/local-install/node_modules/@lerna/cli/index.js');
+      expect(stdout).toContain('__fixtures__/local-install/node_modules/@lerna-lite/cli/index.js');
     });
   }
 });
