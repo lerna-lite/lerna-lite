@@ -2,7 +2,7 @@
 
 const execa = require('execa');
 const os = require('os');
-const tempWrite = require('../../packages/core/src/utils/temp-write');
+const tempWrite = require('../../packages/core/dist/utils/temp-write');
 const path = require('path');
 const cp = require('child_process');
 const loadJsonFile = require('load-json-file');
