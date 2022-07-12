@@ -1,7 +1,7 @@
 'use strict';
 
 // eslint-disable-next-line import/no-extraneous-dependencies, node/no-extraneous-require
-const { Project } = require('../packages/core/src/project');
+const { Project } = require('@lerna-lite/core');
 const normalizeNewline = require('normalize-newline');
 const path = require('path');
 const normalizePath = require('normalize-path');
