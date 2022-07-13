@@ -545,7 +545,7 @@ importers:
       '@types/write-pkg': ^4.0.0
       chalk: ^4.1.2
       dedent: ^0.7.0
-      execa: ^5.0.0
+      execa: ^5.1.1
       js-yaml: ^4.1.0
       load-json-file: ^6.2.0
       minimatch: ^5.1.0
