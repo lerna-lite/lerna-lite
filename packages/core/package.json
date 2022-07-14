@@ -31,7 +31,7 @@
     "npm": ">=8.0.0"
   },
   "dependencies": {
-    "@npmcli/run-script": "^4.1.5",
+    "@npmcli/run-script": "^4.1.7",
     "@octokit/plugin-enterprise-rest": "^6.0.1",
     "@octokit/rest": "^19.0.3",
     "async": "^3.2.4",
@@ -61,7 +61,7 @@
     "node-fetch": "^2.6.7",
     "npm-package-arg": "^9.1.0",
     "npm-packlist": "^5.1.1",
-    "npm-registry-fetch": "^13.1.1",
+    "npm-registry-fetch": "^13.2.0",
     "npmlog": "^6.0.2",
     "os": "^0.1.2",
     "p-map": "^4.0.0",
