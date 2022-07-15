@@ -231,10 +231,15 @@ lerna version --conventional-commits --conventional-prerelease
 When run with this flag, `lerna version` will release with prerelease versions the specified packages (comma-separated) or all packages using `*`. Releases all unreleased changes as pre(patch/minor/major/release) by prefixing the version recommendation from `conventional-commits` with `pre`, eg. if present changes include a feature commit, the recommended bump will be `minor`, so this flag will result in a `preminor` release. If changes are present for packages that are not specified (if specifying packages), or for packages that are already in prerelease, those packages will be versioned as they normally would using `--conventional-commits`.
 
 ### `--changelog-include-commit-author`
-Specify if we want to include the commit author's name when using `--conventional-commits` with changelogs.
+Specify if we want to include the commit author's name, at the end of each commit entry, when using `--conventional-commits` with changelogs.
 
 ```sh
 lerna version --conventional-commits --changelog-include-commit-author
+```
+
+See below for a sample of a changelog entry with author (note the url was shorten up for simplicity)
+```sh
+* **deps:** update dependency git-url-parse to v12 ([978bf36](https://github.com/ghiscoding/lerna-lite/commit/978bf36)) (@Renovate-Bot)
 ```
 
 ### `--changelog-header-message <msg>`
