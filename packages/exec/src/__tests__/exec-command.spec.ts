@@ -21,7 +21,8 @@ import { ExecCommandOption, logOutput } from '@lerna-lite/core';
 import { spawn, spawnStreaming } from '@lerna-lite/core';
 
 // helpers
-const initFixture = require('@lerna-test/helpers').initFixtureFactory(__dirname);
+import helpers from '@lerna-test/helpers';
+const initFixture = helpers.initFixtureFactory(__dirname);
 const { loggingOutput } = require('@lerna-test/helpers/logging-output');
 const { normalizeRelativeDir } = require('@lerna-test/helpers');
 import { factory, ExecCommand } from '../exec-command';

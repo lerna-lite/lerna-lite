@@ -35,7 +35,7 @@ describe('childProcess', () => {
     });
 
     it('rejects on undefined command', async () => {
-      const result = exec('nowImTheModelOfAModernMajorGeneral', undefined);
+      const result = exec('nowImTheModelOfAModernMajorGeneral', undefined as any);
 
       await expect(result).rejects.toThrow(/\bnowImTheModelOfAModernMajorGeneral\b/);
       expect(getChildProcessCount()).toBe(0);

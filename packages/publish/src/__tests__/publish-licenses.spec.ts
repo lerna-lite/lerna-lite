@@ -49,7 +49,8 @@ const { createTempLicenses } = require('../lib/create-temp-licenses');
 const { removeTempLicenses } = require('../lib/remove-temp-licenses');
 
 // helpers
-const initFixture = require('@lerna-test/helpers').initFixtureFactory(__dirname);
+import helpers from '@lerna-test/helpers';
+const initFixture = helpers.initFixtureFactory(__dirname);
 const { loggingOutput } = require('@lerna-test/helpers/logging-output');
 
 // test command

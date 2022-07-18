@@ -31,7 +31,8 @@ const { recommendVersion } = require('@lerna-lite/core');
 const { logOutput } = require('@lerna-lite/core');
 
 // helpers
-const initFixture = require('@lerna-test/helpers').initFixtureFactory(__dirname);
+import helpers from '@lerna-test/helpers';
+const initFixture = helpers.initFixtureFactory(__dirname);
 
 // test command
 import { VersionCommand } from '../version-command';

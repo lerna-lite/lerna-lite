@@ -1,5 +1,3 @@
-'use strict';
-
 // FIXME: better mock for version command
 jest.mock('../../../version/src/lib/git-push', () => jest.requireActual('../../../version/src/lib/__mocks__/git-push'));
 jest.mock('../../../version/src/lib/is-anything-committed', () =>
@@ -35,22 +33,23 @@ jest.mock('../lib/get-unpublished-packages', () => jest.requireActual('../lib/__
 jest.mock('../lib/pack-directory', () => jest.requireActual('../lib/__mocks__/pack-directory'));
 jest.mock('../lib/npm-publish', () => jest.requireActual('../lib/__mocks__/npm-publish'));
 
-const fs = require('fs-extra');
-const path = require('path');
+import fs from 'fs-extra';
+import path from 'path';
 
 // mocked or stubbed modules
-const writePkg = require('write-pkg');
-const { npmPublish } = require('../lib/npm-publish');
-const { logOutput, promptConfirmation, throwIfUncommitted } = require('@lerna-lite/core');
-const { getUnpublishedPackages } = require('../lib/get-unpublished-packages');
+import writePkg from 'write-pkg';
+import { npmPublish } from '../lib/npm-publish';
+import { logOutput, promptConfirmation, throwIfUncommitted } from '@lerna-lite/core';
+import { getUnpublishedPackages } from '../lib/get-unpublished-packages';
 
 // helpers
-const initFixture = require('@lerna-test/helpers').initFixtureFactory(__dirname);
-const { loggingOutput } = require('@lerna-test/helpers/logging-output');
+import { loggingOutput } from '@lerna-test/helpers/logging-output';
+import helpers from '@lerna-test/helpers';
+const initFixture = helpers.initFixtureFactory(__dirname);
 
 // file under test
-const yargParser = require('yargs-parser');
-const { PublishCommand } = require('../publish-command');
+import yargParser from 'yargs-parser';
+import { PublishCommand } from '../publish-command';
 
 const createArgv = (cwd, ...args) => {
   args.unshift('publish');
@@ -67,7 +66,7 @@ describe('publish from-package', () => {
   it('publishes unpublished packages', async () => {
     const cwd = await initFixture('normal');
 
-    getUnpublishedPackages.mockImplementationOnce((packageGraph) => {
+    (getUnpublishedPackages as any).mockImplementationOnce((packageGraph) => {
       const pkgs = packageGraph.rawPackageList.slice(1, 3);
       return pkgs.map((pkg) => packageGraph.get(pkg.name));
     });
@@ -75,18 +74,18 @@ describe('publish from-package', () => {
     await new PublishCommand(createArgv(cwd, '--bump', 'from-package'));
 
     expect(promptConfirmation).toHaveBeenLastCalledWith('Are you sure you want to publish these packages?');
-    expect(logOutput.logged()).toMatch('Found 2 packages to publish:');
-    expect(npmPublish.order()).toEqual(['package-2', 'package-3']);
+    expect((logOutput as any).logged()).toMatch('Found 2 packages to publish:');
+    expect((npmPublish as any).order()).toEqual(['package-2', 'package-3']);
   });
 
   it('publishes unpublished independent packages', async () => {
     const cwd = await initFixture('independent');
 
-    getUnpublishedPackages.mockImplementationOnce((packageGraph) => Array.from(packageGraph.values()));
+    (getUnpublishedPackages as any).mockImplementationOnce((packageGraph) => Array.from(packageGraph.values()));
 
     await new PublishCommand(createArgv(cwd, '--bump', 'from-package'));
 
-    expect(npmPublish.order()).toEqual([
+    expect((npmPublish as any).order()).toEqual([
       'package-1',
       'package-3',
       'package-4',
@@ -107,7 +106,7 @@ describe('publish from-package', () => {
   });
 
   it('throws an error when uncommitted changes are present', async () => {
-    throwIfUncommitted.mockImplementationOnce(() => {
+    (throwIfUncommitted as any).mockImplementationOnce(() => {
       throw new Error('uncommitted');
     });
 
@@ -119,7 +118,7 @@ describe('publish from-package', () => {
   });
 
   it('does not require a git repo', async () => {
-    getUnpublishedPackages.mockImplementationOnce((packageGraph) => [packageGraph.get('package-1')]);
+    (getUnpublishedPackages as any).mockImplementationOnce((packageGraph) => [packageGraph.get('package-1')]);
 
     const cwd = await initFixture('independent');
 
@@ -128,7 +127,7 @@ describe('publish from-package', () => {
     await new PublishCommand(createArgv(cwd, '--bump', 'from-package'));
 
     expect(npmPublish).toHaveBeenCalled();
-    expect(writePkg.updatedManifest('package-1')).not.toHaveProperty('gitHead');
+    expect((writePkg as any).updatedManifest('package-1')).not.toHaveProperty('gitHead');
 
     const logMessages = loggingOutput('notice');
     expect(logMessages).toContain('Unable to verify working tree, proceed at your own risk');
@@ -139,13 +138,13 @@ describe('publish from-package', () => {
   });
 
   it('accepts --git-head override', async () => {
-    getUnpublishedPackages.mockImplementationOnce((packageGraph) => [packageGraph.get('package-1')]);
+    (getUnpublishedPackages as any).mockImplementationOnce((packageGraph) => [packageGraph.get('package-1')]);
 
     const cwd = await initFixture('independent');
 
     await new PublishCommand(createArgv(cwd, '--bump', 'from-package', '--git-head', 'deadbeef'));
 
     expect(npmPublish).toHaveBeenCalled();
-    expect(writePkg.updatedManifest('package-1').gitHead).toBe('deadbeef');
+    expect((writePkg as any).updatedManifest('package-1').gitHead).toBe('deadbeef');
   });
 });

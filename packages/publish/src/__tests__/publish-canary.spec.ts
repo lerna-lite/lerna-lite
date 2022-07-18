@@ -22,24 +22,25 @@ jest.mock('../lib/npm-publish', () => jest.requireActual('../lib/__mocks__/npm-p
 // also point to the local publish command so that all mocks are properly used even by the command-runner
 jest.mock('@lerna-lite/publish', () => jest.requireActual('../publish-command'));
 
-const fs = require('fs-extra');
-const path = require('path');
-const yargParser = require('yargs-parser');
+import fs from 'fs-extra';
+import path from 'path';
+import yargParser from 'yargs-parser';
 
 // mocked modules
-const writePkg = require('write-pkg');
-const { npmPublish } = require('../lib/npm-publish');
-const { promptConfirmation, throwIfUncommitted } = require('@lerna-lite/core');
+import writePkg from 'write-pkg';
+import { npmPublish } from '../lib/npm-publish';
+import { promptConfirmation, throwIfUncommitted } from '@lerna-lite/core';
 
 // helpers
-const initFixture = require('@lerna-test/helpers').initFixtureFactory(__dirname);
-const { gitAdd } = require('@lerna-test/helpers');
-const { gitTag } = require('@lerna-test/helpers');
-const { gitCommit } = require('@lerna-test/helpers');
-const { loggingOutput } = require('@lerna-test/helpers/logging-output');
+import { gitAdd } from '@lerna-test/helpers';
+import { gitTag } from '@lerna-test/helpers';
+import { gitCommit } from '@lerna-test/helpers';
+import { loggingOutput } from '@lerna-test/helpers/logging-output';
+import helpers from '@lerna-test/helpers';
+const initFixture = helpers.initFixtureFactory(__dirname);
 
 // test command
-const { factory, PublishCommand } = require('../index');
+import { factory, PublishCommand } from '../index';
 const lernaPublish = require('@lerna-test/helpers').commandRunner(
   require('../../../cli/src/cli-commands/cli-publish-commands')
 );
@@ -102,7 +103,7 @@ test('publish --canary', async () => {
   await new PublishCommand(createArgv(cwd, '--canary'));
 
   expect(promptConfirmation).toHaveBeenLastCalledWith('Are you sure you want to publish these packages?');
-  expect(npmPublish.registry).toMatchInlineSnapshot(`
+  expect((npmPublish as any).registry).toMatchInlineSnapshot(`
   Map {
     "package-1" => "canary",
     "package-3" => "canary",
@@ -110,7 +111,7 @@ test('publish --canary', async () => {
     "package-2" => "canary",
   }
   `);
-  expect(writePkg.updatedVersions()).toMatchInlineSnapshot(`
+  expect((writePkg as any).updatedVersions()).toMatchInlineSnapshot(`
   Object {
     "package-1": 1.0.1-alpha.0+SHA,
     "package-2": 1.0.1-alpha.0+SHA,
@@ -131,7 +132,7 @@ test('publish --canary with auto-confirm --yes', async () => {
   await new PublishCommand(createArgv(cwd, '--canary', '--yes'));
 
   expect(promptConfirmation).not.toHaveBeenCalled();
-  expect(npmPublish.registry).toMatchInlineSnapshot(`
+  expect((npmPublish as any).registry).toMatchInlineSnapshot(`
   Map {
     "package-1" => "canary",
     "package-3" => "canary",
@@ -139,7 +140,7 @@ test('publish --canary with auto-confirm --yes', async () => {
     "package-2" => "canary",
   }
   `);
-  expect(writePkg.updatedVersions()).toMatchInlineSnapshot(`
+  expect((writePkg as any).updatedVersions()).toMatchInlineSnapshot(`
   Object {
     "package-1": 1.0.1-alpha.0+SHA,
     "package-2": 1.0.1-alpha.0+SHA,
@@ -156,7 +157,7 @@ test('publish --canary --preid beta', async () => {
   // await new PublishCommand(createArgv(cwd, '--canary', '--preid', 'beta'));
   await factory(createArgv(cwd, '--canary', '--preid', 'beta'));
 
-  expect(writePkg.updatedVersions()).toMatchInlineSnapshot(`
+  expect((writePkg as any).updatedVersions()).toMatchInlineSnapshot(`
 Object {
   "package-1": 1.0.1-beta.0+SHA,
   "package-2": 1.0.1-beta.0+SHA,
@@ -171,7 +172,7 @@ test("publish --canary --tag-version-prefix='abc'", async () => {
   await setupChanges(cwd, ['packages/package-1/all-your-base.js', 'belong to us']);
   await new PublishCommand(createArgv(cwd, '--canary', '--tag-version-prefix', 'abc'));
 
-  expect(writePkg.updatedVersions()).toMatchInlineSnapshot(`
+  expect((writePkg as any).updatedVersions()).toMatchInlineSnapshot(`
 Object {
   "package-1": 1.0.1-alpha.0+SHA,
   "package-2": 1.0.1-alpha.0+SHA,
@@ -187,7 +188,7 @@ test('publish --canary <semver>', async () => {
   await new PublishCommand(createArgv(cwd, '--canary', 'prerelease'));
   // prerelease === prepatch, which is the default
 
-  expect(writePkg.updatedVersions()).toMatchInlineSnapshot(`
+  expect((writePkg as any).updatedVersions()).toMatchInlineSnapshot(`
 Object {
   "package-1": 1.0.1-alpha.0+SHA,
   "package-2": 1.0.1-alpha.0+SHA,
@@ -202,7 +203,7 @@ test('publish --canary --independent', async () => {
   await setupChanges(cwd, ['packages/package-1/all-your-base.js', 'belong to us']);
   await new PublishCommand(createArgv(cwd, '--canary', '--bump', 'preminor'));
 
-  expect(writePkg.updatedVersions()).toMatchInlineSnapshot(`
+  expect((writePkg as any).updatedVersions()).toMatchInlineSnapshot(`
 Object {
   "package-1": 1.1.0-alpha.0+SHA,
   "package-2": 2.1.0-alpha.0+SHA,
@@ -230,7 +231,7 @@ test('publish --canary addresses unpublished package', async () => {
   await new PublishCommand(createArgv(cwd, '--canary', '--bump', 'premajor'));
 
   // there have been two commits since the beginning of the repo
-  expect(writePkg.updatedVersions()).toMatchInlineSnapshot(`
+  expect((writePkg as any).updatedVersions()).toMatchInlineSnapshot(`
 Object {
   "package-6": 1.0.0-alpha.1+SHA,
 }
@@ -244,7 +245,7 @@ describe('publish --canary differential', () => {
     await setupChanges(cwd, ['packages/package-1/all-your-base.js', 'belong to us']);
     await new PublishCommand(createArgv(cwd, '--canary', 'patch'));
 
-    expect(writePkg.updatedVersions()).toMatchInlineSnapshot(`
+    expect((writePkg as any).updatedVersions()).toMatchInlineSnapshot(`
 Object {
   "package-1": 1.0.1-alpha.0+SHA,
   "package-2": 1.0.1-alpha.0+SHA,
@@ -261,7 +262,7 @@ Object {
     await setupChanges(cwd, ['packages/package-3/malcolm.js', 'in the middle']);
     await new PublishCommand(createArgv(cwd, '--canary', '--bump', 'minor'));
 
-    expect(writePkg.updatedVersions()).toMatchInlineSnapshot(`
+    expect((writePkg as any).updatedVersions()).toMatchInlineSnapshot(`
 Object {
   "package-3": 1.1.0-alpha.0+SHA,
   "package-4": 1.1.0-alpha.0+SHA,
@@ -276,7 +277,7 @@ Object {
     await setupChanges(cwd, ['packages/package-5/celine-dion.js', 'all by myself']);
     await new PublishCommand(createArgv(cwd, '--canary', '--bump', 'major'));
 
-    expect(writePkg.updatedVersions()).toMatchInlineSnapshot(`
+    expect((writePkg as any).updatedVersions()).toMatchInlineSnapshot(`
 Object {
   "package-5": 2.0.0-alpha.0+SHA,
 }
@@ -295,7 +296,7 @@ describe('publish --canary sequential', () => {
     await setupChanges(cwd, ['packages/package-5/celine-dion.js', 'all by myself']);
     await new PublishCommand(createArgv(cwd, '--canary'));
 
-    expect(writePkg.updatedVersions()).toMatchInlineSnapshot(`
+    expect((writePkg as any).updatedVersions()).toMatchInlineSnapshot(`
 Object {
   "package-5": 5.0.1-alpha.0+SHA,
 }
@@ -306,7 +307,7 @@ Object {
     await setupChanges(cwd, ['packages/package-3/malcolm.js', 'in the middle']);
     await new PublishCommand(createArgv(cwd, '--canary'));
 
-    expect(writePkg.updatedVersions()).toMatchInlineSnapshot(`
+    expect((writePkg as any).updatedVersions()).toMatchInlineSnapshot(`
 Object {
   "package-3": 3.0.1-alpha.1+SHA,
   "package-4": 4.0.1-alpha.1+SHA,
@@ -319,7 +320,7 @@ Object {
     await setupChanges(cwd, ['packages/package-1/all-your-base.js', 'belong to us']);
     await new PublishCommand(createArgv(cwd, '--canary'));
 
-    expect(writePkg.updatedVersions()).toMatchInlineSnapshot(`
+    expect((writePkg as any).updatedVersions()).toMatchInlineSnapshot(`
 Object {
   "package-1": 1.0.1-alpha.2+SHA,
   "package-2": 2.0.1-alpha.2+SHA,
@@ -334,7 +335,7 @@ Object {
     await setupChanges(cwd, ['packages/package-3/malcolm.js', 'tucker']);
     await new PublishCommand(createArgv(cwd, '--canary'));
 
-    expect(writePkg.updatedVersions()).toMatchInlineSnapshot(`
+    expect((writePkg as any).updatedVersions()).toMatchInlineSnapshot(`
 Object {
   "package-3": 3.0.1-alpha.3+SHA,
   "package-4": 4.0.1-alpha.3+SHA,
@@ -347,7 +348,7 @@ Object {
     await setupChanges(cwd, ['packages/package-5/celine-dion.js', 'my heart will go on']);
     await new PublishCommand(createArgv(cwd, '--canary'));
 
-    expect(writePkg.updatedVersions()).toMatchInlineSnapshot(`
+    expect((writePkg as any).updatedVersions()).toMatchInlineSnapshot(`
 Object {
   "package-5": 5.0.1-alpha.4+SHA,
 }
@@ -374,7 +375,7 @@ test('publish --canary --force-publish on tagged release avoids early exit', asy
   expect(logMessages).toContain('all packages');
   // lerna WARN force-publish all packages
 
-  expect(writePkg.updatedVersions()).toMatchInlineSnapshot(`
+  expect((writePkg as any).updatedVersions()).toMatchInlineSnapshot(`
 Object {
   "package-1": 1.0.1-alpha.0+SHA,
   "package-2": 1.0.1-alpha.0+SHA,
@@ -398,7 +399,7 @@ test('publish --canary --force-publish <arg> on tagged release avoids early exit
   expect(logMessages).toContain('package-2');
   // lerna WARN force-publish package-2
 
-  expect(writePkg.updatedVersions()).toMatchInlineSnapshot(`
+  expect((writePkg as any).updatedVersions()).toMatchInlineSnapshot(`
 Object {
   "package-2": 2.0.1-alpha.0+SHA,
   "package-3": 3.0.1-alpha.0+SHA,
@@ -407,7 +408,7 @@ Object {
 });
 
 test('publish --canary with dirty tree throws error', async () => {
-  throwIfUncommitted.mockImplementationOnce(() => {
+  (throwIfUncommitted as any).mockImplementationOnce(() => {
     throw new Error('uncommitted');
   });
 
@@ -449,7 +450,7 @@ test('publish --canary without _any_ tags', async () => {
   const cwd = await initFixture('normal');
   await lernaPublish(cwd)('--canary');
 
-  expect(writePkg.updatedVersions()).toMatchInlineSnapshot(`
+  expect((writePkg as any).updatedVersions()).toMatchInlineSnapshot(`
     Object {
       "package-1": 1.0.1-alpha.0+SHA,
       "package-2": 1.0.1-alpha.0+SHA,
@@ -463,7 +464,7 @@ test('publish --canary without _any_ tags (independent)', async () => {
   const cwd = await initFixture('independent');
   await new PublishCommand(createArgv(cwd, '--canary'));
 
-  expect(writePkg.updatedVersions()).toMatchInlineSnapshot(`
+  expect((writePkg as any).updatedVersions()).toMatchInlineSnapshot(`
     Object {
       "package-1": 1.0.1-alpha.0+SHA,
       "package-2": 2.0.1-alpha.0+SHA,
@@ -492,7 +493,7 @@ test('publish --canary --no-private', async () => {
 
   await new PublishCommand(createArgv(cwd, '--canary', '--no-private'));
 
-  expect(writePkg.updatedVersions()).toMatchInlineSnapshot(`
+  expect((writePkg as any).updatedVersions()).toMatchInlineSnapshot(`
     Object {
       "package-1": 1.0.1-alpha.0+SHA,
       "package-2": 2.0.1-alpha.0+SHA,

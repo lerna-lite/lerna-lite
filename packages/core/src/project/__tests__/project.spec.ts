@@ -1,13 +1,12 @@
-'use strict';
-
-const fs = require('fs-extra');
-const path = require('path');
+import fs from 'fs-extra';
+import path from 'path';
 
 // helpers
-const initFixture = require('@lerna-test/helpers').initFixtureFactory(__dirname);
+import helpers from '@lerna-test/helpers';
+const initFixture = helpers.initFixtureFactory(__dirname);
 
 // file under test
-const { Project, getPackages, getPackagesSync } = require('..');
+import { Project } from '../index';
 
 describe('Project', () => {
   let testDir;
@@ -231,11 +230,6 @@ describe('Project', () => {
       const result = await Project.getPackages(testDir);
       expect(result).toMatchObject([{ name: 'pkg-1' }, { name: 'pkg-2' }]);
     });
-
-    it('is available from a named export', async () => {
-      const result = await getPackages(testDir);
-      expect(result).toMatchObject([{ name: 'pkg-1' }, { name: 'pkg-2' }]);
-    });
   });
 
   describe('.getPackagesSync()', () => {
@@ -260,10 +254,6 @@ describe('Project', () => {
 
     it('is available from a static method', () => {
       expect(Project.getPackagesSync(testDir)).toMatchObject([{ name: 'pkg-1' }, { name: 'pkg-2' }]);
-    });
-
-    it('is available from a named export', () => {
-      expect(getPackagesSync(testDir)).toMatchObject([{ name: 'pkg-1' }, { name: 'pkg-2' }]);
     });
   });
 

@@ -32,6 +32,7 @@
     'chalk',
     'execa',
     'file-url',
+    'find-up',
     'globby',
     'inquirer',
     'is-stream',

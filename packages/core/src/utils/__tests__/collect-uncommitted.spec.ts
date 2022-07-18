@@ -3,9 +3,10 @@ import path from 'path';
 import chalk from 'chalk';
 
 // helpers
-const { getPackages } = require('../../project');
-const { gitAdd } = require('@lerna-test/helpers');
-const initFixture = require('@lerna-test/helpers').initFixtureFactory(__dirname);
+import { Project } from '../../project';
+import { gitAdd } from '@lerna-test/helpers';
+import helpers from '@lerna-test/helpers';
+const initFixture = helpers.initFixtureFactory(__dirname);
 
 // file under test
 import { collectUncommitted, collectUncommittedSync } from '../collect-uncommitted';
@@ -40,7 +41,7 @@ const colorizedAry = [
 // ?? poopy.txt
 
 const setupChanges = async (cwd) => {
-  const [pkg1, pkg2, pkg3, pkg4] = await getPackages(cwd);
+  const [pkg1, pkg2, pkg3, pkg4] = await Project.getPackages(cwd);
 
   // 'AD': (added to index, deleted in working tree)
   const file1 = path.join(pkg1.location, 'file-1.js');

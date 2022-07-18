@@ -41,7 +41,7 @@
     "libnpmpublish": "^6.0.4",
     "npm-package-arg": "^9.1.0",
     "npm-packlist": "^5.1.1",
-    "npm-registry-fetch": "^13.1.1",
+    "npm-registry-fetch": "^13.2.0",
     "npmlog": "^6.0.2",
     "os": "^0.1.2",
     "p-map": "^4.0.0",
@@ -73,6 +73,7 @@
     "@types/semver": "^7.3.10",
     "@types/write-json-file": "^3.2.1",
     "@types/write-pkg": "^4.0.0",
+    "load-json-file": "^6.2.0",
     "yargs-parser": "^21.0.1"
   }
 }
