@@ -1,6 +1,7 @@
 import 'jest-extended';
-import { getPackages } from '../project';
-const initFixture = require('@lerna-test/helpers').initFixtureFactory(__dirname);
+import { Project } from '../project';
+import helpers from '@lerna-test/helpers';
+const initFixture = helpers.initFixtureFactory(__dirname);
 
 import { CyclicPackageGraphNode } from '../package-graph/lib/cyclic-package-graph-node';
 import { PackageGraphNode } from '../package-graph';
@@ -8,7 +9,7 @@ import { PackageGraphNode } from '../package-graph';
 describe('CyclicPackageGraphNode class', () => {
   it('should return the Cyclic Package Graph Node name to be cycle 1', async () => {
     const cwd = await initFixture('cycle-parent');
-    const packages = await getPackages(cwd);
+    const packages = await Project.getPackages(cwd);
     const pkgCyclic = new CyclicPackageGraphNode();
 
     for (const pkg of packages) {
@@ -24,7 +25,7 @@ describe('CyclicPackageGraphNode class', () => {
 
   it('should return the Cyclic Package Graph Node name to be cycle 2', async () => {
     const cwd = await initFixture('cycle-parent');
-    const packages = await getPackages(cwd);
+    const packages = await Project.getPackages(cwd);
     const pkgCyclic = new CyclicPackageGraphNode();
 
     for (const pkg of packages) {
@@ -64,7 +65,7 @@ describe('CyclicPackageGraphNode class', () => {
 
   it('should add localDependents to one of the package and expect the Cyclic Package Graph Node to include 1 localDependents in its array', async () => {
     const cwd = await initFixture('cycle-parent');
-    const packages = await getPackages(cwd);
+    const packages = await Project.getPackages(cwd);
     const pkgCyclic = new CyclicPackageGraphNode();
 
     for (const pkg of packages) {
@@ -83,7 +84,7 @@ describe('CyclicPackageGraphNode class', () => {
 
   it('should add localDependents to one of the package and expect the Cyclic Package Graph Node to include 1 localDependents in its array', async () => {
     const cwd = await initFixture('cycle-parent');
-    const packages = await getPackages(cwd);
+    const packages = await Project.getPackages(cwd);
     const pkgCyclic = new CyclicPackageGraphNode();
 
     for (const pkg of packages) {

@@ -4,66 +4,67 @@ jest.mock('@lerna-lite/core', () => ({
   ...jest.requireActual('@lerna-lite/core'), // return the other real methods, below we'll mock only 2 of the methods
 }));
 
-const path = require('path');
-const fs = require('fs-extra');
-const core = require('@lerna-lite/core');
-const nodeFs = require('node:fs');
-const npmlog = require('npmlog');
+import path from 'path';
+import fs from 'fs-extra';
+import core, { Package } from '@lerna-lite/core';
+import nodeFs from 'node:fs';
+import npmlog from 'npmlog';
 
 // mocked or stubbed modules
-const loadJsonFile = require('load-json-file');
+import loadJsonFile from 'load-json-file';
 
 // helpers
-const { getPackages } = require('../../../core/src/project');
-const initFixture = require('@lerna-test/helpers').initFixtureFactory(__dirname);
+import { Project } from '@lerna-lite/core/src/project';
+import helpers from '@lerna-test/helpers';
+const initFixture = helpers.initFixtureFactory(__dirname);
 
-const {
+import {
   loadPackageLockFileWhenExists,
   updateClassicLockfileVersion,
   updateTempModernLockfileVersion,
   saveUpdatedLockJsonFile,
   runInstallLockFileOnly,
   validateFileExists,
-} = require('../lib/update-lockfile-version');
+} from '../lib/update-lockfile-version';
 
 describe('npm classic lock file', () => {
   test('updateLockfileVersion with lockfile v1', async () => {
     const cwd = await initFixture('lockfile-leaf');
-    const [pkg] = await getPackages(cwd);
+    const [pkg] = await Project.getPackages(cwd);
 
     pkg.version = '2.0.0';
 
-    const returnedLockfilePath = await updateClassicLockfileVersion(pkg);
+    const returnedLockfilePath = await updateClassicLockfileVersion(pkg as unknown as Package);
 
     expect(returnedLockfilePath).toBe(path.join(pkg.location, 'package-lock.json'));
-    expect(Array.from(loadJsonFile.registry.keys())).toStrictEqual(['/packages/package-1']);
-    expect(fs.readJSONSync(returnedLockfilePath)).toHaveProperty('version', '2.0.0');
+    expect(Array.from((loadJsonFile as any).registry.keys())).toStrictEqual(['/packages/package-1']);
+    expect(fs.readJSONSync(returnedLockfilePath as string)).toHaveProperty('version', '2.0.0');
   });
 
   test('updateClassicLockfileVersion with lockfile v2', async () => {
     const cwd = await initFixture('lockfile-leaf-v2');
-    const [pkg] = await getPackages(cwd);
+    const [pkg] = await Project.getPackages(cwd);
 
     pkg.version = '2.0.0';
 
-    const returnedLockfilePath = await updateClassicLockfileVersion(pkg);
+    const returnedLockfilePath = await updateClassicLockfileVersion(pkg as unknown as Package);
 
     expect(returnedLockfilePath).toBe(path.join(pkg.location, 'package-lock.json'));
-    expect(Array.from(loadJsonFile.registry.keys())).toStrictEqual(['/packages/package-1']);
-    const updatedLockfile = fs.readJSONSync(returnedLockfilePath);
+    expect(Array.from((loadJsonFile as any).registry.keys())).toStrictEqual(['/packages/package-1']);
+    const updatedLockfile = fs.readJSONSync(returnedLockfilePath as string);
     expect(updatedLockfile).toHaveProperty('version', '2.0.0');
     expect(updatedLockfile).toHaveProperty(['packages', '', 'version'], '2.0.0');
   });
 
   test('updateClassicLockfileVersion without sibling lockfile', async () => {
     const cwd = await initFixture('lifecycle', false);
-    const [pkg] = await getPackages(cwd);
+    const [pkg] = await Project.getPackages(cwd);
 
     pkg.version = '1.1.0';
 
-    loadJsonFile.mockImplementationOnce(() => Promise.reject(new Error('file not found')));
+    (loadJsonFile as any).mockImplementationOnce(() => Promise.reject(new Error('file not found')));
 
-    const returnedLockfilePath = await updateClassicLockfileVersion(pkg);
+    const returnedLockfilePath = await updateClassicLockfileVersion(pkg as unknown as Package);
 
     expect(returnedLockfilePath).toBeUndefined();
     expect(fs.pathExistsSync(path.join(pkg.location, 'package-lock.json'))).toBe(false);
@@ -75,18 +76,22 @@ describe('npm modern lock file', () => {
     const mockVersion = '2.4.0';
     const cwd = await initFixture('lockfile-version2');
     const rootLockFilePath = path.join(cwd, 'package-lock.json');
-    const packages = await getPackages(cwd);
+    const packages = await Project.getPackages(cwd);
 
     const lockFileOutput = await loadPackageLockFileWhenExists(cwd);
-    if (lockFileOutput.json) {
+    if (lockFileOutput!.json) {
       for (const pkg of packages) {
         pkg.version = mockVersion;
-        await updateTempModernLockfileVersion(pkg, lockFileOutput.json);
+        await updateTempModernLockfileVersion(pkg as unknown as Package, lockFileOutput!.json);
       }
-      await saveUpdatedLockJsonFile(lockFileOutput.path, lockFileOutput.json);
+      await saveUpdatedLockJsonFile(lockFileOutput!.path, lockFileOutput!.json);
     }
 
-    expect(Array.from(loadJsonFile.registry.keys())).toStrictEqual(['/packages/package-1', '/packages/package-2', '/']);
+    expect(Array.from((loadJsonFile as any).registry.keys())).toStrictEqual([
+      '/packages/package-1',
+      '/packages/package-2',
+      '/',
+    ]);
     expect(fs.readJSONSync(rootLockFilePath)).toMatchSnapshot();
   });
 });
@@ -153,9 +158,9 @@ describe('run install lockfile-only', () => {
     });
 
     it(`should update project root lockfile by calling client script "pnpm install --package-lock-only"`, async () => {
-      jest.spyOn(nodeFs.promises, 'access').mockResolvedValue(true);
-      nodeFs.renameSync.mockImplementation(() => true);
-      core.exec.mockImplementation(() => true);
+      jest.spyOn(nodeFs.promises, 'access').mockResolvedValue(true as any);
+      (nodeFs.renameSync as any).mockImplementation(() => true);
+      (core.exec as any).mockImplementation(() => true);
       const execSpy = jest.spyOn(core, 'exec');
       const cwd = await initFixture('lockfile-version2');
 
@@ -168,9 +173,9 @@ describe('run install lockfile-only', () => {
 
   describe('yarn client', () => {
     it(`should update project root lockfile by calling client script "yarn install --package-lock-only"`, async () => {
-      jest.spyOn(nodeFs.promises, 'access').mockResolvedValue(true);
-      nodeFs.renameSync.mockImplementation(() => true);
-      core.exec.mockImplementation(() => true);
+      jest.spyOn(nodeFs.promises, 'access').mockResolvedValue(true as any);
+      (nodeFs.renameSync as any).mockImplementation(() => true);
+      (core.exec as any).mockImplementation(() => true);
       const execSpy = jest.spyOn(core, 'exec');
       const cwd = await initFixture('lockfile-version2');
 

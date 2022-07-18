@@ -23,7 +23,8 @@ const loadJsonFile = require('load-json-file');
 import 'dotenv/config';
 
 // helpers
-const initFixture = require('@lerna-test/helpers').initFixtureFactory(__dirname);
+import helpers from '@lerna-test/helpers';
+const initFixture = helpers.initFixtureFactory(__dirname);
 
 // test command
 import { VersionCommand } from '../version-command';

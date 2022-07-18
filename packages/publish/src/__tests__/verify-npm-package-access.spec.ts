@@ -2,13 +2,14 @@
 
 jest.mock('libnpmaccess');
 
-const access = require('libnpmaccess');
-const { getPackages } = require('@lerna-lite/core');
-const { loggingOutput } = require('@lerna-test/helpers/logging-output');
-const initFixture = require('@lerna-test/helpers').initFixtureFactory(__dirname);
-const { verifyNpmPackageAccess } = require('../lib/verify-npm-package-access');
+import access from 'libnpmaccess';
+import { FetchConfig, Project } from '@lerna-lite/core';
+import { loggingOutput } from '@lerna-test/helpers/logging-output';
+import { verifyNpmPackageAccess } from '../lib/verify-npm-package-access';
+import helpers from '@lerna-test/helpers';
+const initFixture = helpers.initFixtureFactory(__dirname);
 
-access.lsPackages.mockImplementation(() =>
+(access.lsPackages as any).mockImplementation(() =>
   Promise.resolve({
     'package-1': 'read-write',
     'package-2': 'read-write',
@@ -33,10 +34,10 @@ describe('verifyNpmPackageAccess', () => {
   });
 
   test('validates that all packages have read-write permission', async () => {
-    const packages = await getPackages(cwd);
+    const packages = await Project.getPackages(cwd);
     const opts = { registry: 'https://registry.npmjs.org/' };
 
-    await verifyNpmPackageAccess(packages, 'lerna-test', opts);
+    await verifyNpmPackageAccess(packages, 'lerna-test', opts as FetchConfig);
 
     expect(access.lsPackages).toHaveBeenLastCalledWith(
       'lerna-test',
@@ -48,10 +49,10 @@ describe('verifyNpmPackageAccess', () => {
   });
 
   test('allows unpublished packages to pass', async () => {
-    const packages = await getPackages(cwd);
+    const packages = await Project.getPackages(cwd);
     const opts = { registry: 'https://registry.npmjs.org/' };
 
-    access.lsPackages.mockImplementationOnce(() =>
+    (access.lsPackages as any).mockImplementationOnce(() =>
       Promise.resolve({
         'package-1': 'read-write',
         // unpublished packages don't show up in ls-packages
@@ -59,21 +60,21 @@ describe('verifyNpmPackageAccess', () => {
       })
     );
 
-    await verifyNpmPackageAccess(packages, 'lerna-test', opts);
+    await verifyNpmPackageAccess(packages, 'lerna-test', opts as FetchConfig);
 
     expect(access.lsPackages).toHaveBeenCalled();
   });
 
   test('allows null result to pass with warning', async () => {
-    const packages = await getPackages(cwd);
+    const packages = await Project.getPackages(cwd);
     const opts = { registry: 'https://registry.npmjs.org/' };
 
-    access.lsPackages.mockImplementationOnce(() =>
+    (access.lsPackages as any).mockImplementationOnce(() =>
       // access.lsPackages() returns null when _no_ results returned
       Promise.resolve(null)
     );
 
-    await verifyNpmPackageAccess(packages, 'lerna-test', opts);
+    await verifyNpmPackageAccess(packages, 'lerna-test', opts as FetchConfig);
 
     const [logMessage] = loggingOutput('warn');
     expect(logMessage).toBe(
@@ -82,33 +83,33 @@ describe('verifyNpmPackageAccess', () => {
   });
 
   test('throws EACCESS when any package does not have read-write permission', async () => {
-    const packages = await getPackages(cwd);
+    const packages = await Project.getPackages(cwd);
     const opts = { registry: 'https://registry.npmjs.org/' };
 
-    access.lsPackages.mockImplementationOnce(() =>
+    (access.lsPackages as any).mockImplementationOnce(() =>
       Promise.resolve({
         'package-1': 'read-write',
         'package-2': 'read-only',
       })
     );
 
-    const result = verifyNpmPackageAccess(packages, 'lerna-test', opts);
+    const result = verifyNpmPackageAccess(packages, 'lerna-test', opts as FetchConfig);
     await expect(result).rejects.toThrow(`You do not have write permission required to publish "package-2"`);
     expect(console.error).not.toHaveBeenCalled();
   });
 
   test('passes when npm Enterprise registry returns E500', async () => {
-    const packages = await getPackages(cwd);
+    const packages = await Project.getPackages(cwd);
     const registry = 'http://outdated-npm-enterprise.mycompany.com:12345/';
     const opts = { registry };
 
-    access.lsPackages.mockImplementationOnce(() => {
-      const err = new Error('npm-enterprise-what');
+    (access.lsPackages as any).mockImplementationOnce(() => {
+      const err = new Error('npm-enterprise-what') as Error & { code: string };
       err.code = 'E500';
       return Promise.reject(err);
     });
 
-    await verifyNpmPackageAccess(packages, 'lerna-test', opts);
+    await verifyNpmPackageAccess(packages, 'lerna-test', opts as FetchConfig);
 
     const [logMessage] = loggingOutput('warn');
     expect(logMessage).toMatch(
@@ -118,17 +119,17 @@ describe('verifyNpmPackageAccess', () => {
   });
 
   test('passes when Artifactory registry returns E404', async () => {
-    const packages = await getPackages(cwd);
+    const packages = await Project.getPackages(cwd);
     const registry = 'https://artifactory-partial-implementation.corpnet.mycompany.com/';
     const opts = { registry };
 
-    access.lsPackages.mockImplementationOnce(() => {
-      const err = new Error('artifactory-why');
+    (access.lsPackages as any).mockImplementationOnce(() => {
+      const err = new Error('artifactory-why') as Error & { code: string };
       err.code = 'E404';
       return Promise.reject(err);
     });
 
-    await verifyNpmPackageAccess(packages, 'lerna-test', opts);
+    await verifyNpmPackageAccess(packages, 'lerna-test', opts as FetchConfig);
 
     const [logMessage] = loggingOutput('warn');
     expect(logMessage).toMatch(
@@ -138,16 +139,16 @@ describe('verifyNpmPackageAccess', () => {
   });
 
   test('logs unexpected failure message before throwing EWHOAMI', async () => {
-    const packages = await getPackages(cwd);
+    const packages = await Project.getPackages(cwd);
     const opts = {};
 
-    access.lsPackages.mockImplementationOnce(() => {
+    (access.lsPackages as any).mockImplementationOnce(() => {
       const err = new Error('gonna-need-a-bigger-boat');
 
       return Promise.reject(err);
     });
 
-    const result = verifyNpmPackageAccess(packages, 'lerna-test', opts);
+    const result = verifyNpmPackageAccess(packages, 'lerna-test', opts as FetchConfig);
     await expect(result).rejects.toThrow('Authentication error. Use `npm whoami` to troubleshoot.');
     expect(console.error).toHaveBeenCalledWith('gonna-need-a-bigger-boat');
   });

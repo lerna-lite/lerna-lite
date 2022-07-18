@@ -16,7 +16,8 @@ const yargParser = require('yargs-parser');
 const { logOutput } = require('@lerna-lite/core');
 
 // helpers
-const initFixture = require('@lerna-test/helpers').initFixtureFactory(__dirname);
+import helpers from '@lerna-test/helpers';
+const initFixture = helpers.initFixtureFactory(__dirname);
 const { gitAdd } = require('@lerna-test/helpers');
 const { gitCheckout } = require('@lerna-test/helpers');
 const { gitCommit } = require('@lerna-test/helpers');

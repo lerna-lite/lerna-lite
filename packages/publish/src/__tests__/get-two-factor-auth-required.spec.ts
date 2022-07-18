@@ -1,12 +1,11 @@
-'use strict';
-
 jest.mock('../lib/get-profile-data');
 
-const { loggingOutput } = require('@lerna-test/helpers/logging-output');
-const { getProfileData } = require('../lib/get-profile-data');
-const { getTwoFactorAuthRequired } = require('../lib/get-two-factor-auth-required');
+import { FetchConfig } from '@lerna-lite/core';
+import { loggingOutput } from '@lerna-test/helpers/logging-output';
+import { getProfileData } from '../lib/get-profile-data';
+import { getTwoFactorAuthRequired } from '../lib/get-two-factor-auth-required';
 
-getProfileData.mockImplementation(() => Promise.resolve({ tfa: {} }));
+(getProfileData as any).mockImplementation(() => Promise.resolve({ tfa: {} }));
 
 describe('getTwoFactorAuthRequired', () => {
   const origConsoleError = console.error;
@@ -20,7 +19,7 @@ describe('getTwoFactorAuthRequired', () => {
   });
 
   it("resolves true if tfa.mode === 'auth-and-writes'", async () => {
-    getProfileData.mockResolvedValueOnce({
+    (getProfileData as any).mockResolvedValueOnce({
       tfa: {
         mode: 'auth-and-writes',
       },
@@ -32,7 +31,7 @@ describe('getTwoFactorAuthRequired', () => {
   });
 
   it("resolves false if tfa.mode !== 'auth-and-writes'", async () => {
-    getProfileData.mockResolvedValueOnce({
+    (getProfileData as any).mockResolvedValueOnce({
       tfa: {
         mode: 'auth-only',
       },
@@ -43,7 +42,7 @@ describe('getTwoFactorAuthRequired', () => {
   });
 
   it('resolves false if tfa.pending === true', async () => {
-    getProfileData.mockResolvedValueOnce({
+    (getProfileData as any).mockResolvedValueOnce({
       tfa: {
         pending: true,
         mode: 'ignored',
@@ -55,8 +54,8 @@ describe('getTwoFactorAuthRequired', () => {
   });
 
   it('resolves false after profile 404', async () => {
-    getProfileData.mockImplementationOnce(() => {
-      const err = new Error('third-party profile fail');
+    (getProfileData as any).mockImplementationOnce(() => {
+      const err = new Error('third-party profile fail') as Error & { code: string };
 
       err.code = 'E404';
 
@@ -70,8 +69,8 @@ describe('getTwoFactorAuthRequired', () => {
   });
 
   it('resolves false after profile 500', async () => {
-    getProfileData.mockImplementationOnce(() => {
-      const err = new Error('legacy npm Enterprise profile fail');
+    (getProfileData as any).mockImplementationOnce(() => {
+      const err = new Error('legacy npm Enterprise profile fail') as Error & { code: string };
 
       err.code = 'E500';
 
@@ -79,7 +78,7 @@ describe('getTwoFactorAuthRequired', () => {
     });
 
     const opts = { registry: 'such-registry-wow' };
-    const result = await getTwoFactorAuthRequired(opts);
+    const result = await getTwoFactorAuthRequired(opts as FetchConfig);
 
     expect(result).toBe(false);
     expect(loggingOutput('warn')).toContain(
@@ -88,8 +87,8 @@ describe('getTwoFactorAuthRequired', () => {
   });
 
   it('logs unexpected failure message before throwing validation error', async () => {
-    getProfileData.mockImplementationOnce(() => {
-      const err = new Error('zomg explosions');
+    (getProfileData as any).mockImplementationOnce(() => {
+      const err = new Error('zomg explosions') as Error & { code: string };
 
       err.code = 'E401';
 

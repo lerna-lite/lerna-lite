@@ -1,5 +1,3 @@
-'use strict';
-
 // FIXME: better mock for version command
 jest.mock('../../../version/src/lib/git-push', () => jest.requireActual('../../../version/src/lib/__mocks__/git-push'));
 jest.mock('../../../version/src/lib/is-anything-committed', () =>
@@ -35,17 +33,18 @@ jest.mock('../lib/get-unpublished-packages', () => jest.requireActual('../lib/__
 jest.mock('../lib/npm-publish', () => jest.requireActual('../lib/__mocks__/npm-publish'));
 
 // mocked modules
-const { npmPublish } = require('../lib/npm-publish');
-const { logOutput, promptConfirmation, throwIfUncommitted } = require('@lerna-lite/core');
+import { npmPublish } from '../lib/npm-publish';
+import { logOutput, promptConfirmation, throwIfUncommitted } from '@lerna-lite/core';
 
 // helpers
-const initFixture = require('@lerna-test/helpers').initFixtureFactory(__dirname);
-const { gitTag } = require('@lerna-test/helpers');
-const { loggingOutput } = require('@lerna-test/helpers/logging-output');
+import { gitTag } from '@lerna-test/helpers';
+import { loggingOutput } from '@lerna-test/helpers/logging-output';
+import helpers from '@lerna-test/helpers';
+const initFixture = helpers.initFixtureFactory(__dirname);
 
 // test command
-const yargParser = require('yargs-parser');
-const { PublishCommand } = require('../publish-command');
+import yargParser from 'yargs-parser';
+import { PublishCommand } from '../publish-command';
 
 const createArgv = (cwd, ...args) => {
   args.unshift('publish');
@@ -69,8 +68,8 @@ describe('publish from-git', () => {
     expect(throwIfUncommitted).toHaveBeenCalled();
 
     expect(promptConfirmation).toHaveBeenLastCalledWith('Are you sure you want to publish these packages?');
-    expect(logOutput.logged()).toMatch('Found 4 packages to publish:');
-    expect(npmPublish.order()).toEqual([
+    expect((logOutput as any).logged()).toMatch('Found 4 packages to publish:');
+    expect((npmPublish as any).order()).toEqual([
       'package-1',
       'package-3',
       'package-4',
@@ -91,7 +90,7 @@ describe('publish from-git', () => {
     ]);
     await new PublishCommand(createArgv(cwd, '--bump', 'from-git'));
 
-    expect(npmPublish.order()).toEqual([
+    expect((npmPublish as any).order()).toEqual([
       'package-1',
       'package-3',
       'package-4',
@@ -106,7 +105,7 @@ describe('publish from-git', () => {
     await gitTag(cwd, 'foo/1.0.0');
     await new PublishCommand(createArgv(cwd, '--bump', 'from-git', '--tag-version-prefix', 'foo/'));
 
-    expect(npmPublish.order()).toEqual([
+    expect((npmPublish as any).order()).toEqual([
       'package-1',
       'package-3',
       'package-4',
@@ -121,8 +120,8 @@ describe('publish from-git', () => {
     await gitTag(cwd, 'package-3@3.0.0');
     await new PublishCommand(createArgv(cwd, '--bump', 'from-git'));
 
-    expect(logOutput.logged()).toMatch('Found 1 package to publish:');
-    expect(npmPublish.order()).toEqual(['package-3']);
+    expect((logOutput as any).logged()).toMatch('Found 1 package to publish:');
+    expect((npmPublish as any).order()).toEqual(['package-3']);
   });
 
   it('exits early when the current commit is not tagged', async () => {
@@ -137,7 +136,7 @@ describe('publish from-git', () => {
   });
 
   it('throws an error when uncommitted changes are present', async () => {
-    throwIfUncommitted.mockImplementationOnce(() => {
+    (throwIfUncommitted as any).mockImplementationOnce(() => {
       throw new Error('uncommitted');
     });
 

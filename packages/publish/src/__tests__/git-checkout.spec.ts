@@ -1,10 +1,10 @@
-'use strict';
+import execa from 'execa';
+import fs from 'fs-extra';
+import path from 'path';
+import helpers from '@lerna-test/helpers';
+const initFixture = helpers.initFixtureFactory(__dirname);
 
-const execa = require('execa');
-const fs = require('fs-extra');
-const path = require('path');
-const initFixture = require('@lerna-test/helpers').initFixtureFactory(__dirname);
-const { gitCheckout } = require('../lib/git-checkout');
+import { gitCheckout } from '../lib/git-checkout';
 
 test('gitCheckout files', async () => {
   const cwd = await initFixture('no-interdependencies');

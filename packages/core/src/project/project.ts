@@ -30,7 +30,7 @@ export class Project {
   /**
    * @param {string} [cwd] Defaults to process.cwd()
    */
-  constructor(cwd: string) {
+  constructor(cwd?: string) {
     const explorer = cosmiconfigSync('lerna', {
       searchPlaces: ['lerna.json', 'package.json'],
       transform(obj) {
@@ -235,6 +235,3 @@ export class Project {
 
 Project.PACKAGE_GLOB = 'packages/*';
 Project.LICENSE_GLOB = 'LICEN{S,C}E{,.*}';
-
-module.exports.getPackages = Project.getPackages;
-module.exports.getPackagesSync = Project.getPackagesSync;

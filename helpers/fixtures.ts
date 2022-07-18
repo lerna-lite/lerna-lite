@@ -1,17 +1,18 @@
 'use strict';
 
-const execa = require('execa');
-const fileUrl = require('file-url');
-const tempy = require('tempy');
-const fs = require('fs-extra');
-const findUp = require('find-up');
-const path = require('path');
+import execa from 'execa';
+import fileUrl from 'file-url';
+import tempy from 'tempy';
+import fs from 'fs-extra';
+import findUp from 'find-up';
+import path from 'path';
 const { gitAdd, gitCommit, gitInit } = require('./git');
 
-function cloneFixtureFactory(startDir) {
+export function cloneFixtureFactory(startDir: string) {
   const initFixture = initFixtureFactory(startDir);
 
-  return (...args) =>
+  return (...args: any[]) =>
+    // @ts-ignore
     initFixture(...args).then((cwd) => {
       const repoDir = tempy.directory();
       const repoUrl = fileUrl(repoDir, { resolve: false });
@@ -26,9 +27,8 @@ function cloneFixtureFactory(startDir) {
         }));
     });
 }
-exports.cloneFixtureFactory = cloneFixtureFactory;
 
-function findFixture(cwd, fixtureName) {
+export function findFixture(cwd: string, fixtureName: string) {
   return findUp(path.join('__fixtures__', fixtureName), { cwd, type: 'directory' }).then((fixturePath) => {
     if (fixturePath === undefined) {
       throw new Error(`Could not find fixture with name "${fixtureName}"`);
@@ -38,13 +38,12 @@ function findFixture(cwd, fixtureName) {
   });
 }
 
-function copyFixture(targetDir, fixtureName, cwd) {
+export function copyFixture(targetDir: string, fixtureName: string, cwd: string) {
   return findFixture(cwd, fixtureName).then((fp) => fs.copy(fp, targetDir));
 }
-exports.copyFixture = copyFixture;
 
-function initFixtureFactory(startDir) {
-  return (fixtureName, commitMessage = 'Init commit') => {
+export function initFixtureFactory(startDir: string) {
+  return (fixtureName: string, commitMessage: boolean | string = 'Init commit') => {
     const cwd = tempy.directory();
     let chain = Promise.resolve();
 
@@ -60,10 +59,9 @@ function initFixtureFactory(startDir) {
     return chain.then(() => cwd);
   };
 }
-exports.initFixtureFactory = initFixtureFactory;
 
-function initNamedFixtureFactory(startDir) {
-  return (dirName, fixtureName, commitMessage = 'Init commit') => {
+export function initNamedFixtureFactory(startDir: string) {
+  return (dirName: string, fixtureName: string, commitMessage: boolean | string = 'Init commit') => {
     const cwd = path.join(tempy.directory(), dirName);
     let chain = Promise.resolve();
 
@@ -80,4 +78,3 @@ function initNamedFixtureFactory(startDir) {
     return chain.then(() => cwd);
   };
 }
-exports.initNamedFixtureFactory = initNamedFixtureFactory;

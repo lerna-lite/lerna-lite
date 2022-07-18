@@ -1,8 +1,9 @@
 'use strict';
 
-const { Project } = require('@lerna-lite/core');
-const initFixture = require('@lerna-test/helpers').initFixtureFactory(__dirname);
-const { getPackagesWithoutLicense } = require('../lib/get-packages-without-license');
+import { Project } from '@lerna-lite/core';
+import { getPackagesWithoutLicense } from '../lib/get-packages-without-license';
+import helpers from '@lerna-test/helpers';
+const initFixture = helpers.initFixtureFactory(__dirname);
 
 test('getPackagesWithoutLicense', async () => {
   const cwd = await initFixture('licenses');
