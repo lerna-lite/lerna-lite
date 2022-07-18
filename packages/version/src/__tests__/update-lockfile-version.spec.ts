@@ -7,7 +7,7 @@ jest.mock('@lerna-lite/core', () => ({
 import path from 'path';
 import fs from 'fs-extra';
 import core, { Package } from '@lerna-lite/core';
-import nodeFs from 'node:fs';
+import nodeFs from 'fs';
 import npmlog from 'npmlog';
 
 // mocked or stubbed modules
