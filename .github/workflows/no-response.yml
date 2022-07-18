@@ -1,5 +1,4 @@
-# Configuration for probot-no-response - https://github.com/lee-dohm/no-response
-
+# Configuration for GitHub Action no-response - https://github.com/lee-dohm/no-response
 name: No Response
 
 # Both `issue_comment` and `scheduled` event types are required for this Action
@@ -8,8 +7,8 @@ on:
   issue_comment:
     types: [created]
   schedule:
-    # Schedule for five minutes after the hour, every hour
-    - cron: '5 * * * *'
+    # Schedule every day at 00:05
+    - cron: '5 0 * * *'
 
 jobs:
   noResponse:
@@ -18,3 +17,4 @@ jobs:
       - uses: lee-dohm/no-response@v0.5.0
         with:
           token: ${{ github.token }}
+          responseRequiredLabel: 'awaiting response'
