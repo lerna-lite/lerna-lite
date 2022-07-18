@@ -5,7 +5,8 @@ import path from 'path';
 import tempy from 'tempy';
 
 // helpers
-const initFixture = require('@lerna-test/helpers').initFixtureFactory(__dirname);
+import helpers from '@lerna-test/helpers';
+const initFixture = helpers.initFixtureFactory(__dirname);
 
 // file under test
 const lernaInit = require('@lerna-test/helpers').commandRunner(

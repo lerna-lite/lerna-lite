@@ -80,7 +80,7 @@ describe('@lerna/otplease', () => {
   });
 
   it('using cache updated in a different task', async () => {
-    const otpCache = { otp: undefined };
+    const otpCache: any = { otp: undefined };
     const obj = {};
     const fn = jest.fn(makeTestCallback('654321', obj));
 

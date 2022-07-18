@@ -4,7 +4,8 @@ const execa = require('execa');
 const fs = require('fs-extra');
 const path = require('path');
 const slash = require('slash');
-const initFixture = require('@lerna-test/helpers').initFixtureFactory(__dirname);
+import helpers from '@lerna-test/helpers';
+const initFixture = helpers.initFixtureFactory(__dirname);
 const { gitAdd } = require('../lib/git-add');
 
 const getStagedFile = async (cwd) =>

@@ -1,5 +1,3 @@
-'use strict';
-
 jest.mock('npm-registry-fetch');
 jest.mock('@lerna-lite/core', () => ({
   ...jest.requireActual('@lerna-lite/core'), // return the other real methods, below we'll mock only 2 of the methods
@@ -7,7 +5,7 @@ jest.mock('@lerna-lite/core', () => ({
 }));
 
 // mocked modules
-const fetch = require('npm-registry-fetch');
+import fetch from 'npm-registry-fetch';
 
 // file under test
 const npmDistTag = require('../lib/npm-dist-tag');
@@ -22,8 +20,8 @@ const baseOptions = Object.freeze({
   defaultTag: 'latest',
 });
 
-fetch.mockImplementation(() => Promise.resolve());
-fetch.json.mockImplementation(() => Promise.resolve({}));
+(fetch as any).mockImplementation(() => Promise.resolve());
+(fetch as any).json.mockImplementation(() => Promise.resolve({}));
 
 describe('npmDistTag.add()', () => {
   it('adds a dist-tag for a given package@version', async () => {
@@ -46,7 +44,7 @@ describe('npmDistTag.add()', () => {
   });
 
   it('does not attempt to add duplicate of existing tag', async () => {
-    fetch.json.mockImplementationOnce(() =>
+    (fetch as any).json.mockImplementationOnce(() =>
       Promise.resolve({
         latest: '1.0.0',
         'dupe-tag': '1.0.1',
@@ -65,7 +63,7 @@ describe('npmDistTag.add()', () => {
   });
 
   it('defaults tag argument to opts.defaultTag', async () => {
-    fetch.json.mockImplementationOnce(() =>
+    (fetch as any).json.mockImplementationOnce(() =>
       Promise.resolve({
         latest: '1.0.0',
       })
@@ -80,7 +78,7 @@ describe('npmDistTag.add()', () => {
   });
 
   it('supports npm v6 opts.tag fallback', async () => {
-    fetch.json.mockImplementationOnce(() =>
+    (fetch as any).json.mockImplementationOnce(() =>
       Promise.resolve({
         legacy: '1.0.0',
       })
@@ -97,7 +95,7 @@ describe('npmDistTag.add()', () => {
 
 describe('npmDistTag.remove()', () => {
   it('removes an existing dist-tag for a given package', async () => {
-    fetch.json.mockImplementationOnce(() =>
+    (fetch as any).json.mockImplementationOnce(() =>
       Promise.resolve({
         latest: '1.0.0',
         'removed-tag': '1.0.1',
@@ -128,7 +126,7 @@ describe('npmDistTag.remove()', () => {
 
 describe('npmDistTag.list()', () => {
   it('returns dictionary of dist-tags', async () => {
-    fetch.json.mockImplementationOnce(() =>
+    (fetch as any).json.mockImplementationOnce(() =>
       Promise.resolve({
         latest: '1.0.0',
         'other-tag': '1.0.1',
@@ -143,7 +141,7 @@ describe('npmDistTag.list()', () => {
       latest: '1.0.0',
       'other-tag': '1.0.1',
     });
-    expect(fetch.json).toHaveBeenLastCalledWith(
+    expect((fetch as any).json).toHaveBeenLastCalledWith(
       '/-/package/@scope%2fsome-pkg/dist-tags',
       expect.objectContaining({
         preferOnline: true,
@@ -155,7 +153,7 @@ describe('npmDistTag.list()', () => {
   });
 
   it('handles disastrous results gracefully', async () => {
-    fetch.json.mockImplementationOnce(() =>
+    (fetch as any).json.mockImplementationOnce(() =>
       // i mean, wut
       Promise.resolve(null)
     );

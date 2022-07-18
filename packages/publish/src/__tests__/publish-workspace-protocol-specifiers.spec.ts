@@ -1,5 +1,3 @@
-'use strict';
-
 // FIXME: better mock for version command
 jest.mock('../../../version/dist/lib/git-push', () =>
   jest.requireActual('../../../version/src/lib/__mocks__/git-push')
@@ -41,23 +39,24 @@ jest.mock('../lib/get-two-factor-auth-required', () =>
 jest.mock('../lib/pack-directory', () => jest.requireActual('../lib/__mocks__/pack-directory'));
 jest.mock('../lib/npm-publish', () => jest.requireActual('../lib/__mocks__/npm-publish'));
 
-const fs = require('fs-extra');
-const path = require('path');
-const npmlog = require('npmlog');
+import fs from 'fs-extra';
+import path from 'path';
+import npmlog from 'npmlog';
 
 // mocked modules
-const writePkg = require('write-pkg');
+import writePkg from 'write-pkg';
 
 // helpers
-const initFixture = require('@lerna-test/helpers').initFixtureFactory(__dirname);
-const { gitAdd } = require('@lerna-test/helpers');
-const { gitTag } = require('@lerna-test/helpers');
-const { gitCommit } = require('@lerna-test/helpers');
+import { gitAdd } from '@lerna-test/helpers';
+import { gitTag } from '@lerna-test/helpers';
+import { gitCommit } from '@lerna-test/helpers';
+import helpers from '@lerna-test/helpers';
+const initFixture = helpers.initFixtureFactory(__dirname);
 
 // test command
-const { PublishCommand } = require('../index');
+import { PublishCommand } from '../index';
 
-const yargParser = require('yargs-parser');
+import yargParser from 'yargs-parser';
 
 const createArgv = (cwd, ...args) => {
   args.unshift('publish');
@@ -85,7 +84,7 @@ describe("workspace protocol 'workspace:' specifiers", () => {
       await setupChanges(cwd);
       await new PublishCommand(createArgv(cwd, '--bump', 'patch', '--yes', '--no-workspace-strict-match'));
 
-      expect(writePkg.updatedVersions()).toEqual({
+      expect((writePkg as any).updatedVersions()).toEqual({
         'package-1': '1.0.1',
         'package-2': '1.0.1',
         'package-3': '1.0.1',
@@ -96,22 +95,22 @@ describe("workspace protocol 'workspace:' specifiers", () => {
       });
 
       // notably missing is package-1, which has no relative file: dependencies
-      expect(writePkg.updatedManifest('package-2').dependencies).toMatchObject({
+      expect((writePkg as any).updatedManifest('package-2').dependencies).toMatchObject({
         'package-1': '^1.0.1', // workspace:*
       });
-      expect(writePkg.updatedManifest('package-3').dependencies).toMatchObject({
+      expect((writePkg as any).updatedManifest('package-3').dependencies).toMatchObject({
         'package-2': '^1.0.1', // workspace:^
       });
-      expect(writePkg.updatedManifest('package-4').optionalDependencies).toMatchObject({
+      expect((writePkg as any).updatedManifest('package-4').optionalDependencies).toMatchObject({
         'package-3': '^1.0.1', // workspace:~
       });
-      expect(writePkg.updatedManifest('package-5').dependencies).toMatchObject({
+      expect((writePkg as any).updatedManifest('package-5').dependencies).toMatchObject({
         // all fixed versions are bumped when patch
         'package-4': '^1.0.1', // workspace:^1.0.0
         'package-6': '^1.0.1', // workspace:^1.0.0
       });
       // private packages do not need local version resolution
-      expect(writePkg.updatedManifest('package-7').dependencies).toMatchObject({
+      expect((writePkg as any).updatedManifest('package-7').dependencies).toMatchObject({
         'package-1': '^1.0.1', // ^1.0.0
       });
     });
@@ -123,7 +122,7 @@ describe("workspace protocol 'workspace:' specifiers", () => {
       await setupChanges(cwd);
       await new PublishCommand(createArgv(cwd, '--bump', 'minor', '--yes', '--no-workspace-strict-match'));
 
-      expect(writePkg.updatedVersions()).toEqual({
+      expect((writePkg as any).updatedVersions()).toEqual({
         'package-1': '1.1.0',
         'package-2': '1.1.0',
         'package-3': '1.1.0',
@@ -134,22 +133,22 @@ describe("workspace protocol 'workspace:' specifiers", () => {
       });
 
       // notably missing is package-1, which has no relative file: dependencies
-      expect(writePkg.updatedManifest('package-2').dependencies).toMatchObject({
+      expect((writePkg as any).updatedManifest('package-2').dependencies).toMatchObject({
         'package-1': '^1.1.0', // workspace:*
       });
-      expect(writePkg.updatedManifest('package-3').dependencies).toMatchObject({
+      expect((writePkg as any).updatedManifest('package-3').dependencies).toMatchObject({
         'package-2': '^1.1.0', // workspace:^
       });
-      expect(writePkg.updatedManifest('package-4').optionalDependencies).toMatchObject({
+      expect((writePkg as any).updatedManifest('package-4').optionalDependencies).toMatchObject({
         'package-3': '^1.1.0', // workspace:~
       });
-      expect(writePkg.updatedManifest('package-5').dependencies).toMatchObject({
+      expect((writePkg as any).updatedManifest('package-5').dependencies).toMatchObject({
         // all fixed versions are bumped when minor
         'package-4': '^1.1.0', // workspace:^1.0.0
         'package-6': '^1.1.0', // workspace:^1.0.0
       });
       // private packages do not need local version resolution
-      expect(writePkg.updatedManifest('package-7').dependencies).toMatchObject({
+      expect((writePkg as any).updatedManifest('package-7').dependencies).toMatchObject({
         'package-1': '^1.1.0', // ^1.0.0
       });
     });
@@ -163,7 +162,7 @@ describe("workspace protocol 'workspace:' specifiers", () => {
       await setupChanges(cwd);
       await new PublishCommand(createArgv(cwd, '--bump', 'minor', '--yes', '--workspace-strict-match'));
 
-      expect(writePkg.updatedVersions()).toEqual({
+      expect((writePkg as any).updatedVersions()).toEqual({
         'package-1': '1.1.0',
         'package-2': '1.1.0',
         'package-3': '1.1.0',
@@ -174,25 +173,25 @@ describe("workspace protocol 'workspace:' specifiers", () => {
       });
 
       // notably missing is package-1, which has no relative file: dependencies
-      expect(writePkg.updatedManifest('package-2').dependencies).toMatchObject({
+      expect((writePkg as any).updatedManifest('package-2').dependencies).toMatchObject({
         'package-1': '1.1.0', // workspace:*
       });
-      expect(writePkg.updatedManifest('package-3').dependencies).toMatchObject({
+      expect((writePkg as any).updatedManifest('package-3').dependencies).toMatchObject({
         'package-2': '^1.1.0', // workspace:^
       });
-      expect(writePkg.updatedManifest('package-4').optionalDependencies).toMatchObject({
+      expect((writePkg as any).updatedManifest('package-4').optionalDependencies).toMatchObject({
         'package-3': '~1.1.0', // workspace:~
       });
-      expect(writePkg.updatedManifest('package-5').dependencies).toMatchObject({
+      expect((writePkg as any).updatedManifest('package-5').dependencies).toMatchObject({
         // all fixed versions are bumped when minor
         'package-4': '^1.1.0', // workspace:^1.0.0
         'package-6': '~1.1.0', // workspace:~1.0.0
       });
-      expect(writePkg.updatedManifest('package-6').dependencies).toMatchObject({
+      expect((writePkg as any).updatedManifest('package-6').dependencies).toMatchObject({
         'package-1': '>=1.1.0', // workspace:>=1.0.0
       });
       // private packages do not need local version resolution
-      expect(writePkg.updatedManifest('package-7').dependencies).toMatchObject({
+      expect((writePkg as any).updatedManifest('package-7').dependencies).toMatchObject({
         'package-1': '^1.1.0', // ^1.0.0
       });
     });
@@ -204,7 +203,7 @@ describe("workspace protocol 'workspace:' specifiers", () => {
       await setupChanges(cwd);
       await new PublishCommand(createArgv(cwd, '--bump', 'major', '--yes'));
 
-      expect(writePkg.updatedVersions()).toEqual({
+      expect((writePkg as any).updatedVersions()).toEqual({
         'package-1': '2.0.0',
         'package-2': '2.0.0',
         'package-3': '2.0.0',
@@ -215,25 +214,25 @@ describe("workspace protocol 'workspace:' specifiers", () => {
       });
 
       // notably missing is package-1, which has no relative file: dependencies
-      expect(writePkg.updatedManifest('package-2').dependencies).toMatchObject({
+      expect((writePkg as any).updatedManifest('package-2').dependencies).toMatchObject({
         'package-1': '2.0.0', // workspace:*
       });
-      expect(writePkg.updatedManifest('package-3').dependencies).toMatchObject({
+      expect((writePkg as any).updatedManifest('package-3').dependencies).toMatchObject({
         'package-2': '^2.0.0', // workspace:^
       });
-      expect(writePkg.updatedManifest('package-4').optionalDependencies).toMatchObject({
+      expect((writePkg as any).updatedManifest('package-4').optionalDependencies).toMatchObject({
         'package-3': '~2.0.0', // workspace:~
       });
-      expect(writePkg.updatedManifest('package-5').dependencies).toMatchObject({
+      expect((writePkg as any).updatedManifest('package-5').dependencies).toMatchObject({
         // all fixed versions are bumped when major
         'package-4': '^2.0.0', // workspace:^1.0.0
         'package-6': '~2.0.0', // workspace:~1.0.0
       });
-      expect(writePkg.updatedManifest('package-6').dependencies).toMatchObject({
+      expect((writePkg as any).updatedManifest('package-6').dependencies).toMatchObject({
         'package-1': '>=2.0.0', // workspace:>=1.0.0
       });
       // private packages do not need local version resolution
-      expect(writePkg.updatedManifest('package-7').dependencies).toMatchObject({
+      expect((writePkg as any).updatedManifest('package-7').dependencies).toMatchObject({
         'package-1': '^2.0.0', // ^1.0.0
       });
     });
@@ -253,7 +252,7 @@ describe("workspace protocol 'workspace:' specifiers", () => {
           `we recommend using defined versions with workspace protocol. Your dependency is currently being published with "tiny-registry": "latest".`,
         ].join('')
       );
-      expect(writePkg.updatedManifest('package-6').dependencies).toMatchObject({
+      expect((writePkg as any).updatedManifest('package-6').dependencies).toMatchObject({
         'package-1': '>=1.1.0', // workspace:>=1.0.0
         'tiny-registry': 'latest', // workspace:*
         'tiny-tarball': '^2.3.4', // workspace:^2.3.4

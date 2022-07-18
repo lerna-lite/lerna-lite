@@ -1,4 +1,5 @@
-const initFixture = require('@lerna-test/helpers').initFixtureFactory(__dirname);
+import helpers from '@lerna-test/helpers';
+const initFixture = helpers.initFixtureFactory(__dirname);
 const { getCurrentBranch } = require('../lib/get-current-branch');
 
 test('getCurrentBranch', async () => {

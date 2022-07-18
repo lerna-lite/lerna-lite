@@ -36,7 +36,7 @@ export function npmPublish(
   pkg: Package,
   tarFilePath: string,
   options: Omit<LibNpmPublishOptions, 'defaultTag'> = {},
-  otpCache: OneTimePasswordCache
+  otpCache?: OneTimePasswordCache
 ) {
   const { dryRun, ...remainingOptions } = flattenOptions(options);
   const { scope } = npa(pkg?.name ?? '');
@@ -80,7 +80,11 @@ export function npmPublish(
         Object.assign(opts, publishConfigToOpts(manifest.publishConfig));
       }
 
-      return otplease((innerOpts) => publish(manifest, tarData, innerOpts), opts, otpCache).catch((err) => {
+      return otplease(
+        (innerOpts) => publish(manifest, tarData, innerOpts),
+        opts,
+        otpCache as OneTimePasswordCache
+      ).catch((err) => {
         opts.log.silly('', err);
         opts.log.error(err.code, err.body?.error ?? err.message);
 

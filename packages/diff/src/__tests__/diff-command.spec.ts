@@ -6,19 +6,19 @@ jest.mock('@lerna-lite/core', () => ({
   ...(jest.requireActual('@lerna-lite/core') as any), // return the other real methods, below we'll mock only 2 of the methods
   logOutput: jest.requireActual('../../../core/src/__mocks__/output').logOutput,
   collectUpdates: jest.requireActual('../../../core/src/__mocks__/collect-updates').collectUpdates,
-  getPackages: jest.requireActual('../../../core/src/project').getPackages,
 }));
 
 // mocked modules
 let coreChildProcess = require('@lerna-lite/core');
 
 // helpers
-const initFixture = require('@lerna-test/helpers').initFixtureFactory(__dirname);
-const { getPackages } = require('@lerna-lite/core');
-const { gitAdd } = require('@lerna-test/helpers');
-const { gitCommit } = require('@lerna-test/helpers');
-const { gitInit } = require('@lerna-test/helpers');
-const { gitTag } = require('@lerna-test/helpers');
+import helpers from '@lerna-test/helpers';
+const initFixture = helpers.initFixtureFactory(__dirname);
+import { Project } from '@lerna-lite/core';
+import { gitAdd } from '@lerna-test/helpers';
+import { gitCommit } from '@lerna-test/helpers';
+import { gitInit } from '@lerna-test/helpers';
+import { gitTag } from '@lerna-test/helpers';
 
 // file under test
 const lernaDiff = require('@lerna-test/helpers').commandRunner(
@@ -28,7 +28,7 @@ import { DiffCommand } from '../index';
 import { factory } from '../diff-command';
 
 // file under test
-const yargParser = require('yargs-parser');
+import yargParser from 'yargs-parser';
 
 const createArgv = (cwd: string, ...args: string[]) => {
   args.unshift('diff');
@@ -54,7 +54,7 @@ describe('Diff Command', () => {
 
   it('should diff packages from the first commit from DiffCommand class', async () => {
     const cwd = await initFixture('basic');
-    const [pkg1] = await getPackages(cwd);
+    const [pkg1] = await Project.getPackages(cwd);
     const rootReadme = path.join(cwd, 'README.md');
 
     await pkg1.set('changed', 1).serialize();
@@ -69,7 +69,7 @@ describe('Diff Command', () => {
 
   it('should diff packages from the first commit from factory', async () => {
     const cwd = await initFixture('basic');
-    const [pkg1] = await getPackages(cwd);
+    const [pkg1] = await Project.getPackages(cwd);
     const rootReadme = path.join(cwd, 'README.md');
 
     await pkg1.set('changed', 1).serialize();
@@ -84,7 +84,7 @@ describe('Diff Command', () => {
 
   it('should diff packages from the first commit', async () => {
     const cwd = await initFixture('basic');
-    const [pkg1] = await getPackages(cwd);
+    const [pkg1] = await Project.getPackages(cwd);
     const rootReadme = path.join(cwd, 'README.md');
 
     await pkg1.set('changed', 1).serialize();
@@ -99,7 +99,7 @@ describe('Diff Command', () => {
 
   it('should diff packages from the most recent tag', async () => {
     const cwd = await initFixture('basic');
-    const [pkg1] = await getPackages(cwd);
+    const [pkg1] = await Project.getPackages(cwd);
 
     await pkg1.set('changed', 1).serialize();
     await gitAdd(cwd, '-A');
@@ -116,7 +116,7 @@ describe('Diff Command', () => {
 
   it('should diff a specific package', async () => {
     const cwd = await initFixture('basic');
-    const [pkg1, pkg2] = await getPackages(cwd);
+    const [pkg1, pkg2] = await Project.getPackages(cwd);
 
     await pkg1.set('changed', 1).serialize();
     await pkg2.set('changed', 1).serialize();
@@ -130,7 +130,7 @@ describe('Diff Command', () => {
 
   it('passes diff exclude globs configured with --ignore-changes', async () => {
     const cwd = await initFixture('basic');
-    const [pkg1] = await getPackages(cwd);
+    const [pkg1] = await Project.getPackages(cwd);
 
     await pkg1.set('changed', 1).serialize();
     await fs.outputFile(path.join(pkg1.location, 'README.md'), 'ignored change');

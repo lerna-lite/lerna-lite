@@ -1,9 +1,8 @@
-'use strict';
-
-const fs = require('fs-extra');
-const path = require('path');
-const { Project } = require('@lerna-lite/core');
-const initFixture = require('@lerna-test/helpers').initFixtureFactory(__dirname);
+import fs from 'fs-extra';
+import path from 'path';
+import { Project } from '@lerna-lite/core';
+import helpers from '@lerna-test/helpers';
+const initFixture = helpers.initFixtureFactory(__dirname);
 const { removeTempLicenses } = require('../lib/remove-temp-licenses');
 
 describe('removeTempLicenses', () => {

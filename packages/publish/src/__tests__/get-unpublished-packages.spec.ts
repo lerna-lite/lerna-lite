@@ -3,16 +3,17 @@
 jest.mock('pacote');
 
 // mocked module(s)
-const pacote = require('pacote');
+import pacote from 'pacote';
 
 // helpers
-const { getPackages, PackageGraph } = require('@lerna-lite/core');
-const initFixture = require('@lerna-test/helpers').initFixtureFactory(__dirname);
+import { Project, PackageGraph, FetchConfig } from '@lerna-lite/core';
+import helpers from '@lerna-test/helpers';
+const initFixture = helpers.initFixtureFactory(__dirname);
 
 // file under test
-const { getUnpublishedPackages } = require('../lib/get-unpublished-packages');
+import { getUnpublishedPackages } from '../lib/get-unpublished-packages';
 
-pacote.packument.mockImplementation(async (pkg) => {
+(pacote as any).packument.mockImplementation(async (pkg) => {
   if (pkg === 'package-1') {
     return {
       versions: {},
@@ -32,13 +33,13 @@ pacote.packument.mockImplementation(async (pkg) => {
 
 test('getUnpublishedPackages', async () => {
   const cwd = await initFixture('licenses-names');
-  const packages = await getPackages(cwd);
+  const packages = await Project.getPackages(cwd);
   const packageGraph = new PackageGraph(packages);
 
   const opts = {};
-  const pkgs = await getUnpublishedPackages(packageGraph, opts);
+  const pkgs = await getUnpublishedPackages(packageGraph, opts as FetchConfig);
 
-  expect(pacote.packument).toHaveBeenCalledWith('package-1', opts);
+  expect((pacote as any).packument).toHaveBeenCalledWith('package-1', opts);
   expect(pkgs).toMatchInlineSnapshot(`
 Array [
   PackageGraphNode {
@@ -71,13 +72,13 @@ Array [
 
 test('getUnpublishedPackages with private package', async () => {
   const cwd = await initFixture('public-private');
-  const packages = await getPackages(cwd);
+  const packages = await Project.getPackages(cwd);
   const packageGraph = new PackageGraph(packages);
 
   const opts = {};
-  const pkgs = await getUnpublishedPackages(packageGraph, opts);
+  const pkgs = await getUnpublishedPackages(packageGraph, opts as FetchConfig);
 
-  expect(pacote.packument).toHaveBeenCalledWith('package-1', opts);
+  expect((pacote as any).packument).toHaveBeenCalledWith('package-1', opts);
   expect(pkgs).toMatchInlineSnapshot(`
 Array [
   PackageGraphNode {

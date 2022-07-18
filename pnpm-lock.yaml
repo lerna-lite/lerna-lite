@@ -33,6 +33,8 @@ importers:
       eslint-plugin-prefer-arrow: ^1.2.3
       execa: ^5.1.1
       file-url: ^3.0.0
+      find-up: ^5.0.0
+      fs-extra: ^10.1.0
       jest: ^28.1.3
       jest-cli: ^28.1.3
       jest-extended: ^3.0.1
@@ -77,6 +79,8 @@ importers:
       eslint-plugin-prefer-arrow: 1.2.3_eslint@8.19.0
       execa: 5.1.1
       file-url: 3.0.0
+      find-up: 5.0.0
+      fs-extra: 10.1.0
       jest: 28.1.3_@types+node@18.0.0
       jest-cli: 28.1.3_@types+node@18.0.0
       jest-extended: 3.0.1_jest@28.1.3
@@ -150,6 +154,7 @@ importers:
       '@types/glob-parent': ^5.1.1
       '@types/inquirer': ^8.2.1
       '@types/load-json-file': ^5.1.0
+      '@types/minimatch': ^3.0.5
       '@types/npm-package-arg': ^6.1.1
       '@types/p-map': ^2.0.0
       '@types/semver': ^7.3.10
@@ -274,6 +279,7 @@ importers:
       '@types/glob-parent': 5.1.1
       '@types/inquirer': 8.2.1
       '@types/load-json-file': 5.1.0
+      '@types/minimatch': 3.0.5
       '@types/npm-package-arg': 6.1.1
       '@types/p-map': 2.0.0
       '@types/semver': 7.3.10
@@ -431,6 +437,7 @@ importers:
       has-unicode: ^2.0.1
       libnpmaccess: ^6.0.3
       libnpmpublish: ^6.0.4
+      load-json-file: ^6.2.0
       npm-package-arg: ^9.1.0
       npm-packlist: ^5.1.1
       npm-registry-fetch: ^13.2.0
@@ -496,6 +503,7 @@ importers:
       '@types/semver': 7.3.10
       '@types/write-json-file': 3.2.1
       '@types/write-pkg': 4.0.0
+      load-json-file: 6.2.0
       yargs-parser: 21.0.1
 
   packages/run:
@@ -541,6 +549,7 @@ importers:
       '@types/fs-extra': ^9.0.13
       '@types/js-yaml': ^4.0.5
       '@types/load-json-file': ^5.1.0
+      '@types/minimatch': ^3.0.5
       '@types/p-map': ^2.0.0
       '@types/semver': ^7.3.10
       '@types/write-json-file': ^3.2.1
@@ -586,6 +595,7 @@ importers:
       '@types/fs-extra': 9.0.13
       '@types/js-yaml': 4.0.5
       '@types/load-json-file': 5.1.0
+      '@types/minimatch': 3.0.5
       '@types/p-map': 2.0.0
       '@types/semver': 7.3.10
       '@types/write-json-file': 3.2.1
@@ -1645,7 +1655,6 @@ packages:
 
   /@types/minimatch/3.0.5:
     resolution: {integrity: sha512-Klz949h02Gz2uZCMGwDUSDS1YBlTdDDgbWHi+81l29tQALUtvz4rAYi5uoVhE5Lagoq6DeqAUlbrHvW/mXDgdQ==}
-    dev: false
 
   /@types/minimist/1.2.2:
     resolution: {integrity: sha512-jhuKLIRrhvCPLqwPcx6INqmKeiA5EWrsCOPhrlFSrbrmU4ZMPjj5Ul/oLCMDO98XRUIwVm78xICz4EPCektzeQ==}
@@ -3457,6 +3466,14 @@ packages:
       locate-path: 5.0.0
       path-exists: 4.0.0
 
+  /find-up/5.0.0:
+    resolution: {integrity: sha512-78/PXT1wlLLDgTzDs7sjq9hzz0vXD+zn+7wypEe4fXQxCmdmqfGsEPQxmiCSQI3ajFV91bVSsvNtrJRiW6nGng==}
+    engines: {node: '>=10'}
+    dependencies:
+      locate-path: 6.0.0
+      path-exists: 4.0.0
+    dev: true
+
   /flat-cache/3.0.4:
     resolution: {integrity: sha512-dm9s5Pw7Jc0GvMYbshN6zchCA9RgQlzzEZX3vylR9IqFfS8XciblUXOKfW6SiuJ0e13eDYZoZV5wdrev7P3Nwg==}
     engines: {node: ^10.12.0 || >=12.0.0}
@@ -4752,6 +4769,13 @@ packages:
     dependencies:
       p-locate: 4.1.0
 
+  /locate-path/6.0.0:
+    resolution: {integrity: sha512-iPZK6eYjbxRu3uB4/WZ3EsEIMJFMqAoopl3R+zuq0UjcAm/MO6KCweDgPfP3elTztoKP3KtnVHxTn2NHBSDVUw==}
+    engines: {node: '>=10'}
+    dependencies:
+      p-locate: 5.0.0
+    dev: true
+
   /lodash.ismatch/4.4.0:
     resolution: {integrity: sha512-fPMfXjGQEV9Xsq/8MTSgUf255gawYRbjwMyDbcvDhXgV7enSZA0hynz6vMPnpAb5iONEzBHBPsT+0zes5Z301g==}
     dev: false
@@ -5403,6 +5427,13 @@ packages:
     engines: {node: '>=8'}
     dependencies:
       p-limit: 2.3.0
+
+  /p-locate/5.0.0:
+    resolution: {integrity: sha512-LaNjtRWUBY++zB5nE/NwcaoMylSPk+S+ZHNB1TzdbMJMny6dynpAGt7X/tl/QYq3TIeE6nxHppbo2LGymrG5Pw==}
+    engines: {node: '>=10'}
+    dependencies:
+      p-limit: 3.1.0
+    dev: true
 
   /p-map/4.0.0:
     resolution: {integrity: sha512-/bjOqmgETBYB5BoEeGVea8dmvHb2m9GLy1E9W43yeyfP6QQCZGFNa+XRceJEuDB6zqr+gKpIAmlLebMpykw/MQ==}

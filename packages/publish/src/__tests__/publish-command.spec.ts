@@ -1,5 +1,3 @@
-'use strict';
-
 // FIXME: better mock for version command
 jest.mock('../../../version/dist/lib/git-push', () =>
   jest.requireActual('../../../version/src/lib/__mocks__/git-push')
@@ -44,32 +42,33 @@ jest.mock('../lib/npm-dist-tag', () => jest.requireActual('../lib/__mocks__/npm-
 jest.mock('../lib/pack-directory', () => jest.requireActual('../lib/__mocks__/pack-directory'));
 jest.mock('../lib/git-checkout');
 
-const fs = require('fs-extra');
-const path = require('path');
+import fs from 'fs-extra';
+import path from 'path';
 
 // helpers
-const initFixture = require('@lerna-test/helpers').initFixtureFactory(__dirname);
-const { loggingOutput } = require('@lerna-test/helpers/logging-output');
-const { commitChangeToPackage } = require('@lerna-test/helpers');
+import { loggingOutput } from '@lerna-test/helpers/logging-output';
+import { commitChangeToPackage } from '@lerna-test/helpers';
+import helpers from '@lerna-test/helpers';
+const initFixture = helpers.initFixtureFactory(__dirname);
 
 // test command
-const { PublishCommand } = require('../index');
+import { PublishCommand } from '../index';
 const lernaPublish = require('@lerna-test/helpers').commandRunner(
   require('../../../cli/src/cli-commands/cli-publish-commands')
 );
 
-const yargParser = require('yargs-parser');
+import yargParser from 'yargs-parser';
 
 // mocked or stubbed modules
-const { npmPublish } = require('../lib/npm-publish');
-const { promptConfirmation } = require('@lerna-lite/core');
-const { getOneTimePassword, collectUpdates } = require('@lerna-lite/core');
+import { npmPublish } from '../lib/npm-publish';
+import { promptConfirmation } from '@lerna-lite/core';
+import { getOneTimePassword, collectUpdates } from '@lerna-lite/core';
+import { packDirectory } from '../lib/pack-directory';
+import { getNpmUsername } from '../lib/get-npm-username';
+import { verifyNpmPackageAccess } from '../lib/verify-npm-package-access';
+import { getTwoFactorAuthRequired } from '../lib/get-two-factor-auth-required';
+import { gitCheckout } from '../lib/git-checkout';
 const npmDistTag = require('../lib/npm-dist-tag');
-const { packDirectory } = require('../lib/pack-directory');
-const { getNpmUsername } = require('../lib/get-npm-username');
-const { verifyNpmPackageAccess } = require('../lib/verify-npm-package-access');
-const { getTwoFactorAuthRequired } = require('../lib/get-two-factor-auth-required');
-const { gitCheckout } = require('../lib/git-checkout');
 
 const createArgv = (cwd, ...args) => {
   args.unshift('publish');
@@ -84,7 +83,7 @@ const createArgv = (cwd, ...args) => {
   return argv;
 };
 
-gitCheckout.mockImplementation(() => Promise.resolve());
+(gitCheckout as any).mockImplementation(() => Promise.resolve());
 
 describe('PublishCommand', () => {
   describe('cli validation', () => {
@@ -95,7 +94,7 @@ describe('PublishCommand', () => {
     });
 
     it('exits early when no changes found', async () => {
-      collectUpdates.setUpdated(cwd);
+      (collectUpdates as any).setUpdated(cwd);
 
       await new PublishCommand(createArgv(cwd));
       // await lernaPublish(cwd)();
@@ -147,7 +146,7 @@ describe('PublishCommand', () => {
       // await lernaPublish(testDir)();
 
       expect(promptConfirmation).toHaveBeenLastCalledWith('Are you sure you want to publish these packages?');
-      expect(packDirectory.registry).toMatchInlineSnapshot(`
+      expect((packDirectory as any).registry).toMatchInlineSnapshot(`
 Set {
   "package-1",
   "package-3",
@@ -155,7 +154,7 @@ Set {
   "package-2",
 }
 `);
-      expect(npmPublish.registry).toMatchInlineSnapshot(`
+      expect((npmPublish as any).registry).toMatchInlineSnapshot(`
 Map {
   "package-1" => "latest",
   "package-3" => "latest",
@@ -163,7 +162,7 @@ Map {
   "package-2" => "latest",
 }
 `);
-      expect(npmPublish.order()).toEqual([
+      expect((npmPublish as any).order()).toEqual([
         'package-1',
         'package-3',
         'package-4',
@@ -206,7 +205,7 @@ Map {
       await new PublishCommand(createArgv(testDir));
       // await lernaPublish(testDir)();
 
-      expect(npmPublish.order()).toEqual([
+      expect((npmPublish as any).order()).toEqual([
         'package-1',
         'package-3',
         'package-4',
@@ -231,7 +230,7 @@ Map {
       // await lernaPublish(cwd)("--graph-type", "all");
       await new PublishCommand(createArgv(cwd, '--graph-type', 'all'));
 
-      expect(npmPublish.order()).toEqual([
+      expect((npmPublish as any).order()).toEqual([
         'package-1',
         'package-4',
         'package-2',
@@ -250,14 +249,14 @@ Map {
   });
 
   describe('--otp', () => {
-    getOneTimePassword.mockImplementation(() => Promise.resolve('654321'));
+    (getOneTimePassword as any).mockImplementation(() => Promise.resolve('654321'));
 
     it('passes one-time password to npm commands', async () => {
       const testDir = await initFixture('normal');
       const otp = 123456;
 
       // cli option skips prompt
-      getTwoFactorAuthRequired.mockResolvedValueOnce(true);
+      (getTwoFactorAuthRequired as any).mockResolvedValueOnce(true);
 
       // await lernaPublish(testDir)("--otp", otp);
       await new PublishCommand(createArgv(testDir, '--otp', otp));
@@ -274,7 +273,7 @@ Map {
     it('prompts for OTP when option missing and account-level 2FA enabled', async () => {
       const testDir = await initFixture('normal');
 
-      getTwoFactorAuthRequired.mockResolvedValueOnce(true);
+      (getTwoFactorAuthRequired as any).mockResolvedValueOnce(true);
 
       // await lernaPublish(testDir)();
       await new PublishCommand(createArgv(testDir));
@@ -365,7 +364,7 @@ Map {
     });
 
     it('is implied when npm username is undefined', async () => {
-      getNpmUsername.mockImplementationOnce(() => Promise.resolve());
+      (getNpmUsername as any).mockImplementationOnce(() => Promise.resolve());
 
       const cwd = await initFixture('normal');
 
@@ -429,7 +428,7 @@ Map {
 
       await new PublishCommand(createArgv(cwd, '--contents', 'dist'));
 
-      const [[pkgOne, dirOne, opts], [pkgTwo, dirTwo]] = packDirectory.mock.calls;
+      const [[pkgOne, dirOne, opts], [pkgTwo, dirTwo]] = (packDirectory as any).mock.calls;
 
       expect(logSpy).toHaveBeenCalledWith('preversion-root');
       expect(logSpy).toHaveBeenCalledWith('preversion-package-1');

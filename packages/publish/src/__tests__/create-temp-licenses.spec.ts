@@ -1,10 +1,11 @@
 'use strict';
 
-const fs = require('fs-extra');
-const path = require('path');
-const { Project } = require('@lerna-lite/core');
-const initFixture = require('@lerna-test/helpers').initFixtureFactory(__dirname);
-const { createTempLicenses } = require('../lib/create-temp-licenses');
+import fs from 'fs-extra';
+import path from 'path';
+import { Project } from '@lerna-lite/core';
+import helpers from '@lerna-test/helpers';
+const initFixture = helpers.initFixtureFactory(__dirname);
+import { createTempLicenses } from '../lib/create-temp-licenses';
 
 describe('createTempLicenses', () => {
   it('copies root license into package location', async () => {
@@ -63,7 +64,7 @@ describe('createTempLicenses', () => {
     const project = new Project(cwd);
     const [pkg] = await project.getPackages();
 
-    await createTempLicenses(undefined, [pkg]);
+    await createTempLicenses(undefined as any, [pkg]);
 
     const licenseWritten = await fs.pathExists(path.join(pkg.location, 'LICENSE'));
     expect(licenseWritten).toBe(false);
