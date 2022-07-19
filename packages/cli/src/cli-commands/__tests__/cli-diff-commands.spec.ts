@@ -8,7 +8,8 @@ describe('DiffCommand CLI options', () => {
     await cliDiff.handler(undefined as any);
 
     expect(consoleSpy).toHaveBeenCalledWith(
-      expect.stringContaining('"@lerna-lite/diff" is optional and was not found.')
+      expect.stringContaining(`"@lerna-lite/diff" is optional and was not found.`),
+      expect.anything()
     );
   });
 });
