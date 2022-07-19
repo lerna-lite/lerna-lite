@@ -19,9 +19,10 @@ export default {
       // eslint-disable-next-line import/no-unresolved
       const { DiffCommand } = await import('@lerna-lite/diff');
       new DiffCommand(argv);
-    } catch (e) {
+    } catch (err: unknown) {
       console.error(
-        '"@lerna-lite/diff" is optional and was not found. Please install it with `npm install @lerna-lite/diff -D -W`'
+        `"@lerna-lite/diff" is optional and was not found. Please install it with "npm install @lerna-lite/diff -D -W".`,
+        err
       );
     }
   },
