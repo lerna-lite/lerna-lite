@@ -50,12 +50,11 @@ import { runLifecycle } from '@lerna-lite/core';
 // helpers
 import helpers from '@lerna-test/helpers';
 const initFixture = helpers.initFixtureFactory(__dirname);
-const path = require('path');
+import path from 'path';
 
 // test command
-const lernaPublish = require('@lerna-test/helpers').commandRunner(
-  require('../../../cli/src/cli-commands/cli-publish-commands')
-);
+import cliCommands from '../../../cli/src/cli-commands/cli-publish-commands';
+const lernaPublish = helpers.commandRunner(cliCommands);
 
 describe('lifecycle scripts', () => {
   const npmLifecycleEvent = process.env.npm_lifecycle_event;
@@ -105,7 +104,11 @@ describe('lifecycle scripts', () => {
       ['lifecycle', 'postpublish'],
     ]);
 
-    expect(Array.from(loadJsonFile.registry.keys())).toStrictEqual(['/packages/package-1', '/packages/package-2', '/']);
+    expect(Array.from((loadJsonFile as any).registry.keys())).toStrictEqual([
+      '/packages/package-1',
+      '/packages/package-2',
+      '/',
+    ]);
   });
 
   it('does not execute recursive root scripts', async () => {

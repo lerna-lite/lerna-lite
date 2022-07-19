@@ -1,15 +1,18 @@
-'use strict';
+import fs from 'fs';
+import path from 'path';
+import semver from 'semver';
 
-const fs = require('fs');
-const path = require('path');
-const semver = require('semver');
-const { Package } = require('../packages/core/src/package');
+import { Package } from '../packages/core/src/package';
 
-exports.toDependOn = createDependencyMatcher('dependencies');
-exports.toDevDependOn = createDependencyMatcher('devDependencies');
-exports.toPeerDependOn = createDependencyMatcher('peerDependencies');
-exports.toHaveBinaryLinks = toHaveBinaryLinks;
-exports.toHaveExecutables = toHaveExecutables;
+export function toDependOn() {
+  return createDependencyMatcher('dependencies');
+}
+export function toDevDependOn() {
+  return createDependencyMatcher('devDependencies');
+}
+export function toPeerDependOn() {
+  return createDependencyMatcher('peerDependencies');
+}
 
 function createDependencyMatcher(dependencyType) {
   const verbMap = {
@@ -83,7 +86,7 @@ function createDependencyMatcher(dependencyType) {
   };
 }
 
-function toHaveBinaryLinks(received, ...inputs) {
+export function toHaveBinaryLinks(received, ...inputs) {
   const pkg = Package.lazy(received);
   const links =
     process.platform === 'win32'
@@ -142,7 +145,7 @@ function toHaveBinaryLinks(received, ...inputs) {
   };
 }
 
-function toHaveExecutables(received, ...files) {
+export function toHaveExecutables(received, ...files) {
   const pkg = Package.lazy(received);
 
   const expectedFiles = `expected ${files.join(', ')}`;

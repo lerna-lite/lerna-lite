@@ -19,23 +19,21 @@ jest.mock('@lerna-lite/core', () => ({
 // also point to the local version command so that all mocks are properly used even by the command-runner
 jest.mock('@lerna-lite/version', () => jest.requireActual('../version-command'));
 
-const path = require('path');
-const yargParser = require('yargs-parser');
+import path from 'path';
+import yargParser from 'yargs-parser';
 
 // mocked modules
-const { promptSelectOne } = require('@lerna-lite/core');
+import { promptSelectOne } from '@lerna-lite/core';
 
 // helpers
-const initFixture = require('@lerna-test/helpers').initFixtureFactory(
-  path.resolve(__dirname, '../../../publish/src/__tests__')
-);
-const { getCommitMessage } = require('@lerna-test/helpers');
+import helpers from '@lerna-test/helpers';
+const initFixture = helpers.initFixtureFactory(path.resolve(__dirname, '../../../publish/src/__tests__'));
+import { getCommitMessage } from '@lerna-test/helpers';
 
 // test command
 import { factory, VersionCommand } from '../version-command';
-const lernaVersion = require('@lerna-test/helpers').commandRunner(
-  require('../../../cli/src/cli-commands/cli-version-commands')
-);
+import cliCommands from '../../../cli/src/cli-commands/cli-version-commands';
+const lernaVersion = helpers.commandRunner(cliCommands);
 
 const createArgv = (cwd, ...args) => {
   args.unshift('version');

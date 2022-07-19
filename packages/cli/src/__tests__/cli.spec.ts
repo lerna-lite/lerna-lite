@@ -1,17 +1,17 @@
 'use strict';
 
-const execa = require('execa');
-const npmlog = require('npmlog');
-const path = require('path');
-const tempy = require('tempy');
+import execa from 'execa';
+import npmlog from 'npmlog';
+import path from 'path';
+import tempy from 'tempy';
 
 // git init is not necessary
-const { copyFixture } = require('@lerna-test/helpers');
+import { copyFixture } from '@lerna-test/helpers';
 
 // FIXME: this is only working locally but fails in CI, so skip all tests for now
 const CLI = path.join(__dirname, '../cli');
 const bin =
-  (cwd) =>
+  (cwd?: string) =>
   (...args) =>
     execa(CLI, args, { cwd });
 

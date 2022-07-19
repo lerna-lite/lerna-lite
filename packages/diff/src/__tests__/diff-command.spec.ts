@@ -21,11 +21,10 @@ import { gitInit } from '@lerna-test/helpers';
 import { gitTag } from '@lerna-test/helpers';
 
 // file under test
-const lernaDiff = require('@lerna-test/helpers').commandRunner(
-  require('../../../cli/src/cli-commands/cli-diff-commands')
-);
 import { DiffCommand } from '../index';
 import { factory } from '../diff-command';
+import cliDiffCommands from '../../../cli/src/cli-commands/cli-diff-commands';
+const lernaDiff = helpers.commandRunner(cliDiffCommands);
 
 // file under test
 import yargParser from 'yargs-parser';
@@ -110,7 +109,7 @@ describe('Diff Command', () => {
     await gitAdd(cwd, '-A');
     await gitCommit(cwd, 'changed');
 
-    const { stdout } = await lernaDiff(cwd)();
+    const { stdout } = (await lernaDiff(cwd)()) as any;
     expect(stdout).toMatchSnapshot();
   });
 
