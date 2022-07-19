@@ -87,9 +87,10 @@ export default {
       // eslint-disable-next-line import/no-unresolved
       const { RunCommand } = await import('@lerna-lite/run');
       new RunCommand(argv);
-    } catch (e) {
+    } catch (err: unknown) {
       console.error(
-        '"@lerna-lite/run" is optional and was not found. Please install it with `npm install @lerna-lite/run -D -W`'
+        `"@lerna-lite/run" is optional and was not found. Please install it with "npm install @lerna-lite/run -D -W".`,
+        err
       );
     }
   },

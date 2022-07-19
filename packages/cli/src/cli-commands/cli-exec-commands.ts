@@ -81,9 +81,10 @@ export default {
       // eslint-disable-next-line import/no-unresolved
       const { ExecCommand } = await import('@lerna-lite/exec');
       new ExecCommand(argv);
-    } catch (e) {
+    } catch (err: unknown) {
       console.error(
-        '"@lerna-lite/exec" is optional and was not found. Please install it with `npm install @lerna-lite/exec -D -W`'
+        `"@lerna-lite/exec" is optional and was not found. Please install it with "npm install @lerna-lite/exec -D -W".`,
+        err
       );
     }
   },

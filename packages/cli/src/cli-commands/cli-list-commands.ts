@@ -22,9 +22,10 @@ export default {
       // eslint-disable-next-line import/no-unresolved
       const { ListCommand } = await import('@lerna-lite/list');
       new ListCommand(argv);
-    } catch (e) {
+    } catch (err: unknown) {
       console.error(
-        '"@lerna-lite/list" is optional and was not found. Please install it with `npm install @lerna-lite/list -D -W`'
+        `"@lerna-lite/list" is optional and was not found. Please install it with "npm install @lerna-lite/list -D -W".`,
+        err
       );
     }
   },

@@ -8,7 +8,8 @@ describe('ListCommand CLI options', () => {
     await cliList.handler(undefined as any);
 
     expect(consoleSpy).toHaveBeenCalledWith(
-      expect.stringContaining('"@lerna-lite/list" is optional and was not found.')
+      expect.stringContaining('"@lerna-lite/list" is optional and was not found.'),
+      expect.anything()
     );
   });
 });
