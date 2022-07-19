@@ -8,7 +8,8 @@ describe('ExecCommand CLI options', () => {
     await cliExec.handler(undefined as any);
 
     expect(consoleSpy).toHaveBeenCalledWith(
-      expect.stringContaining('"@lerna-lite/exec" is optional and was not found.')
+      expect.stringContaining('"@lerna-lite/exec" is optional and was not found.'),
+      expect.anything()
     );
   });
 });

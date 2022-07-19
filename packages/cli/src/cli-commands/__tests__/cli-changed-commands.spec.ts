@@ -8,7 +8,8 @@ describe('ChangedCommand CLI options', () => {
     await cliChanged.handler(undefined as any);
 
     expect(consoleSpy).toHaveBeenCalledWith(
-      expect.stringContaining('"@lerna-lite/changed" is optional and was not found.')
+      expect.stringContaining('"@lerna-lite/changed" is optional and was not found.'),
+      expect.anything()
     );
   });
 });

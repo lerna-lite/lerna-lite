@@ -48,9 +48,10 @@ export default {
       // eslint-disable-next-line import/no-unresolved
       const { ChangedCommand } = await import('@lerna-lite/changed');
       new ChangedCommand(argv);
-    } catch (e) {
+    } catch (err: unknown) {
       console.error(
-        '"@lerna-lite/changed" is optional and was not found. Please install it with `npm install @lerna-lite/changed -D -W`'
+        `"@lerna-lite/changed" is optional and was not found. Please install it with "npm install @lerna-lite/changed -D -W".`,
+        err
       );
     }
   },

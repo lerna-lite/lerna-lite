@@ -8,7 +8,8 @@ describe('RunCommand CLI options', () => {
     await cliRun.handler(undefined as any);
 
     expect(consoleSpy).toHaveBeenCalledWith(
-      expect.stringContaining('"@lerna-lite/run" is optional and was not found.')
+      expect.stringContaining('"@lerna-lite/run" is optional and was not found.'),
+      expect.anything()
     );
   });
 });
