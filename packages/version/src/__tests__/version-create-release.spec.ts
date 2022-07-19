@@ -25,10 +25,10 @@ jest.mock('@lerna-lite/core', () => ({
 jest.mock('@lerna-lite/version', () => jest.requireActual('../version-command'));
 
 // mocked modules
-const { createGitHubClient } = require('@lerna-lite/core');
-const { createGitLabClient } = require('@lerna-lite/core');
-const { recommendVersion } = require('@lerna-lite/core');
-const { logOutput } = require('@lerna-lite/core');
+import { createGitHubClient } from '@lerna-lite/core';
+import { createGitLabClient } from '@lerna-lite/core';
+import { recommendVersion } from '@lerna-lite/core';
+import { logOutput } from '@lerna-lite/core';
 
 // helpers
 import helpers from '@lerna-test/helpers';
@@ -36,14 +36,13 @@ const initFixture = helpers.initFixtureFactory(__dirname);
 
 // test command
 import { VersionCommand } from '../version-command';
-const lernaVersion = require('@lerna-test/helpers').commandRunner(
-  require('../../../cli/src/cli-commands/cli-version-commands')
-);
+import cliCommands from '../../../cli/src/cli-commands/cli-version-commands';
+const lernaVersion = helpers.commandRunner(cliCommands);
 
-const yargParser = require('yargs-parser');
-const dedent = require('dedent');
+import yargParser from 'yargs-parser';
+import dedent from 'dedent';
 
-const createArgv = (cwd, ...args) => {
+const createArgv = (cwd: string, ...args: any[]) => {
   args.unshift('version');
   if (args.length > 0 && args[1]?.length > 0 && !args[1].startsWith('-')) {
     args[1] = `--bump=${args[1]}`;
@@ -58,7 +57,7 @@ const createArgv = (cwd, ...args) => {
 describe.each([
   ['github', createGitHubClient],
   ['gitlab', createGitLabClient],
-])('--create-release %s', (type, client) => {
+])('--create-release %s', (type: any, client: any) => {
   it('does not create a release if --no-push is passed', async () => {
     const cwd = await initFixture('independent');
 
@@ -104,7 +103,7 @@ describe.each([
   it('marks a version as a pre-release if it contains a valid part', async () => {
     const cwd = await initFixture('normal');
 
-    recommendVersion.mockResolvedValueOnce('2.0.0-alpha.1');
+    (recommendVersion as any).mockResolvedValueOnce('2.0.0-alpha.1');
 
     await new VersionCommand(createArgv(cwd, '--create-release', type, '--conventional-commits'));
 
@@ -130,7 +129,7 @@ describe.each([
       ['package-5', '5.0.1'],
     ]);
 
-    versionBumps.forEach((bump) => recommendVersion.mockResolvedValueOnce(bump));
+    versionBumps.forEach((bump) => (recommendVersion as any).mockResolvedValueOnce(bump));
 
     await new VersionCommand(createArgv(cwd, '--create-release', type, '--conventional-commits'));
 
@@ -151,7 +150,7 @@ describe.each([
   it('creates a single fixed release', async () => {
     const cwd = await initFixture('normal');
 
-    recommendVersion.mockResolvedValueOnce('1.1.0');
+    (recommendVersion as any).mockResolvedValueOnce('1.1.0');
 
     await new VersionCommand(createArgv(cwd, '--create-release', type, '--conventional-commits'));
 
@@ -170,11 +169,11 @@ describe.each([
   it('creates a single fixed release in git dry-run mode', async () => {
     const cwd = await initFixture('normal');
 
-    recommendVersion.mockResolvedValueOnce('1.1.0');
+    (recommendVersion as any).mockResolvedValueOnce('1.1.0');
 
     await new VersionCommand(createArgv(cwd, '--create-release', type, '--conventional-commits', '--git-dry-run'));
 
-    expect(logOutput.logged()).toMatch(dedent`
+    expect((logOutput as any).logged()).toMatch(dedent`
     Changes (5 packages):
      - package-1: 1.0.0 => 1.1.0
      - package-2: 1.0.0 => 1.1.0
@@ -191,7 +190,7 @@ describe('legacy option --github-release', () => {
 
     await lernaVersion(cwd)('--github-release', '--conventional-commits');
 
-    expect(createGitHubClient.releases.size).toBe(1);
+    expect((createGitHubClient as any).releases.size).toBe(1);
   });
 });
 
@@ -202,7 +201,7 @@ describe('--create-release [unrecognized]', () => {
 
     await expect(command).rejects.toThrow('Invalid release client type');
 
-    expect(createGitHubClient.releases.size).toBe(0);
-    expect(createGitLabClient.releases.size).toBe(0);
+    expect((createGitHubClient as any).releases.size).toBe(0);
+    expect((createGitLabClient as any).releases.size).toBe(0);
   });
 });

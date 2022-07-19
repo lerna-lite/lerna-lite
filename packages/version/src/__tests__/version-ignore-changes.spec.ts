@@ -17,18 +17,17 @@ jest.mock('@lerna-lite/core', () => ({
   throwIfUncommitted: jest.requireActual('../../../core/src/__mocks__/check-working-tree').throwIfUncommitted,
 }));
 
-const fs = require('fs-extra');
-const path = require('path');
-const yargParser = require('yargs-parser');
+import fs from 'fs-extra';
+import path from 'path';
+import yargParser from 'yargs-parser';
 
 // helpers
-const initFixture = require('@lerna-test/helpers').initFixtureFactory(
-  path.resolve(__dirname, '../../../publish/src/__tests__')
-);
-const { gitAdd } = require('@lerna-test/helpers');
-const { gitCommit } = require('@lerna-test/helpers');
-const { gitTag } = require('@lerna-test/helpers');
-const { showCommit } = require('@lerna-test/helpers');
+import { gitAdd } from '@lerna-test/helpers';
+import { gitCommit } from '@lerna-test/helpers';
+import { gitTag } from '@lerna-test/helpers';
+import { showCommit } from '@lerna-test/helpers';
+import helpers from '@lerna-test/helpers';
+const initFixture = helpers.initFixtureFactory(path.resolve(__dirname, '../../../publish/src/__tests__'));
 
 // test command
 import { VersionCommand } from '../version-command';

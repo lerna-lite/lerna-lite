@@ -40,13 +40,13 @@ jest.mock('../lib/remove-temp-licenses', () => ({ removeTempLicenses: jest.fn(()
 jest.mock('../lib/pack-directory', () => jest.requireActual('../lib/__mocks__/pack-directory'));
 jest.mock('../lib/npm-publish', () => jest.requireActual('../lib/__mocks__/npm-publish'));
 
-const fs = require('fs-extra');
-const path = require('path');
+import fs from 'fs-extra';
+import path from 'path';
 
 // mocked modules
-const { packDirectory } = require('../lib/pack-directory');
-const { createTempLicenses } = require('../lib/create-temp-licenses');
-const { removeTempLicenses } = require('../lib/remove-temp-licenses');
+import { packDirectory } from '../lib/pack-directory';
+import { createTempLicenses } from '../lib/create-temp-licenses';
+import { removeTempLicenses } from '../lib/remove-temp-licenses';
 
 // helpers
 import helpers from '@lerna-test/helpers';
@@ -54,10 +54,9 @@ const initFixture = helpers.initFixtureFactory(__dirname);
 const { loggingOutput } = require('@lerna-test/helpers/logging-output');
 
 // test command
-const { PublishCommand } = require('../index');
-const lernaPublish = require('@lerna-test/helpers').commandRunner(
-  require('../../../cli/src/cli-commands/cli-publish-commands')
-);
+import { PublishCommand } from '../index';
+import cliCommands from '../../../cli/src/cli-commands/cli-publish-commands';
+const lernaPublish = helpers.commandRunner(cliCommands);
 
 const yargParser = require('yargs-parser');
 
@@ -85,7 +84,7 @@ describe('licenses', () => {
   });
 
   it('removes all temporary licenses on error', async () => {
-    packDirectory.mockImplementationOnce(() => Promise.reject(new Error('boom')));
+    (packDirectory as any).mockImplementationOnce(() => Promise.reject(new Error('boom')));
 
     const cwd = await initFixture('licenses');
     const command = new PublishCommand(createArgv(cwd));
@@ -97,8 +96,8 @@ describe('licenses', () => {
   });
 
   it('does not override original error when removal rejects', async () => {
-    packDirectory.mockImplementationOnce(() => Promise.reject(new Error('boom')));
-    removeTempLicenses.mockImplementationOnce(() => Promise.reject(new Error('shaka-lakka')));
+    (packDirectory as any).mockImplementationOnce(() => Promise.reject(new Error('boom')));
+    (removeTempLicenses as any).mockImplementationOnce(() => Promise.reject(new Error('shaka-lakka')));
 
     const cwd = await initFixture('licenses');
     const command = new PublishCommand(createArgv(cwd));

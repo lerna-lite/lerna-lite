@@ -1,16 +1,17 @@
 'use strict';
 
-const { ValidationError } = require('@lerna-lite/core');
-const { loggingOutput } = require('@lerna-test/helpers/logging-output');
-const initFixture = require('@lerna-test/helpers').initFixtureFactory(__dirname);
-const coreCLI = require('../lerna-cli');
+import { Package, ValidationError } from '@lerna-lite/core';
+import { loggingOutput } from '@lerna-test/helpers/logging-output';
+import lernaCLI from '../lerna-cli';
+import helpers from '@lerna-test/helpers';
+const initFixture = helpers.initFixtureFactory(__dirname);
 
-function prepare(cwd) {
+function prepare(cwd: string) {
   // DRY setup for yargs instance
-  return coreCLI([], cwd).exitProcess(false).detectLocale(false).showHelpOnFail(false).wrap(null);
+  return lernaCLI([], cwd).exitProcess(false).detectLocale(false).showHelpOnFail(false).wrap(null);
 }
 
-async function parse(instance, args) {
+async function parse(instance: any, args: any): Promise<any> {
   return new Promise((resolve, reject) => {
     instance.parse(args, (exitError, argv, output) => {
       if (exitError) {
@@ -105,8 +106,8 @@ describe('core-cli', () => {
     const cli = prepare(cwd);
 
     cli.command('run', 'a package error', {}, () => {
-      const err = new Error('oops');
-      err.pkg = {}; // actual content doesn't matter here
+      const err = new Error('oops') as Error & { pkg: Package };
+      err.pkg = {} as Package; // actual content doesn't matter here
       throw err;
     });
 
@@ -142,7 +143,7 @@ describe('core-cli', () => {
     const spy = jest.spyOn(cli, 'exit');
 
     cli.command('explicit', 'exit code', {}, () => {
-      const err = new Error('fancy fancy');
+      const err = new Error('fancy fancy') as Error & { exitCode: number };
       err.exitCode = 127;
       throw err;
     });

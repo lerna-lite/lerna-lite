@@ -8,21 +8,21 @@ jest.mock('@lerna-lite/core', () => ({
   throwIfUncommitted: jest.requireActual('../../../core/src/__mocks__/check-working-tree').throwIfUncommitted,
 }));
 
-const path = require('path');
-const fs = require('fs');
-const yargParser = require('yargs-parser');
+import path from 'path';
+import fs from 'fs';
+import yargParser from 'yargs-parser';
 
 // mocked modules
-const { logOutput } = require('@lerna-lite/core');
+import { logOutput } from '@lerna-lite/core';
 
 // helpers
+import { gitCheckout } from '@lerna-test/helpers';
+import { gitCommit } from '@lerna-test/helpers';
+import { gitMerge } from '@lerna-test/helpers';
+import { gitTag } from '@lerna-test/helpers';
+import { gitAdd } from '@lerna-test/helpers';
 import helpers from '@lerna-test/helpers';
 const initFixture = helpers.initFixtureFactory(__dirname);
-const { gitAdd } = require('@lerna-test/helpers');
-const { gitCheckout } = require('@lerna-test/helpers');
-const { gitCommit } = require('@lerna-test/helpers');
-const { gitMerge } = require('@lerna-test/helpers');
-const { gitTag } = require('@lerna-test/helpers');
 
 // file under test
 import { VersionCommand } from '../version-command';
@@ -85,7 +85,7 @@ describe('version --include-merged-tags', () => {
       await new VersionCommand(createArgv(testDir, '--no-git-tag-version'));
       // await lernaVersion(testDir)("--no-git-tag-version");
 
-      expect(logOutput.logged()).toMatchInlineSnapshot(`
+      expect((logOutput as any).logged()).toMatchInlineSnapshot(`
 
 Changes (3 packages):
  - package-2: 1.0.0 => 1.0.1
@@ -106,7 +106,7 @@ Changes (3 packages):
       await new VersionCommand(createArgv(testDir, '--no-git-tag-version', '--include-merged-tags'));
       // await lernaVersion(testDir)("--no-git-tag-version", "--include-merged-tags");
 
-      expect(logOutput.logged()).toMatchInlineSnapshot(`
+      expect((logOutput as any).logged()).toMatchInlineSnapshot(`
 
 Changes (2 packages):
  - package-2: 1.0.0 => 1.0.1

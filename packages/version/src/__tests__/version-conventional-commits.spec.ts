@@ -21,23 +21,21 @@ jest.mock('@lerna-lite/core', () => ({
   throwIfUncommitted: jest.requireActual('../../../core/src/__mocks__/check-working-tree').throwIfUncommitted,
 }));
 
-const path = require('path');
-const semver = require('semver');
+import path from 'path';
+import semver from 'semver';
 
 // mocked modules
-const writePkg = require('write-pkg');
-const { collectUpdates } = require('@lerna-lite/core');
-const { recommendVersion, updateChangelog } = require('@lerna-lite/core');
+import writePkg from 'write-pkg';
+import { collectUpdates } from '@lerna-lite/core';
+import { recommendVersion, updateChangelog } from '@lerna-lite/core';
 
 // helpers
-const initFixture = require('@lerna-test/helpers').initFixtureFactory(
-  path.resolve(__dirname, '../../../publish/src/__tests__')
-);
-const { showCommit } = require('@lerna-test/helpers');
+import helpers, { showCommit } from '@lerna-test/helpers';
+const initFixture = helpers.initFixtureFactory(path.resolve(__dirname, '../../../publish/src/__tests__'));
 
 // test command
 import { VersionCommand } from '../version-command';
-const yargParser = require('yargs-parser');
+import yargParser from 'yargs-parser';
 
 const createArgv = (cwd, ...args) => {
   args.unshift('version');
@@ -69,7 +67,7 @@ describe('--conventional-commits', () => {
     ]);
 
     it('should use conventional-commits utility to guess version bump and generate CHANGELOG', async () => {
-      versionBumps.forEach((bump) => recommendVersion.mockResolvedValueOnce(bump));
+      versionBumps.forEach((bump) => (recommendVersion as any).mockResolvedValueOnce(bump));
 
       const cwd = await initFixture('independent');
 
@@ -95,7 +93,7 @@ describe('--conventional-commits', () => {
     });
 
     it('should guess prerelease version bumps and generate CHANGELOG', async () => {
-      prereleaseVersionBumps.forEach((bump) => recommendVersion.mockResolvedValueOnce(bump));
+      prereleaseVersionBumps.forEach((bump) => (recommendVersion as any).mockResolvedValueOnce(bump));
       const cwd = await initFixture('prerelease-independent');
 
       await new VersionCommand(createArgv(cwd, '--conventional-commits', '--conventional-prerelease'));
@@ -104,7 +102,7 @@ describe('--conventional-commits', () => {
       expect(changedFiles).toMatchSnapshot();
 
       prereleaseVersionBumps.forEach((version, name) => {
-        const prereleaseId = semver.prerelease(version)[0];
+        const prereleaseId = (semver as any).prerelease(version)[0];
         expect(recommendVersion).toHaveBeenCalledWith(expect.objectContaining({ name }), 'independent', {
           changelogPreset: undefined,
           rootPath: cwd,
@@ -120,7 +118,7 @@ describe('--conventional-commits', () => {
     });
 
     it('should graduate prerelease version bumps and generate CHANGELOG', async () => {
-      versionBumps.forEach((bump) => recommendVersion.mockResolvedValueOnce(bump));
+      versionBumps.forEach((bump) => (recommendVersion as any).mockResolvedValueOnce(bump));
       const cwd = await initFixture('prerelease-independent');
 
       await new VersionCommand(createArgv(cwd, '--conventional-commits', '--conventional-graduate'));
@@ -177,7 +175,7 @@ describe('--conventional-commits', () => {
 
   describe('fixed mode', () => {
     it('should use conventional-commits utility to guess version bump and generate CHANGELOG', async () => {
-      recommendVersion
+      (recommendVersion as any)
         .mockResolvedValueOnce('1.0.1')
         .mockResolvedValueOnce('1.1.0')
         .mockResolvedValueOnce('2.0.0')
@@ -226,7 +224,7 @@ describe('--conventional-commits', () => {
     });
 
     it('should guess prerelease version bumps and generate CHANGELOG', async () => {
-      recommendVersion
+      (recommendVersion as any)
         .mockResolvedValueOnce('1.0.1-alpha.0')
         .mockResolvedValueOnce('1.1.0-alpha.0')
         .mockResolvedValueOnce('2.0.0-alpha.0')
@@ -317,25 +315,27 @@ describe('--conventional-commits', () => {
   it('avoids duplicating previously-released version', async () => {
     const cwd = await initFixture('no-interdependencies');
 
-    collectUpdates.setUpdated(cwd, 'package-1');
-    recommendVersion.mockResolvedValueOnce('1.1.0');
+    (collectUpdates as any).setUpdated(cwd, 'package-1');
+    (recommendVersion as any).mockResolvedValueOnce('1.1.0');
 
     await new VersionCommand(createArgv(cwd, '--conventional-commits'));
 
-    expect(writePkg.updatedVersions()).toEqual({
+    expect((writePkg as any).updatedVersions()).toEqual({
       'package-1': '1.1.0',
     });
 
     // clear previous publish mock records
     jest.clearAllMocks();
-    writePkg.registry.clear();
+    (writePkg as any).registry.clear();
 
-    collectUpdates.setUpdated(cwd, 'package-2');
-    recommendVersion.mockImplementationOnce((pkg) => Promise.resolve(semver.inc(pkg.version, 'patch')));
+    (collectUpdates as any).setUpdated(cwd, 'package-2');
+    (recommendVersion as any).mockImplementationOnce((pkg) =>
+      Promise.resolve((semver as any).inc(pkg.version, 'patch'))
+    );
 
     await new VersionCommand(createArgv(cwd, '--conventional-commits'));
 
-    expect(writePkg.updatedVersions()).toEqual({
+    expect((writePkg as any).updatedVersions()).toEqual({
       'package-2': '1.1.1',
     });
   });

@@ -1,16 +1,14 @@
 'use strict';
 
 const log = require('npmlog');
-const { multiLineTrimRight } = require('./index');
-
-module.exports.loggingOutput = loggingOutput;
+import { multiLineTrimRight } from './index';
 
 // clear logs between tests
 afterEach(() => {
   log.record.length = 0;
 });
 
-function loggingOutput(minLevel = 'info') {
+export function loggingOutput(minLevel = 'info') {
   // returns an array of log messages at or above the prescribed minLevel
   return (
     log.record

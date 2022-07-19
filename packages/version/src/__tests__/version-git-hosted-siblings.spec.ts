@@ -15,16 +15,15 @@ jest.mock('@lerna-lite/core', () => ({
   throwIfUncommitted: jest.requireActual('../../../core/src/__mocks__/check-working-tree').throwIfUncommitted,
 }));
 
-const path = require('path');
-const yargParser = require('yargs-parser');
+import path from 'path';
+import yargParser from 'yargs-parser';
 
 // mocked module(s)
-const writePkg = require('write-pkg');
+import writePkg from 'write-pkg';
 
 // helpers
-const initFixture = require('@lerna-test/helpers').initFixtureFactory(
-  path.resolve(__dirname, '../../../publish/src/__tests__')
-);
+import helpers from '@lerna-test/helpers';
+const initFixture = helpers.initFixtureFactory(path.resolve(__dirname, '../../../publish/src/__tests__'));
 
 // test command
 import { VersionCommand } from '../version-command';
@@ -47,7 +46,7 @@ describe('git-hosted sibling specifiers', () => {
     // await lernaVersion(cwd)("minor");
     await new VersionCommand(createArgv(cwd, '--bump', 'minor'));
 
-    expect(writePkg.updatedVersions()).toEqual({
+    expect((writePkg as any).updatedVersions()).toEqual({
       'package-1': '1.1.0',
       'package-2': '1.1.0',
       'package-3': '1.1.0',
@@ -56,16 +55,16 @@ describe('git-hosted sibling specifiers', () => {
     });
 
     // package-1 doesn't have any dependencies
-    expect(writePkg.updatedManifest('package-2').dependencies).toMatchObject({
+    expect((writePkg as any).updatedManifest('package-2').dependencies).toMatchObject({
       'package-1': 'github:user/package-1#v1.1.0',
     });
-    expect(writePkg.updatedManifest('package-3').devDependencies).toMatchObject({
+    expect((writePkg as any).updatedManifest('package-3').devDependencies).toMatchObject({
       'package-2': 'git+ssh://git@github.com/user/package-2.git#v1.1.0',
     });
-    expect(writePkg.updatedManifest('package-4').dependencies).toMatchObject({
+    expect((writePkg as any).updatedManifest('package-4').dependencies).toMatchObject({
       'package-1': 'github:user/package-1#v0.0.0', // non-matching semver
     });
-    expect(writePkg.updatedManifest('package-5').dependencies).toMatchObject({
+    expect((writePkg as any).updatedManifest('package-5').dependencies).toMatchObject({
       'package-1': 'git+ssh://git@github.com/user/package-1.git#v1.1.0',
     });
   });
@@ -75,7 +74,7 @@ describe('git-hosted sibling specifiers', () => {
 
     await new VersionCommand(createArgv(cwd, '--bump', 'prerelease', '--preid', 'beta'));
 
-    expect(writePkg.updatedVersions()).toEqual({
+    expect((writePkg as any).updatedVersions()).toEqual({
       'package-1': '1.0.1-beta.0',
       'package-2': '1.0.1-beta.0',
       'package-3': '1.0.1-beta.0',
@@ -84,17 +83,17 @@ describe('git-hosted sibling specifiers', () => {
     });
 
     // package-1 doesn't have any dependencies
-    expect(writePkg.updatedManifest('package-2').dependencies).toMatchObject({
+    expect((writePkg as any).updatedManifest('package-2').dependencies).toMatchObject({
       'package-1': 'github:user/package-1#semver:^1.0.1-beta.0',
     });
     // TODO: investigate why this test fails
-    // expect(writePkg.updatedManifest("package-3").devDependencies).toMatchObject({
+    // expect((writePkg as any).updatedManifest("package-3").devDependencies).toMatchObject({
     //   "package-2": "git+ssh://git@github.com/user/package-2.git#semver:^1.0.1-beta.0",
     // });
-    expect(writePkg.updatedManifest('package-4').dependencies).toMatchObject({
+    expect((writePkg as any).updatedManifest('package-4').dependencies).toMatchObject({
       'package-1': 'github:user/package-1#semver:^0.1.0', // non-matching semver
     });
-    expect(writePkg.updatedManifest('package-5').dependencies).toMatchObject({
+    expect((writePkg as any).updatedManifest('package-5').dependencies).toMatchObject({
       'package-1': 'git+ssh://git@github.com/user/package-1.git#semver:^1.0.1-beta.0',
     });
   });
@@ -104,7 +103,7 @@ describe('git-hosted sibling specifiers', () => {
 
     await new VersionCommand(createArgv(cwd, '--bump', 'premajor', '--preid', 'rc'));
 
-    expect(writePkg.updatedVersions()).toEqual({
+    expect((writePkg as any).updatedVersions()).toEqual({
       'package-1': '2.0.0-rc.0',
       'package-2': '2.0.0-rc.0',
       'package-3': '2.0.0-rc.0',
@@ -113,16 +112,16 @@ describe('git-hosted sibling specifiers', () => {
     });
 
     // package-1 doesn't have any dependencies
-    expect(writePkg.updatedManifest('package-2').dependencies).toMatchObject({
+    expect((writePkg as any).updatedManifest('package-2').dependencies).toMatchObject({
       'package-1': 'gitlab:user/package-1#v2.0.0-rc.0',
     });
-    expect(writePkg.updatedManifest('package-3').devDependencies).toMatchObject({
+    expect((writePkg as any).updatedManifest('package-3').devDependencies).toMatchObject({
       'package-2': 'git+ssh://git@gitlab.com/user/package-2.git#v2.0.0-rc.0',
     });
-    expect(writePkg.updatedManifest('package-4').dependencies).toMatchObject({
+    expect((writePkg as any).updatedManifest('package-4').dependencies).toMatchObject({
       'package-1': 'git+https://user:token@gitlab.com/user/package-1.git#v2.0.0-rc.0',
     });
-    expect(writePkg.updatedManifest('package-5').dependencies).toMatchObject({
+    expect((writePkg as any).updatedManifest('package-5').dependencies).toMatchObject({
       'package-1': 'git+ssh://git@gitlab.com/user/package-1.git#v2.0.0-rc.0',
     });
   });
