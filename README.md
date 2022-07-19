@@ -16,11 +16,12 @@
 - [About Lerna-Lite](#about-lerna-lite)
   - [Why create this lib/fork?](#why-create-this-libfork)
 - [Getting Started](#getting-started)
-- [Installation](#installation)
-- [Migration for existing Lerna users](#migration-for-existing-lerna-users)
-- [See it in Action](https://github.com/ghiscoding/lerna-lite/wiki/Release-Demo)
+  - [Installation](#installation)
+  - [Migration for existing Lerna users](#migration-for-existing-lerna-users)
+- [Project Demo - See it in Action](https://github.com/ghiscoding/lerna-lite/wiki/Release-Demo)
 - [README Badge](#readme-badge)
 - [`lerna.json` config file](https://github.com/ghiscoding/lerna-lite/wiki/lerna.json)
+- [Contributions](#contributions)
 - [Troubleshooting](https://github.com/ghiscoding/lerna-lite/wiki/Troubleshooting)
 - Commands
   - included with CLI
@@ -64,9 +65,9 @@ For more info on how to setup a workspace, choose the best option for you: [Yarn
 Mainly for the following reasons:
 
 1. original Lerna repo was unmaintained for nearly 2 years (dependencies were out of date)
-   - this is no longer true since Nrwl took over ownership of Lerna, but the next few points are still valid
+   - this is no longer true since Nrwl took over stewardship of Lerna, but the next few points are still valid
    - keep PRs in sync with original Lerna
-2. desire to create a smaller lib that is more modular than the original Lerna
+2. desire to create a smaller lib that is more modular and smaller than the original Lerna
    - it's smaller since we only copied half of Lerna's commands and a few are totally optional.
    - we don't need all of Lerna's packages anymore since Workspaces are supported by all package managers.
    - the main starting goal of this fork was to keep only `version` and `publish` commands in the core and make everything else optional (install and use only what you really need).
@@ -146,7 +147,7 @@ Minimum CLI install to get started with Lerna-Lite, that will give you access to
 | 📑 [version](https://github.com/ghiscoding/lerna-lite/tree/main/packages/version#readme) | create new version for each workspace package |
 | ☁️ [publish](https://github.com/ghiscoding/lerna-lite/tree/main/packages/publish#readme) | publish each workspace package |
 
-**Note:** Lerna-Lite CLI is only including 4 commands by default (shown on top), all other commands are **optional commands** and must be installed separately as shown in the table below.
+**Note:** Lerna-Lite CLI is only including 4 commands by default (shown in previous table), all other commands are **optional commands** and must be installed separately as shown in the table below.
 
 ### Separate / Optional Installs
 
