@@ -1,8 +1,7 @@
-'use strict';
-
-const execa = require('execa');
-const cloneFixture = require('@lerna-test/helpers').cloneFixtureFactory(__dirname);
-const { isBehindUpstream } = require('../lib/is-behind-upstream');
+import execa from 'execa';
+import { isBehindUpstream } from '../lib/is-behind-upstream';
+import helpers from '@lerna-test/helpers';
+const cloneFixture = helpers.cloneFixtureFactory(__dirname);
 
 test('isBehindUpstream', async () => {
   const { cwd } = await cloneFixture('root-manifest-only');

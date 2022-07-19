@@ -17,14 +17,13 @@ const { collectUpdates, logOutput } = require('@lerna-lite/core');
 import helpers from '@lerna-test/helpers';
 const initFixture = helpers.initFixtureFactory(__dirname);
 const { loggingOutput } = require('@lerna-test/helpers/logging-output');
-const { updateLernaConfig } = require('@lerna-test/helpers');
+import { updateLernaConfig } from '@lerna-test/helpers';
 
 // file under test
-const lernaChanged = require('@lerna-test/helpers').commandRunner(
-  require('../../../cli/src/cli-commands/cli-changed-commands')
-);
 import { ChangedCommand } from '../index';
 import { factory } from '../changed-command';
+import cliChangedCommands from '../../../cli/src/cli-commands/cli-changed-commands';
+const lernaChanged = helpers.commandRunner(cliChangedCommands);
 
 // file under test
 const yargParser = require('yargs-parser');

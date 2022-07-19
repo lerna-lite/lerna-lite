@@ -1,9 +1,8 @@
-'use strict';
+import execa from 'execa';
 
-const execa = require('execa');
-
-const cloneFixture = require('@lerna-test/helpers').cloneFixtureFactory(__dirname);
-const { gitPush } = require('../lib/git-push');
+import { gitPush } from '../lib/git-push';
+import helpers from '@lerna-test/helpers';
+const cloneFixture = helpers.cloneFixtureFactory(__dirname);
 
 async function listRemoteTags(cwd) {
   return execa('git', ['ls-remote', '--tags', '--refs', '--quiet'], { cwd }).then((result) => result.stdout);

@@ -1,8 +1,6 @@
-'use strict';
-
-const execa = require('execa');
-const path = require('path');
-const lernaCLI = require('../packages/cli/src/lerna-cli');
+import execa from 'execa';
+import path from 'path';
+import lernaCLI from '../packages/cli/src/lerna-cli';
 
 // eslint-disable-next-line node/no-unpublished-require
 const LERNA_BIN = require.resolve('../packages/cli/src/cli');
@@ -14,14 +12,14 @@ const LERNA_BIN = require.resolve('../packages/cli/src/cli');
  * @param {Object} commandModule The yargs command exports
  * @return {Function} with partially-applied yargs config
  */
-exports.commandRunner = function commandRunner(commandModule) {
+export function commandRunner(commandModule: any) {
   /* eslint-disable import/no-dynamic-require, global-require */
   const cmd = commandModule.command.split(' ')[0];
 
   // prime the pump so slow-as-molasses CI doesn't fail with delayed require()
-  require(path.resolve(require.main.filename, '../..'));
+  require(path.resolve((require as any).main.filename, '../..'));
 
-  return (cwd) => {
+  return (cwd: string) => {
     // create a _new_ yargs instance every time cwd changes to avoid singleton pollution
     const cli = lernaCLI([], cwd)
       .exitProcess(false)
@@ -32,8 +30,7 @@ exports.commandRunner = function commandRunner(commandModule) {
 
     return (...args) =>
       new Promise((resolve, reject) => {
-        const yargsMeta = {};
-
+        const yargsMeta: any = {};
         const context = {
           cwd,
           lernaVersion: '__TEST_VERSION__',
@@ -60,7 +57,7 @@ exports.commandRunner = function commandRunner(commandModule) {
           .fail((msg, err) => {
             // since yargs 10.1.0, this is the only way to catch handler rejection
             // _and_ yargs validation exceptions when using async command handlers
-            const actual = err || new Error(msg);
+            const actual = (err || new Error(msg)) as Error & { exitCode: number };
             // backfill exitCode for test convenience
             yargsMeta.exitCode = 'exitCode' in actual ? actual.exitCode : 1;
             context.onRejected(actual);
@@ -68,7 +65,7 @@ exports.commandRunner = function commandRunner(commandModule) {
           .parse([cmd, ...args], context, parseFn);
       });
   };
-};
+}
 
 exports.cliRunner = function cliRunner(cwd, env) {
   const opts = {

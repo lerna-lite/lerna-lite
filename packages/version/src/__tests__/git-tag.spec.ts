@@ -1,8 +1,6 @@
-'use strict';
-
 import { exec } from '@lerna-lite/core';
 
-const { gitTag } = require('../lib/git-tag');
+import { gitTag } from '../lib/git-tag';
 
 jest.mock('@lerna-lite/core', () => {
   const { exec } = jest.requireActual('@lerna-lite/core');
@@ -19,7 +17,7 @@ describe('gitTag', () => {
     const tag = 'v1.2.3';
     const opts = { cwd: 'default' };
 
-    await gitTag(tag, {}, opts);
+    await gitTag(tag, {} as any, opts);
 
     expect(exec).toHaveBeenLastCalledWith('git', ['tag', tag, '-m', tag], opts, false);
   });
@@ -28,7 +26,7 @@ describe('gitTag', () => {
     const tag = 'v3.2.1';
     const opts = { cwd: 'signed' };
 
-    await gitTag(tag, { signGitTag: true }, opts);
+    await gitTag(tag, { signGitTag: true } as any, opts);
 
     expect(exec).toHaveBeenLastCalledWith('git', ['tag', tag, '-m', tag, '--sign'], opts, false);
   });
@@ -37,7 +35,7 @@ describe('gitTag', () => {
     const tag = 'v1.1.1';
     const opts = { cwd: 'forced' };
 
-    await gitTag(tag, { forceGitTag: true }, opts);
+    await gitTag(tag, { forceGitTag: true } as any, opts);
 
     expect(exec).toHaveBeenLastCalledWith('git', ['tag', tag, '-m', tag, '--force'], opts, false);
   });

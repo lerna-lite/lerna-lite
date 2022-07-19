@@ -1,12 +1,11 @@
-'use strict';
+import execa from 'execa';
+import fs from 'fs-extra';
+import path from 'path';
+import slash from 'slash';
+import { gitAdd } from '../lib/git-add';
 
-const execa = require('execa');
-const fs = require('fs-extra');
-const path = require('path');
-const slash = require('slash');
 import helpers from '@lerna-test/helpers';
 const initFixture = helpers.initFixtureFactory(__dirname);
-const { gitAdd } = require('../lib/git-add');
 
 const getStagedFile = async (cwd) =>
   execa('git', ['diff', '--cached', '--name-only'], { cwd }).then((result) => slash(result.stdout));

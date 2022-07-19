@@ -4,7 +4,7 @@ jest.mock('@lerna-lite/core', () => ({
 }));
 
 // mocked modules
-const { logOutput } = require('@lerna-lite/core');
+import { logOutput } from '@lerna-lite/core';
 
 import { lerna } from '../lerna-entry';
 
@@ -13,6 +13,6 @@ describe('cli lerna-entry', () => {
     const output = await lerna(['info']);
 
     expect(output).toBeTruthy();
-    expect(logOutput.logged()).toContain('Environment info:');
+    expect((logOutput as any).logged()).toContain('Environment info:');
   });
 });

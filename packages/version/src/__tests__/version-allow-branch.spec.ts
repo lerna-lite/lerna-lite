@@ -1,5 +1,3 @@
-'use strict';
-
 // local modules _must_ be explicitly mocked
 jest.mock('../lib/git-push', () => jest.requireActual('../lib/__mocks__/git-push'));
 jest.mock('../lib/is-anything-committed', () => jest.requireActual('../lib/__mocks__/is-anything-committed'));
@@ -21,9 +19,8 @@ import execa from 'execa';
 import yargParser from 'yargs-parser';
 
 // helpers
-const initFixture = require('@lerna-test/helpers').initFixtureFactory(
-  path.resolve(__dirname, '../../../publish/src/__tests__')
-);
+import helpers from '@lerna-test/helpers';
+const initFixture = helpers.initFixtureFactory(path.resolve(__dirname, '../../../publish/src/__tests__'));
 
 // test command
 import { VersionCommand } from '../index';

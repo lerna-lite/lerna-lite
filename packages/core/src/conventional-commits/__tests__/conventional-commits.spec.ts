@@ -5,11 +5,8 @@ import path from 'path';
 const { Project } = require('../../project');
 
 // helpers
-import helpers from '@lerna-test/helpers';
+import helpers, { gitAdd, gitCommit, gitTag } from '@lerna-test/helpers';
 const initFixture = helpers.initFixtureFactory(__dirname);
-const { gitAdd } = require('@lerna-test/helpers');
-const { gitCommit } = require('@lerna-test/helpers');
-const { gitTag } = require('@lerna-test/helpers');
 
 // file under test
 import { recommendVersion, updateChangelog } from '../../conventional-commits';

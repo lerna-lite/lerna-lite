@@ -41,9 +41,8 @@ const initFixture = helpers.initFixtureFactory(__dirname);
 
 // test command
 import { factory, PublishCommand } from '../index';
-const lernaPublish = require('@lerna-test/helpers').commandRunner(
-  require('../../../cli/src/cli-commands/cli-publish-commands')
-);
+import cliCommands from '../../../cli/src/cli-commands/cli-publish-commands';
+const lernaPublish = helpers.commandRunner(cliCommands);
 
 // stabilize commit SHA
 expect.addSnapshotSerializer(require('@lerna-test/helpers/serializers/serialize-git-sha'));

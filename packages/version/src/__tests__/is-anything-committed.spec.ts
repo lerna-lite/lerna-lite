@@ -1,11 +1,9 @@
-'use strict';
+import execa from 'execa';
+import { execSync } from '@lerna-lite/core';
+import { isAnythingCommitted } from '../lib/is-anything-committed';
 
-const execa = require('execa');
 import helpers from '@lerna-test/helpers';
 const initFixture = helpers.initFixtureFactory(__dirname);
-const { isAnythingCommitted } = require('../lib/is-anything-committed');
-
-import { execSync } from '@lerna-lite/core';
 
 jest.mock('@lerna-lite/core', () => {
   const { execSync } = jest.requireActual('@lerna-lite/core');

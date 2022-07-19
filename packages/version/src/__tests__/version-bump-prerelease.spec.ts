@@ -17,33 +17,31 @@ jest.mock('@lerna-lite/core', () => ({
 // also point to the local version command so that all mocks are properly used even by the command-runner
 jest.mock('@lerna-lite/version', () => jest.requireActual('../version-command'));
 
-const fs = require('fs-extra');
-const path = require('path');
-const yargParser = require('yargs-parser');
+import fs from 'fs-extra';
+import path from 'path';
+import yargParser from 'yargs-parser';
 // mocked modules
-const { promptTextInput, promptSelectOne } = require('@lerna-lite/core');
+import { promptTextInput, promptSelectOne } from '@lerna-lite/core';
 
 // helpers
-const initFixture = require('@lerna-test/helpers').initFixtureFactory(
-  path.resolve(__dirname, '../../../publish/src/__tests__')
-);
-const { showCommit } = require('@lerna-test/helpers');
-const { gitAdd } = require('@lerna-test/helpers');
-const { gitCommit } = require('@lerna-test/helpers');
-const { gitInit } = require('@lerna-test/helpers');
-const { gitTag } = require('@lerna-test/helpers');
-const { getCommitMessage } = require('@lerna-test/helpers');
+import { showCommit } from '@lerna-test/helpers';
+import { gitAdd } from '@lerna-test/helpers';
+import { gitCommit } from '@lerna-test/helpers';
+import { gitInit } from '@lerna-test/helpers';
+import { gitTag } from '@lerna-test/helpers';
+import { getCommitMessage } from '@lerna-test/helpers';
+import helpers from '@lerna-test/helpers';
+const initFixture = helpers.initFixtureFactory(path.resolve(__dirname, '../../../publish/src/__tests__'));
 
-const Tacks = require('tacks');
-const tempy = require('tempy');
+import Tacks from 'tacks';
+import tempy from 'tempy';
 
 const { File, Dir } = Tacks;
 
 // test command
 import { VersionCommand } from '../version-command';
-const lernaVersion = require('@lerna-test/helpers').commandRunner(
-  require('../../../cli/src/cli-commands/cli-version-commands')
-);
+import cliCommands from '../../../cli/src/cli-commands/cli-version-commands';
+const lernaVersion = helpers.commandRunner(cliCommands);
 
 // remove quotes around top-level strings
 expect.addSnapshotSerializer({
@@ -176,9 +174,9 @@ test('independent version prerelease does not bump on every unrelated change', a
   await gitCommit(cwd, 'init');
 
   // simulate choices for pkg-a then pkg-b
-  promptSelectOne.chooseBump('patch');
-  promptSelectOne.chooseBump('PRERELEASE');
-  promptTextInput.mockImplementationOnce((msg, cfg) =>
+  (promptSelectOne as any).chooseBump('patch');
+  (promptSelectOne as any).chooseBump('PRERELEASE');
+  (promptTextInput as any).mockImplementationOnce((msg, cfg) =>
     // the _existing_ "bumps" prerelease ID should be preserved
     Promise.resolve(cfg.filter())
   );
