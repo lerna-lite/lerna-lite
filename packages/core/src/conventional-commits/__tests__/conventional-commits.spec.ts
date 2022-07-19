@@ -423,7 +423,7 @@ describe('conventional-commits', () => {
 
       await gitTag(cwd, 'dragons-are-awesome1.0.0');
 
-      const [pkg1] = await getPackages(cwd);
+      const [pkg1] = await Project.getPackages(cwd);
 
       // make a change in package-1
       await pkg1.set('changed', 1).serialize();
@@ -662,7 +662,7 @@ describe('conventional-commits', () => {
       await gitTag(cwd, 'package-1@1.0.0');
       await gitTag(cwd, 'package-2@1.0.0');
 
-      const [pkg1, pkg2] = await getPackages(cwd);
+      const [pkg1, pkg2] = await Project.getPackages(cwd);
 
       // make a change in package-1 and package-2
       await pkg1.set('changed', 1).serialize();
