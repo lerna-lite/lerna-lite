@@ -1,4 +1,4 @@
-const nodeFs = require('node:fs');
+import nodeFs from 'fs';
 jest.spyOn(nodeFs, 'renameSync');
 
 // local modules _must_ be explicitly mocked

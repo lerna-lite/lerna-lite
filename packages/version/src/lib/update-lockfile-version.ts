@@ -1,7 +1,7 @@
 import log from 'npmlog';
 import path from 'path';
 import loadJsonFile from 'load-json-file';
-import { promises as fsPromises, renameSync } from 'node:fs';
+import fs from 'fs';
 import os from 'os';
 import semver from 'semver';
 import writeJsonFile from 'write-json-file';
@@ -168,7 +168,7 @@ export async function runInstallLockFileOnly(
 
           // 2. rename "npm-shrinkwrap.json" back to "package-lock.json"
           log.verbose('lock', `renaming "npm-shrinkwrap.json" file back to "package-lock.json"`);
-          renameSync('npm-shrinkwrap.json', 'package-lock.json');
+          fs.renameSync('npm-shrinkwrap.json', 'package-lock.json');
         }
 
         outputLockfileName = inputLockfileName;
@@ -195,7 +195,7 @@ export async function runInstallLockFileOnly(
  */
 export async function validateFileExists(filePath: string) {
   try {
-    await fsPromises.access(filePath);
+    await fs.promises.access(filePath);
     return true;
   } catch {
     return false;
