@@ -49,7 +49,9 @@ export async function updateChangelog(
   const gitRawCommitsOpts = Object.assign({}, options.config.gitRawCommitsOpts);
 
   // when including commit author's name, we need to change the conventional commit format
-  // and later do string extract, of ">>author=%an<<", and replacement to get a commit string that would add (@authorName) to the end of the commit string, ie:
+  // available formats can be found at Git's url: https://git-scm.com/docs/git-log#_pretty_formats
+  // we will later extract a defined token from the string, of ">>author=%an<<",
+  // and reformat the string to get a commit string that would add (@authorName) to the end of the commit string, ie:
   // **deps:** update all non-major dependencies ([ed1db35](https://github.com/ghiscoding/lerna-lite/commit/ed1db35)) (@Renovate-Bot)
   if (changelogIncludeCommitAuthor) {
     gitRawCommitsOpts.format = '%B%n-hash-%n%H>>author=%an<<';
