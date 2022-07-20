@@ -76,15 +76,15 @@ describe('collectUpdates()', () => {
     ]);
     expect(hasTags).toHaveBeenLastCalledWith(execOpts, '');
     expect(describeRefSync).toHaveBeenLastCalledWith(execOpts, undefined, false);
-    expect(makeDiffPredicate).toHaveBeenLastCalledWith("v1.0.0", execOpts, undefined);
+    expect(makeDiffPredicate).toHaveBeenLastCalledWith('v1.0.0', execOpts, undefined);
   });
 
-  it("returns node with changes in independent mode", () => {
-    changedPackages.add("package-standalone");
+  it('returns node with changes in independent mode', () => {
+    changedPackages.add('package-standalone');
 
     const graph = buildGraph();
     const pkgs = graph.rawPackageList;
-    const execOpts = { cwd: "/test", match: '*@*'};
+    const execOpts = { cwd: '/test', match: '*@*' };
     // require("console").dir(graph, { compact: false });
 
     const updates = collectUpdates(pkgs, graph, execOpts, {
@@ -93,7 +93,7 @@ describe('collectUpdates()', () => {
 
     expect(updates).toEqual([
       expect.objectContaining({
-        name: "package-standalone",
+        name: 'package-standalone',
       }),
     ]);
     expect(hasTags).toHaveBeenLastCalledWith(execOpts, '*@*');

@@ -20,7 +20,7 @@ export class ListCommand extends Command<ListCommandOption & FilterOptions> {
   }
 
   async initialize() {
-    this.options.isIndependent =  this.project.isIndependent();
+    this.options.isIndependent = this.project.isIndependent();
     const filteredPackages = await getFilteredPackages(this.packageGraph, this.execOpts, this.options);
     this.result = listable.format(filteredPackages, this.options);
   }

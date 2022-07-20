@@ -237,8 +237,10 @@ export interface UpdateCollectorOptions {
   /** Ref to use when querying git, defaults to most recent annotated tag */
   since?: string;
 
+  /** are we using Lerna independent mode? */
   isIndependent?: boolean;
 
+  /** are we using conventional commits? */
   conventionalCommits?: boolean;
   conventionalGraduate?: boolean;
   excludeDependents?: boolean;

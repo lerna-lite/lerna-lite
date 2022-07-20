@@ -61,7 +61,7 @@ export class ExecCommand extends Command<ExecCommandOption & FilterOptions> {
 
     let chain: Promise<any> = Promise.resolve();
 
-    this.options.isIndependent =  this.project.isIndependent();
+    this.options.isIndependent = this.project.isIndependent();
 
     chain = chain.then(() => getFilteredPackages(this.packageGraph, this.execOpts, this.options));
     chain = chain.then((filteredPackages: Package[]) => {
