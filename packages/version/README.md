@@ -493,13 +493,13 @@ lerna publish from-git --tag-version-prefix=''
 
 ### `--sync-workspace-lock`
 
-This flag will leverage your package manager client to update the project lock file (ie `npm install --package-lock-only`) it is reliant on the [npmClient](https://github.com/ghiscoding/lerna-lite/wiki/lerna.json#concepts) defined in [lerna.json](https://github.com/ghiscoding/lerna-lite/wiki/lerna.json) (`pnpm`, `yarn` or `npm` which is default), this will also include the lock file as a git change once processed. This technique should be much more future proof and safer than having Lerna-Lite doing the work of updating the lock file which is not always ideal neither safe, this flag is one of two solutions (probably the best option) to update the lock file. It might not be the best solution for your use case, see notes below, just give it a try.
+This flag will leverage your package manager client to update the project lock file (ie `npm install --package-lock-only`) it relies heavily on the [npmClient](https://github.com/ghiscoding/lerna-lite/wiki/lerna.json#concepts) defined in your [lerna.json](https://github.com/ghiscoding/lerna-lite/wiki/lerna.json) config (`pnpm`, `yarn` or `npm` which is default) so make sure you have it configured correctly, this process will also include the lock file as part of your git change history once processed. This technique should be much more future proof and safer than having Lerna-Lite doing the actual work of updating the lock file which is not always ideal, neither safe, this flag is one of two solutions (the best option when available) to update the lock file. It might not be the best solution for your use case (ie it doesn't work with yarn classic), see all client notes below:
 
 #### Notes for each client:
 
-> `npm` users: we recommend having npm client version >=8.5.0 installed, so that we can run `npm install --package-lock-only` instead of `npm shrinkwrap` with version < 8.5.0 which would require an extra negative step of lock file renaming. Also note that requiring >=8.5.0 might become an actual minimal requirement in a future release.
+> `npm` users: we recommend having npm client version >=8.5.0 installed, so that we can run `npm install --package-lock-only` instead of `npm shrinkwrap` with version < 8.5.0 which would require an extra, and negative, step of renaming the lock file after execution. Also note that npm >=8.5.0 will become the minimal requirement in the future.
 
-> `pnpm`/`yarn` users: we recommend using the `workspace:` protocol since it will prefer local dependencies and will make it less likely to fetch packages accidentally from the registry (refer to version with [`workspace:` protocol](#workspace-protocol)).
+> `pnpm`/`yarn` users: we recommend using the [`workspace:` protocol](#workspace-protocol) since it will prefer local dependencies and will make it less likely to fetch packages accidentally from the registry.
 
 > `yarn` users: please note that this will only work with Yarn Berry 3.x and higher since it uses `yarn install --mode update-lockfile` (this will not work with yarn 1.x classic)
 
@@ -507,17 +507,18 @@ This flag will leverage your package manager client to update the project lock f
 lerna version --sync-workspace-lock
 ```
 
-The script performed for each client will be the following
+Depending on the `npmClient` defined, it will perform the following:
 
 ```sh
-# npm assuming a `package-lock.json` lock file
+# npm is assuming a `package-lock.json` lock file
+# we highly recommend npm client >= 8.5.0
 npm install --package-lock-only     # npm client >= 8.5.0
-npm shrinkwrap --package-lock-only  # npm client < 8.5.0 will execute a file rename behind the scene
+npm shrinkwrap --package-lock-only  # npm client < 8.5.0 will execute a file rename of shrinkwrap file behind the scene
 
-# pnpm assuming a "pnpm-lock.yaml" lock file and "npmClient": "pnpm"
+# pnpm is assuming a "pnpm-lock.yaml" lock file and "npmClient": "pnpm"
 pnpm install --lockfile-only
 
-# yarn assuming a "yarn.lock" lock file and "npmClient": "yarn"
+# yarn is assuming a "yarn.lock" lock file and "npmClient": "yarn"
 yarn install --mode update-lockfile
 ```
 
@@ -532,6 +533,7 @@ When run with this flag, `lerna version` will skip all confirmation prompts.
 Useful in [Continuous integration (CI)](https://en.wikipedia.org/wiki/Continuous_integration) to automatically answer the publish confirmation prompt.
 
 ## Deprecated Options
+_these options will be removed in the next major version_
 
 ### `--cd-version`
 
@@ -597,12 +599,12 @@ lerna will run [npm lifecycle scripts](https://docs.npmjs.com/cli/v8/using-npm/s
 
 # `workspace:` protocol
 
-The `workspace:` protocol ([pnpm workspace](https://pnpm.io/workspaces), [yarn workspace](https://yarnpkg.com/features/workspaces#workspace-ranges-workspace)) is also supported by Lerna-Lite. We also strongly suggest that you also use the new [`--sync-workspace-lock`](#--sync-workspace-lock) flag to properly update your lock file. When versioning `workspace:` dependency, it will do the following:
+The `workspace:` protocol ([pnpm workspace](https://pnpm.io/workspaces), [yarn workspace](https://yarnpkg.com/features/workspaces#workspace-ranges-workspace)) is also supported by Lerna-Lite. We also strongly suggest that you use this in combo with the new [`--sync-workspace-lock`](#--sync-workspace-lock) flag to properly update your root project lock file. When versioning `workspace:` dependencies, it will do the following:
 
 - fixed target workspace will remain untouched (if you use `workspace:*`, `workspace:~`, or `workspace:^`)
 - semver range workspace will be bumped (if you use `workspace:^1.2.3`)
 
-So for example, if we have `foo`, `bar`, `qar`, `zoo` in the workspace and they all are at version `1.5.0` and a `minor` bump is requested, then the following:
+So for example, if we have `foo`, `bar`, `qar`, `zoo` in the workspace and they are all at version `1.5.0` and a `minor` bump is requested, then the following:
 
 ```json
 {
@@ -615,7 +617,7 @@ So for example, if we have `foo`, `bar`, `qar`, `zoo` in the workspace and they 
 }
 ```
 
-Will do the following update(s) to your `package.json` assuming a `minor` version requested:
+Will apply the following updates to your `package.json` (assuming a `minor` version was requested):
 
 ```json
 {
