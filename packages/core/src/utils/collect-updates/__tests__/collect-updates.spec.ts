@@ -74,7 +74,29 @@ describe('collectUpdates()', () => {
         name: 'package-standalone',
       }),
     ]);
-    expect(hasTags).toHaveBeenLastCalledWith(execOpts);
+    expect(hasTags).toHaveBeenLastCalledWith(execOpts, '');
+    expect(describeRefSync).toHaveBeenLastCalledWith(execOpts, undefined, false);
+    expect(makeDiffPredicate).toHaveBeenLastCalledWith('v1.0.0', execOpts, undefined);
+  });
+
+  it('returns node with changes in independent mode', () => {
+    changedPackages.add('package-standalone');
+
+    const graph = buildGraph();
+    const pkgs = graph.rawPackageList;
+    const execOpts = { cwd: '/test', match: '*@*' };
+    // require("console").dir(graph, { compact: false });
+
+    const updates = collectUpdates(pkgs, graph, execOpts, {
+      isIndependent: true,
+    });
+
+    expect(updates).toEqual([
+      expect.objectContaining({
+        name: 'package-standalone',
+      }),
+    ]);
+    expect(hasTags).toHaveBeenLastCalledWith(execOpts, '*@*');
     expect(describeRefSync).toHaveBeenLastCalledWith(execOpts, undefined, false);
     expect(makeDiffPredicate).toHaveBeenLastCalledWith('v1.0.0', execOpts, undefined);
   });

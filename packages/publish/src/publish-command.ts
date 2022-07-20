@@ -365,6 +365,8 @@ export class PublishCommand extends Command<PublishCommandOption> {
         }
       });
 
+    const isIndependent = this.project.isIndependent();
+
     // find changed packages since last release, if any
     chain = chain.then(() =>
       collectUpdates(
@@ -377,6 +379,7 @@ export class PublishCommand extends Command<PublishCommandOption> {
           ignoreChanges,
           forcePublish,
           includeMergedTags,
+          isIndependent,
           // private packages are never published, don't bother describing their refs.
         } as UpdateCollectorOptions,
         this.options.gitDryRun
@@ -394,7 +397,7 @@ export class PublishCommand extends Command<PublishCommandOption> {
       return `${nextVersion}-${preid}.${Math.max(0, refCount - 1)}+${sha}`;
     };
 
-    if (this.project.isIndependent()) {
+    if (isIndependent) {
       // each package is described against its tags only
       chain = chain.then((updates) =>
         pMap(updates, (node: Package) =>

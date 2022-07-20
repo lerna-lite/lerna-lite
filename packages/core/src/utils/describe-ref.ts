@@ -48,8 +48,12 @@ function describeRef(
   return promise.then(({ stdout } = { stdout: '' }) => {
     const result = parse(stdout, options.cwd);
 
-    log.verbose('git-describe', '%j => %j', options?.match, stdout);
-    log.silly('git-describe', 'parsed => %j', result);
+    if (options?.match) {
+      log.verbose('git-describe', '%j => %j', options?.match, stdout);
+    }
+    if (stdout) {
+      log.silly('git-describe', 'parsed => %j', result);
+    }
 
     return result;
   });
@@ -63,8 +67,12 @@ function describeRefSync(options: DescribeRefOptions = {}, includeMergedTags?: b
   const stdout = execSync('git', getArgs(options, includeMergedTags), options, gitDryRun);
   const result = parse(stdout, options.cwd);
 
-  // only called by collect-updates with no matcher
-  log.silly('git-describe.sync', '%j => %j', stdout, result);
+  if (options?.match) {
+    log.verbose('git-describe.sync', '%j => %j', options?.match, stdout);
+  }
+  if (stdout) {
+    log.silly('git-describe', 'parsed => %j', result);
+  }
 
   return result;
 }

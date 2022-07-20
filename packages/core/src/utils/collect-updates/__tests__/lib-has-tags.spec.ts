@@ -17,6 +17,12 @@ describe('hasTags()', () => {
     expect(childProcess.execSync).toHaveBeenLastCalledWith('git', ['tag'], { cwd: 'test' });
   });
 
+  it('calls `git tag` with --list pattern', () => {
+    hasTags({ cwd: 'test' }, '*@*');
+
+    expect(childProcess.execSync).toHaveBeenLastCalledWith('git', ['tag', '--list', '*@*'], { cwd: 'test' });
+  });
+
   it('returns true when tags exist', () => {
     expect(hasTags()).toBe(true);
   });

@@ -1,5 +1,5 @@
 import log from 'npmlog';
-import { ExecOpts, UpdateCollectorOptions } from '../../models';
+import { DescribeRefOptions, ExecOpts, UpdateCollectorOptions } from '../../models';
 import { Package } from '../../package';
 import { PackageGraph } from '../../package-graph';
 
@@ -23,7 +23,7 @@ export function collectUpdates(
   commandOptions: UpdateCollectorOptions,
   gitDryRun = false
 ) {
-  const { forcePublish, conventionalCommits, conventionalGraduate, excludeDependents } = commandOptions;
+  const { forcePublish, conventionalCommits, conventionalGraduate, excludeDependents, isIndependent } = commandOptions;
 
   // If --conventional-commits and --conventional-graduate are both set, ignore --force-publish
   const useConventionalGraduate = conventionalCommits && conventionalGraduate;
@@ -37,10 +37,23 @@ export function collectUpdates(
       : new Map(filteredPackages.map(({ name }) => [name, packageGraph.get(name)]));
 
   let committish = commandOptions.since;
+  const tagPattern = isIndependent ? '*@*' : '';
 
-  if (hasTags(execOpts)) {
+  if (hasTags(execOpts, tagPattern)) {
+    const describeOptions: DescribeRefOptions = {
+      ...execOpts,
+    };
+
+    if (isIndependent) {
+      describeOptions.match = tagPattern;
+    }
+
     // describe the last annotated tag in the current branch
-    const { sha, refCount, lastTagName } = describeRefSync(execOpts, commandOptions.includeMergedTags, gitDryRun);
+    const { sha, refCount, lastTagName } = describeRefSync(
+      describeOptions,
+      commandOptions.includeMergedTags,
+      gitDryRun
+    );
     // TODO: warn about dirty tree?
 
     if (refCount === '0' && forced.size === 0 && !committish) {
