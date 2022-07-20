@@ -76,6 +76,7 @@ Running `lerna version --conventional-commits` without the above flags will rele
     - [`--conventional-commits`](#--conventional-commits)
     - [`--conventional-graduate`](#--conventional-graduate)
     - [`--conventional-prerelease`](#--conventional-prerelease)
+    - [`--changelog-include-commit-author`](#--changelog-include-commit-author) (new)
     - [`--changelog-header-message <msg>`](#--changelog-header-message-msg) (new)
     - [`--changelog-version-message <msg>`](#--changelog-version-message-msg) (new)
     - [`--create-release <type>`](#--create-release-type)
@@ -229,12 +230,24 @@ lerna version --conventional-commits --conventional-prerelease
 
 When run with this flag, `lerna version` will release with prerelease versions the specified packages (comma-separated) or all packages using `*`. Releases all unreleased changes as pre(patch/minor/major/release) by prefixing the version recommendation from `conventional-commits` with `pre`, eg. if present changes include a feature commit, the recommended bump will be `minor`, so this flag will result in a `preminor` release. If changes are present for packages that are not specified (if specifying packages), or for packages that are already in prerelease, those packages will be versioned as they normally would using `--conventional-commits`.
 
+### `--changelog-include-commit-author`
+Specify if we want to include the commit author's name, at the end of each commit entry, when using `--conventional-commits` with changelogs.
+
+```sh
+lerna version --conventional-commits --changelog-include-commit-author
+```
+
+See below for a sample of a changelog entry with author (note the url was shorten up for simplicity)
+```sh
+* **deps:** update dependency git-url-parse to v12 ([978bf36](https://github.com/ghiscoding/lerna-lite/commit/978bf36)) (@Renovate-Bot)
+```
+
 ### `--changelog-header-message <msg>`
 
 Add a custom message at the top of your "changelog.md" which is located in the root of your project. This option only works when using `--conventional-commits` and will only impact your project root "changelog.md".
 
 ```sh
-lerna version --changelog-header-message "My Custom Header Message"
+lerna version --conventional-commits --changelog-header-message "My Custom Header Message"
 ```
 
 ### `--changelog-version-message <msg>`
@@ -242,7 +255,7 @@ lerna version --changelog-header-message "My Custom Header Message"
 Add a custom message as a prefix to your new version in your "changelog.md" which is located in the root of your project. This option only works when using `--conventional-commits` and will only impact your project root "changelog.md".
 
 ```sh
-lerna version --changelog-version-message "My Great New Version Message"
+lerna version --conventional-commits --changelog-version-message "My Great New Version Message"
 ```
 
 ### `--create-release <type>`

@@ -11,8 +11,9 @@
       "createRelease": "github",
       "gitDryRun": false,
       "syncWorkspaceLock": true,
-      "message": "chore(release): publish new version %v",
-      "changelogHeaderMessage": "### Automate your Workspace Versions, Changelogs & Publish with [Lerna-Lite](https://github.com/ghiscoding/lerna-lite) 🚀"
+      "changelogIncludeCommitAuthor": true,
+      "changelogHeaderMessage": "### Automate your Workspace Versions, Changelogs & Publish with [Lerna-Lite](https://github.com/ghiscoding/lerna-lite) 🚀",
+      "message": "chore(release): publish new version %v"
     },
     "run": {
       "cmdDryRun": false

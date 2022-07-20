@@ -418,6 +418,76 @@ describe('conventional-commits', () => {
       `);
     });
 
+    it('supports custom tagPrefix in fixed mode and include commit author', async () => {
+      const cwd = await initFixture('fixed');
+
+      await gitTag(cwd, 'dragons-are-awesome1.0.0');
+
+      const [pkg1] = await Project.getPackages(cwd);
+
+      // make a change in package-1
+      await pkg1.set('changed', 1).serialize();
+      await gitAdd(cwd, pkg1.manifestLocation);
+      await gitCommit(cwd, 'fix: A second commit for our CHANGELOG');
+
+      // update version
+      await pkg1.set('version', '1.0.1').serialize();
+
+      const [leafChangelog, rootChangelog] = await Promise.all([
+        updateChangelog(pkg1, 'fixed', {
+          changelogIncludeCommitAuthor: true,
+          tagPrefix: 'dragons-are-awesome',
+        }),
+        updateChangelog({ location: cwd } as Package, 'root', {
+          changelogIncludeCommitAuthor: true,
+          tagPrefix: 'dragons-are-awesome',
+          version: '1.0.1',
+        }),
+      ]);
+
+      expect(leafChangelog.newEntry.trimRight()).toMatchInlineSnapshot(`
+        ## [1.0.1](/compare/dragons-are-awesome1.0.0...dragons-are-awesome1.0.1) (YYYY-MM-DD)
+
+
+        ### Bug Fixes
+
+        * A second commit for our CHANGELOG ([SHA](https://github.com/lerna/conventional-commits-fixed/commit/GIT_HEAD)) (@Tester-McPerson)
+      `);
+      expect(rootChangelog.newEntry.trimRight()).toMatchInlineSnapshot(`
+        ## [1.0.1](/compare/dragons-are-awesome1.0.0...dragons-are-awesome1.0.1) (YYYY-MM-DD)
+
+
+        ### Bug Fixes
+
+        * A second commit for our CHANGELOG ([SHA](https://github.com/lerna/conventional-commits-fixed/commit/GIT_HEAD)) (@Tester-McPerson)
+      `);
+
+      await gitAdd(cwd, pkg1.manifestLocation);
+      await gitCommit(cwd, 'chore(release): Publish v1.0.1');
+      await gitTag(cwd, 'dragons-are-awesome1.0.1');
+
+      // subsequent change
+      await pkg1.set('changed', 2).serialize();
+      await gitAdd(cwd, pkg1.manifestLocation);
+      await gitCommit(cwd, 'fix: A third commit for our CHANGELOG');
+
+      const lastRootChangelog = await updateChangelog({ location: cwd } as Package, 'root', {
+        changelogIncludeCommitAuthor: true,
+        tagPrefix: 'dragons-are-awesome',
+        version: '1.0.2',
+      });
+
+      // second commit should not show up again
+      expect(lastRootChangelog.newEntry.trimRight()).toMatchInlineSnapshot(`
+        ## [1.0.2](/compare/dragons-are-awesome1.0.1...dragons-are-awesome1.0.2) (YYYY-MM-DD)
+
+
+        ### Bug Fixes
+
+        * A third commit for our CHANGELOG ([SHA](https://github.com/lerna/conventional-commits-fixed/commit/GIT_HEAD)) (@Tester-McPerson)
+      `);
+    });
+
     it('appends version bump message if no commits have been recorded', async () => {
       const cwd = await initFixture('fixed');
 
@@ -583,6 +653,55 @@ describe('conventional-commits', () => {
         ### Features
 
         * **thing:** added ([SHA](https://github.com/lerna/conventional-commits-independent/commit/GIT_HEAD))
+      `);
+    });
+
+    it('updates independent changelogs and include commit author', async () => {
+      const cwd = await initFixture('independent');
+
+      await gitTag(cwd, 'package-1@1.0.0');
+      await gitTag(cwd, 'package-2@1.0.0');
+
+      const [pkg1, pkg2] = await Project.getPackages(cwd);
+
+      // make a change in package-1 and package-2
+      await pkg1.set('changed', 1).serialize();
+      await pkg2.set('changed', 2).serialize();
+
+      await gitAdd(cwd, pkg1.manifestLocation);
+      await gitCommit(cwd, 'fix(stuff): changed');
+
+      await gitAdd(cwd, pkg2.manifestLocation);
+      await gitCommit(cwd, 'feat(thing): added');
+
+      // update versions
+      await pkg1.set('version', '1.0.1').serialize();
+      await pkg2.set('version', '1.1.0').serialize();
+
+      const opts = {
+        changelogPreset: 'conventional-changelog-angular',
+        changelogIncludeCommitAuthor: true,
+      };
+      const [changelogOne, changelogTwo] = await Promise.all([
+        updateChangelog(pkg1, 'independent', opts),
+        updateChangelog(pkg2, 'independent', opts),
+      ]);
+
+      expect(changelogOne.newEntry.trimRight()).toMatchInlineSnapshot(`
+        ## [1.0.1](/compare/package-1@1.0.0...package-1@1.0.1) (YYYY-MM-DD)
+
+
+        ### Bug Fixes
+
+        * **stuff:** changed ([SHA](https://github.com/lerna/conventional-commits-independent/commit/GIT_HEAD)) (@Tester-McPerson)
+      `);
+      expect(changelogTwo.newEntry.trimRight()).toMatchInlineSnapshot(`
+        # [1.1.0](/compare/package-2@1.0.0...package-2@1.1.0) (YYYY-MM-DD)
+
+
+        ### Features
+
+        * **thing:** added ([SHA](https://github.com/lerna/conventional-commits-independent/commit/GIT_HEAD)) (@Tester-McPerson)
       `);
     });
   });

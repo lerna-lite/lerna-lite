@@ -189,6 +189,9 @@ export interface VersionCommandOption {
   /** Add a custom message at the top of your "changelog.md" which is located in the root of your project. This option only works when using --conventional-commits. */
   changelogHeaderMessage?: string;
 
+  /** Specify if we want to include the commit author's name when using conventional-commits with changelog */
+  changelogIncludeCommitAuthor?: boolean;
+
   /** Add a custom message as a prefix to each new version in your "changelog.md" which is located in the root of your project. This option only works when using --conventional-commits. */
   changelogVersionMessage?: string;
 

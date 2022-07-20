@@ -27,6 +27,7 @@ export async function updateChangelog(
     rootPath,
     tagPrefix = 'v',
     version = undefined,
+    changelogIncludeCommitAuthor = false,
     changelogHeaderMessage = '',
     changelogVersionMessage = '',
   } = updateOptions;
@@ -46,6 +47,15 @@ export async function updateChangelog(
 
   // NOTE: must pass as positional argument due to weird bug in merge-config
   const gitRawCommitsOpts = Object.assign({}, options.config.gitRawCommitsOpts);
+
+  // when including commit author's name, we need to change the conventional commit format
+  // available formats can be found at Git's url: https://git-scm.com/docs/git-log#_pretty_formats
+  // we will later extract a defined token from the string, of ">>author=%an<<",
+  // and reformat the string to get a commit string that would add (@authorName) to the end of the commit string, ie:
+  // **deps:** update all non-major dependencies ([ed1db35](https://github.com/ghiscoding/lerna-lite/commit/ed1db35)) (@Renovate-Bot)
+  if (changelogIncludeCommitAuthor) {
+    gitRawCommitsOpts.format = '%B%n-hash-%n%H>>author=%an<<';
+  }
 
   if (type === 'root') {
     context.version = version;
@@ -76,9 +86,13 @@ export async function updateChangelog(
   const changelogStream = conventionalChangelogCore(options, context, gitRawCommitsOpts);
 
   return Promise.all([
-    (getStream as any)(changelogStream).then(makeBumpOnlyFilter(pkg)),
+    // prettier-ignore
+    getStream(changelogStream).then(makeBumpOnlyFilter(pkg)),
     readExistingChangelog(pkg),
-  ]).then(([newEntry, [changelogFileLoc, changelogContents]]) => {
+  ]).then(([inputEntry, [changelogFileLoc, changelogContents]]) => {
+    // are we including commit author's name in changelog?
+    const newEntry = changelogIncludeCommitAuthor ? parseChangelogCommitAuthorName(inputEntry) : inputEntry;
+
     log.silly(type, 'writing new entry: %j', newEntry);
 
     const changelogVersion = type === 'root' ? changelogVersionMessage : '';
@@ -101,4 +115,34 @@ export async function updateChangelog(
       };
     });
   });
+}
+
+/**
+ * From an input entry string that most often, not always, include commit author's name within defined tokens ">>author=AUTHOR_NAME<<"
+ * We will want to extract the author's name from the commit url and recreate the commit url string and add its author to the end of the string.
+ * You might be wondering, WHY is the commit author part of the commit url?
+ * Mainly because it seems that adding a `format` to the `conventional-changelog-core` of `gitRawCommitsOpts`
+ * will always include it as part of the final commit url because of this line where it parses the template and always seems to include whatever we add into the commit url
+ * https://github.com/conventional-changelog/conventional-changelog/blob/master/packages/git-raw-commits/index.js#L27
+ *
+ * We will transform a string that looks like this:
+ *   "deps: update all non-major dependencies ([ed1db35](https://github.com/ghiscoding/lerna-lite/commit/ed1db35>>author=Renovate Bot<<))"
+ * then extract the commit author's name and transform it into a new string that will look like below
+ *   "deps: update all non-major dependencies ([ed1db35](https://github.com/ghiscoding/lerna-lite/commit/ed1db35)) (@Renovate-Bot)"
+ * @param changelogEntry - changelog entry of a version being released which can contain multiple line entries
+ * @returns
+ */
+function parseChangelogCommitAuthorName(changelogEntry: string) {
+  // to transform the string into what we want, we need to move the substring outside of the url and remove extra search tokens
+  // from this:
+  //   "...ed1db35>>author=Renovate Bot<<))"
+  // into this:
+  //   "...ed1db35)) (@Renovate-Bot)"
+  return changelogEntry.replace(
+    /(.*)(>>author=)(.*)(<<)(.*)/g,
+    (_: string, lineStart: string, _tokenStart?: string, author?: string, _tokenEnd?: string, lineEnd?: string) => {
+      // rebuild the commit string, we'll also replace any whitespaces to hypen in author's name to make it a valid "@" user ref
+      return `${lineStart}${lineEnd || ''} (@${author?.replace(/\s/g, '-') ?? ''})`;
+    }
+  );
 }
