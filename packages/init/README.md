@@ -35,7 +35,7 @@ Create/initialize a new Lerna-Lite repo or upgrade an existing repo to the curre
 When run, this command will:
 
 1. Add `lerna` as a [`devDependency`](https://docs.npmjs.com/files/package.json#devdependencies) in `package.json` if it doesn't already exist.
-2. Creates `lerna.json` config file to store the `version` number and also add a `packages` property (unless you have [--use-workspaces](#--use-workspaces))
+2. Creates `lerna.json` config file to store the `version` number and also add a `packages` property (unless you provide [--use-workspaces](#--use-workspaces))
    - for more info and full details about the `lerna.json` file, you can read the [lerna.json](https://github.com/ghiscoding/lerna-lite/wiki/lerna.json) Wiki.
 
 Example output on a new git repo:
@@ -100,9 +100,9 @@ It will configure `lerna.json` to enforce exact match for all subsequent executi
 $ lerna init --use-workspaces
 ```
 
-This flag tells Lerna-Lite to add a `workspaces` property in the project root `package.json` instead of the default `lerna.json` file, which is the workspace setup that Yarn/NPM now use.
+This flag tells Lerna-Lite to add a `workspaces` property in your project root `package.json` file instead of the default `lerna.json` file, this is the recommended workspace setup for Yarn/NPM Workspaces (however not recommended for pnpm).
 
-In summary, this flag is only useful for npm or yarn users which have `workspaces` array property in their `package.json` and this will not work or do anything for pnpm users (these users should simply use the default setting, which is to have `packages` in `lerna.json` file (as shown in default usage [`lerna.json`](#lernajson) config).
+In summary, this flag is only useful for npm or yarn users which expect a `workspaces` array property in their `package.json`. For pnpm users, this will not work neither do anything (the default setting of having `packages` in `lerna.json` file (as shown in default usage [`lerna.json`](#lernajson) config).
 
 ##### `lerna.json`
 
@@ -112,7 +112,7 @@ In summary, this flag is only useful for npm or yarn users which have `workspace
 }
 ```
 
-##### `package.json` (project root)
+##### `package.json` (at the project root)
 
 ```json
 {
