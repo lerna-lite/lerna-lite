@@ -11,9 +11,9 @@
 
 #### @lerna-lite/cli
 
-CLI for the `init`, `info`, `publish`, `version` and optional `exec`, `list`, `run` commands, the CLI must be called via `lerna <command>` (where command is any of the commands shown below). You can see some more usage samples below.
+CLI for the `init`, `info`, `publish`, `version` and optional commands, the CLI must be called via `lerna <command>` (where command is any of the commands shown below). You can see some more usage samples below.
 
-**Note:** Please note that the `exec`, `list` and `run` commands are optional packages and must be installed separately.
+**Note:** Please note that the `changed`, `diff`, `exec`, `list` and `run` commands are optional packages and must be installed separately.
 
 ## Installation
 
@@ -40,7 +40,7 @@ For all available options of each command, follow any of the command link shown 
   - [lerna info](https://github.com/ghiscoding/lerna-lite/blob/main/packages/info/README.md)
   - [lerna publish](https://github.com/ghiscoding/lerna-lite/blob/main/packages/publish/README.md)
   - [lerna version](https://github.com/ghiscoding/lerna-lite/blob/main/packages/version/README.md)
-- **optional commands** (require a separate install, refer to [installation](https://github.com/ghiscoding/lerna-lite#installation) table)
+- **optional commands** (requires a separate install, refer to the [installation](https://github.com/ghiscoding/lerna-lite#installation) table)
   - [lerna changed](https://github.com/ghiscoding/lerna-lite/blob/main/packages/changed/README.md)
   - [lerna diff](https://github.com/ghiscoding/lerna-lite/blob/main/packages/diff/README.md)
   - [lerna exec](https://github.com/ghiscoding/lerna-lite/blob/main/packages/exec/README.md)
