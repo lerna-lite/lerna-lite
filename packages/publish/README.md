@@ -425,7 +425,7 @@ lerna will run [npm lifecycle scripts](https://docs.npmjs.com/cli/v8/using-npm/s
 
 # `workspace:` protocol
 
-The `workspace:` protocol ([pnpm workspace](https://pnpm.io/workspaces), [yarn workspace](https://yarnpkg.com/features/workspaces#workspace-ranges-workspace)) is also supported by Lerna-Lite. We also strongly suggest that you also use the new [`--sync-workspace-lock`](https://github.com/ghiscoding/lerna-lite/tree/main/packages/version#--sync-workspace-lock) flag to properly update your lock file. When publishing, it will replace any `workspace:` dependency by:
+The `workspace:` protocol ([pnpm workspace](https://pnpm.io/workspaces), [yarn workspace](https://yarnpkg.com/features/workspaces#workspace-ranges-workspace)) is also supported by Lerna-Lite. We also strongly suggest that you use this in combo with the new [`--sync-workspace-lock`](https://github.com/ghiscoding/lerna-lite/tree/main/packages/version#--sync-workspace-lock) flag to properly update your root project lock file. When publishing, it will replace any `workspace:` dependencies by:
 
 - the corresponding version in the target workspace (if you use `workspace:*`, `workspace:~`, or `workspace:^`)
 - the associated semver range (for any other range type)
@@ -464,7 +464,7 @@ _this is the default and is usually what most user will want to use since it wil
 
 When strict match is disabled, it will be transformed and publish with the following:
 
-_you would rarely want to disable the strict match, in fact it will be removed from the code in future release, this flag was created for the sole purpose of making it compatible with previous Lerna-Lite version `1.2.0`. When disabled, in most cases Lerna will assume that the caret (^) is needed unless the option [--exact](https://github.com/ghiscoding/lerna-lite/tree/main/packages/version#--exact) is provided and by doing so is not strictly following pnpm/yarn workspace protocol and is not recommended for that reason._
+_you would rarely want to disable the strict match, in fact this option will be removed entirely in a future release, this flag was created for the sole purpose of making it compatible with previous Lerna-Lite version `1.2.0`. When disabled, in most cases Lerna will assume that the caret (^) is needed unless the option [--exact](https://github.com/ghiscoding/lerna-lite/tree/main/packages/version#--exact) is provided and by doing so will not be strictly following pnpm/yarn workspace protocol and for that reason is not recommended._
 
 ```json
 {
