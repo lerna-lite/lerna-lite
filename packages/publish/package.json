@@ -41,7 +41,7 @@
     "libnpmpublish": "^6.0.4",
     "npm-package-arg": "^9.1.0",
     "npm-packlist": "^5.1.1",
-    "npm-registry-fetch": "^13.2.0",
+    "npm-registry-fetch": "^13.3.0",
     "npmlog": "^6.0.2",
     "os": "^0.1.2",
     "p-map": "^4.0.0",
