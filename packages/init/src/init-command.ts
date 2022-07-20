@@ -1,4 +1,4 @@
-import { Command, CommandType, exec, InitCommandOption, ProjectConfig, RawManifest } from '@lerna-lite/core';
+import { Command, CommandType, exec, InitCommandOption, ProjectConfig } from '@lerna-lite/core';
 import fs from 'fs-extra';
 import path from 'path';
 import pMap from 'p-map';
@@ -102,7 +102,7 @@ export class InitCommand extends Command<InitCommandOption> {
       version = '0.0.0';
     }
 
-    const logMessage = (!projectVersion) ? 'Creating lerna.json' : 'Updating lerna.json';
+    const logMessage = !projectVersion ? 'Creating lerna.json' : 'Updating lerna.json';
     this.logger.info('', logMessage);
 
     delete config[LERNA_CLI_PKG_NAME]; // no longer relevant
@@ -115,7 +115,7 @@ export class InitCommand extends Command<InitCommandOption> {
       initConfig.exact = true;
     }
 
-    const lernaConfig: Partial<ProjectConfig> = { version };
+    const lernaConfig: Partial<ProjectConfig> = { useNx: false, version };
     if (!this.options.useWorkspaces) {
       lernaConfig.packages = ['packages/*'];
     }
@@ -124,9 +124,9 @@ export class InitCommand extends Command<InitCommandOption> {
     return this.project.serializeConfig();
   }
 
-  async ensurePackagesDir() {
+  ensurePackagesDir() {
     this.logger.info('', 'Creating packages directory');
 
-    return pMap(await this.project.packageParentDirs, (dir) => fs.mkdirp(dir));
+    return pMap(this.project.packageParentDirs, (dir) => fs.mkdirp(dir));
   }
 }

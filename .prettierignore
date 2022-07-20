@@ -1,3 +1,9 @@
-# Ignore all HTML files:
+# Ignore all yaml files & dist folders
 *.yml
 *.yaml
+dist
+
+# Ignore json configuration files in fixtures, sometimes they are intentionally malformed
+**/__fixtures__/**/*.json
+**/README.md
+lerna.json

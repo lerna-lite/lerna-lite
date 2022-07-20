@@ -102,6 +102,10 @@ Running `lerna version --conventional-commits` without the above flags will rele
     - [`--tag-version-prefix`](#--tag-version-prefix)
     - [`--sync-workspace-lock`](#--sync-workspace-lock) (new)
     - [`--yes`](#--yes)
+  - [Deprecated Options](#deprecated-options)
+    - [`--cd-version`](#--cd-version)
+    - [`--repo-version`](#--repo-version)
+    - [`--skip-git`](#--skip-git)
   - [Tips](#tips)
     - [Generating Initial Changelogs](#generating-initial-changelogs)
   - [Lifecycle Scripts](#lifecycle-scripts)
@@ -527,6 +531,45 @@ lerna version --yes
 When run with this flag, `lerna version` will skip all confirmation prompts.
 Useful in [Continuous integration (CI)](https://en.wikipedia.org/wiki/Continuous_integration) to automatically answer the publish confirmation prompt.
 
+## Deprecated Options
+
+### `--cd-version`
+
+Pass the semver keyword to the [`bump`](#semver-bump) positional instead.
+
+### `--repo-version`
+
+Pass an explicit version number to the [`bump`](#semver-bump) positional instead.
+
+### `--skip-git`
+
+Use [`--no-git-tag-version`](#--no-git-tag-version) and [`--no-push`](#--no-push) instead.
+
+> NOTE: This option **does not** restrict _all_ git commands from being executed. `git` is still required by `lerna version`.
+
+## Tips
+
+### Generating Initial Changelogs
+
+If you start using the [`--conventional-commits`](#--conventional-commits) option _after_ the monorepo has been active for awhile, you can still generate changelogs for previous releases using [`conventional-changelog-cli`](https://github.com/conventional-changelog/conventional-changelog/tree/master/packages/conventional-changelog-cli#readme) and [`lerna exec`](https://github.com/lerna/lerna/tree/main/commands/exec#readme):
+
+```bash
+# Lerna does not actually use conventional-changelog-cli, so you need to install it temporarily
+npm i -D conventional-changelog-cli
+# Documentation: `npx conventional-changelog --help`
+
+# fixed versioning (default)
+# run in root, then leaves
+npx conventional-changelog --preset angular --release-count 0 --outfile ./CHANGELOG.md --verbose
+npx lerna exec --concurrency 1 --stream -- 'conventional-changelog --preset angular --release-count 0 --commit-path $PWD --pkg $PWD/package.json --outfile $PWD/CHANGELOG.md --verbose'
+
+# independent versioning
+# (no root changelog)
+npx lerna exec --concurrency 1 --stream -- 'conventional-changelog --preset angular --release-count 0 --commit-path $PWD --pkg $PWD/package.json --outfile $PWD/CHANGELOG.md --verbose --lerna-package $LERNA_PACKAGE_NAME'
+```
+
+If you use a custom [`--changelog-preset`](#--changelog-preset), you should change `--preset` value accordingly in the example above.
+
 ## Lifecycle Scripts
 
 ```js
@@ -554,7 +597,7 @@ lerna will run [npm lifecycle scripts](https://docs.npmjs.com/cli/v8/using-npm/s
 
 # `workspace:` protocol
 
-The `workspace:` protocol ([pnpm workspace](https://pnpm.io/workspaces), [yarn workspace](https://yarnpkg.com/features/workspaces#workspace-ranges-workspace)) is also supported by Lerna-Lite. When versioning `workspace:` dependency, it will do the following:
+The `workspace:` protocol ([pnpm workspace](https://pnpm.io/workspaces), [yarn workspace](https://yarnpkg.com/features/workspaces#workspace-ranges-workspace)) is also supported by Lerna-Lite. We also strongly suggest that you also use the new [`--sync-workspace-lock`](#--sync-workspace-lock) flag to properly update your lock file. When versioning `workspace:` dependency, it will do the following:
 
 - fixed target workspace will remain untouched (if you use `workspace:*`, `workspace:~`, or `workspace:^`)
 - semver range workspace will be bumped (if you use `workspace:^1.2.3`)
@@ -572,7 +615,7 @@ So for example, if we have `foo`, `bar`, `qar`, `zoo` in the workspace and they 
 }
 ```
 
-Will update your `package.json` with the following versions with a `minor` version requested:
+Will do the following update(s) to your `package.json` assuming a `minor` version requested:
 
 ```json
 {

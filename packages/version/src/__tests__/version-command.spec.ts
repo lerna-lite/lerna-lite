@@ -30,39 +30,35 @@ import execa from 'execa';
 import yaml from 'js-yaml';
 
 // mocked or stubbed modules
-const writePkg = require('write-pkg');
-const { promptConfirmation, promptSelectOne } = require('@lerna-lite/core');
-const { collectUpdates } = require('@lerna-lite/core');
-const { logOutput } = require('@lerna-lite/core');
-const { checkWorkingTree, throwIfUncommitted } = require('@lerna-lite/core');
-const { gitPush: libPush } = require('../lib/git-push');
-const { isAnythingCommitted } = require('../lib/is-anything-committed');
-const { isBehindUpstream } = require('../lib/is-behind-upstream');
-const { remoteBranchExists } = require('../lib/remote-branch-exists');
+import writePkg from 'write-pkg';
+import { promptConfirmation, promptSelectOne } from '@lerna-lite/core';
+import { collectUpdates } from '@lerna-lite/core';
+import { logOutput } from '@lerna-lite/core';
+import { checkWorkingTree, throwIfUncommitted } from '@lerna-lite/core';
+import { gitPush as libPush } from '../lib/git-push';
+import { isAnythingCommitted } from '../lib/is-anything-committed';
+import { isBehindUpstream } from '../lib/is-behind-upstream';
+import { remoteBranchExists } from '../lib/remote-branch-exists';
 
 // helpers
-const { loggingOutput } = require('@lerna-test/logging-output');
-const { gitAdd } = require('@lerna-test/git-add');
-const { gitTag } = require('@lerna-test/git-tag');
-const { gitCommit } = require('@lerna-test/git-commit');
-const initFixture = require('@lerna-test/init-fixture')(
-  path.resolve(__dirname, '../../../publish/src/__tests__')
-);
-const { showCommit } = require('@lerna-test/show-commit');
-const { getCommitMessage } = require('@lerna-test/get-commit-message');
+import { loggingOutput } from '@lerna-test/helpers/logging-output';
+import helpers, { getCommitMessage, gitAdd, gitCommit, gitTag, showCommit } from '@lerna-test/helpers';
 
 // test command
 import { VersionCommand } from '../version-command';
-const lernaVersion = require('@lerna-test/command-runner')(
-  require('../../../cli/src/cli-commands/cli-version-commands')
-);
 import { loadPackageLockFileWhenExists } from '../lib/update-lockfile-version';
+import cliCommands from '../../../cli/src/cli-commands/cli-version-commands';
+const lernaVersion = helpers.commandRunner(cliCommands);
+const initFixture = helpers.initFixtureFactory(path.resolve(__dirname, '../../../publish/src/__tests__'));
 
 // file under test
 const yargParser = require('yargs-parser');
 
 const createArgv = (cwd, ...args) => {
   args.unshift('version');
+  if (args.length > 0 && args[1]?.length > 0 && !args[1].startsWith('-')) {
+    args[1] = `--bump=${args[1]}`;
+  }
   const parserArgs = args.map(String);
   const argv = yargParser(parserArgs);
   argv['$0'] = cwd;
@@ -90,7 +86,7 @@ const listDirty = (cwd) =>
   );
 
 // stabilize commit SHA
-expect.addSnapshotSerializer(require('@lerna-test/serialize-git-sha'));
+expect.addSnapshotSerializer(require('@lerna-test/helpers/serializers/serialize-git-sha'));
 
 describe('VersionCommand', () => {
   describe('normal mode', () => {
@@ -102,10 +98,10 @@ describe('VersionCommand', () => {
 
       expect(checkWorkingTree).toHaveBeenCalled();
 
-      expect(promptSelectOne.mock.calls).toMatchSnapshot('prompt');
+      expect((promptSelectOne as any).mock.calls).toMatchSnapshot('prompt');
       expect(promptConfirmation).toHaveBeenLastCalledWith('Are you sure you want to create these versions?');
 
-      expect(writePkg.updatedManifest('package-1')).toMatchSnapshot('gitHead');
+      expect((writePkg as any).updatedManifest('package-1')).toMatchSnapshot('gitHead');
 
       const patch = await showCommit(testDir);
       expect(patch).toMatchSnapshot('commit');
@@ -118,7 +114,34 @@ describe('VersionCommand', () => {
         }),
         undefined
       );
-      expect(logOutput.logged()).toMatchSnapshot('console output');
+      expect((logOutput as any).logged()).toMatchSnapshot('console output');
+    });
+
+    it('versions changed packages with publish prompt', async () => {
+      const testDir = await initFixture('normal');
+      // when --conventional-commits is absent,
+      // --no-changelog should have _no_ effect
+      await new VersionCommand({ ...createArgv(testDir, '--no-changelog'), composed: 'composed' });
+
+      expect(checkWorkingTree).toHaveBeenCalled();
+
+      expect((promptSelectOne as any).mock.calls).toMatchSnapshot('prompt');
+      expect(promptConfirmation).toHaveBeenLastCalledWith('Are you sure you want to publish these packages?');
+
+      expect((writePkg as any).updatedManifest('package-1')).toMatchSnapshot('gitHead');
+
+      const patch = await showCommit(testDir);
+      expect(patch).toMatchSnapshot('commit');
+
+      expect(libPush).toHaveBeenLastCalledWith(
+        'origin',
+        'main',
+        expect.objectContaining({
+          cwd: testDir,
+        }),
+        undefined
+      );
+      expect((logOutput as any).logged()).toMatchSnapshot('console output');
     });
 
     it('throws an error when --independent is passed', async () => {
@@ -130,9 +153,7 @@ describe('VersionCommand', () => {
 
     it('throws an error if conventional prerelease and graduate flags are both passed', async () => {
       const testDir = await initFixture('normal');
-      const command = new VersionCommand(
-        createArgv(testDir, '--conventional-prerelease', '--conventional-graduate')
-      );
+      const command = new VersionCommand(createArgv(testDir, '--conventional-prerelease', '--conventional-graduate'));
 
       await expect(command).rejects.toThrow(
         '--conventional-prerelease cannot be combined with --conventional-graduate.'
@@ -151,7 +172,7 @@ describe('VersionCommand', () => {
     });
 
     it("throws an error when remote branch doesn't exist", async () => {
-      remoteBranchExists.mockReturnValueOnce(false);
+      (remoteBranchExists as any).mockReturnValueOnce(false);
 
       const testDir = await initFixture('normal');
       const command = new VersionCommand(createArgv(testDir));
@@ -160,7 +181,7 @@ describe('VersionCommand', () => {
     });
 
     it('throws an error when uncommitted changes are present', async () => {
-      checkWorkingTree.mockImplementationOnce(() => {
+      (checkWorkingTree as any).mockImplementationOnce(() => {
         throw new Error('uncommitted');
       });
 
@@ -172,7 +193,7 @@ describe('VersionCommand', () => {
     });
 
     it('throws an error when current ref is already tagged', async () => {
-      checkWorkingTree.mockImplementationOnce(() => {
+      (checkWorkingTree as any).mockImplementationOnce(() => {
         throw new Error('released');
       });
 
@@ -194,8 +215,8 @@ describe('VersionCommand', () => {
     it('only bumps changed packages when non-major version selected', async () => {
       const testDir = await initFixture('normal');
 
-      collectUpdates.setUpdated(testDir, 'package-3');
-      promptSelectOne.chooseBump('minor');
+      (collectUpdates as any).setUpdated(testDir, 'package-3');
+      (promptSelectOne as any).chooseBump('minor');
 
       await new VersionCommand(createArgv(testDir));
 
@@ -206,8 +227,8 @@ describe('VersionCommand', () => {
     it('bumps all packages when major version selected', async () => {
       const testDir = await initFixture('normal');
 
-      collectUpdates.setUpdated(testDir, 'package-3');
-      promptSelectOne.chooseBump('major');
+      (collectUpdates as any).setUpdated(testDir, 'package-3');
+      (promptSelectOne as any).chooseBump('major');
 
       await new VersionCommand(createArgv(testDir));
 
@@ -219,8 +240,8 @@ describe('VersionCommand', () => {
       const testDir = await initFixture('normal');
 
       // despite being a pendant leaf...
-      collectUpdates.setUpdated(testDir, 'package-4');
-      promptSelectOne.chooseBump('major');
+      (collectUpdates as any).setUpdated(testDir, 'package-4');
+      (promptSelectOne as any).chooseBump('major');
 
       await new VersionCommand(createArgv(testDir, '--no-private'));
 
@@ -234,18 +255,18 @@ describe('VersionCommand', () => {
   describe('independent mode', () => {
     it('versions changed packages', async () => {
       // mock version prompt choices
-      promptSelectOne.chooseBump('patch');
-      promptSelectOne.chooseBump('minor');
-      promptSelectOne.chooseBump('major');
-      promptSelectOne.chooseBump('minor');
-      promptSelectOne.chooseBump('patch');
+      (promptSelectOne as any).chooseBump('patch');
+      (promptSelectOne as any).chooseBump('minor');
+      (promptSelectOne as any).chooseBump('major');
+      (promptSelectOne as any).chooseBump('minor');
+      (promptSelectOne as any).chooseBump('patch');
 
       const testDir = await initFixture('independent');
       await new VersionCommand(createArgv(testDir)); // --independent is only valid in InitCommand
 
       expect(promptConfirmation).toHaveBeenCalled();
 
-      expect(writePkg.updatedManifest('package-1')).toMatchSnapshot('gitHead');
+      expect((writePkg as any).updatedManifest('package-1')).toMatchSnapshot('gitHead');
 
       const patch = await showCommit(testDir);
       expect(patch).toMatchSnapshot('commit');
@@ -258,7 +279,7 @@ describe('VersionCommand', () => {
         }),
         undefined
       );
-      expect(logOutput.logged()).toMatchSnapshot('console output');
+      expect((logOutput as any).logged()).toMatchSnapshot('console output');
     });
   });
 
@@ -300,7 +321,7 @@ describe('VersionCommand', () => {
       const testDir = await initFixture('normal');
       await new VersionCommand(createArgv(testDir, '--no-git-tag-version'));
 
-      expect(writePkg.updatedManifest('package-1')).toMatchSnapshot('gitHead');
+      expect((writePkg as any).updatedManifest('package-1')).toMatchSnapshot('gitHead');
 
       expect(libPush).not.toHaveBeenCalled();
 
@@ -335,6 +356,14 @@ describe('VersionCommand', () => {
       expect(logMessages).toContain('Skipping git tag/commit');
     });
 
+    it('is displaying a warning when using deprecated flag --ignore', async () => {
+      const testDir = await initFixture('normal');
+      await lernaVersion(testDir)('--ignore');
+
+      const logMessages = loggingOutput();
+      expect(logMessages).toContain('--ignore has been renamed --ignore-changes');
+    });
+
     it('is implied by --skip-git', async () => {
       const testDir = await initFixture('normal');
       await lernaVersion(testDir)('--skip-git');
@@ -361,8 +390,7 @@ describe('VersionCommand', () => {
 
   // TODO: (major) make --no-granular-pathspec the default
   describe('--no-granular-pathspec', () => {
-    const getLeftover = (cwd) =>
-      execa('git', ['ls-files', '--others'], { cwd }).then((result) => result.stdout);
+    const getLeftover = (cwd) => execa('git', ['ls-files', '--others'], { cwd }).then((result) => result.stdout);
 
     it('adds changed files globally', async () => {
       const cwd = await initFixture('normal');
@@ -614,7 +642,7 @@ describe('VersionCommand', () => {
 
   describe('when local clone is behind upstream', () => {
     it('throws an error during interactive publish', async () => {
-      isBehindUpstream.mockReturnValueOnce(true);
+      (isBehindUpstream as any).mockReturnValueOnce(true);
 
       const testDir = await initFixture('normal');
       const command = new VersionCommand(createArgv(testDir, '--no-ci'));
@@ -623,7 +651,7 @@ describe('VersionCommand', () => {
     });
 
     it('logs a warning and exits early during CI publish', async () => {
-      isBehindUpstream.mockReturnValueOnce(true);
+      (isBehindUpstream as any).mockReturnValueOnce(true);
 
       const testDir = await initFixture('normal');
 
@@ -646,7 +674,7 @@ describe('VersionCommand', () => {
     it('ignores private packages with no version', async () => {
       const testDir = await initFixture('not-versioned-private');
       await new VersionCommand(createArgv(testDir));
-      expect(Object.keys(writePkg.updatedVersions())).not.toContain('package-4');
+      expect(Object.keys((writePkg as any).updatedVersions())).not.toContain('package-4');
     });
   });
 
@@ -662,9 +690,7 @@ describe('VersionCommand', () => {
       const cwd = await detachedHEAD();
       const command = new VersionCommand(createArgv(cwd));
 
-      await expect(command).rejects.toThrow(
-        'Detached git HEAD, please checkout a branch to choose versions.'
-      );
+      await expect(command).rejects.toThrow('Detached git HEAD, please checkout a branch to choose versions.');
     });
 
     it('does not throw for version --no-git-tag-version', async () => {
@@ -685,23 +711,19 @@ describe('VersionCommand', () => {
       const cwd = await detachedHEAD();
       const command = new VersionCommand(createArgv(cwd, '--no-git-tag-version', '--conventional-commits'));
 
-      await expect(command).rejects.toThrow(
-        'Detached git HEAD, please checkout a branch to choose versions.'
-      );
+      await expect(command).rejects.toThrow('Detached git HEAD, please checkout a branch to choose versions.');
     });
 
     it('throws for version --allow-branch', async () => {
       const cwd = await detachedHEAD();
       const command = new VersionCommand(createArgv(cwd, '--no-git-tag-version', '--allow-branch', 'main'));
 
-      await expect(command).rejects.toThrow(
-        'Detached git HEAD, please checkout a branch to choose versions.'
-      );
+      await expect(command).rejects.toThrow('Detached git HEAD, please checkout a branch to choose versions.');
     });
   });
 
   it('exits with an error when no commits are present', async () => {
-    isAnythingCommitted.mockReturnValueOnce(false);
+    (isAnythingCommitted as any).mockReturnValueOnce(false);
 
     const testDir = await initFixture('normal', false);
     const command = new VersionCommand(createArgv(testDir));
@@ -714,7 +736,7 @@ describe('VersionCommand', () => {
   it('exits early when no changes found', async () => {
     const cwd = await initFixture('normal');
 
-    collectUpdates.setUpdated(cwd);
+    (collectUpdates as any).setUpdated(cwd);
 
     await new VersionCommand(createArgv(cwd));
 
@@ -730,7 +752,7 @@ describe('VersionCommand', () => {
     await gitAdd(testDir, '.');
     await gitCommit(testDir, 'feat: hello');
 
-    collectUpdates.mockImplementationOnce(collectUpdatesActual);
+    (collectUpdates as any).mockImplementationOnce(collectUpdatesActual);
 
     await new VersionCommand(createArgv(testDir, '--bump', 'major', '--yes'));
 
@@ -749,7 +771,7 @@ describe('VersionCommand', () => {
     await gitAdd(testDir, '.');
     await gitCommit(testDir, 'feat: hello');
 
-    collectUpdates.mockImplementationOnce(collectUpdatesActual);
+    (collectUpdates as any).mockImplementationOnce(collectUpdatesActual);
 
     await new VersionCommand(createArgv(testDir, '--bump', 'major', '--yes'));
 
@@ -781,7 +803,7 @@ describe('VersionCommand', () => {
       await setupChanges(testDir);
       await new VersionCommand(createArgv(testDir, '--bump', 'major', '--yes'));
 
-      expect(writePkg.updatedVersions()).toEqual({
+      expect((writePkg as any).updatedVersions()).toEqual({
         'package-1': '2.0.0',
         'package-2': '2.0.0',
         'package-3': '2.0.0',
@@ -792,16 +814,16 @@ describe('VersionCommand', () => {
       });
 
       // package-1 has no relative file: dependencies
-      expect(writePkg.updatedManifest('package-2').dependencies).toMatchObject({
+      expect((writePkg as any).updatedManifest('package-2').dependencies).toMatchObject({
         'package-1': 'file:../package-1',
       });
-      expect(writePkg.updatedManifest('package-3').dependencies).toMatchObject({
+      expect((writePkg as any).updatedManifest('package-3').dependencies).toMatchObject({
         'package-2': 'file:../package-2',
       });
-      expect(writePkg.updatedManifest('package-4').optionalDependencies).toMatchObject({
+      expect((writePkg as any).updatedManifest('package-4').optionalDependencies).toMatchObject({
         'package-3': 'file:../package-3',
       });
-      expect(writePkg.updatedManifest('package-5').dependencies).toMatchObject({
+      expect((writePkg as any).updatedManifest('package-5').dependencies).toMatchObject({
         'package-4': 'file:../package-4',
         'package-6': 'file:../package-6',
       });
@@ -834,13 +856,11 @@ describe('VersionCommand', () => {
   describe('with root lockfile on npm lockfile version >=2', () => {
     it('should update project root lockfile version 2 for every necessary properties by writing directly to the file', async () => {
       const cwd = await initFixture('lockfile-version2');
-      await new VersionCommand(
-        createArgv(cwd, '--bump', 'major', '--yes', '--manually-update-root-lockfile')
-      );
+      await new VersionCommand(createArgv(cwd, '--bump', 'major', '--yes', '--manually-update-root-lockfile'));
 
       const changedFiles = await showCommit(cwd, '--name-only');
       expect(changedFiles).toContain('package-lock.json');
-      expect(writePkg.updatedVersions()).toEqual({
+      expect((writePkg as any).updatedVersions()).toEqual({
         '@my-workspace/package-1': '3.0.0',
         '@my-workspace/package-2': '3.0.0',
       });
@@ -867,14 +887,7 @@ describe('VersionCommand', () => {
       it(`should NOT call runInstallLockFileOnly() when --no-sync-workspace-lock & --no-manually-update-root-lockfile are provided`, async () => {
         const cwd = await initFixture('lockfile-version2');
         await new VersionCommand(
-          createArgv(
-            cwd,
-            '--bump',
-            'major',
-            '--yes',
-            '--no-sync-workspace-lock',
-            '--no-manually-update-root-lockfile'
-          )
+          createArgv(cwd, '--bump', 'major', '--yes', '--no-sync-workspace-lock', '--no-manually-update-root-lockfile')
         );
 
         const changedFiles = await showCommit(cwd, '--name-only');
@@ -894,9 +907,7 @@ describe('VersionCommand', () => {
         const { lockfileVersion, importers } = lockfileResponse;
 
         expect(lockfileVersion).toBe(5.4);
-        expect(importers['packages/package-2'].specifiers['@my-workspace/package-1']).toBe(
-          'workspace:^3.0.0'
-        );
+        expect(importers['packages/package-2'].specifiers['@my-workspace/package-1']).toBe('workspace:^3.0.0');
         expect(importers['packages/package-3'].specifiers['@my-workspace/package-1']).toBe('workspace:^');
         expect(importers['packages/package-3'].specifiers['@my-workspace/package-2']).toBe('workspace:*');
         expect(importers['packages/package-4'].specifiers['@my-workspace/package-1']).toBe('workspace:3.0.0');
@@ -909,7 +920,7 @@ describe('VersionCommand', () => {
 
         const changedFiles = await showCommit(cwd, '--name-only');
         expect(changedFiles).toContain('pnpm-lock.yaml');
-        expect(writePkg.updatedVersions()).toEqual({
+        expect((writePkg as any).updatedVersions()).toEqual({
           '@my-workspace/package-1': '2.4.0',
           '@my-workspace/package-2': '2.4.0',
           '@my-workspace/package-3': '2.4.0',
@@ -920,9 +931,7 @@ describe('VersionCommand', () => {
         const { lockfileVersion, importers } = lockfileResponse;
 
         expect(lockfileVersion).toBe(5.4);
-        expect(importers['packages/package-2'].specifiers['@my-workspace/package-1']).toBe(
-          'workspace:^2.4.0'
-        );
+        expect(importers['packages/package-2'].specifiers['@my-workspace/package-1']).toBe('workspace:^2.4.0');
         expect(importers['packages/package-3'].specifiers['@my-workspace/package-1']).toBe('workspace:^');
         expect(importers['packages/package-3'].specifiers['@my-workspace/package-2']).toBe('workspace:*');
         expect(importers['packages/package-4'].specifiers['@my-workspace/package-1']).toBe('workspace:2.4.0');

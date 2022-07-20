@@ -12,7 +12,9 @@ import { writeLogFile } from './utils/write-log-file';
 import { Project } from './project/project';
 import { ValidationError } from './validation-error';
 import {
+  ChangedCommandOption,
   CommandType,
+  DiffCommandOption,
   ExecCommandOption,
   ExecOpts,
   InitCommandOption,
@@ -27,6 +29,8 @@ import { PackageGraph } from './package-graph/package-graph';
 const DEFAULT_CONCURRENCY = os.cpus().length;
 
 type AvailableCommandOption =
+  | ChangedCommandOption
+  | DiffCommandOption
   | ExecCommandOption
   | InitCommandOption
   | ListCommandOption
@@ -191,9 +195,7 @@ export class Command<T extends AvailableCommandOption> {
     const commandConfig = this.project.config.command || {};
 
     // The current command always overrides otherCommandConfigs
-    const overrides = [this.commandName, ...this.otherCommandConfigs].map(
-      (key) => (commandConfig as any)[key]
-    );
+    const overrides = [this.commandName, ...this.otherCommandConfigs].map((key) => (commandConfig as any)[key]);
 
     this.options = defaultOptions(
       // CLI flags, which if defined overrule subsequent values

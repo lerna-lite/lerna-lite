@@ -35,7 +35,10 @@ export class GetChangelogConfig {
    * @param {import('..').ChangelogPresetConfig} [changelogPreset]
    * @param {string} [rootPath]
    */
-  static getChangelogConfig(changelogPreset: string | { name: string; } = 'conventional-changelog-angular', rootPath?: string) {
+  static getChangelogConfig(
+    changelogPreset: string | { name: string } = 'conventional-changelog-angular',
+    rootPath?: string
+  ) {
     const presetName = typeof changelogPreset === 'string' ? changelogPreset : changelogPreset.name;
     const presetConfig = typeof changelogPreset === 'object' ? changelogPreset : {};
 
@@ -103,7 +106,8 @@ export class GetChangelogConfig {
 
         throw new ValidationError(
           'EPRESET',
-          `Unable to load conventional-changelog preset "${presetName}"${presetName !== presetPackageName ? ` (${presetPackageName})` : ''
+          `Unable to load conventional-changelog preset "${presetName}"${
+            presetName !== presetPackageName ? ` (${presetPackageName})` : ''
           }`
         );
       }

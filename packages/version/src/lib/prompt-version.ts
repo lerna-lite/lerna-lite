@@ -42,7 +42,7 @@ export async function promptVersion(currentVersion: string, name: string, prerel
     return promptTextInput('Enter a custom version', {
       filter: semver.valid,
       // semver.valid() always returns null with invalid input
-      validate: v => v !== null || 'Must be a valid semver version',
+      validate: (v) => v !== null || 'Must be a valid semver version',
     });
   }
 
@@ -51,7 +51,7 @@ export async function promptVersion(currentVersion: string, name: string, prerel
     const prompt = `(default: "${prereleaseId}", yielding ${defaultVersion})`;
 
     return promptTextInput(`Enter a prerelease identifier ${prompt}`, {
-      filter: v => semver.inc(currentVersion, 'prerelease', v || prereleaseId),
+      filter: (v) => semver.inc(currentVersion, 'prerelease', v || prereleaseId),
     });
   }
 

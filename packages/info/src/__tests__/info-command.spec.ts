@@ -1,22 +1,24 @@
 jest.mock('envinfo');
 
-const path = require('path');
-const envinfo = require('envinfo');
+import path from 'path';
+import envinfo from 'envinfo';
 
-envinfo.run.mockResolvedValue('MOCK_ENVINFO');
+(envinfo.run as any).mockResolvedValue('MOCK_ENVINFO');
 
 // mocked modules of @lerna-lite/core
 jest.mock('@lerna-lite/core', () => ({
-  ...jest.requireActual('@lerna-lite/core') as any, // return the other real methods, below we'll mock only 2 of the methods
+  ...(jest.requireActual('@lerna-lite/core') as any), // return the other real methods, below we'll mock only 2 of the methods
   logOutput: jest.requireActual('../../../core/src/__mocks__/output').logOutput,
 }));
 
 const { logOutput } = require('@lerna-lite/core');
 
 // file under test
-const lernaInfo = require('@lerna-test/command-runner')(require('../../../cli/src/cli-commands/cli-info-commands'));
+import helpers from '@lerna-test/helpers';
 import { InfoCommand } from '../index';
 import { factory } from '../info-command';
+import cliInfoCommands from '../../../cli/src/cli-commands/cli-info-commands';
+const lernaInfo = helpers.commandRunner(cliInfoCommands);
 
 describe('Info Command', () => {
   it('outputs result of envinfo() via CLI', async () => {

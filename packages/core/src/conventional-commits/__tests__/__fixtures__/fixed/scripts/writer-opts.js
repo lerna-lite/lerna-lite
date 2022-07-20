@@ -1,4 +1,4 @@
-"use strict";
+'use strict';
 
 module.exports = {
   transform: (commit, context) => {
@@ -44,9 +44,7 @@ module.exports = {
     }
 
     if (typeof commit.subject === `string`) {
-      let url = context.repository
-        ? `${context.host}/${context.owner}/${context.repository}`
-        : context.repoUrl;
+      let url = context.repository ? `${context.host}/${context.owner}/${context.repository}` : context.repoUrl;
       if (url) {
         url = `${url}/issues/`;
         // Issue URLs.
@@ -57,10 +55,7 @@ module.exports = {
       }
       if (context.host) {
         // User URLs.
-        commit.subject = commit.subject.replace(
-          /\B@([a-z0-9](?:-?[a-z0-9]){0,38})/g,
-          `[@$1](${context.host}/$1)`
-        );
+        commit.subject = commit.subject.replace(/\B@([a-z0-9](?:-?[a-z0-9]){0,38})/g, `[@$1](${context.host}/$1)`);
       }
     }
 
@@ -82,39 +77,39 @@ module.exports = {
   noteGroupsSort: `title`,
   // notesSort: compareFunc,
   mainTemplate: [
-    "{{> header}}",
-    "",
-    "{{#each commitGroups}}",
-    "{{#each commits}}",
-    "{{> commit root=@root}}",
-    "{{/each}}",
-    "{{/each}}",
-    "",
-    "{{> footer}}",
-  ].join("\n"),
+    '{{> header}}',
+    '',
+    '{{#each commitGroups}}',
+    '{{#each commits}}',
+    '{{> commit root=@root}}',
+    '{{/each}}',
+    '{{/each}}',
+    '',
+    '{{> footer}}',
+  ].join('\n'),
   headerPartial: [
     '<a name="{{version}}"></a>',
-    "## {{#if isPatch~}} <small>",
-    "{{~/if~}} {{version}}",
+    '## {{#if isPatch~}} <small>',
+    '{{~/if~}} {{version}}',
     '{{~#if title}} "{{title}}"',
-    "{{~/if~}}",
-    "{{~#if date}} ({{date}})",
-    "{{~/if~}}",
-    "{{~#if isPatch~}} </small>",
-    "{{~/if}}",
-    "",
-  ].join("\n"),
-  commitPartial: "* {{header}}",
+    '{{~/if~}}',
+    '{{~#if date}} ({{date}})',
+    '{{~/if~}}',
+    '{{~#if isPatch~}} </small>',
+    '{{~/if}}',
+    '',
+  ].join('\n'),
+  commitPartial: '* {{header}}',
   footerPartial: [
-    "{{#if noteGroups}}",
-    "{{#each noteGroups}}",
-    "",
-    "### {{title}}",
-    "",
-    "{{#each notes}}",
-    "* {{text}}",
-    "{{/each}}",
-    "{{/each}}",
-    "{{/if}}",
-  ].join("\n"),
+    '{{#if noteGroups}}',
+    '{{#each noteGroups}}',
+    '',
+    '### {{title}}',
+    '',
+    '{{#each notes}}',
+    '* {{text}}',
+    '{{/each}}',
+    '{{/each}}',
+    '{{/if}}',
+  ].join('\n'),
 };

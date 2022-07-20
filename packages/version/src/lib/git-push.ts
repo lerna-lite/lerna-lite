@@ -9,8 +9,8 @@ import { exec, ExecOpts } from '@lerna-lite/core';
 export function gitPush(remote: string, branch: string, opts: ExecOpts, gitDryRun = false): Promise<void> {
   log.silly('gitPush', remote, branch);
 
-  return exec('git', ['push', '--follow-tags', '--no-verify', '--atomic', remote, branch], opts, gitDryRun)
-    .catch((error: any) => {
+  return exec('git', ['push', '--follow-tags', '--no-verify', '--atomic', remote, branch], opts, gitDryRun).catch(
+    (error: any) => {
       // @see https://github.com/sindresorhus/execa/blob/v1.0.0/index.js#L159-L179
       // the error message _should_ be on stderr except when GIT_REDIRECT_STDERR has been configured to redirect
       // to stdout. More details in https://git-scm.com/docs/git#Documentation/git.txt-codeGITREDIRECTSTDERRcode
@@ -32,5 +32,6 @@ export function gitPush(remote: string, branch: string, opts: ExecOpts, gitDryRu
 
       // ensure unexpected errors still break chain
       throw error;
-    });
+    }
+  );
 }

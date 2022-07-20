@@ -1,7 +1,7 @@
 {
   "name": "@lerna-lite/exec",
   "description": "Lerna-Lite Exec command will execute an arbitrary command in each package",
-  "version": "1.5.1",
+  "version": "1.6.0",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "typings": "dist/index.d.ts",
@@ -38,11 +38,13 @@
     "multimatch": "^5.0.0",
     "npmlog": "^6.0.2",
     "p-map": "^4.0.0",
-    "upath": "^2.0.1",
-    "yargs": "^17.5.1"
+    "upath": "^2.0.1"
   },
   "devDependencies": {
     "@types/execa": "^2.0.0",
-    "@types/p-map": "^2.0.0"
+    "@types/p-map": "^2.0.0",
+    "globby": "^11.1.0",
+    "yargs": "^17.5.1",
+    "yargs-parser": "^21.0.1"
   }
 }

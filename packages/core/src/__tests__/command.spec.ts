@@ -11,9 +11,10 @@ const childProcess = require('../child-process');
 jest.spyOn(os, 'cpus').mockImplementation(() => new Array(42));
 
 // helpers
-const initFixture = require('@lerna-test/init-fixture')(__dirname);
-import { loggingOutput } from '@lerna-test/logging-output';
-import { updateLernaConfig } from '@lerna-test/update-lerna-config';
+import helpers from '@lerna-test/helpers';
+const initFixture = helpers.initFixtureFactory(__dirname);
+import { loggingOutput } from '@lerna-test/helpers/logging-output';
+import { updateLernaConfig } from '@lerna-test/helpers';
 
 // file under test
 import { Command } from '../command';
@@ -36,7 +37,7 @@ describe('core-command', () => {
   childProcess.getChildProcessCount = jest.fn(() => 0);
 
   // swallow errors when passed in argv
-  const onRejected = () => { };
+  const onRejected = () => {};
 
   class OkCommand extends Command<any> {
     initialize() {
@@ -257,8 +258,8 @@ describe('core-command', () => {
   });
 
   describe('.options', () => {
-    class TestACommand extends Command<any> { }
-    class TestBCommand extends Command<any> { }
+    class TestACommand extends Command<any> {}
+    class TestBCommand extends Command<any> {}
     class TestCCommand extends Command<any> {
       get otherCommandConfigs() {
         return ['testb'];

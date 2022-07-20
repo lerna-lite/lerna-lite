@@ -3,8 +3,6 @@ import log from 'npmlog';
 import yargs from 'yargs/yargs';
 import { globalOptions } from './global-options';
 
-module.exports = lernaCLI;
-
 /**
  * A factory that returns a yargs() instance configured with everything except commands.
  * Chain .parse() from this method to invoke.
@@ -12,7 +10,7 @@ module.exports = lernaCLI;
  * @param {Array = []} argv
  * @param {String = process.cwd()} cwd
  */
-function lernaCLI(argv: any[], cwd: string) {
+function lernaCLI(argv?: any[], cwd?: string) {
   const cli = yargs(argv, cwd);
 
   return globalOptions(cli)
@@ -45,3 +43,5 @@ function lernaCLI(argv: any[], cwd: string) {
       For more information, find our manual at https://github.com/lerna/lerna
     `);
 }
+
+export default lernaCLI;

@@ -16,18 +16,22 @@ export function getCurrentTags(execOpts: ExecOpts, matchingPattern: string, gitD
     reject: false,
   });
 
-  return exec('git', ['tag', '--sort', 'version:refname', '--points-at', 'HEAD', '--list', matchingPattern], opts, gitDryRun)
-    .then((result) => {
-      const lines = result.stdout.split('\n').filter(Boolean);
+  return exec(
+    'git',
+    ['tag', '--sort', 'version:refname', '--points-at', 'HEAD', '--list', matchingPattern],
+    opts,
+    gitDryRun
+  ).then((result) => {
+    const lines = result.stdout.split('\n').filter(Boolean);
 
-      if (matchingPattern === '*@*') {
-        // independent mode does not respect tagVersionPrefix,
-        // but embeds the package name in the tag "prefix"
-        return lines.map((tag) => npa(tag).name);
-      }
+    if (matchingPattern === '*@*') {
+      // independent mode does not respect tagVersionPrefix,
+      // but embeds the package name in the tag "prefix"
+      return lines.map((tag) => npa(tag).name);
+    }
 
-      // "fixed" mode can have a custom tagVersionPrefix,
-      // but it doesn't really matter as it is not used to extract package names
-      return lines;
-    });
+    // "fixed" mode can have a custom tagVersionPrefix,
+    // but it doesn't really matter as it is not used to extract package names
+    return lines;
+  });
 }

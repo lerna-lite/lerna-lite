@@ -2,13 +2,11 @@
 
 import fs from 'fs-extra';
 import path from 'path';
-const { getPackages } = require('../../project');
+const { Project } = require('../../project');
 
 // helpers
-const initFixture = require('@lerna-test/init-fixture')(__dirname);
-const { gitAdd } = require('@lerna-test/git-add');
-const { gitCommit } = require('@lerna-test/git-commit');
-const { gitTag } = require('@lerna-test/git-tag');
+import helpers, { gitAdd, gitCommit, gitTag } from '@lerna-test/helpers';
+const initFixture = helpers.initFixtureFactory(__dirname);
 
 // file under test
 import { recommendVersion, updateChangelog } from '../../conventional-commits';
@@ -17,7 +15,7 @@ import { GetChangelogConfig } from '../get-changelog-config';
 // const { getChangelogConfig } = require('../lib/get-changelog-config');
 
 // stabilize changelog commit SHA and datestamp
-expect.addSnapshotSerializer(require('@lerna-test/serialize-changelog'));
+expect.addSnapshotSerializer(require('@lerna-test/helpers/serializers/serialize-changelog'));
 
 describe('conventional-commits', () => {
   beforeEach(() => {
@@ -27,7 +25,7 @@ describe('conventional-commits', () => {
   describe('recommendVersion()', () => {
     it('returns next version bump', async () => {
       const cwd = await initFixture('fixed');
-      const [pkg1] = await getPackages(cwd);
+      const [pkg1] = await Project.getPackages(cwd);
 
       // make a change in package-1
       await pkg1.set('changed', 1).serialize();
@@ -40,7 +38,7 @@ describe('conventional-commits', () => {
 
     it('returns next version prerelease bump with prereleaseId', async () => {
       const cwd = await initFixture('fixed');
-      const [pkg1] = await getPackages(cwd);
+      const [pkg1] = await Project.getPackages(cwd);
 
       // make a change in package-1
       await pkg1.set('changed', 1).serialize();
@@ -53,7 +51,7 @@ describe('conventional-commits', () => {
 
     it('returns package-specific bumps in independent mode', async () => {
       const cwd = await initFixture('independent');
-      const [pkg1, pkg2] = await getPackages(cwd);
+      const [pkg1, pkg2] = await Project.getPackages(cwd);
       const opts = { changelogPreset: 'angular' };
 
       // make a change in package-1 and package-2
@@ -76,7 +74,7 @@ describe('conventional-commits', () => {
 
     it('returns package-specific prerelease bumps in independent mode with prereleaseId', async () => {
       const cwd = await initFixture('independent');
-      const [pkg1, pkg2] = await getPackages(cwd);
+      const [pkg1, pkg2] = await Project.getPackages(cwd);
       const opts = { changelogPreset: 'angular' };
 
       // make a change in package-1 and package-2
@@ -99,7 +97,7 @@ describe('conventional-commits', () => {
 
     it('falls back to patch bumps for non-bumping commit types', async () => {
       const cwd = await initFixture('independent');
-      const [pkg1, pkg2] = await getPackages(cwd);
+      const [pkg1, pkg2] = await Project.getPackages(cwd);
       const opts = {
         // sometimes presets return null for the level, with no actual releaseType...
         changelogPreset: path.resolve(__dirname, '__fixtures__/fixed/scripts/null-preset.js'),
@@ -125,7 +123,7 @@ describe('conventional-commits', () => {
 
     it('supports local preset paths', async () => {
       const cwd = await initFixture('fixed');
-      const [pkg1] = await getPackages(cwd);
+      const [pkg1] = await Project.getPackages(cwd);
 
       // make a change in package-1
       await pkg1.set('changed', 1).serialize();
@@ -143,7 +141,7 @@ describe('conventional-commits', () => {
 
       await gitTag(cwd, 'dragons-are-awesome1.0.0');
 
-      const [pkg1] = await getPackages(cwd);
+      const [pkg1] = await Project.getPackages(cwd);
 
       // make a change in package-1
       await pkg1.set('changed', 1).serialize();
@@ -158,7 +156,7 @@ describe('conventional-commits', () => {
 
     it('propagates errors from callback', async () => {
       const cwd = await initFixture('fixed');
-      const [pkg1] = await getPackages(cwd);
+      const [pkg1] = await Project.getPackages(cwd);
 
       await expect(
         recommendVersion(pkg1, 'fixed', {
@@ -169,20 +167,18 @@ describe('conventional-commits', () => {
 
     it('throws an error when an implicit changelog preset cannot be loaded', async () => {
       const cwd = await initFixture('fixed');
-      const [pkg1] = await getPackages(cwd);
+      const [pkg1] = await Project.getPackages(cwd);
 
       await expect(
         recommendVersion(pkg1, 'fixed', {
           changelogPreset: 'garbage',
         })
-      ).rejects.toThrow(
-        'Unable to load conventional-changelog preset "garbage" (conventional-changelog-garbage)'
-      );
+      ).rejects.toThrow('Unable to load conventional-changelog preset "garbage" (conventional-changelog-garbage)');
     });
 
     it('throws an error when an implicit changelog preset with scope cannot be loaded', async () => {
       const cwd = await initFixture('fixed');
-      const [pkg1] = await getPackages(cwd);
+      const [pkg1] = await Project.getPackages(cwd);
 
       await expect(
         recommendVersion(pkg1, 'fixed', {
@@ -193,7 +189,7 @@ describe('conventional-commits', () => {
 
     it('throws an error when an implicit changelog preset with scoped subpath cannot be loaded', async () => {
       const cwd = await initFixture('fixed');
-      const [pkg1] = await getPackages(cwd);
+      const [pkg1] = await Project.getPackages(cwd);
 
       await expect(
         recommendVersion(pkg1, 'fixed', {
@@ -204,7 +200,7 @@ describe('conventional-commits', () => {
 
     it('throws an error when an explicit changelog preset cannot be loaded', async () => {
       const cwd = await initFixture('fixed');
-      const [pkg1] = await getPackages(cwd);
+      const [pkg1] = await Project.getPackages(cwd);
 
       await expect(
         recommendVersion(pkg1, 'fixed', {
@@ -215,7 +211,7 @@ describe('conventional-commits', () => {
 
     it('throws an error when an explicit changelog preset with subpath cannot be loaded', async () => {
       const cwd = await initFixture('fixed');
-      const [pkg1] = await getPackages(cwd);
+      const [pkg1] = await Project.getPackages(cwd);
 
       await expect(
         recommendVersion(pkg1, 'fixed', {
@@ -227,7 +223,7 @@ describe('conventional-commits', () => {
     describe('bump for major version zero', () => {
       it('treats breaking changes as semver-minor', async () => {
         const cwd = await initFixture('major-zero');
-        const [pkg0] = await getPackages(cwd);
+        const [pkg0] = await Project.getPackages(cwd);
 
         // make a change in package-0
         await pkg0.set('changed', 1).serialize();
@@ -248,7 +244,7 @@ describe('conventional-commits', () => {
       beforeEach(async () => {
         let value = 0;
         cwd = await initFixture('independent');
-        [pkg] = await getPackages(cwd);
+        [pkg] = await Project.getPackages(cwd);
         opts = { changelogPreset: 'angular' };
         recommend = async (commitMessage, { initVersion } = {} as any) => {
           if (initVersion) {
@@ -296,7 +292,7 @@ describe('conventional-commits', () => {
     it('creates files if they do not exist', async () => {
       const cwd = (await initFixture('changelog-missing')) as string;
 
-      const [pkg1] = await getPackages(cwd);
+      const [pkg1] = await Project.getPackages(cwd);
       const rootPkg = {
         name: 'root',
         location: cwd,
@@ -336,7 +332,7 @@ describe('conventional-commits', () => {
 
       await gitTag(cwd, 'v1.0.0');
 
-      const [pkg1] = await getPackages(cwd);
+      const [pkg1] = await Project.getPackages(cwd);
 
       // make a change in package-1
       await pkg1.set('changed', 1).serialize();
@@ -360,7 +356,7 @@ describe('conventional-commits', () => {
 
       await gitTag(cwd, 'dragons-are-awesome1.0.0');
 
-      const [pkg1] = await getPackages(cwd);
+      const [pkg1] = await Project.getPackages(cwd);
 
       // make a change in package-1
       await pkg1.set('changed', 1).serialize();
@@ -427,7 +423,7 @@ describe('conventional-commits', () => {
 
       await gitTag(cwd, 'v1.0.0');
 
-      const [pkg1, pkg2] = await getPackages(cwd);
+      const [pkg1, pkg2] = await Project.getPackages(cwd);
 
       // make a change in package-1
       await pkg1.set('changed', 1).serialize();
@@ -454,7 +450,7 @@ describe('conventional-commits', () => {
 
       await gitTag(cwd, 'v1.0.0');
 
-      const [pkg1] = await getPackages(cwd);
+      const [pkg1] = await Project.getPackages(cwd);
 
       // make a change in package-1
       await pkg1.set('changed', 1).serialize();
@@ -481,7 +477,7 @@ describe('conventional-commits', () => {
 
       await gitTag(cwd, 'v1.0.0');
 
-      const [, pkg2] = await getPackages(cwd);
+      const [, pkg2] = await Project.getPackages(cwd);
 
       // make a change in package-2
       await pkg2.set('changed', 1).serialize();
@@ -513,17 +509,14 @@ describe('conventional-commits', () => {
       expect(configForPresetNameString).toBeDefined();
 
       const presetConfigObject = { name: './scripts/config-builder-preset', key: 'value' };
-      const configForPresetConfigObject = await GetChangelogConfig.getChangelogConfig(
-        presetConfigObject,
-        cwd
-      );
+      const configForPresetConfigObject = await GetChangelogConfig.getChangelogConfig(presetConfigObject, cwd);
 
       expect(configForPresetConfigObject).toBeDefined();
       expect(configForPresetConfigObject.key).toBe(presetConfigObject.key);
 
       await gitTag(cwd, 'v1.0.0');
 
-      const [, pkg2] = await getPackages(cwd);
+      const [, pkg2] = await Project.getPackages(cwd);
 
       // make a change in package-2
       await pkg2.set('changed', 1).serialize();
@@ -551,7 +544,7 @@ describe('conventional-commits', () => {
       await gitTag(cwd, 'package-1@1.0.0');
       await gitTag(cwd, 'package-2@1.0.0');
 
-      const [pkg1, pkg2] = await getPackages(cwd);
+      const [pkg1, pkg2] = await Project.getPackages(cwd);
 
       // make a change in package-1 and package-2
       await pkg1.set('changed', 1).serialize();

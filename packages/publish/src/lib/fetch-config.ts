@@ -7,7 +7,7 @@ import log from 'npmlog';
  * @param {Partial<FetchConfig>} [extra]
  * @returns {FetchConfig}
  */
-export function getFetchConfig(options: { [key: string]: any }, extra: Partial<FetchConfig>) {
+export function getFetchConfig(options?: { [key: string]: any }, extra?: Partial<FetchConfig>) {
   return {
     log,
     ...options,

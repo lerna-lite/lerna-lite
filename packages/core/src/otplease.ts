@@ -36,14 +36,22 @@ const semaphore: any = {
  * @param {T} _opts The options to be passed to `fn`
  * @param {OneTimePasswordCache} otpCache
  */
-export function otplease<T extends Record<string, unknown>>(fn: (opts: T) => Promise<unknown>, _opts: T, otpCache: OneTimePasswordCache) {
+export function otplease<T extends Record<string, unknown>>(
+  fn: (opts: T) => Promise<unknown>,
+  _opts: T,
+  otpCache: OneTimePasswordCache
+) {
   // always prefer explicit config (if present) to cache
   const opts = { ...otpCache, ..._opts };
   return attempt(fn, opts, otpCache);
 }
 
 /** @returns {Promise<unknown>} */
-function attempt<T extends Record<string, unknown>>(fn: (opts: T) => Promise<unknown>, opts: T, otpCache: OneTimePasswordCache): Promise<unknown> {
+function attempt<T extends Record<string, unknown>>(
+  fn: (opts: T) => Promise<unknown>,
+  opts: T,
+  otpCache: OneTimePasswordCache
+): Promise<unknown> {
   return new Promise((resolve) => {
     resolve(fn(opts));
   }).catch((err: any) => {
@@ -101,7 +109,7 @@ export function getOneTimePassword(message = 'This operation requires a one-time
     validate: (otp?: string) =>
       (otp && /^[\d ]+$|^[A-Fa-f0-9]{64,64}$/.test(otp)) ||
       'Must be a valid one-time-password. ' +
-      'See https://docs.npmjs.com/getting-started/using-two-factor-authentication',
+        'See https://docs.npmjs.com/getting-started/using-two-factor-authentication',
   });
 }
 

@@ -13,7 +13,11 @@ import { PackageGraphNode } from '../package-graph';
  * @param {import('..').VersioningStrategy} type
  * @param {import('..').BaseChangelogOptions & { prereleaseId?: string }} commandOptions
  */
-export async function recommendVersion(pkg: Package | PackageGraphNode, type: VersioningStrategy, recommendationOptions: BaseChangelogOptions & { prereleaseId?: string; }): Promise<string | null> {
+export async function recommendVersion(
+  pkg: Package | PackageGraphNode,
+  type: VersioningStrategy,
+  recommendationOptions: BaseChangelogOptions & { prereleaseId?: string }
+): Promise<string | null> {
   const { changelogPreset, rootPath, tagPrefix, prereleaseId } = recommendationOptions;
 
   log.silly(type, 'for %s at %s', pkg.name, pkg.location);
@@ -44,7 +48,10 @@ export async function recommendVersion(pkg: Package | PackageGraphNode, type: Ve
   };
 
   // 'new' preset API
-  options.config = await GetChangelogConfig.getChangelogConfig(changelogPreset, rootPath) as conventionalChangelogCore.Options.Config;
+  options.config = (await GetChangelogConfig.getChangelogConfig(
+    changelogPreset,
+    rootPath
+  )) as conventionalChangelogCore.Options.Config;
 
   // Ensure potential ValidationError in getChangelogConfig() is propagated correctly
   return new Promise((resolve, reject) => {

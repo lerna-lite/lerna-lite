@@ -32,7 +32,12 @@ function flattenOptions(obj: Omit<LibNpmPublishOptions, 'defaultTag'>): LibNpmPu
  * @param {LibNpmPublishOptions & NpmPublishOptions} [options]
  * @param {import("@lerna/otplease").OneTimePasswordCache} [otpCache]
  */
-export function npmPublish(pkg: Package, tarFilePath: string, options: Omit<LibNpmPublishOptions, 'defaultTag'> = {}, otpCache: OneTimePasswordCache) {
+export function npmPublish(
+  pkg: Package,
+  tarFilePath: string,
+  options: Omit<LibNpmPublishOptions, 'defaultTag'> = {},
+  otpCache?: OneTimePasswordCache
+) {
   const { dryRun, ...remainingOptions } = flattenOptions(options);
   const { scope } = npa(pkg?.name ?? '');
   // pass only the package scope to libnpmpublish
@@ -75,7 +80,11 @@ export function npmPublish(pkg: Package, tarFilePath: string, options: Omit<LibN
         Object.assign(opts, publishConfigToOpts(manifest.publishConfig));
       }
 
-      return otplease((innerOpts) => publish(manifest, tarData, innerOpts), opts, otpCache).catch((err) => {
+      return otplease(
+        (innerOpts) => publish(manifest, tarData, innerOpts),
+        opts,
+        otpCache as OneTimePasswordCache
+      ).catch((err) => {
         opts.log.silly('', err);
         opts.log.error(err.code, err.body?.error ?? err.message);
 
@@ -102,7 +111,9 @@ export function npmPublish(pkg: Package, tarFilePath: string, options: Omit<LibN
  * @param {PackagePublishConfig} publishConfig
  * @returns {Omit<PackagePublishConfig, 'tag'> & { defaultTag?: string }}
  */
-function publishConfigToOpts(publishConfig: PackagePublishConfig): Omit<PackagePublishConfig, 'tag'> & { defaultTag?: string } {
+function publishConfigToOpts(
+  publishConfig: PackagePublishConfig
+): Omit<PackagePublishConfig, 'tag'> & { defaultTag?: string } {
   const opts = { ...publishConfig };
 
   // npm v7 renamed tag internally

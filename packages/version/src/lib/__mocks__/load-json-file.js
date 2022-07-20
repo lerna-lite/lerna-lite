@@ -1,9 +1,9 @@
-"use strict";
+'use strict';
 
-const path = require("path");
-const normalizePath = require("normalize-path");
+const path = require('path');
+const normalizePath = require('normalize-path');
 
-const loadJsonFile = jest.requireActual("load-json-file");
+const loadJsonFile = jest.requireActual('load-json-file');
 const asyncRegistry = new Map();
 const syncRegistry = new Map();
 

@@ -1,7 +1,6 @@
 export const EOL = '\n';
 export const BLANK_LINE = EOL + EOL;
-export const COMMIT_GUIDELINE =
-  'See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.';
+export const COMMIT_GUIDELINE = 'See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.';
 export const CHANGELOG_HEADER = [
   '# Change Log',
   '%s',

@@ -167,10 +167,7 @@ export class VersionCommand extends Command<VersionCommandOption> {
       this.currentBranch = getCurrentBranch(this.execOpts, this.options.gitDryRun);
 
       if (this.currentBranch === 'HEAD') {
-        throw new ValidationError(
-          'ENOGIT',
-          'Detached git HEAD, please checkout a branch to choose versions.'
-        );
+        throw new ValidationError('ENOGIT', 'Detached git HEAD, please checkout a branch to choose versions.');
       }
 
       if (
@@ -482,8 +479,7 @@ export class VersionCommand extends Command<VersionCommandOption> {
     const prereleasePackageNames = this.getPrereleasePackageNames();
     const graduatePackageNames = Array.from(this.getPackagesForOption(conventionalGraduate));
     const shouldPrerelease = (name) => prereleasePackageNames?.includes(name);
-    const shouldGraduate = (name) =>
-      graduatePackageNames.includes('*') || graduatePackageNames.includes(name);
+    const shouldGraduate = (name) => graduatePackageNames.includes('*') || graduatePackageNames.includes(name);
     const getPrereleaseId = (node) => {
       if (!shouldGraduate(node.name) && (shouldPrerelease(node.name) || node.prereleaseId)) {
         return resolvePrereleaseId(node.prereleaseId);
@@ -659,13 +655,11 @@ export class VersionCommand extends Command<VersionCommandOption> {
             }
 
             // save the lockfile, only once, after all package versions were updated
-            return saveUpdatedLockJsonFile(lockFileResponse.path, lockFileResponse.json).then(
-              (lockfilePath) => {
-                if (lockfilePath) {
-                  changedFiles.add(lockfilePath);
-                }
+            return saveUpdatedLockJsonFile(lockFileResponse.path, lockFileResponse.json).then((lockfilePath) => {
+              if (lockfilePath) {
+                changedFiles.add(lockfilePath);
               }
-            );
+            });
           }
         })
       );
@@ -719,9 +713,7 @@ export class VersionCommand extends Command<VersionCommandOption> {
     }
 
     if (this.commitAndTag) {
-      chain = chain.then(() =>
-        gitAdd(Array.from(changedFiles), this.gitOpts, this.execOpts, this.options.gitDryRun)
-      );
+      chain = chain.then(() => gitAdd(Array.from(changedFiles), this.gitOpts, this.execOpts, this.options.gitDryRun));
     }
 
     return chain;
@@ -757,9 +749,7 @@ export class VersionCommand extends Command<VersionCommandOption> {
   async gitCommitAndTagVersion() {
     const version = this.globalVersion;
     const tag = `${this.tagPrefix}${version}`;
-    const message = this.options.message
-      ? this.options.message.replace(/%s/g, tag).replace(/%v/g, version)
-      : tag;
+    const message = this.options.message ? this.options.message.replace(/%s/g, tag).replace(/%v/g, version) : tag;
 
     await gitCommit(message, this.gitOpts, this.execOpts, this.options.gitDryRun);
     await gitTag(tag, this.gitOpts, this.execOpts, this.options.gitDryRun);
@@ -778,10 +768,7 @@ export class VersionCommand extends Command<VersionCommandOption> {
 
     for (const node of this.updates) {
       if (semver.lt(node.version, globalVersion)) {
-        this.logger.verbose(
-          'version',
-          `Overriding version of ${node.name} from ${node.version} to ${globalVersion}`
-        );
+        this.logger.verbose('version', `Overriding version of ${node.name} from ${node.version} to ${globalVersion}`);
 
         node.pkg.version = globalVersion;
       }

@@ -1,7 +1,7 @@
 {
   "name": "@lerna-lite/publish",
   "description": "Publish packages in the current workspace",
-  "version": "1.5.1",
+  "version": "1.6.0",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "typings": "dist/index.d.ts",
@@ -39,14 +39,14 @@
     "has-unicode": "^2.0.1",
     "libnpmaccess": "^6.0.3",
     "libnpmpublish": "^6.0.4",
-    "npm-package-arg": "^9.0.2",
-    "npm-packlist": "^5.1.0",
-    "npm-registry-fetch": "^13.1.1",
+    "npm-package-arg": "^9.1.0",
+    "npm-packlist": "^5.1.1",
+    "npm-registry-fetch": "^13.2.0",
     "npmlog": "^6.0.2",
     "os": "^0.1.2",
     "p-map": "^4.0.0",
     "p-pipe": "^3.1.0",
-    "pacote": "^13.6.0",
+    "pacote": "^13.6.1",
     "path": "^0.12.7",
     "pify": "^5.0.0",
     "read-package-json": "^5.0.1",
@@ -63,15 +63,17 @@
     "yargs": "^17.5.1"
   },
   "devDependencies": {
-    "@types/async": "^3.2.13",
+    "@types/async": "^3.2.15",
     "@types/conventional-changelog-core": "^4.2.1",
     "@types/conventional-recommended-bump": "^6.1.0",
     "@types/execa": "^2.0.0",
     "@types/fs-extra": "^9.0.13",
     "@types/load-json-file": "^5.1.0",
     "@types/p-map": "^2.0.0",
-    "@types/semver": "^7.3.9",
+    "@types/semver": "^7.3.10",
     "@types/write-json-file": "^3.2.1",
-    "@types/write-pkg": "^4.0.0"
+    "@types/write-pkg": "^4.0.0",
+    "load-json-file": "^6.2.0",
+    "yargs-parser": "^21.0.1"
   }
 }

@@ -1,7 +1,7 @@
 {
   "name": "@lerna-lite/run",
   "description": "Lerna-Lite Run command will help to run npm script in each package workspace that contains that script",
-  "version": "1.5.1",
+  "version": "1.6.0",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "typings": "dist/index.d.ts",
@@ -43,6 +43,9 @@
   "devDependencies": {
     "@types/execa": "^2.0.0",
     "@types/p-map": "^2.0.0",
-    "perf_hooks": "^0.0.1"
+    "globby": "^11.1.0",
+    "jest-circus": "^28.1.3",
+    "perf_hooks": "^0.0.1",
+    "yargs-parser": "^21.0.1"
   }
 }

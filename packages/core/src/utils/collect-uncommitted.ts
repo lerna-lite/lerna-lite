@@ -8,10 +8,11 @@ export interface UncommittedConfig {
   log?: typeof npmlog;
 }
 
-const maybeColorize = (colorize: (color?: string) => string) => (s?: string) => (s !== ' ' ? colorize(s) : s);
+const maybeColorize = (colorize: (color?: string) => string) => (s?: string) => s !== ' ' ? colorize(s) : s;
 const cRed = maybeColorize(chalk.red);
 const cGreen = maybeColorize(chalk.green);
-const colorizeStats = (stats: string) => stats.replace(/^([^U]| )([A-Z]| )/gm, replaceStatus).replace(/^\?{2}|U{2}/gm, cRed('$&'));
+const colorizeStats = (stats: string) =>
+  stats.replace(/^([^U]| )([A-Z]| )/gm, replaceStatus).replace(/^\?{2}|U{2}/gm, cRed('$&'));
 const replaceStatus = (_, maybeGreen?: string, maybeRed?: string) => `${cGreen(maybeGreen)}${cRed(maybeRed)}`;
 const splitOnNewLine = (str: string) => str.split('\n');
 const filterEmpty = (lines: string[]) => lines.filter((line) => line.length);
@@ -26,8 +27,7 @@ const transformOutput = o(filterEmpty, o(splitOnNewLine, colorizeStats));
 export function collectUncommitted({ cwd, log = npmlog }: UncommittedConfig, gitDryRun = false): Promise<string[]> {
   log.silly('collect-uncommitted', 'git status --porcelain (async)');
 
-  return exec('git', ['status', '--porcelain'], { cwd }, gitDryRun)
-    .then(({ stdout }) => transformOutput(stdout));
+  return exec('git', ['status', '--porcelain'], { cwd }, gitDryRun).then(({ stdout }) => transformOutput(stdout));
 }
 
 /**

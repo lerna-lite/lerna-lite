@@ -190,11 +190,7 @@ export class PublishCommand extends Command<PublishCommandOption> {
     }
 
     return chain.then(
-      (result: {
-        updates: PackageGraphNode[];
-        updatesVersions: Map<string, any>;
-        needsConfirmation: boolean;
-      }) => {
+      (result: { updates: PackageGraphNode[]; updatesVersions: Map<string, any>; needsConfirmation: boolean }) => {
         if (!result) {
           // early return from nested VersionCommand
           return false;
@@ -348,13 +344,7 @@ export class PublishCommand extends Command<PublishCommandOption> {
 
   detectCanaryVersions() {
     const { cwd } = this.execOpts;
-    const {
-      bump = 'prepatch',
-      preid = 'alpha',
-      ignoreChanges,
-      forcePublish,
-      includeMergedTags,
-    } = this.options;
+    const { bump = 'prepatch', preid = 'alpha', ignoreChanges, forcePublish, includeMergedTags } = this.options;
     // 'prerelease' and 'prepatch' are identical, for our purposes
     const release = bump.startsWith('pre') ? bump.replace('release', 'patch') : `pre${bump}`;
 
@@ -567,9 +557,7 @@ export class PublishCommand extends Command<PublishCommandOption> {
   resolveLocalDependencyLinks() {
     // resolve relative file: links to their actual version range
     const updatesWithLocalLinks = this.updates.filter((node: PackageGraphNode) =>
-      Array.from(node.localDependencies.values()).some(
-        (resolved: NpaResolveResult) => resolved.type === 'directory'
-      )
+      Array.from(node.localDependencies.values()).some((resolved: NpaResolveResult) => resolved.type === 'directory')
     );
 
     return pMap(updatesWithLocalLinks, (node: PackageGraphNode) => {
@@ -594,9 +582,7 @@ export class PublishCommand extends Command<PublishCommandOption> {
   resolveLocalDependencyWorkspaceProtocols() {
     // resolve workspace protocol: translates to their actual version target/range
     const publishingPackagesWithLocalWorkspaces = this.updates.filter((node: PackageGraphNode) =>
-      Array.from(node.localDependencies.values()).some(
-        (resolved: NpaResolveResult) => resolved.explicitWorkspace
-      )
+      Array.from(node.localDependencies.values()).some((resolved: NpaResolveResult) => resolved.explicitWorkspace)
     );
 
     return pMap(publishingPackagesWithLocalWorkspaces, (node: PackageGraphNode) => {
@@ -618,11 +604,9 @@ export class PublishCommand extends Command<PublishCommandOption> {
       }
 
       // 2. remove any "workspace:" prefix from the package to be published any of external dependencies (without anything being bumped)
-      // we will only accept "workspace:" with semver version, for example "workspace:1.2.3" is ok but "workspace:*" will throw
+      // we will only accept "workspace:" with semver version, for example "workspace:1.2.3" is ok but "workspace:*" will log an error
       for (const [_depName, resolved] of node.externalDependencies) {
-        if (/^(workspace:)+(.*)$/.test(resolved.workspaceTarget)) {
-          node.pkg.removeDependencyWorkspaceProtocolPrefix(node.name, resolved);
-        }
+        node.pkg.removeDependencyWorkspaceProtocolPrefix(node.name, resolved);
       }
 
       // writing changes to disk handled in serializeChanges()
@@ -640,10 +624,7 @@ export class PublishCommand extends Command<PublishCommandOption> {
     } catch (err: any) {
       // from-package should be _able_ to run without git, but at least we tried
       this.logger.silly('EGITHEAD', err.message);
-      this.logger.notice(
-        'FYI',
-        'Unable to set temporary gitHead property, it will be missing from registry metadata'
-      );
+      this.logger.notice('FYI', 'Unable to set temporary gitHead property, it will be missing from registry metadata');
     }
 
     // writing changes to disk handled in serializeChanges()
@@ -686,11 +667,7 @@ export class PublishCommand extends Command<PublishCommandOption> {
     return Promise.resolve()
       .then(() =>
         removeTempLicenses(this.packagesToBeLicensed ?? []).catch((removeError) => {
-          this.logger.error(
-            'licenses',
-            'error removing temporary license files',
-            removeError.stack || removeError
-          );
+          this.logger.error('licenses', 'error removing temporary license files', removeError.stack || removeError);
         })
       )
       .then(() => {

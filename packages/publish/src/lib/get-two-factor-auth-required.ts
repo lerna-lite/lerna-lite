@@ -8,7 +8,7 @@ import { getProfileData } from './get-profile-data';
  * @param {import('./fetch-config').FetchConfig} options
  * @returns {Promise<boolean>}
  */
-export function getTwoFactorAuthRequired(options: FetchConfig) {
+export function getTwoFactorAuthRequired(options?: FetchConfig) {
   const opts = getFetchConfig(options, {
     // don't wait forever for third-party failures to be dealt with
     fetchRetries: 0,
@@ -18,7 +18,7 @@ export function getTwoFactorAuthRequired(options: FetchConfig) {
 
   return getProfileData(opts).then(success, failure);
 
-  function success(result: { tfa: { pending: boolean; mode: string; } }) {
+  function success(result: { tfa: { pending: boolean; mode: string } }) {
     opts.log.silly('2FA', result.tfa.toString());
 
     if (result.tfa.pending) {

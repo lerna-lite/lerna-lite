@@ -5,12 +5,14 @@ import path from 'path';
 import tempy from 'tempy';
 
 // helpers
-const initFixture = require('@lerna-test/init-fixture')(__dirname);
+import helpers from '@lerna-test/helpers';
+const initFixture = helpers.initFixtureFactory(__dirname);
 
 // file under test
-const lernaInit = require('@lerna-test/command-runner')(require('../../../cli/src/cli-commands/cli-init-commands'));
 import { InitCommand } from '../index';
 import { factory } from '../init-command';
+import cliCommands from '../../../cli/src/cli-commands/cli-init-commands';
+const lernaInit = helpers.commandRunner(cliCommands);
 
 // file under test
 const yargParser = require('yargs-parser');
@@ -25,7 +27,7 @@ const createArgv = (cwd: string, ...args: string[]) => {
 };
 
 describe('Init Command', () => {
-  const lernaVersion = "__TEST_VERSION__";
+  const lernaVersion = '__TEST_VERSION__';
 
   it('should execute methods when initializing the command via its class', async () => {
     const testDir = await initFixture('empty');
@@ -115,8 +117,8 @@ describe('Init Command', () => {
       const [lernaJson, pkgJson, packagesDirExists, gitDirExists] = await Promise.all([
         fs.readJSON(path.join(testDir, 'lerna.json')),
         fs.readJSON(path.join(testDir, 'package.json')),
-        fs.exists(path.join(testDir, 'packages'), null),
-        fs.exists(path.join(testDir, '.git'), null),
+        fs.exists(path.join(testDir, 'packages'), null as any),
+        fs.exists(path.join(testDir, '.git'), null as any),
       ]);
 
       expect(lernaJson).toMatchObject({
@@ -198,6 +200,7 @@ describe('Init Command', () => {
               hoist: true,
             },
           },
+          useNx: false,
           version: '1.2.3',
         });
       });
@@ -215,7 +218,7 @@ describe('Init Command', () => {
       const [lernaJson, pkgJson, packagesDirExists] = await Promise.all([
         fs.readJSON(path.join(testDir, 'lerna.json')),
         fs.readJSON(path.join(testDir, 'package.json')),
-        fs.exists(path.join(testDir, 'packages'), null),
+        fs.exists(path.join(testDir, 'packages'), null as any),
       ]);
 
       expect(lernaJson).toMatchObject({
@@ -319,6 +322,7 @@ describe('Init Command', () => {
 
       expect(await fs.readJSON(lernaJsonPath)).toEqual({
         packages: ['packages/*'],
+        useNx: false,
         version: '1.2.3',
       });
     });
@@ -370,6 +374,7 @@ describe('Init Command', () => {
           },
         },
         packages: ['packages/*'],
+        useNx: false,
         version: '1.2.3',
       });
     });

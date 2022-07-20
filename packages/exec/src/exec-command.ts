@@ -76,13 +76,7 @@ export class ExecCommand extends Command<ExecCommandOption & FilterOptions> {
   }
 
   execute() {
-    this.logger.info(
-      '',
-      'Executing command in %d %s: %j',
-      this.count,
-      this.packagePlural,
-      this.joinedCommand
-    );
+    this.logger.info('', 'Executing command in %d %s: %j', this.count, this.packagePlural, this.joinedCommand);
 
     let chain: Promise<any> = Promise.resolve();
 
@@ -104,7 +98,7 @@ export class ExecCommand extends Command<ExecCommandOption & FilterOptions> {
       });
     } else {
       // detect error (if any) from collected results
-      chain = chain.then((results: Array<{ exitCode: number; failed?: boolean; pkg: Package; stderr: any; }>) => {
+      chain = chain.then((results: Array<{ exitCode: number; failed?: boolean; pkg: Package; stderr: any }>) => {
         /* istanbul ignore else */
         if (results.some((result) => result.failed)) {
           // propagate "highest" error code, it's probably the most useful
@@ -118,13 +112,7 @@ export class ExecCommand extends Command<ExecCommandOption & FilterOptions> {
     }
 
     return chain.then(() => {
-      this.logger.success(
-        'exec',
-        'Executed command in %d %s: %j',
-        this.count,
-        this.packagePlural,
-        this.joinedCommand
-      );
+      this.logger.success('exec', 'Executed command in %d %s: %j', this.count, this.packagePlural, this.joinedCommand);
     });
   }
 
@@ -201,12 +189,7 @@ export class ExecCommand extends Command<ExecCommandOption & FilterOptions> {
   }
 
   dryRunExec(commandName: string, pkgName: string): Promise<any> {
-    this.logger.info(
-      'dry-run>',
-      `Exec command '%s' in '%s'`,
-      commandName,
-      pkgName
-    );
+    this.logger.info('dry-run>', `Exec command '%s' in '%s'`, commandName, pkgName);
     logOutput(`dry-run> ${pkgName}`);
     return Promise.resolve();
   }

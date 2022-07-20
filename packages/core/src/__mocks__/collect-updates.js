@@ -1,6 +1,6 @@
-"use strict";
+'use strict';
 
-const { collectPackages, getPackagesForOption } = jest.requireActual("../utils/collect-updates/collect-updates");
+const { collectPackages, getPackagesForOption } = jest.requireActual('../utils/collect-updates/collect-updates');
 
 // collectUpdates.setUpdated(cwd, packageNames...)
 // otherwise, enables everything

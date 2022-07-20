@@ -65,9 +65,7 @@ export class RunCommand extends Command<RunCommandOption & FilterOptions> {
     chain = chain.then(() => getFilteredPackages(this.packageGraph!, this.execOpts, this.options));
     chain = chain.then((filteredPackages: Package[]) => {
       this.packagesWithScript =
-        script === 'env'
-          ? filteredPackages
-          : filteredPackages.filter((pkg) => pkg.scripts && pkg.scripts[script]);
+        script === 'env' ? filteredPackages : filteredPackages.filter((pkg) => pkg.scripts && pkg.scripts[script]);
     });
 
     return chain.then(() => {
@@ -86,13 +84,7 @@ export class RunCommand extends Command<RunCommandOption & FilterOptions> {
 
   execute() {
     if (!this.options.useNx) {
-      this.logger.info(
-        '',
-        'Executing command in %d %s: %j',
-        this.count,
-        this.packagePlural,
-        this.joinedCommand
-      );
+      this.logger.info('', 'Executing command in %d %s: %j', this.count, this.packagePlural, this.joinedCommand);
     }
 
     let chain: Promise<any> = Promise.resolve();
@@ -121,56 +113,52 @@ export class RunCommand extends Command<RunCommandOption & FilterOptions> {
       });
     } else {
       // detect error (if any) from collected results
-      chain = chain.then(
-        (results: Array<{ exitCode: number; failed?: boolean; pkg?: Package; stderr: any }>) => {
-          /* istanbul ignore else */
-          if (results?.some((result?: { failed?: boolean }) => result?.failed)) {
-            // propagate 'highest' error code, it's probably the most useful
-            const codes = results.filter((result) => result?.failed).map((result) => result.exitCode);
-            const exitCode = Math.max(...codes, 1);
+      chain = chain.then((results: Array<{ exitCode: number; failed?: boolean; pkg?: Package; stderr: any }>) => {
+        /* istanbul ignore else */
+        if (results?.some((result?: { failed?: boolean }) => result?.failed)) {
+          // propagate 'highest' error code, it's probably the most useful
+          const codes = results.filter((result) => result?.failed).map((result) => result.exitCode);
+          const exitCode = Math.max(...codes, 1);
 
-            this.logger.error('', 'Received non-zero exit code %d during execution', exitCode);
-            if (!this.options.stream) {
-              results
-                .filter((result) => result?.failed)
-                .forEach((result) => {
-                  this.logger.error('', result.pkg?.name ?? '', result.stderr);
-                });
-            }
-            process.exitCode = exitCode;
+          this.logger.error('', 'Received non-zero exit code %d during execution', exitCode);
+          if (!this.options.stream) {
+            results
+              .filter((result) => result?.failed)
+              .forEach((result) => {
+                this.logger.error('', result.pkg?.name ?? '', result.stderr);
+              });
           }
-          return results;
+          process.exitCode = exitCode;
         }
-      );
+        return results;
+      });
     }
 
-    return chain.then(
-      (results: Array<{ exitCode: number; failed?: boolean; pkg?: Package; stderr: any }>) => {
-        const someFailed = results?.some((result) => result?.failed);
-        const logType = someFailed ? 'error' : 'success';
+    return chain.then((results: Array<{ exitCode: number; failed?: boolean; pkg?: Package; stderr: any }>) => {
+      const someFailed = results?.some((result) => result?.failed);
+      const logType = someFailed ? 'error' : 'success';
 
-        this.logger[logType](
-          'run',
-          `Ran npm script '%s' in %d %s in %ss:`,
-          this.script,
-          this.count,
-          this.packagePlural,
-          (getElapsed() / 1000).toFixed(1)
-        );
+      this.logger[logType](
+        'run',
+        `Ran npm script '%s' in %d %s in %ss:`,
+        this.script,
+        this.count,
+        this.packagePlural,
+        (getElapsed() / 1000).toFixed(1)
+      );
 
-        if (!this.bail && !this.options.stream) {
-          results.forEach((result) => {
-            if (result?.failed) {
-              this.logger.error('', ` - ${result.pkg?.name ?? ''}`);
-            } else {
-              this.logger.success('', ` - ${result.pkg?.name ?? ''}`);
-            }
-          });
-        } else {
-          this.logger.success('', this.packagesWithScript.map((pkg) => `- ${pkg.name}`).join('\n'));
-        }
+      if (!this.bail && !this.options.stream) {
+        results.forEach((result) => {
+          if (result?.failed) {
+            this.logger.error('', ` - ${result.pkg?.name ?? ''}`);
+          } else {
+            this.logger.success('', ` - ${result.pkg?.name ?? ''}`);
+          }
+        });
+      } else {
+        this.logger.success('', this.packagesWithScript.map((pkg) => `- ${pkg.name}`).join('\n'));
       }
-    );
+    });
   }
 
   getOpts(pkg: Package): ScriptStreamingOption {
@@ -219,6 +207,11 @@ export class RunCommand extends Command<RunCommandOption & FilterOptions> {
     return chain;
   }
 
+  /** Nx requires quotes around script names of the form script:name*/
+  escapeScriptNameQuotes(scriptName: string) {
+    return scriptName.includes(':') ? `"${scriptName}"` : scriptName;
+  }
+
   async runScriptsUsingNx() {
     if (this.options.ci) {
       process.env.CI = 'true';
@@ -228,7 +221,8 @@ export class RunCommand extends Command<RunCommandOption & FilterOptions> {
     const { targetDependencies, options } = await this.prepNxOptions();
     if (this.packagesWithScript.length === 1) {
       const { runOne } = await import('nx/src/command-line/run-one');
-      const fullQualifiedTarget = this.packagesWithScript.map((p) => p.name)[0] + ':' + this.script;
+      const fullQualifiedTarget =
+        this.packagesWithScript.map((p) => p.name)[0] + ':' + this.escapeScriptNameQuotes(this.script);
       return (runOne as any)(
         process.cwd(),
         {
@@ -253,7 +247,9 @@ export class RunCommand extends Command<RunCommandOption & FilterOptions> {
 
   async prepNxOptions() {
     const { readNxJson } = await import('nx/src/config/configuration');
-    const targetDependenciesAreDefined = Object.keys(readNxJson().targetDependencies || {}).length > 0;
+    const nxJson = readNxJson();
+    const targetDependenciesAreDefined =
+      Object.keys(nxJson.targetDependencies || nxJson.targetDefaults || {}).length > 0;
     const targetDependencies =
       // prettier-ignore
       this.toposort && !targetDependenciesAreDefined
@@ -275,11 +271,15 @@ export class RunCommand extends Command<RunCommandOption & FilterOptions> {
 
     const options = {
       outputStyle,
-      parallel: this.options.concurrency,
+      /**
+       * To match lerna's own behavior (via pMap's default concurrency), we set parallel to a very large number if
+       * the flag has been set (we can't use Infinity because that would cause issues with the task runner).
+       */
+      parallel: this.options.parallel ? 999 : this.concurrency,
       nxBail: this.bail,
       nxIgnoreCycles: !this.options.rejectCycles,
       skipNxCache: this.options.skipNxCache,
-      _: this.args,
+      _: this.args.map((t) => t.toString()),
     };
 
     return { targetDependencies, options };

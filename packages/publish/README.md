@@ -45,6 +45,8 @@ During all publish operations, appropriate [lifecycle scripts](#lifecycle-script
 
 Check out [Per-Package Configuration](#per-package-configuration) for more details about publishing scoped packages, custom registries, and custom dist-tags.
 
+> If you're using [npm automation access token](https://docs.npmjs.com/creating-and-viewing-access-tokens#creating-access-tokens) please remember to [disable lerna access verification feature](#--no-verify-access). Automation token doesn't grant permissions needed for the verification to be successful. [Click here to read more about this issue](https://github.com/lerna/lerna/issues/2788).
+
 ## Positionals
 
 ### semver `--bump from-git`
@@ -241,6 +243,8 @@ If you are using a third-party registry that does not support `npm access ls-pac
 
 > Please use with caution
 
+> For the time being, use this flag/option always when you're handling NPM authorization with the use of [automation access token](https://docs.npmjs.com/creating-and-viewing-access-tokens#creating-access-tokens). [Click here to read more about this issue](https://github.com/lerna/lerna/issues/2788).
+
 ### `--otp`
 
 When publishing packages that require two-factor authentication, you can specify a [one-time password](https://docs.npmjs.com/about-two-factor-authentication) using `--otp`:
@@ -421,7 +425,7 @@ lerna will run [npm lifecycle scripts](https://docs.npmjs.com/cli/v8/using-npm/s
 
 # `workspace:` protocol
 
-The `workspace:` protocol ([pnpm workspace](https://pnpm.io/workspaces), [yarn workspace](https://yarnpkg.com/features/workspaces#workspace-ranges-workspace)) is also supported by Lerna-Lite. When publishing, it will replace any `workspace:` dependency by:
+The `workspace:` protocol ([pnpm workspace](https://pnpm.io/workspaces), [yarn workspace](https://yarnpkg.com/features/workspaces#workspace-ranges-workspace)) is also supported by Lerna-Lite. We also strongly suggest that you also use the new [`--sync-workspace-lock`](https://github.com/ghiscoding/lerna-lite/tree/main/packages/version#--sync-workspace-lock) flag to properly update your lock file. When publishing, it will replace any `workspace:` dependency by:
 
 - the corresponding version in the target workspace (if you use `workspace:*`, `workspace:~`, or `workspace:^`)
 - the associated semver range (for any other range type)

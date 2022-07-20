@@ -1,3 +1,28 @@
+export interface ChangedCommandOption {
+  /** use conventional-changelog to determine version bump and generate CHANGELOG. */
+  conventionalCommits?: boolean;
+
+  /** detect currently prereleased packages that would change to a non-prerelease version. */
+  conventionalGraduate: boolean | string | string[];
+
+  /** always include targeted packages when detecting changed packages, skipping default logic. */
+  forcePublish?: boolean | string | string[];
+
+  /** ignore changes in files matched by glob(s) when detecting changed packages. Pass --no-ignore-changes to completely disable. */
+  ignoreChanges: string[];
+
+  /** include tags from merged branches when detecting changed packages. */
+  includeMergedTags?: boolean;
+}
+
+export interface DiffCommandOption {
+  /** ignore changes in files matched by glob(s) when detecting changed packages. Pass --no-ignore-changes to completely disable. */
+  ignoreChanges: string[];
+
+  /** package name */
+  pkgName: string;
+}
+
 export interface ExecCommandOption {
   /** command to execute by the command */
   cmd?: string;

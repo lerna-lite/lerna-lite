@@ -1,7 +1,7 @@
 {
   "name": "@lerna-lite/optional-cmd-common",
   "description": "Lerna-Lite common utils for optional commands (Exec/List/Run)",
-  "version": "1.5.1",
+  "version": "1.6.0",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "typings": "dist/index.d.ts",
@@ -41,7 +41,7 @@
   },
   "devDependencies": {
     "@types/execa": "^2.0.0",
-    "@types/node": "^17.0.40",
+    "@types/node": "^18.0.0",
     "@types/p-map": "^2.0.0"
   }
 }

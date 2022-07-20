@@ -1,10 +1,10 @@
-"use strict";
+'use strict';
 
-const fs = require("fs");
-const path = require("path");
+const fs = require('fs');
+const path = require('path');
 
-const sourceIndex = path.resolve("./src/index.js");
-const targetIndex = path.resolve("./dist/index.js");
+const sourceIndex = path.resolve('./src/index.js');
+const targetIndex = path.resolve('./dist/index.js');
 
 fs.mkdirSync(path.dirname(targetIndex));
 

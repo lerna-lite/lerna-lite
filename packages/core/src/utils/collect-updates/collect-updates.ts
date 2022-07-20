@@ -1,5 +1,5 @@
 import log from 'npmlog';
-import {DescribeRefOptions, ExecOpts, UpdateCollectorOptions} from '../../models';
+import { DescribeRefOptions, ExecOpts, UpdateCollectorOptions } from '../../models';
 import { Package } from '../../package';
 import { PackageGraph } from '../../package-graph';
 
@@ -16,12 +16,20 @@ import { makeDiffPredicate } from './lib/make-diff-predicate';
  * @param {import("@lerna/child-process").ExecOpts} execOpts
  * @param {UpdateCollectorOptions} commandOptions
  */
-export function collectUpdates(filteredPackages: Package[], packageGraph: PackageGraph, execOpts: ExecOpts, commandOptions: UpdateCollectorOptions, gitDryRun = false) {
+export function collectUpdates(
+  filteredPackages: Package[],
+  packageGraph: PackageGraph,
+  execOpts: ExecOpts,
+  commandOptions: UpdateCollectorOptions,
+  gitDryRun = false
+) {
   const { forcePublish, conventionalCommits, conventionalGraduate, excludeDependents, isIndependent } = commandOptions;
 
   // If --conventional-commits and --conventional-graduate are both set, ignore --force-publish
   const useConventionalGraduate = conventionalCommits && conventionalGraduate;
-  const forced = getPackagesForOption(useConventionalGraduate ? conventionalGraduate : forcePublish as boolean | string[]);
+  const forced = getPackagesForOption(
+    useConventionalGraduate ? conventionalGraduate : (forcePublish as boolean | string[])
+  );
 
   const packages =
     filteredPackages.length === packageGraph.size
@@ -41,7 +49,11 @@ export function collectUpdates(filteredPackages: Package[], packageGraph: Packag
     }
 
     // describe the last annotated tag in the current branch
-    const { sha, refCount, lastTagName } = describeRefSync(describeOptions, commandOptions.includeMergedTags, gitDryRun);
+    const { sha, refCount, lastTagName } = describeRefSync(
+      describeOptions,
+      commandOptions.includeMergedTags,
+      gitDryRun
+    );
     // TODO: warn about dirty tree?
 
     if (refCount === '0' && forced.size === 0 && !committish) {
@@ -93,7 +105,7 @@ export function collectUpdates(filteredPackages: Package[], packageGraph: Packag
     !commandOptions.bump || commandOptions.bump.startsWith('pre')
       ? () => false
       : /* skip packages that have not been previously prereleased */
-      (node) => node.prereleaseId;
+        (node) => node.prereleaseId;
   const isForced = (node, name) =>
     (forced.has('*') || forced.has(name)) && (useConventionalGraduate ? node.prereleaseId : true);
 

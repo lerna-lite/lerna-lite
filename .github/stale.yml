@@ -5,3 +5,10 @@ daysUntilStale: 180
 
 # Label to use when marking as stale
 staleLabel: stale
+
+# Issues with these labels will never be considered stale
+exemptLabels:
+  - dependencies
+  - pinned
+  - security
+  - keep open

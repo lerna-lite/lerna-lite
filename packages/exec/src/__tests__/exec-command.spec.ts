@@ -1,6 +1,6 @@
 // mocked modules
 jest.mock('@lerna-lite/core', () => ({
-  ...jest.requireActual('@lerna-lite/core') as any, // return the other real methods, below we'll mock only 2 of the methods
+  ...(jest.requireActual('@lerna-lite/core') as any), // return the other real methods, below we'll mock only 2 of the methods
   logOutput: jest.requireActual('../../../core/src/__mocks__/output').logOutput,
   spawn: jest.fn(() => Promise.resolve({ exitCode: 0 })),
   spawnStreaming: jest.fn(() => Promise.resolve({ exitCode: 0 })),
@@ -15,17 +15,19 @@ import globby from 'globby';
 import yargParser from 'yargs-parser';
 
 // make sure to import the output mock
-import { logOutput } from '@lerna-lite/core';
+import { ExecCommandOption, logOutput } from '@lerna-lite/core';
 
 // mocked modules
 import { spawn, spawnStreaming } from '@lerna-lite/core';
 
 // helpers
-const initFixture = require('@lerna-test/init-fixture')(__dirname);
-const { loggingOutput } = require('@lerna-test/logging-output');
-const { normalizeRelativeDir } = require('@lerna-test/normalize-relative-dir');
+import helpers from '@lerna-test/helpers';
+import { loggingOutput } from '@lerna-test/helpers/logging-output';
+import { normalizeRelativeDir } from '@lerna-test/helpers';
 import { factory, ExecCommand } from '../exec-command';
-const lernaExec = require('@lerna-test/command-runner')(require('../../../cli/src/cli-commands/cli-exec-commands'));
+import cliExecCommands from '../../../cli/src/cli-commands/cli-exec-commands';
+const lernaExec = helpers.commandRunner(cliExecCommands);
+const initFixture = helpers.initFixtureFactory(__dirname);
 
 // assertion helpers
 const calledInPackages = () => (spawn as any).mock.calls.map(([, , opts]) => path.basename(opts.cwd));
@@ -37,14 +39,14 @@ const execInPackagesStreaming = (testDir) =>
     return arr;
   }, []);
 
-const createArgv = (cwd: string, script?: string, ...args: string[]) => {
+const createArgv = (cwd: string, ...args: string[]) => {
   args.unshift('exec');
+  if (args.length > 0 && args[1]?.length > 0 && !args[1].startsWith('-')) {
+    args[1] = `--cmd=${args[1]}`;
+  }
   const parserArgs = args.join(' ');
   const argv = yargParser(parserArgs);
   argv['$0'] = cwd;
-  if (script) {
-    argv.script = script;
-  }
   args['logLevel'] = 'silent';
   return argv;
 };
@@ -69,13 +71,13 @@ describe('ExecCommand', () => {
     });
 
     it('should complain if invoked without command using factory', async () => {
-      const command = factory(createArgv(testDir, '--parallel'));
+      const command = factory(createArgv(testDir, '--parallel') as ExecCommandOption);
 
       await expect(command).rejects.toThrow('A command to execute is required');
     });
 
     it('should complain if invoked without command using ExecCommand class', async () => {
-      const command = new ExecCommand(createArgv(testDir, '--parallel'));
+      const command = new ExecCommand(createArgv(testDir, '--parallel') as ExecCommandOption);
 
       await expect(command).rejects.toThrow('A command to execute is required');
     });
@@ -158,13 +160,8 @@ describe('ExecCommand', () => {
     it('should run a command in dry-run mode and expect them all to be logged', async () => {
       await lernaExec(testDir)('ls', '--cmd-dry-run');
 
-      // expect(spawn).toHaveBeenCalledTimes(2);
-      // expect(calledInPackages()).toEqual(['package-1', 'package-2']);
       const logLines = (logOutput as any).logged().split('\n');
-      expect(logLines).toEqual([
-        'dry-run> package-1',
-        'dry-run> package-2',
-      ]);
+      expect(logLines).toEqual(['dry-run> package-1', 'dry-run> package-2']);
     });
 
     it('should run a command with parameters', async () => {
@@ -211,6 +208,14 @@ describe('ExecCommand', () => {
         'packages/package-1 ls (prefix: package-1)',
         'packages/package-2 ls (prefix: package-2)',
       ]);
+    });
+
+    it('executes a command in all packages with --stream in dry-run mode and expect them all to be logged', async () => {
+      await lernaExec(testDir)('--stream', 'ls', '--cmd-dry-run');
+
+      const logLines = (logOutput as any).logged().split('\n');
+
+      expect(logLines).toEqual(['dry-run> package-1', 'dry-run> package-2']);
     });
 
     it('omits package prefix with --stream --no-prefix', async () => {
@@ -266,7 +271,7 @@ describe('ExecCommand', () => {
       await lernaExec(cwd)('--profile', '--profile-location', 'foo/bar', '--', 'ls');
 
       const [profileLocation] = await globby('foo/bar/Lerna-Profile-*.json', { cwd, absolute: true });
-      const exists = await fs.exists(profileLocation, null);
+      const exists = await fs.exists(profileLocation, null as any);
 
       expect(exists).toBe(true);
     });

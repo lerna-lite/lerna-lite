@@ -7,7 +7,7 @@ import {
   parseGitRepo,
   ReleaseCommandProps,
   ReleaseOptions,
-  ValidationError
+  ValidationError,
 } from '@lerna-lite/core';
 
 /**
@@ -30,7 +30,12 @@ export function createReleaseClient(type: 'github' | 'gitlab') {
  * @param {{ tags: string[]; releaseNotes: { name: string; notes: string; }[] }} commandProps
  * @param {{ gitRemote: string; execOpts: import('@lerna/child-process').ExecOpts }} opts
  */
-export function createRelease(client, { tags, releaseNotes }: ReleaseCommandProps, { gitRemote, execOpts }: ReleaseOptions, gitDryRun = false) {
+export function createRelease(
+  client,
+  { tags, releaseNotes }: ReleaseCommandProps,
+  { gitRemote, execOpts }: ReleaseOptions,
+  gitDryRun = false
+) {
   const repo = parseGitRepo(gitRemote, execOpts);
 
   return Promise.all(

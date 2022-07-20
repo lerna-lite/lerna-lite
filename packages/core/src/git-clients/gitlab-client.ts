@@ -19,6 +19,4 @@ function createGitLabClient() {
   return OcktokitAdapter(client);
 }
 
-export {
-  createGitLabClient
-};
+export { createGitLabClient };

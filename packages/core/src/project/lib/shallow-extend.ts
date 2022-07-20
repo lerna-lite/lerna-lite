@@ -2,7 +2,7 @@
  * @param {{ [key: string]: unknown }} json
  * @param {{ [key: string]: unknown }} defaults
  */
-export function shallowExtend(json: { [key: string]: any; }, defaults: { [key: string]: any; } = {}) {
+export function shallowExtend(json: { [key: string]: any }, defaults: { [key: string]: any } = {}) {
   return Object.keys(json).reduce((obj, key) => {
     const val = json[key];
 

@@ -10,17 +10,18 @@ jest.mock('@lerna-lite/core', () => ({
   getPackages: jest.requireActual('../../../core/src/project').getPackages,
 }));
 
+// mocked modules
+const { collectUpdates, logOutput } = require('@lerna-lite/core');
+
 // helpers
-const initFixture = require('@lerna-test/init-fixture')(__dirname);
-const { logOutput } = require('@lerna-lite/core');
-const { collectUpdates } = require('@lerna-lite/core');
+import helpers from '@lerna-test/helpers';
+const initFixture = helpers.initFixtureFactory(__dirname);
 
 // file under test
-const lernaList = require('@lerna-test/command-runner')(
-  require('../../../cli/src/cli-commands/cli-list-commands')
-);
 import { ListCommand } from '../index';
 import { factory } from '../list-command';
+import cliListCommands from '../../../cli/src/cli-commands/cli-list-commands';
+const lernaList = helpers.commandRunner(cliListCommands);
 
 // file under test
 const yargParser = require('yargs-parser');
@@ -46,8 +47,8 @@ expect.addSnapshotSerializer({
 });
 
 // normalize temp directory paths in snapshots
-expect.addSnapshotSerializer(require('@lerna-test/serialize-windows-paths'));
-expect.addSnapshotSerializer(require('@lerna-test/serialize-tempdir'));
+expect.addSnapshotSerializer(require('@lerna-test/helpers/serializers/serialize-windows-paths'));
+expect.addSnapshotSerializer(require('@lerna-test/helpers/serializers/serialize-tempdir'));
 
 describe('List Command', () => {
   describe('in a basic repo', () => {
@@ -214,9 +215,7 @@ package-2
     it('appends MISSING flag to long parseable output', async () => {
       const testDir = await initFixture('undefined-version');
       await lernaList(testDir)('--long', '--parseable');
-      expect(logOutput.logged()).toMatchInlineSnapshot(
-        `__TEST_ROOTDIR__/packages/package-1:package-1:MISSING`
-      );
+      expect(logOutput.logged()).toMatchInlineSnapshot(`__TEST_ROOTDIR__/packages/package-1:package-1:MISSING`);
     });
   });
 

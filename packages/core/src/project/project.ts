@@ -30,7 +30,7 @@ export class Project {
   /**
    * @param {string} [cwd] Defaults to process.cwd()
    */
-  constructor(cwd: string) {
+  constructor(cwd?: string) {
     const explorer = cosmiconfigSync('lerna', {
       searchPlaces: ['lerna.json', 'package.json'],
       transform(obj) {
@@ -117,7 +117,7 @@ export class Project {
     return this.config.packages || [Project.PACKAGE_GLOB];
   }
 
-  get packageParentDirs(): Promise<string[]> {
+  get packageParentDirs(): string[] {
     return (this.packageConfigs as any)
       .map(globParent)
       .map((parentDir: string) => path.resolve(this.rootPath, parentDir));
@@ -205,25 +205,16 @@ export class Project {
         (packageJson: any) => new Package(packageJson, path.dirname(packageConfigPath), this.rootPath)
       );
 
-    return this.fileFinder('package.json', (filePaths: string[]) =>
-      pMap(filePaths, mapper, { concurrency: 50 })
-    );
+    return this.fileFinder('package.json', (filePaths: string[]) => pMap(filePaths, mapper, { concurrency: 50 }));
   }
 
   /**
    * @returns {Package[]} A list of Package instances
    */
   getPackagesSync() {
-    return makeSyncFileFinder(this.rootPath, this.packageConfigs)(
-      'package.json',
-      (packageConfigPath: string) => {
-        return new Package(
-          loadJsonFile.sync(packageConfigPath),
-          path.dirname(packageConfigPath),
-          this.rootPath
-        );
-      }
-    ) as string[];
+    return makeSyncFileFinder(this.rootPath, this.packageConfigs)('package.json', (packageConfigPath: string) => {
+      return new Package(loadJsonFile.sync(packageConfigPath), path.dirname(packageConfigPath), this.rootPath);
+    }) as string[];
   }
 
   getPackageLicensePaths(): Promise<string[]> {
@@ -244,6 +235,3 @@ export class Project {
 
 Project.PACKAGE_GLOB = 'packages/*';
 Project.LICENSE_GLOB = 'LICEN{S,C}E{,.*}';
-
-module.exports.getPackages = Project.getPackages;
-module.exports.getPackagesSync = Project.getPackagesSync;

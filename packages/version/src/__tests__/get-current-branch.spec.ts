@@ -1,5 +1,7 @@
-const initFixture = require('@lerna-test/init-fixture')(__dirname);
-const { getCurrentBranch } = require('../lib/get-current-branch');
+import { getCurrentBranch } from '../lib/get-current-branch';
+
+import helpers from '@lerna-test/helpers';
+const initFixture = helpers.initFixtureFactory(__dirname);
 
 test('getCurrentBranch', async () => {
   const cwd = await initFixture('root-manifest-only');

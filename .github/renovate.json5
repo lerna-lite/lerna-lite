@@ -25,14 +25,16 @@
       allowedVersions: '8.0.0',
     },
   ],
-  schedule: ['on Friday', 'every weekend'],
+  schedule: ['on Thursday'],
   ignoreDeps: [
     // ESM Only => https://gist.github.com/sindresorhus/a39789f98801d908bbc7ff3ecc99d99c#how-can-i-move-my-commonjs-project-to-esm
     'byte-size',
     'chalk',
     'execa',
     'file-url',
+    'find-up',
     'globby',
+    'inquirer',
     'is-stream',
     'multimatch',
     'node-fetch',

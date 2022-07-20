@@ -1,4 +1,4 @@
-[![Actions Status](https://github.com/ghiscoding/lerna-lite/workflows/CI%20Build/badge.svg)](https://github.com/ghiscoding/lerna-lite/actions)
+[![Actions Status](https://github.com/ghiscoding/lerna-lite/workflows/CI/badge.svg)](https://github.com/ghiscoding/lerna-lite/actions)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![npm](https://img.shields.io/npm/dy/@lerna-lite/cli?color=forest)](https://www.npmjs.com/package/@lerna-lite/cli)
 [![npm](https://img.shields.io/npm/v/@lerna-lite/cli.svg?logo=npm&logoColor=fff&label=npm)](https://www.npmjs.com/package/@lerna-lite/cli)
@@ -40,7 +40,9 @@ For all available options of each command, follow any of the command link shown 
   - [lerna info](https://github.com/ghiscoding/lerna-lite/blob/main/packages/info/README.md)
   - [lerna publish](https://github.com/ghiscoding/lerna-lite/blob/main/packages/publish/README.md)
   - [lerna version](https://github.com/ghiscoding/lerna-lite/blob/main/packages/version/README.md)
-- optional
+- **optional commands** (require a separate install, refer to [installation](https://github.com/ghiscoding/lerna-lite#installation) table)
+  - [lerna changed](https://github.com/ghiscoding/lerna-lite/blob/main/packages/changed/README.md)
+  - [lerna diff](https://github.com/ghiscoding/lerna-lite/blob/main/packages/diff/README.md)
   - [lerna exec](https://github.com/ghiscoding/lerna-lite/blob/main/packages/exec/README.md)
   - [lerna list](https://github.com/ghiscoding/lerna-lite/blob/main/packages/list/README.md)
   - [lerna run](https://github.com/ghiscoding/lerna-lite/blob/main/packages/run/README.md)

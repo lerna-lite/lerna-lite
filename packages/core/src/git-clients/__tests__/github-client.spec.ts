@@ -59,11 +59,7 @@ describe('parseGitRepo', () => {
 
     const repo = parseGitRepo();
 
-    expect(childProcess.execSync).toHaveBeenCalledWith(
-      'git',
-      ['config', '--get', 'remote.origin.url'],
-      undefined
-    );
+    expect(childProcess.execSync).toHaveBeenCalledWith('git', ['config', '--get', 'remote.origin.url'], undefined);
 
     expect(repo).toEqual(
       expect.objectContaining({
@@ -78,11 +74,7 @@ describe('parseGitRepo', () => {
 
     parseGitRepo('upstream');
 
-    expect(childProcess.execSync).toHaveBeenCalledWith(
-      'git',
-      ['config', '--get', 'remote.upstream.url'],
-      undefined
-    );
+    expect(childProcess.execSync).toHaveBeenCalledWith('git', ['config', '--get', 'remote.upstream.url'], undefined);
   });
 
   it('throws an error if no URL returned', () => {
