@@ -233,31 +233,16 @@ When run with this flag, `lerna version` will release with prerelease versions t
 ### `--changelog-include-commit-author-fullname [msg]`
 Specify if we want to include the git commit author's name, at the end of each changelog commit entry, this is only available when using `--conventional-commits` with changelogs. The default format will append the author's name at the end of each commit entry and wrapped in `()`, for exampe "feat: commit message (Author Name)". We could also use a custom format by providing the `%a` token. Note that in every case, the author's name will always be appended as a suffix to each changelog commit entry.
 
-> **Note** that the author name is the name that was given in the user's Git config, refer to [Git Configuration](https://www.git-scm.com/book/en/v2/Customizing-Git-Git-Configuration) for more info. In other words, this is **not** the same as a GitHub login username.
+> **Note** that the author name is the name that was given in the user's Git config, refer to [Git Configuration](https://www.git-scm.com/book/en/v2/Customizing-Git-Git-Configuration) for more info and it is **not** the same as a GitHub login username. Git itself does not sadly store the git username in its commit history.
 
 ```sh
+# default format, without any argument
 lerna version --conventional-commits --changelog-include-commit-author-fullname
-```
+# **deps:** update dependency git-url-parse to v12 ([978bf36](https://github.com/ghiscoding/lerna-lite/commit/978bf36)) (Renovate Bot)
 
-See below for a sample of a changelog entry with the author's full name (note the url was shorten up for simplicity)
-#### Default Format
-The default format will append the author's name (wrapped in `()`) to the end of the commit message
-
-```sh
-* **deps:** update dependency git-url-parse to v12 ([978bf36](https://github.com/ghiscoding/lerna-lite/commit/978bf36)) (Renovate Bot)
-```
-
-#### Custom Format
-If we want to provide a default format, we can do so by using the `%a` token
-
-```sh
-lerna version --conventional-commits --changelog-include-commit-author-fullname " by _%a_"
-```
-
-will show the following (the use of `_` in this case would display the name in italic)
-
-```sh
-* **deps:** update dependency git-url-parse to v12 ([978bf36](https://github.com/ghiscoding/lerna-lite/commit/978bf36)) by _Renovate Bot_
+# custom format with %a token
+lerna version --conventional-commits --changelog-include-commit-author-fullname " by <%a>"
+# **deps:** update dependency git-url-parse to v12 ([978bf36](https://github.com/ghiscoding/lerna-lite/commit/978bf36)) by <Renovate Bot>
 ```
 
 ### `--changelog-header-message <msg>`
