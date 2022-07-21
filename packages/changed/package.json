@@ -1,7 +1,7 @@
 {
   "name": "@lerna-lite/changed",
   "description": "Lerna-Lite changed commmand - List local packages that have changed since the last tagged release",
-  "version": "1.6.0",
+  "version": "1.8.0",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "typings": "dist/index.d.ts",

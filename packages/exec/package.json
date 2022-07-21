@@ -1,7 +1,7 @@
 {
   "name": "@lerna-lite/exec",
   "description": "Lerna-Lite Exec command will execute an arbitrary command in each package",
-  "version": "1.6.0",
+  "version": "1.8.0",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "typings": "dist/index.d.ts",

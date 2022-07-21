@@ -1,7 +1,7 @@
 {
   "name": "@lerna-lite/cli",
   "description": "Lerna-Lite CLI for the Version/Publish commands",
-  "version": "1.6.0",
+  "version": "1.8.0",
   "main": "dist/cli.js",
   "types": "dist/index.d.ts",
   "typings": "dist/index.d.ts",
