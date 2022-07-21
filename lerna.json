@@ -11,7 +11,7 @@
       "createRelease": "github",
       "gitDryRun": false,
       "syncWorkspaceLock": true,
-      "changelogIncludeCommitAuthorFullname": " by <%a>",
+      "changelogIncludeCommitAuthorFullname": " (by _%a_)",
       "changelogHeaderMessage": "### Automate your Workspace Versions, Changelogs & Publish with [Lerna-Lite](https://github.com/ghiscoding/lerna-lite) 🚀",
       "message": "chore(release): publish new version %v"
     },
