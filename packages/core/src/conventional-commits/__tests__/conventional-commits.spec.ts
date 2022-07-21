@@ -418,7 +418,7 @@ describe('conventional-commits', () => {
       `);
     });
 
-    it('supports custom tagPrefix in fixed mode and include commit author', async () => {
+    it('supports custom tagPrefix in fixed mode and include commit author full name', async () => {
       const cwd = await initFixture('fixed');
 
       await gitTag(cwd, 'dragons-are-awesome1.0.0');
@@ -435,11 +435,11 @@ describe('conventional-commits', () => {
 
       const [leafChangelog, rootChangelog] = await Promise.all([
         updateChangelog(pkg1, 'fixed', {
-          changelogIncludeCommitAuthor: true,
+          changelogIncludeCommitAuthorFullname: true,
           tagPrefix: 'dragons-are-awesome',
         }),
         updateChangelog({ location: cwd } as Package, 'root', {
-          changelogIncludeCommitAuthor: true,
+          changelogIncludeCommitAuthorFullname: true,
           tagPrefix: 'dragons-are-awesome',
           version: '1.0.1',
         }),
@@ -451,7 +451,7 @@ describe('conventional-commits', () => {
 
         ### Bug Fixes
 
-        * A second commit for our CHANGELOG ([SHA](https://github.com/lerna/conventional-commits-fixed/commit/GIT_HEAD)) (@Tester-McPerson)
+        * A second commit for our CHANGELOG ([SHA](https://github.com/lerna/conventional-commits-fixed/commit/GIT_HEAD)) (Tester McPerson)
       `);
       expect(rootChangelog.newEntry.trimRight()).toMatchInlineSnapshot(`
         ## [1.0.1](/compare/dragons-are-awesome1.0.0...dragons-are-awesome1.0.1) (YYYY-MM-DD)
@@ -459,7 +459,7 @@ describe('conventional-commits', () => {
 
         ### Bug Fixes
 
-        * A second commit for our CHANGELOG ([SHA](https://github.com/lerna/conventional-commits-fixed/commit/GIT_HEAD)) (@Tester-McPerson)
+        * A second commit for our CHANGELOG ([SHA](https://github.com/lerna/conventional-commits-fixed/commit/GIT_HEAD)) (Tester McPerson)
       `);
 
       await gitAdd(cwd, pkg1.manifestLocation);
@@ -472,7 +472,7 @@ describe('conventional-commits', () => {
       await gitCommit(cwd, 'fix: A third commit for our CHANGELOG');
 
       const lastRootChangelog = await updateChangelog({ location: cwd } as Package, 'root', {
-        changelogIncludeCommitAuthor: true,
+        changelogIncludeCommitAuthorFullname: true,
         tagPrefix: 'dragons-are-awesome',
         version: '1.0.2',
       });
@@ -484,7 +484,7 @@ describe('conventional-commits', () => {
 
         ### Bug Fixes
 
-        * A third commit for our CHANGELOG ([SHA](https://github.com/lerna/conventional-commits-fixed/commit/GIT_HEAD)) (@Tester-McPerson)
+        * A third commit for our CHANGELOG ([SHA](https://github.com/lerna/conventional-commits-fixed/commit/GIT_HEAD)) (Tester McPerson)
       `);
     });
 
@@ -656,7 +656,7 @@ describe('conventional-commits', () => {
       `);
     });
 
-    it('updates independent changelogs and include commit author', async () => {
+    it('updates independent changelogs and include commit author full name', async () => {
       const cwd = await initFixture('independent');
 
       await gitTag(cwd, 'package-1@1.0.0');
@@ -680,7 +680,7 @@ describe('conventional-commits', () => {
 
       const opts = {
         changelogPreset: 'conventional-changelog-angular',
-        changelogIncludeCommitAuthor: true,
+        changelogIncludeCommitAuthorFullname: true,
       };
       const [changelogOne, changelogTwo] = await Promise.all([
         updateChangelog(pkg1, 'independent', opts),
@@ -693,7 +693,7 @@ describe('conventional-commits', () => {
 
         ### Bug Fixes
 
-        * **stuff:** changed ([SHA](https://github.com/lerna/conventional-commits-independent/commit/GIT_HEAD)) (@Tester-McPerson)
+        * **stuff:** changed ([SHA](https://github.com/lerna/conventional-commits-independent/commit/GIT_HEAD)) (Tester McPerson)
       `);
       expect(changelogTwo.newEntry.trimRight()).toMatchInlineSnapshot(`
         # [1.1.0](/compare/package-2@1.0.0...package-2@1.1.0) (YYYY-MM-DD)
@@ -701,7 +701,56 @@ describe('conventional-commits', () => {
 
         ### Features
 
-        * **thing:** added ([SHA](https://github.com/lerna/conventional-commits-independent/commit/GIT_HEAD)) (@Tester-McPerson)
+        * **thing:** added ([SHA](https://github.com/lerna/conventional-commits-independent/commit/GIT_HEAD)) (Tester McPerson)
+      `);
+    });
+
+    it('updates independent changelogs and include commit author full name with a custom format when defined', async () => {
+      const cwd = await initFixture('independent');
+
+      await gitTag(cwd, 'package-1@1.0.0');
+      await gitTag(cwd, 'package-2@1.0.0');
+
+      const [pkg1, pkg2] = await Project.getPackages(cwd);
+
+      // make a change in package-1 and package-2
+      await pkg1.set('changed', 1).serialize();
+      await pkg2.set('changed', 2).serialize();
+
+      await gitAdd(cwd, pkg1.manifestLocation);
+      await gitCommit(cwd, 'fix(stuff): changed');
+
+      await gitAdd(cwd, pkg2.manifestLocation);
+      await gitCommit(cwd, 'feat(thing): added');
+
+      // update versions
+      await pkg1.set('version', '1.0.1').serialize();
+      await pkg2.set('version', '1.1.0').serialize();
+
+      const opts = {
+        changelogPreset: 'conventional-changelog-angular',
+        changelogIncludeCommitAuthorFullname: ' by <**%a**>',
+      };
+      const [changelogOne, changelogTwo] = await Promise.all([
+        updateChangelog(pkg1, 'independent', opts),
+        updateChangelog(pkg2, 'independent', opts),
+      ]);
+
+      expect(changelogOne.newEntry.trimRight()).toMatchInlineSnapshot(`
+        ## [1.0.1](/compare/package-1@1.0.0...package-1@1.0.1) (YYYY-MM-DD)
+
+
+        ### Bug Fixes
+
+        * **stuff:** changed ([SHA](https://github.com/lerna/conventional-commits-independent/commit/GIT_HEAD)) by <**Tester McPerson**>
+      `);
+      expect(changelogTwo.newEntry.trimRight()).toMatchInlineSnapshot(`
+        # [1.1.0](/compare/package-2@1.0.0...package-2@1.1.0) (YYYY-MM-DD)
+
+
+        ### Features
+
+        * **thing:** added ([SHA](https://github.com/lerna/conventional-commits-independent/commit/GIT_HEAD)) by <**Tester McPerson**>
       `);
     });
   });

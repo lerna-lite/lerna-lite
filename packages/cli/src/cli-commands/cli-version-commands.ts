@@ -63,11 +63,12 @@ export default {
         requiresArg: true,
         type: 'string',
       },
-      'changelog-include-commit-author': {
+      'changelog-include-commit-author-fullname': {
         describe:
-          "Specify if we want to include the commit author's name when using conventional-commits with changelog",
+          "Specify if we want to include the commit author's name, when using conventional-commits with changelog. We can optionally provide a custom message or else a default format will be used.",
         group: 'Version Command Options:',
-        type: 'boolean',
+        requiresArg: false,
+        type: 'string',
       },
       'changelog-version-message': {
         describe:
