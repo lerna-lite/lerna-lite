@@ -61,6 +61,7 @@ jobs:
 
     name: 'Build & Unit Tests on Ubuntu / Node${{ matrix.node }}'
     runs-on: ${{matrix.platform}}
+    if: ${{ !startsWith(github.event.head_commit.message, 'docs:') }}
 
     steps:
       - name: Checkout
@@ -113,13 +114,11 @@ jobs:
 
       - name: Run Jest unit tests
         if: |
-          !contains(github.event.head_commit.message, 'chore(release)') &&
-          !startsWith(github.event.head_commit.message, 'docs:')
+          !contains(github.event.head_commit.message, 'chore(release)')
         run: pnpm jest:ci
 
       - name: Upload Jest coverage to Codecov
         if: |
-          !contains(github.event.head_commit.message, 'chore(release)') &&
-          !startsWith(github.event.head_commit.message, 'docs:') &&
+          !contains(github.event.head_commit.message, 'chore(release)')
           contains(matrix.node, 18)
         run: bash <(curl -s https://codecov.io/bash)
