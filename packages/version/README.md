@@ -241,9 +241,31 @@ lerna version --conventional-commits --changelog-include-commit-author-fullname
 # **deps:** update dependency git-url-parse to v12 ([978bf36](https://github.com/ghiscoding/lerna-lite/commit/978bf36)) (Renovate Bot)
 
 # custom format with %a token
-lerna version --conventional-commits --changelog-include-commit-author-fullname " (by _%a_)"
-# **deps:** update dependency git-url-parse to v12 ([978bf36](https://github.com/ghiscoding/lerna-lite/commit/978bf36)) (by _Renovate Bot_)
+lerna version --conventional-commits --changelog-include-commit-author-fullname " by <%a>"
+# **deps:** update dependency git-url-parse to v12 ([978bf36](https://github.com/ghiscoding/lerna-lite/commit/978bf36)) by <Renovate Bot>
 ```
+
+### `--changelog-include-commit-author-username [msg]`
+Specify if we want to include the git commit author's name, at the end of each changelog commit entry, this is only available when using `--conventional-commits` with changelogs. The default format will append the author's name at the end of each commit entry and wrapped in `()`, for exampe "feat: commit message (Author Name)". We could also use a custom format by providing the `%a` token. Note that in every case, the author's name will always be appended as a suffix to each changelog commit entry.
+
+> **Note** that this requires access to the GitHub API with necessary permissions to execute the query, see below for more info.
+
+```sh
+# default format, without any argument
+lerna version --conventional-commits --changelog-include-commit-author-username
+# **deps:** update dependency git-url-parse to v12 ([978bf36](https://github.com/ghiscoding/lerna-lite/commit/978bf36)) (@renovate-bot)
+
+# custom format with %a token
+lerna version --conventional-commits --changelog-include-commit-author-username " by @%a"
+# **deps:** update dependency git-url-parse to v12 ([978bf36](https://github.com/ghiscoding/lerna-lite/commit/978bf36)) by @renovate-bot
+```
+
+To authenticate with GitHub, the following environment variables can be defined.
+
+- `GH_TOKEN` (required) - Your GitHub authentication token (under Settings > Developer settings > Personal access tokens).
+- `GHE_API_URL` - When using GitHub Enterprise, an absolute URL to the API.
+- `GHE_VERSION` - When using GitHub Enterprise, the currently installed GHE version. [Supports the following versions](https://github.com/octokit/plugin-enterprise-rest.js).
+
 
 ### `--changelog-header-message <msg>`
 

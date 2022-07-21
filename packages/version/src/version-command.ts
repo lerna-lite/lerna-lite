@@ -602,6 +602,7 @@ export class VersionCommand extends Command<VersionCommandOption> {
           rootPath,
           tagPrefix: this.tagPrefix,
           changelogIncludeCommitAuthorFullname: this.options.changelogIncludeCommitAuthorFullname,
+          changelogIncludeCommitAuthorUsername: this.options.changelogIncludeCommitAuthorUsername,
           changelogHeaderMessage: this.options.changelogHeaderMessage,
           changelogVersionMessage: this.options.changelogVersionMessage,
         }).then(({ logPath, newEntry }) => {

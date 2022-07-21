@@ -196,6 +196,12 @@ export interface VersionCommandOption {
   changelogIncludeCommitAuthorFullname?: boolean | string;
 
   /**
+   * Specify if we want to include the commit author login username (ie GitHub username), when using conventional-commits with changelog.
+   * We can optionally provide a custom message or else a default format will be used.
+   */
+  changelogIncludeCommitAuthorUsername?: boolean | string;
+
+  /**
    * Add a custom message as a prefix to each new version in your "changelog.md" which is located in the root of your project.
    * This option only works when using --conventional-commits.
    */

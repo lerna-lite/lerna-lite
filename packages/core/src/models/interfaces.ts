@@ -75,6 +75,7 @@ export interface UpdateChangelogOption {
   changelogVersionMessage?: string;
   changelogPreset?: string;
   changelogIncludeCommitAuthorFullname?: boolean | string;
+  changelogIncludeCommitAuthorUsername?: boolean | string;
   rootPath?: string;
   tagPrefix?: string;
   version?: string;

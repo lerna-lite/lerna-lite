@@ -9,6 +9,7 @@ import { makeBumpOnlyFilter } from './make-bump-only-filter';
 import { readExistingChangelog } from './read-existing-changelog';
 import { UpdateChangelogOption } from '../models';
 import { Package } from '../package';
+import { getClientCommitDetail } from './get-client-commit-detail';
 
 /**
  * @param {import("@lerna/package").Package} pkg
@@ -28,6 +29,7 @@ export async function updateChangelog(
     tagPrefix = 'v',
     version,
     changelogIncludeCommitAuthorFullname,
+    changelogIncludeCommitAuthorUsername,
     changelogHeaderMessage = '',
     changelogVersionMessage = '',
   } = updateOptions;
@@ -85,15 +87,20 @@ export async function updateChangelog(
   // generate the markdown for the upcoming release.
   const changelogStream = conventionalChangelogCore(options, context, gitRawCommitsOpts);
 
+  const previousCommits = await getClientCommitDetail('github', 'lerna-lite', 'ghiscoding', '2022-06-01T01:01:00Z');
+
   return Promise.all([
     // prettier-ignore
     getStream(changelogStream).then(makeBumpOnlyFilter(pkg)),
     readExistingChangelog(pkg),
   ]).then(([inputEntry, [changelogFileLoc, changelogContents]]) => {
-    // are we including commit author's name in changelog?
-    const newEntry = changelogIncludeCommitAuthorFullname
-      ? parseChangelogCommitAuthorFullName(inputEntry, changelogIncludeCommitAuthorFullname)
-      : inputEntry;
+    let newEntry = inputEntry;
+    if (changelogIncludeCommitAuthorFullname) {
+      newEntry = parseChangelogCommitAuthorFullName(inputEntry, changelogIncludeCommitAuthorFullname);
+    } else if (changelogIncludeCommitAuthorUsername) {
+      // do something
+      console.log(previousCommits);
+    }
 
     log.silly(type, 'writing new entry: %j', newEntry);
 
