@@ -76,7 +76,7 @@ Running `lerna version --conventional-commits` without the above flags will rele
     - [`--conventional-commits`](#--conventional-commits)
     - [`--conventional-graduate`](#--conventional-graduate)
     - [`--conventional-prerelease`](#--conventional-prerelease)
-    - [`--changelog-include-commit-author`](#--changelog-include-commit-author) (new)
+    - [`--changelog-include-commit-author-fullname [msg]`](#--changelog-include-commit-author-fullname-msg) (new)
     - [`--changelog-header-message <msg>`](#--changelog-header-message-msg) (new)
     - [`--changelog-version-message <msg>`](#--changelog-version-message-msg) (new)
     - [`--create-release <type>`](#--create-release-type)
@@ -230,16 +230,34 @@ lerna version --conventional-commits --conventional-prerelease
 
 When run with this flag, `lerna version` will release with prerelease versions the specified packages (comma-separated) or all packages using `*`. Releases all unreleased changes as pre(patch/minor/major/release) by prefixing the version recommendation from `conventional-commits` with `pre`, eg. if present changes include a feature commit, the recommended bump will be `minor`, so this flag will result in a `preminor` release. If changes are present for packages that are not specified (if specifying packages), or for packages that are already in prerelease, those packages will be versioned as they normally would using `--conventional-commits`.
 
-### `--changelog-include-commit-author`
-Specify if we want to include the commit author's name, at the end of each commit entry, when using `--conventional-commits` with changelogs.
+### `--changelog-include-commit-author-fullname [msg]`
+Specify if we want to include the git commit author's name, at the end of each changelog commit entry, this is only available when using `--conventional-commits` with changelogs. The default format will append the author's name at the end of each commit entry and wrapped in `()`, for exampe "feat: commit message (Author Name)". We could also use a custom format by providing the `%a` token. Note that in every case, the author's name will always be appended as a suffix to each changelog commit entry.
+
+> **Note** that the author name is the name that was given in the user's Git config, refer to [Git Configuration](https://www.git-scm.com/book/en/v2/Customizing-Git-Git-Configuration) for more info. In other words, this is **not** the same as a GitHub login username.
 
 ```sh
-lerna version --conventional-commits --changelog-include-commit-author
+lerna version --conventional-commits --changelog-include-commit-author-fullname
 ```
 
-See below for a sample of a changelog entry with author (note the url was shorten up for simplicity)
+See below for a sample of a changelog entry with the author's full name (note the url was shorten up for simplicity)
+#### Default Format
+The default format will append the author's name (wrapped in `()`) to the end of the commit message
+
 ```sh
-* **deps:** update dependency git-url-parse to v12 ([978bf36](https://github.com/ghiscoding/lerna-lite/commit/978bf36)) (@Renovate-Bot)
+* **deps:** update dependency git-url-parse to v12 ([978bf36](https://github.com/ghiscoding/lerna-lite/commit/978bf36)) (Renovate Bot)
+```
+
+#### Custom Format
+If we want to provide a default format, we can do so by using the `%a` token
+
+```sh
+lerna version --conventional-commits --changelog-include-commit-author-fullname " by _%a_"
+```
+
+will show the following (the use of `_` in this case would display the name in italic)
+
+```sh
+* **deps:** update dependency git-url-parse to v12 ([978bf36](https://github.com/ghiscoding/lerna-lite/commit/978bf36)) by _Renovate Bot_
 ```
 
 ### `--changelog-header-message <msg>`

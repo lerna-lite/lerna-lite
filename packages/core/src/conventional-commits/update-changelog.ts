@@ -26,8 +26,8 @@ export async function updateChangelog(
     changelogPreset,
     rootPath,
     tagPrefix = 'v',
-    version = undefined,
-    changelogIncludeCommitAuthor = false,
+    version,
+    changelogIncludeCommitAuthorFullname,
     changelogHeaderMessage = '',
     changelogVersionMessage = '',
   } = updateOptions;
@@ -53,7 +53,7 @@ export async function updateChangelog(
   // we will later extract a defined token from the string, of ">>author=%an<<",
   // and reformat the string to get a commit string that would add (@authorName) to the end of the commit string, ie:
   // **deps:** update all non-major dependencies ([ed1db35](https://github.com/ghiscoding/lerna-lite/commit/ed1db35)) (@Renovate-Bot)
-  if (changelogIncludeCommitAuthor) {
+  if (changelogIncludeCommitAuthorFullname) {
     gitRawCommitsOpts.format = '%B%n-hash-%n%H>>author=%an<<';
   }
 
@@ -91,7 +91,9 @@ export async function updateChangelog(
     readExistingChangelog(pkg),
   ]).then(([inputEntry, [changelogFileLoc, changelogContents]]) => {
     // are we including commit author's name in changelog?
-    const newEntry = changelogIncludeCommitAuthor ? parseChangelogCommitAuthorName(inputEntry) : inputEntry;
+    const newEntry = changelogIncludeCommitAuthorFullname
+      ? parseChangelogCommitAuthorFullName(inputEntry, changelogIncludeCommitAuthorFullname)
+      : inputEntry;
 
     log.silly(type, 'writing new entry: %j', newEntry);
 
@@ -132,17 +134,24 @@ export async function updateChangelog(
  * @param changelogEntry - changelog entry of a version being released which can contain multiple line entries
  * @returns
  */
-function parseChangelogCommitAuthorName(changelogEntry: string) {
+function parseChangelogCommitAuthorFullName(changelogEntry: string, commitAuthorFullnameMessage?: string | boolean) {
   // to transform the string into what we want, we need to move the substring outside of the url and remove extra search tokens
   // from this:
   //   "...ed1db35>>author=Renovate Bot<<))"
   // into this:
-  //   "...ed1db35)) (@Renovate-Bot)"
+  //   "...ed1db35)) (Renovate-Bot)"
+  // or as a custom message like this " by **%a**" into this:
+  //   "...ed1db35)) by **Renovate-Bot**"
   return changelogEntry.replace(
     /(.*)(>>author=)(.*)(<<)(.*)/g,
-    (_: string, lineStart: string, _tokenStart?: string, author?: string, _tokenEnd?: string, lineEnd?: string) => {
+    (_: string, lineStart: string, _tokenStart?: string, authorName?: string, _tokenEnd?: string, lineEnd?: string) => {
       // rebuild the commit string, we'll also replace any whitespaces to hypen in author's name to make it a valid "@" user ref
-      return `${lineStart}${lineEnd || ''} (@${author?.replace(/\s/g, '-') ?? ''})`;
+      const commitMsg = `${lineStart}${lineEnd || ''}`;
+      const authorMsg =
+        typeof commitAuthorFullnameMessage === 'string'
+          ? commitAuthorFullnameMessage.replace(/%a/g, authorName || '')
+          : ` (${authorName})`;
+      return commitMsg + authorMsg;
     }
   );
 }
