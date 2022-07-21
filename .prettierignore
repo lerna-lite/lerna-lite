@@ -6,4 +6,5 @@ dist
 # Ignore json configuration files in fixtures, sometimes they are intentionally malformed
 **/__fixtures__/**/*.json
 **/README.md
+**/changelog.md
 lerna.json

@@ -7,12 +7,12 @@ See [Conventional Commits](https://conventionalcommits.org) for commit guideline
 
 ### Bug Fixes
 
-* **deps:** update all non-major dependencies ([#254](https://github.com/ghiscoding/lerna-lite/issues/254)) ([2d9a0d5](https://github.com/ghiscoding/lerna-lite/commit/2d9a0d563af74ad64cafad9225199668f6f6daf4)) by <WhiteSource Renovate>
-* **run:** add double quotes around script target containing colon ([18da175](https://github.com/ghiscoding/lerna-lite/commit/18da175f3b4525c51800affe78b57e151448c643)) by <ghiscoding>
+* **deps:** update all non-major dependencies ([#254](https://github.com/ghiscoding/lerna-lite/issues/254)) ([2d9a0d5](https://github.com/ghiscoding/lerna-lite/commit/2d9a0d563af74ad64cafad9225199668f6f6daf4)) (by _WhiteSource Renovate_)
+* **run:** add double quotes around script target containing colon ([18da175](https://github.com/ghiscoding/lerna-lite/commit/18da175f3b4525c51800affe78b57e151448c643)) (by _ghiscoding_)
 
 ### Features
 
-* filter for lerna tags in independent mode ([#267](https://github.com/ghiscoding/lerna-lite/issues/267)) ([8c3cdb3](https://github.com/ghiscoding/lerna-lite/commit/8c3cdb38528baf7a4075c846bc33c8933a1a5c0b)) by <Ghislain B>
+* filter for lerna tags in independent mode ([#267](https://github.com/ghiscoding/lerna-lite/issues/267)) ([8c3cdb3](https://github.com/ghiscoding/lerna-lite/commit/8c3cdb38528baf7a4075c846bc33c8933a1a5c0b)) (by _Ghislain B_)
 
 # [1.6.0](https://github.com/ghiscoding/lerna-lite/compare/v1.5.1...v1.6.0) (2022-06-30)
 
@@ -132,7 +132,7 @@ See [Conventional Commits](https://conventionalcommits.org) for commit guideline
 
 # [0.3.0](https://github.com/ghiscoding/lerna-lite/compare/v0.2.3...v0.3.0) (2022-02-12)
 
-## BREAKING CHANGE 
+## BREAKING CHANGE
 
 Rename the lib to Lerna-Lite
 
