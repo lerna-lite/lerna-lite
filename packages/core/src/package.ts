@@ -305,9 +305,8 @@ export class Package {
       // when using explicit `workspace:` protocol
       if (resolved.explicitWorkspace) {
         const workspaceTarget = resolved?.workspaceTarget ?? '';
-        const [_, _wsTxt, operatorPrefix, rangePrefix] = workspaceTarget.match(
-          /^(workspace:)?([<>=]{0,2})?([*^~])?(.*)$/
-        ) as RegExpMatchArray;
+        const [_, _wsTxt, operatorPrefix, rangePrefix] =
+          workspaceTarget.match(/^(workspace:)?([<>=]{0,2})?([*^~])?(.*)$/) || [];
 
         if (operatorPrefix) {
           // with workspace it might include an operator, if so use it like "workspace:>=1.2.3"
