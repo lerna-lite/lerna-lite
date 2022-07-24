@@ -1,3 +1,5 @@
+import { RemoteClientType } from './interfaces';
+
 export interface ChangedCommandOption {
   /** use conventional-changelog to determine version bump and generate CHANGELOG. */
   conventionalCommits?: boolean;
@@ -186,29 +188,32 @@ export interface VersionCommandOption {
   /** Version changed packages as prereleases when using --conventional-commits. */
   conventionalPrerelease?: boolean | string;
 
-  /** Add a custom message at the top of your "changelog.md" which is located in the root of your project. This option only works when using --conventional-commits. */
+  /** Add a custom message at the top of your "changelog.md" which is located in the root of your project. This option is only available when using --conventional-commits with changelogs. */
   changelogHeaderMessage?: string;
 
   /**
-   * Specify if we want to include the commit author's name, when using conventional-commits with changelog.
-   * We can optionally provide a custom message or else a default format will be used.
+   * Specify if we want to include the commit author's name, this option is only available when using --conventional-commits with changelogs.
+   * We can also optionally provide a custom message or else a default format will be used.
    */
   changelogIncludeCommitAuthorFullname?: boolean | string;
 
   /**
-   * Specify if we want to include the commit author login username (ie GitHub username), when using conventional-commits with changelog.
-   * We can optionally provide a custom message or else a default format will be used.
+   * Specify if we want to include the commit remote client login name (ie GitHub username), this option is only available when using --conventional-commits with changelogs.
+   * We can also optionally provide a custom message or else a default format will be used.
    */
-  changelogIncludeCommitAuthorUsername?: boolean | string;
+  changelogIncludeCommitsClientLogin?: boolean | string;
 
   /**
    * Add a custom message as a prefix to each new version in your "changelog.md" which is located in the root of your project.
-   * This option only works when using --conventional-commits.
+   * This option is only available when using --conventional-commits with changelogs.
    */
   changelogVersionMessage?: string;
 
   /** Defaults 'angular', custom conventional-changelog preset. */
   changelogPreset?: string;
+
+  /** Create an official GitHub or GitLab release for every version. */
+  createRelease?: RemoteClientType;
 
   /** Specify cross-dependency version numbers exactly rather than with a caret (^). */
   exact?: boolean;
@@ -221,9 +226,6 @@ export interface VersionCommandOption {
 
   /** Defaults to 'origin', push git changes to the specified remote. */
   gitRemote: string;
-
-  /** Create an official GitHub or GitLab release for every version. */
-  createRelease?: 'gitlab' | 'github';
 
   /**
    * Ignore changes in files matched by glob(s) when detecting changed packages.
@@ -284,6 +286,9 @@ export interface VersionCommandOption {
   // preid is copied into ../publish/command because a whitelist for one option isn't worth it
   /** Defaults to 'alpha', specify the prerelease identifier when versioning a prerelease */
   preid?: string;
+
+  /** Remote git client, which client is used when reading commits from remote which is useful when associating client login for each changelog entry. */
+  remoteClient?: RemoteClientType;
 
   /** Pass the `--gpg-sign` flag to `git commit`. */
   signGitCommit?: boolean;

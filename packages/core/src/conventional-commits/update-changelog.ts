@@ -7,31 +7,28 @@ import { BLANK_LINE, CHANGELOG_HEADER, EOL } from './constants';
 import { GetChangelogConfig } from './get-changelog-config';
 import { makeBumpOnlyFilter } from './make-bump-only-filter';
 import { readExistingChangelog } from './read-existing-changelog';
-import { UpdateChangelogOption } from '../models';
+import { ChangelogType, RemoteCommit, UpdateChangelogOption } from '../models';
 import { Package } from '../package';
-import { getClientCommitDetail } from './get-client-commit-detail';
 
 /**
- * @param {import("@lerna/package").Package} pkg
- * @param {import("..").ChangelogType} type
- * @param {import("..").BaseChangelogOptions & { version?: string }} commandOptions
+ * Update changelog with the commits of the new release
+ * @param {Package} pkg
+ * @param {ChangelogType} type
+ * @param {UpdateChangelogOption} commandOptions
  */
-export async function updateChangelog(
-  pkg: Package,
-  type: 'root' | 'independent' | 'fixed',
-  updateOptions: UpdateChangelogOption
-) {
+export async function updateChangelog(pkg: Package, type: ChangelogType, updateOptions: UpdateChangelogOption) {
   log.silly(type, 'for %s at %s', pkg.name, pkg.location);
 
   const {
     changelogPreset,
+    changelogIncludeCommitAuthorFullname,
+    changelogIncludeCommitsClientLogin,
+    changelogHeaderMessage = '',
+    changelogVersionMessage = '',
+    commitsSinceLastRelease,
     rootPath,
     tagPrefix = 'v',
     version,
-    changelogIncludeCommitAuthorFullname,
-    changelogIncludeCommitAuthorUsername,
-    changelogHeaderMessage = '',
-    changelogVersionMessage = '',
   } = updateOptions;
 
   const config = await GetChangelogConfig.getChangelogConfig(changelogPreset, rootPath);
@@ -54,7 +51,7 @@ export async function updateChangelog(
   // available formats can be found at Git's url: https://git-scm.com/docs/git-log#_pretty_formats
   // we will later extract a defined token from the string, of ">>author=%an<<",
   // and reformat the string to get a commit string that would add (@authorName) to the end of the commit string, ie:
-  // **deps:** update all non-major dependencies ([ed1db35](https://github.com/ghiscoding/lerna-lite/commit/ed1db35)) (@Renovate-Bot)
+  // **deps:** update all non-major dependencies ([ed1db35](https://github.com/.../ed1db35)) (@Renovate-Bot)
   if (changelogIncludeCommitAuthorFullname) {
     gitRawCommitsOpts.format = '%B%n-hash-%n%H>>author=%an<<';
   }
@@ -87,19 +84,22 @@ export async function updateChangelog(
   // generate the markdown for the upcoming release.
   const changelogStream = conventionalChangelogCore(options, context, gitRawCommitsOpts);
 
-  const previousCommits = await getClientCommitDetail('github', 'lerna-lite', 'ghiscoding', '2022-06-01T01:01:00Z');
-
   return Promise.all([
     // prettier-ignore
     getStream(changelogStream).then(makeBumpOnlyFilter(pkg)),
     readExistingChangelog(pkg),
   ]).then(([inputEntry, [changelogFileLoc, changelogContents]]) => {
     let newEntry = inputEntry;
+
+    // include commit author name or commit client login name
     if (changelogIncludeCommitAuthorFullname) {
       newEntry = parseChangelogCommitAuthorFullName(inputEntry, changelogIncludeCommitAuthorFullname);
-    } else if (changelogIncludeCommitAuthorUsername) {
-      // do something
-      console.log(previousCommits);
+    } else if (changelogIncludeCommitsClientLogin && commitsSinceLastRelease) {
+      newEntry = parseChangelogCommitClientLogin(
+        inputEntry,
+        commitsSinceLastRelease,
+        changelogIncludeCommitsClientLogin
+      );
     }
 
     log.silly(type, 'writing new entry: %j', newEntry);
@@ -135,24 +135,25 @@ export async function updateChangelog(
  * https://github.com/conventional-changelog/conventional-changelog/blob/master/packages/git-raw-commits/index.js#L27
  *
  * We will transform a string that looks like this:
- *   "deps: update all non-major dependencies ([ed1db35](https://github.com/ghiscoding/lerna-lite/commit/ed1db35>>author=Renovate Bot<<))"
+ *   "deps: update all non-major dependencies ([ed1db35](https://github.com/.../ed1db35>>author=Whitesource Renovate<<))"
  * then extract the commit author's name and transform it into a new string that will look like below
- *   "deps: update all non-major dependencies ([ed1db35](https://github.com/ghiscoding/lerna-lite/commit/ed1db35)) (@Renovate-Bot)"
- * @param changelogEntry - changelog entry of a version being released which can contain multiple line entries
+ *   "deps: update all non-major dependencies ([ed1db35](https://github.com/.../ed1db35)) (Whitesource Whitesource)"
+ * @param {String} changelogEntry - changelog entry of a version being released which can contain multiple line entries
+ * @param {String | Boolean} [commitAuthorFullnameMessage]
  * @returns
  */
 function parseChangelogCommitAuthorFullName(changelogEntry: string, commitAuthorFullnameMessage?: string | boolean) {
   // to transform the string into what we want, we need to move the substring outside of the url and remove extra search tokens
   // from this:
-  //   "...ed1db35>>author=Renovate Bot<<))"
+  //   "...ed1db35>>author=Whitesource Renovate<<))"
   // into this:
-  //   "...ed1db35)) (Renovate-Bot)"
+  //   "...ed1db35)) (Whitesource Renovate)"
   // or as a custom message like this " by **%a**" into this:
-  //   "...ed1db35)) by **Renovate-Bot**"
+  //   "...ed1db35)) by **Whitesource Renovate**"
   return changelogEntry.replace(
     /(.*)(>>author=)(.*)(<<)(.*)/g,
     (_: string, lineStart: string, _tokenStart?: string, authorName?: string, _tokenEnd?: string, lineEnd?: string) => {
-      // rebuild the commit string, we'll also replace any whitespaces to hypen in author's name to make it a valid "@" user ref
+      // rebuild the commit line entry string
       const commitMsg = `${lineStart}${lineEnd || ''}`;
       const authorMsg =
         typeof commitAuthorFullnameMessage === 'string'
@@ -161,4 +162,41 @@ function parseChangelogCommitAuthorFullName(changelogEntry: string, commitAuthor
       return commitMsg + authorMsg;
     }
   );
+}
+
+/**
+ * For each commit line entry, we will append the remote client login username for the first commit entry found, for example:
+ * "commit message ([ed1db35](https://github.com/.../ed1db35)) (@renovate-bot)"
+ * @param {String} changelogEntry - changelog entry of a version being released which can contain multiple line entries
+ * @param {Array<RemoteCommit>} commitsSinceLastRelease
+ * @param {String | Boolean} [commitAuthorUsernameMessage]
+ * @returns
+ */
+function parseChangelogCommitClientLogin(
+  changelogEntry: string,
+  commitsSinceLastRelease: RemoteCommit[],
+  commitAuthorUsernameMessage?: string | boolean
+) {
+  let clientLogin = '';
+  let lineEntryOutput = changelogEntry;
+  const [_, wrappedHash] = changelogEntry.match(/(\[[0-9a-f]{7}\])/) || []; // first commit match only
+  const commitHash = wrappedHash?.replace(/[\[\]]/gi, '') ?? '';
+
+  if (commitHash) {
+    const remoteCommit = commitsSinceLastRelease.find((c) => c.shortHash === commitHash);
+    if (remoteCommit) {
+      clientLogin =
+        typeof commitAuthorUsernameMessage === 'string'
+          ? commitAuthorUsernameMessage
+              .replace(/%l/g, remoteCommit.login || '')
+              .replace(/%a/g, remoteCommit.authorName || '')
+          : ` (@${remoteCommit.login})`;
+
+      // when we have a match, we need to remove any line breaks at the line ending only,
+      // then add our user info and finally add back a single line break
+      lineEntryOutput = changelogEntry.replace(/[\r\n]*$/, '') + clientLogin + EOL;
+    }
+  }
+
+  return lineEntryOutput;
 }

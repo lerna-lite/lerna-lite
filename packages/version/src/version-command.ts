@@ -15,6 +15,7 @@ import {
   Command,
   CommandType,
   createRunner,
+  getCommitsSinceLastRelease,
   logOutput,
   Package,
   PackageGraphNode,
@@ -22,12 +23,13 @@ import {
   recommendVersion,
   ReleaseClient,
   ReleaseNote,
+  RemoteCommit,
   runTopologically,
   throwIfUncommitted,
   updateChangelog,
+  UpdateCollectorOptions,
   ValidationError,
   VersionCommandOption,
-  UpdateCollectorOptions,
 } from '@lerna-lite/core';
 
 import { getCurrentBranch } from './lib/get-current-branch';
@@ -58,6 +60,7 @@ export class VersionCommand extends Command<VersionCommandOption> {
   name = 'version' as CommandType;
 
   globalVersion = '';
+  commitsSinceLastRelease?: RemoteCommit[];
   packagesToVersion: Package[] = [];
   updatesVersions?: Map<string, string>;
   currentBranch = '';
@@ -164,7 +167,7 @@ export class VersionCommand extends Command<VersionCommandOption> {
         );
       }
 
-      this.currentBranch = getCurrentBranch(this.execOpts, this.options.gitDryRun);
+      this.currentBranch = getCurrentBranch(this.execOpts, false);
 
       if (this.currentBranch === 'HEAD') {
         throw new ValidationError('ENOGIT', 'Detached git HEAD, please checkout a branch to choose versions.');
@@ -243,6 +246,36 @@ export class VersionCommand extends Command<VersionCommandOption> {
         dedent`
           --manually-update-root-lockfile cannot be combined with --sync-workspace-lock.
         `
+      );
+    }
+
+    if (this.options.changelogIncludeCommitsClientLogin && this.options.changelogIncludeCommitAuthorFullname) {
+      throw new ValidationError(
+        'ENOTALLOWED',
+        dedent`
+          --changelog-include-commits-client-login cannot be combined with --changelog-include-commit-author-fullname.
+        `
+      );
+    }
+
+    // get all commits from the last release
+    const remoteClient = this.options.createRelease || this.options.remoteClient;
+    const { conventionalCommits, changelogIncludeCommitsClientLogin } = this.options;
+    if (conventionalCommits && changelogIncludeCommitsClientLogin) {
+      if (!remoteClient) {
+        throw new ValidationError(
+          'EMISSINGCLIENT',
+          dedent`
+            --changelog-include-commits-client-login requires one of these two option --remote-client or --create-release to be defined.
+          `
+        );
+      }
+
+      this.commitsSinceLastRelease = await getCommitsSinceLastRelease(
+        remoteClient,
+        this.options.gitRemote,
+        this.currentBranch,
+        this.execOpts
       );
     }
 
@@ -535,7 +568,15 @@ export class VersionCommand extends Command<VersionCommandOption> {
   }
 
   updatePackageVersions() {
-    const { conventionalCommits, changelogPreset, changelog = true } = this.options;
+    const {
+      conventionalCommits,
+      changelogPreset,
+      changelogIncludeCommitAuthorFullname,
+      changelogIncludeCommitsClientLogin,
+      changelogHeaderMessage,
+      changelogVersionMessage,
+      changelog = true,
+    } = this.options;
     const independentVersions = this.project.isIndependent();
     const rootPath = this.project.manifest.location;
     const changedFiles = new Set();
@@ -601,10 +642,11 @@ export class VersionCommand extends Command<VersionCommandOption> {
           changelogPreset,
           rootPath,
           tagPrefix: this.tagPrefix,
-          changelogIncludeCommitAuthorFullname: this.options.changelogIncludeCommitAuthorFullname,
-          changelogIncludeCommitAuthorUsername: this.options.changelogIncludeCommitAuthorUsername,
-          changelogHeaderMessage: this.options.changelogHeaderMessage,
-          changelogVersionMessage: this.options.changelogVersionMessage,
+          changelogIncludeCommitAuthorFullname,
+          changelogIncludeCommitsClientLogin,
+          changelogHeaderMessage,
+          changelogVersionMessage,
+          commitsSinceLastRelease: this.commitsSinceLastRelease,
         }).then(({ logPath, newEntry }) => {
           // commit the updated changelog
           changedFiles.add(logPath);
@@ -684,9 +726,11 @@ export class VersionCommand extends Command<VersionCommandOption> {
             rootPath,
             tagPrefix: this.tagPrefix,
             version: this.globalVersion,
-            changelogIncludeCommitAuthorFullname: this.options.changelogIncludeCommitAuthorFullname,
-            changelogHeaderMessage: this.options.changelogHeaderMessage,
-            changelogVersionMessage: this.options.changelogVersionMessage,
+            changelogIncludeCommitAuthorFullname,
+            changelogIncludeCommitsClientLogin,
+            changelogHeaderMessage,
+            changelogVersionMessage,
+            commitsSinceLastRelease: this.commitsSinceLastRelease,
           }).then(({ logPath, newEntry }) => {
             // commit the updated changelog
             changedFiles.add(logPath);
