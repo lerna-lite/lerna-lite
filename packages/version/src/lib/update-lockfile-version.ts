@@ -100,7 +100,7 @@ export function updateNpmLockFileVersion2(obj: any, pkgName: string, newVersion:
       } else {
         if (k === pkgName) {
           // e.g.: "@lerna-lite/core": "^0.1.2",
-          const [_, versionPrefix, _versionStr] = obj[k].match(/^([\^~])?(.*)$/);
+          const [_, versionPrefix, _versionStr] = obj[k].match(/^([\^~])?(.*)$/) || [];
           obj[k] = `${versionPrefix}${newVersion}`;
         } else if (k === 'name' && obj[k] === pkgName && obj['version'] !== undefined) {
           // e.g. "packages/version": { "name": "@lerna-lite/version", "version": "0.1.2" }
