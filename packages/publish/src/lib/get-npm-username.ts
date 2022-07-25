@@ -50,6 +50,13 @@ export function getNpmUsername(options: FetchConfig): Promise<string | undefined
     opts.log.resume();
 
     if (opts.registry === 'https://registry.npmjs.org/') {
+      if (err.code === 'E403') {
+        throw new ValidationError(
+          'ENEEDAUTH',
+          'Access verification failed. Ensure that your npm access token has both read and write access, or remove the verifyAccess option to skip this verification. Note that npm automation tokens do NOT have read access (https://docs.npmjs.com/creating-and-viewing-access-tokens).'
+        );
+      }
+
       throw new ValidationError('EWHOAMI', 'Authentication error. Use `npm whoami` to troubleshoot.');
     }
 

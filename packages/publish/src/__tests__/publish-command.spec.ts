@@ -60,7 +60,7 @@ import yargParser from 'yargs-parser';
 
 // mocked or stubbed modules
 import { npmPublish } from '../lib/npm-publish';
-import { promptConfirmation } from '@lerna-lite/core';
+import { promptConfirmation, PublishCommandOption } from '@lerna-lite/core';
 import { getOneTimePassword, collectUpdates } from '@lerna-lite/core';
 import { packDirectory } from '../lib/pack-directory';
 import { getNpmUsername } from '../lib/get-npm-username';
@@ -79,7 +79,7 @@ const createArgv = (cwd, ...args) => {
   argv['$0'] = cwd;
   argv['loglevel'] = 'silent';
   argv.composed = 'composed';
-  return argv;
+  return argv as unknown as PublishCommandOption;
 };
 
 (gitCheckout as any).mockImplementation(() => Promise.resolve());
@@ -171,23 +171,8 @@ Map {
       expect(npmDistTag.remove).not.toHaveBeenCalled();
       expect(npmDistTag.add).not.toHaveBeenCalled();
 
-      expect(getNpmUsername).toHaveBeenCalled();
-      expect(getNpmUsername).toHaveBeenLastCalledWith(
-        expect.objectContaining({ registry: 'https://registry.npmjs.org/' })
-      );
-
-      expect(verifyNpmPackageAccess).toHaveBeenCalled();
-      expect(verifyNpmPackageAccess).toHaveBeenLastCalledWith(
-        expect.any(Array),
-        'lerna-test',
-        expect.objectContaining({ registry: 'https://registry.npmjs.org/' })
-      );
-
-      expect(getTwoFactorAuthRequired).toHaveBeenCalled();
-      expect(getTwoFactorAuthRequired).toHaveBeenLastCalledWith(
-        // extra insurance that @lerna/npm-conf is defaulting things correctly
-        expect.objectContaining({ otp: undefined })
-      );
+      expect(getNpmUsername).not.toHaveBeenCalled();
+      expect(verifyNpmPackageAccess).not.toHaveBeenCalled();
 
       expect(gitCheckout).toHaveBeenCalledWith(
         // the list of changed files has been asserted many times already
@@ -269,13 +254,13 @@ Map {
       expect(getOneTimePassword).not.toHaveBeenCalled();
     });
 
-    it('prompts for OTP when option missing and account-level 2FA enabled', async () => {
+    it('prompts for OTP when option missing, account-level 2FA enabled, and verify access is true', async () => {
       const testDir = await initFixture('normal');
 
       (getTwoFactorAuthRequired as any).mockResolvedValueOnce(true);
 
       // await lernaPublish(testDir)();
-      await new PublishCommand(createArgv(testDir));
+      await new PublishCommand(createArgv(testDir, '--verify-access', true));
 
       expect(npmPublish).toHaveBeenCalledWith(
         expect.objectContaining({ name: 'package-1' }),
@@ -284,6 +269,22 @@ Map {
         expect.objectContaining({ otp: '654321' })
       );
       expect(getOneTimePassword).toHaveBeenLastCalledWith('Enter OTP:');
+    });
+
+    it('defers OTP prompt when option missing, account-level 2FA enabled, and verify access is not true', async () => {
+      const testDir = await initFixture('normal');
+
+      (getTwoFactorAuthRequired as any).mockResolvedValueOnce(true);
+
+      await lernaPublish(testDir)();
+
+      expect(npmPublish).toHaveBeenCalledWith(
+        expect.objectContaining({ name: 'package-1' }),
+        '/TEMP_DIR/package-1-MOCKED.tgz',
+        expect.objectContaining({ otp: undefined }),
+        expect.objectContaining({ otp: undefined })
+      );
+      expect(getOneTimePassword).not.toHaveBeenCalled();
     });
   });
 
@@ -352,7 +353,75 @@ Map {
     });
   });
 
+  describe('--verify-access', () => {
+    it("publishes packages after verifying the user's access to each package", async () => {
+      const testDir = await initFixture('normal');
+
+      await lernaPublish(testDir)('--verify-access');
+
+      expect(promptConfirmation).toHaveBeenLastCalledWith('Are you sure you want to publish these packages?');
+      expect((packDirectory as any).registry).toMatchInlineSnapshot(`
+Set {
+  "package-1",
+  "package-3",
+  "package-4",
+  "package-2",
+}
+`);
+      expect((npmPublish as any).registry).toMatchInlineSnapshot(`
+Map {
+  "package-1" => "latest",
+  "package-3" => "latest",
+  "package-4" => "latest",
+  "package-2" => "latest",
+}
+`);
+      expect((npmPublish as any).order()).toEqual([
+        'package-1',
+        'package-3',
+        'package-4',
+        'package-2',
+        // package-5 is private
+      ]);
+      expect(npmDistTag.remove).not.toHaveBeenCalled();
+      expect(npmDistTag.add).not.toHaveBeenCalled();
+
+      expect(getNpmUsername).toHaveBeenCalled();
+      expect(getNpmUsername).toHaveBeenLastCalledWith(
+        expect.objectContaining({ registry: 'https://registry.npmjs.org/' })
+      );
+
+      expect(verifyNpmPackageAccess).toHaveBeenCalled();
+      expect(verifyNpmPackageAccess).toHaveBeenLastCalledWith(
+        expect.any(Array),
+        'lerna-test',
+        expect.objectContaining({ registry: 'https://registry.npmjs.org/' })
+      );
+
+      expect(getTwoFactorAuthRequired).toHaveBeenCalled();
+      expect(getTwoFactorAuthRequired).toHaveBeenLastCalledWith(expect.objectContaining({ otp: undefined }));
+
+      expect(gitCheckout).toHaveBeenCalledWith(
+        expect.any(Array),
+        { granularPathspec: true },
+        { cwd: testDir },
+        undefined
+      );
+    });
+  });
+
   describe('--no-verify-access', () => {
+    it('shows warning that this is the default behavior and that this option is no longer needed', async () => {
+      const cwd = await initFixture('normal');
+
+      await lernaPublish(cwd)('--no-verify-access');
+
+      const logMessages = loggingOutput('warn');
+      expect(logMessages).toContain(
+        '--verify-access=false and --no-verify-access are no longer needed, because the legacy preemptive access verification is now disabled by default. Requests will fail with appropriate errors when not authorized correctly.'
+      );
+    });
+
     it('skips package access verification', async () => {
       const cwd = await initFixture('normal');
 
