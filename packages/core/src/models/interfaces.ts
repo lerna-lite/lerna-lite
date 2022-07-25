@@ -158,7 +158,7 @@ export type NpaResolveResult = (
 /** Passed between concurrent executions */
 export interface OneTimePasswordCache {
   /* The one-time password, passed as an option or received via prompt */
-  otp?: string;
+  otp?: string | number;
 }
 
 export interface LernaConfig {
