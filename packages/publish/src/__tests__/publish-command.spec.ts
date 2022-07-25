@@ -42,6 +42,7 @@ jest.mock('../lib/npm-dist-tag', () => jest.requireActual('../lib/__mocks__/npm-
 jest.mock('../lib/pack-directory', () => jest.requireActual('../lib/__mocks__/pack-directory'));
 jest.mock('../lib/git-checkout');
 
+import { npmConf } from '@lerna-lite/core';
 import fs from 'fs-extra';
 import path from 'path';
 
@@ -242,7 +243,6 @@ Map {
       // cli option skips prompt
       (getTwoFactorAuthRequired as any).mockResolvedValueOnce(true);
 
-      // await lernaPublish(testDir)("--otp", otp);
       await new PublishCommand(createArgv(testDir, '--otp', otp));
 
       expect(npmPublish).toHaveBeenCalledWith(
@@ -254,12 +254,31 @@ Map {
       expect(getOneTimePassword).not.toHaveBeenCalled();
     });
 
+    it('skips one-time password prompt when already found in cache', async () => {
+      const testDir = await initFixture('normal');
+      const otp = '654321';
+
+      (getTwoFactorAuthRequired as any).mockResolvedValueOnce(true);
+
+      const command = new PublishCommand(createArgv(testDir, '--verify-access', true));
+      await command;
+      command.conf.set('otp', otp);
+      await command.publishPacked();
+
+      expect(npmPublish).toHaveBeenCalledWith(
+        expect.objectContaining({ name: 'package-1' }),
+        '/TEMP_DIR/package-1-MOCKED.tgz',
+        expect.objectContaining({ otp: undefined }),
+        expect.objectContaining({ otp: '654321' })
+      );
+      expect(getOneTimePassword).toHaveBeenCalledTimes(1);
+    });
+
     it('prompts for OTP when option missing, account-level 2FA enabled, and verify access is true', async () => {
       const testDir = await initFixture('normal');
 
       (getTwoFactorAuthRequired as any).mockResolvedValueOnce(true);
 
-      // await lernaPublish(testDir)();
       await new PublishCommand(createArgv(testDir, '--verify-access', true));
 
       expect(npmPublish).toHaveBeenCalledWith(
