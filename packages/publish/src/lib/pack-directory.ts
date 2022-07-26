@@ -3,7 +3,7 @@ import packlist from 'npm-packlist';
 import log from 'npmlog';
 import tar from 'tar';
 
-import { Package, PackConfig, runLifecycle, tempWrite } from '@lerna-lite/core';
+import { LifecycleConfig, Package, PackConfig, runLifecycle, tempWrite } from '@lerna-lite/core';
 import { getPacked } from './get-packed';
 import { Readable } from 'stream';
 import { Tarball } from '../models';
@@ -16,7 +16,7 @@ import { Tarball } from '../models';
  */
 export function packDirectory(_pkg: Package, dir: string, options: PackConfig) {
   const pkg = Package.lazy(_pkg, dir);
-  const opts = {
+  const opts: LifecycleConfig = {
     // @ts-ignore
     log,
     ...options,
@@ -33,6 +33,7 @@ export function packDirectory(_pkg: Package, dir: string, options: PackConfig) {
   chain = chain.then(() => runLifecycle(pkg, 'prepare', opts));
 
   if (opts.lernaCommand === 'publish') {
+    opts.stdio = 'inherit';
     chain = chain.then(() => pkg.refresh());
     chain = chain.then(() => runLifecycle(pkg, 'prepublishOnly', opts));
     chain = chain.then(() => pkg.refresh());

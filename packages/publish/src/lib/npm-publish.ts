@@ -6,7 +6,7 @@ import pify from 'pify';
 import { publish } from 'libnpmpublish';
 import readJSON from 'read-package-json';
 
-import { OneTimePasswordCache, otplease, Package, RawManifest, runLifecycle } from '@lerna-lite/core';
+import { LifecycleConfig, OneTimePasswordCache, otplease, Package, RawManifest, runLifecycle } from '@lerna-lite/core';
 import { LibNpmPublishOptions, PackagePublishConfig } from '../models';
 
 const readJSONAsync = pify(readJSON);
@@ -100,8 +100,8 @@ export function npmPublish(
     });
   }
 
-  chain = chain.then(() => runLifecycle(pkg, 'publish', opts));
-  chain = chain.then(() => runLifecycle(pkg, 'postpublish', opts));
+  chain = chain.then(() => runLifecycle(pkg, 'publish', opts as LifecycleConfig));
+  chain = chain.then(() => runLifecycle(pkg, 'postpublish', opts as LifecycleConfig));
 
   return chain;
 }
