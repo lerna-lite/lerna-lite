@@ -31,7 +31,7 @@ export async function getCommitsSinceLastRelease(
     default:
       throw new ValidationError(
         'EREMOTE',
-        'Invalid remote client type, github is currently the only supported client to associate changelog commits with client login.'
+        'Invalid remote client type, "github" is currently the only supported client with the option --changelog-include-commits-client-login.'
       );
   }
 }

@@ -258,7 +258,7 @@ export class VersionCommand extends Command<VersionCommandOption> {
       );
     }
 
-    // get all commits from the last release
+    // fetch all commits from remote server of the last release when user wants to include client login associated to each commits
     const remoteClient = this.options.createRelease || this.options.remoteClient;
     const { conventionalCommits, changelogIncludeCommitsClientLogin } = this.options;
     if (conventionalCommits && changelogIncludeCommitsClientLogin) {

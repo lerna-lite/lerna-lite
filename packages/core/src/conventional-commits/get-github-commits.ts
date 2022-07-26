@@ -29,8 +29,8 @@ export async function getGithubCommits(
 
   do {
     const afterCursorStr = afterCursor ? `, after: "${afterCursor}"` : '';
-    const queryStr =
-      dedent(`query getCommits($repo: String!, $owner: String!, $branchName: String!, $pageSize: Int!, $since: GitTimestamp!) {
+    const queryStr = dedent(`
+        query getCommits($repo: String!, $owner: String!, $branchName: String!, $pageSize: Int!, $since: GitTimestamp!) {
           repository(name: $repo, owner: $owner) {
             ref(qualifiedName: $branchName) {
               target { ... on Commit {

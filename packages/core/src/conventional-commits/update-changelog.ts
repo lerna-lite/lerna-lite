@@ -139,10 +139,10 @@ export async function updateChangelog(pkg: Package, type: ChangelogType, updateO
  * then extract the commit author's name and transform it into a new string that will look like below
  *   "deps: update all non-major dependencies ([ed1db35](https://github.com/.../ed1db35)) (Whitesource Whitesource)"
  * @param {String} changelogEntry - changelog entry of a version being released which can contain multiple line entries
- * @param {String | Boolean} [commitAuthorFullnameMessage]
+ * @param {String | Boolean} [commitCustomFormat]
  * @returns
  */
-function parseChangelogCommitAuthorFullName(changelogEntry: string, commitAuthorFullnameMessage?: string | boolean) {
+function parseChangelogCommitAuthorFullName(changelogEntry: string, commitCustomFormat?: string | boolean) {
   // to transform the string into what we want, we need to move the substring outside of the url and remove extra search tokens
   // from this:
   //   "...ed1db35>>author=Whitesource Renovate<<))"
@@ -156,8 +156,8 @@ function parseChangelogCommitAuthorFullName(changelogEntry: string, commitAuthor
       // rebuild the commit line entry string
       const commitMsg = `${lineStart}${lineEnd || ''}`;
       const authorMsg =
-        typeof commitAuthorFullnameMessage === 'string'
-          ? commitAuthorFullnameMessage.replace(/%a/g, authorName || '')
+        typeof commitCustomFormat === 'string'
+          ? commitCustomFormat.replace(/%a/g, authorName || '')
           : ` (${authorName})`;
       return commitMsg + authorMsg;
     }
@@ -169,34 +169,35 @@ function parseChangelogCommitAuthorFullName(changelogEntry: string, commitAuthor
  * "commit message ([ed1db35](https://github.com/.../ed1db35)) (@renovate-bot)"
  * @param {String} changelogEntry - changelog entry of a version being released which can contain multiple line entries
  * @param {Array<RemoteCommit>} commitsSinceLastRelease
- * @param {String | Boolean} [commitAuthorUsernameMessage]
+ * @param {String | Boolean} [commitCustomFormat]
  * @returns
  */
 function parseChangelogCommitClientLogin(
   changelogEntry: string,
   commitsSinceLastRelease: RemoteCommit[],
-  commitAuthorUsernameMessage?: string | boolean
+  commitCustomFormat?: string | boolean
 ) {
-  let clientLogin = '';
-  let lineEntryOutput = changelogEntry;
-  const [_, wrappedHash] = changelogEntry.match(/(\[[0-9a-f]{7}\])/) || []; // first commit match only
-  const commitHash = wrappedHash?.replace(/[\[\]]/gi, '') ?? '';
+  const entriesOutput: string[] = [];
 
-  if (commitHash) {
-    const remoteCommit = commitsSinceLastRelease.find((c) => c.shortHash === commitHash);
-    if (remoteCommit) {
-      clientLogin =
-        typeof commitAuthorUsernameMessage === 'string'
-          ? commitAuthorUsernameMessage
-              .replace(/%l/g, remoteCommit.login || '')
-              .replace(/%a/g, remoteCommit.authorName || '')
-          : ` (@${remoteCommit.login})`;
+  for (const lineEntry of changelogEntry.split('\n\n')) {
+    let lineEntryOutput = lineEntry;
+    const [_, __, shortSha] = lineEntry.match(/(\[([0-9a-f]{7})\])/) || []; // pull first commit match only
 
-      // when we have a match, we need to remove any line breaks at the line ending only,
-      // then add our user info and finally add back a single line break
-      lineEntryOutput = changelogEntry.replace(/[\r\n]*$/, '') + clientLogin + EOL;
+    if (shortSha) {
+      const remoteCommit = commitsSinceLastRelease.find((c) => c.shortHash === shortSha);
+      if (remoteCommit) {
+        const clientLogin =
+          typeof commitCustomFormat === 'string'
+            ? commitCustomFormat.replace(/%l/g, remoteCommit.login || '').replace(/%a/g, remoteCommit.authorName || '')
+            : ` (@${remoteCommit.login})`;
+
+        // when we have a match, we need to remove any line breaks at the line ending only,
+        // then add our user info and finally add back a single line break
+        lineEntryOutput = lineEntry.replace(/\n*$/, '') + clientLogin;
+      }
     }
+    entriesOutput.push(lineEntryOutput);
   }
 
-  return lineEntryOutput;
+  return entriesOutput.join('\n\n');
 }
