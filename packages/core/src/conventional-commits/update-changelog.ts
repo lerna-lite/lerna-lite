@@ -179,7 +179,7 @@ function parseChangelogCommitClientLogin(
 ) {
   const entriesOutput: string[] = [];
 
-  for (const lineEntry of changelogEntry.split('\n\n')) {
+  for (const lineEntry of changelogEntry.split('\n')) {
     let lineEntryOutput = lineEntry;
     const [_, __, shortSha] = lineEntry.match(/(\[([0-9a-f]{7})\])/) || []; // pull first commit match only
 
@@ -199,5 +199,5 @@ function parseChangelogCommitClientLogin(
     entriesOutput.push(lineEntryOutput);
   }
 
-  return entriesOutput.join('\n\n');
+  return entriesOutput.join('\n');
 }
