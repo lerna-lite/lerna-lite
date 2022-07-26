@@ -4,10 +4,10 @@ jest.mock('@octokit/rest');
 jest.mock('../../child-process');
 
 import { Octokit } from '@octokit/rest';
-const childProcess = require('../../child-process');
+import { execSync } from '../../child-process';
 import { createGitHubClient, parseGitRepo } from '../index';
 
-childProcess.execSync.mockReturnValue('5.6.0');
+(execSync as jest.Mock).mockReturnValue('5.6.0');
 
 describe('createGitHubClient', () => {
   const oldEnv = Object.assign({}, process.env);
@@ -55,11 +55,11 @@ describe('createGitHubClient', () => {
 
 describe('parseGitRepo', () => {
   it('returns a parsed URL', () => {
-    childProcess.execSync.mockReturnValue('git@github.com:org/lerna.git');
+    (execSync as jest.Mock).mockReturnValue('git@github.com:org/lerna.git');
 
     const repo = parseGitRepo();
 
-    expect(childProcess.execSync).toHaveBeenCalledWith('git', ['config', '--get', 'remote.origin.url'], undefined);
+    expect(execSync).toHaveBeenCalledWith('git', ['config', '--get', 'remote.origin.url'], undefined);
 
     expect(repo).toEqual(
       expect.objectContaining({
@@ -70,15 +70,15 @@ describe('parseGitRepo', () => {
   });
 
   it('can change the origin', () => {
-    childProcess.execSync.mockReturnValue('git@github.com:org/lerna.git');
+    (execSync as jest.Mock).mockReturnValue('git@github.com:org/lerna.git');
 
     parseGitRepo('upstream');
 
-    expect(childProcess.execSync).toHaveBeenCalledWith('git', ['config', '--get', 'remote.upstream.url'], undefined);
+    expect(execSync).toHaveBeenCalledWith('git', ['config', '--get', 'remote.upstream.url'], undefined);
   });
 
   it('throws an error if no URL returned', () => {
-    childProcess.execSync.mockReturnValue('');
+    (execSync as jest.Mock).mockReturnValue('');
 
     expect(() => parseGitRepo()).toThrow('Git remote URL could not be found using "origin".');
   });

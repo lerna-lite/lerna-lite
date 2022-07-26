@@ -48,37 +48,56 @@ export async function getGithubCommits(
       since: sinceDate,
     });
 
-    const commitHistoryData = response?.repository?.ref?.target?.history;
-    const pageInfo = commitHistoryData?.pageInfo;
+    const historyData = getDescendantObjectProp<GraphqlCommitHistoryData>(response, 'repository.ref.target.history');
+    const pageInfo = historyData?.pageInfo;
     hasNextPage = pageInfo?.hasNextPage ?? false;
     afterCursor = pageInfo?.endCursor ?? '';
 
-    if (commitHistoryData?.nodes) {
-      for (const commit of commitHistoryData.nodes) {
-        remoteCommits.push({
-          shortHash: commit.oid.substring(0, 7),
-          authorName: commit?.author.name,
-          login: commit?.author?.user?.login ?? '',
-          message: commit.message,
-        });
+    if (historyData?.nodes) {
+      for (const commit of historyData.nodes) {
+        if (commit?.oid && commit?.author) {
+          remoteCommits.push({
+            shortHash: commit.oid.substring(0, 7),
+            authorName: commit?.author.name,
+            login: commit?.author?.user?.login ?? '',
+            message: commit?.message ?? '',
+          });
+        }
       }
     }
   } while (hasNextPage);
 
-  log.verbose('github', 'found %s commits since %s', remoteCommits.length, sinceDate);
+  log.verbose('github', 'found %s commits since last release timestamp %s', remoteCommits.length, sinceDate);
 
   return remoteCommits;
+}
+
+/**
+ * From a dot (.) notation path, find and return a property within an object given a complex object path
+ * Note that the object path does should not include the parent itself
+ * for example if we want to get `address.zip` from `user` object, we would call `getDescendantObjectProp(user, 'address.zip')`
+ * @param object - object to search from
+ * @param path - complex object path to find descendant property from, must be a string with dot (.) notation
+ * @returns outputValue - the object property value found if any
+ */
+export function getDescendantObjectProp<T>(object: any, path: string | undefined): T {
+  if (!object || !path) {
+    return object;
+  }
+  return path.split('.').reduce((obj, prop) => obj && (obj as any)[prop], object);
 }
 
 interface GraphqlCommitClientData {
   repository?: {
     ref?: {
       target?: {
-        history?: {
-          nodes: Array<{ oid: string; message: string; author: { name: string; user: { login: string } } }>;
-          pageInfo: { hasNextPage: boolean; endCursor: string; startCursor: string };
-        };
+        history?: GraphqlCommitHistoryData;
       };
     };
   };
+}
+
+interface GraphqlCommitHistoryData {
+  nodes: Array<{ oid: string; message: string; author: { name: string; user: { login: string } } }>;
+  pageInfo: { hasNextPage: boolean; endCursor: string; startCursor: string };
 }
