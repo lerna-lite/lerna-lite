@@ -64,7 +64,7 @@ export class PublishCommand extends Command<PublishCommandOption> {
   packagesToBeLicensed?: Package[] = [];
   runPackageLifecycle!: (pkg: Package, stage: string) => Promise<void>;
   runRootLifecycle!: (stage: string) => Promise<void> | void;
-  verifyAccess = false;
+  verifyAccess?: boolean = false;
   twoFactorAuthRequired = false;
   updates: PackageGraphNode[] = [];
   updatesVersions?: Map<string, any>;
@@ -110,10 +110,11 @@ export class PublishCommand extends Command<PublishCommandOption> {
 
     // inverted boolean options are only respected if prefixed with `--no-`, e.g. `--no-verify-access`
     this.gitReset = gitReset !== false;
-    this.verifyAccess = verifyAccess !== false;
 
     // consumed by npm-registry-fetch (via libnpmpublish)
     this.npmSession = crypto.randomBytes(8).toString('hex');
+
+    this.verifyAccess = verifyAccess;
   }
 
   get userAgent() {
@@ -122,6 +123,13 @@ export class PublishCommand extends Command<PublishCommandOption> {
   }
 
   initialize() {
+    if (this.options.verifyAccess === false) {
+      this.logger.warn(
+        'verify-access',
+        '--verify-access=false and --no-verify-access are no longer needed, because the legacy preemptive access verification is now disabled by default. Requests will fail with appropriate errors when not authorized correctly.'
+      );
+    }
+
     if (this.options.canary) {
       this.logger.info('canary', 'enabled');
     }

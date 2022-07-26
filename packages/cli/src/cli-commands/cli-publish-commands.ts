@@ -109,12 +109,12 @@ export default {
         type: 'boolean',
       },
       'no-verify-access': {
+        // proxy for --verify-access
         describe: 'Do not verify package read-write access for current npm user.',
         type: 'boolean',
       },
       'verify-access': {
-        // proxy for --no-verify-access
-        hidden: true,
+        describe: 'Verify package read-write access for current npm user.',
         type: 'boolean',
       },
       'workspace-strict-match': {
@@ -122,11 +122,6 @@ export default {
           'Strict match transform version numbers to an exact range (like "1.2.3") rather than with a caret (like ^1.2.3) when using `workspace:*`.',
         type: 'boolean',
       },
-      // y: {
-      //   describe: 'Skip all confirmation prompts.',
-      //   alias: 'yes',
-      //   type: 'boolean',
-      // },
     };
 
     composeVersionOptions(yargs);
