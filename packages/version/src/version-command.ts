@@ -258,6 +258,13 @@ export class VersionCommand extends Command<VersionCommandOption> {
       );
     }
 
+    if (!this.options.workspaceStrictMatch) {
+      this.logger.warn(
+        'version',
+        'Providing --no-workspace-strict-match is deprecated and will be removed in future version, we will make `workspace:` protocol strict matching in every case.'
+      );
+    }
+
     // fetch all commits from remote server of the last release when user wants to include client login associated to each commits
     const remoteClient = this.options.createRelease || this.options.remoteClient;
     const { conventionalCommits, changelogIncludeCommitsClientLogin } = this.options;

@@ -184,6 +184,20 @@ describe('VersionCommand', () => {
       );
     });
 
+    it('shows a warning log when using deprecated --no-workspace-strict-match flag', async () => {
+      const testDir = await initFixture('normal');
+
+      const command = new VersionCommand(createArgv(testDir, '--no-workspace-strict-match'));
+      await command;
+      const loggerSpy = jest.spyOn(command.logger, 'warn');
+      command.initialize();
+
+      expect(loggerSpy).toHaveBeenCalledWith(
+        'version',
+        'Providing --no-workspace-strict-match is deprecated and will be removed in future version, we will make `workspace:` protocol strict matching in every case.'
+      );
+    });
+
     it("throws an error when remote branch doesn't exist", async () => {
       (remoteBranchExists as jest.Mock).mockReturnValueOnce(false);
 
