@@ -84,7 +84,7 @@ const createArgv = (cwd, ...args) => {
   return argv as unknown as PublishCommandOption;
 };
 
-(gitCheckout as any).mockImplementation(() => Promise.resolve());
+(gitCheckout as jest.Mock).mockImplementation(() => Promise.resolve());
 
 describe('PublishCommand', () => {
   describe('cli validation', () => {
@@ -288,14 +288,14 @@ Map {
   });
 
   describe('--otp', () => {
-    (getOneTimePassword as any).mockImplementation(() => Promise.resolve('654321'));
+    (getOneTimePassword as jest.Mock).mockImplementation(() => Promise.resolve('654321'));
 
     it('passes one-time password to npm commands', async () => {
       const testDir = await initFixture('normal');
       const otp = 123456;
 
       // cli option skips prompt
-      (getTwoFactorAuthRequired as any).mockResolvedValueOnce(true);
+      (getTwoFactorAuthRequired as jest.Mock).mockResolvedValueOnce(true);
 
       await new PublishCommand(createArgv(testDir, '--otp', otp));
 
@@ -312,7 +312,7 @@ Map {
       const testDir = await initFixture('normal');
       const otp = '654321';
 
-      (getTwoFactorAuthRequired as any).mockResolvedValueOnce(true);
+      (getTwoFactorAuthRequired as jest.Mock).mockResolvedValueOnce(true);
 
       const command = new PublishCommand(createArgv(testDir, '--verify-access', true));
       await command;
@@ -331,7 +331,7 @@ Map {
     it('prompts for OTP when option missing, account-level 2FA enabled, and verify access is true', async () => {
       const testDir = await initFixture('normal');
 
-      (getTwoFactorAuthRequired as any).mockResolvedValueOnce(true);
+      (getTwoFactorAuthRequired as jest.Mock).mockResolvedValueOnce(true);
 
       await new PublishCommand(createArgv(testDir, '--verify-access', true));
 
@@ -347,7 +347,7 @@ Map {
     it('defers OTP prompt when option missing, account-level 2FA enabled, and verify access is not true', async () => {
       const testDir = await initFixture('normal');
 
-      (getTwoFactorAuthRequired as any).mockResolvedValueOnce(true);
+      (getTwoFactorAuthRequired as jest.Mock).mockResolvedValueOnce(true);
 
       await lernaPublish(testDir)();
 
@@ -505,7 +505,7 @@ Map {
     });
 
     it('is implied when npm username is undefined', async () => {
-      (getNpmUsername as any).mockImplementationOnce(() => Promise.resolve());
+      (getNpmUsername as jest.Mock).mockImplementationOnce(() => Promise.resolve());
 
       const cwd = await initFixture('normal');
 
@@ -564,16 +564,12 @@ Map {
 
   describe('--contents', () => {
     it('allows you to do fancy angular crap', async () => {
-      const logSpy = jest.spyOn(console, 'log').mockImplementation(() => {});
+      jest.spyOn(console, 'log').mockImplementation(() => {});
       const cwd = await initFixture('lifecycle');
 
       await new PublishCommand(createArgv(cwd, '--contents', 'dist'));
 
-      const [[pkgOne, dirOne, opts], [pkgTwo, dirTwo]] = (packDirectory as any).mock.calls;
-
-      // expect(logSpy).toHaveBeenCalledWith('preversion-root');
-      // expect(logSpy).toHaveBeenCalledWith('preversion-package-1');
-      // expect(logSpy).toHaveBeenCalledWith('version-package-1');
+      const [[pkgOne, dirOne, opts], [pkgTwo, dirTwo]] = (packDirectory as jest.Mock).mock.calls;
 
       // second argument to packDirectory() is the location, _not_ the contents
       expect(dirOne).toBe(pkgOne.location);

@@ -98,7 +98,7 @@ describe('VersionCommand', () => {
 
       expect(checkWorkingTree).toHaveBeenCalled();
 
-      expect((promptSelectOne as any).mock.calls).toMatchSnapshot('prompt');
+      expect((promptSelectOne as jest.Mock).mock.calls).toMatchSnapshot('prompt');
       expect(promptConfirmation).toHaveBeenLastCalledWith('Are you sure you want to create these versions?');
 
       expect((writePkg as any).updatedManifest('package-1')).toMatchSnapshot('gitHead');
@@ -125,7 +125,7 @@ describe('VersionCommand', () => {
 
       expect(checkWorkingTree).toHaveBeenCalled();
 
-      expect((promptSelectOne as any).mock.calls).toMatchSnapshot('prompt');
+      expect((promptSelectOne as jest.Mock).mock.calls).toMatchSnapshot('prompt');
       expect(promptConfirmation).toHaveBeenLastCalledWith('Are you sure you want to publish these packages?');
 
       expect((writePkg as any).updatedManifest('package-1')).toMatchSnapshot('gitHead');
@@ -172,7 +172,7 @@ describe('VersionCommand', () => {
     });
 
     it("throws an error when remote branch doesn't exist", async () => {
-      (remoteBranchExists as any).mockReturnValueOnce(false);
+      (remoteBranchExists as jest.Mock).mockReturnValueOnce(false);
 
       const testDir = await initFixture('normal');
       const command = new VersionCommand(createArgv(testDir));
@@ -181,7 +181,7 @@ describe('VersionCommand', () => {
     });
 
     it('throws an error when uncommitted changes are present', async () => {
-      (checkWorkingTree as any).mockImplementationOnce(() => {
+      (checkWorkingTree as jest.Mock).mockImplementationOnce(() => {
         throw new Error('uncommitted');
       });
 
@@ -193,7 +193,7 @@ describe('VersionCommand', () => {
     });
 
     it('throws an error when current ref is already tagged', async () => {
-      (checkWorkingTree as any).mockImplementationOnce(() => {
+      (checkWorkingTree as jest.Mock).mockImplementationOnce(() => {
         throw new Error('released');
       });
 
@@ -642,7 +642,7 @@ describe('VersionCommand', () => {
 
   describe('when local clone is behind upstream', () => {
     it('throws an error during interactive publish', async () => {
-      (isBehindUpstream as any).mockReturnValueOnce(true);
+      (isBehindUpstream as jest.Mock).mockReturnValueOnce(true);
 
       const testDir = await initFixture('normal');
       const command = new VersionCommand(createArgv(testDir, '--no-ci'));
@@ -651,7 +651,7 @@ describe('VersionCommand', () => {
     });
 
     it('logs a warning and exits early during CI publish', async () => {
-      (isBehindUpstream as any).mockReturnValueOnce(true);
+      (isBehindUpstream as jest.Mock).mockReturnValueOnce(true);
 
       const testDir = await initFixture('normal');
 
@@ -723,7 +723,7 @@ describe('VersionCommand', () => {
   });
 
   it('exits with an error when no commits are present', async () => {
-    (isAnythingCommitted as any).mockReturnValueOnce(false);
+    (isAnythingCommitted as jest.Mock).mockReturnValueOnce(false);
 
     const testDir = await initFixture('normal', false);
     const command = new VersionCommand(createArgv(testDir));
@@ -752,7 +752,7 @@ describe('VersionCommand', () => {
     await gitAdd(testDir, '.');
     await gitCommit(testDir, 'feat: hello');
 
-    (collectUpdates as any).mockImplementationOnce(collectUpdatesActual);
+    (collectUpdates as jest.Mock).mockImplementationOnce(collectUpdatesActual);
 
     await new VersionCommand(createArgv(testDir, '--bump', 'major', '--yes'));
 
@@ -771,7 +771,7 @@ describe('VersionCommand', () => {
     await gitAdd(testDir, '.');
     await gitCommit(testDir, 'feat: hello');
 
-    (collectUpdates as any).mockImplementationOnce(collectUpdatesActual);
+    (collectUpdates as jest.Mock).mockImplementationOnce(collectUpdatesActual);
 
     await new VersionCommand(createArgv(testDir, '--bump', 'major', '--yes'));
 
@@ -942,15 +942,11 @@ describe('VersionCommand', () => {
 
   describe('with spurious -- arguments', () => {
     it('ignores the extra arguments with cheesy parseConfiguration()', async () => {
-      const logSpy = jest.spyOn(console, 'log').mockImplementation(() => {});
+      jest.spyOn(console, 'log').mockImplementation(() => {});
 
       const cwd = await initFixture('lifecycle');
       await lernaVersion(cwd)('--yes', '--', '--loglevel', 'ignored', '--blah');
       const logMessages = loggingOutput('warn');
-
-      // expect(logSpy).toHaveBeenCalledWith('preversion-root');
-      // expect(logSpy).toHaveBeenCalledWith('preversion-package-1');
-      // expect(logSpy).toHaveBeenCalledWith('version-package-1');
 
       expect(logMessages).toContain('Arguments after -- are no longer passed to subprocess executions.');
     });
