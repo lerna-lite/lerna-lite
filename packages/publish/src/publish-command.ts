@@ -141,6 +141,13 @@ export class PublishCommand extends Command<PublishCommandOption> {
       );
     }
 
+    if (!this.options.workspaceStrictMatch) {
+      this.logger.warn(
+        'deprecation',
+        'Providing --no-workspace-strict-match is deprecated and will be removed in future version, we will make "workspace:" protocol strict matching in every case.'
+      );
+    }
+
     if (this.options.canary) {
       this.logger.info('canary', 'enabled');
     }
