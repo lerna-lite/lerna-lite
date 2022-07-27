@@ -61,6 +61,7 @@ import yargParser from 'yargs-parser';
 
 // mocked or stubbed modules
 import { npmPublish } from '../lib/npm-publish';
+import { npmPublish as npmPublishMock } from '../lib/__mocks__/npm-publish';
 import { promptConfirmation, PublishCommandOption } from '@lerna-lite/core';
 import { getOneTimePassword, collectUpdates } from '@lerna-lite/core';
 import { packDirectory } from '../lib/pack-directory';
@@ -149,24 +150,24 @@ describe('PublishCommand', () => {
       expect((packDirectory as any).registry).toMatchInlineSnapshot(`
 Set {
   "package-1",
-  "package-3",
   "package-4",
   "package-2",
+  "package-3",
 }
 `);
-      expect((npmPublish as any).registry).toMatchInlineSnapshot(`
+      expect((npmPublish as typeof npmPublishMock).registry).toMatchInlineSnapshot(`
 Map {
   "package-1" => "latest",
-  "package-3" => "latest",
   "package-4" => "latest",
   "package-2" => "latest",
+  "package-3" => "latest",
 }
 `);
-      expect((npmPublish as any).order()).toEqual([
+      expect((npmPublish as typeof npmPublishMock).order()).toEqual([
         'package-1',
-        'package-3',
         'package-4',
         'package-2',
+        'package-3',
         // package-5 is private
       ]);
       expect(npmDistTag.remove).not.toHaveBeenCalled();
@@ -188,13 +189,12 @@ Map {
       const testDir = await initFixture('independent');
 
       await new PublishCommand(createArgv(testDir));
-      // await lernaPublish(testDir)();
 
-      expect((npmPublish as any).order()).toEqual([
+      expect((npmPublish as typeof npmPublishMock).order()).toEqual([
         'package-1',
-        'package-3',
         'package-4',
         'package-2',
+        'package-3',
         // package-5 is private
       ]);
     });
@@ -209,13 +209,51 @@ Map {
   });
 
   describe('--graph-type', () => {
+    it('produces a topological ordering that _includes_ devDependencies when value is not set', async () => {
+      const cwd = await initFixture('normal');
+
+      await new PublishCommand(createArgv(cwd));
+
+      expect((npmPublish as typeof npmPublishMock).order()).toEqual([
+        'package-1',
+        'package-4',
+        'package-2',
+        // package-3 has a peer/devDependency on package-2
+        'package-3',
+        // package-5 is private
+      ]);
+    });
+
+    it("produces a topological ordering that _excludes_ devDependencies when value is 'dependencies' (DEPRECATED)", async () => {
+      const cwd = await initFixture('normal');
+
+      await new PublishCommand(createArgv(cwd, '--graph-type', 'dependencies'));
+
+      expect((npmPublish as typeof npmPublishMock).order()).toEqual([
+        'package-1',
+        // package-3 has a peer/devDependency on package-2
+        'package-3',
+        'package-4',
+        'package-2',
+        // package-5 is private
+      ]);
+
+      const logMessages = loggingOutput('warn');
+      expect(logMessages).toMatchInlineSnapshot(`
+        Array [
+          "--graph-type=dependencies is deprecated and will be removed in the next major version of lerna-lite. If you have a use-case you feel requires it please open an issue to discuss: https://github.com/lerna/lerna/issues/new/choose",
+          "we recommend using --sync-workspace-lock which will sync your lock file via your favorite npm client instead of relying on Lerna-Lite itself to update it.",
+        ]
+      `);
+    });
+
     it("produces a topological ordering that _includes_ devDependencies when value is 'all'", async () => {
       const cwd = await initFixture('normal');
 
       // await lernaPublish(cwd)("--graph-type", "all");
       await new PublishCommand(createArgv(cwd, '--graph-type', 'all'));
 
-      expect((npmPublish as any).order()).toEqual([
+      expect((npmPublish as typeof npmPublishMock).order()).toEqual([
         'package-1',
         'package-4',
         'package-2',
@@ -230,6 +268,22 @@ Map {
       const command = lernaPublish(testDir)('--graph-type', 'poopy-pants');
 
       await expect(command).rejects.toThrow('poopy-pants');
+    });
+  });
+
+  describe('--no-sort', () => {
+    it('produces a lexical ordering when --no-sort is set', async () => {
+      const cwd = await initFixture('normal');
+
+      await new PublishCommand(createArgv(cwd, '--no-sort'));
+
+      expect((npmPublish as typeof npmPublishMock).order()).toEqual([
+        'package-1',
+        'package-2',
+        'package-3',
+        'package-4',
+        // package-5 is private
+      ]);
     });
   });
 
@@ -382,24 +436,24 @@ Map {
       expect((packDirectory as any).registry).toMatchInlineSnapshot(`
 Set {
   "package-1",
-  "package-3",
   "package-4",
   "package-2",
+  "package-3",
 }
 `);
-      expect((npmPublish as any).registry).toMatchInlineSnapshot(`
+      expect((npmPublish as typeof npmPublishMock).registry).toMatchInlineSnapshot(`
 Map {
   "package-1" => "latest",
-  "package-3" => "latest",
   "package-4" => "latest",
   "package-2" => "latest",
+  "package-3" => "latest",
 }
 `);
-      expect((npmPublish as any).order()).toEqual([
+      expect((npmPublish as typeof npmPublishMock).order()).toEqual([
         'package-1',
-        'package-3',
         'package-4',
         'package-2',
+        'package-3',
         // package-5 is private
       ]);
       expect(npmDistTag.remove).not.toHaveBeenCalled();

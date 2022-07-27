@@ -35,11 +35,13 @@ jest.mock('../lib/npm-publish', () => jest.requireActual('../lib/__mocks__/npm-p
 
 import fs from 'fs-extra';
 import path from 'path';
+import yargParser from 'yargs-parser';
 
 // mocked or stubbed modules
 import writePkg from 'write-pkg';
 import { npmPublish } from '../lib/npm-publish';
-import { logOutput, promptConfirmation, throwIfUncommitted } from '@lerna-lite/core';
+import { npmPublish as npmPublishMock } from '../lib/__mocks__/npm-publish';
+import { logOutput, promptConfirmation, PublishCommandOption, throwIfUncommitted } from '@lerna-lite/core';
 import { getUnpublishedPackages } from '../lib/get-unpublished-packages';
 
 // helpers
@@ -48,7 +50,6 @@ import helpers from '@lerna-test/helpers';
 const initFixture = helpers.initFixtureFactory(__dirname);
 
 // file under test
-import yargParser from 'yargs-parser';
 import { PublishCommand } from '../publish-command';
 
 const createArgv = (cwd, ...args) => {
@@ -59,14 +60,14 @@ const createArgv = (cwd, ...args) => {
   const parserArgs = args.join(' ');
   const argv = yargParser(parserArgs);
   argv['$0'] = cwd;
-  return argv;
+  return argv as unknown as PublishCommandOption;
 };
 
 describe('publish from-package', () => {
   it('publishes unpublished packages', async () => {
     const cwd = await initFixture('normal');
 
-    (getUnpublishedPackages as any).mockImplementationOnce((packageGraph) => {
+    (getUnpublishedPackages as jest.Mock).mockImplementationOnce((packageGraph) => {
       const pkgs = packageGraph.rawPackageList.slice(1, 3);
       return pkgs.map((pkg) => packageGraph.get(pkg.name));
     });
@@ -75,21 +76,37 @@ describe('publish from-package', () => {
 
     expect(promptConfirmation).toHaveBeenLastCalledWith('Are you sure you want to publish these packages?');
     expect((logOutput as any).logged()).toMatch('Found 2 packages to publish:');
-    expect((npmPublish as any).order()).toEqual(['package-2', 'package-3']);
+    expect((npmPublish as typeof npmPublishMock).order()).toEqual(['package-2', 'package-3']);
   });
 
   it('publishes unpublished independent packages', async () => {
     const cwd = await initFixture('independent');
 
-    (getUnpublishedPackages as any).mockImplementationOnce((packageGraph) => Array.from(packageGraph.values()));
+    (getUnpublishedPackages as jest.Mock).mockImplementationOnce((packageGraph) => Array.from(packageGraph.values()));
 
-    await new PublishCommand(createArgv(cwd, '--bump', 'from-package'));
+    await new PublishCommand(createArgv(cwd, 'from-package'));
 
-    expect((npmPublish as any).order()).toEqual([
+    expect((npmPublish as typeof npmPublishMock).order()).toEqual([
       'package-1',
-      'package-3',
       'package-4',
       'package-2',
+      'package-3',
+      // package-5 is private
+    ]);
+  });
+
+  it('publishes unpublished independent packages, lexically sorted when --no-sort is present', async () => {
+    const cwd = await initFixture('independent');
+
+    (getUnpublishedPackages as jest.Mock).mockImplementationOnce((packageGraph) => Array.from(packageGraph.values()));
+
+    await new PublishCommand(createArgv(cwd, 'from-package', '--no-sort'));
+
+    expect((npmPublish as typeof npmPublishMock).order()).toEqual([
+      'package-1',
+      'package-2',
+      'package-3',
+      'package-4',
       // package-5 is private
     ]);
   });
@@ -97,7 +114,7 @@ describe('publish from-package', () => {
   it('exits early when all packages are published', async () => {
     const cwd = await initFixture('normal');
 
-    await new PublishCommand(createArgv(cwd, '--bump', 'from-package'));
+    await new PublishCommand(createArgv(cwd, 'from-package'));
 
     expect(npmPublish).not.toHaveBeenCalled();
 
@@ -106,25 +123,25 @@ describe('publish from-package', () => {
   });
 
   it('throws an error when uncommitted changes are present', async () => {
-    (throwIfUncommitted as any).mockImplementationOnce(() => {
+    (throwIfUncommitted as jest.Mock).mockImplementationOnce(() => {
       throw new Error('uncommitted');
     });
 
     const cwd = await initFixture('normal');
-    const command = new PublishCommand(createArgv(cwd, '--bump', 'from-package'));
+    const command = new PublishCommand(createArgv(cwd, 'from-package'));
 
     await expect(command).rejects.toThrow('uncommitted');
     // notably different than the actual message, but good enough here
   });
 
   it('does not require a git repo', async () => {
-    (getUnpublishedPackages as any).mockImplementationOnce((packageGraph) => [packageGraph.get('package-1')]);
+    (getUnpublishedPackages as jest.Mock).mockImplementationOnce((packageGraph) => [packageGraph.get('package-1')]);
 
     const cwd = await initFixture('independent');
 
     // nuke the git repo first
     await fs.remove(path.join(cwd, '.git'));
-    await new PublishCommand(createArgv(cwd, '--bump', 'from-package'));
+    await new PublishCommand(createArgv(cwd, 'from-package'));
 
     expect(npmPublish).toHaveBeenCalled();
     expect((writePkg as any).updatedManifest('package-1')).not.toHaveProperty('gitHead');
@@ -138,11 +155,11 @@ describe('publish from-package', () => {
   });
 
   it('accepts --git-head override', async () => {
-    (getUnpublishedPackages as any).mockImplementationOnce((packageGraph) => [packageGraph.get('package-1')]);
+    (getUnpublishedPackages as jest.Mock).mockImplementationOnce((packageGraph) => [packageGraph.get('package-1')]);
 
     const cwd = await initFixture('independent');
 
-    await new PublishCommand(createArgv(cwd, '--bump', 'from-package', '--git-head', 'deadbeef'));
+    await new PublishCommand(createArgv(cwd, 'from-package', '--git-head', 'deadbeef'));
 
     expect(npmPublish).toHaveBeenCalled();
     expect((writePkg as any).updatedManifest('package-1').gitHead).toBe('deadbeef');

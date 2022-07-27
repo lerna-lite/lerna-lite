@@ -187,7 +187,7 @@ export interface ProjectConfig extends LernaConfig, QueryGraphConfig {
   lernaVersion: string;
   progress?: boolean;
   since?: string;
-  sort?: any;
+  sort?: boolean;
   stream?: boolean;
   useNx?: boolean;
   onRejected?: (result: any) => void;

@@ -1,5 +1,3 @@
-'use strict';
-
 const registry = new Map();
 
 // by default, act like a spy that populates registry
@@ -19,6 +17,9 @@ afterEach(() => {
   registry.clear();
 });
 
-module.exports.npmPublish = mockNpmPublish;
-module.exports.npmPublish.order = order;
-module.exports.npmPublish.registry = registry;
+export const npmPublish = mockNpmPublish as jest.Mock<Promise<void>, [pkg: any, tarData: any, opts: any]> & {
+  order: () => any[];
+  registry: Map<any, any>;
+};
+npmPublish.order = order;
+npmPublish.registry = registry;

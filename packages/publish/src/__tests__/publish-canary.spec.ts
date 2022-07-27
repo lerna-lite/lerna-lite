@@ -1,5 +1,3 @@
-'use strict';
-
 // mocked modules of @lerna-lite/core
 jest.mock('@lerna-lite/core', () => ({
   ...jest.requireActual('@lerna-lite/core'), // return the other real methods, below we'll mock only 2 of the methods
@@ -29,7 +27,8 @@ import yargParser from 'yargs-parser';
 // mocked modules
 import writePkg from 'write-pkg';
 import { npmPublish } from '../lib/npm-publish';
-import { promptConfirmation, throwIfUncommitted } from '@lerna-lite/core';
+import { npmPublish as npmPublishMock } from '../lib/__mocks__/npm-publish';
+import { promptConfirmation, PublishCommandOption, throwIfUncommitted } from '@lerna-lite/core';
 
 // helpers
 import { gitAdd } from '@lerna-test/helpers';
@@ -57,7 +56,7 @@ const createArgv = (cwd, ...args) => {
   const parserArgs = args.join(' ');
   const argv = yargParser(parserArgs);
   argv['$0'] = cwd;
-  return argv;
+  return argv as unknown as PublishCommandOption;
 };
 
 async function initTaggedFixture(fixtureName, tagVersionPrefix = 'v') {
@@ -102,12 +101,12 @@ test('publish --canary', async () => {
   await new PublishCommand(createArgv(cwd, '--canary'));
 
   expect(promptConfirmation).toHaveBeenLastCalledWith('Are you sure you want to publish these packages?');
-  expect((npmPublish as any).registry).toMatchInlineSnapshot(`
+  expect((npmPublish as typeof npmPublishMock).registry).toMatchInlineSnapshot(`
   Map {
     "package-1" => "canary",
-    "package-3" => "canary",
     "package-4" => "canary",
     "package-2" => "canary",
+    "package-3" => "canary",
   }
   `);
   expect((writePkg as any).updatedVersions()).toMatchInlineSnapshot(`
@@ -131,12 +130,12 @@ test('publish --canary with auto-confirm --yes', async () => {
   await new PublishCommand(createArgv(cwd, '--canary', '--yes'));
 
   expect(promptConfirmation).not.toHaveBeenCalled();
-  expect((npmPublish as any).registry).toMatchInlineSnapshot(`
+  expect((npmPublish as typeof npmPublishMock).registry).toMatchInlineSnapshot(`
   Map {
     "package-1" => "canary",
-    "package-3" => "canary",
     "package-4" => "canary",
     "package-2" => "canary",
+    "package-3" => "canary",
   }
   `);
   expect((writePkg as any).updatedVersions()).toMatchInlineSnapshot(`

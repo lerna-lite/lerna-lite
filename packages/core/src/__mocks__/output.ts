@@ -1,7 +1,5 @@
-'use strict';
-
-const chalk = require('chalk');
-const { multiLineTrimRight } = require('@lerna-test/helpers');
+import chalk from 'chalk';
+import { multiLineTrimRight } from '@lerna-test/helpers';
 
 // keep snapshots stable cross-platform
 chalk.level = 0;
@@ -9,7 +7,7 @@ chalk.level = 0;
 // @lerna/output is just a wrapper around console.log
 const mockOutput = jest.fn();
 
-function logged() {
+export function logged() {
   return mockOutput.mock.calls.map((args) => multiLineTrimRight(args[0])).join('\n');
 }
 

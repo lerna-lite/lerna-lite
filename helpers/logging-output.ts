@@ -1,6 +1,4 @@
-'use strict';
-
-const log = require('npmlog');
+import log from 'npmlog';
 import { multiLineTrimRight } from './index';
 
 // clear logs between tests
