@@ -5,8 +5,8 @@ import { exec, tempWrite } from '@lerna-lite/core';
 import { gitCommit } from '../lib/git-commit';
 
 describe('git commit', () => {
-  (exec as any).mockResolvedValue();
-  (tempWrite.sync as any).mockReturnValue('temp-file-path');
+  (exec as jest.Mock).mockResolvedValue(null);
+  (tempWrite.sync as jest.Mock).mockReturnValue('temp-file-path');
 
   test('--message', async () => {
     const opts = { cwd: 'message' };

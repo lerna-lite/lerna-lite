@@ -84,7 +84,7 @@ describe('licenses', () => {
   });
 
   it('removes all temporary licenses on error', async () => {
-    (packDirectory as any).mockImplementationOnce(() => Promise.reject(new Error('boom')));
+    (packDirectory as jest.Mock).mockImplementationOnce(() => Promise.reject(new Error('boom')));
 
     const cwd = await initFixture('licenses');
     const command = new PublishCommand(createArgv(cwd));
@@ -96,8 +96,8 @@ describe('licenses', () => {
   });
 
   it('does not override original error when removal rejects', async () => {
-    (packDirectory as any).mockImplementationOnce(() => Promise.reject(new Error('boom')));
-    (removeTempLicenses as any).mockImplementationOnce(() => Promise.reject(new Error('shaka-lakka')));
+    (packDirectory as jest.Mock).mockImplementationOnce(() => Promise.reject(new Error('boom')));
+    (removeTempLicenses as jest.Mock).mockImplementationOnce(() => Promise.reject(new Error('shaka-lakka')));
 
     const cwd = await initFixture('licenses');
     const command = new PublishCommand(createArgv(cwd));

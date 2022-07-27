@@ -3,7 +3,7 @@ jest.mock('envinfo');
 import path from 'path';
 import envinfo from 'envinfo';
 
-(envinfo.run as any).mockResolvedValue('MOCK_ENVINFO');
+(envinfo.run as jest.Mock).mockResolvedValue('MOCK_ENVINFO');
 
 // mocked modules of @lerna-lite/core
 jest.mock('@lerna-lite/core', () => ({

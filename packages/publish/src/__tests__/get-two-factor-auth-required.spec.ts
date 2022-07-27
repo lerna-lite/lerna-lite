@@ -5,7 +5,7 @@ import { loggingOutput } from '@lerna-test/helpers/logging-output';
 import { getProfileData } from '../lib/get-profile-data';
 import { getTwoFactorAuthRequired } from '../lib/get-two-factor-auth-required';
 
-(getProfileData as any).mockImplementation(() => Promise.resolve({ tfa: {} }));
+(getProfileData as jest.Mock).mockImplementation(() => Promise.resolve({ tfa: {} }));
 
 describe('getTwoFactorAuthRequired', () => {
   const origConsoleError = console.error;
@@ -19,7 +19,7 @@ describe('getTwoFactorAuthRequired', () => {
   });
 
   it("resolves true if tfa.mode === 'auth-and-writes'", async () => {
-    (getProfileData as any).mockResolvedValueOnce({
+    (getProfileData as jest.Mock).mockResolvedValueOnce({
       tfa: {
         mode: 'auth-and-writes',
       },
@@ -31,7 +31,7 @@ describe('getTwoFactorAuthRequired', () => {
   });
 
   it("resolves false if tfa.mode !== 'auth-and-writes'", async () => {
-    (getProfileData as any).mockResolvedValueOnce({
+    (getProfileData as jest.Mock).mockResolvedValueOnce({
       tfa: {
         mode: 'auth-only',
       },
@@ -42,7 +42,7 @@ describe('getTwoFactorAuthRequired', () => {
   });
 
   it('resolves false if tfa.pending === true', async () => {
-    (getProfileData as any).mockResolvedValueOnce({
+    (getProfileData as jest.Mock).mockResolvedValueOnce({
       tfa: {
         pending: true,
         mode: 'ignored',
@@ -54,7 +54,7 @@ describe('getTwoFactorAuthRequired', () => {
   });
 
   it('resolves false after profile 404', async () => {
-    (getProfileData as any).mockImplementationOnce(() => {
+    (getProfileData as jest.Mock).mockImplementationOnce(() => {
       const err = new Error('third-party profile fail') as Error & { code: string };
 
       err.code = 'E404';
@@ -69,7 +69,7 @@ describe('getTwoFactorAuthRequired', () => {
   });
 
   it('resolves false after profile 500', async () => {
-    (getProfileData as any).mockImplementationOnce(() => {
+    (getProfileData as jest.Mock).mockImplementationOnce(() => {
       const err = new Error('legacy npm Enterprise profile fail') as Error & { code: string };
 
       err.code = 'E500';
@@ -87,7 +87,7 @@ describe('getTwoFactorAuthRequired', () => {
   });
 
   it('logs unexpected failure message before throwing validation error', async () => {
-    (getProfileData as any).mockImplementationOnce(() => {
+    (getProfileData as jest.Mock).mockImplementationOnce(() => {
       const err = new Error('zomg explosions') as Error & { code: string };
 
       err.code = 'E401';

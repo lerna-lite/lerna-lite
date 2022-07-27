@@ -103,7 +103,7 @@ describe.each([
   it('marks a version as a pre-release if it contains a valid part', async () => {
     const cwd = await initFixture('normal');
 
-    (recommendVersion as any).mockResolvedValueOnce('2.0.0-alpha.1');
+    (recommendVersion as jest.Mock).mockResolvedValueOnce('2.0.0-alpha.1');
 
     await new VersionCommand(createArgv(cwd, '--create-release', type, '--conventional-commits'));
 
@@ -129,7 +129,7 @@ describe.each([
       ['package-5', '5.0.1'],
     ]);
 
-    versionBumps.forEach((bump) => (recommendVersion as any).mockResolvedValueOnce(bump));
+    versionBumps.forEach((bump) => (recommendVersion as jest.Mock).mockResolvedValueOnce(bump));
 
     await new VersionCommand(createArgv(cwd, '--create-release', type, '--conventional-commits'));
 
@@ -150,7 +150,7 @@ describe.each([
   it('creates a single fixed release', async () => {
     const cwd = await initFixture('normal');
 
-    (recommendVersion as any).mockResolvedValueOnce('1.1.0');
+    (recommendVersion as jest.Mock).mockResolvedValueOnce('1.1.0');
 
     await new VersionCommand(createArgv(cwd, '--create-release', type, '--conventional-commits'));
 
@@ -169,7 +169,7 @@ describe.each([
   it('creates a single fixed release in git dry-run mode', async () => {
     const cwd = await initFixture('normal');
 
-    (recommendVersion as any).mockResolvedValueOnce('1.1.0');
+    (recommendVersion as jest.Mock).mockResolvedValueOnce('1.1.0');
 
     await new VersionCommand(createArgv(cwd, '--create-release', type, '--conventional-commits', '--git-dry-run'));
 

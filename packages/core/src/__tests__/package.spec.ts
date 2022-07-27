@@ -645,7 +645,7 @@ describe('Package', () => {
 });
 
 describe('Package.lazy()', () => {
-  (loadJsonFile.sync as any).mockImplementation(() => ({ name: 'bar', version: '1.0.0' }));
+  (loadJsonFile.sync as jest.Mock).mockImplementation(() => ({ name: 'bar', version: '1.0.0' }));
 
   it('returns package instance from string directory argument', () => {
     const pkg = Package.lazy('/foo/bar');

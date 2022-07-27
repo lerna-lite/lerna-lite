@@ -69,7 +69,7 @@ describe('custom version', () => {
   beforeEach(() => {
     (promptSelectOne as any).chooseBump('CUSTOM');
 
-    (promptTextInput as any).mockImplementationOnce((msg, cfg) => {
+    (promptTextInput as jest.Mock).mockImplementationOnce((msg, cfg) => {
       inputFilter = cfg.filter;
       inputValidate = cfg.validate;
 
@@ -107,7 +107,7 @@ describe('custom prerelease', () => {
   beforeEach(() => {
     (promptSelectOne as any).chooseBump('PRERELEASE');
 
-    (promptTextInput as any).mockImplementationOnce((msg, cfg) => {
+    (promptTextInput as jest.Mock).mockImplementationOnce((msg, cfg) => {
       inputFilter = cfg.filter;
 
       return Promise.resolve(msg);

@@ -176,7 +176,7 @@ test('independent version prerelease does not bump on every unrelated change', a
   // simulate choices for pkg-a then pkg-b
   (promptSelectOne as any).chooseBump('patch');
   (promptSelectOne as any).chooseBump('PRERELEASE');
-  (promptTextInput as any).mockImplementationOnce((msg, cfg) =>
+  (promptTextInput as jest.Mock).mockImplementationOnce((msg, cfg) =>
     // the _existing_ "bumps" prerelease ID should be preserved
     Promise.resolve(cfg.filter())
   );
