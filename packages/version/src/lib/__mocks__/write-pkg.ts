@@ -1,4 +1,4 @@
-import writePkg from 'write-pkg';
+const writePkg = jest.requireActual('write-pkg');
 const registry = new Map();
 
 // by default, act like a spy that populates registry
