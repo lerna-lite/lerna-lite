@@ -4,6 +4,9 @@ import runScript from '@npmcli/run-script';
 import { npmConf } from '../utils/npm-conf';
 import { LifecycleConfig } from '../models';
 import { Package } from '../package';
+import PQueue from 'p-queue';
+
+const queue = new PQueue({ concurrency: 1 });
 
 /**
  * Alias dash-cased npmConf to camelCase
@@ -46,13 +49,14 @@ export function runLifecycle(pkg: Package, stage: string, options: LifecycleConf
   }
 
   const opts = {
+    // @ts-ignore
     log,
     unsafePerm: true,
     ...flattenOptions(options),
   };
   const dir = pkg.location;
   const id = `${pkg.name}@${pkg.version}`;
-  const config: LifecycleConfig = {};
+  const config = {} as LifecycleConfig;
 
   if (opts.ignoreScripts) {
     opts.log.verbose('lifecycle', '%j ignored in %j', stage, pkg.name);
@@ -100,45 +104,53 @@ export function runLifecycle(pkg: Package, stage: string, options: LifecycleConf
 
   /**
    * In order to match the previous behavior of 'npm-lifecycle', we have to disable the writing
-   * to the parent process and print the command banner ourself.
+   * to the parent process and print the command banner ourselves, unless overridden by the options.
    */
-  const stdio = 'pipe';
+  const stdio = opts.stdio || 'pipe';
   if (log.level !== 'silent') {
     printCommandBanner(id, stage, pkg.scripts[stage], dir);
   }
 
-  return runScript({
-    event: stage,
-    path: dir,
-    pkg,
-    args: [],
-    stdio,
-    banner: false,
-    scriptShell: config.scriptShell,
-  }).then(
-    ({ stdout }) => {
-      /**
-       * This adjustment is based on trying to match the existing integration test outputs when migrating
-       * from 'npm-lifecycle' to '@npmcli/run-script'.
-       */
-      // eslint-disable-next-line no-console
-      console.log(stdout.toString().trimEnd());
-      opts.log.silly('lifecycle', '%j finished in %j', stage, pkg.name);
-    },
-    (err) => {
-      // propagate the exit code
-      const exitCode = err.code || 1;
+  return queue.add(async () =>
+    runScript({
+      event: stage,
+      path: dir,
+      pkg,
+      args: [],
+      stdio,
+      banner: false,
+      scriptShell: config.scriptShell,
+    }).then(
+      ({ stdout }) => {
+        if (stdout) {
+          /**
+           * This adjustment is based on trying to match the existing integration test outputs when migrating
+           * from "npm-lifecycle" to "@npmcli/run-script".
+           */
+          // eslint-disable-next-line no-console
+          console.log(stdout.toString().trimEnd());
+        }
 
-      // error logging has already occurred on stderr, but we need to stop the chain
-      log.error('lifecycle', '%j errored in %j, exiting %d', stage, pkg.name, exitCode);
-      // ensure clean logging, avoiding spurious log dump
-      err.name = 'ValidationError';
-      // our yargs.fail() handler expects a numeric .exitCode, not .errno
-      err.exitCode = exitCode;
-      process.exitCode = exitCode;
-      // stop the chain
-      throw err;
-    }
+        opts.log.silly('lifecycle', '%j finished in %j', stage, pkg.name);
+      },
+      (err) => {
+        // propagate the exit code
+        const exitCode = err.code || 1;
+
+        // error logging has already occurred on stderr, but we need to stop the chain
+        log.error('lifecycle', '%j errored in %j, exiting %d', stage, pkg.name, exitCode);
+
+        // ensure clean logging, avoiding spurious log dump
+        err.name = 'ValidationError';
+
+        // our yargs.fail() handler expects a numeric .exitCode, not .errno
+        err.exitCode = exitCode;
+        process.exitCode = exitCode;
+
+        // stop the chain
+        throw err;
+      }
+    )
   );
 }
 

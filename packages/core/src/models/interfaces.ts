@@ -53,13 +53,19 @@ export interface ExecOpts {
 }
 
 export interface LifecycleConfig {
-  log?: typeof log;
+  access?: 'public' | 'restricted';
+  defaultTag?: string;
   ignorePrepublish?: boolean;
   ignoreScripts?: boolean;
+  log: log.Logger;
+  lernaCommand?: string;
   nodeOptions?: string;
+  projectScope?: string | null;
   scriptShell?: string;
   scriptsPrependNodePath?: boolean;
   snapshot?: any;
+  stdio?: string;
+  tag?: string;
   unsafePerm?: boolean;
 }
 
@@ -82,13 +88,13 @@ export interface UpdateChangelogOption {
 
 export interface FetchConfig {
   fetchRetries: number;
-  log: typeof log;
+  log: log.Logger;
   registry: string;
   username: string;
 }
 
 export interface PackConfig {
-  log: typeof log;
+  log: log.Logger;
 
   /* If "publish", run "prepublishOnly" lifecycle */
   lernaCommand?: string;

@@ -1,11 +1,12 @@
 jest.mock('@npmcli/run-script', () => jest.fn(() => Promise.resolve({ stdout: '' })));
 
-const log = require('npmlog');
-const { loggingOutput } = require('@lerna-test/helpers/logging-output');
-const runScript = require('@npmcli/run-script');
-const { npmConf } = require('../npm-conf');
-const { Package } = require('../../package');
-const { runLifecycle, createRunner } = require('../run-lifecycle');
+import log from 'npmlog';
+import { loggingOutput } from '@lerna-test/helpers/logging-output';
+import runScript from '@npmcli/run-script';
+import { npmConf } from '../npm-conf';
+import { Package } from '../../package';
+import { runLifecycle, createRunner } from '../run-lifecycle';
+import { LifecycleConfig } from '../../models';
 
 describe('runLifecycle()', () => {
   const consoleSpy = jest.spyOn(console, 'log').mockImplementation(() => {});
@@ -19,7 +20,7 @@ describe('runLifecycle()', () => {
       name: 'no-scripts',
     };
 
-    await runLifecycle(pkg, 'foo', new Map());
+    await runLifecycle(pkg as Package, 'foo', new Map() as any);
 
     expect(runScript).not.toHaveBeenCalled();
   });
@@ -32,7 +33,7 @@ describe('runLifecycle()', () => {
       },
     };
 
-    await runLifecycle(pkg, 'bar', new Map());
+    await runLifecycle(pkg as Package, 'bar', new Map() as any);
 
     expect(runScript).not.toHaveBeenCalled();
   });
@@ -48,13 +49,13 @@ describe('runLifecycle()', () => {
         engines: {
           node: '>= 8.9.0',
         },
-      },
+      } as unknown as Package,
       '/test/location'
     );
     const stage = 'preversion';
-    const opts = npmConf({ 'custom-cli-flag': true });
+    const opts = npmConf({ 'custom-cli-flag': true }) as unknown as LifecycleConfig;
 
-    await runLifecycle(pkg, stage, opts);
+    await runLifecycle(pkg as Package, stage, opts);
 
     expect(runScript).toHaveBeenLastCalledWith(
       expect.objectContaining({
@@ -85,13 +86,13 @@ describe('runLifecycle()', () => {
         engines: {
           node: '>= 8.9.0',
         },
-      },
+      } as unknown as Package,
       '/test/location'
     );
     const stage = 'preversion';
     const opts = npmConf({ 'custom-cli-flag': true });
 
-    await runLifecycle(pkg, stage, opts);
+    await runLifecycle(pkg as Package, stage, opts as unknown as LifecycleConfig);
 
     expect(consoleSpy).toHaveBeenCalledWith(`\n> test-name@1.0.0-test preversion /test/location\n> test\n`);
   });
@@ -111,7 +112,7 @@ describe('runLifecycle()', () => {
       'script-shell': 'fish',
     };
 
-    await runLifecycle(pkg, stage, opts);
+    await runLifecycle(pkg as Package, stage, opts as unknown as LifecycleConfig);
 
     expect(runScript).toHaveBeenLastCalledWith(
       expect.objectContaining({
@@ -135,7 +136,7 @@ describe('runLifecycle()', () => {
       'ignore-prepublish': true,
     };
 
-    await runLifecycle(pkg, stage, opts);
+    await runLifecycle(pkg as Package, stage, opts as unknown as LifecycleConfig);
 
     expect(runScript).not.toHaveBeenCalled();
   });
@@ -152,7 +153,7 @@ describe('runLifecycle()', () => {
       'ignore-scripts': true,
     };
 
-    await runLifecycle(pkg, stage, opts);
+    await runLifecycle(pkg as Package, stage, opts as unknown as LifecycleConfig);
 
     expect(runScript).not.toHaveBeenCalled();
   });
@@ -169,7 +170,7 @@ describe('runLifecycle()', () => {
     const stage = 'prepack';
     const opts = {};
 
-    await runLifecycle(pkg, stage, opts);
+    await runLifecycle(pkg as Package, stage, opts as unknown as LifecycleConfig);
 
     const callOpts = runScript.mock.calls.pop().pop();
 
@@ -179,6 +180,7 @@ describe('runLifecycle()', () => {
 });
 
 describe('createRunner', () => {
+  const consoleSpy = jest.spyOn(console, 'log').mockImplementation(() => {});
   const runPackageLifecycle = createRunner({ 'other-cli-flag': 0 });
 
   it('skips missing scripts block', async () => {
@@ -188,7 +190,7 @@ describe('createRunner', () => {
       location: 'test',
     };
 
-    await runPackageLifecycle(pkg, 'prepare');
+    await runPackageLifecycle(pkg as Package, 'prepare');
     expect(runScript).not.toHaveBeenCalled();
   });
 
@@ -200,8 +202,25 @@ describe('createRunner', () => {
       scripts: { test: 'echo foo' },
     };
 
-    await runPackageLifecycle(pkg, 'prepare');
+    await runPackageLifecycle(pkg as Package, 'prepare');
     expect(runScript).not.toHaveBeenCalled();
+  });
+
+  it('logs stdout from runScript() response', async () => {
+    runScript.mockImplementationOnce(({ pkg, event }) => {
+      return Promise.resolve({ stdout: 'runScript output' });
+    });
+
+    const pkg = {
+      name: 'has-script-error',
+      version: '1.0.0',
+      location: 'test',
+      scripts: { prepublishOnly: 'exit 123' },
+    };
+
+    await runPackageLifecycle(pkg as Package, 'prepublishOnly');
+
+    expect(consoleSpy).toHaveBeenCalledWith('runScript output');
   });
 
   it('logs script error and re-throws', async () => {
@@ -221,7 +240,7 @@ describe('createRunner', () => {
       scripts: { prepublishOnly: 'exit 123' },
     };
 
-    await expect(runPackageLifecycle(pkg, 'prepublishOnly')).rejects.toThrow(
+    await expect(runPackageLifecycle(pkg as Package, 'prepublishOnly')).rejects.toThrow(
       expect.objectContaining({
         exitCode: 123,
         script: 'exit 123',
@@ -250,7 +269,7 @@ describe('createRunner', () => {
       scripts: { prepack: 'a-thing-that-ends-poorly' },
     };
 
-    await expect(runPackageLifecycle(pkg, 'prepack')).rejects.toThrow(
+    await expect(runPackageLifecycle(pkg as Package, 'prepack')).rejects.toThrow(
       expect.objectContaining({
         exitCode: 1,
         script: 'a-thing-that-ends-poorly',
