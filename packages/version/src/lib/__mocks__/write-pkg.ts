@@ -1,5 +1,3 @@
-'use strict';
-
 const writePkg = jest.requireActual('write-pkg');
 const registry = new Map();
 

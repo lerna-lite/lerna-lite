@@ -23,5 +23,12 @@
     "sourceMap": true,
     "strict": true
   },
-  "exclude": ["**/*.spec.js", "**/*.spec.ts", "**/*.test.js", "**/*.test.ts"]
+  "exclude": [
+    "**/*.spec.js",
+    "**/*.spec.ts",
+    "**/*.test.js",
+    "**/*.test.ts",
+    "**/__fixtures__/**/*.*",
+    "**/__mocks__/**/*.*"
+  ]
 }

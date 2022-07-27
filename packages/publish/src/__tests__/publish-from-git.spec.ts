@@ -34,7 +34,8 @@ jest.mock('../lib/npm-publish', () => jest.requireActual('../lib/__mocks__/npm-p
 
 // mocked modules
 import { npmPublish } from '../lib/npm-publish';
-import { logOutput, promptConfirmation, throwIfUncommitted } from '@lerna-lite/core';
+import { npmPublish as npmPublishMock } from '../lib/__mocks__/npm-publish';
+import { logOutput, promptConfirmation, PublishCommandOption, throwIfUncommitted } from '@lerna-lite/core';
 
 // helpers
 import { gitTag } from '@lerna-test/helpers';
@@ -54,7 +55,7 @@ const createArgv = (cwd, ...args) => {
   const parserArgs = args.join(' ');
   const argv = yargParser(parserArgs);
   argv['$0'] = cwd;
-  return argv;
+  return argv as unknown as PublishCommandOption;
 };
 
 describe('publish from-git', () => {
@@ -69,11 +70,31 @@ describe('publish from-git', () => {
 
     expect(promptConfirmation).toHaveBeenLastCalledWith('Are you sure you want to publish these packages?');
     expect((logOutput as any).logged()).toMatch('Found 4 packages to publish:');
-    expect((npmPublish as any).order()).toEqual([
+    expect((npmPublish as typeof npmPublishMock).order()).toEqual([
       'package-1',
-      'package-3',
       'package-4',
       'package-2',
+      'package-3',
+      // package-5 is private
+    ]);
+  });
+
+  it('publishes tagged packages, lexically sorted when --no-sort is present', async () => {
+    const cwd = await initFixture('normal');
+
+    await gitTag(cwd, 'v1.0.0');
+    await new PublishCommand(createArgv(cwd, 'from-git', '--no-sort'));
+
+    // called from chained describeRef()
+    expect(throwIfUncommitted).toHaveBeenCalled();
+
+    expect(promptConfirmation).toHaveBeenLastCalledWith('Are you sure you want to publish these packages?');
+    expect((logOutput as any).logged()).toMatch('Found 4 packages to publish:');
+    expect((npmPublish as typeof npmPublishMock).order()).toEqual([
+      'package-1',
+      'package-2',
+      'package-3',
+      'package-4',
       // package-5 is private
     ]);
   });
@@ -90,11 +111,11 @@ describe('publish from-git', () => {
     ]);
     await new PublishCommand(createArgv(cwd, '--bump', 'from-git'));
 
-    expect((npmPublish as any).order()).toEqual([
+    expect((npmPublish as typeof npmPublishMock).order()).toEqual([
       'package-1',
-      'package-3',
       'package-4',
       'package-2',
+      'package-3',
       // package-5 is private
     ]);
   });
@@ -105,11 +126,11 @@ describe('publish from-git', () => {
     await gitTag(cwd, 'foo/1.0.0');
     await new PublishCommand(createArgv(cwd, '--bump', 'from-git', '--tag-version-prefix', 'foo/'));
 
-    expect((npmPublish as any).order()).toEqual([
+    expect((npmPublish as typeof npmPublishMock).order()).toEqual([
       'package-1',
-      'package-3',
       'package-4',
       'package-2',
+      'package-3',
       // package-5 is private
     ]);
   });
@@ -121,7 +142,7 @@ describe('publish from-git', () => {
     await new PublishCommand(createArgv(cwd, '--bump', 'from-git'));
 
     expect((logOutput as any).logged()).toMatch('Found 1 package to publish:');
-    expect((npmPublish as any).order()).toEqual(['package-3']);
+    expect((npmPublish as typeof npmPublishMock).order()).toEqual(['package-3']);
   });
 
   it('exits early when the current commit is not tagged', async () => {

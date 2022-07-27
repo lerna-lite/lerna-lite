@@ -65,6 +65,7 @@ export class PublishCommand extends Command<PublishCommandOption> {
   runPackageLifecycle!: (pkg: Package, stage: string) => Promise<void>;
   runRootLifecycle!: (stage: string) => Promise<void> | void;
   verifyAccess?: boolean = false;
+  toposort = false;
   twoFactorAuthRequired = false;
   updates: PackageGraphNode[] = [];
   updatesVersions?: Map<string, any>;
@@ -85,6 +86,9 @@ export class PublishCommand extends Command<PublishCommandOption> {
 
   configureProperties() {
     super.configureProperties();
+
+    // For publish we want to enable topological sorting by default, but allow users to override with --no-sort
+    this.toposort = this.options.sort !== false;
 
     // Defaults are necessary here because yargs defaults
     // override durable options provided by a config file
@@ -127,6 +131,13 @@ export class PublishCommand extends Command<PublishCommandOption> {
       this.logger.warn(
         'verify-access',
         '--verify-access=false and --no-verify-access are no longer needed, because the legacy preemptive access verification is now disabled by default. Requests will fail with appropriate errors when not authorized correctly.'
+      );
+    }
+
+    if (this.options.graphType === 'dependencies') {
+      this.logger.warn(
+        'graph-type',
+        '--graph-type=dependencies is deprecated and will be removed in the next major version of lerna-lite. If you have a use-case you feel requires it please open an issue to discuss: https://github.com/lerna/lerna/issues/new/choose'
       );
     }
 
@@ -701,15 +712,21 @@ export class PublishCommand extends Command<PublishCommandOption> {
   }
 
   topoMapPackages(mapper: (pkg: Package) => Promise<any>) {
-    // we don't respect --no-sort here, sorry
     return runTopologically(this.packagesToPublish, mapper, {
       concurrency: this.concurrency,
       rejectCycles: this.options.rejectCycles,
-      // By default, do not include devDependencies in the graph because it would
-      // increase the chance of dependency cycles, causing less-than-ideal order.
-      // If the user has opted-in to --graph-type=all (or 'graphType': 'all' in lerna.json),
-      // devDependencies _will_ be included in the graph construction.
-      graphType: this.options.graphType === 'all' ? 'allDependencies' : 'dependencies',
+      /**
+       * Previously `publish` had unique default behavior for graph creation vs other commands: it would only consider dependencies when finding
+       * edges by default (i.e. relationships between packages specified via devDependencies would be ignored). It was documented to be the case
+       * in order to try and reduce the chance of dependency cycles.
+       *
+       * We are removing this behavior altogether in v6 because we do not want to have different ways of constructing the graph,
+       * only different ways of utilizing it (e.g. --no-sort vs topological sort).
+       *
+       * Therefore until we remove graphType altogether in v6, we provide a way for users to opt into the old default behavior
+       * by setting the `graphType` option to `dependencies`.
+       */
+      graphType: this.options.graphType === 'dependencies' ? 'dependencies' : 'allDependencies',
     });
   }
 
@@ -752,7 +769,13 @@ export class PublishCommand extends Command<PublishCommandOption> {
       ).filter(Boolean)
     );
 
-    chain = chain.then(() => this.topoMapPackages(mapper));
+    chain = chain.then(() => {
+      if (this.toposort) {
+        return this.topoMapPackages(mapper);
+      }
+      return pMap(this.packagesToPublish, mapper, { concurrency: this.concurrency });
+    });
+
     chain = chain.then(() => removeTempLicenses(this.packagesToBeLicensed ?? []));
 
     // remove temporary license files if _any_ error occurs _anywhere_ in the promise chain
@@ -806,7 +829,12 @@ export class PublishCommand extends Command<PublishCommandOption> {
       ).filter(Boolean)
     );
 
-    chain = chain.then(() => this.topoMapPackages(mapper));
+    chain = chain.then(() => {
+      if (this.toposort) {
+        return this.topoMapPackages(mapper);
+      }
+      return pMap(this.packagesToPublish, mapper, { concurrency: this.concurrency });
+    });
 
     if (!this.hasRootedLeaf) {
       // cyclical 'publish' lifecycles are automatically skipped
@@ -848,7 +876,12 @@ export class PublishCommand extends Command<PublishCommandOption> {
         });
     };
 
-    chain = chain.then(() => this.topoMapPackages(mapper));
+    chain = chain.then(() => {
+      if (this.toposort) {
+        return this.topoMapPackages(mapper);
+      }
+      return pMap(this.packagesToPublish, mapper, { concurrency: this.concurrency });
+    });
 
     return chain.finally(() => tracker.finish());
   }

@@ -42,7 +42,7 @@ export class Command<T extends AvailableCommandOption> {
   concurrency!: number;
   envDefaults: any;
   sort: any;
-  toposort?: number;
+  toposort?: boolean;
 
   execOpts!: ExecOpts;
   commandName: CommandType = '';

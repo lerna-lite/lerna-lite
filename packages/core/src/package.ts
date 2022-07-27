@@ -1,7 +1,6 @@
 import loadJsonFile from 'load-json-file';
 import npa from 'npm-package-arg';
 import npmlog from 'npmlog';
-import os from 'os';
 import path from 'path';
 import writePkg from 'write-pkg';
 
