@@ -485,3 +485,7 @@ The legacy preemptive access verification is now off by default, so `--no-verify
 ### `--skip-npm`
 
 Call [`lerna version`](https://github.com/lerna/lerna/tree/main/commands/version#readme) directly, instead.
+
+### `--no-workspace-strict-match`
+
+Providing --no-workspace-strict-match is deprecated and will be removed in future version, we will make `workspace:` protocol strict matching in every case.

@@ -148,21 +148,21 @@ describe('PublishCommand', () => {
 
       expect(promptConfirmation).toHaveBeenLastCalledWith('Are you sure you want to publish these packages?');
       expect((packDirectory as any).registry).toMatchInlineSnapshot(`
-Set {
-  "package-1",
-  "package-4",
-  "package-2",
-  "package-3",
-}
-`);
+        Set {
+          "package-1",
+          "package-4",
+          "package-2",
+          "package-3",
+        }
+      `);
       expect((npmPublish as typeof npmPublishMock).registry).toMatchInlineSnapshot(`
-Map {
-  "package-1" => "latest",
-  "package-4" => "latest",
-  "package-2" => "latest",
-  "package-3" => "latest",
-}
-`);
+        Map {
+          "package-1" => "latest",
+          "package-4" => "latest",
+          "package-2" => "latest",
+          "package-3" => "latest",
+        }
+      `);
       expect((npmPublish as typeof npmPublishMock).order()).toEqual([
         'package-1',
         'package-4',
@@ -242,6 +242,7 @@ Map {
       expect(logMessages).toMatchInlineSnapshot(`
         Array [
           "--graph-type=dependencies is deprecated and will be removed in the next major version of lerna-lite. If you have a use-case you feel requires it please open an issue to discuss: https://github.com/lerna/lerna/issues/new/choose",
+          "Providing --no-workspace-strict-match is deprecated and will be removed in future version, we will make \\"workspace:\\" protocol strict matching in every case.",
           "we recommend using --sync-workspace-lock which will sync your lock file via your favorite npm client instead of relying on Lerna-Lite itself to update it.",
         ]
       `);
@@ -434,21 +435,21 @@ Map {
 
       expect(promptConfirmation).toHaveBeenLastCalledWith('Are you sure you want to publish these packages?');
       expect((packDirectory as any).registry).toMatchInlineSnapshot(`
-Set {
-  "package-1",
-  "package-4",
-  "package-2",
-  "package-3",
-}
-`);
+        Set {
+          "package-1",
+          "package-4",
+          "package-2",
+          "package-3",
+        }
+      `);
       expect((npmPublish as typeof npmPublishMock).registry).toMatchInlineSnapshot(`
-Map {
-  "package-1" => "latest",
-  "package-4" => "latest",
-  "package-2" => "latest",
-  "package-3" => "latest",
-}
-`);
+        Map {
+          "package-1" => "latest",
+          "package-4" => "latest",
+          "package-2" => "latest",
+          "package-3" => "latest",
+        }
+      `);
       expect((npmPublish as typeof npmPublishMock).order()).toEqual([
         'package-1',
         'package-4',
@@ -479,6 +480,19 @@ Map {
         { granularPathspec: true },
         { cwd: testDir },
         undefined
+      );
+    });
+  });
+
+  describe('--no-workspace-strict-match', () => {
+    it('shows warning that this is the default behavior and that this option is no longer needed', async () => {
+      const cwd = await initFixture('normal');
+
+      await lernaPublish(cwd)('--no-workspace-strict-match');
+
+      const logMessages = loggingOutput('warn');
+      expect(logMessages).toContain(
+        'Providing --no-workspace-strict-match is deprecated and will be removed in future version, we will make "workspace:" protocol strict matching in every case.'
       );
     });
   });
