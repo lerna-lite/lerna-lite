@@ -564,16 +564,12 @@ Map {
 
   describe('--contents', () => {
     it('allows you to do fancy angular crap', async () => {
-      const logSpy = jest.spyOn(console, 'log').mockImplementation(() => {});
+      jest.spyOn(console, 'log').mockImplementation(() => {});
       const cwd = await initFixture('lifecycle');
 
       await new PublishCommand(createArgv(cwd, '--contents', 'dist'));
 
       const [[pkgOne, dirOne, opts], [pkgTwo, dirTwo]] = (packDirectory as jest.Mock).mock.calls;
-
-      expect(logSpy).toHaveBeenCalledWith('preversion-root');
-      expect(logSpy).toHaveBeenCalledWith('preversion-package-1');
-      expect(logSpy).toHaveBeenCalledWith('version-package-1');
 
       // second argument to packDirectory() is the location, _not_ the contents
       expect(dirOne).toBe(pkgOne.location);
