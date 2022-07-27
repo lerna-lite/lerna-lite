@@ -81,6 +81,8 @@ export interface UpdateChangelogOption {
   changelogVersionMessage?: string;
   changelogPreset?: string;
   changelogIncludeCommitAuthorFullname?: boolean | string;
+  changelogIncludeCommitsClientLogin?: boolean | string;
+  commitsSinceLastRelease?: RemoteCommit[];
   rootPath?: string;
   tagPrefix?: string;
   version?: string;
@@ -225,6 +227,22 @@ export interface ReleaseNote {
   name: string;
   notes?: string;
 }
+
+export type RemoteClientType = 'gitlab' | 'github';
+
+export type RemoteCommit = {
+  /** git commit author name */
+  authorName: string;
+
+  /** remote client login (ie github login) */
+  login: string;
+
+  /** commit message headling (50 chars maxlen) */
+  message: string;
+
+  /** short commit hash (7 chars long) */
+  shortHash: string;
+};
 
 export interface UpdateCollectorOptions {
   /** The semver bump keyword (patch/minor/major) or explicit version used */

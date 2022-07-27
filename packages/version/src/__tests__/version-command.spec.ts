@@ -17,6 +17,8 @@ jest.mock('@lerna-lite/core', () => ({
   promptSelectOne: jest.requireActual('../../../core/src/__mocks__/prompt').promptSelectOne,
   promptTextInput: jest.requireActual('../../../core/src/__mocks__/prompt').promptTextInput,
   checkWorkingTree: jest.requireActual('../../../core/src/__mocks__/check-working-tree').checkWorkingTree,
+  getCommitsSinceLastRelease: jest.requireActual('../../../core/src/__mocks__/get-commits-since-last-release')
+    .getCommitsSinceLastRelease,
   throwIfReleased: jest.requireActual('../../../core/src/__mocks__/check-working-tree').throwIfReleased,
   throwIfUncommitted: jest.requireActual('../../../core/src/__mocks__/check-working-tree').throwIfUncommitted,
 }));
@@ -34,7 +36,7 @@ import writePkg from 'write-pkg';
 import { promptConfirmation, promptSelectOne } from '@lerna-lite/core';
 import { collectUpdates } from '@lerna-lite/core';
 import { logOutput } from '@lerna-lite/core';
-import { checkWorkingTree, throwIfUncommitted } from '@lerna-lite/core';
+import { checkWorkingTree, getCommitsSinceLastRelease, throwIfUncommitted } from '@lerna-lite/core';
 import { gitPush as libPush } from '../lib/git-push';
 import { isAnythingCommitted } from '../lib/is-anything-committed';
 import { isBehindUpstream } from '../lib/is-behind-upstream';
@@ -52,7 +54,7 @@ const lernaVersion = helpers.commandRunner(cliCommands);
 const initFixture = helpers.initFixtureFactory(path.resolve(__dirname, '../../../publish/src/__tests__'));
 
 // file under test
-const yargParser = require('yargs-parser');
+import yargParser from 'yargs-parser';
 
 const createArgv = (cwd, ...args) => {
   args.unshift('version');
@@ -171,6 +173,17 @@ describe('VersionCommand', () => {
       );
     });
 
+    it('throws an error if --changelog-include-commits-client-login and --changelog-include-commit-author-fullname flags are both passed', async () => {
+      const testDir = await initFixture('normal');
+      const command = new VersionCommand(
+        createArgv(testDir, '--changelog-include-commits-client-login', '--changelog-include-commit-author-fullname')
+      );
+
+      await expect(command).rejects.toThrow(
+        '--changelog-include-commits-client-login cannot be combined with --changelog-include-commit-author-fullname.'
+      );
+    });
+
     it("throws an error when remote branch doesn't exist", async () => {
       (remoteBranchExists as jest.Mock).mockReturnValueOnce(false);
 
@@ -249,6 +262,32 @@ describe('VersionCommand', () => {
       expect(patch).not.toContain('package-5');
       // ...all packages are still majored
       expect(patch).toContain('package-1');
+    });
+
+    it('throws an error if --changelog-include-commits-client-login without providing --create-release or --remote-client', async () => {
+      const testDir = await initFixture('normal');
+      const command = new VersionCommand(
+        createArgv(testDir, '--changelog-include-commits-client-login', '--conventional-commits')
+      );
+
+      await expect(command).rejects.toThrow(
+        '--changelog-include-commits-client-login requires one of these two option --remote-client or --create-release to be defined.'
+      );
+    });
+
+    it('call getCommitsSinceLastRelease() when --changelog-include-commits-client-login is provided', async () => {
+      const testDir = await initFixture('normal');
+      await new VersionCommand(
+        createArgv(
+          testDir,
+          '--changelog-include-commits-client-login',
+          '--conventional-commits',
+          '--remote-client',
+          'github'
+        )
+      );
+
+      expect(getCommitsSinceLastRelease).toHaveBeenCalled();
     });
   });
 

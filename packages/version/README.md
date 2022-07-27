@@ -77,6 +77,7 @@ Running `lerna version --conventional-commits` without the above flags will rele
     - [`--conventional-graduate`](#--conventional-graduate)
     - [`--conventional-prerelease`](#--conventional-prerelease)
     - [`--changelog-include-commit-author-fullname [msg]`](#--changelog-include-commit-author-fullname-msg) (new)
+    - [`--changelog-include-commits-client-login [msg]`](#--changelog-include-commits-client-login-msg) (new)
     - [`--changelog-header-message <msg>`](#--changelog-header-message-msg) (new)
     - [`--changelog-version-message <msg>`](#--changelog-version-message-msg) (new)
     - [`--create-release <type>`](#--create-release-type)
@@ -96,6 +97,7 @@ Running `lerna version --conventional-commits` without the above flags will rele
     - [`--no-push`](#--no-push)
     - [`--no-manually-update-root-lockfile`](#--no-manually-update-root-lockfile)
     - [`--preid`](#--preid)
+    - [`--remote-client <type>`](#--remote-client-type)
     - [`--signoff-git-commit`](#--signoff-git-commit) (new)
     - [`--sign-git-commit`](#--sign-git-commit)
     - [`--sign-git-tag`](#--sign-git-tag)
@@ -231,23 +233,45 @@ lerna version --conventional-commits --conventional-prerelease
 When run with this flag, `lerna version` will release with prerelease versions the specified packages (comma-separated) or all packages using `*`. Releases all unreleased changes as pre(patch/minor/major/release) by prefixing the version recommendation from `conventional-commits` with `pre`, eg. if present changes include a feature commit, the recommended bump will be `minor`, so this flag will result in a `preminor` release. If changes are present for packages that are not specified (if specifying packages), or for packages that are already in prerelease, those packages will be versioned as they normally would using `--conventional-commits`.
 
 ### `--changelog-include-commit-author-fullname [msg]`
-Specify if we want to include the git commit author's name, at the end of each changelog commit entry, this is only available when using `--conventional-commits` with changelogs. The default format will append the author's name at the end of each commit entry and wrapped in `()`, for exampe "feat: commit message (Author Name)". We could also use a custom format by providing the `%a` token. Note that in every case, the author's name will always be appended as a suffix to each changelog commit entry.
+Specify if we want to include the git commit author's name, appended to the end of each changelog commit entry, this is only available when using `--conventional-commits` with changelogs enabled. The default format will be appending the git commit author name at the end of each commit entry, we could also use a custom format by providing the `%a` token, see examples below.
 
-> **Note** that the author name is the name that was given in the user's Git config, refer to [Git Configuration](https://www.git-scm.com/book/en/v2/Customizing-Git-Git-Configuration) for more info and it is **not** the same as a GitHub login username. Git itself does not sadly store the git username in its commit history.
+> **Note** that the author name is the name that was provided in the user's Git config, for more info please refer to [Git Configuration](https://www.git-scm.com/book/en/v2/Customizing-Git-Git-Configuration). Also note, that is **not** the same as for example a GitHub login username, Git does not store such information in its commit history.
 
 ```sh
 # default format, without any argument
+# will add the author name wrapped in (...) and appended to the commit line entry
 lerna version --conventional-commits --changelog-include-commit-author-fullname
-# **deps:** update dependency git-url-parse to v12 ([978bf36](https://github.com/ghiscoding/lerna-lite/commit/978bf36)) (Renovate Bot)
+# **deps:** update dependency git-url-parse to v12 ([978bf36](https://github.com/.../978bf36)) (Whitesource Renovate)
 
 # custom format with %a token
 lerna version --conventional-commits --changelog-include-commit-author-fullname " (by _%a_)"
-# **deps:** update dependency git-url-parse to v12 ([978bf36](https://github.com/ghiscoding/lerna-lite/commit/978bf36)) (by _Renovate Bot_)
+# **deps:** update dependency git-url-parse to v12 ([978bf36](https://github.com/.../978bf36)) (by _Whitesource Renovate_)
 ```
+
+### `--changelog-include-commits-client-login [msg]`
+Specify if we want to include git commit remote client name (ie GitHub login username), appended to the end of each changelog commit entry, this is only available when using `--conventional-commits` with changelogs enabled. You most also provide 1 of these 2 options [`--create-release <type>`](#--create-release-type) or [`--remote-client <type>`](#--remote-client-type). The default format will be appending the remote client login username at the end of each changelog commit entry, we could also use a custom format by providing the `%a` or `%l` token(s), see examples below.
+
+> Note that this will execute one or more remote API calls to the chosen remote server, which at the moment is only supporting the GitHub client type. This option will also require a valid `GH_TOKEN` with read access permissions to the GitHub API so that it can execute the query to fetch all commit details since the last release, for more info refer to the [`Remote Client Auth Tokens`](#--remote-client-auth-tokens) below.
+> Also note that for this option to work properly, you must make sure that your local commits are in sync with the remote server so that it associate all commits with their respective remote server commits and finally extract the associated remote client user login from them.
+
+```sh
+# default format, without any argument
+# will add the remote client login name wrapped in (@...) and appended to the commit line entry
+lerna version --conventional-commits --changelog-include-commits-client-login --create-release github
+# **deps:** update dependency git-url-parse to v12 ([978bf36](https://github.com/.../978bf36)) (@renovate-bot)
+
+# custom format with 1 of these 2 tokens: %l and/or %a
+# %l: login name (ie: "renovate-bot"), or %a: git author name (ie: "Whitesource Renovate")
+lerna version --conventional-commits --changelog-include-commits-client-login " by @%a" --remote-client github
+# **deps:** update dependency git-url-parse to v12 ([978bf36](https://github.com/.../978bf36)) by @renovate-bot
+```
+
+> We recommend you first try it with the `--git-dry-run` option so that you can validate your remote client access and inspect the changelog output. Make sure to revert your changes once you're satisfied with the output.
+
 
 ### `--changelog-header-message <msg>`
 
-Add a custom message at the top of your "changelog.md" which is located in the root of your project. This option only works when using `--conventional-commits` and will only impact your project root "changelog.md".
+Add a custom message at the top of your "changelog.md" which is located in the root of your project. This option is only available when using `--conventional-commits` and will only impact your project root "changelog.md".
 
 ```sh
 lerna version --conventional-commits --changelog-header-message "My Custom Header Message"
@@ -255,7 +279,7 @@ lerna version --conventional-commits --changelog-header-message "My Custom Heade
 
 ### `--changelog-version-message <msg>`
 
-Add a custom message as a prefix to your new version in your "changelog.md" which is located in the root of your project. This option only works when using `--conventional-commits` and will only impact your project root "changelog.md".
+Add a custom message as a prefix to your new version in your "changelog.md" which is located in the root of your project. This option is only available when using `--conventional-commits` and will only impact your project root "changelog.md".
 
 ```sh
 lerna version --conventional-commits --changelog-version-message "My Great New Version Message"
@@ -270,12 +294,15 @@ lerna version --conventional-commits --create-release gitlab
 
 When run with this flag, `lerna version` will create an official GitHub or GitLab release based on the changed packages. Requires `--conventional-commits` to be passed so that changelogs can be generated.
 
+### Remote Client Auth Tokens
+##### GitHub Auth Token
 To authenticate with GitHub, the following environment variables can be defined.
 
 - `GH_TOKEN` (required) - Your GitHub authentication token (under Settings > Developer settings > Personal access tokens).
 - `GHE_API_URL` - When using GitHub Enterprise, an absolute URL to the API.
 - `GHE_VERSION` - When using GitHub Enterprise, the currently installed GHE version. [Supports the following versions](https://github.com/octokit/plugin-enterprise-rest.js).
 
+##### GitLab Auth Token
 To authenticate with GitLab, the following environment variables can be defined.
 
 - `GL_TOKEN` (required) - Your GitLab authentication token (under User Settings > Access Tokens).
@@ -308,9 +335,9 @@ When run with this flag, `lerna version` will force publish the specified packag
 
 ### `--git-dry-run`
 
-Displays the git command that would be performed without actually executing it, however please note that it will still create all the changelogs. This could be helpful for troubleshooting and also to see changelog changes without commiting them to Git.
+Displays the git command that would be performed without actually executing it, however please note that it will still create all the changelogs. This could be helpful for troubleshooting and also to see changelog changes without committing them to Git.
 
-**Note:** changelogs will still be created (when enabled) even in dry-run mode, so it could be useful to see what gets created without them being committed (however, make sure to discard the changes and roll back your version in `lerna.json` once you're done).
+> **Note:** changelogs will still be created (when enabled) even in dry-run mode, so it could be useful to see what gets created without them being committed (however, make sure to revert the changes and roll back your version in `lerna.json` once you're satisfied with the output).
 
 ```sh
 $ lerna run watch --git-dry-run
@@ -475,6 +502,17 @@ lerna version prepatch --preid next
 
 When run with this flag, `lerna version` will increment `premajor`, `preminor`, `prepatch`, or `prerelease` semver
 bumps using the specified [prerelease identifier](http://semver.org/#spec-item-9).
+
+### `--remote-client <type>`
+
+Define which remote client type is used, this option is only useful with the option [`--changelog-include-commits-client-login [msg]`](#--changelog-include-commits-client-login-msg)
+
+```sh
+lerna version --conventional-commits --remote-client github
+lerna version --conventional-commits --remote-client gitlab
+```
+
+For remote client authentication tokens, like `GH_TOKEN`, refer to [`Remote Client Auth Tokens`](#--remote-client-auth-tokens)
 
 ### `--signoff-git-commit`
 

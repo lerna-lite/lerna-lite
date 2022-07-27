@@ -58,21 +58,28 @@ export default {
       },
       'changelog-header-message': {
         describe:
-          'Add a custom message at the top of your "changelog.md" which is located in the root of your project. This option only works when using --conventional-commits.',
+          'Add a custom message at the top of your "changelog.md" which is located in the root of your project. This option is only available when using --conventional-commits with changelogs.',
         group: 'Version Command Options:',
         requiresArg: true,
         type: 'string',
       },
       'changelog-include-commit-author-fullname': {
         describe:
-          "Specify if we want to include the commit author's name, when using conventional-commits with changelog. We can optionally provide a custom message or else a default format will be used.",
+          "Specify if we want to include the commit author's name, this option is only available when using --conventional-commits with changelogs. We can also optionally provide a custom message or else a default format will be used.",
+        group: 'Version Command Options:',
+        requiresArg: false,
+        type: 'string',
+      },
+      'changelog-include-commits-client-login': {
+        describe:
+          'Specify if we want to include the commit remote client login name (ie GitHub username), this option is only available when using --conventional-commits with changelogs. We can also optionally provide a custom message or else a default format will be used.',
         group: 'Version Command Options:',
         requiresArg: false,
         type: 'string',
       },
       'changelog-version-message': {
         describe:
-          'Add a custom message as a prefix to each new version in your "changelog.md" which is located in the root of your project. This option only works when using --conventional-commits.',
+          'Add a custom message as a prefix to each new version in your "changelog.md" which is located in the root of your project. This option is only available when using --conventional-commits with changelogs.',
         group: 'Version Command Options:',
         requiresArg: true,
         type: 'string',
@@ -191,6 +198,12 @@ export default {
         type: 'string',
         requiresArg: true,
         defaultDescription: 'alpha',
+      },
+      'remote-client': {
+        describe:
+          'Remote git client, which client is used when reading commits from remote which is useful when associating client login for each changelog entry.',
+        type: 'string',
+        choices: ['gitlab', 'github'],
       },
       'sign-git-commit': {
         describe: 'Pass the `--gpg-sign` flag to `git commit`.',

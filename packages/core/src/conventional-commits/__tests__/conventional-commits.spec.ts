@@ -1,8 +1,6 @@
-'use strict';
-
 import fs from 'fs-extra';
 import path from 'path';
-const { Project } = require('../../project');
+import { Project } from '../../project';
 
 // helpers
 import helpers, { gitAdd, gitCommit, gitTag } from '@lerna-test/helpers';
@@ -12,7 +10,6 @@ const initFixture = helpers.initFixtureFactory(__dirname);
 import { recommendVersion, updateChangelog } from '../../conventional-commits';
 import { Package } from '../../package';
 import { GetChangelogConfig } from '../get-changelog-config';
-// const { getChangelogConfig } = require('../lib/get-changelog-config');
 
 // stabilize changelog commit SHA and datestamp
 expect.addSnapshotSerializer(require('@lerna-test/helpers/serializers/serialize-changelog'));
@@ -418,7 +415,7 @@ describe('conventional-commits', () => {
       `);
     });
 
-    it('supports custom tagPrefix in fixed mode and include commit author full name', async () => {
+    it('supports custom tagPrefix in fixed mode when --changelog-include-commit-author-fullname is provided', async () => {
       const cwd = await initFixture('fixed');
 
       await gitTag(cwd, 'dragons-are-awesome1.0.0');
@@ -705,7 +702,7 @@ describe('conventional-commits', () => {
       `);
     });
 
-    it('updates independent changelogs and include commit author full name with a custom format when defined', async () => {
+    it('updates independent changelogs when providing --changelog-include-commit-author-fullname with a custom format when defined', async () => {
       const cwd = await initFixture('independent');
 
       await gitTag(cwd, 'package-1@1.0.0');
@@ -729,7 +726,7 @@ describe('conventional-commits', () => {
 
       const opts = {
         changelogPreset: 'conventional-changelog-angular',
-        changelogIncludeCommitAuthorFullname: ' by <**%a**>',
+        changelogIncludeCommitAuthorFullname: ' by (**%a**)',
       };
       const [changelogOne, changelogTwo] = await Promise.all([
         updateChangelog(pkg1, 'independent', opts),
@@ -742,7 +739,7 @@ describe('conventional-commits', () => {
 
         ### Bug Fixes
 
-        * **stuff:** changed ([SHA](https://github.com/lerna/conventional-commits-independent/commit/GIT_HEAD)) by <**Tester McPerson**>
+        * **stuff:** changed ([SHA](https://github.com/lerna/conventional-commits-independent/commit/GIT_HEAD)) by (**Tester McPerson**)
       `);
       expect(changelogTwo.newEntry.trimRight()).toMatchInlineSnapshot(`
         # [1.1.0](/compare/package-2@1.0.0...package-2@1.1.0) (YYYY-MM-DD)
@@ -750,7 +747,77 @@ describe('conventional-commits', () => {
 
         ### Features
 
-        * **thing:** added ([SHA](https://github.com/lerna/conventional-commits-independent/commit/GIT_HEAD)) by <**Tester McPerson**>
+        * **thing:** added ([SHA](https://github.com/lerna/conventional-commits-independent/commit/GIT_HEAD)) by (**Tester McPerson**)
+      `);
+    });
+
+    it('updates independent changelogs when providing --changelog-include-commits-client-login with a custom format when defined', async () => {
+      const cwd = await initFixture('independent');
+
+      await gitTag(cwd, 'package-1@1.0.0');
+      await gitTag(cwd, 'package-2@1.0.0');
+
+      const [pkg1, pkg2] = await Project.getPackages(cwd);
+
+      // make a change in package-1 and package-2
+      await pkg1.set('changed', 1).serialize();
+      await pkg2.set('changed', 2).serialize();
+
+      await gitAdd(cwd, pkg1.manifestLocation);
+      const resultCommit1 = await gitCommit(cwd, 'fix(stuff): changed');
+
+      await gitAdd(cwd, pkg2.manifestLocation);
+      const resultCommit2 = await gitCommit(cwd, 'feat(thing): added');
+
+      // update versions
+      await pkg1.set('version', '1.0.1').serialize();
+      await pkg2.set('version', '1.1.0').serialize();
+
+      const opt1s = {
+        changelogPreset: 'conventional-changelog-angular',
+        changelogIncludeCommitsClientLogin: true,
+        commitsSinceLastRelease: [
+          {
+            authorName: 'Tester McPerson',
+            login: 'tester-mcperson',
+            shortHash: resultCommit1.stdout.match(/(\[main\s([0-9a-f]{7})\])/)[2],
+            message: 'fix(stuff): changed',
+          },
+        ],
+      };
+      const opt2s = {
+        changelogPreset: 'conventional-changelog-angular',
+        changelogIncludeCommitsClientLogin: ' by (@%l, %a)',
+        commitsSinceLastRelease: [
+          {
+            authorName: 'Tester McPerson',
+            login: 'tester-mcperson',
+            shortHash: resultCommit2.stdout.match(/(\[main\s([0-9a-f]{7})\])/)[2],
+            message: 'feat(thing): added',
+          },
+        ],
+      };
+
+      const [changelogOne, changelogTwo] = await Promise.all([
+        updateChangelog(pkg1, 'independent', opt1s),
+        updateChangelog(pkg2, 'independent', opt2s),
+      ]);
+
+      expect(changelogOne.newEntry.trimRight()).toMatchInlineSnapshot(`
+        ## [1.0.1](/compare/package-1@1.0.0...package-1@1.0.1) (YYYY-MM-DD)
+
+
+        ### Bug Fixes
+
+        * **stuff:** changed ([SHA](https://github.com/lerna/conventional-commits-independent/commit/GIT_HEAD)) (@tester-mcperson)
+      `);
+      expect(changelogTwo.newEntry.trimRight()).toMatchInlineSnapshot(`
+        # [1.1.0](/compare/package-2@1.0.0...package-2@1.1.0) (YYYY-MM-DD)
+
+
+        ### Features
+
+        * **thing:** added ([SHA](https://github.com/lerna/conventional-commits-independent/commit/GIT_HEAD)) by (@tester-mcperson, Tester McPerson)
       `);
     });
   });
