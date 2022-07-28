@@ -11,7 +11,7 @@ jest.mock('@lerna-lite/core', () => ({
 }));
 
 // mocked modules
-const { collectUpdates, logOutput } = require('@lerna-lite/core');
+import { collectUpdates, logOutput } from '@lerna-lite/core';
 
 // helpers
 import helpers from '@lerna-test/helpers';
@@ -24,7 +24,7 @@ import cliListCommands from '../../../cli/src/cli-commands/cli-list-commands';
 const lernaList = helpers.commandRunner(cliListCommands);
 
 // file under test
-const yargParser = require('yargs-parser');
+import yargParser from 'yargs-parser';
 
 const createArgv = (cwd: string, ...args: string[]) => {
   args.unshift('list');
@@ -60,7 +60,7 @@ describe('List Command', () => {
 
     it('should list public packages', async () => {
       await new ListCommand(createArgv(testDir, ''));
-      expect(logOutput.logged()).toMatchInlineSnapshot(`
+      expect((logOutput as any).logged()).toMatchInlineSnapshot(`
 package-1
 package-2
 package-3
@@ -70,7 +70,7 @@ package-4
 
     it('should also list private packages with --all', async () => {
       await lernaList(testDir)('--all');
-      expect(logOutput.logged()).toMatchInlineSnapshot(`
+      expect((logOutput as any).logged()).toMatchInlineSnapshot(`
 package-1
 package-2
 package-3
@@ -82,7 +82,7 @@ package-5 (PRIVATE)
     it('lists public package versions and relative paths with --long', async () => {
       await factory(createArgv(testDir, '--long'));
       // await lernaList(testDir)('--long');
-      expect(logOutput.logged()).toMatchInlineSnapshot(`
+      expect((logOutput as any).logged()).toMatchInlineSnapshot(`
 package-1 v1.0.0 packages/package-1
 package-2 v1.0.0 packages/package-2
 package-3 v1.0.0 packages/package-3
@@ -92,7 +92,7 @@ package-4 v1.0.0 packages/package-4
 
     it('lists all package versions and relative paths with --long --all', async () => {
       await lernaList(testDir)('-la');
-      expect(logOutput.logged()).toMatchInlineSnapshot(`
+      expect((logOutput as any).logged()).toMatchInlineSnapshot(`
 package-1 v1.0.0 packages/package-1
 package-2 v1.0.0 packages/package-2
 package-3 v1.0.0 packages/package-3
@@ -103,7 +103,7 @@ package-5 v1.0.0 packages/package-5 (PRIVATE)
 
     it('lists public package locations with --parseable', async () => {
       await lernaList(testDir)('--parseable');
-      expect(logOutput.logged()).toMatchInlineSnapshot(`
+      expect((logOutput as any).logged()).toMatchInlineSnapshot(`
 __TEST_ROOTDIR__/packages/package-1
 __TEST_ROOTDIR__/packages/package-2
 __TEST_ROOTDIR__/packages/package-3
@@ -113,7 +113,7 @@ __TEST_ROOTDIR__/packages/package-4
 
     it('lists all package locations with --parseable --all', async () => {
       await lernaList(testDir)('-pa');
-      expect(logOutput.logged()).toMatchInlineSnapshot(`
+      expect((logOutput as any).logged()).toMatchInlineSnapshot(`
 __TEST_ROOTDIR__/packages/package-1
 __TEST_ROOTDIR__/packages/package-2
 __TEST_ROOTDIR__/packages/package-3
@@ -124,7 +124,7 @@ __TEST_ROOTDIR__/packages/package-5
 
     it('lists public package locations with --parseable --long', async () => {
       await lernaList(testDir)('--parseable', '--long');
-      expect(logOutput.logged()).toMatchInlineSnapshot(`
+      expect((logOutput as any).logged()).toMatchInlineSnapshot(`
 __TEST_ROOTDIR__/packages/package-1:package-1:1.0.0
 __TEST_ROOTDIR__/packages/package-2:package-2:1.0.0
 __TEST_ROOTDIR__/packages/package-3:package-3:1.0.0
@@ -134,7 +134,7 @@ __TEST_ROOTDIR__/packages/package-4:package-4:1.0.0
 
     it('lists all package locations with --parseable --long --all', async () => {
       await lernaList(testDir)('-pal');
-      expect(logOutput.logged()).toMatchInlineSnapshot(`
+      expect((logOutput as any).logged()).toMatchInlineSnapshot(`
 __TEST_ROOTDIR__/packages/package-1:package-1:1.0.0
 __TEST_ROOTDIR__/packages/package-2:package-2:1.0.0
 __TEST_ROOTDIR__/packages/package-3:package-3:1.0.0
@@ -145,21 +145,21 @@ __TEST_ROOTDIR__/packages/package-5:package-5:1.0.0:PRIVATE
 
     it('lists packages matching --scope', async () => {
       await lernaList(testDir)('--scope', 'package-1');
-      expect(logOutput.logged()).toMatchInlineSnapshot(`package-1`);
+      expect((logOutput as any).logged()).toMatchInlineSnapshot(`package-1`);
     });
 
     it('does not list packages matching --ignore', async () => {
       await lernaList(testDir)('--ignore', 'package-@(2|3|4|5)');
-      expect(logOutput.logged()).toMatchInlineSnapshot(`package-1`);
+      expect((logOutput as any).logged()).toMatchInlineSnapshot(`package-1`);
     });
 
     it('does not list private packages with --no-private', async () => {
       await lernaList(testDir)('--no-private');
-      expect(logOutput.logged()).not.toMatch('package-5 v1.0.0 (private)');
+      expect((logOutput as any).logged()).not.toMatch('package-5 v1.0.0 (private)');
     });
 
     it('does not emit empty stdout', async () => {
-      collectUpdates.setUpdated(testDir);
+      (collectUpdates as any).setUpdated(testDir);
       await lernaList(testDir)('--since', 'deadbeef');
       expect(logOutput).not.toHaveBeenCalled();
       expect(collectUpdates).toHaveBeenLastCalledWith(
@@ -175,7 +175,7 @@ __TEST_ROOTDIR__/packages/package-5:package-5:1.0.0:PRIVATE
     it('should list packages', async () => {
       const testDir = await initFixture('extra');
       await lernaList(testDir)();
-      expect(logOutput.logged()).toMatchInlineSnapshot(`
+      expect((logOutput as any).logged()).toMatchInlineSnapshot(`
 package-3
 package-1
 package-2
@@ -187,7 +187,7 @@ package-2
     it('should list packages, including filtered ones', async () => {
       const testDir = await initFixture('include-filtered-dependencies');
       await lernaList(testDir)('--scope', '@test/package-2', '--include-filtered-dependencies');
-      expect(logOutput.logged()).toMatchInlineSnapshot(`
+      expect((logOutput as any).logged()).toMatchInlineSnapshot(`
 @test/package-2
 @test/package-1
 `);
@@ -198,7 +198,7 @@ package-2
     it('should list packages, including filtered ones', async () => {
       const testDir = await initFixture('include-filtered-dependencies');
       await lernaList(testDir)('--scope', '@test/package-1', '--include-filtered-dependents');
-      expect(logOutput.logged()).toMatchInlineSnapshot(`
+      expect((logOutput as any).logged()).toMatchInlineSnapshot(`
 @test/package-1
 @test/package-2
 `);
@@ -209,13 +209,15 @@ package-2
     it('replaces version with MISSING', async () => {
       const testDir = await initFixture('undefined-version');
       await lernaList(testDir)('--long');
-      expect(logOutput.logged()).toMatchInlineSnapshot(`package-1 MISSING packages/package-1`);
+      expect((logOutput as any).logged()).toMatchInlineSnapshot(`package-1 MISSING packages/package-1`);
     });
 
     it('appends MISSING flag to long parseable output', async () => {
       const testDir = await initFixture('undefined-version');
       await lernaList(testDir)('--long', '--parseable');
-      expect(logOutput.logged()).toMatchInlineSnapshot(`__TEST_ROOTDIR__/packages/package-1:package-1:MISSING`);
+      expect((logOutput as any).logged()).toMatchInlineSnapshot(
+        `__TEST_ROOTDIR__/packages/package-1:package-1:MISSING`
+      );
     });
   });
 
@@ -225,7 +227,7 @@ package-2
       await lernaList(testDir)('--json', '-a');
 
       // Output should be a parseable string
-      const jsonOutput = JSON.parse(logOutput.logged());
+      const jsonOutput = JSON.parse((logOutput as any).logged());
       expect(jsonOutput).toEqual([
         {
           location: expect.stringContaining('package-1'),
@@ -263,10 +265,10 @@ package-2
     it('emits empty array with no results', async () => {
       const testDir = await initFixture('basic');
 
-      collectUpdates.setUpdated(testDir);
+      (collectUpdates as any).setUpdated(testDir);
       await lernaList(testDir)('--since', 'deadbeef', '--json');
 
-      expect(JSON.parse(logOutput.logged())).toEqual([]);
+      expect(JSON.parse((logOutput as any).logged())).toEqual([]);
     });
   });
 
@@ -274,7 +276,7 @@ package-2
     it('should use package.json/workspaces setting', async () => {
       const testDir = await initFixture('yarn-workspaces');
       await lernaList(testDir)();
-      expect(logOutput.logged()).toMatchInlineSnapshot(`
+      expect((logOutput as any).logged()).toMatchInlineSnapshot(`
 package-1
 package-2
 `);
@@ -292,7 +294,7 @@ package-2
       await lernaList(testDir)('--scope', 'package-1', '--include-filtered-dependencies');
 
       // should follow all transitive deps and pass all packages except 7 with no repeats
-      expect(logOutput.logged()).toMatchInlineSnapshot(`
+      expect((logOutput as any).logged()).toMatchInlineSnapshot(`
 package-1
 package-2
 package-3
@@ -307,7 +309,7 @@ package-6
     it('lists globstar-nested packages', async () => {
       const testDir = await initFixture('globstar');
       await lernaList(testDir)();
-      expect(logOutput.logged()).toMatchInlineSnapshot(`
+      expect((logOutput as any).logged()).toMatchInlineSnapshot(`
 globstar
 package-2
 package-4
@@ -320,7 +322,7 @@ package-5
     xit('lists packages under explicitly configured node_modules directories', async () => {
       const testDir = await initFixture('explicit-node-modules');
       await lernaList(testDir)();
-      expect(logOutput.logged()).toMatchInlineSnapshot(`
+      expect((logOutput as any).logged()).toMatchInlineSnapshot(`
 alle-pattern-root
 package-1
 package-2

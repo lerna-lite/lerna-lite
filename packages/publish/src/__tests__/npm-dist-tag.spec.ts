@@ -8,7 +8,8 @@ jest.mock('@lerna-lite/core', () => ({
 import fetch from 'npm-registry-fetch';
 
 // file under test
-const npmDistTag = require('../lib/npm-dist-tag');
+import * as npmDistTag from '../lib/npm-dist-tag';
+import { DistTagOptions } from '../models';
 
 const stubLog = {
   verbose: jest.fn(),
@@ -25,8 +26,8 @@ const baseOptions = Object.freeze({
 
 describe('npmDistTag.add()', () => {
   it('adds a dist-tag for a given package@version', async () => {
-    const opts = { ...baseOptions };
-    const tags = await npmDistTag.add('@scope/some-pkg@1.0.1', 'added-tag', opts);
+    const opts = { ...baseOptions } as unknown as DistTagOptions;
+    const tags = await npmDistTag.add('@scope/some-pkg@1.0.1', 'added-tag', opts, null as any);
 
     expect(tags).toEqual({
       'added-tag': '1.0.1',
@@ -51,8 +52,8 @@ describe('npmDistTag.add()', () => {
       })
     );
 
-    const opts = { ...baseOptions };
-    const tags = await npmDistTag.add('@scope/some-pkg@1.0.1', 'dupe-tag', opts);
+    const opts = { ...baseOptions } as unknown as DistTagOptions;
+    const tags = await npmDistTag.add('@scope/some-pkg@1.0.1', 'dupe-tag', opts, null as any);
 
     expect(tags).toEqual({
       latest: '1.0.0',
@@ -69,8 +70,8 @@ describe('npmDistTag.add()', () => {
       })
     );
 
-    const opts = { ...baseOptions };
-    const tags = await npmDistTag.add('@scope/some-pkg@1.0.1', undefined, opts);
+    const opts = { ...baseOptions } as unknown as DistTagOptions;
+    const tags = await npmDistTag.add('@scope/some-pkg@1.0.1', undefined, opts, null as any);
 
     expect(tags).toEqual({
       latest: '1.0.1',
@@ -84,8 +85,8 @@ describe('npmDistTag.add()', () => {
       })
     );
 
-    const opts = { log: stubLog, tag: 'legacy' };
-    const tags = await npmDistTag.add('@scope/some-pkg@1.0.1', undefined, opts);
+    const opts = { log: stubLog, tag: 'legacy' } as unknown as DistTagOptions;
+    const tags = await npmDistTag.add('@scope/some-pkg@1.0.1', undefined, opts, null as any);
 
     expect(tags).toEqual({
       legacy: '1.0.1',
@@ -102,8 +103,8 @@ describe('npmDistTag.remove()', () => {
       })
     );
 
-    const opts = { ...baseOptions };
-    const tags = await npmDistTag.remove('@scope/some-pkg@1.0.1', 'removed-tag', opts);
+    const opts = { ...baseOptions } as unknown as DistTagOptions;
+    const tags = await npmDistTag.remove('@scope/some-pkg@1.0.1', 'removed-tag', opts, null as any);
 
     expect(tags).not.toHaveProperty('removed-tag');
     expect(fetch).toHaveBeenLastCalledWith(
@@ -115,8 +116,8 @@ describe('npmDistTag.remove()', () => {
   });
 
   it('does not attempt removal of nonexistent tag', async () => {
-    const opts = { ...baseOptions };
-    const tags = await npmDistTag.remove('@scope/some-pkg@1.0.1', 'missing-tag', opts);
+    const opts = { ...baseOptions } as unknown as DistTagOptions;
+    const tags = await npmDistTag.remove('@scope/some-pkg@1.0.1', 'missing-tag', opts, null as any);
 
     expect(tags).toEqual({});
     expect(fetch).not.toHaveBeenCalled();
@@ -134,7 +135,7 @@ describe('npmDistTag.list()', () => {
       })
     );
 
-    const opts = { ...baseOptions };
+    const opts = { ...baseOptions } as unknown as DistTagOptions;
     const tags = await npmDistTag.list('@scope/some-pkg', opts);
 
     expect(tags).toEqual({
@@ -158,7 +159,7 @@ describe('npmDistTag.list()', () => {
       Promise.resolve(null)
     );
 
-    const opts = { ...baseOptions };
+    const opts = { ...baseOptions } as unknown as DistTagOptions;
     const tags = await npmDistTag.list('@scope/some-pkg', opts);
 
     expect(tags).toEqual({});

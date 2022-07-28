@@ -69,7 +69,7 @@ import { getNpmUsername } from '../lib/get-npm-username';
 import { verifyNpmPackageAccess } from '../lib/verify-npm-package-access';
 import { getTwoFactorAuthRequired } from '../lib/get-two-factor-auth-required';
 import { gitCheckout } from '../lib/git-checkout';
-const npmDistTag = require('../lib/npm-dist-tag');
+import * as npmDistTag from '../lib/npm-dist-tag';
 
 const createArgv = (cwd, ...args) => {
   args.unshift('publish');

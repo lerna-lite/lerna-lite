@@ -11,22 +11,20 @@ jest.mock('@lerna-lite/core', () => ({
 }));
 
 // mocked modules
-const { collectUpdates, logOutput } = require('@lerna-lite/core');
+import { collectUpdates, logOutput } from '@lerna-lite/core';
 
 // helpers
 import helpers from '@lerna-test/helpers';
 const initFixture = helpers.initFixtureFactory(__dirname);
-const { loggingOutput } = require('@lerna-test/helpers/logging-output');
+import { loggingOutput } from '@lerna-test/helpers/logging-output';
 import { updateLernaConfig } from '@lerna-test/helpers';
 
 // file under test
+import yargParser from 'yargs-parser';
 import { ChangedCommand } from '../index';
 import { factory } from '../changed-command';
 import cliChangedCommands from '../../../cli/src/cli-commands/cli-changed-commands';
 const lernaChanged = helpers.commandRunner(cliChangedCommands);
-
-// file under test
-const yargParser = require('yargs-parser');
 
 const createArgv = (cwd: string, ...args: string[]) => {
   args.unshift('changed');
@@ -59,11 +57,11 @@ describe('Changed Command', () => {
   });
 
   it('lists changed packages', async () => {
-    collectUpdates.setUpdated(cwd, 'package-2', 'package-3');
+    (collectUpdates as any).setUpdated(cwd, 'package-2', 'package-3');
 
     await factory(createArgv(cwd, ''));
 
-    expect(logOutput.logged()).toMatchInlineSnapshot(`
+    expect((logOutput as any).logged()).toMatchInlineSnapshot(`
 package-2
 package-3
 `);
@@ -72,7 +70,7 @@ package-3
   it('passes --force-publish to update collector', async () => {
     await new ChangedCommand(createArgv(cwd, '--force-publish'));
 
-    expect(logOutput.logged()).toMatchInlineSnapshot(`
+    expect((logOutput as any).logged()).toMatchInlineSnapshot(`
 package-1
 package-2
 package-3
@@ -156,15 +154,15 @@ package-4
   });
 
   it('lists changed private packages with --all', async () => {
-    collectUpdates.setUpdated(cwd, 'package-5');
+    (collectUpdates as any).setUpdated(cwd, 'package-5');
 
     await lernaChanged(cwd)('--all');
 
-    expect(logOutput.logged()).toBe('package-5 (PRIVATE)');
+    expect((logOutput as any).logged()).toBe('package-5 (PRIVATE)');
   });
 
   it('exits non-zero when there are no changed packages', async () => {
-    collectUpdates.setUpdated(cwd);
+    (collectUpdates as any).setUpdated(cwd);
 
     await new ChangedCommand(createArgv(cwd, ''));
 
@@ -177,7 +175,7 @@ package-4
   it('supports all listable flags', async () => {
     await lernaChanged(cwd)('-alp');
 
-    expect(logOutput.logged()).toMatchInlineSnapshot(`
+    expect((logOutput as any).logged()).toMatchInlineSnapshot(`
 __TEST_ROOTDIR__/packages/package-1:package-1:1.0.0
 __TEST_ROOTDIR__/packages/package-2:package-2:1.0.0
 __TEST_ROOTDIR__/packages/package-3:package-3:1.0.0
@@ -187,12 +185,12 @@ __TEST_ROOTDIR__/packages/package-5:package-5:1.0.0:PRIVATE
   });
 
   it('outputs a stringified array of result objects with --json', async () => {
-    collectUpdates.setUpdated(cwd, 'package-2', 'package-3');
+    (collectUpdates as any).setUpdated(cwd, 'package-2', 'package-3');
 
     await lernaChanged(cwd)('--json');
 
     // Output should be a parseable string
-    const jsonOutput = JSON.parse(logOutput.logged());
+    const jsonOutput = JSON.parse((logOutput as any).logged());
     expect(jsonOutput).toMatchInlineSnapshot(`
 Array [
   Object {

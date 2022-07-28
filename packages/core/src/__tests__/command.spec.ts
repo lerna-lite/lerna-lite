@@ -5,7 +5,7 @@ import path from 'path';
 import tempy from 'tempy';
 
 // partially mocked
-const childProcess = require('../child-process');
+import * as childProcess from '../child-process';
 
 // normalize concurrency across different environments (localhost, CI, etc)
 jest.spyOn(os, 'cpus').mockImplementation(() => new Array(42));
@@ -34,7 +34,7 @@ describe('core-command', () => {
     }
   });
 
-  childProcess.getChildProcessCount = jest.fn(() => 0);
+  (childProcess as any).getChildProcessCount = jest.fn(() => 0);
 
   // swallow errors when passed in argv
   const onRejected = () => {};
@@ -140,7 +140,7 @@ describe('core-command', () => {
     });
 
     it('waits to resolve when 1 child process active', async () => {
-      childProcess.getChildProcessCount.mockReturnValueOnce(1);
+      (childProcess.getChildProcessCount as jest.Mock).mockReturnValueOnce(1);
 
       await testFactory();
 
@@ -149,7 +149,7 @@ describe('core-command', () => {
     });
 
     it('waits to resolve when 2 child processes active', async () => {
-      childProcess.getChildProcessCount.mockReturnValueOnce(2);
+      (childProcess.getChildProcessCount as jest.Mock).mockReturnValueOnce(2);
 
       await testFactory();
 

@@ -7,18 +7,18 @@ jest.mock('../lib/has-tags');
 jest.mock('../lib/make-diff-predicate');
 
 // mocked modules
-const { describeRefSync } = require('../../describe-ref');
-const { hasTags } = require('../lib/has-tags');
-const { makeDiffPredicate } = require('../lib/make-diff-predicate');
+import { describeRefSync } from '../../describe-ref';
+import { hasTags } from '../lib/has-tags';
+import { makeDiffPredicate } from '../lib/make-diff-predicate';
 
 // helpers
-const buildGraph = require('../__helpers__/build-graph');
+import buildGraph from '../__helpers__/build-graph';
 
 // file under test
-const { collectUpdates } = require('../collect-updates');
+import { collectUpdates } from '../collect-updates';
 
 // default mock implementations
-describeRefSync.mockReturnValue({
+(describeRefSync as jest.Mock).mockReturnValue({
   lastTagName: 'v1.0.0',
   lastVersion: '1.0.0',
   refCount: '1',
@@ -26,7 +26,7 @@ describeRefSync.mockReturnValue({
   isDirty: false,
 });
 
-hasTags.mockReturnValue(true);
+(hasTags as jest.Mock).mockReturnValue(true);
 
 const changedPackages = new Set();
 const hasDiff = jest
@@ -34,7 +34,7 @@ const hasDiff = jest
   .mockName('hasDiff')
   .mockImplementation((node) => changedPackages.has(node.name));
 
-makeDiffPredicate.mockImplementation(() => hasDiff);
+(makeDiffPredicate as jest.Mock).mockImplementation(() => hasDiff);
 
 // matcher constants
 const ALL_NODES = Object.freeze([
@@ -171,7 +171,7 @@ describe('collectUpdates()', () => {
   it('skips change detection when current revison is already released', () => {
     changedPackages.add('package-dag-1');
 
-    describeRefSync.mockReturnValueOnce({
+    (describeRefSync as jest.Mock).mockReturnValueOnce({
       refCount: '0',
     });
 
@@ -185,7 +185,7 @@ describe('collectUpdates()', () => {
   });
 
   it('returns all nodes when no tag is found', () => {
-    hasTags.mockReturnValueOnce(false);
+    (hasTags as jest.Mock).mockReturnValueOnce(false);
 
     const graph = buildGraph();
     const pkgs = graph.rawPackageList;
@@ -386,7 +386,7 @@ describe('collectUpdates()', () => {
   it('does not exit early on tagged release when --since <ref> is passed', () => {
     changedPackages.add('package-dag-1');
 
-    describeRefSync.mockReturnValueOnce({
+    (describeRefSync as jest.Mock).mockReturnValueOnce({
       refCount: '0',
     });
 

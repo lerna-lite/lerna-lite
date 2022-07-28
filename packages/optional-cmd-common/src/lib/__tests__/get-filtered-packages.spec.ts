@@ -20,7 +20,7 @@ import path from 'path';
 import yargs from 'yargs/yargs';
 
 // mocked modules
-const { collectUpdates } = require('@lerna-lite/core');
+import { collectUpdates } from '@lerna-lite/core';
 
 // helpers
 import helpers from '@lerna-test/helpers';
@@ -28,8 +28,8 @@ const initFixture = helpers.initFixtureFactory(path.resolve(__dirname, '../..'))
 
 import { Project, PackageGraph } from '@lerna-lite/core';
 
-const { getFilteredPackages } = require('../get-filtered-packages');
-const { filterOptions } = require('../../../../cli/src/filter-options');
+import { getFilteredPackages } from '../get-filtered-packages';
+import { filterOptions } from '../../../../cli/src/filter-options';
 
 async function buildGraph(cwd) {
   const packages = await Project.getPackages(cwd);
@@ -72,7 +72,7 @@ test.each`
 `('filters $argv', async ({ argv, matched }) => {
   const packageGraph = await buildGraph(cwd);
   const execOpts = { cwd };
-  const options = parseOptions(...argv);
+  const options: any = parseOptions(...argv);
   options.log = { notice: mockNotice };
 
   const result = await getFilteredPackages(packageGraph, execOpts, options);
@@ -87,7 +87,7 @@ test.each`
 `('errors $argv', async ({ argv }) => {
   const packageGraph = await buildGraph(cwd);
   const execOpts = { cwd };
-  const options = parseOptions(...argv);
+  const options: any = parseOptions(...argv);
   options.log = { notice: mockNotice };
 
   await expect(getFilteredPackages(packageGraph, execOpts, options)).rejects.toThrow(
@@ -103,7 +103,7 @@ test.each`
 `('no errors and no packages $argv', async ({ argv }) => {
   const packageGraph = await buildGraph(cwd);
   const execOpts = { cwd };
-  const options = parseOptions(...argv);
+  const options: any = parseOptions(...argv);
   options.log = { notice: mockNotice };
 
   const result = await getFilteredPackages(packageGraph, execOpts, options);
@@ -113,7 +113,7 @@ test.each`
 test('--since returns all packages if no tag is found', async () => {
   const packageGraph = await buildGraph(cwd);
   const execOpts = { cwd };
-  const options = parseOptions('--since');
+  const options: any = parseOptions('--since');
   options.log = { notice: mockNotice };
 
   const result = await getFilteredPackages(packageGraph, execOpts, options);
@@ -128,11 +128,11 @@ test('--since returns all packages if no tag is found', async () => {
 });
 
 test('--since returns packages updated since the last tag', async () => {
-  collectUpdates.setUpdated(cwd, 'package-2', 'package-3');
+  (collectUpdates as any).setUpdated(cwd, 'package-2', 'package-3');
 
   const packageGraph = await buildGraph(cwd);
   const execOpts = { cwd };
-  const options = parseOptions('--since');
+  const options: any = parseOptions('--since');
   options.log = { notice: mockNotice };
 
   const result = await getFilteredPackages(packageGraph, execOpts, options);
@@ -141,11 +141,11 @@ test('--since returns packages updated since the last tag', async () => {
 });
 
 test('--since <ref> should return packages updated since <ref>', async () => {
-  collectUpdates.setUpdated(cwd, 'package-1', 'package-2', 'package-3');
+  (collectUpdates as any).setUpdated(cwd, 'package-1', 'package-2', 'package-3');
 
   const packageGraph = await buildGraph(cwd);
   const execOpts = { cwd };
-  const options = parseOptions('--since', 'deadbeef');
+  const options: any = parseOptions('--since', 'deadbeef');
   options.log = { notice: mockNotice };
 
   const result = await getFilteredPackages(packageGraph, execOpts, options);
@@ -160,11 +160,11 @@ test('--since <ref> should return packages updated since <ref>', async () => {
 });
 
 test('--scope package-{2,3,4} --since main', async () => {
-  collectUpdates.setUpdated(cwd, 'package-4', 'package-1');
+  (collectUpdates as any).setUpdated(cwd, 'package-4', 'package-1');
 
   const packageGraph = await buildGraph(cwd);
   const execOpts = { cwd };
-  const options = parseOptions('--scope', 'package-{2,3,4}', '--since', 'main');
+  const options: any = parseOptions('--scope', 'package-{2,3,4}', '--since', 'main');
   options.log = { notice: mockNotice };
 
   const result = await getFilteredPackages(packageGraph, execOpts, options);
@@ -182,7 +182,7 @@ test('--scope package-{2,3,4} --since main', async () => {
 test('--exclude-dependents', async () => {
   const packageGraph = await buildGraph(cwd);
   const execOpts = { cwd };
-  const options = parseOptions('--since', 'foo', '--exclude-dependents');
+  const options: any = parseOptions('--since', 'foo', '--exclude-dependents');
   options.log = { notice: mockNotice };
 
   await getFilteredPackages(packageGraph, execOpts, options);
@@ -202,7 +202,7 @@ test('--exclude-dependents conflicts with --include-dependents', async () => {
 test('--include-dependents', async () => {
   const packageGraph = await buildGraph(cwd);
   const execOpts = { cwd };
-  const options = parseOptions('--scope', 'package-1', '--include-dependents');
+  const options: any = parseOptions('--scope', 'package-1', '--include-dependents');
   options.log = { notice: mockNotice };
 
   const result = await getFilteredPackages(packageGraph, execOpts, options);
@@ -214,7 +214,7 @@ test('--include-dependents', async () => {
 test('--no-private', async () => {
   const packageGraph = await buildGraph(cwd);
   const execOpts = { cwd };
-  const options = parseOptions('--scope', 'package-1', 'package-5', '--no-private');
+  const options: any = parseOptions('--scope', 'package-1', 'package-5', '--no-private');
   options.log = { notice: mockNotice };
 
   const result = await getFilteredPackages(packageGraph, execOpts, options);
@@ -226,7 +226,7 @@ test('--no-private', async () => {
 test('--include-dependencies', async () => {
   const packageGraph = await buildGraph(cwd);
   const execOpts = { cwd };
-  const options = parseOptions('--scope', 'package-3', '--include-dependencies');
+  const options: any = parseOptions('--scope', 'package-3', '--include-dependencies');
   options.log = { notice: mockNotice };
 
   const result = await getFilteredPackages(packageGraph, execOpts, options);

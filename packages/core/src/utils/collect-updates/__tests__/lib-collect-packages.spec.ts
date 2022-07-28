@@ -3,12 +3,12 @@
 import { Package } from '../../../package';
 
 // helpers
-const buildGraph = require('../__helpers__/build-graph');
+import buildGraph from '../__helpers__/build-graph';
 
 // file under test
-const { collectPackages } = require('../lib/collect-packages');
+import { collectPackages } from '../lib/collect-packages';
 
-const toNamesList = (collection: Package[]) => Array.from(collection).map((pkg) => pkg.name);
+const toNamesList = (collection: any[]) => Array.from(collection as Package[]).map((pkg) => pkg.name);
 
 test('returns all packages', () => {
   const graph = buildGraph();

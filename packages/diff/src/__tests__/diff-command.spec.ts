@@ -46,7 +46,7 @@ expect.addSnapshotSerializer(require('@lerna-test/helpers/serializers/serialize-
 
 describe('Diff Command', () => {
   // overwrite spawn so we get piped stdout, not inherited
-  coreChildProcess.spawn = jest.fn((...args) => {
+  (coreChildProcess as any).spawn = jest.fn((...args) => {
     // @ts-ignore
     return execa(...args);
   });
@@ -168,7 +168,7 @@ describe('Diff Command', () => {
   it('should error when git diff exits non-zero', async () => {
     const cwd = await initFixture('basic');
 
-    coreChildProcess.spawn.mockImplementationOnce(() => {
+    (coreChildProcess.spawn as jest.Mock).mockImplementationOnce(() => {
       const nonZero = new Error('An actual non-zero, not git diff pager SIGPIPE');
       (nonZero as any).exitCode = 1;
 

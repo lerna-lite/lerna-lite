@@ -2,14 +2,14 @@
 
 jest.mock('../../child-process');
 
-const childProcess = require('../../child-process');
-const { describeRef, describeRefSync } = require('../describe-ref');
+import * as childProcess from '../../child-process';
+import { describeRef, describeRefSync } from '../describe-ref';
 
 const DEFAULT_ARGS = ['describe', '--always', '--long', '--dirty', '--first-parent'];
 
 describe('describeRef()', () => {
   beforeEach(() => {
-    childProcess.exec.mockResolvedValueOnce({ stdout: 'v1.2.3-4-g567890a' });
+    (childProcess.exec as jest.Mock).mockResolvedValueOnce({ stdout: 'v1.2.3-4-g567890a' });
   });
 
   it('resolves parsed metadata', async () => {
@@ -76,7 +76,7 @@ describe('describeRef()', () => {
 
 describe('describeRefSync()', () => {
   beforeEach(() => {
-    childProcess.execSync.mockReturnValueOnce('v1.2.3-4-g567890a');
+    (childProcess.execSync as jest.Mock).mockReturnValueOnce('v1.2.3-4-g567890a');
   });
 
   it('returns parsed metadata', () => {
@@ -143,7 +143,7 @@ describe('describeRefSync()', () => {
 
 describe('parser', () => {
   it('matches independent tags', () => {
-    childProcess.execSync.mockReturnValueOnce('pkg-name@1.2.3-4-g567890a');
+    (childProcess.execSync as jest.Mock).mockReturnValueOnce('pkg-name@1.2.3-4-g567890a');
 
     const result = describeRefSync();
 
@@ -152,7 +152,7 @@ describe('parser', () => {
   });
 
   it('matches independent tags for scoped packages', () => {
-    childProcess.execSync.mockReturnValueOnce('@scope/pkg-name@1.2.3-4-g567890a');
+    (childProcess.execSync as jest.Mock).mockReturnValueOnce('@scope/pkg-name@1.2.3-4-g567890a');
 
     const result = describeRefSync();
 
@@ -161,7 +161,7 @@ describe('parser', () => {
   });
 
   it('matches dirty annotations', () => {
-    childProcess.execSync.mockReturnValueOnce('pkg-name@1.2.3-4-g567890a-dirty');
+    (childProcess.execSync as jest.Mock).mockReturnValueOnce('pkg-name@1.2.3-4-g567890a-dirty');
 
     const result = describeRefSync();
 
@@ -169,7 +169,7 @@ describe('parser', () => {
   });
 
   it('handles non-matching strings safely', () => {
-    childProcess.execSync.mockReturnValueOnce('poopy-pants');
+    (childProcess.execSync as jest.Mock).mockReturnValueOnce('poopy-pants');
 
     const result = describeRefSync();
 
@@ -183,8 +183,8 @@ describe('parser', () => {
   });
 
   it('detects fallback and returns partial metadata', () => {
-    childProcess.execSync.mockReturnValueOnce('a1b2c3d');
-    childProcess.execSync.mockReturnValueOnce('123');
+    (childProcess.execSync as jest.Mock).mockReturnValueOnce('a1b2c3d');
+    (childProcess.execSync as jest.Mock).mockReturnValueOnce('123');
 
     const options = { cwd: 'bar' };
     const result = describeRefSync(options);
@@ -198,8 +198,8 @@ describe('parser', () => {
   });
 
   it('detects dirty fallback and returns partial metadata', () => {
-    childProcess.execSync.mockReturnValueOnce('a1b2c3d-dirty');
-    childProcess.execSync.mockReturnValueOnce('456');
+    (childProcess.execSync as jest.Mock).mockReturnValueOnce('a1b2c3d-dirty');
+    (childProcess.execSync as jest.Mock).mockReturnValueOnce('456');
 
     const result = describeRefSync();
 
@@ -212,7 +212,7 @@ describe('parser', () => {
   });
 
   it('should return metadata for tag names that are sha-like', () => {
-    childProcess.execSync.mockReturnValueOnce('20190104-5-g6fb4e3293');
+    (childProcess.execSync as jest.Mock).mockReturnValueOnce('20190104-5-g6fb4e3293');
 
     const result = describeRefSync();
 

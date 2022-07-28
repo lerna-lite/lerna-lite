@@ -64,7 +64,7 @@ export class InitCommand extends Command<InitCommandOption> {
     }
 
     const rootPkg = this.project.manifest;
-    let targetDependencies: string[];
+    let targetDependencies: { [depName: string]: string };
 
     if (rootPkg.dependencies?.[LERNA_CLI_PKG_NAME]) {
       // lerna is a dependency in the current project

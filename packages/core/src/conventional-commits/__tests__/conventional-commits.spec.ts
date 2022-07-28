@@ -764,10 +764,10 @@ describe('conventional-commits', () => {
       await pkg2.set('changed', 2).serialize();
 
       await gitAdd(cwd, pkg1.manifestLocation);
-      const resultCommit1 = await gitCommit(cwd, 'fix(stuff): changed');
+      const resultCommit1: any = await gitCommit(cwd, 'fix(stuff): changed');
 
       await gitAdd(cwd, pkg2.manifestLocation);
-      const resultCommit2 = await gitCommit(cwd, 'feat(thing): added');
+      const resultCommit2: any = await gitCommit(cwd, 'feat(thing): added');
 
       // update versions
       await pkg1.set('version', '1.0.1').serialize();

@@ -52,11 +52,10 @@ import helpers from '@lerna-test/helpers';
 const initFixture = helpers.initFixtureFactory(__dirname);
 
 // test command
+import yargParser from 'yargs-parser';
 import { PublishCommand } from '../index';
 import cliCommands from '../../../cli/src/cli-commands/cli-publish-commands';
 const lernaPublish = helpers.commandRunner(cliCommands);
-
-const yargParser = require('yargs-parser');
 
 const createArgv = (cwd, ...args) => {
   args.unshift('publish');
