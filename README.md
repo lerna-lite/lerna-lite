@@ -74,6 +74,8 @@ Mainly for the following reasons:
 3. rewrite the lib in TypeScript
 4. replicate a few opened PRs (fixes and features) from Lerna and also add extra features in Lerna-Lite
     - for example we now support the `workspace:` protocol and some `dry-run` options
+5. Lerna v5 is now installing [Nx](https://nx.dev/) as a required dependency, Lerna-Lite **does not**, it remains optional
+    - we did add the `useNx` option into Lerna-Lite but even if [Nx](https://nx.dev/) is nice, it should remain optional.
 
 ### This lib will help you with
 
