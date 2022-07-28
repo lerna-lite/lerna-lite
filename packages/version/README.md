@@ -251,8 +251,9 @@ lerna version --conventional-commits --changelog-include-commits-git-author " (b
 ### `--changelog-include-commits-client-login [msg]`
 Specify if we want to include git commit remote client name (ie GitHub login username), appended to the end of each changelog commit entry, this is only available when using `--conventional-commits` with changelogs enabled. You most also provide 1 of these 2 options [`--create-release <type>`](#--create-release-type) or [`--remote-client <type>`](#--remote-client-type). The default format will be appending the remote client login username at the end of each changelog commit entry, we could also use a custom format by providing the `%a` or `%l` token(s), see examples below.
 
-> Note that this will execute one or more remote API calls to the chosen remote server, which at the moment is only supporting the GitHub client type. This option will also require a valid `GH_TOKEN` with read access permissions to the GitHub API so that it can execute the query to fetch all commit details since the last release, for more info refer to the [`Remote Client Auth Tokens`](#--remote-client-auth-tokens) below.
-> Also note that for this option to work properly, you must make sure that your local commits are in sync with the remote server so that it associate all commits with their respective remote server commits and finally extract the associated remote client user login from them.
+> **Note** that this will execute one or more remote API calls to the chosen remote server, which at the moment is only supporting the GitHub client type. This option will also require a valid `GH_TOKEN` with read access permissions to the GitHub API so that it can execute the query to fetch all commit details since the last release, for more info refer to the [`Remote Client Auth Tokens`](#--remote-client-auth-tokens) below.
+
+> **Note** that for this option to work properly, you must make sure that your local commits are in sync with the remote server so that it associate all commits with their respective remote server commits and finally extract the associated remote client user login from them.
 
 ```sh
 # default format, without any argument
