@@ -1,15 +1,17 @@
-const { Package } = require('../../package');
+import { RawManifest } from '../../models';
+import { Package } from '../../package';
+import { PackageGraphNode } from '../lib/package-graph-node';
 
 // file under test
-const { PackageGraph } = require('../package-graph');
+import { PackageGraph } from '../package-graph';
 
 describe('PackageGraph', () => {
   describe('constructor', () => {
     it('throws an error when duplicate package names are present', () => {
       const pkgs = [
-        new Package({ name: 'pkg-1', version: '1.0.0' }, '/test/pkg-1', '/test'),
-        new Package({ name: 'pkg-2', version: '2.0.0' }, '/test/pkg-2', '/test'),
-        new Package({ name: 'pkg-2', version: '3.0.0' }, '/test/pkg-3', '/test'),
+        new Package({ name: 'pkg-1', version: '1.0.0' } as Package, '/test/pkg-1', '/test'),
+        new Package({ name: 'pkg-2', version: '2.0.0' } as Package, '/test/pkg-2', '/test'),
+        new Package({ name: 'pkg-2', version: '3.0.0' } as Package, '/test/pkg-3', '/test'),
       ];
 
       expect(() => new PackageGraph(pkgs)).toThrowErrorMatchingInlineSnapshot(`
@@ -29,7 +31,7 @@ describe('PackageGraph', () => {
               // non-circular external
               'pkg-2': '^1.0.0',
             },
-          },
+          } as unknown as RawManifest,
           '/test/pkg-1'
         ),
         new Package(
@@ -39,7 +41,7 @@ describe('PackageGraph', () => {
             devDependencies: {
               'pkg-1': '^1.0.0',
             },
-          },
+          } as unknown as RawManifest,
           '/test/pkg-2'
         ),
         new Package(
@@ -49,7 +51,7 @@ describe('PackageGraph', () => {
             dependencies: {
               'pkg-2': '^2.0.0',
             },
-          },
+          } as unknown as RawManifest,
           '/test/pkg-3'
         ),
       ];
@@ -68,7 +70,7 @@ describe('PackageGraph', () => {
           {
             name: 'pkg-1',
             version: '1.0.0',
-          },
+          } as unknown as RawManifest,
           '/test/pkg-1'
         ),
         new Package(
@@ -79,7 +81,7 @@ describe('PackageGraph', () => {
               // non-circular external
               'pkg-1': '^2.0.0',
             },
-          },
+          } as unknown as RawManifest,
           '/test/pkg-2'
         ),
       ];
@@ -97,7 +99,7 @@ describe('PackageGraph', () => {
           {
             name: 'pkg-1',
             version: '1.0.0',
-          },
+          } as unknown as RawManifest,
           '/test/pkg-1'
         ),
         new Package(
@@ -107,7 +109,7 @@ describe('PackageGraph', () => {
             dependencies: {
               'pkg-1': '^1.0.0',
             },
-          },
+          } as unknown as RawManifest,
           '/test/pkg-2'
         ),
         new Package(
@@ -117,7 +119,7 @@ describe('PackageGraph', () => {
             dependencies: {
               'pkg-1': 'workspace:^1.0.0',
             },
-          },
+          } as unknown as RawManifest,
           '/test/pkg-3'
         ),
         new Package(
@@ -127,7 +129,7 @@ describe('PackageGraph', () => {
             dependencies: {
               'pkg-1': 'workspace:*',
             },
-          },
+          } as unknown as RawManifest,
           '/test/pkg-4'
         ),
         new Package(
@@ -140,7 +142,7 @@ describe('PackageGraph', () => {
               'pkg-3': 'workspace:^1.0.0',
               'pkg-4': 'workspace:>=1.0.0',
             },
-          },
+          } as unknown as RawManifest,
           '/test/pkg-5'
         ),
       ];
@@ -165,7 +167,7 @@ describe('PackageGraph', () => {
 
   describe('Node', () => {
     it('proxies Package properties', () => {
-      const pkg = new Package({ name: 'my-pkg', version: '1.2.3' }, '/path/to/my-pkg');
+      const pkg = new Package({ name: 'my-pkg', version: '1.2.3' } as unknown as RawManifest, '/path/to/my-pkg');
       const graph = new PackageGraph([pkg]);
       const node = graph.get('my-pkg');
 
@@ -178,9 +180,9 @@ describe('PackageGraph', () => {
     });
 
     it('exposes graph-specific Map properties', () => {
-      const node = new PackageGraph([new Package({ name: 'my-pkg', version: '4.5.6' }, '/path/to/my-pkg')]).get(
-        'my-pkg'
-      );
+      const node = new PackageGraph([
+        new Package({ name: 'my-pkg', version: '4.5.6' } as unknown as RawManifest, '/path/to/my-pkg'),
+      ]).get('my-pkg');
 
       expect(node).toHaveProperty('externalDependencies', expect.any(Map));
       expect(node).toHaveProperty('localDependencies', expect.any(Map));
@@ -188,18 +190,18 @@ describe('PackageGraph', () => {
     });
 
     it('computes prereleaseId from prerelease version', () => {
-      const node = new PackageGraph([new Package({ name: 'my-pkg', version: '1.2.3-rc.4' }, '/path/to/my-pkg')]).get(
-        'my-pkg'
-      );
+      const node = new PackageGraph([
+        new Package({ name: 'my-pkg', version: '1.2.3-rc.4' } as unknown as RawManifest, '/path/to/my-pkg'),
+      ]).get('my-pkg');
 
       expect(node.prereleaseId).toBe('rc');
     });
 
     describe('.toString()', () => {
       it("returns the node's name", () => {
-        const node = new PackageGraph([new Package({ name: 'pkg-name', version: '0.1.2' }, '/path/to/pkg-name')]).get(
-          'pkg-name'
-        );
+        const node = new PackageGraph([
+          new Package({ name: 'pkg-name', version: '0.1.2' } as unknown as RawManifest, '/path/to/pkg-name'),
+        ]).get('pkg-name');
 
         expect(node.toString()).toBe('pkg-name');
       });
@@ -216,7 +218,7 @@ describe('PackageGraph', () => {
             dependencies: {
               'external-thing': '^1.0.0',
             },
-          },
+          } as unknown as RawManifest,
           '/path/to/package-1'
         ),
         new Package(
@@ -226,7 +228,7 @@ describe('PackageGraph', () => {
             devDependencies: {
               'my-package-1': '^1.0.0',
             },
-          },
+          } as unknown as RawManifest,
           '/path/to/package-2'
         ),
       ];
@@ -245,7 +247,7 @@ describe('PackageGraph', () => {
             devDependencies: {
               'my-package-2': '^1.0.0',
             },
-          },
+          } as unknown as RawManifest,
           '/path/to/package-1'
         ),
         new Package(
@@ -255,7 +257,7 @@ describe('PackageGraph', () => {
             dependencies: {
               'external-thing': 'github:user-foo/project-foo#v1.0.0',
             },
-          },
+          } as unknown as RawManifest,
           '/path/to/package-2'
         ),
       ];
@@ -274,7 +276,7 @@ describe('PackageGraph', () => {
             dependencies: {
               'external-thing': '^1.0.0',
             },
-          },
+          } as unknown as RawManifest,
           '/path/to/package-1'
         ),
         new Package(
@@ -284,7 +286,7 @@ describe('PackageGraph', () => {
             devDependencies: {
               'my-package-1': 'github:user-foo/project-foo#v1.0.0',
             },
-          },
+          } as unknown as RawManifest,
           '/path/to/package-2'
         ),
       ];
@@ -297,8 +299,8 @@ describe('PackageGraph', () => {
   describe('.rawPackageList', () => {
     it('retuns an array of Package instances', () => {
       const pkgs = [
-        new Package({ name: 'pkg-1', version: '1.0.0' }, '/test/pkg-1', '/test'),
-        new Package({ name: 'pkg-2', version: '2.0.0' }, '/test/pkg-2', '/test'),
+        new Package({ name: 'pkg-1', version: '1.0.0' } as unknown as RawManifest, '/test/pkg-1', '/test'),
+        new Package({ name: 'pkg-2', version: '2.0.0' } as unknown as RawManifest, '/test/pkg-2', '/test'),
       ];
       const graph = new PackageGraph(pkgs);
 
@@ -318,7 +320,7 @@ describe('PackageGraph', () => {
         { name: 'pkg-c', version: '1.0.0', dependencies: { 'pkg-d': '1.0.0' } },
         { name: 'pkg-d', version: '1.0.0', dependencies: { 'pkg-c': '1.0.0' } },
         // cycle c <-> d catches nested search.add()
-      ].map((json) => new Package(json, `/test/${json.name}`, '/test'));
+      ].map((json) => new Package(json as unknown as RawManifest, `/test/${json.name}`, '/test'));
       const graph = new PackageGraph(pkgs);
 
       const search = filtered.map((name) => graph.get(name).pkg);
@@ -335,7 +337,7 @@ describe('PackageGraph', () => {
           {
             name: 'pkg-1',
             version: '1.0.0',
-          },
+          } as unknown as RawManifest,
           '/test/pkg-1'
         ),
         new Package(
@@ -345,7 +347,7 @@ describe('PackageGraph', () => {
             dependencies: {
               'pkg-1': '^1.0.0',
             },
-          },
+          } as unknown as RawManifest,
           '/test/pkg-2'
         ),
       ];
@@ -371,7 +373,7 @@ describe('PackageGraph', () => {
             dependencies: {
               'pkg-2': '^2.0.0',
             },
-          },
+          } as unknown as RawManifest,
           '/test/pkg-1'
         ),
         new Package(
@@ -381,7 +383,7 @@ describe('PackageGraph', () => {
             dependencies: {
               'pkg-1': '^1.0.0',
             },
-          },
+          } as unknown as RawManifest,
           '/test/pkg-2'
         ),
       ];
@@ -390,7 +392,7 @@ describe('PackageGraph', () => {
 
       // deepInspect(graph);
       const [paths, nodes] = graph.partitionCycles();
-      graph.pruneCycleNodes(nodes);
+      graph.pruneCycleNodes(nodes as Set<PackageGraphNode>);
       // deepInspect(nodes);
 
       expect(graph.size).toBe(0);
@@ -417,7 +419,7 @@ Set {
       const graph = new PackageGraph(pkgs);
       // deepInspect(graph);
       const [paths, nodes] = graph.partitionCycles();
-      graph.pruneCycleNodes(nodes);
+      graph.pruneCycleNodes(nodes as any);
       // deepInspect(graph);
       // deepInspect(nodes);
 
@@ -430,7 +432,7 @@ Array [
   "standalone",
 ]
 `);
-      expect(Array.from(nodes.keys()).map((node: any) => node.name)).toMatchInlineSnapshot(`
+      expect(Array.from(nodes.keys() as any).map((node: any) => node.name)).toMatchInlineSnapshot(`
 Array [
   "cycle-1",
   "cycle-2",
@@ -523,5 +525,5 @@ function topoPackages() {
       name: 'standalone',
       version: '1.0.0',
     },
-  ].map((json) => new Package(json, `/test/${json.name}`, '/test'));
+  ].map((json) => new Package(json as unknown as RawManifest, `/test/${json.name}`, '/test'));
 }

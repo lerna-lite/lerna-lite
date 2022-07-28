@@ -15,7 +15,7 @@ import cliCommands from '../../../cli/src/cli-commands/cli-init-commands';
 const lernaInit = helpers.commandRunner(cliCommands);
 
 // file under test
-const yargParser = require('yargs-parser');
+import yargParser from 'yargs-parser';
 
 const createArgv = (cwd: string, ...args: string[]) => {
   args.unshift('init');

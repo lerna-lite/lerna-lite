@@ -406,7 +406,7 @@ Object {
 });
 
 test('publish --canary with dirty tree throws error', async () => {
-  (throwIfUncommitted as any).mockImplementationOnce(() => {
+  (throwIfUncommitted as jest.Mock).mockImplementationOnce(() => {
     throw new Error('uncommitted');
   });
 

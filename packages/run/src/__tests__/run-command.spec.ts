@@ -17,7 +17,7 @@ import yargParser from 'yargs-parser';
 import { logOutput, RunCommandOption } from '@lerna-lite/core';
 
 // mocked modules
-const { npmRunScript, npmRunScriptStreaming } = require('../lib/npm-run-script');
+import { npmRunScript, npmRunScriptStreaming } from '../lib/npm-run-script';
 import cliRunCommands from '../../../cli/src/cli-commands/cli-run-commands';
 
 // helpers
@@ -30,7 +30,7 @@ const initFixture = helpers.initFixtureFactory(__dirname);
 
 // assertion helpers
 const ranInPackagesStreaming = (testDir: string) =>
-  npmRunScriptStreaming.mock.calls.reduce((arr, [script, { args, npmClient, pkg, prefix }]) => {
+  (npmRunScriptStreaming as jest.Mock).mock.calls.reduce((arr, [script, { args, npmClient, pkg, prefix }]) => {
     const dir = normalizeRelativeDir(testDir, pkg.location);
     const record = [dir, npmClient, 'run', script, `(prefixed: ${prefix})`].concat(args);
     arr.push(record.join(' '));
@@ -50,8 +50,10 @@ const createArgv = (cwd: string, script?: string, ...args: any[]) => {
 };
 
 describe('RunCommand', () => {
-  npmRunScript.mockImplementation((script, { pkg }) => Promise.resolve({ exitCode: 0, stdout: pkg.name }));
-  npmRunScriptStreaming.mockImplementation(() => Promise.resolve({ exitCode: 0 }));
+  (npmRunScript as jest.Mock).mockImplementation((script, { pkg }) =>
+    Promise.resolve({ exitCode: 0, stdout: pkg.name })
+  );
+  (npmRunScriptStreaming as jest.Mock).mockImplementation(() => Promise.resolve({ exitCode: 0 }));
 
   afterEach(() => {
     process.exitCode = undefined;
@@ -148,7 +150,7 @@ describe('RunCommand', () => {
     });
 
     it('reports script errors with early exit', async () => {
-      npmRunScript.mockImplementationOnce((script, { pkg }) => {
+      (npmRunScript as jest.Mock).mockImplementationOnce((script, { pkg }) => {
         const err: any = new Error(pkg.name);
 
         err.failed = true;
@@ -164,7 +166,7 @@ describe('RunCommand', () => {
     });
 
     it('propagates non-zero exit codes with --no-bail', async () => {
-      npmRunScript.mockImplementationOnce((script, { pkg }) => {
+      (npmRunScript as jest.Mock).mockImplementationOnce((script, { pkg }) => {
         const err: any = new Error(pkg.name);
 
         err.failed = true;

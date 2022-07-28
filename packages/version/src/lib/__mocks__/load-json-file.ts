@@ -1,7 +1,5 @@
-'use strict';
-
-const path = require('path');
-const normalizePath = require('normalize-path');
+import path from 'path';
+import normalizePath from 'normalize-path';
 
 const loadJsonFile = jest.requireActual('load-json-file');
 const asyncRegistry = new Map();

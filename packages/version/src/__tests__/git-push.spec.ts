@@ -54,7 +54,7 @@ test('remote that does not support --atomic', async () => {
   await execa('git', ['tag', 'v4.5.6', '-m', 'v4.5.6'], { cwd });
 
   // the first time the command is executed, simulate remote error
-  (exec as any).mockImplementationOnce(async () => {
+  (exec as jest.Mock).mockImplementationOnce(async () => {
     const stderr = 'fatal: the receiving end does not support --atomic push';
     const error: any = new Error(
       ['Command failed: git push --follow-tags --atomic --no-verify origin main', stderr].join('\n')
@@ -89,7 +89,7 @@ test('remote that does not support --atomic and git stderr redirected to stdout'
   await execa('git', ['tag', 'v4.5.6', '-m', 'v4.5.6'], { cwd });
 
   // the first time the command is executed, simulate remote error
-  (exec as any).mockImplementationOnce(async () => {
+  (exec as jest.Mock).mockImplementationOnce(async () => {
     const stdout = 'fatal: the receiving end does not support --atomic push';
     const error: any = new Error(
       ['Command failed: git push --follow-tags --atomic --no-verify origin main', stdout].join('\n')
@@ -122,7 +122,7 @@ test('git cli that does not support --atomic', async () => {
   await execa('git', ['tag', 'v7.8.9', '-m', 'v7.8.9'], { cwd });
 
   // the first time the command is executed, simulate remote error
-  // (exec as any).mockImplementationOnce(async () => {
+  // (exec as jest.Mock).mockImplementationOnce(async () => {
   //   const stderr = "error: unknown option `atomic'";
   //   const error: any = new Error(
   //     ["Command failed: git push --follow-tags --atomic --no-verify origin master", stderr].join("\n")
@@ -141,7 +141,7 @@ test('git cli that does not support --atomic', async () => {
 test('unexpected git error', async () => {
   const { cwd } = await cloneFixture('root-manifest-only');
 
-  (exec as any).mockImplementationOnce(async () => {
+  (exec as jest.Mock).mockImplementationOnce(async () => {
     const stderr = 'fatal: some unexpected error';
     const error: any = new Error(
       ['Command failed: git push --follow-tags --atomic --no-verify origin main', stderr].join('\n')

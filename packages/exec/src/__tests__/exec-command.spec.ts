@@ -30,10 +30,10 @@ const lernaExec = helpers.commandRunner(cliExecCommands);
 const initFixture = helpers.initFixtureFactory(__dirname);
 
 // assertion helpers
-const calledInPackages = () => (spawn as any).mock.calls.map(([, , opts]) => path.basename(opts.cwd));
+const calledInPackages = () => (spawn as jest.Mock).mock.calls.map(([, , opts]) => path.basename(opts.cwd));
 
 const execInPackagesStreaming = (testDir) =>
-  (spawnStreaming as any).mock.calls.reduce((arr, [command, params, opts, prefix]) => {
+  (spawnStreaming as jest.Mock).mock.calls.reduce((arr, [command, params, opts, prefix]) => {
     const dir = normalizeRelativeDir(testDir, opts.cwd);
     arr.push([dir, command, `(prefix: ${prefix})`].concat(params).join(' '));
     return arr;
@@ -83,7 +83,7 @@ describe('ExecCommand', () => {
     });
 
     it('rejects with execution error', async () => {
-      (spawn as any).mockImplementationOnce((cmd, args) => {
+      (spawn as jest.Mock).mockImplementationOnce((cmd, args) => {
         const boom: any = new Error('execution error');
 
         boom.failed = true;
@@ -105,7 +105,7 @@ describe('ExecCommand', () => {
     });
 
     it('should ignore execution errors with --no-bail', async () => {
-      (spawn as any).mockImplementationOnce((cmd, args, { pkg }) => {
+      (spawn as jest.Mock).mockImplementationOnce((cmd, args, { pkg }) => {
         const boom: any = new Error(pkg.name);
 
         boom.failed = true;

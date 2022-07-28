@@ -1,13 +1,14 @@
 import log from 'npmlog';
 
 import { execSync } from '../../../child-process';
+import { ExecOpts } from '../../../models';
 
 /**
  * Determine if any git tags are reachable.
  * @param {import("@lerna/child-process").ExecOpts} opts
  * @param {string} tagPattern
  */
-export function hasTags(opts, tagPattern: string) {
+export function hasTags(opts?: ExecOpts, tagPattern?: string) {
   log.silly('hasTags', '');
   let result = false;
   const args = ['tag'];

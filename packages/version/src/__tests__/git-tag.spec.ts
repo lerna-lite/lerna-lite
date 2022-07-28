@@ -11,7 +11,7 @@ jest.mock('@lerna-lite/core', () => {
 });
 
 describe('gitTag', () => {
-  (exec as any).mockResolvedValue();
+  (exec as jest.Mock).mockResolvedValue(null);
 
   it('creates an annotated git tag', async () => {
     const tag = 'v1.2.3';

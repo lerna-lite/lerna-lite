@@ -157,7 +157,7 @@ describe('publish from-git', () => {
   });
 
   it('throws an error when uncommitted changes are present', async () => {
-    (throwIfUncommitted as any).mockImplementationOnce(() => {
+    (throwIfUncommitted as jest.Mock).mockImplementationOnce(() => {
       throw new Error('uncommitted');
     });
 

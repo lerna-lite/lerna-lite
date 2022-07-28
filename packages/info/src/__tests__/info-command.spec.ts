@@ -3,7 +3,7 @@ jest.mock('envinfo');
 import path from 'path';
 import envinfo from 'envinfo';
 
-(envinfo.run as any).mockResolvedValue('MOCK_ENVINFO');
+(envinfo.run as jest.Mock).mockResolvedValue('MOCK_ENVINFO');
 
 // mocked modules of @lerna-lite/core
 jest.mock('@lerna-lite/core', () => ({
@@ -11,7 +11,7 @@ jest.mock('@lerna-lite/core', () => ({
   logOutput: jest.requireActual('../../../core/src/__mocks__/output').logOutput,
 }));
 
-const { logOutput } = require('@lerna-lite/core');
+import { logOutput } from '@lerna-lite/core';
 
 // file under test
 import helpers from '@lerna-test/helpers';
@@ -30,7 +30,7 @@ describe('Info Command', () => {
         npmPackages: ['lerna'],
       })
     );
-    expect(logOutput.logged()).toMatch('MOCK_ENVINFO');
+    expect((logOutput as any).logged()).toMatch('MOCK_ENVINFO');
   });
 
   it('outputs result of envinfo() via factory', async () => {
@@ -42,7 +42,7 @@ describe('Info Command', () => {
         npmPackages: ['lerna'],
       })
     );
-    expect(logOutput.logged()).toMatch('MOCK_ENVINFO');
+    expect((logOutput as any).logged()).toMatch('MOCK_ENVINFO');
   });
 
   it('outputs result of envinfo() via InfoCommand class', async () => {
@@ -54,6 +54,6 @@ describe('Info Command', () => {
         npmPackages: ['lerna'],
       })
     );
-    expect(logOutput.logged()).toMatch('MOCK_ENVINFO');
+    expect((logOutput as any).logged()).toMatch('MOCK_ENVINFO');
   });
 });

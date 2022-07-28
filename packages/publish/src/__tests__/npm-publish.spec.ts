@@ -24,10 +24,10 @@ describe('npm-publish', () => {
   const mockTarData = Buffer.from('MOCK');
   const mockManifest = { _normalized: true };
 
-  (fs.readFile as any).mockName('fs.readFile').mockResolvedValue(mockTarData);
-  (publish as any).mockName('libnpmpublish').mockResolvedValue();
-  (readJSON as any).mockName('read-package-json').mockImplementation((file, cb) => cb(null, mockManifest));
-  (runLifecycle as any).mockName('@lerna-lite/core').mockResolvedValue();
+  (fs.readFile as jest.Mock).mockName('fs.readFile').mockResolvedValue(mockTarData);
+  (publish as jest.Mock).mockName('libnpmpublish').mockResolvedValue(null);
+  (readJSON as jest.Mock).mockName('read-package-json').mockImplementation((file, cb) => cb(null, mockManifest));
+  (runLifecycle as jest.Mock).mockName('@lerna-lite/core').mockResolvedValue(null);
 
   const tarFilePath = '/tmp/test-1.10.100.tgz';
   const rootPath = path.normalize('/test');
@@ -67,7 +67,7 @@ describe('npm-publish', () => {
   });
 
   it('overrides pkg.publishConfig.tag when opts.tag is explicitly configured', async () => {
-    (readJSON as any).mockImplementationOnce((file, cb) =>
+    (readJSON as jest.Mock).mockImplementationOnce((file, cb) =>
       cb(null, {
         publishConfig: {
           tag: 'beta',
@@ -92,7 +92,7 @@ describe('npm-publish', () => {
   });
 
   it('respects pkg.publishConfig.tag when opts.defaultTag matches default', async () => {
-    (readJSON as any).mockImplementationOnce((file, cb) =>
+    (readJSON as jest.Mock).mockImplementationOnce((file, cb) =>
       cb(null, {
         publishConfig: {
           tag: 'beta',
@@ -128,7 +128,7 @@ describe('npm-publish', () => {
       rootPath
     );
 
-    (readJSON as any).mockImplementationOnce((file, cb) =>
+    (readJSON as jest.Mock).mockImplementationOnce((file, cb) =>
       cb(null, {
         name: 'fancy-fancy',
         version: '1.10.100',
@@ -150,7 +150,7 @@ describe('npm-publish', () => {
   });
 
   it('merges pkg.publishConfig.registry into options', async () => {
-    (readJSON as any).mockImplementationOnce((file, cb) =>
+    (readJSON as jest.Mock).mockImplementationOnce((file, cb) =>
       cb(null, {
         publishConfig: {
           registry: 'http://pkg-registry.com',
@@ -195,7 +195,7 @@ describe('npm-publish', () => {
   });
 
   it('catches libnpm errors', async () => {
-    (publish as any).mockImplementationOnce(() => {
+    (publish as jest.Mock).mockImplementationOnce(() => {
       const err = new Error('whoopsy') as Error & { code: string; body: any };
       err.code = 'E401';
       err.body = {
@@ -221,7 +221,7 @@ describe('npm-publish', () => {
     expect(log.error).toHaveBeenLastCalledWith('E401', 'doodle');
     expect(process.exitCode).toBe(1);
 
-    (publish as any).mockImplementationOnce(() => {
+    (publish as jest.Mock).mockImplementationOnce(() => {
       const err = new Error('lolwut') as Error & { code: string; errno: any };
       err.code = 'E404';
       err.errno = 9001;

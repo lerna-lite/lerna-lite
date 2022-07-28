@@ -2,7 +2,7 @@
  * @param {boolean|string|string[]} option
  * @returns {Set<string>} A set of package names (or wildcard) derived from option value.
  */
-export function getPackagesForOption(option: boolean | string | string[]) {
+export function getPackagesForOption(option?: boolean | string | string[]) {
   // new Set(null) is equivalent to new Set([])
   // i.e., an empty Set
   let inputs: string[] | null = null;

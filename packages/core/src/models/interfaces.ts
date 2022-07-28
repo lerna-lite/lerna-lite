@@ -32,6 +32,7 @@ export interface DescribeRefOptions {
 /* When annotated release tags are missing */
 export interface DescribeRefFallbackResult {
   isDirty: boolean;
+  lastVersion?: string;
   lastTagName?: string;
   refCount: number | string;
   sha: string;
@@ -257,7 +258,7 @@ export interface UpdateCollectorOptions {
   includeMergedTags?: boolean;
 
   /** Which packages, if any, to always include. Force all packages to be versioned with `true`, or pass a list of globs that match package names */
-  forcePublish?: boolean | string[];
+  forcePublish?: boolean | string | string[];
 
   /** Ref to use when querying git, defaults to most recent annotated tag */
   since?: string;
@@ -267,6 +268,6 @@ export interface UpdateCollectorOptions {
 
   /** are we using conventional commits? */
   conventionalCommits?: boolean;
-  conventionalGraduate?: boolean;
+  conventionalGraduate?: boolean | string;
   excludeDependents?: boolean;
 }

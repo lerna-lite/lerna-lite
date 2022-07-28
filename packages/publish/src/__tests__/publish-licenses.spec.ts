@@ -51,14 +51,14 @@ import { removeTempLicenses } from '../lib/remove-temp-licenses';
 // helpers
 import helpers from '@lerna-test/helpers';
 const initFixture = helpers.initFixtureFactory(__dirname);
-const { loggingOutput } = require('@lerna-test/helpers/logging-output');
+import { loggingOutput } from '@lerna-test/helpers/logging-output';
 
 // test command
 import { PublishCommand } from '../index';
 import cliCommands from '../../../cli/src/cli-commands/cli-publish-commands';
 const lernaPublish = helpers.commandRunner(cliCommands);
 
-const yargParser = require('yargs-parser');
+import yargParser from 'yargs-parser';
 
 const createArgv = (cwd, ...args) => {
   args.unshift('publish');
@@ -84,7 +84,7 @@ describe('licenses', () => {
   });
 
   it('removes all temporary licenses on error', async () => {
-    (packDirectory as any).mockImplementationOnce(() => Promise.reject(new Error('boom')));
+    (packDirectory as jest.Mock).mockImplementationOnce(() => Promise.reject(new Error('boom')));
 
     const cwd = await initFixture('licenses');
     const command = new PublishCommand(createArgv(cwd));
@@ -96,8 +96,8 @@ describe('licenses', () => {
   });
 
   it('does not override original error when removal rejects', async () => {
-    (packDirectory as any).mockImplementationOnce(() => Promise.reject(new Error('boom')));
-    (removeTempLicenses as any).mockImplementationOnce(() => Promise.reject(new Error('shaka-lakka')));
+    (packDirectory as jest.Mock).mockImplementationOnce(() => Promise.reject(new Error('boom')));
+    (removeTempLicenses as jest.Mock).mockImplementationOnce(() => Promise.reject(new Error('shaka-lakka')));
 
     const cwd = await initFixture('licenses');
     const command = new PublishCommand(createArgv(cwd));

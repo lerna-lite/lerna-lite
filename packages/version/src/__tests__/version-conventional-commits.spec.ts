@@ -67,7 +67,7 @@ describe('--conventional-commits', () => {
     ]);
 
     it('should use conventional-commits utility to guess version bump and generate CHANGELOG', async () => {
-      versionBumps.forEach((bump) => (recommendVersion as any).mockResolvedValueOnce(bump));
+      versionBumps.forEach((bump) => (recommendVersion as jest.Mock).mockResolvedValueOnce(bump));
 
       const cwd = await initFixture('independent');
 
@@ -93,7 +93,7 @@ describe('--conventional-commits', () => {
     });
 
     it('should guess prerelease version bumps and generate CHANGELOG', async () => {
-      prereleaseVersionBumps.forEach((bump) => (recommendVersion as any).mockResolvedValueOnce(bump));
+      prereleaseVersionBumps.forEach((bump) => (recommendVersion as jest.Mock).mockResolvedValueOnce(bump));
       const cwd = await initFixture('prerelease-independent');
 
       await new VersionCommand(createArgv(cwd, '--conventional-commits', '--conventional-prerelease'));
@@ -118,7 +118,7 @@ describe('--conventional-commits', () => {
     });
 
     it('should graduate prerelease version bumps and generate CHANGELOG', async () => {
-      versionBumps.forEach((bump) => (recommendVersion as any).mockResolvedValueOnce(bump));
+      versionBumps.forEach((bump) => (recommendVersion as jest.Mock).mockResolvedValueOnce(bump));
       const cwd = await initFixture('prerelease-independent');
 
       await new VersionCommand(createArgv(cwd, '--conventional-commits', '--conventional-graduate'));
@@ -316,7 +316,7 @@ describe('--conventional-commits', () => {
     const cwd = await initFixture('no-interdependencies');
 
     (collectUpdates as any).setUpdated(cwd, 'package-1');
-    (recommendVersion as any).mockResolvedValueOnce('1.1.0');
+    (recommendVersion as jest.Mock).mockResolvedValueOnce('1.1.0');
 
     await new VersionCommand(createArgv(cwd, '--conventional-commits'));
 
@@ -329,7 +329,7 @@ describe('--conventional-commits', () => {
     (writePkg as any).registry.clear();
 
     (collectUpdates as any).setUpdated(cwd, 'package-2');
-    (recommendVersion as any).mockImplementationOnce((pkg) =>
+    (recommendVersion as jest.Mock).mockImplementationOnce((pkg) =>
       Promise.resolve((semver as any).inc(pkg.version, 'patch'))
     );
 

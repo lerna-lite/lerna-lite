@@ -3,7 +3,7 @@ import path from 'path';
 import { Project } from '@lerna-lite/core';
 import helpers from '@lerna-test/helpers';
 const initFixture = helpers.initFixtureFactory(__dirname);
-const { removeTempLicenses } = require('../lib/remove-temp-licenses');
+import { removeTempLicenses } from '../lib/remove-temp-licenses';
 
 describe('removeTempLicenses', () => {
   it('removes license file from target packages', async () => {

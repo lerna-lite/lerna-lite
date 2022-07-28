@@ -157,8 +157,8 @@ describe('run install lockfile-only', () => {
 
     it(`should update project root lockfile by calling client script "pnpm install --package-lock-only"`, async () => {
       jest.spyOn(nodeFs.promises, 'access').mockResolvedValue(true as any);
-      (nodeFs.renameSync as any).mockImplementation(() => true);
-      (core.exec as any).mockImplementation(() => true);
+      (nodeFs.renameSync as jest.Mock).mockImplementation(() => true);
+      (core.exec as jest.Mock).mockImplementation(() => true);
       const execSpy = jest.spyOn(core, 'exec');
       const cwd = await initFixture('lockfile-version2');
 
@@ -172,8 +172,8 @@ describe('run install lockfile-only', () => {
   describe('yarn client', () => {
     it(`should update project root lockfile by calling client script "yarn install --package-lock-only"`, async () => {
       jest.spyOn(nodeFs.promises, 'access').mockResolvedValue(true as any);
-      (nodeFs.renameSync as any).mockImplementation(() => true);
-      (core.exec as any).mockImplementation(() => true);
+      (nodeFs.renameSync as jest.Mock).mockImplementation(() => true);
+      (core.exec as jest.Mock).mockImplementation(() => true);
       const execSpy = jest.spyOn(core, 'exec');
       const cwd = await initFixture('lockfile-version2');
 

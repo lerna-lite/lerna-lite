@@ -7,8 +7,8 @@ import { RunScriptOption, ScriptStreamingOption } from '../../models';
 import { npmRunScript, npmRunScriptStreaming } from '../npm-run-script';
 
 describe('npm-run-script', () => {
-  (exec as any).mockResolvedValue();
-  (spawnStreaming as any).mockResolvedValue();
+  (exec as jest.Mock).mockResolvedValue(null);
+  (spawnStreaming as jest.Mock).mockResolvedValue(null);
 
   describe('npmRunScript()', () => {
     it('runs an npm script in a directory', async () => {

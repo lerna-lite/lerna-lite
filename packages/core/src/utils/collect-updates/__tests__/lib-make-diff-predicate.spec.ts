@@ -1,13 +1,13 @@
 jest.mock('../../../child-process');
 
 // mocked modules
-const childProcesses = require('../../../child-process');
+import * as childProcesses from '../../../child-process';
 
 // file under test
-const { makeDiffPredicate } = require('../lib/make-diff-predicate');
+import { makeDiffPredicate } from '../lib/make-diff-predicate';
 
 function setup(changes) {
-  childProcesses.execSync.mockReturnValueOnce([].concat(changes).join('\n'));
+  (childProcesses.execSync as jest.Mock).mockReturnValueOnce([].concat(changes).join('\n'));
 }
 
 test('git diff call', () => {

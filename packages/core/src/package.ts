@@ -178,19 +178,19 @@ export class Package {
   }
 
   // 'live' collections
-  get dependencies(): string[] {
+  get dependencies(): { [depName: string]: string } {
     return this[PKG].dependencies;
   }
 
-  get devDependencies(): string[] {
+  get devDependencies(): { [depName: string]: string } {
     return this[PKG].devDependencies;
   }
 
-  get optionalDependencies(): string[] {
+  get optionalDependencies(): { [depName: string]: string } {
     return this[PKG].optionalDependencies;
   }
 
-  get peerDependencies(): string[] {
+  get peerDependencies(): { [depName: string]: string } {
     return this[PKG].peerDependencies;
   }
 
@@ -274,7 +274,7 @@ export class Package {
             ].join('')
           );
         }
-        depCollection[depName] = resolved.fetchSpec;
+        depCollection[depName] = resolved.fetchSpec as string;
       }
     }
   }
@@ -334,7 +334,7 @@ export class Package {
           // any other workspace will remain the same in `package.json` file, for example `workspace:^`
           // keep target workspace or bump when it's a workspace semver range (like `workspace:^1.2.3`)
           depCollection[depName] = /^workspace:[*^~]{1}$/.test(workspaceTarget)
-            ? resolved.workspaceTarget // target like `workspace:^` => `workspace:^` (remains untouched in package.json)
+            ? (resolved.workspaceTarget as string) // target like `workspace:^` => `workspace:^` (remains untouched in package.json)
             : `workspace:${depCollection[depName]}`; // range like `workspace:^1.2.3` => `workspace:^1.3.3` (bump minor example)
         }
       }
@@ -364,7 +364,7 @@ export class Package {
    * @param {Boolean} [includePeerDepsFallback] - should we include peerDependencies as fallback?
    * @returns {Array<String>} - array of dependencies that contains the dependency name provided
    */
-  private retrievePackageDependencies(depName: string, includePeerDepsFallback = false): string[] {
+  private retrievePackageDependencies(depName: string, includePeerDepsFallback = false): { [depName: string]: string } {
     // first, try runtime dependencies
     let depCollection = this.dependencies;
 

@@ -27,7 +27,7 @@ describe('GitLabClient', () => {
   describe('createRelease', () => {
     it('requests releases api with release', () => {
       const client = new GitLabClient('http://some/host', 'TOKEN');
-      (fetch as any).mockResolvedValue({ ok: true });
+      (fetch as jest.Mock).mockResolvedValue({ ok: true });
       const release = {
         owner: 'the-owner',
         repo: 'the-repo',

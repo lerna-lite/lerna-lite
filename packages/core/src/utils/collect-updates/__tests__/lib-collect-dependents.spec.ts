@@ -1,10 +1,10 @@
 'use strict';
 
 // helpers
-const buildGraph = require('../__helpers__/build-graph');
+import buildGraph from '../__helpers__/build-graph';
 
 // file under test
-const { collectDependents } = require('../lib/collect-dependents');
+import { collectDependents } from '../lib/collect-dependents';
 
 test('source node (dag)', () => {
   const graph = buildGraph();
