@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [1.9.0](https://github.com/ghiscoding/lerna-lite/compare/v1.8.0...v1.9.0) (2022-07-28)
+
+### Bug Fixes
+
+* **version:** rename option to `--changelog-include-commits-git-author` ([b095637](https://github.com/ghiscoding/lerna-lite/commit/b095637cdf1ce57f7ecaabf06480f86623e0553e)) - by @ghiscoding
+
+### Features
+
+* **publish:** disable legacy `verifyAccess` behavior by default ([#274](https://github.com/ghiscoding/lerna-lite/issues/274)) ([fb1852d](https://github.com/ghiscoding/lerna-lite/commit/fb1852d09470cc6d3f74c9a8af87881686eabc34)) - by @ghiscoding
+* **version:** option to add commit login username on each changelog entry, closes [#248](https://github.com/ghiscoding/lerna-lite/issues/248) ([#272](https://github.com/ghiscoding/lerna-lite/issues/272)) ([2ca0dca](https://github.com/ghiscoding/lerna-lite/commit/2ca0dcaa005cac6306d7d24ffa4d0d8f1a45e320)) - by @ghiscoding
+
 # [1.8.0](https://github.com/ghiscoding/lerna-lite/compare/v1.6.0...v1.8.0) (2022-07-21)
 
 ### Bug Fixes

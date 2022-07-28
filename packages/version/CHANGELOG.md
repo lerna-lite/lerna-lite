@@ -3,6 +3,19 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [1.9.0](https://github.com/ghiscoding/lerna-lite/compare/v1.8.0...v1.9.0) (2022-07-28)
+
+### Bug Fixes
+
+* **version:** inherit stdio for lerna version lifecycle scripts ([#276](https://github.com/ghiscoding/lerna-lite/issues/276)) ([9c3625d](https://github.com/ghiscoding/lerna-lite/commit/9c3625dd06e59fc702b8eef52f2a14daf2095be5)) - by @ghiscoding
+* **version:** make sure we always have regex match array ([#271](https://github.com/ghiscoding/lerna-lite/issues/271)) ([ba34849](https://github.com/ghiscoding/lerna-lite/commit/ba348495cdefc1acbce3cec82b1c68333761cece)) - by @ghiscoding
+* **version:** rename option to `--changelog-include-commits-git-author` ([b095637](https://github.com/ghiscoding/lerna-lite/commit/b095637cdf1ce57f7ecaabf06480f86623e0553e)) - by @ghiscoding
+
+### Features
+
+* **publish:** include all deps in package graph by default, allow no-sort ([#277](https://github.com/ghiscoding/lerna-lite/issues/277)) ([3229e77](https://github.com/ghiscoding/lerna-lite/commit/3229e7765907bf3bcf208baca876054a5a1cec5e)) - by @ghiscoding
+* **version:** option to add commit login username on each changelog entry, closes [#248](https://github.com/ghiscoding/lerna-lite/issues/248) ([#272](https://github.com/ghiscoding/lerna-lite/issues/272)) ([2ca0dca](https://github.com/ghiscoding/lerna-lite/commit/2ca0dcaa005cac6306d7d24ffa4d0d8f1a45e320)) - by @ghiscoding
+
 # [1.8.0](https://github.com/ghiscoding/lerna-lite/compare/v1.6.0...v1.8.0) (2022-07-21)
 
 ### Bug Fixes
