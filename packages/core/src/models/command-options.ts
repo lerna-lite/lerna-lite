@@ -195,6 +195,9 @@ export interface VersionCommandOption {
    * Specify if we want to include the commit author's name, this option is only available when using --conventional-commits with changelogs.
    * We can also optionally provide a custom message or else a default format will be used.
    */
+  changelogIncludeCommitsGitAuthor?: boolean | string;
+
+  /** @deprecated option renamed to `changelogIncludeCommitsGitAuthor` */
   changelogIncludeCommitAuthorFullname?: boolean | string;
 
   /**

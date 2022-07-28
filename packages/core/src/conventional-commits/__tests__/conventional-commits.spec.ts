@@ -415,7 +415,7 @@ describe('conventional-commits', () => {
       `);
     });
 
-    it('supports custom tagPrefix in fixed mode when --changelog-include-commit-author-fullname is provided', async () => {
+    it('supports custom tagPrefix in fixed mode when --changelog-include-commits-git-author is provided', async () => {
       const cwd = await initFixture('fixed');
 
       await gitTag(cwd, 'dragons-are-awesome1.0.0');
@@ -432,11 +432,11 @@ describe('conventional-commits', () => {
 
       const [leafChangelog, rootChangelog] = await Promise.all([
         updateChangelog(pkg1, 'fixed', {
-          changelogIncludeCommitAuthorFullname: true,
+          changelogIncludeCommitsGitAuthor: true,
           tagPrefix: 'dragons-are-awesome',
         }),
         updateChangelog({ location: cwd } as Package, 'root', {
-          changelogIncludeCommitAuthorFullname: true,
+          changelogIncludeCommitsGitAuthor: true,
           tagPrefix: 'dragons-are-awesome',
           version: '1.0.1',
         }),
@@ -469,7 +469,7 @@ describe('conventional-commits', () => {
       await gitCommit(cwd, 'fix: A third commit for our CHANGELOG');
 
       const lastRootChangelog = await updateChangelog({ location: cwd } as Package, 'root', {
-        changelogIncludeCommitAuthorFullname: true,
+        changelogIncludeCommitsGitAuthor: true,
         tagPrefix: 'dragons-are-awesome',
         version: '1.0.2',
       });
@@ -677,7 +677,7 @@ describe('conventional-commits', () => {
 
       const opts = {
         changelogPreset: 'conventional-changelog-angular',
-        changelogIncludeCommitAuthorFullname: true,
+        changelogIncludeCommitsGitAuthor: true,
       };
       const [changelogOne, changelogTwo] = await Promise.all([
         updateChangelog(pkg1, 'independent', opts),
@@ -702,7 +702,7 @@ describe('conventional-commits', () => {
       `);
     });
 
-    it('updates independent changelogs when providing --changelog-include-commit-author-fullname with a custom format when defined', async () => {
+    it('updates independent changelogs when providing --changelog-include-commits-git-author with a custom format when defined', async () => {
       const cwd = await initFixture('independent');
 
       await gitTag(cwd, 'package-1@1.0.0');
@@ -726,7 +726,7 @@ describe('conventional-commits', () => {
 
       const opts = {
         changelogPreset: 'conventional-changelog-angular',
-        changelogIncludeCommitAuthorFullname: ' by (**%a**)',
+        changelogIncludeCommitsGitAuthor: ' by (**%a**)',
       };
       const [changelogOne, changelogTwo] = await Promise.all([
         updateChangelog(pkg1, 'independent', opts),

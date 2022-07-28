@@ -173,14 +173,27 @@ describe('VersionCommand', () => {
       );
     });
 
-    it('throws an error if --changelog-include-commits-client-login and --changelog-include-commit-author-fullname flags are both passed', async () => {
+    it('throws an error if --changelog-include-commits-client-login and --changelog-include-commits-git-author flags are both passed', async () => {
       const testDir = await initFixture('normal');
       const command = new VersionCommand(
-        createArgv(testDir, '--changelog-include-commits-client-login', '--changelog-include-commit-author-fullname')
+        createArgv(testDir, '--changelog-include-commits-client-login', '--changelog-include-commits-git-author')
       );
 
       await expect(command).rejects.toThrow(
-        '--changelog-include-commits-client-login cannot be combined with --changelog-include-commit-author-fullname.'
+        '--changelog-include-commits-client-login cannot be combined with --changelog-include-commits-git-author.'
+      );
+    });
+
+    it('shows a log warning when using previous option --changelog-include-commit-author-fullname since it was renamed.', async () => {
+      const testDir = await initFixture('normal');
+      const command = new VersionCommand(createArgv(testDir, '--changelog-include-commit-author-fullname'));
+      await command;
+      const loggerSpy = jest.spyOn(command.logger, 'warn');
+      command.initialize();
+
+      expect(loggerSpy).toHaveBeenCalledWith(
+        'deprecated',
+        '--changelog-include-commit-author-fullname has been renamed to --changelog-include-commits-git-author.'
       );
     });
 

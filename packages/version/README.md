@@ -76,7 +76,7 @@ Running `lerna version --conventional-commits` without the above flags will rele
     - [`--conventional-commits`](#--conventional-commits)
     - [`--conventional-graduate`](#--conventional-graduate)
     - [`--conventional-prerelease`](#--conventional-prerelease)
-    - [`--changelog-include-commit-author-fullname [msg]`](#--changelog-include-commit-author-fullname-msg) (new)
+    - [`--changelog-include-commits-git-author [msg]`](#--changelog-include-commits-git-author-msg) (new)
     - [`--changelog-include-commits-client-login [msg]`](#--changelog-include-commits-client-login-msg) (new)
     - [`--changelog-header-message <msg>`](#--changelog-header-message-msg) (new)
     - [`--changelog-version-message <msg>`](#--changelog-version-message-msg) (new)
@@ -232,7 +232,7 @@ lerna version --conventional-commits --conventional-prerelease
 
 When run with this flag, `lerna version` will release with prerelease versions the specified packages (comma-separated) or all packages using `*`. Releases all unreleased changes as pre(patch/minor/major/release) by prefixing the version recommendation from `conventional-commits` with `pre`, eg. if present changes include a feature commit, the recommended bump will be `minor`, so this flag will result in a `preminor` release. If changes are present for packages that are not specified (if specifying packages), or for packages that are already in prerelease, those packages will be versioned as they normally would using `--conventional-commits`.
 
-### `--changelog-include-commit-author-fullname [msg]`
+### `--changelog-include-commits-git-author [msg]`
 Specify if we want to include the git commit author's name, appended to the end of each changelog commit entry, this is only available when using `--conventional-commits` with changelogs enabled. The default format will be appending the git commit author name at the end of each commit entry, we could also use a custom format by providing the `%a` token, see examples below.
 
 > **Note** that the author name is the name that was provided in the user's Git config, for more info please refer to [Git Configuration](https://www.git-scm.com/book/en/v2/Customizing-Git-Git-Configuration). Also note, that is **not** the same as for example a GitHub login username, Git does not store such information in its commit history.
@@ -240,11 +240,11 @@ Specify if we want to include the git commit author's name, appended to the end 
 ```sh
 # default format, without any argument
 # will add the author name wrapped in (...) and appended to the commit line entry
-lerna version --conventional-commits --changelog-include-commit-author-fullname
+lerna version --conventional-commits --changelog-include-commits-git-author
 # **deps:** update dependency git-url-parse to v12 ([978bf36](https://github.com/.../978bf36)) (Whitesource Renovate)
 
 # custom format with %a token
-lerna version --conventional-commits --changelog-include-commit-author-fullname " (by _%a_)"
+lerna version --conventional-commits --changelog-include-commits-git-author " (by _%a_)"
 # **deps:** update dependency git-url-parse to v12 ([978bf36](https://github.com/.../978bf36)) (by _Whitesource Renovate_)
 ```
 

@@ -63,9 +63,17 @@ export default {
         requiresArg: true,
         type: 'string',
       },
+      // @deprecated - Option RENAMED
       'changelog-include-commit-author-fullname': {
         describe:
           "Specify if we want to include the commit author's name, this option is only available when using --conventional-commits with changelogs. We can also optionally provide a custom message or else a default format will be used.",
+        group: 'Version Command Options:',
+        requiresArg: false,
+        type: 'string',
+      },
+      'changelog-include-commits-git-author': {
+        describe:
+          "Specify if we want to include the commit git author's name, this option is only available when using --conventional-commits with changelogs. We can also optionally provide a custom message or else a default format will be used.",
         group: 'Version Command Options:',
         requiresArg: false,
         type: 'string',
