@@ -1,8 +1,8 @@
 # Lerna-Lite 🐉
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
-[![PR](https://img.shields.io/badge/PR-Welcome-1abc9c)](https://github.com/ghiscoding/lerna-lite/pulls)
 [![TypeScript](https://img.shields.io/badge/%3C%2F%3E-TypeScript-%230074c1.svg)](http://www.typescriptlang.org/)
+[![Semantic Release](https://img.shields.io/badge/semantic--release-angular-e10079?logo=semantic-release)](https://www.npmjs.com/package/semantic-release)
 [![lerna--lite](https://img.shields.io/badge/maintained%20with-lerna--lite-e137ff)](https://github.com/ghiscoding/lerna-lite)
 
 [![Actions Status](https://github.com/ghiscoding/lerna-lite/workflows/CI/badge.svg)](https://github.com/ghiscoding/lerna-lite/actions)
@@ -65,15 +65,15 @@ For more info on how to setup a workspace, choose the best option for you: [Yarn
 Mainly for the following reasons:
 
 1. original Lerna repo was unmaintained for nearly 2 years (dependencies were out of date)
-   - this is no longer true since Nrwl took over stewardship of Lerna, but the next few points are still valid
-   - keep PRs in sync with original Lerna
+    - this is no longer true since Nrwl took over stewardship of Lerna, but the next few points are still valid
+    - keep PRs in sync with original Lerna
 2. desire to create a smaller lib that is more modular and smaller than the original Lerna
-   - it's smaller since we only copied half of Lerna's commands and a few are totally optional.
-   - we don't need all of Lerna's packages anymore since Workspaces are supported by all package managers.
-   - the main starting goal of this fork was to keep only `version` and `publish` commands in the core and make everything else optional (install and use only what you really need).
+    - it's smaller since we only copied half of Lerna's commands and a few are totally optional.
+    - we don't need all of Lerna's packages anymore since Workspaces are supported by all package managers.
+    - the main starting goal of this fork was to keep only `version` and `publish` commands in the core and make everything else optional (install and use only what you really need).
 3. rewrite the lib in TypeScript
 4. replicate a few opened PRs (fixes and features) from Lerna and also add extra features in Lerna-Lite
-   - for example we now support the `workspace:` protocol and some `dry-run` options
+    - for example we now support the `workspace:` protocol and some `dry-run` options
 
 ### This lib will help you with
 
@@ -216,6 +216,8 @@ You can see a small video of a new version release on this [Release Demo - Wiki]
 - [Lerna Release Workflow](https://github.com/curiousNoob/lerna-release-workflow) - GitHub Template
 
 ## Contributions
+
+[![PR](https://img.shields.io/badge/PR-Welcome-1abc9c)](https://github.com/ghiscoding/lerna-lite/pulls)
 
 Feel free to contribute any Pull Request, PRs are very welcome. 👷👷‍♀️
 
