@@ -40,7 +40,7 @@
 
 ## 📢 Lerna-Lite now supports pnpm/yarn `workspace:` protocol
 
-Are you using this new feature? Please take 30sec. to fill in this 1 question [poll survey 🔘](https://github.com/ghiscoding/lerna-lite/discussions/156) to see which package manager is the most popular and how many of you are taking advantage of this new `workspace:` protocol. Thanks
+Take 30sec. to complete this 1 question [poll survey 🔘](https://github.com/ghiscoding/lerna-lite/discussions/156) if you are using this feature. It's a simple poll to find out which package manager is the most popular with this new `workspace:` protocol feature. Thanks
 
 Lerna-Lite itself is now also using [pnpm workspaces](https://pnpm.io/workspaces) with the `workspace:` protocol as well, woohoo 🎉
 
@@ -97,7 +97,7 @@ Mainly for the following reasons:
 
 ### README Badge
 
-Using Lerna-Lite? Add a README badge to show it off: [![lerna--lite](https://img.shields.io/badge/maintained%20with-lerna--lite-e137ff)](https://github.com/ghiscoding/lerna-lite)
+[![lerna--lite](https://img.shields.io/badge/maintained%20with-lerna--lite-e137ff)](https://github.com/ghiscoding/lerna-lite)
 
 ```sh
 [![lerna--lite](https://img.shields.io/badge/maintained%20with-lerna--lite-e137ff)](https://github.com/ghiscoding/lerna-lite)
@@ -149,7 +149,7 @@ Minimum CLI install to get started with Lerna-Lite, that will give you access to
 | 📑 [version](https://github.com/ghiscoding/lerna-lite/tree/main/packages/version#readme) | create new version for each workspace package |
 | ☁️ [publish](https://github.com/ghiscoding/lerna-lite/tree/main/packages/publish#readme) | publish each workspace package |
 
-**Note:** Lerna-Lite CLI is only including 4 commands by default (shown in previous table), all other commands are **optional commands** and must be installed separately as shown in the table below.
+**Note:** Lerna-Lite CLI is only including 4 built-in commands by default (shown in previous table), all other commands are **optional commands** and must be installed separately as shown in the table below.
 
 ### Separate / Optional Installs
 
@@ -221,9 +221,7 @@ You can see a small video of a new version release on this [Release Demo - Wiki]
 
 [![PR](https://img.shields.io/badge/PR-Welcome-1abc9c)](https://github.com/ghiscoding/lerna-lite/pulls)
 
-Feel free to contribute any Pull Request, PRs are very welcome. 👷👷‍♀️
-
-Also please note that I'm just a simple developer & user of this lib, the same as you are, my knowledge of the library is also probably similar to yours but together we can make it better (and lighter).
+Feel free to contribute any Pull Request. Also please note that I'm just a simple developer & user of this lib, the same as you are, my knowledge of the library is also limited but together we can make it better.
 
 ### Development / Contributions
 
