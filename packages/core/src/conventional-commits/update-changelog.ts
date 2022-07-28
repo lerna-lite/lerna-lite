@@ -21,7 +21,7 @@ export async function updateChangelog(pkg: Package, type: ChangelogType, updateO
 
   const {
     changelogPreset,
-    changelogIncludeCommitAuthorFullname,
+    changelogIncludeCommitsGitAuthor,
     changelogIncludeCommitsClientLogin,
     changelogHeaderMessage = '',
     changelogVersionMessage = '',
@@ -52,7 +52,7 @@ export async function updateChangelog(pkg: Package, type: ChangelogType, updateO
   // we will later extract a defined token from the string, of ">>author=%an<<",
   // and reformat the string to get a commit string that would add (@authorName) to the end of the commit string, ie:
   // **deps:** update all non-major dependencies ([ed1db35](https://github.com/.../ed1db35)) (@Renovate-Bot)
-  if (changelogIncludeCommitAuthorFullname) {
+  if (changelogIncludeCommitsGitAuthor) {
     gitRawCommitsOpts.format = '%B%n-hash-%n%H>>author=%an<<';
   }
 
@@ -92,8 +92,8 @@ export async function updateChangelog(pkg: Package, type: ChangelogType, updateO
     let newEntry = inputEntry;
 
     // include commit author name or commit client login name
-    if (changelogIncludeCommitAuthorFullname) {
-      newEntry = parseChangelogCommitAuthorFullName(inputEntry, changelogIncludeCommitAuthorFullname);
+    if (changelogIncludeCommitsGitAuthor) {
+      newEntry = parseChangelogCommitAuthorFullName(inputEntry, changelogIncludeCommitsGitAuthor);
     } else if (changelogIncludeCommitsClientLogin && commitsSinceLastRelease) {
       newEntry = parseChangelogCommitClientLogin(
         inputEntry,

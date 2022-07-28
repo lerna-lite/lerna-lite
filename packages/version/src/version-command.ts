@@ -249,12 +249,19 @@ export class VersionCommand extends Command<VersionCommandOption> {
       );
     }
 
-    if (this.options.changelogIncludeCommitsClientLogin && this.options.changelogIncludeCommitAuthorFullname) {
+    if (this.options.changelogIncludeCommitsClientLogin && this.options.changelogIncludeCommitsGitAuthor) {
       throw new ValidationError(
         'ENOTALLOWED',
         dedent`
-          --changelog-include-commits-client-login cannot be combined with --changelog-include-commit-author-fullname.
+          --changelog-include-commits-client-login cannot be combined with --changelog-include-commits-git-author.
         `
+      );
+    }
+
+    if (this.options.changelogIncludeCommitAuthorFullname) {
+      this.logger.warn(
+        'deprecated',
+        '--changelog-include-commit-author-fullname has been renamed to --changelog-include-commits-git-author.'
       );
     }
 
@@ -571,7 +578,7 @@ export class VersionCommand extends Command<VersionCommandOption> {
     const {
       conventionalCommits,
       changelogPreset,
-      changelogIncludeCommitAuthorFullname,
+      changelogIncludeCommitsGitAuthor,
       changelogIncludeCommitsClientLogin,
       changelogHeaderMessage,
       changelogVersionMessage,
@@ -642,7 +649,7 @@ export class VersionCommand extends Command<VersionCommandOption> {
           changelogPreset,
           rootPath,
           tagPrefix: this.tagPrefix,
-          changelogIncludeCommitAuthorFullname,
+          changelogIncludeCommitsGitAuthor,
           changelogIncludeCommitsClientLogin,
           changelogHeaderMessage,
           changelogVersionMessage,
@@ -726,7 +733,7 @@ export class VersionCommand extends Command<VersionCommandOption> {
             rootPath,
             tagPrefix: this.tagPrefix,
             version: this.globalVersion,
-            changelogIncludeCommitAuthorFullname,
+            changelogIncludeCommitsGitAuthor,
             changelogIncludeCommitsClientLogin,
             changelogHeaderMessage,
             changelogVersionMessage,
