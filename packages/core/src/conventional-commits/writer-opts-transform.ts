@@ -3,12 +3,12 @@ import { Options as WriterOptions } from 'conventional-changelog-writer';
 import { Commit } from 'conventional-commits-parser';
 import { ChangelogConfig, RemoteCommit } from '../models';
 
+// available formats can be found at Git's url: https://git-scm.com/docs/git-log#_pretty_formats
 const GIT_COMMIT_WITH_AUTHOR_FORMAT =
   '%B%n-hash-%n%H%n-gitTags-%n%d%n-committerDate-%n%ci%n-authorName-%n%an%n-authorEmail-%n%ae%n-gpgStatus-%n%G?%n-gpgSigner-%n%GS';
 
 /**
  * Change the changelog config, we need to update the default format to include commit author name/email,
- * available formats can be found at Git's url: https://git-scm.com/docs/git-log#_pretty_formats
  * Add a `format` to the `conventional-changelog-core` of `gitRawCommitsOpts` will make it available in the commit template
  * https://github.com/conventional-changelog/conventional-changelog/blob/master/packages/git-raw-commits/index.js#L27
  * then no matter which changelog preset is loaded, we'll append the git author name to the commit template
@@ -34,12 +34,9 @@ export function setConfigChangelogCommitGitAuthor(
 }
 
 /**
- * Change the changelog config, we need to update the default format to include commit author name/email,
- * available formats can be found at Git's url: https://git-scm.com/docs/git-log#_pretty_formats
- * We also need to change the transform function and add remote client login (GitHub)
- * Add a `format` to the `conventional-changelog-core` of `gitRawCommitsOpts` will make it available in the commit template
- * https://github.com/conventional-changelog/conventional-changelog/blob/master/packages/git-raw-commits/index.js#L27
- * then no matter which changelog preset is loaded, we'll append the git author name to the commit template
+ * Change the changelog config, we need to update the default format to include remote client login name.
+ * We also need to extend the transform function and add remote client login (GitHub),
+ * and finally no matter which changelog preset is loaded, we'll append the client login to the commit template
  * ie:: **deps:** update all non-major dependencies ([ed1db35](https://github.com/.../ed1db35)) (@renovate-bot)
  * @param {ChangelogConfig} config
  * @param {GitRawCommitsOptions} gitRawCommitsOpts
@@ -65,7 +62,7 @@ export function setConfigChangelogCommitClientLogin(
   writerOpts.commitPartial =
     config.writerOpts.commitPartial!.replace(/\n*$/, '') + ` {{#if @root.linkReferences~}}${extraCommitMsg}{{~/if}}\n`;
 
-  // add commits since last release inte the transform function
+  // add commits since last release into the transform function
   writerOpts.transform = writerOptsTransform.bind(
     null,
     config.writerOpts.transform as (cmt: Commit, ctx: Context) => Commit,
@@ -74,7 +71,7 @@ export function setConfigChangelogCommitClientLogin(
 }
 
 /**
- * Extend the writerOpts transform function from whichever preset config is loaded
+ * Extend the writerOpts transform function from whichever preset config is currently loaded
  * We will execute the original writerOpts transform function, then from it we'll add extra properties to the commit object
  * @param {Transform} originalTransform
  * @param {RemoteCommit[]} commitsSinceLastRelease

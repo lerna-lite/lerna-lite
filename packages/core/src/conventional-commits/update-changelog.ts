@@ -50,7 +50,7 @@ export async function updateChangelog(pkg: Package, type: ChangelogType, updateO
   // NOTE: must pass as positional argument due to weird bug in merge-config
   const gitRawCommitsOpts = Object.assign({}, options.config.gitRawCommitsOpts);
 
-  // are we including commit author name/email or commit client login name
+  // are we including commit author name/email or remote client login name
   if (changelogIncludeCommitsGitAuthor) {
     setConfigChangelogCommitGitAuthor(config, gitRawCommitsOpts, writerOpts, changelogIncludeCommitsGitAuthor);
   } else if (changelogIncludeCommitsClientLogin && commitsSinceLastRelease) {
@@ -104,7 +104,7 @@ export async function updateChangelog(pkg: Package, type: ChangelogType, updateO
     const content = [changelogHeader, changelogVersion, newEntry, changelogContents]
       .join(BLANK_LINE)
       .trim()
-      .replace(/[\r\n]{2,}/gm, '\n\n');
+      .replace(/[\r\n]{2,}/gm, '\n\n'); // conventional-changelog adds way too many extra line breaks, let's remove a few of them
 
     return fs.writeFile(changelogFileLoc, content + EOL).then(() => {
       log.verbose(type, 'wrote', changelogFileLoc);
