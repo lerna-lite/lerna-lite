@@ -233,11 +233,13 @@ lerna version --conventional-commits --conventional-prerelease
 When run with this flag, `lerna version` will release with prerelease versions the specified packages (comma-separated) or all packages using `*`. Releases all unreleased changes as pre(patch/minor/major/release) by prefixing the version recommendation from `conventional-commits` with `pre`, eg. if present changes include a feature commit, the recommended bump will be `minor`, so this flag will result in a `preminor` release. If changes are present for packages that are not specified (if specifying packages), or for packages that are already in prerelease, those packages will be versioned as they normally would using `--conventional-commits`.
 
 ### `--changelog-include-commits-git-author [msg]`
-Specify if we want to include the git commit author's name, appended to the end of each changelog commit entry, this is only available when using `--conventional-commits` with changelogs enabled. The default format will be appending the git commit author name at the end of each commit entry wrapped in `()`, we could also use a custom format by providing any of these tokens (`%a`, `%e`), see examples below.
-- `%a`: git author name (ie: "Whitesource Renovate")
-- `%e`: git author email (ie: "bot@renovateapp.com")
+Specify if we want to include the git commit author's name to the end of each changelog commit entry and wrapped in `(...)`. You could also provide a custom format by using any of these tokens (`%a`, `%e`), see examples below.
+- `%a`: git author name, ie: ("Whitesource Renovate")
+- `%e`: git author email, ie: ("bot@renovateapp.com")
 
-> **Note** the author name is the name that configured in user's git, for more info please refer to [Git Configuration](https://www.git-scm.com/book/en/v2/Customizing-Git-Git-Configuration). Also note, that is **not** the same as for example a GitHub login username, Git does not store such information in its commit history. If you really want the login, then use the next option shown below.
+This option is only available when using `--conventional-commits` with changelogs enabled.
+
+> **Note** the author name is what the user has configured in git, for more info please refer to [Git Configuration](https://www.git-scm.com/book/en/v2/Customizing-Git-Git-Configuration). Also note, that is **not** the same as a remote client GitHub login username, Git does not store such information in its commit history, for that you will want to use the next option shown below.
 
 ```sh
 # default format, without any argument
@@ -250,18 +252,22 @@ lerna version --conventional-commits --changelog-include-commits-git-author " (b
 # **deps:** update dependency git-url-parse to v12 ([978bf36](https://github.com/.../978bf36)) (by _Whitesource Renovate_)
 
 lerna version --conventional-commits --changelog-include-commits-client-login " by %a (%e)" --remote-client github
-# **deps:** update dependency git-url-parse to v12 ([978bf36](https://github.com/.../978bf36)) by Renovate Bot (bot@renovateapp.com)
+# **deps:** update dependency git-url-parse to v12 ([978bf36](https://github.com/.../978bf36)) by _Whitesource Renovate (bot@renovateapp.com)
 ```
 
+> We recommend you first try it with the `--git-dry-run` option so that you can validate your remote client access and inspect the changelog output. Make sure to revert your changes once you're satisfied with the output.
+
 ### `--changelog-include-commits-client-login [msg]`
-Specify if we want to include commit remote client login (ie GitHub login username), appended to the end of each changelog commit entry, this is only available when using `--conventional-commits` with changelogs enabled. You most also provide 1 of these 2 options [`--create-release <type>`](#--create-release-type) or [`--remote-client <type>`](#--remote-client-type). The default format will be appending the remote client login username at the end of each changelog commit entry wrapped in `()`, we could also use a custom format by providing any of these tokens (`%l`, `%a`, `%e`), see examples below.
-- `%a`: git author name (ie: "Whitesource Renovate")
-- `%e`: git author email (ie: "bot@renovateapp.com")
-- `%l`: remote client login (ie: "@renovate-bot")
+Specify if we want to include commit remote client login (ie GitHub login username) to the end of each changelog commit entry and wrapped in `(@...)`. You could also provide a custom format by using any of these tokens (`%l`, `%a`, `%e`), see examples below.
+- `%l`: remote client login, ie ("@renovate-bot")
+- `%a`: git author name, ie: ("Whitesource Renovate")
+- `%e`: git author email, ie: ("bot@renovateapp.com")
 
-> **Note** this will execute one or more remote API calls to the chosen remote server, which at the moment is only supporting the GitHub client type. This option will also require a valid `GH_TOKEN` with read access permissions to the GitHub API so that it can execute the query to fetch all commit details since the last release, for more info refer to the [`Remote Client Auth Tokens`](#--remote-client-auth-tokens) below.
+This option is only available when using `--conventional-commits` with changelogs enabled. You must also provide 1 of these 2 options [`--create-release <type>`](#--create-release-type) or [`--remote-client <type>`](#--remote-client-type)
 
-> **Note** for this option to work properly, you must make sure that your local commits are in sync with the remote server so that it can associate all commits with their respective remote server commits and then extract the associated remote client user login from them.
+> **Note** this will execute one or more client remote API calls (GH is limited to 100 per query), which at the moment is only supporting the GitHub client type. This option will also require a valid `GH_TOKEN` with read access permissions to the GitHub API so that it can execute the query to fetch all commit details since the last release, for more info refer to the [`Remote Client Auth Tokens`](#--remote-client-auth-tokens) below.
+
+> **Note** for this option to work properly, you must make sure that your local commits, on the current branch, are in sync with the remote server. It will then try to match all commits with their respective remote server commits and from there extract their associated remote client user login.
 
 ```sh
 # default format, without any argument
@@ -274,7 +280,7 @@ lerna version --conventional-commits --changelog-include-commits-client-login " 
 # **deps:** update dependency git-url-parse to v12 ([978bf36](https://github.com/.../978bf36)) by @renovate-bot
 
 lerna version --conventional-commits --changelog-include-commits-client-login " by @%l, %a (%e)" --remote-client github
-# **deps:** update dependency git-url-parse to v12 ([978bf36](https://github.com/.../978bf36)) by @renovate-bot, Renovate Bot (bot@renovateapp.com)
+# **deps:** update dependency git-url-parse to v12 ([978bf36](https://github.com/.../978bf36)) by @renovate-bot, _Whitesource Renovate (bot@renovateapp.com)
 ```
 
 > We recommend you first try it with the `--git-dry-run` option so that you can validate your remote client access and inspect the changelog output. Make sure to revert your changes once you're satisfied with the output.
