@@ -3,8 +3,8 @@ import path from 'path';
 import { Project } from '../../project';
 
 // helpers
-import helpers, { gitAdd, gitCommit, gitTag } from '@lerna-test/helpers';
-const initFixture = helpers.initFixtureFactory(__dirname);
+import { gitAdd, gitCommit, gitTag, initFixtureFactory } from '@lerna-test/helpers';
+const initFixture = initFixtureFactory(__dirname);
 
 // file under test
 import { recommendVersion, updateChangelog } from '../../conventional-commits';
@@ -12,7 +12,8 @@ import { Package } from '../../package';
 import { GetChangelogConfig } from '../get-changelog-config';
 
 // stabilize changelog commit SHA and datestamp
-expect.addSnapshotSerializer(require('@lerna-test/helpers/serializers/serialize-changelog'));
+import serializeChangelog from '@lerna-test/helpers/serializers/serialize-changelog';
+expect.addSnapshotSerializer(serializeChangelog);
 
 describe('conventional-commits', () => {
   beforeEach(() => {

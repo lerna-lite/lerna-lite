@@ -1,4 +1,5 @@
 import log from 'npmlog';
+
 import { multiLineTrimRight } from './index';
 
 // clear logs between tests

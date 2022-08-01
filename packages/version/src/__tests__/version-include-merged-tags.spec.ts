@@ -21,8 +21,8 @@ import { gitCommit } from '@lerna-test/helpers';
 import { gitMerge } from '@lerna-test/helpers';
 import { gitTag } from '@lerna-test/helpers';
 import { gitAdd } from '@lerna-test/helpers';
-import helpers from '@lerna-test/helpers';
-const initFixture = helpers.initFixtureFactory(__dirname);
+import { initFixtureFactory } from '@lerna-test/helpers';
+const initFixture = initFixtureFactory(__dirname);
 
 // file under test
 import { VersionCommand } from '../version-command';
@@ -39,8 +39,10 @@ expect.addSnapshotSerializer({
 });
 
 // normalize temp directory paths in snapshots
-expect.addSnapshotSerializer(require('@lerna-test/helpers/serializers/serialize-windows-paths'));
-expect.addSnapshotSerializer(require('@lerna-test/helpers/serializers/serialize-tempdir'));
+import serializeTempdir from '@lerna-test/helpers/serializers/serialize-tempdir';
+import serializeWindowsPaths from '@lerna-test/helpers/serializers/serialize-windows-paths';
+expect.addSnapshotSerializer(serializeWindowsPaths);
+expect.addSnapshotSerializer(serializeTempdir);
 
 const createArgv = (cwd, ...args) => {
   args.unshift('version');

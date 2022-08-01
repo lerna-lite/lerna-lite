@@ -46,8 +46,8 @@ import { getUnpublishedPackages } from '../lib/get-unpublished-packages';
 
 // helpers
 import { loggingOutput } from '@lerna-test/helpers/logging-output';
-import helpers from '@lerna-test/helpers';
-const initFixture = helpers.initFixtureFactory(__dirname);
+import { initFixtureFactory } from '@lerna-test/helpers';
+const initFixture = initFixtureFactory(__dirname);
 
 // file under test
 import { PublishCommand } from '../publish-command';

@@ -49,14 +49,14 @@ import { createTempLicenses } from '../lib/create-temp-licenses';
 import { removeTempLicenses } from '../lib/remove-temp-licenses';
 
 // helpers
-import helpers from '@lerna-test/helpers';
-const initFixture = helpers.initFixtureFactory(__dirname);
+import { commandRunner, initFixtureFactory } from '@lerna-test/helpers';
+const initFixture = initFixtureFactory(__dirname);
 import { loggingOutput } from '@lerna-test/helpers/logging-output';
 
 // test command
 import { PublishCommand } from '../index';
 import cliCommands from '../../../cli/src/cli-commands/cli-publish-commands';
-const lernaPublish = helpers.commandRunner(cliCommands);
+const lernaPublish = commandRunner(cliCommands);
 
 import yargParser from 'yargs-parser';
 

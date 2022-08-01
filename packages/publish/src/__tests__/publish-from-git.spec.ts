@@ -40,8 +40,8 @@ import { logOutput, promptConfirmation, PublishCommandOption, throwIfUncommitted
 // helpers
 import { gitTag } from '@lerna-test/helpers';
 import { loggingOutput } from '@lerna-test/helpers/logging-output';
-import helpers from '@lerna-test/helpers';
-const initFixture = helpers.initFixtureFactory(__dirname);
+import { initFixtureFactory } from '@lerna-test/helpers';
+const initFixture = initFixtureFactory(__dirname);
 
 // test command
 import yargParser from 'yargs-parser';

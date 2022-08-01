@@ -46,16 +46,13 @@ import path from 'path';
 import writePkg from 'write-pkg';
 
 // helpers
-import helpers from '@lerna-test/helpers';
-const initFixture = helpers.initFixtureFactory(__dirname);
-import { gitAdd } from '@lerna-test/helpers';
-import { gitTag } from '@lerna-test/helpers';
-import { gitCommit } from '@lerna-test/helpers';
+import { commandRunner, gitAdd, gitCommit, gitTag, initFixtureFactory } from '@lerna-test/helpers';
+const initFixture = initFixtureFactory(__dirname);
 
 // test command
 import { PublishCommand } from '../index';
 import cliCommands from '../../../cli/src/cli-commands/cli-publish-commands';
-const lernaPublish = helpers.commandRunner(cliCommands);
+const lernaPublish = commandRunner(cliCommands);
 
 import yargParser from 'yargs-parser';
 

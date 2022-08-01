@@ -1,14 +1,11 @@
-'use strict';
-
-const path = require('path');
-const normalizePath = require('normalize-path');
+import path from 'path';
+import normalizePath from 'normalize-path';
 
 // tempy creates subdirectories with hexadecimal names that are 32 characters long
 const TEMP_DIR_REGEXP = /([^\s"]*[\\/][0-9a-f]{32})([^\s"]*)/g;
 // the excluded quotes are due to other snapshot serializers mutating the raw input
 
-// expect.addSnapshotSerializer(require("./serialize-tempdir"));
-module.exports = {
+const serializeTempdir = {
   test(val) {
     return typeof val === 'string' && TEMP_DIR_REGEXP.test(val);
   },
@@ -23,3 +20,6 @@ module.exports = {
 function serializeProjectRoot(match, cwd, subPath) {
   return normalizePath(path.join('__TEST_ROOTDIR__', subPath));
 }
+
+export default serializeTempdir;
+module.exports = serializeTempdir;

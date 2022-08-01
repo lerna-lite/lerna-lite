@@ -2,8 +2,8 @@
 
 import { Project } from '@lerna-lite/core';
 import { getPackagesWithoutLicense } from '../lib/get-packages-without-license';
-import helpers from '@lerna-test/helpers';
-const initFixture = helpers.initFixtureFactory(__dirname);
+import { initFixtureFactory } from '@lerna-test/helpers';
+const initFixture = initFixtureFactory(__dirname);
 
 test('getPackagesWithoutLicense', async () => {
   const cwd = await initFixture('licenses');

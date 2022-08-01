@@ -1,8 +1,6 @@
-'use strict';
-
-const normalizeNewline = require('normalize-newline');
-const serializeTempdir = require('./serialize-tempdir');
-const serializeWindowsPaths = require('./serialize-windows-paths');
+import normalizeNewline from 'normalize-newline';
+import serializeTempdir from './serialize-tempdir';
+import serializeWindowsPaths from './serialize-windows-paths';
 // eslint-disable-next-line node/no-unpublished-require
 const LERNA_VERSION = require('../../core/lerna/package.json').version;
 
@@ -31,7 +29,7 @@ function stabilizeString(str) {
  *
  * @see http://facebook.github.io/jest/docs/expect.html#expectaddsnapshotserializerserializer
  */
-module.exports = {
+const serializePlaceholders = {
   test(thing) {
     if (isObject(thing) && isString(thing.lerna)) {
       // object properties only contain versions
@@ -65,3 +63,6 @@ module.exports = {
     return printer(thing, config, indentation, depth, refs);
   },
 };
+
+export default serializePlaceholders;
+module.exports = serializePlaceholders;

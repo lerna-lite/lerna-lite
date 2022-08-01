@@ -5,14 +5,14 @@ import path from 'path';
 import tempy from 'tempy';
 
 // helpers
-import helpers from '@lerna-test/helpers';
-const initFixture = helpers.initFixtureFactory(__dirname);
+import { commandRunner, initFixtureFactory } from '@lerna-test/helpers';
+const initFixture = initFixtureFactory(__dirname);
 
 // file under test
 import { InitCommand } from '../index';
 import { factory } from '../init-command';
 import cliCommands from '../../../cli/src/cli-commands/cli-init-commands';
-const lernaInit = helpers.commandRunner(cliCommands);
+const lernaInit = commandRunner(cliCommands);
 
 // file under test
 import yargParser from 'yargs-parser';

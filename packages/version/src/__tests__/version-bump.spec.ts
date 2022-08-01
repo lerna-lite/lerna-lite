@@ -26,14 +26,14 @@ import yargParser from 'yargs-parser';
 import { promptSelectOne } from '@lerna-lite/core';
 
 // helpers
-import helpers from '@lerna-test/helpers';
-const initFixture = helpers.initFixtureFactory(path.resolve(__dirname, '../../../publish/src/__tests__'));
+import { commandRunner, initFixtureFactory } from '@lerna-test/helpers';
+const initFixture = initFixtureFactory(path.resolve(__dirname, '../../../publish/src/__tests__'));
 import { getCommitMessage } from '@lerna-test/helpers';
 
 // test command
 import { factory, VersionCommand } from '../version-command';
 import cliCommands from '../../../cli/src/cli-commands/cli-version-commands';
-const lernaVersion = helpers.commandRunner(cliCommands);
+const lernaVersion = commandRunner(cliCommands);
 
 const createArgv = (cwd, ...args) => {
   args.unshift('version');

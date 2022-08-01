@@ -44,14 +44,22 @@ import { remoteBranchExists } from '../lib/remote-branch-exists';
 
 // helpers
 import { loggingOutput } from '@lerna-test/helpers/logging-output';
-import helpers, { getCommitMessage, gitAdd, gitCommit, gitTag, showCommit } from '@lerna-test/helpers';
+import {
+  commandRunner,
+  getCommitMessage,
+  gitAdd,
+  gitCommit,
+  gitTag,
+  initFixtureFactory,
+  showCommit,
+} from '@lerna-test/helpers';
 
 // test command
 import { VersionCommand } from '../version-command';
 import { loadPackageLockFileWhenExists } from '../lib/update-lockfile-version';
 import cliCommands from '../../../cli/src/cli-commands/cli-version-commands';
-const lernaVersion = helpers.commandRunner(cliCommands);
-const initFixture = helpers.initFixtureFactory(path.resolve(__dirname, '../../../publish/src/__tests__'));
+const lernaVersion = commandRunner(cliCommands);
+const initFixture = initFixtureFactory(path.resolve(__dirname, '../../../publish/src/__tests__'));
 
 // file under test
 import yargParser from 'yargs-parser';
@@ -88,7 +96,8 @@ const listDirty = (cwd) =>
   );
 
 // stabilize commit SHA
-expect.addSnapshotSerializer(require('@lerna-test/helpers/serializers/serialize-git-sha'));
+import gitSHA from '@lerna-test/helpers/serializers/serialize-git-sha';
+expect.addSnapshotSerializer(gitSHA);
 
 describe('VersionCommand', () => {
   describe('normal mode', () => {

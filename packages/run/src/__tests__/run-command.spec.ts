@@ -21,12 +21,10 @@ import { npmRunScript, npmRunScriptStreaming } from '../lib/npm-run-script';
 import cliRunCommands from '../../../cli/src/cli-commands/cli-run-commands';
 
 // helpers
-import helpers from '@lerna-test/helpers';
-import { loggingOutput } from '@lerna-test/helpers/logging-output';
-import { normalizeRelativeDir } from '@lerna-test/helpers';
 import { factory, RunCommand } from '../run-command';
-const lernaRun = helpers.commandRunner(cliRunCommands);
-const initFixture = helpers.initFixtureFactory(__dirname);
+import { commandRunner, initFixtureFactory, loggingOutput, normalizeRelativeDir } from '@lerna-test/helpers';
+const lernaRun = commandRunner(cliRunCommands);
+const initFixture = initFixtureFactory(__dirname);
 
 // assertion helpers
 const ranInPackagesStreaming = (testDir: string) =>

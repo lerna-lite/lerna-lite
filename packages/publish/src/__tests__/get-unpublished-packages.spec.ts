@@ -7,8 +7,8 @@ import pacote from 'pacote';
 
 // helpers
 import { Project, PackageGraph, FetchConfig } from '@lerna-lite/core';
-import helpers from '@lerna-test/helpers';
-const initFixture = helpers.initFixtureFactory(__dirname);
+import { initFixtureFactory } from '@lerna-test/helpers';
+const initFixture = initFixtureFactory(__dirname);
 
 // file under test
 import { getUnpublishedPackages } from '../lib/get-unpublished-packages';

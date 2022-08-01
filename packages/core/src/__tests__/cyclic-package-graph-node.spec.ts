@@ -1,7 +1,7 @@
 import 'jest-extended';
 import { Project } from '../project';
-import helpers from '@lerna-test/helpers';
-const initFixture = helpers.initFixtureFactory(__dirname);
+import { initFixtureFactory } from '@lerna-test/helpers';
+const initFixture = initFixtureFactory(__dirname);
 
 import { CyclicPackageGraphNode } from '../package-graph/lib/cyclic-package-graph-node';
 import { PackageGraphNode } from '../package-graph';

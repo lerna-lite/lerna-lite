@@ -1,12 +1,9 @@
-'use strict';
-
-const path = require('path');
-const normalizePath = require('normalize-path');
+import path from 'path';
+import normalizePath from 'normalize-path';
 
 const WHACK_WACK = /(\\)([\S]*)/g;
 
-// expect.addSnapshotSerializer(require("./serialize-windows-paths"));
-module.exports = {
+const serializeWindowsPaths = {
   test(val) {
     return typeof val === 'string' && WHACK_WACK.test(val);
   },
@@ -21,3 +18,6 @@ module.exports = {
 function serializeWindowsPath(match, wack, wackPath) {
   return normalizePath(path.join(wack, wackPath));
 }
+
+export default serializeWindowsPaths;
+module.exports = serializeWindowsPaths;

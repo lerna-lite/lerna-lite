@@ -24,14 +24,17 @@ import yargParser from 'yargs-parser';
 import { promptTextInput, promptSelectOne } from '@lerna-lite/core';
 
 // helpers
-import { showCommit } from '@lerna-test/helpers';
-import { gitAdd } from '@lerna-test/helpers';
-import { gitCommit } from '@lerna-test/helpers';
-import { gitInit } from '@lerna-test/helpers';
-import { gitTag } from '@lerna-test/helpers';
-import { getCommitMessage } from '@lerna-test/helpers';
-import helpers from '@lerna-test/helpers';
-const initFixture = helpers.initFixtureFactory(path.resolve(__dirname, '../../../publish/src/__tests__'));
+import {
+  commandRunner,
+  gitAdd,
+  gitCommit,
+  gitInit,
+  gitTag,
+  getCommitMessage,
+  initFixtureFactory,
+  showCommit,
+} from '@lerna-test/helpers';
+const initFixture = initFixtureFactory(path.resolve(__dirname, '../../../publish/src/__tests__'));
 
 import Tacks from 'tacks';
 import tempy from 'tempy';
@@ -41,7 +44,7 @@ const { File, Dir } = Tacks;
 // test command
 import { VersionCommand } from '../version-command';
 import cliCommands from '../../../cli/src/cli-commands/cli-version-commands';
-const lernaVersion = helpers.commandRunner(cliCommands);
+const lernaVersion = commandRunner(cliCommands);
 
 // remove quotes around top-level strings
 expect.addSnapshotSerializer({
@@ -55,7 +58,8 @@ expect.addSnapshotSerializer({
 });
 
 // stabilize commit SHA
-expect.addSnapshotSerializer(require('@lerna-test/helpers/serializers/serialize-changelog'));
+import serializeChangelog from '@lerna-test/helpers/serializers/serialize-changelog';
+expect.addSnapshotSerializer(serializeChangelog);
 
 const createArgv = (cwd, ...args) => {
   args.unshift('version');

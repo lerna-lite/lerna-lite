@@ -13,8 +13,8 @@ import loadJsonFile from 'load-json-file';
 
 // helpers
 import { Project } from '@lerna-lite/core/src/project';
-import helpers from '@lerna-test/helpers';
-const initFixture = helpers.initFixtureFactory(__dirname);
+import { initFixtureFactory } from '@lerna-test/helpers';
+const initFixture = initFixtureFactory(__dirname);
 
 import {
   loadPackageLockFileWhenExists,

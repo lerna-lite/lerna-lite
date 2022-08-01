@@ -1,8 +1,9 @@
 import execa from 'execa';
-import { remoteBranchExists } from '../lib/remote-branch-exists';
 
-import helpers from '@lerna-test/helpers';
-const cloneFixture = helpers.cloneFixtureFactory(__dirname);
+import { remoteBranchExists } from '../lib/remote-branch-exists';
+import { cloneFixtureFactory } from '@lerna-test/helpers';
+
+const cloneFixture = cloneFixtureFactory(__dirname);
 
 test('remoteBranchExists', async () => {
   const { cwd } = await cloneFixture('root-manifest-only');

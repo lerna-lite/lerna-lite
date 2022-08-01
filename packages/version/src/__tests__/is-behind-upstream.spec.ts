@@ -1,7 +1,8 @@
 import execa from 'execa';
 import { isBehindUpstream } from '../lib/is-behind-upstream';
-import helpers from '@lerna-test/helpers';
-const cloneFixture = helpers.cloneFixtureFactory(__dirname);
+import { cloneFixtureFactory } from '@lerna-test/helpers';
+
+const cloneFixture = cloneFixtureFactory(__dirname);
 
 test('isBehindUpstream', async () => {
   const { cwd } = await cloneFixture('root-manifest-only');

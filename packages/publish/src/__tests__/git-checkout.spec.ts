@@ -1,8 +1,8 @@
 import execa from 'execa';
 import fs from 'fs-extra';
 import path from 'path';
-import helpers from '@lerna-test/helpers';
-const initFixture = helpers.initFixtureFactory(__dirname);
+import { initFixtureFactory } from '@lerna-test/helpers';
+const initFixture = initFixtureFactory(__dirname);
 
 import { gitCheckout } from '../lib/git-checkout';
 

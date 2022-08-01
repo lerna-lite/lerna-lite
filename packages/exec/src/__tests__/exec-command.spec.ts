@@ -21,13 +21,13 @@ import { ExecCommandOption, logOutput } from '@lerna-lite/core';
 import { spawn, spawnStreaming } from '@lerna-lite/core';
 
 // helpers
-import helpers from '@lerna-test/helpers';
+import { commandRunner, initFixtureFactory } from '@lerna-test/helpers';
 import { loggingOutput } from '@lerna-test/helpers/logging-output';
 import { normalizeRelativeDir } from '@lerna-test/helpers';
 import { factory, ExecCommand } from '../exec-command';
 import cliExecCommands from '../../../cli/src/cli-commands/cli-exec-commands';
-const lernaExec = helpers.commandRunner(cliExecCommands);
-const initFixture = helpers.initFixtureFactory(__dirname);
+const lernaExec = commandRunner(cliExecCommands);
+const initFixture = initFixtureFactory(__dirname);
 
 // assertion helpers
 const calledInPackages = () => (spawn as jest.Mock).mock.calls.map(([, , opts]) => path.basename(opts.cwd));

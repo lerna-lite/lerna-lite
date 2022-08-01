@@ -21,8 +21,8 @@ import loadJsonFile from 'load-json-file';
 import yargParser from 'yargs-parser';
 
 // helpers
-import helpers from '@lerna-test/helpers';
-const initFixture = helpers.initFixtureFactory(__dirname);
+import { initFixtureFactory } from '@lerna-test/helpers';
+const initFixture = initFixtureFactory(__dirname);
 
 // test command
 import { VersionCommand } from '../version-command';

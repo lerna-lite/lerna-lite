@@ -1,9 +1,9 @@
 import fs from 'fs-extra';
 import path from 'path';
 import { Project } from '@lerna-lite/core';
-import helpers from '@lerna-test/helpers';
-const initFixture = helpers.initFixtureFactory(__dirname);
 import { removeTempLicenses } from '../lib/remove-temp-licenses';
+import { initFixtureFactory } from '@lerna-test/helpers';
+const initFixture = initFixtureFactory(__dirname);
 
 describe('removeTempLicenses', () => {
   it('removes license file from target packages', async () => {

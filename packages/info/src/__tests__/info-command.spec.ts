@@ -14,11 +14,11 @@ jest.mock('@lerna-lite/core', () => ({
 import { logOutput } from '@lerna-lite/core';
 
 // file under test
-import helpers from '@lerna-test/helpers';
 import { InfoCommand } from '../index';
 import { factory } from '../info-command';
 import cliInfoCommands from '../../../cli/src/cli-commands/cli-info-commands';
-const lernaInfo = helpers.commandRunner(cliInfoCommands);
+import { commandRunner } from '@lerna-test/helpers';
+const lernaInfo = commandRunner(cliInfoCommands);
 
 describe('Info Command', () => {
   it('outputs result of envinfo() via CLI', async () => {

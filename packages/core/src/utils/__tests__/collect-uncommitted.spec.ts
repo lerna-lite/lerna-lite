@@ -5,8 +5,8 @@ import chalk from 'chalk';
 // helpers
 import { Project } from '../../project';
 import { gitAdd } from '@lerna-test/helpers';
-import helpers from '@lerna-test/helpers';
-const initFixture = helpers.initFixtureFactory(__dirname);
+import { initFixtureFactory } from '@lerna-test/helpers';
+const initFixture = initFixtureFactory(__dirname);
 
 // file under test
 import { collectUncommitted, collectUncommittedSync } from '../collect-uncommitted';

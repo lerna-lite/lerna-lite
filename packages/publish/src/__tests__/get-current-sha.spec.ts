@@ -1,8 +1,8 @@
 'use strict';
 
 import { getCurrentSHA } from '../lib/get-current-sha';
-import helpers from '@lerna-test/helpers';
-const initFixture = helpers.initFixtureFactory(__dirname);
+import { initFixtureFactory } from '@lerna-test/helpers';
+const initFixture = initFixtureFactory(__dirname);
 
 test('getCurrentSHA', async () => {
   const cwd = await initFixture('root-manifest-only');

@@ -23,8 +23,8 @@ import yargs from 'yargs/yargs';
 import { collectUpdates } from '@lerna-lite/core';
 
 // helpers
-import helpers from '@lerna-test/helpers';
-const initFixture = helpers.initFixtureFactory(path.resolve(__dirname, '../..'));
+import { initFixtureFactory } from '@lerna-test/helpers';
+const initFixture = initFixtureFactory(path.resolve(__dirname, '../..'));
 
 import { Project, PackageGraph } from '@lerna-lite/core';
 

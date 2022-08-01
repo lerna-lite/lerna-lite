@@ -12,8 +12,8 @@ jest.mock('@lerna-lite/core', () => ({
 let coreChildProcess = require('@lerna-lite/core');
 
 // helpers
-import helpers from '@lerna-test/helpers';
-const initFixture = helpers.initFixtureFactory(__dirname);
+import { commandRunner, initFixtureFactory } from '@lerna-test/helpers';
+const initFixture = initFixtureFactory(__dirname);
 import { Project } from '@lerna-lite/core';
 import { gitAdd } from '@lerna-test/helpers';
 import { gitCommit } from '@lerna-test/helpers';
@@ -24,7 +24,7 @@ import { gitTag } from '@lerna-test/helpers';
 import { DiffCommand } from '../index';
 import { factory } from '../diff-command';
 import cliDiffCommands from '../../../cli/src/cli-commands/cli-diff-commands';
-const lernaDiff = helpers.commandRunner(cliDiffCommands);
+const lernaDiff = commandRunner(cliDiffCommands);
 
 // file under test
 import yargParser from 'yargs-parser';
@@ -42,7 +42,8 @@ const createArgv = (cwd: string, ...args: string[]) => {
 };
 
 // stabilize commit SHA
-expect.addSnapshotSerializer(require('@lerna-test/helpers/serializers/serialize-git-sha'));
+import gitSHA from '@lerna-test/helpers/serializers/serialize-git-sha';
+expect.addSnapshotSerializer(gitSHA);
 
 describe('Diff Command', () => {
   // overwrite spawn so we get piped stdout, not inherited

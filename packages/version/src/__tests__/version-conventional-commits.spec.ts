@@ -30,8 +30,8 @@ import { collectUpdates } from '@lerna-lite/core';
 import { recommendVersion, updateChangelog } from '@lerna-lite/core';
 
 // helpers
-import helpers, { showCommit } from '@lerna-test/helpers';
-const initFixture = helpers.initFixtureFactory(path.resolve(__dirname, '../../../publish/src/__tests__'));
+import { initFixtureFactory, showCommit } from '@lerna-test/helpers';
+const initFixture = initFixtureFactory(path.resolve(__dirname, '../../../publish/src/__tests__'));
 
 // test command
 import { VersionCommand } from '../version-command';

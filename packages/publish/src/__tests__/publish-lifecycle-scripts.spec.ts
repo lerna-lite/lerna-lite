@@ -48,13 +48,13 @@ import { packDirectory } from '../lib/pack-directory';
 import { runLifecycle } from '@lerna-lite/core';
 
 // helpers
-import helpers from '@lerna-test/helpers';
-const initFixture = helpers.initFixtureFactory(__dirname);
+import { commandRunner, initFixtureFactory } from '@lerna-test/helpers';
+const initFixture = initFixtureFactory(__dirname);
 import path from 'path';
 
 // test command
 import cliCommands from '../../../cli/src/cli-commands/cli-publish-commands';
-const lernaPublish = helpers.commandRunner(cliCommands);
+const lernaPublish = commandRunner(cliCommands);
 
 describe('lifecycle scripts', () => {
   const npmLifecycleEvent = process.env.npm_lifecycle_event;

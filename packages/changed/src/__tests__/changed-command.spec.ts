@@ -14,8 +14,8 @@ jest.mock('@lerna-lite/core', () => ({
 import { collectUpdates, logOutput } from '@lerna-lite/core';
 
 // helpers
-import helpers from '@lerna-test/helpers';
-const initFixture = helpers.initFixtureFactory(__dirname);
+import { commandRunner, initFixtureFactory } from '@lerna-test/helpers';
+const initFixture = initFixtureFactory(__dirname);
 import { loggingOutput } from '@lerna-test/helpers/logging-output';
 import { updateLernaConfig } from '@lerna-test/helpers';
 
@@ -24,7 +24,7 @@ import yargParser from 'yargs-parser';
 import { ChangedCommand } from '../index';
 import { factory } from '../changed-command';
 import cliChangedCommands from '../../../cli/src/cli-commands/cli-changed-commands';
-const lernaChanged = helpers.commandRunner(cliChangedCommands);
+const lernaChanged = commandRunner(cliChangedCommands);
 
 const createArgv = (cwd: string, ...args: string[]) => {
   args.unshift('changed');
@@ -47,7 +47,8 @@ expect.addSnapshotSerializer({
 });
 
 // normalize temp directory paths in snapshots
-expect.addSnapshotSerializer(require('@lerna-test/helpers/serializers/serialize-tempdir'));
+import serializeTempdir from '@lerna-test/helpers/serializers/serialize-tempdir';
+expect.addSnapshotSerializer(serializeTempdir);
 
 describe('Changed Command', () => {
   let cwd;

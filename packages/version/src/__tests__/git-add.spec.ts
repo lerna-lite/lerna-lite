@@ -4,8 +4,8 @@ import path from 'path';
 import slash from 'slash';
 import { gitAdd } from '../lib/git-add';
 
-import helpers from '@lerna-test/helpers';
-const initFixture = helpers.initFixtureFactory(__dirname);
+import { initFixtureFactory } from '@lerna-test/helpers';
+const initFixture = initFixtureFactory(__dirname);
 
 const getStagedFile = async (cwd) =>
   execa('git', ['diff', '--cached', '--name-only'], { cwd }).then((result) => slash(result.stdout));

@@ -26,14 +26,15 @@ import { gitAdd } from '@lerna-test/helpers';
 import { gitCommit } from '@lerna-test/helpers';
 import { gitTag } from '@lerna-test/helpers';
 import { showCommit } from '@lerna-test/helpers';
-import helpers from '@lerna-test/helpers';
-const initFixture = helpers.initFixtureFactory(path.resolve(__dirname, '../../../publish/src/__tests__'));
+import { initFixtureFactory } from '@lerna-test/helpers';
+const initFixture = initFixtureFactory(path.resolve(__dirname, '../../../publish/src/__tests__'));
 
 // test command
 import { VersionCommand } from '../version-command';
 
 // stabilize commit SHA
-expect.addSnapshotSerializer(require('@lerna-test/helpers/serializers/serialize-git-sha'));
+import gitSHA from '@lerna-test/helpers/serializers/serialize-git-sha';
+expect.addSnapshotSerializer(gitSHA);
 
 const createArgv = (cwd, ...args) => {
   args.unshift('version');

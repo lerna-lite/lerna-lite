@@ -1,10 +1,7 @@
-'use strict';
+import normalizeNewline from 'normalize-newline';
+import gitSHA from './serialize-git-sha';
 
-const normalizeNewline = require('normalize-newline');
-const gitSHA = require('./serialize-git-sha');
-
-// expect.addSnapshotSerializer(require("./serialize-changelog"));
-module.exports = {
+const serializeChangelog = {
   serialize(str) {
     return gitSHA
       .serialize(normalizeNewline(str))
@@ -16,3 +13,6 @@ module.exports = {
     return val != null && typeof val === 'string';
   },
 };
+
+export default serializeChangelog;
+module.exports = serializeChangelog;

@@ -6,7 +6,7 @@ import tempy from 'tempy';
 import fs from 'fs-extra';
 import findUp from 'find-up';
 import path from 'path';
-const { gitAdd, gitCommit, gitInit } = require('./git');
+import { gitAdd, gitCommit, gitInit } from './git';
 
 export function cloneFixtureFactory(startDir: string) {
   const initFixture = initFixtureFactory(startDir);
@@ -45,7 +45,7 @@ export function copyFixture(targetDir: string, fixtureName: string, cwd: string)
 export function initFixtureFactory(startDir: string) {
   return (fixtureName: string, commitMessage: boolean | string = 'Init commit') => {
     const cwd = tempy.directory();
-    let chain = Promise.resolve();
+    let chain: Promise<any> = Promise.resolve();
 
     chain = chain.then(() => process.chdir(cwd));
     chain = chain.then(() => copyFixture(cwd, fixtureName, startDir));
@@ -63,7 +63,7 @@ export function initFixtureFactory(startDir: string) {
 export function initNamedFixtureFactory(startDir: string) {
   return (dirName: string, fixtureName: string, commitMessage: boolean | string = 'Init commit') => {
     const cwd = path.join(tempy.directory(), dirName);
-    let chain = Promise.resolve();
+    let chain: Promise<any> = Promise.resolve();
 
     chain = chain.then(() => fs.ensureDir(cwd));
     chain = chain.then(() => process.chdir(cwd));

@@ -1,7 +1,4 @@
-'use strict';
-
-// expect.addSnapshotSerializer(require("./serialize-git-sha"));
-module.exports = {
+const gitSha = {
   serialize(str) {
     return (
       str
@@ -15,3 +12,6 @@ module.exports = {
     return val != null && typeof val === 'string' && /[0-9a-f]{7,40}/.test(val);
   },
 };
+
+export default gitSha;
+module.exports = gitSha;

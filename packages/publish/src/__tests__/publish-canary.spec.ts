@@ -31,20 +31,17 @@ import { npmPublish as npmPublishMock } from '../lib/__mocks__/npm-publish';
 import { promptConfirmation, PublishCommandOption, throwIfUncommitted } from '@lerna-lite/core';
 
 // helpers
-import { gitAdd } from '@lerna-test/helpers';
-import { gitTag } from '@lerna-test/helpers';
-import { gitCommit } from '@lerna-test/helpers';
-import { loggingOutput } from '@lerna-test/helpers/logging-output';
-import helpers from '@lerna-test/helpers';
-const initFixture = helpers.initFixtureFactory(__dirname);
+import { commandRunner, gitAdd, gitTag, gitCommit, initFixtureFactory, loggingOutput } from '@lerna-test/helpers';
+const initFixture = initFixtureFactory(__dirname);
 
 // test command
 import { factory, PublishCommand } from '../index';
 import cliCommands from '../../../cli/src/cli-commands/cli-publish-commands';
-const lernaPublish = helpers.commandRunner(cliCommands);
+const lernaPublish = commandRunner(cliCommands);
 
 // stabilize commit SHA
-expect.addSnapshotSerializer(require('@lerna-test/helpers/serializers/serialize-git-sha'));
+import gitSHA from '@lerna-test/helpers/serializers/serialize-git-sha';
+expect.addSnapshotSerializer(gitSHA);
 
 const coreModule = require('@lerna-lite/core');
 

@@ -31,13 +31,13 @@ import { recommendVersion } from '@lerna-lite/core';
 import { logOutput } from '@lerna-lite/core';
 
 // helpers
-import helpers from '@lerna-test/helpers';
-const initFixture = helpers.initFixtureFactory(__dirname);
+import { commandRunner, initFixtureFactory } from '@lerna-test/helpers';
+const initFixture = initFixtureFactory(__dirname);
 
 // test command
 import { VersionCommand } from '../version-command';
 import cliCommands from '../../../cli/src/cli-commands/cli-version-commands';
-const lernaVersion = helpers.commandRunner(cliCommands);
+const lernaVersion = commandRunner(cliCommands);
 
 import yargParser from 'yargs-parser';
 import dedent from 'dedent';

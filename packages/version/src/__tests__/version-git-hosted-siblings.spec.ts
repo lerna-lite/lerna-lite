@@ -22,8 +22,8 @@ import yargParser from 'yargs-parser';
 import writePkg from 'write-pkg';
 
 // helpers
-import helpers from '@lerna-test/helpers';
-const initFixture = helpers.initFixtureFactory(path.resolve(__dirname, '../../../publish/src/__tests__'));
+import { initFixtureFactory } from '@lerna-test/helpers';
+const initFixture = initFixtureFactory(path.resolve(__dirname, '../../../publish/src/__tests__'));
 
 // test command
 import { VersionCommand } from '../version-command';

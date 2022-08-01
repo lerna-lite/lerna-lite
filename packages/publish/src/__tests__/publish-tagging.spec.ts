@@ -48,14 +48,14 @@ import { npmPublish } from '../lib/npm-publish';
 import { add, remove } from '../lib/npm-dist-tag';
 
 // helpers
-import helpers from '@lerna-test/helpers';
-const initFixture = helpers.initFixtureFactory(__dirname);
+import { commandRunner, initFixtureFactory } from '@lerna-test/helpers';
+const initFixture = initFixtureFactory(__dirname);
 
 // test command
 import yargParser from 'yargs-parser';
 import { PublishCommand } from '../index';
 import cliCommands from '../../../cli/src/cli-commands/cli-publish-commands';
-const lernaPublish = helpers.commandRunner(cliCommands);
+const lernaPublish = commandRunner(cliCommands);
 
 const createArgv = (cwd, ...args) => {
   args.unshift('publish');

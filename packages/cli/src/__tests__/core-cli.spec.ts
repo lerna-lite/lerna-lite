@@ -3,8 +3,8 @@
 import { Package, ValidationError } from '@lerna-lite/core';
 import { loggingOutput } from '@lerna-test/helpers/logging-output';
 import lernaCLI from '../lerna-cli';
-import helpers from '@lerna-test/helpers';
-const initFixture = helpers.initFixtureFactory(__dirname);
+import { initFixtureFactory } from '@lerna-test/helpers';
+const initFixture = initFixtureFactory(__dirname);
 
 function prepare(cwd: string) {
   // DRY setup for yargs instance

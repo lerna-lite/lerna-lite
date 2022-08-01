@@ -3,8 +3,8 @@
 import fs from 'fs-extra';
 import path from 'path';
 import { Project } from '@lerna-lite/core';
-import helpers from '@lerna-test/helpers';
-const initFixture = helpers.initFixtureFactory(__dirname);
+import { initFixtureFactory } from '@lerna-test/helpers';
+const initFixture = initFixtureFactory(__dirname);
 import { createTempLicenses } from '../lib/create-temp-licenses';
 
 describe('createTempLicenses', () => {
