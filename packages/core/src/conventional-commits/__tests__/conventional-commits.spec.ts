@@ -98,7 +98,7 @@ describe('conventional-commits', () => {
       const [pkg1, pkg2] = await Project.getPackages(cwd);
       const opts = {
         // sometimes presets return null for the level, with no actual releaseType...
-        changelogPreset: path.resolve(__dirname, '__fixtures__/fixed/scripts/null-preset.js'),
+        changelogPreset: path.resolve(__dirname, '__fixtures__/fixed/scripts/null-preset.ts'),
       };
 
       // make a change in package-1 and package-2
@@ -129,7 +129,7 @@ describe('conventional-commits', () => {
       await gitCommit(cwd, 'feat: changed 1');
 
       const bump = await recommendVersion(pkg1, 'fixed', {
-        changelogPreset: './scripts/local-preset.js',
+        changelogPreset: './scripts/local-preset.ts',
       });
       expect(bump).toBe('1.1.0');
     });
@@ -158,7 +158,7 @@ describe('conventional-commits', () => {
 
       await expect(
         recommendVersion(pkg1, 'fixed', {
-          changelogPreset: './scripts/erroring-preset.js',
+          changelogPreset: './scripts/erroring-preset.ts',
         })
       ).rejects.toThrow('whatBump must be a function');
     });

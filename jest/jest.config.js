@@ -18,8 +18,8 @@ module.exports = {
   moduleFileExtensions: ['json', 'js', 'ts'],
   modulePaths: ['src', '<rootDir>/node_modules'],
   preset: 'ts-jest',
-  setupFiles: ['<rootDir>/jest/silence-logging', '<rootDir>/helpers/npm/set-npm-userconfig'],
-  setupFilesAfterEnv: ['jest-extended/all', '<rootDir>/jest/setup-unit-test-timeout.js'],
+  setupFiles: ['<rootDir>/jest/silence-logging.ts', '<rootDir>/helpers/npm/set-npm-userconfig.ts'],
+  setupFilesAfterEnv: ['jest-extended/all', '<rootDir>/jest/setup-unit-test-timeout.ts'],
   transform: {
     '^.+\\.(ts|html)$': 'ts-jest',
   },

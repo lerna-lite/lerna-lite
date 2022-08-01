@@ -1,7 +1,5 @@
-'use strict';
-
-const fs = require('fs');
-const path = require('path');
+import fs from 'fs';
+import path from 'path';
 
 const distDir = path.resolve('dist');
 const pkg = JSON.parse(fs.readFileSync(path.resolve('package.json'), 'utf8'));

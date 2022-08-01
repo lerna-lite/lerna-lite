@@ -1,5 +1,3 @@
-'use strict';
-
 const { collectPackages, getPackagesForOption } = jest.requireActual('../utils/collect-updates/collect-updates');
 
 // collectUpdates.setUpdated(cwd, packageNames...)

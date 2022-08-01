@@ -1,9 +1,7 @@
-'use strict';
+import globby from 'globby';
+import loadJsonFile from 'load-json-file';
 
-const globby = require('globby');
-const loadJsonFile = require('load-json-file');
-
-exports.loadManifests = function loadManifests(cwd) {
+export function loadManifests(cwd) {
   return globby(
     [
       // all child packages, at any level
@@ -19,4 +17,4 @@ exports.loadManifests = function loadManifests(cwd) {
       followSymbolicLinks: false,
     }
   ).then((files) => Promise.all(files.sort().map((fp) => loadJsonFile(fp))));
-};
+}

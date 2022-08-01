@@ -1,5 +1,3 @@
-'use strict';
-
 import execa from 'execa';
 import npmlog from 'npmlog';
 import path from 'path';
