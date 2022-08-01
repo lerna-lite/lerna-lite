@@ -1,5 +1,3 @@
-'use strict';
-
 const registry = new Set();
 
 const mockPackDirectory = jest.fn((pkg) => {

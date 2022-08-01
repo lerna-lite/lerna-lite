@@ -4,8 +4,8 @@
   "files": [
     "dist"
   ],
-  "main": "dist/index.js",
+  "main": "dist/index.ts",
   "scripts": {
-    "prepare": "node prepare.js"
+    "prepare": "node prepare.ts"
   }
 }

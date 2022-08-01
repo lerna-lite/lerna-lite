@@ -2,9 +2,9 @@
   "name": "tail",
   "version": "4.0.0",
   "files": [
-    "index.js"
+    "index.ts"
   ],
   "scripts": {
-    "postpack": "node postpack.js"
+    "postpack": "node postpack.ts"
   }
 }
