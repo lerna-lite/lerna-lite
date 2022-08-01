@@ -242,7 +242,6 @@ describe('PublishCommand', () => {
       expect(logMessages).toMatchInlineSnapshot(`
         Array [
           "--graph-type=dependencies is deprecated and will be removed in the next major version of lerna-lite. If you have a use-case you feel requires it please open an issue to discuss: https://github.com/lerna/lerna/issues/new/choose",
-          "Providing --no-workspace-strict-match is deprecated and will be removed in future version, we will make \\"workspace:\\" protocol strict matching in every case.",
           "we recommend using --sync-workspace-lock which will sync your lock file via your favorite npm client instead of relying on Lerna-Lite itself to update it.",
         ]
       `);
