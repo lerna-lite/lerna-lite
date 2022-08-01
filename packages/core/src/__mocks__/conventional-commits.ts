@@ -1,8 +1,6 @@
-'use strict';
-
+import path from 'path';
+import semver from 'semver';
 const fs = jest.requireActual('fs-extra');
-const path = require('path');
-const semver = require('semver');
 
 const mockRecommendVersion = jest.fn().mockName('recommendVersion');
 const mockUpdateChangelog = jest.fn().mockName('updateChangelog');

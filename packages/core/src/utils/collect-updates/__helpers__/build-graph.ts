@@ -1,9 +1,5 @@
-'use strict';
-
 // helpers
-const { Package, PackageGraph } = require('../../../index');
-
-module.exports = buildGraph;
+import { Package, PackageGraph } from '../../../index';
 
 function buildGraph(mapPackages = (pkg) => pkg) {
   // cat __fixtures__/toposort/packages/*/package.json
@@ -75,3 +71,6 @@ function buildGraph(mapPackages = (pkg) => pkg) {
 
   return new PackageGraph(packages);
 }
+
+export default buildGraph;
+module.exports = buildGraph;

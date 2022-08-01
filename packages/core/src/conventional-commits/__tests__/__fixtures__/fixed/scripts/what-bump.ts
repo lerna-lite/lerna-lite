@@ -1,9 +1,5 @@
-'use strict';
-
-module.exports = whatBump;
-
-function whatBump(commits) {
-  let level = null;
+export default function whatBump(commits) {
+  let level = 2;
   let breakings = 0;
   let features = 0;
 
@@ -11,13 +7,11 @@ function whatBump(commits) {
     if (commit.notes.length > 0) {
       breakings += commit.notes.length;
       level = 0;
-    } else if (commit.type === 'feat') {
+    } else if (commit.type === `feat`) {
       features += 1;
       if (level === 2) {
         level = 1;
       }
-    } else if (commit.type === 'fix') {
-      level = 2;
     }
   });
 
@@ -29,3 +23,5 @@ function whatBump(commits) {
         : `There are ${breakings} BREAKING CHANGES and ${features} features`,
   };
 }
+
+module.exports = whatBump;

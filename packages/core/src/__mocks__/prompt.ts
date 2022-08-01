@@ -1,6 +1,4 @@
-'use strict';
-
-let choiceIndices = [];
+let choiceIndices: number[] = [];
 afterEach(() => {
   choiceIndices = [];
 });
@@ -26,6 +24,6 @@ const semverIndex = new Map(
   ])
 );
 
-mockSelect.chooseBump = (keyword) => {
-  choiceIndices.push(semverIndex.get(keyword));
+(mockSelect as any).chooseBump = (keyword: string) => {
+  choiceIndices.push(semverIndex.get(keyword) as number);
 };

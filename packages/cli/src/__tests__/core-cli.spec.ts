@@ -1,5 +1,3 @@
-'use strict';
-
 import { Package, ValidationError } from '@lerna-lite/core';
 import { loggingOutput } from '@lerna-test/helpers/logging-output';
 import lernaCLI from '../lerna-cli';

@@ -1,10 +1,8 @@
-'use strict';
-
-module.exports = {
+export default {
   transform: (commit, context) => {
     /* eslint-disable no-param-reassign */
     let discard = true;
-    const issues = [];
+    const issues: string[] = [];
 
     commit.notes.forEach((note) => {
       note.title = `BREAKING CHANGES`;
@@ -48,7 +46,7 @@ module.exports = {
       if (url) {
         url = `${url}/issues/`;
         // Issue URLs.
-        commit.subject = commit.subject.replace(/#([0-9]+)/g, (_, issue) => {
+        commit.subject = commit.subject.replace(/#([0-9]+)/g, (_, issue: string) => {
           issues.push(issue);
           return `[#${issue}](${url}${issue})`;
         });

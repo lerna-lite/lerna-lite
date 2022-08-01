@@ -1,5 +1,3 @@
-'use strict';
-
 const releases = new Map();
 
 // keep test data isolated
