@@ -65,8 +65,6 @@ describe('collectUpdates()', () => {
     const graph = buildGraph();
     const pkgs = graph.rawPackageList;
     const execOpts = { cwd: '/test' };
-    // require("console").dir(graph, { compact: false });
-
     const updates = collectUpdates(pkgs, graph, execOpts, {});
 
     expect(updates).toEqual([
@@ -85,7 +83,6 @@ describe('collectUpdates()', () => {
     const graph = buildGraph();
     const pkgs = graph.rawPackageList;
     const execOpts = { cwd: '/test', match: '*@*' };
-    // require("console").dir(graph, { compact: false });
 
     const updates = collectUpdates(pkgs, graph, execOpts, {
       isIndependent: true,

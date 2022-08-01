@@ -57,7 +57,6 @@ describe('PackageGraph', () => {
       ];
       const graph = new PackageGraph(pkgs);
 
-      // deepInspect(graph);
       expect(graph.get('pkg-1').externalDependencies.has('pkg-2')).toBe(true);
       expect(graph.get('pkg-2').localDependents.has('pkg-1')).toBe(false);
       expect(graph.get('pkg-2').localDependencies.has('pkg-1')).toBe(true);
@@ -86,7 +85,6 @@ describe('PackageGraph', () => {
         ),
       ];
       const graph = new PackageGraph(pkgs, 'allDependencies', true);
-      // deepInspect(graph);
       const [pkg1, pkg2] = graph.values();
 
       expect(pkg1.localDependents.has('pkg-2')).toBe(true);
@@ -352,7 +350,6 @@ describe('PackageGraph', () => {
         ),
       ];
       const graph = new PackageGraph(pkgs);
-      // deepInspect(graph);
       const [paths, nodes] = graph.partitionCycles();
       const cycles = graph.collapseCycles();
 
@@ -390,10 +387,8 @@ describe('PackageGraph', () => {
       const graph = new PackageGraph(pkgs);
       const cycles = graph.collapseCycles();
 
-      // deepInspect(graph);
       const [paths, nodes] = graph.partitionCycles();
       graph.pruneCycleNodes(nodes as Set<PackageGraphNode>);
-      // deepInspect(nodes);
 
       expect(graph.size).toBe(0);
       expect(nodes.size).toBe(2);
@@ -417,11 +412,8 @@ Set {
     it('prunes all cycles from the graph, retaining non-cycles', () => {
       const pkgs = topoPackages();
       const graph = new PackageGraph(pkgs);
-      // deepInspect(graph);
       const [paths, nodes] = graph.partitionCycles();
       graph.pruneCycleNodes(nodes as any);
-      // deepInspect(graph);
-      // deepInspect(nodes);
 
       expect(Array.from(graph.keys())).toMatchInlineSnapshot(`
 Array [
@@ -462,14 +454,6 @@ Set {
     });
   });
 });
-
-// eslint-disable-next-line no-unused-vars
-function deepInspect(obj) {
-  // jest console mutilates console.dir() options argument,
-  // so sidestep it by requiring the non-shimmed method directly.
-  // eslint-disable-next-line global-require
-  require('console').dir(obj, { depth: 10, compact: false });
-}
 
 function topoPackages() {
   return [

@@ -74,5 +74,4 @@ function buildGraph(mapPackages = (pkg) => pkg) {
     .map((json) => new Package(json, `/test/packages/${json.name}`, '/test'));
 
   return new PackageGraph(packages);
-  // require("console").dir(graph, { compact: false })
 }
