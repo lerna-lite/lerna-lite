@@ -1,8 +1,14 @@
 # Change Log
-### Automate your Workspace Versions, Changelogs & Publishing with [Lerna-Lite](https://github.com/ghiscoding/lerna-lite) 🚀
+### Automate your Workspace Versioning, Publishing & Changelog updates with [Lerna-Lite](https://github.com/ghiscoding/lerna-lite) 🚀
 
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
+
+## [1.9.1](https://github.com/ghiscoding/lerna-lite/compare/v1.9.0...v1.9.1) (2022-08-01)
+
+### Bug Fixes
+
+* **publish:** should only warn when using `--no-workspace-strict-match` ([37dd3e7](https://github.com/ghiscoding/lerna-lite/commit/37dd3e7d51c869e3ecd6b2ea0965489038f62d19)) - by @ghiscoding
 
 # [1.9.0](https://github.com/ghiscoding/lerna-lite/compare/v1.8.0...v1.9.0) (2022-07-28)
 
