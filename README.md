@@ -231,7 +231,7 @@ If you wish to contribute to the project, please follow these steps:
 
 1. clone the lib:
    - `git clone https://github.com/ghiscoding/lerna-lite`
-2. install with **pnpm**:
+2. install with **pnpm** from the root:
    - `pnpm install` OR `npx pnpm install`
 3. run a full TypeScript (TSC) build
    - `pnpm build` OR `npx pnpm build`
