@@ -10,11 +10,8 @@ import { createGitHubClient, parseGitRepo } from '../index';
 (execSync as jest.Mock).mockReturnValue('5.6.0');
 
 describe('createGitHubClient', () => {
-  const oldEnv = Object.assign({}, process.env);
-  delete process.env.GH_TOKEN;
-
-  afterEach(() => {
-    process.env = oldEnv;
+  beforeEach(() => {
+    process.env = {};
   });
 
   it('errors if no GH_TOKEN env var', () => {
