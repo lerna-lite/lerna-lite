@@ -21,9 +21,9 @@ const RED_QQ = chalk.red('??');
 
 const colorizedAry = [
   `${GREEN_D}  package.json`,
-  `${GREEN_A}${RED_D} packages/package-1/file-1.js`,
+  `${GREEN_A}${RED_D} packages/package-1/file-1.ts`,
   ` ${RED_D} packages/package-1/package.json`,
-  `${GREEN_A}${RED_M} packages/package-2/file-2.js`,
+  `${GREEN_A}${RED_M} packages/package-2/file-2.ts`,
   ` ${RED_M} packages/package-2/package.json`,
   `${GREEN_M}${RED_M} packages/package-3/package.json`,
   `${GREEN_M}  packages/package-4/package.json`,
@@ -32,9 +32,9 @@ const colorizedAry = [
 ];
 
 // D  package.json
-// AD packages/package-1/file-1.js
+// AD packages/package-1/file-1.ts
 //  D packages/package-1/package.json
-// AM packages/package-2/file-2.js
+// AM packages/package-2/file-2.ts
 //  M packages/package-2/package.json
 // MM packages/package-3/package.json
 // M  packages/package-4/package.json
@@ -44,7 +44,7 @@ const setupChanges = async (cwd) => {
   const [pkg1, pkg2, pkg3, pkg4] = await Project.getPackages(cwd);
 
   // 'AD': (added to index, deleted in working tree)
-  const file1 = path.join(pkg1.location, 'file-1.js');
+  const file1 = path.join(pkg1.location, 'file-1.ts');
   await fs.outputFile(file1, 'yay');
   await gitAdd(cwd, file1);
   await fs.remove(file1);
@@ -57,7 +57,7 @@ const setupChanges = async (cwd) => {
   await pkg2.serialize();
 
   // 'AM': (added to index, modified in working tree)
-  const file2 = path.join(pkg2.location, 'file-2.js');
+  const file2 = path.join(pkg2.location, 'file-2.ts');
   await fs.outputFile(file2, 'woo');
   await gitAdd(cwd, file2);
   await fs.outputFile(file2, 'hoo');

@@ -6,6 +6,6 @@
   ],
   "scripts": {
     "prepublish": "exit 1",
-    "prepublishOnly": "node prepublishOnly.js"
+    "prepublishOnly": "node prepublishOnly.ts"
   }
 }
