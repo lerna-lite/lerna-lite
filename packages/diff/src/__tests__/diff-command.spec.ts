@@ -9,7 +9,7 @@ jest.mock('@lerna-lite/core', () => ({
 }));
 
 // mocked modules
-let coreChildProcess = require('@lerna-lite/core');
+import coreModule from '@lerna-lite/core';
 
 // helpers
 import { commandRunner, initFixtureFactory } from '@lerna-test/helpers';
@@ -47,7 +47,7 @@ expect.addSnapshotSerializer(gitSHA);
 
 describe('Diff Command', () => {
   // overwrite spawn so we get piped stdout, not inherited
-  (coreChildProcess as any).spawn = jest.fn((...args) => {
+  coreModule.spawn = jest.fn((...args) => {
     // @ts-ignore
     return execa(...args);
   });
@@ -169,7 +169,7 @@ describe('Diff Command', () => {
   it('should error when git diff exits non-zero', async () => {
     const cwd = await initFixture('basic');
 
-    (coreChildProcess.spawn as jest.Mock).mockImplementationOnce(() => {
+    (coreModule.spawn as jest.Mock).mockImplementationOnce(() => {
       const nonZero = new Error('An actual non-zero, not git diff pager SIGPIPE');
       (nonZero as any).exitCode = 1;
 

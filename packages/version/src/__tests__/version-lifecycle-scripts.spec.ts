@@ -15,7 +15,6 @@ jest.mock('@lerna-lite/core', () => ({
   throwIfUncommitted: jest.requireActual('../../../core/src/__mocks__/check-working-tree').throwIfUncommitted,
 }));
 
-import 'dotenv/config';
 import { runLifecycle } from '@lerna-lite/core';
 import loadJsonFile from 'load-json-file';
 import yargParser from 'yargs-parser';

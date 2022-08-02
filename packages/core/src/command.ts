@@ -1,6 +1,7 @@
 import cloneDeep from 'clone-deep';
 import dedent from 'dedent';
 import execa from 'execa';
+import isCI from 'is-ci';
 import log, { Logger } from 'npmlog';
 import os from 'os';
 
@@ -163,13 +164,11 @@ export class Command<T extends AvailableCommandOption> {
   }
 
   configureEnvironment() {
-    // eslint-disable-next-line global-require
-    const ci = require('is-ci');
     let loglevel;
     let progress;
 
     /* istanbul ignore next */
-    if (ci || !process.stderr.isTTY || process.env.TERM === 'dumb') {
+    if (isCI || !process.stderr.isTTY || process.env.TERM === 'dumb') {
       log.disableColor();
       progress = false;
     } else if (!process.stdout.isTTY) {
@@ -183,7 +182,7 @@ export class Command<T extends AvailableCommandOption> {
 
     Object.defineProperty(this, 'envDefaults', {
       value: {
-        ci,
+        ci: isCI,
         progress,
         loglevel,
       },
