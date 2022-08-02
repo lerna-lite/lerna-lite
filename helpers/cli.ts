@@ -1,9 +1,9 @@
 import execa from 'execa';
 import path from 'path';
+
 import lernaCLI from '../packages/cli/src/lerna-cli';
 
-// eslint-disable-next-line node/no-unpublished-require
-const LERNA_BIN = require.resolve('../packages/cli/src/cli');
+const LERNA_BIN = path.resolve(__dirname, '../packages/cli/src/cli.ts');
 
 /**
  * A higher-order function to help with passing _actual_ yargs-parsed argv
@@ -28,7 +28,7 @@ export function commandRunner(commandModule: any) {
       .wrap(null)
       .command(commandModule);
 
-    return (...args) =>
+    return (...args: string[]) =>
       new Promise((resolve, reject) => {
         const yargsMeta: any = {};
         const context = {
@@ -48,13 +48,13 @@ export function commandRunner(commandModule: any) {
           },
         };
 
-        const parseFn = (yargsError, parsedArgv, yargsOutput) => {
+        const parseFn = (_yargsError: Error | undefined, parsedArgv: any, yargsOutput: string) => {
           // this is synchronous, before the async handlers resolve
           Object.assign(yargsMeta, { parsedArgv, yargsOutput });
         };
 
         cli
-          .fail((msg, err) => {
+          .fail((msg: string, err: Error) => {
             // since yargs 10.1.0, this is the only way to catch handler rejection
             // _and_ yargs validation exceptions when using async command handlers
             const actual = (err || new Error(msg)) as Error & { exitCode: number };
@@ -67,7 +67,7 @@ export function commandRunner(commandModule: any) {
   };
 }
 
-exports.cliRunner = function cliRunner(cwd, env) {
+exports.cliRunner = function cliRunner(cwd: string, env: { [key: string]: string }) {
   const opts = {
     cwd,
     env: Object.assign(
@@ -82,5 +82,5 @@ exports.cliRunner = function cliRunner(cwd, env) {
     // stdio: ["ignore", "inherit", "inherit"],
   };
 
-  return (...args) => execa('node', [LERNA_BIN].concat(args), opts);
+  return (...args: string[]) => execa('node', [LERNA_BIN].concat(args), opts);
 };

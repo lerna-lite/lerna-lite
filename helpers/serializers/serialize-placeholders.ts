@@ -1,8 +1,12 @@
+import loadJsonFile from 'load-json-file';
+import path from 'path';
+
 import normalizeNewline from 'normalize-newline';
 import serializeTempdir from './serialize-tempdir';
 import serializeWindowsPaths from './serialize-windows-paths';
-// eslint-disable-next-line node/no-unpublished-require
-const LERNA_VERSION = require('../../core/lerna/package.json').version;
+
+const pkgJson = loadJsonFile.sync(path.join(__dirname, '../../core/lerna/', 'package.json')) as any;
+const LERNA_VERSION = pkgJson.version as string;
 
 const VERSION_REGEX = new RegExp(`^((?:.*?notice cli )|\\^?)v?${LERNA_VERSION}`, 'g');
 // TODO: maybe even less naïve regex?

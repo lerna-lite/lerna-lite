@@ -1,5 +1,3 @@
-jest.mock('envinfo');
-
 import fs from 'fs-extra';
 import path from 'path';
 import tempy from 'tempy';

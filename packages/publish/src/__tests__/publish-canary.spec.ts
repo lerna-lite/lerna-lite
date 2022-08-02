@@ -43,9 +43,9 @@ const lernaPublish = commandRunner(cliCommands);
 import gitSHA from '@lerna-test/helpers/serializers/serialize-git-sha';
 expect.addSnapshotSerializer(gitSHA);
 
-const coreModule = require('@lerna-lite/core');
+import coreModule from '@lerna-lite/core';
 
-const createArgv = (cwd, ...args) => {
+const createArgv = (cwd: string, ...args: string[]) => {
   args.unshift('publish');
   if (args.length > 0 && args[1] && args[1].length > 0 && !args[1].startsWith('-')) {
     args[1] = `--bump=${args[1]}`;
