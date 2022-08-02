@@ -45,9 +45,10 @@ jest.mock('load-json-file', () => jest.requireActual('../../../version/src/lib/_
 // mocked modules
 import loadJsonFile from 'load-json-file';
 import { packDirectory } from '../lib/pack-directory';
-import { runLifecycle } from '@lerna-lite/core';
+import { PublishCommandOption, runLifecycle } from '@lerna-lite/core';
 
 // helpers
+import { loggingOutput } from '@lerna-test/helpers/logging-output';
 import { commandRunner, initFixtureFactory } from '@lerna-test/helpers';
 const initFixture = initFixtureFactory(__dirname);
 import path from 'path';
@@ -190,5 +191,19 @@ describe('lifecycle scripts', () => {
         'ignore-scripts': true,
       })
     );
+  });
+});
+
+describe('execScript', () => {
+  it('execute --require-scripts but fails since scripts folder does not exist and log error with script not found message is shown', async () => {
+    const cwd = await initFixture('lifecycle');
+
+    await lernaPublish(cwd)('--require-scripts');
+    const logInfoMessages = loggingOutput('info');
+    const logSillyMessages = loggingOutput('silly');
+
+    expect(logInfoMessages).toContain('enabled');
+    expect(logSillyMessages.filter((x) => x.includes('No prepublish script found at'))).toBeTruthy();
+    expect(logSillyMessages.filter((x) => x.includes('No postpublish script found at'))).toBeTruthy();
   });
 });

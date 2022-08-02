@@ -344,6 +344,17 @@ describe('PublishCommand', () => {
       expect(getOneTimePassword).toHaveBeenLastCalledWith('Enter OTP:');
     });
 
+    it('prompts for OTP when option missing, account-level 2FA enabled and shows a log info about it when in --git-dry-run mode', async () => {
+      const testDir = await initFixture('normal');
+
+      (getTwoFactorAuthRequired as jest.Mock).mockResolvedValueOnce(true);
+
+      await new PublishCommand(createArgv(testDir, '--verify-access', true, '--git-dry-run'));
+      const logMessages = loggingOutput('info');
+
+      expect(logMessages).toContain('will ask OTP');
+    });
+
     it('defers OTP prompt when option missing, account-level 2FA enabled, and verify access is not true', async () => {
       const testDir = await initFixture('normal');
 
