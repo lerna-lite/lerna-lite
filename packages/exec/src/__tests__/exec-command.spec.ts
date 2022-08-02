@@ -6,6 +6,11 @@ jest.mock('@lerna-lite/core', () => ({
   spawnStreaming: jest.fn(() => Promise.resolve({ exitCode: 0 })),
 }));
 
+jest.mock('@lerna-lite/optional-cmd-common', () => ({
+  ...(jest.requireActual('@lerna-lite/optional-cmd-common') as any),
+  ...jest.requireActual('../../../optional-cmd-common/src/lib/profiler'), // test with the real Profiler for test coverage as well
+}));
+
 // also point to the local exec command so that all mocks are properly used even by the command-runner
 jest.mock('@lerna-lite/exec', () => jest.requireActual('../exec-command'));
 
