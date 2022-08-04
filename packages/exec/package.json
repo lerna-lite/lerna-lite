@@ -45,6 +45,6 @@
     "@types/p-map": "^2.0.0",
     "globby": "^11.1.0",
     "yargs": "^17.5.1",
-    "yargs-parser": "^21.0.1"
+    "yargs-parser": "^21.1.0"
   }
 }

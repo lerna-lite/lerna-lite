@@ -46,6 +46,6 @@
     "globby": "^11.1.0",
     "jest-circus": "^28.1.3",
     "perf_hooks": "^0.0.1",
-    "yargs-parser": "^21.0.1"
+    "yargs-parser": "^21.1.0"
   }
 }

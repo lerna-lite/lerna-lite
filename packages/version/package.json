@@ -63,6 +63,6 @@
     "execa": "^5.1.1",
     "js-yaml": "^4.1.0",
     "write-pkg": "^4.0.0",
-    "yargs-parser": "^21.0.1"
+    "yargs-parser": "^21.1.0"
   }
 }

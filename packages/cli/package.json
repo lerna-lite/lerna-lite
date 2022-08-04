@@ -49,6 +49,6 @@
   },
   "devDependencies": {
     "@types/load-json-file": "^5.1.0",
-    "yargs-parser": "^21.0.1"
+    "yargs-parser": "^21.1.0"
   }
 }
