@@ -31,7 +31,7 @@
     "npm": ">=8.0.0"
   },
   "dependencies": {
-    "@npmcli/run-script": "^4.1.7",
+    "@npmcli/run-script": "^4.2.0",
     "@octokit/plugin-enterprise-rest": "^6.0.1",
     "@octokit/rest": "^19.0.3",
     "async": "^3.2.4",
@@ -105,7 +105,7 @@
     "@types/write-file-atomic": "^4.0.0",
     "@types/write-json-file": "^3.2.1",
     "@types/write-pkg": "^4.0.0",
-    "yargs-parser": "^21.0.1"
+    "yargs-parser": "^21.1.0"
   },
   "funding": {
     "type": "ko_fi",
