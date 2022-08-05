@@ -252,7 +252,7 @@ export class RunCommand extends Command<RunCommandOption & FilterOptions> {
       Object.keys(nxJson.targetDependencies || nxJson.targetDefaults || {}).length > 0;
     const targetDependencies =
       // prettier-ignore
-      this.toposort && !targetDependenciesAreDefined
+      this.toposort && !this.options.parallel && !targetDependenciesAreDefined
         ? {
           [this.script]: [
             {
@@ -263,8 +263,9 @@ export class RunCommand extends Command<RunCommandOption & FilterOptions> {
         }
         : {};
 
+    // prettier-ignore
     const outputStyle = this.options.stream
-      ? this.options.prefix !== false
+      ? this.prefix
         ? 'stream'
         : 'stream-without-prefixes'
       : 'dynamic';
