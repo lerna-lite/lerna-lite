@@ -2,16 +2,20 @@ import log from 'npmlog';
 import pify from 'pify';
 import npa from 'npm-package-arg';
 
+import { ChangelogConfig, ChangelogPresetConfig } from '../models';
 import { ValidationError } from '../validation-error';
 
 export class GetChangelogConfig {
   static cfgCache = new Map<string, any>();
 
-  static isFunction(config) {
+  static isFunction(config: ChangelogConfig) {
     return Object.prototype.toString.call(config) === '[object Function]';
   }
 
-  static resolveConfigPromise(presetPackageName: string, presetConfig: any) {
+  static resolveConfigPromise(
+    presetPackageName: string,
+    presetConfig: ChangelogPresetConfig
+  ): Promise<ChangelogConfig> {
     log.verbose('getChangelogConfig', 'Attempting to resolve preset %j', presetPackageName);
 
     let config = require(presetPackageName);
@@ -32,19 +36,17 @@ export class GetChangelogConfig {
   }
 
   /**
-   * @param {import('..').ChangelogPresetConfig} [changelogPreset]
+   * @param {ChangelogPresetConfig} [changelogPreset]
    * @param {string} [rootPath]
    */
   static getChangelogConfig(
-    changelogPreset: string | { name: string } = 'conventional-changelog-angular',
+    changelogPreset: ChangelogPresetConfig = 'conventional-changelog-angular',
     rootPath?: string
-  ) {
+  ): Promise<ChangelogConfig> {
     const presetName = typeof changelogPreset === 'string' ? changelogPreset : changelogPreset.name;
-    const presetConfig = typeof changelogPreset === 'object' ? changelogPreset : {};
-
+    const presetConfig = typeof changelogPreset === 'object' ? changelogPreset : ({} as ChangelogPresetConfig);
     const cacheKey = `${presetName}${presetConfig ? JSON.stringify(presetConfig) : ''}`;
-
-    let config = GetChangelogConfig.cfgCache.get(cacheKey);
+    let config = GetChangelogConfig.cfgCache.get(cacheKey) as Promise<ChangelogConfig>;
 
     if (!config) {
       let presetPackageName = presetName;

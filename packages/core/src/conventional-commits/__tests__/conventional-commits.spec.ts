@@ -727,7 +727,7 @@ describe('conventional-commits', () => {
 
       const opts = {
         changelogPreset: 'conventional-changelog-angular',
-        changelogIncludeCommitsGitAuthor: ' by (**%a**)',
+        changelogIncludeCommitsGitAuthor: ' by **%a** (%e)',
       };
       const [changelogOne, changelogTwo] = await Promise.all([
         updateChangelog(pkg1, 'independent', opts),
@@ -740,7 +740,7 @@ describe('conventional-commits', () => {
 
         ### Bug Fixes
 
-        * **stuff:** changed ([SHA](https://github.com/lerna/conventional-commits-independent/commit/GIT_HEAD)) by (**Tester McPerson**)
+        * **stuff:** changed ([SHA](https://github.com/lerna/conventional-commits-independent/commit/GIT_HEAD)) by **Tester McPerson** (test@example.com)
       `);
       expect(changelogTwo.newEntry.trimRight()).toMatchInlineSnapshot(`
         # [1.1.0](/compare/package-2@1.0.0...package-2@1.1.0) (YYYY-MM-DD)
@@ -748,7 +748,7 @@ describe('conventional-commits', () => {
 
         ### Features
 
-        * **thing:** added ([SHA](https://github.com/lerna/conventional-commits-independent/commit/GIT_HEAD)) by (**Tester McPerson**)
+        * **thing:** added ([SHA](https://github.com/lerna/conventional-commits-independent/commit/GIT_HEAD)) by **Tester McPerson** (test@example.com)
       `);
     });
 
@@ -788,7 +788,7 @@ describe('conventional-commits', () => {
       };
       const opt2s = {
         changelogPreset: 'conventional-changelog-angular',
-        changelogIncludeCommitsClientLogin: ' by (@%l, %a)',
+        changelogIncludeCommitsClientLogin: ' from @%l, _%a (%e)_',
         commitsSinceLastRelease: [
           {
             authorName: 'Tester McPerson',
@@ -818,7 +818,7 @@ describe('conventional-commits', () => {
 
         ### Features
 
-        * **thing:** added ([SHA](https://github.com/lerna/conventional-commits-independent/commit/GIT_HEAD)) by (@tester-mcperson, Tester McPerson)
+        * **thing:** added ([SHA](https://github.com/lerna/conventional-commits-independent/commit/GIT_HEAD)) from @tester-mcperson, _Tester McPerson (test@example.com)_
       `);
     });
   });
