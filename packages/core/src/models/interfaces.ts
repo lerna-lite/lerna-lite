@@ -1,3 +1,6 @@
+import { GitRawCommitsOptions, ParserOptions } from 'conventional-changelog-core';
+import { Options as WriterOptions } from 'conventional-changelog-writer';
+import { Options as RecommendedBumpOptions } from 'conventional-recommended-bump';
 import log from 'npmlog';
 import npa from 'npm-package-arg';
 
@@ -12,6 +15,15 @@ export interface BaseChangelogOptions {
   changelogPreset?: ChangelogPresetConfig;
   rootPath?: string;
   tagPrefix?: string;
+}
+
+export interface ChangelogConfig {
+  conventionalChangelog: { parserOpts: ParserOptions; writerOpts: WriterOptions };
+  gitRawCommitsOpts: GitRawCommitsOptions & { path: string };
+  key?: string;
+  parserOpts: ParserOptions;
+  recommendedBumpOpts: RecommendedBumpOptions;
+  writerOpts: WriterOptions;
 }
 
 export interface CommandOptions {

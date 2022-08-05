@@ -160,6 +160,8 @@ importers:
       '@types/async': ^3.2.15
       '@types/clone-deep': ^4.0.1
       '@types/conventional-changelog-core': ^4.2.1
+      '@types/conventional-changelog-writer': ^4.0.1
+      '@types/conventional-commits-parser': ^3.0.2
       '@types/conventional-recommended-bump': ^6.1.0
       '@types/dedent': ^0.7.0
       '@types/execa': ^2.0.0
@@ -182,6 +184,8 @@ importers:
       config-chain: ^1.1.13
       conventional-changelog-angular: ^5.0.13
       conventional-changelog-core: ^4.2.4
+      conventional-changelog-writer: ^5.0.1
+      conventional-commits-parser: ^3.2.4
       conventional-recommended-bump: ^6.1.0
       cosmiconfig: ^7.0.1
       dedent: ^0.7.0
@@ -237,6 +241,8 @@ importers:
       config-chain: 1.1.13
       conventional-changelog-angular: 5.0.13
       conventional-changelog-core: 4.2.4
+      conventional-changelog-writer: 5.0.1
+      conventional-commits-parser: 3.2.4
       conventional-recommended-bump: 6.1.0
       cosmiconfig: 7.0.1
       dedent: 0.7.0
@@ -285,6 +291,8 @@ importers:
       '@types/async': 3.2.15
       '@types/clone-deep': 4.0.1
       '@types/conventional-changelog-core': 4.2.1
+      '@types/conventional-changelog-writer': 4.0.1
+      '@types/conventional-commits-parser': 3.0.2
       '@types/conventional-recommended-bump': 6.1.0
       '@types/dedent': 0.7.0
       '@types/execa': 2.0.0
@@ -1568,13 +1576,13 @@ packages:
     resolution: {integrity: sha512-S7lJJByPMkkocMWnDKOtkSLi9yXu619+GhGejPnCiNK1Dgwjf5jjzBxXYgMv47tBG8MokmCCV1sWhI53lFl6FA==}
     dependencies:
       '@types/conventional-commits-parser': 3.0.2
-      '@types/node': 17.0.41
+      '@types/node': 18.0.0
     dev: true
 
   /@types/conventional-commits-parser/3.0.2:
     resolution: {integrity: sha512-1kVPUHFaart1iGRFxKn8WNXYEDVAgMb+DLatgql2dGg9jTGf3bNxWtN//C/tDG3ckOLg4u7SSx+qcn8VjzI5zg==}
     dependencies:
-      '@types/node': 17.0.41
+      '@types/node': 18.0.0
     dev: true
 
   /@types/conventional-recommended-bump/6.1.0:
@@ -1609,7 +1617,7 @@ packages:
   /@types/git-raw-commits/2.0.1:
     resolution: {integrity: sha512-vE2lbXxqJ0AqMDoP4N6d+WVfbcBla9+z8IL6e+37JNQIwYZCYY0z3J7hdpY8D/VGwFZ0yIYQLcqk8eCnfXsaEg==}
     dependencies:
-      '@types/node': 17.0.41
+      '@types/node': 18.0.0
     dev: true
 
   /@types/git-url-parse/9.0.1:
@@ -6645,7 +6653,7 @@ packages:
     dev: true
 
   /wordwrap/1.0.0:
-    resolution: {integrity: sha1-J1hIEIkUVqQXHI0CJkQa3pDLyus=}
+    resolution: {integrity: sha512-gvVzJFlPycKc5dZN4yPkP8w7Dc37BtP1yczEneOb4uq34pXZcvrtRTmWV8W+Ume+XCxKgbjM+nevkyFPMybd4Q==}
     dev: false
 
   /wrap-ansi/7.0.0:
