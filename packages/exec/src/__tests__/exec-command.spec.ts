@@ -4,6 +4,8 @@ jest.mock('@lerna-lite/core', () => ({
   logOutput: jest.requireActual('../../../core/src/__mocks__/output').logOutput,
   spawn: jest.fn(() => Promise.resolve({ exitCode: 0 })),
   spawnStreaming: jest.fn(() => Promise.resolve({ exitCode: 0 })),
+  runTopologically: jest.requireActual('../../../core/src/utils/run-topologically').runTopologically,
+  QueryGraph: jest.requireActual('../../../core/src/utils/query-graph').QueryGraph,
 }));
 
 jest.mock('@lerna-lite/optional-cmd-common', () => ({

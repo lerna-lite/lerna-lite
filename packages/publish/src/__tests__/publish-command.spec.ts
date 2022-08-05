@@ -22,6 +22,8 @@ jest.mock('@lerna-lite/core', () => ({
   promptConfirmation: jest.requireActual('../../../core/src/__mocks__/prompt').promptConfirmation,
   promptSelectOne: jest.requireActual('../../../core/src/__mocks__/prompt').promptSelectOne,
   promptTextInput: jest.requireActual('../../../core/src/__mocks__/prompt').promptTextInput,
+  runTopologically: jest.requireActual('../../../core/src/utils/run-topologically').runTopologically,
+  QueryGraph: jest.requireActual('../../../core/src/utils/query-graph').QueryGraph,
 }));
 
 // also point to the local publish command so that all mocks are properly used even by the command-runner
