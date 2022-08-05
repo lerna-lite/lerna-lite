@@ -1,3 +1,8 @@
+jest.mock('@lerna-lite/core', () => ({
+  ...(jest.requireActual('@lerna-lite/core') as any), // return the other real methods, below we'll mock only 2 of the methods
+  QueryGraph: jest.requireActual('../../../core/src/utils/query-graph').QueryGraph,
+}));
+
 import chalk from 'chalk';
 import tempy from 'tempy';
 import Tacks from 'tacks';

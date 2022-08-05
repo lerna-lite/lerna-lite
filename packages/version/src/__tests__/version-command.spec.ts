@@ -19,10 +19,12 @@ jest.mock('@lerna-lite/core', () => ({
   checkWorkingTree: jest.requireActual('../../../core/src/__mocks__/check-working-tree').checkWorkingTree,
   getCommitsSinceLastRelease: jest.requireActual('../../../core/src/__mocks__/get-commits-since-last-release')
     .getCommitsSinceLastRelease,
+  runTopologically: jest.requireActual('../../../core/src/utils/run-topologically').runTopologically,
   throwIfReleased: jest.requireActual('../../../core/src/__mocks__/check-working-tree').throwIfReleased,
   throwIfUncommitted: jest.requireActual('../../../core/src/__mocks__/check-working-tree').throwIfUncommitted,
   npmConf: jest.requireActual('../../../core/src/utils/npm-conf').npmConf,
   writeLogFile: jest.requireActual('../../../core/src/utils/write-log-file').writeLogFile,
+  QueryGraph: jest.requireActual('../../../core/src/utils/query-graph').QueryGraph,
 }));
 
 // also point to the local version command so that all mocks are properly used even by the command-runner
