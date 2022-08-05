@@ -36,6 +36,6 @@
     "@lerna-lite/optional-cmd-common": "workspace:*"
   },
   "devDependencies": {
-    "yargs-parser": "^21.1.0"
+    "yargs-parser": "^21.1.1"
   }
 }

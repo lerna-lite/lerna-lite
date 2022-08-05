@@ -74,6 +74,6 @@
     "@types/write-json-file": "^3.2.1",
     "@types/write-pkg": "^4.0.0",
     "load-json-file": "^6.2.0",
-    "yargs-parser": "^21.1.0"
+    "yargs-parser": "^21.1.1"
   }
 }
