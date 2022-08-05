@@ -22,6 +22,8 @@ jest.mock('@lerna-lite/core', () => ({
   promptConfirmation: jest.requireActual('../../../core/src/__mocks__/prompt').promptConfirmation,
   promptSelectOne: jest.requireActual('../../../core/src/__mocks__/prompt').promptSelectOne,
   promptTextInput: jest.requireActual('../../../core/src/__mocks__/prompt').promptTextInput,
+  npmConf: jest.requireActual('../../../core/src/utils/npm-conf').npmConf,
+  writeLogFile: jest.requireActual('../../../core/src/utils/write-log-file').writeLogFile,
 }));
 
 // also point to the local publish command so that all mocks are properly used even by the command-runner
@@ -42,7 +44,6 @@ jest.mock('../lib/npm-dist-tag', () => jest.requireActual('../lib/__mocks__/npm-
 jest.mock('../lib/pack-directory', () => jest.requireActual('../lib/__mocks__/pack-directory'));
 jest.mock('../lib/git-checkout');
 
-import { npmConf } from '@lerna-lite/core';
 import fs from 'fs-extra';
 import path from 'path';
 
