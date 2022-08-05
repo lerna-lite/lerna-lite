@@ -4,7 +4,7 @@ jest.mock('../get-github-commits');
 
 import { getGithubCommits } from '../get-github-commits';
 import { describeRefSync } from '../../utils/describe-ref';
-import { getCommitsSinceLastRelease, getLastTagDetails } from '../get-commits-since-last-release';
+import { getCommitsSinceLastRelease, getOldestCommitSinceLastTag } from '../get-commits-since-last-release';
 import { execSync } from '../../child-process';
 
 (execSync as jest.Mock).mockReturnValue('"deadbeef 2022-07-01T00:01:02-04:00"');
@@ -45,7 +45,7 @@ describe('getCommitsSinceLastRelease', () => {
   });
 });
 
-describe('getLastTagDetails', () => {
+describe('getOldestCommitSinceLastTag', () => {
   const execOpts = { cwd: '/test' };
 
   describe('with existing tag', () => {
@@ -54,11 +54,11 @@ describe('getLastTagDetails', () => {
     });
 
     it('should expect a result with a tag date, hash and ref count', async () => {
-      const result = await getLastTagDetails(execOpts);
+      const result = await getOldestCommitSinceLastTag(execOpts);
       const execSpy = (execSync as jest.Mock).mockReturnValue('"deadbeef 2022-07-01T00:01:02-04:00"');
 
-      expect(execSpy).toHaveBeenCalledWith('git', ['log', '-1', '--format="%h %cI"', 'v1.0.0'], execOpts);
-      expect(result).toEqual({ tagDate: '2022-07-01T00:01:02-04:00', tagHash: 'deadbeef', tagRefCount: '1' });
+      expect(execSpy).toHaveBeenCalledWith('git', ['log', 'v1.0.0..HEAD', '--format="%h %cI"', '--reverse'], execOpts);
+      expect(result).toEqual({ commitDate: '2022-07-01T00:01:02-04:00', commitHash: 'deadbeef' });
     });
   });
 
@@ -75,14 +75,14 @@ describe('getLastTagDetails', () => {
 
     it('should return first commit date when describeRefSync() did not return a tag date', async () => {
       const execSpy = (execSync as jest.Mock).mockReturnValue('"abcbeef 2022-07-01T00:01:02-04:00"');
-      const result = await getLastTagDetails(execOpts);
+      const result = await getOldestCommitSinceLastTag(execOpts);
 
       expect(execSpy).toHaveBeenCalledWith(
         'git',
         ['log', '--oneline', '--format="%h %cI"', '--reverse', '--max-parents=0', 'HEAD'],
         execOpts
       );
-      expect(result).toEqual({ tagDate: '2022-07-01T00:01:02-04:00', tagHash: 'abcbeef', tagRefCount: '1' });
+      expect(result).toEqual({ commitDate: '2022-07-01T00:01:02-04:00', commitHash: 'abcbeef' });
     });
   });
 });
