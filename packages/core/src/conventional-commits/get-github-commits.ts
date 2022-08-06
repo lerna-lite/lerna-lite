@@ -19,7 +19,7 @@ export async function getGithubCommits(
   gitRemote: string,
   branchName: string,
   sinceDate: string,
-  execOpts: ExecOpts
+  execOpts?: ExecOpts
 ): Promise<RemoteCommit[]> {
   const repo = parseGitRepo(gitRemote, execOpts);
   const octokit = createGitHubClient();
