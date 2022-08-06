@@ -563,7 +563,7 @@ export class PublishCommand extends Command<PublishCommandOption> {
 
       for (const [depName, resolved] of node.localDependencies) {
         // other canary versions need to be updated, non-canary is a no-op
-        const depVersion = this.updatesVersions?.get(depName) || this.packageGraph?.get(depName).pkg.version;
+        const depVersion = this.updatesVersions?.get(depName) || this.packageGraph?.get(depName)!.pkg.version;
 
         // it no longer matters if we mutate the shared Package instance
         node.pkg.updateLocalDependency(
@@ -588,7 +588,7 @@ export class PublishCommand extends Command<PublishCommandOption> {
     return pMap(updatesWithLocalLinks, (node: PackageGraphNode) => {
       for (const [depName, resolved] of node.localDependencies) {
         // regardless of where the version comes from, we can't publish 'file:../sibling-pkg' specs
-        const depVersion = this.updatesVersions?.get(depName) || this.packageGraph?.get(depName).pkg.version;
+        const depVersion = this.updatesVersions?.get(depName) || this.packageGraph?.get(depName)!.pkg.version;
 
         // it no longer matters if we mutate the shared Package instance
         node.pkg.updateLocalDependency(
@@ -616,7 +616,7 @@ export class PublishCommand extends Command<PublishCommandOption> {
 
       // 1. update & bump version of local dependencies
       for (const [depName, resolved] of node.localDependencies) {
-        const depVersion = this.updatesVersions?.get(depName) || this.packageGraph?.get(depName).pkg.version;
+        const depVersion = this.updatesVersions?.get(depName) || this.packageGraph?.get(depName)!.pkg.version;
 
         // it no longer matters if we mutate the shared Package instance
         node.pkg.updateLocalDependency(

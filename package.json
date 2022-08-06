@@ -15,6 +15,7 @@
     "dist-list-cmd": "node ./packages/cli/dist/cli.js list --all",
     "dist-roll-version-dry-run": "node ./packages/cli/dist/cli.js version --git-dry-run",
     "dist-roll-publish-dry-run": "node ./packages/cli/dist/cli.js publish from-package --git-dry-run",
+    "dist-roll-publish-alpha-dry-run": "node ./packages/cli/dist/cli.js publish --git-dry-run --exact --include-merged-tags --preid alpha --dist-tag next prerelease",
     "dist-exec-win": "node ./packages/cli/dist/cli.js exec --scope {@lerna-lite/cli,@lerna-lite/core} -- echo hello from package: %LERNA_PACKAGE_NAME%",
     "dist-exec-unix": "node ./packages/cli/dist/cli.js exec -- echo hello from package: ${LERNA_PACKAGE_NAME}",
     "dist-pack-tarball": "node ./packages/cli/dist/cli.js run pack-tarball",

@@ -1,4 +1,4 @@
-import { Command, CommandType, DiffCommandOption, Package, spawn, ValidationError } from '@lerna-lite/core';
+import { Command, CommandType, DiffCommandOption, PackageGraphNode, spawn, ValidationError } from '@lerna-lite/core';
 
 import { getLastCommit } from './lib/get-last-commit';
 import { hasCommit } from './lib/has-commit';
@@ -17,7 +17,7 @@ export class DiffCommand extends Command<DiffCommandOption> {
   }
 
   initialize() {
-    let targetPackage: Package | undefined = undefined;
+    let targetPackage: PackageGraphNode | undefined = undefined;
     const packageName = this.options.pkgName;
 
     if (packageName) {
