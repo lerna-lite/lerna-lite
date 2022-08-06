@@ -451,7 +451,7 @@ export class VersionCommand extends Command<VersionCommandOption> {
       let hasBreakingChange = false;
 
       for (const [name, bump] of versions) {
-        hasBreakingChange = hasBreakingChange || isBreakingChange(this.packageGraph?.get(name).version, bump);
+        hasBreakingChange = hasBreakingChange || isBreakingChange(this.packageGraph?.get(name)!.version, bump);
       }
 
       if (hasBreakingChange) {
@@ -610,7 +610,7 @@ export class VersionCommand extends Command<VersionCommandOption> {
         pkg.set('version', this.updatesVersions?.get(pkg?.name ?? ''));
 
         // update pkg dependencies
-        for (const [depName, resolved] of this.packageGraph?.get(pkg.name).localDependencies) {
+        for (const [depName, resolved] of this.packageGraph?.get(pkg.name)!.localDependencies) {
           const depVersion = this.updatesVersions?.get(depName);
 
           if (depVersion && resolved.type !== 'directory') {
