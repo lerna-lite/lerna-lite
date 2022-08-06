@@ -3,6 +3,18 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [1.10.0](https://github.com/ghiscoding/lerna-lite/compare/v1.9.1...v1.10.0) (2022-08-06)
+
+### Bug Fixes
+
+* **core:** ensure to touch all nodes in package-graph ([f4f7bbc](https://github.com/ghiscoding/lerna-lite/commit/f4f7bbc60a7331a4077e2bf974bb5abffdb4e804)) - by @ghiscoding
+* **deps:** update all non-major dependencies ([abe1eff](https://github.com/ghiscoding/lerna-lite/commit/abe1eff71fe211c36d05518a43f74da33967a450)) - by @renovate-bot
+* **version:** get oldest commit data for changelog include commit login ([5d7464b](https://github.com/ghiscoding/lerna-lite/commit/5d7464b9224b3da39be2accefe5524ef820980d7)) - by @ghiscoding
+
+### Features
+
+* **version:** use conventional commit changelog writer for perf ([e9d7c52](https://github.com/ghiscoding/lerna-lite/commit/e9d7c52bdd70cac8d1c6a918c0475b613cf9817d)) - by @ghiscoding
+
 ## [1.9.1](https://github.com/ghiscoding/lerna-lite/compare/v1.9.0...v1.9.1) (2022-08-01)
 
 **Note:** Version bump only for package @lerna-lite/core
