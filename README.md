@@ -67,15 +67,15 @@ Mainly for the following reasons:
 1. original Lerna repo was unmaintained for nearly 2 years (dependencies were out of date)
     - this is no longer true since Nrwl took over stewardship of Lerna, but the next few points are still valid
     - keep PRs in sync with original Lerna
-2. desire to create a smaller lib that is more modular and smaller than the original Lerna
+2. desire to create a smaller lib that is more modular and lighter than the original all-in-one Lerna
     - it's smaller since we only copied half of Lerna's commands and a few are totally optional.
     - we don't need all of Lerna's packages anymore since Workspaces are supported by all package managers.
     - the main starting goal of this fork was to keep only `version` and `publish` commands in the core and make everything else optional (install and use only what you really need).
 3. rewrite the lib in TypeScript
 4. replicate a few opened PRs (fixes and features) from Lerna and also add extra features in Lerna-Lite
     - for example we now support the `workspace:` protocol and some `dry-run` options
-5. Lerna v5 is now installing [Nx](https://nx.dev/) as a required dependency, Lerna-Lite **does not**, it remains optional
-    - we did add the `useNx` option into Lerna-Lite but even if [Nx](https://nx.dev/) is nice, it should remain optional.
+5. Lerna v5+ is now installing **[Nx](https://nx.dev/)** as a required [dependency](https://github.com/lerna/lerna/blob/main/core/lerna/package.json#L57) while Lerna-Lite **does not**, it remains optional
+    - we did add the `useNx` option into Lerna-Lite, but even if [Nx](https://nx.dev/) is a nice lib, it should remain optional and it is in here.
 
 ### This lib will help you with
 
@@ -149,7 +149,7 @@ Minimum CLI install to get started with Lerna-Lite, that will give you access to
 | 📑 [version](https://github.com/ghiscoding/lerna-lite/tree/main/packages/version#readme) | create new version for each workspace package |
 | ☁️ [publish](https://github.com/ghiscoding/lerna-lite/tree/main/packages/publish#readme) | publish each workspace package |
 
-**Note:** Lerna-Lite CLI is only including 4 built-in commands by default (shown in previous table), all other commands are **optional commands** and must be installed separately as shown in the table below.
+**Note:** Lerna-Lite CLI is only including 4 built-in commands by default (shown in table above), all other commands are **optional commands** and must be installed separately as shown in the table below.
 
 ### Separate / Optional Installs
 
