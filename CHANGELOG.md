@@ -8,7 +8,7 @@ See [Conventional Commits](https://conventionalcommits.org) for commit guideline
 
 ### Bug Fixes
 
-* **core:** ensure to touch all nodes in package-graph ([f4f7bbc](https://github.com/ghiscoding/lerna-lite/commit/f4f7bbc60a7331a4077e2bf974bb5abffdb4e804)) - by @ghiscoding
+* **core:** ensure to touch all nodes in package-graph, fix issue found by Jest team ([f4f7bbc](https://github.com/ghiscoding/lerna-lite/commit/f4f7bbc60a7331a4077e2bf974bb5abffdb4e804)) - by @ghiscoding
 * **deps:** update all non-major dependencies ([abe1eff](https://github.com/ghiscoding/lerna-lite/commit/abe1eff71fe211c36d05518a43f74da33967a450)) - by @renovate-bot
 * **run:** do not toposort when running in parallel with useNx to match legacy ([af1192c](https://github.com/ghiscoding/lerna-lite/commit/af1192cb11f1378a9b2c03a03b9361b8285bc52d)) - by @ghiscoding
 * **version:** get oldest commit data for changelog include commit login ([5d7464b](https://github.com/ghiscoding/lerna-lite/commit/5d7464b9224b3da39be2accefe5524ef820980d7)) - by @ghiscoding
@@ -27,7 +27,7 @@ See [Conventional Commits](https://conventionalcommits.org) for commit guideline
 
 ### Bug Fixes
 
-* **run-lifecycle:** lifecycle events should run to completion in series ([#275](https://github.com/ghiscoding/lerna-lite/issues/275)) ([8e45a1e](https://github.com/ghiscoding/lerna-lite/commit/8e45a1ef62dfca3a0f30f6375efc496d57f3ddc1)) - by @ghiscoding
+* **core:** ensure to touch all nodes in package-graph, fix issue found by Jest team ([#301](https://github.com/ghiscoding/lerna-lite/issues/301))  ([f4f7bbc](https://github.com/ghiscoding/lerna-lite/commit/f4f7bbc60a7331a4077e2bf974bb5abffdb4e804)) - by @ghiscoding
 * **version:** inherit stdio for lerna version lifecycle scripts ([#276](https://github.com/ghiscoding/lerna-lite/issues/276)) ([9c3625d](https://github.com/ghiscoding/lerna-lite/commit/9c3625dd06e59fc702b8eef52f2a14daf2095be5)) - by @ghiscoding
 * **version:** make sure we always have regex match array ([#271](https://github.com/ghiscoding/lerna-lite/issues/271)) ([ba34849](https://github.com/ghiscoding/lerna-lite/commit/ba348495cdefc1acbce3cec82b1c68333761cece)) - by @ghiscoding
 * **version:** rename option to `--changelog-include-commits-git-author` ([b095637](https://github.com/ghiscoding/lerna-lite/commit/b095637cdf1ce57f7ecaabf06480f86623e0553e)) - by @ghiscoding
