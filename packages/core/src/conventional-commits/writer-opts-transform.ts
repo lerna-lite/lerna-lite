@@ -58,9 +58,8 @@ export function setConfigChangelogCommitClientLogin(
           .replace(/%a/g, '{{authorName}}' || '')
           .replace(/%e/g, '{{authorEmail}}' || '')
           .replace(/%l/g, '{{userLogin}}' || '')
-      : `(@{{userLogin}})`;
-  writerOpts.commitPartial =
-    config.writerOpts.commitPartial!.replace(/\n*$/, '') + ` {{#if @root.linkReferences~}}${extraCommitMsg}{{~/if}}\n`;
+      : ` (@{{userLogin}})`;
+  writerOpts.commitPartial = config.writerOpts.commitPartial!.replace(/\n*$/, '') + `${extraCommitMsg}\n`;
 
   // add commits since last release into the transform function
   writerOpts.transform = writerOptsTransform.bind(
