@@ -10,7 +10,7 @@ export interface ChangedCommandOption {
   /** always include targeted packages when detecting changed packages, skipping default logic. */
   forcePublish?: boolean | string | string[];
 
-  /** ignore changes in files matched by glob(s) when detecting changed packages. Pass --no-ignore-changes to completely disable. */
+  /** ignore changes in files matched by glob(s) when detecting changed packages. Pass `--no-ignore-changes` to completely disable. */
   ignoreChanges: string[];
 
   /** include tags from merged branches when detecting changed packages. */
@@ -18,7 +18,7 @@ export interface ChangedCommandOption {
 }
 
 export interface DiffCommandOption {
-  /** ignore changes in files matched by glob(s) when detecting changed packages. Pass --no-ignore-changes to completely disable. */
+  /** ignore changes in files matched by glob(s) when detecting changed packages. Pass `--no-ignore-changes` to completely disable. */
   ignoreChanges: string[];
 
   /** package name */
@@ -44,7 +44,7 @@ export interface ExecCommandOption {
   /** Continue executing command despite non-zero exit in a given package. */
   noBail?: boolean;
 
-  /** proxy for --no-bail */
+  /** proxy for `--no-bail` */
   bail?: boolean;
 
   // This option controls prefix for stream output so that it can be disabled to be friendly
@@ -52,7 +52,7 @@ export interface ExecCommandOption {
   /** Do not prefix streaming output. */
   noPrefix?: boolean;
 
-  /** proxy for --no-prefix */
+  /** proxy for `--no-prefix` */
   prefix?: boolean;
 
   /** Profile command executions and output performance profile to default location. */
@@ -97,7 +97,7 @@ export interface ListCommandOption {
 }
 
 export interface PublishCommandOption extends VersionCommandOption {
-  /** alias to '--canary' */
+  /** alias to `--canary` */
   c?: boolean;
 
   /** Publish packages after every successful merge using the sha as part of the tag. */
@@ -130,11 +130,11 @@ export interface PublishCommandOption extends VersionCommandOption {
   /** Disable all lifecycle scripts */
   ignoreScripts?: boolean;
 
-  // TODO: (major) make --no-granular-pathspec the default
+  // TODO: (major) make `--no-granular-pathspec` the default
   /** Do not reset changes file-by-file, but globally. */
   noGranularPathspec?: boolean;
 
-  /** proxy for --no-granular-pathspec */
+  /** proxy for `--no-granular-pathspec` */
   granularPathspec?: boolean;
 
   /** Supply a one-time password for publishing with two-factor authentication. */
@@ -149,7 +149,7 @@ export interface PublishCommandOption extends VersionCommandOption {
   /** Do not reset changes to working tree after publishing is complete. */
   noGitReset?: boolean;
 
-  // proxy for --no-git-reset
+  // proxy for `--no-git-reset`
   gitReset?: boolean;
 
   /** Create a temporary tag while publishing. */
@@ -158,10 +158,10 @@ export interface PublishCommandOption extends VersionCommandOption {
   /** Do not verify package read-write access for current npm user. */
   noVerifyAccess?: boolean;
 
-  /** proxy for --no-verify-access */
+  /** proxy for `--no-verify-access` */
   verifyAccess?: boolean;
 
-  /** alias to '--yes' */
+  /** alias to `--yes` */
   y?: boolean;
 
   /** Skip all confirmation prompts. */
@@ -185,14 +185,14 @@ export interface VersionCommandOption {
   /** Version currently prereleased packages to a non-prerelease version. */
   conventionalGraduate?: boolean | string;
 
-  /** Version changed packages as prereleases when using --conventional-commits. */
+  /** Version changed packages as prereleases when using `--conventional-commits`. */
   conventionalPrerelease?: boolean | string;
 
-  /** Add a custom message at the top of your "changelog.md" which is located in the root of your project. This option is only available when using --conventional-commits with changelogs. */
+  /** Add a custom message at the top of your "changelog.md" which is located in the root of your project. This option is only available when using `--conventional-commits` with changelogs. */
   changelogHeaderMessage?: string;
 
   /**
-   * Specify if we want to include the commit author's name, this option is only available when using --conventional-commits with changelogs.
+   * Specify if we want to include the commit author's name, this option is only available when using `--conventional-commits` with changelogs.
    * We can also optionally provide a custom message or else a default format will be used.
    */
   changelogIncludeCommitsGitAuthor?: boolean | string;
@@ -201,14 +201,14 @@ export interface VersionCommandOption {
   changelogIncludeCommitAuthorFullname?: boolean | string;
 
   /**
-   * Specify if we want to include the commit remote client login name (ie GitHub username), this option is only available when using --conventional-commits with changelogs.
+   * Specify if we want to include the commit remote client login name (ie GitHub username), this option is only available when using `--conventional-commits` with changelogs.
    * We can also optionally provide a custom message or else a default format will be used.
    */
   changelogIncludeCommitsClientLogin?: boolean | string;
 
   /**
    * Add a custom message as a prefix to each new version in your "changelog.md" which is located in the root of your project.
-   * This option is only available when using --conventional-commits with changelogs.
+   * This option is only available when using `--conventional-commits` with changelogs.
    */
   changelogVersionMessage?: string;
 
@@ -232,62 +232,62 @@ export interface VersionCommandOption {
 
   /**
    * Ignore changes in files matched by glob(s) when detecting changed packages.
-   * Pass --no-ignore-changes to completely disable.
+   * Pass `--no-ignore-changes` to completely disable.
    */
   ignoreChanges?: string[];
 
-  /** Disable all lifecycle scripts */
+  /** Disable all lifecycle scripts. */
   ignoreScripts?: boolean;
 
   /** Include tags from merged branches when detecting changed packages. */
   includeMergedTags?: boolean;
 
-  /** alias to '--message' */
+  /** alias to `--message`. */
   m?: string;
 
   /** Use a custom commit message when creating the version commit. */
   message?: string;
 
-  /** Do not generate CHANGELOG.md files when using --conventional-commits. */
+  /** Do not generate CHANGELOG.md files when using `--conventional-commits`. */
   noChangelog?: boolean;
 
-  /** proxy for --no-changelog */
+  /** proxy for `--no-changelog`. */
   changelog?: boolean;
 
   /** Do not run git commit hooks when committing version changes. */
   noCommitHooks?: boolean;
 
-  /** proxy for --no-commit-hooks */
+  /** proxy for `--no-commit-hooks`. */
   commitHooks?: boolean;
 
   /** Do not commit or tag version changes. */
   noGitTagVersion?: boolean;
 
-  /** proxy for --no-git-tag-version */
+  /** proxy for `--no-git-tag-version`. */
   gitTagVersion?: boolean;
 
-  // TODO: (major) make --no-granular-pathspec the default
+  // TODO: (major) make `--no-granular-pathspec` the default
   /** Do not stage changes file-by-file, but globally. */
   noGranularPathspec?: boolean;
 
-  /** Stage changes file-by-file, not globally. Proxy for --no-granular-pathspec */
+  /** Stage changes file-by-file, not globally. Proxy for `--no-granular-pathspec`. */
   granularPathspec?: boolean;
 
-  // TODO: (major) make --no-private the default
+  // TODO: (major) make `--no-private` the default
   /** Do not version private packages. */
   noPrivate?: boolean;
 
-  /** proxy for --no-private */
+  /** proxy for `--no-private`. */
   private?: boolean;
 
   /** Do not push tagged commit to git remote. */
   noPush?: boolean;
 
-  /** proxy for --no-push */
+  /** proxy for `--no-push`. */
   push?: boolean;
 
   // preid is copied into ../publish/command because a whitelist for one option isn't worth it
-  /** Defaults to 'alpha', specify the prerelease identifier when versioning a prerelease */
+  /** Defaults to 'alpha', specify the prerelease identifier when versioning a prerelease. */
   preid?: string;
 
   /** Remote git client, which client is used when reading commits from remote which is useful when associating client login for each changelog entry. */
@@ -314,7 +314,7 @@ export interface VersionCommandOption {
   /** Defaults to true when found, update the project root lock file, the lib will internally read/write back to the lock file. */
   manuallyUpdateRootLockfile?: boolean;
 
-  /** Runs `npm install --package-lock-only` or equivalent depending on the package manager defined in `npmClient` */
+  /** Runs `npm install --package-lock-only` or equivalent depending on the package manager defined in `npmClient`. */
   syncWorkspaceLock?: boolean;
 
   /**
@@ -323,7 +323,7 @@ export interface VersionCommandOption {
    */
   workspaceStrictMatch?: boolean;
 
-  /** alias to '--yes' */
+  /** alias to `--yes` */
   y?: boolean;
 
   /** Skip all confirmation prompts. */
@@ -346,7 +346,7 @@ export interface RunCommandOption {
   /** Continue running script despite non-zero exit in a given package. */
   noBail?: boolean;
 
-  /** proxy for --no-bail */
+  /** proxy for `--no-bail`. */
   bail?: boolean;
 
   // This option controls prefix for stream output so that it can be disabled to be friendly
@@ -355,7 +355,7 @@ export interface RunCommandOption {
   /** Do not prefix streaming output. */
   noPrefix?: boolean;
 
-  /** proxy for --no-prefix */
+  /** proxy for `--no-prefix`. */
   prefix?: boolean;
 
   /** Profile script executions and output performance profile to default location. */
@@ -364,10 +364,10 @@ export interface RunCommandOption {
   /** Output performance profile to custom location instead of default project root. */
   profileLocation?: string;
 
-  /** npm script to run by the command */
+  /** npm script to run by the command. */
   script: string;
 
-  /** Enables integration with [Nx](https://nx.dev) */
+  /** Enables integration with [Nx](https://nx.dev). */
   useNx?: boolean;
 
   /** when "useNx" is enabled, do we want to skip caching with Nx? */

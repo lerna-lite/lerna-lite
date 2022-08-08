@@ -115,7 +115,10 @@ export class InitCommand extends Command<InitCommandOption> {
       initConfig.exact = true;
     }
 
-    const lernaConfig: Partial<ProjectConfig> = { useNx: false, version };
+    const lernaConfig: Partial<ProjectConfig> = {
+      $schema: 'node_modules/@lerna-lite/cli/schemas/lerna-schema.json',
+      version,
+    };
     if (!this.options.useWorkspaces) {
       lernaConfig.packages = ['packages/*'];
     }

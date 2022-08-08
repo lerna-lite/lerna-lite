@@ -9,7 +9,8 @@
     "lerna": "dist/cli.js"
   },
   "files": [
-    "/dist"
+    "/dist",
+    "schemas/lerna-schema.json"
   ],
   "publishConfig": {
     "access": "public"

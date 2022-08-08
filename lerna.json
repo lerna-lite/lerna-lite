@@ -1,18 +1,16 @@
 {
+  "$schema": "node_modules/@lerna-lite/cli/schemas/lerna-schema.json",
   "version": "1.10.0",
   "loglevel": "verbose",
   "npmClient": "pnpm",
   "command": {
-    "publish": {
-      "conventionalCommits": true
-    },
     "version": {
       "conventionalCommits": true,
       "createRelease": "github",
       "gitDryRun": false,
       "syncWorkspaceLock": true,
       "changelogIncludeCommitsClientLogin": " - by @%l",
-      "changelogHeaderMessage": "### Automate your Workspace Versioning, Publishing & Changelog updates with [Lerna-Lite](https://github.com/ghiscoding/lerna-lite) 🚀",
+      "changelogHeaderMessage": "### Automate your Workspace Versioning, Publishing & Changelog updates with [Lerna-Lite](https://github.com/ghiscoding/lerna-lite) 📦🚀",
       "message": "chore(release): publish new version %v"
     },
     "run": {

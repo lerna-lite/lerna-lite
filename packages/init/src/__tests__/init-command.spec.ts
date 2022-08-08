@@ -159,6 +159,7 @@ describe('Init Command', () => {
         await lernaInit(testDir)('--exact');
 
         expect(await fs.readJSON(path.join(testDir, 'lerna.json'))).toMatchObject({
+          $schema: 'node_modules/@lerna-lite/cli/schemas/lerna-schema.json',
           command: {
             init: {
               exact: true,
@@ -176,6 +177,7 @@ describe('Init Command', () => {
 
         await fs.outputJSON(lernaJsonPath, {
           '@lerna-lite/cli': '0.1.100',
+          $schema: 'node_modules/@lerna-lite/cli/schemas/lerna-schema.json',
           command: {
             bootstrap: {
               hoist: true,
@@ -193,12 +195,12 @@ describe('Init Command', () => {
         await lernaInit(testDir)('--use-workspaces');
 
         expect(await fs.readJSON(lernaJsonPath)).toEqual({
+          $schema: 'node_modules/@lerna-lite/cli/schemas/lerna-schema.json',
           command: {
             bootstrap: {
               hoist: true,
             },
           },
-          useNx: false,
           version: '1.2.3',
         });
       });
@@ -319,8 +321,8 @@ describe('Init Command', () => {
       await lernaInit(testDir)();
 
       expect(await fs.readJSON(lernaJsonPath)).toEqual({
+        $schema: 'node_modules/@lerna-lite/cli/schemas/lerna-schema.json',
         packages: ['packages/*'],
-        useNx: false,
         version: '1.2.3',
       });
     });
@@ -347,6 +349,7 @@ describe('Init Command', () => {
 
       await fs.outputJSON(lernaJsonPath, {
         '@lerna-lite/cli': '0.1.100',
+        $schema: 'node_modules/@lerna-lite/cli/schemas/lerna-schema.json',
         command: {
           bootstrap: {
             hoist: true,
@@ -363,6 +366,7 @@ describe('Init Command', () => {
       await lernaInit(testDir)('--exact');
 
       expect(await fs.readJSON(lernaJsonPath)).toEqual({
+        $schema: 'node_modules/@lerna-lite/cli/schemas/lerna-schema.json',
         command: {
           bootstrap: {
             hoist: true,
@@ -372,7 +376,6 @@ describe('Init Command', () => {
           },
         },
         packages: ['packages/*'],
-        useNx: false,
         version: '1.2.3',
       });
     });

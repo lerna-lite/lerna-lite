@@ -204,6 +204,8 @@ export interface LernaConfig {
 }
 
 export interface ProjectConfig extends LernaConfig, QueryGraphConfig {
+  /** Lerna JSON Schema https://json-schema.org/ */
+  $schema: string;
   ci?: boolean;
   concurrency: number | string;
   cwd: string;
