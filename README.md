@@ -132,7 +132,10 @@ Note that `package-a` will not be created, it is only shown shown here to help c
 
 Run the following commands to install Lerna-Lite in your project and/or install it globally by adding the `-g` option.
 
-If you are new to Lerna-Lite, you could also run the [lerna init](https://github.com/ghiscoding/lerna-lite/tree/main/packages/init#readme) command which will create the `lerna.json` for you. If you are using a different client other than npm, then make sure to update the `npmClient` property in `lerna.json` (for example: `"npmClient": "yarn"`).
+If you are new to Lerna-Lite, you could also run the [lerna init](https://github.com/ghiscoding/lerna-lite/tree/main/packages/init#readme) command which will create the `lerna.json` for you with a minimal setup. If you are using a different client other than npm, then make sure to update the `npmClient` property in `lerna.json` (for example: `"npmClient": "yarn"`).
+
+### JSON Schema
+You can add a [JSON Schema](https://json-schema.org/) by adding the `$schema` property to your `lerna.json` config file (this will be configured automatically when using `lerna init`). This will help the developer experience, users can see what properties are valid and a brief description of what they do (taken from the lerna command options documentation). You can consult [`lerna.json`](https://github.com/ghiscoding/lerna-lite/blob/main/lerna.json) of Lerna-Lite for a demo.
 
 ### CLI Installation
 
@@ -205,7 +208,7 @@ npm install @lerna-lite/run -D -W
 
 You want to see a project demo? Sure, you're looking at it 😉
 
-Yes indeed, this lib was originally created as an NPM Workspace and later changed to a [pnpm workspaces](https://pnpm.io/workspaces) for the sole purpose of demoing and testing its own code. All changelogs and published versions are created and published by the lib itself, how sweet is that? You will also find that Lerna-Lite project has its own [lerna.json](https://github.com/ghiscoding/lerna-lite/blob/main/lerna.json) config file to run properly (take a look to see how it works).
+Yes indeed, this lib was originally created as an NPM Workspace and later changed to a [pnpm workspaces](https://pnpm.io/workspaces) for the sole purpose of demoing and testing its own code. All changelogs and published versions are created and published by the lib itself, how sweet is that? You will also find that Lerna-Lite project has its own [`lerna.json`](https://github.com/ghiscoding/lerna-lite/blob/main/lerna.json) config file to run properly (take a look to see how it works).
 
 ### See it in Action 🎦
 
