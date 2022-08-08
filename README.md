@@ -67,15 +67,15 @@ Mainly for the following reasons:
 1. original Lerna repo was unmaintained for nearly 2 years (dependencies were out of date)
     - this is no longer true since Nrwl took over stewardship of Lerna, but the next few points are still valid
     - keep PRs in sync with original Lerna
-2. desire to create a smaller lib that is more modular and lighter than the original all-in-one Lerna
-    - it's smaller since we only copied half of Lerna's commands and a few are totally optional.
-    - we don't need all of Lerna's packages anymore since Workspaces are supported by all package managers.
-    - the main starting goal of this fork was to keep only `version` and `publish` commands in the core and make everything else optional (install and use only what you really need).
+2. certain desire to create a smaller and more modular lib that is lighter than the original all-in-one Lerna
+    - it's smaller since we only copied half of Lerna's commands and many of them are totally optional.
+    - we don't need `bootstrap` anymore since Workspaces are supported by all package managers.
+    - the main goal of this fork was to keep only `version` and `publish` commands in the core and make everything else optional (choose and install what you really need).
 3. rewrite the lib in TypeScript
 4. replicate a few opened PRs (fixes and features) from Lerna and also add extra features in Lerna-Lite
     - for example we now support the `workspace:` protocol and some `dry-run` options
-5. Lerna v5+ is now installing **[Nx](https://nx.dev/)** as a required [dependency](https://github.com/lerna/lerna/blob/main/core/lerna/package.json#L57) while Lerna-Lite **does not**, it remains optional
-    - we did add the `useNx` option into Lerna-Lite, but even if [Nx](https://nx.dev/) is a nice lib, it should remain optional and it is in here.
+5. Lerna v5+ is now installing **[Nx](https://nx.dev/)** as a required [dependency](https://github.com/lerna/lerna/blob/main/core/lerna/package.json#L57) while Lerna-Lite **does not**
+    - even if [Nx](https://nx.dev/) could be a nice addition with [`useNx`](https://github.com/ghiscoding/lerna-lite/tree/main/packages/run#usenx-experimental), it should and will always be optional in Lerna-Lite. You get to chose, we are not enforcing anything.
 
 ### This lib will help you with
 
