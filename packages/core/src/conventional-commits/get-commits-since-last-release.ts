@@ -49,17 +49,17 @@ export function getOldestCommitSinceLastTag(execOpts?: ExecOpts, includeMergedTa
 
   if (lastTagName) {
     log.silly('git', 'getCurrentBranchOldestCommitSinceLastTag');
-    let stdout = execSync('git', ['log', `${lastTagName}..HEAD`, '--format="%h %cI"', '--reverse'], execOpts);
+    let stdout = execSync('git', ['log', `${lastTagName}..HEAD`, '--format="%h %aI"', '--reverse'], execOpts);
     if (!stdout) {
       // in some occasion the previous git command might return nothing, in that case we'll return the tag detail instead
-      stdout = execSync('git', ['log', '-1', '--format="%h %cI"', lastTagName], execOpts);
+      stdout = execSync('git', ['log', '-1', '--format="%h %aI"', lastTagName], execOpts);
     }
     [commitResult] = stdout.split('\n');
   } else {
     log.silly('git', 'getCurrentBranchFirstCommit');
     commitResult = execSync(
       'git',
-      ['log', '--oneline', '--format="%h %cI"', '--reverse', '--max-parents=0', 'HEAD'],
+      ['log', '--oneline', '--format="%h %aI"', '--reverse', '--max-parents=0', 'HEAD'],
       execOpts
     );
   }
