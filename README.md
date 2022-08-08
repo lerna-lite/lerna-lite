@@ -135,7 +135,7 @@ Run the following commands to install Lerna-Lite in your project and/or install 
 If you are new to Lerna-Lite, you could also run the [lerna init](https://github.com/ghiscoding/lerna-lite/tree/main/packages/init#readme) command which will create the `lerna.json` for you with a minimal setup. If you are using a different client other than npm, then make sure to update the `npmClient` property in `lerna.json` (for example: `"npmClient": "yarn"`).
 
 ### JSON Schema
-You can add a [JSON Schema](https://json-schema.org/) by adding the `$schema` property to your `lerna.json` config file (this will be configured automatically when using `lerna init`). This will help the developer experience, users can see what properties are valid and a brief description of what they do (taken from the lerna command options documentation). You can consult [`lerna.json`](https://github.com/ghiscoding/lerna-lite/blob/main/lerna.json) of Lerna-Lite for a demo.
+Lerna-Lite [JSON Schema](https://json-schema.org/) can be added to your `lerna.json` with the `$schema` property (this will be configured automatically when using `lerna init`). This will help the developer experience, users can see what properties are valid and a brief description of what they do (taken from the lerna command options documentation). You can consult [`lerna.json`](https://github.com/ghiscoding/lerna-lite/blob/main/lerna.json) of Lerna-Lite for a demo.
 
 ### CLI Installation
 
