@@ -63,7 +63,7 @@ describe('getOldestCommitSinceLastTag', () => {
 
       expect(execSpy).toHaveBeenCalledWith(
         'git',
-        ['log', '--oneline', '--format="%h %cI"', '--reverse', '--max-parents=0', 'HEAD'],
+        ['log', '--oneline', '--format="%h %aI"', '--reverse', '--max-parents=0', 'HEAD'],
         execOpts
       );
       expect(result).toEqual({ commitDate: '2022-07-01T00:01:02-04:00', commitHash: 'abcbeef' });
@@ -82,8 +82,8 @@ describe('getOldestCommitSinceLastTag', () => {
 
       const result = await getOldestCommitSinceLastTag(execOpts);
 
-      expect(execSpy).toHaveBeenCalledWith('git', ['log', 'v1.0.0..HEAD', '--format="%h %cI"', '--reverse'], execOpts);
-      expect(execSpy).toHaveBeenCalledWith('git', ['log', '-1', '--format="%h %cI"', 'v1.0.0'], execOpts);
+      expect(execSpy).toHaveBeenCalledWith('git', ['log', 'v1.0.0..HEAD', '--format="%h %aI"', '--reverse'], execOpts);
+      expect(execSpy).toHaveBeenCalledWith('git', ['log', '-1', '--format="%h %aI"', 'v1.0.0'], execOpts);
       expect(result).toEqual({ commitDate: '2022-07-01T00:01:02-04:00', commitHash: 'deedbeaf' });
     });
 
@@ -91,7 +91,7 @@ describe('getOldestCommitSinceLastTag', () => {
       const result = await getOldestCommitSinceLastTag(execOpts);
       const execSpy = (execSync as jest.Mock).mockReturnValueOnce('"deadbeef 2022-07-01T00:01:02-04:00"');
 
-      expect(execSpy).toHaveBeenCalledWith('git', ['log', 'v1.0.0..HEAD', '--format="%h %cI"', '--reverse'], execOpts);
+      expect(execSpy).toHaveBeenCalledWith('git', ['log', 'v1.0.0..HEAD', '--format="%h %aI"', '--reverse'], execOpts);
       expect(result).toEqual({ commitDate: '2022-07-01T00:01:02-04:00', commitHash: 'deadbeef' });
     });
   });
