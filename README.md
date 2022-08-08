@@ -17,6 +17,7 @@
   - [Why create this lib/fork?](#why-create-this-libfork)
 - [Getting Started](#getting-started)
   - [Installation](#installation)
+  - [JSON Schema](#json-schema)
   - [Migration for existing Lerna users](#migration-for-existing-lerna-users)
 - [Project Demo - See it in Action](https://github.com/ghiscoding/lerna-lite/wiki/Release-Demo)
 - [README Badge](#readme-badge)
