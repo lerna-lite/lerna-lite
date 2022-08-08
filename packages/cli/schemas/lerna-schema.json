@@ -1266,11 +1266,11 @@
           "description": "During `lerna version`, add a custom message at the top of your \"changelog.md\" which is located in the root of your project. This option is only available when using --conventional-commits with changelogs."
         },
         "changelogIncludeCommitsGitAuthor": {
-          "type": "string",
+          "anyOf": [{ "type": "string" }, { "type": "boolean" }],
           "description": "During `lerna version`, specify if we want to include the commit author's name, this option is only available when using --conventional-commits with changelogs. We can also optionally provide a custom message or else a default format will be used."
         },
         "changelogIncludeCommitsClientLogin": {
-          "type": "string",
+          "anyOf": [{ "type": "string" }, { "type": "boolean" }],
           "description": "During `lerna version`, specify if we want to include the commit remote client login name (ie GitHub username), this option is only available when using --conventional-commits with changelogs. We can also optionally provide a custom message or else a default format will be used."
         },
         "changelogVersionMessage": {
