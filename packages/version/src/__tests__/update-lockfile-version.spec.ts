@@ -44,6 +44,8 @@ describe('npm classic lock file', () => {
     const [pkg] = await Project.getPackages(cwd);
 
     pkg.version = '2.0.0';
+    pkg.dependencies['package-1'] = '^2.0.0';
+    pkg.devDependencies['package-2'] = '3.0.0';
 
     const returnedLockfilePath = await updateClassicLockfileVersion(pkg as unknown as Package);
 
@@ -51,7 +53,9 @@ describe('npm classic lock file', () => {
     expect(Array.from((loadJsonFile as any).registry.keys())).toStrictEqual(['/packages/package-1']);
     const updatedLockfile = fs.readJSONSync(returnedLockfilePath as string);
     expect(updatedLockfile).toHaveProperty('version', '2.0.0');
-    expect(updatedLockfile).toHaveProperty(['packages', '', 'version'], '2.0.0');
+    expect(updatedLockfile).toHaveProperty(['packages', '', 'dependencies', 'package-1'], '^2.0.0');
+    expect(updatedLockfile).toHaveProperty(['packages', '', 'dependencies', 'tiny-tarball'], '^1.0.0');
+    expect(updatedLockfile).toHaveProperty(['packages', '', 'devDependencies', 'package-2'], '3.0.0');
   });
 
   test('updateClassicLockfileVersion without sibling lockfile', async () => {

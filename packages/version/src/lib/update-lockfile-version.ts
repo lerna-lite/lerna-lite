@@ -45,6 +45,12 @@ export async function updateClassicLockfileVersion(pkg: Package): Promise<string
       // update version for a npm lockfile v2 format
       if (pkgLockFileObj.packages?.['']) {
         pkgLockFileObj.packages[''].version = pkg.version;
+        if (pkgLockFileObj.packages[''].dependencies) {
+          pkgLockFileObj.packages[''].dependencies = pkg.dependencies;
+        }
+        if (pkgLockFileObj.packages[''].devDependencies) {
+          pkgLockFileObj.packages[''].devDependencies = pkg.devDependencies;
+        }
       }
 
       await writeJsonFile(lockFilePath, pkgLockFileObj, {
