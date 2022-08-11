@@ -57,7 +57,7 @@
     "@types/load-json-file": "^5.1.0",
     "@types/minimatch": "^3.0.5",
     "@types/p-map": "^2.0.0",
-    "@types/semver": "^7.3.10",
+    "@types/semver": "^7.3.11",
     "@types/write-json-file": "^3.2.1",
     "@types/write-pkg": "^4.0.0",
     "execa": "^5.1.1",
