@@ -344,6 +344,318 @@ index SHA..SHA 100644
 +  \\"version\\": \\"1.1.0\\","
 `;
 
+exports[`VersionCommand normal mode versions changed packages in dry-run mode: commit 1`] = `
+"Init commit
+
+HEAD -> main
+
+diff --git a/lerna.json b/lerna.json
+new file mode 100644
+index SHA..SHA
+--- /dev/null
++++ b/lerna.json
+@@ -0,0 +1,3 @@
++{
++  \\"version\\": \\"1.0.0\\"
++}
+diff --git a/package.json b/package.json
+new file mode 100644
+index SHA..SHA
+--- /dev/null
++++ b/package.json
+@@ -0,0 +1,3 @@
++{
++  \\"name\\": \\"normal\\"
++}
+diff --git a/packages/package-1/package.json b/packages/package-1/package.json
+new file mode 100644
+index SHA..SHA
+--- /dev/null
++++ b/packages/package-1/package.json
+@@ -0,0 +1,4 @@
++{
++  \\"name\\": \\"package-1\\",
++  \\"version\\": \\"1.0.0\\"
++}
+diff --git a/packages/package-2/package.json b/packages/package-2/package.json
+new file mode 100644
+index SHA..SHA
+--- /dev/null
++++ b/packages/package-2/package.json
+@@ -0,0 +1,7 @@
++{
++  \\"name\\": \\"package-2\\",
++  \\"version\\": \\"1.0.0\\",
++  \\"dependencies\\": {
++    \\"package-1\\": \\"^1.0.0\\"
++  }
++}
+diff --git a/packages/package-3/package.json b/packages/package-3/package.json
+new file mode 100644
+index SHA..SHA
+--- /dev/null
++++ b/packages/package-3/package.json
+@@ -0,0 +1,10 @@
++{
++  \\"name\\": \\"package-3\\",
++  \\"version\\": \\"1.0.0\\",
++  \\"peerDependencies\\": {
++    \\"package-2\\": \\"^1.0.0\\"
++  },
++  \\"devDependencies\\": {
++    \\"package-2\\": \\"^1.0.0\\"
++  }
++}
+diff --git a/packages/package-4/package.json b/packages/package-4/package.json
+new file mode 100644
+index SHA..SHA
+--- /dev/null
++++ b/packages/package-4/package.json
+@@ -0,0 +1,7 @@
++{
++  \\"name\\": \\"package-4\\",
++  \\"version\\": \\"1.0.0\\",
++  \\"dependencies\\": {
++    \\"package-1\\": \\"^0.0.0\\"
++  }
++}
+diff --git a/packages/package-5/package.json b/packages/package-5/package.json
+new file mode 100644
+index SHA..SHA
+--- /dev/null
++++ b/packages/package-5/package.json
+@@ -0,0 +1,11 @@
++{
++  \\"name\\": \\"package-5\\",
++  \\"dependencies\\": {
++    \\"package-1\\": \\"^1.0.0\\"
++  },
++  \\"optionalDependencies\\": {
++    \\"package-3\\": \\"^1.0.0\\"
++  },
++  \\"private\\": true,
++  \\"version\\": \\"1.0.0\\"
++}"
+`;
+
+exports[`VersionCommand normal mode versions changed packages in dry-run mode: console output 1`] = `
+"
+Changes (5 packages):
+ - package-1: 1.0.0 => 1.0.1
+ - package-2: 1.0.0 => 1.0.1
+ - package-3: 1.0.0 => 1.0.1
+ - package-4: 1.0.0 => 1.0.1
+ - package-5: 1.0.0 => 1.0.1 (private)
+"
+`;
+
+exports[`VersionCommand normal mode versions changed packages in dry-run mode: gitHead 1`] = `
+Object {
+  "name": "package-1",
+  "version": "1.0.1",
+}
+`;
+
+exports[`VersionCommand normal mode versions changed packages in dry-run mode: prompt 1`] = `
+Array [
+  Array [
+    "Select a new version (currently 1.0.0)",
+    Object {
+      "choices": Array [
+        Object {
+          "name": "Patch (1.0.1)",
+          "value": "1.0.1",
+        },
+        Object {
+          "name": "Minor (1.1.0)",
+          "value": "1.1.0",
+        },
+        Object {
+          "name": "Major (2.0.0)",
+          "value": "2.0.0",
+        },
+        Object {
+          "name": "Prepatch (1.0.1-alpha.0)",
+          "value": "1.0.1-alpha.0",
+        },
+        Object {
+          "name": "Preminor (1.1.0-alpha.0)",
+          "value": "1.1.0-alpha.0",
+        },
+        Object {
+          "name": "Premajor (2.0.0-alpha.0)",
+          "value": "2.0.0-alpha.0",
+        },
+        Object {
+          "name": "Custom Prerelease",
+          "value": "PRERELEASE",
+        },
+        Object {
+          "name": "Custom Version",
+          "value": "CUSTOM",
+        },
+      ],
+    },
+  ],
+]
+`;
+
+exports[`VersionCommand normal mode versions changed packages with publish prompt in dry-run mode: commit 1`] = `
+"Init commit
+
+HEAD -> main
+
+diff --git a/lerna.json b/lerna.json
+new file mode 100644
+index SHA..SHA
+--- /dev/null
++++ b/lerna.json
+@@ -0,0 +1,3 @@
++{
++  \\"version\\": \\"1.0.0\\"
++}
+diff --git a/package.json b/package.json
+new file mode 100644
+index SHA..SHA
+--- /dev/null
++++ b/package.json
+@@ -0,0 +1,3 @@
++{
++  \\"name\\": \\"normal\\"
++}
+diff --git a/packages/package-1/package.json b/packages/package-1/package.json
+new file mode 100644
+index SHA..SHA
+--- /dev/null
++++ b/packages/package-1/package.json
+@@ -0,0 +1,4 @@
++{
++  \\"name\\": \\"package-1\\",
++  \\"version\\": \\"1.0.0\\"
++}
+diff --git a/packages/package-2/package.json b/packages/package-2/package.json
+new file mode 100644
+index SHA..SHA
+--- /dev/null
++++ b/packages/package-2/package.json
+@@ -0,0 +1,7 @@
++{
++  \\"name\\": \\"package-2\\",
++  \\"version\\": \\"1.0.0\\",
++  \\"dependencies\\": {
++    \\"package-1\\": \\"^1.0.0\\"
++  }
++}
+diff --git a/packages/package-3/package.json b/packages/package-3/package.json
+new file mode 100644
+index SHA..SHA
+--- /dev/null
++++ b/packages/package-3/package.json
+@@ -0,0 +1,10 @@
++{
++  \\"name\\": \\"package-3\\",
++  \\"version\\": \\"1.0.0\\",
++  \\"peerDependencies\\": {
++    \\"package-2\\": \\"^1.0.0\\"
++  },
++  \\"devDependencies\\": {
++    \\"package-2\\": \\"^1.0.0\\"
++  }
++}
+diff --git a/packages/package-4/package.json b/packages/package-4/package.json
+new file mode 100644
+index SHA..SHA
+--- /dev/null
++++ b/packages/package-4/package.json
+@@ -0,0 +1,7 @@
++{
++  \\"name\\": \\"package-4\\",
++  \\"version\\": \\"1.0.0\\",
++  \\"dependencies\\": {
++    \\"package-1\\": \\"^0.0.0\\"
++  }
++}
+diff --git a/packages/package-5/package.json b/packages/package-5/package.json
+new file mode 100644
+index SHA..SHA
+--- /dev/null
++++ b/packages/package-5/package.json
+@@ -0,0 +1,11 @@
++{
++  \\"name\\": \\"package-5\\",
++  \\"dependencies\\": {
++    \\"package-1\\": \\"^1.0.0\\"
++  },
++  \\"optionalDependencies\\": {
++    \\"package-3\\": \\"^1.0.0\\"
++  },
++  \\"private\\": true,
++  \\"version\\": \\"1.0.0\\"
++}"
+`;
+
+exports[`VersionCommand normal mode versions changed packages with publish prompt in dry-run mode: console output 1`] = `
+"
+Changes (5 packages):
+ - package-1: 1.0.0 => 1.0.1
+ - package-2: 1.0.0 => 1.0.1
+ - package-3: 1.0.0 => 1.0.1
+ - package-4: 1.0.0 => 1.0.1
+ - package-5: 1.0.0 => 1.0.1 (private)
+"
+`;
+
+exports[`VersionCommand normal mode versions changed packages with publish prompt in dry-run mode: gitHead 1`] = `
+Object {
+  "name": "package-1",
+  "version": "1.0.1",
+}
+`;
+
+exports[`VersionCommand normal mode versions changed packages with publish prompt in dry-run mode: prompt 1`] = `
+Array [
+  Array [
+    "Select a new version (currently 1.0.0)",
+    Object {
+      "choices": Array [
+        Object {
+          "name": "Patch (1.0.1)",
+          "value": "1.0.1",
+        },
+        Object {
+          "name": "Minor (1.1.0)",
+          "value": "1.1.0",
+        },
+        Object {
+          "name": "Major (2.0.0)",
+          "value": "2.0.0",
+        },
+        Object {
+          "name": "Prepatch (1.0.1-alpha.0)",
+          "value": "1.0.1-alpha.0",
+        },
+        Object {
+          "name": "Preminor (1.1.0-alpha.0)",
+          "value": "1.1.0-alpha.0",
+        },
+        Object {
+          "name": "Premajor (2.0.0-alpha.0)",
+          "value": "2.0.0-alpha.0",
+        },
+        Object {
+          "name": "Custom Prerelease",
+          "value": "PRERELEASE",
+        },
+        Object {
+          "name": "Custom Version",
+          "value": "CUSTOM",
+        },
+      ],
+    },
+  ],
+]
+`;
+
 exports[`VersionCommand normal mode versions changed packages with publish prompt: commit 1`] = `
 "v1.0.1
 

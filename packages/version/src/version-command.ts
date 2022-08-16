@@ -567,11 +567,12 @@ export class VersionCommand extends Command<VersionCommandOption> {
     }
 
     // When composed from `lerna publish`, use this opportunity to confirm publishing
-    const message = this.composed
+    let confirmMessage = this.options.gitDryRun ? 'dry-run> ' : '';
+    confirmMessage += this.composed
       ? 'Are you sure you want to publish these packages?'
       : 'Are you sure you want to create these versions?';
 
-    return promptConfirmation(message);
+    return promptConfirmation(confirmMessage);
   }
 
   updatePackageVersions() {

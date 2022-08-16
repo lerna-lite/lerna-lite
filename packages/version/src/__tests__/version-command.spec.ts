@@ -132,6 +132,33 @@ describe('VersionCommand', () => {
       expect((logOutput as any).logged()).toMatchSnapshot('console output');
     });
 
+    it('versions changed packages in dry-run mode', async () => {
+      const testDir = await initFixture('normal');
+      // when --conventional-commits is absent,
+      // --no-changelog should have _no_ effect
+      await new VersionCommand(createArgv(testDir, '--no-changelog', '--git-dry-run'));
+
+      expect(checkWorkingTree).toHaveBeenCalled();
+
+      expect((promptSelectOne as jest.Mock).mock.calls).toMatchSnapshot('prompt');
+      expect(promptConfirmation).toHaveBeenLastCalledWith('dry-run> Are you sure you want to create these versions?');
+
+      expect((writePkg as any).updatedManifest('package-1')).toMatchSnapshot('gitHead');
+
+      const patch = await showCommit(testDir);
+      expect(patch).toMatchSnapshot('commit');
+
+      expect(libPush).toHaveBeenLastCalledWith(
+        'origin',
+        'main',
+        expect.objectContaining({
+          cwd: testDir,
+        }),
+        true
+      );
+      expect((logOutput as any).logged()).toMatchSnapshot('console output');
+    });
+
     it('versions changed packages with publish prompt', async () => {
       const testDir = await initFixture('normal');
       // when --conventional-commits is absent,
@@ -155,6 +182,33 @@ describe('VersionCommand', () => {
           cwd: testDir,
         }),
         undefined
+      );
+      expect((logOutput as any).logged()).toMatchSnapshot('console output');
+    });
+
+    it('versions changed packages with publish prompt in dry-run mode', async () => {
+      const testDir = await initFixture('normal');
+      // when --conventional-commits is absent,
+      // --no-changelog should have _no_ effect
+      await new VersionCommand({ ...createArgv(testDir, '--no-changelog', '--git-dry-run'), composed: 'composed' });
+
+      expect(checkWorkingTree).toHaveBeenCalled();
+
+      expect((promptSelectOne as jest.Mock).mock.calls).toMatchSnapshot('prompt');
+      expect(promptConfirmation).toHaveBeenLastCalledWith('dry-run> Are you sure you want to publish these packages?');
+
+      expect((writePkg as any).updatedManifest('package-1')).toMatchSnapshot('gitHead');
+
+      const patch = await showCommit(testDir);
+      expect(patch).toMatchSnapshot('commit');
+
+      expect(libPush).toHaveBeenLastCalledWith(
+        'origin',
+        'main',
+        expect.objectContaining({
+          cwd: testDir,
+        }),
+        true
       );
       expect((logOutput as any).logged()).toMatchSnapshot('console output');
     });

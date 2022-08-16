@@ -486,7 +486,9 @@ export class PublishCommand extends Command<PublishCommandOption> {
       return true;
     }
 
-    return promptConfirmation('Are you sure you want to publish these packages?');
+    let confirmMessage = this.options.gitDryRun ? 'dry-run> ' : '';
+    confirmMessage += 'Are you sure you want to publish these packages?';
+    return promptConfirmation(confirmMessage);
   }
 
   prepareLicenseActions() {
