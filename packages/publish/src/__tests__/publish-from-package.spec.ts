@@ -79,6 +79,21 @@ describe('publish from-package', () => {
     expect((npmPublish as typeof npmPublishMock).order()).toEqual(['package-2', 'package-3']);
   });
 
+  it('publishes unpublished packages in dry-run mode', async () => {
+    const cwd = await initFixture('normal');
+
+    (getUnpublishedPackages as jest.Mock).mockImplementationOnce((packageGraph) => {
+      const pkgs = packageGraph.rawPackageList.slice(1, 3);
+      return pkgs.map((pkg) => packageGraph.get(pkg.name));
+    });
+
+    await new PublishCommand(createArgv(cwd, '--bump', 'from-package', '--git-dry-run'));
+
+    expect(promptConfirmation).toHaveBeenLastCalledWith('dry-run> Are you sure you want to publish these packages?');
+    expect((logOutput as any).logged()).toMatch('Found 2 packages to publish:');
+    expect((npmPublish as typeof npmPublishMock).order()).toEqual(['package-2', 'package-3']);
+  });
+
   it('publishes unpublished independent packages', async () => {
     const cwd = await initFixture('independent');
 

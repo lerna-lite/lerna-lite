@@ -79,6 +79,26 @@ describe('publish from-git', () => {
     ]);
   });
 
+  it('publishes tagged packages in dry-run mode', async () => {
+    const cwd = await initFixture('normal');
+
+    await gitTag(cwd, 'v1.0.0');
+    await new PublishCommand(createArgv(cwd, '--bump', 'from-git', '--git-dry-run'));
+
+    // called from chained describeRef()
+    expect(throwIfUncommitted).toHaveBeenCalled();
+
+    expect(promptConfirmation).toHaveBeenLastCalledWith('dry-run> Are you sure you want to publish these packages?');
+    expect((logOutput as any).logged()).toMatch('Found 4 packages to publish:');
+    expect((npmPublish as typeof npmPublishMock).order()).toEqual([
+      'package-1',
+      'package-4',
+      'package-2',
+      'package-3',
+      // package-5 is private
+    ]);
+  });
+
   it('publishes tagged packages, lexically sorted when --no-sort is present', async () => {
     const cwd = await initFixture('normal');
 
