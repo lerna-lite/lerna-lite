@@ -17,6 +17,7 @@
   - [Why create this lib/fork?](#why-create-this-libfork)
 - [Getting Started](#getting-started)
   - [Installation](#installation)
+  - [JSON Schema](#json-schema)
   - [Migration for existing Lerna users](#migration-for-existing-lerna-users)
 - [Project Demo - See it in Action](https://github.com/ghiscoding/lerna-lite/wiki/Release-Demo)
 - [README Badge](#readme-badge)
@@ -66,16 +67,16 @@ Mainly for the following reasons:
 
 1. original Lerna repo was unmaintained for nearly 2 years (dependencies were out of date)
     - this is no longer true since Nrwl took over stewardship of Lerna, but the next few points are still valid
-    - keep PRs in sync with original Lerna
-2. desire to create a smaller lib that is more modular and lighter than the original all-in-one Lerna
-    - it's smaller since we only copied half of Lerna's commands and a few are totally optional.
-    - we don't need all of Lerna's packages anymore since Workspaces are supported by all package managers.
-    - the main starting goal of this fork was to keep only `version` and `publish` commands in the core and make everything else optional (install and use only what you really need).
-3. rewrite the lib in TypeScript
+    - we now keep PRs in sync with the original Lerna
+2. a desire to create a smaller and more modular lib that is lighter than the original all-in-one Lerna
+    - it's smaller since we only copied half of Lerna's commands and many of them are totally optional.
+    - we don't need `bootstrap` anymore since Workspaces are supported by all package managers.
+    - the main goal of this fork was to keep only `version` and `publish` commands in the core and make everything else optional (choose and install what you really need).
+3. rewrite the lib in TypeScript for type checking and to be compatible with ESM
 4. replicate a few opened PRs (fixes and features) from Lerna and also add extra features in Lerna-Lite
-    - for example we now support the `workspace:` protocol and some `dry-run` options
-5. Lerna v5+ is now installing **[Nx](https://nx.dev/)** as a required [dependency](https://github.com/lerna/lerna/blob/main/core/lerna/package.json#L57) while Lerna-Lite **does not**, it remains optional
-    - we did add the `useNx` option into Lerna-Lite, but even if [Nx](https://nx.dev/) is a nice lib, it should remain optional and it is in here.
+    - for example we now support the `workspace:` protocol, we added changelog headers and some `dry-run` options
+5. Lerna v5+ is now installing **[Nx](https://nx.dev/)** as a required [dependency](https://github.com/lerna/lerna/blob/main/core/lerna/package.json#L57) while it remains **optional** in Lerna-Lite
+    - even if [Nx](https://nx.dev/) could be a nice addition with [`useNx`](https://github.com/ghiscoding/lerna-lite/tree/main/packages/run#usenx-experimental) option, it should and will always be optional in Lerna-Lite. You still get to choose.
 
 ### This lib will help you with
 
@@ -132,7 +133,18 @@ Note that `package-a` will not be created, it is only shown shown here to help c
 
 Run the following commands to install Lerna-Lite in your project and/or install it globally by adding the `-g` option.
 
-If you are new to Lerna-Lite, you could also run the [lerna init](https://github.com/ghiscoding/lerna-lite/tree/main/packages/init#readme) command which will create the `lerna.json` for you. If you are using a different client other than npm, then make sure to update the `npmClient` property in `lerna.json` (for example: `"npmClient": "yarn"`).
+If you are new to Lerna-Lite, you could also run the [lerna init](https://github.com/ghiscoding/lerna-lite/tree/main/packages/init#readme) command which will create the `lerna.json` for you with a minimal setup. If you are using a different client other than npm, then make sure to update the `npmClient` property in `lerna.json` (for example: `"npmClient": "yarn"`).
+
+### JSON Schema
+You can add the `$schema` property into your `lerna.json` to take advantage of Lerna-Lite [JSON Schema](https://json-schema.org/) (`lerna init` will automatically configure this for you). This will help with the developer experience, users can see what properties are valid with a brief description of what they do (taken from the lerna command options documentation).
+
+##### `lerna.json`
+```js
+{
+  "$schema": "node_modules/@lerna-lite/cli/schemas/lerna-schema.json",
+  // ...
+}
+```
 
 ### CLI Installation
 
@@ -205,7 +217,7 @@ npm install @lerna-lite/run -D -W
 
 You want to see a project demo? Sure, you're looking at it 😉
 
-Yes indeed, this lib was originally created as an NPM Workspace and later changed to a [pnpm workspaces](https://pnpm.io/workspaces) for the sole purpose of demoing and testing its own code. All changelogs and published versions are created and published by the lib itself, how sweet is that? You will also find that Lerna-Lite project has its own [lerna.json](https://github.com/ghiscoding/lerna-lite/blob/main/lerna.json) config file to run properly (take a look to see how it works).
+Yes indeed, this lib was originally created as an NPM Workspace and later changed to a [pnpm workspaces](https://pnpm.io/workspaces) for the sole purpose of demoing and testing its own code. All changelogs and published versions are created and published by the lib itself, how sweet is that? You will also find that Lerna-Lite project has its own [`lerna.json`](https://github.com/ghiscoding/lerna-lite/blob/main/lerna.json) config file to run properly (take a look to see how it works).
 
 ### See it in Action 🎦
 
