@@ -282,6 +282,7 @@ export class VersionCommand extends Command<VersionCommandOption> {
         remoteClient,
         this.options.gitRemote,
         this.currentBranch,
+        isIndependent,
         this.execOpts
       );
     }
