@@ -587,7 +587,7 @@ npm install --package-lock-only     # npm client >= 8.5.0
 npm shrinkwrap --package-lock-only  # npm client < 8.5.0 will execute a file rename of shrinkwrap file behind the scene
 
 # pnpm is assuming a "pnpm-lock.yaml" lock file and "npmClient": "pnpm"
-pnpm install --lockfile-only
+pnpm install --lockfile-only --ignore-scripts
 
 # yarn is assuming a "yarn.lock" lock file and "npmClient": "yarn"
 yarn install --mode update-lockfile

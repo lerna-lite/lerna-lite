@@ -30,7 +30,6 @@ export async function loadPackageLockFileWhenExists<T = any>(lockFileFolderPath:
  * Update NPM Lock File (when found), the lock file might be version 1 (exist in package folder) or version 2 (exist in workspace root)
  * Depending on the version type, the structure of the lock file will be different and will be updated accordingly
  * @param {Object} pkg
- * @param {Object} project
  * @returns Promise<string>
  */
 export async function updateClassicLockfileVersion(pkg: Package): Promise<string | undefined> {
@@ -136,8 +135,8 @@ export async function runInstallLockFileOnly(
     case 'pnpm':
       inputLockfileName = 'pnpm-lock.yaml';
       if (await validateFileExists(path.join(cwd, inputLockfileName))) {
-        log.verbose('lock', `updating lock file via "pnpm install --lockfile-only"`);
-        await exec('pnpm', ['install', '--lockfile-only'], { cwd });
+        log.verbose('lock', `updating lock file via "pnpm install --lockfile-only --ignore-scripts"`);
+        await exec('pnpm', ['install', '--lockfile-only', '--ignore-scripts'], { cwd });
         outputLockfileName = inputLockfileName;
       }
       break;
@@ -156,14 +155,14 @@ export async function runInstallLockFileOnly(
         const localNpmVersion = execSync('npm', ['--version']);
         log.silly(`npm`, `current local npm version is "${localNpmVersion}"`);
 
-        // for npm version >=8.5.0 we can call "npm install --package-lock-only"
-        // when lower then we call "npm shrinkwrap --package-lock-only" and rename "npm-shrinkwrap.json" back to "package-lock.json"
+        // for npm version >=8.5.0 we can simply call "npm install --package-lock-only"
+        // however, when lower then we need to call "npm shrinkwrap --package-lock-only" and then rename "npm-shrinkwrap.json" file back to "package-lock.json"
         if (semver.gte(localNpmVersion, '8.5.0')) {
           log.verbose('lock', `updating lock file via "npm install --package-lock-only"`);
           await exec('npm', ['install', '--package-lock-only'], { cwd });
         } else {
-          // TODO: eventually remove in future and/or major release
-          // with npm, we need to do update the lock file in 2 steps
+          // TODO: remove this in the next major release
+          // with npm < 8.5.0, we need to update the lock file in 2 steps
           // 1. using shrinkwrap will delete current lock file and create new "npm-shrinkwrap.json" but will avoid npm retrieving package version info from registry
           log.verbose('lock', `updating lock file via "npm shrinkwrap --package-lock-only".`);
           log.warn(
@@ -186,8 +185,8 @@ export async function runInstallLockFileOnly(
     log.error(
       'lock',
       [
-        `we could not sync or locate "${inputLockfileName}" by using "${npmClient}" client at location ${cwd}`,
-        `Note: if you were expecting a different lock file name, make sure to add "npmClient" into your "lerna.json" config.`,
+        `we could not sync neither locate "${inputLockfileName}" by using "${npmClient}" client at location ${cwd}`,
+        `Note: if you were expecting a different lock file name, make sure to configure "npmClient" into your "lerna.json" config file.`,
       ].join(os.EOL)
     );
   }
