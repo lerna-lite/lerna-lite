@@ -33,7 +33,7 @@ describe('createGitLabClient', () => {
 
     createGitLabClient();
 
-    expect(GitLabClient).toHaveBeenCalledWith('http://some/host', 'TOKEN');
+    expect(GitLabClient).toHaveBeenCalledWith('TOKEN', 'http://some/host');
   });
 
   it('has a createRelease method like ocktokit', () => {

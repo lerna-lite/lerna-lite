@@ -1,7 +1,6 @@
 import fetch from 'node-fetch';
 import log from 'npmlog';
 import path from 'path';
-import { URL } from 'whatwg-url';
 
 import { GitClient, GitClientRelease } from '../models';
 
@@ -9,7 +8,7 @@ export class GitLabClient implements GitClient {
   baseUrl: string;
   token: string;
 
-  constructor(baseUrl = 'https://gitlab.com/api/v4', token: string) {
+  constructor(token: string, baseUrl = 'https://gitlab.com/api/v4') {
     this.baseUrl = baseUrl;
     this.token = token;
   }
