@@ -991,7 +991,7 @@
       },
       "loglevel": {
         "type": "string",
-        "description": "The level of logging to use when running commands. Defaults to info if unspecified.",
+        "description": "The level of logging to use when running commands. Defaults to 'info' if unspecified. You can see more logs by changing to the next log level: 'silent', 'error', 'warn', 'success', 'info', 'verbose' or 'silly'",
         "default": "info",
         "enum": ["error", "warn", "info", "verbose", "debug", "silly"]
       },
