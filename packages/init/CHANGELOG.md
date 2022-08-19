@@ -3,6 +3,12 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [1.11.0](https://github.com/ghiscoding/lerna-lite/compare/v1.10.0...v1.11.0) (2022-08-19)
+
+### Features
+
+* **cli:** add JSON schema for `lerna.json` ([fd93826](https://github.com/ghiscoding/lerna-lite/commit/fd93826f8476dc1cfeba33a46b045fa95a7c38c7)) - by @ghiscoding
+
 # [1.10.0](https://github.com/ghiscoding/lerna-lite/compare/v1.9.1...v1.10.0) (2022-08-06)
 
 ### Bug Fixes

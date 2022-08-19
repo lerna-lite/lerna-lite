@@ -1,8 +1,24 @@
 # Change Log
-### Automate your Workspace Versioning, Publishing & Changelog updates with [Lerna-Lite](https://github.com/ghiscoding/lerna-lite) 🚀
+## Automate your Workspace Versioning, Publishing & Changelog updates with [Lerna-Lite](https://github.com/ghiscoding/lerna-lite) 📦🚀
 
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
+
+# [1.11.0](https://github.com/ghiscoding/lerna-lite/compare/v1.10.0...v1.11.0) (2022-08-19)
+
+### Bug Fixes
+
+* **core:** use match pattern to get last tag date with independent mode ([cebcecf](https://github.com/ghiscoding/lerna-lite/commit/cebcecf95afe30db35995749a9b2a558be176314)) - by @ghiscoding
+* **deps:** update all non-major dependencies ([e3b379c](https://github.com/ghiscoding/lerna-lite/commit/e3b379cc1b2bc9632801950e24ebf964780c8aaf)) - by @renovate-bot
+* **deps:** update all non-major dependencies ([e8dcfec](https://github.com/ghiscoding/lerna-lite/commit/e8dcfece2a45eb6648c3b76f4938d521078673e8)) - by @renovate-bot
+* **version:** changelog client login not need  linkRefs in template ([57047ab](https://github.com/ghiscoding/lerna-lite/commit/57047abe188325cb70bbfa0a8b3edee6b303ef7d)) - by @ghiscoding
+* **version:** commit user login, oldest commit might be undefined ([4132f43](https://github.com/ghiscoding/lerna-lite/commit/4132f436d9ed8a0d826920749f3b76a1f3e0c7cc)) - by @ghiscoding
+* **version:** properly update dependencies npm lockfile v2 ([0abfa85](https://github.com/ghiscoding/lerna-lite/commit/0abfa85eec26b49f6af996bb4333eccd118072e0)) - by @ghiscoding
+* **version:** use `%aI` to pull oldest commit author date ([e033e05](https://github.com/ghiscoding/lerna-lite/commit/e033e05982be3a590ede21cdbc9f839c4d871ab3)) - by @ghiscoding
+
+### Features
+
+* **cli:** add JSON schema for `lerna.json` ([fd93826](https://github.com/ghiscoding/lerna-lite/commit/fd93826f8476dc1cfeba33a46b045fa95a7c38c7)) - by @ghiscoding
 
 # [1.10.0](https://github.com/ghiscoding/lerna-lite/compare/v1.9.1...v1.10.0) (2022-08-06)
 
