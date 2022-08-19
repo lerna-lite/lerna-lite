@@ -153,7 +153,7 @@ describe('run install lockfile-only', () => {
       expect(logSpy).toHaveBeenCalledWith(
         'lock',
         expect.stringContaining(
-          `we could not sync or locate "pnpm-lock.yaml" by using "pnpm" client at location ${cwd}`
+          `we could not sync neither locate "pnpm-lock.yaml" by using "pnpm" client at location ${cwd}`
         )
       );
       expect(lockFileOutput).toBe(undefined);
@@ -168,7 +168,7 @@ describe('run install lockfile-only', () => {
 
       const lockFileOutput = await runInstallLockFileOnly('pnpm', cwd);
 
-      expect(execSpy).toHaveBeenCalledWith('pnpm', ['install', '--lockfile-only'], { cwd });
+      expect(execSpy).toHaveBeenCalledWith('pnpm', ['install', '--lockfile-only', '--ignore-scripts'], { cwd });
       expect(lockFileOutput).toBe('pnpm-lock.yaml');
     });
   });
