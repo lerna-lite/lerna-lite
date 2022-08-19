@@ -12,6 +12,7 @@ import { ValidationError } from '../validation-error';
  * @param {RemoteClientType} client
  * @param {String} gitRemote
  * @param {String} branchName
+ * @param {Boolean} [isIndependent]
  * @param {ExecOpts} [execOpts]
  * @returns {Promise<RemoteCommit[]>}
  */
@@ -19,10 +20,11 @@ export async function getCommitsSinceLastRelease(
   client: RemoteClientType,
   gitRemote: string,
   branchName: string,
+  isIndependent?: boolean,
   execOpts?: ExecOpts
 ): Promise<RemoteCommit[]> {
   // get the last release tag date or the first commit date if no release tag found
-  const { commitDate } = getOldestCommitSinceLastTag(execOpts, false);
+  const { commitDate } = getOldestCommitSinceLastTag(execOpts, isIndependent, false);
 
   switch (client) {
     case 'github':
@@ -40,11 +42,15 @@ export async function getCommitsSinceLastRelease(
  * Find the oldest commit details since the last release tag or else if not tag exists then return first commit info
  * @param {ExecOpts} [execOpts]
  * @param {Boolean} [includeMergedTags]
+ * @param {Boolean} [isIndependent]
  * @returns {*} - oldest commit detail (hash, date)
  */
-export function getOldestCommitSinceLastTag(execOpts?: ExecOpts, includeMergedTags?: boolean) {
+export function getOldestCommitSinceLastTag(execOpts?: ExecOpts, isIndependent?: boolean, includeMergedTags?: boolean) {
   let commitResult = '';
   const describeOptions: DescribeRefOptions = { ...execOpts };
+  if (isIndependent) {
+    describeOptions.match = '*@*'; // independent tag pattern
+  }
   const { lastTagName } = describeRefSync(describeOptions, includeMergedTags);
 
   if (lastTagName) {
