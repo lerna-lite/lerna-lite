@@ -74,10 +74,10 @@ Mainly for the following reasons:
     - the main goal of this fork was to keep only `version` and `publish` commands in the core and make everything else optional (choose and install what you really need).
 3. rewrite the lib in TypeScript for type checking and to be compatible with ESM
 4. replicate a few opened PRs (fixes and features) from Lerna and also add extra features in Lerna-Lite
-    - for example we now support the `workspace:` protocol, we added changelog headers and some `dry-run` options
-5. Lerna v5+ is now installing **[Nx](https://nx.dev/)** as a required [dependency](https://github.com/lerna/lerna/blob/main/core/lerna/package.json#L57) while it remains **optional** in Lerna-Lite
-    - even if [Nx](https://nx.dev/) can be a nice addition with `lerna run` and [`useNx`](https://github.com/ghiscoding/lerna-lite/tree/main/packages/run#usenx-experimental) (which we did add), it should and **will always be optional** in Lerna-Lite. You have the last word.
-6. Lerna is now also enforcing `useWorkspaces` option to be enabled at all time for some features, but this can have undesired effects (you might want to track only the `packages` folder with Lerna and not other folders like `demo` or `website`). Again, that will not be the case in Lerna-Lite, in fact it's actually the inverse, I personally prefer to just use `packages` in `lerna.json` (especially with pnpm)
+    - for example we support yarn/pnpm `workspace:` protocol, we added changelog headers, and added `dry-run` options
+5. Lerna v5 is now installing **[Nx](https://nx.dev/)** as a required [dependency](https://github.com/lerna/lerna/blob/main/core/lerna/package.json#L57), want it or not, while it remains **optional** in Lerna-Lite
+    - even if [Nx](https://nx.dev/) can be a nice addition with `lerna run` and [`useNx`](https://github.com/ghiscoding/lerna-lite/tree/main/packages/run#usenx-experimental) (which we did add), it should and **will always be optional** in Lerna-Lite, it's your decision.
+6. Lerna v5 is now also enforcing `useWorkspaces` option to be enabled, but this can have undesired effects (you might want to track only the `packages` folder with Lerna and not other folders like `demo` or `website`). Again, that will not be enforced in Lerna-Lite, in fact it's the opposite, I personally prefer to just use `packages` in `lerna.json` (especially with pnpm)
 
 ### This lib will help you with
 
