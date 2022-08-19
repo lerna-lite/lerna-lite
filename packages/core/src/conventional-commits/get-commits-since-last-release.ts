@@ -20,7 +20,7 @@ export async function getCommitsSinceLastRelease(
   client: RemoteClientType,
   gitRemote: string,
   branchName: string,
-  isIndependent = false,
+  isIndependent?: boolean,
   execOpts?: ExecOpts
 ): Promise<RemoteCommit[]> {
   // get the last release tag date or the first commit date if no release tag found
