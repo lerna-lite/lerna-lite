@@ -81,7 +81,6 @@
     "tar": "^6.1.11",
     "temp-dir": "^1.0.0",
     "uuid": "^8.3.2",
-    "whatwg-url": "^11.0.0",
     "write-file-atomic": "^4.0.2",
     "write-json-file": "^4.3.0",
     "write-pkg": "^4.0.0",
