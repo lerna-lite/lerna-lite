@@ -54,22 +54,25 @@ export function getOldestCommitSinceLastTag(execOpts?: ExecOpts, isIndependent?:
   const { lastTagName } = describeRefSync(describeOptions, includeMergedTags);
 
   if (lastTagName) {
+    const gitCommandArgs = ['log', `${lastTagName}..HEAD`, '--format="%h %aI"', '--reverse'];
     log.silly('git', 'getCurrentBranchOldestCommitSinceLastTag');
-    let stdout = execSync('git', ['log', `${lastTagName}..HEAD`, '--format="%h %aI"', '--reverse'], execOpts);
+    log.verbose('exec', `git ${gitCommandArgs.join(' ')}`);
+    let stdout = execSync('git', gitCommandArgs, execOpts);
     if (!stdout) {
       // in some occasion the previous git command might return nothing, in that case we'll return the tag detail instead
       stdout = execSync('git', ['log', '-1', '--format="%h %aI"', lastTagName], execOpts);
     }
     [commitResult] = stdout.split('\n');
   } else {
+    const gitCommandArgs = ['log', '--oneline', '--format="%h %aI"', '--reverse', '--max-parents=0', 'HEAD'];
     log.silly('git', 'getCurrentBranchFirstCommit');
-    commitResult = execSync(
-      'git',
-      ['log', '--oneline', '--format="%h %aI"', '--reverse', '--max-parents=0', 'HEAD'],
-      execOpts
-    );
+    log.verbose('exec', `git ${gitCommandArgs.join(' ')}`);
+    commitResult = execSync('git', gitCommandArgs, execOpts);
   }
 
   const [, commitHash, commitDate] = /^"?([0-9a-f]+)\s([0-9\-T\:]*)"?$/.exec(commitResult) || [];
+  // prettier-ignore
+  log.info('oldestCommitSinceLastTag', `commit found since last tag: ${lastTagName} - (SHA) ${commitHash} - ${commitDate}`);
+
   return { commitHash, commitDate };
 }
