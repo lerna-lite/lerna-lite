@@ -10,7 +10,7 @@
       "gitDryRun": false,
       "syncWorkspaceLock": true,
       "changelogIncludeCommitsClientLogin": " - by @%l",
-      "changelogHeaderMessage": "### Automate your Workspace Versioning, Publishing & Changelog updates with [Lerna-Lite](https://github.com/ghiscoding/lerna-lite) 📦🚀",
+      "changelogHeaderMessage": "## Automate your Workspace Versioning, Publishing & Changelog updates with [Lerna-Lite](https://github.com/ghiscoding/lerna-lite) 📦🚀",
       "message": "chore(release): publish new version %v"
     },
     "run": {
