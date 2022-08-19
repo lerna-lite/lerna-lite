@@ -153,7 +153,7 @@ describe('run install lockfile-only', () => {
       expect(logSpy).toHaveBeenCalledWith(
         'lock',
         expect.stringContaining(
-          `we could not sync or locate "pnpm-lock.yaml" by using "pnpm" client at location ${cwd}`
+          `we could not sync neither locate "pnpm-lock.yaml" by using "pnpm" client at location ${cwd}`
         )
       );
       expect(lockFileOutput).toBe(undefined);
