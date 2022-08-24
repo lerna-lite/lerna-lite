@@ -170,7 +170,7 @@ importers:
       '@types/glob-parent': ^5.1.1
       '@types/inquirer': ^9.0.1
       '@types/load-json-file': ^5.1.0
-      '@types/minimatch': ^3.0.5
+      '@types/minimatch': ^5.1.0
       '@types/npm-package-arg': ^6.1.1
       '@types/p-map': ^2.0.0
       '@types/semver': ^7.3.12
@@ -299,7 +299,7 @@ importers:
       '@types/glob-parent': 5.1.1
       '@types/inquirer': 9.0.1
       '@types/load-json-file': 5.1.0
-      '@types/minimatch': 3.0.5
+      '@types/minimatch': 5.1.0
       '@types/npm-package-arg': 6.1.1
       '@types/p-map': 2.0.0
       '@types/semver': 7.3.12
@@ -569,7 +569,7 @@ importers:
       '@types/fs-extra': ^9.0.13
       '@types/js-yaml': ^4.0.5
       '@types/load-json-file': ^5.1.0
-      '@types/minimatch': ^3.0.5
+      '@types/minimatch': ^5.1.0
       '@types/p-map': ^2.0.0
       '@types/semver': ^7.3.12
       '@types/write-json-file': ^3.2.1
@@ -616,7 +616,7 @@ importers:
       '@types/fs-extra': 9.0.13
       '@types/js-yaml': 4.0.5
       '@types/load-json-file': 5.1.0
-      '@types/minimatch': 3.0.5
+      '@types/minimatch': 5.1.0
       '@types/p-map': 2.0.0
       '@types/semver': 7.3.12
       '@types/write-json-file': 3.2.1
@@ -1691,6 +1691,11 @@ packages:
 
   /@types/minimatch/3.0.5:
     resolution: {integrity: sha512-Klz949h02Gz2uZCMGwDUSDS1YBlTdDDgbWHi+81l29tQALUtvz4rAYi5uoVhE5Lagoq6DeqAUlbrHvW/mXDgdQ==}
+    dev: false
+
+  /@types/minimatch/5.1.0:
+    resolution: {integrity: sha512-0RJHq5FqDWo17kdHe+SMDJLfxmLaqHbWnqZ6gNKzDvStUlrmx/eKIY17+ifLS1yybo7X86aUshQMlittDOVNnw==}
+    dev: true
 
   /@types/minimist/1.2.2:
     resolution: {integrity: sha512-jhuKLIRrhvCPLqwPcx6INqmKeiA5EWrsCOPhrlFSrbrmU4ZMPjj5Ul/oLCMDO98XRUIwVm78xICz4EPCektzeQ==}
@@ -2589,8 +2594,8 @@ packages:
     engines: {node: '>=10'}
     hasBin: true
     dependencies:
-      is-text-path: 1.0.1
       JSONStream: 1.3.5
+      is-text-path: 1.0.1
       lodash: 4.17.21
       meow: 8.1.2
       split2: 3.2.2
