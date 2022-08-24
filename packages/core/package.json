@@ -62,7 +62,7 @@
     "minimatch": "^5.1.0",
     "node-fetch": "^2.6.7",
     "npm-package-arg": "^9.1.0",
-    "npm-packlist": "^5.1.1",
+    "npm-packlist": "^5.1.2",
     "npm-registry-fetch": "^13.3.1",
     "npmlog": "^6.0.2",
     "os": "^0.1.2",
