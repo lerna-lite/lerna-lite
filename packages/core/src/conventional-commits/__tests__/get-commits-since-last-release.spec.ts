@@ -129,5 +129,21 @@ describe('getOldestCommitSinceLastTag', () => {
       );
       expect(result).toEqual({ commitDate: '2022-07-01T00:01:02-04:00', commitHash: 'deadbeef' });
     });
+
+    it('should expect a commit date and hash when using different time zone', async () => {
+      const isIndependent = true;
+      const result = await getOldestCommitSinceLastTag(execOpts, isIndependent, false);
+      const execSpy = (execSync as jest.Mock)
+        .mockReturnValueOnce('')
+        .mockReturnValueOnce('"deadbeef 2022-07-01T00:01:02+01:00"');
+
+      expect(describeRefSync).toHaveBeenCalledWith({ cwd: '/test', match: '*@*' }, false);
+      expect(execSpy).toHaveBeenCalledWith(
+        'git',
+        ['log', '@my-workspace/pkg-a@2.0.3..HEAD', '--format="%h %aI"', '--reverse'],
+        execOpts
+      );
+      expect(result).toEqual({ commitDate: '2022-07-01T00:01:02+01:00', commitHash: 'deadbeef' });
+    });
   });
 });
