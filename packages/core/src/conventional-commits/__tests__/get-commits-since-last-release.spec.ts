@@ -117,6 +117,10 @@ describe('getOldestCommitSinceLastTag', () => {
       });
     });
 
+    afterEach(() => {
+      (execSync as jest.Mock).mockReset();
+    });
+
     it('should expect a tag date & hash but queried with a particular tag match pattern when using independent mode', async () => {
       const isIndependent = true;
       const mockExecSyncResult = '"deadabcd 2022-07-01T00:01:02-06:00"';
@@ -135,10 +139,9 @@ describe('getOldestCommitSinceLastTag', () => {
 
     it('should expect a commit date and hash when using different time zone', async () => {
       const isIndependent = true;
+      (execSync as jest.Mock).mockReturnValue('"deadbeef 2022-07-01T00:01:02+01:00"');
       const result = await getOldestCommitSinceLastTag(execOpts, isIndependent, false);
-      const execSpy = (execSync as jest.Mock)
-        .mockReturnValueOnce('')
-        .mockReturnValueOnce('"deadbeef 2022-07-01T00:01:02+01:00"');
+      const execSpy = (execSync as jest.Mock).mockReturnValueOnce('"deadbeef 2022-07-01T00:01:02+01:00"');
 
       expect(describeRefSync).toHaveBeenCalledWith({ cwd: '/test', match: '*@*' }, false);
       expect(execSpy).toHaveBeenCalledWith(
