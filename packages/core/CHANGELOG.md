@@ -3,6 +3,12 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.11.1](https://github.com/ghiscoding/lerna-lite/compare/v1.11.0...v1.11.1) (2022-08-24)
+
+### Bug Fixes
+
+* **core:** fix parsing commit date with different time zone ([2dc37ec](https://github.com/ghiscoding/lerna-lite/commit/2dc37ec5974c6d82967cd4e11b26ab0f90857185)) - by @ahrbil
+
 # [1.11.0](https://github.com/ghiscoding/lerna-lite/compare/v1.10.0...v1.11.0) (2022-08-19)
 
 ### Bug Fixes
