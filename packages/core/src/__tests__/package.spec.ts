@@ -386,8 +386,8 @@ describe('Package', () => {
         pkg.updateLocalDependency(resolved, '2.0.0', '^');
 
         expect(pkg.toJSON()).toMatchInlineSnapshot(`
-          Object {
-            "dependencies": Object {
+          {
+            "dependencies": {
               "a": "workspace:2.0.0",
               "b": "workspace:>=1.0.0",
               "c": "workspace:./foo",
@@ -413,8 +413,8 @@ describe('Package', () => {
         pkg.updateLocalDependency(resolved, '2.0.0', '^');
 
         expect(pkg.toJSON()).toMatchInlineSnapshot(`
-          Object {
-            "devDependencies": Object {
+          {
+            "devDependencies": {
               "a": "workspace:*",
               "b": "workspace:^1.0.0",
             },
@@ -437,8 +437,8 @@ describe('Package', () => {
         pkg.updateLocalDependency(resolved, '2.0.0', '^');
 
         expect(pkg.toJSON()).toMatchInlineSnapshot(`
-          Object {
-            "optionalDependencies": Object {
+          {
+            "optionalDependencies": {
               "a": "workspace:^",
               "b": "workspace:^1.0.0",
             },
@@ -461,8 +461,8 @@ describe('Package', () => {
         pkg.updateLocalDependency(resolved, '2.0.0', '^');
 
         expect(pkg.toJSON()).toMatchInlineSnapshot(`
-          Object {
-            "dependencies": Object {
+          {
+            "dependencies": {
               "a": "workspace:~",
               "b": "workspace:^1.0.0",
             },
@@ -485,8 +485,8 @@ describe('Package', () => {
         pkg.updateLocalDependency(resolved, '2.0.0', '^');
 
         expect(pkg.toJSON()).toMatchInlineSnapshot(`
-          Object {
-            "dependencies": Object {
+          {
+            "dependencies": {
               "a": "workspace:2.0.0",
               "b": "workspace:^1.0.0",
             },
@@ -509,8 +509,8 @@ describe('Package', () => {
         pkg.updateLocalDependency(resolved, '2.0.0', '^');
 
         expect(pkg.toJSON()).toMatchInlineSnapshot(`
-          Object {
-            "dependencies": Object {
+          {
+            "dependencies": {
               "a": "workspace:>=2.0.0",
               "b": "workspace:^1.0.0",
             },
@@ -539,8 +539,8 @@ describe('Package', () => {
         pkg.updateLocalDependency(resolvedB, '1.1.0', '^', true, 'publish');
 
         expect(pkg.toJSON()).toMatchInlineSnapshot(`
-          Object {
-            "dependencies": Object {
+          {
+            "dependencies": {
               "a": "2.0.0",
               "b": "^1.1.0",
             },
@@ -567,8 +567,8 @@ describe('Package', () => {
         pkg.updateLocalDependency(resolvedB, '1.1.0', '~', true, 'publish');
 
         expect(pkg.toJSON()).toMatchInlineSnapshot(`
-          Object {
-            "dependencies": Object {
+          {
+            "dependencies": {
               "a": "^2.0.0",
               "b": "~1.1.0",
             },
@@ -595,8 +595,8 @@ describe('Package', () => {
         pkg.updateLocalDependency(resolvedB, '1.1.0', '^', true, 'publish');
 
         expect(pkg.toJSON()).toMatchInlineSnapshot(`
-          Object {
-            "dependencies": Object {
+          {
+            "dependencies": {
               "a": "~2.0.0",
               "b": "^1.1.0",
             },
@@ -632,8 +632,8 @@ describe('Package', () => {
           ].join('')
         );
         expect(pkg.toJSON()).toMatchInlineSnapshot(`
-          Object {
-            "dependencies": Object {
+          {
+            "dependencies": {
               "a": "latest",
               "b": "^2.2.4",
             },

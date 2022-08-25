@@ -99,20 +99,20 @@ test('publish --canary', async () => {
 
   expect(promptConfirmation).toHaveBeenLastCalledWith('Are you sure you want to publish these packages?');
   expect((npmPublish as typeof npmPublishMock).registry).toMatchInlineSnapshot(`
-  Map {
-    "package-1" => "canary",
-    "package-4" => "canary",
-    "package-2" => "canary",
-    "package-3" => "canary",
-  }
-  `);
+      Map {
+        "package-1" => "canary",
+        "package-4" => "canary",
+        "package-2" => "canary",
+        "package-3" => "canary",
+      }
+    `);
   expect((writePkg as any).updatedVersions()).toMatchInlineSnapshot(`
-  Object {
-    "package-1": 1.0.1-alpha.0+SHA,
-    "package-2": 1.0.1-alpha.0+SHA,
-    "package-3": 1.0.1-alpha.0+SHA,
-    "package-4": 1.0.1-alpha.0+SHA,
-  }
+    {
+      "package-1": 1.0.1-alpha.0+SHA,
+      "package-2": 1.0.1-alpha.0+SHA,
+      "package-3": 1.0.1-alpha.0+SHA,
+      "package-4": 1.0.1-alpha.0+SHA,
+    }
   `);
 });
 
@@ -128,20 +128,20 @@ test('publish --canary with auto-confirm --yes', async () => {
 
   expect(promptConfirmation).not.toHaveBeenCalled();
   expect((npmPublish as typeof npmPublishMock).registry).toMatchInlineSnapshot(`
-  Map {
-    "package-1" => "canary",
-    "package-4" => "canary",
-    "package-2" => "canary",
-    "package-3" => "canary",
-  }
-  `);
+      Map {
+        "package-1" => "canary",
+        "package-4" => "canary",
+        "package-2" => "canary",
+        "package-3" => "canary",
+      }
+    `);
   expect((writePkg as any).updatedVersions()).toMatchInlineSnapshot(`
-  Object {
-    "package-1": 1.0.1-alpha.0+SHA,
-    "package-2": 1.0.1-alpha.0+SHA,
-    "package-3": 1.0.1-alpha.0+SHA,
-    "package-4": 1.0.1-alpha.0+SHA,
-  }
+    {
+      "package-1": 1.0.1-alpha.0+SHA,
+      "package-2": 1.0.1-alpha.0+SHA,
+      "package-3": 1.0.1-alpha.0+SHA,
+      "package-4": 1.0.1-alpha.0+SHA,
+    }
   `);
 });
 
@@ -153,12 +153,12 @@ test('publish --canary --preid beta', async () => {
   await factory(createArgv(cwd, '--canary', '--preid', 'beta'));
 
   expect((writePkg as any).updatedVersions()).toMatchInlineSnapshot(`
-Object {
-  "package-1": 1.0.1-beta.0+SHA,
-  "package-2": 1.0.1-beta.0+SHA,
-  "package-3": 1.0.1-beta.0+SHA,
-}
-`);
+    {
+      "package-1": 1.0.1-beta.0+SHA,
+      "package-2": 1.0.1-beta.0+SHA,
+      "package-3": 1.0.1-beta.0+SHA,
+    }
+  `);
 });
 
 test("publish --canary --tag-version-prefix='abc'", async () => {
@@ -168,12 +168,12 @@ test("publish --canary --tag-version-prefix='abc'", async () => {
   await new PublishCommand(createArgv(cwd, '--canary', '--tag-version-prefix', 'abc'));
 
   expect((writePkg as any).updatedVersions()).toMatchInlineSnapshot(`
-Object {
-  "package-1": 1.0.1-alpha.0+SHA,
-  "package-2": 1.0.1-alpha.0+SHA,
-  "package-3": 1.0.1-alpha.0+SHA,
-}
-`);
+    {
+      "package-1": 1.0.1-alpha.0+SHA,
+      "package-2": 1.0.1-alpha.0+SHA,
+      "package-3": 1.0.1-alpha.0+SHA,
+    }
+  `);
 });
 
 test('publish --canary <semver>', async () => {
@@ -184,12 +184,12 @@ test('publish --canary <semver>', async () => {
   // prerelease === prepatch, which is the default
 
   expect((writePkg as any).updatedVersions()).toMatchInlineSnapshot(`
-Object {
-  "package-1": 1.0.1-alpha.0+SHA,
-  "package-2": 1.0.1-alpha.0+SHA,
-  "package-3": 1.0.1-alpha.0+SHA,
-}
-`);
+    {
+      "package-1": 1.0.1-alpha.0+SHA,
+      "package-2": 1.0.1-alpha.0+SHA,
+      "package-3": 1.0.1-alpha.0+SHA,
+    }
+  `);
 });
 
 test('publish --canary --independent', async () => {
@@ -199,12 +199,12 @@ test('publish --canary --independent', async () => {
   await new PublishCommand(createArgv(cwd, '--canary', '--bump', 'preminor'));
 
   expect((writePkg as any).updatedVersions()).toMatchInlineSnapshot(`
-Object {
-  "package-1": 1.1.0-alpha.0+SHA,
-  "package-2": 2.1.0-alpha.0+SHA,
-  "package-3": 3.1.0-alpha.0+SHA,
-}
-`);
+    {
+      "package-1": 1.1.0-alpha.0+SHA,
+      "package-2": 2.1.0-alpha.0+SHA,
+      "package-3": 3.1.0-alpha.0+SHA,
+    }
+  `);
 });
 
 test('publish --canary addresses unpublished package', async () => {
@@ -227,10 +227,10 @@ test('publish --canary addresses unpublished package', async () => {
 
   // there have been two commits since the beginning of the repo
   expect((writePkg as any).updatedVersions()).toMatchInlineSnapshot(`
-Object {
-  "package-6": 1.0.0-alpha.1+SHA,
-}
-`);
+    {
+      "package-6": 1.0.0-alpha.1+SHA,
+    }
+  `);
 });
 
 describe('publish --canary differential', () => {
@@ -241,14 +241,14 @@ describe('publish --canary differential', () => {
     await new PublishCommand(createArgv(cwd, '--canary', 'patch'));
 
     expect((writePkg as any).updatedVersions()).toMatchInlineSnapshot(`
-Object {
-  "package-1": 1.0.1-alpha.0+SHA,
-  "package-2": 1.0.1-alpha.0+SHA,
-  "package-3": 1.0.1-alpha.0+SHA,
-  "package-4": 1.0.1-alpha.0+SHA,
-  "package-5": 1.0.1-alpha.0+SHA,
-}
-`);
+      {
+        "package-1": 1.0.1-alpha.0+SHA,
+        "package-2": 1.0.1-alpha.0+SHA,
+        "package-3": 1.0.1-alpha.0+SHA,
+        "package-4": 1.0.1-alpha.0+SHA,
+        "package-5": 1.0.1-alpha.0+SHA,
+      }
+    `);
   });
 
   test('internal', async () => {
@@ -258,12 +258,12 @@ Object {
     await new PublishCommand(createArgv(cwd, '--canary', '--bump', 'minor'));
 
     expect((writePkg as any).updatedVersions()).toMatchInlineSnapshot(`
-Object {
-  "package-3": 1.1.0-alpha.0+SHA,
-  "package-4": 1.1.0-alpha.0+SHA,
-  "package-5": 1.1.0-alpha.0+SHA,
-}
-`);
+      {
+        "package-3": 1.1.0-alpha.0+SHA,
+        "package-4": 1.1.0-alpha.0+SHA,
+        "package-5": 1.1.0-alpha.0+SHA,
+      }
+    `);
   });
 
   test('pendant', async () => {
@@ -273,10 +273,10 @@ Object {
     await new PublishCommand(createArgv(cwd, '--canary', '--bump', 'major'));
 
     expect((writePkg as any).updatedVersions()).toMatchInlineSnapshot(`
-Object {
-  "package-5": 2.0.0-alpha.0+SHA,
-}
-`);
+      {
+        "package-5": 2.0.0-alpha.0+SHA,
+      }
+    `);
   });
 });
 
@@ -292,10 +292,10 @@ describe('publish --canary sequential', () => {
     await new PublishCommand(createArgv(cwd, '--canary'));
 
     expect((writePkg as any).updatedVersions()).toMatchInlineSnapshot(`
-Object {
-  "package-5": 5.0.1-alpha.0+SHA,
-}
-`);
+      {
+        "package-5": 5.0.1-alpha.0+SHA,
+      }
+    `);
   });
 
   test('2. internal', async () => {
@@ -303,12 +303,12 @@ Object {
     await new PublishCommand(createArgv(cwd, '--canary'));
 
     expect((writePkg as any).updatedVersions()).toMatchInlineSnapshot(`
-Object {
-  "package-3": 3.0.1-alpha.1+SHA,
-  "package-4": 4.0.1-alpha.1+SHA,
-  "package-5": 5.0.1-alpha.1+SHA,
-}
-`);
+      {
+        "package-3": 3.0.1-alpha.1+SHA,
+        "package-4": 4.0.1-alpha.1+SHA,
+        "package-5": 5.0.1-alpha.1+SHA,
+      }
+    `);
   });
 
   test('3. source', async () => {
@@ -316,14 +316,14 @@ Object {
     await new PublishCommand(createArgv(cwd, '--canary'));
 
     expect((writePkg as any).updatedVersions()).toMatchInlineSnapshot(`
-Object {
-  "package-1": 1.0.1-alpha.2+SHA,
-  "package-2": 2.0.1-alpha.2+SHA,
-  "package-3": 3.0.1-alpha.2+SHA,
-  "package-4": 4.0.1-alpha.2+SHA,
-  "package-5": 5.0.1-alpha.2+SHA,
-}
-`);
+      {
+        "package-1": 1.0.1-alpha.2+SHA,
+        "package-2": 2.0.1-alpha.2+SHA,
+        "package-3": 3.0.1-alpha.2+SHA,
+        "package-4": 4.0.1-alpha.2+SHA,
+        "package-5": 5.0.1-alpha.2+SHA,
+      }
+    `);
   });
 
   test('4. internal', async () => {
@@ -331,12 +331,12 @@ Object {
     await new PublishCommand(createArgv(cwd, '--canary'));
 
     expect((writePkg as any).updatedVersions()).toMatchInlineSnapshot(`
-Object {
-  "package-3": 3.0.1-alpha.3+SHA,
-  "package-4": 4.0.1-alpha.3+SHA,
-  "package-5": 5.0.1-alpha.3+SHA,
-}
-`);
+      {
+        "package-3": 3.0.1-alpha.3+SHA,
+        "package-4": 4.0.1-alpha.3+SHA,
+        "package-5": 5.0.1-alpha.3+SHA,
+      }
+    `);
   });
 
   test('5. pendant', async () => {
@@ -344,10 +344,10 @@ Object {
     await new PublishCommand(createArgv(cwd, '--canary'));
 
     expect((writePkg as any).updatedVersions()).toMatchInlineSnapshot(`
-Object {
-  "package-5": 5.0.1-alpha.4+SHA,
-}
-`);
+      {
+        "package-5": 5.0.1-alpha.4+SHA,
+      }
+    `);
   });
 });
 
@@ -371,13 +371,13 @@ test('publish --canary --force-publish on tagged release avoids early exit', asy
   // lerna WARN force-publish all packages
 
   expect((writePkg as any).updatedVersions()).toMatchInlineSnapshot(`
-Object {
-  "package-1": 1.0.1-alpha.0+SHA,
-  "package-2": 1.0.1-alpha.0+SHA,
-  "package-3": 1.0.1-alpha.0+SHA,
-  "package-4": 1.0.1-alpha.0+SHA,
-}
-`);
+    {
+      "package-1": 1.0.1-alpha.0+SHA,
+      "package-2": 1.0.1-alpha.0+SHA,
+      "package-3": 1.0.1-alpha.0+SHA,
+      "package-4": 1.0.1-alpha.0+SHA,
+    }
+  `);
 });
 
 test('publish --canary --force-publish <arg> on tagged release avoids early exit', async () => {
@@ -395,11 +395,11 @@ test('publish --canary --force-publish <arg> on tagged release avoids early exit
   // lerna WARN force-publish package-2
 
   expect((writePkg as any).updatedVersions()).toMatchInlineSnapshot(`
-Object {
-  "package-2": 2.0.1-alpha.0+SHA,
-  "package-3": 3.0.1-alpha.0+SHA,
-}
-`);
+    {
+      "package-2": 2.0.1-alpha.0+SHA,
+      "package-3": 3.0.1-alpha.0+SHA,
+    }
+  `);
 });
 
 test('publish --canary with dirty tree throws error', async () => {
@@ -446,7 +446,7 @@ test('publish --canary without _any_ tags', async () => {
   await lernaPublish(cwd)('--canary');
 
   expect((writePkg as any).updatedVersions()).toMatchInlineSnapshot(`
-    Object {
+    {
       "package-1": 1.0.1-alpha.0+SHA,
       "package-2": 1.0.1-alpha.0+SHA,
       "package-3": 1.0.1-alpha.0+SHA,
@@ -460,7 +460,7 @@ test('publish --canary without _any_ tags (independent)', async () => {
   await new PublishCommand(createArgv(cwd, '--canary'));
 
   expect((writePkg as any).updatedVersions()).toMatchInlineSnapshot(`
-    Object {
+    {
       "package-1": 1.0.1-alpha.0+SHA,
       "package-2": 2.0.1-alpha.0+SHA,
       "package-3": 3.0.1-alpha.0+SHA,
@@ -489,7 +489,7 @@ test('publish --canary --no-private', async () => {
   await new PublishCommand(createArgv(cwd, '--canary', '--no-private'));
 
   expect((writePkg as any).updatedVersions()).toMatchInlineSnapshot(`
-    Object {
+    {
       "package-1": 1.0.1-alpha.0+SHA,
       "package-2": 2.0.1-alpha.0+SHA,
     }

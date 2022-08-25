@@ -15,10 +15,10 @@ describe('PackageGraph', () => {
       ];
 
       expect(() => new PackageGraph(pkgs)).toThrowErrorMatchingInlineSnapshot(`
-"Package name \\"pkg-2\\" used in multiple packages:
-	/test/pkg-2
-	/test/pkg-3"
-`);
+        "Package name "pkg-2" used in multiple packages:
+        	/test/pkg-2
+        	/test/pkg-3"
+      `);
     });
 
     it('externalizes non-satisfied semver of local sibling', () => {
@@ -394,19 +394,19 @@ describe('PackageGraph', () => {
       expect(nodes.size).toBe(2);
       expect(Array.from(cycles).length).toBe(1);
       expect(paths).toMatchInlineSnapshot(`
-Set {
-  Array [
-    "pkg-1",
-    "pkg-2",
-    "pkg-1",
-  ],
-  Array [
-    "pkg-2",
-    "pkg-1",
-    "pkg-2",
-  ],
-}
-`);
+        Set {
+          [
+            "pkg-1",
+            "pkg-2",
+            "pkg-1",
+          ],
+          [
+            "pkg-2",
+            "pkg-1",
+            "pkg-2",
+          ],
+        }
+      `);
     });
 
     it('prunes all cycles from the graph, retaining non-cycles', () => {
@@ -416,41 +416,41 @@ Set {
       graph.pruneCycleNodes(nodes as any);
 
       expect(Array.from(graph.keys())).toMatchInlineSnapshot(`
-Array [
-  "dag-1",
-  "dag-2a",
-  "dag-2b",
-  "dag-3",
-  "standalone",
-]
-`);
+        [
+          "dag-1",
+          "dag-2a",
+          "dag-2b",
+          "dag-3",
+          "standalone",
+        ]
+      `);
       expect(Array.from(nodes.keys() as any).map((node: any) => node.name)).toMatchInlineSnapshot(`
-Array [
-  "cycle-1",
-  "cycle-2",
-  "cycle-tiebreaker",
-]
-`);
+        [
+          "cycle-1",
+          "cycle-2",
+          "cycle-tiebreaker",
+        ]
+      `);
       expect(paths).toMatchInlineSnapshot(`
-Set {
-  Array [
-    "cycle-1",
-    "cycle-2",
-    "cycle-1",
-  ],
-  Array [
-    "cycle-2",
-    "cycle-1",
-    "cycle-2",
-  ],
-  Array [
-    "cycle-tiebreaker",
-    "cycle-1",
-    "cycle-2",
-    "cycle-1",
-  ],
-}
-`);
+        Set {
+          [
+            "cycle-1",
+            "cycle-2",
+            "cycle-1",
+          ],
+          [
+            "cycle-2",
+            "cycle-1",
+            "cycle-2",
+          ],
+          [
+            "cycle-tiebreaker",
+            "cycle-1",
+            "cycle-2",
+            "cycle-1",
+          ],
+        }
+      `);
     });
   });
 });

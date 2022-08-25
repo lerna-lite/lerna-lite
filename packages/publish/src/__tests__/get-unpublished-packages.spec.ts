@@ -41,33 +41,33 @@ test('getUnpublishedPackages', async () => {
 
   expect((pacote as any).packument).toHaveBeenCalledWith('package-1', opts);
   expect(pkgs).toMatchInlineSnapshot(`
-Array [
-  PackageGraphNode {
-    "externalDependencies": Map {},
-    "localDependencies": Map {},
-    "localDependents": Map {},
-    "name": "package-1",
-  },
-  PackageGraphNode {
-    "externalDependencies": Map {},
-    "localDependencies": Map {},
-    "localDependents": Map {},
-    "name": "package-3",
-  },
-  PackageGraphNode {
-    "externalDependencies": Map {},
-    "localDependencies": Map {},
-    "localDependents": Map {},
-    "name": "package-4",
-  },
-  PackageGraphNode {
-    "externalDependencies": Map {},
-    "localDependencies": Map {},
-    "localDependents": Map {},
-    "name": "package-5",
-  },
-]
-`);
+    [
+      PackageGraphNode {
+        "externalDependencies": Map {},
+        "localDependencies": Map {},
+        "localDependents": Map {},
+        "name": "package-1",
+      },
+      PackageGraphNode {
+        "externalDependencies": Map {},
+        "localDependencies": Map {},
+        "localDependents": Map {},
+        "name": "package-3",
+      },
+      PackageGraphNode {
+        "externalDependencies": Map {},
+        "localDependencies": Map {},
+        "localDependents": Map {},
+        "name": "package-4",
+      },
+      PackageGraphNode {
+        "externalDependencies": Map {},
+        "localDependencies": Map {},
+        "localDependents": Map {},
+        "name": "package-5",
+      },
+    ]
+  `);
 });
 
 test('getUnpublishedPackages with private package', async () => {
@@ -80,13 +80,13 @@ test('getUnpublishedPackages with private package', async () => {
 
   expect((pacote as any).packument).toHaveBeenCalledWith('package-1', opts);
   expect(pkgs).toMatchInlineSnapshot(`
-Array [
-  PackageGraphNode {
-    "externalDependencies": Map {},
-    "localDependencies": Map {},
-    "localDependents": Map {},
-    "name": "package-1",
-  },
-]
-`);
+    [
+      PackageGraphNode {
+        "externalDependencies": Map {},
+        "localDependencies": Map {},
+        "localDependents": Map {},
+        "name": "package-1",
+      },
+    ]
+  `);
 });

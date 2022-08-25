@@ -210,13 +210,13 @@ describe('Project', () => {
       const project = new Project(testDir);
       const result = await project.getPackages();
       expect(result).toMatchInlineSnapshot(`
-        Array [
-          Object {
+        [
+          {
             "name": "pkg-1",
             "version": "1.0.0",
           },
-          Object {
-            "dependencies": Object {
+          {
+            "dependencies": {
               "pkg-1": "^1.0.0",
             },
             "name": "pkg-2",
@@ -236,13 +236,13 @@ describe('Project', () => {
     it('returns a list of package instances synchronously', () => {
       const project = new Project(testDir);
       expect(project.getPackagesSync()).toMatchInlineSnapshot(`
-        Array [
-          Object {
+        [
+          {
             "name": "pkg-1",
             "version": "1.0.0",
           },
-          Object {
-            "dependencies": Object {
+          {
+            "dependencies": {
               "pkg-1": "^1.0.0",
             },
             "name": "pkg-2",

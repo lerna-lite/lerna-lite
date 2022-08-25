@@ -15,18 +15,18 @@ test('returns all packages', () => {
   const result = collectPackages(graph);
 
   expect(toNamesList(result)).toMatchInlineSnapshot(`
-Array [
-  "package-cycle-1",
-  "package-cycle-2",
-  "package-cycle-extraneous-1",
-  "package-cycle-extraneous-2",
-  "package-dag-1",
-  "package-dag-2a",
-  "package-dag-2b",
-  "package-dag-3",
-  "package-standalone",
-]
-`);
+    [
+      "package-cycle-1",
+      "package-cycle-2",
+      "package-cycle-extraneous-1",
+      "package-cycle-extraneous-2",
+      "package-dag-1",
+      "package-dag-2a",
+      "package-dag-2b",
+      "package-dag-3",
+      "package-standalone",
+    ]
+  `);
 });
 
 test('filters packages through isCandidate, passing node and name', () => {
@@ -38,13 +38,13 @@ test('filters packages through isCandidate, passing node and name', () => {
   const result = collectPackages(graph, { isCandidate });
 
   expect(toNamesList(result)).toMatchInlineSnapshot(`
-Array [
-  "package-cycle-1",
-  "package-cycle-2",
-  "package-cycle-extraneous-1",
-  "package-cycle-extraneous-2",
-]
-`);
+    [
+      "package-cycle-1",
+      "package-cycle-2",
+      "package-cycle-extraneous-1",
+      "package-cycle-extraneous-2",
+    ]
+  `);
 });
 
 test('calls onInclude with included package name', () => {
