@@ -262,7 +262,7 @@ describe('RunCommand', () => {
       await new RunCommand(createArgv(testDir, 'env', '--concurrency', '1', '--no-sort', '--stream'));
 
       expect(ranInPackagesStreaming(testDir)).toMatchInlineSnapshot(`
-        Array [
+        [
           "packages/package-cycle-1 npm run env (prefixed: true)",
           "packages/package-cycle-2 npm run env (prefixed: true)",
           "packages/package-cycle-extraneous-1 npm run env (prefixed: true)",

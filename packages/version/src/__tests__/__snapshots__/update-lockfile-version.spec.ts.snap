@@ -1,16 +1,16 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`npm modern lock file updateModernLockfileVersion v2 in project root 1`] = `
-Object {
-  "dependencies": Object {
-    "@my-workspace/package-1": Object {
-      "requires": Object {
+{
+  "dependencies": {
+    "@my-workspace/package-1": {
+      "requires": {
         "tiny-tarball": "^1.0.0",
       },
       "version": "file:packages/package-1",
     },
-    "@my-workspace/package-2": Object {
-      "requires": Object {
+    "@my-workspace/package-2": {
+      "requires": {
         "@my-workspace/package-1": "^2.4.0",
       },
       "version": "file:packages/package-2",
@@ -18,35 +18,35 @@ Object {
   },
   "lockfileVersion": 2,
   "name": "my-workspace",
-  "packages": Object {
-    "": Object {
+  "packages": {
+    "": {
       "license": "MIT",
       "name": "my-workspace",
-      "workspaces": Array [
+      "workspaces": [
         "./packages/package-1",
         "./packages/package-2",
       ],
     },
-    "node_modules/package-1": Object {
+    "node_modules/package-1": {
       "link": true,
       "resolved": "packages/package-1",
     },
-    "node_modules/package-2": Object {
+    "node_modules/package-2": {
       "link": true,
       "resolved": "packages/package-2",
     },
-    "packages/package-1": Object {
+    "packages/package-1": {
       "license": "MIT",
       "name": "@my-workspace/package-1",
-      "tiny-tarball": Object {
+      "tiny-tarball": {
         "integrity": "sha1-u/EC1a5zr+LFUyleD7AiMCFvZbE=",
         "resolved": "https://registry.npmjs.org/tiny-tarball/-/tiny-tarball-1.0.0.tgz",
         "version": "1.0.0",
       },
       "version": "2.4.0",
     },
-    "packages/package-2": Object {
-      "dependencies": Object {
+    "packages/package-2": {
+      "dependencies": {
         "@my-workspace/package-1": "^2.4.0",
       },
       "license": "MIT",

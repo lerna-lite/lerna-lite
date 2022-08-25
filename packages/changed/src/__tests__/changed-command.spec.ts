@@ -63,20 +63,20 @@ describe('Changed Command', () => {
     await factory(createArgv(cwd, ''));
 
     expect((logOutput as any).logged()).toMatchInlineSnapshot(`
-package-2
-package-3
-`);
+      package-2
+      package-3
+    `);
   });
 
   it('passes --force-publish to update collector', async () => {
     await new ChangedCommand(createArgv(cwd, '--force-publish'));
 
     expect((logOutput as any).logged()).toMatchInlineSnapshot(`
-package-1
-package-2
-package-3
-package-4
-`);
+      package-1
+      package-2
+      package-3
+      package-4
+    `);
     expect(collectUpdates).toHaveBeenLastCalledWith(
       expect.any(Array),
       expect.any(Object),
@@ -177,12 +177,12 @@ package-4
     await lernaChanged(cwd)('-alp');
 
     expect((logOutput as any).logged()).toMatchInlineSnapshot(`
-__TEST_ROOTDIR__/packages/package-1:package-1:1.0.0
-__TEST_ROOTDIR__/packages/package-2:package-2:1.0.0
-__TEST_ROOTDIR__/packages/package-3:package-3:1.0.0
-__TEST_ROOTDIR__/packages/package-4:package-4:1.0.0
-__TEST_ROOTDIR__/packages/package-5:package-5:1.0.0:PRIVATE
-`);
+      __TEST_ROOTDIR__/packages/package-1:package-1:1.0.0
+      __TEST_ROOTDIR__/packages/package-2:package-2:1.0.0
+      __TEST_ROOTDIR__/packages/package-3:package-3:1.0.0
+      __TEST_ROOTDIR__/packages/package-4:package-4:1.0.0
+      __TEST_ROOTDIR__/packages/package-5:package-5:1.0.0:PRIVATE
+    `);
   });
 
   it('outputs a stringified array of result objects with --json', async () => {
@@ -193,20 +193,20 @@ __TEST_ROOTDIR__/packages/package-5:package-5:1.0.0:PRIVATE
     // Output should be a parseable string
     const jsonOutput = JSON.parse((logOutput as any).logged());
     expect(jsonOutput).toMatchInlineSnapshot(`
-Array [
-  Object {
-    "location": "__TEST_ROOTDIR__/packages/package-2",
-    "name": "package-2",
-    "private": false,
-    "version": "1.0.0",
-  },
-  Object {
-    "location": "__TEST_ROOTDIR__/packages/package-3",
-    "name": "package-3",
-    "private": false,
-    "version": "1.0.0",
-  },
-]
-`);
+      [
+        {
+          "location": "__TEST_ROOTDIR__/packages/package-2",
+          "name": "package-2",
+          "private": false,
+          "version": "1.0.0",
+        },
+        {
+          "location": "__TEST_ROOTDIR__/packages/package-3",
+          "name": "package-3",
+          "private": false,
+          "version": "1.0.0",
+        },
+      ]
+    `);
   });
 });
