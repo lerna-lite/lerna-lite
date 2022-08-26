@@ -95,7 +95,7 @@
     "tempy": "^1.0.1",
     "ts-jest": "^28.0.8",
     "tsm": "^2.2.2",
-    "typescript": "^4.7.4",
+    "typescript": "^4.8.2",
     "write-json-file": "^4.3.0"
   }
 }
