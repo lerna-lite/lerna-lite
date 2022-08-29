@@ -23,7 +23,13 @@
       "request": "launch",
       "runtimeExecutable": "node",
       "runtimeArgs": ["--nolazy", "-r", "tsm"],
-      "args": ["packages/cli/src/cli.ts", "version", "--git-dry-run"],
+      "args": [
+        "packages/cli/src/cli.ts",
+        "version",
+        "--git-dry-run",
+        "--changelog-include-commits-client-login",
+        "--conventional-commits"
+      ],
       "cwd": "${workspaceRoot}",
       "console": "integratedTerminal",
       "internalConsoleOptions": "openOnSessionStart",

@@ -26,7 +26,7 @@ export function setConfigChangelogCommitGitAuthor(
 ) {
   gitRawCommitsOpts.format = GIT_COMMIT_WITH_AUTHOR_FORMAT;
   const extraCommitMsg =
-    typeof commitCustomFormat === 'string'
+    typeof commitCustomFormat === 'string' && commitCustomFormat !== ''
       ? commitCustomFormat.replace(/%a/g, '{{authorName}}' || '').replace(/%e/g, '{{authorEmail}}' || '')
       : `({{authorName}})`;
   writerOpts.commitPartial =
@@ -53,7 +53,7 @@ export function setConfigChangelogCommitClientLogin(
 ) {
   gitRawCommitsOpts.format = GIT_COMMIT_WITH_AUTHOR_FORMAT;
   const extraCommitMsg =
-    typeof commitCustomFormat === 'string'
+    typeof commitCustomFormat === 'string' && commitCustomFormat !== ''
       ? commitCustomFormat
           .replace(/%a/g, '{{authorName}}' || '')
           .replace(/%e/g, '{{authorEmail}}' || '')

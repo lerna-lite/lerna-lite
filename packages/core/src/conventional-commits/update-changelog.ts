@@ -51,9 +51,12 @@ export async function updateChangelog(pkg: Package, type: ChangelogType, updateO
   const gitRawCommitsOpts = Object.assign({}, options.config.gitRawCommitsOpts);
 
   // are we including commit author name/email or remote client login name
-  if (changelogIncludeCommitsGitAuthor) {
+  if (changelogIncludeCommitsGitAuthor || changelogIncludeCommitsGitAuthor === '') {
     setConfigChangelogCommitGitAuthor(config, gitRawCommitsOpts, writerOpts, changelogIncludeCommitsGitAuthor);
-  } else if (changelogIncludeCommitsClientLogin && commitsSinceLastRelease) {
+  } else if (
+    (changelogIncludeCommitsClientLogin || changelogIncludeCommitsClientLogin === '') &&
+    commitsSinceLastRelease
+  ) {
     // prettier-ignore
     setConfigChangelogCommitClientLogin(config, gitRawCommitsOpts, writerOpts, commitsSinceLastRelease, changelogIncludeCommitsClientLogin);
   }

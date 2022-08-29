@@ -437,7 +437,7 @@ describe('conventional-commits', () => {
           tagPrefix: 'dragons-are-awesome',
         }),
         updateChangelog({ location: cwd } as Package, 'root', {
-          changelogIncludeCommitsGitAuthor: true,
+          changelogIncludeCommitsGitAuthor: '', // empty string would be treated the same as being true but without a format
           tagPrefix: 'dragons-are-awesome',
           version: '1.0.1',
         }),
@@ -776,7 +776,7 @@ describe('conventional-commits', () => {
 
       const opt1s = {
         changelogPreset: 'conventional-changelog-angular',
-        changelogIncludeCommitsClientLogin: true,
+        changelogIncludeCommitsClientLogin: '', // empty string would be treated the same as being true but without a format
         commitsSinceLastRelease: [
           {
             authorName: 'Tester McPerson',
