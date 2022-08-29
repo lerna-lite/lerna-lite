@@ -357,7 +357,7 @@ describe('VersionCommand', () => {
 
     it('call getCommitsSinceLastRelease() when --changelog-include-commits-client-login is provided', async () => {
       const testDir = await initFixture('normal');
-      await new VersionCommand(
+      const command = new VersionCommand(
         createArgv(
           testDir,
           '--changelog-include-commits-client-login',
@@ -366,7 +366,9 @@ describe('VersionCommand', () => {
           'github'
         )
       );
+      await command;
 
+      expect(command.changelogIncludeCommitsClientLogin).toBe(true);
       expect(getCommitsSinceLastRelease).toHaveBeenCalled();
     });
   });

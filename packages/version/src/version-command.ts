@@ -60,6 +60,8 @@ export class VersionCommand extends Command<VersionCommandOption> {
   name = 'version' as CommandType;
 
   globalVersion = '';
+  changelogIncludeCommitsClientLogin?: boolean | string;
+  changelogIncludeCommitsGitAuthor?: boolean | string;
   commitsSinceLastRelease?: RemoteCommit[];
   packagesToVersion: Package[] = [];
   updatesVersions?: Map<string, string>;
@@ -104,6 +106,8 @@ export class VersionCommand extends Command<VersionCommandOption> {
     // override durable options provided by a config file
     const {
       amend,
+      changelogIncludeCommitsClientLogin,
+      changelogIncludeCommitsGitAuthor,
       commitHooks = true,
       gitRemote = 'origin',
       gitTagVersion = true,
@@ -120,6 +124,10 @@ export class VersionCommand extends Command<VersionCommandOption> {
     this.tagPrefix = tagVersionPrefix;
     this.commitAndTag = gitTagVersion;
     this.pushToRemote = gitTagVersion && amend !== true && push;
+    this.changelogIncludeCommitsClientLogin =
+      changelogIncludeCommitsClientLogin === '' ? true : changelogIncludeCommitsClientLogin;
+    this.changelogIncludeCommitsGitAuthor =
+      changelogIncludeCommitsGitAuthor === '' ? true : changelogIncludeCommitsGitAuthor;
     // never automatically push to remote when amending a commit
 
     // prettier-ignore
@@ -249,7 +257,7 @@ export class VersionCommand extends Command<VersionCommandOption> {
       );
     }
 
-    if (this.options.changelogIncludeCommitsClientLogin && this.options.changelogIncludeCommitsGitAuthor) {
+    if (this.changelogIncludeCommitsClientLogin && this.changelogIncludeCommitsGitAuthor) {
       throw new ValidationError(
         'ENOTALLOWED',
         dedent`
@@ -267,8 +275,7 @@ export class VersionCommand extends Command<VersionCommandOption> {
 
     // fetch all commits from remote server of the last release when user wants to include client login associated to each commits
     const remoteClient = this.options.createRelease || this.options.remoteClient;
-    const { conventionalCommits, changelogIncludeCommitsClientLogin } = this.options;
-    if (conventionalCommits && changelogIncludeCommitsClientLogin) {
+    if (this.options.conventionalCommits && this.changelogIncludeCommitsClientLogin) {
       if (!remoteClient) {
         throw new ValidationError(
           'EMISSINGCLIENT',
@@ -580,8 +587,6 @@ export class VersionCommand extends Command<VersionCommandOption> {
     const {
       conventionalCommits,
       changelogPreset,
-      changelogIncludeCommitsGitAuthor,
-      changelogIncludeCommitsClientLogin,
       changelogHeaderMessage,
       changelogVersionMessage,
       changelog = true,
@@ -651,8 +656,8 @@ export class VersionCommand extends Command<VersionCommandOption> {
           changelogPreset,
           rootPath,
           tagPrefix: this.tagPrefix,
-          changelogIncludeCommitsGitAuthor,
-          changelogIncludeCommitsClientLogin,
+          changelogIncludeCommitsGitAuthor: this.changelogIncludeCommitsGitAuthor,
+          changelogIncludeCommitsClientLogin: this.changelogIncludeCommitsClientLogin,
           changelogHeaderMessage,
           changelogVersionMessage,
           commitsSinceLastRelease: this.commitsSinceLastRelease,
@@ -735,8 +740,8 @@ export class VersionCommand extends Command<VersionCommandOption> {
             rootPath,
             tagPrefix: this.tagPrefix,
             version: this.globalVersion,
-            changelogIncludeCommitsGitAuthor,
-            changelogIncludeCommitsClientLogin,
+            changelogIncludeCommitsGitAuthor: this.changelogIncludeCommitsGitAuthor,
+            changelogIncludeCommitsClientLogin: this.changelogIncludeCommitsClientLogin,
             changelogHeaderMessage,
             changelogVersionMessage,
             commitsSinceLastRelease: this.commitsSinceLastRelease,
