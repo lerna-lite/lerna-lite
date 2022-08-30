@@ -678,6 +678,7 @@ describe('conventional-commits', () => {
 
       const opts = {
         changelogPreset: 'conventional-changelog-angular',
+        changelogHeaderMessage: '# Custom Header Message',
         changelogIncludeCommitsGitAuthor: true,
       };
       const [changelogOne, changelogTwo] = await Promise.all([
@@ -688,6 +689,19 @@ describe('conventional-commits', () => {
       expect(changelogOne.newEntry.trimRight()).toMatchInlineSnapshot(`
         ## [1.0.1](/compare/package-1@1.0.0...package-1@1.0.1) (YYYY-MM-DD)
 
+
+        ### Bug Fixes
+
+        * **stuff:** changed ([SHA](https://github.com/lerna/conventional-commits-independent/commit/GIT_HEAD)) (Tester McPerson)
+      `);
+      expect(changelogOne.content.trimRight()).toMatchInlineSnapshot(`
+        # Change Log
+        # Custom Header Message
+
+        All notable changes to this project will be documented in this file.
+        See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
+
+        ## [1.0.1](/compare/package-1@1.0.0...package-1@1.0.1) (YYYY-MM-DD)
 
         ### Bug Fixes
 

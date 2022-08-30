@@ -101,7 +101,7 @@ export async function updateChangelog(pkg: Package, type: ChangelogType, updateO
     const changelogVersion = type === 'root' ? changelogVersionMessage : '';
     const changelogHeader = CHANGELOG_HEADER.replace(
       /%s/g,
-      type === 'root' ? (changelogHeaderMessage?.length > 0 ? changelogHeaderMessage + EOL : '') : ''
+      changelogHeaderMessage?.length > 0 ? changelogHeaderMessage + EOL : ''
     );
 
     const content = [changelogHeader, changelogVersion, newEntry, changelogContents]
@@ -114,6 +114,7 @@ export async function updateChangelog(pkg: Package, type: ChangelogType, updateO
 
       return {
         logPath: changelogFileLoc,
+        content,
         newEntry,
       };
     });
