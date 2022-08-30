@@ -188,7 +188,7 @@ export interface VersionCommandOption {
   /** Version changed packages as prereleases when using `--conventional-commits`. */
   conventionalPrerelease?: boolean | string;
 
-  /** Add a custom message at the top of your "changelog.md" which is located in the root of your project. This option is only available when using `--conventional-commits` with changelogs. */
+  /** Add a custom message at the top of all "changelog.md" files. This option is only available when using `--conventional-commits` with changelogs. */
   changelogHeaderMessage?: string;
 
   /**

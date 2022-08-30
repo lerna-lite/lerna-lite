@@ -288,7 +288,7 @@ lerna version --conventional-commits --changelog-include-commits-client-login " 
 
 ### `--changelog-header-message <msg>`
 
-Add a custom message at the top of your "changelog.md" which is located in the root of your project. This option is only available when using `--conventional-commits` and will only impact your project root "changelog.md".
+Add a custom message at the top of all "changelog.md" files. This option is only available when using `--conventional-commits` and will only impact your project root "changelog.md".
 
 ```sh
 lerna version --conventional-commits --changelog-header-message "My Custom Header Message"
