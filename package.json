@@ -22,7 +22,6 @@
     "preroll-new-release": "pnpm run build",
     "roll-new-release": "pnpm run new-version",
     "postroll-new-release": "pnpm run new-publish",
-    "prenew-version": "pnpm build",
     "new-version": "lerna version",
     "new-publish": "lerna publish from-package",
     "format:check": "prettier --check **/*.{js,ts,yml,json}",
