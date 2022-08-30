@@ -1,7 +1,14 @@
 # Change Log
+## Automate your Workspace Versioning, Publishing & Changelogs with [Lerna-Lite](https://github.com/ghiscoding/lerna-lite) 📦🚀
 
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
+
+## [1.11.2](https://github.com/ghiscoding/lerna-lite/compare/v1.11.1...v1.11.2) (2022-08-30)
+
+### Bug Fixes
+
+* **version:** `--changelog-header-message` should be added to all logs ([c27a97d](https://github.com/ghiscoding/lerna-lite/commit/c27a97d77d58e09ba746848f93e4a66237231473)) - by @ghiscoding
 
 ## [1.11.1](https://github.com/ghiscoding/lerna-lite/compare/v1.11.0...v1.11.1) (2022-08-24)
 

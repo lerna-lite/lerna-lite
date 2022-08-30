@@ -1,7 +1,7 @@
 {
   "name": "@lerna-lite/info",
   "description": "Lerna-Lite - Prints local environnment information",
-  "version": "1.11.1",
+  "version": "1.11.2",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "typings": "dist/index.d.ts",
