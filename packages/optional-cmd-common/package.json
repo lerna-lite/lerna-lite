@@ -41,7 +41,7 @@
   },
   "devDependencies": {
     "@types/execa": "^2.0.0",
-    "@types/node": "^18.7.13",
+    "@types/node": "^18.7.14",
     "@types/p-map": "^2.0.0"
   }
 }
