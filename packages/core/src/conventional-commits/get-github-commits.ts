@@ -29,15 +29,16 @@ export async function getGithubCommits(
 
   do {
     const afterCursorStr = afterCursor ? `, after: "${afterCursor}"` : '';
-    const queryStr = dedent(`
-        query getCommits($repo: String!, $owner: String!, $branchName: String!, $pageSize: Int!, $since: GitTimestamp!) {
+    const queryStr = dedent(
+      `query getCommits($repo: String!, $owner: String!, $branchName: String!, $pageSize: Int!, $since: GitTimestamp!) {
           repository(name: $repo, owner: $owner) {
             ref(qualifiedName: $branchName) {
               target { ... on Commit {
                   history(first: $pageSize, since: $since ${afterCursorStr}) {
                     nodes { oid, message, author { name, user { login }}}
                     pageInfo { hasNextPage, endCursor }
-        }}}}}}`).trim();
+        }}}}}}`
+    ).trim();
 
     const response: GraphqlCommitClientData = await octokit.graphql(queryStr, {
       owner: repo.owner,
