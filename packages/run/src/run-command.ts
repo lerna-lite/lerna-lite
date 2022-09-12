@@ -280,7 +280,7 @@ export class RunCommand extends Command<RunCommandOption & FilterOptions> {
       nxBail: this.bail,
       nxIgnoreCycles: !this.options.rejectCycles,
       skipNxCache: this.options.skipNxCache,
-      _: this.args.map((t) => t.toString()),
+      __overrides__: this.args.map((t) => t.toString()),
     };
 
     return { targetDependencies, options };
