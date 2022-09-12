@@ -1,13 +1,5 @@
 module.exports = {
   rootDir: '../',
-  globals: {
-    'ts-jest': {
-      diagnostics: false,
-      isolatedModules: true,
-      tsconfig: '<rootDir>/jest/tsconfig.spec.json',
-      stringifyContentPathRegex: '\\.html$',
-    },
-  },
   clearMocks: true,
   collectCoverage: process.env.CI && process.env.LERNA_OS_TYPE !== 'windows',
   collectCoverageFrom: ['packages/**/*.+(js|ts)', '!**/dist/**', '!**/node_modules/**', '!**/jest/**'],
@@ -21,7 +13,14 @@ module.exports = {
   setupFiles: ['<rootDir>/jest/silence-logging.ts', '<rootDir>/helpers/npm/set-npm-userconfig.ts'],
   setupFilesAfterEnv: ['jest-extended/all', '<rootDir>/jest/setup-unit-test-timeout.ts'],
   transform: {
-    '^.+\\.(ts|html)$': 'ts-jest',
+    '^.+\\.tsx?$': [
+      'ts-jest',
+      {
+        diagnostics: false,
+        isolatedModules: true,
+        tsconfig: '<rootDir>/jest/tsconfig.spec.json',
+      },
+    ],
   },
   transformIgnorePatterns: ['node_modules/(?!(@lerna-lite)/)'],
   testMatch: ['**/__tests__/**/*.+(ts|js)', '**/+(*.)+(spec|test).+(ts|js)'],
