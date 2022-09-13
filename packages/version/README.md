@@ -315,7 +315,7 @@ When run with this flag, `lerna version` will create an official GitHub or GitLa
 ##### GitHub Auth Token
 To authenticate with GitHub, the following environment variables can be defined.
 
-- `GH_TOKEN` (required) - Your GitHub authentication token (under Settings > Developer settings > Personal access tokens).
+- `GH_TOKEN` (required) - Your GitHub authentication token (under Settings > Developer settings > Personal access tokens), please give it the `repo:public_repo` scope when creating the token.
 - `GHE_API_URL` - When using GitHub Enterprise, an absolute URL to the API.
 - `GHE_VERSION` - When using GitHub Enterprise, the currently installed GHE version. [Supports the following versions](https://github.com/octokit/plugin-enterprise-rest.js).
 
