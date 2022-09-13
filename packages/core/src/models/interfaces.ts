@@ -206,17 +206,44 @@ export interface LernaConfig {
 export interface ProjectConfig extends LernaConfig, QueryGraphConfig {
   /** Lerna JSON Schema https://json-schema.org/ */
   $schema: string;
+
+  /** enabled when running in CI (Continuous Integration). */
   ci?: boolean;
+
+  /** how many threads to use when Lerna parallelizes the tasks (defaults to count of logical CPU cores) */
   concurrency: number | string;
+
+  /** current working directory */
   cwd: string;
+
+  /** Composed commands are called from other commands, like publish -> version */
   composed?: boolean;
+
+  /** Lerna CLI version */
   lernaVersion: string;
+
+  /** show progress bars. */
   progress?: boolean;
+
+  /** Only include packages that have been changed since the specified [ref]. */
   since?: string;
+
+  /** When true, Lerna will sort the packages topologically (dependencies before dependents). */
   sort?: boolean;
+
+  /** During `lerna exec` and `lerna run`, stream output with lines prefixed by originating package name. */
   stream?: boolean;
+
+  /** Enables integration with [Nx](https://nx.dev). */
   useNx?: boolean;
+
+  /** When useNx is true, show verbose output from dependent tasks. */
+  verbose?: boolean;
+
+  /** callback to execute when Promise rejected */
   onRejected?: (result: any) => void;
+
+  /** callback to execute when Promise resolved */
   onResolved?: (result: any) => void;
 }
 
