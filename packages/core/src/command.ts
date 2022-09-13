@@ -206,6 +206,10 @@ export class Command<T extends AvailableCommandOption> {
       // Environmental defaults prepared in previous step
       this.envDefaults
     );
+
+    if (this.options.verbose && this.options.loglevel !== 'silly') {
+      this.options.loglevel = 'verbose';
+    }
   }
 
   configureProperties() {

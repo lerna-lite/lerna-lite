@@ -8,7 +8,9 @@ import {
   ValidationError,
 } from '@lerna-lite/core';
 import { FilterOptions, getFilteredPackages, Profiler } from '@lerna-lite/optional-cmd-common';
+import fs from 'fs-extra';
 import pMap from 'p-map';
+import path from 'path';
 import { performance } from 'perf_hooks';
 
 import { npmRunScript, npmRunScriptStreaming, timer } from './lib';
@@ -218,7 +220,7 @@ export class RunCommand extends Command<RunCommandOption & FilterOptions> {
     }
     performance.mark('init-local');
     this.configureNxOutput();
-    const { targetDependencies, options } = await this.prepNxOptions();
+    const { extraOptions, targetDependencies, options } = await this.prepNxOptions();
     if (this.packagesWithScript.length === 1) {
       const { runOne } = await import('nx/src/command-line/run-one');
       const fullQualifiedTarget =
@@ -229,7 +231,8 @@ export class RunCommand extends Command<RunCommandOption & FilterOptions> {
           'project:target:configuration': fullQualifiedTarget,
           ...options,
         },
-        targetDependencies
+        targetDependencies,
+        extraOptions
       );
     } else {
       const { runMany } = await import('nx/src/command-line/run-many');
@@ -280,10 +283,22 @@ export class RunCommand extends Command<RunCommandOption & FilterOptions> {
       nxBail: this.bail,
       nxIgnoreCycles: !this.options.rejectCycles,
       skipNxCache: this.options.skipNxCache,
+      verbose: this.options.verbose,
       __overrides__: this.args.map((t) => t.toString()),
     };
 
-    return { targetDependencies, options };
+    const excludeTaskDependencies = !fs.existsSync(path.join(this.project.rootPath, 'nx.json'));
+    if (excludeTaskDependencies) {
+      this.logger.verbose(this.name, 'nx.json was not found. Task dependencies will not be automatically included.');
+    } else {
+      this.logger.verbose(this.name, 'nx.json was found. Task dependencies will be automatically included.');
+    }
+
+    const extraOptions = {
+      excludeTaskDependencies,
+    };
+
+    return { targetDependencies, options, extraOptions };
   }
 
   runScriptInPackagesParallel() {

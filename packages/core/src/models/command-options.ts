@@ -367,9 +367,9 @@ export interface RunCommandOption {
   /** npm script to run by the command. */
   script: string;
 
-  /** Enables integration with [Nx](https://nx.dev). */
-  useNx?: boolean;
-
   /** when "useNx" is enabled, do we want to skip caching with Nx? */
   skipNxCache?: boolean;
+
+  /** enables integration with [Nx](https://nx.dev). */
+  useNx?: boolean;
 }
