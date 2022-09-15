@@ -58,7 +58,7 @@
     "@lerna-lite/run": "workspace:*",
     "@lerna-lite/version": "workspace:*",
     "@lerna-test/helpers": "link:helpers",
-    "@types/jest": "^29.0.2",
+    "@types/jest": "^29.0.3",
     "@types/node": "^18.7.16",
     "@types/npmlog": "^4.1.4",
     "@types/yargs": "^17.0.12",
