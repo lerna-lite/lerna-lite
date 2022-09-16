@@ -18,7 +18,7 @@ importers:
       '@lerna-lite/run': workspace:*
       '@lerna-lite/version': workspace:*
       '@lerna-test/helpers': link:helpers
-      '@types/jest': ^29.0.2
+      '@types/jest': ^29.0.3
       '@types/node': ^18.7.16
       '@types/npmlog': ^4.1.4
       '@types/yargs': ^17.0.12
@@ -68,7 +68,7 @@ importers:
       '@lerna-lite/run': link:packages/run
       '@lerna-lite/version': link:packages/version
       '@lerna-test/helpers': link:helpers
-      '@types/jest': 29.0.2
+      '@types/jest': 29.0.3
       '@types/node': 18.7.16
       '@types/npmlog': 4.1.4
       '@types/yargs': 17.0.12
@@ -1680,8 +1680,8 @@ packages:
       '@types/istanbul-lib-report': 3.0.0
     dev: true
 
-  /@types/jest/29.0.2:
-    resolution: {integrity: sha512-TaklkwSEtvwJpleiKBHgEBySIQlcZ08gYP/s5wdtdLnjz9uxjnDd7U+Y0JWACebkqBc+jtbol2PEtEW0wQV2zQ==}
+  /@types/jest/29.0.3:
+    resolution: {integrity: sha512-F6ukyCTwbfsEX5F2YmVYmM5TcTHy1q9P5rWlRbrk56KyMh3v9xRGUO3aa8+SkvMi0SHXtASJv1283enXimC0Og==}
     dependencies:
       expect: 29.0.3
       pretty-format: 29.0.3
@@ -4424,7 +4424,7 @@ packages:
       chalk: 4.1.2
       diff-sequences: 29.0.0
       jest-get-type: 29.0.0
-      pretty-format: 29.0.0
+      pretty-format: 29.0.3
     dev: true
 
   /jest-diff/29.0.3:
@@ -5745,15 +5745,6 @@ packages:
     resolution: {integrity: sha512-ujppO+MkdPqoVINuDFDRLClm7D78qbDt0/NR+wp5FqEZOoTNAjPHWj17QRhu7geIHJfcNhRk1XVQmF8Bp3ye+g==}
     engines: {node: '>=10.13.0'}
     hasBin: true
-    dev: true
-
-  /pretty-format/29.0.0:
-    resolution: {integrity: sha512-tMkFRn1vxRwZdiDETcveuNeonRKDg4doOvI+iyb1sOAtxYioGzRicqnsr+d3C/lLv9hBiM/2lDBi5ilR81h2bQ==}
-    engines: {node: ^14.15.0 || ^16.10.0 || >=18.0.0}
-    dependencies:
-      '@jest/schemas': 29.0.0
-      ansi-styles: 5.2.0
-      react-is: 18.1.0
     dev: true
 
   /pretty-format/29.0.3:
