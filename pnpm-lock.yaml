@@ -194,7 +194,7 @@ importers:
       execa: ^5.1.1
       fs-extra: ^10.1.0
       get-stream: ^6.0.1
-      git-url-parse: ^13.0.0
+      git-url-parse: ^13.1.0
       glob-parent: ^6.0.2
       globby: ^11.1.0
       graceful-fs: ^4.2.10
@@ -250,7 +250,7 @@ importers:
       execa: 5.1.1
       fs-extra: 10.1.0
       get-stream: 6.0.1
-      git-url-parse: 13.0.0
+      git-url-parse: 13.1.0
       glob-parent: 6.0.2
       globby: 11.1.0
       graceful-fs: 4.2.10
@@ -3751,8 +3751,8 @@ packages:
       parse-url: 8.1.0
     dev: false
 
-  /git-url-parse/13.0.0:
-    resolution: {integrity: sha512-X1kozCqKL82dMrCLi4vie9SHDC+QugKskAMs4VUbIkhURKg5yDwxDmf6Ixg73J+/xVgK5TXKhzn8a94nHJHpnA==}
+  /git-url-parse/13.1.0:
+    resolution: {integrity: sha512-5FvPJP/70WkIprlUZ33bm4UAaFdjcLkJLpWft1BeZKqwR0uhhNGoKwlUaPtVb4LxCSQ++erHapRak9kWGj+FCA==}
     dependencies:
       git-up: 7.0.0
     dev: false
