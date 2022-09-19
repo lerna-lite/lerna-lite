@@ -60,16 +60,16 @@ We strongly suggest the use of the new opt-in flag [--sync-workspace-lock](https
 Here are some of the biggest projects using Lerna-Lite fork
 
 <a href=https://github.com/facebook/jest>
-  <img src="./assets/jest-logo.png" height="25" width="25">
   Jest
 </a>&nbsp; | &nbsp;
 <a href=https://github.com/formatjs/formatjs>
-  <img src="./assets/jest-logo.png" height="25" width="25">
   Format.JS
 </a>&nbsp; | &nbsp;
-<a href=https://github.com/logaretm/vee-validate>Vee-Validate</a>&nbsp; | &nbsp;
-<img src="./assets/volar-logo.png" height="25" width="25">
-Volar
+<a href=https://github.com/logaretm/vee-validate>
+  Vee-Validate
+</a>&nbsp; | &nbsp;
+<a href=https://github.com/johnsoncodehk/volar>
+  Volar
 </a>&nbsp; | &nbsp;
 <a href=https://github.com/standardnotes/app>
   <img src=https://avatars.githubusercontent.com/u/24537496?s=200&amp;v=4 width="25" height="25">
