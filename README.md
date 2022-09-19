@@ -39,6 +39,12 @@
 
 ---
 
+## License
+
+[MIT License](LICENSE)
+
+---
+
 ## 📢 Lerna-Lite now supports pnpm/yarn `workspace:` protocol
 
 Take 30sec. to complete this 1 question [poll survey 🔘](https://github.com/ghiscoding/lerna-lite/discussions/156) if you are using this feature. It's a simple poll to find out which package manager is the most popular with this new `workspace:` protocol feature. Thanks
@@ -49,9 +55,28 @@ We strongly suggest the use of the new opt-in flag [--sync-workspace-lock](https
 
 ---
 
-## License
+## Who uses Lerna-Lite
 
-[MIT License](LICENSE)
+Here are some of the biggest projects using Lerna-Lite fork
+
+<svg height="25" width="25" xmlns=http://www.w3.org/2000/svg>
+  <image href="assets/jest-logo.png" x="0" y="0" height="25" width="25" />
+</svg>
+<a href=https://github.com/facebook/jest>Jest</a>&nbsp; | &nbsp;
+<svg height="25" width="25" xmlns=http://www.w3.org/2000/svg>
+  <image href=https://formatjs.io/img/logo.svg x="0" y="0" height="25" width="25" />
+</svg>
+<a href=https://github.com/formatjs/formatjs>Format.JS</a>&nbsp; | &nbsp;
+<svg xmlns=http://www.w3.org/2000/svg height="25" width="25" viewBox="0 0 687.36 595.28005" fill="#06D479">
+  <path d="m572.4 0-57.49 99.56-171.23 296.59L172.45 99.56h118.02l53.21 92.14 53.21-92.14L454.36 0H0l343.68 595.28L687.36 0Z"></path>
+</svg>
+<a href=https://github.com/logaretm/vee-validate>Vee-Validate</a>&nbsp; | &nbsp;
+<img itemprop="image" src="assets/volar-logo.png" width="25" height="25">
+<a href=https://github.com/johnsoncodehk/volar>Volar</a>&nbsp; | &nbsp;
+<img itemprop="image" src=https://avatars.githubusercontent.com/u/24537496?s=200&amp;v=4 width="25" height="25">
+<a href=https://github.com/standardnotes/app>&nbsp;Standard Notes</a>
+
+---
 
 ## About Lerna-Lite
 

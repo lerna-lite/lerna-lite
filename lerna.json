@@ -16,6 +16,7 @@
   "ignoreChanges": [
     "**/__fixtures__/**",
     "**/__tests__/**",
+    "**/assets/**",
     "**/helpers/**",
     "**/*.md"
   ],
