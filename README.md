@@ -60,6 +60,7 @@ We strongly suggest the use of the new opt-in flag [--sync-workspace-lock](https
 Here are some of the biggest projects using Lerna-Lite fork
 
 <a href=https://github.com/facebook/jest>
+  <img src="https://jestjs.io/img/jest.png" width="25" height="25">
   Jest
 </a>&nbsp; | &nbsp;
 <a href=https://github.com/formatjs/formatjs>
@@ -72,7 +73,7 @@ Here are some of the biggest projects using Lerna-Lite fork
   Volar
 </a>&nbsp; | &nbsp;
 <a href=https://github.com/standardnotes/app>
-  <img src=https://avatars.githubusercontent.com/u/24537496?s=200&amp;v=4 width="25" height="25">
+  <img src="https://avatars.githubusercontent.com/u/24537496?s=200&amp;v=4" width="25" height="25">
   &nbsp;Standard Notes
 </a>
 
