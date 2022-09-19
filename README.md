@@ -64,12 +64,15 @@ Here are some of the biggest projects using Lerna-Lite fork
   Jest
 </a>&nbsp; | &nbsp;
 <a href=https://github.com/formatjs/formatjs>
+  <img src="https://formatjs.io/img/logo.svg" width="25" height="25">
   Format.JS
 </a>&nbsp; | &nbsp;
 <a href=https://github.com/logaretm/vee-validate>
+  <img src="https://vee-validate.logaretm.com/v4/logo.png" width="25" height="25">
   Vee-Validate
 </a>&nbsp; | &nbsp;
 <a href=https://github.com/johnsoncodehk/volar>
+  <img src="https://vue.gallerycdn.vsassets.io/extensions/vue/volar/0.40.13/1662609095565/Microsoft.VisualStudio.Services.Icons.Default" width="25" height="25">
   Volar
 </a>&nbsp; | &nbsp;
 <a href=https://github.com/standardnotes/app>
