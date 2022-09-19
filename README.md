@@ -39,12 +39,6 @@
 
 ---
 
-## License
-
-[MIT License](LICENSE)
-
----
-
 ## 📢 Lerna-Lite now supports pnpm/yarn `workspace:` protocol
 
 Take 30sec. to complete this 1 question [poll survey 🔘](https://github.com/ghiscoding/lerna-lite/discussions/156) if you are using this feature. It's a simple poll to find out which package manager is the most popular with this new `workspace:` protocol feature. Thanks
@@ -55,32 +49,37 @@ We strongly suggest the use of the new opt-in flag [--sync-workspace-lock](https
 
 ---
 
+## License
+
+[MIT License](LICENSE)
+
 ## Who uses Lerna-Lite
 
-Here are some of the biggest projects using Lerna-Lite fork
+Here are some of the largest projects using the Lerna-Lite fork
 
-<a href=https://github.com/facebook/jest>
+<a href="https://github.com/facebook/jest">
   <img src="https://jestjs.io/img/jest.png" width="25" height="25">
   Jest
 </a>&nbsp; | &nbsp;
-<a href=https://github.com/formatjs/formatjs>
+<a href="https://github.com/formatjs/formatjs">
   <img src="https://formatjs.io/img/logo.svg" width="25" height="25">
   Format.JS
 </a>&nbsp; | &nbsp;
-<a href=https://github.com/logaretm/vee-validate>
+<a href="https://github.com/logaretm/vee-validate">
   <img src="https://vee-validate.logaretm.com/v4/logo.png" width="25" height="25">
   Vee-Validate
 </a>&nbsp; | &nbsp;
-<a href=https://github.com/johnsoncodehk/volar>
+<a href="https://github.com/johnsoncodehk/volar">
   <img src="https://vue.gallerycdn.vsassets.io/extensions/vue/volar/0.40.13/1662609095565/Microsoft.VisualStudio.Services.Icons.Default" width="25" height="25">
   Volar
 </a>&nbsp; | &nbsp;
-<a href=https://github.com/standardnotes/app>
+<a href="https://github.com/standardnotes/app">
   <img src="https://avatars.githubusercontent.com/u/24537496?s=200&amp;v=4" width="25" height="25">
-  &nbsp;Standard Notes
-</a>
-
----
+  Standard Notes
+</a>&nbsp; | &nbsp;
+<a href="https://github.com/microlinkhq/metascraper">
+  <img src="https://metascraper.js.org/static/logo-banner.png" height="25">
+</a>&nbsp; | &nbsp;
 
 ## About Lerna-Lite
 
@@ -95,8 +94,7 @@ For more info on how to setup a workspace, choose the best option for you: [Yarn
 Mainly for the following reasons:
 
 1. original Lerna repo was unmaintained for nearly 2 years (dependencies were out of date)
-    - this is no longer true since Nrwl took over stewardship of Lerna, but the next few points are still valid
-    - we now keep PRs in sync with the original Lerna
+    - this is no longer true since Nrwl took over stewardship of Lerna (we now keep PRs in sync), but the next few points are still valid
 2. a desire to create a smaller and more modular lib that is lighter than the original all-in-one Lerna
     - it's smaller since we only copied half of Lerna's commands and many of them are totally optional.
     - we don't need `bootstrap` anymore since Workspaces are supported by all package managers.
