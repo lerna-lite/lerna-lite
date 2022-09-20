@@ -4,6 +4,16 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.11.3](https://github.com/ghiscoding/lerna-lite/compare/v1.11.2...v1.11.3) (2022-09-20)
+
+### Bug Fixes
+
+* **cli:** add missing Type to fix TSC build error ([836d7f0](https://github.com/ghiscoding/lerna-lite/commit/836d7f0df7973535aa4e5809fd2f9ba8f2b1cd46)) - by @ghiscoding
+* **deps:** update dependency git-url-parse to ^13.1.0 ([bcce5ae](https://github.com/ghiscoding/lerna-lite/commit/bcce5ae8fc5b6f04a46d41d4c1c1210398bfb933)) - by @renovate-bot
+* **deps:** update dependency git-url-parse to v13 ([3bf8155](https://github.com/ghiscoding/lerna-lite/commit/3bf815527390531be221e14f10a4f61d33aa1bde)) - by @renovate-bot
+* **deps:** update dependency uuid to v9 ([e97efb6](https://github.com/ghiscoding/lerna-lite/commit/e97efb605dc7d94bbd1ecfa6a3c07e371e5013c4)) - by @renovate-bot
+* **run:** exclude dependencies with `--scope` when `nx.json` is not present ([3c222ed](https://github.com/ghiscoding/lerna-lite/commit/3c222eda560722b2540c8fd29906f4f04c44ca4e)) - by @ghiscoding
+
 ## [1.11.2](https://github.com/ghiscoding/lerna-lite/compare/v1.11.1...v1.11.2) (2022-08-30)
 
 ### Bug Fixes

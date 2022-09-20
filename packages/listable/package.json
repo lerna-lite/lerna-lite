@@ -1,7 +1,7 @@
 {
   "name": "@lerna-lite/listable",
   "description": "Lerna-Lite listable utils",
-  "version": "1.11.2",
+  "version": "1.11.3",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "typings": "dist/index.d.ts",
