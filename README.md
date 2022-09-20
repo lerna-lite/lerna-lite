@@ -78,7 +78,7 @@ Here are some of the largest projects using the Lerna-Lite fork
   Standard Notes
 </a>&nbsp; | &nbsp;
 <a href="https://github.com/microlinkhq/metascraper">
-  <img src="https://metascraper.js.org/static/logo-banner.png" height="25">
+  <img src="https://metascraper.js.org/static/logo-banner.png" height="20">
 </a>&nbsp; | &nbsp;
 
 ## About Lerna-Lite
