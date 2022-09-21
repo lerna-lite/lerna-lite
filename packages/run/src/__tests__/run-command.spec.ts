@@ -429,5 +429,17 @@ describe('RunCommand', () => {
       await lernaRun(testDir)('my-cacheable-script', '--skip-nx-cache');
       expect(collectedOutput).not.toContain('Nx read the output from the cache');
     });
+
+    it('should display a console warning when using obsolete options with useNx', async () => {
+      collectedOutput = '';
+
+      await lernaRun(testDir)('my-script', '--sort');
+
+      const [logMessage] = loggingOutput('warn');
+      expect(logMessage).toContain(
+        '"parallel", "sort", "no-sort", and "include-dependencies" are ignored when nx.json exists.'
+      );
+      expect(collectedOutput).toContain('package-1');
+    });
   });
 });
