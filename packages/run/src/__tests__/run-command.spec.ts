@@ -430,7 +430,7 @@ describe('RunCommand', () => {
       expect(collectedOutput).not.toContain('Nx read the output from the cache');
     });
 
-    it('should display a console warning when using obsolete options with useNx', async () => {
+    it('should log a warning when using obsolete options with useNx', async () => {
       collectedOutput = '';
 
       await lernaRun(testDir)('my-script', '--sort');

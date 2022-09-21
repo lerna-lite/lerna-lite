@@ -298,8 +298,6 @@ export class RunCommand extends Command<RunCommandOption & FilterOptions> {
           `"parallel", "sort", "no-sort", and "include-dependencies" are ignored when nx.json exists. See https://lerna.js.org/docs/recipes/using-lerna-powered-by-nx-to-run-tasks for details.`
         );
       }
-    } else {
-      this.logger.verbose(this.name, 'nx.json was not found. Task dependencies will not be automatically included.');
     }
 
     const extraOptions = {
