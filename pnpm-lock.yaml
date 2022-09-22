@@ -132,7 +132,7 @@ importers:
       load-json-file: ^6.2.0
       npmlog: ^6.0.2
       path: ^0.12.7
-      type-fest: ^2.19.0
+      type-fest: ^3.0.0
       yargs: ^17.5.1
       yargs-parser: ^21.1.1
     dependencies:
@@ -151,7 +151,7 @@ importers:
       yargs: 17.5.1
     devDependencies:
       '@types/load-json-file': 5.1.0
-      type-fest: 2.19.0
+      type-fest: 3.0.0
       yargs-parser: 21.1.1
 
   packages/core:
@@ -6537,9 +6537,9 @@ packages:
     engines: {node: '>=8'}
     dev: false
 
-  /type-fest/2.19.0:
-    resolution: {integrity: sha512-RAH822pAdBgcNMAfWnCBU3CFZcfZ/i1eZjwFU/dsLKumyuuP3niueg2UAukXYF0E2AAoc82ZSSf9J0WQBinzHA==}
-    engines: {node: '>=12.20'}
+  /type-fest/3.0.0:
+    resolution: {integrity: sha512-MINvUN5ug9u+0hJDzSZNSnuKXI8M4F5Yvb6SQZ2CYqe7SgKXKOosEcU5R7tRgo85I6eAVBbkVF7TCvB4AUK2xQ==}
+    engines: {node: '>=14.16'}
     dev: true
 
   /typedarray-to-buffer/3.1.5:
