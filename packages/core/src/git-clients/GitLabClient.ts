@@ -2,7 +2,7 @@ import fetch from 'node-fetch';
 import log from 'npmlog';
 import path from 'path';
 
-import { GitClient, GitClientRelease } from '../models';
+import { GitClient, GitClientReleaseOption } from '../models';
 
 export class GitLabClient implements GitClient {
   baseUrl: string;
@@ -13,7 +13,7 @@ export class GitLabClient implements GitClient {
     this.token = token;
   }
 
-  createRelease({ owner, repo, name, tag_name: tagName, body }: GitClientRelease): Promise<void> {
+  createRelease({ owner, repo, name, tag_name: tagName, body }: GitClientReleaseOption): Promise<void> {
     const releasesUrl = this.releasesUrl(owner, repo, 'releases');
 
     log.silly('Requesting GitLab releases', releasesUrl);

@@ -1,7 +1,8 @@
 import { EOL } from 'os';
 import log from 'npmlog';
-
 import { exec, ExecOpts, tempWrite } from '@lerna-lite/core';
+
+import { GitCommitOption } from '../types';
 
 /**
  * @param {string} message
@@ -10,7 +11,7 @@ import { exec, ExecOpts, tempWrite } from '@lerna-lite/core';
  */
 export function gitCommit(
   message: string,
-  { amend, commitHooks, signGitCommit, signoffGitCommit }: any,
+  { amend, commitHooks, signGitCommit, signoffGitCommit }: GitCommitOption,
   opts: ExecOpts,
   gitDryRun = false
 ) {

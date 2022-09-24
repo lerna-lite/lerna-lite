@@ -148,24 +148,28 @@ export interface TopologicalConfig extends QueryGraphConfig {
   concurrency?: number;
 }
 
-export interface GitClientRelease {
+export interface GitClientReleaseOption {
   owner: string;
   repo: string;
   tag_name: string;
   name: string;
-  body: string;
+  body?: string;
   draft?: boolean;
   prerelease?: boolean;
 }
 
-export type GitCreateReleaseFn = () => Promise<{
+export type GitCreateReleaseFn = (options: GitClientReleaseOption) => Promise<{
   ok: boolean;
   status: string;
   statusText: string;
 }>;
 
 export interface GitClient {
-  createRelease: (opts: GitClientRelease) => Promise<void>;
+  createRelease: (opts: GitClientReleaseOption) => Promise<void>;
+}
+
+export interface GitCreateReleaseClientOutput {
+  repos: GitClient;
 }
 
 export type NpaResolveResult = (

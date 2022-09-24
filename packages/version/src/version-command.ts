@@ -593,7 +593,7 @@ export class VersionCommand extends Command<VersionCommandOption> {
     } = this.options;
     const independentVersions = this.project.isIndependent();
     const rootPath = this.project.manifest.location;
-    const changedFiles = new Set();
+    const changedFiles = new Set<string>();
     const npmClient = this.options.npmClient || 'npm';
 
     let chain: Promise<any> = Promise.resolve();
