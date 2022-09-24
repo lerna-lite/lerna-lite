@@ -1,6 +1,5 @@
 import loadJsonFile from 'load-json-file';
 import path from 'path';
-import { JsonObject } from 'type-fest';
 
 import changedCmd from './cli-commands/cli-changed-commands';
 import diffCmd from './cli-commands/cli-diff-commands';
@@ -13,10 +12,16 @@ import runCmd from './cli-commands/cli-run-commands';
 import versionCmd from './cli-commands/cli-version-commands';
 import cli from './lerna-cli';
 
+interface JsonValue {
+  [dep: string]: string | number;
+}
+
 export function lerna(argv: any[]) {
-  const cliPkg = loadJsonFile.sync<JsonObject>(path.join(__dirname, '../', 'package.json'));
+  const cliPkg = loadJsonFile.sync<{ [dep: string]: string | Array<JsonValue> }>(
+    path.join(__dirname, '../', 'package.json')
+  );
   const context = {
-    lernaVersion: cliPkg?.version ?? '',
+    lernaVersion: (cliPkg?.version ?? '') as string,
   };
 
   return cli()

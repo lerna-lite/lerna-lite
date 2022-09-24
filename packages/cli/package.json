@@ -50,7 +50,6 @@
   },
   "devDependencies": {
     "@types/load-json-file": "^5.1.0",
-    "type-fest": "^2.19.0",
     "yargs-parser": "^21.1.1"
   }
 }
