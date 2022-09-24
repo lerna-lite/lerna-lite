@@ -412,8 +412,10 @@ describe('RunCommand', () => {
       collectedOutput = '';
       await lernaRun(testDir)('my-script', '--stream');
 
-      expect(collectedOutput).toContain('[package-1      ]');
-      expect(collectedOutput).toContain('[package-3      ]');
+      expect(collectedOutput).toContain('Lerna (powered by Nx)');
+      // expect(collectedOutput).toContain('Running target my-script for 2 project(s)');
+      expect(collectedOutput).toContain('package-1@1.0.0 my-script');
+      expect(collectedOutput).toContain('package-3@1.0.0 my-script');
     });
 
     it('runs a cacheable script', async () => {
