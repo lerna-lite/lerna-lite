@@ -1,8 +1,7 @@
 import log from 'npmlog';
+import { ExecOpts, execSync } from '@lerna-lite/core';
 
-import { execSync } from '@lerna-lite/core';
-
-export function isAnythingCommitted(opts, gitDryRun = false) {
+export function isAnythingCommitted(opts: ExecOpts, gitDryRun = false) {
   log.silly('isAnythingCommitted', '');
   let anyCommits = execSync('git', ['rev-list', '--count', '--all', '--max-count=1'], opts, gitDryRun);
   if (gitDryRun) {

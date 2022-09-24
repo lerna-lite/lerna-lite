@@ -118,7 +118,7 @@ jobs:
         run: pnpm jest:ci
 
       - name: Upload Jest coverage to Codecov
+        uses: codecov/codecov-action@v3.1.1
         if: |
           contains(matrix.node, 18) &&
-          !contains(github.event.head_commit.message, 'chore(release)')          
-        run: bash <(curl -s https://codecov.io/bash)
+          !contains(github.event.head_commit.message, 'chore(release)')
