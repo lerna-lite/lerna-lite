@@ -4,16 +4,15 @@ import semver from 'semver';
 import {
   createGitHubClient,
   createGitLabClient,
+  GitCreateReleaseClientOutput,
   parseGitRepo,
+  ReleaseClient,
   ReleaseCommandProps,
   ReleaseOptions,
   ValidationError,
 } from '@lerna-lite/core';
 
-/**
- * @param {'github' | 'gitlab'} type
- */
-export function createReleaseClient(type: 'github' | 'gitlab') {
+export function createReleaseClient(type: 'github' | 'gitlab'): GitCreateReleaseClientOutput {
   switch (type) {
     case 'gitlab':
       return createGitLabClient();
@@ -31,7 +30,7 @@ export function createReleaseClient(type: 'github' | 'gitlab') {
  * @param {{ gitRemote: string; execOpts: import('@lerna/child-process').ExecOpts }} opts
  */
 export function createRelease(
-  client,
+  client: ReleaseClient,
   { tags, releaseNotes }: ReleaseCommandProps,
   { gitRemote, execOpts }: ReleaseOptions,
   gitDryRun = false
