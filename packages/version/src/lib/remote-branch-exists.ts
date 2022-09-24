@@ -1,13 +1,12 @@
 import log from 'npmlog';
-
-import { execSync } from '@lerna-lite/core';
+import { ExecOpts, execSync } from '@lerna-lite/core';
 
 /**
  * @param {string} gitRemote
  * @param {string} branch
  * @param {import('@lerna/child-process').ExecOpts} opts
  */
-export function remoteBranchExists(gitRemote: string, branch: string, opts, gitDryRun = false) {
+export function remoteBranchExists(gitRemote: string, branch: string, opts: ExecOpts, gitDryRun = false) {
   log.silly('remoteBranchExists', '');
 
   const remoteBranch = `${gitRemote}/${branch}`;

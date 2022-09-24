@@ -1,8 +1,8 @@
 import log from 'npmlog';
 
-import { execSync } from '@lerna-lite/core';
+import { ExecOpts, execSync } from '@lerna-lite/core';
 
-export function getCurrentBranch(opts, gitDryRun = false) {
+export function getCurrentBranch(opts: ExecOpts, gitDryRun = false) {
   log.silly('currentBranch', '');
   const branch = execSync('git', ['rev-parse', '--abbrev-ref', 'HEAD'], opts, gitDryRun);
   log.verbose('currentBranch', branch);

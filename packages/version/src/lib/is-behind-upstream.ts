@@ -1,8 +1,7 @@
 import log from 'npmlog';
+import { ExecOpts, execSync } from '@lerna-lite/core';
 
-import { execSync } from '@lerna-lite/core';
-
-export function isBehindUpstream(gitRemote, branch, opts, gitDryRun = false) {
+export function isBehindUpstream(gitRemote: string, branch: string, opts: ExecOpts, gitDryRun = false) {
   log.silly('isBehindUpstream', '');
 
   updateRemote(opts, gitDryRun);
@@ -20,7 +19,7 @@ export function updateRemote(opts, gitDryRun = false) {
   execSync('git', ['remote', 'update'], opts, gitDryRun);
 }
 
-export function countLeftRight(symmetricDifference, opts, gitDryRun = false) {
+export function countLeftRight(symmetricDifference: string, opts: ExecOpts, gitDryRun = false) {
   const stdout = execSync('git', ['rev-list', '--left-right', '--count', symmetricDifference], opts, gitDryRun);
 
   return stdout.split('\t').map((val) => parseInt(val, 10));
