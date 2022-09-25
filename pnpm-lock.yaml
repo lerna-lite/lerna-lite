@@ -330,6 +330,7 @@ importers:
       '@lerna-lite/optional-cmd-common': workspace:*
       '@types/execa': ^2.0.0
       '@types/p-map': ^2.0.0
+      chalk: ^4.1.2
       dotenv: ^16.0.2
       fs-extra: ^10.1.0
       globby: ^11.1.0
@@ -342,6 +343,7 @@ importers:
     dependencies:
       '@lerna-lite/core': link:../core
       '@lerna-lite/optional-cmd-common': link:../optional-cmd-common
+      chalk: 4.1.2
       dotenv: 16.0.2
       fs-extra: 10.1.0
       multimatch: 5.0.0
