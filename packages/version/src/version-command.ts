@@ -575,12 +575,12 @@ export class VersionCommand extends Command<VersionCommandOption> {
     }
 
     // When composed from `lerna publish`, use this opportunity to confirm publishing
-    let confirmMessage = this.options.gitDryRun ? 'dry-run> ' : '';
+    let confirmMessage = this.options.gitDryRun ? chalk.bgMagenta('[dry-run]') : '';
     confirmMessage += this.composed
-      ? 'Are you sure you want to publish these packages?'
-      : 'Are you sure you want to create these versions?';
+      ? ' Are you sure you want to publish these packages?'
+      : ' Are you sure you want to create these versions?';
 
-    return promptConfirmation(confirmMessage);
+    return promptConfirmation(confirmMessage.trim());
   }
 
   updatePackageVersions() {

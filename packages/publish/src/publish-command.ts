@@ -1,3 +1,4 @@
+import chalk from 'chalk';
 import os from 'os';
 import path from 'path';
 import crypto from 'crypto';
@@ -486,9 +487,9 @@ export class PublishCommand extends Command<PublishCommandOption> {
       return true;
     }
 
-    let confirmMessage = this.options.gitDryRun ? 'dry-run> ' : '';
-    confirmMessage += 'Are you sure you want to publish these packages?';
-    return promptConfirmation(confirmMessage);
+    let confirmMessage = this.options.gitDryRun ? chalk.bgMagenta('[dry-run]') : '';
+    confirmMessage += ' Are you sure you want to publish these packages?';
+    return promptConfirmation(confirmMessage.trim());
   }
 
   prepareLicenseActions() {
@@ -705,7 +706,7 @@ export class PublishCommand extends Command<PublishCommandOption> {
 
   requestOneTimePassword() {
     if (this.options.gitDryRun) {
-      this.logger.info('dry-run>', 'will ask OTP');
+      this.logger.info(chalk.bold.magenta('[dry-run] >'), 'will ask OTP');
       return;
     }
 

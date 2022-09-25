@@ -1,4 +1,5 @@
 import byteSize from 'byte-size';
+import chalk from 'chalk';
 import columnify from 'columnify';
 import log from 'npmlog';
 import hasUnicode from 'has-unicode';
@@ -62,7 +63,7 @@ export function logPacked(pkg: Package & { packed: Tarball }, dryRun = false) {
 
   // in dry-run mode, show tarball temp location and dependencies, devDependencies
   if (dryRun) {
-    log.notice('', '--- dry-run details ---');
+    log.notice('', `--- ${chalk.bgMagenta('DRY-RUN')} details ---`);
     log.notice('', `temp location: ${tarball.tarFilePath}`);
     log.notice('', `package name: ${pkg.name}`);
     if (pkg.dependencies) {

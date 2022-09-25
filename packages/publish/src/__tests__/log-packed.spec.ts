@@ -1,6 +1,9 @@
+import { Package } from '@lerna-lite/core';
+import chalk from 'chalk';
 import npmlog from 'npmlog';
 
 import { logPacked } from '../lib';
+import { Tarball } from '../models';
 
 describe('log-packed', () => {
   const pkg = {
@@ -31,7 +34,7 @@ describe('log-packed', () => {
         },
       ],
     },
-  };
+  } as unknown as Package & { packed: Tarball };
 
   it('should display dry-run details', () => {
     const logSpy = jest.spyOn(npmlog, 'notice');
@@ -49,7 +52,7 @@ describe('log-packed', () => {
     expect(logSpy).toHaveBeenCalledWith('', expect.stringContaining('bundled files: '));
     expect(logSpy).toHaveBeenCalledWith('', expect.stringContaining('own files: '));
     expect(logSpy).toHaveBeenCalledWith('', expect.stringContaining('total files: '));
-    expect(logSpy).toHaveBeenCalledWith('', '--- dry-run details ---');
+    expect(logSpy).toHaveBeenCalledWith('', `--- ${chalk.bgMagenta('DRY-RUN')} details ---`);
     expect(logSpy).toHaveBeenCalledWith('', 'package name: @lerna-lite/core');
     expect(logSpy).toHaveBeenCalledWith('dependencies:', '');
     expect(logSpy).toHaveBeenCalledWith('', 'tiny-tarball | ^1.0.0');

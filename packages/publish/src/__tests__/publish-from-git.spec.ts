@@ -88,7 +88,7 @@ describe('publish from-git', () => {
     // called from chained describeRef()
     expect(throwIfUncommitted).toHaveBeenCalled();
 
-    expect(promptConfirmation).toHaveBeenLastCalledWith('dry-run> Are you sure you want to publish these packages?');
+    expect(promptConfirmation).toHaveBeenLastCalledWith('[dry-run] Are you sure you want to publish these packages?');
     expect((logOutput as any).logged()).toMatch('Found 4 packages to publish:');
     expect((npmPublish as typeof npmPublishMock).order()).toEqual([
       'package-1',

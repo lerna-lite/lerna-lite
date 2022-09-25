@@ -34,6 +34,7 @@
     "@lerna-lite/core": "workspace:*",
     "@lerna-lite/version": "workspace:*",
     "byte-size": "^7.0.1",
+    "chalk": "^4.1.2",
     "columnify": "^1.6.0",
     "fs-extra": "^10.1.0",
     "has-unicode": "^2.0.1",

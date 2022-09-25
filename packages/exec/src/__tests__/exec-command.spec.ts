@@ -168,7 +168,7 @@ describe('ExecCommand', () => {
       await lernaExec(testDir)('ls', '--cmd-dry-run');
 
       const logLines = (logOutput as any).logged().split('\n');
-      expect(logLines).toEqual(['dry-run> package-1', 'dry-run> package-2']);
+      expect(logLines).toEqual(['[dry-run] > package-1', '[dry-run] > package-2']);
     });
 
     it('should run a command with parameters', async () => {
@@ -222,7 +222,7 @@ describe('ExecCommand', () => {
 
       const logLines = (logOutput as any).logged().split('\n');
 
-      expect(logLines).toEqual(['dry-run> package-1', 'dry-run> package-2']);
+      expect(logLines).toEqual(['[dry-run] > package-1', '[dry-run] > package-2']);
     });
 
     it('omits package prefix with --stream --no-prefix', async () => {
