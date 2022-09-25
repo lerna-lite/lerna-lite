@@ -8,7 +8,8 @@ import {
   ValidationError,
 } from '@lerna-lite/core';
 import { FilterOptions, getFilteredPackages, Profiler } from '@lerna-lite/optional-cmd-common';
-import fs, { existsSync } from 'fs-extra';
+import chalk from 'chalk';
+import { existsSync } from 'fs-extra';
 import pMap from 'p-map';
 import path from 'path';
 import { performance } from 'perf_hooks';
@@ -372,8 +373,8 @@ export class RunCommand extends Command<RunCommandOption & FilterOptions> {
   }
 
   dryRunScript(scriptName: string, pkgName: string): Promise<any> {
-    this.logger.info('dry-run>', `Run npm script '%s' in '%s'`, scriptName, pkgName);
-    logOutput(`dry-run> ${pkgName}`);
+    this.logger.info(chalk.bold.magenta('[dry-run] >'), `Run npm script '%s' in '%s'`, scriptName, pkgName);
+    logOutput(`${chalk.bold.magenta('[dry-run] >')} ${pkgName}`);
     return Promise.resolve();
   }
 }

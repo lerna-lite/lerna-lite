@@ -33,6 +33,7 @@
   "dependencies": {
     "@lerna-lite/core": "workspace:*",
     "@lerna-lite/optional-cmd-common": "workspace:*",
+    "chalk": "^4.1.2",
     "fs-extra": "^10.1.0",
     "multimatch": "^5.0.0",
     "npmlog": "^6.0.2",

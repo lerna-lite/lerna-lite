@@ -1,3 +1,4 @@
+import chalk from 'chalk';
 import log from 'npmlog';
 import semver from 'semver';
 
@@ -58,7 +59,11 @@ export function createRelease(
       };
 
       if (gitDryRun) {
-        log.info('dry-run>', `Create Release with repo options: `, JSON.stringify(releaseOptions));
+        log.info(
+          chalk.bold.magenta('[dry-run] >'),
+          `Create Release with repo options: `,
+          JSON.stringify(releaseOptions)
+        );
         return Promise.resolve();
       }
 
