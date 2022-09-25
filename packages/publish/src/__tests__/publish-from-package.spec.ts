@@ -89,7 +89,7 @@ describe('publish from-package', () => {
 
     await new PublishCommand(createArgv(cwd, '--bump', 'from-package', '--git-dry-run'));
 
-    expect(promptConfirmation).toHaveBeenLastCalledWith('dry-run> Are you sure you want to publish these packages?');
+    expect(promptConfirmation).toHaveBeenLastCalledWith('[dry-run] Are you sure you want to publish these packages?');
     expect((logOutput as any).logged()).toMatch('Found 2 packages to publish:');
     expect((npmPublish as typeof npmPublishMock).order()).toEqual(['package-2', 'package-3']);
   });

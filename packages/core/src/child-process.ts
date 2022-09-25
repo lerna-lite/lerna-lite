@@ -198,6 +198,6 @@ export function logExecCommand(command: string, args?: string[]) {
     cmdList.push(Array.isArray(c) ? c.join(' ') : c);
   }
 
-  log.info('dry-run>', cmdList.join(' '));
+  log.info(chalk.bold.magenta('[dry-run] >'), cmdList.join(' '));
   return '';
 }

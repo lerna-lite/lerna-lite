@@ -141,7 +141,7 @@ describe('VersionCommand', () => {
       expect(checkWorkingTree).toHaveBeenCalled();
 
       expect((promptSelectOne as jest.Mock).mock.calls).toMatchSnapshot('prompt');
-      expect(promptConfirmation).toHaveBeenLastCalledWith('dry-run> Are you sure you want to create these versions?');
+      expect(promptConfirmation).toHaveBeenLastCalledWith('[dry-run] Are you sure you want to create these versions?');
 
       expect((writePkg as any).updatedManifest('package-1')).toMatchSnapshot('gitHead');
 
@@ -195,7 +195,7 @@ describe('VersionCommand', () => {
       expect(checkWorkingTree).toHaveBeenCalled();
 
       expect((promptSelectOne as jest.Mock).mock.calls).toMatchSnapshot('prompt');
-      expect(promptConfirmation).toHaveBeenLastCalledWith('dry-run> Are you sure you want to publish these packages?');
+      expect(promptConfirmation).toHaveBeenLastCalledWith('[dry-run] Are you sure you want to publish these packages?');
 
       expect((writePkg as any).updatedManifest('package-1')).toMatchSnapshot('gitHead');
 

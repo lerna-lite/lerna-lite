@@ -1,3 +1,4 @@
+import chalk from 'chalk';
 import npmlog from 'npmlog';
 // file under test
 import { exec, execSync, getChildProcessCount, spawn } from '../child-process';
@@ -12,7 +13,7 @@ describe('childProcess', () => {
     it('should execute a command in dry-run and log the command', () => {
       const logSpy = jest.spyOn(npmlog, 'info');
       execSync('echo', ['execSync'], undefined, true);
-      expect(logSpy).toHaveBeenCalledWith('dry-run>', 'echo execSync');
+      expect(logSpy).toHaveBeenCalledWith(chalk.bold.magenta('[dry-run] >'), 'echo execSync');
     });
 
     it('does not error when stdout is ignored', () => {
@@ -31,7 +32,7 @@ describe('childProcess', () => {
     it('should execute a command in dry-run and log the command', () => {
       const logSpy = jest.spyOn(npmlog, 'info');
       exec('echo', ['exec'], undefined, true);
-      expect(logSpy).toHaveBeenCalledWith('dry-run>', 'echo exec');
+      expect(logSpy).toHaveBeenCalledWith(chalk.bold.magenta('[dry-run] >'), 'echo exec');
     });
 
     it('rejects on undefined command', async () => {
@@ -79,7 +80,7 @@ describe('childProcess', () => {
     it('should execute a command in dry-run and log the command', () => {
       const logSpy = jest.spyOn(npmlog, 'info');
       spawn('echo', ['-n'], undefined, true);
-      expect(logSpy).toHaveBeenCalledWith('dry-run>', 'echo -n');
+      expect(logSpy).toHaveBeenCalledWith(chalk.bold.magenta('[dry-run] >'), 'echo -n');
     });
 
     it('decorates opts.pkg on error if caught', async () => {

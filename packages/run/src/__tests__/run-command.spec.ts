@@ -283,15 +283,15 @@ describe('RunCommand', () => {
 
       const logLines = (logOutput as any).logged().split('\n');
       expect(logLines).toEqual([
-        'dry-run> package-cycle-1',
-        'dry-run> package-cycle-2',
-        'dry-run> package-cycle-extraneous-1',
-        'dry-run> package-cycle-extraneous-2',
-        'dry-run> package-dag-1',
-        'dry-run> package-dag-2a',
-        'dry-run> package-dag-2b',
-        'dry-run> package-dag-3',
-        'dry-run> package-standalone',
+        '[dry-run] > package-cycle-1',
+        '[dry-run] > package-cycle-2',
+        '[dry-run] > package-cycle-extraneous-1',
+        '[dry-run] > package-cycle-extraneous-2',
+        '[dry-run] > package-dag-1',
+        '[dry-run] > package-dag-2a',
+        '[dry-run] > package-dag-2b',
+        '[dry-run] > package-dag-3',
+        '[dry-run] > package-standalone',
       ]);
     });
   });
