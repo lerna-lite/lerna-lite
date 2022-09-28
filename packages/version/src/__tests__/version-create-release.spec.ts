@@ -25,7 +25,7 @@ jest.mock('@lerna-lite/core', () => ({
 jest.mock('@lerna-lite/version', () => jest.requireActual('../version-command'));
 
 // mocked modules
-import { createGitHubClient } from '@lerna-lite/core';
+import { createGitHubClient, VersionCommandOption } from '@lerna-lite/core';
 import { createGitLabClient } from '@lerna-lite/core';
 import { recommendVersion } from '@lerna-lite/core';
 import { logOutput } from '@lerna-lite/core';
@@ -39,8 +39,9 @@ import { VersionCommand } from '../version-command';
 import cliCommands from '../../../cli/src/cli-commands/cli-version-commands';
 const lernaVersion = commandRunner(cliCommands);
 
-import yargParser from 'yargs-parser';
 import dedent from 'dedent';
+import npmlog from 'npmlog';
+import yargParser from 'yargs-parser';
 
 const createArgv = (cwd: string, ...args: any[]) => {
   args.unshift('version');
@@ -51,13 +52,17 @@ const createArgv = (cwd: string, ...args: any[]) => {
   const argv = yargParser(parserArgs);
   argv['$0'] = cwd;
   argv['loglevel'] = 'silent';
-  return argv;
+  return argv as unknown as VersionCommandOption;
 };
 
 describe.each([
   ['github', createGitHubClient],
   ['gitlab', createGitLabClient],
 ])('--create-release %s', (type: any, client: any) => {
+  beforeEach(() => {
+    process.env = {};
+  });
+
   it('does not create a release if --no-push is passed', async () => {
     const cwd = await initFixture('independent');
 
@@ -101,6 +106,7 @@ describe.each([
   });
 
   it('marks a version as a pre-release if it contains a valid part', async () => {
+    process.env.GH_TOKEN = 'TOKEN';
     const cwd = await initFixture('normal');
 
     (recommendVersion as jest.Mock).mockResolvedValueOnce('2.0.0-alpha.1');
@@ -120,6 +126,7 @@ describe.each([
   });
 
   it('creates a release for every independent version', async () => {
+    process.env.GH_TOKEN = 'TOKEN';
     const cwd = await initFixture('independent');
     const versionBumps = new Map([
       ['package-1', '1.0.1'],
@@ -148,6 +155,8 @@ describe.each([
   });
 
   it('creates a single fixed release', async () => {
+    process.env.GH_TOKEN = 'TOKEN';
+
     const cwd = await initFixture('normal');
 
     (recommendVersion as jest.Mock).mockResolvedValueOnce('1.1.0');
@@ -186,6 +195,9 @@ describe.each([
 
 describe('legacy option --github-release', () => {
   it('is translated into --create-release=github', async () => {
+    process.env = {
+      GH_TOKEN: 'TOKEN',
+    };
     const cwd = await initFixture('normal');
 
     await lernaVersion(cwd)('--github-release', '--conventional-commits');
@@ -203,5 +215,22 @@ describe('--create-release [unrecognized]', () => {
 
     expect((createGitHubClient as any).releases.size).toBe(0);
     expect((createGitLabClient as any).releases.size).toBe(0);
+  });
+});
+
+describe('create --github-release without providing GH_TOKEN', () => {
+  beforeEach(() => {
+    process.env = {};
+  });
+
+  it('should create a GitHub Release link with prefilled data when GH_TOKEN env var is not provided', async () => {
+    const logSpy = jest.spyOn(npmlog, 'info');
+    const cwd = await initFixture('normal');
+
+    await lernaVersion(cwd)('--create-release', 'github', '--conventional-commits');
+
+    // prettier-ignore
+    const releaseUrl = 'https://github.com/lerna/lerna/releases/new?tag=v1.0.1&title=v1.0.1&body=normal&prerelease=false';
+    expect(logSpy).toHaveBeenCalledWith('github', `🔗 ${releaseUrl} 🏷️ (GitHub Release web interface)`);
   });
 });

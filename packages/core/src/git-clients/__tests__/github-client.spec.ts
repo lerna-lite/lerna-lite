@@ -1,5 +1,3 @@
-'use strict';
-
 jest.mock('@octokit/rest');
 jest.mock('../../child-process');
 
@@ -12,12 +10,6 @@ import { createGitHubClient, parseGitRepo } from '../index';
 describe('createGitHubClient', () => {
   beforeEach(() => {
     process.env = {};
-  });
-
-  it('errors if no GH_TOKEN env var', () => {
-    expect(() => {
-      createGitHubClient();
-    }).toThrow('A GH_TOKEN environment variable is required.');
   });
 
   it('doesnt error if GH_TOKEN env var is set', () => {

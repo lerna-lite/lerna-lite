@@ -9,19 +9,16 @@ export function createGitHubClient() {
   log.silly('createGitHubClient', '');
 
   const { GH_TOKEN, GHE_API_URL, GHE_VERSION } = process.env;
+  const options: { auth?: string; baseUrl?: string } = {};
 
-  if (!GH_TOKEN) {
-    throw new Error('A GH_TOKEN environment variable is required.');
+  if (GH_TOKEN) {
+    options.auth = `token ${GH_TOKEN}`;
   }
 
   if (GHE_VERSION) {
     // eslint-disable-next-line
     Octokit.plugin(require(`@octokit/plugin-enterprise-rest/ghe-${GHE_VERSION}`));
   }
-
-  const options: any = {
-    auth: `token ${GH_TOKEN}`,
-  };
 
   if (GHE_API_URL) {
     options.baseUrl = GHE_API_URL;

@@ -582,6 +582,7 @@ importers:
       js-yaml: ^4.1.0
       load-json-file: ^6.2.0
       minimatch: ^5.1.0
+      new-github-release-url: ^1.0.0
       npmlog: ^6.0.2
       p-map: ^4.0.0
       p-pipe: ^3.1.0
@@ -599,6 +600,7 @@ importers:
       dedent: 0.7.0
       load-json-file: 6.2.0
       minimatch: 5.1.0
+      new-github-release-url: 1.0.0
       npmlog: 6.0.2
       p-map: 4.0.0
       p-pipe: 3.1.0
@@ -5193,6 +5195,13 @@ packages:
 
   /neo-async/2.6.2:
     resolution: {integrity: sha512-Yd3UES5mWCSqR+qNT93S3UoYUkqAZ9lLg8a7g9rimsWmYGK8cVToA4/sF3RrshdyV3sAGMXVUmpMYOw+dLpOuw==}
+    dev: false
+
+  /new-github-release-url/1.0.0:
+    resolution: {integrity: sha512-dle7yf655IMjyFUqn6Nxkb18r4AOAkzRcgcZv6WZ0IqrOH4QCEZ8Sm6I7XX21zvHdBeeMeTkhR9qT2Z0EJDx6A==}
+    engines: {node: '>=10'}
+    dependencies:
+      type-fest: 0.4.1
     dev: false
 
   /node-addon-api/3.2.1:
