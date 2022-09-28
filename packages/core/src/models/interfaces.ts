@@ -221,7 +221,7 @@ export interface ProjectConfig extends LernaConfig, QueryGraphConfig {
   cwd: string;
 
   /** Composed commands are called from other commands, like publish -> version */
-  composed?: boolean;
+  composed?: boolean | string;
 
   /** Lerna CLI version */
   lernaVersion: string;

@@ -23,7 +23,7 @@ import path from 'path';
 import yargParser from 'yargs-parser';
 
 // mocked modules
-import { promptSelectOne } from '@lerna-lite/core';
+import { promptSelectOne, VersionCommandOption } from '@lerna-lite/core';
 
 // helpers
 import { commandRunner, initFixtureFactory } from '@lerna-test/helpers';
@@ -44,7 +44,7 @@ const createArgv = (cwd, ...args) => {
   const argv = yargParser(parserArgs);
   argv['$0'] = cwd;
   argv['loglevel'] = 'silent';
-  return argv;
+  return argv as unknown as VersionCommandOption;
 };
 
 describe('version bump', () => {

@@ -22,6 +22,7 @@ import {
   Package,
   PackageGraphNode,
   prereleaseIdFromVersion,
+  ProjectConfig,
   promptConfirmation,
   PublishCommandOption,
   pulseTillDone,
@@ -81,7 +82,7 @@ export class PublishCommand extends Command<PublishCommandOption> {
     return this.options.bump !== 'from-package';
   }
 
-  constructor(argv: PublishCommandOption) {
+  constructor(argv: PublishCommandOption | ProjectConfig) {
     super(argv);
   }
 

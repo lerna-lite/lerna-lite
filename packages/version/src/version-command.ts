@@ -19,6 +19,7 @@ import {
   logOutput,
   Package,
   PackageGraphNode,
+  ProjectConfig,
   promptConfirmation,
   recommendVersion,
   ReleaseClient,
@@ -95,7 +96,7 @@ export class VersionCommand extends Command<VersionCommandOption> {
     ) as boolean;
   }
 
-  constructor(argv: VersionCommandOption) {
+  constructor(argv: VersionCommandOption | ProjectConfig) {
     super(argv);
   }
 

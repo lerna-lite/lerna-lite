@@ -7,6 +7,7 @@ import {
   ExecCommandOption,
   logOutput,
   Package,
+  ProjectConfig,
   runTopologically,
   spawn,
   spawnStreaming,
@@ -38,7 +39,7 @@ export class ExecCommand extends Command<ExecCommandOption & FilterOptions> {
     return false;
   }
 
-  constructor(argv: ExecCommandOption) {
+  constructor(argv: ExecCommandOption | ProjectConfig) {
     super(argv);
   }
 

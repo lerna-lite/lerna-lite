@@ -3,6 +3,7 @@ import {
   CommandType,
   logOutput,
   Package,
+  ProjectConfig,
   RunCommandOption,
   runTopologically,
   ValidationError,
@@ -39,7 +40,7 @@ export class RunCommand extends Command<RunCommandOption & FilterOptions> {
     return false;
   }
 
-  constructor(argv: RunCommandOption) {
+  constructor(argv: RunCommandOption | ProjectConfig) {
     super(argv);
   }
 
