@@ -57,6 +57,7 @@ const initFixture = initFixtureFactory(__dirname);
 import { PublishCommand } from '../index';
 
 import yargParser from 'yargs-parser';
+import { PublishCommandOption } from '@lerna-lite/core';
 
 const createArgv = (cwd, ...args) => {
   args.unshift('publish');
@@ -66,7 +67,7 @@ const createArgv = (cwd, ...args) => {
   const parserArgs = args.join(' ');
   const argv = yargParser(parserArgs);
   argv['$0'] = cwd;
-  return argv;
+  return argv as unknown as PublishCommandOption;
 };
 
 describe("workspace protocol 'workspace:' specifiers", () => {

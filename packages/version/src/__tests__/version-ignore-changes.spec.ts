@@ -34,6 +34,7 @@ import { VersionCommand } from '../version-command';
 
 // stabilize commit SHA
 import gitSHA from '@lerna-test/helpers/serializers/serialize-git-sha';
+import { VersionCommandOption } from '@lerna-lite/core';
 expect.addSnapshotSerializer(gitSHA);
 
 const createArgv = (cwd, ...args) => {
@@ -44,7 +45,7 @@ const createArgv = (cwd, ...args) => {
   const parserArgs = args.map(String);
   const argv = yargParser(parserArgs, { array: [{ key: 'ignoreChanges' }] });
   argv['$0'] = cwd;
-  return argv;
+  return argv as unknown as VersionCommandOption;
 };
 
 describe('version --ignore-changes', () => {

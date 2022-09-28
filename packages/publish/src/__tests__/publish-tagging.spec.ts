@@ -43,7 +43,7 @@ jest.mock('../lib/npm-dist-tag', () => jest.requireActual('../lib/__mocks__/npm-
 jest.mock('@lerna-lite/publish', () => jest.requireActual('../publish-command'));
 
 // mocked modules
-import { collectUpdates } from '@lerna-lite/core';
+import { collectUpdates, PublishCommandOption } from '@lerna-lite/core';
 import { npmPublish } from '../lib/npm-publish';
 import { add, remove } from '../lib/npm-dist-tag';
 
@@ -66,7 +66,7 @@ const createArgv = (cwd, ...args) => {
   const argv = yargParser(parserArgs);
   argv['$0'] = cwd;
   argv['cwd'] = cwd;
-  return argv;
+  return argv as unknown as PublishCommandOption;
 };
 
 test('publish --dist-tag next', async () => {

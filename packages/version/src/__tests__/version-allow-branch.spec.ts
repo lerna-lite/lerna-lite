@@ -27,6 +27,7 @@ import { VersionCommand } from '../index';
 
 // stabilize commit SHA
 import gitSHA from '@lerna-test/helpers/serializers/serialize-git-sha';
+import { VersionCommandOption } from '@lerna-lite/core';
 expect.addSnapshotSerializer(gitSHA);
 
 const createArgv = (cwd: string, ...args: string[]) => {
@@ -37,7 +38,7 @@ const createArgv = (cwd: string, ...args: string[]) => {
   const parserArgs = args.map(String);
   const argv = yargParser(parserArgs, { array: args });
   argv['$0'] = cwd;
-  return argv as any;
+  return argv as unknown as VersionCommandOption;
 };
 
 describe('version --allow-branch', () => {

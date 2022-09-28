@@ -37,7 +37,7 @@ import yaml from 'js-yaml';
 
 // mocked or stubbed modules
 import writePkg from 'write-pkg';
-import { promptConfirmation, promptSelectOne } from '@lerna-lite/core';
+import { promptConfirmation, promptSelectOne, VersionCommandOption } from '@lerna-lite/core';
 import { collectUpdates } from '@lerna-lite/core';
 import { logOutput } from '@lerna-lite/core';
 import { checkWorkingTree, getCommitsSinceLastRelease, throwIfUncommitted } from '@lerna-lite/core';
@@ -77,7 +77,7 @@ const createArgv = (cwd, ...args) => {
   const argv = yargParser(parserArgs);
   argv['$0'] = cwd;
   argv['loglevel'] = 'silent';
-  return argv;
+  return argv as unknown as VersionCommandOption;
 };
 
 async function loadYamlFile<T>(filePath: string) {

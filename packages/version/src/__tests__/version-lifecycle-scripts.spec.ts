@@ -15,7 +15,7 @@ jest.mock('@lerna-lite/core', () => ({
   throwIfUncommitted: jest.requireActual('../../../core/src/__mocks__/check-working-tree').throwIfUncommitted,
 }));
 
-import { runLifecycle } from '@lerna-lite/core';
+import { runLifecycle, VersionCommandOption } from '@lerna-lite/core';
 import loadJsonFile from 'load-json-file';
 import yargParser from 'yargs-parser';
 
@@ -34,7 +34,7 @@ const createArgv = (cwd: string, ...args: string[]) => {
   const parserArgs = args.map(String);
   const argv = yargParser(parserArgs);
   argv['$0'] = cwd;
-  return argv;
+  return argv as unknown as VersionCommandOption;
 };
 
 describe('lifecycle scripts', () => {

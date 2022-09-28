@@ -26,7 +26,7 @@ import semver from 'semver';
 
 // mocked modules
 import writePkg from 'write-pkg';
-import { collectUpdates } from '@lerna-lite/core';
+import { collectUpdates, VersionCommandOption } from '@lerna-lite/core';
 import { recommendVersion, updateChangelog } from '@lerna-lite/core';
 
 // helpers
@@ -45,7 +45,7 @@ const createArgv = (cwd, ...args) => {
   const parserArgs = args.map(String);
   const argv = yargParser(parserArgs);
   argv['$0'] = cwd;
-  return argv;
+  return argv as unknown as VersionCommandOption;
 };
 
 describe('--conventional-commits', () => {

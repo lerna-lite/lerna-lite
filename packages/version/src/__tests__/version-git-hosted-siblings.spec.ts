@@ -27,6 +27,7 @@ const initFixture = initFixtureFactory(path.resolve(__dirname, '../../../publish
 
 // test command
 import { VersionCommand } from '../version-command';
+import { VersionCommandOption } from '@lerna-lite/core';
 
 const createArgv = (cwd, ...args) => {
   args.unshift('version');
@@ -36,7 +37,7 @@ const createArgv = (cwd, ...args) => {
   const parserArgs = args.map(String);
   const argv = yargParser(parserArgs);
   argv['$0'] = cwd;
-  return argv;
+  return argv as unknown as VersionCommandOption;
 };
 
 describe('git-hosted sibling specifiers', () => {

@@ -13,7 +13,7 @@ import fs from 'fs';
 import yargParser from 'yargs-parser';
 
 // mocked modules
-import { logOutput } from '@lerna-lite/core';
+import { logOutput, VersionCommandOption } from '@lerna-lite/core';
 
 // helpers
 import { gitCheckout } from '@lerna-test/helpers';
@@ -52,7 +52,7 @@ const createArgv = (cwd, ...args) => {
   const parserArgs = args.map(String);
   const argv = yargParser(parserArgs);
   argv['$0'] = cwd;
-  return argv;
+  return argv as unknown as VersionCommandOption;
 };
 
 describe('version --include-merged-tags', () => {

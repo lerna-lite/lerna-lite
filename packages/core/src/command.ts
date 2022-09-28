@@ -36,7 +36,8 @@ type AvailableCommandOption =
   | InitCommandOption
   | ListCommandOption
   | PublishCommandOption
-  | VersionCommandOption;
+  | VersionCommandOption
+  | ProjectConfig;
 
 export class Command<T extends AvailableCommandOption> {
   argv: any;

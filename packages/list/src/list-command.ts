@@ -1,4 +1,4 @@
-import { Command, CommandType, ListCommandOption, logOutput } from '@lerna-lite/core';
+import { Command, CommandType, ListCommandOption, logOutput, ProjectConfig } from '@lerna-lite/core';
 import { FilterOptions, getFilteredPackages } from '@lerna-lite/optional-cmd-common';
 import { listable } from '@lerna-lite/listable';
 
@@ -11,7 +11,7 @@ export class ListCommand extends Command<ListCommandOption & FilterOptions> {
   name = 'list' as CommandType;
   result?: { count: number; text: string };
 
-  constructor(argv: ListCommandOption) {
+  constructor(argv: ListCommandOption | ProjectConfig) {
     super(argv);
   }
 
