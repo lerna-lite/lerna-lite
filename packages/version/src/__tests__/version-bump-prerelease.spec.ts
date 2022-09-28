@@ -21,7 +21,7 @@ import fs from 'fs-extra';
 import path from 'path';
 import yargParser from 'yargs-parser';
 // mocked modules
-import { promptTextInput, promptSelectOne } from '@lerna-lite/core';
+import { promptTextInput, promptSelectOne, VersionCommandOption } from '@lerna-lite/core';
 
 // helpers
 import {
@@ -69,7 +69,7 @@ const createArgv = (cwd, ...args) => {
   const parserArgs = args.map(String);
   const argv = yargParser(parserArgs);
   argv['$0'] = cwd;
-  return argv;
+  return argv as unknown as VersionCommandOption;
 };
 
 const setupChanges = async (cwd) => {

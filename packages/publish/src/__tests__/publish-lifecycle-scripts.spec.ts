@@ -45,7 +45,7 @@ jest.mock('load-json-file', () => jest.requireActual('../../../version/src/lib/_
 // mocked modules
 import loadJsonFile from 'load-json-file';
 import { packDirectory } from '../lib/pack-directory';
-import { PublishCommandOption, runLifecycle } from '@lerna-lite/core';
+import { runLifecycle } from '@lerna-lite/core';
 
 // helpers
 import { loggingOutput } from '@lerna-test/helpers/logging-output';

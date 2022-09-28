@@ -25,6 +25,7 @@ import { VersionCommand } from '../version-command';
 
 // stabilize commit SHA
 import gitSHA from '@lerna-test/helpers/serializers/serialize-git-sha';
+import { VersionCommandOption } from '@lerna-lite/core';
 expect.addSnapshotSerializer(gitSHA);
 
 const createArgv = (cwd: string, ...args: string[]) => {
@@ -35,7 +36,7 @@ const createArgv = (cwd: string, ...args: string[]) => {
   const parserArgs = args.map(String);
   const argv = yargParser(parserArgs);
   argv['$0'] = cwd;
-  return argv;
+  return argv as unknown as VersionCommandOption;
 };
 
 test('publish --message %s', async () => {

@@ -59,6 +59,7 @@ import cliCommands from '../../../cli/src/cli-commands/cli-publish-commands';
 const lernaPublish = commandRunner(cliCommands);
 
 import yargParser from 'yargs-parser';
+import { PublishCommandOption } from '@lerna-lite/core';
 
 const createArgv = (cwd, ...args) => {
   args.unshift('publish');
@@ -69,7 +70,7 @@ const createArgv = (cwd, ...args) => {
   const argv = yargParser(parserArgs);
   argv['$0'] = cwd;
   argv['cwd'] = cwd;
-  return argv;
+  return argv as unknown as PublishCommandOption;
 };
 
 describe('licenses', () => {

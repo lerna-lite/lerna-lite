@@ -1,4 +1,12 @@
-import { Command, CommandType, DiffCommandOption, PackageGraphNode, spawn, ValidationError } from '@lerna-lite/core';
+import {
+  Command,
+  CommandType,
+  DiffCommandOption,
+  PackageGraphNode,
+  ProjectConfig,
+  spawn,
+  ValidationError,
+} from '@lerna-lite/core';
 
 import { getLastCommit } from './lib/get-last-commit';
 import { hasCommit } from './lib/has-commit';
@@ -12,7 +20,7 @@ export class DiffCommand extends Command<DiffCommandOption> {
   name = 'diff' as CommandType;
   args: string[] = [];
 
-  constructor(argv: DiffCommandOption) {
+  constructor(argv: DiffCommandOption | ProjectConfig) {
     super(argv);
   }
 
