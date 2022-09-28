@@ -39,6 +39,7 @@ import { VersionCommand } from '../version-command';
 import cliCommands from '../../../cli/src/cli-commands/cli-version-commands';
 const lernaVersion = commandRunner(cliCommands);
 
+import chalk from 'chalk';
 import dedent from 'dedent';
 import npmlog from 'npmlog';
 import yargParser from 'yargs-parser';
@@ -173,6 +174,23 @@ describe.each([
       draft: false,
       prerelease: false,
     });
+  });
+
+  it('creates a single fixed release in dry-run mode', async () => {
+    process.env.GH_TOKEN = 'TOKEN';
+    const logSpy = jest.spyOn(npmlog, 'info');
+
+    const cwd = await initFixture('normal');
+
+    (recommendVersion as jest.Mock).mockResolvedValueOnce('1.1.0');
+
+    await new VersionCommand(createArgv(cwd, '--create-release', type, '--conventional-commits', '--git-dry-run'));
+
+    expect(logSpy).toHaveBeenCalledWith(
+      chalk.bold.magenta('[dry-run] >'),
+      `Create Release with repo options: `,
+      expect.anything()
+    );
   });
 
   it('creates a single fixed release in git dry-run mode', async () => {
