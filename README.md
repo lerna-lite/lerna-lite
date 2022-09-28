@@ -30,7 +30,7 @@
     - 💻 [`info`](https://github.com/ghiscoding/lerna-lite/tree/main/packages/info#readme) - print local environment information (useful when opening new issue)
     - ☁️ [`publish`](https://github.com/ghiscoding/lerna-lite/tree/main/packages/publish#readme) - publish every workspace packages that changed
     - 📑 [`version`](https://github.com/ghiscoding/lerna-lite/tree/main/packages/version#readme) - create new version for each workspace packages
-  - optional commands (requires **separate install**, refer to the [installation](#installation) table shown below)
+  - optional commands (requires **separate install**, refer to the [installation](#separate--optional-installs) table shown below)
     - 🕜 [`changed`](https://github.com/ghiscoding/lerna-lite/tree/main/packages/changed#readme) - list local packages that changed since last tagged release
     - 🌓 [`diff`](https://github.com/ghiscoding/lerna-lite/tree/main/packages/diff#readme) - git diff all packages or a single package since the last release
     - 👷 [`exec`](https://github.com/ghiscoding/lerna-lite/tree/main/packages/exec#readme) - execute shell command in each workspace package
@@ -48,10 +48,6 @@ Lerna-Lite itself is now also using [pnpm workspaces](https://pnpm.io/workspaces
 We strongly suggest the use of the new opt-in flag [--sync-workspace-lock](https://github.com/ghiscoding/lerna-lite/tree/main/packages/version#--sync-workspace-lock) to automatically update your lock file 🔒
 
 ---
-
-## License
-
-[MIT License](LICENSE)
 
 ## Who is using Lerna-Lite
 
@@ -81,9 +77,13 @@ Here are some of the largest projects using the Lerna-Lite fork
   <img src="https://metascraper.js.org/static/logo-banner.png" height="20">
 </a>
 
+## License
+
+[MIT License](LICENSE)
+
 ## About Lerna-Lite
 
-Lerna-Lite differs from the original [Lerna](https://github.com/lerna/lerna) subce it only has a limited subset of commands from Lerna which itself has 15 commands, while Lerna-Lite only includes half of them (and a few are optional). Lerna was originally built as an all-in-one tool, however nowadays Workspaces are available in all package managers and the need for an all-in-one tool ,which includes built-in workspaces functionalities, is no longer necessary. Lerna-Lite is built around this new reality and its CLI is only including the minimum commands which are `init`, `info`, `publish` and `version`, while other commands are available as optional and separate installation (`exec`, `list`, `run`, ...). In summary, Lerna-Lite is more modular than the original Lerna and so you'll end up installing less dependencies, this also makes it more versatile to use with other tools like Turborepo, pnpm and others...
+Lerna-Lite differs from the original [Lerna](https://github.com/lerna/lerna) since it only has a limited subset of commands from Lerna, which itself has 15 commands, while Lerna-Lite only includes half of them (and a few of them are optional). Lerna was originally built as an all-in-one tool, however nowadays Workspaces are available in all package managers and the need for an all-in-one tool ,which includes built-in workspaces functionalities, is no longer necessary. Lerna-Lite is built around this new reality and its CLI is only including the minimum commands which are `init`, `info`, `publish` and `version`, while other commands are available as optional and separate installation (`exec`, `list`, `run`, ...). In summary, Lerna-Lite is more modular than the original Lerna and so you'll end up installing less dependencies, this also makes it more versatile to use with other tools like Turborepo, pnpm and others...
 
 As a summary, Lerna-Lite assumes, and requires to pre-setup a Workspace through your favorite package manager (npm, pnpm, yarn) that will take care of the symlinks (Lerna-Lite does **not include** the `bootstrap`, neither `link` commands hence the need for a workspace pre-setup), so make sure that your workspace is properly setup **before** installing Lerna-Lite.
 
@@ -94,7 +94,7 @@ For more info on how to setup a workspace, choose the best option for you: [npm 
 Mainly for the following reasons:
 
 1. original Lerna repo was unmaintained for nearly 2 years (dependencies were out of date)
-    - this is no longer true since Nrwl took over stewardship of Lerna (we keep PRs in sync with them when possible), but the next few points are still valid
+    - this is no longer true since Nrwl took over stewardship of Lerna (we now keep PRs in sync with them when possible), but the next few points are still valid
 2. a desire to create a smaller and more modular lib that is lighter than the original all-in-one Lerna
     - it's smaller since we only copied half of Lerna's commands and many of them are totally optional.
     - we don't need `bootstrap` anymore since Workspaces are supported by all package managers.
