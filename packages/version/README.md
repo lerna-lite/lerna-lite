@@ -315,9 +315,11 @@ When run with this flag, `lerna version` will create an official GitHub or GitLa
 ##### GitHub Auth Token
 To authenticate with GitHub, the following environment variables can be defined.
 
-- `GH_TOKEN` (required) - Your GitHub authentication token (under Settings > Developer settings > Personal access tokens), please give it the `repo:public_repo` scope when creating the token.
+- `GH_TOKEN` (preferred) - Your GitHub authentication token (under Settings > Developer settings > Personal access tokens), please give it the `repo:public_repo` scope when creating the token.
 - `GHE_API_URL` - When using GitHub Enterprise, an absolute URL to the API.
 - `GHE_VERSION` - When using GitHub Enterprise, the currently installed GHE version. [Supports the following versions](https://github.com/octokit/plugin-enterprise-rest.js).
+
+> **Note:** even though `GH_TOKEN` is the preferred way to automate the creation of a GitHub Release (especially in a CI environment), we actually provide a more manual mode which is when the `GH_TOKEN` is not found. In this mode, we will create a link that once click will open the GitHub web interface form with the fields pre-populated. This mode is enabled automatically when the `GH_TOKEN` environment variable is not set and `--create-release github` is provided.
 
 ##### GitLab Auth Token
 To authenticate with GitLab, the following environment variables can be defined.

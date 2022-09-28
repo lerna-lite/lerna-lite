@@ -1,5 +1,6 @@
 import chalk from 'chalk';
 import log from 'npmlog';
+import newGithubReleaseUrl from 'new-github-release-url';
 import semver from 'semver';
 
 import {
@@ -36,6 +37,7 @@ export function createRelease(
   { gitRemote, execOpts }: ReleaseOptions,
   gitDryRun = false
 ) {
+  const { GH_TOKEN } = process.env;
   const repo = parseGitRepo(gitRemote, execOpts);
 
   return Promise.all(
@@ -48,6 +50,23 @@ export function createRelease(
       }
 
       const prereleaseParts = semver.prerelease(tag.replace(`${name}@`, '')) || [];
+
+      // when the `GH_TOKEN` environment variable is not set,
+      // we'll create a link to GitHub web interface form with the fields pre-populated
+      if (!GH_TOKEN) {
+        const releaseUrl = newGithubReleaseUrl({
+          user: repo.owner,
+          repo: repo.name,
+          tag,
+          isPrerelease: prereleaseParts.length > 0,
+          title: tag,
+          body: notes,
+        });
+        log.verbose('github', 'GH_TOKEN environment variable is not set');
+        log.info('github', `🔗 ${releaseUrl} 🏷️ (GitHub Release web interface)`);
+        return Promise.resolve();
+      }
+
       const releaseOptions = {
         owner: repo.owner,
         repo: repo.name,
