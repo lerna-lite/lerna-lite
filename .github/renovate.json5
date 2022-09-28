@@ -37,6 +37,7 @@
     'inquirer',
     'is-stream',
     'multimatch',
+    'new-github-release-url',
     'node-fetch',
     'normalize-newline',
     'normalize-path',
