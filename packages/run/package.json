@@ -45,7 +45,7 @@
     "@types/execa": "^2.0.0",
     "@types/p-map": "^2.0.0",
     "globby": "^11.1.0",
-    "jest-circus": "^29.0.3",
+    "jest-circus": "^29.1.1",
     "perf_hooks": "^0.0.1",
     "yargs-parser": "^21.1.1"
   }
