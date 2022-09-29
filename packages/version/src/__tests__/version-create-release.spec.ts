@@ -249,6 +249,6 @@ describe('create --github-release without providing GH_TOKEN', () => {
 
     // prettier-ignore
     const releaseUrl = 'https://github.com/lerna/lerna/releases/new?tag=v1.0.1&title=v1.0.1&body=normal&prerelease=false';
-    expect(logSpy).toHaveBeenCalledWith('github', `🔗 ${releaseUrl} 🏷️ (GitHub Release web interface)`);
+    expect(logSpy).toHaveBeenCalledWith('github', `🏷️ (GitHub Release web interface) - 🔗 ${releaseUrl}`);
   });
 });
