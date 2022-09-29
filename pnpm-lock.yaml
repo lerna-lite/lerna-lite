@@ -127,7 +127,7 @@ importers:
       '@lerna-lite/version': workspace:*
       '@types/load-json-file': ^5.1.0
       dedent: ^0.7.0
-      dotenv: ^16.0.2
+      dotenv: ^16.0.3
       import-local: ^3.1.0
       load-json-file: ^6.2.0
       npmlog: ^6.0.2
@@ -142,7 +142,7 @@ importers:
       '@lerna-lite/publish': link:../publish
       '@lerna-lite/version': link:../version
       dedent: 0.7.0
-      dotenv: 16.0.2
+      dotenv: 16.0.3
       import-local: 3.1.0
       load-json-file: 6.2.0
       npmlog: 6.0.2
@@ -329,7 +329,7 @@ importers:
       '@types/execa': ^2.0.0
       '@types/p-map': ^2.0.0
       chalk: ^4.1.2
-      dotenv: ^16.0.2
+      dotenv: ^16.0.3
       fs-extra: ^10.1.0
       globby: ^11.1.0
       multimatch: ^5.0.0
@@ -342,7 +342,7 @@ importers:
       '@lerna-lite/core': link:../core
       '@lerna-lite/optional-cmd-common': link:../optional-cmd-common
       chalk: 4.1.2
-      dotenv: 16.0.2
+      dotenv: 16.0.3
       fs-extra: 10.1.0
       multimatch: 5.0.0
       npmlog: 6.0.2
@@ -3020,8 +3020,8 @@ packages:
     engines: {node: '>=10'}
     dev: true
 
-  /dotenv/16.0.2:
-    resolution: {integrity: sha512-JvpYKUmzQhYoIFgK2MOnF3bciIZoItIIoryihy0rIA+H4Jy0FmgyKYAHCTN98P5ybGSJcIFbh6QKeJdtZd1qhA==}
+  /dotenv/16.0.3:
+    resolution: {integrity: sha512-7GO6HghkA5fYG9TYnNxi14/7K9f5occMlp3zXAuSxn7CKCxt9xbNWG7yF8hTCSUchlfWSe3uLmlPfigevRItzQ==}
     engines: {node: '>=12'}
     dev: false
 
