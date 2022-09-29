@@ -236,7 +236,7 @@ When run with this flag, `lerna version` will graduate the specified packages (c
 
 "Graduating" a package means bumping to the non-prerelease variant of a prerelease version, eg. `package-1@1.0.0-alpha.0 => package-1@1.0.0`.
 
-> NOTE: when specifying packages, dependents of specified packages will be released, but will not be graduated.
+> **Note** when specifying packages, dependents of specified packages will be released, but will not be graduated.
 
 ### `--conventional-prerelease`
 
@@ -344,7 +344,7 @@ To authenticate with GitLab, the following environment variables can be defined.
 - `GL_TOKEN` (required) - Your GitLab authentication token (under User Settings > Access Tokens).
 - `GL_API_URL` - An absolute URL to the API, including the version. (Default: https://gitlab.com/api/v4)
 
-> NOTE: When using this option, you cannot pass [`--no-changelog`](#--no-changelog).
+> **Note** When using this option, you cannot pass [`--no-changelog`](#--no-changelog).
 
 ### `--exact`
 
@@ -373,7 +373,7 @@ When run with this flag, `lerna version` will force publish the specified packag
 
 Displays the git command that would be performed without actually executing it, however please note that it will still create all the changelogs. This could be helpful for troubleshooting and also to see changelog changes without committing them to Git.
 
-> **Note:** changelogs will still be created (when enabled) even in dry-run mode, so it could be useful to see what gets created without them being committed (however, make sure to revert the changes and roll back your version in `lerna.json` once you're satisfied with the output).
+> **Note** changelogs will still be created (when enabled) even in dry-run mode, so it could be useful to see what gets created without them being committed (however, make sure to revert the changes and roll back your version in `lerna.json` once you're satisfied with the output).
 
 ```sh
 $ lerna run watch --git-dry-run
@@ -469,7 +469,7 @@ lerna version --conventional-commits --no-changelog
 
 When using `conventional-commits`, do not generate any `CHANGELOG.md` files.
 
-> NOTE: When using this option, you cannot pass [`--create-release`](#--create-release-type).
+> **Note** When using this option, you cannot pass [`--create-release`](#--create-release-type).
 
 ### `--no-commit-hooks`
 
@@ -554,7 +554,7 @@ For remote client authentication tokens, like `GH_TOKEN`, refer to [`Remote Clie
 
 Adds the `--signoff` flag to the git commit done by lerna version when executed.
 
-> Note: This is different from `--sign-git-commit` which is about gpg signatures.
+> **Note** This is different from `--sign-git-commit` which is about gpg signatures.
 
 ### `--sign-git-commit`
 
@@ -637,7 +637,7 @@ Pass an explicit version number to the [`bump`](#semver-bump) positional instead
 
 Use [`--no-git-tag-version`](#--no-git-tag-version) and [`--no-push`](#--no-push) instead.
 
-> NOTE: This option **does not** restrict _all_ git commands from being executed. `git` is still required by `lerna version`.
+> **Note** This option **does not** restrict _all_ git commands from being executed. `git` is still required by `lerna version`.
 
 ## Tips
 
