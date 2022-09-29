@@ -265,7 +265,7 @@ Specify if we want to include commit remote client login (ie GitHub login userna
 
 This option is only available when using `--conventional-commits` with changelogs enabled. You must also provide 1 of these 2 options [`--create-release <type>`](#--create-release-type) or [`--remote-client <type>`](#--remote-client-type)
 
-> **Note** this will execute one or more client remote API calls (GH is limited to 100 per query), which at the moment is only supporting the GitHub client type. This option will also require a valid `GH_TOKEN` with read access permissions to the GitHub API so that it can execute the query to fetch all commit details since the last release, for more info refer to the [`Remote Client Auth Tokens`](#--remote-client-auth-tokens) below.
+> **Note** this will execute one or more client remote API calls (GH is limited to 100 per query), which at the moment is only supporting the GitHub client type. This option will also require a valid `GH_TOKEN` with read access permissions to the GitHub API so that it can execute the query to fetch all commit details since the last release, for more info refer to the [`Remote Client Auth Tokens`](#remote-client-auth-tokens) below.
 
 > **Note** for this option to work properly, you must make sure that your local commits, on the current branch, are in sync with the remote server. It will then try to match all commits with their respective remote server commits and from there extract their associated remote client user login.
 
@@ -315,11 +315,11 @@ When run with this flag, `lerna version` will create an official GitHub or GitLa
 ##### GitHub Auth Token
 To authenticate with GitHub, the following environment variables can be defined.
 
-- `GH_TOKEN` (preferred) - Your GitHub authentication token (under Settings > Developer settings > Personal access tokens), please give it the `repo:public_repo` scope when creating the token.
+- `GH_TOKEN` (required) - Your GitHub authentication token (under Settings > Developer settings > Personal access tokens), please give it the `repo:public_repo` scope when creating the token (for more info, refer to [GitHub - Creating a personal access token](https://docs.github.com/en/authentication/keeping-your-account-and-data-secure/creating-a-personal-access-token)).
 - `GHE_API_URL` - When using GitHub Enterprise, an absolute URL to the API.
 - `GHE_VERSION` - When using GitHub Enterprise, the currently installed GHE version. [Supports the following versions](https://github.com/octokit/plugin-enterprise-rest.js).
 
-> **Note:** even though `GH_TOKEN` is the preferred way to automate the creation of a GitHub Release (especially in a CI environment), we actually provide a more manual mode which is when the `GH_TOKEN` is not found. In this mode, we will create a link that once click will open the GitHub web interface form with the fields pre-populated. This mode is enabled automatically when the `GH_TOKEN` environment variable is not set and `--create-release github` is provided.
+> **Note** even though `GH_TOKEN` is the preferred way to automate the creation of a GitHub Release (especially in a CI environment), we actually provide a more manual mode which is when the `GH_TOKEN` is not found. In this mode, we will create a link that once click will open the GitHub web interface form with the fields pre-populated. This mode is enabled automatically when the `GH_TOKEN` environment variable is not set and `--create-release github` is provided.
 
 ##### GitLab Auth Token
 To authenticate with GitLab, the following environment variables can be defined.
@@ -531,7 +531,7 @@ lerna version --conventional-commits --remote-client github
 lerna version --conventional-commits --remote-client gitlab
 ```
 
-For remote client authentication tokens, like `GH_TOKEN`, refer to [`Remote Client Auth Tokens`](#--remote-client-auth-tokens)
+For remote client authentication tokens, like `GH_TOKEN`, refer to [`Remote Client Auth Tokens`](#remote-client-auth-tokens)
 
 ### `--signoff-git-commit`
 
