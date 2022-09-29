@@ -63,7 +63,7 @@ export function createRelease(
           body: notes,
         });
         log.verbose('github', 'GH_TOKEN environment variable is not set');
-        log.info('github', `🔗 ${releaseUrl} 🏷️ (GitHub Release web interface)`);
+        log.info('github', `🏷️ (GitHub Release web interface) - 🔗 ${releaseUrl}`);
         return Promise.resolve();
       }
 
