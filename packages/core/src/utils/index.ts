@@ -9,6 +9,7 @@ export * from './env-replace';
 export * from './find-prefix';
 export * from './log-package-error';
 export * from './npm-conf';
+export * from './object-utils';
 export * from './output';
 export * from './parse-field';
 export * from './prerelease-id-from-version';

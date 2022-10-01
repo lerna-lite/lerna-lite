@@ -4,6 +4,12 @@
   "loglevel": "verbose",
   "npmClient": "pnpm",
   "command": {
+    "publish": {
+      "removePackageFields": [
+        "devDependencies",
+        "scripts"
+      ]
+    },
     "version": {
       "conventionalCommits": true,
       "createRelease": "github",

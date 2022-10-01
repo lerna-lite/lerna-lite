@@ -364,6 +364,9 @@
             "registry": {
               "$ref": "#/$defs/commandOptions/shared/registry"
             },
+            "removePackageFields": {
+              "$ref": "#/$defs/commandOptions/publish/removePackageFields"
+            },
             "requireScripts": {
               "$ref": "#/$defs/commandOptions/publish/requireScripts"
             },
@@ -839,6 +842,9 @@
     "otp": {
       "$ref": "#/$defs/commandOptions/publish/otp"
     },
+    "removePackageFields": {
+      "$ref": "#/$defs/commandOptions/publish/removePackageFields"
+    },
     "requireScripts": {
       "$ref": "#/$defs/commandOptions/publish/requireScripts"
     },
@@ -1208,6 +1214,13 @@
         "otp": {
           "type": "string",
           "description": "During `lerna publish`, supply a one-time password for publishing with two-factor authentication."
+        },
+        "removePackageFields": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "description": "Remove fields from each package.json before publishing them to the registry, removing fields from a complex object is also supported via the dot notation (ie 'scripts.build')"
         },
         "requireScripts": {
           "type": "boolean",

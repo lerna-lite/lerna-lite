@@ -13,6 +13,7 @@ import {
   CommandType,
   Conf,
   createRunner,
+  deleteComplexObjectProp,
   describeRef,
   getOneTimePassword,
   logOutput,
@@ -269,6 +270,7 @@ export class PublishCommand extends Command<PublishCommandOption> {
 
     await this.resolveLocalDependencyLinks();
     await this.resolveLocalDependencyWorkspaceProtocols();
+    await this.removePackageProperties();
     await this.annotateGitHead();
     await this.serializeChanges();
     await this.packUpdated();
@@ -690,6 +692,18 @@ export class PublishCommand extends Command<PublishCommandOption> {
     }
 
     return pkg;
+  }
+
+  removePackageProperties() {
+    const { removePackageFields } = this.options;
+
+    return pMap(this.updates, (node: PackageGraphNode) => {
+      if (Array.isArray(removePackageFields)) {
+        for (const removeField of removePackageFields) {
+          deleteComplexObjectProp(node.pkg.pkg, removeField);
+        }
+      }
+    });
   }
 
   removeTempLicensesOnError(error: any) {

@@ -1,0 +1,14 @@
+{
+  "name": "package-2",
+  "description": "one local dependency, one direct dependent, no transitive dependencies",
+  "version": "1.0.0",
+  "main": "dist/cjs/index.js",
+  "dependencies": {
+    "package-1": "^1.0.0"
+  },
+  "scripts": {
+    "build": "tsc --project tsconfig.json",
+    "build:dev": "tsc --incremental --watch",
+    "pack-tarball": "npm pack"
+  }
+}

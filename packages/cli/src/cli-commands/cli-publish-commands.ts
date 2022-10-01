@@ -91,6 +91,11 @@ export default {
         type: 'string',
         requiresArg: true,
       },
+      'remove-package-fields': {
+        describe:
+          'Remove fields from each package.json before publishing them to the registry, removing fields from a complex object is also supported via the dot notation (ie "scripts.build").',
+        type: 'array',
+      },
       'require-scripts': {
         describe: 'Execute ./scripts/prepublish.js and ./scripts/postpublish.js, relative to package root.',
         type: 'boolean',

@@ -143,6 +143,9 @@ export interface PublishCommandOption extends VersionCommandOption {
   /** Use the specified registry for all npm client operations. */
   registry?: string;
 
+  /** Remove fields from each package.json before publishing them to the registry, removing fields from a complex object is also supported via the dot notation (ie "scripts.build") */
+  removePackageFields?: string[];
+
   /** Execute ./scripts/prepublish.js and ./scripts/postpublish.js, relative to package root. */
   requireScripts?: boolean;
 

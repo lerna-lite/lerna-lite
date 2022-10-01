@@ -33,10 +33,10 @@
   "dependencies": {
     "@lerna-lite/core": "workspace:*",
     "chalk": "^4.1.2",
-    "new-github-release-url": "^1.0.0",
     "dedent": "^0.7.0",
     "load-json-file": "^6.2.0",
     "minimatch": "^5.1.0",
+    "new-github-release-url": "^1.0.0",
     "npmlog": "^6.0.2",
     "p-map": "^4.0.0",
     "p-pipe": "^3.1.0",

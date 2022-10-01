@@ -1,0 +1,17 @@
+{
+  "name": "package-3",
+  "description": "one local dependency, one direct dependent, one transitive dependency",
+  "version": "1.0.0",
+  "main": "dist/cjs/index.js",
+  "dependencies": {
+    "package-2": "^1.0.0"
+  },
+  "devDependencies": {
+    "color": "^4.2.0",
+    "tiny-tarball": "^1.0.0"
+  },
+  "scripts": {
+    "build": "tsc --project tsconfig.json",
+    "build:dev": "tsc --incremental --watch"
+  }
+}

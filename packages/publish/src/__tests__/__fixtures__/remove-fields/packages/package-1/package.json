@@ -1,0 +1,10 @@
+{
+  "name": "package-1",
+  "description": "no local dependencies, four local dependents (three transitive)",
+  "version": "1.0.0",
+  "browser": "src/index.ts",
+  "main": "dist/cjs/index.js",
+  "scripts": {
+    "build": "tsc --project tsconfig.json"
+  }
+}
