@@ -404,8 +404,14 @@ describe('RunCommand', () => {
     it('does not run a script in ignored packages', async () => {
       collectedOutput = '';
       await lernaRun(testDir)('my-script', '--ignore', 'package-@(2|3|4)');
+
       expect(collectedOutput).toContain('package-1');
       expect(collectedOutput).not.toContain('package-3');
+
+      const logMessages = loggingOutput('info');
+      expect(logMessages).toContain(
+        'Using the "ignore" option when nx.json exists will exclude only tasks that are not determined to be required by Nx. See https://lerna.js.org/docs/recipes/using-lerna-powered-by-nx-to-run-tasks#--ignore for details.'
+      );
     });
 
     it('runs a script in packages with --stream', async () => {
@@ -439,7 +445,19 @@ describe('RunCommand', () => {
 
       const [logMessage] = loggingOutput('warn');
       expect(logMessage).toContain(
-        '"parallel", "sort", "no-sort", and "include-dependencies" are ignored when nx.json exists.'
+        '"parallel", "sort", and "no-sort" are ignored when nx.json exists. See https://lerna.js.org/docs/recipes/using-lerna-powered-by-nx-to-run-tasks for details.'
+      );
+      expect(collectedOutput).toContain('package-1');
+    });
+
+    it('should log some infos when using "includeDependencies" options with useNx', async () => {
+      collectedOutput = '';
+
+      await lernaRun(testDir)('my-script', '--include-dependencies');
+
+      const logMessages = loggingOutput('info');
+      expect(logMessages).toContain(
+        'Using the "include-dependencies" option when nx.json exists will include both task dependencies detected by Nx and project dependencies detected by Lerna. See https://lerna.js.org/docs/recipes/using-lerna-powered-by-nx-to-run-tasks#--include-dependencies for details.'
       );
       expect(collectedOutput).toContain('package-1');
     });

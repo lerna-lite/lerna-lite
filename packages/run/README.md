@@ -182,6 +182,8 @@ Nx will run tasks in an order and with a concurrency that it determines appropri
 
 **This behavior allows Nx to run tasks in the most efficient way possible, but it also means that some existing options for `lerna run` become obsolete as explained below.**
 
+> **Note** when Lerna is set to use Nx and detects `nx.json` in the workspace, it will defer to Nx to detect task dependencies. Some options for `lerna run` will behave differently. See [Using Lerna (Powered by Nx) to Run Tasks](./recipes/using-lerna-powered-by-nx-to-run-tasks) for more details.
+
 #### Obsolete Options when `useNx` is enabled
 
 ##### `--sort` and `--no-sort`
@@ -199,6 +201,10 @@ Nx will use the task graph to determine which tasks can be run in parallel and d
 
 Lerna by itself does not have knowledge of which tasks depend on others, so it defaults to excluding tasks on dependent projects when using [filter options](https://github.com/lerna/lerna/tree/6cb8ab2d4af7ce25c812e8fb05cd04650105705f/core/filter-options#lernafilter-options) and relies on `--include-dependencies` to manually specify that dependent projects' tasks should be included.
 
-This is no longer a problem when Lerna uses Nx to run tasks. Nx, utilizing its [task graph](https://nx.dev/concepts/mental-model#the-task-graph), will automatically run dependent tasks first when necessary, so `--include-dependencies` is obsolete.
+This is no longer a problem when Lerna uses Nx to run tasks. Nx, utilizing its [task graph](https://nx.dev/concepts/mental-model#the-task-graph), will automatically run dependent tasks first when necessary, so `--include-dependencies` is obsolete. However, it can still be used to include project dependencies that Lerna detects but Nx does not deem necessary and would otherwise exclude.
+
+### `--ignore`
+
+When used with Nx, `--ignore` will never cause `lerna run` to exclude any tasks that are deemed to be required by the Nx [task graph](https://nx.dev/concepts/mental-model#the-task-graph).
 
 > **Tip** the effects on the options above will only apply if `nx.json` exists in the root. If `nx.json` does not exist and `useNx` is `true`, then they will behave just as they would with Lerna's base task runner (if `useNx` is `false`).
