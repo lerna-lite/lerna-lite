@@ -4,6 +4,13 @@
   "version": "1.0.0",
   "main": "dist/cjs/index.js",
   "browser": "src/index.ts",
+  "exports": {
+    "index": {
+        "types": "./types/index.d.ts",
+        "import": "./esm/index.js",
+        "require": "./commonjs/index.cjs"
+    }
+  },
   "dependencies": {
     "package-4": "^1.0.0"
   },

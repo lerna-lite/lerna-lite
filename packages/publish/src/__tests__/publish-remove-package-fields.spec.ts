@@ -57,20 +57,6 @@ import { updateLernaConfig } from '@lerna-test/helpers';
 import cliCommands from '../../../cli/src/cli-commands/cli-publish-commands';
 const lernaPublish = commandRunner(cliCommands);
 
-import yargParser from 'yargs-parser';
-import { PublishCommandOption } from '@lerna-lite/core';
-
-const createArgv = (cwd, ...args) => {
-  args.unshift('publish');
-  if (args.length > 0 && args[1] && args[1].length > 0 && !args[1].startsWith('-')) {
-    args[1] = `--bump=${args[1]}`;
-  }
-  const parserArgs = args.join(' ');
-  const argv = yargParser(parserArgs);
-  argv['$0'] = cwd;
-  return argv as unknown as PublishCommandOption;
-};
-
 describe('publish --remove-package-fields', () => {
   const setupChanges = async (cwd, pkgRoot = 'packages') => {
     await fs.outputFile(path.join(cwd, `${pkgRoot}/package-1/hello.js`), 'world');
@@ -112,11 +98,22 @@ describe('publish --remove-package-fields', () => {
 
       await gitTag(cwd, 'v1.0.0');
       await setupChanges(cwd);
-      await lernaPublish(cwd)('--remove-package-fields', 'devDependencies.jest', 'scripts.build:dev');
+      await lernaPublish(cwd)(
+        '--remove-package-fields',
+        'devDependencies.jest',
+        'scripts.build:dev',
+        'exports.index.types'
+      );
 
       const publishPkg5 = (writePkg as any).updatedManifest('package-5');
       expect(publishPkg5.devDependencies).toEqual({ 'tiny-tarball': '^1.0.0' });
       expect(publishPkg5.scripts).toEqual({ build: 'tsc --project tsconfig.json' });
+      expect(publishPkg5.exports).toEqual({
+        index: {
+          import: './esm/index.js',
+          require: './commonjs/index.cjs',
+        },
+      });
     });
   });
 
@@ -155,7 +152,7 @@ describe('publish --remove-package-fields', () => {
       await updateLernaConfig(cwd, {
         command: {
           publish: {
-            removePackageFields: ['devDependencies', 'scripts.build'],
+            removePackageFields: ['devDependencies', 'scripts.build', 'exports.index.types'],
           },
         },
       });
@@ -186,6 +183,12 @@ describe('publish --remove-package-fields', () => {
         'build:dev': 'tsc --incremental --watch',
       });
       expect(publishPkg5.scripts).toEqual({ 'build:dev': 'tsc --incremental --watch' });
+      expect(publishPkg5.exports).toEqual({
+        index: {
+          import: './esm/index.js',
+          require: './commonjs/index.cjs',
+        },
+      });
     });
   });
 });
