@@ -12,7 +12,6 @@ jest.mock('@lerna-lite/run', () => jest.requireActual('../run-command'));
 
 import fs from 'fs-extra';
 import globby from 'globby';
-import { afterEach, afterAll } from 'jest-circus';
 import yargParser from 'yargs-parser';
 
 // make sure to import the output mock
@@ -361,7 +360,7 @@ describe('RunCommand', () => {
     let originalStdout;
 
     beforeAll(async () => {
-      testDir = await initFixture('powered-by-nx');
+      testDir = await initFixture('powered-by-nx-with-target-defaults');
       process.env.NX_WORKSPACE_ROOT_PATH = testDir;
       // @ts-ignore
       jest.spyOn(process, 'exit').mockImplementation((code: any) => {
@@ -410,7 +409,7 @@ describe('RunCommand', () => {
 
       const logMessages = loggingOutput('info');
       expect(logMessages).toContain(
-        'Using the "ignore" option when nx.json exists will exclude only tasks that are not determined to be required by Nx. See https://lerna.js.org/docs/recipes/using-lerna-powered-by-nx-to-run-tasks#--ignore for details.'
+        'Using the "ignore" option when nx.json has targetDefaults defined will exclude only tasks that are not determined to be required by Nx. See https://lerna.js.org/docs/recipes/using-lerna-powered-by-nx-to-run-tasks#--ignore for details.'
       );
     });
 
@@ -445,7 +444,7 @@ describe('RunCommand', () => {
 
       const [logMessage] = loggingOutput('warn');
       expect(logMessage).toContain(
-        '"parallel", "sort", and "no-sort" are ignored when nx.json exists. See https://lerna.js.org/docs/recipes/using-lerna-powered-by-nx-to-run-tasks for details.'
+        '"parallel", "sort", and "no-sort" are ignored when nx.json has targetDefaults defined. See https://lerna.js.org/docs/recipes/using-lerna-powered-by-nx-to-run-tasks for details.'
       );
       expect(collectedOutput).toContain('package-1');
     });
@@ -457,7 +456,7 @@ describe('RunCommand', () => {
 
       const logMessages = loggingOutput('info');
       expect(logMessages).toContain(
-        'Using the "include-dependencies" option when nx.json exists will include both task dependencies detected by Nx and project dependencies detected by Lerna. See https://lerna.js.org/docs/recipes/using-lerna-powered-by-nx-to-run-tasks#--include-dependencies for details.'
+        'Using the "include-dependencies" option when nx.json has targetDefaults defined will include both task dependencies detected by Nx and project dependencies detected by Lerna. See https://lerna.js.org/docs/recipes/using-lerna-powered-by-nx-to-run-tasks#--include-dependencies for details.'
       );
       expect(collectedOutput).toContain('package-1');
     });
