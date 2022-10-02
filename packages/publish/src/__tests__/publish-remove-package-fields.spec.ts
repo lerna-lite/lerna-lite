@@ -85,7 +85,15 @@ describe('publish --remove-package-fields', () => {
       expect(publishPkg5.browser).toBeUndefined();
     });
 
-    it('passes --ignore-changes to update collector', async () => {
+    it('should skip configuring --remove-package-fields and work normally without touching t', async () => {
+      const cwd = await initFixture('remove-fields');
+      await lernaPublish(cwd)();
+
+      const devDeps = (writePkg as any).updatedManifest('package-5').devDependencies;
+      expect(devDeps).toEqual({ jest: '^29.0.0', 'tiny-tarball': '^1.0.0' });
+    });
+
+    it('should configure a simple --remove-package-fields to remove a single package child field', async () => {
       const cwd = await initFixture('remove-fields');
       await lernaPublish(cwd)('--remove-package-fields', 'devDependencies.jest');
 

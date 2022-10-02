@@ -270,7 +270,11 @@ export class PublishCommand extends Command<PublishCommandOption> {
 
     await this.resolveLocalDependencyLinks();
     await this.resolveLocalDependencyWorkspaceProtocols();
-    await this.removePackageProperties();
+
+    if (this.options.removePackageFields) {
+      await this.removePackageProperties();
+    }
+
     await this.annotateGitHead();
     await this.serializeChanges();
     await this.packUpdated();
