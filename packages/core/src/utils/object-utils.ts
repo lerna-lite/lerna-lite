@@ -8,7 +8,7 @@ export function deleteComplexObjectProp(object: any, path: string) {
     return object;
   }
   const props = path.split('.');
-  const lastProp = props.at(-1);
+  const lastProp = props.slice(-1).pop();
 
   return props.reduce((obj, prop) => {
     if (lastProp !== undefined && obj?.[prop] !== undefined && prop === lastProp) {
