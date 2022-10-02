@@ -271,14 +271,14 @@ Works the same as [`--dist-tag`](#--dist-tag-tag), except only applies to packag
 
 ### `--remove-package-fields <fields>`
 
-Remove certain fields from every package before publishing them to the registry, we can also remove fields from a complex object structure via the dot notation (ie "scripts.build"). This option is helpful in cleaning each "package.json" from every packages, it allows us to remove any extra fields that do not have any usage outside of the project itself (like "devDependencies", "scripts", ...).
+Remove certain fields from every package before publishing them to the registry, we can also remove fields from a complex object structure via the dot notation (ie "scripts.build"). In summary this option is helpful in cleaning each "package.json" of every packages, it allows us to remove any extra fields that do not have any usage outside of the project itself (for example "devDependencies", "scripts", ...).
 
 ```sh
-# remove all packages "devDepencies" and "scripts" fields
+# remove "devDepencies" and "scripts" fields from all packages
 lerna version --remove-package-fields 'devDependencies' 'scripts'
 ```
 
-Removing complex object value(s) are also supported via the dot notation as shown below.
+Removal of complex object value(s) are also supported via the dot notation as shown below.
 
 ```sh
 lerna version --remove-package-fields 'scripts.build'
@@ -299,7 +299,11 @@ This option is probably best specified in `lerna.json` configuration
 
 ```json
 {
-  "removePackageFields": ["devDependencies", "scripts"]
+  "command": {
+    "publish": {
+      "removePackageFields": ["devDependencies", "scripts"],
+    },
+  },
 }
 ```
 
