@@ -301,9 +301,9 @@ This option is probably best specified in `lerna.json` configuration
 {
   "command": {
     "publish": {
-      "removePackageFields": ["devDependencies", "scripts"],
-    },
-  },
+      "removePackageFields": ["devDependencies", "scripts"]
+    }
+  }
 }
 ```
 
