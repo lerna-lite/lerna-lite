@@ -704,7 +704,7 @@ export class PublishCommand extends Command<PublishCommandOption> {
     return pMap(this.updates, (node: PackageGraphNode) => {
       if (Array.isArray(removePackageFields)) {
         for (const removeField of removePackageFields) {
-          deleteComplexObjectProp(node.pkg.pkg, removeField);
+          deleteComplexObjectProp(node.pkg.pkg, removeField, `"${node.pkg.name}" package`);
         }
       }
     });

@@ -1,9 +1,12 @@
+import log from 'npmlog';
+
 /**
  * From a dot (.) notation path, find and delete a property within an object if found given a complex object path
- * @param object - object to search from
- * @param path - complex object path to find descendant property from, must be a string with dot (.) notation
+ * @param {Object} object - object to search from
+ * @param {String} path - complex object path to find descendant property from, must be a string with dot (.) notation
+ * @param {String} [sourceName] - source name of which object name to delete the field from.
  */
-export function deleteComplexObjectProp(object: any, path: string) {
+export function deleteComplexObjectProp(object: any, path: string, sourceName?: string) {
   if (!object || !path) {
     return object;
   }
@@ -13,6 +16,7 @@ export function deleteComplexObjectProp(object: any, path: string) {
   return props.reduce((obj, prop) => {
     if (lastProp !== undefined && obj?.[prop] !== undefined && prop === lastProp) {
       delete obj[prop];
+      log.verbose('mutation', `Removed "${path}" field from ${sourceName || 'n/a'}.`);
     } else {
       return obj?.[prop];
     }
