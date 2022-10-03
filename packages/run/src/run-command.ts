@@ -221,7 +221,7 @@ export class RunCommand extends Command<RunCommandOption & FilterOptions> {
       process.env.CI = 'true';
     }
     performance.mark('init-local');
-    this.configureNxOutput();
+    await this.configureNxOutput();
     const { extraOptions, targetDependencies, options } = await this.prepNxOptions();
     if (this.packagesWithScript.length === 1) {
       const { runOne } = await import('nx/src/command-line/run-one');
@@ -381,7 +381,7 @@ export class RunCommand extends Command<RunCommandOption & FilterOptions> {
       const nxOutput = await import('nx/src/utils/output');
       nxOutput.output.cliName = 'Lerna (powered by Nx)';
       nxOutput.output.formatCommand = (taskId) => taskId;
-      return nxOutput as any;
+      return nxOutput as unknown;
     } catch (e) {
       this.logger.error(
         '\n',

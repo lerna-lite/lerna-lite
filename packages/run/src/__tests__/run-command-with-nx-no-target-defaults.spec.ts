@@ -31,7 +31,7 @@ describe('RunCommand', () => {
 
   // this is a temporary set of tests, which will be replaced by verdacio-driven tests
   // once the required setup is fully set up
-  describe('in a repo powered by Nx', () => {
+  describe('in a repo powered by Nx without defaultTargets', () => {
     let testDir;
     let collectedOutput = '';
     let originalStdout;
