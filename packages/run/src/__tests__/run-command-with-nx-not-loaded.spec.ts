@@ -37,7 +37,7 @@ describe('RunCommand', () => {
     it('should throw when Nx is not loaded', async () => {
       const command = lernaRun(testDir)('my-script');
 
-      await expect(command).rejects.toThrow(`Cannot read properties of undefined (reading 'output')`);
+      await expect(command).rejects.toThrow();
 
       expect(errorSpy).toHaveBeenCalledWith(1);
     });
