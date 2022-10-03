@@ -16,6 +16,13 @@ exports[`RunCommand in a basic repo omits package prefix with --stream --no-pref
 ]
 `;
 
+exports[`RunCommand in a basic repo run in --stream and --no-bail 1`] = `
+[
+  "packages/package-1 npm run my-script (prefixed: true)",
+  "packages/package-3 npm run my-script (prefixed: true)",
+]
+`;
+
 exports[`RunCommand in a basic repo runs a script in all packages with --parallel 1`] = `
 [
   "packages/package-1 npm run env (prefixed: true)",
@@ -26,6 +33,13 @@ exports[`RunCommand in a basic repo runs a script in all packages with --paralle
 `;
 
 exports[`RunCommand in a basic repo runs a script in packages with --stream 1`] = `
+[
+  "packages/package-1 npm run my-script (prefixed: true)",
+  "packages/package-3 npm run my-script (prefixed: true)",
+]
+`;
+
+exports[`RunCommand in a basic repo runs package prefix with --stream and expect it to be prefixed 1`] = `
 [
   "packages/package-1 npm run my-script (prefixed: true)",
   "packages/package-3 npm run my-script (prefixed: true)",

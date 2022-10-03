@@ -12,7 +12,6 @@ jest.mock('@lerna-lite/run', () => jest.requireActual('../run-command'));
 
 import fs from 'fs-extra';
 import globby from 'globby';
-import { afterEach, afterAll } from 'jest-circus';
 import yargParser from 'yargs-parser';
 
 // make sure to import the output mock
@@ -29,6 +28,13 @@ const lernaRun = commandRunner(cliRunCommands);
 const initFixture = initFixtureFactory(__dirname);
 
 // assertion helpers
+const ranInPackagesCapturing = (testDir: string) =>
+  (npmRunScriptStreaming as jest.Mock).mock.calls.reduce((arr, [script, { args, npmClient, pkg, prefix }]) => {
+    const dir = normalizeRelativeDir(testDir, pkg.location);
+    const record = [dir, npmClient, 'run', script, `(prefixed: ${prefix})`].concat(args);
+    arr.push(record.join(' '));
+    return arr;
+  }, []);
 const ranInPackagesStreaming = (testDir: string) =>
   (npmRunScriptStreaming as jest.Mock).mock.calls.reduce((arr, [script, { args, npmClient, pkg, prefix }]) => {
     const dir = normalizeRelativeDir(testDir, pkg.location);
@@ -99,9 +105,28 @@ describe('RunCommand', () => {
       expect(ranInPackagesStreaming(testDir)).toMatchSnapshot();
     });
 
+    it('runs a script in packages in capturing mode with --cmd-dry-run', async () => {
+      await lernaRun(testDir)('my-script', '--cmd-dry-run');
+
+      ranInPackagesCapturing(testDir);
+      const logLines = (logOutput as any).logged().split('\n');
+      expect(logLines).toEqual(['[dry-run] > package-1', '[dry-run] > package-3']);
+    });
+
+    it('runs package prefix with --stream and expect it to be prefixed', async () => {
+      await new RunCommand(createArgv(testDir, 'my-script', '--stream'));
+
+      expect(ranInPackagesStreaming(testDir)).toMatchSnapshot();
+    });
+
     it('omits package prefix with --stream --no-prefix', async () => {
-      // await lernaRun(testDir)('my-script', '--stream', '--no-prefix');
       await new RunCommand(createArgv(testDir, 'my-script', '--stream', '--no-prefix'));
+
+      expect(ranInPackagesStreaming(testDir)).toMatchSnapshot();
+    });
+
+    it('run in --stream and --no-bail', async () => {
+      await new RunCommand(createArgv(testDir, 'my-script', '--stream', '--no-bail'));
 
       expect(ranInPackagesStreaming(testDir)).toMatchSnapshot();
     });
@@ -361,7 +386,7 @@ describe('RunCommand', () => {
     let originalStdout;
 
     beforeAll(async () => {
-      testDir = await initFixture('powered-by-nx');
+      testDir = await initFixture('powered-by-nx-with-target-defaults');
       process.env.NX_WORKSPACE_ROOT_PATH = testDir;
       // @ts-ignore
       jest.spyOn(process, 'exit').mockImplementation((code: any) => {
@@ -410,7 +435,7 @@ describe('RunCommand', () => {
 
       const logMessages = loggingOutput('info');
       expect(logMessages).toContain(
-        'Using the "ignore" option when nx.json exists will exclude only tasks that are not determined to be required by Nx. See https://lerna.js.org/docs/recipes/using-lerna-powered-by-nx-to-run-tasks#--ignore for details.'
+        'Using the "ignore" option when nx.json has targetDefaults defined will exclude only tasks that are not determined to be required by Nx. See https://lerna.js.org/docs/recipes/using-lerna-powered-by-nx-to-run-tasks#--ignore for details.'
       );
     });
 
@@ -420,6 +445,15 @@ describe('RunCommand', () => {
 
       expect(collectedOutput).toContain('Lerna (powered by Nx)');
       // expect(collectedOutput).toContain('Running target my-script for 2 project(s)');
+      expect(collectedOutput).toContain('package-1@1.0.0 my-script');
+      expect(collectedOutput).toContain('package-3@1.0.0 my-script');
+    });
+
+    it('runs a script in packages with --stream and --no-prefix', async () => {
+      collectedOutput = '';
+      await lernaRun(testDir)('my-script', '--stream', '--no-prefix');
+
+      expect(collectedOutput).toContain('Lerna (powered by Nx)');
       expect(collectedOutput).toContain('package-1@1.0.0 my-script');
       expect(collectedOutput).toContain('package-3@1.0.0 my-script');
     });
@@ -445,7 +479,7 @@ describe('RunCommand', () => {
 
       const [logMessage] = loggingOutput('warn');
       expect(logMessage).toContain(
-        '"parallel", "sort", and "no-sort" are ignored when nx.json exists. See https://lerna.js.org/docs/recipes/using-lerna-powered-by-nx-to-run-tasks for details.'
+        '"parallel", "sort", and "no-sort" are ignored when nx.json has targetDefaults defined. See https://lerna.js.org/docs/recipes/using-lerna-powered-by-nx-to-run-tasks for details.'
       );
       expect(collectedOutput).toContain('package-1');
     });
@@ -453,11 +487,11 @@ describe('RunCommand', () => {
     it('should log some infos when using "includeDependencies" options with useNx', async () => {
       collectedOutput = '';
 
-      await lernaRun(testDir)('my-script', '--include-dependencies');
+      await lernaRun(testDir)('my-script', '--include-dependencies', '--', '--silent');
 
       const logMessages = loggingOutput('info');
       expect(logMessages).toContain(
-        'Using the "include-dependencies" option when nx.json exists will include both task dependencies detected by Nx and project dependencies detected by Lerna. See https://lerna.js.org/docs/recipes/using-lerna-powered-by-nx-to-run-tasks#--include-dependencies for details.'
+        'Using the "include-dependencies" option when nx.json has targetDefaults defined will include both task dependencies detected by Nx and project dependencies detected by Lerna. See https://lerna.js.org/docs/recipes/using-lerna-powered-by-nx-to-run-tasks#--include-dependencies for details.'
       );
       expect(collectedOutput).toContain('package-1');
     });
