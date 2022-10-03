@@ -28,6 +28,13 @@ const lernaRun = commandRunner(cliRunCommands);
 const initFixture = initFixtureFactory(__dirname);
 
 // assertion helpers
+const ranInPackagesCapturing = (testDir: string) =>
+  (npmRunScriptStreaming as jest.Mock).mock.calls.reduce((arr, [script, { args, npmClient, pkg, prefix }]) => {
+    const dir = normalizeRelativeDir(testDir, pkg.location);
+    const record = [dir, npmClient, 'run', script, `(prefixed: ${prefix})`].concat(args);
+    arr.push(record.join(' '));
+    return arr;
+  }, []);
 const ranInPackagesStreaming = (testDir: string) =>
   (npmRunScriptStreaming as jest.Mock).mock.calls.reduce((arr, [script, { args, npmClient, pkg, prefix }]) => {
     const dir = normalizeRelativeDir(testDir, pkg.location);
@@ -98,9 +105,28 @@ describe('RunCommand', () => {
       expect(ranInPackagesStreaming(testDir)).toMatchSnapshot();
     });
 
+    it('runs a script in packages in capturing mode with --cmd-dry-run', async () => {
+      await lernaRun(testDir)('my-script', '--cmd-dry-run');
+
+      ranInPackagesCapturing(testDir);
+      const logLines = (logOutput as any).logged().split('\n');
+      expect(logLines).toEqual(['[dry-run] > package-1', '[dry-run] > package-3']);
+    });
+
+    it('runs package prefix with --stream and expect it to be prefixed', async () => {
+      await new RunCommand(createArgv(testDir, 'my-script', '--stream'));
+
+      expect(ranInPackagesStreaming(testDir)).toMatchSnapshot();
+    });
+
     it('omits package prefix with --stream --no-prefix', async () => {
-      // await lernaRun(testDir)('my-script', '--stream', '--no-prefix');
       await new RunCommand(createArgv(testDir, 'my-script', '--stream', '--no-prefix'));
+
+      expect(ranInPackagesStreaming(testDir)).toMatchSnapshot();
+    });
+
+    it('run in --stream and --no-bail', async () => {
+      await new RunCommand(createArgv(testDir, 'my-script', '--stream', '--no-bail'));
 
       expect(ranInPackagesStreaming(testDir)).toMatchSnapshot();
     });
@@ -423,6 +449,15 @@ describe('RunCommand', () => {
       expect(collectedOutput).toContain('package-3@1.0.0 my-script');
     });
 
+    it('runs a script in packages with --stream and --no-prefix', async () => {
+      collectedOutput = '';
+      await lernaRun(testDir)('my-script', '--stream', '--no-prefix');
+
+      expect(collectedOutput).toContain('Lerna (powered by Nx)');
+      expect(collectedOutput).toContain('package-1@1.0.0 my-script');
+      expect(collectedOutput).toContain('package-3@1.0.0 my-script');
+    });
+
     it('runs a cacheable script', async () => {
       collectedOutput = '';
       await lernaRun(testDir)('my-cacheable-script');
@@ -452,7 +487,7 @@ describe('RunCommand', () => {
     it('should log some infos when using "includeDependencies" options with useNx', async () => {
       collectedOutput = '';
 
-      await lernaRun(testDir)('my-script', '--include-dependencies');
+      await lernaRun(testDir)('my-script', '--include-dependencies', '--', '--silent');
 
       const logMessages = loggingOutput('info');
       expect(logMessages).toContain(

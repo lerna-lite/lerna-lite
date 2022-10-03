@@ -346,9 +346,7 @@ export class RunCommand extends Command<RunCommandOption & FilterOptions> {
 
     const chain: Promise<any> = npmRunScriptStreaming(this.script, this.getOpts(pkg));
     if (!this.bail) {
-      chain.then((result: { exitCode: number; failed?: boolean; pkg: Package; stderr: any }) => {
-        return { ...result, pkg };
-      });
+      chain.then((result: { exitCode: number; failed?: boolean; pkg: Package; stderr: any }) => ({ ...result, pkg }));
     }
     return chain;
   }
