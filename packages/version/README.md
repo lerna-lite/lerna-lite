@@ -160,6 +160,8 @@ lerna version --allow-updating-peer-deps
 
 By default peer dependencies versions will not be bumped unless this flag is enabled. When the package to be bumped is found in regular `dependencies` (or `devDependencies`) and also in `peerDependencies`, then it will bump both of them to the same version.
 
+You should really know what you're doing before enabling this option, the npm standard is to never mutate (bump) any `peerDependencies` during publish (see Lerna [PR #1187](https://github.com/lerna/lerna/pull/1187) which disabled it in the first place).
+
 **Note** we will never bump a peer dependency that is including a semver range (ie `>=2.0.0`) even if this flag is enabled.
 
 ### `--amend`
