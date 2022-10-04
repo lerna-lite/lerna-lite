@@ -536,6 +536,9 @@
             "allowBranch": {
               "$ref": "#/$defs/commandOptions/version/allowBranch"
             },
+            "allowUpdatingPeerDeps": {
+              "$ref": "#/$defs/commandOptions/version/allowUpdatingPeerDeps"
+            },
             "amend": {
               "$ref": "#/$defs/commandOptions/version/amend"
             },
@@ -864,6 +867,9 @@
 
     "allowBranch": {
       "$ref": "#/$defs/commandOptions/version/allowBranch"
+    },
+    "allowUpdatingPeerDeps": {
+      "$ref": "#/$defs/commandOptions/version/allowUpdatingPeerDeps"
     },
     "amend": {
       "$ref": "#/$defs/commandOptions/version/amend"
@@ -1258,6 +1264,10 @@
             }
           ],
           "description": "For `lerna version`, the branches to allow versioning from."
+        },
+        "allowUpdatingPeerDeps": {
+          "type": "boolean",
+          "description": "For `lerna version`, allow updating peer dependencies versions. Note that `peerDependencies` with semver range (ie `>=2.0.0`) will never be bumped even with this flag enabled."
         },
         "amend": {
           "type": "boolean",

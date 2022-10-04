@@ -57,10 +57,10 @@ describe('PackageGraph', () => {
       ];
       const graph = new PackageGraph(pkgs);
 
-      expect(graph.get('pkg-1').externalDependencies.has('pkg-2')).toBe(true);
-      expect(graph.get('pkg-2').localDependents.has('pkg-1')).toBe(false);
-      expect(graph.get('pkg-2').localDependencies.has('pkg-1')).toBe(true);
-      expect(graph.get('pkg-3').localDependencies.has('pkg-2')).toBe(true);
+      expect(graph.get('pkg-1')!.externalDependencies.has('pkg-2')).toBe(true);
+      expect(graph.get('pkg-2')!.localDependents.has('pkg-1')).toBe(false);
+      expect(graph.get('pkg-2')!.localDependencies.has('pkg-1')).toBe(true);
+      expect(graph.get('pkg-3')!.localDependencies.has('pkg-2')).toBe(true);
     });
 
     it('localizes all non-satisfied siblings when forced', () => {
@@ -117,6 +117,9 @@ describe('PackageGraph', () => {
             dependencies: {
               'pkg-1': 'workspace:^1.0.0',
             },
+            peerDependencies: {
+              'pkg-1': 'workspace:^1.0.0',
+            },
           } as unknown as RawManifest,
           '/test/pkg-3'
         ),
@@ -140,6 +143,9 @@ describe('PackageGraph', () => {
               'pkg-3': 'workspace:^1.0.0',
               'pkg-4': 'workspace:>=1.0.0',
             },
+            peerDependencies: {
+              'pkg-1': 'workspace:^1.0.0',
+            },
           } as unknown as RawManifest,
           '/test/pkg-5'
         ),
@@ -153,13 +159,13 @@ describe('PackageGraph', () => {
       expect(pkg1.localDependents.has('pkg-3')).toBe(true);
       expect(pkg3.localDependencies.has('pkg-1')).toBe(true);
       expect(pkg4.localDependencies.has('pkg-1')).toBe(true);
-      expect(pkg4.localDependencies.get('pkg-1').workspaceTarget).toBe('workspace:*');
+      expect(pkg4.localDependencies.get('pkg-1').workspaceSpec).toBe('workspace:*');
       expect(pkg5.localDependencies.has('pkg-1')).toBe(true);
       expect(pkg5.localDependencies.has('pkg-2')).toBe(true);
-      expect(pkg5.localDependencies.get('pkg-1').workspaceTarget).toBe('workspace:^');
-      expect(pkg5.localDependencies.get('pkg-2').workspaceTarget).toBe('workspace:~');
-      expect(pkg5.localDependencies.get('pkg-3').workspaceTarget).toBe('workspace:^1.0.0');
-      expect(pkg5.localDependencies.get('pkg-4').workspaceTarget).toBe('workspace:>=1.0.0');
+      expect(pkg5.localDependencies.get('pkg-1').workspaceSpec).toBe('workspace:^');
+      expect(pkg5.localDependencies.get('pkg-2').workspaceSpec).toBe('workspace:~');
+      expect(pkg5.localDependencies.get('pkg-3').workspaceSpec).toBe('workspace:^1.0.0');
+      expect(pkg5.localDependencies.get('pkg-4').workspaceSpec).toBe('workspace:>=1.0.0');
     });
   });
 
@@ -167,7 +173,7 @@ describe('PackageGraph', () => {
     it('proxies Package properties', () => {
       const pkg = new Package({ name: 'my-pkg', version: '1.2.3' } as unknown as RawManifest, '/path/to/my-pkg');
       const graph = new PackageGraph([pkg]);
-      const node = graph.get('my-pkg');
+      const node = graph.get('my-pkg') as PackageGraphNode;
 
       // most of these properties are non-enumerable, so a snapshot doesn't work
       expect(node.name).toBe('my-pkg');
@@ -190,7 +196,7 @@ describe('PackageGraph', () => {
     it('computes prereleaseId from prerelease version', () => {
       const node = new PackageGraph([
         new Package({ name: 'my-pkg', version: '1.2.3-rc.4' } as unknown as RawManifest, '/path/to/my-pkg'),
-      ]).get('my-pkg');
+      ]).get('my-pkg') as PackageGraphNode;
 
       expect(node.prereleaseId).toBe('rc');
     });
@@ -199,7 +205,7 @@ describe('PackageGraph', () => {
       it("returns the node's name", () => {
         const node = new PackageGraph([
           new Package({ name: 'pkg-name', version: '0.1.2' } as unknown as RawManifest, '/path/to/pkg-name'),
-        ]).get('pkg-name');
+        ]).get('pkg-name') as PackageGraphNode;
 
         expect(node.toString()).toBe('pkg-name');
       });
@@ -232,8 +238,8 @@ describe('PackageGraph', () => {
       ];
       const graph = new PackageGraph(packages, 'allDependencies');
 
-      expect(graph.get('my-package-1').localDependencies.size).toBe(0);
-      expect(graph.get('my-package-2').localDependencies.has('my-package-1')).toBe(true);
+      expect(graph.get('my-package-1')!.localDependencies.size).toBe(0);
+      expect(graph.get('my-package-2')!.localDependencies.has('my-package-1')).toBe(true);
     });
 
     it('should skip gitCommittish of packages that are not in localDependencies', () => {
@@ -261,8 +267,8 @@ describe('PackageGraph', () => {
       ];
       const graph = new PackageGraph(packages, 'dependencies');
 
-      expect(graph.get('my-package-1').localDependencies.size).toBe(0);
-      expect(graph.get('my-package-2').localDependencies.size).toBe(0);
+      expect(graph.get('my-package-1')!.localDependencies.size).toBe(0);
+      expect(graph.get('my-package-2')!.localDependencies.size).toBe(0);
     });
 
     it('should return the localDependencies for matched gitCommittish', () => {
@@ -290,7 +296,7 @@ describe('PackageGraph', () => {
       ];
       const graph = new PackageGraph(packages);
 
-      expect(graph.get('my-package-2').localDependencies.has('my-package-1')).toBe(true);
+      expect(graph.get('my-package-2')!.localDependencies.has('my-package-1')).toBe(true);
     });
   });
 
@@ -321,7 +327,7 @@ describe('PackageGraph', () => {
       ].map((json) => new Package(json as unknown as RawManifest, `/test/${json.name}`, '/test'));
       const graph = new PackageGraph(pkgs);
 
-      const search = filtered.map((name) => graph.get(name).pkg);
+      const search = filtered.map((name) => graph.get(name)!.pkg);
       const result = graph[method](search);
 
       expect(result.map((pkg) => pkg.name)).toEqual(expected);

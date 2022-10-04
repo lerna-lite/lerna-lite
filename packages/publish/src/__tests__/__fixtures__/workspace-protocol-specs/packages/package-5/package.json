@@ -4,5 +4,9 @@
   "dependencies": {
     "package-4": "workspace:^1.0.0",
     "package-6": "workspace:~1.0.0"
+  },
+  "peerDependencies": {
+    "package-4": "workspace:>=1.0.0",
+    "package-6": "workspace:~1.0.0"
   }
 }
