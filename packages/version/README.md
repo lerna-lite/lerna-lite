@@ -71,6 +71,7 @@ Running `lerna version --conventional-commits` without the above flags will rele
   - [Prerelease](#prerelease)
   - [Options](#options)
     - [`--allow-branch <glob>`](#--allow-branch-glob)
+    - [`--allow-updating-peer-deps`](#--allow-updating-peer-deps)
     - [`--amend`](#--amend)
     - [`--changelog-preset`](#--changelog-preset)
     - [`--conventional-commits`](#--conventional-commits)
