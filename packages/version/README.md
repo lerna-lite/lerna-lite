@@ -163,7 +163,13 @@ By default peer dependencies versions will not be bumped unless this flag is ena
 
 You should really know what you're doing before enabling this option, the npm standard is to never mutate (bump) any `peerDependencies` during publish (see Lerna [PR #1187](https://github.com/lerna/lerna/pull/1187) which disabled it in the first place).
 
-**Note** we will never bump a peer dependency that is including a semver range (ie `>=2.0.0`) even if this flag is enabled.
+> **Note** peer dependency that includes a semver range with an operator (ie `>=2.0.0`) will never be mutated even if this flag is enabled.
+
+> **Note** Please use with caution when enabling this option, it is not recommended for most users since the npm standard is to never mutate (bump) any `peerDependencies` when publishing new version, at least not without a user intervention, as explained by core Lerna maintainer:
+
+> Changes to a peer version range are always semver major, and should be as broad as possible.
+> Until we can get fancier, we should never automatically modify them to match the new version being published (which is the current incorrect behavior).
+
 
 ### `--amend`
 
@@ -713,3 +719,5 @@ Will apply the following updates to your `package.json` (assuming a `minor` vers
   }
 }
 ```
+
+> **Note** semver range with an operator (ie `workspace:>=2.0.0`) are also supported but will never be mutated.
