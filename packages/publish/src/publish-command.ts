@@ -572,6 +572,7 @@ export class PublishCommand extends Command<PublishCommandOption> {
           resolved,
           depVersion,
           this.savePrefix,
+          this.options.allowUpdatingPeerDeps,
           this.options.workspaceStrictMatch,
           this.commandName
         );
@@ -597,6 +598,7 @@ export class PublishCommand extends Command<PublishCommandOption> {
           resolved,
           depVersion,
           this.savePrefix,
+          this.options.allowUpdatingPeerDeps,
           this.options.workspaceStrictMatch,
           this.commandName
         );
@@ -609,7 +611,7 @@ export class PublishCommand extends Command<PublishCommandOption> {
   resolveLocalDependencyWorkspaceProtocols() {
     // resolve workspace protocol: translates to their actual version target/range
     const publishingPackagesWithLocalWorkspaces = this.updates.filter((node: PackageGraphNode) =>
-      Array.from(node.localDependencies.values()).some((resolved: NpaResolveResult) => resolved.explicitWorkspace)
+      Array.from(node.localDependencies.values()).some((resolved: NpaResolveResult) => resolved.workspaceSpec)
     );
 
     return pMap(publishingPackagesWithLocalWorkspaces, (node: PackageGraphNode) => {
@@ -625,6 +627,7 @@ export class PublishCommand extends Command<PublishCommandOption> {
           resolved,
           depVersion,
           this.savePrefix,
+          this.options.allowUpdatingPeerDeps,
           this.options.workspaceStrictMatch,
           this.commandName
         );
@@ -734,7 +737,13 @@ export class PublishCommand extends Command<PublishCommandOption> {
        * Therefore until we remove graphType altogether in v6, we provide a way for users to opt into the old default behavior
        * by setting the `graphType` option to `dependencies`.
        */
-      graphType: this.options.graphType === 'dependencies' ? 'dependencies' : 'allDependencies',
+      // prettier-ignore
+      graphType:
+        this.options.graphType === 'dependencies'
+          ? 'dependencies'
+          : this.options.allowUpdatingPeerDeps
+            ? 'allPlusPeerDependencies'
+            : 'allDependencies',
     });
   }
 

@@ -152,6 +152,16 @@ Please use with caution.
 lerna version --allow-branch hotfix/oops-fix-the-thing
 ```
 
+### `--allow-updating-peer-deps`
+
+```sh
+lerna version --allow-updating-peer-deps
+```
+
+By default peer dependencies versions will not be bumped unless this flag is enabled. When the package to be bumped is found in regular `dependencies` (or `devDependencies`) and also in `peerDependencies`, then it will bump both of them to the same version.
+
+**Note** we will never bump a peer dependency that is including a semver range (ie `>=2.0.0`) even if this flag is enabled.
+
 ### `--amend`
 
 ```sh

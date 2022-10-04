@@ -135,7 +135,7 @@ export interface ProfileData {
 
 export interface QueryGraphConfig {
   /** "dependencies" excludes devDependencies from graph */
-  graphType?: 'all' | 'allDependencies' | 'dependencies';
+  graphType?: 'all' | 'allDependencies' | 'allPlusPeerDependencies' | 'dependencies';
 
   /** Treatment of local sibling dependencies, default "auto" */
   localDependencies?: 'auto' | 'force' | 'explicit';
@@ -175,8 +175,8 @@ export type NpaResolveResult = (
   | npa.AliasResult
   | npa.RegistryResult
 ) & {
-  explicitWorkspace?: boolean;
-  workspaceTarget?: string;
+  /** the specifier part used when deailing with a `workspace:` protocol resource */
+  workspaceSpec?: string;
 };
 
 /** Passed between concurrent executions */

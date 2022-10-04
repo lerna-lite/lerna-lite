@@ -60,7 +60,7 @@ import yargParser from 'yargs-parser';
 
 const createArgv = (cwd, ...args) => {
   args.unshift('publish');
-  if (args.length > 0 && args[1] && args[1].length > 0 && !args[1].startsWith('-')) {
+  if (args.length > 0 && args[1]?.length > 0 && !args[1].startsWith('-')) {
     args[1] = `--bump=${args[1]}`;
   }
   const parserArgs = args.join(' ');
@@ -76,8 +76,9 @@ describe("workspace protocol 'workspace:' specifiers", () => {
     await gitCommit(cwd, 'setup');
   };
 
+  /** deprecated, to be removed in next major */
   describe('workspace-strict-match disabled', () => {
-    it('overwrites workspace protocol with local patch bump version before npm publish but after git commit', async () => {
+    it('overwrites workspace protocol with local patch bumped version before npm publish but after git commit', async () => {
       const cwd = await initFixture('workspace-protocol-specs');
 
       await gitTag(cwd, 'v1.0.0');
@@ -115,7 +116,7 @@ describe("workspace protocol 'workspace:' specifiers", () => {
       });
     });
 
-    it('overwrites workspace protocol with local minor bump version before npm publish but after git commit', async () => {
+    it('overwrites workspace protocol with local minor bumped version before npm publish but after git commit', async () => {
       const cwd = await initFixture('workspace-protocol-specs');
 
       await gitTag(cwd, 'v1.0.0');
@@ -155,12 +156,14 @@ describe("workspace protocol 'workspace:' specifiers", () => {
   });
 
   describe('workspace-strict-match enabled', () => {
-    it('overwrites workspace protocol with local minor bump version before npm publish but after git commit', async () => {
+    it('overwrites workspace protocol with local minor bumped version before npm publish but after git commit & also expect bump peerDependencies when allowUpdatingPeerDeps flag is enabled', async () => {
       const cwd = await initFixture('workspace-protocol-specs');
 
       await gitTag(cwd, 'v1.0.0');
       await setupChanges(cwd);
-      await new PublishCommand(createArgv(cwd, '--bump', 'minor', '--yes', '--workspace-strict-match'));
+      await new PublishCommand(
+        createArgv(cwd, '--bump', 'minor', '--yes', '--workspace-strict-match', '--allow-updating-peer-deps')
+      );
 
       expect((writePkg as any).updatedVersions()).toEqual({
         'package-1': '1.1.0',
@@ -187,16 +190,28 @@ describe("workspace protocol 'workspace:' specifiers", () => {
         'package-4': '^1.1.0', // workspace:^1.0.0
         'package-6': '~1.1.0', // workspace:~1.0.0
       });
+      expect((writePkg as any).updatedManifest('package-5').peerDependencies).toMatchObject({
+        // peer dependencies without operator range will be bumped with the flag enabled
+        'package-4': '>=1.0.0', // workspace:>=1.0.0, range shouldn't be bumped
+        'package-6': '~1.1.0', // workspace:~1.0.0
+      });
       expect((writePkg as any).updatedManifest('package-6').dependencies).toMatchObject({
-        'package-1': '>=1.1.0', // workspace:>=1.0.0
+        'package-1': '>=1.0.0', // workspace:>=1.0.0, range shouldn't be bumped
+      });
+      expect((writePkg as any).updatedManifest('package-6').peerDependencies).toMatchObject({
+        'package-1': '>=1.0.0', // workspace:>=1.0.0
       });
       // private packages do not need local version resolution
       expect((writePkg as any).updatedManifest('package-7').dependencies).toMatchObject({
-        'package-1': '^1.1.0', // ^1.0.0
+        'package-1': '^1.1.0',
+      });
+      expect((writePkg as any).updatedManifest('package-7').peerDependencies).toMatchObject({
+        'package-2': '^1.1.0',
+        'package-3': '>=1.0.0',
       });
     });
 
-    it('overwrites workspace protocol with local major bump version before npm publish but after git commit', async () => {
+    it('overwrites workspace protocol with local major bumped version before npm publish but after git commit', async () => {
       const cwd = await initFixture('workspace-protocol-specs');
 
       await gitTag(cwd, 'v1.0.0');
@@ -228,12 +243,24 @@ describe("workspace protocol 'workspace:' specifiers", () => {
         'package-4': '^2.0.0', // workspace:^1.0.0
         'package-6': '~2.0.0', // workspace:~1.0.0
       });
+      expect((writePkg as any).updatedManifest('package-5').peerDependencies).toMatchObject({
+        // peer dependencies will not be bumped by default without a flag
+        'package-4': '>=1.0.0', // workspace:^1.0.0
+        'package-6': '~1.0.0', // workspace:~1.0.0
+      });
       expect((writePkg as any).updatedManifest('package-6').dependencies).toMatchObject({
-        'package-1': '>=2.0.0', // workspace:>=1.0.0
+        'package-1': '>=1.0.0', // workspace:>=1.0.0
+      });
+      expect((writePkg as any).updatedManifest('package-6').peerDependencies).toMatchObject({
+        'package-1': '>=1.0.0', // workspace:>=1.0.0, not bumped without a flag
       });
       // private packages do not need local version resolution
       expect((writePkg as any).updatedManifest('package-7').dependencies).toMatchObject({
         'package-1': '^2.0.0', // ^1.0.0
+      });
+      expect((writePkg as any).updatedManifest('package-7').peerDependencies).toMatchObject({
+        'package-2': '^1.0.0', // not bumped without a flag
+        'package-3': '>=1.0.0',
       });
     });
 
@@ -253,7 +280,7 @@ describe("workspace protocol 'workspace:' specifiers", () => {
         ].join('')
       );
       expect((writePkg as any).updatedManifest('package-6').dependencies).toMatchObject({
-        'package-1': '>=1.1.0', // workspace:>=1.0.0
+        'package-1': '>=1.0.0', // workspace:>=1.0.0 will not be bumped without a flag
         'tiny-registry': 'latest', // workspace:*
         'tiny-tarball': '^2.3.4', // workspace:^2.3.4
       });

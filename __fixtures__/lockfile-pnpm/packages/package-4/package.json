@@ -4,5 +4,8 @@
   "dependencies": {
     "@my-workspace/package-1": "workspace:2.3.4",
     "@my-workspace/package-2": "workspace:~"
+  },
+  "peerDependencies": {
+    "@my-workspace/package-1": "workspace:>=2.0.0"
   }
 }

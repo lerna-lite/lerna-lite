@@ -255,26 +255,34 @@ export class Package {
    */
   removeDependencyWorkspaceProtocolPrefix(pkgName: string, resolved: NpaResolveResult) {
     const depName = resolved.name as string;
-    const depCollection = this.retrievePackageDependencies(depName, true);
-    const workspaceTarget = resolved?.workspaceTarget ?? '';
+    const workspaceSpec = resolved?.workspaceSpec ?? '';
+    const localDependencies = this.retrievePackageDependencies(depName);
+    const inspectDependencies = [localDependencies];
 
-    if (
-      depCollection &&
-      (resolved.registry || resolved.type === 'directory') &&
-      /^(workspace:)+(.*)$/.test(workspaceTarget)
-    ) {
-      if (workspaceTarget) {
-        if (resolved.fetchSpec === 'latest') {
-          npmlog.error(
-            `publish`,
-            [
-              `Your package named "${pkgName}" has external dependencies not handled by Lerna-Lite and without workspace version suffix, `,
-              `we recommend using defined versions with workspace protocol. `,
-              `Your dependency is currently being published with "${depName}": "${resolved.fetchSpec}".`,
-            ].join('')
-          );
+    // package could be found in both a local dependencies and peerDependencies, so we need to include it when found
+    if (this.peerDependencies?.[depName]) {
+      inspectDependencies.push(this.peerDependencies);
+    }
+
+    for (const depCollection of inspectDependencies) {
+      if (
+        depCollection &&
+        (resolved.registry || resolved.type === 'directory') &&
+        /^(workspace:)+(.*)$/.test(workspaceSpec)
+      ) {
+        if (workspaceSpec) {
+          if (resolved.fetchSpec === 'latest') {
+            npmlog.error(
+              `publish`,
+              [
+                `Your package named "${pkgName}" has external dependencies not handled by Lerna-Lite and without workspace version suffix, `,
+                `we recommend using defined versions with workspace protocol. `,
+                `Your dependency is currently being published with "${depName}": "${resolved.fetchSpec}".`,
+              ].join('')
+            );
+          }
+          depCollection[depName] = resolved.fetchSpec as string;
         }
-        depCollection[depName] = resolved.fetchSpec as string;
       }
     }
   }
@@ -291,80 +299,102 @@ export class Package {
     resolved: NpaResolveResult,
     depVersion: string,
     savePrefix: string,
+    allowUpdatingPeerDeps = false,
     workspaceStrictMatch = true,
     updatedByCommand?: CommandType
   ) {
     const depName = resolved.name as string;
-    const depCollection = this.retrievePackageDependencies(depName);
+    const localDependencies = this.retrievePackageDependencies(depName);
+    const updatingDependencies = [localDependencies];
 
-    if (depCollection && (resolved.registry || resolved.type === 'directory')) {
-      // a version (1.2.3) OR range (^1.2.3) OR directory (file:../foo-pkg)
-      depCollection[depName] = `${savePrefix}${depVersion}`;
-
-      // when using explicit `workspace:` protocol
-      if (resolved.explicitWorkspace) {
-        const workspaceTarget = resolved?.workspaceTarget ?? '';
-        const [_, _wsTxt, operatorPrefix, rangePrefix] =
-          workspaceTarget.match(/^(workspace:)?([<>=]{0,2})?([*^~])?(.*)$/) || [];
-
-        if (operatorPrefix) {
-          // with workspace it might include an operator, if so use it like "workspace:>=1.2.3"
-          depCollection[depName] = `${operatorPrefix}${depVersion}`;
-        } else if (workspaceStrictMatch) {
-          // with workspace in strict mode we might have empty range prefix like "workspace:1.2.3"
-          depCollection[depName] = `${rangePrefix || ''}${depVersion}`;
-        }
-
-        if (updatedByCommand === 'publish') {
-          // when publishing, workspace protocol will be transformed to semver range
-          // e.g.: considering version is `1.2.3` and we have `workspace:*` it will be converted to "^1.2.3" or to "1.2.3" with strict match range enabled
-          if (workspaceStrictMatch) {
-            if (workspaceTarget === 'workspace:*') {
-              depCollection[depName] = depVersion; // (*) exact range, "1.5.0"
-            } else if (workspaceTarget === 'workspace:~') {
-              depCollection[depName] = `~${depVersion}`; // (~) patch range, "~1.5.0"
-            } else if (workspaceTarget === 'workspace:^') {
-              depCollection[depName] = `^${depVersion}`; // (^) minor range, "^1.5.0"
-            }
-          }
-          // anything else will fall under what Lerna previously found to be the version,
-          // typically by this line: depCollection[depName] = `${savePrefix}${depVersion}`;
-        } else {
-          // when versioning we'll only bump workspace protocol that have semver range like `workspace:^1.2.3`
-          // any other workspace will remain the same in `package.json` file, for example `workspace:^`
-          // keep target workspace or bump when it's a workspace semver range (like `workspace:^1.2.3`)
-          depCollection[depName] = /^workspace:[*^~]{1}$/.test(workspaceTarget)
-            ? (resolved.workspaceTarget as string) // target like `workspace:^` => `workspace:^` (remains untouched in package.json)
-            : `workspace:${depCollection[depName]}`; // range like `workspace:^1.2.3` => `workspace:^1.3.3` (bump minor example)
-        }
+    // when user wants to also bump peerDependencies we'll loop through them as well,
+    // however only do it when not a range operator, ie this would bump ("^2.0.0") but these would not (">=2.0.0" or "workspace:<2.0.0")
+    if (allowUpdatingPeerDeps) {
+      // prettier-ignore
+      if (this.peerDependencies?.[depName] && /^(workspace:)?[~|^]?([0-9\.])*$/.test(this.peerDependencies[depName] || '')) {
+        updatingDependencies.push(this.peerDependencies);
       }
-    } else if (resolved.gitCommittish) {
-      // a git url with matching committish (#v1.2.3 or #1.2.3)
-      const [tagPrefix] = /^\D*/.exec(resolved.gitCommittish) as RegExpExecArray;
+    }
 
-      // update committish
-      const { hosted } = resolved as any; // take that, lint!
-      hosted.committish = `${tagPrefix}${depVersion}`;
+    for (const depCollection of updatingDependencies) {
+      if (depCollection && (resolved.registry || resolved.type === 'directory')) {
+        // a version (1.2.3) OR range (^1.2.3) OR directory (file:../foo-pkg)
+        depCollection[depName] = `${savePrefix}${depVersion}`;
 
-      // always serialize the full url (identical to previous resolved.saveSpec)
-      depCollection[depName] = hosted.toString({ noGitPlus: false, noCommittish: false });
-    } else if (resolved.gitRange) {
-      // a git url with matching gitRange (#semver:^1.2.3)
-      const { hosted } = resolved as any; // take that, lint!
-      hosted.committish = `semver:${savePrefix}${depVersion}`;
+        // when using explicit `workspace:` protocol
+        if (resolved.workspaceSpec) {
+          const workspaceSpec = resolved?.workspaceSpec ?? '';
+          const [_, _wsTxt, operatorPrefix, rangePrefix, semver] =
+            workspaceSpec.match(/^(workspace:)?([<>=]{0,2})?([*|~|^])?(.*)$/) || [];
 
-      // always serialize the full url (identical to previous resolved.saveSpec)
-      depCollection[depName] = hosted.toString({ noGitPlus: false, noCommittish: false });
+          if (operatorPrefix) {
+            // package with range operator should never be bumped, we'll use same version range but without prefix "workspace:>=1.2.3" will assign ">=1.2.3"
+            depCollection[depName] = `${operatorPrefix}${rangePrefix || ''}${semver}`;
+          } else if (workspaceStrictMatch) {
+            // with workspace in strict mode we might have empty range prefix like "workspace:1.2.3"
+            depCollection[depName] = `${rangePrefix || ''}${depVersion}`;
+          }
+
+          if (updatedByCommand === 'publish') {
+            // when publishing, workspace protocol will be transformed to semver range
+            // e.g.: considering version is `1.2.3` and we have `workspace:*` it will be converted to "^1.2.3" or to "1.2.3" with strict match range enabled
+            if (workspaceStrictMatch) {
+              if (workspaceSpec === 'workspace:*') {
+                depCollection[depName] = depVersion; // (*) exact range, "1.5.0"
+              } else if (workspaceSpec === 'workspace:~') {
+                depCollection[depName] = `~${depVersion}`; // (~) patch range, "~1.5.0"
+              } else if (workspaceSpec === 'workspace:^') {
+                depCollection[depName] = `^${depVersion}`; // (^) minor range, "^1.5.0"
+              }
+            }
+            // anything else will fall under what Lerna previously found to be the version,
+            // typically by this line: depCollection[depName] = `${savePrefix}${depVersion}`;
+          } else {
+            // when versioning we'll only bump workspace protocol that have semver range like `workspace:^1.2.3`
+            // any other workspace will remain the same in `package.json` file, for example `workspace:^`
+            // keep target workspace or bump when it's a workspace semver range (like `workspace:^1.2.3`)
+            depCollection[depName] = /^workspace:[*|~|^]{1}$/.test(workspaceSpec)
+              ? (resolved.workspaceSpec as string) // target like `workspace:^` => `workspace:^` (remains untouched in package.json)
+              : `workspace:${depCollection[depName]}`; // range like `workspace:^1.2.3` => `workspace:^1.3.3` (bump minor example)
+          }
+        }
+      } else if (resolved.gitCommittish) {
+        // a git url with matching committish (#v1.2.3 or #1.2.3)
+        const [tagPrefix] = /^\D*/.exec(resolved.gitCommittish) as RegExpExecArray;
+
+        // update committish
+        const { hosted } = resolved as any; // take that, lint!
+        hosted.committish = `${tagPrefix}${depVersion}`;
+
+        // always serialize the full url (identical to previous resolved.saveSpec)
+        depCollection[depName] = hosted.toString({ noGitPlus: false, noCommittish: false });
+      } else if (resolved.gitRange) {
+        // a git url with matching gitRange (#semver:^1.2.3)
+        const { hosted } = resolved as any; // take that, lint!
+        hosted.committish = `semver:${savePrefix}${depVersion}`;
+
+        // always serialize the full url (identical to previous resolved.saveSpec)
+        depCollection[depName] = hosted.toString({ noGitPlus: false, noCommittish: false });
+      }
+    }
+
+    // when publishing, make sure to never publish any dependencies with a `workspace:` protocol prefix and simply remove it when found
+    if (updatedByCommand === 'publish') {
+      if (localDependencies?.[depName].startsWith('workspace:')) {
+        localDependencies[depName] = localDependencies[depName].replace('workspace:', '');
+      }
+      if (this.peerDependencies?.[depName].startsWith('workspace:')) {
+        this.peerDependencies[depName] = this.peerDependencies[depName].replace('workspace:', '');
+      }
     }
   }
 
   /**
    * Retrieve the dependencies collection which contain the dependency name provided, we'll search in all type of dependencies/devDependencies/...
    * @param {String} depName - dependency name
-   * @param {Boolean} [includePeerDepsFallback] - should we include peerDependencies as fallback?
    * @returns {Array<String>} - array of dependencies that contains the dependency name provided
    */
-  private retrievePackageDependencies(depName: string, includePeerDepsFallback = false): { [depName: string]: string } {
+  private retrievePackageDependencies(depName: string): { [depName: string]: string } {
     // first, try runtime dependencies
     let depCollection = this.dependencies;
 
@@ -376,11 +406,6 @@ export class Package {
     // fall back to devDependencies
     if (!depCollection || !depCollection[depName]) {
       depCollection = this.devDependencies;
-    }
-
-    // fall back to peerDependencies (when enabled)
-    if (includePeerDepsFallback && (!depCollection || !depCollection[depName])) {
-      depCollection = this.peerDependencies;
     }
 
     return depCollection;

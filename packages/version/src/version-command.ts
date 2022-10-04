@@ -626,6 +626,7 @@ export class VersionCommand extends Command<VersionCommandOption> {
               resolved,
               depVersion,
               this.savePrefix,
+              this.options.allowUpdatingPeerDeps,
               this.options.workspaceStrictMatch,
               this.commandName
             );
@@ -684,6 +685,7 @@ export class VersionCommand extends Command<VersionCommandOption> {
       runTopologically(this.packagesToVersion, mapUpdate, {
         concurrency: this.concurrency,
         rejectCycles: this.options.rejectCycles,
+        graphType: this.options.allowUpdatingPeerDeps ? 'allPlusPeerDependencies' : 'allDependencies',
       })
     );
 

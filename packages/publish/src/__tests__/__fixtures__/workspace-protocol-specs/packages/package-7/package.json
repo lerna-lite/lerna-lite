@@ -4,5 +4,9 @@
   "private": true,
   "dependencies": {
     "package-1": "^1.0.0"
+  },
+  "peerDependencies": {
+    "package-2": "^1.0.0",
+    "package-3": ">=1.0.0"
   }
 }

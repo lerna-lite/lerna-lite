@@ -13,14 +13,14 @@ import { NpaResolveResult } from '../models';
 export class PackageGraph extends Map<string, PackageGraphNode> {
   /**
    * @param {Package[]} packages - An array of Packages to build the graph out of.
-   * @param {'allDependencies'|'dependencies'} [graphType]
+   * @param {'allDependencies' | 'allPlusPeerDependencies' | 'dependencies'} [graphType]
    *    Pass "dependencies" to create a graph of only dependencies,
    *    excluding the devDependencies that would normally be included.
    * @param {boolean|'auto'|'force'|'explicit'} [localDependencies] Treatment of local sibling dependencies, default "auto"
    */
   constructor(
     packages: Package[],
-    graphType: 'allDependencies' | 'dependencies' = 'allDependencies',
+    graphType: 'allDependencies' | 'allPlusPeerDependencies' | 'dependencies' = 'allDependencies',
     localDependencies: boolean | 'auto' | 'force' | 'explicit' | 'forceLocal' = 'auto'
   ) {
     // For backward compatibility
@@ -60,6 +60,7 @@ export class PackageGraph extends Map<string, PackageGraphNode> {
               {},
               currentNode.pkg.devDependencies,
               currentNode.pkg.optionalDependencies,
+              graphType === 'allPlusPeerDependencies' ? currentNode.pkg.peerDependencies : {},
               currentNode.pkg.dependencies
             );
 
@@ -72,10 +73,11 @@ export class PackageGraph extends Map<string, PackageGraphNode> {
 
         // npa doesn't support the explicit workspace: protocol, supported by
         // pnpm and Yarn.
-        const explicitWorkspace = /^workspace:/.test(spec);
-        let workspaceTarget: string | undefined;
-        if (explicitWorkspace) {
-          workspaceTarget = spec;
+        const isWorkspaceSpec = /^workspace:/.test(spec);
+
+        let fullWorkspaceSpec: string | undefined;
+        if (isWorkspaceSpec) {
+          fullWorkspaceSpec = spec;
           spec = spec.replace(/^workspace:/, '');
 
           // when dependency is defined as target workspace, like `workspace:*`,
@@ -90,10 +92,7 @@ export class PackageGraph extends Map<string, PackageGraphNode> {
         }
 
         const resolved: NpaResolveResult = npa.resolve(depName, spec, currentNode.location);
-        resolved.explicitWorkspace = explicitWorkspace;
-        if (resolved.explicitWorkspace) {
-          resolved.workspaceTarget = workspaceTarget;
-        }
+        resolved.workspaceSpec = fullWorkspaceSpec;
 
         if (!depNode) {
           // it's an external dependency, store the resolution and bail
@@ -101,7 +100,7 @@ export class PackageGraph extends Map<string, PackageGraphNode> {
         }
 
         if (
-          explicitWorkspace ||
+          isWorkspaceSpec ||
           localDependencies === 'force' ||
           resolved.fetchSpec === depNode.location ||
           (localDependencies !== 'explicit' && depNode.satisfies(resolved))
