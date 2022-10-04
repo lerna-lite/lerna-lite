@@ -442,6 +442,8 @@ So for example, if we have `foo`, `bar`, `qar`, `zoo` in the workspace and they 
 }
 ```
 
+> **Note** semver range with an operator (ie `workspace:>=2.0.0`) are also supported but will never be mutated.
+
 #### with `--workspace-strict-match` (default)
 
 When using strict match (default), it will be transformed and publish with the following:
