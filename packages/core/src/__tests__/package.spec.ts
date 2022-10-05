@@ -365,7 +365,7 @@ describe('Package', () => {
         expect((resolved.hosted as any).committish).toBe('semver:^2.0.0');
       });
 
-      it('dot not bump peerDependencies by default without a flag', () => {
+      it('does not bump peerDependencies by default without a flag', () => {
         const pkg = factory({
           peerDependencies: {
             a: '^1.0.0',
@@ -406,6 +406,54 @@ describe('Package', () => {
             "peerDependencies": {
               "a": "^2.0.0",
               "b": ">=1.0.0",
+            },
+          }
+        `);
+      });
+
+      it('bumps peerDependencies canary versions when allowUpdatingPeerDeps flag is enabled except for dependencies with semver range operator', () => {
+        const pkg = factory({
+          peerDependencies: {
+            a: '^1.0.0-alpha.0',
+            b: '>=1.0.0-alpha.0', // range will not be bumped
+          },
+        });
+
+        const resolvedA: NpaResolveResult = npa.resolve('a', '^1.0.0-alpha.0', '.');
+        const resolvedB: NpaResolveResult = npa.resolve('b', '^1.0.0-alpha.0', '.');
+
+        pkg.updateLocalDependency(resolvedA, '1.0.0-alpha.1', '^', true);
+        pkg.updateLocalDependency(resolvedB, '1.0.0-alpha.1', '^', true);
+
+        expect(pkg.toJSON()).toMatchInlineSnapshot(`
+          {
+            "peerDependencies": {
+              "a": "^1.0.0-alpha.1",
+              "b": ">=1.0.0-alpha.0",
+            },
+          }
+        `);
+      });
+
+      it('bumps peerDependencies canary with SHA versions when allowUpdatingPeerDeps flag is enabled except for dependencies with semver range operator', () => {
+        const pkg = factory({
+          peerDependencies: {
+            a: '^1.0.0-alpha.0+SHA',
+            b: '>=1.0.0-alpha.0+SHA', // range will not be bumped
+          },
+        });
+
+        const resolvedA: NpaResolveResult = npa.resolve('a', '^1.0.0-alpha.0+SHA', '.');
+        const resolvedB: NpaResolveResult = npa.resolve('b', '^1.0.0-alpha.0+SHA', '.');
+
+        pkg.updateLocalDependency(resolvedA, '1.0.0-alpha.1+SHA', '^', true);
+        pkg.updateLocalDependency(resolvedB, '1.0.0-alpha.1+SHA', '^', true);
+
+        expect(pkg.toJSON()).toMatchInlineSnapshot(`
+          {
+            "peerDependencies": {
+              "a": "^1.0.0-alpha.1+SHA",
+              "b": ">=1.0.0-alpha.0+SHA",
             },
           }
         `);
