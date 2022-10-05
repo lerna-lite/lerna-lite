@@ -71,7 +71,7 @@ Running `lerna version --conventional-commits` without the above flags will rele
   - [Prerelease](#prerelease)
   - [Options](#options)
     - [`--allow-branch <glob>`](#--allow-branch-glob)
-    - [`--allow-updating-peer-deps`](#--allow-updating-peer-deps) (new)
+    - [`--allow-peer-deps-update`](#--allow-peer-deps-update) (new)
     - [`--amend`](#--amend)
     - [`--changelog-preset`](#--changelog-preset)
     - [`--conventional-commits`](#--conventional-commits)
@@ -153,10 +153,10 @@ Please use with caution.
 lerna version --allow-branch hotfix/oops-fix-the-thing
 ```
 
-### `--allow-updating-peer-deps`
+### `--allow-peer-deps-update`
 
 ```sh
-lerna version --allow-updating-peer-deps
+lerna version --allow-peer-deps-update
 ```
 
 By default peer dependencies versions will not be bumped unless this flag is enabled. When the package to be bumped is found in regular `dependencies` (or `devDependencies`) and also in `peerDependencies`, then it will bump both of them to the same version.

@@ -387,7 +387,7 @@ describe('Package', () => {
         `);
       });
 
-      it('bumps peerDependencies when allowUpdatingPeerDeps flag is enabled except for dependencies with semver range operator', () => {
+      it('bumps peerDependencies when allowPeerDepsUpdate flag is enabled except for dependencies with semver range operator', () => {
         const pkg = factory({
           peerDependencies: {
             a: '^1.0.0',
@@ -411,7 +411,7 @@ describe('Package', () => {
         `);
       });
 
-      it('bumps peerDependencies canary versions when allowUpdatingPeerDeps flag is enabled except for dependencies with semver range operator', () => {
+      it('bumps peerDependencies canary versions when allowPeerDepsUpdate flag is enabled except for dependencies with semver range operator', () => {
         const pkg = factory({
           peerDependencies: {
             a: '^1.0.0-alpha.0',
@@ -435,7 +435,7 @@ describe('Package', () => {
         `);
       });
 
-      it('bumps peerDependencies canary with SHA versions when allowUpdatingPeerDeps flag is enabled except for dependencies with semver range operator', () => {
+      it('bumps peerDependencies canary with SHA versions when allowPeerDepsUpdate flag is enabled except for dependencies with semver range operator', () => {
         const pkg = factory({
           peerDependencies: {
             a: '^1.0.0-alpha.0+SHA',
@@ -490,7 +490,7 @@ describe('Package', () => {
         `);
       });
 
-      it('works with `workspace:` protocol range and bumps both when dependencies and peerDependencies are found and allowUpdatingPeerDeps flag is enabled', () => {
+      it('works with `workspace:` protocol range and bumps both when dependencies and peerDependencies are found and allowPeerDepsUpdate flag is enabled', () => {
         const pkg = factory({
           dependencies: {
             a: 'workspace:^1.0.0',
@@ -530,7 +530,7 @@ describe('Package', () => {
         `);
       });
 
-      it('works with `workspace:` protocol range and DOES NOT update peerDependencies when allowUpdatingPeerDeps flag is disabled', () => {
+      it('works with `workspace:` protocol range and DOES NOT update peerDependencies when allowPeerDepsUpdate flag is disabled', () => {
         const pkg = factory({
           dependencies: {
             a: 'workspace:^1.0.0',
@@ -565,7 +565,7 @@ describe('Package', () => {
         `);
       });
 
-      it('works with `workspace:` protocol range and DOES NOT update peerDependencies when allowUpdatingPeerDeps flag is enabled but the version is a range', () => {
+      it('works with `workspace:` protocol range and DOES NOT update peerDependencies when allowPeerDepsUpdate flag is enabled but the version is a range', () => {
         const pkg = factory({
           dependencies: {
             a: 'workspace:^1.0.0',
@@ -682,7 +682,7 @@ describe('Package', () => {
         const resolved: NpaResolveResult = npa.resolve('a', '^1.0.0', '.');
         resolved.workspaceSpec = 'workspace:1.0.0';
 
-        pkg.updateLocalDependency(resolved, '2.0.0', '^', true); // last arg is allowUpdatingPeerDeps=true
+        pkg.updateLocalDependency(resolved, '2.0.0', '^', true); // last arg is allowPeerDepsUpdate=true
 
         expect(pkg.toJSON()).toMatchInlineSnapshot(`
           {
@@ -738,7 +738,7 @@ describe('Package', () => {
         const resolvedB: NpaResolveResult = npa.resolve('b', '^1.0.0', '.');
         resolvedB.workspaceSpec = 'workspace:^1.0.0';
 
-        pkg.updateLocalDependency(resolvedA, '2.0.0', '^', true, true, 'publish'); // allowUpdatingPeerDeps=true, workspaceStrictMatch=true
+        pkg.updateLocalDependency(resolvedA, '2.0.0', '^', true, true, 'publish'); // allowPeerDepsUpdate=true, workspaceStrictMatch=true
         pkg.updateLocalDependency(resolvedB, '1.1.0', '^', true, true, 'publish');
 
         expect(pkg.toJSON()).toMatchInlineSnapshot(`
@@ -772,7 +772,7 @@ describe('Package', () => {
         const resolvedB: NpaResolveResult = npa.resolve('b', '^1.0.0', '.');
         resolvedB.workspaceSpec = 'workspace:~1.0.0';
 
-        pkg.updateLocalDependency(resolvedA, '2.0.0', '^', true, true, 'publish'); // allowUpdatingPeerDeps=true, workspaceStrictMatch=true
+        pkg.updateLocalDependency(resolvedA, '2.0.0', '^', true, true, 'publish'); // allowPeerDepsUpdate=true, workspaceStrictMatch=true
         pkg.updateLocalDependency(resolvedB, '1.1.0', '~', true, true, 'publish');
 
         expect(pkg.toJSON()).toMatchInlineSnapshot(`
@@ -807,7 +807,7 @@ describe('Package', () => {
         const resolvedB: NpaResolveResult = npa.resolve('b', '^1.0.0', '.');
         resolvedB.workspaceSpec = 'workspace:^1.0.0';
 
-        pkg.updateLocalDependency(resolvedA, '2.0.0', '^', false, true, 'publish'); // allowUpdatingPeerDeps=false, workspaceStrictMatch=true
+        pkg.updateLocalDependency(resolvedA, '2.0.0', '^', false, true, 'publish'); // allowPeerDepsUpdate=false, workspaceStrictMatch=true
         pkg.updateLocalDependency(resolvedB, '1.1.0', '^', false, true, 'publish');
 
         expect(pkg.toJSON()).toMatchInlineSnapshot(`
