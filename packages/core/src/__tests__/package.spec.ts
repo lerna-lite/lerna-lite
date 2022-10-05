@@ -492,7 +492,7 @@ describe('Package', () => {
             e: '^1.0.0',
           },
           peerDependencies: {
-            a: 'workspace:^1.0.0',
+            a: 'workspace:>=1.0.0',
           },
         });
 
@@ -511,7 +511,7 @@ describe('Package', () => {
               "e": "^1.0.0",
             },
             "peerDependencies": {
-              "a": "workspace:^1.0.0",
+              "a": "workspace:>=1.0.0",
             },
           }
         `);
@@ -749,7 +749,7 @@ describe('Package', () => {
           },
           peerDependencies: {
             // nothing wil be bumped by default without flag enabled
-            a: '>=1.0.0',
+            a: 'workspace:>=1.0.0',
             b: '~1.0.0',
           },
         });
@@ -783,6 +783,9 @@ describe('Package', () => {
             a: 'workspace:*',
             b: 'workspace:^2.2.4',
           },
+          peerDependencies: {
+            b: 'workspace:>=2.0.0',
+          },
         });
 
         const resolvedA: NpaResolveResult = npa.resolve('a', '^1.0.0', '.');
@@ -805,6 +808,9 @@ describe('Package', () => {
           {
             "dependencies": {
               "a": "latest",
+              "b": "^2.2.4",
+            },
+            "peerDependencies": {
               "b": "^2.2.4",
             },
           }
