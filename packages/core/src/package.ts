@@ -378,14 +378,10 @@ export class Package {
       }
     }
 
-    // when publishing, make sure to never publish any dependencies with a `workspace:` protocol prefix and simply remove it when found
-    if (updatedByCommand === 'publish') {
-      if (localDependencies?.[depName].startsWith('workspace:')) {
-        localDependencies[depName] = localDependencies[depName].replace('workspace:', '');
-      }
-      if (this.peerDependencies?.[depName].startsWith('workspace:')) {
-        this.peerDependencies[depName] = this.peerDependencies[depName].replace('workspace:', '');
-      }
+    // when allowUpdatingPeerDeps is disabled, we could end up with peerDependencies not being reviewed
+    // and still having the `workspace:` prefix so make sure to remove any of these prefixes
+    if (updatedByCommand === 'publish' && this.peerDependencies?.[depName].startsWith('workspace:')) {
+      this.peerDependencies[depName] = this.peerDependencies[depName].replace('workspace:', '');
     }
   }
 
