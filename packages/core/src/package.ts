@@ -307,12 +307,17 @@ export class Package {
     const localDependencies = this.retrievePackageDependencies(depName);
     const updatingDependencies = [localDependencies];
 
-    // when user wants to also bump peerDependencies we'll loop through them as well,
-    // however only do it when not a range operator, ie this would bump ("^2.0.0") but these would not (">=2.0.0" or "workspace:<2.0.0")
-    if (allowUpdatingPeerDeps) {
-      // prettier-ignore
-      if (this.peerDependencies?.[depName] && /^(workspace:)?[~|^]?([0-9\.])*$/.test(this.peerDependencies[depName] || '')) {
+    // when we have peer dependencies, we might need to perform certain things
+    if (this.peerDependencies?.[depName]) {
+      // when user allows peer bump and is a regular semver version, we'll push it to the array of dependencies to potentially bump
+      // however we won't when the semver has a range with operator, ie this would bump ("^2.0.0") but these would not (">=2.0.0" or "workspace:<2.0.0" or "workspace:*")
+      if (allowUpdatingPeerDeps && /^(workspace:)?[~|^]?([0-9\.]+)$/.test(this.peerDependencies[depName] || '')) {
         updatingDependencies.push(this.peerDependencies);
+      }
+      // when peer bump is disabled, we could end up with peerDependencies not being reviewed
+      // and some might still have the `workspace:` prefix so make sure to remove any of these prefixes
+      else if (updatedByCommand === 'publish' && this.peerDependencies[depName].startsWith('workspace:')) {
+        this.peerDependencies[depName] = this.peerDependencies[depName].replace('workspace:', '');
       }
     }
 
@@ -376,12 +381,6 @@ export class Package {
         // always serialize the full url (identical to previous resolved.saveSpec)
         depCollection[depName] = hosted.toString({ noGitPlus: false, noCommittish: false });
       }
-    }
-
-    // when allowUpdatingPeerDeps is disabled, we could end up with peerDependencies not being reviewed
-    // and still having the `workspace:` prefix so make sure to remove any of these prefixes
-    if (updatedByCommand === 'publish' && this.peerDependencies?.[depName].startsWith('workspace:')) {
-      this.peerDependencies[depName] = this.peerDependencies[depName].replace('workspace:', '');
     }
   }
 
