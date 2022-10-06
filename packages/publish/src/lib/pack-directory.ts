@@ -1,3 +1,4 @@
+import Arborist from '@npmcli/arborist';
 import path from 'path';
 import packlist from 'npm-packlist';
 import log from 'npmlog';
@@ -41,7 +42,11 @@ export function packDirectory(_pkg: Package, dir: string, options: PackConfig) {
 
   chain = chain.then(() => runLifecycle(pkg, 'prepack', opts));
   chain = chain.then(() => pkg.refresh());
-  chain = chain.then(() => packlist({ path: pkg.contents }));
+  chain = chain.then(() => {
+    const arborist = new Arborist({ path: pkg.contents });
+    return arborist.loadActual();
+  });
+  chain = chain.then((tree) => packlist(tree));
   chain = chain.then((files: string[]) =>
     tar.create(
       {
