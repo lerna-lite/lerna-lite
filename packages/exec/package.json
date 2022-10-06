@@ -45,7 +45,7 @@
     "@types/execa": "^2.0.0",
     "@types/p-map": "^2.0.0",
     "globby": "^11.1.0",
-    "yargs": "^17.5.1",
+    "yargs": "^17.6.0",
     "yargs-parser": "^21.1.1"
   }
 }

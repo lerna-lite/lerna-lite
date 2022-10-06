@@ -73,7 +73,7 @@
     "path": "^0.12.7",
     "pify": "^5.0.0",
     "resolve-from": "^5.0.0",
-    "semver": "^7.3.7",
+    "semver": "^7.3.8",
     "slash": "^3.0.0",
     "ssri": "^9.0.1",
     "strong-log-transformer": "^2.1.0",
@@ -83,7 +83,7 @@
     "write-file-atomic": "^4.0.2",
     "write-json-file": "^4.3.0",
     "write-pkg": "^4.0.0",
-    "yargs": "^17.5.1"
+    "yargs": "^17.6.0"
   },
   "devDependencies": {
     "@types/async": "^3.2.15",
