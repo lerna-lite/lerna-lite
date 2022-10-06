@@ -3,7 +3,7 @@ import log from 'npmlog';
 let pulsers = 0;
 let pulse: any;
 
-function pulseStart(prefix: string | Promise<string>) {
+function pulseStart(prefix: string | Promise<unknown>) {
   pulsers += 1;
 
   if (pulsers > 1) {
@@ -23,7 +23,7 @@ function pulseStop() {
   clearInterval(pulse);
 }
 
-export function pulseTillDone(prefix: string | Promise<string>, promise?: Promise<any> | string) {
+export function pulseTillDone(prefix: string | Promise<unknown>, promise?: Promise<any> | string) {
   if (!promise) {
     /* eslint-disable no-param-reassign */
     promise = prefix;
