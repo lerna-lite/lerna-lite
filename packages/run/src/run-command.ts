@@ -8,7 +8,12 @@ import {
   runTopologically,
   ValidationError,
 } from '@lerna-lite/core';
-import { FilterOptions, getFilteredPackages, Profiler } from '@lerna-lite/optional-cmd-common';
+import {
+  FilterOptions,
+  generateProfileOutputPath,
+  getFilteredPackages,
+  Profiler,
+} from '@lerna-lite/optional-cmd-common';
 import chalk from 'chalk';
 import { existsSync } from 'fs-extra';
 import pMap from 'p-map';
@@ -220,6 +225,13 @@ export class RunCommand extends Command<RunCommandOption & FilterOptions> {
     if (this.options.ci) {
       process.env.CI = 'true';
     }
+
+    if (this.options.profile) {
+      const absolutePath = generateProfileOutputPath(this.options.profileLocation);
+      // Nx requires a workspace relative path for this
+      process.env.NX_PROFILE = path.relative(this.project.rootPath, absolutePath);
+    }
+
     performance.mark('init-local');
     await this.configureNxOutput();
     const { extraOptions, targetDependencies, options } = await this.prepNxOptions();
@@ -269,6 +281,10 @@ export class RunCommand extends Command<RunCommandOption & FilterOptions> {
             ],
           }
         : {};
+
+    if (this.options.prefix === false && !this.options.stream) {
+      this.logger.warn(this.name, `"no-prefix" is ignored when not using streaming output.`);
+    }
 
     // prettier-ignore
     const outputStyle = this.options.stream
