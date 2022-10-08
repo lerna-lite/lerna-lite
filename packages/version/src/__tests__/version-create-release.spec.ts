@@ -10,6 +10,7 @@ jest.mock('../lib/remote-branch-exists', () => jest.requireActual('../lib/__mock
 jest.mock('@lerna-lite/core', () => ({
   ...(jest.requireActual('@lerna-lite/core') as any), // return the other real methods, below we'll mock only 2 of the methods
   Command: jest.requireActual('../../../core/src/command').Command,
+  conf: jest.requireActual('../../../core/src/command').conf,
   createGitHubClient: jest.requireActual('../../../core/src/__mocks__/github-client').createGitHubClient,
   createGitLabClient: jest.requireActual('../../../core/src/__mocks__/gitlab-client').createGitLabClient,
   parseGitRepo: jest.requireActual('../../../core/src/__mocks__/github-client').parseGitRepo,
