@@ -1,4 +1,5 @@
 jest.mock('../lib/npm-run-script');
+jest.mock('nx/src/tasks-runner/life-cycles/task-profiling-life-cycle');
 
 jest.mock('@lerna-lite/core', () => ({
   ...(jest.requireActual('@lerna-lite/core') as any), // return the other real methods, below we'll mock only 2 of the methods
@@ -494,6 +495,23 @@ describe('RunCommand', () => {
         'Using the "include-dependencies" option when nx.json has targetDefaults defined will include both task dependencies detected by Nx and project dependencies detected by Lerna. See https://lerna.js.org/docs/recipes/using-lerna-powered-by-nx-to-run-tasks#--include-dependencies for details.'
       );
       expect(collectedOutput).toContain('package-1');
+    });
+
+    it('logs a warning when using no-prefix and streaming output', async () => {
+      collectedOutput = '';
+      await lernaRun(testDir)('my-script', '--scope', 'package-1', '--no-prefix', '--no-stream');
+
+      const logMessages = loggingOutput('warn');
+      expect(logMessages).toContain('"no-prefix" is ignored when not using streaming output.');
+      expect(collectedOutput).toContain('package-1');
+    });
+
+    it('generate an Nx profile and assigns the project relative path to NX_PROFILE environment variable', async () => {
+      collectedOutput = '';
+      await lernaRun(testDir)('my-script', '--scope', 'package-1', '--profile');
+
+      expect(collectedOutput).toContain('package-1');
+      expect(process.env.NX_PROFILE).toContain('Lerna-Profile');
     });
   });
 });

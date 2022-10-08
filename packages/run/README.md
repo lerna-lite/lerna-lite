@@ -62,8 +62,7 @@ $ lerna run --scope my-component test
     - [`--no-prefix`](#--no-prefix)
     - [`--profile`](#--profile)
     - [`--profile-location <location>`](#--profile-location-location)
-  - Features
-    - [`useNx` (experimental)](#usenx-experimental)
+    - [`--use-nx`](#use-nx)
 
 ### `--npm-client <client>`
 
@@ -155,9 +154,9 @@ You can provide a custom location for the performance profile output. The path p
 $ lerna run build --profile --profile-location=logs/profile/
 ```
 
-### `useNx` (experimental)
+### `--use-nx`
 
-Enables integration with [Nx](https://nx.dev). Setting `"useNx": true` in `lerna.json` will tell Lerna to delegate
+Enables integration with [Nx](https://nx.dev). Enabling this option will tell Lerna to delegate
 running tasks to Nx instead of using `p-map` and `p-queue`. This only works if Nx is installed and `nx.json` is present. You can also skip cache by providing `--skip-nx-cache`
 
 Example of `nx.json`:
