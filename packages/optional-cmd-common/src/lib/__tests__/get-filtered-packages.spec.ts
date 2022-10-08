@@ -6,6 +6,7 @@ jest.mock('npmlog', () => ({
 
 jest.mock('@lerna-lite/core', () => ({
   ...(jest.requireActual('@lerna-lite/core') as any), // return the other real methods, below we'll mock only 2 of the methods
+  Command: jest.requireActual('../../../core/src/command').Command,
   logOutput: jest.requireActual('../../../../core/src/__mocks__/output').logOutput,
   promptConfirmation: jest.requireActual('../../../../core/src/__mocks__/prompt').promptConfirmation,
   promptSelectOne: jest.requireActual('../../../../core/src/__mocks__/prompt').promptSelectOne,
@@ -172,7 +173,7 @@ test('--scope package-{2,3,4} --since main', async () => {
   expect(result.map((node) => node.name)).toEqual(['package-4']);
   expect(collectUpdates).toHaveBeenLastCalledWith(
     // filter-packages before collect-updates
-    [2, 3, 4].map((n) => packageGraph.get(`package-${n}`).pkg),
+    [2, 3, 4].map((n) => packageGraph.get(`package-${n}`)!.pkg),
     packageGraph,
     execOpts,
     expect.objectContaining({ since: 'main' })

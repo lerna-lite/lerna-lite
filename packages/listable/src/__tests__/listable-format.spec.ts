@@ -1,5 +1,6 @@
 jest.mock('@lerna-lite/core', () => ({
   ...(jest.requireActual('@lerna-lite/core') as any), // return the other real methods, below we'll mock only 2 of the methods
+  Command: jest.requireActual('../../../core/src/command').Command,
   QueryGraph: jest.requireActual('../../../core/src/utils/query-graph').QueryGraph,
 }));
 
