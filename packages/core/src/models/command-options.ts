@@ -370,6 +370,6 @@ export interface RunCommandOption {
   /** when "useNx" is enabled, do we want to skip caching with Nx? */
   skipNxCache?: boolean;
 
-  /** enables integration with [Nx](https://nx.dev). */
+  /** enables integration with [Nx](https://nx.dev) instead of the default Lerna task runner (which uses `p-map` and `p-queue`). */
   useNx?: boolean;
 }

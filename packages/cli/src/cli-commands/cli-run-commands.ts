@@ -76,6 +76,12 @@ export default {
           hidden: true,
           type: 'boolean',
         },
+        'use-nx': {
+          group: 'Command Options:',
+          describe:
+            'enables integration with Nx instead of the default Lerna task runner (which uses `p-map` and `p-queue`).',
+          type: 'boolean',
+        },
         verbose: {
           group: 'Command Options:',
           describe: 'When "useNx" is true, show verbose output from dependent tasks.',

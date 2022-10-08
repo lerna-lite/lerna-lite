@@ -5,6 +5,10 @@ import upath from 'upath';
 
 import { ProfilerConfig, TraceEvent } from '../models';
 
+export function generateProfileOutputPath(outputDirectory?: string) {
+  return upath.join(upath.resolve(outputDirectory || '.'), getTimeBasedFilename());
+}
+
 const hrtimeToMicroseconds = (hrtime: any) => {
   return (hrtime[0] * 1e9 + hrtime[1]) / 1000;
 };
@@ -40,7 +44,7 @@ export class Profiler {
   constructor({ concurrency, log = npmlog, outputDirectory }: ProfilerConfig) {
     this.events = [];
     this.logger = log;
-    this.outputPath = upath.join(upath.resolve(outputDirectory || '.'), getTimeBasedFilename());
+    this.outputPath = generateProfileOutputPath(outputDirectory);
     this.threads = range(concurrency);
   }
 
