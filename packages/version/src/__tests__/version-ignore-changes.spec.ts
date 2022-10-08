@@ -10,6 +10,7 @@ jest.mock('../lib/remote-branch-exists', () => jest.requireActual('../lib/__mock
 // mocked modules of @lerna-lite/core
 jest.mock('@lerna-lite/core', () => ({
   ...(jest.requireActual('@lerna-lite/core') as any), // return the other real methods, below we'll mock only 2 of the methods
+  Command: jest.requireActual('../../../core/src/command').Command,
   logOutput: jest.requireActual('../../../core/src/__mocks__/output').logOutput,
   promptConfirmation: jest.requireActual('../../../core/src/__mocks__/prompt').promptConfirmation,
   promptSelectOne: jest.requireActual('../../../core/src/__mocks__/prompt').promptSelectOne,
