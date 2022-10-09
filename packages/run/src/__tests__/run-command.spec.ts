@@ -415,6 +415,16 @@ describe('RunCommand', () => {
       expect(collectedOutput).toContain('Successfully ran target');
     });
 
+    it('runs a script in packages in CI mode', async () => {
+      collectedOutput = '';
+      await lernaRun(testDir)('my-script', '--ci');
+
+      expect(process.env.CI).toBeTruthy();
+      expect(collectedOutput).toContain('package-1');
+      expect(collectedOutput).toContain('package-3');
+      expect(collectedOutput).toContain('Successfully ran target');
+    });
+
     it('runs a script with a colon in the script name', async () => {
       collectedOutput = '';
       await lernaRun(testDir)('another-script:but-with-colons');
