@@ -19,6 +19,7 @@ import path from 'path';
 
 // file under test
 import { npmPublish } from '../lib/npm-publish';
+import { LibNpmPublishOptions } from '../models';
 
 describe('npm-publish', () => {
   const mockTarData = Buffer.from('MOCK');
@@ -181,6 +182,20 @@ describe('npm-publish', () => {
 
     expect(publish).not.toHaveBeenCalled();
     expect(runLifecycle).toHaveBeenCalledTimes(2);
+  });
+
+  it.each([['true'], [true], ['false'], [false]])('aliases strict-ssl to strictSSL', async (strictSSLValue) => {
+    const opts = { 'strict-ssl': strictSSLValue } as Partial<LibNpmPublishOptions>;
+
+    await npmPublish(pkg, tarFilePath, opts);
+
+    expect(publish).toHaveBeenCalledWith(
+      expect.anything(),
+      expect.anything(),
+      expect.objectContaining({
+        strictSSL: strictSSLValue,
+      })
+    );
   });
 
   it('calls publish lifecycles', async () => {
