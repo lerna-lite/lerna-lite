@@ -129,6 +129,24 @@ test('--since returns all packages if no tag is found', async () => {
   );
 });
 
+test('--include-merged-tags returns all packages if no tag is found', async () => {
+  const packageGraph = await buildGraph(cwd);
+  const execOpts = { cwd };
+  const options: any = parseOptions('--since', '--include-merged-tags');
+  options.log = { notice: mockNotice };
+
+  const result = await getFilteredPackages(packageGraph, execOpts, options);
+
+  expect(result).toHaveLength(5);
+  expect(collectUpdates).toHaveBeenLastCalledWith(
+    expect.any(Array),
+    packageGraph,
+    execOpts,
+    expect.objectContaining({ since: '' })
+  );
+  expect(mockNotice).toHaveBeenCalledWith('filter', 'including merged tags');
+});
+
 test('--since returns packages updated since the last tag', async () => {
   (collectUpdates as any).setUpdated(cwd, 'package-2', 'package-3');
 
