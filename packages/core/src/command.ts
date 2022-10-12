@@ -321,7 +321,9 @@ export class Command<T extends AvailableCommandOption> {
       chain = chain.then((packages) => {
         this.packageGraph = new PackageGraph(
           packages || [],
-          (this.options as VersionCommandOption).allowPeerDepsUpdate ? 'allPlusPeerDependencies' : 'allDependencies'
+          (this.options as VersionCommandOption).allowPeerDependenciesUpdate
+            ? 'allPlusPeerDependencies'
+            : 'allDependencies'
         );
       });
     }

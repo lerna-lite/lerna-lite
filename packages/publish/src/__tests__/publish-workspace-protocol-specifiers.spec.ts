@@ -157,13 +157,13 @@ describe("workspace protocol 'workspace:' specifiers", () => {
   });
 
   describe('workspace-strict-match enabled', () => {
-    it('overwrites workspace protocol with local minor bumped version before npm publish but after git commit & also expect bump peerDependencies when allowPeerDepsUpdate flag is enabled', async () => {
+    it('overwrites workspace protocol with local minor bumped version before npm publish but after git commit & also expect bump peerDependencies when allowPeerDependenciesUpdate flag is enabled', async () => {
       const cwd = await initFixture('workspace-protocol-specs');
 
       await gitTag(cwd, 'v1.0.0');
       await setupChanges(cwd);
       await new PublishCommand(
-        createArgv(cwd, '--bump', 'minor', '--yes', '--workspace-strict-match', '--allow-peer-deps-update')
+        createArgv(cwd, '--bump', 'minor', '--yes', '--workspace-strict-match', '--allow-peer-dependencies-update')
       );
 
       expect((writePkg as any).updatedVersions()).toEqual({

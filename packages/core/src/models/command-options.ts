@@ -176,7 +176,7 @@ export interface VersionCommandOption {
    * allow updating peer dependencies versions.
    * Note that `peerDependencies` with semver range (ie `>=2.0.0`) will never be bumped even with this flag enabled.
    */
-  allowPeerDepsUpdate?: boolean;
+  allowPeerDependenciesUpdate?: boolean;
 
   /** Amend the existing commit, instead of generating a new one. */
   amend?: boolean;

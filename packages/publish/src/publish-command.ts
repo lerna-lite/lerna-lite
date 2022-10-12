@@ -574,7 +574,7 @@ export class PublishCommand extends Command<PublishCommandOption> {
           resolved,
           depVersion,
           this.savePrefix,
-          this.options.allowPeerDepsUpdate,
+          this.options.allowPeerDependenciesUpdate,
           this.options.workspaceStrictMatch,
           this.commandName
         );
@@ -600,7 +600,7 @@ export class PublishCommand extends Command<PublishCommandOption> {
           resolved,
           depVersion,
           this.savePrefix,
-          this.options.allowPeerDepsUpdate,
+          this.options.allowPeerDependenciesUpdate,
           this.options.workspaceStrictMatch,
           this.commandName
         );
@@ -629,7 +629,7 @@ export class PublishCommand extends Command<PublishCommandOption> {
           resolved,
           depVersion,
           this.savePrefix,
-          this.options.allowPeerDepsUpdate,
+          this.options.allowPeerDependenciesUpdate,
           this.options.workspaceStrictMatch,
           this.commandName
         );
@@ -743,7 +743,7 @@ export class PublishCommand extends Command<PublishCommandOption> {
       graphType:
         this.options.graphType === 'dependencies'
           ? 'dependencies'
-          : this.options.allowPeerDepsUpdate
+          : this.options.allowPeerDependenciesUpdate
             ? 'allPlusPeerDependencies'
             : 'allDependencies',
     });
