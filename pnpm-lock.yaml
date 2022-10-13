@@ -207,7 +207,7 @@ importers:
       node-fetch: ^2.6.7
       npm-package-arg: ^9.1.2
       npm-packlist: ^6.0.1
-      npm-registry-fetch: ^13.3.1
+      npm-registry-fetch: ^14.0.0
       npmlog: ^6.0.2
       p-map: ^4.0.0
       p-pipe: ^3.1.0
@@ -262,7 +262,7 @@ importers:
       node-fetch: 2.6.7
       npm-package-arg: 9.1.2
       npm-packlist: 6.0.1
-      npm-registry-fetch: 13.3.1
+      npm-registry-fetch: 14.0.0
       npmlog: 6.0.2
       p-map: 4.0.0
       p-pipe: 3.1.0
@@ -463,7 +463,7 @@ importers:
       load-json-file: ^6.2.0
       npm-package-arg: ^9.1.2
       npm-packlist: ^6.0.1
-      npm-registry-fetch: ^13.3.1
+      npm-registry-fetch: ^14.0.0
       npmlog: ^6.0.2
       p-map: ^4.0.0
       p-pipe: ^3.1.0
@@ -494,7 +494,7 @@ importers:
       libnpmpublish: 6.0.5
       npm-package-arg: 9.1.2
       npm-packlist: 6.0.1
-      npm-registry-fetch: 13.3.1
+      npm-registry-fetch: 14.0.0
       npmlog: 6.0.2
       p-map: 4.0.0
       p-pipe: 3.1.0
@@ -1351,6 +1351,13 @@ packages:
     engines: {node: ^12.13.0 || ^14.15.0 || >=16.0.0}
     dependencies:
       '@gar/promisify': 1.1.3
+      semver: 7.3.8
+    dev: false
+
+  /@npmcli/fs/3.0.0:
+    resolution: {integrity: sha512-GdeVD+dnBxzMslTFvnctLX5yIqV4ZNZBWNbo1OejQ++bZpnFNQ1AjOn9Sboi+LzheQbCBU1ts1mhEVduHrcZOQ==}
+    engines: {node: ^14.17.0 || ^16.13.0 || >=18.0.0}
+    dependencies:
       semver: 7.3.8
     dev: false
 
@@ -2513,6 +2520,28 @@ packages:
       p-map: 4.0.0
       promise-inflight: 1.0.1
       rimraf: 3.0.2
+      ssri: 9.0.1
+      tar: 6.1.11
+      unique-filename: 2.0.1
+    transitivePeerDependencies:
+      - bluebird
+    dev: false
+
+  /cacache/17.0.0:
+    resolution: {integrity: sha512-5hYD+c8Ytmymo9b8tPgYWrWfHOzaO8M8jMUkyiEYfeLTwo70MUaD/yA1pNONi3upx02JIn3mtpDuSCXoQgtlHw==}
+    engines: {node: ^14.17.0 || ^16.13.0 || >=18.0.0}
+    dependencies:
+      '@npmcli/fs': 3.0.0
+      '@npmcli/move-file': 2.0.0
+      fs-minipass: 2.1.0
+      glob: 8.0.3
+      lru-cache: 7.10.1
+      minipass: 3.1.6
+      minipass-collect: 1.0.2
+      minipass-flush: 1.0.5
+      minipass-pipeline: 1.2.4
+      p-map: 4.0.0
+      promise-inflight: 1.0.1
       ssri: 9.0.1
       tar: 6.1.11
       unique-filename: 2.0.1
@@ -5221,7 +5250,32 @@ packages:
     engines: {node: ^12.13.0 || ^14.15.0 || >=16.0.0}
     dependencies:
       agentkeepalive: 4.2.1
-      cacache: 16.1.1
+      cacache: 16.1.3
+      http-cache-semantics: 4.1.0
+      http-proxy-agent: 5.0.0
+      https-proxy-agent: 5.0.1
+      is-lambda: 1.0.1
+      lru-cache: 7.10.1
+      minipass: 3.1.6
+      minipass-collect: 1.0.2
+      minipass-fetch: 2.1.0
+      minipass-flush: 1.0.5
+      minipass-pipeline: 1.2.4
+      negotiator: 0.6.3
+      promise-retry: 2.0.1
+      socks-proxy-agent: 7.0.0
+      ssri: 9.0.1
+    transitivePeerDependencies:
+      - bluebird
+      - supports-color
+    dev: false
+
+  /make-fetch-happen/11.0.0:
+    resolution: {integrity: sha512-oVk/+BQuW+fUB/RjF8jUtgsVI9wMzcHyahdea6gcshVLWQygW4OlxqEibCEh9XamMVbrXVOAH9dCZrzdLQ1lwg==}
+    engines: {node: ^14.17.0 || ^16.13.0 || >=18.0.0}
+    dependencies:
+      agentkeepalive: 4.2.1
+      cacache: 17.0.0
       http-cache-semantics: 4.1.0
       http-proxy-agent: 5.0.0
       https-proxy-agent: 5.0.1
@@ -5656,6 +5710,22 @@ packages:
     engines: {node: ^12.13.0 || ^14.15.0 || >=16.0.0}
     dependencies:
       make-fetch-happen: 10.1.7
+      minipass: 3.1.6
+      minipass-fetch: 2.1.0
+      minipass-json-stream: 1.0.1
+      minizlib: 2.1.2
+      npm-package-arg: 9.1.2
+      proc-log: 2.0.1
+    transitivePeerDependencies:
+      - bluebird
+      - supports-color
+    dev: false
+
+  /npm-registry-fetch/14.0.0:
+    resolution: {integrity: sha512-suDRgyZKQcy3z10gEhPETQPmz0rJCUQQHQVsdJo1HlU9Y4dAt8WundNTNlHBONfyQUAkhFbdGUysoKHx0+6z+A==}
+    engines: {node: ^14.17.0 || ^16.13.0 || >=18.0.0}
+    dependencies:
+      make-fetch-happen: 11.0.0
       minipass: 3.1.6
       minipass-fetch: 2.1.0
       minipass-json-stream: 1.0.1
