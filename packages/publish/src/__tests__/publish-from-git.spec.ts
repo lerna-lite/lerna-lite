@@ -99,31 +99,9 @@ describe('publish from-git', () => {
     ]);
 
     // check that @my-workspace/package-1 is properly escaped in the tarball tgz name
-    expect(npmPublish).toHaveBeenNthCalledWith(
-      1,
+    expect(npmPublish).toHaveBeenCalledWith(
       expect.objectContaining({ name: '@my-workspace/package-1', version: '1.0.0' }),
       expect.stringContaining('my-workspace-package-1-1.0.0.tgz'),
-      expect.any(Object),
-      expect.any(Object)
-    );
-    expect(npmPublish).toHaveBeenNthCalledWith(
-      2,
-      expect.objectContaining({ name: '@my-workspace/package-4', version: '1.0.0' }),
-      expect.stringContaining('my-workspace-package-4-1.0.0.tgz'),
-      expect.any(Object),
-      expect.any(Object)
-    );
-    expect(npmPublish).toHaveBeenNthCalledWith(
-      3,
-      expect.objectContaining({ name: '@my-workspace/package-2', version: '1.0.0' }),
-      expect.stringContaining('my-workspace-package-2-1.0.0.tgz'),
-      expect.any(Object),
-      expect.any(Object)
-    );
-    expect(npmPublish).toHaveBeenNthCalledWith(
-      4,
-      expect.objectContaining({ name: '@my-workspace/package-3', version: '1.0.0' }),
-      expect.stringContaining('my-workspace-package-3-1.0.0.tgz'),
       expect.any(Object),
       expect.any(Object)
     );

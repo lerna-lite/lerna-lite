@@ -439,16 +439,15 @@ describe('PublishCommand', () => {
   });
 
   describe('--registry', () => {
-    it('passes registry to npm commands', async () => {
-      const testDir = await initFixture('normal');
+    it('passes registry to npm commands that also includes workspace in the name prefix', async () => {
+      const testDir = await initFixture('normal-workspace-name-prefixed');
       const registry = 'https://my-private-registry';
 
-      // await lernaPublish(testDir)("--registry", registry);
-      await new PublishCommand(createArgv(testDir, '--registry', registry));
+      await lernaPublish(testDir)('--registry', registry);
 
       expect(npmPublish).toHaveBeenCalledWith(
-        expect.objectContaining({ name: 'package-1' }),
-        '/TEMP_DIR/package-1-MOCKED.tgz',
+        expect.objectContaining({ name: '@my-workspace/package-1' }),
+        '/TEMP_DIR/@my-workspace/package-1-MOCKED.tgz',
         expect.objectContaining({ registry }),
         expect.objectContaining({ otp: undefined })
       );
