@@ -76,6 +76,13 @@ describe('RunCommand', () => {
       testDir = await initFixture('basic');
     });
 
+    it('is displaying a warning when using deprecated flag --cmd-dry-run', async () => {
+      await lernaRun(testDir)('my-script', '--cmd-dry-run');
+
+      const logMessages = loggingOutput();
+      expect(logMessages).toContain('--cmd-dry-run has been renamed --dry-run');
+    });
+
     it('should complain if invoked with an empty script', async () => {
       const command = lernaRun(testDir)('');
 
@@ -108,8 +115,8 @@ describe('RunCommand', () => {
       expect(ranInPackagesStreaming(testDir)).toMatchSnapshot();
     });
 
-    it('runs a script in packages in capturing mode with --cmd-dry-run', async () => {
-      await lernaRun(testDir)('my-script', '--cmd-dry-run');
+    it('runs a script in packages in capturing mode with --dry-run', async () => {
+      await lernaRun(testDir)('my-script', '--dry-run');
 
       ranInPackagesCapturing(testDir);
       const logLines = (logOutput as any).logged().split('\n');
@@ -304,10 +311,10 @@ describe('RunCommand', () => {
       `);
     });
 
-    it('optionally streams output in cmd-dry-run mode and expect them all to be logged', async () => {
+    it('optionally streams output in --dry-run mode and expect them all to be logged', async () => {
       const testDir = await initFixture('toposort');
 
-      await new RunCommand(createArgv(testDir, 'env', '--concurrency', '1', '--no-sort', '--stream', '--cmd-dry-run'));
+      await new RunCommand(createArgv(testDir, 'env', '--concurrency', '1', '--no-sort', '--stream', '--dry-run'));
 
       const logLines = (logOutput as any).logged().split('\n');
       expect(logLines).toEqual([

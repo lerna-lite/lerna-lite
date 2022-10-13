@@ -12,11 +12,11 @@ export function gitCheckout(
   stagedFiles: string[],
   gitOpts: { granularPathspec: boolean },
   execOpts: ExecOpts,
-  gitDryRun = false
+  dryRun = false
 ) {
   const files = (gitOpts.granularPathspec ? stagedFiles : '.') as string;
 
   log.silly('gitCheckout', files);
 
-  return exec('git', ['checkout', '--'].concat(files), execOpts, gitDryRun);
+  return exec('git', ['checkout', '--'].concat(files), execOpts, dryRun);
 }

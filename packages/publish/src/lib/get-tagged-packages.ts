@@ -9,7 +9,7 @@ import { exec, ExecOpts, PackageGraph } from '@lerna-lite/core';
  * @param {import("@lerna/child-process").ExecOpts} execOpts
  * @returns {Promise<import("@lerna/package-graph").PackageGraphNode[]>}
  */
-export function getTaggedPackages(packageGraph: PackageGraph, rootPath: string, execOpts: ExecOpts, gitDryRun = false) {
+export function getTaggedPackages(packageGraph: PackageGraph, rootPath: string, execOpts: ExecOpts, dryRun = false) {
   log.silly('getTaggedPackages', '');
 
   // @see https://stackoverflow.com/a/424142/5707
@@ -18,7 +18,7 @@ export function getTaggedPackages(packageGraph: PackageGraph, rootPath: string, 
     'git',
     ['diff-tree', '--name-only', '--no-commit-id', '--root', '-r', '-c', 'HEAD'],
     execOpts,
-    gitDryRun
+    dryRun
   ).then(({ stdout }) => {
     const manifests = stdout.split('\n').filter((fp) => path.basename(fp) === 'package.json');
     const locations = new Set<string>(manifests.map((fp) => path.join(rootPath, path.dirname(fp))));

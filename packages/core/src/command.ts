@@ -262,7 +262,7 @@ export class Command<T extends AvailableCommandOption> {
     const gitCommand = 'git';
     const gitArgs = ['rev-parse'];
 
-    if ((this.options as unknown as PublishCommandOption).gitDryRun) {
+    if ((this.options as unknown as PublishCommandOption).dryRun) {
       logExecCommand(gitCommand, gitArgs);
       return true;
     }

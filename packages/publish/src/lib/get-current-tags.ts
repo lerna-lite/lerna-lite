@@ -8,7 +8,7 @@ import { exec, ExecOpts } from '@lerna-lite/core';
  * @param {string} matchingPattern
  * @returns {string[]}
  */
-export function getCurrentTags(execOpts: ExecOpts, matchingPattern: string, gitDryRun = false): Promise<string[]> {
+export function getCurrentTags(execOpts: ExecOpts, matchingPattern: string, dryRun = false): Promise<string[]> {
   log.silly('getCurrentTags', 'matching %j', matchingPattern);
 
   const opts = Object.assign({}, execOpts, {
@@ -20,7 +20,7 @@ export function getCurrentTags(execOpts: ExecOpts, matchingPattern: string, gitD
     'git',
     ['tag', '--sort', 'version:refname', '--points-at', 'HEAD', '--list', matchingPattern],
     opts,
-    gitDryRun
+    dryRun
   ).then((result) => {
     const lines = result.stdout.split('\n').filter(Boolean);
 

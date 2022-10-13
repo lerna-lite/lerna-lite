@@ -24,10 +24,10 @@ const transformOutput = o(filterEmpty, o(splitOnNewLine, colorizeStats));
  * @param {UncommittedConfig} options
  * @returns {Promise<string[]>} A list of uncommitted files
  */
-export function collectUncommitted({ cwd, log = npmlog }: UncommittedConfig, gitDryRun = false): Promise<string[]> {
+export function collectUncommitted({ cwd, log = npmlog }: UncommittedConfig, dryRun = false): Promise<string[]> {
   log.silly('collect-uncommitted', 'git status --porcelain (async)');
 
-  return exec('git', ['status', '--porcelain'], { cwd }, gitDryRun).then(({ stdout }) => transformOutput(stdout));
+  return exec('git', ['status', '--porcelain'], { cwd }, dryRun).then(({ stdout }) => transformOutput(stdout));
 }
 
 /**
@@ -35,9 +35,9 @@ export function collectUncommitted({ cwd, log = npmlog }: UncommittedConfig, git
  * @param {UncommittedConfig} options
  * @returns {string[]} A list of uncommitted files
  */
-export function collectUncommittedSync({ cwd, log = npmlog }: UncommittedConfig, gitDryRun = false): string[] {
+export function collectUncommittedSync({ cwd, log = npmlog }: UncommittedConfig, dryRun = false): string[] {
   log.silly('collect-uncommitted', 'git status --porcelain (sync)');
 
-  const stdout = execSync('git', ['status', '--porcelain'], { cwd }, gitDryRun);
+  const stdout = execSync('git', ['status', '--porcelain'], { cwd }, dryRun);
   return transformOutput(stdout);
 }

@@ -356,7 +356,7 @@ export class RunCommand extends Command<RunCommandOption & FilterOptions> {
   }
 
   runScriptInPackageStreaming(pkg: Package) {
-    if (this.options.cmdDryRun) {
+    if (this.options.dryRun) {
       return this.dryRunScript(this.script, pkg.name);
     }
 
@@ -370,7 +370,7 @@ export class RunCommand extends Command<RunCommandOption & FilterOptions> {
   runScriptInPackageCapturing(pkg: Package) {
     const getElapsed = timer();
 
-    if (this.options.cmdDryRun) {
+    if (this.options.dryRun) {
       return this.dryRunScript(this.script, pkg.name);
     }
 

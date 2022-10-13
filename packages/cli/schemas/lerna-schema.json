@@ -163,8 +163,8 @@
           "type": "object",
           "description": "Options for the `exec` command.",
           "properties": {
-            "cmdDryRun": {
-              "$ref": "#/$defs/commandOptions/exec/cmdDryRun"
+            "dryRun": {
+              "$ref": "#/$defs/commandOptions/exec/dryRun"
             },
             "stream": {
               "$ref": "#/$defs/commandOptions/shared/stream"
@@ -325,6 +325,9 @@
             "canary": {
               "$ref": "#/$defs/commandOptions/publish/canary"
             },
+            "dryRun": {
+              "$ref": "#/$defs/commandOptions/publish/dryRun"
+            },
             "preid": {
               "$ref": "#/$defs/commandOptions/shared/preid"
             },
@@ -441,8 +444,8 @@
           "type": "object",
           "description": "Options for the `run` command.",
           "properties": {
-            "cmdDryRun": {
-              "$ref": "#/$defs/commandOptions/run/cmdDryRun"
+            "dryRun": {
+              "$ref": "#/$defs/commandOptions/run/dryRun"
             },
             "stream": {
               "$ref": "#/$defs/commandOptions/shared/stream"
@@ -563,14 +566,14 @@
             "changelogVersionMessage": {
               "$ref": "#/$defs/commandOptions/version/changelogVersionMessage"
             },
+            "dryRun": {
+              "$ref": "#/$defs/commandOptions/version/dryRun"
+            },
             "exact": {
               "$ref": "#/$defs/commandOptions/shared/exact"
             },
             "forcePublish": {
               "$ref": "#/$defs/commandOptions/shared/forcePublish"
-            },
-            "gitDryRun": {
-              "$ref": "#/$defs/commandOptions/version/gitDryRun"
             },
             "gitRemote": {
               "$ref": "#/$defs/commandOptions/version/gitRemote"
@@ -1148,7 +1151,7 @@
         }
       },
       "exec": {
-        "cmdDryRun": {
+        "dryRun": {
           "type": "boolean",
           "description": "During `lerna exec`, when true, displays the process command that would be performed without executing it."
         }
@@ -1185,6 +1188,10 @@
         "distTag": {
           "type": "string",
           "description": "During `lerna publish`, publish packages with the specified npm dist-tag."
+        },
+        "dryRun": {
+          "type": "boolean",
+          "description": "During `lerna publish`, displays the process command that would be performed without executing it."
         },
         "preDistTag": {
           "type": "string",
@@ -1235,7 +1242,7 @@
         }
       },
       "run": {
-        "cmdDryRun": {
+        "dryRun": {
           "type": "boolean",
           "description": "During `lerna run`, when true, displays the process command that would be performed without executing it."
         },
@@ -1287,7 +1294,7 @@
           "type": "string",
           "description": "For `lerna version`, the custom conventional-changelog preset."
         },
-        "gitDryRun": {
+        "dryRun": {
           "type": "boolean",
           "description": "During `lerna version`, displays the process command that would be performed without executing it."
         },

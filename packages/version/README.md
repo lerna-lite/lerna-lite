@@ -83,7 +83,7 @@ Running `lerna version --conventional-commits` without the above flags will rele
     - [`--create-release <type>`](#--create-release-type)
     - [`--exact`](#--exact)
     - [`--force-publish`](#--force-publish)
-    - [`--git-dry-run`](#--git-dry-run) (new)
+    - [`--dry-run`](#--dry-run) (new)
     - [`--git-remote <name>`](#--git-remote-name)
     - [`--ignore-changes`](#--ignore-changes)
     - [`--ignore-scripts`](#--ignore-scripts)
@@ -255,7 +255,7 @@ lerna version --conventional-commits --changelog-include-commits-client-login " 
 # **deps:** update dependency git-url-parse to v12 ([978bf36](https://github.com/.../978bf36)) by _Whitesource Renovate (bot@renovateapp.com)
 ```
 
-> We recommend you first try it with the `--git-dry-run` option so that you can validate your remote client access and inspect the changelog output. Make sure to revert your changes once you're satisfied with the output.
+> We recommend you first try it with the `--dry-run` option so that you can validate your remote client access and inspect the changelog output. Make sure to revert your changes once you're satisfied with the output.
 
 ### `--changelog-include-commits-client-login [msg]`
 Specify if we want to include commit remote client login (ie GitHub login username) to the end of each changelog commit entry and wrapped in `(@...)`. You could also provide a custom format by using any of these tokens (`%l`, `%a`, `%e`), see examples below.
@@ -283,7 +283,7 @@ lerna version --conventional-commits --changelog-include-commits-client-login " 
 # **deps:** update dependency git-url-parse to v12 ([978bf36](https://github.com/.../978bf36)) by @renovate-bot, _Whitesource Renovate (bot@renovateapp.com)
 ```
 
-> We recommend you first try it with the `--git-dry-run` option so that you can validate your remote client access and inspect the changelog output. Make sure to revert your changes once you're satisfied with the output.
+> We recommend you first try it with the `--dry-run` option so that you can validate your remote client access and inspect the changelog output. Make sure to revert your changes once you're satisfied with the output.
 
 
 ### `--changelog-header-message <msg>`
@@ -352,14 +352,14 @@ When run with this flag, `lerna version` will force publish the specified packag
 
 > This will skip the `lerna changed` check for changed packages and forces a package that didn't have a `git diff` change to be updated.
 
-### `--git-dry-run`
+### `--dry-run`
 
 Displays the git command that would be performed without actually executing it, however please note that it will still create all the changelogs. This could be helpful for troubleshooting and also to see changelog changes without committing them to Git.
 
 > **Note** changelogs will still be created (when enabled) even in dry-run mode, so it could be useful to see what gets created without them being committed (however, make sure to revert the changes and roll back your version in `lerna.json` once you're satisfied with the output).
 
 ```sh
-$ lerna run watch --git-dry-run
+$ lerna run watch --dry-run
 ```
 
 ### `--git-remote <name>`

@@ -4,30 +4,26 @@ import { exec, Package, spawnStreaming } from '@lerna-lite/core';
 import { getNpmExecOpts } from './get-npm-exec-opts';
 import { RunScriptOption, ScriptStreamingOption } from '../models';
 
-export function npmRunScript(
-  script: string,
-  { args, npmClient, pkg, reject = true }: RunScriptOption,
-  cmdDryRun = false
-) {
+export function npmRunScript(script: string, { args, npmClient, pkg, reject = true }: RunScriptOption, dryRun = false) {
   log.silly('npmRunScript', script, args, pkg.name);
 
   const argv = ['run', script, ...args];
   const opts = makeOpts(pkg, reject);
 
-  return exec(npmClient, argv, opts, cmdDryRun);
+  return exec(npmClient, argv, opts, dryRun);
 }
 
 export function npmRunScriptStreaming(
   script: string,
   { args, npmClient, pkg, prefix, reject = true }: ScriptStreamingOption,
-  cmdDryRun = false
+  dryRun = false
 ) {
   log.silly('npmRunScriptStreaming', JSON.stringify([script, args, pkg.name]));
 
   const argv = ['run', script, ...args];
   const opts = makeOpts(pkg, reject);
 
-  return spawnStreaming(npmClient, argv, opts, prefix && pkg.name, cmdDryRun);
+  return spawnStreaming(npmClient, argv, opts, prefix && pkg.name, dryRun);
 }
 
 function makeOpts(pkg: Package, reject: boolean) {

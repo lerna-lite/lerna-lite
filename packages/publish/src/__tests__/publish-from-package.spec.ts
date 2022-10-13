@@ -89,7 +89,7 @@ describe('publish from-package', () => {
       return pkgs.map((pkg) => packageGraph.get(pkg.name));
     });
 
-    await new PublishCommand(createArgv(cwd, '--bump', 'from-package', '--git-dry-run'));
+    await new PublishCommand(createArgv(cwd, '--bump', 'from-package', '--dry-run'));
 
     expect(promptConfirmation).toHaveBeenLastCalledWith('[dry-run] Are you sure you want to publish these packages?');
     expect((logOutput as any).logged()).toMatch('Found 2 packages to publish:');

@@ -35,7 +35,7 @@ export function createRelease(
   client: ReleaseClient,
   { tags, releaseNotes }: ReleaseCommandProps,
   { gitRemote, execOpts }: ReleaseOptions,
-  gitDryRun = false
+  dryRun = false
 ) {
   const { GH_TOKEN } = process.env;
   const repo = parseGitRepo(gitRemote, execOpts);
@@ -77,7 +77,7 @@ export function createRelease(
         prerelease: prereleaseParts.length > 0,
       };
 
-      if (gitDryRun) {
+      if (dryRun) {
         log.info(
           chalk.bold.magenta('[dry-run] >'),
           `Create Release with repo options: `,

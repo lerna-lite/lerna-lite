@@ -166,8 +166,15 @@ describe('ExecCommand', () => {
       expect(calledInPackages()).toEqual(['package-1', 'package-2']);
     });
 
-    it('should run a command in dry-run mode and expect them all to be logged', async () => {
+    it('is displaying a warning when using deprecated flag --cmd-dry-run', async () => {
       await lernaExec(testDir)('ls', '--cmd-dry-run');
+
+      const logMessages = loggingOutput();
+      expect(logMessages).toContain('--cmd-dry-run has been renamed --dry-run');
+    });
+
+    it('should run a command in dry-run mode and expect them all to be logged', async () => {
+      await lernaExec(testDir)('ls', '--dry-run');
 
       const logLines = (logOutput as any).logged().split('\n');
       expect(logLines).toEqual(['[dry-run] > package-1', '[dry-run] > package-2']);
@@ -220,7 +227,7 @@ describe('ExecCommand', () => {
     });
 
     it('executes a command in all packages with --stream in dry-run mode and expect them all to be logged', async () => {
-      await lernaExec(testDir)('--stream', 'ls', '--cmd-dry-run');
+      await lernaExec(testDir)('--stream', 'ls', '--dry-run');
 
       const logLines = (logOutput as any).logged().split('\n');
 

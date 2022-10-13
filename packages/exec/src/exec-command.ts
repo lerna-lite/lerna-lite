@@ -177,14 +177,14 @@ export class ExecCommand extends Command<ExecCommandOption & FilterOptions> {
   }
 
   runCommandInPackageStreaming(pkg: Package) {
-    if (this.options.cmdDryRun) {
+    if (this.options.dryRun) {
       return this.dryRunExec(this.command, pkg.name);
     }
     return spawnStreaming(this.command, this.args, this.getOpts(pkg), this.prefix && pkg.name);
   }
 
   runCommandInPackageCapturing(pkg: Package) {
-    if (this.options.cmdDryRun) {
+    if (this.options.dryRun) {
       return this.dryRunExec(this.command, pkg.name);
     }
     return spawn(this.command, this.args, this.getOpts(pkg));

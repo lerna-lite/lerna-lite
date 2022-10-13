@@ -13,7 +13,7 @@ export function gitCommit(
   message: string,
   { amend, commitHooks, signGitCommit, signoffGitCommit }: GitCommitOption,
   opts: ExecOpts,
-  gitDryRun = false
+  dryRun = false
 ) {
   log.silly('gitCommit', message);
   const args = ['commit'];
@@ -40,5 +40,5 @@ export function gitCommit(
   }
 
   log.verbose('git', args.join(' '));
-  return exec('git', args, opts, gitDryRun);
+  return exec('git', args, opts, dryRun);
 }

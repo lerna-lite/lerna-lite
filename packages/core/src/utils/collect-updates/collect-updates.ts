@@ -21,7 +21,7 @@ export function collectUpdates(
   packageGraph: PackageGraph,
   execOpts: ExecOpts,
   commandOptions: UpdateCollectorOptions,
-  gitDryRun = false
+  dryRun = false
 ) {
   const { forcePublish, conventionalCommits, conventionalGraduate, excludeDependents, isIndependent } = commandOptions;
 
@@ -49,11 +49,7 @@ export function collectUpdates(
     }
 
     // describe the last annotated tag in the current branch
-    const { sha, refCount, lastTagName } = describeRefSync(
-      describeOptions,
-      commandOptions.includeMergedTags,
-      gitDryRun
-    );
+    const { sha, refCount, lastTagName } = describeRefSync(describeOptions, commandOptions.includeMergedTags, dryRun);
     // TODO: warn about dirty tree?
 
     if (refCount === '0' && forced.size === 0 && !committish) {

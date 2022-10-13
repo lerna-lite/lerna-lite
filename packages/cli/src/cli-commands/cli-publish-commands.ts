@@ -25,6 +25,11 @@ export default {
         alias: 'canary',
         type: 'boolean',
       },
+      'dry-run': {
+        describe: 'Displays the process command that would be performed without executing it.',
+        group: 'Publish Command Options:',
+        type: 'boolean',
+      },
       // preid is copied from ../version/command because a whitelist for one option isn't worth it
       preid: {
         describe: 'Specify the prerelease identifier when publishing a prerelease',
@@ -142,6 +147,12 @@ export default {
     yargs.group(Object.keys(opts).concat(sharedKeys), 'Command Options:');
 
     return yargs
+      .option('git-dry-run', {
+        // TODO: remove in next major release
+        hidden: true,
+        conflicts: 'dry-run',
+        type: 'boolean',
+      })
       .option('npm-tag', {
         // TODO: remove in next major release
         hidden: true,
@@ -169,6 +180,13 @@ export default {
           delete argv['npm-tag'];
           log.warn('deprecated', '--npm-tag has been renamed --dist-tag');
         }
+
+        if (argv.gitDryRun) {
+          argv.dryRun = argv.gitDryRun;
+          delete argv.gitDryRun;
+          log.warn('deprecated', '--git-dry-run has been renamed --dry-run');
+        }
+
         /* eslint-enable no-param-reassign */
 
         return argv;
