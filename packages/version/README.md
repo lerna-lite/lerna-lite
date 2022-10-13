@@ -186,7 +186,7 @@ with the new flag both deps would be updated and bumped, for example if we do a 
 ```
 
 ##### without flag
-without the flag it will only update the first package it finds, that is `dependencies` in this case, so peer deps would never be updateed
+without the flag it will only update the first package it finds, that is `dependencies` in this case, so peer deps would never be updated
 ```sh
 {
   "name": "B",
@@ -208,7 +208,7 @@ with the flag enabled, it will update regular semver like these
 - `^1.4.0-alpha.0`
 - `workspace:^1.2.3`
 
-but it will never change version with ranges
+but it will never update or change versions with ranges
 - `>=1.0.0`
 - `>=1.0.0 <2.0.0`
 - `^1 | ^2 | ^3`
