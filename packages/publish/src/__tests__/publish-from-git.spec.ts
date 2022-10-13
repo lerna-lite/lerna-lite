@@ -79,6 +79,56 @@ describe('publish from-git', () => {
     ]);
   });
 
+  it('publishes tagged packages that includes workspace in the name prefix', async () => {
+    const cwd = await initFixture('normal-workspace-name-prefixed');
+
+    await gitTag(cwd, 'v1.0.0');
+    await new PublishCommand(createArgv(cwd, '--bump', 'from-git'));
+
+    // called from chained describeRef()
+    expect(throwIfUncommitted).toHaveBeenCalled();
+
+    expect(promptConfirmation).toHaveBeenLastCalledWith('Are you sure you want to publish these packages?');
+    expect((logOutput as any).logged()).toMatch('Found 4 packages to publish:');
+    expect((npmPublish as typeof npmPublishMock).order()).toEqual([
+      '@my-workspace/package-1',
+      '@my-workspace/package-4',
+      '@my-workspace/package-2',
+      '@my-workspace/package-3',
+      // @my-workspace/package-5 is private
+    ]);
+
+    // check that @my-workspace/package-1 is properly escaped in the tarball tgz name
+    expect(npmPublish).toHaveBeenNthCalledWith(
+      1,
+      expect.objectContaining({ name: '@my-workspace/package-1', version: '1.0.0' }),
+      expect.stringContaining('my-workspace-package-1-1.0.0.tgz'),
+      expect.any(Object),
+      expect.any(Object)
+    );
+    expect(npmPublish).toHaveBeenNthCalledWith(
+      2,
+      expect.objectContaining({ name: '@my-workspace/package-4', version: '1.0.0' }),
+      expect.stringContaining('my-workspace-package-4-1.0.0.tgz'),
+      expect.any(Object),
+      expect.any(Object)
+    );
+    expect(npmPublish).toHaveBeenNthCalledWith(
+      3,
+      expect.objectContaining({ name: '@my-workspace/package-2', version: '1.0.0' }),
+      expect.stringContaining('my-workspace-package-2-1.0.0.tgz'),
+      expect.any(Object),
+      expect.any(Object)
+    );
+    expect(npmPublish).toHaveBeenNthCalledWith(
+      4,
+      expect.objectContaining({ name: '@my-workspace/package-3', version: '1.0.0' }),
+      expect.stringContaining('my-workspace-package-3-1.0.0.tgz'),
+      expect.any(Object),
+      expect.any(Object)
+    );
+  });
+
   it('publishes tagged packages in dry-run mode', async () => {
     const cwd = await initFixture('normal');
 
