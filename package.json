@@ -84,7 +84,7 @@
     "load-json-file": "^6.2.0",
     "normalize-newline": "^3.0.0",
     "normalize-path": "^3.0.0",
-    "npmlog": "^6.0.2",
+    "npmlog": "^7.0.0",
     "nx": "14.8.6",
     "prettier": "^2.7.1",
     "rimraf": "^3.0.2",
