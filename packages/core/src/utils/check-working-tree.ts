@@ -2,17 +2,17 @@ import { collectUncommitted, UncommittedConfig } from './collect-uncommitted';
 import { describeRef } from './describe-ref';
 import { ValidationError } from '../validation-error';
 
-export function checkWorkingTree({ cwd } = {} as UncommittedConfig, gitDryRun = false) {
+export function checkWorkingTree({ cwd } = {} as UncommittedConfig, dryRun = false) {
   let chain: Promise<any> = Promise.resolve();
 
-  chain = chain.then(() => describeRef({ cwd }, undefined, gitDryRun));
+  chain = chain.then(() => describeRef({ cwd }, undefined, dryRun));
 
   // wrap each test separately to allow all applicable errors to be reported
   const tests = [
     // prevent duplicate versioning
     chain.then(throwIfReleased),
     // prevent publish of uncommitted changes
-    chain.then(mkThrowIfUncommitted({ cwd }, gitDryRun) as any),
+    chain.then(mkThrowIfUncommitted({ cwd }, dryRun) as any),
   ];
 
   // passes through result of describeRef() to aid composability
@@ -31,10 +31,10 @@ export function throwIfReleased({ refCount }: { refCount: number | string }) {
 const EUNCOMMIT_MSG =
   'Working tree has uncommitted changes, please commit or remove the following changes before continuing:\n';
 
-export function mkThrowIfUncommitted(options: Partial<UncommittedConfig> = {}, gitDryRun = false) {
+export function mkThrowIfUncommitted(options: Partial<UncommittedConfig> = {}, dryRun = false) {
   return function ({ isDirty }) {
     if (isDirty) {
-      return collectUncommitted(options as UncommittedConfig, gitDryRun).then((uncommitted) => {
+      return collectUncommitted(options as UncommittedConfig, dryRun).then((uncommitted) => {
         throw new ValidationError('EUNCOMMIT', `${EUNCOMMIT_MSG}${uncommitted.join('\n')}`);
       });
     }

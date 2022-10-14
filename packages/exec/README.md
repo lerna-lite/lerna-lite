@@ -58,7 +58,7 @@ $ lerna exec --scope my-component -- ls -la
 - [`@lerna/exec`](#lernaexec)
   - [Usage](#usage)
   - [Options](#options)
-    - [`--cmd-dry-run`](#--cmd-dry-run) (new)
+    - [`--dry-run`](#--dry-run) (new)
     - [`--stream`](#--stream)
     - [`--parallel`](#--parallel)
     - [`--no-bail`](#--no-bail)
@@ -74,12 +74,12 @@ $ lerna exec --scope my-component -- ls -la
 $ lerna exec --concurrency 1 -- ls -la
 ```
 
-### `--cmd-dry-run`
+### `--dry-run`
 
 Displays the execution command that would be performed without actually executing it. This could be helpful for troubleshooting.
 
 ```sh
-$ lerna exec echo hello world --cmd-dry-run
+$ lerna exec echo hello world --dry-run
 ```
 
 ### `--stream`

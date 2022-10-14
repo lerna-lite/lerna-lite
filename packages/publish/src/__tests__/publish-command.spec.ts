@@ -99,6 +99,13 @@ describe('PublishCommand', () => {
       cwd = await initFixture('normal');
     });
 
+    it('is displaying a warning when using deprecated flag --git-dry-run', async () => {
+      await lernaPublish(cwd)('from-package', '--git-dry-run');
+
+      const logMessages = loggingOutput();
+      expect(logMessages).toContain('--git-dry-run has been renamed --dry-run');
+    });
+
     it('exits early when no changes found', async () => {
       (collectUpdates as any).setUpdated(cwd);
 
@@ -394,12 +401,12 @@ describe('PublishCommand', () => {
       expect(getOneTimePassword).toHaveBeenLastCalledWith('Enter OTP:');
     });
 
-    it('prompts for OTP when option missing, account-level 2FA enabled and shows a log info about it when in --git-dry-run mode', async () => {
+    it('prompts for OTP when option missing, account-level 2FA enabled and shows a log info about it when in --dry-run mode', async () => {
       const testDir = await initFixture('normal');
 
       (getTwoFactorAuthRequired as jest.Mock).mockResolvedValueOnce(true);
 
-      await new PublishCommand(createArgv(testDir, '--verify-access', true, '--git-dry-run'));
+      await new PublishCommand(createArgv(testDir, '--verify-access', true, '--dry-run'));
       const logMessages = loggingOutput('info');
 
       expect(logMessages).toContain('will ask OTP');

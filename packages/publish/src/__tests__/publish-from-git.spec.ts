@@ -113,7 +113,7 @@ describe('publish from-git', () => {
     const cwd = await initFixture('normal');
 
     await gitTag(cwd, 'v1.0.0');
-    await new PublishCommand(createArgv(cwd, '--bump', 'from-git', '--git-dry-run'));
+    await new PublishCommand(createArgv(cwd, '--bump', 'from-git', '--dry-run'));
 
     // called from chained describeRef()
     expect(throwIfUncommitted).toHaveBeenCalled();

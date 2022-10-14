@@ -55,7 +55,7 @@ $ lerna run --scope my-component test
   - [Usage](#usage)
   - [Options](#options)
     - [`--npm-client <client>`](#--npm-client-client)
-    - [`--cmd-dry-run`](#--cmd-dry-run) (new)
+    - [`--dry-run`](#--dry-run) (new)
     - [`--stream`](#--stream)
     - [`--parallel`](#--parallel)
     - [`--no-bail`](#--no-bail)
@@ -85,12 +85,12 @@ May also be configured in `lerna.json`:
 }
 ```
 
-### `--cmd-dry-run`
+### `--dry-run`
 
 Displays the process command that would be performed without actually executing it. This could be helpful for troubleshooting.
 
 ```sh
-$ lerna run test:coverage --cmd-dry-run
+$ lerna run test:coverage --dry-run
 ```
 
 ### `--stream`

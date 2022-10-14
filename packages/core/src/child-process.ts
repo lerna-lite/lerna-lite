@@ -26,12 +26,12 @@ export function exec(
   command: string,
   args: string[],
   opts?: execa.Options & { pkg?: Package },
-  cmdDryRun = false
+  dryRun = false
 ): Promise<any> {
   const options = Object.assign({ stdio: 'pipe' }, opts);
-  const spawned = spawnProcess(command, args, options, cmdDryRun);
+  const spawned = spawnProcess(command, args, options, dryRun);
 
-  return cmdDryRun ? Promise.resolve() : wrapError(spawned);
+  return dryRun ? Promise.resolve() : wrapError(spawned);
 }
 
 /**
@@ -40,8 +40,11 @@ export function exec(
  * @param {string[]} args
  * @param {import("execa").SyncOptions} [opts]
  */
-export function execSync(command: string, args?: string[], opts?: execa.SyncOptions<string>, cmdDryRun = false) {
-  return cmdDryRun ? logExecCommand(command, args) : execa.sync(command, args, opts).stdout;
+export function execSync(command: string, args?: string[], opts?: execa.SyncOptions<string>, dryRun = false) {
+  // prettier-ignore
+  return dryRun
+    ? logExecCommand(command, args)
+    : execa.sync(command, args, opts).stdout;
 }
 
 /**
@@ -54,10 +57,10 @@ export function spawn(
   command: string,
   args: string[],
   opts?: execa.Options & { pkg?: Package },
-  cmdDryRun = false
+  dryRun = false
 ): Promise<any> {
   const options = Object.assign({}, opts, { stdio: 'inherit' });
-  const spawned = spawnProcess(command, args, options, cmdDryRun);
+  const spawned = spawnProcess(command, args, options, dryRun);
 
   return wrapError(spawned);
 }
@@ -75,12 +78,12 @@ export function spawnStreaming(
   args: string[],
   opts?: execa.Options & { pkg?: Package },
   prefix?: string | boolean,
-  cmdDryRun = false
+  dryRun = false
 ): Promise<any> {
   const options: any = Object.assign({}, opts);
   options.stdio = ['ignore', 'pipe', 'pipe'];
 
-  const spawned = spawnProcess(command, args, options, cmdDryRun) as execa.ExecaChildProcess<string>;
+  const spawned = spawnProcess(command, args, options, dryRun) as execa.ExecaChildProcess<string>;
 
   const stdoutOpts: any = {};
   const stderrOpts: any = {}; // mergeMultiline causes escaped newlines :P
@@ -132,13 +135,8 @@ export function getExitCode(result: any) {
  * @param {string[]} args
  * @param {import("execa").Options} opts
  */
-export function spawnProcess(
-  command: string,
-  args: string[],
-  opts: execa.Options & { pkg?: Package },
-  cmdDryRun = false
-) {
-  if (cmdDryRun) {
+export function spawnProcess(command: string, args: string[], opts: execa.Options & { pkg?: Package }, dryRun = false) {
+  if (dryRun) {
     return logExecCommand(command, args);
   }
   const child: any = execa(command, args, opts);

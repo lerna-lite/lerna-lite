@@ -98,6 +98,11 @@ export default {
         requiresArg: true,
         defaultDescription: 'angular',
       },
+      'dry-run': {
+        describe: 'Displays the process command that would be performed without executing it.',
+        group: 'Version Command Options:',
+        type: 'boolean',
+      },
       exact: {
         describe: 'Specify cross-dependency version numbers exactly rather than with a caret (^).',
         type: 'boolean',
@@ -105,11 +110,6 @@ export default {
       'force-publish': {
         describe: 'Always include targeted packages in versioning operations, skipping default logic.',
         // type must remain ambiguous because it is overloaded (boolean _or_ string _or_ array)
-      },
-      'git-dry-run': {
-        describe: 'Displays the process command that would be performed without executing it.',
-        group: 'Version Command Options:',
-        type: 'boolean',
       },
       'git-remote': {
         describe: 'Push git changes to the specified remote.',
@@ -291,6 +291,13 @@ export default {
     }
 
     return yargs
+      .option('git-dry-run', {
+        // TODO: remove in next major release
+        // NOT the same as filter-options --git-dry-run
+        hidden: true,
+        conflicts: 'dry-run',
+        type: 'boolean',
+      })
       .option('ignore', {
         // TODO: remove in next major release
         // NOT the same as filter-options --ignore
@@ -323,11 +330,18 @@ export default {
         type: 'boolean',
       })
       .check((argv) => {
+        // override deprecated options
         /* eslint-disable no-param-reassign */
         if (argv.ignore) {
           argv.ignoreChanges = argv.ignore;
           delete argv.ignore;
           log.warn('deprecated', '--ignore has been renamed --ignore-changes');
+        }
+
+        if (argv.gitDryRun) {
+          argv.dryRun = argv.gitDryRun;
+          delete argv.gitDryRun;
+          log.warn('deprecated', '--git-dry-run has been renamed --dry-run');
         }
 
         if (argv.cdVersion && !argv.bump) {

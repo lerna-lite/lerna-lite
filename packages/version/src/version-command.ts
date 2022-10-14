@@ -169,7 +169,7 @@ export class VersionCommand extends Command<VersionCommandOption> {
 
     if (this.requiresGit) {
       // git validation, if enabled, should happen before updates are calculated and versions picked
-      if (!isAnythingCommitted(this.execOpts, this.options.gitDryRun)) {
+      if (!isAnythingCommitted(this.execOpts, this.options.dryRun)) {
         throw new ValidationError(
           'ENOCOMMIT',
           'No commits in this repository. Please commit something before using version.'
@@ -184,7 +184,7 @@ export class VersionCommand extends Command<VersionCommandOption> {
 
       if (
         this.pushToRemote &&
-        !remoteBranchExists(this.gitRemote, this.currentBranch, this.execOpts, this.options.gitDryRun)
+        !remoteBranchExists(this.gitRemote, this.currentBranch, this.execOpts, this.options.dryRun)
       ) {
         throw new ValidationError(
           'ENOREMOTEBRANCH',
@@ -211,7 +211,7 @@ export class VersionCommand extends Command<VersionCommandOption> {
       if (
         this.commitAndTag &&
         this.pushToRemote &&
-        isBehindUpstream(this.gitRemote, this.currentBranch, this.execOpts, this.options.gitDryRun)
+        isBehindUpstream(this.gitRemote, this.currentBranch, this.execOpts, this.options.dryRun)
       ) {
         // eslint-disable-next-line max-len
         const message = `Local branch "${this.currentBranch}" is behind remote upstream ${this.gitRemote}/${this.currentBranch}`;
@@ -349,7 +349,7 @@ export class VersionCommand extends Command<VersionCommandOption> {
       const { forcePublish, conventionalCommits, conventionalGraduate } = this.options;
       const checkUncommittedOnly = forcePublish || (conventionalCommits && conventionalGraduate);
       const check = checkUncommittedOnly ? throwIfUncommitted : checkWorkingTree;
-      await check(this.execOpts, this.options.gitDryRun);
+      await check(this.execOpts, this.options.dryRun);
     } else {
       this.logger.warn('version', 'Skipping working tree validation, proceed at your own risk');
     }
@@ -380,7 +380,7 @@ export class VersionCommand extends Command<VersionCommandOption> {
         this.releaseClient,
         { tags: this.tags, releaseNotes: this.releaseNotes },
         { gitRemote: this.options.gitRemote, execOpts: this.execOpts },
-        this.options.gitDryRun
+        this.options.dryRun
       );
     } else {
       this.logger.info('execute', 'Skipping releases');
@@ -576,7 +576,7 @@ export class VersionCommand extends Command<VersionCommandOption> {
     }
 
     // When composed from `lerna publish`, use this opportunity to confirm publishing
-    let confirmMessage = this.options.gitDryRun ? chalk.bgMagenta('[dry-run]') : '';
+    let confirmMessage = this.options.dryRun ? chalk.bgMagenta('[dry-run]') : '';
     confirmMessage += this.composed
       ? ' Are you sure you want to publish these packages?'
       : ' Are you sure you want to create these versions?';
@@ -775,7 +775,7 @@ export class VersionCommand extends Command<VersionCommandOption> {
     }
 
     if (this.commitAndTag) {
-      chain = chain.then(() => gitAdd(Array.from(changedFiles), this.gitOpts, this.execOpts, this.options.gitDryRun));
+      chain = chain.then(() => gitAdd(Array.from(changedFiles), this.gitOpts, this.execOpts, this.options.dryRun));
     }
 
     return chain;
@@ -802,8 +802,8 @@ export class VersionCommand extends Command<VersionCommandOption> {
     const subject = this.options.message || 'chore: Publish new release';
     const message = tags.reduce((msg, tag) => `${msg}${os.EOL} - ${tag}`, `${subject}${os.EOL}`);
 
-    await gitCommit(message, this.gitOpts, this.execOpts, this.options.gitDryRun);
-    await Promise.all(tags.map((tag) => gitTag(tag, this.gitOpts, this.execOpts, this.options.gitDryRun)));
+    await gitCommit(message, this.gitOpts, this.execOpts, this.options.dryRun);
+    await Promise.all(tags.map((tag) => gitTag(tag, this.gitOpts, this.execOpts, this.options.dryRun)));
 
     return tags;
   }
@@ -813,8 +813,8 @@ export class VersionCommand extends Command<VersionCommandOption> {
     const tag = `${this.tagPrefix}${version}`;
     const message = this.options.message ? this.options.message.replace(/%s/g, tag).replace(/%v/g, version) : tag;
 
-    await gitCommit(message, this.gitOpts, this.execOpts, this.options.gitDryRun);
-    await gitTag(tag, this.gitOpts, this.execOpts, this.options.gitDryRun);
+    await gitCommit(message, this.gitOpts, this.execOpts, this.options.dryRun);
+    await gitTag(tag, this.gitOpts, this.execOpts, this.options.dryRun);
 
     return [tag];
   }
@@ -822,7 +822,7 @@ export class VersionCommand extends Command<VersionCommandOption> {
   gitPushToRemote() {
     this.logger.info('git', 'Pushing tags...');
 
-    return gitPush(this.gitRemote, this.currentBranch, this.execOpts, this.options.gitDryRun);
+    return gitPush(this.gitRemote, this.currentBranch, this.execOpts, this.options.dryRun);
   }
 
   setGlobalVersionFloor() {

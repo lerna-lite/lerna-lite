@@ -106,6 +106,14 @@ import gitSHA from '@lerna-test/helpers/serializers/serialize-git-sha';
 expect.addSnapshotSerializer(gitSHA);
 
 describe('VersionCommand', () => {
+  it('is displaying a warning when using deprecated flag --git-dry-run', async () => {
+    const testDir = await initFixture('normal');
+    await lernaVersion(testDir)('--git-dry-run');
+
+    const logMessages = loggingOutput();
+    expect(logMessages).toContain('--git-dry-run has been renamed --dry-run');
+  });
+
   describe('normal mode', () => {
     it('versions changed packages', async () => {
       const testDir = await initFixture('normal');
@@ -138,7 +146,7 @@ describe('VersionCommand', () => {
       const testDir = await initFixture('normal');
       // when --conventional-commits is absent,
       // --no-changelog should have _no_ effect
-      await new VersionCommand(createArgv(testDir, '--no-changelog', '--git-dry-run'));
+      await new VersionCommand(createArgv(testDir, '--no-changelog', '--dry-run'));
 
       expect(checkWorkingTree).toHaveBeenCalled();
 
@@ -192,7 +200,7 @@ describe('VersionCommand', () => {
       const testDir = await initFixture('normal');
       // when --conventional-commits is absent,
       // --no-changelog should have _no_ effect
-      await new VersionCommand({ ...createArgv(testDir, '--no-changelog', '--git-dry-run'), composed: 'composed' });
+      await new VersionCommand({ ...createArgv(testDir, '--no-changelog', '--dry-run'), composed: 'composed' });
 
       expect(checkWorkingTree).toHaveBeenCalled();
 

@@ -32,8 +32,11 @@ export interface ExecCommandOption {
   /** exec command arguments */
   args?: any;
 
-  /** Displays the execution command that would be performed without executing it. */
+  /** @deprecated option was renamed to `--dry-run`, @see dryRun */
   cmdDryRun?: boolean;
+
+  /** Displays the execution command that would be performed without executing it. */
+  dryRun?: boolean;
 
   /** Stream output with lines prefixed by originating package name. */
   stream?: boolean;
@@ -234,6 +237,9 @@ export interface VersionCommandOption {
   forcePublish?: boolean | string;
 
   /** Displays the process command that would be performed without executing it. */
+  dryRun?: boolean;
+
+  /** @deprecated option was renamed to `--dry-run`, @see dryRun */
   gitDryRun?: boolean;
 
   /** Defaults to 'origin', push git changes to the specified remote. */
@@ -340,8 +346,11 @@ export interface VersionCommandOption {
 }
 
 export interface RunCommandOption {
-  /** Displays the process command that would be performed without executing it. */
+  /** @deprecated option was renamed to `--dry-run`, @see dryRun */
   cmdDryRun?: boolean;
+
+  /** Displays the process command that would be performed without executing it. */
+  dryRun?: boolean;
 
   /** Defaults to 'npm', executable used to run scripts (npm, yarn, pnpm, ...). */
   npmClient?: string;

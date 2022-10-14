@@ -26,7 +26,7 @@
       "args": [
         "packages/cli/src/cli.ts",
         "version",
-        "--git-dry-run",
+        "--dry-run",
         "--changelog-include-commits-client-login",
         "--conventional-commits"
       ],
@@ -41,7 +41,7 @@
       "request": "launch",
       "runtimeExecutable": "node",
       "runtimeArgs": ["--nolazy", "-r", "tsm"],
-      "args": ["packages/cli/src/cli.ts", "publish", "from-package", "--git-dry-run"],
+      "args": ["packages/cli/src/cli.ts", "publish", "from-package", "--dry-run"],
       "cwd": "${workspaceRoot}",
       "console": "integratedTerminal",
       "internalConsoleOptions": "openOnSessionStart",

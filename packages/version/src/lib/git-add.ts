@@ -13,7 +13,7 @@ export function gitAdd(
   changedFiles: string[],
   gitOpts: { granularPathspec: boolean },
   execOpts: ExecOpts,
-  gitDryRun = false
+  dryRun = false
 ) {
   // granular pathspecs should be relative to the git root, but that isn't necessarily where lerna-lite lives
   const files = gitOpts.granularPathspec
@@ -22,5 +22,5 @@ export function gitAdd(
 
   log.silly('gitAdd', files.toString());
 
-  return exec('git', ['add', '--', ...files], execOpts, gitDryRun);
+  return exec('git', ['add', '--', ...files], execOpts, dryRun);
 }

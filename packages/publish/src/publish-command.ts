@@ -298,7 +298,7 @@ export class PublishCommand extends Command<PublishCommandOption> {
   }
 
   verifyWorkingTreeClean() {
-    return describeRef(this.execOpts, undefined, this.options.gitDryRun).then(throwIfUncommitted);
+    return describeRef(this.execOpts, undefined, this.options.dryRun).then(throwIfUncommitted);
   }
 
   detectFromGit() {
@@ -416,7 +416,7 @@ export class PublishCommand extends Command<PublishCommandOption> {
           isIndependent,
           // private packages are never published, don't bother describing their refs.
         } as UpdateCollectorOptions,
-        this.options.gitDryRun
+        this.options.dryRun
       ).filter((node) => !node.pkg.private)
     );
 
@@ -441,7 +441,7 @@ export class PublishCommand extends Command<PublishCommandOption> {
               cwd,
             },
             includeMergedTags,
-            this.options.gitDryRun
+            this.options.dryRun
           )
             // an unpublished package will have no reachable git tag
             .then(makeVersion(node.version))
@@ -460,7 +460,7 @@ export class PublishCommand extends Command<PublishCommandOption> {
             cwd,
           },
           includeMergedTags,
-          this.options.gitDryRun
+          this.options.dryRun
         )
           // a repo with no tags should default to whatever lerna.json claims
           .then(makeVersion(this.project.version))
@@ -494,7 +494,7 @@ export class PublishCommand extends Command<PublishCommandOption> {
       return true;
     }
 
-    let confirmMessage = this.options.gitDryRun ? chalk.bgMagenta('[dry-run]') : '';
+    let confirmMessage = this.options.dryRun ? chalk.bgMagenta('[dry-run]') : '';
     confirmMessage += ' Are you sure you want to publish these packages?';
     return promptConfirmation(confirmMessage.trim());
   }
@@ -683,7 +683,7 @@ export class PublishCommand extends Command<PublishCommandOption> {
       .concat(this.packagesToPublish)
       .map((pkg) => path.relative(cwd, pkg.manifestLocation));
 
-    return gitCheckout(dirtyManifests, gitOpts, this.execOpts, this.options.gitDryRun).catch((err) => {
+    return gitCheckout(dirtyManifests, gitOpts, this.execOpts, this.options.dryRun).catch((err) => {
       this.logger.silly('EGITCHECKOUT', err.message);
       this.logger.notice('FYI', `Unable to reset working tree changes, this probably isn't a git repo.`);
     });
@@ -727,7 +727,7 @@ export class PublishCommand extends Command<PublishCommandOption> {
   }
 
   requestOneTimePassword() {
-    if (this.options.gitDryRun) {
+    if (this.options.dryRun) {
       this.logger.info(chalk.bold.magenta('[dry-run] >'), 'will ask OTP');
       return;
     }
@@ -840,7 +840,7 @@ export class PublishCommand extends Command<PublishCommandOption> {
       // distTag defaults to 'latest' OR whatever is in pkg.publishConfig.tag
       // if we skip temp tags we should tag with the proper value immediately
       tag: this.options.tempTag ? 'lerna-temp' : this.conf.get('tag'),
-      'git-dry-run': this.options.gitDryRun || false,
+      'git-dry-run': this.options.dryRun || false,
     });
 
     const mapper = pPipe(
@@ -855,7 +855,7 @@ export class PublishCommand extends Command<PublishCommandOption> {
               tracker.success('published', pkg.name, pkg.version);
               tracker.completeWork(1);
 
-              logPacked(pkg, this.options.gitDryRun);
+              logPacked(pkg, this.options.dryRun);
 
               return pkg;
             });

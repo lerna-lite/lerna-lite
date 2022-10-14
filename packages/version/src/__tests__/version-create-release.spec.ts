@@ -186,7 +186,7 @@ describe.each([
 
     (recommendVersion as jest.Mock).mockResolvedValueOnce('1.1.0');
 
-    await new VersionCommand(createArgv(cwd, '--create-release', type, '--conventional-commits', '--git-dry-run'));
+    await new VersionCommand(createArgv(cwd, '--create-release', type, '--conventional-commits', '--dry-run'));
 
     expect(logSpy).toHaveBeenCalledWith(
       chalk.bold.magenta('[dry-run] >'),
@@ -200,7 +200,7 @@ describe.each([
 
     (recommendVersion as jest.Mock).mockResolvedValueOnce('1.1.0');
 
-    await new VersionCommand(createArgv(cwd, '--create-release', type, '--conventional-commits', '--git-dry-run'));
+    await new VersionCommand(createArgv(cwd, '--create-release', type, '--conventional-commits', '--dry-run'));
 
     expect((logOutput as any).logged()).toMatch(dedent`
     Changes (5 packages):
