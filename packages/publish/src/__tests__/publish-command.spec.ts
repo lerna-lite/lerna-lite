@@ -190,6 +190,51 @@ describe('PublishCommand', () => {
       );
     });
 
+    it('publishes changed packages including workspace name prefix', async () => {
+      const testDir = await initFixture('normal-workspace-name-prefixed');
+
+      await new PublishCommand(createArgv(testDir));
+      // await lernaPublish(testDir)();
+
+      expect(promptConfirmation).toHaveBeenLastCalledWith('Are you sure you want to publish these packages?');
+      expect((packDirectory as any).registry).toMatchInlineSnapshot(`
+        Set {
+          "@my-workspace/package-1",
+          "@my-workspace/package-4",
+          "@my-workspace/package-2",
+          "@my-workspace/package-3",
+        }
+      `);
+      expect((npmPublish as typeof npmPublishMock).registry).toMatchInlineSnapshot(`
+        Map {
+          "@my-workspace/package-1" => "latest",
+          "@my-workspace/package-4" => "latest",
+          "@my-workspace/package-2" => "latest",
+          "@my-workspace/package-3" => "latest",
+        }
+      `);
+      expect((npmPublish as typeof npmPublishMock).order()).toEqual([
+        '@my-workspace/package-1',
+        '@my-workspace/package-4',
+        '@my-workspace/package-2',
+        '@my-workspace/package-3',
+        // @my-workspace/package-5 is private
+      ]);
+      expect(npmDistTag.remove).not.toHaveBeenCalled();
+      expect(npmDistTag.add).not.toHaveBeenCalled();
+
+      expect(getNpmUsername).not.toHaveBeenCalled();
+      expect(verifyNpmPackageAccess).not.toHaveBeenCalled();
+
+      expect(gitCheckout).toHaveBeenCalledWith(
+        // the list of changed files has been asserted many times already
+        expect.any(Array),
+        { granularPathspec: true },
+        { cwd: testDir },
+        undefined
+      );
+    });
+
     it('publishes changed independent packages', async () => {
       const testDir = await initFixture('independent');
 
@@ -396,16 +441,15 @@ describe('PublishCommand', () => {
   });
 
   describe('--registry', () => {
-    it('passes registry to npm commands', async () => {
-      const testDir = await initFixture('normal');
+    it('passes registry to npm commands that also includes workspace in the name prefix', async () => {
+      const testDir = await initFixture('normal-workspace-name-prefixed');
       const registry = 'https://my-private-registry';
 
-      // await lernaPublish(testDir)("--registry", registry);
-      await new PublishCommand(createArgv(testDir, '--registry', registry));
+      await lernaPublish(testDir)('--registry', registry);
 
       expect(npmPublish).toHaveBeenCalledWith(
-        expect.objectContaining({ name: 'package-1' }),
-        '/TEMP_DIR/package-1-MOCKED.tgz',
+        expect.objectContaining({ name: '@my-workspace/package-1' }),
+        '/TEMP_DIR/@my-workspace/package-1-MOCKED.tgz',
         expect.objectContaining({ registry }),
         expect.objectContaining({ otp: undefined })
       );

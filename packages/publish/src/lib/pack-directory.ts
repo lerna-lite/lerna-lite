@@ -1,3 +1,4 @@
+import Arborist from '@npmcli/arborist';
 import path from 'path';
 import packlist from 'npm-packlist';
 import log from 'npmlog';
@@ -14,7 +15,7 @@ import { Tarball } from '../models';
  * @param {string} dir to pack
  * @param {PackConfig} options
  */
-export function packDirectory(_pkg: Package, dir: string, options: PackConfig) {
+export async function packDirectory(_pkg: Package, dir: string, options: PackConfig) {
   const pkg = Package.lazy(_pkg, dir);
   const opts: LifecycleConfig = {
     // @ts-ignore
@@ -24,51 +25,48 @@ export function packDirectory(_pkg: Package, dir: string, options: PackConfig) {
 
   opts.log.verbose('pack-directory', path.relative('.', pkg.contents));
 
-  let chain: Promise<any> = Promise.resolve();
-
   if (opts.ignorePrepublish !== true) {
-    chain = chain.then(() => runLifecycle(pkg, 'prepublish', opts));
+    await runLifecycle(pkg, 'prepublish', opts);
   }
 
-  chain = chain.then(() => runLifecycle(pkg, 'prepare', opts));
+  await runLifecycle(pkg, 'prepare', opts);
 
   if (opts.lernaCommand === 'publish') {
     opts.stdio = 'inherit';
-    chain = chain.then(() => pkg.refresh());
-    chain = chain.then(() => runLifecycle(pkg, 'prepublishOnly', opts));
-    chain = chain.then(() => pkg.refresh());
+    await pkg.refresh();
+    await runLifecycle(pkg, 'prepublishOnly', opts);
+    await pkg.refresh();
   }
 
-  chain = chain.then(() => runLifecycle(pkg, 'prepack', opts));
-  chain = chain.then(() => pkg.refresh());
-  chain = chain.then(() => packlist({ path: pkg.contents }));
-  chain = chain.then((files: string[]) =>
-    tar.create(
-      {
-        cwd: pkg.contents,
-        prefix: 'package/',
-        portable: true,
-        // Provide a specific date in the 1980s for the benefit of zip,
-        // which is confounded by files dated at the Unix epoch 0.
-        mtime: new Date('1985-10-26T08:15:00.000Z'),
-        gzip: true,
-      },
-      // NOTE: node-tar does some Magic Stuff depending on prefixes for files
-      //       specifically with @ signs, so we just neutralize that one
-      //       and any such future 'features' by prepending `./`
-      files.map((f) => `./${f}`)
-    )
-  );
-  chain = chain.then((stream: DataView & Readable) => tempWrite(stream, getTarballName(pkg)));
-  chain = chain.then((tarFilePath) =>
-    getPacked(pkg, tarFilePath).then((packed: Tarball) =>
-      Promise.resolve()
-        .then(() => runLifecycle(pkg, 'postpack', opts))
-        .then(() => packed)
-    )
+  await runLifecycle(pkg, 'prepack', opts);
+  await pkg.refresh();
+
+  const arborist = new Arborist({ path: pkg.contents });
+  const tree = await arborist.loadActual();
+  const files: string[] = await packlist(tree);
+  const stream: DataView & Readable = tar.create(
+    {
+      cwd: pkg.contents,
+      prefix: 'package/',
+      portable: true,
+      // Provide a specific date in the 1980s for the benefit of zip,
+      // which is confounded by files dated at the Unix epoch 0.
+      mtime: new Date('1985-10-26T08:15:00.000Z'),
+      gzip: true,
+    },
+    // NOTE: node-tar does some Magic Stuff depending on prefixes for files
+    //       specifically with @ signs, so we just neutralize that one
+    //       and any such future 'features' by prepending `./`
+    files.map((f) => `./${f}`)
   );
 
-  return chain;
+  const tarFilePath = await tempWrite(stream, getTarballName(pkg));
+
+  return getPacked(pkg, tarFilePath).then((packed: Tarball) =>
+    Promise.resolve()
+      .then(() => runLifecycle(pkg, 'postpack', opts))
+      .then(() => packed)
+  );
 }
 
 function getTarballName(pkg: Package) {

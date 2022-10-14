@@ -1,0 +1,10 @@
+{
+  "name": "@my-workspace/package-3",
+  "version": "1.0.0",
+  "peerDependencies": {
+    "@my-workspace/package-2": "^1.0.0"
+  },
+  "devDependencies": {
+    "@my-workspace/package-2": "^1.0.0"
+  }
+}

@@ -1,0 +1,11 @@
+{
+  "name": "@my-workspace/package-5",
+  "dependencies": {
+    "@my-workspace/package-1": "^1.0.0"
+  },
+  "optionalDependencies": {
+    "@my-workspace/package-3": "^1.0.0"
+  },
+  "private": true,
+  "version": "1.0.0"
+}
