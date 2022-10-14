@@ -50,19 +50,11 @@
     "path": "^0.12.7",
     "pify": "^5.0.0",
     "read-package-json": "^5.0.2",
-    "resolve-from": "^5.0.0",
     "semver": "^7.3.8",
-    "slash": "^3.0.0",
     "ssri": "^9.0.1",
-    "strong-log-transformer": "^2.1.0",
-    "tar": "^6.1.11",
-    "write-file-atomic": "^4.0.2",
-    "write-json-file": "^4.3.0",
-    "write-pkg": "^4.0.0",
-    "yargs": "^17.6.0"
+    "tar": "^6.1.11"
   },
   "devDependencies": {
-    "@types/async": "^3.2.15",
     "@types/conventional-changelog-core": "^4.2.1",
     "@types/conventional-recommended-bump": "^6.1.0",
     "@types/execa": "^2.0.0",
@@ -70,9 +62,10 @@
     "@types/load-json-file": "^5.1.0",
     "@types/p-map": "^2.0.0",
     "@types/semver": "^7.3.12",
-    "@types/write-json-file": "^3.2.1",
     "@types/write-pkg": "^4.0.0",
     "load-json-file": "^6.2.0",
+    "write-pkg": "^4.0.0",
+    "yargs": "^17.6.0",
     "yargs-parser": "^21.1.1"
   }
 }
