@@ -480,6 +480,9 @@
             "skipNxCache": {
               "$ref": "#/$defs/commandOptions/run/skipNxCache"
             },
+            "loadEnvFiles": {
+              "$ref": "#/$defs/commandOptions/run/loadEnvFiles"
+            },
 
             "npmClient": {
               "$ref": "#/$defs/globals/npmClient"
@@ -1264,6 +1267,10 @@
         "dryRun": {
           "type": "boolean",
           "description": "During `lerna run`, when true, displays the process command that would be performed without executing it."
+        },
+        "loadEnvFiles": {
+          "type": "boolean",
+          "description": "During `lerna run`, when false, skip loading of environment variables from .env files."
         },
         "skipNxCache": {
           "type": "boolean",
