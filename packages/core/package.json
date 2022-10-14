@@ -95,7 +95,7 @@
     "@types/write-file-atomic": "^4.0.0",
     "@types/write-json-file": "^3.2.1",
     "@types/write-pkg": "^4.0.0",
-    "npm-registry-fetch": "^13.3.1",
+    "npm-registry-fetch": "^14.0.0",
     "yargs": "^17.6.0",
     "yargs-parser": "^21.1.1"
   },
