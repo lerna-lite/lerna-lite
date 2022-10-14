@@ -154,7 +154,7 @@ importers:
 
   packages/core:
     specifiers:
-      '@npmcli/run-script': ^4.2.1
+      '@npmcli/run-script': ^5.0.0
       '@octokit/plugin-enterprise-rest': ^6.0.1
       '@octokit/rest': ^19.0.5
       '@types/clone-deep': ^4.0.1
@@ -220,7 +220,7 @@ importers:
       yargs: ^17.6.0
       yargs-parser: ^21.1.1
     dependencies:
-      '@npmcli/run-script': 4.2.1
+      '@npmcli/run-script': 5.0.0
       '@octokit/plugin-enterprise-rest': 6.0.1
       '@octokit/rest': 19.0.5
       chalk: 4.1.2
@@ -1389,6 +1389,11 @@ packages:
     engines: {node: ^12.13.0 || ^14.15.0 || >=16.0.0}
     dev: false
 
+  /@npmcli/node-gyp/3.0.0:
+    resolution: {integrity: sha512-gp8pRXC2oOxu0DUE1/M3bYtb1b3/DbJ5aM113+XJBgfXdussRAsX0YOrOhdd8WvnAR6auDBvJomGAkLKA5ydxA==}
+    engines: {node: ^14.17.0 || ^16.13.0 || >=18.0.0}
+    dev: false
+
   /@npmcli/package-json/2.0.0:
     resolution: {integrity: sha512-42jnZ6yl16GzjWSH7vtrmWyJDGVa/LXPdpN2rcUWolFjc9ON2N3uz0qdBbQACfmhuJZ2lbKYtmK5qx68ZPLHMA==}
     engines: {node: ^12.13.0 || ^14.15.0 || >=16.0.0}
@@ -1399,6 +1404,13 @@ packages:
   /@npmcli/promise-spawn/3.0.0:
     resolution: {integrity: sha512-s9SgS+p3a9Eohe68cSI3fi+hpcZUmXq5P7w0kMlAsWVtR7XbK3ptkZqKT2cK1zLDObJ3sR+8P59sJE0w/KTL1g==}
     engines: {node: ^12.13.0 || ^14.15.0 || >=16.0.0}
+    dependencies:
+      infer-owner: 1.0.4
+    dev: false
+
+  /@npmcli/promise-spawn/4.0.0:
+    resolution: {integrity: sha512-LM/GRZSwkxar1jgd58yW5WspFWrFefh8a/KVy+sbOMa0pCwqlXWxXEjQRQzbtWExyhwPb2XSK/4mJnLeiVOYng==}
+    engines: {node: ^14.17.0 || ^16.13.0 || >=18.0.0}
     dependencies:
       infer-owner: 1.0.4
     dev: false
@@ -1420,6 +1432,20 @@ packages:
       '@npmcli/promise-spawn': 3.0.0
       node-gyp: 9.0.0
       read-package-json-fast: 2.0.3
+      which: 2.0.2
+    transitivePeerDependencies:
+      - bluebird
+      - supports-color
+    dev: false
+
+  /@npmcli/run-script/5.0.0:
+    resolution: {integrity: sha512-AuqcoTOt7v4D2JqC7mCa+eUQHb64vWbwyu9o1hoJiq2kfZNwCB71f0s7tvUw+v+1B5XMdqcr98aGzjKIg7s6Vw==}
+    engines: {node: ^14.17.0 || ^16.13.0 || >=18.0.0}
+    dependencies:
+      '@npmcli/node-gyp': 3.0.0
+      '@npmcli/promise-spawn': 4.0.0
+      node-gyp: 9.0.0
+      read-package-json-fast: 3.0.0
       which: 2.0.2
     transitivePeerDependencies:
       - bluebird
