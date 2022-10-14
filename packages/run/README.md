@@ -62,6 +62,7 @@ $ lerna run --scope my-component test
     - [`--no-prefix`](#--no-prefix)
     - [`--profile`](#--profile)
     - [`--profile-location <location>`](#--profile-location-location)
+    - [`--load-env-files`](#load-env-files)
     - [`--use-nx`](#use-nx)
 
 ### `--npm-client <client>`
@@ -154,6 +155,13 @@ You can provide a custom location for the performance profile output. The path p
 $ lerna run build --profile --profile-location=logs/profile/
 ```
 
+
+### `--load-env-files`
+
+When the task runner is powered by Nx (via [`--use-nx`](#use-nx)) it will automatically load `.env` files for you. You can set `--load-env-files` to false if you want to disable this behavior for any reason.
+
+For more details about what `.env` files will be loaded by default please see: https://nx.dev/recipes/environment-variables/define-environment-variables
+
 ### `--use-nx`
 
 Enables integration with [Nx](https://nx.dev). Enabling this option will tell Lerna to delegate
@@ -202,7 +210,7 @@ Lerna by itself does not have knowledge of which tasks depend on others, so it d
 
 This is no longer a problem when Lerna uses Nx to run tasks. Nx, utilizing its [task graph](https://nx.dev/concepts/mental-model#the-task-graph), will automatically run dependent tasks first when necessary, so `--include-dependencies` is obsolete. However, it can still be used to include project dependencies that Lerna detects but Nx does not deem necessary and would otherwise exclude.
 
-### `--ignore`
+#### `--ignore`
 
 When used with Nx, `--ignore` will never cause `lerna run` to exclude any tasks that are deemed to be required by the Nx [task graph](https://nx.dev/concepts/mental-model#the-task-graph).
 

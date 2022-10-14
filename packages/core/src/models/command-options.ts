@@ -367,8 +367,8 @@ export interface RunCommandOption {
   /** proxy for `--no-bail`. */
   bail?: boolean;
 
-  // This option controls prefix for stream output so that it can be disabled to be friendly
-  // to tools like Visual Studio Code to highlight the raw results
+  /** When useNx is enabled, do we want to automatically load .env files */
+  loadEnvFiles?: boolean;
 
   /** Do not prefix streaming output. */
   noPrefix?: boolean;

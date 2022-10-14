@@ -78,6 +78,11 @@ export default {
           hidden: true,
           type: 'boolean',
         },
+        'load-env-files': {
+          group: 'Command Options:',
+          describe: 'When useNx is enabled, do we want to automatically load .env files',
+          type: 'boolean',
+        },
         'use-nx': {
           group: 'Command Options:',
           describe:
