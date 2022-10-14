@@ -52,7 +52,7 @@
     "pify": "^5.0.0",
     "read-package-json": "^5.0.2",
     "semver": "^7.3.8",
-    "ssri": "^9.0.1",
+    "ssri": "^10.0.0",
     "tar": "^6.1.11"
   },
   "devDependencies": {
