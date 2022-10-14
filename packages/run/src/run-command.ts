@@ -8,7 +8,12 @@ import {
   runTopologically,
   ValidationError,
 } from '@lerna-lite/core';
-import { FilterOptions, getFilteredPackages, Profiler } from '@lerna-lite/optional-cmd-common';
+import {
+  FilterOptions,
+  generateProfileOutputPath,
+  getFilteredPackages,
+  Profiler,
+} from '@lerna-lite/optional-cmd-common';
 import chalk from 'chalk';
 import { existsSync } from 'fs-extra';
 import pMap from 'p-map';
@@ -220,6 +225,13 @@ export class RunCommand extends Command<RunCommandOption & FilterOptions> {
     if (this.options.ci) {
       process.env.CI = 'true';
     }
+
+    if (this.options.profile) {
+      const absolutePath = generateProfileOutputPath(this.options.profileLocation);
+      // Nx requires a workspace relative path for this
+      process.env.NX_PROFILE = path.relative(this.project.rootPath, absolutePath);
+    }
+
     performance.mark('init-local');
     await this.configureNxOutput();
     const { extraOptions, targetDependencies, options } = await this.prepNxOptions();
@@ -270,6 +282,10 @@ export class RunCommand extends Command<RunCommandOption & FilterOptions> {
           }
         : {};
 
+    if (this.options.prefix === false && !this.options.stream) {
+      this.logger.warn(this.name, `"no-prefix" is ignored when not using streaming output.`);
+    }
+
     // prettier-ignore
     const outputStyle = this.options.stream
       ? this.prefix
@@ -300,21 +316,21 @@ export class RunCommand extends Command<RunCommandOption & FilterOptions> {
       if (this.options.parallel || this.options.sort !== undefined) {
         this.logger.warn(
           this.name,
-          `"parallel", "sort", and "no-sort" are ignored when nx.json has targetDefaults defined. See https://lerna.js.org/docs/recipes/using-lerna-powered-by-nx-to-run-tasks for details.`
+          `"parallel", "sort", and "no-sort" are ignored when nx.json has targetDefaults defined.`
         );
       }
 
       if (this.options.includeDependencies) {
         this.logger.info(
           this.name,
-          `Using the "include-dependencies" option when nx.json has targetDefaults defined will include both task dependencies detected by Nx and project dependencies detected by Lerna. See https://lerna.js.org/docs/recipes/using-lerna-powered-by-nx-to-run-tasks#--include-dependencies for details.`
+          `Using the "include-dependencies" option when nx.json has targetDefaults defined will include both task dependencies detected by Nx and project dependencies detected by Lerna.`
         );
       }
 
       if (this.options.ignore) {
         this.logger.info(
           this.name,
-          `Using the "ignore" option when nx.json has targetDefaults defined will exclude only tasks that are not determined to be required by Nx. See https://lerna.js.org/docs/recipes/using-lerna-powered-by-nx-to-run-tasks#--ignore for details.`
+          `Using the "ignore" option when nx.json has targetDefaults defined will exclude only tasks that are not determined to be required by Nx.`
         );
       }
     } else {

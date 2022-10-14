@@ -1,7 +1,10 @@
 jest.mock('../lib/npm-run-script');
+jest.mock('nx/src/tasks-runner/life-cycles/task-profiling-life-cycle');
 
 jest.mock('@lerna-lite/core', () => ({
   ...(jest.requireActual('@lerna-lite/core') as any), // return the other real methods, below we'll mock only 2 of the methods
+  Command: jest.requireActual('../../../core/src/command').Command,
+  conf: jest.requireActual('../../../core/src/command').conf,
   logOutput: jest.requireActual('../../../core/src/__mocks__/output').logOutput,
   runTopologically: jest.requireActual('../../../core/src/utils/run-topologically').runTopologically,
   QueryGraph: jest.requireActual('../../../core/src/utils/query-graph').QueryGraph,
@@ -412,6 +415,16 @@ describe('RunCommand', () => {
       expect(collectedOutput).toContain('Successfully ran target');
     });
 
+    it('runs a script in packages in CI mode', async () => {
+      collectedOutput = '';
+      await lernaRun(testDir)('my-script', '--ci');
+
+      expect(process.env.CI).toBeTruthy();
+      expect(collectedOutput).toContain('package-1');
+      expect(collectedOutput).toContain('package-3');
+      expect(collectedOutput).toContain('Successfully ran target');
+    });
+
     it('runs a script with a colon in the script name', async () => {
       collectedOutput = '';
       await lernaRun(testDir)('another-script:but-with-colons');
@@ -435,7 +448,7 @@ describe('RunCommand', () => {
 
       const logMessages = loggingOutput('info');
       expect(logMessages).toContain(
-        'Using the "ignore" option when nx.json has targetDefaults defined will exclude only tasks that are not determined to be required by Nx. See https://lerna.js.org/docs/recipes/using-lerna-powered-by-nx-to-run-tasks#--ignore for details.'
+        'Using the "ignore" option when nx.json has targetDefaults defined will exclude only tasks that are not determined to be required by Nx.'
       );
     });
 
@@ -479,7 +492,7 @@ describe('RunCommand', () => {
 
       const [logMessage] = loggingOutput('warn');
       expect(logMessage).toContain(
-        '"parallel", "sort", and "no-sort" are ignored when nx.json has targetDefaults defined. See https://lerna.js.org/docs/recipes/using-lerna-powered-by-nx-to-run-tasks for details.'
+        '"parallel", "sort", and "no-sort" are ignored when nx.json has targetDefaults defined.'
       );
       expect(collectedOutput).toContain('package-1');
     });
@@ -491,9 +504,26 @@ describe('RunCommand', () => {
 
       const logMessages = loggingOutput('info');
       expect(logMessages).toContain(
-        'Using the "include-dependencies" option when nx.json has targetDefaults defined will include both task dependencies detected by Nx and project dependencies detected by Lerna. See https://lerna.js.org/docs/recipes/using-lerna-powered-by-nx-to-run-tasks#--include-dependencies for details.'
+        'Using the "include-dependencies" option when nx.json has targetDefaults defined will include both task dependencies detected by Nx and project dependencies detected by Lerna.'
       );
       expect(collectedOutput).toContain('package-1');
+    });
+
+    it('logs a warning when using no-prefix and streaming output', async () => {
+      collectedOutput = '';
+      await lernaRun(testDir)('my-script', '--scope', 'package-1', '--no-prefix', '--no-stream');
+
+      const logMessages = loggingOutput('warn');
+      expect(logMessages).toContain('"no-prefix" is ignored when not using streaming output.');
+      expect(collectedOutput).toContain('package-1');
+    });
+
+    it('generate an Nx profile and assigns the project relative path to NX_PROFILE environment variable', async () => {
+      collectedOutput = '';
+      await lernaRun(testDir)('my-script', '--scope', 'package-1', '--profile');
+
+      expect(collectedOutput).toContain('package-1');
+      expect(process.env.NX_PROFILE).toContain('Lerna-Profile');
     });
   });
 });

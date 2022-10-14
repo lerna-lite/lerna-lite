@@ -35,13 +35,12 @@
     "fs-extra": "^10.1.0",
     "multimatch": "^5.0.0",
     "npmlog": "^6.0.2",
-    "p-map": "^4.0.0",
-    "upath": "^2.0.1",
-    "yargs": "^17.5.1"
+    "upath": "^2.0.1"
   },
   "devDependencies": {
-    "@types/execa": "^2.0.0",
     "@types/node": "^18.7.14",
-    "@types/p-map": "^2.0.0"
+    "@types/p-map": "^2.0.0",
+    "path": "^0.12.7",
+    "yargs": "^17.6.0"
   }
 }

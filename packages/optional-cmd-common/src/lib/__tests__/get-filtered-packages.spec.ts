@@ -6,6 +6,8 @@ jest.mock('npmlog', () => ({
 
 jest.mock('@lerna-lite/core', () => ({
   ...(jest.requireActual('@lerna-lite/core') as any), // return the other real methods, below we'll mock only 2 of the methods
+  Command: jest.requireActual('../../../../core/src/command').Command,
+  conf: jest.requireActual('../../../../core/src/command').conf,
   logOutput: jest.requireActual('../../../../core/src/__mocks__/output').logOutput,
   promptConfirmation: jest.requireActual('../../../../core/src/__mocks__/prompt').promptConfirmation,
   promptSelectOne: jest.requireActual('../../../../core/src/__mocks__/prompt').promptSelectOne,
@@ -127,6 +129,24 @@ test('--since returns all packages if no tag is found', async () => {
   );
 });
 
+test('--include-merged-tags returns all packages if no tag is found', async () => {
+  const packageGraph = await buildGraph(cwd);
+  const execOpts = { cwd };
+  const options: any = parseOptions('--since', '--include-merged-tags');
+  options.log = { notice: mockNotice };
+
+  const result = await getFilteredPackages(packageGraph, execOpts, options);
+
+  expect(result).toHaveLength(5);
+  expect(collectUpdates).toHaveBeenLastCalledWith(
+    expect.any(Array),
+    packageGraph,
+    execOpts,
+    expect.objectContaining({ since: '' })
+  );
+  expect(mockNotice).toHaveBeenCalledWith('filter', 'including merged tags');
+});
+
 test('--since returns packages updated since the last tag', async () => {
   (collectUpdates as any).setUpdated(cwd, 'package-2', 'package-3');
 
@@ -172,7 +192,7 @@ test('--scope package-{2,3,4} --since main', async () => {
   expect(result.map((node) => node.name)).toEqual(['package-4']);
   expect(collectUpdates).toHaveBeenLastCalledWith(
     // filter-packages before collect-updates
-    [2, 3, 4].map((n) => packageGraph.get(`package-${n}`).pkg),
+    [2, 3, 4].map((n) => packageGraph.get(`package-${n}`)!.pkg),
     packageGraph,
     execOpts,
     expect.objectContaining({ since: 'main' })
