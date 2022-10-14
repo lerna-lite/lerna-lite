@@ -445,7 +445,7 @@ importers:
       pify: ^5.0.0
       read-package-json: ^5.0.2
       semver: ^7.3.8
-      ssri: ^9.0.1
+      ssri: ^10.0.0
       tar: ^6.1.11
       write-pkg: ^4.0.0
       yargs: ^17.6.0
@@ -472,7 +472,7 @@ importers:
       pify: 5.0.0
       read-package-json: 5.0.2
       semver: 7.3.8
-      ssri: 9.0.1
+      ssri: 10.0.0
       tar: 6.1.11
     devDependencies:
       '@types/conventional-changelog-core': 4.2.1
@@ -6479,6 +6479,13 @@ packages:
   /sprintf-js/1.0.3:
     resolution: {integrity: sha512-D9cPgkvLlV3t3IzL0D0YLvGA9Ahk4PcvVwUbN0dSGr1aP0Nrt4AEnTUbuGvquEC0mA64Gqt1fzirlRs5ibXx8g==}
     dev: true
+
+  /ssri/10.0.0:
+    resolution: {integrity: sha512-64ghGOpqW0k+jh7m5jndBGdVEoPikWwGQmBNN5ks6jyUSMymzHDTlnNHOvzp+6MmHOljr2MokUzvRksnTwG0Iw==}
+    engines: {node: ^14.17.0 || ^16.13.0 || >=18.0.0}
+    dependencies:
+      minipass: 3.1.6
+    dev: false
 
   /ssri/9.0.1:
     resolution: {integrity: sha512-o57Wcn66jMQvfHG1FlYbWeZWW/dHZhJXjpIcTfXldXEk5nz5lStPo3mK0OJQfGR3RbZUlbISexbljkJzuEj/8Q==}
