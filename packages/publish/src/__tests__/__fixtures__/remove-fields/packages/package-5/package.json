@@ -1,0 +1,25 @@
+{
+  "name": "package-5",
+  "description": "one local dependency, no dependents, three transitive dependencies",
+  "version": "1.0.0",
+  "main": "dist/cjs/index.js",
+  "browser": "src/index.ts",
+  "exports": {
+    "index": {
+        "types": "./types/index.d.ts",
+        "import": "./esm/index.js",
+        "require": "./commonjs/index.cjs"
+    }
+  },
+  "dependencies": {
+    "package-4": "^1.0.0"
+  },
+  "devDependencies": {
+    "jest": "^29.0.0",
+    "tiny-tarball": "^1.0.0"
+  },
+  "scripts": {
+    "build": "tsc --project tsconfig.json",
+    "build:dev": "tsc --incremental --watch"
+  }
+}

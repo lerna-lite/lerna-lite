@@ -11,7 +11,7 @@ jest.mock('@lerna-lite/core', () => ({
 }));
 
 // mocked modules
-import { collectUpdates, logOutput } from '@lerna-lite/core';
+import { ChangedCommandOption, collectUpdates, logOutput } from '@lerna-lite/core';
 
 // helpers
 import { commandRunner, initFixtureFactory } from '@lerna-test/helpers';
@@ -32,7 +32,7 @@ const createArgv = (cwd: string, ...args: string[]) => {
   const argv = yargParser(parserArgs, { array: [{ key: 'ignoreChanges' }] });
   argv['$0'] = cwd;
   argv['loglevel'] = 'silent';
-  return argv;
+  return argv as unknown as ChangedCommandOption;
 };
 
 // remove quotes around top-level strings

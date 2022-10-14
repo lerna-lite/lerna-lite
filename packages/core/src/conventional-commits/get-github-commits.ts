@@ -3,6 +3,7 @@ import log from 'npmlog';
 
 import { createGitHubClient, parseGitRepo } from '../git-clients';
 import { ExecOpts, RemoteCommit } from '../models';
+import { getComplexObjectValue } from '../utils';
 
 const QUERY_PAGE_SIZE = 100; // GitHub API is restricting max of 100 per query
 
@@ -49,7 +50,7 @@ export async function getGithubCommits(
       since: sinceDate,
     });
 
-    const historyData = getDescendantObjectProp<GraphqlCommitHistoryData>(response, 'repository.ref.target.history');
+    const historyData = getComplexObjectValue<GraphqlCommitHistoryData>(response, 'repository.ref.target.history');
     const pageInfo = historyData?.pageInfo;
     hasNextPage = pageInfo?.hasNextPage ?? false;
     afterCursor = pageInfo?.endCursor ?? '';
@@ -71,21 +72,6 @@ export async function getGithubCommits(
   log.verbose('github', 'found %s commits since last release timestamp %s', remoteCommits.length, sinceDate);
 
   return remoteCommits;
-}
-
-/**
- * From a dot (.) notation path, find and return a property within an object given a complex object path
- * Note that the object path does should not include the parent itself
- * for example if we want to get `address.zip` from `user` object, we would call `getDescendantObjectProp(user, 'address.zip')`
- * @param object - object to search from
- * @param path - complex object path to find descendant property from, must be a string with dot (.) notation
- * @returns outputValue - the object property value found if any
- */
-export function getDescendantObjectProp<T>(object: any, path: string | undefined): T {
-  if (!object || !path) {
-    return object;
-  }
-  return path.split('.').reduce((obj, prop) => obj && (obj as any)[prop], object);
 }
 
 interface GraphqlCommitClientData {
