@@ -70,7 +70,7 @@
     "strong-log-transformer": "^2.1.0",
     "temp-dir": "^1.0.0",
     "uuid": "^9.0.0",
-    "write-file-atomic": "^4.0.2",
+    "write-file-atomic": "^5.0.0",
     "write-json-file": "^4.3.0",
     "write-pkg": "^4.0.0"
   },
