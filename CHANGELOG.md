@@ -4,6 +4,34 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [1.12.0](https://github.com/ghiscoding/lerna-lite/compare/v1.11.3...v1.12.0) (2022-10-14)
+
+### Bug Fixes
+
+* bump min Node version to >=14.17.0 to align with external deps ([#387](https://github.com/ghiscoding/lerna-lite/issues/387)) ([2f804e9](https://github.com/ghiscoding/lerna-lite/commit/2f804e92bd319e2b27b1406ca82ec1fdab09c449)) - by @ghiscoding
+* **deps:** update dependency @npmcli/run-script to v5 ([#388](https://github.com/ghiscoding/lerna-lite/issues/388)) ([f8a8995](https://github.com/ghiscoding/lerna-lite/commit/f8a8995a4a23f5b4e0aa21de79f6be490acd46a1)) - by @renovate-bot
+* **deps:** update dependency @octokit/rest to ^19.0.5 ([#380](https://github.com/ghiscoding/lerna-lite/issues/380)) ([18155d8](https://github.com/ghiscoding/lerna-lite/commit/18155d89b078aebcea2ef55704910bea56e8514a)) - by @renovate-bot
+* **deps:** update dependency dotenv to ^16.0.3 ([66467f5](https://github.com/ghiscoding/lerna-lite/commit/66467f593198736a3074b1afddb0c86ea860003c)) - by @renovate-bot
+* **deps:** update dependency npm-packlist to v6 ([4241c2f](https://github.com/ghiscoding/lerna-lite/commit/4241c2f8b530538fc2ea1dec3dbfebb438056470)) - by @renovate-bot
+* **deps:** update dependency npmlog to v7 ([#389](https://github.com/ghiscoding/lerna-lite/issues/389)) ([d2110f1](https://github.com/ghiscoding/lerna-lite/commit/d2110f1aebe4b6cd44bcae2691fbd18fefc78299)) - by @renovate-bot
+* **deps:** update dependency read-package-json to v6 ([#390](https://github.com/ghiscoding/lerna-lite/issues/390)) ([c585090](https://github.com/ghiscoding/lerna-lite/commit/c5850900957dec8d6dd6f7542ee2e088315ee338)) - by @renovate-bot
+* **deps:** update dependency ssri to v10 ([#385](https://github.com/ghiscoding/lerna-lite/issues/385)) ([04457c9](https://github.com/ghiscoding/lerna-lite/commit/04457c95efd4c135adab9e70de66d5942aa9d18e)) - by @renovate-bot
+* **deps:** update dependency write-file-atomic to v5 ([#386](https://github.com/ghiscoding/lerna-lite/issues/386)) ([ffdea0d](https://github.com/ghiscoding/lerna-lite/commit/ffdea0d16e03c0f63e5de4cd61ac53d5eda907e9)) - by @renovate-bot
+* **deps:** upgrading pacote & npm-packlist to v7 requires arborist tree ([#367](https://github.com/ghiscoding/lerna-lite/issues/367)) ([8c34a3b](https://github.com/ghiscoding/lerna-lite/commit/8c34a3bccf582f90543b80253d065b22bddd8e35)) - by @ghiscoding
+* **npm-publish:** Allows disabling of strict SSL checks ([#374](https://github.com/ghiscoding/lerna-lite/issues/374)) ([a26d849](https://github.com/ghiscoding/lerna-lite/commit/a26d8491dcbe2b3867c9f07c93db6d58d7358198)) - by @ghiscoding
+* **run:** allow for loading of env files to be skipped ([#391](https://github.com/ghiscoding/lerna-lite/issues/391)) ([440611e](https://github.com/ghiscoding/lerna-lite/commit/440611ed3acceaef8a3cd4dcfa877591388d83a4)) - by @ghiscoding
+* **run:** fully defer to Nx for dep detection when nx.json exists ([0657aa4](https://github.com/ghiscoding/lerna-lite/commit/0657aa41c7502bedad346bed9a2bf91f4b3405d6)) - by @ghiscoding
+* **run:** only defer to Nx when targetDefaults are defined in nx.json ([127f90c](https://github.com/ghiscoding/lerna-lite/commit/127f90ce512a9ba0142821f5f1819857b8eb1123)) - by @ghiscoding
+* **run:** warn on incompatible arguments with useNx ([bc5e823](https://github.com/ghiscoding/lerna-lite/commit/bc5e82368533d435765250927ecebfa01caeaf62)) - by @ghiscoding
+
+### Features
+
+* **commands:** rename `git-dry-run` and `cmd-dry-run` to simply `dry-run` ([#377](https://github.com/ghiscoding/lerna-lite/issues/377)) ([3a55f5e](https://github.com/ghiscoding/lerna-lite/commit/3a55f5e8f7c26f3890f1c7099ca85c9d72cd2674)) - by @ghiscoding
+* **publish:** add new option `--remove-package-fields` before publish ([#359](https://github.com/ghiscoding/lerna-lite/issues/359)) ([45a2107](https://github.com/ghiscoding/lerna-lite/commit/45a2107aa8862546a261a0c377c3fc704248bc5a)) - by @ghiscoding
+* **run:** add `--use-nx` as CLI option and add Nx profiler ([9da003e](https://github.com/ghiscoding/lerna-lite/commit/9da003e6b570f969c5da437c71f3a8f9753e4704)) - by @ghiscoding
+* **version:** add `--allow-peer-dependencies-update`, closes [#333](https://github.com/ghiscoding/lerna-lite/issues/333) ([#363](https://github.com/ghiscoding/lerna-lite/issues/363)) ([efaf011](https://github.com/ghiscoding/lerna-lite/commit/efaf0111e2e687718d33b42418abd701447a7031)) - by @ghiscoding
+* **version:** use manual GitHub web interface when `GH_TOKEN` undefined ([83e9cce](https://github.com/ghiscoding/lerna-lite/commit/83e9cce5e45a12ccf7028d453a9fcddf965443a1)) - by @ghiscoding
+
 ## [1.11.3](https://github.com/ghiscoding/lerna-lite/compare/v1.11.2...v1.11.3) (2022-09-20)
 
 ### Bug Fixes

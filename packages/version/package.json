@@ -1,7 +1,7 @@
 {
   "name": "@lerna-lite/version",
   "description": "Bump version & write changelog of packages changed since the last release",
-  "version": "1.11.3",
+  "version": "1.12.0",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "typings": "dist/index.d.ts",

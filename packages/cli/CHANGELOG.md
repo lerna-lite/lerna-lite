@@ -4,6 +4,22 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [1.12.0](https://github.com/ghiscoding/lerna-lite/compare/v1.11.3...v1.12.0) (2022-10-14)
+
+### Bug Fixes
+
+* bump min Node version to >=14.17.0 to align with external deps ([#387](https://github.com/ghiscoding/lerna-lite/issues/387)) ([2f804e9](https://github.com/ghiscoding/lerna-lite/commit/2f804e92bd319e2b27b1406ca82ec1fdab09c449)) - by @ghiscoding
+* **deps:** update dependency dotenv to ^16.0.3 ([66467f5](https://github.com/ghiscoding/lerna-lite/commit/66467f593198736a3074b1afddb0c86ea860003c)) - by @renovate-bot
+* **deps:** update dependency npmlog to v7 ([#389](https://github.com/ghiscoding/lerna-lite/issues/389)) ([d2110f1](https://github.com/ghiscoding/lerna-lite/commit/d2110f1aebe4b6cd44bcae2691fbd18fefc78299)) - by @renovate-bot
+* **run:** allow for loading of env files to be skipped ([#391](https://github.com/ghiscoding/lerna-lite/issues/391)) ([440611e](https://github.com/ghiscoding/lerna-lite/commit/440611ed3acceaef8a3cd4dcfa877591388d83a4)) - by @ghiscoding
+
+### Features
+
+* **commands:** rename `git-dry-run` and `cmd-dry-run` to simply `dry-run` ([#377](https://github.com/ghiscoding/lerna-lite/issues/377)) ([3a55f5e](https://github.com/ghiscoding/lerna-lite/commit/3a55f5e8f7c26f3890f1c7099ca85c9d72cd2674)) - by @ghiscoding
+* **publish:** add new option `--remove-package-fields` before publish ([#359](https://github.com/ghiscoding/lerna-lite/issues/359)) ([45a2107](https://github.com/ghiscoding/lerna-lite/commit/45a2107aa8862546a261a0c377c3fc704248bc5a)) - by @ghiscoding
+* **run:** add `--use-nx` as CLI option and add Nx profiler ([9da003e](https://github.com/ghiscoding/lerna-lite/commit/9da003e6b570f969c5da437c71f3a8f9753e4704)) - by @ghiscoding
+* **version:** add `--allow-peer-dependencies-update`, closes [#333](https://github.com/ghiscoding/lerna-lite/issues/333) ([#363](https://github.com/ghiscoding/lerna-lite/issues/363)) ([efaf011](https://github.com/ghiscoding/lerna-lite/commit/efaf0111e2e687718d33b42418abd701447a7031)) - by @ghiscoding
+
 ## [1.11.3](https://github.com/ghiscoding/lerna-lite/compare/v1.11.2...v1.11.3) (2022-09-20)
 
 ### Bug Fixes

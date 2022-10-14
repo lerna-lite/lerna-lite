@@ -4,6 +4,13 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [1.12.0](https://github.com/ghiscoding/lerna-lite/compare/v1.11.3...v1.12.0) (2022-10-14)
+
+### Bug Fixes
+
+* bump min Node version to >=14.17.0 to align with external deps ([#387](https://github.com/ghiscoding/lerna-lite/issues/387)) ([2f804e9](https://github.com/ghiscoding/lerna-lite/commit/2f804e92bd319e2b27b1406ca82ec1fdab09c449)) - by @ghiscoding
+* **deps:** update dependency npmlog to v7 ([#389](https://github.com/ghiscoding/lerna-lite/issues/389)) ([d2110f1](https://github.com/ghiscoding/lerna-lite/commit/d2110f1aebe4b6cd44bcae2691fbd18fefc78299)) - by @renovate-bot
+
 ## [1.11.3](https://github.com/ghiscoding/lerna-lite/compare/v1.11.2...v1.11.3) (2022-09-20)
 
 **Note:** Version bump only for package @lerna-lite/diff
