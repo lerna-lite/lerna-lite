@@ -5,5 +5,8 @@
     "package-1": "workspace:>=1.0.0",
     "tiny-registry": "workspace:*",
     "tiny-tarball": "workspace:^2.3.4"
+  },
+  "peerDependencies": {
+    "package-1": ">=1.0.0"
   }
 }

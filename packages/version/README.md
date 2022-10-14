@@ -71,6 +71,7 @@ Running `lerna version --conventional-commits` without the above flags will rele
   - [Prerelease](#prerelease)
   - [Options](#options)
     - [`--allow-branch <glob>`](#--allow-branch-glob)
+    - [`--allow-peer-dependencies-update`](#--allow-peer-dependencies-update) (new)
     - [`--amend`](#--amend)
     - [`--changelog-preset`](#--changelog-preset)
     - [`--conventional-commits`](#--conventional-commits)
@@ -151,6 +152,66 @@ Please use with caution.
 ```sh
 lerna version --allow-branch hotfix/oops-fix-the-thing
 ```
+
+### `--allow-peer-dependencies-update`
+
+```sh
+lerna version --allow-peer-dependencies-update
+```
+
+By default peer dependencies versions will not be bumped unless this flag is enabled. When the package to be bumped is found in regular `dependencies` (or `devDependencies`) and also in `peerDependencies`, then it will bump both of them to the same version.
+
+> **Note** peer dependency that includes a semver range with an operator (ie `>=2.0.0`) will never be mutated even if this flag is enabled.
+
+> **Note** Please use with caution when enabling this option, it is not recommended for most users since the npm standard is to never mutate (bump) any `peerDependencies` when publishing new version in an automated fashion, at least not without a user intervention, as explained by core Lerna maintainer:
+
+> > _Changes to a peer version range are always semver major, and should be as broad as possible._
+> > _Until we can get fancier, we should never automatically modify them to match the new version being published (which is the current incorrect behavior)._
+
+#### Examples
+##### with flag enabled
+with the new flag both deps would be updated and bumped, for example if we do a `minor` bump
+```sh
+{
+  "name": "B",
+  "dependencies": {
+    "A": "workspace:^1.2.0"   // will update to "workspace:^1.3.0",
+    "B": "^0.4.0":            // will update to "^0.5.0"
+   },
+  "peerDependencies": {
+    "A": "workspace:^1.2.0"   // will update to "workspace:^1.3.0"
+    "B": ">=0.2.0":           // will not be updateed because range with operator (>=) are skipped
+  }
+}
+```
+
+##### without flag
+without the flag it will only update the first package it finds, that is `dependencies` in this case, so peer deps would never be updated
+```sh
+{
+  "name": "B",
+  "dependencies": {
+    "A": "workspace:^1.2.0"   // will update to "workspace:^1.3.0"
+    "B": "^0.4.0":            // will update to "^0.5.0"
+   },
+  "peerDependencies": {
+    "A": "workspace:^1.2.0"   // will NEVER be updateed
+    "B": ">=0.2.0":           // will NEVER be updateed
+  }
+}
+```
+
+#### Some Exclusions
+with the flag enabled, it will update regular semver like these
+- `1.2.3`
+- `^1.2.3`
+- `^1.4.0-alpha.0`
+- `workspace:^1.2.3`
+
+but it will never update or change versions with ranges
+- `>=1.0.0`
+- `>=1.0.0 <2.0.0`
+- `^1 | ^2 | ^3`
 
 ### `--amend`
 
@@ -702,3 +763,5 @@ Will apply the following updates to your `package.json` (assuming a `minor` vers
   }
 }
 ```
+
+> **Note** semver range with an operator (ie `workspace:>=2.0.0`) are also supported but will never be mutated.
