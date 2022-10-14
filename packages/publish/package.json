@@ -50,7 +50,7 @@
     "pacote": "^15.0.0",
     "path": "^0.12.7",
     "pify": "^5.0.0",
-    "read-package-json": "^5.0.2",
+    "read-package-json": "^6.0.0",
     "semver": "^7.3.8",
     "ssri": "^10.0.0",
     "tar": "^6.1.11"
