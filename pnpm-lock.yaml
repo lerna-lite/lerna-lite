@@ -214,7 +214,7 @@ importers:
       strong-log-transformer: ^2.1.0
       temp-dir: ^1.0.0
       uuid: ^9.0.0
-      write-file-atomic: ^4.0.2
+      write-file-atomic: ^5.0.0
       write-json-file: ^4.3.0
       write-pkg: ^4.0.0
       yargs: ^17.6.0
@@ -259,7 +259,7 @@ importers:
       strong-log-transformer: 2.1.0
       temp-dir: 1.0.0
       uuid: 9.0.0
-      write-file-atomic: 4.0.2
+      write-file-atomic: 5.0.0
       write-json-file: 4.3.0
       write-pkg: 4.0.0
     devDependencies:
@@ -7054,6 +7054,14 @@ packages:
     dependencies:
       imurmurhash: 0.1.4
       signal-exit: 3.0.7
+
+  /write-file-atomic/5.0.0:
+    resolution: {integrity: sha512-R7NYMnHSlV42K54lwY9lvW6MnSm1HSJqZL3xiSgi9E7//FYaI74r2G0rd+/X6VAMkHEdzxQaU5HUOXWUz5kA/w==}
+    engines: {node: ^14.17.0 || ^16.13.0 || >=18.0.0}
+    dependencies:
+      imurmurhash: 0.1.4
+      signal-exit: 3.0.7
+    dev: false
 
   /write-json-file/3.2.0:
     resolution: {integrity: sha512-3xZqT7Byc2uORAatYiP3DHUUAVEkNOswEWNs9H5KXiicRTvzYzYqKjYc4G7p+8pltvAw641lVByKVtMpf+4sYQ==}
