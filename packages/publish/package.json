@@ -44,7 +44,7 @@
     "npm-package-arg": "^9.1.2",
     "npm-packlist": "^7.0.0",
     "npm-registry-fetch": "^14.0.0",
-    "npmlog": "^6.0.2",
+    "npmlog": "^7.0.0",
     "p-map": "^4.0.0",
     "p-pipe": "^3.1.0",
     "pacote": "^15.0.0",
