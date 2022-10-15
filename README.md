@@ -26,7 +26,7 @@
 - [Troubleshooting](https://github.com/ghiscoding/lerna-lite/wiki/Troubleshooting)
 - Commands
   - included with CLI
-    - 🛠️ [`init`](https://github.com/ghiscoding/lerna-lite/tree/main/packages/init#readme) - creates a new Lerna-Lite repo (creates `lerna.json` and a workspace structure)
+    - 🛠️ [`init`](https://github.com/ghiscoding/lerna-lite/tree/main/packages/init#readme) - creates a new Lerna-Lite repo (adds `lerna.json` and a workspace structure)
     - 💻 [`info`](https://github.com/ghiscoding/lerna-lite/tree/main/packages/info#readme) - print local environment information (useful when opening new issue)
     - ☁️ [`publish`](https://github.com/ghiscoding/lerna-lite/tree/main/packages/publish#readme) - publish every workspace packages that changed
     - 📑 [`version`](https://github.com/ghiscoding/lerna-lite/tree/main/packages/version#readme) - create new version for each workspace packages
@@ -43,9 +43,7 @@
 
 Take 30sec. to complete this 1 question [poll survey 🔘](https://github.com/ghiscoding/lerna-lite/discussions/156) if you are using this feature. It's a simple poll to find out which package manager is the most popular with this new `workspace:` protocol feature. Thanks
 
-Lerna-Lite itself is now also using [pnpm workspaces](https://pnpm.io/workspaces) with the `workspace:` protocol as well, woohoo 🎉
-
-We strongly suggest the use of the new opt-in flag [--sync-workspace-lock](https://github.com/ghiscoding/lerna-lite/tree/main/packages/version#--sync-workspace-lock) to automatically update your lock file 🔒
+Lerna-Lite itself is now also using [pnpm workspaces](https://pnpm.io/workspaces) with the `workspace:` protocol as well  🎉
 
 ---
 
@@ -102,9 +100,9 @@ Mainly for the following reasons:
 3. rewrite the lib in TypeScript for type checking and to be compatible with ESM in the future
 4. replicate a few opened PRs (fixes and features) from Lerna and also add extra features in Lerna-Lite
     - for example we support yarn/pnpm `workspace:` protocol, we added changelog headers, and added `dry-run` options
-5. Lerna v5 is now installing **[Nx](https://nx.dev/)** as a required [dependency](https://github.com/lerna/lerna/blob/main/core/lerna/package.json#L65), want it or not, while it remains **optional** in Lerna-Lite
+5. Lerna v5-6 is installing **[Nx](https://nx.dev/)** as a required [dependency](https://github.com/lerna/lerna/blob/main/core/lerna/package.json#L66), want it or not, while it remains **optional** in Lerna-Lite
     - even if [Nx](https://nx.dev/) can be a nice addition with `lerna run` and [`useNx`](https://github.com/ghiscoding/lerna-lite/tree/main/packages/run#usenx-experimental) (which we did add), it should and **will always be optional** in Lerna-Lite, it's your decision.
-6. Lerna v5 is now also enforcing `useWorkspaces` option to be enabled, but this can have undesired effects (you might want to track only the `packages` folder with Lerna and not other folders like `demo` or `website`). Again, that will not be enforced in Lerna-Lite, in fact it's the opposite, I personally prefer to just use `packages` in `lerna.json` (especially with pnpm)
+6. Lerna v5-6 is also enforcing `useWorkspaces` option to be enabled, but this can have undesired effects (you might want to track only the `packages` folder with Lerna and not other folders like `demo` or `website`). Again, that will not be enforced in Lerna-Lite, in fact it's the opposite, I personally prefer to just use `packages` in `lerna.json` (especially with pnpm)
 
 ### This lib will help you with
 
