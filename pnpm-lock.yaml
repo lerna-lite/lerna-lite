@@ -432,7 +432,7 @@ importers:
       fs-extra: ^10.1.0
       has-unicode: ^2.0.1
       libnpmaccess: ^6.0.4
-      libnpmpublish: ^6.0.5
+      libnpmpublish: ^7.0.0
       load-json-file: ^6.2.0
       npm-package-arg: ^9.1.2
       npm-packlist: ^7.0.1
@@ -460,7 +460,7 @@ importers:
       fs-extra: 10.1.0
       has-unicode: 2.0.1
       libnpmaccess: 6.0.4
-      libnpmpublish: 6.0.5
+      libnpmpublish: 7.0.0
       npm-package-arg: 9.1.2
       npm-packlist: 7.0.1
       npm-registry-fetch: 14.0.2
@@ -5073,15 +5073,15 @@ packages:
       - supports-color
     dev: false
 
-  /libnpmpublish/6.0.5:
-    resolution: {integrity: sha512-LUR08JKSviZiqrYTDfywvtnsnxr+tOvBU0BF8H+9frt7HMvc6Qn6F8Ubm72g5hDTHbq8qupKfDvDAln2TVPvFg==}
-    engines: {node: ^12.13.0 || ^14.15.0 || >=16.0.0}
+  /libnpmpublish/7.0.0:
+    resolution: {integrity: sha512-yW9LyPq5YuWs2i0y9rZVNP9OeCBiJM/3iInPUtDPORCyF08vqN4A1crOTihd63uqfDEwE0xKSN3omH6qOd0mgw==}
+    engines: {node: ^14.17.0 || ^16.13.0 || >=18.0.0}
     dependencies:
-      normalize-package-data: 4.0.0
-      npm-package-arg: 9.1.2
-      npm-registry-fetch: 13.3.1
+      normalize-package-data: 5.0.0
+      npm-package-arg: 10.0.0
+      npm-registry-fetch: 14.0.2
       semver: 7.3.8
-      ssri: 9.0.1
+      ssri: 10.0.0
     transitivePeerDependencies:
       - bluebird
       - supports-color
@@ -5527,16 +5527,6 @@ packages:
     engines: {node: '>=10'}
     dependencies:
       hosted-git-info: 4.1.0
-      is-core-module: 2.9.0
-      semver: 7.3.8
-      validate-npm-package-license: 3.0.4
-    dev: false
-
-  /normalize-package-data/4.0.0:
-    resolution: {integrity: sha512-m+GL22VXJKkKbw62ZaBBjv8u6IE3UI4Mh5QakIqs3fWiKe0Xyi6L97hakwZK41/LD4R/2ly71Bayx0NLMwLA/g==}
-    engines: {node: ^12.13.0 || ^14.15.0 || >=16}
-    dependencies:
-      hosted-git-info: 5.0.0
       is-core-module: 2.9.0
       semver: 7.3.8
       validate-npm-package-license: 3.0.4
