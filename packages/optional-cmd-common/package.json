@@ -34,7 +34,7 @@
     "@lerna-lite/core": "workspace:*",
     "fs-extra": "^10.1.0",
     "multimatch": "^5.0.0",
-    "npmlog": "^7.0.0",
+    "npmlog": "^7.0.1",
     "upath": "^2.0.1"
   },
   "devDependencies": {

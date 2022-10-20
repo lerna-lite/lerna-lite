@@ -35,13 +35,13 @@
     "@lerna-lite/optional-cmd-common": "workspace:*",
     "chalk": "^4.1.2",
     "fs-extra": "^10.1.0",
-    "npmlog": "^7.0.0",
+    "npmlog": "^7.0.1",
     "p-map": "^4.0.0"
   },
   "devDependencies": {
     "@types/p-map": "^2.0.0",
     "globby": "^11.1.0",
-    "jest-circus": "^29.2.0",
+    "jest-circus": "^29.2.1",
     "perf_hooks": "^0.0.1",
     "yargs": "^17.6.0",
     "yargs-parser": "^21.1.1"

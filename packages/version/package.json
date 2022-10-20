@@ -37,7 +37,7 @@
     "load-json-file": "^6.2.0",
     "minimatch": "^5.1.0",
     "new-github-release-url": "^1.0.0",
-    "npmlog": "^7.0.0",
+    "npmlog": "^7.0.1",
     "p-map": "^4.0.0",
     "p-pipe": "^3.1.0",
     "p-reduce": "^2.1.0",
