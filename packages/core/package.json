@@ -59,7 +59,7 @@
     "minimatch": "^5.1.0",
     "node-fetch": "^2.6.7",
     "npm-package-arg": "^9.1.2",
-    "npmlog": "^7.0.0",
+    "npmlog": "^7.0.1",
     "p-map": "^4.0.0",
     "p-queue": "^6.6.2",
     "path": "^0.12.7",
@@ -95,7 +95,7 @@
     "@types/write-file-atomic": "^4.0.0",
     "@types/write-json-file": "^3.2.1",
     "@types/write-pkg": "^4.0.0",
-    "npm-registry-fetch": "^14.0.1",
+    "npm-registry-fetch": "^14.0.2",
     "yargs": "^17.6.0",
     "yargs-parser": "^21.1.1"
   },
