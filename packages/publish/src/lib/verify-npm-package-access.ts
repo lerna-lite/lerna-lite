@@ -18,10 +18,10 @@ export function verifyNpmPackageAccess(packages: Package[], username: string, op
 
   opts.log.silly('verifyNpmPackageAccess', '');
 
-  return pulseTillDone(access.lsPackages(username, opts)).then(success, failure);
+  return pulseTillDone(access.getPackages(username, opts)).then(success, failure);
 
   function success(result: any) {
-    // when _no_ results received, access.lsPackages returns null
+    // when _no_ results received, access.getPackages returns null
     // we can only assume that the packages in question have never been published
     if (result === null) {
       opts.log.warn(
