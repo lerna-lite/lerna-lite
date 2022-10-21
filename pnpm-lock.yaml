@@ -431,7 +431,7 @@ importers:
       columnify: ^1.6.0
       fs-extra: ^10.1.0
       has-unicode: ^2.0.1
-      libnpmaccess: ^6.0.4
+      libnpmaccess: ^7.0.0
       libnpmpublish: ^7.0.0
       load-json-file: ^6.2.0
       npm-package-arg: ^9.1.2
@@ -459,7 +459,7 @@ importers:
       columnify: 1.6.0
       fs-extra: 10.1.0
       has-unicode: 2.0.1
-      libnpmaccess: 6.0.4
+      libnpmaccess: 7.0.0
       libnpmpublish: 7.0.0
       npm-package-arg: 9.1.2
       npm-packlist: 7.0.1
@@ -5060,14 +5060,12 @@ packages:
       type-check: 0.4.0
     dev: true
 
-  /libnpmaccess/6.0.4:
-    resolution: {integrity: sha512-qZ3wcfIyUoW0+qSFkMBovcTrSGJ3ZeyvpR7d5N9pEYv/kXs8sHP2wiqEIXBKLFrZlmM0kR0RJD7mtfLngtlLag==}
-    engines: {node: ^12.13.0 || ^14.15.0 || >=16.0.0}
+  /libnpmaccess/7.0.0:
+    resolution: {integrity: sha512-WwDa6CExp74s0FKI1eP2pbJ4hMiq5x6kl9XqE0F7RDpmk8sgqvNcCAr/JmMdfpUTqUq6KNddT3bnYBCT/pxniQ==}
+    engines: {node: ^14.17.0 || ^16.13.0 || >=18.0.0}
     dependencies:
-      aproba: 2.0.0
-      minipass: 3.1.6
-      npm-package-arg: 9.1.2
-      npm-registry-fetch: 13.3.1
+      npm-package-arg: 10.0.0
+      npm-registry-fetch: 14.0.2
     transitivePeerDependencies:
       - bluebird
       - supports-color
@@ -5615,22 +5613,6 @@ packages:
       npm-normalize-package-bin: 3.0.0
       npm-package-arg: 10.0.0
       semver: 7.3.8
-    dev: false
-
-  /npm-registry-fetch/13.3.1:
-    resolution: {integrity: sha512-eukJPi++DKRTjSBRcDZSDDsGqRK3ehbxfFUcgaRd0Yp6kRwOwh2WVn0r+8rMB4nnuzvAk6rQVzl6K5CkYOmnvw==}
-    engines: {node: ^12.13.0 || ^14.15.0 || >=16.0.0}
-    dependencies:
-      make-fetch-happen: 10.1.7
-      minipass: 3.1.6
-      minipass-fetch: 2.1.0
-      minipass-json-stream: 1.0.1
-      minizlib: 2.1.2
-      npm-package-arg: 9.1.2
-      proc-log: 2.0.1
-    transitivePeerDependencies:
-      - bluebird
-      - supports-color
     dev: false
 
   /npm-registry-fetch/14.0.2:
