@@ -58,7 +58,7 @@
     "make-dir": "^3.1.0",
     "minimatch": "^5.1.0",
     "node-fetch": "^2.6.7",
-    "npm-package-arg": "^9.1.2",
+    "npm-package-arg": "^10.0.0",
     "npmlog": "^7.0.1",
     "p-map": "^4.0.0",
     "p-queue": "^6.6.2",

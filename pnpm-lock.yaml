@@ -201,7 +201,7 @@ importers:
       make-dir: ^3.1.0
       minimatch: ^5.1.0
       node-fetch: ^2.6.7
-      npm-package-arg: ^9.1.2
+      npm-package-arg: ^10.0.0
       npm-registry-fetch: ^14.0.2
       npmlog: ^7.0.1
       p-map: ^4.0.0
@@ -247,7 +247,7 @@ importers:
       make-dir: 3.1.0
       minimatch: 5.1.0
       node-fetch: 2.6.7
-      npm-package-arg: 9.1.2
+      npm-package-arg: 10.0.0
       npmlog: 7.0.1
       p-map: 4.0.0
       p-queue: 6.6.2
@@ -434,7 +434,7 @@ importers:
       libnpmaccess: ^6.0.4
       libnpmpublish: ^7.0.0
       load-json-file: ^6.2.0
-      npm-package-arg: ^9.1.2
+      npm-package-arg: ^10.0.0
       npm-packlist: ^7.0.1
       npm-registry-fetch: ^14.0.2
       npmlog: ^7.0.1
@@ -461,7 +461,7 @@ importers:
       has-unicode: 2.0.1
       libnpmaccess: 6.0.4
       libnpmpublish: 7.0.0
-      npm-package-arg: 9.1.2
+      npm-package-arg: 10.0.0
       npm-packlist: 7.0.1
       npm-registry-fetch: 14.0.2
       npmlog: 7.0.1
