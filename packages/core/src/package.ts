@@ -271,7 +271,7 @@ export class Package {
         /^(workspace:)+(.*)$/.test(workspaceSpec)
       ) {
         if (workspaceSpec) {
-          if (resolved.fetchSpec === 'latest') {
+          if (resolved.fetchSpec === 'latest' || resolved.fetchSpec === '') {
             npmlog.error(
               `publish`,
               [
