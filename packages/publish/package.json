@@ -39,7 +39,7 @@
     "columnify": "^1.6.0",
     "fs-extra": "^10.1.0",
     "has-unicode": "^2.0.1",
-    "libnpmaccess": "^6.0.4",
+    "libnpmaccess": "^7.0.0",
     "libnpmpublish": "^7.0.0",
     "npm-package-arg": "^10.0.0",
     "npm-packlist": "^7.0.1",
