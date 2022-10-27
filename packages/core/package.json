@@ -31,7 +31,7 @@
     "npm": ">=8.0.0"
   },
   "dependencies": {
-    "@npmcli/run-script": "^5.0.0",
+    "@npmcli/run-script": "^5.0.1",
     "@octokit/plugin-enterprise-rest": "^6.0.1",
     "@octokit/rest": "^19.0.5",
     "chalk": "^4.1.2",
@@ -90,7 +90,7 @@
     "@types/minimatch": "^5.1.2",
     "@types/npm-package-arg": "^6.1.1",
     "@types/p-map": "^2.0.0",
-    "@types/semver": "^7.3.12",
+    "@types/semver": "^7.3.13",
     "@types/strong-log-transformer": "^1.0.0",
     "@types/write-file-atomic": "^4.0.0",
     "@types/write-json-file": "^3.2.1",
