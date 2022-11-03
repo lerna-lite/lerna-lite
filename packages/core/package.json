@@ -31,7 +31,7 @@
     "npm": ">=8.0.0"
   },
   "dependencies": {
-    "@npmcli/run-script": "^5.0.1",
+    "@npmcli/run-script": "^5.1.1",
     "@octokit/plugin-enterprise-rest": "^6.0.1",
     "@octokit/rest": "^19.0.5",
     "chalk": "^4.1.2",
@@ -96,7 +96,7 @@
     "@types/write-json-file": "^3.2.1",
     "@types/write-pkg": "^4.0.0",
     "npm-registry-fetch": "^14.0.2",
-    "yargs": "^17.6.0",
+    "yargs": "^17.6.1",
     "yargs-parser": "^21.1.1"
   },
   "funding": {
