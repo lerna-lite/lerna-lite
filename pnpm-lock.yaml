@@ -154,7 +154,7 @@ importers:
 
   packages/core:
     specifiers:
-      '@npmcli/run-script': ^5.1.1
+      '@npmcli/run-script': ^6.0.0
       '@octokit/plugin-enterprise-rest': ^6.0.1
       '@octokit/rest': ^19.0.5
       '@types/clone-deep': ^4.0.1
@@ -220,7 +220,7 @@ importers:
       yargs: ^17.6.1
       yargs-parser: ^21.1.1
     dependencies:
-      '@npmcli/run-script': 5.1.1
+      '@npmcli/run-script': 6.0.0
       '@octokit/plugin-enterprise-rest': 6.0.1
       '@octokit/rest': 19.0.5
       chalk: 4.1.2
@@ -1414,20 +1414,6 @@ packages:
     engines: {node: ^14.17.0 || ^16.13.0 || >=18.0.0}
     dependencies:
       postcss-selector-parser: 6.0.10
-    dev: false
-
-  /@npmcli/run-script/5.1.1:
-    resolution: {integrity: sha512-mqj/KPVhahTNvmzk5+YsKuqYnPPh1kOJ4/rA2FR5VhPgfJtCbPuBZrlkYUI0A+z5DKzpE5TITCdlgPllpKcd/Q==}
-    engines: {node: ^14.17.0 || ^16.13.0 || >=18.0.0}
-    dependencies:
-      '@npmcli/node-gyp': 3.0.0
-      '@npmcli/promise-spawn': 6.0.1
-      node-gyp: 9.0.0
-      read-package-json-fast: 3.0.1
-      which: 3.0.0
-    transitivePeerDependencies:
-      - bluebird
-      - supports-color
     dev: false
 
   /@npmcli/run-script/6.0.0:
