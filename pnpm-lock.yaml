@@ -43,7 +43,7 @@ importers:
       normalize-newline: ^3.0.0
       normalize-path: ^3.0.0
       npmlog: ^7.0.1
-      nx: 15.0.7
+      nx: 15.0.8
       prettier: ^2.7.1
       rimraf: ^3.0.2
       semver: ^7.3.8
@@ -93,7 +93,7 @@ importers:
       normalize-newline: 3.0.0
       normalize-path: 3.0.0
       npmlog: 7.0.1
-      nx: 15.0.7
+      nx: 15.0.8
       prettier: 2.7.1
       rimraf: 3.0.2
       semver: 7.3.8
@@ -1444,21 +1444,21 @@ packages:
       - supports-color
     dev: false
 
-  /@nrwl/cli/15.0.7:
-    resolution: {integrity: sha512-qj1HuktNRMGGlzI5EXdneQ5+E7p0rdQQMRwiDodaFNTMko7ntH6A62hgq/fTcxmADJyqD31KS+1CvmiMKcof8A==}
+  /@nrwl/cli/15.0.8:
+    resolution: {integrity: sha512-3dy3VGcStWuZXUK91FNIoxIHO44DSuE3bPVLLPfYoOgn8pYjhykpdp6RZHoDkN2NhRypzM73q2GCrmBMfizRyA==}
     dependencies:
-      nx: 15.0.7
+      nx: 15.0.8
     transitivePeerDependencies:
       - '@swc-node/register'
       - '@swc/core'
       - debug
     dev: true
 
-  /@nrwl/tao/15.0.7:
-    resolution: {integrity: sha512-cnK2jlYoseIbYg7hmzC2eSCHmXXBqh4qmQzXonu6y17u+S5jUTSlaQp1f+q/Ah8mJpqQTrHzR+qU5UbnqGQUFQ==}
+  /@nrwl/tao/15.0.8:
+    resolution: {integrity: sha512-Xr1hq3ZCfdKS5XSf8non5eLVdGLEleKdqBhGzdOFssYaPsCDkbavX5mzySzxeLk+DM9rcOFhwwf0x7JCOiq0bQ==}
     hasBin: true
     dependencies:
-      nx: 15.0.7
+      nx: 15.0.8
     transitivePeerDependencies:
       - '@swc-node/register'
       - '@swc/core'
@@ -2713,7 +2713,7 @@ packages:
     dev: false
 
   /concat-map/0.0.1:
-    resolution: {integrity: sha1-2Klr13/Wjfd5OnMDajug1UBdR3s=}
+    resolution: {integrity: sha512-/Srv4dswyQNBfohGpz9o6Yb3Gz3SrUDqBH5rTuhGR7ahtlbYKnVxw2bCFMRljaA7EXHaXZ8wsHdodFvbkhKmqg==}
 
   /concat-stream/2.0.0:
     resolution: {integrity: sha512-MWufYdFw53ccGjCA+Ol7XJYpAlW6/prSMzuPOTRnJGcGzuhLn4Scrz7qf6o8bROZ514ltazcIFJZevcfbo0x7A==}
@@ -5688,8 +5688,8 @@ packages:
       gauge: 5.0.0
       set-blocking: 2.0.0
 
-  /nx/15.0.7:
-    resolution: {integrity: sha512-noXi5Cjd/NSyKDJ+HrkiUFkSRORFFDVAeQYX8LwRrVPvgex/8pv1okzJRXd2diPq3/tft2Cm9EXHLAE2xRvtlQ==}
+  /nx/15.0.8:
+    resolution: {integrity: sha512-LywcMYwZ3acEoRccUq3WBYbfeX+uGm8dyQjVLFPC1caziYZTpvQCb/BtZgLVXpZKexa2wYDXDkHuhb2pcaYcYw==}
     hasBin: true
     requiresBuild: true
     peerDependencies:
@@ -5701,8 +5701,8 @@ packages:
       '@swc/core':
         optional: true
     dependencies:
-      '@nrwl/cli': 15.0.7
-      '@nrwl/tao': 15.0.7
+      '@nrwl/cli': 15.0.8
+      '@nrwl/tao': 15.0.8
       '@parcel/watcher': 2.0.4
       '@yarnpkg/lockfile': 1.1.0
       '@yarnpkg/parsers': 3.0.0-rc.20
