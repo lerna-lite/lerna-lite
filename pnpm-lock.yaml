@@ -132,7 +132,7 @@ importers:
       load-json-file: ^6.2.0
       npmlog: ^7.0.1
       path: ^0.12.7
-      yargs: ^17.6.1
+      yargs: ^17.6.2
       yargs-parser: ^21.1.1
     dependencies:
       '@lerna-lite/core': link:../core
@@ -147,7 +147,7 @@ importers:
       load-json-file: 6.2.0
       npmlog: 7.0.1
       path: 0.12.7
-      yargs: 17.6.1
+      yargs: 17.6.2
     devDependencies:
       '@types/load-json-file': 5.1.0
       yargs-parser: 21.1.1
@@ -217,7 +217,7 @@ importers:
       write-file-atomic: ^5.0.0
       write-json-file: ^4.3.0
       write-pkg: ^4.0.0
-      yargs: ^17.6.1
+      yargs: ^17.6.2
       yargs-parser: ^21.1.1
     dependencies:
       '@npmcli/run-script': 5.1.1
@@ -284,7 +284,7 @@ importers:
       '@types/write-json-file': 3.2.1
       '@types/write-pkg': 4.0.0
       npm-registry-fetch: 14.0.2
-      yargs: 17.6.1
+      yargs: 17.6.2
       yargs-parser: 21.1.1
 
   packages/diff:
@@ -313,7 +313,7 @@ importers:
       globby: ^11.1.0
       npmlog: ^7.0.1
       p-map: ^4.0.0
-      yargs: ^17.6.1
+      yargs: ^17.6.2
       yargs-parser: ^21.1.1
     dependencies:
       '@lerna-lite/core': link:../core
@@ -326,7 +326,7 @@ importers:
       '@types/p-map': 2.0.0
       fs-extra: 10.1.0
       globby: 11.1.0
-      yargs: 17.6.1
+      yargs: 17.6.2
       yargs-parser: 21.1.1
 
   packages/info:
@@ -335,14 +335,14 @@ importers:
       '@types/envinfo': ^7.8.1
       envinfo: ^7.8.1
       path: ^0.12.7
-      yargs: ^17.6.1
+      yargs: ^17.6.2
     dependencies:
       '@lerna-lite/core': link:../core
       envinfo: 7.8.1
     devDependencies:
       '@types/envinfo': 7.8.1
       path: 0.12.7
-      yargs: 17.6.1
+      yargs: 17.6.2
 
   packages/init:
     specifiers:
@@ -400,7 +400,7 @@ importers:
       npmlog: ^7.0.1
       path: ^0.12.7
       upath: ^2.0.1
-      yargs: ^17.6.1
+      yargs: ^17.6.2
     dependencies:
       '@lerna-lite/core': link:../core
       fs-extra: 10.1.0
@@ -411,7 +411,7 @@ importers:
       '@types/node': 18.11.9
       '@types/p-map': 2.0.0
       path: 0.12.7
-      yargs: 17.6.1
+      yargs: 17.6.2
 
   packages/publish:
     specifiers:
@@ -448,7 +448,7 @@ importers:
       ssri: ^10.0.0
       tar: ^6.1.12
       write-pkg: ^4.0.0
-      yargs: ^17.6.1
+      yargs: ^17.6.2
       yargs-parser: ^21.1.1
     dependencies:
       '@lerna-lite/core': link:../core
@@ -485,7 +485,7 @@ importers:
       '@types/write-pkg': 4.0.0
       load-json-file: 6.2.0
       write-pkg: 4.0.0
-      yargs: 17.6.1
+      yargs: 17.6.2
       yargs-parser: 21.1.1
 
   packages/run:
@@ -500,7 +500,7 @@ importers:
       npmlog: ^7.0.1
       p-map: ^4.0.0
       perf_hooks: ^0.0.1
-      yargs: ^17.6.1
+      yargs: ^17.6.2
       yargs-parser: ^21.1.1
     dependencies:
       '@lerna-lite/core': link:../core
@@ -514,7 +514,7 @@ importers:
       globby: 11.1.0
       jest-circus: 29.2.2
       perf_hooks: 0.0.1
-      yargs: 17.6.1
+      yargs: 17.6.2
       yargs-parser: 21.1.1
 
   packages/version:
@@ -549,7 +549,7 @@ importers:
       slash: ^3.0.0
       write-json-file: ^4.3.0
       write-pkg: ^4.0.0
-      yargs: ^17.6.1
+      yargs: ^17.6.2
       yargs-parser: ^21.1.1
     dependencies:
       '@lerna-lite/core': link:../core
@@ -583,7 +583,7 @@ importers:
       fs-extra: 10.1.0
       js-yaml: 4.1.0
       write-pkg: 4.0.0
-      yargs: 17.6.1
+      yargs: 17.6.2
       yargs-parser: 21.1.1
 
 packages:
@@ -4608,7 +4608,7 @@ packages:
       jest-util: 29.2.1
       jest-validate: 29.2.2
       prompts: 2.4.2
-      yargs: 17.6.1
+      yargs: 17.6.2
     transitivePeerDependencies:
       - '@types/node'
       - supports-color
@@ -5734,7 +5734,7 @@ packages:
       tsconfig-paths: 3.14.1
       tslib: 2.4.0
       v8-compile-cache: 2.3.0
-      yargs: 17.6.1
+      yargs: 17.6.2
       yargs-parser: 21.0.1
     transitivePeerDependencies:
       - debug
@@ -7190,8 +7190,8 @@ packages:
       yargs-parser: 20.2.9
     dev: false
 
-  /yargs/17.6.1:
-    resolution: {integrity: sha512-leBuCGrL4dAd6ispNOGsJlhd0uZ6Qehkbu/B9KCR+Pxa/NVdNwi+i31lo0buCm6XxhJQFshXCD0/evfV4xfoUg==}
+  /yargs/17.6.2:
+    resolution: {integrity: sha512-1/9UrdHjDZc0eOU0HxOHoS78C69UD3JRMvzlJ7S79S2nTaWRA/whGCTV8o9e/N/1Va9YIV7Q4sOxD8VV4pCWOw==}
     engines: {node: '>=12'}
     dependencies:
       cliui: 8.0.1
