@@ -557,6 +557,9 @@
             "conventionalGraduate": {
               "$ref": "#/$defs/commandOptions/shared/conventionalGraduate"
             },
+            "conventionalBumpPrerelease": {
+              "$ref": "#/$defs/commandOptions/version/conventionalBumpPrerelease"
+            },
             "conventionalPrerelease": {
               "$ref": "#/$defs/commandOptions/version/conventionalPrerelease"
             },
@@ -885,6 +888,9 @@
     },
     "amend": {
       "$ref": "#/$defs/commandOptions/version/amend"
+    },
+    "conventionalBumpPrerelease": {
+      "$ref": "#/$defs/commandOptions/version/conventionalBumpPrerelease"
     },
     "conventionalPrerelease": {
       "$ref": "#/$defs/commandOptions/version/conventionalPrerelease"
@@ -1299,6 +1305,10 @@
         "amend": {
           "type": "boolean",
           "description": "During `lerna version`, when true, amend the existing commit instead of generating a new one."
+        },
+        "conventionalBumpPrerelease": {
+          "type": "boolean",
+          "description": "During `lerna version`, bumps version of changed prereleased packages when using --conventional-commits."
         },
         "conventionalPrerelease": {
           "anyOf": [{ "type": "string" }, { "type": "boolean" }, { "type": "array", "items": { "type": "string" } }],

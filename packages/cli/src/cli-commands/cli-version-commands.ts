@@ -44,6 +44,10 @@ export default {
         describe: 'Amend the existing commit, instead of generating a new one.',
         type: 'boolean',
       },
+      'conventional-bump-prerelease': {
+        describe: 'Bumps prerelease versions if conventional commits requires it.',
+        type: 'boolean',
+      },
       'conventional-commits': {
         describe: 'Use conventional-changelog to determine version bump and generate CHANGELOG.',
         type: 'boolean',
