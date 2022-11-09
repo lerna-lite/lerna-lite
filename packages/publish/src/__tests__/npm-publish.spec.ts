@@ -175,6 +175,35 @@ describe('npm-publish', () => {
     );
   });
 
+  it('overrides pkg.publishConfig fields into manifest', async () => {
+    (readJSON as jest.Mock).mockImplementationOnce((file, cb) =>
+      cb(null, {
+        main: './src/index.ts',
+        types: './src/index.ts',
+        publishConfig: {
+          main: './dist/index.js',
+          types: './dist/index.d.ts',
+        },
+      })
+    );
+
+    await npmPublish(pkg, tarFilePath);
+
+    expect(publish).toHaveBeenCalledWith(
+      expect.objectContaining({
+        publishConfig: {
+          main: './dist/index.js',
+          types: './dist/index.d.ts',
+        },
+      }),
+      mockTarData,
+      expect.objectContaining({
+        main: './dist/index.js',
+        types: './dist/index.d.ts',
+      })
+    );
+  });
+
   it('respects opts.dryRun', async () => {
     const opts = { dryRun: true };
 
