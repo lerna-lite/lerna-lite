@@ -41,7 +41,7 @@
   "devDependencies": {
     "@types/p-map": "^2.0.0",
     "globby": "^11.1.0",
-    "jest-circus": "^29.2.2",
+    "jest-circus": "^29.3.1",
     "perf_hooks": "^0.0.1",
     "yargs": "^17.6.2",
     "yargs-parser": "^21.1.1"
