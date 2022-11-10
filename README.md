@@ -99,11 +99,17 @@ Mainly for the following reasons:
     - also the main goal of this fork was to keep only `version` and `publish` commands in the core and make everything else as optional packages (choose and install what you really need).
 3. rewrite the lib in TypeScript for type checking and to be compatible with ESM in the future
 4. replicate a few opened PRs (fixes and features) from Lerna and also add extra features in Lerna-Lite
-    - for example we support yarn/pnpm `workspace:` protocol, we added changelog headers, and added `dry-run` options
 5. Lerna v5-6 is installing **[Nx](https://nx.dev/)** as a required [dependency](https://github.com/lerna/lerna/blob/main/core/lerna/package.json#L66), want it or not, while it remains **optional** in Lerna-Lite
     - even if [Nx](https://nx.dev/) can be a nice addition with `lerna run` and [`useNx`](https://github.com/ghiscoding/lerna-lite/tree/main/packages/run#usenx-experimental) (which we did add), it should and **will always be optional** in Lerna-Lite, it's your decision.
 6. Lerna v5-6 is also enforcing `useWorkspaces` option to be enabled, but this can have undesired effects (you might want to track only the `packages` folder with Lerna and not other folders like `demo` or `website`). Again, that will not be enforced in Lerna-Lite, in fact it's the opposite, I personally prefer to just use `packages` in `lerna.json` (especially with pnpm)
-
+7. add new features that only exists in Lerna-Lite
+   - [`workspace:` protocol support](https://github.com/ghiscoding/lerna-lite/tree/main/packages/version#workspace-protocol) (Lerna v6 also added support for it six months later)
+   - [--dry-run](https://github.com/ghiscoding/lerna-lite/tree/main/packages/version#--dry-run) to preview version/publish changes
+   - [lerna version --changelog-header-message "msg"](https://github.com/ghiscoding/lerna-lite/tree/main/packages/version#--changelog-header-message-msg)
+   - [lerna version --changelog-include-commits-client-login](https://github.com/ghiscoding/lerna-lite/tree/main/packages/version#--changelog-include-commits-client-login-msg)
+   - [lerna publish --remove-package-fields](https://github.com/ghiscoding/lerna-lite/tree/main/packages/publish#--remove-package-fields-fields) (cleanup fields before publish)
+   - the best feature of Lerna-Lite has to be its modularity, only install what you really use (see [installation](#cli-installation) below)
+   
 ### This lib will help you with
 
 #### [Version](https://github.com/ghiscoding/lerna-lite/tree/main/packages/version) and [Publish](https://github.com/ghiscoding/lerna-lite/tree/main/packages/publish) commands (included with the CLI)
