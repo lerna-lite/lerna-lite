@@ -24,6 +24,10 @@
       packageNames: ['npm'],
       allowedVersions: '8.0.0',
     },
+    {
+      packageNames: ['nx'],
+      allowedVersions: '15.0.8',
+    },
   ],
   schedule: ['on Thursday'],
   ignoreDeps: [
