@@ -91,26 +91,33 @@ describe('publishConfig overrides', () => {
       'package-3': '1.0.1',
     });
 
-    expect((writePkg as any).updatedManifest('package-1')).toEqual(
-      expect.objectContaining({
-        gitHead: expect.any(String),
-        name: 'package-1',
-        main: 'dist/index.js',
-        publishConfig: { access: 'public' },
-        typings: 'dist/index.d.ts',
-        version: '1.0.1',
-      })
-    );
+    expect((writePkg as any).updatedManifest('package-1')).toEqual({
+      gitHead: expect.any(String),
+      name: 'package-1',
+      main: 'dist/index.js',
+      publishConfig: { access: 'public' },
+      typings: 'dist/index.d.ts',
+      version: '1.0.1',
+    });
 
-    expect((writePkg as any).updatedManifest('package-2')).toEqual(
-      expect.objectContaining({
-        gitHead: expect.any(String),
-        name: 'package-2',
-        bin: './build/bin.js',
-        browser: './build/browser.js',
-        module: './build/index.mjs',
-        version: '1.0.1',
-      })
+    expect((writePkg as any).updatedManifest('package-2')).toEqual({
+      gitHead: expect.any(String),
+      name: 'package-2',
+      bin: './build/bin.js',
+      browser: './build/browser.js',
+      module: './build/index.mjs',
+      exports: {
+        'package-a': './src/package-a.ts',
+        'package-b': 'dist/package-b.js', // this is the only prop changed by publishConfig object merge
+      },
+      dependencies: {
+        'package-1': '^1.0.1',
+      },
+      version: '1.0.1',
+    });
+    // publishConfig should be removed from package-2 since every fields were used as overrides
+    expect((writePkg as any).updatedManifest('package-2')).not.toEqual(
+      expect.objectContaining({ publishConfig: expect.anything() })
     );
 
     expect((writePkg as any).updatedManifest('package-3').publishConfig).toBeUndefined();
@@ -129,29 +136,37 @@ describe('publishConfig overrides', () => {
       'package-3': '1.0.1',
     });
 
-    expect((writePkg as any).updatedManifest('package-1')).toEqual(
-      expect.objectContaining({
-        gitHead: expect.any(String),
-        name: 'package-1',
-        publishConfig: {
-          main: 'dist/index.js',
-          typings: 'dist/index.d.ts',
-          access: 'public',
+    expect((writePkg as any).updatedManifest('package-1')).toEqual({
+      gitHead: expect.any(String),
+      name: 'package-1',
+      main: './src/index.ts',
+      publishConfig: {
+        main: 'dist/index.js',
+        typings: 'dist/index.d.ts',
+        access: 'public',
+      },
+      typings: './src/index.d.ts',
+      version: '1.0.1',
+    });
+    expect((writePkg as any).updatedManifest('package-2')).toEqual({
+      gitHead: expect.any(String),
+      name: 'package-2',
+      dependencies: {
+        'package-1': '^1.0.1',
+      },
+      exports: {
+        'package-a': './src/package-a.ts',
+        'package-b': './src/package-b.ts',
+      },
+      publishConfig: {
+        bin: './build/bin.js',
+        browser: './build/browser.js',
+        module: './build/index.mjs',
+        exports: {
+          'package-b': 'dist/package-b.js',
         },
-        version: '1.0.1',
-      })
-    );
-    expect((writePkg as any).updatedManifest('package-2')).toEqual(
-      expect.objectContaining({
-        gitHead: expect.any(String),
-        name: 'package-2',
-        publishConfig: {
-          bin: './build/bin.js',
-          browser: './build/browser.js',
-          module: './build/index.mjs',
-        },
-        version: '1.0.1',
-      })
-    );
+      },
+      version: '1.0.1',
+    });
   });
 });

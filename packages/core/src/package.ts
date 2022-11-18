@@ -5,7 +5,7 @@ import path from 'path';
 import writePkg from 'write-pkg';
 
 import { PUBLISH_CONFIG_OVERRIDABLE_FIELDS } from './constants';
-import { CommandType, NpaResolveResult, RawManifest } from './models';
+import { CommandType, JsonObject, JsonValue, NpaResolveResult, RawManifest } from './models';
 
 // symbol used to 'hide' internal state
 const PKG = Symbol('pkg');
@@ -251,11 +251,16 @@ export class Package {
 
   /** It is possible to override some fields in the manifest before the package is packed */
   applyPublishConfigOverrides() {
-    const publishConfig = this[PKG].publishConfig as Record<string, string | Record<string, string>>;
+    const publishConfig = this[PKG].publishConfig as { [dep: string]: JsonValue };
     if (publishConfig) {
       PUBLISH_CONFIG_OVERRIDABLE_FIELDS.forEach((key) => {
         if (key in publishConfig) {
-          this[PKG][key] = publishConfig[key];
+          if (typeof publishConfig[key] === 'object') {
+            // when value is an object, we can't reassign directly, we need to merge the fields because it might be a partial assignment (not a 1 to 1)
+            this[PKG][key] = { ...this[PKG][key], ...(publishConfig[key] as JsonObject) };
+          } else {
+            this[PKG][key] = publishConfig[key];
+          }
           delete publishConfig[key];
         }
       });

@@ -7,6 +7,11 @@ import npa from 'npm-package-arg';
 import { Package } from '../package';
 import { InitCommandOption, PublishCommandOption, RunCommandOption, VersionCommandOption } from './command-options';
 
+export type JsonObject = { [Key in string]: JsonValue } & { [Key in string]?: JsonValue | undefined };
+export type JsonArray = JsonValue[];
+export type JsonPrimitive = string | number | boolean | null;
+export type JsonValue = JsonPrimitive | JsonObject | JsonArray;
+
 export type VersioningStrategy = 'fixed' | 'independent';
 export type ChangelogType = 'fixed' | 'independent' | 'root';
 export type ChangelogPresetConfig = string | { name: string; [key: string]: unknown };
