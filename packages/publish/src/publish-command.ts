@@ -31,6 +31,7 @@ import {
   throwIfUncommitted,
   UpdateCollectorOptions,
   ValidationError,
+  PUBLISH_CONFIG_OVERRIDABLE_FIELDS,
 } from '@lerna-lite/core';
 import { getCurrentTags } from './lib/get-current-tags';
 import { getTaggedPackages } from './lib/get-tagged-packages';
@@ -275,6 +276,9 @@ export class PublishCommand extends Command<PublishCommandOption> {
       await this.removePackageProperties();
     }
 
+    if (this.options.publishConfigOverrides !== false) {
+      await this.applyAnyPublishConfigOverrides();
+    }
     await this.annotateGitHead();
     await this.serializeChanges();
     await this.packUpdated();
@@ -588,6 +592,22 @@ export class PublishCommand extends Command<PublishCommandOption> {
 
       // writing changes to disk handled in serializeChanges()
     });
+  }
+
+  /**
+   * It is possible to override some fields in the manifest before the package is packed
+   * @see https://pnpm.io/package_json#publishconfig
+   * @returns
+   */
+  applyAnyPublishConfigOverrides() {
+    // resolve relative file: links to their actual version range
+    const updatesWithPublishConfigOverrides = this.updates.filter((node: PackageGraphNode) =>
+      Object.keys(node.pkg.get('publishConfig') || {}).some((field) =>
+        PUBLISH_CONFIG_OVERRIDABLE_FIELDS.includes(field)
+      )
+    );
+
+    return pMap(updatesWithPublishConfigOverrides, (node: PackageGraphNode) => node.pkg.applyPublishConfigOverrides());
   }
 
   resolveLocalDependencyLinks() {

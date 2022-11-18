@@ -1,0 +1,16 @@
+export const PUBLISH_CONFIG_OVERRIDABLE_FIELDS = [
+  'bin',
+  'main',
+  'exports',
+  'types',
+  'typings',
+  'module',
+  'browser',
+  'esnext',
+  'es2015',
+  'unpkg',
+  'umd:main',
+  'typesVersion',
+  'cpu',
+  'os',
+];

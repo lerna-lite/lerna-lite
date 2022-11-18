@@ -8,6 +8,7 @@ export * from './utils';
 
 // files
 export * from './child-process';
+export * from './constants';
 export * from './command';
 export * from './otplease';
 export * from './package';

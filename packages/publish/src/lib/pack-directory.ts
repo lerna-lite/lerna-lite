@@ -3,7 +3,6 @@ import path from 'path';
 import packlist from 'npm-packlist';
 import log from 'npmlog';
 import tar from 'tar';
-import fs from 'fs-extra';
 
 import { LifecycleConfig, Package, PackConfig, runLifecycle, tempWrite } from '@lerna-lite/core';
 import { getPacked } from './get-packed';
@@ -42,9 +41,6 @@ export async function packDirectory(_pkg: Package, dir: string, options: PackCon
   await runLifecycle(pkg, 'prepack', opts);
   await pkg.refresh();
 
-  await overwritePublishConfig(pkg.manifestLocation);
-  await pkg.refresh();
-
   const arborist = new Arborist({ path: pkg.contents });
   const tree = await arborist.loadActual();
   const files: string[] = await packlist(tree);
@@ -71,47 +67,6 @@ export async function packDirectory(_pkg: Package, dir: string, options: PackCon
       .then(() => runLifecycle(pkg, 'postpack', opts))
       .then(() => packed)
   );
-}
-
-export const PUBLISH_CONFIG_FIELDS = [
-  'bin',
-  'main',
-  'exports',
-  'types',
-  'typings',
-  'module',
-  'browser',
-  'esnext',
-  'es2015',
-  'unpkg',
-  'umd:main',
-  'cpu',
-  'os',
-];
-
-async function overwritePublishConfig(manifestLocation: string) {
-  const manifest = await fs.readJSON(manifestLocation);
-
-  if (manifest.publishConfig === undefined) {
-    return;
-  }
-
-  const publishConfig = { ...manifest.publishConfig };
-
-  PUBLISH_CONFIG_FIELDS.forEach((key) => {
-    if (key in publishConfig) {
-      manifest[key] = publishConfig[key];
-      delete publishConfig[key];
-    }
-  });
-
-  if (Object.keys(publishConfig).length === 0) {
-    delete manifest.publishConfig;
-  } else {
-    manifest.publishConfig = publishConfig;
-  }
-
-  return fs.writeJSON(manifestLocation, manifest);
 }
 
 function getTarballName(pkg: Package) {

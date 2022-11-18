@@ -423,6 +423,34 @@ This _non-standard_ field allows you to customize the published subdirectory jus
   }
 ```
 
+## publishConfig Overrides
+Some specific fields defined in `publishConfig` can be used to override some fields in the manifest before the package is being published. This feature is currently only supported by pnpm and yarn. As per pnpm [`publishConfig`](https://pnpm.io/package_json#publishconfig) documentation, you can override any of these fields (note that yarn might have a different list of fields)
+- `bin`, `main`, `exports`, `types` or `typings`, `module`, `browser`, `esnext`, `es2015`, `unpkg`, `umd:main`, `typesVersions`, `cpu`, `os`
+
+For instance, the following package.json:
+
+```json
+{
+    "name": "foo",
+    "version": "1.0.0",
+    "main": "src/index.ts",
+    "publishConfig": {
+        "main": "lib/index.js",
+        "typings": "lib/index.d.ts"
+    }
+}
+```
+
+Will be published as:
+
+```json
+{
+    "name": "foo",
+    "version": "1.0.0",
+    "main": "lib/index.js",
+    "typings": "lib/index.d.ts"
+}
+```
 <a id="lifecycle-events"><!-- back-compat with previous heading --></a>
 
 ## Lifecycle Scripts

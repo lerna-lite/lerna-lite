@@ -4,6 +4,7 @@ import npmlog from 'npmlog';
 import path from 'path';
 import writePkg from 'write-pkg';
 
+import { PUBLISH_CONFIG_OVERRIDABLE_FIELDS } from './constants';
 import { CommandType, NpaResolveResult, RawManifest } from './models';
 
 // symbol used to 'hide' internal state
@@ -246,6 +247,25 @@ export class Package {
    */
   serialize() {
     return writePkg(this.manifestLocation, this[PKG]).then(() => this);
+  }
+
+  /** It is possible to override some fields in the manifest before the package is packed */
+  applyPublishConfigOverrides() {
+    const publishConfig = this[PKG].publishConfig as Record<string, string | Record<string, string>>;
+    if (publishConfig) {
+      PUBLISH_CONFIG_OVERRIDABLE_FIELDS.forEach((key) => {
+        if (key in publishConfig) {
+          this[PKG][key] = publishConfig[key];
+          delete publishConfig[key];
+        }
+      });
+
+      if (Object.keys(publishConfig).length === 0) {
+        delete this[PKG].publishConfig;
+      } else {
+        this[PKG].publishConfig = publishConfig;
+      }
+    }
   }
 
   /**

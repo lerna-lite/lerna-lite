@@ -143,6 +143,9 @@ export interface PublishCommandOption extends VersionCommandOption {
   /** Supply a one-time password for publishing with two-factor authentication. */
   otp?: string;
 
+  /** apply publishConfig overrides. */
+  publishConfigOverrides?: boolean;
+
   /** Use the specified registry for all npm client operations. */
   registry?: string;
 

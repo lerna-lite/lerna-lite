@@ -86,6 +86,15 @@ export default {
         type: 'string',
         requiresArg: true,
       },
+      'no-publish-config-overrides': {
+        // proxy for --publish-config-overrides
+        hidden: true,
+        type: 'boolean',
+      },
+      'publish-config-overrides': {
+        describe: 'apply publishConfig overrides.',
+        type: 'boolean',
+      },
       registry: {
         describe: 'Use the specified registry for all npm client operations.',
         type: 'string',
