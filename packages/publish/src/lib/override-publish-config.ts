@@ -3,22 +3,22 @@ import { isEmpty, JsonValue, RawManifest } from '@lerna-lite/core';
 // manifest fields that may make sense to overwrite
 const PUBLISH_CONFIG_WHITELIST = new Set([
   'bin',
-  'type',
-  'imports',
-  'main',
-  'module',
-  'typings',
-  'types',
-  'exports',
   'browser',
+  'cpu',
   'esnext',
   'es2015',
-  'unpkg',
-  'umd:main',
-  'os',
-  'cpu',
+  'exports',
+  'imports',
   'libc',
+  'main',
+  'module',
+  'os',
+  'type',
+  'types',
+  'typings',
   'typesVersions',
+  'umd:main',
+  'unpkg',
 ]);
 
 /**
