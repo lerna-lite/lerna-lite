@@ -244,6 +244,10 @@ export default {
         hidden: true,
         type: 'boolean',
       },
+      'npm-client-args': {
+        describe: "Additional arguments to pass to the npm client when performing 'npm install'.",
+        type: 'array',
+      },
       'no-sync-workspace-lock': {
         describe:
           'Do not run `npm install --package-lock-only` or equivalent depending on the package manager defined in `npmClient`.',

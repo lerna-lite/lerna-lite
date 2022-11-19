@@ -126,7 +126,8 @@ export function updateNpmLockFileVersion2(obj: any, pkgName: string, newVersion:
  */
 export async function runInstallLockFileOnly(
   npmClient: 'npm' | 'pnpm' | 'yarn',
-  cwd: string
+  cwd: string,
+  npmClientArgs: string[]
 ): Promise<string | undefined> {
   let inputLockfileName = '';
   let outputLockfileName: string | undefined;
@@ -136,7 +137,7 @@ export async function runInstallLockFileOnly(
       inputLockfileName = 'pnpm-lock.yaml';
       if (await validateFileExists(path.join(cwd, inputLockfileName))) {
         log.verbose('lock', `updating lock file via "pnpm install --lockfile-only --ignore-scripts"`);
-        await exec('pnpm', ['install', '--lockfile-only', '--ignore-scripts'], { cwd });
+        await exec('pnpm', ['install', '--lockfile-only', '--ignore-scripts', ...npmClientArgs], { cwd });
         outputLockfileName = inputLockfileName;
       }
       break;
@@ -144,7 +145,7 @@ export async function runInstallLockFileOnly(
       inputLockfileName = 'yarn.lock';
       if (await validateFileExists(path.join(cwd, inputLockfileName))) {
         log.verbose('lock', `updating lock file via "yarn install --mode update-lockfile"`);
-        await exec('yarn', ['install', '--mode', 'update-lockfile'], { cwd });
+        await exec('yarn', ['install', '--mode', 'update-lockfile', ...npmClientArgs], { cwd });
         outputLockfileName = inputLockfileName;
       }
       break;
@@ -159,7 +160,7 @@ export async function runInstallLockFileOnly(
         // however, when lower then we need to call "npm shrinkwrap --package-lock-only" and then rename "npm-shrinkwrap.json" file back to "package-lock.json"
         if (semver.gte(localNpmVersion, '8.5.0')) {
           log.verbose('lock', `updating lock file via "npm install --package-lock-only"`);
-          await exec('npm', ['install', '--package-lock-only'], { cwd });
+          await exec('npm', ['install', '--package-lock-only', ...npmClientArgs], { cwd });
         } else {
           // TODO: remove this in the next major release
           // with npm < 8.5.0, we need to update the lock file in 2 steps
@@ -169,7 +170,7 @@ export async function runInstallLockFileOnly(
             `npm`,
             `Your npm version is lower than 8.5.0, we recommend upgrading your npm client to avoid the use of "npm shrinkwrap" instead of the regular (better) "npm install --package-lock-only".`
           );
-          await exec('npm', ['shrinkwrap', '--package-lock-only'], { cwd });
+          await exec('npm', ['shrinkwrap', '--package-lock-only', ...npmClientArgs], { cwd });
 
           // 2. rename "npm-shrinkwrap.json" back to "package-lock.json"
           log.verbose('lock', `renaming "npm-shrinkwrap.json" file back to "package-lock.json"`);

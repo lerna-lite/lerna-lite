@@ -329,6 +329,9 @@ export interface VersionCommandOption {
   /** Defaults to true when found, update the project root lock file, the lib will internally read/write back to the lock file. */
   manuallyUpdateRootLockfile?: boolean;
 
+  /** Additional arguments to pass to the npm client when performing 'npm install'. */
+  npmClientArgs?: string[];
+
   /** Runs `npm install --package-lock-only` or equivalent depending on the package manager defined in `npmClient`. */
   syncWorkspaceLock?: boolean;
 
