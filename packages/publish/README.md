@@ -425,7 +425,7 @@ This _non-standard_ field allows you to customize the published subdirectory jus
 ```
 
 ## `publishConfig` Overrides
-Some fields defined in `publishConfig` can be used to override other fields in the manifest before the package is being published. As per pnpm [`publishConfig`](https://pnpm.io/package_json#publishconfig) documentation, you can override any of these fields:
+Certain fields defined in `publishConfig` can be used to override other fields in the manifest before the package gets published. As per pnpm [`publishConfig`](https://pnpm.io/package_json#publishconfig) documentation, you can override any of these fields:
 
 - `bin`, `browser`, `cpu`, `esnext`, `es2015`, `exports`, `imports`, `libc`, `main`, `module`, `os`, `type`, `types`, `typings`, `typesVersions`, `umd:main`, `unpkg`
 
