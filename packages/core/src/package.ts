@@ -4,8 +4,7 @@ import npmlog from 'npmlog';
 import path from 'path';
 import writePkg from 'write-pkg';
 
-import { PUBLISH_CONFIG_OVERRIDABLE_FIELDS } from './constants';
-import { CommandType, JsonObject, JsonValue, NpaResolveResult, RawManifest } from './models';
+import { CommandType, NpaResolveResult, RawManifest } from './models';
 
 // symbol used to 'hide' internal state
 const PKG = Symbol('pkg');
@@ -128,6 +127,11 @@ export class Package {
     return path.join(this.location, 'node_modules', '.bin');
   }
 
+  /** alias to pkg getter (to avoid calling duplicate prop like `node.pkg.pkg` in which node is PackageGraphNode) */
+  get manifest(): RawManifest {
+    return this[PKG];
+  }
+
   get manifestLocation(): string {
     return path.join(this.location, 'package.json');
   }
@@ -247,30 +251,6 @@ export class Package {
    */
   serialize() {
     return writePkg(this.manifestLocation, this[PKG]).then(() => this);
-  }
-
-  /** It is possible to override some fields in the manifest before the package is packed */
-  applyPublishConfigOverrides() {
-    const publishConfig = this[PKG].publishConfig as { [dep: string]: JsonValue };
-    if (publishConfig) {
-      PUBLISH_CONFIG_OVERRIDABLE_FIELDS.forEach((key) => {
-        if (key in publishConfig) {
-          if (typeof publishConfig[key] === 'object') {
-            // when value is an object, we can't reassign directly, we need to merge the fields because it might be a partial assignment (not a 1 to 1)
-            this[PKG][key] = { ...this[PKG][key], ...(publishConfig[key] as JsonObject) };
-          } else {
-            this[PKG][key] = publishConfig[key];
-          }
-          delete publishConfig[key];
-        }
-      });
-
-      if (Object.keys(publishConfig).length === 0) {
-        delete this[PKG].publishConfig;
-      } else {
-        this[PKG].publishConfig = publishConfig;
-      }
-    }
   }
 
   /**

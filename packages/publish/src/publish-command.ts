@@ -31,7 +31,6 @@ import {
   throwIfUncommitted,
   UpdateCollectorOptions,
   ValidationError,
-  PUBLISH_CONFIG_OVERRIDABLE_FIELDS,
 } from '@lerna-lite/core';
 import { getCurrentTags } from './lib/get-current-tags';
 import { getTaggedPackages } from './lib/get-tagged-packages';
@@ -45,6 +44,7 @@ import { packDirectory } from './lib/pack-directory';
 import { npmPublish } from './lib/npm-publish';
 import { logPacked } from './lib/log-packed';
 import { add, remove } from './lib/npm-dist-tag';
+import { overridePublishConfig } from './lib/override-publish-config';
 import { removeTempLicenses } from './lib/remove-temp-licenses';
 import { createTempLicenses } from './lib/create-temp-licenses';
 import { getPackagesWithoutLicense } from './lib/get-packages-without-license';
@@ -277,7 +277,7 @@ export class PublishCommand extends Command<PublishCommandOption> {
     }
 
     if (this.options.publishConfigOverrides !== false) {
-      await this.applyAnyPublishConfigOverrides();
+      await this.applyPublishConfigOverrides();
     }
     await this.annotateGitHead();
     await this.serializeChanges();
@@ -599,15 +599,9 @@ export class PublishCommand extends Command<PublishCommandOption> {
    * @see https://pnpm.io/package_json#publishconfig
    * @returns
    */
-  applyAnyPublishConfigOverrides() {
-    // resolve relative file: links to their actual version range
-    const updatesWithPublishConfigOverrides = this.updates.filter((node: PackageGraphNode) =>
-      Object.keys(node.pkg.get('publishConfig') || {}).some((field) =>
-        PUBLISH_CONFIG_OVERRIDABLE_FIELDS.includes(field)
-      )
-    );
-
-    return pMap(updatesWithPublishConfigOverrides, (node: PackageGraphNode) => node.pkg.applyPublishConfigOverrides());
+  applyPublishConfigOverrides() {
+    // potentially apply any packages that might have publishConfig overrides
+    return pMap(this.updates, (node) => overridePublishConfig(node.pkg.manifest));
   }
 
   resolveLocalDependencyLinks() {
@@ -727,7 +721,7 @@ export class PublishCommand extends Command<PublishCommandOption> {
     return pMap(this.updates, (node: PackageGraphNode) => {
       if (Array.isArray(removePackageFields)) {
         for (const removeField of removePackageFields) {
-          deleteComplexObjectProp(node.pkg.pkg, removeField, `"${node.pkg.name}" package`);
+          deleteComplexObjectProp(node.pkg.manifest, removeField, `"${node.pkg.name}" package`);
         }
       }
     });

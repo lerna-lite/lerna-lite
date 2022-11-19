@@ -107,8 +107,12 @@ describe('publishConfig overrides', () => {
       browser: './build/browser.js',
       module: './build/index.mjs',
       exports: {
-        'package-a': './src/package-a.ts',
-        'package-b': 'dist/package-b.js', // this is the only prop changed by publishConfig object merge
+        'package-b': 'dist/package-b.js',
+      },
+      typesVersions: {
+        '*': {
+          '*': ['overriden'],
+        },
       },
       dependencies: {
         'package-1': '^1.0.1',
@@ -154,9 +158,10 @@ describe('publishConfig overrides', () => {
       dependencies: {
         'package-1': '^1.0.1',
       },
-      exports: {
-        'package-a': './src/package-a.ts',
-        'package-b': './src/package-b.ts',
+      typesVersions: {
+        '*': {
+          '*': ['origin'],
+        },
       },
       publishConfig: {
         bin: './build/bin.js',
@@ -164,6 +169,11 @@ describe('publishConfig overrides', () => {
         module: './build/index.mjs',
         exports: {
           'package-b': 'dist/package-b.js',
+        },
+        typesVersions: {
+          '*': {
+            '*': ['overriden'],
+          },
         },
       },
       version: '1.0.1',

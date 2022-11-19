@@ -4,9 +4,10 @@
   "dependencies": {
     "package-1": "^1.0.0"
   },
-  "exports": {
-    "package-a": "./src/package-a.ts",
-    "package-b": "./src/package-b.ts"
+  "typesVersions": {
+    "*": {
+      "*": ["origin"]
+    }
   },
   "publishConfig": {
     "bin": "./build/bin.js",
@@ -14,6 +15,11 @@
     "module": "./build/index.mjs",
     "exports": {
       "package-b": "dist/package-b.js"
+    },
+    "typesVersions": {
+      "*": {
+        "*": ["overriden"]
+      }
     }
   }
 }
