@@ -91,6 +91,7 @@ This is useful when a previous `lerna publish` failed to publish all packages to
     - [`--temp-tag`](#--temp-tag)
     - [`--verify-access`](#--verify-access)
     - [`--yes`](#--yes)
+  - [`publishConfig` Overrides](#publishconfig-overrides)
   - [`workspace:` protocol](#workspace-protocol)
     - [`--workspace-strict-match (default)`](#with---workspace-strict-match-default)
     - [`--no-workspace-strict-match`](#with---no-workspace-strict-match-deprecated)
@@ -423,9 +424,11 @@ This _non-standard_ field allows you to customize the published subdirectory jus
   }
 ```
 
-## publishConfig Overrides
-Some specific fields defined in `publishConfig` can be used to override some fields in the manifest before the package is being published. As per pnpm [`publishConfig`](https://pnpm.io/package_json#publishconfig) documentation, you can override any of these fields
+## `publishConfig` Overrides
+Some fields defined in `publishConfig` can be used to override other fields in the manifest before the package is being published. As per pnpm [`publishConfig`](https://pnpm.io/package_json#publishconfig) documentation, you can override any of these fields
 - `bin`, `main`, `exports`, `types` or `typings`, `module`, `browser`, `esnext`, `es2015`, `unpkg`, `umd:main`, `typesVersions`, `cpu`, `os`
+
+> **Note** this option is enabled by default but can be disabled bia `lerna publish --no-publish-config-overrides` or (`"publishConfigOverrides": false` in `lerna.json`)
 
 For instance, the following package.json:
 
@@ -451,6 +454,7 @@ Will be published as:
     "typings": "lib/index.d.ts"
 }
 ```
+
 <a id="lifecycle-events"><!-- back-compat with previous heading --></a>
 
 ## Lifecycle Scripts
