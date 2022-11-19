@@ -364,6 +364,9 @@
             "otp": {
               "$ref": "#/$defs/commandOptions/publish/otp"
             },
+            "publishConfigOverrides": {
+              "$ref": "#/$defs/commandOptions/publish/publishConfigOverrides"
+            },
             "registry": {
               "$ref": "#/$defs/commandOptions/shared/registry"
             },
@@ -1230,6 +1233,10 @@
         "otp": {
           "type": "string",
           "description": "During `lerna publish`, supply a one-time password for publishing with two-factor authentication."
+        },
+        "publishConfigOverrides": {
+          "type": "boolean",
+          "description": "apply publishConfig overrides."
         },
         "removePackageFields": {
           "type": "array",

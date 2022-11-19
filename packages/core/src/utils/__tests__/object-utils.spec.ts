@@ -1,7 +1,7 @@
 import cloneDeep from 'clone-deep';
 import npmlog from 'npmlog';
 
-import { deleteComplexObjectProp, getComplexObjectValue } from '../object-utils';
+import { deleteComplexObjectProp, getComplexObjectValue, isEmpty } from '../object-utils';
 
 describe('deleteComplexObjectProp method', () => {
   let obj = {};
@@ -75,5 +75,27 @@ describe('getComplexObjectValue method', () => {
   it('should return the object descendant when using multiple levels of dot notation', () => {
     const output = getComplexObjectValue(obj, 'user.address.street');
     expect(output).toEqual('Broadway');
+  });
+});
+
+describe('isEmpty method', () => {
+  it('should return true when input is an empty object', () => {
+    const output = isEmpty({});
+    expect(output).toBe(true);
+  });
+
+  it('should return true when input is null', () => {
+    const output = isEmpty(null as any);
+    expect(output).toBe(true);
+  });
+
+  it('should return true when input is undefined', () => {
+    const output = isEmpty(undefined as any);
+    expect(output).toBe(true);
+  });
+
+  it('should return false when input has at least one property', () => {
+    const output = isEmpty({ hello: 'world' });
+    expect(output).toBe(false);
   });
 });

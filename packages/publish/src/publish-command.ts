@@ -44,6 +44,7 @@ import { packDirectory } from './lib/pack-directory';
 import { npmPublish } from './lib/npm-publish';
 import { logPacked } from './lib/log-packed';
 import { add, remove } from './lib/npm-dist-tag';
+import { overridePublishConfig } from './lib/override-publish-config';
 import { removeTempLicenses } from './lib/remove-temp-licenses';
 import { createTempLicenses } from './lib/create-temp-licenses';
 import { getPackagesWithoutLicense } from './lib/get-packages-without-license';
@@ -275,6 +276,9 @@ export class PublishCommand extends Command<PublishCommandOption> {
       await this.removePackageProperties();
     }
 
+    if (this.options.publishConfigOverrides !== false) {
+      await this.applyPublishConfigOverrides();
+    }
     await this.annotateGitHead();
     await this.serializeChanges();
     await this.packUpdated();
@@ -590,6 +594,16 @@ export class PublishCommand extends Command<PublishCommandOption> {
     });
   }
 
+  /**
+   * It is possible to override some fields in the manifest before the package is packed
+   * @see https://pnpm.io/package_json#publishconfig
+   * @returns
+   */
+  applyPublishConfigOverrides() {
+    // potentially apply any packages that might have publishConfig overrides
+    return pMap(this.updates, (node) => overridePublishConfig(node.pkg.manifest));
+  }
+
   resolveLocalDependencyLinks() {
     // resolve relative file: links to their actual version range
     const updatesWithLocalLinks = this.updates.filter((node: PackageGraphNode) =>
@@ -707,7 +721,7 @@ export class PublishCommand extends Command<PublishCommandOption> {
     return pMap(this.updates, (node: PackageGraphNode) => {
       if (Array.isArray(removePackageFields)) {
         for (const removeField of removePackageFields) {
-          deleteComplexObjectProp(node.pkg.pkg, removeField, `"${node.pkg.name}" package`);
+          deleteComplexObjectProp(node.pkg.manifest, removeField, `"${node.pkg.name}" package`);
         }
       }
     });

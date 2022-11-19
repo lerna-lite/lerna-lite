@@ -37,3 +37,11 @@ export function getComplexObjectValue<T>(object: any, path: string): T {
   }
   return path.split('.').reduce((obj, prop) => obj?.[prop], object);
 }
+
+/**
+ * Check if an object is empty
+ * @returns {Boolean}
+ */
+export function isEmpty(obj: object) {
+  return !obj || Object.keys(obj).length === 0;
+}

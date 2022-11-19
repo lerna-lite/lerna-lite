@@ -1,0 +1,11 @@
+{
+  "name": "package-1",
+  "version": "1.0.0",
+  "main": "./src/index.ts",
+  "typings": "./src/index.d.ts",
+  "publishConfig": {
+    "main": "dist/index.js",
+    "typings": "dist/index.d.ts",
+    "access": "public"
+  }
+}

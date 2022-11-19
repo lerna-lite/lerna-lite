@@ -127,6 +127,11 @@ export class Package {
     return path.join(this.location, 'node_modules', '.bin');
   }
 
+  /** alias to pkg getter (to avoid calling duplicate prop like `node.pkg.pkg` in which node is PackageGraphNode) */
+  get manifest(): RawManifest {
+    return this[PKG];
+  }
+
   get manifestLocation(): string {
     return path.join(this.location, 'package.json');
   }

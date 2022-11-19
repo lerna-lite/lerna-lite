@@ -91,6 +91,7 @@ This is useful when a previous `lerna publish` failed to publish all packages to
     - [`--temp-tag`](#--temp-tag)
     - [`--verify-access`](#--verify-access)
     - [`--yes`](#--yes)
+  - [`publishConfig` Overrides](#publishconfig-overrides)
   - [`workspace:` protocol](#workspace-protocol)
     - [`--workspace-strict-match (default)`](#with---workspace-strict-match-default)
     - [`--no-workspace-strict-match`](#with---no-workspace-strict-match-deprecated)
@@ -421,6 +422,38 @@ This _non-standard_ field allows you to customize the published subdirectory jus
   "publishConfig": {
     "directory": "dist"
   }
+```
+
+## `publishConfig` Overrides
+Certain fields defined in `publishConfig` can be used to override other fields in the manifest before the package gets published. As per pnpm [`publishConfig`](https://pnpm.io/package_json#publishconfig) documentation, you can override any of these fields:
+
+- `bin`, `browser`, `cpu`, `esnext`, `es2015`, `exports`, `imports`, `libc`, `main`, `module`, `os`, `type`, `types`, `typings`, `typesVersions`, `umd:main`, `unpkg`
+
+> **Note** this option is enabled by default but can be disabled bia `lerna publish --no-publish-config-overrides` or (`"publishConfigOverrides": false` in `lerna.json`)
+
+For instance, the following package.json:
+
+```json
+{
+    "name": "foo",
+    "version": "1.0.0",
+    "main": "src/index.ts",
+    "publishConfig": {
+        "main": "lib/index.js",
+        "typings": "lib/index.d.ts"
+    }
+}
+```
+
+Will be published as:
+
+```json
+{
+    "name": "foo",
+    "version": "1.0.0",
+    "main": "lib/index.js",
+    "typings": "lib/index.d.ts"
+}
 ```
 
 <a id="lifecycle-events"><!-- back-compat with previous heading --></a>

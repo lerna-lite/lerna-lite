@@ -1,0 +1,25 @@
+{
+  "name": "package-2",
+  "version": "1.0.0",
+  "dependencies": {
+    "package-1": "^1.0.0"
+  },
+  "typesVersions": {
+    "*": {
+      "*": ["origin"]
+    }
+  },
+  "publishConfig": {
+    "bin": "./build/bin.js",
+    "browser": "./build/browser.js",
+    "module": "./build/index.mjs",
+    "exports": {
+      "package-b": "dist/package-b.js"
+    },
+    "typesVersions": {
+      "*": {
+        "*": ["overriden"]
+      }
+    }
+  }
+}
