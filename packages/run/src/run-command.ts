@@ -268,7 +268,11 @@ export class RunCommand extends Command<RunCommandOption & FilterOptions> {
     const nxJson = readNxJson();
     const targetDependenciesAreDefined =
       Object.keys(nxJson.targetDependencies || nxJson.targetDefaults || {}).length > 0;
-    const mimicLernaDefaultBehavior = !(nxJsonExists && targetDependenciesAreDefined);
+
+    const hasProjectSpecificNxConfiguration = this.packagesWithScript.some((p) => !!p.get('nx'));
+    const hasCustomizedNxConfiguration =
+      (nxJsonExists && targetDependenciesAreDefined) || hasProjectSpecificNxConfiguration;
+    const mimicLernaDefaultBehavior = !hasCustomizedNxConfiguration;
 
     const targetDependencies =
       this.toposort && !this.options.parallel && mimicLernaDefaultBehavior
@@ -307,36 +311,33 @@ export class RunCommand extends Command<RunCommandOption & FilterOptions> {
       __overrides__: this.args.map((t) => t.toString()),
     };
 
-    if (!mimicLernaDefaultBehavior) {
+    if (hasCustomizedNxConfiguration) {
       this.logger.verbose(
         this.name,
-        'nx.json with targetDefaults was found. Task dependencies will be automatically included.'
+        'Nx target configuration was found. Task dependencies will be automatically included.'
       );
 
       if (this.options.parallel || this.options.sort !== undefined) {
-        this.logger.warn(
-          this.name,
-          `"parallel", "sort", and "no-sort" are ignored when nx.json has targetDefaults defined.`
-        );
+        this.logger.warn(this.name, `"parallel", "sort", and "no-sort" are ignored when Nx targets are configured.`);
       }
 
       if (this.options.includeDependencies) {
         this.logger.info(
           this.name,
-          `Using the "include-dependencies" option when nx.json has targetDefaults defined will include both task dependencies detected by Nx and project dependencies detected by Lerna.`
+          `Using the "include-dependencies" option when Nx targets are configured will include both task dependencies detected by Nx and project dependencies detected by Lerna.`
         );
       }
 
       if (this.options.ignore) {
         this.logger.info(
           this.name,
-          `Using the "ignore" option when nx.json has targetDefaults defined will exclude only tasks that are not determined to be required by Nx.`
+          `Using the "ignore" option when Nx targets are configured will exclude only tasks that are not determined to be required by Nx.`
         );
       }
     } else {
       this.logger.verbose(
         this.name,
-        'nx.json was not found or is missing targetDefaults. Task dependencies will not be automatically included.'
+        'Nx target configuration was not found. Task dependencies will not be automatically included.'
       );
     }
 

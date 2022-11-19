@@ -85,7 +85,7 @@
     "normalize-newline": "^3.0.0",
     "normalize-path": "^3.0.0",
     "npmlog": "^7.0.1",
-    "nx": "15.0.8",
+    "nx": "15.2.1",
     "prettier": "^2.7.1",
     "rimraf": "^3.0.2",
     "semver": "^7.3.8",

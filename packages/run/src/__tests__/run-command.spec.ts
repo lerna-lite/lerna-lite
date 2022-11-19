@@ -455,7 +455,7 @@ describe('RunCommand', () => {
 
       const logMessages = loggingOutput('info');
       expect(logMessages).toContain(
-        'Using the "ignore" option when nx.json has targetDefaults defined will exclude only tasks that are not determined to be required by Nx.'
+        'Using the "ignore" option when Nx targets are configured will exclude only tasks that are not determined to be required by Nx.'
       );
     });
 
@@ -498,9 +498,7 @@ describe('RunCommand', () => {
       await lernaRun(testDir)('my-script', '--sort');
 
       const [logMessage] = loggingOutput('warn');
-      expect(logMessage).toContain(
-        '"parallel", "sort", and "no-sort" are ignored when nx.json has targetDefaults defined.'
-      );
+      expect(logMessage).toContain('"parallel", "sort", and "no-sort" are ignored when Nx targets are configured.');
       expect(collectedOutput).toContain('package-1');
     });
 
@@ -511,7 +509,7 @@ describe('RunCommand', () => {
 
       const logMessages = loggingOutput('info');
       expect(logMessages).toContain(
-        'Using the "include-dependencies" option when nx.json has targetDefaults defined will include both task dependencies detected by Nx and project dependencies detected by Lerna.'
+        'Using the "include-dependencies" option when Nx targets are configured will include both task dependencies detected by Nx and project dependencies detected by Lerna.'
       );
       expect(collectedOutput).toContain('package-1');
     });

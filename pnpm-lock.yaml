@@ -43,7 +43,7 @@ importers:
       normalize-newline: ^3.0.0
       normalize-path: ^3.0.0
       npmlog: ^7.0.1
-      nx: 15.0.8
+      nx: 15.2.1
       prettier: ^2.7.1
       rimraf: ^3.0.2
       semver: ^7.3.8
@@ -93,7 +93,7 @@ importers:
       normalize-newline: 3.0.0
       normalize-path: 3.0.0
       npmlog: 7.0.1
-      nx: 15.0.8
+      nx: 15.2.1
       prettier: 2.7.1
       rimraf: 3.0.2
       semver: 7.3.8
@@ -1430,21 +1430,21 @@ packages:
       - supports-color
     dev: false
 
-  /@nrwl/cli/15.0.8:
-    resolution: {integrity: sha512-3dy3VGcStWuZXUK91FNIoxIHO44DSuE3bPVLLPfYoOgn8pYjhykpdp6RZHoDkN2NhRypzM73q2GCrmBMfizRyA==}
+  /@nrwl/cli/15.2.1:
+    resolution: {integrity: sha512-ufBJ5o3WCixdp6/TPkpn4rH3QBFJcqCMG1d14A/SvAkEnXu3vWlj3E+4GXf3CK+sGNjjf3ZGoNm7OFV+/Ml4GA==}
     dependencies:
-      nx: 15.0.8
+      nx: 15.2.1
     transitivePeerDependencies:
       - '@swc-node/register'
       - '@swc/core'
       - debug
     dev: true
 
-  /@nrwl/tao/15.0.8:
-    resolution: {integrity: sha512-Xr1hq3ZCfdKS5XSf8non5eLVdGLEleKdqBhGzdOFssYaPsCDkbavX5mzySzxeLk+DM9rcOFhwwf0x7JCOiq0bQ==}
+  /@nrwl/tao/15.2.1:
+    resolution: {integrity: sha512-6ApglWKORasLhtjlJmqo2co/UexSSiD7mWVxT2886oKG2Y/T/5RnPFNhJgGnKJIURCNMxiSKhq7GAA+CE9zRZg==}
     hasBin: true
     dependencies:
-      nx: 15.0.8
+      nx: 15.2.1
     transitivePeerDependencies:
       - '@swc-node/register'
       - '@swc/core'
@@ -2716,7 +2716,7 @@ packages:
     dev: false
 
   /concat-map/0.0.1:
-    resolution: {integrity: sha512-/Srv4dswyQNBfohGpz9o6Yb3Gz3SrUDqBH5rTuhGR7ahtlbYKnVxw2bCFMRljaA7EXHaXZ8wsHdodFvbkhKmqg==}
+    resolution: {integrity: sha1-2Klr13/Wjfd5OnMDajug1UBdR3s=}
 
   /concat-stream/2.0.0:
     resolution: {integrity: sha512-MWufYdFw53ccGjCA+Ol7XJYpAlW6/prSMzuPOTRnJGcGzuhLn4Scrz7qf6o8bROZ514ltazcIFJZevcfbo0x7A==}
@@ -5684,8 +5684,8 @@ packages:
       gauge: 5.0.0
       set-blocking: 2.0.0
 
-  /nx/15.0.8:
-    resolution: {integrity: sha512-LywcMYwZ3acEoRccUq3WBYbfeX+uGm8dyQjVLFPC1caziYZTpvQCb/BtZgLVXpZKexa2wYDXDkHuhb2pcaYcYw==}
+  /nx/15.2.1:
+    resolution: {integrity: sha512-vVeT5D02cDDiSmS3P2Bos/waYQa3m0yl/rouzsKpusVSmzAQGQbKXhxPb4WnNIj8Iz/8KjFeBM/RZO021BtGNg==}
     hasBin: true
     requiresBuild: true
     peerDependencies:
@@ -5697,8 +5697,8 @@ packages:
       '@swc/core':
         optional: true
     dependencies:
-      '@nrwl/cli': 15.0.8
-      '@nrwl/tao': 15.0.8
+      '@nrwl/cli': 15.2.1
+      '@nrwl/tao': 15.2.1
       '@parcel/watcher': 2.0.4
       '@yarnpkg/lockfile': 1.1.0
       '@yarnpkg/parsers': 3.0.0-rc.20
@@ -5731,7 +5731,7 @@ packages:
       tslib: 2.4.0
       v8-compile-cache: 2.3.0
       yargs: 17.6.2
-      yargs-parser: 21.0.1
+      yargs-parser: 21.1.1
     transitivePeerDependencies:
       - debug
     dev: true
@@ -7154,11 +7154,6 @@ packages:
     resolution: {integrity: sha512-y11nGElTIV+CT3Zv9t7VKl+Q3hTQoT9a1Qzezhhl6Rp21gJ/IVTW7Z3y9EWXhuUBC2Shnf+DX0antecpAwSP8w==}
     engines: {node: '>=10'}
     dev: false
-
-  /yargs-parser/21.0.1:
-    resolution: {integrity: sha512-9BK1jFpLzJROCI5TzwZL/TU4gqjK5xiHV/RfWLOahrjAko/e4DJkRDZQXfvqAsiZzzYhgAzbgz6lg48jcm4GLg==}
-    engines: {node: '>=12'}
-    dev: true
 
   /yargs-parser/21.1.1:
     resolution: {integrity: sha512-tVpsJW7DdjecAiFpbIB1e3qxIQsE6NoPc5/eTdrbbIC4h0LVsWhnoa3g+m2HclBIujHzsxZ4VJVA+GUuc2/LBw==}
