@@ -4,6 +4,22 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [1.13.0](https://github.com/ghiscoding/lerna-lite/compare/v1.12.0...v1.13.0) (2022-11-22)
+
+### Bug Fixes
+
+* **deps:** libnpmaccess was rewritten, lsPackages is now getPackages ([#401](https://github.com/ghiscoding/lerna-lite/issues/401)) ([abb78b0](https://github.com/ghiscoding/lerna-lite/commit/abb78b0178e33ee0911aebea28a396b75897635d)) - by @ghiscoding
+* **deps:** npm-package-arg now normalize x, x@, x@* ([#400](https://github.com/ghiscoding/lerna-lite/issues/400)) ([41b6eaa](https://github.com/ghiscoding/lerna-lite/commit/41b6eaa7077801084c8cb6308aba4cf2285f7063)) - by @ghiscoding
+* **deps:** update all non-major dependencies ([#402](https://github.com/ghiscoding/lerna-lite/issues/402)) ([3feeea9](https://github.com/ghiscoding/lerna-lite/commit/3feeea9559cafdf84f4b025950d7e4a862104284)) - by @renovate-bot
+* **deps:** update all non-major dependencies ([#405](https://github.com/ghiscoding/lerna-lite/issues/405)) ([084da4f](https://github.com/ghiscoding/lerna-lite/commit/084da4f409b38f66bc1c5d4d2ef43f9a221ca80b)) - by @renovate-bot
+* **deps:** update all non-major dependencies ([#414](https://github.com/ghiscoding/lerna-lite/issues/414)) ([267fced](https://github.com/ghiscoding/lerna-lite/commit/267fced53045193e6a3a7b53fcfc58b6a961bcdc)) - by @renovate-bot
+* **deps:** update dependency @npmcli/arborist to v6 ([#396](https://github.com/ghiscoding/lerna-lite/issues/396)) ([39b0feb](https://github.com/ghiscoding/lerna-lite/commit/39b0feba0938dcd7082ba9fa2e8350c637c0e36c)) - by @renovate-bot
+* **deps:** update dependency libnpmpublish to v7 ([#399](https://github.com/ghiscoding/lerna-lite/issues/399)) ([4eaea64](https://github.com/ghiscoding/lerna-lite/commit/4eaea642ad336d1a2739ba63812367df114aa03e)) - by @renovate-bot
+
+### Features
+
+* **publish:** apply publishConfig overrides, closes [#404](https://github.com/ghiscoding/lerna-lite/issues/404) ([#415](https://github.com/ghiscoding/lerna-lite/issues/415)) ([03e8157](https://github.com/ghiscoding/lerna-lite/commit/03e81571b8e68bc54fa69afbbc00f6338b39b19f)) - by @ghiscoding
+
 # [1.12.0](https://github.com/ghiscoding/lerna-lite/compare/v1.11.3...v1.12.0) (2022-10-14)
 
 ### Bug Fixes

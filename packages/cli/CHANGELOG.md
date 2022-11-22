@@ -4,6 +4,18 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [1.13.0](https://github.com/ghiscoding/lerna-lite/compare/v1.12.0...v1.13.0) (2022-11-22)
+
+### Bug Fixes
+
+* **deps:** update all non-major dependencies ([#405](https://github.com/ghiscoding/lerna-lite/issues/405)) ([084da4f](https://github.com/ghiscoding/lerna-lite/commit/084da4f409b38f66bc1c5d4d2ef43f9a221ca80b)) - by @renovate-bot
+
+### Features
+
+* **publish:** apply publishConfig overrides, closes [#404](https://github.com/ghiscoding/lerna-lite/issues/404) ([#415](https://github.com/ghiscoding/lerna-lite/issues/415)) ([03e8157](https://github.com/ghiscoding/lerna-lite/commit/03e81571b8e68bc54fa69afbbc00f6338b39b19f)) - by @ghiscoding
+* **version:** bump prerelease versions from conventional commits ([#409](https://github.com/ghiscoding/lerna-lite/issues/409)) ([dad936e](https://github.com/ghiscoding/lerna-lite/commit/dad936e9cc42252028175f08de73c8554d3f7cf1)) - by @ghiscoding
+* **version:** use npmClientArgs in npm install after lerna version ([#417](https://github.com/ghiscoding/lerna-lite/issues/417)) ([43e5dcd](https://github.com/ghiscoding/lerna-lite/commit/43e5dcde6bfce0edc062fce4dc3431771423d77c)) - by @ghiscoding
+
 # [1.12.0](https://github.com/ghiscoding/lerna-lite/compare/v1.11.3...v1.12.0) (2022-10-14)
 
 ### Bug Fixes

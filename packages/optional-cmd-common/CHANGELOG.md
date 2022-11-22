@@ -4,6 +4,13 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [1.13.0](https://github.com/ghiscoding/lerna-lite/compare/v1.12.0...v1.13.0) (2022-11-22)
+
+### Bug Fixes
+
+* **deps:** update all non-major dependencies ([#402](https://github.com/ghiscoding/lerna-lite/issues/402)) ([3feeea9](https://github.com/ghiscoding/lerna-lite/commit/3feeea9559cafdf84f4b025950d7e4a862104284)) - by @renovate-bot
+* **deps:** update all non-major dependencies ([#405](https://github.com/ghiscoding/lerna-lite/issues/405)) ([084da4f](https://github.com/ghiscoding/lerna-lite/commit/084da4f409b38f66bc1c5d4d2ef43f9a221ca80b)) - by @renovate-bot
+
 # [1.12.0](https://github.com/ghiscoding/lerna-lite/compare/v1.11.3...v1.12.0) (2022-10-14)
 
 ### Bug Fixes
