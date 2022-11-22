@@ -55,6 +55,10 @@ Here are some of the largest projects using the Lerna-Lite fork
   <img src="https://jestjs.io/img/jest.png" width="25" height="25">
   Jest
 </a>&nbsp; | &nbsp;
+<a href="https://github.com/react-navigation/react-navigation">
+  <img src="https://avatars.githubusercontent.com/u/29647600?s=64&v=4" width="25" height="25">
+  React Navigation
+</a>&nbsp; | &nbsp;
 <a href="https://github.com/formatjs/formatjs">
   <img src="https://formatjs.io/img/logo.svg" width="25" height="25">
   Format.JS
