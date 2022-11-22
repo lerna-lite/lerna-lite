@@ -21,7 +21,7 @@ See [Conventional Commits](https://conventionalcommits.org) for commit guideline
 
 ### Features
 
-* **publish:** apply publishConfig overrides, closes [#404](https://github.com/ghiscoding/lerna-lite/issues/404) ([#415](https://github.com/ghiscoding/lerna-lite/issues/415)) ([03e8157](https://github.com/ghiscoding/lerna-lite/commit/03e81571b8e68bc54fa69afbbc00f6338b39b19f)) - by @ghiscoding
+* **publish:** apply publishConfig overrides, closes [#404](https://github.com/ghiscoding/lerna-lite/issues/404) ([#415](https://github.com/ghiscoding/lerna-lite/issues/415)) ([03e8157](https://github.com/ghiscoding/lerna-lite/commit/03e81571b8e68bc54fa69afbbc00f6338b39b19f)) - by @ghiscoding, @artechventure
 * **version:** bump prerelease versions from conventional commits ([#409](https://github.com/ghiscoding/lerna-lite/issues/409)) ([dad936e](https://github.com/ghiscoding/lerna-lite/commit/dad936e9cc42252028175f08de73c8554d3f7cf1)) - by @ghiscoding
 * **version:** use npmClientArgs in npm install after lerna version ([#417](https://github.com/ghiscoding/lerna-lite/issues/417)) ([43e5dcd](https://github.com/ghiscoding/lerna-lite/commit/43e5dcde6bfce0edc062fce4dc3431771423d77c)) - by @ghiscoding
 
