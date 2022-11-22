@@ -65,7 +65,7 @@ describe('RunCommand', () => {
 
       const logMessages = loggingOutput('verbose');
       expect(logMessages).toContain(
-        'nx.json was not found or is missing targetDefaults. Task dependencies will not be automatically included.'
+        'Nx target configuration was not found. Task dependencies will not be automatically included.'
       );
     });
   });
