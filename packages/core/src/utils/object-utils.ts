@@ -38,6 +38,13 @@ export function getComplexObjectValue<T>(object: any, path: string): T {
   return path.split('.').reduce((obj, prop) => obj?.[prop], object);
 }
 
+export function getDefinedObjectProperties(obj?: object) {
+  if (typeof obj !== 'object') {
+    return obj;
+  }
+  return Object.fromEntries((Object.entries(obj) || []).filter(([_prop, val]) => val !== undefined));
+}
+
 /**
  * Check if an object is empty
  * @returns {Boolean}

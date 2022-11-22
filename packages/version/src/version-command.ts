@@ -623,14 +623,10 @@ export class VersionCommand extends Command<VersionCommandOption> {
 
           if (depVersion && resolved.type !== 'directory') {
             // don't overwrite local file: specifiers, they only change during publish
-            pkg.updateLocalDependency(
-              resolved,
-              depVersion,
-              this.savePrefix,
-              this.options.allowPeerDependenciesUpdate,
-              this.options.workspaceStrictMatch,
-              this.commandName
-            );
+            pkg.updateLocalDependency(resolved, depVersion, this.savePrefix, {
+              allowPeerDependenciesUpdate: this.options.allowPeerDependenciesUpdate ?? false,
+              workspaceStrictMatch: this.options.workspaceStrictMatch ?? true,
+            });
           }
         }
 

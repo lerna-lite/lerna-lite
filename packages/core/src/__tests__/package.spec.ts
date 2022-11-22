@@ -398,8 +398,8 @@ describe('Package', () => {
         const resolvedA: NpaResolveResult = npa.resolve('a', '^1.0.0', '.');
         const resolvedB: NpaResolveResult = npa.resolve('b', '^1.0.0', '.');
 
-        pkg.updateLocalDependency(resolvedA, '2.0.0', '^', true);
-        pkg.updateLocalDependency(resolvedB, '2.0.0', '^', true);
+        pkg.updateLocalDependency(resolvedA, '2.0.0', '^', { allowPeerDependenciesUpdate: true });
+        pkg.updateLocalDependency(resolvedB, '2.0.0', '^', { allowPeerDependenciesUpdate: true });
 
         expect(pkg.toJSON()).toMatchInlineSnapshot(`
           {
@@ -422,8 +422,8 @@ describe('Package', () => {
         const resolvedA: NpaResolveResult = npa.resolve('a', '^1.0.0-alpha.0', '.');
         const resolvedB: NpaResolveResult = npa.resolve('b', '^1.0.0-alpha.0', '.');
 
-        pkg.updateLocalDependency(resolvedA, '1.0.0-alpha.1', '^', true);
-        pkg.updateLocalDependency(resolvedB, '1.0.0-alpha.1', '^', true);
+        pkg.updateLocalDependency(resolvedA, '1.0.0-alpha.1', '^', { allowPeerDependenciesUpdate: true });
+        pkg.updateLocalDependency(resolvedB, '1.0.0-alpha.1', '^', { allowPeerDependenciesUpdate: true });
 
         expect(pkg.toJSON()).toMatchInlineSnapshot(`
           {
@@ -446,8 +446,8 @@ describe('Package', () => {
         const resolvedA: NpaResolveResult = npa.resolve('a', '^1.0.0-alpha.0+SHA', '.');
         const resolvedB: NpaResolveResult = npa.resolve('b', '^1.0.0-alpha.0+SHA', '.');
 
-        pkg.updateLocalDependency(resolvedA, '1.0.0-alpha.1+SHA', '^', true);
-        pkg.updateLocalDependency(resolvedB, '1.0.0-alpha.1+SHA', '^', true);
+        pkg.updateLocalDependency(resolvedA, '1.0.0-alpha.1+SHA', '^', { allowPeerDependenciesUpdate: true });
+        pkg.updateLocalDependency(resolvedB, '1.0.0-alpha.1+SHA', '^', { allowPeerDependenciesUpdate: true });
 
         expect(pkg.toJSON()).toMatchInlineSnapshot(`
           {
@@ -475,7 +475,7 @@ describe('Package', () => {
         const resolved: NpaResolveResult = npa.resolve('a', '^1.0.0', '.');
         resolved.workspaceSpec = 'workspace:^1.0.0';
 
-        pkg.updateLocalDependency(resolved, '2.0.0', '^', true);
+        pkg.updateLocalDependency(resolved, '2.0.0', '^', { allowPeerDependenciesUpdate: true });
 
         expect(pkg.toJSON()).toMatchInlineSnapshot(`
           {
@@ -510,8 +510,8 @@ describe('Package', () => {
         const resolvedB: NpaResolveResult = npa.resolve('b', '^1.0.0', '.');
         resolvedB.workspaceSpec = 'workspace:>=1.0.0';
 
-        pkg.updateLocalDependency(resolvedA, '2.0.0', '^', true);
-        pkg.updateLocalDependency(resolvedB, '2.0.0', '^', true);
+        pkg.updateLocalDependency(resolvedA, '2.0.0', '^', { allowPeerDependenciesUpdate: true });
+        pkg.updateLocalDependency(resolvedB, '2.0.0', '^', { allowPeerDependenciesUpdate: true });
 
         expect(pkg.toJSON()).toMatchInlineSnapshot(`
           {
@@ -547,7 +547,7 @@ describe('Package', () => {
         const resolved: NpaResolveResult = npa.resolve('a', '^1.0.0', '.');
         resolved.workspaceSpec = 'workspace:^1.0.0';
 
-        pkg.updateLocalDependency(resolved, '2.0.0', '^', false);
+        pkg.updateLocalDependency(resolved, '2.0.0', '^', { allowPeerDependenciesUpdate: false });
 
         expect(pkg.toJSON()).toMatchInlineSnapshot(`
           {
@@ -582,7 +582,7 @@ describe('Package', () => {
         const resolved: NpaResolveResult = npa.resolve('a', '^1.0.0', '.');
         resolved.workspaceSpec = 'workspace:^1.0.0';
 
-        pkg.updateLocalDependency(resolved, '2.0.0', '^', true);
+        pkg.updateLocalDependency(resolved, '2.0.0', '^', { allowPeerDependenciesUpdate: true });
 
         expect(pkg.toJSON()).toMatchInlineSnapshot(`
           {
@@ -682,7 +682,7 @@ describe('Package', () => {
         const resolved: NpaResolveResult = npa.resolve('a', '^1.0.0', '.');
         resolved.workspaceSpec = 'workspace:1.0.0';
 
-        pkg.updateLocalDependency(resolved, '2.0.0', '^', true); // last arg is allowPeerDependenciesUpdate=true
+        pkg.updateLocalDependency(resolved, '2.0.0', '^', { allowPeerDependenciesUpdate: true });
 
         expect(pkg.toJSON()).toMatchInlineSnapshot(`
           {
@@ -738,8 +738,16 @@ describe('Package', () => {
         const resolvedB: NpaResolveResult = npa.resolve('b', '^1.0.0', '.');
         resolvedB.workspaceSpec = 'workspace:^1.0.0';
 
-        pkg.updateLocalDependency(resolvedA, '2.0.0', '^', true, true, 'publish'); // allowPeerDependenciesUpdate=true, workspaceStrictMatch=true
-        pkg.updateLocalDependency(resolvedB, '1.1.0', '^', true, true, 'publish');
+        pkg.updateLocalDependency(resolvedA, '2.0.0', '^', {
+          allowPeerDependenciesUpdate: true,
+          workspaceStrictMatch: true,
+          retainWorkspacePrefix: false,
+        });
+        pkg.updateLocalDependency(resolvedB, '1.1.0', '^', {
+          allowPeerDependenciesUpdate: true,
+          workspaceStrictMatch: true,
+          retainWorkspacePrefix: false,
+        });
 
         expect(pkg.toJSON()).toMatchInlineSnapshot(`
           {
@@ -772,8 +780,16 @@ describe('Package', () => {
         const resolvedB: NpaResolveResult = npa.resolve('b', '^1.0.0', '.');
         resolvedB.workspaceSpec = 'workspace:~1.0.0';
 
-        pkg.updateLocalDependency(resolvedA, '2.0.0', '^', true, true, 'publish'); // allowPeerDependenciesUpdate=true, workspaceStrictMatch=true
-        pkg.updateLocalDependency(resolvedB, '1.1.0', '~', true, true, 'publish');
+        pkg.updateLocalDependency(resolvedA, '2.0.0', '^', {
+          allowPeerDependenciesUpdate: true,
+          workspaceStrictMatch: true,
+          retainWorkspacePrefix: false,
+        });
+        pkg.updateLocalDependency(resolvedB, '1.1.0', '~', {
+          allowPeerDependenciesUpdate: true,
+          workspaceStrictMatch: true,
+          retainWorkspacePrefix: false,
+        });
 
         expect(pkg.toJSON()).toMatchInlineSnapshot(`
           {
@@ -807,8 +823,16 @@ describe('Package', () => {
         const resolvedB: NpaResolveResult = npa.resolve('b', '^1.0.0', '.');
         resolvedB.workspaceSpec = 'workspace:^1.0.0';
 
-        pkg.updateLocalDependency(resolvedA, '2.0.0', '^', false, true, 'publish'); // allowPeerDependenciesUpdate=false, workspaceStrictMatch=true
-        pkg.updateLocalDependency(resolvedB, '1.1.0', '^', false, true, 'publish');
+        pkg.updateLocalDependency(resolvedA, '2.0.0', '^', {
+          allowPeerDependenciesUpdate: false,
+          workspaceStrictMatch: true,
+          retainWorkspacePrefix: false,
+        });
+        pkg.updateLocalDependency(resolvedB, '1.1.0', '^', {
+          allowPeerDependenciesUpdate: false,
+          workspaceStrictMatch: true,
+          retainWorkspacePrefix: false,
+        });
 
         expect(pkg.toJSON()).toMatchInlineSnapshot(`
           {

@@ -4,7 +4,8 @@ import npmlog from 'npmlog';
 import path from 'path';
 import writePkg from 'write-pkg';
 
-import { CommandType, NpaResolveResult, RawManifest } from './models';
+import { NpaResolveResult, RawManifest } from './models';
+import { getDefinedObjectProperties } from './utils';
 
 // symbol used to 'hide' internal state
 const PKG = Symbol('pkg');
@@ -304,10 +305,14 @@ export class Package {
     resolved: NpaResolveResult,
     depVersion: string,
     savePrefix: string,
-    allowPeerDependenciesUpdate = false,
-    workspaceStrictMatch = true,
-    updatedByCommand?: CommandType
+    options?: {
+      allowPeerDependenciesUpdate?: boolean;
+      workspaceStrictMatch?: boolean;
+      retainWorkspacePrefix?: boolean;
+    }
   ) {
+    // prettier-ignore
+    const finalOptions = { allowPeerDependenciesUpdate: false, workspaceStrictMatch: true, retainWorkspacePrefix: true, ...getDefinedObjectProperties(options) };
     const depName = resolved.name as string;
     const localDependencies = this.retrievePackageDependencies(depName);
     const updatingDependencies = [localDependencies];
@@ -317,12 +322,12 @@ export class Package {
       // when user allows peer bump and is a regular semver version, we'll push it to the array of dependencies to potentially bump
       // however we won't when the semver has a range with operator, ie this would bump ("^2.0.0") but these would not (">=2.0.0" or "workspace:<2.0.0" or "workspace:*")
       // prettier-ignore
-      if (allowPeerDependenciesUpdate && /^(workspace:)?[~^]?[\d\.]+([\-]+[\w\.\-\+]+)*$/i.test(this.peerDependencies[depName] || '')) {
+      if (finalOptions.allowPeerDependenciesUpdate && /^(workspace:)?[~^]?[\d\.]+([\-]+[\w\.\-\+]+)*$/i.test(this.peerDependencies[depName] || '')) {
         updatingDependencies.push(this.peerDependencies);
       }
       // when peer bump is disabled, we could end up with peerDependencies not being reviewed
       // and some might still have the `workspace:` prefix so make sure to remove any of these prefixes
-      else if (updatedByCommand === 'publish' && this.peerDependencies[depName].startsWith('workspace:')) {
+      else if (!finalOptions.retainWorkspacePrefix && this.peerDependencies[depName].startsWith('workspace:')) {
         this.peerDependencies[depName] = this.peerDependencies[depName].replace('workspace:', '');
       }
     }
@@ -341,15 +346,15 @@ export class Package {
           if (operatorPrefix) {
             // package with range operator should never be bumped, we'll use same version range but without prefix "workspace:>=1.2.3" will assign ">=1.2.3"
             depCollection[depName] = `${operatorPrefix}${rangePrefix || ''}${semver}`;
-          } else if (workspaceStrictMatch) {
+          } else if (finalOptions.workspaceStrictMatch) {
             // with workspace in strict mode we might have empty range prefix like "workspace:1.2.3"
             depCollection[depName] = `${rangePrefix || ''}${depVersion}`;
           }
 
-          if (updatedByCommand === 'publish') {
+          if (!finalOptions.retainWorkspacePrefix) {
             // when publishing, workspace protocol will be transformed to semver range
             // e.g.: considering version is `1.2.3` and we have `workspace:*` it will be converted to "^1.2.3" or to "1.2.3" with strict match range enabled
-            if (workspaceStrictMatch) {
+            if (finalOptions.workspaceStrictMatch) {
               if (workspaceSpec === 'workspace:*') {
                 depCollection[depName] = depVersion; // (*) exact range, "1.5.0"
               } else if (workspaceSpec === 'workspace:~') {

@@ -270,7 +270,7 @@ export class PublishCommand extends Command<PublishCommandOption> {
     }
 
     await this.resolveLocalDependencyLinks();
-    await this.resolveLocalDependencyWorkspaceProtocols();
+    await this.resolveLocalDependencyWorkspaceLinks();
 
     if (this.options.removePackageFields) {
       await this.removePackageProperties();
@@ -580,14 +580,11 @@ export class PublishCommand extends Command<PublishCommandOption> {
         const depVersion = this.updatesVersions?.get(depName) || this.packageGraph?.get(depName)!.pkg.version;
 
         // it no longer matters if we mutate the shared Package instance
-        node.pkg.updateLocalDependency(
-          resolved,
-          depVersion,
-          this.savePrefix,
-          this.options.allowPeerDependenciesUpdate,
-          this.options.workspaceStrictMatch,
-          this.commandName
-        );
+        node.pkg.updateLocalDependency(resolved, depVersion, this.savePrefix, {
+          allowPeerDependenciesUpdate: this.options.allowPeerDependenciesUpdate ?? false,
+          workspaceStrictMatch: this.options.workspaceStrictMatch ?? true,
+          retainWorkspacePrefix: false,
+        });
       }
 
       // writing changes to disk handled in serializeChanges()
@@ -616,21 +613,18 @@ export class PublishCommand extends Command<PublishCommandOption> {
         const depVersion = this.updatesVersions?.get(depName) || this.packageGraph?.get(depName)!.pkg.version;
 
         // it no longer matters if we mutate the shared Package instance
-        node.pkg.updateLocalDependency(
-          resolved,
-          depVersion,
-          this.savePrefix,
-          this.options.allowPeerDependenciesUpdate,
-          this.options.workspaceStrictMatch,
-          this.commandName
-        );
+        node.pkg.updateLocalDependency(resolved, depVersion, this.savePrefix, {
+          allowPeerDependenciesUpdate: this.options.allowPeerDependenciesUpdate ?? false,
+          workspaceStrictMatch: this.options.workspaceStrictMatch ?? true,
+          retainWorkspacePrefix: false,
+        });
       }
 
       // writing changes to disk handled in serializeChanges()
     });
   }
 
-  resolveLocalDependencyWorkspaceProtocols() {
+  resolveLocalDependencyWorkspaceLinks() {
     // resolve workspace protocol: translates to their actual version target/range
     const publishingPackagesWithLocalWorkspaces = this.updates.filter((node: PackageGraphNode) =>
       Array.from(node.localDependencies.values()).some((resolved: NpaResolveResult) => resolved.workspaceSpec)
@@ -645,14 +639,11 @@ export class PublishCommand extends Command<PublishCommandOption> {
         const depVersion = this.updatesVersions?.get(depName) || this.packageGraph?.get(depName)!.pkg.version;
 
         // it no longer matters if we mutate the shared Package instance
-        node.pkg.updateLocalDependency(
-          resolved,
-          depVersion,
-          this.savePrefix,
-          this.options.allowPeerDependenciesUpdate,
-          this.options.workspaceStrictMatch,
-          this.commandName
-        );
+        node.pkg.updateLocalDependency(resolved, depVersion, this.savePrefix, {
+          allowPeerDependenciesUpdate: this.options.allowPeerDependenciesUpdate ?? false,
+          workspaceStrictMatch: this.options.workspaceStrictMatch ?? true,
+          retainWorkspacePrefix: false,
+        });
       }
 
       // 2. remove any "workspace:" prefix from the package to be published any of external dependencies (without anything being bumped)

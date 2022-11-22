@@ -1,7 +1,7 @@
 import cloneDeep from 'clone-deep';
 import npmlog from 'npmlog';
 
-import { deleteComplexObjectProp, getComplexObjectValue, isEmpty } from '../object-utils';
+import { deleteComplexObjectProp, getComplexObjectValue, getDefinedObjectProperties, isEmpty } from '../object-utils';
 
 describe('deleteComplexObjectProp method', () => {
   let obj = {};
@@ -75,6 +75,28 @@ describe('getComplexObjectValue method', () => {
   it('should return the object descendant when using multiple levels of dot notation', () => {
     const output = getComplexObjectValue(obj, 'user.address.street');
     expect(output).toEqual('Broadway');
+  });
+});
+
+describe('getDefinedObjectProperties method', () => {
+  it('should return same input when argument is not an object', () => {
+    const output = getDefinedObjectProperties(20 as any);
+    expect(output).toEqual(20);
+  });
+
+  it('should return same input when argument is not an object', () => {
+    const output = getDefinedObjectProperties(null as any);
+    expect(output).toEqual(null);
+  });
+
+  it('should only returned defined properties when only a partial of them are filled', () => {
+    const output = getDefinedObjectProperties({ firstName: 'John', lastName: 'Doe', age: undefined });
+    expect(output).toEqual({ firstName: 'John', lastName: 'Doe' });
+  });
+
+  it('should only returned same input object when all its properties are defined', () => {
+    const output = getDefinedObjectProperties({ firstName: 'John', lastName: 'Doe', age: 38 });
+    expect(output).toEqual({ firstName: 'John', lastName: 'Doe', age: 38 });
   });
 });
 
