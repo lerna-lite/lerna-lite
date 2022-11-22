@@ -84,32 +84,32 @@ Here are some of the largest projects using the Lerna-Lite fork
 
 Lerna-Lite differs from the original [Lerna](https://github.com/lerna/lerna) since it only has a limited subset of commands from Lerna, which itself has 15 commands, while Lerna-Lite only includes half of them (and a few of them are optional). Lerna was originally built as an all-in-one tool, however nowadays Workspaces are available in all package managers and the need for an all-in-one tool ,which includes built-in workspaces functionalities, is no longer necessary. Lerna-Lite is built around this new reality and its CLI is only including the minimum commands which are `init`, `info`, `publish` and `version`, while other commands are available as optional and separate installation (`exec`, `list`, `run`, ...). In summary, Lerna-Lite is more modular than the original Lerna and so you'll end up installing less dependencies, this also makes it more versatile to use with other tools like Turborepo, pnpm and others...
 
-As a summary, Lerna-Lite assumes, and requires to pre-setup a Workspace through your favorite package manager (npm, pnpm, yarn) that will take care of the symlinks (Lerna-Lite does **not include** the `bootstrap`, neither `link` commands hence the need for a workspace pre-setup), so make sure that your workspace is properly setup **before** installing Lerna-Lite.
+As a summary, Lerna-Lite assumes, and requires you to pre-setup your Workspace through your favorite package manager (npm, pnpm, yarn) that will take care of the symlinks (Lerna-Lite does **not include** the `bootstrap`, `add` and `link` commands hence the need for a workspace pre-setup), so make sure that your workspace is properly setup **before** adding Lerna-Lite.
 
 For more info on how to setup a workspace, choose the best option for you: [npm 7+](https://docs.npmjs.com/cli/v8/using-npm/workspaces) / [Yarn classic](https://classic.yarnpkg.com/en/docs/workspaces) / [Yarn 2+](https://yarnpkg.com/features/workspaces) / [pnpm](https://pnpm.io/workspaces)
 
 ## Why create this lib/fork?
 
-Mainly for the following reasons:
+Below are the main reasons of why this fork was created:
 
-1. original Lerna repo was unmaintained for nearly 2 years (dependencies were out of date)
+1. Lerna repo was unmaintained for nearly 2 years (that in early 2022, dependencies were out of date)
     - this is no longer true since Nrwl took over stewardship of Lerna (we now keep PRs in sync with them when possible), but the next few points are still valid
 2. a desire to create a smaller and more modular lib that is lighter than the original all-in-one Lerna
     - it's smaller since we only copied half of Lerna's commands and many of them are totally optional.
-    - we don't need `bootstrap` anymore since Workspaces are supported by all package managers.
-    - also the main goal of this fork was to keep only `version` and `publish` commands in the core and make everything else as optional packages (choose and install what you really need).
+    - the main goal of this fork was to only keep `version` and `publish` commands in the core and make everything else as optional packages (choose and install what you really need).
 3. rewrite the lib in TypeScript for type checking and to be compatible with ESM in the future
 4. replicate a few opened PRs (fixes and features) from Lerna and also add extra features in Lerna-Lite
-5. Lerna v5-6 is installing **[Nx](https://nx.dev/)** as a required [dependency](https://github.com/lerna/lerna/blob/main/core/lerna/package.json#L66), want it or not, while it remains **optional** in Lerna-Lite
+5. Lerna v5+ is installing **[Nx](https://nx.dev/)** as a required [dependency](https://github.com/lerna/lerna/blob/main/core/lerna/package.json#L66) (want it or not), while it remains **optional** in Lerna-Lite
     - even if [Nx](https://nx.dev/) can be a nice addition with `lerna run` and [`useNx`](https://github.com/ghiscoding/lerna-lite/tree/main/packages/run#usenx-experimental) (which we did add), it should and **will always be optional** in Lerna-Lite, it's your decision.
-6. Lerna v5-6 is also enforcing `useWorkspaces` option to be enabled, but this can have undesired effects (you might want to track only the `packages` folder with Lerna and not other folders like `demo` or `website`). Again, that will not be enforced in Lerna-Lite, in fact it's the opposite, I personally prefer to just use `packages` in `lerna.json` (especially with pnpm)
-7. add new features that only exists in Lerna-Lite
-   - [`workspace:` protocol support](https://github.com/ghiscoding/lerna-lite/tree/main/packages/version#workspace-protocol) (Lerna v6 also added support for it six months later)
+6. Lerna v5+ is also enforcing `useWorkspaces` option to be enabled, but this can have undesired effects (you might want to track only the `packages` folder with Lerna and not other folders like `demo` or `website`). Again, that will not be enforced in Lerna-Lite, in fact it's the opposite, I personally prefer to just use `packages` in `lerna.json` (especially with pnpm)
+7. add extra features that currently only exists in Lerna-Lite
+   - [`workspace:` protocol support](https://github.com/ghiscoding/lerna-lite/tree/main/packages/version#workspace-protocol) (Lerna added support for that six months later in v6)
    - [--dry-run](https://github.com/ghiscoding/lerna-lite/tree/main/packages/version#--dry-run) to preview version/publish changes
    - [lerna version --changelog-header-message "msg"](https://github.com/ghiscoding/lerna-lite/tree/main/packages/version#--changelog-header-message-msg)
    - [lerna version --changelog-include-commits-client-login](https://github.com/ghiscoding/lerna-lite/tree/main/packages/version#--changelog-include-commits-client-login-msg)
    - [lerna publish --remove-package-fields](https://github.com/ghiscoding/lerna-lite/tree/main/packages/publish#--remove-package-fields-fields) (cleanup fields before publish)
    - the best feature of Lerna-Lite has to be its modularity, only install what you really use (see [installation](#cli-installation) below)
+      - a large portion of the users are only interested in version/publish features
    
 ### This lib will help you with
 
@@ -117,8 +117,8 @@ Mainly for the following reasons:
 
 - Automate the rolling of new Versions (`independent` or `fixed`) of all your workspace packages.
   - it will automatically Commit/Tag your new Version & create new GitHub/GitLab Release (when enabled).
-- Automate the creation of Changelogs for all your packages by reading all [Conventional Commits](https://www.conventionalcommits.org/) and a merged one in the project root.
-- Automate the repository Publishing of your new version for all your packages (NPM or other platforms).
+- Automate, when enabled, the creation of Changelogs for all your packages by reading all [Conventional Commits](https://www.conventionalcommits.org/) and a merged one in the project root.
+- Automate, when enabled, the repository Publishing of your new version for all your packages (NPM or other platforms).
 
 #### Other useful, **but optional**, commands
 
