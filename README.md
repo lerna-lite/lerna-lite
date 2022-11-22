@@ -35,7 +35,7 @@
     - 🌓 [`diff`](https://github.com/ghiscoding/lerna-lite/tree/main/packages/diff#readme) - git diff all packages or a single package since the last release
     - 👷 [`exec`](https://github.com/ghiscoding/lerna-lite/tree/main/packages/exec#readme) - execute shell command in each workspace package
     - 📖 [`list`](https://github.com/ghiscoding/lerna-lite/tree/main/packages/list#readme) - list local packages
-    - 🏃 [`run`](https://github.com/ghiscoding/lerna-lite/tree/main/packages/run#readme) - run npm script in each workspace packages
+    - 🏃 [`run`](https://github.com/ghiscoding/lerna-lite/tree/main/packages/run#readme) - run npm script, in topological order, in each workspace package
 
 ---
 
