@@ -74,9 +74,6 @@ Here are some of the largest projects using the Lerna-Lite fork
 <a href="https://github.com/standardnotes/app">
   <img src="https://avatars.githubusercontent.com/u/24537496?s=200&amp;v=4" width="25" height="25">
   Standard Notes
-</a>&nbsp; | &nbsp;
-<a href="https://github.com/microlinkhq/metascraper">
-  <img src="https://metascraper.js.org/static/logo-banner.png" height="20">
 </a>
 
 ## License
