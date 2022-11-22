@@ -121,7 +121,7 @@ describe('run install lockfile-only', () => {
       const execSyncSpy = jest.spyOn(core, 'execSync').mockReturnValue('8.5.0');
       const cwd = await initFixture('lockfile-version2');
 
-      const lockFileOutput = await runInstallLockFileOnly('npm', cwd);
+      const lockFileOutput = await runInstallLockFileOnly('npm', cwd, []);
 
       expect(execSyncSpy).toHaveBeenCalled();
       expect(execSpy).toHaveBeenCalledWith('npm', ['install', '--package-lock-only'], { cwd });
@@ -134,11 +134,23 @@ describe('run install lockfile-only', () => {
       const execSyncSpy = jest.spyOn(core, 'execSync').mockReturnValue('8.4.0');
       const cwd = await initFixture('lockfile-version2');
 
-      const lockFileOutput = await runInstallLockFileOnly('npm', cwd);
+      const lockFileOutput = await runInstallLockFileOnly('npm', cwd, []);
 
       expect(execSyncSpy).toHaveBeenCalled();
       expect(execSpy).toHaveBeenCalledWith('npm', ['shrinkwrap', '--package-lock-only'], { cwd });
       expect(renameSpy).toHaveBeenCalledWith('npm-shrinkwrap.json', 'package-lock.json');
+      expect(lockFileOutput).toBe('package-lock.json');
+    });
+
+    it(`should update project root lockfile by calling npm script "npm install --package-lock-only" with extra npm client arguments when provided`, async () => {
+      const execSpy = jest.spyOn(core, 'exec');
+      const execSyncSpy = jest.spyOn(core, 'execSync').mockReturnValue('8.5.0');
+      const cwd = await initFixture('lockfile-version2');
+
+      const lockFileOutput = await runInstallLockFileOnly('npm', cwd, ['--legacy-peer-deps']);
+
+      expect(execSyncSpy).toHaveBeenCalled();
+      expect(execSpy).toHaveBeenCalledWith('npm', ['install', '--package-lock-only', '--legacy-peer-deps'], { cwd });
       expect(lockFileOutput).toBe('package-lock.json');
     });
   });
@@ -148,7 +160,7 @@ describe('run install lockfile-only', () => {
       const logSpy = jest.spyOn(npmlog, 'error');
       const cwd = await initFixture('lockfile-version2');
 
-      const lockFileOutput = await runInstallLockFileOnly('pnpm', cwd);
+      const lockFileOutput = await runInstallLockFileOnly('pnpm', cwd, []);
 
       expect(logSpy).toHaveBeenCalledWith(
         'lock',
@@ -166,9 +178,27 @@ describe('run install lockfile-only', () => {
       const execSpy = jest.spyOn(core, 'exec');
       const cwd = await initFixture('lockfile-version2');
 
-      const lockFileOutput = await runInstallLockFileOnly('pnpm', cwd);
+      const lockFileOutput = await runInstallLockFileOnly('pnpm', cwd, []);
 
       expect(execSpy).toHaveBeenCalledWith('pnpm', ['install', '--lockfile-only', '--ignore-scripts'], { cwd });
+      expect(lockFileOutput).toBe('pnpm-lock.yaml');
+    });
+
+    it(`should update project root lockfile by calling client script "pnpm install --package-lock-only" with extra npm client arguments when provided`, async () => {
+      jest.spyOn(nodeFs.promises, 'access').mockResolvedValue(true as any);
+      (nodeFs.renameSync as jest.Mock).mockImplementation(() => true);
+      (core.exec as jest.Mock).mockImplementation(() => true);
+      const execSpy = jest.spyOn(core, 'exec');
+      const cwd = await initFixture('lockfile-version2');
+
+      const lockFileOutput = await runInstallLockFileOnly('pnpm', cwd, ['--frozen-lockfile']);
+
+      expect(execSpy).toHaveBeenCalled();
+      expect(execSpy).toHaveBeenCalledWith(
+        'pnpm',
+        ['install', '--lockfile-only', '--ignore-scripts', '--frozen-lockfile'],
+        { cwd }
+      );
       expect(lockFileOutput).toBe('pnpm-lock.yaml');
     });
   });
@@ -181,9 +211,22 @@ describe('run install lockfile-only', () => {
       const execSpy = jest.spyOn(core, 'exec');
       const cwd = await initFixture('lockfile-version2');
 
-      const lockFileOutput = await runInstallLockFileOnly('yarn', cwd);
+      const lockFileOutput = await runInstallLockFileOnly('yarn', cwd, []);
 
       expect(execSpy).toHaveBeenCalledWith('yarn', ['install', '--mode', 'update-lockfile'], { cwd });
+      expect(lockFileOutput).toBe('yarn.lock');
+    });
+
+    it(`should update project root lockfile by calling client script "yarn install --package-lock-only" with extra npm client arguments when provided`, async () => {
+      jest.spyOn(nodeFs.promises, 'access').mockResolvedValue(true as any);
+      (nodeFs.renameSync as jest.Mock).mockImplementation(() => true);
+      (core.exec as jest.Mock).mockImplementation(() => true);
+      const execSpy = jest.spyOn(core, 'exec');
+      const cwd = await initFixture('lockfile-version2');
+
+      const lockFileOutput = await runInstallLockFileOnly('yarn', cwd, ['--check-files']);
+
+      expect(execSpy).toHaveBeenCalledWith('yarn', ['install', '--mode', 'update-lockfile', '--check-files'], { cwd });
       expect(lockFileOutput).toBe('yarn.lock');
     });
   });
