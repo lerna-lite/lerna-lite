@@ -520,7 +520,7 @@ export class VersionCommand extends Command<VersionCommandOption> {
 
   async recommendVersions(resolvePrereleaseId) {
     const independentVersions = this.project.isIndependent();
-    const { changelogPreset, conventionalGraduate } = this.options;
+    const { changelogPreset, conventionalGraduate, conventionalBumpPrerelease } = this.options;
     const rootPath = this.project.manifest.location;
     const type = independentVersions ? 'independent' : 'fixed';
     const prereleasePackageNames = this.getPrereleasePackageNames();
@@ -544,6 +544,7 @@ export class VersionCommand extends Command<VersionCommandOption> {
           rootPath,
           tagPrefix: this.tagPrefix,
           prereleaseId: getPrereleaseId(node),
+          conventionalBumpPrerelease,
         }) as any
     );
 

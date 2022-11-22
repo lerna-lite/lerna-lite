@@ -16,9 +16,9 @@ import { PackageGraphNode } from '../package-graph';
 export async function recommendVersion(
   pkg: Package | PackageGraphNode,
   type: VersioningStrategy,
-  recommendationOptions: BaseChangelogOptions & { prereleaseId?: string }
+  recommendationOptions: BaseChangelogOptions & { prereleaseId?: string; conventionalBumpPrerelease?: boolean }
 ): Promise<string | null> {
-  const { changelogPreset, rootPath, tagPrefix, prereleaseId } = recommendationOptions;
+  const { changelogPreset, rootPath, tagPrefix, prereleaseId, conventionalBumpPrerelease } = recommendationOptions;
 
   log.silly(type, 'for %s at %s', pkg.name, pkg.location);
 
@@ -65,7 +65,7 @@ export async function recommendVersion(
       let releaseType = data.releaseType || 'patch';
 
       if (prereleaseId) {
-        const shouldBump = shouldBumpPrerelease(releaseType, pkg.version);
+        const shouldBump = conventionalBumpPrerelease || shouldBumpPrerelease(releaseType, pkg.version);
         const prereleaseType: ReleaseType = shouldBump ? `pre${releaseType}` : 'prerelease';
         log.verbose(type, 'increment %s by %s - %s', pkg.version, prereleaseType, pkg.name);
         resolve(semver.inc(pkg.version, prereleaseType, prereleaseId));

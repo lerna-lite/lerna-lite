@@ -1,3 +1,4 @@
+import { boolean } from 'yargs';
 import { RemoteClientType } from './interfaces';
 
 export interface ChangedCommandOption {
@@ -202,6 +203,9 @@ export interface VersionCommandOption {
 
   /** Version changed packages as prereleases when using `--conventional-commits`. */
   conventionalPrerelease?: boolean | string;
+
+  /** Bumps prerelease versions if conventional commits requires it. This option is only available when using `--conventional-commits`. */
+  conventionalBumpPrerelease?: boolean;
 
   /** Add a custom message at the top of all "changelog.md" files. This option is only available when using `--conventional-commits` with changelogs. */
   changelogHeaderMessage?: string;
