@@ -90,10 +90,10 @@ For more info on how to setup a workspace, choose the best option for you: [npm 
 
 ## Why create this lib/fork?
 
-Below are the main reasons of why this fork was created:
+Below are the main reasons as to why this fork was created:
 
-1. Lerna repo was unmaintained for nearly 2 years (that in early 2022, dependencies were out of date)
-    - this is no longer true since Nrwl took over stewardship of Lerna (we now keep PRs in sync with them when possible), but the next few points are still valid
+1. Lerna repo was unmaintained for nearly 2 years (in early 2022, dependencies were really out of date)
+    - this is no longer the case since Nrwl took over stewardship of Lerna (we now keep PRs in sync with them when possible), but the next few points are still valid
 2. a desire to create a smaller and more modular lib that is lighter than the original all-in-one Lerna
     - it's smaller since we only copied half of Lerna's commands and many of them are totally optional.
     - the main goal of this fork was to only keep `version` and `publish` commands in the core and make everything else as optional packages (choose and install what you really need).
@@ -102,7 +102,7 @@ Below are the main reasons of why this fork was created:
 5. Lerna v5+ is installing **[Nx](https://nx.dev/)** as a required [dependency](https://github.com/lerna/lerna/blob/main/core/lerna/package.json#L66) (want it or not), while it remains **optional** in Lerna-Lite
     - even if [Nx](https://nx.dev/) can be a nice addition with `lerna run` and [`useNx`](https://github.com/ghiscoding/lerna-lite/tree/main/packages/run#usenx-experimental) (which we did add), it should and **will always be optional** in Lerna-Lite, it's your decision.
 6. Lerna v5+ is also enforcing `useWorkspaces` option to be enabled, but this can have undesired effects (you might want to track only the `packages` folder with Lerna and not other folders like `demo` or `website`). Again, that will not be enforced in Lerna-Lite, in fact it's the opposite, I personally prefer to just use `packages` in `lerna.json` (especially with pnpm)
-7. add extra features that currently only exists in Lerna-Lite
+7. add few extra features that currently only exists in Lerna-Lite
    - [`workspace:` protocol support](https://github.com/ghiscoding/lerna-lite/tree/main/packages/version#workspace-protocol) (Lerna added support for that six months later in v6)
    - [--dry-run](https://github.com/ghiscoding/lerna-lite/tree/main/packages/version#--dry-run) to preview version/publish changes
    - [lerna version --changelog-header-message "msg"](https://github.com/ghiscoding/lerna-lite/tree/main/packages/version#--changelog-header-message-msg)
@@ -165,10 +165,10 @@ Note that `package-a` will not be created, it is only shown here to help clarify
 
 Run the following commands to install Lerna-Lite in your project and/or install it globally by adding the `-g` option.
 
-If you are new to Lerna-Lite, you could also run the [lerna init](https://github.com/ghiscoding/lerna-lite/tree/main/packages/init#readme) command which will create the `lerna.json` for you with a minimal setup. If you are using a different client other than npm, then make sure to update the `npmClient` property in `lerna.json` (for example: `"npmClient": "yarn"`).
+If you are new to Lerna-Lite, you could also run the [lerna init](https://github.com/ghiscoding/lerna-lite/tree/main/packages/init#readme) command which will create the `lerna.json` for you with a minimal setup. If you are using a different client other than npm, then make sure to update the `npmClient` property in `lerna.json` (for example: `"npmClient": "yarn"` or `"pnpm"`).
 
 ### JSON Schema
-You can add the `$schema` property into your `lerna.json` to take advantage of Lerna-Lite [JSON Schema](https://json-schema.org/) (`lerna init` will automatically configure this for you). This will help with the developer experience, users will be able to see what properties are valid with a brief description of what they do (pulled from each lerna command options documentation).
+You can add the `$schema` property into your `lerna.json` to take advantage of Lerna-Lite [JSON Schema](https://json-schema.org/) (`lerna init` will automatically configure this for you). This will help with the developer experience, users will be able to see what properties are valid with a brief description of what they do (each description are pulled from their associated lerna command options documentation).
 
 ##### `lerna.json`
 ```js
@@ -207,7 +207,7 @@ Minimum CLI install to get started with Lerna-Lite, that will give you access to
 
 ### Usage
 
-Add custom NPM Scripts or simply run the commands in a shell with Lerna-Lite CLI, below are a few very simple demo scripts.
+Add custom NPM Scripts or simply run the commands in a shell with Lerna-Lite CLI, you can see below very basic lerna scripts samples.
 
 ```js
 // package.json / npm scripts
@@ -244,6 +244,7 @@ npm install @lerna-lite/cli -D -W
 # install any of the optional commands (refer to installation table)
 npm install @lerna-lite/run -D -W
 ```
+ **Note** you might see a lot of diff changes in your changelog.md files, that is totally normal since Lerna-Lite has code in place to remove all these extra empty lines that Lerna was adding for no reason. 
 
 ## Project Demo?
 
