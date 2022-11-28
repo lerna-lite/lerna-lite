@@ -106,10 +106,10 @@ Below are the main reasons as to why this fork was created:
    - [`workspace:` protocol support](https://github.com/ghiscoding/lerna-lite/tree/main/packages/version#workspace-protocol) (Lerna added support for that six months later in v6)
    - [--dry-run](https://github.com/ghiscoding/lerna-lite/tree/main/packages/version#--dry-run) to preview version/publish 
 changes and changelogs
-   - [lerna version --changelog-header-message "msg"](https://github.com/ghiscoding/lerna-lite/tree/main/packages/version#--changelog-header-message-msg) it could be used to add sponsor badges in changelogs or link to your own repo
-   - [lerna version --changelog-include-commits-client-login](https://github.com/ghiscoding/lerna-lite/tree/main/packages/version#--changelog-include-commits-client-login-msg)
+   - [lerna version --changelog-header-message "msg"](https://github.com/ghiscoding/lerna-lite/tree/main/packages/version#--changelog-header-message-msg) it could be used to add sponsor badges in changelogs
+   - [lerna version --changelog-include-commits-client-login](https://github.com/ghiscoding/lerna-lite/tree/main/packages/version#--changelog-include-commits-client-login-msg) to add PR contributors
    - [lerna publish --remove-package-fields](https://github.com/ghiscoding/lerna-lite/tree/main/packages/publish#--remove-package-fields-fields) (cleanup fields from `package.json` before publishing, Lerna-Lite removes `scripts` and `devDependencies` through this option)
-   - the best feature of Lerna-Lite has to be its modularity, only install what you really use (see [installation](#cli-installation) below)
+   - finally the best feature of Lerna-Lite must be its modularity, you only install what you really use (see [installation](#cli-installation) below)
       - a large portion of the users are only interested in version/publish features
    
 ### This lib will help you with
