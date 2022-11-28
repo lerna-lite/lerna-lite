@@ -104,10 +104,11 @@ Below are the main reasons as to why this fork was created:
 6. Lerna v5+ is also enforcing `useWorkspaces` option to be enabled, but this can have undesired effects (you might want to track only the `packages` folder with Lerna and not other folders like `demo` or `website`). Again, that will not be enforced in Lerna-Lite, in fact it's the opposite, I personally prefer to just use `packages` in `lerna.json` (especially with pnpm)
 7. add few extra features that currently only exists in Lerna-Lite
    - [`workspace:` protocol support](https://github.com/ghiscoding/lerna-lite/tree/main/packages/version#workspace-protocol) (Lerna added support for that six months later in v6)
-   - [--dry-run](https://github.com/ghiscoding/lerna-lite/tree/main/packages/version#--dry-run) to preview version/publish changes
-   - [lerna version --changelog-header-message "msg"](https://github.com/ghiscoding/lerna-lite/tree/main/packages/version#--changelog-header-message-msg)
+   - [--dry-run](https://github.com/ghiscoding/lerna-lite/tree/main/packages/version#--dry-run) to preview version/publish 
+changes and changelogs
+   - [lerna version --changelog-header-message "msg"](https://github.com/ghiscoding/lerna-lite/tree/main/packages/version#--changelog-header-message-msg) it could be used to add sponsor badges in changelogs or link to your own repo
    - [lerna version --changelog-include-commits-client-login](https://github.com/ghiscoding/lerna-lite/tree/main/packages/version#--changelog-include-commits-client-login-msg)
-   - [lerna publish --remove-package-fields](https://github.com/ghiscoding/lerna-lite/tree/main/packages/publish#--remove-package-fields-fields) (cleanup fields before publish)
+   - [lerna publish --remove-package-fields](https://github.com/ghiscoding/lerna-lite/tree/main/packages/publish#--remove-package-fields-fields) (cleanup fields from `package.json` before publishing, Lerna-Lite removes `scripts` and `devDependencies` through this option)
    - the best feature of Lerna-Lite has to be its modularity, only install what you really use (see [installation](#cli-installation) below)
       - a large portion of the users are only interested in version/publish features
    
