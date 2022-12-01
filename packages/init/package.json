@@ -32,7 +32,7 @@
   },
   "dependencies": {
     "@lerna-lite/core": "workspace:*",
-    "fs-extra": "^10.1.0",
+    "fs-extra": "^11.1.0",
     "p-map": "^4.0.0",
     "path": "^0.12.7",
     "write-json-file": "^4.3.0"

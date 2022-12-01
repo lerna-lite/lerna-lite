@@ -34,7 +34,7 @@
     "@lerna-lite/core": "workspace:*",
     "@lerna-lite/optional-cmd-common": "workspace:*",
     "chalk": "^4.1.2",
-    "fs-extra": "^10.1.0",
+    "fs-extra": "^11.1.0",
     "npmlog": "^7.0.1",
     "p-map": "^4.0.0"
   },
