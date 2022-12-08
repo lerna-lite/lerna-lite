@@ -61,7 +61,7 @@
     "@lerna-lite/version": "workspace:*",
     "@lerna-test/helpers": "link:helpers",
     "@types/jest": "^29.2.4",
-    "@types/node": "^18.11.11",
+    "@types/node": "^18.11.12",
     "@types/npmlog": "^4.1.4",
     "@types/yargs": "^17.0.17",
     "@typescript-eslint/eslint-plugin": "^5.46.0",
