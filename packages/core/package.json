@@ -17,14 +17,14 @@
   },
   "license": "MIT",
   "author": "Ghislain B.",
-  "homepage": "https://github.com/ghiscoding/lerna-lite",
+  "homepage": "https://github.com/lerna-lite/lerna-lite",
   "repository": {
     "type": "git",
-    "url": "https://github.com/ghiscoding/lerna-lite.git",
+    "url": "https://github.com/lerna-lite/lerna-lite.git",
     "directory": "packages/core"
   },
   "bugs": {
-    "url": "https://github.com/ghiscoding/lerna-lite/issues"
+    "url": "https://github.com/lerna-lite/lerna-lite/issues"
   },
   "engines": {
     "node": ">=14.17.0",

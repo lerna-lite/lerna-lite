@@ -1,225 +1,225 @@
 # Change Log
-## Automate your Workspace Versioning, Publishing & Changelogs with [Lerna-Lite](https://github.com/ghiscoding/lerna-lite) 📦🚀
+## Automate your Workspace Versioning, Publishing & Changelogs with [Lerna-Lite](https://github.com/lerna-lite/lerna-lite) 📦🚀
 
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
-# [1.13.0](https://github.com/ghiscoding/lerna-lite/compare/v1.12.0...v1.13.0) (2022-11-22)
+# [1.13.0](https://github.com/lerna-lite/lerna-lite/compare/v1.12.0...v1.13.0) (2022-11-22)
 
 ### Bug Fixes
 
-* **deps:** update all non-major dependencies ([#402](https://github.com/ghiscoding/lerna-lite/issues/402)) ([3feeea9](https://github.com/ghiscoding/lerna-lite/commit/3feeea9559cafdf84f4b025950d7e4a862104284)) - by @renovate-bot
-* **deps:** update all non-major dependencies ([#405](https://github.com/ghiscoding/lerna-lite/issues/405)) ([084da4f](https://github.com/ghiscoding/lerna-lite/commit/084da4f409b38f66bc1c5d4d2ef43f9a221ca80b)) - by @renovate-bot
+* **deps:** update all non-major dependencies ([#402](https://github.com/lerna-lite/lerna-lite/issues/402)) ([3feeea9](https://github.com/lerna-lite/lerna-lite/commit/3feeea9559cafdf84f4b025950d7e4a862104284)) - by @renovate-bot
+* **deps:** update all non-major dependencies ([#405](https://github.com/lerna-lite/lerna-lite/issues/405)) ([084da4f](https://github.com/lerna-lite/lerna-lite/commit/084da4f409b38f66bc1c5d4d2ef43f9a221ca80b)) - by @renovate-bot
 
 ### Features
 
-* **version:** bump prerelease versions from conventional commits ([#409](https://github.com/ghiscoding/lerna-lite/issues/409)) ([dad936e](https://github.com/ghiscoding/lerna-lite/commit/dad936e9cc42252028175f08de73c8554d3f7cf1)) - by @ghiscoding
-* **version:** use npmClientArgs in npm install after lerna version ([#417](https://github.com/ghiscoding/lerna-lite/issues/417)) ([43e5dcd](https://github.com/ghiscoding/lerna-lite/commit/43e5dcde6bfce0edc062fce4dc3431771423d77c)) - by @ghiscoding
+* **version:** bump prerelease versions from conventional commits ([#409](https://github.com/lerna-lite/lerna-lite/issues/409)) ([dad936e](https://github.com/lerna-lite/lerna-lite/commit/dad936e9cc42252028175f08de73c8554d3f7cf1)) - by @ghiscoding
+* **version:** use npmClientArgs in npm install after lerna version ([#417](https://github.com/lerna-lite/lerna-lite/issues/417)) ([43e5dcd](https://github.com/lerna-lite/lerna-lite/commit/43e5dcde6bfce0edc062fce4dc3431771423d77c)) - by @ghiscoding
 
-# [1.12.0](https://github.com/ghiscoding/lerna-lite/compare/v1.11.3...v1.12.0) (2022-10-14)
+# [1.12.0](https://github.com/lerna-lite/lerna-lite/compare/v1.11.3...v1.12.0) (2022-10-14)
 
 ### Bug Fixes
 
-* bump min Node version to >=14.17.0 to align with external deps ([#387](https://github.com/ghiscoding/lerna-lite/issues/387)) ([2f804e9](https://github.com/ghiscoding/lerna-lite/commit/2f804e92bd319e2b27b1406ca82ec1fdab09c449)) - by @ghiscoding
-* **deps:** update dependency npmlog to v7 ([#389](https://github.com/ghiscoding/lerna-lite/issues/389)) ([d2110f1](https://github.com/ghiscoding/lerna-lite/commit/d2110f1aebe4b6cd44bcae2691fbd18fefc78299)) - by @renovate-bot
+* bump min Node version to >=14.17.0 to align with external deps ([#387](https://github.com/lerna-lite/lerna-lite/issues/387)) ([2f804e9](https://github.com/lerna-lite/lerna-lite/commit/2f804e92bd319e2b27b1406ca82ec1fdab09c449)) - by @ghiscoding
+* **deps:** update dependency npmlog to v7 ([#389](https://github.com/lerna-lite/lerna-lite/issues/389)) ([d2110f1](https://github.com/lerna-lite/lerna-lite/commit/d2110f1aebe4b6cd44bcae2691fbd18fefc78299)) - by @renovate-bot
 
 ### Features
 
-* **commands:** rename `git-dry-run` and `cmd-dry-run` to simply `dry-run` ([#377](https://github.com/ghiscoding/lerna-lite/issues/377)) ([3a55f5e](https://github.com/ghiscoding/lerna-lite/commit/3a55f5e8f7c26f3890f1c7099ca85c9d72cd2674)) - by @ghiscoding
-* **publish:** add new option `--remove-package-fields` before publish ([#359](https://github.com/ghiscoding/lerna-lite/issues/359)) ([45a2107](https://github.com/ghiscoding/lerna-lite/commit/45a2107aa8862546a261a0c377c3fc704248bc5a)) - by @ghiscoding
-* **version:** add `--allow-peer-dependencies-update`, closes [#333](https://github.com/ghiscoding/lerna-lite/issues/333) ([#363](https://github.com/ghiscoding/lerna-lite/issues/363)) ([efaf011](https://github.com/ghiscoding/lerna-lite/commit/efaf0111e2e687718d33b42418abd701447a7031)) - by @ghiscoding
-* **version:** use manual GitHub web interface when `GH_TOKEN` undefined ([83e9cce](https://github.com/ghiscoding/lerna-lite/commit/83e9cce5e45a12ccf7028d453a9fcddf965443a1)) - by @ghiscoding
+* **commands:** rename `git-dry-run` and `cmd-dry-run` to simply `dry-run` ([#377](https://github.com/lerna-lite/lerna-lite/issues/377)) ([3a55f5e](https://github.com/lerna-lite/lerna-lite/commit/3a55f5e8f7c26f3890f1c7099ca85c9d72cd2674)) - by @ghiscoding
+* **publish:** add new option `--remove-package-fields` before publish ([#359](https://github.com/lerna-lite/lerna-lite/issues/359)) ([45a2107](https://github.com/lerna-lite/lerna-lite/commit/45a2107aa8862546a261a0c377c3fc704248bc5a)) - by @ghiscoding
+* **version:** add `--allow-peer-dependencies-update`, closes [#333](https://github.com/lerna-lite/lerna-lite/issues/333) ([#363](https://github.com/lerna-lite/lerna-lite/issues/363)) ([efaf011](https://github.com/lerna-lite/lerna-lite/commit/efaf0111e2e687718d33b42418abd701447a7031)) - by @ghiscoding
+* **version:** use manual GitHub web interface when `GH_TOKEN` undefined ([83e9cce](https://github.com/lerna-lite/lerna-lite/commit/83e9cce5e45a12ccf7028d453a9fcddf965443a1)) - by @ghiscoding
 
-## [1.11.3](https://github.com/ghiscoding/lerna-lite/compare/v1.11.2...v1.11.3) (2022-09-20)
+## [1.11.3](https://github.com/lerna-lite/lerna-lite/compare/v1.11.2...v1.11.3) (2022-09-20)
 
 **Note:** Version bump only for package @lerna-lite/version
 
-## [1.11.2](https://github.com/ghiscoding/lerna-lite/compare/v1.11.1...v1.11.2) (2022-08-30)
+## [1.11.2](https://github.com/lerna-lite/lerna-lite/compare/v1.11.1...v1.11.2) (2022-08-30)
 
 ### Bug Fixes
 
-* **version:** --changelog-include-commits-[x] in cli should be truthy ([1ddde05](https://github.com/ghiscoding/lerna-lite/commit/1ddde050ccfb285725efb84869adfba733a4dc0c)) - by @ghiscoding
-* **version:** `--changelog-header-message` should be added to all logs ([c27a97d](https://github.com/ghiscoding/lerna-lite/commit/c27a97d77d58e09ba746848f93e4a66237231473)) - by @ghiscoding
+* **version:** --changelog-include-commits-[x] in cli should be truthy ([1ddde05](https://github.com/lerna-lite/lerna-lite/commit/1ddde050ccfb285725efb84869adfba733a4dc0c)) - by @ghiscoding
+* **version:** `--changelog-header-message` should be added to all logs ([c27a97d](https://github.com/lerna-lite/lerna-lite/commit/c27a97d77d58e09ba746848f93e4a66237231473)) - by @ghiscoding
 
-## [1.11.1](https://github.com/ghiscoding/lerna-lite/compare/v1.11.0...v1.11.1) (2022-08-24)
+## [1.11.1](https://github.com/lerna-lite/lerna-lite/compare/v1.11.0...v1.11.1) (2022-08-24)
 
 **Note:** Version bump only for package @lerna-lite/version
 
-# [1.11.0](https://github.com/ghiscoding/lerna-lite/compare/v1.10.0...v1.11.0) (2022-08-19)
+# [1.11.0](https://github.com/lerna-lite/lerna-lite/compare/v1.10.0...v1.11.0) (2022-08-19)
 
 ### Bug Fixes
 
-* **core:** use match pattern to get last tag date with independent mode ([cebcecf](https://github.com/ghiscoding/lerna-lite/commit/cebcecf95afe30db35995749a9b2a558be176314)) - by @ghiscoding
-* **deps:** update all non-major dependencies ([e3b379c](https://github.com/ghiscoding/lerna-lite/commit/e3b379cc1b2bc9632801950e24ebf964780c8aaf)) - by @renovate-bot
-* **deps:** update all non-major dependencies ([e8dcfec](https://github.com/ghiscoding/lerna-lite/commit/e8dcfece2a45eb6648c3b76f4938d521078673e8)) - by @renovate-bot
-* **version:** properly update dependencies npm lockfile v2 ([0abfa85](https://github.com/ghiscoding/lerna-lite/commit/0abfa85eec26b49f6af996bb4333eccd118072e0)) - by @ghiscoding
+* **core:** use match pattern to get last tag date with independent mode ([cebcecf](https://github.com/lerna-lite/lerna-lite/commit/cebcecf95afe30db35995749a9b2a558be176314)) - by @ghiscoding
+* **deps:** update all non-major dependencies ([e3b379c](https://github.com/lerna-lite/lerna-lite/commit/e3b379cc1b2bc9632801950e24ebf964780c8aaf)) - by @renovate-bot
+* **deps:** update all non-major dependencies ([e8dcfec](https://github.com/lerna-lite/lerna-lite/commit/e8dcfece2a45eb6648c3b76f4938d521078673e8)) - by @renovate-bot
+* **version:** properly update dependencies npm lockfile v2 ([0abfa85](https://github.com/lerna-lite/lerna-lite/commit/0abfa85eec26b49f6af996bb4333eccd118072e0)) - by @ghiscoding
 
-# [1.10.0](https://github.com/ghiscoding/lerna-lite/compare/v1.9.1...v1.10.0) (2022-08-06)
+# [1.10.0](https://github.com/lerna-lite/lerna-lite/compare/v1.9.1...v1.10.0) (2022-08-06)
 
 ### Bug Fixes
 
-* **core:** ensure to touch all nodes in package-graph ([f4f7bbc](https://github.com/ghiscoding/lerna-lite/commit/f4f7bbc60a7331a4077e2bf974bb5abffdb4e804)) - by @ghiscoding
-* **deps:** update all non-major dependencies ([abe1eff](https://github.com/ghiscoding/lerna-lite/commit/abe1eff71fe211c36d05518a43f74da33967a450)) - by @renovate-bot
+* **core:** ensure to touch all nodes in package-graph ([f4f7bbc](https://github.com/lerna-lite/lerna-lite/commit/f4f7bbc60a7331a4077e2bf974bb5abffdb4e804)) - by @ghiscoding
+* **deps:** update all non-major dependencies ([abe1eff](https://github.com/lerna-lite/lerna-lite/commit/abe1eff71fe211c36d05518a43f74da33967a450)) - by @renovate-bot
 
 ### Features
 
-* **version:** use conventional commit changelog writer for perf ([e9d7c52](https://github.com/ghiscoding/lerna-lite/commit/e9d7c52bdd70cac8d1c6a918c0475b613cf9817d)) - by @ghiscoding
+* **version:** use conventional commit changelog writer for perf ([e9d7c52](https://github.com/lerna-lite/lerna-lite/commit/e9d7c52bdd70cac8d1c6a918c0475b613cf9817d)) - by @ghiscoding
 
-## [1.9.1](https://github.com/ghiscoding/lerna-lite/compare/v1.9.0...v1.9.1) (2022-08-01)
+## [1.9.1](https://github.com/lerna-lite/lerna-lite/compare/v1.9.0...v1.9.1) (2022-08-01)
 
 **Note:** Version bump only for package @lerna-lite/version
 
-# [1.9.0](https://github.com/ghiscoding/lerna-lite/compare/v1.8.0...v1.9.0) (2022-07-28)
+# [1.9.0](https://github.com/lerna-lite/lerna-lite/compare/v1.8.0...v1.9.0) (2022-07-28)
 
 ### Bug Fixes
 
-* **version:** inherit stdio for lerna version lifecycle scripts ([#276](https://github.com/ghiscoding/lerna-lite/issues/276)) ([9c3625d](https://github.com/ghiscoding/lerna-lite/commit/9c3625dd06e59fc702b8eef52f2a14daf2095be5)) - by @ghiscoding
-* **version:** make sure we always have regex match array ([#271](https://github.com/ghiscoding/lerna-lite/issues/271)) ([ba34849](https://github.com/ghiscoding/lerna-lite/commit/ba348495cdefc1acbce3cec82b1c68333761cece)) - by @ghiscoding
-* **version:** rename option to `--changelog-include-commits-git-author` ([b095637](https://github.com/ghiscoding/lerna-lite/commit/b095637cdf1ce57f7ecaabf06480f86623e0553e)) - by @ghiscoding
+* **version:** inherit stdio for lerna version lifecycle scripts ([#276](https://github.com/lerna-lite/lerna-lite/issues/276)) ([9c3625d](https://github.com/lerna-lite/lerna-lite/commit/9c3625dd06e59fc702b8eef52f2a14daf2095be5)) - by @ghiscoding
+* **version:** make sure we always have regex match array ([#271](https://github.com/lerna-lite/lerna-lite/issues/271)) ([ba34849](https://github.com/lerna-lite/lerna-lite/commit/ba348495cdefc1acbce3cec82b1c68333761cece)) - by @ghiscoding
+* **version:** rename option to `--changelog-include-commits-git-author` ([b095637](https://github.com/lerna-lite/lerna-lite/commit/b095637cdf1ce57f7ecaabf06480f86623e0553e)) - by @ghiscoding
 
 ### Features
 
-* **publish:** include all deps in package graph by default, allow no-sort ([#277](https://github.com/ghiscoding/lerna-lite/issues/277)) ([3229e77](https://github.com/ghiscoding/lerna-lite/commit/3229e7765907bf3bcf208baca876054a5a1cec5e)) - by @ghiscoding
-* **version:** option to add commit login username on each changelog entry, closes [#248](https://github.com/ghiscoding/lerna-lite/issues/248) ([#272](https://github.com/ghiscoding/lerna-lite/issues/272)) ([2ca0dca](https://github.com/ghiscoding/lerna-lite/commit/2ca0dcaa005cac6306d7d24ffa4d0d8f1a45e320)) - by @ghiscoding
+* **publish:** include all deps in package graph by default, allow no-sort ([#277](https://github.com/lerna-lite/lerna-lite/issues/277)) ([3229e77](https://github.com/lerna-lite/lerna-lite/commit/3229e7765907bf3bcf208baca876054a5a1cec5e)) - by @ghiscoding
+* **version:** option to add commit login username on each changelog entry, closes [#248](https://github.com/lerna-lite/lerna-lite/issues/248) ([#272](https://github.com/lerna-lite/lerna-lite/issues/272)) ([2ca0dca](https://github.com/lerna-lite/lerna-lite/commit/2ca0dcaa005cac6306d7d24ffa4d0d8f1a45e320)) - by @ghiscoding
 
-# [1.8.0](https://github.com/ghiscoding/lerna-lite/compare/v1.6.0...v1.8.0) (2022-07-21)
+# [1.8.0](https://github.com/lerna-lite/lerna-lite/compare/v1.6.0...v1.8.0) (2022-07-21)
 
 ### Bug Fixes
 
-* **version:** Node14, import from "fs" instead of "node:fs", fixes [#260](https://github.com/ghiscoding/lerna-lite/issues/260) ([#261](https://github.com/ghiscoding/lerna-lite/issues/261)) ([5e420fd](https://github.com/ghiscoding/lerna-lite/commit/5e420fd4cff05011642f2a5fad4bb5e5f3e60694)) (by _Ghislain B_)
-* **version:** rollback previous patch on pnpm lockfile update ([d9f933c](https://github.com/ghiscoding/lerna-lite/commit/d9f933c7c9c118727cb5108b3ef3b0527d0d3f2c)) (by _ghiscoding_)
+* **version:** Node14, import from "fs" instead of "node:fs", fixes [#260](https://github.com/lerna-lite/lerna-lite/issues/260) ([#261](https://github.com/lerna-lite/lerna-lite/issues/261)) ([5e420fd](https://github.com/lerna-lite/lerna-lite/commit/5e420fd4cff05011642f2a5fad4bb5e5f3e60694)) (by _Ghislain B_)
+* **version:** rollback previous patch on pnpm lockfile update ([d9f933c](https://github.com/lerna-lite/lerna-lite/commit/d9f933c7c9c118727cb5108b3ef3b0527d0d3f2c)) (by _ghiscoding_)
 
 ### Features
 
-* filter for lerna tags in independent mode ([#267](https://github.com/ghiscoding/lerna-lite/issues/267)) ([8c3cdb3](https://github.com/ghiscoding/lerna-lite/commit/8c3cdb38528baf7a4075c846bc33c8933a1a5c0b)) (by _Ghislain B_)
-* **version:** add flag to include changelog commit author, close [#248](https://github.com/ghiscoding/lerna-lite/issues/248) ([#253](https://github.com/ghiscoding/lerna-lite/issues/253)) ([7fd8db1](https://github.com/ghiscoding/lerna-lite/commit/7fd8db1c80c1da9d857cdac13c6c6cea1c5b8a69)) (by _Ghislain B_)
-* **version:** provide custom format to include commit author fullname ([#269](https://github.com/ghiscoding/lerna-lite/issues/269)) ([1f5a94e](https://github.com/ghiscoding/lerna-lite/commit/1f5a94e06de01ceb8143886b5c00fe845173ee9f)) (by _Ghislain B_)
+* filter for lerna tags in independent mode ([#267](https://github.com/lerna-lite/lerna-lite/issues/267)) ([8c3cdb3](https://github.com/lerna-lite/lerna-lite/commit/8c3cdb38528baf7a4075c846bc33c8933a1a5c0b)) (by _Ghislain B_)
+* **version:** add flag to include changelog commit author, close [#248](https://github.com/lerna-lite/lerna-lite/issues/248) ([#253](https://github.com/lerna-lite/lerna-lite/issues/253)) ([7fd8db1](https://github.com/lerna-lite/lerna-lite/commit/7fd8db1c80c1da9d857cdac13c6c6cea1c5b8a69)) (by _Ghislain B_)
+* **version:** provide custom format to include commit author fullname ([#269](https://github.com/lerna-lite/lerna-lite/issues/269)) ([1f5a94e](https://github.com/lerna-lite/lerna-lite/commit/1f5a94e06de01ceb8143886b5c00fe845173ee9f)) (by _Ghislain B_)
 
-# [1.6.0](https://github.com/ghiscoding/lerna-lite/compare/v1.5.1...v1.6.0) (2022-06-30)
-
-### Bug Fixes
-
-* **version:** use `--no-frozen-lockfile` instead of `--fix-lockfile` ([a6120b9](https://github.com/ghiscoding/lerna-lite/commit/a6120b9891b719b573ccc2e821cc9ece52d1781d))
-
-## [1.5.1](https://github.com/ghiscoding/lerna-lite/compare/v1.5.0...v1.5.1) (2022-06-12)
+# [1.6.0](https://github.com/lerna-lite/lerna-lite/compare/v1.5.1...v1.6.0) (2022-06-30)
 
 ### Bug Fixes
 
-* **version:** add better msg for missing `npmClient` with sync lock ([01e26b1](https://github.com/ghiscoding/lerna-lite/commit/01e26b1df86ed09bf090df1d18e38bbbdce1fc1a))
+* **version:** use `--no-frozen-lockfile` instead of `--fix-lockfile` ([a6120b9](https://github.com/lerna-lite/lerna-lite/commit/a6120b9891b719b573ccc2e821cc9ece52d1781d))
 
-# [1.5.0](https://github.com/ghiscoding/lerna-lite/compare/v1.4.0...v1.5.0) (2022-06-08)
+## [1.5.1](https://github.com/lerna-lite/lerna-lite/compare/v1.5.0...v1.5.1) (2022-06-12)
 
 ### Bug Fixes
 
-* correctly add npm package lock to git add list ([281586f](https://github.com/ghiscoding/lerna-lite/commit/281586f75e7e98d3d3410ccf95e49c428be2c889))
-* **deps:** update all non-major dependencies ([c87e937](https://github.com/ghiscoding/lerna-lite/commit/c87e937da725a1d8fa1d685bc3957baf0bcedcee))
-* **lock:** add `--package-lockfile-only` to update lock file ([200e385](https://github.com/ghiscoding/lerna-lite/commit/200e38500e046fb99e716b5bc1fc9d87a9c14aab))
-* **version:** improve default git publish message, closes [#185](https://github.com/ghiscoding/lerna-lite/issues/185) ([735fbe6](https://github.com/ghiscoding/lerna-lite/commit/735fbe66069ef0b9389faf850ae7900ddd076f4d))
-* **version:** support for updating pnpm-lock.yaml ([509ca33](https://github.com/ghiscoding/lerna-lite/commit/509ca3308a76557891feefa5a0f69e350a0687b7))
+* **version:** add better msg for missing `npmClient` with sync lock ([01e26b1](https://github.com/lerna-lite/lerna-lite/commit/01e26b1df86ed09bf090df1d18e38bbbdce1fc1a))
+
+# [1.5.0](https://github.com/lerna-lite/lerna-lite/compare/v1.4.0...v1.5.0) (2022-06-08)
+
+### Bug Fixes
+
+* correctly add npm package lock to git add list ([281586f](https://github.com/lerna-lite/lerna-lite/commit/281586f75e7e98d3d3410ccf95e49c428be2c889))
+* **deps:** update all non-major dependencies ([c87e937](https://github.com/lerna-lite/lerna-lite/commit/c87e937da725a1d8fa1d685bc3957baf0bcedcee))
+* **lock:** add `--package-lockfile-only` to update lock file ([200e385](https://github.com/lerna-lite/lerna-lite/commit/200e38500e046fb99e716b5bc1fc9d87a9c14aab))
+* **version:** improve default git publish message, closes [#185](https://github.com/lerna-lite/lerna-lite/issues/185) ([735fbe6](https://github.com/lerna-lite/lerna-lite/commit/735fbe66069ef0b9389faf850ae7900ddd076f4d))
+* **version:** support for updating pnpm-lock.yaml ([509ca33](https://github.com/lerna-lite/lerna-lite/commit/509ca3308a76557891feefa5a0f69e350a0687b7))
 
 ### Features
 
-* **version:** support for updating `pnpm-lock.yaml`, expand on [#168](https://github.com/ghiscoding/lerna-lite/issues/168) ([ee1a964](https://github.com/ghiscoding/lerna-lite/commit/ee1a96432675886c887544a59dc88185f5ebbd21))
+* **version:** support for updating `pnpm-lock.yaml`, expand on [#168](https://github.com/lerna-lite/lerna-lite/issues/168) ([ee1a964](https://github.com/lerna-lite/lerna-lite/commit/ee1a96432675886c887544a59dc88185f5ebbd21))
 
-# [1.4.0](https://github.com/ghiscoding/lerna-lite/compare/v1.3.0...v1.4.0) (2022-05-30)
+# [1.4.0](https://github.com/lerna-lite/lerna-lite/compare/v1.3.0...v1.4.0) (2022-05-30)
 
 **Note:** Version bump only for package @lerna-lite/version
 
-# [1.3.0](https://github.com/ghiscoding/lerna-lite/compare/v1.2.0...v1.3.0) (2022-05-13)
+# [1.3.0](https://github.com/lerna-lite/lerna-lite/compare/v1.2.0...v1.3.0) (2022-05-13)
 
 ### Features
 
-* **publish:** `workspace:*` (or ~) protocol should strictly match range ([acede60](https://github.com/ghiscoding/lerna-lite/commit/acede60425c9a9b136b86be74b2ef59c03b63646))
+* **publish:** `workspace:*` (or ~) protocol should strictly match range ([acede60](https://github.com/lerna-lite/lerna-lite/commit/acede60425c9a9b136b86be74b2ef59c03b63646))
 
-# [1.2.0](https://github.com/ghiscoding/lerna-lite/compare/v1.1.1...v1.2.0) (2022-05-11)
+# [1.2.0](https://github.com/lerna-lite/lerna-lite/compare/v1.1.1...v1.2.0) (2022-05-11)
 
 ### Bug Fixes
 
-* **version:** include the updated root package-lock.json file in commits ([d6dbc9a](https://github.com/ghiscoding/lerna-lite/commit/d6dbc9a3aec1f4460546582fad92c1e5d6ee901e))
+* **version:** include the updated root package-lock.json file in commits ([d6dbc9a](https://github.com/lerna-lite/lerna-lite/commit/d6dbc9a3aec1f4460546582fad92c1e5d6ee901e))
 
 ### Features
 
-* **core:** add version/publish `workspace:` protocol ([ee57dfb](https://github.com/ghiscoding/lerna-lite/commit/ee57dfbb3ad26cd4bd722e1b54941360ec22f698))
+* **core:** add version/publish `workspace:` protocol ([ee57dfb](https://github.com/lerna-lite/lerna-lite/commit/ee57dfbb3ad26cd4bd722e1b54941360ec22f698))
 
-# [1.1.0](https://github.com/ghiscoding/lerna-lite/compare/v1.0.5...v1.1.0) (2022-05-01)
+# [1.1.0](https://github.com/lerna-lite/lerna-lite/compare/v1.0.5...v1.1.0) (2022-05-01)
 
 ### Features
 
-* **exec:** add Lerna `exec` command ([8e87ea1](https://github.com/ghiscoding/lerna-lite/commit/8e87ea1f3a9987e2700b07886e4f600af090f344))
+* **exec:** add Lerna `exec` command ([8e87ea1](https://github.com/lerna-lite/lerna-lite/commit/8e87ea1f3a9987e2700b07886e4f600af090f344))
 
-* **info:** add `info` command to CLI ([6fa1154](https://github.com/ghiscoding/lerna-lite/commit/6fa1154a9412c78f26585f41d5612ad083d4494a))
+* **info:** add `info` command to CLI ([6fa1154](https://github.com/lerna-lite/lerna-lite/commit/6fa1154a9412c78f26585f41d5612ad083d4494a))
 
-## [1.0.5](https://github.com/ghiscoding/lerna-lite/compare/v1.0.4...v1.0.5) (2022-03-29)
-
-### Bug Fixes
-
-* relax "engines.node" version ([ee59fbc](https://github.com/ghiscoding/lerna-lite/commit/ee59fbcfc7eefa02c85ecff2babd50b1bec112ce))
-
-## [1.0.4](https://github.com/ghiscoding/lerna-lite/compare/v1.0.3...v1.0.4) (2022-03-24)
+## [1.0.5](https://github.com/lerna-lite/lerna-lite/compare/v1.0.4...v1.0.5) (2022-03-29)
 
 ### Bug Fixes
 
-* **version:** load & write project root lockfile v2 only once ([7ad805a](https://github.com/ghiscoding/lerna-lite/commit/7ad805aaeadc2b7646e4e0aa3186830df7448242))
+* relax "engines.node" version ([ee59fbc](https://github.com/lerna-lite/lerna-lite/commit/ee59fbcfc7eefa02c85ecff2babd50b1bec112ce))
 
-## [1.0.3](https://github.com/ghiscoding/lerna-lite/compare/v1.0.2...v1.0.3) (2022-03-19)
-
-### Bug Fixes
-
-* **version:** project root lockfile v2 should be updated correctly ([2689746](https://github.com/ghiscoding/lerna-lite/commit/2689746bd6515ce326bf5d6d678c706b08753300))
-
-## [1.0.2](https://github.com/ghiscoding/lerna-lite/compare/v1.0.1...v1.0.2) (2022-03-17)
+## [1.0.4](https://github.com/lerna-lite/lerna-lite/compare/v1.0.3...v1.0.4) (2022-03-24)
 
 ### Bug Fixes
 
-* **version:** shown repo info when Create Release is enabled in dry-run ([5b0cf6d](https://github.com/ghiscoding/lerna-lite/commit/5b0cf6d7ed9df1cfbae0072a9402f777403c6dd6))
+* **version:** load & write project root lockfile v2 only once ([7ad805a](https://github.com/lerna-lite/lerna-lite/commit/7ad805aaeadc2b7646e4e0aa3186830df7448242))
 
-## [1.0.1](https://github.com/ghiscoding/lerna-lite/compare/v1.0.0...v1.0.1) (2022-03-15)
+## [1.0.3](https://github.com/lerna-lite/lerna-lite/compare/v1.0.2...v1.0.3) (2022-03-19)
+
+### Bug Fixes
+
+* **version:** project root lockfile v2 should be updated correctly ([2689746](https://github.com/lerna-lite/lerna-lite/commit/2689746bd6515ce326bf5d6d678c706b08753300))
+
+## [1.0.2](https://github.com/lerna-lite/lerna-lite/compare/v1.0.1...v1.0.2) (2022-03-17)
+
+### Bug Fixes
+
+* **version:** shown repo info when Create Release is enabled in dry-run ([5b0cf6d](https://github.com/lerna-lite/lerna-lite/commit/5b0cf6d7ed9df1cfbae0072a9402f777403c6dd6))
+
+## [1.0.1](https://github.com/lerna-lite/lerna-lite/compare/v1.0.0...v1.0.1) (2022-03-15)
 
 **Note:** Version bump only for package @lerna-lite/version
 
-# [1.0.0](https://github.com/ghiscoding/lerna-lite/compare/v0.3.7...v1.0.0) (2022-03-15)
+# [1.0.0](https://github.com/lerna-lite/lerna-lite/compare/v0.3.7...v1.0.0) (2022-03-15)
 
 **Note:** Version bump only for package @lerna-lite/version
 
-## [0.3.7](https://github.com/ghiscoding/lerna-lite/compare/v0.3.5...v0.3.7) (2022-03-09)
+## [0.3.7](https://github.com/lerna-lite/lerna-lite/compare/v0.3.5...v0.3.7) (2022-03-09)
 
 ### Bug Fixes
 
-* **core:** better handling of possible missing pkg name ([ef9633d](https://github.com/ghiscoding/lerna-lite/commit/ef9633dfe623e1aca3e9350739317b9c57872b54))
+* **core:** better handling of possible missing pkg name ([ef9633d](https://github.com/lerna-lite/lerna-lite/commit/ef9633dfe623e1aca3e9350739317b9c57872b54))
 
-## [0.3.6](https://github.com/ghiscoding/lerna-lite/compare/v0.3.4...v0.3.6) (2022-03-05)
-
-### Bug Fixes
-
-* **deps:** update few npm dependencies ([9175d48](https://github.com/ghiscoding/lerna-lite/commit/9175d48002ba7efb1b6b69506c3f6e864898b8a0))
-
-## [0.3.5](https://github.com/ghiscoding/lerna-lite/compare/v0.3.4...v0.3.5) (2022-03-05)
+## [0.3.6](https://github.com/lerna-lite/lerna-lite/compare/v0.3.4...v0.3.6) (2022-03-05)
 
 ### Bug Fixes
 
-* **deps:** update few npm dependencies ([9175d48](https://github.com/ghiscoding/lerna-lite/commit/9175d48002ba7efb1b6b69506c3f6e864898b8a0))
+* **deps:** update few npm dependencies ([9175d48](https://github.com/lerna-lite/lerna-lite/commit/9175d48002ba7efb1b6b69506c3f6e864898b8a0))
 
-## [0.3.4](https://github.com/ghiscoding/lerna-lite/compare/v0.3.3...v0.3.4) (2022-03-05)
+## [0.3.5](https://github.com/lerna-lite/lerna-lite/compare/v0.3.4...v0.3.5) (2022-03-05)
 
 ### Bug Fixes
 
-* **version:** add missing lifecycle code from lerna ([a0d9e95](https://github.com/ghiscoding/lerna-lite/commit/a0d9e95b4e1cd80f6f6b933534364e85fa952817))
+* **deps:** update few npm dependencies ([9175d48](https://github.com/lerna-lite/lerna-lite/commit/9175d48002ba7efb1b6b69506c3f6e864898b8a0))
 
-## [0.3.3](https://github.com/ghiscoding/lerna-lite/compare/v0.3.2...v0.3.3) (2022-02-27)
+## [0.3.4](https://github.com/lerna-lite/lerna-lite/compare/v0.3.3...v0.3.4) (2022-03-05)
+
+### Bug Fixes
+
+* **version:** add missing lifecycle code from lerna ([a0d9e95](https://github.com/lerna-lite/lerna-lite/commit/a0d9e95b4e1cd80f6f6b933534364e85fa952817))
+
+## [0.3.3](https://github.com/lerna-lite/lerna-lite/compare/v0.3.2...v0.3.3) (2022-02-27)
 
 **Note:** Version bump only for package @lerna-lite/version
 
-## [0.3.2](https://github.com/ghiscoding/lerna-lite/compare/v0.3.1...v0.3.2) (2022-02-22)
+## [0.3.2](https://github.com/lerna-lite/lerna-lite/compare/v0.3.1...v0.3.2) (2022-02-22)
 
 ### Bug Fixes
 
-* **core:** OTP please  method had non-strict code ([411f308](https://github.com/ghiscoding/lerna-lite/commit/411f3086d943e0c0d80d9c1a4745775ae7d803e9))
+* **core:** OTP please  method had non-strict code ([411f308](https://github.com/lerna-lite/lerna-lite/commit/411f3086d943e0c0d80d9c1a4745775ae7d803e9))
 
-## [0.3.1](https://github.com/ghiscoding/lerna-lite/compare/v0.3.0...v0.3.1) (2022-02-12)
+## [0.3.1](https://github.com/lerna-lite/lerna-lite/compare/v0.3.0...v0.3.1) (2022-02-12)
 
 **Note:** Version bump only for package @lerna-lite/version
 
-# [0.3.0](https://github.com/ghiscoding/lerna-lite/compare/v0.2.3...v0.3.0) (2022-02-12)
+# [0.3.0](https://github.com/lerna-lite/lerna-lite/compare/v0.2.3...v0.3.0) (2022-02-12)
 
 ## BREAKING CHANGE
 

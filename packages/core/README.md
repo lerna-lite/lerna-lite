@@ -10,4 +10,4 @@ The Lerna-Lite core & utils, basically the shared code used by all commands.
 
 ### Installation
 
-Follow the instruction provided in the main [README](https://github.com/ghiscoding/lerna-lite#installation) page.
+Follow the instruction provided in the main [README](https://github.com/lerna-lite/lerna-lite#installation) page.

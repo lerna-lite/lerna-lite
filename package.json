@@ -32,13 +32,13 @@
     "jest:watch": "jest --watch --coverage=false --config ./jest/jest.config.js",
     "outdated:ws": "pnpm -r --stream outdated"
   },
-  "homepage": "https://github.com/ghiscoding/lerna-lite",
+  "homepage": "https://github.com/lerna-lite/lerna-lite",
   "repository": {
     "type": "git",
-    "url": "https://github.com/ghiscoding/lerna-lite.git"
+    "url": "https://github.com/lerna-lite/lerna-lite.git"
   },
   "bugs": {
-    "url": "https://github.com/ghiscoding/lerna-lite/issues"
+    "url": "https://github.com/lerna-lite/lerna-lite/issues"
   },
   "engines": {
     "node": ">=14.17.0",

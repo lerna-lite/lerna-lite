@@ -8,9 +8,9 @@
 
 Shared common code for the following optional commands:
 
-- [@lerna-lite/changed](https://github.com/ghiscoding/lerna-lite/tree/main/packages/changed)
-- [@lerna-lite/list](https://github.com/ghiscoding/lerna-lite/tree/main/packages/list)
+- [@lerna-lite/changed](https://github.com/lerna-lite/lerna-lite/tree/main/packages/changed)
+- [@lerna-lite/list](https://github.com/lerna-lite/lerna-lite/tree/main/packages/list)
 
 ### Installation
 
-Follow the instruction provided in the main [README](https://github.com/ghiscoding/lerna-lite#installation) page.
+Follow the instruction provided in the main [README](https://github.com/lerna-lite/lerna-lite#installation) page.

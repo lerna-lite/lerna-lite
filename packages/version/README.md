@@ -560,7 +560,7 @@ This option makes the most sense configured in `lerna.json`, as you really don't
 }
 ```
 
-The root-level configuration is intentional, as this also covers the [identically-named option in `lerna publish`](https://github.com/ghiscoding/lerna-lite/blob/main/packages/publish/README.md#--no-granular-pathspec).
+The root-level configuration is intentional, as this also covers the [identically-named option in `lerna publish`](https://github.com/lerna-lite/lerna-lite/blob/main/packages/publish/README.md#--no-granular-pathspec).
 
 ### `--no-private`
 
@@ -643,7 +643,7 @@ lerna publish from-git --tag-version-prefix=''
 
 ### `--sync-workspace-lock`
 
-This flag will leverage your package manager client to update the project lock file (ie `npm install --package-lock-only`) it relies heavily on the [npmClient](https://github.com/ghiscoding/lerna-lite/wiki/lerna.json#concepts) defined in your [lerna.json](https://github.com/ghiscoding/lerna-lite/wiki/lerna.json) config (`pnpm`, `yarn` or `npm` which is default) so make sure you have it configured correctly, this process will also include the lock file as part of your git change history once processed. This technique should be much more future proof and safer than having Lerna-Lite doing the actual work of updating the lock file which is not always ideal, neither safe, this flag is one of two solutions (the best option when available) to update the lock file. It might not be the best solution for your use case (ie it doesn't work with yarn classic), see all client notes below:
+This flag will leverage your package manager client to update the project lock file (ie `npm install --package-lock-only`) it relies heavily on the [npmClient](https://github.com/lerna-lite/lerna-lite/wiki/lerna.json#concepts) defined in your [lerna.json](https://github.com/lerna-lite/lerna-lite/wiki/lerna.json) config (`pnpm`, `yarn` or `npm` which is default) so make sure you have it configured correctly, this process will also include the lock file as part of your git change history once processed. This technique should be much more future proof and safer than having Lerna-Lite doing the actual work of updating the lock file which is not always ideal, neither safe, this flag is one of two solutions (the best option when available) to update the lock file. It might not be the best solution for your use case (ie it doesn't work with yarn classic), see all client notes below:
 
 #### Notes for each client:
 

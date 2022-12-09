@@ -33,7 +33,7 @@ lerna publish from-package  # explicitly publish packages where the latest versi
 
 When run, this command does one of the following things:
 
-- Publish packages updated since the last release (calling [`lerna version`](https://github.com/ghiscoding/lerna-lite/blob/main/packages/version/README.md) behind the scenes).
+- Publish packages updated since the last release (calling [`lerna version`](https://github.com/lerna-lite/lerna-lite/blob/main/packages/version/README.md) behind the scenes).
   - This is the legacy behavior of lerna 2.x
 - Publish packages tagged in the current commit (`from-git`).
 - Publish packages in the latest commit where the version is not present in the registry (`from-package`).
@@ -482,11 +482,11 @@ lerna will run [npm lifecycle scripts](https://docs.npmjs.com/cli/v8/using-npm/s
    2. Run `prepare` lifecycle
    3. Run `prepublishOnly` lifecycle
    4. Run `prepack` lifecycle
-   5. Create package tarball in temp directory via [JS API](https://github.com/ghiscoding/lerna-lite/blob/main/packages/publish/src/lib/pack-directory.ts)
+   5. Create package tarball in temp directory via [JS API](https://github.com/lerna-lite/lerna-lite/blob/main/packages/publish/src/lib/pack-directory.ts)
    6. Run `postpack` lifecycle
 7. Run `postpack` lifecycle in root
 8. For each changed package, in topological order (all dependencies before dependents):
-   1. Publish package to configured [registry](#--registry-url) via [JS API](https://github.com/ghiscoding/lerna-lite/blob/main/packages/publish/src/lib/npm-publish.ts)
+   1. Publish package to configured [registry](#--registry-url) via [JS API](https://github.com/lerna-lite/lerna-lite/blob/main/packages/publish/src/lib/npm-publish.ts)
    2. Run `publish` lifecycle
    3. Run `postpublish` lifecycle
 9. Run `publish` lifecycle in root
@@ -496,7 +496,7 @@ lerna will run [npm lifecycle scripts](https://docs.npmjs.com/cli/v8/using-npm/s
 
 # `workspace:` protocol
 
-The `workspace:` protocol ([pnpm workspace](https://pnpm.io/workspaces), [yarn workspace](https://yarnpkg.com/features/workspaces#workspace-ranges-workspace)) is also supported by Lerna-Lite. We also strongly suggest that you use this in combo with the new [`--sync-workspace-lock`](https://github.com/ghiscoding/lerna-lite/tree/main/packages/version#--sync-workspace-lock) flag to properly update your root project lock file. When publishing, it will replace any `workspace:` dependencies by:
+The `workspace:` protocol ([pnpm workspace](https://pnpm.io/workspaces), [yarn workspace](https://yarnpkg.com/features/workspaces#workspace-ranges-workspace)) is also supported by Lerna-Lite. We also strongly suggest that you use this in combo with the new [`--sync-workspace-lock`](https://github.com/lerna-lite/lerna-lite/tree/main/packages/version#--sync-workspace-lock) flag to properly update your root project lock file. When publishing, it will replace any `workspace:` dependencies by:
 
 - the corresponding version in the target workspace (if you use `workspace:*`, `workspace:~`, or `workspace:^`)
 - the associated semver range (for any other range type)
@@ -537,7 +537,7 @@ _this is the default and is usually what most user will want to use since it wil
 
 When strict match is disabled, it will be transformed and publish with the following:
 
-_you would rarely want to disable the strict match, in fact this option will be removed entirely in a future release, this flag was created for the sole purpose of making it compatible with previous Lerna-Lite version `1.2.0`. When disabled, in most cases Lerna will assume that the caret (^) is needed unless the option [--exact](https://github.com/ghiscoding/lerna-lite/tree/main/packages/version#--exact) is provided and by doing so will not be strictly following pnpm/yarn workspace protocol and for that reason is not recommended._
+_you would rarely want to disable the strict match, in fact this option will be removed entirely in a future release, this flag was created for the sole purpose of making it compatible with previous Lerna-Lite version `1.2.0`. When disabled, in most cases Lerna will assume that the caret (^) is needed unless the option [--exact](https://github.com/lerna-lite/lerna-lite/tree/main/packages/version#--exact) is provided and by doing so will not be strictly following pnpm/yarn workspace protocol and for that reason is not recommended._
 
 ```json
 {

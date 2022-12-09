@@ -36,7 +36,7 @@ When run, this command will:
 
 1. Add `lerna` as a [`devDependency`](https://docs.npmjs.com/files/package.json#devdependencies) in `package.json` if it doesn't already exist.
 2. Creates `lerna.json` config file to store the `version` number and also add a `packages` property (unless you provide [--use-workspaces](#--use-workspaces))
-   - for more info and full details about the `lerna.json` file, you can read the [lerna.json](https://github.com/ghiscoding/lerna-lite/wiki/lerna.json) Wiki.
+   - for more info and full details about the `lerna.json` file, you can read the [lerna.json](https://github.com/lerna-lite/lerna-lite/wiki/lerna.json) Wiki.
 
 Example output on a new git repo:
 
