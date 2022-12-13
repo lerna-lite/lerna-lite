@@ -443,6 +443,9 @@
             },
             "continueIfNoMatch": {
               "$ref": "#/$defs/filters/continueIfNoMatch"
+            },
+            "summaryFile": {
+              "$ref": "#/$defs/commandOptions/publish/summaryFile"
             }
           }
         },
@@ -1280,6 +1283,10 @@
         "noVerifyAccess": {
           "type": "boolean",
           "description": "During `lerna publish`, when true, do not verify package read-write access for current npm user."
+        },
+        "summaryFile": {
+          "anyOf": [{ "type": "string" }, { "type": "boolean" }],
+          "description": "Generate a json summary report after all packages have been successfully published, you can pass an optional path for where to save the file."
         },
         "verifyAccess": {
           "type": "boolean",

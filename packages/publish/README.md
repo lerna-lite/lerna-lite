@@ -89,6 +89,7 @@ This is useful when a previous `lerna publish` failed to publish all packages to
     - [`--registry <url>`](#--registry-url)
     - [`--tag-version-prefix`](#--tag-version-prefix)
     - [`--temp-tag`](#--temp-tag)
+    - [`--summary-file <dir>`](#--summary-file)
     - [`--verify-access`](#--verify-access)
     - [`--yes`](#--yes)
   - [`publishConfig` Overrides](#publishconfig-overrides)
@@ -348,6 +349,30 @@ new version(s) to the dist-tag configured by [`--dist-tag`](#--dist-tag-tag) (de
 
 This is not generally necessary, as lerna will publish packages in topological
 order (all dependencies before dependents) by default.
+
+### `--summary-file`
+
+```sh
+# Will create a summary file in the root directory, i.e. `./lerna-publish-summary.json`
+lerna publish --canary --yes --summary-file
+# Will create a summary file in the provided directory, i.e. `./some/other/dir/lerna-publish-summary.json`
+lerna publish --canary --yes --summary-file ./some/other/dir
+```
+
+When run with this flag, a json summary report will be generated after all packages have been successfully published (see below for an example).
+
+```json
+[
+  {
+    "packageName": "package1",
+    "version": "v1.0.1-alpha"
+  },
+  {
+    "packageName": "package2",
+    "version": "v2.0.1-alpha"
+  }
+]
+```
 
 ### `--verify-access`
 

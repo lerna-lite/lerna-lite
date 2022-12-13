@@ -1,4 +1,5 @@
 import chalk from 'chalk';
+import fs from 'fs';
 import os from 'os';
 import path from 'path';
 import crypto from 'crypto';
@@ -296,7 +297,29 @@ export class PublishCommand extends Command<PublishCommandOption> {
     const message: string[] = this.packagesToPublish?.map((pkg) => ` - ${pkg.name}@${pkg.version}`) ?? [];
 
     logOutput('Successfully published:');
-    logOutput(message.join(os.EOL));
+
+    if (this.options.summaryFile !== undefined) {
+      // create a json object and output it to a file location.
+      const filePath = this.options.summaryFile
+        ? `${this.options.summaryFile}/lerna-publish-summary.json`
+        : './lerna-publish-summary.json';
+      const jsonObject = this.packagesToPublish.map((pkg) => {
+        return {
+          packageName: pkg.name,
+          version: pkg.version,
+        };
+      });
+      logOutput(jsonObject);
+      try {
+        fs.writeFileSync(filePath, JSON.stringify(jsonObject));
+        logOutput('Publish summary created: ', filePath);
+      } catch (error) {
+        logOutput('Failed to create the summary report', error);
+      }
+    } else {
+      const message = this.packagesToPublish.map((pkg) => ` - ${pkg.name}@${pkg.version}`);
+      logOutput(message.join(os.EOL));
+    }
 
     this.logger.success('published', '%d %s', count, count === 1 ? 'package' : 'packages');
   }

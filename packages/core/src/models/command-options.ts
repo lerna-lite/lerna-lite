@@ -168,6 +168,9 @@ export interface PublishCommandOption extends VersionCommandOption {
   /** Do not verify package read-write access for current npm user. */
   noVerifyAccess?: boolean;
 
+  /** Generate a json summary report after all packages have been successfully published, you can pass an optional path for where to save the file. */
+  summaryFile?: boolean | string;
+
   /** proxy for `--no-verify-access` */
   verifyAccess?: boolean;
 
