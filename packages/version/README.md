@@ -98,6 +98,7 @@ Running `lerna version --conventional-commits` without the above flags will rele
     - [`--no-private`](#--no-private)
     - [`--no-push`](#--no-push)
     - [`--no-manually-update-root-lockfile`](#--no-manually-update-root-lockfile)
+    - [`--npm-client-args`](#--npm-client-args)
     - [`--preid`](#--preid)
     - [`--remote-client <type>`](#--remote-client-type)
     - [`--signoff-git-commit`](#--signoff-git-commit) (new)
@@ -583,6 +584,40 @@ lerna version --no-manually-update-root-lockfile
 ```
 
 A newer and better option is to this use the new flag [--sync-workspace-lock](#--sync-workspace-lock) which will to rely on your package manager client to do the work (via `install lockfile-only`) which is a lot more reliable, future proof and requires a lot less code in Lerna-Lite itself.
+
+### `--npm-client-args`
+
+This option allows arguments to be passed to the `npm install` that `lerna version` performs to update the lockfile (when `--sync-workspace-lock` is enabled).
+
+For example:
+
+```sh
+lerna version 3.3.3 --sync-workspace-lock --npm-client-args=--legacy-peer-deps
+lerna version 3.3.3 --sync-workspace-lock --npm-client-args="--legacy-peer-deps,--force"
+lerna version 3.3.3 --sync-workspace-lock --npm-client-args="--legacy-peer-deps --force"
+```
+
+This can also be set in `lerna.json`:
+
+```json
+{
+  ...
+  "npmClientArgs": ["--legacy-peer-deps", "--production"]
+}
+```
+
+or specifically for the version command:
+
+```json
+{
+  ...
+  "command": {
+    "version": {
+      "npmClientArgs": ["--legacy-peer-deps", "--production"]
+    }
+  }
+}
+```
 
 ### `--preid`
 
