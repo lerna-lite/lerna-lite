@@ -127,10 +127,15 @@ export function updateNpmLockFileVersion2(obj: any, pkgName: string, newVersion:
 export async function runInstallLockFileOnly(
   npmClient: 'npm' | 'pnpm' | 'yarn',
   cwd: string,
-  npmClientArgs: string[]
+  npmArgs: string[]
 ): Promise<string | undefined> {
   let inputLockfileName = '';
   let outputLockfileName: string | undefined;
+  const npmClientArgsRaw = npmArgs || [];
+  const npmClientArgs: string[] = npmClientArgsRaw.reduce(
+    (args, arg) => args.concat(arg.split(/\s|,/)),
+    [] as string[]
+  );
 
   switch (npmClient) {
     case 'pnpm':

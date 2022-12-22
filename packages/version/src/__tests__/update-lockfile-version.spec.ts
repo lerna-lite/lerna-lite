@@ -153,6 +153,20 @@ describe('run install lockfile-only', () => {
       expect(execSpy).toHaveBeenCalledWith('npm', ['install', '--package-lock-only', '--legacy-peer-deps'], { cwd });
       expect(lockFileOutput).toBe('package-lock.json');
     });
+
+    it(`should update project root lockfile by calling npm script "npm install --legacy-peer-deps,--force" with multiple npm client arguments provided as CSV`, async () => {
+      const execSpy = jest.spyOn(core, 'exec');
+      const execSyncSpy = jest.spyOn(core, 'execSync').mockReturnValue('8.5.0');
+      const cwd = await initFixture('lockfile-version2');
+
+      const lockFileOutput = await runInstallLockFileOnly('npm', cwd, ['--legacy-peer-deps,--force']);
+
+      expect(execSyncSpy).toHaveBeenCalled();
+      expect(execSpy).toHaveBeenCalledWith('npm', ['install', '--package-lock-only', '--legacy-peer-deps', '--force'], {
+        cwd,
+      });
+      expect(lockFileOutput).toBe('package-lock.json');
+    });
   });
 
   describe('pnpm client', () => {
