@@ -22,6 +22,7 @@ import { ProjectConfig, RawManifest } from '../models';
  */
 export class Project {
   config: ProjectConfig;
+  configNotFound: boolean;
   rootConfigLocation: string;
   rootPath: string;
   static PACKAGE_GLOB = 'packages/*';
@@ -40,6 +41,7 @@ export class Project {
             // No need to distinguish between missing and empty,
             // saves a lot of noisy guards elsewhere
             config: {},
+            configNotFound: true,
             // path.resolve(".", ...) starts from process.cwd()
             filepath: path.resolve(cwd || '.', 'lerna.json'),
           };
@@ -66,6 +68,7 @@ export class Project {
     }
 
     this.config = loaded?.config;
+    this.configNotFound = loaded?.configNotFound;
     this.rootConfigLocation = loaded?.filepath ?? '';
     this.rootPath = path.dirname(loaded?.filepath ?? '');
 

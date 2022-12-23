@@ -285,11 +285,12 @@ export class Command<T extends AvailableCommandOption> {
       );
     }
 
+    if (this.project.configNotFound) {
+      throw new ValidationError('ENOLERNA', '`lerna.json` does not exist, have you run `lerna init`?');
+    }
+
     if (!this.project.version) {
-      throw new ValidationError(
-        'ENOLERNA',
-        'No `lerna.json` file exist, please create one in the root of your project.'
-      );
+      throw new ValidationError('ENOVERSION', 'Required property version does not exist in `lerna.json`');
     }
 
     if ((this.options as InitCommandOption).independent && !this.project.isIndependent()) {
