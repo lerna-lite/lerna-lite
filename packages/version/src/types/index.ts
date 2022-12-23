@@ -6,6 +6,6 @@ export interface GitCommitOption {
 }
 
 export interface GitTagOption {
-  forceGitTag: boolean;
-  signGitTag: boolean;
+  forceGitTag?: boolean;
+  signGitTag?: boolean;
 }

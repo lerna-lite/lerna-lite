@@ -165,6 +165,11 @@ export default {
         hidden: true,
         type: 'boolean',
       },
+      'git-tag-command': {
+        describe:
+          'Allows users to specify a custom command to be used when applying git tags. For example, this may be useful for providing a wrapper command in CI/CD pipelines that have no direct write access.',
+        type: 'string',
+      },
       'no-git-tag-version': {
         describe: 'Do not commit or tag version changes.',
         type: 'boolean',
