@@ -85,6 +85,7 @@ Running `lerna version --conventional-commits` without the above flags will rele
     - [`--create-release <type>`](#--create-release-type)
     - [`--exact`](#--exact)
     - [`--force-publish`](#--force-publish)
+    - [`--git-tag-command <cmd>`](#--git-tag-command-cmd) (new)
     - [`--dry-run`](#--dry-run) (new)
     - [`--git-remote <name>`](#--git-remote-name)
     - [`--ignore-changes`](#--ignore-changes)
@@ -438,6 +439,26 @@ Displays the git command that would be performed without actually executing it, 
 
 ```sh
 $ lerna run watch --dry-run
+```
+
+### `--git-tag-command <cmd>`
+
+Allows users to specify a custom command to be used when applying git tags. For example, this may be useful for providing a wrapper command in CI/CD pipelines that have no direct write access.
+
+```sh
+lerna version --git-tag-command "git gh-tag %s -m %s"
+```
+
+This can also be configured in `lerna.json`.
+
+```json
+{
+  "command": {
+    "version": {
+      "gitTagCommand": "git gh-tag %s -m %s"
+    }
+  }
+}
 ```
 
 ### `--git-remote <name>`

@@ -8,19 +8,26 @@ import { GitTagOption } from '../types';
  * @param {{ forceGitTag: boolean; signGitTag: boolean; }} gitOpts
  * @param {import('@lerna/child-process').ExecOpts} opts
  */
-export function gitTag(tag: string, { forceGitTag, signGitTag }: GitTagOption, opts: ExecOpts, dryRun = false) {
-  log.silly('gitTag', tag);
+export function gitTag(
+  tag: string,
+  { forceGitTag, signGitTag }: GitTagOption,
+  opts: ExecOpts,
+  command = 'git tag %s -m %s',
+  dryRun = false
+) {
+  log.silly('gitTag', tag, command);
 
-  const args = ['tag', tag, '-m', tag];
+  const [cmd, ...args] = command.split(' ');
+  const interpolatedArgs = args.map((arg) => arg.replace(/%s/, tag));
 
   if (forceGitTag) {
-    args.push('--force');
+    interpolatedArgs.push('--force');
   }
 
   if (signGitTag) {
-    args.push('--sign');
+    interpolatedArgs.push('--sign');
   }
 
-  log.verbose('git', args.join(' '));
-  return exec('git', args, opts, dryRun);
+  log.verbose(cmd, interpolatedArgs.toString());
+  return exec(cmd, interpolatedArgs, opts, dryRun);
 }

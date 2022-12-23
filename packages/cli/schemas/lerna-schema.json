@@ -620,6 +620,9 @@
             "commitHooks": {
               "$ref": "#/$defs/commandOptions/version/commitHooks"
             },
+            "gitTagCommand": {
+              "$ref": "#/$defs/commandOptions/version/gitTagCommand"
+            },
             "noGitTagVersion": {
               "$ref": "#/$defs/commandOptions/version/noGitTagVersion"
             },
@@ -1395,6 +1398,10 @@
         "commitHooks": {
           "type": "boolean",
           "description": "During `lerna version`, when true, run git commit hooks when committing version changes."
+        },
+        "gitTagCommand": {
+          "type": "string",
+          "description": "During `lerna version`, allows users to specify a custom command to be used when applying git tags."
         },
         "noGitTagVersion": {
           "type": "boolean",
