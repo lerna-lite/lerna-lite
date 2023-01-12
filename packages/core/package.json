@@ -82,7 +82,7 @@
     "@types/conventional-recommended-bump": "^6.1.0",
     "@types/dedent": "^0.7.0",
     "@types/execa": "^2.0.0",
-    "@types/fs-extra": "^9.0.13",
+    "@types/fs-extra": "^11.0.1",
     "@types/git-url-parse": "^9.0.1",
     "@types/glob-parent": "^5.1.1",
     "@types/inquirer": "^9.0.3",

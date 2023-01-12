@@ -51,7 +51,7 @@
     "@types/conventional-changelog-core": "^4.2.1",
     "@types/conventional-recommended-bump": "^6.1.0",
     "@types/execa": "^2.0.0",
-    "@types/fs-extra": "^9.0.13",
+    "@types/fs-extra": "^11.0.1",
     "@types/js-yaml": "^4.0.5",
     "@types/load-json-file": "^5.1.0",
     "@types/minimatch": "^5.1.2",
