@@ -417,7 +417,7 @@ importers:
     specifiers:
       '@lerna-lite/core': workspace:*
       '@lerna-lite/version': workspace:*
-      '@npmcli/arborist': ^6.1.5
+      '@npmcli/arborist': ^6.1.6
       '@types/conventional-changelog-core': ^4.2.1
       '@types/conventional-recommended-bump': ^6.1.0
       '@types/execa': ^2.0.0
@@ -453,7 +453,7 @@ importers:
     dependencies:
       '@lerna-lite/core': link:../core
       '@lerna-lite/version': link:../version
-      '@npmcli/arborist': 6.1.5
+      '@npmcli/arborist': 6.1.6
       byte-size: 7.0.1
       chalk: 4.1.2
       columnify: 1.6.0
@@ -1275,8 +1275,8 @@ packages:
     resolution: {integrity: sha512-KXZccTDEnWqNrrx6JjpJKU/wJvNeg9BDgjS0XhmlZab7br921HtyVbsYzJr4L+xIvjdJ20Wh9dgxgCI2a5CEQw==}
     dev: true
 
-  /@npmcli/arborist/6.1.5:
-    resolution: {integrity: sha512-bdnvRL1Js6uz+CDf0NdG5dIbuwYzHwzTV4/WS16JCDdfstjsYSa8J69bYHf9osUwza9zzg2HI/C5SSmeMN+yFg==}
+  /@npmcli/arborist/6.1.6:
+    resolution: {integrity: sha512-AvHsZV5ZPW/GvPfzgZFqXbiELx3Gh9dLL/nIHZdU2LnlqavReBfniMgy4tqxY7xJ71TB9/Ctkqfb7gIdku7Ybw==}
     engines: {node: ^14.17.0 || ^16.13.0 || >=18.0.0}
     hasBin: true
     dependencies:
