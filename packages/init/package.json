@@ -38,7 +38,7 @@
     "write-json-file": "^4.3.0"
   },
   "devDependencies": {
-    "@types/fs-extra": "^9.0.13",
+    "@types/fs-extra": "^11.0.1",
     "@types/p-map": "^2.0.0",
     "@types/write-json-file": "^3.2.1",
     "yargs-parser": "^21.1.1"
