@@ -31,7 +31,7 @@ export interface ExecCommandOption {
   cmd?: string;
 
   /** exec command arguments */
-  args?: any;
+  args?: string[];
 
   /** @deprecated option was renamed to `--dry-run`, @see dryRun */
   cmdDryRun?: boolean;
@@ -409,4 +409,70 @@ export interface RunCommandOption {
 
   /** enables integration with [Nx](https://nx.dev) instead of the default Lerna task runner (which uses `p-map` and `p-queue`). */
   useNx?: boolean;
+}
+
+/** Watch Command will run a script whenever package(s) or their dependents change. */
+export interface WatchCommandOption {
+  /** watch command arguments */
+  args?: string[];
+
+  /** command to execute by the command */
+  cmd?: string;
+
+  /** Continue executing command despite non-zero exit in a given package. */
+  noBail?: boolean;
+
+  /** proxy for `--no-bail` */
+  bail?: boolean;
+
+  /** Glob pattern to define which file pattern to watch, note that this will be appended to the package file path being watched. */
+  glob?: string;
+
+  /** Defaults to false, when enabled it will fire when a file is being added. */
+  watchAddedFile?: boolean;
+
+  /** Defaults to false, when enabled it will fire when a directory is being added. */
+  watchAddedDir?: boolean;
+
+  /** Defaults to false, when enabled it will fire when a file is being removed. */
+  watchRemovedFile?: boolean;
+
+  /** Defaults to false, when enabled it will fire when a directory is being removed. */
+  watchRemovedDir?: boolean;
+
+  // -- Chokidar options
+  // the options prefixed with "awf" are sub-options of "awaitWriteFinish"
+
+  /** Default to 100, file size polling interval, in milliseconds. */
+  awfPollInterval?: number;
+
+  /** Default to 2000, amount of time in milliseconds for a file size to remain constant before emitting its event. */
+  awfStabilityThreshold?: number;
+
+  /**
+   * Default to true, if `useFsEvents` and `usePolling` are `false`.
+   * Automatically filters out artifacts that occur when using editors that use "atomic writes" instead of writing directly to the source file
+   */
+  atomic?: boolean;
+
+  /** Default to `undefined`, if set, limits how many levels of subdirectories will be traversed. */
+  depth?: number;
+
+  /** Defaults to false, if set to true then the strings passed to .watch() and .add() are treated as literal path names, even if they look like globs. */
+  disableGlobbing?: boolean;
+
+  /** Defaults to true, when false, only the symlinks themselves will be watched for changes instead of following the link references and bubbling events through the link's path. */
+  followSymlinks?: boolean;
+
+  /** Defines files/paths to be ignored */
+  ignored?: string;
+
+  /** Defaults to false, indicates whether to watch files that don't have read permissions if possible. */
+  ignorePermissionErrors?: boolean;
+
+  /** Defaults to 100, interval of file system polling, in milliseconds. You may also set the CHOKIDAR_INTERVAL env variable to override this option. */
+  interval?: number;
+
+  /** Defaults to false, whether to use fs.watchFile (backed by polling), or fs.watch. If polling leads to high CPU utilization, consider setting this to false. */
+  usePolling?: boolean;
 }

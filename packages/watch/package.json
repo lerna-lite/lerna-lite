@@ -1,0 +1,42 @@
+{
+  "name": "@lerna-lite/watch",
+  "description": "Lerna-Lite watch commmand - Runs a command whenever packages or their dependents change",
+  "version": "1.13.0",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "typings": "dist/index.d.ts",
+  "files": [
+    "/dist"
+  ],
+  "publishConfig": {
+    "access": "public"
+  },
+  "scripts": {
+    "build": "tsc --project tsconfig.bundle.json --newLine LF",
+    "pack-tarball": "npm pack"
+  },
+  "license": "MIT",
+  "author": "Ghislain B.",
+  "homepage": "https://github.com/lerna-lite/lerna-lite",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/lerna-lite/lerna-lite.git",
+    "directory": "packages/watch"
+  },
+  "bugs": {
+    "url": "https://github.com/lerna-lite/lerna-lite/issues"
+  },
+  "engines": {
+    "node": ">=14.17.0",
+    "npm": ">=8.0.0"
+  },
+  "dependencies": {
+    "@lerna-lite/core": "workspace:*",
+    "@lerna-lite/optional-cmd-common": "workspace:*",
+    "chokidar": "3.5.3",
+    "path": "^0.12.7"
+  },
+  "devDependencies": {
+    "yargs-parser": "^21.1.1"
+  }
+}

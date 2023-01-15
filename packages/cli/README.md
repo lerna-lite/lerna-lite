@@ -13,7 +13,7 @@
 
 CLI for the `init`, `info`, `publish`, `version` and optional commands, the CLI must be called via `lerna <command>` (where command is any of the commands shown below). You can see some more usage samples below.
 
-**Note:** Please note that the `changed`, `diff`, `exec`, `list` and `run` commands are optional packages and must be installed separately.
+**Note:** Please note that the `changed`, `diff`, `exec`, `list`, `run` and `watch` commands are optional packages and must be installed separately.
 
 ## Installation
 
@@ -46,3 +46,4 @@ For all available options of each command, follow any of the command link shown 
   - [lerna exec](https://github.com/lerna-lite/lerna-lite/blob/main/packages/exec/README.md)
   - [lerna list](https://github.com/lerna-lite/lerna-lite/blob/main/packages/list/README.md)
   - [lerna run](https://github.com/lerna-lite/lerna-lite/blob/main/packages/run/README.md)
+  - [lerna watch](https://github.com/lerna-lite/lerna-lite/blob/main/packages/watch/README.md)

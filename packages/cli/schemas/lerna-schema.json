@@ -212,10 +212,6 @@
             "maxBuffer": {
               "$ref": "#/$defs/globals/maxBuffer"
             },
-            "yes": {
-              "$ref": "#/$defs/globals/yes"
-            },
-
             "scope": {
               "$ref": "#/$defs/filters/scope"
             },
@@ -688,6 +684,109 @@
               "$ref": "#/$defs/globals/yes"
             },
 
+            "scope": {
+              "$ref": "#/$defs/filters/scope"
+            },
+            "ignore": {
+              "$ref": "#/$defs/filters/ignore"
+            },
+            "private": {
+              "$ref": "#/$defs/filters/private"
+            },
+            "since": {
+              "$ref": "#/$defs/filters/since"
+            },
+            "excludeDependents": {
+              "$ref": "#/$defs/filters/excludeDependents"
+            },
+            "includeDependents": {
+              "$ref": "#/$defs/filters/includeDependents"
+            },
+            "includeDependencies": {
+              "$ref": "#/$defs/filters/includeDependencies"
+            },
+            "includeMergedTags": {
+              "$ref": "#/$defs/filters/includeMergedTags"
+            },
+            "continueIfNoMatch": {
+              "$ref": "#/$defs/filters/continueIfNoMatch"
+            }
+          }
+        },
+        "watch": {
+          "type": "object",
+          "description": "Options for the `watch` command.",
+          "properties": {
+            "glob": {
+              "$ref": "#/$defs/commandOptions/watch/glob"
+            },
+            "noBail": {
+              "$ref": "#/$defs/commandOptions/shared/noBail"
+            },
+            "bail": {
+              "$ref": "#/$defs/commandOptions/shared/bail"
+            },
+            "awfStabilityThreshold": {
+              "$ref": "#/$defs/commandOptions/watch/awfStabilityThreshold"
+            },
+            "awfPollInterval": {
+              "$ref": "#/$defs/commandOptions/watch/awfPollInterval"
+            },
+            "atomic": {
+              "$ref": "#/$defs/commandOptions/watch/atomic"
+            },
+            "depth": {
+              "$ref": "#/$defs/commandOptions/watch/depth"
+            },
+            "disableGlobbing": {
+              "$ref": "#/$defs/commandOptions/watch/disableGlobbing"
+            },
+            "followSymlinks": {
+              "$ref": "#/$defs/commandOptions/watch/followSymlinks"
+            },
+            "ignored": {
+              "$ref": "#/$defs/commandOptions/watch/ignored"
+            },
+            "ignorePermissionErrors": {
+              "$ref": "#/$defs/commandOptions/watch/ignorePermissionErrors"
+            },
+            "interval": {
+              "$ref": "#/$defs/commandOptions/watch/interval"
+            },
+            "usePolling": {
+              "$ref": "#/$defs/commandOptions/watch/usePolling"
+            },
+            "watchAddedFile": {
+              "$ref": "#/$defs/commandOptions/watch/watchAddedFile"
+            },
+            "watchAddedDir": {
+              "$ref": "#/$defs/commandOptions/watch/watchAddedDir"
+            },
+            "watchRemovedFile": {
+              "$ref": "#/$defs/commandOptions/watch/watchRemovedFile"
+            },
+            "watchRemovedDir": {
+              "$ref": "#/$defs/commandOptions/watch/watchRemovedDir"
+            },
+
+            "loglevel": {
+              "$ref": "#/$defs/globals/loglevel"
+            },
+            "concurrency": {
+              "$ref": "#/$defs/globals/concurrency"
+            },
+            "rejectCycles": {
+              "$ref": "#/$defs/globals/rejectCycles"
+            },
+            "progress": {
+              "$ref": "#/$defs/globals/progress"
+            },
+            "sort": {
+              "$ref": "#/$defs/globals/sort"
+            },
+            "maxBuffer": {
+              "$ref": "#/$defs/globals/maxBuffer"
+            },
             "scope": {
               "$ref": "#/$defs/filters/scope"
             },
@@ -1442,6 +1541,68 @@
         "tagVersionPrefix": {
           "type": "string",
           "description": "During `lerna version`, customize the tag prefix. To remove entirely, pass an empty string."
+        }
+      },
+      "watch": {
+        "glob": {
+          "type": "string",
+          "description": "Glob pattern to define which file pattern to watch, note that this will be appended to the package file path being watched."
+        },
+        "awfPollInterval": {
+          "type": "number",
+          "description": "Default to 100, file size polling interval, in milliseconds."
+        },
+        "awfStabilityThreshold": {
+          "type": "number",
+          "description": "Default to 2000, amount of time in milliseconds for a file size to remain constant before emitting its event."
+        },
+        "atomic": {
+          "type": "boolean",
+          "description": "Default to true, if `useFsEvents` and `usePolling` are `false`. Automatically filters out artifacts that occur when using editors that use \"atomic writes\" instead of writing directly to the source file"
+        },
+        "depth": {
+          "type": "number",
+          "description": "Default to `undefined`, if set, limits how many levels of subdirectories will be traversed."
+        },
+        "disableGlobbing": {
+          "type": "boolean",
+          "description": "Defaults to false, if set to true then the strings passed to .watch() and .add() are treated as literal path names, even if they look like globs."
+        },
+        "followSymlinks": {
+          "type": "boolean",
+          "description": "Defaults to true, when false, only the symlinks themselves will be watched for changes instead of following the link references and bubbling events through the link's path."
+        },
+        "ignored": {
+          "type": "string",
+          "description": "Defines files/paths to be ignored."
+        },
+        "ignorePermissionErrors": {
+          "type": "boolean",
+          "description": "Defaults to false, indicates whether to watch files that don't have read permissions if possible"
+        },
+        "interval": {
+          "type": "number",
+          "description": "Defaults to 100, interval of file system polling, in milliseconds. You may also set the CHOKIDAR_INTERVAL env variable to override this option."
+        },
+        "usePolling": {
+          "type": "boolean",
+          "description": "Defaults to false, whether to use fs.watchFile (backed by polling), or fs.watch. If polling leads to high CPU utilization, consider setting this to false."
+        },
+        "watchAddedFile": {
+          "type": "boolean",
+          "description": "Defaults to false, when enabled it will fire when a file is being added."
+        },
+        "watchAddedDir": {
+          "type": "boolean",
+          "description": "Defaults to false, when enabled it will fire when a directory is being added."
+        },
+        "watchRemovedFile": {
+          "type": "boolean",
+          "description": "Defaults to false, when enabled it will fire when a file is being removed."
+        },
+        "watchRemovedDir": {
+          "type": "boolean",
+          "description": "Defaults to false, when enabled it will fire when a directory is being removed."
         }
       },
       "shared": {
