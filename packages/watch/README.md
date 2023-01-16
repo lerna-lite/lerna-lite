@@ -8,7 +8,7 @@
 
 Watch for changes within packages and execute commands from the root of the repository, for example when TypeScript or SASS files changed.
 
-> **Note** the `watch` command was also added in the original Lerna but their implementation is using Nx (no surprises) to watch for file changes, however Nx is a rather large dependency if you don't use it. Since we want to keep Lerna-Lite... light (pun intended) we opted to use [`chokidar`](https://github.com/paulmillr/chokidar), it is used by millions of packages (even VSCode uses it), so chances are that you already have it installed directly or indirectly. Another bonus is that most Chokidar [options](https://github.com/paulmillr/chokidar#api) are also available with the `watch` command, see the [Chokidar options](#chokidar-options) below.
+> **Note** the `watch` command also exists in the original [Lerna](https://github.com/lerna/lerna), however their implementation uses Nx (no surprises) to watch for file changes. Since we want to keep Lerna-Lite well... light (pun intended), we opted to use [`Chokidar`](https://github.com/paulmillr/chokidar), it is used by millions of packages (even VSCode uses it), so chances are that you already have it installed directly or indirectly. Another bonus is that most of Chokidar [options](https://github.com/paulmillr/chokidar#api) are also available with the Lerna-Lite `watch` command, please refer to the [Chokidar options](#chokidar-options) below. So even though Lerna and Lerna-Lite both offer the `watch` command, their internal implementations are entirely different but their usage are quite similar (apart from the Chokidar options), though I'm not sure if they also support file add/remove events.
 
 ---
 
@@ -32,7 +32,7 @@ $ lerna watch -- <command>
 
 The values `$LERNA_PACKAGE_NAME`, `$LERNA_FILE_CHANGES` and `$LERNA_FILE_CHANGE_TYPE` will be replaced with the package name, the file that changed, and the Chokidar event that was fired respectively. If multiple file changes are detected, they will all be listed and separated by `;;`.
 
-> **Note** When using `$LERNA_PACKAGE_NAME` and `$LERNA_FILE_CHANGES` in the shell, you will need to escape the dollar sign with a backslash (`\`) when used in the shell. See the [examples](#examples) below.
+> **Note** When using these environment variables in the shell, you will need to escape the dollar sign with a backslash (`\`). See the [examples](#examples) below.
 
 ### Examples
 
@@ -66,7 +66,7 @@ When using `npx`, the `-c` option must be used if also providing variables for s
 $ npx -c 'lerna watch -- echo \$LERNA_PACKAGE_NAME \$LERNA_FILE_CHANGES'
 ```
 
-> **Note** environment variables on Windows platform needs to be wrapped in `%` symbol (ie `%LERNA_PACKAGE_NAME%`).
+> **Note** environment variables on Windows platform need to be wrapped in `%` symbol (ie `%LERNA_PACKAGE_NAME%`), you might be able to circumvent that by using, but untested, [cross-env](https://www.npmjs.com/package/cross-env).
 
 ```sh
 # On Windows
@@ -75,7 +75,7 @@ $ npx -c 'lerna watch -- echo \$LERNA_PACKAGE_NAME \$LERNA_FILE_CHANGES'
 }
 ```
 
-> **Note** to limit the number of file being watched it is recommended to use either [`--ignored`](#--ignored) and/or [`--glob`](#--glob) options, for example you wouldn't want `node_modules`, neither `dist` folders being watched for most of the time.
+> **Note** to limit the number of files being watched, it is recommended to use either [`--ignored`](#--ignored) and/or [`--glob`](#--glob) options. For example you probably don't want the `node_modules` and `dist` folders to be watched.
 
 ## Options
 
@@ -92,7 +92,7 @@ $ npx -c 'lerna watch -- echo \$LERNA_PACKAGE_NAME \$LERNA_FILE_CHANGES'
     - [`--watch-removed-file`](#--watch-removed-file)
     - [`--watch-added-dir`](#--watch-added-dir)
     - [`--watch-removed-dir`](#--watch-removed-dir)
-  - [Chokidar-Options](#chokidar-options)
+  - [Chokidar Options](#chokidar-options)
     - [`--atomic`](#--atomic)
     - [`--depth`](#--depth)
     - [`--disable-globbing`](#--disable-globbing)
@@ -177,11 +177,11 @@ Defaults to `false`, when enabled it will fire when a directory is being removed
 $ lerna watch --watch-removed-dir -- <command>
 ```
 
-> **Note** When enabling any of these extra watch events, you might need to know if the file(s) or directory(ies) were added or removed, for this use case, you will want to use `$LERNA_FILE_CHANGE_TYPE`. Also note that Chokidar event to remoeve a file or directory are named as `unlink` and `unlinkDir`.
+> **Note** When enabling any of these extra watch events above, you might need to know if the file(s) or directory(ies) were added, removed or changed, and for this use case, you can use `$LERNA_FILE_CHANGE_TYPE`. Also note that Chokidar event names to remove a file or directory are `unlink` and `unlinkDir`.
 
 > **Note** an important thing to be aware with Chokidar is that `add`/`addDir` events are also emitted for matching paths while instantiating the watching as chokidar discovers these file paths (before the `ready` event). In other words, when this option is disabled (not recommended) it will fire an event for each file/directory that are discovered when initializing the watch, which why we change the default of [`--ignore-initial`](#--ignore-initial) to be enabled by default to avoid sending a ton of changes.
 
-## Chokidar options
+## Chokidar Options
 Most Chokidar options are available and exposed (with some exceptions like `cwd`). The option descriptions below are summarized, refer to the Chokidar [options](https://github.com/paulmillr/chokidar#api) website for more detailed informations.
 
 ### `--atomic`
@@ -260,7 +260,7 @@ $ lerna watch --use-polling -- <command>
 
 ### The `awaitWriteFinish` option
 
-The `awaitWriteFinish` option can be a complex object, however this is difficult to provide a complex object in the CLI. In order to make them accessible in the CLI, we prefixed these options with "awf". The system will internally replace these prefixed options with the appropriate complex object, ie: `awfPollInterval: 200` will be transformed to `{ awaitWriteFinish: { pollInterval: 200 }}`
+The `awaitWriteFinish` option can be a complex object, this is however difficult to in the CLI. So in order to make them accessible to the CLI, we prefixed them with "awf", the system will internally replace the option(s) with the appropriate Chokidar complex object. For example, `awfPollInterval: 200` will be transformed to `{ awaitWriteFinish: { pollInterval: 200 }}`
 
 ### `--awf-poll-interval`
 
@@ -287,7 +287,7 @@ Lerna will set 3 separate environment variables when running the inner command. 
 - `$LERNA_FILE_CHANGE_TYPE` will be replaced with the Chokidar event emitted.
    - defaults to `change`, other events could be (when enabled) `add`, `addDir`, `unlink` or `unlinkDir`
 
-> **Note** When using these variables, you will need to escape the `$` with a backslash (`\`) when used in the shell. See the examples above.
+> **Note** When using these variables in the shell, you will need to escape the `$` with a backslash (`\`). See the examples above.
 
 ## Running With Package Managers
 
