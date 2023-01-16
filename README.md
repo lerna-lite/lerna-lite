@@ -36,7 +36,7 @@
     - 👷 [`exec`](https://github.com/lerna-lite/lerna-lite/tree/main/packages/exec#readme) - execute shell command in each workspace package
     - 📖 [`list`](https://github.com/lerna-lite/lerna-lite/tree/main/packages/list#readme) - list local packages
     - 🏃 [`run`](https://github.com/lerna-lite/lerna-lite/tree/main/packages/run#readme) - run npm script, in topological order, in each workspace package
-    - 👓 [`watch`](https://github.com/lerna-lite/lerna-lite/tree/main/packages/watch#readme) - Watch for changes within packages and execute commands
+    - 👓 [`watch`](https://github.com/lerna-lite/lerna-lite/tree/main/packages/watch#readme) - watch for changes within packages and execute commands when fired
 
 ---
 
@@ -48,12 +48,11 @@ Lerna-Lite itself is now also using [pnpm workspaces](https://pnpm.io/workspaces
 
 ---
 
-## 📢 Lerna-Lite has a new `watch` command
+## 📢 Lerna-Lite has a new [`lerna watch`](https://github.com/lerna-lite/lerna-lite/tree/main/packages/watch#readme) command
 
-Watch for file changes within packages and execute commands from the root of the repository. This solves a common problem for package-based monorepos, which is to trigger rebuilds of packages when their files change (ie: TypeScript, SASS, ...). Take a look at the new [`watch`](https://github.com/lerna-lite/lerna-lite/tree/main/packages/watch#readme) documentation for more details.
+Watch for file changes within packages and execute commands from the root of the repository. This solves a common problem for package-based monorepos, which is to trigger rebuilds of packages when their files change (ie: TypeScript, SASS, ...). Take a look at the new [`watch`](https://github.com/lerna-lite/lerna-lite/tree/main/packages/watch#readme) command documentation for more details.
 
 ---
-
 
 ## Who is using Lerna-Lite
 
@@ -111,7 +110,7 @@ Below are the main reasons as to why this fork was created:
     - even if [Nx](https://nx.dev/) can be a nice addition with `lerna run` and [`useNx`](https://github.com/lerna-lite/lerna-lite/tree/main/packages/run#usenx-experimental) (which we did add), it should and **will always be optional** in Lerna-Lite, it's your decision.
 6. Lerna v5+ is also enforcing `useWorkspaces` option to be enabled, but this can have undesired effects (you might want to track only the `packages` folder with Lerna and not other folders like `demo` or `website`). Again, that will not be enforced in Lerna-Lite, in fact it's the opposite, I personally prefer to just use `packages` in `lerna.json` (especially with pnpm)
 7. add few extra features that currently only exists in Lerna-Lite
-   - [`workspace:` protocol support](https://github.com/lerna-lite/lerna-lite/tree/main/packages/version#workspace-protocol) (Lerna added support for that six months later in v6)
+   - [`workspace:` protocol support](https://github.com/lerna-lite/lerna-lite/tree/main/packages/version#workspace-protocol) (Lerna added support for it six months later in v6)
    - [--dry-run](https://github.com/lerna-lite/lerna-lite/tree/main/packages/version#--dry-run) to preview version/publish
 changes and changelogs
    - [lerna version --changelog-header-message "msg"](https://github.com/lerna-lite/lerna-lite/tree/main/packages/version#--changelog-header-message-msg) it could be used to add sponsor badges in changelogs
@@ -136,7 +135,7 @@ changes and changelogs
 - [Exec](https://github.com/lerna-lite/lerna-lite/tree/main/packages/exec#readme) command, when installed, will help you execute shell commands in parallel and in topological order.
 - [List](https://github.com/lerna-lite/lerna-lite/tree/main/packages/list#readme) command, when installed, will list all workspace local packages
 - [Run](https://github.com/lerna-lite/lerna-lite/tree/main/packages/run#readme) command, when installed, will help you run npm script in parallel and in topological order.
-- [Watch](https://github.com/lerna-lite/lerna-lite/tree/main/packages/watch#readme) command, when installed, - will watch for changes within packages and execute commands from the root of the repository
+- [Watch](https://github.com/lerna-lite/lerna-lite/tree/main/packages/watch#readme) command, when installed, will watch for changes within packages and execute commands
 
 ### README Badge
 
@@ -214,7 +213,7 @@ Minimum CLI install to get started with Lerna-Lite, that will give you access to
 | 👷 [exec](https://github.com/lerna-lite/lerna-lite/tree/main/packages/exec#readme)       | `npm i @lerna-lite/exec -D -W`    | execute an command in each workspace package       |
 | 📖 [list](https://github.com/lerna-lite/lerna-lite/tree/main/packages/list#readme)       | `npm i @lerna-lite/list -D -W`    | list local packages                            |
 | 🏃 [run](https://github.com/lerna-lite/lerna-lite/tree/main/packages/run#readme)         | `npm i @lerna-lite/run -D -W`      | run npm script in each workspace package           |
-| 👓 [watch](https://github.com/lerna-lite/lerna-lite/tree/main/packages/watch#readme)     | `npm i @lerna-lite/watch -D -W`    | commands from the root of the repository         |
+| 👓 [watch](https://github.com/lerna-lite/lerna-lite/tree/main/packages/watch#readme)     | `npm i @lerna-lite/watch -D -W`    | watch for changes within packages and execute commands when fired         |
 
 ### Usage
 
@@ -225,8 +224,6 @@ Add custom NPM Scripts or simply run the commands in a shell with Lerna-Lite CLI
 "scripts": {
   "new-version": "lerna version",
   "new-publish": "lerna publish from-package",
-
-  "exec-echo": "lerna exec echo hello", // optional `exec` command
   "run-tests": "lerna run test",        // optional `run` command
 }
 ```
@@ -242,7 +239,7 @@ npm uninstall lerna -W   # OR yarn remove lerna -W
 npm uninstall -g lerna   # OR yarn global remove lerna
 ```
 
-2. install Lerna-Lite CLI to get access to `init`, `info`, `version` and `publish` commands
+2. install Lerna-Lite CLI to get access to built-in `init`, `info`, `version` and `publish` commands
 
 ```sh
 # Lerna CLI (includes `init`, `info`, `version` and `publish` commands)
