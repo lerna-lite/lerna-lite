@@ -425,6 +425,16 @@ export interface WatchCommandOption {
   /** proxy for `--no-bail` */
   bail?: boolean;
 
+  /**
+   * Defaults to 100, time to wait in milliseconds before emitting all the file changes into a single event.
+   * This provide enough time for the system to collect all Chokidar events (1x per file changes)
+   * and merge them into a single Lerna watch change event to be emitted (Lerna will join all file paths into a CSV string with ";;").
+   */
+  emitChangesThreshold?: number;
+
+  /** Defaults to ";;", the delimiter that will be used to separete file when mutiple file paths are emitted by the watch */
+  fileDelimiter?: string;
+
   /** Glob pattern to define which file pattern to watch, note that this will be appended to the package file path being watched. */
   glob?: string;
 
@@ -466,6 +476,9 @@ export interface WatchCommandOption {
 
   /** Defines files/paths to be ignored */
   ignored?: string;
+
+  /** Defaults to true, if set to false then add/addDir events are also emitted for matching paths while instantiating the watching as chokidar discovers these file paths (before the ready event). */
+  ignoreInitial?: boolean;
 
   /** Defaults to false, indicates whether to watch files that don't have read permissions if possible. */
   ignorePermissionErrors?: boolean;

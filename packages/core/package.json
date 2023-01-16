@@ -12,6 +12,7 @@
     "/dist"
   ],
   "scripts": {
+    "prebuild": "rimraf dist",
     "build": "tsc --project tsconfig.bundle.json --newLine LF",
     "pack-tarball": "npm pack"
   },

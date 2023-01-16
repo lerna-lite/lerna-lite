@@ -26,6 +26,18 @@ export default {
           hidden: true,
           type: 'boolean',
         },
+        'emit-changes-threshold': {
+          group: 'Command Options:',
+          describe:
+            'Time to wait in milliseconds before emitting all the file changes into a single event, defaults to 100',
+          type: 'number',
+        },
+        'file-delimiter': {
+          group: 'Command Options:',
+          describe:
+            'The delimiter that will be used to separete file when mutiple file paths are emitted by the watch, defaults to ";;",',
+          type: 'string',
+        },
         glob: {
           group: 'Command Options:',
           describe:
@@ -91,6 +103,12 @@ export default {
           group: 'Command Options:',
           describe: 'Defines files/paths to be ignored',
           type: 'string',
+        },
+        'ignore-initial': {
+          group: 'Command Options:',
+          describe:
+            'If set to false then add/addDir events are also emitted for matching paths while instantiating the watching as chokidar discovers these file paths (before the ready event), defaults to true',
+          type: 'boolean',
         },
         'ignore-permission-errors': {
           group: 'Command Options:',

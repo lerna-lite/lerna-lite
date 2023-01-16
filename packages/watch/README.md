@@ -10,8 +10,6 @@ Watch for changes within packages and execute commands from the root of the repo
 
 > **Note** the `watch` command also exists in Lerna but their implementation is using Nx (no surprises here) to watch file changes but Nx is a rather large dependency. However in Lerna-Lite we opted to use a smaller package [`chokidar`](https://github.com/paulmillr/chokidar). Chokidar is used by millions of packages (TypeScript, SASS, ... even VSCode uses it), so chances are that you already have it installed directly or indirectly. Most of Chokidar [options](https://github.com/paulmillr/chokidar#api) are also available with the `lerna watch` command, see the [Chokidar options](#chokidar-options) below.
 
-> **Note** Chokidar fires an event for each file that changed, that is even when multiple files are saved at the same time. If anyone knows or to circumvent this problem and firing only a single event instead of multiple, please reach out in a [Discussion](https://github.com/lerna-lite/lerna-lite/discussions).
-
 ---
 
 ## Installation
@@ -32,22 +30,22 @@ npx lerna watch
 $ lerna watch -- <command>
 ```
 
-The values `$LERNA_PACKAGE_NAME`, `LERNA_WATCH_CHANGE_FILE` and `LERNA_WATCH_CHANGE_TYPE` will be replaced with the package name, the file that changed and the fired event respectively. If multiple file changes are detected, it will fire multiple events (one event per file changed).
+The values `$LERNA_PACKAGE_NAME`, `$LERNA_FILE_CHANGES` and `$LERNA_FILE_CHANGE_TYPE` will be replaced with the package name, the file that changed and the fired event respectively. If multiple file changes are detected, it will fire multiple events (one event per file changed).
 
-> **Note** When using `$LERNA_PACKAGE_NAME` and `LERNA_WATCH_CHANGE_FILE` in the shell, you will need to escape the dollar sign with a backslash (`\`) when used in the shell. See the [examples](#examples) below.
+> **Note** When using `$LERNA_PACKAGE_NAME` and `$LERNA_FILE_CHANGES` in the shell, you will need to escape the dollar sign with a backslash (`\`) when used in the shell. See the [examples](#examples) below.
 
 ### Examples
 
 Watch all packages and echo the package name and the file that changed:
 
 ```sh
-$ lerna watch -- echo \$LERNA_PACKAGE_NAME \LERNA_WATCH_CHANGE_FILE
+$ lerna watch -- echo \$LERNA_PACKAGE_NAME \$LERNA_FILE_CHANGES
 ```
 
 Watch only packages "package-1", "package-3" and their dependencies:
 
 ```sh
-$ lerna watch --scope "package-{1,3}" --include-dependencies -- echo \$LERNA_PACKAGE_NAME \LERNA_WATCH_CHANGE_FILE
+$ lerna watch --scope "package-{1,3}" --include-dependencies -- echo \$LERNA_PACKAGE_NAME \$LERNA_FILE_CHANGES
 ```
 
 Watch only package "package-4" and its dependencies and run the `test` script for the package that changed:
@@ -56,32 +54,28 @@ Watch only package "package-4" and its dependencies and run the `test` script fo
 $ lerna watch --scope="package-4" --include-dependencies -- lerna run test --scope=\$LERNA_PACKAGE_NAME
 ```
 
-Watch a single package and run the "build" script on it when a file within it changes:
+Watch a single package and run the "build" script on it when a file within it changes (but ignore `dist` folder) and also stream the build output:
 
 ```sh
-$ lerna watch --scope="my-package-1" -- lerna run build --scope=\$LERNA_PACKAGE_NAME
+$ lerna watch --ignored=\"**/dist\", --scope="my-package-1" -- lerna run build --scope=\$LERNA_PACKAGE_NAME --stream
 ```
 
 When using `npx`, the `-c` option must be used if also providing variables for substitution:
 
 ```sh
-$ npx -c 'lerna watch -- echo \$LERNA_PACKAGE_NAME \LERNA_WATCH_CHANGE_FILE'
+$ npx -c 'lerna watch -- echo \$LERNA_PACKAGE_NAME \$LERNA_FILE_CHANGES'
 ```
 
-> **Note** environment variables on Windows platform needs to be wrapped in `%` symbol (ie `%LERNA_PACKAGE_NAME%`), to circumvent this problem and be cross platform, you could install [`cross-env`](https://www.npmjs.com/package/cross-env).
+> **Note** environment variables on Windows platform needs to be wrapped in `%` symbol (ie `%LERNA_PACKAGE_NAME%`).
 
 ```sh
 # On Windows
 "scripts": {
-  "watch-files": "lerna watch -- echo \"Watch file %LERNA_WATCH_CHANGE_FILE% %LERNA_WATCH_CHANGE_TYPE% in package %LERNA_PACKAGE_NAME%\""
-}
-
-# On Windows with cross-env
-```sh
-"scripts": {
-  "watch-files": "cross-env-shell lerna watch -- echo \"Watch file $LERNA_WATCH_CHANGE_FILE $LERNA_WATCH_CHANGE_TYPE in package $LERNA_PACKAGE_NAME\""
+  "watch-files": "lerna watch -- echo \"Watch file %LERNA_FILE_CHANGES% %LERNA_FILE_CHANGE_TYPE% in package %LERNA_PACKAGE_NAME%\""
 }
 ```
+
+> **Note** to limit the number of file being watched it is recommended to use either [`--ignored`](#--ignored) and/or [`--glob`](#--glob) options, for example you wouldn't want `node_modules`, neither `dist` folders being watched for most of the time.
 
 ## Options
 
@@ -172,7 +166,7 @@ Defaults to false, when enabled it will fire when a directory is being removed.
 $ lerna watch --watch-removed-dir <command>
 ```
 
-> **Note** When enabling any of the extra watch events, you might need to know if the file or directory was being added or removed and for that you can use `$LERNA_WATCH_CHANGE_TYPE`. Also note that a file or directory removal is the event `unlink` and `unlinkDir`.
+> **Note** When enabling any of the extra watch events, you might need to know if the file or directory was being added or removed and for that you can use `$LERNA_FILE_CHANGE_TYPE`. Also note that a file or directory removal is the event `unlink` and `unlinkDir`.
 
 > **Note** Another thing to be aware is that `add`/`addDir` events are also emitted for matching paths while instantiating the watching as chokidar discovers these file paths (before the `ready` event). In other words, when this option is disabled it will fire an event for each file/directory that are discovered which is why we enabled `ignoreInitial` to avoid firing too many events while starting the watch.
 
@@ -213,11 +207,21 @@ $ lerna watch --follow-symlinks <command>
 
 ### `--ignored`
 
-Defines files/paths to be ignored.
+Defines files/paths to be ignored ([anymatch](https://github.com/micromatch/anymatch)-compatible definition).
 
 ```sh
 $ lerna watch --ignored <command>
 ```
+
+### `--ignore-initial`
+
+Defaults to true, if set to false then add/addDir events are also emitted for matching paths while instantiating the watching as chokidar discovers these file paths (before the ready event).
+
+```sh
+$ lerna watch --ignore-initial <command>
+```
+
+> **Note** you typically want this flag enabled when enabling any of [`--watch-added-file`](#--watch-added-file), [`--watch-added-dir`](#--watch-added-dir), [`--watch-removed-file`](#--watch-removed-file) and [`--watch-removed-dir`](#--watch-removed-dir) which is why we enabled this option by default.
 
 ### `--ignore-permission-errors`
 
@@ -265,8 +269,8 @@ $ lerna watch --awf-stability-threshold <command>
 Lerna will set 3 separate environment variables when running the inner command. These can be used to customize the command that is run.
 
 - `$LERNA_PACKAGE_NAME` will be replaced with the name of the package that changed.
-- `$LERNA_WATCH_CHANGE_FILE` will be replaced with the file that changed. Note that Chokidar fires an event for each file changed
-- `$LERNA_WATCH_CHANGE_TYPE` will be replaced with the file the event that was fired.
+- `$LERNA_FILE_CHANGES` will be replaced with the file(s) that changed, separated by `;;` when multiple are changed.
+- `$LERNA_FILE_CHANGE_TYPE` will be replaced with the file the event that was fired.
    - defaults to `change`, other events could be `add`, `addDir`, `unlink` or `unlinkDir`
 
 > **Note** When using these variables, you will need to escape the `$` with a backslash (`\`) when used in the shell. See the examples above.
@@ -293,4 +297,4 @@ npx:
 npx -c 'lerna watch -- lerna run build --scope=\$LERNA_PACKAGE_NAME'
 ```
 
-> **Note** When using `npx`, you will need to use `-c` and surround the entire `lerna watch` command in single quotes (`'`). Without this, `npx` will try to replace the watch environment variables before passing the command to `lerna`, resulting in an always empty value for `$LERNA_PACKAGE_NAME` and `$LERNA_WATCH_CHANGE_FILE`.
+> **Note** When using `npx`, you will need to use `-c` and surround the entire `lerna watch` command in single quotes (`'`). Without this, `npx` will try to replace the watch environment variables before passing the command to `lerna`, resulting in an always empty value for `$LERNA_PACKAGE_NAME` and `$LERNA_FILE_CHANGES`.

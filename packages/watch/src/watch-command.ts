@@ -3,21 +3,23 @@ import { FilterOptions, getFilteredPackages } from '@lerna-lite/optional-cmd-com
 import chokidar from 'chokidar';
 import path from 'path';
 
-import { CHOKIDAR_AVAILABLE_OPTIONS } from './constants';
+import { CHOKIDAR_AVAILABLE_OPTIONS, FILE_DELIMITER, MERGE_STABILITY_THRESHOLD } from './constants';
+import { ChangesStructure, ChokidarEventType } from './types';
 
 export function factory(argv: WatchCommandOption & FilterOptions) {
   return new WatchCommand(argv);
 }
-
 export class WatchCommand extends Command<WatchCommandOption & FilterOptions> {
-  args: string[] = [];
-  bail = false;
-  command = '';
-  count = 0;
-  env: { [key: string]: string | undefined } = {};
-  filteredPackages: Package[] = [];
-  packagePlural = '';
-  watcher?: chokidar.FSWatcher;
+  protected args: string[] = [];
+  protected bail = false;
+  protected command = '';
+  protected count = 0;
+  protected env: { [key: string]: string | undefined } = {};
+  protected filteredPackages: Package[] = [];
+  protected packagePlural = '';
+  protected watcher?: chokidar.FSWatcher;
+  protected _timer?: NodeJS.Timeout;
+  protected _changes: ChangesStructure = {};
 
   get requiresGit() {
     return false;
@@ -116,10 +118,37 @@ export class WatchCommand extends Command<WatchCommandOption & FilterOptions> {
     }
   }
 
-  changeEventListener(eventType: 'add' | 'addDir' | 'change' | 'unlink' | 'unlinkDir', filepath: string) {
+  changeEventListener(eventType: ChokidarEventType, filepath: string) {
     const pkg = this.filteredPackages.find((p) => filepath.includes(p.location));
     if (pkg) {
-      this.runCommandInPackageCapturing(pkg, filepath, eventType);
+      // changes structure sample: { '@lerna-lite/watch': { pkg: Package, events: { change: ['path1', 'path2'], unlink: ['path3'] } } }
+      if (!this._changes[pkg.name]) {
+        this._changes[pkg.name] = { pkg, events: {} as any };
+      }
+      if (!this._changes[pkg.name].events[eventType]) {
+        this._changes[pkg.name].events[eventType] = [];
+      }
+      this._changes[pkg.name].events[eventType].push(filepath);
+
+      // once we reached emit change stability threshold, we'll fire events for each packages & events while the file paths array will be merged
+      clearTimeout(this._timer as NodeJS.Timeout);
+      this._timer = setTimeout(() => {
+        // since we waited a certain time, destructure the changes object
+        // could include multiple packages to loop through and that will execute multiple events (1 for each package and 1 for each event)
+        for (const changedPkgName of Object.keys(this._changes)) {
+          const changedPkg = this._changes[changedPkgName].pkg;
+          if (this._changes[changedPkgName].events) {
+            for (const changedType of Object.keys(this._changes[changedPkgName].events)) {
+              const fileDelimiter = this.options?.fileDelimiter ?? FILE_DELIMITER;
+              const mergedFiles = this._changes[changedPkgName].events![changedType].join(fileDelimiter);
+              this.runCommandInPackageCapturing(changedPkg, mergedFiles, changedType);
+              delete this._changes[changedPkgName].events[changedType];
+            }
+            delete this._changes[changedPkgName];
+          }
+        }
+        this._changes = {};
+      }, this.options.emitChangesThreshold ?? MERGE_STABILITY_THRESHOLD);
     }
   }
 
@@ -135,7 +164,7 @@ export class WatchCommand extends Command<WatchCommandOption & FilterOptions> {
       throw error;
     } else {
       // propagate "highest" error code, it's probably the most useful
-      const exitCode = error?.code;
+      const exitCode = error?.exitCode ?? error?.code;
       this.logger.error('', 'Received non-zero exit code %d during file watch', exitCode);
       process.exitCode = exitCode;
     }
@@ -148,11 +177,11 @@ export class WatchCommand extends Command<WatchCommandOption & FilterOptions> {
       extendEnv: false,
       env: Object.assign({}, this.env, {
         LERNA_PACKAGE_NAME: pkg.name,
-        LERNA_WATCH_CHANGE_TYPE: eventType,
-        LERNA_WATCH_CHANGE_FILE: changedFile,
+        LERNA_FILE_CHANGE_TYPE: eventType,
+        LERNA_FILE_CHANGES: changedFile,
       }),
       pkg,
-      bail: this.bail,
+      reject: this.bail,
     };
   }
 

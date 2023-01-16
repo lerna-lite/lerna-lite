@@ -19,8 +19,7 @@
       "message": "chore(release): publish new version %v"
     },
     "watch": {
-      "ignored": "**/dist",
-      "glob": "/src/**/*.{ts,md}",
+      "glob": "/src/**/*.{ts,tsx}",
       "watchAddedFile": true,
       "watchRemovedFile": true
     }

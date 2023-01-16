@@ -1544,6 +1544,14 @@
         }
       },
       "watch": {
+        "emitChangesThreshold": {
+          "type": "number",
+          "description": "Defaults to 100, time to wait in milliseconds before emitting all the file changes into a single event."
+        },
+        "fileDelimiter": {
+          "type": "string",
+          "description": "Defaults to ';;', the delimiter that will be used to separete file when mutiple file paths are emitted by the watch."
+        },
         "glob": {
           "type": "string",
           "description": "Glob pattern to define which file pattern to watch, note that this will be appended to the package file path being watched."
@@ -1575,6 +1583,10 @@
         "ignored": {
           "type": "string",
           "description": "Defines files/paths to be ignored."
+        },
+        "ignoreInitial": {
+          "type": "boolean",
+          "description": "Defaults to true, if set to false then add/addDir events are also emitted for matching paths while instantiating the watching as chokidar discovers these file paths (before the ready event)."
         },
         "ignorePermissionErrors": {
           "type": "boolean",
