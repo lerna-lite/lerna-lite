@@ -8,7 +8,7 @@
 
 Watch for changes within packages and execute commands from the root of the repository, for example when TypeScript or SASS files changed.
 
-> **Note** the `watch` command also exists in Lerna but their implementation is using Nx (no surprises here) to watch file changes but Nx is a rather large dependency if you don't use it. Since we want to keep Lerna-Lite... light (pun intended) we opted to use [`chokidar`](https://github.com/paulmillr/chokidar). [`Chokidar`](https://github.com/paulmillr/chokidar) is used by millions of packages (even VSCode uses it), so chances are that you already have it installed directly or indirectly. Most of Chokidar [options](https://github.com/paulmillr/chokidar#api) are also available with the `watch` command, see the [Chokidar options](#chokidar-options) below.
+> **Note** the `watch` command was also added in the original Lerna but their implementation is using Nx (no surprises) to watch for file changes, however Nx is a rather large dependency if you don't use it. Since we want to keep Lerna-Lite... light (pun intended) we opted to use [`chokidar`](https://github.com/paulmillr/chokidar), it is used by millions of packages (even VSCode uses it), so chances are that you already have it installed directly or indirectly. Another bonus is that most Chokidar [options](https://github.com/paulmillr/chokidar#api) are also available with the `watch` command, see the [Chokidar options](#chokidar-options) below.
 
 ---
 
@@ -30,7 +30,7 @@ npx lerna watch
 $ lerna watch -- <command>
 ```
 
-The values `$LERNA_PACKAGE_NAME`, `$LERNA_FILE_CHANGES` and `$LERNA_FILE_CHANGE_TYPE` will be replaced with the package name, the file that changed and the fired event respectively. If multiple file changes are detected, it will fire multiple events (one event per file changed).
+The values `$LERNA_PACKAGE_NAME`, `$LERNA_FILE_CHANGES` and `$LERNA_FILE_CHANGE_TYPE` will be replaced with the package name, the file that changed, and the Chokidar event that was fired respectively. If multiple file changes are detected, they will all be listed and separated by `;;`.
 
 > **Note** When using `$LERNA_PACKAGE_NAME` and `$LERNA_FILE_CHANGES` in the shell, you will need to escape the dollar sign with a backslash (`\`) when used in the shell. See the [examples](#examples) below.
 
@@ -107,7 +107,7 @@ $ npx -c 'lerna watch -- echo \$LERNA_PACKAGE_NAME \$LERNA_FILE_CHANGES'
       - [`--awf-stability-threshold`](#--awf-stability-threshold)
 
 ### `--emit-changes-threshold`
-Defaults to 100, time to wait in milliseconds before emitting all the file changes into a single event.
+Defaults to `100`, time to wait in milliseconds before emitting all the file changes into a single event.
 
 ```sh
 $ lerna watch --emit-changes-threshold=100 -- <command>
@@ -147,7 +147,7 @@ Pass `--no-bail` to disable this behavior, executing in _all_ packages regardles
 
 ### `--watch-added-file`
 
-Defaults to false, when enabled it will fire when a file is being added.
+Defaults to `false`, when enabled it will fire when a file is being added.
 
 ```sh
 $ lerna watch --watch-added-file -- <command>
@@ -155,7 +155,7 @@ $ lerna watch --watch-added-file -- <command>
 
 ### `--watch-added-dir`
 
-Defaults to false, when enabled it will fire when a directory is being added.
+Defaults to `false`, when enabled it will fire when a directory is being added.
 
 ```sh
 $ lerna watch --watch-added-dir -- <command>
@@ -163,7 +163,7 @@ $ lerna watch --watch-added-dir -- <command>
 
 ### `--watch-removed-file`
 
-Defaults to false, when enabled it will fire when a file is being removed.
+Defaults to `false`, when enabled it will fire when a file is being removed.
 
 ```sh
 $ lerna watch --watch-removed-file -- <command>
@@ -171,22 +171,22 @@ $ lerna watch --watch-removed-file -- <command>
 
 ### `--watch-removed-dir`
 
-Defaults to false, when enabled it will fire when a directory is being removed.
+Defaults to `false`, when enabled it will fire when a directory is being removed.
 
 ```sh
 $ lerna watch --watch-removed-dir -- <command>
 ```
 
-> **Note** When enabling any of the extra watch events, you might need to know if the file or directory was being added or removed and for that you can use `$LERNA_FILE_CHANGE_TYPE`. Also note that a file or directory removal is the event `unlink` and `unlinkDir`.
+> **Note** When enabling any of these extra watch events, you might need to know if the file(s) or directory(ies) were added or removed, for this use case, you will want to use `$LERNA_FILE_CHANGE_TYPE`. Also note that Chokidar event to remoeve a file or directory are named as `unlink` and `unlinkDir`.
 
-> **Note** an important thing to be aware with Chokidar is that `add`/`addDir` events are also emitted for matching paths while instantiating the watching as chokidar discovers these file paths (before the `ready` event). In other words, when this option is disabled (not recommended) it will fire an event for each file/directory that are discovered which is why we change the default of [`--ignore-initial`](#--ignore-initial) to be enabled to avoid firing too many events while initializing the watch.
+> **Note** an important thing to be aware with Chokidar is that `add`/`addDir` events are also emitted for matching paths while instantiating the watching as chokidar discovers these file paths (before the `ready` event). In other words, when this option is disabled (not recommended) it will fire an event for each file/directory that are discovered when initializing the watch, which why we change the default of [`--ignore-initial`](#--ignore-initial) to be enabled by default to avoid sending a ton of changes.
 
 ## Chokidar options
-Most Chokidar options are available and exposed, refer to Chokidar [options](https://github.com/paulmillr/chokidar#api) for more informations.
+Most Chokidar options are available and exposed (with some exceptions like `cwd`). The option descriptions below are summarized, refer to the Chokidar [options](https://github.com/paulmillr/chokidar#api) website for more detailed informations.
 
 ### `--atomic`
 
-Default to true, if `useFsEvents` and `usePolling` are `false`. Automatically filters out artifacts that occur when using editors that use "atomic writes" instead of writing directly to the source file.
+Default to `true`, if `useFsEvents` and `usePolling` are `false`. Automatically filters out artifacts that occur when using editors that use "atomic writes" instead of writing directly to the source file.
 
 ```sh
 $ lerna watch --atomic -- <command>
@@ -202,7 +202,7 @@ $ lerna watch --depth=99 -- <command>
 
 ### `--disable-globbing`
 
-Defaults to false, if set to true then the strings passed to Chokidar `.watch()` and `.add()` are treated as literal path names, even if they look like globs.
+Defaults to `false`, if set to true then the strings passed to Chokidar `.watch()` and `.add()` are treated as literal path names, even if they look like globs.
 
 ```sh
 $ lerna watch --disable-globbing -- <command>
@@ -210,7 +210,7 @@ $ lerna watch --disable-globbing -- <command>
 
 ### `--follow-symlinks`
 
-Defaults to true, when false, only the symlinks themselves will be watched for changes instead of following the link references and bubbling events through the link's path.
+Defaults to `true`, when false, only the symlinks themselves will be watched for changes instead of following the link references and bubbling events through the link's path.
 
 ```sh
 $ lerna watch --follow-symlinks -- <command>
@@ -226,7 +226,7 @@ $ lerna watch --ignored=\"**/dist\" -- <command>
 
 ### `--ignore-initial`
 
-Defaults to true, if set to false then add/addDir events are also emitted for matching paths while instantiating the watching as chokidar discovers these file paths (before the ready event).
+Defaults to `true`, if set to false then `add`/`addDir` events are also emitted for matching paths while instantiating the watching as chokidar discovers these file paths (before the `ready` event).
 
 ```sh
 $ lerna watch --ignore-initial -- <command>
@@ -236,7 +236,7 @@ $ lerna watch --ignore-initial -- <command>
 
 ### `--ignore-permission-errors`
 
-Defaults to false, indicates whether to watch files that don't have read permissions if possible.
+Defaults to `false`, indicates whether to watch files that don't have read permissions if possible.
 
 ```sh
 $ lerna watch --ignore-permission-errors -- <command>
@@ -244,7 +244,7 @@ $ lerna watch --ignore-permission-errors -- <command>
 
 ### `--interval`
 
-Defaults to 100, interval of file system polling, in milliseconds. You may also set the CHOKIDAR_INTERVAL env variable to override this option.
+Defaults to `100`, interval of file system polling, in milliseconds. You may also set the CHOKIDAR_INTERVAL env variable to override this option.
 
 ```sh
 $ lerna watch --interval=100 -- <command>
@@ -252,19 +252,19 @@ $ lerna watch --interval=100 -- <command>
 
 ### `--use-polling`
 
-Defaults to false, whether to use fs.watchFile (backed by polling), or fs.watch. If polling leads to high CPU utilization, consider setting this to false.
+Defaults to `false`, whether to use `fs.watchFile` (backed by polling), or `fs.watch`. If polling leads to high CPU utilization, consider setting this to `false`.
 
 ```sh
 $ lerna watch --use-polling -- <command>
 ```
 
-### `awaitWriteFinish` option
+### The `awaitWriteFinish` option
 
 The `awaitWriteFinish` option can be a complex object, however this is difficult to provide a complex object in the CLI. In order to make them accessible in the CLI, we prefixed these options with "awf". The system will internally replace these prefixed options with the appropriate complex object, ie: `awfPollInterval: 200` will be transformed to `{ awaitWriteFinish: { pollInterval: 200 }}`
 
 ### `--awf-poll-interval`
 
-Default to 100, file size polling interval, in milliseconds.
+Default to `100`, file size polling interval, in milliseconds.
 
 ```sh
 $ lerna watch --awf-poll-interval=100 -- <command>
@@ -272,7 +272,7 @@ $ lerna watch --awf-poll-interval=100 -- <command>
 
 ### `--awf-stability-threshold`
 
-Default to 2000, amount of time in milliseconds for a file size to remain constant before emitting its event.
+Default to `2000`, amount of time in milliseconds for a file size to remain constant before emitting its event.
 
 ```sh
 $ lerna watch --awf-stability-threshold=2000 -- <command>
