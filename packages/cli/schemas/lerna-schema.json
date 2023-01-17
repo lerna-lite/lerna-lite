@@ -1550,7 +1550,7 @@
         },
         "fileDelimiter": {
           "type": "string",
-          "description": "Defaults to ';;', the delimiter that will be used to separete file when mutiple file changes are emitted by the watch."
+          "description": "Defaults to whitespace, the delimiter that will be used to separate file when mutiple file changes are emitted by the watch."
         },
         "glob": {
           "type": "string",

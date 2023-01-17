@@ -30,7 +30,7 @@ npx lerna watch
 $ lerna watch -- <command>
 ```
 
-The values `$LERNA_PACKAGE_NAME`, `$LERNA_FILE_CHANGES` and `$LERNA_FILE_CHANGE_TYPE` will be replaced with the package name, the file that changed, and the Chokidar event that was fired respectively. If multiple file changes are detected, they will all be listed and separated by `;;`.
+The values `$LERNA_PACKAGE_NAME`, `$LERNA_FILE_CHANGES` and `$LERNA_FILE_CHANGE_TYPE` will be replaced with the package name, the file that changed, and the Chokidar event that was fired respectively. If multiple file changes are detected, they will all be listed and separated by a whitespace (unless custom file delimiter are provided).
 
 > **Note** When using these environment variables in the shell, you will need to escape the dollar sign with a backslash (`\`). See the [examples](#examples) below.
 
@@ -114,10 +114,10 @@ $ lerna watch --emit-changes-threshold=100 -- <command>
 ```
 
 ### `--file-delimiter`
-Defaults to `;;`, the delimiter that will be used to separete file when mutiple file changes are emitted in a single event by the watch.
+Defaults to a whitespace, the delimiter that will be used to separate files when mutiple file changes are emitted into a single event emitted by the watch.
 
 ```sh
-$ lerna watch --file-delimiter=\",\" -- <command>
+$ lerna watch --file-delimiter=\";;\" -- <command>
 ```
 
 ### `--glob`
@@ -283,7 +283,7 @@ $ lerna watch --awf-stability-threshold=2000 -- <command>
 Lerna will set 3 separate environment variables when running the inner command. These can be used to customize the command that is run.
 
 - `$LERNA_PACKAGE_NAME` will be replaced with the name of the package that changed.
-- `$LERNA_FILE_CHANGES` will be replaced with the file(s) that changed, separated by `;;` when multiple are changed.
+- `$LERNA_FILE_CHANGES` will be replaced with the file(s) that changed, separated by whitespace when multiple files are changed.
 - `$LERNA_FILE_CHANGE_TYPE` will be replaced with the Chokidar event emitted.
    - defaults to `change`, other events could be (when enabled) `add`, `addDir`, `unlink` or `unlinkDir`
 

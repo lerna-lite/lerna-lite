@@ -43,7 +43,7 @@ export default {
         'file-delimiter': {
           group: 'Command Options:',
           describe:
-            'The delimiter that will be used to separete file when mutiple file changes are emitted by the watch, defaults to ";;"',
+            'The delimiter that will be used to separete file when mutiple file changes are emitted by the watch, defaults to whitespace',
           type: 'string',
         },
         glob: {

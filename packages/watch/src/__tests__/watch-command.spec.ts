@@ -191,6 +191,58 @@ describe('Watch Command', () => {
       });
     });
 
+    it('should execute change watch callback with default whitespace file delimiter', async () => {
+      await lernaWatch(testDir)('--', 'echo $LERNA_PACKAGE_NAME $LERNA_FILE_CHANGES');
+      watchChangeHandler(path.join(testDir, 'packages/package-2/file-1.ts'));
+      await watchChangeHandler(path.join(testDir, 'packages/package-2/some-file.ts'));
+
+      expect(calledInPackages()).toEqual(['package-2']);
+      expect(spawn).toHaveBeenCalledTimes(1);
+      expect(spawn).toHaveBeenLastCalledWith('echo $LERNA_PACKAGE_NAME $LERNA_FILE_CHANGES', [], {
+        cwd: path.join(testDir, 'packages/package-2'),
+        pkg: expect.objectContaining({
+          name: 'package-2',
+        }),
+        env: expect.objectContaining({
+          LERNA_PACKAGE_NAME: 'package-2',
+          LERNA_FILE_CHANGES:
+            path.join(testDir, 'packages/package-2/file-1.ts') +
+            ' ' +
+            path.join(testDir, 'packages/package-2/some-file.ts'),
+          LERNA_FILE_CHANGE_TYPE: 'change',
+        }),
+        extendEnv: false,
+        reject: true,
+        shell: true,
+      });
+    });
+
+    it('should execute change watch callback with custom file delimiter when defined', async () => {
+      await lernaWatch(testDir)('--file-delimiter', ';;', '--', 'echo $LERNA_PACKAGE_NAME $LERNA_FILE_CHANGES');
+      watchChangeHandler(path.join(testDir, 'packages/package-2/file-1.ts'));
+      await watchChangeHandler(path.join(testDir, 'packages/package-2/some-file.ts'));
+
+      expect(calledInPackages()).toEqual(['package-2']);
+      expect(spawn).toHaveBeenCalledTimes(1);
+      expect(spawn).toHaveBeenLastCalledWith('echo $LERNA_PACKAGE_NAME $LERNA_FILE_CHANGES', [], {
+        cwd: path.join(testDir, 'packages/package-2'),
+        pkg: expect.objectContaining({
+          name: 'package-2',
+        }),
+        env: expect.objectContaining({
+          LERNA_PACKAGE_NAME: 'package-2',
+          LERNA_FILE_CHANGES:
+            path.join(testDir, 'packages/package-2/file-1.ts') +
+            ';;' +
+            path.join(testDir, 'packages/package-2/some-file.ts'),
+          LERNA_FILE_CHANGE_TYPE: 'change',
+        }),
+        extendEnv: false,
+        reject: true,
+        shell: true,
+      });
+    });
+
     it('should execute watch add callback only the given scope', async () => {
       await lernaWatch(testDir)('--scope', 'package-2', `--watch-added-file`, '--', 'echo $LERNA_PACKAGE_NAME');
       await watchAddHandler(path.join(testDir, 'packages/package-2/some-file.ts'));
