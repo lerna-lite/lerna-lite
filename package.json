@@ -6,7 +6,7 @@
   "scripts": {
     "clean": "rimraf packages/*/dist",
     "clean:tarball": "rimraf packages/**/*.tgz",
-    "build": "pnpm lint && pnpm -r --stream build",
+    "build": "pnpm clean && pnpm lint && pnpm -r --stream build",
     "info-cmd": "lerna info",
     "init-cmd": "lerna init --independent --exact --use-workspaces",
     "changed-cmd": "lerna changed --all",
