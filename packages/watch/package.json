@@ -34,7 +34,7 @@
   "dependencies": {
     "@lerna-lite/core": "workspace:*",
     "@lerna-lite/optional-cmd-common": "workspace:*",
-    "chokidar": "3.5.3",
+    "chokidar": "^3.5.3",
     "path": "^0.12.7"
   },
   "devDependencies": {

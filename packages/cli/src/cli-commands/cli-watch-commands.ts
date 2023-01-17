@@ -10,6 +10,14 @@ export default {
   describe: 'Runs a command whenever packages or their dependents change.',
   builder: (yargs: any) => {
     yargs
+      .example(
+        '$0 watch -- echo "$LERNA_FILE_CHANGES in package $LERNA_PACKAGE_NAME"',
+        '# the file changes with its package name'
+      )
+      .example(
+        '$0 watch --no-bail -- lerna run build --scope=$LERNA_PACKAGE_NAME',
+        '# execute `lerna run build` on the package that emitted a change'
+      )
       .parserConfiguration({
         'populate--': true,
         'strip-dashed': true,

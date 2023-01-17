@@ -1,4 +1,12 @@
-import { Command, Package, spawn, toCamelCase, ValidationError, WatchCommandOption } from '@lerna-lite/core';
+import {
+  Command,
+  Package,
+  ProjectConfig,
+  spawn,
+  toCamelCase,
+  ValidationError,
+  WatchCommandOption,
+} from '@lerna-lite/core';
 import { FilterOptions, getFilteredPackages } from '@lerna-lite/optional-cmd-common';
 import chokidar from 'chokidar';
 import path from 'path';
@@ -6,7 +14,7 @@ import path from 'path';
 import { CHOKIDAR_AVAILABLE_OPTIONS, FILE_DELIMITER, MERGE_STABILITY_THRESHOLD } from './constants';
 import { ChangesStructure, ChokidarEventType } from './types';
 
-export function factory(argv: WatchCommandOption & FilterOptions) {
+export function factory(argv: WatchCommandOption) {
   return new WatchCommand(argv);
 }
 export class WatchCommand extends Command<WatchCommandOption & FilterOptions> {
@@ -17,7 +25,7 @@ export class WatchCommand extends Command<WatchCommandOption & FilterOptions> {
   protected env: { [key: string]: string | undefined } = {};
   protected filteredPackages: Package[] = [];
   protected packagePlural = '';
-  protected watcher?: chokidar.FSWatcher;
+  protected _watcher?: chokidar.FSWatcher;
   protected _timer?: NodeJS.Timeout;
   protected _changes: ChangesStructure = {};
 
@@ -25,7 +33,11 @@ export class WatchCommand extends Command<WatchCommandOption & FilterOptions> {
     return false;
   }
 
-  constructor(argv: WatchCommandOption) {
+  get watcher() {
+    return this._watcher;
+  }
+
+  constructor(argv: WatchCommandOption | ProjectConfig) {
     super(argv);
   }
 
@@ -61,9 +73,9 @@ export class WatchCommand extends Command<WatchCommandOption & FilterOptions> {
     );
 
     try {
+      const packageLocations: string[] = [];
       const chokidarOptions: chokidar.WatchOptions = { ignoreInitial: true, persistent: true, ...this.options };
 
-      const packageLocations: string[] = [];
       this.filteredPackages.forEach((pkg) => {
         // does user have a glob defined, if so append it to the pkg location. Glob example for TS files: /**/*.ts
         let watchingPath = pkg.location;
@@ -92,26 +104,25 @@ export class WatchCommand extends Command<WatchCommandOption & FilterOptions> {
       }
 
       // initialize chokidar watcher for each package found
-      // this.filteredPackages.forEach((pkg) => {
-      this.watcher = chokidar.watch(packageLocations, chokidarOptions);
+      this._watcher = chokidar.watch(packageLocations, chokidarOptions);
 
       // add default event listeners
-      this.watcher
+      this._watcher
         .on('change', (path) => this.changeEventListener('change', path))
         .on('error', (error) => this.onError(error));
 
       // add optional event listeners but only when enabled by the user for perf reasons
       if (this.options.watchAddedFile) {
-        this.watcher.on('add', (path) => this.changeEventListener('add', path));
+        this._watcher.on('add', (path) => this.changeEventListener('add', path));
       }
       if (this.options.watchRemovedFile) {
-        this.watcher.on('unlink', (path) => this.changeEventListener('unlink', path));
+        this._watcher.on('unlink', (path) => this.changeEventListener('unlink', path));
       }
       if (this.options.watchAddedDir) {
-        this.watcher.on('addDir', (path) => this.changeEventListener('addDir', path));
+        this._watcher.on('addDir', (path) => this.changeEventListener('addDir', path));
       }
       if (this.options.watchRemovedDir) {
-        this.watcher.on('unlinkDir', (path) => this.changeEventListener('unlinkDir', path));
+        this._watcher.on('unlinkDir', (path) => this.changeEventListener('unlinkDir', path));
       }
     } catch (err) {
       this.onError(err);
@@ -119,43 +130,46 @@ export class WatchCommand extends Command<WatchCommandOption & FilterOptions> {
   }
 
   changeEventListener(eventType: ChokidarEventType, filepath: string) {
-    const pkg = this.filteredPackages.find((p) => filepath.includes(p.location));
-    if (pkg) {
-      // changes structure sample: { '@lerna-lite/watch': { pkg: Package, events: { change: ['path1', 'path2'], unlink: ['path3'] } } }
-      if (!this._changes[pkg.name]) {
-        this._changes[pkg.name] = { pkg, events: {} as any };
-      }
-      if (!this._changes[pkg.name].events[eventType]) {
-        this._changes[pkg.name].events[eventType] = [];
-      }
-      this._changes[pkg.name].events[eventType].push(filepath);
+    return new Promise((resolve, reject) => {
+      const pkg = this.filteredPackages.find((p) => filepath.includes(p.location));
+      if (!pkg) {
+        reject('no package found');
+      } else {
+        // changes structure sample: { '@lerna-lite/watch': { pkg: Package, events: { change: ['path1', 'path2'], unlink: ['path3'] } } }
+        if (!this._changes[pkg.name]) {
+          this._changes[pkg.name] = { pkg, events: {} as any };
+        }
+        if (!this._changes[pkg.name].events[eventType]) {
+          this._changes[pkg.name].events[eventType] = [];
+        }
+        this._changes[pkg.name].events[eventType].push(filepath);
 
-      // once we reached emit change stability threshold, we'll fire events for each packages & events while the file paths array will be merged
-      clearTimeout(this._timer as NodeJS.Timeout);
-      this._timer = setTimeout(() => {
-        // since we waited a certain time, destructure the changes object
-        // could include multiple packages to loop through and that will execute multiple events (1 for each package and 1 for each event)
-        for (const changedPkgName of Object.keys(this._changes)) {
-          const changedPkg = this._changes[changedPkgName].pkg;
-          if (this._changes[changedPkgName].events) {
+        // once we reached emit change stability threshold, we'll fire events for each packages & events while the file paths array will be merged
+        clearTimeout(this._timer as NodeJS.Timeout);
+        this._timer = setTimeout(() => {
+          // since we waited a certain time, destructure the changes object
+          // could include multiple packages to loop through and that will execute multiple events (1 for each package and 1 for each event)
+          for (const changedPkgName of Object.keys(this._changes)) {
+            const changedPkg = this._changes[changedPkgName].pkg;
             for (const changedType of Object.keys(this._changes[changedPkgName].events)) {
               const fileDelimiter = this.options?.fileDelimiter ?? FILE_DELIMITER;
               const mergedFiles = this._changes[changedPkgName].events![changedType].join(fileDelimiter);
               this.runCommandInPackageCapturing(changedPkg, mergedFiles, changedType);
+              resolve({ changedPkg, mergedFiles, changedType });
               delete this._changes[changedPkgName].events[changedType];
             }
             delete this._changes[changedPkgName];
           }
-        }
-        this._changes = {};
-      }, this.options.emitChangesThreshold ?? MERGE_STABILITY_THRESHOLD);
-    }
+          this._changes = {};
+        }, this.options.emitChangesThreshold ?? MERGE_STABILITY_THRESHOLD);
+      }
+    });
   }
 
   onError(error: any) {
     if (this.bail) {
       // stop watching.
-      this.watcher?.close();
+      this._watcher?.close();
 
       // only the first error is caught
       process.exitCode = error?.exitCode ?? error?.code;
