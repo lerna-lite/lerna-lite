@@ -6,9 +6,9 @@
 
 ## (`lerna watch`) - Watch command [optional] 👓
 
-Watch for changes within packages and execute commands from the root of the repository, for example when TypeScript or SASS files changed.
+Watch for changes within packages and execute commands from the root of the repository, for example run a build when TypeScript file changes.
 
-> **Note** the `watch` command also exists in the original [Lerna](https://github.com/lerna/lerna), however their implementation uses Nx (no surprises) to watch for file changes. Since we want to keep Lerna-Lite well... light (pun intended), we opted to use [`Chokidar`](https://github.com/paulmillr/chokidar), it is used by millions of packages (even VSCode uses it), so chances are that you already have it installed directly or indirectly. Another bonus is that most of Chokidar [options](https://github.com/paulmillr/chokidar#api) are also available with the Lerna-Lite `watch` command, please refer to the [Chokidar options](#chokidar-options) below. So even though Lerna and Lerna-Lite both offer the `watch` command, their internal implementations are entirely different but their usage are quite similar (apart from the Chokidar options), though I'm not sure if they also support file add/remove events.
+> **Note** the `watch` command also exists in the original [Lerna](https://github.com/lerna/lerna), however their implementation uses Nx (no surprises) to watch for file changes. Since we want to keep Lerna-Lite well... light (pun intended), we opted to use [`Chokidar`](https://github.com/paulmillr/chokidar), it is used by millions of packages (even VSCode uses it), so chances are that you already have it installed directly or indirectly. Another bonus is that most of Chokidar [options](https://github.com/paulmillr/chokidar#api) are also available with the Lerna-Lite `watch` command, please refer to the [Chokidar options](#chokidar-options) below. Even though Lerna and Lerna-Lite differs in their internal implementations, their usage are quite similar (apart from the Chokidar options), though I'm not sure if they also support file add/remove events.
 
 ---
 
