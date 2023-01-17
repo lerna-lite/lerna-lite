@@ -50,7 +50,7 @@ Lerna-Lite itself is now also using [pnpm workspaces](https://pnpm.io/workspaces
 
 ## 📢 Lerna-Lite has a new [`lerna watch`](https://github.com/lerna-lite/lerna-lite/tree/main/packages/watch#readme) command
 
-Watch for file changes within packages and execute commands from the root of the repository. This solves a common problem for package-based monorepos, which is to trigger rebuilds of packages when their files change (ie: TypeScript, SASS, ...). Head over to the [`lerna watch`](https://github.com/lerna-lite/lerna-lite/tree/main/packages/watch#readme) documentation for more details.
+Watch for file changes within packages and execute commands from the root of the repository. This solves a common problem for package-based monorepos, which is to trigger rebuilds of packages when their files changed. Head over to the [`lerna watch`](https://github.com/lerna-lite/lerna-lite/tree/main/packages/watch#readme) documentation for more details.
 
 ---
 
