@@ -1,12 +1,4 @@
-import {
-  Command,
-  Package,
-  ProjectConfig,
-  spawn,
-  toCamelCase,
-  ValidationError,
-  WatchCommandOption,
-} from '@lerna-lite/core';
+import { Command, Package, ProjectConfig, spawn, ValidationError, WatchCommandOption } from '@lerna-lite/core';
 import { FilterOptions, getFilteredPackages } from '@lerna-lite/optional-cmd-common';
 import chokidar from 'chokidar';
 import path from 'path';
@@ -31,10 +23,6 @@ export class WatchCommand extends Command<WatchCommandOption & FilterOptions> {
 
   get requiresGit() {
     return false;
-  }
-
-  get watcher() {
-    return this._watcher;
   }
 
   constructor(argv: WatchCommandOption | ProjectConfig) {
@@ -89,11 +77,12 @@ export class WatchCommand extends Command<WatchCommandOption & FilterOptions> {
       // when these prefix are found, we'll build the appropriate complex object, ie: awfPollInterval: 200 => { awaitWriteFinish: { pollInterval: 200 }}
       if (this.options.awfPollInterval !== undefined || this.options.awfStabilityThreshold !== undefined) {
         chokidarOptions.awaitWriteFinish = {};
-        ['awfPollInterval', 'awfStabilityThreshold'].forEach((awfKey) => {
-          if (this.options[awfKey] !== undefined) {
-            chokidarOptions.awaitWriteFinish![toCamelCase(awfKey.replace('awf', ''))] = this.options[awfKey];
-          }
-        });
+        if (this.options.awfPollInterval !== undefined) {
+          chokidarOptions.awaitWriteFinish.pollInterval = this.options.awfPollInterval;
+        }
+        if (this.options.awfStabilityThreshold !== undefined) {
+          chokidarOptions.awaitWriteFinish.stabilityThreshold = this.options.awfStabilityThreshold;
+        }
       }
 
       // remove any watch command options that don't belong to chokidar
@@ -129,12 +118,10 @@ export class WatchCommand extends Command<WatchCommandOption & FilterOptions> {
     }
   }
 
-  changeEventListener(eventType: ChokidarEventType, filepath: string) {
-    return new Promise((resolve, reject) => {
+  protected changeEventListener(eventType: ChokidarEventType, filepath: string) {
+    return new Promise((resolve) => {
       const pkg = this.filteredPackages.find((p) => filepath.includes(p.location));
-      if (!pkg) {
-        reject('no package found');
-      } else {
+      if (pkg) {
         // changes structure sample: { '@lerna-lite/watch': { pkg: Package, events: { change: ['path1', 'path2'], unlink: ['path3'] } } }
         if (!this._changes[pkg.name]) {
           this._changes[pkg.name] = { pkg, events: {} as any };
@@ -166,7 +153,7 @@ export class WatchCommand extends Command<WatchCommandOption & FilterOptions> {
     });
   }
 
-  onError(error: any) {
+  protected onError(error: any) {
     if (this.bail) {
       // stop watching.
       this._watcher?.close();
@@ -184,7 +171,7 @@ export class WatchCommand extends Command<WatchCommandOption & FilterOptions> {
     }
   }
 
-  getOpts(pkg: Package, changedFile: string, eventType: string) {
+  protected getOpts(pkg: Package, changedFile: string, eventType: string) {
     return {
       cwd: pkg.location,
       shell: true,
@@ -199,7 +186,7 @@ export class WatchCommand extends Command<WatchCommandOption & FilterOptions> {
     };
   }
 
-  runCommandInPackageCapturing(pkg: Package, changedFile: string, eventType: string) {
+  protected runCommandInPackageCapturing(pkg: Package, changedFile: string, eventType: string) {
     return spawn(this.command, this.args, this.getOpts(pkg, changedFile, eventType));
   }
 }

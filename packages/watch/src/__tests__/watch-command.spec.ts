@@ -13,22 +13,40 @@ jest.mock('@lerna-lite/optional-cmd-common', () => ({
   ...jest.requireActual('../../../optional-cmd-common/src/lib/profiler'), // test with the real Profiler for test coverage as well
 }));
 
-let changeHandler;
-let errorHandler;
+let watchAddHandler;
+let watchAddDirHandler;
+let watchUnlinkHandler;
+let watchUnlinkDirHandler;
+let watchChangeHandler;
+let watchErrorHandler;
 const closeMock = jest.fn();
-const watchImplementation = jest.fn().mockImplementation(() => ({
+const watchMock = jest.fn().mockImplementation(() => ({
   close: closeMock,
   on: jest.fn().mockImplementation(function (this, event, handler) {
-    if (event === 'error') {
-      errorHandler = handler;
-      // handler('some error');
-    } else if (event === 'change') {
-      changeHandler = handler;
+    switch (event) {
+      case 'change':
+        watchChangeHandler = handler;
+        break;
+      case 'add':
+        watchAddHandler = handler;
+        break;
+      case 'addDir':
+        watchAddDirHandler = handler;
+        break;
+      case 'unlink':
+        watchUnlinkHandler = handler;
+        break;
+      case 'unlinkDir':
+        watchUnlinkDirHandler = handler;
+        break;
+      case 'error':
+        watchErrorHandler = handler;
+        break;
     }
     return this;
   }),
 }));
-jest.mock('chokidar', () => ({ watch: watchImplementation }));
+jest.mock('chokidar', () => ({ watch: watchMock }));
 
 // also point to the local watch command so that all mocks are properly used even by the command-runner
 jest.mock('@lerna-lite/watch', () => jest.requireActual('../watch-command'));
@@ -36,20 +54,16 @@ jest.mock('@lerna-lite/watch', () => jest.requireActual('../watch-command'));
 // jest.useFakeTimers({ timerLimit: 100 });
 
 import path from 'path';
-// import fs from 'fs-extra';
-// import globby from 'globby';
 import yargParser from 'yargs-parser';
 
 // make sure to import the output mock
 import { WatchCommandOption } from '@lerna-lite/core';
 
 // mocked modules
-import { spawn, spawnStreaming } from '@lerna-lite/core';
+import { spawn } from '@lerna-lite/core';
 
 // helpers
 import { commandRunner, initFixtureFactory } from '@lerna-test/helpers';
-import { loggingOutput } from '@lerna-test/helpers/logging-output';
-import { normalizeRelativeDir } from '@lerna-test/helpers';
 import { factory, WatchCommand } from '../watch-command';
 import cliWatchCommands from '../../../cli/src/cli-commands/cli-watch-commands';
 const lernaWatch = commandRunner(cliWatchCommands);
@@ -57,13 +71,6 @@ const initFixture = initFixtureFactory(__dirname);
 
 // assertion helpers
 const calledInPackages = () => (spawn as jest.Mock).mock.calls.map(([, , opts]) => path.basename(opts.cwd));
-
-const watchInPackagesStreaming = (testDir) =>
-  (spawnStreaming as jest.Mock).mock.calls.reduce((arr, [command, params, opts, prefix]) => {
-    const dir = normalizeRelativeDir(testDir, opts.cwd);
-    arr.push([dir, command, `(prefix: ${prefix})`].concat(params).join(' '));
-    return arr;
-  }, []);
 
 const createArgv = (cwd: string, ...args: string[]) => {
   args.unshift('watch');
@@ -117,7 +124,7 @@ describe('Watch Command', () => {
         await lernaWatch(testDir)('--bail', '--', '--shaka', '--lakka');
         const nonZero = new Error('An actual non-zero, not git diff pager SIGPIPE');
         (nonZero as any).exitCode = 1;
-        errorHandler(nonZero);
+        watchErrorHandler(nonZero);
       } catch (err) {
         expect(err.message).toBe('An actual non-zero, not git diff pager SIGPIPE');
       }
@@ -127,15 +134,46 @@ describe('Watch Command', () => {
       await lernaWatch(testDir)('--no-bail', '--', 'lerna run --shaka', '--lakka');
       const nonZero = new Error('An actual non-zero, not git diff pager SIGPIPE');
       (nonZero as any).exitCode = 1;
-      errorHandler(nonZero);
+      watchErrorHandler(nonZero);
 
       expect(process.exitCode).toBe(1);
     });
 
-    it('should only include packages filtered by --scope', async () => {
-      await lernaWatch(testDir)('--scope', 'package-2', '--', 'echo $LERNA_PACKAGE_NAME');
-      await changeHandler(path.join(testDir, 'packages/package-2/some-file.ts'));
+    it('should take glob input option and expect it to be appeneded to the file path being watch by chokidar', async () => {
+      await lernaWatch(testDir)('--glob', '/src/**/*.{ts,tsx}', '--', 'lerna run build');
 
+      expect(watchMock).toHaveBeenCalledWith(
+        [
+          path.join(testDir, 'packages/package-1', '/src/**/*.{ts,tsx}'),
+          path.join(testDir, 'packages/package-2', '/src/**/*.{ts,tsx}'),
+        ],
+        { ignoreInitial: true, persistent: true }
+      );
+    });
+
+    it('should take options prefixed with "awf" (awfPollInterval) and transform them into a valid chokidar "awaitWriteFinish" option', async () => {
+      await lernaWatch(testDir)('--awf-poll-interval', '500', '--', 'lerna run build');
+
+      expect(watchMock).toHaveBeenCalledWith(
+        [path.join(testDir, 'packages/package-1'), path.join(testDir, 'packages/package-2')],
+        { ignoreInitial: true, persistent: true, awaitWriteFinish: { pollInterval: 500 } }
+      );
+    });
+
+    it('should take options prefixed with "awf" (awfStabilityThreshold) and transform them into a valid chokidar "awaitWriteFinish" option', async () => {
+      await lernaWatch(testDir)('--awf-stability-threshold', '275', '--', 'lerna run build');
+
+      expect(watchMock).toHaveBeenCalledWith(
+        [path.join(testDir, 'packages/package-1'), path.join(testDir, 'packages/package-2')],
+        { ignoreInitial: true, persistent: true, awaitWriteFinish: { stabilityThreshold: 275 } }
+      );
+    });
+
+    it('should execute change watch callback only in the given scope', async () => {
+      await lernaWatch(testDir)('--scope', 'package-2', '--', 'echo $LERNA_PACKAGE_NAME');
+      await watchChangeHandler(path.join(testDir, 'packages/package-2/some-file.ts'));
+
+      expect(calledInPackages()).toEqual(['package-2']);
       expect(spawn).toHaveBeenCalledTimes(1);
       expect(spawn).toHaveBeenLastCalledWith('echo $LERNA_PACKAGE_NAME', [], {
         cwd: path.join(testDir, 'packages/package-2'),
@@ -146,6 +184,94 @@ describe('Watch Command', () => {
           LERNA_PACKAGE_NAME: 'package-2',
           LERNA_FILE_CHANGES: path.join(testDir, 'packages/package-2/some-file.ts'),
           LERNA_FILE_CHANGE_TYPE: 'change',
+        }),
+        extendEnv: false,
+        reject: true,
+        shell: true,
+      });
+    });
+
+    it('should execute watch add callback only the given scope', async () => {
+      await lernaWatch(testDir)('--scope', 'package-2', `--watch-added-file`, '--', 'echo $LERNA_PACKAGE_NAME');
+      await watchAddHandler(path.join(testDir, 'packages/package-2/some-file.ts'));
+
+      expect(calledInPackages()).toEqual(['package-2']);
+      expect(spawn).toHaveBeenCalledTimes(1);
+      expect(spawn).toHaveBeenLastCalledWith('echo $LERNA_PACKAGE_NAME', [], {
+        cwd: path.join(testDir, 'packages/package-2'),
+        pkg: expect.objectContaining({
+          name: 'package-2',
+        }),
+        env: expect.objectContaining({
+          LERNA_PACKAGE_NAME: 'package-2',
+          LERNA_FILE_CHANGES: path.join(testDir, 'packages/package-2/some-file.ts'),
+          LERNA_FILE_CHANGE_TYPE: 'add',
+        }),
+        extendEnv: false,
+        reject: true,
+        shell: true,
+      });
+    });
+
+    it('should execute watch add callback only the given scope', async () => {
+      await lernaWatch(testDir)('--scope', 'package-2', `--watch-added-dir`, '--', 'echo $LERNA_PACKAGE_NAME');
+      await watchAddDirHandler(path.join(testDir, 'packages/package-2/some-folder'));
+
+      expect(calledInPackages()).toEqual(['package-2']);
+      expect(spawn).toHaveBeenCalledTimes(1);
+      expect(spawn).toHaveBeenLastCalledWith('echo $LERNA_PACKAGE_NAME', [], {
+        cwd: path.join(testDir, 'packages/package-2'),
+        pkg: expect.objectContaining({
+          name: 'package-2',
+        }),
+        env: expect.objectContaining({
+          LERNA_PACKAGE_NAME: 'package-2',
+          LERNA_FILE_CHANGES: path.join(testDir, 'packages/package-2/some-folder'),
+          LERNA_FILE_CHANGE_TYPE: 'addDir',
+        }),
+        extendEnv: false,
+        reject: true,
+        shell: true,
+      });
+    });
+
+    it('should execute watch add callback only the given scope', async () => {
+      await lernaWatch(testDir)('--scope', 'package-2', `--watch-removed-file`, '--', 'echo $LERNA_PACKAGE_NAME');
+      await watchUnlinkHandler(path.join(testDir, 'packages/package-2/some-file.ts'));
+
+      expect(calledInPackages()).toEqual(['package-2']);
+      expect(spawn).toHaveBeenCalledTimes(1);
+      expect(spawn).toHaveBeenLastCalledWith('echo $LERNA_PACKAGE_NAME', [], {
+        cwd: path.join(testDir, 'packages/package-2'),
+        pkg: expect.objectContaining({
+          name: 'package-2',
+        }),
+        env: expect.objectContaining({
+          LERNA_PACKAGE_NAME: 'package-2',
+          LERNA_FILE_CHANGES: path.join(testDir, 'packages/package-2/some-file.ts'),
+          LERNA_FILE_CHANGE_TYPE: 'unlink',
+        }),
+        extendEnv: false,
+        reject: true,
+        shell: true,
+      });
+    });
+
+    it('should execute watch add callback only the given scope', async () => {
+      await lernaWatch(testDir)('--scope', 'package-2', `--watch-removed-dir`, '--', 'echo $LERNA_PACKAGE_NAME');
+      await watchUnlinkDirHandler(path.join(testDir, 'packages/package-2/some-folder'));
+
+      expect(calledInPackages()).toEqual(['package-2']);
+      expect(spawn).toHaveBeenCalledTimes(1);
+      expect(spawn).toHaveBeenLastCalledWith('echo $LERNA_PACKAGE_NAME', [], {
+        cwd: path.join(testDir, 'packages/package-2'),
+        pkg: expect.objectContaining({
+          name: 'package-2',
+        }),
+        env: expect.objectContaining({
+          LERNA_PACKAGE_NAME: 'package-2',
+          LERNA_FILE_CHANGES: path.join(testDir, 'packages/package-2/some-folder'),
+          LERNA_FILE_CHANGE_TYPE: 'unlinkDir',
         }),
         extendEnv: false,
         reject: true,
