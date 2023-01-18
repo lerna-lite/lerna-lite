@@ -49,6 +49,18 @@ export class WatchCommand extends Command<WatchCommandOption & FilterOptions> {
 
     this.count = this.filteredPackages.length;
     this.packagePlural = this.count === 1 ? 'package' : 'packages';
+
+    if (
+      (this.options.watchAllEvents && this.options.watchAddedFile) ||
+      (this.options.watchAllEvents && this.options.watchAddedDir) ||
+      (this.options.watchAllEvents && this.options.watchRemovedFile) ||
+      (this.options.watchAllEvents && this.options.watchRemovedDir)
+    ) {
+      throw new ValidationError(
+        'ENOTALLOWED',
+        '--watch-all-events cannot be combined with other --watch-xyz option(s).'
+      );
+    }
   }
 
   async execute() {
@@ -101,6 +113,9 @@ export class WatchCommand extends Command<WatchCommandOption & FilterOptions> {
         .on('error', (error) => this.onError(error));
 
       // add optional event listeners but only when enabled by the user for perf reasons
+      if (this.options.watchAllEvents) {
+        this._watcher.on('all', (event, path) => this.changeEventListener(event, path));
+      }
       if (this.options.watchAddedFile) {
         this._watcher.on('add', (path) => this.changeEventListener('add', path));
       }
@@ -127,9 +142,9 @@ export class WatchCommand extends Command<WatchCommandOption & FilterOptions> {
           this._changes[pkg.name] = { pkg, events: {} as any };
         }
         if (!this._changes[pkg.name].events[eventType]) {
-          this._changes[pkg.name].events[eventType] = [];
+          this._changes[pkg.name].events[eventType] = new Set(); // use Set to avoid duplicate entires
         }
-        this._changes[pkg.name].events[eventType].push(filepath);
+        this._changes[pkg.name].events[eventType].add(filepath);
 
         // once we reached emit change stability threshold, we'll fire events for each packages & events while the file paths array will be merged
         clearTimeout(this._timer as NodeJS.Timeout);
@@ -142,7 +157,7 @@ export class WatchCommand extends Command<WatchCommandOption & FilterOptions> {
             // loop through all possible events (add, addDir, unlink, unlinkDir)
             for (const changedType of Object.keys(this._changes[changedPkgName].events)) {
               const fileDelimiter = this.options?.fileDelimiter ?? FILE_DELIMITER;
-              const changedFiles = this._changes[changedPkgName].events[changedType] || [];
+              const changedFiles = Array.from<string>(this._changes[changedPkgName].events[changedType]);
               const mergedFiles = changedFiles.join(fileDelimiter);
               this.runCommandInPackageCapturing(changedPkg, mergedFiles, changedType);
               this.logger.verbose('watch', 'Handling %d files changed in %j.', changedFiles.length, changedPkg.name);

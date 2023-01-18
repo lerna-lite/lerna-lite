@@ -52,6 +52,11 @@ export default {
             'Glob pattern to define which file pattern to watch, note that this will be appended to the package file path being watched.',
           type: 'string',
         },
+        'watch-all-events': {
+          group: 'Command Options:',
+          describe: `When enabled it will trigger from all possible Chokidar events ('add', 'addDir', 'change', 'unlink', 'unlinkDir'), defaults to false`,
+          type: 'boolean',
+        },
         'watch-added-file': {
           group: 'Command Options:',
           describe: 'When enabled it will also watch when a file is being added.',

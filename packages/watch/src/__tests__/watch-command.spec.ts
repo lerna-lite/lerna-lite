@@ -42,6 +42,15 @@ const watchMock = jest.fn().mockImplementation(() => ({
       case 'error':
         watchErrorHandler = handler;
         break;
+      case 'all':
+      default:
+        watchAddHandler = handler;
+        watchAddDirHandler = handler;
+        watchUnlinkHandler = handler;
+        watchUnlinkDirHandler = handler;
+        watchChangeHandler = handler;
+        watchErrorHandler = handler;
+        break;
     }
     return this;
   }),
@@ -80,6 +89,11 @@ const createArgv = (cwd: string, ...args: string[]) => {
   const parserArgs = args.join(' ');
   const argv = yargParser(parserArgs);
   argv['$0'] = cwd;
+  args.forEach((arg, idx) => {
+    if (arg === '--' && args[idx + 1]) {
+      argv.command = args[idx + 1];
+    }
+  });
   args['logLevel'] = 'silent';
   return argv as any;
 };
@@ -108,7 +122,7 @@ describe('Watch Command', () => {
     });
 
     it('should complain if invoked without command using factory', async () => {
-      const command = factory(createArgv(testDir, '--watch-added-file') as WatchCommandOption);
+      const command = factory(createArgv(testDir, '', '--watch-added-file') as WatchCommandOption);
 
       await expect(command).rejects.toThrow('A command to execute is required');
     });
@@ -117,6 +131,14 @@ describe('Watch Command', () => {
       const command = new WatchCommand(createArgv(testDir) as WatchCommandOption);
 
       await expect(command).rejects.toThrow('A command to execute is required');
+    });
+
+    it('should complain if invoking --watch-all-events with other --watch flags', async () => {
+      const command = new WatchCommand(
+        createArgv(testDir, '--watch-all-events', '--watch-added-file', '--', 'lerna run build') as WatchCommandOption
+      );
+
+      await expect(command).rejects.toThrow('--watch-all-events cannot be combined with other --watch-xyz option(s).');
     });
 
     it('rejects with execution error when calling chokidar on change event', async () => {
@@ -244,7 +266,7 @@ describe('Watch Command', () => {
     });
 
     it('should execute watch add callback only the given scope', async () => {
-      await lernaWatch(testDir)('--scope', 'package-2', `--watch-added-file`, '--', 'echo $LERNA_PACKAGE_NAME');
+      await lernaWatch(testDir)('--scope', 'package-2', '--watch-added-file', '--', 'echo $LERNA_PACKAGE_NAME');
       await watchAddHandler(path.join(testDir, 'packages/package-2/some-file.ts'));
 
       expect(calledInPackages()).toEqual(['package-2']);
@@ -266,7 +288,7 @@ describe('Watch Command', () => {
     });
 
     it('should execute watch add callback only the given scope', async () => {
-      await lernaWatch(testDir)('--scope', 'package-2', `--watch-added-dir`, '--', 'echo $LERNA_PACKAGE_NAME');
+      await lernaWatch(testDir)('--scope', 'package-2', '--watch-added-dir', '--', 'echo $LERNA_PACKAGE_NAME');
       await watchAddDirHandler(path.join(testDir, 'packages/package-2/some-folder'));
 
       expect(calledInPackages()).toEqual(['package-2']);
@@ -288,7 +310,7 @@ describe('Watch Command', () => {
     });
 
     it('should execute watch add callback only the given scope', async () => {
-      await lernaWatch(testDir)('--scope', 'package-2', `--watch-removed-file`, '--', 'echo $LERNA_PACKAGE_NAME');
+      await lernaWatch(testDir)('--scope', 'package-2', '--watch-removed-file', '--', 'echo $LERNA_PACKAGE_NAME');
       await watchUnlinkHandler(path.join(testDir, 'packages/package-2/some-file.ts'));
 
       expect(calledInPackages()).toEqual(['package-2']);
@@ -310,7 +332,7 @@ describe('Watch Command', () => {
     });
 
     it('should execute watch add callback only the given scope', async () => {
-      await lernaWatch(testDir)('--scope', 'package-2', `--watch-removed-dir`, '--', 'echo $LERNA_PACKAGE_NAME');
+      await lernaWatch(testDir)('--scope', 'package-2', '--watch-removed-dir', '--', 'echo $LERNA_PACKAGE_NAME');
       await watchUnlinkDirHandler(path.join(testDir, 'packages/package-2/some-folder'));
 
       expect(calledInPackages()).toEqual(['package-2']);
@@ -324,6 +346,79 @@ describe('Watch Command', () => {
           LERNA_PACKAGE_NAME: 'package-2',
           LERNA_FILE_CHANGES: path.join(testDir, 'packages/package-2/some-folder'),
           LERNA_FILE_CHANGE_TYPE: 'unlinkDir',
+        }),
+        extendEnv: false,
+        reject: true,
+        shell: true,
+      });
+    });
+
+    it('should execute watch add callback only the given scope', async () => {
+      await lernaWatch(testDir)('--scope', 'package-2', '--watch-all-events', '--', 'echo $LERNA_PACKAGE_NAME');
+
+      watchAddHandler('add', path.join(testDir, 'packages/package-2/new-file-1.ts'));
+      watchUnlinkHandler('unlink', path.join(testDir, 'packages/package-2/new-file-1.ts'));
+      watchAddDirHandler('addDir', path.join(testDir, 'packages/package-2/new-folder'));
+      watchUnlinkDirHandler('unlinkDir', path.join(testDir, 'packages/package-2/new-folder'));
+      await watchChangeHandler('change', path.join(testDir, 'packages/package-2/some-file.ts'));
+
+      expect(calledInPackages()).toEqual(['package-2', 'package-2', 'package-2', 'package-2', 'package-2']);
+      expect(spawn).toHaveBeenCalledTimes(5);
+      expect(spawn).toHaveBeenCalledWith('echo $LERNA_PACKAGE_NAME', [], {
+        cwd: path.join(testDir, 'packages/package-2'),
+        pkg: expect.objectContaining({ name: 'package-2' }),
+        env: expect.objectContaining({
+          LERNA_PACKAGE_NAME: 'package-2',
+          LERNA_FILE_CHANGES: path.join(testDir, 'packages/package-2/new-file-1.ts'),
+          LERNA_FILE_CHANGE_TYPE: 'add',
+        }),
+        extendEnv: false,
+        reject: true,
+        shell: true,
+      });
+      expect(spawn).toHaveBeenCalledWith('echo $LERNA_PACKAGE_NAME', [], {
+        cwd: path.join(testDir, 'packages/package-2'),
+        pkg: expect.objectContaining({ name: 'package-2' }),
+        env: expect.objectContaining({
+          LERNA_PACKAGE_NAME: 'package-2',
+          LERNA_FILE_CHANGES: path.join(testDir, 'packages/package-2/new-file-1.ts'),
+          LERNA_FILE_CHANGE_TYPE: 'unlink',
+        }),
+        extendEnv: false,
+        reject: true,
+        shell: true,
+      });
+      expect(spawn).toHaveBeenCalledWith('echo $LERNA_PACKAGE_NAME', [], {
+        cwd: path.join(testDir, 'packages/package-2'),
+        pkg: expect.objectContaining({ name: 'package-2' }),
+        env: expect.objectContaining({
+          LERNA_PACKAGE_NAME: 'package-2',
+          LERNA_FILE_CHANGES: path.join(testDir, 'packages/package-2/new-folder'),
+          LERNA_FILE_CHANGE_TYPE: 'addDir',
+        }),
+        extendEnv: false,
+        reject: true,
+        shell: true,
+      });
+      expect(spawn).toHaveBeenCalledWith('echo $LERNA_PACKAGE_NAME', [], {
+        cwd: path.join(testDir, 'packages/package-2'),
+        pkg: expect.objectContaining({ name: 'package-2' }),
+        env: expect.objectContaining({
+          LERNA_PACKAGE_NAME: 'package-2',
+          LERNA_FILE_CHANGES: path.join(testDir, 'packages/package-2/new-folder'),
+          LERNA_FILE_CHANGE_TYPE: 'unlinkDir',
+        }),
+        extendEnv: false,
+        reject: true,
+        shell: true,
+      });
+      expect(spawn).toHaveBeenLastCalledWith('echo $LERNA_PACKAGE_NAME', [], {
+        cwd: path.join(testDir, 'packages/package-2'),
+        pkg: expect.objectContaining({ name: 'package-2' }),
+        env: expect.objectContaining({
+          LERNA_PACKAGE_NAME: 'package-2',
+          LERNA_FILE_CHANGES: path.join(testDir, 'packages/package-2/some-file.ts'),
+          LERNA_FILE_CHANGE_TYPE: 'change',
         }),
         extendEnv: false,
         reject: true,

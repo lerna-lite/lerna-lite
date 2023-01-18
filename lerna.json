@@ -19,9 +19,7 @@
       "message": "chore(release): publish new version %v"
     },
     "watch": {
-      "glob": "/src/**/*.{ts,tsx}",
-      "watchAddedFile": true,
-      "watchRemovedFile": true
+      "glob": "/src/**/*.{ts,tsx}"
     }
   },
   "ignoreChanges": [

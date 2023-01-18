@@ -438,16 +438,19 @@ export interface WatchCommandOption {
   /** Glob pattern to define which file pattern to watch, note that this will be appended to the package file path being watched. */
   glob?: string;
 
-  /** Defaults to false, when enabled it will fire when a file is being added. */
+  /** Defaults to false, when enabled it will trigger from all possible Chokidar events ('add', 'addDir', 'change', 'unlink', 'unlinkDir'). */
+  watchAllEvents?: boolean;
+
+  /** Defaults to false, when enabled it will trigger when a file is being added. */
   watchAddedFile?: boolean;
 
-  /** Defaults to false, when enabled it will fire when a directory is being added. */
+  /** Defaults to false, when enabled it will trigger when a directory is being added. */
   watchAddedDir?: boolean;
 
-  /** Defaults to false, when enabled it will fire when a file is being removed. */
+  /** Defaults to false, when enabled it will trigger when a file is being removed. */
   watchRemovedFile?: boolean;
 
-  /** Defaults to false, when enabled it will fire when a directory is being removed. */
+  /** Defaults to false, when enabled it will trigger when a directory is being removed. */
   watchRemovedDir?: boolean;
 
   // -- Chokidar options

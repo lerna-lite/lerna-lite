@@ -88,10 +88,12 @@ $ npx -c 'lerna watch -- echo \$LERNA_PACKAGE_NAME \$LERNA_FILE_CHANGES'
     - [`--file-delimiter`](#--file-delimiter)
     - [`--glob`](#--glob)
     - [`--no-bail`](#--no-bail)
-    - [`--watch-added-file`](#--watch-added-file)
-    - [`--watch-removed-file`](#--watch-removed-file)
-    - [`--watch-added-dir`](#--watch-added-dir)
-    - [`--watch-removed-dir`](#--watch-removed-dir)
+    - Watch Events
+      - [`--watch-all-events`](#--watch-all-events)
+      - [`--watch-added-file`](#--watch-added-file)
+      - [`--watch-removed-file`](#--watch-removed-file)
+      - [`--watch-added-dir`](#--watch-added-dir)
+      - [`--watch-removed-dir`](#--watch-removed-dir)
   - [Chokidar Options](#chokidar-options)
     - [`--atomic`](#--atomic)
     - [`--depth`](#--depth)
@@ -124,15 +126,9 @@ $ lerna watch --file-delimiter=\";;\" -- <command>
 
 Provide a Glob pattern to target which files to watch, note that this will be appended to the package file path is provided to Chokidar. For example if our package is located under `/home/user/monorepo/packages/pkg-1` and we define `"glob": "/src/**/*.{ts,tsx}"`, then it will use the following watch pattern in Chokidar `/home/user/monorepo/packages/pkg-1/src/**/*.{ts,tsx}`
 
-```json
-{
-  "$schema": "node_modules/@lerna-lite/cli/schemas/lerna-schema.json",
-  "command": {
-    "watch": {
-      "glob": "/src/**/*.{ts,tsx}"
-    }
-  }
-}
+```sh
+# glob pattern will be appended to package location
+$ lerna watch --glob=\"/src\" -- <command>
 ```
 
 ### `--no-bail`
@@ -145,9 +141,20 @@ $ lerna watch --no-bail -- <command>
 By default, `lerna watch` will exit with an error if _any_ execution returns a non-zero exit code.
 Pass `--no-bail` to disable this behavior, executing in _all_ packages regardless of exit code.
 
+### Watch Events
+The `lerna watch` will only execute the watch callback on file changes, you can enable other events as shown below or use `--watch-all-events` for all type of events.
+
+### `--watch-all-events`
+
+Defaults to `false`, when enabled it will trigger from all possible Chokidar events (`add`, `addDir`, `change`, `unlink`, `unlinkDir`).
+
+```sh
+$ lerna watch --watch-all-events -- <command>
+```
+
 ### `--watch-added-file`
 
-Defaults to `false`, when enabled it will fire when a file is being added.
+Defaults to `false`, when enabled it will trigger when a file is being added.
 
 ```sh
 $ lerna watch --watch-added-file -- <command>
@@ -155,7 +162,7 @@ $ lerna watch --watch-added-file -- <command>
 
 ### `--watch-added-dir`
 
-Defaults to `false`, when enabled it will fire when a directory is being added.
+Defaults to `false`, when enabled it will trigger when a directory is being added.
 
 ```sh
 $ lerna watch --watch-added-dir -- <command>
@@ -163,7 +170,7 @@ $ lerna watch --watch-added-dir -- <command>
 
 ### `--watch-removed-file`
 
-Defaults to `false`, when enabled it will fire when a file is being removed.
+Defaults to `false`, when enabled it will trigger when a file is being removed.
 
 ```sh
 $ lerna watch --watch-removed-file -- <command>
@@ -171,7 +178,7 @@ $ lerna watch --watch-removed-file -- <command>
 
 ### `--watch-removed-dir`
 
-Defaults to `false`, when enabled it will fire when a directory is being removed.
+Defaults to `false`, when enabled it will trigger when a directory is being removed.
 
 ```sh
 $ lerna watch --watch-removed-dir -- <command>

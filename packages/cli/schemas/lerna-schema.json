@@ -756,6 +756,9 @@
             "usePolling": {
               "$ref": "#/$defs/commandOptions/watch/usePolling"
             },
+            "watchAllEvents": {
+              "$ref": "#/$defs/commandOptions/watch/watchAllEvents"
+            },
             "watchAddedFile": {
               "$ref": "#/$defs/commandOptions/watch/watchAddedFile"
             },
@@ -1600,21 +1603,25 @@
           "type": "boolean",
           "description": "Defaults to false, whether to use fs.watchFile (backed by polling), or fs.watch. If polling leads to high CPU utilization, consider setting this to false."
         },
+        "watchAllEvents": {
+          "type": "boolean",
+          "description": "Defaults to false, when enabled it will trigger from all possible Chokidar events ('add', 'addDir', 'change', 'unlink', 'unlinkDir')."
+        },
         "watchAddedFile": {
           "type": "boolean",
-          "description": "Defaults to false, when enabled it will fire when a file is being added."
+          "description": "Defaults to false, when enabled it will trigger when a file is being added."
         },
         "watchAddedDir": {
           "type": "boolean",
-          "description": "Defaults to false, when enabled it will fire when a directory is being added."
+          "description": "Defaults to false, when enabled it will trigger when a directory is being added."
         },
         "watchRemovedFile": {
           "type": "boolean",
-          "description": "Defaults to false, when enabled it will fire when a file is being removed."
+          "description": "Defaults to false, when enabled it will trigger when a file is being removed."
         },
         "watchRemovedDir": {
           "type": "boolean",
-          "description": "Defaults to false, when enabled it will fire when a directory is being removed."
+          "description": "Defaults to false, when enabled it will trigger when a directory is being removed."
         }
       },
       "shared": {

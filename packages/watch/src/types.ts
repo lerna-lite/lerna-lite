@@ -6,7 +6,7 @@ export interface ChangesStructure {
   [pkgName: string]: {
     pkg: Package;
     events: {
-      [eventType in ChokidarEventType]: string[];
+      [eventType in ChokidarEventType]: Set<string>;
     };
   };
 }
