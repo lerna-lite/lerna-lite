@@ -72,12 +72,17 @@ When using `npx`, the `-c` option must be used if also providing variables for s
 $ npx -c 'lerna watch -- echo \$LERNA_PACKAGE_NAME \$LERNA_FILE_CHANGES'
 ```
 
-> **Note** environment variables on Windows platform need to be wrapped in `%` symbol (ie `%LERNA_PACKAGE_NAME%`), you might be able to circumvent that by using, but untested, [cross-env](https://www.npmjs.com/package/cross-env).
+> **Note** environment variables on Windows platform need to be wrapped in `%` symbol (ie `%LERNA_PACKAGE_NAME%`), to be cross-platform you can install [cross-env](https://www.npmjs.com/package/cross-env) to circumvent this problem.
 
 ```sh
 # On Windows
 "scripts": {
   "watch-files": "lerna watch -- echo \"Watch file %LERNA_FILE_CHANGES% %LERNA_FILE_CHANGE_TYPE% in package %LERNA_PACKAGE_NAME%\""
+}
+
+# On Windows with cross-env (cross platform)
+"scripts": {
+  "watch-files": "lerna watch -- cross-env-shell echo \"Watch file $LERNA_FILE_CHANGES $LERNA_FILE_CHANGE_TYPE in package $LERNA_PACKAGE_NAME\""
 }
 ```
 

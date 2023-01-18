@@ -25,6 +25,7 @@ importers:
       '@types/yargs': ^17.0.19
       '@typescript-eslint/eslint-plugin': ^5.48.1
       '@typescript-eslint/parser': ^5.48.1
+      cross-env: ^7.0.3
       eslint: ^8.31.0
       eslint-config-airbnb-base: ^15.0.0
       eslint-config-prettier: ^8.6.0
@@ -76,6 +77,7 @@ importers:
       '@types/yargs': 17.0.19
       '@typescript-eslint/eslint-plugin': 5.48.1_3jon24igvnqaqexgwtxk6nkpse
       '@typescript-eslint/parser': 5.48.1_iukboom6ndih5an6iafl45j2fe
+      cross-env: 7.0.3
       eslint: 8.31.0
       eslint-config-airbnb-base: 15.0.0_hnftvkj7qg3s6bbigj4pr6djxy
       eslint-config-prettier: 8.6.0_eslint@8.31.0
@@ -2811,6 +2813,14 @@ packages:
       parse-json: 5.2.0
       path-type: 4.0.0
     dev: false
+
+  /cross-env/7.0.3:
+    resolution: {integrity: sha512-+/HKd6EgcQCJGh2PSjZuUitQBQynKor4wrFbRg4DtAgS1aWO+gU52xpH7M9ScGgXSYmAVS9bIJ8EzuaGw0oNAw==}
+    engines: {node: '>=10.14', npm: '>=6', yarn: '>=1'}
+    hasBin: true
+    dependencies:
+      cross-spawn: 7.0.3
+    dev: true
 
   /cross-spawn/7.0.3:
     resolution: {integrity: sha512-iRDPJKUPVEND7dHPO8rkbOnPpyDygcDFtWjpeWNCgy8WP2rXcxXL8TskReQl6OrB2G7+UJrags1q15Fudc7G6w==}
