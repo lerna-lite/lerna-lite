@@ -12,6 +12,7 @@
     "access": "public"
   },
   "scripts": {
+    "prebuild": "rimraf dist",
     "build": "tsc --project tsconfig.bundle.json --newLine LF",
     "pack-tarball": "npm pack"
   },
@@ -42,6 +43,7 @@
     "@types/p-map": "^2.0.0",
     "fs-extra": "^11.1.0",
     "globby": "^11.1.0",
+    "rimraf": "^3.0.2",
     "yargs": "^17.6.2",
     "yargs-parser": "^21.1.1"
   }

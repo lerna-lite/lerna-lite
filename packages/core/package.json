@@ -12,6 +12,7 @@
     "/dist"
   ],
   "scripts": {
+    "prebuild": "rimraf dist",
     "build": "tsc --project tsconfig.bundle.json --newLine LF",
     "pack-tarball": "npm pack"
   },
@@ -96,6 +97,7 @@
     "@types/write-json-file": "^3.2.1",
     "@types/write-pkg": "^4.0.0",
     "npm-registry-fetch": "^14.0.3",
+    "rimraf": "^3.0.2",
     "yargs": "^17.6.2",
     "yargs-parser": "^21.1.1"
   },

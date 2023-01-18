@@ -12,6 +12,7 @@
     "access": "public"
   },
   "scripts": {
+    "prebuild": "rimraf dist",
     "build": "tsc --project tsconfig.bundle.json --newLine LF",
     "pack-tarball": "npm pack"
   },
@@ -34,5 +35,8 @@
     "@lerna-lite/core": "workspace:*",
     "chalk": "^4.1.2",
     "columnify": "^1.6.0"
+  },
+  "devDependencies": {
+    "rimraf": "^3.0.2"
   }
 }
