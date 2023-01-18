@@ -30,7 +30,7 @@ npx lerna watch
 $ lerna watch -- <command>
 ```
 
-The values `$LERNA_PACKAGE_NAME`, `$LERNA_FILE_CHANGES` and `$LERNA_FILE_CHANGE_TYPE` will be replaced with the package name, the file that changed, and the Chokidar event that was fired respectively. If multiple file changes are detected, they will all be listed and separated by a whitespace (unless custom file delimiter are provided).
+The values `$LERNA_PACKAGE_NAME`, `$LERNA_FILE_CHANGES` and `$LERNA_FILE_CHANGE_TYPE` will be replaced with the package name, the file that changed, and the [`Chokidar`](https://github.com/paulmillr/chokidar) event that was fired respectively. If multiple file changes are detected, they will all be listed and separated by a whitespace (unless custom file delimiter are provided).
 
 > **Note** When using these environment variables in the shell, you will need to escape the dollar sign with a backslash (`\`). See the [examples](#examples) below.
 
@@ -61,7 +61,10 @@ $ lerna watch --glob=\"/src\" --watch-all-events -- lerna run test --scope=\$LER
 ```
 
 Since you can execute any arbitrary commands, you could use `pnpm run` instead of `lerna run` to run the tests, the glob helps to limit the watch to only spec files
+
+```sh
 $ lerna watch --glob=\"/src/**/*.spec.ts\" -- pnpm -r --filter=\$LERNA_PACKAGE_NAME test
+```
 
 Watch a single package and run the "build" script on it when a file within it changes (but ignore `dist` folder) and also stream the build output:
 
@@ -75,7 +78,7 @@ When using `npx`, the `-c` option must be used if also providing variables for s
 $ npx -c 'lerna watch -- echo \$LERNA_PACKAGE_NAME \$LERNA_FILE_CHANGES'
 ```
 
-> **Note** environment variables on Windows platform need to be wrapped in `%` symbol (ie `%LERNA_PACKAGE_NAME%`), to be cross-platform you can install [cross-env](https://www.npmjs.com/package/cross-env) to circumvent this problem.
+> **Note** environment variables on Windows platform need to be wrapped in `%` symbol (ie `%LERNA_PACKAGE_NAME%`), to be cross-platform you can install [cross-env](https://www.npmjs.com/package/cross-env).
 
 ```sh
 # On Windows
@@ -120,7 +123,7 @@ $ npx -c 'lerna watch -- echo \$LERNA_PACKAGE_NAME \$LERNA_FILE_CHANGES'
       - [`--awf-poll-interval`](#--awf-poll-interval)
       - [`--awf-stability-threshold`](#--awf-stability-threshold)
 
-> **Note** to limit the number of files being watched, it is recommended to use either [`--ignored`](#--ignored) and/or [`--glob`](#--glob) options. For example you probably don't want the `node_modules` and `dist` folders to be watched.
+> **Note** to limit the number of files being watched, it is recommended to use either [`--ignored`](#--ignored) and/or [`--glob`](#--glob) options. For example you probably to avoid watching `node_modules` and `dist` folders.
 
 ### `--emit-changes-threshold`
 Defaults to `100`, time to wait in milliseconds before emitting all the file changes into a single event.
@@ -167,7 +170,7 @@ The `lerna watch`, by default, will only execute the watch callback on **file ch
 
 ### `--watch-all-events`
 
-Defaults to `false`, when enabled it will trigger from all possible Chokidar events (`add`, `addDir`, `change`, `unlink`, `unlinkDir`).
+When enabled it will trigger from all possible Chokidar events (`add`, `addDir`, `change`, `unlink`, `unlinkDir`).
 
 ```sh
 $ lerna watch --watch-all-events -- <command>
@@ -177,7 +180,7 @@ $ lerna watch --watch-all-events -- <command>
 
 ### `--watch-added-file`
 
-Defaults to `false`, when enabled it will trigger when a file is being added.
+When enabled it will trigger when a file is being added (in addition to file `change` which is always enabled).
 
 ```sh
 $ lerna watch --watch-added-file -- <command>
@@ -185,7 +188,7 @@ $ lerna watch --watch-added-file -- <command>
 
 ### `--watch-added-dir`
 
-Defaults to `false`, when enabled it will trigger when a directory is being added.
+When enabled it will trigger when a directory is being added (in addition to file `change` which is always enabled).
 
 ```sh
 $ lerna watch --watch-added-dir -- <command>
@@ -193,7 +196,7 @@ $ lerna watch --watch-added-dir -- <command>
 
 ### `--watch-removed-file`
 
-Defaults to `false`, when enabled it will trigger when a file is being removed.
+When enabled it will trigger when a file is being removed (in addition to file `change` which is always enabled).
 
 ```sh
 $ lerna watch --watch-removed-file -- <command>
@@ -201,14 +204,14 @@ $ lerna watch --watch-removed-file -- <command>
 
 ### `--watch-removed-dir`
 
-Defaults to `false`, when enabled it will trigger when a directory is being removed.
+When enabled it will trigger when a directory is being removed (in addition to file `change` which is always enabled).
 
 ```sh
 $ lerna watch --watch-removed-dir -- <command>
 ```
 
 ## Chokidar Options
-Most Chokidar options are available and exposed (with some exceptions like `cwd`). The option descriptions below are summarized, refer to the Chokidar [options](https://github.com/paulmillr/chokidar#api) website for more detailed informations.
+Most [`Chokidar`](https://github.com/paulmillr/chokidar) options are available and exposed (except `cwd` which is required internally). The option descriptions below are summarized, refer to the Chokidar [options](https://github.com/paulmillr/chokidar#api) website for more detailed informations.
 
 ### `--atomic`
 
@@ -228,7 +231,7 @@ $ lerna watch --depth=99 -- <command>
 
 ### `--disable-globbing`
 
-Defaults to `false`, if set to true then the strings passed to Chokidar `.watch()` and `.add()` are treated as literal path names, even if they look like globs.
+Defaults to `false`, if set to `true` then the strings passed to Chokidar `.watch()` and `.add()` are treated as literal path names, even if they look like globs.
 
 ```sh
 $ lerna watch --disable-globbing -- <command>
@@ -236,7 +239,7 @@ $ lerna watch --disable-globbing -- <command>
 
 ### `--follow-symlinks`
 
-Defaults to `true`, when false, only the symlinks themselves will be watched for changes instead of following the link references and bubbling events through the link's path.
+Defaults to `true`, when `false` is provided, only the symlinks themselves will be watched for changes instead of following the link references and bubbling events through the link's path.
 
 ```sh
 $ lerna watch --follow-symlinks -- <command>
@@ -315,7 +318,7 @@ Lerna will set 3 separate environment variables when running the inner command. 
 - `$LERNA_PACKAGE_NAME` will be replaced with the name of the package that changed.
 - `$LERNA_FILE_CHANGES` will be replaced with the file(s) that changed, separated by whitespace when multiple files are changed.
 - `$LERNA_FILE_CHANGE_TYPE` will be replaced with the Chokidar event emitted.
-   - defaults to `change`, other events could be `add`, `addDir`, `unlink` or `unlinkDir` (when enabled, see [Watch Events](#watch-events))
+   - defaults to file `change` only, other optional events are `add`, `addDir`, `unlink` or `unlinkDir` (when enabled, see [Watch Events](#watch-events))
 
 > **Note** When using these variables in the shell, you will need to escape the `$` with a backslash (`\`). See the examples above.
 
