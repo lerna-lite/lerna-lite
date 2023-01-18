@@ -594,6 +594,7 @@ importers:
       '@lerna-lite/optional-cmd-common': workspace:*
       chokidar: ^3.5.3
       path: ^0.12.7
+      rimraf: ^3.0.2
       yargs-parser: ^21.1.1
     dependencies:
       '@lerna-lite/core': link:../core
@@ -601,6 +602,7 @@ importers:
       chokidar: 3.5.3
       path: 0.12.7
     devDependencies:
+      rimraf: 3.0.2
       yargs-parser: 21.1.1
 
 packages:
