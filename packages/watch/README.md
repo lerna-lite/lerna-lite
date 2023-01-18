@@ -127,10 +127,10 @@ $ lerna watch --emit-changes-threshold=100 -- <command>
 ```
 
 ### `--file-delimiter`
-Defaults to a whitespace, the delimiter that will be used to separate files when mutiple file changes are emitted into a single event emitted by the watch.
+Defaults to a whitespace, the delimiter that will be used to separate files when mutiple file changes are emitted into a single event emitted by the watch via the $LERNA_FILE_CHANGES variable.
 
 ```sh
-# use a different delimiter when multiple files are returned
+# use a different delimiter when multiple files are displayed
 $ lerna watch --file-delimiter=\";;\" -- <command>
 ```
 
@@ -143,6 +143,8 @@ Provide a Glob pattern to target which files to watch, note that this will be ap
 $ lerna watch --glob=\"/src\" -- <command>
 ```
 
+> **Note** make sure to include the `/` prefix since the package path that is appended to, does not include a trailing slash.
+
 ### `--no-bail`
 
 ```sh
@@ -154,7 +156,7 @@ By default, `lerna watch` will exit with an error if _any_ execution returns a n
 Pass `--no-bail` to disable this behavior, executing in _all_ packages regardless of exit code.
 
 ### Watch Events
-The `lerna watch`, by default, will only execute the watch callback on file changes. If you want to watch for other events, like add/remove file, you can look at the possible flags below or even use `--watch-all-events` for all type of events.
+The `lerna watch`, by default, will only execute the watch callback on **file changes only** (via Chokidar `change` event). The reason is simply to have less watches open. If you want to watch for other events, like add/remove file, you can look at the possible flags below or even use `--watch-all-events` for all type of events.
 
 > **Note** When enabling any of these extra watch events above, you might need to know if the file(s) or directory(ies) were added, removed or changed, and for this use case, you can use `$LERNA_FILE_CHANGE_TYPE`. Also note that Chokidar event names to remove a file or directory are `unlink` and `unlinkDir`.
 
@@ -167,6 +169,8 @@ Defaults to `false`, when enabled it will trigger from all possible Chokidar eve
 ```sh
 $ lerna watch --watch-all-events -- <command>
 ```
+
+> **Note** make sure to also take a look at [`--ignored`](#--ignored) and/or [`--glob`](#--glob) options to avoid watching too many files.
 
 ### `--watch-added-file`
 
