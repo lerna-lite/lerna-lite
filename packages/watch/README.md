@@ -8,7 +8,7 @@
 
 Watch for changes within packages and execute commands from the root of the repository, for example run a build when TypeScript file changes.
 
-> **Note** the `watch` command also exists in the original [Lerna](https://github.com/lerna/lerna), however their implementation uses Nx (no surprises) to watch for file changes. Since we want to keep Lerna-Lite well... light (pun intended), we opted to use [`Chokidar`](https://github.com/paulmillr/chokidar), it is used by millions of packages (even VSCode uses it), so chances are that you already have it installed directly or indirectly. Another bonus is that most of Chokidar [options](https://github.com/paulmillr/chokidar#api) are also available with the Lerna-Lite `watch` command, please refer to the [Chokidar options](#chokidar-options) below. Even though Lerna and Lerna-Lite differs in their internal implementations, their usage are quite similar (apart from the Chokidar options), though I'm not sure if they also support file add/remove events.
+> **Note** the `watch` command also exists in the original [Lerna](https://github.com/lerna/lerna), however their implementation uses Nx (no surprises) to watch for file changes. Since we want to keep Lerna-Lite well... light, we opted to use [`Chokidar`](https://github.com/paulmillr/chokidar), it is used by millions of packages (even VSCode uses it), so chances are that you already have it installed directly or indirectly. Another bonus is that most of Chokidar [options](https://github.com/paulmillr/chokidar#api) are also available with the Lerna-Lite `watch` command, please refer to the [Chokidar options](#chokidar-options) below. Even though Lerna and Lerna-Lite differs in their internal implementations, their usage are quite similar (apart from the Chokidar options).
 
 ---
 
@@ -54,6 +54,12 @@ Watch only package "package-4" and its dependencies and run the `test` script fo
 $ lerna watch --scope="package-4" --include-dependencies -- lerna run test --scope=\$LERNA_PACKAGE_NAME
 ```
 
+Watch the `/src` folder for any event (add, remove, ...) of each package using the `--glob` option and run the `test` script for the package that changed:
+
+```sh
+$ lerna watch --glob=\"/src\" --watch-all-events -- lerna run test --scope=\$LERNA_PACKAGE_NAME
+```
+
 Watch a single package and run the "build" script on it when a file within it changes (but ignore `dist` folder) and also stream the build output:
 
 ```sh
@@ -88,7 +94,7 @@ $ npx -c 'lerna watch -- echo \$LERNA_PACKAGE_NAME \$LERNA_FILE_CHANGES'
     - [`--file-delimiter`](#--file-delimiter)
     - [`--glob`](#--glob)
     - [`--no-bail`](#--no-bail)
-    - Watch Events
+    - **Watch Events** (defaults to file `changes` only)
       - [`--watch-all-events`](#--watch-all-events)
       - [`--watch-added-file`](#--watch-added-file)
       - [`--watch-removed-file`](#--watch-removed-file)
@@ -142,7 +148,7 @@ By default, `lerna watch` will exit with an error if _any_ execution returns a n
 Pass `--no-bail` to disable this behavior, executing in _all_ packages regardless of exit code.
 
 ### Watch Events
-The `lerna watch` will only execute the watch callback on file changes, you can enable other events as shown below or use `--watch-all-events` for all type of events.
+The `lerna watch`, by default, will only execute the watch callback on file changes. If you want to watch for other events, like add/remove file, you can look at the possible flags below or even use `--watch-all-events` for all type of events.
 
 ### `--watch-all-events`
 
