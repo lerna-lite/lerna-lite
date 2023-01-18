@@ -4,6 +4,20 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [1.14.0](https://github.com/lerna-lite/lerna-lite/compare/v1.13.0...v1.14.0) (2023-01-18)
+
+### Bug Fixes
+
+* **core:** more detailed error message when version cannot be found ([#431](https://github.com/lerna-lite/lerna-lite/issues/431)) ([7f3dffb](https://github.com/lerna-lite/lerna-lite/commit/7f3dffb23d75630226a5a4474651200eec6f136d)) - by @ghiscoding
+* **deps:** update all non-major dependencies ([#423](https://github.com/lerna-lite/lerna-lite/issues/423)) ([b965cc7](https://github.com/lerna-lite/lerna-lite/commit/b965cc79eca285a39ac420fd1c1e3e7614c9c6e0)) - by @renovate-bot
+* **deps:** update all non-major dependencies ([#425](https://github.com/lerna-lite/lerna-lite/issues/425)) ([3793929](https://github.com/lerna-lite/lerna-lite/commit/3793929488365180a7da3e03686bf42eb2172482)) - by @renovate-bot
+
+### Features
+
+* **publish:** add --summary-file option ([#428](https://github.com/lerna-lite/lerna-lite/issues/428)) ([3de55ef](https://github.com/lerna-lite/lerna-lite/commit/3de55ef1ad7127b4e86f4c2f5accfa009c10d79b)) - by @ghiscoding
+* **version:** support custom command for git tag ([#430](https://github.com/lerna-lite/lerna-lite/issues/430)) ([246ac57](https://github.com/lerna-lite/lerna-lite/commit/246ac57953239771a22901a32bd5be77447b8b43)) - by @ghiscoding
+* **watch:** Add `lerna watch` command ([#441](https://github.com/lerna-lite/lerna-lite/issues/441)) ([a244128](https://github.com/lerna-lite/lerna-lite/commit/a24412848129fcfebd593e3c323d69f8f3172112)) - by @ghiscoding
+
 # [1.13.0](https://github.com/lerna-lite/lerna-lite/compare/v1.12.0...v1.13.0) (2022-11-22)
 
 ### Bug Fixes

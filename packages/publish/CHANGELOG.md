@@ -4,6 +4,18 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [1.14.0](https://github.com/lerna-lite/lerna-lite/compare/v1.13.0...v1.14.0) (2023-01-18)
+
+### Bug Fixes
+
+* **deps:** update all non-major dependencies ([#423](https://github.com/lerna-lite/lerna-lite/issues/423)) ([b965cc7](https://github.com/lerna-lite/lerna-lite/commit/b965cc79eca285a39ac420fd1c1e3e7614c9c6e0)) - by @renovate-bot
+* **deps:** update all non-major dependencies ([#425](https://github.com/lerna-lite/lerna-lite/issues/425)) ([3793929](https://github.com/lerna-lite/lerna-lite/commit/3793929488365180a7da3e03686bf42eb2172482)) - by @renovate-bot
+* **deps:** update dependency @npmcli/arborist to ^6.1.6 ([#440](https://github.com/lerna-lite/lerna-lite/issues/440)) ([51eec47](https://github.com/lerna-lite/lerna-lite/commit/51eec4746aa8413900666e817d73d22da4252995)) - by @renovate[bot]
+
+### Features
+
+* **publish:** add --summary-file option ([#428](https://github.com/lerna-lite/lerna-lite/issues/428)) ([3de55ef](https://github.com/lerna-lite/lerna-lite/commit/3de55ef1ad7127b4e86f4c2f5accfa009c10d79b)) - by @ghiscoding
+
 # [1.13.0](https://github.com/lerna-lite/lerna-lite/compare/v1.12.0...v1.13.0) (2022-11-22)
 
 ### Bug Fixes

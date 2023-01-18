@@ -4,6 +4,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [1.14.0](https://github.com/lerna-lite/lerna-lite/compare/v1.13.0...v1.14.0) (2023-01-18)
+
+### Bug Fixes
+
+* **deps:** update all non-major dependencies ([#423](https://github.com/lerna-lite/lerna-lite/issues/423)) ([b965cc7](https://github.com/lerna-lite/lerna-lite/commit/b965cc79eca285a39ac420fd1c1e3e7614c9c6e0)) - by @renovate-bot
+
+### Features
+
+* **version:** allow passing multiple npmClientArgs as CSV ([#429](https://github.com/lerna-lite/lerna-lite/issues/429)) ([0f32a95](https://github.com/lerna-lite/lerna-lite/commit/0f32a950bd9309fd2aafe193dc4d4d64447af49f)) - by @ghiscoding
+* **version:** support custom command for git tag ([#430](https://github.com/lerna-lite/lerna-lite/issues/430)) ([246ac57](https://github.com/lerna-lite/lerna-lite/commit/246ac57953239771a22901a32bd5be77447b8b43)) - by @ghiscoding
+
 # [1.13.0](https://github.com/lerna-lite/lerna-lite/compare/v1.12.0...v1.13.0) (2022-11-22)
 
 ### Bug Fixes
