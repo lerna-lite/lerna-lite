@@ -401,13 +401,13 @@ importers:
       '@lerna-lite/core': workspace:*
       chalk: ^4.1.2
       columnify: ^1.6.0
-      rimraf: ^4.1.1
+      rimraf: ^3.0.2
     dependencies:
       '@lerna-lite/core': link:../core
       chalk: 4.1.2
       columnify: 1.6.0
     devDependencies:
-      rimraf: 4.1.1
+      rimraf: 3.0.2
 
   packages/optional-cmd-common:
     specifiers:
@@ -6362,12 +6362,6 @@ packages:
     hasBin: true
     dependencies:
       glob: 7.2.3
-
-  /rimraf/4.1.1:
-    resolution: {integrity: sha512-Z4Y81w8atcvaJuJuBB88VpADRH66okZAuEm+Jtaufa+s7rZmIz+Hik2G53kGaNytE7lsfXyWktTmfVz0H9xuDg==}
-    engines: {node: '>=14'}
-    hasBin: true
-    dev: true
 
   /run-async/2.4.1:
     resolution: {integrity: sha512-tvVnVv01b8c1RrA6Ep7JkStj85Guv/YrMcwqYQnwjsAS2cTmmPGBBjAjpCW7RrSodNSoE2/qg9O4bceNvUuDgQ==}
