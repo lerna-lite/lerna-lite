@@ -23,6 +23,7 @@ import {
   ProjectConfig,
   PublishCommandOption,
   VersionCommandOption,
+  WatchCommandOption,
 } from './models';
 import { PackageGraph } from './package-graph/package-graph';
 
@@ -37,6 +38,7 @@ type AvailableCommandOption =
   | ListCommandOption
   | PublishCommandOption
   | VersionCommandOption
+  | WatchCommandOption
   | ProjectConfig;
 
 export class Command<T extends AvailableCommandOption> {

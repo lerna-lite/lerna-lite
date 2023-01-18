@@ -11,6 +11,7 @@ import listCmd from './cli-commands/cli-list-commands';
 import publishCmd from './cli-commands/cli-publish-commands';
 import runCmd from './cli-commands/cli-run-commands';
 import versionCmd from './cli-commands/cli-version-commands';
+import watchCmd from './cli-commands/cli-watch-commands';
 import cli from './lerna-cli';
 
 export function lerna(argv: any[]) {
@@ -29,5 +30,6 @@ export function lerna(argv: any[]) {
     .command(publishCmd as any)
     .command(runCmd as any)
     .command(versionCmd as any)
+    .command(watchCmd as any)
     .parse(argv, context);
 }

@@ -17,6 +17,9 @@
       "changelogIncludeCommitsClientLogin": " - by @%l",
       "changelogHeaderMessage": "## Automate your Workspace Versioning, Publishing & Changelogs with [Lerna-Lite](https://github.com/lerna-lite/lerna-lite) 📦🚀",
       "message": "chore(release): publish new version %v"
+    },
+    "watch": {
+      "glob": "/src/**/*.{ts,tsx}"
     }
   },
   "ignoreChanges": [

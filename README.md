@@ -36,8 +36,13 @@
     - 👷 [`exec`](https://github.com/lerna-lite/lerna-lite/tree/main/packages/exec#readme) - execute shell command in each workspace package
     - 📖 [`list`](https://github.com/lerna-lite/lerna-lite/tree/main/packages/list#readme) - list local packages
     - 🏃 [`run`](https://github.com/lerna-lite/lerna-lite/tree/main/packages/run#readme) - run npm script, in topological order, in each workspace package
+    - 👓 [`watch`](https://github.com/lerna-lite/lerna-lite/tree/main/packages/watch#readme) - watch for changes within packages and execute commands when fired
 
 ---
+
+## 📢 Lerna-Lite has a new [`lerna watch`](https://github.com/lerna-lite/lerna-lite/tree/main/packages/watch#readme) command
+
+Watch for file changes within packages and execute commands from the root of the repository. This solves a common problem for package-based monorepos, which is to trigger rebuilds of packages when their files changed. Head over to the [`lerna watch`](https://github.com/lerna-lite/lerna-lite/tree/main/packages/watch#readme) documentation for more details.
 
 ## 📢 Lerna-Lite now supports pnpm/yarn `workspace:` protocol
 
@@ -103,7 +108,7 @@ Below are the main reasons as to why this fork was created:
     - even if [Nx](https://nx.dev/) can be a nice addition with `lerna run` and [`useNx`](https://github.com/lerna-lite/lerna-lite/tree/main/packages/run#usenx-experimental) (which we did add), it should and **will always be optional** in Lerna-Lite, it's your decision.
 6. Lerna v5+ is also enforcing `useWorkspaces` option to be enabled, but this can have undesired effects (you might want to track only the `packages` folder with Lerna and not other folders like `demo` or `website`). Again, that will not be enforced in Lerna-Lite, in fact it's the opposite, I personally prefer to just use `packages` in `lerna.json` (especially with pnpm)
 7. add few extra features that currently only exists in Lerna-Lite
-   - [`workspace:` protocol support](https://github.com/lerna-lite/lerna-lite/tree/main/packages/version#workspace-protocol) (Lerna added support for that six months later in v6)
+   - [`workspace:` protocol support](https://github.com/lerna-lite/lerna-lite/tree/main/packages/version#workspace-protocol) (Lerna added support for it six months later in v6)
    - [--dry-run](https://github.com/lerna-lite/lerna-lite/tree/main/packages/version#--dry-run) to preview version/publish
 changes and changelogs
    - [lerna version --changelog-header-message "msg"](https://github.com/lerna-lite/lerna-lite/tree/main/packages/version#--changelog-header-message-msg) it could be used to add sponsor badges in changelogs
@@ -128,6 +133,7 @@ changes and changelogs
 - [Exec](https://github.com/lerna-lite/lerna-lite/tree/main/packages/exec#readme) command, when installed, will help you execute shell commands in parallel and in topological order.
 - [List](https://github.com/lerna-lite/lerna-lite/tree/main/packages/list#readme) command, when installed, will list all workspace local packages
 - [Run](https://github.com/lerna-lite/lerna-lite/tree/main/packages/run#readme) command, when installed, will help you run npm script in parallel and in topological order.
+- [Watch](https://github.com/lerna-lite/lerna-lite/tree/main/packages/watch#readme) command, when installed, will watch for changes within packages and execute commands
 
 ### README Badge
 
@@ -204,7 +210,8 @@ Minimum CLI install to get started with Lerna-Lite, that will give you access to
 | 🌓 [diff](https://github.com/lerna-lite/lerna-lite/tree/main/packages/diff#readme)       | `npm i @lerna-lite/diff -D -W`    | git diff all packages since the last release   |
 | 👷 [exec](https://github.com/lerna-lite/lerna-lite/tree/main/packages/exec#readme)       | `npm i @lerna-lite/exec -D -W`    | execute an command in each workspace package       |
 | 📖 [list](https://github.com/lerna-lite/lerna-lite/tree/main/packages/list#readme)       | `npm i @lerna-lite/list -D -W`    | list local packages                            |
-| 🏃 [run](https://github.com/lerna-lite/lerna-lite/tree/main/packages/run#readme)         | `npm i @lerna-lite/run -D -W`     | run npm script in each workspace package           |
+| 🏃 [run](https://github.com/lerna-lite/lerna-lite/tree/main/packages/run#readme)         | `npm i @lerna-lite/run -D -W`      | run npm script in each workspace package           |
+| 👓 [watch](https://github.com/lerna-lite/lerna-lite/tree/main/packages/watch#readme)     | `npm i @lerna-lite/watch -D -W`    | watch for changes within packages and execute commands when fired         |
 
 ### Usage
 
@@ -215,8 +222,6 @@ Add custom NPM Scripts or simply run the commands in a shell with Lerna-Lite CLI
 "scripts": {
   "new-version": "lerna version",
   "new-publish": "lerna publish from-package",
-
-  "exec-echo": "lerna exec echo hello", // optional `exec` command
   "run-tests": "lerna run test",        // optional `run` command
 }
 ```
@@ -232,14 +237,14 @@ npm uninstall lerna -W   # OR yarn remove lerna -W
 npm uninstall -g lerna   # OR yarn global remove lerna
 ```
 
-2. install Lerna-Lite CLI to get access to `init`, `info`, `version` and `publish` commands
+2. install Lerna-Lite CLI to get access to built-in `init`, `info`, `version` and `publish` commands
 
 ```sh
 # Lerna CLI (includes `init`, `info`, `version` and `publish` commands)
 npm install @lerna-lite/cli -D -W
 ```
 
-3. optionally install `changed`, `diff`, `exec`, `list` and/or `run` commands (refer to [installation](#installation) table)
+3. optionally install `changed`, `diff`, `exec`, `list`, `run` and/or `watch` commands (refer to [installation](#installation) table above)
 
 ```sh
 # install any of the optional commands (refer to installation table)
@@ -305,5 +310,6 @@ If you have problems running the lib and your problems are related to Git comman
 | [@lerna-lite/diff](https://github.com/lerna-lite/lerna-lite/tree/main/packages/diff) | [![npm](https://img.shields.io/npm/v/@lerna-lite/diff.svg)](https://www.npmjs.com/package/@lerna-lite/diff) | Diff all packages or a single package since last release| [changelog](https://github.com/lerna-lite/lerna-lite/blob/main/packages/diff/CHANGELOG.md) |
 | [@lerna-lite/list](https://github.com/lerna-lite/lerna-lite/tree/main/packages/list) | [![npm](https://img.shields.io/npm/v/@lerna-lite/list.svg)](https://www.npmjs.com/package/@lerna-lite/list) | List local packages | [changelog](https://github.com/lerna-lite/lerna-lite/blob/main/packages/list/CHANGELOG.md) |
 | [@lerna-lite/listable](https://github.com/lerna-lite/lerna-lite/tree/main/packages/listable) | [![npm](https://img.shields.io/npm/v/@lerna-lite/listable.svg)](https://www.npmjs.com/package/@lerna-lite/listable) | Listable utils used by `list` and `changed` commands (internal use) | [changelog](https://github.com/lerna-lite/lerna-lite/blob/main/packages/listable/CHANGELOG.md) |
-| [@lerna-lite/run](https://github.com/lerna-lite/lerna-lite/tree/main/packages/run) | [![npm](https://img.shields.io/npm/v/@lerna-lite/run.svg)](https://www.npmjs.com/package/@lerna-lite/run) | Run npm scripts in current workspace | [changelog](https://github.com/lerna-lite/lerna-lite/blob/main/packages/run/CHANGELOG.md) |
 | [@lerna-lite/optional-cmd-common](https://github.com/lerna-lite/lerna-lite/tree/main/packages/optional-cmd-common) | [![npm](https://img.shields.io/npm/v/@lerna-lite/optional-cmd-common.svg)](https://www.npmjs.com/package/@lerna-lite/optional-cmd-common) | Lerna-Lite common utils for optional commands Exec/List/Run (internal use) | [changelog](https://github.com/lerna-lite/lerna-lite/blob/main/packages/optional-cmd-common/CHANGELOG.md) |
+| [@lerna-lite/run](https://github.com/lerna-lite/lerna-lite/tree/main/packages/run) | [![npm](https://img.shields.io/npm/v/@lerna-lite/run.svg)](https://www.npmjs.com/package/@lerna-lite/run) | Run npm scripts in current workspace | [changelog](https://github.com/lerna-lite/lerna-lite/blob/main/packages/run/CHANGELOG.md) |
+| [@lerna-lite/watch](https://github.com/lerna-lite/lerna-lite/tree/main/packages/watch) | [![npm](https://img.shields.io/npm/v/@lerna-lite/watch.svg)](https://www.npmjs.com/package/@lerna-lite/watch) | Watch for changes within packages and execute commands | [changelog](https://github.com/lerna-lite/lerna-lite/blob/main/packages/watch/CHANGELOG.md) |
