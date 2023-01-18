@@ -86,8 +86,6 @@ $ npx -c 'lerna watch -- echo \$LERNA_PACKAGE_NAME \$LERNA_FILE_CHANGES'
 }
 ```
 
-> **Note** to limit the number of files being watched, it is recommended to use either [`--ignored`](#--ignored) and/or [`--glob`](#--glob) options. For example you probably don't want the `node_modules` and `dist` folders to be watched.
-
 ## Options
 
 `lerna watch` accepts all [filter flags](https://www.npmjs.com/package/@lerna/filter-options). Filter flags can be used to select specific packages to watch. See the [examples](#examples) above.
@@ -118,6 +116,8 @@ $ npx -c 'lerna watch -- echo \$LERNA_PACKAGE_NAME \$LERNA_FILE_CHANGES'
     - `awaitWriteFinish` (these options will be prefixed with `awf`)
       - [`--awf-poll-interval`](#--awf-poll-interval)
       - [`--awf-stability-threshold`](#--awf-stability-threshold)
+
+> **Note** to limit the number of files being watched, it is recommended to use either [`--ignored`](#--ignored) and/or [`--glob`](#--glob) options. For example you probably don't want the `node_modules` and `dist` folders to be watched.
 
 ### `--emit-changes-threshold`
 Defaults to `100`, time to wait in milliseconds before emitting all the file changes into a single event.
@@ -308,7 +308,7 @@ Lerna will set 3 separate environment variables when running the inner command. 
 - `$LERNA_PACKAGE_NAME` will be replaced with the name of the package that changed.
 - `$LERNA_FILE_CHANGES` will be replaced with the file(s) that changed, separated by whitespace when multiple files are changed.
 - `$LERNA_FILE_CHANGE_TYPE` will be replaced with the Chokidar event emitted.
-   - defaults to `change`, other events could be `add`, `addDir`, `unlink` or `unlinkDir` (when enabled)
+   - defaults to `change`, other events could be `add`, `addDir`, `unlink` or `unlinkDir` (when enabled, see [Watch Events](#watch-events))
 
 > **Note** When using these variables in the shell, you will need to escape the `$` with a backslash (`\`). See the examples above.
 
