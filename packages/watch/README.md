@@ -6,7 +6,7 @@
 
 ## (`lerna watch`) - Watch command [optional] 👓
 
-Watch for changes within packages and execute commands from the root of the repository, for example run a build when TypeScript file changes.
+Watch for changes within packages and execute commands from the root of the repository, for example trigger rebuilds of packages when their files changed.
 
 > **Note** the `watch` command also exists in the original [Lerna](https://github.com/lerna/lerna), however their implementation uses Nx (no surprises) to watch for file changes. Since we want to keep Lerna-Lite well... light, we opted to use [`Chokidar`](https://github.com/paulmillr/chokidar), it is used by millions of packages (even VSCode uses it), so chances are that you already have it installed directly or indirectly. Another bonus is that most of Chokidar [options](https://github.com/paulmillr/chokidar#api) are also available with the Lerna-Lite `watch` command, please refer to the [Chokidar options](#chokidar-options) below. Even though Lerna and Lerna-Lite differs in their internal implementations, their usage are quite similar (apart from the Chokidar options).
 
@@ -94,7 +94,7 @@ $ npx -c 'lerna watch -- echo \$LERNA_PACKAGE_NAME \$LERNA_FILE_CHANGES'
     - [`--file-delimiter`](#--file-delimiter)
     - [`--glob`](#--glob)
     - [`--no-bail`](#--no-bail)
-    - **Watch Events** (defaults to file `changes` only)
+    - [Watch Events](#watch-events) (defaults to file `change` only)
       - [`--watch-all-events`](#--watch-all-events)
       - [`--watch-added-file`](#--watch-added-file)
       - [`--watch-removed-file`](#--watch-removed-file)
@@ -125,6 +125,7 @@ $ lerna watch --emit-changes-threshold=100 -- <command>
 Defaults to a whitespace, the delimiter that will be used to separate files when mutiple file changes are emitted into a single event emitted by the watch.
 
 ```sh
+# use a different delimiter when multiple files are returned
 $ lerna watch --file-delimiter=\";;\" -- <command>
 ```
 
@@ -149,6 +150,10 @@ Pass `--no-bail` to disable this behavior, executing in _all_ packages regardles
 
 ### Watch Events
 The `lerna watch`, by default, will only execute the watch callback on file changes. If you want to watch for other events, like add/remove file, you can look at the possible flags below or even use `--watch-all-events` for all type of events.
+
+> **Note** When enabling any of these extra watch events above, you might need to know if the file(s) or directory(ies) were added, removed or changed, and for this use case, you can use `$LERNA_FILE_CHANGE_TYPE`. Also note that Chokidar event names to remove a file or directory are `unlink` and `unlinkDir`.
+
+> **Note** an important thing to be aware with Chokidar is that `add`/`addDir` events are also emitted for matching paths while instantiating the watching as chokidar discovers these file paths (before the `ready` event). In other words, when this option is disabled (not recommended) it will fire an event for each file/directory that are discovered when initializing the watch, which why we change the default of [`--ignore-initial`](#--ignore-initial) to be enabled by default to avoid sending a ton of changes.
 
 ### `--watch-all-events`
 
@@ -190,10 +195,6 @@ Defaults to `false`, when enabled it will trigger when a directory is being remo
 $ lerna watch --watch-removed-dir -- <command>
 ```
 
-> **Note** When enabling any of these extra watch events above, you might need to know if the file(s) or directory(ies) were added, removed or changed, and for this use case, you can use `$LERNA_FILE_CHANGE_TYPE`. Also note that Chokidar event names to remove a file or directory are `unlink` and `unlinkDir`.
-
-> **Note** an important thing to be aware with Chokidar is that `add`/`addDir` events are also emitted for matching paths while instantiating the watching as chokidar discovers these file paths (before the `ready` event). In other words, when this option is disabled (not recommended) it will fire an event for each file/directory that are discovered when initializing the watch, which why we change the default of [`--ignore-initial`](#--ignore-initial) to be enabled by default to avoid sending a ton of changes.
-
 ## Chokidar Options
 Most Chokidar options are available and exposed (with some exceptions like `cwd`). The option descriptions below are summarized, refer to the Chokidar [options](https://github.com/paulmillr/chokidar#api) website for more detailed informations.
 
@@ -234,7 +235,11 @@ $ lerna watch --follow-symlinks -- <command>
 Defines files/paths to be ignored ([anymatch](https://github.com/micromatch/anymatch)-compatible definition).
 
 ```sh
+# ignore dist folder
 $ lerna watch --ignored=\"**/dist\" -- <command>
+
+# or ignore dot file
+$ lerna watch --ignored=\"/(^|[/\\])\../\" -- <command>
 ```
 
 ### `--ignore-initial`
@@ -298,7 +303,7 @@ Lerna will set 3 separate environment variables when running the inner command. 
 - `$LERNA_PACKAGE_NAME` will be replaced with the name of the package that changed.
 - `$LERNA_FILE_CHANGES` will be replaced with the file(s) that changed, separated by whitespace when multiple files are changed.
 - `$LERNA_FILE_CHANGE_TYPE` will be replaced with the Chokidar event emitted.
-   - defaults to `change`, other events could be (when enabled) `add`, `addDir`, `unlink` or `unlinkDir`
+   - defaults to `change`, other events could be `add`, `addDir`, `unlink` or `unlinkDir` (when enabled)
 
 > **Note** When using these variables in the shell, you will need to escape the `$` with a backslash (`\`). See the examples above.
 
