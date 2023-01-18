@@ -60,6 +60,9 @@ Watch the `/src` folder for any event (add, remove, ...) of each package using t
 $ lerna watch --glob=\"/src\" --watch-all-events -- lerna run test --scope=\$LERNA_PACKAGE_NAME
 ```
 
+Since you can execute any arbitrary commands, you could use `pnpm run` instead of `lerna run` to run the tests, the glob helps to limit the watch to only spec files
+$ lerna watch --glob=\"/src/**/*.spec.ts\" -- pnpm -r --filter=\$LERNA_PACKAGE_NAME test
+
 Watch a single package and run the "build" script on it when a file within it changes (but ignore `dist` folder) and also stream the build output:
 
 ```sh
