@@ -138,10 +138,14 @@ export class WatchCommand extends Command<WatchCommandOption & FilterOptions> {
           // could include multiple packages to loop through and that will execute multiple events (1 for each package and 1 for each event)
           for (const changedPkgName of Object.keys(this._changes)) {
             const changedPkg = this._changes[changedPkgName].pkg;
+
+            // loop through all possible events (add, addDir, unlink, unlinkDir)
             for (const changedType of Object.keys(this._changes[changedPkgName].events)) {
               const fileDelimiter = this.options?.fileDelimiter ?? FILE_DELIMITER;
-              const mergedFiles = this._changes[changedPkgName].events![changedType].join(fileDelimiter);
+              const changedFiles = this._changes[changedPkgName].events[changedType] || [];
+              const mergedFiles = changedFiles.join(fileDelimiter);
               this.runCommandInPackageCapturing(changedPkg, mergedFiles, changedType);
+              this.logger.verbose('watch', 'Handling %d files changed in %j.', changedFiles.length, changedPkg.name);
               resolve({ changedPkg, mergedFiles, changedType });
               delete this._changes[changedPkgName].events[changedType];
             }
