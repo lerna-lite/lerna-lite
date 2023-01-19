@@ -3,7 +3,7 @@ import { FilterOptions, getFilteredPackages } from '@lerna-lite/optional-cmd-com
 import chokidar from 'chokidar';
 import path from 'path';
 
-import { CHOKIDAR_AVAILABLE_OPTIONS, FILE_DELIMITER, MERGE_STABILITY_THRESHOLD } from './constants';
+import { CHOKIDAR_AVAILABLE_OPTIONS, EMIT_CHANGES_DELAY, FILE_DELIMITER } from './constants';
 import { ChangesStructure, ChokidarEventType } from './types';
 
 export function factory(argv: WatchCommandOption) {
@@ -74,7 +74,12 @@ export class WatchCommand extends Command<WatchCommandOption & FilterOptions> {
 
     try {
       const packageLocations: string[] = [];
-      const chokidarOptions: chokidar.WatchOptions = { ignoreInitial: true, persistent: true, ...this.options };
+      const chokidarOptions: chokidar.WatchOptions = {
+        ignoreInitial: true,
+        ignorePermissionErrors: true,
+        persistent: true,
+        ...this.options,
+      };
 
       this.filteredPackages.forEach((pkg) => {
         // does user have a glob defined, if so append it to the pkg location. Glob example for TS files: /**/*.ts
@@ -147,7 +152,8 @@ export class WatchCommand extends Command<WatchCommandOption & FilterOptions> {
         this._changes[pkg.name].events[eventType].add(filepath);
 
         // once we reached emit change stability threshold, we'll fire events for each packages & events while the file paths array will be merged
-        clearTimeout(this._timer as NodeJS.Timeout);
+        if (this._timer) clearTimeout(this._timer as NodeJS.Timeout);
+
         this._timer = setTimeout(() => {
           // since we waited a certain time, destructure the changes object
           // could include multiple packages to loop through and that will execute multiple events (1 for each package and 1 for each event)
@@ -167,7 +173,7 @@ export class WatchCommand extends Command<WatchCommandOption & FilterOptions> {
             delete this._changes[changedPkgName];
           }
           this._changes = {};
-        }, this.options.emitChangesThreshold ?? MERGE_STABILITY_THRESHOLD);
+        }, this.options.emitChangesDelay ?? EMIT_CHANGES_DELAY);
       }
     });
   }

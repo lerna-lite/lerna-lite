@@ -34,7 +34,7 @@ export default {
           hidden: true,
           type: 'boolean',
         },
-        'emit-changes-threshold': {
+        'emit-changes-delay': {
           group: 'Command Options:',
           describe:
             'Time to wait in milliseconds before emitting all the file changes into a single event, defaults to 100',
@@ -125,7 +125,7 @@ export default {
         },
         'ignore-permission-errors': {
           group: 'Command Options:',
-          describe: `Indicates whether to watch files that don't have read permissions if possible, defaults to false`,
+          describe: `Indicates whether to watch files that don't have read permissions if possible, defaults to true`,
           type: 'boolean',
         },
         interval: {

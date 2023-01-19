@@ -19,4 +19,4 @@ export const CHOKIDAR_AVAILABLE_OPTIONS = [
 export const FILE_DELIMITER = ' ';
 
 // threshold to hold before firing a single event with merged files
-export const MERGE_STABILITY_THRESHOLD = 100;
+export const EMIT_CHANGES_DELAY = 100;

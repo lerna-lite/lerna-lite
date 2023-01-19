@@ -169,7 +169,7 @@ describe('Watch Command', () => {
           path.join(testDir, 'packages/package-1', '/src/**/*.{ts,tsx}'),
           path.join(testDir, 'packages/package-2', '/src/**/*.{ts,tsx}'),
         ],
-        { ignoreInitial: true, persistent: true }
+        { ignoreInitial: true, ignorePermissionErrors: true, persistent: true }
       );
     });
 
@@ -178,7 +178,7 @@ describe('Watch Command', () => {
 
       expect(watchMock).toHaveBeenCalledWith(
         [path.join(testDir, 'packages/package-1'), path.join(testDir, 'packages/package-2')],
-        { ignoreInitial: true, persistent: true, awaitWriteFinish: { pollInterval: 500 } }
+        { ignoreInitial: true, ignorePermissionErrors: true, persistent: true, awaitWriteFinish: { pollInterval: 500 } }
       );
     });
 
@@ -187,7 +187,12 @@ describe('Watch Command', () => {
 
       expect(watchMock).toHaveBeenCalledWith(
         [path.join(testDir, 'packages/package-1'), path.join(testDir, 'packages/package-2')],
-        { ignoreInitial: true, persistent: true, awaitWriteFinish: { stabilityThreshold: 275 } }
+        {
+          ignoreInitial: true,
+          ignorePermissionErrors: true,
+          persistent: true,
+          awaitWriteFinish: { stabilityThreshold: 275 },
+        }
       );
     });
 
