@@ -293,7 +293,17 @@ $ lerna watch --use-polling -- <command>
 
 ### The `awaitWriteFinish` option
 
-The `awaitWriteFinish` option can be a complex object, this is however difficult to in the CLI. So in order to make them accessible to the CLI, we prefixed them with "awf", the system will internally replace the option(s) with the appropriate Chokidar complex object. For example, `awfPollInterval: 200` will be transformed to `{ awaitWriteFinish: { pollInterval: 200 }}`
+The `awaitWriteFinish` option can be boolean or a complex object
+
+> **Note** Providing a complex object is however difficult to pass to a CLI. So in order to make them accessible to the CLI, we prefixed them with "awf", the system will internally replace the option(s) with the appropriate Chokidar complex object. For example, `awfPollInterval: 200` will be transformed to `{ awaitWriteFinish: { pollInterval: 200 }}`
+
+### `--await-write-finish`
+#### boolean value
+Defaults to `false`, by default the add event will fire when a file first appears on disk, before the entire file has been written. Setting `awaitWriteFinish` to true (or a truthy value) will poll file size, holding its `add` and `change` events until the size does not change for a configurable amount of time.
+
+```sh
+$ lerna watch --await-write-finish -- <command>
+```
 
 ### `--awf-poll-interval`
 

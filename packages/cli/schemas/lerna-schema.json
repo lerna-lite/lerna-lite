@@ -726,6 +726,9 @@
             "bail": {
               "$ref": "#/$defs/commandOptions/shared/bail"
             },
+            "awaitWriteFinish": {
+              "$ref": "#/$defs/commandOptions/watch/awaitWriteFinish"
+            },
             "awfStabilityThreshold": {
               "$ref": "#/$defs/commandOptions/watch/awfStabilityThreshold"
             },
@@ -1558,6 +1561,10 @@
         "glob": {
           "type": "string",
           "description": "Glob pattern to define which file pattern to watch, note that this will be appended to the package file path being watched."
+        },
+        "awaitWriteFinish": {
+          "type": "boolean",
+          "description": "Defaults to false, by default the add event will fire when a file first appears on disk, before the entire file has been written. Setting awaitWriteFinish to true (or a truthy value) will poll file size, holding its add and change events until the size does not change for a configurable amount of time."
         },
         "awfPollInterval": {
           "type": "number",
