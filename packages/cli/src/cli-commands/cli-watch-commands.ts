@@ -79,6 +79,11 @@ export default {
         },
 
         // -- Chokidar options
+        'await-write-finish': {
+          group: 'Command Options:',
+          describe: `Defaults to false, by default the add event will fire when a file first appears on disk, before the entire file has been written. Setting awaitWriteFinish to true (or a truthy value) will poll file size, holding its add and change events until the size does not change for a configurable amount of time.`,
+          type: 'boolean',
+        },
         'awf-stability-threshold': {
           group: 'Command Options:',
           describe:

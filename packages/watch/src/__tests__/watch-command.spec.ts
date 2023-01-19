@@ -185,6 +185,15 @@ describe('Watch Command', () => {
       );
     });
 
+    it('should be able to take --await-write-finish options as a boolean', async () => {
+      await lernaWatch(testDir)('--await-write-finish', '--', 'lerna run build');
+
+      expect(watchMock).toHaveBeenCalledWith(
+        [path.join(testDir, 'packages/package-1'), path.join(testDir, 'packages/package-2')],
+        { ignoreInitial: true, ignorePermissionErrors: true, persistent: true, awaitWriteFinish: true }
+      );
+    });
+
     it('should take options prefixed with "awf" (awfPollInterval) and transform them into a valid chokidar "awaitWriteFinish" option', async () => {
       await lernaWatch(testDir)('--awf-poll-interval', '500', '--', 'lerna run build');
 
