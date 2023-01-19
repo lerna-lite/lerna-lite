@@ -19,10 +19,10 @@ importers:
       '@lerna-lite/version': workspace:*
       '@lerna-lite/watch': workspace:*
       '@lerna-test/helpers': link:helpers
-      '@types/jest': ^29.2.5
+      '@types/jest': ^29.2.6
       '@types/node': ^18.11.18
       '@types/npmlog': ^4.1.4
-      '@types/yargs': ^17.0.19
+      '@types/yargs': ^17.0.20
       '@typescript-eslint/eslint-plugin': ^5.48.2
       '@typescript-eslint/parser': ^5.48.2
       cross-env: ^7.0.3
@@ -71,10 +71,10 @@ importers:
       '@lerna-lite/version': link:packages/version
       '@lerna-lite/watch': link:packages/watch
       '@lerna-test/helpers': link:helpers
-      '@types/jest': 29.2.5
+      '@types/jest': 29.2.6
       '@types/node': 18.11.18
       '@types/npmlog': 4.1.4
-      '@types/yargs': 17.0.19
+      '@types/yargs': 17.0.20
       '@typescript-eslint/eslint-plugin': 5.48.2_caon6io6stgpr7lz2rtbhekxqy
       '@typescript-eslint/parser': 5.48.2_7uibuqfxkfaozanbtbziikiqje
       cross-env: 7.0.3
@@ -1259,7 +1259,7 @@ packages:
       '@types/istanbul-lib-coverage': 2.0.4
       '@types/istanbul-reports': 3.0.1
       '@types/node': 18.11.18
-      '@types/yargs': 17.0.19
+      '@types/yargs': 17.0.20
       chalk: 4.1.2
     dev: true
 
@@ -1798,8 +1798,8 @@ packages:
       '@types/istanbul-lib-report': 3.0.0
     dev: true
 
-  /@types/jest/29.2.5:
-    resolution: {integrity: sha512-H2cSxkKgVmqNHXP7TC2L/WUorrZu8ZigyRywfVzv6EyBlxj39n4C00hjXYQWsbwqgElaj/CiAeSRmk5GoaKTgw==}
+  /@types/jest/29.2.6:
+    resolution: {integrity: sha512-XEUC/Tgw3uMh6Ho8GkUtQ2lPhY5Fmgyp3TdlkTJs1W9VgNxs+Ow/x3Elh8lHQKqCbZL0AubQuqWjHVT033Hhrw==}
     dependencies:
       expect: 29.3.1
       pretty-format: 29.3.1
@@ -1920,8 +1920,8 @@ packages:
     resolution: {integrity: sha512-iO9ZQHkZxHn4mSakYV0vFHAVDyEOIJQrV2uZ06HxEPcx+mt8swXoZHIbaaJ2crJYFfErySgktuTZ3BeLz+XmFA==}
     dev: true
 
-  /@types/yargs/17.0.19:
-    resolution: {integrity: sha512-cAx3qamwaYX9R0fzOIZAlFpo4A+1uBVCxqpKz9D26uTF4srRXaGTTsikQmaotCtNdbhzyUH7ft6p9ktz9s6UNQ==}
+  /@types/yargs/17.0.20:
+    resolution: {integrity: sha512-eknWrTHofQuPk2iuqDm1waA7V6xPlbgBoaaXEgYkClhLOnB0TtbW+srJaOToAgawPxPlHQzwypFA2bhZaUGP5A==}
     dependencies:
       '@types/yargs-parser': 21.0.0
     dev: true
