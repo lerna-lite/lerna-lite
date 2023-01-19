@@ -8,7 +8,7 @@
 
 Watch for changes within packages and execute commands from the root of the repository, for example trigger rebuilds of packages when their files changed.
 
-> **Note** the `watch` command also exists in the original [Lerna](https://github.com/lerna/lerna), however their implementation uses Nx (no surprises) to watch for file changes. Since we want to keep Lerna-Lite well... light, we opted to use [`Chokidar`](https://github.com/paulmillr/chokidar), it is used by millions of packages (even VSCode uses it), so chances are that you already have it installed directly or indirectly. Another bonus is that most of Chokidar [options](https://github.com/paulmillr/chokidar#api) are also available with the Lerna-Lite `watch` command, please refer to the [Chokidar options](#chokidar-options) below. Even though Lerna and Lerna-Lite differs in their internal implementations, their usage are quite similar (apart from the Chokidar options).
+> **Note** the `watch` command also exists in the original [Lerna](https://github.com/lerna/lerna), however their implementation uses Nx (no surprises) to watch for file changes. Since we want to keep Lerna-Lite well... light, we opted to use [`Chokidar`](https://github.com/paulmillr/chokidar), it is used by millions of packages (even ViteJS uses it), so chances are that you already have it installed directly or indirectly. Another bonus is that most of Chokidar [options](https://github.com/paulmillr/chokidar#api) are also available with the Lerna-Lite `watch` command, please refer to the [Chokidar options](#chokidar-options) below. Even though Lerna and Lerna-Lite differs in their internal implementations, their usage are quite similar (apart from the Chokidar options).
 
 ---
 
@@ -57,13 +57,13 @@ $ lerna watch --scope="package-4" --include-dependencies -- lerna run test --sco
 Watch the `/src` folder for any event (add, remove, ...) of each package using the `--glob` option and run the `test` script for the package that changed:
 
 ```sh
-$ lerna watch --glob=\"/src\" --watch-all-events -- lerna run test --scope=\$LERNA_PACKAGE_NAME
+$ lerna watch --glob=\"src\" --watch-all-events -- lerna run test --scope=\$LERNA_PACKAGE_NAME
 ```
 
 Since you can execute any arbitrary commands, you could use `pnpm run` instead of `lerna run` to run the tests, the glob helps to limit the watch to only spec files
 
 ```sh
-$ lerna watch --glob=\"/src/**/*.spec.ts\" -- pnpm -r --filter=\$LERNA_PACKAGE_NAME test
+$ lerna watch --glob=\"src/**/*.spec.ts\" -- pnpm -r --filter=\$LERNA_PACKAGE_NAME test
 ```
 
 Watch a single package and run the "build" script on it when a file within it changes (but ignore `dist` folder) and also stream the build output:
@@ -99,7 +99,7 @@ $ npx -c 'lerna watch -- echo \$LERNA_PACKAGE_NAME \$LERNA_FILE_CHANGES'
 - [`@lerna/watch`](#lernawatch)
   - [Usage](#usage)
   - [Options](#options)
-    - [`--emit-changes-threshold`](#--emit-changes-threshold)
+    - [`--emit-changes-delay`](#--emit-changes-delay)
     - [`--file-delimiter`](#--file-delimiter)
     - [`--glob`](#--glob)
     - [`--no-bail`](#--no-bail)
@@ -123,13 +123,13 @@ $ npx -c 'lerna watch -- echo \$LERNA_PACKAGE_NAME \$LERNA_FILE_CHANGES'
       - [`--awf-poll-interval`](#--awf-poll-interval)
       - [`--awf-stability-threshold`](#--awf-stability-threshold)
 
-> **Note** to limit the number of files being watched, it is recommended to use either [`--ignored`](#--ignored) and/or [`--glob`](#--glob) options. For example you probably to avoid watching `node_modules` and `dist` folders.
+> **Note** to limit the number of files being watched, it is recommended to use either [`--ignored`](#--ignored) and/or [`--glob`](#--glob) options. For example you probably want to avoid watching `node_modules` and `dist` folders.
 
-### `--emit-changes-threshold`
-Defaults to `100`, time to wait in milliseconds before emitting all the file changes into a single event.
+### `--emit-changes-delay`
+Defaults to `100`, time to wait in milliseconds before collecting all file changes and then emitting them into a single watch event. The reason for this option to exist is basically to provide enough time for the lerna watch to collect all prior Chokidar events and merge them into a single watch change event (chokidar has no grouping feature and emits an event for every single file change) and we want to avoid emitting too many events (especially for a watch that triggers a rebuild). This option will come into play when you make a code change that triggers hundred of file changes, you might need to adjust the delay by increasing its value (which is to trigger a large set of changes at the same time, ie variable rename in hundreds of different files).
 
 ```sh
-$ lerna watch --emit-changes-threshold=100 -- <command>
+$ lerna watch --emit-changes-delay=100 -- <command>
 ```
 
 ### `--file-delimiter`
@@ -145,11 +145,9 @@ $ lerna watch --file-delimiter=\";;\" -- <command>
 Provide a Glob pattern to target which files to watch, note that this will be appended to the package file path is provided to Chokidar. For example if our package is located under `/home/user/monorepo/packages/pkg-1` and we define `"glob": "/src/**/*.{ts,tsx}"`, then it will use the following watch pattern in Chokidar `/home/user/monorepo/packages/pkg-1/src/**/*.{ts,tsx}`
 
 ```sh
-# glob pattern will be appended to package location
-$ lerna watch --glob=\"/src\" -- <command>
+# glob pattern will be appended to package path to Chokidar files to watch
+$ lerna watch --glob=\"src\**\*.ts" -- <command>
 ```
-
-> **Note** make sure to include the `/` prefix since the package path that is appended to, does not include a trailing slash.
 
 ### `--no-bail`
 
@@ -237,6 +235,8 @@ Defaults to `false`, if set to `true` then the strings passed to Chokidar `.watc
 $ lerna watch --disable-globbing -- <command>
 ```
 
+> **Note** when this flag is enabled, it would cancel the [`--glob`](#--glob) option.
+
 ### `--follow-symlinks`
 
 Defaults to `true`, when `false` is provided, only the symlinks themselves will be watched for changes instead of following the link references and bubbling events through the link's path.
@@ -269,7 +269,7 @@ $ lerna watch --ignore-initial -- <command>
 
 ### `--ignore-permission-errors`
 
-Defaults to `false`, indicates whether to watch files that don't have read permissions if possible.
+Defaults to `true`, indicates whether to watch files that don't have read permissions if possible.
 
 ```sh
 $ lerna watch --ignore-permission-errors -- <command>

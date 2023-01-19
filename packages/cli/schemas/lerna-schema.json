@@ -1547,7 +1547,7 @@
         }
       },
       "watch": {
-        "emitChangesThreshold": {
+        "emitChangesDelay": {
           "type": "number",
           "description": "Defaults to 100, time to wait in milliseconds before emitting all the file changes into a single event."
         },
@@ -1593,7 +1593,7 @@
         },
         "ignorePermissionErrors": {
           "type": "boolean",
-          "description": "Defaults to false, indicates whether to watch files that don't have read permissions if possible"
+          "description": "Defaults to true, indicates whether to watch files that don't have read permissions if possible"
         },
         "interval": {
           "type": "number",

@@ -430,7 +430,7 @@ export interface WatchCommandOption {
    * This provide enough time for the system to collect all Chokidar events (1x per file changes)
    * and merge them into a single Lerna watch change event to be emitted (Lerna will join all file paths into a CSV string separated by whitespace by default).
    */
-  emitChangesThreshold?: number;
+  emitChangesDelay?: number;
 
   /** Defaults to whitespace, the delimiter that will be used to separate files when mutiple file changes are emitted by the watch */
   fileDelimiter?: string;
@@ -483,7 +483,7 @@ export interface WatchCommandOption {
   /** Defaults to true, if set to false then add/addDir events are also emitted for matching paths while instantiating the watching as chokidar discovers these file paths (before the ready event). */
   ignoreInitial?: boolean;
 
-  /** Defaults to false, indicates whether to watch files that don't have read permissions if possible. */
+  /** Defaults to true, indicates whether to watch files that don't have read permissions if possible. */
   ignorePermissionErrors?: boolean;
 
   /** Defaults to 100, interval of file system polling, in milliseconds. You may also set the CHOKIDAR_INTERVAL env variable to override this option. */
