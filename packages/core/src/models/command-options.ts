@@ -438,6 +438,17 @@ export interface WatchCommandOption {
   /** Glob pattern to define which file pattern to watch, note that this will be appended to the package file path being watched. */
   glob?: string;
 
+  // This option controls prefix for stream output so that it can be disabled to be friendly
+  // to tools like Visual Studio Code to highlight the raw results
+  /** Do not prefix streaming output. */
+  noPrefix?: boolean;
+
+  /** proxy for `--no-prefix` */
+  prefix?: boolean;
+
+  /** Stream output with lines prefixed by originating package name. */
+  stream?: boolean;
+
   /** Defaults to false, when enabled it will trigger from all possible Chokidar events ('add', 'addDir', 'change', 'unlink', 'unlinkDir'). */
   watchAllEvents?: boolean;
 

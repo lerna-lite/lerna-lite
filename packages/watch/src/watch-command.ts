@@ -1,4 +1,12 @@
-import { Command, Package, ProjectConfig, spawn, ValidationError, WatchCommandOption } from '@lerna-lite/core';
+import {
+  Command,
+  Package,
+  ProjectConfig,
+  spawn,
+  spawnStreaming,
+  ValidationError,
+  WatchCommandOption,
+} from '@lerna-lite/core';
 import { FilterOptions, getFilteredPackages } from '@lerna-lite/optional-cmd-common';
 import chokidar from 'chokidar';
 import path from 'path';
@@ -10,16 +18,17 @@ export function factory(argv: WatchCommandOption) {
   return new WatchCommand(argv);
 }
 export class WatchCommand extends Command<WatchCommandOption & FilterOptions> {
-  protected args: string[] = [];
-  protected bail = false;
-  protected command = '';
-  protected count = 0;
-  protected env: { [key: string]: string | undefined } = {};
-  protected filteredPackages: Package[] = [];
-  protected packagePlural = '';
+  protected _args: string[] = [];
+  protected _bail = false;
+  protected _command = '';
+  protected _count = 0;
+  protected _changes: ChangesStructure = {};
+  protected _env: { [key: string]: string | undefined } = {};
+  protected _filteredPackages: Package[] = [];
+  protected _packagePlural = '';
+  protected _prefix = false;
   protected _watcher?: chokidar.FSWatcher;
   protected _timer?: NodeJS.Timeout;
-  protected _changes: ChangesStructure = {};
 
   get requiresGit() {
     return false;
@@ -35,20 +44,21 @@ export class WatchCommand extends Command<WatchCommandOption & FilterOptions> {
     }
 
     const dashedArgs = this.options['--'] || [];
-    this.command = this.options.cmd || dashedArgs.shift();
-    this.args = (this.options.args || []).concat(dashedArgs);
+    this._command = this.options.cmd || dashedArgs.shift();
+    this._args = (this.options.args || []).concat(dashedArgs);
 
     // inverted boolean options
-    this.bail = this.options.bail !== false;
+    this._bail = this.options.bail !== false;
+    this._prefix = this.options.prefix !== false;
 
     // accessing properties of process.env can be expensive,
     // so cache it here to reduce churn during tighter loops
-    this.env = Object.assign({}, process.env);
+    this._env = Object.assign({}, process.env);
 
-    this.filteredPackages = await getFilteredPackages(this.packageGraph, this.execOpts, this.options);
+    this._filteredPackages = await getFilteredPackages(this.packageGraph, this.execOpts, this.options);
 
-    this.count = this.filteredPackages.length;
-    this.packagePlural = this.count === 1 ? 'package' : 'packages';
+    this._count = this._filteredPackages.length;
+    this._packagePlural = this._count === 1 ? 'package' : 'packages';
 
     if (
       (this.options.watchAllEvents && this.options.watchAddedFile) ||
@@ -68,8 +78,8 @@ export class WatchCommand extends Command<WatchCommandOption & FilterOptions> {
       'watch',
       'Executing command %j on changes in %d %s.',
       this.options.command,
-      this.count,
-      this.packagePlural
+      this._count,
+      this._packagePlural
     );
 
     try {
@@ -81,7 +91,7 @@ export class WatchCommand extends Command<WatchCommandOption & FilterOptions> {
         ...this.options,
       };
 
-      this.filteredPackages.forEach((pkg) => {
+      this._filteredPackages.forEach((pkg) => {
         // does user have a glob defined, if so append it to the pkg location. Glob example for TS files: /**/*.ts
         let watchingPath = pkg.location;
         if (this.options.glob) {
@@ -140,7 +150,7 @@ export class WatchCommand extends Command<WatchCommandOption & FilterOptions> {
 
   protected changeEventListener(eventType: ChokidarEventType, filepath: string) {
     return new Promise((resolve) => {
-      const pkg = this.filteredPackages.find((p) => filepath.includes(p.location));
+      const pkg = this._filteredPackages.find((p) => filepath.includes(p.location));
       if (pkg) {
         // changes structure sample: { '@lerna-lite/watch': { pkg: Package, events: { change: ['path1', 'path2'], unlink: ['path3'] } } }
         if (!this._changes[pkg.name]) {
@@ -165,7 +175,7 @@ export class WatchCommand extends Command<WatchCommandOption & FilterOptions> {
               const fileDelimiter = this.options?.fileDelimiter ?? FILE_DELIMITER;
               const changedFiles = Array.from<string>(this._changes[changedPkgName].events[changedType]);
               const mergedFiles = changedFiles.join(fileDelimiter);
-              this.runCommandInPackageCapturing(changedPkg, mergedFiles, changedType);
+              this.getRunner(changedPkg, mergedFiles, changedType);
               this.logger.verbose('watch', 'Handling %d files changed in %j.', changedFiles.length, changedPkg.name);
               resolve({ changedPkg, mergedFiles, changedType });
               delete this._changes[changedPkgName].events[changedType];
@@ -179,7 +189,7 @@ export class WatchCommand extends Command<WatchCommandOption & FilterOptions> {
   }
 
   protected onError(error: any) {
-    if (this.bail) {
+    if (this._bail) {
       // stop watching.
       this._watcher?.close();
 
@@ -201,17 +211,32 @@ export class WatchCommand extends Command<WatchCommandOption & FilterOptions> {
       cwd: pkg.location,
       shell: true,
       extendEnv: false,
-      env: Object.assign({}, this.env, {
+      env: Object.assign({}, this._env, {
         LERNA_PACKAGE_NAME: pkg.name,
         LERNA_FILE_CHANGE_TYPE: eventType,
         LERNA_FILE_CHANGES: changedFile,
       }),
       pkg,
-      reject: this.bail,
+      reject: this._bail,
     };
   }
 
+  protected getRunner(pkg: Package, changedFile: string, eventType: string) {
+    return this.options.stream
+      ? this.runCommandInPackageStreaming(pkg, changedFile, eventType)
+      : this.runCommandInPackageCapturing(pkg, changedFile, eventType);
+  }
+
+  protected runCommandInPackageStreaming(pkg: Package, changedFile: string, eventType: string) {
+    return spawnStreaming(
+      this._command,
+      this._args,
+      this.getOpts(pkg, changedFile, eventType),
+      this._prefix && pkg.name
+    );
+  }
+
   protected runCommandInPackageCapturing(pkg: Package, changedFile: string, eventType: string) {
-    return spawn(this.command, this.args, this.getOpts(pkg, changedFile, eventType));
+    return spawn(this._command, this._args, this.getOpts(pkg, changedFile, eventType));
   }
 }

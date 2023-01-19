@@ -4,6 +4,7 @@ jest.mock('@lerna-lite/core', () => ({
   Command: jest.requireActual('../../../core/src/command').Command,
   conf: jest.requireActual('../../../core/src/command').conf,
   spawn: jest.fn(() => Promise.resolve({ exitCode: 0 })),
+  spawnStreaming: jest.fn(() => Promise.resolve({ exitCode: 0 })),
   runTopologically: jest.requireActual('../../../core/src/utils/run-topologically').runTopologically,
   QueryGraph: jest.requireActual('../../../core/src/utils/query-graph').QueryGraph,
 }));
@@ -69,10 +70,11 @@ import yargParser from 'yargs-parser';
 import { WatchCommandOption } from '@lerna-lite/core';
 
 // mocked modules
-import { spawn } from '@lerna-lite/core';
+import { spawn, spawnStreaming } from '@lerna-lite/core';
 
 // helpers
 import { commandRunner, initFixtureFactory } from '@lerna-test/helpers';
+import { normalizeRelativeDir } from '@lerna-test/helpers';
 import { factory, WatchCommand } from '../watch-command';
 import cliWatchCommands from '../../../cli/src/cli-commands/cli-watch-commands';
 const lernaWatch = commandRunner(cliWatchCommands);
@@ -80,6 +82,12 @@ const initFixture = initFixtureFactory(__dirname);
 
 // assertion helpers
 const calledInPackages = () => (spawn as jest.Mock).mock.calls.map(([, , opts]) => path.basename(opts.cwd));
+const watchInPackagesStreaming = (testDir) =>
+  (spawnStreaming as jest.Mock).mock.calls.reduce((arr, [command, params, opts, prefix]) => {
+    const dir = normalizeRelativeDir(testDir, opts.cwd);
+    arr.push([dir, command, `(prefix: ${prefix})`].concat(params).join(' '));
+    return arr;
+  }, []);
 
 const createArgv = (cwd: string, ...args: string[]) => {
   args.unshift('watch');
@@ -228,6 +236,35 @@ describe('Watch Command', () => {
         reject: true,
         shell: true,
       });
+    });
+
+    it('should execute change watch callback with --stream in the given scope', async () => {
+      await lernaWatch(testDir)('--scope', 'package-2', '--stream', '--', 'echo $LERNA_PACKAGE_NAME');
+      await watchChangeHandler(path.join(testDir, 'packages/package-2/some-file.ts'));
+
+      expect(watchInPackagesStreaming(testDir)).toEqual([
+        'packages/package-2 echo $LERNA_PACKAGE_NAME (prefix: package-2)',
+      ]);
+      expect(spawnStreaming).toHaveBeenCalledTimes(1);
+      expect(spawnStreaming).toHaveBeenLastCalledWith(
+        'echo $LERNA_PACKAGE_NAME',
+        [],
+        {
+          cwd: path.join(testDir, 'packages/package-2'),
+          pkg: expect.objectContaining({
+            name: 'package-2',
+          }),
+          env: expect.objectContaining({
+            LERNA_PACKAGE_NAME: 'package-2',
+            LERNA_FILE_CHANGES: path.join(testDir, 'packages/package-2/some-file.ts'),
+            LERNA_FILE_CHANGE_TYPE: 'change',
+          }),
+          extendEnv: false,
+          reject: true,
+          shell: true,
+        },
+        'package-2'
+      );
     });
 
     it('should execute change watch callback with default whitespace file delimiter', async () => {
