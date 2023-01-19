@@ -85,7 +85,7 @@ export class WatchCommand extends Command<WatchCommandOption & FilterOptions> {
         // does user have a glob defined, if so append it to the pkg location. Glob example for TS files: /**/*.ts
         let watchingPath = pkg.location;
         if (this.options.glob) {
-          watchingPath = path.join(pkg.location, this.options.glob); // append glob to pkg location
+          watchingPath = path.join(pkg.location, '/', this.options.glob); // append glob to pkg location
         }
         packageLocations.push(watchingPath);
       });

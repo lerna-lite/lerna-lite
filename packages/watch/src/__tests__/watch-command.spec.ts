@@ -161,7 +161,19 @@ describe('Watch Command', () => {
       expect(process.exitCode).toBe(1);
     });
 
-    it('should take glob input option and expect it to be appeneded to the file path being watch by chokidar', async () => {
+    it('should take glob input option, without slash prefix, and expect it to be appended to the file path being watch by chokidar', async () => {
+      await lernaWatch(testDir)('--glob', 'src/**/*.{ts,tsx}', '--', 'lerna run build');
+
+      expect(watchMock).toHaveBeenCalledWith(
+        [
+          path.join(testDir, 'packages/package-1', '/src/**/*.{ts,tsx}'),
+          path.join(testDir, 'packages/package-2', '/src/**/*.{ts,tsx}'),
+        ],
+        { ignoreInitial: true, ignorePermissionErrors: true, persistent: true }
+      );
+    });
+
+    it('should take glob input option, with slash prefix, and expect same appended to the file path being watch by chokidar', async () => {
       await lernaWatch(testDir)('--glob', '/src/**/*.{ts,tsx}', '--', 'lerna run build');
 
       expect(watchMock).toHaveBeenCalledWith(
