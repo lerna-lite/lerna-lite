@@ -207,7 +207,7 @@ importers:
       is-stream: ^2.0.1
       load-json-file: ^6.2.0
       make-dir: ^3.1.0
-      minimatch: ^5.1.6
+      minimatch: ^6.1.5
       node-fetch: ^2.6.7
       npm-package-arg: ^10.1.0
       npm-registry-fetch: ^14.0.3
@@ -254,7 +254,7 @@ importers:
       is-stream: 2.0.1
       load-json-file: 6.2.0
       make-dir: 3.1.0
-      minimatch: 5.1.6
+      minimatch: 6.1.5
       node-fetch: 2.6.7
       npm-package-arg: 10.1.0
       npmlog: 7.0.1
@@ -567,7 +567,7 @@ importers:
       fs-extra: ^11.1.0
       js-yaml: ^4.1.0
       load-json-file: ^6.2.0
-      minimatch: ^5.1.6
+      minimatch: ^6.1.5
       new-github-release-url: ^1.0.0
       npmlog: ^7.0.1
       p-map: ^4.0.0
@@ -586,7 +586,7 @@ importers:
       chalk: 4.1.2
       dedent: 0.7.0
       load-json-file: 6.2.0
-      minimatch: 5.1.6
+      minimatch: 6.1.5
       new-github-release-url: 1.0.0
       npmlog: 7.0.1
       p-map: 4.0.0
@@ -5476,6 +5476,13 @@ packages:
     engines: {node: '>=10'}
     dependencies:
       brace-expansion: 2.0.1
+
+  /minimatch/6.1.5:
+    resolution: {integrity: sha512-2/WxnHMkH7qFS+pG8ibLN5GZdx5Y0aLlgFSghaKRUpkeEmC85wZRb/xDvj9jv601KdNOS2G/nNqj2h6k42yxBQ==}
+    engines: {node: '>=10'}
+    dependencies:
+      brace-expansion: 2.0.1
+    dev: false
 
   /minimist-options/4.1.0:
     resolution: {integrity: sha512-Q4r8ghd80yhO/0j1O3B2BjweX3fiHg9cdOwjJd2J76Q135c+NDxGCqdYKQ1SKBuFfgWbAUzBfvYjPUEeNgqN1A==}
