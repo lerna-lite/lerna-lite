@@ -154,7 +154,12 @@ describe('Watch Command', () => {
           path.join(testDir, 'packages/package-1', '/src/**/*.{ts,tsx}'),
           path.join(testDir, 'packages/package-2', '/src/**/*.{ts,tsx}'),
         ],
-        { ignoreInitial: true, ignorePermissionErrors: true, persistent: true }
+        {
+          ignored: ['**/.git/**', '**/dist/**', '**/node_modules/**'],
+          ignoreInitial: true,
+          ignorePermissionErrors: true,
+          persistent: true,
+        }
       );
     });
 
@@ -166,7 +171,12 @@ describe('Watch Command', () => {
           path.join(testDir, 'packages/package-1', '/src/**/*.{ts,tsx}'),
           path.join(testDir, 'packages/package-2', '/src/**/*.{ts,tsx}'),
         ],
-        { ignoreInitial: true, ignorePermissionErrors: true, persistent: true }
+        {
+          ignored: ['**/.git/**', '**/dist/**', '**/node_modules/**'],
+          ignoreInitial: true,
+          ignorePermissionErrors: true,
+          persistent: true,
+        }
       );
     });
 
@@ -175,7 +185,13 @@ describe('Watch Command', () => {
 
       expect(watchMock).toHaveBeenCalledWith(
         [path.join(testDir, 'packages/package-1'), path.join(testDir, 'packages/package-2')],
-        { ignoreInitial: true, ignorePermissionErrors: true, persistent: true, awaitWriteFinish: true }
+        {
+          ignored: ['**/.git/**', '**/dist/**', '**/node_modules/**'],
+          ignoreInitial: true,
+          ignorePermissionErrors: true,
+          persistent: true,
+          awaitWriteFinish: true,
+        }
       );
     });
 
@@ -184,7 +200,13 @@ describe('Watch Command', () => {
 
       expect(watchMock).toHaveBeenCalledWith(
         [path.join(testDir, 'packages/package-1'), path.join(testDir, 'packages/package-2')],
-        { ignoreInitial: true, ignorePermissionErrors: true, persistent: true, awaitWriteFinish: { pollInterval: 500 } }
+        {
+          ignored: ['**/.git/**', '**/dist/**', '**/node_modules/**'],
+          ignoreInitial: true,
+          ignorePermissionErrors: true,
+          persistent: true,
+          awaitWriteFinish: { pollInterval: 500 },
+        }
       );
     });
 
@@ -194,6 +216,7 @@ describe('Watch Command', () => {
       expect(watchMock).toHaveBeenCalledWith(
         [path.join(testDir, 'packages/package-1'), path.join(testDir, 'packages/package-2')],
         {
+          ignored: ['**/.git/**', '**/dist/**', '**/node_modules/**'],
           ignoreInitial: true,
           ignorePermissionErrors: true,
           persistent: true,

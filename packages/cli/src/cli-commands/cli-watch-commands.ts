@@ -111,8 +111,9 @@ export default {
         },
         ignored: {
           group: 'Command Options:',
-          describe: 'Defines files/paths to be ignored',
-          type: 'string',
+          describe:
+            'Defines files/paths to be ignored, it can be a string or an array of string (anymatch-compatible definition)',
+          // type must remain ambiguous because it is overloaded (string _or_ array of string)
         },
         'ignore-initial': {
           group: 'Command Options:',

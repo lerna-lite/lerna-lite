@@ -66,10 +66,10 @@ Since you can execute any arbitrary commands, you could use `pnpm run` instead o
 $ lerna watch --glob=\"src/**/*.spec.ts\" -- pnpm -r --filter=\$LERNA_PACKAGE_NAME test
 ```
 
-Watch and stream two packages and run the "build" script on them when a file within it changes (but ignore `dist` folder):
+Watch and stream two packages and run the "build" script on them when a file within it changes:
 
 ```sh
-$ lerna watch --ignored=\"**/dist\", --scope={my-package-1,my-package-2} -- lerna run build --stream --scope=\$LERNA_PACKAGE_NAME
+$ lerna watch --scope={my-package-1,my-package-2} -- lerna run build --stream --scope=\$LERNA_PACKAGE_NAME
 ```
 
 When using `npx`, the `-c` option must be used if also providing variables for substitution:
@@ -119,10 +119,10 @@ $ npx -c 'lerna watch -- echo \$LERNA_PACKAGE_NAME \$LERNA_FILE_CHANGES'
       - [`--awf-poll-interval`](#--awf-poll-interval)
       - [`--awf-stability-threshold`](#--awf-stability-threshold)
 
-> **Note** to limit the number of files being watched, it is recommended to use either [`--ignored`](#--ignored) and/or [`--glob`](#--glob) options. For example you probably want to avoid watching `node_modules` and `dist` folders.
+> **Note** to limit the number of files being watched, you might want to take a look at either [`--ignored`](#--ignored) and/or [`--glob`](#--glob) options. The `lerna watch` command skips `.git/` and `node_modules/` directories by default.
 
 ### `--emit-changes-delay`
-Defaults to `200`, time to wait in milliseconds before collecting all file changes and then emitting them into a single watch event. The reason for this option to exist is basically to provide enough time for the lerna watch to collect all prior file change and merge them into a single watch change event (chokidar has no grouping feature and emits an event for every single file change) and we want to avoid emitting too many events (especially for a watch that triggers a rebuild). This option will come into play when you make a code change that triggers hundred of file changes, you might need to adjust the delay by increasing its value (which is to trigger a large set of changes at the same time, ie variable rename in hundreds of different files).
+Defaults to `200`, time to wait in milliseconds before collecting all file changes and then emitting them into a single watch event. The reason for this option to exist is basically to provide enough time for `lerna watch` to collect all prior file changes and merge them into a single watch change event (chokidar has no grouping feature and emits an event for every single file change) and we want to avoid emitting too many events (especially for a watch that triggers a rebuild). This option will come into play when you make a code change that triggers hundred of file changes, you might need to adjust the delay by increasing its value (similar library like `Nx` have their `Nx Watch` fixed to `500`).
 
 ```sh
 $ lerna watch --emit-changes-delay=500 -- <command>
@@ -138,7 +138,7 @@ $ lerna watch --file-delimiter=\";;\" -- <command>
 
 ### `--glob`
 
-Provide a Glob pattern to target which files to watch, note that this will be appended to the package file path is provided to Chokidar. For example if our package is located under `/home/user/monorepo/packages/pkg-1` and we define `"glob": "/src/**/*.{ts,tsx}"`, then it will use the following watch pattern in Chokidar `/home/user/monorepo/packages/pkg-1/src/**/*.{ts,tsx}`
+Provide a Glob pattern to target which files to watch, note that this will be appended to the package file path is provided to Chokidar. For example if our package is located under `/home/user/monorepo/packages/pkg-1` and we define `"glob": "/src/**/*.{ts,tsx}"`, it will end using the following watch pattern in Chokidar `/home/user/monorepo/packages/pkg-1/src/**/*.{ts,tsx}`
 
 ```sh
 # glob pattern will be appended to package path to Chokidar files to watch
@@ -208,15 +208,17 @@ $ lerna watch --follow-symlinks -- <command>
 
 ### `--ignored`
 
-Defines files/paths to be ignored ([anymatch](https://github.com/micromatch/anymatch)-compatible definition).
+Defines files/paths to be ignored, it can be a string or an array of string ([anymatch](https://github.com/micromatch/anymatch)-compatible definition). Since we use this in a monorepo, we already skips `.git/`, `dist/` and `node_modules/` directories by default
 
 ```sh
-# ignore dist folder
-$ lerna watch --ignored=\"**/dist\" -- <command>
+# ignore bin folder
+$ lerna watch --ignored=\"**/bin\" -- <command>
 
 # or ignore dot file
 $ lerna watch --ignored=\"/(^|[/\\])\../\" -- <command>
 ```
+
+> **Note** the `lerna watch` command skips `.git/` and `node_modules/` directories by default. If you want to watch files inside `node_moduels/`, you can pass a negated glob pattern, that is `lerna watch --ignored=\"!**/node_modules/**\"`
 
 ### `--ignore-initial`
 
