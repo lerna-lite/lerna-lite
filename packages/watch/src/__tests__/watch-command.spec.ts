@@ -147,7 +147,7 @@ describe('Watch Command', () => {
     });
 
     it('should take glob input option, without slash prefix, and expect it to be appended to the file path being watch by chokidar', async () => {
-      await lernaWatch(testDir)('--glob', 'src/**/*.{ts,tsx}', '--', 'lerna run build');
+      await lernaWatch(testDir)('--emit-changes-delay', '0', '--glob', 'src/**/*.{ts,tsx}', '--', 'lerna run build');
 
       expect(watchMock).toHaveBeenCalledWith(
         [
@@ -164,7 +164,7 @@ describe('Watch Command', () => {
     });
 
     it('should take glob input option, with slash prefix, and expect same appended to the file path being watch by chokidar', async () => {
-      await lernaWatch(testDir)('--glob', '/src/**/*.{ts,tsx}', '--', 'lerna run build');
+      await lernaWatch(testDir)('--emit-changes-delay', '0', '--glob', '/src/**/*.{ts,tsx}', '--', 'lerna run build');
 
       expect(watchMock).toHaveBeenCalledWith(
         [
@@ -181,7 +181,7 @@ describe('Watch Command', () => {
     });
 
     it('should be able to take --await-write-finish options as a boolean', async () => {
-      await lernaWatch(testDir)('--await-write-finish', '--', 'lerna run build');
+      await lernaWatch(testDir)('--emit-changes-delay', '0', '--await-write-finish', '--', 'lerna run build');
 
       expect(watchMock).toHaveBeenCalledWith(
         [path.join(testDir, 'packages/package-1'), path.join(testDir, 'packages/package-2')],
@@ -196,7 +196,7 @@ describe('Watch Command', () => {
     });
 
     it('should take options prefixed with "awf" (awfPollInterval) and transform them into a valid chokidar "awaitWriteFinish" option', async () => {
-      await lernaWatch(testDir)('--awf-poll-interval', '500', '--', 'lerna run build');
+      await lernaWatch(testDir)('--emit-changes-delay', '0', '--awf-poll-interval', '500', '--', 'lerna run build');
 
       expect(watchMock).toHaveBeenCalledWith(
         [path.join(testDir, 'packages/package-1'), path.join(testDir, 'packages/package-2')],
@@ -211,7 +211,14 @@ describe('Watch Command', () => {
     });
 
     it('should take options prefixed with "awf" (awfStabilityThreshold) and transform them into a valid chokidar "awaitWriteFinish" option', async () => {
-      await lernaWatch(testDir)('--awf-stability-threshold', '275', '--', 'lerna run build');
+      await lernaWatch(testDir)(
+        '--emit-changes-delay',
+        '0',
+        '--awf-stability-threshold',
+        '275',
+        '--',
+        'lerna run build'
+      );
 
       expect(watchMock).toHaveBeenCalledWith(
         [path.join(testDir, 'packages/package-1'), path.join(testDir, 'packages/package-2')],
@@ -226,7 +233,7 @@ describe('Watch Command', () => {
     });
 
     it('should execute change watch callback only in the given scope', async () => {
-      await lernaWatch(testDir)('--scope', 'package-2', '--', 'echo $LERNA_PACKAGE_NAME');
+      await lernaWatch(testDir)('--emit-changes-delay', '0', '--scope', 'package-2', '--', 'echo $LERNA_PACKAGE_NAME');
       await watchChangeHandler('change', path.join(testDir, 'packages/package-2/some-file.ts'));
 
       expect(calledInPackages()).toEqual(['package-2']);
@@ -247,7 +254,15 @@ describe('Watch Command', () => {
     });
 
     it('should execute change watch callback with --stream in the given scope', async () => {
-      await lernaWatch(testDir)('--scope', 'package-2', '--stream', '--', 'echo $LERNA_PACKAGE_NAME');
+      await lernaWatch(testDir)(
+        '--emit-changes-delay',
+        '0',
+        '--scope',
+        'package-2',
+        '--stream',
+        '--',
+        'echo $LERNA_PACKAGE_NAME'
+      );
       await watchChangeHandler('change', path.join(testDir, 'packages/package-2/some-file.ts'));
 
       expect(watchInPackagesStreaming(testDir)).toEqual([
@@ -275,7 +290,7 @@ describe('Watch Command', () => {
     });
 
     it('should execute change watch callback with default whitespace file delimiter', async () => {
-      await lernaWatch(testDir)('--', 'echo $LERNA_PACKAGE_NAME $LERNA_FILE_CHANGES');
+      await lernaWatch(testDir)('--emit-changes-delay', '0', '--', 'echo $LERNA_PACKAGE_NAME $LERNA_FILE_CHANGES');
       watchChangeHandler('change', path.join(testDir, 'packages/package-2/file-1.ts'));
       await watchChangeHandler('change', path.join(testDir, 'packages/package-2/some-file.ts'));
 
@@ -300,7 +315,8 @@ describe('Watch Command', () => {
     });
 
     it('should execute change watch callback with custom file delimiter when defined', async () => {
-      await lernaWatch(testDir)('--file-delimiter', ';;', '--', 'echo $LERNA_PACKAGE_NAME $LERNA_FILE_CHANGES');
+      // prettier-ignore
+      await lernaWatch(testDir)('--emit-changes-delay', '0', '--file-delimiter', ';;', '--', 'echo $LERNA_PACKAGE_NAME $LERNA_FILE_CHANGES');
       watchChangeHandler('change', path.join(testDir, 'packages/package-2/file-1.ts'));
       await watchChangeHandler('change', path.join(testDir, 'packages/package-2/some-file.ts'));
 
@@ -325,7 +341,7 @@ describe('Watch Command', () => {
     });
 
     it('should execute watch add callback only on the given scope', async () => {
-      await lernaWatch(testDir)('--scope', 'package-2', '--', 'echo $LERNA_PACKAGE_NAME');
+      await lernaWatch(testDir)('--emit-changes-delay', '0', '--scope', 'package-2', '--', 'echo $LERNA_PACKAGE_NAME');
       await watchAddHandler('add', path.join(testDir, 'packages/package-2/some-file.ts'));
 
       expect(calledInPackages()).toEqual(['package-2']);
@@ -346,7 +362,7 @@ describe('Watch Command', () => {
     });
 
     it('should execute watch add callback only the given scope', async () => {
-      await lernaWatch(testDir)('--scope', 'package-2', '--', 'echo $LERNA_PACKAGE_NAME');
+      await lernaWatch(testDir)('--emit-changes-delay', '0', '--scope', 'package-2', '--', 'echo $LERNA_PACKAGE_NAME');
       await watchAddDirHandler('addDir', path.join(testDir, 'packages/package-2/some-folder'));
 
       expect(calledInPackages()).toEqual(['package-2']);
@@ -367,7 +383,7 @@ describe('Watch Command', () => {
     });
 
     it('should execute watch add callback only the given scope', async () => {
-      await lernaWatch(testDir)('--scope', 'package-2', '--', 'echo $LERNA_PACKAGE_NAME');
+      await lernaWatch(testDir)('--emit-changes-delay', '0', '--scope', 'package-2', '--', 'echo $LERNA_PACKAGE_NAME');
       await watchUnlinkHandler('unlink', path.join(testDir, 'packages/package-2/some-file.ts'));
 
       expect(calledInPackages()).toEqual(['package-2']);
@@ -388,7 +404,7 @@ describe('Watch Command', () => {
     });
 
     it('should execute watch add callback only the given scope', async () => {
-      await lernaWatch(testDir)('--scope', 'package-2', '--', 'echo $LERNA_PACKAGE_NAME');
+      await lernaWatch(testDir)('--emit-changes-delay', '0', '--scope', 'package-2', '--', 'echo $LERNA_PACKAGE_NAME');
       await watchUnlinkDirHandler('unlinkDir', path.join(testDir, 'packages/package-2/some-folder'));
 
       expect(calledInPackages()).toEqual(['package-2']);
@@ -408,9 +424,10 @@ describe('Watch Command', () => {
       });
     });
 
-    it('should execute watch add callback only the given scope', async () => {
-      await lernaWatch(testDir)('--scope', 'package-2', '--', 'echo $LERNA_PACKAGE_NAME');
+    it('should execute watch callback only the given scoped package', async () => {
+      await lernaWatch(testDir)('--emit-changes-delay', '0', '--scope', 'package-2', '--', 'echo $LERNA_PACKAGE_NAME');
 
+      watchAddHandler('add', path.join(testDir, 'packages/package-1/my-file.ts'));
       watchAddHandler('add', path.join(testDir, 'packages/package-2/new-file-1.ts'));
       watchUnlinkHandler('unlink', path.join(testDir, 'packages/package-2/new-file-1.ts'));
       watchAddDirHandler('addDir', path.join(testDir, 'packages/package-2/new-folder'));
@@ -428,6 +445,53 @@ describe('Watch Command', () => {
             path.join(testDir, 'packages/package-2/new-file-1.ts'),
             path.join(testDir, 'packages/package-2/new-folder'),
             path.join(testDir, 'packages/package-2/some-file.ts'),
+          ].join(' '),
+        }),
+        extendEnv: false,
+        reject: true,
+        shell: true,
+      });
+    });
+
+    it('should execute watch multiple callbacks that were queued on multiple packages', async () => {
+      // prettier-ignore
+      await lernaWatch(testDir)('--emit-changes-delay', '0', '--scope', 'package-{1,2}', '--', 'echo $LERNA_PACKAGE_NAME && Promise.resolve(true)');
+
+      watchAddHandler('add', path.join(testDir, 'packages/package-2/new-file-1.ts'));
+      watchUnlinkHandler('unlink', path.join(testDir, 'packages/package-2/new-file-1.ts'));
+      watchAddDirHandler('addDir', path.join(testDir, 'packages/package-2/new-folder'));
+      watchUnlinkDirHandler('unlinkDir', path.join(testDir, 'packages/package-2/new-folder'));
+      watchChangeHandler('change', path.join(testDir, 'packages/package-2/some-file.ts'));
+      watchChangeHandler('addDir', path.join(testDir, 'packages/package-1/src'));
+      watchChangeHandler('change', path.join(testDir, 'packages/package-1/src/some-file-88.ts'));
+      await watchChangeHandler('change', path.join(testDir, 'packages/package-1/src/file-2.ts'));
+
+      expect(calledInPackages()).toEqual(['package-2', 'package-1']);
+      expect(spawn).toHaveBeenCalledTimes(2);
+      expect(spawn).toHaveBeenCalledWith('echo $LERNA_PACKAGE_NAME && Promise.resolve(true)', [], {
+        cwd: path.join(testDir, 'packages/package-2'),
+        pkg: expect.objectContaining({ name: 'package-2' }),
+        env: expect.objectContaining({
+          LERNA_PACKAGE_NAME: 'package-2',
+          LERNA_FILE_CHANGES: [
+            path.join(testDir, 'packages/package-2/new-file-1.ts'),
+            path.join(testDir, 'packages/package-2/new-folder'),
+            path.join(testDir, 'packages/package-2/some-file.ts'),
+          ].join(' '),
+        }),
+        extendEnv: false,
+        reject: true,
+        shell: true,
+      });
+      expect(spawn).toHaveBeenCalledWith('echo $LERNA_PACKAGE_NAME && Promise.resolve(true)', [], {
+        cwd: path.join(testDir, 'packages/package-1'),
+        pkg: expect.objectContaining({ name: 'package-1' }),
+        env: expect.objectContaining({
+          LERNA_PACKAGE_NAME: 'package-1',
+          LERNA_FILE_CHANGES: [
+            path.join(testDir, 'packages/package-1/src'),
+            path.join(testDir, 'packages/package-1/src/some-file-88.ts'),
+            path.join(testDir, 'packages/package-1/src/file-2.ts'),
           ].join(' '),
         }),
         extendEnv: false,
