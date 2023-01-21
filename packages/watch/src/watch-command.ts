@@ -71,12 +71,16 @@ export class WatchCommand extends Command<WatchCommandOption & FilterOptions> {
     );
 
     try {
+      const { ignored = [], ...otherOptions } = this.options ?? {};
       const packageLocations: string[] = [];
       const chokidarOptions: chokidar.WatchOptions = {
+        // we should ignore certain folders by default
+        // uses almost same implementation as ViteJS: https://github.com/vitejs/vite/blob/c747a3f289183b3640a6d4a1410acb5eafd11129/packages/vite/src/node/watch.ts
+        ignored: ['**/.git/**', '**/dist/**', '**/node_modules/**', ...(Array.isArray(ignored) ? ignored : [ignored])],
         ignoreInitial: true,
         ignorePermissionErrors: true,
         persistent: true,
-        ...this.options,
+        ...otherOptions,
       };
 
       this._filteredPackages.forEach((pkg) => {

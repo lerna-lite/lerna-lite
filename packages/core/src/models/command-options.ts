@@ -480,8 +480,8 @@ export interface WatchCommandOption {
   /** Defaults to true, when false, only the symlinks themselves will be watched for changes instead of following the link references and bubbling events through the link's path. */
   followSymlinks?: boolean;
 
-  /** Defines files/paths to be ignored */
-  ignored?: string;
+  /** Defines files/paths to be ignored, it can be a string or an array of string (anymatch-compatible definition) */
+  ignored?: string | string[];
 
   /** Defaults to true, if set to false then add/addDir events are also emitted for matching paths while instantiating the watching as chokidar discovers these file paths (before the ready event). */
   ignoreInitial?: boolean;
