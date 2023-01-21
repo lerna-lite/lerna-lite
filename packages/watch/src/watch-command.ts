@@ -124,11 +124,8 @@ export class WatchCommand extends Command<WatchCommandOption & FilterOptions> {
       const pkg = this._filteredPackages.find((p) => filepath.includes(p.location));
       if (pkg) {
         // changes structure sample: { '@lerna-lite/watch': { pkg: Package, events: { change: ['path1', 'path2'], unlink: ['path3'] } } }
-        if (!this._changes[pkg.name]) {
+        if (!this._changes[pkg.name] || !this._changes[pkg.name].changeFiles) {
           this._changes[pkg.name] = { pkg, changeFiles: new Set<string>() }; // use Set to avoid duplicate entires
-        }
-        if (!this._changes[pkg.name].changeFiles) {
-          this._changes[pkg.name].changeFiles = new Set(); // use Set to avoid duplicate entires
         }
         this._changes[pkg.name].changeFiles.add(filepath);
 
