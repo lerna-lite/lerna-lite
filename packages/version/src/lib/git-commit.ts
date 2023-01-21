@@ -2,7 +2,7 @@ import { EOL } from 'os';
 import log from 'npmlog';
 import { exec, ExecOpts, tempWrite } from '@lerna-lite/core';
 
-import { GitCommitOption } from '../types';
+import { GitCommitOption } from '../models';
 
 /**
  * @param {string} message
