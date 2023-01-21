@@ -37,7 +37,7 @@ export default {
         'emit-changes-delay': {
           group: 'Command Options:',
           describe:
-            'Time to wait in milliseconds before emitting all the file changes into a single event, defaults to 100',
+            'Time to wait in milliseconds before emitting all the file changes into a single event, defaults to 200',
           type: 'number',
         },
         'file-delimiter': {
@@ -67,31 +67,6 @@ export default {
         stream: {
           group: 'Command Options:',
           describe: 'Stream output with lines prefixed by originating package name.',
-          type: 'boolean',
-        },
-        'watch-all-events': {
-          group: 'Command Options:',
-          describe: `When enabled it will trigger from all possible Chokidar events ('add', 'addDir', 'change', 'unlink', 'unlinkDir'), defaults to false`,
-          type: 'boolean',
-        },
-        'watch-added-file': {
-          group: 'Command Options:',
-          describe: 'When enabled it will also watch when a file is being added.',
-          type: 'boolean',
-        },
-        'watch-added-dir': {
-          group: 'Command Options:',
-          describe: 'When enabled it will also watch when a directory is being added.',
-          type: 'boolean',
-        },
-        'watch-removed-file': {
-          group: 'Command Options:',
-          describe: 'When enabled it will also watch when a file is being removed.',
-          type: 'boolean',
-        },
-        'watch-removed-dir': {
-          group: 'Command Options:',
-          describe: 'When enabled it will also watch when a directory is being removed.',
           type: 'boolean',
         },
 

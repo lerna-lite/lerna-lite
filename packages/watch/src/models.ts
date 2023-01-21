@@ -5,8 +5,6 @@ export type ChokidarEventType = 'add' | 'addDir' | 'change' | 'unlink' | 'unlink
 export interface ChangesStructure {
   [pkgName: string]: {
     pkg: Package;
-    events: {
-      [eventType in ChokidarEventType]: Set<string>;
-    };
+    changeFiles: Set<string>;
   };
 }

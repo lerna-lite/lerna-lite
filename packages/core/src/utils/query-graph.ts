@@ -20,7 +20,7 @@ export class QueryGraph {
    */
   static toposort(packages: Package[], options?: QueryGraphConfig) {
     const graph = new QueryGraph(packages, options);
-    const result = [];
+    const result: Package[] = [];
 
     let batch = graph.getAvailablePackages();
 
