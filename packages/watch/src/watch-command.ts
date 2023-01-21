@@ -12,7 +12,7 @@ import chokidar from 'chokidar';
 import path from 'path';
 
 import { CHOKIDAR_AVAILABLE_OPTIONS, EMIT_CHANGES_DELAY, FILE_DELIMITER } from './constants';
-import { ChangesStructure, ChokidarEventType } from './types';
+import { ChangesStructure, ChokidarEventType } from './models';
 
 export function factory(argv: WatchCommandOption) {
   return new WatchCommand(argv);
@@ -59,18 +59,6 @@ export class WatchCommand extends Command<WatchCommandOption & FilterOptions> {
 
     this._count = this._filteredPackages.length;
     this._packagePlural = this._count === 1 ? 'package' : 'packages';
-
-    if (
-      (this.options.watchAllEvents && this.options.watchAddedFile) ||
-      (this.options.watchAllEvents && this.options.watchAddedDir) ||
-      (this.options.watchAllEvents && this.options.watchRemovedFile) ||
-      (this.options.watchAllEvents && this.options.watchRemovedDir)
-    ) {
-      throw new ValidationError(
-        'ENOTALLOWED',
-        '--watch-all-events cannot be combined with other --watch-xyz option(s).'
-      );
-    }
   }
 
   async execute() {
@@ -122,65 +110,49 @@ export class WatchCommand extends Command<WatchCommandOption & FilterOptions> {
       // initialize chokidar watcher for each package found
       this._watcher = chokidar.watch(packageLocations, chokidarOptions);
 
-      // add default event listeners
+      // add Chokidar watcher and watch for all events (add, addDir, unlink, unlinkDir)
       this._watcher
-        .on('change', (path) => this.changeEventListener('change', path))
+        .on('all', (_event, path) => this.changeEventListener(path))
         .on('error', (error) => this.onError(error));
-
-      // add optional event listeners but only when enabled by the user for perf reasons
-      if (this.options.watchAllEvents) {
-        this._watcher.on('all', (event, path) => this.changeEventListener(event, path));
-      }
-      if (this.options.watchAddedFile) {
-        this._watcher.on('add', (path) => this.changeEventListener('add', path));
-      }
-      if (this.options.watchRemovedFile) {
-        this._watcher.on('unlink', (path) => this.changeEventListener('unlink', path));
-      }
-      if (this.options.watchAddedDir) {
-        this._watcher.on('addDir', (path) => this.changeEventListener('addDir', path));
-      }
-      if (this.options.watchRemovedDir) {
-        this._watcher.on('unlinkDir', (path) => this.changeEventListener('unlinkDir', path));
-      }
     } catch (err) {
       this.onError(err);
     }
   }
 
-  protected changeEventListener(eventType: ChokidarEventType, filepath: string) {
+  protected changeEventListener(filepath: string) {
     return new Promise((resolve) => {
       const pkg = this._filteredPackages.find((p) => filepath.includes(p.location));
       if (pkg) {
         // changes structure sample: { '@lerna-lite/watch': { pkg: Package, events: { change: ['path1', 'path2'], unlink: ['path3'] } } }
         if (!this._changes[pkg.name]) {
-          this._changes[pkg.name] = { pkg, events: {} as any };
+          this._changes[pkg.name] = { pkg, changeFiles: new Set<string>() }; // use Set to avoid duplicate entires
         }
-        if (!this._changes[pkg.name].events[eventType]) {
-          this._changes[pkg.name].events[eventType] = new Set(); // use Set to avoid duplicate entires
+        if (!this._changes[pkg.name].changeFiles) {
+          this._changes[pkg.name].changeFiles = new Set(); // use Set to avoid duplicate entires
         }
-        this._changes[pkg.name].events[eventType].add(filepath);
+        this._changes[pkg.name].changeFiles.add(filepath);
 
         // once we reached emit change stability threshold, we'll fire events for each packages & events while the file paths array will be merged
         if (this._timer) clearTimeout(this._timer as NodeJS.Timeout);
 
-        this._timer = setTimeout(() => {
-          // since we waited a certain time, destructure the changes object
-          // could include multiple packages to loop through and that will execute multiple events (1 for each package and 1 for each event)
+        // chokidar triggers events for every single file change (add, unlink, ...),
+        // so in order for us to merge all changes and return them under a single lerna watch event we need to wait a certain delay
+        this._timer = setTimeout(async () => {
+          // destructuring the changes object, it could include multiple packages and files to loop through (1 change for each package)
           for (const changedPkgName of Object.keys(this._changes)) {
             const changedPkg = this._changes[changedPkgName].pkg;
 
             // loop through all possible events (add, addDir, unlink, unlinkDir)
-            for (const changedType of Object.keys(this._changes[changedPkgName].events)) {
+            if (this._changes[changedPkgName].changeFiles) {
               const fileDelimiter = this.options?.fileDelimiter ?? FILE_DELIMITER;
-              const changedFiles = Array.from<string>(this._changes[changedPkgName].events[changedType]);
+              const changedFiles = Array.from<string>(this._changes[changedPkgName].changeFiles);
               const mergedFiles = changedFiles.join(fileDelimiter);
-              this.getRunner(changedPkg, mergedFiles, changedType);
+              await this.getRunner(changedPkg, mergedFiles);
               this.logger.verbose('watch', 'Handling %d files changed in %j.', changedFiles.length, changedPkg.name);
-              resolve({ changedPkg, mergedFiles, changedType });
-              delete this._changes[changedPkgName].events[changedType];
+              this._changes[changedPkgName].changeFiles.clear();
+              delete this._changes[changedPkgName];
+              resolve({ changedPkg, mergedFiles });
             }
-            delete this._changes[changedPkgName];
           }
           this._changes = {};
         }, this.options.emitChangesDelay ?? EMIT_CHANGES_DELAY);
@@ -190,7 +162,7 @@ export class WatchCommand extends Command<WatchCommandOption & FilterOptions> {
 
   protected onError(error: any) {
     if (this._bail) {
-      // stop watching.
+      // stop watching on errors being triggered
       this._watcher?.close();
 
       // only the first error is caught
@@ -206,14 +178,13 @@ export class WatchCommand extends Command<WatchCommandOption & FilterOptions> {
     }
   }
 
-  protected getOpts(pkg: Package, changedFile: string, eventType: string) {
+  protected getOpts(pkg: Package, changedFile: string) {
     return {
       cwd: pkg.location,
       shell: true,
       extendEnv: false,
       env: Object.assign({}, this._env, {
         LERNA_PACKAGE_NAME: pkg.name,
-        LERNA_FILE_CHANGE_TYPE: eventType,
         LERNA_FILE_CHANGES: changedFile,
       }),
       pkg,
@@ -221,22 +192,17 @@ export class WatchCommand extends Command<WatchCommandOption & FilterOptions> {
     };
   }
 
-  protected getRunner(pkg: Package, changedFile: string, eventType: string) {
+  protected getRunner(pkg: Package, changedFile: string) {
     return this.options.stream
-      ? this.runCommandInPackageStreaming(pkg, changedFile, eventType)
-      : this.runCommandInPackageCapturing(pkg, changedFile, eventType);
+      ? this.runCommandInPackageStreaming(pkg, changedFile)
+      : this.runCommandInPackageCapturing(pkg, changedFile);
   }
 
-  protected runCommandInPackageStreaming(pkg: Package, changedFile: string, eventType: string) {
-    return spawnStreaming(
-      this._command,
-      this._args,
-      this.getOpts(pkg, changedFile, eventType),
-      this._prefix && pkg.name
-    );
+  protected runCommandInPackageStreaming(pkg: Package, changedFile: string) {
+    return spawnStreaming(this._command, this._args, this.getOpts(pkg, changedFile), this._prefix && pkg.name);
   }
 
-  protected runCommandInPackageCapturing(pkg: Package, changedFile: string, eventType: string) {
-    return spawn(this._command, this._args, this.getOpts(pkg, changedFile, eventType));
+  protected runCommandInPackageCapturing(pkg: Package, changedFile: string) {
+    return spawn(this._command, this._args, this.getOpts(pkg, changedFile));
   }
 }

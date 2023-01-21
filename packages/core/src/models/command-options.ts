@@ -426,7 +426,7 @@ export interface WatchCommandOption {
   bail?: boolean;
 
   /**
-   * Defaults to 100, time to wait in milliseconds before emitting all the file changes into a single event.
+   * Defaults to 200, time to wait in milliseconds before emitting all the file changes into a single event.
    * This provide enough time for the system to collect all Chokidar events (1x per file changes)
    * and merge them into a single Lerna watch change event to be emitted (Lerna will join all file paths into a CSV string separated by whitespace by default).
    */
@@ -448,21 +448,6 @@ export interface WatchCommandOption {
 
   /** Stream output with lines prefixed by originating package name. */
   stream?: boolean;
-
-  /** Defaults to false, when enabled it will trigger from all possible Chokidar events ('add', 'addDir', 'change', 'unlink', 'unlinkDir'). */
-  watchAllEvents?: boolean;
-
-  /** Defaults to false, when enabled it will trigger when a file is being added. */
-  watchAddedFile?: boolean;
-
-  /** Defaults to false, when enabled it will trigger when a directory is being added. */
-  watchAddedDir?: boolean;
-
-  /** Defaults to false, when enabled it will trigger when a file is being removed. */
-  watchRemovedFile?: boolean;
-
-  /** Defaults to false, when enabled it will trigger when a directory is being removed. */
-  watchRemovedDir?: boolean;
 
   // -- Chokidar options
   // the options prefixed with "awf" are sub-options of "awaitWriteFinish"

@@ -30,7 +30,7 @@ npx lerna watch
 $ lerna watch -- <command>
 ```
 
-The values `$LERNA_PACKAGE_NAME`, `$LERNA_FILE_CHANGES` and `$LERNA_FILE_CHANGE_TYPE` will be replaced with the package name, the file that changed, and the [`Chokidar`](https://github.com/paulmillr/chokidar) event that was fired respectively. If multiple file changes are detected, they will all be listed and separated by a whitespace (unless custom file delimiter are provided).
+The values `$LERNA_PACKAGE_NAME` and `$LERNA_FILE_CHANGES` will be replaced with the package name, the file that changed respectively. If multiple file changes are detected, they will all be listed and separated by a whitespace (unless custom file delimiter are provided).
 
 > **Note** When using these environment variables in the shell, you will need to escape the dollar sign with a backslash (`\`). See the [examples](#examples) below.
 
@@ -54,10 +54,10 @@ Watch only package "package-4" and its dependencies and run the `test` script fo
 $ lerna watch --scope="package-4" --include-dependencies -- lerna run test --scope=\$LERNA_PACKAGE_NAME
 ```
 
-Watch the `/src` folder for any event (add, remove, ...) of each package using the `--glob` option and run the `test` script for the package that changed:
+Watch the `/src` folder of each package using the `--glob` option and run the `test` script for the package that changed:
 
 ```sh
-$ lerna watch --glob=\"src\" --watch-all-events -- lerna run test --scope=\$LERNA_PACKAGE_NAME
+$ lerna watch --glob=\"src\" -- lerna run test --scope=\$LERNA_PACKAGE_NAME
 ```
 
 Since you can execute any arbitrary commands, you could use `pnpm run` instead of `lerna run` to run the tests, the glob helps to limit the watch to only spec files
@@ -66,10 +66,10 @@ Since you can execute any arbitrary commands, you could use `pnpm run` instead o
 $ lerna watch --glob=\"src/**/*.spec.ts\" -- pnpm -r --filter=\$LERNA_PACKAGE_NAME test
 ```
 
-Watch and stream two package and run the "build" script on them when a file within it changes (but ignore `dist` folder):
+Watch and stream two packages and run the "build" script on them when a file within it changes (but ignore `dist` folder):
 
 ```sh
-$ lerna watch --stream --ignored=\"**/dist\", --scope={my-package-1,my-package-2} -- lerna run build --scope=\$LERNA_PACKAGE_NAME
+$ lerna watch --ignored=\"**/dist\", --scope={my-package-1,my-package-2} -- lerna run build --stream --scope=\$LERNA_PACKAGE_NAME
 ```
 
 When using `npx`, the `-c` option must be used if also providing variables for substitution:
@@ -83,12 +83,12 @@ $ npx -c 'lerna watch -- echo \$LERNA_PACKAGE_NAME \$LERNA_FILE_CHANGES'
 ```sh
 # On Windows
 "scripts": {
-  "watch-files": "lerna watch -- echo \"Watch file %LERNA_FILE_CHANGES% %LERNA_FILE_CHANGE_TYPE% in package %LERNA_PACKAGE_NAME%\""
+  "watch-files": "lerna watch -- echo \"Watch file %LERNA_FILE_CHANGES% in package %LERNA_PACKAGE_NAME%\""
 }
 
 # On Windows with cross-env (cross platform)
 "scripts": {
-  "watch-files": "lerna watch -- cross-env-shell echo \"Watch file $LERNA_FILE_CHANGES $LERNA_FILE_CHANGE_TYPE in package $LERNA_PACKAGE_NAME\""
+  "watch-files": "lerna watch -- cross-env-shell echo \"Watch file $LERNA_FILE_CHANGES in package $LERNA_PACKAGE_NAME\""
 }
 ```
 
@@ -105,12 +105,6 @@ $ npx -c 'lerna watch -- echo \$LERNA_PACKAGE_NAME \$LERNA_FILE_CHANGES'
     - [`--stream`](#--stream)
     - [`--no-bail`](#--no-bail)
     - [`--no-prefix`](#--no-prefix)
-    - [Watch Events](#watch-events) (defaults to file `change` only)
-      - [`--watch-all-events`](#--watch-all-events)
-      - [`--watch-added-file`](#--watch-added-file)
-      - [`--watch-removed-file`](#--watch-removed-file)
-      - [`--watch-added-dir`](#--watch-added-dir)
-      - [`--watch-removed-dir`](#--watch-removed-dir)
   - [Chokidar Options](#chokidar-options)
     - [`--atomic`](#--atomic)
     - [`--depth`](#--depth)
@@ -121,17 +115,17 @@ $ npx -c 'lerna watch -- echo \$LERNA_PACKAGE_NAME \$LERNA_FILE_CHANGES'
     - [`--ignore-permission-errors`](#--ignore-permission-errors)
     - [`--interval`](#--interval)
     - [`--use-polling`](#--use-polling)
-    - `awaitWriteFinish` (these options will be prefixed with `awf`)
+    - [The `awaitWriteFinish` option](#the-awaitWriteFinish-option) (these options will be prefixed with `awf`)
       - [`--awf-poll-interval`](#--awf-poll-interval)
       - [`--awf-stability-threshold`](#--awf-stability-threshold)
 
 > **Note** to limit the number of files being watched, it is recommended to use either [`--ignored`](#--ignored) and/or [`--glob`](#--glob) options. For example you probably want to avoid watching `node_modules` and `dist` folders.
 
 ### `--emit-changes-delay`
-Defaults to `100`, time to wait in milliseconds before collecting all file changes and then emitting them into a single watch event. The reason for this option to exist is basically to provide enough time for the lerna watch to collect all prior Chokidar events and merge them into a single watch change event (chokidar has no grouping feature and emits an event for every single file change) and we want to avoid emitting too many events (especially for a watch that triggers a rebuild). This option will come into play when you make a code change that triggers hundred of file changes, you might need to adjust the delay by increasing its value (which is to trigger a large set of changes at the same time, ie variable rename in hundreds of different files).
+Defaults to `200`, time to wait in milliseconds before collecting all file changes and then emitting them into a single watch event. The reason for this option to exist is basically to provide enough time for the lerna watch to collect all prior file change and merge them into a single watch change event (chokidar has no grouping feature and emits an event for every single file change) and we want to avoid emitting too many events (especially for a watch that triggers a rebuild). This option will come into play when you make a code change that triggers hundred of file changes, you might need to adjust the delay by increasing its value (which is to trigger a large set of changes at the same time, ie variable rename in hundreds of different files).
 
 ```sh
-$ lerna watch --emit-changes-delay=100 -- <command>
+$ lerna watch --emit-changes-delay=500 -- <command>
 ```
 
 ### `--file-delimiter`
@@ -174,55 +168,6 @@ Pass `--no-bail` to disable this behavior, executing in _all_ packages regardles
 
 Disable package name prefixing when output is streaming (`--stream` _or_ `--parallel`).
 This option can be useful when piping results to other processes, such as editor plugins.
-
-### Watch Events
-The `lerna watch`, by default, will only execute the watch callback on **file changes only** (via Chokidar `change` event). The reason is simply to have less watches open. If you want to watch for other events, like add/remove file, you can look at the possible flags below or even use `--watch-all-events` for all type of events.
-
-> **Note** When enabling any of these extra watch events above, you might need to know if the file(s) or directory(ies) were added, removed or changed, and for this use case, you can use `$LERNA_FILE_CHANGE_TYPE`. Also note that Chokidar event names to remove a file or directory are `unlink` and `unlinkDir`.
-
-> **Note** an important thing to be aware with Chokidar is that `add`/`addDir` events are also emitted for matching paths while instantiating the watching as chokidar discovers these file paths (before the `ready` event). In other words, when this option is disabled (not recommended) it will fire an event for each file/directory that are discovered when initializing the watch, which why we change the default of [`--ignore-initial`](#--ignore-initial) to be enabled by default to avoid sending a ton of changes.
-
-### `--watch-all-events`
-
-When enabled it will trigger from all possible Chokidar events (`add`, `addDir`, `change`, `unlink`, `unlinkDir`).
-
-```sh
-$ lerna watch --watch-all-events -- <command>
-```
-
-> **Note** make sure to also take a look at [`--ignored`](#--ignored) and/or [`--glob`](#--glob) options to avoid watching too many files.
-
-### `--watch-added-file`
-
-When enabled it will trigger when a file is being added (in addition to file `change` which is always enabled).
-
-```sh
-$ lerna watch --watch-added-file -- <command>
-```
-
-### `--watch-added-dir`
-
-When enabled it will trigger when a directory is being added (in addition to file `change` which is always enabled).
-
-```sh
-$ lerna watch --watch-added-dir -- <command>
-```
-
-### `--watch-removed-file`
-
-When enabled it will trigger when a file is being removed (in addition to file `change` which is always enabled).
-
-```sh
-$ lerna watch --watch-removed-file -- <command>
-```
-
-### `--watch-removed-dir`
-
-When enabled it will trigger when a directory is being removed (in addition to file `change` which is always enabled).
-
-```sh
-$ lerna watch --watch-removed-dir -- <command>
-```
 
 ## Chokidar Options
 Most [`Chokidar`](https://github.com/paulmillr/chokidar) options are available and exposed (except `cwd` which is required internally). The option descriptions below are summarized, refer to the Chokidar [options](https://github.com/paulmillr/chokidar#api) website for more detailed informations.
@@ -280,8 +225,6 @@ Defaults to `true`, if set to false then `add`/`addDir` events are also emitted 
 ```sh
 $ lerna watch --ignore-initial -- <command>
 ```
-
-> **Note** you typically want this flag enabled when enabling any of [`--watch-added-file`](#--watch-added-file), [`--watch-added-dir`](#--watch-added-dir), [`--watch-removed-file`](#--watch-removed-file) and [`--watch-removed-dir`](#--watch-removed-dir) which is why we enabled this option by default.
 
 ### `--ignore-permission-errors`
 
@@ -343,8 +286,6 @@ Lerna will set 3 separate environment variables when running the inner command. 
 
 - `$LERNA_PACKAGE_NAME` will be replaced with the name of the package that changed.
 - `$LERNA_FILE_CHANGES` will be replaced with the file(s) that changed, separated by whitespace when multiple files are changed.
-- `$LERNA_FILE_CHANGE_TYPE` will be replaced with the Chokidar event emitted.
-   - defaults to file `change` only, other optional events are `add`, `addDir`, `unlink` or `unlinkDir` (when enabled, see [Watch Events](#watch-events))
 
 > **Note** When using these variables in the shell, you will need to escape the `$` with a backslash (`\`). See the examples above.
 
