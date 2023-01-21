@@ -52,6 +52,23 @@ export default {
             'Glob pattern to define which file pattern to watch, note that this will be appended to the package file path being watched.',
           type: 'string',
         },
+        // This option controls prefix for stream output so that it can be disabled to be friendly
+        // to tools like Visual Studio Code to highlight the raw results
+        'no-prefix': {
+          group: 'Command Options:',
+          describe: 'Do not prefix streaming output.',
+          type: 'boolean',
+        },
+        prefix: {
+          // proxy for --no-prefix
+          hidden: true,
+          type: 'boolean',
+        },
+        stream: {
+          group: 'Command Options:',
+          describe: 'Stream output with lines prefixed by originating package name.',
+          type: 'boolean',
+        },
         'watch-all-events': {
           group: 'Command Options:',
           describe: `When enabled it will trigger from all possible Chokidar events ('add', 'addDir', 'change', 'unlink', 'unlinkDir'), defaults to false`,

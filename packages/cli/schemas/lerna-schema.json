@@ -717,6 +717,15 @@
           "type": "object",
           "description": "Options for the `watch` command.",
           "properties": {
+            "noPrefix": {
+              "$ref": "#/$defs/commandOptions/shared/noPrefix"
+            },
+            "prefix": {
+              "$ref": "#/$defs/commandOptions/shared/prefix"
+            },
+            "stream": {
+              "$ref": "#/$defs/commandOptions/shared/stream"
+            },
             "glob": {
               "$ref": "#/$defs/commandOptions/watch/glob"
             },
@@ -1661,7 +1670,7 @@
         },
         "stream": {
           "type": "boolean",
-          "description": "During `lerna exec` and `lerna run`, stream output with lines prefixed by originating package name."
+          "description": "During `lerna exec`, `lerna run` and `lerna watch`, stream output with lines prefixed by originating package name."
         },
         "parallel": {
           "type": "boolean",
@@ -1669,19 +1678,19 @@
         },
         "noBail": {
           "type": "boolean",
-          "description": "During `lerna exec` and `lerna run`, when true, do not exit with non-zero status if a command fails."
+          "description": "During `lerna exec`, `lerna run` and `lerna watch`, when true, do not exit with non-zero status if a command fails."
         },
         "bail": {
           "type": "boolean",
-          "description": "During `lerna exec` and `lerna run`, exit with non-zero status if any command fails."
+          "description": "During `lerna exec`, `lerna run` and `lerna watch`, exit with non-zero status if any command fails."
         },
         "noPrefix": {
           "type": "boolean",
-          "description": "During `lerna exec` and `lerna run`, when true, do not prefix output with originating package name."
+          "description": "During `lerna exec`, `lerna run` and `lerna watch`, when true, do not prefix output with originating package name."
         },
         "prefix": {
           "type": "boolean",
-          "description": "During `lerna exec` and `lerna run`, prefix output with originating package name."
+          "description": "During `lerna exec`, `lerna run` and `lerna watch`, prefix output with originating package name."
         },
         "profile": {
           "type": "boolean",

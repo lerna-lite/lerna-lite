@@ -66,10 +66,10 @@ Since you can execute any arbitrary commands, you could use `pnpm run` instead o
 $ lerna watch --glob=\"src/**/*.spec.ts\" -- pnpm -r --filter=\$LERNA_PACKAGE_NAME test
 ```
 
-Watch a single package and run the "build" script on it when a file within it changes (but ignore `dist` folder) and also stream the build output:
+Watch and stream two package and run the "build" script on them when a file within it changes (but ignore `dist` folder):
 
 ```sh
-$ lerna watch --ignored=\"**/dist\", --scope="my-package-1" -- lerna run build --scope=\$LERNA_PACKAGE_NAME --stream
+$ lerna watch --stream --ignored=\"**/dist\", --scope={my-package-1,my-package-2} -- lerna run build --scope=\$LERNA_PACKAGE_NAME
 ```
 
 When using `npx`, the `-c` option must be used if also providing variables for substitution:
@@ -102,7 +102,9 @@ $ npx -c 'lerna watch -- echo \$LERNA_PACKAGE_NAME \$LERNA_FILE_CHANGES'
     - [`--emit-changes-delay`](#--emit-changes-delay)
     - [`--file-delimiter`](#--file-delimiter)
     - [`--glob`](#--glob)
+    - [`--stream`](#--stream)
     - [`--no-bail`](#--no-bail)
+    - [`--no-prefix`](#--no-prefix)
     - [Watch Events](#watch-events) (defaults to file `change` only)
       - [`--watch-all-events`](#--watch-all-events)
       - [`--watch-added-file`](#--watch-added-file)
@@ -149,6 +151,15 @@ Provide a Glob pattern to target which files to watch, note that this will be ap
 $ lerna watch --glob=\"src\**\*.ts" -- <command>
 ```
 
+### `--stream`
+
+Stream output from child processes immediately, prefixed with the originating
+package name. This allows output from different packages to be interleaved.
+
+```sh
+$ lerna watch --stream -- <command>
+```
+
 ### `--no-bail`
 
 ```sh
@@ -158,6 +169,11 @@ $ lerna watch --no-bail -- <command>
 
 By default, `lerna watch` will exit with an error if _any_ execution returns a non-zero exit code.
 Pass `--no-bail` to disable this behavior, executing in _all_ packages regardless of exit code.
+
+### `--no-prefix`
+
+Disable package name prefixing when output is streaming (`--stream` _or_ `--parallel`).
+This option can be useful when piping results to other processes, such as editor plugins.
 
 ### Watch Events
 The `lerna watch`, by default, will only execute the watch callback on **file changes only** (via Chokidar `change` event). The reason is simply to have less watches open. If you want to watch for other events, like add/remove file, you can look at the possible flags below or even use `--watch-all-events` for all type of events.
