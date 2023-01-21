@@ -1,4 +1,4 @@
-import { YargListableOption } from '../types';
+import { YargListableOption } from '../models';
 
 /**
  * Add list-related options to a Yargs instance.

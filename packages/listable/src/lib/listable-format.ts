@@ -3,7 +3,7 @@ import chalk from 'chalk';
 import columnify from 'columnify';
 import path from 'path';
 
-import { ListableOptions } from '../types';
+import { ListableOptions } from '../models';
 
 /**
  * Format a list of packages according to specified options.
