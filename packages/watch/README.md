@@ -66,6 +66,16 @@ Since you can execute any arbitrary commands, you could use `pnpm run` instead o
 $ lerna watch --glob=\"src/**/*.spec.ts\" -- pnpm -r --filter=\$LERNA_PACKAGE_NAME test
 ```
 
+Watch for changes on package-1 or its dependents and run the "build" script on the scoped package and also its dependents:
+
+```sh
+# with lerna run
+$ lerna watch --scope=my-package-1 --include-dependents -- lerna run build --stream --scope=\$LERNA_PACKAGE_NAME --include-dependents
+
+# similarly with pnpm run
+$ lerna watch --scope=my-package-1 --include-dependents -- pnpm run --stream --filter ...\$LERNA_PACKAGE_NAME build
+```
+
 Watch and stream two packages and run the "build" script on them when a file within it changes:
 
 ```sh

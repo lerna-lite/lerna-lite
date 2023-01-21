@@ -2,6 +2,7 @@ import {
   Command,
   Package,
   ProjectConfig,
+  pluralize,
   spawn,
   spawnStreaming,
   ValidationError,
@@ -17,6 +18,7 @@ import { ChangesStructure, ChokidarEventType } from './models';
 export function factory(argv: WatchCommandOption) {
   return new WatchCommand(argv);
 }
+
 export class WatchCommand extends Command<WatchCommandOption & FilterOptions> {
   protected _args: string[] = [];
   protected _bail = false;
@@ -25,8 +27,10 @@ export class WatchCommand extends Command<WatchCommandOption & FilterOptions> {
   protected _changes: ChangesStructure = {};
   protected _env: { [key: string]: string | undefined } = {};
   protected _filteredPackages: Package[] = [];
+  protected _fileDelimiter = '';
   protected _packagePlural = '';
   protected _prefix = false;
+  protected _processing = false;
   protected _watcher?: chokidar.FSWatcher;
   protected _timer?: NodeJS.Timeout;
 
@@ -46,6 +50,7 @@ export class WatchCommand extends Command<WatchCommandOption & FilterOptions> {
     const dashedArgs = this.options['--'] || [];
     this._command = this.options.cmd || dashedArgs.shift();
     this._args = (this.options.args || []).concat(dashedArgs);
+    this._fileDelimiter = this.options?.fileDelimiter ?? FILE_DELIMITER;
 
     // inverted boolean options
     this._bail = this.options.bail !== false;
@@ -124,41 +129,76 @@ export class WatchCommand extends Command<WatchCommandOption & FilterOptions> {
   }
 
   protected changeEventListener(filepath: string) {
-    return new Promise((resolve) => {
-      const pkg = this._filteredPackages.find((p) => filepath.includes(p.location));
-      if (pkg) {
-        // changes structure sample: { '@lerna-lite/watch': { pkg: Package, events: { change: ['path1', 'path2'], unlink: ['path3'] } } }
-        if (!this._changes[pkg.name] || !this._changes[pkg.name].changeFiles) {
-          this._changes[pkg.name] = { pkg, changeFiles: new Set<string>() }; // use Set to avoid duplicate entires
-        }
-        this._changes[pkg.name].changeFiles.add(filepath);
-
-        // once we reached emit change stability threshold, we'll fire events for each packages & events while the file paths array will be merged
-        if (this._timer) clearTimeout(this._timer as NodeJS.Timeout);
-
-        // chokidar triggers events for every single file change (add, unlink, ...),
-        // so in order for us to merge all changes and return them under a single lerna watch event we need to wait a certain delay
-        this._timer = setTimeout(async () => {
-          // destructuring the changes object, it could include multiple packages and files to loop through (1 change for each package)
-          for (const changedPkgName of Object.keys(this._changes)) {
-            const changedPkg = this._changes[changedPkgName].pkg;
-
-            // loop through all possible events (add, addDir, unlink, unlinkDir)
-            if (this._changes[changedPkgName].changeFiles) {
-              const fileDelimiter = this.options?.fileDelimiter ?? FILE_DELIMITER;
-              const changedFiles = Array.from<string>(this._changes[changedPkgName].changeFiles);
-              const mergedFiles = changedFiles.join(fileDelimiter);
-              await this.getRunner(changedPkg, mergedFiles);
-              this.logger.verbose('watch', 'Handling %d files changed in %j.', changedFiles.length, changedPkg.name);
-              this._changes[changedPkgName].changeFiles.clear();
-              delete this._changes[changedPkgName];
-              resolve({ changedPkg, mergedFiles });
-            }
-          }
-          this._changes = {};
-        }, this.options.emitChangesDelay ?? EMIT_CHANGES_DELAY);
+    const pkg = this._filteredPackages.find((p) => filepath.includes(p.location));
+    if (pkg) {
+      // changes structure sample: { '@lerna-lite/watch': { pkg: Package, changeFiles: ['path1', 'path2'] }
+      if (!this._changes[pkg.name] || !this._changes[pkg.name].changeFiles) {
+        this._changes[pkg.name] = { pkg, changeFiles: new Set<string>() }; // use Set to avoid duplicate entires
       }
+      this._changes[pkg.name].changeFiles.add(filepath);
+
+      return this.executeCommandCallback();
+    }
+  }
+
+  protected executeCommandCallback() {
+    return new Promise((resolve) => {
+      // once we reached emit change stability threshold, we'll fire events for each packages & events while the file paths array will be merged
+      if (this._timer) clearTimeout(this._timer as NodeJS.Timeout);
+
+      // chokidar triggers events for every single file change (add, unlink, ...),
+      // so in order for us to merge all changes and return them under a single lerna watch event we need to wait a certain delay
+      this._timer = setTimeout(async () => {
+        // destructuring the changes object, it could include multiple packages and files to loop through (1 change for each package)
+        for (const changedPkgName of Object.keys(this._changes)) {
+          const changedPkg = this._changes[changedPkgName].pkg;
+
+          // execute command callback when file changes are found
+          if (this._changes[changedPkgName].changeFiles?.size > 0) {
+            const changedFiles = Array.from<string>(this._changes[changedPkgName].changeFiles);
+            const changedFilesCsv = changedFiles.join(this._fileDelimiter);
+
+            // make sure there's nothing in progress before executing the next callback
+            if (!this._processing) {
+              this._processing = true;
+              // prettier-ignore
+              this.logger.info('watch', 'Detected %d %s changed in %j.', changedFiles.length, pluralize('file', changedFiles.length), changedPkg.name );
+              this._changes[changedPkgName].changeFiles.clear();
+              await this.getRunner(changedPkg, changedFilesCsv);
+
+              // now that the previous callback is finished, we might still have changes that were queued in the same package
+              // if that is the case then simply execute the callback again on same package
+              if (this._changes[changedPkgName].changeFiles.size > 0) {
+                this.executeCommandCallback();
+              }
+
+              // reaching this point means there's no more callback queued on this package and we should remove it from the list of changes
+              delete this._changes[changedPkgName];
+
+              // we might still have other packages that have changes too, re-execute command callback process when found
+              if (this.hasQueuedChanges()) {
+                this.executeCommandCallback();
+              }
+
+              const pkgLn = Object.keys(this._changes || {}).length;
+              this.logger.verbose('watch', `Found %d ${pluralize('package', pkgLn)} left in the queue.`, pkgLn);
+              this._processing = false;
+            }
+            resolve({ changedPkg, mergedFiles: changedFilesCsv });
+          }
+        }
+      }, this.options.emitChangesDelay ?? EMIT_CHANGES_DELAY);
     });
+  }
+
+  protected hasQueuedChanges() {
+    for (const pkgName of Object.keys(this._changes)) {
+      if (this._changes[pkgName].changeFiles.size > 0) {
+        return true;
+      }
+    }
+
+    return false;
   }
 
   protected onError(error: any) {
