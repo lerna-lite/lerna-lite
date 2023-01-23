@@ -19,9 +19,6 @@ npm install @lerna-lite/watch -D -W
 
 # then use it (see usage below), sure yeah why not
 lerna watch
-
-# OR use npx
-npx lerna watch
 ```
 
 ## Usage
@@ -129,7 +126,7 @@ $ npx -c 'lerna watch -- echo \$LERNA_PACKAGE_NAME \$LERNA_FILE_CHANGES'
       - [`--awf-poll-interval`](#--awf-poll-interval)
       - [`--awf-stability-threshold`](#--awf-stability-threshold)
 
-> **Note** to limit the number of files being watched, you might want to take a look at either [`--ignored`](#--ignored) and/or [`--glob`](#--glob) options. The `lerna watch` command skips `.git/` and `node_modules/` directories by default.
+> **Note** to limit the number of files being watched, you might want to take a look at either [`--ignored`](#--ignored) and/or [`--glob`](#--glob) options. The `lerna watch` command skips `.git/`, `dist/` and `node_modules/` directories by default.
 
 ### `--emit-changes-delay`
 Defaults to `200`, time to wait in milliseconds before collecting all file changes and then emitting them into a single watch event. The reason for this option to exist is basically to provide enough time for `lerna watch` to collect all prior file changes and merge them into a single watch change event (chokidar has no grouping feature and emits an event for every single file change) and we want to avoid emitting too many events (especially for a watch that triggers a rebuild). This option will come into play when you make a code change that triggers hundred of file changes, you might need to adjust the delay by increasing its value (similar library like `Nx` have their `Nx Watch` fixed to `500`).
@@ -148,7 +145,7 @@ $ lerna watch --file-delimiter=\";;\" -- <command>
 
 ### `--glob`
 
-Provide a Glob pattern to target which files to watch, note that this will be appended to the package file path is provided to Chokidar. For example if our package is located under `/home/user/monorepo/packages/pkg-1` and we define `"glob": "/src/**/*.{ts,tsx}"`, it will end using the following watch pattern in Chokidar `/home/user/monorepo/packages/pkg-1/src/**/*.{ts,tsx}`
+Provide a Glob pattern to target which file types to watch, note that this will be appended to the package file path that will be provided to Chokidar. For example if our package is located under `/home/user/monorepo/packages/pkg-1` and we define `"glob": "/src/**/*.{ts,tsx}"`, it will end using the following watch pattern in Chokidar `/home/user/monorepo/packages/pkg-1/src/**/*.{ts,tsx}`
 
 ```sh
 # glob pattern will be appended to package path to Chokidar files to watch
@@ -228,7 +225,7 @@ $ lerna watch --ignored=\"**/bin\" -- <command>
 $ lerna watch --ignored=\"/(^|[/\\])\../\" -- <command>
 ```
 
-> **Note** the `lerna watch` command skips `.git/` and `node_modules/` directories by default. If you want to watch files inside `node_moduels/`, you can pass a negated glob pattern, that is `lerna watch --ignored=\"!**/node_modules/**\"`
+> **Note** the `lerna watch` command skips `.git/`, `dist/` and `node_modules/` directories by default. If you want to watch files inside any of these directories, you can pass a negated glob pattern, that is `lerna watch --ignored=\"!**/node_modules/**\"`
 
 ### `--ignore-initial`
 

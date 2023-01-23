@@ -148,12 +148,16 @@ changes and changelogs
 Let's start by installing Lerna as a dev dependency of your project and run the `init` command to get started (see [init#readme](https://github.com/lerna-lite/lerna-lite/tree/main/packages/init#readme) for all options).
 
 ```sh
+# install Lerna-Lite globally
+$ npm install -g @lerna-lite/cli # pnpm add -g @lerna-lite/cli
+
+# create your monorepo and initialize lerna-lite
 $ mkdir lerna-repo
 $ cd lerna-repo
-$ npx lerna init # with pnpm
+$ lerna init
 
 # for npm/yarn (only) workspaces add --use-workspaces
-$ npx lerna init --use-workspaces
+$ lerna init --use-workspaces
 ```
 
 This will create a `lerna.json` configuration file as well as a `packages` folder, so your folder should now look like this:

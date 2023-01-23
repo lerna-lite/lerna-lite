@@ -17,9 +17,6 @@ npm install @lerna-lite/diff -D -W
 
 # then use it (see usage below)
 lerna diff
-
-# OR use npx
-npx lerna diff
 ```
 
 ## Usage

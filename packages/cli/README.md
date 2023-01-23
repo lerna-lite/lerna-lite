@@ -25,10 +25,6 @@ npm install @lerna-lite/cli -D -W
 lerna info
 lerna version
 lerna publish
-
-# OR use npx
-npx lerna publish
-npx lerna version
 ```
 
 ## Usage

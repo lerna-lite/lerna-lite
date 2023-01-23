@@ -19,9 +19,6 @@ npm install @lerna-lite/run -D -W
 
 # then use it (see usage below)
 lerna run <script>
-
-# OR use npx
-npx lerna run <script>
 ```
 
 ## Usage

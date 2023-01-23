@@ -17,9 +17,6 @@ npm install @lerna-lite/list -D -W
 
 # then use it (see usage below)
 lerna ls
-
-# OR use npx
-npx lerna ls
 ```
 
 ## Usage

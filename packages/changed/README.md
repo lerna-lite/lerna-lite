@@ -17,9 +17,6 @@ npm install @lerna-lite/changed -D -W
 
 # then use it (see usage below)
 lerna changed
-
-# OR use npx
-npx lerna changed
 ```
 
 ## Usage

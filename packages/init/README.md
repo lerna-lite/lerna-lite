@@ -17,9 +17,6 @@ npm install @lerna-lite/cli -D -W
 
 # then use it (see usage below)
 lerna init
-
-# OR use npx
-npx lerna init
 ```
 
 ## Usage

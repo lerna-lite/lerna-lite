@@ -18,9 +18,6 @@ npm install @lerna-lite/cli -D -W
 
 # then use it (see usage below)
 lerna publish
-
-# OR use npx
-npx lerna publish
 ```
 
 ## Usage
