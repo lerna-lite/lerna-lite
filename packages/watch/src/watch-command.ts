@@ -166,22 +166,25 @@ export class WatchCommand extends Command<WatchCommandOption & FilterOptions> {
               this._changes[changedPkgName].changeFiles.clear();
               await this.getRunner(changedPkg, changedFilesCsv);
 
-              // now that the previous callback is finished, we might still have changes that were queued in the same package
-              // if that is the case then simply execute the callback again on same package
+              // now that the previous callback is finished, we might still have changes that were queued on the same package
+              // then simply execute the callback again on same package
               if (this._changes[changedPkgName].changeFiles.size > 0) {
                 this.executeCommandCallback();
               }
 
-              // reaching this point means there's no more callback queued on this package and we should remove it from the list of changes
+              // reaching this point means there's no more callback queued on current package and we should remove it from the list of changes
               delete this._changes[changedPkgName];
 
-              // we might still have other packages that have changes too, re-execute command callback process when found
+              // we might still have other packages that have changes though, so re-execute command callback process if any were found
               if (this.hasQueuedChanges()) {
                 this.executeCommandCallback();
               }
 
               const pkgLn = Object.keys(this._changes || {}).length;
               this.logger.verbose('watch', `Found %d ${pluralize('package', pkgLn)} left in the queue.`, pkgLn);
+              if (pkgLn === 0) {
+                this.logger.info('watch', 'All commands completed, waiting for next change...');
+              }
               this._processing = false;
             }
             resolve({ changedPkg, mergedFiles: changedFilesCsv });
