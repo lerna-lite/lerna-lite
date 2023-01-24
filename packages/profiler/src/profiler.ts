@@ -3,7 +3,7 @@ import npmlog from 'npmlog';
 // @ts-ignore
 import upath from 'upath';
 
-import { ProfilerConfig, TraceEvent } from '../models';
+import { ProfilerConfig, TraceEvent } from './models';
 
 export function generateProfileOutputPath(outputDirectory?: string) {
   return upath.join(upath.resolve(outputDirectory || '.'), getTimeBasedFilename());

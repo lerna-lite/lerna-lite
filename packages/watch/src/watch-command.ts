@@ -8,7 +8,7 @@ import {
   ValidationError,
   WatchCommandOption,
 } from '@lerna-lite/core';
-import { FilterOptions, getFilteredPackages } from '@lerna-lite/optional-cmd-common';
+import { FilterOptions, getFilteredPackages } from '@lerna-lite/filter-packages';
 import chokidar from 'chokidar';
 import path from 'path';
 

@@ -33,7 +33,7 @@
   },
   "dependencies": {
     "@lerna-lite/core": "workspace:*",
-    "@lerna-lite/optional-cmd-common": "workspace:*",
+    "@lerna-lite/filter-packages": "workspace:*",
     "chokidar": "^3.5.3",
     "path": "^0.12.7"
   },

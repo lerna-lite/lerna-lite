@@ -13,10 +13,11 @@ importers:
       '@lerna-lite/core': workspace:*
       '@lerna-lite/diff': workspace:*
       '@lerna-lite/exec': workspace:*
+      '@lerna-lite/filter-packages': workspace:*
       '@lerna-lite/info': workspace:*
       '@lerna-lite/list': workspace:*
       '@lerna-lite/listable': workspace:*
-      '@lerna-lite/optional-cmd-common': workspace:*
+      '@lerna-lite/profiler': workspace:*
       '@lerna-lite/publish': workspace:*
       '@lerna-lite/run': workspace:*
       '@lerna-lite/version': workspace:*
@@ -65,10 +66,11 @@ importers:
       '@lerna-lite/core': link:packages/core
       '@lerna-lite/diff': link:packages/diff
       '@lerna-lite/exec': link:packages/exec
+      '@lerna-lite/filter-packages': link:packages/filter-packages
       '@lerna-lite/info': link:packages/info
       '@lerna-lite/list': link:packages/list
       '@lerna-lite/listable': link:packages/listable
-      '@lerna-lite/optional-cmd-common': link:packages/optional-cmd-common
+      '@lerna-lite/profiler': link:packages/profiler
       '@lerna-lite/publish': link:packages/publish
       '@lerna-lite/run': link:packages/run
       '@lerna-lite/version': link:packages/version
@@ -274,7 +276,8 @@ importers:
   packages/exec:
     specifiers:
       '@lerna-lite/core': workspace:*
-      '@lerna-lite/optional-cmd-common': workspace:*
+      '@lerna-lite/filter-packages': workspace:*
+      '@lerna-lite/profiler': workspace:*
       '@types/p-map': ^2.0.0
       chalk: ^4.1.2
       dotenv: ^16.0.3
@@ -287,7 +290,8 @@ importers:
       yargs-parser: ^21.1.1
     dependencies:
       '@lerna-lite/core': link:../core
-      '@lerna-lite/optional-cmd-common': link:../optional-cmd-common
+      '@lerna-lite/filter-packages': link:../filter-packages
+      '@lerna-lite/profiler': link:../profiler
       chalk: 4.1.2
       dotenv: 16.0.3
       npmlog: 7.0.1
@@ -299,6 +303,27 @@ importers:
       rimraf: 3.0.2
       yargs: 17.6.2
       yargs-parser: 21.1.1
+
+  packages/filter-packages:
+    specifiers:
+      '@lerna-lite/core': workspace:*
+      '@types/node': ^18.11.18
+      '@types/p-map': ^2.0.0
+      multimatch: ^5.0.0
+      npmlog: ^7.0.1
+      path: ^0.12.7
+      rimraf: ^3.0.2
+      yargs: ^17.6.2
+    dependencies:
+      '@lerna-lite/core': link:../core
+      multimatch: 5.0.0
+      npmlog: 7.0.1
+    devDependencies:
+      '@types/node': 18.11.18
+      '@types/p-map': 2.0.0
+      path: 0.12.7
+      rimraf: 3.0.2
+      yargs: 17.6.2
 
   packages/info:
     specifiers:
@@ -345,14 +370,14 @@ importers:
   packages/list:
     specifiers:
       '@lerna-lite/core': workspace:*
+      '@lerna-lite/filter-packages': workspace:*
       '@lerna-lite/listable': workspace:*
-      '@lerna-lite/optional-cmd-common': workspace:*
       rimraf: ^3.0.2
       yargs-parser: ^21.1.1
     dependencies:
       '@lerna-lite/core': link:../core
+      '@lerna-lite/filter-packages': link:../filter-packages
       '@lerna-lite/listable': link:../listable
-      '@lerna-lite/optional-cmd-common': link:../optional-cmd-common
     devDependencies:
       rimraf: 3.0.2
       yargs-parser: 21.1.1
@@ -370,13 +395,12 @@ importers:
     devDependencies:
       rimraf: 3.0.2
 
-  packages/optional-cmd-common:
+  packages/profiler:
     specifiers:
       '@lerna-lite/core': workspace:*
       '@types/node': ^18.11.18
       '@types/p-map': ^2.0.0
       fs-extra: ^11.1.0
-      multimatch: ^5.0.0
       npmlog: ^7.0.1
       path: ^0.12.7
       rimraf: ^3.0.2
@@ -385,7 +409,6 @@ importers:
     dependencies:
       '@lerna-lite/core': link:../core
       fs-extra: 11.1.0
-      multimatch: 5.0.0
       npmlog: 7.0.1
       upath: 2.0.1
     devDependencies:
@@ -475,7 +498,8 @@ importers:
   packages/run:
     specifiers:
       '@lerna-lite/core': workspace:*
-      '@lerna-lite/optional-cmd-common': workspace:*
+      '@lerna-lite/filter-packages': workspace:*
+      '@lerna-lite/profiler': workspace:*
       '@types/p-map': ^2.0.0
       chalk: ^4.1.2
       fs-extra: ^11.1.0
@@ -489,7 +513,8 @@ importers:
       yargs-parser: ^21.1.1
     dependencies:
       '@lerna-lite/core': link:../core
-      '@lerna-lite/optional-cmd-common': link:../optional-cmd-common
+      '@lerna-lite/filter-packages': link:../filter-packages
+      '@lerna-lite/profiler': link:../profiler
       chalk: 4.1.2
       fs-extra: 11.1.0
       npmlog: 7.0.1
@@ -621,14 +646,14 @@ importers:
   packages/watch:
     specifiers:
       '@lerna-lite/core': workspace:*
-      '@lerna-lite/optional-cmd-common': workspace:*
+      '@lerna-lite/filter-packages': workspace:*
       chokidar: ^3.5.3
       path: ^0.12.7
       rimraf: ^3.0.2
       yargs-parser: ^21.1.1
     dependencies:
       '@lerna-lite/core': link:../core
-      '@lerna-lite/optional-cmd-common': link:../optional-cmd-common
+      '@lerna-lite/filter-packages': link:../filter-packages
       chokidar: 3.5.3
       path: 0.12.7
     devDependencies:

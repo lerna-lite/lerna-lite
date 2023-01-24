@@ -1,6 +1,6 @@
 {
-  "name": "@lerna-lite/exec",
-  "description": "Lerna-Lite Exec command will execute an arbitrary command in each package",
+  "name": "@lerna-lite/filter-packages",
+  "description": "Lerna-Lite common filtering utils used by a few optional commands (Exec/List/Run/Watch)",
   "version": "1.14.2",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
@@ -22,7 +22,7 @@
   "repository": {
     "type": "git",
     "url": "https://github.com/lerna-lite/lerna-lite.git",
-    "directory": "packages/exec"
+    "directory": "packages/filter-packages"
   },
   "bugs": {
     "url": "https://github.com/lerna-lite/lerna-lite/issues"
@@ -33,19 +33,14 @@
   },
   "dependencies": {
     "@lerna-lite/core": "workspace:*",
-    "@lerna-lite/filter-packages": "workspace:*",
-    "@lerna-lite/profiler": "workspace:*",
-    "chalk": "^4.1.2",
-    "dotenv": "^16.0.3",
-    "npmlog": "^7.0.1",
-    "p-map": "^4.0.0"
+    "multimatch": "^5.0.0",
+    "npmlog": "^7.0.1"
   },
   "devDependencies": {
+    "@types/node": "^18.11.18",
     "@types/p-map": "^2.0.0",
-    "fs-extra": "^11.1.0",
-    "globby": "^11.1.0",
+    "path": "^0.12.7",
     "rimraf": "^3.0.2",
-    "yargs": "^17.6.2",
-    "yargs-parser": "^21.1.1"
+    "yargs": "^17.6.2"
   }
 }
