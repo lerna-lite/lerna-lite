@@ -42,7 +42,7 @@ $ lerna run build \$LERNA_PACKAGE_NAME
 
 ## Options
 
-`lerna run` accepts all [filter flags](https://www.npmjs.com/package/@lerna/filter-options).
+`lerna run` accepts all [filter flags](https://github.com/lerna-lite/lerna-lite/blob/main/packages/filter-packages/README.md#options).
 
 ```sh
 $ lerna run --scope my-component test
