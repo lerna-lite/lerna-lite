@@ -1,3 +1,4 @@
+import { Package, PackageGraphNode } from '@lerna-lite/core';
 import conventionalRecommendedBump from 'conventional-recommended-bump';
 import conventionalChangelogCore from 'conventional-changelog-core';
 import log from 'npmlog';
@@ -5,8 +6,6 @@ import semver, { ReleaseType } from 'semver';
 
 import { BaseChangelogOptions, VersioningStrategy } from '../models';
 import { GetChangelogConfig } from './get-changelog-config';
-import { Package } from '../package';
-import { PackageGraphNode } from '../package-graph';
 
 /**
  * @param {import('@lerna/package').Package} pkg

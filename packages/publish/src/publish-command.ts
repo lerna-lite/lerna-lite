@@ -7,7 +7,7 @@ import pMap from 'p-map';
 import pPipe from 'p-pipe';
 import semver from 'semver';
 
-import { VersionCommand } from '@lerna-lite/version';
+import { getOneTimePassword, OneTimePasswordCache, VersionCommand } from '@lerna-lite/version';
 import {
   collectUpdates,
   Command,
@@ -16,11 +16,9 @@ import {
   createRunner,
   deleteComplexObjectProp,
   describeRef,
-  getOneTimePassword,
   logOutput,
   NpaResolveResult,
   npmConf,
-  OneTimePasswordCache,
   Package,
   PackageGraphNode,
   prereleaseIdFromVersion,
@@ -33,6 +31,7 @@ import {
   UpdateCollectorOptions,
   ValidationError,
 } from '@lerna-lite/core';
+
 import { getCurrentTags } from './lib/get-current-tags';
 import { getTaggedPackages } from './lib/get-tagged-packages';
 import { getUnpublishedPackages } from './lib/get-unpublished-packages';

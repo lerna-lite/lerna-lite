@@ -3,24 +3,21 @@ jest.mock('../lib/git-push', () => jest.requireActual('../lib/__mocks__/git-push
 jest.mock('../lib/is-anything-committed', () => jest.requireActual('../lib/__mocks__/is-anything-committed'));
 jest.mock('../lib/is-behind-upstream', () => jest.requireActual('../lib/__mocks__/is-behind-upstream'));
 jest.mock('../lib/remote-branch-exists', () => jest.requireActual('../lib/__mocks__/remote-branch-exists'));
+jest.mock('../git-clients/gitlab-client', () => jest.requireActual('../__mocks__/gitlab-client'));
+jest.mock('../conventional-commits/get-commits-since-last-release', () =>
+  jest.requireActual('../__mocks__/get-commits-since-last-release')
+);
 
 jest.mock('@lerna-lite/core', () => ({
   ...(jest.requireActual('@lerna-lite/core') as any), // return the other real methods, below we'll mock only 2 of the methods
   Command: jest.requireActual('../../../core/src/command').Command,
   conf: jest.requireActual('../../../core/src/command').conf,
-  createGitHubClient: jest.requireActual('../../../core/src/__mocks__/github-client').createGitHubClient,
-  createGitLabClient: jest.requireActual('../../../core/src/__mocks__/gitlab-client').createGitLabClient,
-  parseGitRepo: jest.requireActual('../../../core/src/__mocks__/github-client').parseGitRepo,
-  recommendVersion: jest.requireActual('../../../core/src/__mocks__/conventional-commits').recommendVersion,
-  updateChangelog: jest.requireActual('../../../core/src/__mocks__/conventional-commits').updateChangelog,
   logOutput: jest.requireActual('../../../core/src/__mocks__/output').logOutput,
   collectUpdates: jest.requireActual('../../../core/src/__mocks__/collect-updates').collectUpdates,
   promptConfirmation: jest.requireActual('../../../core/src/__mocks__/prompt').promptConfirmation,
   promptSelectOne: jest.requireActual('../../../core/src/__mocks__/prompt').promptSelectOne,
   promptTextInput: jest.requireActual('../../../core/src/__mocks__/prompt').promptTextInput,
   checkWorkingTree: jest.requireActual('../../../core/src/__mocks__/check-working-tree').checkWorkingTree,
-  getCommitsSinceLastRelease: jest.requireActual('../../../core/src/__mocks__/get-commits-since-last-release')
-    .getCommitsSinceLastRelease,
   runTopologically: jest.requireActual('../../../core/src/utils/run-topologically').runTopologically,
   throwIfReleased: jest.requireActual('../../../core/src/__mocks__/check-working-tree').throwIfReleased,
   throwIfUncommitted: jest.requireActual('../../../core/src/__mocks__/check-working-tree').throwIfUncommitted,
@@ -42,7 +39,8 @@ import writePkg from 'write-pkg';
 import { promptConfirmation, promptSelectOne, VersionCommandOption } from '@lerna-lite/core';
 import { collectUpdates } from '@lerna-lite/core';
 import { logOutput } from '@lerna-lite/core';
-import { checkWorkingTree, getCommitsSinceLastRelease, throwIfUncommitted } from '@lerna-lite/core';
+import { checkWorkingTree, throwIfUncommitted } from '@lerna-lite/core';
+import { getCommitsSinceLastRelease } from '../conventional-commits';
 import { gitPush as libPush } from '../lib/git-push';
 import { isAnythingCommitted } from '../lib/is-anything-committed';
 import { isBehindUpstream } from '../lib/is-behind-upstream';

@@ -1,5 +1,3 @@
-'use strict';
-
 import fs from 'fs-extra';
 import path from 'path';
 import { Project } from '@lerna-lite/core';

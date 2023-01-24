@@ -1,8 +1,8 @@
+import { Package } from '@lerna-lite/core';
 import fs from 'fs-extra';
 import path from 'path';
 
 import { BLANK_LINE, COMMIT_GUIDELINE } from './constants';
-import { Package } from '../package';
 
 /**
  * Read the existing changelog, if it exists.

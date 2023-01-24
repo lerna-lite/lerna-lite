@@ -4,9 +4,5 @@
   "description": "Private test helpers for the lerna-lite monorepo",
   "main": "index.js",
   "private": true,
-  "license": "MIT",
-  "dependencies": {
-    "@lerna-lite/cli": "workspace:*",
-    "@lerna-lite/core": "workspace:*"
-  }
+  "license": "MIT"
 }

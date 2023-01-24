@@ -1,14 +1,14 @@
 import fs from 'fs-extra';
 import path from 'path';
-import { Project } from '../../project';
+import { Project } from '@lerna-lite/core';
 
 // helpers
 import { gitAdd, gitCommit, gitTag, initFixtureFactory } from '@lerna-test/helpers';
 const initFixture = initFixtureFactory(__dirname);
 
 // file under test
+import { Package } from '@lerna-lite/core';
 import { recommendVersion, updateChangelog } from '../../conventional-commits';
-import { Package } from '../../package';
 import { GetChangelogConfig } from '../get-changelog-config';
 
 // stabilize changelog commit SHA and datestamp

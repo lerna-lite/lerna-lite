@@ -1,5 +1,3 @@
-'use strict';
-
 jest.mock('../../../child-process');
 
 // mocked modules

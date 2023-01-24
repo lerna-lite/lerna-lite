@@ -1,6 +1,3 @@
-import { GitRawCommitsOptions, ParserOptions } from 'conventional-changelog-core';
-import { Options as WriterOptions } from 'conventional-changelog-writer';
-import { Options as RecommendedBumpOptions } from 'conventional-recommended-bump';
 import log from 'npmlog';
 import npa from 'npm-package-arg';
 
@@ -11,25 +8,6 @@ export type JsonObject = { [Key in string]: JsonValue } & { [Key in string]?: Js
 export type JsonArray = JsonValue[];
 export type JsonPrimitive = string | number | boolean | null;
 export type JsonValue = JsonPrimitive | JsonObject | JsonArray;
-
-export type VersioningStrategy = 'fixed' | 'independent';
-export type ChangelogType = 'fixed' | 'independent' | 'root';
-export type ChangelogPresetConfig = string | { name: string; [key: string]: unknown };
-
-export interface BaseChangelogOptions {
-  changelogPreset?: ChangelogPresetConfig;
-  rootPath?: string;
-  tagPrefix?: string;
-}
-
-export interface ChangelogConfig {
-  conventionalChangelog: { parserOpts: ParserOptions; writerOpts: WriterOptions };
-  gitRawCommitsOpts: GitRawCommitsOptions & { path: string };
-  key?: string;
-  parserOpts: ParserOptions;
-  recommendedBumpOpts: RecommendedBumpOptions;
-  writerOpts: WriterOptions;
-}
 
 export interface CommandOptions {
   rollPublish?: boolean;
@@ -94,21 +72,6 @@ export interface Manifest {
   version: string;
 }
 
-export interface UpdateChangelogOption {
-  changelogHeaderMessage?: string;
-  changelogVersionMessage?: string;
-  changelogPreset?: string;
-  changelogIncludeCommitsGitAuthor?: boolean | string;
-  changelogIncludeCommitsClientLogin?: boolean | string;
-  commitsSinceLastRelease?: RemoteCommit[];
-  rootPath?: string;
-  tagPrefix?: string;
-  version?: string;
-
-  /** @deprecated this option was renamed to `changelogIncludeCommitsGitAuthor` */
-  changelogIncludeCommitAuthorFullname?: boolean | string;
-}
-
 export interface FetchConfig {
   fetchRetries: number;
   log: log.Logger;
@@ -153,30 +116,6 @@ export interface TopologicalConfig extends QueryGraphConfig {
   concurrency?: number;
 }
 
-export interface GitClientReleaseOption {
-  owner: string;
-  repo: string;
-  tag_name: string;
-  name: string;
-  body?: string;
-  draft?: boolean;
-  prerelease?: boolean;
-}
-
-export type GitCreateReleaseFn = (options: GitClientReleaseOption) => Promise<{
-  ok: boolean;
-  status: string;
-  statusText: string;
-}>;
-
-export interface GitClient {
-  createRelease: (opts: GitClientReleaseOption) => Promise<void>;
-}
-
-export interface GitCreateReleaseClientOutput {
-  repos: GitClient;
-}
-
 export type NpaResolveResult = (
   | npa.FileResult
   | npa.HostedGitResult
@@ -187,12 +126,6 @@ export type NpaResolveResult = (
   /** the specifier part used when deailing with a `workspace:` protocol resource */
   workspaceSpec?: string;
 };
-
-/** Passed between concurrent executions */
-export interface OneTimePasswordCache {
-  /* The one-time password, passed as an option or received via prompt */
-  otp?: string | number;
-}
 
 export interface LernaConfig {
   command?: {
@@ -261,43 +194,6 @@ export interface RawManifest extends Package {
   publishConfig?: Record<'directory' | 'registry' | 'tag', string>;
 }
 
-export interface ReleaseClient {
-  repos: {
-    createRelease: GitCreateReleaseFn;
-  };
-}
-
-export interface ReleaseCommandProps {
-  tags: string[];
-  releaseNotes: ReleaseNote[];
-}
-
-export interface ReleaseOptions {
-  gitRemote: string;
-  execOpts: ExecOpts;
-}
-
-export interface ReleaseNote {
-  name: string;
-  notes?: string;
-}
-
-export type RemoteClientType = 'gitlab' | 'github';
-
-export type RemoteCommit = {
-  /** git commit author name */
-  authorName: string;
-
-  /** remote client login (ie github login) */
-  login: string;
-
-  /** commit message headling (50 chars maxlen) */
-  message: string;
-
-  /** short commit hash (7 chars long) */
-  shortHash: string;
-};
-
 export interface UpdateCollectorOptions {
   /** The semver bump keyword (patch/minor/major) or explicit version used */
   bump?: string;
@@ -324,3 +220,5 @@ export interface UpdateCollectorOptions {
   conventionalGraduate?: boolean | string;
   excludeDependents?: boolean;
 }
+
+export type RemoteClientType = 'gitlab' | 'github';

@@ -12,6 +12,12 @@ jest.mock('../../../version/dist/lib/remote-branch-exists', () =>
   jest.requireActual('../../../version/src/lib/__mocks__/remote-branch-exists')
 );
 
+// mocked modules of @lerna-lite/version
+jest.mock('@lerna-lite/version', () => ({
+  ...jest.requireActual('@lerna-lite/version'), // return the other real methods, below we'll mock only 2 of the methods
+  getOneTimePassword: jest.fn(),
+}));
+
 // mocked modules of @lerna-lite/core
 jest.mock('@lerna-lite/core', () => ({
   ...jest.requireActual('@lerna-lite/core'), // return the other real methods, below we'll mock only 2 of the methods
@@ -19,7 +25,6 @@ jest.mock('@lerna-lite/core', () => ({
   conf: jest.requireActual('../../../core/src/command').conf,
   collectUpdates: jest.requireActual('../../../core/src/__mocks__/collect-updates').collectUpdates,
   throwIfUncommitted: jest.requireActual('../../../core/src/__mocks__/check-working-tree').throwIfUncommitted,
-  getOneTimePassword: jest.fn(),
   logOutput: jest.requireActual('../../../core/src/__mocks__/output').logOutput,
   promptConfirmation: jest.requireActual('../../../core/src/__mocks__/prompt').promptConfirmation,
   promptSelectOne: jest.requireActual('../../../core/src/__mocks__/prompt').promptSelectOne,
@@ -66,10 +71,11 @@ const lernaPublish = commandRunner(cliCommands);
 import yargParser from 'yargs-parser';
 
 // mocked or stubbed modules
+import { collectUpdates } from '@lerna-lite/core';
+import { getOneTimePassword } from '@lerna-lite/version';
 import { npmPublish } from '../lib/npm-publish';
 import { npmPublish as npmPublishMock } from '../lib/__mocks__/npm-publish';
 import { promptConfirmation, PublishCommandOption } from '@lerna-lite/core';
-import { getOneTimePassword, collectUpdates } from '@lerna-lite/core';
 import { packDirectory } from '../lib/pack-directory';
 import { getNpmUsername } from '../lib/get-npm-username';
 import { verifyNpmPackageAccess } from '../lib/verify-npm-package-access';

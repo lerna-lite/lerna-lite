@@ -1,5 +1,3 @@
-'use strict';
-
 import { Package } from '../../../package';
 
 // helpers

@@ -1,5 +1,6 @@
-import { OneTimePasswordCache } from './models';
-import { promptTextInput } from './prompt';
+import { promptTextInput } from '@lerna-lite/core';
+
+import { OneTimePasswordCache } from '../models';
 
 // basic single-entry semaphore
 const semaphore: any = {

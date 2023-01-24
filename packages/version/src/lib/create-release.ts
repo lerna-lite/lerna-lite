@@ -1,18 +1,11 @@
+import { ValidationError } from '@lerna-lite/core';
 import chalk from 'chalk';
 import log from 'npmlog';
 import newGithubReleaseUrl from 'new-github-release-url';
 import semver from 'semver';
 
-import {
-  createGitHubClient,
-  createGitLabClient,
-  GitCreateReleaseClientOutput,
-  parseGitRepo,
-  ReleaseClient,
-  ReleaseCommandProps,
-  ReleaseOptions,
-  ValidationError,
-} from '@lerna-lite/core';
+import { createGitHubClient, createGitLabClient, parseGitRepo } from '../git-clients';
+import { GitCreateReleaseClientOutput, ReleaseClient, ReleaseCommandProps, ReleaseOptions } from '../models';
 
 export function createReleaseClient(type: 'github' | 'gitlab'): GitCreateReleaseClientOutput {
   switch (type) {

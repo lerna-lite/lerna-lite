@@ -6,16 +6,14 @@ jest.mock('../lib/git-tag', () => jest.requireActual('../lib/__mocks__/git-tag')
 jest.mock('../lib/is-anything-committed', () => jest.requireActual('../lib/__mocks__/is-anything-committed'));
 jest.mock('../lib/is-behind-upstream', () => jest.requireActual('../lib/__mocks__/is-behind-upstream'));
 jest.mock('../lib/remote-branch-exists', () => jest.requireActual('../lib/__mocks__/remote-branch-exists'));
+jest.mock('../conventional-commits', () => jest.requireActual('../__mocks__/conventional-commits'));
+jest.mock('../git-clients/gitlab-client', () => jest.requireActual('../__mocks__/gitlab-client'));
+jest.mock('../git-clients/github-client', () => jest.requireActual('../__mocks__/github-client'));
 
 jest.mock('@lerna-lite/core', () => ({
   ...(jest.requireActual('@lerna-lite/core') as any), // return the other real methods, below we'll mock only 2 of the methods
   Command: jest.requireActual('../../../core/src/command').Command,
   conf: jest.requireActual('../../../core/src/command').conf,
-  createGitHubClient: jest.requireActual('../../../core/src/__mocks__/github-client').createGitHubClient,
-  createGitLabClient: jest.requireActual('../../../core/src/__mocks__/gitlab-client').createGitLabClient,
-  parseGitRepo: jest.requireActual('../../../core/src/__mocks__/github-client').parseGitRepo,
-  recommendVersion: jest.requireActual('../../../core/src/__mocks__/conventional-commits').recommendVersion,
-  updateChangelog: jest.requireActual('../../../core/src/__mocks__/conventional-commits').updateChangelog,
   logOutput: jest.requireActual('../../../core/src/__mocks__/output').logOutput,
   promptConfirmation: jest.requireActual('../../../core/src/__mocks__/prompt').promptConfirmation,
   promptSelectOne: jest.requireActual('../../../core/src/__mocks__/prompt').promptSelectOne,
@@ -27,10 +25,9 @@ jest.mock('@lerna-lite/core', () => ({
 jest.mock('@lerna-lite/version', () => jest.requireActual('../version-command'));
 
 // mocked modules
-import { createGitHubClient, VersionCommandOption } from '@lerna-lite/core';
-import { createGitLabClient } from '@lerna-lite/core';
-import { recommendVersion } from '@lerna-lite/core';
-import { logOutput } from '@lerna-lite/core';
+import { logOutput, VersionCommandOption } from '@lerna-lite/core';
+import { recommendVersion } from '../conventional-commits';
+import { createGitHubClient, createGitLabClient } from '../git-clients';
 
 // helpers
 import { commandRunner, initFixtureFactory } from '@lerna-test/helpers';

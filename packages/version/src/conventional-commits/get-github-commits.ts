@@ -1,9 +1,9 @@
+import { ExecOpts, getComplexObjectValue } from '@lerna-lite/core';
 import dedent from 'dedent';
 import log from 'npmlog';
 
 import { createGitHubClient, parseGitRepo } from '../git-clients';
-import { ExecOpts, RemoteCommit } from '../models';
-import { getComplexObjectValue } from '../utils';
+import { RemoteCommit } from '../models';
 
 const QUERY_PAGE_SIZE = 100; // GitHub API is restricting max of 100 per query
 
