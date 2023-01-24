@@ -1,5 +1,8 @@
 lockfileVersion: 5.4
 
+overrides:
+  json5@<1.0.2: '>=1.0.2'
+
 importers:
 
   .:

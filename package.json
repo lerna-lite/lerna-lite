@@ -101,5 +101,10 @@
     "tsm": "^2.3.0",
     "typescript": "^4.9.4",
     "write-json-file": "^4.3.0"
+  },
+  "pnpm": {
+    "overrides": {
+      "json5@<1.0.2": ">=1.0.2"
+    }
   }
 }
