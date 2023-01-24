@@ -45,7 +45,10 @@
     "fs-extra": "^11.1.0",
     "get-stream": "^6.0.1",
     "git-url-parse": "^13.1.0",
+    "graceful-fs": "^4.2.10",
+    "is-stream": "^2.0.1",
     "load-json-file": "^6.2.0",
+    "make-dir": "^3.1.0",
     "minimatch": "^5.1.6",
     "new-github-release-url": "^1.0.0",
     "node-fetch": "^2.6.7",
@@ -59,6 +62,8 @@
     "path": "^0.12.7",
     "semver": "^7.3.8",
     "slash": "^3.0.0",
+    "temp-dir": "^1.0.0",
+    "uuid": "^9.0.0",
     "write-json-file": "^4.3.0"
   },
   "devDependencies": {

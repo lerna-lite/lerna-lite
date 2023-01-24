@@ -185,12 +185,9 @@ importers:
       execa: ^5.1.1
       glob-parent: ^6.0.2
       globby: ^11.1.0
-      graceful-fs: ^4.2.10
       inquirer: ^8.2.4
       is-ci: ^3.0.1
-      is-stream: ^2.0.1
       load-json-file: ^6.2.0
-      make-dir: ^3.1.0
       minimatch: ^5.1.6
       npm-package-arg: ^10.1.0
       npm-registry-fetch: ^14.0.3
@@ -203,8 +200,6 @@ importers:
       semver: ^7.3.8
       slash: ^3.0.0
       strong-log-transformer: ^2.1.0
-      temp-dir: ^1.0.0
-      uuid: ^9.0.0
       write-file-atomic: ^5.0.0
       write-json-file: ^4.3.0
       write-pkg: ^4.0.0
@@ -220,12 +215,9 @@ importers:
       execa: 5.1.1
       glob-parent: 6.0.2
       globby: 11.1.0
-      graceful-fs: 4.2.10
       inquirer: 8.2.4
       is-ci: 3.0.1
-      is-stream: 2.0.1
       load-json-file: 6.2.0
-      make-dir: 3.1.0
       minimatch: 5.1.6
       npm-package-arg: 10.1.0
       npmlog: 7.0.1
@@ -236,8 +228,6 @@ importers:
       semver: 7.3.8
       slash: 3.0.0
       strong-log-transformer: 2.1.0
-      temp-dir: 1.0.0
-      uuid: 9.0.0
       write-file-atomic: 5.0.0
       write-json-file: 4.3.0
       write-pkg: 4.0.0
@@ -543,8 +533,11 @@ importers:
       fs-extra: ^11.1.0
       get-stream: ^6.0.1
       git-url-parse: ^13.1.0
+      graceful-fs: ^4.2.10
+      is-stream: ^2.0.1
       js-yaml: ^4.1.0
       load-json-file: ^6.2.0
+      make-dir: ^3.1.0
       minimatch: ^5.1.6
       new-github-release-url: ^1.0.0
       node-fetch: ^2.6.7
@@ -558,6 +551,8 @@ importers:
       rimraf: ^3.0.2
       semver: ^7.3.8
       slash: ^3.0.0
+      temp-dir: ^1.0.0
+      uuid: ^9.0.0
       write-json-file: ^4.3.0
       write-pkg: ^4.0.0
       yargs: ^17.6.2
@@ -576,7 +571,10 @@ importers:
       fs-extra: 11.1.0
       get-stream: 6.0.1
       git-url-parse: 13.1.0
+      graceful-fs: 4.2.10
+      is-stream: 2.0.1
       load-json-file: 6.2.0
+      make-dir: 3.1.0
       minimatch: 5.1.6
       new-github-release-url: 1.0.0
       node-fetch: 2.6.7
@@ -589,6 +587,8 @@ importers:
       pify: 5.0.0
       semver: 7.3.8
       slash: 3.0.0
+      temp-dir: 1.0.0
+      uuid: 9.0.0
       write-json-file: 4.3.0
     devDependencies:
       '@npm/types': 1.0.2

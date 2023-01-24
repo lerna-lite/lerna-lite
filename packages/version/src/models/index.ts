@@ -73,6 +73,12 @@ export interface GitCreateReleaseClientOutput {
   repos: GitClient;
 }
 
+/** Passed between concurrent executions */
+export interface OneTimePasswordCache {
+  /* The one-time password, passed as an option or received via prompt */
+  otp?: string | number;
+}
+
 export interface ReleaseClient {
   repos: {
     createRelease: GitCreateReleaseFn;

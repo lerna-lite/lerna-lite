@@ -1,6 +1,6 @@
 import execa from 'execa';
 import os from 'os';
-import { tempWrite } from '@lerna-lite/core';
+import { tempWrite } from '../../packages/version/src/utils/temp-write';
 import path from 'path';
 import cp from 'child_process';
 import loadJsonFile from 'load-json-file';

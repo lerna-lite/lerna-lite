@@ -1,3 +1,5 @@
+import { LifecycleConfig, Package, RawManifest, runLifecycle } from '@lerna-lite/core';
+import { OneTimePasswordCache, otplease } from '@lerna-lite/version';
 import fs from 'fs-extra';
 import log from 'npmlog';
 import npa from 'npm-package-arg';
@@ -6,7 +8,6 @@ import pify from 'pify';
 import { publish } from 'libnpmpublish';
 import readJSON from 'read-package-json';
 
-import { LifecycleConfig, OneTimePasswordCache, otplease, Package, RawManifest, runLifecycle } from '@lerna-lite/core';
 import { LibNpmPublishOptions, PackagePublishConfig } from '../models';
 
 const readJSONAsync = pify(readJSON);

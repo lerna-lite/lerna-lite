@@ -8,7 +8,6 @@ export * from './utils';
 export * from './child-process';
 export * from './constants';
 export * from './command';
-export * from './otplease';
 export * from './package';
 export * from './prompt';
 export * from './validation-error';

@@ -1,8 +1,8 @@
+import { OneTimePasswordCache, otplease } from '@lerna-lite/version';
 import log from 'npmlog';
 import npa from 'npm-package-arg';
 import fetch from 'npm-registry-fetch';
 
-import { OneTimePasswordCache, otplease } from '@lerna-lite/core';
 import { DistTagOptions } from '../models';
 
 /**

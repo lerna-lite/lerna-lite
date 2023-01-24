@@ -25,10 +25,9 @@ jest.mock('@lerna-lite/core', () => ({
 jest.mock('@lerna-lite/version', () => jest.requireActual('../version-command'));
 
 // mocked modules
-import { VersionCommandOption } from '@lerna-lite/core';
+import { logOutput, VersionCommandOption } from '@lerna-lite/core';
 import { recommendVersion } from '../conventional-commits';
 import { createGitHubClient, createGitLabClient } from '../git-clients';
-import { logOutput } from '@lerna-lite/core';
 
 // helpers
 import { commandRunner, initFixtureFactory } from '@lerna-test/helpers';
