@@ -1,6 +1,6 @@
 {
-  "name": "@lerna-lite/optional-cmd-common",
-  "description": "Lerna-Lite common utils for optional commands (Exec/List/Run)",
+  "name": "@lerna-lite/profiler",
+  "description": "Lerna-Lite Profiler used by certain optional commands (Run/Exec)",
   "version": "1.14.2",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
@@ -22,7 +22,7 @@
   "repository": {
     "type": "git",
     "url": "https://github.com/lerna-lite/lerna-lite.git",
-    "directory": "packages/optional-cmd-common"
+    "directory": "packages/profiler"
   },
   "bugs": {
     "url": "https://github.com/lerna-lite/lerna-lite/issues"
@@ -34,7 +34,6 @@
   "dependencies": {
     "@lerna-lite/core": "workspace:*",
     "fs-extra": "^11.1.0",
-    "multimatch": "^5.0.0",
     "npmlog": "^7.0.1",
     "upath": "^2.0.1"
   },

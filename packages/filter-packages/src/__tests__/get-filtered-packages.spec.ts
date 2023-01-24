@@ -6,16 +6,16 @@ jest.mock('npmlog', () => ({
 
 jest.mock('@lerna-lite/core', () => ({
   ...(jest.requireActual('@lerna-lite/core') as any), // return the other real methods, below we'll mock only 2 of the methods
-  Command: jest.requireActual('../../../../core/src/command').Command,
-  conf: jest.requireActual('../../../../core/src/command').conf,
-  logOutput: jest.requireActual('../../../../core/src/__mocks__/output').logOutput,
-  promptConfirmation: jest.requireActual('../../../../core/src/__mocks__/prompt').promptConfirmation,
-  promptSelectOne: jest.requireActual('../../../../core/src/__mocks__/prompt').promptSelectOne,
-  promptTextInput: jest.requireActual('../../../../core/src/__mocks__/prompt').promptTextInput,
-  throwIfUncommitted: jest.requireActual('../../../../core/src/__mocks__/check-working-tree').throwIfUncommitted,
-  collectUpdates: jest.requireActual('../../../../core/src/__mocks__/collect-updates').collectUpdates,
-  PackageGraph: jest.requireActual('../../../../core/src/package-graph').PackageGraph,
-  getPackages: jest.requireActual('../../../../core/src/project').getPackages,
+  Command: jest.requireActual('../../../core/src/command').Command,
+  conf: jest.requireActual('../../../core/src/command').conf,
+  logOutput: jest.requireActual('../../../core/src/__mocks__/output').logOutput,
+  promptConfirmation: jest.requireActual('../../../core/src/__mocks__/prompt').promptConfirmation,
+  promptSelectOne: jest.requireActual('../../../core/src/__mocks__/prompt').promptSelectOne,
+  promptTextInput: jest.requireActual('../../../core/src/__mocks__/prompt').promptTextInput,
+  throwIfUncommitted: jest.requireActual('../../../core/src/__mocks__/check-working-tree').throwIfUncommitted,
+  collectUpdates: jest.requireActual('../../../core/src/__mocks__/collect-updates').collectUpdates,
+  PackageGraph: jest.requireActual('../../../core/src/package-graph').PackageGraph,
+  getPackages: jest.requireActual('../../../core/src/project').getPackages,
 }));
 
 import path from 'path';
@@ -26,12 +26,12 @@ import { collectUpdates } from '@lerna-lite/core';
 
 // helpers
 import { initFixtureFactory } from '@lerna-test/helpers';
-const initFixture = initFixtureFactory(path.resolve(__dirname, '../..'));
+const initFixture = initFixtureFactory(path.resolve(__dirname, '../'));
 
 import { Project, PackageGraph } from '@lerna-lite/core';
 
 import { getFilteredPackages } from '../get-filtered-packages';
-import { filterOptions } from '../../../../cli/src/filter-options';
+import { filterOptions } from '../../../cli/src/filter-options';
 
 async function buildGraph(cwd) {
   const packages = await Project.getPackages(cwd);

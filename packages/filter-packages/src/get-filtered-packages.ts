@@ -2,7 +2,7 @@ import { collectUpdates, ExecOpts, Package, PackageGraph } from '@lerna-lite/cor
 import log from 'npmlog';
 
 import { filterPackages } from './filter-packages';
-import { FilterOptions } from '../models';
+import { FilterOptions } from './models';
 
 /**
  * Retrieve a list of Package instances filtered by various options.

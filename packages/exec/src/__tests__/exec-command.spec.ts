@@ -10,10 +10,7 @@ jest.mock('@lerna-lite/core', () => ({
   QueryGraph: jest.requireActual('../../../core/src/utils/query-graph').QueryGraph,
 }));
 
-jest.mock('@lerna-lite/optional-cmd-common', () => ({
-  ...(jest.requireActual('@lerna-lite/optional-cmd-common') as any),
-  ...jest.requireActual('../../../optional-cmd-common/src/lib/profiler'), // test with the real Profiler for test coverage as well
-}));
+jest.mock('@lerna-lite/profiler', () => jest.requireActual('../../../profiler/src/profiler'));
 
 // also point to the local exec command so that all mocks are properly used even by the command-runner
 jest.mock('@lerna-lite/exec', () => jest.requireActual('../exec-command'));

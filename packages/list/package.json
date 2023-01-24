@@ -34,7 +34,7 @@
   "dependencies": {
     "@lerna-lite/core": "workspace:*",
     "@lerna-lite/listable": "workspace:*",
-    "@lerna-lite/optional-cmd-common": "workspace:*"
+    "@lerna-lite/filter-packages": "workspace:*"
   },
   "devDependencies": {
     "rimraf": "^3.0.2",
