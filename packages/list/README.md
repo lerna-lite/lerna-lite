@@ -49,7 +49,7 @@ In any case, you can always pass `--loglevel silent` to create pristine chains o
 - [`--toposort`](#--toposort)
 - [`--graph`](#--graph)
 
-`lerna ls` also respects all available [Filter Flags](https://www.npmjs.com/package/@lerna/filter-options).
+`lerna ls` also respects all available [Filter Flags](https://github.com/lerna-lite/lerna-lite/blob/main/packages/filter-packages/README.md#options).
 
 ### `--json`
 
