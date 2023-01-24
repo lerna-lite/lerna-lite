@@ -1,4 +1,3 @@
-import { boolean } from 'yargs';
 import { RemoteClientType } from './interfaces';
 
 export interface ChangedCommandOption {

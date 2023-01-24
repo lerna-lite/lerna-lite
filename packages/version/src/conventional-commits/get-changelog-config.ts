@@ -1,9 +1,9 @@
+import { ValidationError } from '@lerna-lite/core';
 import log from 'npmlog';
-import pify from 'pify';
 import npa from 'npm-package-arg';
+import pify from 'pify';
 
 import { ChangelogConfig, ChangelogPresetConfig } from '../models';
-import { ValidationError } from '../validation-error';
 
 export class GetChangelogConfig {
   static cfgCache = new Map<string, any>();

@@ -1,4 +1,5 @@
-export const EOL = '\n';
+import { EOL } from '@lerna-lite/core';
+
 export const BLANK_LINE = EOL + EOL;
 export const COMMIT_GUIDELINE = 'See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.';
 export const CHANGELOG_HEADER = [

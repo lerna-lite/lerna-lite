@@ -1,5 +1,3 @@
-'use strict';
-
 // file under test
 import { getPackagesForOption } from '../lib/get-packages-for-option';
 

@@ -1,5 +1,3 @@
-'use strict';
-
 import execa from 'execa';
 import fileUrl from 'file-url';
 import tempy from 'tempy';

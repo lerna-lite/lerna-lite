@@ -1,5 +1,3 @@
-'use strict';
-
 jest.mock('pacote');
 
 // mocked module(s)

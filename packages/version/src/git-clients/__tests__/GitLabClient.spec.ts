@@ -1,5 +1,3 @@
-'use strict';
-
 jest.mock('node-fetch');
 
 import fetch from 'node-fetch';

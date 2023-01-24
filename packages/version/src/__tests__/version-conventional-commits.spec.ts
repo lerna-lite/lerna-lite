@@ -3,16 +3,13 @@ jest.mock('../lib/git-push', () => jest.requireActual('../lib/__mocks__/git-push
 jest.mock('../lib/is-anything-committed', () => jest.requireActual('../lib/__mocks__/is-anything-committed'));
 jest.mock('../lib/is-behind-upstream', () => jest.requireActual('../lib/__mocks__/is-behind-upstream'));
 jest.mock('../lib/remote-branch-exists', () => jest.requireActual('../lib/__mocks__/remote-branch-exists'));
+jest.mock('../git-clients/gitlab-client', () => jest.requireActual('../__mocks__/gitlab-client').createGitLabClient);
+jest.mock('../conventional-commits', () => jest.requireActual('../__mocks__/conventional-commits'));
 
 jest.mock('@lerna-lite/core', () => ({
   ...(jest.requireActual('@lerna-lite/core') as any), // return the other real methods, below we'll mock only 2 of the methods
   Command: jest.requireActual('../../../core/src/command').Command,
   conf: jest.requireActual('../../../core/src/command').conf,
-  createGitHubClient: jest.requireActual('../../../core/src/__mocks__/github-client').createGitHubClient,
-  createGitLabClient: jest.requireActual('../../../core/src/__mocks__/gitlab-client').createGitLabClient,
-  parseGitRepo: jest.requireActual('../../../core/src/__mocks__/github-client').parseGitRepo,
-  recommendVersion: jest.requireActual('../../../core/src/__mocks__/conventional-commits').recommendVersion,
-  updateChangelog: jest.requireActual('../../../core/src/__mocks__/conventional-commits').updateChangelog,
   logOutput: jest.requireActual('../../../core/src/__mocks__/output').logOutput,
   collectUpdates: jest.requireActual('../../../core/src/__mocks__/collect-updates').collectUpdates,
   promptConfirmation: jest.requireActual('../../../core/src/__mocks__/prompt').promptConfirmation,
@@ -29,7 +26,7 @@ import semver from 'semver';
 // mocked modules
 import writePkg from 'write-pkg';
 import { collectUpdates, VersionCommandOption } from '@lerna-lite/core';
-import { recommendVersion, updateChangelog } from '@lerna-lite/core';
+import { recommendVersion, updateChangelog } from '../conventional-commits';
 
 // helpers
 import { initFixtureFactory, showCommit } from '@lerna-test/helpers';

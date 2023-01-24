@@ -1,5 +1,3 @@
-'use strict';
-
 jest.mock('../GitLabClient');
 
 import { GitLabClient } from '../GitLabClient';

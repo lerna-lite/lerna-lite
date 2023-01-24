@@ -1,5 +1,3 @@
-'use strict';
-
 import { Project } from '@lerna-lite/core';
 import { getPackagesWithoutLicense } from '../lib/get-packages-without-license';
 import { initFixtureFactory } from '@lerna-test/helpers';

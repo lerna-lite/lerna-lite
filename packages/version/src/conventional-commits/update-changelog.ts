@@ -1,15 +1,15 @@
+import { EOL, Package } from '@lerna-lite/core';
 import conventionalChangelogCore, { Context } from 'conventional-changelog-core';
 import { Options as WriterOptions } from 'conventional-changelog-writer';
 import fs from 'fs-extra';
 import getStream from 'get-stream';
 import log from 'npmlog';
 
-import { BLANK_LINE, CHANGELOG_HEADER, EOL } from './constants';
+import { BLANK_LINE, CHANGELOG_HEADER } from './constants';
 import { GetChangelogConfig } from './get-changelog-config';
 import { makeBumpOnlyFilter } from './make-bump-only-filter';
-import { readExistingChangelog } from './read-existing-changelog';
 import { ChangelogConfig, ChangelogType, UpdateChangelogOption } from '../models';
-import { Package } from '../package';
+import { readExistingChangelog } from './read-existing-changelog';
 import { setConfigChangelogCommitClientLogin, setConfigChangelogCommitGitAuthor } from './writer-opts-transform';
 
 /**

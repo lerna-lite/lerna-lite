@@ -1,4 +1,5 @@
-import { Package } from '../package';
+import { Package } from '@lerna-lite/core';
+
 import { BLANK_LINE } from './constants';
 
 /**

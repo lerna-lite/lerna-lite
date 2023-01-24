@@ -1,11 +1,17 @@
-jest.mock('../../utils/describe-ref');
-jest.mock('../../child-process');
+jest.mock('@lerna-lite/core');
 jest.mock('../get-github-commits');
 
+const execSyncMock = jest.fn();
+const describeRefSyncMock = jest.fn();
+jest.mock('@lerna-lite/core', () => ({
+  ...(jest.requireActual('@lerna-lite/core') as any), // return the other real methods, below we'll mock only 2 of the methods
+  execSync: execSyncMock,
+  describeRefSync: describeRefSyncMock,
+}));
+
 import { getGithubCommits } from '../get-github-commits';
-import { describeRefSync } from '../../utils/describe-ref';
 import { getCommitsSinceLastRelease, getOldestCommitSinceLastTag } from '../get-commits-since-last-release';
-import { execSync } from '../../child-process';
+import { describeRefSync, execSync } from '@lerna-lite/core';
 
 const execOpts = { cwd: '/test' };
 const tagStub = {

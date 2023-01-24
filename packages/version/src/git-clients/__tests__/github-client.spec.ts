@@ -1,8 +1,8 @@
 jest.mock('@octokit/rest');
-jest.mock('../../child-process');
+jest.mock('@lerna-lite/core');
 
 import { Octokit } from '@octokit/rest';
-import { execSync } from '../../child-process';
+import { execSync } from '@lerna-lite/core';
 import { createGitHubClient, parseGitRepo } from '../index';
 
 (execSync as jest.Mock).mockReturnValue('5.6.0');

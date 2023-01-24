@@ -25,7 +25,7 @@ describe('npm-publish', () => {
   const mockTarData = Buffer.from('MOCK');
   const mockManifest = { _normalized: true };
 
-  (fs.readFile as jest.Mock).mockName('fs.readFile').mockResolvedValue(mockTarData);
+  (fs.readFile as any).mockName('fs.readFile').mockResolvedValue(mockTarData);
   (publish as jest.Mock).mockName('libnpmpublish').mockResolvedValue(null);
   (readJSON as jest.Mock).mockName('read-package-json').mockImplementation((file, cb) => cb(null, mockManifest));
   (runLifecycle as jest.Mock).mockName('@lerna-lite/core').mockResolvedValue(null);

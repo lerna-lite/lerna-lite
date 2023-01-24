@@ -15,19 +15,13 @@ import {
   Command,
   CommandType,
   createRunner,
-  getCommitsSinceLastRelease,
   logOutput,
   Package,
   PackageGraphNode,
   ProjectConfig,
   promptConfirmation,
-  recommendVersion,
-  ReleaseClient,
-  ReleaseNote,
-  RemoteCommit,
   runTopologically,
   throwIfUncommitted,
-  updateChangelog,
   UpdateCollectorOptions,
   ValidationError,
   VersionCommandOption,
@@ -51,6 +45,8 @@ import {
   runInstallLockFileOnly,
   saveUpdatedLockJsonFile,
 } from './lib/update-lockfile-version';
+import { ReleaseClient, ReleaseNote, RemoteCommit } from './models';
+import { getCommitsSinceLastRelease, recommendVersion, updateChangelog } from './conventional-commits';
 
 export function factory(argv: VersionCommandOption) {
   return new VersionCommand(argv);
