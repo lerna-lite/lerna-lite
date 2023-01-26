@@ -43,7 +43,7 @@
   "devDependencies": {
     "@types/p-map": "^2.0.0",
     "globby": "^11.1.0",
-    "jest-circus": "^29.4.0",
+    "jest-circus": "^29.4.1",
     "perf_hooks": "^0.0.1",
     "rimraf": "^3.0.2",
     "yargs": "^17.6.2",
