@@ -34,7 +34,7 @@
   "dependencies": {
     "@lerna-lite/core": "workspace:*",
     "@octokit/plugin-enterprise-rest": "^6.0.1",
-    "@octokit/rest": "^19.0.5",
+    "@octokit/rest": "^19.0.7",
     "chalk": "^4.1.2",
     "conventional-changelog-angular": "^5.0.13",
     "conventional-changelog-core": "^4.2.4",
