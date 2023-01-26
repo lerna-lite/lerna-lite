@@ -69,4 +69,3 @@ const serializePlaceholders = {
 };
 
 export default serializePlaceholders;
-module.exports = serializePlaceholders;

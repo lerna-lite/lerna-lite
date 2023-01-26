@@ -20,4 +20,3 @@ function serializeWindowsPath(match, wack, wackPath) {
 }
 
 export default serializeWindowsPaths;
-module.exports = serializeWindowsPaths;

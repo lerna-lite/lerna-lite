@@ -14,5 +14,5 @@ const client = {
   },
 };
 
-module.exports.createGitLabClient = jest.fn(() => client);
-module.exports.createGitLabClient.releases = releases;
+export const createGitLabClient = jest.fn(() => client) as jest.Mock<any, any, any> & { releases: Map<any, any> };
+createGitLabClient.releases = releases;

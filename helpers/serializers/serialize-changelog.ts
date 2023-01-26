@@ -15,4 +15,3 @@ const serializeChangelog = {
 };
 
 export default serializeChangelog;
-module.exports = serializeChangelog;

@@ -13,4 +13,4 @@ pkg.main = 'prepacked.js';
 
 fs.mkdirSync(distDir);
 fs.writeFileSync(path.join(distDir, 'package.json'), JSON.stringify(pkg, null, 2));
-fs.writeFileSync(path.join(distDir, 'prepacked.js'), "module.exports = 'B';");
+fs.writeFileSync(path.join(distDir, 'prepacked.js'), "export default 'B';");
