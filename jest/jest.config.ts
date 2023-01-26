@@ -1,7 +1,9 @@
-module.exports = {
+import type { Config } from '@jest/types';
+
+const config: Config.InitialOptions = {
   rootDir: '../',
   clearMocks: true,
-  collectCoverage: process.env.CI && process.env.LERNA_OS_TYPE !== 'windows',
+  collectCoverage: !!(process.env.CI && process.env.LERNA_OS_TYPE !== 'windows'),
   collectCoverageFrom: ['packages/**/*.+(js|ts)', '!**/dist/**', '!**/node_modules/**', '!**/jest/**'],
   coverageDirectory: '<rootDir>/jest/jest-coverage',
   coveragePathIgnorePatterns: ['\\.d\\.ts$', '<rootDir>/node_modules/'],
@@ -29,3 +31,5 @@ module.exports = {
   // verbose: !!process.env.CI,
   verbose: false,
 };
+
+export default config;
