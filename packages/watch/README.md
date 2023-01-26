@@ -8,7 +8,7 @@
 
 Watch for changes within packages and execute commands from the root of the repository, for example trigger rebuilds of packages when their files changed.
 
-> **Note** the `watch` command also exists in the original [Lerna](https://github.com/lerna/lerna), however their implementation uses Nx (no surprises) to watch for file changes. Since we want to keep Lerna-Lite well... light, we opted to use [`Chokidar`](https://github.com/paulmillr/chokidar), it is used by millions of packages (even ViteJS uses it), so chances are that you already have it installed directly or indirectly. Another bonus is that most of Chokidar [options](https://github.com/paulmillr/chokidar#api) are also available with the Lerna-Lite `watch` command, please refer to the [Chokidar options](#chokidar-options) below. Even though Lerna and Lerna-Lite differs in their internal implementations, their usage are quite similar (apart from the Chokidar options).
+> **Note** the `watch` command also exists in the original [Lerna](https://github.com/lerna/lerna), however their implementation uses Nx (no surprises) to watch for file changes. Since we want to keep Lerna-Lite well... light, we opted to use [`Chokidar`](https://github.com/paulmillr/chokidar), it is used by millions of packages (even ViteJS uses it), so chances are that you already have it installed directly or indirectly. Even though Lerna and Lerna-Lite differs in their internal implementations, their usage are quite similar (apart from the [Chokidar options](#chokidar-options) that we also provide).
 
 ---
 
@@ -45,10 +45,10 @@ Watch only packages "package-1", "package-3" and their dependencies:
 $ lerna watch --scope "package-{1,3}" --include-dependencies -- echo \$LERNA_PACKAGE_NAME \$LERNA_FILE_CHANGES
 ```
 
-Watch only package "package-4" and its dependencies and run the `test` script for the package that changed:
+Watch only package "package-4" and its dependents and run the `test` script for the package that changed:
 
 ```sh
-$ lerna watch --scope="package-4" --include-dependencies -- lerna run test --scope=\$LERNA_PACKAGE_NAME
+$ lerna watch --scope="package-4" --include-dependents -- lerna run test --scope=\$LERNA_PACKAGE_NAME
 ```
 
 Watch the `/src` folder of each package using the `--glob` option and run the `test` script for the package that changed:
@@ -57,20 +57,20 @@ Watch the `/src` folder of each package using the `--glob` option and run the `t
 $ lerna watch --glob=\"src\" -- lerna run test --scope=\$LERNA_PACKAGE_NAME
 ```
 
-Since you can execute any arbitrary commands, you could use `pnpm run` instead of `lerna run` to run the tests, the glob helps to limit the watch to only spec files
+Since you can execute any arbitrary commands, you could use `pnpm run` instead of `lerna run` to run the tests, the glob pattern can help to limit the watch to only spec files
 
 ```sh
 $ lerna watch --glob=\"src/**/*.spec.ts\" -- pnpm -r --filter=\$LERNA_PACKAGE_NAME test
 ```
 
-Watch for changes on package-1 or its dependents and run the "build" script on the scoped package and also its dependents:
+Watch for changes on "package-1" and its dependents and run the "build" script on the scoped package and its dependents:
 
 ```sh
 # with lerna run
-$ lerna watch --scope=my-package-1 --include-dependents -- lerna run build --stream --scope=\$LERNA_PACKAGE_NAME --include-dependents
+$ lerna watch --scope=package-1 --include-dependents -- lerna run build --stream --scope=\$LERNA_PACKAGE_NAME --include-dependents
 
 # similarly with pnpm run
-$ lerna watch --scope=my-package-1 --include-dependents -- pnpm run --stream --filter ...\$LERNA_PACKAGE_NAME build
+$ lerna watch --scope=package-1 --include-dependents -- pnpm run --stream --filter ...\$LERNA_PACKAGE_NAME build
 ```
 
 Watch and stream two packages and run the "build" script on them when a file within it changes:
@@ -129,7 +129,7 @@ $ npx -c 'lerna watch -- echo \$LERNA_PACKAGE_NAME \$LERNA_FILE_CHANGES'
 > **Note** to limit the number of files being watched, you might want to take a look at either [`--ignored`](#--ignored) and/or [`--glob`](#--glob) options. The `lerna watch` command skips `.git/`, `dist/` and `node_modules/` directories by default.
 
 ### `--emit-changes-delay`
-Defaults to `200`, time to wait in milliseconds before collecting all file changes and then emitting them into a single watch event. The reason for this option to exist is basically to provide enough time for `lerna watch` to collect all prior file changes and merge them into a single watch change event (chokidar has no grouping feature and emits an event for every single file change) and we want to avoid emitting too many events (especially for a watch that triggers a rebuild). This option will come into play when you make a code change that triggers hundred of file changes, you might need to adjust the delay by increasing its value (similar library like `Nx` have their `Nx Watch` fixed to `500`).
+Defaults to `200`, time to wait in milliseconds before collecting all file changes before emitting them into a single watch event. This option exists because we want to provide enough time for `lerna watch` to collect all file changes (within that period) and merge these file paths into a single watch change event (chokidar has no grouping feature and emits an event for every file that changed) and we want to avoid emitting too many events (especially for a watch that triggers a rebuild). This option will come into play when you make a code change that triggers hundred of file changes, you might need to adjust the delay by increasing its value (for comparison sake the `Nx` library have their `Nx Watch` set, and fixed, at `500`).
 
 ```sh
 $ lerna watch --emit-changes-delay=500 -- <command>
@@ -145,10 +145,10 @@ $ lerna watch --file-delimiter=\";;\" -- <command>
 
 ### `--glob`
 
-Provide a Glob pattern to target which file types to watch, note that this will be appended to the package file path that will be provided to Chokidar. For example if our package is located under `/home/user/monorepo/packages/pkg-1` and we define `"glob": "/src/**/*.{ts,tsx}"`, it will end using the following watch pattern in Chokidar `/home/user/monorepo/packages/pkg-1/src/**/*.{ts,tsx}`
+Provide a Glob pattern to target which file types to watch, note that this will be appended to the package file path that will be provided to Chokidar. For example, if our package is located under `/home/user/monorepo/packages/pkg-1` and we define a `"glob": "/src/**/*.{ts,tsx}"`, it will provide the following pattern  `/home/user/monorepo/packages/pkg-1/src/**/*.{ts,tsx}` to Chokidar watch.
 
 ```sh
-# glob pattern will be appended to package path to Chokidar files to watch
+# glob pattern will be appended to package path that Chokidar watches
 $ lerna watch --glob=\"src\**\*.ts" -- <command>
 ```
 
@@ -221,7 +221,7 @@ Defines files/paths to be ignored, it can be a string or an array of string ([an
 # ignore bin folder
 $ lerna watch --ignored=\"**/bin\" -- <command>
 
-# or ignore dot file
+# ignore dot file
 $ lerna watch --ignored=\"/(^|[/\\])\../\" -- <command>
 ```
 
