@@ -4,8 +4,4 @@ import parserOpts from './parser-opts';
 import writerOpts from './writer-opts';
 import whatBump from './what-bump';
 
-module.exports = {
-  parserOpts,
-  writerOpts,
-  whatBump,
-};
+export { parserOpts, writerOpts, whatBump };

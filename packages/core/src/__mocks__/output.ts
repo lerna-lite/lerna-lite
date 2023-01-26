@@ -11,5 +11,5 @@ export function logged() {
   return mockOutput.mock.calls.map((args) => multiLineTrimRight(args[0])).join('\n');
 }
 
-module.exports.logOutput = mockOutput;
-module.exports.logOutput.logged = logged;
+export const logOutput = mockOutput as jest.Mock<any, any, any> & { logged: () => string };
+logOutput.logged = logged;

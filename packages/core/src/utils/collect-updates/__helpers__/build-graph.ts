@@ -73,4 +73,3 @@ function buildGraph(mapPackages = (pkg) => pkg) {
 }
 
 export default buildGraph;
-module.exports = buildGraph;

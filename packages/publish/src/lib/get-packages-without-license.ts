@@ -16,5 +16,3 @@ export function getPackagesWithoutLicense(project: Project, packagesToPublish: P
     return packagesToPublish.filter((pkg) => !licensed.has(pkg.location));
   });
 }
-
-module.exports.getPackagesWithoutLicense = getPackagesWithoutLicense;

@@ -14,4 +14,3 @@ const gitSha = {
 };
 
 export default gitSha;
-module.exports = gitSha;

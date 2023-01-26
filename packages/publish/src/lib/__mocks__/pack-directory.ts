@@ -14,5 +14,5 @@ afterEach(() => {
   registry.clear();
 });
 
-module.exports.packDirectory = mockPackDirectory;
-module.exports.packDirectory.registry = registry;
+export const packDirectory = mockPackDirectory as jest.Mock<any, any, any> & { registry: Set<unknown> };
+packDirectory.registry = registry;

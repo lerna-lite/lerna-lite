@@ -12,6 +12,6 @@ function getOrderedCalls() {
   return (mockRunLifecycle as any).mock.calls.map(([pkg, script]) => [pkg.name, script]);
 }
 
-module.exports.runLifecycle = mockRunLifecycle;
-module.exports.createRunner = mockCreateRunner;
-module.exports.runLifecycle.getOrderedCalls = getOrderedCalls;
+export const createRunner = mockCreateRunner;
+export const runLifecycle = mockRunLifecycle as jest.Mock<any, any, any> & { getOrderedCalls: () => any };
+runLifecycle.getOrderedCalls = getOrderedCalls;

@@ -22,4 +22,3 @@ function serializeProjectRoot(match, cwd, subPath) {
 }
 
 export default serializeTempdir;
-module.exports = serializeTempdir;
