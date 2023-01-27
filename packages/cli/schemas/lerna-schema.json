@@ -874,72 +874,6 @@
       "$ref": "#/$defs/filters/continueIfNoMatch"
     },
 
-    "dev": {
-      "$ref": "#/$defs/commandOptions/add/dev"
-    },
-    "peer": {
-      "$ref": "#/$defs/commandOptions/add/peer"
-    },
-    "noBootstrap": {
-      "$ref": "#/$defs/commandOptions/add/noBootstrap"
-    },
-    "bootstrap": {
-      "$ref": "#/$defs/commandOptions/add/bootstrap"
-    },
-    "hoist": {
-      "$ref": "#/$defs/commandOptions/bootstrap/hoist"
-    },
-    "nohoist": {
-      "$ref": "#/$defs/commandOptions/bootstrap/nohoist"
-    },
-    "mutex": {
-      "$ref": "#/$defs/commandOptions/bootstrap/mutex"
-    },
-    "strict": {
-      "$ref": "#/$defs/commandOptions/bootstrap/strict"
-    },
-    "useWorkspaces": {
-      "$ref": "#/$defs/commandOptions/bootstrap/useWorkspaces"
-    },
-
-    "access": {
-      "$ref": "#/$defs/commandOptions/create/access"
-    },
-    "bin": {
-      "$ref": "#/$defs/commandOptions/create/bin"
-    },
-    "description": {
-      "$ref": "#/$defs/commandOptions/create/description"
-    },
-    "dependencies": {
-      "$ref": "#/$defs/commandOptions/create/dependencies"
-    },
-    "esModule": {
-      "$ref": "#/$defs/commandOptions/create/esModule"
-    },
-    "homepage": {
-      "$ref": "#/$defs/commandOptions/create/homepage"
-    },
-    "keywords": {
-      "$ref": "#/$defs/commandOptions/create/keywords"
-    },
-    "license": {
-      "$ref": "#/$defs/commandOptions/create/license"
-    },
-    "tag": {
-      "$ref": "#/$defs/commandOptions/create/tag"
-    },
-
-    "flatten": {
-      "$ref": "#/$defs/commandOptions/import/flatten"
-    },
-    "dest": {
-      "$ref": "#/$defs/commandOptions/import/dest"
-    },
-    "preserveCommit": {
-      "$ref": "#/$defs/commandOptions/import/preserveCommit"
-    },
-
     "independent": {
       "$ref": "#/$defs/commandOptions/init/independent"
     },
@@ -1207,106 +1141,10 @@
       }
     },
     "commandOptions": {
-      "add": {
-        "dev": {
-          "type": "boolean",
-          "description": "During `lerna add`, save the newly added package to devDependencies instead of dependencies."
-        },
-        "peer": {
-          "type": "boolean",
-          "description": "During `lerna add`, save the newly added package to peerDependencies instead of dependencies."
-        },
-        "noBootstrap": {
-          "type": "boolean",
-          "description": "Do not automatically chain `lerna bootstrap` after `lerna add`."
-        },
-        "bootstrap": {
-          "type": "boolean",
-          "description": "Automatically chain `lerna bootstrap` after `lerna add`."
-        }
-      },
-      "bootstrap": {
-        "hoist": {
-          "type": "string",
-          "description": "During `lerna bootstrap`, install external dependencies matching [glob] to the repo root."
-        },
-        "nohoist": {
-          "type": "string",
-          "description": "During `lerna bootstrap`, don't hoist external dependencies matching [glob] to the repo root."
-        },
-        "mutex": {},
-        "strict": {
-          "type": "boolean",
-          "description": "During `lerna bootstrap`, don't allow warnings when hoisting as it causes longer bootstrap times and other issues."
-        },
-        "useWorkspaces": {
-          "type": "boolean",
-          "description": "During `lerna bootstrap`, enable integration with Yarn workspaces."
-        }
-      },
-      "create": {
-        "access": {
-          "type": "string",
-          "enum": ["public", "restricted"],
-          "description": "During `lerna create` and when using a scope, set publishConfig.access value."
-        },
-        "bin": {
-          "type": "string",
-          "description": "During `lerna create`, specifies that the new package has an executable with the given name."
-        },
-        "description": {
-          "type": "string",
-          "description": "During `lerna create`, specifies the description of the new package."
-        },
-        "dependencies": {
-          "type": "array",
-          "items": {
-            "type": "string"
-          },
-          "description": "During `lerna create`, specifies the list of dependencies of the new package."
-        },
-        "esModule": {
-          "type": "boolean",
-          "description": "During `lerna create`, when true, initializes a transpiled ES Module."
-        },
-        "homepage": {
-          "type": "string",
-          "description": "During `lerna create`, specifies the homepage of the new package. Defaults to a subpath of the root pkg.homepage."
-        },
-        "keywords": {
-          "type": "array",
-          "items": {
-            "type": "string"
-          },
-          "description": "During `lerna create`, specifies the list of keywords of the new package."
-        },
-        "license": {
-          "type": "string",
-          "description": "During `lerna create`, specifies the license of the new package (SPDX identifier). Defaults to ISC."
-        },
-        "tag": {
-          "type": "string",
-          "description": "During `lerna create`, specifies the publishConfig.tag for the new package."
-        }
-      },
       "exec": {
         "dryRun": {
           "type": "boolean",
           "description": "During `lerna exec`, when true, displays the process command that would be performed without executing it."
-        }
-      },
-      "import": {
-        "flatten": {
-          "type": "boolean",
-          "description": "During `lerna import`, when true, import each merge commit as a single change the merge introduced."
-        },
-        "dest": {
-          "type": "string",
-          "description": "During `lerna import`, specifies the directory for the external git repository."
-        },
-        "preserveCommit": {
-          "type": "boolean",
-          "description": "During `lerna import`, when true, preserve the original committer in additional to original author."
         }
       },
       "init": {
@@ -1623,8 +1461,8 @@
           "description": "During `lerna bootstrap` and `lerna link`, when true, force local sibling links regardless of version range match."
         },
         "contents": {
-          "type": "boolean",
-          "description": "For `lerna bootstrap`, `lerna link`, and `lerna publish`, the subdirectory to use as the source of any links. Must apply to ALL packages."
+          "type": "string",
+          "description": "For `lerna publish`, the subdirectory to use as the source of any links. Must apply to ALL packages."
         },
         "ignoreChanges": {
           "type": "array",
@@ -1671,7 +1509,7 @@
         },
         "ignoreScripts": {
           "type": "boolean",
-          "description": "During `lerna bootstrap`, `lerna publish`, and `lerna version`, don't run ANY lifecycle scripts in bootstrapped packages."
+          "description": "During `lerna publish`, and `lerna version`, don't run ANY lifecycle scripts in bootstrapped packages."
         },
         "noGranularPathspec": {
           "type": "boolean",
@@ -1691,7 +1529,7 @@
         },
         "ignorePrepublish": {
           "type": "boolean",
-          "description": "During `lerna publish` and `lerna bootstrap`, when true, disable deprecated 'prepublish' lifecycle script."
+          "description": "During `lerna publish`, when true, disable deprecated 'prepublish' lifecycle script."
         },
         "verbose": {
           "type": "boolean",
