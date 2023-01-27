@@ -25,7 +25,7 @@ import { npmRunScript, npmRunScriptStreaming } from '../lib/npm-run-script';
 import cliRunCommands from '../../../cli/src/cli-commands/cli-run-commands';
 
 // helpers
-import { factory, RunCommand } from '../run-command';
+import { factory, RunCommand } from '../index';
 import { commandRunner, initFixtureFactory, loggingOutput, normalizeRelativeDir } from '@lerna-test/helpers';
 const lernaRun = commandRunner(cliRunCommands);
 const initFixture = initFixtureFactory(__dirname);
