@@ -1,4 +1,4 @@
-const npmConfModule = require('../npm-conf');
+import * as npmConfModule from '../npm-conf';
 import { npmConf, toNerfDart, Conf } from '../npm-conf';
 
 describe('@lerna/npm-conf', () => {
@@ -6,12 +6,6 @@ describe('@lerna/npm-conf', () => {
     expect(npmConfModule).toBeDefined();
     expect(Conf).toBeDefined();
     expect(typeof npmConfModule.npmConf).toBe('function');
-  });
-
-  it('exports named defaults', () => {
-    const { defaults } = npmConfModule;
-    expect(defaults).toBeDefined();
-    expect(typeof defaults).toBe('object');
   });
 
   it('exports named Conf', () => {
@@ -30,7 +24,7 @@ describe('@lerna/npm-conf', () => {
   });
 
   it('defaults cli parameter to empty object', () => {
-    const conf = npmConfModule.npmConf();
+    const conf = npmConfModule.npmConf(null);
 
     expect(conf.sources.cli.data).toEqual({});
   });

@@ -9,7 +9,7 @@
       "request": "launch",
       "name": "Jest Current Spec File",
       "program": "${workspaceFolder}/node_modules/.bin/jest",
-      "args": ["--runInBand", "${fileBasename}", "--config", "${workspaceFolder}/jest/jest.config.js"],
+      "args": ["--runInBand", "${fileBasename}", "--config", "${workspaceFolder}/jest/jest.config.ts"],
       "console": "internalConsole",
       "internalConsoleOptions": "neverOpen",
       "disableOptimisticBPs": true,

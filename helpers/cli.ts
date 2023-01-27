@@ -16,9 +16,6 @@ export function commandRunner(commandModule: any) {
   /* eslint-disable import/no-dynamic-require, global-require */
   const cmd = commandModule.command.split(' ')[0];
 
-  // prime the pump so slow-as-molasses CI doesn't fail with delayed require()
-  require(path.resolve((require as any).main.filename, '../..'));
-
   return (cwd: string) => {
     // create a _new_ yargs instance every time cwd changes to avoid singleton pollution
     const cli = lernaCLI([], cwd)
