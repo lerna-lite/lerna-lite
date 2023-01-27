@@ -189,6 +189,10 @@ export default {
           delete argv['npm-tag'];
           log.warn('deprecated', '--npm-tag has been renamed --dist-tag');
         }
+
+        if (argv.requireScripts) {
+          log.warn('deprecated', '--require-scripts has been deprecated and will be removed in next major');
+        }
         /* eslint-enable no-param-reassign */
 
         return argv;

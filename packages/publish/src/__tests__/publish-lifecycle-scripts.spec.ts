@@ -196,6 +196,7 @@ describe('lifecycle scripts', () => {
   });
 });
 
+// @deprecated, execScript should be removed since requireScripts is deprecated
 describe('execScript', () => {
   it('execute --require-scripts but fails since scripts folder does not exist and log error with script not found message is shown', async () => {
     const cwd = await initFixture('lifecycle');
