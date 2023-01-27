@@ -1,3 +1,4 @@
+import fs from 'fs-extra';
 import path from 'path';
 import resolveFrom from 'resolve-from';
 
@@ -27,7 +28,7 @@ export function applyExtends(config: { [key: string]: any }, cwd: string, seen =
 
     seen.add(pathToDefault);
 
-    defaultConfig = require(pathToDefault);
+    defaultConfig = fs.readJsonSync(pathToDefault, { throws: false });
     delete config.extends; // eslint-disable-line no-param-reassign
 
     // deprecateConfig(defaultConfig, pathToDefault);
