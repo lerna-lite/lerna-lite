@@ -156,6 +156,7 @@ export class PublishCommand extends Command<PublishCommandOption> {
       this.logger.info('canary', 'enabled');
     }
 
+    // @deprecated, to be removed in next major
     if (this.options.requireScripts) {
       this.logger.info('require-scripts', 'enabled');
     }
@@ -725,6 +726,7 @@ export class PublishCommand extends Command<PublishCommandOption> {
     });
   }
 
+  // @deprecated, see Lerna PR https://github.com/lerna/lerna/pull/1862/files
   execScript(pkg: Package, script: string) {
     const scriptLocation = path.join(pkg.location, 'scripts', script);
 

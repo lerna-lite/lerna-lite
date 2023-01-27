@@ -152,7 +152,7 @@ export interface PublishCommandOption extends VersionCommandOption {
   /** Remove fields from each package.json before publishing them to the registry, removing fields from a complex object is also supported via the dot notation (ie "scripts.build") */
   removePackageFields?: string[];
 
-  /** Execute ./scripts/prepublish.js and ./scripts/postpublish.js, relative to package root. */
+  /** @deprecated Execute ./scripts/prepublish.js and ./scripts/postpublish.js, relative to package root. */
   requireScripts?: boolean;
 
   /** Do not reset changes to working tree after publishing is complete. */

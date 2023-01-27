@@ -1368,7 +1368,7 @@
         },
         "requireScripts": {
           "type": "boolean",
-          "description": "During `lerna publish`, when true, execute ./scripts/prepublish.js and ./scripts/postpublish.js, relative to package root."
+          "description": "@deprecated During `lerna publish`, when true, execute ./scripts/prepublish.js and ./scripts/postpublish.js, relative to package root."
         },
         "noGitReset": {
           "type": "boolean",
