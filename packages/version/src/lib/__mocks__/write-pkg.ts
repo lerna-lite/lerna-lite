@@ -2,7 +2,7 @@ const writePkg = jest.requireActual('write-pkg');
 const registry = new Map();
 
 // by default, act like a spy that populates registry
-const mockWritePkg = jest.fn((fp, data) => {
+const mockWritePkg: any = jest.fn((fp, data) => {
   registry.set(data.name, data);
 
   return writePkg(fp, data);
@@ -26,7 +26,7 @@ afterEach(() => {
   registry.clear();
 });
 
-module.exports = mockWritePkg;
-module.exports.registry = registry;
-module.exports.updatedManifest = updatedManifest;
-module.exports.updatedVersions = updatedVersions;
+mockWritePkg.registry = registry;
+mockWritePkg.updatedManifest = updatedManifest;
+mockWritePkg.updatedVersions = updatedVersions;
+export default mockWritePkg;

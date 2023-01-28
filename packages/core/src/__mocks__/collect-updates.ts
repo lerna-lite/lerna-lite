@@ -4,7 +4,7 @@ const { collectPackages, getPackagesForOption } = jest.requireActual('../utils/c
 // otherwise, enables everything
 const updated = new Map();
 
-const mockCollectUpdates = jest.fn((filteredPackages, packageGraph, { cwd }) => {
+const mockCollectUpdates: any = jest.fn((filteredPackages, packageGraph, { cwd }) => {
   const targets = updated.get(cwd);
   const updates = targets ? new Map(targets.map((name) => [name, packageGraph.get(name)])) : packageGraph;
 
@@ -18,7 +18,6 @@ afterEach(() => {
   updated.clear();
 });
 
-module.exports.collectUpdates = mockCollectUpdates;
-module.exports.collectUpdates.setUpdated = setUpdated;
-module.exports.collectPackages = collectPackages;
-module.exports.getPackagesForOption = getPackagesForOption;
+export const collectUpdates = mockCollectUpdates;
+collectUpdates.setUpdated = setUpdated;
+export { collectPackages, getPackagesForOption };

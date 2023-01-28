@@ -15,7 +15,7 @@ function incrementCalled(registry, manifestLocation) {
 }
 
 // by default, act like a spy that counts number of times each location was loaded
-const mockLoadJsonFile = jest.fn((manifestLocation) => {
+const mockLoadJsonFile: any = jest.fn((manifestLocation) => {
   incrementCalled(asyncRegistry, manifestLocation);
 
   return loadJsonFile(manifestLocation);
@@ -33,7 +33,7 @@ afterEach(() => {
   syncRegistry.clear();
 });
 
-module.exports = mockLoadJsonFile;
-module.exports.registry = asyncRegistry;
-module.exports.sync = mockLoadJsonFileSync;
-module.exports.sync.registry = syncRegistry;
+mockLoadJsonFile.registry = asyncRegistry;
+mockLoadJsonFile.sync = mockLoadJsonFileSync;
+mockLoadJsonFile.sync.registry = syncRegistry;
+export default mockLoadJsonFile;
