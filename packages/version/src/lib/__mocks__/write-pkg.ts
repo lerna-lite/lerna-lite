@@ -26,7 +26,12 @@ afterEach(() => {
   registry.clear();
 });
 
-mockWritePkg.registry = registry;
-mockWritePkg.updatedManifest = updatedManifest;
-mockWritePkg.updatedVersions = updatedVersions;
-export default mockWritePkg;
+module.exports = mockWritePkg;
+module.exports.registry = registry;
+module.exports.updatedManifest = updatedManifest;
+module.exports.updatedVersions = updatedVersions;
+
+// mockWritePkg.registry = registry;
+// mockWritePkg.updatedManifest = updatedManifest;
+// mockWritePkg.updatedVersions = updatedVersions;
+// export default mockWritePkg;

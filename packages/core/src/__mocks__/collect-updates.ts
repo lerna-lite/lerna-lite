@@ -18,6 +18,11 @@ afterEach(() => {
   updated.clear();
 });
 
-export const collectUpdates = mockCollectUpdates;
-collectUpdates.setUpdated = setUpdated;
-export { collectPackages, getPackagesForOption };
+module.exports.collectUpdates = mockCollectUpdates;
+module.exports.collectUpdates.setUpdated = setUpdated;
+module.exports.collectPackages = collectPackages;
+module.exports.getPackagesForOption = getPackagesForOption;
+
+// export const collectUpdates = mockCollectUpdates;
+// collectUpdates.setUpdated = setUpdated;
+// export { collectPackages, getPackagesForOption };

@@ -33,7 +33,12 @@ afterEach(() => {
   syncRegistry.clear();
 });
 
-mockLoadJsonFile.registry = asyncRegistry;
-mockLoadJsonFile.sync = mockLoadJsonFileSync;
-mockLoadJsonFile.sync.registry = syncRegistry;
-export default mockLoadJsonFile;
+module.exports = mockLoadJsonFile;
+module.exports.registry = asyncRegistry;
+module.exports.sync = mockLoadJsonFileSync;
+module.exports.sync.registry = syncRegistry;
+
+// mockLoadJsonFile.registry = asyncRegistry;
+// mockLoadJsonFile.sync = mockLoadJsonFileSync;
+// mockLoadJsonFile.sync.registry = syncRegistry;
+// export default mockLoadJsonFile;
