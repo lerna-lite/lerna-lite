@@ -55,7 +55,7 @@ import { spawn, spawnStreaming } from '@lerna-lite/core';
 // helpers
 import { commandRunner, initFixtureFactory } from '@lerna-test/helpers';
 import { normalizeRelativeDir } from '@lerna-test/helpers';
-import { factory, WatchCommand } from '../watch-command';
+import { factory, WatchCommand } from '../index';
 import cliWatchCommands from '../../../cli/src/cli-commands/cli-watch-commands';
 const lernaWatch = commandRunner(cliWatchCommands);
 const initFixture = initFixtureFactory(__dirname);

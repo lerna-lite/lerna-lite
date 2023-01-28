@@ -30,7 +30,7 @@ import { spawn, spawnStreaming } from '@lerna-lite/core';
 import { commandRunner, initFixtureFactory } from '@lerna-test/helpers';
 import { loggingOutput } from '@lerna-test/helpers/logging-output';
 import { normalizeRelativeDir } from '@lerna-test/helpers';
-import { factory, ExecCommand } from '../exec-command';
+import { factory, ExecCommand } from '../index';
 import cliExecCommands from '../../../cli/src/cli-commands/cli-exec-commands';
 const lernaExec = commandRunner(cliExecCommands);
 const initFixture = initFixtureFactory(__dirname);

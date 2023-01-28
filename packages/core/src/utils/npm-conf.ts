@@ -2,23 +2,22 @@ import path from 'path';
 
 import { Conf } from '../utils/conf';
 import { toNerfDart } from './nerf-dart';
-const defaults = require('./defaults');
+import * as defaults from './defaults';
 
 // https://github.com/npm/npm/blob/latest/lib/config/core.js#L101-L200
 function npmConf(opts: any) {
-  const conf = new Conf(Object.assign({}, defaults.defaults));
+  const conf = new Conf(Object.assign({}, (defaults as any).defaults));
 
   // prevent keys with undefined values from obscuring defaults
   // prettier-ignore
   const cleanOpts = opts
     ? Object.keys(opts).reduce((acc, key) => {
-      if (opts[key] !== undefined) {
-        // eslint-disable-next-line no-param-reassign
-        acc[key] = opts[key];
-      }
-
-      return acc;
-    }, {})
+        if (opts[key] !== undefined) {
+          // eslint-disable-next-line no-param-reassign
+          acc[key] = opts[key];
+        }
+        return acc;
+      }, {})
     : {};
 
   conf.add(cleanOpts, 'cli');
@@ -56,7 +55,5 @@ function npmConf(opts: any) {
 
   return conf;
 }
-
-module.exports.defaults = Object.assign({}, defaults.defaults);
 
 export { Conf, npmConf, toNerfDart };
