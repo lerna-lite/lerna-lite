@@ -83,23 +83,7 @@ export function npmPublish(
         Object.assign(opts, publishConfigToOpts(manifest.publishConfig));
       }
 
-      return otplease(
-        (innerOpts) => publish(manifest, tarData, innerOpts),
-        opts,
-        otpCache as OneTimePasswordCache
-      ).catch((err) => {
-        opts.log.silly('', err);
-        opts.log.error(err.code, err.body?.error ?? err.message);
-
-        // avoid dumping logs, this isn't a lerna-lite problem
-        err.name = 'ValidationError';
-
-        // ensure process exits non-zero
-        process.exitCode = 'errno' in err ? err.errno : 1;
-
-        // re-throw to break chain upstream
-        throw err;
-      });
+      return otplease((innerOpts) => publish(manifest, tarData, innerOpts), opts, otpCache as OneTimePasswordCache);
     });
   }
 

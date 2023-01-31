@@ -65,6 +65,7 @@ export class PublishCommand extends Command<PublishCommandOption> {
   hasRootedLeaf = false;
   npmSession = '';
   packagesToPublish: Package[] = [];
+  publishedPackages: Package[] = [];
   packagesToBeLicensed?: Package[] = [];
   runPackageLifecycle!: (pkg: Package, stage: string) => Promise<void>;
   runRootLifecycle!: (stage: string) => Promise<void> | void;
@@ -293,8 +294,13 @@ export class PublishCommand extends Command<PublishCommandOption> {
       await this.npmUpdateAsLatest();
     }
 
-    const count = this.packagesToPublish?.length;
-    const message: string[] = this.packagesToPublish?.map((pkg) => ` - ${pkg.name}@${pkg.version}`) ?? [];
+    const count = this.publishedPackages?.length;
+    const publishedPackagesSorted = this.publishedPackages.sort((a, b) => a.name.localeCompare(b.name));
+
+    if (!count) {
+      this.logger.success('All packages have already been published.');
+      return;
+    }
 
     logOutput('Successfully published:');
 
@@ -303,7 +309,7 @@ export class PublishCommand extends Command<PublishCommandOption> {
       const filePath = this.options.summaryFile
         ? `${this.options.summaryFile}/lerna-publish-summary.json`
         : './lerna-publish-summary.json';
-      const jsonObject = this.packagesToPublish.map((pkg) => {
+      const jsonObject = publishedPackagesSorted.map((pkg) => {
         return {
           packageName: pkg.name,
           version: pkg.version,
@@ -317,7 +323,7 @@ export class PublishCommand extends Command<PublishCommandOption> {
         logOutput('Failed to create the summary report', error);
       }
     } else {
-      const message = this.packagesToPublish.map((pkg) => ` - ${pkg.name}@${pkg.version}`);
+      const message = publishedPackagesSorted.map((pkg) => ` - ${pkg.name}@${pkg.version}`);
       logOutput(message.join(os.EOL));
     }
 
@@ -864,6 +870,7 @@ export class PublishCommand extends Command<PublishCommandOption> {
   }
 
   publishPacked() {
+    this.publishedPackages = [];
     const tracker = this.logger.newItem('publish');
     tracker.addWork(this.packagesToPublish?.length);
 
@@ -889,14 +896,35 @@ export class PublishCommand extends Command<PublishCommandOption> {
             const tag = !this.options.tempTag && preDistTag ? preDistTag : opts.tag;
             const pkgOpts = Object.assign({}, opts, { tag });
 
-            return pulseTillDone(npmPublish(pkg, pkg.packed.tarFilePath, pkgOpts, this.otpCache)).then(() => {
-              tracker.success('published', pkg.name, pkg.version);
-              tracker.completeWork(1);
+            return pulseTillDone(npmPublish(pkg, pkg.packed.tarFilePath, pkgOpts, this.otpCache))
+              .then(() => {
+                this.publishedPackages.push(pkg);
 
-              logPacked(pkg, this.options.dryRun);
+                tracker.success('published', pkg.name, pkg.version);
+                tracker.completeWork(1);
 
-              return pkg;
-            });
+                logPacked(pkg, this.options.dryRun);
+
+                return pkg;
+              })
+              .catch((err) => {
+                if (err.code === 'EPUBLISHCONFLICT') {
+                  tracker.warn('publish', `Package is already published: ${pkg.name}@${pkg.version}`);
+                  tracker.completeWork(1);
+
+                  return pkg;
+                }
+
+                this.logger.silly('', err);
+                this.logger.error(err.code, (err.body && err.body.error) || err.message);
+
+                // avoid dumping logs, this isn't a lerna problem
+                err.name = 'ValidationError';
+                // ensure process exits non-zero
+                process.exitCode = 'errno' in err ? err.errno : 1;
+
+                throw err;
+              });
           },
 
           this.options.requireScripts && ((pkg: Package) => this.execScript(pkg, 'postpublish')),

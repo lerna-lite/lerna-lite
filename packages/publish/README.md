@@ -42,6 +42,8 @@ During all publish operations, appropriate [lifecycle scripts](#lifecycle-script
 
 Check out [Per-Package Configuration](#per-package-configuration) for more details about publishing scoped packages, custom registries, and custom dist-tags.
 
+> Note: See the [FAQ](#recovering-from-a-network-error) for information on how to recover from a failed publish.
+
 ## Positionals
 
 ### semver `--bump from-git`
@@ -571,6 +573,14 @@ _you would rarely want to disable the strict match, in fact this option will be 
   }
 }
 ```
+
+## FAQ
+
+### Recovering from a network error
+
+In the case that some packages were successfully published and others were not, `lerna publish` may have left the repository in an inconsistent state with some changed files. To recover from this, reset any extraneous local changes from the failed run to get back to a clean working tree. Then, retry the same `lerna publish` command. Lerna will attempt to publish all of the packages again, but will recognize those that have already been published and skip over them with a warning.
+
+If you used the `lerna publish` command without positional arguments to select a new version for the packages, then you can run `lerna publish from-git` to retry publishing that same already-tagged version instead of having to bump the version again while retrying.
 
 ## Deprecated Options
 
