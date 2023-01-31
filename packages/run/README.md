@@ -40,6 +40,14 @@ The name of the current package is available through the environment variable `L
 $ lerna run build \$LERNA_PACKAGE_NAME
 ```
 
+> **Note for when using Yarn:**
+>
+> ```sh
+> $ yarn lerna <script> -- [..args]
+> ```
+>
+> The double dash (`--`) will be stripped by `yarn`. This results in the inability for Lerna to pass additional args to child scripts through the command line alone. To get around this, either globally install Lerna and run it directly, or create a script in `package.json` with your `lerna run` command and use `yarn` to directly run that instead.
+
 ## Options
 
 `lerna run` accepts all [filter flags](https://github.com/lerna-lite/lerna-lite/blob/main/packages/filter-packages/README.md#options).
