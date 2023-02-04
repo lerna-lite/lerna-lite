@@ -18,7 +18,6 @@
     "preview:build": "lerna run build --stream --include-dependents --scope=@lerna-lite/listable",
     "preview:watch:build": "lerna watch --no-bail --scope=@lerna-lite/listable --include-dependents -- cross-env-shell lerna run build:incremental --stream --include-dependents --scope=$LERNA_PACKAGE_NAME",
     "preview:watch:build:pnpm": "lerna watch --no-bail --scope=@lerna-lite/listable --include-dependents -- cross-env-shell pnpm run --stream --filter ...$LERNA_PACKAGE_NAME build:incremental",
-    "postpreview:watch:build:pnpm": "echo clean exit",
     "preview:watch:files": "lerna watch --glob=\"src/**/*.ts\" --scope=@lerna-lite/listable --include-dependents -- cross-env-shell echo $LERNA_FILE_CHANGES in package $LERNA_PACKAGE_NAME\"",
     "preview:watch:all": "lerna watch --watch-all-events --scope {@lerna-lite/watch,@lerna-lite/exec} -- cross-env-shell echo \"Changed files $LERNA_FILE_CHANGES in package $LERNA_PACKAGE_NAME\"",
     "preview:publish-alpha-dry-run": "lerna publish --dry-run --exact --include-merged-tags --preid alpha --dist-tag next prerelease",

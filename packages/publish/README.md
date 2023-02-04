@@ -129,7 +129,7 @@ Cleanup the packed files & folders from the temp directory once the publish is o
 lerna publish --cleanup-temp-files
 ```
 
-> **Note** Lerna-Lite is prefixing the temp folders with "lerna-" when packing the tarball files, we then use a glob pattern to delete all folders starting with this prefix. Also note that it might not cleanup all possible temp files/folders that were created by the publish process.
+> **Note** Lerna-Lite is prefixing the temp folders with "lerna-" when packing the tarball folders, we then use a glob pattern to delete all folders starting with this prefix. Also note that it is entirely possible that this cleanup misses some extra temp files created by the publish process.
 
 ### `--contents <dir>`
 
