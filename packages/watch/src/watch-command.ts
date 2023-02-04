@@ -73,7 +73,7 @@ export class WatchCommand extends Command<WatchCommandOption & FilterOptions> {
       process.stdin.on('data', (key) => {
         if (key.toString().toLowerCase() === 'x') {
           this.logger.info('watch', 'Exiting the watch...');
-          process.exit();
+          process.exit(0);
         }
       });
     }
