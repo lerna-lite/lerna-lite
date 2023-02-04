@@ -162,7 +162,7 @@ describe('PublishCommand', () => {
     it('publishes changed packages', async () => {
       const testDir = await initFixture('normal');
 
-      await new PublishCommand(createArgv(testDir));
+      await new PublishCommand(createArgv(testDir, '--cleanup-temp-files'));
       // await lernaPublish(testDir)();
 
       expect(promptConfirmation).toHaveBeenLastCalledWith('Are you sure you want to publish these packages?');
@@ -459,7 +459,7 @@ describe('PublishCommand', () => {
       const testDir = await initFixture('normal-workspace-name-prefixed');
       const registry = 'https://my-private-registry';
 
-      await lernaPublish(testDir)('--registry', registry);
+      await lernaPublish(testDir)('--registry', registry, '--cleanup-temp-files');
 
       expect(npmPublish).toHaveBeenCalledWith(
         expect.objectContaining({ name: '@my-workspace/package-1' }),
@@ -493,7 +493,7 @@ describe('PublishCommand', () => {
       const registry = 'https://my-incompatible-registry.com';
 
       // await lernaPublish(testDir)("--registry", registry);
-      await new PublishCommand(createArgv(testDir, '--registry', registry));
+      await new PublishCommand(createArgv(testDir, '--registry', registry, '--cleanup-temp-files'));
 
       const logMessages = loggingOutput('notice');
       expect(logMessages).toContain('Skipping all user and access validation due to third-party registry');
@@ -512,7 +512,7 @@ describe('PublishCommand', () => {
     it('creates the summary file within the provided directory', async () => {
       const cwd = await initFixture('normal');
       const fsSpy = jest.spyOn(fsmain, 'writeFileSync');
-      await lernaPublish(cwd)('--summary-file', './outputs');
+      await lernaPublish(cwd)('--summary-file', './outputs', '--cleanup-temp-files');
 
       const expectedJsonResponse = [
         { packageName: 'package-1', version: '1.0.1' },
@@ -544,7 +544,7 @@ describe('PublishCommand', () => {
     it("publishes packages after verifying the user's access to each package", async () => {
       const testDir = await initFixture('normal');
 
-      await lernaPublish(testDir)('--verify-access');
+      await lernaPublish(testDir)('--verify-access', '--cleanup-temp-files');
 
       expect(promptConfirmation).toHaveBeenLastCalledWith('Are you sure you want to publish these packages?');
       expect((packDirectory as any).registry).toMatchInlineSnapshot(`

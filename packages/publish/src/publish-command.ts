@@ -1,11 +1,14 @@
 import chalk from 'chalk';
+import glob from 'glob';
 import fs from 'fs';
 import os from 'os';
 import path from 'path';
 import crypto from 'crypto';
 import pMap from 'p-map';
 import pPipe from 'p-pipe';
+import rimraf from 'rimraf';
 import semver from 'semver';
+import tempDir from 'temp-dir';
 
 import { getOneTimePassword, OneTimePasswordCache, VersionCommand } from '@lerna-lite/version';
 import {
@@ -325,6 +328,15 @@ export class PublishCommand extends Command<PublishCommandOption> {
     } else {
       const message = publishedPackagesSorted.map((pkg) => ` - ${pkg.name}@${pkg.version}`);
       logOutput(message.join(os.EOL));
+    }
+
+    // optionally cleanup temp packed files after publish, opt-in option
+    if (this.options.cleanupTempFiles) {
+      glob(path.join(tempDir, '/lerna-*'), (_err, deleteFiles) => {
+        // delete silently all files/folders that startsWith "lerna-"
+        deleteFiles.forEach((file) => rimraf(file, () => {}));
+        this.logger.verbose('publish', `Cleaning up ${deleteFiles.length} directories after publish.`);
+      });
     }
 
     this.logger.success('published', '%d %s', count, count === 1 ? 'package' : 'packages');

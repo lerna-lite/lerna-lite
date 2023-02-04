@@ -41,7 +41,7 @@ importers:
       file-url: ^3.0.0
       find-up: ^5.0.0
       fs-extra: ^11.1.0
-      glob: 7.2.3
+      glob: 8.1.0
       globby: 11.1.0
       jest: ^29.4.1
       jest-cli: ^29.4.1
@@ -98,7 +98,7 @@ importers:
       file-url: 3.0.0
       find-up: 5.0.0
       fs-extra: 11.1.0
-      glob: 7.2.3
+      glob: 8.1.0
       globby: 11.1.0
       jest: 29.4.1_zfha7dvnw4nti6zkbsmhmn6xo4
       jest-cli: 29.4.1_zfha7dvnw4nti6zkbsmhmn6xo4
@@ -445,6 +445,7 @@ importers:
       chalk: ^4.1.2
       columnify: ^1.6.0
       fs-extra: ^11.1.0
+      glob: ^8.1.0
       has-unicode: ^2.0.1
       libnpmaccess: ^7.0.1
       libnpmpublish: ^7.0.6
@@ -463,6 +464,7 @@ importers:
       semver: ^7.3.8
       ssri: ^10.0.1
       tar: ^6.1.13
+      temp-dir: ^2.0.0
       write-pkg: ^4.0.0
       yargs: ^17.6.2
       yargs-parser: ^21.1.1
@@ -474,6 +476,7 @@ importers:
       chalk: 4.1.2
       columnify: 1.6.0
       fs-extra: 11.1.0
+      glob: 8.1.0
       has-unicode: 2.0.1
       libnpmaccess: 7.0.1
       libnpmpublish: 7.0.6
@@ -487,9 +490,11 @@ importers:
       path: 0.12.7
       pify: 5.0.0
       read-package-json: 6.0.0
+      rimraf: 3.0.2
       semver: 7.3.8
       ssri: 10.0.1
       tar: 6.1.13
+      temp-dir: 2.0.0
     devDependencies:
       '@types/conventional-changelog-core': 4.2.1
       '@types/conventional-recommended-bump': 6.1.0
@@ -500,7 +505,6 @@ importers:
       '@types/semver': 7.3.13
       '@types/write-pkg': 4.0.0
       load-json-file: 6.2.0
-      rimraf: 3.0.2
       write-pkg: 4.0.0
       yargs: 17.6.2
       yargs-parser: 21.1.1
@@ -1470,7 +1474,7 @@ packages:
     engines: {node: ^14.17.0 || ^16.13.0 || >=18.0.0}
     dependencies:
       '@npmcli/name-from-folder': 1.0.1
-      glob: 8.0.3
+      glob: 8.1.0
       minimatch: 5.1.6
       read-package-json-fast: 3.0.1
     dev: false
@@ -2620,7 +2624,7 @@ packages:
       '@npmcli/move-file': 2.0.0
       chownr: 2.0.0
       fs-minipass: 2.1.0
-      glob: 8.0.3
+      glob: 8.1.0
       infer-owner: 1.0.4
       lru-cache: 7.10.1
       minipass: 3.1.6
@@ -2644,7 +2648,7 @@ packages:
     dependencies:
       '@npmcli/fs': 3.1.0
       fs-minipass: 2.1.0
-      glob: 8.0.3
+      glob: 8.1.0
       lru-cache: 7.10.1
       minipass: 4.0.0
       minipass-collect: 1.0.2
@@ -4247,8 +4251,8 @@ packages:
       once: 1.4.0
       path-is-absolute: 1.0.1
 
-  /glob/8.0.3:
-    resolution: {integrity: sha512-ull455NHSHI/Y1FqGaaYFaLGkNMMJbavMrEGFXG/PGrg6y7sutWHUHrz6gy6WEBH6akM1M414dWKCNs+IhKdiQ==}
+  /glob/8.1.0:
+    resolution: {integrity: sha512-r8hpEjiQEYlF2QU0df3dS+nxxSIreXQS1qRhMJM0Q5NDdR386C7jb7Hwwod8Fgiuex+k0GFjgft18yvxm5XoCQ==}
     engines: {node: '>=12'}
     dependencies:
       fs.realpath: 1.0.0
@@ -6512,7 +6516,7 @@ packages:
     resolution: {integrity: sha512-b/9jxWJ8EwogJPpv99ma+QwtqB7FSl3+V6UXS7Aaay8/5VwMY50oIFooY1UKXMWpfNCM6T/PoGqa5GD1g9xf9w==}
     engines: {node: ^14.17.0 || ^16.13.0 || >=18.0.0}
     dependencies:
-      glob: 8.0.3
+      glob: 8.1.0
       json-parse-even-better-errors: 3.0.0
       normalize-package-data: 5.0.0
       npm-normalize-package-bin: 3.0.0
@@ -7012,7 +7016,6 @@ packages:
   /temp-dir/2.0.0:
     resolution: {integrity: sha512-aoBAniQmmwtcKp/7BzsH8Cxzv8OL736p7v1ihGb5e9DJ9kTwGWHrQrVB5+lfVDzfGrdRzXch+ig7LHaY1JTOrg==}
     engines: {node: '>=8'}
-    dev: true
 
   /tempy/1.0.1:
     resolution: {integrity: sha512-biM9brNqxSc04Ee71hzFbryD11nX7VPhQQY32AdDmjFvodsRFz/3ufeoTZ6uYkRFfGo188tENcASNs3vTdsM0w==}
