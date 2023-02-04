@@ -25,6 +25,7 @@ lerna watch
 
 ```sh
 $ lerna watch -- <command>
+# you can press "x" to exit the watch mode.
 ```
 
 The values `$LERNA_PACKAGE_NAME` and `$LERNA_FILE_CHANGES` will be replaced with the package name, the file that changed respectively. If multiple file changes are detected, they will all be listed and separated by a whitespace (unless custom file delimiter are provided).
@@ -106,7 +107,7 @@ $ npx -c 'lerna watch -- echo \$LERNA_PACKAGE_NAME \$LERNA_FILE_CHANGES'
 - [`@lerna/watch`](#lernawatch)
   - [Usage](#usage)
   - [Options](#options)
-    - [`--emit-changes-delay`](#--emit-changes-delay)
+    - [`--debounce`](#--debounce)
     - [`--file-delimiter`](#--file-delimiter)
     - [`--glob`](#--glob)
     - [`--stream`](#--stream)
@@ -128,11 +129,11 @@ $ npx -c 'lerna watch -- echo \$LERNA_PACKAGE_NAME \$LERNA_FILE_CHANGES'
 
 > **Note** to limit the number of files being watched, you might want to take a look at either [`--ignored`](#--ignored) and/or [`--glob`](#--glob) options. The `lerna watch` command skips `.git/`, `dist/` and `node_modules/` directories by default.
 
-### `--emit-changes-delay`
-Defaults to `200`, time to wait in milliseconds before collecting all file changes before emitting them into a single watch event. This option exists because we want to provide enough time for `lerna watch` to collect all file changes (within that period) and merge these file paths into a single watch change event (chokidar has no grouping feature and emits an event for every file that changed) and we want to avoid emitting too many events (especially for a watch that triggers a rebuild). This option will come into play when you make a code change that triggers hundred of file changes, you might need to adjust the delay by increasing its value (for comparison sake the `Nx` library have their `Nx Watch` set, and fixed, at `500`).
+### `--debounce`
+Defaults to `200` time to wait in milliseconds before collecting all file changes before emitting them into a single watch event. Basically this option is to provide enough time for `lerna watch` to collect all files that changed (within that period) and avoid emitting too many watch events since Chokidar has no such debounce feature. This option becomes quite important when you do code change that affects hundred of file changes at the same time, the default is 200 but you might need to adjust the delay by increasing its value (in comparison, many libraries use `500` debounce for a watch).
 
 ```sh
-$ lerna watch --emit-changes-delay=500 -- <command>
+$ lerna watch --debounce=500 -- <command>
 ```
 
 ### `--file-delimiter`
