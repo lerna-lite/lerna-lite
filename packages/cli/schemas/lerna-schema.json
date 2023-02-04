@@ -1162,6 +1162,10 @@
           "type": "boolean",
           "description": "During `lerna publish`, when true, publish packages after every successful merge using the sha as part of the tag."
         },
+        "cleanupTempFiles": {
+          "type": "boolean",
+          "description": "Cleanup packed temp files/folders after publish process is finished, defaults to false."
+        },
         "distTag": {
           "type": "string",
           "description": "During `lerna publish`, publish packages with the specified npm dist-tag."

@@ -158,7 +158,7 @@ describe('publish from-package', () => {
 
     // nuke the git repo first
     await fs.remove(path.join(cwd, '.git'));
-    await new PublishCommand(createArgv(cwd, 'from-package'));
+    await new PublishCommand(createArgv(cwd, 'from-package', '--cleanup-temp-files'));
 
     expect(npmPublish).toHaveBeenCalled();
     expect((writePkg as any).updatedManifest('package-1')).not.toHaveProperty('gitHead');
@@ -176,7 +176,7 @@ describe('publish from-package', () => {
 
     const cwd = await initFixture('independent');
 
-    await new PublishCommand(createArgv(cwd, 'from-package', '--git-head', 'deadbeef'));
+    await new PublishCommand(createArgv(cwd, 'from-package', '--git-head', 'deadbeef', '--cleanup-temp-files'));
 
     expect(npmPublish).toHaveBeenCalled();
     expect((writePkg as any).updatedManifest('package-1').gitHead).toBe('deadbeef');

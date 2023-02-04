@@ -32,6 +32,10 @@ export default {
         requiresArg: true,
         defaultDescription: 'alpha',
       },
+      'cleanup-temp-files': {
+        describe: 'Cleanup packed temp files/folders after publish process is finished, defaults to false.',
+        type: 'boolean',
+      },
       contents: {
         describe: 'Subdirectory to publish. Must apply to ALL packages.',
         type: 'string',

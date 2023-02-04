@@ -5,6 +5,7 @@
   "npmClient": "pnpm",
   "command": {
     "publish": {
+      "cleanupTempFiles": true,
       "removePackageFields": [
         "devDependencies",
         "scripts"

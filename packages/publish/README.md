@@ -71,6 +71,7 @@ This is useful when a previous `lerna publish` failed to publish all packages to
     - [semver `--bump from-package`](#semver--bump-from-package)
   - [Options](#options)
     - [`--canary`](#--canary)
+    - [`--cleanup-temp-files`](#--cleanup-temp-files) (new)
     - [`--contents <dir>`](#--contents-dir)
     - [`--dist-tag <tag>`](#--dist-tag-tag)
     - [`--force-publish`](#--force-publish)
@@ -119,6 +120,16 @@ If you have publish canary releases from multiple active development branches in
 it is recommended to customize the [`--preid`](#--preid) and [`--dist-tag <tag>`](#--dist-tag-tag) on a per-branch basis to avoid clashing versions.
 
 > The intended use case for this flag is a per commit level release or nightly release.
+
+### `--cleanup-temp-files`
+
+Cleanup the packed files & folders from the temp directory once the publish is over, defaults to `false`.
+
+```sh
+lerna publish --cleanup-temp-files
+```
+
+> **Note** Lerna-Lite is prefixing the temp folders with "lerna-" when packing the tarball files, we then use a glob pattern to delete all folders starting with this prefix. Also note that it might not cleanup all possible temp files/folders that were created by the publish process.
 
 ### `--contents <dir>`
 

@@ -106,6 +106,9 @@ export interface PublishCommandOption extends VersionCommandOption {
   /** Publish packages after every successful merge using the sha as part of the tag. */
   canary?: boolean;
 
+  /** Cleanup packed temp files/folders after publish process is finished, defaults to false. */
+  cleanupTempFiles?: boolean;
+
   /** Specify the prerelease identifier when publishing a prerelease */
   preid?: string;
 
