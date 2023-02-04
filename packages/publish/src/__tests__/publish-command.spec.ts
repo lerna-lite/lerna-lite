@@ -54,7 +54,6 @@ jest.mock('../lib/pack-directory', () => jest.requireActual('../lib/__mocks__/pa
 jest.mock('../lib/git-checkout');
 
 import fs from 'fs-extra';
-import fsmain from 'fs';
 import path from 'path';
 
 // helpers
@@ -459,7 +458,7 @@ describe('PublishCommand', () => {
       const testDir = await initFixture('normal-workspace-name-prefixed');
       const registry = 'https://my-private-registry';
 
-      await lernaPublish(testDir)('--registry', registry, '--cleanup-temp-files');
+      await lernaPublish(testDir)('--registry', registry);
 
       expect(npmPublish).toHaveBeenCalledWith(
         expect.objectContaining({ name: '@my-workspace/package-1' }),
@@ -493,7 +492,7 @@ describe('PublishCommand', () => {
       const registry = 'https://my-incompatible-registry.com';
 
       // await lernaPublish(testDir)("--registry", registry);
-      await new PublishCommand(createArgv(testDir, '--registry', registry, '--cleanup-temp-files'));
+      await new PublishCommand(createArgv(testDir, '--registry', registry));
 
       const logMessages = loggingOutput('notice');
       expect(logMessages).toContain('Skipping all user and access validation due to third-party registry');
@@ -501,18 +500,19 @@ describe('PublishCommand', () => {
   });
 
   describe('--summary-file', () => {
+    beforeAll(() => ((fs.outputFileSync as any) = jest.fn()));
+    afterAll(() => ((fs.outputFileSync as any) = jest.requireActual('fs-extra').outputFileSync));
+
     it('skips creating the summary file', async () => {
       const cwd = await initFixture('normal');
-      const fsSpy = jest.spyOn(fs, 'writeFileSync');
       await lernaPublish(cwd);
 
-      expect(fsSpy).not.toHaveBeenCalled();
+      expect(fs.outputFileSync).not.toHaveBeenCalled();
     });
 
     it('creates the summary file within the provided directory', async () => {
       const cwd = await initFixture('normal');
-      const fsSpy = jest.spyOn(fsmain, 'writeFileSync');
-      await lernaPublish(cwd)('--summary-file', './outputs', '--cleanup-temp-files');
+      await lernaPublish(cwd)('--summary-file', './outputs');
 
       const expectedJsonResponse = [
         { packageName: 'package-1', version: '1.0.1' },
@@ -520,13 +520,14 @@ describe('PublishCommand', () => {
         { packageName: 'package-3', version: '1.0.1' },
         { packageName: 'package-4', version: '1.0.1' },
       ];
-      expect(fsSpy).toHaveBeenCalled();
-      expect(fsSpy).toHaveBeenCalledWith('./outputs/lerna-publish-summary.json', JSON.stringify(expectedJsonResponse));
+      expect(fs.outputFileSync).toHaveBeenCalledWith(
+        './outputs/lerna-publish-summary.json',
+        JSON.stringify(expectedJsonResponse)
+      );
     });
 
     it('creates the summary file at the root when no custom directory is provided', async () => {
       const cwd = await initFixture('normal');
-      const fsSpy = jest.spyOn(fsmain, 'writeFileSync');
       await lernaPublish(cwd)('--summary-file');
 
       const expectedJsonResponse = [
@@ -535,8 +536,10 @@ describe('PublishCommand', () => {
         { packageName: 'package-3', version: '1.0.1' },
         { packageName: 'package-4', version: '1.0.1' },
       ];
-      expect(fsSpy).toHaveBeenCalled();
-      expect(fsSpy).toHaveBeenCalledWith('./lerna-publish-summary.json', JSON.stringify(expectedJsonResponse));
+      expect(fs.outputFileSync).toHaveBeenCalledWith(
+        './lerna-publish-summary.json',
+        JSON.stringify(expectedJsonResponse)
+      );
     });
   });
 
@@ -544,7 +547,7 @@ describe('PublishCommand', () => {
     it("publishes packages after verifying the user's access to each package", async () => {
       const testDir = await initFixture('normal');
 
-      await lernaPublish(testDir)('--verify-access', '--cleanup-temp-files');
+      await lernaPublish(testDir)('--verify-access');
 
       expect(promptConfirmation).toHaveBeenLastCalledWith('Are you sure you want to publish these packages?');
       expect((packDirectory as any).registry).toMatchInlineSnapshot(`
@@ -660,24 +663,6 @@ describe('PublishCommand', () => {
       const cwd = await initFixture('normal');
 
       await lernaPublish(cwd)('--no-granular-pathspec');
-
-      expect(gitCheckout).toHaveBeenCalledWith(
-        // the list of changed files has been asserted many times already
-        expect.any(Array),
-        { granularPathspec: false },
-        { cwd },
-        undefined
-      );
-    });
-
-    xit('consumes configuration from lerna.json', async () => {
-      const cwd = await initFixture('normal');
-
-      await fs.outputJSON(path.join(cwd, 'lerna.json'), {
-        version: '1.0.0',
-        granularPathspec: false,
-      });
-      await lernaPublish(cwd)();
 
       expect(gitCheckout).toHaveBeenCalledWith(
         // the list of changed files has been asserted many times already

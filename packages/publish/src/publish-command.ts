@@ -1,6 +1,6 @@
 import chalk from 'chalk';
 import glob from 'glob';
-import fs from 'fs';
+import fs from 'fs-extra';
 import os from 'os';
 import path from 'path';
 import crypto from 'crypto';
@@ -319,7 +319,7 @@ export class PublishCommand extends Command<PublishCommandOption> {
       });
       logOutput(jsonObject);
       try {
-        fs.writeFileSync(filePath, JSON.stringify(jsonObject));
+        fs.outputFileSync(filePath, JSON.stringify(jsonObject));
         logOutput('Publish summary created: ', filePath);
       } catch (error) {
         logOutput('Failed to create the summary report', error);
@@ -333,7 +333,7 @@ export class PublishCommand extends Command<PublishCommandOption> {
     if (this.options.cleanupTempFiles) {
       glob(path.join(tempDir, '/lerna-*'), (_err, deleteFolders) => {
         // delete silently all files/folders that startsWith "lerna-"
-        deleteFolders.forEach((folder) => fs.rmdir(folder, { recursive: true }, () => {}));
+        deleteFolders.forEach((folder) => fs.removeSync(folder));
         this.logger.verbose('publish', `Found ${deleteFolders.length} temp folders to cleanup after publish.`);
       });
     }

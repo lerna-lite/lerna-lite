@@ -136,7 +136,7 @@ describe('publish from-git', () => {
     const cwd = await initFixture('normal');
 
     await gitTag(cwd, 'v1.0.0');
-    await new PublishCommand(createArgv(cwd, 'from-git', '--no-sort', '--cleanup-temp-files'));
+    await new PublishCommand(createArgv(cwd, 'from-git', '--no-sort'));
 
     // called from chained describeRef()
     expect(throwIfUncommitted).toHaveBeenCalled();
@@ -192,7 +192,7 @@ describe('publish from-git', () => {
     const cwd = await initFixture('independent');
 
     await gitTag(cwd, 'package-3@3.0.0');
-    await new PublishCommand(createArgv(cwd, '--bump', 'from-git', '--cleanup-temp-files'));
+    await new PublishCommand(createArgv(cwd, '--bump', 'from-git'));
 
     expect((logOutput as any).logged()).toMatch('Found 1 package to publish:');
     expect((npmPublish as typeof npmPublishMock).order()).toEqual(['package-3']);
@@ -215,7 +215,7 @@ describe('publish from-git', () => {
     });
 
     const cwd = await initFixture('normal');
-    const command = new PublishCommand(createArgv(cwd, '--bump', 'from-git', '--cleanup-temp-files'));
+    const command = new PublishCommand(createArgv(cwd, '--bump', 'from-git'));
 
     await expect(command).rejects.toThrow('uncommitted');
     // notably different than the actual message, but good enough here
