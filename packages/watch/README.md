@@ -130,7 +130,7 @@ $ npx -c 'lerna watch -- echo \$LERNA_PACKAGE_NAME \$LERNA_FILE_CHANGES'
 > **Note** to limit the number of files being watched, you might want to take a look at either [`--ignored`](#--ignored) and/or [`--glob`](#--glob) options. The `lerna watch` command skips `.git/`, `dist/` and `node_modules/` directories by default.
 
 ### `--debounce`
-Defaults to `200`, time to wait in milliseconds before collecting all file changes before emitting them into a single watch event. This option exists because we want to provide enough time for `lerna watch` to collect all file changed (within that period) to avoid emitting too many watch events since Chokidar has no such grouping feature. This option becomes quite important when you do code change that affects hundred of file changes at the same time, the default is 200 but you might need to adjust the delay by increasing its value (in comparison, many libraries use `500` debounce for a watch).
+Defaults to `200` time to wait in milliseconds before collecting all file changes before emitting them into a single watch event. Basically this option is to provide enough time for `lerna watch` to collect all files that changed (within that period) and avoid emitting too many watch events since Chokidar has no such debounce feature. This option becomes quite important when you do code change that affects hundred of file changes at the same time, the default is 200 but you might need to adjust the delay by increasing its value (in comparison, many libraries use `500` debounce for a watch).
 
 ```sh
 $ lerna watch --debounce=500 -- <command>
