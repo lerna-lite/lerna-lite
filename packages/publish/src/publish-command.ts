@@ -335,7 +335,7 @@ export class PublishCommand extends Command<PublishCommandOption> {
       glob(path.join(tempDir, '/lerna-*'), (_err, deleteFiles) => {
         // delete silently all files/folders that startsWith "lerna-"
         deleteFiles.forEach((file) => rimraf(file, () => {}));
-        this.logger.verbose('publish', `Cleaning up ${deleteFiles.length} directories after publish.`);
+        this.logger.verbose('publish', `Found ${deleteFiles.length} temp files/folders to cleanup after publish.`);
       });
     }
 
