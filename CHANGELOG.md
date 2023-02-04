@@ -4,6 +4,23 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [1.15.0](https://github.com/lerna-lite/lerna-lite/compare/v1.14.2...v1.15.0) (2023-02-04)
+
+### Bug Fixes
+
+* **deps:** update dependency @npmcli/arborist to ^6.2.1 ([#471](https://github.com/lerna-lite/lerna-lite/issues/471)) ([5387b4e](https://github.com/lerna-lite/lerna-lite/commit/5387b4ecbba72e95639b9143233e736507b4ff17)) - by @renovate[bot]
+* **publish:** deprecate publish --require-scripts ([#463](https://github.com/lerna-lite/lerna-lite/issues/463)) ([e8ef54e](https://github.com/lerna-lite/lerna-lite/commit/e8ef54ed18581e092cdd9da89d547635f7792249)) - by @ghiscoding
+* **publish:** downgrade `glob` deps to cleanup temp file ([#475](https://github.com/lerna-lite/lerna-lite/issues/475)) ([de09614](https://github.com/lerna-lite/lerna-lite/commit/de09614454aca271067275de6d97c78d70157a95)) - by @ghiscoding
+* **schema:** `--contents` type should be string, fixes [#466](https://github.com/lerna-lite/lerna-lite/issues/466) ([#467](https://github.com/lerna-lite/lerna-lite/issues/467)) ([c12aafe](https://github.com/lerna-lite/lerna-lite/commit/c12aafe4dacb99f3334617149f1a6892599d7d49)) - by @ghiscoding
+* **watch:** use a better debounce option name for the watch ([#476](https://github.com/lerna-lite/lerna-lite/issues/476)) ([eb0bbc1](https://github.com/lerna-lite/lerna-lite/commit/eb0bbc136133e47881a5ef38ad5e3feb45675e56)) - by @ghiscoding
+
+### Features
+
+* **publish:** add `--cleanup-temp-files` option to cleanup packed tmp ([#474](https://github.com/lerna-lite/lerna-lite/issues/474)) ([6781c79](https://github.com/lerna-lite/lerna-lite/commit/6781c7938a3594b5cd0f6da28f02e3c230d4e045)) - by @ghiscoding
+* **publish:** recover from network failure ([#469](https://github.com/lerna-lite/lerna-lite/issues/469)) ([acd586d](https://github.com/lerna-lite/lerna-lite/commit/acd586d161c95725350b1f9fc51b7b00ce2b8752)) - by @ghiscoding
+* **version:** move all version related methods under version package ([#456](https://github.com/lerna-lite/lerna-lite/issues/456)) ([2c0921a](https://github.com/lerna-lite/lerna-lite/commit/2c0921aecb52330f853d08b453f3cd1a61a0857e)) - by @ghiscoding
+* **watch:** add optional stdin key to exit watch mode cleanly ([#472](https://github.com/lerna-lite/lerna-lite/issues/472)) ([d0cf2d9](https://github.com/lerna-lite/lerna-lite/commit/d0cf2d9d8286f8016867cfd79e3b1146b96b747d)) - by @ghiscoding
+
 ## [1.14.2](https://github.com/lerna-lite/lerna-lite/compare/v1.14.1...v1.14.2) (2023-01-21)
 
 ### Bug Fixes

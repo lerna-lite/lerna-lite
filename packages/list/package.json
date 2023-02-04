@@ -1,7 +1,7 @@
 {
   "name": "@lerna-lite/list",
   "description": "Lerna-Lite list commmand - List local packages",
-  "version": "1.14.2",
+  "version": "1.15.0",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "typings": "dist/index.d.ts",
@@ -34,8 +34,8 @@
   },
   "dependencies": {
     "@lerna-lite/core": "workspace:*",
-    "@lerna-lite/listable": "workspace:*",
-    "@lerna-lite/filter-packages": "workspace:*"
+    "@lerna-lite/filter-packages": "workspace:*",
+    "@lerna-lite/listable": "workspace:*"
   },
   "devDependencies": {
     "rimraf": "^3.0.2",
