@@ -15,6 +15,7 @@ jest.mock('@lerna-lite/core', () => ({
   ...jest.requireActual('@lerna-lite/core'), // return the other real methods, below we'll mock only 2 of the methods
   Command: jest.requireActual('../../../core/src/command').Command,
   conf: jest.requireActual('../../../core/src/command').conf,
+  pulseTillDone: jest.requireActual('../../../core/src/utils').pulseTillDone,
   collectUpdates: jest.requireActual('../../../core/src/__mocks__/collect-updates').collectUpdates,
   getOneTimePassword: () => Promise.resolve('654321'),
   logOutput: jest.requireActual('../../../core/src/__mocks__/output').logOutput,
@@ -42,12 +43,14 @@ import { logOutput, promptConfirmation, PublishCommandOption, throwIfUncommitted
 // helpers
 import { gitTag } from '@lerna-test/helpers';
 import { loggingOutput } from '@lerna-test/helpers/logging-output';
-import { initFixtureFactory } from '@lerna-test/helpers';
+import { commandRunner, initFixtureFactory } from '@lerna-test/helpers';
 const initFixture = initFixtureFactory(__dirname);
 
 // test command
 import yargParser from 'yargs-parser';
 import { PublishCommand } from '../publish-command';
+import cliCommands from '../../../cli/src/cli-commands/cli-publish-commands';
+const lernaPublish = commandRunner(cliCommands);
 
 const createArgv = (cwd, ...args) => {
   args.unshift('publish');
@@ -227,5 +230,41 @@ describe('publish from-git', () => {
         prefix: 'EGITHEAD',
       })
     );
+  });
+
+  it('should throw even when npm publish throws any other type of errors from a previous half publish process', async () => {
+    (npmPublish as jest.Mock).mockImplementationOnce(() => {
+      return Promise.reject({ code: 'UNAUTHORIZED' });
+    });
+
+    const cwd = await initFixture('normal');
+
+    await gitTag(cwd, 'v1.0.0');
+    const command = new PublishCommand(createArgv(cwd, 'from-git', '--no-sort'));
+
+    await expect(command).rejects.toEqual({ code: 'UNAUTHORIZED', name: 'ValidationError' });
+    expect(process.exitCode).toBe(1);
+  });
+
+  it('should not throw and assume package is already published when npm publish throws EPUBLISHCONFLICT from a previous half publish process', async () => {
+    (npmPublish as jest.Mock).mockImplementation(() => {
+      return Promise.reject({ code: 'EPUBLISHCONFLICT' });
+    });
+
+    const cwd = await initFixture('normal');
+
+    await gitTag(cwd, 'v1.0.0');
+    const command = new PublishCommand(createArgv(cwd, 'from-git', '--no-sort'));
+
+    await expect(command).resolves.toBeUndefined();
+
+    // called from chained describeRef()
+    expect(throwIfUncommitted).toHaveBeenCalled();
+
+    // since all packages rejected with publish conflict, we should have the "All published" message when recalling execute()
+    command.initialize();
+    const loggerSpy = jest.spyOn(command.logger, 'success');
+    await command.execute();
+    expect(loggerSpy).toHaveBeenCalledWith('All packages have already been published.');
   });
 });
