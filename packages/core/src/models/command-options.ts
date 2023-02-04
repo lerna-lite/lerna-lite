@@ -432,7 +432,7 @@ export interface WatchCommandOption {
    * This provide enough time for the system to collect all Chokidar events (1x per file changes)
    * and merge them into a single Lerna watch change event to be emitted (Lerna will join all file paths into a CSV string separated by whitespace by default).
    */
-  emitChangesDelay?: number;
+  debounce?: number;
 
   /** Defaults to whitespace, the delimiter that will be used to separate files when mutiple file changes are emitted by the watch */
   fileDelimiter?: string;

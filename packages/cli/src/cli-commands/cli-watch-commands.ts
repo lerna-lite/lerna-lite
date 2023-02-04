@@ -34,7 +34,7 @@ export default {
           hidden: true,
           type: 'boolean',
         },
-        'emit-changes-delay': {
+        debounce: {
           group: 'Command Options:',
           describe:
             'Time to wait in milliseconds before emitting all the file changes into a single event, defaults to 200',

@@ -12,7 +12,7 @@ import { FilterOptions, getFilteredPackages } from '@lerna-lite/filter-packages'
 import chokidar from 'chokidar';
 import path from 'path';
 
-import { CHOKIDAR_AVAILABLE_OPTIONS, EMIT_CHANGES_DELAY, FILE_DELIMITER } from './constants';
+import { CHOKIDAR_AVAILABLE_OPTIONS, DEBOUNCE_DELAY, FILE_DELIMITER } from './constants';
 import { ChangesStructure } from './models';
 
 export function factory(argv: WatchCommandOption) {
@@ -155,7 +155,7 @@ export class WatchCommand extends Command<WatchCommandOption & FilterOptions> {
   }
 
   protected executeCommandCallback() {
-    const debounceDelay = this.options.emitChangesDelay ?? EMIT_CHANGES_DELAY;
+    const debounceDelay = this.options.debounce ?? DEBOUNCE_DELAY;
 
     return new Promise((resolve) => {
       // once we reached emit change stability threshold, we'll fire events for each packages & events while the file paths array will be merged

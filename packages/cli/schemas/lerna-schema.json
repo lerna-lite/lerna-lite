@@ -1386,7 +1386,7 @@
         }
       },
       "watch": {
-        "emitChangesDelay": {
+        "debounce": {
           "type": "number",
           "description": "Defaults to 200, time to wait in milliseconds before emitting all the file changes into a single event."
         },
