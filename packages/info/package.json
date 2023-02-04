@@ -14,6 +14,7 @@
   "scripts": {
     "prebuild": "rimraf dist",
     "build": "tsc --project tsconfig.bundle.json --newLine LF",
+    "build:incremental": "tsc --incremental --project tsconfig.bundle.json --newLine LF --sourceMap false --excludeDirectories dist",
     "pack-tarball": "npm pack"
   },
   "license": "MIT",
