@@ -123,13 +123,13 @@ it is recommended to customize the [`--preid`](#--preid) and [`--dist-tag <tag>`
 
 ### `--cleanup-temp-files`
 
-Cleanup the packed files & folders from the temp directory once the publish is over, defaults to `false`.
+Cleanup the temp folders used by the publish process once the execution is over, defaults to `false`.
 
 ```sh
 lerna publish --cleanup-temp-files
 ```
 
-> **Note** Lerna-Lite is prefixing the temp folders with "lerna-" when packing the tarball folders, we then use a glob pattern to delete all folders starting with this prefix. Also note that it is entirely possible that this cleanup misses some extra temp files created by the publish process.
+> **Note** Lerna-Lite is prefixing the temp folders containing each package tarball with "lerna-", we then use a glob pattern to delete every folders starting with this prefix. Also note that it is entirely possible that this cleanup misses some extra temp files created by the publish process.
 
 ### `--contents <dir>`
 
