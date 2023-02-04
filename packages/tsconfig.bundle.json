@@ -23,5 +23,5 @@
     "sourceMap": true,
     "strict": true
   },
-  "exclude": ["**/*.spec.ts", "**/*.test.js", "**/*.test.ts", "**/__fixtures__/**/*.*", "**/__mocks__/**/*.*"]
+  "exclude": ["**/dist/**", "**/__fixtures__/**/*.*", "**/__mocks__/**/*.*", "**/__tests__/**/*.*"]
 }

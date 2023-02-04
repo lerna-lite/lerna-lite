@@ -652,6 +652,7 @@ importers:
       '@lerna-lite/core': workspace:*
       '@lerna-lite/filter-packages': workspace:*
       chokidar: ^3.5.3
+      mock-stdin: ^1.0.0
       path: ^0.12.7
       rimraf: ^3.0.2
       yargs-parser: ^21.1.1
@@ -661,6 +662,7 @@ importers:
       chokidar: 3.5.3
       path: 0.12.7
     devDependencies:
+      mock-stdin: 1.0.0
       rimraf: 3.0.2
       yargs-parser: 21.1.1
 
@@ -5736,6 +5738,10 @@ packages:
     resolution: {integrity: sha512-vVqVZQyf3WLx2Shd0qJ9xuvqgAyKPLAiqITEtqW0oIUjzo3PePDd6fW9iFz30ef7Ysp/oiWqbhszeGWW2T6Gzw==}
     engines: {node: '>=10'}
     hasBin: true
+
+  /mock-stdin/1.0.0:
+    resolution: {integrity: sha512-tukRdb9Beu27t6dN+XztSRHq9J0B/CoAOySGzHfn8UTfmqipA5yNT/sDUEyYdAV3Hpka6Wx6kOMxuObdOex60Q==}
+    dev: true
 
   /modify-values/1.0.1:
     resolution: {integrity: sha512-xV2bxeN6F7oYjZWTe/YPAy6MN2M+sL4u/Rlm2AHCIVGfo2p1yGmBHQ6vHehl4bRTZBdHu3TSkWdYgkwpYzAGSw==}

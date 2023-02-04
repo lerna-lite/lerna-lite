@@ -43,6 +43,7 @@ jest.mock('@lerna-lite/watch', () => jest.requireActual('../watch-command'));
 
 // jest.useFakeTimers({ timerLimit: 100 });
 
+import mockStdin from 'mock-stdin';
 import path from 'path';
 import yargParser from 'yargs-parser';
 
@@ -87,7 +88,18 @@ const createArgv = (cwd: string, ...args: string[]) => {
 };
 
 describe('Watch Command', () => {
+  const stdinIsTTY = process.stdin.isTTY;
+  const stdoutIsTTY = process.stdout.isTTY;
+  const stdin = mockStdin.stdin();
+
+  beforeEach(() => {
+    process.stdin.isTTY = true;
+    process.stdout.isTTY = true;
+  });
+
   afterEach(() => {
+    process.stdin.isTTY = stdinIsTTY;
+    process.stdout.isTTY = stdoutIsTTY;
     process.exitCode = undefined;
   });
 
@@ -493,6 +505,24 @@ describe('Watch Command', () => {
         reject: true,
         shell: true,
       });
+    });
+
+    it('should execute watch add callback and stop the watch process when typing "x" in the shell', async () => {
+      const mockExit = jest.spyOn(process, 'exit').mockImplementation((number) => {
+        throw new Error('process.exit: ' + number);
+      });
+
+      try {
+        // prettier-ignore
+        await lernaWatch(testDir)('--emit-changes-delay', '0', '--scope', 'package-2', '--', 'echo $LERNA_PACKAGE_NAME');
+        const promise = watchAddHandler('add', path.join(testDir, 'packages/package-2/some-file.ts'));
+        stdin.send('x');
+        stdin.end();
+        await promise;
+      } catch (e) {
+        expect(mockExit).toHaveBeenCalled();
+        mockExit.mockRestore();
+      }
     });
   });
 });

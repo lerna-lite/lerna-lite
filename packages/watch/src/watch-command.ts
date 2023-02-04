@@ -13,7 +13,7 @@ import chokidar from 'chokidar';
 import path from 'path';
 
 import { CHOKIDAR_AVAILABLE_OPTIONS, EMIT_CHANGES_DELAY, FILE_DELIMITER } from './constants';
-import { ChangesStructure, ChokidarEventType } from './models';
+import { ChangesStructure } from './models';
 
 export function factory(argv: WatchCommandOption) {
   return new WatchCommand(argv);
@@ -64,6 +64,19 @@ export class WatchCommand extends Command<WatchCommandOption & FilterOptions> {
 
     this._count = this._filteredPackages.length;
     this._packagePlural = this._count === 1 ? 'package' : 'packages';
+
+    // optional keystroke to exit the watch cleanly
+    if (process.stdin.isTTY) {
+      this.logger.info('watch', 'Press "x" to exit watch mode.');
+      process.stdin.setRawMode(true);
+      process.stdin.resume();
+      process.stdin.on('data', (key) => {
+        if (key.toString().toLowerCase() === 'x') {
+          this.logger.info('watch', 'Exiting the watch...');
+          process.exit();
+        }
+      });
+    }
   }
 
   async execute() {
@@ -142,6 +155,8 @@ export class WatchCommand extends Command<WatchCommandOption & FilterOptions> {
   }
 
   protected executeCommandCallback() {
+    const debounceDelay = this.options.emitChangesDelay ?? EMIT_CHANGES_DELAY;
+
     return new Promise((resolve) => {
       // once we reached emit change stability threshold, we'll fire events for each packages & events while the file paths array will be merged
       if (this._timer) clearTimeout(this._timer as NodeJS.Timeout);
@@ -190,7 +205,7 @@ export class WatchCommand extends Command<WatchCommandOption & FilterOptions> {
             resolve({ changedPkg, mergedFiles: changedFilesCsv });
           }
         }
-      }, this.options.emitChangesDelay ?? EMIT_CHANGES_DELAY);
+      }, debounceDelay);
     });
   }
 
