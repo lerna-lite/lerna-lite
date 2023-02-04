@@ -123,7 +123,7 @@ it is recommended to customize the [`--preid`](#--preid) and [`--dist-tag <tag>`
 
 ### `--cleanup-temp-files`
 
-Cleanup the packed files & folders from the temp directory once the publish is over, defaults to `false`.
+Cleanup the packed files & folders from the temp directory once the publish process is over, defaults to `false`.
 
 ```sh
 lerna publish --cleanup-temp-files
