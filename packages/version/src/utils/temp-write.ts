@@ -14,7 +14,7 @@ import { promisify } from 'util';
 import { v4 as uuidv4 } from 'uuid';
 
 const writeFileP = promisify(fs.writeFile);
-const tempfile = (filePath?: string) => path.join(tempDir, uuidv4(), filePath || '');
+const tempfile = (filePath?: string) => path.join(tempDir, `lerna-${uuidv4()}`, filePath || '');
 
 const writeStream = async (filePath: string, fileContent: Readable) =>
   new Promise((resolve, reject) => {
