@@ -56,18 +56,8 @@ body:
     id: system-info
     attributes:
       label: Environment Info
-      description: versions number of each systems and libs (Lerna-Lite/[packageName], TypeScript)
-      render: shell
-      value: |
-        | Executable        | Version |
-        | ----------------- | ------- |
-        | `lerna --version` | VERSION |
-        | `npm --version`   | VERSION |
-        | `yarn --version`  | VERSION |
-        | `node --version`  | VERSION |
-
-        ---
-        OR simply run `lerna info` command and copy+paste the result here
+      description: output of `npx envinfo --system --npmPackages '@lerna-lite/*' --binaries --browsers`
+      placeholder: System, Binaries, Browsers, Packages
     validations:
       required: true
   - type: dropdown
