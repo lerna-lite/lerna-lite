@@ -14,7 +14,6 @@ importers:
       '@lerna-lite/diff': workspace:*
       '@lerna-lite/exec': workspace:*
       '@lerna-lite/filter-packages': workspace:*
-      '@lerna-lite/info': workspace:*
       '@lerna-lite/list': workspace:*
       '@lerna-lite/listable': workspace:*
       '@lerna-lite/profiler': workspace:*
@@ -71,7 +70,6 @@ importers:
       '@lerna-lite/diff': link:packages/diff
       '@lerna-lite/exec': link:packages/exec
       '@lerna-lite/filter-packages': link:packages/filter-packages
-      '@lerna-lite/info': link:packages/info
       '@lerna-lite/list': link:packages/list
       '@lerna-lite/listable': link:packages/listable
       '@lerna-lite/profiler': link:packages/profiler
@@ -139,7 +137,6 @@ importers:
   packages/cli:
     specifiers:
       '@lerna-lite/core': workspace:*
-      '@lerna-lite/info': workspace:*
       '@lerna-lite/init': workspace:*
       '@lerna-lite/listable': workspace:*
       '@lerna-lite/publish': workspace:*
@@ -156,7 +153,6 @@ importers:
       yargs-parser: ^21.1.1
     dependencies:
       '@lerna-lite/core': link:../core
-      '@lerna-lite/info': link:../info
       '@lerna-lite/init': link:../init
       '@lerna-lite/listable': link:../listable
       '@lerna-lite/publish': link:../publish
@@ -331,23 +327,6 @@ importers:
     devDependencies:
       '@types/node': 18.11.18
       '@types/p-map': 2.0.0
-      path: 0.12.7
-      rimraf: 3.0.2
-      yargs: 17.6.2
-
-  packages/info:
-    specifiers:
-      '@lerna-lite/core': workspace:*
-      '@types/envinfo': ^7.8.1
-      envinfo: ^7.8.1
-      path: ^0.12.7
-      rimraf: ^3.0.2
-      yargs: ^17.6.2
-    dependencies:
-      '@lerna-lite/core': link:../core
-      envinfo: 7.8.1
-    devDependencies:
-      '@types/envinfo': 7.8.1
       path: 0.12.7
       rimraf: 3.0.2
       yargs: 17.6.2
@@ -1826,10 +1805,6 @@ packages:
     resolution: {integrity: sha512-EGlKlgMhnLt/cM4DbUSafFdrkeJoC9Mvnj0PUCU7tFmTjMjNRT957kXCx0wYm3JuEq4o4ZsS5vG+NlkM2DMd2A==}
     dev: true
 
-  /@types/envinfo/7.8.1:
-    resolution: {integrity: sha512-pTyshpmGxqB9lRwG75v2YR0oqKYpCrklOYlZWQ88z/JB0fimT8EVmYekuIwpU3IxPZDHSXCqXKzkCrtAcKY25g==}
-    dev: true
-
   /@types/execa/2.0.0:
     resolution: {integrity: sha512-aBnkJ0r3khaZkHzu9pDZeWXrDg1N/ZtDGRQkK+KIqNVvvTvW+URXMUHQQCQMYdb2GPrcwu9Fq6l9iiT+pirIbg==}
     deprecated: This is a stub types definition. execa provides its own type definitions, so you do not need this installed.
@@ -3224,12 +3199,6 @@ packages:
   /env-paths/2.2.1:
     resolution: {integrity: sha512-+h1lkLKhZMTYjog1VEpJNG7NZJWcuc2DDk/qsqSTRRCOXiLjeQ1d1/udrUGhqMxUgAlwKNZ0cf2uqan5GLuS2A==}
     engines: {node: '>=6'}
-    dev: false
-
-  /envinfo/7.8.1:
-    resolution: {integrity: sha512-/o+BXHmB7ocbHEAs6F2EnG0ogybVVUdkRunTT2glZU9XAaGmhqskrvKwqXuDfNjEO0LZKWdejEEpnq8aM0tOaw==}
-    engines: {node: '>=4'}
-    hasBin: true
     dev: false
 
   /err-code/2.0.3:

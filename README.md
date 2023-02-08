@@ -27,7 +27,6 @@
 - Commands
   - included with CLI
     - 🛠️ [`init`](https://github.com/lerna-lite/lerna-lite/tree/main/packages/init#readme) - creates a new Lerna-Lite repo (adds `lerna.json` and a workspace structure)
-    - 💻 [`info`](https://github.com/lerna-lite/lerna-lite/tree/main/packages/info#readme) - print local environment information (useful when opening new issue)
     - ☁️ [`publish`](https://github.com/lerna-lite/lerna-lite/tree/main/packages/publish#readme) - publish every workspace packages that changed
     - 📑 [`version`](https://github.com/lerna-lite/lerna-lite/tree/main/packages/version#readme) - create new version for each workspace packages
   - optional commands (requires **separate install**, refer to the [installation](#separate--optional-installs) table shown below)
@@ -87,7 +86,7 @@ Here are some of the largest projects using the Lerna-Lite fork
 
 ## About Lerna-Lite
 
-Lerna-Lite differs from the original [Lerna](https://github.com/lerna/lerna) since it only has a limited subset of commands from Lerna, which itself has 15 commands, while Lerna-Lite only includes half of them (and a few of them are optional). Lerna was originally built as an all-in-one tool, however nowadays Workspaces are available in all package managers and the need for an all-in-one tool ,which includes built-in workspaces functionalities, is no longer necessary. Lerna-Lite is built around this new reality and its CLI is only including the minimum commands which are `init`, `info`, `publish` and `version`, while other commands are available as optional and separate installation (`exec`, `list`, `run`, ...). In summary, Lerna-Lite is more modular than the original Lerna and so you'll end up installing less dependencies, this also makes it more versatile to use with other tools like Turborepo, pnpm and others...
+Lerna-Lite differs from the original [Lerna](https://github.com/lerna/lerna) since it only has a limited subset of commands from Lerna, which itself has 15 commands, while Lerna-Lite only includes half of them (and a few of them are optional). Lerna was originally built as an all-in-one tool, however nowadays Workspaces are available in all package managers and the need for an all-in-one tool ,which includes built-in workspaces functionalities, is no longer necessary. Lerna-Lite is built around this new reality and its CLI is only including the minimum commands which are `init`, `publish` and `version`, while other commands are available as optional and separate installation (`exec`, `list`, `run`, ...). In summary, Lerna-Lite is more modular than the original Lerna and so you'll end up installing less dependencies, this also makes it more versatile to use with other tools like Turborepo, pnpm and others...
 
 As a summary, Lerna-Lite assumes, and requires you to pre-setup your Workspace through your favorite package manager (npm, pnpm, yarn) that will take care of the symlinks (Lerna-Lite does **not include** the `bootstrap`, `add` and `link` commands hence the need for a workspace pre-setup), so make sure that your workspace is properly setup **before** adding Lerna-Lite.
 
@@ -208,7 +207,6 @@ Minimum CLI install to get started with Lerna-Lite, that will give you access to
 | Command | Description |
 | ------- | ----------- |
 | 🛠️ [init](https://github.com/lerna-lite/lerna-lite/tree/main/packages/init#readme) | create/initialize a new Lerna-Lite repo |
-| 💻 [info](https://github.com/lerna-lite/lerna-lite/tree/main/packages/info#readme) | print local environment information |
 | 📑 [version](https://github.com/lerna-lite/lerna-lite/tree/main/packages/version#readme) | create new version for each workspace package |
 | ☁️ [publish](https://github.com/lerna-lite/lerna-lite/tree/main/packages/publish#readme) | publish each workspace package |
 
@@ -249,10 +247,10 @@ npm uninstall lerna -W   # OR yarn remove lerna -W
 npm uninstall -g lerna   # OR yarn global remove lerna
 ```
 
-2. install Lerna-Lite CLI to get access to built-in `init`, `info`, `version` and `publish` commands
+2. install Lerna-Lite CLI to get access to built-in `init`, `version` and `publish` commands
 
 ```sh
-# Lerna CLI (includes `init`, `info`, `version` and `publish` commands)
+# Lerna CLI (includes `init`, `version` and `publish` commands)
 npm install @lerna-lite/cli -D -W
 ```
 
@@ -313,7 +311,6 @@ If you have problems running the lib and your problems are related to Git comman
 | ------------ | ------- | ----------- | ------- |
 | [@lerna-lite/cli](https://github.com/lerna-lite/lerna-lite/tree/main/packages/cli) | [![npm](https://img.shields.io/npm/v/@lerna-lite/cli.svg)](https://www.npmjs.com/package/@lerna-lite/cli) | Lerna-Lite Init/Info/Version/Publish comands CLI | [changelog](https://github.com/lerna-lite/lerna-lite/blob/main/packages/cli/CHANGELOG.md) |
 | [@lerna-lite/core](https://github.com/lerna-lite/lerna-lite/tree/main/packages/core) | [![npm](https://img.shields.io/npm/v/@lerna-lite/core.svg)](https://www.npmjs.com/package/@lerna-lite/core) | Lerna-Lite core & shared methods (internal use) | [changelog](https://github.com/lerna-lite/lerna-lite/blob/main/packages/core/CHANGELOG.md) |
-| [@lerna-lite/info](https://github.com/lerna-lite/lerna-lite/tree/main/packages/info) | [![npm](https://img.shields.io/npm/v/@lerna-lite/info.svg)](https://www.npmjs.com/package/@lerna-lite/info) | Print local environment information | [changelog](https://github.com/lerna-lite/lerna-lite/blob/main/packages/info/CHANGELOG.md) |
 | [@lerna-lite/init](https://github.com/lerna-lite/lerna-lite/tree/main/packages/init) | [![npm](https://img.shields.io/npm/v/@lerna-lite/init.svg)](https://www.npmjs.com/package/@lerna-lite/init) | create a new Lerna-Lite repo | [changelog](https://github.com/lerna-lite/lerna-lite/blob/main/packages/init/CHANGELOG.md) |
 | [@lerna-lite/publish](https://github.com/lerna-lite/lerna-lite/tree/main/packages/publish) | [![npm](https://img.shields.io/npm/v/@lerna-lite/publish.svg)](https://www.npmjs.com/package/@lerna-lite/publish) | Publish packages in the current workspace | [changelog](https://github.com/lerna-lite/lerna-lite/blob/main/packages/publish/CHANGELOG.md)             |
 | [@lerna-lite/version](https://github.com/lerna-lite/lerna-lite/tree/main/packages/version) | [![npm](https://img.shields.io/npm/v/@lerna-lite/version.svg)](https://www.npmjs.com/package/@lerna-lite/version) | Bump Version & write Changelogs | [changelog](https://github.com/lerna-lite/lerna-lite/blob/main/packages/version/CHANGELOG.md) |
