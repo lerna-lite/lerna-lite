@@ -64,19 +64,6 @@ export class WatchCommand extends Command<WatchCommandOption & FilterOptions> {
 
     this._count = this._filteredPackages.length;
     this._packagePlural = this._count === 1 ? 'package' : 'packages';
-
-    // optional keystroke to exit the watch cleanly
-    if (process.stdin.isTTY) {
-      this.logger.info('watch', 'Press "x" to exit watch mode.');
-      process.stdin.setRawMode(true);
-      process.stdin.resume();
-      process.stdin.on('data', (key) => {
-        if (key.toString().toLowerCase() === 'x') {
-          this.logger.info('watch', 'Exiting the watch...');
-          process.exit(0);
-        }
-      });
-    }
   }
 
   async execute() {
