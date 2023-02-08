@@ -272,10 +272,6 @@ export class Command<T extends AvailableCommandOption> {
   }
 
   runValidations() {
-    if (this.commandName === 'info') {
-      return;
-    }
-
     if ((this.options.since !== undefined || this.requiresGit) && !this.gitInitialized()) {
       throw new ValidationError('ENOGIT', 'The git binary was not found, or this is not a git repository.');
     }

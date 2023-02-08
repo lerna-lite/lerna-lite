@@ -22,7 +22,6 @@ CLI for the `init`, `info`, `publish`, `version` and optional commands, the CLI 
 npm install @lerna-lite/cli -D -W
 
 # then use it `lerna <command>`
-lerna info
 lerna version
 lerna publish
 ```
@@ -33,7 +32,6 @@ For all available options of each command, follow any of the command link shown 
 
 - included with CLI
   - [lerna init](https://github.com/lerna-lite/lerna-lite/blob/main/packages/init/README.md)
-  - [lerna info](https://github.com/lerna-lite/lerna-lite/blob/main/packages/info/README.md)
   - [lerna publish](https://github.com/lerna-lite/lerna-lite/blob/main/packages/publish/README.md)
   - [lerna version](https://github.com/lerna-lite/lerna-lite/blob/main/packages/version/README.md)
 - **optional commands** (requires a separate install, refer to the [installation](https://github.com/lerna-lite/lerna-lite#separate--optional-installs) table)
