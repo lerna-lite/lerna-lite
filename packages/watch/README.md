@@ -25,7 +25,6 @@ lerna watch
 
 ```sh
 $ lerna watch -- <command>
-# you can press "x" to exit the watch mode.
 ```
 
 The values `$LERNA_PACKAGE_NAME` and `$LERNA_FILE_CHANGES` will be replaced with the package name, the file that changed respectively. If multiple file changes are detected, they will all be listed and separated by a whitespace (unless custom file delimiter are provided).
