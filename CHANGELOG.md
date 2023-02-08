@@ -4,6 +4,13 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.15.1](https://github.com/lerna-lite/lerna-lite/compare/v1.15.0...v1.15.1) (2023-02-08)
+
+### Bug Fixes
+
+* **deps:** update dependency minimatch to v6 ([#481](https://github.com/lerna-lite/lerna-lite/issues/481)) ([b97ecee](https://github.com/lerna-lite/lerna-lite/commit/b97ecee5ed59663680a41579d341b03c467c6c55)) - by @renovate[bot]
+* **watch:** remove watch stdin causing problem exiting the watch ([#478](https://github.com/lerna-lite/lerna-lite/issues/478)) ([6f1232f](https://github.com/lerna-lite/lerna-lite/commit/6f1232f188f12df1365aab7ede11767e3b09aff3)) - by @ghiscoding
+
 # [1.15.0](https://github.com/lerna-lite/lerna-lite/compare/v1.14.2...v1.15.0) (2023-02-04)
 
 ### Bug Fixes
