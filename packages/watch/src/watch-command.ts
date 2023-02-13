@@ -79,8 +79,8 @@ export class WatchCommand extends Command<WatchCommandOption & FilterOptions> {
       const { ignored = [], ...otherOptions } = this.options ?? {};
       const packageLocations: string[] = [];
       const chokidarOptions: chokidar.WatchOptions = {
-        // we should ignore certain folders by default
-        // uses almost same implementation as ViteJS: https://github.com/vitejs/vite/blob/c747a3f289183b3640a6d4a1410acb5eafd11129/packages/vite/src/node/watch.ts
+        // we should ignore certain folders by default, we could use nearly the same implementation as ViteJS
+        // https://github.com/vitejs/vite/blob/c747a3f289183b3640a6d4a1410acb5eafd11129/packages/vite/src/node/watch.ts
         ignored: ['**/.git/**', '**/dist/**', '**/node_modules/**', ...(Array.isArray(ignored) ? ignored : [ignored])],
         ignoreInitial: true,
         ignorePermissionErrors: true,
@@ -133,7 +133,7 @@ export class WatchCommand extends Command<WatchCommandOption & FilterOptions> {
     if (pkg) {
       // changes structure sample: { '@lerna-lite/watch': { pkg: Package, changeFiles: ['path1', 'path2'] }
       if (!this._changes[pkg.name] || !this._changes[pkg.name].changeFiles) {
-        this._changes[pkg.name] = { pkg, changeFiles: new Set<string>() }; // use Set to avoid duplicate entires
+        this._changes[pkg.name] = { pkg, changeFiles: new Set<string>(), timestamp: Date.now() }; // use Set to avoid duplicate entries
       }
       this._changes[pkg.name].changeFiles.add(filepath);
 
@@ -151,13 +151,16 @@ export class WatchCommand extends Command<WatchCommandOption & FilterOptions> {
       // chokidar triggers events for every single file change (add, unlink, ...),
       // so in order for us to merge all changes and return them under a single lerna watch event we need to wait a certain delay
       this._timer = setTimeout(async () => {
+        // sort the changes by their timestamp to make sure that we execute them by queued time of entry
+        const sortedChanges = Object.values(this._changes).sort((a, b) => a.timestamp - b.timestamp);
+
         // destructuring the changes object, it could include multiple packages and files to loop through (1 change for each package)
-        for (const changedPkgName of Object.keys(this._changes)) {
-          const changedPkg = this._changes[changedPkgName].pkg;
+        for (const change of sortedChanges) {
+          const changedPkg = change.pkg;
 
           // execute command callback when file changes are found
-          if (this._changes[changedPkgName].changeFiles?.size > 0) {
-            const changedFiles = Array.from<string>(this._changes[changedPkgName].changeFiles);
+          if (change.changeFiles?.size > 0) {
+            const changedFiles = Array.from<string>(change.changeFiles);
             const changedFilesCsv = changedFiles.join(this._fileDelimiter);
 
             // make sure there's nothing in progress before executing the next callback
@@ -165,17 +168,10 @@ export class WatchCommand extends Command<WatchCommandOption & FilterOptions> {
               this._processing = true;
               // prettier-ignore
               this.logger.info('watch', 'Detected %d %s changed in %j.', changedFiles.length, pluralize('file', changedFiles.length), changedPkg.name );
-              this._changes[changedPkgName].changeFiles.clear();
+              change.changeFiles.clear();
+              delete this._changes[changedPkg.name];
               await this.getRunner(changedPkg, changedFilesCsv);
-
-              // now that the previous callback is finished, we might still have changes that were queued on the same package
-              // then simply execute the callback again on same package
-              if (this._changes[changedPkgName].changeFiles.size > 0) {
-                this.executeCommandCallback();
-              }
-
-              // reaching this point means there's no more callback queued on current package and we should remove it from the list of changes
-              delete this._changes[changedPkgName];
+              this._processing = false;
 
               // we might still have other packages that have changes though, so re-execute command callback process if any were found
               if (this.hasQueuedChanges()) {
@@ -187,8 +183,8 @@ export class WatchCommand extends Command<WatchCommandOption & FilterOptions> {
               if (pkgLn === 0) {
                 this.logger.info('watch', 'All commands completed, waiting for next change...');
               }
-              this._processing = false;
             }
+            // resolving the promise is only useful for unit tests
             resolve({ changedPkg, mergedFiles: changedFilesCsv });
           }
         }
