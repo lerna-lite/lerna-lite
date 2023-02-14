@@ -4,6 +4,12 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.15.2](https://github.com/lerna-lite/lerna-lite/compare/v1.15.1...v1.15.2) (2023-02-14)
+
+### Bug Fixes
+
+* **watch:** watch execution shouldn't skip queued changes ([#482](https://github.com/lerna-lite/lerna-lite/issues/482)) ([d64950b](https://github.com/lerna-lite/lerna-lite/commit/d64950bd502444208235953c8620543ccf0d9170)) - by @ghiscoding
+
 ## [1.15.1](https://github.com/lerna-lite/lerna-lite/compare/v1.15.0...v1.15.1) (2023-02-08)
 
 ### Bug Fixes
