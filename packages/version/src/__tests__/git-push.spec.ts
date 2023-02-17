@@ -18,7 +18,6 @@ jest.mock('@lerna-lite/core', () => {
 });
 
 afterEach(() => {
-  jest.restoreAllMocks();
   delete process.env.GIT_REDIRECT_STDERR;
 });
 
