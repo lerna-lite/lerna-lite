@@ -120,7 +120,7 @@ changes and changelogs
 
 #### [Version](https://github.com/lerna-lite/lerna-lite/tree/main/packages/version) and [Publish](https://github.com/lerna-lite/lerna-lite/tree/main/packages/publish) commands (included with the CLI)
 
-- Automate the rolling of new Versions (`independent` or `fixed`) of all your workspace packages.
+- Automate the rolling of new Versions (`independent` or fixed version) of all your workspace packages.
   - it will automatically Commit/Tag your new Version & create new GitHub/GitLab Release (when enabled).
 - Automate, when enabled, the creation of Changelogs for all your packages by reading all [Conventional Commits](https://www.conventionalcommits.org/) and a merged one in the project root.
 - Automate, when enabled, the repository Publishing of your new version for all your packages (NPM or other platforms).
@@ -176,6 +176,8 @@ Note that `package-a` will not be created, it is only shown here to help clarify
 Run the following commands to install Lerna-Lite in your project and/or install it globally by adding the `-g` option.
 
 If you are new to Lerna-Lite, you could also run the [lerna init](https://github.com/lerna-lite/lerna-lite/tree/main/packages/init#readme) command which will create the `lerna.json` for you with a minimal setup. If you are using a different client other than npm, then make sure to update the `npmClient` property in `lerna.json` (for example: `"npmClient": "yarn"` or `"pnpm"`).
+
+> **Note** please make sure that you have a `lerna.json` config file created and a `version` property defined with either a fixed or independent mode. An error will be thrown if you're missing any of them.
 
 ### JSON Schema
 You can add the `$schema` property into your `lerna.json` to take advantage of Lerna-Lite [JSON Schema](https://json-schema.org/) (`lerna init` will automatically configure this for you). This will help with the developer experience, users will be able to see what properties are valid with a brief description of what they do (each description are pulled from their associated lerna command options documentation).
