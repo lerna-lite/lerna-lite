@@ -20,6 +20,8 @@ npm install @lerna-lite/cli -D -W
 lerna version
 ```
 
+> **Note** please make sure that you have a `lerna.json` config file and a `version` property defined with either a fixed or independent mode (for example: `"version": "independent"`). An error will be thrown if you're missing any of them.
+
 ## Usage
 
 ```sh

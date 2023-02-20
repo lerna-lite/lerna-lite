@@ -288,7 +288,10 @@ export class Command<T extends AvailableCommandOption> {
     }
 
     if (!this.project.version) {
-      throw new ValidationError('ENOVERSION', 'Required property version does not exist in `lerna.json`');
+      throw new ValidationError(
+        'ENOVERSION',
+        'Required property `version` does not exist in `lerna.json`, make sure to provide one of two modes (fixed or independent). For example "version": "independent" OR "version": "1.0.0"'
+      );
     }
 
     if ((this.options as InitCommandOption).independent && !this.project.isIndependent()) {
