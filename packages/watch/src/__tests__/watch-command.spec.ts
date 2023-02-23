@@ -88,6 +88,21 @@ const createArgv = (cwd: string, ...args: string[]) => {
 };
 
 describe('Watch Command', () => {
+  const stdinIsTTY = process.stdin.isTTY;
+  const stdoutIsTTY = process.stdout.isTTY;
+  const stdin = mockStdin.stdin();
+
+  beforeEach(() => {
+    process.stdin.isTTY = true;
+    process.stdout.isTTY = true;
+  });
+
+  afterEach(() => {
+    process.stdin.isTTY = stdinIsTTY;
+    process.stdout.isTTY = stdoutIsTTY;
+    process.exitCode = undefined;
+  });
+
   describe('in a basic repo', () => {
     // working dir is never mutated
     let testDir;
@@ -119,6 +134,8 @@ describe('Watch Command', () => {
     });
 
     it('rejects with execution error when calling chokidar on change event', async () => {
+      jest.spyOn(process, 'exit').mockImplementation((() => {}) as any);
+
       try {
         await lernaWatch(testDir)('--bail', '--', '--shaka', '--lakka');
         const nonZero = new Error('An actual non-zero, not git diff pager SIGPIPE');
@@ -130,6 +147,8 @@ describe('Watch Command', () => {
     });
 
     it('should ignore execution errors with --no-bail', async () => {
+      jest.spyOn(process, 'exit').mockImplementation((() => {}) as any);
+
       await lernaWatch(testDir)('--no-bail', '--', 'lerna run --shaka', '--lakka');
       const nonZero = new Error('An actual non-zero, not git diff pager SIGPIPE');
       (nonZero as any).exitCode = 1;
@@ -483,6 +502,22 @@ describe('Watch Command', () => {
         reject: true,
         shell: true,
       });
+    });
+
+    it('should execute watch add callback and stop the watch process when typing "x" in the shell', async () => {
+      const mockExit = jest.spyOn(process, 'exit').mockImplementation((() => {}) as any);
+
+      try {
+        // prettier-ignore
+        await lernaWatch(testDir)('--debounce', '0', '--scope', 'package-2', '--', 'echo $LERNA_PACKAGE_NAME');
+        const promise = watchAddHandler('add', path.join(testDir, 'packages/package-2/some-file.ts'));
+        stdin.send('x');
+        stdin.end();
+        await promise;
+      } catch (e) {
+        expect(mockExit).toHaveBeenCalled();
+        mockExit.mockRestore();
+      }
     });
   });
 });
