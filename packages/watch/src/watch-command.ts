@@ -123,6 +123,11 @@ export class WatchCommand extends Command<WatchCommandOption & FilterOptions> {
       this._watcher
         .on('all', (_event, path) => this.changeEventListener(path))
         .on('error', (error) => this.onError(error));
+
+      // also watch for any Signal termination to cleanly exit the watch command
+      process.once('SIGINT', this.exitProcess);
+      process.once('SIGTERM', this.exitProcess);
+      process.stdin.on('end', this.exitProcess);
     } catch (err) {
       this.onError(err);
     }
@@ -192,6 +197,19 @@ export class WatchCommand extends Command<WatchCommandOption & FilterOptions> {
     });
   }
 
+  protected exitProcess = async () => {
+    try {
+      this.logger.info('watch', 'Termination call detected, exiting the watch');
+      process.off('SIGINT', this.exitProcess);
+      process.off('SIGTERM', this.exitProcess);
+      process.stdin.off('end', this.exitProcess);
+
+      await this._watcher?.close();
+    } finally {
+      process.exit(0);
+    }
+  };
+
   protected hasQueuedChanges() {
     for (const pkgName of Object.keys(this._changes)) {
       if (this._changes[pkgName].changeFiles.size > 0) {
@@ -204,16 +222,14 @@ export class WatchCommand extends Command<WatchCommandOption & FilterOptions> {
 
   protected onError(error: any) {
     if (this._bail) {
-      // stop watching on errors being triggered
-      this._watcher?.close();
-
       // only the first error is caught
       process.exitCode = error?.exitCode ?? error?.code;
+      this.exitProcess();
 
       // rethrow to halt chain and log properly
       throw error;
     } else {
-      // propagate "highest" error code, it's probably the most useful
+      // propagate "highest" error code, it's probably the most useful, but keep watch process alive
       const exitCode = error?.exitCode ?? error?.code;
       this.logger.error('', 'Received non-zero exit code %d during file watch', exitCode);
       process.exitCode = exitCode;
