@@ -48,7 +48,7 @@
     "load-json-file": "^6.2.0",
     "npmlog": "^7.0.1",
     "path": "^0.12.7",
-    "yargs": "^17.7.0"
+    "yargs": "^17.7.1"
   },
   "devDependencies": {
     "@types/load-json-file": "^5.1.0",

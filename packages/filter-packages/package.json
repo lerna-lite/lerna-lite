@@ -38,10 +38,10 @@
     "npmlog": "^7.0.1"
   },
   "devDependencies": {
-    "@types/node": "^18.13.0",
+    "@types/node": "^18.14.0",
     "@types/p-map": "^2.0.0",
     "path": "^0.12.7",
     "rimraf": "^3.0.2",
-    "yargs": "^17.7.0"
+    "yargs": "^17.7.1"
   }
 }
