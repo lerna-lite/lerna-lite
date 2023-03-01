@@ -198,7 +198,7 @@ importers:
       inquirer: ^8.2.4
       is-ci: ^3.0.1
       load-json-file: ^6.2.0
-      minimatch: ^6.2.0
+      minimatch: ^7.4.2
       npm-package-arg: ^10.1.0
       npm-registry-fetch: ^14.0.3
       npmlog: ^7.0.1
@@ -229,7 +229,7 @@ importers:
       inquirer: 8.2.4
       is-ci: 3.0.1
       load-json-file: 6.2.0
-      minimatch: 6.2.0
+      minimatch: 7.4.2
       npm-package-arg: 10.1.0
       npmlog: 7.0.1
       p-map: 4.0.0
@@ -559,7 +559,7 @@ importers:
       js-yaml: ^4.1.0
       load-json-file: ^6.2.0
       make-dir: ^3.1.0
-      minimatch: ^6.2.0
+      minimatch: ^7.4.2
       new-github-release-url: ^1.0.0
       node-fetch: ^2.6.7
       npm-package-arg: ^10.1.0
@@ -596,7 +596,7 @@ importers:
       is-stream: 2.0.1
       load-json-file: 6.2.0
       make-dir: 3.1.0
-      minimatch: 6.2.0
+      minimatch: 7.4.2
       new-github-release-url: 1.0.0
       node-fetch: 2.6.7
       npm-package-arg: 10.1.0
@@ -5720,6 +5720,13 @@ packages:
 
   /minimatch/6.2.0:
     resolution: {integrity: sha512-sauLxniAmvnhhRjFwPNnJKaPFYyddAgbYdeUpHULtCT/GhzdCx/MDNy+Y40lBxTQUrMzDE8e0S43Z5uqfO0REg==}
+    engines: {node: '>=10'}
+    dependencies:
+      brace-expansion: 2.0.1
+    dev: false
+
+  /minimatch/7.4.2:
+    resolution: {integrity: sha512-xy4q7wou3vUoC9k1xGTXc+awNdGaGVHtFUaey8tiX4H1QRc04DZ/rmDFwNm2EBsuYEhAZ6SgMmYf3InGY6OauA==}
     engines: {node: '>=10'}
     dependencies:
       brace-expansion: 2.0.1
