@@ -1,3 +1,4 @@
+import globby from 'globby';
 import { Package } from '../../../package';
 
 jest.mock('../../describe-ref');
@@ -72,7 +73,9 @@ describe('collectUpdates()', () => {
     ]);
     expect(hasTags).toHaveBeenLastCalledWith(execOpts, '');
     expect(describeRefSync).toHaveBeenLastCalledWith(execOpts, undefined, false);
-    expect(makeDiffPredicate).toHaveBeenLastCalledWith('v1.0.0', execOpts, undefined);
+    expect(makeDiffPredicate).toHaveBeenLastCalledWith('v1.0.0', execOpts, undefined, {
+      independentSubpackages: undefined,
+    });
   });
 
   it('returns node with changes in independent mode', () => {
@@ -93,7 +96,9 @@ describe('collectUpdates()', () => {
     ]);
     expect(hasTags).toHaveBeenLastCalledWith(execOpts, '*@*');
     expect(describeRefSync).toHaveBeenLastCalledWith(execOpts, undefined, false);
-    expect(makeDiffPredicate).toHaveBeenLastCalledWith('v1.0.0', execOpts, undefined);
+    expect(makeDiffPredicate).toHaveBeenLastCalledWith('v1.0.0', execOpts, undefined, {
+      independentSubpackages: undefined,
+    });
   });
 
   it('returns changed node and their dependents', () => {
@@ -363,7 +368,9 @@ describe('collectUpdates()', () => {
       expect.objectContaining({ name: 'package-dag-2a' }),
       expect.objectContaining({ name: 'package-dag-3' }),
     ]);
-    expect(makeDiffPredicate).toHaveBeenLastCalledWith('deadbeef^..deadbeef', execOpts, undefined);
+    expect(makeDiffPredicate).toHaveBeenLastCalledWith('deadbeef^..deadbeef', execOpts, undefined, {
+      independentSubpackages: undefined,
+    });
   });
 
   it('uses revision provided by --since <ref>', () => {
@@ -375,7 +382,9 @@ describe('collectUpdates()', () => {
       since: 'beefcafe',
     });
 
-    expect(makeDiffPredicate).toHaveBeenLastCalledWith('beefcafe', execOpts, undefined);
+    expect(makeDiffPredicate).toHaveBeenLastCalledWith('beefcafe', execOpts, undefined, {
+      independentSubpackages: undefined,
+    });
   });
 
   it('does not exit early on tagged release when --since <ref> is passed', () => {
@@ -410,6 +419,23 @@ describe('collectUpdates()', () => {
       ignoreChanges: ['**/README.md'],
     });
 
-    expect(makeDiffPredicate).toHaveBeenLastCalledWith('v1.0.0', execOpts, ['**/README.md']);
+    expect(makeDiffPredicate).toHaveBeenLastCalledWith('v1.0.0', execOpts, ['**/README.md'], {
+      independentSubpackages: undefined,
+    });
+  });
+
+  it('excludes packages when --independent-subpackages option is enabled', () => {
+    jest.spyOn(globby, 'sync').mockImplementationOnce(() => ['packages/pkg-2/and-another-thing/package.json']);
+    const graph = buildGraph();
+    const pkgs = graph.rawPackageList;
+    const execOpts = { cwd: '/test' };
+
+    collectUpdates(pkgs, graph, execOpts, {
+      independentSubpackages: true,
+    });
+
+    expect(makeDiffPredicate).toHaveBeenLastCalledWith('v1.0.0', execOpts, undefined, {
+      independentSubpackages: true,
+    });
   });
 });

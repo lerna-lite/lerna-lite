@@ -245,6 +245,9 @@ export interface VersionCommandOption {
   /** Specify cross-dependency version numbers exactly rather than with a caret (^). */
   exact?: boolean;
 
+  /** optionally exclude sub-packages when versioning */
+  independentSubpackages?: boolean;
+
   /** Always include targeted packages in versioning operations, skipping default logic. */
   forcePublish?: boolean | string;
 

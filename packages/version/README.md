@@ -83,6 +83,7 @@ Running `lerna version --conventional-commits` without the above flags will rele
     - [`--changelog-version-message <msg>`](#--changelog-version-message-msg) (new)
     - [`--create-release <type>`](#--create-release-type)
     - [`--exact`](#--exact)
+    - [`--independent-subpackages`](#--independent-subpackages)
     - [`--force-publish`](#--force-publish)
     - [`--git-tag-command <cmd>`](#--git-tag-command-cmd) (new)
     - [`--dry-run`](#--dry-run) (new)
@@ -416,6 +417,14 @@ lerna version --exact
 When run with this flag, `lerna version` will specify updated dependencies in updated packages exactly (with no punctuation), instead of as semver compatible (with a `^`).
 
 For more information, see the package.json [dependencies](https://docs.npmjs.com/files/package.json#dependencies) documentation.
+
+### `--independent-subpackages`
+
+```sh
+lerna version --independent-subpackages
+```
+
+If `package B`, being a child of `package A`, has changes they will normally both get bumped although `package A` itself is eventually unchanged. If this flag is enabled and only `package B` was actually changed, `package A` will not get bumped if it does not have any changes on its own.
 
 ### `--force-publish`
 

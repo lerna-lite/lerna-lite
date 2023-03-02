@@ -23,7 +23,14 @@ export function collectUpdates(
   commandOptions: UpdateCollectorOptions,
   dryRun = false
 ) {
-  const { forcePublish, conventionalCommits, conventionalGraduate, excludeDependents, isIndependent } = commandOptions;
+  const {
+    forcePublish,
+    conventionalCommits,
+    conventionalGraduate,
+    excludeDependents,
+    independentSubpackages,
+    isIndependent,
+  } = commandOptions;
 
   // If --conventional-commits and --conventional-graduate are both set, ignore --force-publish
   const useConventionalGraduate = conventionalCommits && conventionalGraduate;
@@ -96,7 +103,9 @@ export function collectUpdates(
 
   log.info('', `Looking for changed packages since ${committish}`);
 
-  const hasDiff = makeDiffPredicate(committish as string, execOpts, commandOptions.ignoreChanges as string[]);
+  const hasDiff = makeDiffPredicate(committish as string, execOpts, commandOptions.ignoreChanges as string[], {
+    independentSubpackages,
+  });
   const needsBump =
     !commandOptions.bump || commandOptions.bump.startsWith('pre')
       ? () => false

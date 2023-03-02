@@ -219,6 +219,9 @@ export interface UpdateCollectorOptions {
   conventionalCommits?: boolean;
   conventionalGraduate?: boolean | string;
   excludeDependents?: boolean;
+
+  /** optionally exclude sub-packages when versioning */
+  independentSubpackages?: boolean;
 }
 
 export type RemoteClientType = 'gitlab' | 'github';

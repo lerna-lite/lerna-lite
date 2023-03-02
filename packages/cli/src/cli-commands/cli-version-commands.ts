@@ -111,6 +111,10 @@ export default {
         describe: 'Specify cross-dependency version numbers exactly rather than with a caret (^).',
         type: 'boolean',
       },
+      'independent-subpackages': {
+        describe: 'Exclude sub-packages when versioning',
+        type: 'boolean',
+      },
       'force-publish': {
         describe: 'Always include targeted packages in versioning operations, skipping default logic.',
         // type must remain ambiguous because it is overloaded (boolean _or_ string _or_ array)
