@@ -148,7 +148,8 @@ export async function runInstallLockFileOnly(
       break;
     case 'yarn':
       inputLockfileName = 'yarn.lock';
-      if (await validateFileExists(path.join(cwd, inputLockfileName))) {
+      const yarnVersion = execSync('yarn', ['--version']);
+      if (semver.gte(yarnVersion, '2.0.0') && (await validateFileExists(path.join(cwd, inputLockfileName)))) {
         log.verbose('lock', `updating lock file via "yarn install --mode update-lockfile"`);
         await exec('yarn', ['install', '--mode', 'update-lockfile', ...npmClientArgs], { cwd });
         outputLockfileName = inputLockfileName;

@@ -123,7 +123,7 @@ describe('run install lockfile-only', () => {
 
       const lockFileOutput = await runInstallLockFileOnly('npm', cwd, []);
 
-      expect(execSyncSpy).toHaveBeenCalled();
+      expect(execSyncSpy).toHaveBeenCalledWith('npm', ['--version']);
       expect(execSpy).toHaveBeenCalledWith('npm', ['install', '--package-lock-only'], { cwd });
       expect(lockFileOutput).toBe('package-lock.json');
     });
@@ -136,7 +136,7 @@ describe('run install lockfile-only', () => {
 
       const lockFileOutput = await runInstallLockFileOnly('npm', cwd, []);
 
-      expect(execSyncSpy).toHaveBeenCalled();
+      expect(execSyncSpy).toHaveBeenCalledWith('npm', ['--version']);
       expect(execSpy).toHaveBeenCalledWith('npm', ['shrinkwrap', '--package-lock-only'], { cwd });
       expect(renameSpy).toHaveBeenCalledWith('npm-shrinkwrap.json', 'package-lock.json');
       expect(lockFileOutput).toBe('package-lock.json');
@@ -149,7 +149,7 @@ describe('run install lockfile-only', () => {
 
       const lockFileOutput = await runInstallLockFileOnly('npm', cwd, ['--legacy-peer-deps']);
 
-      expect(execSyncSpy).toHaveBeenCalled();
+      expect(execSyncSpy).toHaveBeenCalledWith('npm', ['--version']);
       expect(execSpy).toHaveBeenCalledWith('npm', ['install', '--package-lock-only', '--legacy-peer-deps'], { cwd });
       expect(lockFileOutput).toBe('package-lock.json');
     });
@@ -161,7 +161,7 @@ describe('run install lockfile-only', () => {
 
       const lockFileOutput = await runInstallLockFileOnly('npm', cwd, ['--legacy-peer-deps,--force']);
 
-      expect(execSyncSpy).toHaveBeenCalled();
+      expect(execSyncSpy).toHaveBeenCalledWith('npm', ['--version']);
       expect(execSpy).toHaveBeenCalledWith('npm', ['install', '--package-lock-only', '--legacy-peer-deps', '--force'], {
         cwd,
       });
@@ -218,7 +218,22 @@ describe('run install lockfile-only', () => {
   });
 
   describe('yarn client', () => {
+    it(`should NOT update project root lockfile when yarn version is 1.0.0 and is below 2.0.0`, async () => {
+      const execSyncSpy = jest.spyOn(core, 'execSync').mockReturnValue('1.0.0');
+      jest.spyOn(nodeFs.promises, 'access').mockResolvedValue(true as any);
+      (nodeFs.renameSync as jest.Mock).mockImplementation(() => true);
+      (core.exec as jest.Mock).mockImplementation(() => true);
+      const execSpy = jest.spyOn(core, 'exec');
+      const cwd = await initFixture('lockfile-version2');
+
+      await runInstallLockFileOnly('yarn', cwd, []);
+
+      expect(execSyncSpy).toHaveBeenCalledWith('yarn', ['--version']);
+      expect(execSpy).not.toHaveBeenCalled();
+    });
+
     it(`should update project root lockfile by calling client script "yarn install --package-lock-only"`, async () => {
+      const execSyncSpy = jest.spyOn(core, 'execSync').mockReturnValue('3.0.0');
       jest.spyOn(nodeFs.promises, 'access').mockResolvedValue(true as any);
       (nodeFs.renameSync as jest.Mock).mockImplementation(() => true);
       (core.exec as jest.Mock).mockImplementation(() => true);
@@ -227,11 +242,13 @@ describe('run install lockfile-only', () => {
 
       const lockFileOutput = await runInstallLockFileOnly('yarn', cwd, []);
 
+      expect(execSyncSpy).toHaveBeenCalledWith('yarn', ['--version']);
       expect(execSpy).toHaveBeenCalledWith('yarn', ['install', '--mode', 'update-lockfile'], { cwd });
       expect(lockFileOutput).toBe('yarn.lock');
     });
 
     it(`should update project root lockfile by calling client script "yarn install --package-lock-only" with extra npm client arguments when provided`, async () => {
+      const execSyncSpy = jest.spyOn(core, 'execSync').mockReturnValue('4.0.0');
       jest.spyOn(nodeFs.promises, 'access').mockResolvedValue(true as any);
       (nodeFs.renameSync as jest.Mock).mockImplementation(() => true);
       (core.exec as jest.Mock).mockImplementation(() => true);
@@ -240,6 +257,7 @@ describe('run install lockfile-only', () => {
 
       const lockFileOutput = await runInstallLockFileOnly('yarn', cwd, ['--check-files']);
 
+      expect(execSyncSpy).toHaveBeenCalledWith('yarn', ['--version']);
       expect(execSpy).toHaveBeenCalledWith('yarn', ['install', '--mode', 'update-lockfile', '--check-files'], { cwd });
       expect(lockFileOutput).toBe('yarn.lock');
     });
