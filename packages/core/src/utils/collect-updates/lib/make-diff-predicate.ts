@@ -1,3 +1,4 @@
+import globby, { GlobbyOptions } from 'globby';
 import log from 'npmlog';
 import minimatch from 'minimatch';
 import path from 'path';
@@ -11,7 +12,12 @@ import { ExecOpts } from '../../../models';
  * @param {import("@lerna/child-process").ExecOpts} execOpts
  * @param {string[]} ignorePatterns
  */
-export function makeDiffPredicate(committish: string, execOpts: ExecOpts, ignorePatterns: string[] = []) {
+export function makeDiffPredicate(
+  committish: string,
+  execOpts: ExecOpts,
+  ignorePatterns: string[] = [],
+  diffOpts: { excludeSubpackages?: boolean }
+) {
   const ignoreFilters = new Set(
     ignorePatterns.map((p) =>
       minimatch.filter(`!${p}`, {
@@ -27,7 +33,7 @@ export function makeDiffPredicate(committish: string, execOpts: ExecOpts, ignore
   }
 
   return function hasDiffSinceThatIsntIgnored(/** @type {import("@lerna/package-graph").PackageGraphNode} */ node) {
-    const diff = diffSinceIn(committish, node.location, execOpts);
+    const diff = diffSinceIn(committish, node.location, execOpts, diffOpts);
 
     if (diff === '') {
       log.silly('', 'no diff found in %s', node.name);
@@ -56,17 +62,36 @@ export function makeDiffPredicate(committish: string, execOpts: ExecOpts, ignore
 /**
  * @param {string} committish
  * @param {string} location
- * @param {import("@lerna/child-process").ExecOpts} opts
+ * @param {import("@lerna/child-process").ExecOpts} execOpts
  */
-function diffSinceIn(committish, location, opts) {
+function diffSinceIn(
+  committish: string,
+  location: string,
+  execOpts: ExecOpts,
+  diffOpts: { excludeSubpackages?: boolean }
+) {
   const args = ['diff', '--name-only', committish];
-  const formattedLocation = slash(path.relative(opts.cwd, location));
+  const formattedLocation = slash(path.relative(execOpts.cwd, location));
 
   if (formattedLocation) {
     // avoid same-directory path.relative() === ""
-    args.push('--', formattedLocation);
+    let excludeSubpackages: string[] = [];
+
+    // optionally exclude sub-packages
+    if (diffOpts?.excludeSubpackages) {
+      excludeSubpackages = globby
+        .sync('**/*/package.json', {
+          cwd: formattedLocation,
+          nodir: true,
+          ignore: '**/node_modules/**',
+        } as GlobbyOptions)
+        .map((file) => `:^${formattedLocation}/${path.dirname(file)}`);
+    }
+
+    // avoid same-directory path.relative() === ""
+    args.push('--', formattedLocation, ...excludeSubpackages);
   }
 
   log.silly('checking diff', formattedLocation);
-  return execSync('git', args, opts);
+  return execSync('git', args, execOpts);
 }
