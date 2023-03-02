@@ -4,6 +4,7 @@
   "license": "MIT",
   "private": true,
   "scripts": {
+    "lerna": "lerna",
     "clean": "rimraf packages/dist",
     "clean:tarball": "rimraf packages/**/*.tgz",
     "build": "pnpm lint && pnpm -r --stream build",
@@ -12,6 +13,7 @@
     "diff-cmd": "lerna diff",
     "list-cmd": "lerna list --all",
     "exec-win": "lerna exec --scope {@lerna-lite/cli,@lerna-lite/core} -- cross-env-shell echo hello from package: $LERNA_PACKAGE_NAME",
+    "exec:preview": "lerna exec -- git log -p -2",
     "pack-tarball": "lerna run pack-tarball",
     "pack-tarball:nx": "lerna run pack-tarball --stream --use-nx",
     "preview:build": "lerna run build --stream --include-dependents --scope=@lerna-lite/listable",

@@ -52,6 +52,8 @@ $ lerna exec -- node \$LERNA_ROOT_PATH/scripts/some-script.js
 $ lerna exec --scope my-component -- ls -la
 ```
 
+> **Note** When executing the command in the shell, you will need to surround the command provided to `lerna exec` in quotes (what comes after double-dash ` -- `). Without this, the entire line is interpreted by your shell before lerna ever sees it and causes command flags to be returned as unknown. For example `lerna exec -- 'git log -p -2'`. This is not required when used as an npm script.
+
 - [`@lerna/exec`](#lernaexec)
   - [Usage](#usage)
   - [Options](#options)
