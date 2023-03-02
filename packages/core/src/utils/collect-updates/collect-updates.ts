@@ -28,7 +28,7 @@ export function collectUpdates(
     conventionalCommits,
     conventionalGraduate,
     excludeDependents,
-    excludeSubpackages,
+    independentSubpackages,
     isIndependent,
   } = commandOptions;
 
@@ -104,7 +104,7 @@ export function collectUpdates(
   log.info('', `Looking for changed packages since ${committish}`);
 
   const hasDiff = makeDiffPredicate(committish as string, execOpts, commandOptions.ignoreChanges as string[], {
-    excludeSubpackages,
+    independentSubpackages,
   });
   const needsBump =
     !commandOptions.bump || commandOptions.bump.startsWith('pre')

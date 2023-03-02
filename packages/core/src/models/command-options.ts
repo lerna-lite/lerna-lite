@@ -246,7 +246,7 @@ export interface VersionCommandOption {
   exact?: boolean;
 
   /** optionally exclude sub-packages when versioning */
-  excludeSubpackages?: boolean;
+  independentSubpackages?: boolean;
 
   /** Always include targeted packages in versioning operations, skipping default logic. */
   forcePublish?: boolean | string;

@@ -586,8 +586,8 @@
             "exact": {
               "$ref": "#/$defs/commandOptions/shared/exact"
             },
-            "excludeSubpackages": {
-              "$ref": "#/$defs/commandOptions/shared/excludeSubpackages"
+            "independentSubpackages": {
+              "$ref": "#/$defs/commandOptions/shared/independentSubpackages"
             },
             "forcePublish": {
               "$ref": "#/$defs/commandOptions/shared/forcePublish"
@@ -1534,7 +1534,7 @@
           "type": "boolean",
           "description": "During `lerna add`, save the exact version of the newly added package. During `lerna version`, specify cross-dependency version numbers exactly rather than with a caret (^)."
         },
-        "excludeSubpackages": {
+        "independentSubpackages": {
           "type": "boolean",
           "description": "Exclude sub-packages when versioning"
         },

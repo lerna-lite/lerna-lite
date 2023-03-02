@@ -111,7 +111,7 @@ export default {
         describe: 'Specify cross-dependency version numbers exactly rather than with a caret (^).',
         type: 'boolean',
       },
-      'exclude-subpackages': {
+      'independent-subpackages': {
         describe: 'Exclude sub-packages when versioning',
         type: 'boolean',
       },

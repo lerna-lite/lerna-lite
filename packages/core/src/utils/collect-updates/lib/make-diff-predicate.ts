@@ -16,7 +16,7 @@ export function makeDiffPredicate(
   committish: string,
   execOpts: ExecOpts,
   ignorePatterns: string[] = [],
-  diffOpts: { excludeSubpackages?: boolean }
+  diffOpts: { independentSubpackages?: boolean }
 ) {
   const ignoreFilters = new Set(
     ignorePatterns.map((p) =>
@@ -68,18 +68,18 @@ function diffSinceIn(
   committish: string,
   location: string,
   execOpts: ExecOpts,
-  diffOpts: { excludeSubpackages?: boolean }
+  diffOpts: { independentSubpackages?: boolean }
 ) {
   const args = ['diff', '--name-only', committish];
   const formattedLocation = slash(path.relative(execOpts.cwd, location));
 
   if (formattedLocation) {
     // avoid same-directory path.relative() === ""
-    let excludeSubpackages: string[] = [];
+    let independentSubpackages: string[] = [];
 
     // optionally exclude sub-packages
-    if (diffOpts?.excludeSubpackages) {
-      excludeSubpackages = globby
+    if (diffOpts?.independentSubpackages) {
+      independentSubpackages = globby
         .sync('**/*/package.json', {
           cwd: formattedLocation,
           nodir: true,
@@ -89,7 +89,7 @@ function diffSinceIn(
     }
 
     // avoid same-directory path.relative() === ""
-    args.push('--', formattedLocation, ...excludeSubpackages);
+    args.push('--', formattedLocation, ...independentSubpackages);
   }
 
   log.silly('checking diff', formattedLocation);

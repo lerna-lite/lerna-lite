@@ -221,7 +221,7 @@ export interface UpdateCollectorOptions {
   excludeDependents?: boolean;
 
   /** optionally exclude sub-packages when versioning */
-  excludeSubpackages?: boolean;
+  independentSubpackages?: boolean;
 }
 
 export type RemoteClientType = 'gitlab' | 'github';

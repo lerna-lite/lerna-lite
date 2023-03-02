@@ -84,7 +84,7 @@ test('ignore changes (match base)', () => {
   expect(result).toBe(false);
 });
 
-test('exclude subpackages when --exclude-subpackages option is enabled and nested package.json is found', () => {
+test('exclude subpackages when --independent-subpackages option is enabled and nested package.json is found', () => {
   jest.spyOn(globby, 'sync').mockImplementationOnce(() => ['packages/pkg-2/and-another-thing/package.json']);
 
   setup([
@@ -94,7 +94,7 @@ test('exclude subpackages when --exclude-subpackages option is enabled and neste
   ]);
 
   const hasDiff = makeDiffPredicate('v1.0.0', { cwd: '/test' }, ['**/examples/**', '*.md'], {
-    excludeSubpackages: true,
+    independentSubpackages: true,
   });
   const result = hasDiff({
     location: '/test/packages/pkg-2',
@@ -110,7 +110,7 @@ test('exclude subpackages when --exclude-subpackages option is enabled and neste
   );
 });
 
-test('not exclude any subpackages when --exclude-subpackages option is enabled but no nested package.json are found', () => {
+test('not exclude any subpackages when --independent-subpackages option is enabled but no nested package.json are found', () => {
   jest.spyOn(globby, 'sync').mockImplementationOnce(() => []);
 
   setup([
@@ -120,7 +120,7 @@ test('not exclude any subpackages when --exclude-subpackages option is enabled b
   ]);
 
   const hasDiff = makeDiffPredicate('v1.0.0', { cwd: '/test' }, ['**/examples/**', '*.md'], {
-    excludeSubpackages: true,
+    independentSubpackages: true,
   });
   const result = hasDiff({
     location: '/test/packages/pkg-2',

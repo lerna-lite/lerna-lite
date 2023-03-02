@@ -74,7 +74,7 @@ describe('collectUpdates()', () => {
     expect(hasTags).toHaveBeenLastCalledWith(execOpts, '');
     expect(describeRefSync).toHaveBeenLastCalledWith(execOpts, undefined, false);
     expect(makeDiffPredicate).toHaveBeenLastCalledWith('v1.0.0', execOpts, undefined, {
-      excludeSubpackages: undefined,
+      independentSubpackages: undefined,
     });
   });
 
@@ -97,7 +97,7 @@ describe('collectUpdates()', () => {
     expect(hasTags).toHaveBeenLastCalledWith(execOpts, '*@*');
     expect(describeRefSync).toHaveBeenLastCalledWith(execOpts, undefined, false);
     expect(makeDiffPredicate).toHaveBeenLastCalledWith('v1.0.0', execOpts, undefined, {
-      excludeSubpackages: undefined,
+      independentSubpackages: undefined,
     });
   });
 
@@ -369,7 +369,7 @@ describe('collectUpdates()', () => {
       expect.objectContaining({ name: 'package-dag-3' }),
     ]);
     expect(makeDiffPredicate).toHaveBeenLastCalledWith('deadbeef^..deadbeef', execOpts, undefined, {
-      excludeSubpackages: undefined,
+      independentSubpackages: undefined,
     });
   });
 
@@ -383,7 +383,7 @@ describe('collectUpdates()', () => {
     });
 
     expect(makeDiffPredicate).toHaveBeenLastCalledWith('beefcafe', execOpts, undefined, {
-      excludeSubpackages: undefined,
+      independentSubpackages: undefined,
     });
   });
 
@@ -420,22 +420,22 @@ describe('collectUpdates()', () => {
     });
 
     expect(makeDiffPredicate).toHaveBeenLastCalledWith('v1.0.0', execOpts, ['**/README.md'], {
-      excludeSubpackages: undefined,
+      independentSubpackages: undefined,
     });
   });
 
-  it('excludes packages when --exclude-subpackages option is enabled', () => {
+  it('excludes packages when --independent-subpackages option is enabled', () => {
     jest.spyOn(globby, 'sync').mockImplementationOnce(() => ['packages/pkg-2/and-another-thing/package.json']);
     const graph = buildGraph();
     const pkgs = graph.rawPackageList;
     const execOpts = { cwd: '/test' };
 
     collectUpdates(pkgs, graph, execOpts, {
-      excludeSubpackages: true,
+      independentSubpackages: true,
     });
 
     expect(makeDiffPredicate).toHaveBeenLastCalledWith('v1.0.0', execOpts, undefined, {
-      excludeSubpackages: true,
+      independentSubpackages: true,
     });
   });
 });
