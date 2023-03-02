@@ -424,7 +424,7 @@ For more information, see the package.json [dependencies](https://docs.npmjs.com
 lerna version --independent-subpackages
 ```
 
-When run with this flag, `lerna version` will exclude versioning of nested subpackages. For example if `package B` is a subpackage of `package A` and we have changes in both packages, calling a new version will lead to a new version in both package. However if we wanted to bump the version of the parent package only, we could simply use `--independent-subpackages`.
+If `package B`, being a child of `package A`, has changes they will normally both get bumped although `package A` itself is eventually unchanged. If this flag is enabled and only `package B` was actually changed, `package A` will not get bumped if it does not have any changes on its own.
 
 ### `--force-publish`
 
