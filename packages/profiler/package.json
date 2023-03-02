@@ -39,7 +39,7 @@
     "upath": "^2.0.1"
   },
   "devDependencies": {
-    "@types/node": "^18.14.1",
+    "@types/node": "^18.14.2",
     "@types/p-map": "^2.0.0",
     "path": "^0.12.7",
     "rimraf": "^3.0.2",
