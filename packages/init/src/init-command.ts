@@ -119,7 +119,10 @@ export class InitCommand extends Command<InitCommandOption> {
       $schema: 'node_modules/@lerna-lite/cli/schemas/lerna-schema.json',
       version,
     };
-    if (!this.options.useWorkspaces) {
+
+    if (this.options.useWorkspaces) {
+      lernaConfig.useWorkspaces = true;
+    } else {
       lernaConfig.packages = ['packages/*'];
     }
     Object.assign(config, lernaConfig);

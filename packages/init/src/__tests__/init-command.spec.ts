@@ -201,6 +201,7 @@ describe('Init Command', () => {
               hoist: true,
             },
           },
+          useWorkspaces: true,
           version: '1.2.3',
         });
       });
