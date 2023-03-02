@@ -393,6 +393,7 @@ export class PublishCommand extends Command<PublishCommandOption> {
           // (we tried)
           this.logger.silly('EWORKINGTREE', err.message);
           this.logger.notice('FYI', 'Unable to verify working tree, proceed at your own risk');
+          process.exitCode = 0;
         } else {
           // validation errors should be preserved
           throw err;
