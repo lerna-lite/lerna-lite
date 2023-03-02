@@ -35,7 +35,7 @@
   "dependencies": {
     "@lerna-lite/core": "workspace:*",
     "@lerna-lite/version": "workspace:*",
-    "@npmcli/arborist": "^6.2.3",
+    "@npmcli/arborist": "^6.2.4",
     "byte-size": "^7.0.1",
     "chalk": "^4.1.2",
     "columnify": "^1.6.0",
