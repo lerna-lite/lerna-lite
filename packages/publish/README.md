@@ -89,7 +89,7 @@ This is useful when a previous `lerna publish` failed to publish all packages to
     - [`--registry <url>`](#--registry-url)
     - [`--tag-version-prefix`](#--tag-version-prefix)
     - [`--temp-tag`](#--temp-tag)
-    - [`--summary-file <dir>`](#--summary-file)
+    - [`--summary-file <dir>`](#--summary-file) (new)
     - [`--verify-access`](#--verify-access)
     - [`--yes`](#--yes)
   - [`publishConfig` Overrides](#publishconfig-overrides)
