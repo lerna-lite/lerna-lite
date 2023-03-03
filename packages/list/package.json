@@ -38,7 +38,6 @@
     "@lerna-lite/listable": "workspace:*"
   },
   "devDependencies": {
-    "rimraf": "^3.0.2",
     "yargs-parser": "^21.1.1"
   }
 }

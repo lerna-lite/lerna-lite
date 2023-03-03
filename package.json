@@ -6,7 +6,7 @@
   "scripts": {
     "lerna": "lerna",
     "clean": "rimraf packages/dist",
-    "clean:tarball": "rimraf packages/**/*.tgz",
+    "clean:tarball": "rimraf --glob packages/**/*.tgz",
     "build": "pnpm lint && pnpm -r --stream build",
     "init-cmd": "lerna init --independent --exact --use-workspaces",
     "changed-cmd": "lerna changed --all",
@@ -96,7 +96,7 @@
     "nx": "15.8.2",
     "path": "0.12.7",
     "prettier": "^2.8.4",
-    "rimraf": "^3.0.2",
+    "rimraf": "^4.2.0",
     "semver": "^7.3.8",
     "tacks": "^1.2.6",
     "temp-dir": "^2.0.0",

@@ -52,7 +52,6 @@
   },
   "devDependencies": {
     "@types/load-json-file": "^5.1.0",
-    "rimraf": "^3.0.2",
     "yargs-parser": "^21.1.1"
   }
 }

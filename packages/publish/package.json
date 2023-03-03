@@ -69,7 +69,6 @@
     "@types/semver": "^7.3.13",
     "@types/write-pkg": "^4.0.0",
     "load-json-file": "^6.2.0",
-    "rimraf": "^3.0.2",
     "write-pkg": "^4.0.0",
     "yargs": "^17.7.1",
     "yargs-parser": "^21.1.1"

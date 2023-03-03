@@ -36,8 +36,5 @@
     "@lerna-lite/core": "workspace:*",
     "chalk": "^4.1.2",
     "columnify": "^1.6.0"
-  },
-  "devDependencies": {
-    "rimraf": "^3.0.2"
   }
 }

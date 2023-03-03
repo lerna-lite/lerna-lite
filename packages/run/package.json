@@ -46,7 +46,6 @@
     "globby": "^11.1.0",
     "jest-circus": "^29.4.3",
     "perf_hooks": "^0.0.1",
-    "rimraf": "^3.0.2",
     "yargs": "^17.7.1",
     "yargs-parser": "^21.1.1"
   }
