@@ -8,7 +8,7 @@ const initFixture = initFixtureFactory(__dirname);
 
 // file under test
 import { Package } from '@lerna-lite/core';
-import { recommendVersion, updateChangelog } from '../../conventional-commits';
+import { applyBuildMetadata, recommendVersion, updateChangelog } from '../../conventional-commits';
 import { GetChangelogConfig } from '../get-changelog-config';
 
 // stabilize changelog commit SHA and datestamp
@@ -34,6 +34,19 @@ describe('conventional-commits', () => {
       expect(bump).toBe('1.1.0');
     });
 
+    it('returns next version bump with buildMetadata', async () => {
+      const cwd = await initFixture('fixed');
+      const [pkg1] = await Project.getPackages(cwd);
+
+      // make a change in package-1
+      await pkg1.set('changed', 1).serialize();
+      await gitAdd(cwd, pkg1.manifestLocation);
+      await gitCommit(cwd, 'feat: changed 1');
+
+      const bump = await recommendVersion(pkg1, 'fixed', { buildMetadata: '001' });
+      expect(bump).toBe('1.1.0+001');
+    });
+
     it('returns next version prerelease bump with prereleaseId', async () => {
       const cwd = await initFixture('fixed');
       const [pkg1] = await Project.getPackages(cwd);
@@ -45,6 +58,22 @@ describe('conventional-commits', () => {
 
       const bump = await recommendVersion(pkg1, 'fixed', { prereleaseId: 'alpha' } as any);
       expect(bump).toBe('1.1.0-alpha.0');
+    });
+
+    it('returns next version prerelease bump with prereleaseId and buildMetadata', async () => {
+      const cwd = await initFixture('fixed');
+      const [pkg1] = await Project.getPackages(cwd);
+
+      // make a change in package-1
+      await pkg1.set('changed', 1).serialize();
+      await gitAdd(cwd, pkg1.manifestLocation);
+      await gitCommit(cwd, 'feat: changed 1');
+
+      const bump = await recommendVersion(pkg1, 'fixed', {
+        prereleaseId: 'alpha',
+        buildMetadata: '21AF26D3--117B344092BD',
+      });
+      expect(bump).toBe('1.1.0-alpha.0+21AF26D3--117B344092BD');
     });
 
     it('returns package-specific bumps in independent mode', async () => {
@@ -68,6 +97,29 @@ describe('conventional-commits', () => {
       ]);
       expect(bump1).toBe('1.0.1');
       expect(bump2).toBe('1.1.0');
+    });
+
+    it('returns package-specific bumps in independent mode with buildMetadata', async () => {
+      const cwd = await initFixture('independent');
+      const [pkg1, pkg2] = await Project.getPackages(cwd);
+      const opts = { buildMetadata: '20130313144700' };
+
+      // make a change in package-1 and package-2
+      await pkg1.set('changed', 1).serialize();
+      await pkg2.set('changed', 2).serialize();
+
+      await gitAdd(cwd, pkg1.manifestLocation);
+      await gitCommit(cwd, 'fix: changed 1');
+
+      await gitAdd(cwd, pkg2.manifestLocation);
+      await gitCommit(cwd, 'feat: changed 2');
+
+      const [bump1, bump2] = await Promise.all([
+        recommendVersion(pkg1, 'independent', opts),
+        recommendVersion(pkg2, 'independent', opts),
+      ]);
+      expect(bump1).toBe('1.0.1+20130313144700');
+      expect(bump2).toBe('1.1.0+20130313144700');
     });
 
     it('returns package-specific prerelease bumps in independent mode with prereleaseId', async () => {
@@ -909,5 +961,35 @@ describe('conventional-commits', () => {
         * **thing:** added ([SHA](https://github.com/lerna/conventional-commits-independent/commit/GIT_HEAD)) from @tester-mcperson, _Tester McPerson (test@example.com)_
       `);
     });
+  });
+
+  describe('applyBuildMetadata', () => {
+    it('alters version to include build metadata', () => {
+      expect(applyBuildMetadata('1.0.0', '001')).toEqual('1.0.0+001');
+    });
+
+    it('does not alter version when build metadata is an empty string', () => {
+      expect(applyBuildMetadata('1.0.0', '')).toEqual('1.0.0');
+    });
+
+    it('does not alter version when build metadata is null', () => {
+      expect(applyBuildMetadata('1.0.0', null)).toEqual('1.0.0');
+    });
+
+    it('does not alter version when build metadata is undefined', () => {
+      expect(applyBuildMetadata('1.0.0', undefined)).toEqual('1.0.0');
+    });
+
+    test.each([[' '], ['&'], ['a.'], ['a. '], ['a.%'], ['a..1']])(
+      'throws error given invalid build metadata %s',
+      (buildMetadata) => {
+        expect(() => applyBuildMetadata('1.0.0', buildMetadata)).toThrow(
+          expect.objectContaining({
+            name: 'ValidationError',
+            message: 'Build metadata does not satisfy SemVer specification.',
+          })
+        );
+      }
+    );
   });
 });

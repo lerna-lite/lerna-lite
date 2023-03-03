@@ -121,6 +121,8 @@ it is recommended to customize the [`--preid`](#--preid) and [`--dist-tag <tag>`
 
 > The intended use case for this flag is a per commit level release or nightly release.
 
+Canary releases cannot be used in conjunction with the `--build-metadata` option.
+
 ### `--cleanup-temp-files`
 
 Cleanup the temp folders used by the publish process once the execution is over, defaults to `false`.

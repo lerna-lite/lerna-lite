@@ -44,6 +44,11 @@ export default {
         describe: 'Amend the existing commit, instead of generating a new one.',
         type: 'boolean',
       },
+      'build-metadata': {
+        describe: 'Apply build metadata to the release, compatible with SemVer.',
+        requiresArg: true,
+        type: 'string',
+      },
       'conventional-bump-prerelease': {
         describe: 'Bumps prerelease versions if conventional commits requires it.',
         type: 'boolean',

@@ -1,3 +1,4 @@
+export * from './apply-build-metadata';
 export * from './constants';
 export * from './get-changelog-config';
 export * from './get-commits-since-last-release';
