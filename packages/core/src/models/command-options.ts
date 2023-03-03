@@ -196,6 +196,9 @@ export interface VersionCommandOption {
   /** Amend the existing commit, instead of generating a new one. */
   amend?: boolean;
 
+  /** Apply build metadata to the release, compatible with SemVer. */
+  buildMetadata?: string;
+
   /** conventional commit version bump type */
   // prettier-ignore
   bump: 'major' | 'minor' | 'patch' | 'premajor' | 'preminor' | 'prepatch' | 'prerelease' | 'from-git' | 'from-package';

@@ -6,18 +6,24 @@ import semver, { ReleaseType } from 'semver';
 
 import { BaseChangelogOptions, VersioningStrategy } from '../models';
 import { GetChangelogConfig } from './get-changelog-config';
+import { applyBuildMetadata } from './apply-build-metadata';
 
 /**
  * @param {import('@lerna/package').Package} pkg
  * @param {import('..').VersioningStrategy} type
- * @param {import('..').BaseChangelogOptions & { prereleaseId?: string }} commandOptions
+ * @param {import('..').BaseChangelogOptions & { prereleaseId?: string, buildMetadata?: string }} commandOptions
  */
 export async function recommendVersion(
   pkg: Package | PackageGraphNode,
   type: VersioningStrategy,
-  recommendationOptions: BaseChangelogOptions & { prereleaseId?: string; conventionalBumpPrerelease?: boolean }
+  recommendationOptions: BaseChangelogOptions & {
+    prereleaseId?: string;
+    conventionalBumpPrerelease?: boolean;
+    buildMetadata?: string;
+  }
 ): Promise<string | null> {
-  const { changelogPreset, rootPath, tagPrefix, prereleaseId, conventionalBumpPrerelease } = recommendationOptions;
+  const { changelogPreset, rootPath, tagPrefix, prereleaseId, conventionalBumpPrerelease, buildMetadata } =
+    recommendationOptions;
 
   log.silly(type, 'for %s at %s', pkg.name, pkg.location);
 
@@ -67,7 +73,7 @@ export async function recommendVersion(
         const shouldBump = conventionalBumpPrerelease || shouldBumpPrerelease(releaseType, pkg.version);
         const prereleaseType: ReleaseType = shouldBump ? `pre${releaseType}` : 'prerelease';
         log.verbose(type, 'increment %s by %s - %s', pkg.version, prereleaseType, pkg.name);
-        resolve(semver.inc(pkg.version, prereleaseType, prereleaseId));
+        resolve(applyBuildMetadata(semver.inc(pkg.version, prereleaseType, prereleaseId), buildMetadata));
       } else {
         if (semver.major(pkg.version) === 0) {
           // According to semver, major version zero (0.y.z) is for initial
@@ -90,7 +96,7 @@ export async function recommendVersion(
           }
         }
         log.verbose(type, 'increment %s by %s - %s', pkg.version, releaseType, pkg.name);
-        resolve(semver.inc(pkg.version, releaseType));
+        resolve(applyBuildMetadata(semver.inc(pkg.version, releaseType), buildMetadata));
       }
     });
   });

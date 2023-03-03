@@ -72,6 +72,7 @@ Running `lerna version --conventional-commits` without the above flags will rele
     - [`--allow-branch <glob>`](#--allow-branch-glob)
     - [`--allow-peer-dependencies-update`](#--allow-peer-dependencies-update) (new)
     - [`--amend`](#--amend)
+    - [`--build-metadata <buildMetadata>`](#--build-metadata)
     - [`--changelog-preset`](#--changelog-preset)
     - [`--conventional-commits`](#--conventional-commits)
     - [`--conventional-graduate`](#--conventional-graduate)
@@ -227,6 +228,14 @@ When run with this flag, `lerna version` will perform all changes on the current
 This is useful during [Continuous integration (CI)](https://en.wikipedia.org/wiki/Continuous_integration) to reduce the number of commits in the project's history.
 
 In order to prevent unintended overwrites, this command will skip `git push` (i.e., it implies `--no-push`).
+
+### `--build-metadata`
+
+```sh
+lerna version --build-metadata 001
+```
+
+Build metadata must be [SemVer compatible](https://semver.org/#spec-item-10). When provided it will apply to all updated packages, irrespective of whether independent or fixed versioning is utilised. If prompted to choose package version bumps, you can request a custom version to alter or remove build metadata for specific packages.
 
 ### `--changelog-preset`
 

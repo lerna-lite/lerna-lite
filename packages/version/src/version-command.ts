@@ -46,7 +46,12 @@ import {
   saveUpdatedLockJsonFile,
 } from './lib/update-lockfile-version';
 import { ReleaseClient, ReleaseNote, RemoteCommit } from './models';
-import { getCommitsSinceLastRelease, recommendVersion, updateChangelog } from './conventional-commits';
+import {
+  applyBuildMetadata,
+  getCommitsSinceLastRelease,
+  recommendVersion,
+  updateChangelog,
+} from './conventional-commits';
 
 export function factory(argv: VersionCommandOption) {
   return new VersionCommand(argv);
@@ -410,15 +415,21 @@ export class VersionCommand extends Command<VersionCommandOption> {
     let predicate: (s: any) => any;
 
     if (repoVersion) {
-      predicate = makeGlobalVersionPredicate(repoVersion);
+      predicate = makeGlobalVersionPredicate(applyBuildMetadata(repoVersion, this.options.buildMetadata));
     } else if (increment && independentVersions) {
       // compute potential prerelease ID for each independent update
       predicate = (node: { version: string; prereleaseId: string }) =>
-        semver.inc(node.version, increment, resolvePrereleaseId(node.prereleaseId));
+        applyBuildMetadata(
+          semver.inc(node.version, increment, resolvePrereleaseId(node.prereleaseId)),
+          this.options.buildMetadata
+        );
     } else if (increment) {
       // compute potential prerelease ID once for all fixed updates
       const prereleaseId = prereleaseIdFromVersion(this.project.version);
-      const nextVersion = semver.inc(this.project.version, increment, resolvePrereleaseId(prereleaseId));
+      const nextVersion = applyBuildMetadata(
+        semver.inc(this.project.version, increment, resolvePrereleaseId(prereleaseId)),
+        this.options.buildMetadata
+      );
 
       predicate = makeGlobalVersionPredicate(nextVersion as string);
     } else if (conventionalCommits) {
@@ -426,13 +437,13 @@ export class VersionCommand extends Command<VersionCommandOption> {
       return this.recommendVersions(resolvePrereleaseId);
     } else if (independentVersions) {
       // prompt for each independent update with potential prerelease ID
-      predicate = makePromptVersion(resolvePrereleaseId);
+      predicate = makePromptVersion(resolvePrereleaseId, this.options.buildMetadata);
     } else {
       // prompt once with potential prerelease ID
       const prereleaseId = prereleaseIdFromVersion(this.project.version);
       const node = { version: this.project.version, prereleaseId };
 
-      predicate = makePromptVersion(resolvePrereleaseId);
+      predicate = makePromptVersion(resolvePrereleaseId, this.options.buildMetadata);
       predicate = predicate(node).then(makeGlobalVersionPredicate);
     }
 
@@ -516,7 +527,7 @@ export class VersionCommand extends Command<VersionCommandOption> {
 
   async recommendVersions(resolvePrereleaseId) {
     const independentVersions = this.project.isIndependent();
-    const { changelogPreset, conventionalGraduate, conventionalBumpPrerelease } = this.options;
+    const { buildMetadata, changelogPreset, conventionalGraduate, conventionalBumpPrerelease } = this.options;
     const rootPath = this.project.manifest.location;
     const type = independentVersions ? 'independent' : 'fixed';
     const prereleasePackageNames = this.getPrereleasePackageNames();
@@ -541,6 +552,7 @@ export class VersionCommand extends Command<VersionCommandOption> {
           tagPrefix: this.tagPrefix,
           prereleaseId: getPrereleaseId(node),
           conventionalBumpPrerelease,
+          buildMetadata,
         }) as any
     );
 

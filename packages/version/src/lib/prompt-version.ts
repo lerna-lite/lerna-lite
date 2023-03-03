@@ -1,9 +1,18 @@
 import semver from 'semver';
-
 import { PackageGraphNode, promptSelectOne, promptTextInput } from '@lerna-lite/core';
 
-export function makePromptVersion(resolvePrereleaseId: (prereleaseId?: string) => string | undefined) {
-  return (node: PackageGraphNode) => promptVersion(node.version, node.name, resolvePrereleaseId(node.prereleaseId));
+import { applyBuildMetadata } from '../conventional-commits';
+
+/**
+ * @param {(existingPreid: string) => string} resolvePrereleaseId
+ * @param {string} buildMetadata
+ */
+export function makePromptVersion(
+  resolvePrereleaseId: (prereleaseId?: string) => string | undefined,
+  buildMetadata?: string
+) {
+  return (node: PackageGraphNode) =>
+    promptVersion(node.version, node.name, resolvePrereleaseId(node.prereleaseId), buildMetadata);
 }
 
 /**
@@ -11,17 +20,23 @@ export function makePromptVersion(resolvePrereleaseId: (prereleaseId?: string) =
  * It can be run per-package (independent) or globally (fixed).
  *
  * @param {PackageGraphNode|Object} node The metadata to process
- * @property {String} currentVersion
- * @property {String} name (Only used in independent mode)
- * @property {String} prereleaseId
+ * @param {String} currentVersion
+ * @param {String} name (Only used in independent mode)
+ * @param {String} prereleaseId
+ * @param {String} buildMetadata
  */
-export async function promptVersion(currentVersion: string, name: string, prereleaseId?: string): Promise<string> {
-  const patch = semver.inc(currentVersion, 'patch');
-  const minor = semver.inc(currentVersion, 'minor');
-  const major = semver.inc(currentVersion, 'major');
-  const prepatch = semver.inc(currentVersion, 'prepatch', prereleaseId);
-  const preminor = semver.inc(currentVersion, 'preminor', prereleaseId);
-  const premajor = semver.inc(currentVersion, 'premajor', prereleaseId);
+export async function promptVersion(
+  currentVersion: string,
+  name: string,
+  prereleaseId?: string,
+  buildMetadata?: string
+): Promise<string> {
+  const patch = applyBuildMetadata(semver.inc(currentVersion, 'patch'), buildMetadata);
+  const minor = applyBuildMetadata(semver.inc(currentVersion, 'minor'), buildMetadata);
+  const major = applyBuildMetadata(semver.inc(currentVersion, 'major'), buildMetadata);
+  const prepatch = applyBuildMetadata(semver.inc(currentVersion, 'prepatch', prereleaseId), buildMetadata);
+  const preminor = applyBuildMetadata(semver.inc(currentVersion, 'preminor', prereleaseId), buildMetadata);
+  const premajor = applyBuildMetadata(semver.inc(currentVersion, 'premajor', prereleaseId), buildMetadata);
 
   const message = `Select a new version ${name ? `for ${name} ` : ''}(currently ${currentVersion})`;
 
@@ -51,7 +66,7 @@ export async function promptVersion(currentVersion: string, name: string, prerel
     const prompt = `(default: "${prereleaseId}", yielding ${defaultVersion})`;
 
     return promptTextInput(`Enter a prerelease identifier ${prompt}`, {
-      filter: (v) => semver.inc(currentVersion, 'prerelease', v || prereleaseId),
+      filter: (v) => applyBuildMetadata(semver.inc(currentVersion, 'prerelease', v || prereleaseId), buildMetadata),
     });
   }
 

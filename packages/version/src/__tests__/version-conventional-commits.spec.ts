@@ -81,6 +81,7 @@ describe('--conventional-commits', () => {
           rootPath: cwd,
           tagPrefix: 'v',
           prereleaseId: undefined,
+          buildMetadata: undefined,
         });
         expect(updateChangelog).toHaveBeenCalledWith(expect.objectContaining({ name, version }), 'independent', {
           changelogPreset: undefined,
@@ -107,6 +108,7 @@ describe('--conventional-commits', () => {
           rootPath: cwd,
           tagPrefix: 'v',
           prereleaseId,
+          buildMetadata: undefined,
         });
         expect(updateChangelog).toHaveBeenCalledWith(expect.objectContaining({ name, version }), 'independent', {
           changelogPreset: undefined,
@@ -156,6 +158,7 @@ describe('--conventional-commits', () => {
           rootPath: cwd,
           tagPrefix: 'v',
           prerelease: undefined,
+          buildMetadata: undefined,
         });
         expect(updateChangelog).toHaveBeenCalledWith(expect.objectContaining({ name, version }), 'independent', {
           changelogPreset: undefined,
@@ -172,6 +175,7 @@ describe('--conventional-commits', () => {
         rootPath: cwd,
         tagPrefix: 'v',
         prereleaseId: undefined,
+        buildMetadata: undefined,
       };
 
       await new VersionCommand(createArgv(cwd, '--conventional-commits', '--changelog-preset', 'foo-bar'));
@@ -194,6 +198,30 @@ describe('--conventional-commits', () => {
 
       const changedFiles = await showCommit(cwd, '--name-only');
       expect(changedFiles).not.toContain('package-5');
+    });
+
+    it('accepts --build-metadata option', async () => {
+      const buildMetadata = '001';
+      versionBumps.forEach((bump) => (recommendVersion as jest.Mock).mockResolvedValueOnce(`${bump}+${buildMetadata}`));
+      const cwd = await initFixture('independent');
+
+      const changelogOpts = {
+        changelogPreset: undefined,
+        rootPath: cwd,
+        tagPrefix: 'v',
+        prereleaseId: undefined,
+      };
+
+      await new VersionCommand(createArgv(cwd, '--conventional-commits', '--build-metadata', buildMetadata));
+
+      const changedFiles = await showCommit(cwd, '--name-only');
+      expect(changedFiles).toMatchSnapshot();
+
+      expect(recommendVersion).toHaveBeenCalledWith(expect.any(Object), 'independent', {
+        ...changelogOpts,
+        buildMetadata,
+      });
+      expect(updateChangelog).toHaveBeenCalledWith(expect.any(Object), 'independent', changelogOpts);
     });
   });
 
@@ -221,6 +249,7 @@ describe('--conventional-commits', () => {
           rootPath: cwd,
           tagPrefix: 'v',
           prereleaseId: undefined,
+          buildMetadata: undefined,
         });
 
         expect(updateChangelog).toHaveBeenCalledWith(expect.objectContaining({ name, version: '2.0.0' }), 'fixed', {
@@ -270,6 +299,7 @@ describe('--conventional-commits', () => {
           rootPath: cwd,
           tagPrefix: 'v',
           prereleaseId: 'alpha',
+          buildMetadata: undefined,
         });
 
         expect(updateChangelog).toHaveBeenCalledWith(
@@ -315,7 +345,10 @@ describe('--conventional-commits', () => {
         )
       );
 
-      expect(recommendVersion).toHaveBeenCalledWith(expect.any(Object), 'fixed', changelogOpts);
+      expect(recommendVersion).toHaveBeenCalledWith(expect.any(Object), 'fixed', {
+        ...changelogOpts,
+        buildMetadata: undefined,
+      });
       expect(updateChangelog).toHaveBeenCalledWith(expect.any(Object), 'fixed', changelogOpts);
     });
 
@@ -362,5 +395,29 @@ describe('--conventional-commits', () => {
     expect((writePkg as any).updatedVersions()).toEqual({
       'package-2': '1.1.1',
     });
+  });
+
+  it('accepts --build-metadata option', async () => {
+    const buildMetadata = 'exp.sha.5114f85';
+    (recommendVersion as jest.Mock).mockResolvedValueOnce(`1.0.1+${buildMetadata}`);
+    const cwd = await initFixture('normal');
+
+    const changelogOpts = {
+      changelogPreset: undefined,
+      rootPath: cwd,
+      tagPrefix: 'v',
+      prereleaseId: undefined,
+    };
+
+    await new VersionCommand(createArgv(cwd, '--conventional-commits', '--build-metadata', buildMetadata));
+
+    const changedFiles = await showCommit(cwd, '--name-only');
+    expect(changedFiles).toMatchSnapshot();
+
+    expect(recommendVersion).toHaveBeenCalledWith(expect.any(Object), 'fixed', {
+      ...changelogOpts,
+      buildMetadata,
+    });
+    expect(updateChangelog).toHaveBeenCalledWith(expect.any(Object), 'fixed', changelogOpts);
   });
 });
