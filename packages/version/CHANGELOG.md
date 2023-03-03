@@ -4,6 +4,20 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [1.16.0](https://github.com/lerna-lite/lerna-lite/compare/v1.15.2...v1.16.0) (2023-03-03)
+
+### Bug Fixes
+
+* **deps:** update all non-major dependencies ([#488](https://github.com/lerna-lite/lerna-lite/issues/488)) ([126bdb7](https://github.com/lerna-lite/lerna-lite/commit/126bdb7713c7fe5444f755f9f719d07a483cf146)) - by @renovate[bot]
+* **deps:** update dependency minimatch to v7 ([#489](https://github.com/lerna-lite/lerna-lite/issues/489)) ([4fd3ac0](https://github.com/lerna-lite/lerna-lite/commit/4fd3ac0c6b848cd2c3e2417441b36cbd35e05fd3)) - by @renovate[bot]
+* **version:** highlight version prop required in `lerna.json` ([#486](https://github.com/lerna-lite/lerna-lite/issues/486)) ([8720397](https://github.com/lerna-lite/lerna-lite/commit/872039788f22d95b04f237b983013be3c63833c0)), closes [#485](https://github.com/lerna-lite/lerna-lite/issues/485) - by @ghiscoding
+* **version:** validate yarn Berry gte 2.0 before running yarn sync lock ([#494](https://github.com/lerna-lite/lerna-lite/issues/494)) ([26d630e](https://github.com/lerna-lite/lerna-lite/commit/26d630ead0e2249418c29977070f89ad63034a5f)) - by @ghiscoding
+
+### Features
+
+* **version:** add `--independent-subpackages` option, closes [#491](https://github.com/lerna-lite/lerna-lite/issues/491) ([#495](https://github.com/lerna-lite/lerna-lite/issues/495)) ([dfd0a78](https://github.com/lerna-lite/lerna-lite/commit/dfd0a781cb895d6abe00288aee0a51d1abaaaa3d)) - by @ghiscoding
+* **version:** add user-defined build metadata to bumped packages ([#504](https://github.com/lerna-lite/lerna-lite/issues/504)) ([b8fbf2c](https://github.com/lerna-lite/lerna-lite/commit/b8fbf2c7344c2fd5d0d0f3dee5c883eaa3b4be67)) - by @ghiscoding
+
 ## [1.15.1](https://github.com/lerna-lite/lerna-lite/compare/v1.15.0...v1.15.1) (2023-02-08)
 
 ### Bug Fixes

@@ -4,6 +4,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [1.16.0](https://github.com/lerna-lite/lerna-lite/compare/v1.15.2...v1.16.0) (2023-03-03)
+
+### Bug Fixes
+
+* **deps:** update all non-major dependencies ([#488](https://github.com/lerna-lite/lerna-lite/issues/488)) ([126bdb7](https://github.com/lerna-lite/lerna-lite/commit/126bdb7713c7fe5444f755f9f719d07a483cf146)) - by @renovate[bot]
+
+### Features
+
+* **version:** add `--independent-subpackages` option, closes [#491](https://github.com/lerna-lite/lerna-lite/issues/491) ([#495](https://github.com/lerna-lite/lerna-lite/issues/495)) ([dfd0a78](https://github.com/lerna-lite/lerna-lite/commit/dfd0a781cb895d6abe00288aee0a51d1abaaaa3d)) - by @ghiscoding
+* **version:** add user-defined build metadata to bumped packages ([#504](https://github.com/lerna-lite/lerna-lite/issues/504)) ([b8fbf2c](https://github.com/lerna-lite/lerna-lite/commit/b8fbf2c7344c2fd5d0d0f3dee5c883eaa3b4be67)) - by @ghiscoding
+
 ## [1.15.1](https://github.com/lerna-lite/lerna-lite/compare/v1.15.0...v1.15.1) (2023-02-08)
 
 **Note:** Version bump only for package @lerna-lite/cli
