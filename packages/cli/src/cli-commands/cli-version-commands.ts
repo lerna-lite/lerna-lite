@@ -116,6 +116,10 @@ export default {
         describe: 'Specify cross-dependency version numbers exactly rather than with a caret (^).',
         type: 'boolean',
       },
+      'exclude-dependents': {
+        describe: `Exclude all transitive dependents when running a command with --since, overriding the default 'changed' algorithm.`,
+        type: 'boolean',
+      },
       'independent-subpackages': {
         describe: 'Exclude sub-packages when versioning',
         type: 'boolean',
