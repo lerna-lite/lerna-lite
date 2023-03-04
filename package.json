@@ -67,7 +67,7 @@
     "@lerna-lite/run": "workspace:*",
     "@lerna-lite/version": "workspace:*",
     "@lerna-lite/watch": "workspace:*",
-    "@lerna-test/helpers": "file:helpers",
+    "@lerna-test/helpers": "link:helpers",
     "@types/jest": "^29.4.0",
     "@types/node": "^18.14.4",
     "@types/npmlog": "^4.1.4",

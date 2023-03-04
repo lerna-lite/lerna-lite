@@ -21,7 +21,7 @@ importers:
       '@lerna-lite/run': workspace:*
       '@lerna-lite/version': workspace:*
       '@lerna-lite/watch': workspace:*
-      '@lerna-test/helpers': file:helpers
+      '@lerna-test/helpers': link:helpers
       '@types/jest': ^29.4.0
       '@types/node': ^18.14.4
       '@types/npmlog': ^4.1.4
@@ -78,7 +78,7 @@ importers:
       '@lerna-lite/run': link:packages/run
       '@lerna-lite/version': link:packages/version
       '@lerna-lite/watch': link:packages/watch
-      '@lerna-test/helpers': file:helpers
+      '@lerna-test/helpers': link:helpers
       '@types/jest': 29.4.0
       '@types/node': 18.14.4
       '@types/npmlog': 4.1.4
@@ -7736,10 +7736,4 @@ packages:
   /yocto-queue/0.1.0:
     resolution: {integrity: sha512-rVksvsnNCdJ/ohGc6xgPwyN8eheCxsiLM8mxuE/t/mOVqJewPuO1miLpTHQiRgTKCLexL4MeAFVagts7HmNZ2Q==}
     engines: {node: '>=10'}
-    dev: true
-
-  file:helpers:
-    resolution: {directory: helpers, type: directory}
-    name: '@lerna-test/helpers'
-    version: 0.0.0-test-only
     dev: true
