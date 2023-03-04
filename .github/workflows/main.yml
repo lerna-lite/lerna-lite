@@ -110,7 +110,7 @@ jobs:
           restore-keys: ts-jest-${{ matrix.platform }}-${{ matrix.node }}-
 
       - name: Run all workspace TSC builds
-        run: pnpm build
+        run: pnpm build:full
 
       - name: Run Jest unit tests
         if: |

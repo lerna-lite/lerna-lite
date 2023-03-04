@@ -1,0 +1,14 @@
+{
+  "extends": "../../tsconfig.base.json",
+  "compileOnSave": false,
+  "compilerOptions": {
+    "rootDir": "src",
+    "outDir": "dist",
+    "typeRoots": ["typings"],
+    "types": ["jest", "jest-extended", "node"]
+  },
+  "exclude": ["dist", "node_modules", "**/*.spec.ts", "**/__mocks__/**/*.*"],
+  "filesGlob": ["./src/**/*.ts"],
+  "include": ["src/**/*.ts", "typings/**/*.ts"],
+  "references": [{ "path": "../core" }, { "path": "../version" }]
+}

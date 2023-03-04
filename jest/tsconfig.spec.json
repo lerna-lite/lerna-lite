@@ -7,7 +7,7 @@
     "target": "es2018",
     "module": "commonjs",
     "lib": ["es2018"],
-    "types": ["jest", "jest-extended", "jquery", "node"]
+    "types": ["jest", "jest-extended", "node"]
   },
   "include": ["**/*.spec.ts", "**/*.test.js", "**/*.test.ts", "**/__mocks__/**/*.*", "src/typings/**/*.ts", "**/*.d.ts"]
 }
