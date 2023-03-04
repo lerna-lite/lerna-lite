@@ -9,5 +9,5 @@
     "resolveJsonModule": true,
     "types": ["jest", "jest-extended", "node"]
   },
-  "exclude": ["dist/**/*.*", "**/*.scss"]
+  "exclude": ["dist/**/*.*"]
 }
