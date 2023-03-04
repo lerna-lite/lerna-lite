@@ -34,19 +34,20 @@
     "strict": true
   },
   "paths": {
-    "changed": ["changed/src"],
-    "cli": ["cli/src"],
-    "core": ["core/src"],
-    "diff": ["diff/src"],
-    "exec": ["exec/src"],
-    "filter-packages": ["filter-packages/src"],
-    "init": ["init/src"],
-    "list": ["list/src"],
-    "listable": ["listable/src"],
-    "profiler": ["profiler/src"],
-    "publish": ["publish/src"],
-    "run": ["run/src"],
-    "version": ["version/src"],
-    "watch": ["watch/src"]
+    "@lerna-lite/helpers": ["helpers"],
+    "@lerna-lite/changed": ["packages/changed/src"],
+    "@lerna-lite/cli": ["packages/cli/src"],
+    "@lerna-lite/core": ["packages/core/src"],
+    "@lerna-lite/diff": ["packages/diff/src"],
+    "@lerna-lite/exec": ["packages/exec/src"],
+    "@lerna-lite/filter-packages": ["packages/filter-packages/src"],
+    "@lerna-lite/init": ["packages/init/src"],
+    "@lerna-lite/list": ["packages/list/src"],
+    "@lerna-lite/listable": ["packages/listable/src"],
+    "@lerna-lite/profiler": ["packages/profiler/src"],
+    "@lerna-lite/publish": ["packages/publish/src"],
+    "@lerna-lite/run": ["packages/run/src"],
+    "@lerna-lite/version": ["packages/version/src"],
+    "@lerna-lite/watch": ["packages/watch/src"]
   }
 }
