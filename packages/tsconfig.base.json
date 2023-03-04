@@ -15,6 +15,7 @@
     "experimentalDecorators": true,
     "emitDecoratorMetadata": true,
     "forceConsistentCasingInFileNames": true,
+    "importHelpers": true,
     "noEmitHelpers": false,
     "noEmitOnError": true,
     "noImplicitAny": false,
