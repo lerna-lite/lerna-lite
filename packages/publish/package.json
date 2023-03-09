@@ -35,7 +35,7 @@
   "dependencies": {
     "@lerna-lite/core": "workspace:*",
     "@lerna-lite/version": "workspace:*",
-    "@npmcli/arborist": "^6.2.4",
+    "@npmcli/arborist": "^6.2.5",
     "byte-size": "^7.0.1",
     "chalk": "^4.1.2",
     "columnify": "^1.6.0",
@@ -43,7 +43,7 @@
     "glob": "^7.2.3",
     "has-unicode": "^2.0.1",
     "libnpmaccess": "^7.0.2",
-    "libnpmpublish": "^7.1.0",
+    "libnpmpublish": "^7.1.1",
     "npm-package-arg": "^10.1.0",
     "npm-packlist": "^7.0.4",
     "npm-registry-fetch": "^14.0.3",
