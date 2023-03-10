@@ -814,9 +814,9 @@ export class VersionCommand extends Command<VersionCommandOption> {
     const message = tags.reduce((msg, tag) => `${msg}${os.EOL} - ${tag}`, `${subject}${os.EOL}`);
 
     await gitCommit(message, this.gitOpts, this.execOpts, this.options.dryRun);
-    await Promise.all(
-      tags.map((tag) => gitTag(tag, this.gitOpts, this.execOpts, this.options.gitTagCommand, this.options.dryRun))
-    );
+    for (const tag of tags) {
+      await gitTag(tag, this.gitOpts, this.execOpts, this.options.gitTagCommand, this.options.dryRun);
+    }
 
     return tags;
   }
