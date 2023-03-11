@@ -4,6 +4,12 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.16.1](https://github.com/lerna-lite/lerna-lite/compare/v1.16.0...v1.16.1) (2023-03-11)
+
+### Bug Fixes
+
+* sign tags sequentially to prevent gpg issues with many tags ([#511](https://github.com/lerna-lite/lerna-lite/issues/511)) ([5f300be](https://github.com/lerna-lite/lerna-lite/commit/5f300be84c827f4aab26bc82c28bbc8bda451355)) - by @heilmela
+
 # [1.16.0](https://github.com/lerna-lite/lerna-lite/compare/v1.15.2...v1.16.0) (2023-03-03)
 
 ### Bug Fixes
