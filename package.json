@@ -8,6 +8,7 @@
     "clean": "rimraf --glob packages/*/dist packages/*/tsconfig.tsbuildinfo",
     "clean:tarball": "rimraf --glob packages/**/*.tgz",
     "build": "tsc --build ./packages/tsconfig.packages.json",
+    "build:clean": "pnpm clean && tsc --build ./packages/tsconfig.packages.json && echo TSC Build Completed",
     "build:full": "pnpm clean && pnpm lint && tsc --build ./packages/tsconfig.packages.json && echo TSC Build Completed",
     "build:pnpm": "pnpm -r --stream build",
     "init-cmd": "lerna init --independent --exact --use-workspaces",
