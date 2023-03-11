@@ -1,4 +1,5 @@
 {
+  "compileOnSave": false,
   "compilerOptions": {
     "baseUrl": "./",
     "module": "commonjs",
@@ -10,14 +11,15 @@
     "allowSyntheticDefaultImports": true,
     "composite": true,
     "declaration": true,
-    "declarationMap": true,
+    "declarationMap": false,
+    "emitDecoratorMetadata": true,
     "esModuleInterop": true,
     "experimentalDecorators": true,
-    "emitDecoratorMetadata": true,
     "forceConsistentCasingInFileNames": true,
     "importHelpers": true,
     "noEmitHelpers": false,
     "noEmitOnError": true,
+    "noFallthroughCasesInSwitch": true,
     "noImplicitAny": false,
     "noImplicitReturns": false,
     "noUnusedLocals": false,
@@ -26,9 +28,10 @@
     "preserveSymlinks": true,
     "pretty": true,
     "rootDir": ".",
+    "skipLibCheck": true,
+    "skipDefaultLibCheck": true,
     "stripInternal": true,
     "strictNullChecks": true,
-    "skipLibCheck": true,
     "sourceMap": true,
     "suppressImplicitAnyIndexErrors": true,
     "strict": true
@@ -49,5 +52,6 @@
     "@lerna-lite/run": ["packages/run/src"],
     "@lerna-lite/version": ["packages/version/src"],
     "@lerna-lite/watch": ["packages/watch/src"]
-  }
+  },
+  "exclude": ["node_modules"]
 }
