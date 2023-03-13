@@ -17,8 +17,8 @@
   },
   "scripts": {
     "prebuild": "rimraf dist",
-    "build": "tsc --newLine LF",
-    "build:incremental": "tsc --incremental --newLine LF --sourceMap false --excludeDirectories dist",
+    "build": "tsc",
+    "build:incremental": "tsc --incremental --sourceMap false --excludeDirectories dist",
     "pack-tarball": "npm pack"
   },
   "license": "MIT",
