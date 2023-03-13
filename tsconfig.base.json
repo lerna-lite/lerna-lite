@@ -17,6 +17,7 @@
     "experimentalDecorators": true,
     "forceConsistentCasingInFileNames": true,
     "importHelpers": true,
+    "newLine": "lf",
     "noEmitHelpers": false,
     "noEmitOnError": true,
     "noFallthroughCasesInSwitch": true,
