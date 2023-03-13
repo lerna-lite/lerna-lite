@@ -4,6 +4,12 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.16.2](https://github.com/lerna-lite/lerna-lite/compare/v1.16.1...v1.16.2) (2023-03-13)
+
+### Bug Fixes
+
+* **cli:** TypeScript should be saved & published as LF, fixes [#513](https://github.com/lerna-lite/lerna-lite/issues/513) ([#514](https://github.com/lerna-lite/lerna-lite/issues/514)) ([1c62eb7](https://github.com/lerna-lite/lerna-lite/commit/1c62eb7d222db3e7be426d402fbfceff622615fe)) - by @ghiscoding
+
 ## [1.16.1](https://github.com/lerna-lite/lerna-lite/compare/v1.16.0...v1.16.1) (2023-03-11)
 
 **Note:** Version bump only for package @lerna-lite/core
