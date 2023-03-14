@@ -172,6 +172,7 @@ test("publish --canary --tag-version-prefix='abc'", async () => {
       "package-1": 1.0.1-alpha.0+SHA,
       "package-2": 1.0.1-alpha.0+SHA,
       "package-3": 1.0.1-alpha.0+SHA,
+      "package-4": 1.0.1-alpha.0+SHA,
     }
   `);
 });
