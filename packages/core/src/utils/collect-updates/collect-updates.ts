@@ -45,19 +45,14 @@ export function collectUpdates(
       : new Map(filteredPackages.map(({ name }) => [name, packageGraph.get(name)]));
 
   let committish = commandOptions.since;
-  let tagPattern = '';
-  if (isIndependent) {
-    tagPattern = describeTag ? describeTag : '*@*';
-  }
+  const tagPattern = describeTag ? describeTag : isIndependent ? '*@*' : '*v*';
 
   if (hasTags(execOpts, tagPattern)) {
     const describeOptions: DescribeRefOptions = {
       ...execOpts,
     };
 
-    if (isIndependent) {
-      describeOptions.match = tagPattern;
-    }
+    describeOptions.match = tagPattern;
 
     // describe the last annotated tag in the current branch
     const { sha, refCount, lastTagName } = describeRefSync(describeOptions, commandOptions.includeMergedTags, dryRun);

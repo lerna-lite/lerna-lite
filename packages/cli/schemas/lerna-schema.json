@@ -23,6 +23,11 @@
       "description": "When true, Lerna will delegate the implementation details of `lerna run` to the Nx task runner instead of the default Lerna task runner (which uses `p-map` and `p-queue`).",
       "default": false
     },
+    "describeTag": {
+      "type": "string",
+      "description": "During `lerna publish` (not `from-git` mode) and `lerna version`, the package updated since the last release will be found based on the describeTag.",
+      "default": ""
+    },
     "command": {
       "type": "object",
       "description": "Options for individual Lerna commands.",

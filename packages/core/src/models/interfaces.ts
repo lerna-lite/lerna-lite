@@ -188,7 +188,7 @@ export interface ProjectConfig extends LernaConfig, QueryGraphConfig {
   /** callback to execute when Promise resolved */
   onResolved?: (result: any) => void;
 
-  /** custom tag pattern, default is "*@*" */
+  /** custom tag pattern, default is `*@*` (independent mode) or `*v*` (non-independent mode) */
   describeTag?: string;
 }
 

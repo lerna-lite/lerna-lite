@@ -71,8 +71,8 @@ describe('collectUpdates()', () => {
         name: 'package-standalone',
       }),
     ]);
-    expect(hasTags).toHaveBeenLastCalledWith(execOpts, '');
-    expect(describeRefSync).toHaveBeenLastCalledWith(execOpts, undefined, false);
+    expect(hasTags).toHaveBeenLastCalledWith(execOpts, '*v*');
+    expect(describeRefSync).toHaveBeenLastCalledWith({ cwd: '/test', match: '*v*' }, undefined, false);
     expect(makeDiffPredicate).toHaveBeenLastCalledWith('v1.0.0', execOpts, undefined, {
       independentSubpackages: undefined,
     });
@@ -474,7 +474,19 @@ describe('collectUpdates()', () => {
       isIndependent: false,
       includeMergedTags: true,
     });
-    expect(describeRefSync).toHaveBeenCalledWith({ cwd: '/test' }, true, false);
+    expect(describeRefSync).toHaveBeenCalledWith({ cwd: '/test', match: '*custom-tag*' }, true, false);
+  });
+
+  it('no use "describeTag" in non-independent mode', async () => {
+    const graph = buildGraph();
+    const pkgs = graph.rawPackageList;
+    const execOpts = { cwd: '/test' };
+
+    collectUpdates(pkgs, graph, execOpts, {
+      isIndependent: false,
+      includeMergedTags: true,
+    });
+    expect(describeRefSync).toHaveBeenCalledWith({ cwd: '/test', match: '*v*' }, true, false);
   });
 
   it('use "describeTag" with empty value in independent mode', async () => {
