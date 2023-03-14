@@ -474,8 +474,9 @@ describe('collectUpdates()', () => {
       isIndependent: false,
       includeMergedTags: true,
     });
-    expect(describeRefSync).toHaveBeenCalledWith({ cwd: '/test'}, true, false);
+    expect(describeRefSync).toHaveBeenCalledWith({ cwd: '/test' }, true, false);
   });
+
   it('use "describeTag" with empty value in independent mode', async () => {
     const graph = buildGraph();
     const pkgs = graph.rawPackageList;

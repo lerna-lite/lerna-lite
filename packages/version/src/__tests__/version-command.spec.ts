@@ -1087,12 +1087,13 @@ describe('VersionCommand', () => {
 
       await fs.outputJSON(path.join(testDir, 'lerna.json'), {
         version: 'independent',
-        describeTag: '*custom-tag*'
+        describeTag: '*custom-tag*',
       });
       await new VersionCommand(createArgv(testDir));
+
       expect(collectUpdates.mock.calls[0][3].describeTag).toBe('*custom-tag*');
+
       expect(collectUpdates.mock.calls[0][3].isIndependent).toBe(true);
     });
   });
-
 });
