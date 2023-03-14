@@ -447,6 +447,7 @@ export class PublishCommand extends Command<PublishCommandOption> {
       });
 
     const isIndependent = this.project.isIndependent();
+    const describeTag = this.project.config.describeTag;
 
     // find changed packages since last release, if any
     chain = chain.then(() =>
@@ -461,6 +462,7 @@ export class PublishCommand extends Command<PublishCommandOption> {
           forcePublish,
           includeMergedTags,
           isIndependent,
+          describeTag,
           // private packages are never published, don't bother describing their refs.
         } as UpdateCollectorOptions,
         this.options.dryRun

@@ -438,4 +438,54 @@ describe('collectUpdates()', () => {
       independentSubpackages: true,
     });
   });
+
+  it('use "describeTag" in independent mode', async () => {
+    const graph = buildGraph();
+    const pkgs = graph.rawPackageList;
+    const execOpts = { cwd: '/test' };
+
+    collectUpdates(pkgs, graph, execOpts, {
+      describeTag: '*custom-tag*',
+      isIndependent: true,
+      includeMergedTags: true,
+    });
+    expect(describeRefSync).toHaveBeenCalledWith({ cwd: '/test', match: '*custom-tag*' }, true, false);
+  });
+
+  it('no use "describeTag" in independent mode', async () => {
+    const graph = buildGraph();
+    const pkgs = graph.rawPackageList;
+    const execOpts = { cwd: '/test' };
+
+    collectUpdates(pkgs, graph, execOpts, {
+      isIndependent: true,
+      includeMergedTags: true,
+    });
+    expect(describeRefSync).toHaveBeenCalledWith({ cwd: '/test', match: '*@*' }, true, false);
+  });
+
+  it('use "describeTag" in non-independent mode', async () => {
+    const graph = buildGraph();
+    const pkgs = graph.rawPackageList;
+    const execOpts = { cwd: '/test' };
+
+    collectUpdates(pkgs, graph, execOpts, {
+      describeTag: '*custom-tag*',
+      isIndependent: false,
+      includeMergedTags: true,
+    });
+    expect(describeRefSync).toHaveBeenCalledWith({ cwd: '/test'}, true, false);
+  });
+  it('use "describeTag" with empty value in independent mode', async () => {
+    const graph = buildGraph();
+    const pkgs = graph.rawPackageList;
+    const execOpts = { cwd: '/test' };
+
+    collectUpdates(pkgs, graph, execOpts, {
+      describeTag: '',
+      isIndependent: true,
+      includeMergedTags: true,
+    });
+    expect(describeRefSync).toHaveBeenCalledWith({ cwd: '/test', match: '*@*' }, true, false);
+  });
 });

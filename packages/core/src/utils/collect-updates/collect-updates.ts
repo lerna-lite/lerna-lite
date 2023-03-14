@@ -30,6 +30,7 @@ export function collectUpdates(
     excludeDependents,
     independentSubpackages,
     isIndependent,
+    describeTag,
   } = commandOptions;
 
   // If --conventional-commits and --conventional-graduate are both set, ignore --force-publish
@@ -44,7 +45,10 @@ export function collectUpdates(
       : new Map(filteredPackages.map(({ name }) => [name, packageGraph.get(name)]));
 
   let committish = commandOptions.since;
-  const tagPattern = isIndependent ? '*@*' : '';
+  let tagPattern = '';
+  if (isIndependent) {
+    tagPattern = describeTag ? describeTag : '*@*';
+  }
 
   if (hasTags(execOpts, tagPattern)) {
     const describeOptions: DescribeRefOptions = {
