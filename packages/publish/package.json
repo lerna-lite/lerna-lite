@@ -43,7 +43,7 @@
     "glob": "^7.2.3",
     "has-unicode": "^2.0.1",
     "libnpmaccess": "^7.0.2",
-    "libnpmpublish": "^7.1.1",
+    "libnpmpublish": "^7.1.2",
     "npm-package-arg": "^10.1.0",
     "npm-packlist": "^7.0.4",
     "npm-registry-fetch": "^14.0.3",
