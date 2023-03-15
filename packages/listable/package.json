@@ -36,5 +36,8 @@
     "@lerna-lite/core": "workspace:*",
     "chalk": "^4.1.2",
     "columnify": "^1.6.0"
+  },
+  "devDependencies": {
+    "yargs": "^17.7.1"
   }
 }

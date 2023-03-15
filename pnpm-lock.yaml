@@ -362,10 +362,13 @@ importers:
       '@lerna-lite/core': workspace:*
       chalk: ^4.1.2
       columnify: ^1.6.0
+      yargs: ^17.7.1
     dependencies:
       '@lerna-lite/core': link:../core
       chalk: 4.1.2
       columnify: 1.6.0
+    devDependencies:
+      yargs: 17.7.1
 
   packages/profiler:
     specifiers:
