@@ -1080,4 +1080,20 @@ describe('VersionCommand', () => {
       expect(logMessages).toContain('Arguments after -- are no longer passed to subprocess executions.');
     });
   });
+
+  describe('"describeTag" config', () => {
+    it('set "describeTag" in lerna.json', async () => {
+      const testDir = await initFixture('normal');
+
+      await fs.outputJSON(path.join(testDir, 'lerna.json'), {
+        version: 'independent',
+        describeTag: '*custom-tag*',
+      });
+      await new VersionCommand(createArgv(testDir));
+
+      expect(collectUpdates.mock.calls[0][3].describeTag).toBe('*custom-tag*');
+
+      expect(collectUpdates.mock.calls[0][3].isIndependent).toBe(true);
+    });
+  });
 });

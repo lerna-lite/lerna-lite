@@ -31,7 +31,8 @@ lerna publish from-package  # explicitly publish packages where the latest versi
 When run, this command does one of the following things:
 
 - Publish packages updated since the last release (calling [`lerna version`](https://github.com/lerna-lite/lerna-lite/blob/main/packages/version/README.md) behind the scenes).
-  - This is the legacy behavior of lerna 2.x
+  - This is the legacy behavior of lerna 2.x.
+  - The package updated since the last release will be found based on the `describeTag` pattern (For details, refer to [`lerna version`](https://github.com/lerna-lite/lerna-lite/blob/main/packages/version/README.md#describeTag)).
 - Publish packages tagged in the current commit (`from-git`).
 - Publish packages in the latest commit where the version is not present in the registry (`from-package`).
 - Publish an unversioned "canary" release of packages (and their dependents) updated in the previous commit.

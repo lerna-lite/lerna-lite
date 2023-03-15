@@ -187,6 +187,9 @@ export interface ProjectConfig extends LernaConfig, QueryGraphConfig {
 
   /** callback to execute when Promise resolved */
   onResolved?: (result: any) => void;
+
+  /** custom tag pattern, default is `*@*` (independent mode) or `""` (non-independent mode) */
+  describeTag?: string;
 }
 
 /** The subset of package.json properties that Lerna-Lite uses */
@@ -214,6 +217,8 @@ export interface UpdateCollectorOptions {
 
   /** are we using Lerna independent mode? */
   isIndependent?: boolean;
+  /** custom describe tag */
+  describeTag?: string;
 
   /** are we using conventional commits? */
   conventionalCommits?: boolean;

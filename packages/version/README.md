@@ -854,3 +854,16 @@ Will apply the following updates to your `package.json` (assuming a `minor` vers
 ```
 
 > **Note** semver range with an operator (ie `workspace:>=2.0.0`) are also supported but will never be mutated.
+
+## describeTag
+When `lerna version` is executed, it will identifies packages that have been updated since the previous tagged release. The rules it identifies are based on describe tag pattern (excuted `git describe --match` behind the scenes).
+
+The tag pattern defaults to `*@*` (independent mode) or `""` (non-independent mode). You can configure `describeTag` in `lerna.json` to specify the tag pattern.
+
+The `describeTag` will also take effect under `lerna publish`, for example `lerna publish --canary`, but it will not take effect under `lerna publish from-git`.
+
+```
+{
+  describeTag: "*lerna-project*"
+}
+```

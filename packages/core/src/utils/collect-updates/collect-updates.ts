@@ -30,6 +30,7 @@ export function collectUpdates(
     excludeDependents,
     independentSubpackages,
     isIndependent,
+    describeTag,
   } = commandOptions;
 
   // If --conventional-commits and --conventional-graduate are both set, ignore --force-publish
@@ -44,16 +45,14 @@ export function collectUpdates(
       : new Map(filteredPackages.map(({ name }) => [name, packageGraph.get(name)]));
 
   let committish = commandOptions.since;
-  const tagPattern = isIndependent ? '*@*' : '';
+  const tagPattern = describeTag ? describeTag : isIndependent ? '*@*' : '';
 
   if (hasTags(execOpts, tagPattern)) {
     const describeOptions: DescribeRefOptions = {
       ...execOpts,
     };
 
-    if (isIndependent) {
-      describeOptions.match = tagPattern;
-    }
+    describeOptions.match = tagPattern;
 
     // describe the last annotated tag in the current branch
     const { sha, refCount, lastTagName } = describeRefSync(describeOptions, commandOptions.includeMergedTags, dryRun);

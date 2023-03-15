@@ -735,4 +735,20 @@ describe('PublishCommand', () => {
       await expect(command).rejects.toThrow('Dependency cycles detected, you should fix these!');
     });
   });
+
+  describe('"describeTag" config', () => {
+    it('set "describeTag" in lerna.json', async () => {
+      const testDir = await initFixture('normal');
+
+      await fs.outputJSON(path.join(testDir, 'lerna.json'), {
+        version: 'independent',
+        describeTag: '*custom-tag*',
+      });
+      await new PublishCommand(createArgv(testDir, '--canary'));
+
+      expect(collectUpdates.mock.calls[0][3].describeTag).toBe('*custom-tag*');
+
+      expect(collectUpdates.mock.calls[0][3].isIndependent).toBe(true);
+    });
+  });
 });
