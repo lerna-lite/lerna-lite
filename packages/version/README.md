@@ -83,6 +83,7 @@ Running `lerna version --conventional-commits` without the above flags will rele
     - [`--changelog-header-message <msg>`](#--changelog-header-message-msg) (new)
     - [`--changelog-version-message <msg>`](#--changelog-version-message-msg) (new)
     - [`--create-release <type>`](#--create-release-type)
+    - [`--describe-tag <pattern>`](#--describe-tag-pattern)
     - [`--exact`](#--exact)
     - [`--independent-subpackages`](#--independent-subpackages) (new)
     - [`--force-publish`](#--force-publish)
@@ -398,6 +399,17 @@ lerna version --conventional-commits --create-release gitlab
 ```
 
 When run with this flag, `lerna version` will create an official GitHub or GitLab release based on the changed packages. Requires `--conventional-commits` to be passed so that changelogs can be generated.
+
+### `--describe-tag <pattern>`
+When `lerna version` is executed, it will identifies packages that have been updated since the previous tagged release. The rules it identifies are based on describe tag pattern (excuted `git describe --match` behind the scenes).
+
+The tag pattern defaults to `*@*` (independent mode) or `""` (non-independent mode). You can configure `describeTag` in `lerna.json` to specify the tag pattern.
+
+The `describeTag` will also take effect under `lerna publish`, for example `lerna publish --canary`, but it will not take effect under `lerna publish from-git`.
+
+```sh
+lerna version --describe-tag "*lerna-project*"
+```
 
 ### Remote Client Auth Tokens
 ##### GitHub Auth Token
@@ -854,16 +866,3 @@ Will apply the following updates to your `package.json` (assuming a `minor` vers
 ```
 
 > **Note** semver range with an operator (ie `workspace:>=2.0.0`) are also supported but will never be mutated.
-
-## describeTag
-When `lerna version` is executed, it will identifies packages that have been updated since the previous tagged release. The rules it identifies are based on describe tag pattern (excuted `git describe --match` behind the scenes).
-
-The tag pattern defaults to `*@*` (independent mode) or `""` (non-independent mode). You can configure `describeTag` in `lerna.json` to specify the tag pattern.
-
-The `describeTag` will also take effect under `lerna publish`, for example `lerna publish --canary`, but it will not take effect under `lerna publish from-git`.
-
-```
-{
-  describeTag: "*lerna-project*"
-}
-```
