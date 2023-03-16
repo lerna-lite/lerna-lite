@@ -83,7 +83,7 @@ Running `lerna version --conventional-commits` without the above flags will rele
     - [`--changelog-header-message <msg>`](#--changelog-header-message-msg) (new)
     - [`--changelog-version-message <msg>`](#--changelog-version-message-msg) (new)
     - [`--create-release <type>`](#--create-release-type)
-    - [`--describe-tag <pattern>`](#--describe-tag-pattern)
+    - [`--describe-tag <pattern>`](#--describe-tag-pattern) (new)
     - [`--exact`](#--exact)
     - [`--independent-subpackages`](#--independent-subpackages) (new)
     - [`--force-publish`](#--force-publish)
