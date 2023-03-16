@@ -4,6 +4,12 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [1.17.0](https://github.com/lerna-lite/lerna-lite/compare/v1.16.2...v1.17.0) (2023-03-16)
+
+### Features
+
+* **version:** support git "describeTag" configuration in version/publish commands ([#515](https://github.com/lerna-lite/lerna-lite/issues/515)) ([6a041e4](https://github.com/lerna-lite/lerna-lite/commit/6a041e4e864a4868b2d1c213a561ad57a4053a11)) - by @xueran
+
 ## [1.16.2](https://github.com/lerna-lite/lerna-lite/compare/v1.16.1...v1.16.2) (2023-03-13)
 
 ### Bug Fixes
