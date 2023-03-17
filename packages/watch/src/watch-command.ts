@@ -125,9 +125,9 @@ export class WatchCommand extends Command<WatchCommandOption & FilterOptions> {
         .on('error', (error) => this.onError(error));
 
       // also watch for any Signal termination to cleanly exit the watch command
-      process.once('SIGINT', this.exitProcess);
-      process.once('SIGTERM', this.exitProcess);
-      process.stdin.on('end', this.exitProcess);
+      process.once('SIGINT', () => this.handleTermination(128 + 2));
+      process.once('SIGTERM', () => this.handleTermination(128 + 15));
+      process.stdin.on('end', this.handleTermination);
     } catch (err) {
       this.onError(err);
     }
@@ -197,16 +197,17 @@ export class WatchCommand extends Command<WatchCommandOption & FilterOptions> {
     });
   }
 
-  protected exitProcess = async () => {
+  protected handleTermination = async (exitCode?: number) => {
     try {
-      this.logger.info('watch', 'Termination call detected, exiting the watch');
-      process.off('SIGINT', this.exitProcess);
-      process.off('SIGTERM', this.exitProcess);
-      process.stdin.off('end', this.exitProcess);
+      this.logger.info('watch', 'Termination call detected, exiting the Watch');
+      this.logger.silly('watch', `Watch process terminated with exit code: ${exitCode}`);
+      process.off('SIGINT', () => this.handleTermination(128 + 2));
+      process.off('SIGTERM', () => this.handleTermination(128 + 15));
+      process.stdin.off('end', this.handleTermination);
 
       await this._watcher?.close();
     } finally {
-      process.exit(0);
+      process.exit(exitCode);
     }
   };
 
@@ -221,16 +222,17 @@ export class WatchCommand extends Command<WatchCommandOption & FilterOptions> {
   }
 
   protected onError(error: any) {
+    const exitCode = error?.exitCode ?? error?.code;
+
     if (this._bail) {
       // only the first error is caught
-      process.exitCode = error?.exitCode ?? error?.code;
-      this.exitProcess();
+      process.exitCode = exitCode;
+      this.handleTermination(process.exitCode);
 
       // rethrow to halt chain and log properly
       throw error;
     } else {
       // propagate "highest" error code, it's probably the most useful, but keep watch process alive
-      const exitCode = error?.exitCode ?? error?.code;
       this.logger.error('', 'Received non-zero exit code %d during file watch', exitCode);
       process.exitCode = exitCode;
     }
