@@ -27,7 +27,7 @@
     {
       packageNames: ['glob'],
       allowedVersions: '7.2.3',
-    }
+    },
   ],
   schedule: ['on Thursday'],
   ignoreDeps: [
