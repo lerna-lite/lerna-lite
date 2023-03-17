@@ -34,7 +34,6 @@
     "stripInternal": true,
     "strictNullChecks": true,
     "sourceMap": true,
-    "suppressImplicitAnyIndexErrors": true,
     "strict": true
   },
   "paths": {
