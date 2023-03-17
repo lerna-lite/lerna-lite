@@ -61,6 +61,7 @@ export class Project {
       }
 
       // re-throw other errors, could be ours or third-party
+      // istanbul ignore next
       throw err;
     }
 
@@ -158,6 +159,7 @@ export class Project {
       });
     } catch (err: any) {
       // redecorate JSON syntax errors, avoid debug dump
+      // istanbul ignore next
       if (err.name === 'JSONError') {
         throw new ValidationError(err.name, err.message);
       }
