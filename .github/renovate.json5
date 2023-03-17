@@ -27,11 +27,7 @@
     {
       packageNames: ['glob'],
       allowedVersions: '7.2.3',
-    },
-    {
-      packageNames: ['cosmiconfig'],
-      allowedVersions: '8.0.0',
-    },
+    }
   ],
   schedule: ['on Thursday'],
   ignoreDeps: [

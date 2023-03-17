@@ -1,4 +1,4 @@
-import { cosmiconfigSync } from 'cosmiconfig';
+import { cosmiconfigSync, PublicExplorerSync } from 'cosmiconfig';
 import dedent from 'dedent';
 import globby, { GlobbyOptions } from 'globby';
 import globParent from 'glob-parent';
@@ -32,26 +32,37 @@ export class Project {
    * @param {string} [cwd] Defaults to process.cwd()
    */
   constructor(cwd?: string) {
-    const explorer = cosmiconfigSync('lerna', {
-      searchPlaces: ['lerna.json', 'package.json'],
-      transform(obj) {
-        // cosmiconfig returns null when nothing is found
-        if (!obj) {
-          return {
-            // No need to distinguish between missing and empty,
-            // saves a lot of noisy guards elsewhere
-            config: {},
-            configNotFound: true,
-            // path.resolve(".", ...) starts from process.cwd()
-            filepath: path.resolve(cwd || '.', 'lerna.json'),
-          };
-        }
+    let explorer: PublicExplorerSync;
+    try {
+      explorer = cosmiconfigSync('lerna', {
+        searchPlaces: ['lerna.json', 'package.json'],
+        transform(obj) {
+          // cosmiconfig returns null when nothing is found
+          if (!obj) {
+            return {
+              // No need to distinguish between missing and empty,
+              // saves a lot of noisy guards elsewhere
+              config: {},
+              configNotFound: true,
+              // path.resolve(".", ...) starts from process.cwd()
+              filepath: path.resolve(cwd || '.', 'lerna.json'),
+            };
+          }
 
-        obj.config = applyExtends(obj.config, path.dirname(obj.filepath));
+          obj.config = applyExtends(obj.config, path.dirname(obj.filepath));
 
-        return obj;
-      },
-    });
+          return obj;
+        },
+      });
+    } catch (err: any) {
+      // redecorate JSON syntax errors, avoid debug dump
+      if (err.name === 'JSONError') {
+        throw new ValidationError(err.name, err.message);
+      }
+
+      // re-throw other errors, could be ours or third-party
+      throw err;
+    }
 
     let loaded;
 
