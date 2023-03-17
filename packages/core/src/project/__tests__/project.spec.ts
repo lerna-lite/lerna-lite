@@ -56,6 +56,17 @@ describe('Project', () => {
       expect(new Project().config).toEqual({});
     });
 
+    it('errors when package.json is not valid JSON', async () => {
+      const cwd = await initFixture('invalid-package-json');
+
+      expect(() => new Project(cwd)).toThrow(
+        expect.objectContaining({
+          name: 'ValidationError',
+          prefix: 'JSONError',
+        })
+      );
+    });
+
     it('errors when lerna.json is not valid JSON', async () => {
       const cwd = await initFixture('invalid-json');
 
