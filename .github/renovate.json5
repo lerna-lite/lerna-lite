@@ -24,10 +24,6 @@
       packageNames: ['npm'],
       allowedVersions: '8.0.0',
     },
-    {
-      packageNames: ['glob'],
-      allowedVersions: '7.2.3',
-    },
   ],
   schedule: ['on Thursday'],
   ignoreDeps: [
