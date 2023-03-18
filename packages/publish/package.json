@@ -40,7 +40,7 @@
     "chalk": "^4.1.2",
     "columnify": "^1.6.0",
     "fs-extra": "^11.1.0",
-    "glob": "^7.2.3",
+    "glob": "^9.3.0",
     "has-unicode": "^2.0.1",
     "libnpmaccess": "^7.0.2",
     "libnpmpublish": "^7.1.2",
