@@ -43,7 +43,7 @@
   },
   "devDependencies": {
     "@types/p-map": "^2.0.0",
-    "fs-extra": "^11.1.0",
+    "fs-extra": "^11.1.1",
     "globby": "^11.1.0",
     "yargs": "^17.7.1",
     "yargs-parser": "^21.1.1"

@@ -37,7 +37,7 @@
     "@lerna-lite/filter-packages": "workspace:*",
     "@lerna-lite/profiler": "workspace:*",
     "chalk": "^4.1.2",
-    "fs-extra": "^11.1.0",
+    "fs-extra": "^11.1.1",
     "npmlog": "^7.0.1",
     "p-map": "^4.0.0"
   },
