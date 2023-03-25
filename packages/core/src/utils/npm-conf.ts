@@ -2,11 +2,11 @@ import path from 'path';
 
 import { Conf } from '../utils/conf';
 import { toNerfDart } from './nerf-dart';
-import * as defaults from './defaults';
+import { Defaults } from './defaults';
 
 // https://github.com/npm/npm/blob/latest/lib/config/core.js#L101-L200
 function npmConf(opts: any) {
-  const conf = new Conf(Object.assign({}, (defaults as any).defaults));
+  const conf = new Conf(Object.assign({}, new Defaults().defaults));
 
   // prevent keys with undefined values from obscuring defaults
   // prettier-ignore
