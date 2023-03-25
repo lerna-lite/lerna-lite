@@ -83,7 +83,7 @@ function diffSinceIn(
         .sync('**/*/package.json', {
           cwd: formattedLocation,
           nodir: true,
-          ignore: '**/node_modules/**',
+          ignore: ['**/node_modules/**'],
         } as GlobbyOptions)
         .map((file) => `:^${formattedLocation}/${path.dirname(file)}`);
     }
