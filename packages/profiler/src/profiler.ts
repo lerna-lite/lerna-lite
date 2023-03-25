@@ -5,6 +5,13 @@ import upath from 'upath';
 
 import { ProfilerConfig, TraceEvent } from './models';
 
+const getTimeBasedFilename = () => {
+  const now = new Date(); // 2011-10-05T14:48:00.000Z
+  const datetime = now.toISOString().split('.')[0]; // 2011-10-05T14:48:00
+  const datetimeNormalized = datetime.replace(/-|:/g, ''); // 20111005T144800
+  return `Lerna-Profile-${datetimeNormalized}.json`;
+};
+
 export function generateProfileOutputPath(outputDirectory?: string) {
   return upath.join(upath.resolve(outputDirectory || '.'), getTimeBasedFilename());
 }
@@ -20,13 +27,6 @@ const range = (len: number) => {
       .fill()
       .map((_, idx) => idx)
   );
-};
-
-const getTimeBasedFilename = () => {
-  const now = new Date(); // 2011-10-05T14:48:00.000Z
-  const datetime = now.toISOString().split('.')[0]; // 2011-10-05T14:48:00
-  const datetimeNormalized = datetime.replace(/-|:/g, ''); // 20111005T144800
-  return `Lerna-Profile-${datetimeNormalized}.json`;
 };
 
 /**

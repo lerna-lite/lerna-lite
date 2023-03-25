@@ -151,7 +151,9 @@ export class WatchCommand extends Command<WatchCommandOption & FilterOptions> {
 
     return new Promise((resolve) => {
       // once we reached emit change stability threshold, we'll fire events for each packages & events while the file paths array will be merged
-      if (this._timer) clearTimeout(this._timer as NodeJS.Timeout);
+      if (this._timer) {
+        clearTimeout(this._timer as NodeJS.Timeout);
+      }
 
       // chokidar triggers events for every single file change (add, unlink, ...),
       // so in order for us to merge all changes and return them under a single lerna watch event we need to wait a certain delay

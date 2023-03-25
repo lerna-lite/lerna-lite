@@ -7,7 +7,7 @@ import { VersionCommandOption } from '@lerna-lite/core';
  * @see https://github.com/yargs/yargs/blob/master/docs/advanced.md#providing-a-command-module
  */
 
-let addBumpPositionalFn = function (yargs: any, additionalKeywords: string[] = []) {
+const addBumpPositionalFn = function (yargs: any, additionalKeywords: string[] = []) {
   const semverKeywords = ['major', 'minor', 'patch', 'premajor', 'preminor', 'prepatch', 'prerelease'].concat(
     additionalKeywords
   );

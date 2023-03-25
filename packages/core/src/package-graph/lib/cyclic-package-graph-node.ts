@@ -10,6 +10,7 @@ let lastCollapsedNodeId = 0;
  *
  * @extends {Map<string, import('..').PackageGraphNode | CyclicPackageGraphNode>}
  */
+// eslint-disable-next-line no-use-before-define
 export class CyclicPackageGraphNode extends Map<string, PackageGraphNode | CyclicPackageGraphNode> {
   name: string;
   localDependencies: Map<string, any>;

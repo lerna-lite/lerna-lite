@@ -43,14 +43,12 @@ import { logOutput, promptConfirmation, PublishCommandOption, throwIfUncommitted
 // helpers
 import { gitTag } from '@lerna-test/helpers';
 import { loggingOutput } from '@lerna-test/helpers/logging-output';
-import { commandRunner, initFixtureFactory } from '@lerna-test/helpers';
+import { initFixtureFactory } from '@lerna-test/helpers';
 const initFixture = initFixtureFactory(__dirname);
 
 // test command
 import yargParser from 'yargs-parser';
 import { PublishCommand } from '../publish-command';
-import cliCommands from '../../../cli/src/cli-commands/cli-publish-commands';
-const lernaPublish = commandRunner(cliCommands);
 
 const createArgv = (cwd, ...args) => {
   args.unshift('publish');

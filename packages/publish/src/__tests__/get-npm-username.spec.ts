@@ -5,7 +5,7 @@ import { loggingOutput } from '@lerna-test/helpers/logging-output';
 import { getNpmUsername } from '../lib/get-npm-username';
 import { FetchConfig } from '@lerna-lite/core';
 
-(fetch.json as jest.Mock).mockImplementation(() => Promise.resolve({ username: 'lerna-test' }));
+(fetch.json as unknown as jest.Mock).mockImplementation(() => Promise.resolve({ username: 'lerna-test' }));
 
 describe('getNpmUsername', () => {
   const origConsoleError = console.error;
@@ -19,7 +19,7 @@ describe('getNpmUsername', () => {
   });
 
   test('fetches whoami endpoint after profile 404', async () => {
-    (fetch.json as jest.Mock).mockImplementationOnce(() => {
+    (fetch.json as unknown as jest.Mock).mockImplementationOnce(() => {
       const err = new Error('third-party profile fail') as Error & { code: string };
 
       err.code = 'E404';
@@ -35,7 +35,7 @@ describe('getNpmUsername', () => {
   });
 
   test('throws an error when successful fetch yields empty username', async () => {
-    (fetch.json as jest.Mock).mockImplementationOnce(() => Promise.resolve({ username: undefined }));
+    (fetch.json as unknown as jest.Mock).mockImplementationOnce(() => Promise.resolve({ username: undefined }));
 
     await expect(getNpmUsername({ stub: true } as unknown as FetchConfig)).rejects.toThrow(
       'You must be logged in to publish packages. Use `npm login` and try again.'
@@ -44,14 +44,14 @@ describe('getNpmUsername', () => {
   });
 
   test('logs failure message before throwing validation error', async () => {
-    (fetch.json as jest.Mock).mockImplementationOnce(() => {
+    (fetch.json as unknown as jest.Mock).mockImplementationOnce(() => {
       const err = new Error('legacy npm Enterprise profile fail') as Error & { code: string };
 
       err.code = 'E500';
 
       return Promise.reject(err);
     });
-    (fetch.json as jest.Mock).mockImplementationOnce(() => {
+    (fetch.json as unknown as jest.Mock).mockImplementationOnce(() => {
       const err = new Error('third-party whoami fail') as Error & { code: string };
 
       err.code = 'E404';
@@ -68,7 +68,7 @@ describe('getNpmUsername', () => {
   });
 
   test('logs failure message when npm returns forbidden response', async () => {
-    fetch.json.mockImplementationOnce(() => {
+    (fetch.json as unknown as jest.Mock).mockImplementationOnce(() => {
       const err = new Error('npm profile fail due to insufficient permissions') as Error & { code: string };
 
       err.code = 'E403';
@@ -85,7 +85,7 @@ describe('getNpmUsername', () => {
   });
 
   test('allows third-party registries to fail with a stern warning', async () => {
-    (fetch.json as jest.Mock).mockImplementationOnce(() => {
+    (fetch.json as unknown as jest.Mock).mockImplementationOnce(() => {
       const err = new Error('many third-party registries do not support npm whoami') as Error & { code: string };
 
       err.code = 'E401';

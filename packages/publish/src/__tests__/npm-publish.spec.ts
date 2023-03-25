@@ -27,7 +27,9 @@ describe('npm-publish', () => {
 
   (fs.readFile as any).mockName('fs.readFile').mockResolvedValue(mockTarData);
   (publish as jest.Mock).mockName('libnpmpublish').mockResolvedValue(null);
-  (readJSON as jest.Mock).mockName('read-package-json').mockImplementation((file, cb) => cb(null, mockManifest));
+  (readJSON as unknown as jest.Mock)
+    .mockName('read-package-json')
+    .mockImplementation((file, cb) => cb(null, mockManifest));
   (runLifecycle as jest.Mock).mockName('@lerna-lite/core').mockResolvedValue(null);
 
   const tarFilePath = '/tmp/test-1.10.100.tgz';
@@ -68,7 +70,7 @@ describe('npm-publish', () => {
   });
 
   it('overrides pkg.publishConfig.tag when opts.tag is explicitly configured', async () => {
-    (readJSON as jest.Mock).mockImplementationOnce((file, cb) =>
+    (readJSON as unknown as jest.Mock).mockImplementationOnce((file, cb) =>
       cb(null, {
         publishConfig: {
           tag: 'beta',
@@ -93,7 +95,7 @@ describe('npm-publish', () => {
   });
 
   it('respects pkg.publishConfig.tag when opts.defaultTag matches default', async () => {
-    (readJSON as jest.Mock).mockImplementationOnce((file, cb) =>
+    (readJSON as unknown as jest.Mock).mockImplementationOnce((file, cb) =>
       cb(null, {
         publishConfig: {
           tag: 'beta',
@@ -129,7 +131,7 @@ describe('npm-publish', () => {
       rootPath
     );
 
-    (readJSON as jest.Mock).mockImplementationOnce((file, cb) =>
+    (readJSON as unknown as jest.Mock).mockImplementationOnce((file, cb) =>
       cb(null, {
         name: 'fancy-fancy',
         version: '1.10.100',
@@ -151,7 +153,7 @@ describe('npm-publish', () => {
   });
 
   it('merges pkg.publishConfig.registry into options', async () => {
-    (readJSON as jest.Mock).mockImplementationOnce((file, cb) =>
+    (readJSON as unknown as jest.Mock).mockImplementationOnce((file, cb) =>
       cb(null, {
         publishConfig: {
           registry: 'http://pkg-registry.com',

@@ -99,90 +99,6 @@ export interface ListCommandOption {
   toposort?: boolean;
 }
 
-export interface PublishCommandOption extends VersionCommandOption {
-  /** alias to `--canary` */
-  c?: boolean;
-
-  /** Publish packages after every successful merge using the sha as part of the tag. */
-  canary?: boolean;
-
-  /** Cleanup packed temp files/folders after publish process is finished, defaults to false. */
-  cleanupTempFiles?: boolean;
-
-  /** Specify the prerelease identifier when publishing a prerelease */
-  preid?: string;
-
-  /** Subdirectory to publish. Must apply to ALL packages. */
-  contents?: string;
-
-  /** Publish packages with the specified npm dist-tag */
-  distTag?: string;
-
-  /** Legacy Base64 Encoded username and password. */
-  legacyAuth?: string;
-
-  /** Publish prerelease packages with the specified npm dist-tag */
-  preDistTag?: string;
-
-  /** Explicit SHA to set as gitHead when packing tarballs, only allowed with "from-package" positional. */
-  gitHead?: string;
-
-  /** Type of dependency to use when determining package hierarchy. */
-  graphType: 'all' | 'dependencies';
-
-  /** Disable deprecated "prepublish" lifecycle script */
-  ignorePrepublish?: boolean;
-
-  /** Disable all lifecycle scripts */
-  ignoreScripts?: boolean;
-
-  // TODO: (major) make `--no-granular-pathspec` the default
-  /** Do not reset changes file-by-file, but globally. */
-  noGranularPathspec?: boolean;
-
-  /** proxy for `--no-granular-pathspec` */
-  granularPathspec?: boolean;
-
-  /** Supply a one-time password for publishing with two-factor authentication. */
-  otp?: string;
-
-  /** apply publishConfig overrides. */
-  publishConfigOverrides?: boolean;
-
-  /** Use the specified registry for all npm client operations. */
-  registry?: string;
-
-  /** Remove fields from each package.json before publishing them to the registry, removing fields from a complex object is also supported via the dot notation (ie "scripts.build") */
-  removePackageFields?: string[];
-
-  /** @deprecated Execute ./scripts/prepublish.js and ./scripts/postpublish.js, relative to package root. */
-  requireScripts?: boolean;
-
-  /** Do not reset changes to working tree after publishing is complete. */
-  noGitReset?: boolean;
-
-  // proxy for `--no-git-reset`
-  gitReset?: boolean;
-
-  /** Create a temporary tag while publishing. */
-  tempTag?: boolean;
-
-  /** Do not verify package read-write access for current npm user. */
-  noVerifyAccess?: boolean;
-
-  /** Generate a json summary report after all packages have been successfully published, you can pass an optional path for where to save the file. */
-  summaryFile?: boolean | string;
-
-  /** proxy for `--no-verify-access` */
-  verifyAccess?: boolean;
-
-  /** alias to `--yes` */
-  y?: boolean;
-
-  /** Skip all confirmation prompts. */
-  yes?: boolean;
-}
-
 export interface VersionCommandOption {
   /** Specify which branches to allow versioning from. */
   allowBranch?: string[];
@@ -364,6 +280,90 @@ export interface VersionCommandOption {
    * Future version will make `workspace:` protocol as strict matching at all time, so this flag becomes redundant.
    */
   workspaceStrictMatch?: boolean;
+
+  /** alias to `--yes` */
+  y?: boolean;
+
+  /** Skip all confirmation prompts. */
+  yes?: boolean;
+}
+
+export interface PublishCommandOption extends VersionCommandOption {
+  /** alias to `--canary` */
+  c?: boolean;
+
+  /** Publish packages after every successful merge using the sha as part of the tag. */
+  canary?: boolean;
+
+  /** Cleanup packed temp files/folders after publish process is finished, defaults to false. */
+  cleanupTempFiles?: boolean;
+
+  /** Specify the prerelease identifier when publishing a prerelease */
+  preid?: string;
+
+  /** Subdirectory to publish. Must apply to ALL packages. */
+  contents?: string;
+
+  /** Publish packages with the specified npm dist-tag */
+  distTag?: string;
+
+  /** Legacy Base64 Encoded username and password. */
+  legacyAuth?: string;
+
+  /** Publish prerelease packages with the specified npm dist-tag */
+  preDistTag?: string;
+
+  /** Explicit SHA to set as gitHead when packing tarballs, only allowed with "from-package" positional. */
+  gitHead?: string;
+
+  /** Type of dependency to use when determining package hierarchy. */
+  graphType: 'all' | 'dependencies';
+
+  /** Disable deprecated "prepublish" lifecycle script */
+  ignorePrepublish?: boolean;
+
+  /** Disable all lifecycle scripts */
+  ignoreScripts?: boolean;
+
+  // TODO: (major) make `--no-granular-pathspec` the default
+  /** Do not reset changes file-by-file, but globally. */
+  noGranularPathspec?: boolean;
+
+  /** proxy for `--no-granular-pathspec` */
+  granularPathspec?: boolean;
+
+  /** Supply a one-time password for publishing with two-factor authentication. */
+  otp?: string;
+
+  /** apply publishConfig overrides. */
+  publishConfigOverrides?: boolean;
+
+  /** Use the specified registry for all npm client operations. */
+  registry?: string;
+
+  /** Remove fields from each package.json before publishing them to the registry, removing fields from a complex object is also supported via the dot notation (ie "scripts.build") */
+  removePackageFields?: string[];
+
+  /** @deprecated Execute ./scripts/prepublish.js and ./scripts/postpublish.js, relative to package root. */
+  requireScripts?: boolean;
+
+  /** Do not reset changes to working tree after publishing is complete. */
+  noGitReset?: boolean;
+
+  // proxy for `--no-git-reset`
+  gitReset?: boolean;
+
+  /** Create a temporary tag while publishing. */
+  tempTag?: boolean;
+
+  /** Do not verify package read-write access for current npm user. */
+  noVerifyAccess?: boolean;
+
+  /** Generate a json summary report after all packages have been successfully published, you can pass an optional path for where to save the file. */
+  summaryFile?: boolean | string;
+
+  /** proxy for `--no-verify-access` */
+  verifyAccess?: boolean;
 
   /** alias to `--yes` */
   y?: boolean;

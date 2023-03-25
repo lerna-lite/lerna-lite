@@ -4,10 +4,12 @@ import npa from 'npm-package-arg';
 import { Package } from '../package';
 import { InitCommandOption, PublishCommandOption, RunCommandOption, VersionCommandOption } from './command-options';
 
+/* eslint-disable no-use-before-define */
 export type JsonObject = { [Key in string]: JsonValue } & { [Key in string]?: JsonValue | undefined };
 export type JsonArray = JsonValue[];
 export type JsonPrimitive = string | number | boolean | null;
 export type JsonValue = JsonPrimitive | JsonObject | JsonArray;
+/* eslint-enable no-use-before-define */
 
 export interface CommandOptions {
   rollPublish?: boolean;

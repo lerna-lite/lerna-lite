@@ -1,4 +1,4 @@
-let mockNotice = jest.fn();
+const mockNotice = jest.fn();
 jest.mock('npmlog', () => ({
   ...(jest.requireActual('npmlog') as any),
   notice: mockNotice,

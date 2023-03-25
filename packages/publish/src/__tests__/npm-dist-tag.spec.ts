@@ -21,7 +21,7 @@ const baseOptions = Object.freeze({
   defaultTag: 'latest',
 });
 
-(fetch as jest.Mock).mockImplementation(() => Promise.resolve());
+(fetch as unknown as jest.Mock).mockImplementation(() => Promise.resolve());
 (fetch as any).json.mockImplementation(() => Promise.resolve({}));
 
 describe('npmDistTag.add()', () => {

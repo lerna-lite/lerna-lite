@@ -172,7 +172,7 @@ describe('runLifecycle()', () => {
 
     await runLifecycle(pkg as Package, stage, opts as unknown as LifecycleConfig);
 
-    const callOpts = runScript.mock.calls.pop().pop();
+    const callOpts = (runScript as any).mock.calls.pop().pop();
 
     expect(callOpts).not.toHaveProperty('config.log');
     expect(callOpts).not.toHaveProperty('config.logstream');
@@ -207,7 +207,7 @@ describe('createRunner', () => {
   });
 
   it('logs stdout from runScript() response', async () => {
-    runScript.mockImplementationOnce(({ pkg, event }) => {
+    (runScript as unknown as jest.Mock).mockImplementationOnce(() => {
       return Promise.resolve({ stdout: 'runScript output' });
     });
 
@@ -224,7 +224,7 @@ describe('createRunner', () => {
   });
 
   it('logs script error and re-throws', async () => {
-    runScript.mockImplementationOnce(({ pkg, event }) => {
+    (runScript as unknown as jest.Mock).mockImplementationOnce(({ pkg, event }) => {
       const err: any = new Error('boom');
 
       err.code = 123;
@@ -253,7 +253,7 @@ describe('createRunner', () => {
   });
 
   it('defaults error exit code to 1', async () => {
-    runScript.mockImplementationOnce(({ pkg, event }) => {
+    (runScript as unknown as jest.Mock).mockImplementationOnce(({ pkg, event }) => {
       const err: any = new Error('kersplode');
 
       // errno only gets added when a proc closes, not from error

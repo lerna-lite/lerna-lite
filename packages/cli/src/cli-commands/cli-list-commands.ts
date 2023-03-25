@@ -19,7 +19,7 @@ export default {
   handler: async (argv: ListCommandOption) => {
     try {
       // @ts-ignore
-      // eslint-disable-next-line import/no-unresolved
+      // eslint-disable-next-line
       const { ListCommand } = await import('@lerna-lite/list');
       new ListCommand(argv);
     } catch (err: unknown) {
