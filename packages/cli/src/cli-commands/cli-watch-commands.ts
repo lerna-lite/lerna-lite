@@ -151,7 +151,7 @@ export default {
   handler: async (argv: WatchCommandOption) => {
     try {
       // @ts-ignore
-      // eslint-disable-next-line import/no-unresolved
+      // eslint-disable-next-line
       const { WatchCommand } = await import('@lerna-lite/watch');
       new WatchCommand(argv);
     } catch (err: unknown) {

@@ -20,7 +20,7 @@ describe('RunCommand', () => {
 
   describe('in a repo powered by Nx', () => {
     let testDir;
-    let errorSpy = jest.fn();
+    const errorSpy = jest.fn();
 
     beforeAll(async () => {
       testDir = await initFixture('powered-by-nx');

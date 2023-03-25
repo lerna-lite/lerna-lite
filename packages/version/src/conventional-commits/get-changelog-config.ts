@@ -18,6 +18,7 @@ export class GetChangelogConfig {
   ): Promise<ChangelogConfig> {
     log.verbose('getChangelogConfig', 'Attempting to resolve preset %j', presetPackageName);
 
+    // eslint-disable-next-line @typescript-eslint/no-var-requires
     let config = require(presetPackageName);
 
     log.info('getChangelogConfig', 'Successfully resolved preset %j', presetPackageName);

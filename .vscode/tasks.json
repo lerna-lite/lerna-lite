@@ -8,6 +8,12 @@
       "problemMatcher": []
     },
     {
+      "label": "Full Build Library",
+      "type": "shell",
+      "command": "npm run build:full",
+      "problemMatcher": []
+    },
+    {
       "label": "Run Jest Unit Tests (watch)",
       "type": "shell",
       "command": "npm run jest:watch",

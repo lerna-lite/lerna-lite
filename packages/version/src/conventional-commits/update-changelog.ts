@@ -94,7 +94,7 @@ export async function updateChangelog(pkg: Package, type: ChangelogType, updateO
     getStream(changelogStream).then(makeBumpOnlyFilter(pkg)),
     readExistingChangelog(pkg),
   ]).then(([inputEntry, [changelogFileLoc, changelogContents]]) => {
-    let newEntry = inputEntry;
+    const newEntry = inputEntry;
 
     log.silly(type, 'writing new entry: %j', newEntry);
 

@@ -28,7 +28,7 @@ describe('CLI', () => {
   });
 
   it('should call lerna CLI when lerna not found locally', async () => {
-    let { lerna } = await import('../lerna-entry');
+    const { lerna } = await import('../lerna-entry');
 
     await import('../cli');
 

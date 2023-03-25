@@ -16,7 +16,7 @@ export default {
   handler: async (argv: DiffCommandOption) => {
     try {
       // @ts-ignore
-      // eslint-disable-next-line import/no-unresolved
+      // eslint-disable-next-line
       const { DiffCommand } = await import('@lerna-lite/diff');
       new DiffCommand(argv);
     } catch (err: unknown) {

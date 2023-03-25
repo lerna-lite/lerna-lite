@@ -34,6 +34,25 @@ export interface ChangelogConfig {
   writerOpts: WriterOptions;
 }
 
+export interface ReleaseNote {
+  name: string;
+  notes?: string;
+}
+
+export type RemoteCommit = {
+  /** git commit author name */
+  authorName: string;
+
+  /** remote client login (ie github login) */
+  login: string;
+
+  /** commit message headling (50 chars maxlen) */
+  message: string;
+
+  /** short commit hash (7 chars long) */
+  shortHash: string;
+};
+
 export interface UpdateChangelogOption {
   changelogHeaderMessage?: string;
   changelogVersionMessage?: string;
@@ -94,22 +113,3 @@ export interface ReleaseOptions {
   gitRemote: string;
   execOpts: ExecOpts;
 }
-
-export interface ReleaseNote {
-  name: string;
-  notes?: string;
-}
-
-export type RemoteCommit = {
-  /** git commit author name */
-  authorName: string;
-
-  /** remote client login (ie github login) */
-  login: string;
-
-  /** commit message headling (50 chars maxlen) */
-  message: string;
-
-  /** short commit hash (7 chars long) */
-  shortHash: string;
-};

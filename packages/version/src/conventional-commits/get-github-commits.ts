@@ -7,6 +7,21 @@ import { RemoteCommit } from '../models';
 
 const QUERY_PAGE_SIZE = 100; // GitHub API is restricting max of 100 per query
 
+interface GraphqlCommitHistoryData {
+  nodes: Array<{ oid: string; message: string; author: { name: string; user: { login: string } } }>;
+  pageInfo: { hasNextPage: boolean; endCursor: string; startCursor: string };
+}
+
+interface GraphqlCommitClientData {
+  repository?: {
+    ref?: {
+      target?: {
+        history?: GraphqlCommitHistoryData;
+      };
+    };
+  };
+}
+
 /**
  * Get all commits from GitHub remote repository, using GitHub Graphql API, by providing a date to query from
  * https://docs.github.com/en/graphql/reference/objects#repository
@@ -72,19 +87,4 @@ export async function getGithubCommits(
   log.verbose('github', 'found %s commits since last release timestamp %s', remoteCommits.length, sinceDate);
 
   return remoteCommits;
-}
-
-interface GraphqlCommitClientData {
-  repository?: {
-    ref?: {
-      target?: {
-        history?: GraphqlCommitHistoryData;
-      };
-    };
-  };
-}
-
-interface GraphqlCommitHistoryData {
-  nodes: Array<{ oid: string; message: string; author: { name: string; user: { login: string } } }>;
-  pageInfo: { hasNextPage: boolean; endCursor: string; startCursor: string };
 }
