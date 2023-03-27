@@ -231,7 +231,7 @@ export class RunCommand extends Command<RunCommandOption & FilterOptions> {
     performance.mark('init-local');
     await this.configureNxOutput();
     const { extraOptions, targetDependencies, options } = await this.prepNxOptions();
-    if (this.packagesWithScript.length === 1) {
+    if (this.packagesWithScript.length === 1 && !Array.isArray(this.script)) {
       const { runOne } = await import('nx/src/command-line/run-one');
       const fullQualifiedTarget =
         this.packagesWithScript.map((p) => p.name)[0] + ':' + this.escapeScriptNameQuotes(this.script);
