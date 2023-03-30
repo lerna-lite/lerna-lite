@@ -46,6 +46,7 @@
     'p-queue',
     'p-reduce',
     'pify',
+    'pnpm', // delay pnpm v8 until next major since it requires Node 16
     'slash',
     'temp-dir',
     'load-json-file',
