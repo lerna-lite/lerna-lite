@@ -96,7 +96,7 @@
     "normalize-newline": "^3.0.0",
     "normalize-path": "^3.0.0",
     "npmlog": "^7.0.1",
-    "nx": "15.8.9",
+    "nx": "15.9.1",
     "path": "0.12.7",
     "prettier": "^2.8.7",
     "rimraf": "^4.4.1",
@@ -108,7 +108,7 @@
     "ts-node": "^10.9.1",
     "tslib": "^2.5.0",
     "tsm": "^2.3.0",
-    "typescript": "^5.0.2",
+    "typescript": "^5.0.3",
     "write-json-file": "^4.3.0"
   },
   "pnpm": {
