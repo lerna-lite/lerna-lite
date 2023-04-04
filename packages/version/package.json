@@ -66,7 +66,7 @@
     "is-stream": "^3.0.0",
     "load-json-file": "^7.0.1",
     "make-dir": "^3.1.0",
-    "minimatch": "^7.4.3",
+    "minimatch": "^7.4.5",
     "new-github-release-url": "^2.0.0",
     "node-fetch": "^3.3.1",
     "npm-package-arg": "^10.1.0",
