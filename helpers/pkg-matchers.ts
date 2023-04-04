@@ -1,5 +1,5 @@
-import fs from 'node:fs';
-import path from 'path';
+import { accessSync, constants, readdirSync } from 'node:fs';
+import { join as pathJoin } from 'node:path';
 import semver from 'semver';
 
 import { Package } from '../packages/core/src/package.js';
@@ -109,7 +109,7 @@ export function toHaveBinaryLinks(received, ...inputs) {
   let found;
 
   try {
-    found = fs.readdirSync(pkg.binLocation);
+    found = readdirSync(pkg.binLocation);
   } catch (err) {
     if (links.length === 0 && err.code === 'ENOENT') {
       return {
@@ -153,10 +153,10 @@ export function toHaveExecutables(received, ...files) {
   const expectation = `${expectedFiles} ${expectedAction}`;
 
   // eslint-disable-next-line prefer-destructuring
-  const X_OK = fs.constants.X_OK;
+  const X_OK = constants.X_OK;
   const failed = files.filter((file) => {
     try {
-      return fs.accessSync(path.join(pkg.location, file), X_OK);
+      return accessSync(pathJoin(pkg.location, file), X_OK);
     } catch (_) {
       return true;
     }

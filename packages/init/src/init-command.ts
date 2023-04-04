@@ -1,6 +1,6 @@
 import { Command, CommandType, exec, InitCommandOption, ProjectConfig } from '@lerna-lite/core';
 import { mkdirp } from 'fs-extra/esm';
-import path from 'path';
+import { join } from 'node:path';
 import pMap from 'p-map';
 import { writeJsonFile } from 'write-json-file';
 
@@ -54,7 +54,7 @@ export class InitCommand extends Command<InitCommandOption> {
       this.logger.info('', 'Creating package.json');
 
       // initialize with default indentation so write-pkg doesn't screw it up with tabs
-      await writeJsonFile(path.join(this.project.rootPath, 'package.json'), { name: 'root', private: true }, { indent: 2 });
+      await writeJsonFile(join(this.project.rootPath, 'package.json'), { name: 'root', private: true }, { indent: 2 });
     } else {
       this.logger.info('', 'Updating package.json');
     }

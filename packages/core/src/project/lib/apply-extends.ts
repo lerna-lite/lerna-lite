@@ -1,5 +1,5 @@
 import { readJsonSync } from 'fs-extra/esm';
-import path from 'path';
+import { dirname } from 'node:path';
 import resolveFrom from 'resolve-from';
 
 import { shallowExtend } from './shallow-extend.js';
@@ -33,7 +33,7 @@ export function applyExtends(config: { [key: string]: any }, cwd: string, seen =
 
     // deprecateConfig(defaultConfig, pathToDefault);
 
-    defaultConfig = applyExtends(defaultConfig, path.dirname(pathToDefault), seen);
+    defaultConfig = applyExtends(defaultConfig, dirname(pathToDefault), seen);
   }
 
   return shallowExtend(config, defaultConfig);

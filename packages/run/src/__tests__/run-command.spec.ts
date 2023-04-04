@@ -13,7 +13,7 @@ vi.mock('@lerna-lite/core', async () => ({
 // also point to the local run command so that all mocks are properly used even by the command-runner
 vi.mock('@lerna-lite/run', () => vi.importActual<any>('../run-command'));
 
-import fs from 'fs-extra';
+import { pathExists, readJson } from 'fs-extra/esm';
 import { globby } from 'globby';
 import { Mock } from 'vitest';
 import yargParser from 'yargs-parser';
@@ -22,10 +22,10 @@ import yargParser from 'yargs-parser';
 import { logOutput, RunCommandOption } from '@lerna-lite/core';
 
 // mocked modules
-import { fileURLToPath } from 'url';
-import path from 'path';
+import { fileURLToPath } from 'node:url';
+import { dirname } from 'node:path';
 const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
+const __dirname = dirname(__filename);
 import { npmRunScript, npmRunScriptStreaming } from '../lib/npm-run-script';
 import cliRunCommands from '../../../cli/src/cli-commands/cli-run-commands';
 
@@ -247,7 +247,7 @@ describe('RunCommand', () => {
       await lernaRun(cwd)('my-script', '--profile');
 
       const [profileLocation] = await globby('Lerna-Profile-*.json', { cwd, absolute: true });
-      const json = await fs.readJson(profileLocation);
+      const json = await readJson(profileLocation);
 
       expect(json).toMatchObject([
         {
@@ -270,9 +270,9 @@ describe('RunCommand', () => {
       await new RunCommand(createArgv(cwd, 'my-script', '--profile', '--profile-location', 'foo/bar'));
 
       const [profileLocation] = await globby('foo/bar/Lerna-Profile-*.json', { cwd, absolute: true });
-      const exists = await fs.exists(profileLocation, null as any);
+      const isExists = await pathExists(profileLocation, null as any);
 
-      expect(exists).toBe(true);
+      expect(isExists).toBe(true);
     });
   });
 

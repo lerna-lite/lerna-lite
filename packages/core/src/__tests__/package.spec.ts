@@ -1,5 +1,5 @@
-import os from 'node:os';
-import path from 'path';
+import { homedir } from 'node:os';
+import { dirname, normalize, resolve as pathResolve } from 'node:path';
 import { loadJsonFile, loadJsonFileSync } from 'load-json-file';
 import npa from 'npm-package-arg';
 import npmlog from 'npmlog';
@@ -15,10 +15,10 @@ import { Package } from '../package';
 import { NpaResolveResult, RawManifest } from '../models';
 
 const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
+const __dirname = dirname(__filename);
 
 describe('Package', () => {
-  const factory = (json) => new Package(json, path.normalize(`/root/path/to/${json.name || 'package'}`), path.normalize('/root'));
+  const factory = (json) => new Package(json, normalize(`/root/path/to/${json.name || 'package'}`), normalize('/root'));
 
   describe('get .name', () => {
     it('should return the name', () => {
@@ -30,7 +30,7 @@ describe('Package', () => {
   describe('get .location', () => {
     it('should return the location', () => {
       const pkg = factory({ name: 'get-location' });
-      expect(pkg.location).toBe(path.normalize('/root/path/to/get-location'));
+      expect(pkg.location).toBe(normalize('/root/path/to/get-location'));
     });
   });
 
@@ -48,7 +48,7 @@ describe('Package', () => {
     it('returns npa.Result relative to rootPath, always posix', () => {
       const pkg = factory({ name: 'get-resolved' });
 
-      let homeDir = os.homedir();
+      let homeDir = homedir();
 
       // on Windows, make sure to use same drive letter
       if (/([A-Z]:\\).*/i.test(__dirname)) {
@@ -58,9 +58,9 @@ describe('Package', () => {
       expect(pkg.resolved).toMatchObject({
         type: 'directory',
         name: 'get-resolved',
-        where: path.normalize('/root'),
+        where: normalize('/root'),
         // windows is so fucking ridiculous
-        fetchSpec: path.resolve(homeDir, pkg.location),
+        fetchSpec: pathResolve(homeDir, pkg.location),
       });
     });
   });
@@ -68,7 +68,7 @@ describe('Package', () => {
   describe('get .rootPath', () => {
     it('should return the rootPath', () => {
       const pkg = factory({ name: 'get-rootPath' });
-      expect(pkg.rootPath).toBe(path.normalize('/root'));
+      expect(pkg.rootPath).toBe(normalize('/root'));
     });
   });
 
@@ -90,7 +90,7 @@ describe('Package', () => {
   describe('get .contents', () => {
     it('returns pkg.location by default', () => {
       const pkg = factory({ version: '1.0.0' });
-      expect(pkg.contents).toBe(path.normalize('/root/path/to/package'));
+      expect(pkg.contents).toBe(normalize('/root/path/to/package'));
     });
 
     it('returns pkg.publishConfig.directory when present', () => {
@@ -100,7 +100,7 @@ describe('Package', () => {
           directory: 'dist',
         },
       });
-      expect(pkg.contents).toBe(path.normalize('/root/path/to/package/dist'));
+      expect(pkg.contents).toBe(normalize('/root/path/to/package/dist'));
     });
 
     it('returns pkg.location when pkg.publishConfig.directory is not present', () => {
@@ -110,7 +110,7 @@ describe('Package', () => {
           tag: 'next',
         },
       });
-      expect(pkg.contents).toBe(path.normalize('/root/path/to/package'));
+      expect(pkg.contents).toBe(normalize('/root/path/to/package'));
     });
   });
 
@@ -118,7 +118,7 @@ describe('Package', () => {
     it('sets pkg.contents to joined value', () => {
       const pkg = factory({ version: '1.0.0' });
       pkg.contents = 'dist';
-      expect(pkg.contents).toBe(path.normalize('/root/path/to/package/dist'));
+      expect(pkg.contents).toBe(normalize('/root/path/to/package/dist'));
     });
   });
 
@@ -886,14 +886,14 @@ describe('Package.lazy()', () => {
     const pkg = Package.lazy('/foo/bar');
 
     expect(pkg).toBeInstanceOf(Package);
-    expect(pkg.location).toMatch(path.normalize('/foo/bar'));
+    expect(pkg.location).toMatch(normalize('/foo/bar'));
   });
 
   it('returns package instance from package.json file argument', () => {
     const pkg = Package.lazy('/foo/bar/package.json');
 
     expect(pkg).toBeInstanceOf(Package);
-    expect(pkg.location).toMatch(path.normalize('/foo/bar'));
+    expect(pkg.location).toMatch(normalize('/foo/bar'));
   });
 
   it('returns package instance from json and dir arguments', () => {

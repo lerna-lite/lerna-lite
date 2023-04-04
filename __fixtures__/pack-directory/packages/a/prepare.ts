@@ -1,13 +1,13 @@
-import fs from 'fs';
-import path from 'path';
+import { createReadStream, createWriteStream, mkdirSync } from 'node:fs';
+import { dirname, resolve as pathResolve } from 'node:path';
 
-const sourceIndex = path.resolve('./src/index.js');
-const targetIndex = path.resolve('./dist/index.js');
+const sourceIndex = pathResolve('./src/index.js');
+const targetIndex = pathResolve('./dist/index.js');
 
-fs.mkdirSync(path.dirname(targetIndex));
+mkdirSync(dirname(targetIndex));
 
-const reader = fs.createReadStream(sourceIndex);
-const writer = fs.createWriteStream(targetIndex);
+const reader = createReadStream(sourceIndex);
+const writer = createWriteStream(targetIndex);
 
 // fs.copyFileSync is node >=8.5.0
 reader.pipe(writer);

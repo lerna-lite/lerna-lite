@@ -40,13 +40,13 @@ import { packDirectory } from '../lib/pack-directory';
 import { runLifecycle } from '@lerna-lite/core';
 
 // helpers
-import path from 'path';
-import { fileURLToPath } from 'url';
+import { dirname, join } from 'node:path';
+import { fileURLToPath } from 'node:url';
 import { loggingOutput } from '@lerna-test/helpers/logging-output';
 import { commandRunner, initFixtureFactory } from '@lerna-test/helpers';
 
 const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
+const __dirname = dirname(__filename);
 const initFixture = initFixtureFactory(__dirname);
 
 // test command
@@ -73,7 +73,7 @@ describe('lifecycle scripts', () => {
     // package-2 only has prepublish lifecycle
     expect(packDirectory).toHaveBeenCalledWith(
       expect.objectContaining({ name: 'package-2' }),
-      path.join(cwd, 'packages/package-2'),
+      join(cwd, 'packages/package-2'),
       expect.objectContaining({
         'ignore-prepublish': false,
         'ignore-scripts': false,
@@ -148,7 +148,7 @@ describe('lifecycle scripts', () => {
 
     expect(packDirectory).toHaveBeenCalledWith(
       expect.objectContaining({ name: 'package-2' }),
-      path.join(cwd, 'packages/package-2'),
+      join(cwd, 'packages/package-2'),
       expect.objectContaining({
         'ignore-prepublish': true,
       })
@@ -174,7 +174,7 @@ describe('lifecycle scripts', () => {
     );
     expect(packDirectory).toHaveBeenCalledWith(
       expect.objectContaining({ name: 'package-2' }),
-      path.join(cwd, 'packages/package-2'),
+      join(cwd, 'packages/package-2'),
       expect.objectContaining({
         'ignore-scripts': true,
       })

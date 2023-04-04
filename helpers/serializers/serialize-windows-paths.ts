@@ -1,5 +1,5 @@
 import normalizePath from 'normalize-path';
-import path from 'path';
+import { join } from 'node:path';
 
 const WHACK_WACK = /(\\)([\S]*)/g;
 
@@ -16,7 +16,7 @@ const serializeWindowsPaths = {
 };
 
 function serializeWindowsPath(match, wack, wackPath) {
-  return normalizePath(path.join(wack, wackPath));
+  return normalizePath(join(wack, wackPath));
 }
 
 export default serializeWindowsPaths;

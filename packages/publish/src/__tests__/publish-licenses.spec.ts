@@ -31,9 +31,9 @@ vi.mock('../lib/remove-temp-licenses', () => ({ removeTempLicenses: vi.fn(() => 
 vi.mock('../lib/pack-directory', async () => await vi.importActual('../lib/__mocks__/pack-directory'));
 vi.mock('../lib/npm-publish', async () => await vi.importActual('../lib/__mocks__/npm-publish'));
 
-import fs from 'fs-extra';
-import path from 'path';
-import { fileURLToPath } from 'url';
+import { remove } from 'fs-extra/esm';
+import { dirname, join } from 'node:path';
+import { fileURLToPath } from 'node:url';
 
 // mocked modules
 import { packDirectory } from '../lib/pack-directory';
@@ -42,7 +42,7 @@ import { removeTempLicenses } from '../lib/remove-temp-licenses';
 
 // helpers
 const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
+const __dirname = dirname(__filename);
 import { commandRunner, initFixtureFactory } from '@lerna-test/helpers';
 const initFixture = initFixtureFactory(__dirname);
 import { loggingOutput } from '@lerna-test/helpers/logging-output';
@@ -75,7 +75,7 @@ describe('licenses', () => {
 
     await new PublishCommand(createArgv(cwd));
 
-    expect(createTempLicenses).toHaveBeenLastCalledWith(path.join(cwd, 'LICENSE'), packagesToBeLicensed);
+    expect(createTempLicenses).toHaveBeenLastCalledWith(join(cwd, 'LICENSE'), packagesToBeLicensed);
     expect(removeTempLicenses).toHaveBeenLastCalledWith(packagesToBeLicensed);
   });
 
@@ -122,7 +122,7 @@ describe('licenses', () => {
     const cwd = await initFixture('licenses');
 
     // remove root license so warning is triggered
-    await fs.remove(path.join(cwd, 'LICENSE'));
+    await remove(join(cwd, 'LICENSE'));
 
     await lernaPublish(cwd)();
 
@@ -134,7 +134,7 @@ describe('licenses', () => {
     const cwd = await initFixture('licenses-missing');
 
     // simulate _all_ packages missing a license
-    await fs.remove(path.join(cwd, 'packages/package-2/LICENSE'));
+    await remove(join(cwd, 'packages/package-2/LICENSE'));
 
     await lernaPublish(cwd)();
 

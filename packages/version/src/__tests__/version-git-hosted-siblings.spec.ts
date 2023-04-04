@@ -18,8 +18,8 @@ vi.mock('@lerna-lite/core', async () => ({
 }));
 vi.mock('write-pkg', async () => await vi.importActual('../lib/__mocks__/write-pkg'));
 
-import path from 'path';
-import { fileURLToPath } from 'url';
+import { dirname, resolve as pathResolve } from 'node:path';
+import { fileURLToPath } from 'node:url';
 import yargParser from 'yargs-parser';
 
 // mocked module(s)
@@ -27,9 +27,9 @@ import writePkg from 'write-pkg';
 
 // helpers
 const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
+const __dirname = dirname(__filename);
 import { initFixtureFactory } from '@lerna-test/helpers';
-const initFixture = initFixtureFactory(path.resolve(__dirname, '../../../publish/src/__tests__'));
+const initFixture = initFixtureFactory(pathResolve(__dirname, '../../../publish/src/__tests__'));
 
 // test command
 import { VersionCommand } from '../version-command';

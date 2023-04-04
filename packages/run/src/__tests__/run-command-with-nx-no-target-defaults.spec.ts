@@ -15,13 +15,13 @@ import { npmRunScript, npmRunScriptStreaming } from '../lib/npm-run-script';
 import cliRunCommands from '../../../cli/src/cli-commands/cli-run-commands';
 
 // helpers
-import { fileURLToPath } from 'url';
-import path from 'path';
+import { fileURLToPath } from 'node:url';
+import { dirname } from 'node:path';
 import { Mock } from 'vitest';
 
 import { commandRunner, initFixtureFactory, loggingOutput } from '@lerna-test/helpers';
 const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
+const __dirname = dirname(__filename);
 
 const lernaRun = commandRunner(cliRunCommands);
 const initFixture = initFixtureFactory(__dirname);

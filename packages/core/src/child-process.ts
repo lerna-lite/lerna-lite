@@ -2,7 +2,7 @@ import chalk from 'chalk';
 import { execa, execaSync } from 'execa';
 import type { Options as ExecaOptions, SyncOptions as ExacaSyncOptions, ExecaChildProcess } from 'execa';
 import log from 'npmlog';
-import os from 'node:os';
+import { constants } from 'node:os';
 import logTransformer from 'strong-log-transformer';
 
 import { Package } from './package.js';
@@ -114,7 +114,7 @@ export function getExitCode(result: any) {
   // https://nodejs.org/docs/latest-v6.x/api/errors.html#errors_error_code
   // istanbul ignore else
   if (typeof result.code === 'string' || typeof result.exitCode === 'string') {
-    return os.constants.errno[result.code ?? result.exitCode];
+    return constants.errno[result.code ?? result.exitCode];
   }
 
   // istanbul ignore next: extremely weird

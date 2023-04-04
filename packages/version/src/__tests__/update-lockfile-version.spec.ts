@@ -7,13 +7,17 @@ vi.mock('@lerna-lite/core', async () => {
     execSync: vi.fn(execSync),
   };
 });
+vi.mock('node:fs', async () => ({
+  ...(await vi.importActual<any>('node:fs')),
+  renameSync: vi.fn(() => true),
+}));
 
 import npmlog from 'npmlog';
-import nodeFs from 'fs';
-import path from 'path';
 import { Mock } from 'vitest';
-import { pathExistsSync, readJSONSync } from 'fs-extra/esm';
-import { fileURLToPath } from 'url';
+import { pathExistsSync, readJsonSync } from 'fs-extra/esm';
+import { promises as fsPromises, renameSync } from 'node:fs';
+import { dirname as pathDirname, join } from 'node:path';
+import { fileURLToPath } from 'node:url';
 import { Package } from '@lerna-lite/core';
 
 // mocked or stubbed modules
@@ -21,7 +25,7 @@ import { loadJsonFile } from 'load-json-file';
 
 // helpers
 const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
+const __dirname = pathDirname(__filename);
 import { exec, execSync, Project } from '@lerna-lite/core';
 import { initFixtureFactory } from '@lerna-test/helpers';
 const initFixture = initFixtureFactory(__dirname);
@@ -44,9 +48,9 @@ describe('npm classic lock file', () => {
 
     const returnedLockfilePath = await updateClassicLockfileVersion(pkg as unknown as Package);
 
-    expect(returnedLockfilePath).toBe(path.join(pkg.location, 'package-lock.json'));
+    expect(returnedLockfilePath).toBe(join(pkg.location, 'package-lock.json'));
     expect(Array.from((loadJsonFile as any).registry.keys())).toStrictEqual(['/packages/package-1']);
-    expect(readJSONSync(returnedLockfilePath as string)).toHaveProperty('version', '2.0.0');
+    expect(readJsonSync(returnedLockfilePath as string)).toHaveProperty('version', '2.0.0');
   });
 
   test('updateClassicLockfileVersion with lockfile v2', async () => {
@@ -59,8 +63,8 @@ describe('npm classic lock file', () => {
 
     const returnedLockfilePath = await updateClassicLockfileVersion(pkg as unknown as Package);
 
-    const updatedLockfile = readJSONSync(returnedLockfilePath as string);
-    expect(returnedLockfilePath).toBe(path.join(pkg.location, 'package-lock.json'));
+    const updatedLockfile = readJsonSync(returnedLockfilePath as string);
+    expect(returnedLockfilePath).toBe(join(pkg.location, 'package-lock.json'));
     expect(Array.from((loadJsonFile as any).registry.keys())).toStrictEqual(['/packages/package-1']);
     expect(updatedLockfile).toHaveProperty('version', '2.0.0');
     expect(updatedLockfile.packages[''].dependencies['package-1']).toBe('^2.0.0');
@@ -79,7 +83,7 @@ describe('npm classic lock file', () => {
     const returnedLockfilePath = await updateClassicLockfileVersion(pkg as unknown as Package);
 
     expect(returnedLockfilePath).toBeUndefined();
-    expect(pathExistsSync(path.join(pkg.location, 'package-lock.json'))).toBe(false);
+    expect(pathExistsSync(join(pkg.location, 'package-lock.json'))).toBe(false);
   });
 });
 
@@ -87,7 +91,7 @@ describe('npm modern lock file', () => {
   test('updateModernLockfileVersion v2 in project root', async () => {
     const mockVersion = '2.4.0';
     const cwd = await initFixture('lockfile-version2');
-    const rootLockFilePath = path.join(cwd, 'package-lock.json');
+    const rootLockFilePath = join(cwd, 'package-lock.json');
     const packages = await Project.getPackages(cwd);
 
     const lockFileOutput = await loadPackageLockFileWhenExists(cwd);
@@ -100,21 +104,21 @@ describe('npm modern lock file', () => {
     }
 
     // expect(Array.from((loadJsonFile as any).registry.keys())).toStrictEqual(['/packages/package-1', '/packages/package-2', '/']);
-    expect(readJSONSync(rootLockFilePath)).toMatchSnapshot();
+    expect(readJsonSync(rootLockFilePath)).toMatchSnapshot();
   });
 });
 
 describe('validateFileExists() method', () => {
   it(`should return true when file exist`, async () => {
     const cwd = await initFixture('lockfile-version2');
-    const exists = await validateFileExists(path.join(cwd, 'package-lock.json'));
+    const exists = await validateFileExists(join(cwd, 'package-lock.json'));
 
     expect(exists).toBe(true);
   });
 
   it(`should return false when file does not exist`, async () => {
     const cwd = await initFixture('lockfile-version2');
-    const exists = await validateFileExists(path.join(cwd, 'wrong-file.json'));
+    const exists = await validateFileExists(join(cwd, 'wrong-file.json'));
 
     expect(exists).toBe(false);
   });
@@ -135,14 +139,13 @@ describe('run install lockfile-only', () => {
 
     it(`should update project root lockfile by calling npm script "npm shrinkwrap --package-lock-only" when npm version is below 8.5.0`, async () => {
       (execSync as any).mockReturnValueOnce('8.4.0');
-      const renameSpy = vi.spyOn(nodeFs, 'renameSync');
       const cwd = await initFixture('lockfile-version2');
 
       const lockFileOutput = await runInstallLockFileOnly('npm', cwd, []);
 
       expect(execSync).toHaveBeenCalledWith('npm', ['--version']);
       expect(exec).toHaveBeenCalledWith('npm', ['shrinkwrap', '--package-lock-only'], { cwd });
-      expect(renameSpy).toHaveBeenCalledWith('npm-shrinkwrap.json', 'package-lock.json');
+      expect(renameSync).toHaveBeenCalledWith('npm-shrinkwrap.json', 'package-lock.json');
       expect(lockFileOutput).toBe('package-lock.json');
     });
 
@@ -186,8 +189,7 @@ describe('run install lockfile-only', () => {
     });
 
     it(`should update project root lockfile by calling client script "pnpm install --package-lock-only"`, async () => {
-      vi.spyOn(nodeFs.promises, 'access').mockResolvedValue(true as any);
-      vi.spyOn(nodeFs, 'renameSync').mockImplementation(() => true);
+      vi.spyOn(fsPromises, 'access').mockResolvedValue(true as any);
       (exec as Mock).mockImplementationOnce(() => true);
       const cwd = await initFixture('lockfile-version2');
 
@@ -198,8 +200,7 @@ describe('run install lockfile-only', () => {
     });
 
     it(`should update project root lockfile by calling client script "pnpm install --package-lock-only" with extra npm client arguments when provided`, async () => {
-      vi.spyOn(nodeFs.promises, 'access').mockResolvedValue(true as any);
-      vi.spyOn(nodeFs, 'renameSync').mockImplementation(() => true);
+      vi.spyOn(fsPromises, 'access').mockResolvedValue(true as any);
       (exec as Mock).mockImplementationOnce(() => true);
       const cwd = await initFixture('lockfile-version2');
 
@@ -213,8 +214,7 @@ describe('run install lockfile-only', () => {
 
   describe('yarn client', () => {
     it(`should NOT update project root lockfile when yarn version is 1.0.0 and is below 2.0.0`, async () => {
-      vi.spyOn(nodeFs.promises, 'access').mockResolvedValue(true as any);
-      vi.spyOn(nodeFs, 'renameSync').mockImplementation(() => true);
+      vi.spyOn(fsPromises, 'access').mockResolvedValue(true as any);
       (exec as Mock).mockImplementationOnce(() => true);
       const cwd = await initFixture('lockfile-version2');
 
@@ -226,8 +226,7 @@ describe('run install lockfile-only', () => {
 
     it(`should update project root lockfile by calling client script "yarn install --package-lock-only"`, async () => {
       (execSync as any).mockReturnValueOnce('3.0.0');
-      vi.spyOn(nodeFs.promises, 'access').mockResolvedValue(true as any);
-      vi.spyOn(nodeFs, 'renameSync').mockImplementation(() => true);
+      vi.spyOn(fsPromises, 'access').mockResolvedValue(true as any);
       (exec as Mock).mockImplementationOnce(() => true);
       const cwd = await initFixture('lockfile-version2');
 
@@ -240,8 +239,7 @@ describe('run install lockfile-only', () => {
 
     it(`should update project root lockfile by calling client script "yarn install --package-lock-only" with extra npm client arguments when provided`, async () => {
       (execSync as any).mockReturnValueOnce('4.0.0');
-      vi.spyOn(nodeFs.promises, 'access').mockResolvedValue(true as any);
-      vi.spyOn(nodeFs, 'renameSync').mockImplementation(() => true);
+      vi.spyOn(fsPromises, 'access').mockResolvedValue(true as any);
       (exec as Mock).mockImplementationOnce(() => true);
       const cwd = await initFixture('lockfile-version2');
 

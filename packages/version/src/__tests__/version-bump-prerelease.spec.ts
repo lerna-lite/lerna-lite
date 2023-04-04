@@ -19,9 +19,9 @@ vi.mock('@lerna-lite/core', async () => ({
 // also point to the local version command so that all mocks are properly used even by the command-runner
 vi.mock('@lerna-lite/version', async () => await vi.importActual('../version-command'));
 
-import fs from 'fs-extra';
-import path from 'path';
-import { fileURLToPath } from 'url';
+import { outputFile } from 'fs-extra/esm';
+import { dirname, join, resolve as pathResolve } from 'node:path';
+import { fileURLToPath } from 'node:url';
 import yargParser from 'yargs-parser';
 // mocked modules
 import { promptTextInput, promptSelectOne, VersionCommandOption } from '@lerna-lite/core';
@@ -29,8 +29,8 @@ import { promptTextInput, promptSelectOne, VersionCommandOption } from '@lerna-l
 // helpers
 import { commandRunner, gitAdd, gitCommit, gitInit, gitTag, getCommitMessage, initFixtureFactory, showCommit } from '@lerna-test/helpers';
 const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
-const initFixture = initFixtureFactory(path.resolve(__dirname, '../../../publish/src/__tests__'));
+const __dirname = dirname(__filename);
+const initFixture = initFixtureFactory(pathResolve(__dirname, '../../../publish/src/__tests__'));
 
 import Tacks from 'tacks';
 import { temporaryDirectory } from 'tempy';
@@ -71,7 +71,7 @@ const createArgv = (cwd, ...args) => {
 
 const setupChanges = async (cwd) => {
   await gitTag(cwd, 'v1.0.1-beta.3');
-  await fs.outputFile(path.join(cwd, 'packages/package-3/hello.js'), 'world');
+  await outputFile(join(cwd, 'packages/package-3/hello.js'), 'world');
   await gitAdd(cwd, '.');
   await gitCommit(cwd, 'feat: setup');
 };
@@ -192,7 +192,7 @@ chore: Publish new release
  - pkg-b@1.0.0-bumps.2
 `);
 
-  await fs.outputFile(path.join(cwd, 'packages/pkg-a/hello.js'), 'world');
+  await outputFile(join(cwd, 'packages/pkg-a/hello.js'), 'world');
   await gitAdd(cwd, '.');
   await gitCommit(cwd, 'feat: hello world');
 

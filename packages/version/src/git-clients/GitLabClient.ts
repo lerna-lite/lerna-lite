@@ -1,6 +1,6 @@
 import fetch from 'node-fetch';
 import log from 'npmlog';
-import path from 'path';
+import { join } from 'node:path';
 
 import { GitClient, GitClientReleaseOption } from '../models/index.js';
 
@@ -35,8 +35,6 @@ export class GitLabClient implements GitClient {
   }
 
   releasesUrl(namespace: string, project: string, releaseType = 'releases'): string {
-    return new URL(
-      `${this.baseUrl}/${path.join('projects', encodeURIComponent(`${namespace}/${project}`), releaseType)}`
-    ).toString();
+    return new URL(`${this.baseUrl}/${join('projects', encodeURIComponent(`${namespace}/${project}`), releaseType)}`).toString();
   }
 }

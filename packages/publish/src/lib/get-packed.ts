@@ -1,6 +1,6 @@
-import { createReadStream } from 'fs';
+import { createReadStream } from 'node:fs';
 import { stat } from 'fs/promises';
-import path from 'path';
+import { basename } from 'node:path';
 import ssri from 'ssri';
 import tar from 'tar';
 import { Package } from '@lerna-lite/core';
@@ -60,7 +60,7 @@ export function getPacked(pkg: Package, tarFilePath: string): Promise<Tarball> {
         unpackedSize: totalEntrySize,
         shasum,
         integrity: ssri.parse(sha512[0]),
-        filename: path.basename(tarFilePath),
+        filename: basename(tarFilePath),
         files,
         entryCount: totalEntries,
         bundled: Array.from(bundled),

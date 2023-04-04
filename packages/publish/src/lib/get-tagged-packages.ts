@@ -1,4 +1,4 @@
-import path from 'path';
+import { basename, dirname, join } from 'node:path';
 import log from 'npmlog';
 import { exec, ExecOpts, PackageGraph } from '@lerna-lite/core';
 
@@ -16,8 +16,8 @@ export function getTaggedPackages(packageGraph: PackageGraph, rootPath: string, 
   // FIXME: --root is only necessary for tests :P
   return exec('git', ['diff-tree', '--name-only', '--no-commit-id', '--root', '-r', '-c', 'HEAD'], execOpts, dryRun).then(
     ({ stdout }) => {
-      const manifests = stdout.split('\n').filter((fp) => path.basename(fp) === 'package.json');
-      const locations = new Set<string>(manifests.map((fp) => path.join(rootPath, path.dirname(fp))));
+      const manifests = stdout.split('\n').filter((fp) => basename(fp) === 'package.json');
+      const locations = new Set<string>(manifests.map((fp) => join(rootPath, dirname(fp))));
 
       // @ts-ignore
       return Array.from(packageGraph.values()).filter((node: { location: string }) => locations.has(node.location));

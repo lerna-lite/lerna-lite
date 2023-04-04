@@ -1,12 +1,12 @@
-import fs from 'fs-extra';
-import path from 'path';
-import { fileURLToPath } from 'url';
+import { readFile } from 'fs/promises';
+import { dirname, join, resolve as pathResolve } from 'node:path';
+import { fileURLToPath } from 'node:url';
 import { Project } from '@lerna-lite/core';
 
 // helpers
 import { gitAdd, gitCommit, gitTag, initFixtureFactory } from '@lerna-test/helpers';
 const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
+const __dirname = dirname(__filename);
 const initFixture = initFixtureFactory(__dirname);
 
 // file under test
@@ -206,7 +206,7 @@ describe('conventional-commits', () => {
       const [pkg1, pkg2] = await Project.getPackages(cwd);
       const opts = {
         // sometimes presets return null for the level, with no actual releaseType...
-        changelogPreset: path.resolve(__dirname, '__fixtures__/fixed/scripts/null-preset.ts'),
+        changelogPreset: pathResolve(__dirname, '__fixtures__/fixed/scripts/null-preset.ts'),
       };
 
       // make a change in package-1 and package-2
@@ -391,7 +391,7 @@ describe('conventional-commits', () => {
   });
 
   describe('updateChangelog()', () => {
-    const getFileContent = ({ logPath }) => fs.readFile(logPath, 'utf8');
+    const getFileContent = ({ logPath }) => readFile(logPath, 'utf8');
 
     it('creates files if they do not exist', async () => {
       const cwd = (await initFixture('changelog-missing')) as string;
@@ -415,8 +415,8 @@ describe('conventional-commits', () => {
         updateChangelog(rootPkg as Package, 'root', { version: '1.1.0' }),
       ]);
 
-      expect(leafChangelog.logPath).toBe(path.join(pkg1.location, 'CHANGELOG.md'));
-      expect(rootChangelog.logPath).toBe(path.join(rootPkg.location, 'CHANGELOG.md'));
+      expect(leafChangelog.logPath).toBe(join(pkg1.location, 'CHANGELOG.md'));
+      expect(rootChangelog.logPath).toBe(join(rootPkg.location, 'CHANGELOG.md'));
 
       const [leafChangelogContent, rootChangelogContent] = await Promise.all([getFileContent(leafChangelog), getFileContent(rootChangelog)]);
 

@@ -1,4 +1,4 @@
-import path from 'path';
+import { resolve as pathResolve } from 'node:path';
 
 import { Conf } from '../utils/conf.js';
 import { toNerfDart } from './nerf-dart.js';
@@ -24,7 +24,7 @@ function npmConf(opts: any) {
   conf.addEnv();
   conf.loadPrefix();
 
-  const projectConf = path.resolve(conf.localPrefix, '.npmrc');
+  const projectConf = pathResolve(conf.localPrefix, '.npmrc');
   const userConf = conf.get('userconfig');
 
   /* istanbul ignore else */
@@ -38,9 +38,9 @@ function npmConf(opts: any) {
 
   /* istanbul ignore else */
   if (conf.get('prefix')) {
-    const etc = path.resolve(conf.get('prefix'), 'etc');
-    conf.root.globalconfig = path.resolve(etc, 'npmrc');
-    conf.root.globalignorefile = path.resolve(etc, 'npmignore');
+    const etc = pathResolve(conf.get('prefix'), 'etc');
+    conf.root.globalconfig = pathResolve(etc, 'npmrc');
+    conf.root.globalignorefile = pathResolve(etc, 'npmignore');
   }
 
   conf.addFile(conf.get('globalconfig'), 'global');

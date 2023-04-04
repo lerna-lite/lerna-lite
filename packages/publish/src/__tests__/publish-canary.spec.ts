@@ -20,9 +20,9 @@ vi.mock('../lib/verify-npm-package-access', async () => await vi.importActual('.
 vi.mock('../lib/get-npm-username', async () => await vi.importActual('../lib/__mocks__/get-npm-username'));
 vi.mock('../lib/get-two-factor-auth-required', async () => await vi.importActual('../lib/__mocks__/get-two-factor-auth-required'));
 vi.mock('../lib/npm-publish', async () => await vi.importActual('../lib/__mocks__/npm-publish'));
-import fs from 'fs-extra';
-import path from 'path';
-import { fileURLToPath } from 'url';
+import { outputFile } from 'fs-extra/esm';
+import { dirname, join } from 'node:path';
+import { fileURLToPath } from 'node:url';
 import { Mock } from 'vitest';
 import yargParser from 'yargs-parser';
 
@@ -35,7 +35,7 @@ import { promptConfirmation, PublishCommandOption, describeRef, throwIfUncommitt
 // helpers
 import { commandRunner, gitAdd, gitTag, gitCommit, initFixtureFactory, loggingOutput } from '@lerna-test/helpers';
 const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
+const __dirname = dirname(__filename);
 const initFixture = initFixtureFactory(__dirname);
 
 // test command
@@ -86,7 +86,7 @@ async function initTaggedFixture(fixtureName, tagVersionPrefix = 'v') {
  * @param {Array[String]..} tuples Any number of [filePath, fileContent] configs
  */
 async function setupChanges(cwd, ...tuples) {
-  await Promise.all(tuples.map(([filePath, content]) => fs.outputFile(path.join(cwd, filePath), content, 'utf8')));
+  await Promise.all(tuples.map(([filePath, content]) => outputFile(join(cwd, filePath), content, 'utf8')));
   await gitAdd(cwd, '.');
   await gitCommit(cwd, 'setup');
 }

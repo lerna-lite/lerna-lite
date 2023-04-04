@@ -1,7 +1,7 @@
 import { loadJsonFile, loadJsonFileSync } from 'load-json-file';
 import npa from 'npm-package-arg';
 import npmlog from 'npmlog';
-import path from 'path';
+import { basename, dirname, join, resolve as pathResolve, relative } from 'node:path';
 import { writePackage } from 'write-pkg';
 
 import { CommandType, NpaResolveResult, RawManifest } from './models/index.js';
@@ -59,8 +59,8 @@ export class Package {
    */
   static lazy(ref: string | Package | RawManifest, dir = '.'): Package {
     if (typeof ref === 'string') {
-      const location = path.resolve(path.basename(ref) === 'package.json' ? path.dirname(ref) : ref);
-      const manifest = loadJsonFileSync<RawManifest>(path.join(location, 'package.json'));
+      const location = pathResolve(basename(ref) === 'package.json' ? dirname(ref) : ref);
+      const manifest = loadJsonFileSync<RawManifest>(join(location, 'package.json'));
 
       return new Package(manifest, location);
     }
@@ -81,7 +81,7 @@ export class Package {
    */
   constructor(pkg: RawManifest, location: string, rootPath = location) {
     // npa will throw an error if the name is invalid
-    const resolved = npa.resolve(pkg?.name ?? '', `file:${path.relative(rootPath, location)}`, rootPath);
+    const resolved = npa.resolve(pkg?.name ?? '', `file:${relative(rootPath, location)}`, rootPath);
 
     this.name = pkg?.name ?? '';
     this[PKG] = pkg;
@@ -124,7 +124,7 @@ export class Package {
   }
 
   get binLocation(): string {
-    return path.join(this.location, 'node_modules', '.bin');
+    return join(this.location, 'node_modules', '.bin');
   }
 
   /** alias to pkg getter (to avoid calling duplicate prop like `node.pkg.pkg` in which node is PackageGraphNode) */
@@ -133,11 +133,11 @@ export class Package {
   }
 
   get manifestLocation(): string {
-    return path.join(this.location, 'package.json');
+    return join(this.location, 'package.json');
   }
 
   get nodeModulesLocation(): string {
-    return path.join(this.location, 'node_modules');
+    return join(this.location, 'node_modules');
   }
 
   // eslint-disable-next-line class-methods-use-this
@@ -171,7 +171,7 @@ export class Package {
 
     // if provided by pkg.publishConfig.directory value
     if (this[PKG].publishConfig && this[PKG].publishConfig.directory) {
-      return path.join(this.location, this[PKG].publishConfig.directory);
+      return join(this.location, this[PKG].publishConfig.directory);
     }
 
     // default to package root
@@ -179,7 +179,7 @@ export class Package {
   }
 
   set contents(subDirectory: string) {
-    this[_contents] = path.join(this.location, subDirectory);
+    this[_contents] = join(this.location, subDirectory);
   }
 
   // 'live' collections

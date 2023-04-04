@@ -1,7 +1,7 @@
 import chalk from 'chalk';
 import dedent from 'dedent';
 import minimatch from 'minimatch';
-import os from 'node:os';
+import { EOL as OS_EOL } from 'node:os';
 import pMap from 'p-map';
 import pPipe from 'p-pipe';
 import pReduce from 'p-reduce';
@@ -801,7 +801,7 @@ export class VersionCommand extends Command<VersionCommandOption> {
   async gitCommitAndTagVersionForUpdates() {
     const tags = this.packagesToVersion.map((pkg) => `${pkg.name}@${this.updatesVersions?.get(pkg.name)}`);
     const subject = this.options.message || 'chore: Publish new release';
-    const message = tags.reduce((msg, tag) => `${msg}${os.EOL} - ${tag}`, `${subject}${os.EOL}`);
+    const message = tags.reduce((msg, tag) => `${msg}${OS_EOL} - ${tag}`, `${subject}${OS_EOL}`);
 
     await gitCommit(message, this.gitOpts, this.execOpts, this.options.dryRun);
     for (const tag of tags) {

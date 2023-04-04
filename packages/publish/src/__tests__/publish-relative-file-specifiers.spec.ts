@@ -32,16 +32,16 @@ vi.mock('../lib/get-two-factor-auth-required', async () => await vi.importActual
 vi.mock('../lib/pack-directory', async () => await vi.importActual('../lib/__mocks__/pack-directory'));
 vi.mock('../lib/npm-publish', async () => await vi.importActual('../lib/__mocks__/npm-publish'));
 
-import fs from 'fs-extra';
-import path from 'path';
+import { outputFile } from 'fs-extra/esm';
+import { dirname, join } from 'node:path';
 
 // mocked modules
 import writePkg from 'write-pkg';
 
 // helpers
-import { fileURLToPath } from 'url';
+import { fileURLToPath } from 'node:url';
 const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
+const __dirname = dirname(__filename);
 import { commandRunner, gitAdd, gitCommit, gitTag, initFixtureFactory } from '@lerna-test/helpers';
 const initFixture = initFixtureFactory(__dirname);
 
@@ -66,7 +66,7 @@ const createArgv = (cwd, ...args) => {
 
 describe("relative 'file:' specifiers", () => {
   const setupChanges = async (cwd, pkgRoot = 'packages') => {
-    await fs.outputFile(path.join(cwd, `${pkgRoot}/package-1/hello.js`), 'world');
+    await outputFile(join(cwd, `${pkgRoot}/package-1/hello.js`), 'world');
     await gitAdd(cwd, '.');
     await gitCommit(cwd, 'setup');
   };

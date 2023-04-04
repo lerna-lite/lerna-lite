@@ -1,6 +1,6 @@
 import { Package } from '@lerna-lite/core';
 import { readFile } from 'fs/promises';
-import path from 'path';
+import { join } from 'node:path';
 
 import { BLANK_LINE, COMMIT_GUIDELINE } from './constants.js';
 
@@ -10,7 +10,7 @@ import { BLANK_LINE, COMMIT_GUIDELINE } from './constants.js';
  * @returns {Promise<[string, string]>} A tuple of changelog location and contents
  */
 export async function readExistingChangelog(pkg: Package) {
-  const changelogFileLoc = path.join(pkg.location, 'CHANGELOG.md');
+  const changelogFileLoc = join(pkg.location, 'CHANGELOG.md');
 
   let chain: Promise<any> = Promise.resolve();
 

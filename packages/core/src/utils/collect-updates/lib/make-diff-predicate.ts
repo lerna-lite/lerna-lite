@@ -1,7 +1,7 @@
 import { globbySync } from 'globby';
 import log from 'npmlog';
 import minimatch from 'minimatch';
-import path from 'path';
+import { dirname, relative } from 'node:path';
 import slash from 'slash';
 
 import { execSync } from '../../../child-process.js';
@@ -66,7 +66,7 @@ export function makeDiffPredicate(
  */
 function diffSinceIn(committish: string, location: string, execOpts: ExecOpts, diffOpts: { independentSubpackages?: boolean }) {
   const args = ['diff', '--name-only', committish];
-  const formattedLocation = slash(path.relative(execOpts.cwd, location));
+  const formattedLocation = slash(relative(execOpts.cwd, location));
 
   if (formattedLocation) {
     // avoid same-directory path.relative() === ""
@@ -78,7 +78,7 @@ function diffSinceIn(committish: string, location: string, execOpts: ExecOpts, d
         cwd: formattedLocation,
         nodir: true,
         ignore: '**/node_modules/**',
-      }).map((file) => `:^${formattedLocation}/${path.dirname(file)}`);
+      }).map((file) => `:^${formattedLocation}/${dirname(file)}`);
     }
 
     // avoid same-directory path.relative() === ""

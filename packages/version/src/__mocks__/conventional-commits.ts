@@ -1,4 +1,4 @@
-import path from 'path';
+import { join } from 'node:path';
 import semver from 'semver';
 const { outputFile } = await vi.importActual<any>('fs-extra/esm');
 
@@ -16,7 +16,7 @@ mockApplyBuildMetadata.mockImplementation((version, buildMetadata) => {
 mockRecommendVersion.mockImplementation((node) => semver.inc(node.version, 'patch'));
 
 mockUpdateChangelog.mockImplementation((pkg) => {
-  const filePath = path.join(pkg.location, 'CHANGELOG.md');
+  const filePath = join(pkg.location, 'CHANGELOG.md');
 
   // grumble grumble re-implementing the implementation
   return outputFile(filePath, 'changelog', 'utf8').then(() => ({

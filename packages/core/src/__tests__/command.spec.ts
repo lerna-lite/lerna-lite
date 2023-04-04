@@ -5,16 +5,15 @@ vi.mock('../child-process', async () => ({
   getChildProcessCount: vi.fn(() => 0),
 }));
 vi.mock('node:os', async () => ({
-  default: {
-    cpus: () => new Array(cpuCount),
-  },
+  ...(await vi.importActual<any>('node:os')),
+  cpus: () => new Array(cpuCount),
 }));
 
-import fs from 'fs-extra';
+import { outputFile, remove, readJson, writeJson } from 'fs-extra/esm';
 import log from 'npmlog';
-import path from 'path';
+import { dirname, join } from 'node:path';
 import { temporaryDirectory } from 'tempy';
-import { fileURLToPath } from 'url';
+import { fileURLToPath } from 'node:url';
 import { Mock } from 'vitest';
 
 // partially mocked
@@ -25,7 +24,7 @@ import { initFixtureFactory } from '@lerna-test/helpers';
 import { loggingOutput } from '@lerna-test/helpers/logging-output';
 import { updateLernaConfig } from '@lerna-test/helpers';
 const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
+const __dirname = dirname(__filename);
 const initFixture = initFixtureFactory(__dirname);
 
 // file under test
@@ -359,7 +358,7 @@ describe('core-command', () => {
     it('throws ENOPKG when root package.json is not found', async () => {
       const cwd = await initFixture('basic');
 
-      await fs.remove(path.join(cwd, 'package.json'));
+      await remove(join(cwd, 'package.json'));
 
       await expect(testFactory({ cwd })).rejects.toThrow(
         expect.objectContaining({
@@ -371,8 +370,8 @@ describe('core-command', () => {
     it('throws JSONError when root package.json has syntax error', async () => {
       const cwd = await initFixture('basic');
 
-      await fs.writeFile(
-        path.join(cwd, 'package.json'), // trailing comma ...v
+      await outputFile(
+        join(cwd, 'package.json'), // trailing comma ...v
         `{ "name": "invalid", "lerna": { "version": "1.0.0" }, }`
       );
 
@@ -386,7 +385,7 @@ describe('core-command', () => {
     it('throws ENOLERNA when lerna.json is not found', async () => {
       const cwd = await initFixture('basic');
 
-      await fs.remove(path.join(cwd, 'lerna.json'));
+      await remove(join(cwd, 'lerna.json'));
 
       await expect(testFactory({ cwd })).rejects.toThrow(
         expect.objectContaining({
@@ -398,8 +397,8 @@ describe('core-command', () => {
     it('throws ENOVERSION when lerna.json is empty', async () => {
       const cwd = await initFixture('basic');
 
-      const lernaConfigPath = path.join(cwd, 'lerna.json');
-      await fs.writeJson(lernaConfigPath, {});
+      const lernaConfigPath = join(cwd, 'lerna.json');
+      await writeJson(lernaConfigPath, {});
 
       await expect(testFactory({ cwd })).rejects.toThrow(
         expect.objectContaining({
@@ -411,10 +410,10 @@ describe('core-command', () => {
     it('throws ENOVERSION when no version property exists in lerna.json', async () => {
       const cwd = await initFixture('basic');
 
-      const lernaConfigPath = path.join(cwd, 'lerna.json');
-      const lernaConfig = await fs.readJson(lernaConfigPath);
+      const lernaConfigPath = join(cwd, 'lerna.json');
+      const lernaConfig = await readJson(lernaConfigPath);
       delete lernaConfig.version;
-      await fs.writeJson(lernaConfigPath, {
+      await writeJson(lernaConfigPath, {
         ...lernaConfig,
       });
 

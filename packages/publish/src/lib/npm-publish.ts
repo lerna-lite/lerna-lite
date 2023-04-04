@@ -3,7 +3,7 @@ import { OneTimePasswordCache, otplease } from '@lerna-lite/version';
 import { readFile } from 'fs/promises';
 import log from 'npmlog';
 import npa from 'npm-package-arg';
-import path from 'path';
+import { join } from 'node:path';
 import pify from 'pify';
 import { publish } from 'libnpmpublish';
 import readJSON from 'read-package-json';
@@ -60,7 +60,7 @@ export function npmPublish(
 
       if (pkg.contents !== pkg.location) {
         // 'rebase' manifest used to generated directory
-        manifestLocation = path.join(pkg.contents, 'package.json');
+        manifestLocation = join(pkg.contents, 'package.json');
       }
 
       return Promise.all([readFile(tarFilePath), readJSONAsync(manifestLocation) as RawManifest]);

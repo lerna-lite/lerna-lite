@@ -10,9 +10,9 @@ vi.mock('@lerna-lite/core', async () => ({
   throwIfUncommitted: (await vi.importActual<any>('../../../core/src/__mocks__/check-working-tree')).throwIfUncommitted,
 }));
 
-import path from 'path';
-import fs from 'fs';
-import { fileURLToPath } from 'url';
+import { dirname as pathDirname, join } from 'node:path';
+import { appendFileSync } from 'node:fs';
+import { fileURLToPath } from 'node:url';
 import yargParser from 'yargs-parser';
 
 // mocked modules
@@ -20,7 +20,7 @@ import { logOutput, VersionCommandOption } from '@lerna-lite/core';
 
 // helpers
 const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
+const __dirname = pathDirname(__filename);
 import { gitCheckout } from '@lerna-test/helpers';
 import { gitCommit } from '@lerna-test/helpers';
 import { gitMerge } from '@lerna-test/helpers';
@@ -63,20 +63,20 @@ const createArgv = (cwd, ...args) => {
 describe('version --include-merged-tags', () => {
   const setupGitChangesWithBranch = async (cwd, mainPaths, branchPaths) => {
     await gitTag(cwd, 'v1.0.0');
-    await Promise.all(mainPaths.map((fp) => fs.appendFileSync(path.join(cwd, fp), '1')));
+    await Promise.all(mainPaths.map((fp) => appendFileSync(join(cwd, fp), '1')));
     await gitAdd(cwd, '-A');
     await gitCommit(cwd, 'Commit');
     // Create release branch
     await gitCheckout(cwd, ['-b', 'release/v1.0.1']);
     // Switch into release branch
-    await Promise.all(branchPaths.map((fp) => fs.appendFileSync(path.join(cwd, fp), '1')));
+    await Promise.all(branchPaths.map((fp) => appendFileSync(join(cwd, fp), '1')));
     await gitAdd(cwd, '-A');
     await gitCommit(cwd, 'Bump');
     await gitTag(cwd, 'v1.0.1');
     await gitCheckout(cwd, ['main']);
     await gitMerge(cwd, ['--no-ff', 'release/v1.0.1']);
     // Commit after merge
-    await Promise.all(mainPaths.map((fp) => fs.appendFileSync(path.join(cwd, fp), '1')));
+    await Promise.all(mainPaths.map((fp) => appendFileSync(join(cwd, fp), '1')));
     await gitAdd(cwd, '-A');
     await gitCommit(cwd, 'Commit2');
   };

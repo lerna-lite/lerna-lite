@@ -1,7 +1,7 @@
 import { Package, QueryGraph } from '@lerna-lite/core';
 import chalk from 'chalk';
 import columnify from 'columnify';
-import path from 'path';
+import { relative } from 'node:path';
 
 import { ListableOptions } from '../models/index.js';
 
@@ -218,7 +218,7 @@ function formatColumns(resultList: ReturnType<typeof filterResultList>, viewOpti
       formatted.private = `(${chalk.red('PRIVATE')})`;
     }
 
-    formatted.location = chalk.grey(path.relative('.', result.location));
+    formatted.location = chalk.grey(relative('.', result.location));
 
     return formatted;
   }) as unknown as Package[];

@@ -20,13 +20,13 @@ vi.mock('@lerna-lite/core', async () => ({
 }));
 import { runLifecycle, VersionCommandOption } from '@lerna-lite/core';
 import { loadJsonFile } from 'load-json-file';
-import { fileURLToPath } from 'url';
-import path from 'path';
+import { fileURLToPath } from 'node:url';
+import { dirname } from 'node:path';
 import yargParser from 'yargs-parser';
 
 // helpers
 const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
+const __dirname = dirname(__filename);
 import { initFixtureFactory } from '@lerna-test/helpers';
 const initFixture = initFixtureFactory(__dirname);
 

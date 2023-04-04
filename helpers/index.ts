@@ -1,6 +1,6 @@
 import normalizeNewline from 'normalize-newline';
 import normalizePath from 'normalize-path';
-import path from 'path';
+import { relative } from 'node:path';
 
 import { Project } from '../packages/core/src/project/index.js';
 
@@ -26,7 +26,7 @@ export function multiLineTrimRight(str) {
 }
 
 export function normalizeRelativeDir(testDir, filePath) {
-  return normalizePath(path.relative(testDir, filePath));
+  return normalizePath(relative(testDir, filePath));
 }
 
 export * from './git/index.js';
