@@ -1,9 +1,9 @@
-import fs from 'fs-extra';
+import { readJsonSync } from 'fs-extra/esm';
 import path from 'path';
 import resolveFrom from 'resolve-from';
 
-import { shallowExtend } from './shallow-extend';
-import { ValidationError } from '../../validation-error';
+import { shallowExtend } from './shallow-extend.js';
+import { ValidationError } from '../../validation-error.js';
 
 /**
  * @param {{ [key: string]: unknown }} config
@@ -28,7 +28,7 @@ export function applyExtends(config: { [key: string]: any }, cwd: string, seen =
 
     seen.add(pathToDefault);
 
-    defaultConfig = fs.readJsonSync(pathToDefault, { throws: false });
+    defaultConfig = readJsonSync(pathToDefault, { throws: false });
     delete config.extends; // eslint-disable-line no-param-reassign
 
     // deprecateConfig(defaultConfig, pathToDefault);

@@ -1,6 +1,6 @@
 import path from 'path';
-import { envReplace } from './env-replace';
-import { types } from './types';
+import { envReplace } from './env-replace.js';
+import { types } from './types.js';
 
 // https://github.com/npm/npm/blob/latest/lib/config/core.js#L362-L407
 export function parseField(input: any, key: string): any {

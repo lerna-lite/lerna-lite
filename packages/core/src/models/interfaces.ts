@@ -1,8 +1,8 @@
 import log from 'npmlog';
 import npa from 'npm-package-arg';
 
-import { Package } from '../package';
-import { InitCommandOption, PublishCommandOption, RunCommandOption, VersionCommandOption } from './command-options';
+import { Package } from '../package.js';
+import { InitCommandOption, PublishCommandOption, RunCommandOption, VersionCommandOption } from './command-options.js';
 
 /* eslint-disable no-use-before-define */
 export type JsonObject = { [Key in string]: JsonValue } & { [Key in string]?: JsonValue | undefined };
@@ -118,13 +118,7 @@ export interface TopologicalConfig extends QueryGraphConfig {
   concurrency?: number;
 }
 
-export type NpaResolveResult = (
-  | npa.FileResult
-  | npa.HostedGitResult
-  | npa.URLResult
-  | npa.AliasResult
-  | npa.RegistryResult
-) & {
+export type NpaResolveResult = (npa.FileResult | npa.HostedGitResult | npa.URLResult | npa.AliasResult | npa.RegistryResult) & {
   /** the specifier part used when deailing with a `workspace:` protocol resource */
   workspaceSpec?: string;
 };

@@ -1,9 +1,9 @@
 import npa from 'npm-package-arg';
 
-import { CyclicPackageGraphNode, PackageGraphNode, reportCycles } from './lib';
-import { Package } from '../package';
-import { ValidationError } from '../validation-error';
-import { NpaResolveResult } from '../models';
+import { CyclicPackageGraphNode, PackageGraphNode, reportCycles } from './lib/index.js';
+import { Package } from '../package.js';
+import { ValidationError } from '../validation-error.js';
+import { NpaResolveResult } from '../models/index.js';
 
 /**
  * A graph of packages in the current project.
@@ -44,10 +44,7 @@ export class PackageGraph extends Map<string, PackageGraphNode> {
 
       for (const [name, locations] of seen) {
         if (locations.length > 1) {
-          throw new ValidationError(
-            'ENAME',
-            [`Package name "${name}" used in multiple packages:`, ...locations].join('\n\t')
-          );
+          throw new ValidationError('ENAME', [`Package name "${name}" used in multiple packages:`, ...locations].join('\n\t'));
         }
       }
     }

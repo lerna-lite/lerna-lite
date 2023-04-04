@@ -1,7 +1,7 @@
 import log from 'npmlog';
 
-import { execSync } from '../../../child-process';
-import { ExecOpts } from '../../../models';
+import { execSync } from '../../../child-process.js';
+import { ExecOpts } from '../../../models/index.js';
 
 /**
  * Determine if any git tags are reachable.

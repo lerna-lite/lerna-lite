@@ -1,7 +1,8 @@
-import { getFetchConfig } from './fetch-config';
-import { getProfileData } from './get-profile-data';
-import { getWhoAmI } from './get-whoami';
 import { FetchConfig, ValidationError } from '@lerna-lite/core';
+
+import { getFetchConfig } from './fetch-config.js';
+import { getProfileData } from './get-profile-data.js';
+import { getWhoAmI } from './get-whoami.js';
 
 /**
  * Retrieve username of logged-in user.
@@ -33,10 +34,7 @@ export function getNpmUsername(options: FetchConfig): Promise<string | undefined
     opts.log.silly('get npm username', 'received %j', result);
 
     if (!result.username) {
-      throw new ValidationError(
-        'ENEEDAUTH',
-        'You must be logged in to publish packages. Use `npm login` and try again.'
-      );
+      throw new ValidationError('ENEEDAUTH', 'You must be logged in to publish packages. Use `npm login` and try again.');
     }
 
     return result.username;
@@ -60,9 +58,6 @@ export function getNpmUsername(options: FetchConfig): Promise<string | undefined
       throw new ValidationError('EWHOAMI', 'Authentication error. Use `npm whoami` to troubleshoot.');
     }
 
-    opts.log.warn(
-      'EWHOAMI',
-      'Unable to determine npm username from third-party registry, this command will likely fail soon!'
-    );
+    opts.log.warn('EWHOAMI', 'Unable to determine npm username from third-party registry, this command will likely fail soon!');
   }
 }

@@ -8,8 +8,8 @@ import {
   ValidationError,
 } from '@lerna-lite/core';
 
-import { getLastCommit } from './lib/get-last-commit';
-import { hasCommit } from './lib/has-commit';
+import { getLastCommit } from './lib/get-last-commit.js';
+import { hasCommit } from './lib/has-commit.js';
 
 export function factory(argv: DiffCommandOption) {
   return new DiffCommand(argv);

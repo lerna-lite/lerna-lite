@@ -1,12 +1,12 @@
 // mocked modules
-jest.mock('@lerna-lite/core', () => ({
-  ...(jest.requireActual('@lerna-lite/core') as any), // return the other real methods, below we'll mock only 2 of the methods
-  Command: jest.requireActual('../../../core/src/command').Command,
-  conf: jest.requireActual('../../../core/src/command').conf,
-  spawn: jest.fn(() => Promise.resolve({ exitCode: 0 })),
-  spawnStreaming: jest.fn(() => Promise.resolve({ exitCode: 0 })),
-  runTopologically: jest.requireActual('../../../core/src/utils/run-topologically').runTopologically,
-  QueryGraph: jest.requireActual('../../../core/src/utils/query-graph').QueryGraph,
+vi.mock('@lerna-lite/core', async () => ({
+  ...(await vi.importActual<any>('@lerna-lite/core')),
+  Command: (await vi.importActual<any>('../../../core/src/command')).Command,
+  conf: (await vi.importActual<any>('../../../core/src/command')).conf,
+  spawn: vi.fn(() => Promise.resolve({ exitCode: 0 })),
+  spawnStreaming: vi.fn(() => Promise.resolve({ exitCode: 0 })),
+  runTopologically: (await vi.importActual<any>('../../../core/src/utils/run-topologically')).runTopologically,
+  QueryGraph: (await vi.importActual<any>('../../../core/src/utils/query-graph')).QueryGraph,
 }));
 
 let watchAddHandler;
@@ -15,10 +15,10 @@ let watchUnlinkHandler;
 let watchUnlinkDirHandler;
 let watchChangeHandler;
 let watchErrorHandler;
-const closeMock = jest.fn();
-const watchMock = jest.fn().mockImplementation(() => ({
+const closeMock = vi.fn();
+const watchMock = vi.fn().mockImplementation(() => ({
   close: closeMock,
-  on: jest.fn().mockImplementation(function (this, event, handler) {
+  on: vi.fn().mockImplementation(function (this, event, handler) {
     switch (event) {
       case 'error':
         watchErrorHandler = handler;
@@ -36,15 +36,21 @@ const watchMock = jest.fn().mockImplementation(() => ({
     return this;
   }),
 }));
-jest.mock('chokidar', () => ({ watch: watchMock }));
+vi.mock('chokidar', () => ({
+  default: {
+    watch: watchMock,
+  },
+}));
 
 // also point to the local watch command so that all mocks are properly used even by the command-runner
-jest.mock('@lerna-lite/watch', () => jest.requireActual('../watch-command'));
+vi.mock('@lerna-lite/watch', async () => await vi.importActual<any>('../watch-command.js'));
 
-// jest.useFakeTimers({ timerLimit: 100 });
+// vi.useFakeTimers({ timerLimit: 100 });
 
 import mockStdin from 'mock-stdin';
 import path from 'path';
+import { fileURLToPath } from 'url';
+import { Mock } from 'vitest';
 import yargParser from 'yargs-parser';
 
 // make sure to import the output mock
@@ -54,17 +60,19 @@ import { WatchCommandOption } from '@lerna-lite/core';
 import { spawn, spawnStreaming } from '@lerna-lite/core';
 
 // helpers
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 import { commandRunner, initFixtureFactory } from '@lerna-test/helpers';
 import { normalizeRelativeDir } from '@lerna-test/helpers';
-import { factory, WatchCommand } from '../index';
-import cliWatchCommands from '../../../cli/src/cli-commands/cli-watch-commands';
+import { factory, WatchCommand } from '../index.js';
+import cliWatchCommands from '../../../cli/src/cli-commands/cli-watch-commands.js';
 const lernaWatch = commandRunner(cliWatchCommands);
 const initFixture = initFixtureFactory(__dirname);
 
 // assertion helpers
-const calledInPackages = () => (spawn as jest.Mock).mock.calls.map(([, , opts]) => path.basename(opts.cwd));
+const calledInPackages = () => (spawn as Mock).mock.calls.map(([, , opts]) => path.basename(opts.cwd));
 const watchInPackagesStreaming = (testDir) =>
-  (spawnStreaming as jest.Mock).mock.calls.reduce((arr, [command, params, opts, prefix]) => {
+  (spawnStreaming as Mock).mock.calls.reduce((arr, [command, params, opts, prefix]) => {
     const dir = normalizeRelativeDir(testDir, opts.cwd);
     arr.push([dir, command, `(prefix: ${prefix})`].concat(params).join(' '));
     return arr;
@@ -112,7 +120,7 @@ describe('Watch Command', () => {
     });
 
     afterEach(() => {
-      jest.clearAllMocks();
+      vi.clearAllMocks();
     });
 
     it('should complain if invoked without command', async () => {
@@ -134,7 +142,7 @@ describe('Watch Command', () => {
     });
 
     it('rejects with execution error when calling chokidar on change event', async () => {
-      jest.spyOn(process, 'exit').mockImplementation((() => {}) as any);
+      vi.spyOn(process, 'exit').mockImplementation((() => {}) as any);
 
       try {
         await lernaWatch(testDir)('--bail', '--', '--shaka', '--lakka');
@@ -147,7 +155,7 @@ describe('Watch Command', () => {
     });
 
     it('should ignore execution errors with --no-bail', async () => {
-      jest.spyOn(process, 'exit').mockImplementation((() => {}) as any);
+      vi.spyOn(process, 'exit').mockImplementationOnce((() => {}) as any);
 
       await lernaWatch(testDir)('--no-bail', '--', 'lerna run --shaka', '--lakka');
       const nonZero = new Error('An actual non-zero, not git diff pager SIGPIPE');
@@ -155,16 +163,16 @@ describe('Watch Command', () => {
       watchErrorHandler(nonZero);
 
       expect(process.exitCode).toBe(1);
+
+      // reset exit code
+      process.exitCode = undefined;
     });
 
     it('should take glob input option, without slash prefix, and expect it to be appended to the file path being watch by chokidar', async () => {
       await lernaWatch(testDir)('--debounce', '0', '--glob', 'src/**/*.{ts,tsx}', '--', 'lerna run build');
 
       expect(watchMock).toHaveBeenCalledWith(
-        [
-          path.join(testDir, 'packages/package-1', '/src/**/*.{ts,tsx}'),
-          path.join(testDir, 'packages/package-2', '/src/**/*.{ts,tsx}'),
-        ],
+        [path.join(testDir, 'packages/package-1', '/src/**/*.{ts,tsx}'), path.join(testDir, 'packages/package-2', '/src/**/*.{ts,tsx}')],
         {
           ignored: ['**/.git/**', '**/dist/**', '**/node_modules/**'],
           ignoreInitial: true,
@@ -178,10 +186,7 @@ describe('Watch Command', () => {
       await lernaWatch(testDir)('--debounce', '0', '--glob', '/src/**/*.{ts,tsx}', '--', 'lerna run build');
 
       expect(watchMock).toHaveBeenCalledWith(
-        [
-          path.join(testDir, 'packages/package-1', '/src/**/*.{ts,tsx}'),
-          path.join(testDir, 'packages/package-2', '/src/**/*.{ts,tsx}'),
-        ],
+        [path.join(testDir, 'packages/package-1', '/src/**/*.{ts,tsx}'), path.join(testDir, 'packages/package-2', '/src/**/*.{ts,tsx}')],
         {
           ignored: ['**/.git/**', '**/dist/**', '**/node_modules/**'],
           ignoreInitial: true,
@@ -194,46 +199,37 @@ describe('Watch Command', () => {
     it('should be able to take --await-write-finish options as a boolean', async () => {
       await lernaWatch(testDir)('--debounce', '0', '--await-write-finish', '--', 'lerna run build');
 
-      expect(watchMock).toHaveBeenCalledWith(
-        [path.join(testDir, 'packages/package-1'), path.join(testDir, 'packages/package-2')],
-        {
-          ignored: ['**/.git/**', '**/dist/**', '**/node_modules/**'],
-          ignoreInitial: true,
-          ignorePermissionErrors: true,
-          persistent: true,
-          awaitWriteFinish: true,
-        }
-      );
+      expect(watchMock).toHaveBeenCalledWith([path.join(testDir, 'packages/package-1'), path.join(testDir, 'packages/package-2')], {
+        ignored: ['**/.git/**', '**/dist/**', '**/node_modules/**'],
+        ignoreInitial: true,
+        ignorePermissionErrors: true,
+        persistent: true,
+        awaitWriteFinish: true,
+      });
     });
 
     it('should take options prefixed with "awf" (awfPollInterval) and transform them into a valid chokidar "awaitWriteFinish" option', async () => {
       await lernaWatch(testDir)('--debounce', '0', '--awf-poll-interval', '500', '--', 'lerna run build');
 
-      expect(watchMock).toHaveBeenCalledWith(
-        [path.join(testDir, 'packages/package-1'), path.join(testDir, 'packages/package-2')],
-        {
-          ignored: ['**/.git/**', '**/dist/**', '**/node_modules/**'],
-          ignoreInitial: true,
-          ignorePermissionErrors: true,
-          persistent: true,
-          awaitWriteFinish: { pollInterval: 500 },
-        }
-      );
+      expect(watchMock).toHaveBeenCalledWith([path.join(testDir, 'packages/package-1'), path.join(testDir, 'packages/package-2')], {
+        ignored: ['**/.git/**', '**/dist/**', '**/node_modules/**'],
+        ignoreInitial: true,
+        ignorePermissionErrors: true,
+        persistent: true,
+        awaitWriteFinish: { pollInterval: 500 },
+      });
     });
 
     it('should take options prefixed with "awf" (awfStabilityThreshold) and transform them into a valid chokidar "awaitWriteFinish" option', async () => {
       await lernaWatch(testDir)('--debounce', '0', '--awf-stability-threshold', '275', '--', 'lerna run build');
 
-      expect(watchMock).toHaveBeenCalledWith(
-        [path.join(testDir, 'packages/package-1'), path.join(testDir, 'packages/package-2')],
-        {
-          ignored: ['**/.git/**', '**/dist/**', '**/node_modules/**'],
-          ignoreInitial: true,
-          ignorePermissionErrors: true,
-          persistent: true,
-          awaitWriteFinish: { stabilityThreshold: 275 },
-        }
-      );
+      expect(watchMock).toHaveBeenCalledWith([path.join(testDir, 'packages/package-1'), path.join(testDir, 'packages/package-2')], {
+        ignored: ['**/.git/**', '**/dist/**', '**/node_modules/**'],
+        ignoreInitial: true,
+        ignorePermissionErrors: true,
+        persistent: true,
+        awaitWriteFinish: { stabilityThreshold: 275 },
+      });
     });
 
     it('should execute change watch callback only in the given scope', async () => {
@@ -258,20 +254,10 @@ describe('Watch Command', () => {
     });
 
     it('should execute change watch callback with --stream in the given scope', async () => {
-      await lernaWatch(testDir)(
-        '--debounce',
-        '0',
-        '--scope',
-        'package-2',
-        '--stream',
-        '--',
-        'echo $LERNA_PACKAGE_NAME'
-      );
+      await lernaWatch(testDir)('--debounce', '0', '--scope', 'package-2', '--stream', '--', 'echo $LERNA_PACKAGE_NAME');
       await watchChangeHandler('change', path.join(testDir, 'packages/package-2/some-file.ts'));
 
-      expect(watchInPackagesStreaming(testDir)).toEqual([
-        'packages/package-2 echo $LERNA_PACKAGE_NAME (prefix: package-2)',
-      ]);
+      expect(watchInPackagesStreaming(testDir)).toEqual(['packages/package-2 echo $LERNA_PACKAGE_NAME (prefix: package-2)']);
       expect(spawnStreaming).toHaveBeenCalledTimes(1);
       expect(spawnStreaming).toHaveBeenLastCalledWith(
         'echo $LERNA_PACKAGE_NAME',
@@ -307,10 +293,7 @@ describe('Watch Command', () => {
         }),
         env: expect.objectContaining({
           LERNA_PACKAGE_NAME: 'package-2',
-          LERNA_FILE_CHANGES: [
-            path.join(testDir, 'packages/package-2/file-1.ts'),
-            path.join(testDir, 'packages/package-2/some-file.ts'),
-          ].join(' '),
+          LERNA_FILE_CHANGES: [path.join(testDir, 'packages/package-2/file-1.ts'), path.join(testDir, 'packages/package-2/some-file.ts')].join(' '),
         }),
         extendEnv: false,
         reject: true,
@@ -333,10 +316,7 @@ describe('Watch Command', () => {
         }),
         env: expect.objectContaining({
           LERNA_PACKAGE_NAME: 'package-2',
-          LERNA_FILE_CHANGES: [
-            path.join(testDir, 'packages/package-2/file-1.ts'),
-            path.join(testDir, 'packages/package-2/some-file.ts'),
-          ].join(';;'),
+          LERNA_FILE_CHANGES: [path.join(testDir, 'packages/package-2/file-1.ts'), path.join(testDir, 'packages/package-2/some-file.ts')].join(';;'),
         }),
         extendEnv: false,
         reject: true,
@@ -505,7 +485,7 @@ describe('Watch Command', () => {
     });
 
     it('should execute watch add callback and stop the watch process when typing "x" in the shell', async () => {
-      const mockExit = jest.spyOn(process, 'exit').mockImplementation((() => {}) as any);
+      const mockExit = vi.spyOn(process, 'exit').mockImplementation((() => {}) as any);
 
       try {
         // prettier-ignore

@@ -1,10 +1,10 @@
-import loadJsonFile from 'load-json-file';
+import { loadJsonFile, loadJsonFileSync } from 'load-json-file';
 import npa from 'npm-package-arg';
 import npmlog from 'npmlog';
 import path from 'path';
-import writePkg from 'write-pkg';
+import { writePackage } from 'write-pkg';
 
-import { CommandType, NpaResolveResult, RawManifest } from './models';
+import { CommandType, NpaResolveResult, RawManifest } from './models/index.js';
 
 // symbol used to 'hide' internal state
 const PKG = Symbol('pkg');
@@ -60,7 +60,7 @@ export class Package {
   static lazy(ref: string | Package | RawManifest, dir = '.'): Package {
     if (typeof ref === 'string') {
       const location = path.resolve(path.basename(ref) === 'package.json' ? path.dirname(ref) : ref);
-      const manifest = loadJsonFile.sync<RawManifest>(path.join(location, 'package.json'));
+      const manifest = loadJsonFileSync<RawManifest>(path.join(location, 'package.json'));
 
       return new Package(manifest, location);
     }
@@ -250,7 +250,7 @@ export class Package {
    * @returns {Promise} resolves when write finished
    */
   serialize() {
-    return writePkg(this.manifestLocation, this[PKG]).then(() => this);
+    return writePackage(this.manifestLocation, this[PKG]).then(() => this);
   }
 
   /**
@@ -270,11 +270,7 @@ export class Package {
     }
 
     for (const depCollection of inspectDependencies) {
-      if (
-        depCollection &&
-        (resolved.registry || resolved.type === 'directory') &&
-        /^(workspace:)+(.*)$/.test(workspaceSpec)
-      ) {
+      if (depCollection && (resolved.registry || resolved.type === 'directory') && /^(workspace:)+(.*)$/.test(workspaceSpec)) {
         if (workspaceSpec) {
           if (resolved.fetchSpec === 'latest' || resolved.fetchSpec === '') {
             npmlog.error(

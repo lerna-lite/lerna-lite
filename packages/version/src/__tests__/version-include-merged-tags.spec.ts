@@ -1,23 +1,26 @@
 // mocked modules of @lerna-lite/core
-jest.mock('@lerna-lite/core', () => ({
-  ...(jest.requireActual('@lerna-lite/core') as any), // return the other real methods, below we'll mock only 2 of the methods
-  Command: jest.requireActual('../../../core/src/command').Command,
-  conf: jest.requireActual('../../../core/src/command').conf,
-  logOutput: jest.requireActual('../../../core/src/__mocks__/output').logOutput,
-  promptConfirmation: jest.requireActual('../../../core/src/__mocks__/prompt').promptConfirmation,
-  promptSelectOne: jest.requireActual('../../../core/src/__mocks__/prompt').promptSelectOne,
-  promptTextInput: jest.requireActual('../../../core/src/__mocks__/prompt').promptTextInput,
-  throwIfUncommitted: jest.requireActual('../../../core/src/__mocks__/check-working-tree').throwIfUncommitted,
+vi.mock('@lerna-lite/core', async () => ({
+  ...(await vi.importActual<any>('@lerna-lite/core')),
+  Command: (await vi.importActual<any>('../../../core/src/command')).Command,
+  conf: (await vi.importActual<any>('../../../core/src/command')).conf,
+  logOutput: (await vi.importActual<any>('../../../core/src/__mocks__/output')).logOutput,
+  promptConfirmation: (await vi.importActual<any>('../../../core/src/__mocks__/prompt')).promptConfirmation,
+  promptSelectOne: (await vi.importActual<any>('../../../core/src/__mocks__/prompt')).promptSelectOne,
+  promptTextInput: (await vi.importActual<any>('../../../core/src/__mocks__/prompt')).promptTextInput,
+  throwIfUncommitted: (await vi.importActual<any>('../../../core/src/__mocks__/check-working-tree')).throwIfUncommitted,
 }));
 
 import path from 'path';
 import fs from 'fs';
+import { fileURLToPath } from 'url';
 import yargParser from 'yargs-parser';
 
 // mocked modules
 import { logOutput, VersionCommandOption } from '@lerna-lite/core';
 
 // helpers
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 import { gitCheckout } from '@lerna-test/helpers';
 import { gitCommit } from '@lerna-test/helpers';
 import { gitMerge } from '@lerna-test/helpers';

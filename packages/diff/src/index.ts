@@ -1,1 +1,1 @@
-export * from './diff-command';
+export * from './diff-command.js';

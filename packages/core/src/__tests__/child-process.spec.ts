@@ -11,7 +11,7 @@ describe('childProcess', () => {
     });
 
     it('should execute a command in dry-run and log the command', () => {
-      const logSpy = jest.spyOn(npmlog, 'info');
+      const logSpy = vi.spyOn(npmlog, 'info');
       execSync('echo', ['execSync'], undefined, true);
       expect(logSpy).toHaveBeenCalledWith(chalk.bold.magenta('[dry-run] >'), 'echo execSync');
     });
@@ -30,7 +30,7 @@ describe('childProcess', () => {
     });
 
     it('should execute a command in dry-run and log the command', () => {
-      const logSpy = jest.spyOn(npmlog, 'info');
+      const logSpy = vi.spyOn(npmlog, 'info');
       exec('echo', ['exec'], undefined, true);
       expect(logSpy).toHaveBeenCalledWith(chalk.bold.magenta('[dry-run] >'), 'echo exec');
     });
@@ -78,7 +78,7 @@ describe('childProcess', () => {
     });
 
     it('should execute a command in dry-run and log the command', () => {
-      const logSpy = jest.spyOn(npmlog, 'info');
+      const logSpy = vi.spyOn(npmlog, 'info');
       spawn('echo', ['-n'], undefined, true);
       expect(logSpy).toHaveBeenCalledWith(chalk.bold.magenta('[dry-run] >'), 'echo -n');
     });

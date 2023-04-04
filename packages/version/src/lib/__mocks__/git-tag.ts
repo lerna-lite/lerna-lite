@@ -1,2 +1,2 @@
-// to mock user modules, you _must_ call `jest.mock('./path/to/module')`
-export const gitTag = jest.fn(() => Promise.resolve());
+// to mock user modules, you _must_ call `vi.mock('./path/to/module')`
+export const gitTag = vi.fn(() => Promise.resolve());

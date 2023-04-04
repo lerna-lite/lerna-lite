@@ -1,7 +1,15 @@
 {
   "useTabs": false,
   "tabWidth": 2,
-  "printWidth": 120,
+  "printWidth": 130,
   "singleQuote": true,
-  "trailingComma": "es5"
+  "trailingComma": "es5",
+  "overrides": [
+    {
+      "files": ["**/*.spec.ts"],
+      "options": {
+        "printWidth": 160
+      }
+    }
+  ]
 }

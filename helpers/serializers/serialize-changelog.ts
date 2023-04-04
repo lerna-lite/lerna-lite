@@ -1,5 +1,6 @@
 import normalizeNewline from 'normalize-newline';
-import gitSHA from './serialize-git-sha';
+
+import gitSHA from './serialize-git-sha.js';
 
 const serializeChangelog = {
   serialize(str) {

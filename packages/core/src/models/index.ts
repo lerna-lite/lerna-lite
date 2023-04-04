@@ -1,2 +1,2 @@
-export * from './command-options';
-export * from './interfaces';
+export * from './command-options.js';
+export * from './interfaces.js';

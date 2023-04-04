@@ -1,7 +1,11 @@
+import path from 'path';
+import { fileURLToPath } from 'url';
 import { Package, ValidationError } from '@lerna-lite/core';
 import { loggingOutput } from '@lerna-test/helpers/logging-output';
 import lernaCLI from '../lerna-cli';
 import { initFixtureFactory } from '@lerna-test/helpers';
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 const initFixture = initFixtureFactory(__dirname);
 
 function prepare(cwd: string) {
@@ -35,14 +39,7 @@ describe('core-cli', () => {
 
     cli.command('test-cmd', 'will pass');
 
-    const { argv } = await parse(cli, [
-      'test-cmd',
-      '--loglevel=warn',
-      '--concurrency=10',
-      '--no-progress',
-      '--no-sort',
-      '--max-buffer=1024',
-    ]);
+    const { argv } = await parse(cli, ['test-cmd', '--loglevel=warn', '--concurrency=10', '--no-progress', '--no-sort', '--max-buffer=1024']);
 
     expect(argv).toMatchObject({
       loglevel: 'warn',
@@ -87,7 +84,7 @@ describe('core-cli', () => {
     expect(loggingOutput('error')).toEqual(['go boom']);
   });
 
-  xit('does not re-log ValidationError messages (async)', async () => {
+  it.skip('does not re-log ValidationError messages (async)', async () => {
     const cli = prepare(cwd);
 
     cli.command('boom', 'explodey', {}, async () => {
@@ -115,9 +112,9 @@ describe('core-cli', () => {
     expect(loggingOutput('error')).toEqual([]);
   });
 
-  xit('logs generic command errors with fallback exit code', async () => {
+  it.skip('logs generic command errors with fallback exit code', async () => {
     const cli = prepare(cwd);
-    const spy = jest.spyOn(cli, 'exit');
+    const spy = vi.spyOn(cli, 'exit');
 
     cli.command('handler', 'a generic error', {}, async () => {
       const err = new Error('yikes');
@@ -136,9 +133,9 @@ describe('core-cli', () => {
     );
   });
 
-  xit('preserves explicit exit codes', async () => {
+  it.skip('preserves explicit exit codes', async () => {
     const cli = prepare(cwd);
-    const spy = jest.spyOn(cli, 'exit');
+    const spy = vi.spyOn(cli, 'exit');
 
     cli.command('explicit', 'exit code', {}, () => {
       const err = new Error('fancy fancy') as Error & { exitCode: number };

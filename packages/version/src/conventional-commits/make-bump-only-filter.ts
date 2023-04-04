@@ -1,6 +1,6 @@
 import { Package } from '@lerna-lite/core';
 
-import { BLANK_LINE } from './constants';
+import { BLANK_LINE } from './constants.js';
 
 /**
  * @param {import("@lerna/package").Package} pkg

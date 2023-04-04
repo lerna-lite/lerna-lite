@@ -1,5 +1,5 @@
-import path from 'path';
 import normalizePath from 'normalize-path';
+import path from 'path';
 
 const WHACK_WACK = /(\\)([\S]*)/g;
 

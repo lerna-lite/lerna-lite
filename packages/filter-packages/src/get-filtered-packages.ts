@@ -1,8 +1,8 @@
 import { collectUpdates, ExecOpts, Package, PackageGraph } from '@lerna-lite/core';
 import log from 'npmlog';
 
-import { filterPackages } from './filter-packages';
-import { FilterOptions } from './models';
+import { filterPackages } from './filter-packages.js';
+import { FilterOptions } from './models/index.js';
 
 /**
  * Retrieve a list of Package instances filtered by various options.
@@ -26,13 +26,7 @@ export async function getFilteredPackages(packageGraph: PackageGraph, execOpts: 
   let chain: Promise<any> = Promise.resolve();
 
   chain = chain.then(() =>
-    filterPackages(
-      packageGraph.rawPackageList,
-      options.scope,
-      options.ignore,
-      options.private,
-      options.continueIfNoMatch
-    )
+    filterPackages(packageGraph.rawPackageList, options.scope, options.ignore, options.private, options.continueIfNoMatch)
   );
 
   if (options.since !== undefined) {

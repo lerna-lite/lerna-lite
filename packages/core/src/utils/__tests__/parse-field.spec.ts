@@ -5,23 +5,21 @@ describe('parseField()', () => {
     const input = { name: 'test', version: '^1.0.0' };
     const inputJson = JSON.stringify(input);
 
-    expect(() => parseField(`'${inputJson}'`, 'version')).toThrow(
-      `Failed parsing JSON config key version: '${inputJson}'`
-    );
+    expect(() => parseField(`'${inputJson}'`, 'version')).toThrow(`Failed parsing JSON config key version: '${inputJson}'`);
   });
 
   it("should return True when input field is 'true'", () => {
     const input = true;
     const output = parseField(`${input}`, 'version');
 
-    expect(output).toBeTrue();
+    expect(output).toBeTruthy();
   });
 
   it("should return False when input field is 'false'", () => {
     const input = false;
     const output = parseField(`${input}`, 'version');
 
-    expect(output).toBeFalse();
+    expect(output).toBeFalsy();
   });
 
   it("should return Null when input field is 'null'", () => {

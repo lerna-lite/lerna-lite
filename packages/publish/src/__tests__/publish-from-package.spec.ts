@@ -1,42 +1,37 @@
+vi.mock('write-pkg', async () => await vi.importActual('../../../version/src/lib/__mocks__/write-pkg'));
+
 // FIXME: better mock for version command
-jest.mock('../../../version/src/lib/git-push', () => jest.requireActual('../../../version/src/lib/__mocks__/git-push'));
-jest.mock('../../../version/src/lib/is-anything-committed', () =>
-  jest.requireActual('../../../version/src/lib/__mocks__/is-anything-committed')
-);
-jest.mock('../../../version/src/lib/is-behind-upstream', () =>
-  jest.requireActual('../../../version/src/lib/__mocks__/is-behind-upstream')
-);
-jest.mock('../../../version/src/lib/remote-branch-exists', () =>
-  jest.requireActual('../../../version/src/lib/__mocks__/remote-branch-exists')
-);
+vi.mock('../../../version/src/lib/git-push', async () => await vi.importActual('../../../version/src/lib/__mocks__/git-push'));
+vi.mock('../../../version/src/lib/is-anything-committed', async () => await vi.importActual('../../../version/src/lib/__mocks__/is-anything-committed'));
+vi.mock('../../../version/src/lib/is-behind-upstream', async () => await vi.importActual('../../../version/src/lib/__mocks__/is-behind-upstream'));
+vi.mock('../../../version/src/lib/remote-branch-exists', async () => await vi.importActual('../../../version/src/lib/__mocks__/remote-branch-exists'));
 
 // mocked modules, mock only certain methods from core
-jest.mock('@lerna-lite/core', () => ({
-  ...jest.requireActual('@lerna-lite/core'), // return the other real methods, below we'll mock only 2 of the methods
-  Command: jest.requireActual('../../../core/src/command').Command,
-  conf: jest.requireActual('../../../core/src/command').conf,
-  collectUpdates: jest.requireActual('../../../core/src/__mocks__/collect-updates').collectUpdates,
+vi.mock('@lerna-lite/core', async () => ({
+  ...(await vi.importActual<any>('@lerna-lite/core')),
+  Command: (await vi.importActual<any>('../../../core/src/command')).Command,
+  conf: (await vi.importActual<any>('../../../core/src/command')).conf,
+  collectUpdates: (await vi.importActual<any>('../../../core/src/__mocks__/collect-updates')).collectUpdates,
   getOneTimePassword: () => Promise.resolve('654321'),
-  logOutput: jest.requireActual('../../../core/src/__mocks__/output').logOutput,
-  promptConfirmation: jest.requireActual('../../../core/src/__mocks__/prompt').promptConfirmation,
-  throwIfUncommitted: jest.requireActual('../../../core/src/__mocks__/check-working-tree').throwIfUncommitted,
+  logOutput: (await vi.importActual<any>('../../../core/src/__mocks__/output')).logOutput,
+  promptConfirmation: (await vi.importActual<any>('../../../core/src/__mocks__/prompt')).promptConfirmation,
+  throwIfUncommitted: (await vi.importActual<any>('../../../core/src/__mocks__/check-working-tree')).throwIfUncommitted,
 }));
+vi.mock('@lerna-lite/version', async () => await vi.importActual('../../../version/src/version-command'));
 
 // local modules _must_ be explicitly mocked
-jest.mock('../lib/get-packages-without-license', () =>
-  jest.requireActual('../lib/__mocks__/get-packages-without-license')
-);
-jest.mock('../lib/verify-npm-package-access', () => jest.requireActual('../lib/__mocks__/verify-npm-package-access'));
-jest.mock('../lib/get-npm-username', () => jest.requireActual('../lib/__mocks__/get-npm-username'));
-jest.mock('../lib/get-two-factor-auth-required', () =>
-  jest.requireActual('../lib/__mocks__/get-two-factor-auth-required')
-);
-jest.mock('../lib/get-unpublished-packages', () => jest.requireActual('../lib/__mocks__/get-unpublished-packages'));
-jest.mock('../lib/pack-directory', () => jest.requireActual('../lib/__mocks__/pack-directory'));
-jest.mock('../lib/npm-publish', () => jest.requireActual('../lib/__mocks__/npm-publish'));
+vi.mock('../lib/get-packages-without-license', async () => await vi.importActual('../lib/__mocks__/get-packages-without-license'));
+vi.mock('../lib/verify-npm-package-access', async () => await vi.importActual('../lib/__mocks__/verify-npm-package-access'));
+vi.mock('../lib/get-npm-username', async () => await vi.importActual('../lib/__mocks__/get-npm-username'));
+vi.mock('../lib/get-two-factor-auth-required', async () => await vi.importActual('../lib/__mocks__/get-two-factor-auth-required'));
+vi.mock('../lib/get-unpublished-packages', async () => await vi.importActual('../lib/__mocks__/get-unpublished-packages'));
+vi.mock('../lib/pack-directory', async () => await vi.importActual('../lib/__mocks__/pack-directory'));
+vi.mock('../lib/npm-publish', async () => await vi.importActual('../lib/__mocks__/npm-publish'));
 
 import fs from 'fs-extra';
 import path from 'path';
+import { fileURLToPath } from 'url';
+import { Mock } from 'vitest';
 import yargParser from 'yargs-parser';
 
 // mocked or stubbed modules
@@ -47,6 +42,8 @@ import { logOutput, promptConfirmation, PublishCommandOption, throwIfUncommitted
 import { getUnpublishedPackages } from '../lib/get-unpublished-packages';
 
 // helpers
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 import { loggingOutput } from '@lerna-test/helpers/logging-output';
 import { initFixtureFactory } from '@lerna-test/helpers';
 const initFixture = initFixtureFactory(__dirname);
@@ -69,7 +66,7 @@ describe('publish from-package', () => {
   it('publishes unpublished packages', async () => {
     const cwd = await initFixture('normal');
 
-    (getUnpublishedPackages as jest.Mock).mockImplementationOnce((packageGraph) => {
+    (getUnpublishedPackages as Mock).mockImplementationOnce((packageGraph) => {
       const pkgs = packageGraph.rawPackageList.slice(1, 3);
       return pkgs.map((pkg) => packageGraph.get(pkg.name));
     });
@@ -84,7 +81,7 @@ describe('publish from-package', () => {
   it('publishes unpublished packages in dry-run mode', async () => {
     const cwd = await initFixture('normal');
 
-    (getUnpublishedPackages as jest.Mock).mockImplementationOnce((packageGraph) => {
+    (getUnpublishedPackages as Mock).mockImplementationOnce((packageGraph) => {
       const pkgs = packageGraph.rawPackageList.slice(1, 3);
       return pkgs.map((pkg) => packageGraph.get(pkg.name));
     });
@@ -99,7 +96,7 @@ describe('publish from-package', () => {
   it('publishes unpublished independent packages', async () => {
     const cwd = await initFixture('independent');
 
-    (getUnpublishedPackages as jest.Mock).mockImplementationOnce((packageGraph) => Array.from(packageGraph.values()));
+    (getUnpublishedPackages as Mock).mockImplementationOnce((packageGraph) => Array.from(packageGraph.values()));
 
     await new PublishCommand(createArgv(cwd, 'from-package'));
 
@@ -115,7 +112,7 @@ describe('publish from-package', () => {
   it('publishes unpublished independent packages, lexically sorted when --no-sort is present', async () => {
     const cwd = await initFixture('independent');
 
-    (getUnpublishedPackages as jest.Mock).mockImplementationOnce((packageGraph) => Array.from(packageGraph.values()));
+    (getUnpublishedPackages as Mock).mockImplementationOnce((packageGraph) => Array.from(packageGraph.values()));
 
     await new PublishCommand(createArgv(cwd, 'from-package', '--no-sort'));
 
@@ -140,7 +137,7 @@ describe('publish from-package', () => {
   });
 
   it('throws an error when uncommitted changes are present', async () => {
-    (throwIfUncommitted as jest.Mock).mockImplementationOnce(() => {
+    (throwIfUncommitted as Mock).mockImplementationOnce(() => {
       throw new Error('uncommitted');
     });
 
@@ -152,7 +149,7 @@ describe('publish from-package', () => {
   });
 
   it('does not require a git repo', async () => {
-    (getUnpublishedPackages as jest.Mock).mockImplementationOnce((packageGraph) => [packageGraph.get('package-1')]);
+    (getUnpublishedPackages as Mock).mockImplementationOnce((packageGraph) => [packageGraph.get('package-1')]);
 
     const cwd = await initFixture('independent');
 
@@ -165,14 +162,12 @@ describe('publish from-package', () => {
 
     const logMessages = loggingOutput('notice');
     expect(logMessages).toContain('Unable to verify working tree, proceed at your own risk');
-    expect(logMessages).toContain(
-      'Unable to set temporary gitHead property, it will be missing from registry metadata'
-    );
+    expect(logMessages).toContain('Unable to set temporary gitHead property, it will be missing from registry metadata');
     expect(logMessages).toContain("Unable to reset working tree changes, this probably isn't a git repo.");
   });
 
   it('accepts --git-head override', async () => {
-    (getUnpublishedPackages as jest.Mock).mockImplementationOnce((packageGraph) => [packageGraph.get('package-1')]);
+    (getUnpublishedPackages as Mock).mockImplementationOnce((packageGraph) => [packageGraph.get('package-1')]);
 
     const cwd = await initFixture('independent');
 

@@ -1,7 +1,7 @@
 import chalk from 'chalk';
 import dedent from 'dedent';
 import minimatch from 'minimatch';
-import os from 'os';
+import os from 'node:os';
 import pMap from 'p-map';
 import pPipe from 'p-pipe';
 import pReduce from 'p-reduce';
@@ -27,31 +27,31 @@ import {
   VersionCommandOption,
 } from '@lerna-lite/core';
 
-import { getCurrentBranch } from './lib/get-current-branch';
-import { createRelease, createReleaseClient } from './lib/create-release';
-import { isAnythingCommitted } from './lib/is-anything-committed';
-import { remoteBranchExists } from './lib/remote-branch-exists';
-import { isBehindUpstream } from './lib/is-behind-upstream';
-import { isBreakingChange } from './lib/is-breaking-change';
-import { gitAdd } from './lib/git-add';
-import { gitCommit } from './lib/git-commit';
-import { gitTag } from './lib/git-tag';
-import { gitPush } from './lib/git-push';
-import { makePromptVersion } from './lib/prompt-version';
+import { getCurrentBranch } from './lib/get-current-branch.js';
+import { createRelease, createReleaseClient } from './lib/create-release.js';
+import { isAnythingCommitted } from './lib/is-anything-committed.js';
+import { remoteBranchExists } from './lib/remote-branch-exists.js';
+import { isBehindUpstream } from './lib/is-behind-upstream.js';
+import { isBreakingChange } from './lib/is-breaking-change.js';
+import { gitAdd } from './lib/git-add.js';
+import { gitCommit } from './lib/git-commit.js';
+import { gitTag } from './lib/git-tag.js';
+import { gitPush } from './lib/git-push.js';
+import { makePromptVersion } from './lib/prompt-version.js';
 import {
   loadPackageLockFileWhenExists,
   updateClassicLockfileVersion,
   updateTempModernLockfileVersion,
   runInstallLockFileOnly,
   saveUpdatedLockJsonFile,
-} from './lib/update-lockfile-version';
-import { ReleaseClient, ReleaseNote, RemoteCommit } from './models';
+} from './lib/update-lockfile-version.js';
+import { ReleaseClient, ReleaseNote, RemoteCommit } from './models/index.js';
 import {
   applyBuildMetadata,
   getCommitsSinceLastRelease,
   recommendVersion,
   updateChangelog,
-} from './conventional-commits';
+} from './conventional-commits/index.js';
 
 export function factory(argv: VersionCommandOption) {
   return new VersionCommand(argv);
@@ -128,8 +128,7 @@ export class VersionCommand extends Command<VersionCommandOption> {
     this.pushToRemote = gitTagVersion && amend !== true && push;
     this.changelogIncludeCommitsClientLogin =
       changelogIncludeCommitsClientLogin === '' ? true : changelogIncludeCommitsClientLogin;
-    this.changelogIncludeCommitsGitAuthor =
-      changelogIncludeCommitsGitAuthor === '' ? true : changelogIncludeCommitsGitAuthor;
+    this.changelogIncludeCommitsGitAuthor = changelogIncludeCommitsGitAuthor === '' ? true : changelogIncludeCommitsGitAuthor;
     // never automatically push to remote when amending a commit
 
     // prettier-ignore
@@ -173,10 +172,7 @@ export class VersionCommand extends Command<VersionCommandOption> {
     if (this.requiresGit) {
       // git validation, if enabled, should happen before updates are calculated and versions picked
       if (!isAnythingCommitted(this.execOpts, this.options.dryRun)) {
-        throw new ValidationError(
-          'ENOCOMMIT',
-          'No commits in this repository. Please commit something before using version.'
-        );
+        throw new ValidationError('ENOCOMMIT', 'No commits in this repository. Please commit something before using version.');
       }
 
       this.currentBranch = getCurrentBranch(this.execOpts, false);
@@ -185,10 +181,7 @@ export class VersionCommand extends Command<VersionCommandOption> {
         throw new ValidationError('ENOGIT', 'Detached git HEAD, please checkout a branch to choose versions.');
       }
 
-      if (
-        this.pushToRemote &&
-        !remoteBranchExists(this.gitRemote, this.currentBranch, this.execOpts, this.options.dryRun)
-      ) {
+      if (this.pushToRemote && !remoteBranchExists(this.gitRemote, this.currentBranch, this.execOpts, this.options.dryRun)) {
         throw new ValidationError(
           'ENOREMOTEBRANCH',
           dedent`
@@ -237,10 +230,7 @@ export class VersionCommand extends Command<VersionCommandOption> {
         return false;
       }
     } else {
-      this.logger.notice(
-        'FYI',
-        'git repository validation has been skipped, please ensure your version bumps are correct'
-      );
+      this.logger.notice('FYI', 'git repository validation has been skipped, please ensure your version bumps are correct');
     }
 
     if (this.options.conventionalPrerelease && this.options.conventionalGraduate) {
@@ -450,9 +440,7 @@ export class VersionCommand extends Command<VersionCommandOption> {
       predicate = predicate(node).then(makeGlobalVersionPredicate);
     }
 
-    return Promise.resolve(predicate).then((getVersion: (s: PackageGraphNode) => string) =>
-      this.reduceVersions(getVersion)
-    );
+    return Promise.resolve(predicate).then((getVersion: (s: PackageGraphNode) => string) => this.reduceVersions(getVersion));
   }
 
   reduceVersions(getVersion: (s: PackageGraphNode) => string) {
@@ -494,6 +482,7 @@ export class VersionCommand extends Command<VersionCommandOption> {
 
   getPrereleasePackageNames() {
     const prereleasePackageNames = this.getPackagesForOption(this.options.conventionalPrerelease);
+    // prettier-ignore
     const isCandidate = prereleasePackageNames.has('*')
       ? () => true
       : (_node, name) => prereleasePackageNames.has(name);
@@ -568,9 +557,7 @@ export class VersionCommand extends Command<VersionCommandOption> {
 
   confirmVersions(): Promise<boolean> | boolean {
     const changes = this.packagesToVersion.map((pkg) => {
-      let line = ` - ${pkg.name ?? '[n/a]'}: ${pkg.version} => ${chalk.cyan(
-        this.updatesVersions?.get(pkg?.name ?? '')
-      )}`;
+      let line = ` - ${pkg.name ?? '[n/a]'}: ${pkg.version} => ${chalk.cyan(this.updatesVersions?.get(pkg?.name ?? ''))}`;
       if (pkg.private) {
         line += ` (${chalk.red('private')})`;
       }

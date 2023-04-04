@@ -1,6 +1,6 @@
 import log from 'npmlog';
 
-import { multiLineTrimRight } from './index';
+import { multiLineTrimRight } from './index.js';
 
 // clear logs between tests
 afterEach(() => {

@@ -3,7 +3,7 @@ import log from 'npmlog';
 import npa from 'npm-package-arg';
 import fetch from 'npm-registry-fetch';
 
-import { DistTagOptions } from '../models';
+import { DistTagOptions } from '../models/index.js';
 
 /**
  * Add a dist-tag to a package.

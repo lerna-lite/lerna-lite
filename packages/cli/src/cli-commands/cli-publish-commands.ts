@@ -2,7 +2,7 @@ import log from 'npmlog';
 import { PublishCommand } from '@lerna-lite/publish';
 import { PublishCommandOption } from '@lerna-lite/core';
 
-import cliVersionCmd, { addBumpPositional } from './cli-version-commands';
+import cliVersionCmd, { addBumpPositional } from './cli-version-commands.js';
 
 /**
  * @see https://github.com/yargs/yargs/blob/master/docs/advanced.md#providing-a-command-module

@@ -1,5 +1,5 @@
 // helpers
-import { Package, PackageGraph } from '../../../index';
+import { Package, PackageGraph } from '../../../index.js';
 
 function buildGraph(mapPackages = (pkg) => pkg) {
   // cat __fixtures__/toposort/packages/*/package.json

@@ -1,10 +1,11 @@
-import execa from 'execa';
+import { execa } from 'execa';
 import fileUrl from 'file-url';
-import tempy from 'tempy';
+import { temporaryDirectory } from 'tempy';
 import fs from 'fs-extra';
-import findUp from 'find-up';
+import { findUp } from 'find-up';
 import path from 'path';
-import { gitAdd, gitCommit, gitInit } from './git';
+
+import { gitAdd, gitCommit, gitInit } from './git/index.js';
 
 export function cloneFixtureFactory(startDir: string) {
   const initFixture = initFixtureFactory(startDir);
@@ -12,7 +13,7 @@ export function cloneFixtureFactory(startDir: string) {
   return (...args: any[]) =>
     // @ts-ignore
     initFixture(...args).then((cwd) => {
-      const repoDir = tempy.directory();
+      const repoDir = temporaryDirectory();
       const repoUrl = fileUrl(repoDir, { resolve: false });
 
       return execa('git', ['init', '--bare'], { cwd: repoDir })
@@ -42,7 +43,7 @@ export function copyFixture(targetDir: string, fixtureName: string, cwd: string)
 
 export function initFixtureFactory(startDir: string) {
   return (fixtureName: string, commitMessage: boolean | string = 'Init commit') => {
-    const cwd = tempy.directory();
+    const cwd = temporaryDirectory();
     let chain: Promise<any> = Promise.resolve();
 
     chain = chain.then(() => process.chdir(cwd));
@@ -60,7 +61,7 @@ export function initFixtureFactory(startDir: string) {
 
 export function initNamedFixtureFactory(startDir: string) {
   return (dirName: string, fixtureName: string, commitMessage: boolean | string = 'Init commit') => {
-    const cwd = path.join(tempy.directory(), dirName);
+    const cwd = path.join(temporaryDirectory(), dirName);
     let chain: Promise<any> = Promise.resolve();
 
     chain = chain.then(() => fs.ensureDir(cwd));

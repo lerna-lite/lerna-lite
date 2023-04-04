@@ -1,17 +1,19 @@
-jest.mock('npm-registry-fetch');
+vi.mock('npm-registry-fetch');
 
 import fetch from 'npm-registry-fetch';
+import { Mock } from 'vitest';
 import { loggingOutput } from '@lerna-test/helpers/logging-output';
-import { getNpmUsername } from '../lib/get-npm-username';
 import { FetchConfig } from '@lerna-lite/core';
 
-(fetch.json as unknown as jest.Mock).mockImplementation(() => Promise.resolve({ username: 'lerna-test' }));
+import { getNpmUsername } from '../lib/get-npm-username';
+
+(fetch.json as unknown as Mock).mockImplementation(() => Promise.resolve({ username: 'lerna-test' }));
 
 describe('getNpmUsername', () => {
   const origConsoleError = console.error;
 
   beforeEach(() => {
-    console.error = jest.fn();
+    console.error = vi.fn();
   });
 
   afterEach(() => {
@@ -19,7 +21,7 @@ describe('getNpmUsername', () => {
   });
 
   test('fetches whoami endpoint after profile 404', async () => {
-    (fetch.json as unknown as jest.Mock).mockImplementationOnce(() => {
+    (fetch.json as unknown as Mock).mockImplementationOnce(() => {
       const err = new Error('third-party profile fail') as Error & { code: string };
 
       err.code = 'E404';
@@ -35,7 +37,7 @@ describe('getNpmUsername', () => {
   });
 
   test('throws an error when successful fetch yields empty username', async () => {
-    (fetch.json as unknown as jest.Mock).mockImplementationOnce(() => Promise.resolve({ username: undefined }));
+    (fetch.json as unknown as Mock).mockImplementationOnce(() => Promise.resolve({ username: undefined }));
 
     await expect(getNpmUsername({ stub: true } as unknown as FetchConfig)).rejects.toThrow(
       'You must be logged in to publish packages. Use `npm login` and try again.'
@@ -44,14 +46,14 @@ describe('getNpmUsername', () => {
   });
 
   test('logs failure message before throwing validation error', async () => {
-    (fetch.json as unknown as jest.Mock).mockImplementationOnce(() => {
+    (fetch.json as unknown as Mock).mockImplementationOnce(() => {
       const err = new Error('legacy npm Enterprise profile fail') as Error & { code: string };
 
       err.code = 'E500';
 
       return Promise.reject(err);
     });
-    (fetch.json as unknown as jest.Mock).mockImplementationOnce(() => {
+    (fetch.json as unknown as Mock).mockImplementationOnce(() => {
       const err = new Error('third-party whoami fail') as Error & { code: string };
 
       err.code = 'E404';
@@ -61,14 +63,12 @@ describe('getNpmUsername', () => {
 
     const opts = { registry: 'https://registry.npmjs.org/' };
 
-    await expect(getNpmUsername(opts as FetchConfig)).rejects.toThrow(
-      'Authentication error. Use `npm whoami` to troubleshoot.'
-    );
+    await expect(getNpmUsername(opts as FetchConfig)).rejects.toThrow('Authentication error. Use `npm whoami` to troubleshoot.');
     expect(console.error).toHaveBeenCalledWith('third-party whoami fail');
   });
 
   test('logs failure message when npm returns forbidden response', async () => {
-    (fetch.json as unknown as jest.Mock).mockImplementationOnce(() => {
+    (fetch.json as unknown as Mock).mockImplementationOnce(() => {
       const err = new Error('npm profile fail due to insufficient permissions') as Error & { code: string };
 
       err.code = 'E403';
@@ -85,7 +85,7 @@ describe('getNpmUsername', () => {
   });
 
   test('allows third-party registries to fail with a stern warning', async () => {
-    (fetch.json as unknown as jest.Mock).mockImplementationOnce(() => {
+    (fetch.json as unknown as Mock).mockImplementationOnce(() => {
       const err = new Error('many third-party registries do not support npm whoami') as Error & { code: string };
 
       err.code = 'E401';
@@ -98,8 +98,6 @@ describe('getNpmUsername', () => {
     const username = await getNpmUsername(opts as FetchConfig);
 
     expect(username).toBeUndefined();
-    expect(loggingOutput('warn')).toContain(
-      'Unable to determine npm username from third-party registry, this command will likely fail soon!'
-    );
+    expect(loggingOutput('warn')).toContain('Unable to determine npm username from third-party registry, this command will likely fail soon!');
   });
 });

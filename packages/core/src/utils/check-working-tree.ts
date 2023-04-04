@@ -1,6 +1,6 @@
-import { collectUncommitted, UncommittedConfig } from './collect-uncommitted';
-import { describeRef } from './describe-ref';
-import { ValidationError } from '../validation-error';
+import { collectUncommitted, UncommittedConfig } from './collect-uncommitted.js';
+import { describeRef } from './describe-ref.js';
+import { ValidationError } from '../validation-error.js';
 
 export function checkWorkingTree({ cwd } = {} as UncommittedConfig, dryRun = false) {
   let chain: Promise<any> = Promise.resolve();
@@ -28,8 +28,7 @@ export function throwIfReleased({ refCount }: { refCount: number | string }) {
   }
 }
 
-const EUNCOMMIT_MSG =
-  'Working tree has uncommitted changes, please commit or remove the following changes before continuing:\n';
+const EUNCOMMIT_MSG = 'Working tree has uncommitted changes, please commit or remove the following changes before continuing:\n';
 
 export function mkThrowIfUncommitted(options: Partial<UncommittedConfig> = {}, dryRun = false) {
   return function ({ isDirty }) {

@@ -4,11 +4,11 @@ import Arborist from '@npmcli/arborist';
 import path from 'path';
 import packlist from 'npm-packlist';
 import log from 'npmlog';
+import { Readable } from 'stream';
 import tar from 'tar';
 
-import { getPacked } from './get-packed';
-import { Readable } from 'stream';
-import { Tarball } from '../models';
+import { getPacked } from './get-packed.js';
+import { Tarball } from '../models/index.js';
 
 /**
  * Pack a directory suitable for publishing, writing tarball to a tempfile.

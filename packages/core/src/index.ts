@@ -1,13 +1,13 @@
 // folders
-export * from './models';
-export * from './package-graph';
-export * from './project';
-export * from './utils';
+export * from './models/index.js';
+export * from './package-graph/index.js';
+export * from './project/index.js';
+export * from './utils/index.js';
 
 // files
-export * from './child-process';
-export * from './constants';
-export * from './command';
-export * from './package';
-export * from './prompt';
-export * from './validation-error';
+export * from './child-process.js';
+export * from './constants.js';
+export * from './command.js';
+export * from './package.js';
+export * from './prompt.js';
+export * from './validation-error.js';

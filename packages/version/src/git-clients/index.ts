@@ -1,2 +1,2 @@
-export * from './github-client';
-export * from './gitlab-client';
+export * from './github-client.js';
+export * from './gitlab-client.js';

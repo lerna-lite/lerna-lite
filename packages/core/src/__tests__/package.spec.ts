@@ -1,21 +1,24 @@
-import 'jest-extended';
-import os from 'os';
+import os from 'node:os';
 import path from 'path';
-import loadJsonFile from 'load-json-file';
+import { loadJsonFile, loadJsonFileSync } from 'load-json-file';
 import npa from 'npm-package-arg';
 import npmlog from 'npmlog';
-import writePkg from 'write-pkg';
+import { fileURLToPath } from 'node:url';
+import { Mock } from 'vitest';
+import { writePackage } from 'write-pkg';
 
-jest.mock('load-json-file');
-jest.mock('write-pkg');
+vi.mock('load-json-file');
+vi.mock('write-pkg');
 
 // file under test
 import { Package } from '../package';
 import { NpaResolveResult, RawManifest } from '../models';
 
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+
 describe('Package', () => {
-  const factory = (json) =>
-    new Package(json, path.normalize(`/root/path/to/${json.name || 'package'}`), path.normalize('/root'));
+  const factory = (json) => new Package(json, path.normalize(`/root/path/to/${json.name || 'package'}`), path.normalize('/root'));
 
   describe('get .name', () => {
     it('should return the name', () => {
@@ -44,12 +47,20 @@ describe('Package', () => {
   describe('get .resolved', () => {
     it('returns npa.Result relative to rootPath, always posix', () => {
       const pkg = factory({ name: 'get-resolved' });
+
+      let homeDir = os.homedir();
+
+      // on Windows, make sure to use same drive letter
+      if (/([A-Z]:\\).*/i.test(__dirname)) {
+        homeDir = __dirname.substring(0, 1); // ie D:\\
+      }
+
       expect(pkg.resolved).toMatchObject({
         type: 'directory',
         name: 'get-resolved',
         where: path.normalize('/root'),
         // windows is so fucking ridiculous
-        fetchSpec: path.resolve(os.homedir(), pkg.location),
+        fetchSpec: path.resolve(homeDir, pkg.location),
       });
     });
   });
@@ -153,7 +164,7 @@ describe('Package', () => {
         name: 'obj-bin',
         bin: { 'custom-bin': 'bin.js' },
       });
-      expect(pkg.binLocation).toInclude('obj-bin');
+      expect(pkg.binLocation.includes('obj-bin')).toBeTruthy();
     });
   });
 
@@ -163,7 +174,7 @@ describe('Package', () => {
         name: 'obj-bin',
         bin: { 'custom-bin': 'bin.js' },
       });
-      expect(pkg.nodeModulesLocation).toInclude('node_modules');
+      expect(pkg.nodeModulesLocation.includes('node_modules')).toBeTruthy();
     });
   });
 
@@ -295,13 +306,13 @@ describe('Package', () => {
 
   describe('.serialize()', () => {
     it('writes changes to disk', async () => {
-      (writePkg as any).mockImplementation(() => Promise.resolve());
+      (writePackage as any).mockImplementation(() => Promise.resolve());
 
       const pkg = factory({ name: 'serialize-me' });
       const result = await pkg.set('woo', 'hoo').serialize();
 
       expect(result).toBe(pkg);
-      expect(writePkg).toHaveBeenLastCalledWith(
+      expect(writePackage).toHaveBeenLastCalledWith(
         pkg.manifestLocation,
         expect.objectContaining({
           name: 'serialize-me',
@@ -825,7 +836,7 @@ describe('Package', () => {
       });
 
       it('should remove `workspace:` prefix on external dependencies without any version bump applied', () => {
-        const logErrorSpy = jest.spyOn(npmlog, 'error');
+        const logErrorSpy = vi.spyOn(npmlog, 'error');
         const pkg = factory({
           dependencies: {
             a: 'workspace:*',
@@ -869,7 +880,7 @@ describe('Package', () => {
 });
 
 describe('Package.lazy()', () => {
-  (loadJsonFile.sync as jest.Mock).mockImplementation(() => ({ name: 'bar', version: '1.0.0' }));
+  (loadJsonFileSync as Mock).mockImplementation(() => ({ name: 'bar', version: '1.0.0' }));
 
   it('returns package instance from string directory argument', () => {
     const pkg = Package.lazy('/foo/bar');

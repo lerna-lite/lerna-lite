@@ -1,7 +1,11 @@
-import execa from 'execa';
+import { execa } from 'execa';
 import { isBehindUpstream } from '../lib/is-behind-upstream';
 import { cloneFixtureFactory } from '@lerna-test/helpers';
+import { fileURLToPath } from 'url';
+import path from 'path';
 
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 const cloneFixture = cloneFixtureFactory(__dirname);
 
 test('isBehindUpstream', async () => {

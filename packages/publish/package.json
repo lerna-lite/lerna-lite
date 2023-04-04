@@ -2,14 +2,30 @@
   "name": "@lerna-lite/publish",
   "description": "Publish packages in the current workspace",
   "version": "1.17.0",
-  "main": "dist/index.js",
-  "types": "dist/index.d.ts",
-  "typings": "dist/index.d.ts",
   "files": [
     "/dist"
   ],
   "publishConfig": {
     "access": "public"
+  },
+  "type": "module",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "module": "dist/index.js",
+  "exports": {
+    ".": {
+      "import": "./dist/index.js",
+      "default": "./dist/index.js",
+      "types": "./dist/types/index.d.ts"
+    },
+    "./*": "./*"
+  },
+  "typesVersions": {
+    "*": {
+      "*": [
+        "./dist/types/index.d.ts"
+      ]
+    }
   },
   "scripts": {
     "prebuild": "rimraf dist",
@@ -29,15 +45,15 @@
     "url": "https://github.com/lerna-lite/lerna-lite/issues"
   },
   "engines": {
-    "node": ">=14.17.0",
-    "npm": ">=8.0.0"
+    "node": ">=16.15.0",
+    "npm": ">=8.5.0"
   },
   "dependencies": {
     "@lerna-lite/core": "workspace:*",
     "@lerna-lite/version": "workspace:*",
     "@npmcli/arborist": "^6.2.5",
-    "byte-size": "^7.0.1",
-    "chalk": "^4.1.2",
+    "byte-size": "^8.1.0",
+    "chalk": "^5.2.0",
     "columnify": "^1.6.0",
     "fs-extra": "^11.1.1",
     "glob": "^9.3.2",
@@ -48,28 +64,25 @@
     "npm-packlist": "^7.0.4",
     "npm-registry-fetch": "^14.0.3",
     "npmlog": "^7.0.1",
-    "p-map": "^4.0.0",
-    "p-pipe": "^3.1.0",
+    "p-map": "^5.5.0",
+    "p-pipe": "^4.0.0",
     "pacote": "^15.1.1",
     "path": "^0.12.7",
-    "pify": "^5.0.0",
+    "pify": "^6.1.0",
     "read-package-json": "^6.0.1",
     "semver": "^7.3.8",
     "ssri": "^10.0.1",
     "tar": "^6.1.13",
-    "temp-dir": "^2.0.0"
+    "temp-dir": "^3.0.0"
   },
   "devDependencies": {
     "@types/conventional-changelog-core": "^4.2.1",
     "@types/conventional-recommended-bump": "^6.1.0",
-    "@types/execa": "^2.0.0",
     "@types/fs-extra": "^11.0.1",
-    "@types/load-json-file": "^5.1.0",
-    "@types/p-map": "^2.0.0",
+    "@types/pify": "^5.0.1",
     "@types/semver": "^7.3.13",
-    "@types/write-pkg": "^4.0.0",
-    "load-json-file": "^6.2.0",
-    "write-pkg": "^4.0.0",
+    "load-json-file": "^7.0.1",
+    "write-pkg": "^5.1.0",
     "yargs": "^17.7.1",
     "yargs-parser": "^21.1.1"
   }

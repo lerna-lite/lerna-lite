@@ -1,7 +1,11 @@
 import fs from 'fs-extra';
 import path from 'path';
 import { Project } from '@lerna-lite/core';
+import { fileURLToPath } from 'url';
+
 import { initFixtureFactory } from '@lerna-test/helpers';
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 const initFixture = initFixtureFactory(__dirname);
 import { createTempLicenses } from '../lib/create-temp-licenses';
 

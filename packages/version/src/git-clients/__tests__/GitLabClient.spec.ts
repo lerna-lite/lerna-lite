@@ -1,6 +1,8 @@
-jest.mock('node-fetch');
+vi.mock('node-fetch');
 
 import fetch from 'node-fetch';
+import { Mock } from 'vitest';
+
 import { GitLabClient } from '../GitLabClient';
 
 describe('GitLabClient', () => {
@@ -25,7 +27,7 @@ describe('GitLabClient', () => {
   describe('createRelease', () => {
     it('requests releases api with release', () => {
       const client = new GitLabClient('TOKEN', 'http://some/host');
-      (fetch as jest.Mock).mockResolvedValue({ ok: true });
+      (fetch as Mock).mockResolvedValue({ ok: true });
       const release = {
         owner: 'the-owner',
         repo: 'the-repo',

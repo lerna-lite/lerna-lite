@@ -37,7 +37,7 @@ describe('log-packed', () => {
   } as unknown as Package & { packed: Tarball };
 
   it('should display dry-run details', () => {
-    const logSpy = jest.spyOn(npmlog, 'notice');
+    const logSpy = vi.spyOn(npmlog, 'notice');
 
     logPacked(pkg, true);
 

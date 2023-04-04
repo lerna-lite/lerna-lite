@@ -1,9 +1,9 @@
-import fs from 'fs-extra';
+import { outputJson } from 'fs-extra/esm';
 import npmlog from 'npmlog';
 // @ts-ignore
 import upath from 'upath';
 
-import { ProfilerConfig, TraceEvent } from './models';
+import { ProfilerConfig, TraceEvent } from './models.js';
 
 const getTimeBasedFilename = () => {
   const now = new Date(); // 2011-10-05T14:48:00.000Z
@@ -82,8 +82,8 @@ export class Profiler {
   }
 
   output() {
-    return fs
-      .outputJson(this.outputPath, this.events)
-      .then(() => this.logger.info('profiler', `Performance profile saved to ${this.outputPath}`));
+    return outputJson(this.outputPath, this.events).then(() =>
+      this.logger.info('profiler', `Performance profile saved to ${this.outputPath}`)
+    );
   }
 }

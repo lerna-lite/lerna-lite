@@ -16,7 +16,7 @@ import {
 import { FilterOptions, getFilteredPackages } from '@lerna-lite/filter-packages';
 import { Profiler } from '@lerna-lite/profiler';
 
-import { ExecStreamingOption } from './models';
+import { ExecStreamingOption } from './models/index.js';
 
 export function factory(argv: ExecCommandOption) {
   return new ExecCommand(argv);

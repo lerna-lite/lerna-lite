@@ -1,4 +1,4 @@
-import { RemoteClientType } from './interfaces';
+import { RemoteClientType } from './interfaces.js';
 
 export interface ChangedCommandOption {
   /** use conventional-changelog to determine version bump and generate CHANGELOG. */

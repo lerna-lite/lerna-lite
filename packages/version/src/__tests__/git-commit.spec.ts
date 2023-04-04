@@ -1,14 +1,14 @@
-jest.mock('@lerna-lite/core');
-jest.mock('../utils/temp-write');
-import { EOL } from 'os';
+vi.mock('@lerna-lite/core');
+vi.mock('../utils/temp-write');
+import { EOL } from 'node:os';
 import { exec } from '@lerna-lite/core';
 import { gitCommit } from '../lib/git-commit';
 import { tempWrite } from '../utils/temp-write';
 import { GitCommitOption } from '../models';
 
 describe('git commit', () => {
-  (exec as jest.Mock).mockResolvedValue(null);
-  (tempWrite.sync as jest.Mock).mockReturnValue('temp-file-path');
+  (exec as any).mockResolvedValue(null);
+  (tempWrite.sync as any).mockReturnValue('temp-file-path');
 
   test('--message', async () => {
     const opts = { cwd: 'message' };

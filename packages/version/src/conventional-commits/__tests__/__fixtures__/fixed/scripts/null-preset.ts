@@ -4,7 +4,7 @@ import parserOpts from './parser-opts';
 import writerOpts from './writer-opts';
 import whatBump from './null-what-bump';
 
-module.exports = {
+export const output = {
   conventionalChangelog: {
     parserOpts,
     writerOpts,

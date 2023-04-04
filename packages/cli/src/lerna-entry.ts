@@ -1,20 +1,23 @@
-import loadJsonFile from 'load-json-file';
+import { loadJsonFileSync } from 'load-json-file';
 import path from 'path';
 import { JsonValue } from '@lerna-lite/core';
+import { fileURLToPath } from 'url';
 
-import changedCmd from './cli-commands/cli-changed-commands';
-import diffCmd from './cli-commands/cli-diff-commands';
-import execCmd from './cli-commands/cli-exec-commands';
-import initCmd from './cli-commands/cli-init-commands';
-import listCmd from './cli-commands/cli-list-commands';
-import publishCmd from './cli-commands/cli-publish-commands';
-import runCmd from './cli-commands/cli-run-commands';
-import versionCmd from './cli-commands/cli-version-commands';
-import watchCmd from './cli-commands/cli-watch-commands';
-import cli from './lerna-cli';
+import changedCmd from './cli-commands/cli-changed-commands.js';
+import diffCmd from './cli-commands/cli-diff-commands.js';
+import execCmd from './cli-commands/cli-exec-commands.js';
+import initCmd from './cli-commands/cli-init-commands.js';
+import listCmd from './cli-commands/cli-list-commands.js';
+import publishCmd from './cli-commands/cli-publish-commands.js';
+import runCmd from './cli-commands/cli-run-commands.js';
+import versionCmd from './cli-commands/cli-version-commands.js';
+import watchCmd from './cli-commands/cli-watch-commands.js';
+import cli from './lerna-cli.js';
 
 export function lerna(argv: any[]) {
-  const cliPkg = loadJsonFile.sync<{ [dep: string]: JsonValue }>(path.join(__dirname, '../', 'package.json'));
+  const __filename = fileURLToPath(import.meta.url);
+  const __dirname = path.dirname(__filename);
+  const cliPkg = loadJsonFileSync<{ [dep: string]: JsonValue }>(path.join(__dirname, '../', 'package.json'));
   const context = {
     lernaVersion: (cliPkg?.version ?? '') as string,
   };

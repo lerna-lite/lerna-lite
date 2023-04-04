@@ -1,16 +1,18 @@
-jest.mock('@npmcli/run-script', () => jest.fn(() => Promise.resolve({ stdout: '' })));
+vi.mock('@npmcli/run-script', () => ({
+  default: vi.fn(() => Promise.resolve({ stdout: '' })),
+}));
 
 import log from 'npmlog';
+import { Mock } from 'vitest';
 import { loggingOutput } from '@lerna-test/helpers/logging-output';
 import runScript from '@npmcli/run-script';
+
 import { npmConf } from '../npm-conf';
 import { Package } from '../../package';
 import { runLifecycle, createRunner } from '../run-lifecycle';
 import { LifecycleConfig } from '../../models';
 
 describe('runLifecycle()', () => {
-  const consoleSpy = jest.spyOn(console, 'log').mockImplementation(() => {});
-
   beforeEach(() => {
     log.level = 'silent';
   });
@@ -75,6 +77,7 @@ describe('runLifecycle()', () => {
   });
 
   it('calls npm-lifecycle with prepared arguments and expect print banner be called and show a console log of the ran script', async () => {
+    const consoleSpy = vi.spyOn(console, 'log').mockImplementationOnce(() => {});
     log.level = 'info';
     const pkg = new Package(
       {
@@ -180,7 +183,6 @@ describe('runLifecycle()', () => {
 });
 
 describe('createRunner', () => {
-  const consoleSpy = jest.spyOn(console, 'log').mockImplementation(() => {});
   const runPackageLifecycle = createRunner({ 'other-cli-flag': 0 });
 
   it('skips missing scripts block', async () => {
@@ -207,7 +209,8 @@ describe('createRunner', () => {
   });
 
   it('logs stdout from runScript() response', async () => {
-    (runScript as unknown as jest.Mock).mockImplementationOnce(() => {
+    const consoleSpy = vi.spyOn(console, 'log').mockImplementationOnce(() => {});
+    (runScript as unknown as Mock).mockImplementationOnce(() => {
       return Promise.resolve({ stdout: 'runScript output' });
     });
 
@@ -224,7 +227,8 @@ describe('createRunner', () => {
   });
 
   it('logs script error and re-throws', async () => {
-    (runScript as unknown as jest.Mock).mockImplementationOnce(({ pkg, event }) => {
+    vi.spyOn(process, 'exit').mockImplementationOnce((() => {}) as any);
+    (runScript as unknown as Mock).mockImplementationOnce(({ pkg, event }) => {
       const err: any = new Error('boom');
 
       err.code = 123;
@@ -250,10 +254,14 @@ describe('createRunner', () => {
 
     const [errorLog] = loggingOutput('error');
     expect(errorLog).toBe(`"prepublishOnly" errored in "has-script-error", exiting 123`);
+
+    // reset exit code
+    process.exitCode = undefined;
   });
 
   it('defaults error exit code to 1', async () => {
-    (runScript as unknown as jest.Mock).mockImplementationOnce(({ pkg, event }) => {
+    vi.spyOn(process, 'exit').mockImplementationOnce((() => {}) as any);
+    (runScript as unknown as Mock).mockImplementationOnce(({ pkg, event }) => {
       const err: any = new Error('kersplode');
 
       // errno only gets added when a proc closes, not from error
@@ -278,5 +286,8 @@ describe('createRunner', () => {
 
     const [errorLog] = loggingOutput('error');
     expect(errorLog).toBe(`"prepack" errored in "has-execution-error", exiting 1`);
+
+    // reset exit code
+    process.exitCode = undefined;
   });
 });

@@ -1,20 +1,32 @@
+const cpuCount = 42;
+
+vi.mock('../child-process', async () => ({
+  ...(await vi.importActual<any>('../child-process')),
+  getChildProcessCount: vi.fn(() => 0),
+}));
+vi.mock('node:os', async () => ({
+  default: {
+    cpus: () => new Array(cpuCount),
+  },
+}));
+
 import fs from 'fs-extra';
 import log from 'npmlog';
-import os from 'os';
 import path from 'path';
-import tempy from 'tempy';
+import { temporaryDirectory } from 'tempy';
+import { fileURLToPath } from 'url';
+import { Mock } from 'vitest';
 
 // partially mocked
-import * as childProcess from '../child-process';
-
-// normalize concurrency across different environments (localhost, CI, etc)
-jest.spyOn(os, 'cpus').mockImplementation(() => new Array(42));
+import { getChildProcessCount } from '../child-process';
 
 // helpers
 import { initFixtureFactory } from '@lerna-test/helpers';
-const initFixture = initFixtureFactory(__dirname);
 import { loggingOutput } from '@lerna-test/helpers/logging-output';
 import { updateLernaConfig } from '@lerna-test/helpers';
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+const initFixture = initFixtureFactory(__dirname);
 
 // file under test
 import { Command } from '../command';
@@ -33,8 +45,6 @@ describe('core-command', () => {
       process.chdir(testDir);
     }
   });
-
-  (childProcess as any).getChildProcessCount = jest.fn(() => 0);
 
   // swallow errors when passed in argv
   const onRejected = () => {};
@@ -70,17 +80,17 @@ describe('core-command', () => {
     });
 
     it('should fall back to default if concurrency given is NaN', async () => {
-      const command = testFactory({ concurrency: 'bla' });
+      const command = testFactory({ concurrency: 'foo' });
       await command;
 
-      expect(command.concurrency).toBe(42);
+      expect(command.concurrency).toBe(cpuCount);
     });
 
     it('should fall back to default if concurrency given is 0', async () => {
       const command = testFactory({ concurrency: 0 });
       await command;
 
-      expect(command.concurrency).toBe(42);
+      expect(command.concurrency).toBe(cpuCount);
     });
 
     it('should fall back to 1 if concurrency given is smaller than 1', async () => {
@@ -140,7 +150,7 @@ describe('core-command', () => {
     });
 
     it('waits to resolve when 1 child process active', async () => {
-      (childProcess.getChildProcessCount as jest.Mock).mockReturnValueOnce(1);
+      (getChildProcessCount as Mock).mockReturnValueOnce(1);
 
       await testFactory();
 
@@ -149,7 +159,7 @@ describe('core-command', () => {
     });
 
     it('waits to resolve when 2 child processes active', async () => {
-      (childProcess.getChildProcessCount as jest.Mock).mockReturnValueOnce(2);
+      (getChildProcessCount as Mock).mockReturnValueOnce(2);
 
       await testFactory();
 
@@ -162,7 +172,7 @@ describe('core-command', () => {
     const originalConsoleError = console.error;
 
     beforeEach(() => {
-      console.error = jest.fn();
+      console.error = vi.fn();
     });
     afterEach(() => {
       console.error = originalConsoleError;
@@ -337,7 +347,7 @@ describe('core-command', () => {
 
   describe('validations', () => {
     it('throws ENOGIT when repository is not initialized', async () => {
-      const cwd = tempy.directory();
+      const cwd = temporaryDirectory();
 
       await expect(testFactory({ cwd })).rejects.toThrow(
         expect.objectContaining({

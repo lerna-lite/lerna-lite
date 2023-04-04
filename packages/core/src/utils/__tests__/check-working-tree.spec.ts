@@ -1,5 +1,7 @@
-jest.mock('../describe-ref');
-jest.mock('../collect-uncommitted');
+vi.mock('../describe-ref');
+vi.mock('../collect-uncommitted');
+
+import { Mock } from 'vitest';
 
 import { describeRef } from '../describe-ref';
 import { collectUncommitted } from '../collect-uncommitted';
@@ -7,7 +9,7 @@ import { checkWorkingTree } from '../check-working-tree';
 
 describe('check-working-tree', () => {
   it('resolves on a clean tree with no release tags', async () => {
-    (describeRef as jest.Mock).mockResolvedValueOnce({ refCount: '1' });
+    (describeRef as Mock).mockResolvedValueOnce({ refCount: '1' });
 
     const result = await checkWorkingTree({ cwd: 'foo' });
 
@@ -16,21 +18,21 @@ describe('check-working-tree', () => {
   });
 
   it('rejects when current commit has already been released', async () => {
-    (describeRef as jest.Mock).mockResolvedValueOnce({ refCount: '0' });
+    (describeRef as Mock).mockResolvedValueOnce({ refCount: '0' });
 
     await expect(checkWorkingTree()).rejects.toThrow('The current commit has already been released');
   });
 
   it('rejects when working tree has uncommitted changes', async () => {
-    (describeRef as jest.Mock).mockResolvedValueOnce({ isDirty: true });
-    (collectUncommitted as jest.Mock).mockResolvedValueOnce(['AD file']);
+    (describeRef as Mock).mockResolvedValueOnce({ isDirty: true });
+    (collectUncommitted as Mock).mockResolvedValueOnce(['AD file']);
 
     await expect(checkWorkingTree()).rejects.toThrow('\nAD file');
   });
 
   it('passes cwd to collectUncommitted when working tree has uncommitted changes', async () => {
-    (describeRef as jest.Mock).mockResolvedValueOnce({ isDirty: true });
-    (collectUncommitted as jest.Mock).mockResolvedValueOnce(['MM file']);
+    (describeRef as Mock).mockResolvedValueOnce({ isDirty: true });
+    (collectUncommitted as Mock).mockResolvedValueOnce(['MM file']);
 
     await expect(checkWorkingTree({ cwd: 'foo' })).rejects.toThrow('Working tree has uncommitted changes');
 

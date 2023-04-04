@@ -10,4 +10,5 @@ log.disableColor();
 log.disableProgress();
 
 // never let anyone enable progress
-log.enableProgress = jest.fn();
+// log.enableProgress = vi.fn();
+log.enableProgress = () => {};

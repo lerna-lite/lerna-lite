@@ -7,7 +7,7 @@
 
 [![Actions Status](https://github.com/lerna-lite/lerna-lite/workflows/CI/badge.svg)](https://github.com/lerna-lite/lerna-lite/actions)
 [![codecov](https://codecov.io/gh/lerna-lite/lerna-lite/branch/main/graph/badge.svg)](https://codecov.io/gh/lerna-lite/lerna-lite)
-[![jest](https://jestjs.io/img/jest-badge.svg)](https://github.com/facebook/jest)
+[![Vitest](https://img.shields.io/badge/tested%20with-vitest-fcc72b.svg?logo=vitest)](https://vitest.dev/)
 [![NPM downloads](https://img.shields.io/npm/dm/@lerna-lite/cli)](https://www.npmjs.com/package/@lerna-lite/cli)
 [![npm](https://img.shields.io/npm/v/@lerna-lite/cli.svg?logo=npm&logoColor=fff&label=npm)](https://www.npmjs.com/package/@lerna-lite/cli)
 
@@ -56,7 +56,7 @@ Lerna-Lite itself is now also using [pnpm workspaces](https://pnpm.io/workspaces
 Here are some of the largest projects using the Lerna-Lite fork
 
 <a href="https://github.com/facebook/jest">
-  <img src="https://jestjs.io/img/jest.png" width="25" height="25">
+  <img src="https://jestjs.io/img/vi.png" width="25" height="25">
   Jest
 </a>&nbsp; | &nbsp;
 <a href="https://github.com/react-navigation/react-navigation">
@@ -298,9 +298,9 @@ If you wish to contribute to the project, please follow these steps:
    - `pnpm install` OR `npx pnpm install`
 3. run a full TypeScript (TSC) build
    - `pnpm build` OR `npx pnpm build`
-4. add/run Jest unit tests (make sure to run the previous steps first):
-   - `pnpm jest` (full test coverage)
-   - `pnpm jest:watch` (watch mode)
+4. add/run Vitest unit tests (make sure to run the previous steps first):
+   - `pnpm test` (watch mode)
+   - `pnpm test:coverage` (full test coverage)
 5. you can also troubleshoot/debug via the VSCode debugger launch configs that were setup for each command
 
 ## Troubleshooting

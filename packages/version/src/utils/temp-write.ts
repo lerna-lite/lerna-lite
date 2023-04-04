@@ -5,7 +5,7 @@
  */
 
 import fs from 'graceful-fs';
-import isStream from 'is-stream';
+import { isStream } from 'is-stream';
 import makeDir from 'make-dir';
 import path from 'path';
 import { Readable } from 'stream';

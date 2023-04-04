@@ -1,17 +1,17 @@
-jest.mock('inquirer');
+vi.mock('inquirer');
 
-import 'jest-extended';
 import npmlog from 'npmlog';
 import inquirer from 'inquirer';
+
 import { promptConfirmation, promptSelectOne, promptTextInput } from '../prompt';
 
 describe('Prompt', () => {
   it('should prompt confirmation', async () => {
-    jest.spyOn(inquirer, 'prompt').mockResolvedValue({ confirm: true });
+    vi.spyOn(inquirer, 'prompt').mockResolvedValue({ confirm: true });
 
-    const logPauseSpy = jest.spyOn(npmlog, 'pause');
-    const logResumeSpy = jest.spyOn(npmlog, 'resume');
-    const inqSpy = jest.spyOn(inquirer, 'prompt');
+    const logPauseSpy = vi.spyOn(npmlog, 'pause');
+    const logResumeSpy = vi.spyOn(npmlog, 'resume');
+    const inqSpy = vi.spyOn(inquirer, 'prompt');
 
     const output = await promptConfirmation('Choose something.');
     expect(logPauseSpy).toHaveBeenCalled();
@@ -32,11 +32,11 @@ describe('Prompt', () => {
   });
 
   it('should prompt confirmation return false', async () => {
-    jest.spyOn(inquirer, 'prompt').mockResolvedValue({ confirm: false });
+    vi.spyOn(inquirer, 'prompt').mockResolvedValue({ confirm: false });
 
-    const logPauseSpy = jest.spyOn(npmlog, 'pause');
-    const logResumeSpy = jest.spyOn(npmlog, 'resume');
-    const inqSpy = jest.spyOn(inquirer, 'prompt');
+    const logPauseSpy = vi.spyOn(npmlog, 'pause');
+    const logResumeSpy = vi.spyOn(npmlog, 'resume');
+    const inqSpy = vi.spyOn(inquirer, 'prompt');
 
     const output = await promptConfirmation('Choose something.');
     expect(logPauseSpy).toHaveBeenCalled();
@@ -46,11 +46,11 @@ describe('Prompt', () => {
   });
 
   it('should prompt confirmation', async () => {
-    jest.spyOn(inquirer, 'prompt').mockResolvedValue({ confirm: true });
+    vi.spyOn(inquirer, 'prompt').mockResolvedValue({ confirm: true });
 
-    const logPauseSpy = jest.spyOn(npmlog, 'pause');
-    const logResumeSpy = jest.spyOn(npmlog, 'resume');
-    const inqSpy = jest.spyOn(inquirer, 'prompt');
+    const logPauseSpy = vi.spyOn(npmlog, 'pause');
+    const logResumeSpy = vi.spyOn(npmlog, 'resume');
+    const inqSpy = vi.spyOn(inquirer, 'prompt');
 
     const output = await promptConfirmation('Choose something.');
     expect(logPauseSpy).toHaveBeenCalled();
@@ -60,11 +60,11 @@ describe('Prompt', () => {
   });
 
   it('should prompt confirmation return false', async () => {
-    jest.spyOn(inquirer, 'prompt').mockResolvedValue({ confirm: false });
+    vi.spyOn(inquirer, 'prompt').mockResolvedValue({ confirm: false });
 
-    const logPauseSpy = jest.spyOn(npmlog, 'pause');
-    const logResumeSpy = jest.spyOn(npmlog, 'resume');
-    const inqSpy = jest.spyOn(inquirer, 'prompt');
+    const logPauseSpy = vi.spyOn(npmlog, 'pause');
+    const logResumeSpy = vi.spyOn(npmlog, 'resume');
+    const inqSpy = vi.spyOn(inquirer, 'prompt');
 
     const output = await promptConfirmation('Choose something.');
     expect(logPauseSpy).toHaveBeenCalled();
@@ -74,11 +74,11 @@ describe('Prompt', () => {
   });
 
   it('should prompt select one', async () => {
-    jest.spyOn(inquirer, 'prompt').mockResolvedValue({ prompt: true });
+    vi.spyOn(inquirer, 'prompt').mockResolvedValue({ prompt: true });
 
-    const logPauseSpy = jest.spyOn(npmlog, 'pause');
-    const logResumeSpy = jest.spyOn(npmlog, 'resume');
-    const inqSpy = jest.spyOn(inquirer, 'prompt');
+    const logPauseSpy = vi.spyOn(npmlog, 'pause');
+    const logResumeSpy = vi.spyOn(npmlog, 'resume');
+    const inqSpy = vi.spyOn(inquirer, 'prompt');
 
     const output = await promptSelectOne('Choose something.', {
       choices: [
@@ -117,11 +117,11 @@ describe('Prompt', () => {
   });
 
   it('should prompt select one return false', async () => {
-    jest.spyOn(inquirer, 'prompt').mockResolvedValue({ prompt: false });
+    vi.spyOn(inquirer, 'prompt').mockResolvedValue({ prompt: false });
 
-    const logPauseSpy = jest.spyOn(npmlog, 'pause');
-    const logResumeSpy = jest.spyOn(npmlog, 'resume');
-    const inqSpy = jest.spyOn(inquirer, 'prompt');
+    const logPauseSpy = vi.spyOn(npmlog, 'pause');
+    const logResumeSpy = vi.spyOn(npmlog, 'resume');
+    const inqSpy = vi.spyOn(inquirer, 'prompt');
 
     const output = await promptSelectOne('Choose something.', {
       choices: [
@@ -137,11 +137,11 @@ describe('Prompt', () => {
   });
 
   it('should prompt text input', async () => {
-    jest.spyOn(inquirer, 'prompt').mockResolvedValue({ input: true });
+    vi.spyOn(inquirer, 'prompt').mockResolvedValue({ input: true });
 
-    const logPauseSpy = jest.spyOn(npmlog, 'pause');
-    const logResumeSpy = jest.spyOn(npmlog, 'resume');
-    const inqSpy = jest.spyOn(inquirer, 'prompt');
+    const logPauseSpy = vi.spyOn(npmlog, 'pause');
+    const logResumeSpy = vi.spyOn(npmlog, 'resume');
+    const inqSpy = vi.spyOn(inquirer, 'prompt');
 
     const output = await promptTextInput('Choose something...', {
       filter: () => true,
@@ -162,11 +162,11 @@ describe('Prompt', () => {
   });
 
   it('should prompt text input return false', async () => {
-    jest.spyOn(inquirer, 'prompt').mockResolvedValue({ input: false });
+    vi.spyOn(inquirer, 'prompt').mockResolvedValue({ input: false });
 
-    const logPauseSpy = jest.spyOn(npmlog, 'pause');
-    const logResumeSpy = jest.spyOn(npmlog, 'resume');
-    const inqSpy = jest.spyOn(inquirer, 'prompt');
+    const logPauseSpy = vi.spyOn(npmlog, 'pause');
+    const logResumeSpy = vi.spyOn(npmlog, 'resume');
+    const inqSpy = vi.spyOn(inquirer, 'prompt');
 
     const output = await promptTextInput('Choose something...', {
       filter: () => true,

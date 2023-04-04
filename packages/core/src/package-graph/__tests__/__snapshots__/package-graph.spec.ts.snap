@@ -1,0 +1,7 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`PackageGraph > constructor > throws an error when duplicate package names are present 1`] = `
+"Package name \\"pkg-2\\" used in multiple packages:
+	/test/pkg-2
+	/test/pkg-3"
+`;

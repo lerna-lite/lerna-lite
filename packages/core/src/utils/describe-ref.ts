@@ -1,7 +1,7 @@
 import log from 'npmlog';
 
-import { DescribeRefDetailedResult, DescribeRefFallbackResult, DescribeRefOptions } from '../models';
-import { exec, execSync } from '../child-process';
+import { DescribeRefDetailedResult, DescribeRefFallbackResult, DescribeRefOptions } from '../models/index.js';
+import { exec, execSync } from '../child-process.js';
 
 /**
  * Build `git describe` args.
@@ -96,8 +96,7 @@ function parse(stdout: string, cwd?: string): DescribeRefFallbackResult | Descri
     return { refCount, sha, isDirty: Boolean(isDirty) };
   }
 
-  const [, lastTagName, lastVersion, refCount, sha, isDirty] =
-    /^((?:.*@)?(.*))-(\d+)-g([0-9a-f]+)(-dirty)?$/.exec(stdout) || [];
+  const [, lastTagName, lastVersion, refCount, sha, isDirty] = /^((?:.*@)?(.*))-(\d+)-g([0-9a-f]+)(-dirty)?$/.exec(stdout) || [];
 
   return { lastTagName, lastVersion, refCount, sha, isDirty: Boolean(isDirty) };
 }

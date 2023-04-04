@@ -1,15 +1,8 @@
-import {
-  DescribeRefOptions,
-  describeRefSync,
-  ExecOpts,
-  execSync,
-  RemoteClientType,
-  ValidationError,
-} from '@lerna-lite/core';
+import { DescribeRefOptions, describeRefSync, ExecOpts, execSync, RemoteClientType, ValidationError } from '@lerna-lite/core';
 import log from 'npmlog';
 
-import { RemoteCommit } from '../models';
-import { getGithubCommits } from './get-github-commits';
+import { RemoteCommit } from '../models/index.js';
+import { getGithubCommits } from './get-github-commits.js';
 
 /**
  * From the current branch, find all commits since the last tag release.

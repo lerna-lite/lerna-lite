@@ -1,7 +1,7 @@
-jest.mock('../../git-clients', () => ({
-  ...(jest.requireActual('../../git-clients') as any),
-  createGitHubClient: jest.requireActual('../../__mocks__/github-client').createGitHubClient,
-  parseGitRepo: jest.requireActual('../../__mocks__/github-client').parseGitRepo,
+vi.mock('../../git-clients', async () => ({
+  ...(await vi.importActual<any>('../../git-clients')),
+  createGitHubClient: (await vi.importActual<any>('../../__mocks__/github-client')).createGitHubClient,
+  parseGitRepo: (await vi.importActual<any>('../../__mocks__/github-client')).parseGitRepo,
 }));
 
 import { getGithubCommits } from '../get-github-commits';

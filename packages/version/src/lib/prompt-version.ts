@@ -1,16 +1,13 @@
 import semver from 'semver';
 import { PackageGraphNode, promptSelectOne, promptTextInput } from '@lerna-lite/core';
 
-import { applyBuildMetadata } from '../conventional-commits';
+import { applyBuildMetadata } from '../conventional-commits/index.js';
 
 /**
  * @param {(existingPreid: string) => string} resolvePrereleaseId
  * @param {string} buildMetadata
  */
-export function makePromptVersion(
-  resolvePrereleaseId: (prereleaseId?: string) => string | undefined,
-  buildMetadata?: string
-) {
+export function makePromptVersion(resolvePrereleaseId: (prereleaseId?: string) => string | undefined, buildMetadata?: string) {
   return (node: PackageGraphNode) =>
     promptVersion(node.version, node.name, resolvePrereleaseId(node.prereleaseId), buildMetadata);
 }

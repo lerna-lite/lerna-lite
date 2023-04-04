@@ -1,13 +1,17 @@
-import execa from 'execa';
-import os from 'os';
-import { tempWrite } from '../../packages/version/src/utils/temp-write';
+import { execa } from 'execa';
+import os from 'node:os';
 import path from 'path';
 import cp from 'child_process';
-import loadJsonFile from 'load-json-file';
-import writeJsonFile from 'write-json-file';
-import gitSHA from '../serializers/serialize-git-sha';
+import { loadJsonFile } from 'load-json-file';
+import { writeJsonFile } from 'write-json-file';
+import { fileURLToPath } from 'url';
+
+import { tempWrite } from '../../packages/version/src/utils/temp-write.js';
+import gitSHA from '../serializers/serialize-git-sha.js';
 
 // Contains all relevant git config (user, commit.gpgSign, etc)
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 const TEMPLATE = path.resolve(__dirname, 'template');
 
 export function getCommitMessage(cwd, format = '%B') {

@@ -1,4 +1,4 @@
-import os from 'os';
+import os from 'node:os';
 import path from 'path';
 
 const temp = os.tmpdir();
@@ -31,8 +31,8 @@ const cache = path.resolve(cacheRoot, cacheExtra);
 let defaults;
 let globalPrefix;
 
-Object.defineProperty(exports, 'defaults', {
-  get() {
+export class Defaults {
+  get defaults() {
     if (defaults) {
       return defaults;
     }
@@ -183,5 +183,5 @@ Object.defineProperty(exports, 'defaults', {
     };
 
     return defaults;
-  },
-});
+  }
+}

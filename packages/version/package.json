@@ -2,14 +2,30 @@
   "name": "@lerna-lite/version",
   "description": "Bump version & write changelog of packages changed since the last release",
   "version": "1.17.0",
-  "main": "dist/index.js",
-  "types": "dist/index.d.ts",
-  "typings": "dist/index.d.ts",
   "files": [
     "/dist"
   ],
   "publishConfig": {
     "access": "public"
+  },
+  "type": "module",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "module": "dist/index.js",
+  "exports": {
+    ".": {
+      "import": "./dist/index.js",
+      "default": "./dist/index.js",
+      "types": "./dist/types/index.d.ts"
+    },
+    "./*": "./*"
+  },
+  "typesVersions": {
+    "*": {
+      "*": [
+        "./dist/types/index.d.ts"
+      ]
+    }
   },
   "scripts": {
     "prebuild": "rimraf dist",
@@ -29,14 +45,14 @@
     "url": "https://github.com/lerna-lite/lerna-lite/issues"
   },
   "engines": {
-    "node": ">=14.17.0",
-    "npm": ">=8.0.0"
+    "node": ">=16.15.0",
+    "npm": ">=8.5.0"
   },
   "dependencies": {
     "@lerna-lite/core": "workspace:*",
     "@octokit/plugin-enterprise-rest": "^6.0.1",
     "@octokit/rest": "^19.0.7",
-    "chalk": "^4.1.2",
+    "chalk": "^5.2.0",
     "conventional-changelog-angular": "^5.0.13",
     "conventional-changelog-core": "^4.2.4",
     "conventional-changelog-writer": "^5.0.1",
@@ -47,24 +63,24 @@
     "get-stream": "^6.0.1",
     "git-url-parse": "^13.1.0",
     "graceful-fs": "^4.2.11",
-    "is-stream": "^2.0.1",
-    "load-json-file": "^6.2.0",
+    "is-stream": "^3.0.0",
+    "load-json-file": "^7.0.1",
     "make-dir": "^3.1.0",
     "minimatch": "^7.4.3",
-    "new-github-release-url": "^1.0.0",
-    "node-fetch": "^2.6.7",
+    "new-github-release-url": "^2.0.0",
+    "node-fetch": "^3.3.1",
     "npm-package-arg": "^10.1.0",
     "npmlog": "^7.0.1",
-    "p-map": "^4.0.0",
-    "p-pipe": "^3.1.0",
-    "p-reduce": "^2.1.0",
+    "p-map": "^5.5.0",
+    "p-pipe": "^4.0.0",
+    "p-reduce": "^3.0.0",
     "path": "^0.12.7",
-    "pify": "^5.0.0",
+    "pify": "^6.1.0",
     "semver": "^7.3.8",
-    "slash": "^3.0.0",
-    "temp-dir": "^1.0.0",
+    "slash": "^5.0.0",
+    "temp-dir": "^3.0.0",
     "uuid": "^9.0.0",
-    "write-json-file": "^4.3.0"
+    "write-json-file": "^5.0.0"
   },
   "devDependencies": {
     "@npm/types": "^1.0.2",
@@ -73,22 +89,18 @@
     "@types/conventional-commits-parser": "^3.0.3",
     "@types/conventional-recommended-bump": "^6.1.0",
     "@types/dedent": "^0.7.0",
-    "@types/execa": "^2.0.0",
     "@types/fs-extra": "^11.0.1",
     "@types/git-url-parse": "^9.0.1",
     "@types/js-yaml": "^4.0.5",
-    "@types/load-json-file": "^5.1.0",
     "@types/minimatch": "^5.1.2",
     "@types/npm-package-arg": "^6.1.1",
-    "@types/p-map": "^2.0.0",
+    "@types/pify": "^5.0.1",
     "@types/semver": "^7.3.13",
-    "@types/write-json-file": "^3.2.1",
-    "@types/write-pkg": "^4.0.0",
-    "execa": "^5.1.1",
+    "execa": "^7.1.1",
     "fs-extra": "^11.1.1",
     "js-yaml": "^4.1.0",
     "path": "^0.12.7",
-    "write-pkg": "^4.0.0",
+    "write-pkg": "^5.1.0",
     "yargs": "^17.7.1",
     "yargs-parser": "^21.1.1"
   }

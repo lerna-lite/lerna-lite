@@ -1,11 +1,14 @@
 import fs from 'fs-extra';
 import path from 'path';
 import chalk from 'chalk';
+import { fileURLToPath } from 'url';
 
 // helpers
 import { Project } from '../../project';
 import { gitAdd } from '@lerna-test/helpers';
 import { initFixtureFactory } from '@lerna-test/helpers';
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 const initFixture = initFixtureFactory(__dirname);
 
 // file under test
@@ -104,7 +107,7 @@ describe('collectUncommitted()', () => {
 
   it('accepts options.log', async () => {
     // re-uses previous cwd
-    const log = { silly: jest.fn() };
+    const log = { silly: vi.fn() };
 
     const result = await collectUncommitted({ log } as any);
 
@@ -133,7 +136,7 @@ describe('collectUncommittedSync()', () => {
 
   it('accepts options.log', async () => {
     // re-uses previous cwd
-    const log = { silly: jest.fn() };
+    const log = { silly: vi.fn() };
 
     const result = collectUncommittedSync({ log } as any);
 

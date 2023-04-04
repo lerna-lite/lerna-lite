@@ -2,7 +2,7 @@ import normalizeNewline from 'normalize-newline';
 import normalizePath from 'normalize-path';
 import path from 'path';
 
-import { Project } from '../packages/core/src/project';
+import { Project } from '../packages/core/src/project/index.js';
 
 /**
  * Update lerna config inside a test case.
@@ -29,10 +29,9 @@ export function normalizeRelativeDir(testDir, filePath) {
   return normalizePath(path.relative(testDir, filePath));
 }
 
-export * from './git';
-export * from './fixtures';
-export * from './npm';
-export * from './cli';
-export * from './fixtures';
-export * from './logging-output';
-export * from './pkg-matchers';
+export * from './git/index.js';
+export * from './fixtures.js';
+export * from './npm/index.js';
+export * from './cli.js';
+export * from './logging-output.js';
+export * from './pkg-matchers.js';
