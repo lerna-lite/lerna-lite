@@ -14,15 +14,15 @@ test('returns all packages', () => {
 
   expect(toNamesList(result)).toMatchInlineSnapshot(`
     [
-      "package-cycle-1",
-      "package-cycle-2",
-      "package-cycle-extraneous-1",
-      "package-cycle-extraneous-2",
-      "package-dag-1",
-      "package-dag-2a",
-      "package-dag-2b",
-      "package-dag-3",
-      "package-standalone",
+      package-cycle-1,
+      package-cycle-2,
+      package-cycle-extraneous-1,
+      package-cycle-extraneous-2,
+      package-dag-1,
+      package-dag-2a,
+      package-dag-2b,
+      package-dag-3,
+      package-standalone,
     ]
   `);
 });
@@ -37,10 +37,10 @@ test('filters packages through isCandidate, passing node and name', () => {
 
   expect(toNamesList(result)).toMatchInlineSnapshot(`
     [
-      "package-cycle-1",
-      "package-cycle-2",
-      "package-cycle-extraneous-1",
-      "package-cycle-extraneous-2",
+      package-cycle-1,
+      package-cycle-2,
+      package-cycle-extraneous-1,
+      package-cycle-extraneous-2,
     ]
   `);
 });

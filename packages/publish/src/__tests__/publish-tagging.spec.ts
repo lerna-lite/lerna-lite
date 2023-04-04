@@ -103,11 +103,11 @@ test('publish --temp-tag', async () => {
   await new PublishCommand(createArgv(cwd, '--temp-tag'));
 
   expect((npmPublish as any).registry).toMatchInlineSnapshot(`
-Map {
-  "@integration/package-1" => "lerna-temp",
-  "@integration/package-2" => "lerna-temp",
-}
-`);
+    Map {
+      '@integration/package-1' => 'lerna-temp',
+      '@integration/package-2' => 'lerna-temp',
+    }
+  `);
 
   const conf = expect.objectContaining({
     tag: 'latest',
@@ -129,11 +129,11 @@ test('publish --dist-tag beta --temp-tag', async () => {
   await new PublishCommand(createArgv(cwd, '--dist-tag', 'beta', '--temp-tag'));
 
   expect((npmPublish as any).registry).toMatchInlineSnapshot(`
-Map {
-  "@integration/package-1" => "lerna-temp",
-  "@integration/package-2" => "lerna-temp",
-}
-`);
+    Map {
+      '@integration/package-1' => 'lerna-temp',
+      '@integration/package-2' => 'lerna-temp',
+    }
+  `);
 
   const conf = expect.objectContaining({
     tag: 'beta',
@@ -185,11 +185,11 @@ test('publish --pre-dist-tag beta --temp-tag', async () => {
   await new PublishCommand(createArgv(cwd, '--bump', 'prerelease', '--dist-tag', 'next', '--preid', 'beta', '--pre-dist-tag', 'beta', '--temp-tag'));
 
   expect((npmPublish as any).registry).toMatchInlineSnapshot(`
-Map {
-  "@integration/package-1" => "lerna-temp",
-  "@integration/package-2" => "lerna-temp",
-}
-`);
+    Map {
+      '@integration/package-1' => 'lerna-temp',
+      '@integration/package-2' => 'lerna-temp',
+    }
+  `);
 
   const conf = expect.objectContaining({
     tag: 'next',

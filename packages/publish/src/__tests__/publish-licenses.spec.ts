@@ -108,10 +108,10 @@ describe('licenses', () => {
 
     const [warning] = loggingOutput('warn');
     expect(warning).toMatchInlineSnapshot(`
-  "Packages package-1 and package-3 are missing a license.
-  One way to fix this is to add a LICENSE.md file to the root of this repository.
-  See https://choosealicense.com for additional guidance."
-  `);
+      Packages package-1 and package-3 are missing a license.
+      One way to fix this is to add a LICENSE.md file to the root of this repository.
+      See https://choosealicense.com for additional guidance.
+    `);
 
     expect(createTempLicenses).toHaveBeenLastCalledWith(undefined, []);
     expect(removeTempLicenses).toHaveBeenLastCalledWith([]);
