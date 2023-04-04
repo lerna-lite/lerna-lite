@@ -1,8 +1,8 @@
-import log from 'npmlog';
-import path from 'path';
 import { loadJsonFile } from 'load-json-file';
-import fs from 'fs';
-import os from 'node:os';
+import { renameSync, promises } from 'node:fs';
+import { EOL } from 'node:os';
+import { join } from 'node:path';
+import log from 'npmlog';
 import semver from 'semver';
 import { writeJsonFile } from 'write-json-file';
 import { exec, execSync, Package } from '@lerna-lite/core';
@@ -14,7 +14,7 @@ import { exec, execSync, Package } from '@lerna-lite/core';
  */
 export async function loadPackageLockFileWhenExists<T = any>(lockFileFolderPath: string) {
   try {
-    const lockFilePath = path.join(lockFileFolderPath, 'package-lock.json');
+    const lockFilePath = join(lockFileFolderPath, 'package-lock.json');
     const pkgLockFileObj = await loadJsonFile<T>(lockFilePath);
     const lockfileVersion = +(pkgLockFileObj?.['lockfileVersion'] ?? 1);
 
@@ -35,7 +35,7 @@ export async function loadPackageLockFileWhenExists<T = any>(lockFileFolderPath:
 export async function updateClassicLockfileVersion(pkg: Package): Promise<string | undefined> {
   try {
     // "lockfileVersion" = 1, package lock file might be located in the package folder
-    const lockFilePath = path.join(pkg.location, 'package-lock.json');
+    const lockFilePath = join(pkg.location, 'package-lock.json');
     const pkgLockFileObj: any = await loadJsonFile(lockFilePath);
 
     if (pkgLockFileObj) {
@@ -137,7 +137,7 @@ export async function runInstallLockFileOnly(
   switch (npmClient) {
     case 'pnpm':
       inputLockfileName = 'pnpm-lock.yaml';
-      if (await validateFileExists(path.join(cwd, inputLockfileName))) {
+      if (await validateFileExists(join(cwd, inputLockfileName))) {
         log.verbose('lock', `updating lock file via "pnpm install --lockfile-only --ignore-scripts"`);
         await exec('pnpm', ['install', '--lockfile-only', '--ignore-scripts', ...npmClientArgs], { cwd });
         outputLockfileName = inputLockfileName;
@@ -146,7 +146,7 @@ export async function runInstallLockFileOnly(
     case 'yarn':
       inputLockfileName = 'yarn.lock';
       const yarnVersion = execSync('yarn', ['--version']);
-      if (semver.gte(yarnVersion, '2.0.0') && (await validateFileExists(path.join(cwd, inputLockfileName)))) {
+      if (semver.gte(yarnVersion, '2.0.0') && (await validateFileExists(join(cwd, inputLockfileName)))) {
         log.verbose('lock', `updating lock file via "yarn install --mode update-lockfile"`);
         await exec('yarn', ['install', '--mode', 'update-lockfile', ...npmClientArgs], { cwd });
         outputLockfileName = inputLockfileName;
@@ -155,7 +155,7 @@ export async function runInstallLockFileOnly(
     case 'npm':
     default:
       inputLockfileName = 'package-lock.json';
-      if (await validateFileExists(path.join(cwd, inputLockfileName))) {
+      if (await validateFileExists(join(cwd, inputLockfileName))) {
         const localNpmVersion = execSync('npm', ['--version']);
         log.silly(`npm`, `current local npm version is "${localNpmVersion}"`);
 
@@ -177,7 +177,7 @@ export async function runInstallLockFileOnly(
 
           // 2. rename "npm-shrinkwrap.json" back to "package-lock.json"
           log.verbose('lock', `renaming "npm-shrinkwrap.json" file back to "package-lock.json"`);
-          fs.renameSync('npm-shrinkwrap.json', 'package-lock.json');
+          renameSync('npm-shrinkwrap.json', 'package-lock.json');
         }
 
         outputLockfileName = inputLockfileName;
@@ -191,7 +191,7 @@ export async function runInstallLockFileOnly(
       [
         `we could not sync neither locate "${inputLockfileName}" by using "${npmClient}" client at location ${cwd}`,
         `Note: if you were expecting a different lock file name, make sure to configure "npmClient" into your "lerna.json" config file.`,
-      ].join(os.EOL)
+      ].join(EOL)
     );
   }
   return outputLockfileName;
@@ -204,7 +204,7 @@ export async function runInstallLockFileOnly(
  */
 export async function validateFileExists(filePath: string) {
   try {
-    await fs.promises.access(filePath);
+    await promises.access(filePath);
     return true;
   } catch {
     return false;

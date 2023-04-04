@@ -1,4 +1,4 @@
-import path from 'path';
+import { dirname } from 'node:path';
 import normalizePath from 'normalize-path';
 
 const { loadJsonFile: actualLoadJsonFile, loadJsonFileSync: loadJsonFileSyncActual } = await vi.importActual<any>(
@@ -11,7 +11,7 @@ const syncRegistry = new Map();
 function incrementCalled(registry, manifestLocation) {
   // tempy creates dirnames that are 32 characters long, but we want a readable key
   const subPath = (manifestLocation || '').split(/[0-9a-f]{32}/).pop();
-  const key = normalizePath(path.dirname(subPath));
+  const key = normalizePath(dirname(subPath));
 
   // keyed off directory subpath, _not_ pkg.name (we don't know it yet)
   registry.set(key, (registry.get(key) || 0) + 1);

@@ -1,4 +1,4 @@
-import nodeFs from 'fs';
+import nodeFs from 'node:fs';
 vi.spyOn(nodeFs, 'renameSync');
 
 // local modules _must_ be explicitly mocked
@@ -19,20 +19,20 @@ vi.mock('@lerna-lite/core', async () => ({
   throwIfUncommitted: (await vi.importActual<any>('../../../core/src/__mocks__/check-working-tree')).throwIfUncommitted,
 }));
 
-import fs from 'fs-extra';
-import path from 'path';
-import { fileURLToPath } from 'url';
+import { outputFile } from 'fs-extra/esm';
+import { dirname, join, resolve as pathResolve } from 'node:path';
+import { fileURLToPath } from 'node:url';
 import yargParser from 'yargs-parser';
 
 // helpers
 const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
+const __dirname = dirname(__filename);
 import { gitAdd } from '@lerna-test/helpers';
 import { gitCommit } from '@lerna-test/helpers';
 import { gitTag } from '@lerna-test/helpers';
 import { showCommit } from '@lerna-test/helpers';
 import { initFixtureFactory } from '@lerna-test/helpers';
-const initFixture = initFixtureFactory(path.resolve(__dirname, '../../../publish/src/__tests__'));
+const initFixture = initFixtureFactory(pathResolve(__dirname, '../../../publish/src/__tests__'));
 
 // test command
 import { VersionCommand } from '../version-command';
@@ -56,7 +56,7 @@ const createArgv = (cwd, ...args) => {
 describe('version --ignore-changes', () => {
   const setupChanges = async (cwd, tuples) => {
     await gitTag(cwd, 'v1.0.0');
-    await Promise.all(tuples.map(([filePath, content]) => fs.outputFile(path.join(cwd, filePath), content, 'utf8')));
+    await Promise.all(tuples.map(([filePath, content]) => outputFile(join(cwd, filePath), content, 'utf8')));
     await gitAdd(cwd, '.');
     await gitCommit(cwd, 'setup');
   };

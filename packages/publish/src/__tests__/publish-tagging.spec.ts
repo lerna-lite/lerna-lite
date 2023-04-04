@@ -39,10 +39,10 @@ import { npmPublish } from '../lib/npm-publish';
 import { add, remove } from '../lib/npm-dist-tag';
 
 // helpers
-import path from 'path';
-import { fileURLToPath } from 'url';
+import { dirname } from 'node:path';
+import { fileURLToPath } from 'node:url';
 const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
+const __dirname = dirname(__filename);
 import { commandRunner, initFixtureFactory } from '@lerna-test/helpers';
 const initFixture = initFixtureFactory(__dirname);
 

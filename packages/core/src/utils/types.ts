@@ -1,6 +1,6 @@
-import path from 'path';
-import { Stream } from 'stream';
-import url from 'url';
+import path from 'node:path';
+import { Stream } from 'node:stream';
+import url from 'node:url';
 
 const Umask = () => {};
 const getLocalAddresses = () => [];

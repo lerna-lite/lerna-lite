@@ -1,6 +1,6 @@
-import assert from 'assert';
-import fs from 'fs';
-import path from 'path';
+import assert from 'node:assert';
+import { readFileSync, statSync } from 'node:fs';
+import { resolve as pathResolve } from 'node:path';
 // @ts-ignore
 import { ConfigChain } from 'config-chain';
 
@@ -57,7 +57,7 @@ export class Conf extends ConfigChain {
     this._await();
 
     try {
-      const contents = fs.readFileSync(file, 'utf8');
+      const contents = readFileSync(file, 'utf8');
       this.addString(contents, file, 'ini', marker);
     } catch (err: any) {
       this.add({}, marker);
@@ -111,7 +111,7 @@ export class Conf extends ConfigChain {
       set: (prefix) => {
         this.set('prefix', prefix);
       },
-      get: () => path.resolve(this.get('prefix')),
+      get: () => pathResolve(this.get('prefix')),
     });
 
     let p;
@@ -125,7 +125,7 @@ export class Conf extends ConfigChain {
     });
 
     if (Object.prototype.hasOwnProperty.call(cli, 'prefix')) {
-      p = path.resolve(cli.prefix);
+      p = pathResolve(cli.prefix);
     } else {
       try {
         p = findPrefix(process.cwd());
@@ -144,7 +144,7 @@ export class Conf extends ConfigChain {
     }
 
     try {
-      const contents = fs.readFileSync(file, 'utf8');
+      const contents = readFileSync(file, 'utf8');
       const delim = '-----END CERTIFICATE-----';
       const output = contents
         .split(delim)
@@ -174,10 +174,10 @@ export class Conf extends ConfigChain {
       return;
     }
 
-    const prefix = path.resolve(this.get('prefix'));
+    const prefix = pathResolve(this.get('prefix'));
 
     try {
-      const stats = fs.statSync(prefix);
+      const stats = statSync(prefix);
       defConf.user = stats.uid;
     } catch (err: any) {
       if (err.code === 'ENOENT') {

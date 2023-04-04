@@ -10,7 +10,7 @@ import {
 } from '@lerna-lite/core';
 import { FilterOptions, getFilteredPackages } from '@lerna-lite/filter-packages';
 import chokidar from 'chokidar';
-import path from 'path';
+import { join } from 'node:path';
 
 import { CHOKIDAR_AVAILABLE_OPTIONS, DEBOUNCE_DELAY, FILE_DELIMITER } from './constants.js';
 import { ChangesStructure } from './models.js';
@@ -92,7 +92,7 @@ export class WatchCommand extends Command<WatchCommandOption & FilterOptions> {
         // does user have a glob defined, if so append it to the pkg location. Glob example for TS files: /**/*.ts
         let watchingPath = pkg.location;
         if (this.options.glob) {
-          watchingPath = path.join(pkg.location, '/', this.options.glob); // append glob to pkg location
+          watchingPath = join(pkg.location, '/', this.options.glob); // append glob to pkg location
         }
         packageLocations.push(watchingPath);
       });

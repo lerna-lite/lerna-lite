@@ -1,10 +1,11 @@
 import { Project } from '@lerna-lite/core';
 import { getPackagesWithoutLicense } from '../lib/get-packages-without-license';
 import { initFixtureFactory } from '@lerna-test/helpers';
-import { fileURLToPath } from 'url';
-import path from 'path';
+import { fileURLToPath } from 'node:url';
+import { dirname } from 'node:path';
+
 const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
+const __dirname = dirname(__filename);
 const initFixture = initFixtureFactory(__dirname);
 
 test('getPackagesWithoutLicense', async () => {

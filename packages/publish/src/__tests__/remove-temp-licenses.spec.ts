@@ -1,11 +1,11 @@
-import fs from 'fs-extra';
-import path from 'path';
+import { pathExists } from 'fs-extra/esm';
+import { dirname, join } from 'node:path';
 import { Project } from '@lerna-lite/core';
 import { removeTempLicenses } from '../lib/remove-temp-licenses';
 import { initFixtureFactory } from '@lerna-test/helpers';
-import { fileURLToPath } from 'url';
+import { fileURLToPath } from 'node:url';
 const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
+const __dirname = dirname(__filename);
 const initFixture = initFixtureFactory(__dirname);
 
 describe('removeTempLicenses', () => {
@@ -15,11 +15,11 @@ describe('removeTempLicenses', () => {
     const [pkg] = await project.getPackages();
 
     // mimic decoration in createTempLicenses()
-    pkg.licensePath = path.join(pkg.location, 'LICENSE');
+    pkg.licensePath = join(pkg.location, 'LICENSE');
 
     await removeTempLicenses([pkg]);
 
-    const tempLicensePresent = await fs.pathExists(pkg.licensePath);
+    const tempLicensePresent = await pathExists(pkg.licensePath);
     expect(tempLicensePresent).toBe(false);
   });
 
@@ -29,11 +29,11 @@ describe('removeTempLicenses', () => {
     const [pkg] = await project.getPackages();
 
     // mimic decoration in createTempLicenses()
-    pkg.licensePath = path.join(pkg.location, 'LICENSE');
+    pkg.licensePath = join(pkg.location, 'LICENSE');
 
     await removeTempLicenses([]);
 
-    const licensePresent = await fs.pathExists(pkg.licensePath);
+    const licensePresent = await pathExists(pkg.licensePath);
     expect(licensePresent).toBe(true);
   });
 });

@@ -33,10 +33,11 @@ vi.mock('@lerna-lite/core', async (coreOriginal) => {
 });
 vi.mock('write-pkg', async () => await vi.importActual('../lib/__mocks__/write-pkg'));
 
-import fs from 'fs-extra';
-import path from 'path';
+import { outputFile, outputJson } from 'fs-extra/esm';
+import { promises as fsPromises } from 'node:fs';
+import { dirname, join, resolve as pathResolve } from 'node:path';
 import { execa } from 'execa';
-import { fileURLToPath } from 'url';
+import { fileURLToPath } from 'node:url';
 import yaml from 'js-yaml';
 
 // mocked or stubbed modules
@@ -54,12 +55,12 @@ import { commandRunner, getCommitMessage, gitAdd, gitCommit, gitTag, initFixture
 
 // test command
 const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
+const __dirname = dirname(__filename);
 import { VersionCommand } from '../version-command';
 import { loadPackageLockFileWhenExists } from '../lib/update-lockfile-version';
 import cliCommands from '../../../cli/src/cli-commands/cli-version-commands';
 const lernaVersion = commandRunner(cliCommands);
-const initFixture = initFixtureFactory(path.resolve(__dirname, '../../../publish/src/__tests__'));
+const initFixture = initFixtureFactory(pathResolve(__dirname, '../../../publish/src/__tests__'));
 
 // file under test
 import { Mock } from 'vitest';
@@ -79,7 +80,7 @@ const createArgv = (cwd, ...args) => {
 
 async function loadYamlFile<T>(filePath: string) {
   try {
-    const file = await fs.promises.readFile(filePath);
+    const file = await fsPromises.readFile(filePath);
     return (await yaml.load(`${file}`)) as T;
   } catch (e) {
     return undefined;
@@ -390,7 +391,7 @@ describe('VersionCommand', () => {
   });
 
   describe('--no-commit-hooks', () => {
-    const setupPreCommitHook = (cwd) => fs.outputFile(path.join(cwd, '.git/hooks/pre-commit'), '#!/bin/sh\nexit 1\n', { mode: 0o755 });
+    const setupPreCommitHook = (cwd) => outputFile(join(cwd, '.git/hooks/pre-commit'), '#!/bin/sh\nexit 1\n', { mode: 0o755 });
 
     it('passes --no-verify to git commit execution', async () => {
       const cwd = await initFixture('normal');
@@ -406,7 +407,7 @@ describe('VersionCommand', () => {
       const cwd = await initFixture('normal');
 
       await setupPreCommitHook(cwd);
-      await fs.outputJSON(path.join(cwd, 'lerna.json'), {
+      await outputJson(join(cwd, 'lerna.json'), {
         version: '1.0.0',
         command: {
           publish: {
@@ -447,7 +448,7 @@ describe('VersionCommand', () => {
     it('consumes configuration from lerna.json', async () => {
       const testDir = await initFixture('normal');
 
-      await fs.outputJSON(path.join(testDir, 'lerna.json'), {
+      await outputJson(join(testDir, 'lerna.json'), {
         version: '1.0.0',
         command: {
           publish: {
@@ -480,7 +481,7 @@ describe('VersionCommand', () => {
 
     it('skips dirty working tree validation', async () => {
       const testDir = await initFixture('normal');
-      await fs.outputFile(path.join(testDir, 'packages/package-1/hello.js'), 'world');
+      await outputFile(join(testDir, 'packages/package-1/hello.js'), 'world');
       await new VersionCommand(createArgv(testDir, '--no-git-tag-version'));
 
       expect(checkWorkingTree).not.toHaveBeenCalled();
@@ -499,8 +500,8 @@ describe('VersionCommand', () => {
 
     it('adds changed files globally', async () => {
       const cwd = await initFixture('normal');
-      await fs.outputFile(path.join(cwd, '.gitignore'), 'packages/dynamic');
-      await fs.outputJSON(path.join(cwd, 'packages/dynamic/package.json'), {
+      await outputFile(join(cwd, '.gitignore'), 'packages/dynamic');
+      await outputJson(join(cwd, 'packages/dynamic/package.json'), {
         name: 'dynamic',
         version: '1.0.0',
       });
@@ -513,12 +514,12 @@ describe('VersionCommand', () => {
 
     it('consumes configuration from lerna.json', async () => {
       const cwd = await initFixture('normal');
-      await fs.outputFile(path.join(cwd, '.gitignore'), 'packages/dynamic');
-      await fs.outputJSON(path.join(cwd, 'packages/dynamic/package.json'), {
+      await outputFile(join(cwd, '.gitignore'), 'packages/dynamic');
+      await outputJson(join(cwd, 'packages/dynamic/package.json'), {
         name: 'dynamic',
         version: '1.0.0',
       });
-      await fs.outputJSON(path.join(cwd, 'lerna.json'), {
+      await outputJson(join(cwd, 'lerna.json'), {
         version: '1.0.0',
         granularPathspec: false,
       });
@@ -551,7 +552,7 @@ describe('VersionCommand', () => {
     it('consumes configuration from lerna.json', async () => {
       const testDir = await initFixture('normal');
 
-      await fs.outputJSON(path.join(testDir, 'lerna.json'), {
+      await outputJson(join(testDir, 'lerna.json'), {
         version: '1.0.0',
         command: {
           version: {
@@ -586,7 +587,7 @@ describe('VersionCommand', () => {
     it('consumes configuration from lerna.json', async () => {
       const testDir = await initFixture('normal');
 
-      await fs.outputJSON(path.join(testDir, 'lerna.json'), {
+      await outputJson(join(testDir, 'lerna.json'), {
         version: '1.0.0',
         command: {
           publish: {
@@ -622,7 +623,7 @@ describe('VersionCommand', () => {
     it('consumes configuration from lerna.json', async () => {
       const testDir = await initFixture('normal');
 
-      await fs.outputJSON(path.join(testDir, 'lerna.json'), {
+      await outputJson(join(testDir, 'lerna.json'), {
         version: '1.0.0',
         command: {
           publish: {
@@ -694,7 +695,7 @@ describe('VersionCommand', () => {
     it('consumes configuration from lerna.json', async () => {
       const testDir = await initFixture('normal');
 
-      await fs.outputJSON(path.join(testDir, 'lerna.json'), {
+      await outputJson(join(testDir, 'lerna.json'), {
         version: '1.0.0',
         command: {
           publish: {
@@ -851,7 +852,7 @@ describe('VersionCommand', () => {
     const testDir = await initFixture('snake-graph');
 
     await gitTag(testDir, 'v1.0.0');
-    await fs.outputFile(path.join(testDir, 'packages/package-1/hello.js'), 'world');
+    await outputFile(join(testDir, 'packages/package-1/hello.js'), 'world');
     await gitAdd(testDir, '.');
     await gitCommit(testDir, 'feat: hello');
 
@@ -868,7 +869,7 @@ describe('VersionCommand', () => {
 
     await gitTag(testDir, 'v1.0.0');
 
-    await Promise.all(['a', 'b', 'c', 'd'].map((n) => fs.outputFile(path.join(testDir, 'packages', n, 'index.js'), 'hello')));
+    await Promise.all(['a', 'b', 'c', 'd'].map((n) => outputFile(join(testDir, 'packages', n, 'index.js'), 'hello')));
     await gitAdd(testDir, '.');
     await gitCommit(testDir, 'feat: hello');
 
@@ -883,7 +884,7 @@ describe('VersionCommand', () => {
   describe('with relative file: specifiers', () => {
     const setupChanges = async (cwd, pkgRoot = 'packages') => {
       await gitTag(cwd, 'v1.0.0');
-      await fs.outputFile(path.join(cwd, `${pkgRoot}/package-1/hello.js`), 'world');
+      await outputFile(join(cwd, `${pkgRoot}/package-1/hello.js`), 'world');
       await gitAdd(cwd, '.');
       await gitCommit(cwd, 'setup');
     };
@@ -990,7 +991,7 @@ describe('VersionCommand', () => {
         const changedFiles = await showCommit(cwd, '--name-only');
         expect(changedFiles).toContain('pnpm-lock.yaml');
 
-        const lockfileResponse: any = await loadYamlFile(path.join(cwd, 'pnpm-lock.yaml'));
+        const lockfileResponse: any = await loadYamlFile(join(cwd, 'pnpm-lock.yaml'));
         const { lockfileVersion, importers } = lockfileResponse;
 
         expect(lockfileVersion).toBe(5.4);
@@ -1014,7 +1015,7 @@ describe('VersionCommand', () => {
           '@my-workspace/package-4': '2.4.0',
         });
 
-        const lockfileResponse: any = await loadYamlFile(path.join(cwd, 'pnpm-lock.yaml'));
+        const lockfileResponse: any = await loadYamlFile(join(cwd, 'pnpm-lock.yaml'));
         const { lockfileVersion, importers } = lockfileResponse;
 
         expect(lockfileVersion).toBe(5.4);
@@ -1043,7 +1044,7 @@ describe('VersionCommand', () => {
     it('set "describeTag" in lerna.json', async () => {
       const testDir = await initFixture('normal');
 
-      await fs.outputJSON(path.join(testDir, 'lerna.json'), {
+      await outputJson(join(testDir, 'lerna.json'), {
         version: 'independent',
         describeTag: '*custom-tag*',
       });

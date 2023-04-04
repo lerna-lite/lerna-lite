@@ -1,9 +1,9 @@
 import { execa } from 'execa';
-import { fileURLToPath } from 'url';
-import path from 'path';
+import { fileURLToPath } from 'node:url';
+import { dirname } from 'node:path';
 
 const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
+const __dirname = dirname(__filename);
 import { gitPush } from '../lib/git-push';
 import { cloneFixtureFactory } from '@lerna-test/helpers';
 const cloneFixture = cloneFixtureFactory(__dirname);

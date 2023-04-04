@@ -21,21 +21,21 @@ vi.mock('@lerna-lite/core', async () => ({
   throwIfUncommitted: (await vi.importActual<any>('../../../core/src/__mocks__/check-working-tree')).throwIfUncommitted,
 }));
 
-import path from 'path';
+import { dirname, join, resolve as pathResolve } from 'node:path';
 import semver from 'semver';
 import { Mock } from 'vitest';
-import { fileURLToPath } from 'url';
+import { fileURLToPath } from 'node:url';
 
 // mocked modules
 const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
+const __dirname = dirname(__filename);
 import writePkg from 'write-pkg';
 import { collectUpdates, VersionCommandOption } from '@lerna-lite/core';
 import { recommendVersion, updateChangelog } from '../conventional-commits';
 
 // helpers
 import { initFixtureFactory, showCommit } from '@lerna-test/helpers';
-const initFixture = initFixtureFactory(path.resolve(__dirname, '../../../publish/src/__tests__'));
+const initFixture = initFixtureFactory(pathResolve(__dirname, '../../../publish/src/__tests__'));
 
 // test command
 import { VersionCommand } from '../version-command';
@@ -245,7 +245,7 @@ describe('--conventional-commits', () => {
       expect(changedFiles).toMatchSnapshot();
 
       ['package-1', 'package-2', 'package-3', 'package-4', 'package-5'].forEach((name) => {
-        const location = path.join(cwd, 'packages', name);
+        const location = join(cwd, 'packages', name);
 
         expect(recommendVersion).toHaveBeenCalledWith(expect.objectContaining({ name, location }), 'fixed', {
           changelogPreset: undefined,
@@ -295,7 +295,7 @@ describe('--conventional-commits', () => {
       expect(changedFiles).toMatchSnapshot();
 
       ['package-1', 'package-2', 'package-3', 'package-4', 'package-5'].forEach((name) => {
-        const location = path.join(cwd, 'packages', name);
+        const location = join(cwd, 'packages', name);
 
         expect(recommendVersion).toHaveBeenCalledWith(expect.objectContaining({ name, location }), 'fixed', {
           changelogPreset: undefined,

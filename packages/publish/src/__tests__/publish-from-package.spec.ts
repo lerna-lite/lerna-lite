@@ -28,9 +28,9 @@ vi.mock('../lib/get-unpublished-packages', async () => await vi.importActual('..
 vi.mock('../lib/pack-directory', async () => await vi.importActual('../lib/__mocks__/pack-directory'));
 vi.mock('../lib/npm-publish', async () => await vi.importActual('../lib/__mocks__/npm-publish'));
 
-import fs from 'fs-extra';
-import path from 'path';
-import { fileURLToPath } from 'url';
+import { remove } from 'fs-extra/esm';
+import { dirname, join } from 'node:path';
+import { fileURLToPath } from 'node:url';
 import { Mock } from 'vitest';
 import yargParser from 'yargs-parser';
 
@@ -43,7 +43,7 @@ import { getUnpublishedPackages } from '../lib/get-unpublished-packages';
 
 // helpers
 const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
+const __dirname = dirname(__filename);
 import { loggingOutput } from '@lerna-test/helpers/logging-output';
 import { initFixtureFactory } from '@lerna-test/helpers';
 const initFixture = initFixtureFactory(__dirname);
@@ -154,7 +154,7 @@ describe('publish from-package', () => {
     const cwd = await initFixture('independent');
 
     // nuke the git repo first
-    await fs.remove(path.join(cwd, '.git'));
+    await remove(join(cwd, '.git'));
     await new PublishCommand(createArgv(cwd, 'from-package'));
 
     expect(npmPublish).toHaveBeenCalled();

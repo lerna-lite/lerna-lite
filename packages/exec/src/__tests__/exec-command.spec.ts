@@ -15,10 +15,10 @@ vi.mock('@lerna-lite/profiler', async () => await vi.importActual<any>('../../..
 // also point to the local exec command so that all mocks are properly used even by the command-runner
 vi.mock('@lerna-lite/exec', async () => await vi.importActual<any>('../exec-command'));
 
-import path from 'path';
-import fs from 'fs-extra';
+import { basename, dirname, join } from 'node:path';
+import { pathExists, readJson } from 'fs-extra/esm';
 import { globby } from 'globby';
-import { fileURLToPath } from 'url';
+import { fileURLToPath } from 'node:url';
 import { Mock } from 'vitest';
 import yargParser from 'yargs-parser';
 
@@ -30,7 +30,7 @@ import { spawn, spawnStreaming } from '@lerna-lite/core';
 
 // helpers
 const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
+const __dirname = dirname(__filename);
 import { commandRunner, initFixtureFactory } from '@lerna-test/helpers';
 import { loggingOutput } from '@lerna-test/helpers/logging-output';
 import { normalizeRelativeDir } from '@lerna-test/helpers';
@@ -40,7 +40,7 @@ const lernaExec = commandRunner(cliExecCommands);
 const initFixture = initFixtureFactory(__dirname);
 
 // assertion helpers
-const calledInPackages = () => (spawn as Mock).mock.calls.map(([, , opts]) => path.basename(opts.cwd));
+const calledInPackages = () => (spawn as Mock).mock.calls.map(([, , opts]) => basename(opts.cwd));
 
 const execInPackagesStreaming = (testDir) =>
   (spawnStreaming as Mock).mock.calls.reduce((arr, [command, params, opts, prefix]) => {
@@ -154,7 +154,7 @@ describe('ExecCommand', () => {
 
       expect(spawn).toHaveBeenCalledTimes(1);
       expect(spawn).toHaveBeenLastCalledWith('ls', [], {
-        cwd: path.join(testDir, 'packages/package-2'),
+        cwd: join(testDir, 'packages/package-2'),
         pkg: expect.objectContaining({
           name: 'package-2',
         }),
@@ -254,7 +254,7 @@ describe('ExecCommand', () => {
       await lernaExec(cwd)('--profile', '--', 'ls');
 
       const [profileLocation] = await globby('Lerna-Profile-*.json', { cwd, absolute: true });
-      const json = await fs.readJson(profileLocation);
+      const json = await readJson(profileLocation);
 
       expect(json).toMatchObject([
         {
@@ -277,9 +277,9 @@ describe('ExecCommand', () => {
       await lernaExec(cwd)('--profile', '--profile-location', 'foo/bar', '--', 'ls');
 
       const [profileLocation] = await globby('foo/bar/Lerna-Profile-*.json', { cwd, absolute: true });
-      const exists = await fs.exists(profileLocation, null as any);
+      const isExists = await pathExists(profileLocation);
 
-      expect(exists).toBe(true);
+      expect(isExists).toBe(true);
     });
   });
 

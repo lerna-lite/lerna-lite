@@ -1,4 +1,4 @@
-import path from 'path';
+import { dirname } from 'node:path';
 import { Package, Project } from '@lerna-lite/core';
 
 /**
@@ -11,7 +11,7 @@ export function getPackagesWithoutLicense(project: Project, packagesToPublish: P
   return project.getPackageLicensePaths().then((licensePaths: string[]) => {
     // this assumes any existing license is a sibling of package.json, which is pretty safe
     // it also dedupes package locations, since we don't care about duplicate license files
-    const licensed = new Set(licensePaths.map((lp: string) => path.dirname(lp)));
+    const licensed = new Set(licensePaths.map((lp: string) => dirname(lp)));
 
     return packagesToPublish.filter((pkg) => !licensed.has(pkg.location));
   });

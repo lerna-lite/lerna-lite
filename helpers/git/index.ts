@@ -1,18 +1,18 @@
 import { execa } from 'execa';
-import os from 'node:os';
-import path from 'path';
+import { EOL } from 'node:os';
+import { dirname, join, resolve as pathResolve } from 'node:path';
 import cp from 'child_process';
 import { loadJsonFile } from 'load-json-file';
 import { writeJsonFile } from 'write-json-file';
-import { fileURLToPath } from 'url';
+import { fileURLToPath } from 'node:url';
 
 import { tempWrite } from '../../packages/version/src/utils/temp-write.js';
 import gitSHA from '../serializers/serialize-git-sha.js';
 
 // Contains all relevant git config (user, commit.gpgSign, etc)
 const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
-const TEMPLATE = path.resolve(__dirname, 'template');
+const __dirname = dirname(__filename);
+const TEMPLATE = pathResolve(__dirname, 'template');
 
 export function getCommitMessage(cwd, format = '%B') {
   return execa('git', ['log', '-1', `--pretty=format:${format}`], { cwd }).then((result) => result.stdout);
@@ -27,7 +27,7 @@ export function gitCheckout(cwd, args) {
 }
 
 export function gitCommit(cwd, message) {
-  if (message.indexOf(os.EOL) > -1) {
+  if (message.indexOf(EOL) > -1) {
     // Use tempfile to allow multi\nline strings.
     return tempWrite(message).then((fp) => execa('git', ['commit', '-F', fp], { cwd }));
   }
@@ -72,7 +72,7 @@ export function showCommit(cwd, ...args) {
 }
 
 export function commitChangeToPackage(cwd, packageName, commitMsg, data) {
-  const packageJSONPath = path.join(cwd, 'packages', packageName, 'package.json');
+  const packageJSONPath = join(cwd, 'packages', packageName, 'package.json');
 
   // QQ no async/await yet...
   let chain: Promise<any> = Promise.resolve();

@@ -1,7 +1,7 @@
 import { loadJsonFileSync } from 'load-json-file';
-import path from 'path';
+import { dirname, join } from 'node:path';
 import { JsonValue } from '@lerna-lite/core';
-import { fileURLToPath } from 'url';
+import { fileURLToPath } from 'node:url';
 
 import changedCmd from './cli-commands/cli-changed-commands.js';
 import diffCmd from './cli-commands/cli-diff-commands.js';
@@ -16,8 +16,8 @@ import cli from './lerna-cli.js';
 
 export function lerna(argv: any[]) {
   const __filename = fileURLToPath(import.meta.url);
-  const __dirname = path.dirname(__filename);
-  const cliPkg = loadJsonFileSync<{ [dep: string]: JsonValue }>(path.join(__dirname, '../', 'package.json'));
+  const __dirname = dirname(__filename);
+  const cliPkg = loadJsonFileSync<{ [dep: string]: JsonValue }>(join(__dirname, '../', 'package.json'));
   const context = {
     lernaVersion: (cliPkg?.version ?? '') as string,
   };

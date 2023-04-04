@@ -1,11 +1,11 @@
 import { execa } from 'execa';
 import { execSync } from '@lerna-lite/core';
-import { fileURLToPath } from 'url';
-import path from 'path';
+import { fileURLToPath } from 'node:url';
+import { dirname } from 'node:path';
 import { isAnythingCommitted } from '../lib/is-anything-committed';
 
 const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
+const __dirname = dirname(__filename);
 import { initFixtureFactory } from '@lerna-test/helpers';
 
 const initFixture = initFixtureFactory(__dirname);

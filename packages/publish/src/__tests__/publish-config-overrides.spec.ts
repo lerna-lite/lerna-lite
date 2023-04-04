@@ -33,15 +33,15 @@ vi.mock('../lib/pack-directory', async () => await vi.importActual<any>('../lib/
 vi.mock('../lib/npm-publish', async () => await vi.importActual<any>('../lib/__mocks__/npm-publish'));
 
 import { outputFile } from 'fs-extra/esm';
-import path from 'path';
-import { fileURLToPath } from 'url';
+import { dirname, join } from 'node:path';
+import { fileURLToPath } from 'node:url';
 
 // mocked modules
 import writePkg from 'write-pkg';
 
 // helpers
 const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
+const __dirname = dirname(__filename);
 import { gitAdd } from '@lerna-test/helpers';
 import { gitTag } from '@lerna-test/helpers';
 import { gitCommit } from '@lerna-test/helpers';
@@ -67,7 +67,7 @@ const createArgv = (cwd, ...args) => {
 
 describe('publishConfig overrides', () => {
   const setupChanges = async (cwd, pkgRoot = 'packages') => {
-    await outputFile(path.join(cwd, `${pkgRoot}/package-1/hello.js`), 'world');
+    await outputFile(join(cwd, `${pkgRoot}/package-1/hello.js`), 'world');
     await gitAdd(cwd, '.');
     await gitCommit(cwd, 'setup');
   };

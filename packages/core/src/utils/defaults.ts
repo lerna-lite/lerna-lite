@@ -1,7 +1,7 @@
-import os from 'node:os';
-import path from 'path';
+import { homedir, tmpdir, type as osType } from 'node:os';
+import { dirname, join, resolve as pathResolve } from 'node:path';
 
-const temp = os.tmpdir();
+const temp = tmpdir();
 const uidOrPid = process.getuid ? process.getuid() : process.pid;
 const hasUnicode = () => true;
 const isWindows = process.platform === 'win32';
@@ -16,17 +16,17 @@ const umask = {
   fromString: (inputStr?: string) => process.umask(),
 };
 
-let home = os.homedir();
+let home = homedir();
 
 if (home) {
   process.env.HOME = home;
 } else {
-  home = path.resolve(temp, `npm-${uidOrPid}`);
+  home = pathResolve(temp, `npm-${uidOrPid}`);
 }
 
 const cacheExtra = process.platform === 'win32' ? 'npm-cache' : '.npm';
 const cacheRoot = (process.platform === 'win32' && process.env.APPDATA) || home;
-const cache = path.resolve(cacheRoot, cacheExtra);
+const cache = pathResolve(cacheRoot, cacheExtra);
 
 let defaults;
 let globalPrefix;
@@ -41,13 +41,13 @@ export class Defaults {
       globalPrefix = process.env.PREFIX;
     } else if (process.platform === 'win32') {
       // c:\node\node.exe --> prefix=c:\node\
-      globalPrefix = path.dirname(process.execPath);
+      globalPrefix = dirname(process.execPath);
     } else {
       // /usr/local/bin/node --> prefix=/usr/local
-      globalPrefix = path.dirname(path.dirname(process.execPath)); // destdir only is respected on Unix
+      globalPrefix = dirname(dirname(process.execPath)); // destdir only is respected on Unix
 
       if (process.env.DESTDIR) {
-        globalPrefix = path.join(process.env.DESTDIR, globalPrefix);
+        globalPrefix = join(process.env.DESTDIR, globalPrefix);
       }
     }
 
@@ -88,7 +88,7 @@ export class Defaults {
       'git-tag-version': true,
       'commit-hooks': true,
       global: false,
-      globalconfig: path.resolve(globalPrefix, 'etc', 'npmrc'),
+      globalconfig: pathResolve(globalPrefix, 'etc', 'npmrc'),
       'global-style': false,
       group: process.platform === 'win32' ? 0 : process.env.SUDO_GID || (process.getgid && process.getgid()),
       'ham-it-up': false,
@@ -96,7 +96,7 @@ export class Defaults {
       'if-present': false,
       'ignore-prepublish': false,
       'ignore-scripts': false,
-      'init-module': path.resolve(home, '.npm-init.js'),
+      'init-module': pathResolve(home, '.npm-init.js'),
       'init-author-name': '',
       'init-author-email': '',
       'init-author-url': '',
@@ -173,8 +173,8 @@ export class Defaults {
         process.getuid() !== 0,
       'update-notifier': true,
       usage: false,
-      user: process.platform === 'win32' || os.type() === 'OS400' ? 0 : 'nobody',
-      userconfig: path.resolve(home, '.npmrc'),
+      user: process.platform === 'win32' || osType() === 'OS400' ? 0 : 'nobody',
+      userconfig: pathResolve(home, '.npmrc'),
       umask: process.umask ? process.umask() : umask.fromString('022'),
       version: false,
       versions: false,

@@ -3,7 +3,7 @@ import dedent from 'dedent';
 import { execaSync, SyncOptions as ExacaSyncOptions } from 'execa';
 import isCI from 'is-ci';
 import log, { Logger } from 'npmlog';
-import os from 'node:os';
+import { cpus } from 'node:os';
 
 import { cleanStack } from './utils/clean-stack.js';
 import { logExecCommand } from './child-process.js';
@@ -28,7 +28,7 @@ import {
 import { PackageGraph } from './package-graph/package-graph.js';
 
 // maxBuffer value for running exec
-const DEFAULT_CONCURRENCY = os.cpus().length;
+const DEFAULT_CONCURRENCY = cpus().length;
 
 type AvailableCommandOption =
   | ChangedCommandOption

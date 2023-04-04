@@ -25,10 +25,10 @@ vi.mock('@lerna-lite/core', async () => ({
 vi.mock('@lerna-lite/version', async () => await vi.importActual('../version-command'));
 
 // mocked modules
-import { fileURLToPath } from 'url';
-import path from 'path';
+import { fileURLToPath } from 'node:url';
+import { dirname } from 'node:path';
 const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
+const __dirname = dirname(__filename);
 import { logOutput, VersionCommandOption } from '@lerna-lite/core';
 import { recommendVersion } from '../conventional-commits';
 import { createGitHubClient, createGitLabClient } from '../git-clients';

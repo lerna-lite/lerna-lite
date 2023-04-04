@@ -18,8 +18,8 @@ vi.mock('@lerna-lite/core', async () => ({
   getPackages: (await vi.importActual<any>('../../../core/src/project')).getPackages,
 }));
 
-import path from 'path';
-import { fileURLToPath } from 'url';
+import { dirname, resolve as pathResolve } from 'node:path';
+import { fileURLToPath } from 'node:url';
 import yargs from 'yargs/yargs';
 
 // mocked modules
@@ -28,8 +28,8 @@ import { collectUpdates } from '@lerna-lite/core';
 // helpers
 import { initFixtureFactory } from '@lerna-test/helpers';
 const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
-const initFixture = initFixtureFactory(path.resolve(__dirname, '../'));
+const __dirname = dirname(__filename);
+const initFixture = initFixtureFactory(pathResolve(__dirname, '../'));
 
 import { Project, PackageGraph } from '@lerna-lite/core';
 

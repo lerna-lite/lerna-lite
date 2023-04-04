@@ -22,7 +22,7 @@ vi.mock('@lerna-lite/version', async () => vi.importActual('../version-command')
 import { PackageGraphNode, promptSelectOne, promptTextInput, VersionCommandOption } from '@lerna-lite/core';
 import { makePromptVersion } from '../lib/prompt-version';
 
-import path from 'path';
+import { dirname, resolve as pathResolve } from 'node:path';
 import { Mock } from 'vitest';
 import yargParser from 'yargs-parser';
 
@@ -30,11 +30,11 @@ const resolvePrereleaseId = vi.fn(() => 'alpha');
 const versionPrompt = (buildMetadata) => makePromptVersion(resolvePrereleaseId, buildMetadata);
 
 // helpers
-import { fileURLToPath } from 'url';
+import { fileURLToPath } from 'node:url';
 const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
+const __dirname = dirname(__filename);
 import { commandRunner, initFixtureFactory } from '@lerna-test/helpers';
-const initFixture = initFixtureFactory(path.resolve(__dirname, '../../../publish/src/__tests__'));
+const initFixture = initFixtureFactory(pathResolve(__dirname, '../../../publish/src/__tests__'));
 import { showCommit } from '@lerna-test/helpers';
 
 // test command

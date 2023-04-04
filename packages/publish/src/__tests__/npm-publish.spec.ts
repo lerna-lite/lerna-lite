@@ -15,7 +15,7 @@ import readJSON from 'read-package-json';
 import { runLifecycle, Package, RawManifest } from '@lerna-lite/core';
 
 // helpers
-import path from 'path';
+import { join, normalize } from 'node:path';
 import { Mock } from 'vitest';
 
 // file under test
@@ -32,8 +32,8 @@ describe('npm-publish', () => {
   (runLifecycle as Mock).mockName('@lerna-lite/core').mockResolvedValue(null);
 
   const tarFilePath = '/tmp/test-1.10.100.tgz';
-  const rootPath = path.normalize('/test');
-  const pkg = new Package({ name: '@scope/test', version: '1.10.100' } as RawManifest, path.join(rootPath, 'npmPublish/test'), rootPath);
+  const rootPath = normalize('/test');
+  const pkg = new Package({ name: '@scope/test', version: '1.10.100' } as RawManifest, join(rootPath, 'npmPublish/test'), rootPath);
 
   it('calls external libraries with correct arguments', async () => {
     const opts = { tag: 'published-tag' };
@@ -122,7 +122,7 @@ describe('npm-publish', () => {
           directory: 'dist',
         },
       } as RawManifest,
-      path.join(rootPath, 'npmPublish/fancy'),
+      join(rootPath, 'npmPublish/fancy'),
       rootPath
     );
 
@@ -135,7 +135,7 @@ describe('npm-publish', () => {
 
     await npmPublish(fancyPkg, tarFilePath);
 
-    expect(readJSON).toHaveBeenCalledWith(path.join(fancyPkg.location, 'dist/package.json'), expect.any(Function));
+    expect(readJSON).toHaveBeenCalledWith(join(fancyPkg.location, 'dist/package.json'), expect.any(Function));
     expect(publish).toHaveBeenCalledWith(
       expect.objectContaining({
         name: 'fancy-fancy',

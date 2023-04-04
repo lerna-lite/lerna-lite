@@ -1,11 +1,11 @@
-import fs from 'fs-extra';
-import path from 'path';
+import { move, pathExists } from 'fs-extra/esm';
+import { dirname, join } from 'node:path';
 import { Project } from '@lerna-lite/core';
-import { fileURLToPath } from 'url';
+import { fileURLToPath } from 'node:url';
 
 import { initFixtureFactory } from '@lerna-test/helpers';
 const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
+const __dirname = dirname(__filename);
 const initFixture = initFixtureFactory(__dirname);
 import { createTempLicenses } from '../lib/create-temp-licenses';
 
@@ -17,7 +17,7 @@ describe('createTempLicenses', () => {
 
     await createTempLicenses(project.licensePath, [pkg]);
 
-    const licenseWritten = await fs.pathExists(path.join(pkg.location, 'LICENSE'));
+    const licenseWritten = await pathExists(join(pkg.location, 'LICENSE'));
     expect(licenseWritten).toBe(true);
   });
 
@@ -31,7 +31,7 @@ describe('createTempLicenses', () => {
 
     await createTempLicenses(project.licensePath, [pkg]);
 
-    const licenseWritten = await fs.pathExists(path.join(pkg.contents, 'LICENSE'));
+    const licenseWritten = await pathExists(join(pkg.contents, 'LICENSE'));
     expect(licenseWritten).toBe(true);
   });
 
@@ -45,7 +45,7 @@ describe('createTempLicenses', () => {
 
     await createTempLicenses(project.licensePath, [pkg]);
 
-    const licenseWritten = await fs.pathExists(path.join(pkg.contents, 'LICENSE'));
+    const licenseWritten = await pathExists(join(pkg.contents, 'LICENSE'));
     expect(licenseWritten).toBe(true);
   });
 
@@ -54,10 +54,10 @@ describe('createTempLicenses', () => {
     const project = new Project(cwd);
     const [pkg] = await project.getPackages();
 
-    await fs.move(path.join(cwd, 'LICENSE'), path.join(cwd, 'LICENSE.md'));
+    await move(join(cwd, 'LICENSE'), join(cwd, 'LICENSE.md'));
     await createTempLicenses(project.licensePath, [pkg]);
 
-    const licenseWritten = await fs.pathExists(path.join(pkg.location, 'LICENSE.md'));
+    const licenseWritten = await pathExists(join(pkg.location, 'LICENSE.md'));
     expect(licenseWritten).toBe(true);
   });
 
@@ -68,7 +68,7 @@ describe('createTempLicenses', () => {
 
     await createTempLicenses(undefined as any, [pkg]);
 
-    const licenseWritten = await fs.pathExists(path.join(pkg.location, 'LICENSE'));
+    const licenseWritten = await pathExists(join(pkg.location, 'LICENSE'));
     expect(licenseWritten).toBe(false);
   });
 
@@ -79,7 +79,7 @@ describe('createTempLicenses', () => {
 
     await createTempLicenses(project.licensePath, []);
 
-    const licenseWritten = await fs.pathExists(path.join(pkg.location, 'LICENSE'));
+    const licenseWritten = await pathExists(join(pkg.location, 'LICENSE'));
     expect(licenseWritten).toBe(false);
   });
 });

@@ -1,8 +1,8 @@
 import chalk from 'chalk';
 import { glob } from 'glob';
 import { outputFileSync, removeSync } from 'fs-extra/esm';
-import os from 'node:os';
-import path from 'path';
+import { EOL } from 'node:os';
+import { join, relative } from 'node:path';
 import crypto from 'crypto';
 import { createRequire } from 'node:module';
 import normalizePath from 'normalize-path';
@@ -331,12 +331,12 @@ export class PublishCommand extends Command<PublishCommandOption> {
       }
     } else {
       const message = publishedPackagesSorted.map((pkg) => ` - ${pkg.name}@${pkg.version}`);
-      logOutput(message.join(os.EOL));
+      logOutput(message.join(EOL));
     }
 
     // optionally cleanup temp packed files after publish, opt-in option
     if (this.options.cleanupTempFiles) {
-      glob(normalizePath(path.join(tempDir, '/lerna-*'))).then((deleteFolders) => {
+      glob(normalizePath(join(tempDir, '/lerna-*'))).then((deleteFolders) => {
         // delete silently all files/folders that startsWith "lerna-"
         deleteFolders.forEach((folder) => removeSync(folder));
         this.logger.verbose('publish', `Found ${deleteFolders.length} temp folders to cleanup after publish.`);
@@ -537,7 +537,7 @@ export class PublishCommand extends Command<PublishCommandOption> {
 
     logOutput('');
     logOutput(`Found ${count} ${count === 1 ? 'package' : 'packages'} to publish:`);
-    logOutput(message.join(os.EOL));
+    logOutput(message.join(EOL));
     logOutput('');
 
     if (this.options.yes) {
@@ -743,7 +743,7 @@ export class PublishCommand extends Command<PublishCommandOption> {
     // prettier-ignore
     const dirtyManifests = [this.project.manifest]
       .concat(this.packagesToPublish)
-      .map((pkg) => path.relative(cwd, pkg.manifestLocation));
+      .map((pkg) => relative(cwd, pkg.manifestLocation));
 
     return gitCheckout(dirtyManifests, gitOpts, this.execOpts, this.options.dryRun).catch((err) => {
       this.logger.silly('EGITCHECKOUT', err.message);
@@ -753,7 +753,7 @@ export class PublishCommand extends Command<PublishCommandOption> {
 
   // @deprecated, see Lerna PR https://github.com/lerna/lerna/pull/1862/files
   execScript(pkg: Package, script: string) {
-    const scriptLocation = path.join(pkg.location, 'scripts', script);
+    const scriptLocation = join(pkg.location, 'scripts', script);
 
     try {
       const require = createRequire(import.meta.url);
@@ -857,7 +857,7 @@ export class PublishCommand extends Command<PublishCommandOption> {
 
           (pkg: Package & { packed: Tarball }) =>
             pulseTillDone(packDirectory(pkg, pkg.location, opts)).then((packed: Tarball) => {
-              tracker.verbose('packed', path.relative(this.project.rootPath ?? '', pkg.contents));
+              tracker.verbose('packed', relative(this.project.rootPath ?? '', pkg.contents));
               tracker.completeWork(1);
 
               // store metadata for use in this.publishPacked()

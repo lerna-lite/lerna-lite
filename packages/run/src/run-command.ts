@@ -13,7 +13,7 @@ import { generateProfileOutputPath, Profiler } from '@lerna-lite/profiler';
 import chalk from 'chalk';
 import { pathExistsSync } from 'fs-extra/esm';
 import pMap from 'p-map';
-import path from 'path';
+import { join, relative } from 'node:path';
 import { performance } from 'perf_hooks';
 
 import { npmRunScript, npmRunScriptStreaming, timer } from './lib/index.js';
@@ -225,7 +225,7 @@ export class RunCommand extends Command<RunCommandOption & FilterOptions> {
     if (this.options.profile) {
       const absolutePath = generateProfileOutputPath(this.options.profileLocation);
       // Nx requires a workspace relative path for this
-      process.env.NX_PROFILE = path.relative(this.project.rootPath, absolutePath);
+      process.env.NX_PROFILE = relative(this.project.rootPath, absolutePath);
     }
 
     performance.mark('init-local');
@@ -258,7 +258,7 @@ export class RunCommand extends Command<RunCommandOption & FilterOptions> {
   }
 
   async prepNxOptions() {
-    const nxJsonExists = pathExistsSync(path.join(this.project.rootPath, 'nx.json'));
+    const nxJsonExists = pathExistsSync(join(this.project.rootPath, 'nx.json'));
     const { readNxJson } = await import('nx/src/config/configuration.js');
     const nxJson = readNxJson();
     const targetDependenciesAreDefined = Object.keys(nxJson.targetDependencies || nxJson.targetDefaults || {}).length > 0;

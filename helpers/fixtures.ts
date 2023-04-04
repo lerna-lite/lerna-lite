@@ -1,9 +1,9 @@
 import { execa } from 'execa';
 import fileUrl from 'file-url';
 import { temporaryDirectory } from 'tempy';
-import fs from 'fs-extra';
+import { copy, ensureDir } from 'fs-extra/esm';
 import { findUp } from 'find-up';
-import path from 'path';
+import { join } from 'node:path';
 
 import { gitAdd, gitCommit, gitInit } from './git/index.js';
 
@@ -28,7 +28,7 @@ export function cloneFixtureFactory(startDir: string) {
 }
 
 export function findFixture(cwd: string, fixtureName: string) {
-  return findUp(path.join('__fixtures__', fixtureName), { cwd, type: 'directory' }).then((fixturePath) => {
+  return findUp(join('__fixtures__', fixtureName), { cwd, type: 'directory' }).then((fixturePath) => {
     if (fixturePath === undefined) {
       throw new Error(`Could not find fixture with name "${fixtureName}"`);
     }
@@ -38,7 +38,7 @@ export function findFixture(cwd: string, fixtureName: string) {
 }
 
 export function copyFixture(targetDir: string, fixtureName: string, cwd: string) {
-  return findFixture(cwd, fixtureName).then((fp) => fs.copy(fp, targetDir));
+  return findFixture(cwd, fixtureName).then((fp) => copy(fp, targetDir));
 }
 
 export function initFixtureFactory(startDir: string) {
@@ -61,10 +61,10 @@ export function initFixtureFactory(startDir: string) {
 
 export function initNamedFixtureFactory(startDir: string) {
   return (dirName: string, fixtureName: string, commitMessage: boolean | string = 'Init commit') => {
-    const cwd = path.join(temporaryDirectory(), dirName);
+    const cwd = join(temporaryDirectory(), dirName);
     let chain: Promise<any> = Promise.resolve();
 
-    chain = chain.then(() => fs.ensureDir(cwd));
+    chain = chain.then(() => ensureDir(cwd));
     chain = chain.then(() => process.chdir(cwd));
     chain = chain.then(() => copyFixture(cwd, fixtureName, startDir));
     chain = chain.then(() => gitInit(cwd, '.'));

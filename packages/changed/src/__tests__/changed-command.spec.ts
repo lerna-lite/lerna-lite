@@ -18,13 +18,13 @@ import { ChangedCommandOption, collectUpdates, logOutput } from '@lerna-lite/cor
 import cliChangedCommands from '../../../cli/src/cli-commands/cli-changed-commands.js';
 
 // helpers
-import { fileURLToPath } from 'url';
-import path from 'path';
+import { fileURLToPath } from 'node:url';
+import { dirname } from 'node:path';
 import { commandRunner, initFixtureFactory } from '@lerna-test/helpers';
 import { loggingOutput } from '@lerna-test/helpers/logging-output';
 import { updateLernaConfig } from '@lerna-test/helpers';
 const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
+const __dirname = dirname(__filename);
 const initFixture = initFixtureFactory(__dirname);
 
 // file under test

@@ -40,13 +40,13 @@ vi.mock('fs-extra/esm', async () => ({
   outputFileSync: vi.fn(),
 }));
 
-import { outputFileSync, outputJSON } from 'fs-extra/esm';
-import path from 'path';
-import { fileURLToPath } from 'url';
+import { outputFileSync, outputJson } from 'fs-extra/esm';
+import { dirname, join } from 'node:path';
+import { fileURLToPath } from 'node:url';
 
 // helpers
 const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
+const __dirname = dirname(__filename);
 import { loggingOutput } from '@lerna-test/helpers/logging-output';
 import { commitChangeToPackage } from '@lerna-test/helpers';
 import { commandRunner, initFixtureFactory } from '@lerna-test/helpers';
@@ -663,8 +663,8 @@ describe('PublishCommand', () => {
       expect(dirOne).toBe(pkgOne.location);
       expect(dirTwo).toBe(pkgTwo.location);
 
-      expect(pkgOne.contents).toBe(path.join(pkgOne.location, 'dist'));
-      expect(pkgTwo.contents).toBe(path.join(pkgTwo.location, 'dist'));
+      expect(pkgOne.contents).toBe(join(pkgOne.location, 'dist'));
+      expect(pkgTwo.contents).toBe(join(pkgTwo.location, 'dist'));
 
       // opts is a snapshot of npm-conf instance
       expect(packDirectory).toHaveBeenCalledWith(pkgOne, dirOne, opts);
@@ -687,17 +687,17 @@ describe('PublishCommand', () => {
       expect(packDirectory).toHaveBeenCalledWith(
         expect.objectContaining({
           name: 'package-1',
-          contents: path.join(cwd, 'packages/package-1/dist'),
+          contents: join(cwd, 'packages/package-1/dist'),
         }),
-        path.join(cwd, 'packages/package-1'),
+        join(cwd, 'packages/package-1'),
         expect.any(Object)
       );
       expect(packDirectory).toHaveBeenCalledWith(
         expect.objectContaining({
           name: 'package-2',
-          contents: path.join(cwd, 'packages/package-2'),
+          contents: join(cwd, 'packages/package-2'),
         }),
-        path.join(cwd, 'packages/package-2'),
+        join(cwd, 'packages/package-2'),
         expect.any(Object)
       );
     });
@@ -716,7 +716,7 @@ describe('PublishCommand', () => {
     it('set "describeTag" in lerna.json', async () => {
       const testDir = await initFixture('normal');
 
-      await outputJSON(path.join(testDir, 'lerna.json'), {
+      await outputJson(join(testDir, 'lerna.json'), {
         version: 'independent',
         describeTag: '*custom-tag*',
       });

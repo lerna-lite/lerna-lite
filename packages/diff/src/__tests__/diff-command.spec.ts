@@ -8,9 +8,9 @@ vi.mock('@lerna-lite/core', async () => ({
 }));
 
 import { execa } from 'execa';
-import fs from 'fs-extra';
-import path from 'path';
-import { fileURLToPath } from 'url';
+import { outputFile, remove } from 'fs-extra/esm';
+import { dirname, join } from 'node:path';
+import { fileURLToPath } from 'node:url';
 import { Mock } from 'vitest';
 import yargParser from 'yargs-parser';
 
@@ -21,7 +21,7 @@ import { spawn } from '@lerna-lite/core';
 // helpers
 import { commandRunner, initFixtureFactory } from '@lerna-test/helpers';
 const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
+const __dirname = dirname(__filename);
 const initFixture = initFixtureFactory(__dirname);
 import { Project } from '@lerna-lite/core';
 import { gitAdd } from '@lerna-test/helpers';
@@ -79,10 +79,10 @@ describe('Diff Command', () => {
   it('should diff packages from the first commit from DiffCommand class', async () => {
     const cwd = await initFixture('basic');
     const [pkg1] = await Project.getPackages(cwd);
-    const rootReadme = path.join(cwd, 'README.md');
+    const rootReadme = join(cwd, 'README.md');
 
     await pkg1.set('changed', 1).serialize();
-    await fs.outputFile(rootReadme, 'change outside packages glob');
+    await outputFile(rootReadme, 'change outside packages glob');
     await gitAdd(cwd, '-A');
     await gitCommit(cwd, 'changed');
 
@@ -94,10 +94,10 @@ describe('Diff Command', () => {
   it('should diff packages from the first commit from factory', async () => {
     const cwd = await initFixture('basic');
     const [pkg1] = await Project.getPackages(cwd);
-    const rootReadme = path.join(cwd, 'README.md');
+    const rootReadme = join(cwd, 'README.md');
 
     await pkg1.set('changed', 1).serialize();
-    await fs.outputFile(rootReadme, 'change outside packages glob');
+    await outputFile(rootReadme, 'change outside packages glob');
     await gitAdd(cwd, '-A');
     await gitCommit(cwd, 'changed');
 
@@ -109,10 +109,10 @@ describe('Diff Command', () => {
   it('should diff packages from the first commit', async () => {
     const cwd = await initFixture('basic');
     const [pkg1] = await Project.getPackages(cwd);
-    const rootReadme = path.join(cwd, 'README.md');
+    const rootReadme = join(cwd, 'README.md');
 
     await pkg1.set('changed', 1).serialize();
-    await fs.outputFile(rootReadme, 'change outside packages glob');
+    await outputFile(rootReadme, 'change outside packages glob');
     await gitAdd(cwd, '-A');
     await gitCommit(cwd, 'changed');
 
@@ -158,7 +158,7 @@ describe('Diff Command', () => {
     const [pkg1] = await Project.getPackages(cwd);
 
     await pkg1.set('changed', 1).serialize();
-    await fs.outputFile(path.join(pkg1.location, 'README.md'), 'ignored change');
+    await outputFile(join(pkg1.location, 'README.md'), 'ignored change');
     await gitAdd(cwd, '-A');
     await gitCommit(cwd, 'changed');
 
@@ -184,7 +184,7 @@ describe('Diff Command', () => {
   it('should error when running in a repository without commits', async () => {
     const cwd = await initFixture('basic');
 
-    await fs.remove(path.join(cwd, '.git'));
+    await remove(join(cwd, '.git'));
     await gitInit(cwd);
 
     const command = new DiffCommand(createArgv(cwd, 'package-1'));
