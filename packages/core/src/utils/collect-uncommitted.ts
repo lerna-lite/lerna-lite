@@ -1,7 +1,7 @@
 import chalk from 'chalk';
 import npmlog from 'npmlog';
 
-import { exec, execSync } from '../child-process';
+import { exec, execSync } from '../child-process.js';
 
 export interface UncommittedConfig {
   cwd: string;

@@ -1,1 +1,1 @@
-export * from './changed-command';
+export * from './changed-command.js';

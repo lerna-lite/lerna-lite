@@ -1,8 +1,8 @@
-import fs from 'fs';
+import fs from 'node:fs';
 import path from 'path';
 import semver from 'semver';
 
-import { Package } from '../packages/core/src/package';
+import { Package } from '../packages/core/src/package.js';
 
 export function toDependOn() {
   return createDependencyMatcher('dependencies');
@@ -153,7 +153,7 @@ export function toHaveExecutables(received, ...files) {
   const expectation = `${expectedFiles} ${expectedAction}`;
 
   // eslint-disable-next-line prefer-destructuring
-  const X_OK = (fs.constants || fs).X_OK;
+  const X_OK = fs.constants.X_OK;
   const failed = files.filter((file) => {
     try {
       return fs.accessSync(path.join(pkg.location, file), X_OK);

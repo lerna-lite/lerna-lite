@@ -7,15 +7,13 @@
     {
       "type": "node",
       "request": "launch",
-      "name": "Jest Current Spec File",
-      "program": "${workspaceFolder}/node_modules/.bin/jest",
-      "args": ["--runInBand", "${fileBasename}", "--config", "${workspaceFolder}/jest/jest.config.ts"],
-      "console": "internalConsole",
-      "internalConsoleOptions": "neverOpen",
-      "disableOptimisticBPs": true,
-      "windows": {
-        "program": "${workspaceFolder}/node_modules/jest/bin/jest"
-      }
+      "name": "Vitest - Debug Current Test File",
+      "autoAttachChildProcesses": true,
+      "skipFiles": ["<node_internals>/**", "**/node_modules/**"],
+      "program": "${workspaceRoot}/node_modules/vitest/vitest.mjs",
+      "args": ["run", "${relativeFile}", "--no-threads"],
+      "smartStep": true,
+      "console": "integratedTerminal"
     },
     {
       "name": "Version command debugger",

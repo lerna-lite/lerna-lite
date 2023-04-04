@@ -1,5 +1,5 @@
-import globby from 'globby';
-import loadJsonFile from 'load-json-file';
+import { globby } from 'globby';
+import { loadJsonFile } from 'load-json-file';
 
 export function loadManifests(cwd) {
   return globby(

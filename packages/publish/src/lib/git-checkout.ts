@@ -8,12 +8,7 @@ import { exec, ExecOpts } from '@lerna-lite/core';
  * @param {{ granularPathspec: boolean; }} gitOpts
  * @param {import("@lerna/child-process").ExecOpts} execOpts
  */
-export function gitCheckout(
-  stagedFiles: string[],
-  gitOpts: { granularPathspec: boolean },
-  execOpts: ExecOpts,
-  dryRun = false
-) {
+export function gitCheckout(stagedFiles: string[], gitOpts: { granularPathspec: boolean }, execOpts: ExecOpts, dryRun = false) {
   const files = (gitOpts.granularPathspec ? stagedFiles : '.') as string;
 
   log.silly('gitCheckout', files);

@@ -4,9 +4,9 @@ import conventionalChangelogCore from 'conventional-changelog-core';
 import log from 'npmlog';
 import semver, { ReleaseType } from 'semver';
 
-import { BaseChangelogOptions, VersioningStrategy } from '../models';
-import { GetChangelogConfig } from './get-changelog-config';
-import { applyBuildMetadata } from './apply-build-metadata';
+import { BaseChangelogOptions, VersioningStrategy } from '../models/index.js';
+import { GetChangelogConfig } from './get-changelog-config.js';
+import { applyBuildMetadata } from './apply-build-metadata.js';
 
 /**
  * @param {import('@lerna/package').Package} pkg
@@ -22,8 +22,7 @@ export async function recommendVersion(
     buildMetadata?: string;
   }
 ): Promise<string | null> {
-  const { changelogPreset, rootPath, tagPrefix, prereleaseId, conventionalBumpPrerelease, buildMetadata } =
-    recommendationOptions;
+  const { changelogPreset, rootPath, tagPrefix, prereleaseId, conventionalBumpPrerelease, buildMetadata } = recommendationOptions;
 
   log.silly(type, 'for %s at %s', pkg.name, pkg.location);
 

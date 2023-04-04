@@ -1,6 +1,6 @@
 import { WatchCommandOption } from '@lerna-lite/core';
 
-import { filterOptions } from '../filter-options';
+import { filterOptions } from '../filter-options.js';
 
 /**
  * @see https://github.com/yargs/yargs/blob/master/docs/advanced.md#providing-a-command-module
@@ -36,8 +36,7 @@ export default {
         },
         debounce: {
           group: 'Command Options:',
-          describe:
-            'Time to wait in milliseconds before emitting all the file changes into a single event, defaults to 200',
+          describe: 'Time to wait in milliseconds before emitting all the file changes into a single event, defaults to 200',
           type: 'number',
         },
         'file-delimiter': {

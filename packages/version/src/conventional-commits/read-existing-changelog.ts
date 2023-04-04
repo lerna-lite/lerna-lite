@@ -1,8 +1,8 @@
 import { Package } from '@lerna-lite/core';
-import fs from 'fs-extra';
+import { readFile } from 'fs/promises';
 import path from 'path';
 
-import { BLANK_LINE, COMMIT_GUIDELINE } from './constants';
+import { BLANK_LINE, COMMIT_GUIDELINE } from './constants.js';
 
 /**
  * Read the existing changelog, if it exists.
@@ -15,7 +15,7 @@ export async function readExistingChangelog(pkg: Package) {
   let chain: Promise<any> = Promise.resolve();
 
   // catch allows missing file to pass without breaking chain
-  chain = chain.then(() => fs.readFile(changelogFileLoc, 'utf8').catch(() => ''));
+  chain = chain.then(() => readFile(changelogFileLoc, 'utf8').catch(() => ''));
 
   chain = chain.then((changelogContents: string) => {
     // Remove the header if it exists, thus starting at the first entry.

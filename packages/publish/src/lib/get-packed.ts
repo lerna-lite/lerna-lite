@@ -1,10 +1,11 @@
-import fs from 'fs-extra';
+import { createReadStream } from 'fs';
+import { stat } from 'fs/promises';
 import path from 'path';
 import ssri from 'ssri';
 import tar from 'tar';
 import { Package } from '@lerna-lite/core';
 
-import { Tarball } from '../models';
+import { Tarball } from '../models/index.js';
 
 export function getPacked(pkg: Package, tarFilePath: string): Promise<Tarball> {
   const bundledWanted = new Set<string>(/* pkg.bundleDependencies || pkg.bundledDependencies || */ []);
@@ -42,8 +43,8 @@ export function getPacked(pkg: Package, tarFilePath: string): Promise<Tarball> {
     })
     .then(() =>
       Promise.all([
-        fs.stat(tarFilePath),
-        ssri.fromStream(fs.createReadStream(tarFilePath), {
+        stat(tarFilePath),
+        ssri.fromStream(createReadStream(tarFilePath), {
           algorithms: ['sha1', 'sha512'],
         }),
       ])

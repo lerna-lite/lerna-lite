@@ -1,4 +1,4 @@
-import fs from 'fs-extra';
+import { remove } from 'fs-extra/esm';
 import pMap from 'p-map';
 
 import { Package } from '@lerna-lite/core';
@@ -12,5 +12,5 @@ export function removeTempLicenses(packagesToBeLicensed: Package[]): Promise<voi
     return Promise.resolve();
   }
 
-  return pMap(packagesToBeLicensed, (pkg) => fs.remove(pkg.licensePath));
+  return pMap(packagesToBeLicensed, (pkg) => remove(pkg.licensePath));
 }

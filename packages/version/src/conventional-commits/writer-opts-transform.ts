@@ -2,7 +2,7 @@ import { Context, GitRawCommitsOptions } from 'conventional-changelog-core';
 import { Options as WriterOptions } from 'conventional-changelog-writer';
 import { Commit } from 'conventional-commits-parser';
 
-import { ChangelogConfig, RemoteCommit } from '../models';
+import { ChangelogConfig, RemoteCommit } from '../models/index.js';
 
 // available formats can be found at Git's url: https://git-scm.com/docs/git-log#_pretty_formats
 const GIT_COMMIT_WITH_AUTHOR_FORMAT =

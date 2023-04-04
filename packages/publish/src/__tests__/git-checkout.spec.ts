@@ -1,7 +1,11 @@
-import execa from 'execa';
+import { execa } from 'execa';
 import fs from 'fs-extra';
 import path from 'path';
+import { fileURLToPath } from 'url';
 import { initFixtureFactory } from '@lerna-test/helpers';
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 const initFixture = initFixtureFactory(__dirname);
 
 import { gitCheckout } from '../lib/git-checkout';

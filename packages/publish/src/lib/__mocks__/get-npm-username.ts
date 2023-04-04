@@ -1,2 +1,2 @@
-// to mock user modules, you _must_ call `jest.mock('./path/to/module')`
-export const getNpmUsername = jest.fn(() => Promise.resolve('lerna-test'));
+// to mock user modules, you _must_ call `vi.mock('./path/to/module')`
+export const getNpmUsername = vi.fn(() => Promise.resolve('lerna-test'));

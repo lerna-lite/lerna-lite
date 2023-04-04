@@ -1,1 +1,1 @@
-export const getUnpublishedPackages = jest.fn(() => Promise.resolve([]));
+export const getUnpublishedPackages = vi.fn(() => Promise.resolve([]));

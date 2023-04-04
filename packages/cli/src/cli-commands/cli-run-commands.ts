@@ -1,7 +1,7 @@
 import log from 'npmlog';
 import { RunCommandOption } from '@lerna-lite/core';
 
-import { filterOptions } from '../filter-options';
+import { filterOptions } from '../filter-options.js';
 
 /**
  * @see https://github.com/yargs/yargs/blob/master/docs/advanced.md#providing-a-command-module
@@ -85,8 +85,7 @@ export default {
         },
         'use-nx': {
           group: 'Command Options:',
-          describe:
-            'enables integration with Nx instead of the default Lerna task runner (which uses `p-map` and `p-queue`).',
+          describe: 'enables integration with Nx instead of the default Lerna task runner (which uses `p-map` and `p-queue`).',
           type: 'boolean',
         },
         verbose: {

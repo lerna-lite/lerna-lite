@@ -1,7 +1,7 @@
 import access from 'libnpmaccess';
 
 import { FetchConfig, Package, pulseTillDone, ValidationError } from '@lerna-lite/core';
-import { getFetchConfig } from './fetch-config';
+import { getFetchConfig } from './fetch-config.js';
 
 /**
  * Throw an error if the logged-in user does not have read-write access to all packages.
@@ -24,10 +24,7 @@ export function verifyNpmPackageAccess(packages: Package[], username: string, op
     // when _no_ results received, access.getPackages returns null
     // we can only assume that the packages in question have never been published
     if (result === null) {
-      opts.log.warn(
-        '',
-        'The logged-in user does not have any previously-published packages, skipping permission checks...'
-      );
+      opts.log.warn('', 'The logged-in user does not have any previously-published packages, skipping permission checks...');
     } else {
       for (const pkg of packages) {
         if (pkg?.name in result && result[pkg?.name] !== 'read-write') {

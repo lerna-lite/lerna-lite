@@ -1,9 +1,12 @@
 import fs from 'fs-extra';
 import path from 'path';
-import tempy from 'tempy';
+import { fileURLToPath } from 'url';
+import { temporaryDirectory } from 'tempy';
 
 // helpers
 import { commandRunner, initFixtureFactory } from '@lerna-test/helpers';
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 const initFixture = initFixtureFactory(__dirname);
 
 // file under test
@@ -29,9 +32,9 @@ describe('Init Command', () => {
 
   it('should execute methods when initializing the command via its class', async () => {
     const testDir = await initFixture('empty');
-    const ensurePkgJsonSpy = jest.spyOn(InitCommand.prototype, 'ensurePackageJSON');
-    const ensureLernaConfSpy = jest.spyOn(InitCommand.prototype, 'ensureLernaConfig');
-    const ensurePkgDirSpy = jest.spyOn(InitCommand.prototype, 'ensurePackagesDir');
+    const ensurePkgJsonSpy = vi.spyOn(InitCommand.prototype, 'ensurePackageJSON');
+    const ensureLernaConfSpy = vi.spyOn(InitCommand.prototype, 'ensureLernaConfig');
+    const ensurePkgDirSpy = vi.spyOn(InitCommand.prototype, 'ensurePackagesDir');
 
     const cmd = new InitCommand(createArgv(testDir, ''));
     await cmd;
@@ -44,9 +47,9 @@ describe('Init Command', () => {
 
   it('should execute methods when initializing the command via a factory', async () => {
     const testDir = await initFixture('empty');
-    const ensurePkgJsonSpy = jest.spyOn(InitCommand.prototype, 'ensurePackageJSON');
-    const ensureLernaConfSpy = jest.spyOn(InitCommand.prototype, 'ensureLernaConfig');
-    const ensurePkgDirSpy = jest.spyOn(InitCommand.prototype, 'ensurePackagesDir');
+    const ensurePkgJsonSpy = vi.spyOn(InitCommand.prototype, 'ensurePackageJSON');
+    const ensureLernaConfSpy = vi.spyOn(InitCommand.prototype, 'ensureLernaConfig');
+    const ensurePkgDirSpy = vi.spyOn(InitCommand.prototype, 'ensurePackagesDir');
     await factory(createArgv(testDir, ''));
 
     expect(ensurePkgJsonSpy).toHaveBeenCalled();
@@ -85,12 +88,12 @@ describe('Init Command', () => {
   });
 
   it('should ensure when Git will become initialized when it is not at the start', async () => {
-    jest.spyOn(InitCommand.prototype, 'gitInitialized').mockReturnValue(false);
+    vi.spyOn(InitCommand.prototype, 'gitInitialized').mockReturnValue(false);
     const testDir = await initFixture('empty');
 
     const cmd = new InitCommand(createArgv(testDir, ''));
     await cmd;
-    const loggerSpy = jest.spyOn(cmd.logger, 'info');
+    const loggerSpy = vi.spyOn(cmd.logger, 'info');
     cmd.initialize();
 
     expect(loggerSpy).toHaveBeenCalledWith('', 'Initializing Git repository');
@@ -108,7 +111,7 @@ describe('Init Command', () => {
 
   describe('in an empty directory', () => {
     it('initializes git repo with lerna files', async () => {
-      const testDir = tempy.directory();
+      const testDir = temporaryDirectory();
 
       await lernaInit(testDir)();
 
@@ -133,7 +136,7 @@ describe('Init Command', () => {
     });
 
     it('initializes git repo with lerna files in independent mode', async () => {
-      const testDir = tempy.directory();
+      const testDir = temporaryDirectory();
 
       await lernaInit(testDir)('--independent');
 
@@ -142,7 +145,7 @@ describe('Init Command', () => {
 
     describe('with --exact', () => {
       it('uses exact version when adding lerna dependency', async () => {
-        const testDir = tempy.directory();
+        const testDir = temporaryDirectory();
 
         await lernaInit(testDir)('--exact');
 
@@ -154,7 +157,7 @@ describe('Init Command', () => {
       });
 
       it('sets lerna.json command.init.exact to true', async () => {
-        const testDir = tempy.directory();
+        const testDir = temporaryDirectory();
 
         await lernaInit(testDir)('--exact');
 

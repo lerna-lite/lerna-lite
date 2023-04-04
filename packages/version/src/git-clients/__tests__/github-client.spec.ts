@@ -1,11 +1,13 @@
-jest.mock('@octokit/rest');
-jest.mock('@lerna-lite/core');
+vi.mock('@octokit/rest');
+vi.mock('@lerna-lite/core');
 
 import { Octokit } from '@octokit/rest';
 import { execSync } from '@lerna-lite/core';
+import { Mock } from 'vitest';
+
 import { createGitHubClient, parseGitRepo } from '../index';
 
-(execSync as jest.Mock).mockReturnValue('5.6.0');
+(execSync as Mock).mockReturnValue('5.6.0');
 
 describe('createGitHubClient', () => {
   beforeEach(() => {
@@ -44,7 +46,7 @@ describe('createGitHubClient', () => {
 
 describe('parseGitRepo', () => {
   it('returns a parsed URL', () => {
-    (execSync as jest.Mock).mockReturnValue('git@github.com:org/lerna.git');
+    (execSync as Mock).mockReturnValue('git@github.com:org/lerna.git');
 
     const repo = parseGitRepo();
 
@@ -59,7 +61,7 @@ describe('parseGitRepo', () => {
   });
 
   it('can change the origin', () => {
-    (execSync as jest.Mock).mockReturnValue('git@github.com:org/lerna.git');
+    (execSync as Mock).mockReturnValue('git@github.com:org/lerna.git');
 
     parseGitRepo('upstream');
 
@@ -67,7 +69,7 @@ describe('parseGitRepo', () => {
   });
 
   it('throws an error if no URL returned', () => {
-    (execSync as jest.Mock).mockReturnValue('');
+    (execSync as Mock).mockReturnValue('');
 
     expect(() => parseGitRepo()).toThrow('Git remote URL could not be found using "origin".');
   });

@@ -1,4 +1,4 @@
-import fs from 'fs-extra';
+import { copy } from 'fs-extra/esm';
 import path from 'path';
 import pMap from 'p-map';
 
@@ -27,5 +27,5 @@ export function createTempLicenses(srcLicensePath: string, packagesToBeLicensed:
     pkg.licensePath = path.join(pkg.contents, licenseFileName);
   });
 
-  return pMap(packagesToBeLicensed, (pkg) => fs.copy(srcLicensePath, pkg.licensePath, options));
+  return pMap(packagesToBeLicensed, (pkg) => copy(srcLicensePath, pkg.licensePath, options));
 }

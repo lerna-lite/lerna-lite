@@ -1,29 +1,36 @@
-jest.mock('@lerna-lite/core', () => ({
-  ...(jest.requireActual('@lerna-lite/core') as any), // return the other real methods, below we'll mock only 2 of the methods
-  logOutput: jest.requireActual('../../../core/src/__mocks__/output').logOutput,
-  promptConfirmation: jest.requireActual('../../../core/src/__mocks__/prompt').promptConfirmation,
-  promptSelectOne: jest.requireActual('../../../core/src/__mocks__/prompt').promptSelectOne,
-  promptTextInput: jest.requireActual('../../../core/src/__mocks__/prompt').promptTextInput,
-  throwIfUncommitted: jest.requireActual('../../../core/src/__mocks__/check-working-tree').throwIfUncommitted,
-  collectUpdates: jest.requireActual('../../../core/src/__mocks__/collect-updates').collectUpdates,
-  PackageGraph: jest.requireActual('../../../core/src/package-graph').PackageGraph,
-  getPackages: jest.requireActual('../../../core/src/project').getPackages,
+vi.mock('@lerna-lite/core', async () => ({
+  ...(await vi.importActual<any>('@lerna-lite/core')),
+  logOutput: (await vi.importActual<any>('../../../core/src/__mocks__/output')).logOutput,
+  promptConfirmation: (await vi.importActual<any>('../../../core/src/__mocks__/prompt')).promptConfirmation,
+  promptSelectOne: (await vi.importActual<any>('../../../core/src/__mocks__/prompt')).promptSelectOne,
+  promptTextInput: (await vi.importActual<any>('../../../core/src/__mocks__/prompt')).promptTextInput,
+  throwIfUncommitted: (await vi.importActual<any>('../../../core/src/__mocks__/check-working-tree')).throwIfUncommitted,
+  collectUpdates: (await vi.importActual<any>('../../../core/src/__mocks__/collect-updates')).collectUpdates,
+  PackageGraph: (await vi.importActual<any>('../../../core/src/package-graph')).PackageGraph,
+  getPackages: (await vi.importActual<any>('../../../core/src/project')).getPackages,
 }));
+
+// also point to the local version command so that all mocks are properly used even by the command-runner
+vi.mock('@lerna-lite/changed', async () => await vi.importActual('../changed-command'));
 
 // mocked modules
 import { ChangedCommandOption, collectUpdates, logOutput } from '@lerna-lite/core';
+import cliChangedCommands from '../../../cli/src/cli-commands/cli-changed-commands.js';
 
 // helpers
+import { fileURLToPath } from 'url';
+import path from 'path';
 import { commandRunner, initFixtureFactory } from '@lerna-test/helpers';
-const initFixture = initFixtureFactory(__dirname);
 import { loggingOutput } from '@lerna-test/helpers/logging-output';
 import { updateLernaConfig } from '@lerna-test/helpers';
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+const initFixture = initFixtureFactory(__dirname);
 
 // file under test
 import yargParser from 'yargs-parser';
 import { ChangedCommand } from '../index';
 import { factory } from '../changed-command';
-import cliChangedCommands from '../../../cli/src/cli-commands/cli-changed-commands';
 const lernaChanged = commandRunner(cliChangedCommands);
 
 const createArgv = (cwd: string, ...args: string[]) => {
@@ -54,6 +61,7 @@ describe('Changed Command', () => {
   let cwd;
 
   beforeAll(async () => {
+    vi.resetModules();
     cwd = await initFixture('normal');
   });
 
@@ -86,7 +94,7 @@ describe('Changed Command', () => {
   });
 
   it('passes --ignore-changes to update collector', async () => {
-    await lernaChanged(cwd)('--ignore-changes', '**/cli-ignore');
+    await new ChangedCommand(createArgv(cwd, '--ignore-changes', '**/cli-ignore'));
 
     expect(collectUpdates).toHaveBeenLastCalledWith(
       expect.any(Array),
@@ -105,7 +113,7 @@ describe('Changed Command', () => {
       },
     });
 
-    await lernaChanged(cwd)();
+    await new ChangedCommand(createArgv(cwd, ''));
 
     expect(collectUpdates).toHaveBeenLastCalledWith(
       expect.any(Array),
@@ -116,7 +124,7 @@ describe('Changed Command', () => {
   });
 
   it('passes --include-merged-tags to update collector', async () => {
-    await lernaChanged(cwd)('--include-merged-tags');
+    await new ChangedCommand(createArgv(cwd, '--include-merged-tags'));
 
     expect(collectUpdates).toHaveBeenLastCalledWith(
       expect.any(Array),
@@ -139,7 +147,7 @@ describe('Changed Command', () => {
   });
 
   it('warns when --force-publish superseded by --conventional-graduate', async () => {
-    await lernaChanged(cwd)('--conventional-graduate', 'foo', '--force-publish', 'bar');
+    await new ChangedCommand(createArgv(cwd, '--conventional-graduate', 'foo', '--force-publish', 'bar'));
 
     const [logMessage] = loggingOutput('warn');
     expect(logMessage).toBe('--force-publish superseded by --conventional-graduate');
@@ -148,7 +156,7 @@ describe('Changed Command', () => {
   it('logger warns when --force-publish superseded by --conventional-graduate', async () => {
     const cmd = new ChangedCommand(createArgv(cwd, '--conventional-graduate', 'foo', '--force-publish', 'bar'));
     await cmd;
-    const loggerSpy = jest.spyOn(cmd.logger, 'warn');
+    const loggerSpy = vi.spyOn(cmd.logger, 'warn');
     cmd.initialize();
 
     expect(loggerSpy).toHaveBeenCalledWith('option', '--force-publish superseded by --conventional-graduate');
@@ -157,12 +165,13 @@ describe('Changed Command', () => {
   it('lists changed private packages with --all', async () => {
     (collectUpdates as any).setUpdated(cwd, 'package-5');
 
-    await lernaChanged(cwd)('--all');
+    await new ChangedCommand(createArgv(cwd, '--all'));
 
     expect((logOutput as any).logged()).toBe('package-5 (PRIVATE)');
   });
 
   it('exits non-zero when there are no changed packages', async () => {
+    vi.spyOn(process, 'exit').mockImplementationOnce((() => {}) as any);
     (collectUpdates as any).setUpdated(cwd);
 
     await new ChangedCommand(createArgv(cwd, ''));
@@ -174,6 +183,7 @@ describe('Changed Command', () => {
   });
 
   it('supports all listable flags', async () => {
+    // await new ChangedCommand(createArgv(cwd, '-alp'));
     await lernaChanged(cwd)('-alp');
 
     expect((logOutput as any).logged()).toMatchInlineSnapshot(`
@@ -188,7 +198,7 @@ describe('Changed Command', () => {
   it('outputs a stringified array of result objects with --json', async () => {
     (collectUpdates as any).setUpdated(cwd, 'package-2', 'package-3');
 
-    await lernaChanged(cwd)('--json');
+    await new ChangedCommand(createArgv(cwd, '--json'));
 
     // Output should be a parseable string
     const jsonOutput = JSON.parse((logOutput as any).logged());

@@ -2,7 +2,7 @@ import fetch from 'node-fetch';
 import log from 'npmlog';
 import path from 'path';
 
-import { GitClient, GitClientReleaseOption } from '../models';
+import { GitClient, GitClientReleaseOption } from '../models/index.js';
 
 export class GitLabClient implements GitClient {
   baseUrl: string;

@@ -1,3 +1,3 @@
-export const checkWorkingTree = jest.fn(() => Promise.resolve());
-export const throwIfReleased = jest.fn(() => Promise.resolve());
-export const throwIfUncommitted = jest.fn(() => Promise.resolve());
+export const checkWorkingTree = vi.fn(() => Promise.resolve());
+export const throwIfReleased = vi.fn(() => Promise.resolve());
+export const throwIfUncommitted = vi.fn(() => Promise.resolve());

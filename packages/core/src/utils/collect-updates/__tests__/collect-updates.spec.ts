@@ -1,9 +1,16 @@
-import globby from 'globby';
 import { Package } from '../../../package';
 
-jest.mock('../../describe-ref');
-jest.mock('../lib/has-tags');
-jest.mock('../lib/make-diff-predicate');
+vi.mock('../../describe-ref');
+vi.mock('../lib/has-tags');
+vi.mock('../lib/make-diff-predicate');
+
+const globMock = vi.fn();
+vi.mock('globby', async () => ({
+  ...(await vi.importActual<any>('globby')),
+  globbySync: globMock,
+}));
+
+import { Mock } from 'vitest';
 
 // mocked modules
 import { describeRefSync } from '../../describe-ref';
@@ -17,7 +24,7 @@ import buildGraph from '../__helpers__/build-graph';
 import { collectUpdates } from '../collect-updates';
 
 // default mock implementations
-(describeRefSync as jest.Mock).mockReturnValue({
+(describeRefSync as Mock).mockReturnValue({
   lastTagName: 'v1.0.0',
   lastVersion: '1.0.0',
   refCount: '1',
@@ -25,15 +32,15 @@ import { collectUpdates } from '../collect-updates';
   isDirty: false,
 });
 
-(hasTags as jest.Mock).mockReturnValue(true);
+(hasTags as Mock).mockReturnValue(true);
 
 const changedPackages = new Set();
-const hasDiff = jest
+const hasDiff = vi
   .fn()
   .mockName('hasDiff')
   .mockImplementation((node) => changedPackages.has(node.name));
 
-(makeDiffPredicate as jest.Mock).mockImplementation(() => hasDiff);
+(makeDiffPredicate as Mock).mockImplementation(() => hasDiff);
 
 // matcher constants
 const ALL_NODES = Object.freeze([
@@ -171,7 +178,7 @@ describe('collectUpdates()', () => {
   it('skips change detection when current revison is already released', () => {
     changedPackages.add('package-dag-1');
 
-    (describeRefSync as jest.Mock).mockReturnValueOnce({
+    (describeRefSync as Mock).mockReturnValueOnce({
       refCount: '0',
     });
 
@@ -185,7 +192,7 @@ describe('collectUpdates()', () => {
   });
 
   it('returns all nodes when no tag is found', () => {
-    (hasTags as jest.Mock).mockReturnValueOnce(false);
+    (hasTags as Mock).mockReturnValueOnce(false);
 
     const graph = buildGraph();
     const pkgs = graph.rawPackageList;
@@ -231,10 +238,7 @@ describe('collectUpdates()', () => {
       forcePublish: 'package-standalone',
     });
 
-    expect(updates).toEqual([
-      expect.objectContaining({ name: 'package-dag-3' }),
-      expect.objectContaining({ name: 'package-standalone' }),
-    ]);
+    expect(updates).toEqual([expect.objectContaining({ name: 'package-dag-3' }), expect.objectContaining({ name: 'package-standalone' })]);
   });
 
   it('always includes nodes targeted by --force-publish <pkg>,<pkg>', () => {
@@ -311,10 +315,7 @@ describe('collectUpdates()', () => {
       conventionalGraduate: 'package-standalone',
     });
 
-    expect(updates).toEqual([
-      expect.objectContaining({ name: 'package-dag-3' }),
-      expect.objectContaining({ name: 'package-standalone' }),
-    ]);
+    expect(updates).toEqual([expect.objectContaining({ name: 'package-dag-3' }), expect.objectContaining({ name: 'package-standalone' })]);
   });
 
   it('always includes prereleased nodes targeted by --conventional-graduate <pkg>,<pkg>', () => {
@@ -364,10 +365,7 @@ describe('collectUpdates()', () => {
       canary: true,
     });
 
-    expect(updates).toEqual([
-      expect.objectContaining({ name: 'package-dag-2a' }),
-      expect.objectContaining({ name: 'package-dag-3' }),
-    ]);
+    expect(updates).toEqual([expect.objectContaining({ name: 'package-dag-2a' }), expect.objectContaining({ name: 'package-dag-3' })]);
     expect(makeDiffPredicate).toHaveBeenLastCalledWith('deadbeef^..deadbeef', execOpts, undefined, {
       independentSubpackages: undefined,
     });
@@ -390,7 +388,7 @@ describe('collectUpdates()', () => {
   it('does not exit early on tagged release when --since <ref> is passed', () => {
     changedPackages.add('package-dag-1');
 
-    (describeRefSync as jest.Mock).mockReturnValueOnce({
+    (describeRefSync as Mock).mockReturnValueOnce({
       refCount: '0',
     });
 
@@ -425,7 +423,7 @@ describe('collectUpdates()', () => {
   });
 
   it('excludes packages when --independent-subpackages option is enabled', () => {
-    jest.spyOn(globby, 'sync').mockImplementationOnce(() => ['packages/pkg-2/and-another-thing/package.json']);
+    globMock.mockReturnValueOnce(['packages/pkg-2/and-another-thing/package.json']);
     const graph = buildGraph();
     const pkgs = graph.rawPackageList;
     const execOpts = { cwd: '/test' };

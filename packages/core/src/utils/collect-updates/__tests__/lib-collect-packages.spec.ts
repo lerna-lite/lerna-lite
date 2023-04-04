@@ -48,8 +48,8 @@ test('filters packages through isCandidate, passing node and name', () => {
 test('calls onInclude with included package name', () => {
   const graph = buildGraph();
   const packagesToInclude = ['package-standalone'];
-  const isCandidate = (node, name) => packagesToInclude.includes(name);
-  const onInclude = jest.fn();
+  const isCandidate = (_node, name) => packagesToInclude.includes(name);
+  const onInclude = vi.fn();
   collectPackages(graph, { isCandidate, onInclude });
 
   expect(onInclude).toHaveBeenCalledWith(packagesToInclude[0]);

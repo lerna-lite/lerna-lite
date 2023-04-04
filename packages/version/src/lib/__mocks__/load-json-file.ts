@@ -1,7 +1,10 @@
 import path from 'path';
 import normalizePath from 'normalize-path';
 
-const loadJsonFile = jest.requireActual('load-json-file');
+const { loadJsonFile: actualLoadJsonFile, loadJsonFileSync: loadJsonFileSyncActual } = await vi.importActual<any>(
+  'load-json-file'
+);
+
 const asyncRegistry = new Map();
 const syncRegistry = new Map();
 
@@ -15,17 +18,20 @@ function incrementCalled(registry, manifestLocation) {
 }
 
 // by default, act like a spy that counts number of times each location was loaded
-const mockLoadJsonFile: any = jest.fn((manifestLocation) => {
+export const loadJsonFile: any = vi.fn((manifestLocation) => {
   incrementCalled(asyncRegistry, manifestLocation);
 
-  return loadJsonFile(manifestLocation);
+  return actualLoadJsonFile(manifestLocation);
 });
 
-const mockLoadJsonFileSync = jest.fn((manifestLocation) => {
+export const loadJsonFileSync = vi.fn((manifestLocation) => {
   incrementCalled(syncRegistry, manifestLocation);
 
-  return loadJsonFile.sync(manifestLocation);
+  return loadJsonFileSyncActual(manifestLocation);
 });
+
+(loadJsonFile as any).registry = asyncRegistry;
+(loadJsonFileSync as any).registry = syncRegistry;
 
 // keep test data isolated
 afterEach(() => {
@@ -33,10 +39,22 @@ afterEach(() => {
   syncRegistry.clear();
 });
 
-module.exports = mockLoadJsonFile;
-module.exports.registry = asyncRegistry;
-module.exports.sync = mockLoadJsonFileSync;
-module.exports.sync.registry = syncRegistry;
+// export { asyncRegistry as registry, mockLoadJsonFile as loadJsonFile, mockLoadJsonFileSync as loadJsonFileSync };
+// export {
+//   registry: asyncRegistry,
+//   loadJsonFile: mockLoadJsonFile,
+//   loadJsonFileSync: mockLoadJsonFileSync,
+// };
+// export {
+//   // registry: asyncRegistry,
+//   loadJsonFile: mockLoadJsonFile,
+//   loadJsonFileSync: mockLoadJsonFileSync,
+// }
+
+// module.exports.loadJsonFile = mockLoadJsonFile;
+// module.exports.registry = asyncRegistry;
+// module.exports.loadJsonFileSync = mockLoadJsonFileSync;
+// module.exports.loadJsonFileSync.registry = syncRegistry;
 
 // mockLoadJsonFile.registry = asyncRegistry;
 // mockLoadJsonFile.sync = mockLoadJsonFileSync;

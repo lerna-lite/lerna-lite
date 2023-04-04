@@ -4,8 +4,8 @@ import log from 'npmlog';
 import newGithubReleaseUrl from 'new-github-release-url';
 import semver from 'semver';
 
-import { createGitHubClient, createGitLabClient, parseGitRepo } from '../git-clients';
-import { GitCreateReleaseClientOutput, ReleaseClient, ReleaseCommandProps, ReleaseOptions } from '../models';
+import { createGitHubClient, createGitLabClient, parseGitRepo } from '../git-clients/index.js';
+import { GitCreateReleaseClientOutput, ReleaseClient, ReleaseCommandProps, ReleaseOptions } from '../models/index.js';
 
 export function createReleaseClient(type: 'github' | 'gitlab'): GitCreateReleaseClientOutput {
   switch (type) {
@@ -71,11 +71,7 @@ export function createRelease(
       };
 
       if (dryRun) {
-        log.info(
-          chalk.bold.magenta('[dry-run] >'),
-          `Create Release with repo options: `,
-          JSON.stringify(releaseOptions)
-        );
+        log.info(chalk.bold.magenta('[dry-run] >'), `Create Release with repo options: `, JSON.stringify(releaseOptions));
         return Promise.resolve();
       }
 

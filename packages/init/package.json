@@ -2,14 +2,30 @@
   "name": "@lerna-lite/init",
   "description": "Lerna-Lite init commmand - Create a new Lerna repo or upgrade an existing repo to the current version of Lerna",
   "version": "1.17.0",
-  "main": "dist/index.js",
-  "types": "dist/index.d.ts",
-  "typings": "dist/index.d.ts",
   "files": [
     "/dist"
   ],
   "publishConfig": {
     "access": "public"
+  },
+  "type": "module",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "module": "dist/index.js",
+  "exports": {
+    ".": {
+      "import": "./dist/index.js",
+      "default": "./dist/index.js",
+      "types": "./dist/types/index.d.ts"
+    },
+    "./*": "./*"
+  },
+  "typesVersions": {
+    "*": {
+      "*": [
+        "./dist/types/index.d.ts"
+      ]
+    }
   },
   "scripts": {
     "prebuild": "rimraf dist",
@@ -29,20 +45,18 @@
     "url": "https://github.com/lerna-lite/lerna-lite/issues"
   },
   "engines": {
-    "node": ">=14.17.0",
-    "npm": ">=8.0.0"
+    "node": ">=16.15.0",
+    "npm": ">=8.5.0"
   },
   "dependencies": {
     "@lerna-lite/core": "workspace:*",
     "fs-extra": "^11.1.1",
     "p-map": "^4.0.0",
     "path": "^0.12.7",
-    "write-json-file": "^4.3.0"
+    "write-json-file": "^5.0.0"
   },
   "devDependencies": {
     "@types/fs-extra": "^11.0.1",
-    "@types/p-map": "^2.0.0",
-    "@types/write-json-file": "^3.2.1",
     "yargs-parser": "^21.1.1"
   }
 }

@@ -1,16 +1,19 @@
 import semver from 'semver';
 
 // mocked modules of @lerna-lite/core
-jest.mock('@lerna-lite/core', () => ({
-  ...(jest.requireActual('@lerna-lite/core') as any), // return the other real methods, below we'll mock only 2 of the methods
-  promptSelectOne: jest.requireActual('../../../core/src/__mocks__/prompt').promptSelectOne,
-  promptTextInput: jest.requireActual('../../../core/src/__mocks__/prompt').promptTextInput,
-}));
+vi.mock('@lerna-lite/core', async (coreOriginal) => {
+  const mod = (await coreOriginal()) as any;
+  return {
+    ...mod,
+    promptSelectOne: (await vi.importActual<any>('../../../core/src/__mocks__/prompt')).promptSelectOne,
+    promptTextInput: (await vi.importActual<any>('../../../core/src/__mocks__/prompt')).promptTextInput,
+  };
+});
 
 import { promptSelectOne, promptTextInput, prereleaseIdFromVersion, PackageGraphNode } from '@lerna-lite/core';
 import { makePromptVersion } from '../lib/prompt-version';
 
-const resolvePrereleaseId = jest.fn(() => 'alpha');
+const resolvePrereleaseId = vi.fn(() => 'alpha');
 const versionPrompt = makePromptVersion(resolvePrereleaseId);
 
 describe('select', () => {
@@ -34,10 +37,7 @@ describe('select', () => {
         name: 'my-package',
       } as PackageGraphNode);
 
-      expect(promptSelectOne).toHaveBeenLastCalledWith(
-        'Select a new version for my-package (currently 3.2.1)',
-        expect.any(Object)
-      );
+      expect(promptSelectOne).toHaveBeenLastCalledWith('Select a new version for my-package (currently 3.2.1)', expect.any(Object));
     });
   });
 
@@ -69,7 +69,7 @@ describe('custom version', () => {
   beforeEach(() => {
     (promptSelectOne as any).chooseBump('CUSTOM');
 
-    (promptTextInput as jest.Mock).mockImplementationOnce((msg, cfg) => {
+    (promptTextInput as any).mockImplementationOnce((msg, cfg) => {
       inputFilter = cfg.filter;
       inputValidate = cfg.validate;
 
@@ -107,7 +107,7 @@ describe('custom prerelease', () => {
   beforeEach(() => {
     (promptSelectOne as any).chooseBump('PRERELEASE');
 
-    (promptTextInput as jest.Mock).mockImplementationOnce((msg, cfg) => {
+    (promptTextInput as any).mockImplementationOnce((msg, cfg) => {
       inputFilter = cfg.filter;
 
       return Promise.resolve(msg);

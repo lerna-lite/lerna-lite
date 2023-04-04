@@ -1,7 +1,7 @@
 import { ListCommandOption } from '@lerna-lite/core';
 import { listable } from '@lerna-lite/listable';
 
-import { filterOptions } from '../filter-options';
+import { filterOptions } from '../filter-options.js';
 
 /**
  * @see https://github.com/yargs/yargs/blob/master/docs/advanced.md#providing-a-command-module

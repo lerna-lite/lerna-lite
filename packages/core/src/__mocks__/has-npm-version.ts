@@ -1,1 +1,1 @@
-export const hasNpmVersion = jest.fn(() => true);
+export const hasNpmVersion = vi.fn(() => true);

@@ -12,8 +12,8 @@ import { FilterOptions, getFilteredPackages } from '@lerna-lite/filter-packages'
 import chokidar from 'chokidar';
 import path from 'path';
 
-import { CHOKIDAR_AVAILABLE_OPTIONS, DEBOUNCE_DELAY, FILE_DELIMITER } from './constants';
-import { ChangesStructure } from './models';
+import { CHOKIDAR_AVAILABLE_OPTIONS, DEBOUNCE_DELAY, FILE_DELIMITER } from './constants.js';
+import { ChangesStructure } from './models.js';
 
 export function factory(argv: WatchCommandOption) {
   return new WatchCommand(argv);
@@ -120,9 +120,7 @@ export class WatchCommand extends Command<WatchCommandOption & FilterOptions> {
       this._watcher = chokidar.watch(packageLocations, chokidarOptions);
 
       // add Chokidar watcher and watch for all events (add, addDir, unlink, unlinkDir)
-      this._watcher
-        .on('all', (_event, path) => this.changeEventListener(path))
-        .on('error', (error) => this.onError(error));
+      this._watcher.on('all', (_event, path) => this.changeEventListener(path)).on('error', (error) => this.onError(error));
 
       // also watch for any Signal termination to cleanly exit the watch command
       process.once('SIGINT', () => this.handleTermination(128 + 2));

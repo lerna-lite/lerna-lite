@@ -3,6 +3,9 @@ import path from 'path';
 import { Project } from '@lerna-lite/core';
 import { removeTempLicenses } from '../lib/remove-temp-licenses';
 import { initFixtureFactory } from '@lerna-test/helpers';
+import { fileURLToPath } from 'url';
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 const initFixture = initFixtureFactory(__dirname);
 
 describe('removeTempLicenses', () => {

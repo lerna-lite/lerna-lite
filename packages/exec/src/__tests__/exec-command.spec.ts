@@ -1,23 +1,25 @@
 // mocked modules
-jest.mock('@lerna-lite/core', () => ({
-  ...(jest.requireActual('@lerna-lite/core') as any), // return the other real methods, below we'll mock only 2 of the methods
-  Command: jest.requireActual('../../../core/src/command').Command,
-  conf: jest.requireActual('../../../core/src/command').conf,
-  logOutput: jest.requireActual('../../../core/src/__mocks__/output').logOutput,
-  spawn: jest.fn(() => Promise.resolve({ exitCode: 0 })),
-  spawnStreaming: jest.fn(() => Promise.resolve({ exitCode: 0 })),
-  runTopologically: jest.requireActual('../../../core/src/utils/run-topologically').runTopologically,
-  QueryGraph: jest.requireActual('../../../core/src/utils/query-graph').QueryGraph,
+vi.mock('@lerna-lite/core', async () => ({
+  ...(await vi.importActual<any>('@lerna-lite/core')), // return the other real methods, below we'll mock only 2 of the methods
+  Command: (await vi.importActual<any>('../../../core/src/command')).Command,
+  conf: (await vi.importActual<any>('../../../core/src/command')).conf,
+  logOutput: (await vi.importActual<any>('../../../core/src/__mocks__/output')).logOutput,
+  spawn: vi.fn(() => Promise.resolve({ exitCode: 0 })),
+  spawnStreaming: vi.fn(() => Promise.resolve({ exitCode: 0 })),
+  runTopologically: (await vi.importActual<any>('../../../core/src/utils/run-topologically')).runTopologically,
+  QueryGraph: (await vi.importActual<any>('../../../core/src/utils/query-graph')).QueryGraph,
 }));
 
-jest.mock('@lerna-lite/profiler', () => jest.requireActual('../../../profiler/src/profiler'));
+vi.mock('@lerna-lite/profiler', async () => await vi.importActual<any>('../../../profiler/src/profiler'));
 
 // also point to the local exec command so that all mocks are properly used even by the command-runner
-jest.mock('@lerna-lite/exec', () => jest.requireActual('../exec-command'));
+vi.mock('@lerna-lite/exec', async () => await vi.importActual<any>('../exec-command'));
 
 import path from 'path';
 import fs from 'fs-extra';
-import globby from 'globby';
+import { globby } from 'globby';
+import { fileURLToPath } from 'url';
+import { Mock } from 'vitest';
 import yargParser from 'yargs-parser';
 
 // make sure to import the output mock
@@ -27,6 +29,8 @@ import { ExecCommandOption, logOutput } from '@lerna-lite/core';
 import { spawn, spawnStreaming } from '@lerna-lite/core';
 
 // helpers
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 import { commandRunner, initFixtureFactory } from '@lerna-test/helpers';
 import { loggingOutput } from '@lerna-test/helpers/logging-output';
 import { normalizeRelativeDir } from '@lerna-test/helpers';
@@ -36,10 +40,10 @@ const lernaExec = commandRunner(cliExecCommands);
 const initFixture = initFixtureFactory(__dirname);
 
 // assertion helpers
-const calledInPackages = () => (spawn as jest.Mock).mock.calls.map(([, , opts]) => path.basename(opts.cwd));
+const calledInPackages = () => (spawn as Mock).mock.calls.map(([, , opts]) => path.basename(opts.cwd));
 
 const execInPackagesStreaming = (testDir) =>
-  (spawnStreaming as jest.Mock).mock.calls.reduce((arr, [command, params, opts, prefix]) => {
+  (spawnStreaming as Mock).mock.calls.reduce((arr, [command, params, opts, prefix]) => {
     const dir = normalizeRelativeDir(testDir, opts.cwd);
     arr.push([dir, command, `(prefix: ${prefix})`].concat(params).join(' '));
     return arr;
@@ -89,7 +93,8 @@ describe('ExecCommand', () => {
     });
 
     it('rejects with execution error', async () => {
-      (spawn as jest.Mock).mockImplementationOnce((cmd, args) => {
+      vi.spyOn(process, 'exit').mockImplementationOnce((() => {}) as any);
+      (spawn as Mock).mockImplementationOnce((cmd, args) => {
         const boom: any = new Error('execution error');
 
         boom.failed = true;
@@ -108,10 +113,14 @@ describe('ExecCommand', () => {
         })
       );
       expect(process.exitCode).toBe(123);
+
+      // reset exit code
+      process.exitCode = undefined;
     });
 
     it('should ignore execution errors with --no-bail', async () => {
-      (spawn as jest.Mock).mockImplementationOnce((cmd, args, { pkg }) => {
+      vi.spyOn(process, 'exit').mockImplementationOnce((() => {}) as any);
+      (spawn as Mock).mockImplementationOnce((cmd, args, { pkg }) => {
         const boom: any = new Error(pkg.name);
 
         boom.failed = true;
@@ -126,6 +135,9 @@ describe('ExecCommand', () => {
 
       // command doesn't throw, but it _does_ set exitCode
       expect(process.exitCode).toBe(456);
+
+      // reset exit code
+      process.exitCode = undefined;
 
       expect(spawn).toHaveBeenCalledTimes(2);
       expect(spawn).toHaveBeenLastCalledWith(
@@ -199,28 +211,19 @@ describe('ExecCommand', () => {
     it('executes a command in all packages with --parallel', async () => {
       await lernaExec(testDir)('--parallel', 'ls');
 
-      expect(execInPackagesStreaming(testDir)).toEqual([
-        'packages/package-1 ls (prefix: package-1)',
-        'packages/package-2 ls (prefix: package-2)',
-      ]);
+      expect(execInPackagesStreaming(testDir)).toEqual(['packages/package-1 ls (prefix: package-1)', 'packages/package-2 ls (prefix: package-2)']);
     });
 
     it('omits package prefix with --parallel --no-prefix', async () => {
       await lernaExec(testDir)('--parallel', '--no-prefix', 'ls');
 
-      expect(execInPackagesStreaming(testDir)).toEqual([
-        'packages/package-1 ls (prefix: false)',
-        'packages/package-2 ls (prefix: false)',
-      ]);
+      expect(execInPackagesStreaming(testDir)).toEqual(['packages/package-1 ls (prefix: false)', 'packages/package-2 ls (prefix: false)']);
     });
 
     it('executes a command in all packages with --stream', async () => {
       await lernaExec(testDir)('--stream', 'ls');
 
-      expect(execInPackagesStreaming(testDir)).toEqual([
-        'packages/package-1 ls (prefix: package-1)',
-        'packages/package-2 ls (prefix: package-2)',
-      ]);
+      expect(execInPackagesStreaming(testDir)).toEqual(['packages/package-1 ls (prefix: package-1)', 'packages/package-2 ls (prefix: package-2)']);
     });
 
     it('executes a command in all packages with --stream in dry-run mode and expect them all to be logged', async () => {
@@ -234,21 +237,11 @@ describe('ExecCommand', () => {
     it('omits package prefix with --stream --no-prefix', async () => {
       await lernaExec(testDir)('--stream', '--no-prefix', 'ls');
 
-      expect(execInPackagesStreaming(testDir)).toEqual([
-        'packages/package-1 ls (prefix: false)',
-        'packages/package-2 ls (prefix: false)',
-      ]);
+      expect(execInPackagesStreaming(testDir)).toEqual(['packages/package-1 ls (prefix: false)', 'packages/package-2 ls (prefix: false)']);
     });
 
     it('does not explode with filter flags', async () => {
-      await lernaExec(testDir)(
-        'ls',
-        '--no-private',
-        '--since',
-        '--include-merged-tags',
-        '--exclude-dependents',
-        '--include-dependencies'
-      );
+      await lernaExec(testDir)('ls', '--no-private', '--since', '--include-merged-tags', '--exclude-dependents', '--include-dependencies');
 
       expect(calledInPackages()).toEqual(['package-1', 'package-2']);
     });

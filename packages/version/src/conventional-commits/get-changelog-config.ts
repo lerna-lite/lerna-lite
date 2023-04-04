@@ -3,7 +3,7 @@ import log from 'npmlog';
 import npa from 'npm-package-arg';
 import pify from 'pify';
 
-import { ChangelogConfig, ChangelogPresetConfig } from '../models';
+import { ChangelogConfig, ChangelogPresetConfig } from '../models/index.js';
 
 export class GetChangelogConfig {
   static cfgCache = new Map<string, any>();
@@ -12,14 +12,15 @@ export class GetChangelogConfig {
     return Object.prototype.toString.call(config) === '[object Function]';
   }
 
-  static resolveConfigPromise(
-    presetPackageName: string,
-    presetConfig: ChangelogPresetConfig
-  ): Promise<ChangelogConfig> {
+  static async resolveConfigPromise(presetPackageName: string, presetConfig: ChangelogPresetConfig): Promise<ChangelogConfig> {
     log.verbose('getChangelogConfig', 'Attempting to resolve preset %j', presetPackageName);
 
-    // eslint-disable-next-line @typescript-eslint/no-var-requires
-    let config = require(presetPackageName);
+    let config = await import(presetPackageName);
+
+    // using import() with local script presets might load it as module default, if so load this default
+    if (config?.default) {
+      config = config.default;
+    }
 
     log.info('getChangelogConfig', 'Successfully resolved preset %j', presetPackageName);
 
@@ -29,7 +30,8 @@ export class GetChangelogConfig {
         config = config(presetConfig);
       } catch (_) {
         // legacy presets export an errback function instead of Q.all()
-        config = pify(config)();
+        // eslint-disable-next-line @typescript-eslint/ban-types
+        config = (pify(config) as Function)();
       }
     }
 
@@ -40,14 +42,14 @@ export class GetChangelogConfig {
    * @param {ChangelogPresetConfig} [changelogPreset]
    * @param {string} [rootPath]
    */
-  static getChangelogConfig(
+  static async getChangelogConfig(
     changelogPreset: ChangelogPresetConfig = 'conventional-changelog-angular',
     rootPath?: string
   ): Promise<ChangelogConfig> {
     const presetName = typeof changelogPreset === 'string' ? changelogPreset : changelogPreset.name;
     const presetConfig = typeof changelogPreset === 'object' ? changelogPreset : ({} as ChangelogPresetConfig);
     const cacheKey = `${presetName}${presetConfig ? JSON.stringify(presetConfig) : ''}`;
-    let config = GetChangelogConfig.cfgCache.get(cacheKey) as Promise<ChangelogConfig>;
+    let config: ChangelogConfig | Promise<ChangelogConfig> = GetChangelogConfig.cfgCache.get(cacheKey);
 
     if (!config) {
       let presetPackageName = presetName;
@@ -74,7 +76,7 @@ export class GetChangelogConfig {
 
       // Maybe it doesn't need an implicit 'conventional-changelog-' prefix?
       try {
-        config = this.resolveConfigPromise(presetPackageName, presetConfig);
+        config = await this.resolveConfigPromise(presetPackageName, presetConfig);
 
         GetChangelogConfig.cfgCache.set(cacheKey, config);
 
@@ -102,7 +104,7 @@ export class GetChangelogConfig {
       }
 
       try {
-        config = this.resolveConfigPromise(presetPackageName, presetConfig);
+        config = await this.resolveConfigPromise(presetPackageName, presetConfig);
         GetChangelogConfig.cfgCache.set(cacheKey, config);
       } catch (err: any) {
         log.warn('getChangelogConfig', err.message);

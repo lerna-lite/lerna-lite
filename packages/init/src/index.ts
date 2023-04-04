@@ -1,1 +1,1 @@
-export * from './init-command';
+export * from './init-command.js';

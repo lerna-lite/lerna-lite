@@ -1,6 +1,6 @@
-// Jest Snapshot v1, https://goo.gl/fbAQLP
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
 
-exports[`npm modern lock file updateModernLockfileVersion v2 in project root 1`] = `
+exports[`npm modern lock file > updateModernLockfileVersion v2 in project root 1`] = `
 {
   "dependencies": {
     "@my-workspace/package-1": {

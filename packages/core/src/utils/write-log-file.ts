@@ -1,6 +1,6 @@
 import log from 'npmlog';
 import path from 'path';
-import os from 'os';
+import os from 'node:os';
 import writeFileAtomic from 'write-file-atomic';
 
 export function writeLogFile(cwd: string) {

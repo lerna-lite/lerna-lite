@@ -1,16 +1,16 @@
-jest.mock('../cli-commands/cli-changed-commands');
-jest.mock('../cli-commands/cli-diff-commands');
-jest.mock('../cli-commands/cli-exec-commands');
-jest.mock('../cli-commands/cli-init-commands');
-jest.mock('../cli-commands/cli-list-commands');
-jest.mock('../cli-commands/cli-publish-commands');
-jest.mock('../cli-commands/cli-run-commands');
-jest.mock('../cli-commands/cli-version-commands');
-jest.mock('../cli-commands/cli-watch-commands');
+vi.mock('../cli-commands/cli-changed-commands');
+vi.mock('../cli-commands/cli-diff-commands');
+vi.mock('../cli-commands/cli-exec-commands');
+vi.mock('../cli-commands/cli-init-commands');
+vi.mock('../cli-commands/cli-list-commands');
+vi.mock('../cli-commands/cli-publish-commands');
+vi.mock('../cli-commands/cli-run-commands');
+vi.mock('../cli-commands/cli-version-commands');
+vi.mock('../cli-commands/cli-watch-commands');
 
-jest.mock('@lerna-lite/core', () => ({
-  ...(jest.requireActual('@lerna-lite/core') as any), // return the other real methods, below we'll mock only 2 of the methods
-  logOutput: jest.requireActual('../../../core/src/__mocks__/output').logOutput,
+vi.mock('@lerna-lite/core', async () => ({
+  ...(await vi.importActual<any>('@lerna-lite/core')),
+  logOutput: (await vi.importActual<any>('../../../core/src/__mocks__/output')).logOutput,
 }));
 
 import { lerna } from '../lerna-entry';

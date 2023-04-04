@@ -1,10 +1,10 @@
 import log from 'npmlog';
 import path from 'path';
-import loadJsonFile from 'load-json-file';
+import { loadJsonFile } from 'load-json-file';
 import fs from 'fs';
-import os from 'os';
+import os from 'node:os';
 import semver from 'semver';
-import writeJsonFile from 'write-json-file';
+import { writeJsonFile } from 'write-json-file';
 import { exec, execSync, Package } from '@lerna-lite/core';
 
 /**
@@ -132,10 +132,7 @@ export async function runInstallLockFileOnly(
   let inputLockfileName = '';
   let outputLockfileName: string | undefined;
   const npmClientArgsRaw = npmArgs || [];
-  const npmClientArgs: string[] = npmClientArgsRaw.reduce(
-    (args, arg) => args.concat(arg.split(/\s|,/)),
-    [] as string[]
-  );
+  const npmClientArgs: string[] = npmClientArgsRaw.reduce((args, arg) => args.concat(arg.split(/\s|,/)), [] as string[]);
 
   switch (npmClient) {
     case 'pnpm':

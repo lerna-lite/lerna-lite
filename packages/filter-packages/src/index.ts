@@ -1,3 +1,3 @@
-export * from './filter-packages';
-export * from './get-filtered-packages';
-export * from './models';
+export * from './filter-packages.js';
+export * from './get-filtered-packages.js';
+export * from './models/index.js';

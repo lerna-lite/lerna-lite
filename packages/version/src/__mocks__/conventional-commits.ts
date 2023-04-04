@@ -1,12 +1,12 @@
 import path from 'path';
 import semver from 'semver';
-const fs = jest.requireActual('fs-extra');
+const { outputFile } = await vi.importActual<any>('fs-extra/esm');
 
-const applyBuildMetadata = jest.fn().mockName('applyBuildMetadata');
-const mockRecommendVersion = jest.fn().mockName('recommendVersion');
-const mockUpdateChangelog = jest.fn().mockName('updateChangelog');
+const mockApplyBuildMetadata = vi.fn().mockName('applyBuildMetadata');
+const mockRecommendVersion = vi.fn().mockName('recommendVersion');
+const mockUpdateChangelog = vi.fn().mockName('updateChangelog');
 
-applyBuildMetadata.mockImplementation((version, buildMetadata) => {
+mockApplyBuildMetadata.mockImplementation((version, buildMetadata) => {
   if (buildMetadata) {
     return `${version}+${buildMetadata}`;
   }
@@ -19,12 +19,12 @@ mockUpdateChangelog.mockImplementation((pkg) => {
   const filePath = path.join(pkg.location, 'CHANGELOG.md');
 
   // grumble grumble re-implementing the implementation
-  return fs.outputFile(filePath, 'changelog', 'utf8').then(() => ({
+  return outputFile(filePath, 'changelog', 'utf8').then(() => ({
     logPath: filePath,
     newEntry: pkg.version ? `${pkg.name} - ${pkg.version}` : pkg.name,
   }));
 });
 
-exports.applyBuildMetadata = applyBuildMetadata;
-exports.recommendVersion = mockRecommendVersion;
-exports.updateChangelog = mockUpdateChangelog;
+export const applyBuildMetadata = mockApplyBuildMetadata;
+export const recommendVersion = mockRecommendVersion;
+export const updateChangelog = mockUpdateChangelog;

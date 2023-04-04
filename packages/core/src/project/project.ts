@@ -1,18 +1,18 @@
 import { cosmiconfigSync, PublicExplorerSync } from 'cosmiconfig';
 import dedent from 'dedent';
-import globby, { GlobbyOptions } from 'globby';
+import { globbySync } from 'globby';
 import globParent from 'glob-parent';
 import log from 'npmlog';
 import path from 'path';
 import pMap from 'p-map';
-import loadJsonFile from 'load-json-file';
-import writeJsonFile from 'write-json-file';
+import { loadJsonFile, loadJsonFileSync } from 'load-json-file';
+import { writeJsonFile } from 'write-json-file';
 
-import { Package } from '../package';
-import { applyExtends } from './lib/apply-extends';
-import { ValidationError } from '../validation-error';
-import { makeFileFinder, makeSyncFileFinder } from './lib/make-file-finder';
-import { ProjectConfig, RawManifest } from '../models';
+import { Package } from '../package.js';
+import { applyExtends } from './lib/apply-extends.js';
+import { ValidationError } from '../validation-error.js';
+import { makeFileFinder, makeSyncFileFinder } from './lib/make-file-finder.js';
+import { ProjectConfig, RawManifest } from '../models/index.js';
 
 /**
  * A representation of the entire project managed by Lerna.
@@ -133,9 +133,7 @@ export class Project {
   }
 
   get packageParentDirs(): string[] {
-    return (this.packageConfigs as any)
-      .map(globParent)
-      .map((parentDir: string) => path.resolve(this.rootPath, parentDir));
+    return (this.packageConfigs as any).map(globParent).map((parentDir: string) => path.resolve(this.rootPath, parentDir));
   }
 
   get manifest(): RawManifest {
@@ -143,7 +141,7 @@ export class Project {
 
     try {
       const manifestLocation = path.join(this.rootPath, 'package.json');
-      const packageJson = loadJsonFile.sync(manifestLocation) as RawManifest;
+      const packageJson = loadJsonFileSync(manifestLocation) as RawManifest;
 
       if (!packageJson.name) {
         // npm-lifecycle chokes if this is missing, so default like npm init does
@@ -174,13 +172,13 @@ export class Project {
     let licensePath: string | undefined;
 
     try {
-      const search = globby.sync(Project.LICENSE_GLOB, {
+      const search = globbySync(Project.LICENSE_GLOB, {
         cwd: this.rootPath,
         absolute: true,
         caseSensitiveMatch: false,
         // Project license is always a sibling of the root manifest
         deep: 0,
-      } as GlobbyOptions);
+      });
 
       licensePath = search.shift();
 
@@ -229,7 +227,7 @@ export class Project {
    */
   getPackagesSync() {
     return makeSyncFileFinder(this.rootPath, this.packageConfigs)('package.json', (packageConfigPath: string) => {
-      return new Package(loadJsonFile.sync(packageConfigPath), path.dirname(packageConfigPath), this.rootPath);
+      return new Package(loadJsonFileSync(packageConfigPath), path.dirname(packageConfigPath), this.rootPath);
     }) as string[];
   }
 

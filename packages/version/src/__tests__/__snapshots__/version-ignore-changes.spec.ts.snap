@@ -1,6 +1,6 @@
-// Jest Snapshot v1, https://goo.gl/fbAQLP
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
 
-exports[`version --ignore-changes does not version packages with ignored changes 1`] = `
+exports[`version --ignore-changes > does not version packages with ignored changes 1`] = `
 "v1.0.1
 
 HEAD -> main, tag: v1.0.1

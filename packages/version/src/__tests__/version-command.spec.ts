@@ -1,45 +1,47 @@
 // local modules _must_ be explicitly mocked
-jest.mock('../lib/git-push', () => jest.requireActual('../lib/__mocks__/git-push'));
-jest.mock('../lib/is-anything-committed', () => jest.requireActual('../lib/__mocks__/is-anything-committed'));
-jest.mock('../lib/is-behind-upstream', () => jest.requireActual('../lib/__mocks__/is-behind-upstream'));
-jest.mock('../lib/remote-branch-exists', () => jest.requireActual('../lib/__mocks__/remote-branch-exists'));
-jest.mock('../git-clients/gitlab-client', () => jest.requireActual('../__mocks__/gitlab-client'));
-jest.mock('../conventional-commits/get-commits-since-last-release', () =>
-  jest.requireActual('../__mocks__/get-commits-since-last-release')
-);
-
-jest.mock('@lerna-lite/core', () => ({
-  ...(jest.requireActual('@lerna-lite/core') as any), // return the other real methods, below we'll mock only 2 of the methods
-  Command: jest.requireActual('../../../core/src/command').Command,
-  conf: jest.requireActual('../../../core/src/command').conf,
-  logOutput: jest.requireActual('../../../core/src/__mocks__/output').logOutput,
-  collectUpdates: jest.requireActual('../../../core/src/__mocks__/collect-updates').collectUpdates,
-  promptConfirmation: jest.requireActual('../../../core/src/__mocks__/prompt').promptConfirmation,
-  promptSelectOne: jest.requireActual('../../../core/src/__mocks__/prompt').promptSelectOne,
-  promptTextInput: jest.requireActual('../../../core/src/__mocks__/prompt').promptTextInput,
-  checkWorkingTree: jest.requireActual('../../../core/src/__mocks__/check-working-tree').checkWorkingTree,
-  runTopologically: jest.requireActual('../../../core/src/utils/run-topologically').runTopologically,
-  throwIfReleased: jest.requireActual('../../../core/src/__mocks__/check-working-tree').throwIfReleased,
-  throwIfUncommitted: jest.requireActual('../../../core/src/__mocks__/check-working-tree').throwIfUncommitted,
-  npmConf: jest.requireActual('../../../core/src/utils/npm-conf').npmConf,
-  writeLogFile: jest.requireActual('../../../core/src/utils/write-log-file').writeLogFile,
-  QueryGraph: jest.requireActual('../../../core/src/utils/query-graph').QueryGraph,
-}));
+vi.mock('../lib/git-push', async () => await vi.importActual('../lib/__mocks__/git-push'));
+vi.mock('../lib/is-anything-committed', async () => await vi.importActual('../lib/__mocks__/is-anything-committed'));
+vi.mock('../lib/is-behind-upstream', async () => await vi.importActual('../lib/__mocks__/is-behind-upstream'));
+vi.mock('../lib/remote-branch-exists', async () => await vi.importActual('../lib/__mocks__/remote-branch-exists'));
+vi.mock('../git-clients/gitlab-client', async () => await vi.importActual('../__mocks__/gitlab-client'));
+vi.mock('../conventional-commits/get-commits-since-last-release', async () => await vi.importActual('../__mocks__/get-commits-since-last-release'));
 
 // also point to the local version command so that all mocks are properly used even by the command-runner
-jest.mock('@lerna-lite/version', () => jest.requireActual('../version-command'));
+vi.mock('@lerna-lite/version', async () => await vi.importActual('../version-command'));
+
+let collectUpdatesActual = null;
+vi.mock('@lerna-lite/core', async (coreOriginal) => {
+  const mod = (await coreOriginal()) as any;
+  collectUpdatesActual = mod.collectUpdates;
+  return {
+    ...mod,
+    Command: (await vi.importActual<any>('../../../core/src/command')).Command,
+    conf: (await vi.importActual<any>('../../../core/src/command')).conf,
+    logOutput: (await vi.importActual<any>('../../../core/src/__mocks__/output')).logOutput,
+    collectUpdates: (await vi.importActual<any>('../../../core/src/__mocks__/collect-updates')).collectUpdates,
+    promptConfirmation: (await vi.importActual<any>('../../../core/src/__mocks__/prompt')).promptConfirmation,
+    promptSelectOne: (await vi.importActual<any>('../../../core/src/__mocks__/prompt')).promptSelectOne,
+    promptTextInput: (await vi.importActual<any>('../../../core/src/__mocks__/prompt')).promptTextInput,
+    checkWorkingTree: (await vi.importActual<any>('../../../core/src/__mocks__/check-working-tree')).checkWorkingTree,
+    runTopologically: (await vi.importActual<any>('../../../core/src/utils/run-topologically')).runTopologically,
+    throwIfReleased: (await vi.importActual<any>('../../../core/src/__mocks__/check-working-tree')).throwIfReleased,
+    throwIfUncommitted: (await vi.importActual<any>('../../../core/src/__mocks__/check-working-tree')).throwIfUncommitted,
+    npmConf: (await vi.importActual<any>('../../../core/src/utils/npm-conf')).npmConf,
+    writeLogFile: (await vi.importActual<any>('../../../core/src/utils/write-log-file')).writeLogFile,
+    QueryGraph: (await vi.importActual<any>('../../../core/src/utils/query-graph')).QueryGraph,
+  };
+});
+vi.mock('write-pkg', async () => await vi.importActual('../lib/__mocks__/write-pkg'));
 
 import fs from 'fs-extra';
 import path from 'path';
-import execa from 'execa';
+import { execa } from 'execa';
+import { fileURLToPath } from 'url';
 import yaml from 'js-yaml';
 
 // mocked or stubbed modules
 import writePkg from 'write-pkg';
-import { promptConfirmation, promptSelectOne, VersionCommandOption } from '@lerna-lite/core';
-import { collectUpdates } from '@lerna-lite/core';
-import { logOutput } from '@lerna-lite/core';
-import { checkWorkingTree, throwIfUncommitted } from '@lerna-lite/core';
+import { checkWorkingTree, collectUpdates, logOutput, promptConfirmation, promptSelectOne, throwIfUncommitted, VersionCommandOption } from '@lerna-lite/core';
 import { getCommitsSinceLastRelease } from '../conventional-commits';
 import { gitPush as libPush } from '../lib/git-push';
 import { isAnythingCommitted } from '../lib/is-anything-committed';
@@ -48,17 +50,11 @@ import { remoteBranchExists } from '../lib/remote-branch-exists';
 
 // helpers
 import { loggingOutput } from '@lerna-test/helpers/logging-output';
-import {
-  commandRunner,
-  getCommitMessage,
-  gitAdd,
-  gitCommit,
-  gitTag,
-  initFixtureFactory,
-  showCommit,
-} from '@lerna-test/helpers';
+import { commandRunner, getCommitMessage, gitAdd, gitCommit, gitTag, initFixtureFactory, showCommit } from '@lerna-test/helpers';
 
 // test command
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 import { VersionCommand } from '../version-command';
 import { loadPackageLockFileWhenExists } from '../lib/update-lockfile-version';
 import cliCommands from '../../../cli/src/cli-commands/cli-version-commands';
@@ -66,6 +62,7 @@ const lernaVersion = commandRunner(cliCommands);
 const initFixture = initFixtureFactory(path.resolve(__dirname, '../../../publish/src/__tests__'));
 
 // file under test
+import { Mock } from 'vitest';
 import yargParser from 'yargs-parser';
 
 const createArgv = (cwd, ...args) => {
@@ -90,14 +87,12 @@ async function loadYamlFile<T>(filePath: string) {
 }
 
 // certain tests need to use the real thing
-const collectUpdatesActual = jest.requireActual('@lerna-lite/core').collectUpdates;
+// const collectUpdatesActual = (await vi.importActual('@lerna-lite/core')).collectUpdates;
 
 // assertion helpers
 const listDirty = (cwd) =>
   // git ls-files --exclude-standard --modified --others
-  execa('git', ['ls-files', '--exclude-standard', '--modified', '--others'], { cwd }).then((result) =>
-    result.stdout.split('\n').filter(Boolean)
-  );
+  execa('git', ['ls-files', '--exclude-standard', '--modified', '--others'], { cwd }).then((result) => result.stdout.split('\n').filter(Boolean));
 
 // stabilize commit SHA
 import gitSHA from '@lerna-test/helpers/serializers/serialize-git-sha';
@@ -121,7 +116,7 @@ describe('VersionCommand', () => {
 
       expect(checkWorkingTree).toHaveBeenCalled();
 
-      expect((promptSelectOne as jest.Mock).mock.calls).toMatchSnapshot('prompt');
+      expect((promptSelectOne as Mock).mock.calls).toMatchSnapshot('prompt');
       expect(promptConfirmation).toHaveBeenLastCalledWith('Are you sure you want to create these versions?');
 
       expect((writePkg as any).updatedManifest('package-1')).toMatchSnapshot('gitHead');
@@ -148,7 +143,7 @@ describe('VersionCommand', () => {
 
       expect(checkWorkingTree).toHaveBeenCalled();
 
-      expect((promptSelectOne as jest.Mock).mock.calls).toMatchSnapshot('prompt');
+      expect((promptSelectOne as any).mock.calls).toMatchSnapshot('prompt');
       expect(promptConfirmation).toHaveBeenLastCalledWith('[dry-run] Are you sure you want to create these versions?');
 
       expect((writePkg as any).updatedManifest('package-1')).toMatchSnapshot('gitHead');
@@ -175,7 +170,7 @@ describe('VersionCommand', () => {
 
       expect(checkWorkingTree).toHaveBeenCalled();
 
-      expect((promptSelectOne as jest.Mock).mock.calls).toMatchSnapshot('prompt');
+      expect((promptSelectOne as Mock).mock.calls).toMatchSnapshot('prompt');
       expect(promptConfirmation).toHaveBeenLastCalledWith('Are you sure you want to publish these packages?');
 
       expect((writePkg as any).updatedManifest('package-1')).toMatchSnapshot('gitHead');
@@ -202,7 +197,7 @@ describe('VersionCommand', () => {
 
       expect(checkWorkingTree).toHaveBeenCalled();
 
-      expect((promptSelectOne as jest.Mock).mock.calls).toMatchSnapshot('prompt');
+      expect((promptSelectOne as Mock).mock.calls).toMatchSnapshot('prompt');
       expect(promptConfirmation).toHaveBeenLastCalledWith('[dry-run] Are you sure you want to publish these packages?');
 
       expect((writePkg as any).updatedManifest('package-1')).toMatchSnapshot('gitHead');
@@ -232,38 +227,28 @@ describe('VersionCommand', () => {
       const testDir = await initFixture('normal');
       const command = new VersionCommand(createArgv(testDir, '--conventional-prerelease', '--conventional-graduate'));
 
-      await expect(command).rejects.toThrow(
-        '--conventional-prerelease cannot be combined with --conventional-graduate.'
-      );
+      await expect(command).rejects.toThrow('--conventional-prerelease cannot be combined with --conventional-graduate.');
     });
 
     it('throws an error if --manually-update-root-lockfile and --sync-workspace-lock flags are both passed', async () => {
       const testDir = await initFixture('normal');
-      const command = new VersionCommand(
-        createArgv(testDir, '--manually-update-root-lockfile', '--sync-workspace-lock')
-      );
+      const command = new VersionCommand(createArgv(testDir, '--manually-update-root-lockfile', '--sync-workspace-lock'));
 
-      await expect(command).rejects.toThrow(
-        '--manually-update-root-lockfile cannot be combined with --sync-workspace-lock.'
-      );
+      await expect(command).rejects.toThrow('--manually-update-root-lockfile cannot be combined with --sync-workspace-lock.');
     });
 
     it('throws an error if --changelog-include-commits-client-login and --changelog-include-commits-git-author flags are both passed', async () => {
       const testDir = await initFixture('normal');
-      const command = new VersionCommand(
-        createArgv(testDir, '--changelog-include-commits-client-login', '--changelog-include-commits-git-author')
-      );
+      const command = new VersionCommand(createArgv(testDir, '--changelog-include-commits-client-login', '--changelog-include-commits-git-author'));
 
-      await expect(command).rejects.toThrow(
-        '--changelog-include-commits-client-login cannot be combined with --changelog-include-commits-git-author.'
-      );
+      await expect(command).rejects.toThrow('--changelog-include-commits-client-login cannot be combined with --changelog-include-commits-git-author.');
     });
 
     it('shows a log warning when using previous option --changelog-include-commit-author-fullname since it was renamed.', async () => {
       const testDir = await initFixture('normal');
       const command = new VersionCommand(createArgv(testDir, '--changelog-include-commit-author-fullname'));
       await command;
-      const loggerSpy = jest.spyOn(command.logger, 'warn');
+      const loggerSpy = vi.spyOn(command.logger, 'warn');
       command.initialize();
 
       expect(loggerSpy).toHaveBeenCalledWith(
@@ -273,7 +258,7 @@ describe('VersionCommand', () => {
     });
 
     it("throws an error when remote branch doesn't exist", async () => {
-      (remoteBranchExists as jest.Mock).mockReturnValueOnce(false);
+      (remoteBranchExists as Mock).mockReturnValueOnce(false);
 
       const testDir = await initFixture('normal');
       const command = new VersionCommand(createArgv(testDir));
@@ -282,7 +267,7 @@ describe('VersionCommand', () => {
     });
 
     it('throws an error when uncommitted changes are present', async () => {
-      (checkWorkingTree as jest.Mock).mockImplementationOnce(() => {
+      (checkWorkingTree as Mock).mockImplementationOnce(() => {
         throw new Error('uncommitted');
       });
 
@@ -294,7 +279,7 @@ describe('VersionCommand', () => {
     });
 
     it('throws an error when current ref is already tagged', async () => {
-      (checkWorkingTree as jest.Mock).mockImplementationOnce(() => {
+      (checkWorkingTree as Mock).mockImplementationOnce(() => {
         throw new Error('released');
       });
 
@@ -354,9 +339,7 @@ describe('VersionCommand', () => {
 
     it('throws an error if --changelog-include-commits-client-login without providing --create-release or --remote-client', async () => {
       const testDir = await initFixture('normal');
-      const command = new VersionCommand(
-        createArgv(testDir, '--changelog-include-commits-client-login', '--conventional-commits')
-      );
+      const command = new VersionCommand(createArgv(testDir, '--changelog-include-commits-client-login', '--conventional-commits'));
 
       await expect(command).rejects.toThrow(
         '--changelog-include-commits-client-login requires one of these two option --remote-client or --create-release to be defined.'
@@ -366,13 +349,7 @@ describe('VersionCommand', () => {
     it('call getCommitsSinceLastRelease() when --changelog-include-commits-client-login is provided', async () => {
       const testDir = await initFixture('normal');
       const command = new VersionCommand(
-        createArgv(
-          testDir,
-          '--changelog-include-commits-client-login',
-          '--conventional-commits',
-          '--remote-client',
-          'github'
-        )
+        createArgv(testDir, '--changelog-include-commits-client-login', '--conventional-commits', '--remote-client', 'github')
       );
       await command;
 
@@ -413,8 +390,7 @@ describe('VersionCommand', () => {
   });
 
   describe('--no-commit-hooks', () => {
-    const setupPreCommitHook = (cwd) =>
-      fs.outputFile(path.join(cwd, '.git/hooks/pre-commit'), '#!/bin/sh\nexit 1\n', { mode: 0o755 });
+    const setupPreCommitHook = (cwd) => fs.outputFile(path.join(cwd, '.git/hooks/pre-commit'), '#!/bin/sh\nexit 1\n', { mode: 0o755 });
 
     it('passes --no-verify to git commit execution', async () => {
       const cwd = await initFixture('normal');
@@ -771,7 +747,7 @@ describe('VersionCommand', () => {
 
   describe('when local clone is behind upstream', () => {
     it('throws an error during interactive publish', async () => {
-      (isBehindUpstream as jest.Mock).mockReturnValueOnce(true);
+      (isBehindUpstream as Mock).mockReturnValueOnce(true);
 
       const testDir = await initFixture('normal');
       const command = new VersionCommand(createArgv(testDir, '--no-ci'));
@@ -780,7 +756,7 @@ describe('VersionCommand', () => {
     });
 
     it('logs a warning and exits early during CI publish', async () => {
-      (isBehindUpstream as jest.Mock).mockReturnValueOnce(true);
+      (isBehindUpstream as Mock).mockReturnValueOnce(true);
 
       const testDir = await initFixture('normal');
 
@@ -852,14 +828,12 @@ describe('VersionCommand', () => {
   });
 
   it('exits with an error when no commits are present', async () => {
-    (isAnythingCommitted as jest.Mock).mockReturnValueOnce(false);
+    (isAnythingCommitted as Mock).mockReturnValueOnce(false);
 
     const testDir = await initFixture('normal', false);
     const command = new VersionCommand(createArgv(testDir));
 
-    await expect(command).rejects.toThrow(
-      'No commits in this repository. Please commit something before using version.'
-    );
+    await expect(command).rejects.toThrow('No commits in this repository. Please commit something before using version.');
   });
 
   it('exits early when no changes found', async () => {
@@ -881,7 +855,7 @@ describe('VersionCommand', () => {
     await gitAdd(testDir, '.');
     await gitCommit(testDir, 'feat: hello');
 
-    (collectUpdates as jest.Mock).mockImplementationOnce(collectUpdatesActual);
+    (collectUpdates as Mock).mockImplementationOnce(collectUpdatesActual);
 
     await new VersionCommand(createArgv(testDir, '--bump', 'major', '--yes'));
 
@@ -894,28 +868,16 @@ describe('VersionCommand', () => {
 
     await gitTag(testDir, 'v1.0.0');
 
-    await Promise.all(
-      ['a', 'b', 'c', 'd'].map((n) => fs.outputFile(path.join(testDir, 'packages', n, 'index.js'), 'hello'))
-    );
+    await Promise.all(['a', 'b', 'c', 'd'].map((n) => fs.outputFile(path.join(testDir, 'packages', n, 'index.js'), 'hello')));
     await gitAdd(testDir, '.');
     await gitCommit(testDir, 'feat: hello');
 
-    (collectUpdates as jest.Mock).mockImplementationOnce(collectUpdatesActual);
+    (collectUpdates as Mock).mockImplementationOnce(collectUpdatesActual);
 
     await new VersionCommand(createArgv(testDir, '--bump', 'major', '--yes'));
 
     const patch = await showCommit(testDir, '--name-only');
-    expect(patch).toMatchInlineSnapshot(`
-      "v2.0.0
-
-      HEAD -> main, tag: v2.0.0
-
-      lerna.json
-      packages/a/package.json
-      packages/b/package.json
-      packages/c/package.json
-      packages/d/package.json"
-    `);
+    expect(patch).toMatchSnapshot();
   });
 
   describe('with relative file: specifiers', () => {
@@ -1015,9 +977,7 @@ describe('VersionCommand', () => {
     describe('npm client', () => {
       it(`should NOT call runInstallLockFileOnly() when --no-sync-workspace-lock & --no-manually-update-root-lockfile are provided`, async () => {
         const cwd = await initFixture('lockfile-version2');
-        await new VersionCommand(
-          createArgv(cwd, '--bump', 'major', '--yes', '--no-sync-workspace-lock', '--no-manually-update-root-lockfile')
-        );
+        await new VersionCommand(createArgv(cwd, '--bump', 'major', '--yes', '--no-sync-workspace-lock', '--no-manually-update-root-lockfile'));
 
         const changedFiles = await showCommit(cwd, '--name-only');
         expect(changedFiles).not.toContain('package-lock.json');
@@ -1025,9 +985,7 @@ describe('VersionCommand', () => {
 
       it(`should call runInstallLockFileOnly() when --sync-workspace-lock is provided and expect lockfile to be added to git`, async () => {
         const cwd = await initFixture('lockfile-pnpm');
-        await new VersionCommand(
-          createArgv(cwd, '--bump', 'major', '--yes', '--sync-workspace-lock', '--npm-client', 'pnpm')
-        );
+        await new VersionCommand(createArgv(cwd, '--bump', 'major', '--yes', '--sync-workspace-lock', '--npm-client', 'pnpm'));
 
         const changedFiles = await showCommit(cwd, '--name-only');
         expect(changedFiles).toContain('pnpm-lock.yaml');
@@ -1071,7 +1029,7 @@ describe('VersionCommand', () => {
 
   describe('with spurious -- arguments', () => {
     it('ignores the extra arguments with cheesy parseConfiguration()', async () => {
-      jest.spyOn(console, 'log').mockImplementation(() => {});
+      vi.spyOn(console, 'log').mockImplementation(() => {});
 
       const cwd = await initFixture('lifecycle');
       await lernaVersion(cwd)('--yes', '--', '--loglevel', 'ignored', '--blah');
@@ -1091,9 +1049,9 @@ describe('VersionCommand', () => {
       });
       await new VersionCommand(createArgv(testDir));
 
-      expect(collectUpdates.mock.calls[0][3].describeTag).toBe('*custom-tag*');
+      expect((collectUpdates as Mock).mock.calls[0][3].describeTag).toBe('*custom-tag*');
 
-      expect(collectUpdates.mock.calls[0][3].isIndependent).toBe(true);
+      expect((collectUpdates as Mock).mock.calls[0][3].isIndependent).toBe(true);
     });
   });
 });

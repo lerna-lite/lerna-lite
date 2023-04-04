@@ -5,11 +5,11 @@
     "rootDir": "src",
     "outDir": "dist",
     "typeRoots": ["typings"],
-    "types": ["jest", "jest-extended", "node"]
+    "types": ["vitest/globals", "node"]
   },
   "exclude": ["dist", "node_modules", "**/*.spec.ts", "**/__mocks__/**/*.*"],
   "filesGlob": ["./src/**/*.ts"],
-  "include": ["src/**/*.ts", "typings/**/*.ts"],
+  "include": ["src/**/*.ts", "typings/**/*.ts", "src/__tests__/lerna-entry.spec.ts"],
   "references": [
     { "path": "../core" },
     { "path": "../init" },

@@ -1,2 +1,2 @@
-export * from './models';
-export * from './exec-command';
+export * from './models/index.js';
+export * from './exec-command.js';

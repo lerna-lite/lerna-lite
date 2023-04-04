@@ -3,10 +3,11 @@ import fs from 'fs';
 import path from 'path';
 // @ts-ignore
 import { ConfigChain } from 'config-chain';
-import { envReplace } from './env-replace';
-import { findPrefix } from './find-prefix';
-import { parseField } from './parse-field';
-import { toNerfDart } from './nerf-dart';
+
+import { envReplace } from './env-replace.js';
+import { findPrefix } from './find-prefix.js';
+import { parseField } from './parse-field.js';
+import { toNerfDart } from './nerf-dart.js';
 
 export class Conf extends ConfigChain {
   _await: any;

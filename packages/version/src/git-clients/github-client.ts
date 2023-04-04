@@ -1,6 +1,7 @@
 import { execSync } from '@lerna-lite/core';
 import { Octokit } from '@octokit/rest';
 import { SyncOptions } from 'execa';
+import { createRequire } from 'node:module';
 import parseGitUrl from 'git-url-parse';
 import log from 'npmlog';
 
@@ -15,7 +16,8 @@ export function createGitHubClient() {
   }
 
   if (GHE_VERSION) {
-    // eslint-disable-next-line
+    // TODO: probably need to replace with await impot() since createRequire() didn't seem to work when tried in conventional-commits dynamic preset imports
+    const require = createRequire(import.meta.url);
     Octokit.plugin(require(`@octokit/plugin-enterprise-rest/ghe-${GHE_VERSION}`));
   }
 

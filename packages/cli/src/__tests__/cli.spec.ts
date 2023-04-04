@@ -1,38 +1,39 @@
-jest.mock('import-local');
+vi.mock('import-local');
 
-jest.mock('../lerna-entry', () => ({
-  constructor: jest.fn(),
-  lerna: jest.fn(),
+const lernaMock = vi.fn();
+vi.mock('../lerna-entry.js', () => ({
+  constructor: vi.fn(),
+  lerna: lernaMock,
 }));
 
 import importLocal from 'import-local';
 import log from 'npmlog';
+import { Mock } from 'vitest';
 
 describe('CLI', () => {
   afterEach(() => {
-    jest.resetModules();
+    vi.resetModules();
   });
 
   beforeEach(() => {
-    jest.mock('import-local');
+    vi.mock('import-local');
   });
 
   it('should log a message when using local version', async () => {
-    (importLocal as jest.Mock).mockImplementation(() => true);
-    const spy = jest.spyOn(log, 'info');
+    (importLocal as Mock).mockImplementation(() => true);
+    const spy = vi.spyOn(log, 'info');
 
-    await import('../cli');
+    await import('../cli.js');
 
     expect(importLocal).toHaveBeenCalled();
     expect(spy).toHaveBeenCalledWith('cli', 'using local version of lerna');
   });
 
   it('should call lerna CLI when lerna not found locally', async () => {
-    const { lerna } = await import('../lerna-entry');
+    (importLocal as Mock).mockImplementation(() => false);
+    await import('../cli.js');
 
-    await import('../cli');
-
-    expect(lerna).toBeTruthy();
-    expect(lerna).toHaveBeenCalled();
+    expect(lernaMock).toBeTruthy();
+    expect(lernaMock).toHaveBeenCalled();
   });
 });

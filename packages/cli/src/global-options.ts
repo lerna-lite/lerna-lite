@@ -1,4 +1,4 @@
-import os from 'os';
+import os from 'node:os';
 import { Argv } from 'yargs';
 
 export function globalOptions(yargs: Argv<any>) {

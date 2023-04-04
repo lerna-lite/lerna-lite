@@ -5,10 +5,14 @@
     "rootDir": "src",
     "outDir": "dist",
     "typeRoots": ["typings"],
-    "types": ["jest", "jest-extended", "node"]
+    "types": ["vitest/globals", "node"]
   },
-  "exclude": ["dist", "node_modules", "**/*.spec.ts", "**/__mocks__/**/*.*"],
+  "exclude": ["dist", "node_modules", "**/*.spec.ts", "**/*.spec.mts", "**/__mocks__/**/*.*"],
   "filesGlob": ["./src/**/*.ts"],
-  "include": ["src/**/*.ts", "typings/**/*.ts"],
+  "include": [
+    "src/**/*.ts",
+    "typings/**/*.ts",
+    "src/conventional-commits/__tests__/__fixtures__/fixed/scripts/legacy-callback-preset.cts"
+  ],
   "references": [{ "path": "../core" }]
 }

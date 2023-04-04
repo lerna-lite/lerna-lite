@@ -1,4 +1,4 @@
-jest.mock('../GitLabClient');
+vi.mock('../GitLabClient');
 
 import { GitLabClient } from '../GitLabClient';
 import { createGitLabClient } from '../index';

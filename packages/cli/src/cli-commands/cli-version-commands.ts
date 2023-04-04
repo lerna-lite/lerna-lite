@@ -8,12 +8,8 @@ import { VersionCommandOption } from '@lerna-lite/core';
  */
 
 const addBumpPositionalFn = function (yargs: any, additionalKeywords: string[] = []) {
-  const semverKeywords = ['major', 'minor', 'patch', 'premajor', 'preminor', 'prepatch', 'prerelease'].concat(
-    additionalKeywords
-  );
-  const bumpOptionList = `'${semverKeywords.slice(0, -1).join(`', '`)}', or '${
-    semverKeywords[semverKeywords.length - 1]
-  }'.`;
+  const semverKeywords = ['major', 'minor', 'patch', 'premajor', 'preminor', 'prepatch', 'prerelease'].concat(additionalKeywords);
+  const bumpOptionList = `'${semverKeywords.slice(0, -1).join(`', '`)}', or '${semverKeywords[semverKeywords.length - 1]}'.`;
 
   yargs.positional('bump', {
     describe: `Increment version(s) by explicit version _or_ semver keyword,\n${bumpOptionList}`,
@@ -276,8 +272,7 @@ export default {
         type: 'boolean',
       },
       'sync-workspace-lock': {
-        describe:
-          'Runs `npm install --package-lock-only` or equivalent depending on the package manager defined in `npmClient`.',
+        describe: 'Runs `npm install --package-lock-only` or equivalent depending on the package manager defined in `npmClient`.',
         type: 'boolean',
       },
       'workspace-strict-match': {

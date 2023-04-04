@@ -3,6 +3,7 @@
   "version": "0.0.0-test-only",
   "description": "Private test helpers for the lerna-lite monorepo",
   "main": "index.js",
+  "type": "module",
   "private": true,
   "license": "MIT"
 }

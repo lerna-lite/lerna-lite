@@ -1,13 +1,13 @@
 import log from 'npmlog';
-import { DescribeRefOptions, ExecOpts, UpdateCollectorOptions } from '../../models';
-import { Package } from '../../package';
-import { PackageGraph } from '../../package-graph';
 
-import { describeRefSync } from '../describe-ref';
-import { collectPackages } from './lib/collect-packages';
-import { getPackagesForOption } from './lib/get-packages-for-option';
-import { hasTags } from './lib/has-tags';
-import { makeDiffPredicate } from './lib/make-diff-predicate';
+import type { DescribeRefOptions, ExecOpts, UpdateCollectorOptions } from '../../models/index.js';
+import { Package } from '../../package.js';
+import { PackageGraph } from '../../package-graph/index.js';
+import { describeRefSync } from '../describe-ref.js';
+import { collectPackages } from './lib/collect-packages.js';
+import { getPackagesForOption } from './lib/get-packages-for-option.js';
+import { hasTags } from './lib/has-tags.js';
+import { makeDiffPredicate } from './lib/make-diff-predicate.js';
 
 /**
  * Create a list of graph nodes representing packages changed since the previous release, tagged or otherwise.
@@ -35,9 +35,7 @@ export function collectUpdates(
 
   // If --conventional-commits and --conventional-graduate are both set, ignore --force-publish
   const useConventionalGraduate = conventionalCommits && conventionalGraduate;
-  const forced = getPackagesForOption(
-    useConventionalGraduate ? conventionalGraduate : (forcePublish as boolean | string[])
-  );
+  const forced = getPackagesForOption(useConventionalGraduate ? conventionalGraduate : (forcePublish as boolean | string[]));
 
   const packages =
     filteredPackages.length === packageGraph.size
@@ -110,8 +108,7 @@ export function collectUpdates(
       ? () => false
       : /* skip packages that have not been previously prereleased */
         (node) => node.prereleaseId;
-  const isForced = (node, name) =>
-    (forced.has('*') || forced.has(name)) && (useConventionalGraduate ? node.prereleaseId : true);
+  const isForced = (node, name) => (forced.has('*') || forced.has(name)) && (useConventionalGraduate ? node.prereleaseId : true);
 
   return collectPackages(packages, {
     isCandidate: (node, name) => isForced(node, name) || needsBump(node) || hasDiff(node),

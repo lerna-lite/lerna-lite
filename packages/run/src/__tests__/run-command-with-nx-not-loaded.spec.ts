@@ -1,33 +1,38 @@
-jest.mock('nx/src/utils/output', () => undefined);
-jest.mock('../lib/npm-run-script');
+vi.mock('nx/src/utils/output', () => undefined);
+vi.mock('../lib/npm-run-script');
 
 // also point to the local run command so that all mocks are properly used even by the command-runner
-jest.mock('@lerna-lite/run', () => jest.requireActual('../run-command'));
+vi.mock('@lerna-lite/run', async () => await vi.importActual('../run-command'));
 
 // mocked modules
 import { npmRunScript } from '../lib/npm-run-script';
 import cliRunCommands from '../../../cli/src/cli-commands/cli-run-commands';
 
 // helpers
+import { fileURLToPath } from 'url';
+import path from 'path';
+import { Mock } from 'vitest';
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 import { commandRunner, initFixtureFactory } from '@lerna-test/helpers';
+
 const lernaRun = commandRunner(cliRunCommands);
 const initFixture = initFixtureFactory(__dirname);
 
 describe('RunCommand', () => {
-  (npmRunScript as jest.Mock).mockImplementation((script, { pkg }) =>
-    Promise.resolve({ exitCode: 0, stdout: pkg.name })
-  );
+  (npmRunScript as Mock).mockImplementation((_script, { pkg }) => Promise.resolve({ exitCode: 0, stdout: pkg.name }));
 
   describe('in a repo powered by Nx', () => {
     let testDir;
-    const errorSpy = jest.fn();
+    const errorSpy = vi.fn();
 
     beforeAll(async () => {
       testDir = await initFixture('powered-by-nx');
       process.env.NX_WORKSPACE_ROOT_PATH = testDir;
 
       // @ts-ignore
-      jest.spyOn(process, 'exit').mockImplementation((code: any) => {
+      vi.spyOn(process, 'exit').mockImplementation((code: any) => {
         if (code !== 0) {
           errorSpy(code);
         }
@@ -35,9 +40,7 @@ describe('RunCommand', () => {
     });
 
     it('should throw when Nx is not loaded', async () => {
-      const command = lernaRun(testDir)('my-script');
-
-      await expect(command).rejects.toThrow();
+      await lernaRun(testDir)('my-script');
 
       expect(errorSpy).toHaveBeenCalledWith(1);
     });

@@ -1,8 +1,8 @@
-import globby, { GlobbyOptions } from 'globby';
+import { globby, globbySync, Options as GlobbyOptions } from 'globby';
 import path from 'path';
 import pMap from 'p-map';
 
-import { ValidationError } from '../../validation-error';
+import { ValidationError } from '../../validation-error.js';
 
 /**
  * @param {string[]} results
@@ -65,7 +65,7 @@ export function makeFileFinder(rootPath: string, packageConfigs: string[]) {
 }
 
 export function makeSyncFileFinder(rootPath: string, packageConfigs: string[]) {
-  const globOpts: GlobbyOptions = getGlobOpts(rootPath, packageConfigs);
+  const globOpts = getGlobOpts(rootPath, packageConfigs);
 
   return (
     fileName: string,
@@ -75,7 +75,7 @@ export function makeSyncFileFinder(rootPath: string, packageConfigs: string[]) {
     const options: GlobbyOptions = Object.assign({}, customGlobOpts, globOpts);
     const patterns = packageConfigs.map((globPath) => path.posix.join(globPath, fileName)).sort();
 
-    let results: string[] = globby.sync(patterns, options);
+    let results: string[] = globbySync(patterns, options);
 
     // POSIX results always need to be normalized
     results = normalize(results);

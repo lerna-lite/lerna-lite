@@ -1,6 +1,6 @@
 import log from 'npmlog';
 
-import { GitLabClient } from './GitLabClient';
+import { GitLabClient } from './GitLabClient.js';
 
 function OcktokitAdapter(client) {
   return { repos: { createRelease: client.createRelease.bind(client) } };

@@ -1,21 +1,22 @@
-jest.mock('read-package-json');
-jest.mock('libnpmpublish');
-jest.mock('fs-extra');
+vi.mock('read-package-json');
+vi.mock('libnpmpublish');
+vi.mock('fs/promises');
 
-jest.mock('@lerna-lite/core', () => ({
-  ...jest.requireActual('@lerna-lite/core'), // return the other real methods, below we'll mock only 2 of the methods
+vi.mock('@lerna-lite/core', async () => ({
+  ...(await vi.importActual<any>('@lerna-lite/core')),
   otplease: (cb, opts) => Promise.resolve(cb(opts)),
-  runLifecycle: jest.requireActual('../../../core/src/__mocks__/run-lifecycle').runLifecycle,
+  runLifecycle: (await vi.importActual<any>('../../../core/src/__mocks__/run-lifecycle')).runLifecycle,
 }));
 
 // mocked modules
-import fs from 'fs-extra';
+import { readFile } from 'fs/promises';
 import { publish } from 'libnpmpublish';
 import readJSON from 'read-package-json';
 import { runLifecycle, Package, RawManifest } from '@lerna-lite/core';
 
 // helpers
 import path from 'path';
+import { Mock } from 'vitest';
 
 // file under test
 import { npmPublish } from '../lib/npm-publish';
@@ -25,27 +26,21 @@ describe('npm-publish', () => {
   const mockTarData = Buffer.from('MOCK');
   const mockManifest = { _normalized: true };
 
-  (fs.readFile as any).mockName('fs.readFile').mockResolvedValue(mockTarData);
-  (publish as jest.Mock).mockName('libnpmpublish').mockResolvedValue(null);
-  (readJSON as unknown as jest.Mock)
-    .mockName('read-package-json')
-    .mockImplementation((file, cb) => cb(null, mockManifest));
-  (runLifecycle as jest.Mock).mockName('@lerna-lite/core').mockResolvedValue(null);
+  (readFile as Mock).mockName('readFile').mockResolvedValue(mockTarData);
+  (publish as Mock).mockName('libnpmpublish').mockResolvedValue(null);
+  (readJSON as unknown as Mock).mockName('read-package-json').mockImplementation((file, cb) => cb(null, mockManifest));
+  (runLifecycle as Mock).mockName('@lerna-lite/core').mockResolvedValue(null);
 
   const tarFilePath = '/tmp/test-1.10.100.tgz';
   const rootPath = path.normalize('/test');
-  const pkg = new Package(
-    { name: '@scope/test', version: '1.10.100' } as RawManifest,
-    path.join(rootPath, 'npmPublish/test'),
-    rootPath
-  );
+  const pkg = new Package({ name: '@scope/test', version: '1.10.100' } as RawManifest, path.join(rootPath, 'npmPublish/test'), rootPath);
 
   it('calls external libraries with correct arguments', async () => {
     const opts = { tag: 'published-tag' };
 
     await npmPublish(pkg, tarFilePath, opts);
 
-    expect(fs.readFile).toHaveBeenCalledWith(tarFilePath);
+    expect(readFile).toHaveBeenCalledWith(tarFilePath);
     expect(readJSON).toHaveBeenCalledWith(pkg.manifestLocation, expect.any(Function));
     expect(publish).toHaveBeenCalledWith(
       mockManifest,
@@ -70,7 +65,7 @@ describe('npm-publish', () => {
   });
 
   it('overrides pkg.publishConfig.tag when opts.tag is explicitly configured', async () => {
-    (readJSON as unknown as jest.Mock).mockImplementationOnce((file, cb) =>
+    (readJSON as unknown as Mock).mockImplementationOnce((file, cb) =>
       cb(null, {
         publishConfig: {
           tag: 'beta',
@@ -95,7 +90,7 @@ describe('npm-publish', () => {
   });
 
   it('respects pkg.publishConfig.tag when opts.defaultTag matches default', async () => {
-    (readJSON as unknown as jest.Mock).mockImplementationOnce((file, cb) =>
+    (readJSON as unknown as Mock).mockImplementationOnce((file, cb) =>
       cb(null, {
         publishConfig: {
           tag: 'beta',
@@ -131,7 +126,7 @@ describe('npm-publish', () => {
       rootPath
     );
 
-    (readJSON as unknown as jest.Mock).mockImplementationOnce((file, cb) =>
+    (readJSON as unknown as Mock).mockImplementationOnce((file, cb) =>
       cb(null, {
         name: 'fancy-fancy',
         version: '1.10.100',
@@ -153,7 +148,7 @@ describe('npm-publish', () => {
   });
 
   it('merges pkg.publishConfig.registry into options', async () => {
-    (readJSON as unknown as jest.Mock).mockImplementationOnce((file, cb) =>
+    (readJSON as unknown as Mock).mockImplementationOnce((file, cb) =>
       cb(null, {
         publishConfig: {
           registry: 'http://pkg-registry.com',

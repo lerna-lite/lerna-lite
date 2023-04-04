@@ -1,7 +1,7 @@
 import { FetchConfig, ValidationError } from '@lerna-lite/core';
 
-import { getFetchConfig } from './fetch-config';
-import { getProfileData } from './get-profile-data';
+import { getFetchConfig } from './fetch-config.js';
+import { getProfileData } from './get-profile-data.js';
 
 /**
  * Determine if the logged-in user has enabled two-factor auth.

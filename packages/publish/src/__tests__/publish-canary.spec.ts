@@ -1,37 +1,41 @@
+vi.mock('write-pkg', async () => await vi.importActual('../../../version/src/lib/__mocks__/write-pkg'));
+
 // mocked modules of @lerna-lite/core
-jest.mock('@lerna-lite/core', () => ({
-  ...jest.requireActual('@lerna-lite/core'), // return the other real methods, below we'll mock only 2 of the methods
-  logOutput: jest.requireActual('../../../core/src/__mocks__/output').logOutput,
-  promptConfirmation: jest.requireActual('../../../core/src/__mocks__/prompt').promptConfirmation,
-  throwIfUncommitted: jest.requireActual('../../../core/src/__mocks__/check-working-tree').throwIfUncommitted,
+// vi.fn()
+vi.mock('@lerna-lite/core', async () => ({
+  ...(await vi.importActual<any>('../../../core/src/index')),
+  describeRef: vi.fn((await vi.importActual<any>('../../../core/src/utils/describe-ref')).describeRef),
+  logOutput: (await vi.importActual<any>('../../../core/src/__mocks__/output')).logOutput,
+  promptConfirmation: (await vi.importActual<any>('../../../core/src/__mocks__/prompt')).promptConfirmation,
+  promptSelectOne: (await vi.importActual<any>('../../../core/src/__mocks__/prompt')).promptSelectOne,
+  promptTextInput: (await vi.importActual<any>('../../../core/src/__mocks__/prompt')).promptTextInput,
+  throwIfUncommitted: (await vi.importActual<any>('../../../core/src/__mocks__/check-working-tree')).throwIfUncommitted,
 }));
 
-// local modules _must_ be explicitly mocked
-jest.mock('../lib/get-packages-without-license', () =>
-  jest.requireActual('../lib/__mocks__/get-packages-without-license')
-);
-jest.mock('../lib/verify-npm-package-access', () => jest.requireActual('../lib/__mocks__/verify-npm-package-access'));
-jest.mock('../lib/get-npm-username', () => jest.requireActual('../lib/__mocks__/get-npm-username'));
-jest.mock('../lib/get-two-factor-auth-required', () =>
-  jest.requireActual('../lib/__mocks__/get-two-factor-auth-required')
-);
-jest.mock('../lib/npm-publish', () => jest.requireActual('../lib/__mocks__/npm-publish'));
-
 // also point to the local publish command so that all mocks are properly used even by the command-runner
-jest.mock('@lerna-lite/publish', () => jest.requireActual('../publish-command'));
+vi.mock('@lerna-lite/publish', async () => await vi.importActual('../publish-command'));
 
+vi.mock('../lib/get-packages-without-license', async () => await vi.importActual('../lib/__mocks__/get-packages-without-license'));
+vi.mock('../lib/verify-npm-package-access', async () => await vi.importActual('../lib/__mocks__/verify-npm-package-access'));
+vi.mock('../lib/get-npm-username', async () => await vi.importActual('../lib/__mocks__/get-npm-username'));
+vi.mock('../lib/get-two-factor-auth-required', async () => await vi.importActual('../lib/__mocks__/get-two-factor-auth-required'));
+vi.mock('../lib/npm-publish', async () => await vi.importActual('../lib/__mocks__/npm-publish'));
 import fs from 'fs-extra';
 import path from 'path';
+import { fileURLToPath } from 'url';
+import { Mock } from 'vitest';
 import yargParser from 'yargs-parser';
 
 // mocked modules
 import writePkg from 'write-pkg';
 import { npmPublish } from '../lib/npm-publish';
 import { npmPublish as npmPublishMock } from '../lib/__mocks__/npm-publish';
-import { promptConfirmation, PublishCommandOption, throwIfUncommitted } from '@lerna-lite/core';
+import { promptConfirmation, PublishCommandOption, describeRef, throwIfUncommitted } from '@lerna-lite/core';
 
 // helpers
 import { commandRunner, gitAdd, gitTag, gitCommit, initFixtureFactory, loggingOutput } from '@lerna-test/helpers';
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 const initFixture = initFixtureFactory(__dirname);
 
 // test command
@@ -43,16 +47,16 @@ const lernaPublish = commandRunner(cliCommands);
 import gitSHA from '@lerna-test/helpers/serializers/serialize-git-sha';
 expect.addSnapshotSerializer(gitSHA);
 
-import coreModule from '@lerna-lite/core';
-
 const createArgv = (cwd: string, ...args: string[]) => {
   args.unshift('publish');
-  if (args.length > 0 && args[1] && args[1].length > 0 && !args[1].startsWith('-')) {
+  if (args.length > 0 && args[1]?.length > 0 && !args[1].startsWith('-')) {
     args[1] = `--bump=${args[1]}`;
   }
   const parserArgs = args.join(' ');
   const argv = yargParser(parserArgs);
   argv['$0'] = cwd;
+  argv['loglevel'] = 'silent';
+  argv.composed = 'composed';
   return argv as unknown as PublishCommandOption;
 };
 
@@ -90,11 +94,7 @@ async function setupChanges(cwd, ...tuples) {
 test('publish --canary', async () => {
   const cwd = await initTaggedFixture('normal');
 
-  await setupChanges(
-    cwd,
-    ['packages/package-1/all-your-base.js', 'belong to us'],
-    ['packages/package-4/non-matching-semver.js', 'senpai noticed me']
-  );
+  await setupChanges(cwd, ['packages/package-1/all-your-base.js', 'belong to us'], ['packages/package-4/non-matching-semver.js', 'senpai noticed me']);
   await new PublishCommand(createArgv(cwd, '--canary'));
 
   expect(promptConfirmation).toHaveBeenLastCalledWith('Are you sure you want to publish these packages?');
@@ -119,11 +119,7 @@ test('publish --canary', async () => {
 test('publish --canary with auto-confirm --yes', async () => {
   const cwd = await initTaggedFixture('normal');
 
-  await setupChanges(
-    cwd,
-    ['packages/package-1/all-your-base.js', 'belong to us'],
-    ['packages/package-4/non-matching-semver.js', 'senpai noticed me']
-  );
+  await setupChanges(cwd, ['packages/package-1/all-your-base.js', 'belong to us'], ['packages/package-4/non-matching-semver.js', 'senpai noticed me']);
   await new PublishCommand(createArgv(cwd, '--canary', '--yes'));
 
   expect(promptConfirmation).not.toHaveBeenCalled();
@@ -403,7 +399,7 @@ test('publish --canary --force-publish <arg> on tagged release avoids early exit
 });
 
 test('publish --canary with dirty tree throws error', async () => {
-  (throwIfUncommitted as jest.Mock).mockImplementationOnce(() => {
+  (throwIfUncommitted as Mock).mockImplementationOnce(() => {
     throw new Error('uncommitted');
   });
 
@@ -426,12 +422,11 @@ test('publish --canary --git-head <sha> throws an error', async () => {
 });
 
 test('publish --canary --include-merged-tags calls git describe correctly', async () => {
-  const describeSpy = jest.spyOn(coreModule, 'describeRef');
   const cwd = await initTaggedFixture('normal');
 
   await new PublishCommand(createArgv(cwd, '--canary', '--include-merged-tags'));
 
-  expect(describeSpy).toHaveBeenCalledWith(
+  expect(describeRef).toHaveBeenCalledWith(
     {
       match: 'v*.*.*',
       cwd,

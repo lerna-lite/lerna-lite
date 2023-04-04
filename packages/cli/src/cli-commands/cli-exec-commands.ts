@@ -1,7 +1,7 @@
 import log from 'npmlog';
 import { ExecCommandOption } from '@lerna-lite/core';
 
-import { filterOptions } from '../filter-options';
+import { filterOptions } from '../filter-options.js';
 
 /**
  * @see https://github.com/yargs/yargs/blob/master/docs/advanced.md#providing-a-command-module

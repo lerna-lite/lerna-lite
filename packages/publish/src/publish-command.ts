@@ -1,12 +1,13 @@
 import chalk from 'chalk';
 import { glob } from 'glob';
-import fs from 'fs-extra';
-import os from 'os';
+import { outputFileSync, removeSync } from 'fs-extra/esm';
+import os from 'node:os';
 import path from 'path';
 import crypto from 'crypto';
+import { createRequire } from 'node:module';
 import normalizePath from 'normalize-path';
 import pMap from 'p-map';
-import pPipe from 'p-pipe';
+import pPipe, { type UnaryFunction } from 'p-pipe';
 import semver from 'semver';
 import tempDir from 'temp-dir';
 
@@ -35,23 +36,23 @@ import {
   ValidationError,
 } from '@lerna-lite/core';
 
-import { getCurrentTags } from './lib/get-current-tags';
-import { getTaggedPackages } from './lib/get-tagged-packages';
-import { getUnpublishedPackages } from './lib/get-unpublished-packages';
-import { getNpmUsername } from './lib/get-npm-username';
-import { verifyNpmPackageAccess } from './lib/verify-npm-package-access';
-import { getTwoFactorAuthRequired } from './lib/get-two-factor-auth-required';
-import { getCurrentSHA } from './lib/get-current-sha';
-import { gitCheckout } from './lib/git-checkout';
-import { packDirectory } from './lib/pack-directory';
-import { npmPublish } from './lib/npm-publish';
-import { logPacked } from './lib/log-packed';
-import { add, remove } from './lib/npm-dist-tag';
-import { overridePublishConfig } from './lib/override-publish-config';
-import { removeTempLicenses } from './lib/remove-temp-licenses';
-import { createTempLicenses } from './lib/create-temp-licenses';
-import { getPackagesWithoutLicense } from './lib/get-packages-without-license';
-import { Tarball } from './models';
+import { getCurrentTags } from './lib/get-current-tags.js';
+import { getTaggedPackages } from './lib/get-tagged-packages.js';
+import { getUnpublishedPackages } from './lib/get-unpublished-packages.js';
+import { getNpmUsername } from './lib/get-npm-username.js';
+import { verifyNpmPackageAccess } from './lib/verify-npm-package-access.js';
+import { getTwoFactorAuthRequired } from './lib/get-two-factor-auth-required.js';
+import { getCurrentSHA } from './lib/get-current-sha.js';
+import { gitCheckout } from './lib/git-checkout.js';
+import { packDirectory } from './lib/pack-directory.js';
+import { npmPublish } from './lib/npm-publish.js';
+import { logPacked } from './lib/log-packed.js';
+import { add, remove } from './lib/npm-dist-tag.js';
+import { overridePublishConfig } from './lib/override-publish-config.js';
+import { removeTempLicenses } from './lib/remove-temp-licenses.js';
+import { createTempLicenses } from './lib/create-temp-licenses.js';
+import { getPackagesWithoutLicense } from './lib/get-packages-without-license.js';
+import { Tarball } from './models/index.js';
 
 export function factory(argv: PublishCommandOption) {
   return new PublishCommand(argv);
@@ -311,6 +312,7 @@ export class PublishCommand extends Command<PublishCommandOption> {
 
     if (this.options.summaryFile !== undefined) {
       // create a json object and output it to a file location.
+      //prettier-ignore
       const filePath = this.options.summaryFile
         ? `${this.options.summaryFile}/lerna-publish-summary.json`
         : './lerna-publish-summary.json';
@@ -322,7 +324,7 @@ export class PublishCommand extends Command<PublishCommandOption> {
       });
       logOutput(jsonObject);
       try {
-        fs.outputFileSync(filePath, JSON.stringify(jsonObject));
+        outputFileSync(filePath, JSON.stringify(jsonObject));
         logOutput('Publish summary created: ', filePath);
       } catch (error) {
         logOutput('Failed to create the summary report', error);
@@ -336,7 +338,7 @@ export class PublishCommand extends Command<PublishCommandOption> {
     if (this.options.cleanupTempFiles) {
       glob(normalizePath(path.join(tempDir, '/lerna-*'))).then((deleteFolders) => {
         // delete silently all files/folders that startsWith "lerna-"
-        deleteFolders.forEach((folder) => fs.removeSync(folder));
+        deleteFolders.forEach((folder) => removeSync(folder));
         this.logger.verbose('publish', `Found ${deleteFolders.length} temp folders to cleanup after publish.`);
       });
     }
@@ -531,8 +533,7 @@ export class PublishCommand extends Command<PublishCommandOption> {
 
   confirmPublish() {
     const count = this.packagesToPublish?.length;
-    const message =
-      this.packagesToPublish?.map((pkg) => ` - ${pkg.name} => ${this.updatesVersions?.get(pkg.name)}`) ?? [];
+    const message = this.packagesToPublish?.map((pkg) => ` - ${pkg.name} => ${this.updatesVersions?.get(pkg.name)}`) ?? [];
 
     logOutput('');
     logOutput(`Found ${count} ${count === 1 ? 'package' : 'packages'} to publish:`);
@@ -739,6 +740,7 @@ export class PublishCommand extends Command<PublishCommandOption> {
     const gitOpts = {
       granularPathspec: this.options.granularPathspec !== false,
     };
+    // prettier-ignore
     const dirtyManifests = [this.project.manifest]
       .concat(this.packagesToPublish)
       .map((pkg) => path.relative(cwd, pkg.manifestLocation));
@@ -754,6 +756,7 @@ export class PublishCommand extends Command<PublishCommandOption> {
     const scriptLocation = path.join(pkg.location, 'scripts', script);
 
     try {
+      const require = createRequire(import.meta.url);
       require(scriptLocation);
     } catch (ex) {
       this.logger.silly('execScript', `No ${script} script found at ${scriptLocation}`);
@@ -863,7 +866,7 @@ export class PublishCommand extends Command<PublishCommandOption> {
               // manifest may be mutated by any previous lifecycle
               return pkg.refresh();
             }),
-        ] as pPipe.UnaryFunction<any, unknown>[]
+        ] as UnaryFunction<any, unknown>[]
       ).filter(Boolean)
     );
 
@@ -945,7 +948,7 @@ export class PublishCommand extends Command<PublishCommandOption> {
           },
 
           this.options.requireScripts && ((pkg: Package) => this.execScript(pkg, 'postpublish')),
-        ] as pPipe.UnaryFunction<any, unknown>[]
+        ] as UnaryFunction<any, unknown>[]
       ).filter(Boolean)
     );
 

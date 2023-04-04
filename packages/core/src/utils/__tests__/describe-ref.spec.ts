@@ -1,4 +1,6 @@
-jest.mock('../../child-process');
+vi.mock('../../child-process');
+
+import { Mock } from 'vitest';
 
 import * as childProcess from '../../child-process';
 import { describeRef, describeRefSync } from '../describe-ref';
@@ -7,7 +9,7 @@ const DEFAULT_ARGS = ['describe', '--always', '--long', '--dirty', '--first-pare
 
 describe('describeRef()', () => {
   beforeEach(() => {
-    (childProcess.exec as jest.Mock).mockResolvedValueOnce({ stdout: 'v1.2.3-4-g567890a' });
+    (childProcess.exec as Mock).mockResolvedValueOnce({ stdout: 'v1.2.3-4-g567890a' });
   });
 
   it('resolves parsed metadata', async () => {
@@ -41,24 +43,14 @@ describe('describeRef()', () => {
     const options = { match: 'v*.*.*' };
     await describeRef(options);
 
-    expect(childProcess.exec).toHaveBeenLastCalledWith(
-      'git',
-      DEFAULT_ARGS.concat(['--match', 'v*.*.*']),
-      options,
-      false
-    );
+    expect(childProcess.exec).toHaveBeenLastCalledWith('git', DEFAULT_ARGS.concat(['--match', 'v*.*.*']), options, false);
   });
 
   it('accepts options.match in Git dry-run mode', async () => {
     const options = { match: 'v*.*.*' };
     await describeRef(options, false, true);
 
-    expect(childProcess.exec).toHaveBeenLastCalledWith(
-      'git',
-      DEFAULT_ARGS.concat(['--match', 'v*.*.*']),
-      options,
-      true
-    );
+    expect(childProcess.exec).toHaveBeenLastCalledWith('git', DEFAULT_ARGS.concat(['--match', 'v*.*.*']), options, true);
   });
 
   it('accepts includeMergedTags argument', async () => {
@@ -74,7 +66,7 @@ describe('describeRef()', () => {
 
 describe('describeRefSync()', () => {
   beforeEach(() => {
-    (childProcess.execSync as jest.Mock).mockReturnValueOnce('v1.2.3-4-g567890a');
+    (childProcess.execSync as Mock).mockReturnValueOnce('v1.2.3-4-g567890a');
   });
 
   it('returns parsed metadata', () => {
@@ -108,24 +100,14 @@ describe('describeRefSync()', () => {
     const options = { match: 'v*.*.*' };
     describeRefSync(options);
 
-    expect(childProcess.execSync).toHaveBeenLastCalledWith(
-      'git',
-      DEFAULT_ARGS.concat(['--match', 'v*.*.*']),
-      options,
-      false
-    );
+    expect(childProcess.execSync).toHaveBeenLastCalledWith('git', DEFAULT_ARGS.concat(['--match', 'v*.*.*']), options, false);
   });
 
   it('accepts options.match in Git dry-run mode', () => {
     const options = { match: 'v*.*.*' };
     describeRefSync(options, false, true);
 
-    expect(childProcess.execSync).toHaveBeenLastCalledWith(
-      'git',
-      DEFAULT_ARGS.concat(['--match', 'v*.*.*']),
-      options,
-      true
-    );
+    expect(childProcess.execSync).toHaveBeenLastCalledWith('git', DEFAULT_ARGS.concat(['--match', 'v*.*.*']), options, true);
   });
 
   it('accepts includeMergedTags argument', async () => {
@@ -141,7 +123,7 @@ describe('describeRefSync()', () => {
 
 describe('parser', () => {
   it('matches independent tags', () => {
-    (childProcess.execSync as jest.Mock).mockReturnValueOnce('pkg-name@1.2.3-4-g567890a');
+    (childProcess.execSync as Mock).mockReturnValueOnce('pkg-name@1.2.3-4-g567890a');
 
     const result = describeRefSync();
 
@@ -150,7 +132,7 @@ describe('parser', () => {
   });
 
   it('matches independent tags for scoped packages', () => {
-    (childProcess.execSync as jest.Mock).mockReturnValueOnce('@scope/pkg-name@1.2.3-4-g567890a');
+    (childProcess.execSync as Mock).mockReturnValueOnce('@scope/pkg-name@1.2.3-4-g567890a');
 
     const result = describeRefSync();
 
@@ -159,7 +141,7 @@ describe('parser', () => {
   });
 
   it('matches dirty annotations', () => {
-    (childProcess.execSync as jest.Mock).mockReturnValueOnce('pkg-name@1.2.3-4-g567890a-dirty');
+    (childProcess.execSync as Mock).mockReturnValueOnce('pkg-name@1.2.3-4-g567890a-dirty');
 
     const result = describeRefSync();
 
@@ -167,7 +149,7 @@ describe('parser', () => {
   });
 
   it('handles non-matching strings safely', () => {
-    (childProcess.execSync as jest.Mock).mockReturnValueOnce('poopy-pants');
+    (childProcess.execSync as Mock).mockReturnValueOnce('poopy-pants');
 
     const result = describeRefSync();
 
@@ -181,8 +163,8 @@ describe('parser', () => {
   });
 
   it('detects fallback and returns partial metadata', () => {
-    (childProcess.execSync as jest.Mock).mockReturnValueOnce('a1b2c3d');
-    (childProcess.execSync as jest.Mock).mockReturnValueOnce('123');
+    (childProcess.execSync as Mock).mockReturnValueOnce('a1b2c3d');
+    (childProcess.execSync as Mock).mockReturnValueOnce('123');
 
     const options = { cwd: 'bar' };
     const result = describeRefSync(options);
@@ -196,8 +178,8 @@ describe('parser', () => {
   });
 
   it('detects dirty fallback and returns partial metadata', () => {
-    (childProcess.execSync as jest.Mock).mockReturnValueOnce('a1b2c3d-dirty');
-    (childProcess.execSync as jest.Mock).mockReturnValueOnce('456');
+    (childProcess.execSync as Mock).mockReturnValueOnce('a1b2c3d-dirty');
+    (childProcess.execSync as Mock).mockReturnValueOnce('456');
 
     const result = describeRefSync();
 
@@ -210,7 +192,7 @@ describe('parser', () => {
   });
 
   it('should return metadata for tag names that are sha-like', () => {
-    (childProcess.execSync as jest.Mock).mockReturnValueOnce('20190104-5-g6fb4e3293');
+    (childProcess.execSync as Mock).mockReturnValueOnce('20190104-5-g6fb4e3293');
 
     const result = describeRefSync();
 
