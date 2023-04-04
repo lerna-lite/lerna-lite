@@ -45,28 +45,28 @@ test('getUnpublishedPackages', async () => {
   expect(pkgs).toMatchInlineSnapshot(`
     [
       PackageGraphNode {
-        "externalDependencies": Map {},
-        "localDependencies": Map {},
-        "localDependents": Map {},
-        "name": "package-1",
+        'externalDependencies': Map {},
+        'localDependencies': Map {},
+        'localDependents': Map {},
+        'name': 'package-1',
       },
       PackageGraphNode {
-        "externalDependencies": Map {},
-        "localDependencies": Map {},
-        "localDependents": Map {},
-        "name": "package-3",
+        'externalDependencies': Map {},
+        'localDependencies': Map {},
+        'localDependents': Map {},
+        'name': 'package-3',
       },
       PackageGraphNode {
-        "externalDependencies": Map {},
-        "localDependencies": Map {},
-        "localDependents": Map {},
-        "name": "package-4",
+        'externalDependencies': Map {},
+        'localDependencies': Map {},
+        'localDependents': Map {},
+        'name': 'package-4',
       },
       PackageGraphNode {
-        "externalDependencies": Map {},
-        "localDependencies": Map {},
-        "localDependents": Map {},
-        "name": "package-5",
+        'externalDependencies': Map {},
+        'localDependencies': Map {},
+        'localDependents': Map {},
+        'name': 'package-5',
       },
     ]
   `);
@@ -84,10 +84,10 @@ test('getUnpublishedPackages with private package', async () => {
   expect(pkgs).toMatchInlineSnapshot(`
     [
       PackageGraphNode {
-        "externalDependencies": Map {},
-        "localDependencies": Map {},
-        "localDependents": Map {},
-        "name": "package-1",
+        'externalDependencies': Map {},
+        'localDependencies': Map {},
+        'localDependents': Map {},
+        'name': 'package-1',
       },
     ]
   `);
