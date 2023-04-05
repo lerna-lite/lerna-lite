@@ -26,7 +26,6 @@ export async function updateChangelog(pkg: Package, type: ChangelogType, updateO
     changelogIncludeCommitsGitAuthor,
     changelogIncludeCommitsClientLogin,
     changelogHeaderMessage = '',
-    changelogVersionMessage = '',
     commitsSinceLastRelease,
     rootPath,
     tagPrefix = 'v',
@@ -95,13 +94,12 @@ export async function updateChangelog(pkg: Package, type: ChangelogType, updateO
 
     log.silly(type, 'writing new entry: %j', newEntry);
 
-    const changelogVersion = type === 'root' ? changelogVersionMessage : '';
     const changelogHeader = CHANGELOG_HEADER.replace(
       /%s/g,
       changelogHeaderMessage?.length > 0 ? changelogHeaderMessage + EOL : ''
     );
 
-    const content = [changelogHeader, changelogVersion, newEntry, changelogContents]
+    const content = [changelogHeader, newEntry, changelogContents]
       .join(BLANK_LINE)
       .trim()
       .replace(/[\r\n]{2,}/gm, '\n\n'); // conventional-changelog adds way too many extra line breaks, let's remove a few of them

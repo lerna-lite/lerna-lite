@@ -55,7 +55,6 @@ export type RemoteCommit = {
 
 export interface UpdateChangelogOption {
   changelogHeaderMessage?: string;
-  changelogVersionMessage?: string;
   changelogPreset?: string;
   changelogIncludeCommitsGitAuthor?: boolean | string;
   changelogIncludeCommitsClientLogin?: boolean | string;
