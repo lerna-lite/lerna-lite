@@ -57,7 +57,7 @@ $ lerna exec --scope my-component -- ls -la
 - [`@lerna/exec`](#lernaexec)
   - [Usage](#usage)
   - [Options](#options)
-    - [`--dry-run`](#--dry-run) (new)
+    - [`--dry-run`](#--dry-run)
     - [`--stream`](#--stream)
     - [`--parallel`](#--parallel)
     - [`--no-bail`](#--no-bail)
