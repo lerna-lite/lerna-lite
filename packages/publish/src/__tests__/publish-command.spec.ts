@@ -96,13 +96,6 @@ describe('PublishCommand', () => {
       cwd = await initFixture('normal');
     });
 
-    it('is displaying a warning when using deprecated flag --git-dry-run', async () => {
-      await lernaPublish(cwd)('from-package', '--git-dry-run');
-
-      const logMessages = loggingOutput();
-      expect(logMessages).toContain('--git-dry-run has been renamed --dry-run');
-    });
-
     it('exits early when no changes found', async () => {
       (collectUpdates as any).setUpdated(cwd);
 

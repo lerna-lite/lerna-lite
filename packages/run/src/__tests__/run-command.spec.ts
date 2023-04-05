@@ -79,13 +79,6 @@ describe('RunCommand', () => {
       testDir = await initFixture('basic');
     });
 
-    it('is displaying a warning when using deprecated flag --cmd-dry-run', async () => {
-      await lernaRun(testDir)('my-script', '--cmd-dry-run');
-
-      const logMessages = loggingOutput();
-      expect(logMessages).toContain('--cmd-dry-run has been renamed --dry-run');
-    });
-
     it('should complain if invoked with an empty script', async () => {
       const command = lernaRun(testDir)('');
 
@@ -226,17 +219,6 @@ describe('RunCommand', () => {
 
       // reset exit code
       process.exitCode = undefined;
-    });
-  });
-
-  describe('with --include-filtered-dependencies', () => {
-    it('runs scoped command including filtered deps', async () => {
-      const testDir = await initFixture('include-filtered-dependencies');
-      await lernaRun(testDir)('my-script', '--scope', '@test/package-2', '--include-filtered-dependencies', '--', '--silent');
-
-      const logLines = (logOutput as any).logged().split('\n');
-      expect(logLines).toContain('@test/package-1');
-      expect(logLines).toContain('@test/package-2');
     });
   });
 

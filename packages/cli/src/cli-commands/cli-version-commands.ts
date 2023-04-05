@@ -68,14 +68,6 @@ export default {
         requiresArg: true,
         type: 'string',
       },
-      // @deprecated - Option RENAMED
-      'changelog-include-commit-author-fullname': {
-        describe:
-          "Specify if we want to include the commit author's name, this option is only available when using --conventional-commits with changelogs. We can also optionally provide a custom message or else a default format will be used.",
-        group: 'Version Command Options:',
-        requiresArg: false,
-        type: 'string',
-      },
       'changelog-include-commits-git-author': {
         describe:
           "Specify if we want to include the commit git author's name, this option is only available when using --conventional-commits with changelogs. We can also optionally provide a custom message or else a default format will be used.",
@@ -304,97 +296,14 @@ export default {
       yargs.group(Object.keys(opts), 'Command Options:');
     }
 
-    return yargs
-      .option('git-dry-run', {
-        // TODO: remove in next major release
-        // NOT the same as filter-options --git-dry-run
-        hidden: true,
-        conflicts: 'dry-run',
-        type: 'boolean',
-      })
-      .option('ignore', {
-        // TODO: remove in next major release
-        // NOT the same as filter-options --ignore
-        hidden: true,
-        conflicts: 'ignore-changes',
-        type: 'array',
-      })
-      .option('cd-version', {
-        // TODO: remove in next major release
-        hidden: true,
-        conflicts: 'bump',
-        type: 'string',
-        requiresArg: true,
-      })
-      .option('repo-version', {
-        // TODO: remove in next major release
-        hidden: true,
-        conflicts: 'bump',
-        type: 'string',
-        requiresArg: true,
-      })
-      .option('skip-git', {
-        // TODO: remove in next major release
-        hidden: true,
-        type: 'boolean',
-      })
-      .option('github-release', {
-        // TODO: remove in next major release
-        hidden: true,
-        type: 'boolean',
-      })
-      .check((argv) => {
-        // override deprecated options
-        /* eslint-disable no-param-reassign */
-        if (argv.ignore) {
-          argv.ignoreChanges = argv.ignore;
-          delete argv.ignore;
-          log.warn('deprecated', '--ignore has been renamed --ignore-changes');
-        }
+    return yargs.check((argv) => {
+      if (argv['--']) {
+        log.warn('EDOUBLEDASH', 'Arguments after -- are no longer passed to subprocess executions.');
+        log.warn('EDOUBLEDASH', 'This will cause an error in a future major version.');
+      }
 
-        if (argv.gitDryRun) {
-          argv.dryRun = argv.gitDryRun;
-          delete argv.gitDryRun;
-          log.warn('deprecated', '--git-dry-run has been renamed --dry-run');
-        }
-
-        if (argv.cdVersion && !argv.bump) {
-          argv.bump = argv.cdVersion;
-          delete argv.cdVersion;
-          delete argv['cd-version'];
-          log.warn('deprecated', '--cd-version has been replaced by positional [bump]');
-        }
-
-        if (argv.repoVersion && !argv.bump) {
-          argv.bump = argv.repoVersion;
-          delete argv.repoVersion;
-          delete argv['repo-version'];
-          log.warn('deprecated', '--repo-version has been replaced by positional [bump]');
-        }
-
-        if (argv.skipGit) {
-          argv.gitTagVersion = false;
-          argv['git-tag-version'] = false;
-          argv.push = false;
-          delete argv.skipGit;
-          delete argv['skip-git'];
-          log.warn('deprecated', '--skip-git has been replaced by --no-git-tag-version --no-push');
-        }
-
-        if (argv.githubRelease) {
-          argv.createRelease = 'github';
-          delete argv.githubRelease;
-          log.warn('deprecated', '--github-release has been replaced by --create-release=github');
-        }
-        /* eslint-enable no-param-reassign */
-
-        if (argv['--']) {
-          log.warn('EDOUBLEDASH', 'Arguments after -- are no longer passed to subprocess executions.');
-          log.warn('EDOUBLEDASH', 'This will cause an error in a future major version.');
-        }
-
-        return argv;
-      });
+      return argv;
+    });
   },
 
   handler: (argv: VersionCommandOption) => {

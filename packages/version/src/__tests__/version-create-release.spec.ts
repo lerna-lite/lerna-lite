@@ -209,19 +209,6 @@ describe.each([
   });
 });
 
-describe('legacy option --github-release', () => {
-  it('is translated into --create-release=github', async () => {
-    process.env = {
-      GH_TOKEN: 'TOKEN',
-    };
-    const cwd = await initFixture('normal');
-
-    await lernaVersion(cwd)('--github-release', '--conventional-commits');
-
-    expect((createGitHubClient as any).releases.size).toBe(1);
-  });
-});
-
 describe('--create-release [unrecognized]', () => {
   it('throws an error', async () => {
     const cwd = await initFixture('normal');

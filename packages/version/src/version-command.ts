@@ -260,13 +260,6 @@ export class VersionCommand extends Command<VersionCommandOption> {
       );
     }
 
-    if (this.options.changelogIncludeCommitAuthorFullname) {
-      this.logger.warn(
-        'deprecated',
-        '--changelog-include-commit-author-fullname has been renamed to --changelog-include-commits-git-author.'
-      );
-    }
-
     // fetch all commits from remote server of the last release when user wants to include client login associated to each commits
     const remoteClient = this.options.createRelease || this.options.remoteClient;
     if (this.options.conventionalCommits && this.changelogIncludeCommitsClientLogin) {

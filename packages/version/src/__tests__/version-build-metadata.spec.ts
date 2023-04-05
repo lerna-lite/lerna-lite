@@ -77,8 +77,7 @@ describe('--build-metadata without prompt', () => {
 
   it('accepts build metadata for repository version', async () => {
     const testDir = await initFixture('normal');
-    // @deprecated --repo-version was replaced by --bump
-    await lernaVersion(testDir)('--repo-version', '1.0.2', '--build-metadata', '21AF26D3--117B344092BD');
+    await lernaVersion(testDir)('--bump', '1.0.2', '--build-metadata', '21AF26D3--117B344092BD');
 
     expect(promptSelectOne).not.toHaveBeenCalled();
 
@@ -89,17 +88,6 @@ describe('--build-metadata without prompt', () => {
   it('accepts build metadata with semver keyword', async () => {
     const testDir = await initFixture('normal');
     await new VersionCommand(createArgv(testDir, '--bump', 'minor', '--build-metadata', '001'));
-
-    expect(promptSelectOne).not.toHaveBeenCalled();
-
-    const patch = await showCommit(testDir);
-    expect(patch).toMatchSnapshot();
-  });
-
-  it('accepts build metadata with cd version', async () => {
-    const testDir = await initFixture('normal');
-    // @deprecated --repo-version was replaced by --bump
-    await lernaVersion(testDir)('--cd-version', 'premajor', '--build-metadata', 'exp.sha.5114f85');
 
     expect(promptSelectOne).not.toHaveBeenCalled();
 

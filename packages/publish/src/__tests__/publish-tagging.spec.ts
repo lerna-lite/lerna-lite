@@ -43,14 +43,12 @@ import { dirname } from 'node:path';
 import { fileURLToPath } from 'node:url';
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
-import { commandRunner, initFixtureFactory } from '@lerna-test/helpers';
+import { initFixtureFactory } from '@lerna-test/helpers';
 const initFixture = initFixtureFactory(__dirname);
 
 // test command
 import yargParser from 'yargs-parser';
 import { PublishCommand } from '../index';
-import cliCommands from '../../../cli/src/cli-commands/cli-publish-commands';
-const lernaPublish = commandRunner(cliCommands);
 
 const createArgv = (cwd, ...args) => {
   args.unshift('publish');
@@ -83,17 +81,6 @@ test('publish --dist-tag nightly --canary', async () => {
   await new PublishCommand(createArgv(cwd, '--dist-tag', 'nightly', '--canary'));
 
   expect((npmPublish as any).registry.get('package-2')).toBe('nightly');
-  expect(remove).not.toHaveBeenCalled();
-});
-
-test('publish --npm-tag deprecated', async () => {
-  const cwd = await initFixture('normal');
-
-  (collectUpdates as any).setUpdated(cwd, 'package-3');
-
-  await lernaPublish(cwd)('--npm-tag', 'deprecated');
-
-  expect((npmPublish as any).registry.get('package-3')).toBe('deprecated');
   expect(remove).not.toHaveBeenCalled();
 });
 

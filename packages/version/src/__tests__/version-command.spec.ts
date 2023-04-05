@@ -100,14 +100,6 @@ import gitSHA from '@lerna-test/helpers/serializers/serialize-git-sha';
 expect.addSnapshotSerializer(gitSHA);
 
 describe('VersionCommand', () => {
-  it('is displaying a warning when using deprecated flag --git-dry-run', async () => {
-    const testDir = await initFixture('normal');
-    await lernaVersion(testDir)('--git-dry-run');
-
-    const logMessages = loggingOutput();
-    expect(logMessages).toContain('--git-dry-run has been renamed --dry-run');
-  });
-
   describe('normal mode', () => {
     it('versions changed packages', async () => {
       const testDir = await initFixture('normal');
@@ -243,19 +235,6 @@ describe('VersionCommand', () => {
       const command = new VersionCommand(createArgv(testDir, '--changelog-include-commits-client-login', '--changelog-include-commits-git-author'));
 
       await expect(command).rejects.toThrow('--changelog-include-commits-client-login cannot be combined with --changelog-include-commits-git-author.');
-    });
-
-    it('shows a log warning when using previous option --changelog-include-commit-author-fullname since it was renamed.', async () => {
-      const testDir = await initFixture('normal');
-      const command = new VersionCommand(createArgv(testDir, '--changelog-include-commit-author-fullname'));
-      await command;
-      const loggerSpy = vi.spyOn(command.logger, 'warn');
-      command.initialize();
-
-      expect(loggerSpy).toHaveBeenCalledWith(
-        'deprecated',
-        '--changelog-include-commit-author-fullname has been renamed to --changelog-include-commits-git-author.'
-      );
     });
 
     it("throws an error when remote branch doesn't exist", async () => {
@@ -462,23 +441,6 @@ describe('VersionCommand', () => {
       expect(logMessages).toContain('Skipping git tag/commit');
     });
 
-    it('is displaying a warning when using deprecated flag --ignore', async () => {
-      const testDir = await initFixture('normal');
-      await lernaVersion(testDir)('--ignore');
-
-      const logMessages = loggingOutput();
-      expect(logMessages).toContain('--ignore has been renamed --ignore-changes');
-    });
-
-    it('is implied by --skip-git', async () => {
-      const testDir = await initFixture('normal');
-      await lernaVersion(testDir)('--skip-git');
-
-      const logMessages = loggingOutput();
-      expect(logMessages).toContain('Skipping git tag/commit');
-      expect(logMessages).toContain('--skip-git has been replaced by --no-git-tag-version --no-push');
-    });
-
     it('skips dirty working tree validation', async () => {
       const testDir = await initFixture('normal');
       await outputFile(join(testDir, 'packages/package-1/hello.js'), 'world');
@@ -599,15 +561,6 @@ describe('VersionCommand', () => {
 
       const logMessages = loggingOutput('info');
       expect(logMessages).toContain('Skipping git push');
-    });
-
-    it('is implied by --skip-git', async () => {
-      const testDir = await initFixture('normal');
-      await lernaVersion(testDir)('--skip-git');
-
-      const logMessages = loggingOutput();
-      expect(logMessages).toContain('Skipping git push');
-      expect(logMessages).toContain('--skip-git has been replaced by --no-git-tag-version --no-push');
     });
   });
 

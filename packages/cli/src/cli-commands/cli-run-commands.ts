@@ -1,4 +1,3 @@
-import log from 'npmlog';
 import { RunCommandOption } from '@lerna-lite/core';
 
 import { filterOptions } from '../filter-options.js';
@@ -93,25 +92,6 @@ export default {
           describe: 'When "useNx" is true, show verbose output from dependent tasks.',
           type: 'boolean',
         },
-      })
-      .option('cmd-dry-run', {
-        // TODO: remove in next major release
-        hidden: true,
-        conflicts: 'dry-run',
-        type: 'boolean',
-      })
-      .check((argv) => {
-        // override deprecated options
-
-        /* eslint-disable no-param-reassign */
-        if (argv.cmdDryRun) {
-          argv.dryRun = argv.cmdDryRun;
-          delete argv.cmdDryRun;
-          log.warn('deprecated', '--cmd-dry-run has been renamed --dry-run');
-        }
-        /* eslint-enable no-param-reassign */
-
-        return argv;
       });
 
     return filterOptions(yargs);
