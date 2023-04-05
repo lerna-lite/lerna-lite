@@ -627,7 +627,6 @@ export class VersionCommand extends Command<VersionCommandOption> {
               depVersion,
               this.savePrefix,
               this.options.allowPeerDependenciesUpdate,
-              this.options.workspaceStrictMatch,
               this.commandName
             );
           }

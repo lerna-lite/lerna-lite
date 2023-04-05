@@ -293,7 +293,6 @@ export class Package {
    * @param {Object} resolved npa metadata
    * @param {String} depVersion semver
    * @param {String} savePrefix npm_config_save_prefix
-   * @param {Boolean} [workspaceStrictMatch] - are we using `workspace:` protocol strict match?
    * @param {String} [updatedByCommand] - which command called this update?
    */
   updateLocalDependency(
@@ -301,7 +300,6 @@ export class Package {
     depVersion: string,
     savePrefix: string,
     allowPeerDependenciesUpdate = false,
-    workspaceStrictMatch = true,
     updatedByCommand?: CommandType
   ) {
     const depName = resolved.name as string;
@@ -337,7 +335,7 @@ export class Package {
           if (operatorPrefix) {
             // package with range operator should never be bumped, we'll use same version range but without prefix "workspace:>=1.2.3" will assign ">=1.2.3"
             depCollection[depName] = `${operatorPrefix}${rangePrefix || ''}${semver}`;
-          } else if (workspaceStrictMatch) {
+          } else {
             // with workspace in strict mode we might have empty range prefix like "workspace:1.2.3"
             depCollection[depName] = `${rangePrefix || ''}${depVersion}`;
           }
@@ -345,14 +343,12 @@ export class Package {
           if (updatedByCommand === 'publish') {
             // when publishing, workspace protocol will be transformed to semver range
             // e.g.: considering version is `1.2.3` and we have `workspace:*` it will be converted to "^1.2.3" or to "1.2.3" with strict match range enabled
-            if (workspaceStrictMatch) {
-              if (workspaceSpec === 'workspace:*') {
-                depCollection[depName] = depVersion; // (*) exact range, "1.5.0"
-              } else if (workspaceSpec === 'workspace:~') {
-                depCollection[depName] = `~${depVersion}`; // (~) patch range, "~1.5.0"
-              } else if (workspaceSpec === 'workspace:^') {
-                depCollection[depName] = `^${depVersion}`; // (^) minor range, "^1.5.0"
-              }
+            if (workspaceSpec === 'workspace:*') {
+              depCollection[depName] = depVersion; // (*) exact range, "1.5.0"
+            } else if (workspaceSpec === 'workspace:~') {
+              depCollection[depName] = `~${depVersion}`; // (~) patch range, "~1.5.0"
+            } else if (workspaceSpec === 'workspace:^') {
+              depCollection[depName] = `^${depVersion}`; // (^) minor range, "^1.5.0"
             }
             // anything else will fall under what Lerna previously found to be the version,
             // typically by this line: depCollection[depName] = `${savePrefix}${depVersion}`;

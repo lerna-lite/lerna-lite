@@ -150,13 +150,6 @@ export class PublishCommand extends Command<PublishCommandOption> {
       );
     }
 
-    if (this.options.workspaceStrictMatch === false) {
-      this.logger.warn(
-        'deprecation',
-        'Providing --no-workspace-strict-match is deprecated and will be removed in future version, we will make "workspace:" protocol strict matching in every case.'
-      );
-    }
-
     if (this.options.buildMetadata && this.options.canary) {
       throw new ValidationError('ENOTSATISFIED', 'Cannot use --build-metadata in conjunction with --canary option.');
     } else if (this.options.canary) {
@@ -632,7 +625,6 @@ export class PublishCommand extends Command<PublishCommandOption> {
           depVersion,
           this.savePrefix,
           this.options.allowPeerDependenciesUpdate,
-          this.options.workspaceStrictMatch,
           this.commandName
         );
       }
@@ -668,7 +660,6 @@ export class PublishCommand extends Command<PublishCommandOption> {
           depVersion,
           this.savePrefix,
           this.options.allowPeerDependenciesUpdate,
-          this.options.workspaceStrictMatch,
           this.commandName
         );
       }
@@ -697,7 +688,6 @@ export class PublishCommand extends Command<PublishCommandOption> {
           depVersion,
           this.savePrefix,
           this.options.allowPeerDependenciesUpdate,
-          this.options.workspaceStrictMatch,
           this.commandName
         );
       }

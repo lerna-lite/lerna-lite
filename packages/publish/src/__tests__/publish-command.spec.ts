@@ -576,19 +576,6 @@ describe('PublishCommand', () => {
     });
   });
 
-  describe('--no-workspace-strict-match', () => {
-    it('shows warning that this is the default behavior and that this option is no longer needed', async () => {
-      const cwd = await initFixture('normal');
-
-      await lernaPublish(cwd)('--no-workspace-strict-match');
-
-      const logMessages = loggingOutput('warn');
-      expect(logMessages).toContain(
-        'Providing --no-workspace-strict-match is deprecated and will be removed in future version, we will make "workspace:" protocol strict matching in every case.'
-      );
-    });
-  });
-
   describe('--no-verify-access', () => {
     it('shows warning that this is the default behavior and that this option is no longer needed', async () => {
       const cwd = await initFixture('normal');
