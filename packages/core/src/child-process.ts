@@ -63,7 +63,7 @@ export function spawn(command: string, args: string[], opts?: ExecaOptions & { p
  * @param {import("execa").Options} [opts]
  * @param {string} [prefix]
  */
-// istanbul ignore next
+/* c8 ignore next */
 export function spawnStreaming(
   command: string,
   args: string[],
@@ -112,12 +112,11 @@ export function getExitCode(result: any) {
   }
 
   // https://nodejs.org/docs/latest-v6.x/api/errors.html#errors_error_code
-  // istanbul ignore else
   if (typeof result.code === 'string' || typeof result.exitCode === 'string') {
     return constants.errno[result.code ?? result.exitCode];
   }
 
-  // istanbul ignore next: extremely weird
+  /* c8 ignore next: extremely weird */
   throw new TypeError(`Received unexpected exit code value ${JSON.stringify(result.code ?? result.exitCode)}`);
 }
 

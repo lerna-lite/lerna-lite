@@ -102,7 +102,6 @@ export class ExecCommand extends Command<ExecCommandOption & FilterOptions> {
     } else {
       // detect error (if any) from collected results
       chain = chain.then((results: Array<{ exitCode: number; failed?: boolean; pkg: Package; stderr: any }>) => {
-        /* istanbul ignore else */
         if (results.some((result) => result.failed)) {
           // propagate "highest" error code, it's probably the most useful
           const codes = results.filter((result) => result.failed).map((result) => result.exitCode);

@@ -27,16 +27,15 @@ function npmConf(opts: any) {
   const projectConf = pathResolve(conf.localPrefix, '.npmrc');
   const userConf = conf.get('userconfig');
 
-  /* istanbul ignore else */
   if (!conf.get('global') && projectConf !== userConf) {
     conf.addFile(projectConf, 'project');
   } else {
+    /* c8 ignore next */
     conf.add({}, 'project');
   }
 
   conf.addFile(conf.get('userconfig'), 'user');
 
-  /* istanbul ignore else */
   if (conf.get('prefix')) {
     const etc = pathResolve(conf.get('prefix'), 'etc');
     conf.root.globalconfig = pathResolve(etc, 'npmrc');
@@ -48,7 +47,7 @@ function npmConf(opts: any) {
 
   const caFile = conf.get('cafile');
 
-  /* istanbul ignore if */
+  /* c8 ignore next 3 */
   if (caFile) {
     conf.loadCAFile(caFile);
   }

@@ -80,7 +80,6 @@ export function makeSyncFileFinder(rootPath: string, packageConfigs: string[]) {
     // POSIX results always need to be normalized
     results = normalize(results);
 
-    /* istanbul ignore else */
     if (fileMapper) {
       results = results.map(fileMapper);
     }

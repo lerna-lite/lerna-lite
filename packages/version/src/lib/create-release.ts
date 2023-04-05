@@ -13,7 +13,7 @@ export function createReleaseClient(type: 'github' | 'gitlab'): GitCreateRelease
       return createGitLabClient();
     case 'github':
       return createGitHubClient();
-    /* istanbul ignore next: guarded by yargs.choices() */
+    /* c8 ignore next: guarded by yargs.choices() */
     default:
       throw new ValidationError('ERELEASE', 'Invalid release client type');
   }
@@ -37,7 +37,7 @@ export function createRelease(
     releaseNotes.map(({ notes, name }) => {
       const tag = name === 'fixed' ? tags[0] : tags.find((t) => t.startsWith(`${name}@`));
 
-      /* istanbul ignore if */
+      /* c8 ignore next 2 */
       if (!tag) {
         return Promise.resolve();
       }

@@ -61,7 +61,7 @@ export class Project {
       }
 
       // re-throw other errors, could be ours or third-party
-      // istanbul ignore next
+      /* c8 ignore next */
       throw err;
     }
 
@@ -157,7 +157,7 @@ export class Project {
       });
     } catch (err: any) {
       // redecorate JSON syntax errors, avoid debug dump
-      // istanbul ignore next
+      /* c8 ignore next 3 */
       if (err.name === 'JSONError') {
         throw new ValidationError(err.name, err.message);
       }
@@ -192,7 +192,7 @@ export class Project {
         });
       }
     } catch (err: any) {
-      /* istanbul ignore next */
+      /* c8 ignore next */
       throw new ValidationError(err.name, err.message);
     }
 
