@@ -578,7 +578,7 @@ export class PublishCommand extends Command<PublishCommandOption> {
       return chain;
     }
 
-    /* istanbul ignore if */
+    /* c8 ignore next 3 */
     if (process.env.LERNA_INTEGRATION) {
       return chain;
     }

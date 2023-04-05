@@ -20,7 +20,6 @@ const semaphore: any = {
   },
   release() {
     const resolve = this._resolve;
-    // istanbul ignore else
     if (resolve) {
       this._resolve = undefined;
       this._promise = undefined;

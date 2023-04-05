@@ -123,7 +123,6 @@ export class Command<T extends AvailableCommandOption> {
     });
 
     // passed via yargs context in tests, never actual CLI
-    /* istanbul ignore else */
     if (argv.onResolved || argv.onRejected) {
       runner = runner.then(argv.onResolved, argv.onRejected);
 
@@ -151,7 +150,7 @@ export class Command<T extends AvailableCommandOption> {
     return this.runner?.then(onResolved, onRejected);
   }
 
-  /* istanbul ignore next */
+  /* c8 ignore next 3 */
   catch(onRejected: typeof Promise.reject) {
     return this.runner?.catch(onRejected);
   }
@@ -170,7 +169,7 @@ export class Command<T extends AvailableCommandOption> {
     let loglevel;
     let progress;
 
-    /* istanbul ignore next */
+    /* c8 ignore next 3 */
     if (isCI || !process.stderr.isTTY || process.env.TERM === 'dumb') {
       log.disableColor();
       progress = false;
@@ -247,7 +246,7 @@ export class Command<T extends AvailableCommandOption> {
   }
 
   enableProgressBar() {
-    /* istanbul ignore next */
+    /* c8 ignore next 3 */
     if (this.options.progress !== false) {
       log.enableProgress();
     }

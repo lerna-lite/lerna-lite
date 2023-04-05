@@ -28,7 +28,7 @@ function shallowCopy(json: any) {
   return Object.keys(json).reduce((obj, key) => {
     const val: any = json[key];
 
-    /* istanbul ignore if */
+    /* c8 ignore next 2 */
     if (Array.isArray(val)) {
       obj[key] = val.slice();
     } else if (val && typeof val === 'object') {

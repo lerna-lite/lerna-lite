@@ -84,7 +84,6 @@ export function runLifecycle(pkg: Package, stage: string, options: LifecycleConf
     }
   }
 
-  /* istanbul ignore else */
   // eslint-disable-next-line no-underscore-dangle
   if (pkg.__isLernaPackage) {
     // To ensure npm-lifecycle creates the correct npm_package_* env vars,
