@@ -1,12 +1,13 @@
 import log from 'npmlog';
 
 import { GitLabClient } from './GitLabClient.js';
+import { GitCreateReleaseClientOutput } from '../models/index.js';
 
-function OcktokitAdapter(client) {
+function OcktokitAdapter(client): GitCreateReleaseClientOutput {
   return { repos: { createRelease: client.createRelease.bind(client) } };
 }
 
-function createGitLabClient() {
+export function createGitLabClient() {
   const { GL_API_URL, GL_TOKEN } = process.env;
 
   log.silly('Creating a GitLab client...', '');
@@ -19,5 +20,3 @@ function createGitLabClient() {
 
   return OcktokitAdapter(client);
 }
-
-export { createGitLabClient };

@@ -1,11 +1,10 @@
 import { execSync } from '@lerna-lite/core';
 import { Octokit } from '@octokit/rest';
 import { SyncOptions } from 'execa';
-import { createRequire } from 'node:module';
 import parseGitUrl from 'git-url-parse';
 import log from 'npmlog';
 
-export function createGitHubClient() {
+export async function createGitHubClient() {
   log.silly('createGitHubClient', '');
 
   const { GH_TOKEN, GHE_API_URL, GHE_VERSION } = process.env;
@@ -16,9 +15,8 @@ export function createGitHubClient() {
   }
 
   if (GHE_VERSION) {
-    // TODO: probably need to replace with await impot() since createRequire() didn't seem to work when tried in conventional-commits dynamic preset imports
-    const require = createRequire(import.meta.url);
-    Octokit.plugin(require(`@octokit/plugin-enterprise-rest/ghe-${GHE_VERSION}`));
+    const plugin = await import(`@octokit/plugin-enterprise-rest/ghe-${GHE_VERSION}`);
+    Octokit.plugin(plugin);
   }
 
   if (GHE_API_URL) {

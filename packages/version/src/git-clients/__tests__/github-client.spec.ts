@@ -17,25 +17,25 @@ describe('createGitHubClient', () => {
   it('doesnt error if GH_TOKEN env var is set', () => {
     process.env.GH_TOKEN = 'TOKEN';
 
-    expect(() => {
-      createGitHubClient();
+    expect(async () => {
+      await createGitHubClient();
     }).not.toThrow();
   });
 
-  it('initializes GHE plugin when GHE_VERSION env var is set', () => {
+  it('initializes GHE plugin when GHE_VERSION env var is set', async () => {
     process.env.GH_TOKEN = 'TOKEN';
     process.env.GHE_VERSION = '2.18';
 
-    createGitHubClient();
+    await createGitHubClient();
 
     expect(Octokit.plugin).toHaveBeenCalledWith(expect.anything());
   });
 
-  it('sets octokit `baseUrl` when GHE_API_URL is set', () => {
+  it('sets octokit `baseUrl` when GHE_API_URL is set', async () => {
     process.env.GH_TOKEN = 'TOKEN';
     process.env.GHE_API_URL = 'http://some/host';
 
-    createGitHubClient();
+    await createGitHubClient();
 
     expect(Octokit).toHaveBeenCalledWith({
       auth: 'token TOKEN',

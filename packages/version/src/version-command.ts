@@ -45,7 +45,7 @@ import {
   runInstallLockFileOnly,
   saveUpdatedLockJsonFile,
 } from './lib/update-lockfile-version.js';
-import { ReleaseClient, ReleaseNote, RemoteCommit } from './models/index.js';
+import { GitCreateReleaseClientOutput, ReleaseNote, RemoteCommit } from './models/index.js';
 import {
   applyBuildMetadata,
   getCommitsSinceLastRelease,
@@ -73,7 +73,7 @@ export class VersionCommand extends Command<VersionCommandOption> {
   commitAndTag = true;
   pushToRemote = true;
   hasRootedLeaf = false;
-  releaseClient?: ReleaseClient;
+  releaseClient?: GitCreateReleaseClientOutput;
   releaseNotes: ReleaseNote[] = [];
   gitOpts: any;
   runPackageLifecycle: any;
@@ -101,7 +101,7 @@ export class VersionCommand extends Command<VersionCommandOption> {
     super(argv);
   }
 
-  configureProperties() {
+  async configureProperties() {
     super.configureProperties();
 
     // Defaults are necessary here because yargs defaults
@@ -131,12 +131,9 @@ export class VersionCommand extends Command<VersionCommandOption> {
     this.changelogIncludeCommitsGitAuthor = changelogIncludeCommitsGitAuthor === '' ? true : changelogIncludeCommitsGitAuthor;
     // never automatically push to remote when amending a commit
 
-    // prettier-ignore
-    this.releaseClient = (
-      this.pushToRemote &&
-      this.options.createRelease &&
-      createReleaseClient(this.options.createRelease)
-    ) as ReleaseClient | undefined;
+    if (this.pushToRemote && this.options.createRelease) {
+      this.releaseClient = await createReleaseClient(this.options.createRelease);
+    }
     this.releaseNotes = [];
 
     if (this.releaseClient && this.options.conventionalCommits !== true) {
