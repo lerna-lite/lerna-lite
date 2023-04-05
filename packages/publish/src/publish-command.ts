@@ -4,7 +4,6 @@ import { outputFileSync, removeSync } from 'fs-extra/esm';
 import { EOL } from 'node:os';
 import { join, relative } from 'node:path';
 import crypto from 'crypto';
-import { createRequire } from 'node:module';
 import normalizePath from 'normalize-path';
 import pMap from 'p-map';
 import pPipe, { type UnaryFunction } from 'p-pipe';
@@ -154,11 +153,6 @@ export class PublishCommand extends Command<PublishCommandOption> {
       throw new ValidationError('ENOTSATISFIED', 'Cannot use --build-metadata in conjunction with --canary option.');
     } else if (this.options.canary) {
       this.logger.info('canary', 'enabled');
-    }
-
-    // @deprecated, to be removed in next major
-    if (this.options.requireScripts) {
-      this.logger.info('require-scripts', 'enabled');
     }
 
     // npmSession and user-agent are consumed by npm-registry-fetch (via libnpmpublish)
@@ -741,20 +735,6 @@ export class PublishCommand extends Command<PublishCommandOption> {
     });
   }
 
-  // @deprecated, see Lerna PR https://github.com/lerna/lerna/pull/1862/files
-  execScript(pkg: Package, script: string) {
-    const scriptLocation = join(pkg.location, 'scripts', script);
-
-    try {
-      const require = createRequire(import.meta.url);
-      require(scriptLocation);
-    } catch (ex) {
-      this.logger.silly('execScript', `No ${script} script found at ${scriptLocation}`);
-    }
-
-    return pkg;
-  }
-
   removePackageProperties() {
     const { removePackageFields } = this.options;
 
@@ -843,8 +823,6 @@ export class PublishCommand extends Command<PublishCommandOption> {
     const mapper = pPipe(
       ...(
         [
-          this.options.requireScripts && ((pkg: Package) => this.execScript(pkg, 'prepublish')),
-
           (pkg: Package & { packed: Tarball }) =>
             pulseTillDone(packDirectory(pkg, pkg.location, opts)).then((packed: Tarball) => {
               tracker.verbose('packed', relative(this.project.rootPath ?? '', pkg.contents));
@@ -936,8 +914,6 @@ export class PublishCommand extends Command<PublishCommandOption> {
                 throw err;
               });
           },
-
-          this.options.requireScripts && ((pkg: Package) => this.execScript(pkg, 'postpublish')),
         ] as UnaryFunction<any, unknown>[]
       ).filter(Boolean)
     );
