@@ -79,13 +79,6 @@ describe('RunCommand', () => {
       testDir = await initFixture('basic');
     });
 
-    it('is displaying a warning when using deprecated flag --cmd-dry-run', async () => {
-      await lernaRun(testDir)('my-script', '--cmd-dry-run');
-
-      const logMessages = loggingOutput();
-      expect(logMessages).toContain('--cmd-dry-run has been renamed --dry-run');
-    });
-
     it('should complain if invoked with an empty script', async () => {
       const command = lernaRun(testDir)('');
 

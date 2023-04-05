@@ -150,8 +150,6 @@ describe('Project', () => {
       });
     });
 
-    // REMOVED Deprecated caommands
-
     it('throws an error when extend target is unresolvable', async () => {
       const cwd = await initFixture('extends-unresolved');
 

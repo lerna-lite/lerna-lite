@@ -62,9 +62,6 @@ export interface UpdateChangelogOption {
   rootPath?: string;
   tagPrefix?: string;
   version?: string;
-
-  /** @deprecated this option was renamed to `changelogIncludeCommitsGitAuthor` */
-  changelogIncludeCommitAuthorFullname?: boolean | string;
 }
 
 export interface GitClientReleaseOption {

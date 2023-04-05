@@ -110,10 +110,6 @@ Running `lerna version --conventional-commits` without the above flags will rele
     - [`--tag-version-prefix`](#--tag-version-prefix)
     - [`--sync-workspace-lock`](#--sync-workspace-lock)
     - [`--yes`](#--yes)
-  - [Deprecated Options](#deprecated-options)
-    - [`--cd-version`](#--cd-version)
-    - [`--repo-version`](#--repo-version)
-    - [`--skip-git`](#--skip-git)
   - [Tips](#tips)
     - [Generating Initial Changelogs](#generating-initial-changelogs)
   - [Lifecycle Scripts](#lifecycle-scripts)
@@ -753,23 +749,6 @@ lerna version --yes
 
 When run with this flag, `lerna version` will skip all confirmation prompts.
 Useful in [Continuous integration (CI)](https://en.wikipedia.org/wiki/Continuous_integration) to automatically answer the publish confirmation prompt.
-
-## Deprecated Options
-_these options will be removed in the next major version_
-
-### `--cd-version`
-
-Pass the semver keyword to the [`bump`](#semver-bump) positional instead.
-
-### `--repo-version`
-
-Pass an explicit version number to the [`bump`](#semver-bump) positional instead.
-
-### `--skip-git`
-
-Use [`--no-git-tag-version`](#--no-git-tag-version) and [`--no-push`](#--no-push) instead.
-
-> **Note** This option **does not** restrict _all_ git commands from being executed. `git` is still required by `lerna version`.
 
 ## Tips
 

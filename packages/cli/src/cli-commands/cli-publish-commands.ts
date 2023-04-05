@@ -1,4 +1,3 @@
-import log from 'npmlog';
 import { PublishCommand } from '@lerna-lite/publish';
 import { PublishCommandOption } from '@lerna-lite/core';
 
@@ -161,39 +160,7 @@ export default {
 
     yargs.group(Object.keys(opts).concat(sharedKeys), 'Command Options:');
 
-    return yargs
-      .option('npm-tag', {
-        // TODO: remove in next major release
-        hidden: true,
-        conflicts: 'dist-tag',
-        type: 'string',
-        requiresArg: true,
-      })
-      .option('verify-registry', {
-        // TODO: remove in next major release
-        hidden: true,
-        type: 'boolean',
-      })
-      .option('skip-npm', {
-        // TODO: remove in next major release
-        // deprecation notice handled in initialize()
-        hidden: true,
-        type: 'boolean',
-      })
-      .check((argv) => {
-        /* eslint-disable no-param-reassign */
-        if (argv.npmTag) {
-          argv.distTag = argv.npmTag;
-          argv['dist-tag'] = argv.npmTag;
-          delete argv.npmTag;
-          delete argv['npm-tag'];
-          log.warn('deprecated', '--npm-tag has been renamed --dist-tag');
-        }
-
-        /* eslint-enable no-param-reassign */
-
-        return argv;
-      });
+    return yargs;
   },
 
   handler: (argv: PublishCommandOption) => {

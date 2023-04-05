@@ -1,4 +1,3 @@
-import log from 'npmlog';
 import { ExecCommandOption } from '@lerna-lite/core';
 
 import { filterOptions } from '../filter-options.js';
@@ -72,26 +71,6 @@ export default {
           describe: 'Displays the execution command that would be performed without executing it.',
           type: 'boolean',
         },
-      })
-      .option('cmd-dry-run', {
-        // TODO: remove in next major release
-        // NOT the same as filter-options --cmd-dry-run
-        hidden: true,
-        conflicts: 'dry-run',
-        type: 'boolean',
-      })
-      .check((argv) => {
-        // override deprecated options
-
-        /* eslint-disable no-param-reassign */
-        if (argv.cmdDryRun) {
-          argv.dryRun = argv.cmdDryRun;
-          delete argv.cmdDryRun;
-          log.warn('deprecated', '--cmd-dry-run has been renamed --dry-run');
-        }
-        /* eslint-enable no-param-reassign */
-
-        return argv;
       });
 
     return filterOptions(yargs);

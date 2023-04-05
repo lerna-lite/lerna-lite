@@ -32,9 +32,6 @@ export interface ExecCommandOption {
   /** exec command arguments */
   args?: string[];
 
-  /** @deprecated option was renamed to `--dry-run`, @see dryRun */
-  cmdDryRun?: boolean;
-
   /** Displays the execution command that would be performed without executing it. */
   dryRun?: boolean;
 
@@ -140,9 +137,6 @@ export interface VersionCommandOption {
    */
   changelogIncludeCommitsGitAuthor?: boolean | string;
 
-  /** @deprecated option renamed to `changelogIncludeCommitsGitAuthor` */
-  changelogIncludeCommitAuthorFullname?: boolean | string;
-
   /**
    * Specify if we want to include the commit remote client login name (ie GitHub username), this option is only available when using `--conventional-commits` with changelogs.
    * We can also optionally provide a custom message or else a default format will be used.
@@ -166,9 +160,6 @@ export interface VersionCommandOption {
 
   /** Displays the process command that would be performed without executing it. */
   dryRun?: boolean;
-
-  /** @deprecated option was renamed to `--dry-run`, @see dryRun */
-  gitDryRun?: boolean;
 
   /**
    * Allows users to specify a custom command to be used when applying git tags.
@@ -358,9 +349,6 @@ export interface PublishCommandOption extends VersionCommandOption {
 }
 
 export interface RunCommandOption {
-  /** @deprecated option was renamed to `--dry-run`, @see dryRun */
-  cmdDryRun?: boolean;
-
   /** Displays the process command that would be performed without executing it. */
   dryRun?: boolean;
 
