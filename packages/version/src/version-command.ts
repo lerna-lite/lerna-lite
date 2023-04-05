@@ -584,13 +584,7 @@ export class VersionCommand extends Command<VersionCommandOption> {
   }
 
   updatePackageVersions() {
-    const {
-      conventionalCommits,
-      changelogPreset,
-      changelogHeaderMessage,
-      changelogVersionMessage,
-      changelog = true,
-    } = this.options;
+    const { conventionalCommits, changelogPreset, changelogHeaderMessage, changelog = true } = this.options;
     const independentVersions = this.project.isIndependent();
     const rootPath = this.project.manifest.location;
     const changedFiles = new Set<string>();
@@ -659,7 +653,6 @@ export class VersionCommand extends Command<VersionCommandOption> {
           changelogIncludeCommitsGitAuthor: this.changelogIncludeCommitsGitAuthor,
           changelogIncludeCommitsClientLogin: this.changelogIncludeCommitsClientLogin,
           changelogHeaderMessage,
-          changelogVersionMessage,
           commitsSinceLastRelease: this.commitsSinceLastRelease,
         }).then(({ logPath, newEntry }) => {
           // commit the updated changelog
@@ -746,7 +739,6 @@ export class VersionCommand extends Command<VersionCommandOption> {
             changelogIncludeCommitsGitAuthor: this.changelogIncludeCommitsGitAuthor,
             changelogIncludeCommitsClientLogin: this.changelogIncludeCommitsClientLogin,
             changelogHeaderMessage,
-            changelogVersionMessage,
             commitsSinceLastRelease: this.commitsSinceLastRelease,
           }).then(({ logPath, newEntry }) => {
             // commit the updated changelog

@@ -81,7 +81,6 @@ Running `lerna version --conventional-commits` without the above flags will rele
     - [`--changelog-include-commits-git-author [msg]`](#--changelog-include-commits-git-author-msg) (new)
     - [`--changelog-include-commits-client-login [msg]`](#--changelog-include-commits-client-login-msg) (new)
     - [`--changelog-header-message <msg>`](#--changelog-header-message-msg) (new)
-    - [`--changelog-version-message <msg>`](#--changelog-version-message-msg) (new)
     - [`--create-release <type>`](#--create-release-type)
     - [`--describe-tag <pattern>`](#--describe-tag-pattern) (new)
     - [`--exact`](#--exact)
@@ -362,18 +361,10 @@ lerna version --conventional-commits --changelog-include-commits-client-login " 
 
 ### `--changelog-header-message <msg>`
 
-Add a custom message at the top of all "changelog.md" files. This option is only available when using `--conventional-commits` and will only impact your project root "changelog.md".
+Add a custom message at the top of all "changelog.md" files. This option is only available when using `--conventional-commits`
 
 ```sh
 lerna version --conventional-commits --changelog-header-message "My Custom Header Message"
-```
-
-### `--changelog-version-message <msg>`
-
-Add a custom message as a prefix to your new version in your "changelog.md" which is located in the root of your project. This option is only available when using `--conventional-commits` and will only impact your project root "changelog.md".
-
-```sh
-lerna version --conventional-commits --changelog-version-message "My Great New Version Message"
 ```
 
 ### `--conventional-bump-prerelease`

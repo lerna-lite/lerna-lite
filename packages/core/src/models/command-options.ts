@@ -149,12 +149,6 @@ export interface VersionCommandOption {
    */
   changelogIncludeCommitsClientLogin?: boolean | string;
 
-  /**
-   * Add a custom message as a prefix to each new version in your "changelog.md" which is located in the root of your project.
-   * This option is only available when using `--conventional-commits` with changelogs.
-   */
-  changelogVersionMessage?: string;
-
   /** Defaults 'angular', custom conventional-changelog preset. */
   changelogPreset?: string;
 

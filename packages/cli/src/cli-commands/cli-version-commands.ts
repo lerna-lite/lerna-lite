@@ -90,13 +90,6 @@ export default {
         requiresArg: false,
         type: 'string',
       },
-      'changelog-version-message': {
-        describe:
-          'Add a custom message as a prefix to each new version in your "changelog.md" which is located in the root of your project. This option is only available when using --conventional-commits with changelogs.',
-        group: 'Version Command Options:',
-        requiresArg: true,
-        type: 'string',
-      },
       'changelog-preset': {
         describe: 'Custom conventional-changelog preset.',
         type: 'string',
