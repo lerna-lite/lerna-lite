@@ -38,7 +38,7 @@ export async function getGithubCommits(
   execOpts?: ExecOpts
 ): Promise<RemoteCommit[]> {
   const repo = parseGitRepo(gitRemote, execOpts);
-  const octokit = createGitHubClient();
+  const octokit = await createGitHubClient();
   const remoteCommits: Array<RemoteCommit> = [];
   let afterCursor = '';
   let hasNextPage = false;

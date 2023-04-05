@@ -5,14 +5,14 @@ import newGithubReleaseUrl from 'new-github-release-url';
 import semver from 'semver';
 
 import { createGitHubClient, createGitLabClient, parseGitRepo } from '../git-clients/index.js';
-import { GitCreateReleaseClientOutput, ReleaseClient, ReleaseCommandProps, ReleaseOptions } from '../models/index.js';
+import { GitCreateReleaseClientOutput, ReleaseCommandProps, ReleaseOptions } from '../models/index.js';
 
-export function createReleaseClient(type: 'github' | 'gitlab'): GitCreateReleaseClientOutput {
+export async function createReleaseClient(type: 'github' | 'gitlab'): Promise<GitCreateReleaseClientOutput> {
   switch (type) {
     case 'gitlab':
       return createGitLabClient();
     case 'github':
-      return createGitHubClient();
+      return await createGitHubClient();
     /* c8 ignore next: guarded by yargs.choices() */
     default:
       throw new ValidationError('ERELEASE', 'Invalid release client type');
@@ -25,7 +25,7 @@ export function createReleaseClient(type: 'github' | 'gitlab'): GitCreateRelease
  * @param {{ gitRemote: string; execOpts: import('@lerna/child-process').ExecOpts }} opts
  */
 export function createRelease(
-  client: ReleaseClient,
+  client: GitCreateReleaseClientOutput,
   { tags, releaseNotes }: ReleaseCommandProps,
   { gitRemote, execOpts }: ReleaseOptions,
   dryRun = false
