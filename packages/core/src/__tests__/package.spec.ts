@@ -693,7 +693,7 @@ describe('Package', () => {
         const resolved: NpaResolveResult = npa.resolve('a', '^1.0.0', '.');
         resolved.workspaceSpec = 'workspace:1.0.0';
 
-        pkg.updateLocalDependency(resolved, '2.0.0', '^', true); // last arg is allowPeerDependenciesUpdate=true
+        pkg.updateLocalDependency(resolved, '2.0.0', '^', true);
 
         expect(pkg.toJSON()).toMatchInlineSnapshot(`
           {
@@ -749,8 +749,8 @@ describe('Package', () => {
         const resolvedB: NpaResolveResult = npa.resolve('b', '^1.0.0', '.');
         resolvedB.workspaceSpec = 'workspace:^1.0.0';
 
-        pkg.updateLocalDependency(resolvedA, '2.0.0', '^', true, true, 'publish'); // allowPeerDependenciesUpdate=true, workspaceStrictMatch=true
-        pkg.updateLocalDependency(resolvedB, '1.1.0', '^', true, true, 'publish');
+        pkg.updateLocalDependency(resolvedA, '2.0.0', '^', true, 'publish');
+        pkg.updateLocalDependency(resolvedB, '1.1.0', '^', true, 'publish');
 
         expect(pkg.toJSON()).toMatchInlineSnapshot(`
           {
@@ -783,8 +783,8 @@ describe('Package', () => {
         const resolvedB: NpaResolveResult = npa.resolve('b', '^1.0.0', '.');
         resolvedB.workspaceSpec = 'workspace:~1.0.0';
 
-        pkg.updateLocalDependency(resolvedA, '2.0.0', '^', true, true, 'publish'); // allowPeerDependenciesUpdate=true, workspaceStrictMatch=true
-        pkg.updateLocalDependency(resolvedB, '1.1.0', '~', true, true, 'publish');
+        pkg.updateLocalDependency(resolvedA, '2.0.0', '^', true, 'publish');
+        pkg.updateLocalDependency(resolvedB, '1.1.0', '~', true, 'publish');
 
         expect(pkg.toJSON()).toMatchInlineSnapshot(`
           {
@@ -818,8 +818,8 @@ describe('Package', () => {
         const resolvedB: NpaResolveResult = npa.resolve('b', '^1.0.0', '.');
         resolvedB.workspaceSpec = 'workspace:^1.0.0';
 
-        pkg.updateLocalDependency(resolvedA, '2.0.0', '^', false, true, 'publish'); // allowPeerDependenciesUpdate=false, workspaceStrictMatch=true
-        pkg.updateLocalDependency(resolvedB, '1.1.0', '^', false, true, 'publish');
+        pkg.updateLocalDependency(resolvedA, '2.0.0', '^', false, 'publish');
+        pkg.updateLocalDependency(resolvedB, '1.1.0', '^', false, 'publish');
 
         expect(pkg.toJSON()).toMatchInlineSnapshot(`
           {

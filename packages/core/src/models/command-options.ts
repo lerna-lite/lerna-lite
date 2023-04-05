@@ -275,12 +275,6 @@ export interface VersionCommandOption {
   /** Runs `npm install --package-lock-only` or equivalent depending on the package manager defined in `npmClient`. */
   syncWorkspaceLock?: boolean;
 
-  /**
-   * @deprecated Strict match transform version numbers to an exact range (like "1.2.3") rather than with a caret (like ^1.2.3) when using `workspace:*`.
-   * Future version will make `workspace:` protocol as strict matching at all time, so this flag becomes redundant.
-   */
-  workspaceStrictMatch?: boolean;
-
   /** alias to `--yes` */
   y?: boolean;
 

@@ -14,6 +14,7 @@ export default defineConfig({
       exclude: ['**/helpers/**', '**/__fixtures__/**', '**/__mocks__/**', '**/__tests__/**'],
     },
     snapshotFormat: {
+      escapeString: false,
       printBasicPrototype: false,
     },
   },

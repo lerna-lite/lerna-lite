@@ -95,8 +95,6 @@ This is useful when a previous `lerna publish` failed to publish all packages to
     - [`--yes`](#--yes)
   - [`publishConfig` Overrides](#publishconfig-overrides)
   - [`workspace:` protocol](#workspace-protocol)
-    - [`--workspace-strict-match (default)`](#with---workspace-strict-match-default)
-    - [`--no-workspace-strict-match`](#with---no-workspace-strict-match-deprecated)
 
 ### `--canary`
 
@@ -554,34 +552,15 @@ So for example, if we have `foo`, `bar`, `qar`, `zoo` in the workspace and they 
 
 > **Note** semver range with an operator (ie `workspace:>=2.0.0`) are also supported but will never be mutated.
 
-#### with `--workspace-strict-match` (default)
+#### versions that will be published
 
-When using strict match (default), it will be transformed and publish with the following:
-
-_this is the default and is usually what most user will want to use since it will strictly adhere to pnpm/yarn workspace protocol._
+The library is doing a strict match and it will transform and publish the following:
 
 ```json
 {
   "dependencies": {
     "foo": "1.5.0",
     "bar": "~1.5.0",
-    "qar": "^1.5.0",
-    "zoo": "^1.5.0"
-  }
-}
-```
-
-#### with `--no-workspace-strict-match` (deprecated)
-
-When strict match is disabled, it will be transformed and publish with the following:
-
-_you would rarely want to disable the strict match, in fact this option will be removed entirely in a future release, this flag was created for the sole purpose of making it compatible with previous Lerna-Lite version `1.2.0`. When disabled, in most cases Lerna will assume that the caret (^) is needed unless the option [--exact](https://github.com/lerna-lite/lerna-lite/tree/main/packages/version#--exact) is provided and by doing so will not be strictly following pnpm/yarn workspace protocol and for that reason is not recommended._
-
-```json
-{
-  "dependencies": {
-    "foo": "^1.5.0",
-    "bar": "^1.5.0",
     "qar": "^1.5.0",
     "zoo": "^1.5.0"
   }
@@ -605,7 +584,3 @@ The legacy preemptive access verification is now off by default, so `--no-verify
 ### `--skip-npm`
 
 Call [`lerna version`](https://github.com/lerna/lerna/tree/main/commands/version#readme) directly, instead.
-
-### `--no-workspace-strict-match`
-
-Providing --no-workspace-strict-match is deprecated and will be removed in future version, we will make `workspace:` protocol strict matching in every case.
