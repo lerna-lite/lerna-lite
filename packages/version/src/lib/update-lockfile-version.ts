@@ -165,19 +165,10 @@ export async function runInstallLockFileOnly(
           log.verbose('lock', `updating lock file via "npm install --package-lock-only"`);
           await exec('npm', ['install', '--package-lock-only', ...npmClientArgs], { cwd });
         } else {
-          // TODO: remove this in the next major release
-          // with npm < 8.5.0, we need to update the lock file in 2 steps
-          // 1. using shrinkwrap will delete current lock file and create new "npm-shrinkwrap.json" but will avoid npm retrieving package version info from registry
-          log.verbose('lock', `updating lock file via "npm shrinkwrap --package-lock-only".`);
-          log.warn(
-            `npm`,
-            `Your npm version is lower than 8.5.0, we recommend upgrading your npm client to avoid the use of "npm shrinkwrap" instead of the regular (better) "npm install --package-lock-only".`
+          log.error(
+            'lock',
+            'your npm version is lower than 8.5.0 which is the minimum requirement to use `--sync-workspace-lock`'
           );
-          await exec('npm', ['shrinkwrap', '--package-lock-only', ...npmClientArgs], { cwd });
-
-          // 2. rename "npm-shrinkwrap.json" back to "package-lock.json"
-          log.verbose('lock', `renaming "npm-shrinkwrap.json" file back to "package-lock.json"`);
-          renameSync('npm-shrinkwrap.json', 'package-lock.json');
         }
 
         outputLockfileName = inputLockfileName;
