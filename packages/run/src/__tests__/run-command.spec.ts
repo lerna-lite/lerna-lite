@@ -222,17 +222,6 @@ describe('RunCommand', () => {
     });
   });
 
-  describe('with --include-filtered-dependencies', () => {
-    it('runs scoped command including filtered deps', async () => {
-      const testDir = await initFixture('include-filtered-dependencies');
-      await lernaRun(testDir)('my-script', '--scope', '@test/package-2', '--include-filtered-dependencies', '--', '--silent');
-
-      const logLines = (logOutput as any).logged().split('\n');
-      expect(logLines).toContain('@test/package-1');
-      expect(logLines).toContain('@test/package-2');
-    });
-  });
-
   describe('with --profile', () => {
     it('executes a profiled command in all packages', async () => {
       const cwd = await initFixture('basic');

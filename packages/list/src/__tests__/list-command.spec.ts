@@ -189,28 +189,6 @@ package-2
     });
   });
 
-  describe('--include-filtered-dependencies', () => {
-    it('should list packages, including filtered ones', async () => {
-      const testDir = await initFixture('include-filtered-dependencies');
-      await lernaList(testDir)('--scope', '@test/package-2', '--include-filtered-dependencies');
-      expect((logOutput as any).logged()).toMatchInlineSnapshot(`
-@test/package-2
-@test/package-1
-`);
-    });
-  });
-
-  describe('--include-filtered-dependents', () => {
-    it('should list packages, including filtered ones', async () => {
-      const testDir = await initFixture('include-filtered-dependencies');
-      await lernaList(testDir)('--scope', '@test/package-1', '--include-filtered-dependents');
-      expect((logOutput as any).logged()).toMatchInlineSnapshot(`
-@test/package-1
-@test/package-2
-`);
-    });
-  });
-
   describe('with an undefined version', () => {
     it('replaces version with MISSING', async () => {
       const testDir = await initFixture('undefined-version');
@@ -295,7 +273,7 @@ package-2
     // * A package that has already been processed wont get added twice (package 1)
     it('should list all packages with no repeats', async () => {
       const testDir = await initFixture('cycles-and-repeated-deps');
-      await lernaList(testDir)('--scope', 'package-1', '--include-filtered-dependencies');
+      await lernaList(testDir)('--scope', 'package-1', '--include-dependencies');
 
       // should follow all transitive deps and pass all packages except 7 with no repeats
       expect((logOutput as any).logged()).toMatchInlineSnapshot(`
