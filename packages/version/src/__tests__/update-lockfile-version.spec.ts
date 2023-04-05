@@ -7,15 +7,11 @@ vi.mock('@lerna-lite/core', async () => {
     execSync: vi.fn(execSync),
   };
 });
-vi.mock('node:fs', async () => ({
-  ...(await vi.importActual<any>('node:fs')),
-  renameSync: vi.fn(() => true),
-}));
 
 import npmlog from 'npmlog';
 import { Mock } from 'vitest';
 import { pathExistsSync, readJsonSync } from 'fs-extra/esm';
-import { promises as fsPromises, renameSync } from 'node:fs';
+import { promises as fsPromises } from 'node:fs';
 import { dirname as pathDirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { Package } from '@lerna-lite/core';
@@ -137,16 +133,18 @@ describe('run install lockfile-only', () => {
       expect(lockFileOutput).toBe('package-lock.json');
     });
 
-    it(`should update project root lockfile by calling npm script "npm shrinkwrap --package-lock-only" when npm version is below 8.5.0`, async () => {
+    it(`should display a log error when npm version is below 8.5.0 and not actually sync anything`, async () => {
       (execSync as any).mockReturnValueOnce('8.4.0');
       const cwd = await initFixture('lockfile-version2');
+      const logSpy = vi.spyOn(npmlog, 'error');
 
-      const lockFileOutput = await runInstallLockFileOnly('npm', cwd, []);
+      await runInstallLockFileOnly('npm', cwd, []);
 
       expect(execSync).toHaveBeenCalledWith('npm', ['--version']);
-      expect(exec).toHaveBeenCalledWith('npm', ['shrinkwrap', '--package-lock-only'], { cwd });
-      expect(renameSync).toHaveBeenCalledWith('npm-shrinkwrap.json', 'package-lock.json');
-      expect(lockFileOutput).toBe('package-lock.json');
+      expect(logSpy).toHaveBeenCalledWith(
+        'lock',
+        expect.stringContaining('your npm version is lower than 8.5.0 which is the minimum requirement to use `--sync-workspace-lock`')
+      );
     });
 
     it(`should update project root lockfile by calling npm script "npm install --package-lock-only" with extra npm client arguments when provided`, async () => {

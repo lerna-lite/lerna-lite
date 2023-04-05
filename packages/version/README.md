@@ -732,8 +732,6 @@ This flag will leverage your package manager client to update the project lock f
 
 #### Notes for each client:
 
-> `npm` users: we recommend having npm client version >=8.5.0 installed, so that we can run `npm install --package-lock-only` instead of `npm shrinkwrap` with version < 8.5.0 which would require an extra, and negative, step of renaming the lock file after execution. Also note that npm >=8.5.0 will become the minimal requirement in the future.
-
 > `pnpm`/`yarn` users: we recommend using the [`workspace:` protocol](#workspace-protocol) since it will prefer local dependencies and will make it less likely to fetch packages accidentally from the registry.
 
 > `yarn` users: please note that this will only work with Yarn Berry 3.x and higher since it uses `yarn install --mode update-lockfile` (this will not work with yarn 1.x classic)
@@ -745,10 +743,8 @@ lerna version --sync-workspace-lock
 Depending on the `npmClient` defined, it will perform the following:
 
 ```sh
-# npm is assuming a `package-lock.json` lock file
-# we highly recommend npm client >= 8.5.0
-npm install --package-lock-only     # npm client >= 8.5.0
-npm shrinkwrap --package-lock-only  # npm client < 8.5.0 will execute a file rename of shrinkwrap file behind the scene
+# npm is assuming a `package-lock.json` lock file and npm client >= 8.5.0 is required
+npm install --package-lock-only
 
 # pnpm is assuming a "pnpm-lock.yaml" lock file and "npmClient": "pnpm"
 pnpm install --lockfile-only --ignore-scripts
