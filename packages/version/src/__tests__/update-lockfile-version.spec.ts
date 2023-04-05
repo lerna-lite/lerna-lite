@@ -7,15 +7,11 @@ vi.mock('@lerna-lite/core', async () => {
     execSync: vi.fn(execSync),
   };
 });
-vi.mock('node:fs', async () => ({
-  ...(await vi.importActual<any>('node:fs')),
-  renameSync: vi.fn(() => true),
-}));
 
 import npmlog from 'npmlog';
 import { Mock } from 'vitest';
 import { pathExistsSync, readJsonSync } from 'fs-extra/esm';
-import { promises as fsPromises, renameSync } from 'node:fs';
+import { promises as fsPromises } from 'node:fs';
 import { dirname as pathDirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { Package } from '@lerna-lite/core';

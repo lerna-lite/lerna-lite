@@ -1,5 +1,5 @@
 import { loadJsonFile } from 'load-json-file';
-import { renameSync, promises } from 'node:fs';
+import { promises } from 'node:fs';
 import { EOL } from 'node:os';
 import { join } from 'node:path';
 import log from 'npmlog';
@@ -159,8 +159,7 @@ export async function runInstallLockFileOnly(
         const localNpmVersion = execSync('npm', ['--version']);
         log.silly(`npm`, `current local npm version is "${localNpmVersion}"`);
 
-        // for npm version >=8.5.0 we can simply call "npm install --package-lock-only"
-        // however, when lower then we need to call "npm shrinkwrap --package-lock-only" and then rename "npm-shrinkwrap.json" file back to "package-lock.json"
+        // with npm version >=8.5.0, we can simply call "npm install --package-lock-only"
         if (semver.gte(localNpmVersion, '8.5.0')) {
           log.verbose('lock', `updating lock file via "npm install --package-lock-only"`);
           await exec('npm', ['install', '--package-lock-only', ...npmClientArgs], { cwd });
