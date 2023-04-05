@@ -42,7 +42,6 @@ import { runLifecycle } from '@lerna-lite/core';
 // helpers
 import { dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
-import { loggingOutput } from '@lerna-test/helpers/logging-output';
 import { commandRunner, initFixtureFactory } from '@lerna-test/helpers';
 
 const __filename = fileURLToPath(import.meta.url);
@@ -179,20 +178,5 @@ describe('lifecycle scripts', () => {
         'ignore-scripts': true,
       })
     );
-  });
-});
-
-// @deprecated, execScript should be removed since requireScripts is deprecated
-describe('execScript', () => {
-  it('execute --require-scripts but fails since scripts folder does not exist and log error with script not found message is shown', async () => {
-    const cwd = await initFixture('lifecycle');
-
-    await lernaPublish(cwd)('--require-scripts');
-    const logInfoMessages = loggingOutput('info');
-    const logSillyMessages = loggingOutput('silly');
-
-    expect(logInfoMessages).toContain('enabled');
-    expect(logSillyMessages.filter((x) => x.includes('No prepublish script found at'))).toBeTruthy();
-    expect(logSillyMessages.filter((x) => x.includes('No postpublish script found at'))).toBeTruthy();
   });
 });
