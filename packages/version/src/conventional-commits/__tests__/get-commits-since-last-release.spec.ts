@@ -1,3 +1,5 @@
+import { afterEach, beforeEach, describe, expect, it, Mock, vi } from 'vitest';
+
 vi.mock('@lerna-lite/core');
 vi.mock('../get-github-commits');
 
@@ -10,7 +12,6 @@ vi.mock('@lerna-lite/core', async () => ({
 }));
 
 import { describeRefSync, execSync } from '@lerna-lite/core';
-import { Mock } from 'vitest';
 
 import { getGithubCommits } from '../get-github-commits';
 import { getCommitsSinceLastRelease, getOldestCommitSinceLastTag } from '../get-commits-since-last-release';

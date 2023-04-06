@@ -1,3 +1,5 @@
+import { beforeAll, expect, test, vi } from 'vitest';
+
 const mockNotice = vi.fn();
 vi.mock('npmlog', async () => ({
   ...(await vi.importActual<any>('npmlog')),

@@ -1,6 +1,6 @@
+import { Mock, vi } from 'vitest';
 import chalk from 'chalk';
 import { multiLineTrimRight } from '@lerna-test/helpers';
-import { Mock } from 'vitest';
 
 // keep snapshots stable cross-platform
 chalk.level = 0;

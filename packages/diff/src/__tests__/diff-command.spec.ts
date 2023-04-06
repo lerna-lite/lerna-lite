@@ -1,3 +1,5 @@
+import { beforeEach, describe, expect, it, Mock, vi } from 'vitest';
+
 vi.mock('@lerna-lite/core', async () => ({
   ...(await vi.importActual<any>('@lerna-lite/core')),
   Command: (await vi.importActual<any>('../../../core/src/command')).Command,
@@ -11,7 +13,6 @@ import { execa } from 'execa';
 import { outputFile, remove } from 'fs-extra/esm';
 import { dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
-import { Mock } from 'vitest';
 import yargParser from 'yargs-parser';
 
 // mocked modules

@@ -1,3 +1,5 @@
+import { afterEach, beforeAll, describe, expect, it, Mock, vi } from 'vitest';
+
 // mocked modules
 vi.mock('@lerna-lite/core', async () => ({
   ...(await vi.importActual<any>('@lerna-lite/core')), // return the other real methods, below we'll mock only 2 of the methods
@@ -19,7 +21,6 @@ import { basename, dirname, join } from 'node:path';
 import { pathExists, readJson } from 'fs-extra/esm';
 import { globby } from 'globby';
 import { fileURLToPath } from 'node:url';
-import { Mock } from 'vitest';
 import yargParser from 'yargs-parser';
 
 // make sure to import the output mock

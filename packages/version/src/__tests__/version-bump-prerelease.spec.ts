@@ -1,3 +1,5 @@
+import { expect, Mock, test, vi } from 'vitest';
+
 // local modules _must_ be explicitly mocked
 vi.mock('../lib/git-push', async () => await vi.importActual('../lib/__mocks__/git-push'));
 vi.mock('../lib/is-anything-committed', async () => await vi.importActual('../lib/__mocks__/is-anything-committed'));
@@ -34,7 +36,6 @@ const initFixture = initFixtureFactory(pathResolve(__dirname, '../../../publish/
 
 import Tacks from 'tacks';
 import { temporaryDirectory } from 'tempy';
-import { Mock } from 'vitest';
 
 const { File, Dir } = Tacks;
 

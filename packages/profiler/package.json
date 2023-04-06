@@ -16,14 +16,14 @@
     ".": {
       "import": "./dist/index.js",
       "default": "./dist/index.js",
-      "types": "./dist/types/index.d.ts"
+      "types": "./dist/index.d.ts"
     },
     "./*": "./*"
   },
   "typesVersions": {
     "*": {
       "*": [
-        "./dist/types/index.d.ts"
+        "./dist/index.d.ts"
       ]
     }
   },

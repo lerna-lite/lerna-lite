@@ -1,3 +1,5 @@
+import { beforeEach, describe, expect, it, Mock, vi } from 'vitest';
+
 import { Package } from '../../../package';
 
 vi.mock('../../describe-ref');
@@ -9,8 +11,6 @@ vi.mock('globby', async () => ({
   ...(await vi.importActual<any>('globby')),
   globbySync: globMock,
 }));
-
-import { Mock } from 'vitest';
 
 // mocked modules
 import { describeRefSync } from '../../describe-ref';

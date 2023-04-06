@@ -1,3 +1,4 @@
+import { beforeAll, describe, expect, it, vi } from 'vitest';
 import { dirname } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { Package, ValidationError } from '@lerna-lite/core';

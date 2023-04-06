@@ -1,3 +1,5 @@
+import { afterEach, beforeAll, beforeEach, describe, expect, it, Mock, vi } from 'vitest';
+
 // mocked modules
 vi.mock('@lerna-lite/core', async () => ({
   ...(await vi.importActual<any>('@lerna-lite/core')),
@@ -50,7 +52,6 @@ vi.mock('@lerna-lite/watch', async () => await vi.importActual<any>('../watch-co
 import mockStdin from 'mock-stdin';
 import { basename, dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
-import { Mock } from 'vitest';
 import yargParser from 'yargs-parser';
 
 // make sure to import the output mock
@@ -149,7 +150,7 @@ describe('Watch Command', () => {
         const nonZero = new Error('An actual non-zero, not git diff pager SIGPIPE');
         (nonZero as any).exitCode = 1;
         watchErrorHandler(nonZero);
-      } catch (err) {
+      } catch (err: any) {
         expect(err.message).toBe('An actual non-zero, not git diff pager SIGPIPE');
       }
     });

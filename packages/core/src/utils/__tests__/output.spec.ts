@@ -1,3 +1,5 @@
+import { describe, expect, it, vi } from 'vitest';
+
 import { logOutput } from '../output';
 import log from 'npmlog';
 

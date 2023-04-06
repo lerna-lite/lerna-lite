@@ -1,6 +1,6 @@
-vi.mock('../../child-process');
+import { beforeEach, describe, expect, it, Mock, vi } from 'vitest';
 
-import { Mock } from 'vitest';
+vi.mock('../../child-process');
 
 import * as childProcess from '../../child-process';
 import { describeRef, describeRefSync } from '../describe-ref';

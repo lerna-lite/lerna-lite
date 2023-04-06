@@ -1,9 +1,9 @@
+import { beforeEach, describe, expect, it, Mock, vi } from 'vitest';
 vi.mock('@octokit/rest');
 vi.mock('@lerna-lite/core');
 
 import { Octokit } from '@octokit/rest';
 import { execSync } from '@lerna-lite/core';
-import { Mock } from 'vitest';
 
 import { createGitHubClient, parseGitRepo } from '../index';
 

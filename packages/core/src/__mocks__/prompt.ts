@@ -1,3 +1,5 @@
+import { afterEach, vi } from 'vitest';
+
 let choiceIndices: number[] = [];
 afterEach(() => {
   choiceIndices = [];

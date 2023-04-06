@@ -1,3 +1,4 @@
+import { describe, expect, it, vi } from 'vitest';
 import { outputFile, remove } from 'fs-extra/esm';
 import { dirname, join } from 'node:path';
 import chalk from 'chalk';

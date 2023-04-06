@@ -1,4 +1,4 @@
-import { defineConfig } from 'vitest/config';
+import { configDefaults, defineConfig } from 'vitest/config';
 
 export default defineConfig({
   test: {
@@ -11,7 +11,8 @@ export default defineConfig({
     watch: false,
     coverage: {
       include: ['packages/**/*.ts'],
-      exclude: ['**/helpers/**', '**/__fixtures__/**', '**/__mocks__/**', '**/__tests__/**'],
+      exclude: [...configDefaults.exclude, '**/helpers/**', '**/__fixtures__/**', '**/__mocks__/**', '**/__tests__/**'],
+      provider: 'c8',
     },
     snapshotFormat: {
       escapeString: false,

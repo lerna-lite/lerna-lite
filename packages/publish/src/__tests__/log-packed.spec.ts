@@ -1,3 +1,5 @@
+import { describe, expect, it, vi } from 'vitest';
+
 import { Package } from '@lerna-lite/core';
 import chalk from 'chalk';
 import npmlog from 'npmlog';

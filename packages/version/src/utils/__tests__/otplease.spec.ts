@@ -1,11 +1,11 @@
 // mocked modules
 // mocked modules of @lerna-lite/core
+import { afterEach, beforeEach, describe, expect, it, Mock, vi } from 'vitest';
+
 vi.mock('@lerna-lite/core', async () => ({
   ...(await vi.importActual<any>('@lerna-lite/core')), // return the other real methods, below we'll mock only 2 of the methods
   promptTextInput: (await vi.importActual<any>('../../../../core/src/__mocks__/prompt')).promptTextInput,
 }));
-
-import { Mock } from 'vitest';
 
 // file under test
 import { promptTextInput } from '@lerna-lite/core';

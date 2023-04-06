@@ -1,3 +1,5 @@
+import { describe, expect, it } from 'vitest';
+
 import { envReplace } from '../env-replace';
 
 describe('env-replace()', () => {

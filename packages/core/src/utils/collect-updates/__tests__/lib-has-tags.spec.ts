@@ -1,6 +1,6 @@
-vi.mock('../../../child-process');
+import { describe, expect, it, Mock, vi } from 'vitest';
 
-import { Mock } from 'vitest';
+vi.mock('../../../child-process');
 
 // mocked modules
 import * as childProcess from '../../../child-process';

@@ -1,3 +1,5 @@
+import { expect, test, vi } from 'vitest';
+
 vi.mock('pacote');
 
 // mocked module(s)

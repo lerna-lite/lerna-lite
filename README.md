@@ -56,7 +56,7 @@ Lerna-Lite itself is now also using [pnpm workspaces](https://pnpm.io/workspaces
 Here are some of the largest projects using the Lerna-Lite fork
 
 <a href="https://github.com/facebook/jest">
-  <img src="https://jestjs.io/img/vi.png" width="25" height="25">
+  <img src="https://jestjs.io/img/jest.png" width="25" height="25">
   Jest
 </a>&nbsp; | &nbsp;
 <a href="https://github.com/react-navigation/react-navigation">

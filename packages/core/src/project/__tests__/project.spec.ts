@@ -1,3 +1,4 @@
+import { afterEach, beforeAll, describe, expect, it } from 'vitest';
 import { outputFile, remove, writeJson } from 'fs-extra/esm';
 import { basename, dirname, join, resolve as pathResolve } from 'node:path';
 import { fileURLToPath } from 'node:url';

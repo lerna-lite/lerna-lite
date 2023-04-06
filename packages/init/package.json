@@ -16,14 +16,14 @@
     ".": {
       "import": "./dist/index.js",
       "default": "./dist/index.js",
-      "types": "./dist/types/index.d.ts"
+      "types": "./dist/index.d.ts"
     },
     "./*": "./*"
   },
   "typesVersions": {
     "*": {
       "*": [
-        "./dist/types/index.d.ts"
+        "./dist/index.d.ts"
       ]
     }
   },
@@ -56,7 +56,6 @@
     "write-json-file": "^5.0.0"
   },
   "devDependencies": {
-    "@types/fs-extra": "^11.0.1",
     "yargs-parser": "^21.1.1"
   }
 }

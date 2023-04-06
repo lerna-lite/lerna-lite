@@ -1,3 +1,5 @@
+import { describe, expect, it, vi } from 'vitest';
+
 vi.mock('inquirer');
 
 import npmlog from 'npmlog';
@@ -151,11 +153,11 @@ describe('Prompt', () => {
     expect(logResumeSpy).toHaveBeenCalled();
     expect(inqSpy).toHaveBeenCalledWith([
       {
-        filter: expect.toBeFunction(),
+        filter: (expect as any).toBeFunction(),
         message: 'Choose something...',
         name: 'input',
         type: 'input',
-        validate: expect.toBeFunction(),
+        validate: (expect as any).toBeFunction(),
       },
     ]);
     expect(output).toBeTruthy();

@@ -28,6 +28,7 @@ Thumbs.db
 # Distribution folders
 dist
 tsconfig.tsbuildinfo
+tsconfig.*.tsbuildinfo
 
 # Tests Report & Coverage
 **/coverage

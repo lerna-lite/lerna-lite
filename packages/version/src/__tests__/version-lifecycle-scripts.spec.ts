@@ -1,3 +1,5 @@
+import { afterEach, describe, expect, it, vi } from 'vitest';
+
 vi.mock('load-json-file', async () => vi.importActual('../lib/__mocks__/load-json-file'));
 
 // local modules _must_ be explicitly mocked

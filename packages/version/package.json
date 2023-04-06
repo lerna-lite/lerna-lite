@@ -16,14 +16,14 @@
     ".": {
       "import": "./dist/index.js",
       "default": "./dist/index.js",
-      "types": "./dist/types/index.d.ts"
+      "types": "./dist/index.d.ts"
     },
     "./*": "./*"
   },
   "typesVersions": {
     "*": {
       "*": [
-        "./dist/types/index.d.ts"
+        "./dist/index.d.ts"
       ]
     }
   },
@@ -89,7 +89,7 @@
     "@types/conventional-commits-parser": "^3.0.3",
     "@types/conventional-recommended-bump": "^6.1.0",
     "@types/dedent": "^0.7.0",
-    "@types/fs-extra": "^11.0.1",
+    "@types/fs-extra": "11.0.1",
     "@types/git-url-parse": "^9.0.1",
     "@types/js-yaml": "^4.0.5",
     "@types/minimatch": "^5.1.2",

@@ -1,3 +1,4 @@
+import { expect, test } from 'vitest';
 import { execa } from 'execa';
 import { outputFile, outputJson } from 'fs-extra/esm';
 import { dirname, join } from 'node:path';

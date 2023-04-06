@@ -7,8 +7,8 @@ import { RunScriptOption, ScriptStreamingOption } from '../../models';
 import { npmRunScript, npmRunScriptStreaming } from '../npm-run-script';
 
 describe('npm-run-script', () => {
-  (exec as vi.Mock).mockResolvedValue(null);
-  (spawnStreaming as vi.Mock).mockResolvedValue(null);
+  (exec as Mock).mockResolvedValue(null);
+  (spawnStreaming as Mock).mockResolvedValue(null);
 
   describe('npmRunScript()', () => {
     it('runs an npm script in a directory', async () => {

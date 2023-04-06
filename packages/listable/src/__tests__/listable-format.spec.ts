@@ -1,3 +1,4 @@
+import { beforeAll, describe, expect, test, vi } from 'vitest';
 vi.mock('@lerna-lite/core', async () => ({
   ...(await vi.importActual<any>('@lerna-lite/core')), // return the other real methods, below we'll mock only 2 of the methods
   Command: (await vi.importActual<any>('../../../core/src/command')).Command,

@@ -1,4 +1,7 @@
+import { describe, expect, it } from 'vitest';
+
 import { cleanStack } from '../clean-stack';
+
 describe('clean-stack()', () => {
   it('should call cleanStack() and expect the method to split by newline and return the first substring', () => {
     const className = 'VersionCommand';

@@ -1,3 +1,5 @@
+import { afterEach, beforeAll, beforeEach, describe, expect, Mock, test, vi } from 'vitest';
+
 vi.mock('libnpmaccess');
 
 import { FetchConfig, Project } from '@lerna-lite/core';
@@ -6,7 +8,6 @@ import { initFixtureFactory } from '@lerna-test/helpers';
 import access from 'libnpmaccess';
 import { fileURLToPath } from 'node:url';
 import { dirname } from 'node:path';
-import { Mock } from 'vitest';
 
 import { verifyNpmPackageAccess } from '../lib/verify-npm-package-access';
 

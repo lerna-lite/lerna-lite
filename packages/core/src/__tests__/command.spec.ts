@@ -1,3 +1,5 @@
+import { afterEach, beforeAll, beforeEach, describe, expect, it, Mock, vi } from 'vitest';
+
 const cpuCount = 42;
 
 vi.mock('../child-process', async () => ({
@@ -14,7 +16,6 @@ import log from 'npmlog';
 import { dirname, join } from 'node:path';
 import { temporaryDirectory } from 'tempy';
 import { fileURLToPath } from 'node:url';
-import { Mock } from 'vitest';
 
 // partially mocked
 import { getChildProcessCount } from '../child-process';

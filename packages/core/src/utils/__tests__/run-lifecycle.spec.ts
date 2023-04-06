@@ -1,9 +1,10 @@
+import { beforeEach, describe, expect, it, Mock, vi } from 'vitest';
+
 vi.mock('@npmcli/run-script', () => ({
   default: vi.fn(() => Promise.resolve({ stdout: '' })),
 }));
 
 import log from 'npmlog';
-import { Mock } from 'vitest';
 import { loggingOutput } from '@lerna-test/helpers/logging-output';
 import runScript from '@npmcli/run-script';
 

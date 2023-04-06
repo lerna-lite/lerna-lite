@@ -1,8 +1,9 @@
+import { afterEach, beforeEach, describe, expect, it, Mock, vi } from 'vitest';
+
 vi.mock('../lib/get-profile-data');
 
 import { FetchConfig } from '@lerna-lite/core';
 import { loggingOutput } from '@lerna-test/helpers/logging-output';
-import { Mock } from 'vitest';
 
 import { getProfileData } from '../lib/get-profile-data';
 import { getTwoFactorAuthRequired } from '../lib/get-two-factor-auth-required';

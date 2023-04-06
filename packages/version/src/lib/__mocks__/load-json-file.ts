@@ -1,3 +1,4 @@
+import { afterEach, vi } from 'vitest';
 import { dirname } from 'node:path';
 import normalizePath from 'normalize-path';
 

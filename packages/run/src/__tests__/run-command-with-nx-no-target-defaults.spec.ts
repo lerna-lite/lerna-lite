@@ -1,3 +1,5 @@
+import { afterAll, beforeAll, describe, expect, it, Mock, vi } from 'vitest';
+
 vi.mock('../lib/npm-run-script');
 
 vi.mock('@lerna-lite/core', async () => ({
@@ -17,7 +19,6 @@ import cliRunCommands from '../../../cli/src/cli-commands/cli-run-commands';
 // helpers
 import { fileURLToPath } from 'node:url';
 import { dirname } from 'node:path';
-import { Mock } from 'vitest';
 
 import { commandRunner, initFixtureFactory, loggingOutput } from '@lerna-test/helpers';
 const __filename = fileURLToPath(import.meta.url);

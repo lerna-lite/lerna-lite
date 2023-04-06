@@ -1,3 +1,5 @@
+import { expect, test, vi } from 'vitest';
+
 import { Package } from '../../../package';
 
 // helpers

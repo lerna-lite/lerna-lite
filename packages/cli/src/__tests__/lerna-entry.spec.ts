@@ -1,3 +1,5 @@
+import { describe, expect, it, vi } from 'vitest';
+
 vi.mock('../cli-commands/cli-changed-commands');
 vi.mock('../cli-commands/cli-diff-commands');
 vi.mock('../cli-commands/cli-exec-commands');

@@ -1,3 +1,4 @@
+import { beforeEach, describe, expect, test, vi } from 'vitest';
 import semver from 'semver';
 
 // mocked modules of @lerna-lite/core

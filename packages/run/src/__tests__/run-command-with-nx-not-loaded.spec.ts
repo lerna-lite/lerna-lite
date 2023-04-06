@@ -1,3 +1,5 @@
+import { beforeAll, describe, expect, it, Mock, vi } from 'vitest';
+
 vi.mock('nx/src/utils/output', () => undefined);
 vi.mock('../lib/npm-run-script');
 
@@ -11,7 +13,6 @@ import cliRunCommands from '../../../cli/src/cli-commands/cli-run-commands';
 // helpers
 import { fileURLToPath } from 'node:url';
 import { dirname } from 'node:path';
-import { Mock } from 'vitest';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);

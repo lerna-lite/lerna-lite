@@ -1,3 +1,5 @@
+import { beforeEach, describe, expect, it, Mock, vi } from 'vitest';
+
 // local modules _must_ be explicitly mocked
 vi.mock('../lib/git-add', async () => await vi.importActual('../lib/__mocks__/git-add'));
 vi.mock('../lib/git-commit', async () => await vi.importActual('../lib/__mocks__/git-commit'));
@@ -45,7 +47,6 @@ const lernaVersion = commandRunner(cliCommands);
 import chalk from 'chalk';
 import dedent from 'dedent';
 import npmlog from 'npmlog';
-import { Mock } from 'vitest';
 import yargParser from 'yargs-parser';
 
 const createArgv = (cwd: string, ...args: any[]) => {

@@ -53,5 +53,6 @@
     "@lerna-lite/version": ["packages/version/src"],
     "@lerna-lite/watch": ["packages/watch/src"]
   },
-  "exclude": ["node_modules"]
+  "include": ["**/*.ts"],
+  "exclude": ["node_modules/**/*.*", "**/__helpers__/**", "**/__mocks__/**", "**/__tests__/**"]
 }

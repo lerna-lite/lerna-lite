@@ -28,6 +28,7 @@ export function cloneFixtureFactory(startDir: string) {
 }
 
 export function findFixture(cwd: string, fixtureName: string) {
+  // @ts-ignore
   return findUp(join('__fixtures__', fixtureName), { cwd, type: 'directory' }).then((fixturePath) => {
     if (fixturePath === undefined) {
       throw new Error(`Could not find fixture with name "${fixtureName}"`);

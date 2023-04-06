@@ -1,3 +1,4 @@
+import { expect, test } from 'vitest';
 import { execa } from 'execa';
 
 import { remoteBranchExists } from '../lib/remote-branch-exists';

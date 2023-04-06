@@ -1,3 +1,4 @@
+import { describe, expect, it, vi } from 'vitest';
 import chalk from 'chalk';
 import npmlog from 'npmlog';
 // file under test

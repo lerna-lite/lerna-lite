@@ -1,3 +1,5 @@
+import { describe, expect, it, Mock, test, vi } from 'vitest';
+
 // local modules _must_ be explicitly mocked
 vi.mock('../lib/git-push', async () => await vi.importActual('../lib/__mocks__/git-push'));
 vi.mock('../lib/is-anything-committed', async () => await vi.importActual('../lib/__mocks__/is-anything-committed'));
@@ -23,7 +25,6 @@ import { PackageGraphNode, promptSelectOne, promptTextInput, VersionCommandOptio
 import { makePromptVersion } from '../lib/prompt-version';
 
 import { dirname, resolve as pathResolve } from 'node:path';
-import { Mock } from 'vitest';
 import yargParser from 'yargs-parser';
 
 const resolvePrereleaseId = vi.fn(() => 'alpha');
