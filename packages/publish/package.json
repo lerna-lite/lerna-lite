@@ -35,7 +35,7 @@
   "dependencies": {
     "@lerna-lite/core": "workspace:*",
     "@lerna-lite/version": "workspace:*",
-    "@npmcli/arborist": "^6.2.6",
+    "@npmcli/arborist": "^6.2.7",
     "byte-size": "^7.0.1",
     "chalk": "^4.1.2",
     "columnify": "^1.6.0",
@@ -55,7 +55,7 @@
     "pify": "^5.0.0",
     "read-package-json": "^6.0.1",
     "semver": "^7.3.8",
-    "ssri": "^10.0.1",
+    "ssri": "^10.0.2",
     "tar": "^6.1.13",
     "temp-dir": "^2.0.0"
   },
