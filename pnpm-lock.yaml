@@ -280,8 +280,8 @@ importers:
         specifier: ^6.2.0
         version: 6.2.0
       minimatch:
-        specifier: ^7.4.5
-        version: 7.4.5
+        specifier: ^8.0.3
+        version: 8.0.3
       npm-package-arg:
         specifier: ^10.1.0
         version: 10.1.0
@@ -758,8 +758,8 @@ importers:
         specifier: ^3.1.0
         version: 3.1.0
       minimatch:
-        specifier: ^7.4.5
-        version: 7.4.5
+        specifier: ^8.0.3
+        version: 8.0.3
       new-github-release-url:
         specifier: ^1.0.0
         version: 1.0.0
