@@ -30,7 +30,7 @@ jobs:
       - name: Set NodeJS
         uses: actions/setup-node@v3
         with:
-          node-version: 18
+          node-version: 19
           cache: 'pnpm'
 
       - name: Get pnpm store directory
@@ -56,7 +56,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        node: [16, 18]
+        node: [16, 18, 19]
         platform: [ubuntu-latest]
 
     name: 'Build & Unit Tests on Ubuntu / Node${{ matrix.node }}'
@@ -120,5 +120,5 @@ jobs:
       - name: Upload test coverage to Codecov
         uses: codecov/codecov-action@v3.1.1
         if: |
-          contains(matrix.node, 18) &&
+          contains(matrix.node, 19) &&
           !contains(github.event.head_commit.message, 'chore(release)')
