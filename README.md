@@ -24,18 +24,16 @@
 - [`lerna.json` config file](https://github.com/lerna-lite/lerna-lite/wiki/lerna.json)
 - [Contributions](#contributions)
 - [Troubleshooting](https://github.com/lerna-lite/lerna-lite/wiki/Troubleshooting)
-- Commands are **all** optional
-  - `init` is the only command installed by the CLI
-    - 🛠️ [`init`](https://github.com/lerna-lite/lerna-lite/tree/main/packages/init#readme) - creates a new Lerna-Lite repo (adds `lerna.json` and a workspace structure)
-  - optional commands (requires **separate install**, refer to the [installation](#separate--optional-installs) table shown below)
-    - ☁️ [`publish`](https://github.com/lerna-lite/lerna-lite/tree/main/packages/publish#readme) - publish every workspace packages that changed
-    - 📑 [`version`](https://github.com/lerna-lite/lerna-lite/tree/main/packages/version#readme) - create new version for each workspace packages
-    - 🕜 [`changed`](https://github.com/lerna-lite/lerna-lite/tree/main/packages/changed#readme) - list local packages that changed since last tagged release
-    - 🌓 [`diff`](https://github.com/lerna-lite/lerna-lite/tree/main/packages/diff#readme) - git diff all packages or a single package since the last release
-    - 👷 [`exec`](https://github.com/lerna-lite/lerna-lite/tree/main/packages/exec#readme) - execute shell command in each workspace package
-    - 📖 [`list`](https://github.com/lerna-lite/lerna-lite/tree/main/packages/list#readme) - list local packages
-    - 🏃 [`run`](https://github.com/lerna-lite/lerna-lite/tree/main/packages/run#readme) - run npm script, in topological order, in each workspace package
-    - 👓 [`watch`](https://github.com/lerna-lite/lerna-lite/tree/main/packages/watch#readme) - watch for changes within packages and execute commands
+- Commands are **all optional**, refer to the **[Installation table](#separate--optional-installs)** shown below
+  - 🛠️ [`init`](https://github.com/lerna-lite/lerna-lite/tree/main/packages/init#readme) - creates a new Lerna-Lite repo (adds `lerna.json` and a workspace structure)
+  - ☁️ [`publish`](https://github.com/lerna-lite/lerna-lite/tree/main/packages/publish#readme) - publish every workspace packages that changed
+  - 📑 [`version`](https://github.com/lerna-lite/lerna-lite/tree/main/packages/version#readme) - create new version for each workspace packages
+  - 🕜 [`changed`](https://github.com/lerna-lite/lerna-lite/tree/main/packages/changed#readme) - list local packages that changed since last tagged release
+  - 🌓 [`diff`](https://github.com/lerna-lite/lerna-lite/tree/main/packages/diff#readme) - git diff all packages or a single package since the last release
+  - 👷 [`exec`](https://github.com/lerna-lite/lerna-lite/tree/main/packages/exec#readme) - execute shell command in each workspace package
+  - 📖 [`list`](https://github.com/lerna-lite/lerna-lite/tree/main/packages/list#readme) - list local packages
+  - 🏃 [`run`](https://github.com/lerna-lite/lerna-lite/tree/main/packages/run#readme) - run npm script, in topological order, in each workspace package
+  - 👓 [`watch`](https://github.com/lerna-lite/lerna-lite/tree/main/packages/watch#readme) - watch for changes within packages and execute commands
 
 ---
 
@@ -147,7 +145,7 @@ changes and changelogs
 Let's start by installing Lerna as a dev dependency of your project and run the `init` command to get started (see [init#readme](https://github.com/lerna-lite/lerna-lite/tree/main/packages/init#readme) for all options).
 
 ```sh
-# install Lerna-Lite globally
+# install Lerna-Lite CLI globally (only includes `init` command)
 $ npm install -g @lerna-lite/cli # pnpm add -g @lerna-lite/cli
 
 # create your monorepo and initialize lerna-lite
@@ -157,6 +155,9 @@ $ lerna init
 
 # for npm/yarn (only) workspaces add --use-workspaces
 $ lerna init --use-workspaces
+
+# install other optional commands like `publish`, `version`, `run`, ...
+$ npm i @lerna-lite/publish -D -W
 ```
 
 This will create a `lerna.json` configuration file as well as a `packages` folder, so your folder should now look like this:
@@ -173,7 +174,7 @@ Note that `package-a` will not be created, it is only shown here to help clarify
 
 ## Installation
 
-Run the following commands to install Lerna-Lite in your project and/or install it globally by adding the `-g` option.
+> Lerna-Lite is entirely modular, as opposed to Lerna, and installing the CLI locally or globally will only give you access to the `init` command. Make sure to install the command(s) you wish to use.
 
 If you are new to Lerna-Lite, you could also run the [lerna init](https://github.com/lerna-lite/lerna-lite/tree/main/packages/init#readme) command which will create the `lerna.json` for you with a minimal setup. If you are using a different client other than npm, then make sure to update the `npmClient` property in `lerna.json` (for example: `"npmClient": "yarn"` or `"pnpm"`).
 
@@ -235,14 +236,20 @@ npm uninstall lerna -W   # OR yarn remove lerna -W
 npm uninstall -g lerna   # OR yarn global remove lerna
 ```
 
-2. install Lerna-Lite CLI to get access to built-in `init`, `version` and `publish` commands
+2. install Lerna-Lite CLI to get access to built-in `init` command
+**Note** you could also install any other command, like `publish` to get access to the CLI since the CLI is a dependency of every command
 
 ```sh
-# Lerna CLI (includes `init`, `version` and `publish` commands)
+# Lerna CLI (includes `init`)
 npm install @lerna-lite/cli -D -W
+
+# or install `publish` command which will install the CLI behind the scene
+# also note that `version` is a strict dependency of the `publish` command 
+# so installing `publish` will automatically give you access to `init`, `version`, `publish` and the `cli`
+npm install @lerna-lite/publish -D -W
 ```
 
-3. optionally install `changed`, `diff`, `exec`, `list`, `run` and/or `watch` commands (refer to [installation](#installation) table above)
+3. optionally install `changed`, `diff`, `exec`, `list`, `run`, `publish`, `version` or `watch` commands (refer to [installation](#installation) table above)
 
 ```sh
 # install any of the optional commands (refer to installation table)
@@ -297,7 +304,7 @@ If you have problems running the lib and your problems are related to Git comman
 
 | Package Name | Version | Description | Changes |
 | ------------ | ------- | ----------- | ------- |
-| [@lerna-lite/cli](https://github.com/lerna-lite/lerna-lite/tree/main/packages/cli) | [![npm](https://img.shields.io/npm/v/@lerna-lite/cli.svg)](https://www.npmjs.com/package/@lerna-lite/cli) | Lerna-Lite Init/Info/Version/Publish comands CLI | [changelog](https://github.com/lerna-lite/lerna-lite/blob/main/packages/cli/CHANGELOG.md) |
+| [@lerna-lite/cli](https://github.com/lerna-lite/lerna-lite/tree/main/packages/cli) | [![npm](https://img.shields.io/npm/v/@lerna-lite/cli.svg)](https://www.npmjs.com/package/@lerna-lite/cli) | Lerna-Lite Init/Info/Version/Publish commands CLI | [changelog](https://github.com/lerna-lite/lerna-lite/blob/main/packages/cli/CHANGELOG.md) |
 | [@lerna-lite/core](https://github.com/lerna-lite/lerna-lite/tree/main/packages/core) | [![npm](https://img.shields.io/npm/v/@lerna-lite/core.svg)](https://www.npmjs.com/package/@lerna-lite/core) | Lerna-Lite core & shared methods (internal use) | [changelog](https://github.com/lerna-lite/lerna-lite/blob/main/packages/core/CHANGELOG.md) |
 | [@lerna-lite/init](https://github.com/lerna-lite/lerna-lite/tree/main/packages/init) | [![npm](https://img.shields.io/npm/v/@lerna-lite/init.svg)](https://www.npmjs.com/package/@lerna-lite/init) | create a new Lerna-Lite repo | [changelog](https://github.com/lerna-lite/lerna-lite/blob/main/packages/init/CHANGELOG.md) |
 | [@lerna-lite/publish](https://github.com/lerna-lite/lerna-lite/tree/main/packages/publish) | [![npm](https://img.shields.io/npm/v/@lerna-lite/publish.svg)](https://www.npmjs.com/package/@lerna-lite/publish) | Publish packages in the current workspace | [changelog](https://github.com/lerna-lite/lerna-lite/blob/main/packages/publish/CHANGELOG.md)             |
