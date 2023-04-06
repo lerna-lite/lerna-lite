@@ -20,6 +20,7 @@
       "message": "chore(release): publish new version %v"
     }
   },
+  "changelogPreset": "conventional-changelog-conventionalcommits",
   "ignoreChanges": [
     "**/__fixtures__/**",
     "**/__tests__/**",

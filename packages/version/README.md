@@ -240,7 +240,7 @@ lerna version --conventional-commits --changelog-preset angular-bitbucket
 ```
 
 By default, the changelog preset is set to [`angular`](https://github.com/conventional-changelog/conventional-changelog/tree/master/packages/conventional-changelog-angular#angular-convention).
-In some cases you might want to change either use a another preset or a custom one.
+In some cases you might want to change either use another preset or a custom one.
 
 Presets are names of built-in or installable configuration for conventional changelog.
 Presets may be passed as the full name of the package, or the auto-expanded suffix
