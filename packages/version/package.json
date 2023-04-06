@@ -49,6 +49,7 @@
     "npm": ">=8.5.0"
   },
   "dependencies": {
+    "@lerna-lite/cli": "workspace:*",
     "@lerna-lite/core": "workspace:*",
     "@octokit/plugin-enterprise-rest": "^6.0.1",
     "@octokit/rest": "^19.0.7",

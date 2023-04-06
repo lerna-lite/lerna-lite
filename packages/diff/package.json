@@ -49,6 +49,7 @@
     "npm": ">=8.5.0"
   },
   "dependencies": {
+    "@lerna-lite/cli": "workspace:*",
     "@lerna-lite/core": "workspace:*"
   },
   "devDependencies": {
