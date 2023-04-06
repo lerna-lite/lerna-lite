@@ -1,3 +1,5 @@
+import { beforeAll, describe, expect, it, vi } from 'vitest';
+
 vi.mock('@lerna-lite/core', async () => ({
   ...(await vi.importActual<any>('@lerna-lite/core')),
   logOutput: (await vi.importActual<any>('../../../core/src/__mocks__/output')).logOutput,

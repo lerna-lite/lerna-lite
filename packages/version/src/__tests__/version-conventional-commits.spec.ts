@@ -1,3 +1,5 @@
+import { describe, expect, it, Mock, vi } from 'vitest';
+
 // local modules _must_ be explicitly mocked
 vi.mock('../lib/git-push', async () => await vi.importActual('../lib/__mocks__/git-push'));
 vi.mock('../lib/is-anything-committed', async () => await vi.importActual('../lib/__mocks__/is-anything-committed'));
@@ -23,7 +25,6 @@ vi.mock('@lerna-lite/core', async () => ({
 
 import { dirname, join, resolve as pathResolve } from 'node:path';
 import semver from 'semver';
-import { Mock } from 'vitest';
 import { fileURLToPath } from 'node:url';
 
 // mocked modules

@@ -110,7 +110,7 @@ export function toHaveBinaryLinks(received, ...inputs) {
 
   try {
     found = readdirSync(pkg.binLocation);
-  } catch (err) {
+  } catch (err: any) {
     if (links.length === 0 && err.code === 'ENOENT') {
       return {
         message: () => `${expectedName} not to have binary links`,

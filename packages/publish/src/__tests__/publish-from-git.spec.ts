@@ -1,3 +1,5 @@
+import { describe, expect, it, Mock, vi } from 'vitest';
+
 vi.mock('write-pkg', async () => await vi.importActual('../../../version/src/lib/__mocks__/write-pkg'));
 
 // FIXME: better mock for version command
@@ -44,7 +46,6 @@ const __dirname = dirname(__filename);
 const initFixture = initFixtureFactory(__dirname);
 
 // test command
-import { Mock } from 'vitest';
 import yargParser from 'yargs-parser';
 import { PublishCommand } from '../publish-command';
 

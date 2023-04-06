@@ -1,3 +1,5 @@
+import { Mock, vi } from 'vitest';
+
 const mockRunLifecycle = vi.fn((pkg) => Promise.resolve(pkg));
 const mockCreateRunner = vi.fn((opts) => (pkg, stage) => {
   // no longer the actual API, but approximates inner logic of default export
@@ -13,5 +15,5 @@ function getOrderedCalls() {
 }
 
 export const createRunner = mockCreateRunner;
-export const runLifecycle = mockRunLifecycle as vi.Mock<any, any, any> & { getOrderedCalls: () => any };
+export const runLifecycle = mockRunLifecycle as Mock & { getOrderedCalls: () => any };
 runLifecycle.getOrderedCalls = getOrderedCalls;

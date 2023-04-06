@@ -1,3 +1,4 @@
+import { describe, expect, it, vi } from 'vitest';
 import { exec } from '@lerna-lite/core';
 
 import { gitTag } from '../lib/git-tag';

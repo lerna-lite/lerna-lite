@@ -1,3 +1,5 @@
+import { beforeAll, describe, expect, it, vi } from 'vitest';
+
 vi.mock('@lerna-lite/core', async () => ({
   ...(await vi.importActual<any>('@lerna-lite/core')),
   Command: (await vi.importActual<any>('../../../core/src/command')).Command,

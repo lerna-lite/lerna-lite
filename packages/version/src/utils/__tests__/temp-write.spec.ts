@@ -1,3 +1,4 @@
+import { describe, expect, it, vi } from 'vitest';
 import { readFileSync } from 'node:fs';
 import { basename } from 'node:path';
 import { Readable } from 'node:stream';

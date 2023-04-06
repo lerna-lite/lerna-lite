@@ -1,3 +1,5 @@
+import { afterEach, Mock, vi } from 'vitest';
+
 const registry = new Map();
 
 // by default, act like a spy that populates registry
@@ -17,7 +19,7 @@ afterEach(() => {
   registry.clear();
 });
 
-export const npmPublish = mockNpmPublish as vi.Mock<Promise<void>, [pkg: any, tarData: any, opts: any]> & {
+export const npmPublish = mockNpmPublish as Mock & {
   order: () => any[];
   registry: Map<any, any>;
 };

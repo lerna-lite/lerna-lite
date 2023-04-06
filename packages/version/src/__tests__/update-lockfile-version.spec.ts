@@ -1,3 +1,5 @@
+import { describe, expect, it, Mock, test, vi } from 'vitest';
+
 vi.mock('load-json-file', async () => await vi.importActual('../lib/__mocks__/load-json-file'));
 vi.mock('@lerna-lite/core', async () => {
   const { exec, execSync } = await vi.importActual<any>('@lerna-lite/core');
@@ -9,7 +11,6 @@ vi.mock('@lerna-lite/core', async () => {
 });
 
 import npmlog from 'npmlog';
-import { Mock } from 'vitest';
 import { pathExistsSync, readJsonSync } from 'fs-extra/esm';
 import { promises as fsPromises } from 'node:fs';
 import { dirname as pathDirname, join } from 'node:path';

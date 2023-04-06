@@ -1,3 +1,4 @@
+import { beforeEach, describe, expect, it, vi } from 'vitest';
 import cloneDeep from 'clone-deep';
 import npmlog from 'npmlog';
 

@@ -1,3 +1,5 @@
+import { describe, expect, it, vi } from 'vitest';
+
 vi.mock('write-pkg', async () => await vi.importActual('../../../version/src/lib/__mocks__/write-pkg'));
 
 // FIXME: better mock for version command

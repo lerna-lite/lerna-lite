@@ -1,3 +1,5 @@
+import { afterEach, Mock, vi } from 'vitest';
+
 const registry = new Set();
 
 const mockPackDirectory = vi.fn((pkg) => {
@@ -14,5 +16,5 @@ afterEach(() => {
   registry.clear();
 });
 
-export const packDirectory = mockPackDirectory as vi.Mock<any, any, any> & { registry: Set<unknown> };
+export const packDirectory = mockPackDirectory as Mock & { registry: Set<unknown> };
 packDirectory.registry = registry;

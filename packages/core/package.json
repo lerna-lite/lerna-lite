@@ -16,14 +16,14 @@
     ".": {
       "import": "./dist/index.js",
       "default": "./dist/index.js",
-      "types": "./dist/types/index.d.ts"
+      "types": "./dist/index.d.ts"
     },
     "./*": "./*"
   },
   "typesVersions": {
     "*": {
       "*": [
-        "./dist/types/index.d.ts"
+        "./dist/index.d.ts"
       ]
     }
   },
@@ -79,6 +79,7 @@
   "devDependencies": {
     "@types/clone-deep": "^4.0.1",
     "@types/dedent": "^0.7.0",
+    "@types/fs-extra": "11.0.1",
     "@types/glob-parent": "^5.1.1",
     "@types/inquirer": "^9.0.3",
     "@types/minimatch": "^5.1.2",

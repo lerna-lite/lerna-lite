@@ -1,3 +1,5 @@
+import { afterEach, describe, expect, it, vi } from 'vitest';
+
 vi.mock('../GitLabClient');
 
 import { GitLabClient } from '../GitLabClient';

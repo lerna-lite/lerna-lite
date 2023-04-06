@@ -1,3 +1,5 @@
+import { afterEach, vi } from 'vitest';
+
 const releases = new Map();
 
 // keep test data isolated

@@ -1,7 +1,8 @@
+import { describe, expect, it } from 'vitest';
 import { move, pathExists } from 'fs-extra/esm';
 import { dirname, join } from 'node:path';
-import { Project } from '@lerna-lite/core';
 import { fileURLToPath } from 'node:url';
+import { Project } from '@lerna-lite/core';
 
 import { initFixtureFactory } from '@lerna-test/helpers';
 const __filename = fileURLToPath(import.meta.url);

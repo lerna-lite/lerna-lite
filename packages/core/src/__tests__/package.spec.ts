@@ -1,10 +1,11 @@
+import { describe, expect, it, Mock, vi } from 'vitest';
+
 import { homedir } from 'node:os';
 import { dirname, normalize, resolve as pathResolve } from 'node:path';
 import { loadJsonFile, loadJsonFileSync } from 'load-json-file';
 import npa from 'npm-package-arg';
 import npmlog from 'npmlog';
 import { fileURLToPath } from 'node:url';
-import { Mock } from 'vitest';
 import { writePackage } from 'write-pkg';
 
 vi.mock('load-json-file');

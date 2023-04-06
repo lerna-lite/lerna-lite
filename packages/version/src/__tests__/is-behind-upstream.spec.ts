@@ -1,3 +1,4 @@
+import { expect, test } from 'vitest';
 import { execa } from 'execa';
 import { isBehindUpstream } from '../lib/is-behind-upstream';
 import { cloneFixtureFactory } from '@lerna-test/helpers';

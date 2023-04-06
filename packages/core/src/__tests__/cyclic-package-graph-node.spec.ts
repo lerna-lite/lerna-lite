@@ -1,3 +1,4 @@
+import { describe, expect, it } from 'vitest';
 import { fileURLToPath } from 'node:url';
 import { dirname } from 'node:path';
 

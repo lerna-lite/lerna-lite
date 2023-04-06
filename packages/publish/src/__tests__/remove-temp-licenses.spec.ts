@@ -1,3 +1,4 @@
+import { describe, expect, it } from 'vitest';
 import { pathExists } from 'fs-extra/esm';
 import { dirname, join } from 'node:path';
 import { Project } from '@lerna-lite/core';

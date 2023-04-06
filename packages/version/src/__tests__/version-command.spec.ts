@@ -1,3 +1,5 @@
+import { describe, expect, it, Mock, vi } from 'vitest';
+
 // local modules _must_ be explicitly mocked
 vi.mock('../lib/git-push', async () => await vi.importActual('../lib/__mocks__/git-push'));
 vi.mock('../lib/is-anything-committed', async () => await vi.importActual('../lib/__mocks__/is-anything-committed'));
@@ -9,7 +11,7 @@ vi.mock('../conventional-commits/get-commits-since-last-release', async () => aw
 // also point to the local version command so that all mocks are properly used even by the command-runner
 vi.mock('@lerna-lite/version', async () => await vi.importActual('../version-command'));
 
-let collectUpdatesActual = null;
+let collectUpdatesActual: any = null;
 vi.mock('@lerna-lite/core', async (coreOriginal) => {
   const mod = (await coreOriginal()) as any;
   collectUpdatesActual = mod.collectUpdates;
@@ -63,7 +65,6 @@ const lernaVersion = commandRunner(cliCommands);
 const initFixture = initFixtureFactory(pathResolve(__dirname, '../../../publish/src/__tests__'));
 
 // file under test
-import { Mock } from 'vitest';
 import yargParser from 'yargs-parser';
 
 const createArgv = (cwd, ...args) => {

@@ -1,3 +1,4 @@
+import { vi } from 'vitest';
 import { join } from 'node:path';
 import semver from 'semver';
 const { outputFile } = await vi.importActual<any>('fs-extra/esm');

@@ -1,3 +1,5 @@
+import { describe, expect, it } from 'vitest';
+
 import { RawManifest } from '../../models';
 import { Package } from '../../package';
 import { PackageGraphNode } from '../lib/package-graph-node';

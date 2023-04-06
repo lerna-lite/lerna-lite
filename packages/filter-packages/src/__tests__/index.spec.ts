@@ -1,4 +1,6 @@
+import { describe, expect, it } from 'vitest';
 import { ExecOpts } from '@lerna-lite/core';
+
 import * as entry from '../index';
 
 describe('Testing common lib entry point', () => {

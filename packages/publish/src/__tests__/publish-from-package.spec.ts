@@ -1,3 +1,5 @@
+import { describe, expect, it, Mock, vi } from 'vitest';
+
 vi.mock('write-pkg', async () => await vi.importActual('../../../version/src/lib/__mocks__/write-pkg'));
 
 // FIXME: better mock for version command
@@ -31,13 +33,12 @@ vi.mock('../lib/npm-publish', async () => await vi.importActual('../lib/__mocks_
 import { remove } from 'fs-extra/esm';
 import { dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
-import { Mock } from 'vitest';
 import yargParser from 'yargs-parser';
 
 // mocked or stubbed modules
 import writePkg from 'write-pkg';
 import { npmPublish } from '../lib/npm-publish';
-import { npmPublish as npmPublishMock } from '../lib/__mocks__/npm-publish';
+import { npmPublish as npmPublishMock } from '../lib/__mocks__/npm-publish.js';
 import { logOutput, promptConfirmation, PublishCommandOption, throwIfUncommitted } from '@lerna-lite/core';
 import { getUnpublishedPackages } from '../lib/get-unpublished-packages';
 

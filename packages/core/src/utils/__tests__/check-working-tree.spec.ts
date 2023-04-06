@@ -1,7 +1,7 @@
+import { describe, expect, it, Mock, vi } from 'vitest';
+
 vi.mock('../describe-ref');
 vi.mock('../collect-uncommitted');
-
-import { Mock } from 'vitest';
 
 import { describeRef } from '../describe-ref';
 import { collectUncommitted } from '../collect-uncommitted';

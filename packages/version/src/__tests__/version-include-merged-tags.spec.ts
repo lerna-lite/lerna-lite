@@ -1,3 +1,5 @@
+import { describe, expect, it, vi } from 'vitest';
+
 // mocked modules of @lerna-lite/core
 vi.mock('@lerna-lite/core', async () => ({
   ...(await vi.importActual<any>('@lerna-lite/core')),

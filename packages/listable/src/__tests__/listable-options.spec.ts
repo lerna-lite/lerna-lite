@@ -1,3 +1,4 @@
+import { describe, expect, it } from 'vitest';
 import yargs from 'yargs/yargs';
 
 import { listable } from '../index';

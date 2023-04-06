@@ -1,3 +1,4 @@
+import { describe, expect, it, vi } from 'vitest';
 import nodeFs from 'node:fs';
 vi.spyOn(nodeFs, 'renameSync');
 

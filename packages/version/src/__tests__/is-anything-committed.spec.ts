@@ -1,3 +1,4 @@
+import { expect, test, vi } from 'vitest';
 import { execa } from 'execa';
 import { execSync } from '@lerna-lite/core';
 import { fileURLToPath } from 'node:url';

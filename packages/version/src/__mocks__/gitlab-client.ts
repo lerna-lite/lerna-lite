@@ -1,3 +1,5 @@
+import { afterEach, Mock, vi } from 'vitest';
+
 const releases = new Map();
 
 // keep test data isolated
@@ -14,5 +16,5 @@ const client = {
   },
 };
 
-export const createGitLabClient = vi.fn(() => client) as vi.Mock<any, any, any> & { releases: Map<any, any> };
+export const createGitLabClient = vi.fn(() => client) as Mock & { releases: Map<any, any> };
 createGitLabClient.releases = releases;

@@ -1,3 +1,5 @@
+import { describe, expect, test, vi } from 'vitest';
+
 vi.mock('@lerna-lite/core');
 vi.mock('../utils/temp-write');
 import { EOL } from 'node:os';

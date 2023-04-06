@@ -1,3 +1,5 @@
+import { describe, expect, it, Mock, vi } from 'vitest';
+
 vi.mock('read-package-json');
 vi.mock('libnpmpublish');
 vi.mock('fs/promises');
@@ -16,7 +18,6 @@ import { runLifecycle, Package, RawManifest } from '@lerna-lite/core';
 
 // helpers
 import { join, normalize } from 'node:path';
-import { Mock } from 'vitest';
 
 // file under test
 import { npmPublish } from '../lib/npm-publish';

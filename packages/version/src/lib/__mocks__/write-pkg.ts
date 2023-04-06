@@ -1,3 +1,4 @@
+import { afterEach, vi } from 'vitest';
 const { writePackage: actualWritePackage } = await vi.importActual<any>('write-pkg');
 
 const registryMap = new Map();

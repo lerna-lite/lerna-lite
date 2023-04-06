@@ -1,3 +1,5 @@
+import { afterEach, describe, expect, it, vi } from 'vitest';
+
 vi.mock('load-json-file', async () => await vi.importActual('../../../version/src/lib/__mocks__/load-json-file'));
 
 // FIXME: better mock for version command

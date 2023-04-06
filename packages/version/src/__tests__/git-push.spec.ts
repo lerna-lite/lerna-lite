@@ -1,3 +1,4 @@
+import { afterEach, expect, test, vi } from 'vitest';
 import { execa } from 'execa';
 import { fileURLToPath } from 'node:url';
 import { dirname } from 'node:path';

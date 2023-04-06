@@ -1,3 +1,5 @@
+import { describe, expect, it, vi } from 'vitest';
+
 vi.mock('../../git-clients', async () => ({
   ...(await vi.importActual<any>('../../git-clients')),
   createGitHubClient: (await vi.importActual<any>('../../__mocks__/github-client')).createGitHubClient,

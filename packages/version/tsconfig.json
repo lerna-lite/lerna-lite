@@ -4,15 +4,10 @@
   "compilerOptions": {
     "rootDir": "src",
     "outDir": "dist",
-    "typeRoots": ["typings"],
-    "types": ["vitest/globals", "node"]
+    "noEmit": false
   },
-  "exclude": ["dist", "node_modules", "**/*.spec.ts", "**/*.spec.mts", "**/__mocks__/**/*.*"],
   "filesGlob": ["./src/**/*.ts"],
-  "include": [
-    "src/**/*.ts",
-    "typings/**/*.ts",
-    "src/conventional-commits/__tests__/__fixtures__/fixed/scripts/legacy-callback-preset.cts"
-  ],
+  "include": ["src/**/*.ts"],
+  "exclude": ["dist", "node_modules", "**/__mocks__/**", "**/__tests__/**"],
   "references": [{ "path": "../core" }]
 }

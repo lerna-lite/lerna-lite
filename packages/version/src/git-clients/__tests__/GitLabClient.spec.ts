@@ -1,7 +1,8 @@
+import { describe, expect, it, Mock, vi } from 'vitest';
+
 vi.mock('node-fetch');
 
 import fetch from 'node-fetch';
-import { Mock } from 'vitest';
 
 import { GitLabClient } from '../GitLabClient';
 

@@ -1,3 +1,5 @@
+import { afterAll, afterEach, beforeAll, describe, expect, it, Mock, vi } from 'vitest';
+
 vi.mock('../lib/npm-run-script');
 vi.mock('nx/src/tasks-runner/life-cycles/task-profiling-life-cycle');
 
@@ -15,7 +17,6 @@ vi.mock('@lerna-lite/run', () => vi.importActual<any>('../run-command'));
 
 import { pathExists, readJson } from 'fs-extra/esm';
 import { globby } from 'globby';
-import { Mock } from 'vitest';
 import yargParser from 'yargs-parser';
 
 // make sure to import the output mock

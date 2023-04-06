@@ -1,7 +1,4 @@
-// import { collectPackages } from './lib/collect-packages.js';
-// import { collectPackages, getPackagesForOption } from '../utils/collect-updates/lib/index.js';
-// import { getPackagesForOption } from './lib/get-packages-for-option.js';
-// import { collectPackages, getPackagesForOption } from '../utils/collect-updates/collect-updates';
+import { afterEach, vi } from 'vitest';
 
 // collectUpdates.setUpdated(cwd, packageNames...)
 // otherwise, enables everything
@@ -22,14 +19,3 @@ afterEach(() => {
 });
 
 collectUpdates.setUpdated = setUpdated;
-
-// export const collectUpdates = { ...mockCollectUpdates, setUpdated };
-// export { collectUpdates2 as collectUpdates };
-// module.exports.collectUpdates = mockCollectUpdates;
-// module.exports.collectUpdates.setUpdated = setUpdated;
-// module.exports.collectPackages = collectPackages;
-// module.exports.getPackagesForOption = getPackagesForOption;
-
-// export const collectUpdates = mockCollectUpdates;
-// collectUpdates.setUpdated = setUpdated;
-// export { collectPackages, getPackagesForOption };

@@ -1,7 +1,8 @@
+import { afterEach, beforeEach, describe, expect, Mock, test, vi } from 'vitest';
+
 vi.mock('npm-registry-fetch');
 
 import fetch from 'npm-registry-fetch';
-import { Mock } from 'vitest';
 import { loggingOutput } from '@lerna-test/helpers/logging-output';
 import { FetchConfig } from '@lerna-lite/core';
 

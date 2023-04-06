@@ -1,3 +1,5 @@
+import { beforeAll, describe, expect, Mock, test, vi } from 'vitest';
+
 vi.mock('write-pkg', async () => await vi.importActual('../../../version/src/lib/__mocks__/write-pkg'));
 
 // mocked modules of @lerna-lite/core
@@ -23,7 +25,6 @@ vi.mock('../lib/npm-publish', async () => await vi.importActual('../lib/__mocks_
 import { outputFile } from 'fs-extra/esm';
 import { dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
-import { Mock } from 'vitest';
 import yargParser from 'yargs-parser';
 
 // mocked modules

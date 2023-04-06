@@ -1,3 +1,5 @@
+import { describe, expect, it } from 'vitest';
+
 import * as entry from '../index';
 
 describe('Testing common lib entry point', () => {
