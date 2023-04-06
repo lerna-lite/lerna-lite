@@ -119,11 +119,13 @@ importers:
 
   packages/changed:
     specifiers:
+      '@lerna-lite/cli': workspace:*
       '@lerna-lite/core': workspace:*
       '@lerna-lite/list': workspace:*
       '@lerna-lite/listable': workspace:*
       yargs-parser: ^21.1.1
     dependencies:
+      '@lerna-lite/cli': link:../cli
       '@lerna-lite/core': link:../core
       '@lerna-lite/list': link:../list
       '@lerna-lite/listable': link:../listable
@@ -135,8 +137,6 @@ importers:
       '@lerna-lite/core': workspace:*
       '@lerna-lite/init': workspace:*
       '@lerna-lite/listable': workspace:*
-      '@lerna-lite/publish': workspace:*
-      '@lerna-lite/version': workspace:*
       dedent: ^0.7.0
       dotenv: ^16.0.3
       import-local: ^3.1.0
@@ -149,8 +149,6 @@ importers:
       '@lerna-lite/core': link:../core
       '@lerna-lite/init': link:../init
       '@lerna-lite/listable': link:../listable
-      '@lerna-lite/publish': link:../publish
-      '@lerna-lite/version': link:../version
       dedent: 0.7.0
       dotenv: 16.0.3
       import-local: 3.1.0
@@ -246,6 +244,7 @@ importers:
 
   packages/diff:
     specifiers:
+      '@lerna-lite/cli': workspace:*
       '@lerna-lite/core': workspace:*
       '@types/fs-extra': 11.0.1
       execa: ^7.1.1
@@ -253,6 +252,7 @@ importers:
       npmlog: ^7.0.1
       yargs-parser: ^21.1.1
     dependencies:
+      '@lerna-lite/cli': link:../cli
       '@lerna-lite/core': link:../core
     devDependencies:
       '@types/fs-extra': 11.0.1
@@ -263,6 +263,7 @@ importers:
 
   packages/exec:
     specifiers:
+      '@lerna-lite/cli': workspace:*
       '@lerna-lite/core': workspace:*
       '@lerna-lite/filter-packages': workspace:*
       '@lerna-lite/profiler': workspace:*
@@ -276,6 +277,7 @@ importers:
       yargs: ^17.7.1
       yargs-parser: ^21.1.1
     dependencies:
+      '@lerna-lite/cli': link:../cli
       '@lerna-lite/core': link:../core
       '@lerna-lite/filter-packages': link:../filter-packages
       '@lerna-lite/profiler': link:../profiler
@@ -326,11 +328,13 @@ importers:
 
   packages/list:
     specifiers:
+      '@lerna-lite/cli': workspace:*
       '@lerna-lite/core': workspace:*
       '@lerna-lite/filter-packages': workspace:*
       '@lerna-lite/listable': workspace:*
       yargs-parser: ^21.1.1
     dependencies:
+      '@lerna-lite/cli': link:../cli
       '@lerna-lite/core': link:../core
       '@lerna-lite/filter-packages': link:../filter-packages
       '@lerna-lite/listable': link:../listable
@@ -371,6 +375,7 @@ importers:
 
   packages/publish:
     specifiers:
+      '@lerna-lite/cli': workspace:*
       '@lerna-lite/core': workspace:*
       '@lerna-lite/version': workspace:*
       '@npmcli/arborist': ^6.2.7
@@ -406,6 +411,7 @@ importers:
       yargs: ^17.7.1
       yargs-parser: ^21.1.1
     dependencies:
+      '@lerna-lite/cli': link:../cli
       '@lerna-lite/core': link:../core
       '@lerna-lite/version': link:../version
       '@npmcli/arborist': 6.2.7
@@ -444,6 +450,7 @@ importers:
 
   packages/run:
     specifiers:
+      '@lerna-lite/cli': workspace:*
       '@lerna-lite/core': workspace:*
       '@lerna-lite/filter-packages': workspace:*
       '@lerna-lite/profiler': workspace:*
@@ -458,6 +465,7 @@ importers:
       yargs: ^17.7.1
       yargs-parser: ^21.1.1
     dependencies:
+      '@lerna-lite/cli': link:../cli
       '@lerna-lite/core': link:../core
       '@lerna-lite/filter-packages': link:../filter-packages
       '@lerna-lite/profiler': link:../profiler
@@ -475,6 +483,7 @@ importers:
 
   packages/version:
     specifiers:
+      '@lerna-lite/cli': workspace:*
       '@lerna-lite/core': workspace:*
       '@npm/types': ^1.0.2
       '@octokit/plugin-enterprise-rest': ^6.0.1
@@ -526,6 +535,7 @@ importers:
       yargs: ^17.7.1
       yargs-parser: ^21.1.1
     dependencies:
+      '@lerna-lite/cli': link:../cli
       '@lerna-lite/core': link:../core
       '@octokit/plugin-enterprise-rest': 6.0.1
       '@octokit/rest': 19.0.7
@@ -580,6 +590,7 @@ importers:
 
   packages/watch:
     specifiers:
+      '@lerna-lite/cli': workspace:*
       '@lerna-lite/core': workspace:*
       '@lerna-lite/filter-packages': workspace:*
       chokidar: ^3.5.3
@@ -587,6 +598,7 @@ importers:
       path: ^0.12.7
       yargs-parser: ^21.1.1
     dependencies:
+      '@lerna-lite/cli': link:../cli
       '@lerna-lite/core': link:../core
       '@lerna-lite/filter-packages': link:../filter-packages
       chokidar: 3.5.3

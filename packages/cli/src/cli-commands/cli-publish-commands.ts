@@ -1,4 +1,3 @@
-import { PublishCommand } from '@lerna-lite/publish';
 import { PublishCommandOption } from '@lerna-lite/core';
 
 import cliVersionCmd, { addBumpPositional } from './cli-version-commands.js';
@@ -163,7 +162,17 @@ export default {
     return yargs;
   },
 
-  handler: (argv: PublishCommandOption) => {
-    return new PublishCommand(argv);
+  handler: async (argv: PublishCommandOption) => {
+    try {
+      // @ts-ignore
+      // eslint-disable-next-line
+      const { PublishCommand } = await import('@lerna-lite/publish');
+      new PublishCommand(argv);
+    } catch (err: unknown) {
+      console.error(
+        `"@lerna-lite/publish" is optional and was not found. Please install it with "npm install @lerna-lite/publish -D -W".`,
+        err
+      );
+    }
   },
 };
