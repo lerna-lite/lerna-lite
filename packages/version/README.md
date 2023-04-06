@@ -4,7 +4,7 @@
 
 # @lerna-lite/version
 
-## (`lerna version`) - Version command 📑
+## (`lerna version`) - Version command [optional] 📑
 
 Lerna-Lite Version command, bump version of packages changed since the last release.
 
@@ -13,8 +13,7 @@ Lerna-Lite Version command, bump version of packages changed since the last rele
 ## Installation
 
 ```sh
-# simple install or install it globally with -g
-npm install @lerna-lite/cli -D -W
+npm install @lerna-lite/version -D -W
 
 # then use it (see usage below)
 lerna version

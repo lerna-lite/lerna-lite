@@ -1,3 +1,5 @@
+import { describe, expect, it, vi } from 'vitest';
+
 vi.mock('@lerna-lite/list', () => null);
 import cliList from '../cli-list-commands';
 

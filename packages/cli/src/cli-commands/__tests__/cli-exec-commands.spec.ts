@@ -1,3 +1,5 @@
+import { describe, expect, it, vi } from 'vitest';
+
 vi.mock('@lerna-lite/exec', () => null);
 import cliExec from '../cli-exec-commands';
 

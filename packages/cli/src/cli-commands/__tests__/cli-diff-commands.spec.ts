@@ -1,3 +1,5 @@
+import { describe, expect, it, vi } from 'vitest';
+
 vi.mock('@lerna-lite/diff', () => null);
 import cliDiff from '../cli-diff-commands';
 

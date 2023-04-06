@@ -24,12 +24,12 @@
 - [`lerna.json` config file](https://github.com/lerna-lite/lerna-lite/wiki/lerna.json)
 - [Contributions](#contributions)
 - [Troubleshooting](https://github.com/lerna-lite/lerna-lite/wiki/Troubleshooting)
-- Commands
-  - included with CLI
+- Commands are **all** optional
+  - `init` is the only command installed by the CLI
     - 🛠️ [`init`](https://github.com/lerna-lite/lerna-lite/tree/main/packages/init#readme) - creates a new Lerna-Lite repo (adds `lerna.json` and a workspace structure)
+  - optional commands (requires **separate install**, refer to the [installation](#separate--optional-installs) table shown below)
     - ☁️ [`publish`](https://github.com/lerna-lite/lerna-lite/tree/main/packages/publish#readme) - publish every workspace packages that changed
     - 📑 [`version`](https://github.com/lerna-lite/lerna-lite/tree/main/packages/version#readme) - create new version for each workspace packages
-  - optional commands (requires **separate install**, refer to the [installation](#separate--optional-installs) table shown below)
     - 🕜 [`changed`](https://github.com/lerna-lite/lerna-lite/tree/main/packages/changed#readme) - list local packages that changed since last tagged release
     - 🌓 [`diff`](https://github.com/lerna-lite/lerna-lite/tree/main/packages/diff#readme) - git diff all packages or a single package since the last release
     - 👷 [`exec`](https://github.com/lerna-lite/lerna-lite/tree/main/packages/exec#readme) - execute shell command in each workspace package
@@ -198,26 +198,12 @@ or from a CDN
 }
 ```
 
-### CLI Installation
-
-```sh
-npm i @lerna-lite/cli -D -W
-```
-
-Minimum CLI install to get started with Lerna-Lite, that will give you access to the following list of commands:
-
-| Command | Description |
-| ------- | ----------- |
-| 🛠️ [init](https://github.com/lerna-lite/lerna-lite/tree/main/packages/init#readme) | create/initialize a new Lerna-Lite repo |
-| 📑 [version](https://github.com/lerna-lite/lerna-lite/tree/main/packages/version#readme) | create new version for each workspace package |
-| ☁️ [publish](https://github.com/lerna-lite/lerna-lite/tree/main/packages/publish#readme) | publish each workspace package |
-
-**Note:** Lerna-Lite CLI is only including 4 built-in commands by default (shown in table above), all other commands are **optional commands** and must be installed separately as shown in the table below.
-
 ### Separate / Optional Installs
 
 | Command | Install | Description |
 | --------| --------| ----------- |
+| 📑 [version](https://github.com/lerna-lite/lerna-lite/tree/main/packages/version#readme) | `npm i @lerna-lite/version -D -W` | create new version for each workspace package |
+| ☁️ [publish](https://github.com/lerna-lite/lerna-lite/tree/main/packages/publish#readme) | `npm i @lerna-lite/publish -D -W` | publish each workspace package |
 | 🕜 [changed](https://github.com/lerna-lite/lerna-lite/tree/main/packages/changed#readme) | `npm i @lerna-lite/changed -D -W` | list local packages changed since last release |
 | 🌓 [diff](https://github.com/lerna-lite/lerna-lite/tree/main/packages/diff#readme)       | `npm i @lerna-lite/diff -D -W`    | git diff all packages since the last release   |
 | 👷 [exec](https://github.com/lerna-lite/lerna-lite/tree/main/packages/exec#readme)       | `npm i @lerna-lite/exec -D -W`    | execute an command in each workspace package       |

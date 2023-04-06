@@ -4,7 +4,7 @@
 
 # @lerna-lite/publish
 
-## (`lerna publish`) - Publish command ☁️
+## (`lerna publish`) - Publish command [optional] ☁️
 
 Lerna-Lite Publish command, publish package(s) in the current project
 
@@ -13,8 +13,7 @@ Lerna-Lite Publish command, publish package(s) in the current project
 ## Installation
 
 ```sh
-# simple install or install it globally with -g
-npm install @lerna-lite/cli -D -W
+npm install @lerna-lite/publish -D -W
 
 # then use it (see usage below)
 lerna publish

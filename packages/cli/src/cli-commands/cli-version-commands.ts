@@ -1,7 +1,6 @@
-import log from 'npmlog';
-// import semver from 'semver';
-import { VersionCommand } from '@lerna-lite/version';
 import { VersionCommandOption } from '@lerna-lite/core';
+
+import log from 'npmlog';
 
 /**
  * @see https://github.com/yargs/yargs/blob/master/docs/advanced.md#providing-a-command-module
@@ -14,15 +13,6 @@ const addBumpPositionalFn = function (yargs: any, additionalKeywords: string[] =
   yargs.positional('bump', {
     describe: `Increment version(s) by explicit version _or_ semver keyword,\n${bumpOptionList}`,
     type: 'string',
-    // coerce: (choice = '') => {
-    //   const versionBump = choice || yargs.argv.bump;
-
-    //   if (versionBump && (!semver.valid(versionBump) || semverKeywords.indexOf(versionBump) === -1)) {
-    //     throw new Error(`bump must be an explicit version string _or_ one of: ${bumpOptionList}`);
-    //   }
-
-    //   return versionBump;
-    // },
   });
 };
 let addBumpPositional = addBumpPositionalFn;
@@ -307,7 +297,17 @@ export default {
   },
 
   handler: (argv: VersionCommandOption) => {
-    return new VersionCommand(argv);
+    try {
+      // @ts-ignore
+      // eslint-disable-next-line
+      const { VersionCommand } = await import('@lerna-lite/version');
+      new VersionCommand(argv);
+    } catch (err: unknown) {
+      console.error(
+        `"@lerna-lite/version" is optional and was not found. Please install it with "npm install @lerna-lite/version -D -W".`,
+        err
+      );
+    }
   },
 };
 

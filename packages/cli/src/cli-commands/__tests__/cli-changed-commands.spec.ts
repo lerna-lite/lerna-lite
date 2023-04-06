@@ -1,3 +1,5 @@
+import { describe, expect, it, vi } from 'vitest';
+
 vi.mock('@lerna-lite/changed', () => null);
 import cliChanged from '../cli-changed-commands';
 
