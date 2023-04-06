@@ -162,7 +162,7 @@ export default {
     return yargs;
   },
 
-  handler: (argv: PublishCommandOption) => {
+  handler: async (argv: PublishCommandOption) => {
     try {
       // @ts-ignore
       // eslint-disable-next-line

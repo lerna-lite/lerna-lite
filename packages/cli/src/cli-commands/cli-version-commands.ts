@@ -296,7 +296,7 @@ export default {
     });
   },
 
-  handler: (argv: VersionCommandOption) => {
+  handler: async (argv: VersionCommandOption) => {
     try {
       // @ts-ignore
       // eslint-disable-next-line
