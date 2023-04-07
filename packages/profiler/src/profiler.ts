@@ -12,10 +12,6 @@ const getTimeBasedFilename = () => {
   return `Lerna-Profile-${datetimeNormalized}.json`;
 };
 
-export function generateProfileOutputPath(outputDirectory?: string) {
-  return upath.join(upath.resolve(outputDirectory || '.'), getTimeBasedFilename());
-}
-
 const hrtimeToMicroseconds = (hrtime: any) => {
   return (hrtime[0] * 1e9 + hrtime[1]) / 1000;
 };
@@ -44,7 +40,7 @@ export class Profiler {
   constructor({ concurrency, log = npmlog, outputDirectory }: ProfilerConfig) {
     this.events = [];
     this.logger = log;
-    this.outputPath = generateProfileOutputPath(outputDirectory);
+    this.outputPath = upath.join(upath.resolve(outputDirectory || '.'), getTimeBasedFilename());
     this.threads = range(concurrency);
   }
 

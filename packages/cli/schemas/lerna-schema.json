@@ -18,11 +18,6 @@
       "description": "An array of globs where packages can be located.",
       "default": ["packages/*"]
     },
-    "useNx": {
-      "type": "boolean",
-      "description": "When true, Lerna will delegate the implementation details of `lerna run` to the Nx task runner instead of the default Lerna task runner (which uses `p-map` and `p-queue`).",
-      "default": false
-    },
     "command": {
       "type": "object",
       "description": "Options for individual Lerna commands.",
@@ -476,13 +471,6 @@
             "verbose": {
               "$ref": "#/$defs/commandOptions/shared/verbose"
             },
-            "skipNxCache": {
-              "$ref": "#/$defs/commandOptions/run/skipNxCache"
-            },
-            "loadEnvFiles": {
-              "$ref": "#/$defs/commandOptions/run/loadEnvFiles"
-            },
-
             "npmClient": {
               "$ref": "#/$defs/globals/npmClient"
             },
@@ -920,11 +908,6 @@
     "verifyAccess": {
       "$ref": "#/$defs/commandOptions/publish/verifyAccess"
     },
-
-    "skipNxCache": {
-      "$ref": "#/$defs/commandOptions/run/skipNxCache"
-    },
-
     "allowBranch": {
       "$ref": "#/$defs/commandOptions/version/allowBranch"
     },
@@ -1237,14 +1220,6 @@
         "dryRun": {
           "type": "boolean",
           "description": "During `lerna run`, when true, displays the process command that would be performed without executing it."
-        },
-        "loadEnvFiles": {
-          "type": "boolean",
-          "description": "During `lerna run`, when false, skip loading of environment variables from .env files."
-        },
-        "skipNxCache": {
-          "type": "boolean",
-          "description": "During `lerna run`, when true, skip the nx cache."
         }
       },
       "version": {
@@ -1543,7 +1518,7 @@
         },
         "verbose": {
           "type": "boolean",
-          "description": "When true, escalates loglevel to 'verbose' and shows nx verbose output if useNx is true."
+          "description": "When true, escalates loglevel to 'verbose'."
         }
       }
     }
