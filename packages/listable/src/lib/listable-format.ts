@@ -1,14 +1,12 @@
-import { Package, QueryGraph } from '@lerna-lite/core';
+import { ListableOption, Package, QueryGraph } from '@lerna-lite/core';
 import chalk from 'chalk';
 import columnify from 'columnify';
 import { relative } from 'node:path';
 
-import { ListableOptions } from '../models/index.js';
-
 /**
  * Format a list of packages according to specified options.
  * @param {import("@lerna/package").Package[]} pkgList
- * @param {import("./listable-options").ListableOptions} options
+ * @param {import("./listable-options").ListableOption} options
  */
 export function listableFormat(pkgList, options) {
   const viewOptions = parseViewOptions(options);
@@ -35,7 +33,7 @@ export function listableFormat(pkgList, options) {
 /**
  * @param {import("./listable-options").ListableOptions} options
  */
-function parseViewOptions(options: ListableOptions) {
+function parseViewOptions(options: ListableOption) {
   const alias = options._[0];
 
   return {
