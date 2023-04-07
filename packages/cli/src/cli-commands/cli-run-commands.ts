@@ -73,25 +73,6 @@ export default {
           describe: 'Output performance profile to custom location instead of default project root.',
           type: 'string',
         },
-        'skip-nx-cache': {
-          hidden: true,
-          type: 'boolean',
-        },
-        'load-env-files': {
-          group: 'Command Options:',
-          describe: 'When useNx is enabled, do we want to automatically load .env files',
-          type: 'boolean',
-        },
-        'use-nx': {
-          group: 'Command Options:',
-          describe: 'enables integration with Nx instead of the default Lerna task runner (which uses `p-map` and `p-queue`).',
-          type: 'boolean',
-        },
-        verbose: {
-          group: 'Command Options:',
-          describe: 'When "useNx" is true, show verbose output from dependent tasks.',
-          type: 'boolean',
-        },
       });
 
     return filterOptions(yargs);

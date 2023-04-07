@@ -88,16 +88,10 @@ export class RunCommand extends Command<RunCommandOption & FilterOptions> {
   }
 
   execute() {
-    if (!this.options.useNx) {
-      this.logger.info('', 'Executing command in %d %s: %j', this.count, this.packagePlural, this.joinedCommand);
-    }
-
     let chain: Promise<any> = Promise.resolve();
     const getElapsed = timer();
 
-    if (this.options.useNx) {
-      chain = chain.then(() => this.runScriptsUsingNx());
-    } else if (this.options.parallel) {
+    if (this.options.parallel) {
       this.logger.verbose('Parallel', this.joinedCommand!);
       chain = chain.then(() => this.runScriptInPackagesParallel());
     } else if (this.toposort) {
@@ -211,133 +205,6 @@ export class RunCommand extends Command<RunCommandOption & FilterOptions> {
     return chain;
   }
 
-  /** Nx requires quotes around script names of the form script:name*/
-  escapeScriptNameQuotes(scriptName: string) {
-    return scriptName.includes(':') ? `"${scriptName}"` : scriptName;
-  }
-
-  async runScriptsUsingNx() {
-    if (this.options.ci) {
-      process.env.CI = 'true';
-    }
-
-    if (this.options.profile) {
-      const absolutePath = generateProfileOutputPath(this.options.profileLocation);
-      // Nx requires a workspace relative path for this
-      process.env.NX_PROFILE = relative(this.project.rootPath, absolutePath);
-    }
-
-    performance.mark('init-local');
-    await this.configureNxOutput();
-    const { extraOptions, targetDependencies, options } = await this.prepNxOptions();
-    if (this.packagesWithScript.length === 1) {
-      const { runOne } = await import('nx/src/command-line/run-one.js');
-      const fullQualifiedTarget = this.packagesWithScript.map((p) => p.name)[0] + ':' + this.escapeScriptNameQuotes(this.script);
-      return (runOne as any)(
-        process.cwd(),
-        {
-          'project:target:configuration': fullQualifiedTarget,
-          ...options,
-        },
-        targetDependencies,
-        extraOptions
-      );
-    } else {
-      const { runMany } = await import('nx/src/command-line/run-many.js');
-      const projects = this.packagesWithScript.map((p) => p.name).join(',');
-      return (runMany as any)(
-        {
-          projects,
-          target: this.script,
-          ...options,
-        },
-        targetDependencies
-      );
-    }
-  }
-
-  async prepNxOptions() {
-    const nxJsonExists = pathExistsSync(join(this.project.rootPath, 'nx.json'));
-    const { readNxJson } = await import('nx/src/config/configuration.js');
-    const nxJson = readNxJson();
-    const targetDependenciesAreDefined = Object.keys(nxJson.targetDependencies || nxJson.targetDefaults || {}).length > 0;
-
-    const hasProjectSpecificNxConfiguration = this.packagesWithScript.some((p) => !!p.get('nx'));
-    const hasCustomizedNxConfiguration = (nxJsonExists && targetDependenciesAreDefined) || hasProjectSpecificNxConfiguration;
-    const mimicLernaDefaultBehavior = !hasCustomizedNxConfiguration;
-
-    const targetDependencies =
-      this.toposort && !this.options.parallel && mimicLernaDefaultBehavior
-        ? {
-            [this.script]: [
-              {
-                projects: 'dependencies',
-                target: this.script,
-              },
-            ],
-          }
-        : {};
-
-    if (this.options.prefix === false && !this.options.stream) {
-      this.logger.warn(this.name, `"no-prefix" is ignored when not using streaming output.`);
-    }
-
-    // prettier-ignore
-    const outputStyle = this.options.stream
-      ? this.prefix
-        ? 'stream'
-        : 'stream-without-prefixes'
-      : 'dynamic';
-
-    const options = {
-      outputStyle,
-      /**
-       * To match lerna's own behavior (via pMap's default concurrency), we set parallel to a very large number if
-       * the flag has been set (we can't use Infinity because that would cause issues with the task runner).
-       */
-      parallel: this.options.parallel && mimicLernaDefaultBehavior ? 999 : this.concurrency,
-      nxBail: this.bail,
-      nxIgnoreCycles: !this.options.rejectCycles,
-      skipNxCache: this.options.skipNxCache,
-      verbose: this.options.verbose,
-      __overrides__: this.args.map((t) => t.toString()),
-    };
-
-    if (hasCustomizedNxConfiguration) {
-      this.logger.verbose(this.name, 'Nx target configuration was found. Task dependencies will be automatically included.');
-
-      if (this.options.parallel || this.options.sort !== undefined) {
-        this.logger.warn(this.name, `"parallel", "sort", and "no-sort" are ignored when Nx targets are configured.`);
-      }
-
-      if (this.options.includeDependencies) {
-        this.logger.info(
-          this.name,
-          `Using the "include-dependencies" option when Nx targets are configured will include both task dependencies detected by Nx and project dependencies detected by Lerna.`
-        );
-      }
-
-      if (this.options.ignore) {
-        this.logger.info(
-          this.name,
-          `Using the "ignore" option when Nx targets are configured will exclude only tasks that are not determined to be required by Nx.`
-        );
-      }
-    } else {
-      this.logger.verbose(
-        this.name,
-        'Nx target configuration was not found. Task dependencies will not be automatically included.'
-      );
-    }
-
-    const extraOptions = {
-      excludeTaskDependencies: mimicLernaDefaultBehavior,
-      loadDotEnvFiles: this.options.loadEnvFiles ?? true,
-    };
-
-    return { targetDependencies, options, extraOptions };
-  }
-
   runScriptInPackagesParallel() {
     return pMap(this.packagesWithScript, (pkg: Package) => this.runScriptInPackageStreaming(pkg));
   }
@@ -375,23 +242,6 @@ export class RunCommand extends Command<RunCommandOption & FilterOptions> {
         return result;
       }
     );
-  }
-
-  async configureNxOutput() {
-    try {
-      const nxOutput = await import('nx/src/utils/output.js');
-      nxOutput.output.cliName = 'Lerna (powered by Nx)';
-      nxOutput.output.formatCommand = (taskId) => taskId;
-      return nxOutput as unknown;
-    } catch (e) {
-      this.logger.error(
-        '\n',
-        `You have set 'useNx: true' in lerna.json, but you haven't installed Nx as a dependency.\n` +
-          `To do it run 'npm install -D nx@latest' or 'yarn add -D -W nx@latest'.\n` +
-          `Optional: To configure the caching and distribution run 'npx nx init' after installing it.`
-      );
-      process.exit(1);
-    }
   }
 
   dryRunScript(scriptName: string, pkgName: string): Promise<any> {

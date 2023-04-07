@@ -402,9 +402,6 @@ export interface RunCommandOption {
   /** proxy for `--no-bail`. */
   bail?: boolean;
 
-  /** When useNx is enabled, do we want to automatically load .env files */
-  loadEnvFiles?: boolean;
-
   /** Do not prefix streaming output. */
   noPrefix?: boolean;
 
@@ -419,12 +416,6 @@ export interface RunCommandOption {
 
   /** npm script to run by the command. */
   script: string;
-
-  /** when "useNx" is enabled, do we want to skip caching with Nx? */
-  skipNxCache?: boolean;
-
-  /** enables integration with [Nx](https://nx.dev) instead of the default Lerna task runner (which uses `p-map` and `p-queue`). */
-  useNx?: boolean;
 }
 
 /** Watch Command will run a script whenever package(s) or their dependents change. */
