@@ -8,6 +8,8 @@ See [Conventional Commits](https://conventionalcommits.org) for commit guideline
 
 ### ⚠ BREAKING CHANGES
 
+> Refer to the [v2.0.0-alpha.2](https://github.com/lerna-lite/lerna-lite/releases/tag/v2.0.0-alpha.2) release for more info about the migration.
+
 * **run:** remove `--use-nx` (powered by Nx) option from `run` command (#554)
 * **publish:** make version & publish commands optionnal, closes #450 (#552)
 * **build:** migrate to ESM build & switch to Vitest for ESM support (#537)
