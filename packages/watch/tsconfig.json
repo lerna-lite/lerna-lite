@@ -9,5 +9,5 @@
   "exclude": ["dist", "node_modules", "**/*.spec.ts", "**/*.spec.mts", "**/__mocks__/**/*.*"],
   "filesGlob": ["./src/**/*.ts"],
   "include": ["src/**/*.ts"],
-  "references": [{ "path": "../core" }, { "path": "../filter-packages" }]
+  "references": [{ "path": "../cli" }, { "path": "../core" }, { "path": "../filter-packages" }]
 }
