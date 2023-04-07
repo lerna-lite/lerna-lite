@@ -6,14 +6,6 @@ See [Conventional Commits](https://conventionalcommits.org) for commit guideline
 
 ## [2.0.0-alpha.2](https://github.com/lerna-lite/lerna-lite/compare/v2.0.0-alpha.1...v2.0.0-alpha.2) (2023-04-07)
 
-**Note:** Version bump only for package lerna-lite
-
-## [2.0.0-alpha.1](https://github.com/lerna-lite/lerna-lite/compare/v2.0.0-alpha.0...v2.0.0-alpha.1) (2023-04-07)
-
-**Note:** Version bump only for package lerna-lite
-
-## [2.0.0-alpha.0](https://github.com/lerna-lite/lerna-lite/compare/v1.17.0...v2.0.0-alpha.0) (2023-04-07)
-
 ### ⚠ BREAKING CHANGES
 
 * **run:** remove `--use-nx` (powered by Nx) option from `run` command (#554)
