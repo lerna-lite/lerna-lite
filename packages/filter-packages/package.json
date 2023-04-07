@@ -1,7 +1,7 @@
 {
   "name": "@lerna-lite/filter-packages",
   "description": "Lerna-Lite common filtering utils used by a few optional commands (Exec/List/Run/Watch)",
-  "version": "1.17.0",
+  "version": "2.0.0-alpha.0",
   "files": [
     "/dist"
   ],

@@ -4,6 +4,18 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [2.0.0-alpha.0](https://github.com/lerna-lite/lerna-lite/compare/v1.17.0...v2.0.0-alpha.0) (2023-04-07)
+
+### ⚠ BREAKING CHANGES
+
+* **run:** remove `--use-nx` (powered by Nx) option from `run` command (#554)
+* **build:** migrate to ESM build & switch to Vitest for ESM support (#537)
+
+### Features
+
+* **build:** migrate to ESM build & switch to Vitest for ESM support ([#537](https://github.com/lerna-lite/lerna-lite/issues/537)) ([308fc2e](https://github.com/lerna-lite/lerna-lite/commit/308fc2e2d72d90f62b3a3954cbeeb3810b767a35)) - by @ghiscoding
+* **run:** remove `--use-nx` (powered by Nx) option from `run` command ([#554](https://github.com/lerna-lite/lerna-lite/issues/554)) ([b5ff9c9](https://github.com/lerna-lite/lerna-lite/commit/b5ff9c90bf73b221cb30c9dbc184bf34354222fd)) - by @ghiscoding
+
 # [1.17.0](https://github.com/lerna-lite/lerna-lite/compare/v1.16.2...v1.17.0) (2023-03-16)
 
 **Note:** Version bump only for package @lerna-lite/profiler
