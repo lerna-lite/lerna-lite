@@ -4,6 +4,10 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [2.0.0-alpha.1](https://github.com/lerna-lite/lerna-lite/compare/v2.0.0-alpha.0...v2.0.0-alpha.1) (2023-04-07)
+
+**Note:** Version bump only for package @lerna-lite/profiler
+
 ## [2.0.0-alpha.0](https://github.com/lerna-lite/lerna-lite/compare/v1.17.0...v2.0.0-alpha.0) (2023-04-07)
 
 ### ⚠ BREAKING CHANGES
