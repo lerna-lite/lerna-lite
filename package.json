@@ -26,7 +26,7 @@
     "preview:publish-alpha-dry-run": "lerna publish --dry-run --exact --include-merged-tags --preid alpha --dist-tag next prerelease",
     "preview:publish": "lerna publish from-package --dry-run",
     "preview:version": "lerna version --dry-run --independent-subpackages",
-    "preview:alpha-release": "pnpm build:full && lerna publish 2.0.0-alpha.0 --dist-tag next --dry-run",
+    "major-alpha-release": "pnpm build:full && lerna publish 2.0.0-alpha.0 --dist-tag next",
     "preview:roll-new-release": "pnpm build:full && pnpm new-version --dry-run && pnpm new-publish --dry-run",
     "new-version": "lerna version",
     "new-publish": "lerna publish from-package",
