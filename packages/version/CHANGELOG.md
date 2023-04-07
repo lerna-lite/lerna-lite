@@ -4,6 +4,26 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [2.0.0-alpha.0](https://github.com/lerna-lite/lerna-lite/compare/v1.17.0...v2.0.0-alpha.0) (2023-04-07)
+
+### ⚠ BREAKING CHANGES
+
+* **publish:** make version & publish commands optionnal, closes #450 (#552)
+* **build:** migrate to ESM build & switch to Vitest for ESM support (#537)
+
+### Features
+
+* **build:** migrate to ESM build & switch to Vitest for ESM support ([#537](https://github.com/lerna-lite/lerna-lite/issues/537)) ([308fc2e](https://github.com/lerna-lite/lerna-lite/commit/308fc2e2d72d90f62b3a3954cbeeb3810b767a35)) - by @ghiscoding
+* **cli:** remove listable dependency from CLI ([#553](https://github.com/lerna-lite/lerna-lite/issues/553)) ([1baa0d1](https://github.com/lerna-lite/lerna-lite/commit/1baa0d19b7116dac56c9326934c7cc9e07caec8c)) - by @ghiscoding
+* **publish:** make version & publish commands optionnal, closes [#450](https://github.com/lerna-lite/lerna-lite/issues/450) ([#552](https://github.com/lerna-lite/lerna-lite/issues/552)) ([11e4dab](https://github.com/lerna-lite/lerna-lite/commit/11e4dab70185198692b30cc72a184512bdc0e55d)) - by @ghiscoding
+* remove all deprecated options tagged to be removed in next major ([#545](https://github.com/lerna-lite/lerna-lite/issues/545)) ([a6f44b3](https://github.com/lerna-lite/lerna-lite/commit/a6f44b36038e5663d8c14fa062569b0f105a02f4)) - by @ghiscoding
+* **version:** remove deprecated `--changelog-version-message` option ([#543](https://github.com/lerna-lite/lerna-lite/issues/543)) ([d125eef](https://github.com/lerna-lite/lerna-lite/commit/d125eef8d1689403ed8959d60514aec29ca08886)) - by @ghiscoding
+* **version:** use await import instead of require() for GHE release ([#546](https://github.com/lerna-lite/lerna-lite/issues/546)) ([f6a2488](https://github.com/lerna-lite/lerna-lite/commit/f6a2488ac35f573e900674f74ace45e33d200968)) - by @ghiscoding
+
+### Bug Fixes
+
+* **deps:** update dependency minimatch to v8 and couple other deps patch ([#550](https://github.com/lerna-lite/lerna-lite/issues/550)) ([e7d29f1](https://github.com/lerna-lite/lerna-lite/commit/e7d29f105c4757526e059bc5ae1eaa24a6eeaa59)) - by @ghiscoding
+
 # [1.17.0](https://github.com/lerna-lite/lerna-lite/compare/v1.16.2...v1.17.0) (2023-03-16)
 
 ### Features
