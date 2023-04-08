@@ -25,7 +25,7 @@
 - [Contributions](#contributions)
 - [Troubleshooting](https://github.com/lerna-lite/lerna-lite/wiki/Troubleshooting)
 - Available Commands, they are **all optional**, refer to the **[Installation table](#separate--optional-installs)** shown below
-  - 🛠️ [`init`](https://github.com/lerna-lite/lerna-lite/tree/main/packages/init#readme) - creates a new Lerna-Lite workspace structure and adds `lerna.json` 
+  - 🛠️ [`init`](https://github.com/lerna-lite/lerna-lite/tree/main/packages/init#readme) - creates a new Lerna-Lite workspace structure and adds `lerna.json`
      - _`init` is the only command included with the CLI_
   - 📑 [`version`](https://github.com/lerna-lite/lerna-lite/tree/main/packages/version#readme) - create new version for each workspace packages
   - ☁️ [`publish`](https://github.com/lerna-lite/lerna-lite/tree/main/packages/publish#readme) - publish every workspace packages that changed
@@ -66,10 +66,6 @@ Here are some of the largest projects using the Lerna-Lite fork
   <img src="https://formatjs.io/img/logo.svg" width="25" height="25">
   Format.JS
 </a>&nbsp; | &nbsp;
-<a href="https://github.com/logaretm/vee-validate">
-  <img src="https://vee-validate.logaretm.com/v4/logo.png" width="25" height="25">
-  Vee-Validate
-</a>&nbsp; | &nbsp;
 <a href="https://github.com/johnsoncodehk/volar">
   <img src="https://vue.gallerycdn.vsassets.io/extensions/vue/volar/0.40.13/1662609095565/Microsoft.VisualStudio.Services.Icons.Default" width="25" height="25">
   Volar
@@ -99,7 +95,7 @@ Below are the main reasons as to why this fork was created:
     - this is no longer the case since Nrwl, the company behind Nx, took over stewardship of Lerna (we now keep their PRs in sync with them when possible)
 2. a desire to create a smaller and more modular lib that is lighter than the original all-in-one Lerna
     - Lerna-Lite is entirely modular, there are no command installed by default (except `init`) and you must install the commands you wish to use
-    - this fork is much smaller than the original Lerna, since we only copied half of their commands and they are **all** optional (install only what you use)    
+    - this fork is much smaller than the original Lerna, since we only copied half of their commands and they are **all** optional (install only what you use)
 3. rewrite the lib in TypeScript for type checking and eventually be compatible with ESM (now accomplished with v2.0.0)
 4. replicate a few opened PRs (fixes and features) from Lerna and also add extra features in Lerna-Lite
 5. Lerna is becoming more and another Nx product (**[Nx](https://nx.dev/)** is now a required dependency of Lerna but it's not in Lerna-Lite)
@@ -200,7 +196,7 @@ or from a CDN
 
 ### Separate / Optional Installs
 
-> **Note** the `version` package is a strict dependency of `publish`, so installing `publish` will automatically install `version` package behind the scene. 
+> **Note** the `version` package is a strict dependency of `publish`, so installing `publish` will automatically install `version` package behind the scene.
 
 | Command | Install | Description |
 | --------| --------| ----------- |
