@@ -108,4 +108,5 @@ export interface ReleaseCommandProps {
 export interface ReleaseOptions {
   gitRemote: string;
   execOpts: ExecOpts;
+  skipBumpOnlyRelease?: boolean;
 }

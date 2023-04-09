@@ -363,7 +363,7 @@ export class VersionCommand extends Command<VersionCommandOption> {
       await createRelease(
         this.releaseClient,
         { tags: this.tags, releaseNotes: this.releaseNotes },
-        { gitRemote: this.options.gitRemote, execOpts: this.execOpts },
+        { gitRemote: this.options.gitRemote, execOpts: this.execOpts, skipBumpOnlyRelease: this.options.skipBumpOnlyRelease },
         this.options.dryRun
       );
     } else {

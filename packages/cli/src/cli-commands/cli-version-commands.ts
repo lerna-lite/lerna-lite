@@ -250,6 +250,10 @@ export default {
         describe: 'Runs `npm install --package-lock-only` or equivalent depending on the package manager defined in `npmClient`.',
         type: 'boolean',
       },
+      'skip-bump-only-release': {
+        describe: 'do we want to skip creating a release (github/gitlab) when the version is a "version bump only"?',
+        type: 'boolean',
+      },
       'workspace-strict-match': {
         describe:
           'Strict match transform version numbers to an exact range (like "1.2.3") rather than with a caret (like ^1.2.3) when using `workspace:*`.',

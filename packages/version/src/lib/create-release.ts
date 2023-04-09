@@ -27,7 +27,7 @@ export async function createReleaseClient(type: 'github' | 'gitlab'): Promise<Gi
 export function createRelease(
   client: GitCreateReleaseClientOutput,
   { tags, releaseNotes }: ReleaseCommandProps,
-  { gitRemote, execOpts }: ReleaseOptions,
+  { gitRemote, execOpts, skipBumpOnlyRelease }: ReleaseOptions,
   dryRun = false
 ) {
   const { GH_TOKEN } = process.env;
@@ -37,8 +37,9 @@ export function createRelease(
     releaseNotes.map(({ notes, name }) => {
       const tag = name === 'fixed' ? tags[0] : tags.find((t) => t.startsWith(`${name}@`));
 
-      /* c8 ignore next 2 */
-      if (!tag) {
+      // when using independent mode, it could happen that a few version bump only releases are created
+      // and since these aren't very useful for most users, user could choose to skip creating these releases when detecting a version bump only
+      if (!tag || (skipBumpOnlyRelease && notes?.includes('**Note:** Version bump only for package'))) {
         return Promise.resolve();
       }
 
