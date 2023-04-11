@@ -28,6 +28,7 @@
     "preserveConstEnums": true,
     "preserveSymlinks": true,
     "pretty": true,
+    "removeComments": true,
     "rootDir": ".",
     "skipLibCheck": true,
     "skipDefaultLibCheck": true,
