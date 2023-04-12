@@ -2,6 +2,7 @@ import { configDefaults, defineConfig } from 'vitest/config';
 
 export default defineConfig({
   test: {
+    cache: false,
     clearMocks: true,
     environment: 'node',
     globals: true,
@@ -15,8 +16,7 @@ export default defineConfig({
       provider: 'c8',
     },
     snapshotFormat: {
-      escapeString: false,
-      printBasicPrototype: false,
+      escapeString: true,
     },
   },
 });

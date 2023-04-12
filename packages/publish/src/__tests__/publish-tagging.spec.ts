@@ -93,8 +93,8 @@ test('publish --temp-tag', async () => {
 
   expect((npmPublish as any).registry).toMatchInlineSnapshot(`
     Map {
-      '@integration/package-1' => 'lerna-temp',
-      '@integration/package-2' => 'lerna-temp',
+      @integration/package-1 => lerna-temp,
+      @integration/package-2 => lerna-temp,
     }
   `);
 
@@ -119,8 +119,8 @@ test('publish --dist-tag beta --temp-tag', async () => {
 
   expect((npmPublish as any).registry).toMatchInlineSnapshot(`
     Map {
-      '@integration/package-1' => 'lerna-temp',
-      '@integration/package-2' => 'lerna-temp',
+      @integration/package-1 => lerna-temp,
+      @integration/package-2 => lerna-temp,
     }
   `);
 
@@ -175,8 +175,8 @@ test('publish --pre-dist-tag beta --temp-tag', async () => {
 
   expect((npmPublish as any).registry).toMatchInlineSnapshot(`
     Map {
-      '@integration/package-1' => 'lerna-temp',
-      '@integration/package-2' => 'lerna-temp',
+      @integration/package-1 => lerna-temp,
+      @integration/package-2 => lerna-temp,
     }
   `);
 

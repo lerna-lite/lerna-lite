@@ -1,7 +1,7 @@
 // Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
 
 exports[`VersionCommand > --exact > updates existing exact versions 1`] = `
-v1.0.1
+"v1.0.1
 
 HEAD -> main, tag: v1.0.1
 
@@ -10,56 +10,56 @@ index SHA..SHA 100644
 --- a/lerna.json
 +++ b/lerna.json
 @@ -2 +2 @@
--  "version": "1.0.0",
-+  "version": "1.0.1",
+-  \\"version\\": \\"1.0.0\\",
++  \\"version\\": \\"1.0.1\\",
 diff --git a/packages/package-1/package.json b/packages/package-1/package.json
 index SHA..SHA 100644
 --- a/packages/package-1/package.json
 +++ b/packages/package-1/package.json
 @@ -3 +3 @@
--  "version": "1.0.0"
-+  "version": "1.0.1"
+-  \\"version\\": \\"1.0.0\\"
++  \\"version\\": \\"1.0.1\\"
 diff --git a/packages/package-2/package.json b/packages/package-2/package.json
 index SHA..SHA 100644
 --- a/packages/package-2/package.json
 +++ b/packages/package-2/package.json
 @@ -3 +3 @@
--  "version": "1.0.0",
-+  "version": "1.0.1",
+-  \\"version\\": \\"1.0.0\\",
++  \\"version\\": \\"1.0.1\\",
 @@ -5 +5 @@
--    "package-1": "1.0.0"
-+    "package-1": "1.0.1"
+-    \\"package-1\\": \\"1.0.0\\"
++    \\"package-1\\": \\"1.0.1\\"
 diff --git a/packages/package-3/package.json b/packages/package-3/package.json
 index SHA..SHA 100644
 --- a/packages/package-3/package.json
 +++ b/packages/package-3/package.json
 @@ -3 +3 @@
--  "version": "1.0.0",
-+  "version": "1.0.1",
+-  \\"version\\": \\"1.0.0\\",
++  \\"version\\": \\"1.0.1\\",
 @@ -5 +5 @@
--    "package-2": "1.0.0"
-+    "package-2": "1.0.1"
+-    \\"package-2\\": \\"1.0.0\\"
++    \\"package-2\\": \\"1.0.1\\"
 diff --git a/packages/package-4/package.json b/packages/package-4/package.json
 index SHA..SHA 100644
 --- a/packages/package-4/package.json
 +++ b/packages/package-4/package.json
 @@ -3 +3 @@
--  "version": "1.0.0",
-+  "version": "1.0.1",
+-  \\"version\\": \\"1.0.0\\",
++  \\"version\\": \\"1.0.1\\",
 diff --git a/packages/package-5/package.json b/packages/package-5/package.json
 index SHA..SHA 100644
 --- a/packages/package-5/package.json
 +++ b/packages/package-5/package.json
 @@ -4 +4 @@
--    "package-1": "1.0.0"
-+    "package-1": "1.0.1"
+-    \\"package-1\\": \\"1.0.0\\"
++    \\"package-1\\": \\"1.0.1\\"
 @@ -7 +7 @@
--  "version": "1.0.0"
-+  "version": "1.0.1"
+-  \\"version\\": \\"1.0.0\\"
++  \\"version\\": \\"1.0.1\\""
 `;
 
 exports[`VersionCommand > --exact > updates matching local dependencies of published packages with exact versions 1`] = `
-v1.0.1
+"v1.0.1
 
 HEAD -> main, tag: v1.0.1
 
@@ -68,66 +68,66 @@ index SHA..SHA 100644
 --- a/lerna.json
 +++ b/lerna.json
 @@ -2 +2 @@
--  "version": "1.0.0"
-+  "version": "1.0.1"
+-  \\"version\\": \\"1.0.0\\"
++  \\"version\\": \\"1.0.1\\"
 diff --git a/packages/package-1/package.json b/packages/package-1/package.json
 index SHA..SHA 100644
 --- a/packages/package-1/package.json
 +++ b/packages/package-1/package.json
 @@ -3 +3 @@
--  "version": "1.0.0"
-+  "version": "1.0.1"
+-  \\"version\\": \\"1.0.0\\"
++  \\"version\\": \\"1.0.1\\"
 diff --git a/packages/package-2/package.json b/packages/package-2/package.json
 index SHA..SHA 100644
 --- a/packages/package-2/package.json
 +++ b/packages/package-2/package.json
 @@ -3 +3 @@
--  "version": "1.0.0",
-+  "version": "1.0.1",
+-  \\"version\\": \\"1.0.0\\",
++  \\"version\\": \\"1.0.1\\",
 @@ -5 +5 @@
--    "package-1": "^1.0.0"
-+    "package-1": "1.0.1"
+-    \\"package-1\\": \\"^1.0.0\\"
++    \\"package-1\\": \\"1.0.1\\"
 diff --git a/packages/package-3/package.json b/packages/package-3/package.json
 index SHA..SHA 100644
 --- a/packages/package-3/package.json
 +++ b/packages/package-3/package.json
 @@ -3 +3 @@
--  "version": "1.0.0",
-+  "version": "1.0.1",
+-  \\"version\\": \\"1.0.0\\",
++  \\"version\\": \\"1.0.1\\",
 @@ -8 +8 @@
--    "package-2": "^1.0.0"
-+    "package-2": "1.0.1"
+-    \\"package-2\\": \\"^1.0.0\\"
++    \\"package-2\\": \\"1.0.1\\"
 diff --git a/packages/package-4/package.json b/packages/package-4/package.json
 index SHA..SHA 100644
 --- a/packages/package-4/package.json
 +++ b/packages/package-4/package.json
 @@ -3 +3 @@
--  "version": "1.0.0",
-+  "version": "1.0.1",
+-  \\"version\\": \\"1.0.0\\",
++  \\"version\\": \\"1.0.1\\",
 diff --git a/packages/package-5/package.json b/packages/package-5/package.json
 index SHA..SHA 100644
 --- a/packages/package-5/package.json
 +++ b/packages/package-5/package.json
 @@ -4 +4 @@
--    "package-1": "^1.0.0"
-+    "package-1": "1.0.1"
+-    \\"package-1\\": \\"^1.0.0\\"
++    \\"package-1\\": \\"1.0.1\\"
 @@ -7 +7 @@
--    "package-3": "^1.0.0"
-+    "package-3": "1.0.1"
+-    \\"package-3\\": \\"^1.0.0\\"
++    \\"package-3\\": \\"1.0.1\\"
 @@ -10 +10 @@
--  "version": "1.0.0"
-+  "version": "1.0.1"
+-  \\"version\\": \\"1.0.0\\"
++  \\"version\\": \\"1.0.1\\""
 `;
 
 exports[`VersionCommand > --no-git-tag-version > versions changed packages without git commit or push > gitHead 1`] = `
 {
-  name: package-1,
-  version: 1.0.1,
+  "name": "package-1",
+  "version": "1.0.1",
 }
 `;
 
 exports[`VersionCommand > --no-push > versions changed packages without git push 1`] = `
-v1.0.1
+"v1.0.1
 
 HEAD -> main, tag: v1.0.1
 
@@ -136,59 +136,59 @@ index SHA..SHA 100644
 --- a/lerna.json
 +++ b/lerna.json
 @@ -2 +2 @@
--  "version": "1.0.0"
-+  "version": "1.0.1"
+-  \\"version\\": \\"1.0.0\\"
++  \\"version\\": \\"1.0.1\\"
 diff --git a/packages/package-1/package.json b/packages/package-1/package.json
 index SHA..SHA 100644
 --- a/packages/package-1/package.json
 +++ b/packages/package-1/package.json
 @@ -3 +3 @@
--  "version": "1.0.0"
-+  "version": "1.0.1"
+-  \\"version\\": \\"1.0.0\\"
++  \\"version\\": \\"1.0.1\\"
 diff --git a/packages/package-2/package.json b/packages/package-2/package.json
 index SHA..SHA 100644
 --- a/packages/package-2/package.json
 +++ b/packages/package-2/package.json
 @@ -3 +3 @@
--  "version": "1.0.0",
-+  "version": "1.0.1",
+-  \\"version\\": \\"1.0.0\\",
++  \\"version\\": \\"1.0.1\\",
 @@ -5 +5 @@
--    "package-1": "^1.0.0"
-+    "package-1": "^1.0.1"
+-    \\"package-1\\": \\"^1.0.0\\"
++    \\"package-1\\": \\"^1.0.1\\"
 diff --git a/packages/package-3/package.json b/packages/package-3/package.json
 index SHA..SHA 100644
 --- a/packages/package-3/package.json
 +++ b/packages/package-3/package.json
 @@ -3 +3 @@
--  "version": "1.0.0",
-+  "version": "1.0.1",
+-  \\"version\\": \\"1.0.0\\",
++  \\"version\\": \\"1.0.1\\",
 @@ -8 +8 @@
--    "package-2": "^1.0.0"
-+    "package-2": "^1.0.1"
+-    \\"package-2\\": \\"^1.0.0\\"
++    \\"package-2\\": \\"^1.0.1\\"
 diff --git a/packages/package-4/package.json b/packages/package-4/package.json
 index SHA..SHA 100644
 --- a/packages/package-4/package.json
 +++ b/packages/package-4/package.json
 @@ -3 +3 @@
--  "version": "1.0.0",
-+  "version": "1.0.1",
+-  \\"version\\": \\"1.0.0\\",
++  \\"version\\": \\"1.0.1\\",
 diff --git a/packages/package-5/package.json b/packages/package-5/package.json
 index SHA..SHA 100644
 --- a/packages/package-5/package.json
 +++ b/packages/package-5/package.json
 @@ -4 +4 @@
--    "package-1": "^1.0.0"
-+    "package-1": "^1.0.1"
+-    \\"package-1\\": \\"^1.0.0\\"
++    \\"package-1\\": \\"^1.0.1\\"
 @@ -7 +7 @@
--    "package-3": "^1.0.0"
-+    "package-3": "^1.0.1"
+-    \\"package-3\\": \\"^1.0.0\\"
++    \\"package-3\\": \\"^1.0.1\\"
 @@ -10 +10 @@
--  "version": "1.0.0"
-+  "version": "1.0.1"
+-  \\"version\\": \\"1.0.0\\"
++  \\"version\\": \\"1.0.1\\""
 `;
 
 exports[`VersionCommand > independent mode > versions changed packages > commit 1`] = `
-chore: Publish new release
+"chore: Publish new release
 
  - package-1@1.0.1
  - package-2@2.1.0
@@ -203,67 +203,67 @@ index SHA..SHA 100644
 --- a/packages/package-1/package.json
 +++ b/packages/package-1/package.json
 @@ -3 +3 @@
--  "version": "1.0.0"
-+  "version": "1.0.1"
+-  \\"version\\": \\"1.0.0\\"
++  \\"version\\": \\"1.0.1\\"
 diff --git a/packages/package-2/package.json b/packages/package-2/package.json
 index SHA..SHA 100644
 --- a/packages/package-2/package.json
 +++ b/packages/package-2/package.json
 @@ -3 +3 @@
--  "version": "2.0.0",
-+  "version": "2.1.0",
+-  \\"version\\": \\"2.0.0\\",
++  \\"version\\": \\"2.1.0\\",
 @@ -5 +5 @@
--    "package-1": "^1.0.0"
-+    "package-1": "^1.0.1"
+-    \\"package-1\\": \\"^1.0.0\\"
++    \\"package-1\\": \\"^1.0.1\\"
 diff --git a/packages/package-3/package.json b/packages/package-3/package.json
 index SHA..SHA 100644
 --- a/packages/package-3/package.json
 +++ b/packages/package-3/package.json
 @@ -3 +3 @@
--  "version": "3.0.0",
-+  "version": "4.0.0",
+-  \\"version\\": \\"3.0.0\\",
++  \\"version\\": \\"4.0.0\\",
 @@ -5 +5 @@
--    "package-2": "^2.0.0"
-+    "package-2": "^2.1.0"
+-    \\"package-2\\": \\"^2.0.0\\"
++    \\"package-2\\": \\"^2.1.0\\"
 diff --git a/packages/package-4/package.json b/packages/package-4/package.json
 index SHA..SHA 100644
 --- a/packages/package-4/package.json
 +++ b/packages/package-4/package.json
 @@ -3 +3 @@
--  "version": "4.0.0",
-+  "version": "4.1.0",
+-  \\"version\\": \\"4.0.0\\",
++  \\"version\\": \\"4.1.0\\",
 diff --git a/packages/package-5/package.json b/packages/package-5/package.json
 index SHA..SHA 100644
 --- a/packages/package-5/package.json
 +++ b/packages/package-5/package.json
 @@ -4 +4 @@
--    "package-3": "^3.0.0"
-+    "package-3": "^4.0.0"
+-    \\"package-3\\": \\"^3.0.0\\"
++    \\"package-3\\": \\"^4.0.0\\"
 @@ -7 +7 @@
--  "version": "5.0.0"
-+  "version": "5.0.1"
+-  \\"version\\": \\"5.0.0\\"
++  \\"version\\": \\"5.0.1\\""
 `;
 
 exports[`VersionCommand > independent mode > versions changed packages > console output 1`] = `
-
+"
 Changes (5 packages):
  - package-1: 1.0.0 => 1.0.1
  - package-2: 2.0.0 => 2.1.0
  - package-3: 3.0.0 => 4.0.0
  - package-4: 4.0.0 => 4.1.0
  - package-5: 5.0.0 => 5.0.1 (private)
-
+"
 `;
 
 exports[`VersionCommand > independent mode > versions changed packages > gitHead 1`] = `
 {
-  name: package-1,
-  version: 1.0.1,
+  "name": "package-1",
+  "version": "1.0.1",
 }
 `;
 
 exports[`VersionCommand > normal mode > bumps all packages when major version selected 1`] = `
-v2.0.0
+"v2.0.0
 
 HEAD -> main, tag: v2.0.0
 
@@ -272,59 +272,59 @@ index SHA..SHA 100644
 --- a/lerna.json
 +++ b/lerna.json
 @@ -2 +2 @@
--  "version": "1.0.0"
-+  "version": "2.0.0"
+-  \\"version\\": \\"1.0.0\\"
++  \\"version\\": \\"2.0.0\\"
 diff --git a/packages/package-1/package.json b/packages/package-1/package.json
 index SHA..SHA 100644
 --- a/packages/package-1/package.json
 +++ b/packages/package-1/package.json
 @@ -3 +3 @@
--  "version": "1.0.0"
-+  "version": "2.0.0"
+-  \\"version\\": \\"1.0.0\\"
++  \\"version\\": \\"2.0.0\\"
 diff --git a/packages/package-2/package.json b/packages/package-2/package.json
 index SHA..SHA 100644
 --- a/packages/package-2/package.json
 +++ b/packages/package-2/package.json
 @@ -3 +3 @@
--  "version": "1.0.0",
-+  "version": "2.0.0",
+-  \\"version\\": \\"1.0.0\\",
++  \\"version\\": \\"2.0.0\\",
 @@ -5 +5 @@
--    "package-1": "^1.0.0"
-+    "package-1": "^2.0.0"
+-    \\"package-1\\": \\"^1.0.0\\"
++    \\"package-1\\": \\"^2.0.0\\"
 diff --git a/packages/package-3/package.json b/packages/package-3/package.json
 index SHA..SHA 100644
 --- a/packages/package-3/package.json
 +++ b/packages/package-3/package.json
 @@ -3 +3 @@
--  "version": "1.0.0",
-+  "version": "2.0.0",
+-  \\"version\\": \\"1.0.0\\",
++  \\"version\\": \\"2.0.0\\",
 @@ -8 +8 @@
--    "package-2": "^1.0.0"
-+    "package-2": "^2.0.0"
+-    \\"package-2\\": \\"^1.0.0\\"
++    \\"package-2\\": \\"^2.0.0\\"
 diff --git a/packages/package-4/package.json b/packages/package-4/package.json
 index SHA..SHA 100644
 --- a/packages/package-4/package.json
 +++ b/packages/package-4/package.json
 @@ -3 +3 @@
--  "version": "1.0.0",
-+  "version": "2.0.0",
+-  \\"version\\": \\"1.0.0\\",
++  \\"version\\": \\"2.0.0\\",
 diff --git a/packages/package-5/package.json b/packages/package-5/package.json
 index SHA..SHA 100644
 --- a/packages/package-5/package.json
 +++ b/packages/package-5/package.json
 @@ -4 +4 @@
--    "package-1": "^1.0.0"
-+    "package-1": "^2.0.0"
+-    \\"package-1\\": \\"^1.0.0\\"
++    \\"package-1\\": \\"^2.0.0\\"
 @@ -7 +7 @@
--    "package-3": "^1.0.0"
-+    "package-3": "^2.0.0"
+-    \\"package-3\\": \\"^1.0.0\\"
++    \\"package-3\\": \\"^2.0.0\\"
 @@ -10 +10 @@
--  "version": "1.0.0"
-+  "version": "2.0.0"
+-  \\"version\\": \\"1.0.0\\"
++  \\"version\\": \\"2.0.0\\""
 `;
 
 exports[`VersionCommand > normal mode > only bumps changed packages when non-major version selected 1`] = `
-v1.1.0
+"v1.1.0
 
 HEAD -> main, tag: v1.1.0
 
@@ -333,19 +333,19 @@ index SHA..SHA 100644
 --- a/lerna.json
 +++ b/lerna.json
 @@ -2 +2 @@
--  "version": "1.0.0"
-+  "version": "1.1.0"
+-  \\"version\\": \\"1.0.0\\"
++  \\"version\\": \\"1.1.0\\"
 diff --git a/packages/package-3/package.json b/packages/package-3/package.json
 index SHA..SHA 100644
 --- a/packages/package-3/package.json
 +++ b/packages/package-3/package.json
 @@ -3 +3 @@
--  "version": "1.0.0",
-+  "version": "1.1.0",
+-  \\"version\\": \\"1.0.0\\",
++  \\"version\\": \\"1.1.0\\","
 `;
 
 exports[`VersionCommand > normal mode > versions changed packages > commit 1`] = `
-v1.0.1
+"v1.0.1
 
 HEAD -> main, tag: v1.0.1
 
@@ -354,112 +354,112 @@ index SHA..SHA 100644
 --- a/lerna.json
 +++ b/lerna.json
 @@ -2 +2 @@
--  "version": "1.0.0"
-+  "version": "1.0.1"
+-  \\"version\\": \\"1.0.0\\"
++  \\"version\\": \\"1.0.1\\"
 diff --git a/packages/package-1/package.json b/packages/package-1/package.json
 index SHA..SHA 100644
 --- a/packages/package-1/package.json
 +++ b/packages/package-1/package.json
 @@ -3 +3 @@
--  "version": "1.0.0"
-+  "version": "1.0.1"
+-  \\"version\\": \\"1.0.0\\"
++  \\"version\\": \\"1.0.1\\"
 diff --git a/packages/package-2/package.json b/packages/package-2/package.json
 index SHA..SHA 100644
 --- a/packages/package-2/package.json
 +++ b/packages/package-2/package.json
 @@ -3 +3 @@
--  "version": "1.0.0",
-+  "version": "1.0.1",
+-  \\"version\\": \\"1.0.0\\",
++  \\"version\\": \\"1.0.1\\",
 @@ -5 +5 @@
--    "package-1": "^1.0.0"
-+    "package-1": "^1.0.1"
+-    \\"package-1\\": \\"^1.0.0\\"
++    \\"package-1\\": \\"^1.0.1\\"
 diff --git a/packages/package-3/package.json b/packages/package-3/package.json
 index SHA..SHA 100644
 --- a/packages/package-3/package.json
 +++ b/packages/package-3/package.json
 @@ -3 +3 @@
--  "version": "1.0.0",
-+  "version": "1.0.1",
+-  \\"version\\": \\"1.0.0\\",
++  \\"version\\": \\"1.0.1\\",
 @@ -8 +8 @@
--    "package-2": "^1.0.0"
-+    "package-2": "^1.0.1"
+-    \\"package-2\\": \\"^1.0.0\\"
++    \\"package-2\\": \\"^1.0.1\\"
 diff --git a/packages/package-4/package.json b/packages/package-4/package.json
 index SHA..SHA 100644
 --- a/packages/package-4/package.json
 +++ b/packages/package-4/package.json
 @@ -3 +3 @@
--  "version": "1.0.0",
-+  "version": "1.0.1",
+-  \\"version\\": \\"1.0.0\\",
++  \\"version\\": \\"1.0.1\\",
 diff --git a/packages/package-5/package.json b/packages/package-5/package.json
 index SHA..SHA 100644
 --- a/packages/package-5/package.json
 +++ b/packages/package-5/package.json
 @@ -4 +4 @@
--    "package-1": "^1.0.0"
-+    "package-1": "^1.0.1"
+-    \\"package-1\\": \\"^1.0.0\\"
++    \\"package-1\\": \\"^1.0.1\\"
 @@ -7 +7 @@
--    "package-3": "^1.0.0"
-+    "package-3": "^1.0.1"
+-    \\"package-3\\": \\"^1.0.0\\"
++    \\"package-3\\": \\"^1.0.1\\"
 @@ -10 +10 @@
--  "version": "1.0.0"
-+  "version": "1.0.1"
+-  \\"version\\": \\"1.0.0\\"
++  \\"version\\": \\"1.0.1\\""
 `;
 
 exports[`VersionCommand > normal mode > versions changed packages > console output 1`] = `
-
+"
 Changes (5 packages):
  - package-1: 1.0.0 => 1.0.1
  - package-2: 1.0.0 => 1.0.1
  - package-3: 1.0.0 => 1.0.1
  - package-4: 1.0.0 => 1.0.1
  - package-5: 1.0.0 => 1.0.1 (private)
-
+"
 `;
 
 exports[`VersionCommand > normal mode > versions changed packages > gitHead 1`] = `
 {
-  name: package-1,
-  version: 1.0.1,
+  "name": "package-1",
+  "version": "1.0.1",
 }
 `;
 
 exports[`VersionCommand > normal mode > versions changed packages > prompt 1`] = `
 [
   [
-    Select a new version (currently 1.0.0),
+    "Select a new version (currently 1.0.0)",
     {
-      choices: [
+      "choices": [
         {
-          name: Patch (1.0.1),
-          value: 1.0.1,
+          "name": "Patch (1.0.1)",
+          "value": "1.0.1",
         },
         {
-          name: Minor (1.1.0),
-          value: 1.1.0,
+          "name": "Minor (1.1.0)",
+          "value": "1.1.0",
         },
         {
-          name: Major (2.0.0),
-          value: 2.0.0,
+          "name": "Major (2.0.0)",
+          "value": "2.0.0",
         },
         {
-          name: Prepatch (1.0.1-alpha.0),
-          value: 1.0.1-alpha.0,
+          "name": "Prepatch (1.0.1-alpha.0)",
+          "value": "1.0.1-alpha.0",
         },
         {
-          name: Preminor (1.1.0-alpha.0),
-          value: 1.1.0-alpha.0,
+          "name": "Preminor (1.1.0-alpha.0)",
+          "value": "1.1.0-alpha.0",
         },
         {
-          name: Premajor (2.0.0-alpha.0),
-          value: 2.0.0-alpha.0,
+          "name": "Premajor (2.0.0-alpha.0)",
+          "value": "2.0.0-alpha.0",
         },
         {
-          name: Custom Prerelease,
-          value: PRERELEASE,
+          "name": "Custom Prerelease",
+          "value": "PRERELEASE",
         },
         {
-          name: Custom Version,
-          value: CUSTOM,
+          "name": "Custom Version",
+          "value": "CUSTOM",
         },
       ],
     },
@@ -468,7 +468,7 @@ exports[`VersionCommand > normal mode > versions changed packages > prompt 1`] =
 `;
 
 exports[`VersionCommand > normal mode > versions changed packages in dry-run mode > commit 1`] = `
-Init commit
+"Init commit
 
 HEAD -> main
 
@@ -479,7 +479,7 @@ index SHA..SHA
 +++ b/lerna.json
 @@ -0,0 +1,3 @@
 +{
-+  "version": "1.0.0"
++  \\"version\\": \\"1.0.0\\"
 +}
 diff --git a/package.json b/package.json
 new file mode 100644
@@ -488,7 +488,7 @@ index SHA..SHA
 +++ b/package.json
 @@ -0,0 +1,3 @@
 +{
-+  "name": "normal"
++  \\"name\\": \\"normal\\"
 +}
 diff --git a/packages/package-1/package.json b/packages/package-1/package.json
 new file mode 100644
@@ -497,8 +497,8 @@ index SHA..SHA
 +++ b/packages/package-1/package.json
 @@ -0,0 +1,4 @@
 +{
-+  "name": "package-1",
-+  "version": "1.0.0"
++  \\"name\\": \\"package-1\\",
++  \\"version\\": \\"1.0.0\\"
 +}
 diff --git a/packages/package-2/package.json b/packages/package-2/package.json
 new file mode 100644
@@ -507,10 +507,10 @@ index SHA..SHA
 +++ b/packages/package-2/package.json
 @@ -0,0 +1,7 @@
 +{
-+  "name": "package-2",
-+  "version": "1.0.0",
-+  "dependencies": {
-+    "package-1": "^1.0.0"
++  \\"name\\": \\"package-2\\",
++  \\"version\\": \\"1.0.0\\",
++  \\"dependencies\\": {
++    \\"package-1\\": \\"^1.0.0\\"
 +  }
 +}
 diff --git a/packages/package-3/package.json b/packages/package-3/package.json
@@ -520,13 +520,13 @@ index SHA..SHA
 +++ b/packages/package-3/package.json
 @@ -0,0 +1,10 @@
 +{
-+  "name": "package-3",
-+  "version": "1.0.0",
-+  "peerDependencies": {
-+    "package-2": "^1.0.0"
++  \\"name\\": \\"package-3\\",
++  \\"version\\": \\"1.0.0\\",
++  \\"peerDependencies\\": {
++    \\"package-2\\": \\"^1.0.0\\"
 +  },
-+  "devDependencies": {
-+    "package-2": "^1.0.0"
++  \\"devDependencies\\": {
++    \\"package-2\\": \\"^1.0.0\\"
 +  }
 +}
 diff --git a/packages/package-4/package.json b/packages/package-4/package.json
@@ -536,10 +536,10 @@ index SHA..SHA
 +++ b/packages/package-4/package.json
 @@ -0,0 +1,7 @@
 +{
-+  "name": "package-4",
-+  "version": "1.0.0",
-+  "dependencies": {
-+    "package-1": "^0.0.0"
++  \\"name\\": \\"package-4\\",
++  \\"version\\": \\"1.0.0\\",
++  \\"dependencies\\": {
++    \\"package-1\\": \\"^0.0.0\\"
 +  }
 +}
 diff --git a/packages/package-5/package.json b/packages/package-5/package.json
@@ -549,73 +549,73 @@ index SHA..SHA
 +++ b/packages/package-5/package.json
 @@ -0,0 +1,11 @@
 +{
-+  "name": "package-5",
-+  "dependencies": {
-+    "package-1": "^1.0.0"
++  \\"name\\": \\"package-5\\",
++  \\"dependencies\\": {
++    \\"package-1\\": \\"^1.0.0\\"
 +  },
-+  "optionalDependencies": {
-+    "package-3": "^1.0.0"
++  \\"optionalDependencies\\": {
++    \\"package-3\\": \\"^1.0.0\\"
 +  },
-+  "private": true,
-+  "version": "1.0.0"
-+}
++  \\"private\\": true,
++  \\"version\\": \\"1.0.0\\"
++}"
 `;
 
 exports[`VersionCommand > normal mode > versions changed packages in dry-run mode > console output 1`] = `
-
+"
 Changes (5 packages):
  - package-1: 1.0.0 => 1.0.1
  - package-2: 1.0.0 => 1.0.1
  - package-3: 1.0.0 => 1.0.1
  - package-4: 1.0.0 => 1.0.1
  - package-5: 1.0.0 => 1.0.1 (private)
-
+"
 `;
 
 exports[`VersionCommand > normal mode > versions changed packages in dry-run mode > gitHead 1`] = `
 {
-  name: package-1,
-  version: 1.0.1,
+  "name": "package-1",
+  "version": "1.0.1",
 }
 `;
 
 exports[`VersionCommand > normal mode > versions changed packages in dry-run mode > prompt 1`] = `
 [
   [
-    Select a new version (currently 1.0.0),
+    "Select a new version (currently 1.0.0)",
     {
-      choices: [
+      "choices": [
         {
-          name: Patch (1.0.1),
-          value: 1.0.1,
+          "name": "Patch (1.0.1)",
+          "value": "1.0.1",
         },
         {
-          name: Minor (1.1.0),
-          value: 1.1.0,
+          "name": "Minor (1.1.0)",
+          "value": "1.1.0",
         },
         {
-          name: Major (2.0.0),
-          value: 2.0.0,
+          "name": "Major (2.0.0)",
+          "value": "2.0.0",
         },
         {
-          name: Prepatch (1.0.1-alpha.0),
-          value: 1.0.1-alpha.0,
+          "name": "Prepatch (1.0.1-alpha.0)",
+          "value": "1.0.1-alpha.0",
         },
         {
-          name: Preminor (1.1.0-alpha.0),
-          value: 1.1.0-alpha.0,
+          "name": "Preminor (1.1.0-alpha.0)",
+          "value": "1.1.0-alpha.0",
         },
         {
-          name: Premajor (2.0.0-alpha.0),
-          value: 2.0.0-alpha.0,
+          "name": "Premajor (2.0.0-alpha.0)",
+          "value": "2.0.0-alpha.0",
         },
         {
-          name: Custom Prerelease,
-          value: PRERELEASE,
+          "name": "Custom Prerelease",
+          "value": "PRERELEASE",
         },
         {
-          name: Custom Version,
-          value: CUSTOM,
+          "name": "Custom Version",
+          "value": "CUSTOM",
         },
       ],
     },
@@ -624,7 +624,7 @@ exports[`VersionCommand > normal mode > versions changed packages in dry-run mod
 `;
 
 exports[`VersionCommand > normal mode > versions changed packages with publish prompt > commit 1`] = `
-v1.0.1
+"v1.0.1
 
 HEAD -> main, tag: v1.0.1
 
@@ -633,112 +633,112 @@ index SHA..SHA 100644
 --- a/lerna.json
 +++ b/lerna.json
 @@ -2 +2 @@
--  "version": "1.0.0"
-+  "version": "1.0.1"
+-  \\"version\\": \\"1.0.0\\"
++  \\"version\\": \\"1.0.1\\"
 diff --git a/packages/package-1/package.json b/packages/package-1/package.json
 index SHA..SHA 100644
 --- a/packages/package-1/package.json
 +++ b/packages/package-1/package.json
 @@ -3 +3 @@
--  "version": "1.0.0"
-+  "version": "1.0.1"
+-  \\"version\\": \\"1.0.0\\"
++  \\"version\\": \\"1.0.1\\"
 diff --git a/packages/package-2/package.json b/packages/package-2/package.json
 index SHA..SHA 100644
 --- a/packages/package-2/package.json
 +++ b/packages/package-2/package.json
 @@ -3 +3 @@
--  "version": "1.0.0",
-+  "version": "1.0.1",
+-  \\"version\\": \\"1.0.0\\",
++  \\"version\\": \\"1.0.1\\",
 @@ -5 +5 @@
--    "package-1": "^1.0.0"
-+    "package-1": "^1.0.1"
+-    \\"package-1\\": \\"^1.0.0\\"
++    \\"package-1\\": \\"^1.0.1\\"
 diff --git a/packages/package-3/package.json b/packages/package-3/package.json
 index SHA..SHA 100644
 --- a/packages/package-3/package.json
 +++ b/packages/package-3/package.json
 @@ -3 +3 @@
--  "version": "1.0.0",
-+  "version": "1.0.1",
+-  \\"version\\": \\"1.0.0\\",
++  \\"version\\": \\"1.0.1\\",
 @@ -8 +8 @@
--    "package-2": "^1.0.0"
-+    "package-2": "^1.0.1"
+-    \\"package-2\\": \\"^1.0.0\\"
++    \\"package-2\\": \\"^1.0.1\\"
 diff --git a/packages/package-4/package.json b/packages/package-4/package.json
 index SHA..SHA 100644
 --- a/packages/package-4/package.json
 +++ b/packages/package-4/package.json
 @@ -3 +3 @@
--  "version": "1.0.0",
-+  "version": "1.0.1",
+-  \\"version\\": \\"1.0.0\\",
++  \\"version\\": \\"1.0.1\\",
 diff --git a/packages/package-5/package.json b/packages/package-5/package.json
 index SHA..SHA 100644
 --- a/packages/package-5/package.json
 +++ b/packages/package-5/package.json
 @@ -4 +4 @@
--    "package-1": "^1.0.0"
-+    "package-1": "^1.0.1"
+-    \\"package-1\\": \\"^1.0.0\\"
++    \\"package-1\\": \\"^1.0.1\\"
 @@ -7 +7 @@
--    "package-3": "^1.0.0"
-+    "package-3": "^1.0.1"
+-    \\"package-3\\": \\"^1.0.0\\"
++    \\"package-3\\": \\"^1.0.1\\"
 @@ -10 +10 @@
--  "version": "1.0.0"
-+  "version": "1.0.1"
+-  \\"version\\": \\"1.0.0\\"
++  \\"version\\": \\"1.0.1\\""
 `;
 
 exports[`VersionCommand > normal mode > versions changed packages with publish prompt > console output 1`] = `
-
+"
 Changes (5 packages):
  - package-1: 1.0.0 => 1.0.1
  - package-2: 1.0.0 => 1.0.1
  - package-3: 1.0.0 => 1.0.1
  - package-4: 1.0.0 => 1.0.1
  - package-5: 1.0.0 => 1.0.1 (private)
-
+"
 `;
 
 exports[`VersionCommand > normal mode > versions changed packages with publish prompt > gitHead 1`] = `
 {
-  name: package-1,
-  version: 1.0.1,
+  "name": "package-1",
+  "version": "1.0.1",
 }
 `;
 
 exports[`VersionCommand > normal mode > versions changed packages with publish prompt > prompt 1`] = `
 [
   [
-    Select a new version (currently 1.0.0),
+    "Select a new version (currently 1.0.0)",
     {
-      choices: [
+      "choices": [
         {
-          name: Patch (1.0.1),
-          value: 1.0.1,
+          "name": "Patch (1.0.1)",
+          "value": "1.0.1",
         },
         {
-          name: Minor (1.1.0),
-          value: 1.1.0,
+          "name": "Minor (1.1.0)",
+          "value": "1.1.0",
         },
         {
-          name: Major (2.0.0),
-          value: 2.0.0,
+          "name": "Major (2.0.0)",
+          "value": "2.0.0",
         },
         {
-          name: Prepatch (1.0.1-alpha.0),
-          value: 1.0.1-alpha.0,
+          "name": "Prepatch (1.0.1-alpha.0)",
+          "value": "1.0.1-alpha.0",
         },
         {
-          name: Preminor (1.1.0-alpha.0),
-          value: 1.1.0-alpha.0,
+          "name": "Preminor (1.1.0-alpha.0)",
+          "value": "1.1.0-alpha.0",
         },
         {
-          name: Premajor (2.0.0-alpha.0),
-          value: 2.0.0-alpha.0,
+          "name": "Premajor (2.0.0-alpha.0)",
+          "value": "2.0.0-alpha.0",
         },
         {
-          name: Custom Prerelease,
-          value: PRERELEASE,
+          "name": "Custom Prerelease",
+          "value": "PRERELEASE",
         },
         {
-          name: Custom Version,
-          value: CUSTOM,
+          "name": "Custom Version",
+          "value": "CUSTOM",
         },
       ],
     },
@@ -747,7 +747,7 @@ exports[`VersionCommand > normal mode > versions changed packages with publish p
 `;
 
 exports[`VersionCommand > normal mode > versions changed packages with publish prompt in dry-run mode > commit 1`] = `
-Init commit
+"Init commit
 
 HEAD -> main
 
@@ -758,7 +758,7 @@ index SHA..SHA
 +++ b/lerna.json
 @@ -0,0 +1,3 @@
 +{
-+  "version": "1.0.0"
++  \\"version\\": \\"1.0.0\\"
 +}
 diff --git a/package.json b/package.json
 new file mode 100644
@@ -767,7 +767,7 @@ index SHA..SHA
 +++ b/package.json
 @@ -0,0 +1,3 @@
 +{
-+  "name": "normal"
++  \\"name\\": \\"normal\\"
 +}
 diff --git a/packages/package-1/package.json b/packages/package-1/package.json
 new file mode 100644
@@ -776,8 +776,8 @@ index SHA..SHA
 +++ b/packages/package-1/package.json
 @@ -0,0 +1,4 @@
 +{
-+  "name": "package-1",
-+  "version": "1.0.0"
++  \\"name\\": \\"package-1\\",
++  \\"version\\": \\"1.0.0\\"
 +}
 diff --git a/packages/package-2/package.json b/packages/package-2/package.json
 new file mode 100644
@@ -786,10 +786,10 @@ index SHA..SHA
 +++ b/packages/package-2/package.json
 @@ -0,0 +1,7 @@
 +{
-+  "name": "package-2",
-+  "version": "1.0.0",
-+  "dependencies": {
-+    "package-1": "^1.0.0"
++  \\"name\\": \\"package-2\\",
++  \\"version\\": \\"1.0.0\\",
++  \\"dependencies\\": {
++    \\"package-1\\": \\"^1.0.0\\"
 +  }
 +}
 diff --git a/packages/package-3/package.json b/packages/package-3/package.json
@@ -799,13 +799,13 @@ index SHA..SHA
 +++ b/packages/package-3/package.json
 @@ -0,0 +1,10 @@
 +{
-+  "name": "package-3",
-+  "version": "1.0.0",
-+  "peerDependencies": {
-+    "package-2": "^1.0.0"
++  \\"name\\": \\"package-3\\",
++  \\"version\\": \\"1.0.0\\",
++  \\"peerDependencies\\": {
++    \\"package-2\\": \\"^1.0.0\\"
 +  },
-+  "devDependencies": {
-+    "package-2": "^1.0.0"
++  \\"devDependencies\\": {
++    \\"package-2\\": \\"^1.0.0\\"
 +  }
 +}
 diff --git a/packages/package-4/package.json b/packages/package-4/package.json
@@ -815,10 +815,10 @@ index SHA..SHA
 +++ b/packages/package-4/package.json
 @@ -0,0 +1,7 @@
 +{
-+  "name": "package-4",
-+  "version": "1.0.0",
-+  "dependencies": {
-+    "package-1": "^0.0.0"
++  \\"name\\": \\"package-4\\",
++  \\"version\\": \\"1.0.0\\",
++  \\"dependencies\\": {
++    \\"package-1\\": \\"^0.0.0\\"
 +  }
 +}
 diff --git a/packages/package-5/package.json b/packages/package-5/package.json
@@ -828,73 +828,73 @@ index SHA..SHA
 +++ b/packages/package-5/package.json
 @@ -0,0 +1,11 @@
 +{
-+  "name": "package-5",
-+  "dependencies": {
-+    "package-1": "^1.0.0"
++  \\"name\\": \\"package-5\\",
++  \\"dependencies\\": {
++    \\"package-1\\": \\"^1.0.0\\"
 +  },
-+  "optionalDependencies": {
-+    "package-3": "^1.0.0"
++  \\"optionalDependencies\\": {
++    \\"package-3\\": \\"^1.0.0\\"
 +  },
-+  "private": true,
-+  "version": "1.0.0"
-+}
++  \\"private\\": true,
++  \\"version\\": \\"1.0.0\\"
++}"
 `;
 
 exports[`VersionCommand > normal mode > versions changed packages with publish prompt in dry-run mode > console output 1`] = `
-
+"
 Changes (5 packages):
  - package-1: 1.0.0 => 1.0.1
  - package-2: 1.0.0 => 1.0.1
  - package-3: 1.0.0 => 1.0.1
  - package-4: 1.0.0 => 1.0.1
  - package-5: 1.0.0 => 1.0.1 (private)
-
+"
 `;
 
 exports[`VersionCommand > normal mode > versions changed packages with publish prompt in dry-run mode > gitHead 1`] = `
 {
-  name: package-1,
-  version: 1.0.1,
+  "name": "package-1",
+  "version": "1.0.1",
 }
 `;
 
 exports[`VersionCommand > normal mode > versions changed packages with publish prompt in dry-run mode > prompt 1`] = `
 [
   [
-    Select a new version (currently 1.0.0),
+    "Select a new version (currently 1.0.0)",
     {
-      choices: [
+      "choices": [
         {
-          name: Patch (1.0.1),
-          value: 1.0.1,
+          "name": "Patch (1.0.1)",
+          "value": "1.0.1",
         },
         {
-          name: Minor (1.1.0),
-          value: 1.1.0,
+          "name": "Minor (1.1.0)",
+          "value": "1.1.0",
         },
         {
-          name: Major (2.0.0),
-          value: 2.0.0,
+          "name": "Major (2.0.0)",
+          "value": "2.0.0",
         },
         {
-          name: Prepatch (1.0.1-alpha.0),
-          value: 1.0.1-alpha.0,
+          "name": "Prepatch (1.0.1-alpha.0)",
+          "value": "1.0.1-alpha.0",
         },
         {
-          name: Preminor (1.1.0-alpha.0),
-          value: 1.1.0-alpha.0,
+          "name": "Preminor (1.1.0-alpha.0)",
+          "value": "1.1.0-alpha.0",
         },
         {
-          name: Premajor (2.0.0-alpha.0),
-          value: 2.0.0-alpha.0,
+          "name": "Premajor (2.0.0-alpha.0)",
+          "value": "2.0.0-alpha.0",
         },
         {
-          name: Custom Prerelease,
-          value: PRERELEASE,
+          "name": "Custom Prerelease",
+          "value": "PRERELEASE",
         },
         {
-          name: Custom Version,
-          value: CUSTOM,
+          "name": "Custom Version",
+          "value": "CUSTOM",
         },
       ],
     },
@@ -903,7 +903,7 @@ exports[`VersionCommand > normal mode > versions changed packages with publish p
 `;
 
 exports[`VersionCommand > versions all packages with cycles 1`] = `
-v2.0.0
+"v2.0.0
 
 HEAD -> main, tag: v2.0.0
 
@@ -911,11 +911,11 @@ lerna.json
 packages/a/package.json
 packages/b/package.json
 packages/c/package.json
-packages/d/package.json
+packages/d/package.json"
 `;
 
 exports[`VersionCommand > versions all transitive dependents after change 1`] = `
-v2.0.0
+"v2.0.0
 
 HEAD -> main, tag: v2.0.0
 
@@ -924,111 +924,111 @@ index SHA..SHA 100644
 --- a/lerna.json
 +++ b/lerna.json
 @@ -2 +2 @@
--  "version": "1.0.0"
-+  "version": "2.0.0"
+-  \\"version\\": \\"1.0.0\\"
++  \\"version\\": \\"2.0.0\\"
 diff --git a/packages/package-1/package.json b/packages/package-1/package.json
 index SHA..SHA 100644
 --- a/packages/package-1/package.json
 +++ b/packages/package-1/package.json
 @@ -4 +4 @@
--  "version": "1.0.0"
-+  "version": "2.0.0"
+-  \\"version\\": \\"1.0.0\\"
++  \\"version\\": \\"2.0.0\\"
 diff --git a/packages/package-2/package.json b/packages/package-2/package.json
 index SHA..SHA 100644
 --- a/packages/package-2/package.json
 +++ b/packages/package-2/package.json
 @@ -4 +4 @@
--  "version": "1.0.0",
-+  "version": "2.0.0",
+-  \\"version\\": \\"1.0.0\\",
++  \\"version\\": \\"2.0.0\\",
 @@ -6 +6 @@
--    "package-1": "^1.0.0"
-+    "package-1": "^2.0.0"
+-    \\"package-1\\": \\"^1.0.0\\"
++    \\"package-1\\": \\"^2.0.0\\"
 diff --git a/packages/package-3/package.json b/packages/package-3/package.json
 index SHA..SHA 100644
 --- a/packages/package-3/package.json
 +++ b/packages/package-3/package.json
 @@ -4 +4 @@
--  "version": "1.0.0",
-+  "version": "2.0.0",
+-  \\"version\\": \\"1.0.0\\",
++  \\"version\\": \\"2.0.0\\",
 @@ -6 +6 @@
--    "package-2": "^1.0.0"
-+    "package-2": "^2.0.0"
+-    \\"package-2\\": \\"^1.0.0\\"
++    \\"package-2\\": \\"^2.0.0\\"
 diff --git a/packages/package-4/package.json b/packages/package-4/package.json
 index SHA..SHA 100644
 --- a/packages/package-4/package.json
 +++ b/packages/package-4/package.json
 @@ -4 +4 @@
--  "version": "1.0.0",
-+  "version": "2.0.0",
+-  \\"version\\": \\"1.0.0\\",
++  \\"version\\": \\"2.0.0\\",
 @@ -6 +6 @@
--    "package-3": "^1.0.0"
-+    "package-3": "^2.0.0"
+-    \\"package-3\\": \\"^1.0.0\\"
++    \\"package-3\\": \\"^2.0.0\\"
 diff --git a/packages/package-5/package.json b/packages/package-5/package.json
 index SHA..SHA 100644
 --- a/packages/package-5/package.json
 +++ b/packages/package-5/package.json
 @@ -4 +4 @@
--  "version": "1.0.0",
-+  "version": "2.0.0",
+-  \\"version\\": \\"1.0.0\\",
++  \\"version\\": \\"2.0.0\\",
 @@ -6 +6 @@
--    "package-4": "^1.0.0"
-+    "package-4": "^2.0.0"
+-    \\"package-4\\": \\"^1.0.0\\"
++    \\"package-4\\": \\"^2.0.0\\""
 `;
 
 exports[`VersionCommand > with root lockfile on npm lockfile version >=2 > should update project root lockfile version 2 for every necessary properties by writing directly to the file 1`] = `
 {
-  dependencies: {
-    @my-workspace/package-1: {
-      requires: {
-        tiny-tarball: ^1.0.0,
+  "dependencies": {
+    "@my-workspace/package-1": {
+      "requires": {
+        "tiny-tarball": "^1.0.0",
       },
-      version: file:packages/package-1,
+      "version": "file:packages/package-1",
     },
-    @my-workspace/package-2: {
-      requires: {
-        @my-workspace/package-1: ^3.0.0,
+    "@my-workspace/package-2": {
+      "requires": {
+        "@my-workspace/package-1": "^3.0.0",
       },
-      version: file:packages/package-2,
+      "version": "file:packages/package-2",
     },
   },
-  lockfileVersion: 2,
-  name: my-workspace,
-  packages: {
-    : {
-      license: MIT,
-      name: my-workspace,
-      workspaces: [
-        ./packages/package-1,
-        ./packages/package-2,
+  "lockfileVersion": 2,
+  "name": "my-workspace",
+  "packages": {
+    "": {
+      "license": "MIT",
+      "name": "my-workspace",
+      "workspaces": [
+        "./packages/package-1",
+        "./packages/package-2",
       ],
     },
-    node_modules/package-1: {
-      link: true,
-      resolved: packages/package-1,
+    "node_modules/package-1": {
+      "link": true,
+      "resolved": "packages/package-1",
     },
-    node_modules/package-2: {
-      link: true,
-      resolved: packages/package-2,
+    "node_modules/package-2": {
+      "link": true,
+      "resolved": "packages/package-2",
     },
-    packages/package-1: {
-      license: MIT,
-      name: @my-workspace/package-1,
-      tiny-tarball: {
-        integrity: sha1-u/EC1a5zr+LFUyleD7AiMCFvZbE=,
-        resolved: https://registry.npmjs.org/tiny-tarball/-/tiny-tarball-1.0.0.tgz,
-        version: 1.0.0,
+    "packages/package-1": {
+      "license": "MIT",
+      "name": "@my-workspace/package-1",
+      "tiny-tarball": {
+        "integrity": "sha1-u/EC1a5zr+LFUyleD7AiMCFvZbE=",
+        "resolved": "https://registry.npmjs.org/tiny-tarball/-/tiny-tarball-1.0.0.tgz",
+        "version": "1.0.0",
       },
-      version: 3.0.0,
+      "version": "3.0.0",
     },
-    packages/package-2: {
-      dependencies: {
-        @my-workspace/package-1: ^3.0.0,
+    "packages/package-2": {
+      "dependencies": {
+        "@my-workspace/package-1": "^3.0.0",
       },
-      license: MIT,
-      name: @my-workspace/package-2,
-      version: 3.0.0,
+      "license": "MIT",
+      "name": "@my-workspace/package-2",
+      "version": "3.0.0",
     },
   },
-  requires: true,
+  "requires": true,
 }
 `;
