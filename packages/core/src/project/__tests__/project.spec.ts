@@ -220,15 +220,15 @@ describe('Project', () => {
       expect(result).toMatchInlineSnapshot(`
         [
           {
-            "name": "pkg-1",
-            "version": "1.0.0",
+            name: pkg-1,
+            version: 1.0.0,
           },
           {
-            "dependencies": {
-              "pkg-1": "^1.0.0",
+            dependencies: {
+              pkg-1: ^1.0.0,
             },
-            "name": "pkg-2",
-            "version": "1.0.0",
+            name: pkg-2,
+            version: 1.0.0,
           },
         ]
       `);
@@ -246,15 +246,15 @@ describe('Project', () => {
       expect(project.getPackagesSync()).toMatchInlineSnapshot(`
         [
           {
-            "name": "pkg-1",
-            "version": "1.0.0",
+            name: pkg-1,
+            version: 1.0.0,
           },
           {
-            "dependencies": {
-              "pkg-1": "^1.0.0",
+            dependencies: {
+              pkg-1: ^1.0.0,
             },
-            "name": "pkg-2",
-            "version": "1.0.0",
+            name: pkg-2,
+            version: 1.0.0,
           },
         ]
       `);

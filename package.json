@@ -37,6 +37,7 @@
     "lint": "eslint packages -c .eslintrc.json --no-eslintrc --ignore-path .gitignore --cache --cache-location ./node_modules/.cache/eslint",
     "outdated:ws": "pnpm -r --stream outdated",
     "test": "vitest --watch --no-threads",
+    "posttest": "node scripts/cleanup-temp-files.mjs",
     "test:coverage": "vitest --coverage --no-threads",
     "test:coverage:update": "vitest --coverage --no-threads --update"
   },
@@ -74,7 +75,7 @@
     "@types/yargs": "^17.0.24",
     "@typescript-eslint/eslint-plugin": "^5.57.1",
     "@typescript-eslint/parser": "^5.57.1",
-    "@vitest/coverage-c8": "^0.29.8",
+    "@vitest/coverage-c8": "^0.30.1",
     "conventional-changelog-conventionalcommits": "^5.0.0",
     "cross-env": "^7.0.3",
     "eslint": "^8.37.0",
@@ -105,7 +106,7 @@
     "tsm": "^2.3.0",
     "typescript": "^5.0.3",
     "vite": "^4.2.1",
-    "vitest": "^0.29.8",
+    "vitest": "^0.30.1",
     "write-json-file": "^5.0.0"
   },
   "pnpm": {

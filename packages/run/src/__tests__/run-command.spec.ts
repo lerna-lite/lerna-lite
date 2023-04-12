@@ -284,15 +284,15 @@ describe('RunCommand', () => {
 
       expect(ranInPackagesStreaming(testDir)).toMatchInlineSnapshot(`
         [
-          'packages/package-cycle-1 npm run env (prefixed: true)',
-          'packages/package-cycle-2 npm run env (prefixed: true)',
-          'packages/package-cycle-extraneous-1 npm run env (prefixed: true)',
-          'packages/package-cycle-extraneous-2 npm run env (prefixed: true)',
-          'packages/package-dag-1 npm run env (prefixed: true)',
-          'packages/package-dag-2a npm run env (prefixed: true)',
-          'packages/package-dag-2b npm run env (prefixed: true)',
-          'packages/package-dag-3 npm run env (prefixed: true)',
-          'packages/package-standalone npm run env (prefixed: true)',
+          packages/package-cycle-1 npm run env (prefixed: true),
+          packages/package-cycle-2 npm run env (prefixed: true),
+          packages/package-cycle-extraneous-1 npm run env (prefixed: true),
+          packages/package-cycle-extraneous-2 npm run env (prefixed: true),
+          packages/package-dag-1 npm run env (prefixed: true),
+          packages/package-dag-2a npm run env (prefixed: true),
+          packages/package-dag-2b npm run env (prefixed: true),
+          packages/package-dag-3 npm run env (prefixed: true),
+          packages/package-standalone npm run env (prefixed: true),
         ]
       `);
     });
