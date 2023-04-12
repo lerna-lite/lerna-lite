@@ -172,6 +172,9 @@ export interface ProjectConfig extends LernaConfig, QueryGraphConfig {
   /** During `lerna exec` and `lerna run`, stream output with lines prefixed by originating package name. */
   stream?: boolean;
 
+  /** Enables integration with [Nx](https://nx.dev). */
+  useNx?: boolean;
+
   /** When useNx is true, show verbose output from dependent tasks. */
   verbose?: boolean;
 
