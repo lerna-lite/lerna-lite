@@ -1,6 +1,7 @@
-import { afterEach, beforeAll, describe, expect, it, Mock, vi } from 'vitest';
+import { afterAll, afterEach, beforeAll, describe, expect, it, Mock, vi } from 'vitest';
 
 vi.mock('../lib/npm-run-script');
+vi.mock('nx/src/tasks-runner/life-cycles/task-profiling-life-cycle');
 
 vi.mock('@lerna-lite/core', async () => ({
   ...(await vi.importActual<any>('@lerna-lite/core')), // return the other real methods, below we'll mock only 2 of the methods
@@ -371,6 +372,150 @@ describe('RunCommand', () => {
       const command = new RunCommand(createArgv(testDir, 'env', '--reject-cycles'));
 
       await expect(command).rejects.toThrow('Dependency cycles detected, you should fix these!');
+    });
+  });
+
+  // this is a temporary set of tests, which will be replaced by verdacio-driven tests
+  // once the required setup is fully set up
+  describe('in a repo powered by Nx', () => {
+    let testDir;
+    let collectedOutput = '';
+    let originalStdout;
+
+    beforeAll(async () => {
+      testDir = await initFixture('powered-by-nx-with-target-defaults');
+      process.env.NX_WORKSPACE_ROOT_PATH = testDir;
+      // @ts-ignore
+      vi.spyOn(process, 'exit').mockImplementation((code: any) => {
+        if (code !== 0) {
+          throw new Error();
+        }
+      });
+      originalStdout = process.stdout.write;
+      (process.stdout as any).write = (v) => {
+        collectedOutput = `${collectedOutput}\n${v}`;
+      };
+    });
+
+    afterAll(() => {
+      process.stdout.write = originalStdout;
+    });
+
+    it('runs a script in packages', async () => {
+      collectedOutput = '';
+      await lernaRun(testDir)('my-script');
+      expect(collectedOutput).toContain('package-1');
+      expect(collectedOutput).toContain('package-3');
+      expect(collectedOutput).toContain('Successfully ran target');
+    });
+
+    it('runs a script in packages in CI mode', async () => {
+      collectedOutput = '';
+      await lernaRun(testDir)('my-script', '--ci');
+
+      expect(process.env.CI).toBeTruthy();
+      expect(collectedOutput).toContain('package-1');
+      expect(collectedOutput).toContain('package-3');
+      expect(collectedOutput).toContain('Successfully ran target');
+    });
+
+    it('runs a script with a colon in the script name', async () => {
+      collectedOutput = '';
+      await lernaRun(testDir)('another-script:but-with-colons');
+      expect(collectedOutput).toContain('package-1-script-with-colons');
+      expect(collectedOutput).toContain('Successfully ran target');
+    });
+
+    it('runs a script only in scoped packages', async () => {
+      collectedOutput = '';
+      await lernaRun(testDir)('my-script', '--scope', 'package-1');
+      expect(collectedOutput).toContain('package-1');
+      expect(collectedOutput).not.toContain('package-3');
+    });
+
+    it('does not run a script in ignored packages', async () => {
+      collectedOutput = '';
+      await lernaRun(testDir)('my-script', '--ignore', 'package-@(2|3|4)');
+
+      expect(collectedOutput).toContain('package-1');
+      expect(collectedOutput).not.toContain('package-3');
+
+      const logMessages = loggingOutput('info');
+      expect(logMessages).toContain(
+        'Using the "ignore" option when Nx targets are configured will exclude only tasks that are not determined to be required by Nx.'
+      );
+    });
+
+    it('runs a script in packages with --stream', async () => {
+      collectedOutput = '';
+      await lernaRun(testDir)('my-script', '--stream');
+
+      expect(collectedOutput).toContain('Lerna (powered by Nx)');
+      // expect(collectedOutput).toContain('Running target my-script for 2 project(s)');
+      expect(collectedOutput).toContain('package-1@1.0.0 my-script');
+      expect(collectedOutput).toContain('package-3@1.0.0 my-script');
+    });
+
+    it('runs a script in packages with --stream and --no-prefix', async () => {
+      collectedOutput = '';
+      await lernaRun(testDir)('my-script', '--stream', '--no-prefix');
+
+      expect(collectedOutput).toContain('Lerna (powered by Nx)');
+      expect(collectedOutput).toContain('package-1@1.0.0 my-script');
+      expect(collectedOutput).toContain('package-3@1.0.0 my-script');
+    });
+
+    it('runs a cacheable script', async () => {
+      collectedOutput = '';
+      await new RunCommand(createArgv(testDir, 'my-cacheable-script'));
+      expect(collectedOutput).not.toContain('Nx read the output from the cache');
+
+      collectedOutput = '';
+      await new RunCommand(createArgv(testDir, 'my-cacheable-script'));
+      expect(collectedOutput).toContain('Nx read the output from the cache');
+
+      collectedOutput = '';
+      await new RunCommand(createArgv(testDir, 'my-cacheable-script', '--skip-nx-cache'));
+      expect(collectedOutput).not.toContain('Nx read the output from the cache');
+    });
+
+    it('should log a warning when using obsolete options with useNx', async () => {
+      collectedOutput = '';
+
+      await lernaRun(testDir)('my-script', '--sort');
+
+      const [logMessage] = loggingOutput('warn');
+      expect(logMessage).toContain('"parallel", "sort", and "no-sort" are ignored when Nx targets are configured.');
+      expect(collectedOutput).toContain('package-1');
+    });
+
+    it('should log some infos when using "includeDependencies" options with useNx', async () => {
+      collectedOutput = '';
+
+      await lernaRun(testDir)('my-script', '--include-dependencies', '--', '--silent');
+
+      const logMessages = loggingOutput('info');
+      expect(logMessages).toContain(
+        'Using the "include-dependencies" option when Nx targets are configured will include both task dependencies detected by Nx and project dependencies detected by Lerna.'
+      );
+      expect(collectedOutput).toContain('package-1');
+    });
+
+    it('logs a warning when using no-prefix and streaming output', async () => {
+      collectedOutput = '';
+      await lernaRun(testDir)('my-script', '--scope', 'package-1', '--no-prefix', '--no-stream');
+
+      const logMessages = loggingOutput('warn');
+      expect(logMessages).toContain('"no-prefix" is ignored when not using streaming output.');
+      expect(collectedOutput).toContain('package-1');
+    });
+
+    it('generate an Nx profile and assigns the project relative path to NX_PROFILE environment variable', async () => {
+      collectedOutput = '';
+      await lernaRun(testDir)('my-script', '--scope', 'package-1', '--profile');
+
+      expect(collectedOutput).toContain('package-1');
+      expect(process.env.NX_PROFILE).toContain('Lerna-Profile');
     });
   });
 });
