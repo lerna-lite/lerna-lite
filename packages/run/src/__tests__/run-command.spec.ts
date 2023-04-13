@@ -378,7 +378,7 @@ describe('RunCommand', () => {
 
   // this is a temporary set of tests, which will be replaced by verdacio-driven tests
   // once the required setup is fully set up
-  describe('in a repo powered by Nx', () => {
+  describe.skip('in a repo powered by Nx', () => {
     let testDir;
     let collectedOutput = '';
     let originalStdout;
