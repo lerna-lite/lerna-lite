@@ -92,10 +92,9 @@ For more info on how to setup a workspace, choose the best option for you: [npm 
 Below are the main reasons as to why this fork was created:
 
 1. Lerna repo was unmaintained for nearly 2 years (in early 2022, dependencies were really out of date)
-    - this is no longer the case since Nrwl, the company behind Nx, took over stewardship of Lerna (we now try to replicate Lerna PRs into Lerna-Lite when possible)
+    - this is no longer the case since Nrwl, the company behind Nx, took over stewardship of Lerna (so we now try to replicate Lerna's PRs into Lerna-Lite when possible)
 2. a desire to create a smaller and more modular lib that is lighter than the original all-in-one Lerna
-    - Lerna-Lite is entirely modular, there are no command installed by default (except `init`) and you must install the commands you wish to use
-    - this fork is much smaller than the original Lerna, since we only copied half of their commands and they are **all** optional (install only what you use)
+    - Lerna-Lite is now entirely modular, all commands are optional and the user must chose which command(s) to install (install only what you use)
 3. rewrite the lib in TypeScript for type checking and eventually be compatible with ESM (which was accomplished with v2.0.0 and is now ESM only)
 4. replicate a few opened PRs (fixes and features) from Lerna and also add extra features in Lerna-Lite
 5. Lerna is becoming more and more another Nx product (**[Nx](https://nx.dev/)** is now a required dependency of Lerna but it's not in Lerna-Lite)
@@ -106,13 +105,14 @@ changes and changelogs
    - [lerna version --changelog-header-message "msg"](https://github.com/lerna-lite/lerna-lite/tree/main/packages/version#--changelog-header-message-msg) it could be used to add sponsor badges in changelogs
    - [lerna version --changelog-include-commits-client-login](https://github.com/lerna-lite/lerna-lite/tree/main/packages/version#--changelog-include-commits-client-login-msg) to add PR contributors
    - [lerna version --allow-peer-dependencies-update](https://github.com/lerna-lite/lerna-lite/tree/main/packages/version#--allow-peer-dependencies-update)
+   - [lerna version --skip-bump-only-release](https://github.com/lerna-lite/lerna-lite/tree/main/packages/version#--skip-bump-only-release)
    - [lerna publish --remove-package-fields](https://github.com/lerna-lite/lerna-lite/tree/main/packages/publish#--remove-package-fields-fields) (cleanup fields from `package.json` before publishing, Lerna-Lite removes `scripts` and `devDependencies` through this option)
    - in summary the best feature of Lerna-Lite has to be its modularity, you only install what you really need and use (see [installation](#cli-installation) below)
       - a large portion of the users are only interested in version/publish features
 
 ### This lib will help you with
 
-> **Note** all Lerna-Lite commands are optional, refer to [Installation table](#separate--optional-installs) for more info
+> **Note** all commands are optional in Lerna-Lite, refer to [Installation table](#separate--optional-installs) for more info
 
 #### [Version](https://github.com/lerna-lite/lerna-lite/tree/main/packages/version) and [Publish](https://github.com/lerna-lite/lerna-lite/tree/main/packages/publish) commands
 
@@ -199,11 +199,9 @@ or from a CDN
 
 ### Separate / Optional Installs
 
-> **Note** the `version` package is a strict dependency of `publish`, so installing `publish` will automatically install `version` (command) package behind the scene.
-
 | Command | Install | Description |
 | --------| --------| ----------- |
-| ☁️ [publish](https://github.com/lerna-lite/lerna-lite/tree/main/packages/publish#readme) | `npm i @lerna-lite/publish -D -W` | publish each workspace package (includes `version` command) |
+| ☁️ [publish](https://github.com/lerna-lite/lerna-lite/tree/main/packages/publish#readme) * | `npm i @lerna-lite/publish -D -W` | publish each workspace package |
 | 📑 [version](https://github.com/lerna-lite/lerna-lite/tree/main/packages/version#readme) | `npm i @lerna-lite/version -D -W` | create new version for each workspace package |
 | 🕜 [changed](https://github.com/lerna-lite/lerna-lite/tree/main/packages/changed#readme) | `npm i @lerna-lite/changed -D -W` | list local packages changed since last release |
 | 🌓 [diff](https://github.com/lerna-lite/lerna-lite/tree/main/packages/diff#readme)       | `npm i @lerna-lite/diff -D -W`    | git diff all packages since the last release   |
@@ -211,6 +209,8 @@ or from a CDN
 | 📖 [list](https://github.com/lerna-lite/lerna-lite/tree/main/packages/list#readme)       | `npm i @lerna-lite/list -D -W`    | list local packages                            |
 | 🏃 [run](https://github.com/lerna-lite/lerna-lite/tree/main/packages/run#readme)         | `npm i @lerna-lite/run -D -W`      | run npm script in each workspace package           |
 | 👓 [watch](https://github.com/lerna-lite/lerna-lite/tree/main/packages/watch#readme)     | `npm i @lerna-lite/watch -D -W`    | watch for changes within packages and execute commands when fired         |
+
+> **Note** since the `publish` package depends on the `version` package, you could simply install `@lerna-lite/publish` and that will automatically provide you the `version` (command) package behind the scene.
 
 ### Usage
 
@@ -236,21 +236,21 @@ npm uninstall lerna -W   # OR yarn remove lerna -W
 npm uninstall -g lerna   # OR yarn global remove lerna
 ```
 
-2. install Lerna-Lite CLI which will provide access only to the `init` command
+2. install Lerna-Lite CLI which will provide you the `init` command (only)
 
 ```sh
 # Lerna CLI (includes `init`)
 npm install @lerna-lite/cli -D -W
 ```
 
-3. finally install any of the command(s) you wish to use (`changed`, `diff`, `exec`, `list`, `run`, `publish`, `version` or `watch`)
+3. finally install all Lerna-Lite command(s) that you wish to use (`changed`, `diff`, `exec`, `list`, `run`, `publish`, `version` or `watch`)
 _refer to [installation](#installation) table above_
 
 ```sh
 # install any of the optional commands (refer to installation table)
 npm install @lerna-lite/publish -D -W
 ```
-> **Note** you might see a lot of diff changes in your `changelog.md` files after switching from Lerna, that is totally expected since Lerna-Lite has code in place to remove extra empty lines that Lerna was adding for no reason.
+> **Note** on `changelog.md`, you might see a lot of diff changes in your `changelog.md` files after switching to Lerna-Lite and that is totally expected since Lerna-Lite has code in place to remove extra empty lines that Lerna was adding for no reason.
 
 ## Project Demo?
 
