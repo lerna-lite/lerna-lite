@@ -18,5 +18,10 @@ export default defineConfig({
     snapshotFormat: {
       escapeString: true,
     },
+    onConsoleLog(log, type) {
+      if (type === 'stderr' && log.includes(`Could not find 'nx' module`)) {
+        return false;
+      }
+    },
   },
 });
