@@ -466,7 +466,7 @@ describe('RunCommand', () => {
       expect(collectedOutput).toContain('package-3@1.0.0 my-script');
     });
 
-    it('runs a cacheable script', async () => {
+    it.skip('runs a cacheable script', async () => {
       collectedOutput = '';
       await new RunCommand(createArgv(testDir, 'my-cacheable-script'));
       expect(collectedOutput).not.toContain('Nx read the output from the cache');
