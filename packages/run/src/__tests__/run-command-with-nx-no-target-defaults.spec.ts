@@ -43,6 +43,8 @@ describe('RunCommand', () => {
     beforeAll(async () => {
       testDir = await initFixture('powered-by-nx');
       process.env.NX_WORKSPACE_ROOT_PATH = testDir;
+      process.env.NX_DAEMON = 'false';
+
       // @ts-ignore
       vi.spyOn(process, 'exit').mockImplementation(() => {
         // do nothing
