@@ -655,6 +655,9 @@
             "forceGitTag": {
               "$ref": "#/$defs/commandOptions/version/forceGitTag"
             },
+            "skipBumpOnlyRelease": {
+              "$ref": "#/$defs/commandOptions/version/skipBumpOnlyRelease"
+            },
             "syncWorkspaceLock": {
               "$ref": "#/$defs/commandOptions/version/syncWorkspaceLock"
             },
@@ -1372,6 +1375,10 @@
         "forceGitTag": {
           "type": "boolean",
           "description": "During `lerna version`, when true, pass the `--force` flag to `git tag`."
+        },
+        "skipBumpOnlyRelease": {
+          "type": "boolean",
+          "description": "Skip GitHub/GitLab release creation when the version is a \"Version bump only for package x\""
         },
         "syncWorkspaceLock": {
           "type": "boolean",
