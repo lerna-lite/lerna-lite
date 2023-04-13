@@ -49,7 +49,7 @@ importers:
       nx: 15.9.2
       path: 0.12.7
       prettier: ^2.8.7
-      rimraf: ^4.4.1
+      rimraf: ^5.0.0
       semver: ^7.3.8
       tacks: ^1.2.6
       temp-dir: ^3.0.0
@@ -104,7 +104,7 @@ importers:
       nx: 15.9.2
       path: 0.12.7
       prettier: 2.8.7
-      rimraf: 4.4.1
+      rimraf: 5.0.0
       semver: 7.3.8
       tacks: 1.3.0
       temp-dir: 3.0.0
@@ -5773,12 +5773,12 @@ packages:
     dependencies:
       glob: 7.1.4
 
-  /rimraf/4.4.1:
-    resolution: {integrity: sha512-Gk8NlF062+T9CqNGn6h4tls3k6T1+/nXdOcSZVikNVtlRdYpA7wRJJMoXmuvOnLW844rPjdQ7JgXCYM6PPC/og==}
+  /rimraf/5.0.0:
+    resolution: {integrity: sha512-Jf9llaP+RvaEVS5nPShYFhtXIrb3LRKP281ib3So0KkeZKo2wIKyq0Re7TOSwanasA423PSr6CCIL4bP6T040g==}
     engines: {node: '>=14'}
     hasBin: true
     dependencies:
-      glob: 9.3.4
+      glob: 10.0.0
     dev: true
 
   /rollup/3.20.2:
