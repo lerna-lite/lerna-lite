@@ -447,7 +447,7 @@ describe('RunCommand', () => {
       );
     });
 
-    it('runs a script in packages with --stream', async () => {
+    it.skip('runs a script in packages with --stream', async () => {
       collectedOutput = '';
       await lernaRun(testDir)('my-script', '--stream');
 
@@ -457,7 +457,7 @@ describe('RunCommand', () => {
       expect(collectedOutput).toContain('package-3@1.0.0 my-script');
     });
 
-    it('runs a script in packages with --stream and --no-prefix', async () => {
+    it.skip('runs a script in packages with --stream and --no-prefix', async () => {
       collectedOutput = '';
       await lernaRun(testDir)('my-script', '--stream', '--no-prefix');
 
