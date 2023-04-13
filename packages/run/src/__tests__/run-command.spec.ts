@@ -78,6 +78,7 @@ describe('RunCommand', () => {
 
     beforeAll(async () => {
       testDir = await initFixture('basic');
+      process.env.NX_DAEMON = 'false';
     });
 
     it('should complain if invoked with an empty script', async () => {

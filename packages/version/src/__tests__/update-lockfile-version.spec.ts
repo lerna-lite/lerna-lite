@@ -121,10 +121,51 @@ describe('validateFileExists() method', () => {
   });
 });
 
+describe('pnpm client', () => {
+  it('should log an error when lockfile is not located under project root', async () => {
+    (exec as Mock).mockImplementationOnce(() => false);
+    const logSpy = vi.spyOn(npmlog, 'error');
+    const cwd = await initFixture('lockfile-version2');
+
+    const lockFileOutput = await runInstallLockFileOnly('pnpm', cwd, []);
+
+    expect(logSpy).toHaveBeenCalledWith(
+      'lock',
+      expect.stringContaining(`we could not sync neither locate "pnpm-lock.yaml" by using "pnpm" client at location ${cwd}`)
+    );
+    expect(lockFileOutput).toBe(undefined);
+  });
+
+  it(`should update project root lockfile by calling client script "pnpm install --package-lock-only"`, async () => {
+    vi.spyOn(fsPromises, 'access').mockResolvedValue(true as any);
+    (exec as Mock).mockImplementationOnce(() => true);
+    const cwd = await initFixture('lockfile-version2');
+
+    const lockFileOutput = await runInstallLockFileOnly('pnpm', cwd, []);
+
+    expect(exec).toHaveBeenCalledWith('pnpm', ['install', '--lockfile-only', '--ignore-scripts'], { cwd });
+    expect(lockFileOutput).toBe('pnpm-lock.yaml');
+  });
+
+  it(`should update project root lockfile by calling client script "pnpm install --package-lock-only" with extra npm client arguments when provided`, async () => {
+    vi.spyOn(fsPromises, 'access').mockResolvedValue(true as any);
+    (exec as Mock).mockImplementationOnce(() => true);
+    const cwd = await initFixture('lockfile-version2');
+
+    const lockFileOutput = await runInstallLockFileOnly('pnpm', cwd, ['--frozen-lockfile']);
+
+    expect(exec).toHaveBeenCalled();
+    expect(exec).toHaveBeenCalledWith('pnpm', ['install', '--lockfile-only', '--ignore-scripts', '--frozen-lockfile'], { cwd });
+    expect(lockFileOutput).toBe('pnpm-lock.yaml');
+  });
+});
+
 describe('run install lockfile-only', () => {
   describe('npm client', () => {
     it(`should update project root lockfile by calling npm script "npm install --package-lock-only" when npm version is >= 8.5.0`, async () => {
       (execSync as any).mockReturnValueOnce('8.5.0');
+      vi.spyOn(fsPromises, 'access').mockResolvedValue(true as any);
+      (exec as Mock).mockImplementationOnce(() => true);
       const cwd = await initFixture('lockfile-version2');
 
       const lockFileOutput = await runInstallLockFileOnly('npm', cwd, []);
@@ -136,6 +177,8 @@ describe('run install lockfile-only', () => {
 
     it(`should display a log error when npm version is below 8.5.0 and not actually sync anything`, async () => {
       (execSync as any).mockReturnValueOnce('8.4.0');
+      vi.spyOn(fsPromises, 'access').mockResolvedValue(true as any);
+      (exec as Mock).mockImplementationOnce(() => true);
       const cwd = await initFixture('lockfile-version2');
       const logSpy = vi.spyOn(npmlog, 'error');
 
@@ -150,6 +193,8 @@ describe('run install lockfile-only', () => {
 
     it(`should update project root lockfile by calling npm script "npm install --package-lock-only" with extra npm client arguments when provided`, async () => {
       (execSync as any).mockReturnValueOnce('8.5.0');
+      vi.spyOn(fsPromises, 'access').mockResolvedValue(true as any);
+      (exec as Mock).mockImplementationOnce(() => true);
       const cwd = await initFixture('lockfile-version2');
 
       const lockFileOutput = await runInstallLockFileOnly('npm', cwd, ['--legacy-peer-deps']);
@@ -173,46 +218,9 @@ describe('run install lockfile-only', () => {
     });
   });
 
-  describe('pnpm client', () => {
-    it('should log an error when lockfile is not located under project root', async () => {
-      const logSpy = vi.spyOn(npmlog, 'error');
-      const cwd = await initFixture('lockfile-version2');
-
-      const lockFileOutput = await runInstallLockFileOnly('pnpm', cwd, []);
-
-      expect(logSpy).toHaveBeenCalledWith(
-        'lock',
-        expect.stringContaining(`we could not sync neither locate "pnpm-lock.yaml" by using "pnpm" client at location ${cwd}`)
-      );
-      expect(lockFileOutput).toBe(undefined);
-    });
-
-    it(`should update project root lockfile by calling client script "pnpm install --package-lock-only"`, async () => {
-      vi.spyOn(fsPromises, 'access').mockResolvedValue(true as any);
-      (exec as Mock).mockImplementationOnce(() => true);
-      const cwd = await initFixture('lockfile-version2');
-
-      const lockFileOutput = await runInstallLockFileOnly('pnpm', cwd, []);
-
-      expect(exec).toHaveBeenCalledWith('pnpm', ['install', '--lockfile-only', '--ignore-scripts'], { cwd });
-      expect(lockFileOutput).toBe('pnpm-lock.yaml');
-    });
-
-    it(`should update project root lockfile by calling client script "pnpm install --package-lock-only" with extra npm client arguments when provided`, async () => {
-      vi.spyOn(fsPromises, 'access').mockResolvedValue(true as any);
-      (exec as Mock).mockImplementationOnce(() => true);
-      const cwd = await initFixture('lockfile-version2');
-
-      const lockFileOutput = await runInstallLockFileOnly('pnpm', cwd, ['--frozen-lockfile']);
-
-      expect(exec).toHaveBeenCalled();
-      expect(exec).toHaveBeenCalledWith('pnpm', ['install', '--lockfile-only', '--ignore-scripts', '--frozen-lockfile'], { cwd });
-      expect(lockFileOutput).toBe('pnpm-lock.yaml');
-    });
-  });
-
   describe('yarn client', () => {
     it(`should NOT update project root lockfile when yarn version is 1.0.0 and is below 2.0.0`, async () => {
+      (execSync as any).mockReturnValueOnce('1.0.0');
       vi.spyOn(fsPromises, 'access').mockResolvedValue(true as any);
       (exec as Mock).mockImplementationOnce(() => true);
       const cwd = await initFixture('lockfile-version2');

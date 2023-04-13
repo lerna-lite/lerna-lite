@@ -24,6 +24,10 @@
       packageNames: ['npm'],
       allowedVersions: '8.5.0',
     },
+    {
+      packageNames: ['nx'],
+      allowedVersions: '15.4.8', // newer version seems to cause problems with Vitest unit tests
+    },
   ],
   schedule: ['on Thursday'],
 }
