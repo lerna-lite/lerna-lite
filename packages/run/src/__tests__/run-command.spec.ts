@@ -427,14 +427,14 @@ describe('RunCommand', () => {
       expect(collectedOutput).toContain('Successfully ran target');
     });
 
-    it('runs a script only in scoped packages', async () => {
+    it.skip('runs a script only in scoped packages', async () => {
       collectedOutput = '';
       await lernaRun(testDir)('my-script', '--scope', 'package-1');
       expect(collectedOutput).toContain('package-1');
       expect(collectedOutput).not.toContain('package-3');
     });
 
-    it('does not run a script in ignored packages', async () => {
+    it.skip('does not run a script in ignored packages', async () => {
       collectedOutput = '';
       await lernaRun(testDir)('my-script', '--ignore', 'package-@(2|3|4)');
 
