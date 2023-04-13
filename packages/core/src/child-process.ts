@@ -116,7 +116,7 @@ export function getExitCode(result: any) {
     return constants.errno[result.code ?? result.exitCode];
   }
 
-  /* c8 ignore next */
+  /* c8 ignore next : extremely weird */
   throw new TypeError(`Received unexpected exit code value ${JSON.stringify(result.code ?? result.exitCode)}`);
 }
 

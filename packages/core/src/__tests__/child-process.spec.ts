@@ -2,10 +2,18 @@ import { describe, expect, it, vi } from 'vitest';
 import chalk from 'chalk';
 import npmlog from 'npmlog';
 // file under test
-import { exec, execSync, getChildProcessCount, spawn, spawnStreaming } from '../child-process';
+import { exec, execSync, getChildProcessCount, getExitCode, spawn, spawnStreaming } from '../child-process';
 import { Package } from '../package';
 
 describe('childProcess', () => {
+  it('should throw type error on weird but rare error structure', () => {
+    try {
+      getExitCode({ exitCode: { message: 'some error' } });
+    } catch (e) {
+      expect(e.message).toBe('Received unexpected exit code value {"message":"some error"}');
+    }
+  });
+
   describe('.execSync()', () => {
     it('should execute a command in a child process and return the result', () => {
       expect(execSync('echo', ['execSync'])).toContain(`execSync`);
