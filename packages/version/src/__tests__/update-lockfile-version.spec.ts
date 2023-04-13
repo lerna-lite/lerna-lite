@@ -213,6 +213,7 @@ describe('run install lockfile-only', () => {
 
   describe('yarn client', () => {
     it(`should NOT update project root lockfile when yarn version is 1.0.0 and is below 2.0.0`, async () => {
+      (execSync as any).mockReturnValueOnce('1.0.0');
       vi.spyOn(fsPromises, 'access').mockResolvedValue(true as any);
       (exec as Mock).mockImplementationOnce(() => true);
       const cwd = await initFixture('lockfile-version2');
