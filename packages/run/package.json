@@ -59,8 +59,8 @@
     "p-map": "^5.5.0"
   },
   "devDependencies": {
-    "@types/fs-extra": "11.0.1",
-    "globby": "13.1.3",
+    "@types/fs-extra": "^11.0.1",
+    "globby": "^13.1.3",
     "nx": "15.4.8",
     "perf_hooks": "^0.0.1",
     "yargs": "^17.7.1",

@@ -52,8 +52,7 @@
     "@lerna-lite/cli": "workspace:*",
     "@lerna-lite/core": "workspace:*",
     "@lerna-lite/filter-packages": "workspace:*",
-    "chokidar": "^3.5.3",
-    "path": "^0.12.7"
+    "chokidar": "^3.5.3"
   },
   "devDependencies": {
     "mock-stdin": "^1.0.0",
