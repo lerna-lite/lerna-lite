@@ -391,7 +391,7 @@ When run with this flag, `lerna version` will create an official GitHub or GitLa
 
 ### `--skip-bump-only-release`
 
-When this option is enabled and a package version is only being bumped without any conventional commits detected, the GitHub/GitLab release will be skipped. This will avoid creating releases with only "Version bump only for package x" in the release notes, however please note that each changelog will still be updated the version bump only text.
+When this option is enabled and a package version is only being bumped without any conventional commits detected, the GitHub/GitLab release will be skipped. This will avoid creating releases with only "Version bump only for package x" in the release notes, however please note that each changelog are still going to be updated with the "version bump only" text.
 
 ```sh
 lerna version --create-release github --skip-bump-only-release
