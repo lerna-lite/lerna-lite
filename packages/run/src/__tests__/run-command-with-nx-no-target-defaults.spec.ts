@@ -1,7 +1,10 @@
 import { afterAll, beforeAll, describe, expect, it, Mock, vi } from 'vitest';
 
 vi.mock('../lib/npm-run-script');
-vi.mock('nx/src/config/configuration');
+vi.mock('nx/src/config/configuration', () => ({
+  ...vi.importActual<any>('nx/src/config/configuration'),
+  readNxJson: vi.fn(),
+}));
 
 vi.mock('@lerna-lite/core', async () => ({
   ...(await vi.importActual<any>('@lerna-lite/core')), // return the other real methods, below we'll mock only 2 of the methods

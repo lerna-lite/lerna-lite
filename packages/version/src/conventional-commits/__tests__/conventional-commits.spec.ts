@@ -339,8 +339,7 @@ describe('conventional-commits', () => {
       });
     });
 
-    // TODO: need to be re-enabled once problem with Vitest Snapshot is fixed
-    describe.skip('prerelease bumps', () => {
+    describe('prerelease bumps', () => {
       let cwd;
       let pkg;
       let opts;
