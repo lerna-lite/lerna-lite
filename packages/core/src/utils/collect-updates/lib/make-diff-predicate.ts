@@ -1,6 +1,6 @@
 import { globbySync } from 'globby';
 import log from 'npmlog';
-import minimatch from 'minimatch';
+import { filter as minimatchFilter } from 'minimatch';
 import { dirname, relative } from 'node:path';
 import slash from 'slash';
 
@@ -20,7 +20,7 @@ export function makeDiffPredicate(
 ) {
   const ignoreFilters = new Set(
     ignorePatterns.map((p) =>
-      minimatch.filter(`!${p}`, {
+      minimatchFilter(`!${p}`, {
         matchBase: true,
         // dotfiles inside ignored directories should also match
         dot: true,

@@ -1,6 +1,6 @@
 import chalk from 'chalk';
 import dedent from 'dedent';
-import minimatch from 'minimatch';
+import { minimatch } from 'minimatch';
 import { EOL as OS_EOL } from 'node:os';
 import pMap from 'p-map';
 import pPipe from 'p-pipe';
