@@ -280,8 +280,8 @@ importers:
         specifier: ^6.2.0
         version: 6.2.0
       minimatch:
-        specifier: ^7.4.5
-        version: 7.4.5
+        specifier: ^9.0.0
+        version: 9.0.0
       npm-package-arg:
         specifier: ^10.1.0
         version: 10.1.0
@@ -758,8 +758,8 @@ importers:
         specifier: ^3.1.0
         version: 3.1.0
       minimatch:
-        specifier: ^7.4.5
-        version: 7.4.5
+        specifier: ^9.0.0
+        version: 9.0.0
       new-github-release-url:
         specifier: ^1.0.0
         version: 1.0.0
@@ -5961,6 +5961,13 @@ packages:
     engines: {node: '>=16 || 14 >=14.17'}
     dependencies:
       brace-expansion: 2.0.1
+
+  /minimatch@9.0.0:
+    resolution: {integrity: sha512-0jJj8AvgKqWN05mrwuqi8QYKx1WmYSUoKSxu5Qhs9prezTz10sxAHGNZe9J9cqIJzta8DWsleh2KaVaLl6Ru2w==}
+    engines: {node: '>=16 || 14 >=14.17'}
+    dependencies:
+      brace-expansion: 2.0.1
+    dev: false
 
   /minimist-options@4.1.0:
     resolution: {integrity: sha512-Q4r8ghd80yhO/0j1O3B2BjweX3fiHg9cdOwjJd2J76Q135c+NDxGCqdYKQ1SKBuFfgWbAUzBfvYjPUEeNgqN1A==}
