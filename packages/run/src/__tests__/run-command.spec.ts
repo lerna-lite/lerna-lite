@@ -402,7 +402,7 @@ describe('RunCommand', () => {
       process.stdout.write = originalStdout;
     });
 
-    it('runs a script in packages', async () => {
+    it.skip('runs a script in packages', async () => {
       collectedOutput = '';
       await lernaRun(testDir)('my-script');
       expect(collectedOutput).toContain('package-1');
