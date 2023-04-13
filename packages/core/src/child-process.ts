@@ -95,8 +95,8 @@ export function spawnStreaming(
     process.stderr.setMaxListeners(children.size);
   }
 
-  spawned.stdout!.pipe(logTransformer(stdoutOpts)).pipe(process.stdout);
-  spawned.stderr!.pipe(logTransformer(stderrOpts)).pipe(process.stderr);
+  spawned.stdout?.pipe(logTransformer(stdoutOpts)).pipe(process.stdout);
+  spawned.stderr?.pipe(logTransformer(stderrOpts)).pipe(process.stderr);
 
   return wrapError(spawned);
 }

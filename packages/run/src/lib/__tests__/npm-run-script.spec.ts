@@ -1,11 +1,7 @@
 import { describe, expect, it, Mock, vi } from 'vitest';
 
 // mocked modules
-vi.mock('@lerna-lite/core', async () => ({
-  ...(await vi.importActual<any>('@lerna-lite/core')), // return the other real methods, below we'll mock only 2 of the methods
-  exec: vi.fn((await vi.importActual<any>('../../../../core/src/child-process')).exec),
-  spawnStreaming: vi.fn((await vi.importActual<any>('../../../../core/src/child-process')).spawnStreaming),
-}));
+vi.mock('@lerna-lite/core');
 
 import { exec, spawnStreaming } from '@lerna-lite/core';
 import { RunScriptOption, ScriptStreamingOption } from '../../models';
