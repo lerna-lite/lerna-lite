@@ -56,7 +56,6 @@
   },
   "devDependencies": {
     "@types/node": "^18.15.8",
-    "path": "^0.12.7",
     "yargs": "^17.7.1"
   }
 }
