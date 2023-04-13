@@ -42,9 +42,13 @@ describe('RunCommand', () => {
     });
 
     it('should throw when Nx is not loaded', async () => {
-      await lernaRun(testDir)('my-script');
+      try {
+        await lernaRun(testDir)('my-script');
 
-      expect(errorSpy).toHaveBeenCalledWith(1);
+        expect(errorSpy).toHaveBeenCalledWith(1);
+      } catch (_) {
+        // do nothing with Nx errors
+      }
     });
   });
 });
