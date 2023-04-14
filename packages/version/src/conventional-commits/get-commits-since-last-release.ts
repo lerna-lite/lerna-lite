@@ -58,7 +58,7 @@ export function getOldestCommitSinceLastTag(execOpts?: ExecOpts, isIndependent?:
     let stdout = execSync('git', gitCommandArgs, execOpts);
     if (!stdout) {
       // in some occasion the previous git command might return nothing, in that case we'll return the tag detail instead
-      stdout = execSync('git', ['log', '-1', '--format="%h %aI"', lastTagName], execOpts);
+      stdout = execSync('git', ['log', '-1', '--format="%h %aI"', lastTagName], execOpts) || '';
     }
     [commitResult] = stdout.split('\n');
   } else {

@@ -12,7 +12,15 @@ export default defineConfig({
     watch: false,
     coverage: {
       include: ['packages/**/*.ts'],
-      exclude: [...configDefaults.exclude, '**/helpers/**', '**/__fixtures__/**', '**/__mocks__/**', '**/__tests__/**'],
+      exclude: [
+        ...configDefaults.exclude,
+        '**/helpers/**',
+        '**/models/**',
+        '**/__fixtures__/**',
+        '**/__helpers__/**',
+        '**/__mocks__/**',
+        '**/__tests__/**',
+      ],
       provider: 'c8',
     },
     snapshotFormat: {

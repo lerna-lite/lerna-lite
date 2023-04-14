@@ -18,7 +18,9 @@
       "default": "./dist/index.js",
       "types": "./dist/index.d.ts"
     },
-    "./*": "./*"
+    "./*": "./*",
+    "./cli.js": "./dist/cli.js",
+    "./dist/cli.js": "./dist/cli.js"
   },
   "typesVersions": {
     "*": {

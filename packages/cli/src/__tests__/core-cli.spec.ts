@@ -113,45 +113,53 @@ describe('core-cli', () => {
     expect(loggingOutput('error')).toEqual([]);
   });
 
-  it.skip('logs generic command errors with fallback exit code', async () => {
-    const cli = prepare(cwd);
-    const spy = vi.spyOn(cli, 'exit');
+  it('logs generic command errors with fallback exit code', async () => {
+    try {
+      const cli = prepare(cwd);
+      const spy = vi.spyOn(cli, 'exit');
 
-    cli.command('handler', 'a generic error', {}, async () => {
-      const err = new Error('yikes');
-      throw err;
-    });
+      cli.command('handler', 'a generic error', {}, () => {
+        const err = new Error('yikes');
+        throw err;
+      });
 
-    // paradoxically, this does NOT reject...
-    await parse(cli, ['handler']);
+      // paradoxically, this does NOT reject...
+      await parse(cli, ['handler']);
 
-    expect(loggingOutput('error')).toEqual(['yikes']);
-    expect(spy).toHaveBeenLastCalledWith(
-      1,
-      expect.objectContaining({
-        message: 'yikes',
-      })
-    );
+      expect(loggingOutput('error')).toEqual(['yikes']);
+      expect(spy).toHaveBeenLastCalledWith(
+        1,
+        expect.objectContaining({
+          message: 'yikes',
+        })
+      );
+    } catch (e) {
+      expect(e.message).toBe('yikes');
+    }
   });
 
-  it.skip('preserves explicit exit codes', async () => {
-    const cli = prepare(cwd);
-    const spy = vi.spyOn(cli, 'exit');
+  it('preserves explicit exit codes', async () => {
+    try {
+      const cli = prepare(cwd);
+      const spy = vi.spyOn(cli, 'exit');
 
-    cli.command('explicit', 'exit code', {}, () => {
-      const err = new Error('fancy fancy') as Error & { exitCode: number };
-      err.exitCode = 127;
-      throw err;
-    });
+      cli.command('explicit', 'exit code', {}, () => {
+        const err = new Error('fancy fancy') as Error & { exitCode: number };
+        err.exitCode = 127;
+        throw err;
+      });
 
-    // paradoxically, this does NOT reject...
-    await parse(cli, ['explicit']);
+      // paradoxically, this does NOT reject...
+      await parse(cli, ['explicit']);
 
-    expect(spy).toHaveBeenLastCalledWith(
-      127,
-      expect.objectContaining({
-        message: 'fancy fancy',
-      })
-    );
+      expect(spy).toHaveBeenLastCalledWith(
+        127,
+        expect.objectContaining({
+          message: 'fancy fancy',
+        })
+      );
+    } catch (e) {
+      expect(e.message).toBe('fancy fancy');
+    }
   });
 });

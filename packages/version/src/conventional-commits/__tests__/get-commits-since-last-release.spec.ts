@@ -86,31 +86,6 @@ describe('getOldestCommitSinceLastTag', () => {
     });
   });
 
-  describe.skip('with existing tag', () => {
-    beforeEach(() => {
-      (describeRefSync as Mock).mockReturnValue(tagStub);
-    });
-
-    it('should return first commit date and hash when last tag is not found', async () => {
-      const execSpy = (execSync as Mock).mockReturnValueOnce('').mockReturnValueOnce('"deedbeaf 2022-07-01T00:01:02-04:00"');
-
-      const result = await getOldestCommitSinceLastTag(execOpts);
-
-      expect(execSpy).toHaveBeenCalledWith('git', ['log', 'v1.0.0..HEAD', '--format="%h %aI"', '--reverse'], execOpts);
-      expect(execSpy).toHaveBeenCalledWith('git', ['log', '-1', '--format="%h %aI"', 'v1.0.0'], execOpts);
-      expect(result).toEqual({ commitDate: '2022-07-01T00:01:02-04:00', commitHash: 'deedbeaf' });
-    });
-
-    it('should expect a result with a tag date, hash and ref count when last tag is found', async () => {
-      const result = await getOldestCommitSinceLastTag(execOpts, false, false);
-      const execSpy = (execSync as Mock).mockReturnValueOnce('"deadbeef 2022-07-01T00:01:02-04:00"');
-
-      expect(describeRefSync).toHaveBeenCalledWith({ cwd: '/test' }, false);
-      expect(execSpy).toHaveBeenCalledWith('git', ['log', 'v1.0.0..HEAD', '--format="%h %aI"', '--reverse'], execOpts);
-      expect(result).toEqual({ commitDate: '2022-07-01T00:01:02-04:00', commitHash: 'deadbeef' });
-    });
-  });
-
   describe('with existing tag in independent mode', () => {
     beforeEach(() => {
       (describeRefSync as Mock).mockReturnValue({
@@ -145,6 +120,31 @@ describe('getOldestCommitSinceLastTag', () => {
       expect(describeRefSync).toHaveBeenCalledWith({ cwd: '/test', match: '*@*' }, false);
       expect(execSpy).toHaveBeenCalledWith('git', ['log', '@my-workspace/pkg-a@2.0.3..HEAD', '--format="%h %aI"', '--reverse'], execOpts);
       expect(result).toEqual({ commitDate: '2022-07-01T00:01:02+01:00', commitHash: 'deadbeef' });
+    });
+  });
+
+  describe('with existing tag', () => {
+    beforeEach(() => {
+      (describeRefSync as Mock).mockReturnValue(tagStub);
+    });
+
+    it('should return first commit date and hash when last tag is not found', async () => {
+      const execSpy = (execSync as Mock).mockReturnValueOnce('').mockReturnValueOnce('"deedbeaf 2022-07-01T00:01:02-04:00"');
+
+      const result = await getOldestCommitSinceLastTag(execOpts);
+
+      expect(execSpy).toHaveBeenCalledWith('git', ['log', 'v1.0.0..HEAD', '--format="%h %aI"', '--reverse'], execOpts);
+      expect(execSpy).toHaveBeenCalledWith('git', ['log', '-1', '--format="%h %aI"', 'v1.0.0'], execOpts);
+      expect(result).toEqual({ commitDate: '2022-07-01T00:01:02-04:00', commitHash: 'deedbeaf' });
+    });
+
+    it('should expect a result with a tag date, hash and ref count when last tag is found', async () => {
+      const execSpy = (execSync as Mock).mockReturnValueOnce('"deadbeef 2022-07-01T00:01:02-04:00"');
+      const result = await getOldestCommitSinceLastTag(execOpts, false, false);
+
+      expect(describeRefSync).toHaveBeenCalledWith({ cwd: '/test' }, false);
+      expect(execSpy).toHaveBeenCalledWith('git', ['log', 'v1.0.0..HEAD', '--format="%h %aI"', '--reverse'], execOpts);
+      expect(result).toEqual({ commitDate: '2022-07-01T00:01:02-04:00', commitHash: 'deadbeef' });
     });
   });
 });
