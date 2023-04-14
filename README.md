@@ -201,7 +201,7 @@ or from a CDN
 
 | Command | Install | Description |
 | --------| --------| ----------- |
-| ☁️ [publish](https://github.com/lerna-lite/lerna-lite/tree/main/packages/publish#readme) * | `npm i @lerna-lite/publish -D -W` | publish each workspace package |
+| ☁️ [publish](https://github.com/lerna-lite/lerna-lite/tree/main/packages/publish#readme) | `npm i @lerna-lite/publish -D -W` | publish each workspace package |
 | 📑 [version](https://github.com/lerna-lite/lerna-lite/tree/main/packages/version#readme) | `npm i @lerna-lite/version -D -W` | create new version for each workspace package |
 | 🕜 [changed](https://github.com/lerna-lite/lerna-lite/tree/main/packages/changed#readme) | `npm i @lerna-lite/changed -D -W` | list local packages changed since last release |
 | 🌓 [diff](https://github.com/lerna-lite/lerna-lite/tree/main/packages/diff#readme)       | `npm i @lerna-lite/diff -D -W`    | git diff all packages since the last release   |
