@@ -303,13 +303,13 @@ importers:
     specifiers:
       '@lerna-lite/core': workspace:*
       fs-extra: ^11.1.1
-      p-map: ^4.0.0
+      p-map: ^5.5.0
       write-json-file: ^5.0.0
       yargs-parser: ^21.1.1
     dependencies:
       '@lerna-lite/core': link:../core
       fs-extra: 11.1.1
-      p-map: 4.0.0
+      p-map: 5.5.0
       write-json-file: 5.0.0
     devDependencies:
       yargs-parser: 21.1.1
