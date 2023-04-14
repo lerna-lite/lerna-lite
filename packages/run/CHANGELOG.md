@@ -13,6 +13,7 @@ See [Conventional Commits](https://conventionalcommits.org) for commit guideline
 ### Features
 
 * **build:** prepare official Lerna-Lite 2.0 release ([#567](https://github.com/lerna-lite/lerna-lite/issues/567)) ([2865a60](https://github.com/lerna-lite/lerna-lite/commit/2865a604fe85e498cc8c4410cead51ad067a41e0)), closes [#537](https://github.com/lerna-lite/lerna-lite/issues/537) - by @ghiscoding
+* **run** add back optional `--use-nx` option to `run` command ([#557](https://github.com/lerna-lite/lerna-lite/pull/557)) ([7baf389](https://github.com/lerna-lite/lerna-lite/commit/7baf389ef62a7e8d99118be15b4b70de897cd30e)) - by @ghiscoding
 
 ### Bug Fixes
 

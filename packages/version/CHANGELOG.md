@@ -13,6 +13,7 @@ See [Conventional Commits](https://conventionalcommits.org) for commit guideline
 ### Features
 
 * **build:** prepare official Lerna-Lite 2.0 release ([#567](https://github.com/lerna-lite/lerna-lite/issues/567)) ([2865a60](https://github.com/lerna-lite/lerna-lite/commit/2865a604fe85e498cc8c4410cead51ad067a41e0)), closes [#537](https://github.com/lerna-lite/lerna-lite/issues/537) - by @ghiscoding
+* **version** add `--skip-bump-only-release` to avoid empty gh releases ([#555](https://github.com/lerna-lite/lerna-lite/pull/555)) ([e93e6fd](https://github.com/lerna-lite/lerna-lite/commit/e93e6fd348170466d06c825193d4ec4b42cb3920)) - by @ghiscoding
 
 ## [2.0.0-alpha.2](https://github.com/lerna-lite/lerna-lite/compare/v2.0.0-alpha.1...v2.0.0-alpha.2) (2023-04-07)
 
