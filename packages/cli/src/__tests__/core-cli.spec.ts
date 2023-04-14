@@ -85,17 +85,22 @@ describe('core-cli', () => {
     expect(loggingOutput('error')).toEqual(['go boom']);
   });
 
-  it.skip('does not re-log ValidationError messages (async)', async () => {
-    const cli = prepare(cwd);
+  it('does not re-log ValidationError messages (async)', async () => {
+    try {
+      const cli = prepare(cwd);
 
-    cli.command('boom', 'explodey', {}, async () => {
-      throw new ValidationError('test', '...boom');
-    });
+      cli.command('boom', 'explodey', {}, () => {
+        throw new ValidationError('test', '...boom');
+      });
 
-    // paradoxically, this does NOT reject...
-    await parse(cli, ['boom']);
+      // paradoxically, this does NOT reject...
+      await parse(cli, ['boom']);
 
-    expect(loggingOutput('error')).toEqual(['...boom']);
+      expect(loggingOutput('error')).toEqual(['...boom']);
+    } catch (e) {
+      expect(e.prefix).toBe('test');
+      expect(e.message).toBe('...boom');
+    }
   });
 
   it('does not log errors with a pkg property', async () => {
