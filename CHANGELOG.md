@@ -8,6 +8,8 @@ See [Conventional Commits](https://conventionalcommits.org) for commit guideline
 
 ### ⚠ BREAKING CHANGES
 
+> Refer to the [v2.0.0](https://github.com/lerna-lite/lerna-lite/releases/tag/v2.0.0) release for more info about the migration.
+
 * **build:** prepare official Lerna-Lite 2.0 release (#567)
 
 ### Features
@@ -26,8 +28,6 @@ See [Conventional Commits](https://conventionalcommits.org) for commit guideline
 ## [2.0.0-alpha.2](https://github.com/lerna-lite/lerna-lite/compare/v2.0.0-alpha.1...v2.0.0-alpha.2) (2023-04-07)
 
 ### ⚠ BREAKING CHANGES
-
-> Refer to the [v2.0.0-alpha.2](https://github.com/lerna-lite/lerna-lite/releases/tag/v2.0.0-alpha.2) release for more info about the migration.
 
 * **run:** remove `--use-nx` (powered by Nx) option from `run` command (#554)
 * **publish:** make version & publish commands optionnal, closes #450 (#552)
