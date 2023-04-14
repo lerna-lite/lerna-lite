@@ -4,6 +4,21 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [2.0.0](https://github.com/lerna-lite/lerna-lite/compare/v1.17.0...v2.0.0) (2023-04-14)
+
+### ⚠ BREAKING CHANGES
+
+* **build:** prepare official Lerna-Lite 2.0 release (#567)
+
+### Features
+
+* **build:** prepare official Lerna-Lite 2.0 release ([#567](https://github.com/lerna-lite/lerna-lite/issues/567)) ([2865a60](https://github.com/lerna-lite/lerna-lite/commit/2865a604fe85e498cc8c4410cead51ad067a41e0)), closes [#537](https://github.com/lerna-lite/lerna-lite/issues/537) - by @ghiscoding
+
+### Bug Fixes
+
+* **deps:** update all non-major dependencies ([#535](https://github.com/lerna-lite/lerna-lite/issues/535)) ([bdb1e9c](https://github.com/lerna-lite/lerna-lite/commit/bdb1e9c38082f1a5ac7f28d0fa123de08e48bd4b)) - by @renovate[bot]
+* **deps:** update all non-major dependencies ([#547](https://github.com/lerna-lite/lerna-lite/issues/547)) ([deb467c](https://github.com/lerna-lite/lerna-lite/commit/deb467c6bef624ae10861ca1a4251263c8792a91)) - by @renovate[bot]
+
 ## [2.0.0-alpha.2](https://github.com/lerna-lite/lerna-lite/compare/v2.0.0-alpha.1...v2.0.0-alpha.2) (2023-04-07)
 
 **Note:** Version bump only for package @lerna-lite/publish

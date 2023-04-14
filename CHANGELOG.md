@@ -4,6 +4,25 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [2.0.0](https://github.com/lerna-lite/lerna-lite/compare/v1.17.0...v2.0.0) (2023-04-14)
+
+### ⚠ BREAKING CHANGES
+
+* **build:** prepare official Lerna-Lite 2.0 release (#567)
+
+### Features
+
+* **build:** prepare official Lerna-Lite 2.0 release ([#567](https://github.com/lerna-lite/lerna-lite/issues/567)) ([2865a60](https://github.com/lerna-lite/lerna-lite/commit/2865a604fe85e498cc8c4410cead51ad067a41e0)), closes [#537](https://github.com/lerna-lite/lerna-lite/issues/537) - by @ghiscoding
+
+### Bug Fixes
+
+* **config:** catch initialization errors, update cosmiconfig ([#519](https://github.com/lerna-lite/lerna-lite/issues/519)) ([66299a2](https://github.com/lerna-lite/lerna-lite/commit/66299a22084a668f0712745269d71a493c470e18)) - by @d-fischer
+* **core:** ignore globby pattern type should be an array not a string ([#529](https://github.com/lerna-lite/lerna-lite/issues/529)) ([c45dcb1](https://github.com/lerna-lite/lerna-lite/commit/c45dcb1bfaecd4bd306d2a057f150797381f7bee)) - by @ghiscoding
+* **deps:** update all non-major dependencies ([#535](https://github.com/lerna-lite/lerna-lite/issues/535)) ([bdb1e9c](https://github.com/lerna-lite/lerna-lite/commit/bdb1e9c38082f1a5ac7f28d0fa123de08e48bd4b)) - by @renovate[bot]
+* **deps:** update all non-major dependencies ([#547](https://github.com/lerna-lite/lerna-lite/issues/547)) ([deb467c](https://github.com/lerna-lite/lerna-lite/commit/deb467c6bef624ae10861ca1a4251263c8792a91)) - by @renovate[bot]
+* **deps:** update dependency cosmiconfig to ^8.1.3 ([#523](https://github.com/lerna-lite/lerna-lite/issues/523)) ([6870489](https://github.com/lerna-lite/lerna-lite/commit/68704899973067d51b1afb76bd06e3d23b697770)) - by @renovate[bot]
+* **run:** only use run-one w/Nx when not passing multiple scripts ([#531](https://github.com/lerna-lite/lerna-lite/issues/531)) ([731f783](https://github.com/lerna-lite/lerna-lite/commit/731f783c89b9b4f96d0c65cdf36c115c7f1e51d3)) - by @ghiscoding
+
 ## [2.0.0-alpha.2](https://github.com/lerna-lite/lerna-lite/compare/v2.0.0-alpha.1...v2.0.0-alpha.2) (2023-04-07)
 
 ### ⚠ BREAKING CHANGES
