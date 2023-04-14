@@ -1,2 +1,4 @@
-export const getCommitsSinceLastRelease = jest.fn(() => Promise.resolve());
-export const getLastTagDetails = jest.fn(() => ({ tagHash: undefined, tagDate: undefined, tagRefCount: 0 }));
+import { vi } from 'vitest';
+
+export const getCommitsSinceLastRelease = vi.fn(() => Promise.resolve());
+export const getLastTagDetails = vi.fn(() => ({ tagHash: undefined, tagDate: undefined, tagRefCount: 0 }));

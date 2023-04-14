@@ -1,20 +1,28 @@
-import execa from 'execa';
-import fs from 'fs-extra';
-import path from 'path';
+import { beforeEach, describe, expect, it, Mock, vi } from 'vitest';
 
-jest.mock('@lerna-lite/core', () => ({
-  ...(jest.requireActual('@lerna-lite/core') as any), // return the other real methods, below we'll mock only 2 of the methods
-  Command: jest.requireActual('../../../core/src/command').Command,
-  conf: jest.requireActual('../../../core/src/command').conf,
-  logOutput: jest.requireActual('../../../core/src/__mocks__/output').logOutput,
-  collectUpdates: jest.requireActual('../../../core/src/__mocks__/collect-updates').collectUpdates,
+vi.mock('@lerna-lite/core', async () => ({
+  ...(await vi.importActual<any>('@lerna-lite/core')),
+  Command: (await vi.importActual<any>('../../../core/src/command')).Command,
+  conf: (await vi.importActual<any>('../../../core/src/command')).conf,
+  logOutput: (await vi.importActual<any>('../../../core/src/__mocks__/output')).logOutput,
+  collectUpdates: (await vi.importActual<any>('../../../core/src/__mocks__/collect-updates')).collectUpdates,
+  spawn: vi.fn(),
 }));
 
+import { execa } from 'execa';
+import { outputFile, remove } from 'fs-extra/esm';
+import { dirname, join } from 'node:path';
+import { fileURLToPath } from 'node:url';
+import yargParser from 'yargs-parser';
+
 // mocked modules
-import coreModule, { DiffCommandOption } from '@lerna-lite/core';
+import { DiffCommandOption } from '@lerna-lite/core';
+import { spawn } from '@lerna-lite/core';
 
 // helpers
 import { commandRunner, initFixtureFactory } from '@lerna-test/helpers';
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = dirname(__filename);
 const initFixture = initFixtureFactory(__dirname);
 import { Project } from '@lerna-lite/core';
 import { gitAdd } from '@lerna-test/helpers';
@@ -27,9 +35,6 @@ import { DiffCommand } from '../index';
 import { factory } from '../diff-command';
 import cliDiffCommands from '../../../cli/src/cli-commands/cli-diff-commands';
 const lernaDiff = commandRunner(cliDiffCommands);
-
-// file under test
-import yargParser from 'yargs-parser';
 
 const createArgv = (cwd: string, ...args: string[]) => {
   args.unshift('diff');
@@ -44,23 +49,41 @@ const createArgv = (cwd: string, ...args: string[]) => {
 };
 
 // stabilize commit SHA
-import gitSHA from '@lerna-test/helpers/serializers/serialize-git-sha';
+import gitSHA from '@lerna-test/helpers/serializers/serialize-git-sha.js';
 expect.addSnapshotSerializer(gitSHA);
 
+describe('Diff Command with Error Exit Code', () => {
+  beforeEach(() => {
+    (spawn as Mock).mockImplementationOnce(() => {
+      const nonZero = new Error('An actual non-zero, not git diff pager SIGPIPE');
+      (nonZero as any).exitCode = 1;
+      throw nonZero;
+    });
+  });
+
+  it('should error when git diff exits non-zero', async () => {
+    const cwd = await initFixture('basic');
+
+    const command = new DiffCommand(createArgv(cwd, 'package-1'));
+    await expect(command).rejects.toThrow('An actual non-zero, not git diff pager SIGPIPE');
+  });
+});
+
 describe('Diff Command', () => {
-  // overwrite spawn so we get piped stdout, not inherited
-  coreModule.spawn = jest.fn((...args) => {
-    // @ts-ignore
-    return execa(...args);
+  beforeEach(() => {
+    (spawn as Mock).mockImplementationOnce((...args) => {
+      // @ts-ignore
+      return execa(...args);
+    });
   });
 
   it('should diff packages from the first commit from DiffCommand class', async () => {
     const cwd = await initFixture('basic');
     const [pkg1] = await Project.getPackages(cwd);
-    const rootReadme = path.join(cwd, 'README.md');
+    const rootReadme = join(cwd, 'README.md');
 
     await pkg1.set('changed', 1).serialize();
-    await fs.outputFile(rootReadme, 'change outside packages glob');
+    await outputFile(rootReadme, 'change outside packages glob');
     await gitAdd(cwd, '-A');
     await gitCommit(cwd, 'changed');
 
@@ -72,10 +95,10 @@ describe('Diff Command', () => {
   it('should diff packages from the first commit from factory', async () => {
     const cwd = await initFixture('basic');
     const [pkg1] = await Project.getPackages(cwd);
-    const rootReadme = path.join(cwd, 'README.md');
+    const rootReadme = join(cwd, 'README.md');
 
     await pkg1.set('changed', 1).serialize();
-    await fs.outputFile(rootReadme, 'change outside packages glob');
+    await outputFile(rootReadme, 'change outside packages glob');
     await gitAdd(cwd, '-A');
     await gitCommit(cwd, 'changed');
 
@@ -87,10 +110,10 @@ describe('Diff Command', () => {
   it('should diff packages from the first commit', async () => {
     const cwd = await initFixture('basic');
     const [pkg1] = await Project.getPackages(cwd);
-    const rootReadme = path.join(cwd, 'README.md');
+    const rootReadme = join(cwd, 'README.md');
 
     await pkg1.set('changed', 1).serialize();
-    await fs.outputFile(rootReadme, 'change outside packages glob');
+    await outputFile(rootReadme, 'change outside packages glob');
     await gitAdd(cwd, '-A');
     await gitCommit(cwd, 'changed');
 
@@ -112,7 +135,8 @@ describe('Diff Command', () => {
     await gitAdd(cwd, '-A');
     await gitCommit(cwd, 'changed');
 
-    const { stdout } = (await lernaDiff(cwd)()) as any;
+    // @ts-ignore
+    const { stdout } = await new DiffCommand(createArgv(cwd, ''));
     expect(stdout).toMatchSnapshot();
   });
 
@@ -135,7 +159,7 @@ describe('Diff Command', () => {
     const [pkg1] = await Project.getPackages(cwd);
 
     await pkg1.set('changed', 1).serialize();
-    await fs.outputFile(path.join(pkg1.location, 'README.md'), 'ignored change');
+    await outputFile(join(pkg1.location, 'README.md'), 'ignored change');
     await gitAdd(cwd, '-A');
     await gitCommit(cwd, 'changed');
 
@@ -161,24 +185,10 @@ describe('Diff Command', () => {
   it('should error when running in a repository without commits', async () => {
     const cwd = await initFixture('basic');
 
-    await fs.remove(path.join(cwd, '.git'));
+    await remove(join(cwd, '.git'));
     await gitInit(cwd);
 
     const command = new DiffCommand(createArgv(cwd, 'package-1'));
     await expect(command).rejects.toThrow('Cannot diff, there are no commits in this repository yet.');
-  });
-
-  it('should error when git diff exits non-zero', async () => {
-    const cwd = await initFixture('basic');
-
-    (coreModule.spawn as jest.Mock).mockImplementationOnce(() => {
-      const nonZero = new Error('An actual non-zero, not git diff pager SIGPIPE');
-      (nonZero as any).exitCode = 1;
-
-      throw nonZero;
-    });
-
-    const command = new DiffCommand(createArgv(cwd, 'package-1'));
-    await expect(command).rejects.toThrow('An actual non-zero, not git diff pager SIGPIPE');
   });
 });

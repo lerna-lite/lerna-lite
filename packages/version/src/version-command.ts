@@ -1,7 +1,7 @@
 import chalk from 'chalk';
 import dedent from 'dedent';
-import minimatch from 'minimatch';
-import os from 'os';
+import { minimatch } from 'minimatch';
+import { EOL as OS_EOL } from 'node:os';
 import pMap from 'p-map';
 import pPipe from 'p-pipe';
 import pReduce from 'p-reduce';
@@ -27,31 +27,31 @@ import {
   VersionCommandOption,
 } from '@lerna-lite/core';
 
-import { getCurrentBranch } from './lib/get-current-branch';
-import { createRelease, createReleaseClient } from './lib/create-release';
-import { isAnythingCommitted } from './lib/is-anything-committed';
-import { remoteBranchExists } from './lib/remote-branch-exists';
-import { isBehindUpstream } from './lib/is-behind-upstream';
-import { isBreakingChange } from './lib/is-breaking-change';
-import { gitAdd } from './lib/git-add';
-import { gitCommit } from './lib/git-commit';
-import { gitTag } from './lib/git-tag';
-import { gitPush } from './lib/git-push';
-import { makePromptVersion } from './lib/prompt-version';
+import { getCurrentBranch } from './lib/get-current-branch.js';
+import { createRelease, createReleaseClient } from './lib/create-release.js';
+import { isAnythingCommitted } from './lib/is-anything-committed.js';
+import { remoteBranchExists } from './lib/remote-branch-exists.js';
+import { isBehindUpstream } from './lib/is-behind-upstream.js';
+import { isBreakingChange } from './lib/is-breaking-change.js';
+import { gitAdd } from './lib/git-add.js';
+import { gitCommit } from './lib/git-commit.js';
+import { gitTag } from './lib/git-tag.js';
+import { gitPush } from './lib/git-push.js';
+import { makePromptVersion } from './lib/prompt-version.js';
 import {
   loadPackageLockFileWhenExists,
   updateClassicLockfileVersion,
   updateTempModernLockfileVersion,
   runInstallLockFileOnly,
   saveUpdatedLockJsonFile,
-} from './lib/update-lockfile-version';
-import { ReleaseClient, ReleaseNote, RemoteCommit } from './models';
+} from './lib/update-lockfile-version.js';
+import { GitCreateReleaseClientOutput, ReleaseNote, RemoteCommit } from './models/index.js';
 import {
   applyBuildMetadata,
   getCommitsSinceLastRelease,
   recommendVersion,
   updateChangelog,
-} from './conventional-commits';
+} from './conventional-commits/index.js';
 
 export function factory(argv: VersionCommandOption) {
   return new VersionCommand(argv);
@@ -73,7 +73,7 @@ export class VersionCommand extends Command<VersionCommandOption> {
   commitAndTag = true;
   pushToRemote = true;
   hasRootedLeaf = false;
-  releaseClient?: ReleaseClient;
+  releaseClient?: GitCreateReleaseClientOutput;
   releaseNotes: ReleaseNote[] = [];
   gitOpts: any;
   runPackageLifecycle: any;
@@ -101,7 +101,7 @@ export class VersionCommand extends Command<VersionCommandOption> {
     super(argv);
   }
 
-  configureProperties() {
+  async configureProperties() {
     super.configureProperties();
 
     // Defaults are necessary here because yargs defaults
@@ -128,16 +128,12 @@ export class VersionCommand extends Command<VersionCommandOption> {
     this.pushToRemote = gitTagVersion && amend !== true && push;
     this.changelogIncludeCommitsClientLogin =
       changelogIncludeCommitsClientLogin === '' ? true : changelogIncludeCommitsClientLogin;
-    this.changelogIncludeCommitsGitAuthor =
-      changelogIncludeCommitsGitAuthor === '' ? true : changelogIncludeCommitsGitAuthor;
+    this.changelogIncludeCommitsGitAuthor = changelogIncludeCommitsGitAuthor === '' ? true : changelogIncludeCommitsGitAuthor;
     // never automatically push to remote when amending a commit
 
-    // prettier-ignore
-    this.releaseClient = (
-      this.pushToRemote &&
-      this.options.createRelease &&
-      createReleaseClient(this.options.createRelease)
-    ) as ReleaseClient | undefined;
+    if (this.pushToRemote && this.options.createRelease) {
+      this.releaseClient = await createReleaseClient(this.options.createRelease);
+    }
     this.releaseNotes = [];
 
     if (this.releaseClient && this.options.conventionalCommits !== true) {
@@ -173,10 +169,7 @@ export class VersionCommand extends Command<VersionCommandOption> {
     if (this.requiresGit) {
       // git validation, if enabled, should happen before updates are calculated and versions picked
       if (!isAnythingCommitted(this.execOpts, this.options.dryRun)) {
-        throw new ValidationError(
-          'ENOCOMMIT',
-          'No commits in this repository. Please commit something before using version.'
-        );
+        throw new ValidationError('ENOCOMMIT', 'No commits in this repository. Please commit something before using version.');
       }
 
       this.currentBranch = getCurrentBranch(this.execOpts, false);
@@ -185,10 +178,7 @@ export class VersionCommand extends Command<VersionCommandOption> {
         throw new ValidationError('ENOGIT', 'Detached git HEAD, please checkout a branch to choose versions.');
       }
 
-      if (
-        this.pushToRemote &&
-        !remoteBranchExists(this.gitRemote, this.currentBranch, this.execOpts, this.options.dryRun)
-      ) {
+      if (this.pushToRemote && !remoteBranchExists(this.gitRemote, this.currentBranch, this.execOpts, this.options.dryRun)) {
         throw new ValidationError(
           'ENOREMOTEBRANCH',
           dedent`
@@ -237,10 +227,7 @@ export class VersionCommand extends Command<VersionCommandOption> {
         return false;
       }
     } else {
-      this.logger.notice(
-        'FYI',
-        'git repository validation has been skipped, please ensure your version bumps are correct'
-      );
+      this.logger.notice('FYI', 'git repository validation has been skipped, please ensure your version bumps are correct');
     }
 
     if (this.options.conventionalPrerelease && this.options.conventionalGraduate) {
@@ -267,13 +254,6 @@ export class VersionCommand extends Command<VersionCommandOption> {
         dedent`
           --changelog-include-commits-client-login cannot be combined with --changelog-include-commits-git-author.
         `
-      );
-    }
-
-    if (this.options.changelogIncludeCommitAuthorFullname) {
-      this.logger.warn(
-        'deprecated',
-        '--changelog-include-commit-author-fullname has been renamed to --changelog-include-commits-git-author.'
       );
     }
 
@@ -383,7 +363,7 @@ export class VersionCommand extends Command<VersionCommandOption> {
       await createRelease(
         this.releaseClient,
         { tags: this.tags, releaseNotes: this.releaseNotes },
-        { gitRemote: this.options.gitRemote, execOpts: this.execOpts },
+        { gitRemote: this.options.gitRemote, execOpts: this.execOpts, skipBumpOnlyRelease: this.options.skipBumpOnlyRelease },
         this.options.dryRun
       );
     } else {
@@ -450,9 +430,7 @@ export class VersionCommand extends Command<VersionCommandOption> {
       predicate = predicate(node).then(makeGlobalVersionPredicate);
     }
 
-    return Promise.resolve(predicate).then((getVersion: (s: PackageGraphNode) => string) =>
-      this.reduceVersions(getVersion)
-    );
+    return Promise.resolve(predicate).then((getVersion: (s: PackageGraphNode) => string) => this.reduceVersions(getVersion));
   }
 
   reduceVersions(getVersion: (s: PackageGraphNode) => string) {
@@ -494,6 +472,7 @@ export class VersionCommand extends Command<VersionCommandOption> {
 
   getPrereleasePackageNames() {
     const prereleasePackageNames = this.getPackagesForOption(this.options.conventionalPrerelease);
+    // prettier-ignore
     const isCandidate = prereleasePackageNames.has('*')
       ? () => true
       : (_node, name) => prereleasePackageNames.has(name);
@@ -568,9 +547,7 @@ export class VersionCommand extends Command<VersionCommandOption> {
 
   confirmVersions(): Promise<boolean> | boolean {
     const changes = this.packagesToVersion.map((pkg) => {
-      let line = ` - ${pkg.name ?? '[n/a]'}: ${pkg.version} => ${chalk.cyan(
-        this.updatesVersions?.get(pkg?.name ?? '')
-      )}`;
+      let line = ` - ${pkg.name ?? '[n/a]'}: ${pkg.version} => ${chalk.cyan(this.updatesVersions?.get(pkg?.name ?? ''))}`;
       if (pkg.private) {
         line += ` (${chalk.red('private')})`;
       }
@@ -597,13 +574,7 @@ export class VersionCommand extends Command<VersionCommandOption> {
   }
 
   updatePackageVersions() {
-    const {
-      conventionalCommits,
-      changelogPreset,
-      changelogHeaderMessage,
-      changelogVersionMessage,
-      changelog = true,
-    } = this.options;
+    const { conventionalCommits, changelogPreset, changelogHeaderMessage, changelog = true } = this.options;
     const independentVersions = this.project.isIndependent();
     const rootPath = this.project.manifest.location;
     const changedFiles = new Set<string>();
@@ -640,7 +611,6 @@ export class VersionCommand extends Command<VersionCommandOption> {
               depVersion,
               this.savePrefix,
               this.options.allowPeerDependenciesUpdate,
-              this.options.workspaceStrictMatch,
               this.commandName
             );
           }
@@ -673,7 +643,6 @@ export class VersionCommand extends Command<VersionCommandOption> {
           changelogIncludeCommitsGitAuthor: this.changelogIncludeCommitsGitAuthor,
           changelogIncludeCommitsClientLogin: this.changelogIncludeCommitsClientLogin,
           changelogHeaderMessage,
-          changelogVersionMessage,
           commitsSinceLastRelease: this.commitsSinceLastRelease,
         }).then(({ logPath, newEntry }) => {
           // commit the updated changelog
@@ -760,7 +729,6 @@ export class VersionCommand extends Command<VersionCommandOption> {
             changelogIncludeCommitsGitAuthor: this.changelogIncludeCommitsGitAuthor,
             changelogIncludeCommitsClientLogin: this.changelogIncludeCommitsClientLogin,
             changelogHeaderMessage,
-            changelogVersionMessage,
             commitsSinceLastRelease: this.commitsSinceLastRelease,
           }).then(({ logPath, newEntry }) => {
             // commit the updated changelog
@@ -814,7 +782,7 @@ export class VersionCommand extends Command<VersionCommandOption> {
   async gitCommitAndTagVersionForUpdates() {
     const tags = this.packagesToVersion.map((pkg) => `${pkg.name}@${this.updatesVersions?.get(pkg.name)}`);
     const subject = this.options.message || 'chore: Publish new release';
-    const message = tags.reduce((msg, tag) => `${msg}${os.EOL} - ${tag}`, `${subject}${os.EOL}`);
+    const message = tags.reduce((msg, tag) => `${msg}${OS_EOL} - ${tag}`, `${subject}${OS_EOL}`);
 
     await gitCommit(message, this.gitOpts, this.execOpts, this.options.dryRun);
     for (const tag of tags) {

@@ -1,32 +1,40 @@
-// local modules _must_ be explicitly mocked
-jest.mock('../lib/git-add', () => jest.requireActual('../lib/__mocks__/git-add'));
-jest.mock('../lib/git-commit', () => jest.requireActual('../lib/__mocks__/git-commit'));
-jest.mock('../lib/git-push', () => jest.requireActual('../lib/__mocks__/git-push'));
-jest.mock('../lib/git-tag', () => jest.requireActual('../lib/__mocks__/git-tag'));
-jest.mock('../lib/is-anything-committed', () => jest.requireActual('../lib/__mocks__/is-anything-committed'));
-jest.mock('../lib/is-behind-upstream', () => jest.requireActual('../lib/__mocks__/is-behind-upstream'));
-jest.mock('../lib/remote-branch-exists', () => jest.requireActual('../lib/__mocks__/remote-branch-exists'));
-jest.mock('../conventional-commits', () => jest.requireActual('../__mocks__/conventional-commits'));
-jest.mock('../git-clients/gitlab-client', () => jest.requireActual('../__mocks__/gitlab-client'));
-jest.mock('../git-clients/github-client', () => jest.requireActual('../__mocks__/github-client'));
+import { beforeEach, describe, expect, it, Mock, vi } from 'vitest';
+import { join } from 'node:path';
+import { outputFile } from 'fs-extra/esm';
 
-jest.mock('@lerna-lite/core', () => ({
-  ...(jest.requireActual('@lerna-lite/core') as any), // return the other real methods, below we'll mock only 2 of the methods
-  Command: jest.requireActual('../../../core/src/command').Command,
-  conf: jest.requireActual('../../../core/src/command').conf,
-  logOutput: jest.requireActual('../../../core/src/__mocks__/output').logOutput,
-  promptConfirmation: jest.requireActual('../../../core/src/__mocks__/prompt').promptConfirmation,
-  promptSelectOne: jest.requireActual('../../../core/src/__mocks__/prompt').promptSelectOne,
-  promptTextInput: jest.requireActual('../../../core/src/__mocks__/prompt').promptTextInput,
-  throwIfUncommitted: jest.requireActual('../../../core/src/__mocks__/check-working-tree').throwIfUncommitted,
+// local modules _must_ be explicitly mocked
+vi.mock('../lib/git-add', async () => await vi.importActual('../lib/__mocks__/git-add'));
+vi.mock('../lib/git-commit', async () => await vi.importActual('../lib/__mocks__/git-commit'));
+vi.mock('../lib/git-push', async () => await vi.importActual('../lib/__mocks__/git-push'));
+vi.mock('../lib/git-tag', async () => await vi.importActual('../lib/__mocks__/git-tag'));
+vi.mock('../lib/is-anything-committed', async () => await vi.importActual('../lib/__mocks__/is-anything-committed'));
+vi.mock('../lib/is-behind-upstream', async () => await vi.importActual('../lib/__mocks__/is-behind-upstream'));
+vi.mock('../lib/remote-branch-exists', async () => await vi.importActual('../lib/__mocks__/remote-branch-exists'));
+vi.mock('../conventional-commits', async () => await vi.importActual('../__mocks__/conventional-commits'));
+vi.mock('../git-clients/gitlab-client', async () => await vi.importActual('../__mocks__/gitlab-client'));
+vi.mock('../git-clients/github-client', async () => await vi.importActual('../__mocks__/github-client'));
+
+vi.mock('@lerna-lite/core', async () => ({
+  ...(await vi.importActual<any>('@lerna-lite/core')),
+  Command: (await vi.importActual<any>('../../../core/src/command')).Command,
+  conf: (await vi.importActual<any>('../../../core/src/command')).conf,
+  logOutput: (await vi.importActual<any>('../../../core/src/__mocks__/output')).logOutput,
+  promptConfirmation: (await vi.importActual<any>('../../../core/src/__mocks__/prompt')).promptConfirmation,
+  promptSelectOne: (await vi.importActual<any>('../../../core/src/__mocks__/prompt')).promptSelectOne,
+  promptTextInput: (await vi.importActual<any>('../../../core/src/__mocks__/prompt')).promptTextInput,
+  throwIfUncommitted: (await vi.importActual<any>('../../../core/src/__mocks__/check-working-tree')).throwIfUncommitted,
 }));
 
 // also point to the local version command so that all mocks are properly used even by the command-runner
-jest.mock('@lerna-lite/version', () => jest.requireActual('../version-command'));
+vi.mock('@lerna-lite/version', async () => await vi.importActual('../version-command'));
 
 // mocked modules
+import { fileURLToPath } from 'node:url';
+import { dirname } from 'node:path';
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = dirname(__filename);
 import { logOutput, VersionCommandOption } from '@lerna-lite/core';
-import { recommendVersion } from '../conventional-commits';
+import { updateChangelog, recommendVersion } from '../conventional-commits';
 import { createGitHubClient, createGitLabClient } from '../git-clients';
 
 // helpers
@@ -82,9 +90,7 @@ describe.each([
 
   it('throws an error if --no-changelog also passed', async () => {
     const cwd = await initFixture('independent');
-    const command = new VersionCommand(
-      createArgv(cwd, '--create-release', type, '--conventional-commits', '--no-changelog')
-    );
+    const command = new VersionCommand(createArgv(cwd, '--create-release', type, '--conventional-commits', '--no-changelog'));
 
     await expect(command).rejects.toThrow('To create a release, you cannot pass --no-changelog');
 
@@ -109,7 +115,7 @@ describe.each([
     process.env.GH_TOKEN = 'TOKEN';
     const cwd = await initFixture('normal');
 
-    (recommendVersion as jest.Mock).mockResolvedValueOnce('2.0.0-alpha.1');
+    (recommendVersion as Mock).mockResolvedValueOnce('2.0.0-alpha.1');
 
     await new VersionCommand(createArgv(cwd, '--create-release', type, '--conventional-commits'));
 
@@ -136,7 +142,7 @@ describe.each([
       ['package-5', '5.0.1'],
     ]);
 
-    versionBumps.forEach((bump) => (recommendVersion as jest.Mock).mockResolvedValueOnce(bump));
+    versionBumps.forEach((bump) => (recommendVersion as Mock).mockResolvedValueOnce(bump));
 
     await new VersionCommand(createArgv(cwd, '--create-release', type, '--conventional-commits'));
 
@@ -159,7 +165,7 @@ describe.each([
 
     const cwd = await initFixture('normal');
 
-    (recommendVersion as jest.Mock).mockResolvedValueOnce('1.1.0');
+    (recommendVersion as Mock).mockResolvedValueOnce('1.1.0');
 
     await new VersionCommand(createArgv(cwd, '--create-release', type, '--conventional-commits'));
 
@@ -177,25 +183,21 @@ describe.each([
 
   it('creates a single fixed release in dry-run mode', async () => {
     process.env.GH_TOKEN = 'TOKEN';
-    const logSpy = jest.spyOn(npmlog, 'info');
+    const logSpy = vi.spyOn(npmlog, 'info');
 
     const cwd = await initFixture('normal');
 
-    (recommendVersion as jest.Mock).mockResolvedValueOnce('1.1.0');
+    (recommendVersion as Mock).mockResolvedValueOnce('1.1.0');
 
     await new VersionCommand(createArgv(cwd, '--create-release', type, '--conventional-commits', '--dry-run'));
 
-    expect(logSpy).toHaveBeenCalledWith(
-      chalk.bold.magenta('[dry-run] >'),
-      `Create Release with repo options: `,
-      expect.anything()
-    );
+    expect(logSpy).toHaveBeenCalledWith(chalk.bold.magenta('[dry-run] >'), `Create Release with repo options: `, expect.anything());
   });
 
   it('creates a single fixed release in git dry-run mode', async () => {
     const cwd = await initFixture('normal');
 
-    (recommendVersion as jest.Mock).mockResolvedValueOnce('1.1.0');
+    (recommendVersion as Mock).mockResolvedValueOnce('1.1.0');
 
     await new VersionCommand(createArgv(cwd, '--create-release', type, '--conventional-commits', '--dry-run'));
 
@@ -207,19 +209,6 @@ describe.each([
      - package-4: 1.0.0 => 1.1.0
      - package-5: 1.0.0 => 1.1.0 (private)
     `);
-  });
-});
-
-describe('legacy option --github-release', () => {
-  it('is translated into --create-release=github', async () => {
-    process.env = {
-      GH_TOKEN: 'TOKEN',
-    };
-    const cwd = await initFixture('normal');
-
-    await lernaVersion(cwd)('--github-release', '--conventional-commits');
-
-    expect((createGitHubClient as any).releases.size).toBe(1);
   });
 });
 
@@ -241,7 +230,7 @@ describe('create --github-release without providing GH_TOKEN', () => {
   });
 
   it('should create a GitHub Release link with prefilled data when GH_TOKEN env var is not provided', async () => {
-    const logSpy = jest.spyOn(npmlog, 'info');
+    const logSpy = vi.spyOn(npmlog, 'info');
     const cwd = await initFixture('normal');
 
     await lernaVersion(cwd)('--create-release', 'github', '--conventional-commits');
@@ -249,5 +238,88 @@ describe('create --github-release without providing GH_TOKEN', () => {
     // prettier-ignore
     const releaseUrl = 'https://github.com/lerna/lerna/releases/new?tag=v1.0.1&title=v1.0.1&body=normal&prerelease=false';
     expect(logSpy).toHaveBeenCalledWith('github', `🏷️ (GitHub Release web interface) - 🔗 ${releaseUrl}`);
+  });
+});
+
+describe.each([
+  ['github', createGitHubClient],
+  ['gitlab', createGitLabClient],
+])('--create-release %s with version bump only package', (type: any, client: any) => {
+  // make "package-4" a version bump only
+  const bumpOnlyTextPkg4 = `## [4.0.1](https://github.com/my-repo/my-repo/compare/v4.0.0...v4.0.1) (2001-01-01)
+
+  **Note:** Version bump only for package package-4`;
+
+  beforeEach(() => {
+    process.env = {};
+    (updateChangelog as Mock).mockImplementation((pkg) => {
+      const filePath = join(pkg.location, 'CHANGELOG.md');
+      return outputFile(filePath, 'changelog', 'utf8').then(() => ({
+        logPath: filePath,
+        newEntry: pkg.name === 'package-4' ? bumpOnlyTextPkg4 : `${pkg.name} - ${pkg.version}`,
+      }));
+    });
+  });
+
+  it('creates a release for every independent version but skip "version bump only" packages when --skip-bump-only-release is enabled', async () => {
+    process.env.GH_TOKEN = 'TOKEN';
+    const cwd = await initFixture('independent');
+    const versionBumps = new Map([
+      ['package-1', '1.0.1'],
+      ['package-2', '2.0.1'],
+      ['package-3', '4.0.1'],
+      ['package-4', '4.0.1'],
+      ['package-5', '5.0.1'],
+    ]);
+
+    versionBumps.forEach((bump) => (recommendVersion as Mock).mockResolvedValueOnce(bump));
+
+    await new VersionCommand(createArgv(cwd, '--create-release', type, '--conventional-commits', '--skip-bump-only-release'));
+
+    expect(client.releases.size).toBe(4);
+    versionBumps.forEach((version, name) => {
+      if (name === 'package-4') {
+        expect(client.releases.get(`${name}@${version}`)).toBeFalsy();
+      } else {
+        expect(client.releases.get(`${name}@${version}`)).toEqual({
+          owner: 'lerna',
+          repo: 'lerna',
+          tag_name: `${name}@${version}`,
+          name: `${name}@${version}`,
+          body: `${name} - ${version}`,
+          draft: false,
+          prerelease: false,
+        });
+      }
+    });
+  });
+
+  it('creates a release for every independent version even with "version bump only" packages when --skip-bump-only-release is NOT enabled', async () => {
+    process.env.GH_TOKEN = 'TOKEN';
+    const cwd = await initFixture('independent');
+    const versionBumps = new Map([
+      ['package-1', '1.0.1'],
+      ['package-2', '2.0.1'],
+      ['package-3', '4.0.1'],
+      ['package-4', '4.0.1'],
+      ['package-5', '5.0.1'],
+    ]);
+
+    versionBumps.forEach((bump) => (recommendVersion as Mock).mockResolvedValueOnce(bump));
+
+    await new VersionCommand(createArgv(cwd, '--create-release', type, '--conventional-commits'));
+
+    expect(client.releases.size).toBe(5);
+    versionBumps.forEach((version, name) => {
+      expect(client.releases.get(`${name}@${version}`)).toEqual({
+        owner: 'lerna',
+        repo: 'lerna',
+        tag_name: `${name}@${version}`,
+        name: `${name}@${version}`,
+        body: name === 'package-4' ? bumpOnlyTextPkg4 : `${name} - ${version}`,
+        draft: false,
+        prerelease: false,
+      });
+    });
   });
 });

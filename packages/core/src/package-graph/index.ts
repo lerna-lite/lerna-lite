@@ -1,2 +1,2 @@
-export * from './package-graph';
-export * from './lib';
+export * from './package-graph.js';
+export * from './lib/index.js';

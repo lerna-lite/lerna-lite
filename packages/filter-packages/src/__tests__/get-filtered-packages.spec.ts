@@ -1,24 +1,27 @@
-const mockNotice = jest.fn();
-jest.mock('npmlog', () => ({
-  ...(jest.requireActual('npmlog') as any),
+import { beforeAll, expect, test, vi } from 'vitest';
+
+const mockNotice = vi.fn();
+vi.mock('npmlog', async () => ({
+  ...(await vi.importActual<any>('npmlog')),
   notice: mockNotice,
 }));
 
-jest.mock('@lerna-lite/core', () => ({
-  ...(jest.requireActual('@lerna-lite/core') as any), // return the other real methods, below we'll mock only 2 of the methods
-  Command: jest.requireActual('../../../core/src/command').Command,
-  conf: jest.requireActual('../../../core/src/command').conf,
-  logOutput: jest.requireActual('../../../core/src/__mocks__/output').logOutput,
-  promptConfirmation: jest.requireActual('../../../core/src/__mocks__/prompt').promptConfirmation,
-  promptSelectOne: jest.requireActual('../../../core/src/__mocks__/prompt').promptSelectOne,
-  promptTextInput: jest.requireActual('../../../core/src/__mocks__/prompt').promptTextInput,
-  throwIfUncommitted: jest.requireActual('../../../core/src/__mocks__/check-working-tree').throwIfUncommitted,
-  collectUpdates: jest.requireActual('../../../core/src/__mocks__/collect-updates').collectUpdates,
-  PackageGraph: jest.requireActual('../../../core/src/package-graph').PackageGraph,
-  getPackages: jest.requireActual('../../../core/src/project').getPackages,
+vi.mock('@lerna-lite/core', async () => ({
+  ...(await vi.importActual<any>('@lerna-lite/core')), // return the other real methods, below we'll mock only 2 of the methods
+  Command: (await vi.importActual<any>('../../../core/src/command')).Command,
+  conf: (await vi.importActual<any>('../../../core/src/command')).conf,
+  logOutput: (await vi.importActual<any>('../../../core/src/__mocks__/output')).logOutput,
+  promptConfirmation: (await vi.importActual<any>('../../../core/src/__mocks__/prompt')).promptConfirmation,
+  promptSelectOne: (await vi.importActual<any>('../../../core/src/__mocks__/prompt')).promptSelectOne,
+  promptTextInput: (await vi.importActual<any>('../../../core/src/__mocks__/prompt')).promptTextInput,
+  throwIfUncommitted: (await vi.importActual<any>('../../../core/src/__mocks__/check-working-tree')).throwIfUncommitted,
+  collectUpdates: (await vi.importActual<any>('../../../core/src/__mocks__/collect-updates')).collectUpdates,
+  PackageGraph: (await vi.importActual<any>('../../../core/src/package-graph')).PackageGraph,
+  getPackages: (await vi.importActual<any>('../../../core/src/project')).getPackages,
 }));
 
-import path from 'path';
+import { dirname, resolve as pathResolve } from 'node:path';
+import { fileURLToPath } from 'node:url';
 import yargs from 'yargs/yargs';
 
 // mocked modules
@@ -26,7 +29,9 @@ import { collectUpdates } from '@lerna-lite/core';
 
 // helpers
 import { initFixtureFactory } from '@lerna-test/helpers';
-const initFixture = initFixtureFactory(path.resolve(__dirname, '../'));
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = dirname(__filename);
+const initFixture = initFixtureFactory(pathResolve(__dirname, '../'));
 
 import { Project, PackageGraph } from '@lerna-lite/core';
 
@@ -55,7 +60,7 @@ test.each`
   ${'--ignore'}
 `('$flag requires an argument', async ({ flag }) => {
   // swallow stderr during yargs execution
-  jest.spyOn(console, 'error').mockImplementation(() => {});
+  vi.spyOn(console, 'error').mockImplementation(() => {});
 
   expect(() => parseOptions(flag)).toThrow('Not enough arguments');
 });
@@ -92,9 +97,7 @@ test.each`
   const options: any = parseOptions(...argv);
   options.log = { notice: mockNotice };
 
-  await expect(getFilteredPackages(packageGraph, execOpts, options)).rejects.toThrow(
-    'No packages remain after filtering'
-  );
+  await expect(getFilteredPackages(packageGraph, execOpts, options)).rejects.toThrow('No packages remain after filtering');
 });
 
 test.each`
@@ -121,12 +124,7 @@ test('--since returns all packages if no tag is found', async () => {
   const result = await getFilteredPackages(packageGraph, execOpts, options);
 
   expect(result).toHaveLength(5);
-  expect(collectUpdates).toHaveBeenLastCalledWith(
-    expect.any(Array),
-    packageGraph,
-    execOpts,
-    expect.objectContaining({ since: '' })
-  );
+  expect(collectUpdates).toHaveBeenLastCalledWith(expect.any(Array), packageGraph, execOpts, expect.objectContaining({ since: '' }));
 });
 
 test('--include-merged-tags returns all packages if no tag is found', async () => {
@@ -138,12 +136,7 @@ test('--include-merged-tags returns all packages if no tag is found', async () =
   const result = await getFilteredPackages(packageGraph, execOpts, options);
 
   expect(result).toHaveLength(5);
-  expect(collectUpdates).toHaveBeenLastCalledWith(
-    expect.any(Array),
-    packageGraph,
-    execOpts,
-    expect.objectContaining({ since: '' })
-  );
+  expect(collectUpdates).toHaveBeenLastCalledWith(expect.any(Array), packageGraph, execOpts, expect.objectContaining({ since: '' }));
   expect(mockNotice).toHaveBeenCalledWith('filter', 'including merged tags');
 });
 
@@ -171,12 +164,7 @@ test('--since <ref> should return packages updated since <ref>', async () => {
   const result = await getFilteredPackages(packageGraph, execOpts, options);
 
   expect(result.map((node) => node.name)).toEqual(['package-1', 'package-2', 'package-3']);
-  expect(collectUpdates).toHaveBeenLastCalledWith(
-    expect.any(Array),
-    packageGraph,
-    execOpts,
-    expect.objectContaining({ since: 'deadbeef' })
-  );
+  expect(collectUpdates).toHaveBeenLastCalledWith(expect.any(Array), packageGraph, execOpts, expect.objectContaining({ since: 'deadbeef' }));
 });
 
 test('--scope package-{2,3,4} --since main', async () => {
@@ -207,12 +195,7 @@ test('--exclude-dependents', async () => {
 
   await getFilteredPackages(packageGraph, execOpts, options);
 
-  expect(collectUpdates).toHaveBeenLastCalledWith(
-    expect.any(Array),
-    packageGraph,
-    execOpts,
-    expect.objectContaining({ excludeDependents: true })
-  );
+  expect(collectUpdates).toHaveBeenLastCalledWith(expect.any(Array), packageGraph, execOpts, expect.objectContaining({ excludeDependents: true }));
 });
 
 test('--exclude-dependents conflicts with --include-dependents', async () => {

@@ -1,27 +1,34 @@
+import { afterEach, describe, expect, it, vi } from 'vitest';
+
+vi.mock('load-json-file', async () => vi.importActual('../lib/__mocks__/load-json-file'));
+
 // local modules _must_ be explicitly mocked
-jest.mock('../lib/git-push', () => jest.requireActual('../lib/__mocks__/git-push'));
-jest.mock('../lib/is-anything-committed', () => jest.requireActual('../lib/__mocks__/is-anything-committed'));
-jest.mock('../lib/is-behind-upstream', () => jest.requireActual('../lib/__mocks__/is-behind-upstream'));
-jest.mock('../lib/remote-branch-exists', () => jest.requireActual('../lib/__mocks__/remote-branch-exists'));
+vi.mock('../lib/git-push', async () => await vi.importActual('../lib/__mocks__/git-push'));
+vi.mock('../lib/is-anything-committed', async () => await vi.importActual('../lib/__mocks__/is-anything-committed'));
+vi.mock('../lib/is-behind-upstream', async () => await vi.importActual('../lib/__mocks__/is-behind-upstream'));
+vi.mock('../lib/remote-branch-exists', async () => await vi.importActual('../lib/__mocks__/remote-branch-exists'));
 
-jest.mock('@lerna-lite/core', () => ({
-  ...(jest.requireActual('@lerna-lite/core') as any), // return the other real methods, below we'll mock only 2 of the methods
-  Command: jest.requireActual('../../../core/src/command').Command,
-  conf: jest.requireActual('../../../core/src/command').conf,
-  logOutput: jest.requireActual('../../../core/src/__mocks__/output').logOutput,
-  promptConfirmation: jest.requireActual('../../../core/src/__mocks__/prompt').promptConfirmation,
-  promptSelectOne: jest.requireActual('../../../core/src/__mocks__/prompt').promptSelectOne,
-  promptTextInput: jest.requireActual('../../../core/src/__mocks__/prompt').promptTextInput,
-  createRunner: jest.requireActual('../../../core/src/__mocks__/run-lifecycle').createRunner,
-  runLifecycle: jest.requireActual('../../../core/src/__mocks__/run-lifecycle').runLifecycle,
-  throwIfUncommitted: jest.requireActual('../../../core/src/__mocks__/check-working-tree').throwIfUncommitted,
+vi.mock('@lerna-lite/core', async () => ({
+  ...(await vi.importActual<any>('@lerna-lite/core')),
+  Command: (await vi.importActual<any>('../../../core/src/command')).Command,
+  conf: (await vi.importActual<any>('../../../core/src/command')).conf,
+  logOutput: (await vi.importActual<any>('../../../core/src/__mocks__/output')).logOutput,
+  promptConfirmation: (await vi.importActual<any>('../../../core/src/__mocks__/prompt')).promptConfirmation,
+  promptSelectOne: (await vi.importActual<any>('../../../core/src/__mocks__/prompt')).promptSelectOne,
+  promptTextInput: (await vi.importActual<any>('../../../core/src/__mocks__/prompt')).promptTextInput,
+  createRunner: (await vi.importActual<any>('../../../core/src/__mocks__/run-lifecycle')).createRunner,
+  runLifecycle: (await vi.importActual<any>('../../../core/src/__mocks__/run-lifecycle')).runLifecycle,
+  throwIfUncommitted: (await vi.importActual<any>('../../../core/src/__mocks__/check-working-tree')).throwIfUncommitted,
 }));
-
 import { runLifecycle, VersionCommandOption } from '@lerna-lite/core';
-import loadJsonFile from 'load-json-file';
+import { loadJsonFile } from 'load-json-file';
+import { fileURLToPath } from 'node:url';
+import { dirname } from 'node:path';
 import yargParser from 'yargs-parser';
 
 // helpers
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = dirname(__filename);
 import { initFixtureFactory } from '@lerna-test/helpers';
 const initFixture = initFixtureFactory(__dirname);
 
@@ -55,16 +62,8 @@ describe('lifecycle scripts', () => {
 
     ['preversion', 'version', 'postversion'].forEach((script) => {
       // "lifecycle" is the root manifest name
-      expect(runLifecycle).toHaveBeenCalledWith(
-        expect.objectContaining({ name: 'lifecycle' }),
-        script,
-        expect.any(Object)
-      );
-      expect(runLifecycle).toHaveBeenCalledWith(
-        expect.objectContaining({ name: 'package-1' }),
-        script,
-        expect.any(Object)
-      );
+      expect(runLifecycle).toHaveBeenCalledWith(expect.objectContaining({ name: 'lifecycle' }), script, expect.any(Object));
+      expect(runLifecycle).toHaveBeenCalledWith(expect.objectContaining({ name: 'package-1' }), script, expect.any(Object));
     });
 
     // package-2 lacks version lifecycle scripts

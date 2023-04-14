@@ -3,7 +3,7 @@ import log from 'npmlog';
 import npa from 'npm-package-arg';
 import fetch from 'npm-registry-fetch';
 
-import { DistTagOptions } from '../models';
+import { DistTagOptions } from '../models/index.js';
 
 /**
  * Add a dist-tag to a package.
@@ -24,7 +24,7 @@ export function add(spec: string, tag = '', options: DistTagOptions, otpCache: O
 
   opts.log.verbose('dist-tag', `adding "${cleanTag}" to ${name}@${version}`);
 
-  // istanbul ignore next
+  /* c8 ignore next 3 */
   if (opts.dryRun) {
     opts.log.silly('dist-tag', 'dry-run configured, bailing now');
     return Promise.resolve();
@@ -77,7 +77,7 @@ export function remove(spec: string, tag: string, options: DistTagOptions, otpCa
 
   opts.log.verbose('dist-tag', `removing "${tag}" from ${opts.spec.name}`);
 
-  // istanbul ignore next
+  /* c8 ignore next 3 */
   if (opts.dryRun) {
     opts.log.silly('dist-tag', 'dry-run configured, bailing now');
     return Promise.resolve();
@@ -122,7 +122,7 @@ export function list(spec: string, options: DistTagOptions) {
     spec: npa(spec),
   };
 
-  // istanbul ignore next
+  /* c8 ignore next 3 */
   if (opts.dryRun) {
     opts.log.silly('dist-tag', 'dry-run configured, bailing now');
     return Promise.resolve();

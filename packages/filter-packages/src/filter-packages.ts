@@ -1,5 +1,5 @@
 import multimatch from 'multimatch';
-import util from 'util';
+import util from 'node:util';
 import log from 'npmlog';
 
 import { Package, ValidationError } from '@lerna-lite/core';

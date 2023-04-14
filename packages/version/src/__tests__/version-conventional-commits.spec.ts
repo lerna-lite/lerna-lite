@@ -1,36 +1,42 @@
-// local modules _must_ be explicitly mocked
-jest.mock('../lib/git-push', () => jest.requireActual('../lib/__mocks__/git-push'));
-jest.mock('../lib/is-anything-committed', () => jest.requireActual('../lib/__mocks__/is-anything-committed'));
-jest.mock('../lib/is-behind-upstream', () => jest.requireActual('../lib/__mocks__/is-behind-upstream'));
-jest.mock('../lib/remote-branch-exists', () => jest.requireActual('../lib/__mocks__/remote-branch-exists'));
-jest.mock('../git-clients/gitlab-client', () => jest.requireActual('../__mocks__/gitlab-client').createGitLabClient);
-jest.mock('../conventional-commits', () => jest.requireActual('../__mocks__/conventional-commits'));
+import { describe, expect, it, Mock, vi } from 'vitest';
 
-jest.mock('@lerna-lite/core', () => ({
-  ...(jest.requireActual('@lerna-lite/core') as any), // return the other real methods, below we'll mock only 2 of the methods
-  Command: jest.requireActual('../../../core/src/command').Command,
-  conf: jest.requireActual('../../../core/src/command').conf,
-  logOutput: jest.requireActual('../../../core/src/__mocks__/output').logOutput,
-  collectUpdates: jest.requireActual('../../../core/src/__mocks__/collect-updates').collectUpdates,
-  promptConfirmation: jest.requireActual('../../../core/src/__mocks__/prompt').promptConfirmation,
-  promptSelectOne: jest.requireActual('../../../core/src/__mocks__/prompt').promptSelectOne,
-  promptTextInput: jest.requireActual('../../../core/src/__mocks__/prompt').promptTextInput,
-  checkWorkingTree: jest.requireActual('../../../core/src/__mocks__/check-working-tree').checkWorkingTree,
-  throwIfReleased: jest.requireActual('../../../core/src/__mocks__/check-working-tree').throwIfReleased,
-  throwIfUncommitted: jest.requireActual('../../../core/src/__mocks__/check-working-tree').throwIfUncommitted,
+// local modules _must_ be explicitly mocked
+vi.mock('../lib/git-push', async () => await vi.importActual('../lib/__mocks__/git-push'));
+vi.mock('../lib/is-anything-committed', async () => await vi.importActual('../lib/__mocks__/is-anything-committed'));
+vi.mock('../lib/is-behind-upstream', async () => await vi.importActual('../lib/__mocks__/is-behind-upstream'));
+vi.mock('../lib/remote-branch-exists', async () => await vi.importActual('../lib/__mocks__/remote-branch-exists'));
+vi.mock('../git-clients/gitlab-client', async () => await vi.importActual<any>('../__mocks__/gitlab-client'));
+vi.mock('../conventional-commits', async () => await vi.importActual('../__mocks__/conventional-commits'));
+vi.mock('write-pkg', async () => await vi.importActual('../lib/__mocks__/write-pkg'));
+
+vi.mock('@lerna-lite/core', async () => ({
+  ...(await vi.importActual<any>('@lerna-lite/core')),
+  Command: (await vi.importActual<any>('../../../core/src/command')).Command,
+  conf: (await vi.importActual<any>('../../../core/src/command')).conf,
+  logOutput: (await vi.importActual<any>('../../../core/src/__mocks__/output')).logOutput,
+  collectUpdates: (await vi.importActual<any>('../../../core/src/__mocks__/collect-updates')).collectUpdates,
+  promptConfirmation: (await vi.importActual<any>('../../../core/src/__mocks__/prompt')).promptConfirmation,
+  promptSelectOne: (await vi.importActual<any>('../../../core/src/__mocks__/prompt')).promptSelectOne,
+  promptTextInput: (await vi.importActual<any>('../../../core/src/__mocks__/prompt')).promptTextInput,
+  checkWorkingTree: (await vi.importActual<any>('../../../core/src/__mocks__/check-working-tree')).checkWorkingTree,
+  throwIfReleased: (await vi.importActual<any>('../../../core/src/__mocks__/check-working-tree')).throwIfReleased,
+  throwIfUncommitted: (await vi.importActual<any>('../../../core/src/__mocks__/check-working-tree')).throwIfUncommitted,
 }));
 
-import path from 'path';
+import { dirname, join, resolve as pathResolve } from 'node:path';
 import semver from 'semver';
+import { fileURLToPath } from 'node:url';
 
 // mocked modules
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = dirname(__filename);
 import writePkg from 'write-pkg';
 import { collectUpdates, VersionCommandOption } from '@lerna-lite/core';
 import { recommendVersion, updateChangelog } from '../conventional-commits';
 
 // helpers
 import { initFixtureFactory, showCommit } from '@lerna-test/helpers';
-const initFixture = initFixtureFactory(path.resolve(__dirname, '../../../publish/src/__tests__'));
+const initFixture = initFixtureFactory(pathResolve(__dirname, '../../../publish/src/__tests__'));
 
 // test command
 import { VersionCommand } from '../version-command';
@@ -66,7 +72,7 @@ describe('--conventional-commits', () => {
     ]);
 
     it('should use conventional-commits utility to guess version bump and generate CHANGELOG', async () => {
-      versionBumps.forEach((bump) => (recommendVersion as jest.Mock).mockResolvedValueOnce(bump));
+      versionBumps.forEach((bump) => (recommendVersion as Mock).mockResolvedValueOnce(bump));
 
       const cwd = await initFixture('independent');
 
@@ -93,7 +99,7 @@ describe('--conventional-commits', () => {
     });
 
     it('should guess prerelease version bumps and generate CHANGELOG', async () => {
-      prereleaseVersionBumps.forEach((bump) => (recommendVersion as jest.Mock).mockResolvedValueOnce(bump));
+      prereleaseVersionBumps.forEach((bump) => (recommendVersion as Mock).mockResolvedValueOnce(bump));
       const cwd = await initFixture('prerelease-independent');
 
       await new VersionCommand(createArgv(cwd, '--conventional-commits', '--conventional-prerelease'));
@@ -119,12 +125,10 @@ describe('--conventional-commits', () => {
     });
 
     it('should call recommended version with conventionalBumpPrerelease set', async () => {
-      prereleaseVersionBumps.forEach((bump) => (recommendVersion as jest.Mock).mockResolvedValueOnce(bump));
+      prereleaseVersionBumps.forEach((bump) => (recommendVersion as Mock).mockResolvedValueOnce(bump));
       const cwd = await initFixture('prerelease-independent');
 
-      await new VersionCommand(
-        createArgv(cwd, '--conventional-commits', '--conventional-prerelease', '--conventional-bump-prerelease')
-      );
+      await new VersionCommand(createArgv(cwd, '--conventional-commits', '--conventional-prerelease', '--conventional-bump-prerelease'));
 
       prereleaseVersionBumps.forEach((version, name) => {
         const prereleaseId = (semver as any).prerelease(version)[0];
@@ -144,7 +148,7 @@ describe('--conventional-commits', () => {
     });
 
     it('should graduate prerelease version bumps and generate CHANGELOG', async () => {
-      versionBumps.forEach((bump) => (recommendVersion as jest.Mock).mockResolvedValueOnce(bump));
+      versionBumps.forEach((bump) => (recommendVersion as Mock).mockResolvedValueOnce(bump));
       const cwd = await initFixture('prerelease-independent');
 
       await new VersionCommand(createArgv(cwd, '--conventional-commits', '--conventional-graduate'));
@@ -202,7 +206,7 @@ describe('--conventional-commits', () => {
 
     it('accepts --build-metadata option', async () => {
       const buildMetadata = '001';
-      versionBumps.forEach((bump) => (recommendVersion as jest.Mock).mockResolvedValueOnce(`${bump}+${buildMetadata}`));
+      versionBumps.forEach((bump) => (recommendVersion as Mock).mockResolvedValueOnce(`${bump}+${buildMetadata}`));
       const cwd = await initFixture('independent');
 
       const changelogOpts = {
@@ -242,7 +246,7 @@ describe('--conventional-commits', () => {
       expect(changedFiles).toMatchSnapshot();
 
       ['package-1', 'package-2', 'package-3', 'package-4', 'package-5'].forEach((name) => {
-        const location = path.join(cwd, 'packages', name);
+        const location = join(cwd, 'packages', name);
 
         expect(recommendVersion).toHaveBeenCalledWith(expect.objectContaining({ name, location }), 'fixed', {
           changelogPreset: undefined,
@@ -292,7 +296,7 @@ describe('--conventional-commits', () => {
       expect(changedFiles).toMatchSnapshot();
 
       ['package-1', 'package-2', 'package-3', 'package-4', 'package-5'].forEach((name) => {
-        const location = path.join(cwd, 'packages', name);
+        const location = join(cwd, 'packages', name);
 
         expect(recommendVersion).toHaveBeenCalledWith(expect.objectContaining({ name, location }), 'fixed', {
           changelogPreset: undefined,
@@ -302,11 +306,11 @@ describe('--conventional-commits', () => {
           buildMetadata: undefined,
         });
 
-        expect(updateChangelog).toHaveBeenCalledWith(
-          expect.objectContaining({ name, version: '2.0.0-alpha.0' }),
-          'fixed',
-          { changelogPreset: undefined, rootPath: cwd, tagPrefix: 'v' }
-        );
+        expect(updateChangelog).toHaveBeenCalledWith(expect.objectContaining({ name, version: '2.0.0-alpha.0' }), 'fixed', {
+          changelogPreset: undefined,
+          rootPath: cwd,
+          tagPrefix: 'v',
+        });
       });
 
       expect(updateChangelog).toHaveBeenLastCalledWith(
@@ -334,16 +338,7 @@ describe('--conventional-commits', () => {
         prereleaseId: undefined,
       };
 
-      await new VersionCommand(
-        createArgv(
-          cwd,
-          '--conventional-commits',
-          '--changelog-preset',
-          'baz-qux',
-          '--tag-version-prefix',
-          'dragons-are-awesome'
-        )
-      );
+      await new VersionCommand(createArgv(cwd, '--conventional-commits', '--changelog-preset', 'baz-qux', '--tag-version-prefix', 'dragons-are-awesome'));
 
       expect(recommendVersion).toHaveBeenCalledWith(expect.any(Object), 'fixed', {
         ...changelogOpts,
@@ -373,7 +368,7 @@ describe('--conventional-commits', () => {
     const cwd = await initFixture('no-interdependencies');
 
     (collectUpdates as any).setUpdated(cwd, 'package-1');
-    (recommendVersion as jest.Mock).mockResolvedValueOnce('1.1.0');
+    (recommendVersion as Mock).mockResolvedValueOnce('1.1.0');
 
     await new VersionCommand(createArgv(cwd, '--conventional-commits'));
 
@@ -382,13 +377,11 @@ describe('--conventional-commits', () => {
     });
 
     // clear previous publish mock records
-    jest.clearAllMocks();
+    vi.clearAllMocks();
     (writePkg as any).registry.clear();
 
     (collectUpdates as any).setUpdated(cwd, 'package-2');
-    (recommendVersion as jest.Mock).mockImplementationOnce((pkg) =>
-      Promise.resolve((semver as any).inc(pkg.version, 'patch'))
-    );
+    (recommendVersion as Mock).mockImplementationOnce((pkg) => Promise.resolve((semver as any).inc(pkg.version, 'patch')));
 
     await new VersionCommand(createArgv(cwd, '--conventional-commits'));
 
@@ -399,7 +392,7 @@ describe('--conventional-commits', () => {
 
   it('accepts --build-metadata option', async () => {
     const buildMetadata = 'exp.sha.5114f85';
-    (recommendVersion as jest.Mock).mockResolvedValueOnce(`1.0.1+${buildMetadata}`);
+    (recommendVersion as Mock).mockResolvedValueOnce(`1.0.1+${buildMetadata}`);
     const cwd = await initFixture('normal');
 
     const changelogOpts = {

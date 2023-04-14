@@ -1,3 +1,5 @@
+import { expect, test } from 'vitest';
+
 // helpers
 import buildGraph from '../__helpers__/build-graph';
 

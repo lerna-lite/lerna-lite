@@ -1,11 +1,15 @@
-import fs from 'fs-extra';
-import path from 'path';
+import { describe, expect, it, vi } from 'vitest';
+import { outputFile, remove } from 'fs-extra/esm';
+import { dirname, join } from 'node:path';
 import chalk from 'chalk';
+import { fileURLToPath } from 'node:url';
 
 // helpers
 import { Project } from '../../project';
 import { gitAdd } from '@lerna-test/helpers';
 import { initFixtureFactory } from '@lerna-test/helpers';
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = dirname(__filename);
 const initFixture = initFixtureFactory(__dirname);
 
 // file under test
@@ -44,23 +48,23 @@ const setupChanges = async (cwd) => {
   const [pkg1, pkg2, pkg3, pkg4] = await Project.getPackages(cwd);
 
   // 'AD': (added to index, deleted in working tree)
-  const file1 = path.join(pkg1.location, 'file-1.ts');
-  await fs.outputFile(file1, 'yay');
+  const file1 = join(pkg1.location, 'file-1.ts');
+  await outputFile(file1, 'yay');
   await gitAdd(cwd, file1);
-  await fs.remove(file1);
+  await remove(file1);
 
   // ' D': (deleted in working tree)
-  await fs.remove(pkg1.manifestLocation);
+  await remove(pkg1.manifestLocation);
 
   // ' M': (modified in working tree)
   pkg2.set('modified', true);
   await pkg2.serialize();
 
   // 'AM': (added to index, modified in working tree)
-  const file2 = path.join(pkg2.location, 'file-2.ts');
-  await fs.outputFile(file2, 'woo');
+  const file2 = join(pkg2.location, 'file-2.ts');
+  await outputFile(file2, 'woo');
   await gitAdd(cwd, file2);
-  await fs.outputFile(file2, 'hoo');
+  await outputFile(file2, 'hoo');
 
   // 'MM': (updated in index, modified in working tree)
   pkg3.set('updated', true);
@@ -75,13 +79,13 @@ const setupChanges = async (cwd) => {
   await gitAdd(cwd, pkg4.manifestLocation);
 
   // 'D ': (deleted in index)
-  const rootManifest = path.join(cwd, 'package.json');
-  await fs.remove(rootManifest);
+  const rootManifest = join(cwd, 'package.json');
+  await remove(rootManifest);
   await gitAdd(cwd, rootManifest);
 
   // '??': (untracked)
-  const poopy = path.join(cwd, 'poopy.txt');
-  await fs.outputFile(poopy, 'pants');
+  const poopy = join(cwd, 'poopy.txt');
+  await outputFile(poopy, 'pants');
 };
 
 describe('collectUncommitted()', () => {
@@ -104,7 +108,7 @@ describe('collectUncommitted()', () => {
 
   it('accepts options.log', async () => {
     // re-uses previous cwd
-    const log = { silly: jest.fn() };
+    const log = { silly: vi.fn() };
 
     const result = await collectUncommitted({ log } as any);
 
@@ -133,7 +137,7 @@ describe('collectUncommittedSync()', () => {
 
   it('accepts options.log', async () => {
     // re-uses previous cwd
-    const log = { silly: jest.fn() };
+    const log = { silly: vi.fn() };
 
     const result = collectUncommittedSync({ log } as any);
 

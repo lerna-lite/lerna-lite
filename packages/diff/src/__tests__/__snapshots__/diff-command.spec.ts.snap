@@ -1,6 +1,6 @@
-// Jest Snapshot v1, https://goo.gl/fbAQLP
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
 
-exports[`Diff Command passes diff exclude globs configured with --ignore-changes 1`] = `
+exports[`Diff Command > passes diff exclude globs configured with --ignore-changes 1`] = `
 diff --git a/packages/package-1/package.json b/packages/package-1/package.json
 index SHA..SHA 100644
 --- a/packages/package-1/package.json
@@ -11,17 +11,16 @@ index SHA..SHA 100644
 -  "changed": 0,
 +  "changed": 1,
    "version": "1.0.0"
--}
+ }
 \\ No newline at end of file
-+}
 `;
 
-exports[`Diff Command should diff a specific package 1`] = `
+exports[`Diff Command > should diff a specific package 1`] = `
 diff --git a/packages/package-2/package.json b/packages/package-2/package.json
 index SHA..SHA 100644
 --- a/packages/package-2/package.json
 +++ b/packages/package-2/package.json
-@@ -1,8 +1,8 @@
+@@ -1,6 +1,6 @@
  {
    "name": "package-2",
 -  "changed": 0,
@@ -29,13 +28,9 @@ index SHA..SHA 100644
    "version": "1.0.0",
    "dependencies": {
      "package-1": "^1.0.0"
-   }
--}
-\\ No newline at end of file
-+}
 `;
 
-exports[`Diff Command should diff packages from the first commit 1`] = `
+exports[`Diff Command > should diff packages from the first commit 1`] = `
 diff --git a/packages/package-1/package.json b/packages/package-1/package.json
 index SHA..SHA 100644
 --- a/packages/package-1/package.json
@@ -46,12 +41,11 @@ index SHA..SHA 100644
 -  "changed": 0,
 +  "changed": 1,
    "version": "1.0.0"
--}
+ }
 \\ No newline at end of file
-+}
 `;
 
-exports[`Diff Command should diff packages from the first commit from DiffCommand class 1`] = `
+exports[`Diff Command > should diff packages from the first commit from DiffCommand class 1`] = `
 diff --git a/packages/package-1/package.json b/packages/package-1/package.json
 index SHA..SHA 100644
 --- a/packages/package-1/package.json
@@ -62,12 +56,11 @@ index SHA..SHA 100644
 -  "changed": 0,
 +  "changed": 1,
    "version": "1.0.0"
--}
+ }
 \\ No newline at end of file
-+}
 `;
 
-exports[`Diff Command should diff packages from the first commit from factory 1`] = `
+exports[`Diff Command > should diff packages from the first commit from factory 1`] = `
 diff --git a/packages/package-1/package.json b/packages/package-1/package.json
 index SHA..SHA 100644
 --- a/packages/package-1/package.json
@@ -78,12 +71,11 @@ index SHA..SHA 100644
 -  "changed": 0,
 +  "changed": 1,
    "version": "1.0.0"
--}
+ }
 \\ No newline at end of file
-+}
 `;
 
-exports[`Diff Command should diff packages from the most recent tag 1`] = `
+exports[`Diff Command > should diff packages from the most recent tag 1`] = `
 diff --git a/packages/package-1/package.json b/packages/package-1/package.json
 index SHA..SHA 100644
 --- a/packages/package-1/package.json
@@ -96,4 +88,5 @@ index SHA..SHA 100644
 +  "version": "1.0.0",
 +  "sinceLastTag": true
  }
+\\ No newline at end of file
 `;

@@ -1,10 +1,15 @@
-import 'jest-extended';
+import { describe, expect, it } from 'vitest';
+import { fileURLToPath } from 'node:url';
+import { dirname } from 'node:path';
+
 import { Project } from '../project';
 import { initFixtureFactory } from '@lerna-test/helpers';
-const initFixture = initFixtureFactory(__dirname);
-
 import { CyclicPackageGraphNode } from '../package-graph/lib/cyclic-package-graph-node';
 import { PackageGraphNode } from '../package-graph';
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = dirname(__filename);
+const initFixture = initFixtureFactory(__dirname);
 
 describe('CyclicPackageGraphNode class', () => {
   it('should return the Cyclic Package Graph Node name to be cycle 1', async () => {

@@ -1,32 +1,18 @@
-import log from 'npmlog';
-// import semver from 'semver';
-import { VersionCommand } from '@lerna-lite/version';
 import { VersionCommandOption } from '@lerna-lite/core';
+
+import log from 'npmlog';
 
 /**
  * @see https://github.com/yargs/yargs/blob/master/docs/advanced.md#providing-a-command-module
  */
 
 const addBumpPositionalFn = function (yargs: any, additionalKeywords: string[] = []) {
-  const semverKeywords = ['major', 'minor', 'patch', 'premajor', 'preminor', 'prepatch', 'prerelease'].concat(
-    additionalKeywords
-  );
-  const bumpOptionList = `'${semverKeywords.slice(0, -1).join(`', '`)}', or '${
-    semverKeywords[semverKeywords.length - 1]
-  }'.`;
+  const semverKeywords = ['major', 'minor', 'patch', 'premajor', 'preminor', 'prepatch', 'prerelease'].concat(additionalKeywords);
+  const bumpOptionList = `'${semverKeywords.slice(0, -1).join(`', '`)}', or '${semverKeywords[semverKeywords.length - 1]}'.`;
 
   yargs.positional('bump', {
     describe: `Increment version(s) by explicit version _or_ semver keyword,\n${bumpOptionList}`,
     type: 'string',
-    // coerce: (choice = '') => {
-    //   const versionBump = choice || yargs.argv.bump;
-
-    //   if (versionBump && (!semver.valid(versionBump) || semverKeywords.indexOf(versionBump) === -1)) {
-    //     throw new Error(`bump must be an explicit version string _or_ one of: ${bumpOptionList}`);
-    //   }
-
-    //   return versionBump;
-    // },
   });
 };
 let addBumpPositional = addBumpPositionalFn;
@@ -72,14 +58,6 @@ export default {
         requiresArg: true,
         type: 'string',
       },
-      // @deprecated - Option RENAMED
-      'changelog-include-commit-author-fullname': {
-        describe:
-          "Specify if we want to include the commit author's name, this option is only available when using --conventional-commits with changelogs. We can also optionally provide a custom message or else a default format will be used.",
-        group: 'Version Command Options:',
-        requiresArg: false,
-        type: 'string',
-      },
       'changelog-include-commits-git-author': {
         describe:
           "Specify if we want to include the commit git author's name, this option is only available when using --conventional-commits with changelogs. We can also optionally provide a custom message or else a default format will be used.",
@@ -92,13 +70,6 @@ export default {
           'Specify if we want to include the commit remote client login name (ie GitHub username), this option is only available when using --conventional-commits with changelogs. We can also optionally provide a custom message or else a default format will be used.',
         group: 'Version Command Options:',
         requiresArg: false,
-        type: 'string',
-      },
-      'changelog-version-message': {
-        describe:
-          'Add a custom message as a prefix to each new version in your "changelog.md" which is located in the root of your project. This option is only available when using --conventional-commits with changelogs.',
-        group: 'Version Command Options:',
-        requiresArg: true,
         type: 'string',
       },
       'changelog-preset': {
@@ -276,8 +247,11 @@ export default {
         type: 'boolean',
       },
       'sync-workspace-lock': {
-        describe:
-          'Runs `npm install --package-lock-only` or equivalent depending on the package manager defined in `npmClient`.',
+        describe: 'Runs `npm install --package-lock-only` or equivalent depending on the package manager defined in `npmClient`.',
+        type: 'boolean',
+      },
+      'skip-bump-only-release': {
+        describe: 'do we want to skip creating a release (github/gitlab) when the version is a "version bump only"?',
         type: 'boolean',
       },
       'workspace-strict-match': {
@@ -316,101 +290,28 @@ export default {
       yargs.group(Object.keys(opts), 'Command Options:');
     }
 
-    return yargs
-      .option('git-dry-run', {
-        // TODO: remove in next major release
-        // NOT the same as filter-options --git-dry-run
-        hidden: true,
-        conflicts: 'dry-run',
-        type: 'boolean',
-      })
-      .option('ignore', {
-        // TODO: remove in next major release
-        // NOT the same as filter-options --ignore
-        hidden: true,
-        conflicts: 'ignore-changes',
-        type: 'array',
-      })
-      .option('cd-version', {
-        // TODO: remove in next major release
-        hidden: true,
-        conflicts: 'bump',
-        type: 'string',
-        requiresArg: true,
-      })
-      .option('repo-version', {
-        // TODO: remove in next major release
-        hidden: true,
-        conflicts: 'bump',
-        type: 'string',
-        requiresArg: true,
-      })
-      .option('skip-git', {
-        // TODO: remove in next major release
-        hidden: true,
-        type: 'boolean',
-      })
-      .option('github-release', {
-        // TODO: remove in next major release
-        hidden: true,
-        type: 'boolean',
-      })
-      .check((argv) => {
-        // override deprecated options
-        /* eslint-disable no-param-reassign */
-        if (argv.ignore) {
-          argv.ignoreChanges = argv.ignore;
-          delete argv.ignore;
-          log.warn('deprecated', '--ignore has been renamed --ignore-changes');
-        }
+    return yargs.check((argv) => {
+      if (argv['--']) {
+        log.warn('EDOUBLEDASH', 'Arguments after -- are no longer passed to subprocess executions.');
+        log.warn('EDOUBLEDASH', 'This will cause an error in a future major version.');
+      }
 
-        if (argv.gitDryRun) {
-          argv.dryRun = argv.gitDryRun;
-          delete argv.gitDryRun;
-          log.warn('deprecated', '--git-dry-run has been renamed --dry-run');
-        }
-
-        if (argv.cdVersion && !argv.bump) {
-          argv.bump = argv.cdVersion;
-          delete argv.cdVersion;
-          delete argv['cd-version'];
-          log.warn('deprecated', '--cd-version has been replaced by positional [bump]');
-        }
-
-        if (argv.repoVersion && !argv.bump) {
-          argv.bump = argv.repoVersion;
-          delete argv.repoVersion;
-          delete argv['repo-version'];
-          log.warn('deprecated', '--repo-version has been replaced by positional [bump]');
-        }
-
-        if (argv.skipGit) {
-          argv.gitTagVersion = false;
-          argv['git-tag-version'] = false;
-          argv.push = false;
-          delete argv.skipGit;
-          delete argv['skip-git'];
-          log.warn('deprecated', '--skip-git has been replaced by --no-git-tag-version --no-push');
-        }
-
-        if (argv.githubRelease) {
-          argv.createRelease = 'github';
-          delete argv.githubRelease;
-          log.warn('deprecated', '--github-release has been replaced by --create-release=github');
-        }
-        /* eslint-enable no-param-reassign */
-
-        if (argv['--']) {
-          log.warn('EDOUBLEDASH', 'Arguments after -- are no longer passed to subprocess executions.');
-          log.warn('EDOUBLEDASH', 'This will cause an error in a future major version.');
-        }
-
-        return argv;
-      });
+      return argv;
+    });
   },
 
-  handler: (argv: VersionCommandOption) => {
-    return new VersionCommand(argv);
+  handler: async (argv: VersionCommandOption) => {
+    try {
+      // @ts-ignore
+      // eslint-disable-next-line
+      const { VersionCommand } = await import('@lerna-lite/version');
+      new VersionCommand(argv);
+    } catch (err: unknown) {
+      console.error(
+        `"@lerna-lite/version" is optional and was not found. Please install it with "npm install @lerna-lite/version -D -W".`,
+        err
+      );
+    }
   },
 };
 

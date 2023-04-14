@@ -1,11 +1,13 @@
+import { describe, expect, it, vi } from 'vitest';
+
 import { logOutput } from '../output';
 import log from 'npmlog';
 
 describe('logOutput method', () => {
   it('should console log output when called', () => {
-    const consoleSpy = jest.spyOn(console, 'log').mockImplementation(() => {});
-    const clearSpy = jest.spyOn(log, 'clearProgress');
-    const showSpy = jest.spyOn(log, 'showProgress');
+    const consoleSpy = vi.spyOn(console, 'log').mockImplementation(() => {});
+    const clearSpy = vi.spyOn(log, 'clearProgress');
+    const showSpy = vi.spyOn(log, 'showProgress');
 
     logOutput('arg1');
 

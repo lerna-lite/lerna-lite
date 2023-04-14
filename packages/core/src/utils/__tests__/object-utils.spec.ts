@@ -1,3 +1,4 @@
+import { beforeEach, describe, expect, it, vi } from 'vitest';
 import cloneDeep from 'clone-deep';
 import npmlog from 'npmlog';
 
@@ -22,27 +23,24 @@ describe('deleteComplexObjectProp method', () => {
   });
 
   it('should expect the object to remove an entire property when path is a single string without dot notation', () => {
-    const logSpy = jest.spyOn(npmlog, 'verbose');
+    const logSpy = vi.spyOn(npmlog, 'verbose');
     deleteComplexObjectProp(obj, 'user', 'some object name');
     expect(obj).toEqual({ id: 1 });
     expect(logSpy).toHaveBeenCalledWith('mutation', 'Removed "user" field from some object name.');
   });
 
   it('should expect the object descendant to be removed when path is using dot notation', () => {
-    const logSpy = jest.spyOn(npmlog, 'verbose');
+    const logSpy = vi.spyOn(npmlog, 'verbose');
     deleteComplexObjectProp(obj, 'user.firstName');
     expect(obj).toEqual({ id: 1, user: { lastName: 'Doe', address: { number: 123, street: 'Broadway' } } });
     expect(logSpy).toHaveBeenCalledWith('mutation', 'Removed "user.firstName" field from n/a.');
   });
 
   it('should expect the object last descendant to be removed when using multiple levels of dot notation', () => {
-    const logSpy = jest.spyOn(npmlog, 'verbose');
+    const logSpy = vi.spyOn(npmlog, 'verbose');
     deleteComplexObjectProp(obj, 'user.address.street', '"@workspace/pkg-1" package');
     expect(obj).toEqual({ id: 1, user: { firstName: 'John', lastName: 'Doe', address: { number: 123 } } });
-    expect(logSpy).toHaveBeenCalledWith(
-      'mutation',
-      'Removed "user.address.street" field from "@workspace/pkg-1" package.'
-    );
+    expect(logSpy).toHaveBeenCalledWith('mutation', 'Removed "user.address.street" field from "@workspace/pkg-1" package.');
   });
 });
 

@@ -18,40 +18,16 @@
     // allow Node14/npm8 until it is EOL on June 2023
     {
       packageNames: ['node'],
-      allowedVersions: '14.15.0',
+      allowedVersions: '16.15.0',
     },
     {
       packageNames: ['npm'],
-      allowedVersions: '8.0.0',
+      allowedVersions: '8.5.0',
+    },
+    {
+      packageNames: ['nx'],
+      allowedVersions: '15.4.8', // newer version seems to cause problems with Vitest unit tests
     },
   ],
   schedule: ['on Thursday'],
-  ignoreDeps: [
-    // ESM Only => https://gist.github.com/sindresorhus/a39789f98801d908bbc7ff3ecc99d99c#how-can-i-move-my-commonjs-project-to-esm
-    'byte-size',
-    'chalk',
-    'execa',
-    'file-url',
-    'find-up',
-    'globby',
-    'inquirer',
-    'is-stream',
-    'multimatch',
-    'new-github-release-url',
-    'node-fetch',
-    'normalize-newline',
-    'normalize-path',
-    'p-map',
-    'p-pipe',
-    'p-queue',
-    'p-reduce',
-    'pify',
-    'pnpm', // delay pnpm v8 until next major since it requires Node 16
-    'slash',
-    'temp-dir',
-    'load-json-file',
-    'tempy',
-    'write-json-file',
-    'write-pkg',
-  ],
 }

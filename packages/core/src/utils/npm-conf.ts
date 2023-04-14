@@ -1,8 +1,8 @@
-import path from 'path';
+import { resolve as pathResolve } from 'node:path';
 
-import { Conf } from '../utils/conf';
-import { toNerfDart } from './nerf-dart';
-import { Defaults } from './defaults';
+import { Conf } from '../utils/conf.js';
+import { toNerfDart } from './nerf-dart.js';
+import { Defaults } from './defaults.js';
 
 // https://github.com/npm/npm/blob/latest/lib/config/core.js#L101-L200
 function npmConf(opts: any) {
@@ -24,23 +24,22 @@ function npmConf(opts: any) {
   conf.addEnv();
   conf.loadPrefix();
 
-  const projectConf = path.resolve(conf.localPrefix, '.npmrc');
+  const projectConf = pathResolve(conf.localPrefix, '.npmrc');
   const userConf = conf.get('userconfig');
 
-  /* istanbul ignore else */
   if (!conf.get('global') && projectConf !== userConf) {
     conf.addFile(projectConf, 'project');
   } else {
+    /* c8 ignore next */
     conf.add({}, 'project');
   }
 
   conf.addFile(conf.get('userconfig'), 'user');
 
-  /* istanbul ignore else */
   if (conf.get('prefix')) {
-    const etc = path.resolve(conf.get('prefix'), 'etc');
-    conf.root.globalconfig = path.resolve(etc, 'npmrc');
-    conf.root.globalignorefile = path.resolve(etc, 'npmignore');
+    const etc = pathResolve(conf.get('prefix'), 'etc');
+    conf.root.globalconfig = pathResolve(etc, 'npmrc');
+    conf.root.globalignorefile = pathResolve(etc, 'npmignore');
   }
 
   conf.addFile(conf.get('globalconfig'), 'global');
@@ -48,7 +47,7 @@ function npmConf(opts: any) {
 
   const caFile = conf.get('cafile');
 
-  /* istanbul ignore if */
+  /* c8 ignore next 3 */
   if (caFile) {
     conf.loadCAFile(caFile);
   }

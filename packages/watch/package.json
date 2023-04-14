@@ -1,15 +1,31 @@
 {
   "name": "@lerna-lite/watch",
   "description": "Lerna-Lite watch commmand - Runs a command whenever packages or their dependents change",
-  "version": "1.17.0",
-  "main": "dist/index.js",
-  "types": "dist/index.d.ts",
-  "typings": "dist/index.d.ts",
+  "version": "2.0.0-alpha.2",
   "files": [
     "/dist"
   ],
   "publishConfig": {
     "access": "public"
+  },
+  "type": "module",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "module": "dist/index.js",
+  "exports": {
+    ".": {
+      "import": "./dist/index.js",
+      "default": "./dist/index.js",
+      "types": "./dist/index.d.ts"
+    },
+    "./*": "./*"
+  },
+  "typesVersions": {
+    "*": {
+      "*": [
+        "./dist/index.d.ts"
+      ]
+    }
   },
   "scripts": {
     "prebuild": "rimraf dist",
@@ -29,14 +45,14 @@
     "url": "https://github.com/lerna-lite/lerna-lite/issues"
   },
   "engines": {
-    "node": ">=14.17.0",
-    "npm": ">=8.0.0"
+    "node": ">=16.15.0",
+    "npm": ">=8.5.0"
   },
   "dependencies": {
+    "@lerna-lite/cli": "workspace:*",
     "@lerna-lite/core": "workspace:*",
     "@lerna-lite/filter-packages": "workspace:*",
-    "chokidar": "^3.5.3",
-    "path": "^0.12.7"
+    "chokidar": "^3.5.3"
   },
   "devDependencies": {
     "mock-stdin": "^1.0.0",

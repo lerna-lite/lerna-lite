@@ -1,5 +1,10 @@
-import execa from 'execa';
+import { afterEach, expect, test, vi } from 'vitest';
+import { execa } from 'execa';
+import { fileURLToPath } from 'node:url';
+import { dirname } from 'node:path';
 
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = dirname(__filename);
 import { gitPush } from '../lib/git-push';
 import { cloneFixtureFactory } from '@lerna-test/helpers';
 const cloneFixture = cloneFixtureFactory(__dirname);
@@ -9,11 +14,12 @@ async function listRemoteTags(cwd) {
 }
 
 import { exec } from '@lerna-lite/core';
-jest.mock('@lerna-lite/core', () => {
-  const { exec } = jest.requireActual('@lerna-lite/core');
+
+vi.mock('@lerna-lite/core', async () => {
+  const { exec } = await vi.importActual<any>('@lerna-lite/core');
   return {
     __esModule: true,
-    exec: jest.fn(exec),
+    exec: vi.fn(exec),
   };
 });
 
@@ -23,7 +29,6 @@ afterEach(() => {
 
 test('gitPush', async () => {
   const { cwd } = await cloneFixture('root-manifest-only');
-  // const execSpy = jest.spyOn(coreModule, "exec");
 
   await execa('git', ['commit', '--allow-empty', '-m', 'change'], { cwd });
   await execa('git', ['tag', 'v1.2.3', '-m', 'v1.2.3'], { cwd });
@@ -33,12 +38,7 @@ test('gitPush', async () => {
   await gitPush('origin', 'main', { cwd });
 
   expect(exec).toHaveBeenCalled();
-  expect(exec).toHaveBeenLastCalledWith(
-    'git',
-    ['push', '--follow-tags', '--no-verify', '--atomic', 'origin', 'main'],
-    { cwd },
-    false
-  );
+  expect(exec).toHaveBeenLastCalledWith('git', ['push', '--follow-tags', '--no-verify', '--atomic', 'origin', 'main'], { cwd }, false);
 
   const list = await listRemoteTags(cwd);
   expect(list).toMatch('v1.2.3');
@@ -53,11 +53,9 @@ test('remote that does not support --atomic', async () => {
   await execa('git', ['tag', 'v4.5.6', '-m', 'v4.5.6'], { cwd });
 
   // the first time the command is executed, simulate remote error
-  (exec as jest.Mock).mockImplementationOnce(async () => {
+  (exec as any).mockImplementationOnce(async () => {
     const stderr = 'fatal: the receiving end does not support --atomic push';
-    const error: any = new Error(
-      ['Command failed: git push --follow-tags --atomic --no-verify origin main', stderr].join('\n')
-    );
+    const error: any = new Error(['Command failed: git push --follow-tags --atomic --no-verify origin main', stderr].join('\n'));
 
     error.stderr = stderr;
 
@@ -68,12 +66,7 @@ test('remote that does not support --atomic', async () => {
   await gitPush('origin', 'main', { cwd });
 
   expect(exec).toHaveBeenCalledTimes(2);
-  expect(exec).toHaveBeenLastCalledWith(
-    'git',
-    ['push', '--follow-tags', '--no-verify', 'origin', 'main'],
-    { cwd },
-    false
-  );
+  expect(exec).toHaveBeenLastCalledWith('git', ['push', '--follow-tags', '--no-verify', 'origin', 'main'], { cwd }, false);
 
   const list = await listRemoteTags(cwd);
   expect(list).toMatch('v4.5.6');
@@ -88,11 +81,9 @@ test('remote that does not support --atomic and git stderr redirected to stdout'
   await execa('git', ['tag', 'v4.5.6', '-m', 'v4.5.6'], { cwd });
 
   // the first time the command is executed, simulate remote error
-  (exec as jest.Mock).mockImplementationOnce(async () => {
+  (exec as any).mockImplementationOnce(async () => {
     const stdout = 'fatal: the receiving end does not support --atomic push';
-    const error: any = new Error(
-      ['Command failed: git push --follow-tags --atomic --no-verify origin main', stdout].join('\n')
-    );
+    const error: any = new Error(['Command failed: git push --follow-tags --atomic --no-verify origin main', stdout].join('\n'));
 
     error.stdout = stdout;
 
@@ -103,12 +94,7 @@ test('remote that does not support --atomic and git stderr redirected to stdout'
   await gitPush('origin', 'main', { cwd });
 
   expect(exec as any).toHaveBeenCalledTimes(2);
-  expect(exec as any).toHaveBeenLastCalledWith(
-    'git',
-    ['push', '--follow-tags', '--no-verify', 'origin', 'main'],
-    { cwd },
-    false
-  );
+  expect(exec as any).toHaveBeenLastCalledWith('git', ['push', '--follow-tags', '--no-verify', 'origin', 'main'], { cwd }, false);
 
   const list = await listRemoteTags(cwd);
   expect(list).toMatch('v4.5.6');
@@ -121,7 +107,7 @@ test('git cli that does not support --atomic', async () => {
   await execa('git', ['tag', 'v7.8.9', '-m', 'v7.8.9'], { cwd });
 
   // the first time the command is executed, simulate remote error
-  // (exec as jest.Mock).mockImplementationOnce(async () => {
+  // (exec as any).mockImplementationOnce(async () => {
   //   const stderr = "error: unknown option `atomic'";
   //   const error: any = new Error(
   //     ["Command failed: git push --follow-tags --atomic --no-verify origin master", stderr].join("\n")
@@ -140,11 +126,9 @@ test('git cli that does not support --atomic', async () => {
 test('unexpected git error', async () => {
   const { cwd } = await cloneFixture('root-manifest-only');
 
-  (exec as jest.Mock).mockImplementationOnce(async () => {
+  (exec as any).mockImplementationOnce(async () => {
     const stderr = 'fatal: some unexpected error';
-    const error: any = new Error(
-      ['Command failed: git push --follow-tags --atomic --no-verify origin main', stderr].join('\n')
-    );
+    const error: any = new Error(['Command failed: git push --follow-tags --atomic --no-verify origin main', stderr].join('\n'));
 
     error.stderr = stderr;
 

@@ -1,45 +1,41 @@
+import { expect, Mock, test, vi } from 'vitest';
+
 // local modules _must_ be explicitly mocked
-jest.mock('../lib/git-push', () => jest.requireActual('../lib/__mocks__/git-push'));
-jest.mock('../lib/is-anything-committed', () => jest.requireActual('../lib/__mocks__/is-anything-committed'));
-jest.mock('../lib/is-behind-upstream', () => jest.requireActual('../lib/__mocks__/is-behind-upstream'));
-jest.mock('../lib/remote-branch-exists', () => jest.requireActual('../lib/__mocks__/remote-branch-exists'));
+vi.mock('../lib/git-push', async () => await vi.importActual('../lib/__mocks__/git-push'));
+vi.mock('../lib/is-anything-committed', async () => await vi.importActual('../lib/__mocks__/is-anything-committed'));
+vi.mock('../lib/is-behind-upstream', async () => await vi.importActual('../lib/__mocks__/is-behind-upstream'));
+vi.mock('../lib/remote-branch-exists', async () => await vi.importActual('../lib/__mocks__/remote-branch-exists'));
 
 // mocked modules of @lerna-lite/core
-jest.mock('@lerna-lite/core', () => ({
-  ...(jest.requireActual('@lerna-lite/core') as any), // return the other real methods, below we'll mock only 2 of the methods
-  Command: jest.requireActual('../../../core/src/command').Command,
-  conf: jest.requireActual('../../../core/src/command').conf,
-  logOutput: jest.requireActual('../../../core/src/__mocks__/output').logOutput,
-  promptConfirmation: jest.requireActual('../../../core/src/__mocks__/prompt').promptConfirmation,
-  promptSelectOne: jest.requireActual('../../../core/src/__mocks__/prompt').promptSelectOne,
-  promptTextInput: jest.requireActual('../../../core/src/__mocks__/prompt').promptTextInput,
-  throwIfUncommitted: jest.requireActual('../../../core/src/__mocks__/check-working-tree').throwIfUncommitted,
+vi.mock('@lerna-lite/core', async () => ({
+  ...(await vi.importActual<any>('@lerna-lite/core')),
+  Command: (await vi.importActual<any>('../../../core/src/command')).Command,
+  conf: (await vi.importActual<any>('../../../core/src/command')).conf,
+  logOutput: (await vi.importActual<any>('../../../core/src/__mocks__/output')).logOutput,
+  promptConfirmation: (await vi.importActual<any>('../../../core/src/__mocks__/prompt')).promptConfirmation,
+  promptSelectOne: (await vi.importActual<any>('../../../core/src/__mocks__/prompt')).promptSelectOne,
+  promptTextInput: (await vi.importActual<any>('../../../core/src/__mocks__/prompt')).promptTextInput,
+  throwIfUncommitted: (await vi.importActual<any>('../../../core/src/__mocks__/check-working-tree')).throwIfUncommitted,
 }));
 
 // also point to the local version command so that all mocks are properly used even by the command-runner
-jest.mock('@lerna-lite/version', () => jest.requireActual('../version-command'));
+vi.mock('@lerna-lite/version', async () => await vi.importActual('../version-command'));
 
-import fs from 'fs-extra';
-import path from 'path';
+import { outputFile } from 'fs-extra/esm';
+import { dirname, join, resolve as pathResolve } from 'node:path';
+import { fileURLToPath } from 'node:url';
 import yargParser from 'yargs-parser';
 // mocked modules
 import { promptTextInput, promptSelectOne, VersionCommandOption } from '@lerna-lite/core';
 
 // helpers
-import {
-  commandRunner,
-  gitAdd,
-  gitCommit,
-  gitInit,
-  gitTag,
-  getCommitMessage,
-  initFixtureFactory,
-  showCommit,
-} from '@lerna-test/helpers';
-const initFixture = initFixtureFactory(path.resolve(__dirname, '../../../publish/src/__tests__'));
+import { commandRunner, gitAdd, gitCommit, gitInit, gitTag, getCommitMessage, initFixtureFactory, showCommit } from '@lerna-test/helpers';
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = dirname(__filename);
+const initFixture = initFixtureFactory(pathResolve(__dirname, '../../../publish/src/__tests__'));
 
 import Tacks from 'tacks';
-import tempy from 'tempy';
+import { temporaryDirectory } from 'tempy';
 
 const { File, Dir } = Tacks;
 
@@ -76,7 +72,7 @@ const createArgv = (cwd, ...args) => {
 
 const setupChanges = async (cwd) => {
   await gitTag(cwd, 'v1.0.1-beta.3');
-  await fs.outputFile(path.join(cwd, 'packages/package-3/hello.js'), 'world');
+  await outputFile(join(cwd, 'packages/package-3/hello.js'), 'world');
   await gitAdd(cwd, '.');
   await gitCommit(cwd, 'feat: setup');
 };
@@ -145,7 +141,7 @@ test('version prerelease with immediate graduation', async () => {
 });
 
 test('independent version prerelease does not bump on every unrelated change', async () => {
-  const cwd = tempy.directory();
+  const cwd = temporaryDirectory();
   const fixture = new Tacks(
     Dir({
       'lerna.json': File({
@@ -182,7 +178,7 @@ test('independent version prerelease does not bump on every unrelated change', a
   // simulate choices for pkg-a then pkg-b
   (promptSelectOne as any).chooseBump('patch');
   (promptSelectOne as any).chooseBump('PRERELEASE');
-  (promptTextInput as jest.Mock).mockImplementationOnce((msg, cfg) =>
+  (promptTextInput as Mock).mockImplementationOnce((msg, cfg) =>
     // the _existing_ "bumps" prerelease ID should be preserved
     Promise.resolve(cfg.filter())
   );
@@ -197,7 +193,7 @@ chore: Publish new release
  - pkg-b@1.0.0-bumps.2
 `);
 
-  await fs.outputFile(path.join(cwd, 'packages/pkg-a/hello.js'), 'world');
+  await outputFile(join(cwd, 'packages/pkg-a/hello.js'), 'world');
   await gitAdd(cwd, '.');
   await gitCommit(cwd, 'feat: hello world');
 
@@ -213,7 +209,7 @@ chore: Publish new release
 });
 
 test('independent version prerelease respects --no-private', async () => {
-  const cwd = tempy.directory();
+  const cwd = temporaryDirectory();
   const fixture = new Tacks(
     Dir({
       'lerna.json': File({

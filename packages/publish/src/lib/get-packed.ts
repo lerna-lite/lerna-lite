@@ -1,10 +1,11 @@
-import fs from 'fs-extra';
-import path from 'path';
+import { createReadStream } from 'node:fs';
+import { stat } from 'fs/promises';
+import { basename } from 'node:path';
 import ssri from 'ssri';
 import tar from 'tar';
 import { Package } from '@lerna-lite/core';
 
-import { Tarball } from '../models';
+import { Tarball } from '../models/index.js';
 
 export function getPacked(pkg: Package, tarFilePath: string): Promise<Tarball> {
   const bundledWanted = new Set<string>(/* pkg.bundleDependencies || pkg.bundledDependencies || */ []);
@@ -23,7 +24,7 @@ export function getPacked(pkg: Package, tarFilePath: string): Promise<Tarball> {
 
         const p = entry.path;
 
-        /* istanbul ignore if */
+        /* c8 ignore next 5 */
         if (p.startsWith('package/node_modules/')) {
           const name: string = p.match(/^package\/node_modules\/((?:@[^/]+\/)?[^/]+)/)[1];
 
@@ -42,8 +43,8 @@ export function getPacked(pkg: Package, tarFilePath: string): Promise<Tarball> {
     })
     .then(() =>
       Promise.all([
-        fs.stat(tarFilePath),
-        ssri.fromStream(fs.createReadStream(tarFilePath), {
+        stat(tarFilePath),
+        ssri.fromStream(createReadStream(tarFilePath), {
           algorithms: ['sha1', 'sha512'],
         }),
       ])
@@ -59,7 +60,7 @@ export function getPacked(pkg: Package, tarFilePath: string): Promise<Tarball> {
         unpackedSize: totalEntrySize,
         shasum,
         integrity: ssri.parse(sha512[0]),
-        filename: path.basename(tarFilePath),
+        filename: basename(tarFilePath),
         files,
         entryCount: totalEntries,
         bundled: Array.from(bundled),

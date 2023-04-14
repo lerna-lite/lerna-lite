@@ -1,14 +1,14 @@
 import { LifecycleConfig, Package, PackConfig, runLifecycle } from '@lerna-lite/core';
 import { tempWrite } from '@lerna-lite/version';
 import Arborist from '@npmcli/arborist';
-import path from 'path';
 import packlist from 'npm-packlist';
 import log from 'npmlog';
+import { relative } from 'node:path';
+import { Readable } from 'node:stream';
 import tar from 'tar';
 
-import { getPacked } from './get-packed';
-import { Readable } from 'stream';
-import { Tarball } from '../models';
+import { getPacked } from './get-packed.js';
+import { Tarball } from '../models/index.js';
 
 /**
  * Pack a directory suitable for publishing, writing tarball to a tempfile.
@@ -24,7 +24,7 @@ export async function packDirectory(_pkg: Package, dir: string, options: PackCon
     ...options,
   };
 
-  opts.log.verbose('pack-directory', path.relative('.', pkg.contents));
+  opts.log.verbose('pack-directory', relative('.', pkg.contents));
 
   if (opts.ignorePrepublish !== true) {
     await runLifecycle(pkg, 'prepublish', opts);

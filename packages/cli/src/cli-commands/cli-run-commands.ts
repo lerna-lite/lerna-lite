@@ -1,7 +1,6 @@
-import log from 'npmlog';
 import { RunCommandOption } from '@lerna-lite/core';
 
-import { filterOptions } from '../filter-options';
+import { filterOptions } from '../filter-options.js';
 
 /**
  * @see https://github.com/yargs/yargs/blob/master/docs/advanced.md#providing-a-command-module
@@ -85,8 +84,7 @@ export default {
         },
         'use-nx': {
           group: 'Command Options:',
-          describe:
-            'enables integration with Nx instead of the default Lerna task runner (which uses `p-map` and `p-queue`).',
+          describe: 'enables integration with Nx instead of the default Lerna task runner (which uses `p-map` and `p-queue`).',
           type: 'boolean',
         },
         verbose: {
@@ -94,25 +92,6 @@ export default {
           describe: 'When "useNx" is true, show verbose output from dependent tasks.',
           type: 'boolean',
         },
-      })
-      .option('cmd-dry-run', {
-        // TODO: remove in next major release
-        hidden: true,
-        conflicts: 'dry-run',
-        type: 'boolean',
-      })
-      .check((argv) => {
-        // override deprecated options
-
-        /* eslint-disable no-param-reassign */
-        if (argv.cmdDryRun) {
-          argv.dryRun = argv.cmdDryRun;
-          delete argv.cmdDryRun;
-          log.warn('deprecated', '--cmd-dry-run has been renamed --dry-run');
-        }
-        /* eslint-enable no-param-reassign */
-
-        return argv;
       });
 
     return filterOptions(yargs);

@@ -1,12 +1,13 @@
-jest.mock('@lerna-lite/core', () => ({
-  ...(jest.requireActual('@lerna-lite/core') as any), // return the other real methods, below we'll mock only 2 of the methods
-  Command: jest.requireActual('../../../core/src/command').Command,
-  conf: jest.requireActual('../../../core/src/command').conf,
-  QueryGraph: jest.requireActual('../../../core/src/utils/query-graph').QueryGraph,
+import { beforeAll, describe, expect, test, vi } from 'vitest';
+vi.mock('@lerna-lite/core', async () => ({
+  ...(await vi.importActual<any>('@lerna-lite/core')), // return the other real methods, below we'll mock only 2 of the methods
+  Command: (await vi.importActual<any>('../../../core/src/command')).Command,
+  conf: (await vi.importActual<any>('../../../core/src/command')).conf,
+  QueryGraph: (await vi.importActual<any>('../../../core/src/utils/query-graph')).QueryGraph,
 }));
 
 import chalk from 'chalk';
-import tempy from 'tempy';
+import { temporaryDirectory } from 'tempy';
 import Tacks from 'tacks';
 import { Project } from '@lerna-lite/core';
 import { loggingOutput } from '@lerna-test/helpers/logging-output';
@@ -77,7 +78,7 @@ describe('listable.format()', () => {
   );
 
   beforeAll(async () => {
-    const cwd = tempy.directory();
+    const cwd = temporaryDirectory();
 
     fixture.create(cwd);
     process.chdir(cwd);

@@ -1,6 +1,6 @@
 import log from 'npmlog';
 
-import { ValidationError } from '../../validation-error';
+import { ValidationError } from '../../validation-error.js';
 
 export function reportCycles(paths, rejectCycles) {
   if (!paths.length) {

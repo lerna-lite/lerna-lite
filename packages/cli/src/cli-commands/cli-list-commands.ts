@@ -1,7 +1,7 @@
 import { ListCommandOption } from '@lerna-lite/core';
-import { listable } from '@lerna-lite/listable';
 
-import { filterOptions } from '../filter-options';
+import { filterOptions } from '../filter-options.js';
+import { listableOptions } from './listable/listable-options.js';
 
 /**
  * @see https://github.com/yargs/yargs/blob/master/docs/advanced.md#providing-a-command-module
@@ -11,7 +11,7 @@ export default {
   aliases: ['ls', 'la', 'll'],
   describe: 'List local packages',
   builder: (yargs) => {
-    listable.options(yargs);
+    listableOptions(yargs);
 
     return filterOptions(yargs);
   },

@@ -1,1 +1,1 @@
-export * from './list-command';
+export * from './list-command.js';

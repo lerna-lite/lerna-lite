@@ -1,10 +1,7 @@
 {
   "name": "@lerna-lite/cli",
   "description": "Lerna-Lite CLI for the Version/Publish commands",
-  "version": "1.17.0",
-  "main": "dist/cli.js",
-  "types": "dist/index.d.ts",
-  "typings": "dist/index.d.ts",
+  "version": "2.0.0-alpha.2",
   "bin": {
     "lerna": "dist/cli.js"
   },
@@ -14,6 +11,25 @@
   ],
   "publishConfig": {
     "access": "public"
+  },
+  "type": "module",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "module": "dist/index.js",
+  "exports": {
+    ".": {
+      "import": "./dist/index.js",
+      "default": "./dist/index.js",
+      "types": "./dist/index.d.ts"
+    },
+    "./*": "./*"
+  },
+  "typesVersions": {
+    "*": {
+      "*": [
+        "./dist/index.d.ts"
+      ]
+    }
   },
   "scripts": {
     "prebuild": "rimraf dist",
@@ -33,25 +49,20 @@
     "url": "https://github.com/lerna-lite/lerna-lite/issues"
   },
   "engines": {
-    "node": ">=14.17.0",
-    "npm": ">=8.0.0"
+    "node": ">=16.15.0",
+    "npm": ">=8.5.0"
   },
   "dependencies": {
     "@lerna-lite/core": "workspace:*",
     "@lerna-lite/init": "workspace:*",
-    "@lerna-lite/listable": "workspace:*",
-    "@lerna-lite/publish": "workspace:*",
-    "@lerna-lite/version": "workspace:*",
     "dedent": "^0.7.0",
     "dotenv": "^16.0.3",
     "import-local": "^3.1.0",
-    "load-json-file": "^6.2.0",
+    "load-json-file": "^7.0.1",
     "npmlog": "^7.0.1",
-    "path": "^0.12.7",
     "yargs": "^17.7.1"
   },
   "devDependencies": {
-    "@types/load-json-file": "^5.1.0",
     "yargs-parser": "^21.1.1"
   }
 }

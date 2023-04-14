@@ -1,23 +1,28 @@
+import { describe, expect, it, vi } from 'vitest';
+
 // mocked modules of @lerna-lite/core
-jest.mock('@lerna-lite/core', () => ({
-  ...(jest.requireActual('@lerna-lite/core') as any), // return the other real methods, below we'll mock only 2 of the methods
-  Command: jest.requireActual('../../../core/src/command').Command,
-  conf: jest.requireActual('../../../core/src/command').conf,
-  logOutput: jest.requireActual('../../../core/src/__mocks__/output').logOutput,
-  promptConfirmation: jest.requireActual('../../../core/src/__mocks__/prompt').promptConfirmation,
-  promptSelectOne: jest.requireActual('../../../core/src/__mocks__/prompt').promptSelectOne,
-  promptTextInput: jest.requireActual('../../../core/src/__mocks__/prompt').promptTextInput,
-  throwIfUncommitted: jest.requireActual('../../../core/src/__mocks__/check-working-tree').throwIfUncommitted,
+vi.mock('@lerna-lite/core', async () => ({
+  ...(await vi.importActual<any>('@lerna-lite/core')),
+  Command: (await vi.importActual<any>('../../../core/src/command')).Command,
+  conf: (await vi.importActual<any>('../../../core/src/command')).conf,
+  logOutput: (await vi.importActual<any>('../../../core/src/__mocks__/output')).logOutput,
+  promptConfirmation: (await vi.importActual<any>('../../../core/src/__mocks__/prompt')).promptConfirmation,
+  promptSelectOne: (await vi.importActual<any>('../../../core/src/__mocks__/prompt')).promptSelectOne,
+  promptTextInput: (await vi.importActual<any>('../../../core/src/__mocks__/prompt')).promptTextInput,
+  throwIfUncommitted: (await vi.importActual<any>('../../../core/src/__mocks__/check-working-tree')).throwIfUncommitted,
 }));
 
-import path from 'path';
-import fs from 'fs';
+import { dirname as pathDirname, join } from 'node:path';
+import { appendFileSync } from 'node:fs';
+import { fileURLToPath } from 'node:url';
 import yargParser from 'yargs-parser';
 
 // mocked modules
 import { logOutput, VersionCommandOption } from '@lerna-lite/core';
 
 // helpers
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = pathDirname(__filename);
 import { gitCheckout } from '@lerna-test/helpers';
 import { gitCommit } from '@lerna-test/helpers';
 import { gitMerge } from '@lerna-test/helpers';
@@ -60,20 +65,20 @@ const createArgv = (cwd, ...args) => {
 describe('version --include-merged-tags', () => {
   const setupGitChangesWithBranch = async (cwd, mainPaths, branchPaths) => {
     await gitTag(cwd, 'v1.0.0');
-    await Promise.all(mainPaths.map((fp) => fs.appendFileSync(path.join(cwd, fp), '1')));
+    await Promise.all(mainPaths.map((fp) => appendFileSync(join(cwd, fp), '1')));
     await gitAdd(cwd, '-A');
     await gitCommit(cwd, 'Commit');
     // Create release branch
     await gitCheckout(cwd, ['-b', 'release/v1.0.1']);
     // Switch into release branch
-    await Promise.all(branchPaths.map((fp) => fs.appendFileSync(path.join(cwd, fp), '1')));
+    await Promise.all(branchPaths.map((fp) => appendFileSync(join(cwd, fp), '1')));
     await gitAdd(cwd, '-A');
     await gitCommit(cwd, 'Bump');
     await gitTag(cwd, 'v1.0.1');
     await gitCheckout(cwd, ['main']);
     await gitMerge(cwd, ['--no-ff', 'release/v1.0.1']);
     // Commit after merge
-    await Promise.all(mainPaths.map((fp) => fs.appendFileSync(path.join(cwd, fp), '1')));
+    await Promise.all(mainPaths.map((fp) => appendFileSync(join(cwd, fp), '1')));
     await gitAdd(cwd, '-A');
     await gitCommit(cwd, 'Commit2');
   };

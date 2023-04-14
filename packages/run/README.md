@@ -60,7 +60,7 @@ $ lerna run --scope my-component test
   - [Usage](#usage)
   - [Options](#options)
     - [`--npm-client <client>`](#--npm-client-client)
-    - [`--dry-run`](#--dry-run) (new)
+    - [`--dry-run`](#--dry-run)
     - [`--stream`](#--stream)
     - [`--parallel`](#--parallel)
     - [`--no-bail`](#--no-bail)

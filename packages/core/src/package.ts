@@ -1,10 +1,10 @@
-import loadJsonFile from 'load-json-file';
+import { loadJsonFile, loadJsonFileSync } from 'load-json-file';
 import npa from 'npm-package-arg';
 import npmlog from 'npmlog';
-import path from 'path';
-import writePkg from 'write-pkg';
+import { basename, dirname, join, resolve as pathResolve, relative } from 'node:path';
+import { writePackage } from 'write-pkg';
 
-import { CommandType, NpaResolveResult, RawManifest } from './models';
+import { CommandType, NpaResolveResult, RawManifest } from './models/index.js';
 
 // symbol used to 'hide' internal state
 const PKG = Symbol('pkg');
@@ -28,7 +28,7 @@ function shallowCopy(json: any) {
   return Object.keys(json).reduce((obj, key) => {
     const val: any = json[key];
 
-    /* istanbul ignore if */
+    /* c8 ignore next 2 */
     if (Array.isArray(val)) {
       obj[key] = val.slice();
     } else if (val && typeof val === 'object') {
@@ -59,8 +59,8 @@ export class Package {
    */
   static lazy(ref: string | Package | RawManifest, dir = '.'): Package {
     if (typeof ref === 'string') {
-      const location = path.resolve(path.basename(ref) === 'package.json' ? path.dirname(ref) : ref);
-      const manifest = loadJsonFile.sync<RawManifest>(path.join(location, 'package.json'));
+      const location = pathResolve(basename(ref) === 'package.json' ? dirname(ref) : ref);
+      const manifest = loadJsonFileSync<RawManifest>(join(location, 'package.json'));
 
       return new Package(manifest, location);
     }
@@ -81,7 +81,7 @@ export class Package {
    */
   constructor(pkg: RawManifest, location: string, rootPath = location) {
     // npa will throw an error if the name is invalid
-    const resolved = npa.resolve(pkg?.name ?? '', `file:${path.relative(rootPath, location)}`, rootPath);
+    const resolved = npa.resolve(pkg?.name ?? '', `file:${relative(rootPath, location)}`, rootPath);
 
     this.name = pkg?.name ?? '';
     this[PKG] = pkg;
@@ -124,7 +124,7 @@ export class Package {
   }
 
   get binLocation(): string {
-    return path.join(this.location, 'node_modules', '.bin');
+    return join(this.location, 'node_modules', '.bin');
   }
 
   /** alias to pkg getter (to avoid calling duplicate prop like `node.pkg.pkg` in which node is PackageGraphNode) */
@@ -133,11 +133,11 @@ export class Package {
   }
 
   get manifestLocation(): string {
-    return path.join(this.location, 'package.json');
+    return join(this.location, 'package.json');
   }
 
   get nodeModulesLocation(): string {
-    return path.join(this.location, 'node_modules');
+    return join(this.location, 'node_modules');
   }
 
   // eslint-disable-next-line class-methods-use-this
@@ -171,7 +171,7 @@ export class Package {
 
     // if provided by pkg.publishConfig.directory value
     if (this[PKG].publishConfig && this[PKG].publishConfig.directory) {
-      return path.join(this.location, this[PKG].publishConfig.directory);
+      return join(this.location, this[PKG].publishConfig.directory);
     }
 
     // default to package root
@@ -179,7 +179,7 @@ export class Package {
   }
 
   set contents(subDirectory: string) {
-    this[_contents] = path.join(this.location, subDirectory);
+    this[_contents] = join(this.location, subDirectory);
   }
 
   // 'live' collections
@@ -250,7 +250,7 @@ export class Package {
    * @returns {Promise} resolves when write finished
    */
   serialize() {
-    return writePkg(this.manifestLocation, this[PKG]).then(() => this);
+    return writePackage(this.manifestLocation, this[PKG]).then(() => this);
   }
 
   /**
@@ -270,11 +270,7 @@ export class Package {
     }
 
     for (const depCollection of inspectDependencies) {
-      if (
-        depCollection &&
-        (resolved.registry || resolved.type === 'directory') &&
-        /^(workspace:)+(.*)$/.test(workspaceSpec)
-      ) {
+      if (depCollection && (resolved.registry || resolved.type === 'directory') && /^(workspace:)+(.*)$/.test(workspaceSpec)) {
         if (workspaceSpec) {
           if (resolved.fetchSpec === 'latest' || resolved.fetchSpec === '') {
             npmlog.error(
@@ -297,7 +293,6 @@ export class Package {
    * @param {Object} resolved npa metadata
    * @param {String} depVersion semver
    * @param {String} savePrefix npm_config_save_prefix
-   * @param {Boolean} [workspaceStrictMatch] - are we using `workspace:` protocol strict match?
    * @param {String} [updatedByCommand] - which command called this update?
    */
   updateLocalDependency(
@@ -305,7 +300,6 @@ export class Package {
     depVersion: string,
     savePrefix: string,
     allowPeerDependenciesUpdate = false,
-    workspaceStrictMatch = true,
     updatedByCommand?: CommandType
   ) {
     const depName = resolved.name as string;
@@ -341,7 +335,7 @@ export class Package {
           if (operatorPrefix) {
             // package with range operator should never be bumped, we'll use same version range but without prefix "workspace:>=1.2.3" will assign ">=1.2.3"
             depCollection[depName] = `${operatorPrefix}${rangePrefix || ''}${semver}`;
-          } else if (workspaceStrictMatch) {
+          } else {
             // with workspace in strict mode we might have empty range prefix like "workspace:1.2.3"
             depCollection[depName] = `${rangePrefix || ''}${depVersion}`;
           }
@@ -349,14 +343,12 @@ export class Package {
           if (updatedByCommand === 'publish') {
             // when publishing, workspace protocol will be transformed to semver range
             // e.g.: considering version is `1.2.3` and we have `workspace:*` it will be converted to "^1.2.3" or to "1.2.3" with strict match range enabled
-            if (workspaceStrictMatch) {
-              if (workspaceSpec === 'workspace:*') {
-                depCollection[depName] = depVersion; // (*) exact range, "1.5.0"
-              } else if (workspaceSpec === 'workspace:~') {
-                depCollection[depName] = `~${depVersion}`; // (~) patch range, "~1.5.0"
-              } else if (workspaceSpec === 'workspace:^') {
-                depCollection[depName] = `^${depVersion}`; // (^) minor range, "^1.5.0"
-              }
+            if (workspaceSpec === 'workspace:*') {
+              depCollection[depName] = depVersion; // (*) exact range, "1.5.0"
+            } else if (workspaceSpec === 'workspace:~') {
+              depCollection[depName] = `~${depVersion}`; // (~) patch range, "~1.5.0"
+            } else if (workspaceSpec === 'workspace:^') {
+              depCollection[depName] = `^${depVersion}`; // (^) minor range, "^1.5.0"
             }
             // anything else will fall under what Lerna previously found to be the version,
             // typically by this line: depCollection[depName] = `${savePrefix}${depVersion}`;

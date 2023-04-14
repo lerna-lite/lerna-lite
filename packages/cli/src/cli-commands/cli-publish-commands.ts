@@ -1,8 +1,6 @@
-import log from 'npmlog';
-import { PublishCommand } from '@lerna-lite/publish';
 import { PublishCommandOption } from '@lerna-lite/core';
 
-import cliVersionCmd, { addBumpPositional } from './cli-version-commands';
+import cliVersionCmd, { addBumpPositional } from './cli-version-commands.js';
 
 /**
  * @see https://github.com/yargs/yargs/blob/master/docs/advanced.md#providing-a-command-module
@@ -109,10 +107,6 @@ export default {
           'Remove fields from each package.json before publishing them to the registry, removing fields from a complex object is also supported via the dot notation (ie "scripts.build").',
         type: 'array',
       },
-      'require-scripts': {
-        describe: 'Execute ./scripts/prepublish.js and ./scripts/postpublish.js, relative to package root.',
-        type: 'boolean',
-      },
       'no-git-reset': {
         describe: 'Do not reset changes to working tree after publishing is complete.',
         type: 'boolean',
@@ -165,45 +159,20 @@ export default {
 
     yargs.group(Object.keys(opts).concat(sharedKeys), 'Command Options:');
 
-    return yargs
-      .option('npm-tag', {
-        // TODO: remove in next major release
-        hidden: true,
-        conflicts: 'dist-tag',
-        type: 'string',
-        requiresArg: true,
-      })
-      .option('verify-registry', {
-        // TODO: remove in next major release
-        hidden: true,
-        type: 'boolean',
-      })
-      .option('skip-npm', {
-        // TODO: remove in next major release
-        // deprecation notice handled in initialize()
-        hidden: true,
-        type: 'boolean',
-      })
-      .check((argv) => {
-        /* eslint-disable no-param-reassign */
-        if (argv.npmTag) {
-          argv.distTag = argv.npmTag;
-          argv['dist-tag'] = argv.npmTag;
-          delete argv.npmTag;
-          delete argv['npm-tag'];
-          log.warn('deprecated', '--npm-tag has been renamed --dist-tag');
-        }
-
-        if (argv.requireScripts) {
-          log.warn('deprecated', '--require-scripts has been deprecated and will be removed in next major');
-        }
-        /* eslint-enable no-param-reassign */
-
-        return argv;
-      });
+    return yargs;
   },
 
-  handler: (argv: PublishCommandOption) => {
-    return new PublishCommand(argv);
+  handler: async (argv: PublishCommandOption) => {
+    try {
+      // @ts-ignore
+      // eslint-disable-next-line
+      const { PublishCommand } = await import('@lerna-lite/publish');
+      new PublishCommand(argv);
+    } catch (err: unknown) {
+      console.error(
+        `"@lerna-lite/publish" is optional and was not found. Please install it with "npm install @lerna-lite/publish -D -W".`,
+        err
+      );
+    }
   },
 };

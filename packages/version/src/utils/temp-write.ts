@@ -5,16 +5,16 @@
  */
 
 import fs from 'graceful-fs';
-import isStream from 'is-stream';
+import { isStream } from 'is-stream';
 import makeDir from 'make-dir';
-import path from 'path';
-import { Readable } from 'stream';
 import tempDir from 'temp-dir';
-import { promisify } from 'util';
+import { dirname, join } from 'node:path';
+import { Readable } from 'node:stream';
+import { promisify } from 'node:util';
 import { v4 as uuidv4 } from 'uuid';
 
 const writeFileP = promisify(fs.writeFile);
-const tempfile = (filePath?: string) => path.join(tempDir, `lerna-${uuidv4()}`, filePath || '');
+const tempfile = (filePath?: string) => join(tempDir, `lerna-${uuidv4()}`, filePath || '');
 
 const writeStream = async (filePath: string, fileContent: Readable) =>
   new Promise((resolve, reject) => {
@@ -38,7 +38,7 @@ export async function tempWrite(fileContent: Readable | fs.PathOrFileDescriptor,
   const tempPath = tempfile(filePath);
   const write = isStream(fileContent) ? writeStream : writeFileP;
 
-  await makeDir(path.dirname(tempPath));
+  await makeDir(dirname(tempPath));
   await write(tempPath, fileContent as DataView & Readable);
 
   return tempPath;
@@ -47,7 +47,7 @@ export async function tempWrite(fileContent: Readable | fs.PathOrFileDescriptor,
 tempWrite.sync = (fileContent: (DataView & Readable) | string, filePath?: string) => {
   const tempPath = tempfile(filePath);
 
-  makeDir.sync(path.dirname(tempPath));
+  makeDir.sync(dirname(tempPath));
   fs.writeFileSync(tempPath, fileContent);
 
   return tempPath;

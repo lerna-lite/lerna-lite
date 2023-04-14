@@ -1,0 +1,19 @@
+{
+  "files": [],
+  "references": [
+    { "path": "./packages/changed" },
+    { "path": "./packages/cli" },
+    { "path": "./packages/core" },
+    { "path": "./packages/diff" },
+    { "path": "./packages/exec" },
+    { "path": "./packages/filter-packages" },
+    { "path": "./packages/init" },
+    { "path": "./packages/list" },
+    { "path": "./packages/listable" },
+    { "path": "./packages/profiler" },
+    { "path": "./packages/publish" },
+    { "path": "./packages/run" },
+    { "path": "./packages/version" },
+    { "path": "./packages/watch" }
+  ]
+}

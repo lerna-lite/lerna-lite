@@ -4,7 +4,7 @@ import { SyncOptions } from 'execa';
 import parseGitUrl from 'git-url-parse';
 import log from 'npmlog';
 
-export function createGitHubClient() {
+export async function createGitHubClient() {
   log.silly('createGitHubClient', '');
 
   const { GH_TOKEN, GHE_API_URL, GHE_VERSION } = process.env;
@@ -15,8 +15,8 @@ export function createGitHubClient() {
   }
 
   if (GHE_VERSION) {
-    // eslint-disable-next-line
-    Octokit.plugin(require(`@octokit/plugin-enterprise-rest/ghe-${GHE_VERSION}`));
+    const plugin = await import(`@octokit/plugin-enterprise-rest/ghe-${GHE_VERSION}`);
+    Octokit.plugin(plugin);
   }
 
   if (GHE_API_URL) {

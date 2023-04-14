@@ -1,7 +1,9 @@
+import { afterEach, Mock, vi } from 'vitest';
+
 const registry = new Map();
 
 // by default, act like a spy that populates registry
-const mockNpmPublish = jest.fn((pkg, tarData, opts) => {
+const mockNpmPublish = vi.fn((pkg, tarData, opts) => {
   registry.set(pkg.name, opts.tag);
 
   return Promise.resolve();
@@ -17,7 +19,7 @@ afterEach(() => {
   registry.clear();
 });
 
-export const npmPublish = mockNpmPublish as jest.Mock<Promise<void>, [pkg: any, tarData: any, opts: any]> & {
+export const npmPublish = mockNpmPublish as Mock & {
   order: () => any[];
   registry: Map<any, any>;
 };

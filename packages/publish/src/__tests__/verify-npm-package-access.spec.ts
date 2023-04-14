@@ -1,13 +1,21 @@
-jest.mock('libnpmaccess');
+import { afterEach, beforeAll, beforeEach, describe, expect, Mock, test, vi } from 'vitest';
 
-import access from 'libnpmaccess';
+vi.mock('libnpmaccess');
+
 import { FetchConfig, Project } from '@lerna-lite/core';
 import { loggingOutput } from '@lerna-test/helpers/logging-output';
-import { verifyNpmPackageAccess } from '../lib/verify-npm-package-access';
 import { initFixtureFactory } from '@lerna-test/helpers';
+import access from 'libnpmaccess';
+import { fileURLToPath } from 'node:url';
+import { dirname } from 'node:path';
+
+import { verifyNpmPackageAccess } from '../lib/verify-npm-package-access';
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = dirname(__filename);
 const initFixture = initFixtureFactory(__dirname);
 
-(access.getPackages as unknown as jest.Mock).mockImplementation(() =>
+(access.getPackages as unknown as Mock).mockImplementation(() =>
   Promise.resolve({
     'package-1': 'read-write',
     'package-2': 'read-write',
@@ -24,7 +32,7 @@ describe('verifyNpmPackageAccess', () => {
   });
 
   beforeEach(() => {
-    console.error = jest.fn();
+    console.error = vi.fn();
   });
 
   afterEach(() => {
@@ -50,7 +58,7 @@ describe('verifyNpmPackageAccess', () => {
     const packages = await Project.getPackages(cwd);
     const opts = { registry: 'https://registry.npmjs.org/' };
 
-    (access.getPackages as unknown as jest.Mock).mockImplementationOnce(() =>
+    (access.getPackages as unknown as Mock).mockImplementationOnce(() =>
       Promise.resolve({
         'package-1': 'read-write',
         // unpublished packages don't show up in ls-packages
@@ -67,7 +75,7 @@ describe('verifyNpmPackageAccess', () => {
     const packages = await Project.getPackages(cwd);
     const opts = { registry: 'https://registry.npmjs.org/' };
 
-    (access.getPackages as unknown as jest.Mock).mockImplementationOnce(() =>
+    (access.getPackages as unknown as Mock).mockImplementationOnce(() =>
       // access.getPackages() returns null when _no_ results returned
       Promise.resolve(null)
     );
@@ -75,16 +83,14 @@ describe('verifyNpmPackageAccess', () => {
     await verifyNpmPackageAccess(packages, 'lerna-test', opts as FetchConfig);
 
     const [logMessage] = loggingOutput('warn');
-    expect(logMessage).toBe(
-      'The logged-in user does not have any previously-published packages, skipping permission checks...'
-    );
+    expect(logMessage).toBe('The logged-in user does not have any previously-published packages, skipping permission checks...');
   });
 
   test('throws EACCESS when any package does not have read-write permission', async () => {
     const packages = await Project.getPackages(cwd);
     const opts = { registry: 'https://registry.npmjs.org/' };
 
-    (access.getPackages as unknown as jest.Mock).mockImplementationOnce(() =>
+    (access.getPackages as unknown as Mock).mockImplementationOnce(() =>
       Promise.resolve({
         'package-1': 'read-write',
         'package-2': 'read-only',
@@ -101,7 +107,7 @@ describe('verifyNpmPackageAccess', () => {
     const registry = 'http://outdated-npm-enterprise.mycompany.com:12345/';
     const opts = { registry };
 
-    (access.getPackages as unknown as jest.Mock).mockImplementationOnce(() => {
+    (access.getPackages as unknown as Mock).mockImplementationOnce(() => {
       const err = new Error('npm-enterprise-what') as Error & { code: string };
       err.code = 'E500';
       return Promise.reject(err);
@@ -110,9 +116,7 @@ describe('verifyNpmPackageAccess', () => {
     await verifyNpmPackageAccess(packages, 'lerna-test', opts as FetchConfig);
 
     const [logMessage] = loggingOutput('warn');
-    expect(logMessage).toMatch(
-      `Registry "${registry}" does not support \`npm access ls-packages\`, skipping permission checks...`
-    );
+    expect(logMessage).toMatch(`Registry "${registry}" does not support \`npm access ls-packages\`, skipping permission checks...`);
     expect(console.error).not.toHaveBeenCalled();
   });
 
@@ -121,7 +125,7 @@ describe('verifyNpmPackageAccess', () => {
     const registry = 'https://artifactory-partial-implementation.corpnet.mycompany.com/';
     const opts = { registry };
 
-    (access.getPackages as unknown as jest.Mock).mockImplementationOnce(() => {
+    (access.getPackages as unknown as Mock).mockImplementationOnce(() => {
       const err = new Error('artifactory-why') as Error & { code: string };
       err.code = 'E404';
       return Promise.reject(err);
@@ -130,9 +134,7 @@ describe('verifyNpmPackageAccess', () => {
     await verifyNpmPackageAccess(packages, 'lerna-test', opts as FetchConfig);
 
     const [logMessage] = loggingOutput('warn');
-    expect(logMessage).toMatch(
-      `Registry "${registry}" does not support \`npm access ls-packages\`, skipping permission checks...`
-    );
+    expect(logMessage).toMatch(`Registry "${registry}" does not support \`npm access ls-packages\`, skipping permission checks...`);
     expect(console.error).not.toHaveBeenCalled();
   });
 
@@ -140,7 +142,7 @@ describe('verifyNpmPackageAccess', () => {
     const packages = await Project.getPackages(cwd);
     const opts = {};
 
-    (access.getPackages as unknown as jest.Mock).mockImplementationOnce(() => {
+    (access.getPackages as unknown as Mock).mockImplementationOnce(() => {
       const err = new Error('gonna-need-a-bigger-boat');
 
       return Promise.reject(err);

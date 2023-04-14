@@ -1,20 +1,22 @@
-const writePkg = jest.requireActual('write-pkg');
-const registry = new Map();
+import { afterEach, vi } from 'vitest';
+const { writePackage: actualWritePackage } = await vi.importActual<any>('write-pkg');
+
+const registryMap = new Map();
 
 // by default, act like a spy that populates registry
-const mockWritePkg: any = jest.fn((fp, data) => {
-  registry.set(data.name, data);
+export const writePackage = vi.fn((fp, data) => {
+  registryMap.set(data.name, data);
 
-  return writePkg(fp, data);
+  return actualWritePackage(fp, data);
 });
 
-const updatedManifest = (name) => registry.get(name);
+const mockUpdatedManifest = (name) => registryMap.get(name);
 
 // a convenient format for assertions
-function updatedVersions() {
+function mockUpdatedVersions() {
   const result = {};
 
-  registry.forEach((pkg, name) => {
+  registryMap.forEach((pkg, name) => {
     result[name] = pkg.version;
   });
 
@@ -23,15 +25,10 @@ function updatedVersions() {
 
 // keep test data isolated
 afterEach(() => {
-  registry.clear();
+  registryMap.clear();
 });
 
-module.exports = mockWritePkg;
-module.exports.registry = registry;
-module.exports.updatedManifest = updatedManifest;
-module.exports.updatedVersions = updatedVersions;
-
-// mockWritePkg.registry = registry;
-// mockWritePkg.updatedManifest = updatedManifest;
-// mockWritePkg.updatedVersions = updatedVersions;
-// export default mockWritePkg;
+export const registry = registryMap;
+export const updatedManifest = mockUpdatedManifest;
+export const updatedVersions = mockUpdatedVersions;
+export default { registry, updatedManifest, updatedVersions, writePackage };

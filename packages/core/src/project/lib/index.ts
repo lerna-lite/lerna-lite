@@ -1,3 +1,3 @@
-export * from './apply-extends';
-export * from './make-file-finder';
-export * from './shallow-extend';
+export * from './apply-extends.js';
+export * from './make-file-finder.js';
+export * from './shallow-extend.js';

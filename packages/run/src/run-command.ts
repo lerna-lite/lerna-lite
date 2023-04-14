@@ -11,13 +11,13 @@ import {
 import { FilterOptions, getFilteredPackages } from '@lerna-lite/filter-packages';
 import { generateProfileOutputPath, Profiler } from '@lerna-lite/profiler';
 import chalk from 'chalk';
-import { existsSync } from 'fs-extra';
+import { pathExistsSync } from 'fs-extra/esm';
 import pMap from 'p-map';
-import path from 'path';
+import { join, relative } from 'node:path';
 import { performance } from 'perf_hooks';
 
-import { npmRunScript, npmRunScriptStreaming, timer } from './lib';
-import { ScriptStreamingOption } from './models';
+import { npmRunScript, npmRunScriptStreaming, timer } from './lib/index.js';
+import { ScriptStreamingOption } from './models/index.js';
 
 export function factory(argv: RunCommandOption) {
   return new RunCommand(argv);
@@ -119,7 +119,6 @@ export class RunCommand extends Command<RunCommandOption & FilterOptions> {
     } else {
       // detect error (if any) from collected results
       chain = chain.then((results: Array<{ exitCode: number; failed?: boolean; pkg?: Package; stderr: any }>) => {
-        /* istanbul ignore else */
         if (results?.some((result?: { failed?: boolean }) => result?.failed)) {
           // propagate 'highest' error code, it's probably the most useful
           const codes = results.filter((result) => result?.failed).map((result) => result.exitCode);
@@ -225,16 +224,15 @@ export class RunCommand extends Command<RunCommandOption & FilterOptions> {
     if (this.options.profile) {
       const absolutePath = generateProfileOutputPath(this.options.profileLocation);
       // Nx requires a workspace relative path for this
-      process.env.NX_PROFILE = path.relative(this.project.rootPath, absolutePath);
+      process.env.NX_PROFILE = relative(this.project.rootPath, absolutePath);
     }
 
     performance.mark('init-local');
     await this.configureNxOutput();
     const { extraOptions, targetDependencies, options } = await this.prepNxOptions();
-    if (this.packagesWithScript.length === 1 && !Array.isArray(this.script)) {
-      const { runOne } = await import('nx/src/command-line/run-one');
-      const fullQualifiedTarget =
-        this.packagesWithScript.map((p) => p.name)[0] + ':' + this.escapeScriptNameQuotes(this.script);
+    if (this.packagesWithScript.length === 1) {
+      const { runOne } = await import('nx/src/command-line/run-one.js');
+      const fullQualifiedTarget = this.packagesWithScript.map((p) => p.name)[0] + ':' + this.escapeScriptNameQuotes(this.script);
       return (runOne as any)(
         process.cwd(),
         {
@@ -245,7 +243,7 @@ export class RunCommand extends Command<RunCommandOption & FilterOptions> {
         extraOptions
       );
     } else {
-      const { runMany } = await import('nx/src/command-line/run-many');
+      const { runMany } = await import('nx/src/command-line/run-many.js');
       const projects = this.packagesWithScript.map((p) => p.name).join(',');
       return (runMany as any)(
         {
@@ -259,15 +257,13 @@ export class RunCommand extends Command<RunCommandOption & FilterOptions> {
   }
 
   async prepNxOptions() {
-    const nxJsonExists = existsSync(path.join(this.project.rootPath, 'nx.json'));
-    const { readNxJson } = await import('nx/src/config/configuration');
+    const nxJsonExists = pathExistsSync(join(this.project.rootPath, 'nx.json'));
+    const { readNxJson } = await import('nx/src/config/configuration.js');
     const nxJson = readNxJson();
-    const targetDependenciesAreDefined =
-      Object.keys(nxJson.targetDependencies || nxJson.targetDefaults || {}).length > 0;
+    const targetDependenciesAreDefined = Object.keys(nxJson.targetDependencies || nxJson.targetDefaults || {}).length > 0;
 
     const hasProjectSpecificNxConfiguration = this.packagesWithScript.some((p) => !!p.get('nx'));
-    const hasCustomizedNxConfiguration =
-      (nxJsonExists && targetDependenciesAreDefined) || hasProjectSpecificNxConfiguration;
+    const hasCustomizedNxConfiguration = (nxJsonExists && targetDependenciesAreDefined) || hasProjectSpecificNxConfiguration;
     const mimicLernaDefaultBehavior = !hasCustomizedNxConfiguration;
 
     const targetDependencies =
@@ -308,10 +304,7 @@ export class RunCommand extends Command<RunCommandOption & FilterOptions> {
     };
 
     if (hasCustomizedNxConfiguration) {
-      this.logger.verbose(
-        this.name,
-        'Nx target configuration was found. Task dependencies will be automatically included.'
-      );
+      this.logger.verbose(this.name, 'Nx target configuration was found. Task dependencies will be automatically included.');
 
       if (this.options.parallel || this.options.sort !== undefined) {
         this.logger.warn(this.name, `"parallel", "sort", and "no-sort" are ignored when Nx targets are configured.`);
@@ -374,13 +367,7 @@ export class RunCommand extends Command<RunCommandOption & FilterOptions> {
 
     return npmRunScript(this.script, this.getOpts(pkg)).then(
       (result: { exitCode: number; failed?: boolean; pkg: Package; stderr: any; stdout: any }) => {
-        this.logger.info(
-          'run',
-          `Ran npm script '%s' in '%s' in %ss:`,
-          this.script,
-          pkg.name,
-          (getElapsed() / 1000).toFixed(1)
-        );
+        this.logger.info('run', `Ran npm script '%s' in '%s' in %ss:`, this.script, pkg.name, (getElapsed() / 1000).toFixed(1));
         logOutput(result.stdout);
         if (!this.bail) {
           return { ...result, pkg };
@@ -392,7 +379,7 @@ export class RunCommand extends Command<RunCommandOption & FilterOptions> {
 
   async configureNxOutput() {
     try {
-      const nxOutput = await import('nx/src/utils/output');
+      const nxOutput = await import('nx/src/utils/output.js');
       nxOutput.output.cliName = 'Lerna (powered by Nx)';
       nxOutput.output.formatCommand = (taskId) => taskId;
       return nxOutput as unknown;

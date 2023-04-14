@@ -1,8 +1,8 @@
 import { Command, CommandType, exec, InitCommandOption, ProjectConfig } from '@lerna-lite/core';
-import fs from 'fs-extra';
-import path from 'path';
+import { mkdirp } from 'fs-extra/esm';
+import { join } from 'node:path';
 import pMap from 'p-map';
-import writeJsonFile from 'write-json-file';
+import { writeJsonFile } from 'write-json-file';
 
 const LERNA_CLI_PKG_NAME = '@lerna-lite/cli';
 
@@ -54,11 +54,7 @@ export class InitCommand extends Command<InitCommandOption> {
       this.logger.info('', 'Creating package.json');
 
       // initialize with default indentation so write-pkg doesn't screw it up with tabs
-      await writeJsonFile(
-        path.join(this.project.rootPath, 'package.json'),
-        { name: 'root', private: true },
-        { indent: 2 }
-      );
+      await writeJsonFile(join(this.project.rootPath, 'package.json'), { name: 'root', private: true }, { indent: 2 });
     } else {
       this.logger.info('', 'Updating package.json');
     }
@@ -133,6 +129,6 @@ export class InitCommand extends Command<InitCommandOption> {
   ensurePackagesDir() {
     this.logger.info('', 'Creating packages directory');
 
-    return pMap(this.project.packageParentDirs, (dir) => fs.mkdirp(dir));
+    return pMap(this.project.packageParentDirs, (dir) => mkdirp(dir));
   }
 }

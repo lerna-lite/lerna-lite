@@ -1,22 +1,31 @@
-jest.mock('@lerna-lite/core', () => ({
-  ...(jest.requireActual('@lerna-lite/core') as any), // return the other real methods, below we'll mock only 2 of the methods
-  Command: jest.requireActual('../../../core/src/command').Command,
-  conf: jest.requireActual('../../../core/src/command').conf,
-  logOutput: jest.requireActual('../../../core/src/__mocks__/output').logOutput,
-  promptConfirmation: jest.requireActual('../../../core/src/__mocks__/prompt').promptConfirmation,
-  promptSelectOne: jest.requireActual('../../../core/src/__mocks__/prompt').promptSelectOne,
-  promptTextInput: jest.requireActual('../../../core/src/__mocks__/prompt').promptTextInput,
-  throwIfUncommitted: jest.requireActual('../../../core/src/__mocks__/check-working-tree').throwIfUncommitted,
-  collectUpdates: jest.requireActual('../../../core/src/__mocks__/collect-updates').collectUpdates,
-  PackageGraph: jest.requireActual('../../../core/src/package-graph').PackageGraph,
-  getPackages: jest.requireActual('../../../core/src/project').getPackages,
+import { beforeAll, describe, expect, it, vi } from 'vitest';
+
+vi.mock('@lerna-lite/core', async () => ({
+  ...(await vi.importActual<any>('@lerna-lite/core')),
+  Command: (await vi.importActual<any>('../../../core/src/command')).Command,
+  conf: (await vi.importActual<any>('../../../core/src/command')).conf,
+  logOutput: (await vi.importActual<any>('../../../core/src/__mocks__/output')).logOutput,
+  promptConfirmation: (await vi.importActual<any>('../../../core/src/__mocks__/prompt')).promptConfirmation,
+  promptSelectOne: (await vi.importActual<any>('../../../core/src/__mocks__/prompt')).promptSelectOne,
+  promptTextInput: (await vi.importActual<any>('../../../core/src/__mocks__/prompt')).promptTextInput,
+  throwIfUncommitted: (await vi.importActual<any>('../../../core/src/__mocks__/check-working-tree')).throwIfUncommitted,
+  collectUpdates: (await vi.importActual<any>('../../../core/src/__mocks__/collect-updates')).collectUpdates,
+  PackageGraph: (await vi.importActual<any>('../../../core/src/package-graph')).PackageGraph,
+  getPackages: (await vi.importActual<any>('../../../core/src/project')).getPackages,
 }));
+
+vi.mock('@lerna-lite/list', async () => await vi.importActual<any>('../list-command'));
+vi.mock('@lerna-lite/filter-packages', async () => await vi.importActual<any>('../../../filter-packages/src/get-filtered-packages'));
 
 // mocked modules
 import { collectUpdates, ListCommandOption, logOutput } from '@lerna-lite/core';
 
 // helpers
+import { fileURLToPath } from 'node:url';
+import { dirname } from 'node:path';
 import { commandRunner, initFixtureFactory } from '@lerna-test/helpers';
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = dirname(__filename);
 const initFixture = initFixtureFactory(__dirname);
 
 // file under test
@@ -49,8 +58,8 @@ expect.addSnapshotSerializer({
 });
 
 // normalize temp directory paths in snapshots
-import serializeTempdir from '@lerna-test/helpers/serializers/serialize-tempdir';
-import serializeWindowsPaths from '@lerna-test/helpers/serializers/serialize-windows-paths';
+import serializeTempdir from '@lerna-test/helpers/serializers/serialize-tempdir.js';
+import serializeWindowsPaths from '@lerna-test/helpers/serializers/serialize-windows-paths.js';
 expect.addSnapshotSerializer(serializeWindowsPaths);
 expect.addSnapshotSerializer(serializeTempdir);
 
@@ -166,12 +175,7 @@ __TEST_ROOTDIR__/packages/package-5:package-5:1.0.0:PRIVATE
       (collectUpdates as any).setUpdated(testDir);
       await lernaList(testDir)('--since', 'deadbeef');
       expect(logOutput).not.toHaveBeenCalled();
-      expect(collectUpdates).toHaveBeenLastCalledWith(
-        expect.any(Array),
-        expect.any(Map),
-        expect.any(Object),
-        expect.objectContaining({ since: 'deadbeef' })
-      );
+      expect(collectUpdates).toHaveBeenLastCalledWith(expect.any(Array), expect.any(Map), expect.any(Object), expect.objectContaining({ since: 'deadbeef' }));
     });
   });
 
@@ -187,28 +191,6 @@ package-2
     });
   });
 
-  describe('--include-filtered-dependencies', () => {
-    it('should list packages, including filtered ones', async () => {
-      const testDir = await initFixture('include-filtered-dependencies');
-      await lernaList(testDir)('--scope', '@test/package-2', '--include-filtered-dependencies');
-      expect((logOutput as any).logged()).toMatchInlineSnapshot(`
-@test/package-2
-@test/package-1
-`);
-    });
-  });
-
-  describe('--include-filtered-dependents', () => {
-    it('should list packages, including filtered ones', async () => {
-      const testDir = await initFixture('include-filtered-dependencies');
-      await lernaList(testDir)('--scope', '@test/package-1', '--include-filtered-dependents');
-      expect((logOutput as any).logged()).toMatchInlineSnapshot(`
-@test/package-1
-@test/package-2
-`);
-    });
-  });
-
   describe('with an undefined version', () => {
     it('replaces version with MISSING', async () => {
       const testDir = await initFixture('undefined-version');
@@ -219,9 +201,7 @@ package-2
     it('appends MISSING flag to long parseable output', async () => {
       const testDir = await initFixture('undefined-version');
       await lernaList(testDir)('--long', '--parseable');
-      expect((logOutput as any).logged()).toMatchInlineSnapshot(
-        `__TEST_ROOTDIR__/packages/package-1:package-1:MISSING`
-      );
+      expect((logOutput as any).logged()).toMatchInlineSnapshot(`__TEST_ROOTDIR__/packages/package-1:package-1:MISSING`);
     });
   });
 
@@ -295,7 +275,7 @@ package-2
     // * A package that has already been processed wont get added twice (package 1)
     it('should list all packages with no repeats', async () => {
       const testDir = await initFixture('cycles-and-repeated-deps');
-      await lernaList(testDir)('--scope', 'package-1', '--include-filtered-dependencies');
+      await lernaList(testDir)('--scope', 'package-1', '--include-dependencies');
 
       // should follow all transitive deps and pass all packages except 7 with no repeats
       expect((logOutput as any).logged()).toMatchInlineSnapshot(`
@@ -323,7 +303,7 @@ package-5
 `);
     });
 
-    xit('lists packages under explicitly configured node_modules directories', async () => {
+    it.skip('lists packages under explicitly configured node_modules directories', async () => {
       const testDir = await initFixture('explicit-node-modules');
       await lernaList(testDir)();
       expect((logOutput as any).logged()).toMatchInlineSnapshot(`

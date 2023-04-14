@@ -1,3 +1,5 @@
+import { afterEach, vi } from 'vitest';
+
 const releases = new Map();
 
 // keep test data isolated
@@ -30,12 +32,12 @@ export const graphqlCommitNodes = [
 
 const client = {
   repos: {
-    createRelease: jest.fn((opts) => {
+    createRelease: vi.fn((opts) => {
       releases.set(opts.name, opts);
       return Promise.resolve();
     }),
   },
-  graphql: jest.fn(() => {
+  graphql: vi.fn(() => {
     return {
       repository: {
         ref: {
@@ -54,7 +56,7 @@ const client = {
   }),
 };
 
-export const createGitHubClient: any = jest.fn(() => client);
+export const createGitHubClient: any = vi.fn(() => client);
 createGitHubClient.releases = releases;
 
 export const parseGitRepo = () => ({

@@ -1,4 +1,4 @@
-import os from 'os';
+import { cpus } from 'node:os';
 import { Argv } from 'yargs';
 
 export function globalOptions(yargs: Argv<any>) {
@@ -10,7 +10,7 @@ export function globalOptions(yargs: Argv<any>) {
       type: 'string',
     },
     concurrency: {
-      defaultDescription: os.cpus().length,
+      defaultDescription: cpus().length,
       describe: 'How many processes to use when lerna parallelizes tasks.',
       type: 'number',
       requiresArg: true,

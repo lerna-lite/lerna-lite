@@ -1,9 +1,9 @@
 import npa from 'npm-package-arg';
 
-import { CyclicPackageGraphNode, PackageGraphNode, reportCycles } from './lib';
-import { Package } from '../package';
-import { ValidationError } from '../validation-error';
-import { NpaResolveResult } from '../models';
+import { CyclicPackageGraphNode, PackageGraphNode, reportCycles } from './lib/index.js';
+import { Package } from '../package.js';
+import { ValidationError } from '../validation-error.js';
+import { NpaResolveResult } from '../models/index.js';
 
 /**
  * A graph of packages in the current project.
@@ -44,10 +44,7 @@ export class PackageGraph extends Map<string, PackageGraphNode> {
 
       for (const [name, locations] of seen) {
         if (locations.length > 1) {
-          throw new ValidationError(
-            'ENAME',
-            [`Package name "${name}" used in multiple packages:`, ...locations].join('\n\t')
-          );
+          throw new ValidationError('ENAME', [`Package name "${name}" used in multiple packages:`, ...locations].join('\n\t'));
         }
       }
     }
@@ -175,63 +172,6 @@ export class PackageGraph extends Map<string, PackageGraphNode> {
   }
 
   /**
-   * Return a tuple of cycle paths and nodes.
-   *
-   * @deprecated Use collapseCycles instead.
-   *
-   * @param {boolean} rejectCycles Whether or not to reject cycles
-   * @returns {[Set<string[]>, Set<PackageGraphNode>]}
-   */
-  partitionCycles(rejectCycles?: boolean) {
-    const cyclePaths = new Set<string[]>();
-    const cycleNodes = new Set<PackageGraphNode>();
-
-    this.forEach((currentNode: PackageGraphNode, currentName: string) => {
-      const seen = new Set<PackageGraphNode>();
-
-      const visits = (walk) => (dependentNode: PackageGraphNode, dependentName: string, siblingDependents: any) => {
-        const step = walk.concat(dependentName);
-
-        if (seen.has(dependentNode)) {
-          return;
-        }
-
-        seen.add(dependentNode);
-
-        if (dependentNode === currentNode) {
-          // a direct cycle
-          cycleNodes.add(currentNode);
-          cyclePaths.add(step);
-
-          return;
-        }
-
-        if (siblingDependents.has(currentName)) {
-          // a transitive cycle
-          const cycleDependentName = Array.from(dependentNode.localDependencies.keys()).find((key) =>
-            currentNode.localDependents.has(key)
-          );
-          const pathToCycle = step.slice().reverse().concat(cycleDependentName);
-
-          cycleNodes.add(dependentNode);
-          cyclePaths.add(pathToCycle);
-        }
-
-        dependentNode.localDependents.forEach(visits(step));
-      };
-
-      currentNode.localDependents.forEach(visits([currentName]));
-    });
-
-    reportCycles(
-      Array.from(cyclePaths, (cycle) => cycle.join(' -> ')),
-      rejectCycles
-    );
-
-    return [cyclePaths, cycleNodes];
-  }
-
-  /**
    * Returns the cycles of this graph. If two cycles share some elements, they will
    * be returned as a single cycle.
    *
@@ -296,17 +236,6 @@ export class PackageGraph extends Map<string, PackageGraphNode> {
     reportCycles(cyclePaths, rejectCycles);
 
     return cycles;
-  }
-
-  /**
-   * Remove cycle nodes.
-   *
-   * @deprecated Spread set into prune() instead.
-   *
-   * @param {Set<PackageGraphNode>} cycleNodes
-   */
-  pruneCycleNodes(cycleNodes: Set<PackageGraphNode>) {
-    return this.prune(...cycleNodes);
   }
 
   /**

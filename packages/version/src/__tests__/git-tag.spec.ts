@@ -1,17 +1,18 @@
+import { describe, expect, it, vi } from 'vitest';
 import { exec } from '@lerna-lite/core';
 
 import { gitTag } from '../lib/git-tag';
 
-jest.mock('@lerna-lite/core', () => {
-  const { exec } = jest.requireActual('@lerna-lite/core');
+vi.mock('@lerna-lite/core', async () => {
+  const { exec } = await vi.importActual<any>('@lerna-lite/core');
   return {
     __esModule: true,
-    exec: jest.fn(exec),
+    exec: vi.fn(exec),
   };
 });
 
 describe('gitTag', () => {
-  (exec as jest.Mock).mockResolvedValue(null);
+  (exec as any).mockResolvedValue(null);
 
   it('creates an annotated git tag', async () => {
     const tag = 'v1.2.3';

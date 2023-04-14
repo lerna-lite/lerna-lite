@@ -1,11 +1,11 @@
-import globby, { GlobbyOptions } from 'globby';
+import { globbySync } from 'globby';
 import log from 'npmlog';
-import minimatch from 'minimatch';
-import path from 'path';
+import { filter as minimatchFilter } from 'minimatch';
+import { dirname, relative } from 'node:path';
 import slash from 'slash';
 
-import { execSync } from '../../../child-process';
-import { ExecOpts } from '../../../models';
+import { execSync } from '../../../child-process.js';
+import { ExecOpts } from '../../../models/index.js';
 
 /**
  * @param {string} committish
@@ -20,7 +20,7 @@ export function makeDiffPredicate(
 ) {
   const ignoreFilters = new Set(
     ignorePatterns.map((p) =>
-      minimatch.filter(`!${p}`, {
+      minimatchFilter(`!${p}`, {
         matchBase: true,
         // dotfiles inside ignored directories should also match
         dot: true,
@@ -64,14 +64,9 @@ export function makeDiffPredicate(
  * @param {string} location
  * @param {import("@lerna/child-process").ExecOpts} execOpts
  */
-function diffSinceIn(
-  committish: string,
-  location: string,
-  execOpts: ExecOpts,
-  diffOpts: { independentSubpackages?: boolean }
-) {
+function diffSinceIn(committish: string, location: string, execOpts: ExecOpts, diffOpts: { independentSubpackages?: boolean }) {
   const args = ['diff', '--name-only', committish];
-  const formattedLocation = slash(path.relative(execOpts.cwd, location));
+  const formattedLocation = slash(relative(execOpts.cwd, location));
 
   if (formattedLocation) {
     // avoid same-directory path.relative() === ""
@@ -79,13 +74,11 @@ function diffSinceIn(
 
     // optionally exclude sub-packages
     if (diffOpts?.independentSubpackages) {
-      independentSubpackages = globby
-        .sync('**/*/package.json', {
-          cwd: formattedLocation,
-          nodir: true,
-          ignore: ['**/node_modules/**'],
-        } as GlobbyOptions)
-        .map((file) => `:^${formattedLocation}/${path.dirname(file)}`);
+      independentSubpackages = globbySync('**/*/package.json', {
+        cwd: formattedLocation,
+        nodir: true,
+        ignore: '**/node_modules/**',
+      }).map((file) => `:^${formattedLocation}/${dirname(file)}`);
     }
 
     // avoid same-directory path.relative() === ""

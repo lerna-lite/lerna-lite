@@ -1,4 +1,4 @@
-import url from 'url';
+import url from 'node:url';
 
 // https://github.com/npm/npm/blob/0cc9d89/lib/config/nerf-dart.js
 export function toNerfDart(uri) {

@@ -4,16 +4,16 @@ import log from 'npmlog';
 import newGithubReleaseUrl from 'new-github-release-url';
 import semver from 'semver';
 
-import { createGitHubClient, createGitLabClient, parseGitRepo } from '../git-clients';
-import { GitCreateReleaseClientOutput, ReleaseClient, ReleaseCommandProps, ReleaseOptions } from '../models';
+import { createGitHubClient, createGitLabClient, parseGitRepo } from '../git-clients/index.js';
+import { GitCreateReleaseClientOutput, ReleaseCommandProps, ReleaseOptions } from '../models/index.js';
 
-export function createReleaseClient(type: 'github' | 'gitlab'): GitCreateReleaseClientOutput {
+export async function createReleaseClient(type: 'github' | 'gitlab'): Promise<GitCreateReleaseClientOutput> {
   switch (type) {
     case 'gitlab':
       return createGitLabClient();
     case 'github':
-      return createGitHubClient();
-    /* istanbul ignore next: guarded by yargs.choices() */
+      return await createGitHubClient();
+    /* c8 ignore next: guarded by yargs.choices() */
     default:
       throw new ValidationError('ERELEASE', 'Invalid release client type');
   }
@@ -25,9 +25,9 @@ export function createReleaseClient(type: 'github' | 'gitlab'): GitCreateRelease
  * @param {{ gitRemote: string; execOpts: import('@lerna/child-process').ExecOpts }} opts
  */
 export function createRelease(
-  client: ReleaseClient,
+  client: GitCreateReleaseClientOutput,
   { tags, releaseNotes }: ReleaseCommandProps,
-  { gitRemote, execOpts }: ReleaseOptions,
+  { gitRemote, execOpts, skipBumpOnlyRelease }: ReleaseOptions,
   dryRun = false
 ) {
   const { GH_TOKEN } = process.env;
@@ -37,8 +37,9 @@ export function createRelease(
     releaseNotes.map(({ notes, name }) => {
       const tag = name === 'fixed' ? tags[0] : tags.find((t) => t.startsWith(`${name}@`));
 
-      /* istanbul ignore if */
-      if (!tag) {
+      // when using independent mode, it could happen that a few version bump only releases are created
+      // and since these aren't very useful for most users, user could choose to skip creating these releases when detecting a version bump only
+      if (!tag || (skipBumpOnlyRelease && notes?.includes('**Note:** Version bump only for package'))) {
         return Promise.resolve();
       }
 
@@ -71,11 +72,7 @@ export function createRelease(
       };
 
       if (dryRun) {
-        log.info(
-          chalk.bold.magenta('[dry-run] >'),
-          `Create Release with repo options: `,
-          JSON.stringify(releaseOptions)
-        );
+        log.info(chalk.bold.magenta('[dry-run] >'), `Create Release with repo options: `, JSON.stringify(releaseOptions));
         return Promise.resolve();
       }
 

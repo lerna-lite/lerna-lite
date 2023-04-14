@@ -1,4 +1,4 @@
-import { RemoteClientType } from './interfaces';
+import { RemoteClientType } from './interfaces.js';
 
 export interface ChangedCommandOption {
   /** use conventional-changelog to determine version bump and generate CHANGELOG. */
@@ -31,9 +31,6 @@ export interface ExecCommandOption {
 
   /** exec command arguments */
   args?: string[];
-
-  /** @deprecated option was renamed to `--dry-run`, @see dryRun */
-  cmdDryRun?: boolean;
 
   /** Displays the execution command that would be performed without executing it. */
   dryRun?: boolean;
@@ -74,6 +71,41 @@ export interface InitCommandOption {
 
   /** enables integration with Yarn or other package manager that use `workspaces` property in `package.json` */
   useWorkspaces?: boolean;
+}
+
+/** Because yargs.InferredOptionsTypes is next to useless here */
+export interface ListableOption {
+  _: string;
+
+  /** Show information as a JSON array */
+  json: boolean;
+
+  /** Show information as newline-delimited JSON */
+  ndjson: boolean;
+
+  /** Show private packages that are normally hidden */
+  all: boolean;
+
+  /** alias to all */
+  a: boolean;
+
+  /** Show extended information */
+  long: boolean;
+
+  /** alias to long */
+  l: boolean;
+
+  /** alias to parseable */
+  p: boolean;
+
+  /** Show parseable output instead of columnified view */
+  parseable: boolean;
+
+  /** Sort packages in topological order instead of lexical by directory */
+  toposort: boolean;
+
+  /** Show dependency graph as a JSON-formatted adjacency list */
+  graph: boolean;
 }
 
 export interface ListCommandOption {
@@ -140,20 +172,11 @@ export interface VersionCommandOption {
    */
   changelogIncludeCommitsGitAuthor?: boolean | string;
 
-  /** @deprecated option renamed to `changelogIncludeCommitsGitAuthor` */
-  changelogIncludeCommitAuthorFullname?: boolean | string;
-
   /**
    * Specify if we want to include the commit remote client login name (ie GitHub username), this option is only available when using `--conventional-commits` with changelogs.
    * We can also optionally provide a custom message or else a default format will be used.
    */
   changelogIncludeCommitsClientLogin?: boolean | string;
-
-  /**
-   * Add a custom message as a prefix to each new version in your "changelog.md" which is located in the root of your project.
-   * This option is only available when using `--conventional-commits` with changelogs.
-   */
-  changelogVersionMessage?: string;
 
   /** Defaults 'angular', custom conventional-changelog preset. */
   changelogPreset?: string;
@@ -172,9 +195,6 @@ export interface VersionCommandOption {
 
   /** Displays the process command that would be performed without executing it. */
   dryRun?: boolean;
-
-  /** @deprecated option was renamed to `--dry-run`, @see dryRun */
-  gitDryRun?: boolean;
 
   /**
    * Allows users to specify a custom command to be used when applying git tags.
@@ -272,14 +292,11 @@ export interface VersionCommandOption {
   /** Additional arguments to pass to the npm client when performing 'npm install'. */
   npmClientArgs?: string[];
 
+  /** Defaults to false, should we skip GitHub/GitLab release creation when the version is a "Version bump only for package x" */
+  skipBumpOnlyRelease?: boolean;
+
   /** Runs `npm install --package-lock-only` or equivalent depending on the package manager defined in `npmClient`. */
   syncWorkspaceLock?: boolean;
-
-  /**
-   * @deprecated Strict match transform version numbers to an exact range (like "1.2.3") rather than with a caret (like ^1.2.3) when using `workspace:*`.
-   * Future version will make `workspace:` protocol as strict matching at all time, so this flag becomes redundant.
-   */
-  workspaceStrictMatch?: boolean;
 
   /** alias to `--yes` */
   y?: boolean;
@@ -344,9 +361,6 @@ export interface PublishCommandOption extends VersionCommandOption {
   /** Remove fields from each package.json before publishing them to the registry, removing fields from a complex object is also supported via the dot notation (ie "scripts.build") */
   removePackageFields?: string[];
 
-  /** @deprecated Execute ./scripts/prepublish.js and ./scripts/postpublish.js, relative to package root. */
-  requireScripts?: boolean;
-
   /** Do not reset changes to working tree after publishing is complete. */
   noGitReset?: boolean;
 
@@ -373,9 +387,6 @@ export interface PublishCommandOption extends VersionCommandOption {
 }
 
 export interface RunCommandOption {
-  /** @deprecated option was renamed to `--dry-run`, @see dryRun */
-  cmdDryRun?: boolean;
-
   /** Displays the process command that would be performed without executing it. */
   dryRun?: boolean;
 

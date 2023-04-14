@@ -1,3 +1,3 @@
-export * from './lib';
-export * from './models';
-export * from './publish-command';
+export * from './lib/index.js';
+export * from './models/index.js';
+export * from './publish-command.js';

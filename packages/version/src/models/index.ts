@@ -55,7 +55,6 @@ export type RemoteCommit = {
 
 export interface UpdateChangelogOption {
   changelogHeaderMessage?: string;
-  changelogVersionMessage?: string;
   changelogPreset?: string;
   changelogIncludeCommitsGitAuthor?: boolean | string;
   changelogIncludeCommitsClientLogin?: boolean | string;
@@ -63,9 +62,6 @@ export interface UpdateChangelogOption {
   rootPath?: string;
   tagPrefix?: string;
   version?: string;
-
-  /** @deprecated this option was renamed to `changelogIncludeCommitsGitAuthor` */
-  changelogIncludeCommitAuthorFullname?: boolean | string;
 }
 
 export interface GitClientReleaseOption {
@@ -112,4 +108,5 @@ export interface ReleaseCommandProps {
 export interface ReleaseOptions {
   gitRemote: string;
   execOpts: ExecOpts;
+  skipBumpOnlyRelease?: boolean;
 }

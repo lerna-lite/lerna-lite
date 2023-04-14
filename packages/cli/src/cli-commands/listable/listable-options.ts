@@ -1,4 +1,13 @@
-import { YargListableOption } from '../models';
+import { ListableOption } from '@lerna-lite/core';
+
+export type YargListableOption = {
+  [option in keyof ListableOption]: {
+    group: string;
+    describe: string;
+    type: string;
+    alias?: string;
+  };
+};
 
 /**
  * Add list-related options to a Yargs instance.

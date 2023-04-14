@@ -1,16 +1,21 @@
-import execa from 'execa';
-import fs from 'fs-extra';
-import path from 'path';
+import { expect, test } from 'vitest';
+import { execa } from 'execa';
+import { outputFile, outputJson, writeJson } from 'fs-extra/esm';
+import { dirname, join } from 'node:path';
+import { fileURLToPath } from 'node:url';
 import { initFixtureFactory } from '@lerna-test/helpers';
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = dirname(__filename);
 const initFixture = initFixtureFactory(__dirname);
 
 import { gitCheckout } from '../lib/git-checkout';
 
 test('gitCheckout files', async () => {
   const cwd = await initFixture('no-interdependencies');
-  const files = ['package-1', 'package-2'].map((name) => path.join('packages', name, 'package.json'));
+  const files = ['package-1', 'package-2'].map((name) => join('packages', name, 'package.json'));
 
-  await Promise.all(files.map((fp) => fs.writeJSON(path.join(cwd, fp), { foo: 'bar' })));
+  await Promise.all(files.map((fp) => writeJson(join(cwd, fp), { foo: 'bar' })));
   await gitCheckout(files, { granularPathspec: true }, { cwd });
 
   const { stdout: modified } = await execa('git', ['ls-files', '--modified'], { cwd });
@@ -19,12 +24,12 @@ test('gitCheckout files', async () => {
 
 test('gitCheckout files with .gitignored files', async () => {
   const cwd = await initFixture('no-interdependencies');
-  const files = ['package-1', 'package-2', 'package-3'].map((name) => path.join('packages', name, 'package.json'));
+  const files = ['package-1', 'package-2', 'package-3'].map((name) => join('packages', name, 'package.json'));
 
   // simulate a "dynamic", intentionally unversioned package by gitignoring it
-  await fs.writeFile(path.join(cwd, '.gitignore'), 'packages/package-3/*', 'utf8');
+  await outputFile(join(cwd, '.gitignore'), 'packages/package-3/*', 'utf8');
 
-  await Promise.all(files.map((fp) => fs.outputJSON(path.join(cwd, fp), { foo: 'bar' })));
+  await Promise.all(files.map((fp) => outputJson(join(cwd, fp), { foo: 'bar' })));
   await gitCheckout(files, { granularPathspec: false }, { cwd });
 
   const { stdout: modified } = await execa('git', ['ls-files', '--others'], { cwd });

@@ -1,24 +1,25 @@
-jest.mock('../../../child-process');
+import { expect, Mock, test, vi } from 'vitest';
 
-import globby from 'globby';
+vi.mock('../../../child-process');
 
 // mocked modules
 import * as childProcesses from '../../../child-process';
+
+const globMock = vi.fn();
+vi.mock('globby', async () => ({
+  ...(await vi.importActual<any>('globby')),
+  globbySync: globMock,
+}));
 
 // file under test
 import { makeDiffPredicate } from '../lib/make-diff-predicate';
 
 function setup(changes) {
-  (childProcesses.execSync as jest.Mock).mockReturnValueOnce([].concat(changes).join('\n'));
+  (childProcesses.execSync as Mock).mockReturnValueOnce([].concat(changes).join('\n'));
 }
 
 test('git diff call', () => {
-  setup([
-    'packages/pkg-1/__tests__/index.test.js',
-    'packages/pkg-1/index.js',
-    'packages/pkg-1/package.json',
-    'packages/pkg-1/README.md',
-  ]);
+  setup(['packages/pkg-1/__tests__/index.test.js', 'packages/pkg-1/index.js', 'packages/pkg-1/package.json', 'packages/pkg-1/README.md']);
 
   const hasDiff = makeDiffPredicate('v1.0.0', { cwd: '/test' }, undefined, {});
   const result = hasDiff({
@@ -26,11 +27,7 @@ test('git diff call', () => {
   });
 
   expect(result).toBe(true);
-  expect(childProcesses.execSync).toHaveBeenLastCalledWith(
-    'git',
-    ['diff', '--name-only', 'v1.0.0', '--', 'packages/pkg-1'],
-    { cwd: '/test' }
-  );
+  expect(childProcesses.execSync).toHaveBeenLastCalledWith('git', ['diff', '--name-only', 'v1.0.0', '--', 'packages/pkg-1'], { cwd: '/test' });
 });
 
 test('empty diff', () => {
@@ -59,11 +56,7 @@ test('rooted package', () => {
 });
 
 test('ignore changes (globstars)', () => {
-  setup([
-    'packages/pkg-2/examples/.eslintrc.yaml',
-    'packages/pkg-2/examples/do-a-thing/index.js',
-    'packages/pkg-2/examples/and-another-thing/package.json',
-  ]);
+  setup(['packages/pkg-2/examples/.eslintrc.yaml', 'packages/pkg-2/examples/do-a-thing/index.js', 'packages/pkg-2/examples/and-another-thing/package.json']);
 
   const hasDiff = makeDiffPredicate('v1.0.0', { cwd: '/test' }, ['**/examples/**', '*.md'], {});
   const result = hasDiff({
@@ -85,13 +78,9 @@ test('ignore changes (match base)', () => {
 });
 
 test('exclude subpackages when --independent-subpackages option is enabled and nested package.json is found', () => {
-  jest.spyOn(globby, 'sync').mockImplementationOnce(() => ['packages/pkg-2/and-another-thing/package.json']);
+  globMock.mockReturnValueOnce(['packages/pkg-2/and-another-thing/package.json']);
 
-  setup([
-    'packages/pkg-2/package.json',
-    'packages/pkg-2/do-a-thing/index.js',
-    'packages/pkg-2/and-another-thing/package.json',
-  ]);
+  setup(['packages/pkg-2/package.json', 'packages/pkg-2/do-a-thing/index.js', 'packages/pkg-2/and-another-thing/package.json']);
 
   const hasDiff = makeDiffPredicate('v1.0.0', { cwd: '/test' }, ['**/examples/**', '*.md'], {
     independentSubpackages: true,
@@ -111,13 +100,9 @@ test('exclude subpackages when --independent-subpackages option is enabled and n
 });
 
 test('not exclude any subpackages when --independent-subpackages option is enabled but no nested package.json are found', () => {
-  jest.spyOn(globby, 'sync').mockImplementationOnce(() => []);
+  globMock.mockReturnValueOnce([]);
 
-  setup([
-    'packages/pkg-2/package.json',
-    'packages/pkg-2/do-a-thing/index.js',
-    'packages/pkg-2/and-another-thing/method.js',
-  ]);
+  setup(['packages/pkg-2/package.json', 'packages/pkg-2/do-a-thing/index.js', 'packages/pkg-2/and-another-thing/method.js']);
 
   const hasDiff = makeDiffPredicate('v1.0.0', { cwd: '/test' }, ['**/examples/**', '*.md'], {
     independentSubpackages: true,
@@ -127,11 +112,7 @@ test('not exclude any subpackages when --independent-subpackages option is enabl
   });
 
   expect(result).toBe(true);
-  expect(childProcesses.execSync).toHaveBeenLastCalledWith(
-    'git',
-    ['diff', '--name-only', 'v1.0.0', '--', 'packages/pkg-2'],
-    {
-      cwd: '/test',
-    }
-  );
+  expect(childProcesses.execSync).toHaveBeenLastCalledWith('git', ['diff', '--name-only', 'v1.0.0', '--', 'packages/pkg-2'], {
+    cwd: '/test',
+  });
 });

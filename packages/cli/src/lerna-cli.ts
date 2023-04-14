@@ -1,7 +1,7 @@
 import dedent from 'dedent';
 import log from 'npmlog';
 import yargs from 'yargs/yargs';
-import { globalOptions } from './global-options';
+import { globalOptions } from './global-options.js';
 
 /**
  * A factory that returns a yargs() instance configured with everything except commands.

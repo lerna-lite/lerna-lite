@@ -1,15 +1,21 @@
-import execa from 'execa';
+import { expect, test, vi } from 'vitest';
+import { execa } from 'execa';
 import { execSync } from '@lerna-lite/core';
+import { fileURLToPath } from 'node:url';
+import { dirname } from 'node:path';
 import { isAnythingCommitted } from '../lib/is-anything-committed';
 
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = dirname(__filename);
 import { initFixtureFactory } from '@lerna-test/helpers';
+
 const initFixture = initFixtureFactory(__dirname);
 
-jest.mock('@lerna-lite/core', () => {
-  const { execSync } = jest.requireActual('@lerna-lite/core');
+vi.mock('@lerna-lite/core', async () => {
+  const { execSync } = await vi.importActual<any>('@lerna-lite/core');
   return {
     __esModule: true,
-    execSync: jest.fn(execSync),
+    execSync: vi.fn(execSync),
   };
 });
 
@@ -23,12 +29,7 @@ test('dry-run of isAnythingCommitted', async () => {
   const cwd = await initFixture('root-manifest-only');
 
   expect(isAnythingCommitted({ cwd }, true)).toBe(true);
-  expect(execSync).toHaveBeenCalledWith(
-    'git',
-    ['rev-list', '--count', '--all', '--max-count=1'],
-    { cwd: expect.any(String) },
-    true
-  );
+  expect(execSync).toHaveBeenCalledWith('git', ['rev-list', '--count', '--all', '--max-count=1'], { cwd: expect.any(String) }, true);
 });
 
 test('isAnythingCommitted without and with a commit', async () => {

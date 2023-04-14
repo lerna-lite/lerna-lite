@@ -1,26 +1,32 @@
-jest.mock('../lib/npm-run-script');
-jest.mock('nx/src/tasks-runner/life-cycles/task-profiling-life-cycle');
+import { afterAll, afterEach, beforeAll, describe, expect, it, Mock, vi } from 'vitest';
 
-jest.mock('@lerna-lite/core', () => ({
-  ...(jest.requireActual('@lerna-lite/core') as any), // return the other real methods, below we'll mock only 2 of the methods
-  Command: jest.requireActual('../../../core/src/command').Command,
-  conf: jest.requireActual('../../../core/src/command').conf,
-  logOutput: jest.requireActual('../../../core/src/__mocks__/output').logOutput,
-  runTopologically: jest.requireActual('../../../core/src/utils/run-topologically').runTopologically,
-  QueryGraph: jest.requireActual('../../../core/src/utils/query-graph').QueryGraph,
+vi.mock('../lib/npm-run-script');
+vi.mock('nx/src/tasks-runner/life-cycles/task-profiling-life-cycle');
+
+vi.mock('@lerna-lite/core', async () => ({
+  ...(await vi.importActual<any>('@lerna-lite/core')), // return the other real methods, below we'll mock only 2 of the methods
+  Command: (await vi.importActual<any>('../../../core/src/command')).Command,
+  conf: (await vi.importActual<any>('../../../core/src/command')).conf,
+  logOutput: (await vi.importActual<any>('../../../core/src/__mocks__/output')).logOutput,
+  runTopologically: (await vi.importActual<any>('../../../core/src/utils/run-topologically')).runTopologically,
+  QueryGraph: (await vi.importActual<any>('../../../core/src/utils/query-graph')).QueryGraph,
 }));
 
 // also point to the local run command so that all mocks are properly used even by the command-runner
-jest.mock('@lerna-lite/run', () => jest.requireActual('../run-command'));
+vi.mock('@lerna-lite/run', () => vi.importActual<any>('../run-command'));
 
-import fs from 'fs-extra';
-import globby from 'globby';
+import { pathExists, readJson } from 'fs-extra/esm';
+import { globby } from 'globby';
 import yargParser from 'yargs-parser';
 
 // make sure to import the output mock
 import { logOutput, RunCommandOption } from '@lerna-lite/core';
 
 // mocked modules
+import { fileURLToPath } from 'node:url';
+import { dirname } from 'node:path';
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = dirname(__filename);
 import { npmRunScript, npmRunScriptStreaming } from '../lib/npm-run-script';
 import cliRunCommands from '../../../cli/src/cli-commands/cli-run-commands';
 
@@ -32,14 +38,14 @@ const initFixture = initFixtureFactory(__dirname);
 
 // assertion helpers
 const ranInPackagesCapturing = (testDir: string) =>
-  (npmRunScriptStreaming as jest.Mock).mock.calls.reduce((arr, [script, { args, npmClient, pkg, prefix }]) => {
+  (npmRunScriptStreaming as Mock).mock.calls.reduce((arr, [script, { args, npmClient, pkg, prefix }]) => {
     const dir = normalizeRelativeDir(testDir, pkg.location);
     const record = [dir, npmClient, 'run', script, `(prefixed: ${prefix})`].concat(args);
     arr.push(record.join(' '));
     return arr;
   }, []);
 const ranInPackagesStreaming = (testDir: string) =>
-  (npmRunScriptStreaming as jest.Mock).mock.calls.reduce((arr, [script, { args, npmClient, pkg, prefix }]) => {
+  (npmRunScriptStreaming as Mock).mock.calls.reduce((arr, [script, { args, npmClient, pkg, prefix }]) => {
     const dir = normalizeRelativeDir(testDir, pkg.location);
     const record = [dir, npmClient, 'run', script, `(prefixed: ${prefix})`].concat(args);
     arr.push(record.join(' '));
@@ -59,10 +65,8 @@ const createArgv = (cwd: string, script?: string, ...args: any[]) => {
 };
 
 describe('RunCommand', () => {
-  (npmRunScript as jest.Mock).mockImplementation((script, { pkg }) =>
-    Promise.resolve({ exitCode: 0, stdout: pkg.name })
-  );
-  (npmRunScriptStreaming as jest.Mock).mockImplementation(() => Promise.resolve({ exitCode: 0 }));
+  (npmRunScript as Mock).mockImplementation((script, { pkg }) => Promise.resolve({ exitCode: 0, stdout: pkg.name }));
+  (npmRunScriptStreaming as Mock).mockImplementation(() => Promise.resolve({ exitCode: 0 }));
 
   afterEach(() => {
     process.exitCode = undefined;
@@ -74,13 +78,7 @@ describe('RunCommand', () => {
 
     beforeAll(async () => {
       testDir = await initFixture('basic');
-    });
-
-    it('is displaying a warning when using deprecated flag --cmd-dry-run', async () => {
-      await lernaRun(testDir)('my-script', '--cmd-dry-run');
-
-      const logMessages = loggingOutput();
-      expect(logMessages).toContain('--cmd-dry-run has been renamed --dry-run');
+      process.env.NX_DAEMON = 'false';
     });
 
     it('should complain if invoked with an empty script', async () => {
@@ -185,7 +183,8 @@ describe('RunCommand', () => {
     });
 
     it('reports script errors with early exit', async () => {
-      (npmRunScript as jest.Mock).mockImplementationOnce((script, { pkg }) => {
+      vi.spyOn(process, 'exit').mockImplementationOnce((() => {}) as any);
+      (npmRunScript as Mock).mockImplementationOnce((script, { pkg }) => {
         const err: any = new Error(pkg.name);
 
         err.failed = true;
@@ -198,10 +197,14 @@ describe('RunCommand', () => {
 
       await expect(command).rejects.toThrow('package-1');
       expect(process.exitCode).toBe(123);
+
+      // reset exit code
+      process.exitCode = undefined;
     });
 
     it('propagates non-zero exit codes with --no-bail', async () => {
-      (npmRunScript as jest.Mock).mockImplementationOnce((script, { pkg }) => {
+      vi.spyOn(process, 'exit').mockImplementationOnce((() => {}) as any);
+      (npmRunScript as Mock).mockImplementationOnce((script, { pkg }) => {
         const err: any = new Error(pkg.name);
 
         err.failed = true;
@@ -215,24 +218,9 @@ describe('RunCommand', () => {
 
       expect(process.exitCode).toBe(456);
       expect((logOutput as any).logged().split('\n')).toEqual(['package-1', 'package-3']);
-    });
-  });
 
-  describe('with --include-filtered-dependencies', () => {
-    it('runs scoped command including filtered deps', async () => {
-      const testDir = await initFixture('include-filtered-dependencies');
-      await lernaRun(testDir)(
-        'my-script',
-        '--scope',
-        '@test/package-2',
-        '--include-filtered-dependencies',
-        '--',
-        '--silent'
-      );
-
-      const logLines = (logOutput as any).logged().split('\n');
-      expect(logLines).toContain('@test/package-1');
-      expect(logLines).toContain('@test/package-2');
+      // reset exit code
+      process.exitCode = undefined;
     });
   });
 
@@ -243,7 +231,7 @@ describe('RunCommand', () => {
       await lernaRun(cwd)('my-script', '--profile');
 
       const [profileLocation] = await globby('Lerna-Profile-*.json', { cwd, absolute: true });
-      const json = await fs.readJson(profileLocation);
+      const json = await readJson(profileLocation);
 
       expect(json).toMatchObject([
         {
@@ -266,9 +254,9 @@ describe('RunCommand', () => {
       await new RunCommand(createArgv(cwd, 'my-script', '--profile', '--profile-location', 'foo/bar'));
 
       const [profileLocation] = await globby('foo/bar/Lerna-Profile-*.json', { cwd, absolute: true });
-      const exists = await fs.exists(profileLocation, null as any);
+      const isExists = await pathExists(profileLocation, null as any);
 
-      expect(exists).toBe(true);
+      expect(isExists).toBe(true);
     });
   });
 
@@ -298,15 +286,15 @@ describe('RunCommand', () => {
 
       expect(ranInPackagesStreaming(testDir)).toMatchInlineSnapshot(`
         [
-          "packages/package-cycle-1 npm run env (prefixed: true)",
-          "packages/package-cycle-2 npm run env (prefixed: true)",
-          "packages/package-cycle-extraneous-1 npm run env (prefixed: true)",
-          "packages/package-cycle-extraneous-2 npm run env (prefixed: true)",
-          "packages/package-dag-1 npm run env (prefixed: true)",
-          "packages/package-dag-2a npm run env (prefixed: true)",
-          "packages/package-dag-2b npm run env (prefixed: true)",
-          "packages/package-dag-3 npm run env (prefixed: true)",
-          "packages/package-standalone npm run env (prefixed: true)",
+          packages/package-cycle-1 npm run env (prefixed: true),
+          packages/package-cycle-2 npm run env (prefixed: true),
+          packages/package-cycle-extraneous-1 npm run env (prefixed: true),
+          packages/package-cycle-extraneous-2 npm run env (prefixed: true),
+          packages/package-dag-1 npm run env (prefixed: true),
+          packages/package-dag-2a npm run env (prefixed: true),
+          packages/package-dag-2b npm run env (prefixed: true),
+          packages/package-dag-3 npm run env (prefixed: true),
+          packages/package-standalone npm run env (prefixed: true),
         ]
       `);
     });
@@ -399,7 +387,7 @@ describe('RunCommand', () => {
       testDir = await initFixture('powered-by-nx-with-target-defaults');
       process.env.NX_WORKSPACE_ROOT_PATH = testDir;
       // @ts-ignore
-      jest.spyOn(process, 'exit').mockImplementation((code: any) => {
+      vi.spyOn(process, 'exit').mockImplementation((code: any) => {
         if (code !== 0) {
           throw new Error();
         }
@@ -480,15 +468,15 @@ describe('RunCommand', () => {
 
     it('runs a cacheable script', async () => {
       collectedOutput = '';
-      await lernaRun(testDir)('my-cacheable-script');
+      await new RunCommand(createArgv(testDir, 'my-cacheable-script'));
       expect(collectedOutput).not.toContain('Nx read the output from the cache');
 
       collectedOutput = '';
-      await lernaRun(testDir)('my-cacheable-script');
+      await new RunCommand(createArgv(testDir, 'my-cacheable-script'));
       expect(collectedOutput).toContain('Nx read the output from the cache');
 
       collectedOutput = '';
-      await lernaRun(testDir)('my-cacheable-script', '--skip-nx-cache');
+      await new RunCommand(createArgv(testDir, 'my-cacheable-script', '--skip-nx-cache'));
       expect(collectedOutput).not.toContain('Nx read the output from the cache');
     });
 

@@ -1,3 +1,5 @@
-export const add = jest.fn(() => Promise.resolve());
-export const list = jest.fn(() => Promise.resolve({}));
-export const remove = jest.fn(() => Promise.resolve());
+import { vi } from 'vitest';
+
+export const add = vi.fn(() => Promise.resolve());
+export const list = vi.fn(() => Promise.resolve({}));
+export const remove = vi.fn(() => Promise.resolve());

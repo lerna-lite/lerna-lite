@@ -1,6 +1,8 @@
-jest.mock('npm-registry-fetch');
-jest.mock('@lerna-lite/core', () => ({
-  ...jest.requireActual('@lerna-lite/core'), // return the other real methods, below we'll mock only 2 of the methods
+import { describe, expect, it, Mock, vi } from 'vitest';
+
+vi.mock('npm-registry-fetch');
+vi.mock('@lerna-lite/core', async () => ({
+  ...(await vi.importActual<any>('@lerna-lite/core')), // return the other real methods, below we'll mock only 2 of the methods
   otplease: (cb, opts) => Promise.resolve(cb(opts)),
 }));
 
@@ -12,16 +14,16 @@ import * as npmDistTag from '../lib/npm-dist-tag';
 import { DistTagOptions } from '../models';
 
 const stubLog = {
-  verbose: jest.fn(),
-  info: jest.fn(),
-  warn: jest.fn(),
+  verbose: vi.fn(),
+  info: vi.fn(),
+  warn: vi.fn(),
 };
 const baseOptions = Object.freeze({
   log: stubLog,
   defaultTag: 'latest',
 });
 
-(fetch as unknown as jest.Mock).mockImplementation(() => Promise.resolve());
+(fetch as unknown as Mock).mockImplementation(() => Promise.resolve());
 (fetch as any).json.mockImplementation(() => Promise.resolve({}));
 
 describe('npmDistTag.add()', () => {

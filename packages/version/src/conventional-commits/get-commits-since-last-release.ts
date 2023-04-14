@@ -1,15 +1,8 @@
-import {
-  DescribeRefOptions,
-  describeRefSync,
-  ExecOpts,
-  execSync,
-  RemoteClientType,
-  ValidationError,
-} from '@lerna-lite/core';
+import { DescribeRefOptions, describeRefSync, ExecOpts, execSync, RemoteClientType, ValidationError } from '@lerna-lite/core';
 import log from 'npmlog';
 
-import { RemoteCommit } from '../models';
-import { getGithubCommits } from './get-github-commits';
+import { RemoteCommit } from '../models/index.js';
+import { getGithubCommits } from './get-github-commits.js';
 
 /**
  * From the current branch, find all commits since the last tag release.
@@ -65,7 +58,7 @@ export function getOldestCommitSinceLastTag(execOpts?: ExecOpts, isIndependent?:
     let stdout = execSync('git', gitCommandArgs, execOpts);
     if (!stdout) {
       // in some occasion the previous git command might return nothing, in that case we'll return the tag detail instead
-      stdout = execSync('git', ['log', '-1', '--format="%h %aI"', lastTagName], execOpts);
+      stdout = execSync('git', ['log', '-1', '--format="%h %aI"', lastTagName], execOpts) || '';
     }
     [commitResult] = stdout.split('\n');
   } else {

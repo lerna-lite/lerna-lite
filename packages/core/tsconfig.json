@@ -4,10 +4,9 @@
   "compilerOptions": {
     "rootDir": "src",
     "outDir": "dist",
-    "typeRoots": ["typings"],
-    "types": ["jest", "jest-extended", "node"]
+    "types": ["node"]
   },
-  "exclude": ["dist", "node_modules", "**/*.spec.ts", "**/__mocks__/**/*.*"],
   "filesGlob": ["./src/**/*.ts"],
-  "include": ["src/**/*.ts", "typings/**/*.ts"]
+  "include": ["src/**/*.ts"],
+  "exclude": ["dist", "node_modules", "**/__helpers__/**", "**/__mocks__/**", "**/__tests__/**"]
 }

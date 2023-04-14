@@ -1,14 +1,14 @@
-import globby, { GlobbyOptions } from 'globby';
-import path from 'path';
+import { globby, globbySync, Options as GlobbyOptions } from 'globby';
+import { normalize as pathNormalize, posix } from 'node:path';
 import pMap from 'p-map';
 
-import { ValidationError } from '../../validation-error';
+import { ValidationError } from '../../validation-error.js';
 
 /**
  * @param {string[]} results
  */
 function normalize(results: string[]) {
-  return results.map((fp) => path.normalize(fp));
+  return results.map((fp) => pathNormalize(fp));
 }
 
 function getGlobOpts(rootPath: string, packageConfigs: string[]) {
@@ -42,7 +42,7 @@ export function makeFileFinder(rootPath: string, packageConfigs: string[]) {
     const promise = pMap(
       Array.from(packageConfigs).sort(),
       (globPath: string) => {
-        let chain: Promise<any> = globby(path.posix.join(globPath, fileName), options);
+        let chain: Promise<any> = globby(posix.join(globPath, fileName), options);
 
         // fast-glob does not respect pattern order, so we re-sort by absolute path
         chain = chain.then((results) => results.sort());
@@ -65,7 +65,7 @@ export function makeFileFinder(rootPath: string, packageConfigs: string[]) {
 }
 
 export function makeSyncFileFinder(rootPath: string, packageConfigs: string[]) {
-  const globOpts: GlobbyOptions = getGlobOpts(rootPath, packageConfigs);
+  const globOpts = getGlobOpts(rootPath, packageConfigs);
 
   return (
     fileName: string,
@@ -73,14 +73,13 @@ export function makeSyncFileFinder(rootPath: string, packageConfigs: string[]) {
     customGlobOpts?: GlobbyOptions
   ) => {
     const options: GlobbyOptions = Object.assign({}, customGlobOpts, globOpts);
-    const patterns = packageConfigs.map((globPath) => path.posix.join(globPath, fileName)).sort();
+    const patterns = packageConfigs.map((globPath) => posix.join(globPath, fileName)).sort();
 
-    let results: string[] = globby.sync(patterns, options);
+    let results: string[] = globbySync(patterns, options);
 
     // POSIX results always need to be normalized
     results = normalize(results);
 
-    /* istanbul ignore else */
     if (fileMapper) {
       results = results.map(fileMapper);
     }

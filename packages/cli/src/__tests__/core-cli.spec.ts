@@ -1,7 +1,12 @@
+import { beforeAll, describe, expect, it, vi } from 'vitest';
+import { dirname } from 'node:path';
+import { fileURLToPath } from 'node:url';
 import { Package, ValidationError } from '@lerna-lite/core';
 import { loggingOutput } from '@lerna-test/helpers/logging-output';
 import lernaCLI from '../lerna-cli';
 import { initFixtureFactory } from '@lerna-test/helpers';
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = dirname(__filename);
 const initFixture = initFixtureFactory(__dirname);
 
 function prepare(cwd: string) {
@@ -35,14 +40,7 @@ describe('core-cli', () => {
 
     cli.command('test-cmd', 'will pass');
 
-    const { argv } = await parse(cli, [
-      'test-cmd',
-      '--loglevel=warn',
-      '--concurrency=10',
-      '--no-progress',
-      '--no-sort',
-      '--max-buffer=1024',
-    ]);
+    const { argv } = await parse(cli, ['test-cmd', '--loglevel=warn', '--concurrency=10', '--no-progress', '--no-sort', '--max-buffer=1024']);
 
     expect(argv).toMatchObject({
       loglevel: 'warn',
@@ -87,17 +85,22 @@ describe('core-cli', () => {
     expect(loggingOutput('error')).toEqual(['go boom']);
   });
 
-  xit('does not re-log ValidationError messages (async)', async () => {
-    const cli = prepare(cwd);
+  it('does not re-log ValidationError messages (async)', async () => {
+    try {
+      const cli = prepare(cwd);
 
-    cli.command('boom', 'explodey', {}, async () => {
-      throw new ValidationError('test', '...boom');
-    });
+      cli.command('boom', 'explodey', {}, () => {
+        throw new ValidationError('test', '...boom');
+      });
 
-    // paradoxically, this does NOT reject...
-    await parse(cli, ['boom']);
+      // paradoxically, this does NOT reject...
+      await parse(cli, ['boom']);
 
-    expect(loggingOutput('error')).toEqual(['...boom']);
+      expect(loggingOutput('error')).toEqual(['...boom']);
+    } catch (e) {
+      expect(e.prefix).toBe('test');
+      expect(e.message).toBe('...boom');
+    }
   });
 
   it('does not log errors with a pkg property', async () => {
@@ -115,45 +118,53 @@ describe('core-cli', () => {
     expect(loggingOutput('error')).toEqual([]);
   });
 
-  xit('logs generic command errors with fallback exit code', async () => {
-    const cli = prepare(cwd);
-    const spy = jest.spyOn(cli, 'exit');
+  it('logs generic command errors with fallback exit code', async () => {
+    try {
+      const cli = prepare(cwd);
+      const spy = vi.spyOn(cli, 'exit');
 
-    cli.command('handler', 'a generic error', {}, async () => {
-      const err = new Error('yikes');
-      throw err;
-    });
+      cli.command('handler', 'a generic error', {}, () => {
+        const err = new Error('yikes');
+        throw err;
+      });
 
-    // paradoxically, this does NOT reject...
-    await parse(cli, ['handler']);
+      // paradoxically, this does NOT reject...
+      await parse(cli, ['handler']);
 
-    expect(loggingOutput('error')).toEqual(['yikes']);
-    expect(spy).toHaveBeenLastCalledWith(
-      1,
-      expect.objectContaining({
-        message: 'yikes',
-      })
-    );
+      expect(loggingOutput('error')).toEqual(['yikes']);
+      expect(spy).toHaveBeenLastCalledWith(
+        1,
+        expect.objectContaining({
+          message: 'yikes',
+        })
+      );
+    } catch (e) {
+      expect(e.message).toBe('yikes');
+    }
   });
 
-  xit('preserves explicit exit codes', async () => {
-    const cli = prepare(cwd);
-    const spy = jest.spyOn(cli, 'exit');
+  it('preserves explicit exit codes', async () => {
+    try {
+      const cli = prepare(cwd);
+      const spy = vi.spyOn(cli, 'exit');
 
-    cli.command('explicit', 'exit code', {}, () => {
-      const err = new Error('fancy fancy') as Error & { exitCode: number };
-      err.exitCode = 127;
-      throw err;
-    });
+      cli.command('explicit', 'exit code', {}, () => {
+        const err = new Error('fancy fancy') as Error & { exitCode: number };
+        err.exitCode = 127;
+        throw err;
+      });
 
-    // paradoxically, this does NOT reject...
-    await parse(cli, ['explicit']);
+      // paradoxically, this does NOT reject...
+      await parse(cli, ['explicit']);
 
-    expect(spy).toHaveBeenLastCalledWith(
-      127,
-      expect.objectContaining({
-        message: 'fancy fancy',
-      })
-    );
+      expect(spy).toHaveBeenLastCalledWith(
+        127,
+        expect.objectContaining({
+          message: 'fancy fancy',
+        })
+      );
+    } catch (e) {
+      expect(e.message).toBe('fancy fancy');
+    }
   });
 });

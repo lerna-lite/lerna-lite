@@ -1,17 +1,17 @@
 import cloneDeep from 'clone-deep';
 import dedent from 'dedent';
-import execa from 'execa';
+import { execaSync, SyncOptions as ExacaSyncOptions } from 'execa';
 import isCI from 'is-ci';
 import log, { Logger } from 'npmlog';
-import os from 'os';
+import { cpus } from 'node:os';
 
-import { cleanStack } from './utils/clean-stack';
-import { logExecCommand } from './child-process';
-import { logPackageError } from './utils/log-package-error';
-import { warnIfHanging } from './utils/warn-if-hanging';
-import { writeLogFile } from './utils/write-log-file';
-import { Project } from './project/project';
-import { ValidationError } from './validation-error';
+import { cleanStack } from './utils/clean-stack.js';
+import { logExecCommand } from './child-process.js';
+import { logPackageError } from './utils/log-package-error.js';
+import { warnIfHanging } from './utils/warn-if-hanging.js';
+import { writeLogFile } from './utils/write-log-file.js';
+import { Project } from './project/project.js';
+import { ValidationError } from './validation-error.js';
 import {
   ChangedCommandOption,
   CommandType,
@@ -24,11 +24,11 @@ import {
   PublishCommandOption,
   VersionCommandOption,
   WatchCommandOption,
-} from './models';
-import { PackageGraph } from './package-graph/package-graph';
+} from './models/index.js';
+import { PackageGraph } from './package-graph/package-graph.js';
 
 // maxBuffer value for running exec
-const DEFAULT_CONCURRENCY = os.cpus().length;
+const DEFAULT_CONCURRENCY = cpus().length;
 
 type AvailableCommandOption =
   | ChangedCommandOption
@@ -123,7 +123,6 @@ export class Command<T extends AvailableCommandOption> {
     });
 
     // passed via yargs context in tests, never actual CLI
-    /* istanbul ignore else */
     if (argv.onResolved || argv.onRejected) {
       runner = runner.then(argv.onResolved, argv.onRejected);
 
@@ -151,7 +150,7 @@ export class Command<T extends AvailableCommandOption> {
     return this.runner?.then(onResolved, onRejected);
   }
 
-  /* istanbul ignore next */
+  /* c8 ignore next 3 */
   catch(onRejected: typeof Promise.reject) {
     return this.runner?.catch(onRejected);
   }
@@ -170,7 +169,7 @@ export class Command<T extends AvailableCommandOption> {
     let loglevel;
     let progress;
 
-    /* istanbul ignore next */
+    /* c8 ignore next 3 */
     if (isCI || !process.stderr.isTTY || process.env.TERM === 'dumb') {
       log.disableColor();
       progress = false;
@@ -247,14 +246,14 @@ export class Command<T extends AvailableCommandOption> {
   }
 
   enableProgressBar() {
-    /* istanbul ignore next */
+    /* c8 ignore next 3 */
     if (this.options.progress !== false) {
       log.enableProgress();
     }
   }
 
   gitInitialized() {
-    const opts: execa.SyncOptions<string> = {
+    const opts: ExacaSyncOptions<string> = {
       cwd: this.project.rootPath ?? '',
       // don't throw, just want boolean
       reject: false,
@@ -268,7 +267,7 @@ export class Command<T extends AvailableCommandOption> {
       logExecCommand(gitCommand, gitArgs);
       return true;
     }
-    return execa.sync(gitCommand, gitArgs, opts).exitCode === 0;
+    return execaSync(gitCommand, gitArgs, opts).exitCode === 0;
   }
 
   runValidations() {
@@ -277,10 +276,7 @@ export class Command<T extends AvailableCommandOption> {
     }
 
     if (!this.project.manifest) {
-      throw new ValidationError(
-        'ENOPKG',
-        'No `package.json` file found, make sure it exist in the root of your project.'
-      );
+      throw new ValidationError('ENOPKG', 'No `package.json` file found, make sure it exist in the root of your project.');
     }
 
     if (this.project.configNotFound) {
@@ -323,9 +319,7 @@ export class Command<T extends AvailableCommandOption> {
       chain = chain.then((packages) => {
         this.packageGraph = new PackageGraph(
           packages || [],
-          (this.options as VersionCommandOption).allowPeerDependenciesUpdate
-            ? 'allPlusPeerDependencies'
-            : 'allDependencies'
+          (this.options as VersionCommandOption).allowPeerDependenciesUpdate ? 'allPlusPeerDependencies' : 'allDependencies'
         );
       });
     }

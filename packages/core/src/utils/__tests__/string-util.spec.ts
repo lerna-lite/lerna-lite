@@ -1,3 +1,5 @@
+import { describe, expect, it } from 'vitest';
+
 import { pluralize } from '../string-utils';
 
 describe('String Utils', () => {

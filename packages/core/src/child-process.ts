@@ -1,10 +1,11 @@
 import chalk from 'chalk';
-import execa from 'execa';
+import { execa, execaSync } from 'execa';
+import type { Options as ExecaOptions, SyncOptions as ExacaSyncOptions, ExecaChildProcess } from 'execa';
 import log from 'npmlog';
-import os from 'os';
+import { constants } from 'node:os';
 import logTransformer from 'strong-log-transformer';
 
-import { Package } from './package';
+import { Package } from './package.js';
 
 // bookkeeping for spawned processes
 const children = new Set();
@@ -22,12 +23,7 @@ let currentColor = 0;
  * @param {string[]} args
  * @param {import("execa").Options} [opts]
  */
-export function exec(
-  command: string,
-  args: string[],
-  opts?: execa.Options & { pkg?: Package },
-  dryRun = false
-): Promise<any> {
+export function exec(command: string, args: string[], opts?: ExecaOptions & { pkg?: Package }, dryRun = false): Promise<any> {
   const options = Object.assign({ stdio: 'pipe' }, opts);
   const spawned = spawnProcess(command, args, options, dryRun);
 
@@ -40,11 +36,11 @@ export function exec(
  * @param {string[]} args
  * @param {import("execa").SyncOptions} [opts]
  */
-export function execSync(command: string, args?: string[], opts?: execa.SyncOptions<string>, dryRun = false) {
+export function execSync(command: string, args?: string[], opts?: ExacaSyncOptions<string>, dryRun = false) {
   // prettier-ignore
   return dryRun
     ? logExecCommand(command, args)
-    : execa.sync(command, args, opts).stdout;
+    : execaSync(command, args, opts).stdout;
 }
 
 /**
@@ -53,12 +49,7 @@ export function execSync(command: string, args?: string[], opts?: execa.SyncOpti
  * @param {string[]} args
  * @param {import("execa").Options} [opts]
  */
-export function spawn(
-  command: string,
-  args: string[],
-  opts?: execa.Options & { pkg?: Package },
-  dryRun = false
-): Promise<any> {
+export function spawn(command: string, args: string[], opts?: ExecaOptions & { pkg?: Package }, dryRun = false): Promise<any> {
   const options = Object.assign({}, opts, { stdio: 'inherit' });
   const spawned = spawnProcess(command, args, options, dryRun);
 
@@ -72,18 +63,18 @@ export function spawn(
  * @param {import("execa").Options} [opts]
  * @param {string} [prefix]
  */
-// istanbul ignore next
+/* c8 ignore next */
 export function spawnStreaming(
   command: string,
   args: string[],
-  opts?: execa.Options & { pkg?: Package },
+  opts?: ExecaOptions & { pkg?: Package },
   prefix?: string | boolean,
   dryRun = false
 ): Promise<any> {
   const options: any = Object.assign({}, opts);
   options.stdio = ['ignore', 'pipe', 'pipe'];
 
-  const spawned = spawnProcess(command, args, options, dryRun) as execa.ExecaChildProcess<string>;
+  const spawned = spawnProcess(command, args, options, dryRun) as ExecaChildProcess<string>;
 
   const stdoutOpts: any = {};
   const stderrOpts: any = {}; // mergeMultiline causes escaped newlines :P
@@ -104,8 +95,8 @@ export function spawnStreaming(
     process.stderr.setMaxListeners(children.size);
   }
 
-  spawned.stdout!.pipe(logTransformer(stdoutOpts)).pipe(process.stdout);
-  spawned.stderr!.pipe(logTransformer(stderrOpts)).pipe(process.stderr);
+  spawned.stdout?.pipe(logTransformer(stdoutOpts)).pipe(process.stdout);
+  spawned.stderr?.pipe(logTransformer(stderrOpts)).pipe(process.stderr);
 
   return wrapError(spawned);
 }
@@ -121,12 +112,11 @@ export function getExitCode(result: any) {
   }
 
   // https://nodejs.org/docs/latest-v6.x/api/errors.html#errors_error_code
-  // istanbul ignore else
   if (typeof result.code === 'string' || typeof result.exitCode === 'string') {
-    return os.constants.errno[result.code ?? result.exitCode];
+    return constants.errno[result.code ?? result.exitCode];
   }
 
-  // istanbul ignore next: extremely weird
+  /* c8 ignore next : extremely weird */
   throw new TypeError(`Received unexpected exit code value ${JSON.stringify(result.code ?? result.exitCode)}`);
 }
 
@@ -135,7 +125,7 @@ export function getExitCode(result: any) {
  * @param {string[]} args
  * @param {import("execa").Options} opts
  */
-export function spawnProcess(command: string, args: string[], opts: execa.Options & { pkg?: Package }, dryRun = false) {
+export function spawnProcess(command: string, args: string[], opts: ExecaOptions & { pkg?: Package }, dryRun = false) {
   if (dryRun) {
     return logExecCommand(command, args);
   }
@@ -167,7 +157,7 @@ export function spawnProcess(command: string, args: string[], opts: execa.Option
  * @param {string[]} args
  * @param {import("execa").Options} [opts]
  */
-export function wrapError(spawned: execa.ExecaChildProcess & { pkg?: Package }) {
+export function wrapError(spawned: ExecaChildProcess & { pkg?: Package }) {
   if (spawned.pkg) {
     return spawned.catch((err: any) => {
       // ensure exit code is always a number

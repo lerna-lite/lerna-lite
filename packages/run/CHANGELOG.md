@@ -4,6 +4,34 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [2.0.0-alpha.2](https://github.com/lerna-lite/lerna-lite/compare/v2.0.0-alpha.1...v2.0.0-alpha.2) (2023-04-07)
+
+**Note:** Version bump only for package @lerna-lite/run
+
+## [2.0.0-alpha.1](https://github.com/lerna-lite/lerna-lite/compare/v2.0.0-alpha.0...v2.0.0-alpha.1) (2023-04-07)
+
+**Note:** Version bump only for package @lerna-lite/run
+
+## [2.0.0-alpha.0](https://github.com/lerna-lite/lerna-lite/compare/v1.17.0...v2.0.0-alpha.0) (2023-04-07)
+
+### ⚠ BREAKING CHANGES
+
+* **run:** remove `--use-nx` (powered by Nx) option from `run` command (#554)
+* **publish:** make version & publish commands optionnal, closes #450 (#552)
+* **build:** migrate to ESM build & switch to Vitest for ESM support (#537)
+
+### Features
+
+* **build:** migrate to ESM build & switch to Vitest for ESM support ([#537](https://github.com/lerna-lite/lerna-lite/issues/537)) ([308fc2e](https://github.com/lerna-lite/lerna-lite/commit/308fc2e2d72d90f62b3a3954cbeeb3810b767a35)) - by @ghiscoding
+* **cli:** remove listable dependency from CLI ([#553](https://github.com/lerna-lite/lerna-lite/issues/553)) ([1baa0d1](https://github.com/lerna-lite/lerna-lite/commit/1baa0d19b7116dac56c9326934c7cc9e07caec8c)) - by @ghiscoding
+* **publish:** make version & publish commands optionnal, closes [#450](https://github.com/lerna-lite/lerna-lite/issues/450) ([#552](https://github.com/lerna-lite/lerna-lite/issues/552)) ([11e4dab](https://github.com/lerna-lite/lerna-lite/commit/11e4dab70185198692b30cc72a184512bdc0e55d)) - by @ghiscoding
+* remove all deprecated options tagged to be removed in next major ([#545](https://github.com/lerna-lite/lerna-lite/issues/545)) ([a6f44b3](https://github.com/lerna-lite/lerna-lite/commit/a6f44b36038e5663d8c14fa062569b0f105a02f4)) - by @ghiscoding
+* **run:** remove `--use-nx` (powered by Nx) option from `run` command ([#554](https://github.com/lerna-lite/lerna-lite/issues/554)) ([b5ff9c9](https://github.com/lerna-lite/lerna-lite/commit/b5ff9c90bf73b221cb30c9dbc184bf34354222fd)) - by @ghiscoding
+
+### Bug Fixes
+
+* **run:** only use run-one w/Nx when not passing multiple scripts ([#531](https://github.com/lerna-lite/lerna-lite/issues/531)) ([731f783](https://github.com/lerna-lite/lerna-lite/commit/731f783c89b9b4f96d0c65cdf36c115c7f1e51d3)) - by @ghiscoding
+
 # [1.17.0](https://github.com/lerna-lite/lerna-lite/compare/v1.16.2...v1.17.0) (2023-03-16)
 
 **Note:** Version bump only for package @lerna-lite/run

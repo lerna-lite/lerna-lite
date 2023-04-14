@@ -1,5 +1,6 @@
-import 'jest-extended';
+import { describe, expect, it } from 'vitest';
 import { ExecOpts } from '@lerna-lite/core';
+
 import * as entry from '../index';
 
 describe('Testing common lib entry point', () => {
@@ -17,6 +18,6 @@ describe('Testing common lib entry point', () => {
   });
 
   it('should expect arrify to return an array when execOpts input is empty', () => {
-    expect(entry.getFilteredPackages([] as any, {} as ExecOpts, {} as entry.FilterOptions)).toResolve();
+    expect(entry.getFilteredPackages([] as any, {} as ExecOpts, {} as entry.FilterOptions)).resolves.toBeTruthy();
   });
 });

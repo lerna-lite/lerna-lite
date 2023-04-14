@@ -4,6 +4,37 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [2.0.0-alpha.2](https://github.com/lerna-lite/lerna-lite/compare/v2.0.0-alpha.1...v2.0.0-alpha.2) (2023-04-07)
+
+**Note:** Version bump only for package @lerna-lite/core
+
+## [2.0.0-alpha.1](https://github.com/lerna-lite/lerna-lite/compare/v2.0.0-alpha.0...v2.0.0-alpha.1) (2023-04-07)
+
+**Note:** Version bump only for package @lerna-lite/core
+
+## [2.0.0-alpha.0](https://github.com/lerna-lite/lerna-lite/compare/v1.17.0...v2.0.0-alpha.0) (2023-04-07)
+
+### ⚠ BREAKING CHANGES
+
+* **run:** remove `--use-nx` (powered by Nx) option from `run` command (#554)
+* **build:** migrate to ESM build & switch to Vitest for ESM support (#537)
+
+### Features
+
+* **build:** migrate to ESM build & switch to Vitest for ESM support ([#537](https://github.com/lerna-lite/lerna-lite/issues/537)) ([308fc2e](https://github.com/lerna-lite/lerna-lite/commit/308fc2e2d72d90f62b3a3954cbeeb3810b767a35)) - by @ghiscoding
+* **cli:** remove listable dependency from CLI ([#553](https://github.com/lerna-lite/lerna-lite/issues/553)) ([1baa0d1](https://github.com/lerna-lite/lerna-lite/commit/1baa0d19b7116dac56c9326934c7cc9e07caec8c)) - by @ghiscoding
+* **publish:** remove `--require-scripts`, keep npm scripts lifecycle ([#542](https://github.com/lerna-lite/lerna-lite/issues/542)) ([6559aec](https://github.com/lerna-lite/lerna-lite/commit/6559aec9e517fb073583d7684191449e78b809f5)) - by @ghiscoding
+* remove all deprecated options tagged to be removed in next major ([#545](https://github.com/lerna-lite/lerna-lite/issues/545)) ([a6f44b3](https://github.com/lerna-lite/lerna-lite/commit/a6f44b36038e5663d8c14fa062569b0f105a02f4)) - by @ghiscoding
+* **run:** remove `--use-nx` (powered by Nx) option from `run` command ([#554](https://github.com/lerna-lite/lerna-lite/issues/554)) ([b5ff9c9](https://github.com/lerna-lite/lerna-lite/commit/b5ff9c90bf73b221cb30c9dbc184bf34354222fd)) - by @ghiscoding
+* **version:** remove deprecated `--changelog-version-message` option ([#543](https://github.com/lerna-lite/lerna-lite/issues/543)) ([d125eef](https://github.com/lerna-lite/lerna-lite/commit/d125eef8d1689403ed8959d60514aec29ca08886)) - by @ghiscoding
+
+### Bug Fixes
+
+* **config:** catch initialization errors, update cosmiconfig ([#519](https://github.com/lerna-lite/lerna-lite/issues/519)) ([66299a2](https://github.com/lerna-lite/lerna-lite/commit/66299a22084a668f0712745269d71a493c470e18)) - by @d-fischer
+* **core:** ignore globby pattern type should be an array not a string ([#529](https://github.com/lerna-lite/lerna-lite/issues/529)) ([c45dcb1](https://github.com/lerna-lite/lerna-lite/commit/c45dcb1bfaecd4bd306d2a057f150797381f7bee)) - by @ghiscoding
+* **deps:** update dependency cosmiconfig to ^8.1.3 ([#523](https://github.com/lerna-lite/lerna-lite/issues/523)) ([6870489](https://github.com/lerna-lite/lerna-lite/commit/68704899973067d51b1afb76bd06e3d23b697770)) - by @renovate[bot]
+* **deps:** update dependency minimatch to v8 and couple other deps patch ([#550](https://github.com/lerna-lite/lerna-lite/issues/550)) ([e7d29f1](https://github.com/lerna-lite/lerna-lite/commit/e7d29f105c4757526e059bc5ae1eaa24a6eeaa59)) - by @ghiscoding
+
 # [1.17.0](https://github.com/lerna-lite/lerna-lite/compare/v1.16.2...v1.17.0) (2023-03-16)
 
 ### Features

@@ -2,8 +2,8 @@ import { ExecOpts, getComplexObjectValue } from '@lerna-lite/core';
 import dedent from 'dedent';
 import log from 'npmlog';
 
-import { createGitHubClient, parseGitRepo } from '../git-clients';
-import { RemoteCommit } from '../models';
+import { createGitHubClient, parseGitRepo } from '../git-clients/index.js';
+import { RemoteCommit } from '../models/index.js';
 
 const QUERY_PAGE_SIZE = 100; // GitHub API is restricting max of 100 per query
 
@@ -38,7 +38,7 @@ export async function getGithubCommits(
   execOpts?: ExecOpts
 ): Promise<RemoteCommit[]> {
   const repo = parseGitRepo(gitRemote, execOpts);
-  const octokit = createGitHubClient();
+  const octokit = await createGitHubClient();
   const remoteCommits: Array<RemoteCommit> = [];
   let afterCursor = '';
   let hasNextPage = false;

@@ -1,13 +1,13 @@
-import fs from 'fs';
-import path from 'path';
+import { readdirSync } from 'node:fs';
+import { basename, dirname as pathDirname, resolve as pathResolve } from 'node:path';
 
 // https://github.com/npm/npm/blob/876f0c8/lib/config/find-prefix.js
 export function findPrefix(start: string) {
-  let dir = path.resolve(start);
+  let dir = pathResolve(start);
   let walkedUp = false;
 
-  while (path.basename(dir) === 'node_modules') {
-    dir = path.dirname(dir);
+  while (basename(dir) === 'node_modules') {
+    dir = pathDirname(dir);
     walkedUp = true;
   }
 
@@ -24,13 +24,13 @@ export function find(name: string, original: string) {
   }
 
   try {
-    const files = fs.readdirSync(name);
+    const files = readdirSync(name);
 
     if (files.indexOf('node_modules') !== -1 || files.indexOf('package.json') !== -1) {
       return name;
     }
 
-    const dirname = path.dirname(name);
+    const dirname = pathDirname(name);
 
     if (dirname === name) {
       return original;

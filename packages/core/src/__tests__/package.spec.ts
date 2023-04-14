@@ -1,21 +1,25 @@
-import 'jest-extended';
-import os from 'os';
-import path from 'path';
-import loadJsonFile from 'load-json-file';
+import { describe, expect, it, Mock, vi } from 'vitest';
+
+import { homedir } from 'node:os';
+import { dirname, normalize, resolve as pathResolve } from 'node:path';
+import { loadJsonFile, loadJsonFileSync } from 'load-json-file';
 import npa from 'npm-package-arg';
 import npmlog from 'npmlog';
-import writePkg from 'write-pkg';
+import { fileURLToPath } from 'node:url';
+import { writePackage } from 'write-pkg';
 
-jest.mock('load-json-file');
-jest.mock('write-pkg');
+vi.mock('load-json-file');
+vi.mock('write-pkg');
 
 // file under test
 import { Package } from '../package';
 import { NpaResolveResult, RawManifest } from '../models';
 
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = dirname(__filename);
+
 describe('Package', () => {
-  const factory = (json) =>
-    new Package(json, path.normalize(`/root/path/to/${json.name || 'package'}`), path.normalize('/root'));
+  const factory = (json) => new Package(json, normalize(`/root/path/to/${json.name || 'package'}`), normalize('/root'));
 
   describe('get .name', () => {
     it('should return the name', () => {
@@ -27,7 +31,7 @@ describe('Package', () => {
   describe('get .location', () => {
     it('should return the location', () => {
       const pkg = factory({ name: 'get-location' });
-      expect(pkg.location).toBe(path.normalize('/root/path/to/get-location'));
+      expect(pkg.location).toBe(normalize('/root/path/to/get-location'));
     });
   });
 
@@ -44,12 +48,20 @@ describe('Package', () => {
   describe('get .resolved', () => {
     it('returns npa.Result relative to rootPath, always posix', () => {
       const pkg = factory({ name: 'get-resolved' });
+
+      let homeDir = homedir();
+
+      // on Windows, make sure to use same drive letter
+      if (/([A-Z]:\\).*/i.test(__dirname)) {
+        homeDir = __dirname.substring(0, 1); // ie D:\\
+      }
+
       expect(pkg.resolved).toMatchObject({
         type: 'directory',
         name: 'get-resolved',
-        where: path.normalize('/root'),
+        where: normalize('/root'),
         // windows is so fucking ridiculous
-        fetchSpec: path.resolve(os.homedir(), pkg.location),
+        fetchSpec: pathResolve(homeDir, pkg.location),
       });
     });
   });
@@ -57,7 +69,7 @@ describe('Package', () => {
   describe('get .rootPath', () => {
     it('should return the rootPath', () => {
       const pkg = factory({ name: 'get-rootPath' });
-      expect(pkg.rootPath).toBe(path.normalize('/root'));
+      expect(pkg.rootPath).toBe(normalize('/root'));
     });
   });
 
@@ -79,7 +91,7 @@ describe('Package', () => {
   describe('get .contents', () => {
     it('returns pkg.location by default', () => {
       const pkg = factory({ version: '1.0.0' });
-      expect(pkg.contents).toBe(path.normalize('/root/path/to/package'));
+      expect(pkg.contents).toBe(normalize('/root/path/to/package'));
     });
 
     it('returns pkg.publishConfig.directory when present', () => {
@@ -89,7 +101,7 @@ describe('Package', () => {
           directory: 'dist',
         },
       });
-      expect(pkg.contents).toBe(path.normalize('/root/path/to/package/dist'));
+      expect(pkg.contents).toBe(normalize('/root/path/to/package/dist'));
     });
 
     it('returns pkg.location when pkg.publishConfig.directory is not present', () => {
@@ -99,7 +111,7 @@ describe('Package', () => {
           tag: 'next',
         },
       });
-      expect(pkg.contents).toBe(path.normalize('/root/path/to/package'));
+      expect(pkg.contents).toBe(normalize('/root/path/to/package'));
     });
   });
 
@@ -107,7 +119,7 @@ describe('Package', () => {
     it('sets pkg.contents to joined value', () => {
       const pkg = factory({ version: '1.0.0' });
       pkg.contents = 'dist';
-      expect(pkg.contents).toBe(path.normalize('/root/path/to/package/dist'));
+      expect(pkg.contents).toBe(normalize('/root/path/to/package/dist'));
     });
   });
 
@@ -153,7 +165,7 @@ describe('Package', () => {
         name: 'obj-bin',
         bin: { 'custom-bin': 'bin.js' },
       });
-      expect(pkg.binLocation).toInclude('obj-bin');
+      expect(pkg.binLocation.includes('obj-bin')).toBeTruthy();
     });
   });
 
@@ -163,7 +175,7 @@ describe('Package', () => {
         name: 'obj-bin',
         bin: { 'custom-bin': 'bin.js' },
       });
-      expect(pkg.nodeModulesLocation).toInclude('node_modules');
+      expect(pkg.nodeModulesLocation.includes('node_modules')).toBeTruthy();
     });
   });
 
@@ -295,13 +307,13 @@ describe('Package', () => {
 
   describe('.serialize()', () => {
     it('writes changes to disk', async () => {
-      (writePkg as any).mockImplementation(() => Promise.resolve());
+      (writePackage as any).mockImplementation(() => Promise.resolve());
 
       const pkg = factory({ name: 'serialize-me' });
       const result = await pkg.set('woo', 'hoo').serialize();
 
       expect(result).toBe(pkg);
-      expect(writePkg).toHaveBeenLastCalledWith(
+      expect(writePackage).toHaveBeenLastCalledWith(
         pkg.manifestLocation,
         expect.objectContaining({
           name: 'serialize-me',
@@ -379,9 +391,9 @@ describe('Package', () => {
 
         expect(pkg.toJSON()).toMatchInlineSnapshot(`
           {
-            "peerDependencies": {
-              "a": "^1.0.0",
-              "b": "^1.0.0",
+            peerDependencies: {
+              a: ^1.0.0,
+              b: ^1.0.0,
             },
           }
         `);
@@ -403,9 +415,9 @@ describe('Package', () => {
 
         expect(pkg.toJSON()).toMatchInlineSnapshot(`
           {
-            "peerDependencies": {
-              "a": "^2.0.0",
-              "b": ">=1.0.0",
+            peerDependencies: {
+              a: ^2.0.0,
+              b: >=1.0.0,
             },
           }
         `);
@@ -427,9 +439,9 @@ describe('Package', () => {
 
         expect(pkg.toJSON()).toMatchInlineSnapshot(`
           {
-            "peerDependencies": {
-              "a": "^1.0.0-alpha.1",
-              "b": ">=1.0.0-alpha.0",
+            peerDependencies: {
+              a: ^1.0.0-alpha.1,
+              b: >=1.0.0-alpha.0,
             },
           }
         `);
@@ -451,9 +463,9 @@ describe('Package', () => {
 
         expect(pkg.toJSON()).toMatchInlineSnapshot(`
           {
-            "peerDependencies": {
-              "a": "^1.0.0-alpha.1+SHA",
-              "b": ">=1.0.0-alpha.0+SHA",
+            peerDependencies: {
+              a: ^1.0.0-alpha.1+SHA,
+              b: >=1.0.0-alpha.0+SHA,
             },
           }
         `);
@@ -479,12 +491,12 @@ describe('Package', () => {
 
         expect(pkg.toJSON()).toMatchInlineSnapshot(`
           {
-            "dependencies": {
-              "a": "workspace:^2.0.0",
-              "b": "workspace:>=1.0.0",
-              "c": "workspace:./foo",
-              "d": "file:./foo",
-              "e": "^1.0.0",
+            dependencies: {
+              a: workspace:^2.0.0,
+              b: workspace:>=1.0.0,
+              c: workspace:./foo,
+              d: file:./foo,
+              e: ^1.0.0,
             },
           }
         `);
@@ -515,16 +527,16 @@ describe('Package', () => {
 
         expect(pkg.toJSON()).toMatchInlineSnapshot(`
           {
-            "dependencies": {
-              "a": "workspace:^2.0.0",
-              "b": "workspace:>=1.0.0",
-              "c": "workspace:./foo",
-              "d": "file:./foo",
-              "e": "^1.0.0",
+            dependencies: {
+              a: workspace:^2.0.0,
+              b: workspace:>=1.0.0,
+              c: workspace:./foo,
+              d: file:./foo,
+              e: ^1.0.0,
             },
-            "peerDependencies": {
-              "a": "workspace:^2.0.0",
-              "b": "workspace:>=1.0.0",
+            peerDependencies: {
+              a: workspace:^2.0.0,
+              b: workspace:>=1.0.0,
             },
           }
         `);
@@ -551,15 +563,15 @@ describe('Package', () => {
 
         expect(pkg.toJSON()).toMatchInlineSnapshot(`
           {
-            "dependencies": {
-              "a": "workspace:^2.0.0",
-              "b": "workspace:>=1.0.0",
-              "c": "workspace:./foo",
-              "d": "file:./foo",
-              "e": "^1.0.0",
+            dependencies: {
+              a: workspace:^2.0.0,
+              b: workspace:>=1.0.0,
+              c: workspace:./foo,
+              d: file:./foo,
+              e: ^1.0.0,
             },
-            "peerDependencies": {
-              "a": "workspace:>=1.0.0",
+            peerDependencies: {
+              a: workspace:>=1.0.0,
             },
           }
         `);
@@ -586,15 +598,15 @@ describe('Package', () => {
 
         expect(pkg.toJSON()).toMatchInlineSnapshot(`
           {
-            "dependencies": {
-              "a": "workspace:^2.0.0",
-              "b": "workspace:>=1.0.0",
-              "c": "workspace:./foo",
-              "d": "file:./foo",
-              "e": "^1.0.0",
+            dependencies: {
+              a: workspace:^2.0.0,
+              b: workspace:>=1.0.0,
+              c: workspace:./foo,
+              d: file:./foo,
+              e: ^1.0.0,
             },
-            "peerDependencies": {
-              "a": "workspace:>=1.0.0 < 2.0.0",
+            peerDependencies: {
+              a: workspace:>=1.0.0 < 2.0.0,
             },
           }
         `);
@@ -615,9 +627,9 @@ describe('Package', () => {
 
         expect(pkg.toJSON()).toMatchInlineSnapshot(`
           {
-            "devDependencies": {
-              "a": "workspace:*",
-              "b": "workspace:^1.0.0",
+            devDependencies: {
+              a: workspace:*,
+              b: workspace:^1.0.0,
             },
           }
         `);
@@ -638,9 +650,9 @@ describe('Package', () => {
 
         expect(pkg.toJSON()).toMatchInlineSnapshot(`
           {
-            "optionalDependencies": {
-              "a": "workspace:^",
-              "b": "workspace:^1.0.0",
+            optionalDependencies: {
+              a: workspace:^,
+              b: workspace:^1.0.0,
             },
           }
         `);
@@ -661,9 +673,9 @@ describe('Package', () => {
 
         expect(pkg.toJSON()).toMatchInlineSnapshot(`
           {
-            "dependencies": {
-              "a": "workspace:~",
-              "b": "workspace:^1.0.0",
+            dependencies: {
+              a: workspace:~,
+              b: workspace:^1.0.0,
             },
           }
         `);
@@ -682,15 +694,15 @@ describe('Package', () => {
         const resolved: NpaResolveResult = npa.resolve('a', '^1.0.0', '.');
         resolved.workspaceSpec = 'workspace:1.0.0';
 
-        pkg.updateLocalDependency(resolved, '2.0.0', '^', true); // last arg is allowPeerDependenciesUpdate=true
+        pkg.updateLocalDependency(resolved, '2.0.0', '^', true);
 
         expect(pkg.toJSON()).toMatchInlineSnapshot(`
           {
-            "dependencies": {
-              "b": "workspace:^1.0.0",
+            dependencies: {
+              b: workspace:^1.0.0,
             },
-            "peerDependencies": {
-              "a": "workspace:2.0.0",
+            peerDependencies: {
+              a: workspace:2.0.0,
             },
           }
         `);
@@ -711,9 +723,9 @@ describe('Package', () => {
 
         expect(pkg.toJSON()).toMatchInlineSnapshot(`
           {
-            "dependencies": {
-              "a": "workspace:>=1.2.0",
-              "b": "workspace:^1.0.0",
+            dependencies: {
+              a: workspace:>=1.2.0,
+              b: workspace:^1.0.0,
             },
           }
         `);
@@ -738,18 +750,18 @@ describe('Package', () => {
         const resolvedB: NpaResolveResult = npa.resolve('b', '^1.0.0', '.');
         resolvedB.workspaceSpec = 'workspace:^1.0.0';
 
-        pkg.updateLocalDependency(resolvedA, '2.0.0', '^', true, true, 'publish'); // allowPeerDependenciesUpdate=true, workspaceStrictMatch=true
-        pkg.updateLocalDependency(resolvedB, '1.1.0', '^', true, true, 'publish');
+        pkg.updateLocalDependency(resolvedA, '2.0.0', '^', true, 'publish');
+        pkg.updateLocalDependency(resolvedB, '1.1.0', '^', true, 'publish');
 
         expect(pkg.toJSON()).toMatchInlineSnapshot(`
           {
-            "dependencies": {
-              "a": "2.0.0",
-              "b": "^1.1.0",
+            dependencies: {
+              a: 2.0.0,
+              b: ^1.1.0,
             },
-            "peerDependencies": {
-              "a": ">=1.0.0",
-              "b": "^1.1.0",
+            peerDependencies: {
+              a: >=1.0.0,
+              b: ^1.1.0,
             },
           }
         `);
@@ -772,18 +784,18 @@ describe('Package', () => {
         const resolvedB: NpaResolveResult = npa.resolve('b', '^1.0.0', '.');
         resolvedB.workspaceSpec = 'workspace:~1.0.0';
 
-        pkg.updateLocalDependency(resolvedA, '2.0.0', '^', true, true, 'publish'); // allowPeerDependenciesUpdate=true, workspaceStrictMatch=true
-        pkg.updateLocalDependency(resolvedB, '1.1.0', '~', true, true, 'publish');
+        pkg.updateLocalDependency(resolvedA, '2.0.0', '^', true, 'publish');
+        pkg.updateLocalDependency(resolvedB, '1.1.0', '~', true, 'publish');
 
         expect(pkg.toJSON()).toMatchInlineSnapshot(`
           {
-            "dependencies": {
-              "a": "^2.0.0",
-              "b": "~1.1.0",
+            dependencies: {
+              a: ^2.0.0,
+              b: ~1.1.0,
             },
-            "peerDependencies": {
-              "a": ">=1.0.0",
-              "b": "~1.1.0",
+            peerDependencies: {
+              a: >=1.0.0,
+              b: ~1.1.0,
             },
           }
         `);
@@ -807,25 +819,25 @@ describe('Package', () => {
         const resolvedB: NpaResolveResult = npa.resolve('b', '^1.0.0', '.');
         resolvedB.workspaceSpec = 'workspace:^1.0.0';
 
-        pkg.updateLocalDependency(resolvedA, '2.0.0', '^', false, true, 'publish'); // allowPeerDependenciesUpdate=false, workspaceStrictMatch=true
-        pkg.updateLocalDependency(resolvedB, '1.1.0', '^', false, true, 'publish');
+        pkg.updateLocalDependency(resolvedA, '2.0.0', '^', false, 'publish');
+        pkg.updateLocalDependency(resolvedB, '1.1.0', '^', false, 'publish');
 
         expect(pkg.toJSON()).toMatchInlineSnapshot(`
           {
-            "dependencies": {
-              "a": "~2.0.0",
-              "b": "^1.1.0",
+            dependencies: {
+              a: ~2.0.0,
+              b: ^1.1.0,
             },
-            "peerDependencies": {
-              "a": ">=1.0.0",
-              "b": "~1.0.0",
+            peerDependencies: {
+              a: >=1.0.0,
+              b: ~1.0.0,
             },
           }
         `);
       });
 
       it('should remove `workspace:` prefix on external dependencies without any version bump applied', () => {
-        const logErrorSpy = jest.spyOn(npmlog, 'error');
+        const logErrorSpy = vi.spyOn(npmlog, 'error');
         const pkg = factory({
           dependencies: {
             a: 'workspace:*',
@@ -854,12 +866,12 @@ describe('Package', () => {
         );
         expect(pkg.toJSON()).toMatchInlineSnapshot(`
           {
-            "dependencies": {
-              "a": "latest",
-              "b": "^2.2.4",
+            dependencies: {
+              a: latest,
+              b: ^2.2.4,
             },
-            "peerDependencies": {
-              "b": "^2.2.4",
+            peerDependencies: {
+              b: ^2.2.4,
             },
           }
         `);
@@ -869,20 +881,20 @@ describe('Package', () => {
 });
 
 describe('Package.lazy()', () => {
-  (loadJsonFile.sync as jest.Mock).mockImplementation(() => ({ name: 'bar', version: '1.0.0' }));
+  (loadJsonFileSync as Mock).mockImplementation(() => ({ name: 'bar', version: '1.0.0' }));
 
   it('returns package instance from string directory argument', () => {
     const pkg = Package.lazy('/foo/bar');
 
     expect(pkg).toBeInstanceOf(Package);
-    expect(pkg.location).toMatch(path.normalize('/foo/bar'));
+    expect(pkg.location).toMatch(normalize('/foo/bar'));
   });
 
   it('returns package instance from package.json file argument', () => {
     const pkg = Package.lazy('/foo/bar/package.json');
 
     expect(pkg).toBeInstanceOf(Package);
-    expect(pkg.location).toMatch(path.normalize('/foo/bar'));
+    expect(pkg.location).toMatch(normalize('/foo/bar'));
   });
 
   it('returns package instance from json and dir arguments', () => {

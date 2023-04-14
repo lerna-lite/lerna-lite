@@ -1,12 +1,12 @@
 import chalk from 'chalk';
 import { glob } from 'glob';
-import fs from 'fs-extra';
-import os from 'os';
-import path from 'path';
+import { outputFileSync, removeSync } from 'fs-extra/esm';
+import { EOL } from 'node:os';
+import { join, relative } from 'node:path';
 import crypto from 'crypto';
 import normalizePath from 'normalize-path';
 import pMap from 'p-map';
-import pPipe from 'p-pipe';
+import pPipe, { type UnaryFunction } from 'p-pipe';
 import semver from 'semver';
 import tempDir from 'temp-dir';
 
@@ -35,23 +35,23 @@ import {
   ValidationError,
 } from '@lerna-lite/core';
 
-import { getCurrentTags } from './lib/get-current-tags';
-import { getTaggedPackages } from './lib/get-tagged-packages';
-import { getUnpublishedPackages } from './lib/get-unpublished-packages';
-import { getNpmUsername } from './lib/get-npm-username';
-import { verifyNpmPackageAccess } from './lib/verify-npm-package-access';
-import { getTwoFactorAuthRequired } from './lib/get-two-factor-auth-required';
-import { getCurrentSHA } from './lib/get-current-sha';
-import { gitCheckout } from './lib/git-checkout';
-import { packDirectory } from './lib/pack-directory';
-import { npmPublish } from './lib/npm-publish';
-import { logPacked } from './lib/log-packed';
-import { add, remove } from './lib/npm-dist-tag';
-import { overridePublishConfig } from './lib/override-publish-config';
-import { removeTempLicenses } from './lib/remove-temp-licenses';
-import { createTempLicenses } from './lib/create-temp-licenses';
-import { getPackagesWithoutLicense } from './lib/get-packages-without-license';
-import { Tarball } from './models';
+import { getCurrentTags } from './lib/get-current-tags.js';
+import { getTaggedPackages } from './lib/get-tagged-packages.js';
+import { getUnpublishedPackages } from './lib/get-unpublished-packages.js';
+import { getNpmUsername } from './lib/get-npm-username.js';
+import { verifyNpmPackageAccess } from './lib/verify-npm-package-access.js';
+import { getTwoFactorAuthRequired } from './lib/get-two-factor-auth-required.js';
+import { getCurrentSHA } from './lib/get-current-sha.js';
+import { gitCheckout } from './lib/git-checkout.js';
+import { packDirectory } from './lib/pack-directory.js';
+import { npmPublish } from './lib/npm-publish.js';
+import { logPacked } from './lib/log-packed.js';
+import { add, remove } from './lib/npm-dist-tag.js';
+import { overridePublishConfig } from './lib/override-publish-config.js';
+import { removeTempLicenses } from './lib/remove-temp-licenses.js';
+import { createTempLicenses } from './lib/create-temp-licenses.js';
+import { getPackagesWithoutLicense } from './lib/get-packages-without-license.js';
+import { Tarball } from './models/index.js';
 
 export function factory(argv: PublishCommandOption) {
   return new PublishCommand(argv);
@@ -149,22 +149,10 @@ export class PublishCommand extends Command<PublishCommandOption> {
       );
     }
 
-    if (this.options.workspaceStrictMatch === false) {
-      this.logger.warn(
-        'deprecation',
-        'Providing --no-workspace-strict-match is deprecated and will be removed in future version, we will make "workspace:" protocol strict matching in every case.'
-      );
-    }
-
     if (this.options.buildMetadata && this.options.canary) {
       throw new ValidationError('ENOTSATISFIED', 'Cannot use --build-metadata in conjunction with --canary option.');
     } else if (this.options.canary) {
       this.logger.info('canary', 'enabled');
-    }
-
-    // @deprecated, to be removed in next major
-    if (this.options.requireScripts) {
-      this.logger.info('require-scripts', 'enabled');
     }
 
     // npmSession and user-agent are consumed by npm-registry-fetch (via libnpmpublish)
@@ -311,6 +299,7 @@ export class PublishCommand extends Command<PublishCommandOption> {
 
     if (this.options.summaryFile !== undefined) {
       // create a json object and output it to a file location.
+      //prettier-ignore
       const filePath = this.options.summaryFile
         ? `${this.options.summaryFile}/lerna-publish-summary.json`
         : './lerna-publish-summary.json';
@@ -322,21 +311,21 @@ export class PublishCommand extends Command<PublishCommandOption> {
       });
       logOutput(jsonObject);
       try {
-        fs.outputFileSync(filePath, JSON.stringify(jsonObject));
+        outputFileSync(filePath, JSON.stringify(jsonObject));
         logOutput('Publish summary created: ', filePath);
       } catch (error) {
         logOutput('Failed to create the summary report', error);
       }
     } else {
       const message = publishedPackagesSorted.map((pkg) => ` - ${pkg.name}@${pkg.version}`);
-      logOutput(message.join(os.EOL));
+      logOutput(message.join(EOL));
     }
 
     // optionally cleanup temp packed files after publish, opt-in option
     if (this.options.cleanupTempFiles) {
-      glob(normalizePath(path.join(tempDir, '/lerna-*'))).then((deleteFolders) => {
+      glob(normalizePath(join(tempDir, '/lerna-*'))).then((deleteFolders) => {
         // delete silently all files/folders that startsWith "lerna-"
-        deleteFolders.forEach((folder) => fs.removeSync(folder));
+        deleteFolders.forEach((folder) => removeSync(folder));
         this.logger.verbose('publish', `Found ${deleteFolders.length} temp folders to cleanup after publish.`);
       });
     }
@@ -531,12 +520,11 @@ export class PublishCommand extends Command<PublishCommandOption> {
 
   confirmPublish() {
     const count = this.packagesToPublish?.length;
-    const message =
-      this.packagesToPublish?.map((pkg) => ` - ${pkg.name} => ${this.updatesVersions?.get(pkg.name)}`) ?? [];
+    const message = this.packagesToPublish?.map((pkg) => ` - ${pkg.name} => ${this.updatesVersions?.get(pkg.name)}`) ?? [];
 
     logOutput('');
     logOutput(`Found ${count} ${count === 1 ? 'package' : 'packages'} to publish:`);
-    logOutput(message.join(os.EOL));
+    logOutput(message.join(EOL));
     logOutput('');
 
     if (this.options.yes) {
@@ -590,7 +578,7 @@ export class PublishCommand extends Command<PublishCommandOption> {
       return chain;
     }
 
-    /* istanbul ignore if */
+    /* c8 ignore next 3 */
     if (process.env.LERNA_INTEGRATION) {
       return chain;
     }
@@ -631,7 +619,6 @@ export class PublishCommand extends Command<PublishCommandOption> {
           depVersion,
           this.savePrefix,
           this.options.allowPeerDependenciesUpdate,
-          this.options.workspaceStrictMatch,
           this.commandName
         );
       }
@@ -667,7 +654,6 @@ export class PublishCommand extends Command<PublishCommandOption> {
           depVersion,
           this.savePrefix,
           this.options.allowPeerDependenciesUpdate,
-          this.options.workspaceStrictMatch,
           this.commandName
         );
       }
@@ -696,7 +682,6 @@ export class PublishCommand extends Command<PublishCommandOption> {
           depVersion,
           this.savePrefix,
           this.options.allowPeerDependenciesUpdate,
-          this.options.workspaceStrictMatch,
           this.commandName
         );
       }
@@ -739,27 +724,15 @@ export class PublishCommand extends Command<PublishCommandOption> {
     const gitOpts = {
       granularPathspec: this.options.granularPathspec !== false,
     };
+    // prettier-ignore
     const dirtyManifests = [this.project.manifest]
       .concat(this.packagesToPublish)
-      .map((pkg) => path.relative(cwd, pkg.manifestLocation));
+      .map((pkg) => relative(cwd, pkg.manifestLocation));
 
     return gitCheckout(dirtyManifests, gitOpts, this.execOpts, this.options.dryRun).catch((err) => {
       this.logger.silly('EGITCHECKOUT', err.message);
       this.logger.notice('FYI', `Unable to reset working tree changes, this probably isn't a git repo.`);
     });
-  }
-
-  // @deprecated, see Lerna PR https://github.com/lerna/lerna/pull/1862/files
-  execScript(pkg: Package, script: string) {
-    const scriptLocation = path.join(pkg.location, 'scripts', script);
-
-    try {
-      require(scriptLocation);
-    } catch (ex) {
-      this.logger.silly('execScript', `No ${script} script found at ${scriptLocation}`);
-    }
-
-    return pkg;
   }
 
   removePackageProperties() {
@@ -850,11 +823,9 @@ export class PublishCommand extends Command<PublishCommandOption> {
     const mapper = pPipe(
       ...(
         [
-          this.options.requireScripts && ((pkg: Package) => this.execScript(pkg, 'prepublish')),
-
           (pkg: Package & { packed: Tarball }) =>
             pulseTillDone(packDirectory(pkg, pkg.location, opts)).then((packed: Tarball) => {
-              tracker.verbose('packed', path.relative(this.project.rootPath ?? '', pkg.contents));
+              tracker.verbose('packed', relative(this.project.rootPath ?? '', pkg.contents));
               tracker.completeWork(1);
 
               // store metadata for use in this.publishPacked()
@@ -863,7 +834,7 @@ export class PublishCommand extends Command<PublishCommandOption> {
               // manifest may be mutated by any previous lifecycle
               return pkg.refresh();
             }),
-        ] as pPipe.UnaryFunction<any, unknown>[]
+        ] as UnaryFunction<any, unknown>[]
       ).filter(Boolean)
     );
 
@@ -943,9 +914,7 @@ export class PublishCommand extends Command<PublishCommandOption> {
                 throw err;
               });
           },
-
-          this.options.requireScripts && ((pkg: Package) => this.execScript(pkg, 'postpublish')),
-        ] as pPipe.UnaryFunction<any, unknown>[]
+        ] as UnaryFunction<any, unknown>[]
       ).filter(Boolean)
     );
 

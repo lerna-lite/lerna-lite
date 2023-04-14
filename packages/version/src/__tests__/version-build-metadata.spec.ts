@@ -1,36 +1,41 @@
+import { describe, expect, it, Mock, test, vi } from 'vitest';
+
 // local modules _must_ be explicitly mocked
-jest.mock('../lib/git-push', () => jest.requireActual('../lib/__mocks__/git-push'));
-jest.mock('../lib/is-anything-committed', () => jest.requireActual('../lib/__mocks__/is-anything-committed'));
-jest.mock('../lib/is-behind-upstream', () => jest.requireActual('../lib/__mocks__/is-behind-upstream'));
-jest.mock('../lib/remote-branch-exists', () => jest.requireActual('../lib/__mocks__/remote-branch-exists'));
+vi.mock('../lib/git-push', async () => await vi.importActual('../lib/__mocks__/git-push'));
+vi.mock('../lib/is-anything-committed', async () => await vi.importActual('../lib/__mocks__/is-anything-committed'));
+vi.mock('../lib/is-behind-upstream', async () => await vi.importActual('../lib/__mocks__/is-behind-upstream'));
+vi.mock('../lib/remote-branch-exists', async () => await vi.importActual('../lib/__mocks__/remote-branch-exists'));
 
 // mocked modules of @lerna-lite/core
-jest.mock('@lerna-lite/core', () => ({
-  ...(jest.requireActual('@lerna-lite/core') as any), // return the other real methods, below we'll mock only 2 of the methods
-  Command: jest.requireActual('../../../core/src/command').Command,
-  conf: jest.requireActual('../../../core/src/command').conf,
-  logOutput: jest.requireActual('../../../core/src/__mocks__/output').logOutput,
-  promptConfirmation: jest.requireActual('../../../core/src/__mocks__/prompt').promptConfirmation,
-  promptSelectOne: jest.requireActual('../../../core/src/__mocks__/prompt').promptSelectOne,
-  promptTextInput: jest.requireActual('../../../core/src/__mocks__/prompt').promptTextInput,
-  throwIfUncommitted: jest.requireActual('../../../core/src/__mocks__/check-working-tree').throwIfUncommitted,
+vi.mock('@lerna-lite/core', async () => ({
+  ...(await vi.importActual<any>('@lerna-lite/core')),
+  Command: (await vi.importActual<any>('../../../core/src/command')).Command,
+  conf: (await vi.importActual<any>('../../../core/src/command')).conf,
+  logOutput: (await vi.importActual<any>('../../../core/src/__mocks__/output')).logOutput,
+  promptConfirmation: (await vi.importActual<any>('../../../core/src/__mocks__/prompt')).promptConfirmation,
+  promptSelectOne: (await vi.importActual<any>('../../../core/src/__mocks__/prompt')).promptSelectOne,
+  promptTextInput: (await vi.importActual<any>('../../../core/src/__mocks__/prompt')).promptTextInput,
+  throwIfUncommitted: (await vi.importActual<any>('../../../core/src/__mocks__/check-working-tree')).throwIfUncommitted,
 }));
 
 // also point to the local version command so that all mocks are properly used even by the command-runner
-jest.mock('@lerna-lite/version', () => jest.requireActual('../version-command'));
+vi.mock('@lerna-lite/version', async () => vi.importActual('../version-command'));
 
 import { PackageGraphNode, promptSelectOne, promptTextInput, VersionCommandOption } from '@lerna-lite/core';
 import { makePromptVersion } from '../lib/prompt-version';
 
-import path from 'path';
+import { dirname, resolve as pathResolve } from 'node:path';
 import yargParser from 'yargs-parser';
 
-const resolvePrereleaseId = jest.fn(() => 'alpha');
+const resolvePrereleaseId = vi.fn(() => 'alpha');
 const versionPrompt = (buildMetadata) => makePromptVersion(resolvePrereleaseId, buildMetadata);
 
 // helpers
+import { fileURLToPath } from 'node:url';
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = dirname(__filename);
 import { commandRunner, initFixtureFactory } from '@lerna-test/helpers';
-const initFixture = initFixtureFactory(path.resolve(__dirname, '../../../publish/src/__tests__'));
+const initFixture = initFixtureFactory(pathResolve(__dirname, '../../../publish/src/__tests__'));
 import { showCommit } from '@lerna-test/helpers';
 
 // test command
@@ -73,8 +78,7 @@ describe('--build-metadata without prompt', () => {
 
   it('accepts build metadata for repository version', async () => {
     const testDir = await initFixture('normal');
-    // @deprecated --repo-version was replaced by --bump
-    await lernaVersion(testDir)('--repo-version', '1.0.2', '--build-metadata', '21AF26D3--117B344092BD');
+    await lernaVersion(testDir)('--bump', '1.0.2', '--build-metadata', '21AF26D3--117B344092BD');
 
     expect(promptSelectOne).not.toHaveBeenCalled();
 
@@ -85,17 +89,6 @@ describe('--build-metadata without prompt', () => {
   it('accepts build metadata with semver keyword', async () => {
     const testDir = await initFixture('normal');
     await new VersionCommand(createArgv(testDir, '--bump', 'minor', '--build-metadata', '001'));
-
-    expect(promptSelectOne).not.toHaveBeenCalled();
-
-    const patch = await showCommit(testDir);
-    expect(patch).toMatchSnapshot();
-  });
-
-  it('accepts build metadata with cd version', async () => {
-    const testDir = await initFixture('normal');
-    // @deprecated --repo-version was replaced by --bump
-    await lernaVersion(testDir)('--cd-version', 'premajor', '--build-metadata', 'exp.sha.5114f85');
 
     expect(promptSelectOne).not.toHaveBeenCalled();
 
@@ -229,7 +222,7 @@ describe('--build-metadata in version prompt', () => {
     let inputFilter;
 
     (promptSelectOne as any).chooseBump('PRERELEASE');
-    (promptTextInput as jest.Mock).mockImplementationOnce((msg, cfg) => {
+    (promptTextInput as Mock).mockImplementationOnce((msg, cfg) => {
       inputFilter = cfg.filter;
       return Promise.resolve(msg);
     });
@@ -250,7 +243,7 @@ describe('--build-metadata in version prompt', () => {
     let inputValidate;
 
     (promptSelectOne as any).chooseBump('CUSTOM');
-    (promptTextInput as jest.Mock).mockImplementationOnce((msg, cfg) => {
+    (promptTextInput as Mock).mockImplementationOnce((msg, cfg) => {
       inputFilter = cfg.filter;
       inputValidate = cfg.validate;
       return Promise.resolve(msg);

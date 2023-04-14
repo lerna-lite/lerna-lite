@@ -1,35 +1,39 @@
-import nodeFs from 'fs';
-jest.spyOn(nodeFs, 'renameSync');
+import { describe, expect, it, vi } from 'vitest';
+import nodeFs from 'node:fs';
+vi.spyOn(nodeFs, 'renameSync');
 
 // local modules _must_ be explicitly mocked
-jest.mock('../lib/git-push', () => jest.requireActual('../lib/__mocks__/git-push'));
-jest.mock('../lib/is-anything-committed', () => jest.requireActual('../lib/__mocks__/is-anything-committed'));
-jest.mock('../lib/is-behind-upstream', () => jest.requireActual('../lib/__mocks__/is-behind-upstream'));
-jest.mock('../lib/remote-branch-exists', () => jest.requireActual('../lib/__mocks__/remote-branch-exists'));
+vi.mock('../lib/git-push', async () => vi.importActual('../lib/__mocks__/git-push'));
+vi.mock('../lib/is-anything-committed', async () => vi.importActual('../lib/__mocks__/is-anything-committed'));
+vi.mock('../lib/is-behind-upstream', async () => vi.importActual('../lib/__mocks__/is-behind-upstream'));
+vi.mock('../lib/remote-branch-exists', async () => vi.importActual('../lib/__mocks__/remote-branch-exists'));
 
 // mocked modules of @lerna-lite/core
-jest.mock('@lerna-lite/core', () => ({
-  ...(jest.requireActual('@lerna-lite/core') as any), // return the other real methods, below we'll mock only 2 of the methods
-  Command: jest.requireActual('../../../core/src/command').Command,
-  conf: jest.requireActual('../../../core/src/command').conf,
-  logOutput: jest.requireActual('../../../core/src/__mocks__/output').logOutput,
-  promptConfirmation: jest.requireActual('../../../core/src/__mocks__/prompt').promptConfirmation,
-  promptSelectOne: jest.requireActual('../../../core/src/__mocks__/prompt').promptSelectOne,
-  promptTextInput: jest.requireActual('../../../core/src/__mocks__/prompt').promptTextInput,
-  throwIfUncommitted: jest.requireActual('../../../core/src/__mocks__/check-working-tree').throwIfUncommitted,
+vi.mock('@lerna-lite/core', async () => ({
+  ...(await vi.importActual<any>('@lerna-lite/core')),
+  Command: (await vi.importActual<any>('../../../core/src/command')).Command,
+  conf: (await vi.importActual<any>('../../../core/src/command')).conf,
+  logOutput: (await vi.importActual<any>('../../../core/src/__mocks__/output')).logOutput,
+  promptConfirmation: (await vi.importActual<any>('../../../core/src/__mocks__/prompt')).promptConfirmation,
+  promptSelectOne: (await vi.importActual<any>('../../../core/src/__mocks__/prompt')).promptSelectOne,
+  promptTextInput: (await vi.importActual<any>('../../../core/src/__mocks__/prompt')).promptTextInput,
+  throwIfUncommitted: (await vi.importActual<any>('../../../core/src/__mocks__/check-working-tree')).throwIfUncommitted,
 }));
 
-import fs from 'fs-extra';
-import path from 'path';
+import { outputFile } from 'fs-extra/esm';
+import { dirname, join, resolve as pathResolve } from 'node:path';
+import { fileURLToPath } from 'node:url';
 import yargParser from 'yargs-parser';
 
 // helpers
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = dirname(__filename);
 import { gitAdd } from '@lerna-test/helpers';
 import { gitCommit } from '@lerna-test/helpers';
 import { gitTag } from '@lerna-test/helpers';
 import { showCommit } from '@lerna-test/helpers';
 import { initFixtureFactory } from '@lerna-test/helpers';
-const initFixture = initFixtureFactory(path.resolve(__dirname, '../../../publish/src/__tests__'));
+const initFixture = initFixtureFactory(pathResolve(__dirname, '../../../publish/src/__tests__'));
 
 // test command
 import { VersionCommand } from '../version-command';
@@ -53,7 +57,7 @@ const createArgv = (cwd, ...args) => {
 describe('version --ignore-changes', () => {
   const setupChanges = async (cwd, tuples) => {
     await gitTag(cwd, 'v1.0.0');
-    await Promise.all(tuples.map(([filePath, content]) => fs.outputFile(path.join(cwd, filePath), content, 'utf8')));
+    await Promise.all(tuples.map(([filePath, content]) => outputFile(join(cwd, filePath), content, 'utf8')));
     await gitAdd(cwd, '.');
     await gitCommit(cwd, 'setup');
   };

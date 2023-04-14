@@ -1,4 +1,4 @@
-import fs from 'fs';
-import path from 'path';
+import { writeFileSync } from 'node:fs';
+import { resolve } from 'node:path';
 
-fs.writeFileSync(path.resolve('index.js'), "export default 'C';");
+writeFileSync(resolve('index.js'), "export default 'C';");

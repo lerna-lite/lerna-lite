@@ -62,11 +62,6 @@ export class ChangedCommand extends Command<ChangedCommandOption & ListCommandOp
   execute() {
     logOutput(this.result?.text);
 
-    this.logger.success(
-      'found',
-      '%d %s ready to publish',
-      this.result?.count,
-      this.result?.count === 1 ? 'package' : 'packages'
-    );
+    this.logger.success('found', '%d %s ready to publish', this.result?.count, this.result?.count === 1 ? 'package' : 'packages');
   }
 }

@@ -1,4 +1,6 @@
-jest.mock('../../../child-process');
+import { describe, expect, it, Mock, vi } from 'vitest';
+
+vi.mock('../../../child-process');
 
 // mocked modules
 import * as childProcess from '../../../child-process';
@@ -7,7 +9,7 @@ import * as childProcess from '../../../child-process';
 import { hasTags } from '../lib/has-tags';
 
 describe('hasTags()', () => {
-  (childProcess.execSync as jest.Mock).mockImplementation(() => 'v1.0.0\nv1.0.1');
+  (childProcess.execSync as Mock).mockImplementation(() => 'v1.0.0\nv1.0.1');
 
   it('calls `git tag` with options passed in', () => {
     hasTags({ cwd: 'test' });
@@ -26,13 +28,13 @@ describe('hasTags()', () => {
   });
 
   it('returns false when tags do not exist', () => {
-    (childProcess.execSync as jest.Mock).mockImplementation(() => '');
+    (childProcess.execSync as Mock).mockImplementation(() => '');
 
     expect(hasTags()).toBe(false);
   });
 
   it('returns false when git command errors', () => {
-    (childProcess.execSync as jest.Mock).mockImplementation(() => {
+    (childProcess.execSync as Mock).mockImplementation(() => {
       throw new Error('boom');
     });
 

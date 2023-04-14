@@ -4,7 +4,7 @@
 
 # @lerna-lite/publish
 
-## (`lerna publish`) - Publish command ☁️
+## (`lerna publish`) - Publish command [optional] ☁️
 
 Lerna-Lite Publish command, publish package(s) in the current project
 
@@ -13,8 +13,7 @@ Lerna-Lite Publish command, publish package(s) in the current project
 ## Installation
 
 ```sh
-# simple install or install it globally with -g
-npm install @lerna-lite/cli -D -W
+npm install @lerna-lite/publish -D -W
 
 # then use it (see usage below)
 lerna publish
@@ -72,7 +71,7 @@ This is useful when a previous `lerna publish` failed to publish all packages to
     - [semver `--bump from-package`](#semver--bump-from-package)
   - [Options](#options)
     - [`--canary`](#--canary)
-    - [`--cleanup-temp-files`](#--cleanup-temp-files) (new)
+    - [`--cleanup-temp-files`](#--cleanup-temp-files)
     - [`--contents <dir>`](#--contents-dir)
     - [`--dist-tag <tag>`](#--dist-tag-tag)
     - [`--force-publish`](#--force-publish)
@@ -86,17 +85,15 @@ This is useful when a previous `lerna publish` failed to publish all packages to
     - [`--otp`](#--otp)
     - [`--preid`](#--preid)
     - [`--pre-dist-tag <tag>`](#--pre-dist-tag-tag)
-    - [`--remove-package-fields <fields>`](#--remove-package-fields-fields) (new)
+    - [`--remove-package-fields <fields>`](#--remove-package-fields-fields)
     - [`--registry <url>`](#--registry-url)
     - [`--tag-version-prefix`](#--tag-version-prefix)
     - [`--temp-tag`](#--temp-tag)
-    - [`--summary-file <dir>`](#--summary-file) (new)
+    - [`--summary-file <dir>`](#--summary-file)
     - [`--verify-access`](#--verify-access)
     - [`--yes`](#--yes)
   - [`publishConfig` Overrides](#publishconfig-overrides)
   - [`workspace:` protocol](#workspace-protocol)
-    - [`--workspace-strict-match (default)`](#with---workspace-strict-match-default)
-    - [`--no-workspace-strict-match`](#with---no-workspace-strict-match-deprecated)
 
 ### `--canary`
 
@@ -554,34 +551,15 @@ So for example, if we have `foo`, `bar`, `qar`, `zoo` in the workspace and they 
 
 > **Note** semver range with an operator (ie `workspace:>=2.0.0`) are also supported but will never be mutated.
 
-#### with `--workspace-strict-match` (default)
+#### versions that will be published
 
-When using strict match (default), it will be transformed and publish with the following:
-
-_this is the default and is usually what most user will want to use since it will strictly adhere to pnpm/yarn workspace protocol._
+The library is doing a strict match and it will transform and publish the following:
 
 ```json
 {
   "dependencies": {
     "foo": "1.5.0",
     "bar": "~1.5.0",
-    "qar": "^1.5.0",
-    "zoo": "^1.5.0"
-  }
-}
-```
-
-#### with `--no-workspace-strict-match` (deprecated)
-
-When strict match is disabled, it will be transformed and publish with the following:
-
-_you would rarely want to disable the strict match, in fact this option will be removed entirely in a future release, this flag was created for the sole purpose of making it compatible with previous Lerna-Lite version `1.2.0`. When disabled, in most cases Lerna will assume that the caret (^) is needed unless the option [--exact](https://github.com/lerna-lite/lerna-lite/tree/main/packages/version#--exact) is provided and by doing so will not be strictly following pnpm/yarn workspace protocol and for that reason is not recommended._
-
-```json
-{
-  "dependencies": {
-    "foo": "^1.5.0",
-    "bar": "^1.5.0",
     "qar": "^1.5.0",
     "zoo": "^1.5.0"
   }
@@ -595,17 +573,3 @@ _you would rarely want to disable the strict match, in fact this option will be 
 In the case that some packages were successfully published and others were not, `lerna publish` may have left the repository in an inconsistent state with some changed files. To recover from this, reset any extraneous local changes from the failed run to get back to a clean working tree. Then, retry the same `lerna publish` command. Lerna will attempt to publish all of the packages again, but will recognize those that have already been published and skip over them with a warning.
 
 If you used the `lerna publish` command without positional arguments to select a new version for the packages, then you can run `lerna publish from-git` to retry publishing that same already-tagged version instead of having to bump the version again while retrying.
-
-## Deprecated Options
-
-### `--no-verify-access`
-
-The legacy preemptive access verification is now off by default, so `--no-verify-access` is not needed. Requests will fail with appropriate errors when not authorized correctly. To opt-in to the legacy access verification, use [`--verify-access`](#--verify-access).
-
-### `--skip-npm`
-
-Call [`lerna version`](https://github.com/lerna/lerna/tree/main/commands/version#readme) directly, instead.
-
-### `--no-workspace-strict-match`
-
-Providing --no-workspace-strict-match is deprecated and will be removed in future version, we will make `workspace:` protocol strict matching in every case.

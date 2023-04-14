@@ -30,7 +30,7 @@ jobs:
       - name: Set NodeJS
         uses: actions/setup-node@v3
         with:
-          node-version: 18
+          node-version: 19
           cache: 'pnpm'
 
       - name: Get pnpm store directory
@@ -49,14 +49,14 @@ jobs:
       - name: Run pnpm install dependencies
         run: pnpm install
 
-      - run: pnpm run format:check
+      - run: pnpm run prettier:check
       - run: pnpm run ci:lint
 
   tests:
     strategy:
       fail-fast: false
       matrix:
-        node: [14, 16, 18]
+        node: [16, 18, 19]
         platform: [ubuntu-latest]
 
     name: 'Build & Unit Tests on Ubuntu / Node${{ matrix.node }}'
@@ -99,26 +99,26 @@ jobs:
       - name: Run pnpm install dependencies
         run: pnpm install
 
-      - name: Cache TypeScript and Jest
+      - name: Cache TypeScript and Vitest
         uses: actions/cache@v3
         with:
           path: |
             packages/*/lib
             packages/*/tsconfig.tsbuildinfo
-            test/.jest-cache
-          key: ts-jest-${{ matrix.platform }}-${{ matrix.node }}-${{ github.run_id }}
-          restore-keys: ts-jest-${{ matrix.platform }}-${{ matrix.node }}-
+            node_modules/.vitest
+          key: vitest-${{ matrix.platform }}-${{ matrix.node }}-${{ github.run_id }}
+          restore-keys: vitest-${{ matrix.platform }}-${{ matrix.node }}-
 
       - name: Run all workspace TSC builds
         run: pnpm build:full
 
-      - name: Run Jest unit tests
+      - name: Run Vitest unit tests
         if: |
           !contains(github.event.head_commit.message, 'chore(release)')
-        run: pnpm jest:ci
+        run: pnpm test:coverage
 
-      - name: Upload Jest coverage to Codecov
+      - name: Upload test coverage to Codecov
         uses: codecov/codecov-action@v3.1.1
         if: |
-          contains(matrix.node, 18) &&
+          contains(matrix.node, 19) &&
           !contains(github.event.head_commit.message, 'chore(release)')

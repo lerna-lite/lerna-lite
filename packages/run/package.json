@@ -1,15 +1,31 @@
 {
   "name": "@lerna-lite/run",
   "description": "Lerna-Lite Run command will help to run npm script in each package workspace that contains that script",
-  "version": "1.17.0",
-  "main": "dist/index.js",
-  "types": "dist/index.d.ts",
-  "typings": "dist/index.d.ts",
+  "version": "2.0.0-alpha.2",
   "files": [
     "/dist"
   ],
   "publishConfig": {
     "access": "public"
+  },
+  "type": "module",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "module": "dist/index.js",
+  "exports": {
+    ".": {
+      "import": "./dist/index.js",
+      "default": "./dist/index.js",
+      "types": "./dist/index.d.ts"
+    },
+    "./*": "./*"
+  },
+  "typesVersions": {
+    "*": {
+      "*": [
+        "./dist/index.d.ts"
+      ]
+    }
   },
   "scripts": {
     "prebuild": "rimraf dist",
@@ -29,22 +45,23 @@
     "url": "https://github.com/lerna-lite/lerna-lite/issues"
   },
   "engines": {
-    "node": ">=14.17.0",
-    "npm": ">=8.0.0"
+    "node": ">=16.15.0",
+    "npm": ">=8.5.0"
   },
   "dependencies": {
+    "@lerna-lite/cli": "workspace:*",
     "@lerna-lite/core": "workspace:*",
     "@lerna-lite/filter-packages": "workspace:*",
     "@lerna-lite/profiler": "workspace:*",
-    "chalk": "^4.1.2",
+    "chalk": "^5.2.0",
     "fs-extra": "^11.1.1",
     "npmlog": "^7.0.1",
-    "p-map": "^4.0.0"
+    "p-map": "^5.5.0"
   },
   "devDependencies": {
-    "@types/p-map": "^2.0.0",
-    "globby": "^11.1.0",
-    "jest-circus": "^29.5.0",
+    "@types/fs-extra": "^11.0.1",
+    "globby": "^13.1.3",
+    "nx": "15.4.8",
     "perf_hooks": "^0.0.1",
     "yargs": "^17.7.1",
     "yargs-parser": "^21.1.1"

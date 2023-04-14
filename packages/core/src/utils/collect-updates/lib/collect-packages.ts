@@ -1,5 +1,5 @@
-import { PackageGraphNode } from '../../../package-graph/lib/package-graph-node';
-import { collectDependents } from './collect-dependents';
+import { PackageGraphNode } from '../../../package-graph/lib/package-graph-node.js';
+import { collectDependents } from './collect-dependents.js';
 
 interface PackageCollectorOptions {
   isCandidate?: (node: PackageGraphNode, name: string) => boolean;

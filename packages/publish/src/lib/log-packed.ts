@@ -5,7 +5,7 @@ import log from 'npmlog';
 import hasUnicode from 'has-unicode';
 
 import { Package } from '@lerna-lite/core';
-import { Tarball } from '../models';
+import { Tarball } from '../models/index.js';
 
 export function logPacked(pkg: Package & { packed: Tarball }, dryRun = false) {
   const tarball = pkg.packed;

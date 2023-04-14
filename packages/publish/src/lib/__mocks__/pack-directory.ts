@@ -1,6 +1,8 @@
+import { afterEach, Mock, vi } from 'vitest';
+
 const registry = new Set();
 
-const mockPackDirectory = jest.fn((pkg) => {
+const mockPackDirectory = vi.fn((pkg) => {
   registry.add(pkg.name);
 
   return Promise.resolve({
@@ -14,5 +16,5 @@ afterEach(() => {
   registry.clear();
 });
 
-export const packDirectory = mockPackDirectory as jest.Mock<any, any, any> & { registry: Set<unknown> };
+export const packDirectory = mockPackDirectory as Mock & { registry: Set<unknown> };
 packDirectory.registry = registry;

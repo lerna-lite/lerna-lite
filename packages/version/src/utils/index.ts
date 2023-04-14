@@ -1,2 +1,2 @@
-export * from './otplease';
-export * from './temp-write';
+export * from './otplease.js';
+export * from './temp-write.js';

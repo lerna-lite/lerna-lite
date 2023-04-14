@@ -1,39 +1,33 @@
+import { describe, expect, it, Mock, vi } from 'vitest';
+
+vi.mock('write-pkg', async () => await vi.importActual('../../../version/src/lib/__mocks__/write-pkg'));
+
 // FIXME: better mock for version command
-jest.mock('../../../version/src/lib/git-push', () => jest.requireActual('../../../version/src/lib/__mocks__/git-push'));
-jest.mock('../../../version/src/lib/is-anything-committed', () =>
-  jest.requireActual('../../../version/src/lib/__mocks__/is-anything-committed')
-);
-jest.mock('../../../version/src/lib/is-behind-upstream', () =>
-  jest.requireActual('../../../version/src/lib/__mocks__/is-behind-upstream')
-);
-jest.mock('../../../version/src/lib/remote-branch-exists', () =>
-  jest.requireActual('../../../version/src/lib/__mocks__/remote-branch-exists')
-);
+vi.mock('../../../version/src/lib/git-push', async () => await vi.importActual('../../../version/src/lib/__mocks__/git-push'));
+vi.mock('../../../version/src/lib/is-anything-committed', async () => await vi.importActual('../../../version/src/lib/__mocks__/is-anything-committed'));
+vi.mock('../../../version/src/lib/is-behind-upstream', async () => await vi.importActual('../../../version/src/lib/__mocks__/is-behind-upstream'));
+vi.mock('../../../version/src/lib/remote-branch-exists', async () => await vi.importActual('../../../version/src/lib/__mocks__/remote-branch-exists'));
 
 // mocked modules of @lerna-lite/core
-jest.mock('@lerna-lite/core', () => ({
-  ...jest.requireActual('@lerna-lite/core'), // return the other real methods, below we'll mock only 2 of the methods
-  Command: jest.requireActual('../../../core/src/command').Command,
-  conf: jest.requireActual('../../../core/src/command').conf,
-  pulseTillDone: jest.requireActual('../../../core/src/utils').pulseTillDone,
-  collectUpdates: jest.requireActual('../../../core/src/__mocks__/collect-updates').collectUpdates,
+vi.mock('@lerna-lite/core', async () => ({
+  ...(await vi.importActual<any>('@lerna-lite/core')),
+  Command: (await vi.importActual<any>('../../../core/src/command')).Command,
+  conf: (await vi.importActual<any>('../../../core/src/command')).conf,
+  pulseTillDone: (await vi.importActual<any>('../../../core/src/utils')).pulseTillDone,
+  collectUpdates: (await vi.importActual<any>('../../../core/src/__mocks__/collect-updates')).collectUpdates,
   getOneTimePassword: () => Promise.resolve('654321'),
-  logOutput: jest.requireActual('../../../core/src/__mocks__/output').logOutput,
-  promptConfirmation: jest.requireActual('../../../core/src/__mocks__/prompt').promptConfirmation,
-  throwIfUncommitted: jest.requireActual('../../../core/src/__mocks__/check-working-tree').throwIfUncommitted,
+  logOutput: (await vi.importActual<any>('../../../core/src/__mocks__/output')).logOutput,
+  promptConfirmation: (await vi.importActual<any>('../../../core/src/__mocks__/prompt')).promptConfirmation,
+  throwIfUncommitted: (await vi.importActual<any>('../../../core/src/__mocks__/check-working-tree')).throwIfUncommitted,
 }));
 
 // local modules _must_ be explicitly mocked
-jest.mock('../lib/get-packages-without-license', () =>
-  jest.requireActual('../lib/__mocks__/get-packages-without-license')
-);
-jest.mock('../lib/verify-npm-package-access', () => jest.requireActual('../lib/__mocks__/verify-npm-package-access'));
-jest.mock('../lib/get-npm-username', () => jest.requireActual('../lib/__mocks__/get-npm-username'));
-jest.mock('../lib/get-two-factor-auth-required', () =>
-  jest.requireActual('../lib/__mocks__/get-two-factor-auth-required')
-);
-jest.mock('../lib/get-unpublished-packages', () => jest.requireActual('../lib/__mocks__/get-unpublished-packages'));
-jest.mock('../lib/npm-publish', () => jest.requireActual('../lib/__mocks__/npm-publish'));
+vi.mock('../lib/get-packages-without-license', async () => await vi.importActual('../lib/__mocks__/get-packages-without-license'));
+vi.mock('../lib/verify-npm-package-access', async () => await vi.importActual('../lib/__mocks__/verify-npm-package-access'));
+vi.mock('../lib/get-npm-username', async () => await vi.importActual('../lib/__mocks__/get-npm-username'));
+vi.mock('../lib/get-two-factor-auth-required', async () => await vi.importActual('../lib/__mocks__/get-two-factor-auth-required'));
+vi.mock('../lib/get-unpublished-packages', async () => await vi.importActual('../lib/__mocks__/get-unpublished-packages'));
+vi.mock('../lib/npm-publish', async () => await vi.importActual('../lib/__mocks__/npm-publish'));
 
 // mocked modules
 import { npmPublish } from '../lib/npm-publish';
@@ -41,9 +35,14 @@ import { npmPublish as npmPublishMock } from '../lib/__mocks__/npm-publish';
 import { logOutput, promptConfirmation, PublishCommandOption, throwIfUncommitted } from '@lerna-lite/core';
 
 // helpers
+import { dirname } from 'node:path';
+import { fileURLToPath } from 'node:url';
 import { gitTag } from '@lerna-test/helpers';
 import { loggingOutput } from '@lerna-test/helpers/logging-output';
 import { initFixtureFactory } from '@lerna-test/helpers';
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = dirname(__filename);
 const initFixture = initFixtureFactory(__dirname);
 
 // test command
@@ -208,7 +207,7 @@ describe('publish from-git', () => {
   });
 
   it('throws an error when uncommitted changes are present', async () => {
-    (throwIfUncommitted as jest.Mock).mockImplementationOnce(() => {
+    (throwIfUncommitted as Mock).mockImplementationOnce(() => {
       throw new Error('uncommitted');
     });
 
@@ -231,7 +230,8 @@ describe('publish from-git', () => {
   });
 
   it('should throw even when npm publish throws any other type of errors from a previous half publish process', async () => {
-    (npmPublish as jest.Mock).mockImplementationOnce(() => {
+    vi.spyOn(process, 'exit').mockImplementationOnce((() => {}) as any);
+    (npmPublish as Mock).mockImplementationOnce(() => {
       return Promise.reject({ code: 'UNAUTHORIZED' });
     });
 
@@ -242,10 +242,13 @@ describe('publish from-git', () => {
 
     await expect(command).rejects.toEqual({ code: 'UNAUTHORIZED', name: 'ValidationError' });
     expect(process.exitCode).toBe(1);
+
+    // reset exit code
+    process.exitCode = undefined;
   });
 
   it('should not throw and assume package is already published when npm publish throws EPUBLISHCONFLICT from a previous half publish process', async () => {
-    (npmPublish as jest.Mock).mockImplementation(() => {
+    (npmPublish as Mock).mockImplementation(() => {
       return Promise.reject({ code: 'EPUBLISHCONFLICT' });
     });
 
@@ -261,7 +264,7 @@ describe('publish from-git', () => {
 
     // since all packages rejected with publish conflict, we should have the "All published" message when recalling execute()
     command.initialize();
-    const loggerSpy = jest.spyOn(command.logger, 'success');
+    const loggerSpy = vi.spyOn(command.logger, 'success');
     await command.execute();
     expect(loggerSpy).toHaveBeenCalledWith('All packages have already been published.');
   });

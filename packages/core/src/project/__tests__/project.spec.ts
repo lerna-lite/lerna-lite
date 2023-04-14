@@ -1,8 +1,12 @@
-import fs from 'fs-extra';
-import path from 'path';
+import { afterEach, beforeAll, describe, expect, it } from 'vitest';
+import { outputFile, remove, writeJson } from 'fs-extra/esm';
+import { basename, dirname, join, resolve as pathResolve } from 'node:path';
+import { fileURLToPath } from 'node:url';
 
 // helpers
 import { initFixtureFactory } from '@lerna-test/helpers';
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = dirname(__filename);
 const initFixture = initFixtureFactory(__dirname);
 
 // file under test
@@ -105,7 +109,7 @@ describe('Project', () => {
     });
 
     // TODO investigate why the following 2 tests fail on CI but pass locally
-    xit('extends local shared config', async () => {
+    it.skip('extends local shared config', async () => {
       const cwd = await initFixture('extends');
       const project = new Project(cwd);
 
@@ -115,10 +119,10 @@ describe('Project', () => {
       });
     });
 
-    xit('extends local shared config subpath', async () => {
+    it.skip('extends local shared config subpath', async () => {
       const cwd = await initFixture('extends');
 
-      await fs.writeJSON(path.resolve(cwd, 'lerna.json'), {
+      await writeJson(pathResolve(cwd, 'lerna.json'), {
         extends: 'local-package/subpath',
         version: '1.0.0',
       });
@@ -146,8 +150,6 @@ describe('Project', () => {
         version: '1.0.0',
       });
     });
-
-    // REMOVED Deprecated caommands
 
     it('throws an error when extend target is unresolvable', async () => {
       const cwd = await initFixture('extends-unresolved');
@@ -207,12 +209,7 @@ describe('Project', () => {
     it('returns a list of package parent directories', () => {
       const project = new Project(testDir);
       project.config.packages = ['.', 'packages/*', 'dir/nested/*', 'globstar/**'];
-      expect(project.packageParentDirs).toEqual([
-        testDir,
-        path.join(testDir, 'packages'),
-        path.join(testDir, 'dir/nested'),
-        path.join(testDir, 'globstar'),
-      ]);
+      expect(project.packageParentDirs).toEqual([testDir, join(testDir, 'packages'), join(testDir, 'dir/nested'), join(testDir, 'globstar')]);
     });
   });
 
@@ -223,15 +220,15 @@ describe('Project', () => {
       expect(result).toMatchInlineSnapshot(`
         [
           {
-            "name": "pkg-1",
-            "version": "1.0.0",
+            name: pkg-1,
+            version: 1.0.0,
           },
           {
-            "dependencies": {
-              "pkg-1": "^1.0.0",
+            dependencies: {
+              pkg-1: ^1.0.0,
             },
-            "name": "pkg-2",
-            "version": "1.0.0",
+            name: pkg-2,
+            version: 1.0.0,
           },
         ]
       `);
@@ -249,15 +246,15 @@ describe('Project', () => {
       expect(project.getPackagesSync()).toMatchInlineSnapshot(`
         [
           {
-            "name": "pkg-1",
-            "version": "1.0.0",
+            name: pkg-1,
+            version: 1.0.0,
           },
           {
-            "dependencies": {
-              "pkg-1": "^1.0.0",
+            dependencies: {
+              pkg-1: ^1.0.0,
             },
-            "name": "pkg-2",
-            "version": "1.0.0",
+            name: pkg-2,
+            version: 1.0.0,
           },
         ]
       `);
@@ -283,24 +280,24 @@ describe('Project', () => {
 
     it('defaults package.json name field when absent', async () => {
       const cwd = await initFixture('basic');
-      const manifestLocation = path.join(cwd, 'package.json');
+      const manifestLocation = join(cwd, 'package.json');
 
-      await fs.writeJSON(manifestLocation, { private: true }, { spaces: 2 });
+      await writeJson(manifestLocation, { private: true }, { spaces: 2 });
 
       const project = new Project(cwd);
-      expect(project.manifest).toHaveProperty('name', path.basename(cwd));
+      expect(project.manifest).toHaveProperty('name', basename(cwd));
     });
 
     it('does not cache failures', async () => {
       const cwd = await initFixture('basic');
-      const manifestLocation = path.join(cwd, 'package.json');
+      const manifestLocation = join(cwd, 'package.json');
 
-      await fs.remove(manifestLocation);
+      await remove(manifestLocation);
 
       const project = new Project(cwd);
       expect(project.manifest).toBe(undefined);
 
-      await fs.writeJSON(manifestLocation, { name: 'test' }, { spaces: 2 });
+      await writeJson(manifestLocation, { name: 'test' }, { spaces: 2 });
       expect(project.manifest).toHaveProperty('name', 'test');
     });
 
@@ -328,7 +325,7 @@ describe('Project', () => {
       const cwd = await initFixture('licenses-missing');
       const project = new Project(cwd);
 
-      await fs.outputFile(path.join(cwd, 'LICENSE.md'), 'copyright, yo', 'utf8');
+      await outputFile(join(cwd, 'LICENSE.md'), 'copyright, yo', 'utf8');
 
       expect(project.licensePath).toMatch(/LICENSE\.md$/);
     });
@@ -337,7 +334,7 @@ describe('Project', () => {
       const cwd = await initFixture('licenses-missing');
       const project = new Project(cwd);
 
-      await fs.outputFile(path.join(cwd, 'licence.txt'), 'copyright, yo', 'utf8');
+      await outputFile(join(cwd, 'licence.txt'), 'copyright, yo', 'utf8');
 
       expect(project.licensePath).toMatch(/licence\.txt$/);
     });
@@ -355,12 +352,12 @@ describe('Project', () => {
 
       expect(project.licensePath).toBeUndefined();
 
-      await fs.outputFile(path.join(cwd, 'LiCeNsE'), 'copyright, yo', 'utf8');
+      await outputFile(join(cwd, 'LiCeNsE'), 'copyright, yo', 'utf8');
 
       const foundPath = project.licensePath;
       expect(foundPath).toMatch(/LiCeNsE$/);
 
-      await fs.remove(project.licensePath);
+      await remove(project.licensePath);
 
       expect(project.licensePath).toBe(foundPath);
     });
@@ -373,12 +370,12 @@ describe('Project', () => {
       const licensePaths = await project.getPackageLicensePaths();
 
       expect(licensePaths).toEqual([
-        path.join(cwd, 'packages', 'package-1', 'LICENSE'),
-        path.join(cwd, 'packages', 'package-2', 'licence'),
-        path.join(cwd, 'packages', 'package-3', 'LiCeNSe'),
-        path.join(cwd, 'packages', 'package-5', 'LICENCE'),
+        join(cwd, 'packages', 'package-1', 'LICENSE'),
+        join(cwd, 'packages', 'package-2', 'licence'),
+        join(cwd, 'packages', 'package-3', 'LiCeNSe'),
+        join(cwd, 'packages', 'package-5', 'LICENCE'),
         // We do not care about duplicates, they are weeded out elsewhere
-        path.join(cwd, 'packages', 'package-5', 'license'),
+        join(cwd, 'packages', 'package-5', 'license'),
       ]);
     });
   });

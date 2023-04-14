@@ -1,6 +1,6 @@
 import log from 'npmlog';
 
-import { getChildProcessCount } from '../child-process';
+import { getChildProcessCount } from '../child-process.js';
 
 export function warnIfHanging() {
   const childProcessCount = getChildProcessCount();

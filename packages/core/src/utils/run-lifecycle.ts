@@ -1,10 +1,10 @@
 import log from 'npmlog';
 import runScript from '@npmcli/run-script';
-
-import { npmConf } from '../utils/npm-conf';
-import { LifecycleConfig } from '../models';
-import { Package } from '../package';
 import PQueue from 'p-queue';
+
+import { npmConf } from '../utils/npm-conf.js';
+import { LifecycleConfig } from '../models/index.js';
+import { Package } from '../package.js';
 
 const queue = new PQueue({ concurrency: 1 });
 
@@ -84,7 +84,6 @@ export function runLifecycle(pkg: Package, stage: string, options: LifecycleConf
     }
   }
 
-  /* istanbul ignore else */
   // eslint-disable-next-line no-underscore-dangle
   if (pkg.__isLernaPackage) {
     // To ensure npm-lifecycle creates the correct npm_package_* env vars,

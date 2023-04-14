@@ -1,8 +1,6 @@
-import { listableFormat } from './lib/listable-format';
-import { listableOptions } from './lib/listable-options';
+import { listableFormat } from './lib/listable-format.js';
 
 const listable = {
   format: listableFormat,
-  options: listableOptions,
 };
 export { listable };

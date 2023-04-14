@@ -1,14 +1,14 @@
 import { LifecycleConfig, Package, RawManifest, runLifecycle } from '@lerna-lite/core';
 import { OneTimePasswordCache, otplease } from '@lerna-lite/version';
-import fs from 'fs-extra';
+import { readFile } from 'fs/promises';
 import log from 'npmlog';
 import npa from 'npm-package-arg';
-import path from 'path';
+import { join } from 'node:path';
 import pify from 'pify';
 import { publish } from 'libnpmpublish';
 import readJSON from 'read-package-json';
 
-import { LibNpmPublishOptions, PackagePublishConfig } from '../models';
+import { LibNpmPublishOptions, PackagePublishConfig } from '../models/index.js';
 
 const readJSONAsync = pify(readJSON);
 
@@ -60,10 +60,10 @@ export function npmPublish(
 
       if (pkg.contents !== pkg.location) {
         // 'rebase' manifest used to generated directory
-        manifestLocation = path.join(pkg.contents, 'package.json');
+        manifestLocation = join(pkg.contents, 'package.json');
       }
 
-      return Promise.all([fs.readFile(tarFilePath), readJSONAsync(manifestLocation) as RawManifest]);
+      return Promise.all([readFile(tarFilePath), readJSONAsync(manifestLocation) as RawManifest]);
     });
     chain = chain.then(([tarData, manifest]: [any, RawManifest]) => {
       // non-default tag needs to override publishConfig.tag,
@@ -98,9 +98,7 @@ export function npmPublish(
  * @param {PackagePublishConfig} publishConfig
  * @returns {Omit<PackagePublishConfig, 'tag'> & { defaultTag?: string }}
  */
-function publishConfigToOpts(
-  publishConfig: PackagePublishConfig
-): Omit<PackagePublishConfig, 'tag'> & { defaultTag?: string } {
+function publishConfigToOpts(publishConfig: PackagePublishConfig): Omit<PackagePublishConfig, 'tag'> & { defaultTag?: string } {
   const opts = { ...publishConfig };
 
   // npm v7 renamed tag internally

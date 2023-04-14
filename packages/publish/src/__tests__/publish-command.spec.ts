@@ -1,62 +1,54 @@
+import { beforeAll, describe, expect, it, Mock, vi } from 'vitest';
+
 // FIXME: better mock for version command
-jest.mock('../../../version/dist/lib/git-push', () =>
-  jest.requireActual('../../../version/src/lib/__mocks__/git-push')
-);
-jest.mock('../../../version/dist/lib/is-anything-committed', () =>
-  jest.requireActual('../../../version/src/lib/__mocks__/is-anything-committed')
-);
-jest.mock('../../../version/dist/lib/is-behind-upstream', () =>
-  jest.requireActual('../../../version/src/lib/__mocks__/is-behind-upstream')
-);
-jest.mock('../../../version/dist/lib/remote-branch-exists', () =>
-  jest.requireActual('../../../version/src/lib/__mocks__/remote-branch-exists')
-);
+vi.mock('../../../version/src/lib/git-push', async () => await vi.importActual('../../../version/src/lib/__mocks__/git-push'));
+vi.mock('../../../version/src/lib/is-anything-committed', async () => await vi.importActual('../../../version/src/lib/__mocks__/is-anything-committed'));
+vi.mock('../../../version/src/lib/is-behind-upstream', async () => await vi.importActual('../../../version/src/lib/__mocks__/is-behind-upstream'));
+vi.mock('../../../version/src/lib/remote-branch-exists', async () => await vi.importActual('../../../version/src/lib/__mocks__/remote-branch-exists'));
 
 // mocked modules of @lerna-lite/version
-jest.mock('@lerna-lite/version', () => ({
-  ...jest.requireActual('@lerna-lite/version'), // return the other real methods, below we'll mock only 2 of the methods
-  getOneTimePassword: jest.fn(),
+vi.mock('@lerna-lite/version', async () => ({
+  ...(await vi.importActual<any>('../../../version/src/version-command')),
+  getOneTimePassword: vi.fn(),
 }));
 
 // mocked modules of @lerna-lite/core
-jest.mock('@lerna-lite/core', () => ({
-  ...jest.requireActual('@lerna-lite/core'), // return the other real methods, below we'll mock only 2 of the methods
-  Command: jest.requireActual('../../../core/src/command').Command,
-  conf: jest.requireActual('../../../core/src/command').conf,
-  collectUpdates: jest.requireActual('../../../core/src/__mocks__/collect-updates').collectUpdates,
-  throwIfUncommitted: jest.requireActual('../../../core/src/__mocks__/check-working-tree').throwIfUncommitted,
-  logOutput: jest.requireActual('../../../core/src/__mocks__/output').logOutput,
-  promptConfirmation: jest.requireActual('../../../core/src/__mocks__/prompt').promptConfirmation,
-  promptSelectOne: jest.requireActual('../../../core/src/__mocks__/prompt').promptSelectOne,
-  promptTextInput: jest.requireActual('../../../core/src/__mocks__/prompt').promptTextInput,
-  npmConf: jest.requireActual('../../../core/src/utils/npm-conf').npmConf,
-  writeLogFile: jest.requireActual('../../../core/src/utils/write-log-file').writeLogFile,
-  runTopologically: jest.requireActual('../../../core/src/utils/run-topologically').runTopologically,
-  QueryGraph: jest.requireActual('../../../core/src/utils/query-graph').QueryGraph,
+vi.mock('@lerna-lite/core', async () => ({
+  ...(await vi.importActual<any>('../../../core/src/index')),
+  collectUpdates: (await vi.importActual<any>('../../../core/src/__mocks__/collect-updates')).collectUpdates,
+  throwIfUncommitted: (await vi.importActual<any>('../../../core/src/__mocks__/check-working-tree')).throwIfUncommitted,
+  logOutput: (await vi.importActual<any>('../../../core/src/__mocks__/output')).logOutput,
+  promptConfirmation: (await vi.importActual<any>('../../../core/src/__mocks__/prompt')).promptConfirmation,
+  promptSelectOne: (await vi.importActual<any>('../../../core/src/__mocks__/prompt')).promptSelectOne,
+  promptTextInput: (await vi.importActual<any>('../../../core/src/__mocks__/prompt')).promptTextInput,
 }));
 
 // also point to the local publish command so that all mocks are properly used even by the command-runner
-jest.mock('@lerna-lite/publish', () => jest.requireActual('../publish-command'));
+vi.mock('@lerna-lite/publish', async () => await vi.importActual('../publish-command'));
 
 // local modules _must_ be explicitly mocked
-jest.mock('../lib/get-packages-without-license', () =>
-  jest.requireActual('../lib/__mocks__/get-packages-without-license')
-);
-jest.mock('../lib/verify-npm-package-access', () => jest.requireActual('../lib/__mocks__/verify-npm-package-access'));
-jest.mock('../lib/get-npm-username', () => jest.requireActual('../lib/__mocks__/get-npm-username'));
-jest.mock('../lib/get-two-factor-auth-required', () =>
-  jest.requireActual('../lib/__mocks__/get-two-factor-auth-required')
-);
-jest.mock('../lib/get-unpublished-packages', () => jest.requireActual('../lib/__mocks__/get-unpublished-packages'));
-jest.mock('../lib/npm-publish', () => jest.requireActual('../lib/__mocks__/npm-publish'));
-jest.mock('../lib/npm-dist-tag', () => jest.requireActual('../lib/__mocks__/npm-dist-tag'));
-jest.mock('../lib/pack-directory', () => jest.requireActual('../lib/__mocks__/pack-directory'));
-jest.mock('../lib/git-checkout');
+vi.mock('../lib/get-packages-without-license', async () => await vi.importActual('../lib/__mocks__/get-packages-without-license'));
+vi.mock('../lib/verify-npm-package-access', async () => await vi.importActual('../lib/__mocks__/verify-npm-package-access'));
+vi.mock('../lib/get-npm-username', async () => await vi.importActual('../lib/__mocks__/get-npm-username'));
+vi.mock('../lib/get-two-factor-auth-required', async () => await vi.importActual('../lib/__mocks__/get-two-factor-auth-required'));
+vi.mock('../lib/get-unpublished-packages', async () => await vi.importActual('../lib/__mocks__/get-unpublished-packages'));
+vi.mock('../lib/npm-publish', async () => await vi.importActual('../lib/__mocks__/npm-publish'));
+vi.mock('../lib/npm-dist-tag', async () => await vi.importActual('../lib/__mocks__/npm-dist-tag'));
+vi.mock('../lib/pack-directory', async () => await vi.importActual('../lib/__mocks__/pack-directory'));
+vi.mock('../lib/git-checkout');
 
-import fs from 'fs-extra';
-import path from 'path';
+vi.mock('fs-extra/esm', async () => ({
+  ...(await vi.importActual<any>('fs-extra/esm')),
+  outputFileSync: vi.fn(),
+}));
+
+import { outputFileSync, outputJson } from 'fs-extra/esm';
+import { dirname, join } from 'node:path';
+import { fileURLToPath } from 'node:url';
 
 // helpers
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = dirname(__filename);
 import { loggingOutput } from '@lerna-test/helpers/logging-output';
 import { commitChangeToPackage } from '@lerna-test/helpers';
 import { commandRunner, initFixtureFactory } from '@lerna-test/helpers';
@@ -84,7 +76,7 @@ import * as npmDistTag from '../lib/npm-dist-tag';
 
 const createArgv = (cwd, ...args) => {
   args.unshift('publish');
-  if (args.length > 0 && args[1] && args[1].length > 0 && !args[1].startsWith('-')) {
+  if (args.length > 0 && args[1]?.length > 0 && !args[1].startsWith('-')) {
     args[1] = `--bump=${args[1]}`;
   }
   const parserArgs = args.join(' ');
@@ -95,7 +87,7 @@ const createArgv = (cwd, ...args) => {
   return argv as unknown as PublishCommandOption;
 };
 
-(gitCheckout as jest.Mock).mockImplementation(() => Promise.resolve());
+(gitCheckout as Mock).mockImplementation(() => Promise.resolve());
 
 describe('PublishCommand', () => {
   describe('cli validation', () => {
@@ -103,13 +95,6 @@ describe('PublishCommand', () => {
 
     beforeAll(async () => {
       cwd = await initFixture('normal');
-    });
-
-    it('is displaying a warning when using deprecated flag --git-dry-run', async () => {
-      await lernaPublish(cwd)('from-package', '--git-dry-run');
-
-      const logMessages = loggingOutput();
-      expect(logMessages).toContain('--git-dry-run has been renamed --dry-run');
     });
 
     it('exits early when no changes found', async () => {
@@ -167,18 +152,18 @@ describe('PublishCommand', () => {
       expect(promptConfirmation).toHaveBeenLastCalledWith('Are you sure you want to publish these packages?');
       expect((packDirectory as any).registry).toMatchInlineSnapshot(`
         Set {
-          "package-1",
-          "package-4",
-          "package-2",
-          "package-3",
+          package-1,
+          package-4,
+          package-2,
+          package-3,
         }
       `);
       expect((npmPublish as typeof npmPublishMock).registry).toMatchInlineSnapshot(`
         Map {
-          "package-1" => "latest",
-          "package-4" => "latest",
-          "package-2" => "latest",
-          "package-3" => "latest",
+          package-1 => latest,
+          package-4 => latest,
+          package-2 => latest,
+          package-3 => latest,
         }
       `);
       expect((npmPublish as typeof npmPublishMock).order()).toEqual([
@@ -212,18 +197,18 @@ describe('PublishCommand', () => {
       expect(promptConfirmation).toHaveBeenLastCalledWith('Are you sure you want to publish these packages?');
       expect((packDirectory as any).registry).toMatchInlineSnapshot(`
         Set {
-          "@my-workspace/package-1",
-          "@my-workspace/package-4",
-          "@my-workspace/package-2",
-          "@my-workspace/package-3",
+          @my-workspace/package-1,
+          @my-workspace/package-4,
+          @my-workspace/package-2,
+          @my-workspace/package-3,
         }
       `);
       expect((npmPublish as typeof npmPublishMock).registry).toMatchInlineSnapshot(`
         Map {
-          "@my-workspace/package-1" => "latest",
-          "@my-workspace/package-4" => "latest",
-          "@my-workspace/package-2" => "latest",
-          "@my-workspace/package-3" => "latest",
+          @my-workspace/package-1 => latest,
+          @my-workspace/package-4 => latest,
+          @my-workspace/package-2 => latest,
+          @my-workspace/package-3 => latest,
         }
       `);
       expect((npmPublish as typeof npmPublishMock).order()).toEqual([
@@ -304,8 +289,8 @@ describe('PublishCommand', () => {
       const logMessages = loggingOutput('warn');
       expect(logMessages).toMatchInlineSnapshot(`
         [
-          "--graph-type=dependencies is deprecated and will be removed in the next major version of lerna-lite. If you have a use-case you feel requires it please open an issue to discuss: https://github.com/lerna/lerna/issues/new/choose",
-          "we recommend using --sync-workspace-lock which will sync your lock file via your favorite npm client instead of relying on Lerna-Lite itself to update it.",
+          --graph-type=dependencies is deprecated and will be removed in the next major version of lerna-lite. If you have a use-case you feel requires it please open an issue to discuss: https://github.com/lerna/lerna/issues/new/choose,
+          we recommend using --sync-workspace-lock which will sync your lock file via your favorite npm client instead of relying on Lerna-Lite itself to update it.,
         ]
       `);
     });
@@ -351,14 +336,14 @@ describe('PublishCommand', () => {
   });
 
   describe('--otp', () => {
-    (getOneTimePassword as jest.Mock).mockImplementation(() => Promise.resolve('654321'));
+    (getOneTimePassword as Mock).mockImplementation(() => Promise.resolve('654321'));
 
     it('passes one-time password to npm commands', async () => {
       const testDir = await initFixture('normal');
       const otp = 123456;
 
       // cli option skips prompt
-      (getTwoFactorAuthRequired as jest.Mock).mockResolvedValueOnce(true);
+      (getTwoFactorAuthRequired as Mock).mockResolvedValueOnce(true);
 
       await new PublishCommand(createArgv(testDir, '--otp', otp));
 
@@ -375,7 +360,7 @@ describe('PublishCommand', () => {
       const testDir = await initFixture('normal');
       const otp = '654321';
 
-      (getTwoFactorAuthRequired as jest.Mock).mockResolvedValueOnce(true);
+      (getTwoFactorAuthRequired as Mock).mockResolvedValueOnce(true);
 
       const command = new PublishCommand(createArgv(testDir, '--verify-access', true));
       await command;
@@ -394,7 +379,7 @@ describe('PublishCommand', () => {
     it('prompts for OTP when option missing, account-level 2FA enabled, and verify access is true', async () => {
       const testDir = await initFixture('normal');
 
-      (getTwoFactorAuthRequired as jest.Mock).mockResolvedValueOnce(true);
+      (getTwoFactorAuthRequired as Mock).mockResolvedValueOnce(true);
 
       await new PublishCommand(createArgv(testDir, '--verify-access', true));
 
@@ -410,7 +395,7 @@ describe('PublishCommand', () => {
     it('prompts for OTP when option missing, account-level 2FA enabled and shows a log info about it when in --dry-run mode', async () => {
       const testDir = await initFixture('normal');
 
-      (getTwoFactorAuthRequired as jest.Mock).mockResolvedValueOnce(true);
+      (getTwoFactorAuthRequired as Mock).mockResolvedValueOnce(true);
 
       await new PublishCommand(createArgv(testDir, '--verify-access', true, '--dry-run'));
       const logMessages = loggingOutput('info');
@@ -421,7 +406,7 @@ describe('PublishCommand', () => {
     it('defers OTP prompt when option missing, account-level 2FA enabled, and verify access is not true', async () => {
       const testDir = await initFixture('normal');
 
-      (getTwoFactorAuthRequired as jest.Mock).mockResolvedValueOnce(true);
+      (getTwoFactorAuthRequired as Mock).mockResolvedValueOnce(true);
 
       await lernaPublish(testDir)();
 
@@ -500,14 +485,12 @@ describe('PublishCommand', () => {
   });
 
   describe('--summary-file', () => {
-    beforeAll(() => ((fs.outputFileSync as any) = jest.fn()));
-    afterAll(() => ((fs.outputFileSync as any) = jest.requireActual('fs-extra').outputFileSync));
-
     it('skips creating the summary file', async () => {
+      (outputFileSync as any).mockImplementationOnce(() => true);
       const cwd = await initFixture('normal');
       await lernaPublish(cwd);
 
-      expect(fs.outputFileSync).not.toHaveBeenCalled();
+      expect(outputFileSync).not.toHaveBeenCalled();
     });
 
     it('creates the summary file within the provided directory', async () => {
@@ -520,10 +503,7 @@ describe('PublishCommand', () => {
         { packageName: 'package-3', version: '1.0.1' },
         { packageName: 'package-4', version: '1.0.1' },
       ];
-      expect(fs.outputFileSync).toHaveBeenCalledWith(
-        './outputs/lerna-publish-summary.json',
-        JSON.stringify(expectedJsonResponse)
-      );
+      expect(outputFileSync).toHaveBeenCalledWith('./outputs/lerna-publish-summary.json', JSON.stringify(expectedJsonResponse));
     });
 
     it('creates the summary file at the root when no custom directory is provided', async () => {
@@ -536,10 +516,7 @@ describe('PublishCommand', () => {
         { packageName: 'package-3', version: '1.0.1' },
         { packageName: 'package-4', version: '1.0.1' },
       ];
-      expect(fs.outputFileSync).toHaveBeenCalledWith(
-        './lerna-publish-summary.json',
-        JSON.stringify(expectedJsonResponse)
-      );
+      expect(outputFileSync).toHaveBeenCalledWith('./lerna-publish-summary.json', JSON.stringify(expectedJsonResponse));
     });
   });
 
@@ -552,18 +529,18 @@ describe('PublishCommand', () => {
       expect(promptConfirmation).toHaveBeenLastCalledWith('Are you sure you want to publish these packages?');
       expect((packDirectory as any).registry).toMatchInlineSnapshot(`
         Set {
-          "package-1",
-          "package-4",
-          "package-2",
-          "package-3",
+          package-1,
+          package-4,
+          package-2,
+          package-3,
         }
       `);
       expect((npmPublish as typeof npmPublishMock).registry).toMatchInlineSnapshot(`
         Map {
-          "package-1" => "latest",
-          "package-4" => "latest",
-          "package-2" => "latest",
-          "package-3" => "latest",
+          package-1 => latest,
+          package-4 => latest,
+          package-2 => latest,
+          package-3 => latest,
         }
       `);
       expect((npmPublish as typeof npmPublishMock).order()).toEqual([
@@ -577,9 +554,7 @@ describe('PublishCommand', () => {
       expect(npmDistTag.add).not.toHaveBeenCalled();
 
       expect(getNpmUsername).toHaveBeenCalled();
-      expect(getNpmUsername).toHaveBeenLastCalledWith(
-        expect.objectContaining({ registry: 'https://registry.npmjs.org/' })
-      );
+      expect(getNpmUsername).toHaveBeenLastCalledWith(expect.objectContaining({ registry: 'https://registry.npmjs.org/' }));
 
       expect(verifyNpmPackageAccess).toHaveBeenCalled();
       expect(verifyNpmPackageAccess).toHaveBeenLastCalledWith(
@@ -591,25 +566,7 @@ describe('PublishCommand', () => {
       expect(getTwoFactorAuthRequired).toHaveBeenCalled();
       expect(getTwoFactorAuthRequired).toHaveBeenLastCalledWith(expect.objectContaining({ otp: undefined }));
 
-      expect(gitCheckout).toHaveBeenCalledWith(
-        expect.any(Array),
-        { granularPathspec: true },
-        { cwd: testDir },
-        undefined
-      );
-    });
-  });
-
-  describe('--no-workspace-strict-match', () => {
-    it('shows warning that this is the default behavior and that this option is no longer needed', async () => {
-      const cwd = await initFixture('normal');
-
-      await lernaPublish(cwd)('--no-workspace-strict-match');
-
-      const logMessages = loggingOutput('warn');
-      expect(logMessages).toContain(
-        'Providing --no-workspace-strict-match is deprecated and will be removed in future version, we will make "workspace:" protocol strict matching in every case.'
-      );
+      expect(gitCheckout).toHaveBeenCalledWith(expect.any(Array), { granularPathspec: true }, { cwd: testDir }, undefined);
     });
   });
 
@@ -635,7 +592,7 @@ describe('PublishCommand', () => {
     });
 
     it('is implied when npm username is undefined', async () => {
-      (getNpmUsername as jest.Mock).mockImplementationOnce(() => Promise.resolve());
+      (getNpmUsername as Mock).mockImplementationOnce(() => Promise.resolve());
 
       const cwd = await initFixture('normal');
 
@@ -676,19 +633,19 @@ describe('PublishCommand', () => {
 
   describe('--contents', () => {
     it('allows you to do fancy angular crap', async () => {
-      jest.spyOn(console, 'log').mockImplementation(() => {});
+      vi.spyOn(console, 'log').mockImplementation(() => {});
       const cwd = await initFixture('lifecycle');
 
       await new PublishCommand(createArgv(cwd, '--contents', 'dist'));
 
-      const [[pkgOne, dirOne, opts], [pkgTwo, dirTwo]] = (packDirectory as jest.Mock).mock.calls;
+      const [[pkgOne, dirOne, opts], [pkgTwo, dirTwo]] = (packDirectory as Mock).mock.calls;
 
       // second argument to packDirectory() is the location, _not_ the contents
       expect(dirOne).toBe(pkgOne.location);
       expect(dirTwo).toBe(pkgTwo.location);
 
-      expect(pkgOne.contents).toBe(path.join(pkgOne.location, 'dist'));
-      expect(pkgTwo.contents).toBe(path.join(pkgTwo.location, 'dist'));
+      expect(pkgOne.contents).toBe(join(pkgOne.location, 'dist'));
+      expect(pkgTwo.contents).toBe(join(pkgTwo.location, 'dist'));
 
       // opts is a snapshot of npm-conf instance
       expect(packDirectory).toHaveBeenCalledWith(pkgOne, dirOne, opts);
@@ -711,17 +668,17 @@ describe('PublishCommand', () => {
       expect(packDirectory).toHaveBeenCalledWith(
         expect.objectContaining({
           name: 'package-1',
-          contents: path.join(cwd, 'packages/package-1/dist'),
+          contents: join(cwd, 'packages/package-1/dist'),
         }),
-        path.join(cwd, 'packages/package-1'),
+        join(cwd, 'packages/package-1'),
         expect.any(Object)
       );
       expect(packDirectory).toHaveBeenCalledWith(
         expect.objectContaining({
           name: 'package-2',
-          contents: path.join(cwd, 'packages/package-2'),
+          contents: join(cwd, 'packages/package-2'),
         }),
-        path.join(cwd, 'packages/package-2'),
+        join(cwd, 'packages/package-2'),
         expect.any(Object)
       );
     });
@@ -740,15 +697,15 @@ describe('PublishCommand', () => {
     it('set "describeTag" in lerna.json', async () => {
       const testDir = await initFixture('normal');
 
-      await fs.outputJSON(path.join(testDir, 'lerna.json'), {
+      await outputJson(join(testDir, 'lerna.json'), {
         version: 'independent',
         describeTag: '*custom-tag*',
       });
       await new PublishCommand(createArgv(testDir, '--canary'));
 
-      expect(collectUpdates.mock.calls[0][3].describeTag).toBe('*custom-tag*');
+      expect((collectUpdates as Mock).mock.calls[0][3].describeTag).toBe('*custom-tag*');
 
-      expect(collectUpdates.mock.calls[0][3].isIndependent).toBe(true);
+      expect((collectUpdates as Mock).mock.calls[0][3].isIndependent).toBe(true);
     });
   });
 });

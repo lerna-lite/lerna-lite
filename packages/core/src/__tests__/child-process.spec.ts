@@ -1,17 +1,26 @@
+import { describe, expect, it, vi } from 'vitest';
 import chalk from 'chalk';
 import npmlog from 'npmlog';
 // file under test
-import { exec, execSync, getChildProcessCount, spawn } from '../child-process';
+import { exec, execSync, getChildProcessCount, getExitCode, spawn, spawnStreaming } from '../child-process';
 import { Package } from '../package';
 
 describe('childProcess', () => {
+  it('should throw type error on weird but rare error structure', () => {
+    try {
+      getExitCode({ exitCode: { message: 'some error' } });
+    } catch (e) {
+      expect(e.message).toBe('Received unexpected exit code value {"message":"some error"}');
+    }
+  });
+
   describe('.execSync()', () => {
     it('should execute a command in a child process and return the result', () => {
       expect(execSync('echo', ['execSync'])).toContain(`execSync`);
     });
 
     it('should execute a command in dry-run and log the command', () => {
-      const logSpy = jest.spyOn(npmlog, 'info');
+      const logSpy = vi.spyOn(npmlog, 'info');
       execSync('echo', ['execSync'], undefined, true);
       expect(logSpy).toHaveBeenCalledWith(chalk.bold.magenta('[dry-run] >'), 'echo execSync');
     });
@@ -30,7 +39,7 @@ describe('childProcess', () => {
     });
 
     it('should execute a command in dry-run and log the command', () => {
-      const logSpy = jest.spyOn(npmlog, 'info');
+      const logSpy = vi.spyOn(npmlog, 'info');
       exec('echo', ['exec'], undefined, true);
       expect(logSpy).toHaveBeenCalledWith(chalk.bold.magenta('[dry-run] >'), 'echo exec');
     });
@@ -78,13 +87,46 @@ describe('childProcess', () => {
     });
 
     it('should execute a command in dry-run and log the command', () => {
-      const logSpy = jest.spyOn(npmlog, 'info');
+      const logSpy = vi.spyOn(npmlog, 'info');
       spawn('echo', ['-n'], undefined, true);
       expect(logSpy).toHaveBeenCalledWith(chalk.bold.magenta('[dry-run] >'), 'echo -n');
     });
 
     it('decorates opts.pkg on error if caught', async () => {
       const result = spawn('exit', ['123'], {
+        pkg: { name: 'shelled' } as Package,
+        shell: true,
+      });
+
+      await expect(result).rejects.toThrow(
+        expect.objectContaining({
+          exitCode: 123,
+          pkg: { name: 'shelled' },
+        })
+      );
+    });
+  });
+
+  describe('.spawnStreaming()', () => {
+    it('should spawn a command in a child process that always inherits stdio', async () => {
+      const child = spawnStreaming('echo', ['-n']) as any;
+      expect(child.stdio).toEqual([null, expect.anything(), expect.anything()]);
+
+      const { exitCode, signal } = await child;
+      expect(exitCode).toBe(0);
+      expect(signal).toBe(undefined);
+    });
+
+    it('should execute a command in dry-run and log the command', async () => {
+      const logSpy = vi.spyOn(npmlog, 'info');
+
+      await spawnStreaming('echo', ['-n'], { stdio: 'inherit' }, 'my-prefix', true);
+
+      expect(logSpy).toHaveBeenCalledWith(chalk.bold.magenta('[dry-run] >'), 'echo -n');
+    });
+
+    it('decorates opts.pkg on error if caught', async () => {
+      const result = spawnStreaming('exit', ['123'], {
         pkg: { name: 'shelled' } as Package,
         shell: true,
       });

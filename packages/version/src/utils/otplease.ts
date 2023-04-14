@@ -1,6 +1,6 @@
 import { promptTextInput } from '@lerna-lite/core';
 
-import { OneTimePasswordCache } from '../models';
+import { OneTimePasswordCache } from '../models/index.js';
 
 // basic single-entry semaphore
 const semaphore: any = {
@@ -20,7 +20,6 @@ const semaphore: any = {
   },
   release() {
     const resolve = this._resolve;
-    // istanbul ignore else
     if (resolve) {
       this._resolve = undefined;
       this._promise = undefined;
@@ -109,8 +108,7 @@ export function getOneTimePassword(message = 'This operation requires a one-time
     filter: (otp: string) => otp.replace(/\s+/g, ''),
     validate: (otp?: string) =>
       (otp && /^[\d ]+$|^[A-Fa-f0-9]{64,64}$/.test(otp)) ||
-      'Must be a valid one-time-password. ' +
-        'See https://docs.npmjs.com/getting-started/using-two-factor-authentication',
+      'Must be a valid one-time-password. ' + 'See https://docs.npmjs.com/getting-started/using-two-factor-authentication',
   });
 }
 

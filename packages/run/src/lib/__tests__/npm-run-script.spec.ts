@@ -1,5 +1,8 @@
+import { describe, expect, it, Mock, vi } from 'vitest';
+
 // mocked modules
-jest.mock('@lerna-lite/core');
+vi.mock('@lerna-lite/core');
+
 import { exec, spawnStreaming } from '@lerna-lite/core';
 import { RunScriptOption, ScriptStreamingOption } from '../../models';
 
@@ -7,8 +10,8 @@ import { RunScriptOption, ScriptStreamingOption } from '../../models';
 import { npmRunScript, npmRunScriptStreaming } from '../npm-run-script';
 
 describe('npm-run-script', () => {
-  (exec as jest.Mock).mockResolvedValue(null);
-  (spawnStreaming as jest.Mock).mockResolvedValue(null);
+  (exec as Mock).mockResolvedValue(null);
+  (spawnStreaming as Mock).mockResolvedValue(null);
 
   describe('npmRunScript()', () => {
     it('runs an npm script in a directory', async () => {

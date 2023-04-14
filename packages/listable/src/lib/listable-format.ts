@@ -1,14 +1,12 @@
-import { Package, QueryGraph } from '@lerna-lite/core';
+import { ListableOption, Package, QueryGraph } from '@lerna-lite/core';
 import chalk from 'chalk';
 import columnify from 'columnify';
-import path from 'path';
-
-import { ListableOptions } from '../models';
+import { relative } from 'node:path';
 
 /**
  * Format a list of packages according to specified options.
  * @param {import("@lerna/package").Package[]} pkgList
- * @param {import("./listable-options").ListableOptions} options
+ * @param {import("./listable-options").ListableOption} options
  */
 export function listableFormat(pkgList, options) {
   const viewOptions = parseViewOptions(options);
@@ -35,7 +33,7 @@ export function listableFormat(pkgList, options) {
 /**
  * @param {import("./listable-options").ListableOptions} options
  */
-function parseViewOptions(options: ListableOptions) {
+function parseViewOptions(options: ListableOption) {
   const alias = options._[0];
 
   return {
@@ -97,10 +95,7 @@ function formatNDJSON(resultList: ReturnType<typeof filterResultList>) {
  * @param {ReturnType<typeof filterResultList>} resultList
  * @param {ReturnType<typeof parseViewOptions>} viewOptions
  */
-function formatJSONGraph(
-  resultList: ReturnType<typeof filterResultList>,
-  viewOptions: ReturnType<typeof parseViewOptions>
-) {
+function formatJSONGraph(resultList: ReturnType<typeof filterResultList>, viewOptions: ReturnType<typeof parseViewOptions>) {
   // https://en.wikipedia.org/wiki/Adjacency_list
   const graph = {};
 
@@ -158,10 +153,7 @@ function makeParseable(pkg: Package) {
  * @param {ReturnType<typeof filterResultList>} resultList
  * @param {ReturnType<typeof parseViewOptions>} viewOptions
  */
-function formatParseable(
-  resultList: ReturnType<typeof filterResultList>,
-  viewOptions: ReturnType<typeof parseViewOptions>
-) {
+function formatParseable(resultList: ReturnType<typeof filterResultList>, viewOptions: ReturnType<typeof parseViewOptions>) {
   return resultList.map(viewOptions.showLong ? makeParseable : (pkg) => pkg.location).join('\n');
 }
 
@@ -186,10 +178,7 @@ function getColumnOrder(viewOptions: ReturnType<typeof parseViewOptions>) {
  * @param {ReturnType<typeof filterResultList>} resultList
  * @param {ReturnType<typeof parseViewOptions>} viewOptions
  */
-function trimmedColumns(
-  formattedResults: ReturnType<typeof filterResultList>,
-  viewOptions: ReturnType<typeof parseViewOptions>
-) {
+function trimmedColumns(formattedResults: ReturnType<typeof filterResultList>, viewOptions: ReturnType<typeof parseViewOptions>) {
   const str = columnify(formattedResults, {
     showHeaders: false,
     columns: getColumnOrder(viewOptions),
@@ -211,10 +200,7 @@ function trimmedColumns(
  * @param {ReturnType<typeof filterResultList>} resultList
  * @param {ReturnType<typeof parseViewOptions>} viewOptions
  */
-function formatColumns(
-  resultList: ReturnType<typeof filterResultList>,
-  viewOptions: ReturnType<typeof parseViewOptions>
-) {
+function formatColumns(resultList: ReturnType<typeof filterResultList>, viewOptions: ReturnType<typeof parseViewOptions>) {
   const formattedResults = resultList.map((result) => {
     const formatted: Partial<{ location: string; name: string; private: string; version: string }> = {
       name: result.name,
@@ -230,7 +216,7 @@ function formatColumns(
       formatted.private = `(${chalk.red('PRIVATE')})`;
     }
 
-    formatted.location = chalk.grey(path.relative('.', result.location));
+    formatted.location = chalk.grey(relative('.', result.location));
 
     return formatted;
   }) as unknown as Package[];

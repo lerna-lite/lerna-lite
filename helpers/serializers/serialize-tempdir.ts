@@ -1,5 +1,5 @@
-import path from 'path';
 import normalizePath from 'normalize-path';
+import { join } from 'node:path';
 
 // tempy creates subdirectories with hexadecimal names that are 32 characters long
 const TEMP_DIR_REGEXP = /([^\s"]*[\\/][0-9a-f]{32})([^\s"]*)/g;
@@ -18,7 +18,7 @@ const serializeTempdir = {
 };
 
 function serializeProjectRoot(match, cwd, subPath) {
-  return normalizePath(path.join('__TEST_ROOTDIR__', subPath));
+  return normalizePath(join('__TEST_ROOTDIR__', subPath));
 }
 
 export default serializeTempdir;

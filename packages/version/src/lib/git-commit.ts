@@ -1,9 +1,9 @@
-import { EOL } from 'os';
+import { EOL } from 'node:os';
 import log from 'npmlog';
 import { exec, ExecOpts } from '@lerna-lite/core';
 
-import { GitCommitOption } from '../models';
-import { tempWrite } from '../utils';
+import { GitCommitOption } from '../models/index.js';
+import { tempWrite } from '../utils/index.js';
 
 /**
  * @param {string} message

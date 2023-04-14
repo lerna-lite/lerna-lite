@@ -1,17 +1,20 @@
-jest.mock('@lerna-lite/core');
-jest.mock('../get-github-commits');
+import { afterEach, beforeEach, describe, expect, it, Mock, vi } from 'vitest';
 
-const execSyncMock = jest.fn();
-const describeRefSyncMock = jest.fn();
-jest.mock('@lerna-lite/core', () => ({
-  ...(jest.requireActual('@lerna-lite/core') as any), // return the other real methods, below we'll mock only 2 of the methods
+vi.mock('@lerna-lite/core');
+vi.mock('../get-github-commits');
+
+const execSyncMock = vi.fn();
+const describeRefSyncMock = vi.fn();
+vi.mock('@lerna-lite/core', async () => ({
+  ...(await vi.importActual<any>('@lerna-lite/core')), // return the other real methods, below we'll mock only 2 of the methods
   execSync: execSyncMock,
   describeRefSync: describeRefSyncMock,
 }));
 
+import { describeRefSync, execSync } from '@lerna-lite/core';
+
 import { getGithubCommits } from '../get-github-commits';
 import { getCommitsSinceLastRelease, getOldestCommitSinceLastTag } from '../get-commits-since-last-release';
-import { describeRefSync, execSync } from '@lerna-lite/core';
 
 const execOpts = { cwd: '/test' };
 const tagStub = {
@@ -32,19 +35,19 @@ const commitsStub = [
 
 describe('getCommitsSinceLastRelease', () => {
   beforeEach(() => {
-    (describeRefSync as jest.Mock).mockReturnValue(tagStub);
+    (describeRefSync as Mock).mockReturnValue(tagStub);
   });
 
   it('throws an error if used with a remote client other than "github"', async () => {
-    (execSync as jest.Mock).mockReturnValue('"deadbeef 2022-07-01T00:01:02-04:00"');
+    (execSync as Mock).mockReturnValue('"deadbeef 2022-07-01T00:01:02-04:00"');
     await expect(getCommitsSinceLastRelease('gitlab', 'durable', 'main', false, execOpts)).rejects.toThrow(
       'Invalid remote client type, "github" is currently the only supported client with the option --changelog-include-commits-client-login.'
     );
   });
 
   it('should expect commits returned when using "github" when a valid tag is returned', async () => {
-    (getGithubCommits as jest.Mock).mockResolvedValue(commitsStub);
-    (execSync as jest.Mock).mockReturnValue('"deadbeef 2022-07-01T00:01:02-04:00"');
+    (getGithubCommits as Mock).mockResolvedValue(commitsStub);
+    (execSync as Mock).mockReturnValue('"deadbeef 2022-07-01T00:01:02-04:00"');
     const isIndependent = false;
     const result = await getCommitsSinceLastRelease('github', 'durable', 'main', isIndependent, execOpts);
 
@@ -52,8 +55,8 @@ describe('getCommitsSinceLastRelease', () => {
   });
 
   it('should expect commits returned when using "github" when a valid tag in independent mode is returned', async () => {
-    (getGithubCommits as jest.Mock).mockResolvedValue(commitsStub);
-    (execSync as jest.Mock).mockReturnValueOnce('"abcbeef 2022-07-01T00:01:02-04:00"');
+    (getGithubCommits as Mock).mockResolvedValue(commitsStub);
+    (execSync as Mock).mockReturnValueOnce('"abcbeef 2022-07-01T00:01:02-04:00"');
     const isIndependent = true;
     const result = await getCommitsSinceLastRelease('github', 'durable', 'main', isIndependent, execOpts);
 
@@ -65,7 +68,7 @@ describe('getCommitsSinceLastRelease', () => {
 describe('getOldestCommitSinceLastTag', () => {
   describe('without tag', () => {
     beforeEach(() => {
-      (describeRefSync as jest.Mock).mockReturnValue({
+      (describeRefSync as Mock).mockReturnValue({
         lastTagName: undefined,
         lastVersion: undefined,
         refCount: '1',
@@ -75,27 +78,58 @@ describe('getOldestCommitSinceLastTag', () => {
     });
 
     it('should return first commit date when describeRefSync() did not return a tag date', async () => {
-      const execSpy = (execSync as jest.Mock).mockReturnValueOnce('"abcbeef 2022-07-01T00:01:02-04:00"');
+      const execSpy = (execSync as Mock).mockReturnValueOnce('"abcbeef 2022-07-01T00:01:02-04:00"');
       const result = await getOldestCommitSinceLastTag(execOpts);
 
-      expect(execSpy).toHaveBeenCalledWith(
-        'git',
-        ['log', '--oneline', '--format="%h %aI"', '--reverse', '--max-parents=0', 'HEAD'],
-        execOpts
-      );
+      expect(execSpy).toHaveBeenCalledWith('git', ['log', '--oneline', '--format="%h %aI"', '--reverse', '--max-parents=0', 'HEAD'], execOpts);
       expect(result).toEqual({ commitDate: '2022-07-01T00:01:02-04:00', commitHash: 'abcbeef' });
     });
   });
 
-  xdescribe('with existing tag', () => {
+  describe('with existing tag in independent mode', () => {
     beforeEach(() => {
-      (describeRefSync as jest.Mock).mockReturnValue(tagStub);
+      (describeRefSync as Mock).mockReturnValue({
+        ...tagStub,
+        lastTagName: '@my-workspace/pkg-a@2.0.3',
+        lastVersion: '2.0.3',
+      });
+    });
+
+    afterEach(() => {
+      (execSync as Mock).mockReset();
+    });
+
+    it('should expect a tag date & hash but queried with a particular tag match pattern when using independent mode', async () => {
+      const isIndependent = true;
+      const mockExecSyncResult = '"deadabcd 2022-07-01T00:01:02-06:00"';
+      (execSync as Mock).mockReturnValue(mockExecSyncResult);
+      const result = await getOldestCommitSinceLastTag(execOpts, isIndependent, false);
+      const execSpy = (execSync as Mock).mockReturnValueOnce(mockExecSyncResult);
+
+      expect(describeRefSync).toHaveBeenCalledWith({ cwd: '/test', match: '*@*' }, false);
+      expect(execSpy).toHaveBeenCalledWith('git', ['log', '@my-workspace/pkg-a@2.0.3..HEAD', '--format="%h %aI"', '--reverse'], execOpts);
+      expect(result).toEqual({ commitDate: '2022-07-01T00:01:02-06:00', commitHash: 'deadabcd' });
+    });
+
+    it('should expect a commit date and hash when using different time zone', async () => {
+      const isIndependent = true;
+      (execSync as Mock).mockReturnValue('"deadbeef 2022-07-01T00:01:02+01:00"');
+      const result = await getOldestCommitSinceLastTag(execOpts, isIndependent, false);
+      const execSpy = (execSync as Mock).mockReturnValueOnce('"deadbeef 2022-07-01T00:01:02+01:00"');
+
+      expect(describeRefSync).toHaveBeenCalledWith({ cwd: '/test', match: '*@*' }, false);
+      expect(execSpy).toHaveBeenCalledWith('git', ['log', '@my-workspace/pkg-a@2.0.3..HEAD', '--format="%h %aI"', '--reverse'], execOpts);
+      expect(result).toEqual({ commitDate: '2022-07-01T00:01:02+01:00', commitHash: 'deadbeef' });
+    });
+  });
+
+  describe('with existing tag', () => {
+    beforeEach(() => {
+      (describeRefSync as Mock).mockReturnValue(tagStub);
     });
 
     it('should return first commit date and hash when last tag is not found', async () => {
-      const execSpy = (execSync as jest.Mock)
-        .mockReturnValueOnce('')
-        .mockReturnValueOnce('"deedbeaf 2022-07-01T00:01:02-04:00"');
+      const execSpy = (execSync as Mock).mockReturnValueOnce('').mockReturnValueOnce('"deedbeaf 2022-07-01T00:01:02-04:00"');
 
       const result = await getOldestCommitSinceLastTag(execOpts);
 
@@ -105,57 +139,12 @@ describe('getOldestCommitSinceLastTag', () => {
     });
 
     it('should expect a result with a tag date, hash and ref count when last tag is found', async () => {
+      const execSpy = (execSync as Mock).mockReturnValueOnce('"deadbeef 2022-07-01T00:01:02-04:00"');
       const result = await getOldestCommitSinceLastTag(execOpts, false, false);
-      const execSpy = (execSync as jest.Mock).mockReturnValueOnce('"deadbeef 2022-07-01T00:01:02-04:00"');
 
       expect(describeRefSync).toHaveBeenCalledWith({ cwd: '/test' }, false);
       expect(execSpy).toHaveBeenCalledWith('git', ['log', 'v1.0.0..HEAD', '--format="%h %aI"', '--reverse'], execOpts);
       expect(result).toEqual({ commitDate: '2022-07-01T00:01:02-04:00', commitHash: 'deadbeef' });
-    });
-  });
-
-  describe('with existing tag in independent mode', () => {
-    beforeEach(() => {
-      (describeRefSync as jest.Mock).mockReturnValue({
-        ...tagStub,
-        lastTagName: '@my-workspace/pkg-a@2.0.3',
-        lastVersion: '2.0.3',
-      });
-    });
-
-    afterEach(() => {
-      (execSync as jest.Mock).mockReset();
-    });
-
-    it('should expect a tag date & hash but queried with a particular tag match pattern when using independent mode', async () => {
-      const isIndependent = true;
-      const mockExecSyncResult = '"deadabcd 2022-07-01T00:01:02-06:00"';
-      (execSync as jest.Mock).mockReturnValue(mockExecSyncResult);
-      const result = await getOldestCommitSinceLastTag(execOpts, isIndependent, false);
-      const execSpy = (execSync as jest.Mock).mockReturnValueOnce(mockExecSyncResult);
-
-      expect(describeRefSync).toHaveBeenCalledWith({ cwd: '/test', match: '*@*' }, false);
-      expect(execSpy).toHaveBeenCalledWith(
-        'git',
-        ['log', '@my-workspace/pkg-a@2.0.3..HEAD', '--format="%h %aI"', '--reverse'],
-        execOpts
-      );
-      expect(result).toEqual({ commitDate: '2022-07-01T00:01:02-06:00', commitHash: 'deadabcd' });
-    });
-
-    it('should expect a commit date and hash when using different time zone', async () => {
-      const isIndependent = true;
-      (execSync as jest.Mock).mockReturnValue('"deadbeef 2022-07-01T00:01:02+01:00"');
-      const result = await getOldestCommitSinceLastTag(execOpts, isIndependent, false);
-      const execSpy = (execSync as jest.Mock).mockReturnValueOnce('"deadbeef 2022-07-01T00:01:02+01:00"');
-
-      expect(describeRefSync).toHaveBeenCalledWith({ cwd: '/test', match: '*@*' }, false);
-      expect(execSpy).toHaveBeenCalledWith(
-        'git',
-        ['log', '@my-workspace/pkg-a@2.0.3..HEAD', '--format="%h %aI"', '--reverse'],
-        execOpts
-      );
-      expect(result).toEqual({ commitDate: '2022-07-01T00:01:02+01:00', commitHash: 'deadbeef' });
     });
   });
 });

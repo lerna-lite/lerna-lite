@@ -4,7 +4,7 @@
 
 # @lerna-lite/version
 
-## (`lerna version`) - Version command 📑
+## (`lerna version`) - Version command [optional] 📑
 
 Lerna-Lite Version command, bump version of packages changed since the last release.
 
@@ -13,8 +13,7 @@ Lerna-Lite Version command, bump version of packages changed since the last rele
 ## Installation
 
 ```sh
-# simple install or install it globally with -g
-npm install @lerna-lite/cli -D -W
+npm install @lerna-lite/version -D -W
 
 # then use it (see usage below)
 lerna version
@@ -70,25 +69,25 @@ Running `lerna version --conventional-commits` without the above flags will rele
   - [Prerelease](#prerelease)
   - [Options](#options)
     - [`--allow-branch <glob>`](#--allow-branch-glob)
-    - [`--allow-peer-dependencies-update`](#--allow-peer-dependencies-update) (new)
+    - [`--allow-peer-dependencies-update`](#--allow-peer-dependencies-update)
     - [`--amend`](#--amend)
-    - [`--build-metadata <buildMetadata>`](#--build-metadata) (new)
+    - [`--build-metadata <buildMetadata>`](#--build-metadata)
     - [`--changelog-preset`](#--changelog-preset)
     - [`--conventional-commits`](#--conventional-commits)
     - [`--conventional-graduate`](#--conventional-graduate)
     - [`--conventional-prerelease`](#--conventional-prerelease)
-    - [`--conventional-bump-prerelease`](#--conventional-bump-prerelease) (new)
-    - [`--changelog-include-commits-git-author [msg]`](#--changelog-include-commits-git-author-msg) (new)
-    - [`--changelog-include-commits-client-login [msg]`](#--changelog-include-commits-client-login-msg) (new)
-    - [`--changelog-header-message <msg>`](#--changelog-header-message-msg) (new)
-    - [`--changelog-version-message <msg>`](#--changelog-version-message-msg) (new)
+    - [`--conventional-bump-prerelease`](#--conventional-bump-prerelease)
+    - [`--changelog-include-commits-git-author [msg]`](#--changelog-include-commits-git-author-msg)
+    - [`--changelog-include-commits-client-login [msg]`](#--changelog-include-commits-client-login-msg)
+    - [`--changelog-header-message <msg>`](#--changelog-header-message-msg)
     - [`--create-release <type>`](#--create-release-type)
-    - [`--describe-tag <pattern>`](#--describe-tag-pattern) (new)
+    - [`--skip-bump-only-release`](#--skip-bump-only-release)
+    - [`--describe-tag <pattern>`](#--describe-tag-pattern)
     - [`--exact`](#--exact)
-    - [`--independent-subpackages`](#--independent-subpackages) (new)
+    - [`--independent-subpackages`](#--independent-subpackages)
     - [`--force-publish`](#--force-publish)
-    - [`--git-tag-command <cmd>`](#--git-tag-command-cmd) (new)
-    - [`--dry-run`](#--dry-run) (new)
+    - [`--git-tag-command <cmd>`](#--git-tag-command-cmd)
+    - [`--dry-run`](#--dry-run)
     - [`--git-remote <name>`](#--git-remote-name)
     - [`--ignore-changes`](#--ignore-changes)
     - [`--ignore-scripts`](#--ignore-scripts)
@@ -104,17 +103,13 @@ Running `lerna version --conventional-commits` without the above flags will rele
     - [`--npm-client-args`](#--npm-client-args)
     - [`--preid`](#--preid)
     - [`--remote-client <type>`](#--remote-client-type)
-    - [`--signoff-git-commit`](#--signoff-git-commit) (new)
+    - [`--signoff-git-commit`](#--signoff-git-commit)
     - [`--sign-git-commit`](#--sign-git-commit)
     - [`--sign-git-tag`](#--sign-git-tag)
     - [`--force-git-tag`](#--force-git-tag)
     - [`--tag-version-prefix`](#--tag-version-prefix)
-    - [`--sync-workspace-lock`](#--sync-workspace-lock) (new)
+    - [`--sync-workspace-lock`](#--sync-workspace-lock)
     - [`--yes`](#--yes)
-  - [Deprecated Options](#deprecated-options)
-    - [`--cd-version`](#--cd-version)
-    - [`--repo-version`](#--repo-version)
-    - [`--skip-git`](#--skip-git)
   - [Tips](#tips)
     - [Generating Initial Changelogs](#generating-initial-changelogs)
   - [Lifecycle Scripts](#lifecycle-scripts)
@@ -245,7 +240,7 @@ lerna version --conventional-commits --changelog-preset angular-bitbucket
 ```
 
 By default, the changelog preset is set to [`angular`](https://github.com/conventional-changelog/conventional-changelog/tree/master/packages/conventional-changelog-angular#angular-convention).
-In some cases you might want to change either use a another preset or a custom one.
+In some cases you might want to change either use another preset or a custom one.
 
 Presets are names of built-in or installable configuration for conventional changelog.
 Presets may be passed as the full name of the package, or the auto-expanded suffix
@@ -362,18 +357,10 @@ lerna version --conventional-commits --changelog-include-commits-client-login " 
 
 ### `--changelog-header-message <msg>`
 
-Add a custom message at the top of all "changelog.md" files. This option is only available when using `--conventional-commits` and will only impact your project root "changelog.md".
+Add a custom message at the top of all "changelog.md" files. This option is only available when using `--conventional-commits`
 
 ```sh
 lerna version --conventional-commits --changelog-header-message "My Custom Header Message"
-```
-
-### `--changelog-version-message <msg>`
-
-Add a custom message as a prefix to your new version in your "changelog.md" which is located in the root of your project. This option is only available when using `--conventional-commits` and will only impact your project root "changelog.md".
-
-```sh
-lerna version --conventional-commits --changelog-version-message "My Great New Version Message"
 ```
 
 ### `--conventional-bump-prerelease`
@@ -399,6 +386,19 @@ lerna version --conventional-commits --create-release gitlab
 ```
 
 When run with this flag, `lerna version` will create an official GitHub or GitLab release based on the changed packages. Requires `--conventional-commits` to be passed so that changelogs can be generated.
+
+> **Note** to avoid creating too many "Version bump only for package x" when using independent mode, you could enable the option `--skip-bump-only-release`
+
+### `--skip-bump-only-release`
+
+When this option is enabled and a package version is only being bumped without any conventional commits detected, the GitHub/GitLab release will be skipped. This will avoid creating releases with only "Version bump only for package x" in the release notes, however please note that each changelog are still going to be updated with the "version bump only" text.
+
+```sh
+lerna version --create-release github --skip-bump-only-release
+
+# or the same for gitlab
+lerna version --create-release gitlab --skip-bump-only-release
+```
 
 ### `--describe-tag <pattern>`
 When `lerna version` is executed, it will identifies packages that have been updated since the previous tagged release. The rules it identifies are based on describe tag pattern (excuted `git describe --match` behind the scenes).
@@ -732,8 +732,6 @@ This flag will leverage your package manager client to update the project lock f
 
 #### Notes for each client:
 
-> `npm` users: we recommend having npm client version >=8.5.0 installed, so that we can run `npm install --package-lock-only` instead of `npm shrinkwrap` with version < 8.5.0 which would require an extra, and negative, step of renaming the lock file after execution. Also note that npm >=8.5.0 will become the minimal requirement in the future.
-
 > `pnpm`/`yarn` users: we recommend using the [`workspace:` protocol](#workspace-protocol) since it will prefer local dependencies and will make it less likely to fetch packages accidentally from the registry.
 
 > `yarn` users: please note that this will only work with Yarn Berry 3.x and higher since it uses `yarn install --mode update-lockfile` (this will not work with yarn 1.x classic)
@@ -745,10 +743,8 @@ lerna version --sync-workspace-lock
 Depending on the `npmClient` defined, it will perform the following:
 
 ```sh
-# npm is assuming a `package-lock.json` lock file
-# we highly recommend npm client >= 8.5.0
-npm install --package-lock-only     # npm client >= 8.5.0
-npm shrinkwrap --package-lock-only  # npm client < 8.5.0 will execute a file rename of shrinkwrap file behind the scene
+# npm is assuming a `package-lock.json` lock file and npm client >= 8.5.0 is required
+npm install --package-lock-only
 
 # pnpm is assuming a "pnpm-lock.yaml" lock file and "npmClient": "pnpm"
 pnpm install --lockfile-only --ignore-scripts
@@ -766,23 +762,6 @@ lerna version --yes
 
 When run with this flag, `lerna version` will skip all confirmation prompts.
 Useful in [Continuous integration (CI)](https://en.wikipedia.org/wiki/Continuous_integration) to automatically answer the publish confirmation prompt.
-
-## Deprecated Options
-_these options will be removed in the next major version_
-
-### `--cd-version`
-
-Pass the semver keyword to the [`bump`](#semver-bump) positional instead.
-
-### `--repo-version`
-
-Pass an explicit version number to the [`bump`](#semver-bump) positional instead.
-
-### `--skip-git`
-
-Use [`--no-git-tag-version`](#--no-git-tag-version) and [`--no-push`](#--no-push) instead.
-
-> **Note** This option **does not** restrict _all_ git commands from being executed. `git` is still required by `lerna version`.
 
 ## Tips
 

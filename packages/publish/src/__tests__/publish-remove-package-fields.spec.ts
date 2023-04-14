@@ -1,55 +1,52 @@
-// FIXME: better mock for version command
-jest.mock('../../../version/dist/lib/git-push', () =>
-  jest.requireActual('../../../version/src/lib/__mocks__/git-push')
-);
-jest.mock('../../../version/dist/lib/is-anything-committed', () =>
-  jest.requireActual('../../../version/src/lib/__mocks__/is-anything-committed')
-);
-jest.mock('../../../version/dist/lib/is-behind-upstream', () =>
-  jest.requireActual('../../../version/src/lib/__mocks__/is-behind-upstream')
-);
-jest.mock('../../../version/dist/lib/remote-branch-exists', () =>
-  jest.requireActual('../../../version/src/lib/__mocks__/remote-branch-exists')
-);
+import { describe, expect, it, vi } from 'vitest';
 
-// mocked modules of @lerna-lite/core
-jest.mock('@lerna-lite/core', () => ({
-  ...jest.requireActual('@lerna-lite/core'), // return the other real methods, below we'll mock only 2 of the methods
-  collectUpdates: jest.requireActual('../../../core/src/__mocks__/collect-updates').collectUpdates,
-  throwIfUncommitted: jest.requireActual('../../../core/src/__mocks__/check-working-tree').throwIfUncommitted,
+vi.mock('write-pkg', async () => await vi.importActual('../../../version/src/lib/__mocks__/write-pkg'));
+
+// FIXME: better mock for version command
+vi.mock('../../../version/src/lib/git-push', async () => await vi.importActual('../../../version/src/lib/__mocks__/git-push'));
+vi.mock('../../../version/src/lib/is-anything-committed', async () => await vi.importActual('../../../version/src/lib/__mocks__/is-anything-committed'));
+vi.mock('../../../version/src/lib/is-behind-upstream', async () => await vi.importActual('../../../version/src/lib/__mocks__/is-behind-upstream'));
+vi.mock('../../../version/src/lib/remote-branch-exists', async () => await vi.importActual('../../../version/src/lib/__mocks__/remote-branch-exists'));
+
+// mocked modules, mock only certain methods from core
+vi.mock('@lerna-lite/core', async () => ({
+  ...(await vi.importActual<any>('@lerna-lite/core')),
+  Command: (await vi.importActual<any>('../../../core/src/command')).Command,
+  collectUpdates: (await vi.importActual<any>('../../../core/src/__mocks__/collect-updates')).collectUpdates,
   getOneTimePassword: () => Promise.resolve('654321'),
-  logOutput: jest.requireActual('../../../core/src/__mocks__/output').logOutput,
-  promptConfirmation: jest.requireActual('../../../core/src/__mocks__/prompt').promptConfirmation,
-  promptSelectOne: jest.requireActual('../../../core/src/__mocks__/prompt').promptSelectOne,
-  promptTextInput: jest.requireActual('../../../core/src/__mocks__/prompt').promptTextInput,
+  logOutput: (await vi.importActual<any>('../../../core/src/__mocks__/output')).logOutput,
+  promptConfirmation: (await vi.importActual<any>('../../../core/src/__mocks__/prompt')).promptConfirmation,
+  promptSelectOne: (await vi.importActual<any>('../../../core/src/__mocks__/prompt')).promptSelectOne,
+  promptTextInput: (await vi.importActual<any>('../../../core/src/__mocks__/prompt')).promptTextInput,
+  throwIfUncommitted: (await vi.importActual<any>('../../../core/src/__mocks__/check-working-tree')).throwIfUncommitted,
 }));
 
 // also point to the local publish command so that all mocks are properly used even by the command-runner
-jest.mock('@lerna-lite/publish', () => jest.requireActual('../publish-command'));
+vi.mock('@lerna-lite/publish', async () => await vi.importActual('../publish-command'));
+vi.mock('@lerna-lite/version', async () => await vi.importActual('../../../version/src/version-command'));
 
 // local modules _must_ be explicitly mocked
-jest.mock('../lib/get-packages-without-license', () =>
-  jest.requireActual('../lib/__mocks__/get-packages-without-license')
-);
-jest.mock('../lib/verify-npm-package-access', () => jest.requireActual('../lib/__mocks__/verify-npm-package-access'));
-jest.mock('../lib/get-npm-username', () => jest.requireActual('../lib/__mocks__/get-npm-username'));
-jest.mock('../lib/get-two-factor-auth-required', () =>
-  jest.requireActual('../lib/__mocks__/get-two-factor-auth-required')
-);
-jest.mock('../lib/pack-directory', () => jest.requireActual('../lib/__mocks__/pack-directory'));
-jest.mock('../lib/npm-publish', () => jest.requireActual('../lib/__mocks__/npm-publish'));
+vi.mock('../lib/get-packages-without-license', async () => await vi.importActual('../lib/__mocks__/get-packages-without-license'));
+vi.mock('../lib/verify-npm-package-access', async () => await vi.importActual('../lib/__mocks__/verify-npm-package-access'));
+vi.mock('../lib/get-npm-username', async () => await vi.importActual('../lib/__mocks__/get-npm-username'));
+vi.mock('../lib/get-two-factor-auth-required', async () => await vi.importActual('../lib/__mocks__/get-two-factor-auth-required'));
+vi.mock('../lib/pack-directory', async () => await vi.importActual('../lib/__mocks__/pack-directory'));
+vi.mock('../lib/npm-publish', async () => await vi.importActual('../lib/__mocks__/npm-publish'));
 
-import fs from 'fs-extra';
-import path from 'path';
+import { outputFile } from 'fs-extra/esm';
+import { dirname, join } from 'node:path';
 
 // mocked modules
 import writePkg from 'write-pkg';
 
 // helpers
+import { fileURLToPath } from 'node:url';
 import { gitAdd } from '@lerna-test/helpers';
 import { gitTag } from '@lerna-test/helpers';
 import { gitCommit } from '@lerna-test/helpers';
 import { commandRunner, initFixtureFactory } from '@lerna-test/helpers';
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = dirname(__filename);
 const initFixture = initFixtureFactory(__dirname);
 
 // test command
@@ -59,7 +56,7 @@ const lernaPublish = commandRunner(cliCommands);
 
 describe('publish --remove-package-fields', () => {
   const setupChanges = async (cwd, pkgRoot = 'packages') => {
-    await fs.outputFile(path.join(cwd, `${pkgRoot}/package-1/hello.js`), 'world');
+    await outputFile(join(cwd, `${pkgRoot}/package-1/hello.js`), 'world');
     await gitAdd(cwd, '.');
     await gitCommit(cwd, 'setup');
   };
@@ -106,12 +103,7 @@ describe('publish --remove-package-fields', () => {
 
       await gitTag(cwd, 'v1.0.0');
       await setupChanges(cwd);
-      await lernaPublish(cwd)(
-        '--remove-package-fields',
-        'devDependencies.jest',
-        'scripts.build:dev',
-        'exports.index.types'
-      );
+      await lernaPublish(cwd)('--remove-package-fields', 'devDependencies.jest', 'scripts.build:dev', 'exports.index.types');
 
       const publishPkg5 = (writePkg as any).updatedManifest('package-5');
       expect(publishPkg5.devDependencies).toEqual({ 'tiny-tarball': '^1.0.0' });

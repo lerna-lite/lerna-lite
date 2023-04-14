@@ -1,37 +1,42 @@
+import { beforeAll, describe, expect, Mock, test, vi } from 'vitest';
+
+vi.mock('write-pkg', async () => await vi.importActual('../../../version/src/lib/__mocks__/write-pkg'));
+
 // mocked modules of @lerna-lite/core
-jest.mock('@lerna-lite/core', () => ({
-  ...jest.requireActual('@lerna-lite/core'), // return the other real methods, below we'll mock only 2 of the methods
-  logOutput: jest.requireActual('../../../core/src/__mocks__/output').logOutput,
-  promptConfirmation: jest.requireActual('../../../core/src/__mocks__/prompt').promptConfirmation,
-  throwIfUncommitted: jest.requireActual('../../../core/src/__mocks__/check-working-tree').throwIfUncommitted,
+// vi.fn()
+vi.mock('@lerna-lite/core', async () => ({
+  ...(await vi.importActual<any>('../../../core/src/index')),
+  describeRef: vi.fn((await vi.importActual<any>('../../../core/src/utils/describe-ref')).describeRef),
+  logOutput: (await vi.importActual<any>('../../../core/src/__mocks__/output')).logOutput,
+  promptConfirmation: (await vi.importActual<any>('../../../core/src/__mocks__/prompt')).promptConfirmation,
+  promptSelectOne: (await vi.importActual<any>('../../../core/src/__mocks__/prompt')).promptSelectOne,
+  promptTextInput: (await vi.importActual<any>('../../../core/src/__mocks__/prompt')).promptTextInput,
+  throwIfUncommitted: (await vi.importActual<any>('../../../core/src/__mocks__/check-working-tree')).throwIfUncommitted,
 }));
 
-// local modules _must_ be explicitly mocked
-jest.mock('../lib/get-packages-without-license', () =>
-  jest.requireActual('../lib/__mocks__/get-packages-without-license')
-);
-jest.mock('../lib/verify-npm-package-access', () => jest.requireActual('../lib/__mocks__/verify-npm-package-access'));
-jest.mock('../lib/get-npm-username', () => jest.requireActual('../lib/__mocks__/get-npm-username'));
-jest.mock('../lib/get-two-factor-auth-required', () =>
-  jest.requireActual('../lib/__mocks__/get-two-factor-auth-required')
-);
-jest.mock('../lib/npm-publish', () => jest.requireActual('../lib/__mocks__/npm-publish'));
-
 // also point to the local publish command so that all mocks are properly used even by the command-runner
-jest.mock('@lerna-lite/publish', () => jest.requireActual('../publish-command'));
+vi.mock('@lerna-lite/publish', async () => await vi.importActual('../publish-command'));
 
-import fs from 'fs-extra';
-import path from 'path';
+vi.mock('../lib/get-packages-without-license', async () => await vi.importActual('../lib/__mocks__/get-packages-without-license'));
+vi.mock('../lib/verify-npm-package-access', async () => await vi.importActual('../lib/__mocks__/verify-npm-package-access'));
+vi.mock('../lib/get-npm-username', async () => await vi.importActual('../lib/__mocks__/get-npm-username'));
+vi.mock('../lib/get-two-factor-auth-required', async () => await vi.importActual('../lib/__mocks__/get-two-factor-auth-required'));
+vi.mock('../lib/npm-publish', async () => await vi.importActual('../lib/__mocks__/npm-publish'));
+import { outputFile } from 'fs-extra/esm';
+import { dirname, join } from 'node:path';
+import { fileURLToPath } from 'node:url';
 import yargParser from 'yargs-parser';
 
 // mocked modules
 import writePkg from 'write-pkg';
 import { npmPublish } from '../lib/npm-publish';
 import { npmPublish as npmPublishMock } from '../lib/__mocks__/npm-publish';
-import { promptConfirmation, PublishCommandOption, throwIfUncommitted } from '@lerna-lite/core';
+import { promptConfirmation, PublishCommandOption, describeRef, throwIfUncommitted } from '@lerna-lite/core';
 
 // helpers
 import { commandRunner, gitAdd, gitTag, gitCommit, initFixtureFactory, loggingOutput } from '@lerna-test/helpers';
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = dirname(__filename);
 const initFixture = initFixtureFactory(__dirname);
 
 // test command
@@ -43,16 +48,16 @@ const lernaPublish = commandRunner(cliCommands);
 import gitSHA from '@lerna-test/helpers/serializers/serialize-git-sha';
 expect.addSnapshotSerializer(gitSHA);
 
-import coreModule from '@lerna-lite/core';
-
 const createArgv = (cwd: string, ...args: string[]) => {
   args.unshift('publish');
-  if (args.length > 0 && args[1] && args[1].length > 0 && !args[1].startsWith('-')) {
+  if (args.length > 0 && args[1]?.length > 0 && !args[1].startsWith('-')) {
     args[1] = `--bump=${args[1]}`;
   }
   const parserArgs = args.join(' ');
   const argv = yargParser(parserArgs);
   argv['$0'] = cwd;
+  argv['loglevel'] = 'silent';
+  argv.composed = 'composed';
   return argv as unknown as PublishCommandOption;
 };
 
@@ -82,7 +87,7 @@ async function initTaggedFixture(fixtureName, tagVersionPrefix = 'v') {
  * @param {Array[String]..} tuples Any number of [filePath, fileContent] configs
  */
 async function setupChanges(cwd, ...tuples) {
-  await Promise.all(tuples.map(([filePath, content]) => fs.outputFile(path.join(cwd, filePath), content, 'utf8')));
+  await Promise.all(tuples.map(([filePath, content]) => outputFile(join(cwd, filePath), content, 'utf8')));
   await gitAdd(cwd, '.');
   await gitCommit(cwd, 'setup');
 }
@@ -90,28 +95,24 @@ async function setupChanges(cwd, ...tuples) {
 test('publish --canary', async () => {
   const cwd = await initTaggedFixture('normal');
 
-  await setupChanges(
-    cwd,
-    ['packages/package-1/all-your-base.js', 'belong to us'],
-    ['packages/package-4/non-matching-semver.js', 'senpai noticed me']
-  );
+  await setupChanges(cwd, ['packages/package-1/all-your-base.js', 'belong to us'], ['packages/package-4/non-matching-semver.js', 'senpai noticed me']);
   await new PublishCommand(createArgv(cwd, '--canary'));
 
   expect(promptConfirmation).toHaveBeenLastCalledWith('Are you sure you want to publish these packages?');
   expect((npmPublish as typeof npmPublishMock).registry).toMatchInlineSnapshot(`
-      Map {
-        "package-1" => "canary",
-        "package-4" => "canary",
-        "package-2" => "canary",
-        "package-3" => "canary",
-      }
-    `);
+    Map {
+      package-1 => canary,
+      package-4 => canary,
+      package-2 => canary,
+      package-3 => canary,
+    }
+  `);
   expect((writePkg as any).updatedVersions()).toMatchInlineSnapshot(`
     {
-      "package-1": 1.0.1-alpha.0+SHA,
-      "package-2": 1.0.1-alpha.0+SHA,
-      "package-3": 1.0.1-alpha.0+SHA,
-      "package-4": 1.0.1-alpha.0+SHA,
+      package-1: 1.0.1-alpha.0+SHA,
+      package-2: 1.0.1-alpha.0+SHA,
+      package-3: 1.0.1-alpha.0+SHA,
+      package-4: 1.0.1-alpha.0+SHA,
     }
   `);
 });
@@ -119,28 +120,24 @@ test('publish --canary', async () => {
 test('publish --canary with auto-confirm --yes', async () => {
   const cwd = await initTaggedFixture('normal');
 
-  await setupChanges(
-    cwd,
-    ['packages/package-1/all-your-base.js', 'belong to us'],
-    ['packages/package-4/non-matching-semver.js', 'senpai noticed me']
-  );
+  await setupChanges(cwd, ['packages/package-1/all-your-base.js', 'belong to us'], ['packages/package-4/non-matching-semver.js', 'senpai noticed me']);
   await new PublishCommand(createArgv(cwd, '--canary', '--yes'));
 
   expect(promptConfirmation).not.toHaveBeenCalled();
   expect((npmPublish as typeof npmPublishMock).registry).toMatchInlineSnapshot(`
-      Map {
-        "package-1" => "canary",
-        "package-4" => "canary",
-        "package-2" => "canary",
-        "package-3" => "canary",
-      }
-    `);
+    Map {
+      package-1 => canary,
+      package-4 => canary,
+      package-2 => canary,
+      package-3 => canary,
+    }
+  `);
   expect((writePkg as any).updatedVersions()).toMatchInlineSnapshot(`
     {
-      "package-1": 1.0.1-alpha.0+SHA,
-      "package-2": 1.0.1-alpha.0+SHA,
-      "package-3": 1.0.1-alpha.0+SHA,
-      "package-4": 1.0.1-alpha.0+SHA,
+      package-1: 1.0.1-alpha.0+SHA,
+      package-2: 1.0.1-alpha.0+SHA,
+      package-3: 1.0.1-alpha.0+SHA,
+      package-4: 1.0.1-alpha.0+SHA,
     }
   `);
 });
@@ -154,9 +151,9 @@ test('publish --canary --preid beta', async () => {
 
   expect((writePkg as any).updatedVersions()).toMatchInlineSnapshot(`
     {
-      "package-1": 1.0.1-beta.0+SHA,
-      "package-2": 1.0.1-beta.0+SHA,
-      "package-3": 1.0.1-beta.0+SHA,
+      package-1: 1.0.1-beta.0+SHA,
+      package-2: 1.0.1-beta.0+SHA,
+      package-3: 1.0.1-beta.0+SHA,
     }
   `);
 });
@@ -169,9 +166,9 @@ test("publish --canary --tag-version-prefix='abc'", async () => {
 
   expect((writePkg as any).updatedVersions()).toMatchInlineSnapshot(`
     {
-      "package-1": 1.0.1-alpha.0+SHA,
-      "package-2": 1.0.1-alpha.0+SHA,
-      "package-3": 1.0.1-alpha.0+SHA,
+      package-1: 1.0.1-alpha.0+SHA,
+      package-2: 1.0.1-alpha.0+SHA,
+      package-3: 1.0.1-alpha.0+SHA,
     }
   `);
 });
@@ -185,9 +182,9 @@ test('publish --canary <semver>', async () => {
 
   expect((writePkg as any).updatedVersions()).toMatchInlineSnapshot(`
     {
-      "package-1": 1.0.1-alpha.0+SHA,
-      "package-2": 1.0.1-alpha.0+SHA,
-      "package-3": 1.0.1-alpha.0+SHA,
+      package-1: 1.0.1-alpha.0+SHA,
+      package-2: 1.0.1-alpha.0+SHA,
+      package-3: 1.0.1-alpha.0+SHA,
     }
   `);
 });
@@ -200,9 +197,9 @@ test('publish --canary --independent', async () => {
 
   expect((writePkg as any).updatedVersions()).toMatchInlineSnapshot(`
     {
-      "package-1": 1.1.0-alpha.0+SHA,
-      "package-2": 2.1.0-alpha.0+SHA,
-      "package-3": 3.1.0-alpha.0+SHA,
+      package-1: 1.1.0-alpha.0+SHA,
+      package-2: 2.1.0-alpha.0+SHA,
+      package-3: 3.1.0-alpha.0+SHA,
     }
   `);
 });
@@ -228,7 +225,7 @@ test('publish --canary addresses unpublished package', async () => {
   // there have been two commits since the beginning of the repo
   expect((writePkg as any).updatedVersions()).toMatchInlineSnapshot(`
     {
-      "package-6": 1.0.0-alpha.1+SHA,
+      package-6: 1.0.0-alpha.1+SHA,
     }
   `);
 });
@@ -242,11 +239,11 @@ describe('publish --canary differential', () => {
 
     expect((writePkg as any).updatedVersions()).toMatchInlineSnapshot(`
       {
-        "package-1": 1.0.1-alpha.0+SHA,
-        "package-2": 1.0.1-alpha.0+SHA,
-        "package-3": 1.0.1-alpha.0+SHA,
-        "package-4": 1.0.1-alpha.0+SHA,
-        "package-5": 1.0.1-alpha.0+SHA,
+        package-1: 1.0.1-alpha.0+SHA,
+        package-2: 1.0.1-alpha.0+SHA,
+        package-3: 1.0.1-alpha.0+SHA,
+        package-4: 1.0.1-alpha.0+SHA,
+        package-5: 1.0.1-alpha.0+SHA,
       }
     `);
   });
@@ -259,9 +256,9 @@ describe('publish --canary differential', () => {
 
     expect((writePkg as any).updatedVersions()).toMatchInlineSnapshot(`
       {
-        "package-3": 1.1.0-alpha.0+SHA,
-        "package-4": 1.1.0-alpha.0+SHA,
-        "package-5": 1.1.0-alpha.0+SHA,
+        package-3: 1.1.0-alpha.0+SHA,
+        package-4: 1.1.0-alpha.0+SHA,
+        package-5: 1.1.0-alpha.0+SHA,
       }
     `);
   });
@@ -274,7 +271,7 @@ describe('publish --canary differential', () => {
 
     expect((writePkg as any).updatedVersions()).toMatchInlineSnapshot(`
       {
-        "package-5": 2.0.0-alpha.0+SHA,
+        package-5: 2.0.0-alpha.0+SHA,
       }
     `);
   });
@@ -293,7 +290,7 @@ describe('publish --canary sequential', () => {
 
     expect((writePkg as any).updatedVersions()).toMatchInlineSnapshot(`
       {
-        "package-5": 5.0.1-alpha.0+SHA,
+        package-5: 5.0.1-alpha.0+SHA,
       }
     `);
   });
@@ -304,9 +301,9 @@ describe('publish --canary sequential', () => {
 
     expect((writePkg as any).updatedVersions()).toMatchInlineSnapshot(`
       {
-        "package-3": 3.0.1-alpha.1+SHA,
-        "package-4": 4.0.1-alpha.1+SHA,
-        "package-5": 5.0.1-alpha.1+SHA,
+        package-3: 3.0.1-alpha.1+SHA,
+        package-4: 4.0.1-alpha.1+SHA,
+        package-5: 5.0.1-alpha.1+SHA,
       }
     `);
   });
@@ -317,11 +314,11 @@ describe('publish --canary sequential', () => {
 
     expect((writePkg as any).updatedVersions()).toMatchInlineSnapshot(`
       {
-        "package-1": 1.0.1-alpha.2+SHA,
-        "package-2": 2.0.1-alpha.2+SHA,
-        "package-3": 3.0.1-alpha.2+SHA,
-        "package-4": 4.0.1-alpha.2+SHA,
-        "package-5": 5.0.1-alpha.2+SHA,
+        package-1: 1.0.1-alpha.2+SHA,
+        package-2: 2.0.1-alpha.2+SHA,
+        package-3: 3.0.1-alpha.2+SHA,
+        package-4: 4.0.1-alpha.2+SHA,
+        package-5: 5.0.1-alpha.2+SHA,
       }
     `);
   });
@@ -332,9 +329,9 @@ describe('publish --canary sequential', () => {
 
     expect((writePkg as any).updatedVersions()).toMatchInlineSnapshot(`
       {
-        "package-3": 3.0.1-alpha.3+SHA,
-        "package-4": 4.0.1-alpha.3+SHA,
-        "package-5": 5.0.1-alpha.3+SHA,
+        package-3: 3.0.1-alpha.3+SHA,
+        package-4: 4.0.1-alpha.3+SHA,
+        package-5: 5.0.1-alpha.3+SHA,
       }
     `);
   });
@@ -345,7 +342,7 @@ describe('publish --canary sequential', () => {
 
     expect((writePkg as any).updatedVersions()).toMatchInlineSnapshot(`
       {
-        "package-5": 5.0.1-alpha.4+SHA,
+        package-5: 5.0.1-alpha.4+SHA,
       }
     `);
   });
@@ -372,10 +369,10 @@ test('publish --canary --force-publish on tagged release avoids early exit', asy
 
   expect((writePkg as any).updatedVersions()).toMatchInlineSnapshot(`
     {
-      "package-1": 1.0.1-alpha.0+SHA,
-      "package-2": 1.0.1-alpha.0+SHA,
-      "package-3": 1.0.1-alpha.0+SHA,
-      "package-4": 1.0.1-alpha.0+SHA,
+      package-1: 1.0.1-alpha.0+SHA,
+      package-2: 1.0.1-alpha.0+SHA,
+      package-3: 1.0.1-alpha.0+SHA,
+      package-4: 1.0.1-alpha.0+SHA,
     }
   `);
 });
@@ -396,14 +393,14 @@ test('publish --canary --force-publish <arg> on tagged release avoids early exit
 
   expect((writePkg as any).updatedVersions()).toMatchInlineSnapshot(`
     {
-      "package-2": 2.0.1-alpha.0+SHA,
-      "package-3": 3.0.1-alpha.0+SHA,
+      package-2: 2.0.1-alpha.0+SHA,
+      package-3: 3.0.1-alpha.0+SHA,
     }
   `);
 });
 
 test('publish --canary with dirty tree throws error', async () => {
-  (throwIfUncommitted as jest.Mock).mockImplementationOnce(() => {
+  (throwIfUncommitted as Mock).mockImplementationOnce(() => {
     throw new Error('uncommitted');
   });
 
@@ -426,12 +423,11 @@ test('publish --canary --git-head <sha> throws an error', async () => {
 });
 
 test('publish --canary --include-merged-tags calls git describe correctly', async () => {
-  const describeSpy = jest.spyOn(coreModule, 'describeRef');
   const cwd = await initTaggedFixture('normal');
 
   await new PublishCommand(createArgv(cwd, '--canary', '--include-merged-tags'));
 
-  expect(describeSpy).toHaveBeenCalledWith(
+  expect(describeRef).toHaveBeenCalledWith(
     {
       match: 'v*.*.*',
       cwd,
@@ -447,10 +443,10 @@ test('publish --canary without _any_ tags', async () => {
 
   expect((writePkg as any).updatedVersions()).toMatchInlineSnapshot(`
     {
-      "package-1": 1.0.1-alpha.0+SHA,
-      "package-2": 1.0.1-alpha.0+SHA,
-      "package-3": 1.0.1-alpha.0+SHA,
-      "package-4": 1.0.1-alpha.0+SHA,
+      package-1: 1.0.1-alpha.0+SHA,
+      package-2: 1.0.1-alpha.0+SHA,
+      package-3: 1.0.1-alpha.0+SHA,
+      package-4: 1.0.1-alpha.0+SHA,
     }
   `);
 });
@@ -461,10 +457,10 @@ test('publish --canary without _any_ tags (independent)', async () => {
 
   expect((writePkg as any).updatedVersions()).toMatchInlineSnapshot(`
     {
-      "package-1": 1.0.1-alpha.0+SHA,
-      "package-2": 2.0.1-alpha.0+SHA,
-      "package-3": 3.0.1-alpha.0+SHA,
-      "package-4": 4.0.1-alpha.0+SHA,
+      package-1: 1.0.1-alpha.0+SHA,
+      package-2: 2.0.1-alpha.0+SHA,
+      package-3: 3.0.1-alpha.0+SHA,
+      package-4: 4.0.1-alpha.0+SHA,
     }
   `);
 });
@@ -490,8 +486,8 @@ test('publish --canary --no-private', async () => {
 
   expect((writePkg as any).updatedVersions()).toMatchInlineSnapshot(`
     {
-      "package-1": 1.0.1-alpha.0+SHA,
-      "package-2": 2.0.1-alpha.0+SHA,
+      package-1: 1.0.1-alpha.0+SHA,
+      package-2: 2.0.1-alpha.0+SHA,
     }
   `);
 });

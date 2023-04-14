@@ -1,11 +1,18 @@
-jest.mock('pacote');
+import { expect, test, vi } from 'vitest';
+
+vi.mock('pacote');
 
 // mocked module(s)
 import pacote from 'pacote';
 
 // helpers
+import { fileURLToPath } from 'node:url';
+import { dirname } from 'node:path';
 import { Project, PackageGraph, FetchConfig } from '@lerna-lite/core';
 import { initFixtureFactory } from '@lerna-test/helpers';
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = dirname(__filename);
 const initFixture = initFixtureFactory(__dirname);
 
 // file under test

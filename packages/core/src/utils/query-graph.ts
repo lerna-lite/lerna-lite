@@ -1,7 +1,7 @@
-import { PackageGraph } from '../package-graph/package-graph';
-import { QueryGraphConfig } from '../models';
-import { Package } from '../package';
-import { PackageGraphNode } from '../package-graph';
+import { PackageGraph } from '../package-graph/package-graph.js';
+import { QueryGraphConfig } from '../models/index.js';
+import { Package } from '../package.js';
+import { PackageGraphNode } from '../package-graph/index.js';
 
 /**
  * A mutable PackageGraph used to query for next available packages.

@@ -1,1 +1,3 @@
-export const hasNpmVersion = jest.fn(() => true);
+import { vi } from 'vitest';
+
+export const hasNpmVersion = vi.fn(() => true);

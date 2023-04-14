@@ -1,18 +1,18 @@
 import { cosmiconfigSync, PublicExplorerSync } from 'cosmiconfig';
 import dedent from 'dedent';
-import globby, { GlobbyOptions } from 'globby';
+import { globbySync } from 'globby';
 import globParent from 'glob-parent';
 import log from 'npmlog';
-import path from 'path';
+import { basename, dirname, join, normalize, resolve as pathResolve } from 'node:path';
 import pMap from 'p-map';
-import loadJsonFile from 'load-json-file';
-import writeJsonFile from 'write-json-file';
+import { loadJsonFile, loadJsonFileSync } from 'load-json-file';
+import { writeJsonFile } from 'write-json-file';
 
-import { Package } from '../package';
-import { applyExtends } from './lib/apply-extends';
-import { ValidationError } from '../validation-error';
-import { makeFileFinder, makeSyncFileFinder } from './lib/make-file-finder';
-import { ProjectConfig, RawManifest } from '../models';
+import { Package } from '../package.js';
+import { applyExtends } from './lib/apply-extends.js';
+import { ValidationError } from '../validation-error.js';
+import { makeFileFinder, makeSyncFileFinder } from './lib/make-file-finder.js';
+import { ProjectConfig, RawManifest } from '../models/index.js';
 
 /**
  * A representation of the entire project managed by Lerna.
@@ -44,12 +44,12 @@ export class Project {
               // saves a lot of noisy guards elsewhere
               config: {},
               configNotFound: true,
-              // path.resolve(".", ...) starts from process.cwd()
-              filepath: path.resolve(cwd || '.', 'lerna.json'),
+              // pathResolve(".", ...) starts from process.cwd()
+              filepath: pathResolve(cwd || '.', 'lerna.json'),
             };
           }
 
-          obj.config = applyExtends(obj.config, path.dirname(obj.filepath));
+          obj.config = applyExtends(obj.config, dirname(obj.filepath));
 
           return obj;
         },
@@ -61,7 +61,7 @@ export class Project {
       }
 
       // re-throw other errors, could be ours or third-party
-      // istanbul ignore next
+      /* c8 ignore next */
       throw err;
     }
 
@@ -82,7 +82,7 @@ export class Project {
     this.config = loaded?.config;
     this.configNotFound = loaded?.configNotFound;
     this.rootConfigLocation = loaded?.filepath ?? '';
-    this.rootPath = path.dirname(loaded?.filepath ?? '');
+    this.rootPath = dirname(loaded?.filepath ?? '');
 
     log.verbose('rootPath', this.rootPath);
   }
@@ -133,21 +133,19 @@ export class Project {
   }
 
   get packageParentDirs(): string[] {
-    return (this.packageConfigs as any)
-      .map(globParent)
-      .map((parentDir: string) => path.resolve(this.rootPath, parentDir));
+    return (this.packageConfigs as any).map(globParent).map((parentDir: string) => pathResolve(this.rootPath, parentDir));
   }
 
   get manifest(): RawManifest {
     let manifest;
 
     try {
-      const manifestLocation = path.join(this.rootPath, 'package.json');
-      const packageJson = loadJsonFile.sync(manifestLocation) as RawManifest;
+      const manifestLocation = join(this.rootPath, 'package.json');
+      const packageJson = loadJsonFileSync(manifestLocation) as RawManifest;
 
       if (!packageJson.name) {
         // npm-lifecycle chokes if this is missing, so default like npm init does
-        packageJson.name = path.basename(path.dirname(manifestLocation));
+        packageJson.name = basename(dirname(manifestLocation));
       }
 
       // Encapsulate raw JSON in Package instance
@@ -159,7 +157,7 @@ export class Project {
       });
     } catch (err: any) {
       // redecorate JSON syntax errors, avoid debug dump
-      // istanbul ignore next
+      /* c8 ignore next 3 */
       if (err.name === 'JSONError') {
         throw new ValidationError(err.name, err.message);
       }
@@ -174,19 +172,19 @@ export class Project {
     let licensePath: string | undefined;
 
     try {
-      const search = globby.sync(Project.LICENSE_GLOB, {
+      const search = globbySync(Project.LICENSE_GLOB, {
         cwd: this.rootPath,
         absolute: true,
         caseSensitiveMatch: false,
         // Project license is always a sibling of the root manifest
         deep: 0,
-      } as GlobbyOptions);
+      });
 
       licensePath = search.shift();
 
       if (licensePath) {
         // POSIX results always need to be normalized
-        licensePath = path.normalize(licensePath);
+        licensePath = normalize(licensePath);
 
         // redefine getter to lazy-loaded value
         Object.defineProperty(this, 'licensePath', {
@@ -194,7 +192,7 @@ export class Project {
         });
       }
     } catch (err: any) {
-      /* istanbul ignore next */
+      /* c8 ignore next */
       throw new ValidationError(err.name, err.message);
     }
 
@@ -218,7 +216,7 @@ export class Project {
   getPackages(): Promise<Package[]> {
     const mapper = (packageConfigPath: string) =>
       loadJsonFile(packageConfigPath)?.then(
-        (packageJson: any) => new Package(packageJson, path.dirname(packageConfigPath), this.rootPath)
+        (packageJson: any) => new Package(packageJson, dirname(packageConfigPath), this.rootPath)
       );
 
     return this.fileFinder('package.json', (filePaths: string[]) => pMap(filePaths, mapper, { concurrency: 50 }));
@@ -229,7 +227,7 @@ export class Project {
    */
   getPackagesSync() {
     return makeSyncFileFinder(this.rootPath, this.packageConfigs)('package.json', (packageConfigPath: string) => {
-      return new Package(loadJsonFile.sync(packageConfigPath), path.dirname(packageConfigPath), this.rootPath);
+      return new Package(loadJsonFileSync(packageConfigPath), dirname(packageConfigPath), this.rootPath);
     }) as string[];
   }
 

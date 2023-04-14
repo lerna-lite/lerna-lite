@@ -1,16 +1,16 @@
 import { EOL, Package } from '@lerna-lite/core';
 import conventionalChangelogCore, { Context } from 'conventional-changelog-core';
 import { Options as WriterOptions } from 'conventional-changelog-writer';
-import fs from 'fs-extra';
+import { writeFile } from 'fs/promises';
 import getStream from 'get-stream';
 import log from 'npmlog';
 
-import { BLANK_LINE, CHANGELOG_HEADER } from './constants';
-import { GetChangelogConfig } from './get-changelog-config';
-import { makeBumpOnlyFilter } from './make-bump-only-filter';
-import { ChangelogConfig, ChangelogType, UpdateChangelogOption } from '../models';
-import { readExistingChangelog } from './read-existing-changelog';
-import { setConfigChangelogCommitClientLogin, setConfigChangelogCommitGitAuthor } from './writer-opts-transform';
+import { BLANK_LINE, CHANGELOG_HEADER } from './constants.js';
+import { GetChangelogConfig } from './get-changelog-config.js';
+import { makeBumpOnlyFilter } from './make-bump-only-filter.js';
+import { ChangelogConfig, ChangelogType, UpdateChangelogOption } from '../models/index.js';
+import { readExistingChangelog } from './read-existing-changelog.js';
+import { setConfigChangelogCommitClientLogin, setConfigChangelogCommitGitAuthor } from './writer-opts-transform.js';
 
 /**
  * Update changelog with the commits of the new release
@@ -26,7 +26,6 @@ export async function updateChangelog(pkg: Package, type: ChangelogType, updateO
     changelogIncludeCommitsGitAuthor,
     changelogIncludeCommitsClientLogin,
     changelogHeaderMessage = '',
-    changelogVersionMessage = '',
     commitsSinceLastRelease,
     rootPath,
     tagPrefix = 'v',
@@ -53,10 +52,7 @@ export async function updateChangelog(pkg: Package, type: ChangelogType, updateO
   // are we including commit author name/email or remote client login name
   if (changelogIncludeCommitsGitAuthor || changelogIncludeCommitsGitAuthor === '') {
     setConfigChangelogCommitGitAuthor(config, gitRawCommitsOpts, writerOpts, changelogIncludeCommitsGitAuthor);
-  } else if (
-    (changelogIncludeCommitsClientLogin || changelogIncludeCommitsClientLogin === '') &&
-    commitsSinceLastRelease
-  ) {
+  } else if ((changelogIncludeCommitsClientLogin || changelogIncludeCommitsClientLogin === '') && commitsSinceLastRelease) {
     // prettier-ignore
     setConfigChangelogCommitClientLogin(config, gitRawCommitsOpts, writerOpts, commitsSinceLastRelease, changelogIncludeCommitsClientLogin);
   }
@@ -98,18 +94,17 @@ export async function updateChangelog(pkg: Package, type: ChangelogType, updateO
 
     log.silly(type, 'writing new entry: %j', newEntry);
 
-    const changelogVersion = type === 'root' ? changelogVersionMessage : '';
     const changelogHeader = CHANGELOG_HEADER.replace(
       /%s/g,
       changelogHeaderMessage?.length > 0 ? changelogHeaderMessage + EOL : ''
     );
 
-    const content = [changelogHeader, changelogVersion, newEntry, changelogContents]
+    const content = [changelogHeader, newEntry, changelogContents]
       .join(BLANK_LINE)
       .trim()
       .replace(/[\r\n]{2,}/gm, '\n\n'); // conventional-changelog adds way too many extra line breaks, let's remove a few of them
 
-    return fs.writeFile(changelogFileLoc, content + EOL).then(() => {
+    return writeFile(changelogFileLoc, content + EOL).then(() => {
       log.verbose(type, 'wrote', changelogFileLoc);
 
       return {

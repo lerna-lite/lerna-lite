@@ -1,9 +1,12 @@
-import execa from 'execa';
-import path from 'path';
+import { execa } from 'execa';
+import { dirname, resolve as pathResolve } from 'node:path';
+import { fileURLToPath } from 'node:url';
 
-import lernaCLI from '../packages/cli/src/lerna-cli';
+import lernaCLI from '../packages/cli/src/lerna-cli.js';
 
-const LERNA_BIN = path.resolve(__dirname, '../packages/cli/src/cli.ts');
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = dirname(__filename);
+const LERNA_BIN = pathResolve(__dirname, '../packages/cli/src/cli.ts');
 
 /**
  * A higher-order function to help with passing _actual_ yargs-parsed argv
@@ -13,17 +16,12 @@ const LERNA_BIN = path.resolve(__dirname, '../packages/cli/src/cli.ts');
  * @return {Function} with partially-applied yargs config
  */
 export function commandRunner(commandModule: any) {
-  /* eslint-disable import/no-dynamic-require, global-require */
+  /* eslint-disable global-require */
   const cmd = commandModule.command.split(' ')[0];
 
   return (cwd: string) => {
     // create a _new_ yargs instance every time cwd changes to avoid singleton pollution
-    const cli = lernaCLI([], cwd)
-      .exitProcess(false)
-      .detectLocale(false)
-      .showHelpOnFail(false)
-      .wrap(null)
-      .command(commandModule);
+    const cli = lernaCLI([], cwd).exitProcess(false).detectLocale(false).showHelpOnFail(false).wrap(null).command(commandModule);
 
     return (...args: string[]) =>
       new Promise((resolve, reject) => {
@@ -64,7 +62,7 @@ export function commandRunner(commandModule: any) {
   };
 }
 
-exports.cliRunner = function cliRunner(cwd: string, env: { [key: string]: string }) {
+export function cliRunner(cwd: string, env: { [key: string]: string }) {
   const opts = {
     cwd,
     env: Object.assign(
@@ -80,4 +78,4 @@ exports.cliRunner = function cliRunner(cwd: string, env: { [key: string]: string
   };
 
   return (...args: string[]) => execa('node', [LERNA_BIN].concat(args), opts);
-};
+}

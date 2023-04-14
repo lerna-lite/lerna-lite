@@ -1,9 +1,10 @@
+import { describe, expect, it } from 'vitest';
 import yargs from 'yargs/yargs';
 
-import { listable } from '../index';
+import { listableOptions } from '../listable-options.js';
 
 describe('listable.options()', () => {
-  const parsed = (...args) => (listable.options(yargs()) as any).parse(args.join(' '));
+  const parsed = (...args) => (listableOptions(yargs()) as any).parse(args.join(' '));
 
   it('provides --json', () => {
     expect(parsed('--json')).toHaveProperty('json', true);
