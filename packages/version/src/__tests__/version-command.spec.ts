@@ -948,7 +948,7 @@ describe('VersionCommand', () => {
         const lockfileResponse: any = await loadYamlFile(join(cwd, 'pnpm-lock.yaml'));
         const { lockfileVersion, importers } = lockfileResponse;
 
-        expect(lockfileVersion).toBe(5.4);
+        expect(lockfileVersion).toBe(6.0);
         expect(importers['packages/package-2'].specifiers['@my-workspace/package-1']).toBe('workspace:^3.0.0');
         expect(importers['packages/package-3'].specifiers['@my-workspace/package-1']).toBe('workspace:^');
         expect(importers['packages/package-3'].specifiers['@my-workspace/package-2']).toBe('workspace:*');
@@ -972,7 +972,7 @@ describe('VersionCommand', () => {
         const lockfileResponse: any = await loadYamlFile(join(cwd, 'pnpm-lock.yaml'));
         const { lockfileVersion, importers } = lockfileResponse;
 
-        expect(lockfileVersion).toBe(5.4);
+        expect(lockfileVersion).toBe(6.0);
         expect(importers['packages/package-2'].specifiers['@my-workspace/package-1']).toBe('workspace:^2.4.0');
         expect(importers['packages/package-3'].specifiers['@my-workspace/package-1']).toBe('workspace:^');
         expect(importers['packages/package-3'].specifiers['@my-workspace/package-2']).toBe('workspace:*');
