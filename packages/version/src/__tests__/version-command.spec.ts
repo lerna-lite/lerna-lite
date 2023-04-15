@@ -949,11 +949,11 @@ describe('VersionCommand', () => {
         const { lockfileVersion, importers } = lockfileResponse;
 
         expect(lockfileVersion).toBe('6.0');
-        expect(importers['packages/package-2'].specifiers['@my-workspace/package-1']).toBe('workspace:^3.0.0');
-        expect(importers['packages/package-3'].specifiers['@my-workspace/package-1']).toBe('workspace:^');
-        expect(importers['packages/package-3'].specifiers['@my-workspace/package-2']).toBe('workspace:*');
-        expect(importers['packages/package-4'].specifiers['@my-workspace/package-1']).toBe('workspace:3.0.0');
-        expect(importers['packages/package-4'].specifiers['@my-workspace/package-2']).toBe('workspace:~');
+        expect(importers['packages/package-2'].dependencies['@my-workspace/package-1'].specifier).toBe('workspace:^3.0.0');
+        expect(importers['packages/package-3'].dependencies['@my-workspace/package-1'].specifier).toBe('workspace:^');
+        expect(importers['packages/package-3'].dependencies['@my-workspace/package-2'].specifier).toBe('workspace:*');
+        expect(importers['packages/package-4'].dependencies['@my-workspace/package-1'].specifier).toBe('workspace:3.0.0');
+        expect(importers['packages/package-4'].dependencies['@my-workspace/package-2'].specifier).toBe('workspace:~');
       });
 
       it(`should call runInstallLockFileOnly() when --sync-workspace-lock is provided and expect lockfile to be added to git even without npmClient`, async () => {
@@ -973,11 +973,11 @@ describe('VersionCommand', () => {
         const { lockfileVersion, importers } = lockfileResponse;
 
         expect(lockfileVersion).toBe('6.0');
-        expect(importers['packages/package-2'].specifiers['@my-workspace/package-1']).toBe('workspace:^2.4.0');
-        expect(importers['packages/package-3'].specifiers['@my-workspace/package-1']).toBe('workspace:^');
-        expect(importers['packages/package-3'].specifiers['@my-workspace/package-2']).toBe('workspace:*');
-        expect(importers['packages/package-4'].specifiers['@my-workspace/package-1']).toBe('workspace:2.4.0');
-        expect(importers['packages/package-4'].specifiers['@my-workspace/package-2']).toBe('workspace:~');
+        expect(importers['packages/package-2'].dependencies['@my-workspace/package-1'].specifier).toBe('workspace:^2.4.0');
+        expect(importers['packages/package-3'].dependencies['@my-workspace/package-1'].specifier).toBe('workspace:^');
+        expect(importers['packages/package-3'].dependencies['@my-workspace/package-2'].specifier).toBe('workspace:*');
+        expect(importers['packages/package-4'].dependencies['@my-workspace/package-1'].specifier).toBe('workspace:2.4.0');
+        expect(importers['packages/package-4'].dependencies['@my-workspace/package-2'].specifier).toBe('workspace:~');
       });
     });
   });
