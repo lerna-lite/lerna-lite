@@ -67,7 +67,7 @@ Here are some of the largest projects using the Lerna-Lite fork
   Format.JS
 </a>&nbsp; | &nbsp;
 <a href="https://github.com/johnsoncodehk/volar">
-  <img src="https://vue.gallerycdn.vsassets.io/extensions/vue/volar/0.40.13/1662609095565/Microsoft.VisualStudio.Services.Icons.Default" width="25" height="25">
+  <img src="https://vue.gallerycdn.vsassets.io/extensions/vue/volar/1.3.16/1681622004073/Microsoft.VisualStudio.Services.Icons.Default" width="25" height="25">
   Volar
 </a>&nbsp; | &nbsp;
 <a href="https://github.com/standardnotes/app">
