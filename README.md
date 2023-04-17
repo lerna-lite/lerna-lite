@@ -98,7 +98,7 @@ Below are the main reasons as to why this fork was created:
     - Lerna-Lite is now entirely modular, all commands are optional (install only what you use)
 3. rewrite the lib in TypeScript and build the project as ESM only (you can still use it in a CommonJS environment)
 4. replicate a few opened PRs from Lerna and add extra features into Lerna-Lite
-5. Lerna is becoming an Nx product (Lerna >=5.5 is now requiring **[Nx](https://nx.dev/)** while it's not in Lerna-Lite)
+5. Lerna is becoming another Nx product (Lerna >=5.5 is now requiring **[Nx](https://nx.dev/)** while it's not in Lerna-Lite)
    - if you use Nx then it's probably better to stick with Lerna, but if you aren't then Lerna-Lite is preferred
 6. Lastly a few extra features were added, and only exist, into Lerna-Lite:
    - [`workspace:` protocol support](https://github.com/lerna-lite/lerna-lite/tree/main/packages/version#workspace-protocol) (Lerna added support for it six months later in v6)
@@ -121,7 +121,7 @@ On a final note, the best feature of Lerna-Lite has to be its modularity, you on
 - Automate the creation of new Versions (`independent` or fixed version) of all your workspace packages.
   - it will automatically Commit/Tag your new Version & create new GitHub/GitLab Release (when enabled).
 - Automate, when enabled, the creation of Changelogs for all your packages by reading all [Conventional Commits](https://www.conventionalcommits.org/).
-- Automate, when enabled, the repository Publishing of your new version(s) for all your packages (on NPM or others).
+- Automate, the repository Publishing of your new version(s) for all your packages (on NPM or other platforms).
 
 #### Other optional commands
 
@@ -231,7 +231,7 @@ Add custom NPM Scripts or simply run the commands in your shell with the Lerna-L
 
 ### Migration for existing [Lerna](https://github.com/lerna/lerna) Users
 
-If you are migrating from Lerna, it should be fairly easy to just replace Lerna with Lerna-Lite in your dependencies and add necessary commands and that's about it, the CLI commands and options are the same, take a look at the quick steps shown below:
+If you are migrating from Lerna, it should be fairly easy to just replace Lerna with Lerna-Lite in your dependencies and install necessary commands and that's about it. The CLI commands and options are the same, but all commands are optional installs, take a look at the quick steps shown below:
 
 1. remove Lerna from your local & global dependencies
 
