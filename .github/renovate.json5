@@ -11,11 +11,10 @@
       enabled: false,
     },
     {
-      // npm audit seems to prefer 1.2.6 for some reason
+      // npm security audit seems to prefer 1.2.6 for some reason
       packageNames: ['tacks'],
       allowedVersions: '1.2.6',
     },
-    // allow Node14/npm8 until it is EOL on June 2023
     {
       packageNames: ['node'],
       allowedVersions: '16.15.0',
@@ -26,7 +25,7 @@
     },
     {
       packageNames: ['nx'],
-      allowedVersions: '15.4.8', // newer version seems to cause problems with Vitest unit tests
+      allowedVersions: '15.4.8', // newer version seems to cause problems with Vitest
     },
   ],
   schedule: ['on Thursday'],
