@@ -242,6 +242,8 @@ describe('publish from-git', () => {
 
     await expect(command).rejects.toEqual({ code: 'UNAUTHORIZED', name: 'ValidationError' });
     expect(process.exitCode).toBe(1);
+    const logMessages = loggingOutput('notice');
+    expect(logMessages).toContain('Package failed to publish: package-1');
 
     // reset exit code
     process.exitCode = undefined;
