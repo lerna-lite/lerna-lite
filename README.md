@@ -110,7 +110,7 @@ changes and changelogs
    - [lerna version --skip-bump-only-release](https://github.com/lerna-lite/lerna-lite/tree/main/packages/version#--skip-bump-only-release) to avoid cluttering your GitHub releases in `independent` mode
    - [lerna publish --remove-package-fields](https://github.com/lerna-lite/lerna-lite/tree/main/packages/publish#--remove-package-fields-fields) (empty certain fields from `package.json` before publishing, ie: Lerna-Lite uses it to remove `scripts` and `devDependencies`)
   
-To summarize, the best feature of Lerna-Lite has to be its modularity, you only install what you use and are interested in (see [installation](#cli-installation) below). A large portion of the users are only interested in version/publish commands
+On a final note, the best feature of Lerna-Lite has to be its modularity, you only install what you use and are interested in (see [installation](#cli-installation) below). A large portion of the users are only interested in version/publish commands
 
 ### This lib will help you with
 
@@ -130,7 +130,7 @@ To summarize, the best feature of Lerna-Lite has to be its modularity, you only 
 - [Exec](https://github.com/lerna-lite/lerna-lite/tree/main/packages/exec#readme) command, when installed, will help you execute shell commands in parallel and in topological order.
 - [List](https://github.com/lerna-lite/lerna-lite/tree/main/packages/list#readme) command, when installed, will list all workspace local packages
 - [Run](https://github.com/lerna-lite/lerna-lite/tree/main/packages/run#readme) command, when installed, will help you run npm script in parallel and in topological order.
-- [Watch](https://github.com/lerna-lite/lerna-lite/tree/main/packages/watch#readme) command, when installed, will watch for changes within packages and execute commands
+- [Watch](https://github.com/lerna-lite/lerna-lite/tree/main/packages/watch#readme) command, when installed, will watch for changes within all packages and execute certain commands
 
 ### README Badge
 
@@ -142,7 +142,7 @@ To summarize, the best feature of Lerna-Lite has to be its modularity, you only 
 
 ## Getting Started
 
-Let's start by installing the Lerna-Lite CLI as a dev dependency to your project and then run the `init` command to get started (see [init#readme](https://github.com/lerna-lite/lerna-lite/tree/main/packages/init#readme) for all options). Note that the CLI must be installed at all time and other commands must be installed separately (the CLI only includes the `init` command), refer to the **[Installation table](#separate--optional-installs)** for more info.
+Let's start by installing the Lerna-Lite CLI as a dev dependency to your project and then run the `init` command to get started (see [init#readme](https://github.com/lerna-lite/lerna-lite/tree/main/packages/init#readme) for all options). Note that the CLI must be installed at all time and then other commands must be installed separately (the CLI only includes the `init` command), refer to the **[Installation table](#separate--optional-installs)** for more info.
 
 ```sh
 # install Lerna-Lite CLI locally or globally (only includes `init` command)
@@ -155,9 +155,6 @@ $ lerna init
 
 # for npm/yarn (only) workspaces add --use-workspaces
 $ lerna init --use-workspaces
-
-# install any of the optional commands that interests you (`publish`, `version`, `run`, `exec`, ...)
-$ npm i @lerna-lite/publish -D -W
 ```
 
 This will create a `lerna.json` configuration file as well as a `packages` folder, so your folder should now look like this:
@@ -171,6 +168,11 @@ lerna-repo/
 ```
 
 Note that `package-a` will not be created, it is only shown here to help clarify the structure. For more info and full details about the `lerna.json` file, you can read the [lerna.json](https://github.com/lerna-lite/lerna-lite/wiki/lerna.json) Wiki.
+
+Finally install the commands that are of interest to you (`publish`, `version`, `run`, `exec`, ...)
+```sh
+$ npm i @lerna-lite/publish -D -W
+```
 
 ## Installation
 
@@ -216,7 +218,7 @@ or from a CDN
 
 ### Usage
 
-Add custom NPM Scripts or simply run the commands in your shell with the Lerna-Lite CLI, you can see below some very basic lerna script samples.
+Add custom NPM Scripts or simply run the commands in your shell with the Lerna-Lite CLI, you can see some very basic script samples below.
 
 ```js
 // package.json / npm scripts
@@ -252,11 +254,11 @@ _refer to [installation](#installation) table above_
 # install any of the optional commands (refer to installation table)
 npm install @lerna-lite/publish -D -W
 ```
-> **Note** on `changelog.md`, you might see a lot of diff changes in your `changelog.md` files after switching to Lerna-Lite and that is totally expected since Lerna-Lite has code in place to remove extra empty lines that Lerna was adding for no reason.
+> **Note** you might see a lot of diff changes across your `changelog.md` files after switching to Lerna-Lite and that is totally expected since Lerna-Lite has code in place to remove empty lines that were added by Lerna for no real reason.
 
 ## Project Demo?
 
-You want to see a project demo? Sure, you're looking at it 😉
+You want to see a project demo? Sure... you're looking at it 😉
 
 Yes indeed, this project was originally created as an NPM Workspace and later migrated to a [pnpm workspaces](https://pnpm.io/workspaces) for the sole purpose of demoing and testing its own code. All changelogs and versions are created and published by the lib itself, how sweet is that? You can also see that Lerna-Lite project has its own [`lerna.json`](https://github.com/lerna-lite/lerna-lite/blob/main/lerna.json) config file as well to run properly (take a look to see how it works).
 
