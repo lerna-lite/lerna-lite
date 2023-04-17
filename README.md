@@ -244,7 +244,7 @@ npm uninstall -g lerna   # OR yarn global remove lerna
 npm install @lerna-lite/cli -D -W
 ```
 
-3. finally install all Lerna-Lite command(s) that you wish to use (`changed`, `diff`, `exec`, `list`, `run`, `publish`, `version` or `watch`)
+3. finally install the Lerna-Lite command(s) that you wish to use (`changed`, `diff`, `exec`, `list`, `run`, `publish`, `version` and/or `watch`)
 _refer to [installation](#installation) table above_
 
 ```sh
