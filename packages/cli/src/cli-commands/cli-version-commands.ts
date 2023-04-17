@@ -81,7 +81,13 @@ export default {
       'dry-run': {
         describe: 'Displays the process command that would be performed without executing it.',
         group: 'Version Command Options:',
-        type: 'boolean',
+        coerce: (val: boolean | string) => {
+          // make sure user isn't providing anything else but a boolean or a parseable string as boolean (ie "true")
+          if (typeof val === 'string' && !/(true|false)/i.test(val)) {
+            throw new Error(`--dry-run option must be of type boolean and you provided: ${val}`);
+          }
+          return Boolean(val);
+        },
       },
       exact: {
         describe: 'Specify cross-dependency version numbers exactly rather than with a caret (^).',

@@ -1009,4 +1009,20 @@ describe('VersionCommand', () => {
       expect((collectUpdates as Mock).mock.calls[0][3].isIndependent).toBe(true);
     });
   });
+
+  describe('CLI arguments', () => {
+    it('throws when --dry-run has a string argument other than "true" or "false"', async () => {
+      const cwd = await initFixture('lifecycle');
+      const command = lernaVersion(cwd)('--no-changelog', '--dry-run', 'premajor');
+
+      await expect(command).rejects.toThrow('--dry-run option must be of type boolean and you provided: premajor');
+    });
+
+    it('does not throw when --dry-run has a string argument "true"', async () => {
+      const cwd = await initFixture('lifecycle');
+      const command = lernaVersion(cwd)('--no-changelog', '--dry-run', 'true');
+
+      await expect(command).resolves;
+    });
+  });
 });
