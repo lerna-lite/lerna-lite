@@ -81,9 +81,9 @@ Here are some of the largest projects using the Lerna-Lite fork
 
 ## About Lerna-Lite
 
-Lerna-Lite differs from the original [Lerna](https://github.com/lerna/lerna) since it only has a limited subset of commands from Lerna, which itself has 15 commands, while Lerna-Lite only includes half of them (and a few of them are optional). Lerna was originally built as an all-in-one tool, however nowadays Workspaces are available in all package managers and the need for an all-in-one tool ,which includes built-in workspaces functionalities, is no longer necessary. Lerna-Lite is built around this new reality and its CLI is only including the minimum commands which are `init`, `publish` and `version`, while other commands are available as optional and separate installation (`exec`, `list`, `run`, ...). In summary, Lerna-Lite is more modular than the original Lerna and so you'll end up installing less dependencies, this also makes it more versatile to use with other tools like Turborepo, pnpm and others...
+Lerna-Lite differs from the original [Lerna](https://github.com/lerna/lerna) since it only has a limited subset of commands from Lerna, which itself has 15 commands, while Lerna-Lite only includes half of them and all commands are optional. Lerna was originally built as an all-in-one tool, however nowadays Workspaces are available in all package managers and the need for an all-in-one tool, which includes built-in workspaces functionalities, is no longer needed. Lerna-Lite is built around this new reality and only provides commands that package managers do not include. To summarize, Lerna-Lite is more modular than the original Lerna and you'll end up installing a lot less dependencies, this also makes it more versatile to use with other tools like Turborepo, pnpm and others...
 
-As a summary, Lerna-Lite assumes, and requires you to pre-setup your Workspace through your favorite package manager (npm, pnpm, yarn) that will take care of the symlinks (Lerna-Lite does **not include** the `bootstrap`, `add` and `link` commands hence the need for a workspace pre-setup), so make sure that your workspace is properly setup **before** adding Lerna-Lite.
+Lerna-Lite assumes, and requires you to pre-setup your Workspace through your favorite package manager (npm, pnpm, yarn) that will take care of the symlinks (Lerna-Lite does **not include** the `bootstrap`, `add` and `link` commands hence the need for a workspace pre-setup), so make sure that your workspace is properly setup **before** adding Lerna-Lite.
 
 For more info on how to setup a workspace, choose the best option for you: [npm 7+](https://docs.npmjs.com/cli/v8/using-npm/workspaces) / [Yarn classic](https://classic.yarnpkg.com/en/docs/workspaces) / [Yarn 2+](https://yarnpkg.com/features/workspaces) / [pnpm](https://pnpm.io/workspaces)
 
@@ -92,13 +92,13 @@ For more info on how to setup a workspace, choose the best option for you: [npm 
 Below are the main reasons as to why this fork was created:
 
 1. Lerna repo was unmaintained for nearly 2 years (in early 2022, dependencies were really out of date)
-    - this is no longer the case since Nrwl, the company behind Nx, took over stewardship of Lerna (so we now try to replicate Lerna's PRs into Lerna-Lite when possible)
-2. a desire to create a smaller and more modular lib that is lighter than the original all-in-one Lerna
-    - Lerna-Lite is now entirely modular, all commands are optional and the user must chose which command(s) to install (install only what you use)
-3. rewrite the lib in TypeScript for type checking and eventually be compatible with ESM (which was accomplished with v2.0.0 and is now ESM only)
-4. replicate a few opened PRs (fixes and features) from Lerna and also add extra features in Lerna-Lite
-5. Lerna is becoming more and more another Nx product (**[Nx](https://nx.dev/)** is now a required dependency of Lerna but it's not in Lerna-Lite)
-6. we added a few extra features that currently exists only in Lerna-Lite
+    - this is no longer the case since Nrwl, the company behind Nx, took over stewardship of Lerna (we now try to replicate Lerna's PRs into Lerna-Lite when possible)
+2. a desire to create a smaller and more modular project that is lighter than the original all-in-one Lerna
+    - Lerna-Lite is now entirely modular, all commands are optional (install only what you use)
+3. rewrite the lib in TypeScript and make the project compatible with ESM
+4. replicate a few opened PRs from Lerna and also add extra features in Lerna-Lite
+5. Lerna is becoming another Nx product (**[Nx](https://nx.dev/)** is now a required dependency of Lerna but it's not in Lerna-Lite)
+6. Lastly a few extra features currently exists only in Lerna-Lite
    - [`workspace:` protocol support](https://github.com/lerna-lite/lerna-lite/tree/main/packages/version#workspace-protocol) (Lerna added support six months later in v6)
    - [--dry-run](https://github.com/lerna-lite/lerna-lite/tree/main/packages/version#--dry-run) to preview version/publish
 changes and changelogs
@@ -107,19 +107,20 @@ changes and changelogs
    - [lerna version --allow-peer-dependencies-update](https://github.com/lerna-lite/lerna-lite/tree/main/packages/version#--allow-peer-dependencies-update)
    - [lerna version --skip-bump-only-release](https://github.com/lerna-lite/lerna-lite/tree/main/packages/version#--skip-bump-only-release)
    - [lerna publish --remove-package-fields](https://github.com/lerna-lite/lerna-lite/tree/main/packages/publish#--remove-package-fields-fields) (cleanup fields from `package.json` before publishing, Lerna-Lite removes `scripts` and `devDependencies` through this option)
-   - in summary the best feature of Lerna-Lite has to be its modularity, you only install what you really need and use (see [installation](#cli-installation) below)
-      - a large portion of the users are only interested in version/publish features
+  
+To summarize, the best feature of Lerna-Lite has to be its modularity, you only install what you really need and use (see [installation](#cli-installation) below)
+  - a large portion of the users are only interested in version/publish commands
 
 ### This lib will help you with
 
-> **Note** all commands are optional in Lerna-Lite, refer to [Installation table](#separate--optional-installs) for more info
+> **Note** all commands are optional in Lerna-Lite, refer to the [Installation table](#separate--optional-installs) for more info
 
 #### [Version](https://github.com/lerna-lite/lerna-lite/tree/main/packages/version) and [Publish](https://github.com/lerna-lite/lerna-lite/tree/main/packages/publish) commands
 
 - Automate the creation of new Versions (`independent` or fixed version) of all your workspace packages.
   - it will automatically Commit/Tag your new Version & create new GitHub/GitLab Release (when enabled).
 - Automate, when enabled, the creation of Changelogs for all your packages by reading all [Conventional Commits](https://www.conventionalcommits.org/) and a merged one in the project root.
-- Automate, when enabled, the repository Publishing of your new version for all your packages (NPM or other platforms).
+- Automate, when enabled, the repository Publishing of your new version(s) for all your packages (on NPM or other platforms).
 
 #### Other optional commands
 
@@ -140,7 +141,7 @@ changes and changelogs
 
 ## Getting Started
 
-Let's start by installing Lerna CLI as a dev dependency of your project and the run the `init` command to get started (see [init#readme](https://github.com/lerna-lite/lerna-lite/tree/main/packages/init#readme) for all options). Note that all commands, except `init`, are optional and must be installed separately, refer to the **[Installation table](#separate--optional-installs)** for more info.
+Let's start by installing Lerna CLI as a dev dependency of your project and the run the `init` command to get started (see [init#readme](https://github.com/lerna-lite/lerna-lite/tree/main/packages/init#readme) for all options). Note that the CLI must be installed at all time and other commands (except `init` which is included in the CLI) must be installed separately, refer to the **[Installation table](#separate--optional-installs)** for more info.
 
 ```sh
 # install Lerna-Lite CLI locally or globally (only includes `init` command)
