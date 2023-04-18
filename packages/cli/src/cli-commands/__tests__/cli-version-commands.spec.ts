@@ -37,5 +37,8 @@ describe('Version Command CLI options', () => {
       .parse(argv);
     // console.log('%o', options);
     expect(options).toEqual(expected);
+    // The check below are to keep the linter from complaining.
+    expect(_).toBeDefined();
+    expect(_caller).toBeDefined();
   });
 });
