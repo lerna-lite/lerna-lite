@@ -169,7 +169,7 @@ export class Command<T extends AvailableCommandOption> {
     let loglevel;
     let progress;
 
-    /* c8 ignore next 3 */
+    /* c8 ignore next 4 */
     if (isCI || !process.stderr.isTTY || process.env.TERM === 'dumb') {
       log.disableColor();
       progress = false;
