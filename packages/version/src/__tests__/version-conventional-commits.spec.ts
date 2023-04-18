@@ -172,6 +172,15 @@ describe('--conventional-commits', () => {
       });
     });
 
+    it('throws when --conventional-prerelease is used with an argument that returns nothing to prerelease', async () => {
+      prereleaseVersionBumps.forEach((bump) => (recommendVersion as Mock).mockResolvedValueOnce(bump));
+      const cwd = await initFixture('prerelease-independent');
+
+      const command = new VersionCommand(createArgv(cwd, '--conventional-commits', '--conventional-prerelease', 'premajor'));
+
+      await expect(command).rejects.toThrow('No packages found to prerelease when using "--conventional-prerelease premajor".');
+    });
+
     it('accepts --changelog-preset option', async () => {
       const cwd = await initFixture('independent');
       const changelogOpts = {
