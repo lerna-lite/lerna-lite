@@ -81,7 +81,7 @@ Here are some of the largest projects using the Lerna-Lite fork
 
 ## About Lerna-Lite
 
-Lerna-Lite differs from the original [Lerna](https://github.com/lerna/lerna) since it only has a limited subset of commands from Lerna, which itself has 15 commands, while Lerna-Lite only includes half of them and all commands are optional. Lerna was originally built as an all-in-one tool, however nowadays Workspaces are available in all package managers and the need for an all-in-one tool, which includes built-in workspaces functionalities, is no longer needed. Lerna-Lite is built around this new reality and only provides commands that package managers do not include. To summarize, Lerna-Lite is more modular than the original Lerna and you'll end up installing a lot less dependencies, this also makes it more versatile to use with other tools like Turborepo, pnpm and others...
+Lerna-Lite differs from the original [Lerna](https://github.com/lerna/lerna) since it only has a limited subset of Lerna's list of commands (which itself has 15 commands), while Lerna-Lite only includes half of them and all commands are optional. Lerna was originally built as an all-in-one tool, however nowadays Workspaces are available in all package managers and the need for an all-in-one tool, which includes built-in workspaces functionalities, is no longer needed. Lerna-Lite is built around this new reality and only provides commands that package managers do not include. To summarize, Lerna-Lite is more modular than the original Lerna and you'll end up installing a lot less dependencies, this also makes it more versatile to use with other tools like Turborepo, pnpm and others...
 
 Lerna-Lite assumes, and requires you to pre-setup your Workspace through your favorite package manager (npm, pnpm, yarn) that will take care of the symlinks (Lerna-Lite does **not include** the `bootstrap`, `add`, `create` and `link` commands hence the need for a workspace pre-setup), so make sure that your workspace is properly setup **before** adding Lerna-Lite.
 
@@ -111,7 +111,7 @@ changes and changelogs
    - [lerna version --skip-bump-only-release](https://github.com/lerna-lite/lerna-lite/tree/main/packages/version#--skip-bump-only-release) to avoid cluttering your GitHub releases in `independent` mode
    - [lerna publish --remove-package-fields](https://github.com/lerna-lite/lerna-lite/tree/main/packages/publish#--remove-package-fields-fields) (empty certain fields from `package.json` before publishing, ie: Lerna-Lite uses it to remove `scripts` and `devDependencies`)
   
-On a final note, the best feature of Lerna-Lite (versus Lerna) has to be its modularit. A large portion of the users are only interested in version/publish commands and on the other hand, a small minority are interested in only run/exec commands. Lerna-Lite offers that by allowing you to install only what you use and are interested in (see [installation](#cli-installation) below). 
+On a final note, the best feature of Lerna-Lite (versus Lerna) has to be its modularity. A large portion of the users are only interested in version/publish commands but on the other hand, a small minority are only interested in run/exec commands. Lerna-Lite offers that flexibility by allowing you to install only what you use and are interested in (see [installation](#cli-installation) below). 
 
 ### This lib will help you with
 
