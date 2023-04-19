@@ -62,15 +62,35 @@
     "npmlog": "^7.0.1",
     "yargs": "^17.7.1"
   },
-  "peerDependencies": {
-    "@lerna-lite/publish": "2.0.0"
-  },
-  "peerDependenciesMeta": {
-    "@lerna-lite/publish": {
-      "optional": true
-    }
-  },
   "devDependencies": {
     "yargs-parser": "^21.1.1"
+  },
+  "peerDependencies": {
+    "@lerna-lite/exec": "2.x",
+    "@lerna-lite/list": "2.x",
+    "@lerna-lite/publish": "2.x",
+    "@lerna-lite/run": "2.x",
+    "@lerna-lite/version": "2.x",
+    "@lerna-lite/watch": "2.x"
+  },
+  "peerDependenciesMeta": {
+    "@lerna-lite/exec": {
+      "optional": true
+    },
+    "@lerna-lite/list": {
+      "optional": true
+    },
+    "@lerna-lite/publish": {
+      "optional": true
+    },
+    "@lerna-lite/run": {
+      "optional": true
+    },
+    "@lerna-lite/version": {
+      "optional": true
+    },
+    "@lerna-lite/watch": {
+      "optional": true
+    }
   }
 }
