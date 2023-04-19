@@ -188,6 +188,9 @@ importers:
       '@lerna-lite/init':
         specifier: workspace:*
         version: link:../init
+      '@lerna-lite/publish':
+        specifier: 2.0.0
+        version: link:../publish
       dedent:
         specifier: ^0.7.0
         version: 0.7.0

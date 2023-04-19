@@ -62,6 +62,14 @@
     "npmlog": "^7.0.1",
     "yargs": "^17.7.1"
   },
+  "peerDependencies": {
+    "@lerna-lite/publish": "2.0.0"
+  },
+  "peerDependenciesMeta": {
+    "@lerna-lite/publish": {
+      "optional": true
+    }
+  },
   "devDependencies": {
     "yargs-parser": "^21.1.1"
   }
