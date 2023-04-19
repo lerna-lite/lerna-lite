@@ -9,6 +9,7 @@ export default defineConfig({
     threads: false,
     testTimeout: 60000,
     setupFiles: ['./vitest/vitest-setup.ts', './vitest/silence-logging.ts', './helpers/npm/set-npm-userconfig.ts'],
+    silent: true,
     watch: false,
     coverage: {
       include: ['packages/**/*.ts'],
