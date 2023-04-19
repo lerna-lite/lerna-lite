@@ -61,9 +61,6 @@
       "json5@<1.0.2": ">=1.0.2"
     }
   },
-  "dependencies": {
-    "nx": "15.4.8"
-  },
   "devDependencies": {
     "@lerna-lite/changed": "workspace:*",
     "@lerna-lite/cli": "workspace:*",
@@ -102,6 +99,7 @@
     "normalize-newline": "^4.1.0",
     "normalize-path": "^3.0.0",
     "npmlog": "^7.0.1",
+    "nx": "15.4.8",
     "prettier": "^2.8.7",
     "rimraf": "^5.0.0",
     "semver": "^7.4.0",

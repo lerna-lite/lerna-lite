@@ -5,6 +5,7 @@
       "options": {
         "useDaemonProcess": false,
         "cacheableOperations": ["my-cacheable-script"],
+        "captureStderr": true,
         "skipNxCache": true
       }
     }
