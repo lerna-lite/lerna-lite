@@ -147,6 +147,29 @@ describe('--conventional-commits', () => {
       });
     });
 
+    it('should call recommended version with conventionalPreRelease=* and conventionalBumpPrerelease set', async () => {
+      prereleaseVersionBumps.forEach((bump) => (recommendVersion as Mock).mockResolvedValueOnce(bump));
+      const cwd = await initFixture('prerelease-independent');
+
+      await new VersionCommand(createArgv(cwd, '--conventional-commits', '--conventional-prerelease', '*', '--conventional-bump-prerelease'));
+
+      prereleaseVersionBumps.forEach((version, name) => {
+        const prereleaseId = (semver as any).prerelease(version)[0];
+        expect(recommendVersion).toHaveBeenCalledWith(expect.objectContaining({ name }), 'independent', {
+          changelogPreset: undefined,
+          rootPath: cwd,
+          tagPrefix: 'v',
+          prereleaseId,
+          conventionalBumpPrerelease: true,
+        });
+        expect(updateChangelog).toHaveBeenCalledWith(expect.objectContaining({ name, version }), 'independent', {
+          changelogPreset: undefined,
+          rootPath: cwd,
+          tagPrefix: 'v',
+        });
+      });
+    });
+
     it('should graduate prerelease version bumps and generate CHANGELOG', async () => {
       versionBumps.forEach((bump) => (recommendVersion as Mock).mockResolvedValueOnce(bump));
       const cwd = await initFixture('prerelease-independent');
@@ -172,13 +195,22 @@ describe('--conventional-commits', () => {
       });
     });
 
-    it('throws when --conventional-prerelease is used with an argument that returns nothing to prerelease', async () => {
+    it('throws when --conventional-prerelease is used with a string argument that returns nothing to prerelease', async () => {
       prereleaseVersionBumps.forEach((bump) => (recommendVersion as Mock).mockResolvedValueOnce(bump));
       const cwd = await initFixture('prerelease-independent');
 
       const command = new VersionCommand(createArgv(cwd, '--conventional-commits', '--conventional-prerelease', 'premajor'));
 
       await expect(command).rejects.toThrow('No packages found to prerelease when using "--conventional-prerelease premajor".');
+    });
+
+    it('throws when --conventional-prerelease is used with a number argument that returns nothing to prerelease', async () => {
+      prereleaseVersionBumps.forEach((bump) => (recommendVersion as Mock).mockResolvedValueOnce(bump));
+      const cwd = await initFixture('prerelease-independent');
+
+      const command = new VersionCommand(createArgv(cwd, '--conventional-commits', '--conventional-prerelease', 22));
+
+      await expect(command).rejects.toThrow('No packages found to prerelease when using "--conventional-prerelease 22".');
     });
 
     it('accepts --changelog-preset option', async () => {

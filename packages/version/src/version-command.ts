@@ -479,7 +479,7 @@ export class VersionCommand extends Command<VersionCommandOption> {
 
     const prePkgs = collectPackages(this.packageGraph, { isCandidate }).map((pkg) => pkg?.name ?? '');
 
-    if (typeof this.options.conventionalPrerelease === 'string' && prePkgs.length === 0) {
+    if (typeof this.options.conventionalPrerelease !== 'boolean' && prePkgs.length === 0) {
       throw new ValidationError(
         'ENOPRERELEASE',
         `No packages found to prerelease when using "--conventional-prerelease ${this.options.conventionalPrerelease}".`
