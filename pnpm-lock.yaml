@@ -185,12 +185,27 @@ importers:
       '@lerna-lite/core':
         specifier: workspace:*
         version: link:../core
+      '@lerna-lite/exec':
+        specifier: 2.x
+        version: link:../exec
       '@lerna-lite/init':
         specifier: workspace:*
         version: link:../init
+      '@lerna-lite/list':
+        specifier: 2.x
+        version: link:../list
       '@lerna-lite/publish':
-        specifier: 2.0.0
+        specifier: 2.x
         version: link:../publish
+      '@lerna-lite/run':
+        specifier: 2.x
+        version: link:../run
+      '@lerna-lite/version':
+        specifier: 2.x
+        version: link:../version
+      '@lerna-lite/watch':
+        specifier: 2.x
+        version: link:../watch
       dedent:
         specifier: ^0.7.0
         version: 0.7.0
