@@ -1,4 +1,5 @@
 import log from 'npmlog';
+import { afterEach } from 'vitest';
 
 import { multiLineTrimRight } from './index.js';
 

@@ -904,6 +904,7 @@ export class PublishCommand extends Command<PublishCommandOption> {
                 }
 
                 this.logger.silly('', err);
+                this.logger.warn('notice', `Package failed to publish: ${pkg.name}`);
                 this.logger.error(err.code, (err.body && err.body.error) || err.message);
 
                 // avoid dumping logs, this isn't a lerna problem
