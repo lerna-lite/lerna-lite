@@ -27,7 +27,7 @@ export default defineConfig({
       escapeString: true,
     },
     onConsoleLog(log, _type) {
-      if (/* _type === 'stderr' && */ log.includes(`Could not find 'nx' module`) || log.includes('lerna-lite ')) {
+      if (/* _type === 'stderr' && */ log.includes(`Could not find 'nx' module`) || log.includes('lerna-lite')) {
         return false;
       }
     },
