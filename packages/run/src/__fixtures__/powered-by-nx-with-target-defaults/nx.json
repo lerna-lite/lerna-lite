@@ -4,7 +4,8 @@
       "runner": "nx/tasks-runners/default",
       "options": {
         "useDaemonProcess": false,
-        "cacheableOperations": ["my-cacheable-script"]
+        "cacheableOperations": ["my-cacheable-script"],
+        "skipNxCache": true
       }
     }
   },
