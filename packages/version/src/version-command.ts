@@ -477,7 +477,20 @@ export class VersionCommand extends Command<VersionCommandOption> {
       ? () => true
       : (_node, name) => prereleasePackageNames.has(name);
 
-    return collectPackages(this.packageGraph, { isCandidate }).map((pkg) => pkg?.name ?? '');
+    const prePkgs = collectPackages(this.packageGraph, { isCandidate }).map((pkg) => pkg?.name ?? '');
+
+    if (
+      this.options.conventionalPrerelease !== undefined &&
+      typeof this.options.conventionalPrerelease !== 'boolean' &&
+      prePkgs.length === 0
+    ) {
+      throw new ValidationError(
+        'ENOPRERELEASE',
+        `No packages found to prerelease when using "--conventional-prerelease ${this.options.conventionalPrerelease}".`
+      );
+    }
+
+    return prePkgs;
   }
 
   /**
