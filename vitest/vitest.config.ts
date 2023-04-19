@@ -26,8 +26,8 @@ export default defineConfig({
     snapshotFormat: {
       escapeString: true,
     },
-    onConsoleLog(log, type) {
-      if (type === 'stderr' && log.includes(`Could not find 'nx' module`)) {
+    onConsoleLog(log, _type) {
+      if (/* _type === 'stderr' && */ log.includes(`Could not find 'nx' module`) || log.includes('lerna-lite ')) {
         return false;
       }
     },
