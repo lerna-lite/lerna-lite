@@ -22,11 +22,3 @@ expect.extend({
     };
   },
 });
-
-// filter out certain logs from showing up in unit test log
-const log = console.log;
-console.log = (...msg) => {
-  if (!msg[0]?.includes('lerna-lite')) {
-    log(...msg);
-  }
-};

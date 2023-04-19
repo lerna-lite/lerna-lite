@@ -15,7 +15,7 @@ vi.mock('@lerna-lite/core', async () => ({
 // also point to the local run command so that all mocks are properly used even by the command-runner
 vi.mock('@lerna-lite/run', () => vi.importActual<any>('../run-command'));
 
-import { pathExists, readJson } from 'fs-extra/esm';
+import { pathExists, readJson } from 'fs-extra';
 import { globby } from 'globby';
 import yargParser from 'yargs-parser';
 
