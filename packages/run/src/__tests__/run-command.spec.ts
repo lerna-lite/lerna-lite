@@ -393,9 +393,12 @@ describe('RunCommand', () => {
         }
       });
       originalStdout = process.stdout.write;
-      (process.stdout as any).write = (v) => {
+      vi.spyOn(process.stdout, 'write').mockImplementation((v: string) => {
         collectedOutput = `${collectedOutput}\n${v}`;
-      };
+      });
+      // (process.stdout as any).write = (v) => {
+      //   collectedOutput = `${collectedOutput}\n${v}`;
+      // };
     });
 
     afterAll(() => {
