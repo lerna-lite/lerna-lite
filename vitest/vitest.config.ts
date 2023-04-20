@@ -2,6 +2,7 @@ import { configDefaults, defineConfig } from 'vitest/config';
 
 export default defineConfig({
   test: {
+    cache: false,
     clearMocks: true,
     environment: 'node',
     testTimeout: 60000,
@@ -19,9 +20,6 @@ export default defineConfig({
         '**/__tests__/**',
       ],
       provider: 'c8',
-    },
-    snapshotFormat: {
-      escapeString: true,
     },
     onConsoleLog(log, type) {
       if (type === 'stderr' && log.includes(`Could not find 'nx' module`)) {

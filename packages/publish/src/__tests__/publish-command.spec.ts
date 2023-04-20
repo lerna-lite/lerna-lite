@@ -152,18 +152,18 @@ describe('PublishCommand', () => {
       expect(promptConfirmation).toHaveBeenLastCalledWith('Are you sure you want to publish these packages?');
       expect((packDirectory as any).registry).toMatchInlineSnapshot(`
         Set {
-          "package-1",
-          "package-4",
-          "package-2",
-          "package-3",
+          package-1,
+          package-4,
+          package-2,
+          package-3,
         }
       `);
       expect((npmPublish as typeof npmPublishMock).registry).toMatchInlineSnapshot(`
         Map {
-          "package-1" => "latest",
-          "package-4" => "latest",
-          "package-2" => "latest",
-          "package-3" => "latest",
+          package-1 => latest,
+          package-4 => latest,
+          package-2 => latest,
+          package-3 => latest,
         }
       `);
       expect((npmPublish as typeof npmPublishMock).order()).toEqual([
@@ -197,18 +197,18 @@ describe('PublishCommand', () => {
       expect(promptConfirmation).toHaveBeenLastCalledWith('Are you sure you want to publish these packages?');
       expect((packDirectory as any).registry).toMatchInlineSnapshot(`
         Set {
-          "@my-workspace/package-1",
-          "@my-workspace/package-4",
-          "@my-workspace/package-2",
-          "@my-workspace/package-3",
+          @my-workspace/package-1,
+          @my-workspace/package-4,
+          @my-workspace/package-2,
+          @my-workspace/package-3,
         }
       `);
       expect((npmPublish as typeof npmPublishMock).registry).toMatchInlineSnapshot(`
         Map {
-          "@my-workspace/package-1" => "latest",
-          "@my-workspace/package-4" => "latest",
-          "@my-workspace/package-2" => "latest",
-          "@my-workspace/package-3" => "latest",
+          @my-workspace/package-1 => latest,
+          @my-workspace/package-4 => latest,
+          @my-workspace/package-2 => latest,
+          @my-workspace/package-3 => latest,
         }
       `);
       expect((npmPublish as typeof npmPublishMock).order()).toEqual([
@@ -289,8 +289,8 @@ describe('PublishCommand', () => {
       const logMessages = loggingOutput('warn');
       expect(logMessages).toMatchInlineSnapshot(`
         [
-          "--graph-type=dependencies is deprecated and will be removed in the next major version of lerna-lite. If you have a use-case you feel requires it please open an issue to discuss: https://github.com/lerna/lerna/issues/new/choose",
-          "we recommend using --sync-workspace-lock which will sync your lock file via your favorite npm client instead of relying on Lerna-Lite itself to update it.",
+          --graph-type=dependencies is deprecated and will be removed in the next major version of lerna-lite. If you have a use-case you feel requires it please open an issue to discuss: https://github.com/lerna/lerna/issues/new/choose,
+          we recommend using --sync-workspace-lock which will sync your lock file via your favorite npm client instead of relying on Lerna-Lite itself to update it.,
         ]
       `);
     });
@@ -545,18 +545,18 @@ describe('PublishCommand', () => {
       expect(promptConfirmation).toHaveBeenLastCalledWith('Are you sure you want to publish these packages?');
       expect((packDirectory as any).registry).toMatchInlineSnapshot(`
         Set {
-          "package-1",
-          "package-4",
-          "package-2",
-          "package-3",
+          package-1,
+          package-4,
+          package-2,
+          package-3,
         }
       `);
       expect((npmPublish as typeof npmPublishMock).registry).toMatchInlineSnapshot(`
         Map {
-          "package-1" => "latest",
-          "package-4" => "latest",
-          "package-2" => "latest",
-          "package-3" => "latest",
+          package-1 => latest,
+          package-4 => latest,
+          package-2 => latest,
+          package-3 => latest,
         }
       `);
       expect((npmPublish as typeof npmPublishMock).order()).toEqual([
