@@ -39,7 +39,7 @@
     "outdated:ws": "pnpm -r --stream outdated",
     "test": "vitest --watch --no-threads --config ./vitest/vitest.config.ts",
     "posttest": "node scripts/cleanup-temp-files.mjs",
-    "test:coverage": "vitest --coverage --no-threads --config ./vitest/vitest.config.ts",
+    "test:coverage": "vitest --coverage --no-threads --silent --config ./vitest/vitest.config.ts",
     "test:coverage:update": "vitest --coverage --no-threads --update --config ./vitest/vitest.config.ts"
   },
   "homepage": "https://github.com/lerna-lite/lerna-lite",
