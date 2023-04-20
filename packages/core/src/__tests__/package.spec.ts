@@ -391,9 +391,9 @@ describe('Package', () => {
 
         expect(pkg.toJSON()).toMatchInlineSnapshot(`
           {
-            peerDependencies: {
-              a: ^1.0.0,
-              b: ^1.0.0,
+            "peerDependencies": {
+              "a": "^1.0.0",
+              "b": "^1.0.0",
             },
           }
         `);
@@ -415,9 +415,9 @@ describe('Package', () => {
 
         expect(pkg.toJSON()).toMatchInlineSnapshot(`
           {
-            peerDependencies: {
-              a: ^2.0.0,
-              b: >=1.0.0,
+            "peerDependencies": {
+              "a": "^2.0.0",
+              "b": ">=1.0.0",
             },
           }
         `);
@@ -439,9 +439,9 @@ describe('Package', () => {
 
         expect(pkg.toJSON()).toMatchInlineSnapshot(`
           {
-            peerDependencies: {
-              a: ^1.0.0-alpha.1,
-              b: >=1.0.0-alpha.0,
+            "peerDependencies": {
+              "a": "^1.0.0-alpha.1",
+              "b": ">=1.0.0-alpha.0",
             },
           }
         `);
@@ -463,9 +463,9 @@ describe('Package', () => {
 
         expect(pkg.toJSON()).toMatchInlineSnapshot(`
           {
-            peerDependencies: {
-              a: ^1.0.0-alpha.1+SHA,
-              b: >=1.0.0-alpha.0+SHA,
+            "peerDependencies": {
+              "a": "^1.0.0-alpha.1+SHA",
+              "b": ">=1.0.0-alpha.0+SHA",
             },
           }
         `);
@@ -491,12 +491,12 @@ describe('Package', () => {
 
         expect(pkg.toJSON()).toMatchInlineSnapshot(`
           {
-            dependencies: {
-              a: workspace:^2.0.0,
-              b: workspace:>=1.0.0,
-              c: workspace:./foo,
-              d: file:./foo,
-              e: ^1.0.0,
+            "dependencies": {
+              "a": "workspace:^2.0.0",
+              "b": "workspace:>=1.0.0",
+              "c": "workspace:./foo",
+              "d": "file:./foo",
+              "e": "^1.0.0",
             },
           }
         `);
@@ -527,16 +527,16 @@ describe('Package', () => {
 
         expect(pkg.toJSON()).toMatchInlineSnapshot(`
           {
-            dependencies: {
-              a: workspace:^2.0.0,
-              b: workspace:>=1.0.0,
-              c: workspace:./foo,
-              d: file:./foo,
-              e: ^1.0.0,
+            "dependencies": {
+              "a": "workspace:^2.0.0",
+              "b": "workspace:>=1.0.0",
+              "c": "workspace:./foo",
+              "d": "file:./foo",
+              "e": "^1.0.0",
             },
-            peerDependencies: {
-              a: workspace:^2.0.0,
-              b: workspace:>=1.0.0,
+            "peerDependencies": {
+              "a": "workspace:^2.0.0",
+              "b": "workspace:>=1.0.0",
             },
           }
         `);
@@ -563,15 +563,15 @@ describe('Package', () => {
 
         expect(pkg.toJSON()).toMatchInlineSnapshot(`
           {
-            dependencies: {
-              a: workspace:^2.0.0,
-              b: workspace:>=1.0.0,
-              c: workspace:./foo,
-              d: file:./foo,
-              e: ^1.0.0,
+            "dependencies": {
+              "a": "workspace:^2.0.0",
+              "b": "workspace:>=1.0.0",
+              "c": "workspace:./foo",
+              "d": "file:./foo",
+              "e": "^1.0.0",
             },
-            peerDependencies: {
-              a: workspace:>=1.0.0,
+            "peerDependencies": {
+              "a": "workspace:>=1.0.0",
             },
           }
         `);
@@ -598,15 +598,15 @@ describe('Package', () => {
 
         expect(pkg.toJSON()).toMatchInlineSnapshot(`
           {
-            dependencies: {
-              a: workspace:^2.0.0,
-              b: workspace:>=1.0.0,
-              c: workspace:./foo,
-              d: file:./foo,
-              e: ^1.0.0,
+            "dependencies": {
+              "a": "workspace:^2.0.0",
+              "b": "workspace:>=1.0.0",
+              "c": "workspace:./foo",
+              "d": "file:./foo",
+              "e": "^1.0.0",
             },
-            peerDependencies: {
-              a: workspace:>=1.0.0 < 2.0.0,
+            "peerDependencies": {
+              "a": "workspace:>=1.0.0 < 2.0.0",
             },
           }
         `);
@@ -627,9 +627,9 @@ describe('Package', () => {
 
         expect(pkg.toJSON()).toMatchInlineSnapshot(`
           {
-            devDependencies: {
-              a: workspace:*,
-              b: workspace:^1.0.0,
+            "devDependencies": {
+              "a": "workspace:*",
+              "b": "workspace:^1.0.0",
             },
           }
         `);
@@ -650,9 +650,9 @@ describe('Package', () => {
 
         expect(pkg.toJSON()).toMatchInlineSnapshot(`
           {
-            optionalDependencies: {
-              a: workspace:^,
-              b: workspace:^1.0.0,
+            "optionalDependencies": {
+              "a": "workspace:^",
+              "b": "workspace:^1.0.0",
             },
           }
         `);
@@ -673,9 +673,9 @@ describe('Package', () => {
 
         expect(pkg.toJSON()).toMatchInlineSnapshot(`
           {
-            dependencies: {
-              a: workspace:~,
-              b: workspace:^1.0.0,
+            "dependencies": {
+              "a": "workspace:~",
+              "b": "workspace:^1.0.0",
             },
           }
         `);
@@ -698,11 +698,11 @@ describe('Package', () => {
 
         expect(pkg.toJSON()).toMatchInlineSnapshot(`
           {
-            dependencies: {
-              b: workspace:^1.0.0,
+            "dependencies": {
+              "b": "workspace:^1.0.0",
             },
-            peerDependencies: {
-              a: workspace:2.0.0,
+            "peerDependencies": {
+              "a": "workspace:2.0.0",
             },
           }
         `);
@@ -723,9 +723,9 @@ describe('Package', () => {
 
         expect(pkg.toJSON()).toMatchInlineSnapshot(`
           {
-            dependencies: {
-              a: workspace:>=1.2.0,
-              b: workspace:^1.0.0,
+            "dependencies": {
+              "a": "workspace:>=1.2.0",
+              "b": "workspace:^1.0.0",
             },
           }
         `);
@@ -755,13 +755,13 @@ describe('Package', () => {
 
         expect(pkg.toJSON()).toMatchInlineSnapshot(`
           {
-            dependencies: {
-              a: 2.0.0,
-              b: ^1.1.0,
+            "dependencies": {
+              "a": "2.0.0",
+              "b": "^1.1.0",
             },
-            peerDependencies: {
-              a: >=1.0.0,
-              b: ^1.1.0,
+            "peerDependencies": {
+              "a": ">=1.0.0",
+              "b": "^1.1.0",
             },
           }
         `);
@@ -789,13 +789,13 @@ describe('Package', () => {
 
         expect(pkg.toJSON()).toMatchInlineSnapshot(`
           {
-            dependencies: {
-              a: ^2.0.0,
-              b: ~1.1.0,
+            "dependencies": {
+              "a": "^2.0.0",
+              "b": "~1.1.0",
             },
-            peerDependencies: {
-              a: >=1.0.0,
-              b: ~1.1.0,
+            "peerDependencies": {
+              "a": ">=1.0.0",
+              "b": "~1.1.0",
             },
           }
         `);
@@ -824,13 +824,13 @@ describe('Package', () => {
 
         expect(pkg.toJSON()).toMatchInlineSnapshot(`
           {
-            dependencies: {
-              a: ~2.0.0,
-              b: ^1.1.0,
+            "dependencies": {
+              "a": "~2.0.0",
+              "b": "^1.1.0",
             },
-            peerDependencies: {
-              a: >=1.0.0,
-              b: ~1.0.0,
+            "peerDependencies": {
+              "a": ">=1.0.0",
+              "b": "~1.0.0",
             },
           }
         `);
@@ -866,12 +866,12 @@ describe('Package', () => {
         );
         expect(pkg.toJSON()).toMatchInlineSnapshot(`
           {
-            dependencies: {
-              a: latest,
-              b: ^2.2.4,
+            "dependencies": {
+              "a": "latest",
+              "b": "^2.2.4",
             },
-            peerDependencies: {
-              b: ^2.2.4,
+            "peerDependencies": {
+              "b": "^2.2.4",
             },
           }
         `);
