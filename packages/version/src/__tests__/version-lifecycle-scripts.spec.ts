@@ -20,8 +20,11 @@ vi.mock('@lerna-lite/core', async () => ({
   runLifecycle: (await vi.importActual<any>('../../../core/src/__mocks__/run-lifecycle')).runLifecycle,
   throwIfUncommitted: (await vi.importActual<any>('../../../core/src/__mocks__/check-working-tree')).throwIfUncommitted,
 }));
+
+// utils
 import { runLifecycle, VersionCommandOption } from '@lerna-lite/core';
 import { loadJsonFile } from 'load-json-file';
+import npmlog from 'npmlog';
 import { fileURLToPath } from 'node:url';
 import { dirname } from 'node:path';
 import yargParser from 'yargs-parser';
@@ -48,6 +51,7 @@ const createArgv = (cwd: string, ...args: string[]) => {
 
 describe('lifecycle scripts', () => {
   const npmLifecycleEvent = process.env.npm_lifecycle_event;
+  npmlog.level = 'silent';
 
   afterEach(() => {
     process.env.npm_lifecycle_event = npmLifecycleEvent;

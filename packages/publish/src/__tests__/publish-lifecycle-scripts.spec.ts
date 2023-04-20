@@ -42,6 +42,7 @@ import { packDirectory } from '../lib/pack-directory';
 import { runLifecycle } from '@lerna-lite/core';
 
 // helpers
+import npmlog from 'npmlog';
 import { dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { commandRunner, initFixtureFactory } from '@lerna-test/helpers';
@@ -56,6 +57,7 @@ const lernaPublish = commandRunner(cliCommands);
 
 describe('lifecycle scripts', () => {
   const npmLifecycleEvent = process.env.npm_lifecycle_event;
+  npmlog.level = 'silent';
 
   afterEach(() => {
     process.env.npm_lifecycle_event = npmLifecycleEvent;

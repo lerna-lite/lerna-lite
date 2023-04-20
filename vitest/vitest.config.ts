@@ -5,11 +5,11 @@ export default defineConfig({
     cache: false,
     clearMocks: true,
     environment: 'node',
+    globals: true,
     threads: false,
     testTimeout: 60000,
     setupFiles: ['./vitest/vitest-setup.ts', './vitest/silence-logging.ts', './helpers/npm/set-npm-userconfig.ts'],
     silent: true,
-    singleThread: true,
     watch: false,
     coverage: {
       include: ['packages/**/*.ts'],
