@@ -382,8 +382,12 @@ describe('RunCommand', () => {
     let testDir;
     let collectedOutput = '';
     let originalStdout;
+    const stdinIsTTY = process.stdin.isTTY;
+    const stdoutIsTTY = process.stdout.isTTY;
 
     beforeAll(async () => {
+      process.stdin.isTTY = true;
+      process.stdout.isTTY = true;
       testDir = await initFixture('powered-by-nx-with-target-defaults');
       process.env.NX_WORKSPACE_ROOT_PATH = testDir;
       // @ts-ignore
@@ -393,16 +397,15 @@ describe('RunCommand', () => {
         }
       });
       originalStdout = process.stdout.write;
-      vi.spyOn(process.stdout, 'write').mockImplementation((v: string) => {
+      (process.stdout as any).write = (v) => {
         collectedOutput = `${collectedOutput}\n${v}`;
-      });
-      // (process.stdout as any).write = (v) => {
-      //   collectedOutput = `${collectedOutput}\n${v}`;
-      // };
+      };
     });
 
     afterAll(() => {
       process.stdout.write = originalStdout;
+      process.stdin.isTTY = stdinIsTTY;
+      process.stdout.isTTY = stdoutIsTTY;
     });
 
     it('runs a script in packages', async () => {
