@@ -53,7 +53,7 @@ expect.addSnapshotSerializer({
   },
   serialize(val, config, indentation, depth) {
     // top-level strings don't need quotes, but nested ones do (object properties, etc)
-    return depth ? `'${val}'` : val;
+    return depth ? `"${val}"` : val;
   },
 });
 
