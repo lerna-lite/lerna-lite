@@ -1,4 +1,4 @@
-import { beforeAll, describe, expect, it, Mock, vi } from 'vitest';
+import { beforeAll, beforeEach, describe, expect, it, Mock, vi } from 'vitest';
 
 // FIXME: better mock for version command
 vi.mock('../../../version/src/lib/git-push', async () => await vi.importActual('../../../version/src/lib/__mocks__/git-push'));
@@ -336,6 +336,10 @@ describe('PublishCommand', () => {
   });
 
   describe('--otp', () => {
+    beforeEach(() => {
+      vi.clearAllMocks();
+    });
+
     (getOneTimePassword as Mock).mockImplementation(() => Promise.resolve('654321'));
 
     it('passes one-time password to npm commands', async () => {
@@ -421,6 +425,10 @@ describe('PublishCommand', () => {
   });
 
   describe('--legacy-auth', () => {
+    beforeEach(() => {
+      vi.clearAllMocks();
+    });
+
     it('passes auth to npm commands', async () => {
       const testDir = await initFixture('normal');
       const data = 'hi:mom';
@@ -439,6 +447,10 @@ describe('PublishCommand', () => {
   });
 
   describe('--registry', () => {
+    beforeEach(() => {
+      vi.clearAllMocks();
+    });
+
     it('passes registry to npm commands that also includes workspace in the name prefix', async () => {
       const testDir = await initFixture('normal-workspace-name-prefixed');
       const registry = 'https://my-private-registry';
@@ -521,6 +533,10 @@ describe('PublishCommand', () => {
   });
 
   describe('--verify-access', () => {
+    beforeEach(() => {
+      vi.clearAllMocks();
+    });
+
     it("publishes packages after verifying the user's access to each package", async () => {
       const testDir = await initFixture('normal');
 
@@ -571,6 +587,10 @@ describe('PublishCommand', () => {
   });
 
   describe('--no-verify-access', () => {
+    beforeEach(() => {
+      vi.clearAllMocks();
+    });
+
     it('shows warning that this is the default behavior and that this option is no longer needed', async () => {
       const cwd = await initFixture('normal');
 
@@ -604,6 +624,10 @@ describe('PublishCommand', () => {
   });
 
   describe('--no-git-reset', () => {
+    beforeEach(() => {
+      vi.clearAllMocks();
+    });
+
     it('skips git checkout of package manifests', async () => {
       const cwd = await initFixture('normal');
 
@@ -632,6 +656,10 @@ describe('PublishCommand', () => {
   });
 
   describe('--contents', () => {
+    beforeEach(() => {
+      vi.clearAllMocks();
+    });
+
     it('allows you to do fancy angular crap', async () => {
       vi.spyOn(console, 'log').mockImplementation(() => {});
       const cwd = await initFixture('lifecycle');
@@ -694,6 +722,10 @@ describe('PublishCommand', () => {
   });
 
   describe('"describeTag" config', () => {
+    beforeEach(() => {
+      vi.clearAllMocks();
+    });
+
     it('set "describeTag" in lerna.json', async () => {
       const testDir = await initFixture('normal');
 

@@ -1,4 +1,4 @@
-import { describe, expect, it, Mock, test, vi } from 'vitest';
+import { beforeEach, describe, expect, it, Mock, test, vi } from 'vitest';
 
 vi.mock('load-json-file', async () => await vi.importActual('../lib/__mocks__/load-json-file'));
 vi.mock('@lerna-lite/core', async () => {
@@ -11,7 +11,7 @@ vi.mock('@lerna-lite/core', async () => {
 });
 
 import npmlog from 'npmlog';
-import { pathExistsSync, readJsonSync } from 'fs-extra/esm';
+import { pathExistsSync, readJsonSync } from 'fs-extra';
 import { promises as fsPromises } from 'node:fs';
 import { dirname as pathDirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
@@ -219,6 +219,10 @@ describe('run install lockfile-only', () => {
   });
 
   describe('yarn client', () => {
+    beforeEach(() => {
+      vi.clearAllMocks();
+    });
+
     it(`should NOT update project root lockfile when yarn version is 1.0.0 and is below 2.0.0`, async () => {
       (execSync as any).mockReturnValueOnce('1.0.0');
       vi.spyOn(fsPromises, 'access').mockResolvedValue(true as any);
