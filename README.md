@@ -94,13 +94,13 @@ Below are the main reasons as to why this fork was created:
 1. Lerna repo was unmaintained for nearly 2 years (in early 2022, dependencies were really out of date)
     - this is no longer the case since Nrwl, the company behind Nx, took over stewardship of Lerna
         - please note that Lerna-Lite fork was created couple months **before** Nrwl took over Lerna
-        - we now try to replicate Lerna's PRs into Lerna-Lite when possible
-2. a desire to create a smaller and more modular project that is lighter than the original all-in-one Lerna
+        - since then we try to replicate Lerna's PRs into Lerna-Lite when possible
+2. Desire to create a smaller and more modular project that is lighter than the original all-in-one Lerna
     - Lerna-Lite is now entirely modular, all commands are optional (install only what you use)
-3. rewrite the lib in TypeScript and build the project as ESM only (you can still use it in a CommonJS environment)
-4. replicate a few opened PRs from Lerna and add extra features into Lerna-Lite
-5. Lerna is becoming another Nx product (Lerna >=5.5 is now requiring **[Nx](https://nx.dev/)** while it's not in Lerna-Lite)
-   - if you use Nx then it's probably better to stick with Lerna, but if you aren't then Lerna-Lite is preferred
+3. Rewrite the lib in TypeScript and build the project as ESM only (you can still use it in a CommonJS environment)
+4. Replicate a few opened PRs from Lerna and add a few extra features into Lerna-Lite (see below)
+5. Lerna is becoming another Nx product (Lerna >=5.5 now requires **[Nx](https://nx.dev/)** while it's not required in Lerna-Lite)
+   - if you use Nx then it's probably better to use Lerna, but if you are not then Lerna-Lite is preferred
 6. Lastly a few extra features were added, and only exist, into Lerna-Lite:
    - [`workspace:` protocol support](https://github.com/lerna-lite/lerna-lite/tree/main/packages/version#workspace-protocol) (Lerna added support for it six months later in v6)
    - [--dry-run](https://github.com/lerna-lite/lerna-lite/tree/main/packages/version#--dry-run) to preview version/publish
@@ -110,8 +110,8 @@ changes and changelogs
    - [lerna version --allow-peer-dependencies-update](https://github.com/lerna-lite/lerna-lite/tree/main/packages/version#--allow-peer-dependencies-update) if you want your peer deps to also be updated
    - [lerna version --skip-bump-only-release](https://github.com/lerna-lite/lerna-lite/tree/main/packages/version#--skip-bump-only-release) to avoid cluttering your GitHub releases in `independent` mode
    - [lerna publish --remove-package-fields](https://github.com/lerna-lite/lerna-lite/tree/main/packages/publish#--remove-package-fields-fields) (empty certain fields from `package.json` before publishing, ie: Lerna-Lite uses it to remove `scripts` and `devDependencies`)
-  
-On a final note, the best feature of Lerna-Lite (versus Lerna) has to be its modularity. A large portion of the users are only interested in version/publish commands but on the other hand, a small minority are only interested in run/exec commands. Lerna-Lite offers that flexibility by allowing you to install only what you use and are interested in (see [installation](#cli-installation) below). 
+
+On a final note, the best feature of Lerna-Lite (versus Lerna) has to be its modularity. A large portion of the users are only interested in version/publish commands but on the other hand, a small minority are only interested in run/exec commands. Lerna-Lite offers you that flexibility by allowing you to install only the commands you choose to use (see [installation](#cli-installation) below).
 
 ### This lib will help you with
 
