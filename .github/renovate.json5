@@ -27,10 +27,9 @@
       packageNames: ['nx'],
       allowedVersions: '15.4.8', // newer version seems to cause problems with Vitest
     },
-    {
-      packageNames: ['vite'],
-      allowedVersions: '4.2.1',
-    },
+  ],
+  ignoreDeps: [
+    'vite', // Vite is installed only because required by Vitest VSCode debugger to work, see open issue: https://github.com/vitest-dev/vitest/issues/3112
   ],
   schedule: ['on Thursday'],
 }
