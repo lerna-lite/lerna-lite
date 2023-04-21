@@ -4,6 +4,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [2.1.0](https://github.com/lerna-lite/lerna-lite/compare/v2.0.0...v2.1.0) (2023-04-21)
+
+### Features
+
+* **publish:** add name of package that fails to publish ([#574](https://github.com/lerna-lite/lerna-lite/issues/574)) ([94e5fed](https://github.com/lerna-lite/lerna-lite/commit/94e5fed11fc94f757f35c52d454c999135e86547)) - by @ghiscoding
+
+### Bug Fixes
+
+* **deps:** update all non-major dependencies ([#583](https://github.com/lerna-lite/lerna-lite/issues/583)) ([43c156c](https://github.com/lerna-lite/lerna-lite/commit/43c156cb64cef9bb9cbd800b8decbed9137e80a3)) - by @renovate[bot]
+* **publish:** add normalize-path as a dependency ([#579](https://github.com/lerna-lite/lerna-lite/issues/579)) ([5dedbbe](https://github.com/lerna-lite/lerna-lite/commit/5dedbbe582d87521abdafc4d73f7b5504865521e)) - by @rfoel
+
 ## [2.0.0](https://github.com/lerna-lite/lerna-lite/compare/v1.17.0...v2.0.0) (2023-04-14)
 
 ### ⚠ BREAKING CHANGES
