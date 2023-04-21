@@ -185,27 +185,9 @@ importers:
       '@lerna-lite/core':
         specifier: workspace:*
         version: link:../core
-      '@lerna-lite/exec':
-        specifier: 2.x
-        version: link:../exec
       '@lerna-lite/init':
         specifier: workspace:*
         version: link:../init
-      '@lerna-lite/list':
-        specifier: 2.x
-        version: link:../list
-      '@lerna-lite/publish':
-        specifier: 2.x
-        version: link:../publish
-      '@lerna-lite/run':
-        specifier: 2.x
-        version: link:../run
-      '@lerna-lite/version':
-        specifier: 2.x
-        version: link:../version
-      '@lerna-lite/watch':
-        specifier: 2.x
-        version: link:../watch
       dedent:
         specifier: ^0.7.0
         version: 0.7.0
@@ -1560,7 +1542,7 @@ packages:
     resolution: {integrity: sha512-AY0VoG/AXdlSOocuREfPoEW4SNhOPp/7fw6mpAxfVIny1uZ+0fEtMoCi7NhELSlqQIRLMu7RgfKhkxT+AJ+EXg==}
     engines: {node: ^14.17.0 || ^16.13.0 || >=18.0.0}
     dependencies:
-      minimatch: 7.4.5
+      minimatch: 7.4.6
     dev: false
 
   /@tufjs/models@1.0.3:
@@ -4123,7 +4105,7 @@ packages:
     resolution: {integrity: sha512-ezmQ1Dg2b3jVZh2Dh+ar6Eu2MqNSTkyb32HU2MAQQQX9tKM3q/UQ/9lf03lQ5hW+fOeoMnwxwkleZ0xcNp0/qg==}
     engines: {node: ^14.17.0 || ^16.13.0 || >=18.0.0}
     dependencies:
-      minimatch: 7.4.5
+      minimatch: 7.4.6
     dev: false
 
   /ignore@5.2.4:

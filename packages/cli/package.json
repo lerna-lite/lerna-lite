@@ -65,14 +65,6 @@
   "devDependencies": {
     "yargs-parser": "^21.1.1"
   },
-  "peerDependencies": {
-    "@lerna-lite/exec": "2.x",
-    "@lerna-lite/list": "2.x",
-    "@lerna-lite/publish": "2.x",
-    "@lerna-lite/run": "2.x",
-    "@lerna-lite/version": "2.x",
-    "@lerna-lite/watch": "2.x"
-  },
   "peerDependenciesMeta": {
     "@lerna-lite/exec": {
       "optional": true
