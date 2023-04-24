@@ -168,9 +168,10 @@ lerna-repo/
   lerna.json
 ```
 
-Note that `package-a` will not be created, it is only shown here to help clarify the structure. For more info and full details about the `lerna.json` file, you can read the [lerna.json](https://github.com/lerna-lite/lerna-lite/wiki/lerna.json) Wiki.
+Note that `package-a` will not be created, it is only shown here to help clarify the structure. For more info and full details about the `lerna.json` file, you can read the [lerna.json](https://github.com/lerna-lite/lerna-lite/wiki/lerna.json) Wiki. Also note that you can optionally add comments to your `lerna.json` config file since it can parse JSON5 file format.
 
 Finally install the commands that are of interest to you (`publish`, `version`, `run`, `exec`, ...)
+
 ```sh
 $ npm i @lerna-lite/publish -D -W
 ```
