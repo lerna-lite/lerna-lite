@@ -39,6 +39,7 @@ export class Project {
         loaders: {
           ...defaultLoaders,
           '.json': (filepath, content) => {
+            /* c8 ignore next 3 */
             if (!filepath.endsWith('lerna.json')) {
               return defaultLoaders['.json'](filepath, content);
             }
