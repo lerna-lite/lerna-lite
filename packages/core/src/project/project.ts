@@ -1,7 +1,8 @@
-import { cosmiconfigSync, PublicExplorerSync } from 'cosmiconfig';
+import { cosmiconfigSync, defaultLoaders, type PublicExplorerSync } from 'cosmiconfig';
 import dedent from 'dedent';
 import { globbySync } from 'globby';
 import globParent from 'glob-parent';
+import JSON5 from 'json5';
 import log from 'npmlog';
 import { basename, dirname, join, normalize, resolve as pathResolve } from 'node:path';
 import pMap from 'p-map';
@@ -35,6 +36,30 @@ export class Project {
     let explorer: PublicExplorerSync;
     try {
       explorer = cosmiconfigSync('lerna', {
+        loaders: {
+          ...defaultLoaders,
+          '.json': (filepath, content) => {
+            /* c8 ignore next 3 */
+            if (!filepath.endsWith('lerna.json')) {
+              return defaultLoaders['.json'](filepath, content);
+            }
+            /**
+             * This prevents lerna from blowing up on trailing commas and comments in lerna configs,
+             * however it should be noted that we will not be able to respect those things whenever
+             * we perform an automated config migration, e.g. via `lerna repair` and they will be lost.
+             * (Although that will be easy enough for the user to see and updated in their `git diff`)
+             */
+            try {
+              return JSON5.parse(content);
+            } catch (err: unknown) {
+              if (err instanceof Error) {
+                err.name = 'JSONError';
+                err.message = `Error in: ${filepath}\n${err.message}`;
+              }
+              throw err;
+            }
+          },
+        },
         searchPlaces: ['lerna.json', 'package.json'],
         transform(obj) {
           // cosmiconfig returns null when nothing is found
