@@ -64,13 +64,13 @@
     "normalize-path": "^3.0.0",
     "npm-package-arg": "^10.1.0",
     "npm-packlist": "^7.0.4",
-    "npm-registry-fetch": "^14.0.4",
+    "npm-registry-fetch": "^14.0.5",
     "npmlog": "^7.0.1",
     "p-map": "^6.0.0",
     "p-pipe": "^4.0.0",
-    "pacote": "^15.1.2",
+    "pacote": "^15.1.3",
     "pify": "^6.1.0",
-    "read-package-json": "^6.0.1",
+    "read-package-json": "^6.0.2",
     "semver": "^7.5.0",
     "ssri": "^10.0.4",
     "tar": "^6.1.13",
@@ -84,7 +84,7 @@
     "@types/semver": "^7.3.13",
     "load-json-file": "^7.0.1",
     "write-pkg": "^5.1.0",
-    "yargs": "^17.7.1",
+    "yargs": "^17.7.2",
     "yargs-parser": "^21.1.1"
   }
 }

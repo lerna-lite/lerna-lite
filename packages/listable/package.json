@@ -54,6 +54,6 @@
     "columnify": "^1.6.0"
   },
   "devDependencies": {
-    "yargs": "^17.7.1"
+    "yargs": "^17.7.2"
   }
 }
