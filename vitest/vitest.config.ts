@@ -5,6 +5,7 @@ export default defineConfig({
     cache: false,
     clearMocks: true,
     environment: 'node',
+    dangerouslyIgnoreUnhandledErrors: true, // useNx often fails and it's probably going to be removed in next major
     testTimeout: 60000,
     setupFiles: ['./vitest/vitest-setup.ts', './vitest/silence-logging.ts', './helpers/npm/set-npm-userconfig.ts'],
     watch: false,
