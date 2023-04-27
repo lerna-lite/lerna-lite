@@ -67,8 +67,8 @@ $ lerna run --scope my-component test
     - [`--no-prefix`](#--no-prefix)
     - [`--profile`](#--profile)
     - [`--profile-location <location>`](#--profile-location-location)
-    - [`--load-env-files`](#load-env-files)
-    - [`--use-nx`](#use-nx)
+    - [`--load-env-files`](#--load-env-files)
+    - [`--use-nx`](#--use-nx)
 
 ### `--npm-client <client>`
 

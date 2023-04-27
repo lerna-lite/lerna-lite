@@ -4,6 +4,22 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [2.1.0](https://github.com/lerna-lite/lerna-lite/compare/v2.0.0...v2.1.0) (2023-04-21)
+
+### Features
+
+* **publish:** add name of package that fails to publish ([#574](https://github.com/lerna-lite/lerna-lite/issues/574)) ([94e5fed](https://github.com/lerna-lite/lerna-lite/commit/94e5fed11fc94f757f35c52d454c999135e86547)) - by @ghiscoding
+
+### Bug Fixes
+
+* cannot find `publish` module if `cli` inside a monorepo package ([#573](https://github.com/lerna-lite/lerna-lite/issues/573)) ([6cb85d8](https://github.com/lerna-lite/lerna-lite/commit/6cb85d8cacfb486a01fe3b2e1b326014b4cd0eab)) - by @johnsoncodehk
+* cannot find optional commands if `cli` inside a monorepo package ([#578](https://github.com/lerna-lite/lerna-lite/issues/578)) ([c1979dd](https://github.com/lerna-lite/lerna-lite/commit/c1979ddd2de7c735ae5e62116d3e87e3a3d472e8)) - by @ghiscoding
+* **deps:** update all non-major dependencies ([#583](https://github.com/lerna-lite/lerna-lite/issues/583)) ([43c156c](https://github.com/lerna-lite/lerna-lite/commit/43c156cb64cef9bb9cbd800b8decbed9137e80a3)) - by @renovate[bot]
+* **deps:** update dependency p-map to v5 ([#568](https://github.com/lerna-lite/lerna-lite/issues/568)) ([e7c4ee9](https://github.com/lerna-lite/lerna-lite/commit/e7c4ee9ca7c64ff3d9eecae3666c8e4eb21e2c18)) - by @renovate[bot]
+* keep only peerDependenciesMeta without peerDeps, fixes [#578](https://github.com/lerna-lite/lerna-lite/issues/578) ([#585](https://github.com/lerna-lite/lerna-lite/issues/585)) ([b804aac](https://github.com/lerna-lite/lerna-lite/commit/b804aacd71f9f048a6bea1b1df7cf45b90ff7ebe)) - by @ghiscoding
+* **publish:** add normalize-path as a dependency ([#579](https://github.com/lerna-lite/lerna-lite/issues/579)) ([5dedbbe](https://github.com/lerna-lite/lerna-lite/commit/5dedbbe582d87521abdafc4d73f7b5504865521e)) - by @rfoel
+* **version:** invalid --conventional-prerelease should throw, fix [#569](https://github.com/lerna-lite/lerna-lite/issues/569) ([#577](https://github.com/lerna-lite/lerna-lite/issues/577)) ([b4d9e1f](https://github.com/lerna-lite/lerna-lite/commit/b4d9e1f45438436196891f471ddfafb25dced542)) - by @ghiscoding
+
 ## [2.0.0](https://github.com/lerna-lite/lerna-lite/compare/v1.17.0...v2.0.0) (2023-04-14)
 
 ### ⚠ BREAKING CHANGES

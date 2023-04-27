@@ -1,7 +1,20 @@
+import dedent from 'dedent';
 import { afterEach, beforeAll, describe, expect, it } from 'vitest';
 import { outputFile, remove, writeJson } from 'fs-extra/esm';
 import { basename, dirname, join, resolve as pathResolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
+
+// Serialize the JSONError output to be more human readable
+expect.addSnapshotSerializer({
+  serialize(str: string) {
+    // eslint-disable-next-line @typescript-eslint/no-var-requires
+    const stripAnsi = require('strip-ansi');
+    return stripAnsi(str).replace(/Error in: .*lerna\.json/, 'Error in: normalized/path/to/lerna.json');
+  },
+  test(val: string) {
+    return val != null && typeof val === 'string' && val.includes('Error in: ');
+  },
+});
 
 // helpers
 import { initFixtureFactory } from '@lerna-test/helpers';
@@ -60,19 +73,18 @@ describe('Project', () => {
       expect(new Project().config).toEqual({});
     });
 
-    it('errors when package.json is not valid JSON', async () => {
-      const cwd = await initFixture('invalid-package-json');
+    it('does not error when lerna.json contains trailing commas and/or comments', async () => {
+      const cwd = await initFixture('invalid-lerna-json-recoverable');
 
-      expect(() => new Project(cwd)).toThrow(
-        expect.objectContaining({
-          name: 'ValidationError',
-          prefix: 'JSONError',
-        })
-      );
+      expect(new Project(cwd).config).toMatchInlineSnapshot(`
+        {
+          version: 1.0.0,
+        }
+      `);
     });
 
-    it('errors when lerna.json is not valid JSON', async () => {
-      const cwd = await initFixture('invalid-json');
+    it('errors when lerna.json is irrecoverably invalid JSON', async () => {
+      const cwd = await initFixture('invalid-lerna-json-irrecoverable');
 
       expect(() => new Project(cwd)).toThrow(
         expect.objectContaining({
@@ -80,6 +92,11 @@ describe('Project', () => {
           prefix: 'JSONError',
         })
       );
+
+      expect(() => new Project(cwd)).toThrowErrorMatchingInlineSnapshot(dedent`
+        Error in: normalized/path/to/lerna.json
+        JSON5: invalid character '2' at 2:3
+      `);
     });
 
     it('returns parsed rootPkg.lerna', async () => {
@@ -302,7 +319,7 @@ describe('Project', () => {
     });
 
     it('errors when root package.json is not valid JSON', async () => {
-      const cwd = await initFixture('invalid-json');
+      const cwd = await initFixture('invalid-package-json');
 
       expect(() => new Project(cwd)).toThrow(
         expect.objectContaining({

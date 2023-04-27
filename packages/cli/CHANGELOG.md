@@ -4,6 +4,14 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [2.1.0](https://github.com/lerna-lite/lerna-lite/compare/v2.0.0...v2.1.0) (2023-04-21)
+
+### Bug Fixes
+
+* cannot find `publish` module if `cli` inside a monorepo package ([#573](https://github.com/lerna-lite/lerna-lite/issues/573)) ([6cb85d8](https://github.com/lerna-lite/lerna-lite/commit/6cb85d8cacfb486a01fe3b2e1b326014b4cd0eab)) - by @johnsoncodehk
+* cannot find optional commands if `cli` inside a monorepo package ([#578](https://github.com/lerna-lite/lerna-lite/issues/578)) ([c1979dd](https://github.com/lerna-lite/lerna-lite/commit/c1979ddd2de7c735ae5e62116d3e87e3a3d472e8)) - by @ghiscoding
+* keep only peerDependenciesMeta without peerDeps, fixes [#578](https://github.com/lerna-lite/lerna-lite/issues/578) ([#585](https://github.com/lerna-lite/lerna-lite/issues/585)) ([b804aac](https://github.com/lerna-lite/lerna-lite/commit/b804aacd71f9f048a6bea1b1df7cf45b90ff7ebe)) - by @ghiscoding
+
 ## [2.0.0](https://github.com/lerna-lite/lerna-lite/compare/v1.17.0...v2.0.0) (2023-04-14)
 
 ### ⚠ BREAKING CHANGES

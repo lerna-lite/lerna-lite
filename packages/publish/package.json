@@ -1,7 +1,7 @@
 {
   "name": "@lerna-lite/publish",
   "description": "Publish packages in the current workspace",
-  "version": "2.0.0",
+  "version": "2.1.0",
   "files": [
     "/dist"
   ],
@@ -57,22 +57,22 @@
     "chalk": "^5.2.0",
     "columnify": "^1.6.0",
     "fs-extra": "^11.1.1",
-    "glob": "^10.2.1",
+    "glob": "^10.2.2",
     "has-unicode": "^2.0.1",
     "libnpmaccess": "^7.0.2",
     "libnpmpublish": "^7.1.3",
     "normalize-path": "^3.0.0",
     "npm-package-arg": "^10.1.0",
     "npm-packlist": "^7.0.4",
-    "npm-registry-fetch": "^14.0.4",
+    "npm-registry-fetch": "^14.0.5",
     "npmlog": "^7.0.1",
-    "p-map": "^5.5.0",
+    "p-map": "^6.0.0",
     "p-pipe": "^4.0.0",
-    "pacote": "^15.1.2",
+    "pacote": "^15.1.3",
     "pify": "^6.1.0",
-    "read-package-json": "^6.0.1",
+    "read-package-json": "^6.0.2",
     "semver": "^7.5.0",
-    "ssri": "^10.0.3",
+    "ssri": "^10.0.4",
     "tar": "^6.1.13",
     "temp-dir": "^3.0.0"
   },
@@ -84,7 +84,7 @@
     "@types/semver": "^7.3.13",
     "load-json-file": "^7.0.1",
     "write-pkg": "^5.1.0",
-    "yargs": "^17.7.1",
+    "yargs": "^17.7.2",
     "yargs-parser": "^21.1.1"
   }
 }

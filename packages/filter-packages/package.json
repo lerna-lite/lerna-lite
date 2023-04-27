@@ -1,7 +1,7 @@
 {
   "name": "@lerna-lite/filter-packages",
   "description": "Lerna-Lite common filtering utils used by a few optional commands (Exec/List/Run/Watch)",
-  "version": "2.0.0",
+  "version": "2.1.0",
   "files": [
     "/dist"
   ],
@@ -54,7 +54,7 @@
     "npmlog": "^7.0.1"
   },
   "devDependencies": {
-    "@types/node": "^18.15.12",
-    "yargs": "^17.7.1"
+    "@types/node": "^18.16.2",
+    "yargs": "^17.7.2"
   }
 }
