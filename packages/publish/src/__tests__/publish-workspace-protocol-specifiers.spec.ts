@@ -100,6 +100,10 @@ describe("workspace protocol 'workspace:' specifiers", () => {
       expect((writePkg as any).updatedManifest('package-3').dependencies).toMatchObject({
         'package-2': '^1.1.0', // workspace:^
       });
+      expect((writePkg as any).updatedManifest('package-3').peerDependencies).toMatchObject({
+        // peer deps should be bumped when major
+        'package-2': '^1.1.0', // workspace:^
+      });
       expect((writePkg as any).updatedManifest('package-4').optionalDependencies).toMatchObject({
         'package-3': '~1.1.0', // workspace:~
       });
@@ -152,6 +156,10 @@ describe("workspace protocol 'workspace:' specifiers", () => {
       });
       expect((writePkg as any).updatedManifest('package-3').dependencies).toMatchObject({
         'package-2': '^2.0.0', // workspace:^
+      });
+      expect((writePkg as any).updatedManifest('package-3').peerDependencies).toMatchObject({
+        // peer deps without the allow peer bump flag will not be bumped
+        'package-2': '^1.0.0', // workspace:^
       });
       expect((writePkg as any).updatedManifest('package-4').optionalDependencies).toMatchObject({
         'package-3': '~2.0.0', // workspace:~

@@ -774,7 +774,7 @@ describe('Package', () => {
             b: 'workspace:~1.0.0',
           },
           peerDependencies: {
-            a: '>=1.0.0', // range will not be bumped
+            a: 'workspace:^',
             b: 'workspace:~1.0.0', // will be bumped
           },
         });
@@ -794,7 +794,7 @@ describe('Package', () => {
               b: ~1.1.0,
             },
             peerDependencies: {
-              a: >=1.0.0,
+              a: ^2.0.0,
               b: ~1.1.0,
             },
           }
