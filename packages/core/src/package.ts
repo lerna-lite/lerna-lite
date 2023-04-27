@@ -309,7 +309,7 @@ export class Package {
     // when we have peer dependencies, we might need to perform certain actions
     if (this.peerDependencies?.[depName]) {
       // when user allows peer bump and is a regular semver version, we'll push it to the array of dependencies to potentially bump
-      // however we won't when the semver has a range with operator, ie this would bump ("^2.0.0") but the following would not (">=2.0.0" or "workspace:<2.0.0" or "workspace:*")
+      // however we won't when the semver has a range with operator, ie this would bump ("^2.0.0") but the following would not (">=2.0.0", "14 || 15" or "workspace:<2.0.0")
       // prettier-ignore
       if (allowPeerDependenciesUpdate && /^(workspace:)?[~^*]?[\d\.]*([\-]+[\w\.\-\+]+)*$/i.test(this.peerDependencies[depName] || '')) {
         updatingDependencies.push(this.peerDependencies);
