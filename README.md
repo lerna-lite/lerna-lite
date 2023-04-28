@@ -26,7 +26,7 @@
 - [Troubleshooting](https://github.com/lerna-lite/lerna-lite/wiki/Troubleshooting)
 - Available Commands, they are **all optional**, refer to the **[Installation table](#separate--optional-installs)** shown below
   - 🛠️ [`init`](https://github.com/lerna-lite/lerna-lite/tree/main/packages/init#readme) - creates a new Lerna-Lite workspace structure and adds `lerna.json`
-     - _the only command included with the CLI is `init`_
+     - _this is the only command (`init`) included with the CLI_
   - 📑 [`version`](https://github.com/lerna-lite/lerna-lite/tree/main/packages/version#readme) - create new version for each workspace packages
   - ☁️ [`publish`](https://github.com/lerna-lite/lerna-lite/tree/main/packages/publish#readme) - publish every workspace packages that changed
   - 🕜 [`changed`](https://github.com/lerna-lite/lerna-lite/tree/main/packages/changed#readme) - list local packages that changed since last tagged release
@@ -91,27 +91,27 @@ For more info on how to setup a workspace, choose the best option for you: [npm 
 
 Below are the main reasons as to why this fork was created:
 
-1. Lerna repo was unmaintained for nearly 2 years (in early 2022, dependencies were really out of date)
+1. Lerna repo was unmaintained for nearly 2 years (in early 2022, Lerna's dependencies were really out of date)
     - this is no longer the case since Nrwl, the company behind Nx, took over stewardship of Lerna
         - please note that Lerna-Lite fork was created couple months **before** Nrwl took over Lerna
-        - since then we try to replicate Lerna's PRs into Lerna-Lite when possible
-2. Desire to create a smaller and more modular project that is lighter than the original all-in-one Lerna
+        - the goal now is to try to replicate Lerna's PRs when possible (Nx specific code will not be replicated)
+2. A desire to create a smaller and more modular project that is lighter than the original all-in-one Lerna
     - Lerna-Lite is now entirely modular, all commands are optional (install only what you use)
 3. Rewrite the lib in TypeScript and build the project as ESM only (you can still use it in a CommonJS environment)
 4. Replicate a few opened PRs from Lerna and add a few extra features into Lerna-Lite (see below)
-5. Lerna is becoming another Nx product (Lerna >=5.5 now requires **[Nx](https://nx.dev/)** while it's not required in Lerna-Lite)
+5. Lerna is becoming another Nx branded product (Lerna >=5.5 now requires **[Nx](https://nx.dev/)** while it's not in Lerna-Lite)
    - if you use Nx then it's probably better to use Lerna, but if you are not then Lerna-Lite is preferred
-6. Lastly a few extra features were added, and only exist, into Lerna-Lite:
+6. Also a few extra features were added, and only exist, in Lerna-Lite:
    - [`workspace:` protocol support](https://github.com/lerna-lite/lerna-lite/tree/main/packages/version#workspace-protocol) (Lerna added support for it six months later in v6)
-   - [--dry-run](https://github.com/lerna-lite/lerna-lite/tree/main/packages/version#--dry-run) to preview version/publish
-changes and changelogs
+   - [--dry-run](https://github.com/lerna-lite/lerna-lite/tree/main/packages/version#--dry-run) to preview version/publish and changelogs locally
    - [lerna version --changelog-header-message "msg"](https://github.com/lerna-lite/lerna-lite/tree/main/packages/version#--changelog-header-message-msg) it could be used to add sponsor badges in changelogs
    - [lerna version --changelog-include-commits-client-login](https://github.com/lerna-lite/lerna-lite/tree/main/packages/version#--changelog-include-commits-client-login-msg) to add PR contributors
    - [lerna version --allow-peer-dependencies-update](https://github.com/lerna-lite/lerna-lite/tree/main/packages/version#--allow-peer-dependencies-update) if you want your peer deps to also be updated
    - [lerna version --skip-bump-only-release](https://github.com/lerna-lite/lerna-lite/tree/main/packages/version#--skip-bump-only-release) to avoid cluttering your GitHub releases in `independent` mode
-   - [lerna publish --remove-package-fields](https://github.com/lerna-lite/lerna-lite/tree/main/packages/publish#--remove-package-fields-fields) (empty certain fields from `package.json` before publishing, ie: Lerna-Lite uses it to remove `scripts` and `devDependencies`)
+   - [lerna publish --remove-package-fields](https://github.com/lerna-lite/lerna-lite/tree/main/packages/publish#--remove-package-fields-fields) (remove certain fields from `package.json` before publishing)
+      - ie: Lerna-Lite itself uses it to remove `scripts` and `devDependencies`
 
-On a final note, the best feature of Lerna-Lite (versus Lerna) has to be its modularity. A large portion of the users are only interested in version/publish commands but on the other hand, a small minority are only interested in run/exec commands. Lerna-Lite offers you that flexibility by allowing you to install only the commands you choose to use (see [installation](#cli-installation) below).
+On a final note, the best feature of Lerna-Lite (versus Lerna) has to be its modularity. A large portion of the users are only interested in version/publish commands but on the other hand, a small minority are only interested in other commands like run/exec. Lerna-Lite offers you this flexibility by allowing to install only the commands you choose to use (see [installation](#cli-installation) below).
 
 ### This lib will help you with
 
@@ -185,7 +185,7 @@ If you are new to Lerna-Lite, you could also run the [lerna init](https://github
 > **Note** please make sure that you have a `lerna.json` config file created and a `version` property defined with either a fixed or `independent` mode. An error will be thrown if you're missing any of them.
 
 ### JSON Schema
-You can add the `$schema` property into your `lerna.json` to take advantage of Lerna-Lite [JSON Schema](https://json-schema.org/) (`lerna init` will automatically configure this for you). This will help with the developer experience, users will be able to see what properties are valid with their types and a brief description of what they do (each description are pulled from their associated lerna command options documentation).
+You can add the `$schema` property into your `lerna.json` to take advantage of Lerna-Lite [JSON Schema](https://json-schema.org/) (`lerna init` can help setting it up for you). This will help with the developer experience, users will be able to see what properties are valid with their types and a brief description of what they do (each description are pulled from their associated lerna command options documentation).
 
 ##### `lerna.json`
 ```js
@@ -233,7 +233,7 @@ Add custom NPM Scripts or simply run the commands in your shell with the Lerna-L
 
 ### Migration for existing [Lerna](https://github.com/lerna/lerna) Users
 
-If you are migrating from Lerna, it should be fairly easy to just replace Lerna with Lerna-Lite in your dependencies and install necessary commands and that's about it. The CLI commands and options are the same, but all commands are optional installs, take a look at the quick steps shown below:
+If you are migrating from Lerna, it should be fairly easy to just replace Lerna with Lerna-Lite in your dependencies, install necessary commands and that's about it. The CLI commands and options are the same, but all commands are optional installs. Take a look at the quick steps shown below:
 
 1. remove Lerna from your local & global dependencies
 
