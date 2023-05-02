@@ -4,6 +4,12 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [2.2.0](https://github.com/lerna-lite/lerna-lite/compare/v2.1.0...v2.2.0) (2023-05-02)
+
+### Bug Fixes
+
+* **deps:** update dependency p-map to v6 ([#589](https://github.com/lerna-lite/lerna-lite/issues/589)) ([13c4c04](https://github.com/lerna-lite/lerna-lite/commit/13c4c04a4286f6833f3d1edf8e80f66140868fb8)) - by @renovate[bot]
+
 ## [2.1.0](https://github.com/lerna-lite/lerna-lite/compare/v2.0.0...v2.1.0) (2023-04-21)
 
 ### Bug Fixes
