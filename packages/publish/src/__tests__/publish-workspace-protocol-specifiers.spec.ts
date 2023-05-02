@@ -99,7 +99,7 @@ describe("workspace protocol 'workspace:' specifiers", () => {
       });
       expect((writePkg as any).updatedManifest('package-2').peerDependencies).toMatchObject({
         // peer deps should be bumped to a fixed minor version
-        'package-1': '1.1.0', // workspace:^
+        'package-1': '1.1.0', // workspace:*
       });
       expect((writePkg as any).updatedManifest('package-3').dependencies).toMatchObject({
         'package-2': '^1.1.0', // workspace:^
