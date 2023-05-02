@@ -26,6 +26,10 @@ export default {
         describe: 'Specify which branches to allow versioning from.',
         type: 'array',
       },
+      'allow-peer-dependencies-update': {
+        describe: 'Allow bumping versions of peer dependencies.',
+        type: 'boolean',
+      },
       amend: {
         describe: 'Amend the existing commit, instead of generating a new one.',
         type: 'boolean',
