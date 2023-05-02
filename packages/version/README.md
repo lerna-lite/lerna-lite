@@ -169,34 +169,40 @@ By default peer dependencies versions will not be bumped unless this flag is ena
 > > _Until we can get fancier, we should never automatically modify them to match the new version being published (which is the current incorrect behavior)._
 
 #### Examples
+For the example shown below, we will consider the packages to have the following versions (`"A": "1.2.0"`, `"B": "0.4.0"` anc `"C": 2.0.0"`). The examples shown below includes very basic demo of what `workspace:` can do, for more info on that subject please read [`workspace:` protocol](#workspace-protocol).
+
 ##### with flag enabled
 with the new flag both deps would be updated and bumped, for example if we do a `minor` bump
-```sh
+```js
 {
   "name": "B",
   "dependencies": {
-    "A": "workspace:^1.2.0"   // will update to "workspace:^1.3.0",
-    "B": "^0.4.0":            // will update to "^0.5.0"
+    "A": "workspace:^1.2.0",  // will bump the version to "workspace:^1.3.0" and publish as "^1.3.0"
+    "B": "^0.4.0",            // will bump to "^0.5.0"
+    "C": "workspace:^"        // will bump the version to "workspace:^2.1.0" and publish as "^2.1.0"
    },
   "peerDependencies": {
-    "A": "workspace:^1.2.0"   // will update to "workspace:^1.3.0"
-    "B": ">=0.2.0":           // will not be updateed because range with operator (>=) are skipped
+    "A": "workspace:^1.2.0",  // will update the version to "workspace:^1.3.0" and publish as "^1.3.0"
+    "B": ">=0.2.0",           // will not be updated because range with operator (>=) are skipped
+    "C": "workspace:^"        // will keep the version to "workspace:^" but publish as "^2.1.0"
   }
 }
 ```
 
 ##### without flag
 without the flag it will only update the first package it finds, that is `dependencies` in this case, so peer deps would never be updated
-```sh
+```js
 {
   "name": "B",
   "dependencies": {
-    "A": "workspace:^1.2.0"   // will update to "workspace:^1.3.0"
-    "B": "^0.4.0":            // will update to "^0.5.0"
+    "A": "workspace:^1.2.0",  // will bump to "workspace:^1.3.0"
+    "B": "^0.4.0",            // will bump to "^0.5.0"
+    "C": "workspace:^"
    },
   "peerDependencies": {
-    "A": "workspace:^1.2.0"   // will NEVER be updateed
-    "B": ">=0.2.0":           // will NEVER be updateed
+    "A": "workspace:^1.2.0",  // will NOT bump the version and will publish as "^1.2.0"
+    "B": ">=0.2.0",           // will NOT bump the version and will publish as ">=0.2.0"
+    "C": "workspace:^"        // will NOT bump the version and will publish previously resolved version "^2.0.0"
   }
 }
 ```
