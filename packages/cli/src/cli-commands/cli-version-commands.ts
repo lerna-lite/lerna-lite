@@ -258,11 +258,6 @@ export default {
         describe: 'do we want to skip creating a release (github/gitlab) when the version is a "version bump only"?',
         type: 'boolean',
       },
-      'workspace-strict-match': {
-        describe:
-          'Strict match transform version numbers to an exact range (like "1.2.3") rather than with a caret (like ^1.2.3) when using `workspace:*`.',
-        type: 'boolean',
-      },
       y: {
         describe: 'Skip all confirmation prompts.',
         alias: 'yes',

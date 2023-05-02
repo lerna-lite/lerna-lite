@@ -135,11 +135,6 @@ export default {
         describe: 'Verify package read-write access for current npm user.',
         type: 'boolean',
       },
-      'workspace-strict-match': {
-        describe:
-          'Strict match transform version numbers to an exact range (like "1.2.3") rather than with a caret (like ^1.2.3) when using `workspace:*`.',
-        type: 'boolean',
-      },
     };
 
     composeVersionOptions(yargs);
