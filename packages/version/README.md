@@ -169,7 +169,8 @@ By default peer dependencies versions will not be bumped unless this flag is ena
 > > _Until we can get fancier, we should never automatically modify them to match the new version being published (which is the current incorrect behavior)._
 
 #### Examples
-For the example shown below, we will consider the packages to have the following versions (`"A": "1.2.0"`, `"B": "0.4.0"` anc `"C": 2.0.0"`)
+For the example shown below, we will consider the packages to have the following versions (`"A": "1.2.0"`, `"B": "0.4.0"` anc `"C": 2.0.0"`). The examples shown below includes very basic demo of what `workspace:` can do, for more info on that subject please read [`workspace:` protocol](#workspace-protocol).
+
 ##### with flag enabled
 with the new flag both deps would be updated and bumped, for example if we do a `minor` bump
 ```js
