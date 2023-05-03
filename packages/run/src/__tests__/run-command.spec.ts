@@ -480,6 +480,7 @@ describe('RunCommand', () => {
       expect(collectedOutput).not.toContain('Nx read the output from the cache');
     });
 
+    // deprecated
     it('should log a warning when using obsolete options with useNx', async () => {
       collectedOutput = '';
 

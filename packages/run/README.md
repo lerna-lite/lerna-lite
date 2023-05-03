@@ -68,7 +68,8 @@ $ lerna run --scope my-component test
     - [`--profile`](#--profile)
     - [`--profile-location <location>`](#--profile-location-location)
     - [`--load-env-files`](#--load-env-files)
-    - [`--use-nx`](#--use-nx)
+    - [`--use-nx`](#--use-nx) (deprecated)
+      - now deprecated, it will be removed in next major
 
 ### `--npm-client <client>`
 
@@ -168,6 +169,8 @@ When the task runner is powered by Nx (via [`--use-nx`](#use-nx)) it will automa
 For more details about what `.env` files will be loaded by default please see: https://nx.dev/recipes/environment-variables/define-environment-variables
 
 ### `--use-nx`
+
+> **Note** this feature is now deprecated and will be removed in the next major version, if you wish to use Nx then you should consider using the original [Lerna](https://github.com/lerna/lerna) since it has full Nx integration. The goal of Lerna-Lite is to stay light hence the deprecation of this option.
 
 Enables integration with [Nx](https://nx.dev). Enabling this option will tell Lerna to delegate
 running tasks to Nx instead of using `p-map` and `p-queue`. This only works if Nx is installed and `nx.json` is present. You can also skip cache by providing `--skip-nx-cache`

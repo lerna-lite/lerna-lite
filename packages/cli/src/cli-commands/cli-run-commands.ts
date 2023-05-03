@@ -84,7 +84,8 @@ export default {
         },
         'use-nx': {
           group: 'Command Options:',
-          describe: 'enables integration with Nx instead of the default Lerna task runner (which uses `p-map` and `p-queue`).',
+          describe:
+            '(deprecated) Enables integration with Nx instead of the default Lerna task runner (which uses `p-map` and `p-queue`).',
           type: 'boolean',
         },
         verbose: {
