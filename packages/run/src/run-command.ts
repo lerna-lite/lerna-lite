@@ -88,6 +88,7 @@ export class RunCommand extends Command<RunCommandOption & FilterOptions> {
   }
 
   execute() {
+    // deprecated
     if (!this.options.useNx) {
       this.logger.info('', 'Executing command in %d %s: %j', this.count, this.packagePlural, this.joinedCommand);
     }
@@ -216,6 +217,7 @@ export class RunCommand extends Command<RunCommandOption & FilterOptions> {
     return scriptName.includes(':') ? `"${scriptName}"` : scriptName;
   }
 
+  // now deprecated
   async runScriptsUsingNx() {
     if (this.options.ci) {
       process.env.CI = 'true';

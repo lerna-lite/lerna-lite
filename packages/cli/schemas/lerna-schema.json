@@ -1550,7 +1550,7 @@
         },
         "verbose": {
           "type": "boolean",
-          "description": "When true, escalates loglevel to 'verbose' and shows nx verbose output if useNx is true."
+          "description": "(deprecated) When true, escalates loglevel to 'verbose' and shows nx verbose output if useNx is true."
         }
       }
     }
