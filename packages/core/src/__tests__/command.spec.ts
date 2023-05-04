@@ -1,6 +1,6 @@
 import { afterEach, beforeAll, beforeEach, describe, expect, it, Mock, vi } from 'vitest';
 
-const cpuCount = 42;
+const cpuCount = vi.hoisted(() => 42);
 
 vi.mock('../child-process', async () => ({
   ...(await vi.importActual<any>('../child-process')),

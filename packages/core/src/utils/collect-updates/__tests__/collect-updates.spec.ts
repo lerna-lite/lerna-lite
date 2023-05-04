@@ -6,7 +6,7 @@ vi.mock('../../describe-ref');
 vi.mock('../lib/has-tags');
 vi.mock('../lib/make-diff-predicate');
 
-const globMock = vi.fn();
+const { globMock } = vi.hoisted(() => ({ globMock: vi.fn() }));
 vi.mock('globby', async () => ({
   ...(await vi.importActual<any>('globby')),
   globbySync: globMock,

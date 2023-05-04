@@ -5,7 +5,7 @@ vi.mock('../../../child-process');
 // mocked modules
 import * as childProcesses from '../../../child-process';
 
-const globMock = vi.fn();
+const { globMock } = vi.hoisted(() => ({ globMock: vi.fn() }));
 vi.mock('globby', async () => ({
   ...(await vi.importActual<any>('globby')),
   globbySync: globMock,

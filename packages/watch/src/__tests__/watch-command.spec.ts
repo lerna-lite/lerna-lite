@@ -17,30 +17,30 @@ let watchUnlinkHandler;
 let watchUnlinkDirHandler;
 let watchChangeHandler;
 let watchErrorHandler;
-const closeMock = vi.fn();
-const watchMock = vi.fn().mockImplementation(() => ({
-  close: closeMock,
-  on: vi.fn().mockImplementation(function (this, event, handler) {
-    switch (event) {
-      case 'error':
-        watchErrorHandler = handler;
-        break;
-      case 'all':
-      default:
-        watchAddHandler = handler;
-        watchAddDirHandler = handler;
-        watchUnlinkHandler = handler;
-        watchUnlinkDirHandler = handler;
-        watchChangeHandler = handler;
-        watchErrorHandler = handler;
-        break;
-    }
-    return this;
-  }),
-}));
+const { closeMock } = vi.hoisted(() => ({ closeMock: vi.fn() }));
+
 vi.mock('chokidar', () => ({
   default: {
-    watch: watchMock,
+    watch: vi.fn().mockImplementation(() => ({
+      close: closeMock,
+      on: vi.fn().mockImplementation(function (this, event, handler) {
+        switch (event) {
+          case 'error':
+            watchErrorHandler = handler;
+            break;
+          case 'all':
+          default:
+            watchAddHandler = handler;
+            watchAddDirHandler = handler;
+            watchUnlinkHandler = handler;
+            watchUnlinkDirHandler = handler;
+            watchChangeHandler = handler;
+            watchErrorHandler = handler;
+            break;
+        }
+        return this;
+      }),
+    })),
   },
 }));
 
@@ -48,7 +48,7 @@ vi.mock('chokidar', () => ({
 vi.mock('@lerna-lite/watch', async () => await vi.importActual<any>('../watch-command.js'));
 
 // vi.useFakeTimers({ timerLimit: 100 });
-
+import chokidar from 'chokidar';
 import mockStdin from 'mock-stdin';
 import { basename, dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
@@ -172,7 +172,7 @@ describe('Watch Command', () => {
     it('should take glob input option, without slash prefix, and expect it to be appended to the file path being watch by chokidar', async () => {
       await lernaWatch(testDir)('--debounce', '0', '--glob', 'src/**/*.{ts,tsx}', '--', 'lerna run build');
 
-      expect(watchMock).toHaveBeenCalledWith(
+      expect(chokidar.watch).toHaveBeenCalledWith(
         [join(testDir, 'packages/package-1', '/src/**/*.{ts,tsx}'), join(testDir, 'packages/package-2', '/src/**/*.{ts,tsx}')],
         {
           ignored: ['**/.git/**', '**/dist/**', '**/node_modules/**'],
@@ -186,7 +186,7 @@ describe('Watch Command', () => {
     it('should take glob input option, with slash prefix, and expect same appended to the file path being watch by chokidar', async () => {
       await lernaWatch(testDir)('--debounce', '0', '--glob', '/src/**/*.{ts,tsx}', '--', 'lerna run build');
 
-      expect(watchMock).toHaveBeenCalledWith(
+      expect(chokidar.watch).toHaveBeenCalledWith(
         [join(testDir, 'packages/package-1', '/src/**/*.{ts,tsx}'), join(testDir, 'packages/package-2', '/src/**/*.{ts,tsx}')],
         {
           ignored: ['**/.git/**', '**/dist/**', '**/node_modules/**'],
@@ -200,7 +200,7 @@ describe('Watch Command', () => {
     it('should be able to take --await-write-finish options as a boolean', async () => {
       await lernaWatch(testDir)('--debounce', '0', '--await-write-finish', '--', 'lerna run build');
 
-      expect(watchMock).toHaveBeenCalledWith([join(testDir, 'packages/package-1'), join(testDir, 'packages/package-2')], {
+      expect(chokidar.watch).toHaveBeenCalledWith([join(testDir, 'packages/package-1'), join(testDir, 'packages/package-2')], {
         ignored: ['**/.git/**', '**/dist/**', '**/node_modules/**'],
         ignoreInitial: true,
         ignorePermissionErrors: true,
@@ -212,7 +212,7 @@ describe('Watch Command', () => {
     it('should take options prefixed with "awf" (awfPollInterval) and transform them into a valid chokidar "awaitWriteFinish" option', async () => {
       await lernaWatch(testDir)('--debounce', '0', '--awf-poll-interval', '500', '--', 'lerna run build');
 
-      expect(watchMock).toHaveBeenCalledWith([join(testDir, 'packages/package-1'), join(testDir, 'packages/package-2')], {
+      expect(chokidar.watch).toHaveBeenCalledWith([join(testDir, 'packages/package-1'), join(testDir, 'packages/package-2')], {
         ignored: ['**/.git/**', '**/dist/**', '**/node_modules/**'],
         ignoreInitial: true,
         ignorePermissionErrors: true,
@@ -224,7 +224,7 @@ describe('Watch Command', () => {
     it('should take options prefixed with "awf" (awfStabilityThreshold) and transform them into a valid chokidar "awaitWriteFinish" option', async () => {
       await lernaWatch(testDir)('--debounce', '0', '--awf-stability-threshold', '275', '--', 'lerna run build');
 
-      expect(watchMock).toHaveBeenCalledWith([join(testDir, 'packages/package-1'), join(testDir, 'packages/package-2')], {
+      expect(chokidar.watch).toHaveBeenCalledWith([join(testDir, 'packages/package-1'), join(testDir, 'packages/package-2')], {
         ignored: ['**/.git/**', '**/dist/**', '**/node_modules/**'],
         ignoreInitial: true,
         ignorePermissionErrors: true,
