@@ -1,7 +1,6 @@
 import { describe, expect, it, Mock, vi } from 'vitest';
 
-const execSyncMock = vi.fn();
-
+const { execSyncMock } = vi.hoisted(() => ({ execSyncMock: vi.fn() }));
 vi.mock('@lerna-lite/core', async () => ({
   ...(await vi.importActual<any>('@lerna-lite/core')), // return the other real methods, below we'll mock only 2 of the methods
   execSync: execSyncMock,

@@ -11,12 +11,8 @@ vi.mock('../conventional-commits/get-commits-since-last-release', async () => aw
 // also point to the local version command so that all mocks are properly used even by the command-runner
 vi.mock('@lerna-lite/version', async () => await vi.importActual('../version-command'));
 
-let collectUpdatesActual: any = null;
-vi.mock('@lerna-lite/core', async (coreOriginal) => {
-  const mod = (await coreOriginal()) as any;
-  collectUpdatesActual = mod.collectUpdates;
-  return {
-    ...mod,
+vi.mock('@lerna-lite/core', async (coreOriginal) => ({
+    ...(await coreOriginal()) as any,
     Command: (await vi.importActual<any>('../../../core/src/command')).Command,
     conf: (await vi.importActual<any>('../../../core/src/command')).conf,
     logOutput: (await vi.importActual<any>('../../../core/src/__mocks__/output')).logOutput,
@@ -31,11 +27,10 @@ vi.mock('@lerna-lite/core', async (coreOriginal) => {
     npmConf: (await vi.importActual<any>('../../../core/src/utils/npm-conf')).npmConf,
     writeLogFile: (await vi.importActual<any>('../../../core/src/utils/write-log-file')).writeLogFile,
     QueryGraph: (await vi.importActual<any>('../../../core/src/utils/query-graph')).QueryGraph,
-  };
-});
+}));
 vi.mock('write-pkg', async () => await vi.importActual('../lib/__mocks__/write-pkg'));
 
-import { outputFile, outputJson } from 'fs-extra/esm';
+import { outputFile, outputJson } from 'fs-extra';
 import { promises as fsPromises } from 'node:fs';
 import { dirname, join, resolve as pathResolve } from 'node:path';
 import { execa } from 'execa';
@@ -89,7 +84,7 @@ async function loadYamlFile<T>(filePath: string) {
 }
 
 // certain tests need to use the real thing
-// const collectUpdatesActual = (await vi.importActual('@lerna-lite/core')).collectUpdates;
+const collectUpdatesActual = (await vi.importActual<any>('@lerna-lite/core')).collectUpdates;
 
 // assertion helpers
 const listDirty = (cwd) =>
