@@ -12,21 +12,21 @@ vi.mock('../conventional-commits/get-commits-since-last-release', async () => aw
 vi.mock('@lerna-lite/version', async () => await vi.importActual('../version-command'));
 
 vi.mock('@lerna-lite/core', async (coreOriginal) => ({
-    ...(await coreOriginal()) as any,
-    Command: (await vi.importActual<any>('../../../core/src/command')).Command,
-    conf: (await vi.importActual<any>('../../../core/src/command')).conf,
-    logOutput: (await vi.importActual<any>('../../../core/src/__mocks__/output')).logOutput,
-    collectUpdates: (await vi.importActual<any>('../../../core/src/__mocks__/collect-updates')).collectUpdates,
-    promptConfirmation: (await vi.importActual<any>('../../../core/src/__mocks__/prompt')).promptConfirmation,
-    promptSelectOne: (await vi.importActual<any>('../../../core/src/__mocks__/prompt')).promptSelectOne,
-    promptTextInput: (await vi.importActual<any>('../../../core/src/__mocks__/prompt')).promptTextInput,
-    checkWorkingTree: (await vi.importActual<any>('../../../core/src/__mocks__/check-working-tree')).checkWorkingTree,
-    runTopologically: (await vi.importActual<any>('../../../core/src/utils/run-topologically')).runTopologically,
-    throwIfReleased: (await vi.importActual<any>('../../../core/src/__mocks__/check-working-tree')).throwIfReleased,
-    throwIfUncommitted: (await vi.importActual<any>('../../../core/src/__mocks__/check-working-tree')).throwIfUncommitted,
-    npmConf: (await vi.importActual<any>('../../../core/src/utils/npm-conf')).npmConf,
-    writeLogFile: (await vi.importActual<any>('../../../core/src/utils/write-log-file')).writeLogFile,
-    QueryGraph: (await vi.importActual<any>('../../../core/src/utils/query-graph')).QueryGraph,
+  ...((await coreOriginal()) as any),
+  Command: (await vi.importActual<any>('../../../core/src/command')).Command,
+  conf: (await vi.importActual<any>('../../../core/src/command')).conf,
+  logOutput: (await vi.importActual<any>('../../../core/src/__mocks__/output')).logOutput,
+  collectUpdates: (await vi.importActual<any>('../../../core/src/__mocks__/collect-updates')).collectUpdates,
+  promptConfirmation: (await vi.importActual<any>('../../../core/src/__mocks__/prompt')).promptConfirmation,
+  promptSelectOne: (await vi.importActual<any>('../../../core/src/__mocks__/prompt')).promptSelectOne,
+  promptTextInput: (await vi.importActual<any>('../../../core/src/__mocks__/prompt')).promptTextInput,
+  checkWorkingTree: (await vi.importActual<any>('../../../core/src/__mocks__/check-working-tree')).checkWorkingTree,
+  runTopologically: (await vi.importActual<any>('../../../core/src/utils/run-topologically')).runTopologically,
+  throwIfReleased: (await vi.importActual<any>('../../../core/src/__mocks__/check-working-tree')).throwIfReleased,
+  throwIfUncommitted: (await vi.importActual<any>('../../../core/src/__mocks__/check-working-tree')).throwIfUncommitted,
+  npmConf: (await vi.importActual<any>('../../../core/src/utils/npm-conf')).npmConf,
+  writeLogFile: (await vi.importActual<any>('../../../core/src/utils/write-log-file')).writeLogFile,
+  QueryGraph: (await vi.importActual<any>('../../../core/src/utils/query-graph')).QueryGraph,
 }));
 vi.mock('write-pkg', async () => await vi.importActual('../lib/__mocks__/write-pkg'));
 
