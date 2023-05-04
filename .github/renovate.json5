@@ -31,6 +31,10 @@
       packageNames: ['vitest'],
       allowedVersions: '0.30.1',
     },
+    {
+      packageNames: ['@vitest/coverage-c8'],
+      allowedVersions: '0.30.1',
+    },
   ],
   ignoreDeps: [
     'vite', // Vite is installed only because required by Vitest VSCode debugger to work, see open issue: https://github.com/vitest-dev/vitest/issues/3112
