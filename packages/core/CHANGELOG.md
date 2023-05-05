@@ -4,6 +4,12 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [2.3.0](https://github.com/lerna-lite/lerna-lite/compare/v2.2.0...v2.3.0) (2023-05-05)
+
+### Bug Fixes
+
+* **deps:** update dependency inquirer to ^9.2.1 ([#599](https://github.com/lerna-lite/lerna-lite/issues/599)) ([b043c78](https://github.com/lerna-lite/lerna-lite/commit/b043c7886e3745b6ae0ca4bedbc8e42e918ee2db)) - by @renovate[bot]
+
 ## [2.2.0](https://github.com/lerna-lite/lerna-lite/compare/v2.1.0...v2.2.0) (2023-05-02)
 
 ### Features

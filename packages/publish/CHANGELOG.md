@@ -4,6 +4,16 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [2.3.0](https://github.com/lerna-lite/lerna-lite/compare/v2.2.0...v2.3.0) (2023-05-05)
+
+### Features
+
+* **publish:** add npm provenance to lerna publish ([#600](https://github.com/lerna-lite/lerna-lite/issues/600)) ([dc082c2](https://github.com/lerna-lite/lerna-lite/commit/dc082c25282eee8ea0a67d6dc3ff17210a315b5b)) - by @ghiscoding
+
+### Bug Fixes
+
+* **deps:** update all non-major dependencies ([#597](https://github.com/lerna-lite/lerna-lite/issues/597)) ([48f8ad6](https://github.com/lerna-lite/lerna-lite/commit/48f8ad6f35fa7ef1b31b39a61e7eb73a1dffc798)) - by @renovate[bot]
+
 ## [2.2.0](https://github.com/lerna-lite/lerna-lite/compare/v2.1.0...v2.2.0) (2023-05-02)
 
 ### Bug Fixes
