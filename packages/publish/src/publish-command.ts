@@ -77,6 +77,7 @@ export class PublishCommand extends Command<PublishCommandOption> {
   twoFactorAuthRequired = false;
   updates: PackageGraphNode[] = [];
   updatesVersions?: Map<string, any>;
+  private uniqueProvenanceUrls = new Set();
 
   get otherCommandConfigs() {
     // back-compat
@@ -331,6 +332,12 @@ export class PublishCommand extends Command<PublishCommandOption> {
     }
 
     this.logger.success('published', '%d %s', count, count === 1 ? 'package' : 'packages');
+
+    if (this.uniqueProvenanceUrls.size > 0) {
+      logOutput('The following provenance transparency log entries were created during publishing:');
+      const message = Array.from(this.uniqueProvenanceUrls).map((url) => ` - ${url}`);
+      logOutput(message.join(EOL));
+    }
   }
 
   verifyWorkingTreeClean() {
@@ -876,6 +883,22 @@ export class PublishCommand extends Command<PublishCommandOption> {
       'git-dry-run': this.options.dryRun || false,
     });
 
+    /**
+     * Currently libnpmpublish does not expose the provenance data it creates. We therefore have to hackily intercept
+     * the logs it emits. Sadly because we eagerly kick off all the publish requests in the same process, there
+     * is no way to reconcile the logs to the pkg's they relate to, so the best we can do is collect up the unique
+     * URLs and print them at the end of the publishing logs.
+     */
+    const logListener = (...args) => {
+      const str = args.join(' ');
+      if (str.toLowerCase().includes('provenance statement') && str.includes('https://')) {
+        // Extract the URL from the log message
+        const url = str.match(/https:\/\/[^ ]+/)?.[0] ?? '';
+        this.uniqueProvenanceUrls.add(url);
+      }
+    };
+    process.on('log', logListener);
+
     const mapper = pPipe(
       ...(
         [
@@ -932,7 +955,10 @@ export class PublishCommand extends Command<PublishCommandOption> {
       chain = chain.then(() => this.runRootLifecycle('postpublish'));
     }
 
-    return chain.finally(() => tracker.finish());
+    return chain.finally(() => {
+      process.removeListener('log', logListener);
+      tracker.finish();
+    });
   }
 
   npmUpdateAsLatest() {
