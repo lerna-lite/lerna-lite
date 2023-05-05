@@ -8,7 +8,6 @@ See [Conventional Commits](https://conventionalcommits.org) for commit guideline
 
 ### Features
 
-* **publish:** add npm provenance to lerna publish ([#600](https://github.com/lerna-lite/lerna-lite/issues/600)) ([51e85ea](https://github.com/lerna-lite/lerna-lite/commit/51e85ea4bfb68bb61b6d8aa833b3de71f30cabc9)) - by @ghiscoding
 * **publish:** add npm provenance to lerna publish ([#600](https://github.com/lerna-lite/lerna-lite/issues/600)) ([dc082c2](https://github.com/lerna-lite/lerna-lite/commit/dc082c25282eee8ea0a67d6dc3ff17210a315b5b)) - by @ghiscoding
 
 ### Bug Fixes
