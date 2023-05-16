@@ -347,7 +347,6 @@ it('should create a github release discussion when enabled', async () => {
   (createReleaseClient as Mock).mockImplementation(() => Promise.resolve({ repos: { createRelease: createReleaseMock } }));
 
   const cwd = await initFixture('normal');
-  const client = createGitHubClient as any;
 
   (recommendVersion as Mock).mockResolvedValueOnce('1.1.0');
 
