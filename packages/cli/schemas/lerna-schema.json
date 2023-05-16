@@ -598,6 +598,9 @@
             "createRelease": {
               "$ref": "#/$defs/commandOptions/version/createRelease"
             },
+            "createReleaseDiscussion": {
+              "$ref": "#/$defs/commandOptions/version/createReleaseDiscussion"
+            },
             "ignoreChanges": {
               "$ref": "#/$defs/commandOptions/shared/ignoreChanges"
             },
@@ -1319,6 +1322,10 @@
           "type": "string",
           "description": "During `lerna version`, an official GitHub or GitLab release for every version.",
           "enum": ["github", "gitlab"]
+        },
+        "createReleaseDiscussion": {
+          "type": "string",
+          "description": "Create a GitHub Discussion from the new release (note that createRelease must be enabled for this to work)."
         },
         "message": {
           "type": "string",
