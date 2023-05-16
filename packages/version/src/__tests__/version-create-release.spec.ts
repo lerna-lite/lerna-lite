@@ -344,7 +344,7 @@ describe.each([
 it('should create a github release discussion when enabled', async () => {
   process.env.GH_TOKEN = 'TOKEN';
   const createReleaseMock = vi.fn(() => Promise.resolve(true));
-  (createReleaseClient as Mock).mockImplementation(() => Promise.resolve({ repos: { createRelease: createReleaseMock }}));
+  (createReleaseClient as Mock).mockImplementation(() => Promise.resolve({ repos: { createRelease: createReleaseMock } }));
 
   const cwd = await initFixture('normal');
   const client = createGitHubClient as any;
