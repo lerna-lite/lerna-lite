@@ -72,6 +72,7 @@ export interface GitClientReleaseOption {
   body?: string;
   draft?: boolean;
   prerelease?: boolean;
+  discussion_category_name?: string;
 }
 
 export type GitCreateReleaseFn = (options: GitClientReleaseOption) => Promise<{

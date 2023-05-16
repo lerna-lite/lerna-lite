@@ -5,7 +5,7 @@ import newGithubReleaseUrl from 'new-github-release-url';
 import semver from 'semver';
 
 import { createGitHubClient, createGitLabClient, parseGitRepo } from '../git-clients/index.js';
-import { GitCreateReleaseClientOutput, ReleaseCommandProps, ReleaseOptions } from '../models/index.js';
+import { GitClientReleaseOption, GitCreateReleaseClientOutput, ReleaseCommandProps, ReleaseOptions } from '../models/index.js';
 
 export async function createReleaseClient(type: 'github' | 'gitlab'): Promise<GitCreateReleaseClientOutput> {
   switch (type) {
@@ -19,13 +19,9 @@ export async function createReleaseClient(type: 'github' | 'gitlab'): Promise<Gi
   }
 }
 
-/**
- * @param {ReturnType<typeof createReleaseClient>} client
- * @param {{ tags: string[]; releaseNotes: { name: string; notes: string; }[] }} commandProps
- * @param {{ gitRemote: string; execOpts: import('@lerna/child-process').ExecOpts }} opts
- */
+/** Create a release on a remote client (github or gitlab) */
 export function createRelease(
-  client: GitCreateReleaseClientOutput,
+  { client, releaseDiscussion }: { client: GitCreateReleaseClientOutput; releaseDiscussion?: string },
   { tags, releaseNotes }: ReleaseCommandProps,
   { gitRemote, execOpts, skipBumpOnlyRelease }: ReleaseOptions,
   dryRun = false
@@ -61,7 +57,7 @@ export function createRelease(
         return Promise.resolve();
       }
 
-      const releaseOptions = {
+      const releaseOptions: GitClientReleaseOption = {
         owner: repo.owner,
         repo: repo.name,
         tag_name: tag,
@@ -70,6 +66,11 @@ export function createRelease(
         draft: false,
         prerelease: prereleaseParts.length > 0,
       };
+
+      // also optionally create a Discussion with the release (currently only works with GitHub)
+      if (releaseDiscussion) {
+        releaseOptions.discussion_category_name = releaseDiscussion;
+      }
 
       if (dryRun) {
         log.info(chalk.bold.magenta('[dry-run] >'), `Create Release with repo options: `, JSON.stringify(releaseOptions));

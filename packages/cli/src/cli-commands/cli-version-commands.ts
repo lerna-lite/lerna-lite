@@ -114,6 +114,10 @@ export default {
         type: 'string',
         choices: ['gitlab', 'github'],
       },
+      'create-release-discussion': {
+        describe: 'Create a GitHub Discussion from the new release (note that createRelease must be enabled for this to work).',
+        type: 'string',
+      },
       'ignore-changes': {
         describe: [
           'Ignore changes in files matched by glob(s) when detecting changed packages.',

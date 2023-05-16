@@ -184,6 +184,9 @@ export interface VersionCommandOption {
   /** Create an official GitHub or GitLab release for every version. */
   createRelease?: RemoteClientType;
 
+  /** Create a GitHub Discussion from the new release (note that createRelease must be enabled for this to work and it only works with GitHub at the moment). */
+  createReleaseDiscussion?: string;
+
   /** Specify cross-dependency version numbers exactly rather than with a caret (^). */
   exact?: boolean;
 

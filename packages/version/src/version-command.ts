@@ -140,6 +140,10 @@ export class VersionCommand extends Command<VersionCommandOption> {
       throw new ValidationError('ERELEASE', 'To create a release, you must enable --conventional-commits');
     }
 
+    if (this.options.createReleaseDiscussion && !this.options.createRelease) {
+      throw new ValidationError('ERELEASE', 'To create a release discussion, you must define --create-release');
+    }
+
     if (this.releaseClient && this.options.changelog === false) {
       throw new ValidationError('ERELEASE', 'To create a release, you cannot pass --no-changelog');
     }
@@ -360,12 +364,19 @@ export class VersionCommand extends Command<VersionCommandOption> {
 
     if (this.releaseClient) {
       this.logger.info('execute', 'Creating releases...');
-      await createRelease(
-        this.releaseClient,
-        { tags: this.tags, releaseNotes: this.releaseNotes },
-        { gitRemote: this.options.gitRemote, execOpts: this.execOpts, skipBumpOnlyRelease: this.options.skipBumpOnlyRelease },
-        this.options.dryRun
-      );
+      try {
+        await createRelease(
+          { client: this.releaseClient, releaseDiscussion: this.options.createReleaseDiscussion },
+          { tags: this.tags, releaseNotes: this.releaseNotes },
+          { gitRemote: this.options.gitRemote, execOpts: this.execOpts, skipBumpOnlyRelease: this.options.skipBumpOnlyRelease },
+          this.options.dryRun
+        );
+      } catch (err: any) {
+        this.logger.error(
+          'ERELEASE',
+          `Something went wrong when creating the ${this.options.createRelease} release. Error:: ${err?.message ?? err}`
+        );
+      }
     } else {
       this.logger.info('execute', 'Skipping releases');
     }

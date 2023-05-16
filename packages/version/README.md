@@ -81,6 +81,7 @@ Running `lerna version --conventional-commits` without the above flags will rele
     - [`--changelog-include-commits-client-login [msg]`](#--changelog-include-commits-client-login-msg)
     - [`--changelog-header-message <msg>`](#--changelog-header-message-msg)
     - [`--create-release <type>`](#--create-release-type)
+    - [`--create-release-discussion <name>`](#--create-release-discussion-name)
     - [`--skip-bump-only-release`](#--skip-bump-only-release)
     - [`--describe-tag <pattern>`](#--describe-tag-pattern)
     - [`--exact`](#--exact)
@@ -394,6 +395,17 @@ lerna version --conventional-commits --create-release gitlab
 When run with this flag, `lerna version` will create an official GitHub or GitLab release based on the changed packages. Requires `--conventional-commits` to be passed so that changelogs can be generated.
 
 > **Note** to avoid creating too many "Version bump only for package x" when using independent mode, you could enable the option `--skip-bump-only-release`
+
+### `--create-release-discussion <name>`
+
+Create a discussion for this release, this will create both a Release and a Discussion.
+
+```sh
+lerna version --conventional-commits --create-release github --create-release-discussion announcement
+```
+
+> **Note** currently only available for GitHub Releases following this GitHub blog post [You can now link discussions to new releases](https://github.blog/changelog/2021-04-06-releases-support-comments-and-reactions-with-discussion-linking/)
+
 
 ### `--skip-bump-only-release`
 

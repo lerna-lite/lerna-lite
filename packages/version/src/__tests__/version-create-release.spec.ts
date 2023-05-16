@@ -13,6 +13,13 @@ vi.mock('../lib/remote-branch-exists', async () => await vi.importActual('../lib
 vi.mock('../conventional-commits', async () => await vi.importActual('../__mocks__/conventional-commits'));
 vi.mock('../git-clients/gitlab-client', async () => await vi.importActual('../__mocks__/gitlab-client'));
 vi.mock('../git-clients/github-client', async () => await vi.importActual('../__mocks__/github-client'));
+vi.mock('../lib/create-release', async () => {
+  const { createRelease, createReleaseClient } = await vi.importActual<any>('../lib/create-release');
+  return {
+    createRelease: vi.fn(createRelease),
+    createReleaseClient: vi.fn(createReleaseClient),
+  };
+});
 
 vi.mock('@lerna-lite/core', async () => ({
   ...(await vi.importActual<any>('@lerna-lite/core')),
@@ -36,6 +43,7 @@ const __dirname = dirname(__filename);
 import { logOutput, VersionCommandOption } from '@lerna-lite/core';
 import { updateChangelog, recommendVersion } from '../conventional-commits';
 import { createGitHubClient, createGitLabClient } from '../git-clients';
+import { createRelease, createReleaseClient } from '../lib/create-release.js';
 
 // helpers
 import { commandRunner, initFixtureFactory } from '@lerna-test/helpers';
@@ -84,6 +92,15 @@ describe.each([
     const command = new VersionCommand(createArgv(cwd, '--create-release', type));
 
     await expect(command).rejects.toThrow('To create a release, you must enable --conventional-commits');
+
+    expect(client.releases.size).toBe(0);
+  });
+
+  it('throws an error if --create-release-discussion is provided without defining --create-release', async () => {
+    const cwd = await initFixture('independent');
+    const command = new VersionCommand(createArgv(cwd, '--create-release-discussion', 'some-discussion'));
+
+    await expect(command).rejects.toThrow('To create a release discussion, you must define --create-release');
 
     expect(client.releases.size).toBe(0);
   });
@@ -322,4 +339,47 @@ describe.each([
       });
     });
   });
+});
+
+it('should create a github release discussion when enabled', async () => {
+  process.env.GH_TOKEN = 'TOKEN';
+  const createReleaseMock = vi.fn(() => Promise.resolve(true));
+  (createReleaseClient as Mock).mockImplementation(() => Promise.resolve({ repos: { createRelease: createReleaseMock }}));
+
+  const cwd = await initFixture('normal');
+  const client = createGitHubClient as any;
+
+  (recommendVersion as Mock).mockResolvedValueOnce('1.1.0');
+
+  const command = new VersionCommand(createArgv(cwd, '--create-release', 'github', '--conventional-commits', '--create-release-discussion', 'some-discussion'));
+  await command;
+  await command.execute();
+
+  expect(createReleaseMock).toHaveBeenCalledWith({
+    owner: 'lerna',
+    repo: 'lerna',
+    tag_name: 'v1.1.0',
+    name: 'v1.1.0',
+    body: expect.stringContaining('normal'),
+    draft: false,
+    prerelease: false,
+    discussion_category_name: 'some-discussion',
+  });
+});
+
+it('should log an error when createRelease throws', async () => {
+  process.env.GH_TOKEN = 'TOKEN';
+  (createReleaseClient as Mock).mockImplementation(() => Promise.resolve({ repos: { createRelease: vi.fn(() => Promise.reject('some error')) } }));
+  (createRelease as Mock).mockImplementationOnce(() => {
+    throw new Error('some error');
+  });
+  const cwd = await initFixture('normal');
+  const command = new VersionCommand(createArgv(cwd, '--conventional-commits', '--create-release', 'github', '--create-release-discussion', 'some-discussion'));
+  await command;
+  const loggerSpy = vi.spyOn(command.logger, 'error');
+  await command.execute();
+
+  expect(loggerSpy).toHaveBeenCalledWith('ERELEASE', 'Something went wrong when creating the github release. Error:: some error');
+  expect((createGitHubClient as any).releases.size).toBe(0);
+  expect((createGitLabClient as any).releases.size).toBe(0);
 });
