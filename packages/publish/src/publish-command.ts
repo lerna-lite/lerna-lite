@@ -1,5 +1,5 @@
 import chalk from 'chalk';
-import { glob } from 'glob';
+import { globby } from 'globby';
 import { outputFileSync, removeSync } from 'fs-extra/esm';
 import { EOL } from 'node:os';
 import { join, relative } from 'node:path';
@@ -324,7 +324,7 @@ export class PublishCommand extends Command<PublishCommandOption> {
 
     // optionally cleanup temp packed files after publish, opt-in option
     if (this.options.cleanupTempFiles) {
-      glob(normalizePath(join(tempDir, '/lerna-*'))).then((deleteFolders) => {
+      globby(normalizePath(join(tempDir, '/lerna-*'))).then((deleteFolders) => {
         // delete silently all files/folders that startsWith "lerna-"
         deleteFolders.forEach((folder) => removeSync(folder));
         this.logger.verbose('publish', `Found ${deleteFolders.length} temp folders to cleanup after publish.`);
