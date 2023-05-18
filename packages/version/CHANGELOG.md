@@ -4,6 +4,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [2.4.0](https://github.com/lerna-lite/lerna-lite/compare/v2.3.0...v2.4.0) (2023-05-18)
+
+### Features
+
+* **version:** add new `--create-release-discussion` option ([#604](https://github.com/lerna-lite/lerna-lite/issues/604)) ([c246d0d](https://github.com/lerna-lite/lerna-lite/commit/c246d0da01dac1c8241a357f1280c873d39f981c)) - by @ghiscoding
+
+### Bug Fixes
+
+* **deps:** update all non-major dependencies ([#601](https://github.com/lerna-lite/lerna-lite/issues/601)) ([65fa856](https://github.com/lerna-lite/lerna-lite/commit/65fa8568e721fc7b4db4dff60396d99e419e69f6)) - by @renovate[bot]
+* **deps:** update all non-major dependencies ([#608](https://github.com/lerna-lite/lerna-lite/issues/608)) ([b000303](https://github.com/lerna-lite/lerna-lite/commit/b000303e0bf66b1f1fbdd939124b0b97a828deea)) - by @renovate[bot]
+
 ## [2.3.0](https://github.com/lerna-lite/lerna-lite/compare/v2.2.0...v2.3.0) (2023-05-05)
 
 **Note:** Version bump only for package @lerna-lite/version

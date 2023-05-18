@@ -4,6 +4,19 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [2.4.0](https://github.com/lerna-lite/lerna-lite/compare/v2.3.0...v2.4.0) (2023-05-18)
+
+### Bug Fixes
+
+* **deps:** update all non-major dependencies ([#601](https://github.com/lerna-lite/lerna-lite/issues/601)) ([65fa856](https://github.com/lerna-lite/lerna-lite/commit/65fa8568e721fc7b4db4dff60396d99e419e69f6)) - by @renovate[bot]
+* **deps:** update all non-major dependencies ([#608](https://github.com/lerna-lite/lerna-lite/issues/608)) ([b000303](https://github.com/lerna-lite/lerna-lite/commit/b000303e0bf66b1f1fbdd939124b0b97a828deea)) - by @renovate[bot]
+* **deps:** update dependency glob to v10 ([#607](https://github.com/lerna-lite/lerna-lite/issues/607)) ([dadbaca](https://github.com/lerna-lite/lerna-lite/commit/dadbaca3f961405c96339e259268f548ea6e1e0e)) - by @renovate[bot]
+* **deps:** update dependency glob to v10 ([#609](https://github.com/lerna-lite/lerna-lite/issues/609)) ([dc146e0](https://github.com/lerna-lite/lerna-lite/commit/dc146e079c482b14e5bafc220baea0eec87fd524)) - by @renovate[bot]
+
+### Reverts
+
+* Revert "chore: replace `glob` by `globby` to cleanup temp files (#605)" (#606) ([d940322](https://github.com/lerna-lite/lerna-lite/commit/d940322515345d5fee44817f54652acdb28daea8)), closes [#605](https://github.com/lerna-lite/lerna-lite/issues/605) [#606](https://github.com/lerna-lite/lerna-lite/issues/606) - by @ghiscoding
+
 ## [2.3.0](https://github.com/lerna-lite/lerna-lite/compare/v2.2.0...v2.3.0) (2023-05-05)
 
 ### Features
