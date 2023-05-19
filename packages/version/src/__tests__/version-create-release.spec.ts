@@ -89,7 +89,7 @@ describe.each([
 
   it('throws an error if --conventional-commits is not passed', async () => {
     const cwd = await initFixture('independent');
-    const command = new VersionCommand(createArgv(cwd, '--create-release', type));
+    const command = lernaVersion(cwd)('--create-release', type);
 
     await expect(command).rejects.toThrow('To create a release, you must enable --conventional-commits');
 
@@ -98,16 +98,25 @@ describe.each([
 
   it('throws an error if --create-release-discussion is provided without defining --create-release', async () => {
     const cwd = await initFixture('independent');
-    const command = new VersionCommand(createArgv(cwd, '--create-release-discussion', 'some-discussion'));
+    const command = lernaVersion(cwd)('--create-release-discussion', 'some-discussion');
 
     await expect(command).rejects.toThrow('To create a release discussion, you must define --create-release');
 
     expect(client.releases.size).toBe(0);
   });
 
+  it('throws an error if --create-release-discussion is missing a category name', async () => {
+    const cwd = await initFixture('independent');
+    const command = lernaVersion(cwd)('--create-release', type, '--conventional-commits', '--create-release-discussion');
+
+    await expect(command).rejects.toThrow('A discussion category name must be provided to the --create-release-discussion option.');
+
+    expect(client.releases.size).toBe(0);
+  });
+
   it('throws an error if --no-changelog also passed', async () => {
     const cwd = await initFixture('independent');
-    const command = new VersionCommand(createArgv(cwd, '--create-release', type, '--conventional-commits', '--no-changelog'));
+    const command = lernaVersion(cwd)('--create-release', type, '--conventional-commits', '--no-changelog');
 
     await expect(command).rejects.toThrow('To create a release, you cannot pass --no-changelog');
 
@@ -116,7 +125,7 @@ describe.each([
 
   it('throws an error if environment variables are not present', async () => {
     const cwd = await initFixture('normal');
-    const command = new VersionCommand(createArgv(cwd, '--create-release', type, '--conventional-commits'));
+    const command = lernaVersion(cwd)('--create-release', type, '--conventional-commits');
     const message = `Environment variables for ${type} are missing!`;
 
     client.mockImplementationOnce(() => {

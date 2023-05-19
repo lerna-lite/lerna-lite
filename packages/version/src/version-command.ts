@@ -144,6 +144,13 @@ export class VersionCommand extends Command<VersionCommandOption> {
       throw new ValidationError('ERELEASE', 'To create a release discussion, you must define --create-release');
     }
 
+    if (this.options.createReleaseDiscussion !== undefined && !this.options.createReleaseDiscussion) {
+      throw new ValidationError(
+        'ERELEASE',
+        'A discussion category name must be provided to the --create-release-discussion option.'
+      );
+    }
+
     if (this.releaseClient && this.options.changelog === false) {
       throw new ValidationError('ERELEASE', 'To create a release, you cannot pass --no-changelog');
     }
