@@ -17,7 +17,7 @@ CLI will only provide the `init` command by default, all other commands are enti
 
 ```sh
 # simple install or install it globally with -g
-npm install @lerna-lite/cli -D -W
+npm install @lerna-lite/cli -D
 
 # then use it `lerna <command>`
 lerna version

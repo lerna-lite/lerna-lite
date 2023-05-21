@@ -13,7 +13,7 @@ Lerna-Lite Publish command, publish package(s) in the current project
 ## Installation
 
 ```sh
-npm install @lerna-lite/publish -D -W
+npm install @lerna-lite/publish -D
 
 # then use it (see usage below)
 lerna publish

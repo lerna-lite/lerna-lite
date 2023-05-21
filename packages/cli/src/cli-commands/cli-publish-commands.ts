@@ -165,7 +165,7 @@ export default {
       new PublishCommand(argv);
     } catch (err: unknown) {
       console.error(
-        `"@lerna-lite/publish" is optional and was not found. Please install it with "npm install @lerna-lite/publish -D -W".`,
+        `"@lerna-lite/publish" is optional and was not found. Please install it with "npm install @lerna-lite/publish -D".`,
         err
       );
     }

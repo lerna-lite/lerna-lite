@@ -173,7 +173,7 @@ Note that `package-a` will not be created, it is only shown here to help clarify
 Finally install the commands that are of interest to you (`publish`, `version`, `run`, `exec`, ...)
 
 ```sh
-$ npm i @lerna-lite/publish -D -W
+$ npm i @lerna-lite/publish -D
 ```
 
 ## Installation
@@ -207,14 +207,14 @@ or from a CDN
 
 | Command | Install | Description |
 | --------| --------| ----------- |
-| ☁️ [publish](https://github.com/lerna-lite/lerna-lite/tree/main/packages/publish#readme) | `npm i @lerna-lite/publish -D -W` | publish each workspace package |
-| 📑 [version](https://github.com/lerna-lite/lerna-lite/tree/main/packages/version#readme) | `npm i @lerna-lite/version -D -W` | create new version for each workspace package |
-| 🕜 [changed](https://github.com/lerna-lite/lerna-lite/tree/main/packages/changed#readme) | `npm i @lerna-lite/changed -D -W` | list local packages changed since last release |
-| 🌓 [diff](https://github.com/lerna-lite/lerna-lite/tree/main/packages/diff#readme)       | `npm i @lerna-lite/diff -D -W`    | git diff all packages since the last release   |
-| 👷 [exec](https://github.com/lerna-lite/lerna-lite/tree/main/packages/exec#readme)       | `npm i @lerna-lite/exec -D -W`    | execute an command in each workspace package       |
-| 📖 [list](https://github.com/lerna-lite/lerna-lite/tree/main/packages/list#readme)       | `npm i @lerna-lite/list -D -W`    | list local packages                            |
-| 🏃 [run](https://github.com/lerna-lite/lerna-lite/tree/main/packages/run#readme)         | `npm i @lerna-lite/run -D -W`      | run npm script in each workspace package           |
-| 👓 [watch](https://github.com/lerna-lite/lerna-lite/tree/main/packages/watch#readme)     | `npm i @lerna-lite/watch -D -W`    | watch for changes & execute commands when fired |
+| ☁️ [publish](https://github.com/lerna-lite/lerna-lite/tree/main/packages/publish#readme) | `npm i @lerna-lite/publish -D` | publish each workspace package |
+| 📑 [version](https://github.com/lerna-lite/lerna-lite/tree/main/packages/version#readme) | `npm i @lerna-lite/version -D` | create new version for each workspace package |
+| 🕜 [changed](https://github.com/lerna-lite/lerna-lite/tree/main/packages/changed#readme) | `npm i @lerna-lite/changed -D` | list local packages changed since last release |
+| 🌓 [diff](https://github.com/lerna-lite/lerna-lite/tree/main/packages/diff#readme)       | `npm i @lerna-lite/diff -D`    | git diff all packages since the last release   |
+| 👷 [exec](https://github.com/lerna-lite/lerna-lite/tree/main/packages/exec#readme)       | `npm i @lerna-lite/exec -D`    | execute an command in each workspace package       |
+| 📖 [list](https://github.com/lerna-lite/lerna-lite/tree/main/packages/list#readme)       | `npm i @lerna-lite/list -D`    | list local packages                            |
+| 🏃 [run](https://github.com/lerna-lite/lerna-lite/tree/main/packages/run#readme)         | `npm i @lerna-lite/run -D`      | run npm script in each workspace package           |
+| 👓 [watch](https://github.com/lerna-lite/lerna-lite/tree/main/packages/watch#readme)     | `npm i @lerna-lite/watch -D`    | watch for changes & execute commands when fired |
 
 > **Note** since the `publish` package depends on the `version` package, you could simply install `@lerna-lite/publish` to automatically give you access to the `version` command.
 
@@ -238,7 +238,7 @@ If you are migrating from Lerna, it should be fairly easy to just replace Lerna 
 1. remove Lerna from your local & global dependencies
 
 ```sh
-npm uninstall lerna -W   # OR yarn remove lerna -W
+npm uninstall lerna      # OR yarn remove lerna -W
 npm uninstall -g lerna   # OR yarn global remove lerna
 ```
 
@@ -246,7 +246,7 @@ npm uninstall -g lerna   # OR yarn global remove lerna
 
 ```sh
 # Lerna CLI (includes `init`)
-npm install @lerna-lite/cli -D -W
+npm install @lerna-lite/cli -D
 ```
 
 3. finally install the Lerna-Lite command(s) that you wish to use (`changed`, `diff`, `exec`, `list`, `run`, `publish`, `version` and/or `watch`)
@@ -254,7 +254,7 @@ _refer to [installation](#installation) table above_
 
 ```sh
 # install any of the optional commands (refer to installation table)
-npm install @lerna-lite/publish -D -W
+npm install @lerna-lite/publish -D
 ```
 > **Note** you might see a lot of diff changes across your `changelog.md` files after switching to Lerna-Lite and that is totally expected since Lerna-Lite has code in place to remove empty lines that were added by Lerna for no real reason.
 

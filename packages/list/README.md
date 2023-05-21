@@ -13,7 +13,7 @@ List local packages
 ## Installation
 
 ```sh
-npm install @lerna-lite/list -D -W
+npm install @lerna-lite/list -D
 
 # then use it (see usage below)
 lerna ls

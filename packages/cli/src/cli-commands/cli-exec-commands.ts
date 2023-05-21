@@ -84,7 +84,7 @@ export default {
       new ExecCommand(argv);
     } catch (err: unknown) {
       console.error(
-        `"@lerna-lite/exec" is optional and was not found. Please install it with "npm install @lerna-lite/exec -D -W".`,
+        `"@lerna-lite/exec" is optional and was not found. Please install it with "npm install @lerna-lite/exec -D".`,
         err
       );
     }

@@ -13,7 +13,7 @@ Diff all packages or a single package since the last release
 ## Installation
 
 ```sh
-npm install @lerna-lite/diff -D -W
+npm install @lerna-lite/diff -D
 
 # then use it (see usage below)
 lerna diff

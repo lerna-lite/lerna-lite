@@ -311,7 +311,7 @@ export default {
       new VersionCommand(argv);
     } catch (err: unknown) {
       console.error(
-        `"@lerna-lite/version" is optional and was not found. Please install it with "npm install @lerna-lite/version -D -W".`,
+        `"@lerna-lite/version" is optional and was not found. Please install it with "npm install @lerna-lite/version -D".`,
         err
       );
     }
