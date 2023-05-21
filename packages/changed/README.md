@@ -13,7 +13,7 @@ List local packages that have changed since the last tagged release
 ## Installation
 
 ```sh
-npm install @lerna-lite/changed -D -W
+npm install @lerna-lite/changed -D
 
 # then use it (see usage below)
 lerna changed

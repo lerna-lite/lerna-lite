@@ -15,7 +15,7 @@ Watch for changes within packages and execute commands from the root of the repo
 ## Installation
 
 ```sh
-npm install @lerna-lite/watch -D -W
+npm install @lerna-lite/watch -D
 
 # then use it (see usage below), sure yeah why not
 lerna watch

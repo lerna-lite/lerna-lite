@@ -13,7 +13,7 @@ Create/initialize a new Lerna-Lite repo or upgrade an existing repo to the curre
 ## Installation
 
 ```sh
-npm install @lerna-lite/cli -D -W
+npm install @lerna-lite/cli -D
 
 # then use it (see usage below)
 lerna init

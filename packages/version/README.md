@@ -13,7 +13,7 @@ Lerna-Lite Version command, bump version of packages changed since the last rele
 ## Installation
 
 ```sh
-npm install @lerna-lite/version -D -W
+npm install @lerna-lite/version -D
 
 # then use it (see usage below)
 lerna version
