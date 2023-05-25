@@ -84,8 +84,8 @@
   },
   "devDependencies": {
     "@npm/types": "^1.0.2",
-    "@types/conventional-changelog-core": "^4.2.1",
-    "@types/conventional-changelog-writer": "^4.0.2",
+    "@types/conventional-changelog-core": "^4.2.2",
+    "@types/conventional-changelog-writer": "^4.0.3",
     "@types/conventional-commits-parser": "^3.0.3",
     "@types/conventional-recommended-bump": "^6.1.0",
     "@types/dedent": "^0.7.0",
