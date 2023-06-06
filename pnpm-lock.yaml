@@ -672,8 +672,8 @@ importers:
         specifier: ^5.0.13
         version: 5.0.13
       conventional-changelog-core:
-        specifier: ^4.2.4
-        version: 4.2.4
+        specifier: ^5.0.0
+        version: 5.0.0
       conventional-changelog-writer:
         specifier: ^5.0.1
         version: 5.0.1
@@ -2638,9 +2638,9 @@ packages:
       q: 1.5.1
     dev: true
 
-  /conventional-changelog-core@4.2.4:
-    resolution: {integrity: sha512-gDVS+zVJHE2v4SLc6B0sLsPiloR0ygU7HaDW14aNJE1v4SlqJPILPl/aJC7YdtRE4CybBf8gDwObBvKha8Xlyg==}
-    engines: {node: '>=10'}
+  /conventional-changelog-core@5.0.0:
+    resolution: {integrity: sha512-0NBrAAMklYvkkXkXZmdn+oOx97ENlALdLGrEAYejicNXZiwdVvZv7c4KqK5g+HGGnnB9db7IgwXhti/k3hM2ig==}
+    engines: {node: '>=14'}
     dependencies:
       add-stream: 1.0.0
       conventional-changelog-writer: 5.0.1
@@ -2650,12 +2650,9 @@ packages:
       git-raw-commits: 2.0.11
       git-remote-origin-url: 2.0.0
       git-semver-tags: 4.1.1
-      lodash: 4.17.21
       normalize-package-data: 3.0.3
-      q: 1.5.1
       read-pkg: 3.0.0
       read-pkg-up: 3.0.0
-      through2: 4.0.2
     dev: false
 
   /conventional-changelog-preset-loader@2.3.4:
