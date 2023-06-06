@@ -20,7 +20,7 @@ export default defineConfig({
         '**/__mocks__/**',
         '**/__tests__/**',
       ],
-      provider: 'c8',
+      provider: 'v8',
     },
     onConsoleLog(log, type) {
       if (type === 'stderr' && log.includes(`Could not find 'nx' module`)) {
