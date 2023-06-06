@@ -207,7 +207,7 @@ describe('conventional-commits', () => {
       const [pkg1, pkg2] = await Project.getPackages(cwd);
       const opts = {
         // sometimes presets return null for the level, with no actual releaseType...
-        changelogPreset: pathResolve(__dirname, '__fixtures__/fixed/scripts/null-preset.ts'),
+        changelogPreset: pathResolve(__dirname, '../__fixtures__/fixed/scripts/null-preset.ts'),
       };
 
       // make a change in package-1 and package-2
