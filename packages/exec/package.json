@@ -54,7 +54,7 @@
     "@lerna-lite/filter-packages": "workspace:*",
     "@lerna-lite/profiler": "workspace:*",
     "chalk": "^5.2.0",
-    "dotenv": "^16.1.3",
+    "dotenv": "^16.1.4",
     "npmlog": "^7.0.1",
     "p-map": "^6.0.0"
   },
