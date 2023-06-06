@@ -56,7 +56,7 @@
     "chalk": "^5.2.0",
     "conventional-changelog-angular": "^5.0.13",
     "conventional-changelog-core": "^5.0.0",
-    "conventional-changelog-writer": "^5.0.1",
+    "conventional-changelog-writer": "^6.0.0",
     "conventional-commits-parser": "^4.0.0",
     "conventional-recommended-bump": "^6.1.0",
     "dedent": "^0.7.0",
