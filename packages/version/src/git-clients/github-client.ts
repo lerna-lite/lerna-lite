@@ -15,7 +15,7 @@ export async function createGitHubClient() {
   }
 
   if (GHE_VERSION) {
-    const plugin = await import(`@octokit/plugin-enterprise-rest/ghe-${GHE_VERSION}`);
+    const plugin = await import(`@octokit/plugin-enterprise-rest/ghe-${GHE_VERSION}/index.js`);
     Octokit.plugin(plugin);
   }
 
