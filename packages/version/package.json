@@ -58,7 +58,7 @@
     "conventional-changelog-core": "^5.0.0",
     "conventional-changelog-writer": "^6.0.0",
     "conventional-commits-parser": "^4.0.0",
-    "conventional-recommended-bump": "^6.1.0",
+    "conventional-recommended-bump": "^7.0.0",
     "dedent": "^0.7.0",
     "fs-extra": "^11.1.1",
     "get-stream": "^7.0.0",
