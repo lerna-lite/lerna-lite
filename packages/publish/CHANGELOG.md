@@ -4,6 +4,12 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [2.4.1](https://github.com/lerna-lite/lerna-lite/compare/v2.4.0...v2.4.1) (2023-06-07)
+
+### Bug Fixes
+
+* **deps:** update dependency glob to v10 ([#616](https://github.com/lerna-lite/lerna-lite/issues/616)) ([4f92ea2](https://github.com/lerna-lite/lerna-lite/commit/4f92ea21ce4a30006d44b2ef0c87e30acdf85a5e)) - by @renovate[bot]
+
 ## [2.4.0](https://github.com/lerna-lite/lerna-lite/compare/v2.3.0...v2.4.0) (2023-05-18)
 
 ### Bug Fixes
