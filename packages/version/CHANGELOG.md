@@ -9,10 +9,6 @@ See [Conventional Commits](https://conventionalcommits.org) for commit guideline
 ### Bug Fixes
 
 * **deps:** update all non-major dependencies ([#615](https://github.com/lerna-lite/lerna-lite/issues/615)) ([e5b28bf](https://github.com/lerna-lite/lerna-lite/commit/e5b28bfd89060ffa31a41c25eae2134b8c317d4a)) - by @renovate[bot]
-* **deps:** update dependency conventional-changelog-core to v5 ([#628](https://github.com/lerna-lite/lerna-lite/issues/628)) ([56b2054](https://github.com/lerna-lite/lerna-lite/commit/56b2054f019d20d444b783c06d36a68e31450596)) - by @renovate[bot]
-* **deps:** update dependency conventional-changelog-writer to v6 ([#629](https://github.com/lerna-lite/lerna-lite/issues/629)) ([679b3da](https://github.com/lerna-lite/lerna-lite/commit/679b3da68d49a348ec971af4b7dc45f646f47d08)) - by @renovate[bot]
-* **deps:** update dependency conventional-commits-parser to v4 ([#627](https://github.com/lerna-lite/lerna-lite/issues/627)) ([c533653](https://github.com/lerna-lite/lerna-lite/commit/c533653cb41da33fc242fbbf71afdd256cd8ae30)) - by @renovate[bot]
-* **deps:** update dependency conventional-recommended-bump to v7 ([#632](https://github.com/lerna-lite/lerna-lite/issues/632)) ([ea382d4](https://github.com/lerna-lite/lerna-lite/commit/ea382d422a20fe8c82d7c9be67d1f305c6c82f19)) - by @renovate[bot]
 * **deps:** update dependency get-stream to v7 ([#620](https://github.com/lerna-lite/lerna-lite/issues/620)) ([723ca54](https://github.com/lerna-lite/lerna-lite/commit/723ca542651c25e3a3eb9da41b6a8f09a088b9ce)) - by @renovate[bot]
 * fix GitHub Enterprise plugin import path ([#625](https://github.com/lerna-lite/lerna-lite/issues/625)) ([acbfa43](https://github.com/lerna-lite/lerna-lite/commit/acbfa4361c18178c75c50e2d0fb76c01bb0778d1)) - by @p-chan
 
