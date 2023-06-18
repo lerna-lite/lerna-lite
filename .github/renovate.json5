@@ -27,15 +27,27 @@
       packageNames: ['nx'],
       allowedVersions: '15.4.8', // newer version seems to cause problems with Vitest
     },
+    {
+      packageNames: ['conventional-changelog-angular'],
+      allowedVersions: '5.0.13',
+    },
+    {
+      packageNames: ['conventional-changelog-core'],
+      allowedVersions: '4.2.4',
+    },
+    {
+      packageNames: ['conventional-changelog-writer'],
+      allowedVersions: '5.0.1',
+    },
+    {
+      packageNames: ['conventional-commits-parser'],
+      allowedVersions: '3.2.4',
+    },
+    {
+      packageNames: ['conventional-recommended-bump'],
+      allowedVersions: '6.1.0',
+    },
   ],
-  ignoreDeps: [
-    // skip all conventional-changelog deps since the angular one is now working with `async await('conventional-changelog-angular')`
-    'conventional-changelog-angular',
-    'dependency conventional-commits-parser',
-    'dependency conventional-recommended-bump',
-    'dependency conventional-changelog-conventionalcommits',
-    'dependency conventional-changelog-core',
-    'dependency conventional-changelog-writer'
-  ],
+  ignoreDeps: [],
   schedule: ['on Thursday'],
 }
