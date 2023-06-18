@@ -40,6 +40,10 @@
       allowedVersions: '5.0.1',
     },
     {
+      packageNames: ['conventional-changelog-conventionalcommits'],
+      allowedVersions: '5.0.0',
+    },
+    {
       packageNames: ['conventional-commits-parser'],
       allowedVersions: '3.2.4',
     },
