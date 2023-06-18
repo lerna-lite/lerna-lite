@@ -115,6 +115,32 @@ describe('publish --remove-package-fields', () => {
         },
       });
     });
+
+    it('should expect any lifecycle script (prepack, prepublish, ...postpack) to never be deleted even when user defines the entire scripts for deletion', async () => {
+      const cwd = await initFixture('remove-fields');
+
+      await gitTag(cwd, 'v1.0.0');
+      await setupChanges(cwd);
+      await lernaPublish(cwd)('--remove-package-fields', 'scripts');
+
+      const publishPkg1 = (writePkg as any).updatedManifest('package-1');
+      const publishPkg2 = (writePkg as any).updatedManifest('package-2');
+      const publishPkg3 = (writePkg as any).updatedManifest('package-3');
+      const publishPkg4 = (writePkg as any).updatedManifest('package-4');
+      const publishPkg5 = (writePkg as any).updatedManifest('package-5');
+
+      expect(publishPkg1.scripts).toEqual({
+        prepack: 'echo from prepack-1',
+        postpack: 'echo from postpack-1',
+      });
+      expect(publishPkg2.scripts).toBeUndefined();
+      expect(publishPkg3.scripts).toBeUndefined();
+      expect(publishPkg4.scripts).toEqual({
+        prepack: 'echo from prepack-4',
+        postpack: 'echo from postpack-4',
+      });
+      expect(publishPkg5.scripts).toBeUndefined();
+    });
   });
 
   describe('use "removePackageFields" from Lerna config', () => {
@@ -168,7 +194,10 @@ describe('publish --remove-package-fields', () => {
       const publishPkg5 = (writePkg as any).updatedManifest('package-5');
 
       expect(publishPkg1.devDependencies).toBeUndefined();
-      expect(publishPkg1.scripts).toEqual({});
+      expect(publishPkg1.scripts).toEqual({
+        prepack: 'echo from prepack-1',
+        postpack: 'echo from postpack-1',
+      });
       expect(publishPkg2.devDependencies).toBeUndefined();
       expect(publishPkg2.scripts).toEqual({
         'build:dev': 'tsc --incremental --watch',
@@ -181,6 +210,8 @@ describe('publish --remove-package-fields', () => {
       expect(publishPkg4.devDependencies).toBeUndefined();
       expect(publishPkg4.scripts).toEqual({
         'build:dev': 'tsc --incremental --watch',
+        prepack: 'echo from prepack-4',
+        postpack: 'echo from postpack-4',
       });
       expect(publishPkg5.scripts).toEqual({ 'build:dev': 'tsc --incremental --watch' });
       expect(publishPkg5.exports).toEqual({
