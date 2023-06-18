@@ -296,6 +296,9 @@ Removal of complex object value(s) are also supported via the dot notation as sh
 lerna version --remove-package-fields 'scripts.build'
 ```
 
+> **Note** lifecycle scripts are executed after the field removal process and for that reason if any of these scripts are found, it will not delete them and completely skip them whenever found (`prepublish`, `prepublishOnly`, `prepack`, `postpack`).
+
+
 ##### output
 
 ```diff
