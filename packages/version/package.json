@@ -31,7 +31,9 @@
     "prebuild": "rimraf dist",
     "build": "tsc",
     "build:incremental": "tsc --incremental --sourceMap false --excludeDirectories dist",
-    "pack-tarball": "npm pack"
+    "pack-tarball": "npm pack",
+    "prepack": "echo hello from prepack",
+    "postpack": "echo hello from postpack"
   },
   "license": "MIT",
   "author": "Ghislain B.",

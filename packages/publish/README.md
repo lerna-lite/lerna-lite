@@ -290,6 +290,8 @@ Remove certain fields from every package before publishing them to the registry,
 lerna version --remove-package-fields 'devDependencies' 'scripts'
 ```
 
+> **Note** lifecycle scripts (`prepublish`, `prepublishOnly`, `prepack`, `postpack`) are executed after the field removal process and for that reason if any of these scripts are found, it will leave them in place and skip the removal whenever found.
+
 Removal of complex object value(s) are also supported via the dot notation as shown below.
 
 ```sh

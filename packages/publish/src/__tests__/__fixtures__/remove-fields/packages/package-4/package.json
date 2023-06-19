@@ -8,6 +8,8 @@
   },
   "scripts": {
     "build": "tsc --project tsconfig.json",
-    "build:dev": "tsc --incremental --watch"
+    "build:dev": "tsc --incremental --watch",
+    "prepack": "echo from prepack-4",
+    "postpack": "echo from postpack-4"
   }
 }

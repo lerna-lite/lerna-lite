@@ -5,6 +5,8 @@
   "browser": "src/index.ts",
   "main": "dist/cjs/index.js",
   "scripts": {
-    "build": "tsc --project tsconfig.json"
+    "build": "tsc --project tsconfig.json",
+    "prepack": "echo from prepack-1",
+    "postpack": "echo from postpack-1"
   }
 }
