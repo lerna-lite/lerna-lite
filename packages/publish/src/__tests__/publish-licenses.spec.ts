@@ -108,11 +108,11 @@ describe('licenses', () => {
     await lernaPublish(cwd)('--no-manually-update-root-lockfile');
 
     const [warning] = loggingOutput('warn');
-    expect(warning).toMatchInlineSnapshot(`
-      Packages package-1 and package-3 are missing a license.
-      One way to fix this is to add a LICENSE.md file to the root of this repository.
-      See https://choosealicense.com for additional guidance.
-    `);
+    expect(warning).toBe(
+      'Packages package-1 and package-3 are missing a license.\n' +
+        'One way to fix this is to add a LICENSE.md file to the root of this repository.\n' +
+        'See https://choosealicense.com for additional guidance.'
+    );
 
     expect(createTempLicenses).toHaveBeenLastCalledWith(undefined, []);
     expect(removeTempLicenses).toHaveBeenLastCalledWith([]);
