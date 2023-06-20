@@ -128,6 +128,7 @@ describe('publish --remove-package-fields', () => {
       const publishPkg3 = (writePkg as any).updatedManifest('package-3');
       const publishPkg4 = (writePkg as any).updatedManifest('package-4');
       const publishPkg5 = (writePkg as any).updatedManifest('package-5');
+      const publishPkg6 = (writePkg as any).updatedManifest('package-6');
 
       expect(publishPkg1.scripts).toEqual({
         prepack: 'echo from prepack-1',
@@ -140,6 +141,7 @@ describe('publish --remove-package-fields', () => {
         postpack: 'echo from postpack-4',
       });
       expect(publishPkg5.scripts).toBeUndefined();
+      expect(publishPkg6.scripts).toBeUndefined();
     });
   });
 

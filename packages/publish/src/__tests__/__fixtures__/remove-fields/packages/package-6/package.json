@@ -1,0 +1,8 @@
+{
+  "name": "package-6",
+  "description": "example package without scripts, maybe eslint plugin",
+  "version": "1.0.0",
+  "peerDependencies": {
+    "eslint": "^8.40.0"
+  }
+}
