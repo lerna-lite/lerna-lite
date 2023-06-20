@@ -4,6 +4,13 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [2.4.2](https://github.com/lerna-lite/lerna-lite/compare/v2.4.1...v2.4.2) (2023-06-20)
+
+### Bug Fixes
+
+* **deps:** update dependency semver to ^7.5.2 ([#646](https://github.com/lerna-lite/lerna-lite/issues/646)) ([449358b](https://github.com/lerna-lite/lerna-lite/commit/449358b9db37b94e3e1ebcf3af4ad8cc0b2ae9ca)) - by @renovate[bot]
+* **publish:** skip lifecycle scripts on pkg fields removal, fixes [#637](https://github.com/lerna-lite/lerna-lite/issues/637) ([#647](https://github.com/lerna-lite/lerna-lite/issues/647)) ([5b2a15a](https://github.com/lerna-lite/lerna-lite/commit/5b2a15afcb36c62fe9d3b9f49c59bea86613c633)) - by @ghiscoding
+
 ## [2.4.1](https://github.com/lerna-lite/lerna-lite/compare/v2.4.0...v2.4.1) (2023-06-07)
 
 ### Bug Fixes

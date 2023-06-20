@@ -4,6 +4,13 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [2.4.2](https://github.com/lerna-lite/lerna-lite/compare/v2.4.1...v2.4.2) (2023-06-20)
+
+### Bug Fixes
+
+* **deps:** update all non-major dependencies ([#648](https://github.com/lerna-lite/lerna-lite/issues/648)) ([a54b90f](https://github.com/lerna-lite/lerna-lite/commit/a54b90f91d1888c72c23b16321b1f5947472e74b)) - by @renovate[bot]
+* **publish:** skip lifecycle scripts on pkg fields removal, fixes [#637](https://github.com/lerna-lite/lerna-lite/issues/637) ([#647](https://github.com/lerna-lite/lerna-lite/issues/647)) ([5b2a15a](https://github.com/lerna-lite/lerna-lite/commit/5b2a15afcb36c62fe9d3b9f49c59bea86613c633)) - by @ghiscoding
+
 ## [2.4.1](https://github.com/lerna-lite/lerna-lite/compare/v2.4.0...v2.4.1) (2023-06-07)
 
 **Note:** Version bump only for package @lerna-lite/cli
