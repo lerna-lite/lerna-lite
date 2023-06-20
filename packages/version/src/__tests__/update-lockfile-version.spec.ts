@@ -36,6 +36,18 @@ import {
   validateFileExists,
 } from '../lib/update-lockfile-version';
 
+// Serialize the JSONError output to be more human readable
+expect.addSnapshotSerializer({
+  serialize(str: string) {
+    // eslint-disable-next-line @typescript-eslint/no-var-requires
+    const stripAnsi = require('strip-ansi');
+    return stripAnsi(str).replace(/Error in: .*lerna\.json/, 'Error in: normalized/path/to/lerna.json');
+  },
+  test(val: string) {
+    return val != null && typeof val === 'string' && val.includes('Error in: ');
+  },
+});
+
 describe('npm classic lock file', () => {
   test('updateLockfileVersion with lockfile v1', async () => {
     const cwd = await initFixture('lockfile-leaf');
@@ -101,52 +113,7 @@ describe('npm modern lock file', () => {
     }
 
     // expect(Array.from((loadJsonFile as any).registry.keys())).toStrictEqual(['/packages/package-1', '/packages/package-2', '/']);
-    expect(readJsonSync(rootLockFilePath)).toEqual({
-      dependencies: {
-        '@my-workspace/package-1': {
-          requires: { 'tiny-tarball': '^1.0.0' },
-          version: 'file:packages/package-1',
-        },
-        '@my-workspace/package-2': {
-          requires: { '@my-workspace/package-1': '^2.4.0' },
-          version: 'file:packages/package-2',
-        },
-      },
-      lockfileVersion: 2,
-      name: 'my-workspace',
-      packages: {
-        '': {
-          license: 'MIT',
-          name: 'my-workspace',
-          workspaces: ['./packages/package-1', './packages/package-2'],
-        },
-        'node_modules/package-1': {
-          link: true,
-          resolved: 'packages/package-1',
-        },
-        'node_modules/package-2': {
-          link: true,
-          resolved: 'packages/package-2',
-        },
-        'packages/package-1': {
-          license: 'MIT',
-          name: '@my-workspace/package-1',
-          'tiny-tarball': {
-            integrity: 'sha1-u/EC1a5zr+LFUyleD7AiMCFvZbE=',
-            resolved: 'https://registry.npmjs.org/tiny-tarball/-/tiny-tarball-1.0.0.tgz',
-            version: '1.0.0',
-          },
-          version: '2.4.0',
-        },
-        'packages/package-2': {
-          dependencies: { '@my-workspace/package-1': '^2.4.0' },
-          license: 'MIT',
-          name: '@my-workspace/package-2',
-          version: '2.4.0',
-        },
-      },
-      requires: true,
-    });
+    expect(readJsonSync(rootLockFilePath)).toMatchSnapshot();
   });
 });
 
