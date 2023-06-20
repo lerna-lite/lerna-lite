@@ -4,6 +4,12 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [2.4.3](https://github.com/lerna-lite/lerna-lite/compare/v2.4.2...v2.4.3) (2023-06-20)
+
+### Bug Fixes
+
+* **publish:** handle empty scripts section on remove-fields flag ([#652](https://github.com/lerna-lite/lerna-lite/issues/652)) ([4b050ca](https://github.com/lerna-lite/lerna-lite/commit/4b050caad40520ab2f897498c9d59bb08ebf2e72)) - by @Naymi
+
 ## [2.4.2](https://github.com/lerna-lite/lerna-lite/compare/v2.4.1...v2.4.2) (2023-06-20)
 
 ### Bug Fixes
