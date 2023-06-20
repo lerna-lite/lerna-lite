@@ -36,6 +36,18 @@ import {
   validateFileExists,
 } from '../lib/update-lockfile-version';
 
+// Serialize the JSONError output to be more human readable
+expect.addSnapshotSerializer({
+  serialize(str: string) {
+    // eslint-disable-next-line @typescript-eslint/no-var-requires
+    const stripAnsi = require('strip-ansi');
+    return stripAnsi(str).replace(/Error in: .*lerna\.json/, 'Error in: normalized/path/to/lerna.json');
+  },
+  test(val: string) {
+    return val != null && typeof val === 'string' && val.includes('Error in: ');
+  },
+});
+
 describe('npm classic lock file', () => {
   test('updateLockfileVersion with lockfile v1', async () => {
     const cwd = await initFixture('lockfile-leaf');
