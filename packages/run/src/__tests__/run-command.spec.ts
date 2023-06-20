@@ -52,6 +52,17 @@ const ranInPackagesStreaming = (testDir: string) =>
     return arr;
   }, []);
 
+// remove quotes around top-level strings
+expect.addSnapshotSerializer({
+  test(val) {
+    return typeof val === 'string';
+  },
+  serialize(val, config, indentation, depth) {
+    // top-level strings don't need quotes, but nested ones do (object properties, etc)
+    return depth ? `"${val}"` : val;
+  },
+});
+
 const createArgv = (cwd: string, script?: string, ...args: any[]) => {
   args.unshift('run');
   const parserArgs = args.join(' ');
@@ -286,15 +297,15 @@ describe('RunCommand', () => {
 
       expect(ranInPackagesStreaming(testDir)).toMatchInlineSnapshot(`
         [
-          packages/package-cycle-1 npm run env (prefixed: true),
-          packages/package-cycle-2 npm run env (prefixed: true),
-          packages/package-cycle-extraneous-1 npm run env (prefixed: true),
-          packages/package-cycle-extraneous-2 npm run env (prefixed: true),
-          packages/package-dag-1 npm run env (prefixed: true),
-          packages/package-dag-2a npm run env (prefixed: true),
-          packages/package-dag-2b npm run env (prefixed: true),
-          packages/package-dag-3 npm run env (prefixed: true),
-          packages/package-standalone npm run env (prefixed: true),
+          "packages/package-cycle-1 npm run env (prefixed: true)",
+          "packages/package-cycle-2 npm run env (prefixed: true)",
+          "packages/package-cycle-extraneous-1 npm run env (prefixed: true)",
+          "packages/package-cycle-extraneous-2 npm run env (prefixed: true)",
+          "packages/package-dag-1 npm run env (prefixed: true)",
+          "packages/package-dag-2a npm run env (prefixed: true)",
+          "packages/package-dag-2b npm run env (prefixed: true)",
+          "packages/package-dag-3 npm run env (prefixed: true)",
+          "packages/package-standalone npm run env (prefixed: true)",
         ]
       `);
     });

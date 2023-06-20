@@ -4,6 +4,17 @@ import { outputFile, remove, writeJson } from 'fs-extra/esm';
 import { basename, dirname, join, resolve as pathResolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
 
+// remove quotes around top-level strings
+expect.addSnapshotSerializer({
+  test(val) {
+    return typeof val === 'string';
+  },
+  serialize(val, config, indentation, depth) {
+    // top-level strings don't need quotes, but nested ones do (object properties, etc)
+    return depth ? `"${val}"` : val;
+  },
+});
+
 // Serialize the JSONError output to be more human readable
 expect.addSnapshotSerializer({
   serialize(str: string) {
@@ -78,7 +89,7 @@ describe('Project', () => {
 
       expect(new Project(cwd).config).toMatchInlineSnapshot(`
         {
-          version: 1.0.0,
+          "version": "1.0.0",
         }
       `);
     });
@@ -237,15 +248,15 @@ describe('Project', () => {
       expect(result).toMatchInlineSnapshot(`
         [
           {
-            name: pkg-1,
-            version: 1.0.0,
+            "name": "pkg-1",
+            "version": "1.0.0",
           },
           {
-            dependencies: {
-              pkg-1: ^1.0.0,
+            "dependencies": {
+              "pkg-1": "^1.0.0",
             },
-            name: pkg-2,
-            version: 1.0.0,
+            "name": "pkg-2",
+            "version": "1.0.0",
           },
         ]
       `);
@@ -263,15 +274,15 @@ describe('Project', () => {
       expect(project.getPackagesSync()).toMatchInlineSnapshot(`
         [
           {
-            name: pkg-1,
-            version: 1.0.0,
+            "name": "pkg-1",
+            "version": "1.0.0",
           },
           {
-            dependencies: {
-              pkg-1: ^1.0.0,
+            "dependencies": {
+              "pkg-1": "^1.0.0",
             },
-            name: pkg-2,
-            version: 1.0.0,
+            "name": "pkg-2",
+            "version": "1.0.0",
           },
         ]
       `);

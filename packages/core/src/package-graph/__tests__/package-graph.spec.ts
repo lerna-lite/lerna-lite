@@ -16,7 +16,7 @@ describe('PackageGraph', () => {
         new Package({ name: 'pkg-2', version: '3.0.0' } as Package, '/test/pkg-3', '/test'),
       ];
 
-      expect(() => new PackageGraph(pkgs)).toThrowErrorMatchingSnapshot();
+      expect(() => new PackageGraph(pkgs)).toThrowError('Package name "pkg-2" used in multiple packages:\n\t/test/pkg-2\n\t/test/pkg-3');
     });
 
     it('externalizes non-satisfied semver of local sibling', () => {
