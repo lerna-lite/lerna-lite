@@ -751,7 +751,7 @@ export class PublishCommand extends Command<PublishCommandOption> {
         for (const removeField of removePackageFields) {
           if (removeField === 'scripts') {
             // when deleting field "scripts", we need to keep any lifecycle script(s) to avoid failure when packing tarball
-            const scriptNames = Object.keys(node.pkg.manifest['scripts']);
+            const scriptNames = Object.keys(node.pkg.manifest['scripts'] ?? {});
             const remainingScripts = excludeValuesFromArray(scriptNames, ['prepublish', 'prepublishOnly', 'prepack', 'postpack']);
             if (remainingScripts.length < scriptNames.length) {
               remainingScripts.forEach((scriptName) =>
