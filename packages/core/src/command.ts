@@ -15,6 +15,7 @@ import { ValidationError } from './validation-error.js';
 import {
   ChangedCommandOption,
   CommandType,
+  CreateCommandOption,
   DiffCommandOption,
   ExecCommandOption,
   ExecOpts,
@@ -32,6 +33,7 @@ const DEFAULT_CONCURRENCY = cpus().length;
 
 type AvailableCommandOption =
   | ChangedCommandOption
+  | CreateCommandOption
   | DiffCommandOption
   | ExecCommandOption
   | InitCommandOption

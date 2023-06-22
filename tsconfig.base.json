@@ -42,6 +42,7 @@
     "@lerna-lite/changed": ["packages/changed/src"],
     "@lerna-lite/cli": ["packages/cli/src"],
     "@lerna-lite/core": ["packages/core/src"],
+    "@lerna-lite/create": ["packages/create/src"],
     "@lerna-lite/diff": ["packages/diff/src"],
     "@lerna-lite/exec": ["packages/exec/src"],
     "@lerna-lite/filter-packages": ["packages/filter-packages/src"],

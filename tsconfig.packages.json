@@ -4,6 +4,7 @@
     { "path": "./packages/changed" },
     { "path": "./packages/cli" },
     { "path": "./packages/core" },
+    { "path": "./packages/create" },
     { "path": "./packages/diff" },
     { "path": "./packages/exec" },
     { "path": "./packages/filter-packages" },

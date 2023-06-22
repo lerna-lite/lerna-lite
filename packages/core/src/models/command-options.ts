@@ -1,5 +1,49 @@
 import { RemoteClientType } from './interfaces.js';
 
+export interface CreateCommandOption {
+  /** When using a scope, set publishConfig.access value */
+  access?: 'public' | 'restricted';
+
+  /** Package has an executable. Customize with --bin <executableName> */
+  bin?: boolean | string;
+
+  /** Package description */
+  description?: string;
+
+  /** A list of package dependencies */
+  dependencies?: string[];
+
+  /** Initialize a transpiled ES Module */
+  esModule?: boolean;
+
+  /** The package homepage, defaulting to a subpath of the root pkg.homepage */
+  homepage?: string;
+
+  /** A list of package keywords */
+  keywords?: string[];
+
+  /** The desired package license (SPDX identifier) */
+  license?: string;
+
+  /** A custom package location, defaulting to the first configured package location */
+  loc?: string;
+
+  /** The package name (including scope), which must be locally unique _and_ publicly available */
+  name: string;
+
+  /** Make the new package private, never published to any external registry */
+  private?: boolean;
+
+  /** Configure the package's publishConfig.registry */
+  registry?: string;
+
+  /** Configure the package's publishConfig.tag */
+  tag?: string;
+
+  /** Skip all prompts, accepting default values */
+  yes?: boolean;
+}
+
 export interface ChangedCommandOption {
   /** use conventional-changelog to determine version bump and generate CHANGELOG. */
   conventionalCommits?: boolean;

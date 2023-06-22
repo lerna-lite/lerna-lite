@@ -4,6 +4,7 @@ import { JsonValue } from '@lerna-lite/core';
 import { fileURLToPath } from 'node:url';
 
 import changedCmd from './cli-commands/cli-changed-commands.js';
+import createCmd from './cli-commands/cli-create-command.js';
 import diffCmd from './cli-commands/cli-diff-commands.js';
 import execCmd from './cli-commands/cli-exec-commands.js';
 import initCmd from './cli-commands/cli-init-commands.js';
@@ -24,6 +25,7 @@ export function lerna(argv: any[]) {
 
   return cli()
     .command(changedCmd as any)
+    .command(createCmd as any)
     .command(diffCmd as any)
     .command(execCmd as any)
     .command(initCmd as any)

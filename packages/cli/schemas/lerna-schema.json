@@ -97,6 +97,95 @@
             }
           }
         },
+        "create": {
+          "type": "object",
+          "description": "Options for the `create` command.",
+          "properties": {
+            "access": {
+              "$ref": "#/$defs/commandOptions/create/access"
+            },
+            "bin": {
+              "$ref": "#/$defs/commandOptions/create/bin"
+            },
+            "description": {
+              "$ref": "#/$defs/commandOptions/create/description"
+            },
+            "dependencies": {
+              "$ref": "#/$defs/commandOptions/create/dependencies"
+            },
+            "esModule": {
+              "$ref": "#/$defs/commandOptions/create/esModule"
+            },
+            "homepage": {
+              "$ref": "#/$defs/commandOptions/create/homepage"
+            },
+            "keywords": {
+              "$ref": "#/$defs/commandOptions/create/keywords"
+            },
+            "license": {
+              "$ref": "#/$defs/commandOptions/create/license"
+            },
+            "registry": {
+              "$ref": "#/$defs/commandOptions/shared/registry"
+            },
+            "tag": {
+              "$ref": "#/$defs/commandOptions/create/tag"
+            },
+
+            "npmClient": {
+              "$ref": "#/$defs/globals/npmClient"
+            },
+            "loglevel": {
+              "$ref": "#/$defs/globals/loglevel"
+            },
+            "concurrency": {
+              "$ref": "#/$defs/globals/concurrency"
+            },
+            "rejectCycles": {
+              "$ref": "#/$defs/globals/rejectCycles"
+            },
+            "progress": {
+              "$ref": "#/$defs/globals/progress"
+            },
+            "sort": {
+              "$ref": "#/$defs/globals/sort"
+            },
+            "maxBuffer": {
+              "$ref": "#/$defs/globals/maxBuffer"
+            },
+            "yes": {
+              "$ref": "#/$defs/globals/yes"
+            },
+
+            "scope": {
+              "$ref": "#/$defs/filters/scope"
+            },
+            "ignore": {
+              "$ref": "#/$defs/filters/ignore"
+            },
+            "private": {
+              "$ref": "#/$defs/filters/private"
+            },
+            "since": {
+              "$ref": "#/$defs/filters/since"
+            },
+            "excludeDependents": {
+              "$ref": "#/$defs/filters/excludeDependents"
+            },
+            "includeDependents": {
+              "$ref": "#/$defs/filters/includeDependents"
+            },
+            "includeDependencies": {
+              "$ref": "#/$defs/filters/includeDependencies"
+            },
+            "includeMergedTags": {
+              "$ref": "#/$defs/filters/includeMergedTags"
+            },
+            "continueIfNoMatch": {
+              "$ref": "#/$defs/filters/continueIfNoMatch"
+            }
+          }
+        },
         "diff": {
           "type": "object",
           "description": "Options for the `diff` command.",
@@ -887,6 +976,34 @@
       "$ref": "#/$defs/commandOptions/init/independent"
     },
 
+    "access": {
+      "$ref": "#/$defs/commandOptions/create/access"
+    },
+    "bin": {
+      "$ref": "#/$defs/commandOptions/create/bin"
+    },
+    "description": {
+      "$ref": "#/$defs/commandOptions/create/description"
+    },
+    "dependencies": {
+      "$ref": "#/$defs/commandOptions/create/dependencies"
+    },
+    "esModule": {
+      "$ref": "#/$defs/commandOptions/create/esModule"
+    },
+    "homepage": {
+      "$ref": "#/$defs/commandOptions/create/homepage"
+    },
+    "keywords": {
+      "$ref": "#/$defs/commandOptions/create/keywords"
+    },
+    "license": {
+      "$ref": "#/$defs/commandOptions/create/license"
+    },
+    "tag": {
+      "$ref": "#/$defs/commandOptions/create/tag"
+    },
+
     "canary": {
       "$ref": "#/$defs/commandOptions/publish/canary"
     },
@@ -1147,6 +1264,51 @@
       }
     },
     "commandOptions": {
+      "create": {
+        "access": {
+          "type": "string",
+          "enum": ["public", "restricted"],
+          "description": "During `lerna create` and when using a scope, set publishConfig.access value."
+        },
+        "bin": {
+          "type": "string",
+          "description": "During `lerna create`, specifies that the new package has an executable with the given name."
+        },
+        "description": {
+          "type": "string",
+          "description": "During `lerna create`, specifies the description of the new package."
+        },
+        "dependencies": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "description": "During `lerna create`, specifies the list of dependencies of the new package."
+        },
+        "esModule": {
+          "type": "boolean",
+          "description": "During `lerna create`, when true, initializes a transpiled ES Module."
+        },
+        "homepage": {
+          "type": "string",
+          "description": "During `lerna create`, specifies the homepage of the new package. Defaults to a subpath of the root pkg.homepage."
+        },
+        "keywords": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "description": "During `lerna create`, specifies the list of keywords of the new package."
+        },
+        "license": {
+          "type": "string",
+          "description": "During `lerna create`, specifies the license of the new package (SPDX identifier). Defaults to ISC."
+        },
+        "tag": {
+          "type": "string",
+          "description": "During `lerna create`, specifies the publishConfig.tag for the new package."
+        }
+      },
       "exec": {
         "dryRun": {
           "type": "boolean",
