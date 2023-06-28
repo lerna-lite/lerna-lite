@@ -931,7 +931,10 @@ export class PublishCommand extends Command<PublishCommandOption> {
                 return pkg;
               })
               .catch((err) => {
-                if (err.code === 'EPUBLISHCONFLICT') {
+                if (
+                  err.code === 'EPUBLISHCONFLICT' ||
+                  (err.code === 'E403' && err.body?.error?.includes('You cannot publish over the previously published versions'))
+                ) {
                   tracker.warn('publish', `Package is already published: ${pkg.name}@${pkg.version}`);
                   tracker.completeWork(1);
 
