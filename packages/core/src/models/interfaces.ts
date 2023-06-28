@@ -75,6 +75,7 @@ export interface Manifest {
 }
 
 export interface FetchConfig {
+  [key: string]: unknown;
   fetchRetries: number;
   log: log.Logger;
   registry: string;
