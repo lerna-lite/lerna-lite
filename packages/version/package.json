@@ -68,7 +68,7 @@
     "graceful-fs": "^4.2.11",
     "is-stream": "^3.0.0",
     "load-json-file": "^7.0.1",
-    "make-dir": "^3.1.0",
+    "make-dir": "^4.0.0",
     "minimatch": "^9.0.1",
     "new-github-release-url": "^2.0.0",
     "node-fetch": "^3.3.1",
