@@ -57,7 +57,7 @@
     "chalk": "^5.2.0",
     "columnify": "^1.6.0",
     "fs-extra": "^11.1.1",
-    "glob": "^10.3.0",
+    "glob": "^10.3.1",
     "has-unicode": "^2.0.1",
     "libnpmaccess": "^7.0.2",
     "libnpmpublish": "^7.4.0",
@@ -71,7 +71,7 @@
     "pacote": "^15.2.0",
     "pify": "^6.1.0",
     "read-package-json": "^6.0.4",
-    "semver": "^7.5.2",
+    "semver": "^7.5.3",
     "ssri": "^10.0.4",
     "tar": "^6.1.15",
     "temp-dir": "^3.0.0"
