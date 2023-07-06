@@ -30,7 +30,7 @@ vi.mock('@lerna-lite/core', async (coreOriginal) => ({
 }));
 vi.mock('write-pkg', async () => await vi.importActual('../lib/__mocks__/write-pkg'));
 
-import { outputFile, outputJson } from 'fs-extra';
+import { outputFile, outputJson } from 'fs-extra/esm';
 import { promises as fsPromises } from 'node:fs';
 import { dirname, join, resolve as pathResolve } from 'node:path';
 import { execa } from 'execa';
