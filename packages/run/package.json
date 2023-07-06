@@ -60,7 +60,7 @@
   },
   "devDependencies": {
     "@types/fs-extra": "^11.0.1",
-    "globby": "^13.2.0",
+    "globby": "^13.2.2",
     "nx": "15.4.8",
     "perf_hooks": "^0.0.1",
     "yargs": "^17.7.2",
