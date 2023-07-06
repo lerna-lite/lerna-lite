@@ -4,6 +4,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [2.5.0](https://github.com/lerna-lite/lerna-lite/compare/v2.4.3...v2.5.0) (2023-07-06)
+
+### Bug Fixes
+
+* **deps:** update all non-major dependencies ([#654](https://github.com/lerna-lite/lerna-lite/issues/654)) ([247d17b](https://github.com/lerna-lite/lerna-lite/commit/247d17bf627b23776ad49f28d42b210dab5c713d)) - by @renovate[bot]
+* **deps:** update all non-major dependencies ([#662](https://github.com/lerna-lite/lerna-lite/issues/662)) ([009a47c](https://github.com/lerna-lite/lerna-lite/commit/009a47c191d75b89a8bc68860ec83369a21bea91)) - by @renovate[bot]
+* **deps:** update dependency chalk to ^5.3.0 ([#660](https://github.com/lerna-lite/lerna-lite/issues/660)) ([96c80a9](https://github.com/lerna-lite/lerna-lite/commit/96c80a9aace6f10967f0f6f31880b177ecd6e0f5)) - by @renovate[bot]
+* **publish:** catch publish conflict 403 error from npm ([#657](https://github.com/lerna-lite/lerna-lite/issues/657)) ([738c028](https://github.com/lerna-lite/lerna-lite/commit/738c0282c8f50cbfdd4259185a9668aefb78c727)) - by @ghiscoding
+* **publish:** ensure that error code is a number ([#656](https://github.com/lerna-lite/lerna-lite/issues/656)) ([0b823d5](https://github.com/lerna-lite/lerna-lite/commit/0b823d546a217d021b165a64f20e334b88bf4c09)) - by @ghiscoding
+* strict-ssl mapping for node-fetch-registry during unpublished projects lookup ([#655](https://github.com/lerna-lite/lerna-lite/issues/655)) ([9b6a400](https://github.com/lerna-lite/lerna-lite/commit/9b6a400ab0cb0edc1efab5c45f2dded2856c0cff)) - by @ghiscoding
+
 ## [2.4.3](https://github.com/lerna-lite/lerna-lite/compare/v2.4.2...v2.4.3) (2023-06-20)
 
 ### Bug Fixes
