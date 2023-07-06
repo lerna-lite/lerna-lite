@@ -8,7 +8,7 @@ export interface UncommittedConfig {
   log?: typeof npmlog;
 }
 
-const maybeColorize = (colorize: (color?: string) => string) => (s?: string) => s !== ' ' ? colorize(s) : s;
+const maybeColorize = (colorize: (color?: string) => string) => (s?: string) => (s !== ' ' ? colorize(s) : s);
 const cRed = maybeColorize(chalk.red);
 const cGreen = maybeColorize(chalk.green);
 const replaceStatus = (_, maybeGreen?: string, maybeRed?: string) => `${cGreen(maybeGreen)}${cRed(maybeRed)}`;
