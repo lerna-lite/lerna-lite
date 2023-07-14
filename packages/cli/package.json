@@ -57,7 +57,7 @@
   "dependencies": {
     "@lerna-lite/core": "workspace:*",
     "@lerna-lite/init": "workspace:*",
-    "dedent": "^0.7.0",
+    "dedent": "^1.0.2",
     "dotenv": "^16.3.1",
     "import-local": "^3.1.0",
     "load-json-file": "^7.0.1",
