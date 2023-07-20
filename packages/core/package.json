@@ -76,7 +76,7 @@
     "strong-log-transformer": "^2.1.0",
     "write-file-atomic": "^5.0.1",
     "write-json-file": "^5.0.0",
-    "write-pkg": "^5.1.0"
+    "write-pkg": "^6.0.0"
   },
   "devDependencies": {
     "@types/clone-deep": "^4.0.1",
