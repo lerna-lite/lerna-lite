@@ -78,7 +78,7 @@
     "@lerna-lite/watch": "workspace:*",
     "@lerna-test/helpers": "link:helpers",
     "@types/fs-extra": "^11.0.1",
-    "@types/node": "^18.16.19",
+    "@types/node": "^20.4.4",
     "@types/npmlog": "^4.1.4",
     "@types/yargs": "^17.0.24",
     "@typescript-eslint/eslint-plugin": "^6.1.0",

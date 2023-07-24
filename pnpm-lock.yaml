@@ -57,8 +57,8 @@ importers:
         specifier: ^11.0.1
         version: 11.0.1
       '@types/node':
-        specifier: ^18.16.19
-        version: 18.16.19
+        specifier: ^20.4.4
+        version: 20.4.4
       '@types/npmlog':
         specifier: ^4.1.4
         version: 4.1.4
@@ -145,7 +145,7 @@ importers:
         version: 3.1.0
       ts-node:
         specifier: ^10.9.1
-        version: 10.9.1(@types/node@18.16.19)(typescript@5.1.6)
+        version: 10.9.1(@types/node@20.4.4)(typescript@5.1.6)
       tslib:
         specifier: ^2.6.0
         version: 2.6.0
@@ -414,8 +414,8 @@ importers:
         version: 7.0.1
     devDependencies:
       '@types/node':
-        specifier: ^18.16.19
-        version: 18.16.19
+        specifier: ^20.4.4
+        version: 20.4.4
       yargs:
         specifier: ^17.7.2
         version: 17.7.2
@@ -490,8 +490,8 @@ importers:
         version: 2.0.1
     devDependencies:
       '@types/node':
-        specifier: ^18.16.19
-        version: 18.16.19
+        specifier: ^20.4.4
+        version: 20.4.4
       yargs:
         specifier: ^17.7.2
         version: 17.7.2
@@ -1654,7 +1654,7 @@ packages:
       '@types/conventional-commits-parser': 3.0.3
       '@types/conventional-recommended-bump': 6.1.0
       '@types/git-raw-commits': 2.0.1
-      '@types/node': 18.16.19
+      '@types/node': 20.4.4
       '@types/normalize-package-data': 2.4.1
     dev: true
 
@@ -1662,13 +1662,13 @@ packages:
     resolution: {integrity: sha512-fL9tZgn70qjPpKw4Kt44VvXyVJeQfJL6tQObLIOgdqaAzoJokI353ypVBiJA1lgvt3Kpy5dbhm7mjJ6Fz/MxQw==}
     dependencies:
       '@types/conventional-commits-parser': 3.0.3
-      '@types/node': 18.16.19
+      '@types/node': 20.4.4
     dev: true
 
   /@types/conventional-commits-parser@3.0.3:
     resolution: {integrity: sha512-aoUKfRQYvGMH+spFpOTX9jO4nZoz9/BKp4hlHPxL3Cj2r2Xj+jEcwlXtFIyZr5uL8bh1nbWynDEYaAota+XqPg==}
     dependencies:
-      '@types/node': 18.16.19
+      '@types/node': 20.4.4
     dev: true
 
   /@types/conventional-recommended-bump@6.1.0:
@@ -1693,7 +1693,7 @@ packages:
   /@types/git-raw-commits@2.0.1:
     resolution: {integrity: sha512-vE2lbXxqJ0AqMDoP4N6d+WVfbcBla9+z8IL6e+37JNQIwYZCYY0z3J7hdpY8D/VGwFZ0yIYQLcqk8eCnfXsaEg==}
     dependencies:
-      '@types/node': 18.16.19
+      '@types/node': 20.4.4
     dev: true
 
   /@types/git-url-parse@9.0.1:
@@ -1730,7 +1730,7 @@ packages:
   /@types/jsonfile@6.1.1:
     resolution: {integrity: sha512-GSgiRCVeapDN+3pqA35IkQwasaCh/0YFH5dEF6S88iDvEn901DjOeH3/QPY+XYP1DFzDZPvIvfeEgk+7br5png==}
     dependencies:
-      '@types/node': 18.16.19
+      '@types/node': 20.4.4
     dev: true
 
   /@types/minimatch@3.0.5:
@@ -1747,6 +1747,10 @@ packages:
 
   /@types/node@18.16.19:
     resolution: {integrity: sha512-IXl7o+R9iti9eBW4Wg2hx1xQDig183jj7YLn8F7udNceyfkbn1ZxmzZXuak20gR40D7pIkIY1kYGx5VIGbaHKA==}
+    dev: true
+
+  /@types/node@20.4.4:
+    resolution: {integrity: sha512-CukZhumInROvLq3+b5gLev+vgpsIqC2D0deQr/yS1WnxvmYLlJXZpaQrQiseMY+6xusl79E04UjWoqyr+t1/Ew==}
     dev: true
 
   /@types/normalize-package-data@2.4.1:
@@ -1777,7 +1781,7 @@ packages:
   /@types/through@0.0.30:
     resolution: {integrity: sha512-FvnCJljyxhPM3gkRgWmxmDZyAQSiBQQWLI0A0VFL0K7W1oRUrPJSqNO0NvTnLkBcotdlp3lKvaT0JrnyRDkzOg==}
     dependencies:
-      '@types/node': 18.16.19
+      '@types/node': 20.4.4
     dev: true
 
   /@types/write-file-atomic@4.0.0:
@@ -6418,7 +6422,7 @@ packages:
       typescript: 5.1.6
     dev: true
 
-  /ts-node@10.9.1(@types/node@18.16.19)(typescript@5.1.6):
+  /ts-node@10.9.1(@types/node@20.4.4)(typescript@5.1.6):
     resolution: {integrity: sha512-NtVysVPkxxrwFGUUxGYhfux8k78pQB3JqYBXlLRZgdGUqTO5wU/UyHop5p70iEbGhB7q5KmiZiU0Y3KlJrScEw==}
     hasBin: true
     peerDependencies:
@@ -6437,7 +6441,7 @@ packages:
       '@tsconfig/node12': 1.0.11
       '@tsconfig/node14': 1.0.3
       '@tsconfig/node16': 1.0.4
-      '@types/node': 18.16.19
+      '@types/node': 20.4.4
       acorn: 8.8.2
       acorn-walk: 8.2.0
       arg: 4.1.3
@@ -6672,7 +6676,7 @@ packages:
     dependencies:
       builtins: 5.0.1
 
-  /vite-node@0.33.0(@types/node@18.16.19):
+  /vite-node@0.33.0(@types/node@20.4.4):
     resolution: {integrity: sha512-19FpHYbwWWxDr73ruNahC+vtEdza52kA90Qb3La98yZ0xULqV8A5JLNPUff0f5zID4984tW7l3DH2przTJUZSw==}
     engines: {node: '>=v14.18.0'}
     hasBin: true
@@ -6682,7 +6686,7 @@ packages:
       mlly: 1.4.0
       pathe: 1.1.1
       picocolors: 1.0.0
-      vite: 4.3.8(@types/node@18.16.19)
+      vite: 4.3.8(@types/node@20.4.4)
     transitivePeerDependencies:
       - '@types/node'
       - less
@@ -6693,7 +6697,7 @@ packages:
       - terser
     dev: true
 
-  /vite@4.3.8(@types/node@18.16.19):
+  /vite@4.3.8(@types/node@20.4.4):
     resolution: {integrity: sha512-uYB8PwN7hbMrf4j1xzGDk/lqjsZvCDbt/JC5dyfxc19Pg8kRm14LinK/uq+HSLNswZEoKmweGdtpbnxRtrAXiQ==}
     engines: {node: ^14.18.0 || >=16.0.0}
     hasBin: true
@@ -6718,7 +6722,7 @@ packages:
       terser:
         optional: true
     dependencies:
-      '@types/node': 18.16.19
+      '@types/node': 20.4.4
       esbuild: 0.17.19
       postcss: 8.4.23
       rollup: 3.23.0
@@ -6759,7 +6763,7 @@ packages:
     dependencies:
       '@types/chai': 4.3.5
       '@types/chai-subset': 1.3.3
-      '@types/node': 18.16.19
+      '@types/node': 20.4.4
       '@vitest/expect': 0.33.0
       '@vitest/runner': 0.33.0
       '@vitest/snapshot': 0.33.0
@@ -6778,8 +6782,8 @@ packages:
       strip-literal: 1.0.1
       tinybench: 2.5.0
       tinypool: 0.6.0
-      vite: 4.3.8(@types/node@18.16.19)
-      vite-node: 0.33.0(@types/node@18.16.19)
+      vite: 4.3.8(@types/node@20.4.4)
+      vite-node: 0.33.0(@types/node@20.4.4)
       why-is-node-running: 2.2.2
     transitivePeerDependencies:
       - less
