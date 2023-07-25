@@ -23,7 +23,7 @@ jobs:
         uses: actions/checkout@v3
 
       - name: Install pnpm itself
-        uses: pnpm/action-setup@v2.2.4
+        uses: pnpm/action-setup@v2
         with:
           version: 8
 
@@ -70,7 +70,7 @@ jobs:
           fetch-depth: 2 # codecov-bash seems to require this
 
       - name: Install pnpm itself
-        uses: pnpm/action-setup@v2.2.4
+        uses: pnpm/action-setup@v2
         with:
           version: 8
 
@@ -118,7 +118,7 @@ jobs:
         run: pnpm test:coverage
 
       - name: Upload test coverage to Codecov
-        uses: codecov/codecov-action@v3.1.4
+        uses: codecov/codecov-action@v3
         if: |
           contains(matrix.node, 20) &&
           !contains(github.event.head_commit.message, 'chore(release)')
