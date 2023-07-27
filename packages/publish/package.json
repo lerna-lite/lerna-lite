@@ -60,7 +60,7 @@
     "glob": "^10.3.3",
     "has-unicode": "^2.0.1",
     "libnpmaccess": "^7.0.2",
-    "libnpmpublish": "^7.5.0",
+    "libnpmpublish": "^8.0.0",
     "normalize-path": "^3.0.0",
     "npm-package-arg": "^10.1.0",
     "npm-packlist": "^7.0.4",

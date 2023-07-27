@@ -532,8 +532,8 @@ importers:
         specifier: ^7.0.2
         version: 7.0.2
       libnpmpublish:
-        specifier: ^7.5.0
-        version: 7.5.0
+        specifier: ^8.0.0
+        version: 8.0.0
       normalize-path:
         specifier: ^3.0.0
         version: 3.0.0
@@ -4570,8 +4570,8 @@ packages:
       - supports-color
     dev: false
 
-  /libnpmpublish@7.5.0:
-    resolution: {integrity: sha512-zctH6QcTJ093lpxmkufr2zr3AJ9V90hcRilDFNin6n91ODj+S28RdyMFFJpa9NwyztmyV2hlWLyZv0GaOQBDyA==}
+  /libnpmpublish@8.0.0:
+    resolution: {integrity: sha512-ceQrKuGkL4pXXaL7R0xEJTueuMbrd31BU6RAd9EUYWd4EQjtWtyIa66bz7uGb4UgXDE7EkcXW8ZsUOmeJGTkYQ==}
     engines: {node: ^14.17.0 || ^16.13.0 || >=18.0.0}
     dependencies:
       ci-info: 3.8.0
