@@ -23,11 +23,9 @@ export default {
       const { ListCommand } = await import('@lerna-lite/list');
       new ListCommand(argv);
     } catch (err: unknown) {
-      console.error(
-        `"@lerna-lite/list" is optional and was not found. Please install it with "npm install @lerna-lite/list -D".`,
-        err
+      throw new Error(
+        `"@lerna-lite/list" is optional and was not found. Please install it with "npm install @lerna-lite/list -D". ${err}`
       );
-      throw err;
     }
   },
 };

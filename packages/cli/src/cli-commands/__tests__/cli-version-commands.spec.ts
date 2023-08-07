@@ -10,10 +10,7 @@ const oc = expect.objectContaining;
 
 describe('Version Command CLI options', () => {
   it('should log a console error when versionCommand is not provided', async () => {
-    const consoleSpy = vi.spyOn(console, 'error').mockImplementation(() => {});
-
-    await expect(cliVersion.handler(undefined as any)).rejects.toThrowError(new TypeError('VersionCommand is not a constructor'));
-    expect(consoleSpy).toHaveBeenCalledWith(expect.stringContaining('"@lerna-lite/version" is optional and was not found.'), expect.anything());
+    await expect(cliVersion.handler(undefined as any)).rejects.toThrow(new RegExp('"@lerna-lite/version" is optional and was not found.'));
   });
 
   const patchedVersionCommand = {
