@@ -168,6 +168,7 @@ export default {
         `"@lerna-lite/publish" is optional and was not found. Please install it with "npm install @lerna-lite/publish -D".`,
         err
       );
+      throw err;
     }
   },
 };

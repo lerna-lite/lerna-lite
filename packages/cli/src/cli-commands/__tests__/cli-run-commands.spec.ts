@@ -7,7 +7,9 @@ describe('RunCommand CLI options', () => {
   it('should log a console error when RunCommand is not provided', async () => {
     const consoleSpy = vi.spyOn(console, 'error').mockImplementation(() => {});
 
-    await cliRun.handler(undefined as any);
+    await expect(cliRun.handler(undefined as any)).rejects.toMatchInlineSnapshot(
+      '[Error: [vitest] vi.mock("@lerna-lite/run", factory?: () => unknown) is not returning an object. Did you mean to return an object with a "default" key?]'
+    );
 
     expect(consoleSpy).toHaveBeenCalledWith(expect.stringContaining('"@lerna-lite/run" is optional and was not found.'), expect.anything());
   });

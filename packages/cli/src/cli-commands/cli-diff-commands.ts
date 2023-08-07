@@ -24,6 +24,7 @@ export default {
         `"@lerna-lite/diff" is optional and was not found. Please install it with "npm install @lerna-lite/diff -D".`,
         err
       );
+      throw err;
     }
   },
 };

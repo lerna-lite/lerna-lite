@@ -314,6 +314,7 @@ export default {
         `"@lerna-lite/version" is optional and was not found. Please install it with "npm install @lerna-lite/version -D".`,
         err
       );
+      throw err;
     }
   },
 };

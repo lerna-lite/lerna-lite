@@ -27,6 +27,7 @@ export default {
         `"@lerna-lite/list" is optional and was not found. Please install it with "npm install @lerna-lite/list -D".`,
         err
       );
+      throw err;
     }
   },
 };

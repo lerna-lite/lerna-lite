@@ -54,6 +54,7 @@ export default {
         `"@lerna-lite/changed" is optional and was not found. Please install it with "npm install @lerna-lite/changed -D".`,
         err
       );
+      throw err;
     }
   },
 };

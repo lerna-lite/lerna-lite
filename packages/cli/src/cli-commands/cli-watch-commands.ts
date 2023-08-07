@@ -158,6 +158,7 @@ export default {
         `"@lerna-lite/watch" is optional and was not found. Please install it with "npm install @lerna-lite/watch -D".`,
         err
       );
+      throw err;
     }
   },
 };

@@ -109,6 +109,7 @@ export default {
         `"@lerna-lite/run" is optional and was not found. Please install it with "npm install @lerna-lite/run -D".`,
         err
       );
+      throw err;
     }
   },
 };
