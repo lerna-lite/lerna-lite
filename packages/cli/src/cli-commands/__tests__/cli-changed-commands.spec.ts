@@ -1,7 +1,5 @@
 import { describe, expect, it, vi } from 'vitest';
-vi.mock('@lerna-lite/changed', () => {
-  throw new Error('module not found');
-});
+vi.mock('@lerna-lite/changed', () => null);
 import cliChanged from '../cli-changed-commands';
 
 describe('ChangedCommand CLI options', () => {
