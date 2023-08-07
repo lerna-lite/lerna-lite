@@ -95,3 +95,19 @@ test('getUnpublishedPackages with private package', async () => {
     ]
   `);
 });
+
+test('getUnpublishedPackages with strict-ssl = false', async () => {
+  const cwd = await initFixture('public-private');
+  const packages = await Project.getPackages(cwd);
+  const packageGraph = new PackageGraph(packages);
+
+  const opts = { 'strict-ssl': false };
+  const pkgs = await getUnpublishedPackages(packageGraph, opts as FetchConfig);
+
+  expect((pacote as any).packument).toHaveBeenCalledWith('package-1', { 'strict-ssl': false, strictSSL: false });
+  expect(pkgs).toEqual([
+    expect.objectContaining({
+      name: 'package-1',
+    }),
+  ]);
+});

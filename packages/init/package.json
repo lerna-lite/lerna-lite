@@ -1,7 +1,7 @@
 {
   "name": "@lerna-lite/init",
   "description": "Lerna-Lite init commmand - Create a new Lerna repo or upgrade an existing repo to the current version of Lerna",
-  "version": "2.4.2",
+  "version": "2.5.0",
   "files": [
     "/dist"
   ],
@@ -9,9 +9,6 @@
     "access": "public"
   },
   "type": "module",
-  "main": "dist/index.js",
-  "types": "dist/index.d.ts",
-  "module": "dist/index.js",
   "exports": {
     ".": {
       "import": "./dist/index.js",
@@ -27,6 +24,9 @@
       ]
     }
   },
+  "types": "dist/index.d.ts",
+  "main": "dist/index.js",
+  "module": "dist/index.js",
   "scripts": {
     "prebuild": "rimraf dist",
     "build": "tsc",

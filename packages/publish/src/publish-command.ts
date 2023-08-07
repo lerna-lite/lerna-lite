@@ -931,7 +931,10 @@ export class PublishCommand extends Command<PublishCommandOption> {
                 return pkg;
               })
               .catch((err) => {
-                if (err.code === 'EPUBLISHCONFLICT') {
+                if (
+                  err.code === 'EPUBLISHCONFLICT' ||
+                  (err.code === 'E403' && err.body?.error?.includes('You cannot publish over the previously published versions'))
+                ) {
                   tracker.warn('publish', `Package is already published: ${pkg.name}@${pkg.version}`);
                   tracker.completeWork(1);
 
@@ -945,7 +948,12 @@ export class PublishCommand extends Command<PublishCommandOption> {
                 // avoid dumping logs, this isn't a lerna problem
                 err.name = 'ValidationError';
                 // ensure process exits non-zero
-                process.exitCode = 'errno' in err ? err.errno : 1;
+                if ('errno' in err && typeof err.errno === 'number' && Number.isFinite(err.errno)) {
+                  process.exitCode = err.errno;
+                } else {
+                  this.logger.error('', `errno "${err.errno}" is not a valid exit code - exiting with code 1`);
+                  process.exitCode = 1;
+                }
 
                 throw err;
               });

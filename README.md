@@ -1,4 +1,4 @@
-# Lerna-Lite 🐉
+# Lerna-Lite <img src="https://avatars.githubusercontent.com/u/120162016?s=96&amp;v=4" alt="@lerna-lite" size="55" height="55" width="55" data-view-component="true" style="margin-bottom:-10px">
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![TypeScript](https://img.shields.io/badge/%3C%2F%3E-TypeScript-%230074c1.svg)](http://www.typescriptlang.org/)
@@ -24,16 +24,16 @@
 - [`lerna.json` config file](https://github.com/lerna-lite/lerna-lite/wiki/lerna.json)
 - [Contributions](#contributions)
 - [Troubleshooting](https://github.com/lerna-lite/lerna-lite/wiki/Troubleshooting)
-- Available Commands, they are **all optional**, refer to the **[Installation table](#separate--optional-installs)** shown below.
-  - _click on any of the command link below to see their full documentation and available options_
+- **Available Commands** (they are **all optional**, refer to the **[Installation table](#separate--optional-installs)** shown below)
+  - _click on any of the command link below to see dedicated documentation and available options_
   - 🛠️ [`init`](https://github.com/lerna-lite/lerna-lite/tree/main/packages/init#readme) - creates a new Lerna-Lite workspace structure and adds `lerna.json`
-     - _this is the only command (`init`) included with the CLI_
-  - 📑 [`version`](https://github.com/lerna-lite/lerna-lite/tree/main/packages/version#readme) - create new version for each workspace packages
-  - ☁️ [`publish`](https://github.com/lerna-lite/lerna-lite/tree/main/packages/publish#readme) - publish every workspace packages that changed
+     - _this is the only command (`init`) included with the CLI_  
   - 🕜 [`changed`](https://github.com/lerna-lite/lerna-lite/tree/main/packages/changed#readme) - list local packages that changed since last tagged release
   - 🌓 [`diff`](https://github.com/lerna-lite/lerna-lite/tree/main/packages/diff#readme) - git diff all packages or a single package since the last release
   - 👷 [`exec`](https://github.com/lerna-lite/lerna-lite/tree/main/packages/exec#readme) - execute shell command in each workspace package
   - 📖 [`list`](https://github.com/lerna-lite/lerna-lite/tree/main/packages/list#readme) - list local packages
+  - ☁️ [`publish`](https://github.com/lerna-lite/lerna-lite/tree/main/packages/publish#readme) - publish every workspace packages that changed
+  - 📑 [`version`](https://github.com/lerna-lite/lerna-lite/tree/main/packages/version#readme) - create new version for each workspace packages
   - 🏃 [`run`](https://github.com/lerna-lite/lerna-lite/tree/main/packages/run#readme) - run npm script, in topological order, in each workspace package
   - 👓 [`watch`](https://github.com/lerna-lite/lerna-lite/tree/main/packages/watch#readme) - watch for changes within packages and execute commands
 
@@ -45,9 +45,9 @@ Watch for file changes within packages and execute commands from the root of the
 
 ## 📢 Lerna-Lite now supports pnpm/yarn `workspace:` protocol
 
-Take 30sec. to complete this 1 question [poll survey 🔘](https://github.com/lerna-lite/lerna-lite/discussions/156) if you are using this feature. It's a simple poll to find out which package manager is the most popular with this new `workspace:` protocol feature (so far 60% pnpm and 40% yarn).
+Take 30sec. to complete this 1 question [poll survey 🔘](https://github.com/lerna-lite/lerna-lite/discussions/156) if you are using this feature. It's a simple poll to find out which package manager is the most popular with this new `workspace:` protocol feature (so far, about 60% pnpm and 40% yarn).
 
-Lerna-Lite itself is now also using [pnpm workspaces](https://pnpm.io/workspaces) with the `workspace:` protocol as well  🎉
+Lerna-Lite itself is also using [pnpm workspaces](https://pnpm.io/workspaces) with the `workspace:` protocol as well  🎉
 
 ---
 
@@ -82,11 +82,11 @@ Here are some of the largest projects using this Lerna-Lite fork
 
 ## About Lerna-Lite
 
-Lerna-Lite differs from the original [Lerna](https://github.com/lerna/lerna) since it only has a limited subset of Lerna's list of commands (which itself has 15 commands), while Lerna-Lite only includes half of them and all commands are optional. Lerna was originally built as an all-in-one tool, however nowadays Workspaces are available in all package managers and the need for an all-in-one tool, which includes built-in workspaces functionalities, is no longer needed. Lerna-Lite is built around this new reality and only provides commands that package managers do not include. To summarize, Lerna-Lite is more modular than the original Lerna and you'll end up installing a lot less dependencies, this also makes it more versatile to use with other tools like Turborepo, pnpm and others...
+Lerna-Lite differs from the original [Lerna](https://github.com/lerna/lerna) since it only has a limited subset of Lerna's list of commands (which itself has 15 commands) and **all** commands are optional in Lerna-Lite. Lerna was originally built as an all-in-one tool, however nowadays Workspaces are available in all package managers and the need for an all-in-one tool, which includes built-in workspaces functionalities (like `bootstrap`), is no longer needed. Lerna-Lite is built around this new reality and is only providing commands that package managers do not include. To summarize, Lerna-Lite is more modular than the original Lerna and you'll end up installing a lot less dependencies, this also makes it more versatile to use with other tools like Turborepo, pnpm and other...
 
 Lerna-Lite assumes, and requires you to pre-setup your Workspace through your favorite package manager (npm, pnpm, yarn) that will take care of the symlinks (Lerna-Lite does **not include** the `bootstrap`, `add`, `create` and `link` commands hence the need for a workspace pre-setup), so make sure that your workspace is properly setup **before** adding Lerna-Lite.
 
-For more info on how to setup a workspace, choose the best option for you: [npm 7+](https://docs.npmjs.com/cli/v8/using-npm/workspaces) / [Yarn classic](https://classic.yarnpkg.com/en/docs/workspaces) / [Yarn 2+](https://yarnpkg.com/features/workspaces) / [pnpm](https://pnpm.io/workspaces)
+For more info on how to setup a workspace, choose the best option: [npm 7+](https://docs.npmjs.com/cli/v8/using-npm/workspaces) | [Yarn classic](https://classic.yarnpkg.com/en/docs/workspaces) | [Yarn 2+](https://yarnpkg.com/features/workspaces) | [pnpm](https://pnpm.io/workspaces)
 
 ## Why create this lib/fork?
 
@@ -95,16 +95,17 @@ Below are the main reasons as to why this fork was created:
 1. Lerna repo was unmaintained for nearly 2 years (in early 2022, Lerna's dependencies were really out of date)
     - this is no longer the case since Nrwl, the company behind Nx, took over stewardship of Lerna
         - please note that Lerna-Lite fork was created couple months **before** Nrwl took over Lerna
-        - the new goal is to try replicating Lerna PRs when possible while keeping Lerna-Lite small (Nx specific code will not be replicated)
-2. A desire to create a smaller alternative that is lighter than the original all-in-one Lerna
-    - Lerna-Lite is entirely modular, all commands are optional (install only what you really need).
-3. Rewrite the lib in TypeScript and build the project as ESM (you can still use it in a CommonJS environment)
-4. Replicate a few opened PRs from Lerna and add a few extra unique features into Lerna-Lite (see below)
+        - we now replicate Lerna's PRs when possible (except Nx specific code will not be replicated)
+2. A desire to create a smaller and a lighter alternative compared to the original all-in-one Lerna tool
+    - Lerna-Lite is entirely modular, all commands are totally optional (install only what you really need).
+3. Rewrote the lib in TypeScript and build the project as ESM since v2.0 (you can still use it in a CJS environment)
+4. Replicated a few opened PRs from Lerna and add a few unique features into Lerna-Lite (see number 6 below)
 5. Lerna is becoming another Nx branded product (Lerna >=5.5 now requires **[Nx](https://nx.dev/)** while not required in Lerna-Lite)
-   - if you already use Nx then it's probably better to use Lerna, but if you are not then Lerna-Lite is preferred
+   - if you already use Nx then it's probably better to use Lerna, but if you are not then Lerna-Lite is preferred   
    - if you use other tools like TurboRepo and install Lerna (original) you end up downloading 2 similar tools
-6. A few unique features were added, and only exist, in Lerna-Lite:
-   - [`workspace:` protocol support](https://github.com/lerna-lite/lerna-lite/tree/main/packages/version#workspace-protocol) (Lerna added support for it six months later in v6)
+   - even TypeScript is now required in Lerna >=6 (even for a JS monorepo) however not required in Lerna-Lite
+6. Added a few unique features that are available currently only in Lerna-Lite:
+   - [`workspace:` protocol support](https://github.com/lerna-lite/lerna-lite/tree/main/packages/version#workspace-protocol) (*) Lerna added support for that too six months later in v6
    - [--dry-run](https://github.com/lerna-lite/lerna-lite/tree/main/packages/version#--dry-run) to preview version/publish and changelogs locally
    - [lerna version --changelog-header-message "msg"](https://github.com/lerna-lite/lerna-lite/tree/main/packages/version#--changelog-header-message-msg) it could be used to add sponsor badges in changelogs
    - [lerna version --changelog-include-commits-client-login](https://github.com/lerna-lite/lerna-lite/tree/main/packages/version#--changelog-include-commits-client-login-msg) to add PR contributors
@@ -113,7 +114,7 @@ Below are the main reasons as to why this fork was created:
    - [lerna publish --remove-package-fields](https://github.com/lerna-lite/lerna-lite/tree/main/packages/publish#--remove-package-fields-fields) (remove certain fields from `package.json` before publishing)
       - ie: Lerna-Lite itself uses it to remove `scripts` and `devDependencies`
 
-On a final note, the best feature of Lerna-Lite (versus Lerna) has to be its modularity. A large portion of the users are only interested in version/publish commands but on the other hand, a small minority are only interested in other commands like run/exec. Lerna-Lite offers you this flexibility by allowing the user to only install the command(s) that are of interest to you (see [installation](#cli-installation) below). Lastly the number 5 could be a concern for some users who are not interested to use Nx (like me personally) and want to have the power of Lerna but keep their download to the bare minimum.
+On a final note, the best feature of Lerna-Lite (versus Lerna) has to be its modularity. A large portion of the users are only interested in version/publish commands but on the other hand, a small minority are only interested in other commands like run/exec. Lerna-Lite offers this flexibility by allowing the user to install only the command(s) that he/she is interested in using (see [installation](#cli-installation) below). Lastly from the list above, the number 5 could be a concern for some users who are not interested to use Nx (like me) and still want to have the power of Lerna but keep their download to the bare minimum.
 
 ### This lib will help you with
 
@@ -145,10 +146,10 @@ On a final note, the best feature of Lerna-Lite (versus Lerna) has to be its mod
 
 ## Getting Started
 
-Let's start by installing the Lerna-Lite CLI as a dev dependency to your project and then run the `init` command to get started (see [init#readme](https://github.com/lerna-lite/lerna-lite/tree/main/packages/init#readme) for all options). Note that the CLI must be installed at all time and then other commands must be installed separately (the CLI only includes the `init` command), refer to the **[Installation table](#separate--optional-installs)** for more info.
+Let's start by installing Lerna-Lite CLI as a dev dependency to your project and then run the `init` command to get started (see [init#readme](https://github.com/lerna-lite/lerna-lite/tree/main/packages/init#readme) for all options). Note that the CLI must be installed at all time, then proceed by installing any other optional commands (the CLI is only including the `init` command), refer to the **[Installation table](#separate--optional-installs)** for more info.
 
 ```sh
-# install Lerna-Lite CLI locally or globally (only includes `init` command)
+# install Lerna-Lite CLI locally or globally (`init` is the only command installed)
 $ npm install -g @lerna-lite/cli # pnpm add -g @lerna-lite/cli
 
 # create your monorepo and initialize lerna-lite
@@ -170,7 +171,7 @@ lerna-repo/
   lerna.json
 ```
 
-Note that `package-a` will not be created, it is only shown here to help clarify the structure. For more info and full details about the `lerna.json` file, you can read the [lerna.json](https://github.com/lerna-lite/lerna-lite/wiki/lerna.json) Wiki. Also note that you can optionally add comments to your `lerna.json` config file since it can parse JSON5 file format.
+Note that `package-a` will not be created, it is only shown here to help clarify the structure. For more info and full details about the `lerna.json` file, you can read the [lerna.json](https://github.com/lerna-lite/lerna-lite/wiki/lerna.json) Wiki. Also note that you can optionally add comments to your `lerna.json` config file since it is also able to parse JSON5 file format.
 
 Finally install the commands that are of interest to you (`publish`, `version`, `run`, `exec`, ...)
 
@@ -180,14 +181,14 @@ $ npm i @lerna-lite/publish -D
 
 ## Installation
 
-> Lerna-Lite is entirely modular, as opposed to Lerna, and installing the CLI locally or globally will only provide you the `init` command. Please make sure to install that are of interest (see table below).
+> Lerna-Lite is entirely modular, as opposed to Lerna, and installing the CLI locally or globally will only provide you the `init` command. Please make sure to install other commands that you are interested in (see table below).
 
 If you are new to Lerna-Lite, you could also run the [lerna init](https://github.com/lerna-lite/lerna-lite/tree/main/packages/init#readme) command which will create the `lerna.json` for you with a minimal setup. If you are using a different client other than npm, then make sure to update the `npmClient` property in `lerna.json` (for example: `"npmClient": "yarn"` or `"pnpm"`).
 
 > **Note** please make sure that you have a `lerna.json` config file created and a `version` property defined with either a fixed or `independent` mode. An error will be thrown if you're missing any of them.
 
 ### JSON Schema
-You can add the `$schema` property into your `lerna.json` to take advantage of Lerna-Lite [JSON Schema](https://json-schema.org/) (`lerna init` can help setting it up for you). This will help with the developer experience, users will be able to see what properties are valid with their types and a brief description of what the option does (each description are pulled from their associated lerna command options documentation).
+You can add the `$schema` property into your `lerna.json` to take advantage of Lerna-Lite [JSON Schema](https://json-schema.org/) (`lerna init` can help setting it up for you). This will help with the developer experience, users will be able to see what properties are valid with their types and a brief description of what each option does (descriptions are pulled from their associated lerna command options documentation).
 
 ##### `lerna.json`
 ```js
@@ -213,7 +214,7 @@ You can add the `$schema` property into your `lerna.json` to take advantage of L
 | 🏃 [run](https://github.com/lerna-lite/lerna-lite/tree/main/packages/run#readme)         | `npm i @lerna-lite/run -D`      | run npm script in each workspace package           |
 | 👓 [watch](https://github.com/lerna-lite/lerna-lite/tree/main/packages/watch#readme)     | `npm i @lerna-lite/watch -D`    | watch for changes & execute commands when fired |
 
-> **Note** since the `publish` package depends on the `version` package, you could simply install `@lerna-lite/publish` to automatically give you access to both commands.
+> **Note** since the `publish` package depends on the `version` package, you could simply install `@lerna-lite/publish` to automatically gain access to both commands.
 
 ### Usage
 
@@ -231,7 +232,9 @@ Add custom NPM scripts or simply run the commands in your shell with the Lerna-L
 
 ### Migration for existing [Lerna](https://github.com/lerna/lerna) users
 
-If you are migrating from Lerna, it should be fairly easy to just replace Lerna with Lerna-Lite in your dependencies, then install the commands that you are interested in and that's about it. The CLI commands and options are the same, but all commands are optional installs. Take a look at the quick steps shown below:
+Migrating from Lerna, should be fairly easy to just replace Lerna with Lerna-Lite in your dependencies, then install the commands that you are interested in and that's about it. The CLI commands and options are the same, except that all commands are optional installs (that is the biggest difference with Lerna). Take a look at the steps shown below:
+
+> **Note** as opposed to Lerna v7 and higher, the `useWorkspace` is **not** enabled by default in Lerna-Lite and we still recommend to use either `useWorkspaces` for Yarn/NPM or use the default `packages` in `lerna.json` for pnpm users. The `useWorkspaces` has some drawback since some of the packages could be unrelated to the project releases (ie: website, examples) and for this use case the `packages/*` defined in `lerna.json` could be better (i.e. [Jest](https://github.com/facebook/jest) uses this approach).
 
 1. remove Lerna from your local & global dependencies
 
@@ -240,14 +243,14 @@ npm uninstall lerna      # OR yarn remove lerna -W
 npm uninstall -g lerna   # OR yarn global remove lerna
 ```
 
-2. install Lerna-Lite CLI which will provide you the `init` command (only)
+2. install Lerna-Lite CLI which will provide you, and only, the `init` command
 
 ```sh
 # Lerna CLI (includes `init`)
 npm install @lerna-lite/cli -D
 ```
 
-3. finally install the Lerna-Lite command(s) that you wish to use (`changed`, `diff`, `exec`, `list`, `run`, `publish`, `version` and/or `watch`)
+3. finally install any of the optional Lerna-Lite command(s) that you wish to use (`changed`, `diff`, `exec`, `list`, `run`, `publish`, `version` and/or `watch`)
 _refer to [installation](#installation) table above_
 
 ```sh
@@ -255,15 +258,27 @@ _refer to [installation](#installation) table above_
 npm install @lerna-lite/publish -D
 ```
 
-> **Note** as opposed to Lerna v7 and higher, the `useWorkspace` is **not** enabled by default and we still recommend to use either `useWorkspaces` for Yarn/NPM or use the default `packages` in `lerna.json` for pnpm users.
-
-> **Note** you might see a lot of diff changes across your `changelog.md` files after switching to Lerna-Lite and that is totally expected since Lerna-Lite has code in place to remove empty lines that were added by Lerna for no real reason.
+4. review your `lerna.json` config file and remove any unrelated command options, for example `bootstrap` does not exist in Lerna-Lite so there's no need to keep that config
+```diff
+{
+    "npmClient": "yarn",
+    "command": {
+        "version": {
+            "conventionalCommits": true
+        },
+-       "bootstrap": {
+-           "npmClientArgs": ["--no-package-lock"]
+-       }
+    }
+}
+```
+> **Note** after publishing your next release with conventional-changelog, you might see a lot of diff changes across your `changelog.md` files after switching to Lerna-Lite and that is totally expected since Lerna-Lite has code in place to remove empty lines that were added by Lerna for no reason.
 
 ## Project Demo?
 
 You want to see a project demo? Sure... you're looking at it 😉
 
-Yes indeed, this project was originally created as an NPM Workspace and later migrated to a [pnpm workspaces](https://pnpm.io/workspaces) for the sole purpose of demoing and testing its own code. All changelogs and versions are created and published by the lib itself, how sweet is that? You can also see this project also has its own [`lerna.json`](https://github.com/lerna-lite/lerna-lite/blob/main/lerna.json) config file as well to run properly (take a look to see how it works).
+Yes indeed, this project was originally created as an NPM Workspace and later migrated to a [pnpm workspaces](https://pnpm.io/workspaces) for the sole purpose of demoing and testing its own code. All changelogs and versions are created and published by the lib itself, how sweet is that? You can also see that this project has its own [`lerna.json`](https://github.com/lerna-lite/lerna-lite/blob/main/lerna.json) config file as well to run properly (take a look to see how it works).
 
 ### See it in Action 🎦
 
@@ -279,7 +294,7 @@ You can see a small video of a new version release on this [Release Demo - Wiki]
 
 [![PR](https://img.shields.io/badge/PR-Welcome-1abc9c)](https://github.com/lerna-lite/lerna-lite/pulls)
 
-Feel free to contribute any Pull Request. Also please note that I'm just a simple developer & user of this lib, the same as you are, and my knowledge of the library is also limited in some areas of the project, but together we can make it better.
+Feel free to contribute any Pull Request. Also please note that the original code was not created by me and my knowledge of the library is still limited in some sections of the project. The main goal of this fork was to make it more modular and keep dependencies up to date (Renovate was put in place and runs weekly). 
 
 ### Development / Contributions
 
@@ -300,7 +315,7 @@ If you wish to contribute to the project, please follow these steps:
 
 ## Troubleshooting
 
-If you have problems running the lib and your problems are related to Git commands that were executed, then we suggest to first try with the `--dry-run` option to see if it helps in finding the error(s) you may have. Another great, and possibly much more useful suggestion, is to search in the original Lerna [issues](https://github.com/lerna/lerna/issues) list and see if any solution could help you (remember that Lerna-Lite is a fork of the original code from Lerna and it works the same way). Lastly, if that is not enough and you wish to troubleshoot yourself, then read this [Troubleshooting - Wiki](https://github.com/lerna-lite/lerna-lite/wiki/Troubleshooting) to possibly troubleshoot yourself the execution in your own environment.
+If you have problems running the lib and your problems are related to Git commands that were executed, then we suggest to first try with the `--dry-run` option to see if it helps in finding the error(s) that you may have. Another great, and possibly much more useful suggestion, is to search in the original Lerna [issues](https://github.com/lerna/lerna/issues) list and see if any solution could help you (remember that Lerna-Lite is a fork of the original code from Lerna and it works the same way). Lastly, if that is not enough and you wish to troubleshoot yourself, then read this [Troubleshooting - Wiki](https://github.com/lerna-lite/lerna-lite/wiki/Troubleshooting) to possibly troubleshoot yourself the execution in your own environment.
 
 ## Lerna-Lite Full List of Packages
 

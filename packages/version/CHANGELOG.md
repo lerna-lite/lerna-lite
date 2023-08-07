@@ -4,6 +4,18 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [2.5.0](https://github.com/lerna-lite/lerna-lite/compare/v2.4.3...v2.5.0) (2023-07-06)
+
+### Features
+
+* **version:** update conventional-changelog to new major versions ([#666](https://github.com/lerna-lite/lerna-lite/issues/666)) ([b29c647](https://github.com/lerna-lite/lerna-lite/commit/b29c647fe8b077e7c9ae13cc72f667979b45d97c)) - by @ghiscoding
+
+### Bug Fixes
+
+* **deps:** update all non-major dependencies ([#662](https://github.com/lerna-lite/lerna-lite/issues/662)) ([009a47c](https://github.com/lerna-lite/lerna-lite/commit/009a47c191d75b89a8bc68860ec83369a21bea91)) - by @renovate[bot]
+* **deps:** update dependency chalk to ^5.3.0 ([#660](https://github.com/lerna-lite/lerna-lite/issues/660)) ([96c80a9](https://github.com/lerna-lite/lerna-lite/commit/96c80a9aace6f10967f0f6f31880b177ecd6e0f5)) - by @renovate[bot]
+* **deps:** update dependency make-dir to v4 ([#659](https://github.com/lerna-lite/lerna-lite/issues/659)) ([81dd798](https://github.com/lerna-lite/lerna-lite/commit/81dd7982979febcd2453b8f0ec72f9a1c7e56413)) - by @renovate[bot]
+
 ## [2.4.2](https://github.com/lerna-lite/lerna-lite/compare/v2.4.1...v2.4.2) (2023-06-20)
 
 ### Bug Fixes

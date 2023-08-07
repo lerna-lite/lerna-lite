@@ -2,7 +2,6 @@
   extends: ['config:base', 'group:allNonMajor'],
   labels: ['dependencies'],
   ignorePaths: ['helpers', '**/__fixtures__/**', '**/__tests__/**'],
-  node: false,
   pin: false,
   rangeStrategy: 'bump',
   packageRules: [
@@ -28,28 +27,8 @@
       allowedVersions: '15.4.8', // newer version seems to cause problems with Vitest
     },
     {
-      packageNames: ['conventional-changelog-angular'],
-      allowedVersions: '5.0.13',
-    },
-    {
-      packageNames: ['conventional-changelog-core'],
-      allowedVersions: '4.2.4',
-    },
-    {
-      packageNames: ['conventional-changelog-writer'],
-      allowedVersions: '5.0.1',
-    },
-    {
-      packageNames: ['conventional-changelog-conventionalcommits'],
-      allowedVersions: '5.0.0',
-    },
-    {
-      packageNames: ['conventional-commits-parser'],
-      allowedVersions: '3.2.4',
-    },
-    {
-      packageNames: ['conventional-recommended-bump'],
-      allowedVersions: '6.1.0',
+      packageNames: ['@octokit/rest'],
+      allowedVersions: '<20.0.0', // v20 removes Node16, so let's wait until Node16 is EOL
     },
   ],
   ignoreDeps: [],

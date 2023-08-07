@@ -1,7 +1,7 @@
 {
   "name": "@lerna-lite/run",
   "description": "Lerna-Lite Run command will help to run npm script in each package workspace that contains that script",
-  "version": "2.4.2",
+  "version": "2.5.0",
   "files": [
     "/dist"
   ],
@@ -9,9 +9,6 @@
     "access": "public"
   },
   "type": "module",
-  "main": "dist/index.js",
-  "types": "dist/index.d.ts",
-  "module": "dist/index.js",
   "exports": {
     ".": {
       "import": "./dist/index.js",
@@ -27,6 +24,9 @@
       ]
     }
   },
+  "types": "dist/index.d.ts",
+  "main": "dist/index.js",
+  "module": "dist/index.js",
   "scripts": {
     "prebuild": "rimraf dist",
     "build": "tsc",
@@ -53,14 +53,14 @@
     "@lerna-lite/core": "workspace:*",
     "@lerna-lite/filter-packages": "workspace:*",
     "@lerna-lite/profiler": "workspace:*",
-    "chalk": "^5.2.0",
+    "chalk": "^5.3.0",
     "fs-extra": "^11.1.1",
     "npmlog": "^7.0.1",
     "p-map": "^6.0.0"
   },
   "devDependencies": {
     "@types/fs-extra": "^11.0.1",
-    "globby": "^13.2.0",
+    "globby": "^13.2.2",
     "nx": "15.4.8",
     "perf_hooks": "^0.0.1",
     "yargs": "^17.7.2",

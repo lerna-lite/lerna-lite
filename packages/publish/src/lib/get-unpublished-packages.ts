@@ -18,8 +18,10 @@ export function getUnpublishedPackages(packageGraph: PackageGraph, opts: FetchCo
   // @ts-ignore
   const graphNodesToCheck = Array.from(packageGraph.values()).filter(({ pkg }) => !pkg.private);
 
-  const mapper = (pkg) =>
-    pacote.packument(pkg?.name ?? '', opts).then(
+  const mapper = (pkg) => {
+    // libnpmpublish / npm-registry-fetch check strictSSL rather than strict-ssl
+    opts['strictSSL'] = opts['strict-ssl'];
+    return pacote.packument(pkg?.name ?? '', opts).then(
       (packument) => {
         if (packument.versions === undefined || packument.versions[pkg.version] === undefined) {
           return pkg;
@@ -30,6 +32,7 @@ export function getUnpublishedPackages(packageGraph: PackageGraph, opts: FetchCo
         return pkg;
       }
     );
+  };
 
   chain = chain.then(() => pMap(graphNodesToCheck, mapper, { concurrency: 4 }));
 

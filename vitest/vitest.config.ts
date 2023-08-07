@@ -4,6 +4,9 @@ export default defineConfig({
   test: {
     cache: false,
     clearMocks: true,
+    deps: {
+      interopDefault: false,
+    },
     environment: 'node',
     dangerouslyIgnoreUnhandledErrors: true, // useNx often fails and it's probably going to be removed in next major
     testTimeout: 60000,
