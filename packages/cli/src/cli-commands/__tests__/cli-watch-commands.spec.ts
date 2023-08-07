@@ -5,10 +5,8 @@ import cliWatch from '../cli-watch-commands';
 
 describe('Watch Command CLI options', () => {
   it('should log a console error when watchCommand is not provided', async () => {
-    const consoleSpy = vi.spyOn(console, 'error').mockImplementation(() => {});
-
-    await cliWatch.handler(undefined as any);
-
-    expect(consoleSpy).toHaveBeenCalledWith(expect.stringContaining('"@lerna-lite/watch" is optional and was not found.'), expect.anything());
+    await expect(cliWatch.handler(undefined as any)).rejects.toThrow(
+      new RegExp('"@lerna-lite/watch" is optional and was not found. Please install it with "npm install @lerna-lite/watch -D"')
+    );
   });
 });

@@ -10,12 +10,15 @@ const oc = expect.objectContaining;
 
 describe('Version Command CLI options', () => {
   it('should log a console error when versionCommand is not provided', async () => {
-    const consoleSpy = vi.spyOn(console, 'error').mockImplementation(() => {});
-
-    await cliVersion.handler(undefined as any);
-
-    expect(consoleSpy).toHaveBeenCalledWith(expect.stringContaining('"@lerna-lite/version" is optional and was not found.'), expect.anything());
+    await expect(cliVersion.handler(undefined as any)).rejects.toThrow(new RegExp('"@lerna-lite/version" is optional and was not found.'));
   });
+
+  const patchedVersionCommand = {
+    ...cliVersion,
+    handler: function (...args: any[]) {
+      return cliVersion.handler.call(this, ...args).catch(() => {});
+    },
+  };
 
   it.each`
     args                                                                                   | expected
@@ -34,7 +37,7 @@ describe('Version Command CLI options', () => {
       _,
       ...options
     } = await yargs()
-      .command(cliVersion as any)
+      .command(patchedVersionCommand as any)
       .exitProcess(false)
       .parse(argv);
     // console.log('%o', options);
