@@ -72,7 +72,7 @@
     "minimatch": "^9.0.3",
     "new-github-release-url": "^2.0.0",
     "node-fetch": "^3.3.2",
-    "npm-package-arg": "^10.1.0",
+    "npm-package-arg": "^11.0.0",
     "npmlog": "^7.0.1",
     "p-map": "^6.0.0",
     "p-pipe": "^4.0.0",
