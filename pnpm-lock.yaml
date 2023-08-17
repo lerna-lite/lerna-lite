@@ -690,8 +690,8 @@ importers:
         specifier: ^11.1.1
         version: 11.1.1
       get-stream:
-        specifier: ^7.0.1
-        version: 7.0.1
+        specifier: ^8.0.0
+        version: 8.0.0
       git-url-parse:
         specifier: ^13.1.0
         version: 13.1.0
@@ -3848,8 +3848,8 @@ packages:
     resolution: {integrity: sha512-ts6Wi+2j3jQjqi70w5AlN8DFnkSwC+MqmxEzdEALB2qXZYV3X/b1CTfgPLGJNMeAWxdPfU8FO1ms3NUfaHCPYg==}
     engines: {node: '>=10'}
 
-  /get-stream@7.0.1:
-    resolution: {integrity: sha512-3M8C1EOFN6r8AMUhwUAACIoXZJEOufDU5+0gFFN5uNs6XYOralD2Pqkl7m046va6x77FwposWXbAhPPIOus7mQ==}
+  /get-stream@8.0.0:
+    resolution: {integrity: sha512-tdTnEIxF4oDc9Gd+PAApCAQWTf5t8N0/QDf4nH7ahIgc2YUvRL7259xiFlkLEpehTXc7QugSflnLLJap5Gd+HA==}
     engines: {node: '>=16'}
     dev: false
 
