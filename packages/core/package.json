@@ -89,7 +89,7 @@
     "@types/semver": "^7.5.0",
     "@types/strong-log-transformer": "^1.0.0",
     "@types/write-file-atomic": "^4.0.0",
-    "npm-registry-fetch": "^15.0.0",
+    "npm-registry-fetch": "^16.0.0",
     "yargs": "^17.7.2",
     "yargs-parser": "^21.1.1"
   },
