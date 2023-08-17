@@ -64,7 +64,7 @@
     "normalize-path": "^3.0.0",
     "npm-package-arg": "^11.0.0",
     "npm-packlist": "^7.0.4",
-    "npm-registry-fetch": "^15.0.0",
+    "npm-registry-fetch": "^16.0.0",
     "npmlog": "^7.0.1",
     "p-map": "^6.0.0",
     "p-pipe": "^4.0.0",
