@@ -2,9 +2,8 @@ import { afterEach, vi } from 'vitest';
 import { dirname } from 'node:path';
 import normalizePath from 'normalize-path';
 
-const { loadJsonFile: actualLoadJsonFile, loadJsonFileSync: loadJsonFileSyncActual } = await vi.importActual<any>(
-  'load-json-file'
-);
+const { loadJsonFile: actualLoadJsonFile, loadJsonFileSync: loadJsonFileSyncActual } =
+  await vi.importActual<any>('load-json-file');
 
 const asyncRegistry = new Map();
 const syncRegistry = new Map();
