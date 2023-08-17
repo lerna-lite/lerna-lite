@@ -556,8 +556,8 @@ importers:
         specifier: ^4.0.0
         version: 4.0.0
       pacote:
-        specifier: ^15.2.0
-        version: 15.2.0
+        specifier: ^17.0.1
+        version: 17.0.1
       pify:
         specifier: ^6.1.0
         version: 6.1.0
@@ -1317,8 +1317,8 @@ packages:
     dependencies:
       semver: 7.5.4
 
-  /@npmcli/git@4.0.4:
-    resolution: {integrity: sha512-5yZghx+u5M47LghaybLCkdSyFzV/w4OuH12d96HO389Ik9CDsLaDZJVynSGGVJOLn6gy/k7Dz5XYcplM3uxXRg==}
+  /@npmcli/git@4.1.0:
+    resolution: {integrity: sha512-9hwoB3gStVfa0N31ymBmrX+GuDGdVA/QWShZVqE0HK2Af+7QGGrCTbZia/SW0ImUTjTne7SP91qxDmtXvDHRPQ==}
     engines: {node: ^14.17.0 || ^16.13.0 || >=18.0.0}
     dependencies:
       '@npmcli/promise-spawn': 6.0.2
@@ -1333,13 +1333,13 @@ packages:
       - bluebird
     dev: false
 
-  /@npmcli/git@4.1.0:
-    resolution: {integrity: sha512-9hwoB3gStVfa0N31ymBmrX+GuDGdVA/QWShZVqE0HK2Af+7QGGrCTbZia/SW0ImUTjTne7SP91qxDmtXvDHRPQ==}
-    engines: {node: ^14.17.0 || ^16.13.0 || >=18.0.0}
+  /@npmcli/git@5.0.1:
+    resolution: {integrity: sha512-9zUEqmRMZU5bmqWVu83wFVHH9kwLEQeMuDUDSYsBK/L4qbBl8Shdoc5EWfANzAdy5kFuPbBn7ToXTakbVdlCZg==}
+    engines: {node: ^16.14.0 || >=18.0.0}
     dependencies:
       '@npmcli/promise-spawn': 6.0.2
-      lru-cache: 7.18.3
-      npm-pick-manifest: 8.0.1
+      lru-cache: 10.0.1
+      npm-pick-manifest: 9.0.0
       proc-log: 3.0.0
       promise-inflight: 1.0.1
       promise-retry: 2.0.1
@@ -5265,6 +5265,16 @@ packages:
       semver: 7.5.4
     dev: false
 
+  /npm-pick-manifest@9.0.0:
+    resolution: {integrity: sha512-VfvRSs/b6n9ol4Qb+bDwNGUXutpy76x6MARw/XssevE0TnctIKcmklJZM5Z7nqs5z5aW+0S63pgCNbpkUNNXBg==}
+    engines: {node: ^16.14.0 || >=18.0.0}
+    dependencies:
+      npm-install-checks: 6.1.1
+      npm-normalize-package-bin: 3.0.1
+      npm-package-arg: 11.0.0
+      semver: 7.5.4
+    dev: false
+
   /npm-registry-fetch@14.0.5:
     resolution: {integrity: sha512-kIDMIo4aBm6xg7jOttupWZamsZRkAqMqwqqbVXnUqstY5+tapvv6bkH/qMR76jdgV+YljEUCyWx3hRYMrJiAgA==}
     engines: {node: ^14.17.0 || ^16.13.0 || >=18.0.0}
@@ -5597,7 +5607,7 @@ packages:
     engines: {node: ^14.17.0 || ^16.13.0 || >=18.0.0}
     hasBin: true
     dependencies:
-      '@npmcli/git': 4.0.4
+      '@npmcli/git': 4.1.0
       '@npmcli/installed-package-contents': 2.0.2
       '@npmcli/promise-spawn': 6.0.2
       '@npmcli/run-script': 6.0.2
@@ -5611,6 +5621,34 @@ packages:
       proc-log: 3.0.0
       promise-retry: 2.0.1
       read-package-json: 6.0.4
+      read-package-json-fast: 3.0.2
+      sigstore: 1.5.2
+      ssri: 10.0.5
+      tar: 6.1.15
+    transitivePeerDependencies:
+      - bluebird
+      - supports-color
+    dev: false
+
+  /pacote@17.0.1:
+    resolution: {integrity: sha512-rZzq8E6l+rputgZnhDd/t9rpp47oVnz4SPaKKBRPb7zmrM/QJLub7iJGge4UglWfpxeRynQLUI2Tj2MYaiRqCg==}
+    engines: {node: ^16.14.0 || >=18.0.0}
+    hasBin: true
+    dependencies:
+      '@npmcli/git': 5.0.1
+      '@npmcli/installed-package-contents': 2.0.2
+      '@npmcli/promise-spawn': 6.0.2
+      '@npmcli/run-script': 6.0.2
+      cacache: 18.0.0
+      fs-minipass: 3.0.2
+      minipass: 7.0.3
+      npm-package-arg: 11.0.0
+      npm-packlist: 7.0.4
+      npm-pick-manifest: 9.0.0
+      npm-registry-fetch: 16.0.0
+      proc-log: 3.0.0
+      promise-retry: 2.0.1
+      read-package-json: 7.0.0
       read-package-json-fast: 3.0.2
       sigstore: 1.5.2
       ssri: 10.0.5
