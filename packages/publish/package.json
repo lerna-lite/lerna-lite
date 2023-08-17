@@ -68,7 +68,7 @@
     "npmlog": "^7.0.1",
     "p-map": "^6.0.0",
     "p-pipe": "^4.0.0",
-    "pacote": "^15.2.0",
+    "pacote": "^17.0.1",
     "pify": "^6.1.0",
     "read-package-json": "^6.0.4",
     "semver": "^7.5.4",
