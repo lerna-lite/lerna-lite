@@ -63,7 +63,7 @@
     "libnpmpublish": "^8.0.0",
     "normalize-path": "^3.0.0",
     "npm-package-arg": "^11.0.0",
-    "npm-packlist": "^7.0.4",
+    "npm-packlist": "^8.0.0",
     "npm-registry-fetch": "^16.0.0",
     "npmlog": "^7.0.1",
     "p-map": "^6.0.0",
