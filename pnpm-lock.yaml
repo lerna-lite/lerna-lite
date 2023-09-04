@@ -227,7 +227,7 @@ importers:
         specifier: ^1.1.13
         version: 1.1.13
       cosmiconfig:
-        specifier: ^8.3.3
+        specifier: ^8.2.0
         version: 8.3.3(typescript@5.2.2)
       dedent:
         specifier: ^1.5.1
@@ -269,8 +269,8 @@ importers:
         specifier: ^6.0.0
         version: 6.0.0
       p-queue:
-        specifier: ^7.3.4
-        version: 7.3.4
+        specifier: ^7.4.1
+        version: 7.4.1
       resolve-from:
         specifier: ^5.0.0
         version: 5.0.0
@@ -3628,8 +3628,8 @@ packages:
     resolution: {integrity: sha512-i/2XbnSz/uxRCU6+NdVJgKWDTM427+MqYbkQzD321DuCQJUqOuJKIA0IM2+W2xtYHdKOmZ4dR6fExsd4SXL+WQ==}
     engines: {node: '>=6'}
 
-  /eventemitter3@4.0.7:
-    resolution: {integrity: sha512-8guHBZCwKnFhYdHr2ysuRWErTwhoN2X8XELRlrRwpmfeY2jjuUN4taQMsULKUVo1K4DvZl+0pgfyoysHxvmvEw==}
+  /eventemitter3@5.0.1:
+    resolution: {integrity: sha512-GWkBvjiSZK87ELrYOSESUYeVIc9mvLLf/nXalMOS5dYrgZq9o5OVkbZAVM06CVxYsCwH9BDZFPlQTlPA1j4ahA==}
     dev: false
 
   /events@3.3.0:
@@ -5643,11 +5643,11 @@ packages:
     engines: {node: '>=12'}
     dev: false
 
-  /p-queue@7.3.4:
-    resolution: {integrity: sha512-esox8CWt0j9EZECFvkFl2WNPat8LN4t7WWeXq73D9ha0V96qPRufApZi4ZhPwXAln1uVVal429HVVKPa2X0yQg==}
+  /p-queue@7.4.1:
+    resolution: {integrity: sha512-vRpMXmIkYF2/1hLBKisKeVYJZ8S2tZ0zEAmIJgdVKP2nq0nh4qCdf8bgw+ZgKrkh71AOCaqzwbJJk1WtdcF3VA==}
     engines: {node: '>=12'}
     dependencies:
-      eventemitter3: 4.0.7
+      eventemitter3: 5.0.1
       p-timeout: 5.1.0
     dev: false
 
