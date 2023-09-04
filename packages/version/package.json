@@ -57,7 +57,7 @@
     "@octokit/rest": "^19.0.13",
     "chalk": "^5.3.0",
     "conventional-changelog-angular": "^6.0.0",
-    "conventional-changelog-core": "^5.0.2",
+    "conventional-changelog-core": "^6.0.0",
     "conventional-changelog-writer": "^6.0.1",
     "conventional-commits-parser": "^4.0.0",
     "conventional-recommended-bump": "^7.0.1",
