@@ -79,7 +79,7 @@
     "write-pkg": "^6.0.0"
   },
   "devDependencies": {
-    "@types/clone-deep": "^4.0.1",
+    "@types/clone-deep": "^4.0.2",
     "@types/dedent": "^0.7.0",
     "@types/fs-extra": "^11.0.1",
     "@types/glob-parent": "^5.1.1",
