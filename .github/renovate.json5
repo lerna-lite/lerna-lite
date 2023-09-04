@@ -30,10 +30,6 @@
       packageNames: ['@octokit/rest'],
       allowedVersions: '<20.0.0', // v20 removes Node16, so let's wait until Node16 is EOL
     },
-    {
-      packageNames: ['typescript'],
-      allowedVersions: '5.1.6',
-    },
   ],
   ignoreDeps: [],
   schedule: ['on Thursday'],
