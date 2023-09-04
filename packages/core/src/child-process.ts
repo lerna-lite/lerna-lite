@@ -36,7 +36,7 @@ export function exec(command: string, args: string[], opts?: ExecaOptions & { pk
  * @param {string[]} args
  * @param {import("execa").SyncOptions} [opts]
  */
-export function execSync(command: string, args?: string[], opts?: ExacaSyncOptions<string>, dryRun = false) {
+export function execSync(command: string, args?: string[], opts?: ExacaSyncOptions, dryRun = false) {
   // prettier-ignore
   return dryRun
     ? logExecCommand(command, args)
