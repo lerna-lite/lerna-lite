@@ -76,6 +76,14 @@ Here are some of the largest projects using this Lerna-Lite fork
   Standard Notes
 </a>
 
+### Sponsors
+
+<table><tr>
+  <td align="center" valign="middle">
+<a href="https://github.com/wundergraph" target="_blank"><img src="https://avatars.githubusercontent.com/u/64281914" width="50" height="50" valign="middle" /> </a></td><td align="center" valign="middle">
+  </tr>
+</table>
+
 ## License
 
 [MIT License](LICENSE)
