@@ -532,8 +532,8 @@ importers:
         specifier: ^8.0.0
         version: 8.0.0
       libnpmpublish:
-        specifier: ^8.0.0
-        version: 8.0.0
+        specifier: ^9.0.0
+        version: 9.0.0
       normalize-path:
         specifier: ^3.0.0
         version: 3.0.0
@@ -1602,11 +1602,6 @@ packages:
       '@sigstore/protobuf-specs': 0.2.1
     dev: false
 
-  /@sigstore/protobuf-specs@0.1.0:
-    resolution: {integrity: sha512-a31EnjuIDSX8IXBUib3cYLDRlPMU36AWX4xS8ysLaNu4ZzUesDiPt83pgrW2X1YLMe5L2HbDyaKK5BrL4cNKaQ==}
-    engines: {node: ^14.17.0 || ^16.13.0 || >=18.0.0}
-    dev: false
-
   /@sigstore/protobuf-specs@0.2.1:
     resolution: {integrity: sha512-XTWVxnWJu+c1oCshMLwnKvz8ZQJJDVOlciMfgpJBQbThVjKTCG8dwyhgLngBD2KN0ap9F/gOV8rFDEx8uh7R2A==}
     engines: {node: ^14.17.0 || ^16.13.0 || >=18.0.0}
@@ -1656,22 +1651,9 @@ packages:
     resolution: {integrity: sha512-vxhUy4J8lyeyinH7Azl1pdd43GJhZH/tP2weN8TntQblOY+A0XbT8DJk1/oCPuOOyg/Ja757rG0CgHcWC8OfMA==}
     dev: true
 
-  /@tufjs/canonical-json@1.0.0:
-    resolution: {integrity: sha512-QTnf++uxunWvG2z3UFNzAoQPHxnSXOwtaI3iJ+AohhV+5vONuArPjJE7aPXPVXfXJsqrVbZBu9b81AJoSd09IQ==}
-    engines: {node: ^14.17.0 || ^16.13.0 || >=18.0.0}
-    dev: false
-
   /@tufjs/canonical-json@2.0.0:
     resolution: {integrity: sha512-yVtV8zsdo8qFHe+/3kw81dSLyF7D576A5cCFCi4X7B39tWT7SekaEFUnvnWJHz+9qO7qJTah1JbrDjWKqFtdWA==}
     engines: {node: ^16.14.0 || >=18.0.0}
-    dev: false
-
-  /@tufjs/models@1.0.4:
-    resolution: {integrity: sha512-qaGV9ltJP0EO25YfFUPhxRVK0evXFIAGicsVXuRim4Ed9cjPxYhNnNJ49SFmbeLgtxpslIkX317IgpfcHPVj/A==}
-    engines: {node: ^14.17.0 || ^16.13.0 || >=18.0.0}
-    dependencies:
-      '@tufjs/canonical-json': 1.0.0
-      minimatch: 9.0.3
     dev: false
 
   /@tufjs/models@2.0.0:
@@ -2430,24 +2412,6 @@ packages:
       unique-filename: 2.0.1
     transitivePeerDependencies:
       - bluebird
-    dev: false
-
-  /cacache@17.1.3:
-    resolution: {integrity: sha512-jAdjGxmPxZh0IipMdR7fK/4sDSrHMLUV0+GvVUsjwyGNKHsh79kW/otg+GkbXwl6Uzvy9wsvHOX4nUoWldeZMg==}
-    engines: {node: ^14.17.0 || ^16.13.0 || >=18.0.0}
-    dependencies:
-      '@npmcli/fs': 3.1.0
-      fs-minipass: 3.0.2
-      glob: 10.3.4
-      lru-cache: 7.18.3
-      minipass: 5.0.0
-      minipass-collect: 1.0.2
-      minipass-flush: 1.0.5
-      minipass-pipeline: 1.2.4
-      p-map: 4.0.0
-      ssri: 10.0.5
-      tar: 6.1.15
-      unique-filename: 3.0.0
     dev: false
 
   /cacache@18.0.0:
@@ -4333,11 +4297,6 @@ packages:
       ci-info: 3.8.0
     dev: false
 
-  /is-core-module@2.12.1:
-    resolution: {integrity: sha512-Q4ZuBAe2FUsKtyQJoQHlvP8OvBERxO3jEmy1I7hcRXcJBGGHFh/aJBswbXuS9sgrDH2QUO8ilkwNPHvHMd8clg==}
-    dependencies:
-      has: 1.0.3
-
   /is-core-module@2.13.0:
     resolution: {integrity: sha512-Z7dk6Qo8pOCp3l4tsX2C5ZVas4V+UxwQodwZhLopL91TX8UyyHEXafPcyoeeWuLrwzHcr3igO78wNLwHJHsMCQ==}
     dependencies:
@@ -4686,17 +4645,17 @@ packages:
       npm-registry-fetch: 16.0.0
     dev: false
 
-  /libnpmpublish@8.0.0:
-    resolution: {integrity: sha512-ceQrKuGkL4pXXaL7R0xEJTueuMbrd31BU6RAd9EUYWd4EQjtWtyIa66bz7uGb4UgXDE7EkcXW8ZsUOmeJGTkYQ==}
-    engines: {node: ^14.17.0 || ^16.13.0 || >=18.0.0}
+  /libnpmpublish@9.0.0:
+    resolution: {integrity: sha512-4bKe8I5qkYeHms/4tlXuAlOAssjEyUcTci5YrmAaQqMm5yHC3836Uazj1YFQzRlMJQZBc2e21XF5XSnnvVsOiA==}
+    engines: {node: ^16.14.0 || >=18.0.0}
     dependencies:
       ci-info: 3.8.0
-      normalize-package-data: 5.0.0
-      npm-package-arg: 10.1.0
-      npm-registry-fetch: 14.0.5
+      normalize-package-data: 6.0.0
+      npm-package-arg: 11.0.0
+      npm-registry-fetch: 16.0.0
       proc-log: 3.0.0
       semver: 7.5.4
-      sigstore: 1.5.2
+      sigstore: 2.1.0
       ssri: 10.0.5
     transitivePeerDependencies:
       - supports-color
@@ -4837,29 +4796,6 @@ packages:
       ssri: 9.0.1
     transitivePeerDependencies:
       - bluebird
-      - supports-color
-    dev: false
-
-  /make-fetch-happen@11.1.1:
-    resolution: {integrity: sha512-rLWS7GCSTcEujjVBs2YqG7Y4643u8ucvCJeSRqiLYhesrDuzeuFIk37xREzAsfQaqzl8b9rNCE4m6J8tvX4Q8w==}
-    engines: {node: ^14.17.0 || ^16.13.0 || >=18.0.0}
-    dependencies:
-      agentkeepalive: 4.3.0
-      cacache: 17.1.3
-      http-cache-semantics: 4.1.1
-      http-proxy-agent: 5.0.0
-      https-proxy-agent: 5.0.1
-      is-lambda: 1.0.1
-      lru-cache: 7.18.3
-      minipass: 5.0.0
-      minipass-fetch: 3.0.3
-      minipass-flush: 1.0.5
-      minipass-pipeline: 1.2.4
-      negotiator: 0.6.3
-      promise-retry: 2.0.1
-      socks-proxy-agent: 7.0.0
-      ssri: 10.0.5
-    transitivePeerDependencies:
       - supports-color
     dev: false
 
@@ -5230,7 +5166,7 @@ packages:
     engines: {node: '>=10'}
     dependencies:
       hosted-git-info: 4.1.0
-      is-core-module: 2.12.1
+      is-core-module: 2.13.0
       semver: 7.5.4
       validate-npm-package-license: 3.0.4
     dev: false
@@ -5240,7 +5176,7 @@ packages:
     engines: {node: ^14.17.0 || ^16.13.0 || >=18.0.0}
     dependencies:
       hosted-git-info: 6.1.1
-      is-core-module: 2.12.1
+      is-core-module: 2.13.0
       semver: 7.5.4
       validate-npm-package-license: 3.0.4
 
@@ -5249,7 +5185,7 @@ packages:
     engines: {node: ^16.14.0 || >=18.0.0}
     dependencies:
       hosted-git-info: 7.0.0
-      is-core-module: 2.12.1
+      is-core-module: 2.13.0
       semver: 7.5.4
       validate-npm-package-license: 3.0.4
     dev: false
@@ -5284,16 +5220,6 @@ packages:
     engines: {node: ^14.17.0 || ^16.13.0 || >=18.0.0}
     dev: false
 
-  /npm-package-arg@10.1.0:
-    resolution: {integrity: sha512-uFyyCEmgBfZTtrKk/5xDfHp6+MdrqGotX/VoOyEEl3mBwiEE5FlBaePanazJSVMPT7vKepcjYBY2ztg9A3yPIA==}
-    engines: {node: ^14.17.0 || ^16.13.0 || >=18.0.0}
-    dependencies:
-      hosted-git-info: 6.1.1
-      proc-log: 3.0.0
-      semver: 7.5.4
-      validate-npm-package-name: 5.0.0
-    dev: false
-
   /npm-package-arg@11.0.0:
     resolution: {integrity: sha512-D8sItaQ8n6VlBUFed3DLz2sCpkabRAjaiLkTamDppvh8lmmAPirzNfBuhJd/2rlmoxZ2S9mOHmIEvzV2z2jOeA==}
     engines: {node: ^16.14.0 || >=18.0.0}
@@ -5318,21 +5244,6 @@ packages:
       npm-normalize-package-bin: 3.0.1
       npm-package-arg: 11.0.0
       semver: 7.5.4
-    dev: false
-
-  /npm-registry-fetch@14.0.5:
-    resolution: {integrity: sha512-kIDMIo4aBm6xg7jOttupWZamsZRkAqMqwqqbVXnUqstY5+tapvv6bkH/qMR76jdgV+YljEUCyWx3hRYMrJiAgA==}
-    engines: {node: ^14.17.0 || ^16.13.0 || >=18.0.0}
-    dependencies:
-      make-fetch-happen: 11.1.1
-      minipass: 5.0.0
-      minipass-fetch: 3.0.3
-      minipass-json-stream: 1.0.1
-      minizlib: 2.1.2
-      npm-package-arg: 10.1.0
-      proc-log: 3.0.0
-    transitivePeerDependencies:
-      - supports-color
     dev: false
 
   /npm-registry-fetch@16.0.0:
@@ -6084,7 +5995,7 @@ packages:
     resolution: {integrity: sha512-Sb+mjNHOULsBv818T40qSPeRiuWLyaGMa5ewydRLFimneixmVy2zdivRl+AF6jaYPC8ERxGDmFSiqui6SfPd+g==}
     hasBin: true
     dependencies:
-      is-core-module: 2.12.1
+      is-core-module: 2.13.0
       path-parse: 1.0.7
       supports-preserve-symlinks-flag: 1.0.0
     dev: true
@@ -6245,18 +6156,6 @@ packages:
   /signal-exit@4.1.0:
     resolution: {integrity: sha512-bzyZ1e88w9O1iNJbKnOlvYTrWPDl46O1bG0D3XInv+9tkPrxrN8jUUTiFlDkkmKWgn1M6CfIA13SuGqOa9Korw==}
     engines: {node: '>=14'}
-
-  /sigstore@1.5.2:
-    resolution: {integrity: sha512-X95v6xAAooVpn7PaB94TDmFeSO5SBfCtB1R23fvzr36WTfjtkiiyOeei979nbTjc8nzh6FSLeltQZuODsm1EjQ==}
-    engines: {node: ^14.17.0 || ^16.13.0 || >=18.0.0}
-    hasBin: true
-    dependencies:
-      '@sigstore/protobuf-specs': 0.1.0
-      make-fetch-happen: 11.1.1
-      tuf-js: 1.1.6
-    transitivePeerDependencies:
-      - supports-color
-    dev: false
 
   /sigstore@2.1.0:
     resolution: {integrity: sha512-kPIj+ZLkyI3QaM0qX8V/nSsweYND3W448pwkDgS6CQ74MfhEkIR8ToK5Iyx46KJYRjseVcD3Rp9zAmUAj6ZjPw==}
@@ -6711,17 +6610,6 @@ packages:
     dependencies:
       esbuild: 0.15.18
     dev: true
-
-  /tuf-js@1.1.6:
-    resolution: {integrity: sha512-CXwFVIsXGbVY4vFiWF7TJKWmlKJAT8TWkH4RmiohJRcDJInix++F0dznDmoVbtJNzZ8yLprKUG4YrDIhv3nBMg==}
-    engines: {node: ^14.17.0 || ^16.13.0 || >=18.0.0}
-    dependencies:
-      '@tufjs/models': 1.0.4
-      debug: 4.3.4
-      make-fetch-happen: 11.1.1
-    transitivePeerDependencies:
-      - supports-color
-    dev: false
 
   /tuf-js@2.1.0:
     resolution: {integrity: sha512-eD7YPPjVlMzdggrOeE8zwoegUaG/rt6Bt3jwoQPunRiNVzgcCE009UDFJKJjG+Gk9wFu6W/Vi+P5d/5QpdD9jA==}
