@@ -36,23 +36,19 @@
     },
     {
       packageNames: ['conventional-changelog-angular'],
-      allowedVersions: '7.0.0',
-    },
-    {
-      packageNames: ['conventional-changelog-core'],
       allowedVersions: '6.0.0',
     },
     {
+      packageNames: ['conventional-changelog-core'],
+      allowedVersions: '5.0.2',
+    },
+    {
       packageNames: ['conventional-changelog-writer'],
-      allowedVersions: '7.0.0',
+      allowedVersions: '6.0.1',
     },
     {
       packageNames: ['conventional-changelog-conventionalcommits'],
       allowedVersions: '6.1.0',
-    },
-    {
-      packageNames: ['conventional-commits-parser'],
-      allowedVersions: '5.0.0',
     },
     {
       packageNames: ['conventional-recommended-bump'],
