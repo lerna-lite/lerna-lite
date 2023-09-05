@@ -26,7 +26,7 @@ export async function createGitHubClient() {
   return new Octokit(options);
 }
 
-export function parseGitRepo(remote = 'origin', opts?: SyncOptions<string>): parseGitUrl.GitUrl {
+export function parseGitRepo(remote = 'origin', opts?: SyncOptions): parseGitUrl.GitUrl {
   log.silly('parseGitRepo', '');
   const args = ['config', '--get', `remote.${remote}.url`];
   log.verbose('git', args.join(' '));

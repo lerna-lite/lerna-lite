@@ -1,6 +1,6 @@
 import cloneDeep from 'clone-deep';
 import dedent from 'dedent';
-import { execaSync, SyncOptions as ExacaSyncOptions } from 'execa';
+import { execaSync, SyncOptions } from 'execa';
 import isCI from 'is-ci';
 import log, { Logger } from 'npmlog';
 import { cpus } from 'node:os';
@@ -253,7 +253,7 @@ export class Command<T extends AvailableCommandOption> {
   }
 
   gitInitialized() {
-    const opts: ExacaSyncOptions<string> = {
+    const opts: SyncOptions = {
       cwd: this.project.rootPath ?? '',
       // don't throw, just want boolean
       reject: false,
