@@ -34,6 +34,30 @@
       packageNames: ['cosmiconfig'],
       allowedVersions: '8.2.0',
     },
+    {
+      packageNames: ['conventional-changelog-angular'],
+      allowedVersions: '7.0.0',
+    },
+    {
+      packageNames: ['conventional-changelog-core'],
+      allowedVersions: '6.0.0',
+    },
+    {
+      packageNames: ['conventional-changelog-writer'],
+      allowedVersions: '7.0.0',
+    },
+    {
+      packageNames: ['conventional-changelog-conventionalcommits'],
+      allowedVersions: '6.1.0',
+    },
+    {
+      packageNames: ['conventional-commits-parser'],
+      allowedVersions: '5.0.0',
+    },
+    {
+      packageNames: ['conventional-recommended-bump'],
+      allowedVersions: '7.0.1',
+    },
   ],
   ignoreDeps: [],
   schedule: ['on Thursday'],
