@@ -529,8 +529,8 @@ importers:
         specifier: ^2.0.1
         version: 2.0.1
       libnpmaccess:
-        specifier: ^7.0.2
-        version: 7.0.2
+        specifier: ^8.0.0
+        version: 8.0.0
       libnpmpublish:
         specifier: ^8.0.0
         version: 8.0.0
@@ -4678,14 +4678,12 @@ packages:
       type-check: 0.4.0
     dev: true
 
-  /libnpmaccess@7.0.2:
-    resolution: {integrity: sha512-vHBVMw1JFMTgEk15zRsJuSAg7QtGGHpUSEfnbcRL1/gTBag9iEfJbyjpDmdJmwMhvpoLoNBtdAUCdGnaP32hhw==}
-    engines: {node: ^14.17.0 || ^16.13.0 || >=18.0.0}
+  /libnpmaccess@8.0.0:
+    resolution: {integrity: sha512-aqKf4L5haaLkFm05RQ0p+7E+f7BplkR+na2gC/e59/OAH1vsNoy/L3NxHXX8OuEwxSlj9M1nd0XXtuFkZpV3gw==}
+    engines: {node: ^16.14.0 || >=18.0.0}
     dependencies:
-      npm-package-arg: 10.1.0
-      npm-registry-fetch: 14.0.5
-    transitivePeerDependencies:
-      - supports-color
+      npm-package-arg: 11.0.0
+      npm-registry-fetch: 16.0.0
     dev: false
 
   /libnpmpublish@8.0.0:

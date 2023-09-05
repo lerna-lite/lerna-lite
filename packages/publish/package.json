@@ -59,7 +59,7 @@
     "fs-extra": "^11.1.1",
     "glob": "^10.3.4",
     "has-unicode": "^2.0.1",
-    "libnpmaccess": "^7.0.2",
+    "libnpmaccess": "^8.0.0",
     "libnpmpublish": "^8.0.0",
     "normalize-path": "^3.0.0",
     "npm-package-arg": "^11.0.0",
