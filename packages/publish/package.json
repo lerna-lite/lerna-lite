@@ -62,7 +62,7 @@
     "libnpmaccess": "^8.0.0",
     "libnpmpublish": "^9.0.0",
     "normalize-path": "^3.0.0",
-    "npm-package-arg": "^11.0.0",
+    "npm-package-arg": "^11.0.1",
     "npm-packlist": "^8.0.0",
     "npm-registry-fetch": "^16.0.0",
     "npmlog": "^7.0.1",
@@ -73,7 +73,7 @@
     "read-package-json": "^7.0.0",
     "semver": "^7.5.4",
     "ssri": "^10.0.5",
-    "tar": "^6.1.15",
+    "tar": "^6.2.0",
     "temp-dir": "^3.0.0"
   },
   "devDependencies": {

@@ -56,7 +56,7 @@
     "npm": ">=8.5.0",
     "pnpm": "8"
   },
-  "packageManager": "pnpm@8.7.1",
+  "packageManager": "pnpm@8.7.4",
   "pnpm": {
     "overrides": {
       "json5@<1.0.2": ">=1.0.2"
