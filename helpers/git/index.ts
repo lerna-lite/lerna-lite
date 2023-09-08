@@ -1,10 +1,10 @@
 import { execa } from 'execa';
 import { EOL } from 'node:os';
 import { dirname, join, resolve as pathResolve } from 'node:path';
-import cp from 'child_process';
+import cp from 'node:child_process';
+import { fileURLToPath } from 'node:url';
 import { loadJsonFile } from 'load-json-file';
 import { writeJsonFile } from 'write-json-file';
-import { fileURLToPath } from 'node:url';
 
 import { tempWrite } from '../../packages/version/src/utils/temp-write.js';
 import gitSHA from '../serializers/serialize-git-sha.js';
