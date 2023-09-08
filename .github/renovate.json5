@@ -31,10 +31,6 @@
       allowedVersions: '<20.0.0', // v20 removes Node16, so let's wait until Node16 is EOL
     },
     {
-      packageNames: ['cosmiconfig'],
-      allowedVersions: '8.2.0',
-    },
-    {
       packageNames: ['conventional-changelog-angular'],
       allowedVersions: '6.0.0',
     },
