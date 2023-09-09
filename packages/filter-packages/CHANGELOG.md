@@ -4,6 +4,13 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [2.5.1](https://github.com/lerna-lite/lerna-lite/compare/v2.5.0...v2.5.1) (2023-09-09)
+
+### Bug Fixes
+
+* CJS fallbacks should be at the end not at beginning ([#675](https://github.com/lerna-lite/lerna-lite/issues/675)) ([e3d7b9f](https://github.com/lerna-lite/lerna-lite/commit/e3d7b9f0028997a9ad24328f5e2d52de0ec91030)) - by @ghiscoding
+* **deps:** update all non-major dependencies ([#722](https://github.com/lerna-lite/lerna-lite/issues/722)) ([c2afec6](https://github.com/lerna-lite/lerna-lite/commit/c2afec6dee0378814c1795bd24e9fdfa07d67296)) - by @renovate[bot]
+
 ## [2.5.0](https://github.com/lerna-lite/lerna-lite/compare/v2.4.3...v2.5.0) (2023-07-06)
 
 ### Bug Fixes

@@ -4,6 +4,33 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [2.5.1](https://github.com/lerna-lite/lerna-lite/compare/v2.5.0...v2.5.1) (2023-09-09)
+
+### Bug Fixes
+
+* CJS fallbacks should be at the end not at beginning ([#675](https://github.com/lerna-lite/lerna-lite/issues/675)) ([e3d7b9f](https://github.com/lerna-lite/lerna-lite/commit/e3d7b9f0028997a9ad24328f5e2d52de0ec91030)) - by @ghiscoding
+* **deps:** update all non-major dependencies ([#718](https://github.com/lerna-lite/lerna-lite/issues/718)) ([7c2897f](https://github.com/lerna-lite/lerna-lite/commit/7c2897fc23eb0b3c47cbd3a78d0a1e8592be35e2)) - by @renovate[bot]
+* **deps:** update all non-major dependencies ([#722](https://github.com/lerna-lite/lerna-lite/issues/722)) ([c2afec6](https://github.com/lerna-lite/lerna-lite/commit/c2afec6dee0378814c1795bd24e9fdfa07d67296)) - by @renovate[bot]
+* **deps:** update dependency @npmcli/arborist to v7 ([#715](https://github.com/lerna-lite/lerna-lite/issues/715)) ([c18600d](https://github.com/lerna-lite/lerna-lite/commit/c18600dd2c630f1745100eada98c5b878e33143b)) - by @renovate[bot]
+* **deps:** update dependency @npmcli/run-script to v7 ([#705](https://github.com/lerna-lite/lerna-lite/issues/705)) ([bf45173](https://github.com/lerna-lite/lerna-lite/commit/bf4517304220eb7159a91729f23e275d900bcf85)) - by @renovate[bot]
+* **deps:** update dependency conventional-commits-parser to v5 ([#709](https://github.com/lerna-lite/lerna-lite/issues/709)) ([af5b43a](https://github.com/lerna-lite/lerna-lite/commit/af5b43a8de8a10b81b7522550eebd5b29932259c)) - by @renovate[bot]
+* **deps:** update dependency dedent to ^1.3.0 ([#682](https://github.com/lerna-lite/lerna-lite/issues/682)) ([4c94183](https://github.com/lerna-lite/lerna-lite/commit/4c9418327058b04210474314b9f675e13fb5efd7)) - by @renovate[bot]
+* **deps:** update dependency dedent to v1 and fix method call ([#673](https://github.com/lerna-lite/lerna-lite/issues/673)) ([fd543fe](https://github.com/lerna-lite/lerna-lite/commit/fd543fe8ba048e3fd5525df9c77872c865f4af40)) - by @ghiscoding
+* **deps:** update dependency get-stream to ^8.0.1 ([#698](https://github.com/lerna-lite/lerna-lite/issues/698)) ([3e7dcb7](https://github.com/lerna-lite/lerna-lite/commit/3e7dcb7fcc9bb5d56b57141f23572a67b8e3b073)) - by @renovate[bot]
+* **deps:** update dependency get-stream to v8 ([#691](https://github.com/lerna-lite/lerna-lite/issues/691)) ([c6d8a5e](https://github.com/lerna-lite/lerna-lite/commit/c6d8a5eb3eab4af87c9a32d736b70d8e41a8a21e)) - by @renovate[bot]
+* **deps:** update dependency inquirer to ^9.2.8 ([#672](https://github.com/lerna-lite/lerna-lite/issues/672)) ([d92d224](https://github.com/lerna-lite/lerna-lite/commit/d92d2246a0ce45b5d9be798a4c174a3decee2732)) - by @renovate[bot]
+* **deps:** update dependency libnpmaccess to v8 ([#716](https://github.com/lerna-lite/lerna-lite/issues/716)) ([f7802a5](https://github.com/lerna-lite/lerna-lite/commit/f7802a5133fea3496e42b81b47ea46ffa57c1c8e)) - by @renovate[bot]
+* **deps:** update dependency libnpmpublish to v8 ([#680](https://github.com/lerna-lite/lerna-lite/issues/680)) ([6ae83d5](https://github.com/lerna-lite/lerna-lite/commit/6ae83d52e8e55a6bc1142a89d86d9494fbb92d5e)) - by @renovate[bot]
+* **deps:** update dependency libnpmpublish to v9 ([#717](https://github.com/lerna-lite/lerna-lite/issues/717)) ([6fd8106](https://github.com/lerna-lite/lerna-lite/commit/6fd8106ae8de90b80973152c12f9e8be3aa4b7b5)) - by @renovate[bot]
+* **deps:** update dependency minimatch to ^9.0.3 ([#665](https://github.com/lerna-lite/lerna-lite/issues/665)) ([18c78ea](https://github.com/lerna-lite/lerna-lite/commit/18c78ea6299d2a157512da907d17245af1f42cb1)) - by @renovate[bot]
+* **deps:** update dependency npm-package-arg to v11 ([#692](https://github.com/lerna-lite/lerna-lite/issues/692)) ([2b69331](https://github.com/lerna-lite/lerna-lite/commit/2b693315ffa900c3ad047c29b68708e727fd2f43)) - by @renovate[bot]
+* **deps:** update dependency npm-packlist to v8 ([#702](https://github.com/lerna-lite/lerna-lite/issues/702)) ([e0d4e12](https://github.com/lerna-lite/lerna-lite/commit/e0d4e12aba549798cb7b5013ddd1a290be3d25c0)) - by @renovate[bot]
+* **deps:** update dependency npm-registry-fetch to v15 ([#684](https://github.com/lerna-lite/lerna-lite/issues/684)) ([94baefd](https://github.com/lerna-lite/lerna-lite/commit/94baefdac2b4945bb28b0d913710322eed8297a3)) - by @renovate[bot]
+* **deps:** update dependency npm-registry-fetch to v16 ([#693](https://github.com/lerna-lite/lerna-lite/issues/693)) ([1f19ec5](https://github.com/lerna-lite/lerna-lite/commit/1f19ec51da959ec2ae16c7728816a474d597de6d)) - by @renovate[bot]
+* **deps:** update dependency pacote to v17 ([#695](https://github.com/lerna-lite/lerna-lite/issues/695)) ([d92b678](https://github.com/lerna-lite/lerna-lite/commit/d92b6785ceb6e1c71457eb1ac8904c7a206a669c)) - by @renovate[bot]
+* **deps:** update dependency read-package-json to v7 ([#696](https://github.com/lerna-lite/lerna-lite/issues/696)) ([325256b](https://github.com/lerna-lite/lerna-lite/commit/325256b0c23c263c9ce7ebfaba5b30b9eb5942c8)) - by @renovate[bot]
+* **version:** skipBumpOnlyReleases reimplementation, fixes [#703](https://github.com/lerna-lite/lerna-lite/issues/703) ([#721](https://github.com/lerna-lite/lerna-lite/issues/721)) ([4fc2f55](https://github.com/lerna-lite/lerna-lite/commit/4fc2f552efedc1df98c6a1fd4aeac0959c0ab46e)) - by @ghiscoding
+
 ## [2.5.0](https://github.com/lerna-lite/lerna-lite/compare/v2.4.3...v2.5.0) (2023-07-06)
 
 ### Features

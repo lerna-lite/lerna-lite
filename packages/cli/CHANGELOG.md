@@ -4,6 +4,15 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [2.5.1](https://github.com/lerna-lite/lerna-lite/compare/v2.5.0...v2.5.1) (2023-09-09)
+
+### Bug Fixes
+
+* CJS fallbacks should be at the end not at beginning ([#675](https://github.com/lerna-lite/lerna-lite/issues/675)) ([e3d7b9f](https://github.com/lerna-lite/lerna-lite/commit/e3d7b9f0028997a9ad24328f5e2d52de0ec91030)) - by @ghiscoding
+* **deps:** update dependency dedent to ^1.3.0 ([#682](https://github.com/lerna-lite/lerna-lite/issues/682)) ([4c94183](https://github.com/lerna-lite/lerna-lite/commit/4c9418327058b04210474314b9f675e13fb5efd7)) - by @renovate[bot]
+* **deps:** update dependency dedent to v1 and fix method call ([#673](https://github.com/lerna-lite/lerna-lite/issues/673)) ([fd543fe](https://github.com/lerna-lite/lerna-lite/commit/fd543fe8ba048e3fd5525df9c77872c865f4af40)) - by @ghiscoding
+* **version:** skipBumpOnlyReleases reimplementation, fixes [#703](https://github.com/lerna-lite/lerna-lite/issues/703) ([#721](https://github.com/lerna-lite/lerna-lite/issues/721)) ([4fc2f55](https://github.com/lerna-lite/lerna-lite/commit/4fc2f552efedc1df98c6a1fd4aeac0959c0ab46e)) - by @ghiscoding
+
 ## [2.5.0](https://github.com/lerna-lite/lerna-lite/compare/v2.4.3...v2.5.0) (2023-07-06)
 
 **Note:** Version bump only for package @lerna-lite/cli
