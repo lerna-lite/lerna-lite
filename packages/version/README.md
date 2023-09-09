@@ -82,7 +82,7 @@ Running `lerna version --conventional-commits` without the above flags will rele
     - [`--changelog-header-message <msg>`](#--changelog-header-message-msg)
     - [`--create-release <type>`](#--create-release-type)
     - [`--create-release-discussion <name>`](#--create-release-discussion-name)
-    - [`--skip-bump-only-release`](#--skip-bump-only-release)
+    - [`--skip-bump-only-releases`](#--skip-bump-only-releases)
     - [`--describe-tag <pattern>`](#--describe-tag-pattern)
     - [`--exact`](#--exact)
     - [`--independent-subpackages`](#--independent-subpackages)
@@ -394,7 +394,7 @@ lerna version --conventional-commits --create-release gitlab
 
 When run with this flag, `lerna version` will create an official GitHub or GitLab release based on the changed packages. Requires `--conventional-commits` to be passed so that changelogs can be generated.
 
-> **Note** to avoid creating too many "Version bump only for package x" when using independent mode, you could enable the option `--skip-bump-only-release`
+> **Note** to avoid creating too many "Version bump only for package x" when using independent mode, you could enable the option `--skip-bump-only-releases`
 
 ### `--create-release-discussion <name>`
 
@@ -407,15 +407,17 @@ lerna version --conventional-commits --create-release github --create-release-di
 > **Note** currently only available for GitHub Releases following this GitHub blog post [You can now link discussions to new releases](https://github.blog/changelog/2021-04-06-releases-support-comments-and-reactions-with-discussion-linking/)
 
 
-### `--skip-bump-only-release`
+### `--skip-bump-only-releases`
 
 When this option is enabled and a package version is only being bumped without any conventional commits detected, the GitHub/GitLab release will be skipped. This will avoid creating releases with only "Version bump only for package x" in the release notes, however please note that each changelog are still going to be updated with the "version bump only" text.
 
+> **Note** first implemented as `--skip-bump-only-release` but later renamed to a plural option `--skip-bump-only-releases` which is a better option name to represent multiple releases can be skipped. 
+
 ```sh
-lerna version --create-release github --skip-bump-only-release
+lerna version --create-release github --skip-bump-only-releases
 
 # or the same for gitlab
-lerna version --create-release gitlab --skip-bump-only-release
+lerna version --create-release gitlab --skip-bump-only-releases
 ```
 
 ### `--describe-tag <pattern>`

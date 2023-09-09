@@ -22,7 +22,7 @@
       "runtimeExecutable": "node",
       "runtimeArgs": ["--nolazy", "-r", "tsm"],
       "args": [
-        "packages/cli/src/cli.ts",
+        "packages/cli/dist/cli.js",
         "version",
         "--dry-run",
         "--changelog-include-commits-client-login",
