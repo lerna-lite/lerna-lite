@@ -1,4 +1,4 @@
-import { ExecOpts } from '@lerna-lite/core';
+import { ExecOpts, Package } from '@lerna-lite/core';
 import { GitRawCommitsOptions, ParserOptions } from 'conventional-changelog-core';
 import { Options as WriterOptions } from 'conventional-changelog-writer';
 import { Options as RecommendedBumpOptions } from 'conventional-recommended-bump';
@@ -37,6 +37,7 @@ export interface ChangelogConfig {
 export interface ReleaseNote {
   name: string;
   notes?: string;
+  pkg?: Package;
 }
 
 export type RemoteCommit = {
@@ -109,5 +110,5 @@ export interface ReleaseCommandProps {
 export interface ReleaseOptions {
   gitRemote: string;
   execOpts: ExecOpts;
-  skipBumpOnlyRelease?: boolean;
+  skipBumpOnlyReleases?: boolean;
 }

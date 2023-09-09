@@ -661,6 +661,9 @@
             "skipBumpOnlyRelease": {
               "$ref": "#/$defs/commandOptions/version/skipBumpOnlyRelease"
             },
+            "skipBumpOnlyReleases": {
+              "$ref": "#/$defs/commandOptions/version/skipBumpOnlyReleases"
+            },
             "syncWorkspaceLock": {
               "$ref": "#/$defs/commandOptions/version/syncWorkspaceLock"
             },
@@ -1384,6 +1387,10 @@
           "description": "During `lerna version`, when true, pass the `--force` flag to `git tag`."
         },
         "skipBumpOnlyRelease": {
+          "type": "boolean",
+          "description": "(deprecated) renamed to plural name \"--skip-bump-only-releases\". Skip GitHub/GitLab release creation when the version is a \"Version bump only for package x\""
+        },
+        "skipBumpOnlyReleases": {
           "type": "boolean",
           "description": "Skip GitHub/GitLab release creation when the version is a \"Version bump only for package x\""
         },

@@ -272,14 +272,15 @@ describe.each([
   ['gitlab', createGitLabClient],
 ])('--create-release %s with version bump only package', (type: any, client: any) => {
   // make "package-4" a version bump only
-  const bumpOnlyTextPkg4 = `## [4.0.1](https://github.com/my-repo/my-repo/compare/v4.0.0...v4.0.1) (2001-01-01)
-
-  **Note:** Version bump only for package package-4`;
+  const bumpOnlyTextPkg4 = `**Note:** Version bump only for package package-4`;
 
   beforeEach(() => {
     process.env = {};
     (updateChangelog as Mock).mockImplementation((pkg) => {
       const filePath = join(pkg.location, 'CHANGELOG.md');
+      if (pkg.name === 'package-4') {
+        pkg.isBumpOnlyVersion = true; // updated by updateChangelog() => makeBumpOnlyFilter()
+      }
       return outputFile(filePath, 'changelog', 'utf8').then(() => ({
         logPath: filePath,
         newEntry: pkg.name === 'package-4' ? bumpOnlyTextPkg4 : `${pkg.name} - ${pkg.version}`,
@@ -287,6 +288,7 @@ describe.each([
     });
   });
 
+  // @deprecated since it was renamed to pluralized option name, this test and singular option name will be removed in next major
   it('creates a release for every independent version but skip "version bump only" packages when --skip-bump-only-release is enabled', async () => {
     process.env.GH_TOKEN = 'TOKEN';
     const cwd = await initFixture('independent');
@@ -320,7 +322,40 @@ describe.each([
     });
   });
 
-  it('creates a release for every independent version even with "version bump only" packages when --skip-bump-only-release is NOT enabled', async () => {
+  it('creates a release for every independent version but skip "version bump only" packages when --skip-bump-only-releases is enabled', async () => {
+    process.env.GH_TOKEN = 'TOKEN';
+    const cwd = await initFixture('independent');
+    const versionBumps = new Map([
+      ['package-1', '1.0.1'],
+      ['package-2', '2.0.1'],
+      ['package-3', '4.0.1'],
+      ['package-4', '4.0.1'],
+      ['package-5', '5.0.1'],
+    ]);
+
+    versionBumps.forEach((bump) => (recommendVersion as Mock).mockResolvedValueOnce(bump));
+
+    await new VersionCommand(createArgv(cwd, '--create-release', type, '--conventional-commits', '--skip-bump-only-releases'));
+
+    expect(client.releases.size).toBe(4);
+    versionBumps.forEach((version, name) => {
+      if (name === 'package-4') {
+        expect(client.releases.get(`${name}@${version}`)).toBeFalsy();
+      } else {
+        expect(client.releases.get(`${name}@${version}`)).toEqual({
+          owner: 'lerna',
+          repo: 'lerna',
+          tag_name: `${name}@${version}`,
+          name: `${name}@${version}`,
+          body: `${name} - ${version}`,
+          draft: false,
+          prerelease: false,
+        });
+      }
+    });
+  });
+
+  it('creates a release for every independent version even with "version bump only" packages when --skip-bump-only-releases is NOT enabled', async () => {
     process.env.GH_TOKEN = 'TOKEN';
     const cwd = await initFixture('independent');
     const versionBumps = new Map([

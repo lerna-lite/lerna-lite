@@ -23,19 +23,19 @@ export async function createReleaseClient(type: 'github' | 'gitlab'): Promise<Gi
 export function createRelease(
   { client, releaseDiscussion }: { client: GitCreateReleaseClientOutput; releaseDiscussion?: string },
   { tags, releaseNotes }: ReleaseCommandProps,
-  { gitRemote, execOpts, skipBumpOnlyRelease }: ReleaseOptions,
+  { gitRemote, execOpts, skipBumpOnlyReleases }: ReleaseOptions,
   dryRun = false
 ) {
   const { GH_TOKEN } = process.env;
   const repo = parseGitRepo(gitRemote, execOpts);
 
   return Promise.all(
-    releaseNotes.map(({ notes, name }) => {
+    releaseNotes.map(({ notes, name, pkg }) => {
       const tag = name === 'fixed' ? tags[0] : tags.find((t) => t.startsWith(`${name}@`));
 
       // when using independent mode, it could happen that a few version bump only releases are created
       // and since these aren't very useful for most users, user could choose to skip creating these releases when detecting a version bump only
-      if (!tag || (skipBumpOnlyRelease && notes?.includes('**Note:** Version bump only for package'))) {
+      if (!tag || (skipBumpOnlyReleases && pkg?.isBumpOnlyVersion)) {
         return Promise.resolve();
       }
 

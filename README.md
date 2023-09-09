@@ -118,7 +118,7 @@ Below are the main reasons as to why this fork was created:
    - [lerna version --changelog-header-message "msg"](https://github.com/lerna-lite/lerna-lite/tree/main/packages/version#--changelog-header-message-msg) it could be used to add sponsor badges in changelogs
    - [lerna version --changelog-include-commits-client-login](https://github.com/lerna-lite/lerna-lite/tree/main/packages/version#--changelog-include-commits-client-login-msg) to add PR contributors
    - [lerna version --allow-peer-dependencies-update](https://github.com/lerna-lite/lerna-lite/tree/main/packages/version#--allow-peer-dependencies-update) if you want your peer deps to also be updated
-   - [lerna version --skip-bump-only-release](https://github.com/lerna-lite/lerna-lite/tree/main/packages/version#--skip-bump-only-release) to avoid cluttering your GitHub releases in `independent` mode
+   - [lerna version --skip-bump-only-releases](https://github.com/lerna-lite/lerna-lite/tree/main/packages/version#--skip-bump-only-releases) to avoid cluttering your GitHub releases in `independent` mode
    - [lerna publish --remove-package-fields](https://github.com/lerna-lite/lerna-lite/tree/main/packages/publish#--remove-package-fields-fields) (remove certain fields from `package.json` before publishing)
       - ie: Lerna-Lite itself uses it to remove `scripts` and `devDependencies`
 

@@ -48,6 +48,7 @@ function shallowCopy(json: any) {
 export class Package {
   _id = '';
   name: string;
+  isBumpOnlyVersion = false;
   licensePath = '';
   localDependencies = new Map<string, any>();
 
@@ -170,7 +171,7 @@ export class Package {
     }
 
     // if provided by pkg.publishConfig.directory value
-    if (this[PKG].publishConfig && this[PKG].publishConfig.directory) {
+    if (this[PKG].publishConfig?.directory) {
       return join(this.location, this[PKG].publishConfig.directory);
     }
 

@@ -295,8 +295,11 @@ export interface VersionCommandOption {
   /** Additional arguments to pass to the npm client when performing 'npm install'. */
   npmClientArgs?: string[];
 
-  /** Defaults to false, should we skip GitHub/GitLab release creation when the version is a "Version bump only for package x" */
+  /** @deprecated @alias `skipBumpOnlyReleases` renamed previous flag from `skipBumpOnlyRelease` to `skipBumpOnlyReleases`. */
   skipBumpOnlyRelease?: boolean;
+
+  /** Defaults to false, should we skip GitHub/GitLab release creation when the version is a "Version bump only for package x" */
+  skipBumpOnlyReleases?: boolean;
 
   /** Runs `npm install --package-lock-only` or equivalent depending on the package manager defined in `npmClient`. */
   syncWorkspaceLock?: boolean;

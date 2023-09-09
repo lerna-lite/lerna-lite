@@ -608,6 +608,7 @@ describe('conventional-commits', () => {
         changelogPreset: './scripts/local-preset',
       });
 
+      expect(pkg2.isBumpOnlyVersion).toBeTruthy();
       expect(leafChangelog.newEntry.trimRight()).toMatchInlineSnapshot(`
         <a name="1.0.1"></a>
         ## <small>1.0.1 (YYYY-MM-DD)</small>
