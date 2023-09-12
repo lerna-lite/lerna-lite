@@ -470,9 +470,11 @@ Certain fields defined in `publishConfig` can be used to override other fields i
 
 - `bin`, `browser`, `cpu`, `esnext`, `es2015`, `exports`, `imports`, `libc`, `main`, `module`, `os`, `type`, `types`, `typings`, `typesVersions`, `umd:main`, `unpkg`
 
-> **Note** this option is enabled by default but can be disabled bia `lerna publish --no-publish-config-overrides` or (`"publishConfigOverrides": false` in `lerna.json`)
+> **Note** the code implementation was copied from pnpm but is agnostic and will work the same way on all package manager (works the same on pnpm, yarn or npm).
 
-For instance, the following package.json:
+> **Note** this option is enabled by default but can be disabled via `lerna publish --no-publish-config-overrides` or (`"publishConfigOverrides": false` in `lerna.json`)
+
+For instance, the following `package.json`:
 
 ```json
 {
