@@ -39,11 +39,7 @@
 
 ---
 
-## 📢 Lerna-Lite has a new [`lerna watch`](https://github.com/lerna-lite/lerna-lite/tree/main/packages/watch#readme) command
-
-Watch for file changes within packages and execute commands from the root of the repository. This solves a common problem for package-based monorepos, which is to trigger rebuilds of packages when their files changed. Head over to the [`lerna watch`](https://github.com/lerna-lite/lerna-lite/tree/main/packages/watch#readme) documentation for more details.
-
-## 📢 Lerna-Lite now supports pnpm/yarn `workspace:` protocol
+## 📢 Lerna-Lite supports pnpm/yarn `workspace:` protocol
 
 Take 30sec. to complete this 1 question [poll survey 🔘](https://github.com/lerna-lite/lerna-lite/discussions/156) if you are using this feature. It's a simple poll to find out which package manager is the most popular with this new `workspace:` protocol feature (so far, about 60% pnpm and 40% yarn).
 
@@ -76,11 +72,11 @@ Here are some of the largest projects using this Lerna-Lite fork
   Standard Notes
 </a>
 
-### Sponsors
+## Sponsors
 
-<table><tr>
-  <td align="center" valign="middle">
-<a href="https://github.com/wundergraph" target="_blank"><img src="https://avatars.githubusercontent.com/u/64281914" width="50" height="50" valign="middle" /> </a></td><td align="center" valign="middle">
+<table>
+  <tr>
+    <td align="center" valign="middle"><a href="https://github.com/wundergraph" target="_blank"><img src="https://avatars.githubusercontent.com/u/64281914" width="60" height="60" valign="middle" /> Wundergraph</a></td>
   </tr>
 </table>
 
@@ -343,3 +339,11 @@ If you have problems running the lib and your problems are related to Git comman
 | [@lerna-lite/profiler](https://github.com/lerna-lite/lerna-lite/tree/main/packages/profiler) | [![npm](https://img.shields.io/npm/v/@lerna-lite/profiler.svg)](https://www.npmjs.com/package/@lerna-lite/profiler) | Lerna-Lite Profiler used by some optional commands (internal use) | [changelog](https://github.com/lerna-lite/lerna-lite/blob/main/packages/profiler/CHANGELOG.md) |
 | [@lerna-lite/run](https://github.com/lerna-lite/lerna-lite/tree/main/packages/run) | [![npm](https://img.shields.io/npm/v/@lerna-lite/run.svg)](https://www.npmjs.com/package/@lerna-lite/run) | Run npm scripts in current workspace | [changelog](https://github.com/lerna-lite/lerna-lite/blob/main/packages/run/CHANGELOG.md) |
 | [@lerna-lite/watch](https://github.com/lerna-lite/lerna-lite/tree/main/packages/watch) | [![npm](https://img.shields.io/npm/v/@lerna-lite/watch.svg)](https://www.npmjs.com/package/@lerna-lite/watch) | Watch for changes within packages and execute commands | [changelog](https://github.com/lerna-lite/lerna-lite/blob/main/packages/watch/CHANGELOG.md) |
+
+## Sponsors
+
+<table>
+  <tr>
+    <td align="center" valign="middle"><a href="https://github.com/wundergraph" target="_blank"><img src="https://avatars.githubusercontent.com/u/64281914" width="60" height="60" valign="middle" /> Wundergraph</a></td>
+  </tr>
+</table>
