@@ -118,7 +118,7 @@ jobs:
         run: pnpm test:coverage
 
       - name: Upload test coverage to Codecov
-        uses: codecov/codecov-action@v3
+        uses: codecov/codecov-action@v4
         if: |
           contains(matrix.node, 20) &&
           !contains(github.event.head_commit.message, 'chore(release)')
