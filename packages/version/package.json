@@ -81,7 +81,7 @@
     "semver": "^7.5.4",
     "slash": "^5.1.0",
     "temp-dir": "^3.0.0",
-    "uuid": "^9.0.0",
+    "uuid": "^9.0.1",
     "write-json-file": "^5.0.0"
   },
   "devDependencies": {
