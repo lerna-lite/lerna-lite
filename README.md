@@ -70,6 +70,10 @@ Here are some of the largest projects using this Lerna-Lite fork
 <a href="https://github.com/standardnotes/app">
   <img src="https://avatars.githubusercontent.com/u/24537496?s=200&amp;v=4" width="25" height="25">
   Standard Notes
+</a>&nbsp; | &nbsp;
+<a href="https://github.com/nativescript-community" title="NativeScript Community">
+  <img src="https://avatars.githubusercontent.com/u/50633791?s=200&v=4" width="25" height="25">
+   NativeScript
 </a>
 
 ## Sponsors
