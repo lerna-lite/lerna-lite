@@ -307,20 +307,7 @@ Feel free to contribute any Pull Request. Also please note that the original cod
 
 ### Development / Contributions
 
-If you wish to contribute to the project, please follow these steps:
-
-**Note**: this project uses [pnpm workspaces](https://pnpm.io/workspaces), you can install pnpm by following their [installation](https://pnpm.io/installation) or simply run `npx pnpm` to run any of the pnpm scripts shown below:
-
-1. clone the lib:
-   - `git clone https://github.com/lerna-lite/lerna-lite`
-2. install with **pnpm** from the root:
-   - `pnpm install` OR `npx pnpm install`
-3. run a full TypeScript (TSC) build
-   - `pnpm build` OR `npx pnpm build`
-4. add/run Vitest unit tests (make sure to run the previous steps first):
-   - `pnpm test` (watch mode)
-   - `pnpm test:coverage` (full test coverage)
-5. you can also troubleshoot/debug via the VSCode debugger launch configs that were setup for each command
+To contribute to the project, please follow the steps shown in the [Contributing Guide](https://github.com/lerna-lite/lerna-lite/blob/main/CONTRIBUTING.md)
 
 ## Troubleshooting
 
