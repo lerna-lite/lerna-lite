@@ -114,7 +114,7 @@ Below are the main reasons as to why this fork was created:
    - even TypeScript is now required in Lerna >=6 (even for a JS monorepo) however not required in Lerna-Lite
 6. Added a few unique features that are available currently only in Lerna-Lite:
    - [`workspace:` protocol support](https://github.com/lerna-lite/lerna-lite/tree/main/packages/version#workspace-protocol) (*) Lerna added support for the same 6 months later in v6
-   - [--dry-run](https://github.com/lerna-lite/lerna-lite/tree/main/packages/version#--dry-run) to preview version/publish and changelogs locally (will show git changes without committing them)
+   - [--dry-run](https://github.com/lerna-lite/lerna-lite/tree/main/packages/version#--dry-run) to preview version/publish & changelogs locally (will show git changes without committing them)
    - [lerna version --changelog-header-message "msg"](https://github.com/lerna-lite/lerna-lite/tree/main/packages/version#--changelog-header-message-msg) for showing banner or sponsors in your changelogs
    - [lerna version --changelog-include-commits-client-login](https://github.com/lerna-lite/lerna-lite/tree/main/packages/version#--changelog-include-commits-client-login-msg) to add PR contributors in GitHub releases
    - [lerna version --allow-peer-dependencies-update](https://github.com/lerna-lite/lerna-lite/tree/main/packages/version#--allow-peer-dependencies-update) to also updated your peer dependencies
@@ -227,7 +227,7 @@ You can add the `$schema` property into your `lerna.json` to take advantage of L
 
 ### Usage
 
-Add custom NPM scripts or simply run the commands in your shell with the Lerna-Lite CLI, you can see below some very basic script samples.
+Add custom NPM scripts or simply run the commands in your shell with the Lerna-Lite CLI, you can see below some very basic Lerna npm script samples.
 
 ```js
 // package.json / npm scripts
@@ -241,7 +241,7 @@ Add custom NPM scripts or simply run the commands in your shell with the Lerna-L
 
 ### Migration for existing [Lerna](https://github.com/lerna/lerna) users
 
-Migrating from the original Lerna, should be fairly easy since you just replace Lerna dependency with Lerna-Lite `@lerna-lite/cli`, then install all the commands that you are interested in and that's it. The CLI commands and options are the same, except that all commands are optionals (that is the biggest difference with Lerna). To install these commands, take a look at the steps shown below:
+Migrating from the original Lerna, should be fairly easy since you simply need to replace your Lerna dependency with Lerna-Lite `@lerna-lite/cli`, then install all the commands that you are interested in and that's it. The CLI commands and options are the same. The biggest difference compared to Lerna is that you need to install the commands that you are interested in, for that take a look at the steps shown below:
 
 > **Note** as opposed to Lerna v7 and higher, the `useWorkspace` is **not** enabled by default in Lerna-Lite and we still recommend to use either `useWorkspaces` for Yarn/NPM or use the default `packages` in `lerna.json` for pnpm users. The `useWorkspaces` has some drawback since some of the packages could be unrelated to the project releases (ie: website, examples) and for this use case the `packages/*` defined in `lerna.json` could be better (i.e. [Jest](https://github.com/facebook/jest) uses this approach).
 
