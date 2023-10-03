@@ -59,7 +59,7 @@ jobs:
         node: [16, 18, 20]
         platform: [ubuntu-latest]
 
-    name: 'Build & Unit Tests on Ubuntu / Node${{ matrix.node }}'
+    name: 'Run on Ubuntu / Node${{ matrix.node }}'
     runs-on: ${{matrix.platform}}
     if: ${{ !startsWith(github.event.head_commit.message, 'docs:') }}
 
