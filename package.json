@@ -38,10 +38,10 @@
     "ci:lint": "eslint packages -c .eslintrc.json --no-eslintrc --ignore-path .gitignore",
     "lint": "eslint packages -c .eslintrc.json --no-eslintrc --ignore-path .gitignore --cache --cache-location ./node_modules/.cache/eslint",
     "outdated:ws": "pnpm -r --stream outdated",
-    "test": "vitest --watch --no-threads --config ./vitest/vitest.config.ts",
+    "test": "vitest --watch --pool forks --config ./vitest/vitest.config.ts",
     "posttest": "node scripts/cleanup-temp-files.mjs",
-    "test:coverage": "vitest --coverage --no-threads --config ./vitest/vitest.config.ts",
-    "test:coverage:update": "vitest --coverage --no-threads --update --config ./vitest/vitest.config.ts"
+    "test:coverage": "vitest --coverage --pool forks --config ./vitest/vitest.config.ts",
+    "test:coverage:update": "vitest --coverage --pool forks --update --config ./vitest/vitest.config.ts"
   },
   "homepage": "https://github.com/lerna-lite/lerna-lite",
   "repository": {
@@ -83,7 +83,7 @@
     "@types/yargs": "^17.0.26",
     "@typescript-eslint/eslint-plugin": "^6.7.3",
     "@typescript-eslint/parser": "^6.7.3",
-    "@vitest/coverage-v8": "^0.34.6",
+    "@vitest/coverage-v8": "1.0.0-beta.0",
     "conventional-changelog-conventionalcommits": "^6.1.0",
     "cross-env": "^7.0.3",
     "eslint": "^8.50.0",
@@ -111,7 +111,7 @@
     "tslib": "^2.6.2",
     "tsm": "^2.3.0",
     "typescript": "^5.2.2",
-    "vitest": "^0.34.6",
+    "vitest": "1.0.0-beta.0",
     "write-json-file": "^5.0.0"
   }
 }
