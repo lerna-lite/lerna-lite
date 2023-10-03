@@ -27,6 +27,16 @@ import { dirname, join, resolve as pathResolve } from 'node:path';
 import semver from 'semver';
 import { fileURLToPath } from 'node:url';
 
+expect.addSnapshotSerializer({
+  test(val) {
+    return typeof val === 'string';
+  },
+  serialize(val, config, indentation, depth) {
+    // top-level strings don't need quotes, but nested ones do (object properties, etc)
+    return depth ? `"${val}"` : val;
+  },
+});
+
 // mocked modules
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);

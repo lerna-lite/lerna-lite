@@ -27,6 +27,16 @@ import { makePromptVersion } from '../lib/prompt-version';
 import { dirname, resolve as pathResolve } from 'node:path';
 import yargParser from 'yargs-parser';
 
+expect.addSnapshotSerializer({
+  test(val) {
+    return typeof val === 'string';
+  },
+  serialize(val, config, indentation, depth) {
+    // top-level strings don't need quotes, but nested ones do (object properties, etc)
+    return depth ? `"${val}"` : val;
+  },
+});
+
 const resolvePrereleaseId = vi.fn(() => 'alpha');
 const versionPrompt = (buildMetadata) => makePromptVersion(resolvePrereleaseId, buildMetadata);
 

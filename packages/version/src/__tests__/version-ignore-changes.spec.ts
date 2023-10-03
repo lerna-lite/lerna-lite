@@ -43,6 +43,16 @@ import gitSHA from '@lerna-test/helpers/serializers/serialize-git-sha';
 import { VersionCommandOption } from '@lerna-lite/core';
 expect.addSnapshotSerializer(gitSHA);
 
+expect.addSnapshotSerializer({
+  test(val) {
+    return typeof val === 'string';
+  },
+  serialize(val, config, indentation, depth) {
+    // top-level strings don't need quotes, but nested ones do (object properties, etc)
+    return depth ? `"${val}"` : val;
+  },
+});
+
 const createArgv = (cwd, ...args) => {
   args.unshift('version');
   if (args.length > 0 && args[1]?.length > 0 && !args[1].startsWith('-')) {
