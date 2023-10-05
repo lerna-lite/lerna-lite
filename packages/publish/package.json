@@ -78,7 +78,7 @@
   },
   "devDependencies": {
     "@types/conventional-changelog-core": "^4.2.4",
-    "@types/conventional-recommended-bump": "^6.1.1",
+    "@types/conventional-recommended-bump": "^9.0.0",
     "@types/fs-extra": "^11.0.2",
     "@types/pify": "^5.0.2",
     "@types/semver": "^7.5.3",

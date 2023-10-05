@@ -1,4 +1,4 @@
-lockfileVersion: '6.1'
+lockfileVersion: '6.0'
 
 settings:
   autoInstallPeers: true
@@ -581,8 +581,8 @@ importers:
         specifier: ^4.2.4
         version: 4.2.4
       '@types/conventional-recommended-bump':
-        specifier: ^6.1.1
-        version: 6.1.1
+        specifier: ^9.0.0
+        version: 9.0.0
       '@types/fs-extra':
         specifier: ^11.0.2
         version: 11.0.2
@@ -763,8 +763,8 @@ importers:
         specifier: ^3.0.4
         version: 3.0.4
       '@types/conventional-recommended-bump':
-        specifier: ^6.1.1
-        version: 6.1.1
+        specifier: ^9.0.0
+        version: 9.0.0
       '@types/dedent':
         specifier: ^0.7.0
         version: 0.7.0
@@ -1673,7 +1673,7 @@ packages:
     dependencies:
       '@types/conventional-changelog-writer': 4.0.6
       '@types/conventional-commits-parser': 3.0.4
-      '@types/conventional-recommended-bump': 6.1.1
+      '@types/conventional-recommended-bump': 9.0.0
       '@types/git-raw-commits': 2.0.1
       '@types/node': 20.7.1
       '@types/normalize-package-data': 2.4.1
@@ -1692,8 +1692,8 @@ packages:
       '@types/node': 20.7.1
     dev: true
 
-  /@types/conventional-recommended-bump@6.1.1:
-    resolution: {integrity: sha512-wxKDmz1U21EgTB5tP19RJ8vl9SME1k3dHVQ9MAeoghZpd141VhQBTOiWCQP2ifl2tT6XByME06UaN8wAQAft0Q==}
+  /@types/conventional-recommended-bump@9.0.0:
+    resolution: {integrity: sha512-sSak9Fd2qyddJFEaJAHCsnx+T9HQOOqIawriP2waTmFAVWGXpt8mWW1P4TJNF5MOtLOKGQRVuYWHqvSrIfZTsw==}
     dependencies:
       '@types/conventional-changelog-core': 4.2.4
       '@types/conventional-changelog-writer': 4.0.6

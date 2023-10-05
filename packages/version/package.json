@@ -89,7 +89,7 @@
     "@types/conventional-changelog-core": "^4.2.4",
     "@types/conventional-changelog-writer": "^4.0.6",
     "@types/conventional-commits-parser": "^3.0.4",
-    "@types/conventional-recommended-bump": "^6.1.1",
+    "@types/conventional-recommended-bump": "^9.0.0",
     "@types/dedent": "^0.7.0",
     "@types/fs-extra": "^11.0.2",
     "@types/git-url-parse": "^9.0.1",
