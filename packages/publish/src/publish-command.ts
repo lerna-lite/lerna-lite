@@ -53,6 +53,8 @@ import { removeTempLicenses } from './lib/remove-temp-licenses.js';
 import { createTempLicenses } from './lib/create-temp-licenses.js';
 import { getPackagesWithoutLicense } from './lib/get-packages-without-license.js';
 import { Tarball } from './models/index.js';
+import { isNpmJsPublishVersionConflict } from './lib/is-npm-js-publish-version-conflict.js';
+import { isNpmPkgGitHubPublishVersionConflict } from './lib/is-npm-pkg-github-publish-version-conflict.js';
 
 export function factory(argv: PublishCommandOption) {
   return new PublishCommand(argv);
@@ -931,13 +933,12 @@ export class PublishCommand extends Command<PublishCommandOption> {
                 return pkg;
               })
               .catch((err) => {
-                if (
-                  err.code === 'EPUBLISHCONFLICT' ||
-                  (err.code === 'E403' && err.body?.error?.includes('You cannot publish over the previously published versions'))
-                ) {
+                const isNpmJsComConflict = isNpmJsPublishVersionConflict(err);
+                const isNpmPkgGitHubComConflict = isNpmPkgGitHubPublishVersionConflict(err);
+
+                if (isNpmJsComConflict || isNpmPkgGitHubComConflict) {
                   tracker.warn('publish', `Package is already published: ${pkg.name}@${pkg.version}`);
                   tracker.completeWork(1);
-
                   return pkg;
                 }
 
