@@ -50,6 +50,10 @@
       packageNames: ['conventional-recommended-bump'],
       allowedVersions: '7.0.1',
     },
+    {
+      packageNames: ['@types/conventional-recommended-bump'],
+      allowedVersions: '6.1.1',
+    }
   ],
   ignoreDeps: [],
   schedule: ['on Thursday'],
