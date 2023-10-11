@@ -788,7 +788,7 @@ Useful in [Continuous integration (CI)](https://en.wikipedia.org/wiki/Continuous
 
 ### Generating Initial Changelogs
 
-If you start using the [`--conventional-commits`](#--conventional-commits) option _after_ the monorepo has been active for awhile, you can still generate changelogs for previous releases using [`conventional-changelog-cli`](https://github.com/conventional-changelog/conventional-changelog/tree/master/packages/conventional-changelog-cli#readme) and [`lerna exec`](https://github.com/lerna/lerna/tree/main/commands/exec#readme):
+If you start using the [`--conventional-commits`](#--conventional-commits) option _after_ the monorepo has been active for awhile, you can still generate changelogs for previous releases using [`conventional-changelog-cli`](https://github.com/conventional-changelog/conventional-changelog/tree/master/packages/conventional-changelog-cli#readme) and [`lerna exec`](https://github.com/lerna-lite/lerna-lite/tree/main/packages/exec#readme):
 
 ```bash
 # Lerna does not actually use conventional-changelog-cli, so you need to install it temporarily

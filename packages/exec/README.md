@@ -6,7 +6,7 @@
 
 ## (`lerna exec`) - Exec command [optional] 👷
 
-**Optional package** extracted from Lerna [exec command](https://github.com/lerna/lerna/tree/main/commands/exec) that will give us the ability to execute an arbitrary command in each package.
+**Optional package** extracted from Lerna `exec` command that will give us the ability to execute an arbitrary command in each package.
 
 This package was added mainly because NPM Workspaces don't yet support executing commands in parallel and in topological order (they do have this [RFC](https://github.com/npm/rfcs/issues/190), so perhaps someday this package would become irrelevant :)).
 
