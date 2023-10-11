@@ -249,9 +249,11 @@ describe('publish from-git', () => {
     process.exitCode = undefined;
   });
 
-  it('should not throw and assume package is already published when npm publish throws EPUBLISHCONFLICT from a previous half publish process', async () => {
+  it('should not throw and assume package is already published on npmjs.com registry when npm publish throws EPUBLISHCONFLICT from a previous half publish process', async () => {
     (npmPublish as Mock).mockImplementation(() => {
-      return Promise.reject({ code: 'EPUBLISHCONFLICT' });
+      const ex = new Error('Mocked npm publish fail') as Error & { code: string };
+      ex.code = 'EPUBLISHCONFLICT';
+      return Promise.reject(ex);
     });
 
     const cwd = await initFixture('normal');
@@ -269,5 +271,114 @@ describe('publish from-git', () => {
     const loggerSpy = vi.spyOn(command.logger, 'success');
     await command.execute();
     expect(loggerSpy).toHaveBeenCalledWith('All packages have already been published.');
+  });
+
+  it('should not throw and assume package is already published on npmjs.com registry when npm publish throws "You cannot publish over the previously published versions" from a previous half publish process', async () => {
+    (npmPublish as Mock).mockImplementation(() => {
+      const ex = new Error('You cannot publish over the previously published versions') as Error & { code: string };
+      ex.code = 'E403';
+      return Promise.reject(ex);
+    });
+
+    const cwd = await initFixture('normal');
+
+    await gitTag(cwd, 'v1.0.0');
+    const command = new PublishCommand(createArgv(cwd, 'from-git', '--no-sort'));
+
+    await expect(command).resolves.toBeUndefined();
+
+    // called from chained describeRef()
+    expect(throwIfUncommitted).toHaveBeenCalled();
+
+    // since all packages rejected with publish conflict, we should have the "All published" message when recalling execute()
+    command.initialize();
+    const loggerSpy = vi.spyOn(command.logger, 'success');
+    await command.execute();
+    expect(loggerSpy).toHaveBeenCalledWith('All packages have already been published.');
+  });
+
+  it('should not throw and assume package is already published on GitHub npm Registry when npm publish throws E409 from a previous half publish process', async () => {
+    (npmPublish as Mock).mockImplementation(() => {
+      const ex = new Error('Mocked npm publish fail') as Error & { code: string };
+      ex.code = 'E409';
+      return Promise.reject(ex);
+    });
+
+    const cwd = await initFixture('normal');
+
+    await gitTag(cwd, 'v1.0.0');
+    const command = new PublishCommand(createArgv(cwd, 'from-git', '--no-sort'));
+
+    await expect(command).resolves.toBeUndefined();
+
+    // called from chained describeRef()
+    expect(throwIfUncommitted).toHaveBeenCalled();
+
+    // since all packages rejected with publish conflict, we should have the "All published" message when recalling execute()
+    command.initialize();
+    const loggerSpy = vi.spyOn(command.logger, 'success');
+    await command.execute();
+    expect(loggerSpy).toHaveBeenCalledWith('All packages have already been published.');
+  });
+
+  it('should not throw and assume package is already published on GitHub npm Registry when npm publish throws "409 Conflict - PUT https://npm.pkg.github.com" from a previous half publish process', async () => {
+    (npmPublish as Mock).mockImplementation(() => {
+      const ex = new Error('409 Conflict - PUT https://npm.pkg.github.com/');
+      return Promise.reject(ex);
+    });
+
+    const cwd = await initFixture('normal');
+
+    await gitTag(cwd, 'v1.0.0');
+    const command = new PublishCommand(createArgv(cwd, 'from-git', '--no-sort'));
+
+    await expect(command).resolves.toBeUndefined();
+
+    // called from chained describeRef()
+    expect(throwIfUncommitted).toHaveBeenCalled();
+
+    // since all packages rejected with publish conflict, we should have the "All published" message when recalling execute()
+    command.initialize();
+    const loggerSpy = vi.spyOn(command.logger, 'success');
+    await command.execute();
+    expect(loggerSpy).toHaveBeenCalledWith('All packages have already been published.');
+  });
+
+  it('should not throw and assume package is already published on GitHub npm Registry when npm publish throws "Cannot publish over existing version" from a previous half publish process', async () => {
+    (npmPublish as Mock).mockImplementation(() => {
+      const ex = new Error('some unrelated error message because we want detection based on ex.body.error') as Error & { body: { error: string } };
+      ex.body = { error: 'Cannot publish over existing version' };
+      return Promise.reject(ex);
+    });
+
+    const cwd = await initFixture('normal');
+
+    await gitTag(cwd, 'v1.0.0');
+    const command = new PublishCommand(createArgv(cwd, 'from-git', '--no-sort'));
+
+    await expect(command).resolves.toBeUndefined();
+
+    // called from chained describeRef()
+    expect(throwIfUncommitted).toHaveBeenCalled();
+
+    // since all packages rejected with publish conflict, we should have the "All published" message when recalling execute()
+    command.initialize();
+    const loggerSpy = vi.spyOn(command.logger, 'success');
+    await command.execute();
+    expect(loggerSpy).toHaveBeenCalledWith('All packages have already been published.');
+  });
+
+  it('should re-throw when npm publish throws not related to npmjs/github version conflict', async () => {
+    (npmPublish as Mock).mockImplementation(() => {
+      const ex = new Error('The milk was spilt.');
+      return Promise.reject(ex);
+    });
+
+    const cwd = await initFixture('normal');
+
+    await gitTag(cwd, 'v1.0.0');
+    const command = new PublishCommand(createArgv(cwd, 'from-git', '--no-sort'));
+
+    await expect(command).rejects.toBeTruthy();
   });
 });
