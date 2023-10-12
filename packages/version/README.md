@@ -435,17 +435,17 @@ lerna version --describe-tag "*lerna-project*"
 ##### GitHub Auth Token
 To authenticate with GitHub, the following environment variables can be defined.
 
-- `GH_TOKEN` or `GITHUB_TOKEN` (required) - Your GitHub authentication token (under Settings > Developer settings > Personal access tokens), please give it the `repo:public_repo` scope when creating the token (for more info, refer to [GitHub - Creating a personal access token](https://docs.github.com/en/authentication/keeping-your-account-and-data-secure/creating-a-personal-access-token)).
-- `GHE_API_URL` - When using GitHub Enterprise, an absolute URL to the API.
-- `GHE_VERSION` - When using GitHub Enterprise, the currently installed GHE version. [Supports the following versions](https://github.com/octokit/plugin-enterprise-rest.js).
+- `GH_TOKEN` or `GITHUB_TOKEN`: Your GitHub authentication token (under Settings > Developer settings > Personal access tokens), please give it the `repo:public_repo` scope when creating the token (for more info, refer to [GitHub - Creating a personal access token](https://docs.github.com/en/authentication/keeping-your-account-and-data-secure/creating-a-personal-access-token)).
+- `GHE_API_URL`: When using GitHub Enterprise, an absolute URL to the API.
+- `GHE_VERSION`: When using GitHub Enterprise, the currently installed GHE version. [Supports the following versions](https://github.com/octokit/plugin-enterprise-rest.js).
 
-> **Note** even though `GH_TOKEN` (or `GITHUB_TOKEN`) is the preferred way to automate the creation of a GitHub Release (especially in a CI environment), we are also providing a more manual mode when the `GH_TOKEN` could not be found or read. In this mode, we will create a link that once click will open the GitHub web interface form with the fields pre-populated. This mode is enabled automatically when the `GH_TOKEN` environment variable is not set and `--create-release github` is provided.
+> **Note** even though `GH_TOKEN` (or `GITHUB_TOKEN`) is the preferred way to automate the creation of a GitHub Release (especially in a CI environment), we are also providing a more manual mode when the `GH_TOKEN` could not be found or read. For that use case (when token cannot be read), we will create a link that once clicked it will open the GitHub web interface form with the fields pre-populated. This mode is enabled automatically when `--create-release github` is enabled without providing a valid `GH_TOKEN` environment variable.
 
 ##### GitLab Auth Token
 To authenticate with GitLab, the following environment variables can be defined.
 
-- `GL_TOKEN` (required) - Your GitLab authentication token (under User Settings > Access Tokens).
-- `GL_API_URL` - An absolute URL to the API, including the version. (Default: https://gitlab.com/api/v4)
+- `GL_TOKEN` (required): Your GitLab authentication token (under User Settings > Access Tokens).
+- `GL_API_URL`: An absolute URL to the API, including the version. (Default: https://gitlab.com/api/v4)
 
 > **Note** When using this option, you cannot pass [`--no-changelog`](#--no-changelog).
 
