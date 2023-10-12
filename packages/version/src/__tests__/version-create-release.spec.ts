@@ -158,7 +158,7 @@ describe.each([
   });
 
   it('creates a release for every independent version', async () => {
-    process.env.GH_TOKEN = 'TOKEN';
+    process.env.GITHUB_TOKEN = 'TOKEN';
     const cwd = await initFixture('independent');
     const versionBumps = new Map([
       ['package-1', '1.0.1'],
@@ -208,7 +208,7 @@ describe.each([
   });
 
   it('creates a single fixed release in dry-run mode', async () => {
-    process.env.GH_TOKEN = 'TOKEN';
+    process.env.GITHUB_TOKEN = 'TOKEN';
     const logSpy = vi.spyOn(npmlog, 'info');
 
     const cwd = await initFixture('normal');
@@ -250,7 +250,7 @@ describe('--create-release [unrecognized]', () => {
   });
 });
 
-describe('create --github-release without providing GH_TOKEN', () => {
+describe('create --github-release without providing GH_TOKEN or GITHUB_TOKEN', () => {
   beforeEach(() => {
     process.env = {};
   });
@@ -323,7 +323,7 @@ describe.each([
   });
 
   it('creates a release for every independent version but skip "version bump only" packages when --skip-bump-only-releases is enabled', async () => {
-    process.env.GH_TOKEN = 'TOKEN';
+    process.env.GITHUB_TOKEN = 'TOKEN';
     const cwd = await initFixture('independent');
     const versionBumps = new Map([
       ['package-1', '1.0.1'],
@@ -411,7 +411,7 @@ it('should create a github release discussion when enabled', async () => {
 });
 
 it('should log an error when createRelease throws', async () => {
-  process.env.GH_TOKEN = 'TOKEN';
+  process.env.GITHUB_TOKEN = 'TOKEN';
   (createReleaseClient as Mock).mockImplementation(() => Promise.resolve({ repos: { createRelease: vi.fn(() => Promise.reject('some error')) } }));
   (createRelease as Mock).mockImplementationOnce(() => {
     throw new Error('some error');

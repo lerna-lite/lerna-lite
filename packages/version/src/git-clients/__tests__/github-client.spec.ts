@@ -14,8 +14,16 @@ describe('createGitHubClient', () => {
     process.env = {};
   });
 
-  it('doesnt error if GH_TOKEN env var is set', () => {
+  it('does not error if GH_TOKEN env var is set', () => {
     process.env.GH_TOKEN = 'TOKEN';
+
+    expect(async () => {
+      await createGitHubClient();
+    }).not.toThrow();
+  });
+
+  it('does not error if GITHUB_TOKEN env var is set', () => {
+    process.env.GITHUB_TOKEN = 'TOKEN';
 
     expect(async () => {
       await createGitHubClient();
@@ -24,6 +32,15 @@ describe('createGitHubClient', () => {
 
   it('initializes GHE plugin when GHE_VERSION env var is set', async () => {
     process.env.GH_TOKEN = 'TOKEN';
+    process.env.GHE_VERSION = '2.18';
+
+    await createGitHubClient();
+
+    expect(Octokit.plugin).toHaveBeenCalledWith(expect.anything());
+  });
+
+  it('initializes GHE plugin when GHE_VERSION env var is set with GITHUB_TOKEN', async () => {
+    process.env.GITHUB_TOKEN = 'TOKEN';
     process.env.GHE_VERSION = '2.18';
 
     await createGitHubClient();

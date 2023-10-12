@@ -26,7 +26,7 @@ export function createRelease(
   { gitRemote, execOpts, skipBumpOnlyReleases }: ReleaseOptions,
   dryRun = false
 ) {
-  const { GH_TOKEN } = process.env;
+  const { GH_TOKEN, GITHUB_TOKEN } = process.env;
   const repo = parseGitRepo(gitRemote, execOpts);
 
   return Promise.all(
@@ -41,9 +41,9 @@ export function createRelease(
 
       const prereleaseParts = semver.prerelease(tag.replace(`${name}@`, '')) || [];
 
-      // when the `GH_TOKEN` environment variable is not set,
+      // when the `GH_TOKEN` (or `GITHUB_TOKEN`) environment variable is not set,
       // we'll create a link to GitHub web interface form with the fields pre-populated
-      if (!GH_TOKEN) {
+      if (!GH_TOKEN && !GITHUB_TOKEN) {
         const releaseUrl = newGithubReleaseUrl({
           user: repo.owner,
           repo: repo.name,
@@ -52,7 +52,7 @@ export function createRelease(
           title: tag,
           body: notes,
         });
-        log.verbose('github', 'GH_TOKEN environment variable is not set');
+        log.verbose('github', 'GH_TOKEN (or GITHUB_TOKEN) environment variable could not be found');
         log.info('github', `🏷️ (GitHub Release web interface) - 🔗 ${releaseUrl}`);
         return Promise.resolve();
       }
