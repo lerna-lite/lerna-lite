@@ -37,6 +37,9 @@
             "conventionalGraduate": {
               "$ref": "#/$defs/commandOptions/shared/conventionalGraduate"
             },
+            "forceConventionalGraduate": {
+              "$ref": "#/$defs/commandOptions/shared/forceConventionalGraduate"
+            },
             "forcePublish": {
               "$ref": "#/$defs/commandOptions/shared/forcePublish"
             },
@@ -558,6 +561,9 @@
             },
             "conventionalGraduate": {
               "$ref": "#/$defs/commandOptions/shared/conventionalGraduate"
+            },
+            "forceConventionalGraduate": {
+              "$ref": "#/$defs/commandOptions/shared/forceConventionalGraduate"
             },
             "conventionalBumpPrerelease": {
               "$ref": "#/$defs/commandOptions/version/conventionalBumpPrerelease"
@@ -1482,6 +1488,10 @@
           "type": "string",
           "description": "During `lerna publish` (not `from-git` mode) and `lerna version`, the package updated since the last release will be found based on the describeTag.",
           "default": ""
+        },
+        "forceConventionalGraduate": {
+          "type": "boolean",
+          "description": "Forces all packages specified by --conventional-graduate to bump their version whether or not they are a prerelease or have changes since the previous version. Relevant for `lerna changed` and `lerna version`."
         },
         "forceLocal": {
           "type": "boolean",

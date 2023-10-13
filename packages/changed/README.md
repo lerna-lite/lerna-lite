@@ -49,6 +49,7 @@ Unlike `lerna ls`, however, `lerna changed` **does not** support [filter options
 `lerna changed` supports the following options of [`lerna version`](https://github.com/lerna-lite/lerna-lite/tree/main/packages/version#options) (the others are irrelevant):
 
 - [`--conventional-graduate`](https://github.com/lerna-lite/lerna-lite/tree/main/packages/version#--conventional-graduate).
+- [`--force-conventional-graduate`](https://github.com/lerna-lite/lerna-lite/tree/main/packages/version#--force-conventional-graduate).
 - [`--force-publish`](https://github.com/lerna-lite/lerna-lite/tree/main/packages/version#--force-publish).
 - [`--ignore-changes`](https://github.com/lerna-lite/lerna-lite/tree/main/packages/version#--ignore-changes).
 - [`--include-merged-tags`](https://github.com/lerna-lite/lerna-lite/tree/main/packages/version#--include-merged-tags).

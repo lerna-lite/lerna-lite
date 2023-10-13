@@ -220,6 +220,10 @@ export interface UpdateCollectorOptions {
   /** are we using conventional commits? */
   conventionalCommits?: boolean;
   conventionalGraduate?: boolean | string;
+
+  /** Forces all packages specified by --conventional-graduate to bump their version whether or not they are a prerelease or have changes since the previous version. */
+  forceConventionalGraduate?: boolean;
+
   excludeDependents?: boolean;
 
   /** optionally exclude sub-packages when versioning */

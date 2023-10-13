@@ -25,6 +25,7 @@ export function collectUpdates(
 ) {
   const {
     forcePublish,
+    forceConventionalGraduate,
     conventionalCommits,
     conventionalGraduate,
     excludeDependents,
@@ -33,8 +34,8 @@ export function collectUpdates(
     describeTag,
   } = commandOptions;
 
-  // If --conventional-commits and --conventional-graduate are both set, ignore --force-publish
-  const useConventionalGraduate = conventionalCommits && conventionalGraduate;
+  // If --conventional-commits and --conventional-graduate are both set, ignore --force-publish but consider --force-conventional-graduate
+  const useConventionalGraduate = conventionalCommits && (conventionalGraduate || forceConventionalGraduate);
   const forced = getPackagesForOption(useConventionalGraduate ? conventionalGraduate : (forcePublish as boolean | string[]));
 
   const packages =
@@ -108,7 +109,8 @@ export function collectUpdates(
       ? () => false
       : /* skip packages that have not been previously prereleased */
         (node) => node.prereleaseId;
-  const isForced = (node, name) => (forced.has('*') || forced.has(name)) && (useConventionalGraduate ? node.prereleaseId : true);
+  const isForced = (node, name) =>
+    (forced.has('*') || forced.has(name)) && ((useConventionalGraduate ? node.prereleaseId : true) || forceConventionalGraduate);
 
   return collectPackages(packages, {
     isCandidate: (node, name) => isForced(node, name) || needsBump(node) || hasDiff(node),
