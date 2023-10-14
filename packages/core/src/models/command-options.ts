@@ -7,6 +7,9 @@ export interface ChangedCommandOption {
   /** detect currently prereleased packages that would change to a non-prerelease version. */
   conventionalGraduate: boolean | string | string[];
 
+  /** always include all packages by specified by --conventional-graduate */
+  forceConventionalGraduate: boolean;
+
   /** always include targeted packages when detecting changed packages, skipping default logic. */
   forcePublish?: boolean | string | string[];
 
@@ -156,6 +159,9 @@ export interface VersionCommandOption {
 
   /** Version currently prereleased packages to a non-prerelease version. */
   conventionalGraduate?: boolean | string;
+
+  /** Forces all packages specified by --conventional-graduate to bump their version whether or not they are a prerelease or have changes since the previous version. */
+  forceConventionalGraduate?: boolean;
 
   /** Version changed packages as prereleases when using `--conventional-commits`. */
   conventionalPrerelease?: boolean | string;
