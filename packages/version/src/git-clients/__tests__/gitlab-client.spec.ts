@@ -8,6 +8,7 @@ import { createGitLabClient } from '../index';
 describe('createGitLabClient', () => {
   const oldEnv = Object.assign({}, process.env);
   delete process.env.GH_TOKEN;
+  delete process.env.GITHUB_TOKEN;
 
   afterEach(() => {
     process.env = oldEnv;

@@ -7,11 +7,11 @@ import log from 'npmlog';
 export async function createGitHubClient() {
   log.silly('createGitHubClient', '');
 
-  const { GH_TOKEN, GHE_API_URL, GHE_VERSION } = process.env;
+  const { GH_TOKEN, GITHUB_TOKEN, GHE_API_URL, GHE_VERSION } = process.env;
   const options: { auth?: string; baseUrl?: string } = {};
 
-  if (GH_TOKEN) {
-    options.auth = `token ${GH_TOKEN}`;
+  if (GH_TOKEN || GITHUB_TOKEN) {
+    options.auth = `token ${GH_TOKEN || GITHUB_TOKEN}`;
   }
 
   if (GHE_VERSION) {
