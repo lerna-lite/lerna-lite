@@ -4,6 +4,13 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [2.6.0](https://github.com/lerna-lite/lerna-lite/compare/v2.5.1...v2.6.0) (2023-10-14)
+
+### Features
+
+* add `GITHUB_TOKEN` as valid alias to `GH_TOKEN` ([#742](https://github.com/lerna-lite/lerna-lite/issues/742)) ([e31eddb](https://github.com/lerna-lite/lerna-lite/commit/e31eddb4c0ecddf1c10ec02e43da72675ddcd86c)) - by @ghiscoding
+* **version:** add `--force-conventional-graduate` to force update ([#743](https://github.com/lerna-lite/lerna-lite/issues/743)) ([d9de881](https://github.com/lerna-lite/lerna-lite/commit/d9de88154be32bd2de8c28acfda774c7e9985ffd)) - by @ghiscoding
+
 ## [2.5.1](https://github.com/lerna-lite/lerna-lite/compare/v2.5.0...v2.5.1) (2023-09-09)
 
 ### Bug Fixes

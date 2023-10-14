@@ -4,6 +4,13 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [2.6.0](https://github.com/lerna-lite/lerna-lite/compare/v2.5.1...v2.6.0) (2023-10-14)
+
+### Bug Fixes
+
+* **deps:** update all non-major dependencies ([#739](https://github.com/lerna-lite/lerna-lite/issues/739)) ([d8aeb27](https://github.com/lerna-lite/lerna-lite/commit/d8aeb27ffbd8f66822ba3c202492022a387464c1)) - by @renovate[bot]
+* **publish:** fix version conflict recognition for github packages ([#738](https://github.com/lerna-lite/lerna-lite/issues/738)) ([210eefa](https://github.com/lerna-lite/lerna-lite/commit/210eefa4d0277093f45b30074f3b588c17c04f28)) - by @petermetz
+
 ## [2.5.1](https://github.com/lerna-lite/lerna-lite/compare/v2.5.0...v2.5.1) (2023-09-09)
 
 ### Bug Fixes
