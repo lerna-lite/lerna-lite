@@ -1,4 +1,4 @@
-lockfileVersion: '6.0'
+lockfileVersion: '6.1'
 
 settings:
   autoInstallPeers: true
@@ -72,7 +72,7 @@ importers:
         specifier: ^6.7.5
         version: 6.7.5(eslint@8.51.0)(typescript@5.2.2)
       '@vitest/coverage-v8':
-        specifier: 1.0.0-beta.2
+        specifier: ^1.0.0-beta.2
         version: 1.0.0-beta.2(vitest@1.0.0-beta.2)
       conventional-changelog-conventionalcommits:
         specifier: ^6.1.0
@@ -156,7 +156,7 @@ importers:
         specifier: ^5.2.2
         version: 5.2.2
       vitest:
-        specifier: 1.0.0-beta.2
+        specifier: ^1.0.0-beta.2
         version: 1.0.0-beta.2(@types/node@20.8.6)
       write-json-file:
         specifier: ^5.0.0
