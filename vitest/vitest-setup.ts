@@ -8,7 +8,7 @@ import { expect } from 'vitest';
  * @see: https://vitest.dev/api/expect.html#expect-extend
  */
 expect.extend({
-  toBeFunction: (received) => {
+  toBeFunction: <T = any>(received: T) => {
     return {
       message: () => `expected ${received} to be typeof function`,
       pass: typeof received === 'function',
