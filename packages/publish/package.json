@@ -77,11 +77,11 @@
     "temp-dir": "^3.0.0"
   },
   "devDependencies": {
-    "@types/conventional-changelog-core": "^4.2.4",
+    "@types/conventional-changelog-core": "^4.2.5",
     "@types/conventional-recommended-bump": "^6.1.1",
-    "@types/fs-extra": "^11.0.2",
-    "@types/pify": "^5.0.2",
-    "@types/semver": "^7.5.3",
+    "@types/fs-extra": "^11.0.3",
+    "@types/pify": "^5.0.3",
+    "@types/semver": "^7.5.4",
     "load-json-file": "^7.0.1",
     "write-pkg": "^6.0.0",
     "yargs": "^17.7.2",

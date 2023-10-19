@@ -56,7 +56,7 @@
     "npm": ">=8.5.0",
     "pnpm": "8"
   },
-  "packageManager": "pnpm@8.9.0",
+  "packageManager": "pnpm@8.9.2",
   "pnpm": {
     "overrides": {
       "json5@<1.0.2": ">=1.0.2"
@@ -77,12 +77,12 @@
     "@lerna-lite/version": "workspace:*",
     "@lerna-lite/watch": "workspace:*",
     "@lerna-test/helpers": "link:helpers",
-    "@types/fs-extra": "^11.0.2",
-    "@types/node": "^20.8.6",
-    "@types/npmlog": "^4.1.4",
-    "@types/yargs": "^17.0.28",
-    "@typescript-eslint/eslint-plugin": "^6.7.5",
-    "@typescript-eslint/parser": "^6.7.5",
+    "@types/fs-extra": "^11.0.3",
+    "@types/node": "^20.8.7",
+    "@types/npmlog": "^4.1.5",
+    "@types/yargs": "^17.0.29",
+    "@typescript-eslint/eslint-plugin": "^6.8.0",
+    "@typescript-eslint/parser": "^6.8.0",
     "@vitest/coverage-v8": "^1.0.0-beta.2",
     "conventional-changelog-conventionalcommits": "^6.1.0",
     "cross-env": "^7.0.3",
