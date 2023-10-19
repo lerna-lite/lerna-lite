@@ -59,7 +59,7 @@
     "p-map": "^6.0.0"
   },
   "devDependencies": {
-    "@types/fs-extra": "^11.0.2",
+    "@types/fs-extra": "^11.0.3",
     "globby": "^13.2.2",
     "nx": "15.4.8",
     "perf_hooks": "^0.0.1",
