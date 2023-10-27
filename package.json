@@ -56,7 +56,7 @@
     "npm": ">=8.5.0",
     "pnpm": "8"
   },
-  "packageManager": "pnpm@8.9.2",
+  "packageManager": "pnpm@8.10.0",
   "pnpm": {
     "overrides": {
       "json5@<1.0.2": ">=1.0.2"
@@ -83,7 +83,7 @@
     "@types/yargs": "^17.0.29",
     "@typescript-eslint/eslint-plugin": "^6.9.0",
     "@typescript-eslint/parser": "^6.9.0",
-    "@vitest/coverage-v8": "^1.0.0-beta.2",
+    "@vitest/coverage-v8": "^1.0.0-beta.3",
     "conventional-changelog-conventionalcommits": "^6.1.0",
     "cross-env": "^7.0.3",
     "eslint": "^8.52.0",
@@ -111,7 +111,7 @@
     "tslib": "^2.6.2",
     "tsm": "^2.3.0",
     "typescript": "^5.2.2",
-    "vitest": "^1.0.0-beta.2",
+    "vitest": "^1.0.0-beta.3",
     "write-json-file": "^5.0.0"
   }
 }
