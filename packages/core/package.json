@@ -51,7 +51,7 @@
     "npm": ">=8.5.0"
   },
   "dependencies": {
-    "@npmcli/run-script": "^7.0.1",
+    "@npmcli/run-script": "^7.0.2",
     "chalk": "^5.3.0",
     "clone-deep": "^4.0.1",
     "config-chain": "^1.1.13",
