@@ -77,7 +77,7 @@ function diffSinceIn(committish: string, location: string, execOpts: ExecOpts, d
       independentSubpackages = globbySync('**/*/package.json', {
         cwd: formattedLocation,
         nodir: true,
-        ignore: '**/node_modules/**',
+        ignore: ['**/node_modules/**'],
       }).map((file) => `:^${formattedLocation}/${dirname(file)}`);
     }
 
