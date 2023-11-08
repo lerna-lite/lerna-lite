@@ -60,5 +60,5 @@
     }
   ],
   ignoreDeps: [],
-  schedule: ['on Thursday'],
+  schedule: ['every 2 weeks on Thursday'],
 }
