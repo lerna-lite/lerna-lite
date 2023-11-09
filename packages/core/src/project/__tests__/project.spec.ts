@@ -1,4 +1,3 @@
-import dedent from 'dedent';
 import { afterEach, beforeAll, describe, expect, it } from 'vitest';
 import { outputFile, remove, writeJson } from 'fs-extra/esm';
 import { basename, dirname, join, resolve as pathResolve } from 'node:path';
@@ -12,18 +11,6 @@ expect.addSnapshotSerializer({
   serialize(val, config, indentation, depth) {
     // top-level strings don't need quotes, but nested ones do (object properties, etc)
     return depth ? `"${val}"` : val;
-  },
-});
-
-// Serialize the JSONError output to be more human readable
-expect.addSnapshotSerializer({
-  serialize(str: string) {
-    // eslint-disable-next-line @typescript-eslint/no-var-requires
-    const stripAnsi = require('strip-ansi');
-    return stripAnsi(str).replace(/Error in: .*lerna\.json/, 'Error in: normalized/path/to/lerna.json');
-  },
-  test(val: string) {
-    return val != null && typeof val === 'string' && val.includes('Error in: ');
   },
 });
 
@@ -104,10 +91,7 @@ describe('Project', () => {
         })
       );
 
-      expect(() => new Project(cwd)).toThrowErrorMatchingInlineSnapshot(dedent`
-        Error in: normalized/path/to/lerna.json
-        JSON5: invalid character '2' at 2:3
-      `);
+      expect(() => new Project(cwd)).toThrow(/Error in:.*lerna\.json\sJSON5: invalid character '2' at 2:3/);
     });
 
     it('returns parsed rootPkg.lerna', async () => {
