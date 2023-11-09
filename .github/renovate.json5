@@ -27,14 +27,6 @@
       allowedVersions: '15.4.8', // newer version seems to cause problems with Vitest
     },
     {
-      packageNames: ['@octokit/rest'],
-      allowedVersions: '<20.0.0', // v20 removes Node16, so let's wait until Node16 is EOL
-    },
-    {
-      packageNames: ['multimatch'],
-      allowedVersions: '6.0.0',
-    },
-    {
       packageNames: ['conventional-changelog-angular'],
       allowedVersions: '6.0.0',
     },
@@ -57,7 +49,21 @@
     {
       packageNames: ['@types/conventional-recommended-bump'],
       allowedVersions: '6.1.1',
-    }
+    },
+
+    // Node 18 deps
+    {
+      packageNames: ['@octokit/rest'],
+      allowedVersions: '<20.0.0',
+    },
+    {
+      packageNames: [globby'],
+      allowedVersions: '<14.0.0',
+    },
+    {
+      packageNames: ['multimatch'],
+      allowedVersions: '6.0.0',
+    },
   ],
   ignoreDeps: [],
   schedule: ['every 2 weeks on Thursday'],
