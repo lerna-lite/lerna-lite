@@ -57,7 +57,7 @@
       allowedVersions: '<20.0.0',
     },
     {
-      packageNames: [globby'],
+      packageNames: ['globby'],
       allowedVersions: '<14.0.0',
     },
     {
