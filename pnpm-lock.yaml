@@ -224,8 +224,8 @@ importers:
         specifier: ^1.1.13
         version: 1.1.13
       cosmiconfig:
-        specifier: ^9.0.0-alpha.1
-        version: 9.0.0-alpha.1(typescript@5.2.2)
+        specifier: ^9.0.0-alpha.3
+        version: 9.0.0-alpha.3(typescript@5.2.2)
       dedent:
         specifier: ^1.5.1
         version: 1.5.1
@@ -2739,8 +2739,8 @@ packages:
     resolution: {integrity: sha512-ZQBvi1DcpJ4GDqanjucZ2Hj3wEO5pZDS89BWbkcrvdxksJorwUDDZamX9ldFkp9aw2lmBDLgkObEA4DWNJ9FYQ==}
     dev: false
 
-  /cosmiconfig@9.0.0-alpha.1(typescript@5.2.2):
-    resolution: {integrity: sha512-y59McVFjw5Ye2PMnBoNjlX66RIszonGnmfkGBW93CDDlpuHaMxwXtjY2pYXy0oDVIhYd+RB5p3BC7suhaiG2EQ==}
+  /cosmiconfig@9.0.0-alpha.3(typescript@5.2.2):
+    resolution: {integrity: sha512-tQkA7kUq+6FKyHMzp8tCc0otgr3tFJH0w2xlM7DdJ4Rna1PregHD0aJw+5tmO7TvUhk8hJAbapYK6F+N3NO8yg==}
     engines: {node: '>=14'}
     peerDependencies:
       typescript: '>=4.9.5'
