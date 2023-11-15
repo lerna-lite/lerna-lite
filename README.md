@@ -180,6 +180,8 @@ lerna-repo/
   lerna.json
 ```
 
+**Note** Lerna-Lite now supports 3 file extension types (`.json`, `.jsonc` and `.json5`), the last 2 can accept comments but most code editors (like VSCode) only support [JSON Schema](https://json-schema.org/) and intellisense via `.json` and `.jsonc` extensions but not with `.json5`. Also our parser is very relaxed since we parse all 3 types with `JSON5.parse` so you could in theory add comments to all 3 types, but `.jsonc` or `.json5` are still prefered when adding comments. 
+
 Note that `package-a` will not be created, it is only shown here to help clarify the structure. For more info and full details about the `lerna.json` file, you can read the [lerna.json](https://github.com/lerna-lite/lerna-lite/wiki/lerna.json) Wiki. Also note that you can optionally add comments to your `lerna.json` config file since it is also able to parse JSON5 file format.
 
 Finally install the commands that are of interest to you (`publish`, `version`, `run`, `exec`, ...)
@@ -199,6 +201,7 @@ If you are new to Lerna-Lite, you could also run the [lerna init](https://github
 ### JSON Schema
 You can add the `$schema` property into your `lerna.json` to take advantage of Lerna-Lite [JSON Schema](https://json-schema.org/) (`lerna init` can help setting it up for you). This will help with the developer experience, users will be able to see what properties are valid with their types and a brief description of what each option does (descriptions are pulled from their associated lerna command options documentation).
 
+
 ##### `lerna.json`
 ```js
 {
@@ -209,6 +212,8 @@ You can add the `$schema` property into your `lerna.json` to take advantage of L
   "$schema": "https://raw.githubusercontent.com/lerna-lite/lerna-lite/main/packages/cli/schemas/lerna-schema.json",
 }
 ```
+
+> **Note** we support 3 config file extensions (`.json`, `.jsonc` and `.json5`), however most code editors (like VSCode) do not support JSON Schema with `.json5` extension, so `.jsonc` might be preffered if you wish to add comments.
 
 ### Separate / Optional Installs
 
@@ -287,7 +292,7 @@ npm install @lerna-lite/publish -D
 
 You want to see a project demo? Sure... you're looking at it 😉
 
-Yes indeed, this project was originally created as an NPM Workspace and later migrated to a [pnpm workspaces](https://pnpm.io/workspaces) for the sole purpose of demoing and testing its own code. All changelogs and versions are created and published by the lib itself, how sweet is that? You can also see that this project has its own [`lerna.json`](https://github.com/lerna-lite/lerna-lite/blob/main/lerna.json) config file as well to run properly (take a look to see how it works).
+Yes indeed, this project was originally created as an NPM Workspace and later migrated to a [pnpm workspaces](https://pnpm.io/workspaces) for the sole purpose of demoing and testing its own code. All changelogs and versions are created and published by the lib itself, how sweet is that? You can also see that this project has its own [`lerna.jsonc`](https://github.com/lerna-lite/lerna-lite/blob/main/lerna.jsonc) config file as well to run properly (take a look to see how it works).
 
 ### See it in Action 🎦
 
