@@ -247,7 +247,7 @@ export class Project {
   }
 
   json5Loader(filepath: string, content: any) {
-    /* c8 ignore next 3 */
+    /* c8 ignore next 4 */
     if (!/.*lerna\.json[c|5]?$/gi.test(filepath)) {
       // when none of the 3x lerna config file type is found `lerna.{json,jsonc,json5}`, return default cosmiconfig json loader
       return defaultLoaders['.json'](filepath, content);
