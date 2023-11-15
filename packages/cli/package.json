@@ -14,22 +14,9 @@
   },
   "type": "module",
   "exports": {
-    ".": {
-      "import": "./dist/index.js",
-      "default": "./dist/index.js",
-      "types": "./dist/index.d.ts"
-    },
-    "./*": "./*"
+    "types": "./dist/index.d.ts",
+    "default": "./dist/index.js"
   },
-  "typesVersions": {
-    "*": {
-      "*": [
-        "./dist/index.d.ts"
-      ]
-    }
-  },
-  "types": "dist/index.d.ts",
-  "main": "dist/index.js",
   "module": "dist/index.js",
   "scripts": {
     "prebuild": "rimraf dist",
