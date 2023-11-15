@@ -38,29 +38,11 @@ export class Project {
       explorer = cosmiconfigSync('lerna', {
         loaders: {
           ...defaultLoaders,
-          '.json': (filepath, content) => {
-            /* c8 ignore next 3 */
-            if (!filepath.endsWith('lerna.json')) {
-              return defaultLoaders['.json'](filepath, content);
-            }
-            /**
-             * This prevents lerna from blowing up on trailing commas and comments in lerna configs,
-             * however it should be noted that we will not be able to respect those things whenever
-             * we perform an automated config migration, e.g. via `lerna repair` and they will be lost.
-             * (Although that will be easy enough for the user to see and updated in their `git diff`)
-             */
-            try {
-              return JSON5.parse(content);
-            } catch (err: unknown) {
-              if (err instanceof Error) {
-                err.name = 'JSONError';
-                err.message = `Error in: ${filepath}\n${err.message}`;
-              }
-              throw err;
-            }
-          },
+          '.json': this.json5Loader,
+          '.jsonc': this.json5Loader,
+          '.json5': this.json5Loader,
         },
-        searchPlaces: ['lerna.json', 'package.json'],
+        searchPlaces: ['lerna.json', 'lerna.jsonc', 'lerna.json5', 'package.json'],
         transform(obj) {
           // cosmiconfig returns null when nothing is found
           if (!obj) {
@@ -262,6 +244,30 @@ export class Project {
 
   isIndependent() {
     return this.version === 'independent';
+  }
+
+  json5Loader(filepath: string, content: any) {
+    /* c8 ignore next 4 */
+    if (!/.*lerna\.json[c|5]?$/gi.test(filepath)) {
+      // when none of the 3x lerna config file type is found `lerna.{json,jsonc,json5}`, return default cosmiconfig json loader
+      return defaultLoaders['.json'](filepath, content);
+    }
+
+    /**
+     * This prevents lerna from blowing up on trailing commas and comments in lerna configs,
+     * however it should be noted that we will not be able to respect those things whenever
+     * we perform an automated config migration, e.g. via `lerna repair` and they will be lost.
+     * (Although that will be easy enough for the user to see and updated in their `git diff`)
+     */
+    try {
+      return JSON5.parse(content);
+    } catch (err: unknown) {
+      if (err instanceof Error) {
+        err.name = 'JSONError';
+        err.message = `Error in: ${filepath}\n${err.message}`;
+      }
+      throw err;
+    }
   }
 
   serializeConfig() {

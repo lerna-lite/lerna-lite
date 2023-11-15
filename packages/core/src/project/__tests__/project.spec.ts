@@ -81,6 +81,44 @@ describe('Project', () => {
       `);
     });
 
+    it('does not error when lerna.jsonc contains trailing commas and/or comments', async () => {
+      const cwd = await initFixture('invalid-lerna-jsonc-recoverable');
+
+      expect(new Project(cwd).config).toMatchInlineSnapshot(`
+        {
+          "version": "1.0.0",
+        }
+      `);
+    });
+
+    it('can load lerna.jsonc config with comments', async () => {
+      const cwd = await initFixture('lerna-jsonc-config');
+      const project = new Project(cwd);
+
+      expect(project.config).toEqual({
+        version: '1.0.0',
+      });
+      expect(project.config).toMatchInlineSnapshot(`
+        {
+          "version": "1.0.0",
+        }
+      `);
+    });
+
+    it('can load lerna.json5 config with trailing commas and/or comments', async () => {
+      const cwd = await initFixture('lerna-json5-config');
+      const project = new Project(cwd);
+
+      expect(project.config).toEqual({
+        version: '1.0.0',
+      });
+      expect(project.config).toMatchInlineSnapshot(`
+        {
+          "version": "1.0.0",
+        }
+      `);
+    });
+
     it('errors when lerna.json is irrecoverably invalid JSON', async () => {
       const cwd = await initFixture('invalid-lerna-json-irrecoverable');
 
