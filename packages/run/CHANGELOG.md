@@ -4,6 +4,12 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## 2.7.0 (2023-11-16)
+
+### Features
+
+* **core:** add (`.jsonc`, `.json5`) support to Lerna-Lite config ([#760](https://github.com/lerna-lite/lerna-lite/issues/760)) ([311c297](https://github.com/lerna-lite/lerna-lite/commit/311c2978f16648db3a041493c2b0be9b1f031a94)) - by @ghiscoding
+
 ## [2.6.0](https://github.com/lerna-lite/lerna-lite/compare/v2.5.1...v2.6.0) (2023-10-14)
 
 **Note:** Version bump only for package @lerna-lite/run

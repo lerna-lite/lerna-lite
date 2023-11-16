@@ -1,7 +1,7 @@
 {
   "name": "@lerna-lite/exec",
   "description": "Lerna-Lite Exec command will execute an arbitrary command in each package",
-  "version": "2.6.0",
+  "version": "2.7.0",
   "files": [
     "/dist"
   ],
