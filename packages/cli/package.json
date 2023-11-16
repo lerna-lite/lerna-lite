@@ -17,7 +17,6 @@
     "types": "./dist/index.d.ts",
     "default": "./dist/index.js"
   },
-  "module": "dist/index.js",
   "scripts": {
     "prebuild": "rimraf dist",
     "build": "tsc",
