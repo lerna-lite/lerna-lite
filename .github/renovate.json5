@@ -64,6 +64,10 @@
       packageNames: ['multimatch'],
       allowedVersions: '6.0.0',
     },
+    {
+      packageNames: ['find-up'],
+      allowedVersions: '<7.0.0',
+    },
   ],
   ignoreDeps: [],
   schedule: ['every 2 weeks on Thursday'],
