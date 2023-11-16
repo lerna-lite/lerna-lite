@@ -60,4 +60,4 @@ jobs:
           git config --global user.name "${{ github.actor }}"
           git config --global user.email "users.noreply.github.com"
           pnpm whoami
-          pnpm run list-cmd
+          pnpm run local-list
