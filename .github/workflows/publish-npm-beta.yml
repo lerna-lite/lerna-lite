@@ -55,7 +55,7 @@ jobs:
       - name: Lerna Version 🏷️
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          NODE_AUTH_TOKEN: ${{ secrets.NPM_AUTH_TOKEN }}
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
         run: |
           git config --global user.name "${{ github.actor }}"
           git config --global user.email "users.noreply.github.com"
@@ -74,6 +74,6 @@ jobs:
       - name: Lerna Publish 📦
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          NODE_AUTH_TOKEN: ${{ secrets.NPM_AUTH_TOKEN }}
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
         run: |
           pnpm run ci:publish:beta --otp ${{ steps.wait-for-secrets.outputs.OTP }}
