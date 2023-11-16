@@ -1,4 +1,4 @@
-name: 🏷️ Publish NPM Latest
+name: 🏷️ Lerna-Lite list
 
 on: workflow_dispatch
 
