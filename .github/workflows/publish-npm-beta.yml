@@ -49,6 +49,9 @@ jobs:
       - name: Run pnpm install dependencies
         run: pnpm install
 
+      - name: Run all workspace TSC builds
+        run: pnpm build:full
+
       - name: Lerna Version 🏷️
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
