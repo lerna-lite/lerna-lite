@@ -23,7 +23,7 @@ jobs:
         shell: bash
         run: echo "START_TIME=$(TZ=":America/New_York" date -R|sed 's/.....$//')" >> $GITHUB_ENV
 
-      - name: Current date - ${{ env.START_TIME }}
+      - name: Current datetime - ${{ env.START_TIME }}
         run: echo ${{ env.START_TIME }}
 
       - name: Checkout
@@ -71,6 +71,13 @@ jobs:
     if: ${{ !startsWith(github.event.head_commit.message, 'docs:') }}
 
     steps:
+      - name: Retrieve current Date Time in EST
+        shell: bash
+        run: echo "START_TIME=$(TZ=":America/New_York" date -R|sed 's/.....$//')" >> $GITHUB_ENV
+
+      - name: Current datetime - ${{ env.START_TIME }}
+        run: echo ${{ env.START_TIME }}
+        
       - name: Checkout
         uses: actions/checkout@v4
         with:
