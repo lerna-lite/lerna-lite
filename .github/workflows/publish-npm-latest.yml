@@ -15,7 +15,7 @@ jobs:
         shell: bash
         run: echo "START_TIME=$(TZ=":America/New_York" date -R|sed 's/.....$//')" >> $GITHUB_ENV
 
-      - name: Echo date
+      - name: Current datetime - ${{ env.START_TIME }}
         run: echo ${{ env.START_TIME }}
 
       - name: Clone repository
