@@ -9,7 +9,10 @@ export class GetChangelogConfig {
   static cfgCache = new Map<string, any>();
 
   static isFunction(config: ChangelogConfig) {
-    return Object.prototype.toString.call(config) === '[object Function]';
+    return (
+      Object.prototype.toString.call(config) === '[object Function]' ||
+      Object.prototype.toString.call(config) === '[object AsyncFunction]'
+    );
   }
 
   static async resolveConfigPromise(presetPackageName: string, presetConfig: ChangelogPresetConfig): Promise<ChangelogConfig> {

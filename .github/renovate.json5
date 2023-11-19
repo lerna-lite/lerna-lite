@@ -26,30 +26,6 @@
       packageNames: ['nx'],
       allowedVersions: '15.4.8', // newer version seems to cause problems with Vitest
     },
-    {
-      packageNames: ['conventional-changelog-angular'],
-      allowedVersions: '6.0.0',
-    },
-    {
-      packageNames: ['conventional-changelog-core'],
-      allowedVersions: '5.0.2',
-    },
-    {
-      packageNames: ['conventional-changelog-writer'],
-      allowedVersions: '6.0.1',
-    },
-    {
-      packageNames: ['conventional-changelog-conventionalcommits'],
-      allowedVersions: '6.1.0',
-    },
-    {
-      packageNames: ['conventional-recommended-bump'],
-      allowedVersions: '7.0.1',
-    },
-    {
-      packageNames: ['@types/conventional-recommended-bump'],
-      allowedVersions: '6.1.1',
-    },
 
     // Node 18 deps
     {
@@ -69,6 +45,11 @@
       allowedVersions: '<7.0.0',
     },
   ],
-  ignoreDeps: [],
+  ignoreDeps: [
+    'conventional-changelog-core',
+    'conventional-changelog-writer',
+    'conventional-changelog-conventionalcommits',
+    'conventional-recommended-bump',
+  ],
   schedule: ['every 2 weeks on Thursday'],
 }
