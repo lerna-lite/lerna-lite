@@ -5,7 +5,11 @@
   "main": "index.js",
   "type": "module",
   "exports": {
-    "default": "./index.js"
+    ".": {
+      "import": "./index.js",
+      "default": "./index.js"
+    },
+    "./*": "./*"
   },
   "private": true,
   "license": "MIT"
