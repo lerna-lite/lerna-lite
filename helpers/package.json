@@ -4,6 +4,9 @@
   "description": "Private test helpers for the lerna-lite monorepo",
   "main": "index.js",
   "type": "module",
+  "exports": {
+    "default": "./index.js"
+  },
   "private": true,
   "license": "MIT"
 }

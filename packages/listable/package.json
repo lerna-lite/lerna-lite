@@ -5,10 +5,18 @@
   "files": [
     "/dist"
   ],
+  "type": "module",
   "publishConfig": {
     "access": "public"
   },
-  "type": "module",
+  "types": "index.d.ts",
+  "typesVersions": {
+    ">=4.2": {
+      "*": [
+        "./dist/index.d.ts"
+      ]
+    }
+  },
   "exports": {
     "types": "./dist/index.d.ts",
     "default": "./dist/index.js"
