@@ -4,6 +4,12 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## 2.7.1 (2023-11-19)
+
+### Bug Fixes
+
+* support changelog-presets using async factory funcs ([#766](https://github.com/lerna-lite/lerna-lite/issues/766)) ([77c293f](https://github.com/lerna-lite/lerna-lite/commit/77c293f46cf6a8eacf4e2d2d4626e48471e82fc3)) - by @ghiscoding
+
 ## 2.7.0 (2023-11-16)
 
 ### Features
