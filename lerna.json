@@ -1,13 +1,15 @@
 {
   "$schema": "node_modules/@lerna-lite/cli/schemas/lerna-schema.json",
-  // or from a CDN:: "$schema": "https://raw.githubusercontent.com/lerna-lite/lerna-lite/main/packages/cli/schemas/lerna-schema.json",
-  "version": "2.7.1",
+  "version": "2.7.2",
   "loglevel": "verbose",
   "npmClient": "pnpm",
   "command": {
     "publish": {
       "cleanupTempFiles": true,
-      "removePackageFields": ["devDependencies", "scripts"]
+      "removePackageFields": [
+        "devDependencies",
+        "scripts"
+      ]
     },
     "version": {
       "conventionalCommits": true,
@@ -18,6 +20,13 @@
     }
   },
   "changelogPreset": "conventional-changelog-conventionalcommits",
-  "ignoreChanges": ["**/__fixtures__/**", "**/__tests__/**", "**/helpers/**", "**/*.md"],
-  "packages": ["packages/*"]
+  "ignoreChanges": [
+    "**/__fixtures__/**",
+    "**/__tests__/**",
+    "**/helpers/**",
+    "**/*.md"
+  ],
+  "packages": [
+    "packages/*"
+  ]
 }

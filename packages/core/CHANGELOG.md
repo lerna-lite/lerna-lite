@@ -4,6 +4,12 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [2.7.2](https://github.com/lerna-lite/lerna-lite/compare/v2.7.1...v2.7.2) (2023-11-20)
+
+### Bug Fixes
+
+* **version:** writing to lerna.json5 should keep json5 format ([#768](https://github.com/lerna-lite/lerna-lite/issues/768)) ([fd66852](https://github.com/lerna-lite/lerna-lite/commit/fd66852ea3ec40b51070e76f25aca4e7d6c99e88)) - by @ghiscoding
+
 ## 2.7.1 (2023-11-19)
 
 **Note:** Version bump only for package @lerna-lite/core
