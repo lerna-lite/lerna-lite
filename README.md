@@ -292,7 +292,7 @@ npm install @lerna-lite/publish -D
 
 You want to see a project demo? Sure... you're looking at it 😉
 
-Yes indeed, this project was originally created as an NPM Workspace and later migrated to a [pnpm workspaces](https://pnpm.io/workspaces) for the sole purpose of demoing and testing its own code. All changelogs and versions are created and published by the lib itself, how sweet is that? You can also see that this project has its own [`lerna.jsonc`](https://github.com/lerna-lite/lerna-lite/blob/main/lerna.jsonc) config file as well to run properly (take a look to see how it works).
+Yes indeed, this project was originally created as an NPM Workspace and later migrated to a [pnpm workspaces](https://pnpm.io/workspaces) for the sole purpose of demoing and testing its own code. All changelogs and versions are created and published by the lib itself, how sweet is that? You can also see that this project has its own [`lerna.json`](https://github.com/lerna-lite/lerna-lite/blob/main/lerna.json) config file as well to run properly (take a look to see how it works).
 
 ### See it in Action 🎦
 
