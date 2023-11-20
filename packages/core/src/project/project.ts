@@ -4,6 +4,7 @@ import { globbySync } from 'globby';
 import globParent from 'glob-parent';
 import JSON5 from 'json5';
 import log from 'npmlog';
+import { writeFileSync } from 'node:fs';
 import { basename, dirname, join, normalize, resolve as pathResolve } from 'node:path';
 import pMap from 'p-map';
 import { loadJsonFile, loadJsonFileSync } from 'load-json-file';
@@ -270,11 +271,20 @@ export class Project {
     }
   }
 
-  serializeConfig() {
-    // TODO: might be package.json prop
-    return writeJsonFile(this.rootConfigLocation, this.config, { indent: 2, detectIndent: true }).then(
-      () => this.rootConfigLocation
-    );
+  serializeConfig(): Promise<string> {
+    if (this.rootConfigLocation.endsWith('lerna.json5')) {
+      // for .json5, we must use JSON stringify method then save as regular text file
+      return new Promise((resolve) => {
+        writeFileSync(this.rootConfigLocation, JSON5.stringify(this.config, { space: 2 }));
+        resolve(this.rootConfigLocation);
+      });
+    } else {
+      // TODO: might be package.json prop
+      // for .json/.jsonc we can use `write-json-file` lib
+      return writeJsonFile(this.rootConfigLocation, this.config, { indent: 2, detectIndent: true }).then(
+        () => this.rootConfigLocation
+      );
+    }
   }
 }
 
