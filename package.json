@@ -69,7 +69,7 @@
   },
   "devDependencies": {
     "@lerna-lite/changed": "workspace:*",
-    "@lerna-lite/cli": "^workspace:*",
+    "@lerna-lite/cli": "workspace:*",
     "@lerna-lite/core": "workspace:*",
     "@lerna-lite/diff": "workspace:*",
     "@lerna-lite/exec": "workspace:*",
