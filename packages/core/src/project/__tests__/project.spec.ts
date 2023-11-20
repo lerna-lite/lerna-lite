@@ -1,7 +1,10 @@
-import { afterEach, beforeAll, describe, expect, it } from 'vitest';
+import { afterEach, beforeAll, describe, expect, it, vi } from 'vitest';
 import { outputFile, remove, writeJson } from 'fs-extra/esm';
 import { basename, dirname, join, resolve as pathResolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
+
+vi.mock('node:fs');
+import { writeFileSync } from 'node:fs';
 
 // remove quotes around top-level strings
 expect.addSnapshotSerializer({
@@ -117,6 +120,14 @@ describe('Project', () => {
           "version": "1.0.0",
         }
       `);
+    });
+
+    it('can write to lerna.json5 config as json5 format', async () => {
+      const cwd = await initFixture('lerna-json5-config');
+      const project = new Project(cwd);
+
+      project.serializeConfig();
+      expect(writeFileSync).toHaveBeenCalledWith(expect.stringContaining('lerna.json5'), expect.stringContaining(`version: '1.0.0'`));
     });
 
     it('errors when lerna.json is irrecoverably invalid JSON', async () => {
