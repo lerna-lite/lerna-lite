@@ -1,10 +1,12 @@
-import { afterEach, beforeAll, describe, expect, it, vi } from 'vitest';
+import { afterEach, beforeAll, describe, expect, it, Mock, vi } from 'vitest';
 import { outputFile, remove, writeJson } from 'fs-extra/esm';
 import { basename, dirname, join, resolve as pathResolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
 
+vi.mock('write-json-file');
 vi.mock('node:fs');
 import { writeFileSync } from 'node:fs';
+import { writeJsonFile } from 'write-json-file';
 
 // remove quotes around top-level strings
 expect.addSnapshotSerializer({
@@ -120,6 +122,22 @@ describe('Project', () => {
           "version": "1.0.0",
         }
       `);
+    });
+
+    it('can write to lerna.jsonc config as json format', async () => {
+      (writeJsonFile as Mock).mockResolvedValue({});
+      const cwd = await initFixture('lerna-jsonc-config');
+      const project = new Project(cwd);
+
+      project.serializeConfig();
+      expect(writeJsonFile).toHaveBeenCalledWith(
+        expect.stringContaining('lerna.jsonc'),
+        { version: '1.0.0' },
+        {
+          indent: 2,
+          detectIndent: true,
+        }
+      );
     });
 
     it('can write to lerna.json5 config as json5 format', async () => {
