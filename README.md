@@ -180,7 +180,7 @@ lerna-repo/
   lerna.json
 ```
 
-**Note** Lerna-Lite now supports 3 file extension types (`.json`, `.jsonc` and `.json5`), the last 2 can accept comments but most code editors (like VSCode) only support [JSON Schema](https://json-schema.org/) and intellisense via `.json` and `.jsonc` extensions but not with `.json5`. Also our parser is very relaxed since we parse all 3 types with `JSON5.parse` so you could in theory add comments to all 3 types, but `.jsonc` or `.json5` are still prefered when adding comments. 
+**Note** Lerna-Lite now supports 3 file extension types (`.json`, `.jsonc` and `.json5`), however not all code editors support [JSON Schema](https://json-schema.org/) with `.json5`, so `lerna.json` might still be the preferred config. 
 
 Note that `package-a` will not be created, it is only shown here to help clarify the structure. For more info and full details about the `lerna.json` file, you can read the [lerna.json](https://github.com/lerna-lite/lerna-lite/wiki/lerna.json) Wiki. Also note that you can optionally add comments to your `lerna.json` config file since it is also able to parse JSON5 file format.
 
@@ -213,7 +213,7 @@ You can add the `$schema` property into your `lerna.json` to take advantage of L
 }
 ```
 
-> **Note** we support 3 config file extensions (`.json`, `.jsonc` and `.json5`), however most code editors (like VSCode) do not support JSON Schema with `.json5` extension, so `.jsonc` might be preffered if you wish to add comments.
+> **Note** JSON Schema might not be well supported by all code editors with `.json5`, use `lerna.json` if that is a problem for you.
 
 ### Separate / Optional Installs
 
