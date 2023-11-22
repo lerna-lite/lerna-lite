@@ -7,6 +7,12 @@ on:
         description: 'Fixed Version'
         required: true
         type: string
+      tag:
+        type: choice
+        description: Tag
+        options:
+          - latest
+          - beta
 
 permissions:
   contents: write
@@ -65,7 +71,8 @@ jobs:
       - name: Run all workspace TSC builds
         run: pnpm build:full
 
-      - name: Lerna Version 🏷️
+      - name: Lerna Version (latest) 🏷️
+        if: ${{ contains(inputs.tag, 'latest') }}
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
@@ -74,6 +81,17 @@ jobs:
           git config --global user.email "${{ github.actor }}@users.noreply.github.com"
           pnpm whoami
           pnpm run ci:version ${{ inputs.version }}
+
+      - name: Lerna Version (beta) 🏷️
+        if: ${{ contains(inputs.tag, 'beta') }}
+        env: 
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+        run: |
+          git config --global user.name "${{ github.actor }}"
+          git config --global user.email "${{ github.actor }}@users.noreply.github.com"
+          pnpm whoami
+          pnpm run lerna -- version prerelease --conventional-commits --conventional-prerelease --preid beta --force-publish --yes
 
       - name: OTP
         uses: step-security/wait-for-secrets@v1
