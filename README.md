@@ -164,10 +164,10 @@ $ npm install -g @lerna-lite/cli # pnpm add -g @lerna-lite/cli
 # create your monorepo and initialize lerna-lite
 $ mkdir lerna-repo
 $ cd lerna-repo
-$ lerna init
+$ npx lerna init # OR pnpm exec lerna init
 
 # for npm/yarn (only) workspaces add --use-workspaces
-$ lerna init --use-workspaces
+$ npx lerna init --use-workspaces
 ```
 
 This will create a `lerna.json` configuration file as well as a `packages` folder, so your folder should now look like this:
