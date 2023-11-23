@@ -80,18 +80,19 @@ jobs:
           git config --global user.name "${{ github.actor }}"
           git config --global user.email "${{ github.actor }}@users.noreply.github.com"
           pnpm whoami
-          pnpm run ci:version ${{ inputs.version }}
+          pnpm exec lerna version ${{ inputs.version }} --yes
 
       - name: Lerna Version (beta) 🏷️
         if: ${{ contains(inputs.tag, 'beta') }}
-        env: 
+        env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+          NPM_CONFIG_PROVENANCE: true
         run: |
           git config --global user.name "${{ github.actor }}"
           git config --global user.email "${{ github.actor }}@users.noreply.github.com"
           pnpm whoami
-          pnpm run lerna -- version prerelease --conventional-commits --conventional-prerelease --preid beta --force-publish --yes
+          pnpm exec lerna version prerelease --conventional-commits --conventional-prerelease --preid beta --force-publish --yes
 
       - name: OTP
         uses: step-security/wait-for-secrets@v1
@@ -106,5 +107,6 @@ jobs:
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+          NPM_CONFIG_PROVENANCE: true
         run: |
-          pnpm run ci:publish --otp ${{ steps.wait-for-secrets.outputs.OTP }}
+          pnpm exec lerna publish from-package --force-publish --yes --otp ${{ steps.wait-for-secrets.outputs.OTP }}

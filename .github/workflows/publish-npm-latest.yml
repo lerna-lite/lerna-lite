@@ -1,6 +1,12 @@
 name: 🏷️ Publish NPM Latest
 
-on: workflow_dispatch
+on:
+  workflow_dispatch:
+    inputs:
+      graduate:
+        type: boolean
+        required: false
+        description: Force Conventional Graduate
 
 permissions:
   contents: write
@@ -59,15 +65,29 @@ jobs:
       - name: Run all workspace TSC builds
         run: pnpm build:full
 
-      - name: Lerna Version 🏷️
+      - name: Lerna Version (no graduate) 🏷️
+        if: ${{ inputs.graduate == false }}
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+          NPM_CONFIG_PROVENANCE: true
         run: |
           git config --global user.name "${{ github.actor }}"
           git config --global user.email "${{ github.actor }}@users.noreply.github.com"
           pnpm whoami
-          pnpm run ci:version
+          pnpm exec lerna version --yes
+
+      - name: Lerna Version (force graduate) 🏷️
+        if: ${{ inputs.graduate == true }}
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+          NPM_CONFIG_PROVENANCE: true
+        run: |
+          git config --global user.name "${{ github.actor }}"
+          git config --global user.email "${{ github.actor }}@users.noreply.github.com"
+          pnpm whoami
+          pnpm exec lerna version --conventional-commits --conventional-graduate --yes
 
       - name: OTP
         uses: step-security/wait-for-secrets@v1
@@ -82,5 +102,6 @@ jobs:
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+          NPM_CONFIG_PROVENANCE: true
         run: |
-          pnpm run ci:publish --otp ${{ steps.wait-for-secrets.outputs.OTP }}
+          pnpm exec lerna publish from-package --force-publish --yes --otp ${{ steps.wait-for-secrets.outputs.OTP }}
