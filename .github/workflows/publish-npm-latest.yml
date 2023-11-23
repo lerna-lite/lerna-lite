@@ -75,7 +75,7 @@ jobs:
           git config --global user.name "${{ github.actor }}"
           git config --global user.email "${{ github.actor }}@users.noreply.github.com"
           pnpm whoami
-          pnpm exec lerna version --yes
+          pnpm run local-lerna version --yes
 
       - name: Lerna Version (force graduate) 🏷️
         if: ${{ inputs.graduate == true }}
@@ -87,7 +87,7 @@ jobs:
           git config --global user.name "${{ github.actor }}"
           git config --global user.email "${{ github.actor }}@users.noreply.github.com"
           pnpm whoami
-          pnpm exec lerna version --conventional-commits --conventional-graduate --yes
+          pnpm run local-lerna version --conventional-commits --conventional-graduate --yes
 
       - name: OTP
         uses: step-security/wait-for-secrets@v1
@@ -104,4 +104,4 @@ jobs:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
           NPM_CONFIG_PROVENANCE: true
         run: |
-          pnpm exec lerna publish from-package --force-publish --yes --otp ${{ steps.wait-for-secrets.outputs.OTP }}
+          pnpm run local-lerna publish from-package --force-publish --yes --otp ${{ steps.wait-for-secrets.outputs.OTP }}

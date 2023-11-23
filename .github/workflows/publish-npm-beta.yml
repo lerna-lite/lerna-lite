@@ -68,7 +68,7 @@ jobs:
           git config --global user.name "${{ github.actor }}"
           git config --global user.email "${{ github.actor }}@users.noreply.github.com"
           pnpm whoami
-          pnpm exec lerna version prerelease --conventional-commits --conventional-prerelease --preid beta --force-publish --yes
+          pnpm run local-lerna version prerelease --conventional-commits --conventional-prerelease --preid beta --force-publish --yes
 
       - name: OTP
         uses: step-security/wait-for-secrets@v1
@@ -85,4 +85,4 @@ jobs:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
           NPM_CONFIG_PROVENANCE: true
         run: |
-          pnpm exec lerna publish from-package --force-publish --dist-tag next --yes --otp ${{ steps.wait-for-secrets.outputs.OTP }}
+          pnpm run local-lerna publish from-package --force-publish --dist-tag next --yes --otp ${{ steps.wait-for-secrets.outputs.OTP }}
