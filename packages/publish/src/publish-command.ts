@@ -258,7 +258,7 @@ export class PublishCommand extends Command<PublishCommandOption> {
   }
 
   async execute() {
-    const logPrefix = this.options.dryRun ? chalk.bgMagenta('[dry-run] ') : '';
+    const logPrefix = this.options.dryRun ? chalk.bgMagenta('[dry-run]') : '';
     this.enableProgressBar();
     this.logger.info('publish', `Publishing packages to npm... ${logPrefix}`);
 
