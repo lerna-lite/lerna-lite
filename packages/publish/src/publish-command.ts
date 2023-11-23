@@ -258,8 +258,9 @@ export class PublishCommand extends Command<PublishCommandOption> {
   }
 
   async execute() {
+    const logPrefix = this.options.dryRun ? chalk.bgMagenta('[dry-run]') : '';
     this.enableProgressBar();
-    this.logger.info('publish', 'Publishing packages to npm...');
+    this.logger.info('publish', `Publishing packages to npm... ${logPrefix}`);
 
     await this.prepareRegistryActions();
     await this.prepareLicenseActions();
@@ -299,7 +300,7 @@ export class PublishCommand extends Command<PublishCommandOption> {
       return;
     }
 
-    logOutput('Successfully published:');
+    logOutput(`Successfully published: ${logPrefix}`);
 
     if (this.options.summaryFile !== undefined) {
       // create a json object and output it to a file location.
@@ -334,7 +335,7 @@ export class PublishCommand extends Command<PublishCommandOption> {
       });
     }
 
-    this.logger.success('published', '%d %s', count, count === 1 ? 'package' : 'packages');
+    this.logger.success('published', `%d %s ${logPrefix}`, count, count === 1 ? 'package' : 'packages');
 
     if (this.uniqueProvenanceUrls.size > 0) {
       logOutput('The following provenance transparency log entries were created during publishing:');
@@ -529,11 +530,12 @@ export class PublishCommand extends Command<PublishCommandOption> {
   }
 
   confirmPublish() {
+    const logPrefix = this.options.dryRun ? chalk.bgMagenta('[dry-run]') : '';
     const count = this.packagesToPublish?.length;
     const message = this.packagesToPublish?.map((pkg) => ` - ${pkg.name} => ${this.updatesVersions?.get(pkg.name)}`) ?? [];
 
     logOutput('');
-    logOutput(`Found ${count} ${count === 1 ? 'package' : 'packages'} to publish:`);
+    logOutput(`Found ${count} ${count === 1 ? 'package' : 'packages'} to publish: ${logPrefix}`);
     logOutput(message.join(EOL));
     logOutput('');
 
