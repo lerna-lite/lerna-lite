@@ -9,7 +9,7 @@ import { Tarball } from '../models/index.js';
 
 export function logPacked(pkg: Package & { packed: Tarball }, dryRun = false) {
   const tarball = pkg.packed;
-  log.notice('', dryRun ? chalk.bgMagenta('[dry-run] ') : '');
+  log.notice('', dryRun ? chalk.bgMagenta('[dry-run]') : '');
   log.notice('', `${hasUnicode() ? '📦 ' : 'package:'} ${tarball.name}@${tarball.version}`);
 
   if (tarball.files && tarball.files.length) {
