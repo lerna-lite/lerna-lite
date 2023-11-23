@@ -75,7 +75,7 @@ jobs:
           git config --global user.name "${{ github.actor }}"
           git config --global user.email "${{ github.actor }}@users.noreply.github.com"
           pnpm whoami
-          pnpm exec lerna version --yes --dry-run
+          node ./packages/cli/dist/cli.js version --yes --dry-run
 
       - name: "[dry-run] 🧪 Lerna Version (force graduate) 🏷️"
         if: ${{ inputs.graduate == true }}
@@ -87,7 +87,7 @@ jobs:
           git config --global user.name "${{ github.actor }}"
           git config --global user.email "${{ github.actor }}@users.noreply.github.com"
           pnpm whoami
-          pnpm exec lerna version --conventional-commits --conventional-graduate --yes --dry-run
+          node ./packages/cli/dist/cli.js version --conventional-commits --conventional-graduate --yes --dry-run
 
       - name: "[dry-run] 🧪 Lerna Publish 📦"
         env:
@@ -95,4 +95,4 @@ jobs:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
           NPM_CONFIG_PROVENANCE: true
         run: |
-          pnpm exec lerna publish from-package --force-publish --yes --dry-run
+          node ./packages/cli/dist/cli.js publish from-package --force-publish --yes --dry-run
