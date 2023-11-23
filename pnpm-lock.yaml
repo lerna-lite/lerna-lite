@@ -60,8 +60,8 @@ importers:
         specifier: ^20.9.4
         version: 20.9.4
       '@types/npmlog':
-        specifier: ^4.1.6
-        version: 4.1.6
+        specifier: ^7.0.0
+        version: 7.0.0
       '@types/yargs':
         specifier: ^17.0.32
         version: 17.0.32
@@ -1889,8 +1889,8 @@ packages:
     resolution: {integrity: sha512-vDgdbMy2QXHnAruzlv68pUtXCjmqUk3WrBAsRboRovsOmxbfn/WiYCjmecyKjGztnMps5dWp4Uq2prp+Ilo17Q==}
     dev: true
 
-  /@types/npmlog@4.1.6:
-    resolution: {integrity: sha512-0l3z16vnlJGl2Mi/rgJFrdwfLZ4jfNYgE6ZShEpjqhHuGTqdEzNles03NpYHwUMVYZa+Tj46UxKIEpE78lQ3DQ==}
+  /@types/npmlog@7.0.0:
+    resolution: {integrity: sha512-hJWbrKFvxKyWwSUXjZMYTINsSOY6IclhvGOZ97M8ac2tmR9hMwmTnYaMdpGhvju9ctWLTPhCS+eLfQNluiEjQQ==}
     dependencies:
       '@types/node': 20.9.4
     dev: true
