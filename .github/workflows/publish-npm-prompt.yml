@@ -33,7 +33,7 @@ jobs:
       - name: Clone repository
         uses: actions/checkout@v4
         with:
-          fetch-depth: 3
+          fetch-depth: 0
           token: ${{ secrets.GITHUB_TOKEN }}
 
       - if: ${{ github.event.pull_request.merged != true && contains('["ghiscoding"]', github.actor) != true }}
