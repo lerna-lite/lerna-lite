@@ -676,6 +676,9 @@
             "tagVersionPrefix": {
               "$ref": "#/$defs/commandOptions/version/tagVersionPrefix"
             },
+            "premajorVersionBump": {
+              "$ref": "#/$defs/commandOptions/version/premajorVersionBump"
+            },
 
             "npmClient": {
               "$ref": "#/$defs/globals/npmClient"
@@ -1002,6 +1005,9 @@
     },
     "tagVersionPrefix": {
       "$ref": "#/$defs/commandOptions/version/tagVersionPrefix"
+    },
+    "premajorVersionBump": {
+      "$ref": "#/$defs/commandOptions/version/premajorVersionBump"
     },
 
     "registry": {
@@ -1407,6 +1413,11 @@
         "tagVersionPrefix": {
           "type": "string",
           "description": "During `lerna version`, customize the tag prefix. To remove entirely, pass an empty string."
+        },
+        "premajorVersionBump": {
+          "type": "string",
+          "description": "During `lerna version`, with 'force-patch', ensure premajor version releases are bumped as patch for non-breaking changes.",
+          "enum": ["default", "force-patch"]
         }
       },
       "watch": {

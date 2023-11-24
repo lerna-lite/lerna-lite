@@ -301,6 +301,14 @@ export interface VersionCommandOption {
   /** Additional arguments to pass to the npm client when performing 'npm install'. */
   npmClientArgs?: string[];
 
+  /**
+   * This option allows you to control how lerna handles bumping versions for packages with a
+   * `premajor` version (packages that have not had a major release, e.g. `"version": "0.2.4"`)
+   * when non-breaking changes are detected.
+   * Breaking changes in `premajor` packages will always trigger a `minor` bump.
+   */
+  premajorVersionBump?: 'default' | 'force-patch';
+
   /** @deprecated @alias `skipBumpOnlyReleases` renamed previous flag from `skipBumpOnlyRelease` to `skipBumpOnlyReleases`. */
   skipBumpOnlyRelease?: boolean;
 
