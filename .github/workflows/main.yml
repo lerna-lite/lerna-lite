@@ -63,7 +63,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        node: [16, 18, 20]
+        node: [18, 20, 21]
         platform: [ubuntu-latest]
 
     name: 'Run on Ubuntu / Node${{ matrix.node }}'
@@ -77,7 +77,7 @@ jobs:
 
       - name: Current datetime - ${{ env.START_TIME }}
         run: echo ${{ env.START_TIME }}
-        
+
       - name: Checkout
         uses: actions/checkout@v4
         with:
