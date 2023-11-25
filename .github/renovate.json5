@@ -19,26 +19,8 @@
       allowedVersions: '18.0.0',
     },
     {
-      packageNames: ['nx'],
-      allowedVersions: '15.4.8', // newer version seems to cause problems with Vitest
-    },
-
-    // Node 18 deps
-    {
-      packageNames: ['@octokit/rest'],
-      allowedVersions: '<20.0.0',
-    },
-    {
-      packageNames: ['globby'],
-      allowedVersions: '<14.0.0',
-    },
-    {
       packageNames: ['multimatch'],
       allowedVersions: '6.0.0',
-    },
-    {
-      packageNames: ['find-up'],
-      allowedVersions: '<7.0.0',
     },
   ],
   ignoreDeps: [

@@ -53,7 +53,7 @@
   },
   "devDependencies": {
     "@types/fs-extra": "^11.0.4",
-    "globby": "^13.2.2",
+    "globby": "^14.0.0",
     "perf_hooks": "^0.0.1",
     "yargs": "^17.7.2",
     "yargs-parser": "^21.1.1"
