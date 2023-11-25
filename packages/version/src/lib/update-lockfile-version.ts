@@ -5,7 +5,7 @@ import { join } from 'node:path';
 import log from 'npmlog';
 import semver from 'semver';
 import { writeJsonFile } from 'write-json-file';
-import { exec, execSync, Package } from '@lerna-lite/core';
+import { execPackageManager, execPackageManagerSync, Package } from '@lerna-lite/core';
 
 /**
  * From a folder path provided, try to load a `package-lock.json` file if it exists.
@@ -139,16 +139,22 @@ export async function runInstallLockFileOnly(
       inputLockfileName = 'pnpm-lock.yaml';
       if (await validateFileExists(join(cwd, inputLockfileName))) {
         log.verbose('lock', `updating lock file via "pnpm install --lockfile-only --ignore-scripts"`);
-        await exec('pnpm', ['install', '--lockfile-only', '--ignore-scripts', ...npmClientArgs], { cwd });
+        await execPackageManager('pnpm', ['install', '--lockfile-only', '--ignore-scripts', ...npmClientArgs], { cwd });
         outputLockfileName = inputLockfileName;
       }
       break;
     case 'yarn':
       inputLockfileName = 'yarn.lock';
-      const yarnVersion = execSync('yarn', ['--version']);
+      const yarnVersion = execPackageManagerSync('yarn', ['--version']);
       if (semver.gte(yarnVersion, '2.0.0') && (await validateFileExists(join(cwd, inputLockfileName)))) {
         log.verbose('lock', `updating lock file via "yarn install --mode update-lockfile"`);
-        await exec('yarn', ['install', '--mode', 'update-lockfile', ...npmClientArgs], { cwd });
+        await execPackageManager('yarn', ['install', '--mode', 'update-lockfile', ...npmClientArgs], {
+          cwd,
+          env: {
+            ...process.env,
+            YARN_ENABLE_SCRIPTS: 'false',
+          },
+        });
         outputLockfileName = inputLockfileName;
       }
       break;
@@ -156,13 +162,13 @@ export async function runInstallLockFileOnly(
     default:
       inputLockfileName = 'package-lock.json';
       if (await validateFileExists(join(cwd, inputLockfileName))) {
-        const localNpmVersion = execSync('npm', ['--version']);
+        const localNpmVersion = execPackageManagerSync('npm', ['--version']);
         log.silly(`npm`, `current local npm version is "${localNpmVersion}"`);
 
         // with npm version >=8.5.0, we can simply call "npm install --package-lock-only"
         if (semver.gte(localNpmVersion, '8.5.0')) {
           log.verbose('lock', `updating lock file via "npm install --package-lock-only"`);
-          await exec('npm', ['install', '--package-lock-only', ...npmClientArgs], { cwd });
+          await execPackageManager('npm', ['install', '--package-lock-only', ...npmClientArgs], { cwd });
         } else {
           log.error(
             'lock',
