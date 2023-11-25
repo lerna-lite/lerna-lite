@@ -65,8 +65,6 @@ export class VersionCommand extends Command<VersionCommandOption> {
   changelogIncludeCommitsClientLogin?: boolean | string;
   changelogIncludeCommitsGitAuthor?: boolean | string;
   commitsSinceLastRelease?: RemoteCommit[];
-  packagesToVersion: Package[] = [];
-  updatesVersions?: Map<string, string>;
   currentBranch = '';
   gitRemote = '';
   tagPrefix = '';
@@ -80,7 +78,10 @@ export class VersionCommand extends Command<VersionCommandOption> {
   runRootLifecycle!: (stage: string) => Promise<void> | void;
   savePrefix = '';
   tags: string[] = [];
+  packagesToVersion: Package[] = [];
   updates: PackageGraphNode[] = [];
+  updatesVersions?: Map<string, string>;
+  premajorVersionBump?: 'default' | 'force-patch';
 
   get otherCommandConfigs(): string[] {
     // back-compat
@@ -120,6 +121,7 @@ export class VersionCommand extends Command<VersionCommandOption> {
       signGitTag,
       forceGitTag,
       tagVersionPrefix = 'v',
+      premajorVersionBump = 'default',
     } = this.options;
 
     this.gitRemote = gitRemote;
@@ -129,6 +131,7 @@ export class VersionCommand extends Command<VersionCommandOption> {
     this.changelogIncludeCommitsClientLogin =
       changelogIncludeCommitsClientLogin === '' ? true : changelogIncludeCommitsClientLogin;
     this.changelogIncludeCommitsGitAuthor = changelogIncludeCommitsGitAuthor === '' ? true : changelogIncludeCommitsGitAuthor;
+    this.premajorVersionBump = premajorVersionBump;
     // never automatically push to remote when amending a commit
 
     if (this.pushToRemote && this.options.createRelease) {
@@ -563,14 +566,19 @@ export class VersionCommand extends Command<VersionCommandOption> {
 
     const versions: Map<string, string> = await this.reduceVersions(
       (node) =>
-        recommendVersion(node, type, {
-          changelogPreset,
-          rootPath,
-          tagPrefix: this.tagPrefix,
-          prereleaseId: getPrereleaseId(node),
-          conventionalBumpPrerelease,
-          buildMetadata,
-        }) as any
+        recommendVersion(
+          node,
+          type,
+          {
+            changelogPreset,
+            rootPath,
+            tagPrefix: this.tagPrefix,
+            prereleaseId: getPrereleaseId(node),
+            conventionalBumpPrerelease,
+            buildMetadata,
+          },
+          this.premajorVersionBump
+        ) as any
     );
 
     if (type === 'fixed') {

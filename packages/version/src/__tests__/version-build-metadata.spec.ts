@@ -169,6 +169,7 @@ describe('--build-metadata with prompt', () => {
     (promptSelectOne as any).chooseBump('major');
     (promptSelectOne as any).chooseBump('minor');
     (promptSelectOne as any).chooseBump('patch');
+    (promptSelectOne as any).chooseBump('minor');
 
     await new VersionCommand(createArgv(testDir, '--build-metadata', '21AF26D3--117B344092BD'));
 

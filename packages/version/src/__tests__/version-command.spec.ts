@@ -342,6 +342,7 @@ describe('VersionCommand', () => {
       (promptSelectOne as any).chooseBump('major');
       (promptSelectOne as any).chooseBump('minor');
       (promptSelectOne as any).chooseBump('patch');
+      (promptSelectOne as any).chooseBump('minor');
 
       const testDir = await initFixture('independent');
       await new VersionCommand(createArgv(testDir)); // --independent is only valid in InitCommand
