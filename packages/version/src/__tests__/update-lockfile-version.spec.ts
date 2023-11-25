@@ -2,7 +2,7 @@ import { beforeEach, describe, expect, it, Mock, test, vi } from 'vitest';
 
 vi.mock('load-json-file', async () => await vi.importActual('../lib/__mocks__/load-json-file'));
 vi.mock('@lerna-lite/core', async () => {
-  const { exec, execSync, execPackageManager, execPackageManagerSync } = await vi.importActual<any>('@lerna-lite/core');
+  const { execPackageManager, execPackageManagerSync } = await vi.importActual<any>('@lerna-lite/core');
   return {
     ...(await vi.importActual<any>('@lerna-lite/core')),
     execPackageManager: vi.fn(execPackageManager),
