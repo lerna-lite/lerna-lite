@@ -301,6 +301,14 @@ export interface VersionCommandOption {
   /** Additional arguments to pass to the npm client when performing 'npm install'. */
   npmClientArgs?: string[];
 
+  /**
+   * This option allows you to control how lerna handles bumping versions for packages with a
+   * `premajor` version (packages that have not had a major release, e.g. `"version": "0.2.4"`)
+   * when non-breaking changes are detected.
+   * Breaking changes in `premajor` packages will always trigger a `minor` bump.
+   */
+  premajorVersionBump?: 'default' | 'force-patch';
+
   /** @deprecated @alias `skipBumpOnlyReleases` renamed previous flag from `skipBumpOnlyRelease` to `skipBumpOnlyReleases`. */
   skipBumpOnlyRelease?: boolean;
 
@@ -417,9 +425,6 @@ export interface RunCommandOption {
   /** proxy for `--no-bail`. */
   bail?: boolean;
 
-  /** @deprecated When useNx is enabled, do we want to automatically load .env files */
-  loadEnvFiles?: boolean;
-
   /** Do not prefix streaming output. */
   noPrefix?: boolean;
 
@@ -434,12 +439,6 @@ export interface RunCommandOption {
 
   /** npm script to run by the command. */
   script: string;
-
-  /** @deprecated when "useNx" is enabled, do we want to skip caching with Nx? */
-  skipNxCache?: boolean;
-
-  /** @deprecated this will be removed in next major version. Enables integration with [Nx](https://nx.dev) instead of the default Lerna task runner (which uses `p-map` and `p-queue`). */
-  useNx?: boolean;
 }
 
 /** Watch Command will run a script whenever package(s) or their dependents change. */

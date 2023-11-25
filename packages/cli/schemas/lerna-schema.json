@@ -18,11 +18,6 @@
       "description": "An array of globs where packages can be located.",
       "default": ["packages/*"]
     },
-    "useNx": {
-      "type": "boolean",
-      "description": "When true, Lerna will delegate the implementation details of `lerna run` to the Nx task runner instead of the default Lerna task runner (which uses `p-map` and `p-queue`).",
-      "default": false
-    },
     "command": {
       "type": "object",
       "description": "Options for individual Lerna commands.",
@@ -479,13 +474,6 @@
             "verbose": {
               "$ref": "#/$defs/commandOptions/shared/verbose"
             },
-            "skipNxCache": {
-              "$ref": "#/$defs/commandOptions/run/skipNxCache"
-            },
-            "loadEnvFiles": {
-              "$ref": "#/$defs/commandOptions/run/loadEnvFiles"
-            },
-
             "npmClient": {
               "$ref": "#/$defs/globals/npmClient"
             },
@@ -675,6 +663,9 @@
             },
             "tagVersionPrefix": {
               "$ref": "#/$defs/commandOptions/version/tagVersionPrefix"
+            },
+            "premajorVersionBump": {
+              "$ref": "#/$defs/commandOptions/version/premajorVersionBump"
             },
 
             "npmClient": {
@@ -935,11 +926,6 @@
     "verifyAccess": {
       "$ref": "#/$defs/commandOptions/publish/verifyAccess"
     },
-
-    "skipNxCache": {
-      "$ref": "#/$defs/commandOptions/run/skipNxCache"
-    },
-
     "allowBranch": {
       "$ref": "#/$defs/commandOptions/version/allowBranch"
     },
@@ -1002,6 +988,9 @@
     },
     "tagVersionPrefix": {
       "$ref": "#/$defs/commandOptions/version/tagVersionPrefix"
+    },
+    "premajorVersionBump": {
+      "$ref": "#/$defs/commandOptions/version/premajorVersionBump"
     },
 
     "registry": {
@@ -1252,14 +1241,6 @@
         "dryRun": {
           "type": "boolean",
           "description": "During `lerna run`, when true, displays the process command that would be performed without executing it."
-        },
-        "loadEnvFiles": {
-          "type": "boolean",
-          "description": "During `lerna run`, when false, skip loading of environment variables from .env files."
-        },
-        "skipNxCache": {
-          "type": "boolean",
-          "description": "During `lerna run`, when true, skip the nx cache."
         }
       },
       "version": {
@@ -1407,6 +1388,11 @@
         "tagVersionPrefix": {
           "type": "string",
           "description": "During `lerna version`, customize the tag prefix. To remove entirely, pass an empty string."
+        },
+        "premajorVersionBump": {
+          "type": "string",
+          "description": "During `lerna version`, with 'force-patch', ensure premajor version releases are bumped as patch for non-breaking changes.",
+          "enum": ["default", "force-patch"]
         }
       },
       "watch": {
@@ -1574,7 +1560,7 @@
         },
         "verbose": {
           "type": "boolean",
-          "description": "(deprecated) When true, escalates loglevel to 'verbose' and shows nx verbose output if useNx is true."
+          "description": "When true, escalates loglevel to 'verbose'."
         }
       }
     }

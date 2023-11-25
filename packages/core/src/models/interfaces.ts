@@ -113,6 +113,7 @@ export interface QueryGraphConfig {
 
   /** Whether or not to reject dependency cycles */
   rejectCycles?: boolean;
+  premajorVersionBump?: 'default' | 'force-patch';
 }
 
 export interface TopologicalConfig extends QueryGraphConfig {
@@ -172,9 +173,6 @@ export interface ProjectConfig extends LernaConfig, QueryGraphConfig {
 
   /** During `lerna exec` and `lerna run`, stream output with lines prefixed by originating package name. */
   stream?: boolean;
-
-  /** @deprecated Enables integration with [Nx](https://nx.dev). */
-  useNx?: boolean;
 
   /** When useNx is true, show verbose output from dependent tasks. */
   verbose?: boolean;

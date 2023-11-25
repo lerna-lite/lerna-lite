@@ -166,13 +166,14 @@ describe.each([
       ['package-3', '4.0.0'],
       ['package-4', '4.1.0'],
       ['package-5', '5.0.1'],
+      ['package-6', '0.2.0'],
     ]);
 
     versionBumps.forEach((bump) => (recommendVersion as Mock).mockResolvedValueOnce(bump));
 
     await new VersionCommand(createArgv(cwd, '--create-release', type, '--conventional-commits'));
 
-    expect(client.releases.size).toBe(5);
+    expect(client.releases.size).toBe(6);
     versionBumps.forEach((version, name) => {
       expect(client.releases.get(`${name}@${version}`)).toEqual({
         owner: 'lerna',
@@ -304,7 +305,7 @@ describe.each([
 
     await new VersionCommand(createArgv(cwd, '--create-release', type, '--conventional-commits', '--skip-bump-only-release'));
 
-    expect(client.releases.size).toBe(4);
+    expect(client.releases.size).toBe(5);
     versionBumps.forEach((version, name) => {
       if (name === 'package-4') {
         expect(client.releases.get(`${name}@${version}`)).toBeFalsy();
@@ -337,7 +338,7 @@ describe.each([
 
     await new VersionCommand(createArgv(cwd, '--create-release', type, '--conventional-commits', '--skip-bump-only-releases'));
 
-    expect(client.releases.size).toBe(4);
+    expect(client.releases.size).toBe(5);
     versionBumps.forEach((version, name) => {
       if (name === 'package-4') {
         expect(client.releases.get(`${name}@${version}`)).toBeFalsy();
@@ -370,7 +371,7 @@ describe.each([
 
     await new VersionCommand(createArgv(cwd, '--create-release', type, '--conventional-commits'));
 
-    expect(client.releases.size).toBe(5);
+    expect(client.releases.size).toBe(6);
     versionBumps.forEach((version, name) => {
       expect(client.releases.get(`${name}@${version}`)).toEqual({
         owner: 'lerna',

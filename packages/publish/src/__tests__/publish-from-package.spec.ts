@@ -104,6 +104,7 @@ describe('publish from-package', () => {
     expect((npmPublish as typeof npmPublishMock).order()).toEqual([
       'package-1',
       'package-4',
+      'package-6',
       'package-2',
       'package-3',
       // package-5 is private
@@ -123,6 +124,7 @@ describe('publish from-package', () => {
       'package-3',
       'package-4',
       // package-5 is private
+      'package-6',
     ]);
   });
 
