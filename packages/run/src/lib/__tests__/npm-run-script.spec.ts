@@ -3,14 +3,14 @@ import { describe, expect, it, Mock, vi } from 'vitest';
 // mocked modules
 vi.mock('@lerna-lite/core');
 
-import { exec, spawnStreaming } from '@lerna-lite/core';
+import { execPackageManager, spawnStreaming } from '@lerna-lite/core';
 import { RunScriptOption, ScriptStreamingOption } from '../../models';
 
 // file under test
 import { npmRunScript, npmRunScriptStreaming } from '../npm-run-script';
 
 describe('npm-run-script', () => {
-  (exec as Mock).mockResolvedValue(null);
+  (execPackageManager as Mock).mockResolvedValue(null);
   (spawnStreaming as Mock).mockResolvedValue(null);
 
   describe('npmRunScript()', () => {
@@ -26,7 +26,7 @@ describe('npm-run-script', () => {
 
       await npmRunScript(script, config);
 
-      expect(exec).toHaveBeenLastCalledWith(
+      expect(execPackageManager).toHaveBeenLastCalledWith(
         'npm',
         ['run', script, '--bar', 'baz'],
         {
@@ -52,7 +52,7 @@ describe('npm-run-script', () => {
 
       await npmRunScript(script, config, true);
 
-      expect(exec).toHaveBeenLastCalledWith(
+      expect(execPackageManager).toHaveBeenLastCalledWith(
         'npm',
         ['run', script, '--bar', 'baz'],
         {
@@ -79,7 +79,7 @@ describe('npm-run-script', () => {
 
       await npmRunScript(script, config);
 
-      expect(exec).toHaveBeenLastCalledWith(
+      expect(execPackageManager).toHaveBeenLastCalledWith(
         'npm',
         ['run', script],
         {
@@ -105,7 +105,7 @@ describe('npm-run-script', () => {
 
       await npmRunScript(script, config);
 
-      expect(exec).toHaveBeenLastCalledWith(
+      expect(execPackageManager).toHaveBeenLastCalledWith(
         'yarn',
         ['run', script, '--bar', 'baz'],
         {

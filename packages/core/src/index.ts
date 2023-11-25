@@ -1,4 +1,5 @@
 // folders
+export * from './corepack/index.js';
 export * from './models/index.js';
 export * from './package-graph/index.js';
 export * from './project/index.js';

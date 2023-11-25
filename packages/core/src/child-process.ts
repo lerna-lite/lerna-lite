@@ -22,6 +22,7 @@ let currentColor = 0;
  * @param {string} command
  * @param {string[]} args
  * @param {import("execa").Options} [opts]
+ * @param {boolean} [dryRun]
  */
 export function exec(command: string, args: string[], opts?: ExecaOptions & { pkg?: Package }, dryRun = false): Promise<any> {
   const options = Object.assign({ stdio: 'pipe' }, opts);
@@ -35,6 +36,7 @@ export function exec(command: string, args: string[], opts?: ExecaOptions & { pk
  * @param {string} command
  * @param {string[]} args
  * @param {import("execa").SyncOptions} [opts]
+ * @param {boolean} [dryRun]
  */
 export function execSync(command: string, args?: string[], opts?: ExacaSyncOptions, dryRun = false) {
   // prettier-ignore
@@ -48,6 +50,7 @@ export function execSync(command: string, args?: string[], opts?: ExacaSyncOptio
  * @param {string} command
  * @param {string[]} args
  * @param {import("execa").Options} [opts]
+ * @param {boolean} [dryRun]
  */
 export function spawn(command: string, args: string[], opts?: ExecaOptions & { pkg?: Package }, dryRun = false): Promise<any> {
   const options = Object.assign({}, opts, { stdio: 'inherit' });
@@ -62,6 +65,7 @@ export function spawn(command: string, args: string[], opts?: ExecaOptions & { p
  * @param {string[]} args
  * @param {import("execa").Options} [opts]
  * @param {string} [prefix]
+ * @param {boolean} [dryRun]
  */
 /* c8 ignore next */
 export function spawnStreaming(
@@ -124,6 +128,7 @@ export function getExitCode(result: any) {
  * @param {string} command
  * @param {string[]} args
  * @param {import("execa").Options} opts
+ * @param {boolean} [dryRun]
  */
 export function spawnProcess(command: string, args: string[], opts: ExecaOptions & { pkg?: Package }, dryRun = false) {
   if (dryRun) {
