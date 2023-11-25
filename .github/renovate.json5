@@ -16,11 +16,7 @@
     },
     {
       packageNames: ['node'],
-      allowedVersions: '16.15.0',
-    },
-    {
-      packageNames: ['npm'],
-      allowedVersions: '8.5.0',
+      allowedVersions: '18.0.0',
     },
     {
       packageNames: ['nx'],
