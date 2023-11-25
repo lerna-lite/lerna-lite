@@ -424,8 +424,6 @@ lerna version --conventional-commits --create-release github --create-release-di
 
 When this option is enabled and a package version is only being bumped without any conventional commits detected, the GitHub/GitLab release will be skipped. This will avoid creating releases with only "Version bump only for package x" in the release notes, however please note that each changelog are still going to be updated with the "version bump only" text.
 
-> **Note** first implemented as `--skip-bump-only-release` but later renamed to a plural option `--skip-bump-only-releases` which is a better option name to represent multiple releases can be skipped.
-
 ```sh
 lerna version --create-release github --skip-bump-only-releases
 
