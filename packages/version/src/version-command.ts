@@ -381,7 +381,7 @@ export class VersionCommand extends Command<VersionCommandOption> {
           {
             gitRemote: this.options.gitRemote,
             execOpts: this.execOpts,
-            skipBumpOnlyReleases: this.options.skipBumpOnlyReleases ?? this.options.skipBumpOnlyRelease,
+            skipBumpOnlyReleases: this.options.skipBumpOnlyReleases,
           },
           this.options.dryRun
         );

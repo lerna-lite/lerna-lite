@@ -309,9 +309,6 @@ export interface VersionCommandOption {
    */
   premajorVersionBump?: 'default' | 'force-patch';
 
-  /** @deprecated @alias `skipBumpOnlyReleases` renamed previous flag from `skipBumpOnlyRelease` to `skipBumpOnlyReleases`. */
-  skipBumpOnlyRelease?: boolean;
-
   /** Defaults to false, should we skip GitHub/GitLab release creation when the version is a "Version bump only for package x" */
   skipBumpOnlyReleases?: boolean;
 
