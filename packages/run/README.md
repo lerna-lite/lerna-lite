@@ -67,9 +67,6 @@ $ lerna run --scope my-component test
     - [`--no-prefix`](#--no-prefix)
     - [`--profile`](#--profile)
     - [`--profile-location <location>`](#--profile-location-location)
-    - [`--load-env-files`](#--load-env-files)
-    - [`--use-nx`](#--use-nx) (deprecated)
-      - now deprecated, it will be removed in next major
 
 ### `--npm-client <client>`
 
@@ -160,66 +157,3 @@ You can provide a custom location for the performance profile output. The path p
 ```sh
 $ lerna run build --profile --profile-location=logs/profile/
 ```
-
-
-### `--load-env-files`
-
-When the task runner is powered by Nx (via [`--use-nx`](#use-nx)) it will automatically load `.env` files for you. You can set `--load-env-files` to false if you want to disable this behavior for any reason.
-
-For more details about what `.env` files will be loaded by default please see: https://nx.dev/recipes/environment-variables/define-environment-variables
-
-### `--use-nx`
-
-> **Note** this feature is now deprecated and will be removed in the next major version, if you wish to use Nx then you should consider using the original [Lerna](https://github.com/lerna/lerna) since it has full Nx integration. The goal of Lerna-Lite is to stay light hence the deprecation of this option.
-
-Enables integration with [Nx](https://nx.dev). Enabling this option will tell Lerna to delegate
-running tasks to Nx instead of using `p-map` and `p-queue`. This only works if Nx is installed and `nx.json` is present. You can also skip cache by providing `--skip-nx-cache`
-
-Example of `nx.json`:
-
-```json
-{
-  "extends": "nx/presets/npm.json",
-  "tasksRunnerOptions": {
-    "default": {
-      "runner": "nx/tasks-runners/default",
-      "options": {
-        "cacheableOperations": ["build"]
-      }
-    }
-  }
-}
-```
-
-When [Nx](https://nx.dev/) is installed and `nx.json` is detected in the current workspace with `useNx` set to `true` in `lerna.json`, Lerna will respect `nx.json` configuration during `lerna run` and delegate to the Nx task runner.
-
-Nx will run tasks in an order and with a concurrency that it determines appropriate based on the task graph that it creates. For more information, see [Nx Mental Model: The Task Graph](https://nx.dev/concepts/mental-model#the-task-graph).
-
-**This behavior allows Nx to run tasks in the most efficient way possible, but it also means that some existing options for `lerna run` become obsolete as explained below.**
-
-> **Note** when Lerna is set to use Nx and detects `nx.json` with `targetDefaults` in the workspace, it will defer to Nx to detect task dependencies. Some options for `lerna run` will behave differently. See [Using Lerna (Powered by Nx) to Run Tasks](./recipes/using-lerna-powered-by-nx-to-run-tasks) for more details.
-
-#### Obsolete Options when `useNx` is enabled
-
-##### `--sort` and `--no-sort`
-
-Nx will always run tasks in the order it deems is correct based on its knowledge of project and task dependencies, so `--sort` and `--no-sort` have no effect.
-
-##### `--parallel`
-
-Nx will use the task graph to determine which tasks can be run in parallel and do so automatically, so `--parallel` has no effect.
-
-> **Note** if you want to limit the concurrency of tasks, you can still use the [concurrency global option](https://github.com/lerna/lerna/blob/6cb8ab2d4af7ce25c812e8fb05cd04650105705f/core/global-options/README.md#--concurrency) to accomplish this.
-
-
-##### `--include-dependencies`
-
-Lerna by itself does not have knowledge of which tasks depend on others, so it defaults to excluding tasks on dependent projects when using [filter options](https://github.com/lerna/lerna/tree/6cb8ab2d4af7ce25c812e8fb05cd04650105705f/core/filter-options#lernafilter-options) and relies on `--include-dependencies` to manually specify that dependent projects' tasks should be included.
-
-This is no longer a problem when Lerna uses Nx to run tasks. Nx, utilizing its [task graph](https://nx.dev/concepts/mental-model#the-task-graph), will automatically run dependent tasks first when necessary, so `--include-dependencies` is obsolete. However, it can still be used to include project dependencies that Lerna detects but Nx does not deem necessary and would otherwise exclude.
-
-#### `--ignore`
-
-When used with Nx, `--ignore` will never cause `lerna run` to exclude any tasks that are deemed to be required by the Nx [task graph](https://nx.dev/concepts/mental-model#the-task-graph).
-
-> **Tip** the effects on the options above will only apply if `nx.json` exists in the root with the `targetDefaults` property defined. Otherwise, they will behave just as they would with Lerna's base task runner (if `useNx` is `false`).
