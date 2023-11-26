@@ -7,14 +7,14 @@ import { exec, execSync, getChildProcessCount } from '../../child-process';
 import { Package } from '../../package';
 
 vi.mock('../child-process', async () => ({
-  ...(await vi.importActual<any>('../child-process')),
+  ...(await vi.importActual<any>('../../child-process')),
   exec: vi.fn(),
   execSync: vi.fn(),
-  getChildProcessCount: (await vi.importActual<any>('../child-process')).getChildProcessCount,
+  getChildProcessCount: (await vi.importActual<any>('../../child-process')).getChildProcessCount,
 }));
 
-const execActual = (await vi.importActual<any>('../child-process')).exec;
-const execSyncActual = (await vi.importActual<any>('../child-process')).execSync;
+const execActual = (await vi.importActual<any>('../../child-process')).exec;
+const execSyncActual = (await vi.importActual<any>('../../child-process')).execSync;
 
 describe('.execPackageManagerSync()', () => {
   beforeEach(() => {
