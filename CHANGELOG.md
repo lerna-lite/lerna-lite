@@ -8,6 +8,8 @@ See [Conventional Commits](https://conventionalcommits.org) for commit guideline
 
 ### ⚠ BREAKING CHANGES
 
+> Refer to the [v3.0.0](https://github.com/lerna-lite/lerna-lite/releases/tag/v3.0.0) release for more info about the migration.
+
 * **core:** upgrade deps to Node 18 and higher (#777)
 * **run:** remove `--use-nx` (powered by Nx) option from `run` command (#776)
 
