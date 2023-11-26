@@ -6,7 +6,7 @@ import { execPackageManager, execPackageManagerSync } from '../exec-package-mana
 import { exec, execSync, getChildProcessCount } from '../../child-process';
 import { Package } from '../../package';
 
-vi.mock('../child-process', async () => ({
+vi.mock('../../child-process', async () => ({
   ...(await vi.importActual<any>('../../child-process')),
   exec: vi.fn(),
   execSync: vi.fn(),
