@@ -4,6 +4,18 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [3.0.0](https://github.com/lerna-lite/lerna-lite/compare/v2.7.2...v3.0.0) (2023-11-26)
+
+### ⚠ BREAKING CHANGES
+
+* **core:** upgrade deps to Node 18 and higher (#777)
+
+### Features
+
+* **core:** upgrade deps to Node 18 and higher ([#777](https://github.com/lerna-lite/lerna-lite/issues/777)) ([70225e8](https://github.com/lerna-lite/lerna-lite/commit/70225e8d0ec396d5ce9565fafcecba851650d0d8)) - by @ghiscoding
+* **core:** use corepack when enabled to sync lockfile/run npm script ([#775](https://github.com/lerna-lite/lerna-lite/issues/775)) ([3f5624c](https://github.com/lerna-lite/lerna-lite/commit/3f5624cbee9c846981d5231b56c9c5936dc25b3e)) - by @ghiscoding
+* **version:** add --premajor-version-bump option to force patch bumps ([#774](https://github.com/lerna-lite/lerna-lite/issues/774)) ([d092fc6](https://github.com/lerna-lite/lerna-lite/commit/d092fc660c7c5fbf6b7da7ce4e1feb8827e93267)) - by @ghiscoding
+
 ## [2.7.2](https://github.com/lerna-lite/lerna-lite/compare/v2.7.1...v2.7.2) (2023-11-20)
 
 **Note:** Version bump only for package @lerna-lite/version
