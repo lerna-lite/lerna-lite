@@ -43,7 +43,7 @@
   },
   "dependencies": {
     "@lerna-lite/core": "workspace:*",
-    "multimatch": "6.0.0",
+    "multimatch": "^7.0.0",
     "npmlog": "^7.0.1"
   },
   "devDependencies": {
