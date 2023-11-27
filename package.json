@@ -56,11 +56,6 @@
     "pnpm": "8"
   },
   "packageManager": "pnpm@8.11.0",
-  "pnpm": {
-    "overrides": {
-      "json5@<1.0.2": ">=1.0.2"
-    }
-  },
   "devDependencies": {
     "@lerna-lite/changed": "workspace:*",
     "@lerna-lite/cli": "workspace:*",
