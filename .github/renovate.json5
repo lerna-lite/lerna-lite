@@ -25,6 +25,7 @@
     'conventional-changelog-writer',
     'conventional-changelog-conventionalcommits',
     'conventional-recommended-bump',
+    'lee-dohm/no-response',
   ],
   schedule: ['every 2 weeks on Thursday'],
 }
