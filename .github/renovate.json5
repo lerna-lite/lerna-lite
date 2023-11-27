@@ -20,6 +20,7 @@
     },
   ],
   ignoreDeps: [
+    '@types/conventional-recommended-bump',
     'conventional-changelog-core',
     'conventional-changelog-writer',
     'conventional-changelog-conventionalcommits',
