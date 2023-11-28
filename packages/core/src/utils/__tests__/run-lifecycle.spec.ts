@@ -4,6 +4,7 @@ vi.mock('@npmcli/run-script', () => ({
   default: vi.fn(() => Promise.resolve({ stdout: '' })),
 }));
 
+import '@lerna-test/helpers/silence-logging';
 import log from 'npmlog';
 import { loggingOutput } from '@lerna-test/helpers/logging-output';
 import runScript from '@npmcli/run-script';

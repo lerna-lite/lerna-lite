@@ -5,6 +5,7 @@ import { fileURLToPath } from 'node:url';
 import { temporaryDirectory } from 'tempy';
 
 // helpers
+import '@lerna-test/helpers/silence-logging';
 import { commandRunner, initFixtureFactory } from '@lerna-test/helpers';
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
