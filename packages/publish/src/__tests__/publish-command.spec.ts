@@ -545,6 +545,8 @@ describe('PublishCommand', () => {
   });
 
   describe('--verify-access', () => {
+    vi.spyOn(console, 'log').mockImplementation(() => {});
+
     beforeEach(() => {
       vi.clearAllMocks();
     });
@@ -673,7 +675,6 @@ describe('PublishCommand', () => {
     });
 
     it('allows you to do fancy angular crap', async () => {
-      vi.spyOn(console, 'log').mockImplementation(() => {});
       const cwd = await initFixture('lifecycle');
 
       await new PublishCommand(createArgv(cwd, '--contents', 'dist'));

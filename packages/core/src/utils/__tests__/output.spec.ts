@@ -4,8 +4,9 @@ import { logOutput } from '../output';
 import log from 'npmlog';
 
 describe('logOutput method', () => {
+  const consoleSpy = vi.spyOn(console, 'log').mockImplementation(() => {});
+
   it('should console log output when called', () => {
-    const consoleSpy = vi.spyOn(console, 'log').mockImplementation(() => {});
     const clearSpy = vi.spyOn(log, 'clearProgress');
     const showSpy = vi.spyOn(log, 'showProgress');
 

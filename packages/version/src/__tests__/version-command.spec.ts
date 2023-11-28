@@ -96,6 +96,8 @@ import gitSHA from '@lerna-test/helpers/serializers/serialize-git-sha';
 expect.addSnapshotSerializer(gitSHA);
 
 describe('VersionCommand', () => {
+  vi.spyOn(console, 'log').mockImplementation(() => {});
+
   describe('normal mode', () => {
     it('versions changed packages', async () => {
       const testDir = await initFixture('normal');
@@ -980,8 +982,6 @@ describe('VersionCommand', () => {
 
   describe('with spurious -- arguments', () => {
     it('ignores the extra arguments with cheesy parseConfiguration()', async () => {
-      vi.spyOn(console, 'log').mockImplementation(() => {});
-
       const cwd = await initFixture('lifecycle');
       await lernaVersion(cwd)('--yes', '--', '--loglevel', 'ignored', '--blah');
       const logMessages = loggingOutput('warn');
