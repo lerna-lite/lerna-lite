@@ -47,6 +47,7 @@ import { isBehindUpstream } from '../lib/is-behind-upstream';
 import { remoteBranchExists } from '../lib/remote-branch-exists';
 
 // helpers
+import '@lerna-test/helpers/silence-logging';
 import { loggingOutput } from '@lerna-test/helpers/logging-output';
 import { commandRunner, getCommitMessage, gitAdd, gitCommit, gitTag, initFixtureFactory, showCommit } from '@lerna-test/helpers';
 
