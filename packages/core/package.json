@@ -59,7 +59,7 @@
     "minimatch": "^9.0.3",
     "npm-package-arg": "^11.0.1",
     "npmlog": "^7.0.1",
-    "p-map": "^6.0.0",
+    "p-map": "^7.0.0",
     "p-queue": "^7.4.1",
     "resolve-from": "^5.0.0",
     "semver": "^7.5.4",
