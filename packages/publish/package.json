@@ -59,7 +59,7 @@
     "npm-packlist": "^8.0.0",
     "npm-registry-fetch": "^16.1.0",
     "npmlog": "^7.0.1",
-    "p-map": "^6.0.0",
+    "p-map": "^7.0.0",
     "p-pipe": "^4.0.0",
     "pacote": "^17.0.4",
     "pify": "^6.1.0",

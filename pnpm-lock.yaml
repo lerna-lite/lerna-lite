@@ -260,8 +260,8 @@ importers:
         specifier: ^7.0.1
         version: 7.0.1
       p-map:
-        specifier: ^6.0.0
-        version: 6.0.0
+        specifier: ^7.0.0
+        version: 7.0.0
       p-queue:
         specifier: ^7.4.1
         version: 7.4.1
@@ -376,8 +376,8 @@ importers:
         specifier: ^7.0.1
         version: 7.0.1
       p-map:
-        specifier: ^6.0.0
-        version: 6.0.0
+        specifier: ^7.0.0
+        version: 7.0.0
     devDependencies:
       '@types/fs-extra':
         specifier: ^11.0.4
@@ -423,8 +423,8 @@ importers:
         specifier: ^11.1.1
         version: 11.1.1
       p-map:
-        specifier: ^6.0.0
-        version: 6.0.0
+        specifier: ^7.0.0
+        version: 7.0.0
       write-json-file:
         specifier: ^5.0.0
         version: 5.0.0
@@ -544,8 +544,8 @@ importers:
         specifier: ^7.0.1
         version: 7.0.1
       p-map:
-        specifier: ^6.0.0
-        version: 6.0.0
+        specifier: ^7.0.0
+        version: 7.0.0
       p-pipe:
         specifier: ^4.0.0
         version: 4.0.0
@@ -623,8 +623,8 @@ importers:
         specifier: ^7.0.1
         version: 7.0.1
       p-map:
-        specifier: ^6.0.0
-        version: 6.0.0
+        specifier: ^7.0.0
+        version: 7.0.0
     devDependencies:
       '@types/fs-extra':
         specifier: ^11.0.4
@@ -714,8 +714,8 @@ importers:
         specifier: ^7.0.1
         version: 7.0.1
       p-map:
-        specifier: ^6.0.0
-        version: 6.0.0
+        specifier: ^7.0.0
+        version: 7.0.0
       p-pipe:
         specifier: ^4.0.0
         version: 4.0.0
@@ -5169,9 +5169,9 @@ packages:
     dependencies:
       aggregate-error: 3.1.0
 
-  /p-map@6.0.0:
-    resolution: {integrity: sha512-T8BatKGY+k5rU+Q/GTYgrEf2r4xRMevAN5mtXc2aPc4rS1j3s+vWTaO2Wag94neXuCAUAs8cxBL9EeB5EA6diw==}
-    engines: {node: '>=16'}
+  /p-map@7.0.0:
+    resolution: {integrity: sha512-EZl03dLKv3RypkrjlevZoNwQMSy4bAblWcR18zhonktnN4fUs3asFQKSe0awn982omGxamvbejqQKQYDJYHCEg==}
+    engines: {node: '>=18'}
     dev: false
 
   /p-pipe@4.0.0:
