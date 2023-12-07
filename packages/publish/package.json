@@ -70,8 +70,6 @@
     "temp-dir": "^3.0.0"
   },
   "devDependencies": {
-    "@types/conventional-changelog-core": "^4.2.7",
-    "@types/conventional-recommended-bump": "^6.1.1",
     "@types/fs-extra": "^11.0.4",
     "@types/pify": "^5.0.4",
     "@types/semver": "^7.5.6",

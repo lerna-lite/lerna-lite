@@ -59,11 +59,9 @@ export async function recommendVersion(
   )) as conventionalChangelogCore.Options.Config;
 
   // Ensure potential ValidationError in getChangelogConfig() is propagated correctly
-  return new Promise((resolve, reject) => {
-    conventionalRecommendedBump(options, (err, data) => {
-      if (err) {
-        return reject(err);
-      }
+  return new Promise(async (resolve, reject) => {
+    try {
+      const data = await conventionalRecommendedBump(options);
 
       // result might be undefined because some presets are not consistent with angular
       // we still need to bump _something_ because lerna-lite saw a change here
@@ -104,6 +102,8 @@ export async function recommendVersion(
         log.verbose(type, 'increment %s by %s - %s', pkg.version, releaseType, pkg.name);
         resolve(applyBuildMetadata(semver.inc(pkg.version, releaseType), buildMetadata));
       }
-    });
+    } catch (err) {
+      reject(err);
+    }
   });
 }
