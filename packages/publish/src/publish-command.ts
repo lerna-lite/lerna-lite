@@ -590,7 +590,7 @@ export class PublishCommand extends Command<PublishCommandOption> {
       return chain;
     }
 
-    /* c8 ignore next 3 */
+    /* v8 ignore next 3 */
     if (process.env.LERNA_INTEGRATION) {
       return chain;
     }

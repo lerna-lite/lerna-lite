@@ -67,7 +67,7 @@ export function spawn(command: string, args: string[], opts?: ExecaOptions & { p
  * @param {string} [prefix]
  * @param {boolean} [dryRun]
  */
-/* c8 ignore next */
+/* v8 ignore next */
 export function spawnStreaming(
   command: string,
   args: string[],
@@ -120,7 +120,7 @@ export function getExitCode(result: any) {
     return constants.errno[result.code ?? result.exitCode];
   }
 
-  /* c8 ignore next : extremely weird */
+  /* v8 ignore next : extremely weird */
   throw new TypeError(`Received unexpected exit code value ${JSON.stringify(result.code ?? result.exitCode)}`);
 }
 

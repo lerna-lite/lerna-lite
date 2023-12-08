@@ -13,7 +13,7 @@ export async function createReleaseClient(type: 'github' | 'gitlab'): Promise<Gi
       return createGitLabClient();
     case 'github':
       return await createGitHubClient();
-    /* c8 ignore next: guarded by yargs.choices() */
+    /* v8 ignore next: guarded by yargs.choices() */
     default:
       throw new ValidationError('ERELEASE', 'Invalid release client type');
   }

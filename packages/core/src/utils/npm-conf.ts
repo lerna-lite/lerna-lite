@@ -30,7 +30,7 @@ function npmConf(opts: any) {
   if (!conf.get('global') && projectConf !== userConf) {
     conf.addFile(projectConf, 'project');
   } else {
-    /* c8 ignore next */
+    /* v8 ignore next */
     conf.add({}, 'project');
   }
 
@@ -47,7 +47,7 @@ function npmConf(opts: any) {
 
   const caFile = conf.get('cafile');
 
-  /* c8 ignore next 3 */
+  /* v8 ignore next 3 */
   if (caFile) {
     conf.loadCAFile(caFile);
   }

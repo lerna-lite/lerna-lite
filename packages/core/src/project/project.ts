@@ -69,7 +69,7 @@ export class Project {
       }
 
       // re-throw other errors, could be ours or third-party
-      /* c8 ignore next */
+      /* v8 ignore next */
       throw err;
     }
 
@@ -165,7 +165,7 @@ export class Project {
       });
     } catch (err: any) {
       // redecorate JSON syntax errors, avoid debug dump
-      /* c8 ignore next 3 */
+      /* v8 ignore next 3 */
       if (err.name === 'JSONError') {
         throw new ValidationError(err.name, err.message);
       }
@@ -200,7 +200,7 @@ export class Project {
         });
       }
     } catch (err: any) {
-      /* c8 ignore next */
+      /* v8 ignore next */
       throw new ValidationError(err.name, err.message);
     }
 
@@ -248,7 +248,7 @@ export class Project {
   }
 
   json5Loader(filepath: string, content: any) {
-    /* c8 ignore next 4 */
+    /* v8 ignore next 4 */
     if (!/.*lerna\.json[c|5]?$/gi.test(filepath)) {
       // when none of the 3x lerna config file type is found `lerna.{json,jsonc,json5}`, return default cosmiconfig json loader
       return defaultLoaders['.json'](filepath, content);
