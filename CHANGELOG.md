@@ -4,6 +4,19 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [3.1.0](https://github.com/lerna-lite/lerna-lite/compare/v3.0.0...v3.1.0) (2023-12-08)
+
+### Features
+
+* **version:** update conventional-changelog pks to latest w/factory ([#788](https://github.com/lerna-lite/lerna-lite/issues/788)) ([a24f3c6](https://github.com/lerna-lite/lerna-lite/commit/a24f3c641c6dc99157c8bff414e24029b6026b35)) - by @ghiscoding
+
+### Bug Fixes
+
+* **core:** avoid reading empty `.config.json`, upgrade `cosmiconfig` v9, fixes [#729](https://github.com/lerna-lite/lerna-lite/issues/729) ([#754](https://github.com/lerna-lite/lerna-lite/issues/754)) ([e47ed90](https://github.com/lerna-lite/lerna-lite/commit/e47ed9018fde0c7d6aeaa3a83912b2558ff9837a)) - by @ghiscoding
+* **deps:** update all non-major dependencies ([#783](https://github.com/lerna-lite/lerna-lite/issues/783)) ([fa026de](https://github.com/lerna-lite/lerna-lite/commit/fa026deb9de67c21de10ad985e339530b4d17cca)) - by @renovate[bot]
+* **deps:** update dependency p-map to v7 ([#784](https://github.com/lerna-lite/lerna-lite/issues/784)) ([2644c23](https://github.com/lerna-lite/lerna-lite/commit/2644c23f563f5dafc60d2380802ef8bc81ba808c)) - by @renovate[bot]
+* **deps:** update dependency p-queue to v8 ([#787](https://github.com/lerna-lite/lerna-lite/issues/787)) ([5c0d470](https://github.com/lerna-lite/lerna-lite/commit/5c0d470a24551c9ab2b679ebb5885c14184492a6)) - by @renovate[bot]
+
 ## [3.0.0](https://github.com/lerna-lite/lerna-lite/compare/v2.7.2...v3.0.0) (2023-11-26)
 
 ### ⚠ BREAKING CHANGES
