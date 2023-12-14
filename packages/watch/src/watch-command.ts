@@ -117,7 +117,7 @@ export class WatchCommand extends Command<WatchCommandOption & FilterOptions> {
       }
 
       // initialize chokidar watcher for each package found
-      this._watcher = chokidar.watch(...new Set(...packageLocations), chokidarOptions);
+      this._watcher = chokidar.watch([...new Set(packageLocations)], chokidarOptions);
 
       // add Chokidar watcher and watch for all events (add, addDir, unlink, unlinkDir)
       this._watcher.on('all', (_event, path) => this.changeEventListener(path)).on('error', (error) => this.onError(error));
