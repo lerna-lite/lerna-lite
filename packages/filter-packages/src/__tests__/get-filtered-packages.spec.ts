@@ -1,10 +1,6 @@
 import { beforeAll, expect, test, vi } from 'vitest';
 
 const { mockNotice } = vi.hoisted(() => ({ mockNotice: vi.fn() }));
-vi.mock('npmlog', async () => ({
-  ...(await vi.importActual<any>('npmlog')),
-  notice: mockNotice,
-}));
 
 vi.mock('@lerna-lite/core', async () => ({
   ...(await vi.importActual<any>('@lerna-lite/core')), // return the other real methods, below we'll mock only 2 of the methods
