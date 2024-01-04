@@ -153,11 +153,11 @@ describe('Prompt', () => {
     expect(logResumeSpy).toHaveBeenCalled();
     expect(inqSpy).toHaveBeenCalledWith([
       {
-        filter: expect.toBeFunction(),
+        filter: expect.any(Function),
         message: 'Choose something...',
         name: 'input',
         type: 'input',
-        validate: expect.toBeFunction(),
+        validate: expect.any(Function),
       },
     ]);
     expect(output).toBeTruthy();
