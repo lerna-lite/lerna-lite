@@ -42,7 +42,7 @@
     "node": "^18.0.0 || >=20.0.0"
   },
   "dependencies": {
-    "@npmcli/run-script": "^7.0.2",
+    "@npmcli/run-script": "^7.0.3",
     "chalk": "^5.3.0",
     "clone-deep": "^4.0.1",
     "config-chain": "^1.1.13",
@@ -59,7 +59,7 @@
     "minimatch": "^9.0.3",
     "npm-package-arg": "^11.0.1",
     "npmlog": "^7.0.1",
-    "p-map": "^7.0.0",
+    "p-map": "^7.0.1",
     "p-queue": "^8.0.1",
     "resolve-from": "^5.0.0",
     "semver": "^7.5.4",

@@ -65,7 +65,7 @@
     "node-fetch": "^3.3.2",
     "npm-package-arg": "^11.0.1",
     "npmlog": "^7.0.1",
-    "p-map": "^7.0.0",
+    "p-map": "^7.0.1",
     "p-pipe": "^4.0.0",
     "p-reduce": "^3.0.0",
     "pify": "^6.1.0",
