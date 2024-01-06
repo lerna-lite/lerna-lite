@@ -4,6 +4,12 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [3.2.0](https://github.com/lerna-lite/lerna-lite/compare/v3.1.0...v3.2.0) (2024-01-06)
+
+### Features
+
+* **version:** add `--generate-release-notes` for GitHub release ([#798](https://github.com/lerna-lite/lerna-lite/issues/798)) ([96d4a61](https://github.com/lerna-lite/lerna-lite/commit/96d4a61e9c234d17d91b8b6c77f771af5e7d59e1))
+
 ## [3.1.0](https://github.com/lerna-lite/lerna-lite/compare/v3.0.0...v3.1.0) (2023-12-08)
 
 **Note:** Version bump only for package @lerna-lite/cli

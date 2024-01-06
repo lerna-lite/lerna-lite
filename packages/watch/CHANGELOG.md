@@ -4,6 +4,12 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [3.2.0](https://github.com/lerna-lite/lerna-lite/compare/v3.1.0...v3.2.0) (2024-01-06)
+
+### Bug Fixes
+
+* **watch:** avoid chokidar throttling on watch startup ([#789](https://github.com/lerna-lite/lerna-lite/issues/789)) ([cbea60f](https://github.com/lerna-lite/lerna-lite/commit/cbea60fdbcdb51d449fd0dd81ff5214e71587a8d))
+
 ## [3.1.0](https://github.com/lerna-lite/lerna-lite/compare/v3.0.0...v3.1.0) (2023-12-08)
 
 **Note:** Version bump only for package @lerna-lite/watch
