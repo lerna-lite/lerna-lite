@@ -25,6 +25,6 @@ jobs:
         stale-pr-message: 'Stale pull request message'
         stale-issue-label: 'stale-issue'
         stale-pr-label: 'stale-PR'
-        days-before-stale: 120
-        days-before-close: 14
+        days-before-stale: 60
+        days-before-close: 7
         exempt-issue-labels: 'wip,pending triage,keep open,pinned,security'
