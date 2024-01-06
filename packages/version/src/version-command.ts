@@ -158,7 +158,7 @@ export class VersionCommand extends Command<VersionCommandOption> {
       );
     }
 
-    if (this.releaseClient && this.options.changelog === false) {
+    if (this.releaseClient && this.options.changelog === false && this.options.generateReleaseNotes !== true) {
       throw new ValidationError('ERELEASE', 'To create a release, you cannot pass --no-changelog');
     }
 
@@ -382,6 +382,7 @@ export class VersionCommand extends Command<VersionCommandOption> {
         await createRelease(
           {
             client: this.releaseClient,
+            type: this.options.createRelease!,
             generateReleaseNotes: this.options.generateReleaseNotes,
             releaseDiscussion: this.options.createReleaseDiscussion,
           },
@@ -711,6 +712,13 @@ export class VersionCommand extends Command<VersionCommandOption> {
           return pkg;
         })
       );
+    } else if (this.options.generateReleaseNotes && !changelog) {
+      actions.push((pkg: Package) => {
+        this.releaseNotes.push({
+          name: pkg.name,
+          pkg,
+        });
+      });
     }
 
     const mapUpdate = pPipe(...actions);
@@ -793,6 +801,12 @@ export class VersionCommand extends Command<VersionCommandOption> {
             });
           })
         );
+      } else if (this.options.generateReleaseNotes && !changelog) {
+        chain.then(() => {
+          this.releaseNotes.push({
+            name: 'fixed',
+          });
+        });
       }
 
       chain = chain.then(() =>
