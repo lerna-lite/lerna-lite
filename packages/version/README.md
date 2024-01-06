@@ -428,7 +428,7 @@ When run with this flag, `lerna version` will create an official GitHub release 
 lerna version --conventional-commits --create-release github --generate-release-notes
 ```
 
-You could also skip the changelog creation since GitHub automatically generates the name and body for the new release.
+Since GitHub automatically generates the name and body for the new release, you could skip the changelog creation if you wish.
 
 ```sh
 lerna version --conventional-commits --no-changelog --create-release github --generate-release-notes
