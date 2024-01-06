@@ -143,6 +143,10 @@ export class VersionCommand extends Command<VersionCommandOption> {
       throw new ValidationError('ERELEASE', 'To create a release, you must enable --conventional-commits');
     }
 
+    if (this.options.generateReleaseNotes && !this.options.createRelease) {
+      throw new ValidationError('ERELEASE', 'To generate release notes, you must define --create-release');
+    }
+
     if (this.options.createReleaseDiscussion && !this.options.createRelease) {
       throw new ValidationError('ERELEASE', 'To create a release discussion, you must define --create-release');
     }
@@ -376,7 +380,11 @@ export class VersionCommand extends Command<VersionCommandOption> {
       this.logger.info('execute', 'Creating releases...');
       try {
         await createRelease(
-          { client: this.releaseClient, releaseDiscussion: this.options.createReleaseDiscussion },
+          {
+            client: this.releaseClient,
+            generateReleaseNotes: this.options.generateReleaseNotes,
+            releaseDiscussion: this.options.createReleaseDiscussion,
+          },
           { tags: this.tags, releaseNotes: this.releaseNotes },
           {
             gitRemote: this.options.gitRemote,

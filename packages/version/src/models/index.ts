@@ -69,10 +69,11 @@ export interface GitClientReleaseOption {
   owner: string;
   repo: string;
   tag_name: string;
-  name: string;
+  name?: string;
   body?: string;
   draft?: boolean;
   prerelease?: boolean;
+  generate_release_notes?: boolean;
   discussion_category_name?: string;
 }
 

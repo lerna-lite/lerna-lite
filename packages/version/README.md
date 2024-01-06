@@ -83,6 +83,7 @@ Running `lerna version --conventional-commits` without the above flags will rele
     - [`--changelog-header-message <msg>`](#--changelog-header-message-msg)
     - [`--create-release <type>`](#--create-release-type)
     - [`--create-release-discussion <name>`](#--create-release-discussion-name)
+    - [`--generate-release-notes`](#--generate-release-notes)
     - [`--skip-bump-only-releases`](#--skip-bump-only-releases)
     - [`--describe-tag <pattern>`](#--describe-tag-pattern)
     - [`--exact`](#--exact)
@@ -417,8 +418,17 @@ Create a discussion for this release, this will create both a Release and a Disc
 lerna version --conventional-commits --create-release github --create-release-discussion announcement
 ```
 
-> **Note** currently only available for GitHub Releases following this GitHub blog post [You can now link discussions to new releases](https://github.blog/changelog/2021-04-06-releases-support-comments-and-reactions-with-discussion-linking/)
+> **Note** this option is currently only available for GitHub Releases following this GitHub blog post [You can now link discussions to new releases](https://github.blog/changelog/2021-04-06-releases-support-comments-and-reactions-with-discussion-linking/)
 
+### `--generate-release-notes`
+
+When run with this flag, `lerna version` will create an official GitHub release by automatically generating the name and body for the new release.
+
+```sh
+lerna version --conventional-commits --create-release github --generate-release-notes
+```
+
+> **Note** this option is currently only available for GitHub Releases, more info can be found in this GitHub documentation page [Automatically generated release notes](https://docs.github.com/en/repositories/releasing-projects-on-github/automatically-generated-release-notes)
 
 ### `--skip-bump-only-releases`
 

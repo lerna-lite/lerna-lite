@@ -21,7 +21,11 @@ export async function createReleaseClient(type: 'github' | 'gitlab'): Promise<Gi
 
 /** Create a release on a remote client (github or gitlab) */
 export function createRelease(
-  { client, releaseDiscussion }: { client: GitCreateReleaseClientOutput; releaseDiscussion?: string },
+  {
+    client,
+    generateReleaseNotes,
+    releaseDiscussion,
+  }: { client: GitCreateReleaseClientOutput; generateReleaseNotes?: boolean; releaseDiscussion?: string },
   { tags, releaseNotes }: ReleaseCommandProps,
   { gitRemote, execOpts, skipBumpOnlyReleases }: ReleaseOptions,
   dryRun = false
@@ -61,8 +65,6 @@ export function createRelease(
         owner: repo.owner,
         repo: repo.name,
         tag_name: tag,
-        name: tag,
-        body: notes,
         draft: false,
         prerelease: prereleaseParts.length > 0,
       };
@@ -70,6 +72,15 @@ export function createRelease(
       // also optionally create a Discussion with the release (currently only works with GitHub)
       if (releaseDiscussion) {
         releaseOptions.discussion_category_name = releaseDiscussion;
+      }
+
+      // whether to automatically generate the `name` and `body` for this release
+      // else we'll add the notes as the release description body & tag as the name
+      if (generateReleaseNotes) {
+        releaseOptions.generate_release_notes = generateReleaseNotes;
+      } else {
+        releaseOptions.name = tag;
+        releaseOptions.body = notes;
       }
 
       if (dryRun) {
