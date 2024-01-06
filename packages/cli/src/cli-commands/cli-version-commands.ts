@@ -124,7 +124,8 @@ export default {
         type: 'string',
       },
       'generate-release-notes': {
-        describe: 'Whether to automatically generate the name and body for this release.',
+        describe:
+          'Provides an alternative to create a GitHub release by letting GitHub automatically generate the name and body for the new release.',
         type: 'boolean',
       },
       'ignore-changes': {

@@ -1316,7 +1316,7 @@
         },
         "generateReleaseNotes": {
           "type": "boolean",
-          "description": "Whether to automatically generate the name and body for this release."
+          "description": "Provides an alternative to create a GitHub release by letting GitHub automatically generate the name and body for the new release."
         },
         "message": {
           "type": "string",
