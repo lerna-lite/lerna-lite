@@ -1314,6 +1314,10 @@
           "type": "string",
           "description": "Create a GitHub Discussion from the new release (note that createRelease must be enabled for this to work)."
         },
+        "generateReleaseNotes": {
+          "type": "boolean",
+          "description": "Whether to automatically generate the name and body for this release."
+        },
         "message": {
           "type": "string",
           "description": "For `lerna version`, the custom commit message to use when creating the version commit."

@@ -193,6 +193,9 @@ export interface VersionCommandOption {
   /** Create a GitHub Discussion from the new release (note that createRelease must be enabled for this to work and it only works with GitHub at the moment). */
   createReleaseDiscussion?: string;
 
+  /** Whether to automatically generate the name and body for this release. */
+  generateReleaseNotes?: boolean;
+
   /** Specify cross-dependency version numbers exactly rather than with a caret (^). */
   exact?: boolean;
 

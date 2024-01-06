@@ -123,6 +123,10 @@ export default {
         describe: 'Create a GitHub Discussion from the new release (note that createRelease must be enabled for this to work).',
         type: 'string',
       },
+      'generate-release-notes': {
+        describe: 'Whether to automatically generate the name and body for this release.',
+        type: 'boolean',
+      },
       'ignore-changes': {
         describe: [
           'Ignore changes in files matched by glob(s) when detecting changed packages.',

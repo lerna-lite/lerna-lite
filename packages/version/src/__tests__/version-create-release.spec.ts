@@ -96,6 +96,15 @@ describe.each([
     expect(client.releases.size).toBe(0);
   });
 
+  it('throws an error if --generate-release-notes is provided without defining --create-release', async () => {
+    const cwd = await initFixture('independent');
+    const command = lernaVersion(cwd)('--generate-release-notes');
+
+    await expect(command).rejects.toThrow('To generate release notes, you must define --create-release');
+
+    expect(client.releases.size).toBe(0);
+  });
+
   it('throws an error if --create-release-discussion is provided without defining --create-release', async () => {
     const cwd = await initFixture('independent');
     const command = lernaVersion(cwd)('--create-release-discussion', 'some-discussion');
@@ -374,6 +383,29 @@ it('should create a github release discussion when enabled', async () => {
     draft: false,
     prerelease: false,
     discussion_category_name: 'some-discussion',
+  });
+});
+
+it('should create a github release and generate release notes', async () => {
+  process.env.GH_TOKEN = 'TOKEN';
+  const createReleaseMock = vi.fn(() => Promise.resolve(true));
+  (createReleaseClient as Mock).mockImplementation(() => Promise.resolve({ repos: { createRelease: createReleaseMock } }));
+
+  const cwd = await initFixture('normal');
+
+  (recommendVersion as Mock).mockResolvedValueOnce('1.1.0');
+
+  const command = new VersionCommand(createArgv(cwd, '--create-release', 'github', '--conventional-commits', '--generate-release-notes'));
+  await command;
+  await command.execute();
+
+  expect(createReleaseMock).toHaveBeenCalledWith({
+    owner: 'lerna',
+    repo: 'lerna',
+    tag_name: 'v1.1.0',
+    draft: false,
+    generate_release_notes: true,
+    prerelease: false,
   });
 });
 
