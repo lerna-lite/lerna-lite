@@ -23,9 +23,15 @@ export async function createReleaseClient(type: 'github' | 'gitlab'): Promise<Gi
 export function createRelease(
   {
     client,
+    type,
     generateReleaseNotes,
     releaseDiscussion,
-  }: { client: GitCreateReleaseClientOutput; generateReleaseNotes?: boolean; releaseDiscussion?: string },
+  }: {
+    client: GitCreateReleaseClientOutput;
+    type: 'github' | 'gitlab';
+    generateReleaseNotes?: boolean;
+    releaseDiscussion?: string;
+  },
   { tags, releaseNotes }: ReleaseCommandProps,
   { gitRemote, execOpts, skipBumpOnlyReleases }: ReleaseOptions,
   dryRun = false
@@ -47,7 +53,7 @@ export function createRelease(
 
       // when the `GH_TOKEN` (or `GITHUB_TOKEN`) environment variable is not set,
       // we'll create a link to GitHub web interface form with the fields pre-populated
-      if (!GH_TOKEN && !GITHUB_TOKEN) {
+      if (type === 'github' && !GH_TOKEN && !GITHUB_TOKEN) {
         const releaseUrl = newGithubReleaseUrl({
           user: repo.owner,
           repo: repo.name,

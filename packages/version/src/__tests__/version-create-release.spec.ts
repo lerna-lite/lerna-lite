@@ -386,7 +386,7 @@ it('should create a github release discussion when enabled', async () => {
   });
 });
 
-it('should create a github release and generate release notes', async () => {
+it('should create a github release and generate release notes with changelog', async () => {
   process.env.GH_TOKEN = 'TOKEN';
   const createReleaseMock = vi.fn(() => Promise.resolve(true));
   (createReleaseClient as Mock).mockImplementation(() => Promise.resolve({ repos: { createRelease: createReleaseMock } }));
@@ -396,6 +396,29 @@ it('should create a github release and generate release notes', async () => {
   (recommendVersion as Mock).mockResolvedValueOnce('1.1.0');
 
   const command = new VersionCommand(createArgv(cwd, '--create-release', 'github', '--conventional-commits', '--generate-release-notes'));
+  await command;
+  await command.execute();
+
+  expect(createReleaseMock).toHaveBeenCalledWith({
+    owner: 'lerna',
+    repo: 'lerna',
+    tag_name: 'v1.1.0',
+    draft: false,
+    generate_release_notes: true,
+    prerelease: false,
+  });
+});
+
+it('should create a github release and generate release notes with --no-changelog', async () => {
+  process.env.GH_TOKEN = 'TOKEN';
+  const createReleaseMock = vi.fn(() => Promise.resolve(true));
+  (createReleaseClient as Mock).mockImplementation(() => Promise.resolve({ repos: { createRelease: createReleaseMock } }));
+
+  const cwd = await initFixture('normal');
+
+  (recommendVersion as Mock).mockResolvedValueOnce('1.1.0');
+
+  const command = new VersionCommand(createArgv(cwd, '--create-release', 'github', '--conventional-commits', '--generate-release-notes', '--no-changelog'));
   await command;
   await command.execute();
 

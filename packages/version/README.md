@@ -412,7 +412,7 @@ When run with this flag, `lerna version` will create an official GitHub or GitLa
 
 ### `--create-release-discussion <name>`
 
-Create a discussion for this release, this will create both a Release and a Discussion.
+Create a discussion for this release, this will create both a Release and a Discussion. Conventional commits is required for this option to work.
 
 ```sh
 lerna version --conventional-commits --create-release github --create-release-discussion announcement
@@ -422,10 +422,16 @@ lerna version --conventional-commits --create-release github --create-release-di
 
 ### `--generate-release-notes`
 
-When run with this flag, `lerna version` will create an official GitHub release by automatically generating the name and body for the new release.
+When run with this flag, `lerna version` will create an official GitHub release by automatically generating the name and body for the new release. Conventional commits is required for this option to work.
 
 ```sh
 lerna version --conventional-commits --create-release github --generate-release-notes
+```
+
+Since GitHub automatically generates the name and body for the new release, you could skip the changelog creation if you wish.
+
+```sh
+lerna version --conventional-commits --no-changelog --create-release github --generate-release-notes
 ```
 
 > **Note** this option is currently only available for GitHub Releases, more info can be found in this GitHub documentation page [Automatically generated release notes](https://docs.github.com/en/repositories/releasing-projects-on-github/automatically-generated-release-notes)
@@ -468,7 +474,7 @@ To authenticate with GitLab, the following environment variables can be defined.
 - `GL_TOKEN` (required): Your GitLab authentication token (under User Settings > Access Tokens).
 - `GL_API_URL`: An absolute URL to the API, including the version. (Default: https://gitlab.com/api/v4)
 
-> **Note** When using this option, you cannot pass [`--no-changelog`](#--no-changelog).
+> **Note** When using this option, you cannot pass [`--no-changelog`](#--no-changelog) except when used with [`--generate-release-notes`](#--generate-release-notes).
 
 ### `--exact`
 
