@@ -1,7 +1,7 @@
 {
   "name": "@lerna-lite/listable",
   "description": "Lerna-Lite listable utils",
-  "version": "3.2.0",
+  "version": "3.2.1",
   "files": [
     "/dist"
   ],

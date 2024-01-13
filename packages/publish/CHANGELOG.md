@@ -4,6 +4,14 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [3.2.1](https://github.com/lerna-lite/lerna-lite/compare/v3.2.0...v3.2.1) (2024-01-13)
+
+### Bug Fixes
+
+* **deps:** update all non-major dependencies ([#802](https://github.com/lerna-lite/lerna-lite/issues/802)) ([29e0504](https://github.com/lerna-lite/lerna-lite/commit/29e050449b5ff7d12461b4e27eaacf1c58640fb8)) - by @renovate[bot]
+* **publish:** --canary --dry-run command should create valid tags ([#803](https://github.com/lerna-lite/lerna-lite/issues/803)) ([ff62bf1](https://github.com/lerna-lite/lerna-lite/commit/ff62bf16c344870f37fa3cb23ee0d20d32e0a6ed)) - by @ghiscoding
+* **publish:** lerna publish --canary --dry-run shouldn't throw ([#801](https://github.com/lerna-lite/lerna-lite/issues/801)) ([9f44c71](https://github.com/lerna-lite/lerna-lite/commit/9f44c716c8ff84f731dc1db2bf078bc4d9015f43)) - by @ghiscoding
+
 ## [3.2.0](https://github.com/lerna-lite/lerna-lite/compare/v3.1.0...v3.2.0) (2024-01-06)
 
 ### Bug Fixes

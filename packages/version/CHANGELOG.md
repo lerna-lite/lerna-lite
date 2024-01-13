@@ -4,6 +4,12 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [3.2.1](https://github.com/lerna-lite/lerna-lite/compare/v3.2.0...v3.2.1) (2024-01-13)
+
+### Bug Fixes
+
+* **version:** allow generateReleaseNotes w/o changelog ([#800](https://github.com/lerna-lite/lerna-lite/issues/800)) ([aea5f1f](https://github.com/lerna-lite/lerna-lite/commit/aea5f1fe1b3ab10f9b0f1a1a45777c75e73a9e21)) - by @ghiscoding
+
 ## [3.2.0](https://github.com/lerna-lite/lerna-lite/compare/v3.1.0...v3.2.0) (2024-01-06)
 
 ### Features

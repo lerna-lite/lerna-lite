@@ -4,6 +4,12 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [3.2.1](https://github.com/lerna-lite/lerna-lite/compare/v3.2.0...v3.2.1) (2024-01-13)
+
+### Bug Fixes
+
+* **publish:** lerna publish --canary --dry-run shouldn't throw ([#801](https://github.com/lerna-lite/lerna-lite/issues/801)) ([9f44c71](https://github.com/lerna-lite/lerna-lite/commit/9f44c716c8ff84f731dc1db2bf078bc4d9015f43)) - by @ghiscoding
+
 ## [3.2.0](https://github.com/lerna-lite/lerna-lite/compare/v3.1.0...v3.2.0) (2024-01-06)
 
 ### Features
