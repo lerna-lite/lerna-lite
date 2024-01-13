@@ -438,14 +438,7 @@ test('publish --canary --include-merged-tags calls git describe correctly', asyn
 
   await new PublishCommand(createArgv(cwd, '--canary', '--include-merged-tags'));
 
-  expect(describeRef).toHaveBeenCalledWith(
-    {
-      match: 'v*.*.*',
-      cwd,
-    },
-    true,
-    undefined
-  );
+  expect(describeRef).toHaveBeenCalledWith({ match: 'v*.*.*', cwd }, true);
 });
 
 test('publish --canary without _any_ tags', async () => {
