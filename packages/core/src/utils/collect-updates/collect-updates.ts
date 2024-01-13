@@ -20,8 +20,7 @@ export function collectUpdates(
   filteredPackages: Package[],
   packageGraph: PackageGraph,
   execOpts: ExecOpts,
-  commandOptions: UpdateCollectorOptions,
-  dryRun = false
+  commandOptions: UpdateCollectorOptions
 ) {
   const {
     forcePublish,
