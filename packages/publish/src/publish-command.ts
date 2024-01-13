@@ -452,22 +452,16 @@ export class PublishCommand extends Command<PublishCommandOption> {
 
     // find changed packages since last release, if any
     chain = chain.then(() =>
-      collectUpdates(
-        this.packageGraph?.rawPackageList ?? [],
-        this.packageGraph,
-        this.execOpts,
-        {
-          bump: 'prerelease',
-          canary: true,
-          ignoreChanges,
-          forcePublish,
-          includeMergedTags,
-          isIndependent,
-          describeTag,
-          // private packages are never published, don't bother describing their refs.
-        } as UpdateCollectorOptions,
-        this.options.dryRun
-      ).filter((node) => !node.pkg.private)
+      collectUpdates(this.packageGraph?.rawPackageList ?? [], this.packageGraph, this.execOpts, {
+        bump: 'prerelease',
+        canary: true,
+        ignoreChanges,
+        forcePublish,
+        includeMergedTags,
+        isIndependent,
+        describeTag,
+        // private packages are never published, don't bother describing their refs.
+      } as UpdateCollectorOptions).filter((node) => !node.pkg.private)
     );
 
     // prettier-ignore

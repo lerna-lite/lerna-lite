@@ -20,8 +20,7 @@ export function collectUpdates(
   filteredPackages: Package[],
   packageGraph: PackageGraph,
   execOpts: ExecOpts,
-  commandOptions: UpdateCollectorOptions,
-  dryRun = false
+  commandOptions: UpdateCollectorOptions
 ) {
   const {
     forcePublish,
@@ -54,7 +53,7 @@ export function collectUpdates(
     describeOptions.match = tagPattern;
 
     // describe the last annotated tag in the current branch
-    const { sha, refCount, lastTagName } = describeRefSync(describeOptions, commandOptions.includeMergedTags, dryRun);
+    const { sha, refCount, lastTagName } = describeRefSync(describeOptions, commandOptions.includeMergedTags);
     // TODO: warn about dirty tree?
 
     if (refCount === '0' && forced.size === 0 && !committish) {

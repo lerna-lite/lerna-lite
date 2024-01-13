@@ -79,7 +79,7 @@ describe('collectUpdates()', () => {
       }),
     ]);
     expect(hasTags).toHaveBeenLastCalledWith(execOpts, '');
-    expect(describeRefSync).toHaveBeenLastCalledWith({ cwd: '/test', match: '' }, undefined, false);
+    expect(describeRefSync).toHaveBeenLastCalledWith({ cwd: '/test', match: '' }, undefined);
     expect(makeDiffPredicate).toHaveBeenLastCalledWith('v1.0.0', execOpts, undefined, {
       independentSubpackages: undefined,
     });
@@ -102,7 +102,7 @@ describe('collectUpdates()', () => {
       }),
     ]);
     expect(hasTags).toHaveBeenLastCalledWith(execOpts, '*@*');
-    expect(describeRefSync).toHaveBeenLastCalledWith(execOpts, undefined, false);
+    expect(describeRefSync).toHaveBeenLastCalledWith(execOpts, undefined);
     expect(makeDiffPredicate).toHaveBeenLastCalledWith('v1.0.0', execOpts, undefined, {
       independentSubpackages: undefined,
     });
@@ -479,7 +479,7 @@ describe('collectUpdates()', () => {
       isIndependent: true,
       includeMergedTags: true,
     });
-    expect(describeRefSync).toHaveBeenCalledWith({ cwd: '/test', match: '*custom-tag*' }, true, false);
+    expect(describeRefSync).toHaveBeenCalledWith({ cwd: '/test', match: '*custom-tag*' }, true);
   });
 
   it('no use "describeTag" in independent mode', async () => {
@@ -491,7 +491,7 @@ describe('collectUpdates()', () => {
       isIndependent: true,
       includeMergedTags: true,
     });
-    expect(describeRefSync).toHaveBeenCalledWith({ cwd: '/test', match: '*@*' }, true, false);
+    expect(describeRefSync).toHaveBeenCalledWith({ cwd: '/test', match: '*@*' }, true);
   });
 
   it('use "describeTag" in non-independent mode', async () => {
@@ -504,7 +504,7 @@ describe('collectUpdates()', () => {
       isIndependent: false,
       includeMergedTags: true,
     });
-    expect(describeRefSync).toHaveBeenCalledWith({ cwd: '/test', match: '*custom-tag*' }, true, false);
+    expect(describeRefSync).toHaveBeenCalledWith({ cwd: '/test', match: '*custom-tag*' }, true);
   });
 
   it('no use "describeTag" in non-independent mode', async () => {
@@ -516,7 +516,7 @@ describe('collectUpdates()', () => {
       isIndependent: false,
       includeMergedTags: true,
     });
-    expect(describeRefSync).toHaveBeenCalledWith({ cwd: '/test', match: '' }, true, false);
+    expect(describeRefSync).toHaveBeenCalledWith({ cwd: '/test', match: '' }, true);
   });
 
   it('use "describeTag" with empty value in independent mode', async () => {
@@ -529,6 +529,6 @@ describe('collectUpdates()', () => {
       isIndependent: true,
       includeMergedTags: true,
     });
-    expect(describeRefSync).toHaveBeenCalledWith({ cwd: '/test', match: '*@*' }, true, false);
+    expect(describeRefSync).toHaveBeenCalledWith({ cwd: '/test', match: '*@*' }, true);
   });
 });
