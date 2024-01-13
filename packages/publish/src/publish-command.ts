@@ -484,8 +484,7 @@ export class PublishCommand extends Command<PublishCommandOption> {
               match: `${node.name}@*`,
               cwd,
             },
-            includeMergedTags,
-            this.options.dryRun
+            includeMergedTags
           )
             // an unpublished package will have no reachable git tag
             .then(makeVersion(node.version))
@@ -503,8 +502,7 @@ export class PublishCommand extends Command<PublishCommandOption> {
             match: `${this.tagPrefix}*.*.*`,
             cwd,
           },
-          includeMergedTags,
-          this.options.dryRun
+          includeMergedTags
         )
           // a repo with no tags should default to whatever lerna.json claims
           .then(makeVersion(this.project.version))
