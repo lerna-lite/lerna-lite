@@ -39,7 +39,6 @@ jobs:
       - name: Set NodeJS
         uses: actions/setup-node@v4
         with:
-          cache: "pnpm"
           registry-url: 'https://registry.npmjs.org/'
           node-version: 20
           scope: "@lerna-lite"
