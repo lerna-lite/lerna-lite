@@ -29,6 +29,7 @@
     "preview:version": "lerna version --dry-run --yes",
     "major-release": "pnpm build:full && lerna publish 2.0.0",
     "preview:release": "lerna publish --dry-run --yes",
+    "preview:release:canary": "lerna publish --dry-run --yes --canary",
     "preview:roll-new-release": "pnpm build:full && lerna version --yes --dry-run && lerna publish from-package --dry-run --yes",
     "new-version": "lerna version",
     "new-publish": "lerna publish from-package",
