@@ -20,7 +20,7 @@
     },
     {
       packageNames: ['prettier'],
-      allowedVersions: '3.2.2',
+      allowedVersions: '3.2.1',
     },
   ],
   ignoreDeps: ['lee-dohm/no-response'],
