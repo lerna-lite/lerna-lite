@@ -6,9 +6,9 @@
 
 ## (`lerna watch`) - Watch command [optional] 👓
 
-Watch for changes within packages and execute commands from the root of the repository, for example trigger rebuilds of packages when their files changed.
+Watch for changes within packages and execute commands from the root of the repository, for example, trigger a rebuild of packages when any of its files change.
 
-> **Note** the `watch` command also exists in the original [Lerna](https://github.com/lerna/lerna), however their implementation uses Nx (no surprises) to watch for file changes. Since we want to keep Lerna-Lite well... light, we opted to use [`Chokidar`](https://github.com/paulmillr/chokidar), it is used by millions of packages (even ViteJS uses it), so chances are that you already have it installed directly or indirectly. Even though Lerna and Lerna-Lite differs in their internal implementations, their usage are quite similar (apart from the [Chokidar options](#chokidar-options) that we also provide).
+> **Note** the `watch` command also exists in the original [Lerna](https://github.com/lerna/lerna), however their implementation uses Nx (no surprises) to watch for file changes. Since we want to keep Lerna-Lite well... light, we opted to use [`Chokidar`](https://github.com/paulmillr/chokidar), it is used by millions of packages (even ViteJS uses it), so chances are that you already have it installed directly or indirectly. Even though Lerna and Lerna-Lite differs in their internal implementations, their usage are nearly identical (apart from the [Chokidar options](#chokidar-options) that we also provide).
 
 ---
 
@@ -27,7 +27,7 @@ lerna watch
 $ lerna watch -- <command>
 ```
 
-The values `$LERNA_PACKAGE_NAME` and `$LERNA_FILE_CHANGES` will be replaced with the package name, the file that changed respectively. If multiple file changes are detected, they will all be listed and separated by a whitespace (unless custom file delimiter are provided).
+The values `$LERNA_PACKAGE_NAME` and `$LERNA_FILE_CHANGES` will be replaced with the package name, the file that changed respectively. If multiple file changes are detected, they will all be listed and separated by a whitespace (unless a custom file delimiter is provided).
 
 > **Note** When using these environment variables in the shell, you will need to escape the dollar sign with a backslash (`\`). See the [examples](#examples) below.
 
@@ -57,7 +57,7 @@ Watch the `/src` folder of each package using the `--glob` option and run the `t
 $ lerna watch --glob=\"src\" -- lerna run test --scope=\$LERNA_PACKAGE_NAME
 ```
 
-Since you can execute any arbitrary commands, you could use `pnpm run` instead of `lerna run` to run the tests, the glob pattern can help to limit the watch to only spec files
+Since you can execute any arbitrary commands, you could use `pnpm run` instead of `lerna run` to run the tests, the glob pattern can help to limit the watch to target only spec files
 
 ```sh
 $ lerna watch --glob=\"src/**/*.spec.ts\" -- pnpm -r --filter=\$LERNA_PACKAGE_NAME test
@@ -73,7 +73,7 @@ $ lerna watch --scope=package-1 --include-dependents -- lerna run build --stream
 $ lerna watch --scope=package-1 --include-dependents -- pnpm run --stream --filter ...\$LERNA_PACKAGE_NAME build
 ```
 
-Watch and stream two packages and run the "build" script on them when a file within it changes:
+Watch and stream two packages and run the "build" script when any files within the targeted packages changed:
 
 ```sh
 $ lerna watch --scope={my-package-1,my-package-2} -- lerna run build --stream --scope=\$LERNA_PACKAGE_NAME
@@ -85,7 +85,7 @@ When using `npx`, the `-c` option must be used if also providing variables for s
 $ npx -c 'lerna watch -- echo \$LERNA_PACKAGE_NAME \$LERNA_FILE_CHANGES'
 ```
 
-> **Note** environment variables on Windows platform need to be wrapped in `%` symbol (ie `%LERNA_PACKAGE_NAME%`), to be cross-platform you can install [cross-env](https://www.npmjs.com/package/cross-env).
+> **Note** environment variables on Windows platform need to be wrapped between two `%` (e.g. `%LERNA_PACKAGE_NAME%`), you could also install [cross-env](https://www.npmjs.com/package/cross-env) to be cross-platform.
 
 ```sh
 # On Windows
@@ -291,21 +291,21 @@ $ lerna watch --awf-stability-threshold=2000 -- <command>
 
 ## Watch Environment Variables
 
-Lerna will set 3 separate environment variables when running the inner command. These can be used to customize the command that is run.
+Lerna-Lite will set 3 separate environment variables when running the inner command. These can be used to customize the command that will be executed.
 
 - `$LERNA_PACKAGE_NAME` will be replaced with the name of the package that changed.
 - `$LERNA_FILE_CHANGES` will be replaced with the file(s) that changed, separated by whitespace when multiple files are changed.
 
-> **Note** When using these variables in the shell, you will need to escape the `$` with a backslash (`\`). See the examples above.
+> **Note** When using these variables in the shell, you will need to escape the `$` with a backslash (`\`). See all examples above.
 
 ## Running With Package Managers
 
-The examples above showcase using `lerna` directly in the terminal. However, you can also use `lerna` via a package manager without adding it to your path:
+The examples above showcase using `lerna` directly in the terminal. However, you could also use `lerna` via a package manager without adding it to your path:
 
 pnpm:
 
 ```sh
-pnpm lerna watch -- lerna run build --scope=\$LERNA_PACKAGE_NAME
+pnpm exec lerna watch -- lerna run build --scope=\$LERNA_PACKAGE_NAME
 ```
 
 yarn:
