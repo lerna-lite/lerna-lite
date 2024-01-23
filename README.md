@@ -318,7 +318,7 @@ To contribute to the project, please follow the steps shown in the [Contributing
 
 If you have problems running the lib and your problems are related to Git commands that were executed, then we suggest to first try with the `--dry-run` option to see if it helps in finding the error(s) that you may have. Another great, and possibly much more useful suggestion, is to search in the original Lerna [issues](https://github.com/lerna/lerna/issues) list and see if any solution could help you (remember that Lerna-Lite is a fork of the original code from Lerna and it works the same way). Lastly, if that is not enough and you wish to troubleshoot yourself, then read this [Troubleshooting - Wiki](https://github.com/lerna-lite/lerna-lite/wiki/Troubleshooting) to possibly troubleshoot yourself the execution in your own environment.
 
-## Lerna-Lite Full List of Packages
+## Published Packages
 
 | Package Name | Version | Description | Changes |
 | ------------ | ------- | ----------- | ------- |
