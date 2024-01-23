@@ -49,7 +49,7 @@ Lerna-Lite itself is also using [pnpm workspaces](https://pnpm.io/workspaces) wi
 
 ## Who is using Lerna-Lite
 
-Here are some of the largest projects using this Lerna-Lite fork
+Here are some of the largest projects using Lerna-Lite
 
 <a href="https://github.com/facebook/jest">
   <img src="https://jestjs.io/img/jest.png" width="25" height="25">
@@ -67,9 +67,9 @@ Here are some of the largest projects using this Lerna-Lite fork
   <img src="https://vue.gallerycdn.vsassets.io/extensions/vue/volar/1.3.16/1681622004073/Microsoft.VisualStudio.Services.Icons.Default" width="25" height="25">
   Volar
 </a>&nbsp; | &nbsp;
-<a href="https://github.com/standardnotes/app">
-  <img src="https://avatars.githubusercontent.com/u/24537496?s=200&amp;v=4" width="25" height="25">
-  Standard Notes
+<a href="https://github.com/palantir/blueprint">
+  <img src="https://avatars.githubusercontent.com/u/303157?s=48&v=4" width="25" height="25">
+  Blueprint
 </a>&nbsp; | &nbsp;
 <a href="https://github.com/nativescript-community" title="NativeScript Community">
   <img src="https://avatars.githubusercontent.com/u/50633791?s=200&v=4" width="25" height="25">
@@ -90,7 +90,7 @@ Here are some of the largest projects using this Lerna-Lite fork
 
 ## About Lerna-Lite
 
-Lerna-Lite differs from the original [Lerna](https://github.com/lerna/lerna) since it only has a limited subset of Lerna's list of commands (which itself has 15 commands) and **all** commands are **optional** in Lerna-Lite making installs typically much smaller. Lerna was originally built as an all-in-one tool, however nowadays Workspaces are available in all package managers and the need for an all-in-one tool, which includes built-in workspaces functionalities (like `bootstrap`), is no longer needed. Lerna-Lite is built around this new reality and is only providing commands that package managers do not include. To summarize, Lerna-Lite is more modular than the original Lerna and you'll end up installing a lot less dependencies also making it more versatile to use with other tools like Turborepo, pnpm and other...
+Lerna-Lite differs from the original [Lerna](https://github.com/lerna/lerna) since it only has a limited subset of Lerna's list of commands (which itself has 15 commands) and **all** commands are **optional** in Lerna-Lite making installs typically much smaller. Lerna was originally built as an all-in-one tool, however nowadays Workspaces are available in all package managers and the need for an all-in-one tool, which includes built-in workspaces functionalities (like `bootstrap`), is no longer needed. Lerna-Lite is built around this new reality and is only providing commands that package managers do not include. To summarize, Lerna-Lite is more modular than the original Lerna and you'll end up installing a lot less dependencies also making it more versatile to use with other tools like TurboRepo, pnpm and other...
 
 Lerna-Lite assumes, and requires you to pre-setup your Workspace through your favorite package manager (npm, pnpm, yarn) that will take care of the symlinks. Lerna-Lite does **not include** the `bootstrap`, `add`, `create` and `link` commands hence the need for you to properly setup your workspace prior to installing Lerna-Lite.
 
