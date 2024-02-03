@@ -8,7 +8,6 @@ export default defineConfig({
       interopDefault: false,
     },
     environment: 'node',
-    dangerouslyIgnoreUnhandledErrors: true, // useNx often fails and it's probably going to be removed in next major
     testTimeout: 60000,
     setupFiles: ['./vitest/silence-logging.ts', './helpers/npm/set-npm-userconfig.ts'],
     watch: false,
@@ -24,11 +23,6 @@ export default defineConfig({
         '**/__tests__/**',
       ],
       provider: 'v8',
-    },
-    onConsoleLog(log, type) {
-      if (type === 'stderr' && log.includes(`Could not find 'nx' module`)) {
-        return false;
-      }
     },
   },
 });
