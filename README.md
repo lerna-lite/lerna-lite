@@ -335,4 +335,4 @@ If you have problems running the lib and your problems are related to Git comman
 
 ## Sponsors
 
-<img src="https://avatars.githubusercontent.com/u/64281914" width="60" height="60" valign="middle" /> Wundergraph</a>
+<a href="https://github.com/wundergraph" target="_blank"><img src="https://avatars.githubusercontent.com/u/64281914" width="60" height="60" valign="middle" /> Wundergraph</a>
