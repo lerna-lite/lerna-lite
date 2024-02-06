@@ -10,7 +10,7 @@
     "clean:tarball": "rimraf --glob packages/**/*.tgz",
     "build": "tsc --build ./tsconfig.packages.json",
     "build:clean": "pnpm clean && tsc --build ./tsconfig.packages.json && echo TSC Build Completed",
-    "build:full": "pnpm clean && pnpm lint && tsc --build ./tsconfig.packages.json && echo TSC Build Completed",
+    "build:full": "pnpm clean && pnpm lint && prettier:write && tsc --build ./tsconfig.packages.json && echo TSC Build Completed",
     "build:pnpm": "pnpm -r --stream build",
     "init-cmd": "lerna init --independent --exact --use-workspaces",
     "changed-cmd": "lerna changed --all",
