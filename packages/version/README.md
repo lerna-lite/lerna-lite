@@ -89,8 +89,9 @@ Running `lerna version --conventional-commits` without the above flags will rele
     - [`--exact`](#--exact)
     - [`--independent-subpackages`](#--independent-subpackages)
     - [`--force-publish`](#--force-publish)
-    - [`--git-tag-command <cmd>`](#--git-tag-command-cmd)
     - [`--dry-run`](#--dry-run)
+    - [`--git-tag-command <cmd>`](#--git-tag-command-cmd)
+    - [`--tag-version-separator`](#--tag-version-separator)
     - [`--git-remote <name>`](#--git-remote-name)
     - [`--ignore-changes`](#--ignore-changes)
     - [`--ignore-scripts`](#--ignore-scripts)
@@ -536,6 +537,13 @@ This can also be configured in `lerna.json`.
     }
   }
 }
+```
+
+### `--tag-version-separator`
+Customize the tag version separator used when creating tags for independent versioning, defaults to "@".
+
+```sh
+lerna version --tag-version-separator "__"
 ```
 
 ### `--git-remote <name>`

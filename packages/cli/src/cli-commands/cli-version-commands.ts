@@ -181,6 +181,12 @@ export default {
         hidden: true,
         type: 'boolean',
       },
+      'tag-version-separator': {
+        describe: 'Customize the tag version separator used when creating tags for independent versioning, defaults to "@".',
+        type: 'string',
+        requiresArg: true,
+        defaultDescription: '@',
+      },
       // TODO: (major) make --no-granular-pathspec the default
       'no-granular-pathspec': {
         describe: 'Do not stage changes file-by-file, but globally.',

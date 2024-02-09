@@ -4,6 +4,7 @@ vi.mock('../../child-process');
 
 import * as childProcess from '../../child-process';
 import { describeRef, describeRefSync } from '../describe-ref';
+import { DescribeRefDetailedResult } from '../../models';
 
 const DEFAULT_ARGS = ['describe', '--always', '--long', '--dirty', '--first-parent'];
 
@@ -146,6 +147,43 @@ describe('parser', () => {
     const result = describeRefSync();
 
     expect(result.isDirty).toBe(true);
+  });
+
+  describe('custom tag-version-separator', () => {
+    it('matches independent tags using a custom tag-version-separator, CASE 1', () => {
+      (childProcess.execSync as Mock).mockReturnValueOnce('pkg-name__1.2.3-4-g567890a');
+
+      const result = describeRefSync({ separator: '__' }) as DescribeRefDetailedResult;
+
+      expect(result.lastTagName).toBe('pkg-name__1.2.3');
+      expect(result.lastVersion).toBe('1.2.3');
+    });
+
+    it('matches independent tags using a custom tag-version-separator, CASE 2', () => {
+      (childProcess.execSync as Mock).mockReturnValueOnce('pkg-name-1.2.3-4-g567890a');
+
+      const result = describeRefSync({ separator: '-' }) as DescribeRefDetailedResult;
+
+      expect(result.lastTagName).toBe('pkg-name-1.2.3');
+      expect(result.lastVersion).toBe('1.2.3');
+    });
+
+    it('matches independent tags for scoped packages', () => {
+      (childProcess.execSync as Mock).mockReturnValueOnce('@scope/pkg-name_1.2.3-4-g567890a');
+
+      const result = describeRefSync({ separator: '_' }) as DescribeRefDetailedResult;
+
+      expect(result.lastTagName).toBe('@scope/pkg-name_1.2.3');
+      expect(result.lastVersion).toBe('1.2.3');
+    });
+
+    it('matches dirty annotations', () => {
+      (childProcess.execSync as Mock).mockReturnValueOnce('pkg-name@@1.2.3-4-g567890a-dirty');
+
+      const result = describeRefSync({ separator: '@@' });
+
+      expect(result.isDirty).toBe(true);
+    });
   });
 
   it('handles non-matching strings safely', () => {

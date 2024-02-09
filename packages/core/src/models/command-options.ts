@@ -295,6 +295,9 @@ export interface VersionCommandOption {
   /** Defaults to 'v', customize the tag prefix. To remove entirely, pass an empty string. */
   tagVersionPrefix?: string;
 
+  /** Customize the tag version separator used when creating tags for independent versioning. */
+  tagVersionSeparator?: string;
+
   /** Do not manually update (read/write back to the lock file) the project root lock file. */
   noManuallyUpdateRootLockfile?: boolean;
 
