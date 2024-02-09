@@ -31,6 +31,7 @@ export function collectUpdates(
     independentSubpackages,
     isIndependent,
     describeTag,
+    tagVersionSeparator,
   } = commandOptions;
 
   // If --conventional-commits and --conventional-graduate are both set, ignore --force-publish but consider --force-conventional-graduate
@@ -48,9 +49,9 @@ export function collectUpdates(
   if (hasTags(execOpts, tagPattern)) {
     const describeOptions: DescribeRefOptions = {
       ...execOpts,
+      match: tagPattern,
+      separator: tagVersionSeparator,
     };
-
-    describeOptions.match = tagPattern;
 
     // describe the last annotated tag in the current branch
     const { sha, refCount, lastTagName } = describeRefSync(describeOptions, commandOptions.includeMergedTags);

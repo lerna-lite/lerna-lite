@@ -1350,6 +1350,10 @@
           "type": "boolean",
           "description": "During `lerna version`, when true, commit and tag version changes."
         },
+        "tagVersionSeparator": {
+          "type": "string",
+          "description": "Customize the tag version separator used when creating tags for independent versioning, defaults to \"@\"."
+        },
         "noPush": {
           "type": "boolean",
           "description": "During `lerna version`, when true, do not push tagged commit to git remote."

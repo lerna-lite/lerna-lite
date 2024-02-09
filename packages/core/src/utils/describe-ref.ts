@@ -46,7 +46,7 @@ function describeRef(
   const promise = exec('git', getArgs(options, includeMergedTags), options, dryRun);
 
   return promise.then(({ stdout } = { stdout: '' }) => {
-    const result = parse(stdout, options.cwd);
+    const result = parse(stdout, options.cwd, options.separator);
 
     if (options?.match) {
       log.verbose('git-describe', '%j => %j', options?.match, stdout);
@@ -63,9 +63,13 @@ function describeRef(
  * @param {DescribeRefOptions} [options]
  * @param {boolean} [includeMergedTags]
  */
-function describeRefSync(options: DescribeRefOptions = {}, includeMergedTags?: boolean, dryRun = false) {
+function describeRefSync(
+  options: DescribeRefOptions = {},
+  includeMergedTags?: boolean,
+  dryRun = false
+): DescribeRefFallbackResult | DescribeRefDetailedResult {
   const stdout = execSync('git', getArgs(options, includeMergedTags), options, dryRun);
-  const result = parse(stdout, options.cwd);
+  const result = parse(stdout, options.cwd, options.separator);
 
   if (options?.match) {
     log.verbose('git-describe.sync', '%j => %j', options?.match, stdout);
@@ -81,9 +85,11 @@ function describeRefSync(options: DescribeRefOptions = {}, includeMergedTags?: b
  * Parse git output and return relevant metadata.
  * @param {string} stdout Result of `git describe`
  * @param {string} [cwd] Defaults to `process.cwd()`
+ * @param [separator] Separator used within independent version tags, defaults to @
  * @returns {DescribeRefFallbackResult|DescribeRefDetailedResult}
  */
-function parse(stdout: string, cwd?: string): DescribeRefFallbackResult | DescribeRefDetailedResult {
+function parse(stdout: string, cwd?: string, separator?: string): DescribeRefFallbackResult | DescribeRefDetailedResult {
+  separator = separator || '@';
   const minimalShaRegex = /^([0-9a-f]{7,40})(-dirty)?$/;
   // when git describe fails to locate tags, it returns only the minimal sha
   if (minimalShaRegex.test(stdout)) {
@@ -96,7 +102,11 @@ function parse(stdout: string, cwd?: string): DescribeRefFallbackResult | Descri
     return { refCount, sha, isDirty: Boolean(isDirty) };
   }
 
-  const [, lastTagName, lastVersion, refCount, sha, isDirty] = /^((?:.*@)?(.*))-(\d+)-g([0-9a-f]+)(-dirty)?$/.exec(stdout) || [];
+  // If the user has specified a custom separator, it may not be regex-safe, so escape it
+  const escapedSeparator = separator.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+  const regexPattern = new RegExp(`^((?:.*${escapedSeparator})?(.*))-(\\d+)-g([0-9a-f]+)(-dirty)?$`);
+
+  const [, lastTagName, lastVersion, refCount, sha, isDirty] = regexPattern.exec(stdout) || [];
 
   return { lastTagName, lastVersion, refCount, sha, isDirty: Boolean(isDirty) };
 }

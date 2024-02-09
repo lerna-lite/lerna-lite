@@ -24,6 +24,9 @@ export interface DescribeRefOptions {
 
   /* Glob passed to `--match` flag */
   match?: string;
+
+  /** Separator used within independent version tags, defaults to @ */
+  separator?: string;
 }
 
 /* When annotated release tags are missing */
@@ -223,6 +226,9 @@ export interface UpdateCollectorOptions {
   forceConventionalGraduate?: boolean;
 
   excludeDependents?: boolean;
+
+  // Separator used within independent version tags, defaults to @
+  tagVersionSeparator?: string;
 
   /** optionally exclude sub-packages when versioning */
   independentSubpackages?: boolean;

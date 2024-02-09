@@ -846,7 +846,8 @@ export class VersionCommand extends Command<VersionCommandOption> {
   }
 
   async gitCommitAndTagVersionForUpdates() {
-    const tags = this.packagesToVersion.map((pkg) => `${pkg.name}@${this.updatesVersions?.get(pkg.name)}`);
+    const tagVersionSeparator = this.options.tagVersionSeparator || '@';
+    const tags = this.packagesToVersion.map((pkg) => `${pkg.name}${tagVersionSeparator}${this.updatesVersions?.get(pkg.name)}`);
     const subject = this.options.message || 'chore: Publish new release';
     const message = tags.reduce((msg, tag) => `${msg}${OS_EOL} - ${tag}`, `${subject}${OS_EOL}`);
 
