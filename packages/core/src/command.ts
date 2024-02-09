@@ -272,7 +272,10 @@ export class Command<T extends AvailableCommandOption> {
 
   runValidations() {
     if ((this.options.since !== undefined || this.requiresGit) && !this.gitInitialized()) {
-      throw new ValidationError('ENOGIT', 'The git binary was not found, or this is not a git repository.');
+      throw new ValidationError(
+        'ENOGIT',
+        "The git binary was not found, this is not a git repository, or you git doesn't have the right ownership. Run `git rev-parse` to get more details."
+      );
     }
 
     if (!this.project.manifest) {
