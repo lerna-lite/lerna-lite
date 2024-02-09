@@ -32,5 +32,7 @@ export class ListCommand extends Command<ListCommandOption & FilterOptions> {
     }
 
     this.logger.success('found', '%d %s', this.result?.count, this.result?.count === 1 ? 'package' : 'packages');
+
+    process.exit(0);
   }
 }
