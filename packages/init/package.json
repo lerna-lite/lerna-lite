@@ -1,7 +1,7 @@
 {
   "name": "@lerna-lite/init",
   "description": "Lerna-Lite init commmand - Create a new Lerna repo or upgrade an existing repo to the current version of Lerna",
-  "version": "3.2.1",
+  "version": "3.3.0",
   "files": [
     "/dist"
   ],

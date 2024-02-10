@@ -4,6 +4,13 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [3.3.0](https://github.com/lerna-lite/lerna-lite/compare/v3.2.1...v3.3.0) (2024-02-10)
+
+### Bug Fixes
+
+* **deps:** update all non-major dependencies ([#808](https://github.com/lerna-lite/lerna-lite/issues/808)) ([cec587b](https://github.com/lerna-lite/lerna-lite/commit/cec587bd5571f1a536d17b917dcd2a9b82665526)) - by @renovate[bot]
+* **publish:** removePackageFields shouldn't mutate original package.json ([#817](https://github.com/lerna-lite/lerna-lite/issues/817)) ([84f6a88](https://github.com/lerna-lite/lerna-lite/commit/84f6a88748d113a8571e3c84c28137c915312883)) - by @ghiscoding
+
 ## [3.2.1](https://github.com/lerna-lite/lerna-lite/compare/v3.2.0...v3.2.1) (2024-01-13)
 
 ### Bug Fixes
