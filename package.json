@@ -95,7 +95,7 @@
     "normalize-newline": "^4.1.0",
     "normalize-path": "^3.0.0",
     "npmlog": "^7.0.1",
-    "prettier": "^3.2.1",
+    "prettier": "^3.2.5",
     "rimraf": "^5.0.5",
     "semver": "^7.6.0",
     "tacks": "^1.2.6",
