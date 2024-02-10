@@ -742,21 +742,21 @@ export class PublishCommand extends Command<PublishCommandOption> {
   removePackageProperties() {
     const { removePackageFields } = this.options;
 
-    return pMap(this.updates, (node: PackageGraphNode) => {
+    return pMap(this.packagesToPublish, (node: Package) => {
       if (Array.isArray(removePackageFields)) {
         for (const removeField of removePackageFields) {
           if (removeField === 'scripts') {
             // when deleting field "scripts", we need to keep any lifecycle script(s) to avoid failure when packing tarball
-            const scriptNames = Object.keys(node.pkg.manifest['scripts'] ?? {});
+            const scriptNames = Object.keys(node.pkg['scripts'] ?? {});
             const remainingScripts = excludeValuesFromArray(scriptNames, ['prepublish', 'prepublishOnly', 'prepack', 'postpack']);
             if (remainingScripts.length < scriptNames.length) {
               remainingScripts.forEach((scriptName) =>
-                deleteComplexObjectProp(node.pkg.manifest['scripts'], scriptName, `"${node.pkg.name}" package`)
+                deleteComplexObjectProp(node.pkg['scripts'], scriptName, `"${node.pkg.name}" package`)
               );
               continue; // to next package
             }
           }
-          deleteComplexObjectProp(node.pkg.manifest, removeField, `"${node.pkg.name}" package`);
+          deleteComplexObjectProp(node.pkg, removeField, `"${node.pkg.name}" package`);
         }
       }
     });
