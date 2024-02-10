@@ -18,10 +18,6 @@
       packageNames: ['node'],
       allowedVersions: '18.0.0',
     },
-    {
-      packageNames: ['prettier'],
-      allowedVersions: '3.2.1',
-    },
   ],
   ignoreDeps: ['lee-dohm/no-response'],
   schedule: ['every 2 weeks on Thursday'],
