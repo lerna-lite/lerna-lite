@@ -47,14 +47,14 @@
     "@lerna-lite/filter-packages": "workspace:*",
     "@lerna-lite/profiler": "workspace:*",
     "chalk": "^5.3.0",
-    "dotenv": "^16.4.1",
+    "dotenv": "^16.4.4",
     "npmlog": "^7.0.1",
     "p-map": "^7.0.1"
   },
   "devDependencies": {
     "@types/fs-extra": "^11.0.4",
     "fs-extra": "^11.2.0",
-    "globby": "^14.0.0",
+    "globby": "^14.0.1",
     "yargs": "^17.7.2",
     "yargs-parser": "^21.1.1"
   }
