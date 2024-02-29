@@ -57,7 +57,7 @@
     "get-stream": "^8.0.1",
     "git-url-parse": "^14.0.0",
     "graceful-fs": "^4.2.11",
-    "is-stream": "^3.0.0",
+    "is-stream": "^4.0.1",
     "load-json-file": "^7.0.1",
     "make-dir": "^4.0.0",
     "minimatch": "^9.0.3",
