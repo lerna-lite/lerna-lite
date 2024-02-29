@@ -328,6 +328,9 @@
             "contents": {
               "$ref": "#/$defs/commandOptions/shared/contents"
             },
+            "describeTag": {
+              "$ref": "#/$defs/globals/describeTag"
+            },
             "distTag": {
               "$ref": "#/$defs/commandOptions/publish/distTag"
             },
@@ -572,7 +575,7 @@
               "$ref": "#/$defs/commandOptions/version/changelogHeaderMessage"
             },
             "describeTag": {
-              "$ref": "#/$defs/commandOptions/shared/describeTag"
+              "$ref": "#/$defs/globals/describeTag"
             },
             "dryRun": {
               "$ref": "#/$defs/commandOptions/version/dryRun"
@@ -824,6 +827,9 @@
         }
       }
     },
+    "describeTag": {
+      "$ref": "#/$defs/globals/describeTag"
+    },
     "npmClient": {
       "$ref": "#/$defs/globals/npmClient"
     },
@@ -1059,6 +1065,11 @@
   },
   "$defs": {
     "globals": {
+      "describeTag": {
+        "type": "string",
+        "description": "During `lerna publish` (not `from-git` mode) and `lerna version`, the package updated since the last release will be found based on the describeTag.",
+        "default": ""
+      },
       "npmClient": {
         "type": "string",
         "description": "The npm client to use when running commands (either npm, pnpm or yarn). Defaults to npm if unspecified.",
@@ -1470,11 +1481,6 @@
         "conventionalGraduate": {
           "anyOf": [{ "type": "string" }, { "type": "boolean" }, { "type": "array", "items": { "type": "string" } }],
           "description": "Detect currently prereleased packages that would change to a non-prerelease version. Relevant for `lerna changed` and `lerna version`."
-        },
-        "describeTag": {
-          "type": "string",
-          "description": "During `lerna publish` (not `from-git` mode) and `lerna version`, the package updated since the last release will be found based on the describeTag.",
-          "default": ""
         },
         "forceConventionalGraduate": {
           "type": "boolean",

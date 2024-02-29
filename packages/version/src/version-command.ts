@@ -178,7 +178,7 @@ export class VersionCommand extends Command<VersionCommandOption> {
 
   async initialize() {
     const isIndependent = this.project.isIndependent();
-    const describeTag = this.project.config.describeTag;
+    const describeTag = this.options.describeTag;
 
     if (!isIndependent) {
       this.logger.info('current project version', this.project.version ?? '');

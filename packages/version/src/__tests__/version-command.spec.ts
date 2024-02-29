@@ -991,12 +991,30 @@ describe('VersionCommand', () => {
   });
 
   describe('"describeTag" config', () => {
-    it('set "describeTag" in lerna.json', async () => {
+    it('set "describeTag" in lerna.json root config', async () => {
       const testDir = await initFixture('normal');
 
       await outputJson(join(testDir, 'lerna.json'), {
         version: 'independent',
         describeTag: '*custom-tag*',
+      });
+      await new VersionCommand(createArgv(testDir));
+
+      expect((collectUpdates as Mock).mock.calls[0][3].describeTag).toBe('*custom-tag*');
+
+      expect((collectUpdates as Mock).mock.calls[0][3].isIndependent).toBe(true);
+    });
+
+    it('set "describeTag" in lerna.json version command', async () => {
+      const testDir = await initFixture('normal');
+
+      await outputJson(join(testDir, 'lerna.json'), {
+        version: 'independent',
+        command: {
+          version: {
+            describeTag: '*custom-tag*',
+          },
+        },
       });
       await new VersionCommand(createArgv(testDir));
 
