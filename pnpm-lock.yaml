@@ -745,8 +745,8 @@ importers:
         specifier: ^4.0.10
         version: 4.0.10
       '@types/conventional-commits-parser':
-        specifier: ^3.0.6
-        version: 3.0.6
+        specifier: ^5.0.0
+        version: 5.0.0
       '@types/conventional-recommended-bump':
         specifier: ^9.0.3
         version: 9.0.3
@@ -1721,7 +1721,7 @@ packages:
     resolution: {integrity: sha512-owT5zzi5tfWkck1DC000YEs/yzNgTs1NGj3D2+SofHgGFNQAFeurz6uc/5di+ygSBu+CuHgHXbAkchdmCc9RuQ==}
     dependencies:
       '@types/conventional-changelog-writer': 4.0.10
-      '@types/conventional-commits-parser': 3.0.6
+      '@types/conventional-commits-parser': 5.0.0
       '@types/conventional-recommended-bump': 9.0.3
       '@types/git-raw-commits': 2.0.1
       '@types/node': 20.11.19
@@ -1731,12 +1731,12 @@ packages:
   /@types/conventional-changelog-writer@4.0.10:
     resolution: {integrity: sha512-EK654IW1SBqTZSzN9+PlB6SKSYlDhsrCv1olfeEXvt/FHcmd7kvFWW0cFvMtnWalR/D7baYzY3FJ2TSt7UUySg==}
     dependencies:
-      '@types/conventional-commits-parser': 3.0.6
+      '@types/conventional-commits-parser': 5.0.0
       '@types/node': 20.11.19
     dev: true
 
-  /@types/conventional-commits-parser@3.0.6:
-    resolution: {integrity: sha512-z4crlplLzL9uA5kbE4ZghAf5RbrEr1UL/uNGGgxYbJjI0jRBjuYKuasbo13ANZsSapLTM2DLZk6LDcjemow4qQ==}
+  /@types/conventional-commits-parser@5.0.0:
+    resolution: {integrity: sha512-loB369iXNmAZglwWATL+WRe+CRMmmBPtpolYzIebFaX4YA3x+BEfLqhUAV9WanycKI3TG1IMr5bMJDajDKLlUQ==}
     dependencies:
       '@types/node': 20.11.19
     dev: true
@@ -1746,7 +1746,7 @@ packages:
     dependencies:
       '@types/conventional-changelog-core': 4.2.7
       '@types/conventional-changelog-writer': 4.0.10
-      '@types/conventional-commits-parser': 3.0.6
+      '@types/conventional-commits-parser': 5.0.0
     dev: true
 
   /@types/dedent@0.7.2:

@@ -79,7 +79,7 @@
     "@npm/types": "^1.0.2",
     "@types/conventional-changelog-core": "^4.2.7",
     "@types/conventional-changelog-writer": "^4.0.10",
-    "@types/conventional-commits-parser": "^3.0.6",
+    "@types/conventional-commits-parser": "^5.0.0",
     "@types/conventional-recommended-bump": "^9.0.3",
     "@types/dedent": "^0.7.2",
     "@types/fs-extra": "^11.0.4",
