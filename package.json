@@ -56,7 +56,7 @@
     "node": "^18.0.0 || >=20.0.0",
     "pnpm": "8"
   },
-  "packageManager": "pnpm@8.15.3",
+  "packageManager": "pnpm@8.15.4",
   "devDependencies": {
     "@lerna-lite/changed": "workspace:*",
     "@lerna-lite/cli": "workspace:*",
@@ -73,15 +73,15 @@
     "@lerna-lite/watch": "workspace:*",
     "@lerna-test/helpers": "link:helpers",
     "@types/fs-extra": "^11.0.4",
-    "@types/node": "^20.11.19",
+    "@types/node": "^20.11.22",
     "@types/npmlog": "^7.0.0",
     "@types/yargs": "^17.0.32",
-    "@typescript-eslint/eslint-plugin": "^7.0.2",
-    "@typescript-eslint/parser": "^7.0.2",
-    "@vitest/coverage-v8": "^1.3.0",
+    "@typescript-eslint/eslint-plugin": "^7.1.0",
+    "@typescript-eslint/parser": "^7.1.0",
+    "@vitest/coverage-v8": "^1.3.1",
     "conventional-changelog-conventionalcommits": "^7.0.2",
     "cross-env": "^7.0.3",
-    "eslint": "^8.56.0",
+    "eslint": "^8.57.0",
     "eslint-config-prettier": "^9.1.0",
     "eslint-plugin-import": "^2.29.1",
     "eslint-plugin-node": "^11.1.0",
@@ -105,7 +105,7 @@
     "tslib": "^2.6.2",
     "tsm": "^2.3.0",
     "typescript": "^5.3.3",
-    "vitest": "^1.3.0",
+    "vitest": "^1.3.1",
     "write-json-file": "^5.0.0"
   }
 }
