@@ -135,6 +135,9 @@ export interface LernaConfig {
     version?: VersionCommandOption;
     run?: RunCommandOption;
   };
+  /** custom tag pattern, default is `*@*` (independent mode) or `""` (non-independent mode) */
+  describeTag?: string;
+
   packages?: string[];
   loglevel?: 'silent' | 'error' | 'warn' | 'notice' | 'http' | 'timing' | 'info' | 'verbose' | 'silly';
 
