@@ -4,6 +4,14 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [3.3.1](https://github.com/lerna-lite/lerna-lite/compare/v3.3.0...v3.3.1) (2024-03-04)
+
+### Bug Fixes
+
+* **deps:** update all non-major dependencies ([#824](https://github.com/lerna-lite/lerna-lite/issues/824)) ([ef9a442](https://github.com/lerna-lite/lerna-lite/commit/ef9a4427473a13044e9131b8cb7ec1fb5770bdb0)) - by @renovate[bot]
+* **deps:** update dependency is-stream to v4 ([#828](https://github.com/lerna-lite/lerna-lite/issues/828)) ([412deb3](https://github.com/lerna-lite/lerna-lite/commit/412deb374b52ea4f338550d0ae435a924503591c)) - by @renovate[bot]
+* **version:** describeTag in lerna config version cmd/root, fix [#826](https://github.com/lerna-lite/lerna-lite/issues/826) ([#827](https://github.com/lerna-lite/lerna-lite/issues/827)) ([878091d](https://github.com/lerna-lite/lerna-lite/commit/878091d08390cc479914ef0bf901a13dc1c1ee3b)) - by @ghiscoding
+
 ## [3.3.0](https://github.com/lerna-lite/lerna-lite/compare/v3.2.1...v3.3.0) (2024-02-10)
 
 ### Features
