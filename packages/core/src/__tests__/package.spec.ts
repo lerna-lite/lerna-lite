@@ -6,10 +6,10 @@ import { loadJsonFile, loadJsonFileSync } from 'load-json-file';
 import npa from 'npm-package-arg';
 import npmlog from 'npmlog';
 import { fileURLToPath } from 'node:url';
-import { writePackage } from 'write-pkg';
+import { writePackage } from 'write-package';
 
 vi.mock('load-json-file');
-vi.mock('write-pkg');
+vi.mock('write-package');
 
 // file under test
 import { Package } from '../package';

@@ -2,7 +2,7 @@ import { loadJsonFile, loadJsonFileSync } from 'load-json-file';
 import npa from 'npm-package-arg';
 import npmlog from 'npmlog';
 import { basename, dirname, join, resolve as pathResolve, relative } from 'node:path';
-import { writePackage } from 'write-pkg';
+import { writePackage } from 'write-package';
 
 import { CommandType, NpaResolveResult, RawManifest } from './models/index.js';
 
@@ -394,7 +394,7 @@ export class Package {
    * @param {String} depName - dependency name
    * @returns {Array<String>} - array of dependencies that contains the dependency name provided
    */
-  private retrievePackageDependencies(depName: string): { [depName: string]: string } {
+  retrievePackageDependencies(depName: string): { [depName: string]: string } {
     // first, try runtime dependencies
     let depCollection = this.dependencies;
 

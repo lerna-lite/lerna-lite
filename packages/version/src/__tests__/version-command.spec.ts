@@ -28,7 +28,7 @@ vi.mock('@lerna-lite/core', async (coreOriginal) => ({
   writeLogFile: (await vi.importActual<any>('../../../core/src/utils/write-log-file')).writeLogFile,
   QueryGraph: (await vi.importActual<any>('../../../core/src/utils/query-graph')).QueryGraph,
 }));
-vi.mock('write-pkg', async () => await vi.importActual('../lib/__mocks__/write-pkg'));
+vi.mock('write-package', async () => await vi.importActual('../lib/__mocks__/write-package'));
 
 import { outputFile, outputJson } from 'fs-extra/esm';
 import { promises as fsPromises } from 'node:fs';
@@ -38,7 +38,7 @@ import { fileURLToPath } from 'node:url';
 import yaml from 'js-yaml';
 
 // mocked or stubbed modules
-import writePkg from 'write-pkg';
+import writePkg from 'write-package';
 import { checkWorkingTree, collectUpdates, logOutput, promptConfirmation, promptSelectOne, throwIfUncommitted, VersionCommandOption } from '@lerna-lite/core';
 import { getCommitsSinceLastRelease } from '../conventional-commits';
 import { gitPush as libPush } from '../lib/git-push';

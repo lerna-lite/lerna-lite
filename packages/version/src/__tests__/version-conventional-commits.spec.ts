@@ -7,7 +7,7 @@ vi.mock('../lib/is-behind-upstream', async () => await vi.importActual('../lib/_
 vi.mock('../lib/remote-branch-exists', async () => await vi.importActual('../lib/__mocks__/remote-branch-exists'));
 vi.mock('../git-clients/gitlab-client', async () => await vi.importActual<any>('../__mocks__/gitlab-client'));
 vi.mock('../conventional-commits', async () => await vi.importActual('../__mocks__/conventional-commits'));
-vi.mock('write-pkg', async () => await vi.importActual('../lib/__mocks__/write-pkg'));
+vi.mock('write-package', async () => await vi.importActual('../lib/__mocks__/write-package'));
 
 vi.mock('@lerna-lite/core', async () => ({
   ...(await vi.importActual<any>('@lerna-lite/core')),
@@ -40,7 +40,7 @@ expect.addSnapshotSerializer({
 // mocked modules
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
-import writePkg from 'write-pkg';
+import writePkg from 'write-package';
 import { collectUpdates, VersionCommandOption } from '@lerna-lite/core';
 import { recommendVersion, updateChangelog } from '../conventional-commits';
 

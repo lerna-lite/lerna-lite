@@ -5,7 +5,7 @@ vi.mock('../lib/git-push', async () => await vi.importActual('../lib/__mocks__/g
 vi.mock('../lib/is-anything-committed', async () => await vi.importActual('../lib/__mocks__/is-anything-committed'));
 vi.mock('../lib/is-behind-upstream', async () => await vi.importActual('../lib/__mocks__/is-behind-upstream'));
 vi.mock('../lib/remote-branch-exists', async () => await vi.importActual('../lib/__mocks__/remote-branch-exists'));
-vi.mock('write-pkg', async () => await vi.importActual('../lib/__mocks__/write-pkg'));
+vi.mock('write-package', async () => await vi.importActual('../lib/__mocks__/write-package'));
 
 // mocked modules of @lerna-lite/core
 vi.mock('@lerna-lite/core', async () => ({
@@ -18,14 +18,14 @@ vi.mock('@lerna-lite/core', async () => ({
   promptTextInput: (await vi.importActual<any>('../../../core/src/__mocks__/prompt')).promptTextInput,
   throwIfUncommitted: (await vi.importActual<any>('../../../core/src/__mocks__/check-working-tree')).throwIfUncommitted,
 }));
-vi.mock('write-pkg', async () => await vi.importActual('../lib/__mocks__/write-pkg'));
+vi.mock('write-package', async () => await vi.importActual('../lib/__mocks__/write-package'));
 
 import { dirname, resolve as pathResolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import yargParser from 'yargs-parser';
 
 // mocked module(s)
-import writePkg from 'write-pkg';
+import writePkg from 'write-package';
 
 // helpers
 const __filename = fileURLToPath(import.meta.url);
