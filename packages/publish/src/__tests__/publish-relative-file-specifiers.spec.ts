@@ -1,6 +1,6 @@
 import { describe, expect, it, vi } from 'vitest';
 
-vi.mock('write-pkg', async () => await vi.importActual('../../../version/src/lib/__mocks__/write-pkg'));
+vi.mock('write-package', async () => await vi.importActual('../../../version/src/lib/__mocks__/write-package'));
 
 // FIXME: better mock for version command
 vi.mock('../../../version/src/lib/git-push', async () => await vi.importActual('../../../version/src/lib/__mocks__/git-push'));
@@ -38,7 +38,7 @@ import { outputFile } from 'fs-extra/esm';
 import { dirname, join } from 'node:path';
 
 // mocked modules
-import writePkg from 'write-pkg';
+import writePkg from 'write-package';
 
 // helpers
 import { fileURLToPath } from 'node:url';

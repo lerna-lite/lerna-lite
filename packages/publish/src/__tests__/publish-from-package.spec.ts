@@ -1,6 +1,6 @@
 import { describe, expect, it, Mock, vi } from 'vitest';
 
-vi.mock('write-pkg', async () => await vi.importActual('../../../version/src/lib/__mocks__/write-pkg'));
+vi.mock('write-package', async () => await vi.importActual('../../../version/src/lib/__mocks__/write-package'));
 
 // FIXME: better mock for version command
 vi.mock('../../../version/src/lib/git-push', async () => await vi.importActual('../../../version/src/lib/__mocks__/git-push'));
@@ -36,7 +36,7 @@ import { fileURLToPath } from 'node:url';
 import yargParser from 'yargs-parser';
 
 // mocked or stubbed modules
-import writePkg from 'write-pkg';
+import writePkg from 'write-package';
 import { npmPublish } from '../lib/npm-publish';
 import { npmPublish as npmPublishMock } from '../lib/__mocks__/npm-publish.js';
 import { logOutput, promptConfirmation, PublishCommandOption, throwIfUncommitted } from '@lerna-lite/core';

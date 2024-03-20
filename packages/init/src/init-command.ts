@@ -53,7 +53,7 @@ export class InitCommand extends Command<InitCommandOption> {
     if (!this.project.manifest) {
       this.logger.info('', 'Creating package.json');
 
-      // initialize with default indentation so write-pkg doesn't screw it up with tabs
+      // initialize with default indentation so write-package doesn't screw it up with tabs
       await writeJsonFile(join(this.project.rootPath, 'package.json'), { name: 'root', private: true }, { indent: 2 });
     } else {
       this.logger.info('', 'Updating package.json');

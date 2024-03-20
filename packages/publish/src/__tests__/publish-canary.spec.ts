@@ -1,6 +1,6 @@
 import { beforeAll, describe, expect, Mock, test, vi } from 'vitest';
 
-vi.mock('write-pkg', async () => await vi.importActual('../../../version/src/lib/__mocks__/write-pkg'));
+vi.mock('write-package', async () => await vi.importActual('../../../version/src/lib/__mocks__/write-package'));
 
 // mocked modules of @lerna-lite/core
 // vi.fn()
@@ -28,7 +28,7 @@ import { fileURLToPath } from 'node:url';
 import yargParser from 'yargs-parser';
 
 // mocked modules
-import writePkg from 'write-pkg';
+import writePkg from 'write-package';
 import { npmPublish } from '../lib/npm-publish';
 import { npmPublish as npmPublishMock } from '../lib/__mocks__/npm-publish';
 import { promptConfirmation, PublishCommandOption, describeRef, throwIfUncommitted } from '@lerna-lite/core';
