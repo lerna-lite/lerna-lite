@@ -32,7 +32,7 @@ export function createRelease(
     generateReleaseNotes?: boolean;
     releaseDiscussion?: string;
   },
-  { tags, releaseNotes }: ReleaseCommandProps,
+  { tags, releaseNotes, tagVersionSeparator }: ReleaseCommandProps,
   { gitRemote, execOpts, skipBumpOnlyReleases }: ReleaseOptions,
   dryRun = false
 ) {
@@ -41,7 +41,7 @@ export function createRelease(
 
   return Promise.all(
     releaseNotes.map(({ notes, name, pkg }) => {
-      const tag = name === 'fixed' ? tags[0] : tags.find((t) => t.startsWith(`${name}@`));
+      const tag = name === 'fixed' ? tags[0] : tags.find((t) => t.startsWith(`${name}${tagVersionSeparator}`));
 
       // when using independent mode, it could happen that a few version bump only releases are created
       // and since these aren't very useful for most users, user could choose to skip creating these releases when detecting a version bump only
@@ -49,7 +49,7 @@ export function createRelease(
         return Promise.resolve();
       }
 
-      const prereleaseParts = semver.prerelease(tag.replace(`${name}@`, '')) || [];
+      const prereleaseParts = semver.prerelease(tag.replace(`${name}${tagVersionSeparator}`, '')) || [];
 
       // when the `GH_TOKEN` (or `GITHUB_TOKEN`) environment variable is not set,
       // we'll create a link to GitHub web interface form with the fields pre-populated

@@ -386,7 +386,11 @@ export class VersionCommand extends Command<VersionCommandOption> {
             generateReleaseNotes: this.options.generateReleaseNotes,
             releaseDiscussion: this.options.createReleaseDiscussion,
           },
-          { tags: this.tags, releaseNotes: this.releaseNotes },
+          {
+            tags: this.tags,
+            tagVersionSeparator: this.options.tagVersionSeparator || '@',
+            releaseNotes: this.releaseNotes,
+          },
           {
             gitRemote: this.options.gitRemote,
             execOpts: this.execOpts,
