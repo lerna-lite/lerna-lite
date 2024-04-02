@@ -73,7 +73,7 @@
     "@lerna-lite/watch": "workspace:*",
     "@lerna-test/helpers": "link:helpers",
     "@types/fs-extra": "^11.0.4",
-    "@types/node": "^20.12.2",
+    "@types/node": "^20.12.3",
     "@types/npmlog": "^7.0.0",
     "@types/yargs": "^17.0.32",
     "@typescript-eslint/eslint-plugin": "^7.5.0",
