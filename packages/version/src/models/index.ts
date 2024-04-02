@@ -105,6 +105,7 @@ export interface ReleaseClient {
 
 export interface ReleaseCommandProps {
   tags: string[];
+  tagVersionSeparator: string;
   releaseNotes: ReleaseNote[];
 }
 
