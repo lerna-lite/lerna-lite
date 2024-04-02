@@ -4,6 +4,13 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [3.3.2](https://github.com/lerna-lite/lerna-lite/compare/v3.3.1...v3.3.2) (2024-04-02)
+
+### Bug Fixes
+
+* **deps:** update dependency get-stream to v9 ([#836](https://github.com/lerna-lite/lerna-lite/issues/836)) ([c247658](https://github.com/lerna-lite/lerna-lite/commit/c247658904900389e548d52771362bcb7c18f972)) - by @renovate[bot]
+* **version:** create release when using custom tag-version-separator ([#837](https://github.com/lerna-lite/lerna-lite/issues/837)) ([5fa6184](https://github.com/lerna-lite/lerna-lite/commit/5fa61841151b767671bda8c108206d5a0b412935)) - by @ghiscoding
+
 ## [3.3.1](https://github.com/lerna-lite/lerna-lite/compare/v3.3.0...v3.3.1) (2024-03-04)
 
 ### Bug Fixes
