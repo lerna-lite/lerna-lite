@@ -74,19 +74,19 @@ jobs:
           if ${{inputs.dryrun == true && inputs.graduate != true}}
           then
               echo "LERNA_VERSION_TYPE=🧪 Dry-Run" >> $GITHUB_ENV
-              echo "LERNA_VERSION_QUERY=pnpm exec lerna version --yes --dry-run" >> $GITHUB_ENV
+              echo "LERNA_VERSION_QUERY=pnpm run local-lerna version --yes --dry-run" >> $GITHUB_ENV
           elif ${{inputs.dryrun == true && inputs.graduate == true}}
           then
               echo "LERNA_VERSION_TYPE=🧪 Dry-Run w/Graduate" >> $GITHUB_ENV
-              echo "LERNA_VERSION_QUERY=pnpm exec lerna version --yes --dry-run --conventional-graduate" >> $GITHUB_ENV
+              echo "LERNA_VERSION_QUERY=pnpm run local-lerna version --yes --dry-run --conventional-graduate" >> $GITHUB_ENV
           elif ${{inputs.dryrun != true && inputs.graduate == true}}
           then
               echo "LERNA_VERSION_TYPE=🚀 Prod Version w/Graduate" >> $GITHUB_ENV
-              echo "LERNA_VERSION_QUERY=pnpm exec lerna version --yes --conventional-graduate" >> $GITHUB_ENV
+              echo "LERNA_VERSION_QUERY=pnpm run local-lerna version --yes --conventional-graduate" >> $GITHUB_ENV
           elif ${{inputs.dryrun != true && inputs.graduate != true}}
           then
               echo "LERNA_VERSION_TYPE=🚀 Prod Version" >> $GITHUB_ENV
-              echo "LERNA_VERSION_QUERY=pnpm exec lerna version --yes" >> $GITHUB_ENV
+              echo "LERNA_VERSION_QUERY=pnpm run local-lerna version --yes" >> $GITHUB_ENV
           fi
 
       - name: Final version query type - ${{ env.LERNA_VERSION_TYPE }}
@@ -120,4 +120,4 @@ jobs:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
           NPM_CONFIG_PROVENANCE: true
         run: |
-          pnpm exec lerna publish from-package --force-publish --yes --otp ${{ steps.wait-for-secrets.outputs.OTP }}
+          pnpm run local-lerna publish from-package --force-publish --yes --otp ${{ steps.wait-for-secrets.outputs.OTP }}

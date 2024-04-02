@@ -78,17 +78,8 @@ jobs:
       - name: Run pnpm install dependencies
         run: pnpm install
 
-      - name: Build Library
-        run: pnpm bundle
-
-      - name: Archive common build artifacts
-        if: ${{ inputs.dryrun != true }}
-        uses: actions/upload-artifact@v4
-        with:
-          name: dist-common
-          path: |
-            packages/common/dist
-          retention-days: 5
+      - name: Run all workspace TSC builds
+        run: pnpm build:full
 
       - name: 🧪 Lerna Version auto-bump (dry-run) 🏷️
         if: ${{ inputs.dryrun == true && inputs.bump == 'auto' }}
@@ -100,7 +91,7 @@ jobs:
           git config --global user.name "${{ github.actor }}"
           git config --global user.email "${{ github.actor }}@users.noreply.github.com"
           pnpm whoami
-          pnpm exec lerna version --conventional-commits --conventional-prerelease --dry-run --preid ${{ inputs.tag }} --force-publish --yes
+          pnpm run local-lerna version --conventional-commits --conventional-prerelease --dry-run --preid ${{ inputs.tag }} --force-publish --yes
 
       - name: 🧪 Lerna Version with selected pre-bump (dry-run) 🏷️
         if: ${{ inputs.dryrun == true && inputs.bump != 'auto' }}
@@ -112,7 +103,7 @@ jobs:
           git config --global user.name "${{ github.actor }}"
           git config --global user.email "${{ github.actor }}@users.noreply.github.com"
           pnpm whoami
-          pnpm exec lerna version ${{ inputs.bump }} --conventional-commits --conventional-prerelease --dry-run --preid ${{ inputs.tag }} --force-publish --yes
+          pnpm run local-lerna version ${{ inputs.bump }} --conventional-commits --conventional-prerelease --dry-run --preid ${{ inputs.tag }} --force-publish --yes
 
       - name: 🧪 Lerna Publish (dry-run) 📦
         if: ${{ inputs.dryrun == true }}
@@ -121,7 +112,7 @@ jobs:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
           NPM_CONFIG_PROVENANCE: true
         run: |
-          pnpm exec lerna publish from-package --force-publish --dist-tag ${{ inputs.tag }} --yes --dry-run
+          pnpm run local-lerna publish from-package --force-publish --dist-tag ${{ inputs.tag }} --yes --dry-run
 
       - name: Lerna Version auto-bump 🏷️
         if: ${{ inputs.dryrun != true && inputs.bump == 'auto' }}
@@ -133,7 +124,7 @@ jobs:
           git config --global user.name "${{ github.actor }}"
           git config --global user.email "${{ github.actor }}@users.noreply.github.com"
           pnpm whoami
-          pnpm exec lerna version --conventional-commits --conventional-prerelease --preid ${{ inputs.tag }} --force-publish --yes
+          pnpm run local-lerna version --conventional-commits --conventional-prerelease --preid ${{ inputs.tag }} --force-publish --yes
 
       - name: Lerna Version with selected pre-bump 🏷️
         if: ${{ inputs.dryrun != true && inputs.bump != 'auto' }}
@@ -145,7 +136,7 @@ jobs:
           git config --global user.name "${{ github.actor }}"
           git config --global user.email "${{ github.actor }}@users.noreply.github.com"
           pnpm whoami
-          pnpm exec lerna version ${{ inputs.bump }} --conventional-commits --conventional-prerelease --preid ${{ inputs.tag }} --force-publish --yes
+          pnpm run local-lerna version ${{ inputs.bump }} --conventional-commits --conventional-prerelease --preid ${{ inputs.tag }} --force-publish --yes
 
       - name: OTP
         if: ${{ inputs.dryrun != true }}
@@ -164,4 +155,4 @@ jobs:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
           NPM_CONFIG_PROVENANCE: true
         run: |
-          pnpm exec lerna publish from-package --force-publish --dist-tag ${{ inputs.tag }} --yes --otp ${{ steps.wait-for-secrets.outputs.OTP }}
+          pnpm run local-lerna publish from-package --force-publish --dist-tag ${{ inputs.tag }} --yes --otp ${{ steps.wait-for-secrets.outputs.OTP }}

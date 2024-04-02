@@ -68,16 +68,8 @@ jobs:
       - name: Run pnpm install dependencies
         run: pnpm install
 
-      - name: Build Library
-        run: pnpm bundle
-
-      - name: Archive common build artifacts
-        uses: actions/upload-artifact@v4
-        with:
-          name: dist-common
-          path: |
-            packages/common/dist
-          retention-days: 5
+      - name: Run all workspace TSC builds
+        run: pnpm build:full
 
       - name: Lerna Version (latest) 🏷️
         if: ${{ contains(inputs.tag, 'latest') }}
@@ -88,7 +80,7 @@ jobs:
           git config --global user.name "${{ github.actor }}"
           git config --global user.email "${{ github.actor }}@users.noreply.github.com"
           pnpm whoami
-          pnpm exec lerna version ${{ inputs.version }} --yes
+          pnpm run local-lerna version ${{ inputs.version }} --yes
 
       - name: Lerna Version (beta) 🏷️
         if: ${{ contains(inputs.tag, 'beta') }}
@@ -100,7 +92,7 @@ jobs:
           git config --global user.name "${{ github.actor }}"
           git config --global user.email "${{ github.actor }}@users.noreply.github.com"
           pnpm whoami
-          pnpm exec lerna version prerelease --conventional-commits --conventional-prerelease --preid beta --force-publish --yes
+          pnpm run local-lerna version prerelease --conventional-commits --conventional-prerelease --preid beta --force-publish --yes
 
       - name: OTP
         uses: step-security/wait-for-secrets@v1
@@ -117,14 +109,4 @@ jobs:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
           NPM_CONFIG_PROVENANCE: true
         run: |
-          pnpm exec lerna publish from-package --force-publish --yes --otp ${{ steps.wait-for-secrets.outputs.OTP }}
-
-      - name: Website Dev Build
-        run: pnpm build:dev
-
-      - name: Deploy to gh-pages
-        if: github.ref == 'refs/heads/master'
-        uses: peaceiris/actions-gh-pages@v3
-        with:
-          github_token: ${{ secrets.GITHUB_TOKEN }}
-          publish_dir: ./website
+          pnpm run local-lerna publish from-package --force-publish --yes --otp ${{ steps.wait-for-secrets.outputs.OTP }}
