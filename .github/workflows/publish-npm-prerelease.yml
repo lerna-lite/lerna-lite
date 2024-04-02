@@ -1,25 +1,35 @@
-name: 🏷️ Publish NPM (version prompt)
+name: 🏷️ Publish NPM prerelease
 
 on:
   workflow_dispatch:
     inputs:
-      version:
-        description: 'Fixed Version'
-        required: true
-        type: string
+      bump:
+        type: choice
+        description: Bump
+        options:
+          - prepatch
+          - preminor
+          - premajor
+          - prerelease
+          - auto
       tag:
         type: choice
         description: Tag
         options:
-          - latest
+          - alpha
           - beta
+          - next
+      dryrun:
+        type: boolean
+        required: false
+        description: Dry-Run
 
 permissions:
   contents: write
   id-token: write
 
 jobs:
-  deploy-npm-prompt:
+  deploy-npm-prerelease:
     runs-on: ubuntu-latest
     timeout-minutes: 30
     steps:
@@ -72,6 +82,7 @@ jobs:
         run: pnpm bundle
 
       - name: Archive common build artifacts
+        if: ${{ inputs.dryrun != true }}
         uses: actions/upload-artifact@v4
         with:
           name: dist-common
@@ -79,19 +90,8 @@ jobs:
             packages/common/dist
           retention-days: 5
 
-      - name: Lerna Version (latest) 🏷️
-        if: ${{ contains(inputs.tag, 'latest') }}
-        env:
-          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
-        run: |
-          git config --global user.name "${{ github.actor }}"
-          git config --global user.email "${{ github.actor }}@users.noreply.github.com"
-          pnpm whoami
-          pnpm exec lerna version ${{ inputs.version }} --yes
-
-      - name: Lerna Version (beta) 🏷️
-        if: ${{ contains(inputs.tag, 'beta') }}
+      - name: 🧪 Lerna Version auto-bump (dry-run) 🏷️
+        if: ${{ inputs.dryrun == true && inputs.bump == 'auto' }}
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
@@ -100,9 +100,55 @@ jobs:
           git config --global user.name "${{ github.actor }}"
           git config --global user.email "${{ github.actor }}@users.noreply.github.com"
           pnpm whoami
-          pnpm exec lerna version prerelease --conventional-commits --conventional-prerelease --preid beta --force-publish --yes
+          pnpm exec lerna version --conventional-commits --conventional-prerelease --dry-run --preid ${{ inputs.tag }} --force-publish --yes
+
+      - name: 🧪 Lerna Version with selected pre-bump (dry-run) 🏷️
+        if: ${{ inputs.dryrun == true && inputs.bump != 'auto' }}
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+          NPM_CONFIG_PROVENANCE: true
+        run: |
+          git config --global user.name "${{ github.actor }}"
+          git config --global user.email "${{ github.actor }}@users.noreply.github.com"
+          pnpm whoami
+          pnpm exec lerna version ${{ inputs.bump }} --conventional-commits --conventional-prerelease --dry-run --preid ${{ inputs.tag }} --force-publish --yes
+
+      - name: 🧪 Lerna Publish (dry-run) 📦
+        if: ${{ inputs.dryrun == true }}
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+          NPM_CONFIG_PROVENANCE: true
+        run: |
+          pnpm exec lerna publish from-package --force-publish --dist-tag ${{ inputs.tag }} --yes --dry-run
+
+      - name: Lerna Version auto-bump 🏷️
+        if: ${{ inputs.dryrun != true && inputs.bump == 'auto' }}
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+          NPM_CONFIG_PROVENANCE: true
+        run: |
+          git config --global user.name "${{ github.actor }}"
+          git config --global user.email "${{ github.actor }}@users.noreply.github.com"
+          pnpm whoami
+          pnpm exec lerna version --conventional-commits --conventional-prerelease --preid ${{ inputs.tag }} --force-publish --yes
+
+      - name: Lerna Version with selected pre-bump 🏷️
+        if: ${{ inputs.dryrun != true && inputs.bump != 'auto' }}
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+          NPM_CONFIG_PROVENANCE: true
+        run: |
+          git config --global user.name "${{ github.actor }}"
+          git config --global user.email "${{ github.actor }}@users.noreply.github.com"
+          pnpm whoami
+          pnpm exec lerna version ${{ inputs.bump }} --conventional-commits --conventional-prerelease --preid ${{ inputs.tag }} --force-publish --yes
 
       - name: OTP
+        if: ${{ inputs.dryrun != true }}
         uses: step-security/wait-for-secrets@v1
         id: wait-for-secrets
         with:
@@ -112,19 +158,10 @@ jobs:
               description: 'OTP from authenticator app'
 
       - name: Lerna Publish 📦
+        if: ${{ inputs.dryrun != true }}
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
           NPM_CONFIG_PROVENANCE: true
         run: |
-          pnpm exec lerna publish from-package --force-publish --yes --otp ${{ steps.wait-for-secrets.outputs.OTP }}
-
-      - name: Website Dev Build
-        run: pnpm build:dev
-
-      - name: Deploy to gh-pages
-        if: github.ref == 'refs/heads/master'
-        uses: peaceiris/actions-gh-pages@v3
-        with:
-          github_token: ${{ secrets.GITHUB_TOKEN }}
-          publish_dir: ./website
+          pnpm exec lerna publish from-package --force-publish --dist-tag ${{ inputs.tag }} --yes --otp ${{ steps.wait-for-secrets.outputs.OTP }}

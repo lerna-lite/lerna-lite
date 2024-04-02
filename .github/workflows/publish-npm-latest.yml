@@ -3,9 +3,11 @@ name: 🏷️ Publish NPM Latest
 on:
   workflow_dispatch:
     inputs:
+      dryrun:
+        type: boolean
+        description: Dry-Run
       graduate:
         type: boolean
-        required: false
         description: Force Conventional Graduate
 
 permissions:
@@ -31,7 +33,7 @@ jobs:
           token: ${{ secrets.GITHUB_TOKEN }}
 
       - if: ${{ github.event.pull_request.merged != true && contains('["ghiscoding"]', github.actor) != true }}
-        name: Ensure current actor is allowed to run the workflow
+        name: Exit early when current actor is not allowed to push new release
         run: |
           echo "Error: Your GitHub username (${{ github.actor }}) is not on the allowed list of admins for this workflow"
           exit 1
@@ -66,20 +68,31 @@ jobs:
       - name: Run all workspace TSC builds
         run: pnpm build:full
 
-      - name: Lerna Version (no graduate) 🏷️
-        if: ${{ inputs.graduate == false }}
-        env:
-          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
-          NPM_CONFIG_PROVENANCE: true
+      - name: Lerna Version (build query)
+        shell: bash
         run: |
-          git config --global user.name "${{ github.actor }}"
-          git config --global user.email "${{ github.actor }}@users.noreply.github.com"
-          pnpm whoami
-          pnpm run local-lerna version --yes
+          if ${{inputs.dryrun == true && inputs.graduate != true}}
+          then
+              echo "LERNA_VERSION_TYPE=🧪 Dry-Run" >> $GITHUB_ENV
+              echo "LERNA_VERSION_QUERY=pnpm exec lerna version --yes --dry-run" >> $GITHUB_ENV
+          elif ${{inputs.dryrun == true && inputs.graduate == true}}
+          then
+              echo "LERNA_VERSION_TYPE=🧪 Dry-Run w/Graduate" >> $GITHUB_ENV
+              echo "LERNA_VERSION_QUERY=pnpm exec lerna version --yes --dry-run --conventional-graduate" >> $GITHUB_ENV
+          elif ${{inputs.dryrun != true && inputs.graduate == true}}
+          then
+              echo "LERNA_VERSION_TYPE=🚀 Prod Version w/Graduate" >> $GITHUB_ENV
+              echo "LERNA_VERSION_QUERY=pnpm exec lerna version --yes --conventional-graduate" >> $GITHUB_ENV
+          elif ${{inputs.dryrun != true && inputs.graduate != true}}
+          then
+              echo "LERNA_VERSION_TYPE=🚀 Prod Version" >> $GITHUB_ENV
+              echo "LERNA_VERSION_QUERY=pnpm exec lerna version --yes" >> $GITHUB_ENV
+          fi
 
-      - name: Lerna Version (force graduate) 🏷️
-        if: ${{ inputs.graduate == true }}
+      - name: Final version query type - ${{ env.LERNA_VERSION_TYPE }}
+        run: echo "${{ env.LERNA_VERSION_QUERY }}"
+
+      - name: Lerna Version 🏷️
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
@@ -88,9 +101,10 @@ jobs:
           git config --global user.name "${{ github.actor }}"
           git config --global user.email "${{ github.actor }}@users.noreply.github.com"
           pnpm whoami
-          pnpm run local-lerna version --conventional-commits --conventional-graduate --yes
+          pnpm exec ${{ env.LERNA_VERSION_QUERY }}
 
       - name: OTP
+        if: ${{ inputs.dryrun != true }}
         uses: step-security/wait-for-secrets@v1
         id: wait-for-secrets
         with:
@@ -100,9 +114,10 @@ jobs:
               description: 'OTP from authenticator app'
 
       - name: Lerna Publish 📦
+        if: ${{ inputs.dryrun != true }}
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
           NPM_CONFIG_PROVENANCE: true
         run: |
-          pnpm run local-lerna publish from-package --force-publish --yes --otp ${{ steps.wait-for-secrets.outputs.OTP }}
+          pnpm exec lerna publish from-package --force-publish --yes --otp ${{ steps.wait-for-secrets.outputs.OTP }}
