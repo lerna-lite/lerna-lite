@@ -30,20 +30,16 @@ export class Conf extends ConfigChain {
 
   // https://github.com/npm/npm/blob/latest/lib/config/core.js#L332-L342
   add(data: any, marker: any) {
-    try {
-      /* eslint-disable no-param-reassign */
-      for (const x of Object.keys(data)) {
-        // https://github.com/npm/npm/commit/f0e998d
-        const newKey = envReplace(x);
-        const newField = parseField(data[x], newKey);
+    /* eslint-disable no-param-reassign */
+    for (const x of Object.keys(data)) {
+      // https://github.com/npm/npm/commit/f0e998d
+      const newKey = envReplace(x);
+      const newField = parseField(data[x], newKey);
 
-        delete data[x];
-        data[newKey] = newField;
-      }
-      /* eslint-enable no-param-reassign */
-    } catch (err: any) {
-      throw err;
+      delete data[x];
+      data[newKey] = newField;
     }
+    /* eslint-enable no-param-reassign */
 
     return super.add(data, marker);
   }
@@ -127,11 +123,7 @@ export class Conf extends ConfigChain {
     if (Object.prototype.hasOwnProperty.call(cli, 'prefix')) {
       p = pathResolve(cli.prefix);
     } else {
-      try {
-        p = findPrefix(process.cwd());
-      } catch (err: any) {
-        throw err;
-      }
+      p = findPrefix(process.cwd());
     }
 
     return p;
