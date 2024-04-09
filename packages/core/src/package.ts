@@ -141,7 +141,6 @@ export class Package {
     return join(this.location, 'node_modules');
   }
 
-  // eslint-disable-next-line class-methods-use-this
   get __isLernaPackage(): boolean {
     // safer than instanceof across module boundaries
     return true;

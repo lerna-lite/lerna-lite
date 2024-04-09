@@ -1,6 +1,5 @@
 export default {
   transform: (commit, context) => {
-    /* eslint-disable no-param-reassign */
     let discard = true;
     const issues: string[] = [];
 
@@ -67,7 +66,6 @@ export default {
     });
 
     return commit;
-    /* eslint-enable no-param-reassign */
   },
   groupBy: `type`,
   commitGroupsSort: `title`,

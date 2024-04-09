@@ -19,7 +19,6 @@ const readJSONAsync = pify(readJSON);
  */
 function flattenOptions(obj: Omit<LibNpmPublishOptions, 'defaultTag'>): LibNpmPublishOptions {
   return {
-    // eslint-disable-next-line dot-notation -- (npm v7 compat)
     defaultTag: obj['tag'] || 'latest',
     dryRun: obj['dry-run'] || obj['git-dry-run'],
     // libnpmpublish / npm-registry-fetch check strictSSL rather than strict-ssl
@@ -74,7 +73,6 @@ export function npmPublish(
         manifest.publishConfig.tag &&
         manifest.publishConfig.tag !== opts.defaultTag
       ) {
-        // eslint-disable-next-line no-param-reassign
         manifest.publishConfig.tag = opts.defaultTag as string;
       }
 

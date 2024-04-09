@@ -79,7 +79,6 @@ export default {
   handler: async (argv: ExecCommandOption) => {
     try {
       // @ts-ignore
-      // eslint-disable-next-line
       const { ExecCommand } = await import('@lerna-lite/exec');
       new ExecCommand(argv);
     } catch (err: unknown) {

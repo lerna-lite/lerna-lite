@@ -51,7 +51,6 @@ export default {
   handler: async (argv: ChangedCommandOption & ListCommandOption) => {
     try {
       // @ts-ignore
-      // eslint-disable-next-line
       const { ChangedCommand } = await import('@lerna-lite/changed');
       new ChangedCommand(argv);
     } catch (err: unknown) {

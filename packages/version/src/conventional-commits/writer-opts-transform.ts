@@ -28,7 +28,7 @@ export function setConfigChangelogCommitGitAuthor(
   gitRawCommitsOpts.format = GIT_COMMIT_WITH_AUTHOR_FORMAT;
   const extraCommitMsg =
     typeof commitCustomFormat === 'string' && commitCustomFormat !== ''
-      ? commitCustomFormat.replace(/%a/g, '{{authorName}}' || '').replace(/%e/g, '{{authorEmail}}' || '')
+      ? commitCustomFormat.replace(/%a/g, '{{authorName}}').replace(/%e/g, '{{authorEmail}}')
       : `({{authorName}})`;
   writerOpts.commitPartial =
     config.writerOpts.commitPartial!.replace(/\n*$/, '') + ` {{#if @root.linkReferences~}}${extraCommitMsg}{{~/if}}\n`;
@@ -55,10 +55,7 @@ export function setConfigChangelogCommitClientLogin(
   gitRawCommitsOpts.format = GIT_COMMIT_WITH_AUTHOR_FORMAT;
   const extraCommitMsg =
     typeof commitCustomFormat === 'string' && commitCustomFormat !== ''
-      ? commitCustomFormat
-          .replace(/%a/g, '{{authorName}}' || '')
-          .replace(/%e/g, '{{authorEmail}}' || '')
-          .replace(/%l/g, '{{userLogin}}' || '')
+      ? commitCustomFormat.replace(/%a/g, '{{authorName}}').replace(/%e/g, '{{authorEmail}}').replace(/%l/g, '{{userLogin}}')
       : ` (@{{userLogin}})`;
   writerOpts.commitPartial = config.writerOpts.commitPartial!.replace(/\n*$/, '') + `${extraCommitMsg}\n`;
 

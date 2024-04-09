@@ -127,8 +127,8 @@ export class Command<T extends AvailableCommandOption> {
       runner = runner.then(argv.onResolved, argv.onRejected);
 
       // when nested, never resolve inner with outer callbacks
-      delete argv.onResolved; // eslint-disable-line no-param-reassign
-      delete argv.onRejected; // eslint-disable-line no-param-reassign
+      delete argv.onResolved;
+      delete argv.onRejected;
     }
 
     // 'hide' irrelevant argv keys from options

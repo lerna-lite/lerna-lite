@@ -51,7 +51,7 @@ export function verifyNpmPackageAccess(packages: Package[], username: string, op
 
     // Log the error cleanly to stderr
     opts.log.pause();
-    console.error(err.message); // eslint-disable-line no-console
+    console.error(err.message);
     opts.log.resume();
 
     throw new ValidationError('EWHOAMI', 'Authentication error. Use `npm whoami` to troubleshoot.');

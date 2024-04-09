@@ -44,7 +44,7 @@ export function getTwoFactorAuthRequired(options?: FetchConfig) {
 
     // Log the error cleanly to stderr
     opts.log.pause();
-    console.error(err.message); // eslint-disable-line no-console
+    console.error(err.message);
     opts.log.resume();
 
     throw new ValidationError('ETWOFACTOR', 'Unable to obtain two-factor auth mode');

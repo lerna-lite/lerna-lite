@@ -25,7 +25,7 @@ export class PackageGraph extends Map<string, PackageGraphNode> {
   ) {
     // For backward compatibility
     if (localDependencies === true || localDependencies === 'forceLocal') {
-      localDependencies = 'force'; // eslint-disable-line
+      localDependencies = 'force';
     }
 
     super(packages.map((pkg: Package) => [pkg?.name ?? '', new PackageGraphNode(pkg)]));
@@ -219,7 +219,6 @@ export class PackageGraph extends Map<string, PackageGraphNode> {
       }
 
       if (walkStack.indexOf(topLevelDependent) === -1) {
-        // eslint-disable-next-line no-use-before-define
         visitWithStack(baseNode, topLevelDependent);
       }
     }

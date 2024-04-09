@@ -329,7 +329,6 @@ export default {
   handler: async (argv: VersionCommandOption) => {
     try {
       // @ts-ignore
-      // eslint-disable-next-line
       const { VersionCommand } = await import('@lerna-lite/version');
       new VersionCommand(argv);
     } catch (err: unknown) {

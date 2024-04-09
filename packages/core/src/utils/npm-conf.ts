@@ -13,7 +13,6 @@ function npmConf(opts: any) {
   const cleanOpts = opts
     ? Object.keys(opts).reduce((acc, key) => {
         if (opts[key] !== undefined) {
-          // eslint-disable-next-line no-param-reassign
           acc[key] = opts[key];
         }
         return acc;
