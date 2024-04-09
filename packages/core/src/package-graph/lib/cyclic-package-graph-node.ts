@@ -24,7 +24,6 @@ export class CyclicPackageGraphNode extends Map<string, PackageGraphNode | Cycli
     this.localDependents = new Map<string, PackageGraphNode | CyclicPackageGraphNode>();
   }
 
-  // eslint-disable-next-line class-methods-use-this
   get isCycle() {
     return true;
   }

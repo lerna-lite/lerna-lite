@@ -30,7 +30,6 @@ export class Conf extends ConfigChain {
 
   // https://github.com/npm/npm/blob/latest/lib/config/core.js#L332-L342
   add(data: any, marker: any) {
-    /* eslint-disable no-param-reassign */
     for (const x of Object.keys(data)) {
       // https://github.com/npm/npm/commit/f0e998d
       const newKey = envReplace(x);
@@ -39,7 +38,6 @@ export class Conf extends ConfigChain {
       delete data[x];
       data[newKey] = newField;
     }
-    /* eslint-enable no-param-reassign */
 
     return super.add(data, marker);
   }

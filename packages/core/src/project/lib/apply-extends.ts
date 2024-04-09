@@ -29,7 +29,7 @@ export function applyExtends(config: { [key: string]: any }, cwd: string, seen =
     seen.add(pathToDefault);
 
     defaultConfig = readJsonSync(pathToDefault, { throws: false });
-    delete config.extends; // eslint-disable-line no-param-reassign
+    delete config.extends;
 
     // deprecateConfig(defaultConfig, pathToDefault);
 

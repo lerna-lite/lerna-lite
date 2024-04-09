@@ -30,7 +30,6 @@ function flattenOptions(obj: LifecycleConfig) {
  * Modified to add back "path" and make it behave more like "npm-lifecycle"
  */
 function printCommandBanner(id: string, event: string, cmd: string, path: string) {
-  // eslint-disable-next-line no-console
   return console.log(`\n> ${id ? `${id} ` : ''}${event} ${path}\n> ${cmd.trim().replace(/\n/g, '\n> ')}\n`);
 }
 
@@ -44,7 +43,6 @@ export function runLifecycle(pkg: Package, stage: string, options: LifecycleConf
   // back-compat for @lerna/npm-conf instances
   // https://github.com/isaacs/proto-list/blob/27764cd/proto-list.js#L14
   if ('root' in options) {
-    // eslint-disable-next-line no-param-reassign
     options = options.snapshot;
   }
 
@@ -84,16 +82,13 @@ export function runLifecycle(pkg: Package, stage: string, options: LifecycleConf
     }
   }
 
-  // eslint-disable-next-line no-underscore-dangle
   if (pkg.__isLernaPackage) {
     // To ensure npm-lifecycle creates the correct npm_package_* env vars,
     // we must pass the _actual_ JSON instead of our fancy Package thingy
-    // eslint-disable-next-line no-param-reassign
     pkg = pkg.toJSON() as Package;
   }
 
   // _id is needed by @npmcli/run-script
-  // eslint-disable-next-line no-underscore-dangle
   pkg._id = id;
 
   opts.log.silly('lifecycle', '%j starting in %j', stage, pkg.name);
@@ -126,7 +121,6 @@ export function runLifecycle(pkg: Package, stage: string, options: LifecycleConf
          * This adjustment is based on trying to match the existing integration test outputs when migrating
          * from "npm-lifecycle" to "@npmcli/run-script".
          */
-        // eslint-disable-next-line no-console
         console.log(stdout.toString().trimEnd());
       }
 

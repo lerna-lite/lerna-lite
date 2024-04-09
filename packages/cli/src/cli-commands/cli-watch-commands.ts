@@ -139,7 +139,6 @@ export default {
       .middleware((args) => {
         const { '--': doubleDash } = args;
         if (doubleDash && Array.isArray(doubleDash)) {
-          // eslint-disable-next-line no-param-reassign
           args.command = doubleDash.join(' ');
         }
       }, true);
@@ -150,7 +149,6 @@ export default {
   handler: async (argv: WatchCommandOption) => {
     try {
       // @ts-ignore
-      // eslint-disable-next-line
       const { WatchCommand } = await import('@lerna-lite/watch');
       new WatchCommand(argv);
     } catch (err: unknown) {

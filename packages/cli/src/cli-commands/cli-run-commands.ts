@@ -81,7 +81,6 @@ export default {
   handler: async (argv: RunCommandOption) => {
     try {
       // @ts-ignore
-      // eslint-disable-next-line
       const { RunCommand } = await import('@lerna-lite/run');
       new RunCommand(argv);
     } catch (err: unknown) {

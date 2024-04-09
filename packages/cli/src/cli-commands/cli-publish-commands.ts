@@ -160,7 +160,6 @@ export default {
   handler: async (argv: PublishCommandOption) => {
     try {
       // @ts-ignore
-      // eslint-disable-next-line
       const { PublishCommand } = await import('@lerna-lite/publish');
       new PublishCommand(argv);
     } catch (err: unknown) {
