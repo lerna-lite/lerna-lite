@@ -1,6 +1,5 @@
 import { LifecycleConfig, Package, PackConfig, runLifecycle } from '@lerna-lite/core';
 import { tempWrite } from '@lerna-lite/version';
-import Arborist from '@npmcli/arborist';
 import packlist from 'npm-packlist';
 import log from 'npmlog';
 import { relative } from 'node:path';
@@ -42,9 +41,7 @@ export async function packDirectory(_pkg: Package, dir: string, options: PackCon
   await runLifecycle(pkg, 'prepack', opts);
   await pkg.refresh();
 
-  const arborist = new Arborist({ path: pkg.contents });
-  const tree = await arborist.loadActual();
-  const files: string[] = await packlist(tree);
+  const files: string[] = await packlist({ path: pkg.contents });
   const stream: DataView & Readable = tar.create(
     {
       cwd: pkg.contents,
