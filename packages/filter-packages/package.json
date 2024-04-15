@@ -40,7 +40,7 @@
     "npmlog": "^7.0.1"
   },
   "devDependencies": {
-    "@types/node": "^20.12.3",
+    "@types/node": "^20.12.7",
     "yargs": "^17.7.2"
   }
 }
