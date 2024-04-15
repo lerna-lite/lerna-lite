@@ -4,6 +4,13 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [3.3.3](https://github.com/lerna-lite/lerna-lite/compare/v3.3.2...v3.3.3) (2024-04-15)
+
+### Bug Fixes
+
+* **deps:** update all non-major dependencies ([#841](https://github.com/lerna-lite/lerna-lite/issues/841)) ([86945b9](https://github.com/lerna-lite/lerna-lite/commit/86945b989840b9608bf7873afad7ec1183f3a740)) - by @renovate[bot]
+* **publish:** downgrade npm-packlist to v5.1.1 ([#844](https://github.com/lerna-lite/lerna-lite/issues/844)) ([8d18186](https://github.com/lerna-lite/lerna-lite/commit/8d181860f83d516029cfd661955e3948642bcf96)) - by @wassim-ben-amor
+
 ## [3.3.2](https://github.com/lerna-lite/lerna-lite/compare/v3.3.1...v3.3.2) (2024-04-02)
 
 ### Bug Fixes
