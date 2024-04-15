@@ -19,6 +19,6 @@
       allowedVersions: '18.0.0',
     },
   ],
-  ignoreDeps: ['lee-dohm/no-response'],
+  ignoreDeps: ['lee-dohm/no-response', 'npm-packlist'],
   schedule: ['every 2 weeks on Thursday'],
 }
