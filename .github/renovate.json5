@@ -18,7 +18,11 @@
       packageNames: ['node'],
       allowedVersions: '18.0.0',
     },
+    {
+      packageNames: ['npm-packlist'],
+      allowedVersions: '<6.0.0',
+    },
   ],
-  ignoreDeps: ['lee-dohm/no-response', 'npm-packlist'],
+  ignoreDeps: ['lee-dohm/no-response'],
   schedule: ['every 2 weeks on Thursday'],
 }
