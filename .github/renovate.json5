@@ -23,7 +23,11 @@
       allowedVersions: '<6.0.0',
     },
     {
-      packageNames: ['tart'],
+      packageNames: ['pnpm'],
+      allowedVersions: '<9.0.0',
+    },
+    {
+      packageNames: ['tar'],
       allowedVersions: '<7.0.0',
     },
   ],
