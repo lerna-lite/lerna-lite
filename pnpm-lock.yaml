@@ -206,8 +206,8 @@ importers:
   packages/core:
     dependencies:
       '@npmcli/run-script':
-        specifier: ^7.0.4
-        version: 7.0.4
+        specifier: ^8.0.0
+        version: 8.0.0
       chalk:
         specifier: ^5.3.0
         version: 5.3.0
@@ -1346,6 +1346,20 @@ packages:
       '@npmcli/package-json': 5.0.0
       '@npmcli/promise-spawn': 7.0.0
       node-gyp: 10.0.1
+      which: 4.0.0
+    transitivePeerDependencies:
+      - bluebird
+    dev: false
+
+  /@npmcli/run-script@8.0.0:
+    resolution: {integrity: sha512-5noc+eCQmX1W9nlFUe65n5MIteikd3vOA2sEPdXtlUv68KWyHNFZnT/LDRXu/E4nZ5yxjciP30pADr/GQ97W1w==}
+    engines: {node: ^16.14.0 || >=18.0.0}
+    dependencies:
+      '@npmcli/node-gyp': 3.0.0
+      '@npmcli/package-json': 5.0.0
+      '@npmcli/promise-spawn': 7.0.0
+      node-gyp: 10.0.1
+      proc-log: 4.1.0
       which: 4.0.0
     transitivePeerDependencies:
       - bluebird
