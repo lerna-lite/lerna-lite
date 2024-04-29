@@ -296,6 +296,8 @@ lerna version --remove-package-fields 'devDependencies' 'scripts'
 
 > **Note** lifecycle scripts (`prepublish`, `prepublishOnly`, `prepack`, `postpack`) are executed after the field removal process and for that reason if any of these scripts are found, it will leave them in place and skip the removal whenever found.
 
+> **Note** this option will actually temporarily modify the actual `package.json` just before the publish process starts and will then revert the change after the publish process is completed. If for whatever reason, your publish process fails, it is possible that your each package, are now in an invalid state (e.g. `scripts` could be removed), so it very important to review your `package.json` after a publish failure.
+
 Removal of complex object value(s) are also supported via the dot notation as shown below.
 
 ```sh
