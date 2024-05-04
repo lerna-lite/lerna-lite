@@ -227,7 +227,7 @@ export class WatchCommand extends Command<WatchCommandOption & FilterOptions> {
 
     if (this._bail) {
       // only the first error is caught
-      process.exitCode = exitCode;
+      process.exitCode = exitCode as number;
       this.handleTermination(process.exitCode);
 
       // rethrow to halt chain and log properly
@@ -235,7 +235,7 @@ export class WatchCommand extends Command<WatchCommandOption & FilterOptions> {
     } else {
       // propagate "highest" error code, it's probably the most useful, but keep watch process alive
       this.logger.error('', 'Received non-zero exit code %d during file watch', exitCode);
-      process.exitCode = exitCode;
+      process.exitCode = exitCode as number;
     }
   }
 
