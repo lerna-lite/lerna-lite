@@ -54,9 +54,9 @@
   },
   "engines": {
     "node": "^18.0.0 || >=20.0.0",
-    "pnpm": "8.15.5"
+    "pnpm": "8.15.8"
   },
-  "packageManager": "pnpm@8.15.5",
+  "packageManager": "pnpm@8.15.8",
   "devDependencies": {
     "@lerna-lite/changed": "workspace:*",
     "@lerna-lite/cli": "workspace:*",
