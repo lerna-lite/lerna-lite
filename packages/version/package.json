@@ -40,7 +40,7 @@
     "@octokit/plugin-enterprise-rest": "^6.0.1",
     "@octokit/rest": "^20.1.1",
     "chalk": "^5.3.0",
-    "conventional-changelog-angular": "^7.0.0",
+    "conventional-changelog-angular": "^8.0.0",
     "conventional-changelog-core": "^7.0.0",
     "conventional-changelog-writer": "^7.0.1",
     "conventional-commits-parser": "^5.0.0",
