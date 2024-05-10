@@ -30,6 +30,10 @@
       packageNames: ['tar'],
       allowedVersions: '<7.0.0',
     },
+    {
+      packageNames: ['execa'],
+      allowedVersions: '<9.0.0',
+    },
   ],
   ignoreDeps: ['lee-dohm/no-response'],
   schedule: ['every 2 weeks on Thursday'],
