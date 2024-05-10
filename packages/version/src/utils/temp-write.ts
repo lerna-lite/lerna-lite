@@ -6,7 +6,7 @@
 
 import fs from 'graceful-fs';
 import { isStream } from 'is-stream';
-import makeDir from 'make-dir';
+import { makeDirectory, makeDirectorySync } from 'make-dir';
 import tempDir from 'temp-dir';
 import { dirname, join } from 'node:path';
 import { Readable } from 'node:stream';
@@ -38,7 +38,7 @@ export async function tempWrite(fileContent: Readable | fs.PathOrFileDescriptor,
   const tempPath = tempfile(filePath);
   const write = isStream(fileContent) ? writeStream : writeFileP;
 
-  await makeDir(dirname(tempPath));
+  await makeDirectory(dirname(tempPath));
   await write(tempPath, fileContent as DataView & Readable);
 
   return tempPath;
@@ -47,7 +47,7 @@ export async function tempWrite(fileContent: Readable | fs.PathOrFileDescriptor,
 tempWrite.sync = (fileContent: (DataView & Readable) | string, filePath?: string) => {
   const tempPath = tempfile(filePath);
 
-  makeDir.sync(dirname(tempPath));
+  makeDirectorySync(dirname(tempPath));
   fs.writeFileSync(tempPath, fileContent);
 
   return tempPath;
