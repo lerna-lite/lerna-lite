@@ -40,7 +40,7 @@
   },
   "devDependencies": {
     "@types/fs-extra": "^11.0.4",
-    "execa": "^8.0.1",
+    "execa": "^9.0.2",
     "fs-extra": "^11.2.0",
     "npmlog": "^7.0.1",
     "yargs-parser": "^21.1.1"

@@ -82,7 +82,7 @@
     "@types/npm-package-arg": "^6.1.4",
     "@types/pify": "^5.0.4",
     "@types/semver": "^7.5.8",
-    "execa": "^8.0.1",
+    "execa": "^9.0.2",
     "fs-extra": "^11.2.0",
     "js-yaml": "^4.1.0",
     "write-package": "^7.0.1",

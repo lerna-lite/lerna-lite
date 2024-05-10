@@ -41,7 +41,7 @@
     "config-chain": "^1.1.13",
     "cosmiconfig": "^9.0.0",
     "dedent": "^1.5.3",
-    "execa": "^8.0.1",
+    "execa": "^9.0.2",
     "fs-extra": "^11.2.0",
     "glob-parent": "^6.0.2",
     "globby": "^14.0.1",
