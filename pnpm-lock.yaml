@@ -315,8 +315,8 @@ importers:
         specifier: ^4.0.3
         version: 4.0.3
       npm-registry-fetch:
-        specifier: ^16.2.1
-        version: 16.2.1
+        specifier: ^17.0.1
+        version: 17.0.1
       yargs:
         specifier: ^17.7.2
         version: 17.7.2
@@ -532,8 +532,8 @@ importers:
         specifier: ^5.1.3
         version: 5.1.3
       npm-registry-fetch:
-        specifier: ^16.2.1
-        version: 16.2.1
+        specifier: ^17.0.1
+        version: 17.0.1
       npmlog:
         specifier: ^7.0.1
         version: 7.0.1
@@ -1339,14 +1339,9 @@ packages:
       which: 4.0.0
     dev: false
 
-  /@npmcli/redact@1.1.0:
-    resolution: {integrity: sha512-PfnWuOkQgu7gCbnSsAisaX7hKOdZ4wSAhAzH3/ph5dSGau52kCRrMMGbiSQLwyTZpgldkZ49b0brkOr1AzGBHQ==}
-    engines: {node: ^16.14.0 || >=18.0.0}
-
   /@npmcli/redact@2.0.0:
     resolution: {integrity: sha512-SEjCPAVHWYUIQR+Yn03kJmrJjZDtJLYpj300m3HV9OTRZNpC5YpbMsM3eTkECyT4aWj8lDr9WeY6TWefpubtYQ==}
     engines: {node: ^16.14.0 || >=18.0.0}
-    dev: false
 
   /@npmcli/run-script@8.1.0:
     resolution: {integrity: sha512-y7efHHwghQfk28G2z3tlZ67pLG0XdfYbcVG26r7YIXALRsrVQcTq4/tdenSmdOrEsNahIYA/eh8aEVROWGFUDg==}
@@ -4749,19 +4744,6 @@ packages:
       semver: 7.6.0
     dev: false
 
-  /npm-registry-fetch@16.2.1:
-    resolution: {integrity: sha512-8l+7jxhim55S85fjiDGJ1rZXBWGtRLi1OSb4Z3BPLObPuIaeKRlPRiYMSHU4/81ck3t71Z+UwDDl47gcpmfQQA==}
-    engines: {node: ^16.14.0 || >=18.0.0}
-    dependencies:
-      '@npmcli/redact': 1.1.0
-      make-fetch-happen: 13.0.0
-      minipass: 7.0.4
-      minipass-fetch: 3.0.3
-      minipass-json-stream: 1.0.1
-      minizlib: 2.1.2
-      npm-package-arg: 11.0.2
-      proc-log: 4.1.0
-
   /npm-registry-fetch@17.0.1:
     resolution: {integrity: sha512-fLu9MTdZTlJAHUek/VLklE6EpIiP3VZpTiuN7OOMCt2Sd67NCpSEetMaxHHEZiZxllp8ZLsUpvbEszqTFEc+wA==}
     engines: {node: ^16.14.0 || >=18.0.0}
@@ -4773,8 +4755,7 @@ packages:
       minipass-json-stream: 1.0.1
       minizlib: 2.1.2
       npm-package-arg: 11.0.2
-      proc-log: 4.1.0
-    dev: false
+      proc-log: 4.2.0
 
   /npm-run-path@5.1.0:
     resolution: {integrity: sha512-sJOdmRGrY2sjNTRMbSvluQqg+8X7ZK61yvzBEIDhz4f8z1TZFYABsqjjCBd/0PUNE9M6QDgHJXQkGUEm7Q+l9Q==}
@@ -5180,7 +5161,6 @@ packages:
   /proc-log@4.2.0:
     resolution: {integrity: sha512-g8+OnU/L2v+wyiVK+D5fA34J7EH8jZ8DDlvwhRCMxmMj7UCBvxiO1mGeN+36JXIKF4zevU4kRBd8lVgG9vLelA==}
     engines: {node: ^14.17.0 || ^16.13.0 || >=18.0.0}
-    dev: false
 
   /process@0.11.10:
     resolution: {integrity: sha512-cdGef/drWFoydD1JsMzuFf8100nZl+GT+yacc2bEced5f9Rjk4z+WtFUTBu9PhOi9j/jfmBPu0mMEY4wIdAF8A==}
