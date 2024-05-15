@@ -16,6 +16,18 @@ export interface CommandOptions {
   rollVersion?: boolean;
 }
 
+export interface ChangelogPresetOptions {
+  name: string;
+  header?: string;
+  types?: Array<{ type: string; section: string; hidden?: boolean }>;
+  issuePrefixes?: string[];
+  issueUrlFormat?: string;
+  commitUrlFormat?: string;
+  compareUrlFormat?: string;
+  userUrlFormat?: string;
+  releaseCommitMessageFormat?: string;
+}
+
 export type CommandType = '' | 'changed' | 'exec' | 'info' | 'init' | 'list' | 'publish' | 'run' | 'version';
 
 export interface DescribeRefOptions {

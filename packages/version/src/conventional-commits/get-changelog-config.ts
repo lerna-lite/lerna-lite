@@ -55,7 +55,7 @@ export class GetChangelogConfig {
     let config: ChangelogConfig | Promise<ChangelogConfig> = GetChangelogConfig.cfgCache.get(cacheKey);
 
     if (!config) {
-      let presetPackageName = presetName;
+      let presetPackageName = presetName as string;
 
       // https://github.com/npm/npm-package-arg#result-object
       const parsed: any = npa(presetPackageName, rootPath);

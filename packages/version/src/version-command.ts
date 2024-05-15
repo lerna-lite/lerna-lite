@@ -45,7 +45,7 @@ import {
   runInstallLockFileOnly,
   saveUpdatedLockJsonFile,
 } from './lib/update-lockfile-version.js';
-import { GitCreateReleaseClientOutput, ReleaseNote, RemoteCommit } from './models/index.js';
+import { ChangelogPresetOptions, GitCreateReleaseClientOutput, ReleaseNote, RemoteCommit } from './models/index.js';
 import {
   applyBuildMetadata,
   getCommitsSinceLastRelease,
@@ -160,6 +160,17 @@ export class VersionCommand extends Command<VersionCommandOption> {
 
     if (this.releaseClient && this.options.changelog === false && this.options.generateReleaseNotes !== true) {
       throw new ValidationError('ERELEASE', 'To create a release, you cannot pass --no-changelog');
+    }
+
+    if (
+      this.options.conventionalCommits &&
+      typeof this.options.changelogPreset === 'object' &&
+      (this.options.changelogPreset as ChangelogPresetOptions)?.releaseCommitMessageFormat
+    ) {
+      throw new ValidationError(
+        'ENOTSUPPORTED',
+        'The Lerna config "changelogPreset.releaseCommitMessageFormat" is not supported, you should simply use "version.message" instead which will give you the same end result.'
+      );
     }
 
     this.gitOpts = {

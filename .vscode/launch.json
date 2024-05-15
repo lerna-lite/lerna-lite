@@ -22,6 +22,7 @@
         "packages/cli/dist/cli.js",
         "version",
         "--dry-run",
+        "--yes",
         "--changelog-include-commits-client-login",
         "--conventional-commits"
       ],
