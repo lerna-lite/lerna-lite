@@ -4,6 +4,15 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [3.4.0](https://github.com/lerna-lite/lerna-lite/compare/v3.3.3...v3.4.0) (2024-05-15)
+
+### Bug Fixes
+
+* **deps:** update all non-major dependencies ([#849](https://github.com/lerna-lite/lerna-lite/issues/849)) ([bf23757](https://github.com/lerna-lite/lerna-lite/commit/bf23757941b7b334d1e2feb5f64b39b6748e5a1c)) - by @renovate[bot]
+* **deps:** update dependency @npmcli/run-script to v8 ([#847](https://github.com/lerna-lite/lerna-lite/issues/847)) ([de2b7ca](https://github.com/lerna-lite/lerna-lite/commit/de2b7ca3a786f2921565e73225c0dcc9141b7636)) - by @renovate[bot]
+* **deps:** update dependency npm-registry-fetch to v17 ([#862](https://github.com/lerna-lite/lerna-lite/issues/862)) ([413f75c](https://github.com/lerna-lite/lerna-lite/commit/413f75cd0b275fb49f6bebdac4e3c1750d73020e)) - by @renovate[bot]
+* **versions:** support `changelogPreset.header`, fixes [#852](https://github.com/lerna-lite/lerna-lite/issues/852) ([#864](https://github.com/lerna-lite/lerna-lite/issues/864)) ([358324c](https://github.com/lerna-lite/lerna-lite/commit/358324cd8d4fd0dd92f90eed91625cbb6179488b)) - by @ghiscoding
+
 ## [3.3.3](https://github.com/lerna-lite/lerna-lite/compare/v3.3.2...v3.3.3) (2024-04-15)
 
 ### Bug Fixes

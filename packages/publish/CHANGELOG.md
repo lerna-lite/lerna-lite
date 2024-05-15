@@ -4,6 +4,14 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [3.4.0](https://github.com/lerna-lite/lerna-lite/compare/v3.3.3...v3.4.0) (2024-05-15)
+
+### Bug Fixes
+
+* **deps:** update all non-major dependencies ([#849](https://github.com/lerna-lite/lerna-lite/issues/849)) ([bf23757](https://github.com/lerna-lite/lerna-lite/commit/bf23757941b7b334d1e2feb5f64b39b6748e5a1c)) - by @renovate[bot]
+* **deps:** update dependency npm-registry-fetch to v17 ([#862](https://github.com/lerna-lite/lerna-lite/issues/862)) ([413f75c](https://github.com/lerna-lite/lerna-lite/commit/413f75cd0b275fb49f6bebdac4e3c1750d73020e)) - by @renovate[bot]
+* **deps:** update dependency pacote to v18 ([#848](https://github.com/lerna-lite/lerna-lite/issues/848)) ([0f98a46](https://github.com/lerna-lite/lerna-lite/commit/0f98a46759e013fd51a57db130a691b18497f1e9)) - by @renovate[bot]
+
 ## [3.3.3](https://github.com/lerna-lite/lerna-lite/compare/v3.3.2...v3.3.3) (2024-04-15)
 
 ### Bug Fixes
