@@ -1,4 +1,4 @@
-import { ExecOpts, Package } from '@lerna-lite/core';
+import { ChangelogPresetOptions, ExecOpts, Package } from '@lerna-lite/core';
 import { GitRawCommitsOptions, ParserOptions } from 'conventional-changelog-core';
 import { Options as WriterOptions } from 'conventional-changelog-writer';
 import { Options as RecommendedBumpOptions } from 'conventional-recommended-bump';
@@ -17,7 +17,7 @@ export interface GitTagOption {
 
 export type VersioningStrategy = 'fixed' | 'independent';
 export type ChangelogType = 'fixed' | 'independent' | 'root';
-export type ChangelogPresetConfig = string | { name: string; [key: string]: unknown };
+export type ChangelogPresetConfig = string | ChangelogPresetOptions;
 
 export interface BaseChangelogOptions {
   changelogPreset?: ChangelogPresetConfig;
@@ -56,7 +56,7 @@ export type RemoteCommit = {
 
 export interface UpdateChangelogOption {
   changelogHeaderMessage?: string;
-  changelogPreset?: string;
+  changelogPreset?: ChangelogPresetConfig;
   changelogIncludeCommitsGitAuthor?: boolean | string;
   changelogIncludeCommitsClientLogin?: boolean | string;
   commitsSinceLastRelease?: RemoteCommit[];

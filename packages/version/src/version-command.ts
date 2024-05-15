@@ -9,22 +9,23 @@ import semver from 'semver';
 
 import {
   EOL,
+  type ChangelogPresetOptions,
   checkWorkingTree,
   collectPackages,
   collectUpdates,
   Command,
-  CommandType,
+  type CommandType,
   createRunner,
   logOutput,
-  Package,
-  PackageGraphNode,
-  ProjectConfig,
+  type Package,
+  type PackageGraphNode,
+  type ProjectConfig,
   promptConfirmation,
   runTopologically,
   throwIfUncommitted,
-  UpdateCollectorOptions,
+  type UpdateCollectorOptions,
   ValidationError,
-  VersionCommandOption,
+  type VersionCommandOption,
 } from '@lerna-lite/core';
 
 import { getCurrentBranch } from './lib/get-current-branch.js';
@@ -160,6 +161,17 @@ export class VersionCommand extends Command<VersionCommandOption> {
 
     if (this.releaseClient && this.options.changelog === false && this.options.generateReleaseNotes !== true) {
       throw new ValidationError('ERELEASE', 'To create a release, you cannot pass --no-changelog');
+    }
+
+    if (
+      this.options.conventionalCommits &&
+      typeof this.options.changelogPreset === 'object' &&
+      (this.options.changelogPreset as ChangelogPresetOptions)?.releaseCommitMessageFormat
+    ) {
+      throw new ValidationError(
+        'ENOTSUPPORTED',
+        'The Lerna config "changelogPreset.releaseCommitMessageFormat" is not supported, you should simply use "version.message" instead which will give you the same end result.'
+      );
     }
 
     this.gitOpts = {

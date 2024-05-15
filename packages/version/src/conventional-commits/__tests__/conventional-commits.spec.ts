@@ -439,6 +439,66 @@ describe('conventional-commits', () => {
       expect(rootChangelogContent).toMatchSnapshot('root');
     });
 
+    it('creates changelog with changelogPreset when defined', async () => {
+      const cwd = (await initFixture('changelog-missing')) as string;
+
+      const [pkg1] = await Project.getPackages(cwd);
+      const rootPkg = {
+        name: 'root',
+        location: cwd,
+      };
+
+      // make a change in package-1
+      await pkg1.set('changed', 1).serialize();
+      await gitAdd(cwd, pkg1.manifestLocation);
+      await gitCommit(cwd, 'feat: I should be placed in the CHANGELOG');
+
+      // update version
+      await pkg1.set('version', '1.1.0').serialize();
+
+      const [leafChangelog, rootChangelog] = await Promise.all([
+        updateChangelog(pkg1, 'fixed', {
+          changelogPreset: {
+            name: 'conventionalcommits',
+            header: 'My Custom Header',
+            types: [
+              {
+                type: 'feat',
+                section: '✨ Features',
+              },
+              {
+                type: 'fix',
+                section: '🐛 Bug Fixes',
+              },
+              {
+                type: 'chore',
+                section: '🚀 Chore',
+                hidden: true,
+              },
+              {
+                type: 'docs',
+                section: '📝 Documentation',
+              },
+            ],
+            issuePrefixes: ['#'],
+            issueUrlFormat: '{{host}}/{{owner}}/{{repository}}/issues/{{id}}',
+            commitUrlFormat: '{{host}}/{{owner}}/{{repository}}/commit/{{hash}}',
+            compareUrlFormat: '{{host}}/{{owner}}/{{repository}}/compare/{{previousTag}}...{{currentTag}}',
+            userUrlFormat: '{{host}}/{{user}}',
+          },
+        }),
+        updateChangelog(rootPkg as Package, 'root', { version: '1.1.0' }),
+      ]);
+
+      expect(leafChangelog.logPath).toBe(join(pkg1.location, 'CHANGELOG.md'));
+      expect(rootChangelog.logPath).toBe(join(rootPkg.location, 'CHANGELOG.md'));
+
+      const [leafChangelogContent, rootChangelogContent] = await Promise.all([getFileContent(leafChangelog), getFileContent(rootChangelog)]);
+
+      expect(leafChangelogContent).toMatchSnapshot('leaf');
+      expect(rootChangelogContent).toMatchSnapshot('root');
+    });
+
     it('updates fixed changelogs', async () => {
       const cwd = await initFixture('fixed');
       const rootPkg = {

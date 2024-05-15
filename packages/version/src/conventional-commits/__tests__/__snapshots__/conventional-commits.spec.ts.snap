@@ -1,5 +1,30 @@
 // Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
 
+exports[`conventional-commits > updateChangelog() > creates changelog with changelogPreset when defined > leaf 1`] = `
+My Custom Header
+
+## 1.1.0 (YYYY-MM-DD)
+
+### ✨ Features
+
+* I should be placed in the CHANGELOG ([SHA](https://github.com/lerna/changelog-missing/commit/GIT_HEAD))
+
+`;
+
+exports[`conventional-commits > updateChangelog() > creates changelog with changelogPreset when defined > root 1`] = `
+# Change Log
+
+All notable changes to this project will be documented in this file.
+See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
+
+# 1.1.0 (YYYY-MM-DD)
+
+### Features
+
+* I should be placed in the CHANGELOG ([SHA](https://github.com/lerna/changelog-missing/commit/GIT_HEAD))
+
+`;
+
 exports[`conventional-commits > updateChangelog() > creates files if they do not exist > leaf 1`] = `
 # Change Log
 

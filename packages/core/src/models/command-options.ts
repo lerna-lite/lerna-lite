@@ -1,4 +1,4 @@
-import { RemoteClientType } from './interfaces.js';
+import { ChangelogPresetOptions, RemoteClientType } from './interfaces.js';
 
 export interface ChangedCommandOption {
   /** use conventional-changelog to determine version bump and generate CHANGELOG. */
@@ -185,7 +185,7 @@ export interface VersionCommandOption {
   changelogIncludeCommitsClientLogin?: boolean | string;
 
   /** Defaults 'angular', custom conventional-changelog preset. */
-  changelogPreset?: string;
+  changelogPreset?: string | ChangelogPresetOptions;
 
   /** Create an official GitHub or GitLab release for every version. */
   createRelease?: RemoteClientType;

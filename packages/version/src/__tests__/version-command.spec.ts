@@ -332,6 +332,18 @@ describe('VersionCommand', () => {
       expect(command.changelogIncludeCommitsClientLogin).toBe(true);
       expect(getCommitsSinceLastRelease).toHaveBeenCalled();
     });
+
+    it('throws an error if changelogPreset is defined and includes releaseCommitMessageFormat', async () => {
+      const cwd = await initFixture('normal');
+      const command = new VersionCommand({
+        conventionalCommits: true,
+        changelogPreset: { name: 'conventionalcommits', releaseCommitMessageFormat: 'test' },
+      } as unknown as VersionCommandOption);
+
+      await expect(command).rejects.toThrow(
+        'The Lerna config "changelogPreset.releaseCommitMessageFormat" is not supported, you should simply use "version.message" instead which will give you the same end result.'
+      );
+    });
   });
 
   describe('independent mode', () => {

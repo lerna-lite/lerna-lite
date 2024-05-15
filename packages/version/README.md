@@ -276,6 +276,8 @@ If the preset exports a builder function (e.g. `conventional-changelog-conventio
 }
 ```
 
+> **Note** the option `changelogPreset.releaseCommitMessageFormat` is not supported and will throw, you can simply use [`--message`](#--message-msg) to have the same result.
+
 ### `--conventional-commits`
 
 ```sh

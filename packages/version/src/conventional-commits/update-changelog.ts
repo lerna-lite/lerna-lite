@@ -1,4 +1,4 @@
-import { EOL, Package } from '@lerna-lite/core';
+import { ChangelogPresetOptions, EOL, Package } from '@lerna-lite/core';
 import conventionalChangelogCore, { Context } from 'conventional-changelog-core';
 import { Options as WriterOptions } from 'conventional-changelog-writer';
 import { writeFile } from 'fs/promises';
@@ -94,10 +94,9 @@ export async function updateChangelog(pkg: Package, type: ChangelogType, updateO
 
     log.silly(type, 'writing new entry: %j', newEntry);
 
-    const changelogHeader = CHANGELOG_HEADER.replace(
-      /%s/g,
-      changelogHeaderMessage?.length > 0 ? changelogHeaderMessage + EOL : ''
-    );
+    const changelogHeader =
+      (changelogPreset as ChangelogPresetOptions)?.header ??
+      CHANGELOG_HEADER.replace(/%s/g, changelogHeaderMessage?.length > 0 ? changelogHeaderMessage + EOL : '');
 
     const content = [changelogHeader, newEntry, changelogContents]
       .join(BLANK_LINE)
