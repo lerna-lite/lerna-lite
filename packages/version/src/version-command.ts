@@ -9,22 +9,23 @@ import semver from 'semver';
 
 import {
   EOL,
+  type ChangelogPresetOptions,
   checkWorkingTree,
   collectPackages,
   collectUpdates,
   Command,
-  CommandType,
+  type CommandType,
   createRunner,
   logOutput,
-  Package,
-  PackageGraphNode,
-  ProjectConfig,
+  type Package,
+  type PackageGraphNode,
+  type ProjectConfig,
   promptConfirmation,
   runTopologically,
   throwIfUncommitted,
-  UpdateCollectorOptions,
+  type UpdateCollectorOptions,
   ValidationError,
-  VersionCommandOption,
+  type VersionCommandOption,
 } from '@lerna-lite/core';
 
 import { getCurrentBranch } from './lib/get-current-branch.js';
@@ -45,7 +46,7 @@ import {
   runInstallLockFileOnly,
   saveUpdatedLockJsonFile,
 } from './lib/update-lockfile-version.js';
-import { ChangelogPresetOptions, GitCreateReleaseClientOutput, ReleaseNote, RemoteCommit } from './models/index.js';
+import { GitCreateReleaseClientOutput, ReleaseNote, RemoteCommit } from './models/index.js';
 import {
   applyBuildMetadata,
   getCommitsSinceLastRelease,
