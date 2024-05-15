@@ -334,7 +334,7 @@ describe('VersionCommand', () => {
     });
 
     it('throws an error if changelogPreset is defined and includes releaseCommitMessageFormat', async () => {
-      const cwd = await initFixture('independent-changelog-preset-invalid');
+      const cwd = await initFixture('normal');
       const command = new VersionCommand({
         conventionalCommits: true,
         changelogPreset: { name: 'conventionalcommits', releaseCommitMessageFormat: 'test' },
