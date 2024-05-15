@@ -660,8 +660,8 @@ importers:
         specifier: ^5.0.0
         version: 5.0.0
       conventional-recommended-bump:
-        specifier: ^9.0.0
-        version: 9.0.0
+        specifier: ^10.0.0
+        version: 10.0.0
       dedent:
         specifier: ^1.5.3
         version: 1.5.3
@@ -742,8 +742,8 @@ importers:
         specifier: ^5.0.0
         version: 5.0.0
       '@types/conventional-recommended-bump':
-        specifier: ^9.0.3
-        version: 9.0.3
+        specifier: ^10.0.0
+        version: 10.0.0
       '@types/dedent':
         specifier: ^0.7.2
         version: 0.7.2
@@ -882,6 +882,23 @@ packages:
   /@bcoe/v8-coverage@0.2.3:
     resolution: {integrity: sha512-0hYQ8SB4Db5zvZB4axdMHGwEaQjkZzFjQiN9LVYvIFB2nSUHW9tYpxWriPrWDASIxiaXax83REcLxuSdnGPZtw==}
     dev: true
+
+  /@conventional-changelog/git-client@1.0.1(conventional-commits-filter@5.0.0)(conventional-commits-parser@6.0.0):
+    resolution: {integrity: sha512-PJEqBwAleffCMETaVm/fUgHldzBE35JFk3/9LL6NUA5EXa3qednu+UT6M7E5iBu3zIQZCULYIiZ90fBYHt6xUw==}
+    engines: {node: '>=18'}
+    peerDependencies:
+      conventional-commits-filter: ^5.0.0
+      conventional-commits-parser: ^6.0.0
+    peerDependenciesMeta:
+      conventional-commits-filter:
+        optional: true
+      conventional-commits-parser:
+        optional: true
+    dependencies:
+      '@types/semver': 7.5.8
+      conventional-commits-filter: 5.0.0
+      conventional-commits-parser: 6.0.0
+      semver: 7.6.2
 
   /@cspotcode/source-map-support@0.8.1:
     resolution: {integrity: sha512-IchNf6dN4tHoMFIn/7OE8LWZ19Y6q/67Bmf6vnGREv8RSbBVb9LPJxEcnwrcwX6ixSvaiGoomAUvu4YSxXrVgw==}
@@ -1672,7 +1689,7 @@ packages:
     dependencies:
       '@types/conventional-changelog-writer': 4.0.10
       '@types/conventional-commits-parser': 5.0.0
-      '@types/conventional-recommended-bump': 9.0.3
+      '@types/conventional-recommended-bump': 10.0.0
       '@types/git-raw-commits': 2.0.1
       '@types/node': 20.12.12
       '@types/normalize-package-data': 2.4.1
@@ -1691,12 +1708,11 @@ packages:
       '@types/node': 20.12.12
     dev: true
 
-  /@types/conventional-recommended-bump@9.0.3:
-    resolution: {integrity: sha512-rOZiRkTRNAPAqBotvm8+VTzILJMnMuad52/VhSjOVTP9Mrn3K+EiSeii/YC/FiPTp2mBTo45D9I3H6z6+EOfsw==}
+  /@types/conventional-recommended-bump@10.0.0:
+    resolution: {integrity: sha512-Yy0Ln9ZRvcbkXovZM33JoMml7FLaYOn1XwxKBL/w+I3FhB1MEWv4Fpaz/EITh56OTdZ5TWp/R2PRT1u1qZl1Gw==}
+    deprecated: This is a stub types definition. conventional-recommended-bump provides its own type definitions, so you do not need this installed.
     dependencies:
-      '@types/conventional-changelog-core': 4.2.7
-      '@types/conventional-changelog-writer': 4.0.10
-      '@types/conventional-commits-parser': 5.0.0
+      conventional-recommended-bump: 10.0.0
     dev: true
 
   /@types/dedent@0.7.2:
@@ -1787,7 +1803,6 @@ packages:
 
   /@types/semver@7.5.8:
     resolution: {integrity: sha512-I8EUhyrgfLrcTkzV3TSsGyl1tSuPrEDzr0yd5m90UgNxQkyDXULk3b6MlQqTCpZpNtWe1K0hzclnZkTcLBe2UQ==}
-    dev: true
 
   /@types/strong-log-transformer@1.0.2:
     resolution: {integrity: sha512-z3vq3aAB5Y5D/AcrKZa5j5bUQVAMcJuzV8NJfzPzRs+hk5mdJy5bgvthlpK8Wr3hiXqpkViNu9M18dnkGvmsPA==}
@@ -2542,10 +2557,9 @@ packages:
       read-pkg-up: 10.1.0
     dev: false
 
-  /conventional-changelog-preset-loader@4.1.0:
-    resolution: {integrity: sha512-HozQjJicZTuRhCRTq4rZbefaiCzRM2pr6u2NL3XhrmQm4RMnDXfESU6JKu/pnKwx5xtdkYfNCsbhN5exhiKGJA==}
-    engines: {node: '>=16'}
-    dev: false
+  /conventional-changelog-preset-loader@5.0.0:
+    resolution: {integrity: sha512-SetDSntXLk8Jh1NOAl1Gu5uLiCNSYenB5tm0YVeZKePRIgDW9lQImromTwLa3c/Gae298tsgOM+/CYT9XAl0NA==}
+    engines: {node: '>=18'}
 
   /conventional-changelog-writer@7.0.1:
     resolution: {integrity: sha512-Uo+R9neH3r/foIvQ0MKcsXkX642hdm9odUp7TqgFS7BsalTcjzRlIfWZrZR1gbxOozKucaKt5KAbjW8J8xRSmA==}
@@ -2565,6 +2579,10 @@ packages:
     engines: {node: '>=16'}
     dev: false
 
+  /conventional-commits-filter@5.0.0:
+    resolution: {integrity: sha512-tQMagCOC59EVgNZcC5zl7XqO30Wki9i9J3acbUvkaosCT6JX3EeFwJD7Qqp4MCikRnzS18WXV3BLIQ66ytu6+Q==}
+    engines: {node: '>=18'}
+
   /conventional-commits-parser@5.0.0:
     resolution: {integrity: sha512-ZPMl0ZJbw74iS9LuX9YIAiW8pfM5p3yh2o/NbXHbkFuZzY5jvdi5jFycEOkmBW5H5I7nA+D6f3UcsCLP2vvSEA==}
     engines: {node: '>=16'}
@@ -2576,18 +2594,23 @@ packages:
       split2: 4.2.0
     dev: false
 
-  /conventional-recommended-bump@9.0.0:
-    resolution: {integrity: sha512-HR1yD0G5HgYAu6K0wJjLd7QGRK8MQDqqj6Tn1n/ja1dFwBCE6QmV+iSgQ5F7hkx7OUR/8bHpxJqYtXj2f/opPQ==}
-    engines: {node: '>=16'}
+  /conventional-commits-parser@6.0.0:
+    resolution: {integrity: sha512-TbsINLp48XeMXR8EvGjTnKGsZqBemisPoyWESlpRyR8lif0lcwzqz+NMtYSj1ooF/WYjSuu7wX0CtdeeMEQAmA==}
+    engines: {node: '>=18'}
     hasBin: true
     dependencies:
-      conventional-changelog-preset-loader: 4.1.0
-      conventional-commits-filter: 4.0.0
-      conventional-commits-parser: 5.0.0
-      git-raw-commits: 4.0.0
-      git-semver-tags: 7.0.1
-      meow: 12.1.1
-    dev: false
+      meow: 13.2.0
+
+  /conventional-recommended-bump@10.0.0:
+    resolution: {integrity: sha512-RK/fUnc2btot0oEVtrj3p2doImDSs7iiz/bftFCDzels0Qs1mxLghp+DFHMaOC0qiCI6sWzlTDyBFSYuot6pRA==}
+    engines: {node: '>=18'}
+    hasBin: true
+    dependencies:
+      '@conventional-changelog/git-client': 1.0.1(conventional-commits-filter@5.0.0)(conventional-commits-parser@6.0.0)
+      conventional-changelog-preset-loader: 5.0.0
+      conventional-commits-filter: 5.0.0
+      conventional-commits-parser: 6.0.0
+      meow: 13.2.0
 
   /cosmiconfig@9.0.0(typescript@5.4.5):
     resolution: {integrity: sha512-itvL5h8RETACmOTFc4UfIyB2RfEHi71Ax6E/PivVxq9NseKbOWpeyHEOIbmAw1rs8Ak0VursQNww7lf7YtUwzg==}
@@ -4430,6 +4453,10 @@ packages:
     resolution: {integrity: sha512-BhXM0Au22RwUneMPwSCnyhTOizdWoIEPU9sp0Aqa1PnDMR5Wv2FGXYDjuzJEIX+Eo2Rb8xuYe5jrnm5QowQFkw==}
     engines: {node: '>=16.10'}
     dev: false
+
+  /meow@13.2.0:
+    resolution: {integrity: sha512-pxQJQzB6djGPXh08dacEloMFopsOqGVRKFPYvPOt9XDZ1HasbgDZA74CJGreSU4G3Ak7EFJGoiH2auq+yXISgA==}
+    engines: {node: '>=18'}
 
   /merge-stream@2.0.0:
     resolution: {integrity: sha512-abv/qOcuPfk3URPfDzmZU1LKmuw8kT+0nIHvKrKgFrwifol/doWcdA4ZqsWQ8ENrFKkd67Mfpo/LovbIUsbt3w==}
