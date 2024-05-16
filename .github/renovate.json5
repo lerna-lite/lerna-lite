@@ -39,6 +39,7 @@
     'lee-dohm/no-response',
 
     // ignore all new major conventional-changelog versions (until breaking changes are investigated, let's just skip them all)
+    '@types/conventional-recommended-bump',
     'conventional-changelog-core',
     'conventional-changelog-writer',
     'conventional-commits-parser',
