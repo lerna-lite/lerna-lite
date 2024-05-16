@@ -35,6 +35,16 @@
       allowedVersions: '<9.0.0',
     },
   ],
-  ignoreDeps: ['lee-dohm/no-response'],
+  ignoreDeps: [
+    'lee-dohm/no-response',
+
+    // ignore all new major conventional-changelog versions (until breaking changes are investigated, let's just skip them all)
+    'conventional-changelog-core',
+    'conventional-changelog-writer',
+    'conventional-commits-parser',
+    'conventional-changelog-angular',
+    'conventional-changelog-conventionalcommits',
+    'conventional-recommended-bump',
+  ],
   schedule: ['every 2 weeks on Thursday'],
 }
