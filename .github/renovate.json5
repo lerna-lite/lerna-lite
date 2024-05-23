@@ -10,6 +10,7 @@
       enabled: false,
     },
     {
+      // group all Conventional-Changelog dependencies
       matchPackagePatterns: ['^conventional-', '^@types/conventional-'],
       groupName: 'Conventional-Changelog packages'
     },
