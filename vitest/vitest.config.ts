@@ -8,6 +8,7 @@ export default defineConfig({
       interopDefault: false,
     },
     environment: 'node',
+    pool: 'forks',
     testTimeout: 60000,
     setupFiles: ['./vitest/silence-logging.ts', './helpers/npm/set-npm-userconfig.ts'],
     watch: false,
