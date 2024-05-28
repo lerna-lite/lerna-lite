@@ -79,7 +79,7 @@
     "@vitest/coverage-v8": "^1.6.0",
     "conventional-changelog-conventionalcommits": "^7.0.2",
     "cross-env": "^7.0.3",
-    "eslint": "^9.2.0",
+    "eslint": "^9.3.0",
     "eslint-config-prettier": "^9.1.0",
     "eslint-plugin-import": "^2.29.1",
     "eslint-plugin-n": "^17.7.0",
@@ -87,7 +87,7 @@
     "file-url": "^4.0.0",
     "find-up": "^7.0.0",
     "fs-extra": "^11.2.0",
-    "glob": "^10.3.15",
+    "glob": "^10.4.1",
     "globby": "^14.0.1",
     "load-json-file": "^7.0.1",
     "normalize-newline": "^4.1.0",
@@ -103,7 +103,7 @@
     "tslib": "^2.6.2",
     "tsm": "^2.3.0",
     "typescript": "^5.4.5",
-    "typescript-eslint": "^7.9.0",
+    "typescript-eslint": "^7.11.0",
     "vitest": "^1.6.0",
     "write-json-file": "^5.0.0"
   }
