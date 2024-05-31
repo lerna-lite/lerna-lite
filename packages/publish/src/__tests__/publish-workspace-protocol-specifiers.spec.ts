@@ -141,7 +141,7 @@ describe("workspace protocol 'workspace:' specifiers", () => {
 
     await gitTag(cwd, 'v1.0.0');
     await setupChanges(cwd);
-    await new PublishCommand(createArgv(cwd, '--bump', 'major', '--yes'));
+    await new PublishCommand(createArgv(cwd, '--bump', 'major', '--yes', '--allow-peer-dependencies-update'));
 
     expect((writePkg as any).updatedVersions()).toEqual({
       'package-1': '2.0.0',
@@ -161,8 +161,7 @@ describe("workspace protocol 'workspace:' specifiers", () => {
       'package-2': '^2.0.0', // workspace:^
     });
     expect((writePkg as any).updatedManifest('package-3').peerDependencies).toMatchObject({
-      // peer deps without the allow peer bump flag will not be bumped
-      'package-2': '^1.0.0', // workspace:^
+      'package-2': '^2.0.0', // workspace:^
     });
     expect((writePkg as any).updatedManifest('package-4').optionalDependencies).toMatchObject({
       'package-3': '~2.0.0', // workspace:~
@@ -174,11 +173,11 @@ describe("workspace protocol 'workspace:' specifiers", () => {
     });
     expect((writePkg as any).updatedManifest('package-5').peerDependencies).toMatchObject({
       // peer dependencies will not be bumped by default without a flag
-      'package-4': '>=1.0.0', // workspace:^1.0.0
-      'package-6': '~1.0.0', // workspace:~1.0.0
+      'package-4': '>=1.0.0', // workspace:>=1.0.0, range shouldn't be bumped
+      'package-6': '~2.0.0', // workspace:~1.0.0
     });
     expect((writePkg as any).updatedManifest('package-6').dependencies).toMatchObject({
-      'package-1': '>=1.0.0', // workspace:>=1.0.0
+      'package-1': '>=1.0.0', // workspace:>=1.0.0, range shouldn't be bumped
     });
     expect((writePkg as any).updatedManifest('package-6').peerDependencies).toMatchObject({
       'package-1': '>=1.0.0', // workspace:>=1.0.0, not bumped without a flag
@@ -188,8 +187,8 @@ describe("workspace protocol 'workspace:' specifiers", () => {
       'package-1': '^2.0.0', // ^1.0.0
     });
     expect((writePkg as any).updatedManifest('package-7').peerDependencies).toMatchObject({
-      'package-2': '^1.0.0', // not bumped without a flag
-      'package-3': '>=1.0.0',
+      'package-2': '^2.0.0',
+      'package-3': '>=1.0.0', // workspace:>=1.0.0, range shouldn't be bumped
     });
   });
 
@@ -199,7 +198,7 @@ describe("workspace protocol 'workspace:' specifiers", () => {
 
     await gitTag(cwd, 'v1.0.0');
     await setupChanges(cwd);
-    await new PublishCommand(createArgv(cwd, '--bump', 'minor', '--yes'));
+    await new PublishCommand(createArgv(cwd, '--bump', 'minor', '--yes', '--allow-peer-dependencies-update'));
 
     expect(logErrorSpy).toHaveBeenCalledWith(
       'publish',
