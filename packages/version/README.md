@@ -168,6 +168,8 @@ By default peer dependencies versions will not be bumped unless this flag is ena
 
 > **Note** peer dependency that includes a semver range with an operator (ie `>=2.0.0`) will never be mutated even if this flag is enabled.
 
+> **Note** peer dependencies that use `workspace:` protocol without enabling `--allow-peer-dependencies-update` are not supported.
+
 > **Note** Please use with caution when enabling this option, it is not recommended for most users since the npm standard is to never mutate (bump) any `peerDependencies` when publishing new version in an automated fashion, at least not without a user intervention, as explained by core Lerna maintainer:
 
 > > _Changes to a peer version range are always semver major, and should be as broad as possible._
