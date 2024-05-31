@@ -2,6 +2,7 @@ import chalk from 'chalk';
 import dedent from 'dedent';
 import { minimatch } from 'minimatch';
 import { EOL as OS_EOL } from 'node:os';
+import pLimit from 'p-limit';
 import pMap from 'p-map';
 import pPipe from 'p-pipe';
 import pReduce from 'p-reduce';
@@ -889,10 +890,13 @@ export class VersionCommand extends Command<VersionCommandOption> {
     this.logger.info('git', 'Pushing tags...');
 
     if (this.options.pushTagsOneByOne) {
+      const promises: Promise[] = [];
+      const limit = pLimit(1);
       this.tags.forEach((tag) => {
-        this.logger.info('git', `Pushing tag: ${tag}`);
-        return gitPushSingleTag(this.gitRemote, this.currentBranch, tag, this.execOpts, this.options.dryRun);
+        this.logger.verbose('git', `Pushing tag: ${tag}`);
+        promises.push(limit(gitPushSingleTag(this.gitRemote, this.currentBranch, tag, this.execOpts, this.options.dryRun)));
       });
+      return Promise.allSettled(promises);
     }
     return gitPush(this.gitRemote, this.currentBranch, this.execOpts, this.options.dryRun);
   }
