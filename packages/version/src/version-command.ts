@@ -894,7 +894,7 @@ export class VersionCommand extends Command<VersionCommandOption> {
       const limit = pLimit(1);
       this.tags.forEach((tag) => {
         this.logger.verbose('git', `Pushing tag: ${tag}`);
-        promises.push(limit(gitPushSingleTag(this.gitRemote, this.currentBranch, tag, this.execOpts, this.options.dryRun)));
+        promises.push(limit(() => gitPushSingleTag(this.gitRemote, this.currentBranch, tag, this.execOpts, this.options.dryRun)));
       });
       return Promise.allSettled(promises);
     }
