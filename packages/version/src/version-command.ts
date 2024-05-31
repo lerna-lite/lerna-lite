@@ -890,7 +890,7 @@ export class VersionCommand extends Command<VersionCommandOption> {
     this.logger.info('git', 'Pushing tags...');
 
     if (this.options.pushTagsOneByOne) {
-      const promises: Promise[] = [];
+      const promises: Promise<void>[] = [];
       const limit = pLimit(1);
       this.tags.forEach((tag) => {
         this.logger.verbose('git', `Pushing tag: ${tag}`);
