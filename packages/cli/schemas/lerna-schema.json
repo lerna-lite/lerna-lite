@@ -1373,6 +1373,10 @@
           "type": "boolean",
           "description": "During `lerna version`, when true, push tagged commit to git remote."
         },
+        "pushTagsOneByOne": {
+          "type": "boolean",
+          "description": "For `lerna version`, pushes git tags one by one (only useful for `independent` mode)."
+        },
         "signGitCommit": {
           "type": "boolean",
           "description": "During `lerna version`, when true, pass the `--gpg-sign` flag to `git commit`."

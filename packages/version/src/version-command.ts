@@ -37,7 +37,7 @@ import { isBreakingChange } from './lib/is-breaking-change.js';
 import { gitAdd } from './lib/git-add.js';
 import { gitCommit } from './lib/git-commit.js';
 import { gitTag } from './lib/git-tag.js';
-import { gitPush } from './lib/git-push.js';
+import { gitPush, gitPushSingleTag } from './lib/git-push.js';
 import { makePromptVersion } from './lib/prompt-version.js';
 import {
   loadPackageLockFileWhenExists,
@@ -888,6 +888,12 @@ export class VersionCommand extends Command<VersionCommandOption> {
   gitPushToRemote() {
     this.logger.info('git', 'Pushing tags...');
 
+    if (this.options.pushTagsOneByOne) {
+      this.tags.forEach((tag) => {
+        this.logger.info('git', `Pushing tag: ${tag}`);
+        return gitPushSingleTag(this.gitRemote, this.currentBranch, tag, this.execOpts, this.options.dryRun);
+      });
+    }
     return gitPush(this.gitRemote, this.currentBranch, this.execOpts, this.options.dryRun);
   }
 

@@ -217,6 +217,10 @@ export default {
         hidden: true,
         type: 'boolean',
       },
+      'push-tags-one-by-one': {
+        describe: 'pushes git tags one by one (only useful for `independent` mode).',
+        type: 'boolean',
+      },
       // preid is copied into ../publish/command because a whitelist for one option isn't worth it
       preid: {
         describe: 'Specify the prerelease identifier when versioning a prerelease',
