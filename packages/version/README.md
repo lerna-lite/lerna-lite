@@ -768,6 +768,8 @@ lerna version --conventional-commits --premajor-version-bump force-patch
 
 This option will push all git tags one by one to overcome a GitHub limitation, which can happen when using `independent` mode and too many tags are pushed at once.
 
+> **Note** please be aware that there is a performance impact to push each tag one at a time since this action is purposely limited to a concurrency of 1.
+
 ### `--remote-client <type>`
 
 Define which remote client type is used, this option is only useful with the option [`--changelog-include-commits-client-login [msg]`](#--changelog-include-commits-client-login-msg)
