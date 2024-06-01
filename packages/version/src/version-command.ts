@@ -887,9 +887,9 @@ export class VersionCommand extends Command<VersionCommandOption> {
   }
 
   gitPushToRemote() {
-    this.logger.info('git', 'Pushing tags...');
-
+    // we could push tags one by one (to avoid GitHub limit)
     if (this.options.pushTagsOneByOne) {
+      this.logger.info('git', 'Pushing tags one by one...');
       const promises: Promise<void>[] = [];
       const limit = pLimit(1);
       this.tags.forEach((tag) => {
@@ -898,6 +898,9 @@ export class VersionCommand extends Command<VersionCommandOption> {
       });
       return Promise.allSettled(promises);
     }
+
+    // or push all tags by using followTags
+    this.logger.info('git', 'Pushing tags...');
     return gitPush(this.gitRemote, this.currentBranch, this.execOpts, this.options.dryRun);
   }
 
