@@ -4,6 +4,12 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [3.5.0](https://github.com/lerna-lite/lerna-lite/compare/v3.4.0...v3.5.0) (2024-06-03)
+
+### Features
+
+* **version:** add `--push-tags-one-by-one`, fixes [#701](https://github.com/lerna-lite/lerna-lite/issues/701) ([#871](https://github.com/lerna-lite/lerna-lite/issues/871)) ([88ad61b](https://github.com/lerna-lite/lerna-lite/commit/88ad61b11e87565d1615d451aef09b9b2d7b533c)) - by @ghiscoding
+
 ## [3.4.0](https://github.com/lerna-lite/lerna-lite/compare/v3.3.3...v3.4.0) (2024-05-15)
 
 ### Bug Fixes
