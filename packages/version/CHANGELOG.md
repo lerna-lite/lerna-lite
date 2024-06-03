@@ -9,7 +9,8 @@ See [Conventional Commits](https://conventionalcommits.org) for commit guideline
 ### Features
 
 * **version:** add `--push-tags-one-by-one`, fixes [#701](https://github.com/lerna-lite/lerna-lite/issues/701) ([#871](https://github.com/lerna-lite/lerna-lite/issues/871)) ([88ad61b](https://github.com/lerna-lite/lerna-lite/commit/88ad61b11e87565d1615d451aef09b9b2d7b533c)) - by @ghiscoding
-
+* **version:** throw when using `workspace:` without allow peer bump, fixes [#869](https://github.com/lerna-lite/lerna-lite/issues/869) ([#870](https://github.com/lerna-lite/lerna-lite/issues/870)) ([12b29ee](https://github.com/lerna-lite/lerna-lite/commit/12b29ee67968522f090964d3f7c7ea221bbc2c68))
+  
 ## [3.4.0](https://github.com/lerna-lite/lerna-lite/compare/v3.3.3...v3.4.0) (2024-05-15)
 
 ### Features
