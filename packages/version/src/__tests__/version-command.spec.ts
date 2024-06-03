@@ -948,7 +948,9 @@ describe('VersionCommand', () => {
 
       it(`should call runInstallLockFileOnly() when --sync-workspace-lock is provided and expect lockfile to be added to git`, async () => {
         const cwd = await initFixture('lockfile-pnpm');
-        await new VersionCommand(createArgv(cwd, '--bump', 'major', '--yes', '--sync-workspace-lock', '--npm-client', 'pnpm'));
+        await new VersionCommand(
+          createArgv(cwd, '--bump', 'major', '--yes', '--allow-peer-dependencies-update', '--sync-workspace-lock', '--npm-client', 'pnpm')
+        );
 
         const changedFiles = await showCommit(cwd, '--name-only');
         expect(changedFiles).toContain('pnpm-lock.yaml');
@@ -966,7 +968,7 @@ describe('VersionCommand', () => {
 
       it(`should call runInstallLockFileOnly() when --sync-workspace-lock is provided and expect lockfile to be added to git even without npmClient`, async () => {
         const cwd = await initFixture('lockfile-pnpm');
-        await new VersionCommand(createArgv(cwd, '--bump', 'minor', '--yes', '--sync-workspace-lock'));
+        await new VersionCommand(createArgv(cwd, '--bump', 'minor', '--allow-peer-dependencies-update', '--yes', '--sync-workspace-lock'));
 
         const changedFiles = await showCommit(cwd, '--name-only');
         expect(changedFiles).toContain('pnpm-lock.yaml');

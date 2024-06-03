@@ -5,6 +5,7 @@ import { basename, dirname, join, resolve as pathResolve, relative } from 'node:
 import { writePackage } from 'write-package';
 
 import { CommandType, NpaResolveResult, RawManifest } from './models/index.js';
+import { ValidationError } from './validation-error.js';
 
 // symbol used to 'hide' internal state
 const PKG = Symbol('pkg');
@@ -313,6 +314,8 @@ export class Package {
       // prettier-ignore
       if (allowPeerDependenciesUpdate && /^(workspace:)?[~^*]?[\d.]*([-]+[\w.\-+]+)*$/i.test(this.peerDependencies[depName] || '')) {
         updatingDependencies.push(this.peerDependencies);
+      } else if (this.peerDependencies[depName].startsWith('workspace:') && !allowPeerDependenciesUpdate) {
+        throw new ValidationError('ENOTALLOWED', 'Peer dependencies that use `workspace:` protocol without enabling `--allow-peer-dependencies-update` are not supported.');
       }
       // when peer bump is disabled, we could end up with peerDependencies not being reviewed
       // and some might still have the `workspace:` prefix so make sure to remove any of these prefixes
