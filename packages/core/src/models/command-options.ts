@@ -277,6 +277,9 @@ export interface VersionCommandOption {
   /** Defaults to 'alpha', specify the prerelease identifier when versioning a prerelease. */
   preid?: string;
 
+  /** pushes git tags one by one (only useful for `independent` mode) */
+  pushTagsOneByOne?: boolean;
+
   /** Remote git client, which client is used when reading commits from remote which is useful when associating client login for each changelog entry. */
   remoteClient?: RemoteClientType;
 

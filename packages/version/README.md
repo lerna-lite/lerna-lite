@@ -108,6 +108,7 @@ Running `lerna version --conventional-commits` without the above flags will rele
     - [`--preid`](#--preid)
     - [`--premajor-version-bump`](#--premajor-version-bump)
     - [`--remote-client <type>`](#--remote-client-type)
+    - [`--push-tags-one-by-one`](#--push-tags-one-by-one)
     - [`--signoff-git-commit`](#--signoff-git-commit)
     - [`--sign-git-commit`](#--sign-git-commit)
     - [`--sign-git-tag`](#--sign-git-tag)
@@ -744,7 +745,6 @@ lerna version prepatch --preid next
 When run with this flag, `lerna version` will increment `premajor`, `preminor`, `prepatch`, or `prerelease` semver
 bumps using the specified [prerelease identifier](http://semver.org/#spec-item-9).
 
-
 ### `--premajor-version-bump`
 
 This option allows you to control how lerna handles bumping versions for packages with a
@@ -765,6 +765,12 @@ lerna version --conventional-commits --premajor-version-bump force-patch
 # in this case, a non-breaking feat would always be a patch bump
 # 0.1.0 --> 0.1.1
 ```
+
+### `--push-tags-one-by-one`
+
+This option will push all git tags one by one to overcome a GitHub limitation, which can happen when using `independent` mode and too many tags are pushed at once.
+
+> **Note** please be aware that there is a performance impact to push each tag one at a time since this action is purposely limited to a concurrency of 1.
 
 ### `--remote-client <type>`
 

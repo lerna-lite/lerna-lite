@@ -41,7 +41,7 @@ import yaml from 'js-yaml';
 import writePkg from 'write-package';
 import { checkWorkingTree, collectUpdates, logOutput, promptConfirmation, promptSelectOne, throwIfUncommitted, VersionCommandOption } from '@lerna-lite/core';
 import { getCommitsSinceLastRelease } from '../conventional-commits';
-import { gitPush as libPush } from '../lib/git-push';
+import { gitPush as libPush, gitPushSingleTag as libPushSingleTag } from '../lib/git-push';
 import { isAnythingCommitted } from '../lib/is-anything-committed';
 import { isBehindUpstream } from '../lib/is-behind-upstream';
 import { remoteBranchExists } from '../lib/remote-branch-exists';
@@ -376,6 +376,37 @@ describe('VersionCommand', () => {
       );
       expect((logOutput as any).logged()).toMatchSnapshot('console output');
     });
+
+    it('versions changed packages push git tag one by one', async () => {
+      // mock version prompt choices
+      (promptSelectOne as any).chooseBump('patch');
+      (promptSelectOne as any).chooseBump('minor');
+      (promptSelectOne as any).chooseBump('major');
+      (promptSelectOne as any).chooseBump('minor');
+      (promptSelectOne as any).chooseBump('patch');
+      (promptSelectOne as any).chooseBump('minor');
+
+      const testDir = await initFixture('independent');
+      await new VersionCommand(createArgv(testDir, '--push-tags-one-by-one')); // --independent is only valid in InitCommand
+
+      expect(promptConfirmation).toHaveBeenCalled();
+
+      expect((writePkg as any).updatedManifest('package-1')).toMatchSnapshot('gitHead');
+
+      const patch = await showCommit(testDir);
+      expect(patch).toMatchSnapshot('commit');
+
+      expect(libPushSingleTag).toHaveBeenLastCalledWith(
+        'origin',
+        'main',
+        'package-6@0.2.0',
+        expect.objectContaining({
+          cwd: testDir,
+        }),
+        undefined
+      );
+      expect((logOutput as any).logged()).toMatchSnapshot('console output');
+    });
   });
 
   describe('--no-commit-hooks', () => {
@@ -418,6 +449,28 @@ describe('VersionCommand', () => {
       expect((writePkg as any).updatedManifest('package-1')).toMatchSnapshot('gitHead');
 
       expect(libPush).not.toHaveBeenCalled();
+
+      const logMessages = loggingOutput('info');
+      expect(logMessages).toContain('Skipping git tag/commit');
+
+      const unstaged = await listDirty(testDir);
+      expect(unstaged).toEqual([
+        'lerna.json',
+        'packages/package-1/package.json',
+        'packages/package-2/package.json',
+        'packages/package-3/package.json',
+        'packages/package-4/package.json',
+        'packages/package-5/package.json',
+      ]);
+    });
+
+    it('versions changed packages without git commit or one by one push', async () => {
+      const testDir = await initFixture('normal');
+      await new VersionCommand(createArgv(testDir, '--no-git-tag-version', '--push-tags-one-by-one'));
+
+      expect((writePkg as any).updatedManifest('package-1')).toMatchSnapshot('gitHead');
+
+      expect(libPushSingleTag).not.toHaveBeenCalled();
 
       const logMessages = loggingOutput('info');
       expect(logMessages).toContain('Skipping git tag/commit');
@@ -555,6 +608,22 @@ describe('VersionCommand', () => {
       expect(unstaged).toEqual([]);
     });
 
+    it('versions changed packages without git one by one push', async () => {
+      const testDir = await initFixture('normal');
+      await new VersionCommand(createArgv(testDir, '--no-push', '--push-tags-one-by-one'));
+
+      const patch = await showCommit(testDir);
+      expect(patch).toMatchSnapshot();
+
+      expect(libPushSingleTag).not.toHaveBeenCalled();
+
+      const logMessages = loggingOutput('info');
+      expect(logMessages).toContain('Skipping git push');
+
+      const unstaged = await listDirty(testDir);
+      expect(unstaged).toEqual([]);
+    });
+
     it('consumes configuration from lerna.json', async () => {
       const testDir = await initFixture('normal');
 
@@ -654,6 +723,21 @@ describe('VersionCommand', () => {
       );
     });
 
+    it('pushes tags one by one to specified remote', async () => {
+      const testDir = await initFixture('normal');
+      await new VersionCommand(createArgv(testDir, '--git-remote', 'upstream', '--push-tags-one-by-one'));
+
+      expect(libPushSingleTag).toHaveBeenLastCalledWith(
+        'upstream',
+        'main',
+        'v1.0.1',
+        expect.objectContaining({
+          cwd: testDir,
+        }),
+        undefined
+      );
+    });
+
     it('consumes configuration from lerna.json', async () => {
       const testDir = await initFixture('normal');
 
@@ -670,6 +754,30 @@ describe('VersionCommand', () => {
       expect(libPush).toHaveBeenLastCalledWith(
         'durable',
         'main',
+        expect.objectContaining({
+          cwd: testDir,
+        }),
+        undefined
+      );
+    });
+
+    it('consumes configuration from lerna.json with push tags one by one', async () => {
+      const testDir = await initFixture('normal');
+
+      await outputJson(join(testDir, 'lerna.json'), {
+        version: '1.0.0',
+        command: {
+          publish: {
+            gitRemote: 'durable',
+          },
+        },
+      });
+      await new VersionCommand(createArgv(testDir, '--push-tags-one-by-one'));
+
+      expect(libPushSingleTag).toHaveBeenLastCalledWith(
+        'durable',
+        'main',
+        'v1.0.1',
         expect.objectContaining({
           cwd: testDir,
         }),

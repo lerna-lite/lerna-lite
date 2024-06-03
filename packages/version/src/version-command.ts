@@ -2,6 +2,7 @@ import chalk from 'chalk';
 import dedent from 'dedent';
 import { minimatch } from 'minimatch';
 import { EOL as OS_EOL } from 'node:os';
+import pLimit from 'p-limit';
 import pMap from 'p-map';
 import pPipe from 'p-pipe';
 import pReduce from 'p-reduce';
@@ -37,7 +38,7 @@ import { isBreakingChange } from './lib/is-breaking-change.js';
 import { gitAdd } from './lib/git-add.js';
 import { gitCommit } from './lib/git-commit.js';
 import { gitTag } from './lib/git-tag.js';
-import { gitPush } from './lib/git-push.js';
+import { gitPush, gitPushSingleTag } from './lib/git-push.js';
 import { makePromptVersion } from './lib/prompt-version.js';
 import {
   loadPackageLockFileWhenExists,
@@ -886,8 +887,20 @@ export class VersionCommand extends Command<VersionCommandOption> {
   }
 
   gitPushToRemote() {
-    this.logger.info('git', 'Pushing tags...');
+    // we could push tags one by one (to avoid GitHub limit)
+    if (this.options.pushTagsOneByOne) {
+      this.logger.info('git', 'Pushing tags one by one...');
+      const promises: Promise<void>[] = [];
+      const limit = pLimit(1);
+      this.tags.forEach((tag) => {
+        this.logger.verbose('git', `Pushing tag: ${tag}`);
+        promises.push(limit(() => gitPushSingleTag(this.gitRemote, this.currentBranch, tag, this.execOpts, this.options.dryRun)));
+      });
+      return Promise.allSettled(promises);
+    }
 
+    // or push all tags by using followTags
+    this.logger.info('git', 'Pushing tags...');
     return gitPush(this.gitRemote, this.currentBranch, this.execOpts, this.options.dryRun);
   }
 
