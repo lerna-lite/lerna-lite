@@ -576,7 +576,7 @@ The library is doing a strict match and it will transform and publish the follow
 }
 ```
 
-> **Note** peer dependencies that use `workspace:` protocol without enabling `lerna version --allow-peer-dependencies-update` are **not supported** and it will cause problem if you omit the flag because peer dependencies are completely ignored by Lerna-Lite unless you enable the `--allow-peer-dependencies-update` option (see Lerna-Lite [version#--allow-peer-dependencies-update](https://github.com/lerna-lite/lerna-lite/tree/main/packages/version#--allow-peer-dependencies-update) for more info).
+> **Note** peer dependencies that use `workspace:` protocol without enabling `--allow-peer-dependencies-update` are **not supported** and it will cause problem when you omit the flag. Peer dependencies are completely ignored by default and any `workspace:` added to peer dependencies will be published **as is** unless you enable the `--allow-peer-dependencies-update` option (see Lerna-Lite [version#--allow-peer-dependencies-update](https://github.com/lerna-lite/lerna-lite/tree/main/packages/version#--allow-peer-dependencies-update) for more info).
 
 ## FAQ
 
