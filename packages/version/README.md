@@ -198,7 +198,7 @@ with the new flag both deps would be updated and bumped, for example if we do a 
 ```
 
 ##### without flag
-without the flag it will only update the first package it finds, that is `dependencies` in this case, so peer deps would never be updated
+without the flag peer dependencies are completely ignored and it will only update other dependencies that it finds and peer dependencies will be published untouched and **as is**
 ```js
 {
   "name": "B",
@@ -208,9 +208,9 @@ without the flag it will only update the first package it finds, that is `depend
     "C": "workspace:^"
    },
   "peerDependencies": {
-    "A": "workspace:^1.2.0",  // will NOT bump the version and will publish as "^1.2.0"
+    "A": "workspace:^1.2.0",  // will NOT bump the version and will publish "workspace:^1.2.0"
     "B": ">=0.2.0",           // will NOT bump the version and will publish as ">=0.2.0"
-    "C": "workspace:^"        // will NOT bump the version and will publish previously resolved version "^2.0.0"
+    "C": "workspace:^"        // will NOT bump the version and will publish "workspace:^"
   }
 }
 ```
