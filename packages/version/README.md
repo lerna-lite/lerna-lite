@@ -169,7 +169,7 @@ By default peer dependencies versions will not be bumped unless this flag is ena
 
 > **Note** peer dependency that includes a semver range with an operator (ie `>=2.0.0`) will never be mutated even if this flag is enabled.
 
-> **Note** peer dependencies that use `workspace:` protocol without enabling `--allow-peer-dependencies-update` are not supported.
+> **Note** peer dependencies that use `workspace:` protocol without enabling `--allow-peer-dependencies-update` are **not supported** and it will cause problem if you omit the flag.
 
 > **Note** Please use with caution when enabling this option, it is not recommended for most users since the npm standard is to never mutate (bump) any `peerDependencies` when publishing new version in an automated fashion, at least not without a user intervention, as explained by core Lerna maintainer:
 
@@ -933,3 +933,5 @@ Will apply the following updates to your `package.json` (assuming a `minor` vers
 ```
 
 > **Note** semver range with an operator (ie `workspace:>=2.0.0`) are also supported but will never be mutated.
+
+> **Note** peer dependencies that use `workspace:` protocol without enabling `--allow-peer-dependencies-update` are **not supported** and it will cause problem if you omit the flag because peer dependencies are completely ignored by Lerna-Lite unless you enable the `--allow-peer-dependencies-update` option.
