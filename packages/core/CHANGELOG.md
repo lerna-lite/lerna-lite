@@ -4,6 +4,12 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [3.5.1](https://github.com/lerna-lite/lerna-lite/compare/v3.5.0...v3.5.1) (2024-06-07)
+
+### Bug Fixes
+
+* **publish:** always bump & publish peer deps with `workspace:` protocol ([#873](https://github.com/lerna-lite/lerna-lite/issues/873)) ([0325539](https://github.com/lerna-lite/lerna-lite/commit/03255399018b19bd3a7de1f0ef9ee0c82ed6137e)) - by @ghiscoding
+
 ## [3.5.0](https://github.com/lerna-lite/lerna-lite/compare/v3.4.0...v3.5.0) (2024-06-03)
 
 ### Features
