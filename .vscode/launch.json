@@ -37,7 +37,7 @@
       "request": "launch",
       "runtimeExecutable": "node",
       "runtimeArgs": ["--nolazy", "-r", "tsm"],
-      "args": ["packages/cli/dist/cli.js", "publish", "from-package", "--dry-run"],
+      "args": ["packages/cli/dist/cli.js", "publish", "from-package", "--dry-run", "--yes"],
       "cwd": "${workspaceRoot}",
       "console": "integratedTerminal",
       "internalConsoleOptions": "openOnSessionStart",

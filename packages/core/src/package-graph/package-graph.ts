@@ -13,14 +13,14 @@ import { NpaResolveResult } from '../models/index.js';
 export class PackageGraph extends Map<string, PackageGraphNode> {
   /**
    * @param {Package[]} packages - An array of Packages to build the graph out of.
-   * @param {'allDependencies' | 'allPlusPeerDependencies' | 'dependencies'} [graphType]
+   * @param {'allDependencies' | 'dependencies'} [graphType]
    *    Pass "dependencies" to create a graph of only dependencies,
    *    excluding the devDependencies that would normally be included.
    * @param {boolean|'auto'|'force'|'explicit'} [localDependencies] Treatment of local sibling dependencies, default "auto"
    */
   constructor(
     packages: Package[],
-    graphType: 'allDependencies' | 'allPlusPeerDependencies' | 'dependencies' = 'allDependencies',
+    graphType: 'allDependencies' | 'dependencies' = 'allDependencies',
     localDependencies: boolean | 'auto' | 'force' | 'explicit' | 'forceLocal' = 'auto'
   ) {
     // For backward compatibility
@@ -57,7 +57,7 @@ export class PackageGraph extends Map<string, PackageGraphNode> {
               {},
               currentNode.pkg.devDependencies,
               currentNode.pkg.optionalDependencies,
-              graphType === 'allPlusPeerDependencies' ? currentNode.pkg.peerDependencies : {},
+              currentNode.pkg.peerDependencies,
               currentNode.pkg.dependencies
             );
 

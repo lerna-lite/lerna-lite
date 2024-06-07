@@ -169,7 +169,7 @@ By default peer dependencies versions will not be bumped unless this flag is ena
 
 > **Note** peer dependency that includes a semver range with an operator (ie `>=2.0.0`) will never be mutated even if this flag is enabled.
 
-> **Note** peer dependencies that use `workspace:` protocol without enabling `--allow-peer-dependencies-update` are **not supported** and it will cause problem if you omit the flag.
+> **Note** peer dependencies that use `workspace:` protocol will be bump **even** without enabling `--allow-peer-dependencies-update` because that protocol always expect a version replacement with current version.
 
 > **Note** Please use with caution when enabling this option, it is not recommended for most users since the npm standard is to never mutate (bump) any `peerDependencies` when publishing new version in an automated fashion, at least not without a user intervention, as explained by core Lerna maintainer:
 
@@ -177,7 +177,7 @@ By default peer dependencies versions will not be bumped unless this flag is ena
 > > _Until we can get fancier, we should never automatically modify them to match the new version being published (which is the current incorrect behavior)._
 
 #### Examples
-For the example shown below, we will consider the packages to have the following versions (`"A": "1.2.0"`, `"B": "0.4.0"` anc `"C": 2.0.0"`). The examples shown below includes very basic demo of what `workspace:` can do, for more info on that subject please read [`workspace:` protocol](#workspace-protocol).
+For the example shown below, we will consider the packages to have the following versions (`"A": "1.2.0"`, `"B": "0.4.0"`, `"C": 2.0.0"`). The examples shown below includes very basic demo of what `workspace:` can do, for more info on that subject please read [`workspace:` protocol](#workspace-protocol).
 
 ##### with flag enabled
 with the new flag both deps would be updated and bumped, for example if we do a `minor` bump
@@ -190,15 +190,16 @@ with the new flag both deps would be updated and bumped, for example if we do a 
     "C": "workspace:^"        // will bump the version to "workspace:^2.1.0" and publish as "^2.1.0"
    },
   "peerDependencies": {
-    "A": "workspace:^1.2.0",  // will update the version to "workspace:^1.3.0" and publish as "^1.3.0"
-    "B": ">=0.2.0",           // will not be updated because range with operator (>=) are skipped
-    "C": "workspace:^"        // will keep the version to "workspace:^" but publish as "^2.1.0"
+    "D": "workspace:^1.2.0",  // will update the version to "workspace:^1.3.0" and publish as "^1.3.0"
+    "E": ">=0.2.0",           // will not be updated because range with operator (>=) are skipped
+    "F": "workspace:^"        // will keep the version to "workspace:^" but publish as "^2.1.0"
   }
 }
 ```
 
 ##### without flag
-without the flag peer dependencies are completely ignored and it will only update other dependencies that it finds and peer dependencies will be published untouched and **as is**
+without the flag peer dependencies are completely ignored **except** for `workspace:` which are always bumped even without the flag and the reason is because `workspace:` are always expected to be transformed.
+
 ```js
 {
   "name": "B",
@@ -208,9 +209,10 @@ without the flag peer dependencies are completely ignored and it will only updat
     "C": "workspace:^"
    },
   "peerDependencies": {
-    "A": "workspace:^1.2.0",  // will NOT bump the version and will publish "workspace:^1.2.0"
-    "B": ">=0.2.0",           // will NOT bump the version and will publish as ">=0.2.0"
-    "C": "workspace:^"        // will NOT bump the version and will publish "workspace:^"
+    "D": "workspace:^1.2.0",  // will update the version to "workspace:^1.3.0" and publish as "^1.3.0"
+    "E": ">=0.2.0",           // will NOT bump the version and will publish as ">=0.2.0"
+    "F": "workspace:^",       // will keep the version to "workspace:^" but publish as "^2.1.0"
+    "G": "^1.2.0"             // will NOT bump because the flag is disabled and workspace: was not found
   }
 }
 ```
@@ -933,5 +935,3 @@ Will apply the following updates to your `package.json` (assuming a `minor` vers
 ```
 
 > **Note** semver range with an operator (ie `workspace:>=2.0.0`) are also supported but will never be mutated.
-
-> **Note** peer dependencies that use `workspace:` protocol without enabling `--allow-peer-dependencies-update` are **not supported** and it will cause problem if you omit the flag because peer dependencies are completely ignored by Lerna-Lite unless you enable the `--allow-peer-dependencies-update` option.

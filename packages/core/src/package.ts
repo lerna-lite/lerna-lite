@@ -5,7 +5,6 @@ import { basename, dirname, join, resolve as pathResolve, relative } from 'node:
 import { writePackage } from 'write-package';
 
 import { CommandType, NpaResolveResult, RawManifest } from './models/index.js';
-import { ValidationError } from './validation-error.js';
 
 // symbol used to 'hide' internal state
 const PKG = Symbol('pkg');
@@ -307,15 +306,17 @@ export class Package {
     const localDependencies = this.retrievePackageDependencies(depName);
     const updatingDependencies = [localDependencies];
 
-    // when we have peer dependencies, we might need to perform certain actions
+    // peer dependencies will not be bumped by default unless we use allowPeerDependenciesUpdate
+    // however, we still need to inspect them to avoid publishing peer deps with `workspace:` protocol
     if (this.peerDependencies?.[depName]) {
       // when user allows peer bump and is a regular semver version, we'll push it to the array of dependencies to potentially bump
       // however we won't when the semver has a range with operator, ie this would bump ("^2.0.0") but the following would not (">=2.0.0", "14 || 15" or "workspace:<2.0.0")
       // prettier-ignore
-      if (allowPeerDependenciesUpdate && /^(workspace:)?[~^*]?[\d.]*([-]+[\w.\-+]+)*$/i.test(this.peerDependencies[depName] || '')) {
+      if (
+        allowPeerDependenciesUpdate && /^(workspace:)?[~^*]?[\d.]*([-]+[\w.\-+]+)*$/i.test(this.peerDependencies[depName] || '') ||
+        (updatedByCommand !== 'publish' &&this.peerDependencies[depName].startsWith('workspace:'))
+      ) {
         updatingDependencies.push(this.peerDependencies);
-      } else if (this.peerDependencies[depName].startsWith('workspace:') && !allowPeerDependenciesUpdate) {
-        throw new ValidationError('ENOTALLOWED', 'Peer dependencies that use `workspace:` protocol without enabling `--allow-peer-dependencies-update` are not supported.');
       }
       // when peer bump is disabled, we could end up with peerDependencies not being reviewed
       // and some might still have the `workspace:` prefix so make sure to remove any of these prefixes
