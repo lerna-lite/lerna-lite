@@ -806,13 +806,7 @@ export class PublishCommand extends Command<PublishCommandOption> {
        * Therefore until we remove graphType altogether in v6, we provide a way for users to opt into the old default behavior
        * by setting the `graphType` option to `dependencies`.
        */
-      // prettier-ignore
-      graphType:
-        this.options.graphType === 'dependencies'
-          ? 'dependencies'
-          : this.options.allowPeerDependenciesUpdate
-            ? 'allPlusPeerDependencies'
-            : 'allDependencies',
+      graphType: this.options.graphType === 'dependencies' ? 'dependencies' : 'allDependencies',
     });
   }
 

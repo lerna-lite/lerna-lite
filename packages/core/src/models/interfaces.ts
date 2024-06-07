@@ -121,7 +121,7 @@ export interface ProfileData {
 
 export interface QueryGraphConfig {
   /** "dependencies" excludes devDependencies from graph */
-  graphType?: 'all' | 'allDependencies' | 'allPlusPeerDependencies' | 'dependencies';
+  graphType?: 'all' | 'allDependencies' | 'dependencies';
 
   /** Treatment of local sibling dependencies, default "auto" */
   localDependencies?: 'auto' | 'force' | 'explicit';

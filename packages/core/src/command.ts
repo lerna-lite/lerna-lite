@@ -320,10 +320,7 @@ export class Command<T extends AvailableCommandOption> {
     if (this.commandName !== 'info') {
       chain = chain.then(() => this.project.getPackages());
       chain = chain.then((packages) => {
-        this.packageGraph = new PackageGraph(
-          packages || [],
-          (this.options as VersionCommandOption).allowPeerDependenciesUpdate ? 'allPlusPeerDependencies' : 'allDependencies'
-        );
+        this.packageGraph = new PackageGraph(packages || [], 'allDependencies');
       });
     }
 

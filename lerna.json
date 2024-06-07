@@ -5,13 +5,14 @@
   "npmClient": "pnpm",
   "command": {
     "publish": {
-      "cleanupTempFiles": true,
+      "cleanupTempFiles": false,
       "removePackageFields": [
         "devDependencies",
         "scripts"
       ]
     },
     "version": {
+      "allowPeerDependenciesUpdate": false,
       "conventionalCommits": true,
       "createRelease": "github",
       "changelogIncludeCommitsClientLogin": " - by @%l",

@@ -1200,7 +1200,7 @@
         },
         "graphType": {
           "type": "string",
-          "enum": ["all", "dependencies", "allDependencies", "allPlusPeerDependencies"],
+          "enum": ["all", "dependencies", "allDependencies"],
           "description": "DEPRECATED: For `lerna publish`, if you want to ignore devDependencies when considering the package graph you can set this property equal to 'dependencies'.",
           "default": "all",
           "deprecated": true

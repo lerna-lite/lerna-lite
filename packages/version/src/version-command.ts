@@ -743,7 +743,7 @@ export class VersionCommand extends Command<VersionCommandOption> {
       runTopologically(this.packagesToVersion, mapUpdate, {
         concurrency: this.concurrency,
         rejectCycles: this.options.rejectCycles,
-        graphType: this.options.allowPeerDependenciesUpdate ? 'allPlusPeerDependencies' : 'allDependencies',
+        graphType: 'allDependencies',
       })
     );
 

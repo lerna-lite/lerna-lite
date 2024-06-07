@@ -61,7 +61,7 @@ export function logPacked(pkg: Package & { packed: Tarball }, dryRun = false) {
     )
   );
 
-  // in dry-run mode, show tarball temp location and dependencies, devDependencies
+  // in dry-run mode, show tarball temp location and dependencies, devDependencies and/or peerDependencies
   if (dryRun) {
     log.notice('', `--- ${chalk.bgMagenta('DRY-RUN')} details ---`);
     log.notice('', `temp location: ${tarball.tarFilePath}`);
@@ -73,6 +73,10 @@ export function logPacked(pkg: Package & { packed: Tarball }, dryRun = false) {
     if (pkg.devDependencies) {
       log.notice('devDependencies:', '');
       log.notice('', columnify(pkg.devDependencies, { columnSplitter: ' | ', showHeaders: false }));
+    }
+    if (pkg.peerDependencies) {
+      log.notice('peerDependencies:', '');
+      log.notice('', columnify(pkg.peerDependencies, { columnSplitter: ' | ', showHeaders: false }));
     }
   }
 

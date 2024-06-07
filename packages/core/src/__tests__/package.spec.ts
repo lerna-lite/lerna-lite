@@ -484,22 +484,6 @@ describe('Package', () => {
     });
 
     describe('Version with `workspace:` protocol', () => {
-      it('throws when "workspace:" protocol is used without enabling allowPeerDependenciesUpdate flag', () => {
-        const pkg = factory({
-          peerDependencies: {
-            a: 'workspace:^1.0.0',
-          },
-        });
-
-        const resolvedA: NpaResolveResult = npa.resolve('a', '^1.0.0', '.');
-
-        try {
-          pkg.updateLocalDependency(resolvedA, '2.0.0', '^', false);
-        } catch (e) {
-          expect(e.message).toBe('Peer dependencies that use `workspace:` protocol without enabling `--allow-peer-dependencies-update` are not supported.');
-        }
-      });
-
       it('works with `workspace:` protocol range', () => {
         const pkg = factory({
           dependencies: {
@@ -569,10 +553,44 @@ describe('Package', () => {
         `);
       });
 
-      it('works with `workspace:` protocol range and DOES NOT update peerDependencies when allowPeerDependenciesUpdate flag is enabled but the version is a range', () => {
+      it('bumps peer dependencies that have `workspace:` protocol even when allowPeerDependenciesUpdate flag is disabled', () => {
         const pkg = factory({
           dependencies: {
             a: 'workspace:^1.0.0',
+            b: 'workspace:>=1.0.0',
+            c: 'workspace:./foo',
+            d: 'file:./foo',
+            e: '^1.0.0',
+          },
+          peerDependencies: {
+            a: 'workspace:^1.0.0',
+          },
+        });
+
+        const resolved: NpaResolveResult = npa.resolve('a', '^1.0.0', '.');
+        resolved.workspaceSpec = 'workspace:^1.0.0';
+
+        pkg.updateLocalDependency(resolved, '2.0.0', '^', false, 'version');
+
+        expect(pkg.toJSON()).toMatchInlineSnapshot(`
+          {
+            "dependencies": {
+              "a": "workspace:^2.0.0",
+              "b": "workspace:>=1.0.0",
+              "c": "workspace:./foo",
+              "d": "file:./foo",
+              "e": "^1.0.0",
+            },
+            "peerDependencies": {
+              "a": "workspace:^2.0.0",
+            },
+          }
+        `);
+      });
+
+      it('works with `workspace:` protocol range and DOES NOT update peerDependencies when allowPeerDependenciesUpdate flag is enabled but the version is a range', () => {
+        const pkg = factory({
+          dependencies: {
             b: 'workspace:>=1.0.0',
             c: 'workspace:./foo',
             d: 'file:./foo',
@@ -584,14 +602,13 @@ describe('Package', () => {
         });
 
         const resolved: NpaResolveResult = npa.resolve('a', '^1.0.0', '.');
-        resolved.workspaceSpec = 'workspace:^1.0.0';
+        resolved.workspaceSpec = 'workspace:>=1.0.0 < 2.0.0';
 
         pkg.updateLocalDependency(resolved, '2.0.0', '^', true);
 
         expect(pkg.toJSON()).toMatchInlineSnapshot(`
           {
             "dependencies": {
-              "a": "workspace:^2.0.0",
               "b": "workspace:>=1.0.0",
               "c": "workspace:./foo",
               "d": "file:./foo",
@@ -788,6 +805,39 @@ describe('Package', () => {
             "peerDependencies": {
               "a": "^2.0.0",
               "b": "~1.1.0",
+            },
+          }
+        `);
+      });
+
+      it('should transform `workspace:~` protocol to semver range when calling a publish', () => {
+        const pkg = factory({
+          dependencies: {
+            b: 'workspace:^1.0.0',
+          },
+          peerDependencies: {
+            // workspace: will always be bumped even without flag enabled
+            a: 'workspace:>=1.0.0',
+            b: '~1.0.0',
+          },
+        });
+
+        const resolvedA: NpaResolveResult = npa.resolve('a', '^1.0.0', '.');
+        resolvedA.workspaceSpec = 'workspace:>=1.0.0';
+        const resolvedB: NpaResolveResult = npa.resolve('b', '^1.0.0', '.');
+        resolvedB.workspaceSpec = 'workspace:^1.0.0';
+
+        pkg.updateLocalDependency(resolvedA, '2.0.0', '^', false, 'publish');
+        pkg.updateLocalDependency(resolvedB, '1.1.0', '^', false, 'publish');
+
+        expect(pkg.toJSON()).toMatchInlineSnapshot(`
+          {
+            "dependencies": {
+              "b": "^1.1.0",
+            },
+            "peerDependencies": {
+              "a": ">=1.0.0",
+              "b": "~1.0.0",
             },
           }
         `);

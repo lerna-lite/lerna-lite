@@ -112,7 +112,7 @@ describe("workspace protocol 'workspace:' specifiers", () => {
     });
     expect((writePkg as any).updatedManifest('package-5').dependencies).toMatchObject({
       // all fixed versions are bumped when minor
-      'package-4': '^1.1.0', // workspace:^1.0.0
+      'package-4': '>=1.0.0', // workspace:>=1.0.0, semver range are never bumped
       'package-6': '~1.1.0', // workspace:~1.0.0
     });
     expect((writePkg as any).updatedManifest('package-5').peerDependencies).toMatchObject({
@@ -168,7 +168,7 @@ describe("workspace protocol 'workspace:' specifiers", () => {
     });
     expect((writePkg as any).updatedManifest('package-5').dependencies).toMatchObject({
       // all fixed versions are bumped when major
-      'package-4': '^2.0.0', // workspace:^1.0.0
+      'package-4': '>=1.0.0', // workspace:>=1.0.0, semver range are never bumped
       'package-6': '~2.0.0', // workspace:~1.0.0
     });
     expect((writePkg as any).updatedManifest('package-5').peerDependencies).toMatchObject({
