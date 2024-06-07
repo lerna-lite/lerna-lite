@@ -45,7 +45,7 @@
     "glob": "^10.4.1",
     "has-unicode": "^2.0.1",
     "libnpmaccess": "^8.0.6",
-    "libnpmpublish": "^9.0.8",
+    "libnpmpublish": "^9.0.9",
     "normalize-path": "^3.0.0",
     "npm-package-arg": "^11.0.2",
     "npm-packlist": "^5.1.3",
