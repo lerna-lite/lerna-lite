@@ -68,7 +68,7 @@ export function getOldestCommitSinceLastTag(execOpts?: ExecOpts, isIndependent?:
     commitResult = execSync('git', gitCommandArgs, execOpts);
   }
 
-  const [, commitHash, commitDate] = /^"?([0-9a-f]+)\s([0-9\-|+T:]*)"?$/.exec(commitResult) || [];
+  const [, commitHash, commitDate] = /^"?([0-9a-f]+)\s([0-9\-Z.|+T:]*)"?$/.exec(commitResult) || [];
   // prettier-ignore
   log.info('oldestCommitSinceLastTag', `commit found since last tag: ${lastTagName} - (SHA) ${commitHash} - ${commitDate}`);
 
