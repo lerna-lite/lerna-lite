@@ -4,6 +4,12 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [3.5.2](https://github.com/lerna-lite/lerna-lite/compare/v3.5.1...v3.5.2) (2024-06-13)
+
+### Bug Fixes
+
+* **version:** update get last commit hash info regex to support all timezone ([#875](https://github.com/lerna-lite/lerna-lite/issues/875)) ([30bf0e7](https://github.com/lerna-lite/lerna-lite/commit/30bf0e7b20e445845c68c3b177d096c9ccde0e3b)) - by @njfamirm
+
 ## [3.5.1](https://github.com/lerna-lite/lerna-lite/compare/v3.5.0...v3.5.1) (2024-06-07)
 
 ### Bug Fixes

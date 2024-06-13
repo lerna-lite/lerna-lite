@@ -1,7 +1,7 @@
 {
   "name": "@lerna-lite/publish",
   "description": "Publish packages in the current workspace",
-  "version": "3.5.1",
+  "version": "3.5.2",
   "files": [
     "/dist"
   ],
