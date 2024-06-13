@@ -76,12 +76,28 @@ describe('getOldestCommitSinceLastTag', () => {
       });
     });
 
-    it('should return first commit date when describeRefSync() did not return a tag date', async () => {
+    it('should return first commit date format as ISO+offset when describeRefSync() did not return a tag date', async () => {
       const execSpy = (execSync as Mock).mockReturnValueOnce('"abcbeef 2022-07-01T00:01:02-04:00"');
       const result = await getOldestCommitSinceLastTag(execOpts);
 
       expect(execSpy).toHaveBeenCalledWith('git', ['log', '--oneline', '--format="%h %aI"', '--reverse', '--max-parents=0', 'HEAD'], execOpts);
       expect(result).toEqual({ commitDate: '2022-07-01T00:01:02-04:00', commitHash: 'abcbeef' });
+    });
+
+    it('should return first commit date with a TZ format when describeRefSync() did not return a tag date', async () => {
+      const execSpy = (execSync as Mock).mockReturnValueOnce('"abcbeef 2024-05-16T10:37:42Z"');
+      const result = await getOldestCommitSinceLastTag(execOpts);
+
+      expect(execSpy).toHaveBeenCalledWith('git', ['log', '--oneline', '--format="%h %aI"', '--reverse', '--max-parents=0', 'HEAD'], execOpts);
+      expect(result).toEqual({ commitDate: '2024-05-16T10:37:42Z', commitHash: 'abcbeef' });
+    });
+
+    it('should return first commit date with a TZ and microsecond format when describeRefSync() did not return a tag date', async () => {
+      const execSpy = (execSync as Mock).mockReturnValueOnce('"abcbeef 2024-05-16T10:37:42.234Z"');
+      const result = await getOldestCommitSinceLastTag(execOpts);
+
+      expect(execSpy).toHaveBeenCalledWith('git', ['log', '--oneline', '--format="%h %aI"', '--reverse', '--max-parents=0', 'HEAD'], execOpts);
+      expect(result).toEqual({ commitDate: '2024-05-16T10:37:42.234Z', commitHash: 'abcbeef' });
     });
   });
 
