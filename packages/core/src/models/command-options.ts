@@ -318,6 +318,9 @@ export interface VersionCommandOption {
    */
   premajorVersionBump?: 'default' | 'force-patch';
 
+  /** Default to false, runs lifecycle scripts when syncing the lock file after the version bump. */
+  runScriptsOnLockfileUpdate?: boolean;
+
   /** Defaults to false, should we skip GitHub/GitLab release creation when the version is a "Version bump only for package x" */
   skipBumpOnlyReleases?: boolean;
 

@@ -658,6 +658,9 @@
             "skipBumpOnlyReleases": {
               "$ref": "#/$defs/commandOptions/version/skipBumpOnlyReleases"
             },
+            "runScriptsOnLockfileUpdate": {
+              "$ref": "#/$defs/commandOptions/version/runScriptsOnLockfileUpdate"
+            },
             "syncWorkspaceLock": {
               "$ref": "#/$defs/commandOptions/version/syncWorkspaceLock"
             },
@@ -1392,6 +1395,10 @@
         "forceGitTag": {
           "type": "boolean",
           "description": "During `lerna version`, when true, pass the `--force` flag to `git tag`."
+        },
+        "runScriptsOnLockfileUpdate": {
+          "type": "boolean",
+          "description": "During `lerna version`, when true, runs lifecycle scripts when syncing the lock file after the version bump."
         },
         "skipBumpOnlyReleases": {
           "type": "boolean",

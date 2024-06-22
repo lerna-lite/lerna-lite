@@ -109,6 +109,7 @@ Running `lerna version --conventional-commits` without the above flags will rele
     - [`--premajor-version-bump`](#--premajor-version-bump)
     - [`--remote-client <type>`](#--remote-client-type)
     - [`--push-tags-one-by-one`](#--push-tags-one-by-one)
+    - [`--run-scripts-on-lockfile-update`](#--run-scripts-on-lockfile-update)
     - [`--signoff-git-commit`](#--signoff-git-commit)
     - [`--sign-git-commit`](#--sign-git-commit)
     - [`--sign-git-tag`](#--sign-git-tag)
@@ -784,6 +785,11 @@ lerna version --conventional-commits --remote-client gitlab
 ```
 
 For remote client authentication tokens, like `GH_TOKEN` (or `GITHUB_TOKEN`), refer to [`Remote Client Auth Tokens`](#remote-client-auth-tokens)
+
+### `--run-scripts-on-lockfile-update`
+
+By default, `lerna version` skips any lifecycle script when syncing the package-lock file after the version bump (when using NPM as `npmClient`).
+With this option it will run `prepare`, `postinstall`, etc.
 
 ### `--signoff-git-commit`
 

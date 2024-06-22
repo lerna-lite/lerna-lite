@@ -269,6 +269,10 @@ export default {
         describe: "Additional arguments to pass to the npm client when performing 'npm install'.",
         type: 'array',
       },
+      'run-scripts-on-lockfile-update': {
+        describe: 'Runs lifecycle scripts when syncing the lock file after the version bump.',
+        type: 'boolean',
+      },
       'no-sync-workspace-lock': {
         describe:
           'Do not run `npm install --package-lock-only` or equivalent depending on the package manager defined in `npmClient`.',

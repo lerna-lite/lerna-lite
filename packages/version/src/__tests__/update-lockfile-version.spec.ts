@@ -184,7 +184,7 @@ describe('pnpm client', () => {
     const logSpy = vi.spyOn(npmlog, 'error');
     const cwd = await initFixture('lockfile-version2');
 
-    const lockFileOutput = await runInstallLockFileOnly('pnpm', cwd, []);
+    const lockFileOutput = await runInstallLockFileOnly('pnpm', cwd, { npmClientArgs: [] });
 
     expect(logSpy).toHaveBeenCalledWith(
       'lock',
@@ -198,7 +198,7 @@ describe('pnpm client', () => {
     (execPackageManager as Mock).mockImplementationOnce(() => true);
     const cwd = await initFixture('lockfile-version2');
 
-    const lockFileOutput = await runInstallLockFileOnly('pnpm', cwd, []);
+    const lockFileOutput = await runInstallLockFileOnly('pnpm', cwd, { npmClientArgs: [] });
 
     expect(execPackageManager).toHaveBeenCalledWith('pnpm', ['install', '--lockfile-only', '--ignore-scripts'], { cwd });
     expect(lockFileOutput).toBe('pnpm-lock.yaml');
@@ -209,7 +209,7 @@ describe('pnpm client', () => {
     (execPackageManager as Mock).mockImplementationOnce(() => true);
     const cwd = await initFixture('lockfile-version2');
 
-    const lockFileOutput = await runInstallLockFileOnly('pnpm', cwd, ['--frozen-lockfile']);
+    const lockFileOutput = await runInstallLockFileOnly('pnpm', cwd, { npmClientArgs: ['--frozen-lockfile'] });
 
     expect(execPackageManager).toHaveBeenCalled();
     expect(execPackageManager).toHaveBeenCalledWith('pnpm', ['install', '--lockfile-only', '--ignore-scripts', '--frozen-lockfile'], { cwd });
@@ -219,16 +219,16 @@ describe('pnpm client', () => {
 
 describe('run install lockfile-only', () => {
   describe('npm client', () => {
-    it(`should update project root lockfile by calling npm script "npm install --package-lock-only" when npm version is >= 8.5.0`, async () => {
+    it(`should update project root lockfile by calling npm script "npm install --package-lock-only --ignore-scripts" when npm version is >= 8.5.0`, async () => {
       (execPackageManagerSync as any).mockReturnValueOnce('8.5.0');
       vi.spyOn(fsPromises, 'access').mockResolvedValue(true as any);
       (execPackageManager as Mock).mockImplementationOnce(() => true);
       const cwd = await initFixture('lockfile-version2');
 
-      const lockFileOutput = await runInstallLockFileOnly('npm', cwd, []);
+      const lockFileOutput = await runInstallLockFileOnly('npm', cwd, { npmClientArgs: [] });
 
       expect(execPackageManagerSync).toHaveBeenCalledWith('npm', ['--version']);
-      expect(execPackageManager).toHaveBeenCalledWith('npm', ['install', '--package-lock-only'], { cwd });
+      expect(execPackageManager).toHaveBeenCalledWith('npm', ['install', '--package-lock-only', '--ignore-scripts'], { cwd });
       expect(lockFileOutput).toBe('package-lock.json');
     });
 
@@ -239,7 +239,7 @@ describe('run install lockfile-only', () => {
       const cwd = await initFixture('lockfile-version2');
       const logSpy = vi.spyOn(npmlog, 'error');
 
-      await runInstallLockFileOnly('npm', cwd, []);
+      await runInstallLockFileOnly('npm', cwd, { npmClientArgs: [] });
 
       expect(execPackageManagerSync).toHaveBeenCalledWith('npm', ['--version']);
       expect(logSpy).toHaveBeenCalledWith(
@@ -248,16 +248,29 @@ describe('run install lockfile-only', () => {
       );
     });
 
+    it(`should update project root lockfile by calling npm script "npm install --package-lock-only" without running npm scripts when --run-scripts-on-lockfile-update is enabled`, async () => {
+      (execPackageManagerSync as any).mockReturnValueOnce('8.5.0');
+      vi.spyOn(fsPromises, 'access').mockResolvedValue(true as any);
+      (execPackageManager as Mock).mockImplementationOnce(() => true);
+      const cwd = await initFixture('lockfile-version2');
+
+      const lockFileOutput = await runInstallLockFileOnly('npm', cwd, { npmClientArgs: [], runScriptsOnLockfileUpdate: true });
+
+      expect(execPackageManagerSync).toHaveBeenCalledWith('npm', ['--version']);
+      expect(execPackageManager).toHaveBeenCalledWith('npm', ['install', '--package-lock-only'], { cwd });
+      expect(lockFileOutput).toBe('package-lock.json');
+    });
+
     it(`should update project root lockfile by calling npm script "npm install --package-lock-only" with extra npm client arguments when provided`, async () => {
       (execPackageManagerSync as any).mockReturnValueOnce('8.5.0');
       vi.spyOn(fsPromises, 'access').mockResolvedValue(true as any);
       (execPackageManager as Mock).mockImplementationOnce(() => true);
       const cwd = await initFixture('lockfile-version2');
 
-      const lockFileOutput = await runInstallLockFileOnly('npm', cwd, ['--legacy-peer-deps']);
+      const lockFileOutput = await runInstallLockFileOnly('npm', cwd, { npmClientArgs: ['--legacy-peer-deps'], runScriptsOnLockfileUpdate: false });
 
       expect(execPackageManagerSync).toHaveBeenCalledWith('npm', ['--version']);
-      expect(execPackageManager).toHaveBeenCalledWith('npm', ['install', '--package-lock-only', '--legacy-peer-deps'], { cwd });
+      expect(execPackageManager).toHaveBeenCalledWith('npm', ['install', '--package-lock-only', '--ignore-scripts', '--legacy-peer-deps'], { cwd });
       expect(lockFileOutput).toBe('package-lock.json');
     });
 
@@ -265,10 +278,10 @@ describe('run install lockfile-only', () => {
       (execPackageManagerSync as any).mockReturnValueOnce('8.5.0');
       const cwd = await initFixture('lockfile-version2');
 
-      const lockFileOutput = await runInstallLockFileOnly('npm', cwd, ['--legacy-peer-deps,--force']);
+      const lockFileOutput = await runInstallLockFileOnly('npm', cwd, { npmClientArgs: ['--legacy-peer-deps,--force'] });
 
       expect(execPackageManagerSync).toHaveBeenCalledWith('npm', ['--version']);
-      expect(execPackageManager).toHaveBeenCalledWith('npm', ['install', '--package-lock-only', '--legacy-peer-deps', '--force'], {
+      expect(execPackageManager).toHaveBeenCalledWith('npm', ['install', '--package-lock-only', '--ignore-scripts', '--legacy-peer-deps', '--force'], {
         cwd,
       });
       expect(lockFileOutput).toBe('package-lock.json');
@@ -286,7 +299,7 @@ describe('run install lockfile-only', () => {
       (execPackageManager as Mock).mockImplementationOnce(() => true);
       const cwd = await initFixture('lockfile-version2');
 
-      await runInstallLockFileOnly('yarn', cwd, []);
+      await runInstallLockFileOnly('yarn', cwd, { npmClientArgs: [] });
 
       expect(execPackageManagerSync).toHaveBeenCalledWith('yarn', ['--version']);
       expect(execPackageManager).not.toHaveBeenCalled();
@@ -298,7 +311,7 @@ describe('run install lockfile-only', () => {
       (execPackageManager as Mock).mockImplementationOnce(() => true);
       const cwd = await initFixture('lockfile-version2');
 
-      const lockFileOutput = await runInstallLockFileOnly('yarn', cwd, []);
+      const lockFileOutput = await runInstallLockFileOnly('yarn', cwd, { npmClientArgs: [] });
 
       expect(execPackageManagerSync).toHaveBeenCalledWith('yarn', ['--version']);
       expect(execPackageManager).toHaveBeenCalledWith('yarn', ['install', '--mode', 'update-lockfile'], {
@@ -317,7 +330,7 @@ describe('run install lockfile-only', () => {
       (execPackageManager as Mock).mockImplementationOnce(() => true);
       const cwd = await initFixture('lockfile-version2');
 
-      const lockFileOutput = await runInstallLockFileOnly('yarn', cwd, ['--check-files']);
+      const lockFileOutput = await runInstallLockFileOnly('yarn', cwd, { npmClientArgs: ['--check-files'] });
 
       expect(execPackageManagerSync).toHaveBeenCalledWith('yarn', ['--version']);
       expect(execPackageManager).toHaveBeenCalledWith('yarn', ['install', '--mode', 'update-lockfile', '--check-files'], {
