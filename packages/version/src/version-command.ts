@@ -782,13 +782,14 @@ export class VersionCommand extends Command<VersionCommandOption> {
     } else if (this.options.syncWorkspaceLock) {
       // update lock file, with npm client defined when `--sync-workspace-lock` is enabled
       chain = chain.then(() =>
-        runInstallLockFileOnly(npmClient, this.project.manifest.location, this.options.npmClientArgs || []).then(
-          (lockfilePath) => {
-            if (lockfilePath) {
-              changedFiles.add(lockfilePath);
-            }
+        runInstallLockFileOnly(npmClient, this.project.manifest.location, {
+          npmClientArgs: this.options.npmClientArgs || [],
+          runScriptsOnLockfileUpdate: this.options.runScriptsOnLockfileUpdate,
+        }).then((lockfilePath) => {
+          if (lockfilePath) {
+            changedFiles.add(lockfilePath);
           }
-        )
+        })
       );
     }
 

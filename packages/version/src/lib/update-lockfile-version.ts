@@ -127,11 +127,14 @@ export function updateNpmLockFileVersion2(obj: any, pkgName: string, newVersion:
 export async function runInstallLockFileOnly(
   npmClient: 'npm' | 'pnpm' | 'yarn',
   cwd: string,
-  npmArgs: string[]
+  options: {
+    npmClientArgs: string[];
+    runScriptsOnLockfileUpdate?: boolean;
+  }
 ): Promise<string | undefined> {
   let inputLockfileName = '';
   let outputLockfileName: string | undefined;
-  const npmClientArgsRaw = npmArgs || [];
+  const npmClientArgsRaw = options.npmClientArgs || [];
   const npmClientArgs: string[] = npmClientArgsRaw.reduce((args, arg) => args.concat(arg.split(/\s|,/)), [] as string[]);
 
   switch (npmClient) {
@@ -168,7 +171,16 @@ export async function runInstallLockFileOnly(
         // with npm version >=8.5.0, we can simply call "npm install --package-lock-only"
         if (semver.gte(localNpmVersion, '8.5.0')) {
           log.verbose('lock', `updating lock file via "npm install --package-lock-only"`);
-          await execPackageManager('npm', ['install', '--package-lock-only', ...npmClientArgs], { cwd });
+          await execPackageManager(
+            'npm',
+            [
+              'install',
+              '--package-lock-only',
+              !options.runScriptsOnLockfileUpdate ? '--ignore-scripts' : '',
+              ...npmClientArgs,
+            ].filter(Boolean),
+            { cwd }
+          );
         } else {
           log.error(
             'lock',
