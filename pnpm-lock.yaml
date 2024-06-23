@@ -476,10 +476,6 @@ importers:
       set-blocking:
         specifier: ^2.0.0
         version: 2.0.0
-    devDependencies:
-      yargs-parser:
-        specifier: ^21.1.1
-        version: 21.1.1
 
   packages/profiler:
     dependencies:

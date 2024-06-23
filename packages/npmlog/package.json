@@ -39,8 +39,5 @@
     "console-control-strings": "^1.1.0",
     "gauge": "^5.0.2",
     "set-blocking": "^2.0.0"
-  },
-  "devDependencies": {
-    "yargs-parser": "^21.1.1"
   }
 }
