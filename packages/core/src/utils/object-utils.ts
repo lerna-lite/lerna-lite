@@ -1,4 +1,4 @@
-import log from 'npmlog';
+import { log } from '@lerna-lite/npmlog';
 
 /**
  * From a dot (.) notation path, find and delete a property within an object if found given a complex object path

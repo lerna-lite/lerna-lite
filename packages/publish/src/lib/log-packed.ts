@@ -1,10 +1,10 @@
 import byteSize from 'byte-size';
 import chalk from 'chalk';
 import columnify from 'columnify';
-import log from 'npmlog';
 import hasUnicode from 'has-unicode';
-
 import { Package } from '@lerna-lite/core';
+import { log } from '@lerna-lite/npmlog';
+
 import { Tarball } from '../models/index.js';
 
 export function logPacked(pkg: Package & { packed: Tarball }, dryRun = false) {

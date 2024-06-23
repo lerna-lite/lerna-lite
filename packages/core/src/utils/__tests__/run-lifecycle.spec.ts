@@ -4,8 +4,8 @@ vi.mock('@npmcli/run-script', () => ({
   default: vi.fn(() => Promise.resolve({ stdout: '' })),
 }));
 
-import log from 'npmlog';
 import { loggingOutput } from '@lerna-test/helpers/logging-output';
+import { log } from '@lerna-lite/npmlog';
 import runScript from '@npmcli/run-script';
 
 import { npmConf } from '../npm-conf';

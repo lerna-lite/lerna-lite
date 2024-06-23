@@ -1,4 +1,4 @@
-import log from 'npmlog';
+import { log } from '@lerna-lite/npmlog';
 
 import type { DescribeRefOptions, ExecOpts, UpdateCollectorOptions } from '../../models/index.js';
 import { Package } from '../../package.js';

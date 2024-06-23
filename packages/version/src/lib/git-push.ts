@@ -1,5 +1,5 @@
-import log from 'npmlog';
 import { exec, ExecOpts } from '@lerna-lite/core';
+import { log } from '@lerna-lite/npmlog';
 
 /**
  * @param {string} remote

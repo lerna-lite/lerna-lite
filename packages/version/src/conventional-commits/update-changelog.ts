@@ -1,9 +1,9 @@
 import { ChangelogPresetOptions, EOL, Package } from '@lerna-lite/core';
+import { log } from '@lerna-lite/npmlog';
 import conventionalChangelogCore, { Context } from 'conventional-changelog-core';
 import { Options as WriterOptions } from 'conventional-changelog-writer';
 import { writeFile } from 'fs/promises';
 import getStream from 'get-stream';
-import log from 'npmlog';
 
 import { BLANK_LINE, CHANGELOG_HEADER } from './constants.js';
 import { GetChangelogConfig } from './get-changelog-config.js';

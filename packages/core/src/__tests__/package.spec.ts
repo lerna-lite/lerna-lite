@@ -1,11 +1,11 @@
 import { describe, expect, it, Mock, vi } from 'vitest';
 
+import { log } from '@lerna-lite/npmlog';
+import { loadJsonFile, loadJsonFileSync } from 'load-json-file';
 import { homedir } from 'node:os';
 import { dirname, normalize, resolve as pathResolve } from 'node:path';
-import { loadJsonFile, loadJsonFileSync } from 'load-json-file';
-import npa from 'npm-package-arg';
-import npmlog from 'npmlog';
 import { fileURLToPath } from 'node:url';
+import npa from 'npm-package-arg';
 import { writePackage } from 'write-package';
 
 vi.mock('load-json-file');
@@ -844,7 +844,7 @@ describe('Package', () => {
       });
 
       it('should remove `workspace:` prefix on external dependencies without any version bump applied', () => {
-        const logErrorSpy = vi.spyOn(npmlog, 'error');
+        const logErrorSpy = vi.spyOn(log, 'error');
         const pkg = factory({
           dependencies: {
             a: 'workspace:*',

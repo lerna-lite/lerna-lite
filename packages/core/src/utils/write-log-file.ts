@@ -1,4 +1,4 @@
-import log from 'npmlog';
+import { log } from '@lerna-lite/npmlog';
 import { join } from 'node:path';
 import { EOL } from 'node:os';
 import writeFileAtomic from 'write-file-atomic';

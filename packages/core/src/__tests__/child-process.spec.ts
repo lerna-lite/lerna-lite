@@ -1,6 +1,7 @@
 import { describe, expect, it, vi } from 'vitest';
 import chalk from 'chalk';
-import npmlog from 'npmlog';
+import { log } from '@lerna-lite/npmlog';
+
 // file under test
 import { exec, execSync, getChildProcessCount, getExitCode, spawn, spawnStreaming } from '../child-process';
 import { Package } from '../package';
@@ -20,7 +21,7 @@ describe('childProcess', () => {
     });
 
     it('should execute a command in dry-run and log the command', () => {
-      const logSpy = vi.spyOn(npmlog, 'info');
+      const logSpy = vi.spyOn(log, 'info');
       execSync('echo', ['execSync'], undefined, true);
       expect(logSpy).toHaveBeenCalledWith(chalk.bold.magenta('[dry-run] >'), 'echo execSync');
     });
@@ -39,7 +40,7 @@ describe('childProcess', () => {
     });
 
     it('should execute a command in dry-run and log the command', () => {
-      const logSpy = vi.spyOn(npmlog, 'info');
+      const logSpy = vi.spyOn(log, 'info');
       exec('echo', ['exec'], undefined, true);
       expect(logSpy).toHaveBeenCalledWith(chalk.bold.magenta('[dry-run] >'), 'echo exec');
     });
@@ -87,7 +88,7 @@ describe('childProcess', () => {
     });
 
     it('should execute a command in dry-run and log the command', () => {
-      const logSpy = vi.spyOn(npmlog, 'info');
+      const logSpy = vi.spyOn(log, 'info');
       spawn('echo', ['-n'], undefined, true);
       expect(logSpy).toHaveBeenCalledWith(chalk.bold.magenta('[dry-run] >'), 'echo -n');
     });
@@ -118,7 +119,7 @@ describe('childProcess', () => {
     });
 
     it('should execute a command in dry-run and log the command', async () => {
-      const logSpy = vi.spyOn(npmlog, 'info');
+      const logSpy = vi.spyOn(log, 'info');
 
       await spawnStreaming('echo', ['-n'], { stdio: 'inherit' }, 'my-prefix', true);
 

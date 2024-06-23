@@ -34,12 +34,12 @@ vi.mock('../lib/get-two-factor-auth-required', async () => await vi.importActual
 vi.mock('../lib/pack-directory', async () => await vi.importActual<any>('../lib/__mocks__/pack-directory'));
 vi.mock('../lib/npm-publish', async () => await vi.importActual<any>('../lib/__mocks__/npm-publish'));
 
+import { log } from '@lerna-lite/npmlog';
 import { outputFile } from 'fs-extra/esm';
 import { dirname, join } from 'node:path';
-import npmlog from 'npmlog';
 
 // mocked modules
-import writePkg from 'write-package';
+import * as writePkg from 'write-package';
 
 // helpers
 import { fileURLToPath } from 'node:url';
@@ -194,7 +194,7 @@ describe("workspace protocol 'workspace:' specifiers", () => {
 
   it('remove workspace protocol from external dependencies and minor bump other local dependencies with workspace protocol', async () => {
     const cwd = await initFixture('workspace-protocol-specs');
-    const logErrorSpy = vi.spyOn(npmlog, 'error');
+    const logErrorSpy = vi.spyOn(log, 'error');
 
     await gitTag(cwd, 'v1.0.0');
     await setupChanges(cwd);

@@ -1,6 +1,6 @@
-import log from 'npmlog';
 import runScript from '@npmcli/run-script';
 import PQueue from 'p-queue';
+import { log } from '@lerna-lite/npmlog';
 
 import { npmConf } from '../utils/npm-conf.js';
 import { LifecycleConfig } from '../models/index.js';

@@ -1,8 +1,8 @@
 import { loadJsonFile, loadJsonFileSync } from 'load-json-file';
 import npa from 'npm-package-arg';
-import npmlog from 'npmlog';
 import { basename, dirname, join, resolve as pathResolve, relative } from 'node:path';
 import { writePackage } from 'write-package';
+import { log } from '@lerna-lite/npmlog';
 
 import { CommandType, NpaResolveResult, RawManifest } from './models/index.js';
 
@@ -273,7 +273,7 @@ export class Package {
       if (depCollection && (resolved.registry || resolved.type === 'directory') && /^(workspace:)+(.*)$/.test(workspaceSpec)) {
         if (workspaceSpec) {
           if (resolved.fetchSpec === 'latest' || resolved.fetchSpec === '') {
-            npmlog.error(
+            log.error(
               `publish`,
               [
                 `Your package named "${pkgName}" has external dependencies not handled by Lerna-Lite and without workspace version suffix, `,

@@ -1,5 +1,6 @@
 import { outputJson } from 'fs-extra/esm';
-import npmlog from 'npmlog';
+import { log as npmlog, Logger } from '@lerna-lite/npmlog';
+
 // @ts-ignore
 import upath from 'upath';
 
@@ -30,7 +31,7 @@ const range = (len: number) => {
  */
 export class Profiler {
   events: TraceEvent[] = [];
-  logger: typeof npmlog;
+  logger: Logger;
   outputPath: string;
   threads: number[];
 

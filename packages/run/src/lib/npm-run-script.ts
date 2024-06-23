@@ -1,4 +1,4 @@
-import log from 'npmlog';
+import { log } from '@lerna-lite/npmlog';
 import { execPackageManager, Package, spawnStreaming } from '@lerna-lite/core';
 
 import { getNpmExecOpts } from './get-npm-exec-opts.js';

@@ -1,5 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import fetch from 'npm-registry-fetch';
+
 import { pulseTillDone } from '../pulse-till-done';
 
 describe('pulse-till-done()', () => {

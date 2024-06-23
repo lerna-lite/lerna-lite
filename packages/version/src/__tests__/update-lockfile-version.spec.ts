@@ -10,12 +10,12 @@ vi.mock('@lerna-lite/core', async () => {
   };
 });
 
-import npmlog from 'npmlog';
+import { Package } from '@lerna-lite/core';
+import { log } from '@lerna-lite/npmlog';
 import { pathExistsSync, readJsonSync } from 'fs-extra/esm';
 import { promises as fsPromises } from 'node:fs';
 import { dirname as pathDirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
-import { Package } from '@lerna-lite/core';
 
 // mocked or stubbed modules
 import { loadJsonFile } from 'load-json-file';
@@ -181,7 +181,7 @@ describe('validateFileExists() method', () => {
 describe('pnpm client', () => {
   it('should log an error when lockfile is not located under project root', async () => {
     (execPackageManager as Mock).mockImplementationOnce(() => false);
-    const logSpy = vi.spyOn(npmlog, 'error');
+    const logSpy = vi.spyOn(log, 'error');
     const cwd = await initFixture('lockfile-version2');
 
     const lockFileOutput = await runInstallLockFileOnly('pnpm', cwd, { npmClientArgs: [] });
@@ -237,7 +237,7 @@ describe('run install lockfile-only', () => {
       vi.spyOn(fsPromises, 'access').mockResolvedValue(true as any);
       (execPackageManager as Mock).mockImplementationOnce(() => true);
       const cwd = await initFixture('lockfile-version2');
-      const logSpy = vi.spyOn(npmlog, 'error');
+      const logSpy = vi.spyOn(log, 'error');
 
       await runInstallLockFileOnly('npm', cwd, { npmClientArgs: [] });
 

@@ -1,11 +1,11 @@
+import { log as npmlog, Logger } from '@lerna-lite/npmlog';
 import chalk from 'chalk';
-import npmlog from 'npmlog';
 
 import { exec, execSync } from '../child-process.js';
 
 export interface UncommittedConfig {
   cwd: string;
-  log?: typeof npmlog;
+  log?: Logger;
 }
 
 const maybeColorize = (colorize: (color?: string) => string) => (s?: string) => (s !== ' ' ? colorize(s) : s);

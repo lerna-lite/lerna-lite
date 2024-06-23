@@ -28,7 +28,7 @@ import { fileURLToPath } from 'node:url';
 import yargParser from 'yargs-parser';
 
 // mocked modules
-import writePkg from 'write-package';
+import * as writePkg from 'write-package';
 import { npmPublish } from '../lib/npm-publish';
 import { npmPublish as npmPublishMock } from '../lib/__mocks__/npm-publish';
 import { promptConfirmation, PublishCommandOption, describeRef, throwIfUncommitted } from '@lerna-lite/core';

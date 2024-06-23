@@ -1,4 +1,4 @@
-import log from 'npmlog';
+import { Logger } from '@lerna-lite/npmlog';
 import npa from 'npm-package-arg';
 
 import { Package } from '../package.js';
@@ -70,7 +70,7 @@ export interface LifecycleConfig {
   defaultTag?: string;
   ignorePrepublish?: boolean;
   ignoreScripts?: boolean;
-  log: log.Logger;
+  log: Logger;
   lernaCommand?: string;
   nodeOptions?: string;
   projectScope?: string | null;
@@ -92,13 +92,13 @@ export interface Manifest {
 export interface FetchConfig {
   [key: string]: unknown;
   fetchRetries: number;
-  log: log.Logger;
+  log: Logger;
   registry: string;
   username: string;
 }
 
 export interface PackConfig {
-  log: log.Logger;
+  log: Logger;
 
   /* If "publish", run "prepublishOnly" lifecycle */
   lernaCommand?: string;

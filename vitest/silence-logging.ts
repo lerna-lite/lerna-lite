@@ -1,4 +1,5 @@
-import log from 'npmlog';
+import { log } from '@lerna-lite/npmlog';
+import { vi } from 'vitest';
 
 // silence logs
 log.level = 'silent';
@@ -11,4 +12,4 @@ log.disableProgress();
 
 // never let anyone enable progress
 // log.enableProgress = vi.fn();
-log.enableProgress = () => {};
+log.enableProgress = vi.fn(() => {});

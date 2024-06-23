@@ -12,10 +12,10 @@ vi.mock('node:os', async () => ({
 }));
 
 import { outputFile, remove, readJson, writeJson } from 'fs-extra/esm';
-import log from 'npmlog';
 import { dirname, join } from 'node:path';
 import { temporaryDirectory } from 'tempy';
 import { fileURLToPath } from 'node:url';
+import { log } from '@lerna-lite/npmlog';
 
 // partially mocked
 import { getChildProcessCount } from '../child-process';

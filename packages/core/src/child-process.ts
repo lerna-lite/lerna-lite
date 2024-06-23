@@ -1,7 +1,7 @@
+import { log } from '@lerna-lite/npmlog';
 import chalk from 'chalk';
 import { execa, execaSync } from 'execa';
 import type { Options as ExecaOptions, SyncOptions as ExacaSyncOptions, ExecaChildProcess } from 'execa';
-import log from 'npmlog';
 import { constants } from 'node:os';
 import logTransformer from 'strong-log-transformer';
 

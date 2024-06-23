@@ -1,5 +1,5 @@
+import { log } from '@lerna-lite/npmlog';
 import { globbySync } from 'globby';
-import log from 'npmlog';
 import { filter as minimatchFilter } from 'minimatch';
 import { dirname, relative } from 'node:path';
 import slash from 'slash';

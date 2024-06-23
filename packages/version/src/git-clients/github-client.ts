@@ -1,8 +1,8 @@
 import { execSync } from '@lerna-lite/core';
+import { log } from '@lerna-lite/npmlog';
 import { Octokit } from '@octokit/rest';
 import { SyncOptions } from 'execa';
 import parseGitUrl from 'git-url-parse';
-import log from 'npmlog';
 
 export async function createGitHubClient() {
   log.silly('createGitHubClient', '');

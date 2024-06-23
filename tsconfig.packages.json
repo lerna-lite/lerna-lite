@@ -10,6 +10,7 @@
     { "path": "./packages/init" },
     { "path": "./packages/list" },
     { "path": "./packages/listable" },
+    { "path": "./packages/npmlog" },
     { "path": "./packages/profiler" },
     { "path": "./packages/publish" },
     { "path": "./packages/run" },

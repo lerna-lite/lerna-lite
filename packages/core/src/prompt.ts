@@ -1,5 +1,5 @@
 import inquirer, { ListChoiceOptions, Question } from 'inquirer';
-import log from 'npmlog';
+import { log } from '@lerna-lite/npmlog';
 
 /**
  * Prompt for confirmation

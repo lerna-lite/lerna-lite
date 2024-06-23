@@ -1,5 +1,5 @@
-import log from 'npmlog';
 import { afterEach } from 'vitest';
+import { log } from '@lerna-lite/npmlog';
 
 import { multiLineTrimRight } from './index.js';
 

@@ -38,7 +38,7 @@ import { fileURLToPath } from 'node:url';
 import yaml from 'js-yaml';
 
 // mocked or stubbed modules
-import writePkg from 'write-package';
+import * as writePkg from 'write-package';
 import { checkWorkingTree, collectUpdates, logOutput, promptConfirmation, promptSelectOne, throwIfUncommitted, VersionCommandOption } from '@lerna-lite/core';
 import { getCommitsSinceLastRelease } from '../conventional-commits';
 import { gitPush as libPush, gitPushSingleTag as libPushSingleTag } from '../lib/git-push';
