@@ -2,7 +2,7 @@
  * Adapted from https://github.com/npm/npmlog/blob/756bd05d01e7e4841fba25204d6b85dfcffeba3c/test/basic.js
  */
 import stream from 'node:stream';
-import { afterAll, afterEach, beforeEach, describe, expect, test } from 'vitest';
+import { afterAll, afterEach, beforeEach, describe, expect, test, vi } from 'vitest';
 
 import { log, Logger } from '../npmlog.js';
 
@@ -407,6 +407,19 @@ describe('Basic Tests', () => {
       log.gauge._gauge.template = _template;
     });
 
+    test('disableProgress and expect gauge/progress to be enabled', () => {
+      log.disableProgress();
+      expect(log.gauge.isEnabled()).toBe(false);
+      expect(log.progressEnabled).toBe(false);
+
+      log.enableProgress();
+
+      expect(log.gauge.isEnabled()).toBe(true);
+      expect(log.progressEnabled).toBe(true);
+
+      log.disableProgress();
+    });
+
     test('enableProgress while paused', () => {
       log.disableProgress();
       log.pause();
@@ -414,9 +427,60 @@ describe('Basic Tests', () => {
       expect(log.gauge.isEnabled()).toBe(false);
     });
 
-    test('pause while progressEnabled', () => {
-      log.pause();
+    test('disableProgress and expect gauge/progress to be disabled', () => {
+      log.enableProgress();
+      expect(log.gauge.isEnabled()).toBe(true);
+      expect(log.progressEnabled).toBe(true);
+
+      log.disableProgress();
+
       expect(log.gauge.isEnabled()).toBe(false);
+      expect(log.progressEnabled).toBe(false);
+    });
+
+    test('clearProgress and expect gauge to be hidden', () => {
+      const spy = vi.spyOn(log.gauge, 'hide');
+
+      log.enableProgress();
+      expect(log.gauge.isEnabled()).toBe(true);
+      expect(log.progressEnabled).toBe(true);
+
+      log.clearProgress();
+      expect(spy).toHaveBeenCalled();
+    });
+
+    test('pause while progressEnabled', () => {
+      const spy = vi.spyOn(log.gauge, 'disable');
+
+      log.enableProgress();
+      log.pause();
+
+      expect(log.gauge.isEnabled()).toBe(false);
+      expect(spy).toHaveBeenCalled();
+
+      log.resume();
+    });
+
+    test('resume while progressEnabled', () => {
+      const spy = vi.spyOn(log.gauge, 'enable');
+
+      log.enableProgress();
+      log.pause();
+      log.resume();
+
+      expect(spy).toHaveBeenCalled();
+    });
+
+    test('showProgress and expect gauge to show progress', () => {
+      const spy = vi.spyOn(log.gauge, 'show');
+
+      log.enableProgress();
+      expect(log.gauge.isEnabled()).toBe(true);
+      expect(log.progressEnabled).toBe(true);
+      log.silly('silly prefix', 'x = %j', { foo: { bar: 'baz' } });
+
+      log.showProgress();
+      expect(spy).toHaveBeenCalled();
     });
 
     test('_buffer while paused', () => {
