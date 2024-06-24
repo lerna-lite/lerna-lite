@@ -102,7 +102,7 @@ test('getUnpublishedPackages with strict-ssl = false', async () => {
   const packageGraph = new PackageGraph(packages);
 
   const opts = { 'strict-ssl': false };
-  const pkgs = await getUnpublishedPackages(packageGraph, opts as FetchConfig);
+  const pkgs = await getUnpublishedPackages(packageGraph, opts as unknown as FetchConfig);
 
   expect((pacote as any).packument).toHaveBeenCalledWith('package-1', { 'strict-ssl': false, strictSSL: false });
   expect(pkgs).toEqual([

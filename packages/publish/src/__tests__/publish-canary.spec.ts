@@ -56,7 +56,7 @@ expect.addSnapshotSerializer({
 });
 
 // stabilize commit SHA
-import gitSHA from '@lerna-test/helpers/serializers/serialize-git-sha';
+import gitSHA from '@lerna-test/helpers/serializers/serialize-git-sha.js';
 expect.addSnapshotSerializer(gitSHA);
 
 const createArgv = (cwd: string, ...args: string[]) => {

@@ -33,7 +33,7 @@ import { spawn, spawnStreaming } from '@lerna-lite/core';
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
 import { commandRunner, initFixtureFactory } from '@lerna-test/helpers';
-import { loggingOutput } from '@lerna-test/helpers/logging-output';
+import { loggingOutput } from '@lerna-test/helpers/logging-output.js';
 import { normalizeRelativeDir } from '@lerna-test/helpers';
 import { factory, ExecCommand } from '../index';
 import cliExecCommands from '../../../cli/src/cli-commands/cli-exec-commands';

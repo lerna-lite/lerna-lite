@@ -1,9 +1,10 @@
 import { expect, test } from 'vitest';
 import { execa } from 'execa';
-import { isBehindUpstream } from '../lib/is-behind-upstream';
 import { cloneFixtureFactory } from '@lerna-test/helpers';
 import { fileURLToPath } from 'node:url';
 import { dirname } from 'node:path';
+
+import { isBehindUpstream } from '../lib/is-behind-upstream';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);

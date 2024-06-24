@@ -2,7 +2,7 @@ import { accessSync, constants, readdirSync } from 'node:fs';
 import { join as pathJoin } from 'node:path';
 import semver from 'semver';
 
-import { Package } from '../packages/core/src/package.js';
+import { Package } from '../packages/core/dist/package.js';
 
 export function toDependOn() {
   return createDependencyMatcher('dependencies');

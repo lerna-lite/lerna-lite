@@ -1,10 +1,10 @@
 import { expect, test } from 'vitest';
-
 import { Project } from '@lerna-lite/core';
-import { getPackagesWithoutLicense } from '../lib/get-packages-without-license';
 import { initFixtureFactory } from '@lerna-test/helpers';
 import { fileURLToPath } from 'node:url';
 import { dirname } from 'node:path';
+
+import { getPackagesWithoutLicense } from '../lib/get-packages-without-license';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);

@@ -22,7 +22,7 @@ import { getChildProcessCount } from '../child-process';
 
 // helpers
 import { initFixtureFactory } from '@lerna-test/helpers';
-import { loggingOutput } from '@lerna-test/helpers/logging-output';
+import { loggingOutput } from '@lerna-test/helpers/logging-output.js';
 import { updateLernaConfig } from '@lerna-test/helpers';
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);

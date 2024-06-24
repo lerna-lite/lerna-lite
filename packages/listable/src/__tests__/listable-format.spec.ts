@@ -10,7 +10,7 @@ import chalk from 'chalk';
 import { temporaryDirectory } from 'tempy';
 import Tacks from 'tacks';
 import { Project } from '@lerna-lite/core';
-import { loggingOutput } from '@lerna-test/helpers/logging-output';
+import { loggingOutput } from '@lerna-test/helpers/logging-output.js';
 
 import { listable } from '../index';
 
@@ -31,8 +31,8 @@ expect.addSnapshotSerializer({
 });
 
 // normalize temp directory paths in snapshots
-import serializeTempdir from '@lerna-test/helpers/serializers/serialize-tempdir';
-import serializeWindowsPaths from '@lerna-test/helpers/serializers/serialize-windows-paths';
+import serializeTempdir from '@lerna-test/helpers/serializers/serialize-tempdir.js';
+import serializeWindowsPaths from '@lerna-test/helpers/serializers/serialize-windows-paths.js';
 expect.addSnapshotSerializer(serializeWindowsPaths);
 expect.addSnapshotSerializer(serializeTempdir);
 

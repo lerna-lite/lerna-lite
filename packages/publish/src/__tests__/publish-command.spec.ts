@@ -49,7 +49,7 @@ import { fileURLToPath } from 'node:url';
 // helpers
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
-import { loggingOutput } from '@lerna-test/helpers/logging-output';
+import { loggingOutput } from '@lerna-test/helpers/logging-output.js';
 import { commitChangeToPackage } from '@lerna-test/helpers';
 import { commandRunner, initFixtureFactory } from '@lerna-test/helpers';
 const initFixture = initFixtureFactory(__dirname);

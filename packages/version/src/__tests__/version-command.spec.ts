@@ -47,7 +47,7 @@ import { isBehindUpstream } from '../lib/is-behind-upstream';
 import { remoteBranchExists } from '../lib/remote-branch-exists';
 
 // helpers
-import { loggingOutput } from '@lerna-test/helpers/logging-output';
+import { loggingOutput } from '@lerna-test/helpers/logging-output.js';
 import { commandRunner, getCommitMessage, gitAdd, gitCommit, gitTag, initFixtureFactory, showCommit } from '@lerna-test/helpers';
 
 // test command
@@ -92,7 +92,7 @@ const listDirty = (cwd) =>
   execa('git', ['ls-files', '--exclude-standard', '--modified', '--others'], { cwd }).then((result) => result.stdout.split('\n').filter(Boolean));
 
 // stabilize commit SHA
-import gitSHA from '@lerna-test/helpers/serializers/serialize-git-sha';
+import gitSHA from '@lerna-test/helpers/serializers/serialize-git-sha.js';
 expect.addSnapshotSerializer(gitSHA);
 
 describe('VersionCommand', () => {

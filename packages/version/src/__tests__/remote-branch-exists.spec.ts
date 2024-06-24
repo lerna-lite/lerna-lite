@@ -1,10 +1,10 @@
 import { expect, test } from 'vitest';
-import { execa } from 'execa';
-
-import { remoteBranchExists } from '../lib/remote-branch-exists';
 import { cloneFixtureFactory } from '@lerna-test/helpers';
+import { execa } from 'execa';
 import { fileURLToPath } from 'node:url';
 import { dirname } from 'node:path';
+
+import { remoteBranchExists } from '../lib/remote-branch-exists';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
