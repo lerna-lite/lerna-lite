@@ -31,7 +31,7 @@ interface GaugeOptions {
 interface Status {
   spun: number;
   section: string;
-  subsection: string;
+  subsection: string | Promise<any>;
   completed?: number;
 }
 
@@ -264,7 +264,7 @@ export class Gauge {
     this._requestRedraw();
   }
 
-  pulse(subsection?: string) {
+  pulse(subsection?: string | Promise<any>) {
     this._status.subsection = subsection || '';
     this._status.spun++;
     if (this._disabled) {
