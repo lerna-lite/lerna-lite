@@ -7,9 +7,10 @@ import { WriteStream } from 'node:tty';
 import { format } from 'node:util';
 
 import Progress from 'are-we-there-yet';
-import Gauge from 'gauge';
-import setBlocking from 'set-blocking';
 import consoleControl from 'console-control-strings';
+import setBlocking from 'set-blocking';
+
+import { Gauge } from './gauge/index.js';
 
 setBlocking(true);
 
@@ -22,7 +23,7 @@ export class Logger extends EventEmitter {
   private id: number;
   record: any[];
   maxRecordSize: number;
-  gauge: any;
+  gauge: Gauge;
   tracker: any;
   progressEnabled: boolean;
   level: string;
@@ -140,7 +141,7 @@ export class Logger extends EventEmitter {
       return;
     }
     this.progressEnabled = true;
-    this.tracker.on('change', this.showProgress);
+    this.tracker.on('change', this.showProgress.bind(this));
     this.gauge.enable();
   }
 
@@ -149,7 +150,7 @@ export class Logger extends EventEmitter {
       return;
     }
     this.progressEnabled = false;
-    this.tracker.removeListener('change', this.showProgress);
+    this.tracker.removeListener('change', this.showProgress.bind(this));
     this.gauge.disable();
   }
 
@@ -354,52 +355,47 @@ export class Logger extends EventEmitter {
     }
     this.disp[lvl] = disp;
   }
+
+  newGroup(name: string) {
+    const group = this.tracker.newGroup(name);
+    this.mixinLogMethods(group);
+    return group;
+  }
+
+  newItem(name: string, todo?: number) {
+    const item = this.tracker.newItem(name, todo);
+    this.mixinLogMethods(item);
+    return item;
+  }
+
+  newStream(name: string, todo?: number) {
+    const stream = this.tracker.newStream(name, todo);
+    this.mixinLogMethods(stream);
+    return stream;
+  }
+
+  private mixinLogMethods(tracker: any) {
+    Object.keys(this).forEach((P) => {
+      if (P[0] === '_') {
+        return;
+      }
+      if (tracker[P]) {
+        return;
+      }
+      if (typeof this[P] !== 'function') {
+        return;
+      }
+
+      const func = this[P];
+      tracker[P] = (...args: any[]) => {
+        return func.apply(this, args);
+      };
+    });
+
+    tracker.showProgress = this.showProgress.bind(this);
+  }
 }
 
 const log = new Logger();
-const trackerConstructors = ['newGroup', 'newItem', 'newStream'] as const;
-
-const mixinLog = (tracker: any) => {
-  Object.keys(log).forEach((P) => {
-    if (P[0] === '_') {
-      return;
-    }
-    if (trackerConstructors.includes(P as any)) {
-      return;
-    }
-    if (tracker[P]) {
-      return;
-    }
-    if (typeof log[P] !== 'function') {
-      return;
-    }
-
-    const func = log[P];
-    tracker[P] = function (...args: any[]) {
-      return func.apply(log, args);
-    };
-  });
-
-  if (tracker instanceof Progress.TrackerGroup) {
-    trackerConstructors.forEach((C) => {
-      const func = tracker[C];
-      tracker[C] = function (...args: any[]) {
-        return mixinLog(func.apply(tracker, args));
-      };
-    });
-  }
-
-  // Add showProgress method to the tracker
-  tracker.showProgress = log.showProgress.bind(log);
-
-  return tracker;
-};
-
-trackerConstructors.forEach((C) => {
-  (log as any)[C] = function (...args: any[]) {
-    // eslint-disable-next-line prefer-spread
-    return mixinLog(this.tracker[C].apply(this.tracker, args));
-  };
-});
 
 export { log };

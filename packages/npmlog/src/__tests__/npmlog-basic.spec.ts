@@ -1,9 +1,10 @@
 /**
  * Adapted from https://github.com/npm/npmlog/blob/756bd05d01e7e4841fba25204d6b85dfcffeba3c/test/basic.js
  */
-import stream from 'node:stream';
+import { Stream, Writable } from 'node:stream';
 import { afterAll, afterEach, beforeEach, describe, expect, test, vi } from 'vitest';
 
+import themes from '../gauge/themes.js';
 import { log, Logger } from '../npmlog.js';
 
 const result: any[] = [];
@@ -283,9 +284,7 @@ const logEventsExpect = [
   { id: 29, level: 'noise', prefix: 'error', message: 'erroring', messageRaw: ['erroring'] },
 ];
 
-// eslint-disable-next-line @typescript-eslint/no-var-requires
-const Stream = require('stream').Stream;
-const s = new Stream();
+const s: any = new Stream();
 s.write = function (m: any) {
   result.push(m);
 };
@@ -391,8 +390,6 @@ describe('Basic Tests', () => {
 
     test('themes', () => {
       const _themes = log.gauge._themes;
-      // eslint-disable-next-line @typescript-eslint/no-var-requires
-      const themes = require('gauge/lib/themes');
       const newThemes = themes.newThemeSet();
       log.setGaugeThemeset(newThemes);
       expect(log.gauge._themes).toEqual(newThemes);
@@ -534,7 +531,7 @@ describe('Basic Tests', () => {
     });
 
     test('should not throw', () => {
-      log.gauge = null;
+      log.gauge = null as any;
       log.stream = null;
       expect(() => log.write('message')).not.toThrow();
     });
@@ -546,7 +543,7 @@ describe('Basic Tests', () => {
     });
 
     test('should not throw', () => {
-      const badStream = new stream.Writable();
+      const badStream = new Writable();
       badStream.on('data', () => {
         throw new Error('should not have gotten data!');
       });
@@ -563,7 +560,7 @@ describe('Basic Tests', () => {
     });
 
     test('should return undefined', () => {
-      log.gauge = null;
+      log.gauge = null as any;
       log.stream = null;
       expect(log._format('message')).toBeUndefined();
     });
@@ -577,7 +574,7 @@ describe('Basic Tests', () => {
     test('nonexistant stream', () => {
       const gauge = log.gauge;
 
-      log.gauge = null;
+      log.gauge = null as any;
       log.stream = null;
       expect(log._format('message')).toBeUndefined();
 
