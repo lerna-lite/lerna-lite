@@ -82,7 +82,7 @@ describe('ThemeSet', () => {
       xyz: 17,
     });
     expect(themes.getTheme('test1').xyz).toBe(17); // existing themes updated
-    
+
     const newTheme: any = themes.newTheme({ id: 99 });
     expect(newTheme.id).toBe(99); // new theme initialized
     expect(newTheme.xyz).toBe(17); // new theme got extension
