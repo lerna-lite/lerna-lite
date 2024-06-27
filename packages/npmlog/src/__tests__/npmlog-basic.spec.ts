@@ -305,7 +305,6 @@ describe('Basic Tests', () => {
     log.on('log.info', logInfoEvents.push.bind(logInfoEvents));
     log.on('info prefix', logPrefixEvents.push.bind(logPrefixEvents));
 
-    console.error('log.level=silly');
     log.level = 'silly';
     log.silly('silly prefix', 'x = %j', { foo: { bar: 'baz' } });
     log.verbose('verbose prefix', 'x = %j', { foo: { bar: 'baz' } });
@@ -317,7 +316,6 @@ describe('Basic Tests', () => {
     log.error('error prefix', 'x = %j', { foo: { bar: 'baz' } });
     log.silent('silent prefix', 'x = %j', { foo: { bar: 'baz' } });
 
-    console.error('log.level=silent');
     log.level = 'silent';
     log.silly('silly prefix', 'x = %j', { foo: { bar: 'baz' } });
     log.verbose('verbose prefix', 'x = %j', { foo: { bar: 'baz' } });
@@ -329,7 +327,6 @@ describe('Basic Tests', () => {
     log.error('error prefix', 'x = %j', { foo: { bar: 'baz' } });
     log.silent('silent prefix', 'x = %j', { foo: { bar: 'baz' } });
 
-    console.error('log.level=info');
     log.level = 'info';
     log.silly('silly prefix', 'x = %j', { foo: { bar: 'baz' } });
     log.verbose('verbose prefix', 'x = %j', { foo: { bar: 'baz' } });

@@ -16,7 +16,7 @@ import { applyBuildMetadata, recommendVersion, updateChangelog } from '../../con
 import { GetChangelogConfig } from '../get-changelog-config';
 
 // stabilize changelog commit SHA and datestamp
-import serializeChangelog from '@lerna-test/helpers/serializers/serialize-changelog';
+import serializeChangelog from '@lerna-test/helpers/serializers/serialize-changelog.js';
 expect.addSnapshotSerializer(serializeChangelog);
 
 describe('conventional-commits', () => {
