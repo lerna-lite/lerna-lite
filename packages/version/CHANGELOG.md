@@ -4,6 +4,19 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [3.6.0](https://github.com/lerna-lite/lerna-lite/compare/v3.5.2...v3.6.0) (2024-06-27)
+
+### Features
+
+* **version:** option to not ignore scripts on lock update, fixes [#877](https://github.com/lerna-lite/lerna-lite/issues/877) ([#881](https://github.com/lerna-lite/lerna-lite/issues/881)) ([1b78b53](https://github.com/lerna-lite/lerna-lite/commit/1b78b53a19e20b21b589025ff2b287d583390975)) - by @ghiscoding
+
+### Bug Fixes
+
+* **deps:** update dependency @octokit/rest to v21 ([#880](https://github.com/lerna-lite/lerna-lite/issues/880)) ([17d7d8c](https://github.com/lerna-lite/lerna-lite/commit/17d7d8c53695d7c20ba8586085f232fd8c97ca56)) - by @renovate[bot]
+* **deps:** update dependency uuid to v10 ([#879](https://github.com/lerna-lite/lerna-lite/issues/879)) ([5bc0d9a](https://github.com/lerna-lite/lerna-lite/commit/5bc0d9a753f1463340ed1b63d4585142dfa5a62f)) - by @renovate[bot]
+* inline deprecated `npmlog` util dependency ([#882](https://github.com/lerna-lite/lerna-lite/issues/882)) ([9243e8e](https://github.com/lerna-lite/lerna-lite/commit/9243e8e0078c07add85dc997a4a04bfaf77a44e5)) - by @ghiscoding
+* replace deprecated `read-package-json` with `@npmcli/package-json` ([#883](https://github.com/lerna-lite/lerna-lite/issues/883)) ([fe23cf7](https://github.com/lerna-lite/lerna-lite/commit/fe23cf7b471ce7b6f761b33a58b520082d539172)) - by @ghiscoding
+
 ## [3.5.2](https://github.com/lerna-lite/lerna-lite/compare/v3.5.1...v3.5.2) (2024-06-13)
 
 ### Bug Fixes

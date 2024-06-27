@@ -4,6 +4,16 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [3.6.0](https://github.com/lerna-lite/lerna-lite/compare/v3.5.2...v3.6.0) (2024-06-27)
+
+### Features
+
+* **version:** option to not ignore scripts on lock update, fixes [#877](https://github.com/lerna-lite/lerna-lite/issues/877) ([#881](https://github.com/lerna-lite/lerna-lite/issues/881)) ([1b78b53](https://github.com/lerna-lite/lerna-lite/commit/1b78b53a19e20b21b589025ff2b287d583390975)) - by @ghiscoding
+
+### Bug Fixes
+
+* inline deprecated `npmlog` util dependency ([#882](https://github.com/lerna-lite/lerna-lite/issues/882)) ([9243e8e](https://github.com/lerna-lite/lerna-lite/commit/9243e8e0078c07add85dc997a4a04bfaf77a44e5)) - by @ghiscoding
+
 ## [3.5.1](https://github.com/lerna-lite/lerna-lite/compare/v3.5.0...v3.5.1) (2024-06-07)
 
 ### Bug Fixes

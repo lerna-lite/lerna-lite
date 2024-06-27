@@ -4,6 +4,13 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [3.6.0](https://github.com/lerna-lite/lerna-lite/compare/v3.5.2...v3.6.0) (2024-06-27)
+
+### Bug Fixes
+
+* inline deprecated `npmlog` util dependency ([#882](https://github.com/lerna-lite/lerna-lite/issues/882)) ([9243e8e](https://github.com/lerna-lite/lerna-lite/commit/9243e8e0078c07add85dc997a4a04bfaf77a44e5)) - by @ghiscoding
+* replace deprecated `read-package-json` with `@npmcli/package-json` ([#883](https://github.com/lerna-lite/lerna-lite/issues/883)) ([fe23cf7](https://github.com/lerna-lite/lerna-lite/commit/fe23cf7b471ce7b6f761b33a58b520082d539172)) - by @ghiscoding
+
 ## [3.5.2](https://github.com/lerna-lite/lerna-lite/compare/v3.5.1...v3.5.2) (2024-06-13)
 
 **Note:** Version bump only for package @lerna-lite/publish
