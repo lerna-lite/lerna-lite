@@ -84,6 +84,6 @@ describe('ThemeSet', () => {
     const newTheme: any = themes.newTheme({ id: 99 });
     expect(newTheme.id).toBe(99); // new theme initialized
     expect(newTheme.xyz).toBe(17); // new theme got extension
-    expect(themes.getThemeNames()).toBeGreaterThan(10);
+    expect(themes.getThemeNames()).toBe({});
   });
 });
