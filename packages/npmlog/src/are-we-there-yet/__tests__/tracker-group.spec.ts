@@ -137,17 +137,14 @@ describe('TrackerGroup', () => {
 
   it('cycles', () => {
     const track = new TrackerGroup('top');
-
-    function testCycle(addTo: any, toAdd: any) {
+    const testCycle = (addTo: any, toAdd: any) => {
       try {
         addTo.addUnit(toAdd);
         throw new Error('Expected cycle error');
       } catch (ex) {
-        console.log(ex);
-        // eslint-disable-next-line jest/no-conditional-expect
         expect(ex).toBeInstanceOf(Error);
       }
-    }
+    };
 
     testCycle(track, track);
     const layer1 = track.newGroup('layer1');
@@ -163,7 +160,7 @@ describe('TrackerGroup', () => {
       track.finish();
       expect(true).toBe(true);
     } catch (e) {
-      // eslint-disable-next-line jest/no-conditional-expect
+      // eslint-disable-next-line
       expect(false).toBe(true);
     }
   });
