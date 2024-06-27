@@ -1,16 +1,13 @@
-import { LifecycleConfig, Package, RawManifest, runLifecycle } from '@lerna-lite/core';
+import { type LifecycleConfig, type Package, runLifecycle } from '@lerna-lite/core';
 import { log } from '@lerna-lite/npmlog';
-import { OneTimePasswordCache, otplease } from '@lerna-lite/version';
+import { type OneTimePasswordCache, otplease } from '@lerna-lite/version';
+import PackageJson from '@npmcli/package-json';
 import { readFile } from 'fs/promises';
 import { publish } from 'libnpmpublish';
-import { join } from 'node:path';
+import { dirname, join } from 'node:path';
 import npa from 'npm-package-arg';
-import pify from 'pify';
-import readJSON from 'read-package-json';
 
-import { LibNpmPublishOptions, PackagePublishConfig } from '../models/index.js';
-
-const readJSONAsync = pify(readJSON);
+import type { LibNpmPublishOptions, PackagePublishConfig } from '../models/index.js';
 
 /**
  * Alias dash-cased npmConf to camelCase
@@ -34,12 +31,12 @@ function flattenOptions(obj: Omit<LibNpmPublishOptions, 'defaultTag'>): LibNpmPu
  * @param {LibNpmPublishOptions & NpmPublishOptions} [options]
  * @param {import("@lerna/otplease").OneTimePasswordCache} [otpCache]
  */
-export function npmPublish(
+export async function npmPublish(
   pkg: Package,
   tarFilePath: string,
   options: Omit<LibNpmPublishOptions, 'defaultTag'> = {},
   otpCache?: OneTimePasswordCache
-) {
+): Promise<void | Response> {
   const { dryRun, ...remainingOptions } = flattenOptions(options);
   const { scope } = npa(pkg?.name ?? '');
   // pass only the package scope to libnpmpublish
@@ -51,44 +48,46 @@ export function npmPublish(
 
   opts.log.verbose('publish', pkg.name);
 
-  let chain: Promise<any> = Promise.resolve();
+  let result: undefined | Response;
 
   if (!dryRun) {
-    chain = chain.then(() => {
-      let { manifestLocation } = pkg;
+    let { manifestLocation } = pkg;
 
-      if (pkg.contents !== pkg.location) {
-        // 'rebase' manifest used to generated directory
-        manifestLocation = join(pkg.contents, 'package.json');
-      }
+    if (pkg.contents !== pkg.location) {
+      // 'rebase' manifest used to generated directory
+      manifestLocation = join(pkg.contents, 'package.json');
+    }
 
-      return Promise.all([readFile(tarFilePath), readJSONAsync(manifestLocation) as RawManifest]);
-    });
-    chain = chain.then(([tarData, manifest]: [any, RawManifest]) => {
-      // non-default tag needs to override publishConfig.tag,
-      // which is merged into opts below if necessary
-      if (
-        opts.defaultTag !== 'latest' &&
-        manifest.publishConfig &&
-        manifest.publishConfig.tag &&
-        manifest.publishConfig.tag !== opts.defaultTag
-      ) {
-        manifest.publishConfig.tag = opts.defaultTag as string;
-      }
+    const [tarData, npmCliPackageJson] = await Promise.all([
+      readFile(tarFilePath),
+      await PackageJson.load(dirname(manifestLocation)),
+    ]);
 
-      // publishConfig is no longer consumed in n-r-f, so merge here
-      if (manifest.publishConfig) {
-        Object.assign(opts, publishConfigToOpts(manifest.publishConfig));
-      }
+    const manifestContent = npmCliPackageJson.content;
 
-      return otplease((innerOpts) => publish(manifest, tarData, innerOpts), opts, otpCache as OneTimePasswordCache);
-    });
+    // non-default tag needs to override publishConfig.tag,
+    // which is merged into opts below if necessary
+    if (
+      opts.defaultTag !== 'latest' &&
+      manifestContent.publishConfig &&
+      manifestContent.publishConfig.tag &&
+      manifestContent.publishConfig.tag !== opts.defaultTag
+    ) {
+      manifestContent.publishConfig.tag = opts.defaultTag as string;
+    }
+
+    // publishConfig is no longer consumed in n-r-f, so merge here
+    if (manifestContent.publishConfig) {
+      Object.assign(opts, publishConfigToOpts(manifestContent.publishConfig));
+    }
+
+    result = await otplease((innerOpts) => publish(manifestContent, tarData, innerOpts), opts, otpCache as OneTimePasswordCache);
   }
 
-  chain = chain.then(() => runLifecycle(pkg, 'publish', opts as LifecycleConfig));
-  chain = chain.then(() => runLifecycle(pkg, 'postpublish', opts as LifecycleConfig));
+  await runLifecycle(pkg, 'publish', opts as LifecycleConfig);
+  await runLifecycle(pkg, 'postpublish', opts as LifecycleConfig);
 
-  return chain;
+  return result;
 }
 
 /**

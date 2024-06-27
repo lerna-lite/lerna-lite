@@ -43,7 +43,7 @@ export function otplease<T extends Record<string, unknown>>(
 ) {
   // always prefer explicit config (if present) to cache
   const opts = { ...otpCache, ..._opts };
-  return attempt(fn, opts, otpCache);
+  return attempt(fn, opts, otpCache) as Promise<undefined | Response>;
 }
 
 /** @returns {Promise<unknown>} */
