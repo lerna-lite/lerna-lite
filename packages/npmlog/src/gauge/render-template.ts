@@ -171,6 +171,8 @@ function prepareItems(width, template, values) {
       }
     });
   } while (resizing && resized++ < output.length);
+
+  /* v8 ignore next 3 */
   if (resizing) {
     throw Internal('Resize loop iterated too many times while determining maxLength');
   }
