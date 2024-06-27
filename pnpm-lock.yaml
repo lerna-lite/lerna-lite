@@ -532,6 +532,9 @@ importers:
       '@lerna-lite/version':
         specifier: workspace:*
         version: link:../version
+      '@npmcli/package-json':
+        specifier: ^5.2.0
+        version: 5.2.0
       byte-size:
         specifier: ^8.1.1
         version: 8.1.1
@@ -577,12 +580,6 @@ importers:
       pacote:
         specifier: ^18.0.6
         version: 18.0.6
-      pify:
-        specifier: ^6.1.0
-        version: 6.1.0
-      read-package-json:
-        specifier: ^7.0.1
-        version: 7.0.1
       semver:
         specifier: ^7.6.2
         version: 7.6.2
@@ -599,9 +596,6 @@ importers:
       '@types/fs-extra':
         specifier: ^11.0.4
         version: 11.0.4
-      '@types/pify':
-        specifier: ^5.0.4
-        version: 5.0.4
       '@types/semver':
         specifier: ^7.5.8
         version: 7.5.8
@@ -1360,6 +1354,21 @@ packages:
       json-parse-even-better-errors: 3.0.0
       normalize-package-data: 6.0.0
       proc-log: 4.1.0
+      semver: 7.6.2
+    transitivePeerDependencies:
+      - bluebird
+    dev: false
+
+  /@npmcli/package-json@5.2.0:
+    resolution: {integrity: sha512-qe/kiqqkW0AGtvBjL8TJKZk/eBBSpnJkUWvHdQ9jM2lKHXRYYJuyNpJPlJw3c8QjC2ow6NZYiLExhUaeJelbxQ==}
+    engines: {node: ^16.14.0 || >=18.0.0}
+    dependencies:
+      '@npmcli/git': 5.0.1
+      glob: 10.4.1
+      hosted-git-info: 7.0.1
+      json-parse-even-better-errors: 3.0.0
+      normalize-package-data: 6.0.1
+      proc-log: 4.2.0
       semver: 7.6.2
     transitivePeerDependencies:
       - bluebird
@@ -4958,7 +4967,7 @@ packages:
     dependencies:
       '@npmcli/git': 5.0.1
       '@npmcli/installed-package-contents': 2.0.2
-      '@npmcli/package-json': 5.1.0
+      '@npmcli/package-json': 5.2.0
       '@npmcli/promise-spawn': 7.0.0
       '@npmcli/run-script': 8.1.0
       cacache: 18.0.0
@@ -5180,16 +5189,6 @@ packages:
   /react-is@18.2.0:
     resolution: {integrity: sha512-xWGDIW6x921xtzPkhiULtthJHoJvBbF3q26fzloPCK0hsvxtPVelvftw3zjbHWSkR2km9Z+4uxbDDK/6Zw9B8w==}
     dev: true
-
-  /read-package-json@7.0.1:
-    resolution: {integrity: sha512-8PcDiZ8DXUjLf687Ol4BR8Bpm2umR7vhoZOzNRt+uxD9GpBh/K+CAAALVIiYFknmvlmyg7hM7BSNUXPaCCqd0Q==}
-    engines: {node: ^16.14.0 || >=18.0.0}
-    dependencies:
-      glob: 10.4.1
-      json-parse-even-better-errors: 3.0.0
-      normalize-package-data: 6.0.0
-      npm-normalize-package-bin: 3.0.1
-    dev: false
 
   /read-pkg-up@10.1.0:
     resolution: {integrity: sha512-aNtBq4jR8NawpKJQldrQcSW9y/d+KWH4v24HWkHljOZ7H0av+YTGANBzRh9A5pw7v/bLVsLVPpOhJ7gHNVy8lA==}
