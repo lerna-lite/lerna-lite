@@ -2,8 +2,7 @@ import { afterEach, beforeEach, describe, expect, it } from 'vitest';
 
 import { log } from '../npmlog.js';
 import { Gauge } from '../gauge/index.js';
-
-import Progress from 'are-we-there-yet';
+import { TrackerGroup } from '../are-we-there-yet/tracker-group.js';
 
 let actions: any[] = [];
 
@@ -74,7 +73,7 @@ describe('log module', () => {
     log.useColor = () => false;
     log.disableProgress();
     log.resume();
-    log.tracker = new Progress.TrackerGroup();
+    log.tracker = new TrackerGroup();
     log.enableProgress();
     actions = [];
   });

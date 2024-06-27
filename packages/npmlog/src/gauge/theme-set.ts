@@ -95,7 +95,7 @@ ThemeSetProto.newMissingThemeError = function newMissingThemeError(name) {
 };
 
 ThemeSetProto.newMissingDefaultThemeError = function newMissingDefaultThemeError(platformName, hasUnicode, hasColor) {
-  const err = new Error(
+  const err: any = new Error(
     'Could not find a gauge theme for your platform/unicode/color use combo:\n' +
       '    platform = ' +
       platformName +
@@ -105,7 +105,7 @@ ThemeSetProto.newMissingDefaultThemeError = function newMissingDefaultThemeError
       '\n' +
       '    hasColor = ' +
       hasColor
-  ) as any;
+  );
   Error.captureStackTrace.call(err, newMissingDefaultThemeError);
   err.platform = platformName;
   err.hasUnicode = hasUnicode;
