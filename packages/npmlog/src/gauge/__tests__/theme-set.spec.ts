@@ -23,6 +23,7 @@ themes.setDefault({ platform: 'zz', hasUnicode: true, hasColor: false }, 'test4'
 describe('ThemeSet', () => {
   it('should get themes based on conditions', () => {
     expect(themes().id).toBe(0); // fallback
+    expect(themes.getThemeNames()).toContain('fallback');
 
     expect(themes({ platform: 'aa' }).id).toBe(1); // aa ff
     expect(themes({ platform: 'aa', hasUnicode: true }).id).toBe(1); // aa tf
@@ -81,6 +82,7 @@ describe('ThemeSet', () => {
       xyz: 17,
     });
     expect(themes.getTheme('test1').xyz).toBe(17); // existing themes updated
+    
     const newTheme: any = themes.newTheme({ id: 99 });
     expect(newTheme.id).toBe(99); // new theme initialized
     expect(newTheme.xyz).toBe(17); // new theme got extension
