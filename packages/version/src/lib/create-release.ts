@@ -1,6 +1,6 @@
 import { ValidationError } from '@lerna-lite/core';
+import { log } from '@lerna-lite/npmlog';
 import chalk from 'chalk';
-import log from 'npmlog';
 import newGithubReleaseUrl from 'new-github-release-url';
 import semver from 'semver';
 

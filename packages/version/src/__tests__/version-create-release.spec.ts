@@ -54,9 +54,9 @@ import { VersionCommand } from '../version-command';
 import cliCommands from '../../../cli/src/cli-commands/cli-version-commands';
 const lernaVersion = commandRunner(cliCommands);
 
+import { log } from '@lerna-lite/npmlog';
 import chalk from 'chalk';
 import dedent from 'dedent';
-import npmlog from 'npmlog';
 import yargParser from 'yargs-parser';
 
 const createArgv = (cwd: string, ...args: any[]) => {
@@ -219,7 +219,7 @@ describe.each([
 
   it('creates a single fixed release in dry-run mode', async () => {
     process.env.GITHUB_TOKEN = 'TOKEN';
-    const logSpy = vi.spyOn(npmlog, 'info');
+    const logSpy = vi.spyOn(log, 'info');
 
     const cwd = await initFixture('normal');
 
@@ -266,7 +266,7 @@ describe('create --github-release without providing GH_TOKEN or GITHUB_TOKEN', (
   });
 
   it('should create a GitHub Release link with prefilled data when GH_TOKEN env var is not provided', async () => {
-    const logSpy = vi.spyOn(npmlog, 'info');
+    const logSpy = vi.spyOn(log, 'info');
     const cwd = await initFixture('normal');
 
     await lernaVersion(cwd)('--create-release', 'github', '--conventional-commits');

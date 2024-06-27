@@ -1,7 +1,7 @@
 import { Package, PackageGraphNode } from '@lerna-lite/core';
+import { log } from '@lerna-lite/npmlog';
 import conventionalRecommendedBump from 'conventional-recommended-bump';
 import conventionalChangelogCore from 'conventional-changelog-core';
-import log from 'npmlog';
 import semver, { ReleaseType } from 'semver';
 
 import { BaseChangelogOptions, VersioningStrategy } from '../models/index.js';

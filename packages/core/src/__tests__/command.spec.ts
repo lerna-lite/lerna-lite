@@ -12,17 +12,17 @@ vi.mock('node:os', async () => ({
 }));
 
 import { outputFile, remove, readJson, writeJson } from 'fs-extra/esm';
-import log from 'npmlog';
 import { dirname, join } from 'node:path';
 import { temporaryDirectory } from 'tempy';
 import { fileURLToPath } from 'node:url';
+import { log } from '@lerna-lite/npmlog';
 
 // partially mocked
 import { getChildProcessCount } from '../child-process';
 
 // helpers
 import { initFixtureFactory } from '@lerna-test/helpers';
-import { loggingOutput } from '@lerna-test/helpers/logging-output';
+import { loggingOutput } from '@lerna-test/helpers/logging-output.js';
 import { updateLernaConfig } from '@lerna-test/helpers';
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);

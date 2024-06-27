@@ -1,6 +1,6 @@
-import { basename, dirname, join } from 'node:path';
-import log from 'npmlog';
 import { exec, ExecOpts, PackageGraph } from '@lerna-lite/core';
+import { log } from '@lerna-lite/npmlog';
+import { basename, dirname, join } from 'node:path';
 
 /**
  * Retrieve a list of graph nodes for packages that were tagged in a non-independent release.

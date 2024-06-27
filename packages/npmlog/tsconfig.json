@@ -1,0 +1,14 @@
+{
+  "extends": "../../tsconfig.base.json",
+  "compileOnSave": false,
+  "compilerOptions": {
+    "module": "ESNext",
+    "rootDir": "src",
+    "outDir": "dist",
+    "types": ["node"]
+  },
+  "filesGlob": ["./src/**/*.ts"],
+  "include": ["src/**/*.ts"],
+  "exclude": ["dist", "node_modules", "**/__helpers__/**", "**/__mocks__/**", "**/__tests__/**"],
+  "references": []
+}

@@ -1,4 +1,4 @@
-import log from 'npmlog';
+import { log } from '@lerna-lite/npmlog';
 
 import { getChildProcessCount } from '../child-process.js';
 

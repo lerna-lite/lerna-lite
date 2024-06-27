@@ -3,9 +3,8 @@ import { afterEach, beforeEach, describe, expect, Mock, test, vi } from 'vitest'
 vi.mock('npm-registry-fetch');
 
 import fetch from 'npm-registry-fetch';
-import { loggingOutput } from '@lerna-test/helpers/logging-output';
+import { loggingOutput } from '@lerna-test/helpers/logging-output.js';
 import { FetchConfig } from '@lerna-lite/core';
-
 import { getNpmUsername } from '../lib/get-npm-username';
 
 (fetch.json as unknown as Mock).mockImplementation(() => Promise.resolve({ username: 'lerna-test' }));

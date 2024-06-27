@@ -2,7 +2,7 @@ import { execa } from 'execa';
 import { dirname, resolve as pathResolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
 
-import lernaCLI from '../packages/cli/src/lerna-cli.js';
+import lernaCLI from '../packages/cli/dist/lerna-cli.js';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);

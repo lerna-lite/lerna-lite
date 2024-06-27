@@ -1,7 +1,7 @@
+import { log } from '@lerna-lite/npmlog';
 import { describe, expect, it, vi } from 'vitest';
 
 import { logOutput } from '../output';
-import log from 'npmlog';
 
 describe('logOutput method', () => {
   it('should console log output when called', () => {

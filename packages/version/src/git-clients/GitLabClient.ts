@@ -1,5 +1,5 @@
+import { log } from '@lerna-lite/npmlog';
 import fetch from 'node-fetch';
-import log from 'npmlog';
 import { join } from 'node:path';
 
 import { GitClient, GitClientReleaseOption } from '../models/index.js';

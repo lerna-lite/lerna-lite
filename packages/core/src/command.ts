@@ -2,8 +2,8 @@ import cloneDeep from 'clone-deep';
 import dedent from 'dedent';
 import { execaSync, SyncOptions } from 'execa';
 import isCI from 'is-ci';
-import log, { Logger } from 'npmlog';
 import { cpus } from 'node:os';
+import { log, Logger } from '@lerna-lite/npmlog';
 
 import { cleanStack } from './utils/clean-stack.js';
 import { logExecCommand } from './child-process.js';

@@ -1,8 +1,7 @@
+import { Package, ValidationError } from '@lerna-lite/core';
+import { log } from '@lerna-lite/npmlog';
 import multimatch from 'multimatch';
 import util from 'node:util';
-import log from 'npmlog';
-
-import { Package, ValidationError } from '@lerna-lite/core';
 
 /**
  * Filters a list of packages, returning all packages that match the `include` glob[s]

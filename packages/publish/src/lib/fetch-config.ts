@@ -1,5 +1,5 @@
 import { FetchConfig } from '@lerna-lite/core';
-import log from 'npmlog';
+import { log } from '@lerna-lite/npmlog';
 
 /**
  * Create a merged options object suitable for npm-registry-fetch.

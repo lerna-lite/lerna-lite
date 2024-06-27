@@ -1,9 +1,9 @@
 import { LifecycleConfig, Package, PackConfig, runLifecycle } from '@lerna-lite/core';
+import { log } from '@lerna-lite/npmlog';
 import { tempWrite } from '@lerna-lite/version';
-import packlist from 'npm-packlist';
-import log from 'npmlog';
 import { relative } from 'node:path';
 import { Readable } from 'node:stream';
+import packlist from 'npm-packlist';
 import tar from 'tar';
 
 import { getPacked } from './get-packed.js';

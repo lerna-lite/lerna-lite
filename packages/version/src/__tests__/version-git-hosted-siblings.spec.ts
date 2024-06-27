@@ -25,7 +25,7 @@ import { fileURLToPath } from 'node:url';
 import yargParser from 'yargs-parser';
 
 // mocked module(s)
-import writePkg from 'write-package';
+import * as writePkg from 'write-package';
 
 // helpers
 const __filename = fileURLToPath(import.meta.url);

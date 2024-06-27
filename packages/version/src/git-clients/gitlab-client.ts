@@ -1,4 +1,4 @@
-import log from 'npmlog';
+import { log } from '@lerna-lite/npmlog';
 
 import { GitLabClient } from './GitLabClient.js';
 import { GitCreateReleaseClientOutput } from '../models/index.js';

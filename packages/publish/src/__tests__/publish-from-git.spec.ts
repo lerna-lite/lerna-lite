@@ -38,7 +38,7 @@ import { logOutput, promptConfirmation, PublishCommandOption, throwIfUncommitted
 import { dirname } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { gitTag } from '@lerna-test/helpers';
-import { loggingOutput } from '@lerna-test/helpers/logging-output';
+import { loggingOutput } from '@lerna-test/helpers/logging-output.js';
 import { initFixtureFactory } from '@lerna-test/helpers';
 
 const __filename = fileURLToPath(import.meta.url);

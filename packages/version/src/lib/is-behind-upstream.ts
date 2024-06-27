@@ -1,5 +1,5 @@
-import log from 'npmlog';
 import { ExecOpts, execSync } from '@lerna-lite/core';
+import { log } from '@lerna-lite/npmlog';
 
 export function isBehindUpstream(gitRemote: string, branch: string, opts: ExecOpts, dryRun = false) {
   log.silly('isBehindUpstream', '');

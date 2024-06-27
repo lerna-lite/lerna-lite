@@ -1,13 +1,13 @@
+import { log } from '@lerna-lite/npmlog';
 import { cosmiconfigSync, defaultLoaders, type PublicExplorerSync } from 'cosmiconfig';
 import dedent from 'dedent';
 import { globbySync } from 'globby';
 import globParent from 'glob-parent';
 import JSON5 from 'json5';
-import log from 'npmlog';
+import { loadJsonFile, loadJsonFileSync } from 'load-json-file';
 import { writeFileSync } from 'node:fs';
 import { basename, dirname, join, normalize, resolve as pathResolve } from 'node:path';
 import pMap from 'p-map';
-import { loadJsonFile, loadJsonFileSync } from 'load-json-file';
 import { writeJsonFile } from 'write-json-file';
 
 import { Package } from '../package.js';

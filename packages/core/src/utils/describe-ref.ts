@@ -1,4 +1,4 @@
-import log from 'npmlog';
+import { log } from '@lerna-lite/npmlog';
 
 import { DescribeRefDetailedResult, DescribeRefFallbackResult, DescribeRefOptions } from '../models/index.js';
 import { exec, execSync } from '../child-process.js';

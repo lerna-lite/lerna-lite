@@ -1,6 +1,5 @@
-import log from 'npmlog';
-
 import { ExecOpts, execSync } from '@lerna-lite/core';
+import { log } from '@lerna-lite/npmlog';
 
 export function getCurrentBranch(opts: ExecOpts, dryRun = false) {
   log.silly('currentBranch', '');

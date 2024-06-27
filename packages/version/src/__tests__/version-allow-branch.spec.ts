@@ -33,7 +33,7 @@ const initFixture = initFixtureFactory(pathResolve(__dirname, '../../../publish/
 import { VersionCommand } from '../index';
 
 // stabilize commit SHA
-import gitSHA from '@lerna-test/helpers/serializers/serialize-git-sha';
+import gitSHA from '@lerna-test/helpers/serializers/serialize-git-sha.js';
 import { VersionCommandOption } from '@lerna-lite/core';
 expect.addSnapshotSerializer(gitSHA);
 

@@ -1,6 +1,6 @@
 import chalk from 'chalk';
-import npmlog from 'npmlog';
 import { beforeEach, describe, expect, it, Mock, vi } from 'vitest';
+import { log } from '@lerna-lite/npmlog';
 
 import { execPackageManager, execPackageManagerSync } from '../exec-package-manager';
 import { exec, execSync, getChildProcessCount } from '../../child-process';
@@ -48,7 +48,7 @@ describe('.execPackageManagerSync()', () => {
     });
 
     it('should execute a command in dry-run and log the command', () => {
-      const logSpy = vi.spyOn(npmlog, 'info');
+      const logSpy = vi.spyOn(log, 'info');
       execPackageManagerSync('echo', ['execPackageManagerSync'], undefined, true);
       expect(logSpy).toHaveBeenCalledWith(chalk.bold.magenta('[dry-run] >'), 'echo execPackageManagerSync');
     });
@@ -94,7 +94,7 @@ describe('.execPackageManager()', () => {
     });
 
     it('should execute a command in dry-run and log the command', () => {
-      const logSpy = vi.spyOn(npmlog, 'info');
+      const logSpy = vi.spyOn(log, 'info');
       execPackageManager('echo', ['exec'], undefined, true);
       expect(logSpy).toHaveBeenCalledWith(chalk.bold.magenta('[dry-run] >'), 'echo exec');
     });

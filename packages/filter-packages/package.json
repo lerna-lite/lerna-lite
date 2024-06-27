@@ -36,8 +36,8 @@
   },
   "dependencies": {
     "@lerna-lite/core": "workspace:*",
-    "multimatch": "^7.0.0",
-    "npmlog": "^7.0.1"
+    "@lerna-lite/npmlog": "workspace:^",
+    "multimatch": "^7.0.0"
   },
   "devDependencies": {
     "@types/node": "^20.14.2",

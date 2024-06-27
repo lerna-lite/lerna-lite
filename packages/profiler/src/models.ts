@@ -1,8 +1,8 @@
-import npmlog from 'npmlog';
+import { Logger } from '@lerna-lite/npmlog';
 
 export interface ProfilerConfig {
   concurrency: number;
-  log?: typeof npmlog;
+  log?: Logger;
   outputDirectory?: string;
 }
 

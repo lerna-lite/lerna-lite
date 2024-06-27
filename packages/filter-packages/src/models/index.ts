@@ -1,7 +1,7 @@
-import npmlog from 'npmlog';
+import { Logger } from '@lerna-lite/npmlog';
 
 export interface FilterOptions {
-  log: typeof npmlog;
+  log: Logger;
   scope: string[];
   ignore: string[];
   private: boolean;

@@ -39,7 +39,7 @@ import { dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
 
 // mocked modules
-import writePkg from 'write-package';
+import * as writePkg from 'write-package';
 
 // helpers
 const __filename = fileURLToPath(import.meta.url);

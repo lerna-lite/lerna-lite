@@ -56,7 +56,7 @@ expect.addSnapshotSerializer({
 });
 
 // stabilize commit SHA
-import serializeChangelog from '@lerna-test/helpers/serializers/serialize-changelog';
+import serializeChangelog from '@lerna-test/helpers/serializers/serialize-changelog.js';
 expect.addSnapshotSerializer(serializeChangelog);
 
 const createArgv = (cwd, ...args) => {

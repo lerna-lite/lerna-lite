@@ -40,7 +40,7 @@ expect.addSnapshotSerializer({
 // mocked modules
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
-import writePkg from 'write-package';
+import * as writePkg from 'write-package';
 import { collectUpdates, VersionCommandOption } from '@lerna-lite/core';
 import { recommendVersion, updateChangelog } from '../conventional-commits';
 

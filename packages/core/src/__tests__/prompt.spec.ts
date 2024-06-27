@@ -2,7 +2,7 @@ import { describe, expect, it, vi } from 'vitest';
 
 vi.mock('inquirer');
 
-import npmlog from 'npmlog';
+import { log } from '@lerna-lite/npmlog';
 import inquirer from 'inquirer';
 
 import { promptConfirmation, promptSelectOne, promptTextInput } from '../prompt';
@@ -11,8 +11,8 @@ describe('Prompt', () => {
   it('should prompt confirmation', async () => {
     vi.spyOn(inquirer, 'prompt').mockResolvedValue({ confirm: true });
 
-    const logPauseSpy = vi.spyOn(npmlog, 'pause');
-    const logResumeSpy = vi.spyOn(npmlog, 'resume');
+    const logPauseSpy = vi.spyOn(log, 'pause');
+    const logResumeSpy = vi.spyOn(log, 'resume');
     const inqSpy = vi.spyOn(inquirer, 'prompt');
 
     const output = await promptConfirmation('Choose something.');
@@ -36,8 +36,8 @@ describe('Prompt', () => {
   it('should prompt confirmation return false', async () => {
     vi.spyOn(inquirer, 'prompt').mockResolvedValue({ confirm: false });
 
-    const logPauseSpy = vi.spyOn(npmlog, 'pause');
-    const logResumeSpy = vi.spyOn(npmlog, 'resume');
+    const logPauseSpy = vi.spyOn(log, 'pause');
+    const logResumeSpy = vi.spyOn(log, 'resume');
     const inqSpy = vi.spyOn(inquirer, 'prompt');
 
     const output = await promptConfirmation('Choose something.');
@@ -50,8 +50,8 @@ describe('Prompt', () => {
   it('should prompt confirmation', async () => {
     vi.spyOn(inquirer, 'prompt').mockResolvedValue({ confirm: true });
 
-    const logPauseSpy = vi.spyOn(npmlog, 'pause');
-    const logResumeSpy = vi.spyOn(npmlog, 'resume');
+    const logPauseSpy = vi.spyOn(log, 'pause');
+    const logResumeSpy = vi.spyOn(log, 'resume');
     const inqSpy = vi.spyOn(inquirer, 'prompt');
 
     const output = await promptConfirmation('Choose something.');
@@ -64,8 +64,8 @@ describe('Prompt', () => {
   it('should prompt confirmation return false', async () => {
     vi.spyOn(inquirer, 'prompt').mockResolvedValue({ confirm: false });
 
-    const logPauseSpy = vi.spyOn(npmlog, 'pause');
-    const logResumeSpy = vi.spyOn(npmlog, 'resume');
+    const logPauseSpy = vi.spyOn(log, 'pause');
+    const logResumeSpy = vi.spyOn(log, 'resume');
     const inqSpy = vi.spyOn(inquirer, 'prompt');
 
     const output = await promptConfirmation('Choose something.');
@@ -78,8 +78,8 @@ describe('Prompt', () => {
   it('should prompt select one', async () => {
     vi.spyOn(inquirer, 'prompt').mockResolvedValue({ prompt: true });
 
-    const logPauseSpy = vi.spyOn(npmlog, 'pause');
-    const logResumeSpy = vi.spyOn(npmlog, 'resume');
+    const logPauseSpy = vi.spyOn(log, 'pause');
+    const logResumeSpy = vi.spyOn(log, 'resume');
     const inqSpy = vi.spyOn(inquirer, 'prompt');
 
     const output = await promptSelectOne('Choose something.', {
@@ -121,8 +121,8 @@ describe('Prompt', () => {
   it('should prompt select one return false', async () => {
     vi.spyOn(inquirer, 'prompt').mockResolvedValue({ prompt: false });
 
-    const logPauseSpy = vi.spyOn(npmlog, 'pause');
-    const logResumeSpy = vi.spyOn(npmlog, 'resume');
+    const logPauseSpy = vi.spyOn(log, 'pause');
+    const logResumeSpy = vi.spyOn(log, 'resume');
     const inqSpy = vi.spyOn(inquirer, 'prompt');
 
     const output = await promptSelectOne('Choose something.', {
@@ -141,8 +141,8 @@ describe('Prompt', () => {
   it('should prompt text input', async () => {
     vi.spyOn(inquirer, 'prompt').mockResolvedValue({ input: true });
 
-    const logPauseSpy = vi.spyOn(npmlog, 'pause');
-    const logResumeSpy = vi.spyOn(npmlog, 'resume');
+    const logPauseSpy = vi.spyOn(log, 'pause');
+    const logResumeSpy = vi.spyOn(log, 'resume');
     const inqSpy = vi.spyOn(inquirer, 'prompt');
 
     const output = await promptTextInput('Choose something...', {
@@ -166,8 +166,8 @@ describe('Prompt', () => {
   it('should prompt text input return false', async () => {
     vi.spyOn(inquirer, 'prompt').mockResolvedValue({ input: false });
 
-    const logPauseSpy = vi.spyOn(npmlog, 'pause');
-    const logResumeSpy = vi.spyOn(npmlog, 'resume');
+    const logPauseSpy = vi.spyOn(log, 'pause');
+    const logResumeSpy = vi.spyOn(log, 'resume');
     const inqSpy = vi.spyOn(inquirer, 'prompt');
 
     const output = await promptTextInput('Choose something...', {

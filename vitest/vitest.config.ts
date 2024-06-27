@@ -22,6 +22,7 @@ export default defineConfig({
         '**/__helpers__/**',
         '**/__mocks__/**',
         '**/__tests__/**',
+        '**/index.ts',
       ],
       provider: 'v8',
     },

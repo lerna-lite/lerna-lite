@@ -6,7 +6,7 @@ import { fileURLToPath } from 'node:url';
 import { loadJsonFile } from 'load-json-file';
 import { writeJsonFile } from 'write-json-file';
 
-import { tempWrite } from '../../packages/version/src/utils/temp-write.js';
+import { tempWrite } from '../../packages/version/dist/utils/temp-write.js';
 import gitSHA from '../serializers/serialize-git-sha.js';
 
 // Contains all relevant git config (user, commit.gpgSign, etc)

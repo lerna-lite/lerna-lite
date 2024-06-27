@@ -1,5 +1,5 @@
-import log from 'npmlog';
 import { ExecOpts, execSync } from '@lerna-lite/core';
+import { log } from '@lerna-lite/npmlog';
 
 /**
  * @param {import("@lerna/child-process").ExecOpts} execOpts

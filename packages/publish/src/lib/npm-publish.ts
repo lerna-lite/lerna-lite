@@ -1,11 +1,11 @@
 import { LifecycleConfig, Package, RawManifest, runLifecycle } from '@lerna-lite/core';
+import { log } from '@lerna-lite/npmlog';
 import { OneTimePasswordCache, otplease } from '@lerna-lite/version';
 import { readFile } from 'fs/promises';
-import log from 'npmlog';
-import npa from 'npm-package-arg';
-import { join } from 'node:path';
-import pify from 'pify';
 import { publish } from 'libnpmpublish';
+import { join } from 'node:path';
+import npa from 'npm-package-arg';
+import pify from 'pify';
 import readJSON from 'read-package-json';
 
 import { LibNpmPublishOptions, PackagePublishConfig } from '../models/index.js';

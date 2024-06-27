@@ -1,4 +1,4 @@
-import log from 'npmlog';
+import { log } from '@lerna-lite/npmlog';
 
 /**
  * @param {import('execa').ExecaError & { pkg: import('@lerna/package').Package }} err

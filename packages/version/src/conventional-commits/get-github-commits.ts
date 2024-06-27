@@ -1,6 +1,6 @@
 import { ExecOpts, getComplexObjectValue } from '@lerna-lite/core';
+import { log } from '@lerna-lite/npmlog';
 import dedent from 'dedent';
-import log from 'npmlog';
 
 import { createGitHubClient, parseGitRepo } from '../git-clients/index.js';
 import { RemoteCommit } from '../models/index.js';

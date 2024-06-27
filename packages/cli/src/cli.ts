@@ -2,7 +2,8 @@
 
 import 'dotenv/config';
 import importLocal from 'import-local';
-import log from 'npmlog';
+import { log } from '@lerna-lite/npmlog';
+
 import { lerna } from './lerna-entry.js';
 
 if (importLocal(import.meta.url)) {

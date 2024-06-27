@@ -38,7 +38,7 @@ import { outputFile } from 'fs-extra/esm';
 import { dirname, join } from 'node:path';
 
 // mocked modules
-import writePkg from 'write-package';
+import * as writePkg from 'write-package';
 
 // helpers
 import { fileURLToPath } from 'node:url';

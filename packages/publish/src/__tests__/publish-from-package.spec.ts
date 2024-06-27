@@ -36,7 +36,7 @@ import { fileURLToPath } from 'node:url';
 import yargParser from 'yargs-parser';
 
 // mocked or stubbed modules
-import writePkg from 'write-package';
+import * as writePkg from 'write-package';
 import { npmPublish } from '../lib/npm-publish';
 import { npmPublish as npmPublishMock } from '../lib/__mocks__/npm-publish.js';
 import { logOutput, promptConfirmation, PublishCommandOption, throwIfUncommitted } from '@lerna-lite/core';
@@ -45,7 +45,7 @@ import { getUnpublishedPackages } from '../lib/get-unpublished-packages';
 // helpers
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
-import { loggingOutput } from '@lerna-test/helpers/logging-output';
+import { loggingOutput } from '@lerna-test/helpers/logging-output.js';
 import { initFixtureFactory } from '@lerna-test/helpers';
 const initFixture = initFixtureFactory(__dirname);
 

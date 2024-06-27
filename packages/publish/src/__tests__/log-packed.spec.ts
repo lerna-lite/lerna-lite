@@ -1,8 +1,8 @@
 import { describe, expect, it, vi } from 'vitest';
 
 import { Package } from '@lerna-lite/core';
+import { log } from '@lerna-lite/npmlog';
 import chalk from 'chalk';
-import npmlog from 'npmlog';
 
 import { logPacked } from '../lib';
 import { Tarball } from '../models';
@@ -39,7 +39,7 @@ describe('log-packed', () => {
   } as unknown as Package & { packed: Tarball };
 
   it('should display dry-run details', () => {
-    const logSpy = vi.spyOn(npmlog, 'notice');
+    const logSpy = vi.spyOn(log, 'notice');
 
     logPacked(pkg, true);
 

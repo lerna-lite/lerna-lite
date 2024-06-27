@@ -1,0 +1,51 @@
+{
+  "name": "@lerna-lite/npmlog",
+  "description": "Lerna-Lite npmlog reimplementation of the now deprecated npm/npmlog",
+  "version": "3.5.1",
+  "files": [
+    "/dist"
+  ],
+  "type": "module",
+  "publishConfig": {
+    "access": "public"
+  },
+  "types": "./dist/index.d.ts",
+  "exports": {
+    "types": "./dist/index.d.ts",
+    "default": "./dist/index.js"
+  },
+  "scripts": {
+    "prebuild": "rimraf dist",
+    "build": "tsc",
+    "build:incremental": "tsc --incremental --sourceMap false --excludeDirectories dist",
+    "pack-tarball": "npm pack"
+  },
+  "license": "MIT",
+  "author": "Ghislain B.",
+  "homepage": "https://github.com/lerna-lite/lerna-lite",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/lerna-lite/lerna-lite.git",
+    "directory": "packages/npmlog"
+  },
+  "bugs": {
+    "url": "https://github.com/lerna-lite/lerna-lite/issues"
+  },
+  "engines": {
+    "node": "^18.0.0 || >=20.0.0"
+  },
+  "dependencies": {
+    "aproba": "^2.0.0",
+    "color-support": "^1.1.3",
+    "console-control-strings": "^1.1.0",
+    "has-unicode": "^2.0.1",
+    "set-blocking": "^2.0.0",
+    "signal-exit": "^4.1.0",
+    "string-width": "^7.1.0",
+    "strip-ansi": "^7.1.0",
+    "wide-align": "^1.1.5"
+  },
+  "devDependencies": {
+    "readable-stream": "^4.5.2"
+  }
+}

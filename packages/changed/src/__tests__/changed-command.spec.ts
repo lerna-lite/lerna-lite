@@ -23,7 +23,7 @@ import cliChangedCommands from '../../../cli/src/cli-commands/cli-changed-comman
 import { fileURLToPath } from 'node:url';
 import { dirname } from 'node:path';
 import { commandRunner, initFixtureFactory } from '@lerna-test/helpers';
-import { loggingOutput } from '@lerna-test/helpers/logging-output';
+import { loggingOutput } from '@lerna-test/helpers/logging-output.js';
 import { updateLernaConfig } from '@lerna-test/helpers';
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
@@ -56,7 +56,7 @@ expect.addSnapshotSerializer({
 });
 
 // normalize temp directory paths in snapshots
-import serializeTempdir from '@lerna-test/helpers/serializers/serialize-tempdir';
+import serializeTempdir from '@lerna-test/helpers/serializers/serialize-tempdir.js';
 expect.addSnapshotSerializer(serializeTempdir);
 
 describe('Changed Command', () => {
