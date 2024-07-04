@@ -24,6 +24,7 @@
       allowedVersions: '18.0.0',
     },
     {
+      // ref PR #844: https://github.com/lerna-lite/lerna-lite/pull/844
       packageNames: ['npm-packlist'],
       allowedVersions: '<6.0.0',
     },
@@ -32,10 +33,12 @@
       allowedVersions: '<9.0.0',
     },
     {
+      // ref commit: https://github.com/lerna-lite/lerna-lite/commit/291bf01c5e0b49e70733c8abb17e2bb8141d5cbe
       packageNames: ['tar'],
       allowedVersions: '<7.0.0',
     },
     {
+      //  ref commit: https://github.com/lerna-lite/lerna-lite/commit/fd18921e90f7bc696b7422fecdcf50662fce6f8d
       packageNames: ['execa'],
       allowedVersions: '<9.0.0',
     },
