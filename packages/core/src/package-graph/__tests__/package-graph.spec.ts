@@ -189,6 +189,26 @@ describe('PackageGraph', () => {
       expect(node).toHaveProperty('localDependents', expect.any(Map));
     });
 
+    it('handles yarn patch protocol versions transparently and without hiccups', () => {
+      const pkg = new Package(
+        {
+          name: 'my-pkg',
+          version: '1.0.0',
+          dependencies: {
+            '@ionic-native/splash-screen':
+              'patch:@ionic-native/splash-screen@npm%3A5.36.0#~/.yarn/patches/@ionic-native-splash-screen-npm-5.36.0-531cbbe0f8.patch',
+          },
+        } as unknown as RawManifest,
+        '/path/to/my-pkg'
+      );
+      const node = new PackageGraph([pkg]).get('my-pkg');
+      expect(node?.externalDependencies.get('@ionic-native/splash-screen').rawSpec).toBe('5.36.0');
+      expect(node?.externalDependencies.get('@ionic-native/splash-screen').fetchSpec).toBe('5.36.0');
+      expect(node).toHaveProperty('externalDependencies', expect.any(Map));
+      expect(node).toHaveProperty('localDependencies', expect.any(Map));
+      expect(node).toHaveProperty('localDependents', expect.any(Map));
+    });
+
     it('computes prereleaseId from prerelease version', () => {
       const node = new PackageGraph([new Package({ name: 'my-pkg', version: '1.2.3-rc.4' } as unknown as RawManifest, '/path/to/my-pkg')]).get(
         'my-pkg'

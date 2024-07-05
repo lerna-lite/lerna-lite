@@ -6,6 +6,20 @@ import { ValidationError } from '../validation-error.js';
 import { NpaResolveResult } from '../models/index.js';
 
 /**
+ * A regular expression used to capture and substitute package versions (referred to as "spec" in the lerna-lite code).
+ *
+ * An example of what a spec looks like when the yarn patch protocol has been applied to it is this:
+ * `patch:@ionic-native/splash-screen@npm%3A5.36.0#~/.yarn/patches/@ionic-native-splash-screen-npm-5.36.0-531cbbe0f8.patch`
+ *
+ * We extract the original version string of the package from it and continue package graph traversal with that so that
+ * we can finish building the graph in projects where the yarn patch protocol is under use for patching third-party code.
+ *
+ * @see https://github.com/lerna-lite/lerna-lite/issues/223
+ * @see https://yarnpkg.com/cli/patch
+ */
+export const YARN_PATCH_PROTOCOL_REG_EXP = new RegExp(`patch:(.*)@npm%3A(.*)#~\\/.yarn\\/patches\\/(.*).patch`);
+
+/**
  * A graph of packages in the current project.
  *
  * @extends {Map<string, PackageGraphNode>}
@@ -67,6 +81,11 @@ export class PackageGraph extends Map<string, PackageGraphNode> {
         // As they apparently have no intention of being compatible, we have to do it for them.
         // @see https://github.com/yarnpkg/yarn/issues/4212
         let spec = graphDependencies[depName].replace(/^link:/, 'file:');
+
+        // Yarn patch protocol handling: We swap out the patch URL with the regular semantic version.
+        if (spec.startsWith('patch:')) {
+          spec = spec.replace(YARN_PATCH_PROTOCOL_REG_EXP, '$2');
+        }
 
         // npa doesn't support the explicit workspace: protocol, supported by
         // pnpm and Yarn.
