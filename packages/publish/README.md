@@ -74,6 +74,7 @@ This is useful when a previous `lerna publish` failed to publish all packages to
     - [semver `--bump from-git`](#semver--bump-from-git)
     - [semver `--bump from-package`](#semver--bump-from-package)
   - [Options](#options)
+    - [`--arborist-load-options`](#--arborist-load-options)
     - [`--canary`](#--canary)
     - [`--cleanup-temp-files`](#--cleanup-temp-files)
     - [`--contents <dir>`](#--contents-dir)
@@ -98,6 +99,21 @@ This is useful when a previous `lerna publish` failed to publish all packages to
     - [`--yes`](#--yes)
   - [`publishConfig` Overrides](#publishconfig-overrides)
   - [`workspace:` protocol](#workspace-protocol)
+
+### `--arborist-load-options`
+Arborist options that can be provided in your `lerna.json` config which are options associated to the `arborist.loadActual(options)` method.
+
+Only configurable via `lerna.json` because an object must be provided:
+
+```json
+{
+  "command": {
+    "publish": {
+      "arboristLoadOptions": { "ignoreMissing": true }
+    }
+  }
+}
+```
 
 ### `--canary`
 

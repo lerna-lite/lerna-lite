@@ -688,8 +688,8 @@ describe('PublishCommand', () => {
       expect(pkgTwo.contents).toBe(join(pkgTwo.location, 'dist'));
 
       // opts is a snapshot of npm-conf instance
-      expect(packDirectory).toHaveBeenCalledWith(pkgOne, dirOne, opts);
-      expect(packDirectory).toHaveBeenCalledWith(pkgTwo, dirTwo, opts);
+      expect(packDirectory).toHaveBeenCalledWith(pkgOne, dirOne, opts, { ignoreMissing: true });
+      expect(packDirectory).toHaveBeenCalledWith(pkgTwo, dirTwo, opts, { ignoreMissing: true });
     });
   });
 
@@ -711,7 +711,8 @@ describe('PublishCommand', () => {
           contents: join(cwd, 'packages/package-1/dist'),
         }),
         join(cwd, 'packages/package-1'),
-        expect.any(Object)
+        expect.any(Object),
+        { ignoreMissing: true }
       );
       expect(packDirectory).toHaveBeenCalledWith(
         expect.objectContaining({
@@ -719,7 +720,8 @@ describe('PublishCommand', () => {
           contents: join(cwd, 'packages/package-2'),
         }),
         join(cwd, 'packages/package-2'),
-        expect.any(Object)
+        expect.any(Object),
+        { ignoreMissing: true }
       );
     });
   });

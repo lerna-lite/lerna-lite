@@ -1,4 +1,4 @@
-import { ChangelogPresetOptions, RemoteClientType } from './interfaces.js';
+import { ArboristLoadOption, ChangelogPresetOptions, RemoteClientType } from './interfaces.js';
 
 export interface ChangedCommandOption {
   /** use conventional-changelog to determine version bump and generate CHANGELOG. */
@@ -335,6 +335,12 @@ export interface VersionCommandOption {
 }
 
 export interface PublishCommandOption extends VersionCommandOption {
+  /**
+   * Arborist options associated to the `arborist.loadActual(options)` method.
+   * ref: https://github.com/npm/cli/blob/6f33d74f310fa27aad30fd00d58d8e4404ef8cb2/workspaces/arborist/lib/arborist/load-actual.js#L98-L107
+   */
+  arboristLoadOptions?: ArboristLoadOption;
+
   /** alias to `--canary` */
   c?: boolean;
 

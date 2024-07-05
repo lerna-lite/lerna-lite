@@ -78,7 +78,8 @@ describe('lifecycle scripts', () => {
       expect.objectContaining({
         'ignore-prepublish': false,
         'ignore-scripts': false,
-      })
+      }),
+      { ignoreMissing: true }
     );
 
     expect((runLifecycle as any).getOrderedCalls()).toEqual([
@@ -152,7 +153,8 @@ describe('lifecycle scripts', () => {
       join(cwd, 'packages/package-2'),
       expect.objectContaining({
         'ignore-prepublish': true,
-      })
+      }),
+      { ignoreMissing: true }
     );
 
     // runLifecycle() is _called_ with "prepublish" for root,
@@ -178,7 +180,8 @@ describe('lifecycle scripts', () => {
       join(cwd, 'packages/package-2'),
       expect.objectContaining({
         'ignore-scripts': true,
-      })
+      }),
+      { ignoreMissing: true }
     );
   });
 });
