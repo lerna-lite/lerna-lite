@@ -273,10 +273,34 @@ describe('publish from-git', () => {
     expect(loggerSpy).toHaveBeenCalledWith('All packages have already been published.');
   });
 
-  it('should not throw and assume package is already published on npmjs.com registry when npm publish throws "You cannot publish over the previously published versions" from a previous half publish process', async () => {
+  it('should not throw and assume package is already published on npmjs.com registry when npm publish throws error E403 with message "You cannot publish over the previously published versions" from a previous half publish process', async () => {
     (npmPublish as Mock).mockImplementation(() => {
       const ex = new Error('You cannot publish over the previously published versions') as Error & { code: string };
       ex.code = 'E403';
+      return Promise.reject(ex);
+    });
+
+    const cwd = await initFixture('normal');
+
+    await gitTag(cwd, 'v1.0.0');
+    const command = new PublishCommand(createArgv(cwd, 'from-git', '--no-sort'));
+
+    await expect(command).resolves.toBeUndefined();
+
+    // called from chained describeRef()
+    expect(throwIfUncommitted).toHaveBeenCalled();
+
+    // since all packages rejected with publish conflict, we should have the "All published" message when recalling execute()
+    command.initialize();
+    const loggerSpy = vi.spyOn(command.logger, 'success');
+    await command.execute();
+    expect(loggerSpy).toHaveBeenCalledWith('All packages have already been published.');
+  });
+
+  it('should not throw and assume package is already published on npmjs.com registry when npm publish throws error E409 with message "Failed to save packument"', async () => {
+    (npmPublish as Mock).mockImplementation(() => {
+      const ex = new Error('Failed to save packument') as Error & { code: string };
+      ex.code = 'E409';
       return Promise.reject(ex);
     });
 
