@@ -833,7 +833,7 @@ export class PublishCommand extends Command<PublishCommandOption> {
       ...(
         [
           (pkg: Package & { packed: Tarball }) =>
-            pulseTillDone(packDirectory(pkg, pkg.location, opts)).then((packed: Tarball) => {
+            pulseTillDone(packDirectory(pkg, pkg.location, opts, this.options.arboristLoadOptions)).then((packed: Tarball) => {
               tracker.verbose('packed', relative(this.project.rootPath ?? '', pkg.contents));
               tracker.completeWork(1);
 

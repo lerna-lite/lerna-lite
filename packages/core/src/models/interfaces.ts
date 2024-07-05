@@ -11,6 +11,15 @@ export type JsonPrimitive = string | number | boolean | null;
 export type JsonValue = JsonPrimitive | JsonObject | JsonArray;
 /* eslint-enable no-use-before-define */
 
+export interface ArboristLoadOption {
+  global?: any;
+  filter?: (node?: any) => boolean;
+  root?: any;
+  transplantFilter?: (node?: any) => boolean;
+  ignoreMissing?: boolean;
+  forceActual?: boolean;
+}
+
 export interface CommandOptions {
   rollPublish?: boolean;
   rollVersion?: boolean;

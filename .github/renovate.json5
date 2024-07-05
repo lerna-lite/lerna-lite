@@ -12,7 +12,7 @@
     {
       // group all Conventional-Changelog dependencies
       matchPackagePatterns: ['^conventional-', '^@types/conventional-'],
-      groupName: 'Conventional-Changelog packages'
+      groupName: 'Conventional-Changelog packages',
     },
     {
       // npm security audit seems to prefer 1.2.6 for some reason
@@ -22,11 +22,6 @@
     {
       packageNames: ['node'],
       allowedVersions: '18.0.0',
-    },
-    {
-      // ref PR #844: https://github.com/lerna-lite/lerna-lite/pull/844
-      packageNames: ['npm-packlist'],
-      allowedVersions: '<6.0.0',
     },
     {
       packageNames: ['pnpm'],

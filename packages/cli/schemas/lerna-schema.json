@@ -316,6 +316,9 @@
           "type": "object",
           "description": "Options for the `publish` command.",
           "properties": {
+            "arboristLoadOptions": {
+              "$ref": "#/$defs/commandOptions/publish/arboristLoadOptions"
+            },
             "canary": {
               "$ref": "#/$defs/commandOptions/publish/canary"
             },
@@ -1173,6 +1176,10 @@
         }
       },
       "publish": {
+        "arboristLoadOptions": {
+          "type": "object",
+          "description": "During `lerna publish`, Arborist options associated to the `arborist.loadActual(options)` method."
+        },
         "canary": {
           "type": "boolean",
           "description": "During `lerna publish`, when true, publish packages after every successful merge using the sha as part of the tag."
