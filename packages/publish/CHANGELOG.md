@@ -4,6 +4,16 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [3.7.0](https://github.com/lerna-lite/lerna-lite/compare/v3.6.0...v3.7.0) (2024-07-05)
+
+### Features
+
+* **publish:** add `arboristLoadOptions` for optional `ignoreMissing` ([#889](https://github.com/lerna-lite/lerna-lite/issues/889)) ([f8417d1](https://github.com/lerna-lite/lerna-lite/commit/f8417d1eee5ecc8acbdff97afc7a044841a90920)) - by @ghiscoding
+
+### Bug Fixes
+
+* **publish:** ignore E409 error when re-publishing to NPM ([#890](https://github.com/lerna-lite/lerna-lite/issues/890)) ([d011168](https://github.com/lerna-lite/lerna-lite/commit/d0111685d03298d629b15607a29c23053018496e)) - by @ghiscoding
+
 ## [3.6.0](https://github.com/lerna-lite/lerna-lite/compare/v3.5.2...v3.6.0) (2024-06-27)
 
 ### Bug Fixes

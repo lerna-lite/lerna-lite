@@ -4,6 +4,13 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [3.7.0](https://github.com/lerna-lite/lerna-lite/compare/v3.6.0...v3.7.0) (2024-07-05)
+
+### Features
+
+* add support for Yarn patch protocol ([#887](https://github.com/lerna-lite/lerna-lite/issues/887)) ([05579ab](https://github.com/lerna-lite/lerna-lite/commit/05579ab949fbdf8a83300a637aba0e5e89cb6a93)), closes [#223](https://github.com/lerna-lite/lerna-lite/issues/223) - by @petermetz
+* **publish:** add `arboristLoadOptions` for optional `ignoreMissing` ([#889](https://github.com/lerna-lite/lerna-lite/issues/889)) ([f8417d1](https://github.com/lerna-lite/lerna-lite/commit/f8417d1eee5ecc8acbdff97afc7a044841a90920)) - by @ghiscoding
+
 ## [3.6.0](https://github.com/lerna-lite/lerna-lite/compare/v3.5.2...v3.6.0) (2024-06-27)
 
 ### Features
