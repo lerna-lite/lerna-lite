@@ -1,6 +1,6 @@
 /**
- * The purpose of this function is to determine whether the error object passed
- * in represents a version conflict when publishing a package to the npm registry.
+ * The purpose of this function is to determine whether the error object passed in
+ * represents a version conflict when publishing a package to the npm registry.
  *
  * An example of a version conflict error is:
  * ```json
@@ -31,8 +31,8 @@ export function isNpmJsPublishVersionConflict(ex: unknown): boolean {
     return true;
   } else if (
     'code' in ex &&
-    ex.code === 'E403' &&
-    ex.message?.includes('You cannot publish over the previously published versions')
+    ((ex.code === 'E409' && ex.message?.includes('Failed to save packument')) ||
+      (ex.code === 'E403' && ex.message?.includes('You cannot publish over the previously published versions')))
   ) {
     return true;
   }
