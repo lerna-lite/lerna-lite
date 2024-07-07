@@ -16,7 +16,7 @@ export function deleteComplexObjectProp(object: any, path: string, sourceName?: 
   return props.reduce((obj, prop) => {
     if (lastProp !== undefined && obj?.[prop] !== undefined && prop === lastProp) {
       delete obj[prop];
-      log.verbose('mutation', `Removed "${path}" field from ${sourceName || 'n/a'}.`);
+      log.verbose('pack', `Removed "${path}" field from ${sourceName || 'n/a'}.`);
     } else {
       return obj?.[prop];
     }
