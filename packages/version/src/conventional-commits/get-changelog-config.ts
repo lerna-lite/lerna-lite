@@ -33,7 +33,6 @@ export class GetChangelogConfig {
         config = config(presetConfig);
       } catch (_) {
         // legacy presets export an errback function instead of Q.all()
-        // eslint-disable-next-line @typescript-eslint/ban-types
         config = (pify(config) as Function)();
       }
     }

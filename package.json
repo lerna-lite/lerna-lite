@@ -38,6 +38,7 @@
     "prettier:write": "prettier --write **/*.{js,ts,yml,json}",
     "ci:lint": "eslint packages",
     "lint": "eslint packages --cache --cache-location ./node_modules/.cache/eslint",
+    "lint:no-cache": "eslint packages",
     "outdated:ws": "pnpm -r --stream outdated",
     "test": "vitest --watch --config ./vitest/vitest.config.ts",
     "posttest": "node scripts/cleanup-temp-files.mjs",
@@ -103,7 +104,7 @@
     "tslib": "^2.6.3",
     "tsm": "^2.3.0",
     "typescript": "^5.5.3",
-    "typescript-eslint": "^7.15.0",
+    "typescript-eslint": "^8.0.0-alpha.41",
     "vitest": "^2.0.0-beta.13",
     "write-json-file": "^5.0.0"
   }
