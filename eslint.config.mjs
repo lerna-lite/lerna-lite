@@ -43,6 +43,7 @@ export default tseslint.config(
       parser: tsParser,
       parserOptions: {
         project: ['./tsconfig.base.json'],
+        tsconfigRootDir: import.meta.dirname,
       },
     },
     settings: {
@@ -87,7 +88,12 @@ export default tseslint.config(
       '@typescript-eslint/no-empty-function': 'off',
       '@typescript-eslint/no-explicit-any': 'off',
       '@typescript-eslint/no-non-null-assertion': 'off',
-      '@typescript-eslint/no-unused-vars': ['error', { argsIgnorePattern: '^_', destructuredArrayIgnorePattern: '^_' }],
+      '@typescript-eslint/no-unsafe-function-type': 'off',
+      '@typescript-eslint/no-unused-expressions': 'off',
+      '@typescript-eslint/no-unused-vars': [
+        'error',
+        { argsIgnorePattern: '^_', destructuredArrayIgnorePattern: '^_', caughtErrors: 'none' },
+      ],
     },
   }
 );
