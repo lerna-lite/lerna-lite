@@ -37,6 +37,14 @@ export async function getGithubCommits(
   sinceDate: string,
   execOpts?: ExecOpts
 ): Promise<RemoteCommit[]> {
+  if (!sinceDate) {
+    log.warn(
+      'github',
+      'invalid "since" date provided to `getGithubCommits()` which is however required to properly fetch all GitHub commits info since the last release.'
+    );
+    return Promise.resolve([]);
+  }
+
   const repo = parseGitRepo(gitRemote, execOpts);
   const octokit = await createGitHubClient();
   const remoteCommits: Array<RemoteCommit> = [];
