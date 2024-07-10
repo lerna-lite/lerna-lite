@@ -12,7 +12,18 @@ import { getGithubCommits } from '../get-github-commits';
 const execOpts = { cwd: '/test' };
 
 describe('getGithubCommits method', () => {
-  it('logs a warning and returns an empty array of changes when git tag "since" date is invalid or undefined', async () => {
+  it('logs a warning and returns an empty array of changes when git tag "since" date is undefined', async () => {
+    const logSpy = vi.spyOn(log, 'warn');
+    const output = await getGithubCommits('durable', 'main', undefined as any, execOpts);
+
+    expect(output).toHaveLength(0);
+    expect(logSpy).toHaveBeenCalledWith(
+      'github',
+      'invalid "since" date provided to `getGithubCommits()` which is however required to properly fetch all GitHub commits info since the last release.'
+    );
+  });
+
+  it('logs a warning and returns an empty array of changes when git tag "since" date is empty', async () => {
     const logSpy = vi.spyOn(log, 'warn');
     const output = await getGithubCommits('durable', 'main', '', execOpts);
 
