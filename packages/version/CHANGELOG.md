@@ -4,6 +4,13 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [3.7.1](https://github.com/lerna-lite/lerna-lite/compare/v3.7.0...v3.7.1) (2024-07-13)
+
+### Bug Fixes
+
+* **deps:** update all non-major dependencies ([#894](https://github.com/lerna-lite/lerna-lite/issues/894)) ([c2c40fa](https://github.com/lerna-lite/lerna-lite/commit/c2c40fa73c263dc73efbe2b16710f26854102eda)) - by @renovate[bot]
+* **version:** don't throw when invalid since date found to query GraphQL ([#893](https://github.com/lerna-lite/lerna-lite/issues/893)) ([eee5bca](https://github.com/lerna-lite/lerna-lite/commit/eee5bcad884bb57b38968359cb226944d27bb88f)) - by @ghiscoding
+
 ## [3.7.0](https://github.com/lerna-lite/lerna-lite/compare/v3.6.0...v3.7.0) (2024-07-05)
 
 ### Bug Fixes
