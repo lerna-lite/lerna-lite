@@ -1,5 +1,18 @@
-import inquirer, { ListChoiceOptions, Question } from 'inquirer';
+import inquirer from 'inquirer';
 import { log } from '@lerna-lite/npmlog';
+
+interface ListChoiceOptions {
+  value: string;
+  name?: string;
+  description?: string;
+  disabled?: boolean | string;
+}
+
+interface Question {
+  choices: ListChoiceOptions[];
+  filter?: (args: any) => any;
+  validate?: (value: string) => boolean | string | Promise<string | boolean>;
+}
 
 /**
  * Prompt for confirmation
@@ -31,10 +44,7 @@ export async function promptConfirmation(message: string): Promise<boolean> {
  * @param {{ choices: import("inquirer").ListChoiceOptions[] } & Pick<import("inquirer").Question, 'filter' | 'validate'>} [options]
  * @returns {Promise<string>}
  */
-export async function promptSelectOne(
-  message: string,
-  { choices, filter, validate } = {} as { choices: ListChoiceOptions[] } & Pick<Question, 'filter' | 'validate'>
-): Promise<string> {
+export async function promptSelectOne(message: string, { choices, filter, validate } = {} as Question): Promise<string> {
   log.pause();
 
   const answers = await inquirer.prompt([
@@ -59,10 +69,7 @@ export async function promptSelectOne(
  * @param {Pick<import("inquirer").Question, 'filter' | 'validate'>} [options]
  * @returns {Promise<string>}
  */
-export async function promptTextInput(
-  message: string,
-  { filter, validate } = {} as Pick<Question, 'filter' | 'validate'>
-): Promise<string> {
+export async function promptTextInput(message: string, { filter, validate } = {} as Omit<Question, 'choices'>): Promise<string> {
   log.pause();
 
   const answers = await inquirer.prompt([
