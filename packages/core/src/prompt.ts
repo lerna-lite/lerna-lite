@@ -1,4 +1,6 @@
-import inquirer from 'inquirer';
+import expand from '@inquirer/expand';
+import input from '@inquirer/input';
+import select from '@inquirer/select';
 import { log } from '@lerna-lite/npmlog';
 
 interface ListChoiceOptions {
@@ -21,67 +23,54 @@ interface Question {
  */
 export async function promptConfirmation(message: string): Promise<boolean> {
   log.pause();
-  const answers = await inquirer.prompt([
-    {
-      type: 'expand',
-      name: 'confirm',
-      message,
-      default: 2, // default to help in order to avoid clicking straight through
-      choices: [
-        { key: 'y', name: 'Yes', value: true },
-        { key: 'n', name: 'No', value: false },
-      ],
-    },
-  ]);
+  const answers = await expand({
+    message,
+    default: 'h', // default to help in order to avoid clicking straight through
+    choices: [
+      { key: 'y', name: 'Yes', value: true },
+      { key: 'n', name: 'No', value: false },
+    ],
+  });
   log.resume();
 
-  return answers.confirm;
+  return answers;
 }
 
 /**
  * Prompt for selection
  * @param {string} message
- * @param {{ choices: import("inquirer").ListChoiceOptions[] } & Pick<import("inquirer").Question, 'filter' | 'validate'>} [options]
+ * @param {Question} [options]
  * @returns {Promise<string>}
  */
-export async function promptSelectOne(message: string, { choices, filter, validate } = {} as Question): Promise<string> {
+export async function promptSelectOne(message: string, { choices }: Question = {} as Question): Promise<string> {
   log.pause();
 
-  const answers = await inquirer.prompt([
-    {
-      type: 'list',
-      name: 'prompt',
-      message,
-      choices,
-      pageSize: choices.length,
-      filter,
-      validate,
-    },
-  ]);
+  const answers = await select({
+    message,
+    choices,
+    pageSize: choices.length,
+  });
   log.resume();
 
-  return answers.prompt;
+  return answers;
 }
 
 /**
  * Prompt for input
  * @param {string} message
- * @param {Pick<import("inquirer").Question, 'filter' | 'validate'>} [options]
+ * @param {Omit<Question, 'choices'>} [options]
  * @returns {Promise<string>}
  */
-export async function promptTextInput(message: string, { filter, validate } = {} as Omit<Question, 'choices'>): Promise<string> {
+export async function promptTextInput(message: string, { filter, validate }: Omit<Question, 'choices'> = {}): Promise<string> {
   log.pause();
 
-  const answers = await inquirer.prompt([
-    {
-      type: 'input',
-      name: 'input',
-      message,
-      filter,
-      validate,
-    },
-  ]);
+  const promptResult = await input({
+    message,
+    validate,
+  });
+
+  const finalResult = promptResult && typeof filter === 'function' ? filter(promptResult) : promptResult;
   log.resume();
 
-  return answers.input;
+  return finalResult;
 }

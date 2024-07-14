@@ -1,86 +1,81 @@
-import { describe, expect, it, vi } from 'vitest';
+import { describe, expect, it, Mock, vi } from 'vitest';
 
-vi.mock('inquirer');
+vi.mock('@inquirer/expand');
+vi.mock('@inquirer/input');
+vi.mock('@inquirer/select');
 
+import expand from '@inquirer/expand';
+import input from '@inquirer/input';
+import select from '@inquirer/select';
 import { log } from '@lerna-lite/npmlog';
-import inquirer from 'inquirer';
 
 import { promptConfirmation, promptSelectOne, promptTextInput } from '../prompt';
 
 describe('Prompt', () => {
   it('should prompt confirmation', async () => {
-    vi.spyOn(inquirer, 'prompt').mockResolvedValue({ confirm: true });
+    (expand as Mock).mockResolvedValue(true);
 
     const logPauseSpy = vi.spyOn(log, 'pause');
     const logResumeSpy = vi.spyOn(log, 'resume');
-    const inqSpy = vi.spyOn(inquirer, 'prompt');
 
     const output = await promptConfirmation('Choose something.');
     expect(logPauseSpy).toHaveBeenCalled();
     expect(logResumeSpy).toHaveBeenCalled();
-    expect(inqSpy).toHaveBeenCalledWith([
-      {
-        type: 'expand',
-        name: 'confirm',
-        message: 'Choose something.',
-        default: 2,
-        choices: [
-          { key: 'y', name: 'Yes', value: true },
-          { key: 'n', name: 'No', value: false },
-        ],
-      },
-    ]);
+    expect(expand).toHaveBeenCalledWith({
+      message: 'Choose something.',
+      default: 'h',
+      choices: [
+        { key: 'y', name: 'Yes', value: true },
+        { key: 'n', name: 'No', value: false },
+      ],
+    });
     expect(output).toBeTruthy();
   });
 
   it('should prompt confirmation return false', async () => {
-    vi.spyOn(inquirer, 'prompt').mockResolvedValue({ confirm: false });
+    (expand as Mock).mockResolvedValue(false);
 
     const logPauseSpy = vi.spyOn(log, 'pause');
     const logResumeSpy = vi.spyOn(log, 'resume');
-    const inqSpy = vi.spyOn(inquirer, 'prompt');
 
     const output = await promptConfirmation('Choose something.');
     expect(logPauseSpy).toHaveBeenCalled();
     expect(logResumeSpy).toHaveBeenCalled();
-    expect(inqSpy).toHaveBeenCalled();
+    expect(expand).toHaveBeenCalled();
     expect(output).toBeFalsy();
   });
 
   it('should prompt confirmation', async () => {
-    vi.spyOn(inquirer, 'prompt').mockResolvedValue({ confirm: true });
+    (expand as Mock).mockResolvedValue(true);
 
     const logPauseSpy = vi.spyOn(log, 'pause');
     const logResumeSpy = vi.spyOn(log, 'resume');
-    const inqSpy = vi.spyOn(inquirer, 'prompt');
 
     const output = await promptConfirmation('Choose something.');
     expect(logPauseSpy).toHaveBeenCalled();
     expect(logResumeSpy).toHaveBeenCalled();
-    expect(inqSpy).toHaveBeenCalled();
+    expect(expand).toHaveBeenCalled();
     expect(output).toBeTruthy();
   });
 
   it('should prompt confirmation return false', async () => {
-    vi.spyOn(inquirer, 'prompt').mockResolvedValue({ confirm: false });
+    (expand as Mock).mockResolvedValue(false);
 
     const logPauseSpy = vi.spyOn(log, 'pause');
     const logResumeSpy = vi.spyOn(log, 'resume');
-    const inqSpy = vi.spyOn(inquirer, 'prompt');
 
     const output = await promptConfirmation('Choose something.');
     expect(logPauseSpy).toHaveBeenCalled();
     expect(logResumeSpy).toHaveBeenCalled();
-    expect(inqSpy).toHaveBeenCalled();
+    expect(expand).toHaveBeenCalled();
     expect(output).toBeFalsy();
   });
 
   it('should prompt select one', async () => {
-    vi.spyOn(inquirer, 'prompt').mockResolvedValue({ prompt: true });
+    (select as Mock).mockResolvedValue(true);
 
     const logPauseSpy = vi.spyOn(log, 'pause');
     const logResumeSpy = vi.spyOn(log, 'resume');
-    const inqSpy = vi.spyOn(inquirer, 'prompt');
 
     const output = await promptSelectOne('Choose something.', {
       choices: [
@@ -91,39 +86,34 @@ describe('Prompt', () => {
     });
     expect(logPauseSpy).toHaveBeenCalled();
     expect(logResumeSpy).toHaveBeenCalled();
-    expect(inqSpy).toHaveBeenCalledWith([
-      {
-        choices: [
-          {
-            name: 'Patch',
-            value: 'patch',
-          },
-          {
-            name: 'Minor',
-            value: 'minor',
-          },
-          {
-            name: 'Major',
-            value: 'major',
-          },
-        ],
-        filter: undefined,
-        message: 'Choose something.',
-        name: 'prompt',
-        pageSize: 3,
-        type: 'list',
-        validate: undefined,
-      },
-    ]);
+    expect(select).toHaveBeenCalledWith({
+      choices: [
+        {
+          name: 'Patch',
+          value: 'patch',
+        },
+        {
+          name: 'Minor',
+          value: 'minor',
+        },
+        {
+          name: 'Major',
+          value: 'major',
+        },
+      ],
+      filter: undefined,
+      message: 'Choose something.',
+      pageSize: 3,
+      validate: undefined,
+    });
     expect(output).toBeTruthy();
   });
 
   it('should prompt select one return false', async () => {
-    vi.spyOn(inquirer, 'prompt').mockResolvedValue({ prompt: false });
+    (select as Mock).mockResolvedValue(false);
 
     const logPauseSpy = vi.spyOn(log, 'pause');
     const logResumeSpy = vi.spyOn(log, 'resume');
-    const inqSpy = vi.spyOn(inquirer, 'prompt');
 
     const output = await promptSelectOne('Choose something.', {
       choices: [
@@ -134,16 +124,15 @@ describe('Prompt', () => {
     });
     expect(logPauseSpy).toHaveBeenCalled();
     expect(logResumeSpy).toHaveBeenCalled();
-    expect(inqSpy).toHaveBeenCalled();
+    expect(select).toHaveBeenCalled();
     expect(output).toBeFalsy();
   });
 
   it('should prompt text input', async () => {
-    vi.spyOn(inquirer, 'prompt').mockResolvedValue({ input: true });
+    (input as Mock).mockResolvedValueOnce(true);
 
     const logPauseSpy = vi.spyOn(log, 'pause');
     const logResumeSpy = vi.spyOn(log, 'resume');
-    const inqSpy = vi.spyOn(inquirer, 'prompt');
 
     const output = await promptTextInput('Choose something...', {
       filter: () => true,
@@ -151,32 +140,78 @@ describe('Prompt', () => {
     });
     expect(logPauseSpy).toHaveBeenCalled();
     expect(logResumeSpy).toHaveBeenCalled();
-    expect(inqSpy).toHaveBeenCalledWith([
-      {
-        filter: expect.any(Function),
-        message: 'Choose something...',
-        name: 'input',
-        type: 'input',
-        validate: expect.any(Function),
-      },
-    ]);
+    expect(input).toHaveBeenCalledWith({
+      message: 'Choose something...',
+      validate: expect.any(Function),
+    });
     expect(output).toBeTruthy();
   });
 
-  it('should prompt text input return false', async () => {
-    vi.spyOn(inquirer, 'prompt').mockResolvedValue({ input: false });
+  it('should prompt text input and return false when validation is invalid', async () => {
+    const isValid = false;
+    (input as Mock).mockResolvedValueOnce(isValid);
 
     const logPauseSpy = vi.spyOn(log, 'pause');
     const logResumeSpy = vi.spyOn(log, 'resume');
-    const inqSpy = vi.spyOn(inquirer, 'prompt');
 
     const output = await promptTextInput('Choose something...', {
       filter: () => true,
-      validate: () => false,
+      validate: () => isValid,
     });
     expect(logPauseSpy).toHaveBeenCalled();
     expect(logResumeSpy).toHaveBeenCalled();
-    expect(inqSpy).toHaveBeenCalled();
+    expect(input).toHaveBeenCalled();
     expect(output).toBeFalsy();
+  });
+
+  it('should prompt text input and return true when validation is valid', async () => {
+    const isValid = true;
+    (input as Mock).mockResolvedValueOnce(isValid);
+
+    const logPauseSpy = vi.spyOn(log, 'pause');
+    const logResumeSpy = vi.spyOn(log, 'resume');
+
+    const output = await promptTextInput('Choose something...', {
+      filter: () => true,
+      validate: () => isValid,
+    });
+    expect(logPauseSpy).toHaveBeenCalled();
+    expect(logResumeSpy).toHaveBeenCalled();
+    expect(input).toHaveBeenCalled();
+    expect(output).toBeTruthy();
+  });
+
+  it('should prompt text input and return false when filter is falsy', async () => {
+    const filterOutput = false;
+    (input as Mock).mockResolvedValueOnce(true);
+
+    const logPauseSpy = vi.spyOn(log, 'pause');
+    const logResumeSpy = vi.spyOn(log, 'resume');
+
+    const output = await promptTextInput('Choose something...', {
+      filter: () => filterOutput,
+      validate: () => true,
+    });
+    expect(logPauseSpy).toHaveBeenCalled();
+    expect(logResumeSpy).toHaveBeenCalled();
+    expect(input).toHaveBeenCalled();
+    expect(output).toBeFalsy();
+  });
+
+  it('should prompt text input and return true when filter is truthy', async () => {
+    const filterOutput = true;
+    (input as Mock).mockResolvedValueOnce(true);
+
+    const logPauseSpy = vi.spyOn(log, 'pause');
+    const logResumeSpy = vi.spyOn(log, 'resume');
+
+    const output = await promptTextInput('Choose something...', {
+      filter: () => filterOutput,
+      validate: () => true,
+    });
+    expect(logPauseSpy).toHaveBeenCalled();
+    expect(logResumeSpy).toHaveBeenCalled();
+    expect(input).toHaveBeenCalled();
+    expect(output).toBeTruthy();
   });
 });
