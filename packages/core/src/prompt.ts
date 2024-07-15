@@ -64,7 +64,14 @@ export async function promptSelectOne(
  * @param {Omit<Question, 'choices'>} [options]
  * @returns {Promise<string>}
  */
-export async function promptTextInput(message: string, { filter, validate }: Omit<Question, 'choices'> = {}): Promise<string> {
+type InputConfig = Parameters<typeof input>[0];
+export async function promptTextInput(
+  message: string,
+  {
+    filter,
+    validate,
+  }: Pick<InputConfig, "validate"> & { filter?: (value: string) => string }
+): Promise<string> {
   log.pause();
 
   const promptResult = await input({
