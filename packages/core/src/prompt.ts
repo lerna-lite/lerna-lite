@@ -42,7 +42,10 @@ export async function promptConfirmation(message: string): Promise<boolean> {
  * @param {Question} [options]
  * @returns {Promise<string>}
  */
-export async function promptSelectOne(message: string, { choices }: Question = {} as Question): Promise<string> {
+export async function promptSelectOne(
+  message: string,
+  { choices }: Partial<Parameters<typeof select>[0]> = {}
+): Promise<string[]> {
   log.pause();
 
   const answers = await select({
