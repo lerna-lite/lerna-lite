@@ -3,19 +3,6 @@ import input from '@inquirer/input';
 import select from '@inquirer/select';
 import { log } from '@lerna-lite/npmlog';
 
-interface ListChoiceOptions {
-  value: string;
-  name?: string;
-  description?: string;
-  disabled?: boolean | string;
-}
-
-interface Question {
-  choices: ListChoiceOptions[];
-  filter?: (args: any) => any;
-  validate?: (value: string) => boolean | string | Promise<string | boolean>;
-}
-
 /**
  * Prompt for confirmation
  * @param {string} message
@@ -42,16 +29,17 @@ export async function promptConfirmation(message: string): Promise<boolean> {
  * @param {Question} [options]
  * @returns {Promise<string>}
  */
+type SelectConfigChoices = Partial<Parameters<typeof select>[0]>;
 export async function promptSelectOne(
   message: string,
-  { choices }: Partial<Parameters<typeof select>[0]> = {}
-): Promise<string[]> {
+  { choices }: SelectConfigChoices = {} as SelectConfigChoices
+): Promise<string> {
   log.pause();
 
   const answers = await select({
     message,
-    choices,
-    pageSize: choices.length,
+    choices: choices!,
+    pageSize: choices!.length,
   });
   log.resume();
 
@@ -67,10 +55,7 @@ export async function promptSelectOne(
 type InputConfig = Parameters<typeof input>[0];
 export async function promptTextInput(
   message: string,
-  {
-    filter,
-    validate,
-  }: Pick<InputConfig, "validate"> & { filter?: (value: string) => string }
+  { filter, validate }: Partial<Pick<InputConfig, 'validate'> & { filter?: (value: string) => string | null }>
 ): Promise<string> {
   log.pause();
 
