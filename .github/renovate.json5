@@ -65,5 +65,5 @@
     'conventional-changelog-conventionalcommits',
     'conventional-recommended-bump',
   ],
-  schedule: ['every 2 weeks on Thursday'],
+  schedule: ['every 2 weeks on Tuesday'],
 }
