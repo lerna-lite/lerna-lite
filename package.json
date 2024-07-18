@@ -94,7 +94,7 @@
     "load-json-file": "^7.0.1",
     "normalize-newline": "^4.1.0",
     "normalize-path": "^3.0.0",
-    "prettier": "^3.3.2",
+    "prettier": "^3.3.3",
     "rimraf": "^5.0.9",
     "semver": "^7.6.2",
     "tacks": "^1.2.6",
