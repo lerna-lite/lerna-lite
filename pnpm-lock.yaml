@@ -150,8 +150,8 @@ importers:
         specifier: ^2.0.4
         version: 2.0.4(@types/node@20.14.11)
       write-json-file:
-        specifier: ^5.0.0
-        version: 5.0.0
+        specifier: ^6.0.0
+        version: 6.0.0
 
   packages/changed:
     dependencies:
@@ -284,8 +284,8 @@ importers:
         specifier: ^5.0.1
         version: 5.0.1
       write-json-file:
-        specifier: ^5.0.0
-        version: 5.0.0
+        specifier: ^6.0.0
+        version: 6.0.0
       write-package:
         specifier: ^7.0.1
         version: 7.0.1
@@ -426,8 +426,8 @@ importers:
         specifier: ^7.0.2
         version: 7.0.2
       write-json-file:
-        specifier: ^5.0.0
-        version: 5.0.0
+        specifier: ^6.0.0
+        version: 6.0.0
     devDependencies:
       yargs-parser:
         specifier: ^21.1.1
@@ -763,8 +763,8 @@ importers:
         specifier: ^10.0.0
         version: 10.0.0
       write-json-file:
-        specifier: ^5.0.0
-        version: 5.0.0
+        specifier: ^6.0.0
+        version: 6.0.0
     devDependencies:
       '@npm/types':
         specifier: ^1.0.2
@@ -6350,7 +6350,6 @@ packages:
     dependencies:
       imurmurhash: 0.1.4
       signal-exit: 4.1.0
-    dev: false
 
   /write-json-file@5.0.0:
     resolution: {integrity: sha512-ddSsCLa4aQ3kI21BthINo4q905/wfhvQ3JL3774AcRjBaiQmfn5v4rw77jQ7T6CmAit9VOQO+FsLyPkwxoB1fw==}
@@ -6360,6 +6359,15 @@ packages:
       is-plain-obj: 4.1.0
       sort-keys: 5.0.0
       write-file-atomic: 3.0.3
+
+  /write-json-file@6.0.0:
+    resolution: {integrity: sha512-MNHcU3f9WxnNyR6MxsYSj64Jz0+dwIpisWKWq9gqLj/GwmA9INg3BZ3vt70/HB3GEwrnDQWr4RPrywnhNzmUFA==}
+    engines: {node: '>=18'}
+    dependencies:
+      detect-indent: 7.0.1
+      is-plain-obj: 4.1.0
+      sort-keys: 5.0.0
+      write-file-atomic: 5.0.1
 
   /write-package@7.0.1:
     resolution: {integrity: sha512-S7c5F2mpb5o+9pS1UfO3jcQb0OR25L7ZJT64cv3K0TkGh1VxJb+PNnL8b46KSJ6tmxIbA0xgHnrtBdVGeHmJ0A==}
