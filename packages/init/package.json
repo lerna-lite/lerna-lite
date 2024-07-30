@@ -38,7 +38,7 @@
     "@lerna-lite/core": "workspace:*",
     "fs-extra": "^11.2.0",
     "p-map": "^7.0.2",
-    "write-json-file": "^5.0.0"
+    "write-json-file": "^6.0.0"
   },
   "devDependencies": {
     "yargs-parser": "^21.1.1"

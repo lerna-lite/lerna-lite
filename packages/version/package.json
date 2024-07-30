@@ -67,7 +67,7 @@
     "slash": "^5.1.0",
     "temp-dir": "^3.0.0",
     "uuid": "^10.0.0",
-    "write-json-file": "^5.0.0"
+    "write-json-file": "^6.0.0"
   },
   "devDependencies": {
     "@npm/types": "^1.0.2",

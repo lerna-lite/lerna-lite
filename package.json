@@ -106,6 +106,6 @@
     "typescript": "^5.5.3",
     "typescript-eslint": "^8.0.0-alpha.51",
     "vitest": "^2.0.4",
-    "write-json-file": "^5.0.0"
+    "write-json-file": "^6.0.0"
   }
 }
