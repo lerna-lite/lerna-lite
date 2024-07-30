@@ -545,8 +545,8 @@ importers:
         specifier: ^5.2.0
         version: 5.2.0
       byte-size:
-        specifier: ^8.2.1
-        version: 8.2.1
+        specifier: ^9.0.0
+        version: 9.0.0
       chalk:
         specifier: ^5.3.0
         version: 5.3.0
@@ -2461,8 +2461,8 @@ packages:
     dependencies:
       semver: 7.6.3
 
-  /byte-size@8.2.1:
-    resolution: {integrity: sha512-pph2jjc3PxRLeB2nWfJy/tMiHnS6j7xhDlkglBp3KlchnJkILdZ2DmUyZ8svDJ5Z+q431vbhuoiuOvuGhY8fjw==}
+  /byte-size@9.0.0:
+    resolution: {integrity: sha512-xrJ8Hki7eQ6xew55mM6TG9zHI852OoAHcPfduWWtR6yxk2upTuIZy13VioRBDyHReHDdbeDPifUboeNkK/sXXA==}
     engines: {node: '>=12.17'}
     dev: false
 
