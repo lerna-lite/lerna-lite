@@ -35,9 +35,9 @@
     "node": "^18.0.0 || >=20.0.0"
   },
   "dependencies": {
-    "@inquirer/expand": "^2.1.17",
-    "@inquirer/input": "^2.2.4",
-    "@inquirer/select": "^2.4.2",
+    "@inquirer/expand": "^2.1.20",
+    "@inquirer/input": "^2.2.7",
+    "@inquirer/select": "^2.4.5",
     "@lerna-lite/npmlog": "workspace:^",
     "@npmcli/run-script": "^8.1.0",
     "chalk": "^5.3.0",
@@ -62,7 +62,7 @@
     "strong-log-transformer": "^2.1.0",
     "write-file-atomic": "^5.0.1",
     "write-json-file": "^6.0.0",
-    "write-package": "^7.0.1"
+    "write-package": "^7.1.0"
   },
   "devDependencies": {
     "@types/clone-deep": "^4.0.4",

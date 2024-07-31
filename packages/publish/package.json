@@ -65,7 +65,7 @@
     "@types/fs-extra": "^11.0.4",
     "@types/semver": "^7.5.8",
     "load-json-file": "^7.0.1",
-    "write-package": "^7.0.1",
+    "write-package": "^7.1.0",
     "yargs": "^17.7.2",
     "yargs-parser": "^21.1.1"
   }
