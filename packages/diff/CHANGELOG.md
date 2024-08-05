@@ -4,6 +4,10 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [3.8.0](https://github.com/lerna-lite/lerna-lite/compare/v3.7.1...v3.8.0) (2024-08-05)
+
+**Note:** Version bump only for package @lerna-lite/diff
+
 ## [3.7.1](https://github.com/lerna-lite/lerna-lite/compare/v3.7.0...v3.7.1) (2024-07-13)
 
 **Note:** Version bump only for package @lerna-lite/diff

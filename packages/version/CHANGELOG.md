@@ -4,6 +4,15 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [3.8.0](https://github.com/lerna-lite/lerna-lite/compare/v3.7.1...v3.8.0) (2024-08-05)
+
+### Bug Fixes
+
+* **deps:** update all non-major dependencies ([#899](https://github.com/lerna-lite/lerna-lite/issues/899)) ([6e1f45a](https://github.com/lerna-lite/lerna-lite/commit/6e1f45a8d29cb76cbc9c19d8d18fb9b488284215)) - by @renovate[bot]
+* **deps:** update all non-major dependencies ([#903](https://github.com/lerna-lite/lerna-lite/issues/903)) ([7dc9e7a](https://github.com/lerna-lite/lerna-lite/commit/7dc9e7ae021a6dbbac8c2eba1b117ba5ca85a514)) - by @renovate[bot]
+* **deps:** update dependency write-json-file to v6 ([#905](https://github.com/lerna-lite/lerna-lite/issues/905)) ([754c57f](https://github.com/lerna-lite/lerna-lite/commit/754c57f591261ed7d25dd28f4a898688df5aee1a)) - by @renovate[bot]
+* **version:** truncate release body based on maximum size allowed ([#909](https://github.com/lerna-lite/lerna-lite/issues/909)) ([72b576f](https://github.com/lerna-lite/lerna-lite/commit/72b576fd16d0f28ca45eddec9c0a54e32294eab0)) - by @ghiscoding
+
 ## [3.7.1](https://github.com/lerna-lite/lerna-lite/compare/v3.7.0...v3.7.1) (2024-07-13)
 
 ### Bug Fixes

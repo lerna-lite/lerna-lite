@@ -4,6 +4,12 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [3.8.0](https://github.com/lerna-lite/lerna-lite/compare/v3.7.1...v3.8.0) (2024-08-05)
+
+### Bug Fixes
+
+* **deps:** update dependency write-json-file to v6 ([#905](https://github.com/lerna-lite/lerna-lite/issues/905)) ([754c57f](https://github.com/lerna-lite/lerna-lite/commit/754c57f591261ed7d25dd28f4a898688df5aee1a)) - by @renovate[bot]
+
 ## [3.7.1](https://github.com/lerna-lite/lerna-lite/compare/v3.7.0...v3.7.1) (2024-07-13)
 
 **Note:** Version bump only for package @lerna-lite/init

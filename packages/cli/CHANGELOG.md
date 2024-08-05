@@ -4,6 +4,16 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [3.8.0](https://github.com/lerna-lite/lerna-lite/compare/v3.7.1...v3.8.0) (2024-08-05)
+
+### Features
+
+* **publish:** enable throttling when publishing modules ([#907](https://github.com/lerna-lite/lerna-lite/issues/907)) ([51e0ace](https://github.com/lerna-lite/lerna-lite/commit/51e0acebf79c9ee1f3352eed3a68eb09d8df6276)) - by @ghiscoding
+
+### Bug Fixes
+
+* **deps:** update all non-major dependencies ([#899](https://github.com/lerna-lite/lerna-lite/issues/899)) ([6e1f45a](https://github.com/lerna-lite/lerna-lite/commit/6e1f45a8d29cb76cbc9c19d8d18fb9b488284215)) - by @renovate[bot]
+
 ## [3.7.1](https://github.com/lerna-lite/lerna-lite/compare/v3.7.0...v3.7.1) (2024-07-13)
 
 **Note:** Version bump only for package @lerna-lite/cli

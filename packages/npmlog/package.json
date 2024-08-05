@@ -1,7 +1,7 @@
 {
   "name": "@lerna-lite/npmlog",
   "description": "Lerna-Lite npmlog reimplementation of the now deprecated npm/npmlog",
-  "version": "3.7.0",
+  "version": "3.8.0",
   "files": [
     "/dist"
   ],

@@ -4,6 +4,20 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [3.8.0](https://github.com/lerna-lite/lerna-lite/compare/v3.7.1...v3.8.0) (2024-08-05)
+
+### Features
+
+* **publish:** enable throttling when publishing modules ([#907](https://github.com/lerna-lite/lerna-lite/issues/907)) ([51e0ace](https://github.com/lerna-lite/lerna-lite/commit/51e0acebf79c9ee1f3352eed3a68eb09d8df6276)) - by @ghiscoding
+
+### Bug Fixes
+
+* **core:** use inquirer new modern approach to move away from legacy ([#897](https://github.com/lerna-lite/lerna-lite/issues/897)) ([4d07ed0](https://github.com/lerna-lite/lerna-lite/commit/4d07ed04962e2ffd04cfdb3c704e2b12cb5fe122)) - by @ghiscoding
+* **deps:** update all non-major dependencies ([#899](https://github.com/lerna-lite/lerna-lite/issues/899)) ([6e1f45a](https://github.com/lerna-lite/lerna-lite/commit/6e1f45a8d29cb76cbc9c19d8d18fb9b488284215)) - by @renovate[bot]
+* **deps:** update all non-major dependencies ([#903](https://github.com/lerna-lite/lerna-lite/issues/903)) ([7dc9e7a](https://github.com/lerna-lite/lerna-lite/commit/7dc9e7ae021a6dbbac8c2eba1b117ba5ca85a514)) - by @renovate[bot]
+* **deps:** update all non-major dependencies ([#908](https://github.com/lerna-lite/lerna-lite/issues/908)) ([2502959](https://github.com/lerna-lite/lerna-lite/commit/250295988c753d8bc6785bdb39b66fe843153500)) - by @renovate[bot]
+* **deps:** update dependency write-json-file to v6 ([#905](https://github.com/lerna-lite/lerna-lite/issues/905)) ([754c57f](https://github.com/lerna-lite/lerna-lite/commit/754c57f591261ed7d25dd28f4a898688df5aee1a)) - by @renovate[bot]
+
 ## [3.7.1](https://github.com/lerna-lite/lerna-lite/compare/v3.7.0...v3.7.1) (2024-07-13)
 
 ### Bug Fixes
