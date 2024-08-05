@@ -1,4 +1,4 @@
-import { ValidationError } from '@lerna-lite/core';
+import { RemoteClientType, ValidationError } from '@lerna-lite/core';
 import { log } from '@lerna-lite/npmlog';
 import chalk from 'chalk';
 import newGithubReleaseUrl from 'new-github-release-url';
@@ -50,6 +50,7 @@ export function createRelease(
       }
 
       const prereleaseParts = semver.prerelease(tag.replace(`${name}${tagVersionSeparator}`, '')) || [];
+      const body = truncateReleaseBody(notes || '', type);
 
       // when the `GH_TOKEN` (or `GITHUB_TOKEN`) environment variable is not set,
       // we'll create a link to GitHub web interface form with the fields pre-populated
@@ -60,7 +61,7 @@ export function createRelease(
           tag,
           isPrerelease: prereleaseParts.length > 0,
           title: tag,
-          body: notes,
+          body,
         });
         log.verbose('github', 'GH_TOKEN (or GITHUB_TOKEN) environment variable could not be found');
         log.info('github', `🏷️ (GitHub Release web interface) - 🔗 ${releaseUrl}`);
@@ -86,7 +87,7 @@ export function createRelease(
         releaseOptions.generate_release_notes = generateReleaseNotes;
       } else {
         releaseOptions.name = tag;
-        releaseOptions.body = notes;
+        releaseOptions.body = body;
       }
 
       if (dryRun) {
@@ -97,4 +98,25 @@ export function createRelease(
       return client.repos.createRelease(releaseOptions);
     })
   );
+}
+
+export function truncateReleaseBody(body: string, type?: RemoteClientType) {
+  let maxReleaseBodyLength: number | undefined;
+
+  switch (type) {
+    case 'gitlab':
+      maxReleaseBodyLength = 1000000;
+      break;
+    case 'github':
+      maxReleaseBodyLength = 125000;
+      break;
+    default:
+      return body;
+  }
+
+  if (body.length > maxReleaseBodyLength) {
+    const ellipsis = '...';
+    return body.slice(0, maxReleaseBodyLength - ellipsis.length) + ellipsis;
+  }
+  return body;
 }
