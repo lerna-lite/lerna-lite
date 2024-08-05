@@ -16,4 +16,5 @@ export * from './npm-dist-tag.js';
 export * from './npm-publish.js';
 export * from './pack-directory.js';
 export * from './remove-temp-licenses.js';
+export * from './throttle-queue.js';
 export * from './verify-npm-package-access.js';
