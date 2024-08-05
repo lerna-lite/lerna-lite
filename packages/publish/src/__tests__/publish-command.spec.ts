@@ -157,7 +157,7 @@ describe('PublishCommand', () => {
     it('publishes changed packages', async () => {
       const testDir = await initFixture('normal');
 
-      await new PublishCommand(createArgv(testDir, '--cleanup-temp-files'));
+      await new PublishCommand(createArgv(testDir, '--cleanup-temp-files', '--throttle'));
       // await lernaPublish(testDir)();
 
       expect(promptConfirmation).toHaveBeenLastCalledWith('Are you sure you want to publish these packages?');
