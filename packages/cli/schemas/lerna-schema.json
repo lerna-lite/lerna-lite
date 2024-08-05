@@ -1250,6 +1250,18 @@
           "anyOf": [{ "type": "string" }, { "type": "boolean" }],
           "description": "Generate a json summary report after all packages have been successfully published, you can pass an optional path for where to save the file."
         },
+        "throttle": {
+          "type": "boolean",
+          "description": "Throttle module publication. This is implicit if a throttle size or delay is provided"
+        },
+        "throttle-size": {
+          "type": "number",
+          "description": "Bucket size used to throttle module publication."
+        },
+        "throttle-delay": {
+          "type": "number",
+          "description": "Delay between throttle bucket items publications (in seconds)."
+        },
         "verifyAccess": {
           "type": "boolean",
           "description": "During `lerna publish`, when true, verify package read-write access for current npm user."

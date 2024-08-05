@@ -365,6 +365,15 @@ export interface PublishCommandOption extends VersionCommandOption {
   /** Publish prerelease packages with the specified npm dist-tag */
   preDistTag?: string;
 
+  /** Throttle module publication. This is implicit if a throttle size or delay is provided */
+  throttle?: boolean;
+
+  /** Bucket size used to throttle module publication. */
+  throttleSize?: number;
+
+  /** Delay between throttle bucket items publications (in seconds). */
+  throttleDelay?: number;
+
   /** Explicit SHA to set as gitHead when packing tarballs, only allowed with "from-package" positional. */
   gitHead?: string;
 
