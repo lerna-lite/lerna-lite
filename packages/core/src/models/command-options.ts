@@ -365,6 +365,10 @@ export interface PublishCommandOption extends VersionCommandOption {
   /** Publish prerelease packages with the specified npm dist-tag */
   preDistTag?: string;
 
+  throttle?: boolean;
+  throttleSize?: number;
+  throttleDelay?: number;
+
   /** Explicit SHA to set as gitHead when packing tarballs, only allowed with "from-package" positional. */
   gitHead?: string;
 

@@ -94,6 +94,7 @@ This is useful when a previous `lerna publish` failed to publish all packages to
     - [`--registry <url>`](#--registry-url)
     - [`--tag-version-prefix`](#--tag-version-prefix)
     - [`--temp-tag`](#--temp-tag)
+    - [`--throttle`](#--throttle)
     - [`--summary-file <dir>`](#--summary-file)
     - [`--verify-access`](#--verify-access)
     - [`--yes`](#--yes)
@@ -418,6 +419,20 @@ You should NOT use this option if:
 
 1.  You are using a third-party registry that does not support `npm access ls-packages`
 2.  You are using an authentication token without read access, such as a [npm automation access token](https://docs.npmjs.com/creating-and-viewing-access-tokens#creating-access-tokens)
+
+### `--throttle`
+
+This option class allows to throttle the timing at which modules are published to the configured registry.
+
+- `--throttle`: Enable throttling when publishing modules
+- `--throttle-size`: The amount of modules that may be published at once (defaults to `25`)
+- `--throttle-delay`: How long to wait after a module was successfully published (defaults to 30 seconds)
+
+This is usefull to avoid errors/retries when publishing to rate-limited repositories on huge monorepos:
+
+```bash
+lerna publish from-git --throttle --throttle-delay=$((3600*24))
+```
 
 ### `--yes`
 

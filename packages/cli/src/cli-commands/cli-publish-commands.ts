@@ -131,6 +131,18 @@ export default {
           'Generate a json summary report after all packages have been successfully published, you can pass an optional path for where to save the file.',
         type: 'string',
       },
+      throttle: {
+        describe: 'Throttle module publication. This is implicit if a throttle size or delay is provided',
+        type: 'boolean',
+      },
+      'throttle-size': {
+        describe: 'Bucket size used to throttle module publication.',
+        type: 'number',
+      },
+      'throttle-delay': {
+        describe: 'Delay between throttle bucket items publications (in seconds).',
+        type: 'number',
+      },
       'verify-access': {
         describe: 'Verify package read-write access for current npm user.',
         type: 'boolean',

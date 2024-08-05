@@ -52,7 +52,8 @@ import { overridePublishConfig } from './lib/override-publish-config.js';
 import { removeTempLicenses } from './lib/remove-temp-licenses.js';
 import { createTempLicenses } from './lib/create-temp-licenses.js';
 import { getPackagesWithoutLicense } from './lib/get-packages-without-license.js';
-import { Tarball } from './models/index.js';
+import { Queue, TailHeadQueue } from './lib/throttle-queue';
+import type { Tarball } from './models/index.js';
 import { isNpmJsPublishVersionConflict } from './lib/is-npm-js-publish-version-conflict.js';
 import { isNpmPkgGitHubPublishVersionConflict } from './lib/is-npm-pkg-github-publish-version-conflict.js';
 
@@ -901,6 +902,16 @@ export class PublishCommand extends Command<PublishCommandOption> {
     };
     process.on('log', logListener);
 
+    let queue: Queue | undefined = undefined;
+    if (this.options.throttle) {
+      const DEFAULT_QUEUE_THROTTLE_SIZE = 25;
+      const DEFAULT_QUEUE_THROTTLE_DELAY = 30;
+      queue = new TailHeadQueue(
+        this.options.throttleSize !== undefined ? this.options.throttleSize : DEFAULT_QUEUE_THROTTLE_SIZE,
+        (this.options.throttleDelay !== undefined ? this.options.throttleDelay : DEFAULT_QUEUE_THROTTLE_DELAY) * 1000
+      );
+    }
+
     const mapper = pPipe(
       ...(
         [
@@ -909,7 +920,11 @@ export class PublishCommand extends Command<PublishCommandOption> {
             const tag = !this.options.tempTag && preDistTag ? preDistTag : opts.tag;
             const pkgOpts = Object.assign({}, opts, { tag });
 
-            return pulseTillDone(npmPublish(pkg, pkg.packed.tarFilePath, pkgOpts, this.otpCache))
+            return pulseTillDone(
+              queue
+                ? queue.queue(() => npmPublish(pkg, pkg.packed.tarFilePath, pkgOpts, this.otpCache))
+                : npmPublish(pkg, pkg.packed.tarFilePath, pkgOpts, this.otpCache)
+            )
               .then(() => {
                 this.publishedPackages.push(pkg);
 
