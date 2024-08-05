@@ -52,7 +52,7 @@ import { overridePublishConfig } from './lib/override-publish-config.js';
 import { removeTempLicenses } from './lib/remove-temp-licenses.js';
 import { createTempLicenses } from './lib/create-temp-licenses.js';
 import { getPackagesWithoutLicense } from './lib/get-packages-without-license.js';
-import { Queue, TailHeadQueue } from './lib/throttle-queue';
+import { Queue, TailHeadQueue } from './lib/throttle-queue.js';
 import type { Tarball } from './models/index.js';
 import { isNpmJsPublishVersionConflict } from './lib/is-npm-js-publish-version-conflict.js';
 import { isNpmPkgGitHubPublishVersionConflict } from './lib/is-npm-pkg-github-publish-version-conflict.js';
