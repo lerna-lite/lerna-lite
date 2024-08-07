@@ -9,8 +9,16 @@ export default tseslint.config(
       '**/*.js',
       '**/*.mjs',
       '**/*/*.d.ts',
-      '**/__tests__/*',
-      '**/dist',      
+      '*.test.js',
+      '*.test.ts',
+      '*.spec.js',
+      '*.spec.ts',
+      '**/dist/*',
+      '**/__helpers__/**/*.*',
+      '**/__mocks__/**/*.*',
+      '**/__tests__/**/*.*',
+      '**/packages/**/*.js',
+      '**/__tests__/*'
     ],
   },
   {
