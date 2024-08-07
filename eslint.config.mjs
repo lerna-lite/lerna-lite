@@ -4,35 +4,20 @@ import n from 'eslint-plugin-n';
 import tsParser from '@typescript-eslint/parser';
 
 export default tseslint.config(
-  eslint.configs.recommended,
-  ...tseslint.configs.recommended,
   {
     ignores: [
-      '*.css',
-      '*.scss',
-      '*.html',
-      '*.png',
-      '*.json',
-      '*.js',
-      '*.d.ts',
-      '*.map',
-      '*.md',
-      '*.zip',
-      '*.test.js',
-      '*.test.ts',
-      '*.spec.js',
-      '*.spec.ts',
-      '**/**/*.json',
-      '**/**/*.js',
-      '**/__tests__/*.*',
-      '**/dist/**/*.*',
-      '**/__helpers__/**/*.*',
-      '**/__mocks__/**/*.*',
-      '**/__tests__/**/*.*',
-      '**/packages/**/*.js',
+      '**/*.js',
+      '**/*.mjs',
+      '**/*/*.d.ts',
+      '**/__tests__/*',
+      '**/dist',      
     ],
   },
   {
+    extends: [
+      eslint.configs.recommended,
+      ...tseslint.configs.recommended,
+    ],
     plugins: {
       '@typescript-eslint': tseslint.plugin,
       n,
@@ -48,7 +33,7 @@ export default tseslint.config(
     },
     settings: {
       node: {
-        tryExtensions: ['.js', '.json', '.node', '.ts', '.d.ts'],
+        tryExtensions: ['.ts'],
         resolvePaths: ['node_modules/@types'],
       },
     },
