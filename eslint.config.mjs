@@ -1,50 +1,26 @@
 import eslint from '@eslint/js';
 import tseslint from 'typescript-eslint';
 import n from 'eslint-plugin-n';
-import tsParser from '@typescript-eslint/parser';
+import vitest from 'eslint-plugin-vitest';
 
 export default tseslint.config(
   {
     ignores: [
       '**/*.js',
       '**/*.mjs',
+      '**/*.json',
+      '**/*.md',
       '**/*/*.d.ts',
-      '*.test.js',
-      '*.test.ts',
-      '*.spec.js',
-      '*.spec.ts',
       '**/dist/*',
       '**/__helpers__/**/*.*',
       '**/__mocks__/**/*.*',
-      '**/__tests__/**/*.*',
       '**/packages/**/*.js',
-      '**/__tests__/*'
     ],
   },
   {
-    extends: [
-      eslint.configs.recommended,
-      ...tseslint.configs.recommended,
-    ],
-    plugins: {
-      '@typescript-eslint': tseslint.plugin,
-      n,
-    },
-    files: ['**/*.ts'],
-
-    languageOptions: {
-      parser: tsParser,
-      parserOptions: {
-        project: ['./tsconfig.base.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-    },
-    settings: {
-      node: {
-        tryExtensions: ['.ts'],
-        resolvePaths: ['node_modules/@types'],
-      },
-    },
+    extends: [eslint.configs.recommended, ...tseslint.configs.recommended],
+    plugins: { n },
+    files: ['**/*.spec.ts', '**/*.ts'],
     rules: {
       'class-methods-use-this': 'off',
       'consistent-return': 'off',
@@ -87,6 +63,27 @@ export default tseslint.config(
         'error',
         { argsIgnorePattern: '^_', destructuredArrayIgnorePattern: '^_', caughtErrors: 'none' },
       ],
+    },
+  },
+  {
+    files: ['**/*.{spec,test}.ts'],
+    plugins: { vitest },
+    rules: {
+      ...vitest.configs.recommended.rules,
+      // ...vitest.configs.all.rules, // worth testing from time to time…
+
+      // Additional rules below taken from `vitest.configs.all.rules`
+      'vitest/consistent-test-it': 0,
+      'vitest/no-hooks': 0, // when testing `vitest.configs.all.rules`
+      'vitest/no-test-return-statement': 1,
+      'vitest/prefer-expect-assertions': 0, // when testing `vitest.configs.all.rules`
+      'vitest/prefer-todo': 1,
+      'vitest/require-to-throw-message': 1,
+    },
+    languageOptions: {
+      globals: {
+        ...vitest.environments.env.globals,
+      },
     },
   }
 );

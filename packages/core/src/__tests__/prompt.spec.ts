@@ -45,7 +45,7 @@ describe('Prompt', () => {
     expect(output).toBeFalsy();
   });
 
-  it('should prompt confirmation', async () => {
+  it('should prompt confirmation with an ouput', async () => {
     (expand as Mock).mockResolvedValue(true);
 
     const logPauseSpy = vi.spyOn(log, 'pause');
@@ -56,19 +56,6 @@ describe('Prompt', () => {
     expect(logResumeSpy).toHaveBeenCalled();
     expect(expand).toHaveBeenCalled();
     expect(output).toBeTruthy();
-  });
-
-  it('should prompt confirmation return false', async () => {
-    (expand as Mock).mockResolvedValue(false);
-
-    const logPauseSpy = vi.spyOn(log, 'pause');
-    const logResumeSpy = vi.spyOn(log, 'resume');
-
-    const output = await promptConfirmation('Choose something.');
-    expect(logPauseSpy).toHaveBeenCalled();
-    expect(logResumeSpy).toHaveBeenCalled();
-    expect(expand).toHaveBeenCalled();
-    expect(output).toBeFalsy();
   });
 
   it('should prompt select one', async () => {

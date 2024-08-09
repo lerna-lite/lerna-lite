@@ -29,11 +29,5 @@ describe('conf', () => {
       cli.localPrefix = 'v';
       expect(cli.prefix).toBe('v');
     });
-
-    // it('should return prefix also when called from a prefix callback', () => {
-    //   cli.prefix = () => 'v';
-    //   cli.globalPrefix = 'v';
-    //   expect(cli.prefix).toBe('v');
-    // });
   });
 });

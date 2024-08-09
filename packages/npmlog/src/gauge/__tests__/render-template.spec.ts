@@ -44,7 +44,6 @@ describe('renderTemplate', () => {
       result = renderTemplate(10, [{ type: 'xyzzy' }, 'static'], {});
       throw new Error('Test failed'); // intentionally throw error if no error is caught
     } catch (e) {
-      // eslint-disable-next-line
       expect(e).toBeDefined(); // missing type
     }
 

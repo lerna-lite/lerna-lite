@@ -331,19 +331,6 @@ describe('Init Command', () => {
         version: '1.2.3',
       });
     });
-
-    // it('creates package directories when glob is configured', async () => {
-    //   const testDir = await initFixture('has-lerna');
-    //   const lernaJsonPath = join(testDir, 'lerna.json');
-
-    //   await outputJson(lernaJsonPath, {
-    //     packages: ['modules/*'],
-    //   });
-
-    //   await lernaInit(testDir)();
-
-    //   expect(await pathExists(join(testDir, 'modules'), null)).toBe(true);
-    // });
   });
 
   describe('when re-initializing with --exact', () => {

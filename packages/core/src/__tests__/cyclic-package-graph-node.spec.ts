@@ -87,7 +87,7 @@ describe('CyclicPackageGraphNode class', () => {
     expect(pkgCyclic.contains('a')).toBeTruthy();
   });
 
-  it('should add localDependents to one of the package and expect the Cyclic Package Graph Node to include 1 localDependents in its array', async () => {
+  it('should add localDependents to multiple packages and expect the Cyclic Package Graph Node to include 1 localDependents in its array', async () => {
     const cwd = await initFixture('cycle-parent');
     const packages = await Project.getPackages(cwd);
     const pkgCyclic = new CyclicPackageGraphNode();

@@ -39,7 +39,7 @@ import {
 // Serialize the JSONError output to be more human readable
 expect.addSnapshotSerializer({
   serialize(str: string) {
-    // eslint-disable-next-line @typescript-eslint/no-var-requires
+    // eslint-disable-next-line @typescript-eslint/no-require-imports
     const stripAnsi = require('strip-ansi');
     return stripAnsi(str).replace(/Error in: .*lerna\.json/, 'Error in: normalized/path/to/lerna.json');
   },

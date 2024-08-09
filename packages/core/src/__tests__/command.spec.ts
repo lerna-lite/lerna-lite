@@ -340,7 +340,7 @@ describe('core-command', () => {
     ['initialize', 'execute'].forEach((method) => {
       it(`throws if ${method}() is not overridden`, () => {
         const command = new Command({ cwd: testDir, onRejected } as any);
-        expect(() => command[method]()).toThrow();
+        expect(() => command[method]()).toThrow('');
       });
     });
   });

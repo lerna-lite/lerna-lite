@@ -13,10 +13,6 @@ describe('TrackerGroup', () => {
 
   it('completion', () => {
     const track = new TrackerGroup(name);
-    const todo = 100;
-    const a = track.newItem('a', 10, 1);
-    const b = track.newItem('b', 10, 1);
-
     const promise = new Promise<void>((resolve) => {
       testEvent(track, 'change', afterFinishEmpty);
       track.finish();
@@ -31,10 +27,10 @@ describe('TrackerGroup', () => {
       }
     });
 
+    // eslint-disable-next-line vitest/no-test-return-statement
     return promise.then(() => {
       const track = new TrackerGroup(name);
       const a = track.newItem('a', 10, 1);
-      const b = track.newItem('b', 10, 1);
 
       const promise = new Promise<void>((resolve) => {
         testEvent(track, 'change', afterCompleteWork);
@@ -72,9 +68,7 @@ describe('TrackerGroup', () => {
 
   it('add more work', () => {
     const track = new TrackerGroup(name);
-    const todo = 100;
     const a = track.newItem('a', 10, 2);
-    const b = track.newItem('b', 10, 1);
 
     const promise = new Promise<void>((resolve) => {
       testEvent(track, 'change', afterAddWork);
@@ -90,6 +84,7 @@ describe('TrackerGroup', () => {
       }
     });
 
+    // eslint-disable-next-line vitest/no-test-return-statement
     return promise.then(() => {
       const promise = new Promise<void>((resolve) => {
         testEvent(track, 'change', afterWeightedFinishAll);
@@ -132,6 +127,7 @@ describe('TrackerGroup', () => {
       }
     });
 
+    // eslint-disable-next-line vitest/no-test-return-statement
     return promise;
   });
 
@@ -160,7 +156,6 @@ describe('TrackerGroup', () => {
       track.finish();
       expect(true).toBe(true);
     } catch (e) {
-      // eslint-disable-next-line
       expect(false).toBe(true);
     }
   });
