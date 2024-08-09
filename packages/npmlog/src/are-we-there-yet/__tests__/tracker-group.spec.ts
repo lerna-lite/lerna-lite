@@ -13,6 +13,9 @@ describe('TrackerGroup', () => {
 
   it('completion', () => {
     const track = new TrackerGroup(name);
+    track.newItem('a', 10, 1);
+    track.newItem('b', 10, 1);
+
     const promise = new Promise<void>((resolve) => {
       testEvent(track, 'change', afterFinishEmpty);
       track.finish();
@@ -31,6 +34,7 @@ describe('TrackerGroup', () => {
     return promise.then(() => {
       const track = new TrackerGroup(name);
       const a = track.newItem('a', 10, 1);
+      track.newItem('b', 10, 1);
 
       const promise = new Promise<void>((resolve) => {
         testEvent(track, 'change', afterCompleteWork);
@@ -69,6 +73,7 @@ describe('TrackerGroup', () => {
   it('add more work', () => {
     const track = new TrackerGroup(name);
     const a = track.newItem('a', 10, 2);
+    track.newItem('b', 10, 1);
 
     const promise = new Promise<void>((resolve) => {
       testEvent(track, 'change', afterAddWork);

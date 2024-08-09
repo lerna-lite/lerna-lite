@@ -20,7 +20,7 @@ export default tseslint.config(
   {
     extends: [eslint.configs.recommended, ...tseslint.configs.recommended],
     plugins: { n },
-    files: ['**/*.spec.ts', '**/*.ts'],
+    files: ['**/*.ts'],
     rules: {
       'class-methods-use-this': 'off',
       'consistent-return': 'off',
