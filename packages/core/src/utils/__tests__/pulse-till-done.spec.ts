@@ -16,7 +16,7 @@ describe('pulse-till-done()', () => {
     expect(data.name).toBeTruthy();
   });
 
-  it('should expect to execute a pulse and return the data when 1st input is a string prefix and 2nd argument is a Promise', async () => {
-    await expect(pulseTillDone(fetch.json('../../../invalid-file.json', { name: '@lerna-lite/core' }))).rejects.toThrow();
+  it('throws when an invalid file is provided to pulse', async () => {
+    await expect(pulseTillDone(fetch.json('../../../invalid-file.json', { name: '@lerna-lite/core' }))).rejects.toThrow('');
   });
 });

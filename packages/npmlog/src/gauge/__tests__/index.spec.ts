@@ -6,6 +6,7 @@ import { describe, expect, it } from 'vitest';
 import { Gauge } from '../index.js';
 
 function Sink(this: any) {
+  // eslint-disable-next-line prefer-rest-params
   stream.Writable.call(this, arguments);
 }
 util.inherits(Sink, stream.Writable);
@@ -24,6 +25,7 @@ MockPlumbing.prototype = {};
 
 function RecordCall(name: string) {
   return function () {
+    // eslint-disable-next-line prefer-rest-params
     const args = Array.prototype.slice.call(arguments);
     results.emit('called', [name, args]);
     results.emit('called:' + name, args);
@@ -76,7 +78,6 @@ describe('construct', () => {
 });
 
 describe('show & pulse: fixedframerate', () => {
-  // eslint-disable-next-line
   it('should show and pulse with fixed framerate', () =>
     new Promise((done: any) => {
       const testtimeout = setTimeout(() => {
@@ -117,7 +118,6 @@ describe('show & pulse: fixedframerate', () => {
 });
 
 describe('window resizing', () => {
-  // eslint-disable-next-line
   it('should handle window resizing', () =>
     new Promise((done: any) => {
       const testtimeout = setTimeout(() => {
@@ -170,7 +170,6 @@ function collectResults(time: number | undefined, cb: { (got: any): void; (got: 
 }
 
 describe('hideCursor:true', () => {
-  // eslint-disable-next-line
   it('should hide cursor when enabled', () =>
     new Promise((done: any) => {
       const output = new Sink();
@@ -201,7 +200,6 @@ describe('hideCursor:true', () => {
 });
 
 describe('hideCursor:false', () => {
-  // eslint-disable-next-line
   it('should not hide cursor when disabled', () =>
     new Promise((done: any) => {
       const output = new Sink();

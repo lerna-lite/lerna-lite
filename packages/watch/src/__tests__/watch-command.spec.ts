@@ -346,7 +346,7 @@ describe('Watch Command', () => {
       });
     });
 
-    it('should execute watch add callback only the given scope', async () => {
+    it('should execute watch addDir callback only on the given scope', async () => {
       await lernaWatch(testDir)('--debounce', '0', '--scope', 'package-2', '--', 'echo $LERNA_PACKAGE_NAME');
       await watchAddDirHandler('addDir', join(testDir, 'packages/package-2/some-folder'));
 
@@ -367,7 +367,7 @@ describe('Watch Command', () => {
       });
     });
 
-    it('should execute watch add callback only the given scope', async () => {
+    it('should execute watch unlink callback only on the given scope', async () => {
       await lernaWatch(testDir)('--debounce', '0', '--scope', 'package-2', '--', 'echo $LERNA_PACKAGE_NAME');
       await watchUnlinkHandler('unlink', join(testDir, 'packages/package-2/some-file.ts'));
 
@@ -388,7 +388,7 @@ describe('Watch Command', () => {
       });
     });
 
-    it('should execute watch add callback only the given scope', async () => {
+    it('should execute watch unlinkDir callback only on the given scope', async () => {
       await lernaWatch(testDir)('--debounce', '0', '--scope', 'package-2', '--', 'echo $LERNA_PACKAGE_NAME');
       await watchUnlinkDirHandler('unlinkDir', join(testDir, 'packages/package-2/some-folder'));
 

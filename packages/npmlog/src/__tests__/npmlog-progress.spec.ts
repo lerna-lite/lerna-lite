@@ -62,6 +62,7 @@ describe('log module', () => {
         actions.push(['hide']);
       },
       show() {
+        // eslint-disable-next-line prefer-rest-params
         actions.push(['show'].concat(Array.prototype.slice.call(arguments)));
       },
       pulse(name: any) {
@@ -89,6 +90,7 @@ describe('log module', () => {
     didActions('enableProgress', [['enable']]);
     log.enableProgress();
     didActions('enableProgress again', []);
+    expect(log.gauge.isEnabled()).toBe(true);
   });
 
   it('disableProgress', () => {
@@ -96,6 +98,7 @@ describe('log module', () => {
     didActions('disableProgress', [['disable']]);
     log.disableProgress();
     didActions('disableProgress again', []);
+    expect(log.gauge.isEnabled()).toBe(false);
   });
 
   it('showProgress', () => {
@@ -114,6 +117,7 @@ describe('log module', () => {
     log.showProgress('foo');
     didActions('showProgress', [['show', { section: 'foo', subsection: '', completed: 0, logline: 'info foo' }]]);
     log.record.length = 0;
+    expect(log.gauge.isEnabled()).toBe(true);
   });
 
   it('clearProgress', () => {
@@ -168,6 +172,7 @@ describe('log module', () => {
         },
       ],
     ]);
+    expect(log.gauge.isEnabled()).toBe(true);
   });
 
   it('newGroup', () => {
@@ -232,6 +237,7 @@ describe('log module', () => {
         },
       ],
     ]);
+    expect(log.gauge.isEnabled()).toBe(true);
   });
 
   it('newStream', () => {
@@ -282,6 +288,7 @@ describe('log module', () => {
     didActions('enableProgress', []);
     log.enableProgress();
     didActions('enableProgress again', []);
+    expect(log.gauge.isEnabled()).toBe(false);
   });
 
   it('pause while enableProgress', () => {
@@ -292,5 +299,6 @@ describe('log module', () => {
     didActions('enableProgress', [['enable'], ['disable']]);
     log.resume();
     didActions('enableProgress', [['enable']]);
+    expect(log.gauge.isEnabled()).toBe(true);
   });
 });
