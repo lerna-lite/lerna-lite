@@ -5,7 +5,7 @@ import { dirname } from 'node:path';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
-import { gitPush, gitPushSingleTag } from '../lib/git-push';
+import { gitPush, gitPushSingleTag } from '../lib/git-push.js';
 import { cloneFixtureFactory } from '@lerna-test/helpers';
 const cloneFixture = cloneFixtureFactory(__dirname);
 

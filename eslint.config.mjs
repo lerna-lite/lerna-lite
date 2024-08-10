@@ -1,34 +1,38 @@
 import eslint from '@eslint/js';
 import tseslint from 'typescript-eslint';
 import n from 'eslint-plugin-n';
+import node from 'eslint-plugin-node';
+import eslintPrettier from 'eslint-config-prettier';
 import vitest from 'eslint-plugin-vitest';
 
 export default tseslint.config(
   {
-    ignores: [
-      '**/*.{js,mjs}',
-      '**/*.{json,md}',
-      '**/*/*.d.ts',
-      '**/dist/*',
-      '**/__helpers__/**/*.*',
-      '**/__mocks__/**/*.*',
-    ],
+    ignores: ['**/*.{js,mjs,json,md}', '**/*/*.d.ts', '**/dist/*', '**/__helpers__/**/*.*', '**/__mocks__/**/*.*'],
   },
   {
     extends: [eslint.configs.recommended, ...tseslint.configs.recommended],
-    plugins: { n },
+    plugins: { n, node },
     files: ['**/*.ts'],
     rules: {
+      'arrow-body-style': 'off',
       'class-methods-use-this': 'off',
       'consistent-return': 'off',
       curly: ['error', 'all'],
       'default-param-last': 'off',
       'dot-notation': 'off',
-      'import/extensions': 'off',
       'import/no-extraneous-dependencies': 'off',
       'import/no-unresolved': 'off',
       'import/order': 'off',
+      'max-len': 'off',
       'n/no-missing-require': 'off',
+      'node/file-extension-in-import': [
+        'error',
+        'always',
+        {
+          tryExtensions: ['.js', '.json'],
+          '.xxx': 'always',
+        },
+      ],
       'no-async-promise-executor': 'off',
       'no-param-reassign': 'off',
       'no-restricted-syntax': 'off',
@@ -48,8 +52,6 @@ export default tseslint.config(
       'prefer-destructuring': 'off',
       'prefer-object-spread': 'off',
       strict: 'off',
-      'max-len': 'off',
-      'arrow-body-style': 'off',
       '@typescript-eslint/ban-ts-comment': 'off',
       '@typescript-eslint/no-empty-function': 'off',
       '@typescript-eslint/no-explicit-any': 'off',
@@ -82,5 +84,6 @@ export default tseslint.config(
         ...vitest.environments.env.globals,
       },
     },
-  }
+  },
+  eslintPrettier
 );

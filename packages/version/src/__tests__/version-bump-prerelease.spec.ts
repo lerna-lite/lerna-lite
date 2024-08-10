@@ -40,8 +40,8 @@ import { temporaryDirectory } from 'tempy';
 const { File, Dir } = Tacks;
 
 // test command
-import { VersionCommand } from '../version-command';
-import cliCommands from '../../../cli/src/cli-commands/cli-version-commands';
+import { VersionCommand } from '../version-command.js';
+import cliCommands from '../../../cli/src/cli-commands/cli-version-commands.js';
 const lernaVersion = commandRunner(cliCommands);
 
 // remove quotes around top-level strings

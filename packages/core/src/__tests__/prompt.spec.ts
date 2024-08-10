@@ -9,7 +9,7 @@ import input from '@inquirer/input';
 import select from '@inquirer/select';
 import { log } from '@lerna-lite/npmlog';
 
-import { promptConfirmation, promptSelectOne, promptTextInput } from '../prompt';
+import { promptConfirmation, promptSelectOne, promptTextInput } from '../prompt.js';
 
 describe('Prompt', () => {
   it('should prompt confirmation', async () => {

@@ -8,9 +8,9 @@ import { loggingOutput } from '@lerna-test/helpers/logging-output.js';
 import { log } from '@lerna-lite/npmlog';
 import runScript from '@npmcli/run-script';
 
-import { npmConf } from '../npm-conf';
-import { Package } from '../../package';
-import { runLifecycle, createRunner } from '../run-lifecycle';
+import { npmConf } from '../npm-conf.js';
+import { Package } from '../../package.js';
+import { runLifecycle, createRunner } from '../run-lifecycle.js';
 import { LifecycleConfig } from '../../models';
 
 describe('runLifecycle()', () => {

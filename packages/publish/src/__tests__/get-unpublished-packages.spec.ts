@@ -16,7 +16,7 @@ const __dirname = dirname(__filename);
 const initFixture = initFixtureFactory(__dirname);
 
 // file under test
-import { getUnpublishedPackages } from '../lib/get-unpublished-packages';
+import { getUnpublishedPackages } from '../lib/get-unpublished-packages.js';
 
 (pacote as any).packument.mockImplementation(async (pkg) => {
   if (pkg === 'package-1') {

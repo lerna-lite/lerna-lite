@@ -1,6 +1,6 @@
 import { beforeEach, describe, expect, it, Mock, vi } from 'vitest';
 
-import { Package } from '../../../package';
+import { Package } from '../../../package.js';
 
 vi.mock('../../describe-ref');
 vi.mock('../lib/has-tags');
@@ -13,15 +13,15 @@ vi.mock('globby', async () => ({
 }));
 
 // mocked modules
-import { describeRefSync } from '../../describe-ref';
-import { hasTags } from '../lib/has-tags';
-import { makeDiffPredicate } from '../lib/make-diff-predicate';
+import { describeRefSync } from '../../describe-ref.js';
+import { hasTags } from '../lib/has-tags.js';
+import { makeDiffPredicate } from '../lib/make-diff-predicate.js';
 
 // helpers
-import buildGraph from '../__helpers__/build-graph';
+import buildGraph from '../__helpers__/build-graph.js';
 
 // file under test
-import { collectUpdates } from '../collect-updates';
+import { collectUpdates } from '../collect-updates.js';
 
 // default mock implementations
 (describeRefSync as Mock).mockReturnValue({

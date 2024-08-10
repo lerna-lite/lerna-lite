@@ -7,7 +7,7 @@ vi.mock('../../git-clients', async () => ({
   parseGitRepo: (await vi.importActual<any>('../../__mocks__/github-client')).parseGitRepo,
 }));
 
-import { getGithubCommits } from '../get-github-commits';
+import { getGithubCommits } from '../get-github-commits.js';
 
 const execOpts = { cwd: '/test' };
 

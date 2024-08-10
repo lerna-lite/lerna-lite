@@ -26,7 +26,7 @@ const __dirname = dirname(__filename);
 const initFixture = initFixtureFactory(__dirname);
 
 // file under test
-import { Project } from '../index';
+import { Project } from '../index.js';
 
 describe('Project', () => {
   let testDir;

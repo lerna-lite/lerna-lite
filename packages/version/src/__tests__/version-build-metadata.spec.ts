@@ -22,7 +22,7 @@ vi.mock('@lerna-lite/core', async () => ({
 vi.mock('@lerna-lite/version', async () => vi.importActual('../version-command'));
 
 import { PackageGraphNode, promptSelectOne, promptTextInput, VersionCommandOption } from '@lerna-lite/core';
-import { makePromptVersion } from '../lib/prompt-version';
+import { makePromptVersion } from '../lib/prompt-version.js';
 
 import { dirname, resolve as pathResolve } from 'node:path';
 import yargParser from 'yargs-parser';
@@ -49,8 +49,8 @@ const initFixture = initFixtureFactory(pathResolve(__dirname, '../../../publish/
 import { showCommit } from '@lerna-test/helpers';
 
 // test command
-import { VersionCommand } from '../version-command';
-import cliCommands from '../../../cli/src/cli-commands/cli-version-commands';
+import { VersionCommand } from '../version-command.js';
+import cliCommands from '../../../cli/src/cli-commands/cli-version-commands.js';
 const lernaVersion = commandRunner(cliCommands);
 
 const createArgv = (cwd, ...args) => {

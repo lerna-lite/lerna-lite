@@ -12,7 +12,7 @@ vi.mock('load-json-file');
 vi.mock('write-package');
 
 // file under test
-import { Package } from '../package';
+import { Package } from '../package.js';
 import { NpaResolveResult, RawManifest } from '../models';
 
 const __filename = fileURLToPath(import.meta.url);

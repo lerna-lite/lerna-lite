@@ -13,7 +13,7 @@ const __dirname = dirname(__filename);
 const initFixture = initFixtureFactory(__dirname);
 
 // file under test
-import { collectUncommitted, collectUncommittedSync } from '../collect-uncommitted';
+import { collectUncommitted, collectUncommittedSync } from '../collect-uncommitted.js';
 
 // primary assertion setup
 const GREEN_A = chalk.green('A');

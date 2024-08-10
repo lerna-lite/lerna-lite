@@ -1,6 +1,6 @@
 import { beforeEach, describe, expect, it } from 'vitest';
-import { Conf } from '../conf';
-import * as defaults from '../defaults';
+import { Conf } from '../conf.js';
+import * as defaults from '../defaults.js';
 
 describe('conf', () => {
   describe('loadPrefix()', () => {

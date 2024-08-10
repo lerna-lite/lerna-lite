@@ -31,8 +31,8 @@ const initFixture = initFixtureFactory(__dirname);
 
 // file under test
 import yargParser from 'yargs-parser';
-import { ChangedCommand } from '../index';
-import { factory } from '../changed-command';
+import { ChangedCommand } from '../index.js';
+import { factory } from '../changed-command.js';
 const lernaChanged = commandRunner(cliChangedCommands);
 
 const createArgv = (cwd: string, ...args: string[]) => {

@@ -4,7 +4,7 @@ vi.mock('node-fetch');
 
 import fetch from 'node-fetch';
 
-import { GitLabClient } from '../GitLabClient';
+import { GitLabClient } from '../GitLabClient.js';
 
 describe('GitLabClient', () => {
   describe('constructor', () => {

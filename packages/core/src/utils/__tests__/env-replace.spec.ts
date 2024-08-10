@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
 
-import { envReplace } from '../env-replace';
+import { envReplace } from '../env-replace.js';
 
 describe('env-replace()', () => {
   it('should throw an error when there are no env variable defined or found', () => {

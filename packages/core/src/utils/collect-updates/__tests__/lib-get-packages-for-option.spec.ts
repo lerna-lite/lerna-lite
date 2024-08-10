@@ -1,7 +1,7 @@
 import { expect, test } from 'vitest';
 
 // file under test
-import { getPackagesForOption } from '../lib/get-packages-for-option';
+import { getPackagesForOption } from '../lib/get-packages-for-option.js';
 
 test('no argument', () => {
   const result = getPackagesForOption();

@@ -3,8 +3,8 @@ import chalk from 'chalk';
 import { log } from '@lerna-lite/npmlog';
 
 // file under test
-import { exec, execSync, getChildProcessCount, getExitCode, spawn, spawnStreaming } from '../child-process';
-import { Package } from '../package';
+import { exec, execSync, getChildProcessCount, getExitCode, spawn, spawnStreaming } from '../child-process.js';
+import { Package } from '../package.js';
 
 describe('childProcess', () => {
   it('should throw type error on weird but rare error structure', () => {

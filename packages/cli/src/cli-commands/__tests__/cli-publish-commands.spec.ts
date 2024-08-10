@@ -1,7 +1,7 @@
 import { describe, expect, it, vi } from 'vitest';
 
 vi.mock('@lerna-lite/publish', () => null);
-import cliPublish from '../cli-publish-commands';
+import cliPublish from '../cli-publish-commands.js';
 
 describe('Publish Command CLI options', () => {
   it('should log a console error when publishCommand is not provided', async () => {

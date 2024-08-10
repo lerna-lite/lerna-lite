@@ -2,8 +2,8 @@ import { beforeEach, describe, expect, it, Mock, vi } from 'vitest';
 
 vi.mock('../../child-process');
 
-import * as childProcess from '../../child-process';
-import { describeRef, describeRefSync } from '../describe-ref';
+import * as childProcess from '../../child-process.js';
+import { describeRef, describeRefSync } from '../describe-ref.js';
 import { DescribeRefDetailedResult } from '../../models';
 
 const DEFAULT_ARGS = ['describe', '--always', '--long', '--dirty', '--first-parent'];

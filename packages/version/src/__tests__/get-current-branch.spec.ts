@@ -2,7 +2,7 @@ import { expect, test } from 'vitest';
 import { dirname } from 'node:path';
 import { fileURLToPath } from 'node:url';
 
-import { getCurrentBranch } from '../lib/get-current-branch';
+import { getCurrentBranch } from '../lib/get-current-branch.js';
 import { initFixtureFactory } from '@lerna-test/helpers';
 
 const __filename = fileURLToPath(import.meta.url);

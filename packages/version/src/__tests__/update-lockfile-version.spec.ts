@@ -34,7 +34,7 @@ import {
   saveUpdatedLockJsonFile,
   runInstallLockFileOnly,
   validateFileExists,
-} from '../lib/update-lockfile-version';
+} from '../lib/update-lockfile-version.js';
 
 // Serialize the JSONError output to be more human readable
 expect.addSnapshotSerializer({

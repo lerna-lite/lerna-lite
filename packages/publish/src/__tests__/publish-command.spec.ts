@@ -55,8 +55,8 @@ import { commandRunner, initFixtureFactory } from '@lerna-test/helpers';
 const initFixture = initFixtureFactory(__dirname);
 
 // test command
-import { PublishCommand } from '../index';
-import cliCommands from '../../../cli/src/cli-commands/cli-publish-commands';
+import { PublishCommand } from '../index.js';
+import cliCommands from '../../../cli/src/cli-commands/cli-publish-commands.js';
 const lernaPublish = commandRunner(cliCommands);
 
 import yargParser from 'yargs-parser';
@@ -64,15 +64,15 @@ import yargParser from 'yargs-parser';
 // mocked or stubbed modules
 import { collectUpdates } from '@lerna-lite/core';
 import { getOneTimePassword } from '@lerna-lite/version';
-import { npmPublish } from '../lib/npm-publish';
-import { npmPublish as npmPublishMock } from '../lib/__mocks__/npm-publish';
+import { npmPublish } from '../lib/npm-publish.js';
+import { npmPublish as npmPublishMock } from '../lib/__mocks__/npm-publish.js';
 import { promptConfirmation, PublishCommandOption } from '@lerna-lite/core';
-import { packDirectory } from '../lib/pack-directory';
-import { getNpmUsername } from '../lib/get-npm-username';
-import { verifyNpmPackageAccess } from '../lib/verify-npm-package-access';
-import { getTwoFactorAuthRequired } from '../lib/get-two-factor-auth-required';
-import { gitCheckout } from '../lib/git-checkout';
-import * as npmDistTag from '../lib/npm-dist-tag';
+import { packDirectory } from '../lib/pack-directory.js';
+import { getNpmUsername } from '../lib/get-npm-username.js';
+import { verifyNpmPackageAccess } from '../lib/verify-npm-package-access.js';
+import { getTwoFactorAuthRequired } from '../lib/get-two-factor-auth-required.js';
+import { gitCheckout } from '../lib/git-checkout.js';
+import * as npmDistTag from '../lib/npm-dist-tag.js';
 
 // remove quotes around top-level strings
 expect.addSnapshotSerializer({

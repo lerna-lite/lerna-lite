@@ -1,11 +1,11 @@
 import { describe, expect, it } from 'vitest';
 
 import { RawManifest } from '../../models';
-import { Package } from '../../package';
-import { PackageGraphNode } from '../lib/package-graph-node';
+import { Package } from '../../package.js';
+import { PackageGraphNode } from '../lib/package-graph-node.js';
 
 // file under test
-import { PackageGraph } from '../package-graph';
+import { PackageGraph } from '../package-graph.js';
 
 describe('PackageGraph', () => {
   describe('constructor', () => {

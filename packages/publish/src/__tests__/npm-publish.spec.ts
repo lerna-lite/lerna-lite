@@ -20,7 +20,7 @@ import { runLifecycle, Package, RawManifest } from '@lerna-lite/core';
 import { dirname, join, normalize } from 'node:path';
 
 // file under test
-import { npmPublish } from '../lib/npm-publish';
+import { npmPublish } from '../lib/npm-publish.js';
 import { LibNpmPublishOptions } from '../models';
 
 describe('npm-publish', () => {

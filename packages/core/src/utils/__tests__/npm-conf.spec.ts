@@ -1,7 +1,7 @@
 import { describe, expect, it } from 'vitest';
 
-import * as npmConfModule from '../npm-conf';
-import { npmConf, toNerfDart, Conf } from '../npm-conf';
+import * as npmConfModule from '../npm-conf.js';
+import { npmConf, toNerfDart, Conf } from '../npm-conf.js';
 
 describe('@lerna/npm-conf', () => {
   it('exports default factory', () => {

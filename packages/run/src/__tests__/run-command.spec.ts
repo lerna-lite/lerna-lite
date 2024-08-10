@@ -26,11 +26,11 @@ import { fileURLToPath } from 'node:url';
 import { dirname } from 'node:path';
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
-import { npmRunScript, npmRunScriptStreaming } from '../lib/npm-run-script';
-import cliRunCommands from '../../../cli/src/cli-commands/cli-run-commands';
+import { npmRunScript, npmRunScriptStreaming } from '../lib/npm-run-script.js';
+import cliRunCommands from '../../../cli/src/cli-commands/cli-run-commands.js';
 
 // helpers
-import { factory, RunCommand } from '../index';
+import { factory, RunCommand } from '../index.js';
 import { commandRunner, initFixtureFactory, loggingOutput, normalizeRelativeDir } from '@lerna-test/helpers';
 const lernaRun = commandRunner(cliRunCommands);
 const initFixture = initFixtureFactory(__dirname);

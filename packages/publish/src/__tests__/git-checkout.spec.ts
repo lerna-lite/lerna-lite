@@ -9,7 +9,7 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
 const initFixture = initFixtureFactory(__dirname);
 
-import { gitCheckout } from '../lib/git-checkout';
+import { gitCheckout } from '../lib/git-checkout.js';
 
 test('gitCheckout files', async () => {
   const cwd = await initFixture('no-interdependencies');

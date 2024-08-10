@@ -37,10 +37,10 @@ import yargParser from 'yargs-parser';
 
 // mocked or stubbed modules
 import * as writePkg from 'write-package';
-import { npmPublish } from '../lib/npm-publish';
+import { npmPublish } from '../lib/npm-publish.js';
 import { npmPublish as npmPublishMock } from '../lib/__mocks__/npm-publish.js';
 import { logOutput, promptConfirmation, PublishCommandOption, throwIfUncommitted } from '@lerna-lite/core';
-import { getUnpublishedPackages } from '../lib/get-unpublished-packages';
+import { getUnpublishedPackages } from '../lib/get-unpublished-packages.js';
 
 // helpers
 const __filename = fileURLToPath(import.meta.url);
@@ -50,7 +50,7 @@ import { initFixtureFactory } from '@lerna-test/helpers';
 const initFixture = initFixtureFactory(__dirname);
 
 // file under test
-import { PublishCommand } from '../publish-command';
+import { PublishCommand } from '../publish-command.js';
 
 const createArgv = (cwd, ...args) => {
   args.unshift('publish');

@@ -2,7 +2,7 @@ import { expect, test } from 'vitest';
 import { dirname } from 'node:path';
 import { fileURLToPath } from 'node:url';
 
-import { getCurrentSHA } from '../lib/get-current-sha';
+import { getCurrentSHA } from '../lib/get-current-sha.js';
 import { initFixtureFactory } from '@lerna-test/helpers';
 
 const __filename = fileURLToPath(import.meta.url);

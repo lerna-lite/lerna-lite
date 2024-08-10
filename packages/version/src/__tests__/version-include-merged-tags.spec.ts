@@ -32,7 +32,7 @@ import { initFixtureFactory } from '@lerna-test/helpers';
 const initFixture = initFixtureFactory(__dirname);
 
 // file under test
-import { VersionCommand } from '../version-command';
+import { VersionCommand } from '../version-command.js';
 
 // remove quotes around top-level strings
 expect.addSnapshotSerializer({

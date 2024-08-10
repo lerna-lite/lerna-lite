@@ -9,7 +9,7 @@ vi.mock('@lerna-lite/core', async () => ({
 
 // file under test
 import { promptTextInput } from '@lerna-lite/core';
-import { otplease, getOneTimePassword } from '../otplease';
+import { otplease, getOneTimePassword } from '../otplease.js';
 
 // global mock setup
 (promptTextInput as Mock).mockResolvedValue('123456');

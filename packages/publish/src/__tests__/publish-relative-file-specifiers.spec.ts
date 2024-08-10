@@ -48,8 +48,8 @@ import { commandRunner, gitAdd, gitCommit, gitTag, initFixtureFactory } from '@l
 const initFixture = initFixtureFactory(__dirname);
 
 // test command
-import { PublishCommand } from '../index';
-import cliCommands from '../../../cli/src/cli-commands/cli-publish-commands';
+import { PublishCommand } from '../index.js';
+import cliCommands from '../../../cli/src/cli-commands/cli-publish-commands.js';
 const lernaPublish = commandRunner(cliCommands);
 
 import yargParser from 'yargs-parser';

@@ -4,8 +4,8 @@ vi.mock('@lerna-lite/core');
 vi.mock('../utils/temp-write');
 import { EOL } from 'node:os';
 import { exec } from '@lerna-lite/core';
-import { gitCommit } from '../lib/git-commit';
-import { tempWrite } from '../utils/temp-write';
+import { gitCommit } from '../lib/git-commit.js';
+import { tempWrite } from '../utils/temp-write.js';
 import { GitCommitOption } from '../models';
 
 describe('git commit', () => {

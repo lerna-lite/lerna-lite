@@ -10,7 +10,7 @@ vi.mock('@lerna-lite/core', async () => ({
 import fetch from 'npm-registry-fetch';
 
 // file under test
-import * as npmDistTag from '../lib/npm-dist-tag';
+import * as npmDistTag from '../lib/npm-dist-tag.js';
 import { DistTagOptions } from '../models';
 
 const stubLog = {

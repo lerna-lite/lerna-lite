@@ -1,7 +1,7 @@
 import { describe, expect, it, vi } from 'vitest';
 
 vi.mock('@lerna-lite/exec', () => null);
-import cliExec from '../cli-exec-commands';
+import cliExec from '../cli-exec-commands.js';
 
 describe('ExecCommand CLI options', () => {
   it('should log a console error when ExecCommand is not provided', async () => {
