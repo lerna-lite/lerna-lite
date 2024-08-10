@@ -21,7 +21,7 @@ import { dirname, join, normalize } from 'node:path';
 
 // file under test
 import { npmPublish } from '../lib/npm-publish.js';
-import { LibNpmPublishOptions } from '../models';
+import { LibNpmPublishOptions } from '../models/index.js';
 
 describe('npm-publish', () => {
   const mockTarData = Buffer.from('MOCK');

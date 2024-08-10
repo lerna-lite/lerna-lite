@@ -12,7 +12,7 @@ const initFixture = initFixtureFactory(__dirname);
 
 // file under test
 import { Package } from '@lerna-lite/core';
-import { applyBuildMetadata, recommendVersion, updateChangelog } from '../../conventional-commits';
+import { applyBuildMetadata, recommendVersion, updateChangelog } from '../../conventional-commits.js';
 import { GetChangelogConfig } from '../get-changelog-config.js';
 
 // stabilize changelog commit SHA and datestamp

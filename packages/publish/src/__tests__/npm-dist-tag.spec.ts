@@ -11,7 +11,7 @@ import fetch from 'npm-registry-fetch';
 
 // file under test
 import * as npmDistTag from '../lib/npm-dist-tag.js';
-import { DistTagOptions } from '../models';
+import { DistTagOptions } from '../models/index.js';
 
 const stubLog = {
   verbose: vi.fn(),

@@ -40,7 +40,7 @@ import yaml from 'js-yaml';
 // mocked or stubbed modules
 import * as writePkg from 'write-package';
 import { checkWorkingTree, collectUpdates, logOutput, promptConfirmation, promptSelectOne, throwIfUncommitted, VersionCommandOption } from '@lerna-lite/core';
-import { getCommitsSinceLastRelease } from '../conventional-commits';
+import { getCommitsSinceLastRelease } from '../conventional-commits/index.js';
 import { gitPush as libPush, gitPushSingleTag as libPushSingleTag } from '../lib/git-push.js';
 import { isAnythingCommitted } from '../lib/is-anything-committed.js';
 import { isBehindUpstream } from '../lib/is-behind-upstream.js';

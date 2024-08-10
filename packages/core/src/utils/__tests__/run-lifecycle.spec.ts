@@ -11,7 +11,7 @@ import runScript from '@npmcli/run-script';
 import { npmConf } from '../npm-conf.js';
 import { Package } from '../../package.js';
 import { runLifecycle, createRunner } from '../run-lifecycle.js';
-import { LifecycleConfig } from '../../models';
+import { LifecycleConfig } from '../../models/index.js';
 
 describe('runLifecycle()', () => {
   beforeEach(() => {

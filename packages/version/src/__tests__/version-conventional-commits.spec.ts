@@ -42,7 +42,7 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
 import * as writePkg from 'write-package';
 import { collectUpdates, VersionCommandOption } from '@lerna-lite/core';
-import { recommendVersion, updateChangelog } from '../conventional-commits';
+import { recommendVersion, updateChangelog } from '../conventional-commits/index.js';
 
 // helpers
 import { initFixtureFactory, showCommit } from '@lerna-test/helpers';

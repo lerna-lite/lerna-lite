@@ -84,7 +84,6 @@
     "eslint": "^9.8.0",
     "eslint-config-prettier": "^9.1.0",
     "eslint-plugin-n": "^17.10.2",
-    "eslint-plugin-node": "^11.1.0",
     "eslint-plugin-vitest": "^0.5.4",
     "execa": "^8.0.1",
     "file-url": "^4.0.0",
