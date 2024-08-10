@@ -1,6 +1,6 @@
 import { describe, expect, test } from 'vitest';
 
-import * as throttling from '../lib/throttle-queue';
+import * as throttling from '../lib/throttle-queue.js';
 
 describe('verifyTailHeadQueueBehavior', () => {
   test('immediately runs all provided resolving promises within queue size', async () => {

@@ -13,7 +13,7 @@ vi.mock('@lerna-lite/core', async () => ({
 import { execSync } from '@lerna-lite/core';
 
 // file under test
-import { getLastCommit } from '../../lib/get-last-commit';
+import { getLastCommit } from '../../lib/get-last-commit.js';
 
 describe('get-last-commit', () => {
   (execSync as Mock).mockImplementation(() => 'v1.0.0\nv1.0.1');

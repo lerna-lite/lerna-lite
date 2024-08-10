@@ -18,7 +18,7 @@ import { fileURLToPath } from 'node:url';
 import { log } from '@lerna-lite/npmlog';
 
 // partially mocked
-import { getChildProcessCount } from '../child-process';
+import { getChildProcessCount } from '../child-process.js';
 
 // helpers
 import { initFixtureFactory } from '@lerna-test/helpers';
@@ -29,7 +29,7 @@ const __dirname = dirname(__filename);
 const initFixture = initFixtureFactory(__dirname);
 
 // file under test
-import { Command } from '../command';
+import { Command } from '../command.js';
 
 describe('core-command', () => {
   let testDir = '';

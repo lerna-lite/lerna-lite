@@ -1,22 +1,17 @@
 import eslint from '@eslint/js';
 import tseslint from 'typescript-eslint';
 import n from 'eslint-plugin-n';
+import node from 'eslint-plugin-node';
+import eslintPrettier from 'eslint-config-prettier';
 import vitest from 'eslint-plugin-vitest';
 
 export default tseslint.config(
   {
-    ignores: [
-      '**/*.{js,mjs}',
-      '**/*.{json,md}',
-      '**/*/*.d.ts',
-      '**/dist/*',
-      '**/__helpers__/**/*.*',
-      '**/__mocks__/**/*.*',
-    ],
+    ignores: ['**/*.{js,mjs,json,md}', '**/*/*.d.ts', '**/dist/*', '**/__helpers__/**/*.*', '**/__mocks__/**/*.*'],
   },
   {
     extends: [eslint.configs.recommended, ...tseslint.configs.recommended],
-    plugins: { n },
+    plugins: { n, node },
     files: ['**/*.ts'],
     rules: {
       'class-methods-use-this': 'off',
@@ -29,6 +24,14 @@ export default tseslint.config(
       'import/no-unresolved': 'off',
       'import/order': 'off',
       'n/no-missing-require': 'off',
+      'node/file-extension-in-import': [
+        'error',
+        'always',
+        {
+          tryExtensions: ['.js', '.json'],
+          '.xxx': 'always',
+        },
+      ],
       'no-async-promise-executor': 'off',
       'no-param-reassign': 'off',
       'no-restricted-syntax': 'off',
@@ -82,5 +85,6 @@ export default tseslint.config(
         ...vitest.environments.env.globals,
       },
     },
-  }
+  },
+  eslintPrettier
 );

@@ -2,7 +2,7 @@ import { describe, expect, it } from 'vitest';
 import { pathExists } from 'fs-extra/esm';
 import { dirname, join } from 'node:path';
 import { Project } from '@lerna-lite/core';
-import { removeTempLicenses } from '../lib/remove-temp-licenses';
+import { removeTempLicenses } from '../lib/remove-temp-licenses.js';
 import { initFixtureFactory } from '@lerna-test/helpers';
 import { fileURLToPath } from 'node:url';
 const __filename = fileURLToPath(import.meta.url);

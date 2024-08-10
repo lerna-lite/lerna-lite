@@ -49,7 +49,7 @@ import { initFixtureFactory, showCommit } from '@lerna-test/helpers';
 const initFixture = initFixtureFactory(pathResolve(__dirname, '../../../publish/src/__tests__'));
 
 // test command
-import { VersionCommand } from '../version-command';
+import { VersionCommand } from '../version-command.js';
 import yargParser from 'yargs-parser';
 
 const createArgv = (cwd, ...args) => {

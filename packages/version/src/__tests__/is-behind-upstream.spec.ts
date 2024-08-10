@@ -4,7 +4,7 @@ import { cloneFixtureFactory } from '@lerna-test/helpers';
 import { fileURLToPath } from 'node:url';
 import { dirname } from 'node:path';
 
-import { isBehindUpstream } from '../lib/is-behind-upstream';
+import { isBehindUpstream } from '../lib/is-behind-upstream.js';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);

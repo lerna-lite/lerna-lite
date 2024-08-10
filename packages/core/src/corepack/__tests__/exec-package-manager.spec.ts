@@ -2,9 +2,9 @@ import chalk from 'chalk';
 import { beforeEach, describe, expect, it, Mock, vi } from 'vitest';
 import { log } from '@lerna-lite/npmlog';
 
-import { execPackageManager, execPackageManagerSync } from '../exec-package-manager';
-import { exec, execSync, getChildProcessCount } from '../../child-process';
-import { Package } from '../../package';
+import { execPackageManager, execPackageManagerSync } from '../exec-package-manager.js';
+import { exec, execSync, getChildProcessCount } from '../../child-process.js';
+import { Package } from '../../package.js';
 
 vi.mock('../../child-process', async () => ({
   ...(await vi.importActual<any>('../../child-process')),

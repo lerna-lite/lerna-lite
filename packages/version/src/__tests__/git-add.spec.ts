@@ -3,7 +3,7 @@ import { execa } from 'execa';
 import { outputFile, outputJson } from 'fs-extra/esm';
 import { dirname, join } from 'node:path';
 import slash from 'slash';
-import { gitAdd } from '../lib/git-add';
+import { gitAdd } from '../lib/git-add.js';
 
 import { initFixtureFactory } from '@lerna-test/helpers';
 import { fileURLToPath } from 'node:url';

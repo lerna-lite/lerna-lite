@@ -37,8 +37,8 @@ const initFixture = initFixtureFactory(pathResolve(__dirname, '../../../publish/
 import { getCommitMessage } from '@lerna-test/helpers';
 
 // test command
-import { factory, VersionCommand } from '../version-command';
-import cliCommands from '../../../cli/src/cli-commands/cli-version-commands';
+import { factory, VersionCommand } from '../version-command.js';
+import cliCommands from '../../../cli/src/cli-commands/cli-version-commands.js';
 const lernaVersion = commandRunner(cliCommands);
 
 const createArgv = (cwd, ...args) => {

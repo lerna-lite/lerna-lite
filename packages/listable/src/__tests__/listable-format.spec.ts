@@ -12,7 +12,7 @@ import Tacks from 'tacks';
 import { Project } from '@lerna-lite/core';
 import { loggingOutput } from '@lerna-test/helpers/logging-output.js';
 
-import { listable } from '../index';
+import { listable } from '../index.js';
 
 const { File, Dir } = Tacks;
 

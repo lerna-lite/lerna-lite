@@ -2,7 +2,7 @@ import { log } from '@lerna-lite/npmlog';
 import cloneDeep from 'clone-deep';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 
-import { deleteComplexObjectProp, getComplexObjectValue, isEmpty } from '../object-utils';
+import { deleteComplexObjectProp, getComplexObjectValue, isEmpty } from '../object-utils.js';
 
 describe('deleteComplexObjectProp method', () => {
   let obj = {};

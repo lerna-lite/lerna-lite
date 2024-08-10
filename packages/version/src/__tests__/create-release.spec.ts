@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
 
-import { truncateReleaseBody } from '../lib/create-release';
+import { truncateReleaseBody } from '../lib/create-release.js';
 
 describe('truncateReleaseBody', () => {
   const generateRandomString = (length: number): string => {

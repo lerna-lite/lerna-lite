@@ -29,8 +29,8 @@ import yargParser from 'yargs-parser';
 
 // mocked modules
 import * as writePkg from 'write-package';
-import { npmPublish } from '../lib/npm-publish';
-import { npmPublish as npmPublishMock } from '../lib/__mocks__/npm-publish';
+import { npmPublish } from '../lib/npm-publish.js';
+import { npmPublish as npmPublishMock } from '../lib/__mocks__/npm-publish.js';
 import { promptConfirmation, PublishCommandOption, describeRef, throwIfUncommitted } from '@lerna-lite/core';
 
 // helpers
@@ -40,8 +40,8 @@ const __dirname = dirname(__filename);
 const initFixture = initFixtureFactory(__dirname);
 
 // test command
-import { factory, PublishCommand } from '../index';
-import cliCommands from '../../../cli/src/cli-commands/cli-publish-commands';
+import { factory, PublishCommand } from '../index.js';
+import cliCommands from '../../../cli/src/cli-commands/cli-publish-commands.js';
 const lernaPublish = commandRunner(cliCommands);
 
 // remove quotes around top-level strings

@@ -11,9 +11,9 @@ const __dirname = dirname(__filename);
 const initFixture = initFixtureFactory(__dirname);
 
 // file under test
-import { InitCommand } from '../index';
-import { factory } from '../init-command';
-import cliCommands from '../../../cli/src/cli-commands/cli-init-commands';
+import { InitCommand } from '../index.js';
+import { factory } from '../init-command.js';
+import cliCommands from '../../../cli/src/cli-commands/cli-init-commands.js';
 const lernaInit = commandRunner(cliCommands);
 
 // file under test

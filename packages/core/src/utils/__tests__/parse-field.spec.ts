@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
 
-import { parseField } from '../parse-field';
+import { parseField } from '../parse-field.js';
 
 describe('parseField()', () => {
   it('should throw when failing to parse property from the JSON input', () => {

@@ -5,7 +5,7 @@ vi.mock('npm-registry-fetch');
 import fetch from 'npm-registry-fetch';
 import { loggingOutput } from '@lerna-test/helpers/logging-output.js';
 import { FetchConfig } from '@lerna-lite/core';
-import { getNpmUsername } from '../lib/get-npm-username';
+import { getNpmUsername } from '../lib/get-npm-username.js';
 
 (fetch.json as unknown as Mock).mockImplementation(() => Promise.resolve({ username: 'lerna-test' }));
 

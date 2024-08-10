@@ -7,7 +7,7 @@ import { execPackageManager, spawnStreaming } from '@lerna-lite/core';
 import { RunScriptOption, ScriptStreamingOption } from '../../models';
 
 // file under test
-import { npmRunScript, npmRunScriptStreaming } from '../npm-run-script';
+import { npmRunScript, npmRunScriptStreaming } from '../npm-run-script.js';
 
 describe('npm-run-script', () => {
   (execPackageManager as Mock).mockResolvedValue(null);

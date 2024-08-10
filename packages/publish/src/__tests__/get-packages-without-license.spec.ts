@@ -4,7 +4,7 @@ import { initFixtureFactory } from '@lerna-test/helpers';
 import { fileURLToPath } from 'node:url';
 import { dirname } from 'node:path';
 
-import { getPackagesWithoutLicense } from '../lib/get-packages-without-license';
+import { getPackagesWithoutLicense } from '../lib/get-packages-without-license.js';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);

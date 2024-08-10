@@ -30,8 +30,8 @@ vi.mock('../lib/get-unpublished-packages', async () => await vi.importActual('..
 vi.mock('../lib/npm-publish', async () => await vi.importActual('../lib/__mocks__/npm-publish'));
 
 // mocked modules
-import { npmPublish } from '../lib/npm-publish';
-import { npmPublish as npmPublishMock } from '../lib/__mocks__/npm-publish';
+import { npmPublish } from '../lib/npm-publish.js';
+import { npmPublish as npmPublishMock } from '../lib/__mocks__/npm-publish.js';
 import { logOutput, promptConfirmation, PublishCommandOption, throwIfUncommitted } from '@lerna-lite/core';
 
 // helpers
@@ -47,7 +47,7 @@ const initFixture = initFixtureFactory(__dirname);
 
 // test command
 import yargParser from 'yargs-parser';
-import { PublishCommand } from '../publish-command';
+import { PublishCommand } from '../publish-command.js';
 
 const createArgv = (cwd, ...args) => {
   args.unshift('publish');

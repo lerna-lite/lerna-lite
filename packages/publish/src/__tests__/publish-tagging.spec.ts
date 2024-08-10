@@ -37,8 +37,8 @@ vi.mock('@lerna-lite/version', async () => await vi.importActual('../../../versi
 
 // mocked modules
 import { collectUpdates, PublishCommandOption } from '@lerna-lite/core';
-import { npmPublish } from '../lib/npm-publish';
-import { add, remove } from '../lib/npm-dist-tag';
+import { npmPublish } from '../lib/npm-publish.js';
+import { add, remove } from '../lib/npm-dist-tag.js';
 
 // helpers
 import { dirname } from 'node:path';
@@ -50,7 +50,7 @@ const initFixture = initFixtureFactory(__dirname);
 
 // test command
 import yargParser from 'yargs-parser';
-import { PublishCommand } from '../index';
+import { PublishCommand } from '../index.js';
 
 const createArgv = (cwd, ...args) => {
   args.unshift('publish');

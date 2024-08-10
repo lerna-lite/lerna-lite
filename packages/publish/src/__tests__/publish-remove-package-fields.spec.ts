@@ -51,7 +51,7 @@ const initFixture = initFixtureFactory(__dirname);
 
 // test command
 import { updateLernaConfig } from '@lerna-test/helpers';
-import cliCommands from '../../../cli/src/cli-commands/cli-publish-commands';
+import cliCommands from '../../../cli/src/cli-commands/cli-publish-commands.js';
 const lernaPublish = commandRunner(cliCommands);
 
 describe('publish --remove-package-fields', () => {

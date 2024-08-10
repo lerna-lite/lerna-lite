@@ -29,9 +29,9 @@ const __dirname = dirname(__filename);
 const initFixture = initFixtureFactory(__dirname);
 
 // file under test
-import { ListCommand } from '../index';
-import { factory } from '../list-command';
-import cliListCommands from '../../../cli/src/cli-commands/cli-list-commands';
+import { ListCommand } from '../index.js';
+import { factory } from '../list-command.js';
+import cliListCommands from '../../../cli/src/cli-commands/cli-list-commands.js';
 const lernaList = commandRunner(cliListCommands);
 
 // file under test

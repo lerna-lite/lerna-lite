@@ -4,7 +4,7 @@ import { dirname } from 'node:path';
 
 import { Project } from '../project';
 import { initFixtureFactory } from '@lerna-test/helpers';
-import { CyclicPackageGraphNode } from '../package-graph/lib/cyclic-package-graph-node';
+import { CyclicPackageGraphNode } from '../package-graph/lib/cyclic-package-graph-node.js';
 import { PackageGraphNode } from '../package-graph';
 
 const __filename = fileURLToPath(import.meta.url);

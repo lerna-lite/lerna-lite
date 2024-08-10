@@ -38,7 +38,7 @@ vi.mock('../lib/npm-publish', async () => await vi.importActual('../lib/__mocks_
 
 // mocked modules
 import { loadJsonFile } from 'load-json-file';
-import { packDirectory } from '../lib/pack-directory';
+import { packDirectory } from '../lib/pack-directory.js';
 import { runLifecycle } from '@lerna-lite/core';
 
 // helpers
@@ -51,7 +51,7 @@ const __dirname = dirname(__filename);
 const initFixture = initFixtureFactory(__dirname);
 
 // test command
-import cliCommands from '../../../cli/src/cli-commands/cli-publish-commands';
+import cliCommands from '../../../cli/src/cli-commands/cli-publish-commands.js';
 const lernaPublish = commandRunner(cliCommands);
 
 describe('lifecycle scripts', () => {

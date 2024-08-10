@@ -35,8 +35,8 @@ const __dirname = dirname(__filename);
 import { commandRunner, initFixtureFactory } from '@lerna-test/helpers';
 import { loggingOutput } from '@lerna-test/helpers/logging-output.js';
 import { normalizeRelativeDir } from '@lerna-test/helpers';
-import { factory, ExecCommand } from '../index';
-import cliExecCommands from '../../../cli/src/cli-commands/cli-exec-commands';
+import { factory, ExecCommand } from '../index.js';
+import cliExecCommands from '../../../cli/src/cli-commands/cli-exec-commands.js';
 const lernaExec = commandRunner(cliExecCommands);
 const initFixture = initFixtureFactory(__dirname);
 

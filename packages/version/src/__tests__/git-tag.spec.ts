@@ -1,7 +1,7 @@
 import { describe, expect, it, vi } from 'vitest';
 import { exec } from '@lerna-lite/core';
 
-import { gitTag } from '../lib/git-tag';
+import { gitTag } from '../lib/git-tag.js';
 
 vi.mock('@lerna-lite/core', async () => {
   const { exec } = await vi.importActual<any>('@lerna-lite/core');

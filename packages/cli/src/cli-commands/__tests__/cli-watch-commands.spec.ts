@@ -1,7 +1,7 @@
 import { describe, expect, it, vi } from 'vitest';
 
 vi.mock('@lerna-lite/watch', () => null);
-import cliWatch from '../cli-watch-commands';
+import cliWatch from '../cli-watch-commands.js';
 
 describe('Watch Command CLI options', () => {
   it('should log a console error when watchCommand is not provided', async () => {

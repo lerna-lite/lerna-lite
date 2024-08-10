@@ -12,7 +12,7 @@ vi.mock('@lerna-lite/core', async (coreOriginal) => {
 });
 
 import { promptSelectOne, promptTextInput, prereleaseIdFromVersion, PackageGraphNode } from '@lerna-lite/core';
-import { makePromptVersion } from '../lib/prompt-version';
+import { makePromptVersion } from '../lib/prompt-version.js';
 
 const resolvePrereleaseId = vi.fn(() => 'alpha');
 const versionPrompt = makePromptVersion(resolvePrereleaseId);

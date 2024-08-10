@@ -9,7 +9,7 @@ import access from 'libnpmaccess';
 import { fileURLToPath } from 'node:url';
 import { dirname } from 'node:path';
 
-import { verifyNpmPackageAccess } from '../lib/verify-npm-package-access';
+import { verifyNpmPackageAccess } from '../lib/verify-npm-package-access.js';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);

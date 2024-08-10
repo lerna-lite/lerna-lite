@@ -33,7 +33,7 @@ import { initFixtureFactory } from '@lerna-test/helpers';
 const initFixture = initFixtureFactory(__dirname);
 
 // test command
-import { VersionCommand } from '../version-command';
+import { VersionCommand } from '../version-command.js';
 
 const createArgv = (cwd: string, ...args: string[]) => {
   args.unshift('version');

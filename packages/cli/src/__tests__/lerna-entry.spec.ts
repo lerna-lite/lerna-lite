@@ -15,7 +15,7 @@ vi.mock('@lerna-lite/core', async () => ({
   logOutput: (await vi.importActual<any>('../../../core/src/__mocks__/output')).logOutput,
 }));
 
-import { lerna } from '../lerna-entry';
+import { lerna } from '../lerna-entry.js';
 
 describe('cli lerna-entry', () => {
   it('should execute lerna changed', async () => {

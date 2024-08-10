@@ -1,8 +1,8 @@
 import { Writable } from 'stream';
 import { describe, expect, it } from 'vitest';
 
-import { TrackerStream } from '../tracker-stream';
-import testEvent from './test-event';
+import { TrackerStream } from '../tracker-stream.js';
+import testEvent from './test-event.js';
 
 class Sink extends Writable {
   _write(data: any, encoding: string, cb: () => void) {

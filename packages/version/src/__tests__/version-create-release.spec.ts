@@ -50,8 +50,8 @@ import { commandRunner, initFixtureFactory } from '@lerna-test/helpers';
 const initFixture = initFixtureFactory(__dirname);
 
 // test command
-import { VersionCommand } from '../version-command';
-import cliCommands from '../../../cli/src/cli-commands/cli-version-commands';
+import { VersionCommand } from '../version-command.js';
+import cliCommands from '../../../cli/src/cli-commands/cli-version-commands.js';
 const lernaVersion = commandRunner(cliCommands);
 
 import { log } from '@lerna-lite/npmlog';

@@ -31,9 +31,9 @@ import { gitInit } from '@lerna-test/helpers';
 import { gitTag } from '@lerna-test/helpers';
 
 // file under test
-import { DiffCommand } from '../index';
-import { factory } from '../diff-command';
-import cliDiffCommands from '../../../cli/src/cli-commands/cli-diff-commands';
+import { DiffCommand } from '../index.js';
+import { factory } from '../diff-command.js';
+import cliDiffCommands from '../../../cli/src/cli-commands/cli-diff-commands.js';
 const lernaDiff = commandRunner(cliDiffCommands);
 
 const createArgv = (cwd: string, ...args: string[]) => {

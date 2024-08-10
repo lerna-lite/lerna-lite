@@ -3,7 +3,7 @@ import { expect, Mock, test, vi } from 'vitest';
 vi.mock('../../../child-process');
 
 // mocked modules
-import * as childProcesses from '../../../child-process';
+import * as childProcesses from '../../../child-process.js';
 
 const { globMock } = vi.hoisted(() => ({ globMock: vi.fn() }));
 vi.mock('globby', async () => ({
@@ -12,7 +12,7 @@ vi.mock('globby', async () => ({
 }));
 
 // file under test
-import { makeDiffPredicate } from '../lib/make-diff-predicate';
+import { makeDiffPredicate } from '../lib/make-diff-predicate.js';
 
 function setup(changes) {
   (childProcesses.execSync as Mock).mockReturnValueOnce([].concat(changes).join('\n'));

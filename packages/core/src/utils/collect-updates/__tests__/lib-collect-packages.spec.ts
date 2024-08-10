@@ -1,12 +1,12 @@
 import { expect, test, vi } from 'vitest';
 
-import { Package } from '../../../package';
+import { Package } from '../../../package.js';
 
 // helpers
-import buildGraph from '../__helpers__/build-graph';
+import buildGraph from '../__helpers__/build-graph.js';
 
 // file under test
-import { collectPackages } from '../lib/collect-packages';
+import { collectPackages } from '../lib/collect-packages.js';
 
 const toNamesList = (collection: any[]) => Array.from(collection as Package[]).map((pkg) => pkg.name);
 

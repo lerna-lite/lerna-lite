@@ -38,9 +38,9 @@ import { dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
 
 // mocked modules
-import { packDirectory } from '../lib/pack-directory';
-import { createTempLicenses } from '../lib/create-temp-licenses';
-import { removeTempLicenses } from '../lib/remove-temp-licenses';
+import { packDirectory } from '../lib/pack-directory.js';
+import { createTempLicenses } from '../lib/create-temp-licenses.js';
+import { removeTempLicenses } from '../lib/remove-temp-licenses.js';
 
 // helpers
 const __filename = fileURLToPath(import.meta.url);
@@ -50,8 +50,8 @@ const initFixture = initFixtureFactory(__dirname);
 import { loggingOutput } from '@lerna-test/helpers/logging-output.js';
 
 // test command
-import { PublishCommand } from '../index';
-import cliCommands from '../../../cli/src/cli-commands/cli-publish-commands';
+import { PublishCommand } from '../index.js';
+import cliCommands from '../../../cli/src/cli-commands/cli-publish-commands.js';
 const lernaPublish = commandRunner(cliCommands);
 
 import yargParser from 'yargs-parser';

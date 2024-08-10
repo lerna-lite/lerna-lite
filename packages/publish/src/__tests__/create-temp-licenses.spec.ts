@@ -8,7 +8,7 @@ import { initFixtureFactory } from '@lerna-test/helpers';
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
 const initFixture = initFixtureFactory(__dirname);
-import { createTempLicenses } from '../lib/create-temp-licenses';
+import { createTempLicenses } from '../lib/create-temp-licenses.js';
 
 describe('createTempLicenses', () => {
   it('copies root license into package location', async () => {

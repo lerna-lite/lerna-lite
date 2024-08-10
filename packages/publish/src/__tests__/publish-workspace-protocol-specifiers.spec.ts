@@ -52,7 +52,7 @@ import { initFixtureFactory } from '@lerna-test/helpers';
 const initFixture = initFixtureFactory(__dirname);
 
 // test command
-import { PublishCommand } from '../index';
+import { PublishCommand } from '../index.js';
 
 import yargParser from 'yargs-parser';
 import { PublishCommandOption } from '@lerna-lite/core';

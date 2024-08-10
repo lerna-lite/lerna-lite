@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
 
-import { cleanStack } from '../clean-stack';
+import { cleanStack } from '../clean-stack.js';
 
 describe('clean-stack()', () => {
   it('should call cleanStack() and expect the method to split by newline and return the first substring', () => {

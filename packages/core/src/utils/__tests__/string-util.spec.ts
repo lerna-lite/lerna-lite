@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
 
-import { excludeValuesFromArray, pluralize } from '../string-utils';
+import { excludeValuesFromArray, pluralize } from '../string-utils.js';
 
 describe('String Utils', () => {
   describe('pluralize() method', () => {
