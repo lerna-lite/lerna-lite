@@ -5,7 +5,7 @@ import chalk from 'chalk';
 import { fileURLToPath } from 'node:url';
 
 // helpers
-import { Project } from '../../project';
+import { Project } from '../../project/project.js';
 import { gitAdd } from '@lerna-test/helpers';
 import { initFixtureFactory } from '@lerna-test/helpers';
 const __filename = fileURLToPath(import.meta.url);

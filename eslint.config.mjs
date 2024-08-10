@@ -1,7 +1,6 @@
 import eslint from '@eslint/js';
 import tseslint from 'typescript-eslint';
 import n from 'eslint-plugin-n';
-import node from 'eslint-plugin-node';
 import eslintPrettier from 'eslint-config-prettier';
 import vitest from 'eslint-plugin-vitest';
 
@@ -11,7 +10,7 @@ export default tseslint.config(
   },
   {
     extends: [eslint.configs.recommended, ...tseslint.configs.recommended],
-    plugins: { n, node },
+    plugins: { n },
     files: ['**/*.ts'],
     rules: {
       'arrow-body-style': 'off',
@@ -24,15 +23,8 @@ export default tseslint.config(
       'import/no-unresolved': 'off',
       'import/order': 'off',
       'max-len': 'off',
+      'n/file-extension-in-import': ['error', 'always'],
       'n/no-missing-require': 'off',
-      'node/file-extension-in-import': [
-        'error',
-        'always',
-        {
-          tryExtensions: ['.js', '.json'],
-          '.xxx': 'always',
-        },
-      ],
       'no-async-promise-executor': 'off',
       'no-param-reassign': 'off',
       'no-restricted-syntax': 'off',

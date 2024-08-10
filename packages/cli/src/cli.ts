@@ -1,6 +1,5 @@
 #!/usr/bin/env node
 
-// eslint-disable-next-line node/file-extension-in-import
 import 'dotenv/config';
 import importLocal from 'import-local';
 import { log } from '@lerna-lite/npmlog';

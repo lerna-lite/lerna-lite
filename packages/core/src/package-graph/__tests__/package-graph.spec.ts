@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
 
-import { RawManifest } from '../../models';
+import { RawManifest } from '../../models/index.js';
 import { Package } from '../../package.js';
 import { PackageGraphNode } from '../lib/package-graph-node.js';
 

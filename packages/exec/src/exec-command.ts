@@ -1,4 +1,3 @@
-// eslint-disable-next-line node/file-extension-in-import
 import 'dotenv/config';
 import chalk from 'chalk';
 import pMap from 'p-map';

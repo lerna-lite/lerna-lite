@@ -2,10 +2,10 @@ import { describe, expect, it } from 'vitest';
 import { fileURLToPath } from 'node:url';
 import { dirname } from 'node:path';
 
-import { Project } from '../project';
+import { Project } from '../project/project.js';
 import { initFixtureFactory } from '@lerna-test/helpers';
 import { CyclicPackageGraphNode } from '../package-graph/lib/cyclic-package-graph-node.js';
-import { PackageGraphNode } from '../package-graph';
+import { PackageGraphNode } from '../package-graph/index.js';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);

@@ -41,8 +41,8 @@ import { dirname } from 'node:path';
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
 import { logOutput, VersionCommandOption } from '@lerna-lite/core';
-import { updateChangelog, recommendVersion } from '../conventional-commits';
-import { createGitHubClient, createGitLabClient } from '../git-clients';
+import { updateChangelog, recommendVersion } from '../conventional-commits/index.js';
+import { createGitHubClient, createGitLabClient } from '../git-clients/index.js';
 import { createRelease, createReleaseClient } from '../lib/create-release.js';
 
 // helpers

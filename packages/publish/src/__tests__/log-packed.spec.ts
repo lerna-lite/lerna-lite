@@ -4,8 +4,8 @@ import { Package } from '@lerna-lite/core';
 import { log } from '@lerna-lite/npmlog';
 import chalk from 'chalk';
 
-import { logPacked } from '../lib';
-import { Tarball } from '../models';
+import { logPacked } from '../lib/index.js';
+import { Tarball } from '../models/index.js';
 
 describe('log-packed', () => {
   const pkg = {
