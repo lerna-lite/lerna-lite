@@ -6,15 +6,12 @@ import vitest from 'eslint-plugin-vitest';
 export default tseslint.config(
   {
     ignores: [
-      '**/*.js',
-      '**/*.mjs',
-      '**/*.json',
-      '**/*.md',
+      '**/*.{js,mjs}',
+      '**/*.{json,md}',
       '**/*/*.d.ts',
       '**/dist/*',
       '**/__helpers__/**/*.*',
       '**/__mocks__/**/*.*',
-      '**/packages/**/*.js',
     ],
   },
   {
