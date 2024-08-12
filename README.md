@@ -99,13 +99,13 @@ Below are the main reasons as to why this fork was created:
 1. Lerna repo was unmaintained for nearly 2 years (in early 2022, Lerna's dependencies were really out of date)
     - Lerna is now maintained again since Nrwl, the company behind Nx, took over stewardship of Lerna
         - please note that Lerna-Lite fork was created couple months **before** Nrwl took over Lerna
-        - we now also replicate Lerna's PRs whenever possible (except for `Nx` specific changes which are skipped)
-2. A desire to create a smaller and a lighter alternative compared to the original all-in-one Lerna tool
+        - we also replicate Lerna's PRs whenever possible (except for `Nx` specific changes which are skipped)
+2. A desire to create a smaller and lighter alternative compared to the original all-in-one Lerna tool
     - Lerna-Lite is entirely modular, all commands are totally optional (install only what you really need).
-3. Rewritten the lib in TypeScript and since v2.0 it is also built as ESM only (you can still use it in a CJS environment)
+3. The project was rewritten in TypeScript and also built as ESM only since v2.0 (you can still use it in a CJS environment)
 4. Newer version of the original Lerna v5.5+ is now requiring **[Nx](https://nx.dev/)**, however not needed by Lerna-Lite
    - note, if you already use `Nx` then it's probably better to use Lerna, otherwise Lerna-Lite is suggested   
-   - but if you use other tools like TurboRepo and install the original Lerna you end up with 2 similar tools (not good)
+   - if you use other tools like TurboRepo and install the original Lerna you end up with 2 similar tools (not good)
 5. Lerna-Lite added a few unique features (not available in Lerna itself):
    - [`workspace:` protocol support](https://github.com/lerna-lite/lerna-lite/tree/main/packages/version#workspace-protocol)
      * _Lerna added support for the same feature 6 months later in their v6.0 release_
@@ -281,7 +281,7 @@ npm install @lerna-lite/publish -D
     }
 }
 ```
-> **Note** after switching to Lerna-Lite and publishing your next release with conventional-changelog, you will probably see a lot of diff changes across your `changelog.md` files, many empty lines will be deleted, and that is totally expected since Lerna-Lite has code in place to remove these empty lines that were added by Lerna for no reason.
+> **Note** after switching to Lerna-Lite and publishing your next release with conventional-changelog, you will probably see a lot of diff changes across your `changelog.md` files, a lot of empty lines will be deleted, and that is totally expected since Lerna-Lite has code in place to remove these unnecessary empty lines.
 
 ## Project Demo?
 
@@ -291,7 +291,7 @@ Yes indeed, this project was originally created as an NPM Workspace and later mi
 
 ### See it in Action 🎦
 
-You can see a small video of a new version release on this [Release Demo - Wiki](https://github.com/lerna-lite/lerna-lite/wiki/Release-Demo) to demonstrate its usage. Confused with all these options? Perhaps taking a look at some of the references shown below might help you get started.
+You can see a small video of a new version release on this [Release Demo - Wiki](https://github.com/lerna-lite/lerna-lite/wiki/Release-Demo) to demonstrate its usage. Are you confused with all these options? Perhaps taking a look at some of the references shown below might help you get started.
 
 ### Good Lerna Tutorials / References
 
@@ -303,7 +303,7 @@ You can see a small video of a new version release on this [Release Demo - Wiki]
 
 [![PR](https://img.shields.io/badge/PR-Welcome-1abc9c)](https://github.com/lerna-lite/lerna-lite/pulls)
 
-Feel free to contribute any Pull Request. Also please note that the original code was not created by me and my knowledge of the library is still limited in some sections of the project. The main goal of this fork was to make it more modular and keep dependencies up to date (Renovate was put in place and runs weekly). 
+Contributions are very well encouraged. Also please note that the original code was created by much smarter persons that myself and my knowledge of the project might still lack in some areas of the project. The main goal of this fork was to make it more modular and keep dependencies up to date (Renovate was put in place and is running weekly). 
 
 ### Development / Contributions
 
@@ -311,7 +311,7 @@ To contribute to the project, please follow the steps shown in the [Contributing
 
 ## Troubleshooting
 
-If you have problems running the lib and your problems are related to Git commands that were executed, then we suggest to first try with the `--dry-run` option to see if it helps in finding the error(s) that you may have. Another great, and possibly much more useful suggestion, is to search in the original Lerna [issues](https://github.com/lerna/lerna/issues) list and see if any solution could help you (remember that Lerna-Lite is a fork of the original code from Lerna and it works the same way). Lastly, if that is not enough and you wish to troubleshoot yourself, then read this [Troubleshooting - Wiki](https://github.com/lerna-lite/lerna-lite/wiki/Troubleshooting) to possibly troubleshoot yourself the execution in your own environment.
+If you have problems running the project and your problems are related to Git commands that were executed, we then suggest to first try with the `--dry-run` option to see if it helps in finding the error(s) that you may have. Another great, and possibly much more useful suggestion, is to search in the original Lerna [issues](https://github.com/lerna/lerna/issues) list and see if any solution could help you (remember that Lerna-Lite is a fork of the original code from Lerna and it works the same way). Lastly, if that is not enough and you wish to troubleshoot yourself, then read this [Troubleshooting - Wiki](https://github.com/lerna-lite/lerna-lite/wiki/Troubleshooting) to possibly troubleshoot yourself the execution in your own environment.
 
 ## Published Packages
 
