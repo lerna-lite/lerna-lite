@@ -70,7 +70,7 @@
     "write-json-file": "^6.0.0"
   },
   "devDependencies": {
-    "@npm/types": "^1.0.2",
+    "@npm/types": "^2.0.0",
     "@types/conventional-changelog-core": "^4.2.7",
     "@types/conventional-changelog-writer": "^4.0.10",
     "@types/conventional-commits-parser": "^5.0.0",
