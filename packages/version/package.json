@@ -49,7 +49,7 @@
     "dedent": "^1.5.3",
     "fs-extra": "^11.2.0",
     "get-stream": "^9.0.1",
-    "git-url-parse": "^14.1.0",
+    "git-url-parse": "^15.0.0",
     "graceful-fs": "^4.2.11",
     "is-stream": "^4.0.1",
     "load-json-file": "^7.0.1",
