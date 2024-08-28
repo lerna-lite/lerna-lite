@@ -1,4 +1,4 @@
-# Lerna-Lite <img src="https://avatars.githubusercontent.com/u/120162016?s=96&amp;v=4" class="avatar" alt="@lerna-lite" size="55" height="55" width="55" data-view-component="true">
+# Lerna-Lite <img class="avatar" src="https://avatars.githubusercontent.com/u/120162016?s=96&amp;v=4" alt="@lerna-lite" height="55" width="55">
 
 <center>
 
