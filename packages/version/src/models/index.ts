@@ -6,11 +6,18 @@ import { Options as RecommendedBumpOptions } from 'conventional-recommended-bump
 export interface GitCommitOption {
   amend: boolean;
   commitHooks: boolean;
+  overrideMessage?: boolean;
   signGitCommit: boolean;
   signoffGitCommit: boolean;
 }
 
 export interface GitTagOption {
+  amend?: boolean;
+  commitHooks?: boolean;
+  granularPathspec?: boolean;
+  signGitCommit?: boolean;
+  signoffGitCommit?: boolean;
+  overrideMessage?: boolean;
   forceGitTag?: boolean;
   signGitTag?: boolean;
 }

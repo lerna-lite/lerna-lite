@@ -295,6 +295,9 @@ export interface VersionCommandOption {
   /** Pass the `--force` flag to `git tag`. */
   forceGitTag?: boolean;
 
+  /** Are we overriding the commit message? */
+  overrideMessage?: boolean;
+
   /** Defaults to 'v', customize the tag prefix. To remove entirely, pass an empty string. */
   tagVersionPrefix?: string;
 
