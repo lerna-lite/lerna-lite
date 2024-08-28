@@ -1045,6 +1045,7 @@ export class PublishCommand extends Command<PublishCommandOption> {
   }
 
   private getSummaryFilePath(): string {
+    /* v8 ignore next 3 */
     if (this.options.summaryFile === undefined) {
       throw new Error('summaryFile options is not defined. Unable to get path.');
     }
@@ -1055,6 +1056,7 @@ export class PublishCommand extends Command<PublishCommandOption> {
 
     const normalizedPath = normalize(this.options.summaryFile);
 
+    /* v8 ignore next 3 */
     if (normalizedPath === '') {
       throw new Error('summaryFile is not a valid path.');
     }
