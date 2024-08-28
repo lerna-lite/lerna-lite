@@ -43,5 +43,8 @@
   "devDependencies": {
     "mock-stdin": "^1.0.0",
     "yargs-parser": "^21.1.1"
+  },
+  "overrides": {
+    "braces": "^3.0.3"
   }
 }
