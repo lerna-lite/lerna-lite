@@ -796,12 +796,12 @@ describe('VersionCommand', () => {
       expect(checkWorkingTree).not.toHaveBeenCalled();
     });
 
-    it('ignores custom messages', async () => {
-      const testDir = await initFixture('normal', 'preserved');
-      await new VersionCommand(createArgv(testDir, '-m', 'ignored', '--amend'));
+    it('considers custom messages', async () => {
+      const cwd = await initFixture('normal', 'preserved');
+      await lernaVersion(cwd)('-m', 'custom', '--amend');
 
-      const message = await getCommitMessage(testDir);
-      expect(message).toBe('preserved');
+      const message = await getCommitMessage(cwd);
+      expect(message).toBe('custom');
     });
   });
 

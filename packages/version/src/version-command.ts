@@ -124,12 +124,14 @@ export class VersionCommand extends Command<VersionCommandOption> {
       forceGitTag,
       tagVersionPrefix = 'v',
       premajorVersionBump = 'default',
+      message,
     } = this.options;
 
     this.gitRemote = gitRemote;
     this.tagPrefix = tagVersionPrefix;
     this.commitAndTag = gitTagVersion;
     this.pushToRemote = gitTagVersion && amend !== true && push;
+    const overrideMessage = amend && !!message;
     this.changelogIncludeCommitsClientLogin =
       changelogIncludeCommitsClientLogin === '' ? true : changelogIncludeCommitsClientLogin;
     this.changelogIncludeCommitsGitAuthor = changelogIncludeCommitsGitAuthor === '' ? true : changelogIncludeCommitsGitAuthor;
@@ -179,6 +181,7 @@ export class VersionCommand extends Command<VersionCommandOption> {
       amend,
       commitHooks,
       granularPathspec,
+      overrideMessage,
       signGitCommit,
       signoffGitCommit,
       signGitTag,

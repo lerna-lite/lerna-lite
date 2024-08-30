@@ -12,7 +12,7 @@ import { tempWrite } from '../utils/index.js';
  */
 export function gitCommit(
   message: string,
-  { amend, commitHooks, signGitCommit, signoffGitCommit }: GitCommitOption,
+  { amend, commitHooks, overrideMessage, signGitCommit, signoffGitCommit }: GitCommitOption,
   opts: ExecOpts,
   dryRun = false
 ) {
@@ -31,13 +31,20 @@ export function gitCommit(
     args.push('--signoff');
   }
 
+  const shouldChangeMessage = amend ? amend && overrideMessage : true;
   if (amend) {
-    args.push('--amend', '--no-edit');
-  } else if (message.indexOf(EOL) > -1) {
-    // Use tempfile to allow multi\nline strings.
-    args.push('-F', tempWrite.sync(message, 'lerna-commit.txt'));
+    args.push('--amend');
+  }
+
+  if (shouldChangeMessage) {
+    if (message.indexOf(EOL) > -1) {
+      // Use tempfile to allow multi\nline strings.
+      args.push('-F', tempWrite.sync(message, 'lerna-commit.txt'));
+    } else {
+      args.push('-m', message);
+    }
   } else {
-    args.push('-m', message);
+    args.push('--no-edit');
   }
 
   log.verbose('git', args.join(' '));
