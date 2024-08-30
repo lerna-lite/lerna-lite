@@ -3,7 +3,16 @@
   "$id": "https://github.com/lerna-lite/lerna-lite#getting-started",
   "title": "JSON schema for Lerna-Lite configuration",
   "type": "object",
+  "additionalProperties": false,
   "properties": {
+    "$schema": {
+      "type": "string",
+      "description": "The JSON schema version used to validate this configuration file"
+    },
+    "extends": {
+      "type": "string",
+      "description": "A shareable configuration preset that will be used as the base for this configuration"
+    },
     "version": {
       "type": "string",
       "description": "The version of the repository, or \"independent\" for a repository with independently versioned packages.",
