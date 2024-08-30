@@ -4,6 +4,14 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [3.9.0](https://github.com/lerna-lite/lerna-lite/compare/v3.8.0...v3.9.0) (2024-08-30)
+
+### Bug Fixes
+
+* **deps:** update all non-major dependencies ([#916](https://github.com/lerna-lite/lerna-lite/issues/916)) ([42ee0e3](https://github.com/lerna-lite/lerna-lite/commit/42ee0e3218ec1e10517287a5eac713cf69d03e37)) - by @renovate[bot]
+* **deps:** update dependency git-url-parse to v15 ([#918](https://github.com/lerna-lite/lerna-lite/issues/918)) ([5b4d649](https://github.com/lerna-lite/lerna-lite/commit/5b4d64970732c4fe848080053ccd31f61b1c682e)) - by @renovate[bot]
+* **version:** enable changing commit message when using amend ([#920](https://github.com/lerna-lite/lerna-lite/issues/920)) ([d00c87e](https://github.com/lerna-lite/lerna-lite/commit/d00c87e356a0e97cafdabbe57a658d054ce096fe)) - by @ghiscoding
+
 ## [3.8.0](https://github.com/lerna-lite/lerna-lite/compare/v3.7.1...v3.8.0) (2024-08-05)
 
 ### Bug Fixes

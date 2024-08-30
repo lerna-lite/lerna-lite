@@ -4,6 +4,12 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [3.9.0](https://github.com/lerna-lite/lerna-lite/compare/v3.8.0...v3.9.0) (2024-08-30)
+
+### Bug Fixes
+
+* **schema:** add extends property in schema ([#921](https://github.com/lerna-lite/lerna-lite/issues/921)) ([726145f](https://github.com/lerna-lite/lerna-lite/commit/726145fe305bed155243b81008c97c2b8bf61b4b)) - by @ghiscoding
+
 ## [3.8.0](https://github.com/lerna-lite/lerna-lite/compare/v3.7.1...v3.8.0) (2024-08-05)
 
 ### Features

@@ -4,6 +4,12 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [3.9.0](https://github.com/lerna-lite/lerna-lite/compare/v3.8.0...v3.9.0) (2024-08-30)
+
+### Features
+
+* **publish:** support full file path for --summary-file ([#919](https://github.com/lerna-lite/lerna-lite/issues/919)) ([25b3718](https://github.com/lerna-lite/lerna-lite/commit/25b37184adff216655700cdc27cc9ec47ae291b7)) - by @ghiscoding
+
 ## [3.8.0](https://github.com/lerna-lite/lerna-lite/compare/v3.7.1...v3.8.0) (2024-08-05)
 
 ### Features

@@ -4,6 +4,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [3.9.0](https://github.com/lerna-lite/lerna-lite/compare/v3.8.0...v3.9.0) (2024-08-30)
+
+### Features
+
+* **publish:** support full file path for --summary-file ([#919](https://github.com/lerna-lite/lerna-lite/issues/919)) ([25b3718](https://github.com/lerna-lite/lerna-lite/commit/25b37184adff216655700cdc27cc9ec47ae291b7)) - by @ghiscoding
+
+### Bug Fixes
+
+* **core:** don't include other deps when `graphType` is provided ([#922](https://github.com/lerna-lite/lerna-lite/issues/922)) ([8fe05bc](https://github.com/lerna-lite/lerna-lite/commit/8fe05bcbb6572d63fcb832c921879bdb27654fce)) - by @ghiscoding
+* **version:** enable changing commit message when using amend ([#920](https://github.com/lerna-lite/lerna-lite/issues/920)) ([d00c87e](https://github.com/lerna-lite/lerna-lite/commit/d00c87e356a0e97cafdabbe57a658d054ce096fe)) - by @ghiscoding
+
 ## [3.8.0](https://github.com/lerna-lite/lerna-lite/compare/v3.7.1...v3.8.0) (2024-08-05)
 
 ### Features
