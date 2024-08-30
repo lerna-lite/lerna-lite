@@ -1,21 +1,21 @@
 # Lerna-Lite <img class="avatar" src="https://avatars.githubusercontent.com/u/120162016?s=96&amp;v=4" alt="@lerna-lite" height="55" width="55">
 
-<center>
 
-[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
-[![TypeScript](https://img.shields.io/badge/%3C%2F%3E-TypeScript-%230074c1.svg)](http://www.typescriptlang.org/)
-[![Conventional Changelog](https://img.shields.io/badge/%20%20%F0%9F%93%A6%F0%9F%9A%80-conventional--changelog-e10079.svg?style=flat)](https://github.com/conventional-changelog/conventional-changelog)
-[![lerna--lite](https://img.shields.io/badge/maintained%20with-lerna--lite-e137ff)](https://github.com/lerna-lite/lerna-lite)
-[![Node](https://img.shields.io/node/v/@lerna-lite/cli.svg)](https://nodejs.org/en/about/previous-releases)
+<p>
+<a href="https://opensource.org/licenses/MIT"><img src="https://img.shields.io/badge/License-MIT-yellow.svg" alt="License: MIT" /></a>
+<a href="http://www.typescriptlang.org/"><img src="https://img.shields.io/badge/%3C%2F%3E-TypeScript-%230074c1.svg" alt="TypeScript" /></a>
+<a href="https://github.com/conventional-changelog/conventional-changelog"><img src="https://img.shields.io/badge/%20%20%F0%9F%93%A6%F0%9F%9A%80-conventional--changelog-e10079.svg?style=flat" alt="Conventional Changelog" /></a>
+<a href="https://github.com/lerna-lite/lerna-lite"><img src="https://img.shields.io/badge/maintained%20with-lerna--lite-e137ff" alt="Maintained with Lerna-Lite" /></a>
+<a href="https://nodejs.org/en/about/previous-releases"><img src="https://img.shields.io/node/v/@lerna-lite/cli.svg" alt="Node" /></a>
+</P>
 
-
-[![Actions Status](https://github.com/lerna-lite/lerna-lite/workflows/CI/badge.svg)](https://github.com/lerna-lite/lerna-lite/actions)
-[![codecov](https://codecov.io/gh/lerna-lite/lerna-lite/branch/main/graph/badge.svg)](https://codecov.io/gh/lerna-lite/lerna-lite)
-[![Vitest](https://img.shields.io/badge/tested%20with-vitest-fcc72b.svg?logo=vitest)](https://vitest.dev/)
-[![NPM downloads](https://img.shields.io/npm/dm/@lerna-lite/cli)](https://www.npmjs.com/package/@lerna-lite/cli)
-[![npm](https://img.shields.io/npm/v/@lerna-lite/cli.svg?logo=npm&logoColor=fff&label=npm)](https://www.npmjs.com/package/@lerna-lite/cli)
-
-</center>
+<p>
+<a href="https://github.com/lerna-lite/lerna-lite/actions"><img src="https://github.com/lerna-lite/lerna-lite/workflows/CI/badge.svg" alt="Actions Status" /></a>
+<a href="https://codecov.io/gh/lerna-lite/lerna-lite"><img src="https://codecov.io/gh/lerna-lite/lerna-lite/branch/main/graph/badge.svg" alt="codecov" /></a>
+<a href="https://vitest.dev/"><img src="https://img.shields.io/badge/tested%20with-vitest-fcc72b.svg?logo=vitest" alt="Vitest" /></a>
+<a href="https://www.npmjs.com/package/@lerna-lite/cli"><img src="https://img.shields.io/npm/dm/@lerna-lite/cli" alt="NPM downloads" /></a>
+<a href="https://www.npmjs.com/package/@lerna-lite/cli"><img src="https://img.shields.io/npm/v/@lerna-lite/cli.svg?logo=npm&logoColor=fff&label=npm" alt="npm" /></a>
+</P>
 
 ## Lerna-Lite is a super light version of the original [Lerna](https://github.com/lerna/lerna)
 
