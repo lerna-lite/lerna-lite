@@ -392,6 +392,8 @@ order (all dependencies before dependents) by default.
 lerna publish --canary --yes --summary-file
 # Will create a summary file in the provided directory, i.e. `./some/other/dir/lerna-publish-summary.json`
 lerna publish --canary --yes --summary-file ./some/other/dir
+# Will create a summary file with the provided name, i.e. `./some/other/dir/my-summary.json`
+lerna publish --canary --yes --summary-file ./some/other/dir/my-summary.json
 ```
 
 When run with this flag, a json summary report will be generated after all packages have been successfully published (see below for an example).

@@ -2,7 +2,7 @@ import chalk from 'chalk';
 import { glob } from 'glob';
 import { outputFileSync, removeSync } from 'fs-extra/esm';
 import { EOL } from 'node:os';
-import { join, relative } from 'node:path';
+import { join as pathJoin, normalize, relative } from 'node:path';
 import crypto from 'crypto';
 import normalizePath from 'normalize-path';
 import pMap from 'p-map';
@@ -304,11 +304,7 @@ export class PublishCommand extends Command<PublishCommandOption> {
     logOutput(`Successfully published: ${logPrefix}`);
 
     if (this.options.summaryFile !== undefined) {
-      // create a json object and output it to a file location.
-      //prettier-ignore
-      const filePath = this.options.summaryFile
-        ? `${this.options.summaryFile}/lerna-publish-summary.json`
-        : './lerna-publish-summary.json';
+      const filePath = this.getSummaryFilePath();
       const jsonObject = publishedPackagesSorted.map((pkg) => {
         return {
           packageName: pkg.name,
@@ -329,7 +325,7 @@ export class PublishCommand extends Command<PublishCommandOption> {
 
     // optionally cleanup temp packed files after publish, opt-in option
     if (this.options.cleanupTempFiles) {
-      glob(normalizePath(join(tempDir, '/lerna-*'))).then((deleteFolders) => {
+      glob(normalizePath(pathJoin(tempDir, '/lerna-*'))).then((deleteFolders) => {
         // delete silently all files/folders that startsWith "lerna-"
         deleteFolders.forEach((folder) => removeSync(folder));
         this.logger.verbose('publish', `Found ${deleteFolders.length} temp folders to cleanup after publish.`);
@@ -1046,5 +1042,29 @@ export class PublishCommand extends Command<PublishCommandOption> {
     if (isPrerelease) {
       return this.options.preDistTag;
     }
+  }
+
+  private getSummaryFilePath(): string {
+    /* v8 ignore next 3 */
+    if (this.options.summaryFile === undefined) {
+      throw new Error('summaryFile options is not defined. Unable to get path.');
+    }
+
+    if (this.options.summaryFile === '') {
+      return pathJoin(process.cwd(), './lerna-publish-summary.json');
+    }
+
+    const normalizedPath = normalize(this.options.summaryFile);
+
+    /* v8 ignore next 3 */
+    if (normalizedPath === '') {
+      throw new Error('summaryFile is not a valid path.');
+    }
+
+    if (normalizedPath.endsWith('.json')) {
+      return pathJoin(process.cwd(), normalizedPath);
+    }
+
+    return pathJoin(process.cwd(), normalizedPath, 'lerna-publish-summary.json');
   }
 }
