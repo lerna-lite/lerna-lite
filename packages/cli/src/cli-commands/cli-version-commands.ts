@@ -281,8 +281,9 @@ export default {
         describe: 'Runs `npm install --package-lock-only` or equivalent depending on the package manager defined in `npmClient`.',
         type: 'boolean',
       },
-      'skip-bump-only-release': {
-        describe: 'do we want to skip creating a release (github/gitlab) when the version is a "version bump only"?',
+      'skip-bump-only-releases': {
+        describe: 'Skip release(s) creation when the version is a "version bump only"?',
+        alias: 'skip-bump-only-release',
         type: 'boolean',
       },
       'premajor-version-bump': {
