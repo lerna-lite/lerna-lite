@@ -1430,7 +1430,7 @@
         },
         "skipBumpOnlyReleases": {
           "type": "boolean",
-          "description": "Skip GitHub/GitLab release creation when the version is a \"Version bump only for package x\""
+          "description": "Skip remote release(s) creation when the version is a \"version bump only\""
         },
         "syncWorkspaceLock": {
           "type": "boolean",
