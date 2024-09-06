@@ -283,7 +283,6 @@ export default {
       },
       'skip-bump-only-releases': {
         describe: 'Skip release(s) creation when the version is a "version bump only"?',
-        alias: 'skip-bump-only-release',
         type: 'boolean',
       },
       'premajor-version-bump': {
