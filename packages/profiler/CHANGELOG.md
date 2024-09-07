@@ -4,6 +4,12 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [3.9.1](https://github.com/lerna-lite/lerna-lite/compare/v3.9.0...v3.9.1) (2024-09-07)
+
+### Bug Fixes
+
+* **deps:** update all non-major dependencies ([#927](https://github.com/lerna-lite/lerna-lite/issues/927)) ([a7a69e7](https://github.com/lerna-lite/lerna-lite/commit/a7a69e782e7e60a8ccda66a13c28d93b169a5b8d)) - by @renovate[bot]
+
 ## [3.9.0](https://github.com/lerna-lite/lerna-lite/compare/v3.8.0...v3.9.0) (2024-08-30)
 
 **Note:** Version bump only for package @lerna-lite/profiler

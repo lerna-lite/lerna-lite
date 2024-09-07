@@ -4,6 +4,14 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [3.9.1](https://github.com/lerna-lite/lerna-lite/compare/v3.9.0...v3.9.1) (2024-09-07)
+
+### Bug Fixes
+
+* **deps:** update all non-major dependencies ([#927](https://github.com/lerna-lite/lerna-lite/issues/927)) ([a7a69e7](https://github.com/lerna-lite/lerna-lite/commit/a7a69e782e7e60a8ccda66a13c28d93b169a5b8d)) - by @renovate[bot]
+* **deps:** update dependency ssri to v11 ([#926](https://github.com/lerna-lite/lerna-lite/issues/926)) ([7594054](https://github.com/lerna-lite/lerna-lite/commit/7594054fe2ae2ab5154fba1a6b987128a00ce945)) - by @renovate[bot]
+* **version:** Renamed 'skip-bump-only-release' CLI option to plural ([#925](https://github.com/lerna-lite/lerna-lite/issues/925)) ([b552346](https://github.com/lerna-lite/lerna-lite/commit/b55234609030a7f9443bfb8a18a587a091d274e6)), closes [#924](https://github.com/lerna-lite/lerna-lite/issues/924) - by @SchulteMarkus
+
 ## [3.9.0](https://github.com/lerna-lite/lerna-lite/compare/v3.8.0...v3.9.0) (2024-08-30)
 
 ### Features

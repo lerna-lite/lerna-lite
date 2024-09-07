@@ -4,6 +4,12 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [3.9.1](https://github.com/lerna-lite/lerna-lite/compare/v3.9.0...v3.9.1) (2024-09-07)
+
+### Bug Fixes
+
+* **deps:** update dependency ssri to v11 ([#926](https://github.com/lerna-lite/lerna-lite/issues/926)) ([7594054](https://github.com/lerna-lite/lerna-lite/commit/7594054fe2ae2ab5154fba1a6b987128a00ce945)) - by @renovate[bot]
+
 ## [3.9.0](https://github.com/lerna-lite/lerna-lite/compare/v3.8.0...v3.9.0) (2024-08-30)
 
 ### Features

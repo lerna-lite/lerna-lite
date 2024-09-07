@@ -4,6 +4,12 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [3.9.1](https://github.com/lerna-lite/lerna-lite/compare/v3.9.0...v3.9.1) (2024-09-07)
+
+### Bug Fixes
+
+* **version:** Renamed 'skip-bump-only-release' CLI option to plural ([#925](https://github.com/lerna-lite/lerna-lite/issues/925)) ([b552346](https://github.com/lerna-lite/lerna-lite/commit/b55234609030a7f9443bfb8a18a587a091d274e6)), closes [#924](https://github.com/lerna-lite/lerna-lite/issues/924) - by @SchulteMarkus
+
 ## [3.9.0](https://github.com/lerna-lite/lerna-lite/compare/v3.8.0...v3.9.0) (2024-08-30)
 
 ### Bug Fixes
