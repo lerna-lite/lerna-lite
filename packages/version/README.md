@@ -450,7 +450,7 @@ lerna version --conventional-commits --no-changelog --create-release github --ge
 
 ### `--skip-bump-only-releases`
 
-When this option is enabled and a package version is only being bumped without any conventional commits detected, the GitHub/GitLab release will be skipped. This will avoid creating releases with only "Version bump only for package x" in the release notes, however please note that each changelog are still going to be updated with the "version bump only" text.
+When this option is enabled and a package version is only being bumped without any conventional commits detected, the GitHub/GitLab release will be skipped but only when using the independent mode. This will avoid creating releases with only "Version bump only for package x" in the release notes, however please note that each changelog are still going to be updated with the "version bump only" text.
 
 ```sh
 lerna version --create-release github --skip-bump-only-releases
@@ -458,6 +458,8 @@ lerna version --create-release github --skip-bump-only-releases
 # or the same for gitlab
 lerna version --create-release gitlab --skip-bump-only-releases
 ```
+
+> **Note** this option is only useful and can only be used with independent mode. Also please note that each changelogs are still going to be updated with the "version bump only" text and only the releases will be skipped.
 
 ### `--describe-tag <pattern>`
 When `lerna version` is executed, it will identifies packages that have been updated since the previous tagged release. The rules it identifies are based on describe tag pattern (excuted `git describe --match` behind the scenes).
