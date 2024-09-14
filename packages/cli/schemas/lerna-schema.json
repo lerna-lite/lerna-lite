@@ -869,6 +869,9 @@
     "maxBuffer": {
       "$ref": "#/$defs/globals/maxBuffer"
     },
+    "useWorkspaces": {
+      "$ref": "#/$defs/globals/useWorkspaces"
+    },
     "yes": {
       "$ref": "#/$defs/globals/yes"
     },
@@ -1123,6 +1126,10 @@
       "maxBuffer": {
         "type": "integer",
         "description": "The maximum number of bytes to allow a child process for subcommand execution."
+      },
+      "useWorkspaces": {
+        "type": "boolean",
+        "description": "Enables integration with Yarn or other package manager that use `workspaces` property in `package.json`."
       },
       "yes": {
         "type": "boolean",
