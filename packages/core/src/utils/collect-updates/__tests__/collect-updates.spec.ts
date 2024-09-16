@@ -79,7 +79,7 @@ describe('collectUpdates()', () => {
       }),
     ]);
     expect(hasTags).toHaveBeenLastCalledWith(execOpts, 'v*');
-    expect(describeRefSync).toHaveBeenLastCalledWith({ cwd: '/test', match: '' }, undefined);
+    expect(describeRefSync).toHaveBeenLastCalledWith({ cwd: '/test', match: 'v*' }, undefined);
     expect(makeDiffPredicate).toHaveBeenLastCalledWith('v1.0.0', execOpts, undefined, {
       independentSubpackages: undefined,
     });
