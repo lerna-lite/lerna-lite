@@ -44,7 +44,7 @@ export function collectUpdates(
       : new Map(filteredPackages.map(({ name }) => [name, packageGraph.get(name)]));
 
   let committish = commandOptions.since;
-  const tagPattern = describeTag ? describeTag : isIndependent ? '*@*' : '';
+  const tagPattern = describeTag ? describeTag : isIndependent ? '*@*' : 'v*';
 
   if (hasTags(execOpts, tagPattern)) {
     const describeOptions: DescribeRefOptions = {

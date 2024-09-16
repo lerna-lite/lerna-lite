@@ -507,7 +507,7 @@ describe('collectUpdates()', () => {
     expect(describeRefSync).toHaveBeenCalledWith({ cwd: '/test', match: '*custom-tag*' }, true);
   });
 
-  it('no use "describeTag" in non-independent mode', async () => {
+  it('use "describeTag" with default value in non-independent mode', async () => {
     const graph = buildGraph();
     const pkgs = graph.rawPackageList;
     const execOpts = { cwd: '/test' };
@@ -516,10 +516,10 @@ describe('collectUpdates()', () => {
       isIndependent: false,
       includeMergedTags: true,
     });
-    expect(describeRefSync).toHaveBeenCalledWith({ cwd: '/test', match: '' }, true);
+    expect(describeRefSync).toHaveBeenCalledWith({ cwd: '/test', match: 'v*' }, true);
   });
 
-  it('use "describeTag" with empty value in independent mode', async () => {
+  it('use "describeTag" with default value in independent mode', async () => {
     const graph = buildGraph();
     const pkgs = graph.rawPackageList;
     const execOpts = { cwd: '/test' };
