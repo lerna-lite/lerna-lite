@@ -78,7 +78,7 @@ describe('collectUpdates()', () => {
         name: 'package-standalone',
       }),
     ]);
-    expect(hasTags).toHaveBeenLastCalledWith(execOpts, '');
+    expect(hasTags).toHaveBeenLastCalledWith(execOpts, 'v*');
     expect(describeRefSync).toHaveBeenLastCalledWith({ cwd: '/test', match: '' }, undefined);
     expect(makeDiffPredicate).toHaveBeenLastCalledWith('v1.0.0', execOpts, undefined, {
       independentSubpackages: undefined,
