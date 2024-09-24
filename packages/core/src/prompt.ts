@@ -10,7 +10,7 @@ import { log } from '@lerna-lite/npmlog';
  */
 export async function promptConfirmation(message: string): Promise<boolean> {
   log.pause();
-  const answers = await expand({
+  const answers = await expand<boolean>({
     message,
     default: 'h', // default to help in order to avoid clicking straight through
     choices: [
@@ -36,7 +36,7 @@ export async function promptSelectOne(
 ): Promise<string> {
   log.pause();
 
-  const answers = await select({
+  const answers = await select<string>({
     message,
     choices: choices!,
     pageSize: choices!.length,
