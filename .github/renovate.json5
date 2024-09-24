@@ -15,6 +15,11 @@
       groupName: 'Conventional-Changelog packages',
     },
     {
+      // group all Inquirer dependencies
+      matchPackagePatterns: ['^@inquirer/'],
+      groupName: 'Inquirer packages',
+    },
+    {
       // npm security audit seems to prefer 1.2.6 for some reason
       packageNames: ['tacks'],
       allowedVersions: '1.2.6',
