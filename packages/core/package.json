@@ -35,7 +35,7 @@
     "node": "^18.0.0 || >=20.0.0"
   },
   "dependencies": {
-    "@inquirer/expand": "^2.3.0",
+    "@inquirer/expand": "^3.0.1",
     "@inquirer/input": "^2.3.0",
     "@inquirer/select": "^2.5.0",
     "@lerna-lite/npmlog": "workspace:^",
