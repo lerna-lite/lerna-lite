@@ -2,7 +2,7 @@ import eslint from '@eslint/js';
 import tseslint from 'typescript-eslint';
 import n from 'eslint-plugin-n';
 import eslintPrettier from 'eslint-config-prettier';
-import vitest from 'eslint-plugin-vitest';
+import vitest from '@vitest/eslint-plugin';
 
 export default tseslint.config(
   {
