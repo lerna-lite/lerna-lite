@@ -61,6 +61,20 @@
       packageNames: ['chokidar'],
       allowedVersions: '<4.0.0',
     },
+
+    // skip newer versions of npm-packlist, ssri and write-file-atomic since they bumped their Node requirement to ^18.17.0 || >=20.5.0
+    {
+      packageNames: ['npm-packlist'],
+      allowedVersions: '<9.0.0',
+    },
+    {
+      packageNames: ['ssri'],
+      allowedVersions: '<12.0.0',
+    },
+    {
+      packageNames: ['write-file-atomic'],
+      allowedVersions: '<6.0.0',
+    },
   ],
   ignoreDeps: [
     'lee-dohm/no-response',
