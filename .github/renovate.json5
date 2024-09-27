@@ -79,6 +79,18 @@
       packageNames: ['write-file-atomic'],
       allowedVersions: '<6.0.0',
     },
+    {
+      packageNames: ['@npmcli/package-json'],
+      allowedVersions: '<6.0.0',
+    },
+    {
+      packageNames: ['@npmcli/run-script'],
+      allowedVersions: '<9.0.0',
+    },
+    {
+      packageNames: ['npm-registry-fetch'],
+      allowedVersions: '<18.0.0',
+    },
   ],
   ignoreDeps: [
     'lee-dohm/no-response',
