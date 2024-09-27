@@ -95,9 +95,6 @@ importers:
       fs-extra:
         specifier: ^11.2.0
         version: 11.2.0
-      glob:
-        specifier: ^10.4.5
-        version: 10.4.5
       globby:
         specifier: ^14.0.2
         version: 14.0.2
@@ -553,9 +550,9 @@ importers:
       fs-extra:
         specifier: ^11.2.0
         version: 11.2.0
-      glob:
-        specifier: ^10.4.5
-        version: 10.4.5
+      globby:
+        specifier: ^14.0.2
+        version: 14.0.2
       has-unicode:
         specifier: ^2.0.1
         version: 2.0.1
