@@ -45,7 +45,7 @@
     "chalk": "^5.3.0",
     "columnify": "^1.6.0",
     "fs-extra": "^11.2.0",
-    "glob": "^10.4.5",
+    "globby": "^14.0.2",
     "has-unicode": "^2.0.1",
     "libnpmaccess": "^8.0.6",
     "libnpmpublish": "^9.0.9",
