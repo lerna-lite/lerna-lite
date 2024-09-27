@@ -88,6 +88,10 @@
       allowedVersions: '<9.0.0',
     },
     {
+      packageNames: ['pacote'],
+      allowedVersions: '<19.0.0',
+    },
+    {
       packageNames: ['npm-registry-fetch'],
       allowedVersions: '<18.0.0',
     },
