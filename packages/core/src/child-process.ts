@@ -1,5 +1,5 @@
 import { log } from '@lerna-lite/npmlog';
-import chalk from 'chalk';
+import pc from 'picocolors';
 import { execa, execaSync } from 'execa';
 import type { Options as ExecaOptions, SyncOptions as ExacaSyncOptions, ExecaChildProcess } from 'execa';
 import { constants } from 'node:os';
@@ -85,11 +85,11 @@ export function spawnStreaming(
 
   if (prefix) {
     const colorName = colorWheel[currentColor % NUM_COLORS];
-    const color = chalk[colorName];
+    const color = pc[colorName];
 
     currentColor += 1;
 
-    stdoutOpts.tag = `${color.bold(prefix)}:`;
+    stdoutOpts.tag = `${pc.bold(color(prefix))}:`;
     stderrOpts.tag = `${color(prefix)}:`;
   }
 
@@ -191,6 +191,6 @@ export function logExecCommand(command: string, args?: string[]) {
     cmdList.push(Array.isArray(c) ? c.join(' ') : c);
   }
 
-  log.info(chalk.bold.magenta('[dry-run] >'), cmdList.join(' '));
+  log.info(pc.bold(pc.magenta('[dry-run] >')), cmdList.join(' '));
   return '';
 }

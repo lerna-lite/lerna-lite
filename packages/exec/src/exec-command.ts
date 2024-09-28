@@ -1,5 +1,5 @@
 import 'dotenv/config';
-import chalk from 'chalk';
+import pc from 'picocolors';
 import pMap from 'p-map';
 import {
   Command,
@@ -191,8 +191,8 @@ export class ExecCommand extends Command<ExecCommandOption & FilterOptions> {
   }
 
   dryRunExec(commandName: string, pkgName: string): Promise<any> {
-    this.logger.info(chalk.bold.magenta('[dry-run] >'), `Exec command '%s' in '%s'`, commandName, pkgName);
-    logOutput(`${chalk.bold.magenta('[dry-run] >')} ${pkgName}`);
+    this.logger.info(pc.bold(pc.magenta('[dry-run] >')), `Exec command '%s' in '%s'`, commandName, pkgName);
+    logOutput(`${pc.bold(pc.magenta('[dry-run] >'))} ${pkgName}`);
     return Promise.resolve();
   }
 }

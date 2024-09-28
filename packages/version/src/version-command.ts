@@ -1,7 +1,7 @@
-import chalk from 'chalk';
 import dedent from 'dedent';
 import { minimatch } from 'minimatch';
 import { EOL as OS_EOL } from 'node:os';
+import pc from 'picocolors';
 import pLimit from 'p-limit';
 import pMap from 'p-map';
 import pPipe from 'p-pipe';
@@ -618,9 +618,9 @@ export class VersionCommand extends Command<VersionCommandOption> {
 
   confirmVersions(): Promise<boolean> | boolean {
     const changes = this.packagesToVersion.map((pkg) => {
-      let line = ` - ${pkg.name ?? '[n/a]'}: ${pkg.version} => ${chalk.cyan(this.updatesVersions?.get(pkg?.name ?? ''))}`;
+      let line = ` - ${pkg.name ?? '[n/a]'}: ${pkg.version} => ${pc.cyan(this.updatesVersions?.get(pkg?.name ?? ''))}`;
       if (pkg.private) {
-        line += ` (${chalk.red('private')})`;
+        line += ` (${pc.red('private')})`;
       }
       return line;
     });
@@ -636,7 +636,7 @@ export class VersionCommand extends Command<VersionCommandOption> {
     }
 
     // When composed from `lerna publish`, use this opportunity to confirm publishing
-    let confirmMessage = this.options.dryRun ? chalk.bgMagenta('[dry-run]') : '';
+    let confirmMessage = this.options.dryRun ? pc.bgMagenta('[dry-run]') : '';
     confirmMessage += this.composed
       ? ' Are you sure you want to publish these packages?'
       : ' Are you sure you want to create these versions?';

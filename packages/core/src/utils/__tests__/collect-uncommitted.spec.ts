@@ -1,7 +1,7 @@
 import { describe, expect, it, vi } from 'vitest';
 import { outputFile, remove } from 'fs-extra/esm';
 import { dirname, join } from 'node:path';
-import chalk from 'chalk';
+import pc from 'picocolors';
 import { fileURLToPath } from 'node:url';
 
 // helpers
@@ -16,12 +16,12 @@ const initFixture = initFixtureFactory(__dirname);
 import { collectUncommitted, collectUncommittedSync } from '../collect-uncommitted.js';
 
 // primary assertion setup
-const GREEN_A = chalk.green('A');
-const GREEN_M = chalk.green('M');
-const GREEN_D = chalk.green('D');
-const RED_D = chalk.red('D');
-const RED_M = chalk.red('M');
-const RED_QQ = chalk.red('??');
+const GREEN_A = pc.green('A');
+const GREEN_M = pc.green('M');
+const GREEN_D = pc.green('D');
+const RED_D = pc.red('D');
+const RED_M = pc.red('M');
+const RED_QQ = pc.red('??');
 
 const colorizedAry = [
   `${GREEN_D}  package.json`,

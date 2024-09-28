@@ -6,7 +6,6 @@ vi.mock('@lerna-lite/core', async () => ({
   QueryGraph: (await vi.importActual<any>('../../../core/src/utils/query-graph')).QueryGraph,
 }));
 
-import chalk from 'chalk';
 import { temporaryDirectory } from 'tempy';
 import Tacks from 'tacks';
 import { Project } from '@lerna-lite/core';
@@ -15,9 +14,6 @@ import { loggingOutput } from '@lerna-test/helpers/logging-output.js';
 import { listable } from '../index.js';
 
 const { File, Dir } = Tacks;
-
-// keep snapshots stable cross-platform
-chalk.level = 0;
 
 // remove quotes around top-level strings
 expect.addSnapshotSerializer({

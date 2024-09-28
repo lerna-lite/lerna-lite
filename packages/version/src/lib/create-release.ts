@@ -1,7 +1,7 @@
 import { RemoteClientType, ValidationError } from '@lerna-lite/core';
 import { log } from '@lerna-lite/npmlog';
-import chalk from 'chalk';
 import newGithubReleaseUrl from 'new-github-release-url';
+import pc from 'picocolors';
 import semver from 'semver';
 
 import { createGitHubClient, createGitLabClient, parseGitRepo } from '../git-clients/index.js';
@@ -91,7 +91,7 @@ export function createRelease(
       }
 
       if (dryRun) {
-        log.info(chalk.bold.magenta('[dry-run] >'), `Create Release with repo options: `, JSON.stringify(releaseOptions));
+        log.info(pc.bold(pc.magenta('[dry-run] >')), `Create Release with repo options: `, JSON.stringify(releaseOptions));
         return Promise.resolve();
       }
 

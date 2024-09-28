@@ -55,8 +55,8 @@ import cliCommands from '../../../cli/src/cli-commands/cli-version-commands.js';
 const lernaVersion = commandRunner(cliCommands);
 
 import { log } from '@lerna-lite/npmlog';
-import chalk from 'chalk';
 import dedent from 'dedent';
+import pc from 'picocolors';
 import yargParser from 'yargs-parser';
 
 const createArgv = (cwd: string, ...args: any[]) => {
@@ -227,7 +227,7 @@ describe.each([
 
     await new VersionCommand(createArgv(cwd, '--create-release', type, '--conventional-commits', '--dry-run'));
 
-    expect(logSpy).toHaveBeenCalledWith(chalk.bold.magenta('[dry-run] >'), `Create Release with repo options: `, expect.anything());
+    expect(logSpy).toHaveBeenCalledWith(pc.bold(pc.magenta('[dry-run] >')), `Create Release with repo options: `, expect.anything());
   });
 
   it('creates a single fixed release in git dry-run mode', async () => {
