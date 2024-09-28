@@ -68,8 +68,8 @@ export function cliRunner(cwd: string, env: { [key: string]: string }) {
     env: Object.assign(
       {
         CI: 'true',
-        // always turn off chalk
-        FORCE_COLOR: '0',
+        // always turn off picocolors
+        NO_COLOR: true,
       },
       env
     ),

@@ -1,4 +1,4 @@
-import chalk from 'chalk';
+import pc from 'picocolors';
 import { beforeEach, describe, expect, it, Mock, vi } from 'vitest';
 import { log } from '@lerna-lite/npmlog';
 
@@ -50,7 +50,7 @@ describe('.execPackageManagerSync()', () => {
     it('should execute a command in dry-run and log the command', () => {
       const logSpy = vi.spyOn(log, 'info');
       execPackageManagerSync('echo', ['execPackageManagerSync'], undefined, true);
-      expect(logSpy).toHaveBeenCalledWith(chalk.bold.magenta('[dry-run] >'), 'echo execPackageManagerSync');
+      expect(logSpy).toHaveBeenCalledWith(pc.bold(pc.magenta('[dry-run] >')), 'echo execPackageManagerSync');
     });
 
     it('does not error when stdout is ignored', () => {
@@ -96,7 +96,7 @@ describe('.execPackageManager()', () => {
     it('should execute a command in dry-run and log the command', () => {
       const logSpy = vi.spyOn(log, 'info');
       execPackageManager('echo', ['exec'], undefined, true);
-      expect(logSpy).toHaveBeenCalledWith(chalk.bold.magenta('[dry-run] >'), 'echo exec');
+      expect(logSpy).toHaveBeenCalledWith(pc.bold(pc.magenta('[dry-run] >')), 'echo exec');
     });
 
     it('rejects on undefined command', async () => {

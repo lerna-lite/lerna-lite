@@ -214,9 +214,6 @@ importers:
       '@npmcli/run-script':
         specifier: ^8.1.0
         version: 8.1.0
-      chalk:
-        specifier: ^5.3.0
-        version: 5.3.0
       clone-deep:
         specifier: ^4.0.1
         version: 4.0.1
@@ -262,6 +259,9 @@ importers:
       p-queue:
         specifier: ^8.0.1
         version: 8.0.1
+      picocolors:
+        specifier: ^1.1.0
+        version: 1.1.0
       resolve-from:
         specifier: ^5.0.0
         version: 5.0.0
@@ -363,15 +363,15 @@ importers:
       '@lerna-lite/profiler':
         specifier: workspace:*
         version: link:../profiler
-      chalk:
-        specifier: ^5.3.0
-        version: 5.3.0
       dotenv:
         specifier: ^16.4.5
         version: 16.4.5
       p-map:
         specifier: ^7.0.2
         version: 7.0.2
+      picocolors:
+        specifier: ^1.1.0
+        version: 1.1.0
     devDependencies:
       '@types/fs-extra':
         specifier: ^11.0.4
@@ -451,12 +451,12 @@ importers:
       '@lerna-lite/core':
         specifier: workspace:*
         version: link:../core
-      chalk:
-        specifier: ^5.3.0
-        version: 5.3.0
       columnify:
         specifier: ^1.6.0
         version: 1.6.0
+      picocolors:
+        specifier: ^1.1.0
+        version: 1.1.0
     devDependencies:
       yargs:
         specifier: ^17.7.2
@@ -541,9 +541,6 @@ importers:
       byte-size:
         specifier: ^9.0.0
         version: 9.0.0
-      chalk:
-        specifier: ^5.3.0
-        version: 5.3.0
       columnify:
         specifier: ^1.6.0
         version: 1.6.0
@@ -583,6 +580,9 @@ importers:
       pacote:
         specifier: ^18.0.6
         version: 18.0.6
+      picocolors:
+        specifier: ^1.1.0
+        version: 1.1.0
       semver:
         specifier: ^7.6.3
         version: 7.6.3
@@ -632,15 +632,15 @@ importers:
       '@lerna-lite/profiler':
         specifier: workspace:*
         version: link:../profiler
-      chalk:
-        specifier: ^5.3.0
-        version: 5.3.0
       fs-extra:
         specifier: ^11.2.0
         version: 11.2.0
       p-map:
         specifier: ^7.0.2
         version: 7.0.2
+      picocolors:
+        specifier: ^1.1.0
+        version: 1.1.0
     devDependencies:
       '@types/fs-extra':
         specifier: ^11.0.4
@@ -675,9 +675,6 @@ importers:
       '@octokit/rest':
         specifier: ^21.0.2
         version: 21.0.2
-      chalk:
-        specifier: ^5.3.0
-        version: 5.3.0
       conventional-changelog-angular:
         specifier: ^7.0.0
         version: 7.0.0
@@ -741,6 +738,9 @@ importers:
       p-reduce:
         specifier: ^3.0.0
         version: 3.0.0
+      picocolors:
+        specifier: ^1.1.0
+        version: 1.1.0
       pify:
         specifier: ^6.1.0
         version: 6.1.0
@@ -864,7 +864,7 @@ packages:
     engines: {node: '>=6.9.0'}
     dependencies:
       '@babel/highlight': 7.24.2
-      picocolors: 1.0.1
+      picocolors: 1.1.0
 
   /@babel/helper-string-parser@7.24.6:
     resolution: {integrity: sha512-WdJjwMEkmBicq5T9fm/cHND3+UlFa2Yj8ALLgmoSQAJZysYbBjw+azChSGPN4DSPLXOcooGRvDwZWMcF/mLO2Q==}
@@ -891,7 +891,7 @@ packages:
       '@babel/helper-validator-identifier': 7.24.6
       chalk: 2.4.2
       js-tokens: 4.0.0
-      picocolors: 1.0.1
+      picocolors: 1.1.0
 
   /@babel/parser@7.24.6:
     resolution: {integrity: sha512-eNZXdfU35nJC2h24RznROuOpO94h6x8sg9ju0tT9biNtLZ2vuP8SduLqqV+/8+cebSLV9SJEAN5Z3zQbJG/M+Q==}
@@ -2482,11 +2482,6 @@ packages:
       ansi-styles: 4.3.0
       supports-color: 7.2.0
     dev: true
-
-  /chalk@5.3.0:
-    resolution: {integrity: sha512-dLitG79d+GV1Nb/VYcCDFivJeK1hiukt9QjRNVOsUtTy1rR1YJsmpGGTZ3qJos+uw7WmWF4wUwBd9jxjocFC2w==}
-    engines: {node: ^12.17.0 || ^14.13 || >=16.0.0}
-    dev: false
 
   /check-error@2.1.1:
     resolution: {integrity: sha512-OAlb+T7V4Op9OwdkjmguYRqncdlx5JiofwOAUkmTF+jNdHwzTaTs4sRAGpzLF3oOz5xAyDGrPgeIDFQmDOTiJw==}
@@ -4634,8 +4629,8 @@ packages:
     resolution: {integrity: sha512-qG/D9iA4KDme+KF4vCObJy6Bouu3BlQnmJ8jPydVPm32NJBD9ZK1ZNgXSYaZKHkVC1sKSqUiLgFvAZPUiIEnBw==}
     dev: true
 
-  /picocolors@1.0.1:
-    resolution: {integrity: sha512-anP1Z8qwhkbmu7MFP5iTt+wQKXgwzf7zTyGlcdzabySa9vd0Xt392U0rVmz9poOaBj0uHJKyyo9/upk0HrEQew==}
+  /picocolors@1.1.0:
+    resolution: {integrity: sha512-TQ92mBOW0l3LeMeyLV6mzy/kWr8lkd/hp3mTg7wYK7zJhuBStmGMBG0BdeDZS/dZx1IukaX6Bk11zcln25o1Aw==}
 
   /picomatch@2.3.1:
     resolution: {integrity: sha512-JU3teHTNjmE2VCGFzuY8EXzCDVwEqB2a8fsIvwaStHhAWJEeVd1o1QD80CU6+ZdEXXSLbSsuLwJjkCBWqRQUVA==}
@@ -4666,7 +4661,7 @@ packages:
     engines: {node: ^10 || ^12 || >=14}
     dependencies:
       nanoid: 3.3.6
-      picocolors: 1.0.1
+      picocolors: 1.1.0
       source-map-js: 1.2.0
     dev: true
 

@@ -2,7 +2,7 @@ import { describe, expect, it, vi } from 'vitest';
 
 import { Package } from '@lerna-lite/core';
 import { log } from '@lerna-lite/npmlog';
-import chalk from 'chalk';
+import pc from 'picocolors';
 
 import { logPacked } from '../lib/index.js';
 import { Tarball } from '../models/index.js';
@@ -54,7 +54,7 @@ describe('log-packed', () => {
     expect(logSpy).toHaveBeenCalledWith('', expect.stringContaining('bundled files: '));
     expect(logSpy).toHaveBeenCalledWith('', expect.stringContaining('own files: '));
     expect(logSpy).toHaveBeenCalledWith('', expect.stringContaining('total files: '));
-    expect(logSpy).toHaveBeenCalledWith('', `--- ${chalk.bgMagenta('DRY-RUN')} details ---`);
+    expect(logSpy).toHaveBeenCalledWith('', `--- ${pc.bgMagenta('DRY-RUN')} details ---`);
     expect(logSpy).toHaveBeenCalledWith('', 'package name: @lerna-lite/core');
     expect(logSpy).toHaveBeenCalledWith('dependencies:', '');
     expect(logSpy).toHaveBeenCalledWith('', 'tiny-tarball | ^1.0.0');

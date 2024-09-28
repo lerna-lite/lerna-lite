@@ -10,7 +10,7 @@ import {
 } from '@lerna-lite/core';
 import { FilterOptions, getFilteredPackages } from '@lerna-lite/filter-packages';
 import { Profiler } from '@lerna-lite/profiler';
-import chalk from 'chalk';
+import pc from 'picocolors';
 import pMap from 'p-map';
 
 import { npmRunScript, npmRunScriptStreaming, timer } from './lib/index.js';
@@ -242,8 +242,8 @@ export class RunCommand extends Command<RunCommandOption & FilterOptions> {
   }
 
   dryRunScript(scriptName: string, pkgName: string): Promise<any> {
-    this.logger.info(chalk.bold.magenta('[dry-run] >'), `Run npm script '%s' in '%s'`, scriptName, pkgName);
-    logOutput(`${chalk.bold.magenta('[dry-run] >')} ${pkgName}`);
+    this.logger.info(pc.bold(pc.magenta('[dry-run] >')), `Run npm script '%s' in '%s'`, scriptName, pkgName);
+    logOutput(`${pc.bold(pc.magenta('[dry-run] >'))} ${pkgName}`);
     return Promise.resolve();
   }
 }

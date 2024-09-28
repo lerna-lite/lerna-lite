@@ -1,5 +1,5 @@
 import { ListableOption, Package, QueryGraph } from '@lerna-lite/core';
-import chalk from 'chalk';
+import pc from 'picocolors';
 import columnify from 'columnify';
 import { relative } from 'node:path';
 
@@ -207,16 +207,16 @@ function formatColumns(resultList: ReturnType<typeof filterResultList>, viewOpti
     };
 
     if (result.version) {
-      formatted.version = chalk.green(`v${result.version}`);
+      formatted.version = pc.green(`v${result.version}`);
     } else {
-      formatted.version = chalk.yellow('MISSING');
+      formatted.version = pc.yellow('MISSING');
     }
 
     if (result.private) {
-      formatted.private = `(${chalk.red('PRIVATE')})`;
+      formatted.private = `(${pc.red('PRIVATE')})`;
     }
 
-    formatted.location = chalk.grey(relative('.', result.location));
+    formatted.location = pc.gray(relative('.', result.location));
 
     return formatted;
   }) as unknown as Package[];

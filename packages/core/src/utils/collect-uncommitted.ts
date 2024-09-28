@@ -1,5 +1,5 @@
 import { log as npmlog, Logger } from '@lerna-lite/npmlog';
-import chalk from 'chalk';
+import pc from 'picocolors';
 
 import { exec, execSync } from '../child-process.js';
 
@@ -9,8 +9,8 @@ export interface UncommittedConfig {
 }
 
 const maybeColorize = (colorize: (color?: string) => string) => (s?: string) => (s !== ' ' ? colorize(s) : s);
-const cRed = maybeColorize(chalk.red);
-const cGreen = maybeColorize(chalk.green);
+const cRed = maybeColorize(pc.red);
+const cGreen = maybeColorize(pc.green);
 const replaceStatus = (_, maybeGreen?: string, maybeRed?: string) => `${cGreen(maybeGreen)}${cRed(maybeRed)}`;
 const colorizeStats = (stats: string) =>
   stats.replace(/^([^U]| )([A-Z]| )/gm, replaceStatus).replace(/^\?{2}|U{2}/gm, cRed('$&'));
