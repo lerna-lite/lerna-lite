@@ -43,11 +43,7 @@
       allowedVersions: '<9.0.0',
     },
 
-    // node-glob, minimatch and rimraf new major releases dropped support for Node 18, we'll have to wait our next major to upgrade them
-    {
-      packageNames: ['glob'],
-      allowedVersions: '<11.0.0',
-    },
+    // minimatch and rimraf new major releases dropped support for Node 18, we'll have to wait our next major to upgrade them
     {
       packageNames: ['minimatch'],
       allowedVersions: '<10.0.0',
