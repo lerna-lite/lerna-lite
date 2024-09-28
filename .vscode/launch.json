@@ -4,6 +4,9 @@
     {
       "name": "Vitest - Debug Current Test File",
       "type": "node",
+      "env": {
+        "NO_COLOR": "true"
+      },
       "request": "launch",
       "autoAttachChildProcesses": true,
       "skipFiles": ["<node_internals>/**", "**/node_modules/**"],

@@ -4,7 +4,6 @@ export default defineConfig({
   test: {
     cache: false,
     clearMocks: true,
-    color: false,
     deps: {
       interopDefault: false,
     },
