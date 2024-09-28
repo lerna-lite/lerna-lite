@@ -41,7 +41,7 @@
     "upath": "^2.0.1"
   },
   "devDependencies": {
-    "@types/node": "^22.5.4",
+    "@types/node": "^22.7.4",
     "yargs": "^17.7.2"
   }
 }
