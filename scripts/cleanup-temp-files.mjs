@@ -1,10 +1,10 @@
-import { globby } from 'globby';
-import { join as pathJoin } from 'node:path';
 import { removeSync } from 'fs-extra/esm';
-import tempDir from 'temp-dir';
+import { join as pathJoin } from 'node:path';
 import normalizePath from 'normalize-path';
+import tempDir from 'temp-dir';
+import { glob } from 'tinyglobby';
 
-globby(normalizePath(pathJoin(tempDir, '/lerna-*')), { onlyDirectories: true })
+glob(normalizePath(pathJoin(tempDir, '/lerna-*')), { onlyDirectories: true })
   .then((deleteFolders) => {
     // silently delete all files/folders that startsWith "lerna-"
     console.log(`Found ${deleteFolders.length} temp folders to cleanup.`);

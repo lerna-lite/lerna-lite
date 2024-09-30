@@ -1,5 +1,5 @@
 import { log } from '@lerna-lite/npmlog';
-import { globbySync } from 'globby';
+import { globSync } from 'tinyglobby';
 import { filter as minimatchFilter } from 'minimatch';
 import { dirname, relative } from 'node:path';
 import slash from 'slash';
@@ -74,9 +74,9 @@ function diffSinceIn(committish: string, location: string, execOpts: ExecOpts, d
 
     // optionally exclude sub-packages
     if (diffOpts?.independentSubpackages) {
-      independentSubpackages = globbySync('**/*/package.json', {
+      independentSubpackages = globSync('**/*/package.json', {
         cwd: formattedLocation,
-        nodir: true,
+        onlyDirectories: false,
         ignore: ['**/node_modules/**'],
       }).map((file) => `:^${formattedLocation}/${dirname(file)}`);
     }

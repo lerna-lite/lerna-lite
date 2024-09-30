@@ -1,6 +1,5 @@
 import crypto from 'crypto';
 import { outputFileSync, removeSync } from 'fs-extra/esm';
-import { globby } from 'globby';
 import { EOL } from 'node:os';
 import { join as pathJoin, normalize, relative } from 'node:path';
 import normalizePath from 'normalize-path';
@@ -9,6 +8,7 @@ import pMap from 'p-map';
 import pPipe, { type UnaryFunction } from 'p-pipe';
 import semver from 'semver';
 import tempDir from 'temp-dir';
+import { glob } from 'tinyglobby';
 
 import { getOneTimePassword, OneTimePasswordCache, VersionCommand } from '@lerna-lite/version';
 import {
@@ -325,7 +325,7 @@ export class PublishCommand extends Command<PublishCommandOption> {
 
     // optionally cleanup temp packed files after publish, opt-in option
     if (this.options.cleanupTempFiles) {
-      globby(normalizePath(pathJoin(tempDir, '/lerna-*')), { onlyDirectories: true }).then((deleteFolders) => {
+      glob(normalizePath(pathJoin(tempDir, '/lerna-*')), { onlyDirectories: true }).then((deleteFolders) => {
         // silently delete all files/folders that startsWith "lerna-"
         deleteFolders.forEach((folder) => removeSync(folder));
         this.logger.verbose('publish', `Found ${deleteFolders.length} temp folders to cleanup after publish.`);

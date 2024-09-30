@@ -15,7 +15,7 @@ vi.mock('@lerna-lite/core', async () => ({
 vi.mock('@lerna-lite/run', () => vi.importActual<any>('../run-command'));
 
 import { pathExists, readJson } from 'fs-extra/esm';
-import { globby } from 'globby';
+import { glob } from 'tinyglobby';
 import yargParser from 'yargs-parser';
 
 // make sure to import the output mock
@@ -240,7 +240,7 @@ describe('RunCommand', () => {
 
       await lernaRun(cwd)('my-script', '--profile');
 
-      const [profileLocation] = await globby('Lerna-Profile-*.json', { cwd, absolute: true });
+      const [profileLocation] = await glob('Lerna-Profile-*.json', { cwd, absolute: true });
       const json = await readJson(profileLocation);
 
       expect(json).toMatchObject([
@@ -263,7 +263,7 @@ describe('RunCommand', () => {
 
       await new RunCommand(createArgv(cwd, 'my-script', '--profile', '--profile-location', 'foo/bar'));
 
-      const [profileLocation] = await globby('foo/bar/Lerna-Profile-*.json', { cwd, absolute: true });
+      const [profileLocation] = await glob('foo/bar/Lerna-Profile-*.json', { cwd, absolute: true });
       const isExists = await pathExists(profileLocation, null as any);
 
       expect(isExists).toBe(true);
