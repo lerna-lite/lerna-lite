@@ -7,7 +7,7 @@ import * as childProcesses from '../../../child-process.js';
 
 const { globMock } = vi.hoisted(() => ({ globMock: vi.fn() }));
 vi.mock('tinyglobby', async () => ({
-  ...(await vi.importActual<any>('tinyglobby')),
+  ...(await vi.importActual('tinyglobby')),
   globSync: globMock,
 }));
 
