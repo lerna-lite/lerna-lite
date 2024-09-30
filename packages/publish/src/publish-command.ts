@@ -325,11 +325,13 @@ export class PublishCommand extends Command<PublishCommandOption> {
 
     // optionally cleanup temp packed files after publish, opt-in option
     if (this.options.cleanupTempFiles) {
-      glob(normalizePath(pathJoin(tempDir, '/lerna-*')), { onlyDirectories: true }).then((deleteFolders) => {
-        // silently delete all files/folders that startsWith "lerna-"
-        deleteFolders.forEach((folder) => removeSync(folder));
-        this.logger.verbose('publish', `Found ${deleteFolders.length} temp folders to cleanup after publish.`);
-      });
+      glob(normalizePath(pathJoin(tempDir, '/lerna-*')), { absolute: true, cwd: tempDir, onlyDirectories: true }).then(
+        (deleteFolders) => {
+          // silently delete all files/folders that startsWith "lerna-"
+          deleteFolders.forEach((folder) => removeSync(folder));
+          this.logger.verbose('publish', `Found ${deleteFolders.length} temp folders to cleanup after publish.`);
+        }
+      );
     }
 
     this.logger.success('published', `%d %s ${logPrefix}`, count, count === 1 ? 'package' : 'packages');

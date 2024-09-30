@@ -8,6 +8,7 @@
     "local-lerna": "node ./packages/cli/dist/cli.js",
     "clean": "rimraf --glob packages/*/dist packages/*/tsconfig.tsbuildinfo",
     "clean:tarball": "rimraf --glob packages/**/*.tgz",
+    "clean:temp": "node scripts/cleanup-temp-files.mjs",
     "build": "tsc --build ./tsconfig.packages.json",
     "build:clean": "pnpm clean && tsc --build ./tsconfig.packages.json && echo TSC Build Completed",
     "build:full": "pnpm clean && pnpm lint && pnpm prettier:check && tsc --build ./tsconfig.packages.json && echo TSC Build Completed",
@@ -41,7 +42,7 @@
     "lint:no-cache": "eslint packages",
     "outdated:ws": "pnpm -r --stream outdated",
     "test": "cross-env-shell NO_COLOR=true vitest --watch --config ./vitest/vitest.config.ts",
-    "posttest": "node scripts/cleanup-temp-files.mjs",
+    "posttest": "pnpm clean:temp",
     "test:coverage": "cross-env-shell NO_COLOR=true vitest --coverage --config ./vitest/vitest.config.ts",
     "test:coverage:update": "cross-env-shell NO_COLOR=true vitest --coverage --update --config ./vitest/vitest.config.ts"
   },
