@@ -123,8 +123,8 @@ importers:
         specifier: ^3.1.0
         version: 3.1.0
       tinyglobby:
-        specifier: ^0.2.8
-        version: 0.2.8
+        specifier: ^0.2.9
+        version: 0.2.9
       ts-node:
         specifier: ^10.9.2
         version: 10.9.2(@types/node@22.5.4)(typescript@5.5.4)
@@ -272,8 +272,8 @@ importers:
         specifier: ^2.1.0
         version: 2.1.0
       tinyglobby:
-        specifier: ^0.2.8
-        version: 0.2.8
+        specifier: ^0.2.9
+        version: 0.2.9
       write-file-atomic:
         specifier: ^5.0.1
         version: 5.0.1
@@ -380,8 +380,8 @@ importers:
         specifier: ^11.2.0
         version: 11.2.0
       tinyglobby:
-        specifier: ^0.2.8
-        version: 0.2.8
+        specifier: ^0.2.9
+        version: 0.2.9
       yargs:
         specifier: ^17.7.2
         version: 17.7.2
@@ -649,8 +649,8 @@ importers:
         specifier: ^0.0.1
         version: 0.0.1
       tinyglobby:
-        specifier: ^0.2.8
-        version: 0.2.8
+        specifier: ^0.2.9
+        version: 0.2.9
       yargs:
         specifier: ^17.7.2
         version: 17.7.2
@@ -5187,8 +5187,8 @@ packages:
       picomatch: 4.0.2
     dev: false
 
-  /tinyglobby@0.2.8:
-    resolution: {integrity: sha512-AMLZywN0vbhiZi2neFEaj9VIIxC+PjDMsp0nAK6tpR86LJavZgHqGz0S/FOONwBygC+mu7R0/TyAQw0gx0Mu9Q==}
+  /tinyglobby@0.2.9:
+    resolution: {integrity: sha512-8or1+BGEdk1Zkkw2ii16qSS7uVrQJPre5A9o/XkWPATkk23FZh/15BKFxPnlTy6vkljZxLqYCzzBMj30ZrSvjw==}
     engines: {node: '>=12.0.0'}
     dependencies:
       fdir: 6.4.0(picomatch@4.0.2)
