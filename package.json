@@ -98,7 +98,7 @@
     "tacks": "^1.2.6",
     "temp-dir": "^3.0.0",
     "tempy": "^3.1.0",
-    "tinyglobby": "^0.2.7",
+    "tinyglobby": "^0.2.8",
     "ts-node": "^10.9.2",
     "tslib": "^2.7.0",
     "tsm": "^2.3.0",
