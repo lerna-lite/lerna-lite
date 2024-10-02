@@ -22,7 +22,8 @@
 - [About Lerna-Lite](#about-lerna-lite)
   - [Why create this lib/fork?](#why-create-this-libfork)
 - [Getting Started](#getting-started)
-  - [Installation](#installation)
+- [How It Works](#how-it-works)
+- [Installation](#installation)
   - [JSON Schema](#json-schema)
   - [Migration for existing Lerna users](#migration-for-existing-lerna-users)
 - [Project Demo - See it in Action](https://github.com/lerna-lite/lerna-lite/wiki/Release-Demo)
@@ -102,16 +103,16 @@ According to your needs, choose the best option to setup a workspace: [npm 7+](h
 
 Below are the main reasons as to why this fork was created:
 
-1. Lerna repo was unmaintained for nearly 2 years (in early 2022, Lerna's dependencies were really out of date)
+1. Lerna's repo was unmaintained for nearly 2 years (in early 2022, Lerna's dependencies were really out of date)
     - Lerna is now maintained again since Nrwl, the company behind Nx, took over stewardship of Lerna
         - please note that Lerna-Lite fork was created couple months **before** Nrwl took over Lerna
         - we also replicate Lerna's PRs whenever possible (except for `Nx` specific changes which are skipped)
 2. A desire to create a smaller and lighter alternative compared to the original all-in-one Lerna tool
     - Lerna-Lite is entirely modular, all commands are totally optional (install only what you really need).
 3. The project was rewritten in TypeScript and also built as ESM only since v2.0 (you can still use it in a CJS environment)
-4. Newer version of the original Lerna v5.5+ is now requiring **[Nx](https://nx.dev/)**, however not needed by Lerna-Lite
-   - note, if you already use `Nx` then it's probably better to use Lerna, otherwise Lerna-Lite is suggested   
-   - if you use other tools like TurboRepo and install the original Lerna you end up with 2 similar tools (not good)
+4. Newer Lerna versions v5.5+ are now requiring and installing **[Nx](https://nx.dev/)**, however not the case in Lerna-Lite
+   - note, if you already use `Nx` then it's probably better to use Lerna, otherwise Lerna-Lite is the real alternative
+   - if you use other tools like TurboRepo and install the original Lerna, you end up with 2 similar tools (not good)
 5. Lerna-Lite added a few unique features (not available in Lerna itself):
    - [`workspace:` protocol support](https://github.com/lerna-lite/lerna-lite/tree/main/packages/version#workspace-protocol)
      * _Lerna added support for the same feature 6 months later in their v6.0 release_
@@ -124,7 +125,7 @@ Below are the main reasons as to why this fork was created:
    - [lerna publish --remove-package-fields](https://github.com/lerna-lite/lerna-lite/tree/main/packages/publish#--remove-package-fields-fields) (remove certain fields from `package.json` before publishing)
       - ie: Lerna-Lite itself uses it to remove `scripts` and `devDependencies`
 
-On a final note, the best feature of Lerna-Lite (versus Lerna) has to be its modularity. A large portion of the users are only interested in version/publish commands but on the other hand, a small minority are only interested in other commands like `lerna run`/`exec`. Lerna-Lite offers this flexibility by allowing the user to choose what to install (see [installation](#cli-installation) below) which help to keep your download to the bare minimum.
+On a final note, the best feature of Lerna-Lite (versus Lerna) has to be its modularity. A large portion of the users are only interested in version/publish commands but on the other hand, a small minority are only interested in other commands like `lerna run`/`exec`. Lerna-Lite offers this kind of flexibility by allowing the user to choose what to install (see [installation](#cli-installation) below) which help to keep your download to the bare minimum.
 
 ### Lerna-Lite will help you with the following:
 
@@ -134,7 +135,7 @@ On a final note, the best feature of Lerna-Lite (versus Lerna) has to be its mod
 
 - Automate the creation of new Versions (`independent` or fixed version) of all your workspace packages.
   - it will automatically Commit/Tag your new Version & create new GitHub/GitLab Release (when enabled).
-- Automate, when enabled, the creation of Changelogs for all your packages by reading all [Conventional Commits](https://www.conventionalcommits.org/).
+- Automate, when enabled, the creation of Changelogs for all your packages by reading your [Conventional Commits](https://www.conventionalcommits.org/).
 - Automate, the repository Publishing of your new version(s) for all your packages (on NPM or other platforms).
 
 #### Other optional commands
@@ -190,6 +191,28 @@ The final step will be to install the commands that are of interest to you (`pub
 ```sh
 $ npm i @lerna-lite/publish -D
 ```
+
+## How It Works
+
+Lerna allows you to manage your project using one of two modes: Fixed or Independent.
+
+### Fixed/Locked mode (default)
+
+Fixed mode Lerna projects operate on a single version line. The version is kept in the `lerna.json` file at the root of your project under the `version` key. When you run `lerna publish`, if a module has been updated since the last time a release was made, it will be updated to the new version you're releasing. This means that you only publish a new version of a package when you need to.
+
+> Note: If you have a major version zero, all updates are [considered breaking](https://semver.org/#spec-item-4). Because of that, running `lerna publish` with a major version zero and choosing any non-prerelease version number will cause new versions to be published for all packages, even if not all packages have changed since the last release.
+
+This is the mode that [Jest](https://github.com/jestjs/jest)) is currently using. Use this if you want to automatically tie all package versions together. One issue with this approach is that a major change in any package will result in all packages having a new major version.
+
+### Independent mode
+
+`lerna init --independent`
+
+Independent mode Lerna projects allows maintainers to increment package versions independently of each other. Each time you publish, you will get a prompt for each package that has changed to specify if it's a patch, minor, major or custom change.
+
+Independent mode allows you to more specifically update versions for each package and makes sense for a group of components. Combining this mode with something like [semantic-release](https://github.com/semantic-release/semantic-release) would make it less painful. (There is work on this already at [atlassian/lerna-semantic-release](https://github.com/atlassian/lerna-semantic-release)).
+
+> Set the `version` key in `lerna.json` to `independent` to run in independent mode.
 
 ## Installation
 
