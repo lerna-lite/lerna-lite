@@ -16,7 +16,7 @@
   "types": "./dist/index.d.ts",
   "exports": {
     "types": "./dist/index.d.ts",
-    "default": "./dist/index.js"
+    "import": "./dist/index.js"
   },
   "scripts": {
     "prebuild": "rimraf dist",
