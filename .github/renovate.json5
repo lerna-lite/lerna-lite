@@ -60,20 +60,8 @@
 
     // skip newer versions of a few NPM packages, until our next major, since they bumped their Node requirement to ^18.17.0 || >=20.5.0
     {
-      packageNames: ['npm-packlist'],
-      allowedVersions: '<9.0.0',
-    },
-    {
-      packageNames: ['npm-package-arg'],
-      allowedVersions: '<12.0.0',
-    },
-    {
-      packageNames: ['ssri'],
-      allowedVersions: '<12.0.0',
-    },
-    {
-      packageNames: ['write-file-atomic'],
-      allowedVersions: '<6.0.0',
+      packageNames: ['@npmcli/arborist'],
+      allowedVersions: '<8.0.0',
     },
     {
       packageNames: ['@npmcli/package-json'],
@@ -84,12 +72,36 @@
       allowedVersions: '<9.0.0',
     },
     {
-      packageNames: ['pacote'],
-      allowedVersions: '<19.0.0',
+      packageNames: ['libnpmaccess'],
+      allowedVersions: '<9.0.0',
+    },
+    {
+      packageNames: ['libnpmpublish'],
+      allowedVersions: '<10.0.0',
+    },
+    {
+      packageNames: ['npm-packlist'],
+      allowedVersions: '<9.0.0',
+    },
+    {
+      packageNames: ['npm-package-arg'],
+      allowedVersions: '<12.0.0',
     },
     {
       packageNames: ['npm-registry-fetch'],
       allowedVersions: '<18.0.0',
+    },
+    {
+      packageNames: ['pacote'],
+      allowedVersions: '<19.0.0',
+    },
+    {
+      packageNames: ['ssri'],
+      allowedVersions: '<12.0.0',
+    },
+    {
+      packageNames: ['write-file-atomic'],
+      allowedVersions: '<6.0.0',
     },
   ],
   ignoreDeps: [
