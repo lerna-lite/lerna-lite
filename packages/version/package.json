@@ -61,11 +61,11 @@
     "p-map": "^7.0.2",
     "p-pipe": "^4.0.0",
     "p-reduce": "^3.0.0",
-    "picocolors": "^1.1.0",
     "pify": "^6.1.0",
     "semver": "^7.6.3",
     "slash": "^5.1.0",
     "temp-dir": "^3.0.0",
+    "tinyrainbow": "^1.2.0",
     "uuid": "^10.0.0",
     "write-json-file": "^6.0.0"
   },

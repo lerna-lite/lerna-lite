@@ -1,12 +1,12 @@
 import dedent from 'dedent';
 import { minimatch } from 'minimatch';
 import { EOL as OS_EOL } from 'node:os';
-import pc from 'picocolors';
 import pLimit from 'p-limit';
 import pMap from 'p-map';
 import pPipe from 'p-pipe';
 import pReduce from 'p-reduce';
 import semver from 'semver';
+import c from 'tinyrainbow';
 
 import {
   EOL,
@@ -47,7 +47,7 @@ import {
   runInstallLockFileOnly,
   saveUpdatedLockJsonFile,
 } from './lib/update-lockfile-version.js';
-import { GitCreateReleaseClientOutput, ReleaseNote, RemoteCommit } from './models/index.js';
+import { GitCreateReleaseClientOutput, ReleaseNote, RemoteCommit } from './interfaces.js';
 import {
   applyBuildMetadata,
   getCommitsSinceLastRelease,
@@ -618,9 +618,9 @@ export class VersionCommand extends Command<VersionCommandOption> {
 
   confirmVersions(): Promise<boolean> | boolean {
     const changes = this.packagesToVersion.map((pkg) => {
-      let line = ` - ${pkg.name ?? '[n/a]'}: ${pkg.version} => ${pc.cyan(this.updatesVersions?.get(pkg?.name ?? ''))}`;
+      let line = ` - ${pkg.name ?? '[n/a]'}: ${pkg.version} => ${c.cyan(this.updatesVersions?.get(pkg?.name ?? ''))}`;
       if (pkg.private) {
-        line += ` (${pc.red('private')})`;
+        line += ` (${c.red('private')})`;
       }
       return line;
     });
@@ -636,7 +636,7 @@ export class VersionCommand extends Command<VersionCommandOption> {
     }
 
     // When composed from `lerna publish`, use this opportunity to confirm publishing
-    let confirmMessage = this.options.dryRun ? pc.bgMagenta('[dry-run]') : '';
+    let confirmMessage = this.options.dryRun ? c.bgMagenta('[dry-run]') : '';
     confirmMessage += this.composed
       ? ' Are you sure you want to publish these packages?'
       : ' Are you sure you want to create these versions?';

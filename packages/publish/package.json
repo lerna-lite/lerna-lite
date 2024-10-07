@@ -55,11 +55,11 @@
     "p-map": "^7.0.2",
     "p-pipe": "^4.0.0",
     "pacote": "^18.0.6",
-    "picocolors": "^1.1.0",
     "semver": "^7.6.3",
     "ssri": "^11.0.0",
     "tar": "^6.2.1",
-    "temp-dir": "^3.0.0"
+    "temp-dir": "^3.0.0",
+    "tinyrainbow": "^1.2.0"
   },
   "devDependencies": {
     "@types/fs-extra": "^11.0.4",

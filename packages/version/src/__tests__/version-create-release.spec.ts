@@ -1,6 +1,6 @@
-import { beforeEach, describe, expect, it, Mock, vi } from 'vitest';
-import { join } from 'node:path';
 import { outputFile } from 'fs-extra/esm';
+import { join } from 'node:path';
+import { beforeEach, describe, expect, it, Mock, vi } from 'vitest';
 
 // local modules _must_ be explicitly mocked
 vi.mock('../lib/git-add', async () => await vi.importActual('../lib/__mocks__/git-add'));
@@ -41,9 +41,11 @@ import { dirname } from 'node:path';
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
 import { logOutput, VersionCommandOption } from '@lerna-lite/core';
-import { updateChangelog, recommendVersion } from '../conventional-commits/index.js';
-import { createGitHubClient, createGitLabClient } from '../git-clients/index.js';
+import { updateChangelog } from '../conventional-commits/update-changelog.js';
+import { recommendVersion } from '../conventional-commits/recommend-version.js';
 import { createRelease, createReleaseClient } from '../lib/create-release.js';
+import { createGitHubClient } from '../git-clients/github-client.js';
+import { createGitLabClient } from '../git-clients/gitlab-client.js';
 
 // helpers
 import { commandRunner, initFixtureFactory } from '@lerna-test/helpers';
@@ -56,7 +58,7 @@ const lernaVersion = commandRunner(cliCommands);
 
 import { log } from '@lerna-lite/npmlog';
 import dedent from 'dedent';
-import pc from 'picocolors';
+import c from 'tinyrainbow';
 import yargParser from 'yargs-parser';
 
 const createArgv = (cwd: string, ...args: any[]) => {
@@ -227,7 +229,7 @@ describe.each([
 
     await new VersionCommand(createArgv(cwd, '--create-release', type, '--conventional-commits', '--dry-run'));
 
-    expect(logSpy).toHaveBeenCalledWith(pc.bold(pc.magenta('[dry-run] >')), `Create Release with repo options: `, expect.anything());
+    expect(logSpy).toHaveBeenCalledWith(c.bold(c.magenta('[dry-run] >')), `Create Release with repo options: `, expect.anything());
   });
 
   it('creates a single fixed release in git dry-run mode', async () => {

@@ -37,7 +37,7 @@
   "dependencies": {
     "@lerna-lite/core": "workspace:*",
     "columnify": "^1.6.0",
-    "picocolors": "^1.1.0"
+    "tinyrainbow": "^1.2.0"
   },
   "devDependencies": {
     "yargs": "^17.7.2"

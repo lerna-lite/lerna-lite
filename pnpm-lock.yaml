@@ -259,9 +259,6 @@ importers:
       p-queue:
         specifier: ^8.0.1
         version: 8.0.1
-      picocolors:
-        specifier: ^1.1.0
-        version: 1.1.0
       resolve-from:
         specifier: ^5.0.0
         version: 5.0.0
@@ -274,6 +271,9 @@ importers:
       strong-log-transformer:
         specifier: ^2.1.0
         version: 2.1.0
+      tinyrainbow:
+        specifier: ^1.2.0
+        version: 1.2.0
       write-file-atomic:
         specifier: ^5.0.1
         version: 5.0.1
@@ -369,9 +369,9 @@ importers:
       p-map:
         specifier: ^7.0.2
         version: 7.0.2
-      picocolors:
-        specifier: ^1.1.0
-        version: 1.1.0
+      tinyrainbow:
+        specifier: ^1.2.0
+        version: 1.2.0
     devDependencies:
       '@types/fs-extra':
         specifier: ^11.0.4
@@ -454,9 +454,9 @@ importers:
       columnify:
         specifier: ^1.6.0
         version: 1.6.0
-      picocolors:
-        specifier: ^1.1.0
-        version: 1.1.0
+      tinyrainbow:
+        specifier: ^1.2.0
+        version: 1.2.0
     devDependencies:
       yargs:
         specifier: ^17.7.2
@@ -580,9 +580,6 @@ importers:
       pacote:
         specifier: ^18.0.6
         version: 18.0.6
-      picocolors:
-        specifier: ^1.1.0
-        version: 1.1.0
       semver:
         specifier: ^7.6.3
         version: 7.6.3
@@ -595,6 +592,9 @@ importers:
       temp-dir:
         specifier: ^3.0.0
         version: 3.0.0
+      tinyrainbow:
+        specifier: ^1.2.0
+        version: 1.2.0
     devDependencies:
       '@types/fs-extra':
         specifier: ^11.0.4
@@ -638,9 +638,9 @@ importers:
       p-map:
         specifier: ^7.0.2
         version: 7.0.2
-      picocolors:
-        specifier: ^1.1.0
-        version: 1.1.0
+      tinyrainbow:
+        specifier: ^1.2.0
+        version: 1.2.0
     devDependencies:
       '@types/fs-extra':
         specifier: ^11.0.4
@@ -738,9 +738,6 @@ importers:
       p-reduce:
         specifier: ^3.0.0
         version: 3.0.0
-      picocolors:
-        specifier: ^1.1.0
-        version: 1.1.0
       pify:
         specifier: ^6.1.0
         version: 6.1.0
@@ -753,6 +750,9 @@ importers:
       temp-dir:
         specifier: ^3.0.0
         version: 3.0.0
+      tinyrainbow:
+        specifier: ^1.2.0
+        version: 1.2.0
       uuid:
         specifier: ^10.0.0
         version: 10.0.0
@@ -5225,7 +5225,6 @@ packages:
   /tinyrainbow@1.2.0:
     resolution: {integrity: sha512-weEDEq7Z5eTHPDh4xjX789+fHfF+P8boiFB+0vbWzpbnbsEr/GRaohi/uMKxg8RZMXnl1ItAi/IUHWMsjDV7kQ==}
     engines: {node: '>=14.0.0'}
-    dev: true
 
   /tinyspy@3.0.0:
     resolution: {integrity: sha512-q5nmENpTHgiPVd1cJDDc9cVoYN5x4vCvwT3FMilvKPKneCBZAxn2YWQjDF0UMcE9k0Cay1gBiDfTMU0g+mPMQA==}
