@@ -1,6 +1,6 @@
-import { outputFile } from 'fs-extra/esm';
-import { join } from 'node:path';
 import { beforeEach, describe, expect, it, Mock, vi } from 'vitest';
+import { join } from 'node:path';
+import { outputFile } from 'fs-extra/esm';
 
 // local modules _must_ be explicitly mocked
 vi.mock('../lib/git-add', async () => await vi.importActual('../lib/__mocks__/git-add'));
@@ -41,8 +41,7 @@ import { dirname } from 'node:path';
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
 import { logOutput, VersionCommandOption } from '@lerna-lite/core';
-import { updateChangelog } from '../conventional-commits/update-changelog.js';
-import { recommendVersion } from '../conventional-commits/recommend-version.js';
+import { updateChangelog, recommendVersion } from '../conventional-commits/index.js';
 import { createRelease, createReleaseClient } from '../lib/create-release.js';
 import { createGitHubClient } from '../git-clients/github-client.js';
 import { createGitLabClient } from '../git-clients/gitlab-client.js';
