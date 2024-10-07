@@ -7,7 +7,7 @@ import { publish } from 'libnpmpublish';
 import { dirname, join } from 'node:path';
 import npa from 'npm-package-arg';
 
-import type { LibNpmPublishOptions, PackagePublishConfig } from '../models/index.js';
+import type { LibNpmPublishOptions, PackagePublishConfig } from '../interfaces.js';
 
 /**
  * Alias dash-cased npmConf to camelCase

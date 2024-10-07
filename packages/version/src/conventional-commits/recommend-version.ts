@@ -4,7 +4,7 @@ import conventionalRecommendedBump from 'conventional-recommended-bump';
 import conventionalChangelogCore from 'conventional-changelog-core';
 import semver, { ReleaseType } from 'semver';
 
-import { BaseChangelogOptions, VersioningStrategy } from '../models/index.js';
+import { BaseChangelogOptions, VersioningStrategy } from '../interfaces.js';
 import { GetChangelogConfig } from './get-changelog-config.js';
 import { applyBuildMetadata } from './apply-build-metadata.js';
 

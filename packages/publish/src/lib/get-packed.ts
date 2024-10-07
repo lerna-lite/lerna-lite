@@ -5,7 +5,7 @@ import ssri from 'ssri';
 import tar from 'tar';
 import { Package } from '@lerna-lite/core';
 
-import { Tarball } from '../models/index.js';
+import { Tarball } from '../interfaces.js';
 
 export function getPacked(pkg: Package, tarFilePath: string): Promise<Tarball> {
   const bundledWanted = new Set<string>(/* pkg.bundleDependencies || pkg.bundledDependencies || */ []);

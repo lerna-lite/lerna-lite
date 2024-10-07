@@ -1,7 +1,7 @@
 import { ListableOption, Package, QueryGraph } from '@lerna-lite/core';
-import pc from 'picocolors';
 import columnify from 'columnify';
 import { relative } from 'node:path';
+import c from 'tinyrainbow';
 
 /**
  * Format a list of packages according to specified options.
@@ -207,16 +207,16 @@ function formatColumns(resultList: ReturnType<typeof filterResultList>, viewOpti
     };
 
     if (result.version) {
-      formatted.version = pc.green(`v${result.version}`);
+      formatted.version = c.green(`v${result.version}`);
     } else {
-      formatted.version = pc.yellow('MISSING');
+      formatted.version = c.yellow('MISSING');
     }
 
     if (result.private) {
-      formatted.private = `(${pc.red('PRIVATE')})`;
+      formatted.private = `(${c.red('PRIVATE')})`;
     }
 
-    formatted.location = pc.gray(relative('.', result.location));
+    formatted.location = c.gray(relative('.', result.location));
 
     return formatted;
   }) as unknown as Package[];

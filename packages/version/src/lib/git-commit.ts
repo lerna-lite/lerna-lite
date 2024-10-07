@@ -2,7 +2,7 @@ import { exec, ExecOpts } from '@lerna-lite/core';
 import { log } from '@lerna-lite/npmlog';
 import { EOL } from 'node:os';
 
-import { GitCommitOption } from '../models/index.js';
+import { GitCommitOption } from '../interfaces.js';
 import { tempWrite } from '../utils/index.js';
 
 /**

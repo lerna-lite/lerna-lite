@@ -68,7 +68,7 @@ export function cliRunner(cwd: string, env: { [key: string]: string }) {
     env: Object.assign(
       {
         CI: 'true',
-        // always turn off picocolors
+        // always turn off tinyrainbow
         NO_COLOR: true,
       },
       env
