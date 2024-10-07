@@ -1,7 +1,7 @@
 {
   "name": "@lerna-lite/publish",
   "description": "Publish packages in the current workspace",
-  "version": "3.9.1",
+  "version": "3.9.2",
   "files": [
     "/dist"
   ],
@@ -12,7 +12,7 @@
   "types": "./dist/index.d.ts",
   "exports": {
     "types": "./dist/index.d.ts",
-    "default": "./dist/index.js"
+    "import": "./dist/index.js"
   },
   "scripts": {
     "prebuild": "rimraf dist",
@@ -40,7 +40,7 @@
     "@lerna-lite/npmlog": "workspace:^",
     "@lerna-lite/version": "workspace:*",
     "@npmcli/arborist": "^7.5.4",
-    "@npmcli/package-json": "^5.2.0",
+    "@npmcli/package-json": "^5.2.1",
     "byte-size": "^9.0.0",
     "columnify": "^1.6.0",
     "fs-extra": "^11.2.0",
@@ -54,12 +54,12 @@
     "p-map": "^7.0.2",
     "p-pipe": "^4.0.0",
     "pacote": "^18.0.6",
-    "picocolors": "^1.1.0",
     "semver": "^7.6.3",
     "ssri": "^11.0.0",
     "tar": "^6.2.1",
     "temp-dir": "^3.0.0",
-    "tinyglobby": "^0.2.7"
+    "tinyglobby": "^0.2.7",
+    "tinyrainbow": "^1.2.0"
   },
   "devDependencies": {
     "@types/fs-extra": "^11.0.4",

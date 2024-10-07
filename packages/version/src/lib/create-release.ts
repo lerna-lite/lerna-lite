@@ -1,11 +1,11 @@
 import { RemoteClientType, ValidationError } from '@lerna-lite/core';
 import { log } from '@lerna-lite/npmlog';
 import newGithubReleaseUrl from 'new-github-release-url';
-import pc from 'picocolors';
 import semver from 'semver';
+import c from 'tinyrainbow';
 
 import { createGitHubClient, createGitLabClient, parseGitRepo } from '../git-clients/index.js';
-import { GitClientReleaseOption, GitCreateReleaseClientOutput, ReleaseCommandProps, ReleaseOptions } from '../models/index.js';
+import { GitClientReleaseOption, GitCreateReleaseClientOutput, ReleaseCommandProps, ReleaseOptions } from '../interfaces.js';
 
 export async function createReleaseClient(type: 'github' | 'gitlab'): Promise<GitCreateReleaseClientOutput> {
   switch (type) {
@@ -91,7 +91,7 @@ export function createRelease(
       }
 
       if (dryRun) {
-        log.info(pc.bold(pc.magenta('[dry-run] >')), `Create Release with repo options: `, JSON.stringify(releaseOptions));
+        log.info(c.bold(c.magenta('[dry-run] >')), `Create Release with repo options: `, JSON.stringify(releaseOptions));
         return Promise.resolve();
       }
 

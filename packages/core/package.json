@@ -1,7 +1,7 @@
 {
   "name": "@lerna-lite/core",
   "description": "Lerna-Lite core implementation module",
-  "version": "3.9.1",
+  "version": "3.9.2",
   "publishConfig": {
     "access": "public"
   },
@@ -12,7 +12,7 @@
   "types": "./dist/index.d.ts",
   "exports": {
     "types": "./dist/index.d.ts",
-    "default": "./dist/index.js"
+    "import": "./dist/index.js"
   },
   "scripts": {
     "prebuild": "rimraf dist",
@@ -54,12 +54,12 @@
     "npm-package-arg": "^11.0.3",
     "p-map": "^7.0.2",
     "p-queue": "^8.0.1",
-    "picocolors": "^1.1.0",
     "resolve-from": "^5.0.0",
     "semver": "^7.6.3",
     "slash": "^5.1.0",
     "strong-log-transformer": "^2.1.0",
     "tinyglobby": "^0.2.9",
+    "tinyrainbow": "^1.2.0",
     "write-file-atomic": "^5.0.1",
     "write-json-file": "^6.0.0",
     "write-package": "^7.1.0"

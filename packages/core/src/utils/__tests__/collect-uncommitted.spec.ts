@@ -1,8 +1,8 @@
-import { describe, expect, it, vi } from 'vitest';
 import { outputFile, remove } from 'fs-extra/esm';
 import { dirname, join } from 'node:path';
-import pc from 'picocolors';
 import { fileURLToPath } from 'node:url';
+import c from 'tinyrainbow';
+import { describe, expect, it, vi } from 'vitest';
 
 // helpers
 import { Project } from '../../project/project.js';
@@ -16,12 +16,12 @@ const initFixture = initFixtureFactory(__dirname);
 import { collectUncommitted, collectUncommittedSync } from '../collect-uncommitted.js';
 
 // primary assertion setup
-const GREEN_A = pc.green('A');
-const GREEN_M = pc.green('M');
-const GREEN_D = pc.green('D');
-const RED_D = pc.red('D');
-const RED_M = pc.red('M');
-const RED_QQ = pc.red('??');
+const GREEN_A = c.green('A');
+const GREEN_M = c.green('M');
+const GREEN_D = c.green('D');
+const RED_D = c.red('D');
+const RED_M = c.red('M');
+const RED_QQ = c.red('??');
 
 const colorizedAry = [
   `${GREEN_D}  package.json`,

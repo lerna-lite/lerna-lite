@@ -1,7 +1,7 @@
 {
   "name": "@lerna-lite/exec",
   "description": "Lerna-Lite Exec command will execute an arbitrary command in each package",
-  "version": "3.9.1",
+  "version": "3.9.2",
   "files": [
     "/dist"
   ],
@@ -12,7 +12,7 @@
   "types": "./dist/index.d.ts",
   "exports": {
     "types": "./dist/index.d.ts",
-    "default": "./dist/index.js"
+    "import": "./dist/index.js"
   },
   "scripts": {
     "prebuild": "rimraf dist",
@@ -41,7 +41,7 @@
     "@lerna-lite/profiler": "workspace:*",
     "dotenv": "^16.4.5",
     "p-map": "^7.0.2",
-    "picocolors": "^1.1.0"
+    "tinyrainbow": "^1.2.0"
   },
   "devDependencies": {
     "@types/fs-extra": "^11.0.4",

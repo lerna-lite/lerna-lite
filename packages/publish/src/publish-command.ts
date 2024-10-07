@@ -3,12 +3,12 @@ import { outputFileSync, removeSync } from 'fs-extra/esm';
 import { EOL } from 'node:os';
 import { join as pathJoin, normalize, relative } from 'node:path';
 import normalizePath from 'normalize-path';
-import pc from 'picocolors';
 import pMap from 'p-map';
 import pPipe, { type UnaryFunction } from 'p-pipe';
 import semver from 'semver';
 import tempDir from 'temp-dir';
 import { glob } from 'tinyglobby';
+import c from 'tinyrainbow';
 
 import { getOneTimePassword, OneTimePasswordCache, VersionCommand } from '@lerna-lite/version';
 import {
@@ -53,7 +53,7 @@ import { removeTempLicenses } from './lib/remove-temp-licenses.js';
 import { createTempLicenses } from './lib/create-temp-licenses.js';
 import { getPackagesWithoutLicense } from './lib/get-packages-without-license.js';
 import { Queue, TailHeadQueue } from './lib/throttle-queue.js';
-import type { Tarball } from './models/index.js';
+import type { Tarball } from './interfaces.js';
 import { isNpmJsPublishVersionConflict } from './lib/is-npm-js-publish-version-conflict.js';
 import { isNpmPkgGitHubPublishVersionConflict } from './lib/is-npm-pkg-github-publish-version-conflict.js';
 
@@ -259,7 +259,7 @@ export class PublishCommand extends Command<PublishCommandOption> {
   }
 
   async execute() {
-    const logPrefix = this.options.dryRun ? pc.bgMagenta('[dry-run]') : '';
+    const logPrefix = this.options.dryRun ? c.bgMagenta('[dry-run]') : '';
     this.enableProgressBar();
     this.logger.info('publish', `Publishing packages to npm... ${logPrefix}`);
 
@@ -521,7 +521,7 @@ export class PublishCommand extends Command<PublishCommandOption> {
   }
 
   confirmPublish() {
-    const logPrefix = this.options.dryRun ? pc.bgMagenta('[dry-run]') : '';
+    const logPrefix = this.options.dryRun ? c.bgMagenta('[dry-run]') : '';
     const count = this.packagesToPublish?.length;
     const message = this.packagesToPublish?.map((pkg) => ` - ${pkg.name} => ${this.updatesVersions?.get(pkg.name)}`) ?? [];
 
@@ -535,7 +535,7 @@ export class PublishCommand extends Command<PublishCommandOption> {
       return true;
     }
 
-    let confirmMessage = this.options.dryRun ? pc.bgMagenta('[dry-run]') : '';
+    let confirmMessage = this.options.dryRun ? c.bgMagenta('[dry-run]') : '';
     confirmMessage += ' Are you sure you want to publish these packages?';
     return promptConfirmation(confirmMessage.trim());
   }
@@ -776,7 +776,7 @@ export class PublishCommand extends Command<PublishCommandOption> {
 
   requestOneTimePassword() {
     if (this.options.dryRun) {
-      this.logger.info(pc.bold(pc.magenta('[dry-run] >')), 'will ask OTP');
+      this.logger.info(c.bold(c.magenta('[dry-run] >')), 'will ask OTP');
       return;
     }
 

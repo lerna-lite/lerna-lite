@@ -8,7 +8,7 @@ import getStream from 'get-stream';
 import { BLANK_LINE, CHANGELOG_HEADER } from './constants.js';
 import { GetChangelogConfig } from './get-changelog-config.js';
 import { makeBumpOnlyFilter } from './make-bump-only-filter.js';
-import { ChangelogConfig, ChangelogType, UpdateChangelogOption } from '../models/index.js';
+import { ChangelogConfig, ChangelogType, UpdateChangelogOption } from '../interfaces.js';
 import { readExistingChangelog } from './read-existing-changelog.js';
 import { setConfigChangelogCommitClientLogin, setConfigChangelogCommitGitAuthor } from './writer-opts-transform.js';
 

@@ -4,6 +4,12 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [3.9.2](https://github.com/lerna-lite/lerna-lite/compare/v3.9.1...v3.9.2) (2024-09-28)
+
+### Bug Fixes
+
+* **schema:** bool prop `useWorkspaces` missing in Schema, fixes [#930](https://github.com/lerna-lite/lerna-lite/issues/930) ([#931](https://github.com/lerna-lite/lerna-lite/issues/931)) ([a24a59a](https://github.com/lerna-lite/lerna-lite/commit/a24a59ac8f47400a18415a619e0294d5fcb105c1)) - by @ghiscoding
+
 ## [3.9.1](https://github.com/lerna-lite/lerna-lite/compare/v3.9.0...v3.9.1) (2024-09-07)
 
 ### Bug Fixes

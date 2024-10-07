@@ -4,6 +4,15 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [3.9.2](https://github.com/lerna-lite/lerna-lite/compare/v3.9.1...v3.9.2) (2024-09-28)
+
+### Bug Fixes
+
+* **deps:** replace `chalk` with `picocolors` ([#940](https://github.com/lerna-lite/lerna-lite/issues/940)) ([7850c65](https://github.com/lerna-lite/lerna-lite/commit/7850c655bf138a38a9c9fbd90a84c594c0138ef0)) - by @ghiscoding
+* **deps:** update all non-major dependencies ([#929](https://github.com/lerna-lite/lerna-lite/issues/929)) ([fea1aec](https://github.com/lerna-lite/lerna-lite/commit/fea1aec3e4a3824c6d717fd1530475f4df3a4174)) - by @renovate[bot]
+* **deps:** update inquirer packages to v3 (major) ([#937](https://github.com/lerna-lite/lerna-lite/issues/937)) ([c53390a](https://github.com/lerna-lite/lerna-lite/commit/c53390a2e3e200daead8e04ddc6765fb12e29804)) - by @renovate[bot]
+* **schema:** bool prop `useWorkspaces` missing in Schema, fixes [#930](https://github.com/lerna-lite/lerna-lite/issues/930) ([#931](https://github.com/lerna-lite/lerna-lite/issues/931)) ([a24a59a](https://github.com/lerna-lite/lerna-lite/commit/a24a59ac8f47400a18415a619e0294d5fcb105c1)) - by @ghiscoding
+
 ## [3.9.1](https://github.com/lerna-lite/lerna-lite/compare/v3.9.0...v3.9.1) (2024-09-07)
 
 ### Bug Fixes

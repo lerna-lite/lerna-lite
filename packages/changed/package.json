@@ -1,7 +1,7 @@
 {
   "name": "@lerna-lite/changed",
   "description": "Lerna-Lite changed commmand - List local packages that have changed since the last tagged release",
-  "version": "3.9.1",
+  "version": "3.9.2",
   "files": [
     "/dist"
   ],
@@ -12,7 +12,7 @@
   "types": "./dist/index.d.ts",
   "exports": {
     "types": "./dist/index.d.ts",
-    "default": "./dist/index.js"
+    "import": "./dist/index.js"
   },
   "scripts": {
     "prebuild": "rimraf dist",

@@ -1,7 +1,7 @@
 {
   "name": "@lerna-lite/watch",
   "description": "Lerna-Lite watch commmand - Runs a command whenever packages or their dependents change",
-  "version": "3.9.1",
+  "version": "3.9.2",
   "files": [
     "/dist"
   ],
@@ -12,7 +12,7 @@
   "types": "./dist/index.d.ts",
   "exports": {
     "types": "./dist/index.d.ts",
-    "default": "./dist/index.js"
+    "import": "./dist/index.js"
   },
   "scripts": {
     "prebuild": "rimraf dist",

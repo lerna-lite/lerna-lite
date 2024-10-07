@@ -3,7 +3,7 @@ import { log } from '@lerna-lite/npmlog';
 import dedent from 'dedent';
 
 import { createGitHubClient, parseGitRepo } from '../git-clients/index.js';
-import { RemoteCommit } from '../models/index.js';
+import { RemoteCommit } from '../interfaces.js';
 
 const QUERY_PAGE_SIZE = 100; // GitHub API is restricting max of 100 per query
 

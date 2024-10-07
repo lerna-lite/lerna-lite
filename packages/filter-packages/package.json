@@ -1,7 +1,7 @@
 {
   "name": "@lerna-lite/filter-packages",
   "description": "Lerna-Lite common filtering utils used by a few optional commands (Exec/List/Run/Watch)",
-  "version": "3.9.1",
+  "version": "3.9.2",
   "files": [
     "/dist"
   ],
@@ -12,7 +12,7 @@
   "types": "./dist/index.d.ts",
   "exports": {
     "types": "./dist/index.d.ts",
-    "default": "./dist/index.js"
+    "import": "./dist/index.js"
   },
   "scripts": {
     "prebuild": "rimraf dist",
@@ -40,7 +40,7 @@
     "multimatch": "^7.0.0"
   },
   "devDependencies": {
-    "@types/node": "^22.5.4",
+    "@types/node": "^22.7.4",
     "yargs": "^17.7.2"
   }
 }

@@ -1,7 +1,7 @@
 import { exec, ExecOpts } from '@lerna-lite/core';
 import { log } from '@lerna-lite/npmlog';
 
-import { GitTagOption } from '../models/index.js';
+import { GitTagOption } from '../interfaces.js';
 
 /**
  * @param {string} tag
