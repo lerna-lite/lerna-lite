@@ -1,4 +1,4 @@
-import { globby, globbySync, Options as GlobbyOptions } from 'globby';
+import { glob, globSync, GlobOptions as TinyGlobbyOptions } from 'tinyglobby';
 import { normalize as pathNormalize, posix } from 'node:path';
 import pMap from 'p-map';
 
@@ -17,7 +17,7 @@ function getGlobOpts(rootPath: string, packageConfigs: string[]) {
     absolute: true,
     expandDirectories: false,
     followSymbolicLinks: false,
-  } as GlobbyOptions;
+  } as TinyGlobbyOptions;
 
   if (packageConfigs.some((cfg) => cfg.indexOf('**') > -1)) {
     if (packageConfigs.some((cfg) => cfg.indexOf('node_modules') > -1)) {
@@ -42,7 +42,7 @@ export function makeFileFinder(rootPath: string, packageConfigs: string[]) {
     const promise = pMap(
       Array.from(packageConfigs).sort(),
       (globPath: string) => {
-        let chain: Promise<any> = globby(posix.join(globPath, fileName), options);
+        let chain: Promise<any> = glob(posix.join(globPath, fileName), options);
 
         // fast-glob does not respect pattern order, so we re-sort by absolute path
         chain = chain.then((results) => results.sort());
@@ -70,12 +70,12 @@ export function makeSyncFileFinder(rootPath: string, packageConfigs: string[]) {
   return (
     fileName: string,
     fileMapper: (value: string, index: number, array: string[]) => any,
-    customGlobOpts?: GlobbyOptions
+    customGlobOpts?: TinyGlobbyOptions
   ) => {
-    const options: GlobbyOptions = Object.assign({}, customGlobOpts, globOpts);
+    const options: TinyGlobbyOptions = Object.assign({}, customGlobOpts, globOpts);
     const patterns = packageConfigs.map((globPath) => posix.join(globPath, fileName)).sort();
 
-    let results: string[] = globbySync(patterns, options);
+    let results: string[] = globSync(patterns, options);
 
     // POSIX results always need to be normalized
     results = normalize(results);

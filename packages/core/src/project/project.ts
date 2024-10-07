@@ -1,7 +1,7 @@
 import { log } from '@lerna-lite/npmlog';
 import { cosmiconfigSync, defaultLoaders, type PublicExplorerSync } from 'cosmiconfig';
 import dedent from 'dedent';
-import { globbySync } from 'globby';
+import { globSync } from 'tinyglobby';
 import globParent from 'glob-parent';
 import JSON5 from 'json5';
 import { loadJsonFile, loadJsonFileSync } from 'load-json-file';
@@ -180,7 +180,7 @@ export class Project {
     let licensePath: string | undefined;
 
     try {
-      const search = globbySync(Project.LICENSE_GLOB, {
+      const search = globSync(Project.LICENSE_GLOB, {
         cwd: this.rootPath,
         absolute: true,
         caseSensitiveMatch: false,
