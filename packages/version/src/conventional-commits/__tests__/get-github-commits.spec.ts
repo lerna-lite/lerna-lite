@@ -1,8 +1,8 @@
 import { describe, expect, it, vi } from 'vitest';
 import { log } from '@lerna-lite/npmlog';
 
-vi.mock('../../git-clients', async () => ({
-  ...(await vi.importActual<any>('../../git-clients')),
+vi.mock('../../git-clients/github-client', async () => ({
+  ...(await vi.importActual<any>('../../git-clients/github-client')),
   createGitHubClient: (await vi.importActual<any>('../../__mocks__/github-client')).createGitHubClient,
   parseGitRepo: (await vi.importActual<any>('../../__mocks__/github-client')).parseGitRepo,
 }));

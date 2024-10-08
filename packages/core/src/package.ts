@@ -4,7 +4,7 @@ import { basename, dirname, join, resolve as pathResolve, relative } from 'node:
 import { writePackage } from 'write-package';
 import { log } from '@lerna-lite/npmlog';
 
-import { CommandType, NpaResolveResult, RawManifest } from './models/index.js';
+import { CommandType, NpaResolveResult, RawManifest } from './models/interfaces.js';
 
 // symbol used to 'hide' internal state
 const PKG = Symbol('pkg');

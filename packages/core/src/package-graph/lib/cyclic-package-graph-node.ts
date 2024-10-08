@@ -1,4 +1,4 @@
-import { PackageGraphNode } from '../../package-graph/index.js';
+import { PackageGraphNode } from '../../package-graph/lib/package-graph-node.js';
 
 let lastCollapsedNodeId = 0;
 

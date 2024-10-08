@@ -1,7 +1,7 @@
 import semver from 'semver';
 import { PackageGraphNode, promptSelectOne, promptTextInput } from '@lerna-lite/core';
 
-import { applyBuildMetadata } from '../conventional-commits/index.js';
+import { applyBuildMetadata } from '../conventional-commits/apply-build-metadata.js';
 
 /**
  * @param {(existingPreid: string) => string} resolvePrereleaseId

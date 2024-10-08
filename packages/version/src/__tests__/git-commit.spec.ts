@@ -6,7 +6,7 @@ import { EOL } from 'node:os';
 import { exec } from '@lerna-lite/core';
 import { gitCommit } from '../lib/git-commit.js';
 import { tempWrite } from '../utils/temp-write.js';
-import { GitCommitOption } from '../models/index.js';
+import { GitCommitOption } from '../interfaces.js';
 
 describe('git commit', () => {
   (exec as any).mockResolvedValue(null);

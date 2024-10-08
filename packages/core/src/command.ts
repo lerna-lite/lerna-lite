@@ -12,19 +12,17 @@ import { warnIfHanging } from './utils/warn-if-hanging.js';
 import { writeLogFile } from './utils/write-log-file.js';
 import { Project } from './project/project.js';
 import { ValidationError } from './validation-error.js';
+import { CommandType, ExecOpts, ProjectConfig } from './models/interfaces.js';
 import {
   ChangedCommandOption,
-  CommandType,
   DiffCommandOption,
   ExecCommandOption,
-  ExecOpts,
   InitCommandOption,
   ListCommandOption,
-  ProjectConfig,
   PublishCommandOption,
   VersionCommandOption,
   WatchCommandOption,
-} from './models/index.js';
+} from './models/command-options.js';
 import { PackageGraph } from './package-graph/package-graph.js';
 
 // maxBuffer value for running exec

@@ -4,7 +4,8 @@ import newGithubReleaseUrl from 'new-github-release-url';
 import semver from 'semver';
 import c from 'tinyrainbow';
 
-import { createGitHubClient, createGitLabClient, parseGitRepo } from '../git-clients/index.js';
+import { createGitHubClient, parseGitRepo } from '../git-clients/github-client.js';
+import { createGitLabClient } from '../git-clients/gitlab-client.js';
 import { GitClientReleaseOption, GitCreateReleaseClientOutput, ReleaseCommandProps, ReleaseOptions } from '../interfaces.js';
 
 export async function createReleaseClient(type: 'github' | 'gitlab'): Promise<GitCreateReleaseClientOutput> {

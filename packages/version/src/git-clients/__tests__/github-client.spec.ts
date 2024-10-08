@@ -5,7 +5,7 @@ vi.mock('@lerna-lite/core');
 import { Octokit } from '@octokit/rest';
 import { execSync } from '@lerna-lite/core';
 
-import { createGitHubClient, parseGitRepo } from '../index.js';
+import { createGitHubClient, parseGitRepo } from '../github-client.js';
 
 (execSync as Mock).mockReturnValue('5.6.0');
 

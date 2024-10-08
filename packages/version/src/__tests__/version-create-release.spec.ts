@@ -10,7 +10,8 @@ vi.mock('../lib/git-tag', async () => await vi.importActual('../lib/__mocks__/gi
 vi.mock('../lib/is-anything-committed', async () => await vi.importActual('../lib/__mocks__/is-anything-committed'));
 vi.mock('../lib/is-behind-upstream', async () => await vi.importActual('../lib/__mocks__/is-behind-upstream'));
 vi.mock('../lib/remote-branch-exists', async () => await vi.importActual('../lib/__mocks__/remote-branch-exists'));
-vi.mock('../conventional-commits', async () => await vi.importActual('../__mocks__/conventional-commits'));
+vi.mock('../conventional-commits/recommend-version', async () => await vi.importActual('../__mocks__/conventional-commits/recommend-version'));
+vi.mock('../conventional-commits/update-changelog', async () => await vi.importActual('../__mocks__/conventional-commits/update-changelog'));
 vi.mock('../git-clients/gitlab-client', async () => await vi.importActual('../__mocks__/gitlab-client'));
 vi.mock('../git-clients/github-client', async () => await vi.importActual('../__mocks__/github-client'));
 vi.mock('../lib/create-release', async () => {
@@ -41,7 +42,8 @@ import { dirname } from 'node:path';
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
 import { logOutput, VersionCommandOption } from '@lerna-lite/core';
-import { updateChangelog, recommendVersion } from '../conventional-commits/index.js';
+import { recommendVersion } from '../conventional-commits/recommend-version.js';
+import { updateChangelog } from '../conventional-commits/update-changelog.js';
 import { createRelease, createReleaseClient } from '../lib/create-release.js';
 import { createGitHubClient } from '../git-clients/github-client.js';
 import { createGitLabClient } from '../git-clients/gitlab-client.js';

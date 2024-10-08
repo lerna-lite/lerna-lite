@@ -13,7 +13,7 @@ vi.mock('@lerna-lite/core', async () => ({
   ...(await vi.importActual<any>('@lerna-lite/core')),
   Command: (await vi.importActual<any>('../../../core/src/command')).Command,
   conf: (await vi.importActual<any>('../../../core/src/command')).conf,
-  pulseTillDone: (await vi.importActual<any>('../../../core/src/utils')).pulseTillDone,
+  pulseTillDone: (await vi.importActual<any>('../../../core/src/utils/pulse-till-done')).pulseTillDone,
   collectUpdates: (await vi.importActual<any>('../../../core/src/__mocks__/collect-updates')).collectUpdates,
   getOneTimePassword: () => Promise.resolve('654321'),
   logOutput: (await vi.importActual<any>('../../../core/src/__mocks__/output')).logOutput,

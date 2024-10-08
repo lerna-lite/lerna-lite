@@ -1,9 +1,11 @@
 import npa from 'npm-package-arg';
 
-import { CyclicPackageGraphNode, PackageGraphNode, reportCycles } from './lib/index.js';
+import { CyclicPackageGraphNode } from './lib/cyclic-package-graph-node.js';
+import { PackageGraphNode } from './lib/package-graph-node.js';
+import { reportCycles } from './lib/report-cycles.js';
 import { Package } from '../package.js';
 import { ValidationError } from '../validation-error.js';
-import { NpaResolveResult } from '../models/index.js';
+import { NpaResolveResult } from '../models/interfaces.js';
 
 /**
  * A regular expression used to capture and substitute package versions (referred to as "spec" in the lerna-lite code).
