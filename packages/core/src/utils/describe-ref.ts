@@ -1,6 +1,6 @@
 import { log } from '@lerna-lite/npmlog';
 
-import { DescribeRefDetailedResult, DescribeRefFallbackResult, DescribeRefOptions } from '../models/index.js';
+import { DescribeRefDetailedResult, DescribeRefFallbackResult, DescribeRefOptions } from '../models/interfaces.js';
 import { exec, execSync } from '../child-process.js';
 
 /**

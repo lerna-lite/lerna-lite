@@ -6,7 +6,8 @@ vi.mock('../lib/is-anything-committed', async () => await vi.importActual('../li
 vi.mock('../lib/is-behind-upstream', async () => await vi.importActual('../lib/__mocks__/is-behind-upstream'));
 vi.mock('../lib/remote-branch-exists', async () => await vi.importActual('../lib/__mocks__/remote-branch-exists'));
 vi.mock('../git-clients/gitlab-client', async () => await vi.importActual<any>('../__mocks__/gitlab-client'));
-vi.mock('../conventional-commits', async () => await vi.importActual('../__mocks__/conventional-commits'));
+vi.mock('../conventional-commits/recommend-version', async () => await vi.importActual('../__mocks__/conventional-commits/recommend-version'));
+vi.mock('../conventional-commits/update-changelog', async () => await vi.importActual('../__mocks__/conventional-commits/update-changelog'));
 vi.mock('write-package', async () => await vi.importActual('../lib/__mocks__/write-package'));
 
 vi.mock('@lerna-lite/core', async () => ({
@@ -42,7 +43,8 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
 import * as writePkg from 'write-package';
 import { collectUpdates, VersionCommandOption } from '@lerna-lite/core';
-import { recommendVersion, updateChangelog } from '../conventional-commits/index.js';
+import { recommendVersion } from '../conventional-commits/recommend-version.js';
+import { updateChangelog } from '../conventional-commits/update-changelog.js';
 
 // helpers
 import { initFixtureFactory, showCommit } from '@lerna-test/helpers';

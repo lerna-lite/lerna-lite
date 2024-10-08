@@ -8,8 +8,8 @@ vi.mock('@lerna-lite/core', async () => ({
   promptTextInput: (await vi.importActual<any>('../../../core/src/__mocks__/prompt')).promptTextInput,
   throwIfUncommitted: (await vi.importActual<any>('../../../core/src/__mocks__/check-working-tree')).throwIfUncommitted,
   collectUpdates: (await vi.importActual<any>('../../../core/src/__mocks__/collect-updates')).collectUpdates,
-  PackageGraph: (await vi.importActual<any>('../../../core/src/package-graph')).PackageGraph,
-  getPackages: (await vi.importActual<any>('../../../core/src/project')).getPackages,
+  PackageGraph: (await vi.importActual<any>('../../../core/src/package-graph/package-graph')).PackageGraph,
+  getPackages: (await vi.importActual<any>('../../../core/src/project/project')).getPackages,
 }));
 
 // also point to the local version command so that all mocks are properly used even by the command-runner

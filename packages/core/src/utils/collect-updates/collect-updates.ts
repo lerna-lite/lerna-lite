@@ -1,8 +1,8 @@
 import { log } from '@lerna-lite/npmlog';
 
-import type { DescribeRefOptions, ExecOpts, UpdateCollectorOptions } from '../../models/index.js';
+import type { DescribeRefOptions, ExecOpts, UpdateCollectorOptions } from '../../models/interfaces.js';
 import { Package } from '../../package.js';
-import { PackageGraph } from '../../package-graph/index.js';
+import { PackageGraph } from '../../package-graph/package-graph.js';
 import { describeRefSync } from '../describe-ref.js';
 import { collectPackages } from './lib/collect-packages.js';
 import { getPackagesForOption } from './lib/get-packages-for-option.js';

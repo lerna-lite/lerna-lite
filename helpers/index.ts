@@ -2,7 +2,7 @@ import normalizeNewline from 'normalize-newline';
 import normalizePath from 'normalize-path';
 import { relative } from 'node:path';
 
-import { Project } from '../packages/core/dist/project/index.js';
+import { Project } from '../packages/core/dist/project/project.js';
 
 /**
  * Update lerna config inside a test case.

@@ -14,7 +14,7 @@ import { Package } from '../package.js';
 import { applyExtends } from './lib/apply-extends.js';
 import { ValidationError } from '../validation-error.js';
 import { makeFileFinder, makeSyncFileFinder } from './lib/make-file-finder.js';
-import { ProjectConfig, RawManifest } from '../models/index.js';
+import { ProjectConfig, RawManifest } from '../models/interfaces.js';
 
 /**
  * A representation of the entire project managed by Lerna.

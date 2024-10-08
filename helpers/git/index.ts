@@ -1,9 +1,9 @@
 import { execa } from 'execa';
+import { loadJsonFile } from 'load-json-file';
+import cp from 'node:child_process';
 import { EOL } from 'node:os';
 import { dirname, join, resolve as pathResolve } from 'node:path';
-import cp from 'node:child_process';
 import { fileURLToPath } from 'node:url';
-import { loadJsonFile } from 'load-json-file';
 import { writeJsonFile } from 'write-json-file';
 
 import { tempWrite } from '../../packages/version/dist/utils/temp-write.js';

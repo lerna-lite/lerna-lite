@@ -3,7 +3,7 @@ import { log } from '@lerna-lite/npmlog';
 import { EOL } from 'node:os';
 
 import { GitCommitOption } from '../interfaces.js';
-import { tempWrite } from '../utils/index.js';
+import { tempWrite } from '../utils/temp-write.js';
 
 /**
  * @param {string} message
