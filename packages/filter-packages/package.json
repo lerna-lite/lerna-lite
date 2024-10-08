@@ -36,7 +36,7 @@
   },
   "dependencies": {
     "@lerna-lite/core": "workspace:*",
-    "@lerna-lite/npmlog": "workspace:^",
+    "@lerna-lite/npmlog": "workspace:*",
     "multimatch": "^7.0.0"
   },
   "devDependencies": {

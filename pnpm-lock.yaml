@@ -209,7 +209,7 @@ importers:
         specifier: ^4.0.0
         version: 4.0.0(@types/node@22.7.4)
       '@lerna-lite/npmlog':
-        specifier: workspace:^
+        specifier: workspace:*
         version: link:../npmlog
       '@npmcli/run-script':
         specifier: ^8.1.0
@@ -395,7 +395,7 @@ importers:
         specifier: workspace:*
         version: link:../core
       '@lerna-lite/npmlog':
-        specifier: workspace:^
+        specifier: workspace:*
         version: link:../npmlog
       multimatch:
         specifier: ^7.0.0
@@ -527,7 +527,7 @@ importers:
         specifier: workspace:*
         version: link:../core
       '@lerna-lite/npmlog':
-        specifier: workspace:^
+        specifier: workspace:*
         version: link:../npmlog
       '@lerna-lite/version':
         specifier: workspace:*
@@ -667,7 +667,7 @@ importers:
         specifier: workspace:*
         version: link:../core
       '@lerna-lite/npmlog':
-        specifier: workspace:^
+        specifier: workspace:*
         version: link:../npmlog
       '@octokit/plugin-enterprise-rest':
         specifier: ^6.0.1

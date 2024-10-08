@@ -37,7 +37,7 @@
   "dependencies": {
     "@lerna-lite/cli": "workspace:*",
     "@lerna-lite/core": "workspace:*",
-    "@lerna-lite/npmlog": "workspace:^",
+    "@lerna-lite/npmlog": "workspace:*",
     "@octokit/plugin-enterprise-rest": "^6.0.1",
     "@octokit/rest": "^21.0.2",
     "conventional-changelog-angular": "^7.0.0",

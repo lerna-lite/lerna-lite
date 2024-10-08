@@ -37,7 +37,7 @@
   "dependencies": {
     "@lerna-lite/cli": "workspace:*",
     "@lerna-lite/core": "workspace:*",
-    "@lerna-lite/npmlog": "workspace:^",
+    "@lerna-lite/npmlog": "workspace:*",
     "@lerna-lite/version": "workspace:*",
     "@npmcli/arborist": "^7.5.4",
     "@npmcli/package-json": "^5.2.1",
