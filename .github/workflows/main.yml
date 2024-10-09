@@ -131,7 +131,7 @@ jobs:
           !contains(github.event.head_commit.message, 'chore(release)')
         env:
           NO_COLOR: true
-        run: pnpm test:coverage
+        run: pnpm test
 
       - name: Upload test coverage to Codecov
         uses: codecov/codecov-action@v4

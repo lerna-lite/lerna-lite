@@ -29,6 +29,6 @@ corepack prepare pnpm@latest --activate
 4. run a full TypeScript (TSC) build
    - `pnpm build` OR `npx pnpm build`
 5. add/run Vitest unit tests (make sure to run the previous steps first):
-   - `pnpm test` (watch mode)
-   - `pnpm test:coverage` (full test coverage)
+   - `pnpm test:watch` (watch mode)
+   - `pnpm test` (full test coverage)
 6. after achieving step 2 to 5, then the final step would be to create the Pull Request...

@@ -16,13 +16,13 @@
     {
       "label": "Run Vitest Unit Tests (watch)",
       "type": "shell",
-      "command": "npm run test",
+      "command": "npm run test:watch",
       "problemMatcher": []
     },
     {
       "label": "Run Vitest with Test Coverage",
       "type": "shell",
-      "command": "npm run test:coverage",
+      "command": "npm run test",
       "problemMatcher": []
     },
     {
