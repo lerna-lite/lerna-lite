@@ -4,6 +4,14 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [3.9.3](https://github.com/lerna-lite/lerna-lite/compare/v3.9.2...v3.9.3) (2024-10-08)
+
+### Bug Fixes
+
+* **deps:** replace `globby` with `tinyglobby` ([#941](https://github.com/lerna-lite/lerna-lite/issues/941)) ([be8d050](https://github.com/lerna-lite/lerna-lite/commit/be8d050dbe72b42ff98c8acbfdc0b3665396ed28)) - by @ghiscoding
+* **deps:** replace `picocolors` with `tinyrainbow` ([#942](https://github.com/lerna-lite/lerna-lite/issues/942)) ([75fc4df](https://github.com/lerna-lite/lerna-lite/commit/75fc4dffca0f618c60a5932dab1a4a14ab8ee0ed)) - by @ghiscoding
+* **deps:** update inquirer packages to v4 ([#944](https://github.com/lerna-lite/lerna-lite/issues/944)) ([c9be87d](https://github.com/lerna-lite/lerna-lite/commit/c9be87df2d650b334eafed4bfc077b0ccac29619)) - by @renovate[bot]
+
 ## [3.9.2](https://github.com/lerna-lite/lerna-lite/compare/v3.9.1...v3.9.2) (2024-09-28)
 
 ### Bug Fixes
