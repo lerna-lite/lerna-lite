@@ -208,6 +208,9 @@ importers:
       '@inquirer/select':
         specifier: ^4.0.0
         version: 4.0.0(@types/node@22.7.5)
+      '@lerna-lite/filter-packages':
+        specifier: workspace:*
+        version: link:../filter-packages
       '@lerna-lite/npmlog':
         specifier: workspace:*
         version: link:../npmlog
@@ -357,9 +360,6 @@ importers:
       '@lerna-lite/core':
         specifier: workspace:*
         version: link:../core
-      '@lerna-lite/filter-packages':
-        specifier: workspace:*
-        version: link:../filter-packages
       '@lerna-lite/profiler':
         specifier: workspace:*
         version: link:../profiler

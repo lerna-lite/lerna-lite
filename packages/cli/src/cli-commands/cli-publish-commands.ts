@@ -1,6 +1,7 @@
 import { PublishCommandOption } from '@lerna-lite/core';
 
 import cliVersionCmd, { addBumpPositional } from './cli-version-commands.js';
+import { filterOptions } from '../filter-options.js';
 
 /**
  * @see https://github.com/yargs/yargs/blob/master/docs/advanced.md#providing-a-command-module
@@ -150,6 +151,7 @@ export default {
     };
 
     composeVersionOptions(yargs);
+    filterOptions(yargs);
 
     yargs.options(opts);
 

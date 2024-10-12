@@ -38,6 +38,7 @@
     "@inquirer/expand": "^4.0.0",
     "@inquirer/input": "^4.0.0",
     "@inquirer/select": "^4.0.0",
+    "@lerna-lite/filter-packages": "workspace:*",
     "@lerna-lite/npmlog": "workspace:*",
     "@npmcli/run-script": "^8.1.0",
     "clone-deep": "^4.0.1",
