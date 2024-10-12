@@ -323,7 +323,7 @@ export default {
       // hide options from composed command's help output
       yargs.group(Object.keys(opts), 'Command Options:');
     }
-     filterOptions(yargs);
+    filterOptions(yargs);
 
     return yargs.check((argv) => {
       if (argv['--']) {

@@ -324,9 +324,9 @@ export class Command<T extends AvailableCommandOption> {
         const { graphType } = this.options.command?.[this.commandName] ?? {};
         this.packageGraph = new PackageGraph(packages || [], graphType ?? 'allDependencies');
         if (this.options.isIndependent) {
-          return getFilteredPackages(this.packageGraph, this.execOpts, this.options).then((filteredPackages: Package[])=>{
+          return getFilteredPackages(this.packageGraph, this.execOpts, this.options).then((filteredPackages: Package[]) => {
             this.packageGraph = new PackageGraph(filteredPackages || [], graphType ?? 'allDependencies');
-          })
+          });
         }
       });
     }
