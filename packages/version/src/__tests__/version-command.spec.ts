@@ -1043,8 +1043,8 @@ describe('VersionCommand', () => {
   });
 
   describe('updating lockfile-only', () => {
-    // test with npm client only since other clients are tested in separate file "update-lockfile-version.spec"
-    describe('npm client', () => {
+    // test with pnpm client only since other clients are tested in separate file "update-lockfile-version.spec"
+    describe('pnpm client', () => {
       it(`should NOT call runInstallLockFileOnly() when --no-sync-workspace-lock & --no-manually-update-root-lockfile are provided`, async () => {
         const cwd = await initFixture('lockfile-version2');
         await new VersionCommand(createArgv(cwd, '--bump', 'major', '--yes', '--no-sync-workspace-lock', '--no-manually-update-root-lockfile'));
@@ -1065,7 +1065,7 @@ describe('VersionCommand', () => {
         const lockfileResponse: any = await loadYamlFile(join(cwd, 'pnpm-lock.yaml'));
         const { lockfileVersion, importers } = lockfileResponse;
 
-        expect(lockfileVersion).toMatch(/6\.[0-9]$/);
+        expect(lockfileVersion).toMatch(/([6-9]|1[0-9])\.[0-9]$/);
         expect(importers['packages/package-2'].dependencies['@my-workspace/package-1'].specifier).toBe('workspace:^3.0.0');
         expect(importers['packages/package-3'].dependencies['@my-workspace/package-1'].specifier).toBe('workspace:^');
         expect(importers['packages/package-3'].dependencies['@my-workspace/package-2'].specifier).toBe('workspace:*');
@@ -1089,7 +1089,7 @@ describe('VersionCommand', () => {
         const lockfileResponse: any = await loadYamlFile(join(cwd, 'pnpm-lock.yaml'));
         const { lockfileVersion, importers } = lockfileResponse;
 
-        expect(lockfileVersion).toMatch(/6\.[0-9]$/);
+        expect(lockfileVersion).toMatch(/([6-9]|1[0-9])\.[0-9]$/);
         expect(importers['packages/package-2'].dependencies['@my-workspace/package-1'].specifier).toBe('workspace:^2.4.0');
         expect(importers['packages/package-3'].dependencies['@my-workspace/package-1'].specifier).toBe('workspace:^');
         expect(importers['packages/package-3'].dependencies['@my-workspace/package-2'].specifier).toBe('workspace:*');
