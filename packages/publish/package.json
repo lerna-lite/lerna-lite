@@ -58,7 +58,7 @@
     "ssri": "^11.0.0",
     "tar": "^6.2.1",
     "temp-dir": "^3.0.0",
-    "tinyglobby": "^0.2.7",
+    "tinyglobby": "^0.2.9",
     "tinyrainbow": "^1.2.0"
   },
   "devDependencies": {
