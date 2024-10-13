@@ -4,16 +4,16 @@ const { mockNotice } = vi.hoisted(() => ({ mockNotice: vi.fn() }));
 
 vi.mock('@lerna-lite/core', async () => ({
   ...(await vi.importActual<any>('@lerna-lite/core')), // return the other real methods, below we'll mock only 2 of the methods
-  Command: (await vi.importActual<any>('../../../core/src/command')).Command,
-  conf: (await vi.importActual<any>('../../../core/src/command')).conf,
-  logOutput: (await vi.importActual<any>('../../../core/src/__mocks__/output')).logOutput,
-  promptConfirmation: (await vi.importActual<any>('../../../core/src/__mocks__/prompt')).promptConfirmation,
-  promptSelectOne: (await vi.importActual<any>('../../../core/src/__mocks__/prompt')).promptSelectOne,
-  promptTextInput: (await vi.importActual<any>('../../../core/src/__mocks__/prompt')).promptTextInput,
-  throwIfUncommitted: (await vi.importActual<any>('../../../core/src/__mocks__/check-working-tree')).throwIfUncommitted,
-  collectUpdates: (await vi.importActual<any>('../../../core/src/__mocks__/collect-updates')).collectUpdates,
-  PackageGraph: (await vi.importActual<any>('../../../core/src/package-graph/package-graph')).PackageGraph,
-  getPackages: (await vi.importActual<any>('../../../core/src/project/project')).getPackages,
+  Command: (await vi.importActual<any>('../../command')).Command,
+  conf: (await vi.importActual<any>('../../command')).conf,
+  logOutput: (await vi.importActual<any>('../../__mocks__/output')).logOutput,
+  promptConfirmation: (await vi.importActual<any>('../../__mocks__/prompt')).promptConfirmation,
+  promptSelectOne: (await vi.importActual<any>('../../__mocks__/prompt')).promptSelectOne,
+  promptTextInput: (await vi.importActual<any>('../../__mocks__/prompt')).promptTextInput,
+  throwIfUncommitted: (await vi.importActual<any>('../../__mocks__/check-working-tree')).throwIfUncommitted,
+  collectUpdates: (await vi.importActual<any>('../../__mocks__/collect-updates')).collectUpdates,
+  PackageGraph: (await vi.importActual<any>('../../package-graph/package-graph')).PackageGraph,
+  getPackages: (await vi.importActual<any>('../../project/project')).getPackages,
 }));
 
 import { dirname, resolve as pathResolve } from 'node:path';
