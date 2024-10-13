@@ -31,8 +31,8 @@ const initFixture = initFixtureFactory(pathResolve(__dirname, '../'));
 
 import { Project, PackageGraph } from '@lerna-lite/core';
 
-import { getFilteredPackages } from '../get-filtered-packages.js';
-import { filterOptions } from '../../../cli/src/filter-options.js';
+import { getFilteredPackages } from '../lib/get-filtered-packages.js';
+import { filterOptions } from '../../../../cli/src/filter-options.js';
 
 async function buildGraph(cwd) {
   const packages = await Project.getPackages(cwd);

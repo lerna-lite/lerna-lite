@@ -4,7 +4,7 @@ import { execaSync, SyncOptions } from 'execa';
 import isCI from 'is-ci';
 import { cpus } from 'node:os';
 import { log, Logger } from '@lerna-lite/npmlog';
-import { FilterOptions, getFilteredPackages } from '@lerna-lite/filter-packages';
+import { FilterOptions, getFilteredPackages } from './filter-packages/index.js';
 
 import { cleanStack } from './utils/clean-stack.js';
 import { logExecCommand } from './child-process.js';
@@ -323,11 +323,9 @@ export class Command<T extends AvailableCommandOption> {
       chain = chain.then((packages) => {
         const { graphType } = this.options.command?.[this.commandName] ?? {};
         this.packageGraph = new PackageGraph(packages || [], graphType ?? 'allDependencies');
-        if (this.options.isIndependent) {
-          return getFilteredPackages(this.packageGraph, this.execOpts, this.options).then((filteredPackages: Package[]) => {
-            this.packageGraph = new PackageGraph(filteredPackages || [], graphType ?? 'allDependencies');
-          });
-        }
+        return getFilteredPackages(this.packageGraph, this.execOpts, this.options).then((filteredPackages: Package[]) => {
+          this.packageGraph = new PackageGraph(filteredPackages || [], graphType ?? 'allDependencies');
+        });
       });
     }
 

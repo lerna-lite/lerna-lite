@@ -12,10 +12,10 @@ vi.mock('@lerna-lite/core', async () => ({
   collectUpdates: (await vi.importActual<any>('../../../core/src/__mocks__/collect-updates')).collectUpdates,
   PackageGraph: (await vi.importActual<any>('../../../core/src/package-graph/package-graph')).PackageGraph,
   getPackages: (await vi.importActual<any>('../../../core/src/project/project')).getPackages,
+  getFilteredPackages: (await vi.importActual<any>('../../../core/src/profilter-packagest')).getFilteredPackages,
 }));
 
 vi.mock('@lerna-lite/list', async () => await vi.importActual<any>('../list-command'));
-vi.mock('@lerna-lite/filter-packages', async () => await vi.importActual<any>('../../../filter-packages/src/get-filtered-packages'));
 
 // mocked modules
 import { collectUpdates, ListCommandOption, logOutput } from '@lerna-lite/core';

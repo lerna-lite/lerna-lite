@@ -6,7 +6,6 @@
     { "path": "./packages/core" },
     { "path": "./packages/diff" },
     { "path": "./packages/exec" },
-    { "path": "./packages/filter-packages" },
     { "path": "./packages/init" },
     { "path": "./packages/list" },
     { "path": "./packages/listable" },

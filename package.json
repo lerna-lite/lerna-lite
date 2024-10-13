@@ -65,7 +65,6 @@
     "@lerna-lite/core": "workspace:*",
     "@lerna-lite/diff": "workspace:*",
     "@lerna-lite/exec": "workspace:*",
-    "@lerna-lite/filter-packages": "workspace:*",
     "@lerna-lite/list": "workspace:*",
     "@lerna-lite/listable": "workspace:*",
     "@lerna-lite/npmlog": "workspace:*",

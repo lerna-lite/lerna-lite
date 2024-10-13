@@ -119,26 +119,18 @@ describe('PublishCommand', () => {
       expect(verifyNpmPackageAccess).not.toHaveBeenCalled();
     });
 
-    it('exits non-zero with --scope', async () => {
-      const command = lernaPublish(cwd)('--scope', 'package-1');
-
-      await expect(command).rejects.toThrow(
-        expect.objectContaining({
-          exitCode: 1,
-          message: 'Unknown argument: scope',
-        })
-      );
+    it('publish using scoped packages', async () => {
+      await new PublishCommand(createArgv(cwd, 'my-script', '--scope', 'package-1'));
+      
+      const logMessages = loggingOutput('success');
+      expect(logMessages).toContain('No changed packages to publish');
     });
 
-    it('exits non-zero with --since', async () => {
-      const command = lernaPublish(cwd)('--since', 'main');
+    it('publish using ignored packages', async () => {
+      await new PublishCommand(createArgv(cwd, 'my-script', '--ignore', 'package-@(2|3|4)'));
 
-      await expect(command).rejects.toThrow(
-        expect.objectContaining({
-          exitCode: 1,
-          message: 'Unknown argument: since',
-        })
-      );
+      const logMessages = loggingOutput('success');
+      expect(logMessages).toContain('No changed packages to publish');
     });
 
     it('errors when --git-head is passed without from-package positional', async () => {
