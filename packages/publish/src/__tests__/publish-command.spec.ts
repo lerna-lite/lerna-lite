@@ -121,7 +121,7 @@ describe('PublishCommand', () => {
 
     it('publish using scoped packages', async () => {
       await new PublishCommand(createArgv(cwd, 'my-script', '--scope', 'package-1'));
-      
+
       const logMessages = loggingOutput('success');
       expect(logMessages).toContain('No changed packages to publish');
     });

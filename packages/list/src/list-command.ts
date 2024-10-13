@@ -1,4 +1,12 @@
-import { Command, CommandType, FilterOptions, ListCommandOption, getFilteredPackages, logOutput, ProjectConfig } from '@lerna-lite/core';
+import {
+  Command,
+  CommandType,
+  FilterOptions,
+  ListCommandOption,
+  getFilteredPackages,
+  logOutput,
+  ProjectConfig,
+} from '@lerna-lite/core';
 import { listable } from '@lerna-lite/listable';
 
 export function factory(argv: ListCommandOption) {

@@ -40,7 +40,6 @@ export * from './utils/types.js';
 export * from './utils/warn-if-hanging.js';
 export * from './utils/write-log-file.js';
 
-
 // files
 export * from './child-process.js';
 export * from './constants.js';
