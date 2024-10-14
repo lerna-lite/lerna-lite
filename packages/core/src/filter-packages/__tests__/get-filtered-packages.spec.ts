@@ -2,26 +2,17 @@ import { beforeAll, expect, test, vi } from 'vitest';
 
 const { mockNotice } = vi.hoisted(() => ({ mockNotice: vi.fn() }));
 
-vi.mock('@lerna-lite/core', async () => ({
-  ...(await vi.importActual<any>('@lerna-lite/core')), // return the other real methods, below we'll mock only 2 of the methods
-  Command: (await vi.importActual<any>('../../command')).Command,
-  conf: (await vi.importActual<any>('../../command')).conf,
-  logOutput: (await vi.importActual<any>('../../__mocks__/output')).logOutput,
-  promptConfirmation: (await vi.importActual<any>('../../__mocks__/prompt')).promptConfirmation,
-  promptSelectOne: (await vi.importActual<any>('../../__mocks__/prompt')).promptSelectOne,
-  promptTextInput: (await vi.importActual<any>('../../__mocks__/prompt')).promptTextInput,
-  throwIfUncommitted: (await vi.importActual<any>('../../__mocks__/check-working-tree')).throwIfUncommitted,
-  collectUpdates: (await vi.importActual<any>('../../__mocks__/collect-updates')).collectUpdates,
-  PackageGraph: (await vi.importActual<any>('../../package-graph/package-graph')).PackageGraph,
-  getPackages: (await vi.importActual<any>('../../project/project')).getPackages,
-}));
+vi.mock('../../prompt', async () => await vi.importActual('../../__mocks__/prompt'));
+vi.mock('../../output', async () => await vi.importActual('../../__mocks__/output'));
+vi.mock('../../utils/check-working-tree', async () => await vi.importActual('../../__mocks__/check-working-tree'));
+vi.mock('../../utils/collect-updates', async () => await vi.importActual('../../__mocks__/collect-updates'));
 
 import { dirname, resolve as pathResolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import yargs from 'yargs/yargs';
 
 // mocked modules
-import { collectUpdates } from '@lerna-lite/core';
+import { collectUpdates } from '../../__mocks__/collect-updates.js';
 
 // helpers
 import { initFixtureFactory } from '@lerna-test/helpers';
@@ -29,7 +20,8 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
 const initFixture = initFixtureFactory(pathResolve(__dirname, '../'));
 
-import { Project, PackageGraph } from '@lerna-lite/core';
+import { PackageGraph } from '../../package-graph/package-graph.js';
+import { Project } from '../../project/project.js';
 
 import { getFilteredPackages } from '../lib/get-filtered-packages.js';
 import { filterOptions } from '../../../../cli/src/filter-options.js';
