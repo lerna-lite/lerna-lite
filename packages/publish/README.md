@@ -67,7 +67,11 @@ This is useful when a previous `lerna publish` failed to publish all packages to
 
 ## Options
 
-`lerna publish` supports all of the options provided by [`lerna version`](https://github.com/lerna-lite/lerna-lite/tree/main/packages/version#options) in addition to the following:
+`lerna publish` supports all of the options provided by [`lerna version`](https://github.com/lerna-lite/lerna-lite/tree/main/packages/version#options) in addition to the options shown below, it also accepts all [filter flags](https://github.com/lerna-lite/lerna-lite/blob/main/packages/core/README.md#options).
+
+```sh
+$ lerna publish --scope my-component test
+```
 
 - [`@lerna/publish`](#lernapublish)
   - [Positionals](#positionals)

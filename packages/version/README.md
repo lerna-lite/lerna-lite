@@ -62,6 +62,12 @@ Running `lerna version --conventional-commits` without the above flags will rele
 
 ## Options
 
+`lerna version` accepts all [filter flags](https://github.com/lerna-lite/lerna-lite/blob/main/packages/core/README.md#options).
+
+```sh
+$ lerna version --scope my-component test
+```
+
 - [`@lerna/version`](#lernaversion)
   - [Usage](#usage)
   - [Positionals](#positionals)
