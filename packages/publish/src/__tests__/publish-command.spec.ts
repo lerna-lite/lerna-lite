@@ -239,17 +239,17 @@ describe('PublishCommand', () => {
 
     it('publishes only the filtered packages when providing a --scope', async () => {
       const testDir = await initFixture('independent');
-    
+
       await new PublishCommand(createArgv(testDir, '--scope', 'package-1'));
-    
+
       expect((npmPublish as typeof npmPublishMock).order()).toEqual(['package-1']);
     });
-    
+
     it('publishes only the packages that are not --ignore(d)', async () => {
       const testDir = await initFixture('independent');
-    
+
       await new PublishCommand(createArgv(testDir, '--ignore', 'package-@(2|3|4)'));
-    
+
       expect((npmPublish as typeof npmPublishMock).order()).toEqual(['package-1', 'package-6']);
     });
 
