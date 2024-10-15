@@ -1,6 +1,8 @@
 import {
   Command,
   CommandType,
+  FilterOptions,
+  getFilteredPackages,
   logOutput,
   Package,
   ProjectConfig,
@@ -8,7 +10,6 @@ import {
   runTopologically,
   ValidationError,
 } from '@lerna-lite/core';
-import { FilterOptions, getFilteredPackages } from '@lerna-lite/filter-packages';
 import { Profiler } from '@lerna-lite/profiler';
 import pMap from 'p-map';
 import c from 'tinyrainbow';

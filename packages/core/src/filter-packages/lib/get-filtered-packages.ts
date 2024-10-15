@@ -1,5 +1,9 @@
-import { collectUpdates, ExecOpts, Package, PackageGraph } from '@lerna-lite/core';
 import { log } from '@lerna-lite/npmlog';
+
+import { ExecOpts } from '../../models/interfaces.js';
+import { PackageGraph } from '../../package-graph/package-graph.js';
+import { Package } from '../../package.js';
+import { collectUpdates } from '../../utils/collect-updates/collect-updates.js';
 
 import { filterPackages } from './filter-packages.js';
 import { FilterOptions } from './interfaces.js';

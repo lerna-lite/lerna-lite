@@ -1,5 +1,6 @@
 import { VersionCommandOption } from '@lerna-lite/core';
 import { log } from '@lerna-lite/npmlog';
+import { filterOptions } from '../filter-options.js';
 
 /**
  * @see https://github.com/yargs/yargs/blob/master/docs/advanced.md#providing-a-command-module
@@ -322,6 +323,7 @@ export default {
       // hide options from composed command's help output
       yargs.group(Object.keys(opts), 'Command Options:');
     }
+    filterOptions(yargs);
 
     return yargs.check((argv) => {
       if (argv['--']) {

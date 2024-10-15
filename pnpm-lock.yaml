@@ -23,9 +23,6 @@ importers:
       '@lerna-lite/exec':
         specifier: workspace:*
         version: link:packages/exec
-      '@lerna-lite/filter-packages':
-        specifier: workspace:*
-        version: link:packages/filter-packages
       '@lerna-lite/list':
         specifier: workspace:*
         version: link:packages/list
@@ -247,6 +244,9 @@ importers:
       minimatch:
         specifier: ^9.0.5
         version: 9.0.5
+      multimatch:
+        specifier: ^7.0.0
+        version: 7.0.0
       npm-package-arg:
         specifier: ^11.0.3
         version: 11.0.3
@@ -357,9 +357,6 @@ importers:
       '@lerna-lite/core':
         specifier: workspace:*
         version: link:../core
-      '@lerna-lite/filter-packages':
-        specifier: workspace:*
-        version: link:../filter-packages
       '@lerna-lite/profiler':
         specifier: workspace:*
         version: link:../profiler
@@ -435,9 +432,6 @@ importers:
       '@lerna-lite/core':
         specifier: workspace:*
         version: link:../core
-      '@lerna-lite/filter-packages':
-        specifier: workspace:*
-        version: link:../filter-packages
       '@lerna-lite/listable':
         specifier: workspace:*
         version: link:../listable
@@ -623,9 +617,6 @@ importers:
       '@lerna-lite/core':
         specifier: workspace:*
         version: link:../core
-      '@lerna-lite/filter-packages':
-        specifier: workspace:*
-        version: link:../filter-packages
       '@lerna-lite/npmlog':
         specifier: workspace:*
         version: link:../npmlog
@@ -823,9 +814,6 @@ importers:
       '@lerna-lite/core':
         specifier: workspace:*
         version: link:../core
-      '@lerna-lite/filter-packages':
-        specifier: workspace:*
-        version: link:../filter-packages
       chokidar:
         specifier: ^3.6.0
         version: 3.6.0

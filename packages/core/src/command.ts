@@ -4,6 +4,7 @@ import { execaSync, SyncOptions } from 'execa';
 import isCI from 'is-ci';
 import { cpus } from 'node:os';
 import { log, Logger } from '@lerna-lite/npmlog';
+import { FilterOptions, getFilteredPackages } from './filter-packages/index.js';
 
 import { cleanStack } from './utils/clean-stack.js';
 import { logExecCommand } from './child-process.js';
@@ -24,6 +25,7 @@ import {
   WatchCommandOption,
 } from './models/command-options.js';
 import { PackageGraph } from './package-graph/package-graph.js';
+import { Package } from './package.js';
 
 // maxBuffer value for running exec
 const DEFAULT_CONCURRENCY = cpus().length;
@@ -50,7 +52,7 @@ export class Command<T extends AvailableCommandOption> {
   commandName: CommandType = '';
   composed;
   logger!: Logger;
-  options!: T & ExecOpts & ProjectConfig;
+  options!: T & ExecOpts & ProjectConfig & FilterOptions;
   project!: Project;
   packageGraph!: PackageGraph;
   runner?: Promise<any>;
@@ -320,6 +322,9 @@ export class Command<T extends AvailableCommandOption> {
       chain = chain.then((packages) => {
         const { graphType } = this.options.command?.[this.commandName] ?? {};
         this.packageGraph = new PackageGraph(packages || [], graphType ?? 'allDependencies');
+        return getFilteredPackages(this.packageGraph, this.execOpts, this.options).then((filteredPackages: Package[]) => {
+          this.packageGraph = new PackageGraph(filteredPackages || [], graphType ?? 'allDependencies');
+        });
       });
     }
 

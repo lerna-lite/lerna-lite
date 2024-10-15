@@ -1,14 +1,15 @@
 import {
   Command,
+  FilterOptions,
   Package,
   ProjectConfig,
+  getFilteredPackages,
   pluralize,
   spawn,
   spawnStreaming,
   ValidationError,
   WatchCommandOption,
 } from '@lerna-lite/core';
-import { FilterOptions, getFilteredPackages } from '@lerna-lite/filter-packages';
 import chokidar from 'chokidar';
 import { join } from 'node:path';
 

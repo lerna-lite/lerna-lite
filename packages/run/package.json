@@ -37,7 +37,6 @@
   "dependencies": {
     "@lerna-lite/cli": "workspace:*",
     "@lerna-lite/core": "workspace:*",
-    "@lerna-lite/filter-packages": "workspace:*",
     "@lerna-lite/npmlog": "workspace:*",
     "@lerna-lite/profiler": "workspace:*",
     "fs-extra": "^11.2.0",

@@ -1,6 +1,7 @@
 // folders
 export * from './corepack/exec-package-manager.js';
 export * from './corepack/is-corepack-enabled.js';
+export * from './filter-packages/index.js';
 export * from './models/command-options.js';
 export * from './models/interfaces.js';
 export * from './package-graph/package-graph.js';

@@ -51,6 +51,7 @@
     "json5": "^2.2.3",
     "load-json-file": "^7.0.1",
     "minimatch": "^9.0.5",
+    "multimatch": "^7.0.0",
     "npm-package-arg": "^11.0.3",
     "p-map": "^7.0.2",
     "p-queue": "^8.0.1",

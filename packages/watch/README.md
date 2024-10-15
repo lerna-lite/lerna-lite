@@ -101,7 +101,7 @@ $ npx -c 'lerna watch -- echo \$LERNA_PACKAGE_NAME \$LERNA_FILE_CHANGES'
 
 ## Options
 
-`lerna watch` accepts all [filter flags](https://github.com/lerna-lite/lerna-lite/blob/main/packages/filter-packages/README.md#options). Filter flags can be used to select specific packages to watch. See the [examples](#examples) above.
+`lerna watch` accepts all [filter flags](https://github.com/lerna-lite/lerna-lite/blob/main/packages/core/README.md#options). Filter flags can be used to select specific packages to watch. See the [examples](#examples) above.
 
 - [`@lerna/watch`](#lernawatch)
   - [Usage](#usage)

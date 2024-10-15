@@ -46,7 +46,7 @@ $ lerna exec -- node \$LERNA_ROOT_PATH/scripts/some-script.js
 
 ## Options
 
-`lerna exec` accepts all [filter flags](https://github.com/lerna-lite/lerna-lite/blob/main/packages/filter-packages/README.md#options).
+`lerna exec` accepts all [filter flags](https://github.com/lerna-lite/lerna-lite/blob/main/packages/core/README.md#options).
 
 ```sh
 $ lerna exec --scope my-component -- ls -la
