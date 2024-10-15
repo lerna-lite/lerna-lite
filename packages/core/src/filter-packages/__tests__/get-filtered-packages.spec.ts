@@ -3,16 +3,16 @@ import { beforeAll, expect, test, vi } from 'vitest';
 const { mockNotice } = vi.hoisted(() => ({ mockNotice: vi.fn() }));
 
 vi.mock('../../prompt', async () => await vi.importActual('../../__mocks__/prompt'));
-vi.mock('../../output', async () => await vi.importActual('../../__mocks__/output'));
+vi.mock('../../utils/output', async () => await vi.importActual('../../__mocks__/output'));
 vi.mock('../../utils/check-working-tree', async () => await vi.importActual('../../__mocks__/check-working-tree'));
-vi.mock('../../utils/collect-updates', async () => await vi.importActual('../../__mocks__/collect-updates'));
+vi.mock('../../utils/collect-updates/collect-updates.js', async () => await vi.importActual('../../__mocks__/collect-updates'));
 
 import { dirname, resolve as pathResolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import yargs from 'yargs/yargs';
 
 // mocked modules
-import { collectUpdates } from '../../__mocks__/collect-updates.js';
+import { collectUpdates } from '../../utils/collect-updates/collect-updates.js';
 
 // helpers
 import { initFixtureFactory } from '@lerna-test/helpers';

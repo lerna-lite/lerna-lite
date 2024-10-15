@@ -20,6 +20,8 @@ vi.mock('@lerna-lite/list', async () => await vi.importActual<any>('../list-comm
 // mocked modules
 import { collectUpdates, ListCommandOption, logOutput } from '@lerna-lite/core';
 
+vi.mock('../../../core/src/utils/collect-updates/collect-updates.js', async () => await vi.importActual('../../../core/src/__mocks__/collect-updates'));
+
 // helpers
 import { fileURLToPath } from 'node:url';
 import { dirname } from 'node:path';

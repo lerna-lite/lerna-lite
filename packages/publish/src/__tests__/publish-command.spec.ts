@@ -119,20 +119,6 @@ describe('PublishCommand', () => {
       expect(verifyNpmPackageAccess).not.toHaveBeenCalled();
     });
 
-    it('publish using scoped packages', async () => {
-      await new PublishCommand(createArgv(cwd, 'my-script', '--scope', 'package-1'));
-
-      const logMessages = loggingOutput('success');
-      expect(logMessages).toContain('No changed packages to publish');
-    });
-
-    it('publish using ignored packages', async () => {
-      await new PublishCommand(createArgv(cwd, 'my-script', '--ignore', 'package-@(2|3|4)'));
-
-      const logMessages = loggingOutput('success');
-      expect(logMessages).toContain('No changed packages to publish');
-    });
-
     it('errors when --git-head is passed without from-package positional', async () => {
       const command = new PublishCommand(createArgv(cwd, '--git-head', 'deadbeef'));
 
@@ -249,6 +235,22 @@ describe('PublishCommand', () => {
         'package-3',
         // package-5 is private
       ]);
+    });
+
+    it('publishes only the filtered packages when providing a --scope', async () => {
+      const testDir = await initFixture('independent');
+    
+      await new PublishCommand(createArgv(testDir, '--scope', 'package-1'));
+    
+      expect((npmPublish as typeof npmPublishMock).order()).toEqual(['package-1']);
+    });
+    
+    it('publishes only the packages that are not --ignore(d)', async () => {
+      const testDir = await initFixture('independent');
+    
+      await new PublishCommand(createArgv(testDir, '--ignore', 'package-@(2|3|4)'));
+    
+      expect((npmPublish as typeof npmPublishMock).order()).toEqual(['package-1', 'package-6']);
     });
 
     it('throws an error in fixed mode when --independent is passed', async () => {
