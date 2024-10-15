@@ -318,7 +318,6 @@ export class Command<T extends AvailableCommandOption> {
     let chain: Promise<any> = Promise.resolve();
 
     if (this.commandName !== 'info') {
-      this.options.isIndependent = this.project.isIndependent();
       chain = chain.then(() => this.project.getPackages());
       chain = chain.then((packages) => {
         const { graphType } = this.options.command?.[this.commandName] ?? {};

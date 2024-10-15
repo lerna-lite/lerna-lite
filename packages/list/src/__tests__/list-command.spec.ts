@@ -15,12 +15,11 @@ vi.mock('@lerna-lite/core', async () => ({
   getFilteredPackages: (await vi.importActual<any>('../../../core/src/filter-packages')).getFilteredPackages,
 }));
 
+vi.mock('../../../core/src/utils/collect-updates/collect-updates.js', async () => await vi.importActual('../../../core/src/__mocks__/collect-updates'));
 vi.mock('@lerna-lite/list', async () => await vi.importActual<any>('../list-command'));
 
 // mocked modules
 import { collectUpdates, ListCommandOption, logOutput } from '@lerna-lite/core';
-
-vi.mock('../../../core/src/utils/collect-updates/collect-updates.js', async () => await vi.importActual('../../../core/src/__mocks__/collect-updates'));
 
 // helpers
 import { fileURLToPath } from 'node:url';
