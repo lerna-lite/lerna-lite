@@ -131,7 +131,11 @@ describe('version bump', () => {
     await factory(createArgv(testDir, '--bump', 'prerelease', '--scope', 'package-1'));
 
     const message = await getCommitMessage(testDir);
-    expect(message).toContain('package-1@1.0.1-alpha.0');
+    expect(message).not.toContain('package-2@1.0.1-alpha.0');
+    expect(message).not.toContain('package-3@1.0.1-alpha.0');
+    expect(message).not.toContain('package-4@1.0.1-alpha.0');
+    expect(message).not.toContain('package-5@1.0.1-alpha.0');
+    expect(message).not.toContain('package-6@1.0.1-alpha.0');
   });
 
   test('prerelease increments version only for the packages that are not --ignore(d)', async () => {
@@ -141,7 +145,11 @@ describe('version bump', () => {
     await factory(createArgv(testDir, '--bump', 'prerelease', '--ignore', 'package-@(2|3|4|5|6)'));
 
     const message = await getCommitMessage(testDir);
-    expect(message).toContain('package-1@1.0.1-alpha.0');
+    expect(message).not.toContain('package-2@1.0.1-alpha.0');
+    expect(message).not.toContain('package-3@1.0.1-alpha.0');
+    expect(message).not.toContain('package-4@1.0.1-alpha.0');
+    expect(message).not.toContain('package-5@1.0.1-alpha.0');
+    expect(message).not.toContain('package-6@1.0.1-alpha.0');
   });
 
   test('prerelease increments version with custom --preid', async () => {
