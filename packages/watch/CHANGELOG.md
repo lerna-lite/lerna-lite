@@ -4,6 +4,12 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [3.10.0](https://github.com/lerna-lite/lerna-lite/compare/v3.9.3...v3.10.0) (2024-10-15)
+
+### Features
+
+* support --scope filter options in all lerna commands ([#948](https://github.com/lerna-lite/lerna-lite/issues/948)) ([f72f893](https://github.com/lerna-lite/lerna-lite/commit/f72f893beb5b9c3c23c861caba06dab801c37435)) - by @farfromrefug
+
 ## [3.9.3](https://github.com/lerna-lite/lerna-lite/compare/v3.9.2...v3.9.3) (2024-10-08)
 
 **Note:** Version bump only for package @lerna-lite/watch
