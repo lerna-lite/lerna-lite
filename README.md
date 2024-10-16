@@ -67,7 +67,7 @@ Here are some of the largest projects using Lerna-Lite
   React Navigation
 </a>&nbsp; | &nbsp;
 <a href="https://github.com/formatjs/formatjs">
-  <img src="https://formatjs.io/img/logo.svg" width="25" height="25">
+  <img src="https://avatars.githubusercontent.com/u/50559490" width="25" height="25">
   Format.JS
 </a>&nbsp; | &nbsp;
 <a href="https://github.com/johnsoncodehk/volar">
