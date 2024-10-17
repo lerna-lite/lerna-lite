@@ -16,6 +16,7 @@ import { pathExistsSync, readJsonSync } from 'fs-extra/esm';
 import { promises as fsPromises } from 'node:fs';
 import { dirname as pathDirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
+import { stripVTControlCharacters } from 'node:util';
 
 // mocked or stubbed modules
 import { loadJsonFile } from 'load-json-file';
@@ -39,9 +40,7 @@ import {
 // Serialize the JSONError output to be more human readable
 expect.addSnapshotSerializer({
   serialize(str: string) {
-    // eslint-disable-next-line @typescript-eslint/no-require-imports
-    const stripAnsi = require('strip-ansi');
-    return stripAnsi(str).replace(/Error in: .*lerna\.json/, 'Error in: normalized/path/to/lerna.json');
+    return stripVTControlCharacters(str).replace(/Error in: .*lerna\.json/, 'Error in: normalized/path/to/lerna.json');
   },
   test(val: string) {
     return val != null && typeof val === 'string' && val.includes('Error in: ');
