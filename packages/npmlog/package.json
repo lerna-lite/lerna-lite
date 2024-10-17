@@ -42,7 +42,6 @@
     "set-blocking": "^2.0.0",
     "signal-exit": "^4.1.0",
     "string-width": "^7.2.0",
-    "strip-ansi": "^7.1.0",
     "wide-align": "^1.1.5"
   },
   "devDependencies": {

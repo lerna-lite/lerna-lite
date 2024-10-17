@@ -2,7 +2,7 @@
  * Inlined from deprecated package https://github.com/npm/gauge/blob/f8092518a47ac6a96027ae3ad97d0251ffe7643b
  */
 
-import stripAnsi from 'strip-ansi';
+import { stripVTControlCharacters } from 'node:util';
 import stringWidth from 'string-width';
 
 export function wideTruncate(str: string, target: number) {
@@ -19,7 +19,7 @@ export function wideTruncate(str: string, target: number) {
   // We compute the number of bytes of ansi sequences here and add
   // that to our initial truncation to ensure that we don't slice one
   // that we want to keep in half.
-  const noAnsi = stripAnsi(str);
+  const noAnsi = stripVTControlCharacters(str);
   const ansiSize = str.length + noAnsi.length;
   let truncated = str.slice(0, target + ansiSize);
 
