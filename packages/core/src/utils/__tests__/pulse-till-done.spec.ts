@@ -17,6 +17,6 @@ describe('pulse-till-done()', () => {
   });
 
   it('throws when an invalid file is provided to pulse', async () => {
-    await expect(pulseTillDone(json('../../../invalid-file.json', { name: '@lerna-lite/core' }))).rejects.toThrow('');
+    await expect(pulseTillDone(json('../../../invalid-file.json', { name: '@lerna-lite/core' }))).rejects.toThrow('404 Not Found');
   });
 });
