@@ -6,7 +6,7 @@ describe('env-replace()', () => {
   it('should throw an error when there are no env variable defined or found', () => {
     const input = 'http://registry.npmjs.org/:_authToken=${UNKNOWN_TOKEN}';
 
-    expect(() => envReplace(input)).toThrow('');
+    expect(() => envReplace(input)).toThrow('Failed to replace env in config');
   });
 
   it('should return the same input when not a string', () => {
