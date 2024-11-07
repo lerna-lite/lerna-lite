@@ -46,7 +46,7 @@
   "devDependencies": {
     "@types/fs-extra": "^11.0.4",
     "perf_hooks": "^0.0.1",
-    "tinyglobby": "^0.2.9",
+    "tinyglobby": "^0.2.10",
     "yargs": "^17.7.2",
     "yargs-parser": "^21.1.1"
   }
