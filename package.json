@@ -56,9 +56,9 @@
   },
   "engines": {
     "node": "^18.0.0 || >=20.0.0",
-    "pnpm": ">=9.12.3"
+    "pnpm": ">=9.14.2"
   },
-  "packageManager": "pnpm@9.12.3",
+  "packageManager": "pnpm@9.14.2",
   "devDependencies": {
     "@lerna-lite/changed": "workspace:*",
     "@lerna-lite/cli": "workspace:*",
@@ -75,15 +75,15 @@
     "@lerna-lite/watch": "workspace:*",
     "@lerna-test/helpers": "link:helpers",
     "@types/fs-extra": "^11.0.4",
-    "@types/node": "^22.9.0",
+    "@types/node": "^22.10.1",
     "@types/yargs": "^17.0.33",
-    "@vitest/coverage-v8": "^2.1.4",
-    "@vitest/eslint-plugin": "^1.1.7",
+    "@vitest/coverage-v8": "^2.1.6",
+    "@vitest/eslint-plugin": "^1.1.12",
     "conventional-changelog-conventionalcommits": "^7.0.2",
     "cross-env": "^7.0.3",
-    "eslint": "^9.14.0",
+    "eslint": "^9.15.0",
     "eslint-config-prettier": "^9.1.0",
-    "eslint-plugin-n": "^17.13.1",
+    "eslint-plugin-n": "^17.14.0",
     "execa": "^8.0.1",
     "file-url": "^4.0.0",
     "find-up": "^7.0.0",
@@ -91,7 +91,7 @@
     "load-json-file": "^7.0.1",
     "normalize-newline": "^4.1.0",
     "normalize-path": "^3.0.0",
-    "prettier": "^3.3.3",
+    "prettier": "^3.4.1",
     "rimraf": "^5.0.10",
     "semver": "^7.6.3",
     "tacks": "^1.2.6",
@@ -101,9 +101,9 @@
     "ts-node": "^10.9.2",
     "tslib": "^2.8.1",
     "tsm": "^2.3.0",
-    "typescript": "^5.6.3",
-    "typescript-eslint": "^8.13.0",
-    "vitest": "^2.1.4",
+    "typescript": "^5.7.2",
+    "typescript-eslint": "^8.16.0",
+    "vitest": "^2.1.6",
     "write-json-file": "^6.0.0"
   }
 }
