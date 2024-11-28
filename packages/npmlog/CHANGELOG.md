@@ -4,6 +4,12 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [3.10.1](https://github.com/lerna-lite/lerna-lite/compare/v3.10.0...v3.10.1) (2024-11-28)
+
+### Bug Fixes
+
+* drop `strip-ansi` in favor of native stripVTControlCharacters ([#950](https://github.com/lerna-lite/lerna-lite/issues/950)) ([2f23996](https://github.com/lerna-lite/lerna-lite/commit/2f23996fec6bcc695515a344957a7cf46edf90d4)) - by @ghiscoding
+
 ## [3.10.0](https://github.com/lerna-lite/lerna-lite/compare/v3.9.3...v3.10.0) (2024-10-15)
 
 **Note:** Version bump only for package @lerna-lite/npmlog

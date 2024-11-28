@@ -1,7 +1,7 @@
 {
   "name": "@lerna-lite/changed",
   "description": "Lerna-Lite changed commmand - List local packages that have changed since the last tagged release",
-  "version": "3.10.0",
+  "version": "3.10.1",
   "files": [
     "/dist"
   ],

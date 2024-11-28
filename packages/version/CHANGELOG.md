@@ -4,6 +4,14 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [3.10.1](https://github.com/lerna-lite/lerna-lite/compare/v3.10.0...v3.10.1) (2024-11-28)
+
+### Bug Fixes
+
+* **deps:** update dependency git-url-parse to v16 ([#960](https://github.com/lerna-lite/lerna-lite/issues/960)) ([c4d1833](https://github.com/lerna-lite/lerna-lite/commit/c4d1833971f799de77e873cf420f3abce52b5bbf)) - by @renovate[bot]
+* **deps:** update dependency uuid to v11 ([#957](https://github.com/lerna-lite/lerna-lite/issues/957)) ([cbda4b6](https://github.com/lerna-lite/lerna-lite/commit/cbda4b6a5a4759c599b8d408ff8a54b3636f10c1)) - by @renovate[bot]
+* drop `strip-ansi` in favor of native stripVTControlCharacters ([#950](https://github.com/lerna-lite/lerna-lite/issues/950)) ([2f23996](https://github.com/lerna-lite/lerna-lite/commit/2f23996fec6bcc695515a344957a7cf46edf90d4)) - by @ghiscoding
+
 ## [3.10.0](https://github.com/lerna-lite/lerna-lite/compare/v3.9.3...v3.10.0) (2024-10-15)
 
 ### Features

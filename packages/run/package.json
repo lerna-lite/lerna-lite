@@ -1,7 +1,7 @@
 {
   "name": "@lerna-lite/run",
   "description": "Lerna-Lite Run command will help to run npm script in each package workspace that contains that script",
-  "version": "3.10.0",
+  "version": "3.10.1",
   "files": [
     "/dist"
   ],
