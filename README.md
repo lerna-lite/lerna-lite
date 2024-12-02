@@ -85,7 +85,21 @@ Here are some of the largest projects using Lerna-Lite
 
 ## Sponsors
 
-<a href="https://github.com/wundergraph" target="_blank"><img src="https://avatars.githubusercontent.com/u/64281914" width="60" height="60" valign="middle" /> Wundergraph</a>
+<div>
+  <span>
+    <a href="https://github.com/wundergraph" target="_blank">
+      <img src="https://avatars.githubusercontent.com/u/64281914" width="50" height="50" valign="middle" /> 
+      Wundergraph
+    </a>
+  </span>
+  &nbsp;
+  <span style="margin-left: 8px">
+    <a href="https://github.com/johnsoncodehk" target="_blank">
+      <img src="https://avatars.githubusercontent.com/u/16279759" width="50" height="50" valign="middle" /> 
+      johnsoncodehk (Volar)
+    </a>
+  </span>
+</div>
 
 ## License
 
@@ -363,4 +377,18 @@ If you have problems running the project and your problems are related to Git co
 
 ## Sponsors
 
-<a href="https://github.com/wundergraph" target="_blank"><img src="https://avatars.githubusercontent.com/u/64281914" width="60" height="60" valign="middle" /> Wundergraph</a>
+<div>
+  <span>
+    <a href="https://github.com/wundergraph" target="_blank">
+      <img src="https://avatars.githubusercontent.com/u/64281914" width="50" height="50" valign="middle" /> 
+      Wundergraph
+    </a>
+  </span>
+  &nbsp;
+  <span style="margin-left: 8px">
+    <a href="https://github.com/johnsoncodehk" target="_blank">
+      <img src="https://avatars.githubusercontent.com/u/16279759" width="50" height="50" valign="middle" /> 
+      johnsoncodehk (Volar)
+    </a>
+  </span>
+</div>
