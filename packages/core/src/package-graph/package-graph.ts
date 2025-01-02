@@ -1,4 +1,7 @@
+import fs from 'node:fs';
+import path from 'node:path';
 import npa from 'npm-package-arg';
+import { parse } from 'yaml';
 
 import { CyclicPackageGraphNode } from './lib/cyclic-package-graph-node.js';
 import { PackageGraphNode } from './lib/package-graph-node.js';
@@ -65,6 +68,8 @@ export class PackageGraph extends Map<string, PackageGraphNode> {
       }
     }
 
+    const { catalog, catalogs } = this.readWorkspaceCatalogConfig();
+
     this.forEach((currentNode: PackageGraphNode, currentName: string) => {
       const graphDependencies =
         graphType === 'dependencies'
@@ -87,6 +92,20 @@ export class PackageGraph extends Map<string, PackageGraphNode> {
         // Yarn patch protocol handling: We swap out the patch URL with the regular semantic version.
         if (spec.startsWith('patch:')) {
           spec = spec.replace(YARN_PATCH_PROTOCOL_REG_EXP, '$2');
+        }
+
+        // handle catalog: protocol supported by pnpm
+        const isCatalogSpec = /^catalog:/.test(spec);
+
+        if (isCatalogSpec) {
+          spec = spec.replace(/^catalog:/, '');
+          const catalogVersion = spec === '' || spec === 'default' ? catalog[depName] : catalogs[spec]?.[depName];
+
+          if (catalogVersion) {
+            spec = catalogVersion;
+          } else {
+            console.warn(`Warning: No version found in ${spec || 'default'} catalog for ${depName}`);
+          }
         }
 
         // npa doesn't support the explicit workspace: protocol, supported by
@@ -158,6 +177,18 @@ export class PackageGraph extends Map<string, PackageGraphNode> {
    */
   addDependents(filteredPackages: Package[]) {
     return this.extendList(filteredPackages, 'localDependents');
+  }
+
+  readWorkspaceCatalogConfig() {
+    const workspaceConfigPath = path.join(process.cwd(), 'pnpm-workspace.yaml');
+    const { catalog = {}, catalogs = {} } = fs.existsSync(workspaceConfigPath)
+      ? parse(fs.readFileSync(workspaceConfigPath, 'utf8'))
+      : {};
+
+    return {
+      catalog,
+      catalogs,
+    };
   }
 
   /**

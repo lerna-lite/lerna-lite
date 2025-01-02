@@ -63,7 +63,8 @@
     "tinyrainbow": "^1.2.0",
     "write-file-atomic": "^5.0.1",
     "write-json-file": "^6.0.0",
-    "write-package": "^7.1.0"
+    "write-package": "^7.1.0",
+    "yaml": "2.6.1"
   },
   "devDependencies": {
     "@types/clone-deep": "^4.0.4",

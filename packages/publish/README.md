@@ -104,6 +104,7 @@ $ lerna publish --scope my-component test
     - [`--yes`](#--yes)
   - [`publishConfig` Overrides](#publishconfig-overrides)
   - [`workspace:` protocol](#workspace-protocol)
+  - [`catalog:` protocol](#catalog-protocol)
 
 ### `--arborist-load-options`
 Arborist options that can be provided in your `lerna.json` config which are options associated to the `arborist.loadActual(options)` method.
@@ -612,6 +613,10 @@ The library is doing a strict match and it will transform and publish the follow
   }
 }
 ```
+
+# `catalog:` protocol
+
+The `catalog:` protocol ([pnpm catalog](https://pnpm.io/catalogs)) can be recognized by Lerna-Lite. When publishing, they will be kept as is. If you need to bump the version of a package in a catalog, you will need to edit `pnpm-workspace.yaml` manually. So we suggest using `workspace:` protocol instead for workspace dependencies.
 
 ## FAQ
 

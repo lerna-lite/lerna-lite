@@ -46,7 +46,7 @@
 
 ---
 
-## 📢 Lerna-Lite supports pnpm/yarn `workspace:` protocol
+## 📢 Lerna-Lite supports pnpm/yarn `workspace:` protocol and pnpm `catalog:` protocol
 
 Take 30sec. to complete this 1 question [poll survey 🔘](https://github.com/lerna-lite/lerna-lite/discussions/156) if you are using this feature. It's a simple poll to find out which package manager is the most popular with `workspace:` protocol feature (so far, about 60% pnpm and 40% yarn).
 
