@@ -38,8 +38,8 @@
     "@lerna-lite/cli": "workspace:*",
     "@lerna-lite/core": "workspace:*",
     "@lerna-lite/profiler": "workspace:*",
-    "dotenv": "^16.4.5",
-    "p-map": "^7.0.2",
+    "dotenv": "^16.4.7",
+    "p-map": "^7.0.3",
     "tinyrainbow": "^1.2.0"
   },
   "devDependencies": {

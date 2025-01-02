@@ -53,7 +53,7 @@
     "minimatch": "^9.0.5",
     "multimatch": "^7.0.0",
     "npm-package-arg": "^11.0.3",
-    "p-map": "^7.0.2",
+    "p-map": "^7.0.3",
     "p-queue": "^8.0.1",
     "resolve-from": "^5.0.0",
     "semver": "^7.6.3",
@@ -64,7 +64,7 @@
     "write-file-atomic": "^5.0.1",
     "write-json-file": "^6.0.0",
     "write-package": "^7.1.0",
-    "yaml": "2.6.1"
+    "yaml": "2.7.0"
   },
   "devDependencies": {
     "@types/clone-deep": "^4.0.4",

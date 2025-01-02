@@ -40,7 +40,7 @@
     "@lerna-lite/npmlog": "workspace:*",
     "@lerna-lite/profiler": "workspace:*",
     "fs-extra": "^11.2.0",
-    "p-map": "^7.0.2",
+    "p-map": "^7.0.3",
     "tinyrainbow": "^1.2.0"
   },
   "devDependencies": {
