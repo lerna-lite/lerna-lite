@@ -1,7 +1,7 @@
 {
   "name": "@lerna-lite/watch",
   "description": "Lerna-Lite watch commmand - Runs a command whenever packages or their dependents change",
-  "version": "3.10.1",
+  "version": "3.11.0",
   "files": [
     "/dist"
   ],

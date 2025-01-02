@@ -4,6 +4,18 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [3.11.0](https://github.com/lerna-lite/lerna-lite/compare/v3.10.1...v3.11.0) (2025-01-02)
+
+### Features
+
+* **core:** support catalog: protocol ([#965](https://github.com/lerna-lite/lerna-lite/issues/965)) ([4d739e2](https://github.com/lerna-lite/lerna-lite/commit/4d739e25a44c46e5df24df156fc8b36ad49d0989)) - by @Mister-Hope
+
+### Bug Fixes
+
+* **deps:** update all non-major dependencies ([#966](https://github.com/lerna-lite/lerna-lite/issues/966)) ([956ad09](https://github.com/lerna-lite/lerna-lite/commit/956ad098754c6869263afb92ec629be1ad968bbc)) - by @renovate[bot]
+* **deps:** update dependency is-ci to v4 ([#968](https://github.com/lerna-lite/lerna-lite/issues/968)) ([d8424a7](https://github.com/lerna-lite/lerna-lite/commit/d8424a7bcedf7ae445977e198e706e642180ee27)) - by @renovate[bot]
+* **deps:** update inquirer packages ([#967](https://github.com/lerna-lite/lerna-lite/issues/967)) ([3bc8dff](https://github.com/lerna-lite/lerna-lite/commit/3bc8dff3712c35a2ad86f49b51ad036e171c7805)) - by @renovate[bot]
+
 ## [3.10.1](https://github.com/lerna-lite/lerna-lite/compare/v3.10.0...v3.10.1) (2024-11-28)
 
 ### Bug Fixes
