@@ -103,8 +103,8 @@ $ lerna publish --scope my-component test
     - [`--verify-access`](#--verify-access)
     - [`--yes`](#--yes)
   - [`publishConfig` Overrides](#publishconfig-overrides)
-  - [`workspace:` protocol](#workspace-protocol)
   - [`catalog:` protocol](#catalog-protocol)
+  - [`workspace:` protocol](#workspace-protocol)
 
 ### `--arborist-load-options`
 Arborist options that can be provided in your `lerna.json` config which are options associated to the `arborist.loadActual(options)` method.
@@ -577,6 +577,10 @@ lerna will run [npm lifecycle scripts](https://docs.npmjs.com/cli/v8/using-npm/s
 10. Run `postpublish` lifecycle in root
 11. Update temporary dist-tag to latest, if [enabled](#--temp-tag)
 
+# `catalog:` protocol
+
+The `catalog:` protocol ([pnpm catalog](https://pnpm.io/catalogs)) can be recognized by Lerna-Lite. When publishing, they will be kept as is. If you need to bump the version of a package in a catalog, you will need to edit `pnpm-workspace.yaml` manually. So we suggest using `workspace:` protocol instead for workspace dependencies.
+
 # `workspace:` protocol
 
 The `workspace:` protocol ([pnpm workspace](https://pnpm.io/workspaces), [yarn workspace](https://yarnpkg.com/features/workspaces#workspace-ranges-workspace)) is also supported by Lerna-Lite. We also strongly suggest that you use this in combo with the new [`--sync-workspace-lock`](https://github.com/lerna-lite/lerna-lite/tree/main/packages/version#--sync-workspace-lock) flag to properly update your root project lock file. When publishing, it will replace any `workspace:` dependencies by:
@@ -613,10 +617,6 @@ The library is doing a strict match and it will transform and publish the follow
   }
 }
 ```
-
-# `catalog:` protocol
-
-The `catalog:` protocol ([pnpm catalog](https://pnpm.io/catalogs)) can be recognized by Lerna-Lite. When publishing, they will be kept as is. If you need to bump the version of a package in a catalog, you will need to edit `pnpm-workspace.yaml` manually. So we suggest using `workspace:` protocol instead for workspace dependencies.
 
 ## FAQ
 
