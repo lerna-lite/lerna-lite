@@ -8,7 +8,7 @@ See [Conventional Commits](https://conventionalcommits.org) for commit guideline
 
 ### Features
 
-* **core:** support catalog: protocol ([#965](https://github.com/lerna-lite/lerna-lite/issues/965)) ([4d739e2](https://github.com/lerna-lite/lerna-lite/commit/4d739e25a44c46e5df24df156fc8b36ad49d0989)) - by @Mister-Hope
+* **core:** support `catalog:` protocol ([#965](https://github.com/lerna-lite/lerna-lite/issues/965)) ([4d739e2](https://github.com/lerna-lite/lerna-lite/commit/4d739e25a44c46e5df24df156fc8b36ad49d0989)) - by @Mister-Hope
 
 ### Bug Fixes
 
