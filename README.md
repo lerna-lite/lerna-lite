@@ -71,7 +71,7 @@ Here are some of the largest projects using Lerna-Lite
   Format.JS
 </a>&nbsp; | &nbsp;
 <a href="https://github.com/johnsoncodehk/volar">
-  <img src="https://vue.gallerycdn.vsassets.io/extensions/vue/volar/1.3.16/1681622004073/Microsoft.VisualStudio.Services.Icons.Default" width="25" height="25">
+  <img src="https://raw.githubusercontent.com/johnsoncodehk/sponsors/master/logos/Vue.svg" width="25" height="25">
   Volar
 </a>&nbsp; | &nbsp;
 <a href="https://github.com/palantir/blueprint">
