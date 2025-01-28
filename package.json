@@ -56,9 +56,9 @@
   },
   "engines": {
     "node": "^18.0.0 || >=20.0.0",
-    "pnpm": "9.15.2"
+    "pnpm": "9.15.4"
   },
-  "packageManager": "pnpm@9.15.2",
+  "packageManager": "pnpm@9.15.4",
   "devDependencies": {
     "@lerna-lite/changed": "workspace:*",
     "@lerna-lite/cli": "workspace:*",
@@ -75,19 +75,19 @@
     "@lerna-lite/watch": "workspace:*",
     "@lerna-test/helpers": "link:helpers",
     "@types/fs-extra": "^11.0.4",
-    "@types/node": "^22.10.3",
+    "@types/node": "^22.12.0",
     "@types/yargs": "^17.0.33",
-    "@vitest/coverage-v8": "^3.0.0-beta.3",
-    "@vitest/eslint-plugin": "^1.1.23",
+    "@vitest/coverage-v8": "^3.0.4",
+    "@vitest/eslint-plugin": "^1.1.25",
     "conventional-changelog-conventionalcommits": "^7.0.2",
     "cross-env": "^7.0.3",
-    "eslint": "^9.17.0",
+    "eslint": "^9.19.0",
     "eslint-config-prettier": "^9.1.0",
     "eslint-plugin-n": "^17.15.1",
     "execa": "^8.0.1",
     "file-url": "^4.0.0",
     "find-up": "^7.0.0",
-    "fs-extra": "^11.2.0",
+    "fs-extra": "^11.3.0",
     "load-json-file": "^7.0.1",
     "normalize-newline": "^4.1.0",
     "normalize-path": "^3.0.0",
@@ -101,9 +101,9 @@
     "ts-node": "^10.9.2",
     "tslib": "^2.8.1",
     "tsm": "^2.3.0",
-    "typescript": "^5.7.2",
-    "typescript-eslint": "^8.19.0",
-    "vitest": "^3.0.0-beta.3",
+    "typescript": "^5.7.3",
+    "typescript-eslint": "^8.22.0",
+    "vitest": "^3.0.4",
     "write-json-file": "^6.0.0"
   }
 }
