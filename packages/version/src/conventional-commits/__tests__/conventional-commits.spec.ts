@@ -283,7 +283,7 @@ describe('conventional-commits', () => {
         recommendVersion(pkg1, 'fixed', {
           changelogPreset: './scripts/erroring-preset.ts',
         })
-      ).rejects.toThrow('whatBump must be a function');
+      ).rejects.toThrow('`whatBump` must be a function');
     });
 
     it('throws an error when an implicit changelog preset cannot be loaded', async () => {
@@ -687,7 +687,6 @@ describe('conventional-commits', () => {
 
       expect(pkg2.isBumpOnlyVersion).toBeTruthy();
       expect(leafChangelog.newEntry.trimRight()).toMatchInlineSnapshot(`
-        <a name="1.0.1"></a>
         ## <small>1.0.1 (YYYY-MM-DD)</small>
 
         **Note:** Version bump only for package package-2
@@ -714,9 +713,9 @@ describe('conventional-commits', () => {
       });
 
       expect(leafChangelog.newEntry).toMatchInlineSnapshot(`
-        <a name="1.0.1"></a>
         ## <small>1.0.1 (YYYY-MM-DD)</small>
-        * fix(pkg1): A commit using the old preset API
+
+        * fix(pkg1): A commit using the old preset API ([SHA](https://github.com/lerna/conventional-commits-fixed/commit/SHA))
 
       `);
     });
@@ -741,9 +740,9 @@ describe('conventional-commits', () => {
       });
 
       expect(leafChangelog.newEntry).toMatchInlineSnapshot(`
-        <a name="1.0.1"></a>
         ## <small>1.0.1 (YYYY-MM-DD)</small>
-        * fix(pkg2): A commit using a legacy callback preset
+
+        * fix(pkg2): A commit using a legacy callback preset ([SHA](https://github.com/lerna/conventional-commits-fixed/commit/SHA))
 
       `);
     });
@@ -777,9 +776,9 @@ describe('conventional-commits', () => {
       });
 
       expect(leafChangelog.newEntry).toMatchInlineSnapshot(`
-        <a name="1.0.1"></a>
         ## <small>1.0.1 (YYYY-MM-DD)</small>
-        * fix(pkg2): A commit using a legacy callback preset
+
+        * fix(pkg2): A commit using a legacy callback preset ([SHA](https://github.com/lerna/conventional-commits-fixed/commit/SHA))
 
       `);
     });
@@ -964,6 +963,7 @@ describe('conventional-commits', () => {
           {
             authorName: 'Tester McPerson',
             login: 'tester-mcperson',
+            hash: resultCommit1.stdout.match(/(\[main\s([0-9a-f]{7})\])/)[2],
             shortHash: resultCommit1.stdout.match(/(\[main\s([0-9a-f]{7})\])/)[2],
             message: 'fix(stuff): changed',
           },
@@ -976,12 +976,14 @@ describe('conventional-commits', () => {
           {
             authorName: 'Tester McPerson',
             login: 'tester-mcperson',
+            hash: resultCommit2.stdout.match(/(\[main\s([0-9a-f]{7})\])/)[2],
             shortHash: resultCommit2.stdout.match(/(\[main\s([0-9a-f]{7})\])/)[2],
             message: 'feat(thing): added',
           },
         ],
       };
 
+      // const changelogOne = await updateChangelog(pkg1, 'independent', opt1s);
       const [changelogOne, changelogTwo] = await Promise.all([updateChangelog(pkg1, 'independent', opt1s), updateChangelog(pkg2, 'independent', opt2s)]);
 
       expect(changelogOne.newEntry.trimRight()).toMatchInlineSnapshot(`
@@ -994,7 +996,6 @@ describe('conventional-commits', () => {
       `);
       expect(changelogTwo.newEntry.trimRight()).toMatchInlineSnapshot(`
         # [1.1.0](/compare/package-2@1.0.0...package-2@1.1.0) (YYYY-MM-DD)
-
 
         ### Features
 

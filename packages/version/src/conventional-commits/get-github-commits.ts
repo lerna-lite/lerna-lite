@@ -82,6 +82,7 @@ export async function getGithubCommits(
       for (const commit of historyData.nodes) {
         if (commit?.oid && commit?.author) {
           remoteCommits.push({
+            hash: commit.oid,
             shortHash: commit.oid.substring(0, 7),
             authorName: commit?.author.name,
             login: commit?.author?.user?.login ?? '',

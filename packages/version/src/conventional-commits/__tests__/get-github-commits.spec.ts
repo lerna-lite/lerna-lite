@@ -43,12 +43,14 @@ describe('getGithubCommits method', () => {
         authorName: 'Tester McPerson',
         login: 'tester-mcperson',
         message: 'fix(stuff): changed something',
+        hash: 'deadbeef123456789',
         shortHash: 'deadbee',
       },
       {
         authorName: 'Tester McPerson',
         login: 'tester-mcperson',
         message: 'chore(thing): updated some small stuff',
+        hash: 'bee1234beef7890abc',
         shortHash: 'bee1234',
       },
     ]);
