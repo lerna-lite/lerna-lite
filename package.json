@@ -82,7 +82,7 @@
     "conventional-changelog-conventionalcommits": "^7.0.2",
     "cross-env": "^7.0.3",
     "eslint": "^9.19.0",
-    "eslint-config-prettier": "^9.1.0",
+    "eslint-config-prettier": "^10.0.1",
     "eslint-plugin-n": "^17.15.1",
     "execa": "^8.0.1",
     "file-url": "^4.0.0",
