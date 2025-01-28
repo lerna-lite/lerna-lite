@@ -65,7 +65,7 @@
     "semver": "^7.6.3",
     "slash": "^5.1.0",
     "temp-dir": "^3.0.0",
-    "tinyrainbow": "^1.2.0",
+    "tinyrainbow": "^2.0.0",
     "uuid": "^11.0.5",
     "write-json-file": "^6.0.0"
   },

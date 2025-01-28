@@ -272,8 +272,8 @@ importers:
         specifier: ^0.2.10
         version: 0.2.10
       tinyrainbow:
-        specifier: ^1.2.0
-        version: 1.2.0
+        specifier: ^2.0.0
+        version: 2.0.0
       write-file-atomic:
         specifier: ^5.0.1
         version: 5.0.1
@@ -370,8 +370,8 @@ importers:
         specifier: ^7.0.3
         version: 7.0.3
       tinyrainbow:
-        specifier: ^1.2.0
-        version: 1.2.0
+        specifier: ^2.0.0
+        version: 2.0.0
     devDependencies:
       '@types/fs-extra':
         specifier: ^11.0.4
@@ -433,8 +433,8 @@ importers:
         specifier: ^1.6.0
         version: 1.6.0
       tinyrainbow:
-        specifier: ^1.2.0
-        version: 1.2.0
+        specifier: ^2.0.0
+        version: 2.0.0
     devDependencies:
       yargs:
         specifier: ^17.7.2
@@ -568,8 +568,8 @@ importers:
         specifier: ^0.2.10
         version: 0.2.10
       tinyrainbow:
-        specifier: ^1.2.0
-        version: 1.2.0
+        specifier: ^2.0.0
+        version: 2.0.0
     devDependencies:
       '@types/fs-extra':
         specifier: ^11.0.4
@@ -611,8 +611,8 @@ importers:
         specifier: ^7.0.3
         version: 7.0.3
       tinyrainbow:
-        specifier: ^1.2.0
-        version: 1.2.0
+        specifier: ^2.0.0
+        version: 2.0.0
     devDependencies:
       '@types/fs-extra':
         specifier: ^11.0.4
@@ -723,8 +723,8 @@ importers:
         specifier: ^3.0.0
         version: 3.0.0
       tinyrainbow:
-        specifier: ^1.2.0
-        version: 1.2.0
+        specifier: ^2.0.0
+        version: 2.0.0
       uuid:
         specifier: ^11.0.5
         version: 11.0.5
@@ -3369,10 +3369,6 @@ packages:
   tinypool@1.0.2:
     resolution: {integrity: sha512-al6n+QEANGFOMf/dmUMsuS5/r9B06uwlyNjZZql/zv8J7ybHCgoihBNORZCY2mzUuAnomQa2JdhyHKzZxPCrFA==}
     engines: {node: ^18.0.0 || >=20.0.0}
-
-  tinyrainbow@1.2.0:
-    resolution: {integrity: sha512-weEDEq7Z5eTHPDh4xjX789+fHfF+P8boiFB+0vbWzpbnbsEr/GRaohi/uMKxg8RZMXnl1ItAi/IUHWMsjDV7kQ==}
-    engines: {node: '>=14.0.0'}
 
   tinyrainbow@2.0.0:
     resolution: {integrity: sha512-op4nsTR47R6p0vMUUoYl/a+ljLFVtlfaXkLQmqfLR1qHma1h/ysYk4hEXZ880bf2CYgTskvTa/e196Vd5dDQXw==}
@@ -6248,8 +6244,6 @@ snapshots:
       picomatch: 4.0.2
 
   tinypool@1.0.2: {}
-
-  tinyrainbow@1.2.0: {}
 
   tinyrainbow@2.0.0: {}
 

@@ -41,7 +41,7 @@
     "@lerna-lite/profiler": "workspace:*",
     "fs-extra": "^11.3.0",
     "p-map": "^7.0.3",
-    "tinyrainbow": "^1.2.0"
+    "tinyrainbow": "^2.0.0"
   },
   "devDependencies": {
     "@types/fs-extra": "^11.0.4",
