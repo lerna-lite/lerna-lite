@@ -31,7 +31,7 @@ export function setConfigChangelogCommitGitAuthor(
       ? commitCustomFormat.replace(/%a/g, '{{authorName}}').replace(/%e/g, '{{authorEmail}}')
       : `({{authorName}})`;
   writerOpts.commitPartial =
-    config.writerOpts.commitPartial!.replace(/\n*$/, '') + ` {{#if @root.linkReferences~}}${extraCommitMsg}{{~/if}}\n`;
+    config.writer.commitPartial!.replace(/\n*$/, '') + ` {{#if @root.linkReferences~}}${extraCommitMsg}{{~/if}}\n`;
 }
 
 /**
@@ -57,14 +57,14 @@ export function setConfigChangelogCommitClientLogin(
     typeof commitCustomFormat === 'string' && commitCustomFormat !== ''
       ? commitCustomFormat.replace(/%a/g, '{{authorName}}').replace(/%e/g, '{{authorEmail}}').replace(/%l/g, '{{userLogin}}')
       : ` (@{{userLogin}})`;
-  writerOpts.commitPartial = config.writerOpts.commitPartial!.replace(/\n*$/, '') + `${extraCommitMsg}\n`;
+  writerOpts.commitPartial = config.writer.commitPartial!.replace(/\n*$/, '') + `${extraCommitMsg}\n`;
 
   // add commits since last release into the transform function
   writerOpts.transform = writerOptsTransform.bind(
     null,
-    config.writerOpts.transform as (cmt: Commit, ctx: Context) => Commit,
+    config.writer.transform as unknown as (cmt: Commit, ctx: Context) => Commit,
     commitsSinceLastRelease
-  );
+  ) as any;
 }
 
 /**
@@ -83,15 +83,18 @@ export function writerOptsTransform(
   context: Context
 ) {
   // execute original writerOpts transform
-  const extendedCommit = originalTransform(commit, context);
+  const clonedCommit = { ...commit };
 
   // add client remote detail (login)
-  if (extendedCommit) {
-    const remoteCommit = commitsSinceLastRelease.find((c) => c.shortHash === commit.shortHash);
+  if (clonedCommit) {
+    const shortHash = clonedCommit.shortHash || clonedCommit.hash?.substring(0, 7);
+    const remoteCommit = commitsSinceLastRelease.find((c) => c.shortHash === shortHash);
     if (remoteCommit?.login) {
-      commit.userLogin = remoteCommit.login;
+      clonedCommit.userLogin = remoteCommit.login;
     }
   }
+
+  const extendedCommit = originalTransform(clonedCommit, context);
 
   return extendedCommit;
 }

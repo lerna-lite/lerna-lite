@@ -1,7 +1,8 @@
 import { ChangelogPresetOptions, EOL, Package } from '@lerna-lite/core';
 import { log } from '@lerna-lite/npmlog';
-import conventionalChangelogCore, { Context } from 'conventional-changelog-core';
+import conventionalChangelogCore, { Context, Options as ChangelogCoreOptions } from 'conventional-changelog-core';
 import { Options as WriterOptions } from 'conventional-changelog-writer';
+import { Commit } from 'conventional-commits-parser';
 import { writeFile } from 'fs/promises';
 import getStream from 'get-stream';
 
@@ -40,7 +41,7 @@ export async function updateChangelog(pkg: Package, type: ChangelogType, updateO
   // cc-core mutates input :P
   if (config.conventionalChangelog) {
     // "new" preset API
-    options.config = Object.assign({}, config.conventionalChangelog) as ChangelogConfig;
+    options.config = Object.assign({}, config.conventionalChangelog) as unknown as ChangelogConfig;
   } else {
     // "old" preset API
     options.config = Object.assign({}, config) as ChangelogConfig;
@@ -49,7 +50,7 @@ export async function updateChangelog(pkg: Package, type: ChangelogType, updateO
   // NOTE: must pass as positional argument due to weird bug in merge-config
   const gitRawCommitsOpts = Object.assign({}, options.config.gitRawCommitsOpts);
 
-  // are we including commit author name/email or remote client login name
+  // // are we including commit author name/email or remote client login name
   if (changelogIncludeCommitsGitAuthor || changelogIncludeCommitsGitAuthor === '') {
     setConfigChangelogCommitGitAuthor(config, gitRawCommitsOpts, writerOpts, changelogIncludeCommitsGitAuthor);
   } else if ((changelogIncludeCommitsClientLogin || changelogIncludeCommitsClientLogin === '') && commitsSinceLastRelease) {
@@ -82,8 +83,19 @@ export async function updateChangelog(pkg: Package, type: ChangelogType, updateO
     }
   }
 
+  const opt = { ...options } as ChangelogCoreOptions;
+
+  if ((changelogIncludeCommitsClientLogin || changelogIncludeCommitsClientLogin === '') && commitsSinceLastRelease) {
+    opt.transform = (commit) => {
+      return {
+        ...commit,
+        userLogin: 'ghiscoding',
+      } as Commit & { userLogin: string };
+    };
+  }
+
   // generate the markdown for the upcoming release.
-  const changelogStream = conventionalChangelogCore(options, context, gitRawCommitsOpts, undefined, writerOpts);
+  const changelogStream = conventionalChangelogCore(opt, context, gitRawCommitsOpts, undefined, writerOpts);
 
   return Promise.all([
     // prettier-ignore
