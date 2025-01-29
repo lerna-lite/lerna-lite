@@ -36,7 +36,7 @@ When run, this command does one of the following things:
 - Publish packages in the latest commit where the version is not present in the registry (`from-package`).
 - Publish an unversioned "canary" release of packages (and their dependents) updated in the previous commit.
 
-During all publish operations, appropriate [lifecycle scripts](#lifecycle-scripts) are called in the root and per-package (unless disabled by [`--ignore-scripts](#--ignore-scripts)).
+During all publish operations, appropriate [lifecycle scripts](#lifecycle-scripts) are called in the root and per-package (unless disabled by [`--ignore-scripts`](#--ignore-scripts)).
 
 Check out [Per-Package Configuration](#per-package-configuration) for more details about publishing scoped packages, custom registries, and custom dist-tags.
 
@@ -75,8 +75,8 @@ $ lerna publish --scope my-component test
 
 - [`@lerna/publish`](#lernapublish)
   - [Positionals](#positionals)
-    - [semver `--bump from-git`](#semver--bump-from-git)
-    - [semver `--bump from-package`](#semver--bump-from-package)
+    - [semver `--bump from-git`](#semver---bump-from-git)
+    - [semver `--bump from-package`](#semver---bump-from-package)
   - [Options](#options)
     - [`--arborist-load-options`](#--arborist-load-options)
     - [`--canary`](#--canary)
