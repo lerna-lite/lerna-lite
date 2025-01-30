@@ -47,6 +47,7 @@ describe('PackageGraph', () => {
           'package-1': '2.3.4',
           'fs-extra': '^11.2.0',
           'p-map': '^7.0.3',
+          'pkg-1': '1.0.0',
           tinyrainbow: '^2.0.0',
         },
         catalogs: {
@@ -170,7 +171,7 @@ describe('PackageGraph', () => {
             name: 'pkg-4',
             version: '1.0.0',
             dependencies: {
-              'pkg-1': 'catalog:',
+              'pkg-2': 'catalog:',
             },
           } as unknown as RawManifest,
           '/test/pkg-4'
@@ -184,9 +185,12 @@ describe('PackageGraph', () => {
       expect(pkg2.localDependencies.has('pkg-1')).toBe(false);
       expect(pkg1.localDependents.has('pkg-3')).toBe(true);
       expect(pkg3.localDependencies.has('pkg-1')).toBe(true);
-      expect(pkg4.localDependencies.has('pkg-1')).toBe(true);
-      expect(pkg4.localDependencies.get('pkg-1').catalogSpec).toBe('catalog:');
-      expect(logWarnSpy).toHaveBeenCalledWith('graph', 'No version found in "default" catalog for "pkg-1"');
+      expect(pkg4.localDependencies.has('pkg-1')).toBe(false);
+      expect(pkg3.localDependencies.get('pkg-1').catalogSpec).toBe('catalog:');
+      expect(pkg3.localDependencies.get('pkg-1').fetchSpec).toBe('1.0.0');
+      expect(pkg4.localDependencies.get('pkg-2').catalogSpec).toBe('catalog:');
+      expect(pkg4.localDependencies.get('pkg-2').fetchSpec).toBe(''); // not found in global catalog so it will show warning below
+      expect(logWarnSpy).toHaveBeenCalledWith('graph', 'No version found in "default" catalog for "pkg-2"');
     });
 
     it('only localizes workspace: siblings when it must be explicit', () => {
@@ -428,7 +432,7 @@ describe('PackageGraph', () => {
     });
   });
 
-  describe.skip.each`
+  describe.each`
     method               | filtered     | expected
     ${'addDependencies'} | ${['pkg-a']} | ${['pkg-a', 'pkg-b']}
     ${'addDependents'}   | ${['pkg-d']} | ${['pkg-d', 'pkg-c']}
