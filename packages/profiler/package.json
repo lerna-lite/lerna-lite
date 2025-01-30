@@ -37,7 +37,7 @@
   "dependencies": {
     "@lerna-lite/core": "workspace:*",
     "@lerna-lite/npmlog": "workspace:*",
-    "fs-extra": "^11.3.0",
+    "fs-extra": "catalog:",
     "upath": "^2.0.1"
   },
   "devDependencies": {

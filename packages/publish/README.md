@@ -579,7 +579,47 @@ lerna will run [npm lifecycle scripts](https://docs.npmjs.com/cli/v8/using-npm/s
 
 # `catalog:` protocol
 
-The `catalog:` protocol ([pnpm catalog](https://pnpm.io/catalogs)) can be recognized by Lerna-Lite. When publishing, they will be kept as is. If you need to bump the version of a package in a catalog, you will need to edit `pnpm-workspace.yaml` manually. So we suggest using `workspace:` protocol instead for workspace dependencies.
+The `catalog:` protocol ([pnpm catalog](https://pnpm.io/catalogs)) can be recognized by Lerna-Lite. When publishing, they will be kept as is. If you need to bump the version of a package in a catalog, you will need to edit `pnpm-workspace.yaml` manually. So we suggest using [`workspace:`](#workspace-protocol) protocol instead for workspace dependencies.
+
+So for example, if our `pnpm-workspace.yaml` file has the following configuration
+
+```yaml
+packages:
+  - packages/*
+
+# Define a catalog
+catalog:
+  fs-extra: '^11.2.0'
+  typescript: '^5.7.2'
+```
+
+and then one of our package with the following dependencies defined
+
+```json
+{
+  "dependencies": {
+    "fs-extra": "catalog:"
+  },
+  "devDependencies": {
+    "typescript": "catalog:*"
+  }
+}
+```
+
+#### versions that will be published
+
+Lerna-Lite will replace all `catalog:` protocol with the versions defined in the global catalog(s) just before publishing.
+
+```json
+{
+  "dependencies": {
+    "fs-extra": "^11.2.0"
+  },
+  "devDependencies": {
+    "typescript": "^5.7.2"
+  }
+}
+```
 
 # `workspace:` protocol
 

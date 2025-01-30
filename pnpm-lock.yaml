@@ -4,6 +4,12 @@ settings:
   autoInstallPeers: true
   excludeLinksFromLockfile: false
 
+catalogs:
+  default:
+    fs-extra:
+      specifier: ^11.2.0
+      version: 11.3.0
+
 importers:
 
   .:
@@ -90,7 +96,7 @@ importers:
         specifier: ^7.0.0
         version: 7.0.0
       fs-extra:
-        specifier: ^11.3.0
+        specifier: 'catalog:'
         version: 11.3.0
       load-json-file:
         specifier: ^7.0.1
@@ -227,7 +233,7 @@ importers:
         specifier: ^8.0.1
         version: 8.0.1
       fs-extra:
-        specifier: ^11.3.0
+        specifier: 'catalog:'
         version: 11.3.0
       glob-parent:
         specifier: ^6.0.2
@@ -346,7 +352,7 @@ importers:
         specifier: ^8.0.1
         version: 8.0.1
       fs-extra:
-        specifier: ^11.3.0
+        specifier: 'catalog:'
         version: 11.3.0
       yargs-parser:
         specifier: ^21.1.1
@@ -377,7 +383,7 @@ importers:
         specifier: ^11.0.4
         version: 11.0.4
       fs-extra:
-        specifier: ^11.3.0
+        specifier: 'catalog:'
         version: 11.3.0
       tinyglobby:
         specifier: ^0.2.10
@@ -395,7 +401,7 @@ importers:
         specifier: workspace:*
         version: link:../core
       fs-extra:
-        specifier: ^11.3.0
+        specifier: 'catalog:'
         version: 11.3.0
       p-map:
         specifier: ^7.0.3
@@ -480,7 +486,7 @@ importers:
         specifier: workspace:*
         version: link:../npmlog
       fs-extra:
-        specifier: ^11.3.0
+        specifier: 'catalog:'
         version: 11.3.0
       upath:
         specifier: ^2.0.1
@@ -520,7 +526,7 @@ importers:
         specifier: ^1.6.0
         version: 1.6.0
       fs-extra:
-        specifier: ^11.3.0
+        specifier: 'catalog:'
         version: 11.3.0
       has-unicode:
         specifier: ^2.0.1
@@ -605,7 +611,7 @@ importers:
         specifier: workspace:*
         version: link:../profiler
       fs-extra:
-        specifier: ^11.3.0
+        specifier: 'catalog:'
         version: 11.3.0
       p-map:
         specifier: ^7.0.3
@@ -666,7 +672,7 @@ importers:
         specifier: ^1.5.3
         version: 1.5.3
       fs-extra:
-        specifier: ^11.3.0
+        specifier: 'catalog:'
         version: 11.3.0
       get-stream:
         specifier: ^9.0.1

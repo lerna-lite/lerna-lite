@@ -126,6 +126,7 @@ $ lerna version --scope my-component test
   - [Tips](#tips)
     - [Generating Initial Changelogs](#generating-initial-changelogs)
   - [Lifecycle Scripts](#lifecycle-scripts)
+  - [`catalog:` protocol](#catalog-protocol)
   - [`workspace:` protocol](#workspace-protocol)
 
 ### `--allow-branch <glob>`
@@ -917,6 +918,16 @@ lerna will run [npm lifecycle scripts](https://docs.npmjs.com/cli/v8/using-npm/s
 8. Run `postversion` lifecycle in root
 9. Push commit and tag(s) to remote, if [enabled](#--no-push)
 10. Create release, if [enabled](#--create-release-type)
+
+# `catalog:` protocol
+
+The pnpm `catalog:` protocol ([pnpm catalogs](https://pnpm.io/catalogs) only available in pnpm) is also supported by Lerna-Lite, here's a quote from pnpm docs that best describes the feature.
+
+> "Catalogs" are a [workspace feature](https://pnpm.io/workspaces) for defining dependency version ranges as reusable constants. Constants defined in catalogs can later be referenced in package.json files.
+
+Lerna-Lite will replace all `catalog:` protocol with the versions defined in your `pnpm-workspace.yaml` global catalog(s).
+
+For more info take a look at the [`lerna publish#catalog`](https://github.com/lerna-lite/lerna-lite/blob/main/packages/publish/README.md#catalog-protocol)
 
 # `workspace:` protocol
 

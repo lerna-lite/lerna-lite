@@ -1,0 +1,9 @@
+{
+  "name": "workspace-protocol-specs",
+  "description": "workspace protocol specifiers should act just like recognized semver ranges",
+  "private": true,
+  "version": "0.0.0-lerna",
+  "dependencies": {
+    "package-2": "catalog:"
+  }
+}

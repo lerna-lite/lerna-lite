@@ -43,7 +43,7 @@
     "@npmcli/package-json": "^5.2.1",
     "byte-size": "^9.0.1",
     "columnify": "^1.6.0",
-    "fs-extra": "^11.3.0",
+    "fs-extra": "catalog:",
     "has-unicode": "^2.0.1",
     "libnpmaccess": "^8.0.6",
     "libnpmpublish": "^9.0.9",

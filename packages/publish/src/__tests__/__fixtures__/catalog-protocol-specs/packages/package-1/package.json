@@ -1,0 +1,9 @@
+{
+  "name": "package-1",
+  "version": "2.3.4",
+  "dependencies": {
+    "fs-extra": "catalog:",
+    "tinyrainbow": "catalog:",
+    "tiny-tarball": "^1.0.0"
+  }
+}
