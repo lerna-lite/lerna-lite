@@ -923,7 +923,7 @@ lerna will run [npm lifecycle scripts](https://docs.npmjs.com/cli/v8/using-npm/s
 
 The pnpm `catalog:` protocol ([pnpm catalogs](https://pnpm.io/catalogs) only available in pnpm) is also supported by Lerna-Lite, here's a quote from pnpm docs that best describes the feature.
 
-> "Catalogs" are a [workspace feature](https://pnpm.io/workspaces) for defining dependency version ranges as reusable constants. Constants defined in catalogs can later be referenced in package.json files.
+> "Catalogs" are a [workspace feature](https://pnpm.io/workspaces) for defining dependency version ranges as reusable constants. Constants defined in catalogs can later be referenced in `package.json` files.
 
 Lerna-Lite will replace all `catalog:` protocol with the versions defined in your `pnpm-workspace.yaml` global catalog(s).
 

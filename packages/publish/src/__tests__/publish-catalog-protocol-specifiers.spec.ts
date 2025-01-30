@@ -100,6 +100,8 @@ describe("catalog protocol 'catalog:' specifiers", () => {
     });
     expect((writePkg as any).updatedManifest('package-2').peerDependencies).toMatchObject({
       'package-1': '2.3.4', // catalog:
+      react: '^18.2.0',
+      'react-dom': '^18.2.0',
       tinyrainbow: '^2.0.0',
     });
     expect((writePkg as any).updatedManifest('package-3').dependencies).toMatchObject({
@@ -113,6 +115,8 @@ describe("catalog protocol 'catalog:' specifiers", () => {
     });
     expect((writePkg as any).updatedManifest('package-4').peerDependencies).toMatchObject({
       'fs-extra': '^11.2.0',
+      react: '^17.0.2',
+      'react-dom': '^17.0.2',
     });
     expect((writePkg as any).updatedManifest('package-5').dependencies).toMatchObject({
       tinyrainbow: '^2.0.0', // catalog:

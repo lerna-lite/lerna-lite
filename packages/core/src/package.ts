@@ -254,7 +254,7 @@ export class Package {
   }
 
   /**
-   * Mutate given dependency (could be local/external) spec according to type
+   * Remove any given dependencies collections which contains a `workspace:` spec is found and replace them with their resolved fetchSpec
    * @param {String} pkgName - package name
    * @param {Object} resolved npa metadata
    */
@@ -280,7 +280,7 @@ export class Package {
             `publish`,
             [
               `Your package named "${pkgName}" has external dependencies not handled by Lerna-Lite and without workspace version suffix, `,
-              `we recommend using defined versions with workspace protocol. `,
+              `we recommend using defined versions with "workspace:" protocol. `,
               `Your dependency is currently being published with "${depName}": "${resolved.fetchSpec}".`,
             ].join('')
           );
@@ -291,11 +291,11 @@ export class Package {
   }
 
   /**
-   * Mutate given dependency (could be local/external) spec by updating `catalog:` protocol with global catalog version
+   * Mutate given dependency and anywhere a `catalog:` spec is found, we'll replace them with their resolved fetchSpec coming from the global catalog version
    * @param {Object} resolved npa metadata
    */
   updateDependencyCatalogProtocol(resolved: NpaResolveResult) {
-    // find all type of dependencies that could have `catalog:` protocol and update them all
+    // find all dependencies collections that could have `catalog:` protocol
     // most `catalog:` refs will be found in externalDependencies, but we need to check and replace all types
     const depName = resolved.name as string;
     const inspectDependencies = this.retrieveAllDependenciesWithName(depName, [
@@ -305,9 +305,9 @@ export class Package {
       'peerDependencies',
     ]);
 
+    // loop through all dependencies collections and replace any `catalog:` protocol with the resolved fetchSpec (from global catalog)
     for (const depCollection of inspectDependencies) {
       if (depCollection && (resolved.registry || resolved.type === 'directory') && resolved?.catalogSpec) {
-        // replace any `catalog:` protocol with the resolved fetchSpec
         depCollection[depName] = resolved.fetchSpec as string;
       }
     }
@@ -418,7 +418,7 @@ export class Package {
   }
 
   /**
-   * Retrieve all dependencies collections which includes the dependency name
+   * Retrieve all dependencies collections in which the dependency name was found
    * @param {String} depName - dependency name
    * @param {Array<String>} dependenciesTypes - array of dependencies types to search in
    * @returns {Array<Object>} - array of dependencies that contains the dependency name provided
