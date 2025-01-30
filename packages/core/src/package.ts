@@ -295,8 +295,9 @@ export class Package {
    * @param {Object} resolved npa metadata
    */
   updateDependencyCatalogProtocol(resolved: NpaResolveResult) {
-    const depName = resolved.name as string;
     // find all type of dependencies that could have `catalog:` protocol and update them all
+    // most `catalog:` refs will be found in externalDependencies, but we need to check and replace all types
+    const depName = resolved.name as string;
     const inspectDependencies = this.retrieveAllDependenciesWithName(depName, [
       'dependencies',
       'devDependencies',
