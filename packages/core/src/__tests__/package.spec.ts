@@ -13,7 +13,7 @@ vi.mock('write-package');
 
 // file under test
 import { Package } from '../package.js';
-import { NpaResolveResult, RawManifest } from '../models/index.js';
+import { NpaResolveResult, RawManifest } from '../models/interfaces.js';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
@@ -868,7 +868,7 @@ describe('Package', () => {
           'publish',
           [
             `Your package named "package-1" has external dependencies not handled by Lerna-Lite and without workspace version suffix, `,
-            `we recommend using defined versions with workspace protocol. Your dependency is currently being published with "a": "latest".`,
+            `we recommend using defined versions with "workspace:" protocol. Your dependency is currently being published with "a": "latest".`,
           ].join('')
         );
         expect(pkg.toJSON()).toMatchInlineSnapshot(`

@@ -38,6 +38,7 @@ export interface ChangelogPresetOptions {
 }
 
 export type CommandType = '' | 'changed' | 'exec' | 'info' | 'init' | 'list' | 'publish' | 'run' | 'version';
+export type DependenciesType = 'dependencies' | 'devDependencies' | 'optionalDependencies' | 'peerDependencies';
 
 export interface DescribeRefOptions {
   /* Defaults to `process.cwd()` */
@@ -145,7 +146,10 @@ export interface TopologicalConfig extends QueryGraphConfig {
 }
 
 export type NpaResolveResult = (npa.FileResult | npa.HostedGitResult | npa.URLResult | npa.AliasResult | npa.RegistryResult) & {
-  /** the specifier part used when deailing with a `workspace:` protocol resource */
+  /** the specifier part used when dealing with a `catalog:` protocol resource */
+  catalogSpec?: string;
+
+  /** the specifier part used when dealing with a `workspace:` protocol resource */
   workspaceSpec?: string;
 };
 

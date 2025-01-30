@@ -1,0 +1,14 @@
+{
+  "name": "package-2",
+  "version": "2.3.4",
+  "dependencies": {
+    "package-1": "catalog:",
+    "tinyrainbow": "catalog:"
+  },
+  "peerDependencies": {
+    "package-1": "catalog:",
+    "react": "catalog:react18",
+    "react-dom": "catalog:react18",
+    "tinyrainbow": "catalog:"
+  }
+}

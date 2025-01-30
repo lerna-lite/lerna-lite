@@ -50,7 +50,7 @@
 
 Take 30sec. to complete this 1 question [poll survey 🔘](https://github.com/lerna-lite/lerna-lite/discussions/156) if you are using this feature. It's a simple poll to find out which package manager is the most popular with `workspace:` protocol feature (so far, about 60% pnpm and 40% yarn).
 
-Lerna-Lite itself is also using [pnpm workspaces](https://pnpm.io/workspaces) with the `workspace:` protocol 🎉
+Lerna-Lite itself is also using [pnpm catalogs](https://pnpm.io/catalogs) and [pnpm workspaces](https://pnpm.io/workspaces) with both `catalog:` and `workspace:` protocols 🎉
 
 ---
 
@@ -112,6 +112,7 @@ Below are the main reasons as to why this fork was created:
 5. Lerna-Lite added a few unique features (not available in Lerna itself):
    - [`workspace:` protocol support](https://github.com/lerna-lite/lerna-lite/tree/main/packages/version#workspace-protocol)
      * _Lerna added support for the same feature 6 months later in their v6.0 release_
+   - [`catalog:` protocol support](https://github.com/lerna-lite/lerna-lite/tree/main/packages/version#catalog-protocol) for both `version` and `publish` commands
    - [--dry-run](https://github.com/lerna-lite/lerna-lite/tree/main/packages/version#--dry-run) to preview version/publish & changelogs locally (will show git changes without committing them)
    - [lerna version --changelog-header-message "msg"](https://github.com/lerna-lite/lerna-lite/tree/main/packages/version#--changelog-header-message-msg) for showing banner or sponsors in your changelogs
    - [lerna version --changelog-include-commits-client-login](https://github.com/lerna-lite/lerna-lite/tree/main/packages/version#--changelog-include-commits-client-login-msg) to add PR contributors in GitHub releases

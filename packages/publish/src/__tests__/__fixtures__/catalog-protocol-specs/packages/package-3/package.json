@@ -1,0 +1,9 @@
+{
+  "name": "package-3",
+  "version": "2.3.4",
+  "dependencies": {
+    "fs-extra": "catalog:",
+    "p-map": "catalog:",
+    "tinyrainbow": "catalog:"
+  }
+}

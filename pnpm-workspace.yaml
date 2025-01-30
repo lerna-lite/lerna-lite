@@ -5,3 +5,7 @@ packages:
   # exclude packages that are inside test directories
   - '!**/__fixtures__/**'
   - '!**/__test__/**'
+
+# Define a catalog of version ranges.
+catalog:
+  fs-extra: '^11.2.0'

@@ -204,7 +204,7 @@ describe("workspace protocol 'workspace:' specifiers", () => {
       'publish',
       [
         `Your package named "package-6" has external dependencies not handled by Lerna-Lite and without workspace version suffix, `,
-        `we recommend using defined versions with workspace protocol. Your dependency is currently being published with "tiny-registry": "".`,
+        `we recommend using defined versions with "workspace:" protocol. Your dependency is currently being published with "tiny-registry": "".`,
       ].join('')
     );
     expect((writePkg as any).updatedManifest('package-6').dependencies).toMatchObject({

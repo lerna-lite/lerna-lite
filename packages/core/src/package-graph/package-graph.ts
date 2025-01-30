@@ -1,3 +1,4 @@
+import { log } from '@lerna-lite/npmlog';
 import fs from 'node:fs';
 import path from 'node:path';
 import npa from 'npm-package-arg';
@@ -96,25 +97,25 @@ export class PackageGraph extends Map<string, PackageGraphNode> {
 
         // handle catalog: protocol supported by pnpm
         const isCatalogSpec = /^catalog:/.test(spec);
-
+        let originalCatalogSpec: string | undefined;
         if (isCatalogSpec) {
+          originalCatalogSpec = spec;
           spec = spec.replace(/^catalog:/, '');
           const catalogVersion = spec === '' || spec === 'default' ? catalog[depName] : catalogs[spec]?.[depName];
 
           if (catalogVersion) {
             spec = catalogVersion;
           } else {
-            console.warn(`Warning: No version found in ${spec || 'default'} catalog for ${depName}`);
+            log.warn('graph', `No version found in "${spec || 'default'}" catalog for "${depName}"`);
           }
         }
 
         // npa doesn't support the explicit workspace: protocol, supported by
         // pnpm and Yarn.
         const isWorkspaceSpec = /^workspace:/.test(spec);
-
-        let fullWorkspaceSpec: string | undefined;
+        let originalWorkspaceSpec: string | undefined;
         if (isWorkspaceSpec) {
-          fullWorkspaceSpec = spec;
+          originalWorkspaceSpec = spec;
           spec = spec.replace(/^workspace:/, '');
 
           // when dependency is defined as target workspace, like `workspace:*`,
@@ -129,7 +130,8 @@ export class PackageGraph extends Map<string, PackageGraphNode> {
         }
 
         const resolved: NpaResolveResult = npa.resolve(depName, spec, currentNode.location);
-        resolved.workspaceSpec = fullWorkspaceSpec;
+        resolved.catalogSpec = originalCatalogSpec;
+        resolved.workspaceSpec = originalWorkspaceSpec;
 
         if (!depNode) {
           // it's an external dependency, store the resolution and bail
@@ -137,12 +139,13 @@ export class PackageGraph extends Map<string, PackageGraphNode> {
         }
 
         if (
+          isCatalogSpec ||
           isWorkspaceSpec ||
           localDependencies === 'force' ||
           resolved.fetchSpec === depNode.location ||
           (localDependencies !== 'explicit' && depNode.satisfies(resolved))
         ) {
-          // a local file: specifier, a matching semver or a workspace: version
+          // could be a local `file:` specifier, a matching semver, a `catalog:` or a `workspace:` protocols
           currentNode.localDependencies.set(depName, resolved);
           depNode.localDependents.set(currentName, currentNode);
         } else {

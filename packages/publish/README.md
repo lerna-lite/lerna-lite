@@ -579,7 +579,66 @@ lerna will run [npm lifecycle scripts](https://docs.npmjs.com/cli/v8/using-npm/s
 
 # `catalog:` protocol
 
-The `catalog:` protocol ([pnpm catalog](https://pnpm.io/catalogs)) can be recognized by Lerna-Lite. When publishing, they will be kept as is. If you need to bump the version of a package in a catalog, you will need to edit `pnpm-workspace.yaml` manually. So we suggest using `workspace:` protocol instead for workspace dependencies.
+The `catalog:` protocol ([pnpm catalog](https://pnpm.io/catalogs)) can be recognized by Lerna-Lite. When publishing, they will be replaced as is and use the version range defined in your global catalog. If you need to bump the version of a package in a catalog, you will need to edit `pnpm-workspace.yaml` manually. If you wish them to be bumped automatically, then we suggest using [`workspace:`](#workspace-protocol) protocol instead for any workspace dependencies.
+
+So for example, if our `pnpm-workspace.yaml` file has the following configuration
+
+```yaml
+packages:
+  - packages/*
+
+# Define a catalog of version ranges.
+catalog:
+  fs-extra: '^11.2.0'
+  typescript: '^5.7.0'
+
+# named catalogs are also supported
+catalogs:
+  # Can be referenced through "catalog:react17"
+  react17:
+    react: ^17.0.0
+    react-dom: ^17.0.0
+  # Can be referenced through "catalog:react18"
+  react18:
+    react: ^18.2.0
+    react-dom: ^18.2.0
+```
+
+and then one of our package with the following dependencies defined in our `package.json`
+
+```json
+{
+  "dependencies": {
+    "fs-extra": "catalog:"
+  },
+  "devDependencies": {
+    "typescript": "catalog:"
+  },
+  "peerDependencies": {
+    "react": "catalog:react18",
+    "react-dom": "catalog:react18"
+  }
+}
+```
+
+#### versions that will be published
+
+Lerna-Lite will replace all `catalog:` protocol with the version ranges defined in the global catalog(s) and publish the following:
+
+```json
+{
+  "dependencies": {
+    "fs-extra": "^11.2.0"
+  },
+  "devDependencies": {
+    "typescript": "^5.7.0"
+  },
+  "peerDependencies": {
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0"
+  }
+}
+```
 
 # `workspace:` protocol
 

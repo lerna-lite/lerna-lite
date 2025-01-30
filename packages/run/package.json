@@ -39,7 +39,7 @@
     "@lerna-lite/core": "workspace:*",
     "@lerna-lite/npmlog": "workspace:*",
     "@lerna-lite/profiler": "workspace:*",
-    "fs-extra": "^11.3.0",
+    "fs-extra": "catalog:",
     "p-map": "^7.0.3",
     "tinyrainbow": "^2.0.0"
   },

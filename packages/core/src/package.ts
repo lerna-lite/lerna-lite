@@ -4,7 +4,7 @@ import { basename, dirname, join, resolve as pathResolve, relative } from 'node:
 import { writePackage } from 'write-package';
 import { log } from '@lerna-lite/npmlog';
 
-import { CommandType, NpaResolveResult, RawManifest } from './models/interfaces.js';
+import { CommandType, DependenciesType, NpaResolveResult, RawManifest } from './models/interfaces.js';
 
 // symbol used to 'hide' internal state
 const PKG = Symbol('pkg');
@@ -254,15 +254,19 @@ export class Package {
   }
 
   /**
-   * Mutate given dependency (could be local/external) spec according to type
+   * Remove any given dependencies collections which contains a `workspace:` spec is found and replace them with their resolved fetchSpec
    * @param {String} pkgName - package name
    * @param {Object} resolved npa metadata
    */
   removeDependencyWorkspaceProtocolPrefix(pkgName: string, resolved: NpaResolveResult) {
     const depName = resolved.name as string;
     const workspaceSpec = resolved?.workspaceSpec ?? '';
-    const localDependencies = this.retrievePackageDependencies(depName);
-    const inspectDependencies = [localDependencies];
+    const inspectDependencies = this.retrieveAllDependenciesWithName(depName, [
+      'dependencies',
+      'devDependencies',
+      'optionalDependencies',
+      'peerDependencies',
+    ]);
 
     // package could be found in both a local dependencies and peerDependencies, so we need to include it when found
     if (this.peerDependencies?.[depName]) {
@@ -271,19 +275,40 @@ export class Package {
 
     for (const depCollection of inspectDependencies) {
       if (depCollection && (resolved.registry || resolved.type === 'directory') && /^(workspace:)+(.*)$/.test(workspaceSpec)) {
-        if (workspaceSpec) {
-          if (resolved.fetchSpec === 'latest' || resolved.fetchSpec === '') {
-            log.error(
-              `publish`,
-              [
-                `Your package named "${pkgName}" has external dependencies not handled by Lerna-Lite and without workspace version suffix, `,
-                `we recommend using defined versions with workspace protocol. `,
-                `Your dependency is currently being published with "${depName}": "${resolved.fetchSpec}".`,
-              ].join('')
-            );
-          }
-          depCollection[depName] = resolved.fetchSpec as string;
+        if (workspaceSpec && (resolved.fetchSpec === 'latest' || resolved.fetchSpec === '')) {
+          log.error(
+            `publish`,
+            [
+              `Your package named "${pkgName}" has external dependencies not handled by Lerna-Lite and without workspace version suffix, `,
+              `we recommend using defined versions with "workspace:" protocol. `,
+              `Your dependency is currently being published with "${depName}": "${resolved.fetchSpec}".`,
+            ].join('')
+          );
         }
+        depCollection[depName] = resolved.fetchSpec as string;
+      }
+    }
+  }
+
+  /**
+   * Mutate given dependency and anywhere a `catalog:` spec is found, we'll replace them with their resolved fetchSpec coming from the global catalog version
+   * @param {Object} resolved npa metadata
+   */
+  updateDependencyCatalogProtocol(resolved: NpaResolveResult) {
+    // find all dependencies collections that could have `catalog:` protocol
+    // most `catalog:` refs will be found in externalDependencies, but we need to check and replace all types
+    const depName = resolved.name as string;
+    const inspectDependencies = this.retrieveAllDependenciesWithName(depName, [
+      'dependencies',
+      'devDependencies',
+      'optionalDependencies',
+      'peerDependencies',
+    ]);
+
+    // loop through all dependencies collections and replace any `catalog:` protocol with the resolved fetchSpec (from global catalog)
+    for (const depCollection of inspectDependencies) {
+      if (depCollection && (resolved.registry || resolved.type === 'directory') && resolved?.catalogSpec) {
+        depCollection[depName] = resolved.fetchSpec as string;
       }
     }
   }
@@ -303,7 +328,7 @@ export class Package {
     updatedByCommand?: CommandType
   ) {
     const depName = resolved.name as string;
-    const localDependencies = this.retrievePackageDependencies(depName);
+    const localDependencies = this.retrieveDependenciesWithName(depName);
     const updatingDependencies = [localDependencies];
 
     // peer dependencies will not be bumped by default unless we use allowPeerDependenciesUpdate
@@ -393,11 +418,29 @@ export class Package {
   }
 
   /**
-   * Retrieve the dependencies collection which contain the dependency name provided, we'll search in all type of dependencies/devDependencies/...
+   * Retrieve all dependencies collections in which the dependency name was found
+   * @param {String} depName - dependency name
+   * @param {Array<String>} dependenciesTypes - array of dependencies types to search in
+   * @returns {Array<Object>} - array of dependencies that contains the dependency name provided
+   */
+  retrieveAllDependenciesWithName(depName: string, dependenciesTypes: DependenciesType[]) {
+    const inspectDependencies: Array<{ [depName: string]: string }> = [];
+
+    dependenciesTypes.forEach((depType) => {
+      if (this[depType]?.[depName]) {
+        inspectDependencies.push(this[depType]);
+      }
+    });
+
+    return inspectDependencies;
+  }
+
+  /**
+   * Retrieve the first dependencies collection which includes the dependency name inside it, we'll search in all type of dependencies/devDependencies/...
    * @param {String} depName - dependency name
    * @returns {Array<String>} - array of dependencies that contains the dependency name provided
    */
-  retrievePackageDependencies(depName: string): { [depName: string]: string } {
+  retrieveDependenciesWithName(depName: string): { [depName: string]: string } {
     // first, try runtime dependencies
     let depCollection = this.dependencies;
 

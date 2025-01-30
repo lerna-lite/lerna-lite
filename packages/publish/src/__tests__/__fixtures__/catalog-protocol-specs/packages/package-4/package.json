@@ -1,0 +1,13 @@
+{
+  "name": "package-4",
+  "version": "2.3.4",
+  "dependencies": {
+    "fs-extra": "catalog:",
+    "p-map": "catalog:"
+  },
+  "peerDependencies": {
+    "fs-extra": "^11.2.0",
+    "react": "catalog:react17",
+    "react-dom": "catalog:react17"
+  }
+}
