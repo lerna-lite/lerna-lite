@@ -159,6 +159,7 @@ describe('PackageGraph', () => {
             version: '1.0.0',
             dependencies: {
               'pkg-1': 'catalog:',
+              react: 'catalog:react18',
             },
             peerDependencies: {
               'pkg-1': 'catalog:',
@@ -188,6 +189,8 @@ describe('PackageGraph', () => {
       expect(pkg4.localDependencies.has('pkg-1')).toBe(false);
       expect(pkg3.localDependencies.get('pkg-1').catalogSpec).toBe('catalog:');
       expect(pkg3.localDependencies.get('pkg-1').fetchSpec).toBe('1.0.0');
+      expect(pkg3.externalDependencies.get('react').catalogSpec).toBe('catalog:react18'); // named catalog
+      expect(pkg3.externalDependencies.get('react').fetchSpec).toBe('^18.2.0');
       expect(pkg4.localDependencies.get('pkg-2').catalogSpec).toBe('catalog:');
       expect(pkg4.localDependencies.get('pkg-2').fetchSpec).toBe(''); // not found in global catalog so it will show warning below
       expect(logWarnSpy).toHaveBeenCalledWith('graph', 'No version found in "default" catalog for "pkg-2"');
