@@ -25,7 +25,7 @@ catalog:
   npm-registry-fetch: ^17.1.0
   p-map: ^7.0.3
   p-pipe: ^4.0.0
-  semver: ^7.6.3
+  semver: ^7.7.0
   slash: ^5.1.0
   temp-dir: ^3.0.0
   tinyglobby: ^0.2.10
