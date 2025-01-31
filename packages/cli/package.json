@@ -42,14 +42,14 @@
     "@lerna-lite/core": "workspace:*",
     "@lerna-lite/init": "workspace:*",
     "@lerna-lite/npmlog": "workspace:*",
-    "dedent": "^1.5.3",
-    "dotenv": "^16.4.7",
+    "dedent": "catalog:",
+    "dotenv": "catalog:",
     "import-local": "^3.2.0",
-    "load-json-file": "^7.0.1",
-    "yargs": "^17.7.2"
+    "load-json-file": "catalog:",
+    "yargs": "catalog:"
   },
   "devDependencies": {
-    "yargs-parser": "^21.1.1"
+    "yargs-parser": "catalog:"
   },
   "peerDependenciesMeta": {
     "@lerna-lite/exec": {
