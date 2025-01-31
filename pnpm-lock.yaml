@@ -58,8 +58,8 @@ catalogs:
       specifier: ^4.0.0
       version: 4.0.0
     semver:
-      specifier: ^7.6.3
-      version: 7.6.3
+      specifier: ^7.7.0
+      version: 7.7.0
     slash:
       specifier: ^5.1.0
       version: 5.1.0
@@ -190,7 +190,7 @@ importers:
         version: 5.0.10
       semver:
         specifier: 'catalog:'
-        version: 7.6.3
+        version: 7.7.0
       tacks:
         specifier: ^1.2.6
         version: 1.2.6
@@ -342,7 +342,7 @@ importers:
         version: 5.0.0
       semver:
         specifier: 'catalog:'
-        version: 7.6.3
+        version: 7.7.0
       slash:
         specifier: 'catalog:'
         version: 5.1.0
@@ -635,7 +635,7 @@ importers:
         version: 18.0.6
       semver:
         specifier: 'catalog:'
-        version: 7.6.3
+        version: 7.7.0
       ssri:
         specifier: ^11.0.0
         version: 11.0.0
@@ -796,7 +796,7 @@ importers:
         version: 6.1.0
       semver:
         specifier: 'catalog:'
-        version: 7.6.3
+        version: 7.7.0
       slash:
         specifier: 'catalog:'
         version: 5.1.0
@@ -3269,8 +3269,8 @@ packages:
   safer-buffer@2.1.2:
     resolution: {integrity: sha512-YZo3K82SD7Riyi0E1EQPojLz7kpepnSQI9IyPbHHg1XXXevb5dJI7tpyN2ADxGcQbHG7vcyRHk0cbwqcQriUtg==}
 
-  semver@7.6.3:
-    resolution: {integrity: sha512-oVekP1cKtI+CTDvHWYFUcMtsK/00wmAEfyqKfNdARm8u1wNVhSgaX7A8d4UuIlUI5e84iEwOhs7ZPYRmzU9U6A==}
+  semver@7.7.0:
+    resolution: {integrity: sha512-DrfFnPzblFmNrIZzg5RzHegbiRWg7KMR7btwi2yjHwx06zsUbO5g613sVwEV7FTwmzJu+Io0lJe2GJ3LxqpvBQ==}
     engines: {node: '>=10'}
     hasBin: true
 
@@ -4075,7 +4075,7 @@ snapshots:
       promise-all-reject-late: 1.0.1
       promise-call-limit: 3.0.1
       read-package-json-fast: 3.0.2
-      semver: 7.6.3
+      semver: 7.7.0
       ssri: 10.0.6
       treeverse: 3.0.0
       walk-up-path: 3.0.1
@@ -4085,7 +4085,7 @@ snapshots:
 
   '@npmcli/fs@3.1.1':
     dependencies:
-      semver: 7.6.3
+      semver: 7.7.0
 
   '@npmcli/git@5.0.1':
     dependencies:
@@ -4095,7 +4095,7 @@ snapshots:
       proc-log: 3.0.0
       promise-inflight: 1.0.1
       promise-retry: 2.0.1
-      semver: 7.6.3
+      semver: 7.7.0
       which: 3.0.1
     transitivePeerDependencies:
       - bluebird
@@ -4123,7 +4123,7 @@ snapshots:
       json-parse-even-better-errors: 3.0.2
       pacote: 18.0.6
       proc-log: 4.2.0
-      semver: 7.6.3
+      semver: 7.7.0
     transitivePeerDependencies:
       - bluebird
       - supports-color
@@ -4140,7 +4140,7 @@ snapshots:
       json-parse-even-better-errors: 3.0.2
       normalize-package-data: 6.0.1
       proc-log: 4.2.0
-      semver: 7.6.3
+      semver: 7.7.0
     transitivePeerDependencies:
       - bluebird
 
@@ -4152,7 +4152,7 @@ snapshots:
       json-parse-even-better-errors: 3.0.2
       normalize-package-data: 6.0.1
       proc-log: 4.2.0
-      semver: 7.6.3
+      semver: 7.7.0
     transitivePeerDependencies:
       - bluebird
 
@@ -4480,7 +4480,7 @@ snapshots:
       fast-glob: 3.3.2
       is-glob: 4.0.3
       minimatch: 9.0.5
-      semver: 7.6.3
+      semver: 7.7.0
       ts-api-utils: 2.0.0(typescript@5.7.3)
       typescript: 5.7.3
     transitivePeerDependencies:
@@ -4677,7 +4677,7 @@ snapshots:
 
   builtins@5.0.1:
     dependencies:
-      semver: 7.6.3
+      semver: 7.7.0
 
   byte-size@9.0.1: {}
 
@@ -4848,7 +4848,7 @@ snapshots:
       handlebars: 4.7.7
       json-stringify-safe: 5.0.1
       meow: 12.1.1
-      semver: 7.6.3
+      semver: 7.7.0
       split2: 4.2.0
 
   conventional-commits-filter@4.0.0: {}
@@ -5083,7 +5083,7 @@ snapshots:
   eslint-compat-utils@0.5.1(eslint@9.19.0):
     dependencies:
       eslint: 9.19.0
-      semver: 7.6.3
+      semver: 7.7.0
 
   eslint-config-prettier@10.0.1(eslint@9.19.0):
     dependencies:
@@ -5106,7 +5106,7 @@ snapshots:
       globals: 15.12.0
       ignore: 5.3.2
       minimatch: 9.0.5
-      semver: 7.6.3
+      semver: 7.7.0
 
   eslint-scope@8.2.0:
     dependencies:
@@ -5321,7 +5321,7 @@ snapshots:
   git-semver-tags@7.0.1:
     dependencies:
       meow: 12.1.1
-      semver: 7.6.3
+      semver: 7.7.0
 
   git-up@8.0.0:
     dependencies:
@@ -5585,7 +5585,7 @@ snapshots:
       npm-package-arg: 11.0.3
       npm-registry-fetch: 17.1.0
       proc-log: 4.2.0
-      semver: 7.6.3
+      semver: 7.7.0
       sigstore: 2.2.0
       ssri: 10.0.6
     transitivePeerDependencies:
@@ -5627,7 +5627,7 @@ snapshots:
 
   make-dir@4.0.0:
     dependencies:
-      semver: 7.6.3
+      semver: 7.7.0
 
   make-dir@5.0.0: {}
 
@@ -5760,7 +5760,7 @@ snapshots:
       make-fetch-happen: 13.0.0
       nopt: 7.2.1
       proc-log: 3.0.0
-      semver: 7.6.3
+      semver: 7.7.0
       tar: 6.2.1
       which: 4.0.0
 
@@ -5776,14 +5776,14 @@ snapshots:
     dependencies:
       hosted-git-info: 7.0.2
       is-core-module: 2.13.1
-      semver: 7.6.3
+      semver: 7.7.0
       validate-npm-package-license: 3.0.4
 
   normalize-package-data@6.0.1:
     dependencies:
       hosted-git-info: 7.0.2
       is-core-module: 2.13.1
-      semver: 7.6.3
+      semver: 7.7.0
       validate-npm-package-license: 3.0.4
 
   normalize-path@3.0.0: {}
@@ -5794,7 +5794,7 @@ snapshots:
 
   npm-install-checks@6.2.0:
     dependencies:
-      semver: 7.6.3
+      semver: 7.7.0
 
   npm-normalize-package-bin@3.0.1: {}
 
@@ -5802,7 +5802,7 @@ snapshots:
     dependencies:
       hosted-git-info: 7.0.2
       proc-log: 4.2.0
-      semver: 7.6.3
+      semver: 7.7.0
       validate-npm-package-name: 5.0.0
 
   npm-packlist@8.0.2:
@@ -5814,14 +5814,14 @@ snapshots:
       npm-install-checks: 6.2.0
       npm-normalize-package-bin: 3.0.1
       npm-package-arg: 11.0.3
-      semver: 7.6.3
+      semver: 7.7.0
 
   npm-pick-manifest@9.0.1:
     dependencies:
       npm-install-checks: 6.2.0
       npm-normalize-package-bin: 3.0.1
       npm-package-arg: 11.0.3
-      semver: 7.6.3
+      semver: 7.7.0
 
   npm-registry-fetch@17.1.0:
     dependencies:
@@ -6145,7 +6145,7 @@ snapshots:
   safer-buffer@2.1.2:
     optional: true
 
-  semver@7.6.3: {}
+  semver@7.7.0: {}
 
   set-blocking@2.0.0: {}
 
