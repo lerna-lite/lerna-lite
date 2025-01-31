@@ -122,7 +122,7 @@ describe('Prompt', () => {
     const logResumeSpy = vi.spyOn(log, 'resume');
 
     const output = await promptTextInput('Choose something...', {
-      filter: () => true,
+      filter: () => 'true',
       validate: () => false,
     });
     expect(logPauseSpy).toHaveBeenCalled();
@@ -142,13 +142,13 @@ describe('Prompt', () => {
     const logResumeSpy = vi.spyOn(log, 'resume');
 
     const output = await promptTextInput('Choose something...', {
-      filter: () => true,
+      filter: () => 'true',
       validate: () => isValid,
     });
     expect(logPauseSpy).toHaveBeenCalled();
     expect(logResumeSpy).toHaveBeenCalled();
     expect(input).toHaveBeenCalled();
-    expect(output).toBeFalsy();
+    expect(output).toBe(false);
   });
 
   it('should prompt text input and return true when validation is valid', async () => {
@@ -159,13 +159,13 @@ describe('Prompt', () => {
     const logResumeSpy = vi.spyOn(log, 'resume');
 
     const output = await promptTextInput('Choose something...', {
-      filter: () => true,
+      filter: () => 'true',
       validate: () => isValid,
     });
     expect(logPauseSpy).toHaveBeenCalled();
     expect(logResumeSpy).toHaveBeenCalled();
     expect(input).toHaveBeenCalled();
-    expect(output).toBeTruthy();
+    expect(output).toBe('true');
   });
 
   it('should prompt text input and return false when filter is falsy', async () => {
@@ -176,13 +176,13 @@ describe('Prompt', () => {
     const logResumeSpy = vi.spyOn(log, 'resume');
 
     const output = await promptTextInput('Choose something...', {
-      filter: () => filterOutput,
+      filter: () => `${filterOutput}`,
       validate: () => true,
     });
     expect(logPauseSpy).toHaveBeenCalled();
     expect(logResumeSpy).toHaveBeenCalled();
     expect(input).toHaveBeenCalled();
-    expect(output).toBeFalsy();
+    expect(output).toBe('false');
   });
 
   it('should prompt text input and return true when filter is truthy', async () => {
@@ -193,12 +193,12 @@ describe('Prompt', () => {
     const logResumeSpy = vi.spyOn(log, 'resume');
 
     const output = await promptTextInput('Choose something...', {
-      filter: () => filterOutput,
+      filter: () => `${filterOutput}`,
       validate: () => true,
     });
     expect(logPauseSpy).toHaveBeenCalled();
     expect(logResumeSpy).toHaveBeenCalled();
     expect(input).toHaveBeenCalled();
-    expect(output).toBeTruthy();
+    expect(output).toBe('true');
   });
 });
