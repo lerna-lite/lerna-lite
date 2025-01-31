@@ -40,14 +40,14 @@
     "@lerna-lite/npmlog": "workspace:*",
     "@lerna-lite/profiler": "workspace:*",
     "fs-extra": "catalog:",
-    "p-map": "^7.0.3",
-    "tinyrainbow": "^2.0.0"
+    "p-map": "catalog:",
+    "tinyrainbow": "catalog:"
   },
   "devDependencies": {
-    "@types/fs-extra": "^11.0.4",
+    "@types/fs-extra": "catalog:",
     "perf_hooks": "^0.0.1",
-    "tinyglobby": "^0.2.10",
-    "yargs": "^17.7.2",
-    "yargs-parser": "^21.1.1"
+    "tinyglobby": "catalog:",
+    "yargs": "catalog:",
+    "yargs-parser": "catalog:"
   }
 }

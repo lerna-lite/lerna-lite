@@ -36,10 +36,10 @@
   },
   "dependencies": {
     "@lerna-lite/core": "workspace:*",
-    "columnify": "^1.6.0",
-    "tinyrainbow": "^2.0.0"
+    "columnify": "catalog:",
+    "tinyrainbow": "catalog:"
   },
   "devDependencies": {
-    "yargs": "^17.7.2"
+    "yargs": "catalog:"
   }
 }
