@@ -921,17 +921,17 @@ lerna will run [npm lifecycle scripts](https://docs.npmjs.com/cli/v8/using-npm/s
 
 # `catalog:` protocol
 
-The pnpm `catalog:` protocol ([pnpm catalogs](https://pnpm.io/catalogs) only available in pnpm) is also supported by Lerna-Lite, here's a quote from pnpm docs that best describes the feature.
+The pnpm `catalog:` protocol ([pnpm catalogs](https://pnpm.io/catalogs) which is only available in pnpm) is also supported by Lerna-Lite, here's a quote from pnpm docs that best describes the feature.
 
 > "Catalogs" are a [workspace feature](https://pnpm.io/workspaces) for defining dependency version ranges as reusable constants. Constants defined in catalogs can later be referenced in `package.json` files.
 
-Lerna-Lite will replace all `catalog:` protocol with the versions defined in your `pnpm-workspace.yaml` global catalog(s).
+Lerna-Lite will replace all `catalog:` protocol with the version ranges defined in the `pnpm-workspace.yaml` global catalog(s).
 
 For more info take a look at the [`lerna publish#catalog`](https://github.com/lerna-lite/lerna-lite/blob/main/packages/publish/README.md#catalog-protocol)
 
 # `workspace:` protocol
 
-The `workspace:` protocol ([pnpm workspace](https://pnpm.io/workspaces), [yarn workspace](https://yarnpkg.com/features/workspaces#workspace-ranges-workspace)) is also supported by Lerna-Lite. We also strongly suggest that you use this in combo with the new [`--sync-workspace-lock`](#--sync-workspace-lock) flag to properly update your root project lock file. When versioning `workspace:` dependencies, it will do the following:
+The `workspace:` protocol ([pnpm workspace](https://pnpm.io/workspaces), [yarn workspace](https://yarnpkg.com/features/workspaces#workspace-ranges-workspace)) is also supported by Lerna-Lite. You could also use this in combo with the new [`--sync-workspace-lock`](#--sync-workspace-lock) flag to properly update your root project lock file. When versioning `workspace:` dependencies, it will do the following:
 
 - fixed target workspace will remain untouched (if you use `workspace:*`, `workspace:~`, or `workspace:^`)
 - semver range workspace will be bumped (if you use `workspace:^1.2.3`)
