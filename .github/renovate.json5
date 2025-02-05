@@ -102,6 +102,7 @@
   ],
   ignoreDeps: [
     'lee-dohm/no-response',
+    'pnpm',
 
     // ignore all new major conventional-changelog versions (until breaking changes are investigated, let's just skip them all)
     '@types/conventional-recommended-bump',
