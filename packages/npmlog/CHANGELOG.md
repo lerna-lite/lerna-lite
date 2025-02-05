@@ -4,6 +4,12 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [3.12.0](https://github.com/lerna-lite/lerna-lite/compare/v3.11.0...v3.12.0) (2025-01-31)
+
+### Bug Fixes
+
+* **deps:** update all non-major dependencies ([#971](https://github.com/lerna-lite/lerna-lite/issues/971)) ([24d1bbc](https://github.com/lerna-lite/lerna-lite/commit/24d1bbccb3c263c53212e373ffe7d2fe1692551e)) - by @renovate[bot]
+
 ## [3.11.0](https://github.com/lerna-lite/lerna-lite/compare/v3.10.1...v3.11.0) (2025-01-02)
 
 ### Bug Fixes

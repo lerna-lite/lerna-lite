@@ -4,6 +4,19 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [3.12.0](https://github.com/lerna-lite/lerna-lite/compare/v3.11.0...v3.12.0) (2025-01-31)
+
+### Features
+
+* **publish:** support pnpm `catalog:` protocol with lerna publish ([#975](https://github.com/lerna-lite/lerna-lite/issues/975)) ([1dd3dc7](https://github.com/lerna-lite/lerna-lite/commit/1dd3dc74f2021a049cffb9f11af89a6890176d17)) - by @ghiscoding
+
+### Bug Fixes
+
+* **deps:** update all non-major dependencies ([#971](https://github.com/lerna-lite/lerna-lite/issues/971)) ([24d1bbc](https://github.com/lerna-lite/lerna-lite/commit/24d1bbccb3c263c53212e373ffe7d2fe1692551e)) - by @renovate[bot]
+* **deps:** update dependency tinyrainbow to v2 ([#973](https://github.com/lerna-lite/lerna-lite/issues/973)) ([2c14288](https://github.com/lerna-lite/lerna-lite/commit/2c14288407e12d82b02fa2641c0d0b46990b7f6a)) - by @renovate[bot]
+* **deps:** update inquirer packages ([#970](https://github.com/lerna-lite/lerna-lite/issues/970)) ([dc737b6](https://github.com/lerna-lite/lerna-lite/commit/dc737b6403f8cc6c24d3bc4ca161eff359f0b653)) - by @renovate[bot]
+* **deps:** update inquirer packages ([#974](https://github.com/lerna-lite/lerna-lite/issues/974)) ([2e6caf6](https://github.com/lerna-lite/lerna-lite/commit/2e6caf6c1a2fe5f3d897e9303076636d9faba3a6)) - by @renovate[bot]
+
 ## [3.11.0](https://github.com/lerna-lite/lerna-lite/compare/v3.10.1...v3.11.0) (2025-01-02)
 
 ### Features

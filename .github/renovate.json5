@@ -99,6 +99,10 @@
       packageNames: ['write-file-atomic'],
       allowedVersions: '<6.0.0',
     },
+    {
+      packageNames: ['pnpm'],
+      allowedVersions: '9.10.0',
+    },
   ],
   ignoreDeps: [
     'lee-dohm/no-response',

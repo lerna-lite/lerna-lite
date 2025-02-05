@@ -579,7 +579,7 @@ lerna will run [npm lifecycle scripts](https://docs.npmjs.com/cli/v8/using-npm/s
 
 # `catalog:` protocol
 
-The `catalog:` protocol ([pnpm catalog](https://pnpm.io/catalogs)) can be recognized by Lerna-Lite. When publishing, they will be replaced as is and use the version range defined in your global catalog. If you need to bump the version of a package in a catalog, you will need to edit `pnpm-workspace.yaml` manually. If you wish them to be bumped automatically, then we suggest using [`workspace:`](#workspace-protocol) protocol instead for any workspace dependencies.
+The `catalog:` protocol ([pnpm catalog](https://pnpm.io/catalogs)) can be recognized by Lerna-Lite. When publishing, they will be replaced "as is" by reading and using the version range defined in your global catalog. If you need to bump the version of a package in a catalog, you will need to edit `pnpm-workspace.yaml` manually. If you wish them to be bumped automatically, then we strongly suggest that you use the [`workspace:`](#workspace-protocol) protocol instead which is better for local workspace dependencies.
 
 So for example, if our `pnpm-workspace.yaml` file has the following configuration
 
@@ -594,17 +594,16 @@ catalog:
 
 # named catalogs are also supported
 catalogs:
-  # Can be referenced through "catalog:react17"
+  # Can be referenced through "catalog:react17" or "catalog:react18"
   react17:
     react: ^17.0.0
     react-dom: ^17.0.0
-  # Can be referenced through "catalog:react18"
   react18:
     react: ^18.2.0
     react-dom: ^18.2.0
 ```
 
-and then one of our package with the following dependencies defined in our `package.json`
+and then if one of our package has the following dependencies defined in our `package.json`
 
 ```json
 {
@@ -623,7 +622,7 @@ and then one of our package with the following dependencies defined in our `pack
 
 #### versions that will be published
 
-Lerna-Lite will replace all `catalog:` protocol with the version ranges defined in the global catalog(s) and publish the following:
+Lerna-Lite will resolve all `catalog:` protocol by extracting the version ranges defined in the global catalog(s) and will publish the following:
 
 ```json
 {
@@ -642,7 +641,7 @@ Lerna-Lite will replace all `catalog:` protocol with the version ranges defined 
 
 # `workspace:` protocol
 
-The `workspace:` protocol ([pnpm workspace](https://pnpm.io/workspaces), [yarn workspace](https://yarnpkg.com/features/workspaces#workspace-ranges-workspace)) is also supported by Lerna-Lite. We also strongly suggest that you use this in combo with the new [`--sync-workspace-lock`](https://github.com/lerna-lite/lerna-lite/tree/main/packages/version#--sync-workspace-lock) flag to properly update your root project lock file. When publishing, it will replace any `workspace:` dependencies by:
+The `workspace:` protocol ([pnpm workspace](https://pnpm.io/workspaces), [yarn workspace](https://yarnpkg.com/features/workspaces#workspace-ranges-workspace)) is also supported by Lerna-Lite. You could also use this in combo with the new [`--sync-workspace-lock`](https://github.com/lerna-lite/lerna-lite/tree/main/packages/version#--sync-workspace-lock) flag to properly update your root project lock file. When publishing, it will replace any `workspace:` dependencies by:
 
 - the corresponding version in the target workspace (if you use `workspace:*`, `workspace:~`, or `workspace:^`)
 - the associated semver range (for any other range type)
@@ -676,6 +675,8 @@ The library is doing a strict match and it will transform and publish the follow
   }
 }
 ```
+
+> **Note** semver range with an operator (ie `workspace:>=2.0.0`) are also supported but will never be mutated.
 
 ## FAQ
 

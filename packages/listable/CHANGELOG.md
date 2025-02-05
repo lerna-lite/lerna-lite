@@ -4,6 +4,12 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [3.12.0](https://github.com/lerna-lite/lerna-lite/compare/v3.11.0...v3.12.0) (2025-01-31)
+
+### Bug Fixes
+
+* **deps:** update dependency tinyrainbow to v2 ([#973](https://github.com/lerna-lite/lerna-lite/issues/973)) ([2c14288](https://github.com/lerna-lite/lerna-lite/commit/2c14288407e12d82b02fa2641c0d0b46990b7f6a)) - by @renovate[bot]
+
 ## [3.11.0](https://github.com/lerna-lite/lerna-lite/compare/v3.10.1...v3.11.0) (2025-01-02)
 
 **Note:** Version bump only for package @lerna-lite/listable
