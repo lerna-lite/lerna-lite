@@ -25,10 +25,6 @@
       allowedVersions: '1.2.6',
     },
     {
-      packageNames: ['node'],
-      allowedVersions: '18.0.0',
-    },
-    {
       // ref commit: https://github.com/lerna-lite/lerna-lite/commit/291bf01c5e0b49e70733c8abb17e2bb8141d5cbe
       packageNames: ['tar'],
       allowedVersions: '<7.0.0',
@@ -99,13 +95,10 @@
       packageNames: ['write-file-atomic'],
       allowedVersions: '<6.0.0',
     },
-    {
-      packageNames: ['pnpm'],
-      allowedVersions: '9.10.0',
-    },
   ],
   ignoreDeps: [
     'lee-dohm/no-response',
+    'node',
     'pnpm',
 
     // ignore all new major conventional-changelog versions (until breaking changes are investigated, let's just skip them all)
