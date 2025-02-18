@@ -105,5 +105,10 @@
     "typescript-eslint": "^8.24.1",
     "vitest": "^3.0.6",
     "write-json-file": "catalog:"
+  },
+  "pnpm": {
+    "overrides": {
+      "vite": "6.0.11"
+    }
   }
 }
