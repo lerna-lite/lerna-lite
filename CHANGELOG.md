@@ -4,6 +4,13 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [3.12.1](https://github.com/lerna-lite/lerna-lite/compare/v3.12.0...v3.12.1) (2025-02-18)
+
+### Bug Fixes
+
+* **deps:** update all non-major dependencies ([#981](https://github.com/lerna-lite/lerna-lite/issues/981)) ([2be4207](https://github.com/lerna-lite/lerna-lite/commit/2be420786f571934d35c7a916aa564765e9f2084)) - by @renovate[bot]
+* **deps:** update inquirer packages ([#980](https://github.com/lerna-lite/lerna-lite/issues/980)) ([2c7eb45](https://github.com/lerna-lite/lerna-lite/commit/2c7eb45e2185a4ebf4bb203d43c47f24d2f8b808)) - by @renovate[bot]
+
 ## [3.12.0](https://github.com/lerna-lite/lerna-lite/compare/v3.11.0...v3.12.0) (2025-01-31)
 
 ### Features
