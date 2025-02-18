@@ -85,9 +85,6 @@ catalogs:
       specifier: ^21.1.1
       version: 21.1.1
 
-overrides:
-  vite: 6.0.11
-
 importers:
 
   .:
@@ -1700,7 +1697,7 @@ packages:
     resolution: {integrity: sha512-KPztr4/tn7qDGZfqlSPQoF2VgJcKxnDNhmfR3VgZ6Fy1bO8T9Fc1stUiTXtqz0yG24VpD00pZP5f8EOFknjNuQ==}
     peerDependencies:
       msw: ^2.4.9
-      vite: 6.0.11
+      vite: ^5.0.0 || ^6.0.0
     peerDependenciesMeta:
       msw:
         optional: true
