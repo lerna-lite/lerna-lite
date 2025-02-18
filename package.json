@@ -94,7 +94,7 @@
     "prettier": "^3.5.1",
     "rimraf": "^5.0.10",
     "semver": "catalog:",
-    "tacks": "^1.2.6",
+    "tacks": "1.2.6",
     "temp-dir": "catalog:",
     "tempy": "^3.1.0",
     "tinyglobby": "catalog:",
