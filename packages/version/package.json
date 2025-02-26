@@ -66,7 +66,7 @@
     "slash": "catalog:",
     "temp-dir": "catalog:",
     "tinyrainbow": "catalog:",
-    "uuid": "^11.0.5",
+    "uuid": "^11.1.0",
     "write-json-file": "catalog:"
   },
   "devDependencies": {
