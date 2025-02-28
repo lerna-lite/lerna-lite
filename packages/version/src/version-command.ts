@@ -160,7 +160,12 @@ export class VersionCommand extends Command<VersionCommandOption> {
       );
     }
 
-    if (this.releaseClient && this.options.changelog === false && this.options.generateReleaseNotes !== true) {
+    if (
+      !this.options.dryRun &&
+      this.releaseClient &&
+      this.options.changelog === false &&
+      this.options.generateReleaseNotes !== true
+    ) {
       throw new ValidationError('ERELEASE', 'To create a release, you cannot pass --no-changelog');
     }
 
