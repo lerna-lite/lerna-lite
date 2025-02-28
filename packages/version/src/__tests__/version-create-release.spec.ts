@@ -137,9 +137,9 @@ describe.each([
 
   it('shows a console warning if --no-changelog also passed with --dry-run mode', async () => {
     const cwd = await initFixture('independent');
-    const logMessages = loggingOutput('warn');
     lernaVersion(cwd)('--create-release', type, '--conventional-commits', '--no-changelog', '--dry-run');
 
+    const logMessages = loggingOutput('warn');
     expect(logMessages).toContain('To create a release, you cannot pass --no-changelog');
   });
 
