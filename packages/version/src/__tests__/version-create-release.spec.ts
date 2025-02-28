@@ -135,6 +135,17 @@ describe.each([
     expect(client.releases.size).toBe(0);
   });
 
+  it('shows a console warning if --no-changelog also passed with --dry-run mode', async () => {
+    const logSpy = vi.spyOn(log, 'warn');
+    const cwd = await initFixture('independent');
+
+    (recommendVersion as Mock).mockResolvedValueOnce('1.1.0');
+
+    await new VersionCommand(createArgv(cwd, '--create-release', type, '--conventional-commits', '--no-changelog', '--dry-run'));
+
+    expect(logSpy).toHaveBeenCalledWith('ERELEASE', 'To create a release, you cannot pass --no-changelog');
+  });
+
   it('throws an error if environment variables are not present', async () => {
     const cwd = await initFixture('normal');
     const command = lernaVersion(cwd)('--create-release', type, '--conventional-commits');
