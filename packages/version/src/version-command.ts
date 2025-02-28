@@ -160,15 +160,6 @@ export class VersionCommand extends Command<VersionCommandOption> {
       );
     }
 
-    if (this.releaseClient && this.options.changelog === false && this.options.generateReleaseNotes !== true) {
-      const msg = 'To create a release, you cannot pass --no-changelog';
-      if (this.options.dryRun) {
-        this.logger.warn('ERELEASE', msg);
-      } else {
-        throw new ValidationError('ERELEASE', msg);
-      }
-    }
-
     if (
       this.options.conventionalCommits &&
       typeof this.options.changelogPreset === 'object' &&
@@ -196,6 +187,14 @@ export class VersionCommand extends Command<VersionCommandOption> {
   }
 
   async initialize() {
+    if (this.releaseClient && this.options.changelog === false && this.options.generateReleaseNotes !== true) {
+      const msg = 'To create a release, you cannot pass --no-changelog';
+      if (!this.options.dryRun) {
+        throw new ValidationError('ERELEASE', msg);
+      }
+      this.logger.warn('ERELEASE', msg);
+    }
+
     const isIndependent = this.project.isIndependent();
     const describeTag = this.options.describeTag;
 
