@@ -49,6 +49,7 @@ import { createGitHubClient } from '../git-clients/github-client.js';
 import { createGitLabClient } from '../git-clients/gitlab-client.js';
 
 // helpers
+import { loggingOutput } from '@lerna-test/helpers/logging-output.js';
 import { commandRunner, initFixtureFactory } from '@lerna-test/helpers';
 const initFixture = initFixtureFactory(__dirname);
 
