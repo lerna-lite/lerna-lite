@@ -160,13 +160,13 @@ export class VersionCommand extends Command<VersionCommandOption> {
       );
     }
 
-    if (
-      !this.options.dryRun &&
-      this.releaseClient &&
-      this.options.changelog === false &&
-      this.options.generateReleaseNotes !== true
-    ) {
-      throw new ValidationError('ERELEASE', 'To create a release, you cannot pass --no-changelog');
+    if (this.releaseClient && this.options.changelog === false && this.options.generateReleaseNotes !== true) {
+      const msg = 'To create a release, you cannot pass --no-changelog';
+      if (this.options.dryRun) {
+        this.logger.warn('ERELEASE', msg);
+      } else {
+        throw new ValidationError('ERELEASE', msg);
+      }
     }
 
     if (
