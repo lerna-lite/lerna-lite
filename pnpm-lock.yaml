@@ -846,9 +846,6 @@ importers:
       '@types/npm-package-arg':
         specifier: ^6.1.4
         version: 6.1.4
-      '@types/pify':
-        specifier: ^5.0.4
-        version: 5.0.4
       '@types/semver':
         specifier: 'catalog:'
         version: 7.5.8
@@ -1560,9 +1557,6 @@ packages:
 
   '@types/parse-path@7.0.3':
     resolution: {integrity: sha512-LriObC2+KYZD3FzCrgWGv/qufdUy4eXrxcLgQMfYXgPbLIecKIsVBaQgUPmxSSLcjmYbDTQbMgr6qr6l/eb7Bg==}
-
-  '@types/pify@5.0.4':
-    resolution: {integrity: sha512-gxKJ1Aw8LbyCsCQWIsip9bYKJCNsKHMoZoQMAe2IWH7U7hgp/l6TvJpbFvu8ZlGBimjZZNvEx2S1ZQlj02ayNQ==}
 
   '@types/semver@7.5.8':
     resolution: {integrity: sha512-I8EUhyrgfLrcTkzV3TSsGyl1tSuPrEDzr0yd5m90UgNxQkyDXULk3b6MlQqTCpZpNtWe1K0hzclnZkTcLBe2UQ==}
@@ -4392,8 +4386,6 @@ snapshots:
   '@types/npm-package-arg@6.1.4': {}
 
   '@types/parse-path@7.0.3': {}
-
-  '@types/pify@5.0.4': {}
 
   '@types/semver@7.5.8': {}
 

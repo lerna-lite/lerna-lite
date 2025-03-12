@@ -81,7 +81,6 @@
     "@types/js-yaml": "^4.0.9",
     "@types/minimatch": "^5.1.2",
     "@types/npm-package-arg": "^6.1.4",
-    "@types/pify": "^5.0.4",
     "@types/semver": "catalog:",
     "execa": "catalog:",
     "js-yaml": "^4.1.0",
