@@ -4,6 +4,13 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [3.12.3](https://github.com/lerna-lite/lerna-lite/compare/v3.12.2...v3.12.3) (2025-03-12)
+
+### Bug Fixes
+
+* **deps:** update inquirer packages ([#994](https://github.com/lerna-lite/lerna-lite/issues/994)) ([a6bfed2](https://github.com/lerna-lite/lerna-lite/commit/a6bfed284e65be34b41d12947b8897aeb861f472)) - by @renovate[bot]
+* use cosmiconfig global searchStrategy to fix breaking behaviour ([#992](https://github.com/lerna-lite/lerna-lite/issues/992)) ([5f1cd42](https://github.com/lerna-lite/lerna-lite/commit/5f1cd42fe9b2057c726ae57463cbac8ca2b68a42)) - by @ghiscoding
+
 ## [3.12.1](https://github.com/lerna-lite/lerna-lite/compare/v3.12.0...v3.12.1) (2025-02-18)
 
 ### Bug Fixes
