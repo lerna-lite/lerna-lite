@@ -44,6 +44,7 @@ export class Project {
           '.json5': this.json5Loader,
         },
         searchPlaces: ['lerna.json', 'lerna.jsonc', 'lerna.json5', 'package.json'],
+        searchStrategy: 'global',
         transform(obj) {
           // cosmiconfig returns null when nothing is found
           if (!obj) {

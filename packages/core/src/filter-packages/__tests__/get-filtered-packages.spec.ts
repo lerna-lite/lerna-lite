@@ -32,7 +32,7 @@ async function buildGraph(cwd) {
 }
 
 function parseOptions(...args) {
-  return filterOptions(yargs().exitProcess(false).showHelpOnFail(false)).parse(args);
+  return filterOptions(yargs().locale('en').exitProcess(false).showHelpOnFail(false)).parse(args);
 }
 
 // working dir is never mutated
