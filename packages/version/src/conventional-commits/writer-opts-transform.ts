@@ -30,8 +30,9 @@ export function setConfigChangelogCommitGitAuthor(
     typeof commitCustomFormat === 'string' && commitCustomFormat !== ''
       ? commitCustomFormat.replace(/%a/g, '{{authorName}}').replace(/%e/g, '{{authorEmail}}')
       : `({{authorName}})`;
-  writerOpts.commitPartial =
-    config.writer.commitPartial!.replace(/\n*$/, '') + ` {{#if @root.linkReferences~}}${extraCommitMsg}{{~/if}}\n`;
+
+  const commitPartial = config.writer?.commitPartial || '';
+  writerOpts.commitPartial = commitPartial.replace(/\n*$/, '') + ` {{#if @root.linkReferences~}}${extraCommitMsg}{{~/if}}\n`;
 }
 
 /**
@@ -57,7 +58,9 @@ export function setConfigChangelogCommitClientLogin(
     typeof commitCustomFormat === 'string' && commitCustomFormat !== ''
       ? commitCustomFormat.replace(/%a/g, '{{authorName}}').replace(/%e/g, '{{authorEmail}}').replace(/%l/g, '{{userLogin}}')
       : ` (@{{userLogin}})`;
-  writerOpts.commitPartial = config.writer.commitPartial!.replace(/\n*$/, '') + `${extraCommitMsg}\n`;
+
+  const commitPartial = config.writer?.commitPartial || '';
+  writerOpts.commitPartial = commitPartial.replace(/\n*$/, '') + `${extraCommitMsg}\n`;
 
   // add commits since last release into the transform function
   writerOpts.transform = writerOptsTransform.bind(
@@ -82,10 +85,10 @@ export function writerOptsTransform(
   commit: Commit,
   context: Context
 ) {
-  // execute original writerOpts transform
+  // Clone the commit object to avoid mutating the original
   const clonedCommit = { ...commit };
 
-  // add client remote detail (login)
+  // Add client remote detail (login)
   if (clonedCommit) {
     const shortHash = clonedCommit.shortHash || clonedCommit.hash?.substring(0, 7);
     const remoteCommit = commitsSinceLastRelease.find((c) => c.shortHash === shortHash);
@@ -94,6 +97,7 @@ export function writerOptsTransform(
     }
   }
 
+  // Execute the original transform function
   const extendedCommit = originalTransform(clonedCommit, context);
 
   return extendedCommit;

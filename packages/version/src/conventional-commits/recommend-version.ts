@@ -1,7 +1,7 @@
 import { Package, PackageGraphNode } from '@lerna-lite/core';
 import { log } from '@lerna-lite/npmlog';
 import { Bumper, BumperRecommendation, packagePrefix } from 'conventional-recommended-bump';
-import semver, { BaseReleaseType, ReleaseType } from 'semver';
+import semver, { ReleaseType } from 'semver';
 
 import { BaseChangelogOptions, ChangelogConfig, VersioningStrategy } from '../interfaces.js';
 import { GetChangelogConfig } from './get-changelog-config.js';
@@ -34,14 +34,17 @@ export async function recommendVersion(
   const parserOptions =
     changelogConfig.output?.recommendedBumpOpts.parserOpts ||
     changelogConfig.conventionalChangelog?.parserOpts ||
-    changelogConfig.parser;
+    changelogConfig.parser ||
+    {};
 
   bumper.commits({ path: pkg.location }, parserOptions);
 
   if (type === 'independent') {
     // lernaPackage got removed in v10, see https://github.com/conventional-changelog/conventional-changelog/issues/1266#issuecomment-2102760233
     const pkgPrefix = packagePrefix(pkg.name);
-    bumper.tag({ prefix: pkgPrefix });
+    if (pkgPrefix) {
+      bumper.tag({ prefix: pkgPrefix });
+    }
   } else {
     // only fixed mode can have a custom tag prefix
     bumper.tag({ prefix: tagPrefix });
@@ -68,11 +71,15 @@ export async function recommendVersion(
 
     const bumperPreset = changelogConfig?.output || changelogConfig;
 
-    if (bumperPreset === null) {
+    if (!bumperPreset) {
       return () => ({ releaseType: null });
     }
 
-    return (bumperPreset as ChangelogConfig).whatBump || bumperPreset.recommendedBumpOpts?.whatBump;
+    return (
+      (bumperPreset as ChangelogConfig).whatBump ||
+      bumperPreset.recommendedBumpOpts?.whatBump ||
+      (() => ({ releaseType: 'patch' }))
+    );
   }
 
   // Ensure potential ValidationError in getChangelogConfig() is propagated correctly
@@ -80,12 +87,12 @@ export async function recommendVersion(
     try {
       // result might be undefined because some presets are not consistent with angular
       // we still need to bump _something_ because lerna-lite saw a change here
-      const whatBumpResult = (await getWhatBump()) as (commits: Commit[]) => Promise<BumperRecommendation | null | undefined>;
-      let releaseType: ReleaseType = ((await bumper.bump(whatBumpResult)).releaseType || 'patch') as BaseReleaseType;
+      const whatBumpFn = (await getWhatBump()) as (commits: Commit[]) => Promise<BumperRecommendation | null | undefined>;
+      let releaseType = ((await bumper.bump(whatBumpFn)).releaseType || 'patch') as ReleaseType;
 
       if (prereleaseId) {
         const shouldBump = conventionalBumpPrerelease || shouldBumpPrerelease(releaseType, pkg.version);
-        const prereleaseType: ReleaseType = shouldBump ? `pre${releaseType}` : 'prerelease';
+        const prereleaseType = (shouldBump ? `pre${releaseType}` : 'prerelease') as ReleaseType;
         log.verbose(type, 'increment %s by %s - %s', pkg.version, prereleaseType, pkg.name);
         resolve(applyBuildMetadata(semver.inc(pkg.version, prereleaseType, prereleaseId), buildMetadata));
       } else {

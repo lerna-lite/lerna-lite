@@ -87,10 +87,14 @@ export async function updateChangelog(pkg: Package, type: ChangelogType, updateO
 
   if ((changelogIncludeCommitsClientLogin || changelogIncludeCommitsClientLogin === '') && commitsSinceLastRelease) {
     opt.transform = (commit) => {
-      return {
+      const transformedCommit = {
         ...commit,
         userLogin: 'ghiscoding',
       } as Commit & { userLogin: string };
+
+      log.verbose('transform', 'Transformed commit:', transformedCommit);
+
+      return transformedCommit;
     };
   }
 
