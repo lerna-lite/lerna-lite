@@ -32,7 +32,7 @@
     "url": "https://github.com/lerna-lite/lerna-lite/issues"
   },
   "engines": {
-    "node": "^18.0.0 || >=20.0.0"
+    "node": "^20.0.6 || >=22.0.0"
   },
   "dependencies": {
     "aproba": "^2.0.0",
