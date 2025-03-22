@@ -1,12 +1,26 @@
-import { describe, expect, it, Mock, vi } from 'vitest';
-
-vi.mock('node-fetch');
-
-import fetch from 'node-fetch';
+import { afterEach, beforeEach, describe, expect, it, Mock, vi } from 'vitest';
 
 import { GitLabClient } from '../GitLabClient.js';
 
 describe('GitLabClient', () => {
+  let originalFetch: any;
+  let fetchMock: Mock;
+
+  beforeEach(() => {
+    originalFetch = global.fetch;
+    global.fetch = vi.fn(() =>
+      Promise.resolve({
+        json: () => Promise.resolve({ test: 100 }),
+      })
+    ) as Mock;
+    fetchMock = global.fetch as any;
+  });
+
+  afterEach(() => {
+    global.fetch = originalFetch;
+    fetchMock = undefined as any;
+  });
+
   describe('constructor', () => {
     it('sets `baseUrl` and `token`', () => {
       const client = new GitLabClient('TOKEN', 'http://some/host');
@@ -28,7 +42,7 @@ describe('GitLabClient', () => {
   describe('createRelease', () => {
     it('requests releases api with release', () => {
       const client = new GitLabClient('TOKEN', 'http://some/host');
-      (fetch as Mock).mockResolvedValue({ ok: true });
+      fetchMock.mockResolvedValue({ ok: true });
       const release = {
         owner: 'the-owner',
         repo: 'the-repo',
@@ -39,7 +53,7 @@ describe('GitLabClient', () => {
 
       client.createRelease(release);
 
-      expect(fetch).toHaveBeenCalledWith('http://some/host/projects/the-owner%2Fthe-repo/releases', {
+      expect(fetchMock).toHaveBeenCalledWith('http://some/host/projects/the-owner%2Fthe-repo/releases', {
         method: 'post',
         body: JSON.stringify({
           name: 'the-name',
