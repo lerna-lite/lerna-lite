@@ -78,7 +78,7 @@ export async function updateChangelog(pkg: Package, type: ChangelogType, updateO
 
       // preserve tagPrefix because cc-core can't find the currentTag otherwise
       context.currentTag = `${tagPrefix}${pkg.version}`;
-      context.version = pkg.version; // TODO investigate why Lerna doesn't have this line
+      context.version = pkg.version;
     }
   }
 
