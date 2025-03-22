@@ -1,6 +1,6 @@
 import { ChangelogPresetOptions, EOL, Package } from '@lerna-lite/core';
 import { log } from '@lerna-lite/npmlog';
-import conventionalChangelogCore, { Context, Options as ChangelogCoreOptions } from 'conventional-changelog-core';
+import conventionalChangelogCore, { Context, Options as ChangelogCoreOptions } from 'conventional-changelog';
 import { Options as WriterOptions } from 'conventional-changelog-writer';
 import { writeFile } from 'fs/promises';
 import getStream from 'get-stream';

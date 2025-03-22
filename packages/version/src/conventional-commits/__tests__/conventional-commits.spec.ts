@@ -983,8 +983,8 @@ describe('conventional-commits', () => {
         ],
       };
 
-      // const changelogOne = await updateChangelog(pkg1, 'independent', opt1s);
-      const [changelogOne, changelogTwo] = await Promise.all([updateChangelog(pkg1, 'independent', opt1s), updateChangelog(pkg2, 'independent', opt2s)]);
+      const changelogOne = await updateChangelog(pkg1, 'independent', opt1s);
+      const changelogTwo = await updateChangelog(pkg2, 'independent', opt2s);
 
       expect(changelogOne.newEntry.trimRight()).toMatchInlineSnapshot(`
         ## [1.0.1](/compare/package-1@1.0.0...package-1@1.0.1) (YYYY-MM-DD)
@@ -996,6 +996,7 @@ describe('conventional-commits', () => {
       `);
       expect(changelogTwo.newEntry.trimRight()).toMatchInlineSnapshot(`
         # [1.1.0](/compare/package-2@1.0.0...package-2@1.1.0) (YYYY-MM-DD)
+
 
         ### Features
 

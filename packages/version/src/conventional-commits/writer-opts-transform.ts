@@ -1,6 +1,5 @@
-import { GitRawCommitsOptions } from 'conventional-changelog-core';
+import { GitRawCommitsOptions } from 'conventional-changelog';
 import { Options as WriterOptions } from 'conventional-changelog-writer';
-import { Commit } from 'conventional-commits-parser';
 
 import { ChangelogConfig, RemoteCommit } from '../interfaces.js';
 
@@ -63,16 +62,18 @@ export function setConfigChangelogCommitClientLogin(
   writerOpts.commitPartial = commitPartial.replace(/\n*$/, '') + `${extraCommitMsg}\n`;
 
   // add commits since last release into the transform function
-  writerOpts.transform = (commit) => {
-    const extendedCommit = { ...commit } as Commit & { userLogin?: string };
+  const originalTransform = config.writer?.transform;
+  writerOpts.transform = (commit, context, options) => {
+    const transCommit = originalTransform?.(commit, context, options) || null;
 
-    // add remote client detail (login) when found
-    if (extendedCommit) {
+    // add remote client detail (user login) when found
+    if (transCommit) {
       const remoteCommit = commitsSinceLastRelease.find((c) => commit.hash?.startsWith(c.shortHash));
       if (remoteCommit?.login) {
-        extendedCommit.userLogin = remoteCommit.login;
+        return { ...transCommit, userLogin: remoteCommit.login };
       }
     }
-    return extendedCommit;
+
+    return transCommit;
   };
 }

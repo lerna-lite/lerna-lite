@@ -1,5 +1,5 @@
 import { ChangelogPresetOptions, ExecOpts, Package } from '@lerna-lite/core';
-import { Context, GitRawCommitsOptions, ParserOptions } from 'conventional-changelog-core';
+import { Context, GitRawCommitsOptions, ParserOptions } from 'conventional-changelog';
 import { Options as WriterOptions } from 'conventional-changelog-writer';
 import { Commit, ParserStreamOptions } from 'conventional-commits-parser';
 import { BumperRecommendation, Preset as BumperPresetOptions } from 'conventional-recommended-bump';
