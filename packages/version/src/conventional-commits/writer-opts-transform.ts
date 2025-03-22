@@ -1,4 +1,4 @@
-import { Context, GitRawCommitsOptions } from 'conventional-changelog-core';
+import { GitRawCommitsOptions } from 'conventional-changelog-core';
 import { Options as WriterOptions } from 'conventional-changelog-writer';
 import { Commit } from 'conventional-commits-parser';
 
@@ -63,42 +63,16 @@ export function setConfigChangelogCommitClientLogin(
   writerOpts.commitPartial = commitPartial.replace(/\n*$/, '') + `${extraCommitMsg}\n`;
 
   // add commits since last release into the transform function
-  writerOpts.transform = writerOptsTransform.bind(
-    null,
-    config.writer.transform as unknown as (cmt: Commit, ctx: Context) => Commit,
-    commitsSinceLastRelease
-  ) as any;
-}
+  writerOpts.transform = (commit) => {
+    const extendedCommit = { ...commit } as Commit & { userLogin?: string };
 
-/**
- * Extend the writerOpts transform function from whichever preset config is currently loaded
- * We will execute the original writerOpts transform function, then from it we'll add extra properties to the commit object
- * @param {Transform} originalTransform
- * @param {RemoteCommit[]} commitsSinceLastRelease
- * @param {Commit} commit
- * @param {Context} context
- * @returns
- */
-export function writerOptsTransform(
-  originalTransform: (cmt: Commit, ctx: Context) => Commit,
-  commitsSinceLastRelease: RemoteCommit[],
-  commit: Commit,
-  context: Context
-) {
-  // Clone the commit object to avoid mutating the original
-  const clonedCommit = { ...commit };
-
-  // Add client remote detail (login)
-  if (clonedCommit) {
-    const shortHash = clonedCommit.shortHash || clonedCommit.hash?.substring(0, 7);
-    const remoteCommit = commitsSinceLastRelease.find((c) => c.shortHash === shortHash);
-    if (remoteCommit?.login) {
-      clonedCommit.userLogin = remoteCommit.login;
+    // add remote client detail (login) when found
+    if (extendedCommit) {
+      const remoteCommit = commitsSinceLastRelease.find((c) => commit.hash?.startsWith(c.shortHash));
+      if (remoteCommit?.login) {
+        extendedCommit.userLogin = remoteCommit.login;
+      }
     }
-  }
-
-  // Execute the original transform function
-  const extendedCommit = originalTransform(clonedCommit, context);
-
-  return extendedCommit;
+    return extendedCommit;
+  };
 }

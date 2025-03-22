@@ -2,7 +2,6 @@ import { ChangelogPresetOptions, EOL, Package } from '@lerna-lite/core';
 import { log } from '@lerna-lite/npmlog';
 import conventionalChangelogCore, { Context, Options as ChangelogCoreOptions } from 'conventional-changelog-core';
 import { Options as WriterOptions } from 'conventional-changelog-writer';
-import { Commit } from 'conventional-commits-parser';
 import { writeFile } from 'fs/promises';
 import getStream from 'get-stream';
 
@@ -50,7 +49,7 @@ export async function updateChangelog(pkg: Package, type: ChangelogType, updateO
   // NOTE: must pass as positional argument due to weird bug in merge-config
   const gitRawCommitsOpts = Object.assign({}, options.config.gitRawCommitsOpts);
 
-  // // are we including commit author name/email or remote client login name
+  // are we including commit author name/email or remote client login name
   if (changelogIncludeCommitsGitAuthor || changelogIncludeCommitsGitAuthor === '') {
     setConfigChangelogCommitGitAuthor(config, gitRawCommitsOpts, writerOpts, changelogIncludeCommitsGitAuthor);
   } else if ((changelogIncludeCommitsClientLogin || changelogIncludeCommitsClientLogin === '') && commitsSinceLastRelease) {
@@ -83,23 +82,14 @@ export async function updateChangelog(pkg: Package, type: ChangelogType, updateO
     }
   }
 
-  const opt = { ...options } as ChangelogCoreOptions;
-
-  if ((changelogIncludeCommitsClientLogin || changelogIncludeCommitsClientLogin === '') && commitsSinceLastRelease) {
-    opt.transform = (commit) => {
-      const transformedCommit = {
-        ...commit,
-        userLogin: 'ghiscoding',
-      } as Commit & { userLogin: string };
-
-      log.verbose('transform', 'Transformed commit:', transformedCommit);
-
-      return transformedCommit;
-    };
-  }
-
   // generate the markdown for the upcoming release.
-  const changelogStream = conventionalChangelogCore(opt, context, gitRawCommitsOpts, undefined, writerOpts);
+  const changelogStream = conventionalChangelogCore(
+    options as ChangelogCoreOptions,
+    context,
+    gitRawCommitsOpts,
+    undefined,
+    writerOpts
+  );
 
   return Promise.all([
     // prettier-ignore
