@@ -71,15 +71,12 @@ export async function recommendVersion(
 
     const bumperPreset = changelogConfig?.output || changelogConfig;
 
+    /* v8 ignore next 3 */
     if (!bumperPreset) {
       return () => ({ releaseType: null });
     }
 
-    return (
-      (bumperPreset as ChangelogConfig).whatBump ||
-      bumperPreset.recommendedBumpOpts?.whatBump ||
-      (() => ({ releaseType: 'patch' }))
-    );
+    return (bumperPreset as ChangelogConfig).whatBump || bumperPreset.recommendedBumpOpts?.whatBump;
   }
 
   // Ensure potential ValidationError in getChangelogConfig() is propagated correctly

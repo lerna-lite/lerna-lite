@@ -982,11 +982,25 @@ describe('conventional-commits', () => {
           },
         ],
       };
+      const opt3s = {
+        changelogPreset: 'conventional-changelog-angular',
+        changelogIncludeCommitsClientLogin: ' from @%l, _%a (%e)_',
+        commitsSinceLastRelease: [
+          {
+            authorName: 'Tester McPerson',
+            login: 'tester-mcperson',
+            hash: 'abc123', // invalid hash
+            shortHash: 'abc123', // invalid hash
+            message: 'feat(thing): added',
+          },
+        ],
+      };
 
-      const changelogOne = await updateChangelog(pkg1, 'independent', opt1s);
-      const changelogTwo = await updateChangelog(pkg2, 'independent', opt2s);
+      const changelog1 = await updateChangelog(pkg1, 'independent', opt1s);
+      const changelog2 = await updateChangelog(pkg2, 'independent', opt2s);
+      const changelog3 = await updateChangelog(pkg2, 'independent', opt3s);
 
-      expect(changelogOne.newEntry.trimRight()).toMatchInlineSnapshot(`
+      expect(changelog1.newEntry.trimRight()).toMatchInlineSnapshot(`
         ## [1.0.1](/compare/package-1@1.0.0...package-1@1.0.1) (YYYY-MM-DD)
 
 
@@ -994,13 +1008,23 @@ describe('conventional-commits', () => {
 
         * **stuff:** changed ([SHA](https://github.com/lerna/conventional-commits-independent/commit/GIT_HEAD)) (@tester-mcperson)
       `);
-      expect(changelogTwo.newEntry.trimRight()).toMatchInlineSnapshot(`
+      expect(changelog2.newEntry.trimRight()).toMatchInlineSnapshot(`
         # [1.1.0](/compare/package-2@1.0.0...package-2@1.1.0) (YYYY-MM-DD)
 
 
         ### Features
 
         * **thing:** added ([SHA](https://github.com/lerna/conventional-commits-independent/commit/GIT_HEAD)) from @tester-mcperson, _Tester McPerson (test@example.com)_
+      `);
+
+      // when SHA isn't found, it will still try to format the message but without a user @
+      expect(changelog3.newEntry.trimRight()).toMatchInlineSnapshot(`
+        # [1.1.0](/compare/package-2@1.0.0...package-2@1.1.0) (YYYY-MM-DD)
+
+
+        ### Features
+
+        * **thing:** added ([SHA](https://github.com/lerna/conventional-commits-independent/commit/GIT_HEAD)) from @, _Tester McPerson (test@example.com)_
       `);
     });
   });
