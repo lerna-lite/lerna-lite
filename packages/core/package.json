@@ -33,7 +33,7 @@
     "url": "https://github.com/lerna-lite/lerna-lite/issues"
   },
   "engines": {
-    "node": "^18.0.0 || >=20.0.0"
+    "node": "^20.17.0 || >=22.9.0"
   },
   "dependencies": {
     "@inquirer/expand": "^4.0.11",
