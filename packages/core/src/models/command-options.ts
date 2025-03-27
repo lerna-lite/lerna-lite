@@ -1,4 +1,4 @@
-import { ArboristLoadOption, ChangelogPresetOptions, RemoteClientType } from './interfaces.js';
+import type { ArboristLoadOption, ChangelogPresetOptions, RemoteClientType } from './interfaces.js';
 
 export interface ChangedCommandOption {
   /** use conventional-changelog to determine version bump and generate CHANGELOG. */

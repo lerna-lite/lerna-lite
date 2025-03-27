@@ -1,4 +1,5 @@
-import { collectUncommitted, UncommittedConfig } from './collect-uncommitted.js';
+import type { UncommittedConfig } from './collect-uncommitted.js';
+import { collectUncommitted } from './collect-uncommitted.js';
 import { describeRef } from './describe-ref.js';
 import { ValidationError } from '../validation-error.js';
 

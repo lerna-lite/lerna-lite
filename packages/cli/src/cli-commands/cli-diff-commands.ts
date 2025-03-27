@@ -1,4 +1,4 @@
-import { DiffCommandOption } from '@lerna-lite/core';
+import type { DiffCommandOption } from '@lerna-lite/core';
 
 /**
  * @see https://github.com/yargs/yargs/blob/master/docs/advanced.md#providing-a-command-module

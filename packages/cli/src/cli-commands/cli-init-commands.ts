@@ -1,4 +1,4 @@
-import { InitCommandOption } from '@lerna-lite/core';
+import type { InitCommandOption } from '@lerna-lite/core';
 import { InitCommand } from '@lerna-lite/init';
 
 /**

@@ -1,7 +1,7 @@
-import { GitRawCommitsOptions } from 'conventional-changelog';
-import { Options as WriterOptions } from 'conventional-changelog-writer';
+import type { GitRawCommitsOptions } from 'conventional-changelog';
+import type { Options as WriterOptions } from 'conventional-changelog-writer';
 
-import { ChangelogConfig, RemoteCommit } from '../interfaces.js';
+import type { ChangelogConfig, RemoteCommit } from '../interfaces.js';
 
 // available formats can be found at Git's url: https://git-scm.com/docs/git-log#_pretty_formats
 const GIT_COMMIT_WITH_AUTHOR_FORMAT =

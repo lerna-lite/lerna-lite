@@ -1,12 +1,14 @@
-import { Package, PackageGraphNode } from '@lerna-lite/core';
+import type { Package, PackageGraphNode } from '@lerna-lite/core';
 import { log } from '@lerna-lite/npmlog';
-import { Bumper, BumperRecommendation, packagePrefix } from 'conventional-recommended-bump';
-import semver, { ReleaseType } from 'semver';
+import type { BumperRecommendation } from 'conventional-recommended-bump';
+import { Bumper, packagePrefix } from 'conventional-recommended-bump';
+import type { ReleaseType } from 'semver';
+import semver from 'semver';
 
-import { BaseChangelogOptions, ChangelogConfig, VersioningStrategy } from '../interfaces.js';
+import type { BaseChangelogOptions, ChangelogConfig, VersioningStrategy } from '../interfaces.js';
 import { GetChangelogConfig } from './get-changelog-config.js';
 import { applyBuildMetadata } from './apply-build-metadata.js';
-import { Commit } from 'conventional-commits-parser';
+import type { Commit } from 'conventional-commits-parser';
 
 /**
  * @param {import('@lerna/package').Package} pkg

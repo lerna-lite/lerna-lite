@@ -1,12 +1,12 @@
 import { log } from '@lerna-lite/npmlog';
 
-import { ExecOpts } from '../../models/interfaces.js';
-import { PackageGraph } from '../../package-graph/package-graph.js';
-import { Package } from '../../package.js';
+import type { ExecOpts } from '../../models/interfaces.js';
+import type { PackageGraph } from '../../package-graph/package-graph.js';
+import type { Package } from '../../package.js';
 import { collectUpdates } from '../../utils/collect-updates/collect-updates.js';
 
 import { filterPackages } from './filter-packages.js';
-import { FilterOptions } from './interfaces.js';
+import type { FilterOptions } from './interfaces.js';
 
 /**
  * Retrieve a list of Package instances filtered by various options.

@@ -1,20 +1,20 @@
 import {
   Command,
-  FilterOptions,
-  Package,
-  ProjectConfig,
+  type FilterOptions,
+  type Package,
+  type ProjectConfig,
   getFilteredPackages,
   pluralize,
   spawn,
   spawnStreaming,
   ValidationError,
-  WatchCommandOption,
+  type WatchCommandOption,
 } from '@lerna-lite/core';
 import chokidar from 'chokidar';
 import { join } from 'node:path';
 
 import { CHOKIDAR_AVAILABLE_OPTIONS, DEBOUNCE_DELAY, FILE_DELIMITER } from './constants.js';
-import { ChangesStructure } from './models.js';
+import type { ChangesStructure } from './models.js';
 
 export function factory(argv: WatchCommandOption) {
   return new WatchCommand(argv);

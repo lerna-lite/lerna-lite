@@ -9,7 +9,7 @@ import { isStream } from 'is-stream';
 import { makeDirectory, makeDirectorySync } from 'make-dir';
 import tempDir from 'temp-dir';
 import { dirname, join } from 'node:path';
-import { Readable } from 'node:stream';
+import type { Readable } from 'node:stream';
 import { promisify } from 'node:util';
 import { v4 as uuidv4 } from 'uuid';
 
