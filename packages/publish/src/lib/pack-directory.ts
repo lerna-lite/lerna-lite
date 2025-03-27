@@ -1,9 +1,10 @@
-import { ArboristLoadOption, LifecycleConfig, Package, PackConfig, runLifecycle } from '@lerna-lite/core';
+import type { ArboristLoadOption, LifecycleConfig, PackConfig } from '@lerna-lite/core';
+import { Package, runLifecycle } from '@lerna-lite/core';
 import { log } from '@lerna-lite/npmlog';
 import { tempWrite } from '@lerna-lite/version';
 import Arborist from '@npmcli/arborist';
 import { relative } from 'node:path';
-import { Readable } from 'node:stream';
+import type { Readable } from 'node:stream';
 import packlist from 'npm-packlist';
 import tar from 'tar';
 

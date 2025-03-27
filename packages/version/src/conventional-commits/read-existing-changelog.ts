@@ -1,4 +1,4 @@
-import { Package } from '@lerna-lite/core';
+import type { Package } from '@lerna-lite/core';
 import { readFile } from 'fs/promises';
 import { join } from 'node:path';
 

@@ -1,7 +1,7 @@
-import { ChangelogPresetOptions, ExecOpts, Package } from '@lerna-lite/core';
-import { GitRawCommitsOptions, ParserOptions } from 'conventional-changelog-core';
-import { Options as WriterOptions } from 'conventional-changelog-writer';
-import { Options as RecommendedBumpOptions } from 'conventional-recommended-bump';
+import type { ChangelogPresetOptions, ExecOpts, Package } from '@lerna-lite/core';
+import type { GitRawCommitsOptions, ParserOptions } from 'conventional-changelog-core';
+import type { Options as WriterOptions } from 'conventional-changelog-writer';
+import type { Options as RecommendedBumpOptions } from 'conventional-recommended-bump';
 
 export interface GitCommitOption {
   amend: boolean;

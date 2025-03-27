@@ -3,8 +3,8 @@ import PQueue from 'p-queue';
 import { log } from '@lerna-lite/npmlog';
 
 import { npmConf } from '../utils/npm-conf.js';
-import { LifecycleConfig } from '../models/interfaces.js';
-import { Package } from '../package.js';
+import type { LifecycleConfig } from '../models/interfaces.js';
+import type { Package } from '../package.js';
 
 const queue = new PQueue({ concurrency: 1 });
 

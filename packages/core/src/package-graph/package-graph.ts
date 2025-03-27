@@ -7,9 +7,9 @@ import { parse } from 'yaml';
 import { CyclicPackageGraphNode } from './lib/cyclic-package-graph-node.js';
 import { PackageGraphNode } from './lib/package-graph-node.js';
 import { reportCycles } from './lib/report-cycles.js';
-import { Package } from '../package.js';
+import type { Package } from '../package.js';
 import { ValidationError } from '../validation-error.js';
-import { NpaResolveResult } from '../models/interfaces.js';
+import type { NpaResolveResult } from '../models/interfaces.js';
 
 /**
  * A regular expression used to capture and substitute package versions (referred to as "spec" in the lerna-lite code).

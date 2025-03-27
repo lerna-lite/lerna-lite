@@ -1,4 +1,5 @@
-import { execPackageManager, execPackageManagerSync, Package } from '@lerna-lite/core';
+import type { Package } from '@lerna-lite/core';
+import { execPackageManager, execPackageManagerSync } from '@lerna-lite/core';
 import { log } from '@lerna-lite/npmlog';
 import { loadJsonFile } from 'load-json-file';
 import { promises } from 'node:fs';

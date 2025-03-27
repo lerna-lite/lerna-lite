@@ -1,8 +1,8 @@
-import { Logger } from '@lerna-lite/npmlog';
-import npa from 'npm-package-arg';
+import type { Logger } from '@lerna-lite/npmlog';
+import type npa from 'npm-package-arg';
 
-import { Package } from '../package.js';
-import { InitCommandOption, PublishCommandOption, RunCommandOption, VersionCommandOption } from './command-options.js';
+import type { Package } from '../package.js';
+import type { InitCommandOption, PublishCommandOption, RunCommandOption, VersionCommandOption } from './command-options.js';
 
 /* eslint-disable no-use-before-define */
 export type JsonObject = { [Key in string]: JsonValue } & { [Key in string]?: JsonValue | undefined };

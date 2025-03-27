@@ -1,4 +1,4 @@
-import { Logger } from '@lerna-lite/npmlog';
+import type { Logger } from '@lerna-lite/npmlog';
 
 export interface ProfilerConfig {
   concurrency: number;

@@ -1,7 +1,7 @@
 import { remove } from 'fs-extra/esm';
 import pMap from 'p-map';
 
-import { Package } from '@lerna-lite/core';
+import type { Package } from '@lerna-lite/core';
 
 /**
  * Remove temporary license files.

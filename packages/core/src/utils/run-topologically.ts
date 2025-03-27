@@ -1,9 +1,9 @@
 import PQueue from 'p-queue';
 
 import { QueryGraph } from './query-graph.js';
-import { TopologicalConfig } from '../models/interfaces.js';
-import { Package } from '../package.js';
-import { PackageGraphNode } from '../package-graph/lib/package-graph-node.js';
+import type { TopologicalConfig } from '../models/interfaces.js';
+import type { Package } from '../package.js';
+import type { PackageGraphNode } from '../package-graph/lib/package-graph-node.js';
 
 /**
  * Run callback in maximally-saturated topological order.

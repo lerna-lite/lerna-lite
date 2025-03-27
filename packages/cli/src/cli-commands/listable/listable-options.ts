@@ -1,4 +1,4 @@
-import { ListableOption } from '@lerna-lite/core';
+import type { ListableOption } from '@lerna-lite/core';
 
 export type YargListableOption = {
   [option in keyof ListableOption]: {

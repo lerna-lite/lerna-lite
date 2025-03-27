@@ -2,8 +2,8 @@
 export * from './corepack/exec-package-manager.js';
 export * from './corepack/is-corepack-enabled.js';
 export * from './filter-packages/index.js';
-export * from './models/command-options.js';
-export * from './models/interfaces.js';
+export type * from './models/command-options.js';
+export type * from './models/interfaces.js';
 export * from './package-graph/package-graph.js';
 export * from './package-graph/lib/cyclic-package-graph-node.js';
 export * from './package-graph/lib/package-graph-node.js';

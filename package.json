@@ -40,6 +40,7 @@
     "ci:lint": "eslint packages",
     "lint": "eslint packages --cache --cache-location ./node_modules/.cache/eslint",
     "lint:no-cache": "eslint packages",
+    "lint:fix": "eslint packages --fix",
     "outdated:ws": "pnpm -r --stream outdated",
     "test": "cross-env-shell NO_COLOR=true vitest --coverage --config ./vitest/vitest.config.ts",
     "test:watch": "cross-env-shell NO_COLOR=true vitest --watch --config ./vitest/vitest.config.ts",

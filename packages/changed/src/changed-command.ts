@@ -1,12 +1,5 @@
-import {
-  collectUpdates,
-  Command,
-  CommandType,
-  ChangedCommandOption,
-  ListCommandOption,
-  logOutput,
-  UpdateCollectorOptions,
-} from '@lerna-lite/core';
+import type { CommandType, ChangedCommandOption, ListCommandOption, UpdateCollectorOptions } from '@lerna-lite/core';
+import { collectUpdates, Command, logOutput } from '@lerna-lite/core';
 import { listable } from '@lerna-lite/listable';
 
 export function factory(argv: ChangedCommandOption & ListCommandOption) {

@@ -1,4 +1,4 @@
-import fetch from 'npm-registry-fetch';
+import type fetch from 'npm-registry-fetch';
 
 export interface DistTagOptions extends fetch.FetchOptions {
   defaultTag?: string;

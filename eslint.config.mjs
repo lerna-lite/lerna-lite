@@ -12,6 +12,13 @@ export default tseslint.config(
     extends: [eslint.configs.recommended, ...tseslint.configs.recommended],
     plugins: { n },
     files: ['**/*.ts'],
+    languageOptions: {
+      parser: tseslint.parser,
+      parserOptions: {
+        project: ['./tsconfig.base.json'],
+        tsconfigRootDir: import.meta.dirname,
+      },
+    },
     rules: {
       'arrow-body-style': 'off',
       'class-methods-use-this': 'off',
@@ -45,6 +52,8 @@ export default tseslint.config(
       'prefer-object-spread': 'off',
       strict: 'off',
       '@typescript-eslint/ban-ts-comment': 'off',
+      '@typescript-eslint/consistent-type-exports': 'error',
+      '@typescript-eslint/consistent-type-imports': 'error',
       '@typescript-eslint/no-empty-function': 'off',
       '@typescript-eslint/no-explicit-any': 'off',
       '@typescript-eslint/no-non-null-assertion': 'off',
@@ -70,6 +79,8 @@ export default tseslint.config(
       'vitest/prefer-expect-assertions': 0, // when testing `vitest.configs.all.rules`
       'vitest/prefer-todo': 1,
       'vitest/require-to-throw-message': 1,
+      '@typescript-eslint/consistent-type-exports': 'off',
+      '@typescript-eslint/consistent-type-imports': 'off',
     },
     languageOptions: {
       globals: {
