@@ -125,16 +125,16 @@ Only configurable via `lerna.json` since an object type must be provided:
 
 ```sh
 lerna publish --canary
-# 1.0.0 => 1.0.1-alpha.0+${SHA} of packages changed since the previous commit
-# a subsequent canary publish will yield 1.0.1-alpha.1+${SHA}, etc
+# 1.0.0 => 1.0.1-alpha.0.${SHA} of packages changed since the previous commit
+# a subsequent canary publish will yield 1.0.1-alpha.1.${SHA}, etc
 
 lerna publish --canary --preid beta
-# 1.0.0 => 1.0.1-beta.0+${SHA}
+# 1.0.0 => 1.0.1-beta.0.${SHA}
 
 # The following are equivalent:
 lerna publish --canary minor
 lerna publish --canary preminor
-# 1.0.0 => 1.1.0-alpha.0+${SHA}
+# 1.0.0 => 1.1.0-alpha.0.${SHA}
 ```
 
 When run with this flag, `lerna publish` publishes packages in a more granular way (per commit).

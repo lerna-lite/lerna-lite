@@ -120,10 +120,10 @@ test('publish --canary', async () => {
   );
   expect((writePkg as any).updatedVersions()).toMatchInlineSnapshot(`
     {
-      "package-1": 1.0.1-alpha.0+SHA,
-      "package-2": 1.0.1-alpha.0+SHA,
-      "package-3": 1.0.1-alpha.0+SHA,
-      "package-4": 1.0.1-alpha.0+SHA,
+      "package-1": 1.0.1-alpha.0.SHA,
+      "package-2": 1.0.1-alpha.0.SHA,
+      "package-3": 1.0.1-alpha.0.SHA,
+      "package-4": 1.0.1-alpha.0.SHA,
     }
   `);
 });
@@ -145,10 +145,10 @@ test('publish --canary with auto-confirm --yes', async () => {
   );
   expect((writePkg as any).updatedVersions()).toMatchInlineSnapshot(`
     {
-      "package-1": 1.0.1-alpha.0+SHA,
-      "package-2": 1.0.1-alpha.0+SHA,
-      "package-3": 1.0.1-alpha.0+SHA,
-      "package-4": 1.0.1-alpha.0+SHA,
+      "package-1": 1.0.1-alpha.0.SHA,
+      "package-2": 1.0.1-alpha.0.SHA,
+      "package-3": 1.0.1-alpha.0.SHA,
+      "package-4": 1.0.1-alpha.0.SHA,
     }
   `);
 });
@@ -162,9 +162,9 @@ test('publish --canary --preid beta', async () => {
 
   expect((writePkg as any).updatedVersions()).toMatchInlineSnapshot(`
     {
-      "package-1": 1.0.1-beta.0+SHA,
-      "package-2": 1.0.1-beta.0+SHA,
-      "package-3": 1.0.1-beta.0+SHA,
+      "package-1": 1.0.1-beta.0.SHA,
+      "package-2": 1.0.1-beta.0.SHA,
+      "package-3": 1.0.1-beta.0.SHA,
     }
   `);
 });
@@ -177,9 +177,9 @@ test("publish --canary --tag-version-prefix='abc'", async () => {
 
   expect((writePkg as any).updatedVersions()).toMatchInlineSnapshot(`
     {
-      "package-1": 1.0.1-alpha.0+SHA,
-      "package-2": 1.0.1-alpha.0+SHA,
-      "package-3": 1.0.1-alpha.0+SHA,
+      "package-1": 1.0.1-alpha.0.SHA,
+      "package-2": 1.0.1-alpha.0.SHA,
+      "package-3": 1.0.1-alpha.0.SHA,
     }
   `);
 });
@@ -193,9 +193,9 @@ test('publish --canary <semver>', async () => {
 
   expect((writePkg as any).updatedVersions()).toMatchInlineSnapshot(`
     {
-      "package-1": 1.0.1-alpha.0+SHA,
-      "package-2": 1.0.1-alpha.0+SHA,
-      "package-3": 1.0.1-alpha.0+SHA,
+      "package-1": 1.0.1-alpha.0.SHA,
+      "package-2": 1.0.1-alpha.0.SHA,
+      "package-3": 1.0.1-alpha.0.SHA,
     }
   `);
 });
@@ -208,9 +208,9 @@ test('publish --canary --independent', async () => {
 
   expect((writePkg as any).updatedVersions()).toMatchInlineSnapshot(`
     {
-      "package-1": 1.1.0-alpha.0+SHA,
-      "package-2": 2.1.0-alpha.0+SHA,
-      "package-3": 3.1.0-alpha.0+SHA,
+      "package-1": 1.1.0-alpha.0.SHA,
+      "package-2": 2.1.0-alpha.0.SHA,
+      "package-3": 3.1.0-alpha.0.SHA,
     }
   `);
 });
@@ -236,7 +236,7 @@ test('publish --canary addresses unpublished package', async () => {
   // there have been two commits since the beginning of the repo
   expect((writePkg as any).updatedVersions()).toMatchInlineSnapshot(`
     {
-      "package-6": 1.0.0-alpha.1+SHA,
+      "package-6": 1.0.0-alpha.1.SHA,
     }
   `);
 });
@@ -250,11 +250,11 @@ describe('publish --canary differential', () => {
 
     expect((writePkg as any).updatedVersions()).toMatchInlineSnapshot(`
       {
-        "package-1": 1.0.1-alpha.0+SHA,
-        "package-2": 1.0.1-alpha.0+SHA,
-        "package-3": 1.0.1-alpha.0+SHA,
-        "package-4": 1.0.1-alpha.0+SHA,
-        "package-5": 1.0.1-alpha.0+SHA,
+        "package-1": 1.0.1-alpha.0.SHA,
+        "package-2": 1.0.1-alpha.0.SHA,
+        "package-3": 1.0.1-alpha.0.SHA,
+        "package-4": 1.0.1-alpha.0.SHA,
+        "package-5": 1.0.1-alpha.0.SHA,
       }
     `);
   });
@@ -267,9 +267,9 @@ describe('publish --canary differential', () => {
 
     expect((writePkg as any).updatedVersions()).toMatchInlineSnapshot(`
       {
-        "package-3": 1.1.0-alpha.0+SHA,
-        "package-4": 1.1.0-alpha.0+SHA,
-        "package-5": 1.1.0-alpha.0+SHA,
+        "package-3": 1.1.0-alpha.0.SHA,
+        "package-4": 1.1.0-alpha.0.SHA,
+        "package-5": 1.1.0-alpha.0.SHA,
       }
     `);
   });
@@ -282,7 +282,7 @@ describe('publish --canary differential', () => {
 
     expect((writePkg as any).updatedVersions()).toMatchInlineSnapshot(`
       {
-        "package-5": 2.0.0-alpha.0+SHA,
+        "package-5": 2.0.0-alpha.0.SHA,
       }
     `);
   });
@@ -301,7 +301,7 @@ describe('publish --canary sequential', () => {
 
     expect((writePkg as any).updatedVersions()).toMatchInlineSnapshot(`
       {
-        "package-5": 5.0.1-alpha.0+SHA,
+        "package-5": 5.0.1-alpha.0.SHA,
       }
     `);
   });
@@ -312,9 +312,9 @@ describe('publish --canary sequential', () => {
 
     expect((writePkg as any).updatedVersions()).toMatchInlineSnapshot(`
       {
-        "package-3": 3.0.1-alpha.1+SHA,
-        "package-4": 4.0.1-alpha.1+SHA,
-        "package-5": 5.0.1-alpha.1+SHA,
+        "package-3": 3.0.1-alpha.1.SHA,
+        "package-4": 4.0.1-alpha.1.SHA,
+        "package-5": 5.0.1-alpha.1.SHA,
       }
     `);
   });
@@ -325,11 +325,11 @@ describe('publish --canary sequential', () => {
 
     expect((writePkg as any).updatedVersions()).toMatchInlineSnapshot(`
       {
-        "package-1": 1.0.1-alpha.2+SHA,
-        "package-2": 2.0.1-alpha.2+SHA,
-        "package-3": 3.0.1-alpha.2+SHA,
-        "package-4": 4.0.1-alpha.2+SHA,
-        "package-5": 5.0.1-alpha.2+SHA,
+        "package-1": 1.0.1-alpha.2.SHA,
+        "package-2": 2.0.1-alpha.2.SHA,
+        "package-3": 3.0.1-alpha.2.SHA,
+        "package-4": 4.0.1-alpha.2.SHA,
+        "package-5": 5.0.1-alpha.2.SHA,
       }
     `);
   });
@@ -340,9 +340,9 @@ describe('publish --canary sequential', () => {
 
     expect((writePkg as any).updatedVersions()).toMatchInlineSnapshot(`
       {
-        "package-3": 3.0.1-alpha.3+SHA,
-        "package-4": 4.0.1-alpha.3+SHA,
-        "package-5": 5.0.1-alpha.3+SHA,
+        "package-3": 3.0.1-alpha.3.SHA,
+        "package-4": 4.0.1-alpha.3.SHA,
+        "package-5": 5.0.1-alpha.3.SHA,
       }
     `);
   });
@@ -353,7 +353,7 @@ describe('publish --canary sequential', () => {
 
     expect((writePkg as any).updatedVersions()).toMatchInlineSnapshot(`
       {
-        "package-5": 5.0.1-alpha.4+SHA,
+        "package-5": 5.0.1-alpha.4.SHA,
       }
     `);
   });
@@ -380,10 +380,10 @@ test('publish --canary --force-publish on tagged release avoids early exit', asy
 
   expect((writePkg as any).updatedVersions()).toMatchInlineSnapshot(`
     {
-      "package-1": 1.0.1-alpha.0+SHA,
-      "package-2": 1.0.1-alpha.0+SHA,
-      "package-3": 1.0.1-alpha.0+SHA,
-      "package-4": 1.0.1-alpha.0+SHA,
+      "package-1": 1.0.1-alpha.0.SHA,
+      "package-2": 1.0.1-alpha.0.SHA,
+      "package-3": 1.0.1-alpha.0.SHA,
+      "package-4": 1.0.1-alpha.0.SHA,
     }
   `);
 });
@@ -404,8 +404,8 @@ test('publish --canary --force-publish <arg> on tagged release avoids early exit
 
   expect((writePkg as any).updatedVersions()).toMatchInlineSnapshot(`
     {
-      "package-2": 2.0.1-alpha.0+SHA,
-      "package-3": 3.0.1-alpha.0+SHA,
+      "package-2": 2.0.1-alpha.0.SHA,
+      "package-3": 3.0.1-alpha.0.SHA,
     }
   `);
 });
@@ -447,10 +447,10 @@ test('publish --canary without _any_ tags', async () => {
 
   expect((writePkg as any).updatedVersions()).toMatchInlineSnapshot(`
     {
-      "package-1": 1.0.1-alpha.0+SHA,
-      "package-2": 1.0.1-alpha.0+SHA,
-      "package-3": 1.0.1-alpha.0+SHA,
-      "package-4": 1.0.1-alpha.0+SHA,
+      "package-1": 1.0.1-alpha.0.SHA,
+      "package-2": 1.0.1-alpha.0.SHA,
+      "package-3": 1.0.1-alpha.0.SHA,
+      "package-4": 1.0.1-alpha.0.SHA,
     }
   `);
 });
@@ -461,11 +461,11 @@ test('publish --canary without _any_ tags (independent)', async () => {
 
   expect((writePkg as any).updatedVersions()).toMatchInlineSnapshot(`
     {
-      "package-1": 1.0.1-alpha.0+SHA,
-      "package-2": 2.0.1-alpha.0+SHA,
-      "package-3": 3.0.1-alpha.0+SHA,
-      "package-4": 4.0.1-alpha.0+SHA,
-      "package-6": 0.1.1-alpha.0+SHA,
+      "package-1": 1.0.1-alpha.0.SHA,
+      "package-2": 2.0.1-alpha.0.SHA,
+      "package-3": 3.0.1-alpha.0.SHA,
+      "package-4": 4.0.1-alpha.0.SHA,
+      "package-6": 0.1.1-alpha.0.SHA,
     }
   `);
 });
@@ -491,8 +491,8 @@ test('publish --canary --no-private', async () => {
 
   expect((writePkg as any).updatedVersions()).toMatchInlineSnapshot(`
     {
-      "package-1": 1.0.1-alpha.0+SHA,
-      "package-2": 2.0.1-alpha.0+SHA,
+      "package-1": 1.0.1-alpha.0.SHA,
+      "package-2": 2.0.1-alpha.0.SHA,
     }
   `);
 });
