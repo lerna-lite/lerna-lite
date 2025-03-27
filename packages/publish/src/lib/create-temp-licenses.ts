@@ -2,7 +2,7 @@ import { copy } from 'fs-extra/esm';
 import { basename, join } from 'node:path';
 import pMap from 'p-map';
 
-import { Package } from '@lerna-lite/core';
+import type { Package } from '@lerna-lite/core';
 
 /**
  * Create temporary license files.

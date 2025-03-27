@@ -1,14 +1,16 @@
-import { ChangelogPresetOptions, EOL, Package } from '@lerna-lite/core';
+import type { ChangelogPresetOptions, Package } from '@lerna-lite/core';
+import { EOL } from '@lerna-lite/core';
 import { log } from '@lerna-lite/npmlog';
-import conventionalChangelogCore, { Context } from 'conventional-changelog-core';
-import { Options as WriterOptions } from 'conventional-changelog-writer';
+import type { Context, Options as ChangelogCoreOptions } from 'conventional-changelog';
+import conventionalChangelogCore from 'conventional-changelog';
+import type { Options as WriterOptions } from 'conventional-changelog-writer';
 import { writeFile } from 'fs/promises';
 import getStream from 'get-stream';
 
 import { BLANK_LINE, CHANGELOG_HEADER } from './constants.js';
 import { GetChangelogConfig } from './get-changelog-config.js';
 import { makeBumpOnlyFilter } from './make-bump-only-filter.js';
-import { ChangelogConfig, ChangelogType, UpdateChangelogOption } from '../interfaces.js';
+import type { ChangelogConfig, ChangelogType, UpdateChangelogOption } from '../interfaces.js';
 import { readExistingChangelog } from './read-existing-changelog.js';
 import { setConfigChangelogCommitClientLogin, setConfigChangelogCommitGitAuthor } from './writer-opts-transform.js';
 
@@ -40,7 +42,7 @@ export async function updateChangelog(pkg: Package, type: ChangelogType, updateO
   // cc-core mutates input :P
   if (config.conventionalChangelog) {
     // "new" preset API
-    options.config = Object.assign({}, config.conventionalChangelog) as ChangelogConfig;
+    options.config = Object.assign({}, config.conventionalChangelog) as unknown as ChangelogConfig;
   } else {
     // "old" preset API
     options.config = Object.assign({}, config) as ChangelogConfig;
@@ -78,12 +80,18 @@ export async function updateChangelog(pkg: Package, type: ChangelogType, updateO
 
       // preserve tagPrefix because cc-core can't find the currentTag otherwise
       context.currentTag = `${tagPrefix}${pkg.version}`;
-      context.version = pkg.version; // TODO investigate why Lerna doesn't have this line
+      context.version = pkg.version;
     }
   }
 
   // generate the markdown for the upcoming release.
-  const changelogStream = conventionalChangelogCore(options, context, gitRawCommitsOpts, undefined, writerOpts);
+  const changelogStream = conventionalChangelogCore(
+    options as ChangelogCoreOptions,
+    context,
+    gitRawCommitsOpts,
+    undefined,
+    writerOpts
+  );
 
   return Promise.all([
     // prettier-ignore

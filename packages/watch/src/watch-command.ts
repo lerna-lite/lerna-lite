@@ -1,20 +1,22 @@
 import {
   Command,
-  FilterOptions,
-  Package,
-  ProjectConfig,
+  type FilterOptions,
+  type Package,
+  type ProjectConfig,
   getFilteredPackages,
   pluralize,
   spawn,
   spawnStreaming,
   ValidationError,
-  WatchCommandOption,
+  type WatchCommandOption,
 } from '@lerna-lite/core';
-import chokidar from 'chokidar';
-import { join } from 'node:path';
+import { type ChokidarOptions, type FSWatcher, watch } from 'chokidar';
+import { join, relative } from 'node:path';
+import picomatch from 'picomatch';
+import { globSync } from 'tinyglobby';
 
 import { CHOKIDAR_AVAILABLE_OPTIONS, DEBOUNCE_DELAY, FILE_DELIMITER } from './constants.js';
-import { ChangesStructure } from './models.js';
+import type { ChangesStructure } from './models.js';
 
 export function factory(argv: WatchCommandOption) {
   return new WatchCommand(argv);
@@ -32,11 +34,17 @@ export class WatchCommand extends Command<WatchCommandOption & FilterOptions> {
   protected _packagePlural = '';
   protected _prefix = false;
   protected _processing = false;
-  protected _watcher?: chokidar.FSWatcher;
-  protected _timer?: NodeJS.Timeout;
+  protected _ignoredGlobs: string[] = [];
+  protected _timerChange?: NodeJS.Timeout;
+  protected _watcher?: FSWatcher;
+  protected _watchedFiles: Set<string> = new Set();
 
   get requiresGit() {
     return false;
+  }
+
+  get watchedFiles() {
+    return this._watchedFiles;
   }
 
   constructor(argv: WatchCommandOption | ProjectConfig) {
@@ -78,25 +86,16 @@ export class WatchCommand extends Command<WatchCommandOption & FilterOptions> {
 
     try {
       const { ignored = [], ...otherOptions } = this.options ?? {};
-      const packageLocations: string[] = [];
-      const chokidarOptions: chokidar.WatchOptions = {
+      this._ignoredGlobs = ['**/.git/**', '**/dist/**', '**/node_modules/**', ...(Array.isArray(ignored) ? ignored : [ignored])];
+
+      const chokidarOptions: ChokidarOptions = {
         // we should ignore certain folders by default, we could use nearly the same implementation as ViteJS
         // https://github.com/vitejs/vite/blob/c747a3f289183b3640a6d4a1410acb5eafd11129/packages/vite/src/node/watch.ts
-        ignored: ['**/.git/**', '**/dist/**', '**/node_modules/**', ...(Array.isArray(ignored) ? ignored : [ignored])],
         ignoreInitial: true,
         ignorePermissionErrors: true,
         persistent: true,
         ...otherOptions,
       };
-
-      this._filteredPackages.forEach((pkg) => {
-        // does user have a glob defined, if so append it to the pkg location. Glob example for TS files: /**/*.ts
-        let watchingPath = pkg.location;
-        if (this.options.glob) {
-          watchingPath = join(pkg.location, '/', this.options.glob); // append glob to pkg location
-        }
-        packageLocations.push(watchingPath);
-      });
 
       // the `awaitWriteFinish` option can be a complex object but in order to provide these options from the CLI, we'll prefix them with "awf"
       // when these prefix are found, we'll build the appropriate complex object, ie: awfPollInterval: 200 => { awaitWriteFinish: { pollInterval: 200 }}
@@ -117,30 +116,68 @@ export class WatchCommand extends Command<WatchCommandOption & FilterOptions> {
         }
       }
 
-      // initialize chokidar watcher for each package found
-      this._watcher = chokidar.watch([...new Set(packageLocations)], chokidarOptions);
+      // convert strings to picomatch pattern functions for chokidar compat
+      const ignoredMatchers = this._ignoredGlobs.map((pattern) => {
+        if (typeof pattern === 'string') {
+          const matcher = picomatch(pattern, { dot: true });
+          return (path: string) => matcher(path);
+        }
+        /* v8 ignore next */
+        return pattern;
+      });
+
+      // initialize chokidar watcher by adding all package folders to the watcher,
+      // we'll use all directories so that when new files are being added, they will also be inspected
+      const pkgFolders = this._filteredPackages.map((pkg) => this.posixifyPath(pkg.location));
+      const foldersToWatch = globSync(pkgFolders, { onlyDirectories: true, ignore: this._ignoredGlobs });
+      this._watcher = watch(foldersToWatch, {
+        ...chokidarOptions,
+        cwd: process.cwd(),
+        ignored: ignoredMatchers,
+      });
+
+      // also generate the full list of files to watch so that we can inspect it before calling the handler
+      this.regenerateWatchGlobPaths();
 
       // add Chokidar watcher and watch for all events (add, addDir, unlink, unlinkDir)
-      this._watcher.on('all', (_event, path) => this.changeEventListener(path)).on('error', (error) => this.onError(error));
+      this._watcher
+        .on('all', (event, filePath) => {
+          const rootPath = process.cwd();
+          const relativeFilePath = relative(rootPath, filePath);
+
+          // when a file(s) are being added, we'll regenerate the list of paths that are watched
+          if (event === 'add') {
+            this.regenerateWatchGlobPaths();
+          }
+
+          // make sure that the file is in the watch before calling the callback
+          if (this._watchedFiles.has(this.posixifyPath(relativeFilePath))) {
+            return this.changeEventListener(relativeFilePath);
+          }
+        })
+        .on('error', (error) => this.onError(error));
 
       // also watch for any Signal termination to cleanly exit the watch command
       process.once('SIGINT', () => this.handleTermination(128 + 2));
       process.once('SIGTERM', () => this.handleTermination(128 + 15));
-      process.stdin.on('end', this.handleTermination);
+      process.stdin.on('end', () => this.handleTermination());
       /* v8 ignore next 3 */
     } catch (err) {
       this.onError(err);
     }
   }
 
-  protected changeEventListener(filepath: string) {
-    const pkg = this._filteredPackages.find((p) => filepath.includes(p.location));
+  protected changeEventListener(relativeFilePath: string) {
+    // find the package that the filepath is associated to
+    const rootPath = process.cwd();
+    const pkg = this._filteredPackages.find((p) => relativeFilePath.includes(relative(rootPath, p.location)));
+
     if (pkg) {
       // changes structure sample: { '@lerna-lite/watch': { pkg: Package, changeFiles: ['path1', 'path2'] }
       if (!this._changes[pkg.name] || !this._changes[pkg.name].changeFiles) {
         this._changes[pkg.name] = { pkg, changeFiles: new Set<string>(), timestamp: Date.now() }; // use Set to avoid duplicate entries
       }
-      this._changes[pkg.name].changeFiles.add(filepath);
+      this._changes[pkg.name].changeFiles.add(relativeFilePath);
 
       return this.executeCommandCallback();
     }
@@ -151,13 +188,13 @@ export class WatchCommand extends Command<WatchCommandOption & FilterOptions> {
 
     return new Promise((resolve) => {
       // once we reached emit change stability threshold, we'll fire events for each packages & events while the file paths array will be merged
-      if (this._timer) {
-        clearTimeout(this._timer as NodeJS.Timeout);
+      if (this._timerChange) {
+        clearTimeout(this._timerChange as NodeJS.Timeout);
       }
 
       // chokidar triggers events for every single file change (add, unlink, ...),
       // so in order for us to merge all changes and return them under a single lerna watch event we need to wait a certain delay
-      this._timer = setTimeout(async () => {
+      this._timerChange = setTimeout(async () => {
         // sort the changes by their timestamp to make sure that we execute them by queued time of entry
         const sortedChanges = Object.values(this._changes).sort((a, b) => a.timestamp - b.timestamp);
 
@@ -167,7 +204,7 @@ export class WatchCommand extends Command<WatchCommandOption & FilterOptions> {
 
           // execute command callback when file changes are found
           if (change.changeFiles?.size > 0) {
-            const changedFiles = Array.from<string>(change.changeFiles);
+            const changedFiles = Array.from<string>(change.changeFiles).map((f) => join(process.cwd(), f));
             const changedFilesCsv = changedFiles.join(this._fileDelimiter);
 
             // make sure there's nothing in progress before executing the next callback
@@ -199,7 +236,7 @@ export class WatchCommand extends Command<WatchCommandOption & FilterOptions> {
     });
   }
 
-  protected handleTermination = async (exitCode?: number) => {
+  protected async handleTermination(exitCode?: number) {
     try {
       this.logger.info('watch', 'Termination call detected, exiting the Watch');
       this.logger.silly('watch', `Watch process terminated with exit code: ${exitCode}`);
@@ -211,7 +248,7 @@ export class WatchCommand extends Command<WatchCommandOption & FilterOptions> {
     } finally {
       process.exit(exitCode);
     }
-  };
+  }
 
   protected hasQueuedChanges() {
     for (const pkgName of Object.keys(this._changes)) {
@@ -221,6 +258,15 @@ export class WatchCommand extends Command<WatchCommandOption & FilterOptions> {
     }
 
     return false;
+  }
+
+  /**
+   * take any path (windows/posix) and normalize it as a posix path,
+   * note that we have this in place because tinyglobby returns posix paths even on windows,
+   * see: https://github.com/SuperchupuDev/tinyglobby/issues/102
+   */
+  protected posixifyPath(filePath: string) {
+    return filePath.replace(/\\/g, '/');
   }
 
   protected onError(error: any) {
@@ -258,6 +304,22 @@ export class WatchCommand extends Command<WatchCommandOption & FilterOptions> {
     return this.options.stream
       ? this.runCommandInPackageStreaming(pkg, changedFile)
       : this.runCommandInPackageCapturing(pkg, changedFile);
+  }
+
+  protected regenerateWatchGlobPaths() {
+    const patterns: string[] = [];
+
+    this._filteredPackages.forEach((pkg) => {
+      // does user have a glob defined, if so append it to the pkg location. Glob example for TS files: /**/*.ts
+      let watchingPath = pkg.location;
+      if (this.options.glob) {
+        watchingPath = join(pkg.location, '/', this.options.glob); // append glob to pkg location
+      }
+      const unixPath = this.posixifyPath(watchingPath);
+      patterns.push(unixPath);
+    });
+
+    this._watchedFiles = new Set(globSync(patterns, { ignore: this._ignoredGlobs }));
   }
 
   protected runCommandInPackageStreaming(pkg: Package, changedFile: string) {

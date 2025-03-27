@@ -1,6 +1,4 @@
-import { Package } from '@lerna-lite/core';
-
-export type ChokidarEventType = 'add' | 'addDir' | 'change' | 'unlink' | 'unlinkDir';
+import type { Package } from '@lerna-lite/core';
 
 export interface ChangesStructure {
   [pkgName: string]: {

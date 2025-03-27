@@ -1,22 +1,12 @@
-import {
-  Command,
-  CommandType,
-  FilterOptions,
-  getFilteredPackages,
-  logOutput,
-  Package,
-  ProjectConfig,
-  RunCommandOption,
-  runTopologically,
-  ValidationError,
-} from '@lerna-lite/core';
+import type { CommandType, FilterOptions, Package, ProjectConfig, RunCommandOption } from '@lerna-lite/core';
+import { Command, getFilteredPackages, logOutput, runTopologically, ValidationError } from '@lerna-lite/core';
 import { Profiler } from '@lerna-lite/profiler';
 import pMap from 'p-map';
 import c from 'tinyrainbow';
 
 import { npmRunScript, npmRunScriptStreaming } from './lib/npm-run-script.js';
 import { timer } from './lib/timer.js';
-import { ScriptStreamingOption } from './interfaces.js';
+import type { ScriptStreamingOption } from './interfaces.js';
 
 export function factory(argv: RunCommandOption) {
   return new RunCommand(argv);

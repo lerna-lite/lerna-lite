@@ -4,7 +4,7 @@
 
 import consoleControl from 'console-control-strings';
 import { EventEmitter } from 'node:events';
-import { WriteStream } from 'node:tty';
+import type { WriteStream } from 'node:tty';
 import { format } from 'node:util';
 import setBlocking from 'set-blocking';
 

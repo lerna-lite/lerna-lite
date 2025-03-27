@@ -1,10 +1,13 @@
 import cloneDeep from 'clone-deep';
 import dedent from 'dedent';
-import { execaSync, SyncOptions } from 'execa';
+import type { SyncOptions } from 'execa';
+import { execaSync } from 'execa';
 import isCI from 'is-ci';
 import { cpus } from 'node:os';
-import { log, Logger } from '@lerna-lite/npmlog';
-import { FilterOptions, getFilteredPackages } from './filter-packages/index.js';
+import type { Logger } from '@lerna-lite/npmlog';
+import { log } from '@lerna-lite/npmlog';
+import type { FilterOptions } from './filter-packages/index.js';
+import { getFilteredPackages } from './filter-packages/index.js';
 
 import { cleanStack } from './utils/clean-stack.js';
 import { logExecCommand } from './child-process.js';
@@ -13,8 +16,8 @@ import { warnIfHanging } from './utils/warn-if-hanging.js';
 import { writeLogFile } from './utils/write-log-file.js';
 import { Project } from './project/project.js';
 import { ValidationError } from './validation-error.js';
-import { CommandType, ExecOpts, ProjectConfig } from './models/interfaces.js';
-import {
+import type { CommandType, ExecOpts, ProjectConfig } from './models/interfaces.js';
+import type {
   ChangedCommandOption,
   DiffCommandOption,
   ExecCommandOption,
@@ -25,7 +28,7 @@ import {
   WatchCommandOption,
 } from './models/command-options.js';
 import { PackageGraph } from './package-graph/package-graph.js';
-import { Package } from './package.js';
+import type { Package } from './package.js';
 
 // maxBuffer value for running exec
 const DEFAULT_CONCURRENCY = cpus().length;

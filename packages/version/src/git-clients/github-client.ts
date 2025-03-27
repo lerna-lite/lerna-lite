@@ -1,7 +1,7 @@
 import { execSync } from '@lerna-lite/core';
 import { log } from '@lerna-lite/npmlog';
 import { Octokit } from '@octokit/rest';
-import { SyncOptions } from 'execa';
+import { type SyncOptions } from 'execa';
 import parseGitUrl from 'git-url-parse';
 
 export async function createGitHubClient() {

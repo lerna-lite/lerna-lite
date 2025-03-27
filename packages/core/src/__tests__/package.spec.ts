@@ -461,22 +461,22 @@ describe('Package', () => {
       it('bumps peerDependencies canary with SHA versions when allowPeerDependenciesUpdate flag is enabled except for dependencies with semver range operator', () => {
         const pkg = factory({
           peerDependencies: {
-            a: '^1.0.0-alpha.0+SHA',
-            b: '>=1.0.0-alpha.0+SHA', // range will not be bumped
+            a: '^1.0.0-alpha.0.SHA',
+            b: '>=1.0.0-alpha.0.SHA', // range will not be bumped
           },
         });
 
-        const resolvedA: NpaResolveResult = npa.resolve('a', '^1.0.0-alpha.0+SHA', '.');
-        const resolvedB: NpaResolveResult = npa.resolve('b', '^1.0.0-alpha.0+SHA', '.');
+        const resolvedA: NpaResolveResult = npa.resolve('a', '^1.0.0-alpha.0.SHA', '.');
+        const resolvedB: NpaResolveResult = npa.resolve('b', '^1.0.0-alpha.0.SHA', '.');
 
-        pkg.updateLocalDependency(resolvedA, '1.0.0-alpha.1+SHA', '^', true);
-        pkg.updateLocalDependency(resolvedB, '1.0.0-alpha.1+SHA', '^', true);
+        pkg.updateLocalDependency(resolvedA, '1.0.0-alpha.1.SHA', '^', true);
+        pkg.updateLocalDependency(resolvedB, '1.0.0-alpha.1.SHA', '^', true);
 
         expect(pkg.toJSON()).toMatchInlineSnapshot(`
           {
             "peerDependencies": {
-              "a": "^1.0.0-alpha.1+SHA",
-              "b": ">=1.0.0-alpha.0+SHA",
+              "a": "^1.0.0-alpha.1.SHA",
+              "b": ">=1.0.0-alpha.0.SHA",
             },
           }
         `);

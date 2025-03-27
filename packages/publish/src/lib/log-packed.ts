@@ -1,11 +1,11 @@
-import { Package } from '@lerna-lite/core';
+import type { Package } from '@lerna-lite/core';
 import { log } from '@lerna-lite/npmlog';
 import byteSize from 'byte-size';
 import columnify from 'columnify';
 import hasUnicode from 'has-unicode';
 import c from 'tinyrainbow';
 
-import { Tarball } from '../interfaces.js';
+import type { Tarball } from '../interfaces.js';
 
 export function logPacked(pkg: Package & { packed: Tarball }, dryRun = false) {
   const tarball = pkg.packed;

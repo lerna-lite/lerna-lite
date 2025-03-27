@@ -1,4 +1,5 @@
-import { exec, ExecOpts, PackageGraph } from '@lerna-lite/core';
+import type { ExecOpts, PackageGraph } from '@lerna-lite/core';
+import { exec } from '@lerna-lite/core';
 import { log } from '@lerna-lite/npmlog';
 import { basename, dirname, join } from 'node:path';
 
