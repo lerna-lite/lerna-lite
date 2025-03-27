@@ -38,5 +38,5 @@
     "strict": true
   },
   "include": ["**/*.ts"],
-  "exclude": ["node_modules/**/*.*", "**/__helpers__/**", "**/__fixtures__/**", "**/__mocks__/**"]
+  "exclude": ["node_modules/**/*.*", "**/__helpers__/**", "**/__mocks__/**"]
 }
