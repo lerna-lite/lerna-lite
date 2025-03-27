@@ -6,7 +6,15 @@
     "outDir": "dist",
     "types": ["node"]
   },
-  "exclude": ["dist", "node_modules", "**/*.spec.ts", "**/*.spec.mts", "**/__mocks__/**/*.*"],
+  "exclude": [
+    "dist",
+    "node_modules",
+    "**/__fixtures__/**",
+    "**/*.spec.ts",
+    "**/*.spec.mts",
+    "**/__fixtures__/**",
+    "**/__mocks__/**/*.*"
+  ],
   "filesGlob": ["./src/**/*.ts"],
   "include": ["src/**/*.ts"],
   "references": [{ "path": "../cli" }, { "path": "../core" }]

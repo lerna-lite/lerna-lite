@@ -9,6 +9,6 @@
   },
   "filesGlob": ["./src/**/*.ts"],
   "include": ["src/**/*.ts"],
-  "exclude": ["dist", "node_modules", "**/__helpers__/**", "**/__mocks__/**", "**/__tests__/**"],
+  "exclude": ["dist", "node_modules", "**/__fixtures__/**", "**/__helpers__/**", "**/__mocks__/**", "**/__tests__/**"],
   "references": []
 }
