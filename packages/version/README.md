@@ -291,6 +291,19 @@ If the preset exports a builder function (e.g. `conventional-changelog-conventio
 
 > **Note** the option `changelogPreset.releaseCommitMessageFormat` is not supported and will throw, you can simply use [`--message`](#--message-msg) to have the same result.
 
+> ![WARNING] 
+> When using `conventional-changelog-conventionalcommits` with other tools for example [`@commitlint/config-conventional`](https://www.npmjs.com/package/@commitlint/config-conventional), you may need to override the version of the transitive `conventional-changelog-conventionalcommits` dependency, like so:
+>
+> ```json
+> {
+>   "overrides": {
+>     "conventional-changelog-conventionalcommits": "8.0.0"
+>   }
+> }
+> ```
+>
+> Use `"resolutions"` for pnpm or Yarn.
+
 ### `--conventional-commits`
 
 ```sh
