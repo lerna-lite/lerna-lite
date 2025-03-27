@@ -5,7 +5,7 @@ import { constants } from 'node:os';
 import logTransformer from 'strong-log-transformer';
 import c from 'tinyrainbow';
 
-import { Package } from './package.js';
+import type { Package } from './package.js';
 
 // bookkeeping for spawned processes
 const children = new Set();

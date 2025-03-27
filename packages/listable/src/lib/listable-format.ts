@@ -1,4 +1,5 @@
-import { ListableOption, Package, QueryGraph } from '@lerna-lite/core';
+import type { ListableOption, Package } from '@lerna-lite/core';
+import { QueryGraph } from '@lerna-lite/core';
 import columnify from 'columnify';
 import { relative } from 'node:path';
 import c from 'tinyrainbow';

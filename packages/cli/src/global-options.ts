@@ -1,5 +1,5 @@
 import { cpus } from 'node:os';
-import { Argv } from 'yargs';
+import type { Argv } from 'yargs';
 
 export function globalOptions(yargs: Argv<any>) {
   // the global options applicable to _every_ command

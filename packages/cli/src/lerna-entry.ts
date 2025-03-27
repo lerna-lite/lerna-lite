@@ -1,6 +1,6 @@
 import { loadJsonFileSync } from 'load-json-file';
 import { dirname, join } from 'node:path';
-import { JsonValue } from '@lerna-lite/core';
+import type { JsonValue } from '@lerna-lite/core';
 import { fileURLToPath } from 'node:url';
 
 import changedCmd from './cli-commands/cli-changed-commands.js';

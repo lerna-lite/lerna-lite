@@ -1,6 +1,6 @@
 import { promptTextInput } from '@lerna-lite/core';
 
-import { OneTimePasswordCache } from '../interfaces.js';
+import type { OneTimePasswordCache } from '../interfaces.js';
 
 // basic single-entry semaphore
 const semaphore: any = {

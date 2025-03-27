@@ -22,7 +22,7 @@ export * from './lib/is-breaking-change.js';
 export * from './lib/prompt-version.js';
 export * from './lib/remote-branch-exists.js';
 export * from './lib/update-lockfile-version.js';
-export * from './interfaces.js';
+export type * from './interfaces.js';
 export * from './version-command.js';
 export * from './utils/otplease.js';
 export * from './utils/temp-write.js';

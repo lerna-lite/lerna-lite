@@ -1,5 +1,6 @@
 import semver from 'semver';
-import { PackageGraphNode, promptSelectOne, promptTextInput } from '@lerna-lite/core';
+import type { PackageGraphNode } from '@lerna-lite/core';
+import { promptSelectOne, promptTextInput } from '@lerna-lite/core';
 
 import { applyBuildMetadata } from '../conventional-commits/apply-build-metadata.js';
 

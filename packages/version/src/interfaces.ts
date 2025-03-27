@@ -1,7 +1,8 @@
-import { ChangelogPresetOptions, ExecOpts, Package } from '@lerna-lite/core';
-import { GitRawCommitsOptions, ParserOptions } from 'conventional-changelog-core';
-import { Options as WriterOptions } from 'conventional-changelog-writer';
-import { Options as RecommendedBumpOptions } from 'conventional-recommended-bump';
+import type { ChangelogPresetOptions, ExecOpts, Package } from '@lerna-lite/core';
+import type { Context, GitRawCommitsOptions, ParserOptions } from 'conventional-changelog';
+import type { Options as WriterOptions } from 'conventional-changelog-writer';
+import type { Commit, ParserStreamOptions } from 'conventional-commits-parser';
+import type { BumperRecommendation, Preset as BumperPresetOptions } from 'conventional-recommended-bump';
 
 export interface GitCommitOption {
   amend: boolean;
@@ -32,13 +33,27 @@ export interface BaseChangelogOptions {
   tagPrefix?: string;
 }
 
-export interface ChangelogConfig {
-  conventionalChangelog: { parserOpts: ParserOptions; writerOpts: WriterOptions };
-  gitRawCommitsOpts: GitRawCommitsOptions & { path: string };
+export interface ChangelogBumperOption {
+  parser: ParserOptions;
+  writer: WriterOptions;
+  whatBump: (commits: Commit[]) => Promise<BumperRecommendation | null | undefined>;
+}
+
+export interface ChangelogConfig extends ChangelogBumperOption {
+  context?: Partial<Context> | undefined;
+  gitRawCommitsOpts?: GitRawCommitsOptions & { path: string };
   key?: string;
-  parserOpts: ParserOptions;
-  recommendedBumpOpts: RecommendedBumpOptions;
-  writerOpts: WriterOptions;
+  parserOpts?: ParserOptions | undefined;
+  conventionalChangelog: { parserOpts: ParserOptions; writerOpts: WriterOptions };
+  output?: {
+    conventionalChangelog: { parserOpts: ParserOptions; writerOpts: WriterOptions };
+    recommendedBumpOpts: {
+      parserOpts: ParserStreamOptions;
+      whatBump: (commits: Commit[]) => Promise<BumperRecommendation | null | undefined>;
+    };
+  };
+  recommendedBumpOpts?: BumperPresetOptions;
+  writerOpts?: WriterOptions;
 }
 
 export interface ReleaseNote {
@@ -56,6 +71,9 @@ export type RemoteCommit = {
 
   /** commit message headling (50 chars maxlen) */
   message: string;
+
+  /** commit hash */
+  hash: string;
 
   /** short commit hash (7 chars long) */
   shortHash: string;

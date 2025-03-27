@@ -1,4 +1,4 @@
-import { Package } from '@lerna-lite/core';
+import type { Package } from '@lerna-lite/core';
 
 import { BLANK_LINE } from './constants.js';
 

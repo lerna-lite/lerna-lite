@@ -1,4 +1,5 @@
-import { RemoteClientType, ValidationError } from '@lerna-lite/core';
+import type { RemoteClientType } from '@lerna-lite/core';
+import { ValidationError } from '@lerna-lite/core';
 import { log } from '@lerna-lite/npmlog';
 import newGithubReleaseUrl from 'new-github-release-url';
 import semver from 'semver';
@@ -6,7 +7,7 @@ import c from 'tinyrainbow';
 
 import { createGitHubClient, parseGitRepo } from '../git-clients/github-client.js';
 import { createGitLabClient } from '../git-clients/gitlab-client.js';
-import { GitClientReleaseOption, GitCreateReleaseClientOutput, ReleaseCommandProps, ReleaseOptions } from '../interfaces.js';
+import type { GitClientReleaseOption, GitCreateReleaseClientOutput, ReleaseCommandProps, ReleaseOptions } from '../interfaces.js';
 
 export async function createReleaseClient(type: 'github' | 'gitlab'): Promise<GitCreateReleaseClientOutput> {
   switch (type) {

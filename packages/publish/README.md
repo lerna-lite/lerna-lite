@@ -107,9 +107,9 @@ $ lerna publish --scope my-component test
   - [`workspace:` protocol](#workspace-protocol)
 
 ### `--arborist-load-options`
-Arborist options that can be provided in your `lerna.json` config which are options associated to the `arborist.loadActual(options)` method.
+Arborist options that can be provided in your `lerna.json` config which are options associated to the `arborist.loadActual(options)` method. This option exists because in some rare occasions Arborist could be extremely slow to parse the entire tree from a project repository. The slowness was found to be caused by Arborist and a potential way to speedup the process is to ignore the missing edges when parsing the tree (which is the config example shown below). It was provided as an opt-in option because we don't know if ignoring missing edges has any negative side effect (we think it's ok but still, to be safe we've made it as opt-in with below option)
 
-Only configurable via `lerna.json` because an object must be provided:
+Only configurable via `lerna.json` since an object type must be provided:
 
 ```json
 {

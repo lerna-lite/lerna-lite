@@ -1,4 +1,4 @@
-import { FetchConfig, PackageGraph, PackageGraphNode } from '@lerna-lite/core';
+import type { FetchConfig, PackageGraph, PackageGraphNode } from '@lerna-lite/core';
 import { log } from '@lerna-lite/npmlog';
 import pMap from 'p-map';
 import pacote from 'pacote';

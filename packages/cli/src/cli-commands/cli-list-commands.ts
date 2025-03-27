@@ -1,4 +1,4 @@
-import { ListCommandOption } from '@lerna-lite/core';
+import type { ListCommandOption } from '@lerna-lite/core';
 
 import { filterOptions } from '../filter-options.js';
 import { listableOptions } from './listable/listable-options.js';

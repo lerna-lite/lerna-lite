@@ -1,4 +1,4 @@
-import { PackageGraphNode } from '../../../package-graph/lib/package-graph-node.js';
+import type { PackageGraphNode } from '../../../package-graph/lib/package-graph-node.js';
 import { collectDependents } from './collect-dependents.js';
 
 interface PackageCollectorOptions {

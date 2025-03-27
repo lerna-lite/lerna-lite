@@ -5,7 +5,7 @@ import { dirname, relative } from 'node:path';
 import slash from 'slash';
 
 import { execSync } from '../../../child-process.js';
-import { ExecOpts } from '../../../models/interfaces.js';
+import type { ExecOpts } from '../../../models/interfaces.js';
 
 /**
  * @param {string} committish

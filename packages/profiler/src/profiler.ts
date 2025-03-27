@@ -1,10 +1,11 @@
 import { outputJson } from 'fs-extra/esm';
-import { log as npmlog, Logger } from '@lerna-lite/npmlog';
+import type { Logger } from '@lerna-lite/npmlog';
+import { log as npmlog } from '@lerna-lite/npmlog';
 
 // @ts-ignore
 import upath from 'upath';
 
-import { ProfilerConfig, TraceEvent } from './models.js';
+import type { ProfilerConfig, TraceEvent } from './models.js';
 
 const getTimeBasedFilename = () => {
   const now = new Date(); // 2011-10-05T14:48:00.000Z
