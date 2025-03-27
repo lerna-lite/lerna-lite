@@ -13,7 +13,7 @@ export function listableFormat(pkgList, options) {
   const resultList = filterResultList(pkgList, viewOptions);
   const count = resultList.length;
 
-  let text;
+  let text = '';
 
   if (viewOptions.showJSON) {
     text = formatJSON(resultList);

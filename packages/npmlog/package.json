@@ -18,6 +18,7 @@
     "prebuild": "rimraf dist",
     "build": "tsc",
     "build:incremental": "tsc --incremental --sourceMap false --excludeDirectories dist",
+    "echo:test": "echo \"Lerna-Lite npmlog package\"",
     "pack-tarball": "npm pack"
   },
   "license": "MIT",

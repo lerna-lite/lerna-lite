@@ -473,7 +473,7 @@ export interface WatchCommandOption {
   /** watch command arguments */
   args?: string[];
 
-  /** command to execute by the command */
+  /** command to execute by the watch callback */
   cmd?: string;
 
   /** Continue executing command despite non-zero exit in a given package. */
@@ -492,7 +492,7 @@ export interface WatchCommandOption {
   /** Defaults to whitespace, the delimiter that will be used to separate files when mutiple file changes are emitted by the watch */
   fileDelimiter?: string;
 
-  /** Glob pattern to define which file pattern to watch, note that this will be appended to the package file path being watched. */
+  /** Glob pattern to define which file paths to watch, note that this will be appended to the package file path being watched. */
   glob?: string;
 
   // This option controls prefix for stream output so that it can be disabled to be friendly
@@ -537,7 +537,7 @@ export interface WatchCommandOption {
   /** Defaults to true, when false, only the symlinks themselves will be watched for changes instead of following the link references and bubbling events through the link's path. */
   followSymlinks?: boolean;
 
-  /** Defines files/paths to be ignored, it can be a string or an array of string (anymatch-compatible definition) */
+  /** Provide a list of file paths or Glob patterns to be ignored, it can be a string or an array of string (anymatch-compatible definition) */
   ignored?: string | string[];
 
   /** Defaults to true, if set to false then add/addDir events are also emitted for matching paths while instantiating the watching as chokidar discovers these file paths (before the ready event). */

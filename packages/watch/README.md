@@ -109,6 +109,7 @@ $ npx -c 'lerna watch -- echo \$LERNA_PACKAGE_NAME \$LERNA_FILE_CHANGES'
     - [`--debounce`](#--debounce)
     - [`--file-delimiter`](#--file-delimiter)
     - [`--glob`](#--glob)
+    - [`--ignored`](#--ignored)
     - [`--stream`](#--stream)
     - [`--no-bail`](#--no-bail)
     - [`--no-prefix`](#--no-prefix)
@@ -117,7 +118,6 @@ $ npx -c 'lerna watch -- echo \$LERNA_PACKAGE_NAME \$LERNA_FILE_CHANGES'
     - [`--depth`](#--depth)
     - [`--disable-globbing`](#--disable-globbing)
     - [`--follow-symlinks`](#--follow-symlinks)
-    - [`--ignored`](#--ignored)
     - [`--ignore-initial`](#--ignore-initial)
     - [`--ignore-permission-errors`](#--ignore-permission-errors)
     - [`--interval`](#--interval)
@@ -151,6 +151,23 @@ Provide a Glob pattern to target which file types to watch, note that this will 
 # glob pattern will be appended to package path that Chokidar watches
 $ lerna watch --glob=\"src\**\*.ts" -- <command>
 ```
+
+### `--ignored`
+
+Defines files/paths or Glob pattern to be ignored it can be a string or an array of string ([anymatch](https://github.com/micromatch/anymatch)-compatible definition). Also, since we use this in a monorepo, we already configured the watch to skip `.git/`, `dist/` and `node_modules/` directories by default
+
+```sh
+# ignore bin folder
+$ lerna watch --ignored=\"**/bin\" -- <command>
+
+# ignore dot file
+$ lerna watch --ignored=\"/(^|[/\\])\../\" -- <command>
+```
+
+> **Note** the `lerna watch` command skips `.git/`, `dist/` and `node_modules/` directories by default. If you want to watch files inside any of these directories, you can pass a negated glob pattern, that is `lerna watch --ignored=\"!**/node_modules/**\"`
+
+> [!NOTE]
+> The `ignored` option only accept glob patterns (string or strings array) and we then use [`tinyglobby`](https://www.npmjs.com/package/tinyglobby) internally to parse it and find which files to watch. Please also note that this option is no longer the same as Chokidar@4 `ignored` option because their implementation no longer accept globs anymore.
 
 ### `--stream`
 
@@ -212,20 +229,6 @@ Defaults to `true`, when `false` is provided, only the symlinks themselves will 
 ```sh
 $ lerna watch --follow-symlinks -- <command>
 ```
-
-### `--ignored`
-
-Defines files/paths to be ignored, it can be a string or an array of string ([anymatch](https://github.com/micromatch/anymatch)-compatible definition). Since we use this in a monorepo, we already skips `.git/`, `dist/` and `node_modules/` directories by default
-
-```sh
-# ignore bin folder
-$ lerna watch --ignored=\"**/bin\" -- <command>
-
-# ignore dot file
-$ lerna watch --ignored=\"/(^|[/\\])\../\" -- <command>
-```
-
-> **Note** the `lerna watch` command skips `.git/`, `dist/` and `node_modules/` directories by default. If you want to watch files inside any of these directories, you can pass a negated glob pattern, that is `lerna watch --ignored=\"!**/node_modules/**\"`
 
 ### `--ignore-initial`
 

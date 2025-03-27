@@ -18,6 +18,7 @@
     "prebuild": "rimraf dist",
     "build": "tsc",
     "build:incremental": "tsc --incremental --sourceMap false --excludeDirectories dist",
+    "echo:test": "echo \"Lerna-Lite watch package\"",
     "pack-tarball": "npm pack"
   },
   "license": "MIT",
@@ -37,7 +38,9 @@
   "dependencies": {
     "@lerna-lite/cli": "workspace:*",
     "@lerna-lite/core": "workspace:*",
-    "chokidar": "^3.6.0"
+    "chokidar": "^4.0.3",
+    "picomatch": "^4.0.2",
+    "tinyglobby": "catalog:"
   },
   "devDependencies": {
     "mock-stdin": "^1.0.0",

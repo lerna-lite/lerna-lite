@@ -45,11 +45,6 @@
       packageNames: ['rimraf'],
       allowedVersions: '<6.0.0',
     },
-    // skip Chokidar v4 until possibly the next major since glob is no longer directly supported by the lib
-    {
-      packageNames: ['chokidar'],
-      allowedVersions: '<4.0.0',
-    },
 
     // skip newer versions of a few NPM packages, until our next major, since they bumped their Node requirement to ^18.17.0 || >=20.5.0
     {
