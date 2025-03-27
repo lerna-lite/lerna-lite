@@ -8,7 +8,7 @@ function isPercent(num) {
   if (typeof num !== 'string') {
     return false;
   }
-  return num.slice(-1) === '%';
+  return num.at(-1) === '%';
 }
 
 function percent(num) {

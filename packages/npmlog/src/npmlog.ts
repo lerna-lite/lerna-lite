@@ -168,7 +168,7 @@ export class Logger extends EventEmitter {
     if (name) {
       values.section = name;
     }
-    const last = this.record[this.record.length - 1];
+    const last = this.record.at(-1);
     if (last) {
       values.subsection = last.prefix;
       const disp = this.disp[last.level];
