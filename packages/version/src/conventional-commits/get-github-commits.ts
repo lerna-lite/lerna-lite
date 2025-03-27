@@ -1,9 +1,10 @@
-import { ExecOpts, getComplexObjectValue } from '@lerna-lite/core';
+import type { ExecOpts } from '@lerna-lite/core';
+import { getComplexObjectValue } from '@lerna-lite/core';
 import { log } from '@lerna-lite/npmlog';
 import dedent from 'dedent';
 
 import { createGitHubClient, parseGitRepo } from '../git-clients/github-client.js';
-import { RemoteCommit } from '../interfaces.js';
+import type { RemoteCommit } from '../interfaces.js';
 
 const QUERY_PAGE_SIZE = 100; // GitHub API is restricting max of 100 per query
 
@@ -82,6 +83,7 @@ export async function getGithubCommits(
       for (const commit of historyData.nodes) {
         if (commit?.oid && commit?.author) {
           remoteCommits.push({
+            hash: commit.oid,
             shortHash: commit.oid.substring(0, 7),
             authorName: commit?.author.name,
             login: commit?.author?.user?.login ?? '',

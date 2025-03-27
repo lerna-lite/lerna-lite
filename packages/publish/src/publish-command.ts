@@ -10,29 +10,32 @@ import tempDir from 'temp-dir';
 import { glob } from 'tinyglobby';
 import c from 'tinyrainbow';
 
-import { getOneTimePassword, OneTimePasswordCache, VersionCommand } from '@lerna-lite/version';
+import type { OneTimePasswordCache } from '@lerna-lite/version';
+import { getOneTimePassword, VersionCommand } from '@lerna-lite/version';
+import type {
+  CommandType,
+  Conf,
+  NpaResolveResult,
+  Package,
+  PackageGraphNode,
+  ProjectConfig,
+  PublishCommandOption,
+  UpdateCollectorOptions,
+} from '@lerna-lite/core';
 import {
   collectUpdates,
   Command,
-  CommandType,
-  Conf,
   createRunner,
   deleteComplexObjectProp,
   describeRef,
   excludeValuesFromArray,
   logOutput,
-  NpaResolveResult,
   npmConf,
-  Package,
-  PackageGraphNode,
   prereleaseIdFromVersion,
-  ProjectConfig,
   promptConfirmation,
-  PublishCommandOption,
   pulseTillDone,
   runTopologically,
   throwIfUncommitted,
-  UpdateCollectorOptions,
   ValidationError,
 } from '@lerna-lite/core';
 
@@ -52,7 +55,8 @@ import { overridePublishConfig } from './lib/override-publish-config.js';
 import { removeTempLicenses } from './lib/remove-temp-licenses.js';
 import { createTempLicenses } from './lib/create-temp-licenses.js';
 import { getPackagesWithoutLicense } from './lib/get-packages-without-license.js';
-import { Queue, TailHeadQueue } from './lib/throttle-queue.js';
+import type { Queue } from './lib/throttle-queue.js';
+import { TailHeadQueue } from './lib/throttle-queue.js';
 import type { Tarball } from './interfaces.js';
 import { isNpmJsPublishVersionConflict } from './lib/is-npm-js-publish-version-conflict.js';
 import { isNpmPkgGitHubPublishVersionConflict } from './lib/is-npm-pkg-github-publish-version-conflict.js';
@@ -472,7 +476,7 @@ export class PublishCommand extends Command<PublishCommandOption> {
 
       // semver.inc() starts a new prerelease at .0, git describe starts at .1
       // and build metadata is always ignored when comparing dependency ranges
-      return `${nextVersion}-${preid}.${Math.max(0, refCount - 1)}+${sha}`;
+      return `${nextVersion}-${preid}.${Math.max(0, refCount - 1)}.${sha}`;
     };
 
     if (isIndependent) {

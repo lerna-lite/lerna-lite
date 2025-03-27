@@ -47,7 +47,7 @@ import {
   runInstallLockFileOnly,
   saveUpdatedLockJsonFile,
 } from './lib/update-lockfile-version.js';
-import { GitCreateReleaseClientOutput, ReleaseNote, RemoteCommit } from './interfaces.js';
+import type { GitCreateReleaseClientOutput, ReleaseNote, RemoteCommit } from './interfaces.js';
 import { applyBuildMetadata } from './conventional-commits/apply-build-metadata.js';
 import { getCommitsSinceLastRelease } from './conventional-commits/get-commits-since-last-release.js';
 import { recommendVersion } from './conventional-commits/recommend-version.js';

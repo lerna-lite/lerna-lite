@@ -1,9 +1,10 @@
 import { log } from '@lerna-lite/npmlog';
-import { OneTimePasswordCache, otplease } from '@lerna-lite/version';
+import type { OneTimePasswordCache } from '@lerna-lite/version';
+import { otplease } from '@lerna-lite/version';
 import npa from 'npm-package-arg';
 import fetch from 'npm-registry-fetch';
 
-import { DistTagOptions } from '../interfaces.js';
+import type { DistTagOptions } from '../interfaces.js';
 
 /**
  * Add a dist-tag to a package.

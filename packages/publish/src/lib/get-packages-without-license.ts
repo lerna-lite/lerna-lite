@@ -1,5 +1,5 @@
 import { dirname } from 'node:path';
-import { Package, Project } from '@lerna-lite/core';
+import type { Package, Project } from '@lerna-lite/core';
 
 /**
  * Retrieve a list of packages that lack a license file.

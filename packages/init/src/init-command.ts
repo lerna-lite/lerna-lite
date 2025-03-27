@@ -1,4 +1,5 @@
-import { Command, CommandType, exec, InitCommandOption, ProjectConfig } from '@lerna-lite/core';
+import type { CommandType, InitCommandOption, ProjectConfig } from '@lerna-lite/core';
+import { Command, exec } from '@lerna-lite/core';
 import { mkdirp } from 'fs-extra/esm';
 import { join } from 'node:path';
 import pMap from 'p-map';

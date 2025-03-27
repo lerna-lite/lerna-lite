@@ -18,5 +18,5 @@ export * from './lib/pack-directory.js';
 export * from './lib/remove-temp-licenses.js';
 export * from './lib/throttle-queue.js';
 export * from './lib/verify-npm-package-access.js';
-export * from './interfaces.js';
+export type * from './interfaces.js';
 export * from './publish-command.js';

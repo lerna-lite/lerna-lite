@@ -12,7 +12,7 @@
     },
     {
       // group all Conventional-Changelog dependencies
-      matchPackagePatterns: ['^conventional-', '^@types/conventional-'],
+      matchPackagePatterns: ['^conventional-'],
       groupName: 'Conventional-Changelog packages',
     },
     {
@@ -44,11 +44,6 @@
     {
       packageNames: ['rimraf'],
       allowedVersions: '<6.0.0',
-    },
-    // skip Chokidar v4 until possibly the next major since glob is no longer directly supported by the lib
-    {
-      packageNames: ['chokidar'],
-      allowedVersions: '<4.0.0',
     },
 
     // skip newer versions of a few NPM packages, until our next major, since they bumped their Node requirement to ^18.17.0 || >=20.5.0
@@ -97,21 +92,6 @@
       allowedVersions: '<6.0.0',
     },
   ],
-  ignoreDeps: [
-    'lee-dohm/no-response',
-    'node',
-    'pnpm',
-
-    // ignore all new major conventional-changelog versions (until breaking changes are investigated, let's just skip them all)
-    '@types/conventional-recommended-bump',
-    '@types/conventional-changelog-core',
-    '@types/conventional-commits-parser',
-    'conventional-changelog-core',
-    'conventional-changelog-writer',
-    'conventional-commits-parser',
-    'conventional-changelog-angular',
-    'conventional-changelog-conventionalcommits',
-    'conventional-recommended-bump',
-  ],
+  ignoreDeps: ['lee-dohm/no-response', 'node', 'pnpm'],
   schedule: ['every 4 weeks on Tuesday'],
 }
