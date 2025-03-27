@@ -1,2 +1,2 @@
 export type * from './models.js';
-export type * from './watch-command.js';
+export * from './watch-command.js';
