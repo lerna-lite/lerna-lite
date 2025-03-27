@@ -1,4 +1,4 @@
-import { WatchCommandOption } from '@lerna-lite/core';
+import type { WatchCommandOption } from '@lerna-lite/core';
 
 import { filterOptions } from '../filter-options.js';
 

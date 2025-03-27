@@ -1,4 +1,4 @@
-import { Package } from '@lerna-lite/core';
+import type { Package } from '@lerna-lite/core';
 import { log } from '@lerna-lite/npmlog';
 
 export function getNpmExecOpts(pkg: Package) {

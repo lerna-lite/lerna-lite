@@ -1,10 +1,11 @@
-import { Package, PackageGraphNode } from '@lerna-lite/core';
+import type { Package, PackageGraphNode } from '@lerna-lite/core';
 import { log } from '@lerna-lite/npmlog';
 import conventionalRecommendedBump from 'conventional-recommended-bump';
-import conventionalChangelogCore from 'conventional-changelog-core';
-import semver, { ReleaseType } from 'semver';
+import type conventionalChangelogCore from 'conventional-changelog-core';
+import type { ReleaseType } from 'semver';
+import semver from 'semver';
 
-import { BaseChangelogOptions, VersioningStrategy } from '../interfaces.js';
+import type { BaseChangelogOptions, VersioningStrategy } from '../interfaces.js';
 import { GetChangelogConfig } from './get-changelog-config.js';
 import { applyBuildMetadata } from './apply-build-metadata.js';
 

@@ -3,9 +3,9 @@ import { stat } from 'fs/promises';
 import { basename } from 'node:path';
 import ssri from 'ssri';
 import tar from 'tar';
-import { Package } from '@lerna-lite/core';
+import type { Package } from '@lerna-lite/core';
 
-import { Tarball } from '../interfaces.js';
+import type { Tarball } from '../interfaces.js';
 
 export function getPacked(pkg: Package, tarFilePath: string): Promise<Tarball> {
   const bundledWanted = new Set<string>(/* pkg.bundleDependencies || pkg.bundledDependencies || */ []);

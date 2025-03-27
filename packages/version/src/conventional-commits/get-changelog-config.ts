@@ -3,7 +3,7 @@ import { log } from '@lerna-lite/npmlog';
 import npa from 'npm-package-arg';
 import pify from 'pify';
 
-import { ChangelogConfig, ChangelogPresetConfig } from '../interfaces.js';
+import type { ChangelogConfig, ChangelogPresetConfig } from '../interfaces.js';
 
 export class GetChangelogConfig {
   static cfgCache = new Map<string, any>();
