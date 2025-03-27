@@ -154,7 +154,7 @@ $ lerna watch --glob=\"src\**\*.ts" -- <command>
 
 ### `--ignored`
 
-Defines files/paths or Glob pattern to be ignored it can be a string or an array of string ([anymatch](https://github.com/micromatch/anymatch)-compatible definition). Also, since we use this in a monorepo, we already configured the watch to skip `.git/`, `dist/` and `node_modules/` directories by default
+Defines file paths or Glob pattern to be ignored, it could be defined as a string or an array of strings ([anymatch](https://github.com/micromatch/anymatch)-compatible definition). Also, since we use this in a monorepo, we already preconfigured the watch to skip `.git/`, `dist/` and `node_modules/` directories by default.
 
 ```sh
 # ignore bin folder
@@ -167,7 +167,7 @@ $ lerna watch --ignored=\"/(^|[/\\])\../\" -- <command>
 > **Note** the `lerna watch` command skips `.git/`, `dist/` and `node_modules/` directories by default. If you want to watch files inside any of these directories, you can pass a negated glob pattern, that is `lerna watch --ignored=\"!**/node_modules/**\"`
 
 > [!NOTE]
-> The `ignored` option only accept glob patterns (string or strings array) and we then use [`tinyglobby`](https://www.npmjs.com/package/tinyglobby) internally to parse it and find which files to watch. Please also note that this option is no longer the same as Chokidar@4 `ignored` option because their implementation no longer accept globs anymore.
+> The `ignored` option only accept glob pattern (string or strings array) and we then use [`tinyglobby`](https://www.npmjs.com/package/tinyglobby) internally to parse it and find which files to watch. Please also note that this option is no longer the same as Chokidar@4 `ignored` option because their implementation no longer accept globs anymore.
 
 ### `--stream`
 
