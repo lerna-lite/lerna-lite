@@ -5,7 +5,6 @@ export const CHOKIDAR_AVAILABLE_OPTIONS = [
   'binaryInterval',
   'cwd',
   'depth',
-  'disableGlobbing',
   'followSymlinks',
   'ignored',
   'ignoreInitial',
