@@ -1,6 +1,5 @@
-import type { Context, GitRawCommitsOptions } from 'conventional-changelog-core';
+import type { GitRawCommitsOptions } from 'conventional-changelog';
 import type { Options as WriterOptions } from 'conventional-changelog-writer';
-import type { Commit } from 'conventional-commits-parser';
 
 import type { ChangelogConfig, RemoteCommit } from '../interfaces.js';
 
@@ -30,8 +29,9 @@ export function setConfigChangelogCommitGitAuthor(
     typeof commitCustomFormat === 'string' && commitCustomFormat !== ''
       ? commitCustomFormat.replace(/%a/g, '{{authorName}}').replace(/%e/g, '{{authorEmail}}')
       : `({{authorName}})`;
-  writerOpts.commitPartial =
-    config.writerOpts.commitPartial!.replace(/\n*$/, '') + ` {{#if @root.linkReferences~}}${extraCommitMsg}{{~/if}}\n`;
+
+  const commitPartial = config.writer?.commitPartial || '';
+  writerOpts.commitPartial = commitPartial.replace(/\n*$/, '') + ` {{#if @root.linkReferences~}}${extraCommitMsg}{{~/if}}\n`;
 }
 
 /**
@@ -57,41 +57,23 @@ export function setConfigChangelogCommitClientLogin(
     typeof commitCustomFormat === 'string' && commitCustomFormat !== ''
       ? commitCustomFormat.replace(/%a/g, '{{authorName}}').replace(/%e/g, '{{authorEmail}}').replace(/%l/g, '{{userLogin}}')
       : ` (@{{userLogin}})`;
-  writerOpts.commitPartial = config.writerOpts.commitPartial!.replace(/\n*$/, '') + `${extraCommitMsg}\n`;
+
+  const commitPartial = config.writer?.commitPartial || '';
+  writerOpts.commitPartial = commitPartial.replace(/\n*$/, '') + `${extraCommitMsg}\n`;
 
   // add commits since last release into the transform function
-  writerOpts.transform = writerOptsTransform.bind(
-    null,
-    config.writerOpts.transform as (cmt: Commit, ctx: Context) => Commit,
-    commitsSinceLastRelease
-  );
-}
+  const originalTransform = config.writer?.transform;
+  writerOpts.transform = (commit, context, options) => {
+    const transCommit = originalTransform?.(commit, context, options) || null;
 
-/**
- * Extend the writerOpts transform function from whichever preset config is currently loaded
- * We will execute the original writerOpts transform function, then from it we'll add extra properties to the commit object
- * @param {Transform} originalTransform
- * @param {RemoteCommit[]} commitsSinceLastRelease
- * @param {Commit} commit
- * @param {Context} context
- * @returns
- */
-export function writerOptsTransform(
-  originalTransform: (cmt: Commit, ctx: Context) => Commit,
-  commitsSinceLastRelease: RemoteCommit[],
-  commit: Commit,
-  context: Context
-) {
-  // execute original writerOpts transform
-  const extendedCommit = originalTransform(commit, context);
-
-  // add client remote detail (login)
-  if (extendedCommit) {
-    const remoteCommit = commitsSinceLastRelease.find((c) => c.shortHash === commit.shortHash);
-    if (remoteCommit?.login) {
-      commit.userLogin = remoteCommit.login;
+    // add remote client detail (user login) when found
+    if (transCommit) {
+      const remoteCommit = commitsSinceLastRelease.find((c) => commit.hash?.startsWith(c.shortHash));
+      if (remoteCommit?.login) {
+        return { ...transCommit, userLogin: remoteCommit.login };
+      }
     }
-  }
 
-  return extendedCommit;
+    return transCommit;
+  };
 }
