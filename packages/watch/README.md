@@ -9,7 +9,8 @@
 Watch for changes within packages and execute commands from the root of the repository, for example, trigger a rebuild of packages when any of its files change.
 
 > **Note** the `watch` command also exists in the original [Lerna](https://github.com/lerna/lerna), however their implementation uses Nx (no surprises) to watch for file changes. Since we want to keep Lerna-Lite well... light, we opted to use [`Chokidar`](https://github.com/paulmillr/chokidar), it is used by millions of packages (even ViteJS uses it), so chances are that you already have it installed directly or indirectly. Even though Lerna and Lerna-Lite differs in their internal implementations, their usage are nearly identical (apart from the [Chokidar options](#chokidar-options) that we also provide).
-
+>
+> We originally used `chokidar@3` but later migrated to `chokidar@4` in Lerna-Lite v4.0
 ---
 
 ## Installation
@@ -198,7 +199,7 @@ Disable package name prefixing when output is streaming (`--stream` _or_ `--para
 This option can be useful when piping results to other processes, such as editor plugins.
 
 ## Chokidar Options
-Most [`Chokidar`](https://github.com/paulmillr/chokidar) options are available and exposed (except `cwd` and `ignored` because Chokidar itself no longer accept globs, see [`--ignored`](#--ignored) option for our own custom option that accepts globs). The option descriptions below are summarized, refer to the Chokidar [options](https://github.com/paulmillr/chokidar#api) website for more detailed informations.
+Most [`Chokidar`](https://github.com/paulmillr/chokidar) options are available and exposed (except `cwd` and `ignored` because `chokidar@4` itself no longer accept globs, see [`--ignored`](#--ignored) option to see our own custom option that accepts globs). The option descriptions below are summarized, please visit the Chokidar [options](https://github.com/paulmillr/chokidar#api) website for more detailed informations.
 
 ### `--atomic`
 
@@ -236,7 +237,7 @@ $ lerna watch --follow-symlinks -- <command>
 
  ### `ignored` (not supported, see [`--ignored`](#--ignored) instead)
 
- Chokidar `ignored` option is not supported because they don't support globs anymore, however we have our own custom option which is named the same and does accept glob patterns and so just take a look at our watch [`--ignored`](#--ignored) option above.
+ Chokidar `ignored` option is not exposed because they don't support globs anymore, however Lerna-Lite watch has its own custom [`--ignored`](#--ignored) option which has the same name and it does accept glob patterns, so just take a look at our watch [`--ignored`](#--ignored) option above.
 
 ### `--ignore-initial`
 
