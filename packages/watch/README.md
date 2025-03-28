@@ -29,7 +29,7 @@ $ lerna watch -- <command>
 
 The values `$LERNA_PACKAGE_NAME` and `$LERNA_FILE_CHANGES` will be replaced with the package name, the file that changed respectively. If multiple file changes are detected, they will all be listed and separated by a whitespace (unless a custom file delimiter is provided).
 
-> **Note** When using these environment variables in the shell, you will need to escape the dollar sign with a backslash (`\`). See the [examples](#examples) below.
+> **Note** When using these environment variables in the shell, you will need to escape the dollar symbol with a backslash (`\$`). See the [examples](#examples) below.
 
 ### Examples
 
@@ -98,6 +98,10 @@ $ npx -c 'lerna watch -- echo \$LERNA_PACKAGE_NAME \$LERNA_FILE_CHANGES'
   "watch-files": "lerna watch -- cross-env-shell echo \"Watch file $LERNA_FILE_CHANGES in package $LERNA_PACKAGE_NAME\""
 }
 ```
+
+Below are basic samples added directly in Lerna-Lite which are used (manually) to test its own watch command (basically what was created/used to implement & test the watch with chokidar)
+
+https://github.com/lerna-lite/lerna-lite/blob/ab731935f452c79deb668a76e41814eee812b772/package.json#L25-L27
 
 ## Options
 
@@ -194,7 +198,7 @@ Disable package name prefixing when output is streaming (`--stream` _or_ `--para
 This option can be useful when piping results to other processes, such as editor plugins.
 
 ## Chokidar Options
-Most [`Chokidar`](https://github.com/paulmillr/chokidar) options are available and exposed (except `cwd` which is required internally). The option descriptions below are summarized, refer to the Chokidar [options](https://github.com/paulmillr/chokidar#api) website for more detailed informations.
+Most [`Chokidar`](https://github.com/paulmillr/chokidar) options are available and exposed (except `cwd` and `ignored` because Chokidar itself no longer accept globs, see [`--ignored`](#--ignored) option for our own custom option that accepts globs). The option descriptions below are summarized, refer to the Chokidar [options](https://github.com/paulmillr/chokidar#api) website for more detailed informations.
 
 ### `--atomic`
 
@@ -229,6 +233,10 @@ Defaults to `true`, when `false` is provided, only the symlinks themselves will 
 ```sh
 $ lerna watch --follow-symlinks -- <command>
 ```
+
+ ### `ignored` (not supported, see [`--ignored`](#--ignored) instead)
+
+ Chokidar `ignored` option is not supported because they don't support globs anymore, however we have our own custom option which is named the same and does accept glob patterns and so just take a look at our watch [`--ignored`](#--ignored) option above.
 
 ### `--ignore-initial`
 
