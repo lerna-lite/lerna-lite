@@ -16,13 +16,13 @@ catalogs:
       specifier: ^5.1.2
       version: 5.1.2
     '@types/node':
-      specifier: ^22.13.10
+      specifier: ^22.13.14
       version: 22.13.14
     '@types/npm-package-arg':
       specifier: ^6.1.4
       version: 6.1.4
     '@types/semver':
-      specifier: ^7.5.8
+      specifier: ^7.7.0
       version: 7.7.0
     columnify:
       specifier: ^1.6.0
@@ -147,10 +147,10 @@ importers:
         specifier: ^17.0.33
         version: 17.0.33
       '@vitest/coverage-v8':
-        specifier: ^3.0.8
+        specifier: ^3.0.9
         version: 3.0.9(vitest@3.0.9(@types/node@22.13.14)(yaml@2.7.0))
       '@vitest/eslint-plugin':
-        specifier: ^1.1.37
+        specifier: ^1.1.38
         version: 1.1.38(@typescript-eslint/utils@8.28.0(eslint@9.23.0)(typescript@5.8.2))(eslint@9.23.0)(typescript@5.8.2)(vitest@3.0.9(@types/node@22.13.14)(yaml@2.7.0))
       conventional-changelog-conventionalcommits:
         specifier: ^8.0.0
@@ -159,13 +159,13 @@ importers:
         specifier: ^7.0.3
         version: 7.0.3
       eslint:
-        specifier: ^9.22.0
+        specifier: ^9.23.0
         version: 9.23.0
       eslint-config-prettier:
         specifier: ^10.1.1
         version: 10.1.1(eslint@9.23.0)
       eslint-plugin-n:
-        specifier: ^17.16.2
+        specifier: ^17.17.0
         version: 17.17.0(eslint@9.23.0)
       execa:
         specifier: 'catalog:'
@@ -219,10 +219,10 @@ importers:
         specifier: ^5.8.2
         version: 5.8.2
       typescript-eslint:
-        specifier: ^8.26.1
+        specifier: ^8.28.0
         version: 8.28.0(eslint@9.23.0)(typescript@5.8.2)
       vitest:
-        specifier: ^3.0.8
+        specifier: ^3.0.9
         version: 3.0.9(@types/node@22.13.14)(yaml@2.7.0)
       write-json-file:
         specifier: 'catalog:'
