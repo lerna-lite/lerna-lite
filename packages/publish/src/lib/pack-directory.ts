@@ -4,9 +4,8 @@ import { log } from '@lerna-lite/npmlog';
 import { tempWrite } from '@lerna-lite/version';
 import Arborist from '@npmcli/arborist';
 import { relative } from 'node:path';
-import type { Readable } from 'node:stream';
 import packlist from 'npm-packlist';
-import tar from 'tar';
+import { create } from 'tar';
 
 import { getPacked } from './get-packed.js';
 
@@ -45,7 +44,7 @@ export async function packDirectory(_pkg: Package, dir: string, options: PackCon
   const arborist = new Arborist({ path: pkg.contents });
   const tree = await arborist.loadActual({ ...arboristOptions });
   const files: string[] = await packlist(tree);
-  const stream: DataView & Readable = tar.create(
+  const stream = create(
     {
       cwd: pkg.contents,
       prefix: 'package/',

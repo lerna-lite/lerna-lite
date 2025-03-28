@@ -26,70 +26,9 @@
       allowedVersions: '1.2.6',
     },
     {
-      // ref commit: https://github.com/lerna-lite/lerna-lite/commit/291bf01c5e0b49e70733c8abb17e2bb8141d5cbe
-      packageNames: ['tar'],
-      allowedVersions: '<7.0.0',
-    },
-    {
       // ref commit: https://github.com/lerna-lite/lerna-lite/commit/fd18921e90f7bc696b7422fecdcf50662fce6f8d
       packageNames: ['execa'],
       allowedVersions: '<9.0.0',
-    },
-
-    // minimatch and rimraf new major releases dropped support for Node 18, we'll have to wait our next major to upgrade them
-    {
-      packageNames: ['minimatch'],
-      allowedVersions: '<10.0.0',
-    },
-    {
-      packageNames: ['rimraf'],
-      allowedVersions: '<6.0.0',
-    },
-
-    // skip newer versions of a few NPM packages, until our next major, since they bumped their Node requirement to ^18.17.0 || >=20.5.0
-    {
-      packageNames: ['@npmcli/arborist'],
-      allowedVersions: '<8.0.0',
-    },
-    {
-      packageNames: ['@npmcli/package-json'],
-      allowedVersions: '<6.0.0',
-    },
-    {
-      packageNames: ['@npmcli/run-script'],
-      allowedVersions: '<9.0.0',
-    },
-    {
-      packageNames: ['libnpmaccess'],
-      allowedVersions: '<9.0.0',
-    },
-    {
-      packageNames: ['libnpmpublish'],
-      allowedVersions: '<10.0.0',
-    },
-    {
-      packageNames: ['npm-packlist'],
-      allowedVersions: '<9.0.0',
-    },
-    {
-      packageNames: ['npm-package-arg'],
-      allowedVersions: '<12.0.0',
-    },
-    {
-      packageNames: ['npm-registry-fetch'],
-      allowedVersions: '<18.0.0',
-    },
-    {
-      packageNames: ['pacote'],
-      allowedVersions: '<19.0.0',
-    },
-    {
-      packageNames: ['ssri'],
-      allowedVersions: '<12.0.0',
-    },
-    {
-      packageNames: ['write-file-atomic'],
-      allowedVersions: '<6.0.0',
     },
   ],
   ignoreDeps: ['lee-dohm/no-response', 'node', 'pnpm'],

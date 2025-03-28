@@ -93,7 +93,7 @@
     "normalize-newline": "^4.1.0",
     "normalize-path": "catalog:",
     "prettier": "^3.5.3",
-    "rimraf": "^5.0.10",
+    "rimraf": "^6.0.1",
     "semver": "catalog:",
     "tacks": "1.2.6",
     "temp-dir": "catalog:",
