@@ -8,6 +8,8 @@ See [Conventional Commits](https://conventionalcommits.org) for commit guideline
 
 ### ⚠ BREAKING CHANGES
 
+> Please visit the [v4.0.0](https://github.com/lerna-lite/lerna-lite/releases/tag/v4.0.0) release for more info about the migration.
+
 * **deps:** bump minimum Node version to ^20.17.0 || >=22.9.0 (#1000)
 * **watch:** upgrade Chokidar to v4.0 major version (#1004)
 
