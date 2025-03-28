@@ -2,7 +2,7 @@ import { createReadStream } from 'node:fs';
 import { stat } from 'fs/promises';
 import { basename } from 'node:path';
 import ssri from 'ssri';
-import tar from 'tar';
+import { list } from 'tar';
 import type { Package } from '@lerna-lite/core';
 
 import type { Tarball } from '../interfaces.js';
@@ -15,32 +15,31 @@ export function getPacked(pkg: Package, tarFilePath: string): Promise<Tarball> {
   let totalEntries = 0;
   let totalEntrySize = 0;
 
-  return tar
-    .list({
-      file: tarFilePath,
-      onentry(entry) {
-        totalEntries += 1;
-        totalEntrySize += entry.size;
+  return list({
+    file: tarFilePath,
+    onentry(entry) {
+      totalEntries += 1;
+      totalEntrySize += entry.size;
 
-        const p = entry.path;
+      const p = entry.path;
 
-        /* v8 ignore next 5 */
-        if (p.startsWith('package/node_modules/')) {
-          const name: string = p.match(/^package\/node_modules\/((?:@[^/]+\/)?[^/]+)/)[1];
+      /* v8 ignore next 5 */
+      if (p.startsWith('package/node_modules/')) {
+        const name: string = p.match(/^package\/node_modules\/((?:@[^/]+\/)?[^/]+)/)![1];
 
-          if (bundledWanted.has(name)) {
-            bundled.add(name);
-          }
-        } else {
-          files.push({
-            path: entry.path.replace(/^package\//, ''),
-            size: entry.size,
-            mode: entry.mode,
-          });
+        if (bundledWanted.has(name)) {
+          bundled.add(name);
         }
-      },
-      strip: 1,
-    })
+      } else {
+        files.push({
+          path: entry.path.replace(/^package\//, ''),
+          size: `${entry.size}`,
+          mode: `${entry.mode || ''}`,
+        });
+      }
+    },
+    strip: 1,
+  })
     .then(() =>
       Promise.all([
         stat(tarFilePath),
