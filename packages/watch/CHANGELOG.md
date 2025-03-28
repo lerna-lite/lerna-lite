@@ -4,6 +4,18 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [4.0.0](https://github.com/lerna-lite/lerna-lite/compare/v3.12.3...v4.0.0) (2025-03-28)
+
+### ⚠ BREAKING CHANGES
+
+* **deps:** bump minimum Node version to ^20.17.0 || >=22.9.0 (#1000)
+* **watch:** upgrade Chokidar to v4.0 major version (#1004)
+
+### Bug Fixes
+
+* **deps:** bump minimum Node version to ^20.17.0 || >=22.9.0 ([#1000](https://github.com/lerna-lite/lerna-lite/issues/1000)) ([9a87d82](https://github.com/lerna-lite/lerna-lite/commit/9a87d82ff71f274dd41a0cd85f9036f11c2525b7)) - by @ghiscoding
+* **watch:** upgrade Chokidar to v4.0 major version ([#1004](https://github.com/lerna-lite/lerna-lite/issues/1004)) ([d376975](https://github.com/lerna-lite/lerna-lite/commit/d3769750b63446f83f04ae797fbdb8863a18c311)) - by @ghiscoding
+
 ## [3.12.3](https://github.com/lerna-lite/lerna-lite/compare/v3.12.2...v3.12.3) (2025-03-12)
 
 **Note:** Version bump only for package @lerna-lite/watch
