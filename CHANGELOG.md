@@ -8,7 +8,8 @@ See [Conventional Commits](https://conventionalcommits.org) for commit guideline
 
 ### ⚠ BREAKING CHANGES
 
-> Please visit the [v4.0.0](https://github.com/lerna-lite/lerna-lite/releases/tag/v4.0.0) release for more info about the migration.
+> [!NOTE]
+> Please visit the [v4.0.0](https://github.com/lerna-lite/lerna-lite/releases/tag/v4.0.0) release for more details about the migration.
 
 * **deps:** update all major npm & other deps (#1008)
 * **deps:** bump minimum Node version to ^20.17.0 || >=22.9.0 (#1000)
