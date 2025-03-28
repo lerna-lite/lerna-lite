@@ -123,6 +123,7 @@ https://github.com/lerna-lite/lerna-lite/blob/ab731935f452c79deb668a76e41814eee8
     - [`--depth`](#--depth)
     - [`--disable-globbing`](#--disable-globbing)
     - [`--follow-symlinks`](#--follow-symlinks)
+    - `ignored` (not supported, see watch [`--ignored`](#--ignored) option above instead)
     - [`--ignore-initial`](#--ignore-initial)
     - [`--ignore-permission-errors`](#--ignore-permission-errors)
     - [`--interval`](#--interval)
@@ -172,7 +173,7 @@ $ lerna watch --ignored=\"/(^|[/\\])\../\" -- <command>
 > **Note** the `lerna watch` command skips `.git/`, `dist/` and `node_modules/` directories by default. If you want to watch files inside any of these directories, you can pass a negated glob pattern, that is `lerna watch --ignored=\"!**/node_modules/**\"`
 
 > [!NOTE]
-> The `ignored` option only accept glob pattern (string or array of strings) and we then use [`tinyglobby`](https://www.npmjs.com/package/tinyglobby) internally to find out which files to watch. Please also note that this option is no longer the same as Chokidar@4 `ignored` option because their implementation no longer accept globs anymore but Lerna-Lite watch does.
+> The watch `ignored` option only accept glob patterns (string or array of strings) and then internally we use [`tinyglobby`](https://www.npmjs.com/package/tinyglobby) to find out the file list of files to watch (or ignore). Please also note that this option is no longer the same as Chokidar@4 `ignored` option because their implementation no longer accept globs but Lerna-Lite watch still do.
 
 ### `--stream`
 
