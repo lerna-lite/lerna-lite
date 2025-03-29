@@ -6,6 +6,9 @@ See [Conventional Commits](https://conventionalcommits.org) for commit guideline
 
 ## [4.0.0](https://github.com/lerna-lite/lerna-lite/compare/v3.12.3...v4.0.0) (2025-03-28)
 
+> [!NOTE]
+> Please visit the [v4.0.0](https://github.com/lerna-lite/lerna-lite/releases/tag/v4.0.0) release for more details about the migration.
+
 ### ⚠ BREAKING CHANGES
 
 * **deps:** bump minimum Node version to ^20.17.0 || >=22.9.0 (#1000)
