@@ -36,16 +36,14 @@
 
 _Click on any command below to see documentation of all available options_
 
-| Command | Install | Description |
-| --------| --------| ----------- |
-| ☁️ [publish](https://github.com/lerna-lite/lerna-lite/tree/main/packages/publish#readme) | `npm i @lerna-lite/publish -D` | publish workspace packages |
-| 📑 [version](https://github.com/lerna-lite/lerna-lite/tree/main/packages/version#readme) | `npm i @lerna-lite/version -D` | bump workspace package versions   |
-| 🕜 [changed](https://github.com/lerna-lite/lerna-lite/tree/main/packages/changed#readme) | `npm i @lerna-lite/changed -D` | list local packages changed since last release  |
-| 🌓 [diff](https://github.com/lerna-lite/lerna-lite/tree/main/packages/diff#readme)       | `npm i @lerna-lite/diff -D`    | git diff all packages since the last release    |
-| 👷 [exec](https://github.com/lerna-lite/lerna-lite/tree/main/packages/exec#readme)       | `npm i @lerna-lite/exec -D`    | execute shell commands in each workspace package |
-| 📖 [list](https://github.com/lerna-lite/lerna-lite/tree/main/packages/list#readme)       | `npm i @lerna-lite/list -D`    | list local packages                             |
-| 🏃 [run](https://github.com/lerna-lite/lerna-lite/tree/main/packages/run#readme)         | `npm i @lerna-lite/run -D`     | run npm script in each workspace package        |
-| 👓 [watch](https://github.com/lerna-lite/lerna-lite/tree/main/packages/watch#readme)     | `npm i @lerna-lite/watch -D`   | watch for changes & execute commands when fired |
+- ☁️ **[publish](https://github.com/lerna-lite/lerna-lite/tree/main/packages/publish#readme)** - publish workspace packages - `npm i @lerna-lite/publish -D`
+- 📑 **[version](https://github.com/lerna-lite/lerna-lite/tree/main/packages/version#readme)** - bump workspace package versions - `npm i @lerna-lite/version -D`
+- 🕜 **[changed](https://github.com/lerna-lite/lerna-lite/tree/main/packages/changed#readme)** - list local packages changed since last release - `npm i @lerna-lite/changed -D`
+- 🌓 **[diff](https://github.com/lerna-lite/lerna-lite/tree/main/packages/diff#readme)** - git diff all packages since the last release - `npm i @lerna-lite/diff -D`
+- 👷 **[exec](https://github.com/lerna-lite/lerna-lite/tree/main/packages/exec#readme)** - execute shell commands in each workspace package - `npm i @lerna-lite/exec -D`
+- 📖 **[list](https://github.com/lerna-lite/lerna-lite/tree/main/packages/list#readme)** - list local packages - `npm i @lerna-lite/list -D`
+- 🏃 **[run](https://github.com/lerna-lite/lerna-lite/tree/main/packages/run#readme)** - run npm script in each workspace package - `npm i @lerna-lite/run -D`
+- 👓 **[watch](https://github.com/lerna-lite/lerna-lite/tree/main/packages/watch#readme)** - watch for changes & execute commands when fired - `npm i @lerna-lite/watch -D`
 
 > **Note** since the `publish` package depends on the `version` package, you could simply install `@lerna-lite/publish` to automatically get access to both commands.
 
