@@ -260,7 +260,7 @@ export class Package {
    */
   removeDependencyWorkspaceProtocolPrefix(pkgName: string, resolved: NpaResolveResult) {
     const depName = resolved.name as string;
-    const workspaceSpec = resolved?.workspaceSpec ?? '';
+    const workspaceSpec = resolved.workspaceSpec ?? '';
     const inspectDependencies = this.retrieveAllDependenciesWithName(depName, [
       'dependencies',
       'devDependencies',
