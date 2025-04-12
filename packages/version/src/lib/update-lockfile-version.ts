@@ -110,9 +110,7 @@ export function updateNpmLockFileVersion2(obj: any, pkgName: string, newVersion:
           obj[k] = `${versionPrefix}${newVersion}`;
         } else if (k === 'name' && obj[k] === pkgName && obj['version'] !== undefined) {
           // e.g. "packages/version": { "name": "@lerna-lite/version", "version": "0.1.2" }
-          if (obj['version'] !== undefined) {
-            obj['version'] = newVersion;
-          }
+          obj['version'] = newVersion;
         }
       }
     }
