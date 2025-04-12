@@ -49,7 +49,7 @@ function describeRef(
     const result = parse(stdout, options.cwd, options.separator);
 
     if (options?.match) {
-      log.verbose('git-describe', '%j => %j', options?.match, stdout);
+      log.verbose('git-describe', '%j => %j', options.match, stdout);
     }
     if (stdout) {
       log.silly('git-describe', 'parsed => %j', result);
@@ -72,7 +72,7 @@ function describeRefSync(
   const result = parse(stdout, options.cwd, options.separator);
 
   if (options?.match) {
-    log.verbose('git-describe.sync', '%j => %j', options?.match, stdout);
+    log.verbose('git-describe.sync', '%j => %j', options.match, stdout);
   }
   if (stdout) {
     log.silly('git-describe', 'parsed => %j', result);

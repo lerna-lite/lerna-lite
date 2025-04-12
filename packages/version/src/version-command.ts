@@ -374,7 +374,7 @@ export class VersionCommand extends Command<VersionCommandOption> {
     }
 
     const versionsForUpdate = await this.getVersionsForUpdates();
-    await this.setUpdatesForVersions(versionsForUpdate);
+    this.setUpdatesForVersions(versionsForUpdate);
     return this.confirmVersions();
   }
 
