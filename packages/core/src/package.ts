@@ -365,7 +365,7 @@ export class Package {
         if (resolved.workspaceSpec) {
           const workspaceSpec = resolved?.workspaceSpec ?? '';
           const [_, _wsTxt, operatorPrefix, rangePrefix, semver] =
-            workspaceSpec.match(/^(workspace:)?([<>=]{0,2})?([*|~|^])?(.*)$/) || [];
+            workspaceSpec.match(/^(workspace:)?([<>=]{0,2})?([*~^])?(.*)$/) || [];
 
           if (operatorPrefix) {
             // package with range operator should never be bumped, we'll use same version range but without prefix "workspace:>=1.2.3" will assign ">=1.2.3"
@@ -391,7 +391,7 @@ export class Package {
             // when versioning we'll only bump workspace protocol that have semver range like `workspace:^1.2.3`
             // any other workspace will remain the same in `package.json` file, for example `workspace:^`
             // keep target workspace or bump when it's a workspace semver range (like `workspace:^1.2.3`)
-            depCollection[depName] = /^workspace:[*|~|^]{1}$/.test(workspaceSpec)
+            depCollection[depName] = /^workspace:[*~^]{1}$/.test(workspaceSpec)
               ? (resolved.workspaceSpec as string) // target like `workspace:^` => `workspace:^` (remains untouched in package.json)
               : `workspace:${depCollection[depName]}`; // range like `workspace:^1.2.3` => `workspace:^1.3.3` (bump minor example)
           }
