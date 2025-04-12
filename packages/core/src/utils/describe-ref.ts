@@ -48,7 +48,7 @@ function describeRef(
   return promise.then(({ stdout } = { stdout: '' }) => {
     const result = parse(stdout, options.cwd, options.separator);
 
-    if (options?.match) {
+    if (options.match) {
       log.verbose('git-describe', '%j => %j', options.match, stdout);
     }
     if (stdout) {
@@ -71,7 +71,7 @@ function describeRefSync(
   const stdout = execSync('git', getArgs(options, includeMergedTags), options, dryRun);
   const result = parse(stdout, options.cwd, options.separator);
 
-  if (options?.match) {
+  if (options.match) {
     log.verbose('git-describe.sync', '%j => %j', options.match, stdout);
   }
   if (stdout) {
