@@ -82,9 +82,9 @@ export class Package {
    */
   constructor(pkg: RawManifest, location: string, rootPath = location) {
     // npa will throw an error if the name is invalid
-    const resolved = npa.resolve(pkg?.name ?? '', `file:${relative(rootPath, location)}`, rootPath);
+    const resolved = npa.resolve(pkg.name ?? '', `file:${relative(rootPath, location)}`, rootPath);
 
-    this.name = pkg?.name ?? '';
+    this.name = pkg.name ?? '';
     this[PKG] = pkg;
 
     // omit raw pkg from default util.inspect() output, but preserve internal mutability
@@ -363,7 +363,7 @@ export class Package {
 
         // when using explicit `workspace:` protocol
         if (resolved.workspaceSpec) {
-          const workspaceSpec = resolved?.workspaceSpec ?? '';
+          const workspaceSpec = resolved.workspaceSpec ?? '';
           const [_, _wsTxt, operatorPrefix, rangePrefix, semver] =
             workspaceSpec.match(/^(workspace:)?([<>=]{0,2})?([*|~|^])?(.*)$/) || [];
 
