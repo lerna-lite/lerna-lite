@@ -9,7 +9,7 @@ glob(normalizePath(pathJoin(tempDir, '/lerna-*')), { absolute: true, cwd: tempDi
   .then((deleteFolders) => {
     // silently delete all files/folders that startsWith "lerna-"
     console.log(`Found ${deleteFolders.length} temp folders to cleanup.`);
-    (deleteFolders || []).forEach((folder) => removeSync(folder));
+    deleteFolders.forEach((folder) => removeSync(folder));
   })
   .catch((error) => {
     console.error('Error occurred while cleaning up temp folders:', error);

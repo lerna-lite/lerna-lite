@@ -285,7 +285,7 @@ export class PublishCommand extends Command<PublishCommandOption> {
     if (this.options.publishConfigOverrides !== false) {
       await this.applyPublishConfigOverrides();
     }
-    await this.annotateGitHead();
+    this.annotateGitHead();
     await this.serializeChanges();
     await this.packUpdated();
     await this.publishPacked();

@@ -38,7 +38,7 @@ export async function npmPublish(
   otpCache?: OneTimePasswordCache
 ): Promise<void | Response> {
   const { dryRun, ...remainingOptions } = flattenOptions(options);
-  const { scope } = npa(pkg?.name ?? '');
+  const { scope } = npa(pkg.name ?? '');
   // pass only the package scope to libnpmpublish
   const opts = {
     log,

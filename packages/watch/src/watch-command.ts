@@ -85,7 +85,7 @@ export class WatchCommand extends Command<WatchCommandOption & FilterOptions> {
     );
 
     try {
-      const { ignored = [], ...otherOptions } = this.options ?? {};
+      const { ignored = [], ...otherOptions } = this.options;
       this._ignoredGlobs = ['**/.git/**', '**/dist/**', '**/node_modules/**', ...(Array.isArray(ignored) ? ignored : [ignored])];
 
       const chokidarOptions: ChokidarOptions = {
