@@ -823,8 +823,8 @@ importers:
         specifier: 'catalog:'
         version: 11.0.4
       '@types/git-url-parse':
-        specifier: ^9.0.3
-        version: 9.0.3
+        specifier: ^16.0.2
+        version: 16.0.2
       '@types/js-yaml':
         specifier: ^4.0.9
         version: 4.0.9
@@ -1529,8 +1529,9 @@ packages:
   '@types/fs-extra@11.0.4':
     resolution: {integrity: sha512-yTbItCNreRooED33qjunPthRcSjERP1r4MqCZc7wv0u2sUkzTFp45tgUfS5+r7FrZPdmCCNflLhVSP/o+SemsQ==}
 
-  '@types/git-url-parse@9.0.3':
-    resolution: {integrity: sha512-Wrb8zeghhpKbYuqAOg203g+9YSNlrZWNZYvwxJuDF4dTmerijqpnGbI79yCuPtHSXHPEwv1pAFUB4zsSqn82Og==}
+  '@types/git-url-parse@16.0.2':
+    resolution: {integrity: sha512-STa+QaJtPbqwtioDIncRyft1xXrsTIYW0KkS6RS6l++NiDaQxqgsIkNp2Jf9nJ1KnCGPOvWaR1iO+B7LkM8+ew==}
+    deprecated: This is a stub types definition. git-url-parse provides its own type definitions, so you do not need this installed.
 
   '@types/glob-parent@5.1.3':
     resolution: {integrity: sha512-p+NciRH8TRvrgISOCQ55CP+lktMmDpOXsp4spULIIz0L4aJ6G9zFX+N0UZ2xulmJRgaQLRxXIp4xHdL6YOQjDg==}
@@ -4197,7 +4198,9 @@ snapshots:
       '@types/jsonfile': 6.1.4
       '@types/node': 22.13.14
 
-  '@types/git-url-parse@9.0.3': {}
+  '@types/git-url-parse@16.0.2':
+    dependencies:
+      git-url-parse: 16.0.1
 
   '@types/glob-parent@5.1.3': {}
 
