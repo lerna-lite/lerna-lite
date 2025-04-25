@@ -291,7 +291,63 @@ If the preset exports a builder function (e.g. `conventional-changelog-conventio
 
 > **Note** the option `changelogPreset.releaseCommitMessageFormat` is not supported and will throw, you can simply use [`--message`](#--message-msg) to have the same result.
 
-> ![WARNING] 
+
+Below is a full demo of how you can use a preset with full configuration
+
+```json
+{
+    "$schema": "node_modules/@lerna-lite/cli/schemas/lerna-schema.json",
+    "version": "1.0.0",
+    "changelogPreset": {
+      "name": "conventionalcommits",
+      "issueUrlFormat": "{{host}}/{{owner}}/{{repository}}/issues/{{id}}",
+      "types": [
+        {
+          "type": "feat",
+          "section": "✨ Features"
+        },
+        {
+          "type": "fix",
+          "section": "🐛 Bug Fixes"
+        },
+        {
+          "type": "perf",
+          "section": "🚀 Performance Improvements"
+        },
+        {
+          "type": "chore",
+          "hidden": true
+        },
+        {
+          "type": "docs",
+          "hidden": true
+        },
+        {
+          "type": "style",
+          "hidden": true
+        },
+        {
+          "type": "refactor",
+          "hidden": true
+        },
+        {
+          "type": "test",
+          "hidden": true
+        }
+      ],
+      "issuePrefixes": ["#"],
+      "commitUrlFormat": "{{host}}/{{owner}}/{{repository}}/commit/{{hash}}",
+      "compareUrlFormat": "{{host}}/{{owner}}/{{repository}}/compare/{{previousTag}}...{{currentTag}}",
+      "userUrlFormat": "{{host}}/{{user}}",
+      "writerOpts": {
+        "commitPartial": "- {{message}}\n"
+      }
+  },
+  "packages": ["packages/*"]
+}
+```
+
+> [!WARNING] 
 > When using `conventional-changelog-conventionalcommits` with other tools for example [`@commitlint/config-conventional`](https://www.npmjs.com/package/@commitlint/config-conventional), you may need to override the version of the transitive `conventional-changelog-conventionalcommits` dependency, like so:
 >
 > ```json

@@ -106,7 +106,7 @@ describe('npm modern lock file', () => {
     if (lockFileOutput!.json) {
       for (const pkg of packages) {
         pkg.version = mockVersion;
-        await updateTempModernLockfileVersion(pkg as unknown as Package, lockFileOutput!.json);
+        updateTempModernLockfileVersion(pkg as unknown as Package, lockFileOutput!.json);
       }
       await saveUpdatedLockJsonFile(lockFileOutput!.path, lockFileOutput!.json);
     }

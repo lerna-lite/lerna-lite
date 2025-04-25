@@ -2,7 +2,7 @@
   extends: ['config:base', 'group:allNonMajor'],
   labels: ['dependencies'],
   ignorePaths: ['helpers', '**/__fixtures__/**', '**/__tests__/**'],
-  lockFileMaintenance: { enabled: false },
+  lockFileMaintenance: { enabled: true },
   pin: false,
   rangeStrategy: 'bump',
   packageRules: [

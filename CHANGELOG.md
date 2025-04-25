@@ -4,6 +4,34 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [4.0.0](https://github.com/lerna-lite/lerna-lite/compare/v3.12.3...v4.0.0) (2025-03-28)
+
+> [!NOTE]
+> Please visit the [v4.0.0](https://github.com/lerna-lite/lerna-lite/releases/tag/v4.0.0) release for more details about the migration.
+
+### ⚠ BREAKING CHANGES
+
+* **deps:** update all major npm & other deps (#1008)
+* **deps:** bump minimum Node version to ^20.17.0 || >=22.9.0 (#1000)
+* **version:** change default "describe [Git] tag" pattern to `v*` (#1001)
+* **watch:** upgrade Chokidar to v4.0 major version (#1004)
+* **deps:** remove `node-fetch`, fixes punycode warning (#998)
+* **deps:** upgrade all conventional-changelog-* to major versions (#997)
+
+### Bug Fixes
+
+* **deps:** bump minimum Node version to ^20.17.0 || >=22.9.0 ([#1000](https://github.com/lerna-lite/lerna-lite/issues/1000)) ([9a87d82](https://github.com/lerna-lite/lerna-lite/commit/9a87d82ff71f274dd41a0cd85f9036f11c2525b7)) - by @ghiscoding
+* **deps:** update all major npm & other deps ([#1008](https://github.com/lerna-lite/lerna-lite/issues/1008)) ([332a1c0](https://github.com/lerna-lite/lerna-lite/commit/332a1c0c06dbb2d7354fecf53c3433e8d1d5e2bf)) - by @ghiscoding
+* **deps:** update inquirer packages ([#996](https://github.com/lerna-lite/lerna-lite/issues/996)) ([6eb5a80](https://github.com/lerna-lite/lerna-lite/commit/6eb5a80d9dd42898b8028712cd15abc7959ade3b)) - by @renovate[bot]
+* **deps:** upgrade all conventional-changelog-* to major versions ([#997](https://github.com/lerna-lite/lerna-lite/issues/997)) ([df2d462](https://github.com/lerna-lite/lerna-lite/commit/df2d46206b791064dd476bd20ec133766b6f8afa)) - by @ghiscoding
+* **publish:** replace +{SHA} with .{SHA} in lerna publish --canary ([#999](https://github.com/lerna-lite/lerna-lite/issues/999)) ([26da1a9](https://github.com/lerna-lite/lerna-lite/commit/26da1a9ba36a2fb71b082786572f1edb5ee19efc)) - by @ghiscoding
+* **version:** change default "describe [Git] tag" pattern to `v*` ([#1001](https://github.com/lerna-lite/lerna-lite/issues/1001)) ([6b0f1e9](https://github.com/lerna-lite/lerna-lite/commit/6b0f1e90ac50437f355fd2c92fe9e4e964ecadc4)) - by @ghiscoding
+* **watch:** upgrade Chokidar to v4.0 major version ([#1004](https://github.com/lerna-lite/lerna-lite/issues/1004)) ([d376975](https://github.com/lerna-lite/lerna-lite/commit/d3769750b63446f83f04ae797fbdb8863a18c311)) - by @ghiscoding
+
+### Miscellaneous Chores
+
+* **deps:** remove `node-fetch`, fixes punycode warning ([#998](https://github.com/lerna-lite/lerna-lite/issues/998)) ([f3c6388](https://github.com/lerna-lite/lerna-lite/commit/f3c6388f98875bba817a17fdfc0864e58cab1d11)) - by @ghiscoding
+
 ## [3.12.3](https://github.com/lerna-lite/lerna-lite/compare/v3.12.2...v3.12.3) (2025-03-12)
 
 ### Bug Fixes

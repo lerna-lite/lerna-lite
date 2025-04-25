@@ -374,7 +374,7 @@ export class VersionCommand extends Command<VersionCommandOption> {
     }
 
     const versionsForUpdate = await this.getVersionsForUpdates();
-    await this.setUpdatesForVersions(versionsForUpdate);
+    this.setUpdatesForVersions(versionsForUpdate);
     return this.confirmVersions();
   }
 
@@ -620,7 +620,7 @@ export class VersionCommand extends Command<VersionCommandOption> {
 
   confirmVersions(): Promise<boolean> | boolean {
     const changes = this.packagesToVersion.map((pkg) => {
-      let line = ` - ${pkg.name ?? '[n/a]'}: ${pkg.version} => ${c.cyan(this.updatesVersions?.get(pkg?.name ?? ''))}`;
+      let line = ` - ${pkg.name ?? '[n/a]'}: ${pkg.version} => ${c.cyan(this.updatesVersions?.get(pkg.name ?? ''))}`;
       if (pkg.private) {
         line += ` (${c.red('private')})`;
       }
@@ -671,7 +671,7 @@ export class VersionCommand extends Command<VersionCommandOption> {
       (pkg: Package) => pkg.refresh(),
       (pkg: Package) => {
         // set new version
-        pkg.set('version', this.updatesVersions?.get(pkg?.name ?? ''));
+        pkg.set('version', this.updatesVersions?.get(pkg.name ?? ''));
 
         // update pkg dependencies
         for (const [depName, resolved] of this.packageGraph?.get(pkg.name)!.localDependencies) {

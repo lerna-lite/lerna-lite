@@ -12,35 +12,35 @@ describe('parseField()', () => {
 
   it("should return True when input field is 'true'", () => {
     const input = true;
-    const output = parseField(`${input}`, 'version');
+    const output = parseField(input, 'version');
 
     expect(output).toBeTruthy();
   });
 
   it("should return False when input field is 'false'", () => {
     const input = false;
-    const output = parseField(`${input}`, 'version');
+    const output = parseField(input, 'version');
 
     expect(output).toBeFalsy();
   });
 
   it("should return Null when input field is 'null'", () => {
     const input = null;
-    const output = parseField(`${input}`, 'version');
+    const output = parseField(input, 'version');
 
     expect(output).toBeNull();
   });
 
   it("should return Undefined when input field is 'undefined'", () => {
     const input = undefined;
-    const output = parseField(`${input}`, 'version');
+    const output = parseField(input, 'version');
 
     expect(output).toBeUndefined();
   });
 
   it('should return number when key is found to be a Number in types.ts filed', () => {
     const input = 123;
-    const output = parseField(`${input}`, 'searchlimit');
+    const output = parseField(input, 'searchlimit');
 
     expect(output).toBe(123);
   });

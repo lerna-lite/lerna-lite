@@ -9,7 +9,8 @@
 Watch for changes within packages and execute commands from the root of the repository, for example, trigger a rebuild of packages when any of its files change.
 
 > **Note** the `watch` command also exists in the original [Lerna](https://github.com/lerna/lerna), however their implementation uses Nx (no surprises) to watch for file changes. Since we want to keep Lerna-Lite well... light, we opted to use [`Chokidar`](https://github.com/paulmillr/chokidar), it is used by millions of packages (even ViteJS uses it), so chances are that you already have it installed directly or indirectly. Even though Lerna and Lerna-Lite differs in their internal implementations, their usage are nearly identical (apart from the [Chokidar options](#chokidar-options) that we also provide).
-
+>
+> We originally used `chokidar@3` but later migrated to `chokidar@4` in Lerna-Lite v4.0
 ---
 
 ## Installation
@@ -29,7 +30,7 @@ $ lerna watch -- <command>
 
 The values `$LERNA_PACKAGE_NAME` and `$LERNA_FILE_CHANGES` will be replaced with the package name, the file that changed respectively. If multiple file changes are detected, they will all be listed and separated by a whitespace (unless a custom file delimiter is provided).
 
-> **Note** When using these environment variables in the shell, you will need to escape the dollar sign with a backslash (`\`). See the [examples](#examples) below.
+> **Note** When using these environment variables in the shell, you will need to escape the dollar symbol with a backslash (`\$`). See the [examples](#examples) below.
 
 ### Examples
 
@@ -99,6 +100,10 @@ $ npx -c 'lerna watch -- echo \$LERNA_PACKAGE_NAME \$LERNA_FILE_CHANGES'
 }
 ```
 
+Below are basic samples added directly in Lerna-Lite which are used (manually) to test its own watch command (basically what was created/used to implement & test the watch with chokidar)
+
+https://github.com/lerna-lite/lerna-lite/blob/ab731935f452c79deb668a76e41814eee812b772/package.json#L25-L27
+
 ## Options
 
 `lerna watch` accepts all [filter flags](https://github.com/lerna-lite/lerna-lite/blob/main/packages/core/README.md#options). Filter flags can be used to select specific packages to watch. See the [examples](#examples) above.
@@ -118,6 +123,7 @@ $ npx -c 'lerna watch -- echo \$LERNA_PACKAGE_NAME \$LERNA_FILE_CHANGES'
     - [`--depth`](#--depth)
     - [`--disable-globbing`](#--disable-globbing)
     - [`--follow-symlinks`](#--follow-symlinks)
+    - `ignored` (not supported, see watch [`--ignored`](#--ignored) option above instead)
     - [`--ignore-initial`](#--ignore-initial)
     - [`--ignore-permission-errors`](#--ignore-permission-errors)
     - [`--interval`](#--interval)
@@ -167,7 +173,7 @@ $ lerna watch --ignored=\"/(^|[/\\])\../\" -- <command>
 > **Note** the `lerna watch` command skips `.git/`, `dist/` and `node_modules/` directories by default. If you want to watch files inside any of these directories, you can pass a negated glob pattern, that is `lerna watch --ignored=\"!**/node_modules/**\"`
 
 > [!NOTE]
-> The `ignored` option only accept glob pattern (string or array of strings) and we then use [`tinyglobby`](https://www.npmjs.com/package/tinyglobby) internally to find out which files to watch. Please also note that this option is no longer the same as Chokidar@4 `ignored` option because their implementation no longer accept globs anymore but Lerna-Lite watch does.
+> The watch `ignored` option only accept glob patterns (string or array of strings) and then internally we use [`tinyglobby`](https://www.npmjs.com/package/tinyglobby) to find out the file list of files to watch (or ignore). Please also note that this option is no longer the same as Chokidar@4 `ignored` option because their implementation no longer accept globs but Lerna-Lite watch still do.
 
 ### `--stream`
 
@@ -194,7 +200,7 @@ Disable package name prefixing when output is streaming (`--stream` _or_ `--para
 This option can be useful when piping results to other processes, such as editor plugins.
 
 ## Chokidar Options
-Most [`Chokidar`](https://github.com/paulmillr/chokidar) options are available and exposed (except `cwd` which is required internally). The option descriptions below are summarized, refer to the Chokidar [options](https://github.com/paulmillr/chokidar#api) website for more detailed informations.
+Most [`Chokidar`](https://github.com/paulmillr/chokidar) options are available and exposed (except `cwd` and `ignored` because `chokidar@4` itself no longer accept globs, see [`--ignored`](#--ignored) option to see our own custom option that accepts globs). The option descriptions below are summarized, please visit the Chokidar [options](https://github.com/paulmillr/chokidar#api) website for more detailed informations.
 
 ### `--atomic`
 
@@ -229,6 +235,10 @@ Defaults to `true`, when `false` is provided, only the symlinks themselves will 
 ```sh
 $ lerna watch --follow-symlinks -- <command>
 ```
+
+ ### `ignored` (not supported, see [`--ignored`](#--ignored) instead)
+
+ Chokidar `ignored` option is not exposed because they don't support globs anymore, however Lerna-Lite watch has its own custom [`--ignored`](#--ignored) option which has the same name and it does accept glob patterns, so just take a look at our watch [`--ignored`](#--ignored) option above.
 
 ### `--ignore-initial`
 

@@ -82,9 +82,9 @@ export class Package {
    */
   constructor(pkg: RawManifest, location: string, rootPath = location) {
     // npa will throw an error if the name is invalid
-    const resolved = npa.resolve(pkg?.name ?? '', `file:${relative(rootPath, location)}`, rootPath);
+    const resolved = npa.resolve(pkg.name ?? '', `file:${relative(rootPath, location)}`, rootPath);
 
-    this.name = pkg?.name ?? '';
+    this.name = pkg.name ?? '';
     this[PKG] = pkg;
 
     // omit raw pkg from default util.inspect() output, but preserve internal mutability
@@ -260,7 +260,7 @@ export class Package {
    */
   removeDependencyWorkspaceProtocolPrefix(pkgName: string, resolved: NpaResolveResult) {
     const depName = resolved.name as string;
-    const workspaceSpec = resolved?.workspaceSpec ?? '';
+    const workspaceSpec = resolved.workspaceSpec ?? '';
     const inspectDependencies = this.retrieveAllDependenciesWithName(depName, [
       'dependencies',
       'devDependencies',
@@ -363,9 +363,9 @@ export class Package {
 
         // when using explicit `workspace:` protocol
         if (resolved.workspaceSpec) {
-          const workspaceSpec = resolved?.workspaceSpec ?? '';
+          const workspaceSpec = resolved.workspaceSpec ?? '';
           const [_, _wsTxt, operatorPrefix, rangePrefix, semver] =
-            workspaceSpec.match(/^(workspace:)?([<>=]{0,2})?([*|~|^])?(.*)$/) || [];
+            workspaceSpec.match(/^(workspace:)?([<>=]{0,2})?([*~^])?(.*)$/) || [];
 
           if (operatorPrefix) {
             // package with range operator should never be bumped, we'll use same version range but without prefix "workspace:>=1.2.3" will assign ">=1.2.3"
@@ -391,7 +391,7 @@ export class Package {
             // when versioning we'll only bump workspace protocol that have semver range like `workspace:^1.2.3`
             // any other workspace will remain the same in `package.json` file, for example `workspace:^`
             // keep target workspace or bump when it's a workspace semver range (like `workspace:^1.2.3`)
-            depCollection[depName] = /^workspace:[*|~|^]{1}$/.test(workspaceSpec)
+            depCollection[depName] = /^workspace:[*~^]{1}$/.test(workspaceSpec)
               ? (resolved.workspaceSpec as string) // target like `workspace:^` => `workspace:^` (remains untouched in package.json)
               : `workspace:${depCollection[depName]}`; // range like `workspace:^1.2.3` => `workspace:^1.3.3` (bump minor example)
           }

@@ -29,7 +29,6 @@ describe('.execPackageManagerSync()', () => {
     });
 
     it('calls execSync with corepack when enabled', () => {
-      Object.assign({}, process.env);
       process.env.COREPACK_ROOT = 'pnpm';
 
       execPackageManagerSync('echo', ['execPackageManagerSync']);
@@ -72,7 +71,6 @@ describe('.execPackageManager()', () => {
     });
 
     it('calls exec with corepack when enabled', () => {
-      Object.assign({}, process.env);
       process.env.COREPACK_ROOT = 'pnpm';
 
       execPackageManager('echo', ['execPackageManager']);

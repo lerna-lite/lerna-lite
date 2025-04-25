@@ -1,6 +1,6 @@
 {
   "$schema": "node_modules/@lerna-lite/cli/schemas/lerna-schema.json",
-  "version": "3.12.3",
+  "version": "4.0.0",
   "loglevel": "verbose",
   "npmClient": "pnpm",
   "command": {
@@ -20,7 +20,7 @@
       "message": "chore(release): publish new version %s"
     }
   },
-  "changelogPreset": "conventional-changelog-conventionalcommits",
+  "changelogPreset": "conventionalcommits",
   "ignoreChanges": [
     "**/__fixtures__/**",
     "**/__tests__/**",

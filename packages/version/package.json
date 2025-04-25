@@ -1,7 +1,7 @@
 {
   "name": "@lerna-lite/version",
   "description": "Bump version & write changelog of packages changed since the last release",
-  "version": "3.12.3",
+  "version": "4.0.0",
   "files": [
     "/dist"
   ],
@@ -49,7 +49,7 @@
     "dedent": "catalog:",
     "fs-extra": "catalog:",
     "get-stream": "^9.0.1",
-    "git-url-parse": "^16.0.1",
+    "git-url-parse": "^16.1.0",
     "graceful-fs": "^4.2.11",
     "is-stream": "^4.0.1",
     "load-json-file": "catalog:",
@@ -73,7 +73,7 @@
     "@npm/types": "^2.0.0",
     "@types/dedent": "catalog:",
     "@types/fs-extra": "catalog:",
-    "@types/git-url-parse": "^9.0.3",
+    "@types/git-url-parse": "^16.0.2",
     "@types/js-yaml": "^4.0.9",
     "@types/minimatch": "catalog:",
     "@types/npm-package-arg": "catalog:",
