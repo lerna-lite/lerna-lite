@@ -73,7 +73,6 @@
     "@npm/types": "^2.0.0",
     "@types/dedent": "catalog:",
     "@types/fs-extra": "catalog:",
-    "@types/git-url-parse": "^16.0.2",
     "@types/js-yaml": "^4.0.9",
     "@types/minimatch": "catalog:",
     "@types/npm-package-arg": "catalog:",
