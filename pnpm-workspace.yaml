@@ -17,7 +17,7 @@ catalog:
   columnify: ^1.6.0
   dedent: ^1.5.3
   dotenv: ^16.4.7
-  execa: ^8.0.1
+  execa: ^9.5.2
   fs-extra: ^11.3.0
   has-unicode: ^2.0.1
   load-json-file: ^7.0.1
