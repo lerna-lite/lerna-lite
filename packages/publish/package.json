@@ -40,7 +40,7 @@
     "@lerna-lite/core": "workspace:*",
     "@lerna-lite/npmlog": "workspace:*",
     "@lerna-lite/version": "workspace:*",
-    "@npmcli/arborist": "^9.0.1",
+    "@npmcli/arborist": "^9.0.2",
     "@npmcli/package-json": "^6.1.1",
     "byte-size": "^9.0.1",
     "columnify": "catalog:",
