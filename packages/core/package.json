@@ -65,7 +65,7 @@
     "write-file-atomic": "^6.0.0",
     "write-json-file": "catalog:",
     "write-package": "catalog:",
-    "yaml": "2.7.0"
+    "yaml": "2.7.1"
   },
   "devDependencies": {
     "@types/clone-deep": "^4.0.4",
