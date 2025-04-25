@@ -1,6 +1,6 @@
 import { log } from '@lerna-lite/npmlog';
 import { execa, execaSync } from 'execa';
-import type { Options as ExecaOptions, SyncOptions as ExacaSyncOptions, ExecaChildProcess } from 'execa';
+import type { Options as ExecaOptions, SyncOptions as ExacaSyncOptions, ResultPromise } from 'execa';
 import { constants } from 'node:os';
 import logTransformer from 'strong-log-transformer';
 import c from 'tinyrainbow';
@@ -42,7 +42,7 @@ export function execSync(command: string, args?: string[], opts?: ExacaSyncOptio
   // prettier-ignore
   return dryRun
     ? logExecCommand(command, args)
-    : execaSync(command, args, opts).stdout;
+    : execaSync(command, args, opts).stdout as string;
 }
 
 /**
@@ -78,7 +78,7 @@ export function spawnStreaming(
   const options: any = Object.assign({}, opts);
   options.stdio = ['ignore', 'pipe', 'pipe'];
 
-  const spawned = spawnProcess(command, args, options, dryRun) as ExecaChildProcess<string>;
+  const spawned = spawnProcess(command, args, options, dryRun) as ResultPromise<ExecaOptions & { pkg: Package }>;
 
   const stdoutOpts: any = {};
   const stderrOpts: any = {}; // mergeMultiline causes escaped newlines :P
@@ -162,7 +162,7 @@ export function spawnProcess(command: string, args: string[], opts: ExecaOptions
  * @param {string[]} args
  * @param {import("execa").Options} [opts]
  */
-export function wrapError(spawned: ExecaChildProcess & { pkg?: Package }) {
+export function wrapError(spawned: any) {
   if (spawned.pkg) {
     return spawned.catch((err: any) => {
       // ensure exit code is always a number
@@ -183,7 +183,7 @@ export function wrapError(spawned: ExecaChildProcess & { pkg?: Package }) {
  * @param {string} command
  * @param {string[]} args
  */
-export function logExecCommand(command: string, args?: string[]) {
+export function logExecCommand(command: string, args?: string[]): string {
   const argStr = (Array.isArray(args) ? args.join(' ') : args) ?? '';
 
   const cmdList: string[] = [];
