@@ -7,7 +7,7 @@ import { describeRefSync } from '../describe-ref.js';
 import { collectPackages } from './lib/collect-packages.js';
 import { getPackagesForOption } from './lib/get-packages-for-option.js';
 import { hasTags } from './lib/has-tags.js';
-import { makeDiffPredicate } from './lib/make-diff-predicate.js';
+import { diffWorkspaceCatalog, makeDiffPredicate } from './lib/make-diff-predicate.js';
 
 /**
  * Create a list of graph nodes representing packages changed since the previous release, tagged or otherwise.
@@ -46,6 +46,7 @@ export function collectUpdates(
   let committish = commandOptions.since;
   const tagPattern = describeTag ? describeTag : isIndependent ? '*@*' : 'v*';
 
+  let prevTag = '';
   if (hasTags(execOpts, tagPattern)) {
     const describeOptions: DescribeRefOptions = {
       ...execOpts,
@@ -55,6 +56,7 @@ export function collectUpdates(
 
     // describe the last annotated tag in the current branch
     const { sha, refCount, lastTagName } = describeRefSync(describeOptions, commandOptions.includeMergedTags);
+    prevTag = lastTagName || '';
     // TODO: warn about dirty tree?
 
     if (refCount === '0' && forced.size === 0 && !committish) {
@@ -101,9 +103,20 @@ export function collectUpdates(
 
   log.info('', `Looking for changed packages since ${committish}`);
 
-  const hasDiff = makeDiffPredicate(committish as string, execOpts, commandOptions.ignoreChanges as string[], {
-    independentSubpackages,
-  });
+  const changedCatalogDeps: string[] = [];
+  if (prevTag && packageGraph.hasWorkspaceCatalog) {
+    changedCatalogDeps.push(...diffWorkspaceCatalog(prevTag));
+  }
+
+  const hasDiff = makeDiffPredicate(
+    committish as string,
+    execOpts,
+    commandOptions.ignoreChanges as string[],
+    changedCatalogDeps,
+    {
+      independentSubpackages,
+    }
+  );
   const needsBump =
     !commandOptions.bump || commandOptions.bump.startsWith('pre')
       ? () => false
