@@ -38,7 +38,7 @@
   "dependencies": {
     "@inquirer/expand": "^4.0.12",
     "@inquirer/input": "^4.1.9",
-    "@inquirer/select": "^4.1.1",
+    "@inquirer/select": "^4.2.0",
     "@lerna-lite/npmlog": "workspace:*",
     "@npmcli/run-script": "^9.1.0",
     "clone-deep": "^4.0.1",

@@ -287,8 +287,8 @@ importers:
         specifier: ^4.1.9
         version: 4.1.9(@types/node@22.15.2)
       '@inquirer/select':
-        specifier: ^4.1.1
-        version: 4.1.1(@types/node@22.15.2)
+        specifier: ^4.2.0
+        version: 4.2.0(@types/node@22.15.2)
       '@lerna-lite/npmlog':
         specifier: workspace:*
         version: link:../npmlog
@@ -1177,8 +1177,8 @@ packages:
       '@types/node':
         optional: true
 
-  '@inquirer/select@4.1.1':
-    resolution: {integrity: sha512-IUXzzTKVdiVNMA+2yUvPxWsSgOG4kfX93jOM4Zb5FgujeInotv5SPIJVeXQ+fO4xu7tW8VowFhdG5JRmmCyQ1Q==}
+  '@inquirer/select@4.2.0':
+    resolution: {integrity: sha512-KkXQ4aSySWimpV4V/TUJWdB3tdfENZUU765GjOIZ0uPwdbGIG6jrxD4dDf1w68uP+DVtfNhr1A92B+0mbTZ8FA==}
     engines: {node: '>=18'}
     peerDependencies:
       '@types/node': '>=18'
@@ -3833,7 +3833,7 @@ snapshots:
     optionalDependencies:
       '@types/node': 22.15.2
 
-  '@inquirer/select@4.1.1(@types/node@22.15.2)':
+  '@inquirer/select@4.2.0(@types/node@22.15.2)':
     dependencies:
       '@inquirer/core': 10.1.10(@types/node@22.15.2)
       '@inquirer/figures': 1.0.11
