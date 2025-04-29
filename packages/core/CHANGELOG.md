@@ -4,6 +4,20 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [4.1.0](https://github.com/lerna-lite/lerna-lite/compare/v4.0.0...v4.1.0) (2025-04-29)
+
+### Features
+
+* **core:** upgrade to Execa v9 ([#1019](https://github.com/lerna-lite/lerna-lite/issues/1019)) ([0e41889](https://github.com/lerna-lite/lerna-lite/commit/0e41889d15ddb6e968b987598406d666749298ec)) - by @ghiscoding
+
+### Bug Fixes
+
+* **core:** fix wrong regexp about workspace protocol ([#1012](https://github.com/lerna-lite/lerna-lite/issues/1012)) ([eb4c47c](https://github.com/lerna-lite/lerna-lite/commit/eb4c47ca5ab08866f0abbab842b24d7c85b240a9)) - by @Mister-Hope
+* **deps:** update all non-major dependencies ([#1014](https://github.com/lerna-lite/lerna-lite/issues/1014)) ([cbf1ff0](https://github.com/lerna-lite/lerna-lite/commit/cbf1ff0681cb0ec3f76dc9f7de54d5531d3415af)) - by @renovate[bot]
+* **deps:** update dependency @inquirer/select to ^4.2.0 ([#1022](https://github.com/lerna-lite/lerna-lite/issues/1022)) ([ba1b380](https://github.com/lerna-lite/lerna-lite/commit/ba1b3806a9f59fa8038d5e2dec4c47365d06f04f)) - by @renovate[bot]
+* **deps:** update inquirer packages ([#1015](https://github.com/lerna-lite/lerna-lite/issues/1015)) ([c16622a](https://github.com/lerna-lite/lerna-lite/commit/c16622ae73580b77cbc44de88cd9032acf2d9c0a)) - by @renovate[bot]
+* **version:** pnpm catalog changes should be reflected in packages ([#1023](https://github.com/lerna-lite/lerna-lite/issues/1023)) ([1058573](https://github.com/lerna-lite/lerna-lite/commit/10585739a0c85191d7a8f5aa0aaa7f97b34d2752)) - by @ghiscoding
+
 ## [4.0.0](https://github.com/lerna-lite/lerna-lite/compare/v3.12.3...v4.0.0) (2025-03-28)
 
 > [!NOTE]

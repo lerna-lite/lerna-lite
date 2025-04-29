@@ -4,6 +4,13 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [4.1.0](https://github.com/lerna-lite/lerna-lite/compare/v4.0.0...v4.1.0) (2025-04-29)
+
+### Bug Fixes
+
+* **deps:** update all non-major dependencies ([#1014](https://github.com/lerna-lite/lerna-lite/issues/1014)) ([cbf1ff0](https://github.com/lerna-lite/lerna-lite/commit/cbf1ff0681cb0ec3f76dc9f7de54d5531d3415af)) - by @renovate[bot]
+* **version:** pnpm catalog changes should be reflected in packages ([#1023](https://github.com/lerna-lite/lerna-lite/issues/1023)) ([1058573](https://github.com/lerna-lite/lerna-lite/commit/10585739a0c85191d7a8f5aa0aaa7f97b34d2752)) - by @ghiscoding
+
 ## [4.0.0](https://github.com/lerna-lite/lerna-lite/compare/v3.12.3...v4.0.0) (2025-03-28)
 
 > [!NOTE]
