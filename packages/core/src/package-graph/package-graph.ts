@@ -1,6 +1,6 @@
 import { log } from '@lerna-lite/npmlog';
-import fs from 'node:fs';
-import path from 'node:path';
+import { existsSync, readFileSync } from 'node:fs';
+import { join } from 'node:path';
 import npa from 'npm-package-arg';
 import { parse } from 'yaml';
 
@@ -31,6 +31,9 @@ export const YARN_PATCH_PROTOCOL_REG_EXP = new RegExp(`patch:(.*)@npm%3A(.*)#~\\
  * @extends {Map<string, PackageGraphNode>}
  */
 export class PackageGraph extends Map<string, PackageGraphNode> {
+  /** does the workspace project use pnpm catalog? */
+  hasWorkspaceCatalog = false;
+
   /**
    * @param {Package[]} packages - An array of Packages to build the graph out of.
    * @param {'allDependencies' | 'dependencies'} [graphType]
@@ -70,6 +73,10 @@ export class PackageGraph extends Map<string, PackageGraphNode> {
     }
 
     const { catalog, catalogs } = this.readWorkspaceCatalogConfig();
+
+    if (Object.keys(catalog).length > 0 || Object.keys(catalogs).length > 0) {
+      this.hasWorkspaceCatalog = true;
+    }
 
     this.forEach((currentNode: PackageGraphNode, currentName: string) => {
       const graphDependencies =
@@ -183,9 +190,9 @@ export class PackageGraph extends Map<string, PackageGraphNode> {
   }
 
   readWorkspaceCatalogConfig() {
-    const workspaceConfigPath = path.join(process.cwd(), 'pnpm-workspace.yaml');
-    const { catalog = {}, catalogs = {} } = fs.existsSync(workspaceConfigPath)
-      ? parse(fs.readFileSync(workspaceConfigPath, 'utf8'))
+    const workspaceConfigPath = join(process.cwd(), 'pnpm-workspace.yaml');
+    const { catalog = {}, catalogs = {} } = existsSync(workspaceConfigPath)
+      ? parse(readFileSync(workspaceConfigPath, 'utf8'))
       : {};
 
     return {

@@ -15,7 +15,7 @@ vi.mock('glob', async () => ({
 // mocked modules
 import { describeRefSync } from '../../describe-ref.js';
 import { hasTags } from '../lib/has-tags.js';
-import { makeDiffPredicate } from '../lib/make-diff-predicate.js';
+import { diffWorkspaceCatalog, makeDiffPredicate } from '../lib/make-diff-predicate.js';
 
 // helpers
 import buildGraph from '../__helpers__/build-graph.js';
@@ -41,6 +41,7 @@ const hasDiff = vi
   .mockImplementation((node) => changedPackages.has(node.name));
 
 (makeDiffPredicate as Mock).mockImplementation(() => hasDiff);
+(diffWorkspaceCatalog as Mock).mockReturnValue([]);
 
 // matcher constants
 const ALL_NODES = Object.freeze([
@@ -80,7 +81,7 @@ describe('collectUpdates()', () => {
     ]);
     expect(hasTags).toHaveBeenLastCalledWith(execOpts, 'v*');
     expect(describeRefSync).toHaveBeenLastCalledWith({ cwd: '/test', match: 'v*' }, undefined);
-    expect(makeDiffPredicate).toHaveBeenLastCalledWith('v1.0.0', execOpts, undefined, {
+    expect(makeDiffPredicate).toHaveBeenLastCalledWith('v1.0.0', execOpts, undefined, [], {
       independentSubpackages: undefined,
     });
   });
@@ -103,7 +104,7 @@ describe('collectUpdates()', () => {
     ]);
     expect(hasTags).toHaveBeenLastCalledWith(execOpts, '*@*');
     expect(describeRefSync).toHaveBeenLastCalledWith(execOpts, undefined);
-    expect(makeDiffPredicate).toHaveBeenLastCalledWith('v1.0.0', execOpts, undefined, {
+    expect(makeDiffPredicate).toHaveBeenLastCalledWith('v1.0.0', execOpts, undefined, [], {
       independentSubpackages: undefined,
     });
   });
@@ -398,7 +399,7 @@ describe('collectUpdates()', () => {
     });
 
     expect(updates).toEqual([expect.objectContaining({ name: 'package-dag-2a' }), expect.objectContaining({ name: 'package-dag-3' })]);
-    expect(makeDiffPredicate).toHaveBeenLastCalledWith('deadbeef^..deadbeef', execOpts, undefined, {
+    expect(makeDiffPredicate).toHaveBeenLastCalledWith('deadbeef^..deadbeef', execOpts, undefined, [], {
       independentSubpackages: undefined,
     });
   });
@@ -412,7 +413,7 @@ describe('collectUpdates()', () => {
       since: 'beefcafe',
     });
 
-    expect(makeDiffPredicate).toHaveBeenLastCalledWith('beefcafe', execOpts, undefined, {
+    expect(makeDiffPredicate).toHaveBeenLastCalledWith('beefcafe', execOpts, undefined, [], {
       independentSubpackages: undefined,
     });
   });
@@ -449,7 +450,7 @@ describe('collectUpdates()', () => {
       ignoreChanges: ['**/README.md'],
     });
 
-    expect(makeDiffPredicate).toHaveBeenLastCalledWith('v1.0.0', execOpts, ['**/README.md'], {
+    expect(makeDiffPredicate).toHaveBeenLastCalledWith('v1.0.0', execOpts, ['**/README.md'], [], {
       independentSubpackages: undefined,
     });
   });
@@ -464,7 +465,7 @@ describe('collectUpdates()', () => {
       independentSubpackages: true,
     });
 
-    expect(makeDiffPredicate).toHaveBeenLastCalledWith('v1.0.0', execOpts, undefined, {
+    expect(makeDiffPredicate).toHaveBeenLastCalledWith('v1.0.0', execOpts, undefined, [], {
       independentSubpackages: true,
     });
   });
