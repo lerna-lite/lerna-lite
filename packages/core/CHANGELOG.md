@@ -4,6 +4,12 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [4.1.1](https://github.com/lerna-lite/lerna-lite/compare/v4.1.0...v4.1.1) (2025-04-29)
+
+### Bug Fixes
+
+* pnpm local catalog changes should be reflected in packages ([#1028](https://github.com/lerna-lite/lerna-lite/issues/1028)) ([20479ca](https://github.com/lerna-lite/lerna-lite/commit/20479ca8f6a33b4f930af7198222e60bf914c2e7)) - by @ghiscoding
+
 ## [4.1.0](https://github.com/lerna-lite/lerna-lite/compare/v4.0.0...v4.1.0) (2025-04-29)
 
 ### Features
