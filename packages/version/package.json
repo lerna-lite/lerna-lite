@@ -70,7 +70,7 @@
     "write-json-file": "catalog:"
   },
   "devDependencies": {
-    "@npm/types": "^2.0.0",
+    "@npm/types": "^2.1.0",
     "@types/dedent": "catalog:",
     "@types/fs-extra": "catalog:",
     "@types/js-yaml": "^4.0.9",
