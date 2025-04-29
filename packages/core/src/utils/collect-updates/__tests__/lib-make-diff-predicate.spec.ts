@@ -48,6 +48,7 @@ test('empty diff', () => {
   const hasDiff = makeDiffPredicate('v1.0.0', { cwd: '/test' }, undefined, [], {});
   const result = hasDiff({
     location: '/test/packages/pkg-1',
+    localDependencies: new Map([]),
     externalDependencies: new Map([['pkg-2', {}]]),
   } as PackageGraphNode);
 
@@ -75,6 +76,7 @@ test('ignore changes (globstars)', () => {
   const hasDiff = makeDiffPredicate('v1.0.0', { cwd: '/test' }, ['**/examples/**', '*.md'], [], {});
   const result = hasDiff({
     location: '/test/packages/pkg-2',
+    localDependencies: new Map([]),
     externalDependencies: new Map([['pkg-2', {}]]),
   } as PackageGraphNode);
 
@@ -87,6 +89,7 @@ test('ignore changes (match base)', () => {
   const hasDiff = makeDiffPredicate('v1.0.0', { cwd: '/test' }, ['*.md'], [], {});
   const result = hasDiff({
     location: '/test/packages/pkg-3',
+    localDependencies: new Map([]),
     externalDependencies: new Map([['pkg-2', {}]]),
   } as PackageGraphNode);
 
@@ -103,6 +106,7 @@ test('exclude subpackages when --independent-subpackages option is enabled and n
   });
   const result = hasDiff({
     location: '/test/packages/pkg-2',
+    localDependencies: new Map([]),
     externalDependencies: new Map([['pkg-2', {}]]),
   } as PackageGraphNode);
 
@@ -126,6 +130,7 @@ test('not exclude any subpackages when --independent-subpackages option is enabl
   });
   const result = hasDiff({
     location: '/test/packages/pkg-2',
+    localDependencies: new Map([]),
     externalDependencies: new Map([['pkg-2', {}]]),
   } as PackageGraphNode);
 
@@ -135,13 +140,28 @@ test('not exclude any subpackages when --independent-subpackages option is enabl
   });
 });
 
-test('diffWorkspaceCatalog with changes in pnpm workspace catalog', () => {
+test('diffWorkspaceCatalog with external dependency changes in pnpm workspace catalog', () => {
   setup([]);
 
   const hasDiff = makeDiffPredicate('v1.0.0', { cwd: '/test' }, undefined, ['vite'], {});
   const result = hasDiff({
     location: '/test/packages/pkg-1',
+    localDependencies: new Map([]),
     externalDependencies: new Map([['vite', {}]]),
+  } as PackageGraphNode);
+
+  expect(result).toBe(true);
+  expect(childProcesses.execSync).toHaveBeenLastCalledWith('git', ['diff', '--name-only', 'v1.0.0', '--', 'packages/pkg-1'], { cwd: '/test' });
+});
+
+test('diffWorkspaceCatalog with local dependency changes in pnpm workspace catalog', () => {
+  setup([]);
+
+  const hasDiff = makeDiffPredicate('v1.0.0', { cwd: '/test' }, undefined, ['@mono/pkg-1'], {});
+  const result = hasDiff({
+    location: '/test/packages/pkg-1',
+    localDependencies: new Map([['@mono/pkg-1', {}]]),
+    externalDependencies: new Map([]),
   } as PackageGraphNode);
 
   expect(result).toBe(true);
@@ -167,7 +187,7 @@ test('diff workspace catalog returning dependencies that changed in the catalog'
   expect(changes).toEqual(['execa']);
 });
 
-test('diffWorkspaceCatalog returns changed dependencies when catalog values differ', () => {
+test('diffWorkspaceCatalog returns changed external dependencies when catalog values differ', () => {
   const prev = 'packages:\n  - packages/**\n\ncatalog:\n  execa: ^8.0.0\n  fs-extra: ^11.3.0';
   const curr = 'packages:\n  - packages/**\n\ncatalog:\n  execa: ^9.5.2\n  fs-extra: ^11.3.0';
   (readFileMock as Mock).mockReturnValueOnce(curr);
@@ -175,6 +195,16 @@ test('diffWorkspaceCatalog returns changed dependencies when catalog values diff
 
   const changes = diffWorkspaceCatalog('v1.0.0');
   expect(changes).toEqual(['execa']);
+});
+
+test('diffWorkspaceCatalog returns changed local dependencies when catalog values differ', () => {
+  const prev = 'packages:\n  - packages/**\n\ncatalog:\n  "@mono/pkg-1": ^8.0.0\n  fs-extra: ^11.3.0';
+  const curr = 'packages:\n  - packages/**\n\ncatalog:\n  "@mono/pkg-1": ^9.5.2\n  fs-extra: ^11.3.0';
+  (readFileMock as Mock).mockReturnValueOnce(curr);
+  (childProcesses.execSync as Mock).mockReturnValueOnce(prev);
+
+  const changes = diffWorkspaceCatalog('v1.0.0');
+  expect(changes).toEqual(['@mono/pkg-1']);
 });
 
 test('diffWorkspaceCatalog returns multiple changed dependencies', () => {
