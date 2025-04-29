@@ -26,6 +26,6 @@
       allowedVersions: '1.2.6',
     },
   ],
-  ignoreDeps: ['lee-dohm/no-response', 'node'],
+  ignoreDeps: ['lee-dohm/no-response', 'node', 'pnpm'],
   schedule: ['every 4 weeks on Tuesday'],
 }
