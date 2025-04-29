@@ -109,40 +109,51 @@ function diffSinceIn(committish: string, location: string, execOpts: ExecOpts, d
 }
 
 /**
- * When using pnpm workspace catalog(s), we will compare current catalogs against the previous commit's catalogs
+ * When using pnpm workspace catalog(s), we will compare current catalogs against the previous commited catalogs
  * and return dependencies that changed since then.
  */
 export function diffWorkspaceCatalog(prevTag: string): string[] {
-  const workspaceConfigPath = join(process.cwd(), 'pnpm-workspace.yaml');
-  const previousContents = execSync('git', ['show', `${prevTag}:pnpm-workspace.yaml`]);
-
-  // Get the current commit's file contents
-  const currentContents = readFileSync(workspaceConfigPath, 'utf8');
-
-  // Parse the YAML files
-  const previousConfig = parse(previousContents);
-  const currentConfig = parse(currentContents);
-
-  // Find the changed dependencies
   const changedDependencies: string[] = [];
-  Object.keys(currentConfig.catalog).forEach((key) => {
-    if (!previousConfig.catalog[key] || previousConfig.catalog[key] !== currentConfig.catalog[key]) {
-      changedDependencies.push(key);
-    }
-  });
+  try {
+    // Get the previous commit's file contents
+    const prevWorkspaceContent = execSync('git', ['show', `${prevTag}:pnpm-workspace.yaml`]);
 
-  const diffOutput = execSync('git', ['diff', `${prevTag}..HEAD`, '--', 'pnpm-workspace.yaml']);
-  const diffLines = diffOutput.split('\n');
-  const changedDependenciesFromDiff: string[] = [];
-  diffLines.forEach((line) => {
-    if (line.startsWith('+ catalog.') && line.includes(':')) {
-      const key = line.substring(11).split(':')[0].trim();
-      changedDependenciesFromDiff.push(key);
-    } else if (line.startsWith('+   ') && line.includes(':')) {
-      const key = line.substring(5).split(':')[0].trim();
-      changedDependenciesFromDiff.push(key);
+    // Get the current commit's file contents
+    const workspaceConfigPath = join(process.cwd(), 'pnpm-workspace.yaml');
+    const currentWorkspaceContent = readFileSync(workspaceConfigPath, 'utf8');
+
+    // Parse the YAML files
+    const previousConfig = parse(prevWorkspaceContent);
+    const currentConfig = parse(currentWorkspaceContent);
+
+    // If either config is missing catalog, fallback to diff
+    if (currentConfig.catalog) {
+      // Find the changed dependencies
+      Object.keys(currentConfig.catalog).forEach((key) => {
+        if (!previousConfig.catalog[key] || previousConfig.catalog[key] !== currentConfig.catalog[key]) {
+          changedDependencies.push(key);
+        }
+      });
+
+      const diffOutput = execSync('git', ['diff', `${prevTag}..HEAD`, '--', 'pnpm-workspace.yaml']);
+      const diffLines = diffOutput.split('\n');
+      diffLines.forEach((line) => {
+        if (line.startsWith('+  ') && line.includes(':')) {
+          const key = line.substring(3).split(':')[0].trim();
+          if (key && !changedDependencies.includes(key)) {
+            changedDependencies.push(key);
+          }
+        } else if (line.startsWith('+ catalog.') && line.includes(':')) {
+          const key = line.substring(10).split(':')[0].trim();
+          if (key && !changedDependencies.includes(key)) {
+            changedDependencies.push(key);
+          }
+        }
+      });
     }
-  });
+  } catch {
+    // do nothing, an empty array will be returned
+  }
 
   return changedDependencies;
 }
