@@ -68,7 +68,11 @@ export function makeDiffPredicate(
     }
 
     // last check, user might use pnpm catalog, if so check if current node package has changes found in catalog
-    if (!hasDiff && Array.from(node.externalDependencies).some(([depName]) => changedCatalogDeps.includes(depName))) {
+    if (
+      !hasDiff &&
+      (Array.from(node.externalDependencies).some(([depName]) => changedCatalogDeps.includes(depName)) ||
+        Array.from(node.localDependencies).some(([depName]) => changedCatalogDeps.includes(depName)))
+    ) {
       log.silly('', 'diff found in catalog dependencies on package %s', node.name);
       hasDiff = true;
     }
