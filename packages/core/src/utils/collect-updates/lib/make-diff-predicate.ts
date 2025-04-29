@@ -1,8 +1,7 @@
 import { log } from '@lerna-lite/npmlog';
-import { join } from 'node:path';
 import { filter as minimatchFilter } from 'minimatch';
 import { readFileSync } from 'node:fs';
-import { dirname, relative } from 'node:path';
+import { dirname, join, relative } from 'node:path';
 import slash from 'slash';
 import { globSync } from 'tinyglobby';
 import { parse } from 'yaml';
