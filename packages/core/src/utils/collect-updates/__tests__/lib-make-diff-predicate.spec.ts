@@ -140,7 +140,7 @@ test('not exclude any subpackages when --independent-subpackages option is enabl
   });
 });
 
-test('diffWorkspaceCatalog with changes in pnpm workspace catalog', () => {
+test('diffWorkspaceCatalog with external dependency changes in pnpm workspace catalog', () => {
   setup([]);
 
   const hasDiff = makeDiffPredicate('v1.0.0', { cwd: '/test' }, undefined, ['vite'], {});
@@ -154,7 +154,7 @@ test('diffWorkspaceCatalog with changes in pnpm workspace catalog', () => {
   expect(childProcesses.execSync).toHaveBeenLastCalledWith('git', ['diff', '--name-only', 'v1.0.0', '--', 'packages/pkg-1'], { cwd: '/test' });
 });
 
-test('diffWorkspaceCatalog with changes in pnpm workspace catalog', () => {
+test('diffWorkspaceCatalog with local dependency changes in pnpm workspace catalog', () => {
   setup([]);
 
   const hasDiff = makeDiffPredicate('v1.0.0', { cwd: '/test' }, undefined, ['@mono/pkg-1'], {});
