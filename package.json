@@ -57,10 +57,11 @@
   },
   "engines": {
     "node": "^20.17.0 || >=22.9.0",
-    "pnpm": "9.x"
+    "pnpm": "10.x"
   },
-  "packageManager": "pnpm@9.10.0",
+  "packageManager": "pnpm@10.10.0",
   "devDependencies": {
+    "@eslint/js": "^9.25.1",
     "@lerna-lite/changed": "workspace:*",
     "@lerna-lite/cli": "workspace:*",
     "@lerna-lite/core": "workspace:*",
