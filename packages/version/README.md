@@ -991,11 +991,12 @@ The pnpm `catalog:` protocol ([pnpm catalogs](https://pnpm.io/catalogs) which is
 
 > "Catalogs" are a [workspace feature](https://pnpm.io/workspaces) for defining dependency version ranges as reusable constants. Constants defined in catalogs can later be referenced in `package.json` files.
 
-Lerna-Lite will replace all `catalog:` protocol with the version ranges defined in the `pnpm-workspace.yaml` global catalog(s).
+Lerna-Lite will replace all `catalog:` protocol with the version ranges pulled from the `pnpm-workspace.yaml` global catalog(s) while executing lerna version or publish commands.
 
-> **Note** Lerna-Lite will only read the catalog (to get versions), but it will **never write** to it. If you want version bump then you should use `workspace:` for local dependencies.
+> [!NOTE]
+> Lerna-Lite only has a read access to the catalog and will pull versions from your `pnpm-workspace.yaml` to get dependency versions, but it will **never write** back to the catalog. If you want version bump while running these commands, then you should use `workspace:` for local dependencies. A side note, is that it does work with local dependencies but only if the local dependency version changed in a previous git commit **before** lerna version/publish are executed (since again Lerna-Lite will never write or update the catalog).
 
-For more info take a look at the [`lerna publish#catalog`](https://github.com/lerna-lite/lerna-lite/blob/main/packages/publish/README.md#catalog-protocol)
+For more details about how Catalog works in Lerna-Lite, take a look at the [`lerna publish#catalog`](https://github.com/lerna-lite/lerna-lite/blob/main/packages/publish/README.md#catalog-protocol) documentation.
 
 # `workspace:` protocol
 
