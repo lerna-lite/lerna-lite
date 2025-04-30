@@ -582,7 +582,7 @@ lerna will run [npm lifecycle scripts](https://docs.npmjs.com/cli/v8/using-npm/s
 The `catalog:` protocol ([pnpm catalog](https://pnpm.io/catalogs)) can be recognized by Lerna-Lite. When publishing, they will be replaced "as is" by reading and using the version range defined in your global catalog. If you need to bump the version of a package in a catalog, you will need to edit `pnpm-workspace.yaml` manually. If you wish them to be bumped automatically, then we strongly suggest that you use the [`workspace:`](#workspace-protocol) protocol instead which is better for local workspace dependencies.
 
 > [!NOTE]
-> Lerna-Lite will only ever read the catalog (to get versions), but it will **never write** to it. If you want version bump then you should use `workspace:` for local dependencies.
+> Lerna-Lite will only ever read the catalog, from `pnpm-workspace.yaml` to get dependency versions, but it will **never write** to the catalog. If you want version bump then you should use `workspace:` for local dependencies. It does work with local dependencies but only if the dependency version changed in a previous commit before lerna version/publish are executed, since again Lerna-Lite will never write or update the catalog.
 
 So for example, if our `pnpm-workspace.yaml` file has the following configuration
 
