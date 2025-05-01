@@ -42,7 +42,7 @@
     "lint:no-cache": "eslint packages",
     "lint:fix": "eslint packages --fix",
     "outdated:ws": "pnpm -r --stream outdated",
-    "test": "cross-env-shell NO_COLOR=true vitest --coverage --config ./vitest/vitest.config.ts",
+    "test": "vitest --coverage --config ./vitest/vitest.config.ts",
     "test:watch": "cross-env-shell NO_COLOR=true vitest --watch --config ./vitest/vitest.config.ts",
     "posttest": "pnpm clean:temp",
     "test:coverage:update": "cross-env-shell NO_COLOR=true vitest --coverage --update --config ./vitest/vitest.config.ts"
@@ -104,7 +104,13 @@
     "tslib": "^2.8.1",
     "typescript": "^5.8.3",
     "typescript-eslint": "^8.31.1",
+    "vite": "https://pkg.pr.new/vite@4bd8043",
     "vitest": "^3.1.2",
     "write-json-file": "catalog:"
+  },
+  "pnpm": {
+    "overrides": {
+      "vite": "https://pkg.pr.new/vite@4bd8043"
+    }
   }
 }

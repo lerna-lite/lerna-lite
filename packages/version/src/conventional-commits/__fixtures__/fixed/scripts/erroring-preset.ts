@@ -4,5 +4,7 @@ const erroringPresets = {
   },
 };
 
+// not likely we support this
+// https://github.com/vitest-dev/vitest/issues/7920
 export default erroringPresets;
-module.exports = erroringPresets;
+// module.exports = erroringPresets;
