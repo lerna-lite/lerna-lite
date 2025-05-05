@@ -5,4 +5,3 @@ const erroringPresets = {
 };
 
 export default erroringPresets;
-module.exports = erroringPresets;

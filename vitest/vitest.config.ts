@@ -26,5 +26,8 @@ export default defineConfig({
       ],
       provider: 'v8',
     },
+    env: {
+      NO_COLOR: 'true',
+    },
   },
 });

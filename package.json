@@ -42,10 +42,10 @@
     "lint:no-cache": "eslint packages",
     "lint:fix": "eslint packages --fix",
     "outdated:ws": "pnpm -r --stream outdated",
-    "test": "cross-env-shell NO_COLOR=true vitest --coverage --config ./vitest/vitest.config.ts",
-    "test:watch": "cross-env-shell NO_COLOR=true vitest --watch --config ./vitest/vitest.config.ts",
+    "test": "vitest --coverage --config ./vitest/vitest.config.ts",
+    "test:watch": "vitest --watch --config ./vitest/vitest.config.ts",
     "posttest": "pnpm clean:temp",
-    "test:coverage:update": "cross-env-shell NO_COLOR=true vitest --coverage --update --config ./vitest/vitest.config.ts"
+    "test:coverage:update": "vitest --coverage --update --config ./vitest/vitest.config.ts"
   },
   "homepage": "https://github.com/lerna-lite/lerna-lite",
   "repository": {
