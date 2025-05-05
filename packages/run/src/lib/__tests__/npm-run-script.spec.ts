@@ -4,8 +4,8 @@ import { describe, expect, it, Mock, vi } from 'vitest';
 vi.mock('@lerna-lite/core');
 
 import { execPackageManager, spawnStreaming } from '@lerna-lite/core';
-import { RunScriptOption, ScriptStreamingOption } from '../../interfaces.js';
 
+import { RunScriptOption, ScriptStreamingOption } from '../../interfaces.js';
 // file under test
 import { npmRunScript, npmRunScriptStreaming } from '../npm-run-script.js';
 

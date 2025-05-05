@@ -20,10 +20,11 @@ vi.mock('@lerna-lite/core', async () => ({
   runLifecycle: (await vi.importActual<any>('../../../core/src/__mocks__/run-lifecycle')).runLifecycle,
   throwIfUncommitted: (await vi.importActual<any>('../../../core/src/__mocks__/check-working-tree')).throwIfUncommitted,
 }));
+import { dirname } from 'node:path';
+import { fileURLToPath } from 'node:url';
+
 import { runLifecycle, VersionCommandOption } from '@lerna-lite/core';
 import { loadJsonFile } from 'load-json-file';
-import { fileURLToPath } from 'node:url';
-import { dirname } from 'node:path';
 import yargParser from 'yargs-parser';
 
 // helpers

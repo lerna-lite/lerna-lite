@@ -2,6 +2,7 @@
  * Adapted from https://github.com/npm/npmlog/blob/756bd05d01e7e4841fba25204d6b85dfcffeba3c/test/basic.js
  */
 import { Stream, Writable } from 'node:stream';
+
 import { afterAll, afterEach, beforeEach, describe, expect, test, vi } from 'vitest';
 
 import themes from '../gauge/themes.js';

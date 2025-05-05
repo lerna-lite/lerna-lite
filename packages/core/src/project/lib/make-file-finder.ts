@@ -1,7 +1,8 @@
+import { normalize as pathNormalize, posix } from 'node:path';
+
+import pMap from 'p-map';
 import type { GlobOptions as TinyGlobbyOptions } from 'tinyglobby';
 import { glob, globSync } from 'tinyglobby';
-import { normalize as pathNormalize, posix } from 'node:path';
-import pMap from 'p-map';
 
 import { ValidationError } from '../../validation-error.js';
 

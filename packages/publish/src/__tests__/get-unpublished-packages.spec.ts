@@ -3,13 +3,13 @@ import { expect, test, vi } from 'vitest';
 vi.mock('pacote');
 
 // mocked module(s)
-import pacote from 'pacote';
-
+import { dirname } from 'node:path';
 // helpers
 import { fileURLToPath } from 'node:url';
-import { dirname } from 'node:path';
-import { Project, PackageGraph, FetchConfig } from '@lerna-lite/core';
+
+import { FetchConfig, PackageGraph, Project } from '@lerna-lite/core';
 import { initFixtureFactory } from '@lerna-test/helpers';
+import pacote from 'pacote';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);

@@ -1,7 +1,8 @@
+import { EOL } from 'node:os';
+
 import type { ExecOpts } from '@lerna-lite/core';
 import { exec } from '@lerna-lite/core';
 import { log } from '@lerna-lite/npmlog';
-import { EOL } from 'node:os';
 
 import type { GitCommitOption } from '../interfaces.js';
 import { tempWrite } from '../utils/temp-write.js';

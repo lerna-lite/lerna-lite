@@ -1,13 +1,14 @@
 import assert from 'node:assert';
 import { readFileSync, statSync } from 'node:fs';
 import { resolve as pathResolve } from 'node:path';
+
 // @ts-ignore
 import { ConfigChain } from 'config-chain';
 
 import { envReplace } from './env-replace.js';
 import { findPrefix } from './find-prefix.js';
-import { parseField } from './parse-field.js';
 import { toNerfDart } from './nerf-dart.js';
+import { parseField } from './parse-field.js';
 
 export class Conf extends ConfigChain {
   _await: any;

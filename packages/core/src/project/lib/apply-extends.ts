@@ -1,9 +1,10 @@
-import { readJsonSync } from 'fs-extra/esm';
 import { dirname } from 'node:path';
+
+import { readJsonSync } from 'fs-extra/esm';
 import resolveFrom from 'resolve-from';
 
-import { shallowExtend } from './shallow-extend.js';
 import { ValidationError } from '../../validation-error.js';
+import { shallowExtend } from './shallow-extend.js';
 
 /**
  * @param {{ [key: string]: unknown }} config

@@ -1,5 +1,5 @@
-import { describe, expect, it } from 'vitest';
 import { json } from 'npm-registry-fetch';
+import { describe, expect, it } from 'vitest';
 
 import { pulseTillDone } from '../pulse-till-done.js';
 

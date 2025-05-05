@@ -12,13 +12,13 @@ vi.mock('@lerna-lite/core', async () => ({
   throwIfUncommitted: (await vi.importActual<any>('../../../core/src/__mocks__/check-working-tree')).throwIfUncommitted,
 }));
 
-import { dirname as pathDirname, join } from 'node:path';
 import { appendFileSync } from 'node:fs';
+import { dirname as pathDirname,join } from 'node:path';
 import { fileURLToPath } from 'node:url';
-import yargParser from 'yargs-parser';
 
 // mocked modules
 import { logOutput, VersionCommandOption } from '@lerna-lite/core';
+import yargParser from 'yargs-parser';
 
 // helpers
 const __filename = fileURLToPath(import.meta.url);

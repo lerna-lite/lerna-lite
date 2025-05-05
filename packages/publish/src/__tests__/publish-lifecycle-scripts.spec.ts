@@ -37,14 +37,15 @@ vi.mock('../lib/pack-directory', async () => await vi.importActual('../lib/__moc
 vi.mock('../lib/npm-publish', async () => await vi.importActual('../lib/__mocks__/npm-publish'));
 
 // mocked modules
-import { loadJsonFile } from 'load-json-file';
-import { packDirectory } from '../lib/pack-directory.js';
-import { runLifecycle } from '@lerna-lite/core';
-
 // helpers
 import { dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
+
+import { runLifecycle } from '@lerna-lite/core';
 import { commandRunner, initFixtureFactory } from '@lerna-test/helpers';
+import { loadJsonFile } from 'load-json-file';
+
+import { packDirectory } from '../lib/pack-directory.js';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);

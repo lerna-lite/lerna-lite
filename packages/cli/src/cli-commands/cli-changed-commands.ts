@@ -1,7 +1,7 @@
 import type { ChangedCommandOption, ListCommandOption } from '@lerna-lite/core';
 
-import { listableOptions } from './listable/listable-options.js';
 import { filterOptions } from '../filter-options.js';
+import { listableOptions } from './listable/listable-options.js';
 
 /**
  * @see https://github.com/yargs/yargs/blob/master/docs/advanced.md#providing-a-command-module

@@ -11,19 +11,19 @@ vi.mock('node:os', async () => ({
   cpus: () => new Array(cpuCount),
 }));
 
-import { outputFile, remove, readJson, writeJson } from 'fs-extra/esm';
 import { dirname, join } from 'node:path';
-import { temporaryDirectory } from 'tempy';
 import { fileURLToPath } from 'node:url';
+
 import { log } from '@lerna-lite/npmlog';
+// helpers
+import { initFixtureFactory } from '@lerna-test/helpers';
+import { updateLernaConfig } from '@lerna-test/helpers';
+import { loggingOutput } from '@lerna-test/helpers/logging-output.js';
+import { outputFile, readJson, remove, writeJson } from 'fs-extra/esm';
+import { temporaryDirectory } from 'tempy';
 
 // partially mocked
 import { getChildProcessCount } from '../child-process.js';
-
-// helpers
-import { initFixtureFactory } from '@lerna-test/helpers';
-import { loggingOutput } from '@lerna-test/helpers/logging-output.js';
-import { updateLernaConfig } from '@lerna-test/helpers';
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
 const initFixture = initFixtureFactory(__dirname);

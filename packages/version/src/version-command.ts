@@ -1,15 +1,6 @@
-import dedent from 'dedent';
-import { minimatch } from 'minimatch';
 import { EOL as OS_EOL } from 'node:os';
-import pLimit from 'p-limit';
-import pMap from 'p-map';
-import pPipe from 'p-pipe';
-import pReduce from 'p-reduce';
-import semver from 'semver';
-import c from 'tinyrainbow';
 
 import {
-  EOL,
   type ChangelogPresetOptions,
   checkWorkingTree,
   collectPackages,
@@ -17,6 +8,7 @@ import {
   Command,
   type CommandType,
   createRunner,
+  EOL,
   logOutput,
   type Package,
   type PackageGraphNode,
@@ -28,30 +20,38 @@ import {
   ValidationError,
   type VersionCommandOption,
 } from '@lerna-lite/core';
+import dedent from 'dedent';
+import { minimatch } from 'minimatch';
+import pLimit from 'p-limit';
+import pMap from 'p-map';
+import pPipe from 'p-pipe';
+import pReduce from 'p-reduce';
+import semver from 'semver';
+import c from 'tinyrainbow';
 
-import { getCurrentBranch } from './lib/get-current-branch.js';
-import { createRelease, createReleaseClient } from './lib/create-release.js';
-import { isAnythingCommitted } from './lib/is-anything-committed.js';
-import { remoteBranchExists } from './lib/remote-branch-exists.js';
-import { isBehindUpstream } from './lib/is-behind-upstream.js';
-import { isBreakingChange } from './lib/is-breaking-change.js';
-import { gitAdd } from './lib/git-add.js';
-import { gitCommit } from './lib/git-commit.js';
-import { gitTag } from './lib/git-tag.js';
-import { gitPush, gitPushSingleTag } from './lib/git-push.js';
-import { makePromptVersion } from './lib/prompt-version.js';
-import {
-  loadPackageLockFileWhenExists,
-  updateClassicLockfileVersion,
-  updateTempModernLockfileVersion,
-  runInstallLockFileOnly,
-  saveUpdatedLockJsonFile,
-} from './lib/update-lockfile-version.js';
-import type { GitCreateReleaseClientOutput, ReleaseNote, RemoteCommit } from './interfaces.js';
 import { applyBuildMetadata } from './conventional-commits/apply-build-metadata.js';
 import { getCommitsSinceLastRelease } from './conventional-commits/get-commits-since-last-release.js';
 import { recommendVersion } from './conventional-commits/recommend-version.js';
 import { updateChangelog } from './conventional-commits/update-changelog.js';
+import type { GitCreateReleaseClientOutput, ReleaseNote, RemoteCommit } from './interfaces.js';
+import { createRelease, createReleaseClient } from './lib/create-release.js';
+import { getCurrentBranch } from './lib/get-current-branch.js';
+import { gitAdd } from './lib/git-add.js';
+import { gitCommit } from './lib/git-commit.js';
+import { gitPush, gitPushSingleTag } from './lib/git-push.js';
+import { gitTag } from './lib/git-tag.js';
+import { isAnythingCommitted } from './lib/is-anything-committed.js';
+import { isBehindUpstream } from './lib/is-behind-upstream.js';
+import { isBreakingChange } from './lib/is-breaking-change.js';
+import { makePromptVersion } from './lib/prompt-version.js';
+import { remoteBranchExists } from './lib/remote-branch-exists.js';
+import {
+  loadPackageLockFileWhenExists,
+  runInstallLockFileOnly,
+  saveUpdatedLockJsonFile,
+  updateClassicLockfileVersion,
+  updateTempModernLockfileVersion,
+} from './lib/update-lockfile-version.js';
 
 export function factory(argv: VersionCommandOption) {
   return new VersionCommand(argv);

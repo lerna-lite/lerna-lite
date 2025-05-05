@@ -2,6 +2,7 @@ import eslint from '@eslint/js';
 import tseslint from 'typescript-eslint';
 import n from 'eslint-plugin-n';
 import eslintPrettier from 'eslint-config-prettier';
+import simpleImportSort from 'eslint-plugin-simple-import-sort';
 import vitest from '@vitest/eslint-plugin';
 
 export default tseslint.config(
@@ -10,7 +11,7 @@ export default tseslint.config(
   },
   {
     extends: [eslint.configs.recommended, ...tseslint.configs.recommended],
-    plugins: { n },
+    plugins: { n, 'simple-import-sort': simpleImportSort },
     files: ['**/*.ts'],
     languageOptions: {
       parser: tseslint.parser,
@@ -38,18 +39,14 @@ export default tseslint.config(
       'no-underscore-dangle': 'off',
       'no-unsafe-optional-chaining': 'off',
       'no-case-declarations': 'off',
-      'no-use-before-define': [
-        'error',
-        {
-          functions: false,
-          classes: false,
-        },
-      ],
+      'no-use-before-define': ['error', { functions: false, classes: false }],
       'n/no-extraneous-require': 'off',
       'n/no-unpublished-require': 'off',
       'n/no-unsupported-features/es-syntax': 'off',
       'prefer-destructuring': 'off',
       'prefer-object-spread': 'off',
+      'simple-import-sort/imports': 'error',
+      'simple-import-sort/exports': 'error',
       strict: 'off',
       '@typescript-eslint/ban-ts-comment': 'off',
       '@typescript-eslint/consistent-type-exports': 'error',

@@ -33,13 +33,14 @@ vi.mock('../lib/remove-temp-licenses', () => ({ removeTempLicenses: vi.fn(() => 
 vi.mock('../lib/pack-directory', async () => await vi.importActual('../lib/__mocks__/pack-directory'));
 vi.mock('../lib/npm-publish', async () => await vi.importActual('../lib/__mocks__/npm-publish'));
 
-import { remove } from 'fs-extra/esm';
 import { dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
 
+import { remove } from 'fs-extra/esm';
+
+import { createTempLicenses } from '../lib/create-temp-licenses.js';
 // mocked modules
 import { packDirectory } from '../lib/pack-directory.js';
-import { createTempLicenses } from '../lib/create-temp-licenses.js';
 import { removeTempLicenses } from '../lib/remove-temp-licenses.js';
 
 // helpers
@@ -49,13 +50,13 @@ import { commandRunner, initFixtureFactory } from '@lerna-test/helpers';
 const initFixture = initFixtureFactory(__dirname);
 import { loggingOutput } from '@lerna-test/helpers/logging-output.js';
 
+import cliCommands from '../../../cli/src/cli-commands/cli-publish-commands.js';
 // test command
 import { PublishCommand } from '../index.js';
-import cliCommands from '../../../cli/src/cli-commands/cli-publish-commands.js';
 const lernaPublish = commandRunner(cliCommands);
 
-import yargParser from 'yargs-parser';
 import { PublishCommandOption } from '@lerna-lite/core';
+import yargParser from 'yargs-parser';
 
 const createArgv = (cwd, ...args) => {
   args.unshift('publish');

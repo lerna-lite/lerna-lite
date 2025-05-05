@@ -9,22 +9,21 @@ vi.mock('../../utils/collect-updates/collect-updates.js', async () => await vi.i
 
 import { dirname, resolve as pathResolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
+
+// helpers
+import { initFixtureFactory } from '@lerna-test/helpers';
 import yargs from 'yargs/yargs';
 
 // mocked modules
 import { collectUpdates } from '../../utils/collect-updates/collect-updates.js';
-
-// helpers
-import { initFixtureFactory } from '@lerna-test/helpers';
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
 const initFixture = initFixtureFactory(pathResolve(__dirname, '../'));
 
+import { filterOptions } from '../../../../cli/src/filter-options.js';
 import { PackageGraph } from '../../package-graph/package-graph.js';
 import { Project } from '../../project/project.js';
-
 import { getFilteredPackages } from '../lib/get-filtered-packages.js';
-import { filterOptions } from '../../../../cli/src/filter-options.js';
 
 async function buildGraph(cwd) {
   const packages = await Project.getPackages(cwd);

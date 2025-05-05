@@ -1,7 +1,7 @@
 import type { PublishCommandOption } from '@lerna-lite/core';
 
-import cliVersionCmd, { addBumpPositional } from './cli-version-commands.js';
 import { filterOptions } from '../filter-options.js';
+import cliVersionCmd, { addBumpPositional } from './cli-version-commands.js';
 
 /**
  * @see https://github.com/yargs/yargs/blob/master/docs/advanced.md#providing-a-command-module

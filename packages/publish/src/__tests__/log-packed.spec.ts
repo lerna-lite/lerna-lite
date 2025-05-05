@@ -3,8 +3,8 @@ import { log } from '@lerna-lite/npmlog';
 import c from 'tinyrainbow';
 import { describe, expect, it, vi } from 'vitest';
 
-import { logPacked } from '../lib/log-packed.js';
 import { Tarball } from '../interfaces.js';
+import { logPacked } from '../lib/log-packed.js';
 
 describe('log-packed', () => {
   const pkg = {

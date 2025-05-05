@@ -11,17 +11,17 @@ vi.mock('@lerna-lite/core', async () => ({
 }));
 
 // mocked modules
-import { readFile } from 'fs/promises';
-import { publish } from 'libnpmpublish';
-import PackageJson from '@npmcli/package-json';
-import { runLifecycle, Package, RawManifest } from '@lerna-lite/core';
-
 // helpers
 import { dirname, join, normalize } from 'node:path';
 
+import { Package, RawManifest, runLifecycle } from '@lerna-lite/core';
+import PackageJson from '@npmcli/package-json';
+import { readFile } from 'fs/promises';
+import { publish } from 'libnpmpublish';
+
+import { LibNpmPublishOptions } from '../interfaces.js';
 // file under test
 import { npmPublish } from '../lib/npm-publish.js';
-import { LibNpmPublishOptions } from '../models/index.js';
 
 describe('npm-publish', () => {
   const mockTarData = Buffer.from('MOCK');
@@ -66,7 +66,7 @@ describe('npm-publish', () => {
   });
 
   it('overrides pkg.publishConfig.tag when opts.tag is explicitly configured', async () => {
-    PackageJson.load.mockImplementationOnce(() => ({
+    (PackageJson.load as Mock).mockImplementationOnce(() => ({
       content: {
         publishConfig: {
           tag: 'beta',
@@ -91,7 +91,7 @@ describe('npm-publish', () => {
   });
 
   it('respects pkg.publishConfig.tag when opts.defaultTag matches default', async () => {
-    PackageJson.load.mockImplementationOnce(() => ({
+    (PackageJson.load as Mock).mockImplementationOnce(() => ({
       content: {
         publishConfig: {
           tag: 'beta',
@@ -127,7 +127,7 @@ describe('npm-publish', () => {
       rootPath
     );
 
-    PackageJson.load.mockImplementationOnce(() => ({
+    (PackageJson.load as Mock).mockImplementationOnce(() => ({
       content: {
         name: 'fancy-fancy',
         version: '1.10.100',
@@ -149,7 +149,7 @@ describe('npm-publish', () => {
   });
 
   it('merges pkg.publishConfig.registry into options', async () => {
-    PackageJson.load.mockImplementationOnce(() => ({
+    (PackageJson.load as Mock).mockImplementationOnce(() => ({
       content: {
         publishConfig: {
           registry: 'http://pkg-registry.com',

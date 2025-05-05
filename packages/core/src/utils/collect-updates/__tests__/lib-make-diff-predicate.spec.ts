@@ -17,8 +17,8 @@ vi.mock('node:fs', async () => ({
 }));
 
 // file under test
-import { diffWorkspaceCatalog, makeDiffPredicate } from '../lib/make-diff-predicate.js';
 import { PackageGraphNode } from '../../../../dist/index.js';
+import { diffWorkspaceCatalog, makeDiffPredicate } from '../lib/make-diff-predicate.js';
 
 function setup(changes) {
   (childProcesses.execSync as Mock).mockReturnValueOnce([].concat(changes).join('\n'));

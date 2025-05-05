@@ -2,9 +2,9 @@ import { log } from '@lerna-lite/npmlog';
 import c from 'tinyrainbow';
 import { beforeEach, describe, expect, it, Mock, vi } from 'vitest';
 
-import { execPackageManager, execPackageManagerSync } from '../exec-package-manager.js';
 import { exec, execSync, getChildProcessCount } from '../../child-process.js';
 import { Package } from '../../package.js';
+import { execPackageManager, execPackageManagerSync } from '../exec-package-manager.js';
 
 vi.mock('../../child-process', async () => ({
   ...(await vi.importActual<any>('../../child-process')),

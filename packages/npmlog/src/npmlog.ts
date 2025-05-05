@@ -2,10 +2,11 @@
  * Adapted from https://github.com/npm/npmlog/blob/756bd05d01e7e4841fba25204d6b85dfcffeba3c/lib/log.js
  */
 
-import consoleControl from 'console-control-strings';
 import { EventEmitter } from 'node:events';
 import type { WriteStream } from 'node:tty';
 import { format } from 'node:util';
+
+import consoleControl from 'console-control-strings';
 import setBlocking from 'set-blocking';
 
 import { TrackerGroup } from './are-we-there-yet/tracker-group.js';

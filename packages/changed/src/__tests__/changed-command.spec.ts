@@ -16,23 +16,25 @@ vi.mock('@lerna-lite/core', async () => ({
 vi.mock('@lerna-lite/changed', async () => await vi.importActual('../changed-command'));
 
 // mocked modules
-import { ChangedCommandOption, collectUpdates, logOutput } from '@lerna-lite/core';
-import cliChangedCommands from '../../../cli/src/cli-commands/cli-changed-commands.js';
-
+import { dirname } from 'node:path';
 // helpers
 import { fileURLToPath } from 'node:url';
-import { dirname } from 'node:path';
+
+import { ChangedCommandOption, collectUpdates, logOutput } from '@lerna-lite/core';
 import { commandRunner, initFixtureFactory } from '@lerna-test/helpers';
-import { loggingOutput } from '@lerna-test/helpers/logging-output.js';
 import { updateLernaConfig } from '@lerna-test/helpers';
+import { loggingOutput } from '@lerna-test/helpers/logging-output.js';
+
+import cliChangedCommands from '../../../cli/src/cli-commands/cli-changed-commands.js';
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
 const initFixture = initFixtureFactory(__dirname);
 
 // file under test
 import yargParser from 'yargs-parser';
-import { ChangedCommand } from '../index.js';
+
 import { factory } from '../changed-command.js';
+import { ChangedCommand } from '../index.js';
 const lernaChanged = commandRunner(cliChangedCommands);
 
 const createArgv = (cwd: string, ...args: string[]) => {

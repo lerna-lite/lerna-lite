@@ -2,7 +2,7 @@ import type { ChangelogPresetOptions, ExecOpts, Package } from '@lerna-lite/core
 import type { Context, GitRawCommitsOptions, ParserOptions } from 'conventional-changelog';
 import type { Options as WriterOptions } from 'conventional-changelog-writer';
 import type { Commit, ParserStreamOptions } from 'conventional-commits-parser';
-import type { BumperRecommendation, Preset as BumperPresetOptions } from 'conventional-recommended-bump';
+import type { BumperRecommendation,Preset as BumperPresetOptions } from 'conventional-recommended-bump';
 
 export interface GitCommitOption {
   amend: boolean;

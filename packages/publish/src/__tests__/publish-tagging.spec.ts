@@ -36,13 +36,14 @@ vi.mock('@lerna-lite/publish', async () => await vi.importActual('../publish-com
 vi.mock('@lerna-lite/version', async () => await vi.importActual('../../../version/src/version-command'));
 
 // mocked modules
-import { collectUpdates, PublishCommandOption } from '@lerna-lite/core';
-import { npmPublish } from '../lib/npm-publish.js';
-import { add, remove } from '../lib/npm-dist-tag.js';
-
 // helpers
 import { dirname } from 'node:path';
 import { fileURLToPath } from 'node:url';
+
+import { collectUpdates, PublishCommandOption } from '@lerna-lite/core';
+
+import { add, remove } from '../lib/npm-dist-tag.js';
+import { npmPublish } from '../lib/npm-publish.js';
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
 import { initFixtureFactory } from '@lerna-test/helpers';
@@ -50,6 +51,7 @@ const initFixture = initFixtureFactory(__dirname);
 
 // test command
 import yargParser from 'yargs-parser';
+
 import { PublishCommand } from '../index.js';
 
 const createArgv = (cwd, ...args) => {

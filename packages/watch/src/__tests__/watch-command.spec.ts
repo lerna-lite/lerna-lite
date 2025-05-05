@@ -45,25 +45,25 @@ vi.mock('chokidar', () => ({
 // also point to the local watch command so that all mocks are properly used even by the command-runner
 vi.mock('@lerna-lite/watch', async () => await vi.importActual<any>('../watch-command.js'));
 
-import { watch as chokidarWatch } from 'chokidar';
-import mockStdin from 'mock-stdin';
 import { basename, dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
-import yargParser from 'yargs-parser';
 
 // make sure to import the output mock
 import { WatchCommandOption } from '@lerna-lite/core';
-
 // mocked modules
 import { spawn, spawnStreaming } from '@lerna-lite/core';
+import { watch as chokidarWatch } from 'chokidar';
+import mockStdin from 'mock-stdin';
+import yargParser from 'yargs-parser';
 
 // helpers
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
 import { commandRunner, initFixtureFactory } from '@lerna-test/helpers';
 import { normalizeRelativeDir } from '@lerna-test/helpers';
-import { factory, WatchCommand } from '../index.js';
+
 import cliWatchCommands from '../../../cli/src/cli-commands/cli-watch-commands.js';
+import { factory, WatchCommand } from '../index.js';
 const lernaWatch = commandRunner(cliWatchCommands);
 const initFixture = initFixtureFactory(__dirname);
 

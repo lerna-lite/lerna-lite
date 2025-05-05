@@ -18,25 +18,25 @@ vi.mock('@lerna-lite/profiler', async () => await vi.importActual<any>('../../..
 vi.mock('@lerna-lite/exec', async () => await vi.importActual<any>('../exec-command'));
 
 import { basename, dirname, join } from 'node:path';
-import { pathExists, readJson } from 'fs-extra/esm';
-import { glob } from 'tinyglobby';
 import { fileURLToPath } from 'node:url';
-import yargParser from 'yargs-parser';
 
 // make sure to import the output mock
 import { ExecCommandOption, logOutput } from '@lerna-lite/core';
-
 // mocked modules
 import { spawn, spawnStreaming } from '@lerna-lite/core';
+import { pathExists, readJson } from 'fs-extra/esm';
+import { glob } from 'tinyglobby';
+import yargParser from 'yargs-parser';
 
 // helpers
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
 import { commandRunner, initFixtureFactory } from '@lerna-test/helpers';
-import { loggingOutput } from '@lerna-test/helpers/logging-output.js';
 import { normalizeRelativeDir } from '@lerna-test/helpers';
-import { factory, ExecCommand } from '../index.js';
+import { loggingOutput } from '@lerna-test/helpers/logging-output.js';
+
 import cliExecCommands from '../../../cli/src/cli-commands/cli-exec-commands.js';
+import { ExecCommand, factory } from '../index.js';
 const lernaExec = commandRunner(cliExecCommands);
 const initFixture = initFixtureFactory(__dirname);
 

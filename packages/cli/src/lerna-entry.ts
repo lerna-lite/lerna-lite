@@ -1,7 +1,8 @@
-import { loadJsonFileSync } from 'load-json-file';
 import { dirname, join } from 'node:path';
-import type { JsonValue } from '@lerna-lite/core';
 import { fileURLToPath } from 'node:url';
+
+import type { JsonValue } from '@lerna-lite/core';
+import { loadJsonFileSync } from 'load-json-file';
 
 import changedCmd from './cli-commands/cli-changed-commands.js';
 import diffCmd from './cli-commands/cli-diff-commands.js';

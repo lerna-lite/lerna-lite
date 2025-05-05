@@ -1,8 +1,9 @@
-import { expect, test } from 'vitest';
-import { execa } from 'execa';
-import { cloneFixtureFactory } from '@lerna-test/helpers';
-import { fileURLToPath } from 'node:url';
 import { dirname } from 'node:path';
+import { fileURLToPath } from 'node:url';
+
+import { cloneFixtureFactory } from '@lerna-test/helpers';
+import { execa } from 'execa';
+import { expect, test } from 'vitest';
 
 import { isBehindUpstream } from '../lib/is-behind-upstream.js';
 

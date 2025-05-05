@@ -1,10 +1,8 @@
 import { expect, test, vi } from 'vitest';
 
 import { Package } from '../../../package.js';
-
 // helpers
 import buildGraph from '../__helpers__/build-graph.js';
-
 // file under test
 import { collectPackages } from '../lib/collect-packages.js';
 

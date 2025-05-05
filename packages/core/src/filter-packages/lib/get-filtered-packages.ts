@@ -1,10 +1,9 @@
 import { log } from '@lerna-lite/npmlog';
 
 import type { ExecOpts } from '../../models/interfaces.js';
-import type { PackageGraph } from '../../package-graph/package-graph.js';
 import type { Package } from '../../package.js';
+import type { PackageGraph } from '../../package-graph/package-graph.js';
 import { collectUpdates } from '../../utils/collect-updates/collect-updates.js';
-
 import { filterPackages } from './filter-packages.js';
 import type { FilterOptions } from './interfaces.js';
 

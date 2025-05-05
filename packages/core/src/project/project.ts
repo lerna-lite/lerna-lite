@@ -1,20 +1,21 @@
+import { writeFileSync } from 'node:fs';
+import { basename, dirname, join, normalize, resolve as pathResolve } from 'node:path';
+
 import { log } from '@lerna-lite/npmlog';
 import { cosmiconfigSync, defaultLoaders, type PublicExplorerSync } from 'cosmiconfig';
 import dedent from 'dedent';
-import { globSync } from 'tinyglobby';
 import globParent from 'glob-parent';
 import JSON5 from 'json5';
 import { loadJsonFile, loadJsonFileSync } from 'load-json-file';
-import { writeFileSync } from 'node:fs';
-import { basename, dirname, join, normalize, resolve as pathResolve } from 'node:path';
 import pMap from 'p-map';
+import { globSync } from 'tinyglobby';
 import { writeJsonFile } from 'write-json-file';
 
-import { Package } from '../package.js';
-import { applyExtends } from './lib/apply-extends.js';
-import { ValidationError } from '../validation-error.js';
-import { makeFileFinder, makeSyncFileFinder } from './lib/make-file-finder.js';
 import type { ProjectConfig, RawManifest } from '../models/interfaces.js';
+import { Package } from '../package.js';
+import { ValidationError } from '../validation-error.js';
+import { applyExtends } from './lib/apply-extends.js';
+import { makeFileFinder, makeSyncFileFinder } from './lib/make-file-finder.js';
 
 /**
  * A representation of the entire project managed by Lerna.

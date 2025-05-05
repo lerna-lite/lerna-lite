@@ -1,8 +1,9 @@
-import { expect, test } from 'vitest';
+import { dirname } from 'node:path';
+import { fileURLToPath } from 'node:url';
+
 import { cloneFixtureFactory } from '@lerna-test/helpers';
 import { execa } from 'execa';
-import { fileURLToPath } from 'node:url';
-import { dirname } from 'node:path';
+import { expect, test } from 'vitest';
 
 import { remoteBranchExists } from '../lib/remote-branch-exists.js';
 

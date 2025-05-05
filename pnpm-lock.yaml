@@ -170,6 +170,9 @@ importers:
       eslint-plugin-n:
         specifier: ^17.17.0
         version: 17.17.0(eslint@9.25.1)
+      eslint-plugin-simple-import-sort:
+        specifier: ^12.1.1
+        version: 12.1.1(eslint@9.25.1)
       execa:
         specifier: 'catalog:'
         version: 9.5.2
@@ -2120,6 +2123,11 @@ packages:
     engines: {node: ^18.18.0 || ^20.9.0 || >=21.1.0}
     peerDependencies:
       eslint: '>=8.23.0'
+
+  eslint-plugin-simple-import-sort@12.1.1:
+    resolution: {integrity: sha512-6nuzu4xwQtE3332Uz0to+TxDQYRLTKRESSc2hefVT48Zc8JthmN23Gx9lnYhu0FtkRSL1oxny3kJ2aveVhmOVA==}
+    peerDependencies:
+      eslint: '>=5.0.0'
 
   eslint-scope@8.3.0:
     resolution: {integrity: sha512-pUNxi75F8MJ/GdeKtVLSbYg4ZI34J6C0C7sbL4YOp2exGwen7ZsuBqKzUhXd0qMQ362yET3z+uPwKeg/0C2XCQ==}
@@ -4830,6 +4838,10 @@ snapshots:
       ignore: 5.3.2
       minimatch: 9.0.5
       semver: 7.7.1
+
+  eslint-plugin-simple-import-sort@12.1.1(eslint@9.25.1):
+    dependencies:
+      eslint: 9.25.1
 
   eslint-scope@8.3.0:
     dependencies:
