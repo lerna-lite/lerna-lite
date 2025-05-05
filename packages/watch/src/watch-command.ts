@@ -1,17 +1,18 @@
+import { join, relative } from 'node:path';
+
 import {
   Command,
   type FilterOptions,
-  type Package,
-  type ProjectConfig,
   getFilteredPackages,
+  type Package,
   pluralize,
+  type ProjectConfig,
   spawn,
   spawnStreaming,
   ValidationError,
   type WatchCommandOption,
 } from '@lerna-lite/core';
 import { type ChokidarOptions, type FSWatcher, watch } from 'chokidar';
-import { join, relative } from 'node:path';
 import picomatch from 'picomatch';
 import { globSync } from 'tinyglobby';
 

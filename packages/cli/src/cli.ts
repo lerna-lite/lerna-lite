@@ -1,8 +1,9 @@
 #!/usr/bin/env node
 
 import 'dotenv/config';
-import importLocal from 'import-local';
+
 import { log } from '@lerna-lite/npmlog';
+import importLocal from 'import-local';
 
 import { lerna } from './lerna-entry.js';
 

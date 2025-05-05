@@ -1,7 +1,6 @@
-import fetch from 'npm-registry-fetch';
-
 import type { FetchConfig, ProfileData } from '@lerna-lite/core';
 import { pulseTillDone } from '@lerna-lite/core';
+import fetch from 'npm-registry-fetch';
 
 /**
  * Retrieve profile data of logged-in user.

@@ -1,5 +1,5 @@
-import { beforeEach, describe, expect, test, vi } from 'vitest';
 import semver from 'semver';
+import { beforeEach, describe, expect, test, vi } from 'vitest';
 
 // mocked modules of @lerna-lite/core
 vi.mock('@lerna-lite/core', async (coreOriginal) => {
@@ -11,7 +11,8 @@ vi.mock('@lerna-lite/core', async (coreOriginal) => {
   };
 });
 
-import { promptSelectOne, promptTextInput, prereleaseIdFromVersion, PackageGraphNode } from '@lerna-lite/core';
+import { PackageGraphNode, prereleaseIdFromVersion, promptSelectOne, promptTextInput } from '@lerna-lite/core';
+
 import { makePromptVersion } from '../lib/prompt-version.js';
 
 const resolvePrereleaseId = vi.fn(() => 'alpha');

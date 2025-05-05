@@ -1,17 +1,6 @@
-import crypto from 'crypto';
-import { outputFileSync, removeSync } from 'fs-extra/esm';
 import { EOL } from 'node:os';
 import { join as pathJoin, normalize, relative } from 'node:path';
-import normalizePath from 'normalize-path';
-import pMap from 'p-map';
-import pPipe, { type UnaryFunction } from 'p-pipe';
-import semver from 'semver';
-import tempDir from 'temp-dir';
-import { glob } from 'tinyglobby';
-import c from 'tinyrainbow';
 
-import type { OneTimePasswordCache } from '@lerna-lite/version';
-import { getOneTimePassword, VersionCommand } from '@lerna-lite/version';
 import type {
   CommandType,
   Conf,
@@ -38,28 +27,39 @@ import {
   throwIfUncommitted,
   ValidationError,
 } from '@lerna-lite/core';
+import type { OneTimePasswordCache } from '@lerna-lite/version';
+import { getOneTimePassword, VersionCommand } from '@lerna-lite/version';
+import crypto from 'crypto';
+import { outputFileSync, removeSync } from 'fs-extra/esm';
+import normalizePath from 'normalize-path';
+import pMap from 'p-map';
+import pPipe, { type UnaryFunction } from 'p-pipe';
+import semver from 'semver';
+import tempDir from 'temp-dir';
+import { glob } from 'tinyglobby';
+import c from 'tinyrainbow';
 
-import { getCurrentTags } from './lib/get-current-tags.js';
-import { getTaggedPackages } from './lib/get-tagged-packages.js';
-import { getUnpublishedPackages } from './lib/get-unpublished-packages.js';
-import { getNpmUsername } from './lib/get-npm-username.js';
-import { verifyNpmPackageAccess } from './lib/verify-npm-package-access.js';
-import { getTwoFactorAuthRequired } from './lib/get-two-factor-auth-required.js';
-import { getCurrentSHA } from './lib/get-current-sha.js';
-import { gitCheckout } from './lib/git-checkout.js';
-import { packDirectory } from './lib/pack-directory.js';
-import { npmPublish } from './lib/npm-publish.js';
-import { logPacked } from './lib/log-packed.js';
-import { add, remove } from './lib/npm-dist-tag.js';
-import { overridePublishConfig } from './lib/override-publish-config.js';
-import { removeTempLicenses } from './lib/remove-temp-licenses.js';
-import { createTempLicenses } from './lib/create-temp-licenses.js';
-import { getPackagesWithoutLicense } from './lib/get-packages-without-license.js';
-import type { Queue } from './lib/throttle-queue.js';
-import { TailHeadQueue } from './lib/throttle-queue.js';
 import type { Tarball } from './interfaces.js';
+import { createTempLicenses } from './lib/create-temp-licenses.js';
+import { getCurrentSHA } from './lib/get-current-sha.js';
+import { getCurrentTags } from './lib/get-current-tags.js';
+import { getNpmUsername } from './lib/get-npm-username.js';
+import { getPackagesWithoutLicense } from './lib/get-packages-without-license.js';
+import { getTaggedPackages } from './lib/get-tagged-packages.js';
+import { getTwoFactorAuthRequired } from './lib/get-two-factor-auth-required.js';
+import { getUnpublishedPackages } from './lib/get-unpublished-packages.js';
+import { gitCheckout } from './lib/git-checkout.js';
 import { isNpmJsPublishVersionConflict } from './lib/is-npm-js-publish-version-conflict.js';
 import { isNpmPkgGitHubPublishVersionConflict } from './lib/is-npm-pkg-github-publish-version-conflict.js';
+import { logPacked } from './lib/log-packed.js';
+import { add, remove } from './lib/npm-dist-tag.js';
+import { npmPublish } from './lib/npm-publish.js';
+import { overridePublishConfig } from './lib/override-publish-config.js';
+import { packDirectory } from './lib/pack-directory.js';
+import { removeTempLicenses } from './lib/remove-temp-licenses.js';
+import type { Queue } from './lib/throttle-queue.js';
+import { TailHeadQueue } from './lib/throttle-queue.js';
+import { verifyNpmPackageAccess } from './lib/verify-npm-package-access.js';
 
 export function factory(argv: PublishCommandOption) {
   return new PublishCommand(argv);

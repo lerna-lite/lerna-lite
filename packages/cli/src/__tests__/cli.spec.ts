@@ -8,8 +8,8 @@ vi.mock('../lerna-entry.js', () => ({
   lerna: lernaMock,
 }));
 
-import importLocal from 'import-local';
 import { log } from '@lerna-lite/npmlog';
+import importLocal from 'import-local';
 
 describe('CLI', () => {
   afterEach(() => {

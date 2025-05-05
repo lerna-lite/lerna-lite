@@ -1,8 +1,9 @@
-import { expect, test } from 'vitest';
+import { dirname } from 'node:path';
+import { fileURLToPath } from 'node:url';
+
 import { Project } from '@lerna-lite/core';
 import { initFixtureFactory } from '@lerna-test/helpers';
-import { fileURLToPath } from 'node:url';
-import { dirname } from 'node:path';
+import { expect, test } from 'vitest';
 
 import { getPackagesWithoutLicense } from '../lib/get-packages-without-license.js';
 

@@ -1,4 +1,5 @@
 import { cpus } from 'node:os';
+
 import type { Argv } from 'yargs';
 
 export function globalOptions(yargs: Argv<any>) {

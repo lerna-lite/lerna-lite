@@ -19,6 +19,7 @@ vi.mock('@lerna-lite/core', async () => ({
 
 import { dirname, resolve as pathResolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
+
 import yargParser from 'yargs-parser';
 
 // helpers
@@ -28,11 +29,11 @@ import { getCommitMessage, initFixtureFactory } from '@lerna-test/helpers';
 const initFixture = initFixtureFactory(pathResolve(__dirname, '../../../publish/src/__tests__'));
 
 // test command
-import { VersionCommand } from '../version-command.js';
-
+import { VersionCommandOption } from '@lerna-lite/core';
 // stabilize commit SHA
 import gitSHA from '@lerna-test/helpers/serializers/serialize-git-sha.js';
-import { VersionCommandOption } from '@lerna-lite/core';
+
+import { VersionCommand } from '../version-command.js';
 expect.addSnapshotSerializer(gitSHA);
 
 const createArgv = (cwd: string, ...args: string[]) => {

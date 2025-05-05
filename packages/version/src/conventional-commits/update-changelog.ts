@@ -7,10 +7,10 @@ import type { Options as WriterOptions } from 'conventional-changelog-writer';
 import { writeFile } from 'fs/promises';
 import getStream from 'get-stream';
 
+import type { ChangelogConfig, ChangelogType, UpdateChangelogOption } from '../interfaces.js';
 import { BLANK_LINE, CHANGELOG_HEADER } from './constants.js';
 import { GetChangelogConfig } from './get-changelog-config.js';
 import { makeBumpOnlyFilter } from './make-bump-only-filter.js';
-import type { ChangelogConfig, ChangelogType, UpdateChangelogOption } from '../interfaces.js';
 import { readExistingChangelog } from './read-existing-changelog.js';
 import { setConfigChangelogCommitClientLogin, setConfigChangelogCommitGitAuthor } from './writer-opts-transform.js';
 

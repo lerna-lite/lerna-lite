@@ -6,10 +6,10 @@ vi.mock('@lerna-lite/core', async () => ({
   QueryGraph: (await vi.importActual<any>('../../../core/src/utils/query-graph')).QueryGraph,
 }));
 
-import { temporaryDirectory } from 'tempy';
-import Tacks from 'tacks';
 import { Project } from '@lerna-lite/core';
 import { loggingOutput } from '@lerna-test/helpers/logging-output.js';
+import Tacks from 'tacks';
+import { temporaryDirectory } from 'tempy';
 
 import { listable } from '../index.js';
 

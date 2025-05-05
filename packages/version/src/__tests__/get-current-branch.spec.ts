@@ -1,9 +1,10 @@
-import { expect, test } from 'vitest';
 import { dirname } from 'node:path';
 import { fileURLToPath } from 'node:url';
 
-import { getCurrentBranch } from '../lib/get-current-branch.js';
 import { initFixtureFactory } from '@lerna-test/helpers';
+import { expect, test } from 'vitest';
+
+import { getCurrentBranch } from '../lib/get-current-branch.js';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);

@@ -22,26 +22,26 @@ vi.mock('../lib/verify-npm-package-access', async () => await vi.importActual('.
 vi.mock('../lib/get-npm-username', async () => await vi.importActual('../lib/__mocks__/get-npm-username'));
 vi.mock('../lib/get-two-factor-auth-required', async () => await vi.importActual('../lib/__mocks__/get-two-factor-auth-required'));
 vi.mock('../lib/npm-publish', async () => await vi.importActual('../lib/__mocks__/npm-publish'));
-import { outputFile } from 'fs-extra/esm';
 import { dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
-import yargParser from 'yargs-parser';
 
+import { describeRef, promptConfirmation, PublishCommandOption, throwIfUncommitted } from '@lerna-lite/core';
+// helpers
+import { commandRunner, gitAdd, gitCommit, gitTag, initFixtureFactory, loggingOutput } from '@lerna-test/helpers';
+import { outputFile } from 'fs-extra/esm';
 // mocked modules
 import * as writePkg from 'write-package';
-import { npmPublish } from '../lib/npm-publish.js';
-import { npmPublish as npmPublishMock } from '../lib/__mocks__/npm-publish.js';
-import { promptConfirmation, PublishCommandOption, describeRef, throwIfUncommitted } from '@lerna-lite/core';
+import yargParser from 'yargs-parser';
 
-// helpers
-import { commandRunner, gitAdd, gitTag, gitCommit, initFixtureFactory, loggingOutput } from '@lerna-test/helpers';
+import { npmPublish as npmPublishMock } from '../lib/__mocks__/npm-publish.js';
+import { npmPublish } from '../lib/npm-publish.js';
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
 const initFixture = initFixtureFactory(__dirname);
 
 // test command
-import { factory, PublishCommand } from '../index.js';
 import cliCommands from '../../../cli/src/cli-commands/cli-publish-commands.js';
+import { factory, PublishCommand } from '../index.js';
 const lernaPublish = commandRunner(cliCommands);
 
 // remove quotes around top-level strings

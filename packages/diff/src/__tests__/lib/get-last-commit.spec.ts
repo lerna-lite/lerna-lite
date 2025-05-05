@@ -1,5 +1,5 @@
-import { describe, expect, it, Mock, vi } from 'vitest';
 import { log } from '@lerna-lite/npmlog';
+import { describe, expect, it, Mock, vi } from 'vitest';
 
 const { execSyncMock } = vi.hoisted(() => ({ execSyncMock: vi.fn() }));
 vi.mock('@lerna-lite/core', async () => ({

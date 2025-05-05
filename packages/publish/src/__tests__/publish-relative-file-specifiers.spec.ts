@@ -34,26 +34,25 @@ vi.mock('../lib/get-two-factor-auth-required', async () => await vi.importActual
 vi.mock('../lib/pack-directory', async () => await vi.importActual('../lib/__mocks__/pack-directory'));
 vi.mock('../lib/npm-publish', async () => await vi.importActual('../lib/__mocks__/npm-publish'));
 
-import { outputFile } from 'fs-extra/esm';
 import { dirname, join } from 'node:path';
-
-// mocked modules
-import * as writePkg from 'write-package';
-
 // helpers
 import { fileURLToPath } from 'node:url';
+
+import { outputFile } from 'fs-extra/esm';
+// mocked modules
+import * as writePkg from 'write-package';
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
 import { commandRunner, gitAdd, gitCommit, gitTag, initFixtureFactory } from '@lerna-test/helpers';
 const initFixture = initFixtureFactory(__dirname);
 
 // test command
-import { PublishCommand } from '../index.js';
 import cliCommands from '../../../cli/src/cli-commands/cli-publish-commands.js';
+import { PublishCommand } from '../index.js';
 const lernaPublish = commandRunner(cliCommands);
 
-import yargParser from 'yargs-parser';
 import { PublishCommandOption } from '@lerna-lite/core';
+import yargParser from 'yargs-parser';
 
 const createArgv = (cwd, ...args) => {
   args.unshift('publish');

@@ -1,5 +1,6 @@
-import { describe, expect, it, vi } from 'vitest';
 import nodeFs from 'node:fs';
+
+import { describe, expect, it, vi } from 'vitest';
 vi.spyOn(nodeFs, 'renameSync');
 
 // local modules _must_ be explicitly mocked
@@ -20,9 +21,10 @@ vi.mock('@lerna-lite/core', async () => ({
   throwIfUncommitted: (await vi.importActual<any>('../../../core/src/__mocks__/check-working-tree')).throwIfUncommitted,
 }));
 
-import { outputFile } from 'fs-extra/esm';
 import { dirname, join, resolve as pathResolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
+
+import { outputFile } from 'fs-extra/esm';
 import yargParser from 'yargs-parser';
 
 // helpers
@@ -36,11 +38,11 @@ import { initFixtureFactory } from '@lerna-test/helpers';
 const initFixture = initFixtureFactory(pathResolve(__dirname, '../../../publish/src/__tests__'));
 
 // test command
-import { VersionCommand } from '../version-command.js';
-
+import { VersionCommandOption } from '@lerna-lite/core';
 // stabilize commit SHA
 import gitSHA from '@lerna-test/helpers/serializers/serialize-git-sha.js';
-import { VersionCommandOption } from '@lerna-lite/core';
+
+import { VersionCommand } from '../version-command.js';
 expect.addSnapshotSerializer(gitSHA);
 
 expect.addSnapshotSerializer({

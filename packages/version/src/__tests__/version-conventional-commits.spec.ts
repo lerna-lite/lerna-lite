@@ -25,8 +25,9 @@ vi.mock('@lerna-lite/core', async () => ({
 }));
 
 import { dirname, join, resolve as pathResolve } from 'node:path';
-import semver from 'semver';
 import { fileURLToPath } from 'node:url';
+
+import semver from 'semver';
 
 expect.addSnapshotSerializer({
   test(val) {
@@ -41,18 +42,19 @@ expect.addSnapshotSerializer({
 // mocked modules
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
-import * as writePkg from 'write-package';
 import { collectUpdates, VersionCommandOption } from '@lerna-lite/core';
-import { recommendVersion } from '../conventional-commits/recommend-version.js';
-import { updateChangelog } from '../conventional-commits/update-changelog.js';
-
 // helpers
 import { initFixtureFactory, showCommit } from '@lerna-test/helpers';
+import * as writePkg from 'write-package';
+
+import { recommendVersion } from '../conventional-commits/recommend-version.js';
+import { updateChangelog } from '../conventional-commits/update-changelog.js';
 const initFixture = initFixtureFactory(pathResolve(__dirname, '../../../publish/src/__tests__'));
 
 // test command
-import { VersionCommand } from '../version-command.js';
 import yargParser from 'yargs-parser';
+
+import { VersionCommand } from '../version-command.js';
 
 const createArgv = (cwd, ...args) => {
   args.unshift('version');

@@ -4,7 +4,6 @@ vi.mock('../../../child-process');
 
 // mocked modules
 import * as childProcess from '../../../child-process.js';
-
 // file under test
 import { hasTags } from '../lib/has-tags.js';
 

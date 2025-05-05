@@ -21,15 +21,15 @@ vi.mock('@lerna-lite/core', async () => ({
 // also point to the local version command so that all mocks are properly used even by the command-runner
 vi.mock('@lerna-lite/version', async () => await vi.importActual('../version-command'));
 
-import { outputFile } from 'fs-extra/esm';
 import { dirname, join, resolve as pathResolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
-import yargParser from 'yargs-parser';
-// mocked modules
-import { promptTextInput, promptSelectOne, VersionCommandOption } from '@lerna-lite/core';
 
+// mocked modules
+import { promptSelectOne, promptTextInput, VersionCommandOption } from '@lerna-lite/core';
 // helpers
-import { commandRunner, gitAdd, gitCommit, gitInit, gitTag, getCommitMessage, initFixtureFactory, showCommit } from '@lerna-test/helpers';
+import { commandRunner, getCommitMessage, gitAdd, gitCommit, gitInit, gitTag, initFixtureFactory, showCommit } from '@lerna-test/helpers';
+import { outputFile } from 'fs-extra/esm';
+import yargParser from 'yargs-parser';
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
 const initFixture = initFixtureFactory(pathResolve(__dirname, '../../../publish/src/__tests__'));
@@ -40,8 +40,8 @@ import { temporaryDirectory } from 'tempy';
 const { File, Dir } = Tacks;
 
 // test command
-import { VersionCommand } from '../version-command.js';
 import cliCommands from '../../../cli/src/cli-commands/cli-version-commands.js';
+import { VersionCommand } from '../version-command.js';
 const lernaVersion = commandRunner(cliCommands);
 
 // remove quotes around top-level strings

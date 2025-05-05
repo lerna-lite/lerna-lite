@@ -1,3 +1,4 @@
+export type * from './interfaces.js';
 export * from './lib/create-temp-licenses.js';
 export * from './lib/fetch-config.js';
 export * from './lib/get-current-sha.js';
@@ -18,5 +19,4 @@ export * from './lib/pack-directory.js';
 export * from './lib/remove-temp-licenses.js';
 export * from './lib/throttle-queue.js';
 export * from './lib/verify-npm-package-access.js';
-export type * from './interfaces.js';
 export * from './publish-command.js';

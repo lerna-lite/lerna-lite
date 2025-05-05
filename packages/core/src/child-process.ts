@@ -1,7 +1,8 @@
-import { log } from '@lerna-lite/npmlog';
-import { execa, execaSync } from 'execa';
-import type { Options as ExecaOptions, SyncOptions as ExacaSyncOptions, ResultPromise } from 'execa';
 import { constants } from 'node:os';
+
+import { log } from '@lerna-lite/npmlog';
+import type { Options as ExecaOptions, ResultPromise, SyncOptions as ExacaSyncOptions } from 'execa';
+import { execa, execaSync } from 'execa';
 import logTransformer from 'strong-log-transformer';
 import c from 'tinyrainbow';
 

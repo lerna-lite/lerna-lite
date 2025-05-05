@@ -1,15 +1,16 @@
-import { log } from '@lerna-lite/npmlog';
 import { existsSync, readFileSync } from 'node:fs';
 import { join } from 'node:path';
+
+import { log } from '@lerna-lite/npmlog';
 import npa from 'npm-package-arg';
 import { parse } from 'yaml';
 
+import type { NpaResolveResult } from '../models/interfaces.js';
+import type { Package } from '../package.js';
+import { ValidationError } from '../validation-error.js';
 import { CyclicPackageGraphNode } from './lib/cyclic-package-graph-node.js';
 import { PackageGraphNode } from './lib/package-graph-node.js';
 import { reportCycles } from './lib/report-cycles.js';
-import type { Package } from '../package.js';
-import { ValidationError } from '../validation-error.js';
-import type { NpaResolveResult } from '../models/interfaces.js';
 
 /**
  * A regular expression used to capture and substitute package versions (referred to as "spec" in the lerna-lite code).

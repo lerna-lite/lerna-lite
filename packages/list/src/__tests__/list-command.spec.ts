@@ -19,20 +19,20 @@ vi.mock('../../../core/src/utils/collect-updates/collect-updates.js', async () =
 vi.mock('@lerna-lite/list', async () => await vi.importActual<any>('../list-command'));
 
 // mocked modules
-import { collectUpdates, ListCommandOption, logOutput } from '@lerna-lite/core';
-
+import { dirname } from 'node:path';
 // helpers
 import { fileURLToPath } from 'node:url';
-import { dirname } from 'node:path';
+
+import { collectUpdates, ListCommandOption, logOutput } from '@lerna-lite/core';
 import { commandRunner, initFixtureFactory } from '@lerna-test/helpers';
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
 const initFixture = initFixtureFactory(__dirname);
 
 // file under test
+import cliListCommands from '../../../cli/src/cli-commands/cli-list-commands.js';
 import { ListCommand } from '../index.js';
 import { factory } from '../list-command.js';
-import cliListCommands from '../../../cli/src/cli-commands/cli-list-commands.js';
 const lernaList = commandRunner(cliListCommands);
 
 // file under test

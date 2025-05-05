@@ -9,18 +9,17 @@ vi.mock('@lerna-lite/core', async () => ({
   spawn: vi.fn(),
 }));
 
-import { execa } from 'execa';
-import { outputFile, remove } from 'fs-extra/esm';
 import { dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
-import yargParser from 'yargs-parser';
 
 // mocked modules
 import { DiffCommandOption } from '@lerna-lite/core';
 import { spawn } from '@lerna-lite/core';
-
 // helpers
 import { commandRunner, initFixtureFactory } from '@lerna-test/helpers';
+import { execa } from 'execa';
+import { outputFile, remove } from 'fs-extra/esm';
+import yargParser from 'yargs-parser';
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
 const initFixture = initFixtureFactory(__dirname);
@@ -30,10 +29,10 @@ import { gitCommit } from '@lerna-test/helpers';
 import { gitInit } from '@lerna-test/helpers';
 import { gitTag } from '@lerna-test/helpers';
 
+import cliDiffCommands from '../../../cli/src/cli-commands/cli-diff-commands.js';
+import { factory } from '../diff-command.js';
 // file under test
 import { DiffCommand } from '../index.js';
-import { factory } from '../diff-command.js';
-import cliDiffCommands from '../../../cli/src/cli-commands/cli-diff-commands.js';
 const lernaDiff = commandRunner(cliDiffCommands);
 
 const createArgv = (cwd: string, ...args: string[]) => {

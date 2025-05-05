@@ -1,10 +1,10 @@
+import { log } from '@lerna-lite/npmlog';
 import runScript from '@npmcli/run-script';
 import PQueue from 'p-queue';
-import { log } from '@lerna-lite/npmlog';
 
-import { npmConf } from '../utils/npm-conf.js';
 import type { LifecycleConfig } from '../models/interfaces.js';
 import type { Package } from '../package.js';
+import { npmConf } from '../utils/npm-conf.js';
 
 const queue = new PQueue({ concurrency: 1 });
 

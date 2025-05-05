@@ -1,24 +1,24 @@
-import { beforeEach, describe, expect, it, test } from 'vitest';
-import { readFile } from 'fs/promises';
 import { dirname, join, resolve as pathResolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
-import { Project } from '@lerna-lite/core';
 
+import { Project } from '@lerna-lite/core';
 // helpers
 import { gitAdd, gitCommit, gitTag, initFixtureFactory } from '@lerna-test/helpers';
+import { readFile } from 'fs/promises';
+import { beforeEach, describe, expect, it, test } from 'vitest';
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
 const initFixture = initFixtureFactory(__dirname);
 
 // file under test
 import { Package } from '@lerna-lite/core';
+// stabilize changelog commit SHA and datestamp
+import serializeChangelog from '@lerna-test/helpers/serializers/serialize-changelog.js';
+
 import { applyBuildMetadata } from '../../conventional-commits/apply-build-metadata.js';
 import { recommendVersion } from '../../conventional-commits/recommend-version.js';
 import { updateChangelog } from '../../conventional-commits/update-changelog.js';
 import { GetChangelogConfig } from '../get-changelog-config.js';
-
-// stabilize changelog commit SHA and datestamp
-import serializeChangelog from '@lerna-test/helpers/serializers/serialize-changelog.js';
 expect.addSnapshotSerializer(serializeChangelog);
 
 describe('conventional-commits', () => {

@@ -4,14 +4,14 @@ vi.mock('@npmcli/run-script', () => ({
   default: vi.fn(() => Promise.resolve({ stdout: '' })),
 }));
 
-import { loggingOutput } from '@lerna-test/helpers/logging-output.js';
 import { log } from '@lerna-lite/npmlog';
+import { loggingOutput } from '@lerna-test/helpers/logging-output.js';
 import runScript from '@npmcli/run-script';
 
-import { npmConf } from '../npm-conf.js';
+import { LifecycleConfig } from '../../models/interfaces.js';
 import { Package } from '../../package.js';
-import { runLifecycle, createRunner } from '../run-lifecycle.js';
-import { LifecycleConfig } from '../../models/index.js';
+import { npmConf } from '../npm-conf.js';
+import { createRunner, runLifecycle } from '../run-lifecycle.js';
 
 describe('runLifecycle()', () => {
   beforeEach(() => {

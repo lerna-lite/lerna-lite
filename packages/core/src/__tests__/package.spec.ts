@@ -1,19 +1,19 @@
-import { describe, expect, it, Mock, vi } from 'vitest';
-
-import { log } from '@lerna-lite/npmlog';
-import { loadJsonFile, loadJsonFileSync } from 'load-json-file';
 import { homedir } from 'node:os';
 import { dirname, normalize, resolve as pathResolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
+
+import { log } from '@lerna-lite/npmlog';
+import { loadJsonFile, loadJsonFileSync } from 'load-json-file';
 import npa from 'npm-package-arg';
+import { describe, expect, it, Mock, vi } from 'vitest';
 import { writePackage } from 'write-package';
 
 vi.mock('load-json-file');
 vi.mock('write-package');
 
 // file under test
-import { Package } from '../package.js';
 import { NpaResolveResult, RawManifest } from '../models/interfaces.js';
+import { Package } from '../package.js';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);

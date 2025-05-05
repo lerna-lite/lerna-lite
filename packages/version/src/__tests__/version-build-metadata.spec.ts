@@ -21,11 +21,12 @@ vi.mock('@lerna-lite/core', async () => ({
 // also point to the local version command so that all mocks are properly used even by the command-runner
 vi.mock('@lerna-lite/version', async () => vi.importActual('../version-command'));
 
-import { PackageGraphNode, promptSelectOne, promptTextInput, VersionCommandOption } from '@lerna-lite/core';
-import { makePromptVersion } from '../lib/prompt-version.js';
-
 import { dirname, resolve as pathResolve } from 'node:path';
+
+import { PackageGraphNode, promptSelectOne, promptTextInput, VersionCommandOption } from '@lerna-lite/core';
 import yargParser from 'yargs-parser';
+
+import { makePromptVersion } from '../lib/prompt-version.js';
 
 expect.addSnapshotSerializer({
   test(val) {
@@ -48,9 +49,9 @@ import { commandRunner, initFixtureFactory } from '@lerna-test/helpers';
 const initFixture = initFixtureFactory(pathResolve(__dirname, '../../../publish/src/__tests__'));
 import { showCommit } from '@lerna-test/helpers';
 
+import cliCommands from '../../../cli/src/cli-commands/cli-version-commands.js';
 // test command
 import { VersionCommand } from '../version-command.js';
-import cliCommands from '../../../cli/src/cli-commands/cli-version-commands.js';
 const lernaVersion = commandRunner(cliCommands);
 
 const createArgv = (cwd, ...args) => {

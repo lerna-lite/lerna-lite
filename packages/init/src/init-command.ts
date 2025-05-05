@@ -1,7 +1,8 @@
+import { join } from 'node:path';
+
 import type { CommandType, InitCommandOption, ProjectConfig } from '@lerna-lite/core';
 import { Command, exec } from '@lerna-lite/core';
 import { mkdirp } from 'fs-extra/esm';
-import { join } from 'node:path';
 import pMap from 'p-map';
 import { writeJsonFile } from 'write-json-file';
 

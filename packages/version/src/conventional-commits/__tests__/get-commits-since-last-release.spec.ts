@@ -12,8 +12,8 @@ vi.mock('@lerna-lite/core', async () => ({
 
 import { describeRefSync, execSync } from '@lerna-lite/core';
 
-import { getGithubCommits } from '../get-github-commits.js';
 import { getCommitsSinceLastRelease, getOldestCommitSinceLastTag } from '../get-commits-since-last-release.js';
+import { getGithubCommits } from '../get-github-commits.js';
 
 const execOpts = { cwd: '/test' };
 const tagStub = {

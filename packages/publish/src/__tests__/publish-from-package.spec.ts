@@ -30,23 +30,24 @@ vi.mock('../lib/get-unpublished-packages', async () => await vi.importActual('..
 vi.mock('../lib/pack-directory', async () => await vi.importActual('../lib/__mocks__/pack-directory'));
 vi.mock('../lib/npm-publish', async () => await vi.importActual('../lib/__mocks__/npm-publish'));
 
-import { remove } from 'fs-extra/esm';
 import { dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
-import yargParser from 'yargs-parser';
 
+import { logOutput, promptConfirmation, PublishCommandOption, throwIfUncommitted } from '@lerna-lite/core';
+import { remove } from 'fs-extra/esm';
 // mocked or stubbed modules
 import * as writePkg from 'write-package';
-import { npmPublish } from '../lib/npm-publish.js';
+import yargParser from 'yargs-parser';
+
 import { npmPublish as npmPublishMock } from '../lib/__mocks__/npm-publish.js';
-import { logOutput, promptConfirmation, PublishCommandOption, throwIfUncommitted } from '@lerna-lite/core';
 import { getUnpublishedPackages } from '../lib/get-unpublished-packages.js';
+import { npmPublish } from '../lib/npm-publish.js';
 
 // helpers
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
-import { loggingOutput } from '@lerna-test/helpers/logging-output.js';
 import { initFixtureFactory } from '@lerna-test/helpers';
+import { loggingOutput } from '@lerna-test/helpers/logging-output.js';
 const initFixture = initFixtureFactory(__dirname);
 
 // file under test

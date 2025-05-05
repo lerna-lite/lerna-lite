@@ -22,10 +22,10 @@ vi.mock('write-package', async () => await vi.importActual('../lib/__mocks__/wri
 
 import { dirname, resolve as pathResolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
-import yargParser from 'yargs-parser';
 
 // mocked module(s)
 import * as writePkg from 'write-package';
+import yargParser from 'yargs-parser';
 
 // helpers
 const __filename = fileURLToPath(import.meta.url);
@@ -34,8 +34,9 @@ import { initFixtureFactory } from '@lerna-test/helpers';
 const initFixture = initFixtureFactory(pathResolve(__dirname, '../../../publish/src/__tests__'));
 
 // test command
-import { VersionCommand } from '../version-command.js';
 import { VersionCommandOption } from '@lerna-lite/core';
+
+import { VersionCommand } from '../version-command.js';
 
 const createArgv = (cwd, ...args) => {
   args.unshift('version');

@@ -1,8 +1,10 @@
-import { expect, test, vi } from 'vitest';
-import { execa } from 'execa';
-import { execSync } from '@lerna-lite/core';
-import { fileURLToPath } from 'node:url';
 import { dirname } from 'node:path';
+import { fileURLToPath } from 'node:url';
+
+import { execSync } from '@lerna-lite/core';
+import { execa } from 'execa';
+import { expect, test, vi } from 'vitest';
+
 import { isAnythingCommitted } from '../lib/is-anything-committed.js';
 
 const __filename = fileURLToPath(import.meta.url);

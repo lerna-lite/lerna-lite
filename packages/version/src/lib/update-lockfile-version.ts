@@ -1,10 +1,11 @@
+import { promises } from 'node:fs';
+import { EOL } from 'node:os';
+import { join } from 'node:path';
+
 import type { Package } from '@lerna-lite/core';
 import { execPackageManager, execPackageManagerSync } from '@lerna-lite/core';
 import { log } from '@lerna-lite/npmlog';
 import { loadJsonFile } from 'load-json-file';
-import { promises } from 'node:fs';
-import { EOL } from 'node:os';
-import { join } from 'node:path';
 import semver from 'semver';
 import { writeJsonFile } from 'write-json-file';
 

@@ -86,6 +86,7 @@
     "eslint": "^9.25.1",
     "eslint-config-prettier": "^10.1.2",
     "eslint-plugin-n": "^17.17.0",
+    "eslint-plugin-simple-import-sort": "^12.1.1",
     "execa": "catalog:",
     "file-url": "^4.0.0",
     "find-up": "^7.0.0",

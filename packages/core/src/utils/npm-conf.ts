@@ -1,8 +1,8 @@
 import { resolve as pathResolve } from 'node:path';
 
 import { Conf } from '../utils/conf.js';
-import { toNerfDart } from './nerf-dart.js';
 import { Defaults } from './defaults.js';
+import { toNerfDart } from './nerf-dart.js';
 
 // https://github.com/npm/npm/blob/latest/lib/config/core.js#L101-L200
 function npmConf(opts: any) {

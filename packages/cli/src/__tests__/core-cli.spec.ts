@@ -1,10 +1,12 @@
-import { beforeAll, describe, expect, it, vi } from 'vitest';
 import { dirname } from 'node:path';
 import { fileURLToPath } from 'node:url';
+
 import { Package, ValidationError } from '@lerna-lite/core';
-import { loggingOutput } from '@lerna-test/helpers/logging-output.js';
-import lernaCLI from '../lerna-cli.js';
 import { initFixtureFactory } from '@lerna-test/helpers';
+import { loggingOutput } from '@lerna-test/helpers/logging-output.js';
+import { beforeAll, describe, expect, it, vi } from 'vitest';
+
+import lernaCLI from '../lerna-cli.js';
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
 const initFixture = initFixtureFactory(__dirname);

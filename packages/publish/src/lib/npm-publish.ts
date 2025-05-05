@@ -1,10 +1,11 @@
+import { dirname, join } from 'node:path';
+
 import { type LifecycleConfig, type Package, runLifecycle } from '@lerna-lite/core';
 import { log } from '@lerna-lite/npmlog';
 import { type OneTimePasswordCache, otplease } from '@lerna-lite/version';
 import PackageJson from '@npmcli/package-json';
 import { readFile } from 'fs/promises';
 import { publish } from 'libnpmpublish';
-import { dirname, join } from 'node:path';
 import npa from 'npm-package-arg';
 
 import type { LibNpmPublishOptions, PackagePublishConfig } from '../interfaces.js';

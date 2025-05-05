@@ -14,14 +14,12 @@ vi.mock('glob', async () => ({
 
 // mocked modules
 import { describeRefSync } from '../../describe-ref.js';
-import { hasTags } from '../lib/has-tags.js';
-import { diffWorkspaceCatalog, makeDiffPredicate } from '../lib/make-diff-predicate.js';
-
 // helpers
 import buildGraph from '../__helpers__/build-graph.js';
-
 // file under test
 import { collectUpdates } from '../collect-updates.js';
+import { hasTags } from '../lib/has-tags.js';
+import { diffWorkspaceCatalog, makeDiffPredicate } from '../lib/make-diff-predicate.js';
 
 // default mock implementations
 (describeRefSync as Mock).mockReturnValue({

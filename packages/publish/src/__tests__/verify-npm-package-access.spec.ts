@@ -2,12 +2,13 @@ import { afterEach, beforeAll, beforeEach, describe, expect, Mock, test, vi } fr
 
 vi.mock('libnpmaccess');
 
-import { FetchConfig, Project } from '@lerna-lite/core';
-import { loggingOutput } from '@lerna-test/helpers/logging-output.js';
-import { initFixtureFactory } from '@lerna-test/helpers';
-import access from 'libnpmaccess';
-import { fileURLToPath } from 'node:url';
 import { dirname } from 'node:path';
+import { fileURLToPath } from 'node:url';
+
+import { FetchConfig, Project } from '@lerna-lite/core';
+import { initFixtureFactory } from '@lerna-test/helpers';
+import { loggingOutput } from '@lerna-test/helpers/logging-output.js';
+import access from 'libnpmaccess';
 
 import { verifyNpmPackageAccess } from '../lib/verify-npm-package-access.js';
 

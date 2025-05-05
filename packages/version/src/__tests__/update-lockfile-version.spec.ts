@@ -10,14 +10,14 @@ vi.mock('@lerna-lite/core', async () => {
   };
 });
 
-import { Package } from '@lerna-lite/core';
-import { log } from '@lerna-lite/npmlog';
-import { pathExistsSync, readJsonSync } from 'fs-extra/esm';
 import { promises as fsPromises } from 'node:fs';
 import { dirname as pathDirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { stripVTControlCharacters } from 'node:util';
 
+import { Package } from '@lerna-lite/core';
+import { log } from '@lerna-lite/npmlog';
+import { pathExistsSync, readJsonSync } from 'fs-extra/esm';
 // mocked or stubbed modules
 import { loadJsonFile } from 'load-json-file';
 
@@ -30,10 +30,10 @@ const initFixture = initFixtureFactory(__dirname);
 
 import {
   loadPackageLockFileWhenExists,
+  runInstallLockFileOnly,
+  saveUpdatedLockJsonFile,
   updateClassicLockfileVersion,
   updateTempModernLockfileVersion,
-  saveUpdatedLockJsonFile,
-  runInstallLockFileOnly,
   validateFileExists,
 } from '../lib/update-lockfile-version.js';
 

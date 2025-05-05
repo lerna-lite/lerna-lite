@@ -3,8 +3,9 @@ import { describe, expect, it, vi } from 'vitest';
 vi.mock('@lerna-lite/version', () => {
   return { VersionCommand: null };
 });
-import cliVersion from '../cli-version-commands.js';
 import yargs from 'yargs/yargs';
+
+import cliVersion from '../cli-version-commands.js';
 
 describe('Version Command CLI options', () => {
   it('should log a console error when versionCommand is not provided', async () => {

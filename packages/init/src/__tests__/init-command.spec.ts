@@ -1,19 +1,19 @@
-import { describe, expect, it, vi } from 'vitest';
-import { ensureDir, outputJson, pathExists, readJson } from 'fs-extra/esm';
 import { dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
-import { temporaryDirectory } from 'tempy';
 
 // helpers
 import { commandRunner, initFixtureFactory } from '@lerna-test/helpers';
+import { ensureDir, outputJson, pathExists, readJson } from 'fs-extra/esm';
+import { temporaryDirectory } from 'tempy';
+import { describe, expect, it, vi } from 'vitest';
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
 const initFixture = initFixtureFactory(__dirname);
 
 // file under test
+import cliCommands from '../../../cli/src/cli-commands/cli-init-commands.js';
 import { InitCommand } from '../index.js';
 import { factory } from '../init-command.js';
-import cliCommands from '../../../cli/src/cli-commands/cli-init-commands.js';
 const lernaInit = commandRunner(cliCommands);
 
 // file under test
