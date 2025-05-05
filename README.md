@@ -31,6 +31,7 @@
 - [`lerna.json` config file](https://github.com/lerna-lite/lerna-lite/wiki/lerna.json)
 - [Contributions](#contributions)
 - [Troubleshooting](https://github.com/lerna-lite/lerna-lite/wiki/Troubleshooting)
+- [Sponsors](#sponsors)
 
 ### Available Commands
 
