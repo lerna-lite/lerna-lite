@@ -1,4 +1,4 @@
-import { basename, dirname, join, relative,resolve as pathResolve } from 'node:path';
+import { basename, dirname, join, relative, resolve as pathResolve } from 'node:path';
 
 import { log } from '@lerna-lite/npmlog';
 import { loadJsonFile, loadJsonFileSync } from 'load-json-file';

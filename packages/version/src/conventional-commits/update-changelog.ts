@@ -1,7 +1,7 @@
 import type { ChangelogPresetOptions, Package } from '@lerna-lite/core';
 import { EOL } from '@lerna-lite/core';
 import { log } from '@lerna-lite/npmlog';
-import type { Context,Options as ChangelogCoreOptions } from 'conventional-changelog';
+import type { Context, Options as ChangelogCoreOptions } from 'conventional-changelog';
 import conventionalChangelogCore from 'conventional-changelog';
 import type { Options as WriterOptions } from 'conventional-changelog-writer';
 import { writeFile } from 'fs/promises';

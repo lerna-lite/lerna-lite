@@ -1,4 +1,4 @@
-import type { Options as ExecaOptions,SyncOptions as ExacaSyncOptions } from 'execa';
+import type { Options as ExecaOptions, SyncOptions as ExacaSyncOptions } from 'execa';
 
 import { exec, execSync } from '../child-process.js';
 import type { Package } from '../package.js';

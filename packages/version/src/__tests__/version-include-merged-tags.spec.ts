@@ -13,7 +13,7 @@ vi.mock('@lerna-lite/core', async () => ({
 }));
 
 import { appendFileSync } from 'node:fs';
-import { dirname as pathDirname,join } from 'node:path';
+import { dirname as pathDirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
 
 // mocked modules
