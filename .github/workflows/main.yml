@@ -63,7 +63,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        node: [20, 22]
+        node: [20, 22, 24]
         platform: [ubuntu-latest]
 
     name: 'Run on Ubuntu / Node${{ matrix.node }}'
