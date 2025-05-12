@@ -4,6 +4,13 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [4.1.2](https://github.com/lerna-lite/lerna-lite/compare/v4.1.1...v4.1.2) (2025-05-12)
+
+### Bug Fixes
+
+* **deps:** update inquirer packages ([#1035](https://github.com/lerna-lite/lerna-lite/issues/1035)) ([16b6745](https://github.com/lerna-lite/lerna-lite/commit/16b67458e086b320badf951c961ffad7408987b0)) - by @renovate[bot]
+* **publish:** re-prompt OTP if it expired when publishing too many pkgs ([#1034](https://github.com/lerna-lite/lerna-lite/issues/1034)) ([9df3f69](https://github.com/lerna-lite/lerna-lite/commit/9df3f695b188270c653d21ac00b6cb379e418e89)) - by @ghiscoding
+
 ## [4.1.1](https://github.com/lerna-lite/lerna-lite/compare/v4.1.0...v4.1.1) (2025-04-29)
 
 ### Bug Fixes
