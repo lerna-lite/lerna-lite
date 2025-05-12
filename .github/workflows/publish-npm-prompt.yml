@@ -104,9 +104,35 @@ jobs:
               description: 'OTP from authenticator app'
 
       - name: Lerna Publish 📦
+        if: ${{ inputs.dryrun != true }}
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
           NPM_CONFIG_PROVENANCE: true
+        shell: bash
         run: |
-          pnpm run local-lerna publish from-package --force-publish --yes --otp ${{ steps.wait-for-secrets.outputs.OTP }}
+          # Attempt to publish all packages
+          try {
+            pnpm run local-lerna publish from-package --force-publish --yes --otp ${{ steps.wait-for-secrets.outputs.OTP }}
+          } catch (error) {
+            # Check for EOTP error
+            if [[ "$error" == *"EOTP"* ]]; then
+              echo "::error title=OTP Expired::OTP has expired. Please provide a new OTP."
+              # Prompt for a new OTP
+              OTP=$(step-security/wait-for-secrets@v1 \
+                secrets: |
+                  OTP:
+                    name: 'New OTP to publish package'
+                    description: 'OTP from authenticator app' \
+                )
+              # Retry the publish command with the new OTP
+              pnpm run local-lerna publish from-package --force-publish --yes --otp $OTP
+            # Check for version conflict error (replace with your actual check)
+            elif [[ "$error" == *"version conflict"* ]]; then
+              echo "::warning title=Version Conflict::A package has a version conflict. Skipping."
+            else
+              # Fail the workflow for other errors
+              echo "::error title=Publish Failed::Publishing failed with an unexpected error."
+              exit 1
+            }
+          }

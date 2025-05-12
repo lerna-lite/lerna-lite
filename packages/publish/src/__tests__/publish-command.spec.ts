@@ -431,6 +431,108 @@ describe('PublishCommand', () => {
     });
   });
 
+  describe('OTP Retry Logic', () => {
+    beforeEach(() => {
+      vi.clearAllMocks();
+    });
+
+    it('retries publishing a package after OTP expiration', async () => {
+      const testDir = await initFixture('normal');
+
+      // Simulate OTP expiration on the first publish attempt
+      (npmPublish as Mock).mockImplementationOnce(() => {
+        const error = new Error('OTP expired') as any;
+        error.code = 'EOTP';
+        throw error;
+      });
+
+      // Simulate successful OTP re-request
+      (getOneTimePassword as Mock).mockResolvedValueOnce('123456');
+
+      await new PublishCommand(createArgv(testDir));
+
+      expect(getOneTimePassword).toHaveBeenCalledTimes(1);
+      expect(npmPublish).toHaveBeenCalledTimes(5); // 4 initial calls + 1 retry for package-1
+    });
+
+    it('fails the process if OTP is not provided after expiration', async () => {
+      const testDir = await initFixture('normal');
+
+      // Simulate OTP expiration on the first publish attempt
+      (npmPublish as Mock).mockImplementationOnce(() => {
+        const error = new Error('OTP expired') as any;
+        error.code = 'EOTP';
+        throw error;
+      });
+
+      // Simulate user not providing an OTP
+      (getOneTimePassword as Mock).mockRejectedValueOnce(new Error('User canceled OTP input'));
+
+      const command = new PublishCommand(createArgv(testDir, '--no-sort'));
+      await expect(command).rejects.toThrow('User canceled OTP input');
+
+      expect(getOneTimePassword).toHaveBeenCalledTimes(1);
+      expect(npmPublish).toHaveBeenCalledTimes(3); // Only 3 calls before aborting
+    });
+  });
+
+  describe('Version Conflict Handling', () => {
+    beforeEach(() => {
+      vi.clearAllMocks();
+    });
+
+    it('skips publishing a package with a version conflict', async () => {
+      const testDir = await initFixture('normal');
+
+      // Simulate a version conflict error
+      (npmPublish as Mock).mockImplementationOnce(() => {
+        const error = new Error('Version conflict') as any;
+        error.code = 'E409';
+        throw error;
+      });
+
+      await new PublishCommand(createArgv(testDir, '--no-sort'));
+
+      expect(npmPublish).toHaveBeenCalledTimes(4); // 4 initial calls, but one fails due to conflict
+      const logMessages = loggingOutput('warn');
+      expect(logMessages).toEqual(expect.arrayContaining(['Package is already published: package-1@1.0.1']));
+    });
+  });
+
+  describe('Integration of OTP Retry and Version Conflict Handling', () => {
+    beforeEach(() => {
+      vi.clearAllMocks();
+    });
+
+    it('handles both OTP expiration and version conflicts gracefully', async () => {
+      const testDir = await initFixture('normal');
+
+      // Simulate OTP expiration on the first publish attempt
+      (npmPublish as Mock).mockImplementationOnce(() => {
+        const error = new Error('OTP expired') as any;
+        error.code = 'EOTP';
+        throw error;
+      });
+
+      // Simulate successful OTP re-request
+      (getOneTimePassword as Mock).mockResolvedValueOnce('123456');
+
+      // Simulate a version conflict on the second package
+      (npmPublish as Mock).mockImplementationOnce(() => {
+        const error = new Error('Version conflict') as any;
+        error.code = 'E409';
+        throw error;
+      });
+
+      await new PublishCommand(createArgv(testDir, '--no-sort'));
+
+      expect(getOneTimePassword).toHaveBeenCalledTimes(1);
+      expect(npmPublish).toHaveBeenCalledTimes(5); // 4 initial calls + 1 retry for package-1
+      const logMessages = loggingOutput('warn');
+      expect(logMessages).toEqual(expect.arrayContaining(['Package is already published: package-2@1.0.1']));
+    });
+  });
+
   describe('--legacy-auth', () => {
     beforeEach(() => {
       vi.clearAllMocks();

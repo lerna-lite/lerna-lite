@@ -942,65 +942,69 @@ export class PublishCommand extends Command<PublishCommandOption> {
       );
     }
 
-    const mapper = pPipe(
-      ...(
-        [
-          (pkg: Package & { packed: Tarball }) => {
-            const preDistTag = this.getPreDistTag(pkg);
-            const tag = !this.options.tempTag && preDistTag ? preDistTag : opts.tag;
-            const pkgOpts = Object.assign({}, opts, { tag });
+    const mapper = async (pkg: Package & { packed: Tarball }) => {
+      const preDistTag = this.getPreDistTag(pkg);
+      const tag = !this.options.tempTag && preDistTag ? preDistTag : opts.tag;
+      const pkgOpts = Object.assign({}, opts, { tag });
 
-            return pulseTillDone(
-              queue
-                ? queue.queue(() => npmPublish(pkg, pkg.packed.tarFilePath, pkgOpts, this.otpCache))
-                : npmPublish(pkg, pkg.packed.tarFilePath, pkgOpts, this.otpCache)
-            )
-              .then(() => {
-                this.publishedPackages.push(pkg);
+      try {
+        await pulseTillDone(
+          queue
+            ? queue.queue(() => npmPublish(pkg, pkg.packed.tarFilePath, pkgOpts, this.otpCache))
+            : npmPublish(pkg, pkg.packed.tarFilePath, pkgOpts, this.otpCache)
+        );
+        this.publishedPackages.push(pkg);
 
-                tracker.success('published', pkg.name, pkg.version);
-                tracker.completeWork(1);
+        tracker.success('published', pkg.name, pkg.version);
+        tracker.completeWork(1);
 
-                logPacked(pkg, this.options.dryRun);
+        logPacked(pkg, this.options.dryRun);
 
-                return pkg;
-              })
-              .catch((err) => {
-                const isNpmJsComConflict = isNpmJsPublishVersionConflict(err);
-                const isNpmPkgGitHubComConflict = isNpmPkgGitHubPublishVersionConflict(err);
+        return pkg;
+      } catch (err: any) {
+        if (err.code === 'EOTP') {
+          this.logger.warn('OTP expired, requesting a new OTP...');
+          await this.requestOneTimePassword(); // Re-request OTP
+          return pulseTillDone(
+            queue
+              ? queue.queue(() => npmPublish(pkg, pkg.packed.tarFilePath, pkgOpts, this.otpCache))
+              : npmPublish(pkg, pkg.packed.tarFilePath, pkgOpts, this.otpCache)
+          ); // Retry publish
+        }
 
-                if (isNpmJsComConflict || isNpmPkgGitHubComConflict) {
-                  tracker.warn('publish', `Package is already published: ${pkg.name}@${pkg.version}`);
-                  tracker.completeWork(1);
-                  return pkg;
-                }
+        const isNpmJsComConflict = isNpmJsPublishVersionConflict(err);
+        const isNpmPkgGitHubComConflict = isNpmPkgGitHubPublishVersionConflict(err);
 
-                this.logger.silly('', err);
-                this.logger.warn('notice', `Package failed to publish: ${pkg.name}`);
-                this.logger.error(err.code, (err.body && err.body.error) || err.message);
+        if (isNpmJsComConflict || isNpmPkgGitHubComConflict) {
+          tracker.warn('publish', `Package is already published: ${pkg.name}@${pkg.version}`);
+          tracker.completeWork(1);
+          return pkg;
+        }
 
-                // avoid dumping logs, this isn't a lerna problem
-                err.name = 'ValidationError';
-                // ensure process exits non-zero
-                if ('errno' in err && typeof err.errno === 'number' && Number.isFinite(err.errno)) {
-                  process.exitCode = err.errno;
-                } else {
-                  this.logger.error('', `errno "${err.errno}" is not a valid exit code - exiting with code 1`);
-                  process.exitCode = 1;
-                }
+        this.logger.silly('', err);
+        this.logger.warn('notice', `Package failed to publish: ${pkg.name}`);
+        this.logger.error(err.code, (err.body && err.body.error) || err.message);
 
-                throw err;
-              });
-          },
-        ] as UnaryFunction<any, unknown>[]
-      ).filter(Boolean)
-    );
+        // avoid dumping logs, this isn't a lerna problem
+        err.name = 'ValidationError';
+        // ensure process exits non-zero
+        /* v8 ignore next 3 */
+        if ('errno' in err && typeof err.errno === 'number' && Number.isFinite(err.errno)) {
+          process.exitCode = err.errno;
+        } else {
+          this.logger.error('', `errno "${err.errno}" is not a valid exit code - exiting with code 1`);
+          process.exitCode = 1;
+        }
+
+        throw err;
+      }
+    };
 
     chain = chain.then(() => {
       if (this.toposort) {
-        return this.topoMapPackages(mapper);
+        return this.topoMapPackages((pkg) => mapper(pkg as Package & { packed: Tarball }));
       }
-      return pMap(this.packagesToPublish, mapper, { concurrency: this.concurrency });
+      return pMap(this.packagesToPublish as (Package & { packed: Tarball })[], mapper, { concurrency: this.concurrency });
     });
 
     if (!this.hasRootedLeaf) {
