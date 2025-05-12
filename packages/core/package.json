@@ -36,9 +36,9 @@
     "node": "^20.17.0 || >=22.9.0"
   },
   "dependencies": {
-    "@inquirer/expand": "^4.0.12",
-    "@inquirer/input": "^4.1.9",
-    "@inquirer/select": "^4.2.0",
+    "@inquirer/expand": "^4.0.13",
+    "@inquirer/input": "^4.1.10",
+    "@inquirer/select": "^4.2.1",
     "@lerna-lite/npmlog": "workspace:*",
     "@npmcli/run-script": "^9.1.0",
     "clone-deep": "^4.0.1",
