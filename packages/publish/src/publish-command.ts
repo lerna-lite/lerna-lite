@@ -988,6 +988,7 @@ export class PublishCommand extends Command<PublishCommandOption> {
         // avoid dumping logs, this isn't a lerna problem
         err.name = 'ValidationError';
         // ensure process exits non-zero
+        /* v8 ignore next 3 */
         if ('errno' in err && typeof err.errno === 'number' && Number.isFinite(err.errno)) {
           process.exitCode = err.errno;
         } else {
