@@ -112,27 +112,26 @@ jobs:
         shell: bash
         run: |
           # Attempt to publish all packages
-          try {
-            pnpm run local-lerna publish from-package --force-publish --yes --otp ${{ steps.wait-for-secrets.outputs.OTP }}
-          } catch (error) {
+          pnpm run local-lerna publish from-package --force-publish --yes --otp ${{ steps.wait-for-secrets.outputs.OTP }} || {
             # Check for EOTP error
-            if [[ "$error" == *"EOTP"* ]]; then
+            if [[ "$output" == *"EOTP"* ]]; then
               echo "::error title=OTP Expired::OTP has expired. Please provide a new OTP."
               # Prompt for a new OTP
-              OTP=$(step-security/wait-for-secrets@v1 \
+              OTP=$(\
+                uses: step-security/wait-for-secrets@v1 \
                 secrets: |
                   OTP:
                     name: 'New OTP to publish package'
                     description: 'OTP from authenticator app' \
-                )
+              )
               # Retry the publish command with the new OTP
               pnpm run local-lerna publish from-package --force-publish --yes --otp $OTP
             # Check for version conflict error (replace with your actual check)
-            elif [[ "$error" == *"version conflict"* ]]; then
+            elif [[ "$output" == *"version conflict"* ]]; then
               echo "::warning title=Version Conflict::A package has a version conflict. Skipping."
             else
               # Fail the workflow for other errors
               echo "::error title=Publish Failed::Publishing failed with an unexpected error."
               exit 1
-            }
+            fi
           }
