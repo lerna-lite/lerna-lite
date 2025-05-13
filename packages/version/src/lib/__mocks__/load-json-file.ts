@@ -38,25 +38,3 @@ afterEach(() => {
   asyncRegistry.clear();
   syncRegistry.clear();
 });
-
-// export { asyncRegistry as registry, mockLoadJsonFile as loadJsonFile, mockLoadJsonFileSync as loadJsonFileSync };
-// export {
-//   registry: asyncRegistry,
-//   loadJsonFile: mockLoadJsonFile,
-//   loadJsonFileSync: mockLoadJsonFileSync,
-// };
-// export {
-//   // registry: asyncRegistry,
-//   loadJsonFile: mockLoadJsonFile,
-//   loadJsonFileSync: mockLoadJsonFileSync,
-// }
-
-// module.exports.loadJsonFile = mockLoadJsonFile;
-// module.exports.registry = asyncRegistry;
-// module.exports.loadJsonFileSync = mockLoadJsonFileSync;
-// module.exports.loadJsonFileSync.registry = syncRegistry;
-
-// mockLoadJsonFile.registry = asyncRegistry;
-// mockLoadJsonFile.sync = mockLoadJsonFileSync;
-// mockLoadJsonFile.sync.registry = syncRegistry;
-// export default mockLoadJsonFile;
