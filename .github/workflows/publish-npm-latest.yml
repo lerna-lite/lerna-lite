@@ -42,7 +42,7 @@ jobs:
         uses: actions/setup-node@v4
         with:
           registry-url: 'https://registry.npmjs.org/'
-          node-version: 20
+          node-version: 22
           scope: "@lerna-lite"
 
       - name: Install pnpm
@@ -119,29 +119,37 @@ jobs:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
           NPM_CONFIG_PROVENANCE: true
-        shell: bash
+        id: lerna-publish
         run: |
           # Attempt to publish all packages
-          pnpm run local-lerna publish from-package --force-publish --yes --otp ${{ steps.wait-for-secrets.outputs.OTP }} || {
-            # Check for EOTP error
-            if [[ "$output" == *"EOTP"* ]]; then
-              echo "::error title=OTP Expired::OTP has expired. Please provide a new OTP."
-              # Prompt for a new OTP
-              OTP=$(\
-                uses: step-security/wait-for-secrets@v1 \
-                secrets: |
-                  OTP:
-                    name: 'New OTP to publish package'
-                    description: 'OTP from authenticator app' \
-              )
-              # Retry the publish command with the new OTP
-              pnpm run local-lerna publish from-package --force-publish --yes --otp $OTP
-            # Check for version conflict error (replace with your actual check)
-            elif [[ "$output" == *"version conflict"* ]]; then
-              echo "::warning title=Version Conflict::A package has a version conflict. Skipping."
-            else
-              # Fail the workflow for other errors
-              echo "::error title=Publish Failed::Publishing failed with an unexpected error."
-              exit 1
-            fi
+          pnpm run local-lerna publish from-package --force-publish --yes --otp ${{ steps.wait-for-secrets.outputs.OTP }}
+          EXIT_CODE=$?
+          echo "EXIT_CODE=$EXIT_CODE" >> $GITHUB_ENV
+          OUTPUT=$(cat /dev/stdout)
+          echo "OUTPUT=$OUTPUT" >> $GITHUB_ENV
+          if [ $EXIT_CODE -ne 0 ]; then
+            echo "::set-output name=publish_failed::true"
+          fi
+
+      - name: Check for EOTP and Prompt for New OTP
+        if: ${{ steps.lerna-publish.outputs.publish_failed == 'true' && contains(env.OUTPUT, 'HttpErrorAuthOTP') }}
+        uses: step-security/wait-for-secrets@v1
+        id: wait-for-new-otp
+        with:
+          secrets: |
+            OTP:
+              name: 'New OTP to publish package'
+              description: 'OTP from authenticator app'
+
+      - name: Retry Lerna Publish with New OTP
+        if: ${{ steps.lerna-publish.outputs.publish_failed == 'true' && contains(env.OUTPUT, 'HttpErrorAuthOTP') }}
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+          NPM_CONFIG_PROVENANCE: true
+        run: |
+          # Retry the publish command with the new OTP
+          pnpm run local-lerna publish from-package --force-publish --yes --otp ${{ steps.wait-for-new-otp.outputs.OTP }} || {
+            echo "::error title=Publish Failed::Publishing failed even after providing a new OTP."
+            exit 1
           }
