@@ -36,5 +36,5 @@
     },
   ],
   ignoreDeps: ['lee-dohm/no-response', 'node', 'pnpm'],
-  schedule: ['every 4 weeks on Tuesday'],
+  schedule: ['every 2 months on Thursday'],
 }
