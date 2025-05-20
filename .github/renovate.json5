@@ -28,12 +28,12 @@
     // skip again conventional-changelog deps that have more breaking changes that I do not yet understand (again sic)
     {
       packageNames: ['conventional-changelog'],
-      allowedVersions: '6.0.0'
-    }
+      allowedVersions: '6.0.0',
+    },
     {
       packageNames: ['conventional-changelog-conventionalcommits'],
-      allowedVersions: '8.0.0'
-    }
+      allowedVersions: '8.0.0',
+    },
   ],
   ignoreDeps: ['lee-dohm/no-response', 'node', 'pnpm'],
   schedule: ['every 4 weeks on Tuesday'],
