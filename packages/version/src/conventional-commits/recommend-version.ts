@@ -87,7 +87,8 @@ export async function recommendVersion(
       // result might be undefined because some presets are not consistent with angular
       // we still need to bump _something_ because lerna-lite saw a change here
       const whatBumpFn = (await getWhatBump()) as (commits: Commit[]) => Promise<BumperRecommendation | null | undefined>;
-      let releaseType = ((await bumper.bump(whatBumpFn)).releaseType || 'patch') as ReleaseType;
+      const bumpResult = (await bumper.bump(whatBumpFn)) as BumperRecommendation;
+      let releaseType = (bumpResult?.releaseType || 'patch') as ReleaseType;
 
       if (prereleaseId) {
         const shouldBump = conventionalBumpPrerelease || shouldBumpPrerelease(releaseType, pkg.version);
