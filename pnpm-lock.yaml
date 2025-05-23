@@ -153,8 +153,8 @@ importers:
         specifier: ^3.1.4
         version: 3.1.4(vitest@3.1.4(@types/node@22.15.21)(yaml@2.8.0))
       '@vitest/eslint-plugin':
-        specifier: ^1.2.0
-        version: 1.2.0(eslint@9.27.0)(typescript@5.8.3)(vitest@3.1.4(@types/node@22.15.21)(yaml@2.8.0))
+        specifier: ^1.2.1
+        version: 1.2.1(eslint@9.27.0)(typescript@5.8.3)(vitest@3.1.4(@types/node@22.15.21)(yaml@2.8.0))
       conventional-changelog-conventionalcommits:
         specifier: ^9.0.0
         version: 9.0.0
@@ -723,8 +723,8 @@ importers:
   packages/version:
     dependencies:
       '@conventional-changelog/git-client':
-        specifier: ^2.2.0
-        version: 2.2.0(conventional-commits-filter@5.0.0)(conventional-commits-parser@6.1.0)
+        specifier: ^2.3.0
+        version: 2.3.0(conventional-commits-filter@5.0.0)(conventional-commits-parser@6.1.0)
       '@lerna-lite/cli':
         specifier: workspace:*
         version: link:../cli
@@ -915,8 +915,8 @@ packages:
     resolution: {integrity: sha512-6zABk/ECA/QYSCQ1NGiVwwbQerUCZ+TQbp64Q3AgmfNvurHH0j8TtXa1qbShXA6qqkpAj4V5W8pP6mLe1mcMqA==}
     engines: {node: '>=18'}
 
-  '@conventional-changelog/git-client@2.2.0':
-    resolution: {integrity: sha512-pi7zipe40jaf0GBmC0COO7jh1m1U2ZZ0LRbt19ydVleZ5pfwy3yGb+Tl40irqJz69+UqmE9+ZjaJc7j46Jhqng==}
+  '@conventional-changelog/git-client@2.3.0':
+    resolution: {integrity: sha512-QMDUPg9jMnclFoQL/YwLhdvDK+El3SPBiB6B9gqXQk283lWLw9qb4y4DPNZWMHaIeB6Xkx4CD7AEgnCxihWgng==}
     engines: {node: '>=18'}
     peerDependencies:
       conventional-commits-filter: ^5.0.0
@@ -1640,8 +1640,8 @@ packages:
       '@vitest/browser':
         optional: true
 
-  '@vitest/eslint-plugin@1.2.0':
-    resolution: {integrity: sha512-6vn3QDy+ysqHGkbH9fU9uyWptqNc638dgPy0uAlh/XpniTBp+0WeVlXGW74zqggex/CwYOhK8t5GVo/FH3NMPw==}
+  '@vitest/eslint-plugin@1.2.1':
+    resolution: {integrity: sha512-JQr1jdVcrsoS7Sdzn83h9sq4DvREf9Q/onTZbJCqTVlv/76qb+TZrLv/9VhjnjSMHweQH5FdpMDeCR6aDe2fgw==}
     peerDependencies:
       eslint: '>= 8.57.0'
       typescript: '>= 5.0.0'
@@ -3612,7 +3612,7 @@ snapshots:
 
   '@bcoe/v8-coverage@1.0.2': {}
 
-  '@conventional-changelog/git-client@2.2.0(conventional-commits-filter@5.0.0)(conventional-commits-parser@6.1.0)':
+  '@conventional-changelog/git-client@2.3.0(conventional-commits-filter@5.0.0)(conventional-commits-parser@6.1.0)':
     dependencies:
       semver: 7.7.2
     optionalDependencies:
@@ -4325,7 +4325,7 @@ snapshots:
     transitivePeerDependencies:
       - supports-color
 
-  '@vitest/eslint-plugin@1.2.0(eslint@9.27.0)(typescript@5.8.3)(vitest@3.1.4(@types/node@22.15.21)(yaml@2.8.0))':
+  '@vitest/eslint-plugin@1.2.1(eslint@9.27.0)(typescript@5.8.3)(vitest@3.1.4(@types/node@22.15.21)(yaml@2.8.0))':
     dependencies:
       '@typescript-eslint/utils': 8.32.1(eslint@9.27.0)(typescript@5.8.3)
       eslint: 9.27.0
@@ -4584,7 +4584,7 @@ snapshots:
 
   conventional-changelog@7.0.2(conventional-commits-filter@5.0.0):
     dependencies:
-      '@conventional-changelog/git-client': 2.2.0(conventional-commits-filter@5.0.0)(conventional-commits-parser@6.1.0)
+      '@conventional-changelog/git-client': 2.3.0(conventional-commits-filter@5.0.0)(conventional-commits-parser@6.1.0)
       '@types/normalize-package-data': 2.4.4
       conventional-changelog-preset-loader: 5.0.0
       conventional-changelog-writer: 8.1.0
@@ -4603,7 +4603,7 @@ snapshots:
 
   conventional-recommended-bump@11.1.0:
     dependencies:
-      '@conventional-changelog/git-client': 2.2.0(conventional-commits-filter@5.0.0)(conventional-commits-parser@6.1.0)
+      '@conventional-changelog/git-client': 2.3.0(conventional-commits-filter@5.0.0)(conventional-commits-parser@6.1.0)
       conventional-changelog-preset-loader: 5.0.0
       conventional-commits-filter: 5.0.0
       conventional-commits-parser: 6.1.0

@@ -16,9 +16,9 @@ import { setConfigChangelogCommitClientLogin, setConfigChangelogCommitGitAuthor 
 
 /**
  * Update changelog with the commits of the new release
- * @param {Package} pkg
- * @param {ChangelogType} type
- * @param {UpdateChangelogOption} commandOptions
+ * @param {Package} pkg - Package (or root) to update changelog
+ * @param {ChangelogType} type - "fixed" | "independent" | "root"
+ * @param {UpdateChangelogOption} updateOptions - multiple options & context
  */
 export async function updateChangelog(pkg: Package, type: ChangelogType, updateOptions: UpdateChangelogOption) {
   log.silly(type, 'for %s at %s', pkg.name, pkg.location);
@@ -35,9 +35,9 @@ export async function updateChangelog(pkg: Package, type: ChangelogType, updateO
   } = updateOptions;
 
   const config = await GetChangelogConfig.getChangelogConfig(changelogPreset, rootPath);
-  const genOptions = {} as ChangelogCoreOptions;
+  const ccOptions = {} as ChangelogCoreOptions;
   const tagOptions = {} as GetSemverTagsParams;
-  const context = {} as Context; // pass as positional because cc-core's merge-config is wack
+  const writerContext = {} as Context; // pass as positional because cc-core's merge-config is wack
   const writerOpts = {} as WriterOptions;
   let changelogConfig = {} as ChangelogConfig;
 
@@ -58,7 +58,7 @@ export async function updateChangelog(pkg: Package, type: ChangelogType, updateO
 
   let pkgPath = '';
   if (type === 'root') {
-    context.version = version;
+    writerContext.version = version;
 
     // preserve tagPrefix because cc-core can't find the currentTag otherwise
     // root changelogs are only enabled in fixed mode, and need the proper tag prefix
@@ -75,7 +75,7 @@ export async function updateChangelog(pkg: Package, type: ChangelogType, updateO
       tagOptions.prefix = tagPrefix;
 
       // preserve tagPrefix because cc-core can't find the currentTag otherwise
-      context.version = pkg.version;
+      writerContext.version = pkg.version;
     }
   }
 
@@ -83,10 +83,10 @@ export async function updateChangelog(pkg: Package, type: ChangelogType, updateO
   const changelogStream = new ConventionalChangelog()
     .readPackage(pkgPath)
     .config(changelogConfig)
+    .options(ccOptions)
     .commits(gitRawCommitsOpts)
-    .context(context)
-    .options(genOptions)
     .tags(tagOptions)
+    .context(writerContext)
     .writer(writerOpts)
     .write();
 
