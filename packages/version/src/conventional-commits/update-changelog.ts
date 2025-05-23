@@ -42,13 +42,8 @@ export async function updateChangelog(pkg: Package, type: ChangelogType, updateO
   let changelogConfig = {} as ChangelogConfig;
 
   // cc-core mutates input :P
-  if (config.conventionalChangelog) {
-    // "new" preset API
-    changelogConfig = Object.assign({}, config.conventionalChangelog) as unknown as ChangelogConfig;
-  } else {
-    // "old" preset API
-    changelogConfig = Object.assign({}, config) as ChangelogConfig;
-  }
+  // "new" preset API
+  changelogConfig = Object.assign({}, config) as ChangelogConfig;
 
   // NOTE: must pass as positional argument due to weird bug in merge-config
   const gitRawCommitsOpts: GetCommitsParams = {};

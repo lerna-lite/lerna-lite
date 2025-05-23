@@ -808,11 +808,7 @@ describe('conventional-commits', () => {
       await pkg1.set('version', '1.0.1').serialize();
       await pkg2.set('version', '1.1.0').serialize();
 
-      const opts = {
-        conventionalChangelog: {
-          changelogPreset: 'conventional-changelog-angular',
-        },
-      };
+      const opts = { changelogPreset: 'conventional-changelog-angular' };
       const [changelogOne, changelogTwo] = await Promise.all([updateChangelog(pkg1, 'independent', opts), updateChangelog(pkg2, 'independent', opts)]);
 
       expect(changelogOne.newEntry.trimEnd()).toMatchInlineSnapshot(`
