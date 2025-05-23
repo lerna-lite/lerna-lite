@@ -1,7 +1,7 @@
 {
   "name": "@lerna-lite/profiler",
   "description": "Lerna-Lite Profiler used by certain optional commands (Run/Exec)",
-  "version": "4.1.2",
+  "version": "4.2.0",
   "files": [
     "/dist"
   ],
