@@ -17,7 +17,7 @@ exports[`conventional-commits > updateChangelog() > creates changelog with chang
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
-## 1.1.0 (YYYY-MM-DD)
+# 1.1.0 (YYYY-MM-DD)
 
 ### Features
 
@@ -35,7 +35,7 @@ See [Conventional Commits](https://conventionalcommits.org) for commit guideline
 
 ### Features
 
-* I should be placed in the CHANGELOG ([SHA](https://github.com/lerna/changelog-missing/commit/GIT_HEAD))
+*  ([SHA](https://github.com/lerna/changelog-missing/commit/GIT_HEAD))
 
 `;
 
@@ -49,7 +49,7 @@ See [Conventional Commits](https://conventionalcommits.org) for commit guideline
 
 ### Features
 
-* I should be placed in the CHANGELOG ([SHA](https://github.com/lerna/changelog-missing/commit/GIT_HEAD))
+*  ([SHA](https://github.com/lerna/changelog-missing/commit/GIT_HEAD))
 
 `;
 
