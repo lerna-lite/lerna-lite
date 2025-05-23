@@ -4,13 +4,10 @@ import parserOpts from './parser-opts.js';
 import whatBump from './what-bump.js';
 import writerOpts from './writer-opts.js';
 
-module.exports = {
+export default {
   conventionalChangelog: {
-    parserOpts,
-    writerOpts,
-  },
-  recommendedBumpOpts: {
-    parserOpts,
+    parser: parserOpts,
+    writer: writerOpts,
     whatBump,
   },
 };

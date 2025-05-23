@@ -5,9 +5,8 @@ import whatBump from './what-bump.js';
 import writerOpts from './writer-opts.js';
 
 // https://github.com/conventional-changelog/conventional-changelog/blob/943542f3b2342bb5933d84847fb19b727c607df0/packages/conventional-changelog-ember/index.js#L10
-module.exports = presetOpts;
 
-export function presetOpts(cb) {
+export default function presetOpts(cb) {
   process.nextTick(cb, null, {
     parserOpts,
     writerOpts,

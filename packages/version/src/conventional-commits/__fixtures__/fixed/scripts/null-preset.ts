@@ -4,13 +4,8 @@ import whatBump from './null-what-bump.js';
 import parserOpts from './parser-opts.js';
 import writerOpts from './writer-opts.js';
 
-export const output = {
-  conventionalChangelog: {
-    parserOpts,
-    writerOpts,
-  },
-  recommendedBumpOpts: {
-    parserOpts,
-    whatBump,
-  },
+export default {
+  parser: parserOpts,
+  writer: writerOpts,
+  whatBump,
 };

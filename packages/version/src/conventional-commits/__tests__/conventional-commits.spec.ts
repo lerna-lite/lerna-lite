@@ -141,8 +141,7 @@ describe('conventional-commits', () => {
       expect(bump2).toBe('1.1.0-beta.0');
     });
 
-    // TODO: need to be re-enabled once problem with Vitest Snapshot is fixed
-    it.skip('returns package-specific version bumps from prereleases with prereleaseId', async () => {
+    it('returns package-specific version bumps from prereleases with prereleaseId', async () => {
       const cwd = await initFixture('prerelease-independent');
       const [pkg1, pkg2, pkg3] = await Project.getPackages(cwd);
       const opts = { changelogPreset: 'angular' };
@@ -554,7 +553,7 @@ describe('conventional-commits', () => {
         }),
       ]);
 
-      expect(leafChangelog.newEntry.trimRight()).toMatchInlineSnapshot(`
+      expect(leafChangelog.newEntry.trimEnd()).toMatchInlineSnapshot(`
         ## [1.0.1](/compare/dragons-are-awesome1.0.0...dragons-are-awesome1.0.1) (YYYY-MM-DD)
 
 
@@ -562,7 +561,7 @@ describe('conventional-commits', () => {
 
         * A second commit for our CHANGELOG ([SHA](https://github.com/lerna/conventional-commits-fixed/commit/GIT_HEAD))
       `);
-      expect(rootChangelog.newEntry.trimRight()).toMatchInlineSnapshot(`
+      expect(rootChangelog.newEntry.trimEnd()).toMatchInlineSnapshot(`
         ## [1.0.1](/compare/dragons-are-awesome1.0.0...dragons-are-awesome1.0.1) (YYYY-MM-DD)
 
 
@@ -586,7 +585,7 @@ describe('conventional-commits', () => {
       });
 
       // second commit should not show up again
-      expect(lastRootChangelog.newEntry.trimRight()).toMatchInlineSnapshot(`
+      expect(lastRootChangelog.newEntry.trimEnd()).toMatchInlineSnapshot(`
         ## [1.0.2](/compare/dragons-are-awesome1.0.1...dragons-are-awesome1.0.2) (YYYY-MM-DD)
 
 
@@ -623,7 +622,7 @@ describe('conventional-commits', () => {
         }),
       ]);
 
-      expect(leafChangelog.newEntry.trimRight()).toMatchInlineSnapshot(`
+      expect(leafChangelog.newEntry.trimEnd()).toMatchInlineSnapshot(`
         ## [1.0.1](/compare/dragons-are-awesome1.0.0...dragons-are-awesome1.0.1) (YYYY-MM-DD)
 
 
@@ -631,7 +630,7 @@ describe('conventional-commits', () => {
 
         * A second commit for our CHANGELOG ([SHA](https://github.com/lerna/conventional-commits-fixed/commit/GIT_HEAD)) (Tester McPerson)
       `);
-      expect(rootChangelog.newEntry.trimRight()).toMatchInlineSnapshot(`
+      expect(rootChangelog.newEntry.trimEnd()).toMatchInlineSnapshot(`
         ## [1.0.1](/compare/dragons-are-awesome1.0.0...dragons-are-awesome1.0.1) (YYYY-MM-DD)
 
 
@@ -656,7 +655,7 @@ describe('conventional-commits', () => {
       });
 
       // second commit should not show up again
-      expect(lastRootChangelog.newEntry.trimRight()).toMatchInlineSnapshot(`
+      expect(lastRootChangelog.newEntry.trimEnd()).toMatchInlineSnapshot(`
         ## [1.0.2](/compare/dragons-are-awesome1.0.1...dragons-are-awesome1.0.2) (YYYY-MM-DD)
 
 
@@ -686,7 +685,8 @@ describe('conventional-commits', () => {
       });
 
       expect(pkg2.isBumpOnlyVersion).toBeTruthy();
-      expect(leafChangelog.newEntry.trimRight()).toMatchInlineSnapshot(`
+      expect(leafChangelog.newEntry.trimEnd()).toMatchInlineSnapshot(`
+        <a name="1.0.1"></a>
         ## <small>1.0.1 (YYYY-MM-DD)</small>
 
         **Note:** Version bump only for package package-2
@@ -713,9 +713,10 @@ describe('conventional-commits', () => {
       });
 
       expect(leafChangelog.newEntry).toMatchInlineSnapshot(`
+        <a name="1.0.1"></a>
         ## <small>1.0.1 (YYYY-MM-DD)</small>
 
-        * fix(pkg1): A commit using the old preset API ([SHA](https://github.com/lerna/conventional-commits-fixed/commit/SHA))
+        * fix(pkg1): A commit using the old preset API ([SHA](https://github.com/lerna/conventional-commits-fixed/commit/GIT_HEAD))
 
       `);
     });
@@ -740,9 +741,10 @@ describe('conventional-commits', () => {
       });
 
       expect(leafChangelog.newEntry).toMatchInlineSnapshot(`
+        <a name="1.0.1"></a>
         ## <small>1.0.1 (YYYY-MM-DD)</small>
 
-        * fix(pkg2): A commit using a legacy callback preset ([SHA](https://github.com/lerna/conventional-commits-fixed/commit/SHA))
+        * fix(pkg2): A commit using a legacy callback preset ([SHA](https://github.com/lerna/conventional-commits-fixed/commit/GIT_HEAD))
 
       `);
     });
@@ -776,9 +778,10 @@ describe('conventional-commits', () => {
       });
 
       expect(leafChangelog.newEntry).toMatchInlineSnapshot(`
+        <a name="1.0.1"></a>
         ## <small>1.0.1 (YYYY-MM-DD)</small>
 
-        * fix(pkg2): A commit using a legacy callback preset ([SHA](https://github.com/lerna/conventional-commits-fixed/commit/SHA))
+        * fix(pkg2): A commit using a legacy callback preset ([SHA](https://github.com/lerna/conventional-commits-fixed/commit/GIT_HEAD))
 
       `);
     });
@@ -805,12 +808,10 @@ describe('conventional-commits', () => {
       await pkg1.set('version', '1.0.1').serialize();
       await pkg2.set('version', '1.1.0').serialize();
 
-      const opts = {
-        changelogPreset: 'conventional-changelog-angular',
-      };
+      const opts = { changelogPreset: 'conventional-changelog-angular' };
       const [changelogOne, changelogTwo] = await Promise.all([updateChangelog(pkg1, 'independent', opts), updateChangelog(pkg2, 'independent', opts)]);
 
-      expect(changelogOne.newEntry.trimRight()).toMatchInlineSnapshot(`
+      expect(changelogOne.newEntry.trimEnd()).toMatchInlineSnapshot(`
         ## [1.0.1](/compare/package-1@1.0.0...package-1@1.0.1) (YYYY-MM-DD)
 
 
@@ -818,7 +819,7 @@ describe('conventional-commits', () => {
 
         * **stuff:** changed ([SHA](https://github.com/lerna/conventional-commits-independent/commit/GIT_HEAD))
       `);
-      expect(changelogTwo.newEntry.trimRight()).toMatchInlineSnapshot(`
+      expect(changelogTwo.newEntry.trimEnd()).toMatchInlineSnapshot(`
         # [1.1.0](/compare/package-2@1.0.0...package-2@1.1.0) (YYYY-MM-DD)
 
 
@@ -857,7 +858,7 @@ describe('conventional-commits', () => {
       };
       const [changelogOne, changelogTwo] = await Promise.all([updateChangelog(pkg1, 'independent', opts), updateChangelog(pkg2, 'independent', opts)]);
 
-      expect(changelogOne.newEntry.trimRight()).toMatchInlineSnapshot(`
+      expect(changelogOne.newEntry.trimEnd()).toMatchInlineSnapshot(`
         ## [1.0.1](/compare/package-1@1.0.0...package-1@1.0.1) (YYYY-MM-DD)
 
 
@@ -865,7 +866,7 @@ describe('conventional-commits', () => {
 
         * **stuff:** changed ([SHA](https://github.com/lerna/conventional-commits-independent/commit/GIT_HEAD)) (Tester McPerson)
       `);
-      expect(changelogOne.content.trimRight()).toMatchInlineSnapshot(`
+      expect(changelogOne.content.trimEnd()).toMatchInlineSnapshot(`
         # Change Log
         # Custom Header Message
 
@@ -878,7 +879,7 @@ describe('conventional-commits', () => {
 
         * **stuff:** changed ([SHA](https://github.com/lerna/conventional-commits-independent/commit/GIT_HEAD)) (Tester McPerson)
       `);
-      expect(changelogTwo.newEntry.trimRight()).toMatchInlineSnapshot(`
+      expect(changelogTwo.newEntry.trimEnd()).toMatchInlineSnapshot(`
         # [1.1.0](/compare/package-2@1.0.0...package-2@1.1.0) (YYYY-MM-DD)
 
 
@@ -916,7 +917,7 @@ describe('conventional-commits', () => {
       };
       const [changelogOne, changelogTwo] = await Promise.all([updateChangelog(pkg1, 'independent', opts), updateChangelog(pkg2, 'independent', opts)]);
 
-      expect(changelogOne.newEntry.trimRight()).toMatchInlineSnapshot(`
+      expect(changelogOne.newEntry.trimEnd()).toMatchInlineSnapshot(`
         ## [1.0.1](/compare/package-1@1.0.0...package-1@1.0.1) (YYYY-MM-DD)
 
 
@@ -924,7 +925,7 @@ describe('conventional-commits', () => {
 
         * **stuff:** changed ([SHA](https://github.com/lerna/conventional-commits-independent/commit/GIT_HEAD)) by **Tester McPerson** (test@example.com)
       `);
-      expect(changelogTwo.newEntry.trimRight()).toMatchInlineSnapshot(`
+      expect(changelogTwo.newEntry.trimEnd()).toMatchInlineSnapshot(`
         # [1.1.0](/compare/package-2@1.0.0...package-2@1.1.0) (YYYY-MM-DD)
 
 
@@ -1000,7 +1001,7 @@ describe('conventional-commits', () => {
       const changelog2 = await updateChangelog(pkg2, 'independent', opt2s);
       const changelog3 = await updateChangelog(pkg2, 'independent', opt3s);
 
-      expect(changelog1.newEntry.trimRight()).toMatchInlineSnapshot(`
+      expect(changelog1.newEntry.trimEnd()).toMatchInlineSnapshot(`
         ## [1.0.1](/compare/package-1@1.0.0...package-1@1.0.1) (YYYY-MM-DD)
 
 
@@ -1008,7 +1009,7 @@ describe('conventional-commits', () => {
 
         * **stuff:** changed ([SHA](https://github.com/lerna/conventional-commits-independent/commit/GIT_HEAD)) (@tester-mcperson)
       `);
-      expect(changelog2.newEntry.trimRight()).toMatchInlineSnapshot(`
+      expect(changelog2.newEntry.trimEnd()).toMatchInlineSnapshot(`
         # [1.1.0](/compare/package-2@1.0.0...package-2@1.1.0) (YYYY-MM-DD)
 
 
@@ -1018,7 +1019,7 @@ describe('conventional-commits', () => {
       `);
 
       // when SHA isn't found, it will still try to format the message but without a user @
-      expect(changelog3.newEntry.trimRight()).toMatchInlineSnapshot(`
+      expect(changelog3.newEntry.trimEnd()).toMatchInlineSnapshot(`
         # [1.1.0](/compare/package-2@1.0.0...package-2@1.1.0) (YYYY-MM-DD)
 
 

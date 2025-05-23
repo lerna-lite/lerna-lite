@@ -1,8 +1,8 @@
+import type { GetCommitsParams, GetSemverTagsParams } from '@conventional-changelog/git-client';
 import type { ChangelogPresetOptions, ExecOpts, Package } from '@lerna-lite/core';
-import type { Context, GitRawCommitsOptions, ParserOptions } from 'conventional-changelog';
 import type { Options as WriterOptions } from 'conventional-changelog-writer';
-import type { Commit, ParserStreamOptions } from 'conventional-commits-parser';
-import type { BumperRecommendation, Preset as BumperPresetOptions } from 'conventional-recommended-bump';
+import type { Commit, ParserOptions, ParserStreamOptions } from 'conventional-commits-parser';
+import type { BumperRecommendation } from 'conventional-recommended-bump';
 
 export interface GitCommitOption {
   amend: boolean;
@@ -33,27 +33,29 @@ export interface BaseChangelogOptions {
   tagPrefix?: string;
 }
 
+/** @deprecated @use ChangelogBumperOption interface */
+export interface OldChangelogBumperOption {
+  parserOpts: ParserOptions;
+  writerOpts: WriterOptions;
+  whatBump: (commits: Commit[]) => Promise<BumperRecommendation | null | undefined>;
+}
+
 export interface ChangelogBumperOption {
   parser: ParserOptions;
   writer: WriterOptions;
   whatBump: (commits: Commit[]) => Promise<BumperRecommendation | null | undefined>;
 }
 
-export interface ChangelogConfig extends ChangelogBumperOption {
-  context?: Partial<Context> | undefined;
-  gitRawCommitsOpts?: GitRawCommitsOptions & { path: string };
+export interface ChangelogConfig {
+  /** @deprecated to be removed in next major */
+  conventionalChangelog?: ChangelogBumperOption | OldChangelogBumperOption;
+  name?: string;
   key?: string;
-  parserOpts?: ParserOptions | undefined;
-  conventionalChangelog: { parserOpts: ParserOptions; writerOpts: WriterOptions };
-  output?: {
-    conventionalChangelog: { parserOpts: ParserOptions; writerOpts: WriterOptions };
-    recommendedBumpOpts: {
-      parserOpts: ParserStreamOptions;
-      whatBump: (commits: Commit[]) => Promise<BumperRecommendation | null | undefined>;
-    };
-  };
-  recommendedBumpOpts?: BumperPresetOptions;
-  writerOpts?: WriterOptions;
+  tags?: GetSemverTagsParams;
+  commits?: GetCommitsParams;
+  parser?: ParserStreamOptions;
+  writer?: WriterOptions;
+  whatBump: (commits: Commit[]) => Promise<BumperRecommendation | null | undefined>;
 }
 
 export interface ReleaseNote {
