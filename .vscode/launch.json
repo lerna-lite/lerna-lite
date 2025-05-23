@@ -20,14 +20,7 @@
       "type": "node",
       "request": "launch",
       "runtimeExecutable": "node",
-      "args": [
-        "packages/cli/dist/cli.js",
-        "version",
-        "--dry-run",
-        "--yes",
-        "--changelog-include-commits-client-login",
-        "--conventional-commits"
-      ],
+      "args": ["packages/cli/dist/cli.js", "version", "--dry-run", "--yes", "--conventional-commits"],
       "cwd": "${workspaceRoot}",
       "console": "integratedTerminal",
       "internalConsoleOptions": "openOnSessionStart",

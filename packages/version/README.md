@@ -338,10 +338,7 @@ Below is a full demo of how you can use a preset with full configuration
       "issuePrefixes": ["#"],
       "commitUrlFormat": "{{host}}/{{owner}}/{{repository}}/commit/{{hash}}",
       "compareUrlFormat": "{{host}}/{{owner}}/{{repository}}/compare/{{previousTag}}...{{currentTag}}",
-      "userUrlFormat": "{{host}}/{{user}}",
-      "writerOpts": {
-        "commitPartial": "- {{message}}\n"
-      }
+      "userUrlFormat": "{{host}}/{{user}}"
   },
   "packages": ["packages/*"]
 }

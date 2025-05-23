@@ -1,7 +1,5 @@
 const erroringPresets = {
-  recommendedBumpOpts: {
-    whatBump: 'I should be a function',
-  },
+  whatBump: 'I should be a function',
 };
 
 export default erroringPresets;

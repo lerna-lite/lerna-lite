@@ -6,7 +6,7 @@ import { Bumper, packagePrefix } from 'conventional-recommended-bump';
 import type { ReleaseType } from 'semver';
 import semver from 'semver';
 
-import type { BaseChangelogOptions, ChangelogConfig, VersioningStrategy } from '../interfaces.js';
+import type { BaseChangelogOptions, VersioningStrategy } from '../interfaces.js';
 import { applyBuildMetadata } from './apply-build-metadata.js';
 import { GetChangelogConfig } from './get-changelog-config.js';
 
@@ -32,12 +32,8 @@ export async function recommendVersion(
   const bumper = new Bumper();
 
   // 'new' preset API
-  const changelogConfig: ChangelogConfig = await GetChangelogConfig.getChangelogConfig(changelogPreset, rootPath);
-  const parserOptions =
-    changelogConfig.output?.recommendedBumpOpts.parserOpts ||
-    changelogConfig.conventionalChangelog?.parserOpts ||
-    changelogConfig.parser ||
-    {};
+  const changelogConfig = await GetChangelogConfig.getChangelogConfig(changelogPreset, rootPath);
+  const parserOptions = changelogConfig.parser || {};
 
   bumper.commits({ path: pkg.location }, parserOptions);
 
@@ -71,14 +67,12 @@ export async function recommendVersion(
       return changelogConfig.whatBump;
     }
 
-    const bumperPreset = changelogConfig?.output || changelogConfig;
-
     /* v8 ignore next 3 */
-    if (!bumperPreset) {
+    if (!changelogConfig) {
       return () => ({ releaseType: null });
     }
 
-    return (bumperPreset as ChangelogConfig).whatBump || bumperPreset.recommendedBumpOpts?.whatBump;
+    return changelogConfig.whatBump;
   }
 
   // Ensure potential ValidationError in getChangelogConfig() is propagated correctly

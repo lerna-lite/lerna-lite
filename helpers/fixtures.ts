@@ -1,9 +1,10 @@
+import { join } from 'node:path';
+
 import { execa } from 'execa';
 import fileUrl from 'file-url';
-import { temporaryDirectory } from 'tempy';
-import { copy, ensureDir } from 'fs-extra/esm';
 import { findUp } from 'find-up';
-import { join } from 'node:path';
+import { copy, ensureDir } from 'fs-extra/esm';
+import { temporaryDirectory } from 'tempy';
 
 import { gitAdd, gitCommit, gitInit } from './git/index.js';
 

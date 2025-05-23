@@ -1,9 +1,9 @@
+import { type GetCommitsParams, type GetSemverTagsParams, packagePrefix } from '@conventional-changelog/git-client';
 import type { ChangelogPresetOptions, Package } from '@lerna-lite/core';
 import { EOL } from '@lerna-lite/core';
 import { log } from '@lerna-lite/npmlog';
-import type { Context, Options as ChangelogCoreOptions } from 'conventional-changelog';
-import conventionalChangelogCore from 'conventional-changelog';
-import type { Options as WriterOptions } from 'conventional-changelog-writer';
+import { ConventionalChangelog, type Options as ChangelogCoreOptions } from 'conventional-changelog';
+import type { Context, Options as WriterOptions } from 'conventional-changelog-writer';
 import { writeFile } from 'fs/promises';
 import getStream from 'get-stream';
 
@@ -35,21 +35,18 @@ export async function updateChangelog(pkg: Package, type: ChangelogType, updateO
   } = updateOptions;
 
   const config = await GetChangelogConfig.getChangelogConfig(changelogPreset, rootPath);
-  const options = {} as { config: ChangelogConfig; lernaPackage: string; tagPrefix: string; pkg: { path: string } };
+  const genOptions = {} as ChangelogCoreOptions;
+  const tagOptions = {} as GetSemverTagsParams;
   const context = {} as Context; // pass as positional because cc-core's merge-config is wack
   const writerOpts = {} as WriterOptions;
+  let changelogConfig = {} as ChangelogConfig;
 
   // cc-core mutates input :P
-  if (config.conventionalChangelog) {
-    // "new" preset API
-    options.config = Object.assign({}, config.conventionalChangelog) as unknown as ChangelogConfig;
-  } else {
-    // "old" preset API
-    options.config = Object.assign({}, config) as ChangelogConfig;
-  }
+  // "new" preset API
+  changelogConfig = Object.assign({}, config) as ChangelogConfig;
 
   // NOTE: must pass as positional argument due to weird bug in merge-config
-  const gitRawCommitsOpts = Object.assign({}, options.config.gitRawCommitsOpts);
+  const gitRawCommitsOpts: GetCommitsParams = {};
 
   // are we including commit author name/email or remote client login name
   if (changelogIncludeCommitsGitAuthor || changelogIncludeCommitsGitAuthor === '') {
@@ -59,39 +56,39 @@ export async function updateChangelog(pkg: Package, type: ChangelogType, updateO
     setConfigChangelogCommitClientLogin(config, gitRawCommitsOpts, writerOpts, commitsSinceLastRelease, changelogIncludeCommitsClientLogin);
   }
 
+  let pkgPath = '';
   if (type === 'root') {
     context.version = version;
 
     // preserve tagPrefix because cc-core can't find the currentTag otherwise
-    context.currentTag = `${tagPrefix}${version}`;
-
     // root changelogs are only enabled in fixed mode, and need the proper tag prefix
-    options.tagPrefix = tagPrefix;
+    tagOptions.prefix = tagPrefix;
   } else {
     // "fixed" or "independent"
     gitRawCommitsOpts.path = pkg.location;
-    options.pkg = { path: pkg.manifestLocation };
+    pkgPath = pkg.manifestLocation;
 
     if (type === 'independent') {
-      options.lernaPackage = pkg.name;
+      tagOptions.prefix = packagePrefix(pkg.name);
     } else {
       // only fixed mode can have a custom tag prefix
-      options.tagPrefix = tagPrefix;
+      tagOptions.prefix = tagPrefix;
 
       // preserve tagPrefix because cc-core can't find the currentTag otherwise
-      context.currentTag = `${tagPrefix}${pkg.version}`;
       context.version = pkg.version;
     }
   }
 
   // generate the markdown for the upcoming release.
-  const changelogStream = conventionalChangelogCore(
-    options as ChangelogCoreOptions,
-    context,
-    gitRawCommitsOpts,
-    undefined,
-    writerOpts
-  );
+  const changelogStream = new ConventionalChangelog()
+    .readPackage(pkgPath)
+    .config(changelogConfig)
+    .commits(gitRawCommitsOpts)
+    .context(context)
+    .options(genOptions)
+    .tags(tagOptions)
+    .writer(writerOpts)
+    .write();
 
   return Promise.all([
     // prettier-ignore

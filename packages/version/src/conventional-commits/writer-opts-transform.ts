@@ -1,4 +1,4 @@
-import type { GitRawCommitsOptions } from 'conventional-changelog';
+import { type GetCommitsParams } from '@conventional-changelog/git-client';
 import type { Options as WriterOptions } from 'conventional-changelog-writer';
 
 import type { ChangelogConfig, RemoteCommit } from '../interfaces.js';
@@ -20,7 +20,7 @@ const GIT_COMMIT_WITH_AUTHOR_FORMAT =
  */
 export function setConfigChangelogCommitGitAuthor(
   config: ChangelogConfig,
-  gitRawCommitsOpts: GitRawCommitsOptions,
+  gitRawCommitsOpts: GetCommitsParams,
   writerOpts: WriterOptions,
   commitCustomFormat?: string | boolean
 ) {
@@ -40,14 +40,14 @@ export function setConfigChangelogCommitGitAuthor(
  * and finally no matter which changelog preset is loaded, we'll append the client login to the commit template
  * ie:: **deps:** update all non-major dependencies ([ed1db35](https://github.com/.../ed1db35)) (@renovate-bot)
  * @param {ChangelogConfig} config
- * @param {GitRawCommitsOptions} gitRawCommitsOpts
+ * @param {GetCommitsParams} gitRawCommitsOpts
  * @param {WriterOptions} writerOpts
  * @param {RemoteCommit[]} commitsSinceLastRelease
  * @param {string | boolean} [commitCustomFormat]
  */
 export function setConfigChangelogCommitClientLogin(
   config: ChangelogConfig,
-  gitRawCommitsOpts: GitRawCommitsOptions,
+  gitRawCommitsOpts: GetCommitsParams,
   writerOpts: WriterOptions,
   commitsSinceLastRelease: RemoteCommit[],
   commitCustomFormat?: string | boolean
