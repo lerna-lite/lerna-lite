@@ -598,8 +598,8 @@ importers:
         specifier: workspace:*
         version: link:../version
       '@npmcli/arborist':
-        specifier: ^9.1.0
-        version: 9.1.0
+        specifier: ^9.1.1
+        version: 9.1.1
       '@npmcli/package-json':
         specifier: ^6.2.0
         version: 6.2.0
@@ -1250,8 +1250,8 @@ packages:
     resolution: {integrity: sha512-S79NdEgDQd/NGCay6TCoVzXSj74skRZIKJcpJjC5lOq34SZzyI6MqtiiWoiVWoVrTcGjNeC4ipbh1VIHlpfF5Q==}
     engines: {node: ^18.17.0 || >=20.5.0}
 
-  '@npmcli/arborist@9.1.0':
-    resolution: {integrity: sha512-PoOjBc3stYoaI2ehGC0hKQLoa18UYuSxxNZMm86f1y/mjokOvLrshbes7Fne2fk/4V1wR4s2BRdHpYHbp+PJcg==}
+  '@npmcli/arborist@9.1.1':
+    resolution: {integrity: sha512-dtANj0Y757hrIDBfylk6neUzMi2yOX0+jK/YjwKrjSMOzis/o8APRfo6VCKL9hhodAeBW72xD65aN9gPzwQz8Q==}
     engines: {node: ^20.17.0 || >=22.9.0}
     hasBin: true
 
@@ -3867,7 +3867,7 @@ snapshots:
     transitivePeerDependencies:
       - supports-color
 
-  '@npmcli/arborist@9.1.0':
+  '@npmcli/arborist@9.1.1':
     dependencies:
       '@isaacs/string-locale-compare': 1.1.0
       '@npmcli/fs': 4.0.0
