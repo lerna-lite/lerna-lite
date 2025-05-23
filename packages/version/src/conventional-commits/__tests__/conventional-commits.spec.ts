@@ -810,8 +810,8 @@ describe('conventional-commits', () => {
 
       const opts = {
         conventionalChangelog: {
-          changelogPreset: 'conventional-changelog-angular'
-        }
+          changelogPreset: 'conventional-changelog-angular',
+        },
       };
       const [changelogOne, changelogTwo] = await Promise.all([updateChangelog(pkg1, 'independent', opts), updateChangelog(pkg2, 'independent', opts)]);
 
