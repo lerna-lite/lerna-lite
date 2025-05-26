@@ -41,7 +41,7 @@
     "@lerna-lite/core": "workspace:*",
     "@lerna-lite/npmlog": "workspace:*",
     "@octokit/plugin-enterprise-rest": "^6.0.1",
-    "@octokit/rest": "^21.1.1",
+    "@octokit/rest": "^22.0.0",
     "conventional-changelog": "^7.0.2",
     "conventional-changelog-angular": "^8.0.0",
     "conventional-changelog-writer": "^8.1.0",
