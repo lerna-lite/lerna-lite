@@ -64,7 +64,7 @@ export async function updateClassicLockfileVersion(pkg: Package): Promise<string
 }
 
 /**
- * Update NPM Lock File (when found), the lock file must be version 2 or higher and is considered as modern lockfile,
+ * Update NPM Lock File (when found), the lock file must be version 2 or higher to be considered as a modern lockfile,
  * its structure is different and all version properties will be updated accordingly
  * @param {Object} pkg
  * @param {Object} project
@@ -94,7 +94,7 @@ export async function saveUpdatedLockJsonFile(filePath: string, updateLockFileOb
 }
 
 /**
- * Update workspace root NPM Lock File Version Type 2 (considerd modern lockfile)
+ * Update workspace root NPM Lock File Version Type 2 (considered as modern lockfile)
  * @param {Object} obj
  * @param {String} pkgName
  * @param {String} newVersion
@@ -122,7 +122,7 @@ export function updateNpmLockFileVersion2(obj: any, pkgName: string, newVersion:
  * Run `npm install --package-lock-only` or equivalent depending on the package manager defined in `npmClient`
  * @param {'npm' | 'pnpm' | 'yarn'} npmClient
  * @param {String} cwd
- * @returns {Promise<string | undefined>} lockfile name if executed successfully
+ * @returns {Promise<string | undefined>} lockfile name when executed successfully
  */
 export async function runInstallLockFileOnly(
   npmClient: 'npm' | 'pnpm' | 'yarn',
@@ -198,7 +198,7 @@ export async function runInstallLockFileOnly(
       'lock',
       [
         `we could not sync neither locate "${inputLockfileName}" by using "${npmClient}" client at location ${cwd}`,
-        `Note: if you were expecting a different lock file name, make sure to configure "npmClient" into your "lerna.json" config file.`,
+        `Note: if you were expecting a different lock file name, make sure to add/configure "npmClient" in your "lerna.json" config file.`,
       ].join(EOL)
     );
   }
