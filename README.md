@@ -53,7 +53,7 @@ _Click on any command below to see documentation of all available options_
 
 ## 📢 Lerna-Lite supports pnpm/yarn `workspace:` protocol and pnpm `catalog:` protocol
 
-Take 30sec. to complete this 1 question [poll survey 🔘](https://github.com/lerna-lite/lerna-lite/discussions/156) if you are using this feature. It's a simple poll to find out which package manager is the most popular with `workspace:` protocol feature (so far, about 60% pnpm and 40% yarn).
+Take 30sec. to complete this 1 question [poll survey 🔘](https://github.com/lerna-lite/lerna-lite/discussions/156) if you are using this feature. It's a simple poll to find out which package manager is the most popular with `workspace:` protocol (so far, about 60% pnpm and 40% yarn).
 
 Lerna-Lite itself is also using both [pnpm catalogs](https://pnpm.io/catalogs) and [pnpm workspaces](https://pnpm.io/workspaces) 🎉
 
@@ -105,7 +105,7 @@ According to your needs, choose the best option to setup a workspace: [npm 7+](h
 Below are the main reasons as to why this fork was created:
 
 1. Lerna's repo was unmaintained for nearly 2 years (in early 2022, Lerna's dependencies were really out of date)
-    - Lerna (original) got later transferred to Nrwl, the company behind Nx, and are now the current maintainers
+    - Lerna (original) was later transferred to Nrwl, the company behind Nx, and are now the current maintainers
         - please note that Lerna-Lite fork was created couple months **before** Nrwl took over Lerna
         - we also replicate all Lerna PRs whenever possible (except for `Nx` specific changes which are ignored)
 2. A desire to create a smaller and lighter alternative compared to the original all-in-one Lerna tool
@@ -114,20 +114,20 @@ Below are the main reasons as to why this fork was created:
 4. The original Lerna version v5.5+ now requires **[Nx](https://nx.dev/)** (want it or not), but that is not the case in Lerna-Lite
    - note, if you already use `Nx` then it's probably better to use Lerna, otherwise Lerna-Lite is a better alternative
    - if you use tools like TurboRepo and install the original Lerna, you end up installing 2 similar tools (not good)
-5. in Lerna-Lite we also added a few unique features which are not available in Lerna (original):
+5. in Lerna-Lite we also added a few unique features that are not available in the original Lerna:
    - [`catalog:` protocol support](https://github.com/lerna-lite/lerna-lite/tree/main/packages/version#catalog-protocol) for both `version` and `publish` commands (new)
    - [`workspace:` protocol support](https://github.com/lerna-lite/lerna-lite/tree/main/packages/version#workspace-protocol)
      * _Lerna added support for the same feature 6 months later in their v6.0 release_
-   - [--dry-run](https://github.com/lerna-lite/lerna-lite/tree/main/packages/version#--dry-run) to preview version/publish & changelogs locally (will show git changes without committing them)
+   - [--dry-run](https://github.com/lerna-lite/lerna-lite/tree/main/packages/version#--dry-run) to preview version/publish & changelogs locally (it will show git changes without committing them)
    - [lerna version --allow-peer-dependencies-update](https://github.com/lerna-lite/lerna-lite/tree/main/packages/version#--allow-peer-dependencies-update) to also update your peer dependencies
    - [lerna version --changelog-header-message "msg"](https://github.com/lerna-lite/lerna-lite/tree/main/packages/version#--changelog-header-message-msg) for showing banner or sponsors in your changelogs
-   - [lerna version --changelog-include-commits-client-login](https://github.com/lerna-lite/lerna-lite/tree/main/packages/version#--changelog-include-commits-client-login-msg) to add PR contributors in GitHub releases
+   - [lerna version --changelog-include-commits-client-login](https://github.com/lerna-lite/lerna-lite/tree/main/packages/version#--changelog-include-commits-client-login-msg) to add PR contributors to GitHub releases
    - [lerna publish --remove-package-fields](https://github.com/lerna-lite/lerna-lite/tree/main/packages/publish#--remove-package-fields-fields) (remove certain fields from `package.json` before publishing)
-   - [lerna version --skip-bump-only-releases](https://github.com/lerna-lite/lerna-lite/tree/main/packages/version#--skip-bump-only-releases) to avoid cluttering your GitHub releases with `independent` mode
+     - i.e.: we use it in here to publish Lerna-Lite without any `scripts` or `devDependencies`
+   - [lerna version --skip-bump-only-releases](https://github.com/lerna-lite/lerna-lite/tree/main/packages/version#--skip-bump-only-releases), avoid cluttering your GitHub releases when using `independent`
    - [lerna version --sync-workspace-lock](https://github.com/lerna-lite/lerna-lite/tree/main/packages/version#--sync-workspace-lock) to sync lock file before publishing (not needed w/`workspace:` protocol)
-      - ie: we use it in here to publish Lerna-Lite without any `scripts` or `devDependencies`
 
-On a final note, I think that the best feature of Lerna-Lite (versus Lerna) really has to be its modularity. A large portion of the users are only interested in version/publish commands, but on the other hand, a small minority might want other commands like `lerna run`/`exec`. Lerna-Lite offers this kind of flexibility by allowing the user to choose what to install (see [installation](#cli-installation) below) which help to keep your download to the bare minimum.
+On a final note, I think that the best feature of Lerna-Lite (versus Lerna) must be its modularity. A large portion of the users are only interested in version/publish commands, but on the other hand, a small minority might want other commands like `lerna run`/`exec`. Lerna-Lite offers this kind of flexibility by allowing the user to choose what to install (see [installation](#cli-installation) below) which help to keep your download to the bare minimum.
 
 ### Lerna-Lite will help you with the following:
 
@@ -184,9 +184,9 @@ lerna-repo/
   lerna.json
 ```
 
-**Note** Lerna-Lite now supports 3 file extension types (`.json`, `.jsonc` and `.json5`), however not all code editors support [JSON Schema](https://json-schema.org/) with `.json5`, so `lerna.json` might still be the preferred extension (all formats support inline comments, even `.json`). 
+**Note** Lerna-Lite now supports 3 file extension types (`.json`, `.jsonc` and `.json5`), however please note that not all code editors support [JSON Schema](https://json-schema.org/) with `.json5`, so `lerna.json` might still be the preferred file extension (all formats support inline comments, even `.json`). 
 
-Note that `package-a` will not be created, it is only shown here to help clarify the structure. For more info and full details about the `lerna.json` file, you can read the [lerna.json](https://github.com/lerna-lite/lerna-lite/wiki/lerna.json) Wiki. Also note that you can optionally add comments to your `lerna.json` config file since it is also able to parse JSON5 file format.
+Note that `package-a` show above will not be created, it is only shown here to help clarify the structure. For more info and full details about the `lerna.json` file, please read the [lerna.json](https://github.com/lerna-lite/lerna-lite/wiki/lerna.json) Wiki. Also note that you can optionally add comments to your `lerna.json` config file since it is also able to parse JSON5 file format.
 
 The final step will be to install the commands that are of interest to you (`publish`, `version`, `run`, `exec`, ...)
 
