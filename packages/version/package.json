@@ -49,7 +49,6 @@
     "conventional-recommended-bump": "^11.1.0",
     "dedent": "catalog:",
     "fs-extra": "catalog:",
-    "get-stream": "^9.0.1",
     "git-url-parse": "^16.1.0",
     "graceful-fs": "^4.2.11",
     "is-stream": "^4.0.1",

@@ -761,9 +761,6 @@ importers:
       fs-extra:
         specifier: 'catalog:'
         version: 11.3.0
-      get-stream:
-        specifier: ^9.0.1
-        version: 9.0.1
       git-url-parse:
         specifier: ^16.1.0
         version: 16.1.0
