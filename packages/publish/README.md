@@ -102,6 +102,7 @@ $ lerna publish --scope my-component test
     - [`--summary-file <dir>`](#--summary-file)
     - [`--verify-access`](#--verify-access)
     - [`--yes`](#--yes)
+  - [NPM Provenance](#npm-provenance)
   - [`publishConfig` Overrides](#publishconfig-overrides)
   - [`catalog:` protocol](#catalog-protocol)
   - [`workspace:` protocol](#workspace-protocol)
@@ -504,6 +505,18 @@ This _non-standard_ field allows you to customize the published subdirectory jus
     "directory": "dist"
   }
 ```
+
+## NPM Provenance
+
+NPM provenance is a security feature that creates a verifiable connection between a published package and its source code repository. When enabled, it provides cryptographic proof that a package was built from a specific GitHub repository commit using GitHub Actions or Gitlab runners. This helps prevent supply chain attacks where malicious actors could publish compromised versions of popular packages.
+
+You can enable Provenance via `.npmrc` or within the workflow
+- in `.npmrc` via `provenance=true`
+- or in the workflow via `env: NPM_CONFIG_PROVENANCE: true`
+
+For more detailed informations on how to enable the feature and use this in a CI environment like GitHub Action Workflow, you can read this article that I wrote:
+- [How to publish on npm with `--provenance` using Lerna-Lite](https://dev.to/ghiscoding/how-to-publish-on-npm-with-provenance-using-lerna-lite-3cjf)
+
 
 ## `publishConfig` Overrides
 Certain fields defined in `publishConfig` can be used to override other fields in the manifest before the package gets published. As per pnpm [`publishConfig`](https://pnpm.io/package_json#publishconfig) documentation, you can override any of these fields:
