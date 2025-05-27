@@ -34,5 +34,5 @@ catalog:
   tinyrainbow: ^2.0.0
   write-json-file: ^6.0.0
   write-package: ^7.1.0
-  yargs: ^17.7.2
+  yargs: ^18.0.0
   yargs-parser: ^22.0.0
