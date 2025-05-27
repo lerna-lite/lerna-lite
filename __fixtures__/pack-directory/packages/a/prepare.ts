@@ -9,5 +9,4 @@ mkdirSync(dirname(targetIndex));
 const reader = createReadStream(sourceIndex);
 const writer = createWriteStream(targetIndex);
 
-// fs.copyFileSync is node >=8.5.0
 reader.pipe(writer);
