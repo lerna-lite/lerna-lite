@@ -94,7 +94,7 @@ export async function updateChangelog(pkg: Package, type: ChangelogType, updateO
     for await (const chunk of changelogStream) {
       entry += chunk;
     }
-    return makeBumpOnlyFilter(pkg)(entry);
+    return makeBumpOnlyFilter(pkg, entry);
   })();
 
   return Promise.all([
