@@ -62,7 +62,7 @@ const lernaPublish = commandRunner(cliCommands);
 
 // mocked or stubbed modules
 import { collectUpdates } from '@lerna-lite/core';
-import { promptConfirmation, PublishCommandOption } from '@lerna-lite/core';
+import { logOutput, promptConfirmation, PublishCommandOption } from '@lerna-lite/core';
 import { getOneTimePassword } from '@lerna-lite/version';
 import yargParser from 'yargs-parser';
 
@@ -863,6 +863,38 @@ describe('PublishCommand', () => {
       expect((collectUpdates as Mock).mock.calls[0][3].describeTag).toBe('*custom-tag*');
 
       expect((collectUpdates as Mock).mock.calls[0][3].isIndependent).toBe(true);
+    });
+  });
+
+  describe('PublishCommand provenance transparency log URLs', () => {
+    it('prints package name and provenance URL when present in publish result', async () => {
+      const cwd = await initFixture('normal');
+      // Simulate npmPublish returning a transparencyLogUrl for two packages
+      (npmPublish as typeof npmPublishMock)
+        .mockResolvedValueOnce({ transparencyLogUrl: 'https://search.sigstore.dev/?logIndex=111' })
+        .mockResolvedValueOnce({ transparencyLogUrl: 'https://search.sigstore.dev/?logIndex=222' })
+        .mockResolvedValueOnce({ transparencyLogUrl: 'https://search.sigstore.dev/?logIndex=333' })
+        .mockResolvedValueOnce({ transparencyLogUrl: 'https://search.sigstore.dev/?logIndex=444' });
+
+      await new PublishCommand(createArgv(cwd));
+
+      expect(logOutput).toHaveBeenCalledWith('The following provenance transparency log entries were created during publishing:');
+      // Check that both package names and URLs are present in the output
+      expect(logOutput).toHaveBeenCalledWith(expect.stringContaining('package-1: https://search.sigstore.dev/?logIndex=111'));
+      expect(logOutput).toHaveBeenCalledWith(expect.stringContaining('package-2: https://search.sigstore.dev/?logIndex=333')); // URLs are offset because of the dep graph
+      expect(logOutput).toHaveBeenCalledWith(expect.stringContaining('package-3: https://search.sigstore.dev/?logIndex=444'));
+      expect(logOutput).toHaveBeenCalledWith(expect.stringContaining('package-4: https://search.sigstore.dev/?logIndex=222'));
+    });
+
+    it('does not print provenance URLs if none are present', async () => {
+      const cwd = await initFixture('normal');
+      // Simulate npmPublish returning no transparencyLogUrl
+      (npmPublish as any).mockResolvedValue({});
+
+      await new PublishCommand(createArgv(cwd));
+
+      expect(logOutput).not.toHaveBeenCalledWith('The following provenance transparency log entries were created during publishing:');
+      expect(logOutput).not.toHaveBeenCalledWith(expect.stringContaining('package-1: https://search.sigstore.dev/?logIndex=111'));
     });
   });
 });

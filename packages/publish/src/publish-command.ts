@@ -85,7 +85,6 @@ export class PublishCommand extends Command<PublishCommandOption> {
   twoFactorAuthRequired = false;
   updates: PackageGraphNode[] = [];
   updatesVersions?: Map<string, any>;
-  private uniqueProvenanceUrls = new Set();
 
   get otherCommandConfigs() {
     // back-compat
@@ -340,12 +339,6 @@ export class PublishCommand extends Command<PublishCommandOption> {
     }
 
     this.logger.success('published', `%d %s ${logPrefix}`, count, count === 1 ? 'package' : 'packages');
-
-    if (this.uniqueProvenanceUrls.size > 0) {
-      logOutput('The following provenance transparency log entries were created during publishing:');
-      const message = Array.from(this.uniqueProvenanceUrls).map((url) => ` - ${url}`);
-      logOutput(message.join(EOL));
-    }
   }
 
   verifyWorkingTreeClean() {
@@ -916,22 +909,6 @@ export class PublishCommand extends Command<PublishCommandOption> {
       'git-dry-run': this.options.dryRun || false,
     });
 
-    /**
-     * Currently libnpmpublish does not expose the provenance data it creates. We therefore have to hackily intercept
-     * the logs it emits. Sadly because we eagerly kick off all the publish requests in the same process, there
-     * is no way to reconcile the logs to the pkg's they relate to, so the best we can do is collect up the unique
-     * URLs and print them at the end of the publishing logs.
-     */
-    const logListener = (...args) => {
-      const str = args.join(' ');
-      if (str.toLowerCase().includes('provenance statement') && str.includes('https://')) {
-        // Extract the URL from the log message
-        const url = str.match(/https:\/\/[^ ]+/)?.[0] ?? '';
-        this.uniqueProvenanceUrls.add(url);
-      }
-    };
-    process.on('log', logListener);
-
     let queue: Queue | undefined = undefined;
     if (this.options.throttle) {
       const DEFAULT_QUEUE_THROTTLE_SIZE = 25;
@@ -942,18 +919,26 @@ export class PublishCommand extends Command<PublishCommandOption> {
       );
     }
 
+    // Set to collect all Provenance transparency log URLs when enabled
+    const provenanceUrls = new Map();
+
     const mapper = async (pkg: Package & { packed: Tarball }) => {
       const preDistTag = this.getPreDistTag(pkg);
       const tag = !this.options.tempTag && preDistTag ? preDistTag : opts.tag;
       const pkgOpts = Object.assign({}, opts, { tag });
 
       try {
-        await pulseTillDone(
+        const publishResult = await pulseTillDone(
           queue
             ? queue.queue(() => npmPublish(pkg, pkg.packed.tarFilePath, pkgOpts, this.otpCache))
             : npmPublish(pkg, pkg.packed.tarFilePath, pkgOpts, this.otpCache)
         );
         this.publishedPackages.push(pkg);
+
+        // Collect provenance URL if present
+        if (publishResult?.transparencyLogUrl) {
+          provenanceUrls.set(pkg.name, publishResult.transparencyLogUrl);
+        }
 
         tracker.success('published', pkg.name, pkg.version);
         tracker.completeWork(1);
@@ -1014,7 +999,12 @@ export class PublishCommand extends Command<PublishCommandOption> {
     }
 
     return chain.finally(() => {
-      process.removeListener('log', logListener);
+      // print Provenance URLs if any
+      if (provenanceUrls.size > 0) {
+        logOutput('The following provenance transparency log entries were created during publishing:');
+        const message = Array.from(provenanceUrls.entries()).map(([pkg, url]) => ` - ${pkg}: ${url}`);
+        logOutput(message.join(EOL));
+      }
       tracker.finish();
     });
   }
