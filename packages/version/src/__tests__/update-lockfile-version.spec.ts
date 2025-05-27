@@ -218,8 +218,7 @@ describe('pnpm client', () => {
 
 describe('run install lockfile-only', () => {
   describe('npm client', () => {
-    it(`should update project root lockfile by calling npm script "npm install --package-lock-only --ignore-scripts" when npm version is >= 8.5.0`, async () => {
-      (execPackageManagerSync as any).mockReturnValueOnce('8.5.0');
+    it(`should update project root lockfile by calling npm script "npm install --package-lock-only --ignore-scripts"`, async () => {
       vi.spyOn(fsPromises, 'access').mockResolvedValue(true as any);
       (execPackageManager as Mock).mockImplementationOnce(() => true);
       const cwd = await initFixture('lockfile-version2');
@@ -231,24 +230,7 @@ describe('run install lockfile-only', () => {
       expect(lockFileOutput).toBe('package-lock.json');
     });
 
-    it(`should display a log error when npm version is below 8.5.0 and not actually sync anything`, async () => {
-      (execPackageManagerSync as any).mockReturnValueOnce('8.4.0');
-      vi.spyOn(fsPromises, 'access').mockResolvedValue(true as any);
-      (execPackageManager as Mock).mockImplementationOnce(() => true);
-      const cwd = await initFixture('lockfile-version2');
-      const logSpy = vi.spyOn(log, 'error');
-
-      await runInstallLockFileOnly('npm', cwd, { npmClientArgs: [] });
-
-      expect(execPackageManagerSync).toHaveBeenCalledWith('npm', ['--version']);
-      expect(logSpy).toHaveBeenCalledWith(
-        'lock',
-        expect.stringContaining('your npm version is lower than 8.5.0 which is the minimum requirement to use `--sync-workspace-lock`')
-      );
-    });
-
     it(`should update project root lockfile by calling npm script "npm install --package-lock-only" without running npm scripts when --run-scripts-on-lockfile-update is enabled`, async () => {
-      (execPackageManagerSync as any).mockReturnValueOnce('8.5.0');
       vi.spyOn(fsPromises, 'access').mockResolvedValue(true as any);
       (execPackageManager as Mock).mockImplementationOnce(() => true);
       const cwd = await initFixture('lockfile-version2');
@@ -261,7 +243,6 @@ describe('run install lockfile-only', () => {
     });
 
     it(`should update project root lockfile by calling npm script "npm install --package-lock-only" with extra npm client arguments when provided`, async () => {
-      (execPackageManagerSync as any).mockReturnValueOnce('8.5.0');
       vi.spyOn(fsPromises, 'access').mockResolvedValue(true as any);
       (execPackageManager as Mock).mockImplementationOnce(() => true);
       const cwd = await initFixture('lockfile-version2');
@@ -274,7 +255,6 @@ describe('run install lockfile-only', () => {
     });
 
     it(`should update project root lockfile by calling npm script "npm install --legacy-peer-deps,--force" with multiple npm client arguments provided as CSV`, async () => {
-      (execPackageManagerSync as any).mockReturnValueOnce('8.5.0');
       const cwd = await initFixture('lockfile-version2');
 
       const lockFileOutput = await runInstallLockFileOnly('npm', cwd, { npmClientArgs: ['--legacy-peer-deps,--force'] });

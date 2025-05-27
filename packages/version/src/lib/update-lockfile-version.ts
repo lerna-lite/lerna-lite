@@ -168,25 +168,18 @@ export async function runInstallLockFileOnly(
         const localNpmVersion = execPackageManagerSync('npm', ['--version']);
         log.silly(`npm`, `current local npm version is "${localNpmVersion}"`);
 
-        // with npm version >=8.5.0, we can simply call "npm install --package-lock-only"
-        if (semver.gte(localNpmVersion, '8.5.0')) {
-          log.verbose('lock', `updating lock file via "npm install --package-lock-only"`);
-          await execPackageManager(
-            'npm',
-            [
-              'install',
-              '--package-lock-only',
-              !options.runScriptsOnLockfileUpdate ? '--ignore-scripts' : '',
-              ...npmClientArgs,
-            ].filter(Boolean),
-            { cwd }
-          );
-        } else {
-          log.error(
-            'lock',
-            'your npm version is lower than 8.5.0 which is the minimum requirement to use `--sync-workspace-lock`'
-          );
-        }
+        // we can simply call "npm install --package-lock-only" to update the lock file
+        log.verbose('lock', `updating lock file via "npm install --package-lock-only"`);
+        await execPackageManager(
+          'npm',
+          [
+            'install',
+            '--package-lock-only',
+            !options.runScriptsOnLockfileUpdate ? '--ignore-scripts' : '',
+            ...npmClientArgs,
+          ].filter(Boolean),
+          { cwd }
+        );
 
         outputLockfileName = inputLockfileName;
       }

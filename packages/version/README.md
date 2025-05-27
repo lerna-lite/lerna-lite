@@ -914,7 +914,7 @@ lerna version --sync-workspace-lock
 Depending on the `npmClient` defined, it will perform the following:
 
 ```sh
-# npm is assuming a `package-lock.json` lock file and npm client >= 8.5.0 is required
+# npm is assuming a `package-lock.json` lock file
 npm install --package-lock-only
 
 # pnpm is assuming a "pnpm-lock.yaml" lock file and "npmClient": "pnpm"
