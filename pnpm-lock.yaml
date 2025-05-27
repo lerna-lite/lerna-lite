@@ -88,8 +88,8 @@ catalogs:
       specifier: ^17.7.2
       version: 17.7.2
     yargs-parser:
-      specifier: ^21.1.1
-      version: 21.1.1
+      specifier: ^22.0.0
+      version: 22.0.0
 
 importers:
 
@@ -251,7 +251,7 @@ importers:
     devDependencies:
       yargs-parser:
         specifier: 'catalog:'
-        version: 21.1.1
+        version: 22.0.0
 
   packages/cli:
     dependencies:
@@ -282,7 +282,7 @@ importers:
     devDependencies:
       yargs-parser:
         specifier: 'catalog:'
-        version: 21.1.1
+        version: 22.0.0
 
   packages/core:
     dependencies:
@@ -415,7 +415,7 @@ importers:
         version: 17.7.2
       yargs-parser:
         specifier: 'catalog:'
-        version: 21.1.1
+        version: 22.0.0
 
   packages/diff:
     dependencies:
@@ -440,7 +440,7 @@ importers:
         version: 11.3.0
       yargs-parser:
         specifier: 'catalog:'
-        version: 21.1.1
+        version: 22.0.0
 
   packages/exec:
     dependencies:
@@ -477,7 +477,7 @@ importers:
         version: 17.7.2
       yargs-parser:
         specifier: 'catalog:'
-        version: 21.1.1
+        version: 22.0.0
 
   packages/init:
     dependencies:
@@ -496,7 +496,7 @@ importers:
     devDependencies:
       yargs-parser:
         specifier: 'catalog:'
-        version: 21.1.1
+        version: 22.0.0
 
   packages/list:
     dependencies:
@@ -512,7 +512,7 @@ importers:
     devDependencies:
       yargs-parser:
         specifier: 'catalog:'
-        version: 21.1.1
+        version: 22.0.0
 
   packages/listable:
     dependencies:
@@ -678,7 +678,7 @@ importers:
         version: 17.7.2
       yargs-parser:
         specifier: 'catalog:'
-        version: 21.1.1
+        version: 22.0.0
 
   packages/run:
     dependencies:
@@ -718,7 +718,7 @@ importers:
         version: 17.7.2
       yargs-parser:
         specifier: 'catalog:'
-        version: 21.1.1
+        version: 22.0.0
 
   packages/version:
     dependencies:
@@ -854,7 +854,7 @@ importers:
         version: 17.7.2
       yargs-parser:
         specifier: 'catalog:'
-        version: 21.1.1
+        version: 22.0.0
 
   packages/watch:
     dependencies:
@@ -879,7 +879,7 @@ importers:
         version: 1.0.0
       yargs-parser:
         specifier: 'catalog:'
-        version: 21.1.1
+        version: 22.0.0
 
 packages:
 
@@ -3553,6 +3553,10 @@ packages:
   yargs-parser@21.1.1:
     resolution: {integrity: sha512-tVpsJW7DdjecAiFpbIB1e3qxIQsE6NoPc5/eTdrbbIC4h0LVsWhnoa3g+m2HclBIujHzsxZ4VJVA+GUuc2/LBw==}
     engines: {node: '>=12'}
+
+  yargs-parser@22.0.0:
+    resolution: {integrity: sha512-rwu/ClNdSMpkSrUb+d6BRsSkLUq1fmfsY6TOpYzTwvwkg1/NRG85KBy3kq++A8LKQwX6lsu+aWad+2khvuXrqw==}
+    engines: {node: ^20.19.0 || ^22.12.0 || >=23}
 
   yargs@17.7.2:
     resolution: {integrity: sha512-7dSzzRQ++CKnNI/krKnYRV7JKKPUXMEh61soaHKg9mrWEhzFWhFnxPxGl+69cD1Ou63C13NUPCnmIcrvqCuM6w==}
@@ -6232,6 +6236,8 @@ snapshots:
   yaml@2.8.0: {}
 
   yargs-parser@21.1.1: {}
+
+  yargs-parser@22.0.0: {}
 
   yargs@17.7.2:
     dependencies:
