@@ -5,7 +5,6 @@ import { log } from '@lerna-lite/npmlog';
 import { ConventionalChangelog, type Options as ChangelogCoreOptions } from 'conventional-changelog';
 import type { Context, Options as WriterOptions } from 'conventional-changelog-writer';
 import { writeFile } from 'fs/promises';
-import getStream from 'get-stream';
 
 import type { ChangelogConfig, ChangelogType, UpdateChangelogOption } from '../interfaces.js';
 import { BLANK_LINE, CHANGELOG_HEADER } from './constants.js';
@@ -90,9 +89,17 @@ export async function updateChangelog(pkg: Package, type: ChangelogType, updateO
     .writer(writerOpts)
     .write();
 
+  const inputEntryPromise = (async () => {
+    let entry = '';
+    for await (const chunk of changelogStream) {
+      entry += chunk;
+    }
+    return makeBumpOnlyFilter(pkg)(entry);
+  })();
+
   return Promise.all([
     // prettier-ignore
-    getStream(changelogStream).then(makeBumpOnlyFilter(pkg)),
+    inputEntryPromise,
     readExistingChangelog(pkg),
   ]).then(([inputEntry, [changelogFileLoc, changelogContents]]) => {
     const newEntry = inputEntry;
