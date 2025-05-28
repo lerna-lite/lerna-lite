@@ -40,9 +40,13 @@ export function normalizeRelativeDir(testDir, filePath) {
  * @returns
  */
 export function temporaryDirectory(prefix?: string): string {
-  const tempDirPath = pathJoin(realpathSync(tmpdir()), `${prefix || ''}${uuidv4()}`);
-  mkdirSync(tempDirPath, { recursive: true });
-  return tempDirPath;
+  try {
+    const tempDirPath = pathJoin(realpathSync(tmpdir()), `${prefix || ''}${uuidv4()}`);
+    mkdirSync(tempDirPath, { recursive: true });
+    return tempDirPath;
+  } catch (error) {
+    throw new Error(`Failed to create temporary directory: ${error.message}`);
+  }
 }
 
 export * from './cli.js';

@@ -1,12 +1,17 @@
 import { basename, dirname, join, resolve as pathResolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
 
+import { initFixtureFactory } from '@lerna-test/helpers';
 import { outputFile, remove, writeJson } from 'fs-extra/esm';
-import { afterEach, beforeAll, describe, expect, it, Mock, vi } from 'vitest';
+import { afterEach, beforeAll, beforeEach, describe, expect, it, Mock, vi } from 'vitest';
 
 vi.mock('write-json-file');
-vi.mock('node:fs');
-import { writeFileSync } from 'node:fs';
+// vi.mock('node:fs');
+const { writeFileMock } = vi.hoisted(() => ({ writeFileMock: vi.fn() }));
+vi.mock('node:fs', async () => ({
+  ...(await vi.importActual('node:fs')),
+  writeFileSync: writeFileMock,
+}));
 
 import { writeJsonFile } from 'write-json-file';
 
@@ -22,7 +27,6 @@ expect.addSnapshotSerializer({
 });
 
 // helpers
-import { initFixtureFactory } from '@lerna-test/helpers';
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
 const initFixture = initFixtureFactory(__dirname);
@@ -31,10 +35,14 @@ const initFixture = initFixtureFactory(__dirname);
 import { Project } from '../project.js';
 
 describe('Project', () => {
-  let testDir;
+  let testDir = '';
 
   beforeAll(async () => {
     testDir = await initFixture('basic');
+  });
+
+  beforeEach(() => {
+    (writeFileMock as Mock).mockReset();
   });
 
   afterEach(() => {
@@ -147,7 +155,10 @@ describe('Project', () => {
       const project = new Project(cwd);
 
       project.serializeConfig();
-      expect(writeFileSync).toHaveBeenCalledWith(expect.stringContaining('lerna.json5'), expect.stringContaining(`version: '1.0.0'`));
+
+      (writeFileMock as Mock).mockName('writeFileSync');
+
+      expect(writeFileMock).toHaveBeenCalledWith(expect.stringContaining('lerna.json5'), expect.stringContaining(`version: '1.0.0'`));
     });
 
     it('errors when lerna.json is irrecoverably invalid JSON', async () => {
