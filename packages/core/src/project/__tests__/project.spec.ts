@@ -5,14 +5,13 @@ import { initFixtureFactory } from '@lerna-test/helpers';
 import { outputFile, remove, writeJson } from 'fs-extra/esm';
 import { afterEach, beforeAll, beforeEach, describe, expect, it, Mock, vi } from 'vitest';
 
-vi.mock('write-json-file');
-// vi.mock('node:fs');
 const { writeFileMock } = vi.hoisted(() => ({ writeFileMock: vi.fn() }));
 vi.mock('node:fs', async () => ({
   ...(await vi.importActual('node:fs')),
   writeFileSync: writeFileMock,
 }));
 
+vi.mock('write-json-file');
 import { writeJsonFile } from 'write-json-file';
 
 // remove quotes around top-level strings
