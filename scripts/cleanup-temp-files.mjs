@@ -5,9 +5,8 @@ import { join as pathJoin } from 'node:path';
 import normalizePath from 'normalize-path';
 import { glob } from 'tinyglobby';
 
-const tempDirPath = pathJoin(realpathSync(tmpdir()));
-const tempDirLernaPath = pathJoin(tempDirPath, 'lerna-*');
-const normalizedLernaPath = normalizePath(tempDirLernaPath);
+const tempDirPath = realpathSync(tmpdir());
+const normalizedLernaPath = normalizePath(pathJoin(tempDirPath, 'lerna-*'));
 console.log('cleanup Lerna temp folders from', normalizedLernaPath);
 glob(normalizedLernaPath, { absolute: true, cwd: tempDirPath, onlyDirectories: true })
   .then((deleteFolders) => {

@@ -329,9 +329,8 @@ export class PublishCommand extends Command<PublishCommandOption> {
 
     // optionally cleanup temp packed files after publish, opt-in option
     if (this.options.cleanupTempFiles) {
-      const tempDirPath = pathJoin(realpathSync(tmpdir()));
-      const tempDirLernaPath = pathJoin(tempDirPath, 'lerna-*');
-      const normalizedLernaPath = normalizePath(tempDirLernaPath);
+      const tempDirPath = realpathSync(tmpdir());
+      const normalizedLernaPath = normalizePath(pathJoin(tempDirPath, 'lerna-*'));
       glob(normalizedLernaPath, { absolute: true, cwd: tempDirPath, onlyDirectories: true }).then((deleteFolders) => {
         // silently delete all files/folders that startsWith "lerna-"
         deleteFolders.forEach((folder) => removeSync(folder));
