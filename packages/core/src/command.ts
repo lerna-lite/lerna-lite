@@ -2,11 +2,11 @@ import { cpus } from 'node:os';
 
 import type { Logger } from '@lerna-lite/npmlog';
 import { log } from '@lerna-lite/npmlog';
+import { isCI } from 'ci-info';
 import cloneDeep from 'clone-deep';
 import dedent from 'dedent';
 import type { SyncOptions } from 'execa';
 import { execaSync } from 'execa';
-import isCI from 'is-ci';
 
 import { logExecCommand } from './child-process.js';
 import type { FilterOptions } from './filter-packages/index.js';
