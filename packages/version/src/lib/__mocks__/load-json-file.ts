@@ -9,8 +9,8 @@ const asyncRegistry = new Map();
 const syncRegistry = new Map();
 
 function incrementCalled(registry, manifestLocation) {
-  // tempy creates dirnames that are 32 characters long, but we want a readable key
-  const subPath = (manifestLocation || '').split(/[0-9a-f]{32}/).pop();
+  // `temporaryDirectory()` creates dirnames with a UUID that are 36 characters long, but we want a readable key
+  const subPath = (manifestLocation || '').split(/(lerna-)?[0-9a-f-]{36}/).pop();
   const key = normalizePath(dirname(subPath));
 
   // keyed off directory subpath, _not_ pkg.name (we don't know it yet)

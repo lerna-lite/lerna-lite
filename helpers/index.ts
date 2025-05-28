@@ -1,6 +1,10 @@
+import { mkdirSync, realpathSync } from 'node:fs';
+import { tmpdir } from 'node:os';
+import { join as pathJoin, relative } from 'node:path';
+
 import normalizeNewline from 'normalize-newline';
 import normalizePath from 'normalize-path';
-import { relative } from 'node:path';
+import { v4 as uuidv4 } from 'uuid';
 
 import { Project } from '../packages/core/dist/project/project.js';
 
@@ -29,9 +33,21 @@ export function normalizeRelativeDir(testDir, filePath) {
   return normalizePath(relative(testDir, filePath));
 }
 
-export * from './git/index.js';
-export * from './fixtures.js';
-export * from './npm/index.js';
+/**
+ * Create a temporary directory using UUID as a unique name.
+ * A prefix can be provided to help identify the directory.
+ * @param {String} [prefix]
+ * @returns
+ */
+export function temporaryDirectory(prefix?: string): string {
+  const tempDirPath = pathJoin(realpathSync(tmpdir()), `${prefix || ''}${uuidv4()}`);
+  mkdirSync(tempDirPath, { recursive: true });
+  return tempDirPath;
+}
+
 export * from './cli.js';
+export * from './fixtures.js';
+export * from './git/index.js';
 export * from './logging-output.js';
+export * from './npm/index.js';
 export * from './pkg-matchers.js';

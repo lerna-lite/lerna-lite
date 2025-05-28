@@ -98,13 +98,12 @@
     "rimraf": "^6.0.1",
     "semver": "catalog:",
     "tacks": "1.2.6",
-    "temp-dir": "catalog:",
-    "tempy": "^3.1.0",
     "tinyglobby": "catalog:",
     "ts-node": "^10.9.2",
     "tslib": "^2.8.1",
     "typescript": "^5.8.3",
     "typescript-eslint": "^8.32.1",
+    "uuid": "catalog:",
     "vitest": "^3.1.4",
     "write-json-file": "catalog:"
   }

@@ -58,7 +58,6 @@
     "semver": "catalog:",
     "ssri": "^12.0.0",
     "tar": "^7.4.3",
-    "temp-dir": "catalog:",
     "tinyglobby": "catalog:",
     "tinyrainbow": "catalog:"
   },

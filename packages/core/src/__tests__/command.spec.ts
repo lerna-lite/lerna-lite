@@ -16,11 +16,9 @@ import { fileURLToPath } from 'node:url';
 
 import { log } from '@lerna-lite/npmlog';
 // helpers
-import { initFixtureFactory } from '@lerna-test/helpers';
-import { updateLernaConfig } from '@lerna-test/helpers';
+import { initFixtureFactory, temporaryDirectory, updateLernaConfig } from '@lerna-test/helpers';
 import { loggingOutput } from '@lerna-test/helpers/logging-output.js';
 import { outputFile, readJson, remove, writeJson } from 'fs-extra/esm';
-import { temporaryDirectory } from 'tempy';
 
 // partially mocked
 import { getChildProcessCount } from '../child-process.js';

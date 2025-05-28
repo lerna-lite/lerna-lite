@@ -1,4 +1,5 @@
-import { EOL } from 'node:os';
+import { realpathSync } from 'node:fs';
+import { EOL, tmpdir } from 'node:os';
 import { join as pathJoin, normalize, relative } from 'node:path';
 
 import type {
@@ -35,7 +36,6 @@ import normalizePath from 'normalize-path';
 import pMap from 'p-map';
 import pPipe, { type UnaryFunction } from 'p-pipe';
 import semver from 'semver';
-import tempDir from 'temp-dir';
 import { glob } from 'tinyglobby';
 import c from 'tinyrainbow';
 
@@ -329,13 +329,14 @@ export class PublishCommand extends Command<PublishCommandOption> {
 
     // optionally cleanup temp packed files after publish, opt-in option
     if (this.options.cleanupTempFiles) {
-      glob(normalizePath(pathJoin(tempDir, '/lerna-*')), { absolute: true, cwd: tempDir, onlyDirectories: true }).then(
-        (deleteFolders) => {
-          // silently delete all files/folders that startsWith "lerna-"
-          deleteFolders.forEach((folder) => removeSync(folder));
-          this.logger.verbose('publish', `Found ${deleteFolders.length} temp folders to cleanup after publish.`);
-        }
-      );
+      const tempDirPath = pathJoin(realpathSync(tmpdir()));
+      const tempDirLernaPath = pathJoin(tempDirPath, 'lerna-*');
+      const normalizedLernaPath = normalizePath(tempDirLernaPath);
+      glob(normalizedLernaPath, { absolute: true, cwd: tempDirPath, onlyDirectories: true }).then((deleteFolders) => {
+        // silently delete all files/folders that startsWith "lerna-"
+        deleteFolders.forEach((folder) => removeSync(folder));
+        this.logger.verbose('publish', `Found ${deleteFolders.length} temp folders to cleanup after publish.`);
+      });
     }
 
     this.logger.success('published', `%d %s ${logPrefix}`, count, count === 1 ? 'package' : 'packages');

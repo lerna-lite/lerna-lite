@@ -2,9 +2,8 @@ import { dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
 
 // helpers
-import { commandRunner, initFixtureFactory } from '@lerna-test/helpers';
+import { commandRunner, initFixtureFactory, temporaryDirectory } from '@lerna-test/helpers';
 import { ensureDir, outputJson, pathExists, readJson } from 'fs-extra/esm';
-import { temporaryDirectory } from 'tempy';
 import { describe, expect, it, vi } from 'vitest';
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
