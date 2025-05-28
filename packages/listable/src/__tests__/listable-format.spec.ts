@@ -7,9 +7,8 @@ vi.mock('@lerna-lite/core', async () => ({
 }));
 
 import { Project } from '@lerna-lite/core';
-import { loggingOutput } from '@lerna-test/helpers/logging-output.js';
+import { loggingOutput, temporaryDirectory } from '@lerna-test/helpers';
 import Tacks from 'tacks';
-import { temporaryDirectory } from 'tempy';
 
 import { listable } from '../index.js';
 

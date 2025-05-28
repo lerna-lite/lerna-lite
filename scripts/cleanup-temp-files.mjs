@@ -1,11 +1,14 @@
 import { removeSync } from 'fs-extra/esm';
+import { realpathSync } from 'node:fs';
+import { tmpdir } from 'node:os';
 import { join as pathJoin } from 'node:path';
 import normalizePath from 'normalize-path';
-import tempDir from 'temp-dir';
 import { glob } from 'tinyglobby';
 
-console.log('cleanup Lerna temp folders from', normalizePath(pathJoin(tempDir, '/lerna-*')));
-glob(normalizePath(pathJoin(tempDir, '/lerna-*')), { absolute: true, cwd: tempDir, onlyDirectories: true })
+const tempDirPath = realpathSync(tmpdir());
+const normalizedLernaPath = normalizePath(pathJoin(tempDirPath, 'lerna-*'));
+console.log('cleanup Lerna temp folders from', normalizedLernaPath);
+glob(normalizedLernaPath, { absolute: true, cwd: tempDirPath, onlyDirectories: true })
   .then((deleteFolders) => {
     // silently delete all files/folders that startsWith "lerna-"
     console.log(`Found ${deleteFolders.length} temp folders to cleanup.`);

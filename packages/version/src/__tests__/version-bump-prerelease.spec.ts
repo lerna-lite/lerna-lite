@@ -27,7 +27,7 @@ import { fileURLToPath } from 'node:url';
 // mocked modules
 import { promptSelectOne, promptTextInput, VersionCommandOption } from '@lerna-lite/core';
 // helpers
-import { commandRunner, getCommitMessage, gitAdd, gitCommit, gitInit, gitTag, initFixtureFactory, showCommit } from '@lerna-test/helpers';
+import { commandRunner, getCommitMessage, gitAdd, gitCommit, gitInit, gitTag, initFixtureFactory, showCommit, temporaryDirectory } from '@lerna-test/helpers';
 import { outputFile } from 'fs-extra/esm';
 import yargParser from 'yargs-parser';
 const __filename = fileURLToPath(import.meta.url);
@@ -35,7 +35,6 @@ const __dirname = dirname(__filename);
 const initFixture = initFixtureFactory(pathResolve(__dirname, '../../../publish/src/__tests__'));
 
 import Tacks from 'tacks';
-import { temporaryDirectory } from 'tempy';
 
 const { File, Dir } = Tacks;
 

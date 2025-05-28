@@ -4,9 +4,9 @@ import { execa } from 'execa';
 import fileUrl from 'file-url';
 import { findUp } from 'find-up';
 import { copy, ensureDir } from 'fs-extra/esm';
-import { temporaryDirectory } from 'tempy';
 
 import { gitAdd, gitCommit, gitInit } from './git/index.js';
+import { temporaryDirectory } from './index.js';
 
 export function cloneFixtureFactory(startDir: string) {
   const initFixture = initFixtureFactory(startDir);
