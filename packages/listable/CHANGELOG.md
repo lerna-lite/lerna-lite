@@ -4,6 +4,12 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [4.3.0](https://github.com/lerna-lite/lerna-lite/compare/v4.2.0...v4.3.0) (2025-05-29)
+
+### Features
+
+* **deps:** replace `temp-dir`, `tempy` and `make-dir` with native code ([#1056](https://github.com/lerna-lite/lerna-lite/issues/1056)) ([60d1669](https://github.com/lerna-lite/lerna-lite/commit/60d16693f0aedeb6a65648c75ffb5f7ec9f5f445)) - by @ghiscoding
+
 ## [4.2.0](https://github.com/lerna-lite/lerna-lite/compare/v4.1.2...v4.2.0) (2025-05-23)
 
 **Note:** Version bump only for package @lerna-lite/listable

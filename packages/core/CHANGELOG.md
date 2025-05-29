@@ -4,6 +4,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [4.3.0](https://github.com/lerna-lite/lerna-lite/compare/v4.2.0...v4.3.0) (2025-05-29)
+
+### Features
+
+* **deps:** replace `temp-dir`, `tempy` and `make-dir` with native code ([#1056](https://github.com/lerna-lite/lerna-lite/issues/1056)) ([60d1669](https://github.com/lerna-lite/lerna-lite/commit/60d16693f0aedeb6a65648c75ffb5f7ec9f5f445)) - by @ghiscoding
+
+### Bug Fixes
+
+* **deps:** replace `is-ci` with `ci-info.isCI` ([#1057](https://github.com/lerna-lite/lerna-lite/issues/1057)) ([0ac0aaa](https://github.com/lerna-lite/lerna-lite/commit/0ac0aaaedaf87b21e332e8e5779e1390c0ec4996)) - by @ghiscoding
+* **deps:** update inquirer packages ([#1058](https://github.com/lerna-lite/lerna-lite/issues/1058)) ([33b1ccf](https://github.com/lerna-lite/lerna-lite/commit/33b1ccf59377bb92d08ebad04dcc7d8934986d30)) - by @renovate[bot]
+
 ## [4.2.0](https://github.com/lerna-lite/lerna-lite/compare/v4.1.2...v4.2.0) (2025-05-23)
 
 ### Bug Fixes

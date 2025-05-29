@@ -4,6 +4,16 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [4.3.0](https://github.com/lerna-lite/lerna-lite/compare/v4.2.0...v4.3.0) (2025-05-29)
+
+### Features
+
+* **deps:** replace `temp-dir`, `tempy` and `make-dir` with native code ([#1056](https://github.com/lerna-lite/lerna-lite/issues/1056)) ([60d1669](https://github.com/lerna-lite/lerna-lite/commit/60d16693f0aedeb6a65648c75ffb5f7ec9f5f445)) - by @ghiscoding
+
+### Bug Fixes
+
+* **publish:** Provenance URLs should have their associated pkg name ([#1053](https://github.com/lerna-lite/lerna-lite/issues/1053)) ([1feda1f](https://github.com/lerna-lite/lerna-lite/commit/1feda1fce34fb089e829d652c040de3b6c507bc2)) - by @ghiscoding
+
 ## [4.2.0](https://github.com/lerna-lite/lerna-lite/compare/v4.1.2...v4.2.0) (2025-05-23)
 
 ### Bug Fixes

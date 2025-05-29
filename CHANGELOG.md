@@ -4,6 +4,20 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [4.3.0](https://github.com/lerna-lite/lerna-lite/compare/v4.2.0...v4.3.0) (2025-05-29)
+
+### Features
+
+* **deps:** replace `temp-dir`, `tempy` and `make-dir` with native code ([#1056](https://github.com/lerna-lite/lerna-lite/issues/1056)) ([60d1669](https://github.com/lerna-lite/lerna-lite/commit/60d16693f0aedeb6a65648c75ffb5f7ec9f5f445)) - by @ghiscoding
+
+### Bug Fixes
+
+* **deps:** replace `is-ci` with `ci-info.isCI` ([#1057](https://github.com/lerna-lite/lerna-lite/issues/1057)) ([0ac0aaa](https://github.com/lerna-lite/lerna-lite/commit/0ac0aaaedaf87b21e332e8e5779e1390c0ec4996)) - by @ghiscoding
+* **deps:** update all non-major dependencies ([#1059](https://github.com/lerna-lite/lerna-lite/issues/1059)) ([d4d9416](https://github.com/lerna-lite/lerna-lite/commit/d4d94168d32faa1be03d9bf3bf3bfe24572528b1)) - by @renovate[bot]
+* **deps:** update dependency @octokit/rest to v22 ([#1049](https://github.com/lerna-lite/lerna-lite/issues/1049)) ([09b7b81](https://github.com/lerna-lite/lerna-lite/commit/09b7b815eefd5691c9781b88665def40ebee6040)) - by @renovate[bot]
+* **deps:** update inquirer packages ([#1058](https://github.com/lerna-lite/lerna-lite/issues/1058)) ([33b1ccf](https://github.com/lerna-lite/lerna-lite/commit/33b1ccf59377bb92d08ebad04dcc7d8934986d30)) - by @renovate[bot]
+* **publish:** Provenance URLs should have their associated pkg name ([#1053](https://github.com/lerna-lite/lerna-lite/issues/1053)) ([1feda1f](https://github.com/lerna-lite/lerna-lite/commit/1feda1fce34fb089e829d652c040de3b6c507bc2)) - by @ghiscoding
+
 ## [4.2.0](https://github.com/lerna-lite/lerna-lite/compare/v4.1.2...v4.2.0) (2025-05-23)
 
 ### Features
