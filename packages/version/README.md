@@ -430,10 +430,14 @@ lerna version --conventional-commits --changelog-include-commits-client-login " 
 > We recommend you first try it with the `--dry-run` option so that you can validate your remote client access and inspect the changelog output. Make sure to revert your changes once you're satisfied with the output.
 
 ### `--changelog-include-commits-client-login [msg]`
+
 Specify if we want to include commit remote client login (ie GitHub login username) to the end of each changelog commit entry and wrapped in `(@...)`. You could also provide a custom format by using any of these tokens (`%l`, `%a`, `%e`), see examples below.
 - `%l`: remote client login, ie ("@renovate-bot")
 - `%a`: git author name, ie: ("Whitesource Renovate")
 - `%e`: git author email, ie: ("bot@renovateapp.com")
+
+> [!NOTE]
+> If you're only interested in using `%a` and `%e`, you should consider using [`--changelog-include-commits-git-author`](#--changelog-include-commits-git-author-msg) instead because `--changelog-include-commits-client-login` makes an API call to GitHub (via their GraphQL API) to fetch remote client logins. On the other hand, `--changelog-include-commits-git-author` simply reads your local Git and doesn't need any API fetching. So make sure to use the correct option depending on your use case.
 
 This option is only available when using `--conventional-commits` with changelogs enabled. You must also provide 1 of these 2 options [`--create-release <type>`](#--create-release-type) or [`--remote-client <type>`](#--remote-client-type)
 
