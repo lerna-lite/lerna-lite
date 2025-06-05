@@ -84,6 +84,9 @@ catalogs:
     write-package:
       specifier: ^7.1.0
       version: 7.1.0
+    yaml:
+      specifier: ^2.8.0
+      version: 2.8.0
     yargs:
       specifier: ^18.0.0
       version: 18.0.0
@@ -371,7 +374,7 @@ importers:
         specifier: 'catalog:'
         version: 7.1.0
       yaml:
-        specifier: 2.8.0
+        specifier: 'catalog:'
         version: 2.8.0
     devDependencies:
       '@types/clone-deep':
@@ -816,9 +819,6 @@ importers:
       '@types/fs-extra':
         specifier: 'catalog:'
         version: 11.0.4
-      '@types/js-yaml':
-        specifier: ^4.0.9
-        version: 4.0.9
       '@types/minimatch':
         specifier: 'catalog:'
         version: 5.1.2
@@ -831,12 +831,12 @@ importers:
       execa:
         specifier: 'catalog:'
         version: 9.6.0
-      js-yaml:
-        specifier: ^4.1.0
-        version: 4.1.0
       write-package:
         specifier: 'catalog:'
         version: 7.1.0
+      yaml:
+        specifier: 'catalog:'
+        version: 2.8.0
       yargs:
         specifier: 'catalog:'
         version: 18.0.0
@@ -1523,9 +1523,6 @@ packages:
 
   '@types/inquirer@9.0.8':
     resolution: {integrity: sha512-CgPD5kFGWsb8HJ5K7rfWlifao87m4ph8uioU7OTncJevmE/VLIqAAjfQtko578JZg7/f69K4FgqYym3gNr7DeA==}
-
-  '@types/js-yaml@4.0.9':
-    resolution: {integrity: sha512-k4MGaQl5TGo/iipqb2UDG2UwjXziSWkh0uysQelTlJpX1qGlpUZYm8PnO4DxG1qBomtJUdYJ6qR6xdIah10JLg==}
 
   '@types/json-schema@7.0.15':
     resolution: {integrity: sha512-5+fP8P8MFNC+AyZCDxrB2pkZFPGzqQWUzpSeuuVLvm8VMcorNYavBqoFcxK8bQz4Qsbn4oUEEem4wDLfcysGHA==}
@@ -4176,8 +4173,6 @@ snapshots:
     dependencies:
       '@types/through': 0.0.33
       rxjs: 7.8.2
-
-  '@types/js-yaml@4.0.9': {}
 
   '@types/json-schema@7.0.15': {}
 

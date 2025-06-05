@@ -40,9 +40,9 @@ import { commandRunner, getCommitMessage, gitAdd, gitCommit, gitTag, initFixture
 import { loggingOutput } from '@lerna-test/helpers/logging-output.js';
 import { execa } from 'execa';
 import { outputFile, outputJson } from 'fs-extra/esm';
-import yaml from 'js-yaml';
 // mocked or stubbed modules
 import * as writePkg from 'write-package';
+import { parse } from 'yaml';
 
 import { getCommitsSinceLastRelease } from '../conventional-commits/get-commits-since-last-release.js';
 import { gitPush as libPush, gitPushSingleTag as libPushSingleTag } from '../lib/git-push.js';
@@ -77,7 +77,7 @@ const createArgv = (cwd, ...args) => {
 async function loadYamlFile<T>(filePath: string) {
   try {
     const file = await fsPromises.readFile(filePath);
-    return (await yaml.load(`${file}`)) as T;
+    return (await parse(`${file}`)) as T;
   } catch (e) {
     return undefined;
   }
@@ -1062,8 +1062,7 @@ describe('VersionCommand', () => {
         const changedFiles = await showCommit(cwd, '--name-only');
         expect(changedFiles).toContain('pnpm-lock.yaml');
 
-        const lockfileResponse: any = await loadYamlFile(join(cwd, 'pnpm-lock.yaml'));
-        const { lockfileVersion, importers } = lockfileResponse;
+        const { lockfileVersion, importers } = await loadYamlFile<any>(join(cwd, 'pnpm-lock.yaml'));
 
         expect(lockfileVersion).toMatch(/([6-9]|1[0-9])\.[0-9]$/);
         expect(importers['packages/package-2'].dependencies['@my-workspace/package-1'].specifier).toBe('workspace:^3.0.0');

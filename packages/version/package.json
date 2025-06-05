@@ -71,13 +71,12 @@
     "@npm/types": "^2.1.0",
     "@types/dedent": "catalog:",
     "@types/fs-extra": "catalog:",
-    "@types/js-yaml": "^4.0.9",
     "@types/minimatch": "catalog:",
     "@types/npm-package-arg": "catalog:",
     "@types/semver": "catalog:",
     "execa": "catalog:",
-    "js-yaml": "^4.1.0",
     "write-package": "catalog:",
+    "yaml": "catalog:",
     "yargs": "catalog:",
     "yargs-parser": "catalog:"
   }
