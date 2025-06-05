@@ -1001,7 +1001,7 @@ export class PublishCommand extends Command<PublishCommandOption> {
     return chain.finally(() => {
       // print Provenance URLs if any
       if (provenanceUrls.size > 0) {
-        logOutput('The following provenance transparency log entries were created during publishing:');
+        logOutput('The following Provenance transparency log entries were created during publishing:');
         const message = Array.from(provenanceUrls.entries()).map(([pkg, url]) => ` - ${pkg}: ${url}`);
         logOutput(message.join(EOL));
       }

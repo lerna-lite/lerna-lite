@@ -878,7 +878,7 @@ describe('PublishCommand', () => {
 
       await new PublishCommand(createArgv(cwd));
 
-      expect(logOutput).toHaveBeenCalledWith('The following provenance transparency log entries were created during publishing:');
+      expect(logOutput).toHaveBeenCalledWith('The following Provenance transparency log entries were created during publishing:');
       // Check that both package names and URLs are present in the output
       expect(logOutput).toHaveBeenCalledWith(expect.stringContaining('package-1: https://search.sigstore.dev/?logIndex=111'));
       expect(logOutput).toHaveBeenCalledWith(expect.stringContaining('package-2: https://search.sigstore.dev/?logIndex=333')); // URLs are offset because of the dep graph
@@ -893,7 +893,7 @@ describe('PublishCommand', () => {
 
       await new PublishCommand(createArgv(cwd));
 
-      expect(logOutput).not.toHaveBeenCalledWith('The following provenance transparency log entries were created during publishing:');
+      expect(logOutput).not.toHaveBeenCalledWith('The following Provenance transparency log entries were created during publishing:');
       expect(logOutput).not.toHaveBeenCalledWith(expect.stringContaining('package-1: https://search.sigstore.dev/?logIndex=111'));
     });
   });
