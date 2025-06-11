@@ -5,7 +5,7 @@ import { log } from '@lerna-lite/npmlog';
 import { filter as minimatchFilter } from 'minimatch';
 import slash from 'slash';
 import { globSync } from 'tinyglobby';
-import { parse } from 'yaml';
+import { parse as yamlParse } from 'yaml';
 
 import { execSync } from '../../../child-process.js';
 import type { ExecOpts } from '../../../models/interfaces.js';
@@ -127,18 +127,29 @@ export function diffWorkspaceCatalog(prevTag: string): string[] {
     const currentWorkspaceContent = readFileSync(workspaceConfigPath, 'utf8');
 
     // Parse the YAML files
-    const previousConfig = parse(prevWorkspaceContent);
-    const currentConfig = parse(currentWorkspaceContent);
+    const previousConfig = yamlParse(prevWorkspaceContent);
+    const currentConfig = yamlParse(currentWorkspaceContent);
 
     // If either config is missing catalog, fallback to diff
-    if (currentConfig.catalog) {
+    if (currentConfig.catalog || currentConfig.catalogs) {
       // Find the changed dependencies
-      Object.keys(currentConfig.catalog).forEach((key) => {
-        if (!previousConfig.catalog[key] || previousConfig.catalog[key] !== currentConfig.catalog[key]) {
-          changedDependencies.push(key);
+      Object.keys(currentConfig.catalog || {}).forEach((depName) => {
+        if (!previousConfig.catalog[depName] || previousConfig.catalog[depName] !== currentConfig.catalog[depName]) {
+          changedDependencies.push(depName);
         }
       });
+      Object.keys(currentConfig.catalogs || {}).forEach((catName) => {
+        Object.keys(currentConfig.catalogs[catName]).forEach((depName) => {
+          if (
+            !currentConfig.catalogs[catName][depName] ||
+            previousConfig.catalogs[catName][depName] !== currentConfig.catalogs[catName][depName]
+          ) {
+            changedDependencies.push(depName);
+          }
+        });
+      });
 
+      // Get the diff output for the catalog file
       const diffOutput = execSync('git', ['diff', `${prevTag}..HEAD`, '--', 'pnpm-workspace.yaml']);
       const diffLines = diffOutput.split('\n');
       diffLines.forEach((line) => {
