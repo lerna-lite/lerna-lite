@@ -1090,9 +1090,9 @@
       },
       "npmClient": {
         "type": "string",
-        "description": "The npm client to use when running commands (either npm, pnpm or yarn). Defaults to npm if unspecified.",
+        "description": "The npm client to use when running commands (either 'npm', 'pnpm', 'yarn' or 'bun'). Defaults to 'npm' if unspecified.",
         "default": "npm",
-        "enum": ["npm", "pnpm", "yarn"]
+        "enum": ["npm", "pnpm", "yarn", "bun"]
       },
       "npmClientArgs": {
         "type": "array",

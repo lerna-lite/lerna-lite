@@ -14,7 +14,7 @@ describe('PackageGraph', () => {
   let testDir = '';
 
   beforeAll(async () => {
-    testDir = await initFixture('catalog-protocol');
+    testDir = await initFixture('pnpm-catalog');
   });
 
   afterEach(() => {
@@ -34,31 +34,6 @@ describe('PackageGraph', () => {
       ];
 
       expect(() => new PackageGraph(pkgs)).toThrowError('Package name "pkg-2" used in multiple packages:\n\t/test/pkg-2\n\t/test/pkg-3');
-    });
-
-    it('can read catalog & catalogs from "pnpm-workspace.yaml" file', () => {
-      const pkgs = [];
-      const graph = new PackageGraph(pkgs);
-
-      expect(graph.readWorkspaceCatalogConfig()).toEqual({
-        catalog: {
-          'package-1': '2.3.4',
-          'fs-extra': '^11.2.0',
-          'p-map': '^7.0.3',
-          'pkg-1': '1.0.0',
-          tinyrainbow: '^2.0.0',
-        },
-        catalogs: {
-          react17: {
-            react: '^17.0.2',
-            'react-dom': '^17.0.2',
-          },
-          react18: {
-            react: '^18.2.0',
-            'react-dom': '^18.2.0',
-          },
-        },
-      });
     });
 
     it('externalizes non-satisfied semver of local sibling', () => {
@@ -129,69 +104,6 @@ describe('PackageGraph', () => {
 
       expect(pkg1.localDependents.has('pkg-2')).toBe(true);
       expect(pkg2.localDependencies.has('pkg-1')).toBe(true);
-    });
-
-    it('only localizes catalog: siblings when it must be explicit', () => {
-      const logWarnSpy = vi.spyOn(log, 'warn');
-      const pkgs = [
-        new Package(
-          {
-            name: 'pkg-1',
-            version: '1.0.0',
-          } as unknown as RawManifest,
-          '/test/pkg-1'
-        ),
-        new Package(
-          {
-            name: 'pkg-2',
-            version: '1.0.0',
-            dependencies: {
-              'pkg-1': '^1.0.0',
-            },
-          } as unknown as RawManifest,
-          '/test/pkg-2'
-        ),
-        new Package(
-          {
-            name: 'pkg-3',
-            version: '1.0.0',
-            dependencies: {
-              'pkg-1': 'catalog:',
-              react: 'catalog:react18',
-            },
-            peerDependencies: {
-              'pkg-1': 'catalog:',
-            },
-          } as unknown as RawManifest,
-          '/test/pkg-3'
-        ),
-        new Package(
-          {
-            name: 'pkg-4',
-            version: '1.0.0',
-            dependencies: {
-              'pkg-2': 'catalog:',
-            },
-          } as unknown as RawManifest,
-          '/test/pkg-4'
-        ),
-      ];
-
-      const graph = new PackageGraph(pkgs, 'allDependencies', 'explicit');
-      const [pkg1, pkg2, pkg3, pkg4] = graph.values();
-
-      expect(pkg1.localDependents.has('pkg-2')).toBe(false);
-      expect(pkg2.localDependencies.has('pkg-1')).toBe(false);
-      expect(pkg1.localDependents.has('pkg-3')).toBe(true);
-      expect(pkg3.localDependencies.has('pkg-1')).toBe(true);
-      expect(pkg4.localDependencies.has('pkg-1')).toBe(false);
-      expect(pkg3.localDependencies.get('pkg-1').catalogSpec).toBe('catalog:');
-      expect(pkg3.localDependencies.get('pkg-1').fetchSpec).toBe('1.0.0');
-      expect(pkg3.externalDependencies.get('react').catalogSpec).toBe('catalog:react18'); // named catalog
-      expect(pkg3.externalDependencies.get('react').fetchSpec).toBe('^18.2.0');
-      expect(pkg4.localDependencies.get('pkg-2').catalogSpec).toBe('catalog:');
-      expect(pkg4.localDependencies.get('pkg-2').fetchSpec).toBe(''); // not found in global catalog so it will show warning below
-      expect(logWarnSpy).toHaveBeenCalledWith('graph', 'No version found in "default" catalog for "pkg-2"');
     });
 
     it('only localizes workspace: siblings when it must be explicit', () => {
@@ -269,6 +181,194 @@ describe('PackageGraph', () => {
       expect(pkg5.localDependencies.get('pkg-2').workspaceSpec).toBe('workspace:~');
       expect(pkg5.localDependencies.get('pkg-3').workspaceSpec).toBe('workspace:^1.0.0');
       expect(pkg5.localDependencies.get('pkg-4').workspaceSpec).toBe('workspace:>=1.0.0');
+    });
+  });
+
+  describe('pnpm workspace catalog', () => {
+    beforeAll(async () => {
+      testDir = await initFixture('pnpm-catalog');
+    });
+
+    it('can read catalog & catalogs from "pnpm-workspace.yaml" file', () => {
+      const pkgs = [];
+      const graph = new PackageGraph(pkgs);
+
+      expect(graph.readWorkspaceCatalogConfig('pnpm')).toEqual({
+        catalog: {
+          'package-1': '2.3.4',
+          'fs-extra': '^11.2.0',
+          'p-map': '^7.0.3',
+          'pkg-1': '1.0.0',
+          tinyrainbow: '^2.0.0',
+        },
+        catalogs: {
+          react17: {
+            react: '^17.0.2',
+            'react-dom': '^17.0.2',
+          },
+          react18: {
+            react: '^18.2.0',
+            'react-dom': '^18.2.0',
+          },
+        },
+      });
+    });
+
+    it('only localizes catalog: siblings when it must be explicit using pnpm', () => {
+      const logWarnSpy = vi.spyOn(log, 'warn');
+      const pkgs = [
+        new Package(
+          {
+            name: 'pkg-1',
+            version: '1.0.0',
+          } as unknown as RawManifest,
+          '/test/pkg-1'
+        ),
+        new Package(
+          {
+            name: 'pkg-2',
+            version: '1.0.0',
+            dependencies: {
+              'pkg-1': '^1.0.0',
+            },
+          } as unknown as RawManifest,
+          '/test/pkg-2'
+        ),
+        new Package(
+          {
+            name: 'pkg-3',
+            version: '1.0.0',
+            dependencies: {
+              'pkg-1': 'catalog:',
+              react: 'catalog:react18',
+            },
+            peerDependencies: {
+              'pkg-1': 'catalog:',
+            },
+          } as unknown as RawManifest,
+          '/test/pkg-3'
+        ),
+        new Package(
+          {
+            name: 'pkg-4',
+            version: '1.0.0',
+            dependencies: {
+              'pkg-2': 'catalog:',
+            },
+          } as unknown as RawManifest,
+          '/test/pkg-4'
+        ),
+      ];
+
+      const graph = new PackageGraph(pkgs, 'allDependencies', 'explicit', 'pnpm');
+      const [pkg1, pkg2, pkg3, pkg4] = graph.values();
+
+      expect(pkg1.localDependents.has('pkg-2')).toBe(false);
+      expect(pkg2.localDependencies.has('pkg-1')).toBe(false);
+      expect(pkg1.localDependents.has('pkg-3')).toBe(true);
+      expect(pkg3.localDependencies.has('pkg-1')).toBe(true);
+      expect(pkg4.localDependencies.has('pkg-1')).toBe(false);
+      expect(pkg3.localDependencies.get('pkg-1').catalogSpec).toBe('catalog:');
+      expect(pkg3.localDependencies.get('pkg-1').fetchSpec).toBe('1.0.0');
+      expect(pkg3.externalDependencies.get('react').catalogSpec).toBe('catalog:react18'); // named catalog
+      expect(pkg3.externalDependencies.get('react').fetchSpec).toBe('^18.2.0');
+      expect(pkg4.localDependencies.get('pkg-2').catalogSpec).toBe('catalog:');
+      expect(pkg4.localDependencies.get('pkg-2').fetchSpec).toBe(''); // not found in global catalog so it will show warning below
+      expect(logWarnSpy).toHaveBeenCalledWith('graph', 'No version found in "default" catalog for "pkg-2"');
+    });
+  });
+
+  describe('package.json workspace catalog', () => {
+    beforeAll(async () => {
+      testDir = await initFixture('package-workspaces-catalog');
+    });
+
+    it('can read catalog & catalogs from "package.json" file', () => {
+      const pkgs = [];
+      const graph = new PackageGraph(pkgs);
+
+      expect(graph.readWorkspaceCatalogConfig('bun')).toEqual({
+        catalog: {
+          'package-1': '2.3.4',
+          'fs-extra': '^11.2.0',
+          'p-map': '^7.0.3',
+          'pkg-1': '1.0.0',
+          tinyrainbow: '^2.0.0',
+        },
+        catalogs: {
+          react17: {
+            react: '^17.0.2',
+            'react-dom': '^17.0.2',
+          },
+          react18: {
+            react: '^18.2.0',
+            'react-dom': '^18.2.0',
+          },
+        },
+      });
+    });
+
+    it('only localizes catalog: siblings when it must be explicit using bun', () => {
+      const logWarnSpy = vi.spyOn(log, 'warn');
+      const pkgs = [
+        new Package(
+          {
+            name: 'pkg-1',
+            version: '1.0.0',
+          } as unknown as RawManifest,
+          '/test/pkg-1'
+        ),
+        new Package(
+          {
+            name: 'pkg-2',
+            version: '1.0.0',
+            dependencies: {
+              'pkg-1': '^1.0.0',
+            },
+          } as unknown as RawManifest,
+          '/test/pkg-2'
+        ),
+        new Package(
+          {
+            name: 'pkg-3',
+            version: '1.0.0',
+            dependencies: {
+              'pkg-1': 'catalog:',
+              react: 'catalog:react18',
+            },
+            peerDependencies: {
+              'pkg-1': 'catalog:',
+            },
+          } as unknown as RawManifest,
+          '/test/pkg-3'
+        ),
+        new Package(
+          {
+            name: 'pkg-4',
+            version: '1.0.0',
+            dependencies: {
+              'pkg-2': 'catalog:',
+            },
+          } as unknown as RawManifest,
+          '/test/pkg-4'
+        ),
+      ];
+
+      const graph = new PackageGraph(pkgs, 'allDependencies', 'explicit', 'bun');
+      const [pkg1, pkg2, pkg3, pkg4] = graph.values();
+
+      expect(pkg1.localDependents.has('pkg-2')).toBe(false);
+      expect(pkg2.localDependencies.has('pkg-1')).toBe(false);
+      expect(pkg1.localDependents.has('pkg-3')).toBe(true);
+      expect(pkg3.localDependencies.has('pkg-1')).toBe(true);
+      expect(pkg4.localDependencies.has('pkg-1')).toBe(false);
+      expect(pkg3.localDependencies.get('pkg-1').catalogSpec).toBe('catalog:');
+      expect(pkg3.localDependencies.get('pkg-1').fetchSpec).toBe('1.0.0');
+      expect(pkg3.externalDependencies.get('react').catalogSpec).toBe('catalog:react18'); // named catalog
+      expect(pkg3.externalDependencies.get('react').fetchSpec).toBe('^18.2.0');
+      expect(pkg4.localDependencies.get('pkg-2').catalogSpec).toBe('catalog:');
+      expect(pkg4.localDependencies.get('pkg-2').fetchSpec).toBe(''); // not found in global catalog so it will show warning below
+      expect(logWarnSpy).toHaveBeenCalledWith('graph', 'No version found in "default" catalog for "pkg-2"');
     });
   });
 

@@ -1,4 +1,4 @@
-import type { ArboristLoadOption, ChangelogPresetOptions, RemoteClientType } from './interfaces.js';
+import type { ArboristLoadOption, ChangelogPresetOptions, NpmClient, RemoteClientType } from './interfaces.js';
 
 export interface ChangedCommandOption {
   /** use conventional-changelog to determine version bump and generate CHANGELOG. */
@@ -438,7 +438,7 @@ export interface RunCommandOption {
   dryRun?: boolean;
 
   /** Defaults to 'npm', executable used to run scripts (npm, yarn, pnpm, ...). */
-  npmClient?: string;
+  npmClient?: NpmClient;
 
   /** Stream output with lines prefixed by package. */
   stream?: boolean;

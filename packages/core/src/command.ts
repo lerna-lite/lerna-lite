@@ -325,9 +325,14 @@ export class Command<T extends AvailableCommandOption> {
       chain = chain.then(() => this.project.getPackages());
       chain = chain.then((packages) => {
         const { graphType } = this.options.command?.[this.commandName] ?? {};
-        this.packageGraph = new PackageGraph(packages || [], graphType ?? 'allDependencies');
+        this.packageGraph = new PackageGraph(packages || [], graphType ?? 'allDependencies', 'auto', this.options.npmClient);
         return getFilteredPackages(this.packageGraph, this.execOpts, this.options).then((filteredPackages: Package[]) => {
-          this.packageGraph = new PackageGraph(filteredPackages || [], graphType ?? 'allDependencies');
+          this.packageGraph = new PackageGraph(
+            filteredPackages || [],
+            graphType ?? 'allDependencies',
+            'auto',
+            this.options.npmClient
+          );
         });
       });
     }

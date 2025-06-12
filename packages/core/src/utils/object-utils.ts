@@ -1,4 +1,5 @@
 import { log } from '@lerna-lite/npmlog';
+import JSON5 from 'json5';
 
 /**
  * From a dot (.) notation path, find and delete a property within an object if found given a complex object path
@@ -44,4 +45,22 @@ export function getComplexObjectValue<T>(object: any, path: string): T {
  */
 export function isEmpty(obj: object) {
   return !obj || Object.keys(obj).length === 0;
+}
+
+/**
+ * Loosely parse a stringified JSON file content, accepting comments using json5 parser
+ * @param {String} content - file content
+ * @param {String} filepath - optional file path location for the error
+ * @returns
+ */
+export function looselyJsonParse(content: string, filepath = '') {
+  try {
+    return JSON5.parse(content || '{}');
+  } catch (err: unknown) {
+    if (err instanceof Error) {
+      err.name = 'JSONError';
+      err.message = `Error in: ${filepath}\n${err.message}`;
+    }
+    throw err;
+  }
 }

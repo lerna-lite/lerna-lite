@@ -3,11 +3,11 @@ packages:
 
 # Define a catalog of version ranges.
 catalog:
-  package-1: '2.3.4'
-  fs-extra: '^11.2.0'
-  pkg-1: '1.0.0'
-  p-map: '^7.0.3'
-  tinyrainbow: '^2.0.0'
+  package-1: 2.3.4
+  fs-extra: ^11.2.0
+  pkg-1: 1.0.0
+  p-map: ^7.0.3
+  tinyrainbow: ^2.0.0
 
 catalogs:
   # Can be referenced through "catalog:react17"

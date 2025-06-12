@@ -1,12 +1,9 @@
-import { existsSync, readFileSync } from 'node:fs';
-import { join } from 'node:path';
-
 import { log } from '@lerna-lite/npmlog';
 import npa from 'npm-package-arg';
-import { parse } from 'yaml';
 
-import type { NpaResolveResult } from '../models/interfaces.js';
+import type { NpaResolveResult, NpmClient } from '../models/interfaces.js';
 import type { Package } from '../package.js';
+import { extractCatalogConfigFromPkg, extractCatalogConfigFromYaml } from '../utils/catalog-utils.js';
 import { ValidationError } from '../validation-error.js';
 import { CyclicPackageGraphNode } from './lib/cyclic-package-graph-node.js';
 import { PackageGraphNode } from './lib/package-graph-node.js';
@@ -35,6 +32,9 @@ export class PackageGraph extends Map<string, PackageGraphNode> {
   /** does the workspace project use pnpm catalog? */
   hasWorkspaceCatalog = false;
 
+  /** npm client being used */
+  npmClient: NpmClient = 'npm';
+
   /**
    * @param {Package[]} packages - An array of Packages to build the graph out of.
    * @param {'allDependencies' | 'dependencies'} [graphType]
@@ -45,7 +45,8 @@ export class PackageGraph extends Map<string, PackageGraphNode> {
   constructor(
     packages: Package[],
     graphType: 'allDependencies' | 'dependencies' = 'allDependencies',
-    localDependencies: boolean | 'auto' | 'force' | 'explicit' | 'forceLocal' = 'auto'
+    localDependencies: boolean | 'auto' | 'force' | 'explicit' | 'forceLocal' = 'auto',
+    client: NpmClient = 'npm'
   ) {
     // For backward compatibility
     if (localDependencies === true || localDependencies === 'forceLocal') {
@@ -73,7 +74,8 @@ export class PackageGraph extends Map<string, PackageGraphNode> {
       }
     }
 
-    const { catalog, catalogs } = this.readWorkspaceCatalogConfig();
+    this.npmClient = client;
+    const { catalog, catalogs } = this.readWorkspaceCatalogConfig(this.npmClient);
 
     if (Object.keys(catalog).length > 0 || Object.keys(catalogs).length > 0) {
       this.hasWorkspaceCatalog = true;
@@ -190,16 +192,15 @@ export class PackageGraph extends Map<string, PackageGraphNode> {
     return this.extendList(filteredPackages, 'localDependents');
   }
 
-  readWorkspaceCatalogConfig() {
-    const workspaceConfigPath = join(process.cwd(), 'pnpm-workspace.yaml');
-    const { catalog = {}, catalogs = {} } = existsSync(workspaceConfigPath)
-      ? parse(readFileSync(workspaceConfigPath, 'utf8'))
-      : {};
+  /** read the workspaces catalog depending on the npm client (currently support 'pnpm' and 'bun') */
+  readWorkspaceCatalogConfig(npmClient: NpmClient) {
+    if (npmClient === 'pnpm') {
+      return extractCatalogConfigFromYaml();
+    } else if (npmClient === 'bun') {
+      return extractCatalogConfigFromPkg();
+    }
 
-    return {
-      catalog,
-      catalogs,
-    };
+    return { catalog: {}, catalogs: {} };
   }
 
   /**

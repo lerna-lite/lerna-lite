@@ -1,0 +1,29 @@
+{
+  "name": "workspace-protocol-specs",
+  "description": "workspace protocol specifiers should act just like recognized semver ranges",
+  "private": true,
+  "version": "0.0.0-lerna",
+  "dependencies": {
+    "package-2": "catalog:"
+  },
+  "workspaces": {
+    "packages": ["packages/**"],
+    "catalog": {
+      "package-1": "2.3.4",
+      "fs-extra": "^11.2.0",
+      "pkg-1": "1.0.0",
+      "p-map": "^7.0.3",
+      "tinyrainbow": "^2.0.0"
+    },
+    "catalogs": {
+      "react17": {
+        "react": "^17.0.2",
+        "react-dom": "^17.0.2"
+      },
+      "react18": {
+        "react": "^18.2.0",
+        "react-dom": "^18.2.0"
+      }
+    }
+  }
+}
