@@ -58,7 +58,7 @@ export function extractCatalogConfigFromPkg(pkgContent?: string): CatalogConfig 
 }
 
 /**
- * Compare the before/after catalog(s) config and return any dependencies that changed in the workspace catalog. *
+ * Compare the before/after catalog(s) config and return any dependencies that changed in the workspace catalog.
  * @param {CatalogConfig} prev - previous catalog(s) config
  * @param {CatalogConfig} curr - current catalog(s) config
  * @returns
