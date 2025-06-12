@@ -13,6 +13,7 @@ import { writeJsonFile } from 'write-json-file';
 
 import type { ProjectConfig, RawManifest } from '../models/interfaces.js';
 import { Package } from '../package.js';
+import { looselyJsonParse } from '../utils/object-utils.js';
 import { ValidationError } from '../validation-error.js';
 import { applyExtends } from './lib/apply-extends.js';
 import { makeFileFinder, makeSyncFileFinder } from './lib/make-file-finder.js';
@@ -262,15 +263,7 @@ export class Project {
      * we perform an automated config migration, e.g. via `lerna repair` and they will be lost.
      * (Although that will be easy enough for the user to see and updated in their `git diff`)
      */
-    try {
-      return JSON5.parse(content);
-    } catch (err: unknown) {
-      if (err instanceof Error) {
-        err.name = 'JSONError';
-        err.message = `Error in: ${filepath}\n${err.message}`;
-      }
-      throw err;
-    }
+    return looselyJsonParse(content, filepath);
   }
 
   serializeConfig(): Promise<string> {

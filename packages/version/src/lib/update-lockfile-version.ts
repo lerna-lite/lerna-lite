@@ -2,7 +2,7 @@ import { promises } from 'node:fs';
 import { EOL } from 'node:os';
 import { join } from 'node:path';
 
-import type { Package } from '@lerna-lite/core';
+import type { NpmClient, Package } from '@lerna-lite/core';
 import { execPackageManager, execPackageManagerSync } from '@lerna-lite/core';
 import { log } from '@lerna-lite/npmlog';
 import { loadJsonFile } from 'load-json-file';
@@ -120,12 +120,12 @@ export function updateNpmLockFileVersion2(obj: any, pkgName: string, newVersion:
 
 /**
  * Run `npm install --package-lock-only` or equivalent depending on the package manager defined in `npmClient`
- * @param {'npm' | 'pnpm' | 'yarn'} npmClient
+ * @param {NpmClient} npmClient
  * @param {String} cwd
  * @returns {Promise<string | undefined>} lockfile name when executed successfully
  */
 export async function runInstallLockFileOnly(
-  npmClient: 'npm' | 'pnpm' | 'yarn',
+  npmClient: NpmClient,
   cwd: string,
   options: {
     npmClientArgs: string[];

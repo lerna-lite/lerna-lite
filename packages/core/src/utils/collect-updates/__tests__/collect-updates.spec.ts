@@ -67,11 +67,12 @@ describe('collectUpdates()', () => {
   it('returns node with changes', () => {
     changedPackages.add('package-standalone');
 
-    const graph = buildGraph();
+    const graph = buildGraph(undefined, 'pnpm');
     const pkgs = graph.rawPackageList;
     const execOpts = { cwd: '/test' };
     const updates = collectUpdates(pkgs, graph, execOpts, {});
 
+    expect(diffWorkspaceCatalog).toHaveBeenCalled();
     expect(updates).toEqual([
       expect.objectContaining({
         name: 'package-standalone',

@@ -1,7 +1,7 @@
 // helpers
-import { Package, PackageGraph } from '../../../index.js';
+import { NpmClient, Package, PackageGraph } from '../../../index.js';
 
-function buildGraph(mapPackages = (pkg) => pkg) {
+function buildGraph(mapPackages = (pkg) => pkg, npmClient: NpmClient = 'npm') {
   // cat __fixtures__/toposort/packages/*/package.json
   const packages = [
     {
@@ -69,7 +69,7 @@ function buildGraph(mapPackages = (pkg) => pkg) {
     .map(mapPackages)
     .map((json) => new Package(json, `/test/packages/${json.name}`, '/test'));
 
-  return new PackageGraph(packages);
+  return new PackageGraph(packages, 'allDependencies', 'auto', npmClient);
 }
 
 export default buildGraph;

@@ -1,15 +1,20 @@
-import { readFileSync } from 'node:fs';
+import { existsSync, readFileSync } from 'node:fs';
 import { dirname, join, relative } from 'node:path';
 
 import { log } from '@lerna-lite/npmlog';
 import { filter as minimatchFilter } from 'minimatch';
 import slash from 'slash';
 import { globSync } from 'tinyglobby';
-import { parse as yamlParse } from 'yaml';
 
 import { execSync } from '../../../child-process.js';
-import type { ExecOpts } from '../../../models/interfaces.js';
+import type { ExecOpts, NpmClient } from '../../../models/interfaces.js';
 import { type PackageGraphNode } from '../../../package-graph/lib/package-graph-node.js';
+import {
+  type CatalogConfig,
+  diffCatalogs,
+  extractCatalogConfigFromPkg,
+  extractCatalogConfigFromYaml,
+} from '../../catalog-utils.js';
 
 /**
  * @param {string} committish
@@ -113,62 +118,38 @@ function diffSinceIn(committish: string, location: string, execOpts: ExecOpts, d
 }
 
 /**
- * When using pnpm workspace catalog(s), we will compare current catalogs against the previous commited catalogs
- * and return dependencies that changed since then.
+ * Returns dependencies whose semver ranges changed, were added, or removed
+ * in pnpm-workspace.yaml
+ * or package.json catalog(s) since prevTag.
  */
-export function diffWorkspaceCatalog(prevTag: string): string[] {
-  const changedDependencies: string[] = [];
+export function diffWorkspaceCatalog(prevTag: string, npmClient: NpmClient): string[] {
   try {
-    // Get the previous commit's file contents
-    const prevWorkspaceContent = execSync('git', ['show', `${prevTag}:pnpm-workspace.yaml`]);
+    const cwd = process.cwd();
+    const yamlPath = join(cwd, 'pnpm-workspace.yaml');
+    const jsonPath = join(cwd, 'package.json');
 
-    // Get the current commit's file contents
-    const workspaceConfigPath = join(process.cwd(), 'pnpm-workspace.yaml');
-    const currentWorkspaceContent = readFileSync(workspaceConfigPath, 'utf8');
+    let prevConfig: CatalogConfig = { catalog: {}, catalogs: {} };
+    let currConfig: CatalogConfig = { catalog: {}, catalogs: {} };
 
-    // Parse the YAML files
-    const previousConfig = yamlParse(prevWorkspaceContent);
-    const currentConfig = yamlParse(currentWorkspaceContent);
-
-    // If either config is missing catalog, fallback to diff
-    if (currentConfig.catalog || currentConfig.catalogs) {
-      // Find the changed dependencies
-      Object.keys(currentConfig.catalog || {}).forEach((depName) => {
-        if (!previousConfig.catalog[depName] || previousConfig.catalog[depName] !== currentConfig.catalog[depName]) {
-          changedDependencies.push(depName);
-        }
-      });
-      Object.keys(currentConfig.catalogs || {}).forEach((catName) => {
-        Object.keys(currentConfig.catalogs[catName]).forEach((depName) => {
-          if (
-            !currentConfig.catalogs[catName][depName] ||
-            previousConfig.catalogs[catName][depName] !== currentConfig.catalogs[catName][depName]
-          ) {
-            changedDependencies.push(depName);
-          }
-        });
-      });
-
-      // Get the diff output for the catalog file
-      const diffOutput = execSync('git', ['diff', `${prevTag}..HEAD`, '--', 'pnpm-workspace.yaml']);
-      const diffLines = diffOutput.split('\n');
-      diffLines.forEach((line) => {
-        if (line.startsWith('+  ') && line.includes(':')) {
-          const key = line.substring(3).split(':')[0].trim();
-          if (key && !changedDependencies.includes(key)) {
-            changedDependencies.push(key);
-          }
-        } else if (line.startsWith('+ catalog.') && line.includes(':')) {
-          const key = line.substring(10).split(':')[0].trim();
-          if (key && !changedDependencies.includes(key)) {
-            changedDependencies.push(key);
-          }
-        }
-      });
+    if (npmClient === 'pnpm' && existsSync(yamlPath)) {
+      // pnpm workspace
+      const prevYamlStr = execSync(`git show ${prevTag}:pnpm-workspace.yaml`);
+      const currYamlStr = readFileSync(yamlPath, 'utf8');
+      prevConfig = extractCatalogConfigFromYaml(prevYamlStr);
+      currConfig = extractCatalogConfigFromYaml(currYamlStr);
+    } else if (npmClient === 'bun' && existsSync(jsonPath)) {
+      // Bun workspace
+      const prevJsonStr = execSync(`git show ${prevTag}:package.json`);
+      const currJsonStr = readFileSync(jsonPath, 'utf8');
+      prevConfig = extractCatalogConfigFromPkg(prevJsonStr);
+      currConfig = extractCatalogConfigFromPkg(currJsonStr);
+    } else {
+      // No supported workspace file found
+      return [];
     }
-  } catch {
-    // do nothing, an empty array will be returned
-  }
 
-  return changedDependencies;
+    return Array.from(diffCatalogs(prevConfig, currConfig));
+  } catch {
+    return [];
+  }
 }

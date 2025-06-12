@@ -151,6 +151,8 @@ export type NpaResolveResult = (npa.FileResult | npa.HostedGitResult | npa.URLRe
   workspaceSpec?: string;
 };
 
+export type NpmClient = 'npm' | 'pnpm' | 'yarn' | 'bun';
+
 export interface LernaConfig {
   command?: {
     init?: InitCommandOption;
@@ -165,7 +167,7 @@ export interface LernaConfig {
   loglevel?: 'silent' | 'error' | 'warn' | 'notice' | 'http' | 'timing' | 'info' | 'verbose' | 'silly';
 
   /** executable used to install dependencies (npm, yarn, pnpm, ...) */
-  npmClient?: 'npm' | 'pnpm' | 'yarn';
+  npmClient?: NpmClient;
 
   /** enables integration with Yarn or other package manager that use `workspaces` property in `package.json` */
   useWorkspaces?: boolean;
