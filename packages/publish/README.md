@@ -592,12 +592,14 @@ lerna will run [npm lifecycle scripts](https://docs.npmjs.com/cli/v8/using-npm/s
 
 # `catalog:` protocol
 
-The `catalog:` protocol ([pnpm catalog](https://pnpm.io/catalogs)) can be recognized by Lerna-Lite. When publishing, they will be replaced "as is" by reading and using the version range defined in your global catalog. If you need to bump the version of a package in a catalog, you will need to edit `pnpm-workspace.yaml` manually. If you wish them to be bumped automatically, then we strongly suggest that you use the [`workspace:`](#workspace-protocol) protocol instead which is better for local workspace dependencies.
+The `catalog:` protocol ([pnpm catalogs](https://pnpm.io/catalogs), [Bun catalogs](https://bun.sh/docs/install/catalogs)) can be recognized by Lerna-Lite. When publishing, they will be replaced "as is" by reading and using the version range defined in your global catalog. If you need to bump the version of a package in a catalog, you will need to edit `pnpm-workspace.yaml` (or `package.json > workspaces`) manually. If you wish them to be bumped automatically, then we strongly suggest that you use the [`workspace:`](#workspace-protocol) protocol instead of catalog which is better for local workspace dependencies.
 
 > [!NOTE]
-> Lerna-Lite only has a read access to the catalog and will pull all dependency versions it finds in your `pnpm-workspace.yaml` catalog, but it will **never write** back to that file. If you want version bump while running lerna version/publish commands, then you should use `workspace:` for local dependencies. A side note though, is that it does work with local dependencies but only if the local dependency version changed in a previous git commit **before** lerna commands are executed (since again Lerna-Lite will never write or update the catalog).
+> Lerna-Lite only has a read access to the catalog and will pull all dependency versions it finds from your `pnpm-workspace.yaml` (or `package.json`) catalog, but it will **never write** back to that file. If you want version bump while running lerna version/publish commands, then you should use `workspace:` for local dependencies. A side note though, it does work with local dependencies but only if the local dependency version changed in a previous git commit **before** lerna commands are executed (since again Lerna-Lite will never write or update the catalog).
 
-So for example, if our `pnpm-workspace.yaml` file has the following configuration
+So for example, if our `pnpm-workspace.yaml` (or `package.json > workspaces`) file has the following configuration
+
+from a `pnpm-workspace.yaml`
 
 ```yaml
 packages:
@@ -619,7 +621,32 @@ catalogs:
     react-dom: ^18.2.0
 ```
 
-and then if one of our package has the following dependencies defined in our `package.json`
+or from project root `package.json > workspaces`
+
+```json
+{
+  "name": "my-monorepo",
+  "workspaces": {
+    "packages": ["packages/*"],
+    "catalog": {
+      "fs-extra": "^11.2.0",
+      "typescript": "^5.7.0"
+    },
+    "catalogs": {
+      "react17": {
+        "react": "^17.0.0",
+        "react-dom": "^17.0.0"
+      },
+      "react18": {
+        "react": "^18.2.0",
+        "react-dom": "^18.2.0"
+      }
+    }
+  }
+}
+```
+
+and then if one of our monorepo package have the following dependencies defined in our `package.json`
 
 ```json
 {
