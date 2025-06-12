@@ -603,7 +603,7 @@ Displays the git command that would be performed without actually executing it, 
 > **Note** changelogs will still be created (when enabled) even in dry-run mode, so it could be useful to see what gets created without them being committed (however, make sure to revert the changes and roll back your version in `lerna.json` once you're satisfied with the output).
 
 ```sh
-$ lerna run watch --dry-run
+$ lerna version --dry-run
 ```
 
 ### `--git-tag-command <cmd>`
