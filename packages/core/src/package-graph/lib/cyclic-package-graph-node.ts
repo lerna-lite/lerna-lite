@@ -8,9 +8,8 @@ let lastCollapsedNodeId = 0;
  * information are the connections to the other nodes of the graph.
  * It can contain either `PackageGraphNode`s or other `CyclicPackageGraphNode`s.
  *
- * @extends {Map<string, import('..').PackageGraphNode | CyclicPackageGraphNode>}
+ * @extends {Map<string, PackageGraphNode | CyclicPackageGraphNode>}
  */
-// eslint-disable-next-line no-use-before-define
 export class CyclicPackageGraphNode extends Map<string, PackageGraphNode | CyclicPackageGraphNode> {
   name: string;
   localDependencies: Map<string, any>;

@@ -64,28 +64,28 @@ Lerna-Lite itself is also using both [pnpm catalogs](https://pnpm.io/catalogs) a
 Here are some of the largest projects using Lerna-Lite
 
 <a href="https://github.com/facebook/jest">
-  <img src="https://jestjs.io/img/jest.png" width="25" height="25">
+  <img src="https://jestjs.io/img/jest.png" width="28" height="28">
   Jest
 </a>&nbsp; | &nbsp;
 <a href="https://github.com/react-navigation/react-navigation">
-  <img src="https://avatars.githubusercontent.com/u/29647600?s=64&v=4" width="25" height="25">
+  <img src="https://avatars.githubusercontent.com/u/29647600?s=64&v=4" width="28" height="28">
   React Navigation
 </a>&nbsp; | &nbsp;
 <a href="https://github.com/formatjs/formatjs">
-  <img src="https://avatars.githubusercontent.com/u/50559490" width="25" height="25">
+  <img src="https://avatars.githubusercontent.com/u/50559490" width="28" height="28">
   Format.JS
 </a>&nbsp; | &nbsp;
 <a href="https://github.com/johnsoncodehk/volar">
-  <img src="https://raw.githubusercontent.com/johnsoncodehk/sponsors/master/logos/Vue.svg" width="25" height="25">
+  <img src="https://raw.githubusercontent.com/johnsoncodehk/sponsors/master/logos/Vue.svg" width="28" height="28">
   Volar
 </a>&nbsp; | &nbsp;
 <a href="https://github.com/palantir/blueprint">
-  <img src="https://avatars.githubusercontent.com/u/303157?s=48&v=4" width="25" height="25">
+  <img src="https://avatars.githubusercontent.com/u/303157?s=48&v=4" width="28" height="28">
   Blueprint
 </a>&nbsp; | &nbsp;
-<a href="https://github.com/nativescript-community" title="NativeScript Community">
-  <img src="https://avatars.githubusercontent.com/u/50633791?s=200&v=4" width="25" height="25">
-   NativeScript
+<a href="https://github.com/sanity-io/sanity" title="Sanity">
+  <img src="https://avatars.githubusercontent.com/u/17177659?s=48&v=4" width="28" height="28">
+   Sanity
 </a>
 
 ## License
@@ -94,9 +94,9 @@ Here are some of the largest projects using Lerna-Lite
 
 ## About Lerna-Lite
 
-Lerna-Lite differs from the original [Lerna](https://github.com/lerna/lerna) since it doesn't install or require Nx (Lerna now does) and it only has a limited subset of its original commands (9 out of 15 commands) and they are **all optional** in Lerna-Lite making its install footprint a lot smaller. Lerna was originally built as an all-in-one tool, however nowadays, Workspaces are available in all package managers and the need for an all-in-one tool, which includes built-in workspaces functionalities (like `bootstrap`), is no longer necessary. Lerna-Lite is built around this new reality and is only providing commands that package managers do not yet provide or are less efficient. To summarize, Lerna-Lite is much more modular than the original Lerna and you'll end up installing a lot less dependencies while also making it more versatile to use with other tools like TurboRepo, pnpm and others...
+Lerna-Lite differs from the original [Lerna](https://github.com/lerna/lerna), the latter now install & require Nx (which is large) and it has 15 buit-in commands. Lerna-Lite, on the other hand doesn't require Nx and only has a limited subset of the original commands (9 out of 15 commands) and they are **all optional** in Lerna-Lite making its install footprint a lot smaller. Lerna was originally built as an all-in-one tool, however nowadays, Workspaces are available in all package managers and the need for an all-in-one tool, which includes built-in workspaces functionalities (like `bootstrap`), is no longer necessary. Lerna-Lite is built around this new reality and is only providing commands that package managers do not yet provide or are less efficient. To summarize, Lerna-Lite is much more modular than the original Lerna and you'll end up installing a lot less dependencies while also making it more versatile to use with other tools like TurboRepo, pnpm and others...
 
-Lerna-Lite assumes, and requires you to pre-setup your Workspace through your favorite package manager (npm, pnpm, yarn) that will take care of the symlinks. Lerna-Lite does **not include** Lerna's `bootstrap`, `add`, `create` or `link` commands hence the need for you to properly set up your workspace prior to installing Lerna-Lite.
+Lerna-Lite assumes, and requires that you pre-setup your Workspace through your favorite package manager (npm, pnpm, yarn) that will take care of the symlinks. Lerna-Lite does **not include** Lerna's `bootstrap`, `add`, `create` or `link` commands hence the need for you to properly set up your workspace prior to installing Lerna-Lite.
 
 According to your needs, choose the best option to set up a workspace: [npm 7+](https://docs.npmjs.com/cli/v8/using-npm/workspaces) | [Yarn classic](https://classic.yarnpkg.com/en/docs/workspaces) | [Yarn 2+](https://yarnpkg.com/features/workspaces) | [pnpm](https://pnpm.io/workspaces)
 
@@ -118,7 +118,7 @@ Below are the main reasons as to why this fork was created:
    - [`catalog:` protocol support](https://github.com/lerna-lite/lerna-lite/tree/main/packages/version#catalog-protocol) for both `version` and `publish` commands (new)
    - [`workspace:` protocol support](https://github.com/lerna-lite/lerna-lite/tree/main/packages/version#workspace-protocol)
      * _Lerna added support for the same feature 6 months later in their v6.0 release_
-   - [--dry-run](https://github.com/lerna-lite/lerna-lite/tree/main/packages/version#--dry-run) to preview version/publish & changelogs locally (it will show git changes without committing them)
+   - [--dry-run](https://github.com/lerna-lite/lerna-lite/tree/main/packages/version#--dry-run) to preview version/publish & changelogs locally (shows git changes without committing them)
    - [lerna version --allow-peer-dependencies-update](https://github.com/lerna-lite/lerna-lite/tree/main/packages/version#--allow-peer-dependencies-update) to also update your peer dependencies
    - [lerna version --changelog-header-message "msg"](https://github.com/lerna-lite/lerna-lite/tree/main/packages/version#--changelog-header-message-msg) for showing banner or sponsors in your changelogs
    - [lerna version --changelog-include-commits-client-login](https://github.com/lerna-lite/lerna-lite/tree/main/packages/version#--changelog-include-commits-client-login-msg) to add PR contributors to GitHub releases

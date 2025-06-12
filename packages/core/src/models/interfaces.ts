@@ -4,12 +4,10 @@ import type npa from 'npm-package-arg';
 import type { Package } from '../package.js';
 import type { InitCommandOption, PublishCommandOption, RunCommandOption, VersionCommandOption } from './command-options.js';
 
-/* eslint-disable no-use-before-define */
 export type JsonObject = { [Key in string]: JsonValue } & { [Key in string]?: JsonValue | undefined };
 export type JsonArray = JsonValue[];
 export type JsonPrimitive = string | number | boolean | null;
 export type JsonValue = JsonPrimitive | JsonObject | JsonArray;
-/* eslint-enable no-use-before-define */
 
 export interface ArboristLoadOption {
   global?: any;
