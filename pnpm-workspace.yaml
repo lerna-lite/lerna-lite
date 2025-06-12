@@ -11,7 +11,7 @@ catalog:
   "@types/dedent": ^0.7.2
   "@types/fs-extra": ^11.0.4
   "@types/minimatch": ^5.1.2
-  "@types/node": ^22.15.29
+  "@types/node": ^22.15.31
   "@types/npm-package-arg": ^6.1.4
   "@types/semver": ^7.7.0
   columnify: ^1.6.0
@@ -21,7 +21,7 @@ catalog:
   fs-extra: ^11.3.0
   has-unicode: ^2.0.1
   load-json-file: ^7.0.1
-  minimatch: ^10.0.1
+  minimatch: ^10.0.3
   normalize-path: ^3.0.0
   npm-package-arg: ^12.0.2
   npm-registry-fetch: ^18.0.2
