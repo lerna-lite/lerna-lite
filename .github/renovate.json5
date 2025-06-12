@@ -12,7 +12,7 @@
     },
     {
       // group all Conventional-Changelog dependencies
-      matchPackagePatterns: ['^conventional-'],
+      matchPackagePatterns: ['^conventional-', '^@conventional-changelog/'],
       groupName: 'Conventional-Changelog packages',
     },
     {
