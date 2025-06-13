@@ -379,12 +379,11 @@ export class Package {
           if (updatedByCommand === 'publish') {
             // when publishing, workspace protocol will be transformed to semver range
             // e.g.: considering version is `1.2.3` and we have `workspace:*` it will be converted to "^1.2.3" or to "1.2.3" with strict match range enabled
-            if (workspaceSpec === 'workspace:*') {
-              depCollection[depName] = depVersion; // (*) exact range, "1.5.0"
-            } else if (workspaceSpec === 'workspace:~') {
-              depCollection[depName] = `~${depVersion}`; // (~) patch range, "~1.5.0"
-            } else if (workspaceSpec === 'workspace:^') {
-              depCollection[depName] = `^${depVersion}`; // (^) minor range, "^1.5.0"
+            const [_, wspecPrefix, wspecSemver] = workspaceSpec.match(/^workspace:([*~^])?(.*)$/) || [];
+            // when finding `workspace:[*~^]` but don't accept `workspace:^2.5.0`
+            if (wspecPrefix && !wspecSemver) {
+              // (*) exact range → "1.5.0", (~) patch range → "~1.5.0", (^) minor range → "^1.5.0"
+              depCollection[depName] = wspecPrefix === '*' ? depVersion : `${wspecPrefix}${depVersion}`;
             }
             // anything else will fall under what Lerna previously found to be the version,
             // typically by this line: depCollection[depName] = `${savePrefix}${depVersion}`;
