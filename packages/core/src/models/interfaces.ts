@@ -137,6 +137,7 @@ export interface QueryGraphConfig {
   /** Whether or not to reject dependency cycles */
   rejectCycles?: boolean;
   premajorVersionBump?: 'default' | 'force-patch';
+  npmClient?: NpmClient;
 }
 
 export interface TopologicalConfig extends QueryGraphConfig {

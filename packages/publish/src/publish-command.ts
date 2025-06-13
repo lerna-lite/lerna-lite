@@ -831,6 +831,7 @@ export class PublishCommand extends Command<PublishCommandOption> {
        * by setting the `graphType` option to `dependencies`.
        */
       graphType: this.options.graphType === 'dependencies' ? 'dependencies' : 'allDependencies',
+      npmClient: this.options.npmClient,
     });
   }
 

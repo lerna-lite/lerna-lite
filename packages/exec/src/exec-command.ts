@@ -157,6 +157,7 @@ export class ExecCommand extends Command<ExecCommandOption & FilterOptions> {
     let chain: Promise<any> = runTopologically(this.filteredPackages, runner, {
       concurrency: this.concurrency,
       rejectCycles: this.options.rejectCycles,
+      npmClient: this.options.npmClient,
     });
 
     if (profiler!) {

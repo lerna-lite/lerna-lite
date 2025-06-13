@@ -17,10 +17,10 @@ import { QueryGraph } from './query-graph.js';
 export function runTopologically<T = any>(
   packages: Package[],
   runner: (pkg: Package) => Promise<T>,
-  { concurrency, graphType, rejectCycles } = {} as TopologicalConfig
+  { concurrency, graphType, rejectCycles, npmClient = 'npm' } = {} as TopologicalConfig
 ) {
   const queue = new PQueue({ concurrency });
-  const graph = new QueryGraph(packages, { graphType, rejectCycles });
+  const graph = new QueryGraph(packages, { graphType, rejectCycles, npmClient });
 
   return new Promise((resolve, reject) => {
     const returnValues: any[] = [];

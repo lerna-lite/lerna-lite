@@ -749,6 +749,7 @@ export class VersionCommand extends Command<VersionCommandOption> {
         concurrency: this.concurrency,
         rejectCycles: this.options.rejectCycles,
         graphType: 'allDependencies',
+        npmClient: this.options.npmClient,
       })
     );
 
