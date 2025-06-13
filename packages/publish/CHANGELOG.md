@@ -4,6 +4,16 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [4.4.0](https://github.com/lerna-lite/lerna-lite/compare/v4.3.0...v4.4.0) (2025-06-13)
+
+### Features
+
+* support Bun Catalogs, fixes [#1063](https://github.com/lerna-lite/lerna-lite/issues/1063) ([#1065](https://github.com/lerna-lite/lerna-lite/issues/1065)) ([4f1e1aa](https://github.com/lerna-lite/lerna-lite/commit/4f1e1aacf0fcf00f42700cda73e7b9f735d17f2e)) - by @ghiscoding
+
+### Bug Fixes
+
+* **deps:** update all non-major dependencies ([#1067](https://github.com/lerna-lite/lerna-lite/issues/1067)) ([a50cf0c](https://github.com/lerna-lite/lerna-lite/commit/a50cf0c5ef45fe78a946dc38cec8f8eeb37bd138)) - by @renovate[bot]
+
 ## [4.3.0](https://github.com/lerna-lite/lerna-lite/compare/v4.2.0...v4.3.0) (2025-05-29)
 
 ### Features
