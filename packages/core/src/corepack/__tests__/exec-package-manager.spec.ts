@@ -18,7 +18,7 @@ const execSyncActual = (await vi.importActual<any>('../../child-process')).execS
 
 describe('.execPackageManagerSync()', () => {
   beforeEach(() => {
-    process.env = {};
+    delete process.env.COREPACK_ROOT;
   });
 
   describe('mock child processes', () => {
@@ -60,7 +60,7 @@ describe('.execPackageManagerSync()', () => {
 
 describe('.execPackageManager()', () => {
   beforeEach(() => {
-    process.env = {};
+    delete process.env.COREPACK_ROOT;
   });
 
   describe('mock child processes', () => {

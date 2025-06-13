@@ -80,7 +80,8 @@ describe.each([
   ['gitlab', createGitLabClient],
 ])('--create-release %s', (type: any, client: any) => {
   beforeEach(() => {
-    process.env = {};
+    delete process.env.GH_TOKEN;
+    delete process.env.GITHUB_TOKEN;
   });
 
   it('does not create a release if --no-push is passed', async () => {
@@ -277,7 +278,8 @@ describe('--create-release [unrecognized]', () => {
 
 describe('create --github-release without providing GH_TOKEN or GITHUB_TOKEN', () => {
   beforeEach(() => {
-    process.env = {};
+    delete process.env.GH_TOKEN;
+    delete process.env.GITHUB_TOKEN;
   });
 
   it('should create a GitHub Release link with prefilled data when GH_TOKEN env var is not provided', async () => {
@@ -300,7 +302,8 @@ describe.each([
   const bumpOnlyTextPkg4 = `**Note:** Version bump only for package package-4`;
 
   beforeEach(() => {
-    process.env = {};
+    delete process.env.GH_TOKEN;
+    delete process.env.GITHUB_TOKEN;
     (updateChangelog as Mock).mockImplementation((pkg) => {
       const filePath = join(pkg.location, 'CHANGELOG.md');
       if (pkg.name === 'package-4') {

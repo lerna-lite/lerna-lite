@@ -11,7 +11,10 @@ import { createGitHubClient, parseGitRepo } from '../github-client.js';
 
 describe('createGitHubClient', () => {
   beforeEach(() => {
-    process.env = {};
+    delete process.env.GH_TOKEN;
+    delete process.env.GHE_VERSION;
+    delete process.env.GHE_API_URL;
+    delete process.env.GITHUB_TOKEN;
   });
 
   it('does not error if GH_TOKEN env var is set', () => {
