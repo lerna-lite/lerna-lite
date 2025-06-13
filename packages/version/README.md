@@ -292,6 +292,9 @@ If the preset exports a builder function (e.g. `conventional-changelog-conventio
 > **Note** the option `changelogPreset.releaseCommitMessageFormat` is not supported and will throw, you can simply use [`--message`](#--message-msg) to have the same result.
 
 
+If you use any preset other than the default, you should also install the matching `conventional-changelog` package as a devDependency.
+The value of this argument will also be used to determine the version bump for each package if the [`--conventional-commits`](#--conventional-commits) flag is passed.
+
 Below is a full demo of how you can use a preset with full configuration
 
 ```json
@@ -364,6 +367,12 @@ lerna version --conventional-commits
 ```
 
 When run with this flag, `lerna version` will use the [Conventional Commits Specification](https://conventionalcommits.org/) to [determine the version bump](https://github.com/conventional-changelog/conventional-changelog/tree/master/packages/conventional-recommended-bump) and [generate CHANGELOG.md files](https://github.com/conventional-changelog/conventional-changelog/tree/master/packages/conventional-changelog-cli).
+
+When run with this flag, `lerna version` will use the `conventional-changelog` package to [determine the version bump](https://github.com/conventional-changelog/conventional-changelog/tree/master/packages/conventional-recommended-bump) and [generate CHANGELOG.md files](https://github.com/conventional-changelog/conventional-changelog/tree/master/packages/conventional-changelog-cli).
+
+If you do not also set the [`--changelog-preset`](#--changelog-preset) option, lerna will use the default configuration from the `conventional-changelog` package, which is currently the [`angular` spec](https://github.com/conventional-changelog/conventional-changelog/tree/master/packages/conventional-changelog-angular).
+
+If you want your versions bumped according to a different spec, such as [Conventional Commits Specification](https://conventionalcommits.org/) which supports the use of `!` in the header to denote breaking changes, you must pass the `--conventional-changelog` flag with a spec name like `conventionalcommits`.
 
 Passing [`--no-changelog`](#--no-changelog) will disable the generation (or updating) of `CHANGELOG.md` files.
 
