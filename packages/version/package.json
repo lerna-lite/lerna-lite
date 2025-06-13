@@ -1,7 +1,7 @@
 {
   "name": "@lerna-lite/version",
   "description": "Bump version & write changelog of packages changed since the last release",
-  "version": "4.4.0",
+  "version": "4.4.1",
   "files": [
     "/dist"
   ],

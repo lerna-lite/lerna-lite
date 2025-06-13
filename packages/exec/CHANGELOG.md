@@ -4,6 +4,12 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [4.4.1](https://github.com/lerna-lite/lerna-lite/compare/v4.4.0...v4.4.1) (2025-06-13)
+
+### Bug Fixes
+
+* add missing npmClient needed for Catalog while newing QueryGraph ([#1070](https://github.com/lerna-lite/lerna-lite/issues/1070)) ([eda2aac](https://github.com/lerna-lite/lerna-lite/commit/eda2aac1f7ea6387df39cf4c969ad6c7ae4f2681)) - by @ghiscoding
+
 ## [4.4.0](https://github.com/lerna-lite/lerna-lite/compare/v4.3.0...v4.4.0) (2025-06-13)
 
 **Note:** Version bump only for package @lerna-lite/exec
