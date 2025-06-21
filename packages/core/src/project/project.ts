@@ -2,10 +2,10 @@ import { writeFileSync } from 'node:fs';
 import { basename, dirname, join, normalize, resolve as pathResolve } from 'node:path';
 
 import { log } from '@lerna-lite/npmlog';
-import { cosmiconfigSync, defaultLoaders, type PublicExplorerSync } from 'cosmiconfig';
 import dedent from 'dedent';
 import globParent from 'glob-parent';
 import JSON5 from 'json5';
+import { lilconfigSync } from 'lilconfig';
 import { loadJsonFile, loadJsonFileSync } from 'load-json-file';
 import pMap from 'p-map';
 import { globSync } from 'tinyglobby';
@@ -36,64 +36,42 @@ export class Project {
    * @param {string} [cwd] Defaults to process.cwd()
    */
   constructor(cwd?: string) {
-    let explorer: PublicExplorerSync;
+    let loaded;
     try {
-      explorer = cosmiconfigSync('lerna', {
+      const explorer = lilconfigSync('lerna', {
+        searchPlaces: ['package.json', 'lerna.json', 'lerna.jsonc', 'lerna.json5'],
         loaders: {
-          ...defaultLoaders,
-          '.json': this.json5Loader,
-          '.jsonc': this.json5Loader,
-          '.json5': this.json5Loader,
-        },
-        searchPlaces: ['lerna.json', 'lerna.jsonc', 'lerna.json5', 'package.json'],
-        searchStrategy: 'global',
-        transform(obj) {
-          // cosmiconfig returns null when nothing is found
-          if (!obj) {
-            return {
-              // No need to distinguish between missing and empty,
-              // saves a lot of noisy guards elsewhere
-              config: {},
-              configNotFound: true,
-              // pathResolve(".", ...) starts from process.cwd()
-              filepath: pathResolve(cwd || '.', 'lerna.json'),
-            };
-          }
-
-          obj.config = applyExtends(obj.config, dirname(obj.filepath));
-
-          return obj;
+          '.json': this.json5Loader.bind(this),
+          '.jsonc': this.json5Loader.bind(this),
+          '.json5': this.json5Loader.bind(this),
         },
       });
-    } catch (err: any) {
-      // redecorate JSON syntax errors, avoid debug dump
-      if (err.name === 'JSONError') {
-        throw new ValidationError(err.name, err.message);
-      }
-
-      // re-throw other errors, could be ours or third-party
-      /* v8 ignore next */
-      throw err;
-    }
-
-    let loaded;
-
-    try {
       loaded = explorer.search(cwd);
     } catch (err: any) {
       // redecorate JSON syntax errors, avoid debug dump
-      if (err.name === 'JSONError') {
-        throw new ValidationError(err.name, err.message);
+      if (err.name === 'JSONError' || err.name === 'SyntaxError') {
+        throw new ValidationError('JSONError', err.message);
       }
-
       // re-throw other errors, could be ours or third-party
       throw err;
     }
 
-    this.config = loaded?.config;
-    this.configNotFound = loaded?.configNotFound;
-    this.rootConfigLocation = loaded?.filepath ?? '';
-    this.rootPath = dirname(loaded?.filepath ?? '');
+    let configObj = loaded?.config;
+    let configNotFound = !loaded;
+    const filepath = loaded?.filepath ?? pathResolve(cwd || '.', 'lerna.json');
+
+    if (configObj) {
+      configObj = applyExtends(configObj, dirname(filepath));
+      configNotFound = false;
+    } else {
+      configObj = {};
+      configNotFound = true;
+    }
+
+    this.config = configObj;
+    this.configNotFound = configNotFound;
+    this.rootConfigLocation = filepath;
+    this.rootPath = dirname(filepath);
 
     log.verbose('rootPath', this.rootPath);
   }
@@ -253,8 +231,8 @@ export class Project {
   json5Loader(filepath: string, content: any) {
     /* v8 ignore next 4 */
     if (!/.*lerna\.json[c|5]?$/gi.test(filepath)) {
-      // when none of the 3x lerna config file type is found `lerna.{json,jsonc,json5}`, return default cosmiconfig json loader
-      return defaultLoaders['.json'](filepath, content);
+      // For other .json files, use the default JSON.parse
+      return JSON.parse(content);
     }
 
     /**
