@@ -19,7 +19,7 @@ import {
 /**
  * Matches a file path against a glob pattern that may contain a globstar (**).
  * The globstar matches zero or more directories in the file path.
- * Custom function similar and to previous implementation of minimatch's `filter` function, but also supports globstar matching.
+ * Custom function to implement previous implementation of minimatch's `filter` function, but also supports globstar matching.
  * @param {string} pattern - The glob pattern to match against.
  * @param {string} filePath - The file path to check.
  * @returns {boolean} - Returns true if the file path matches the pattern, false otherwise.
