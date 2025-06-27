@@ -4,6 +4,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [4.5.0](https://github.com/lerna-lite/lerna-lite/compare/v4.4.1...v4.5.0) (2025-06-27)
+
+### Features
+
+* **deps:** replace `cosmiconfig` with `lilconfig` ([#1073](https://github.com/lerna-lite/lerna-lite/issues/1073)) ([719358e](https://github.com/lerna-lite/lerna-lite/commit/719358e8fbae7f0513b9118d28bae2349d7c87de)) - by @ghiscoding
+* **deps:** replace `minimatch` with `zeptomatch` ([#1074](https://github.com/lerna-lite/lerna-lite/issues/1074)) ([8bc67cb](https://github.com/lerna-lite/lerna-lite/commit/8bc67cbcbd66ddc20356d978c5e6e089bcf34fb6)) - by @ghiscoding
+
+### Bug Fixes
+
+* **deps:** update conventional-changelog packages ([#1068](https://github.com/lerna-lite/lerna-lite/issues/1068)) ([8ea7944](https://github.com/lerna-lite/lerna-lite/commit/8ea794426ad8776af54c669d361c6f7bb7bebddb)) - by @renovate[bot]
+
 ## [4.4.1](https://github.com/lerna-lite/lerna-lite/compare/v4.4.0...v4.4.1) (2025-06-13)
 
 ### Bug Fixes
