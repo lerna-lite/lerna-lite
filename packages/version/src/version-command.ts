@@ -21,13 +21,13 @@ import {
   type VersionCommandOption,
 } from '@lerna-lite/core';
 import dedent from 'dedent';
-import { minimatch } from 'minimatch';
 import pLimit from 'p-limit';
 import pMap from 'p-map';
 import pPipe from 'p-pipe';
 import pReduce from 'p-reduce';
 import semver from 'semver';
 import c from 'tinyrainbow';
+import zeptomatch from 'zeptomatch';
 
 import { applyBuildMetadata } from './conventional-commits/apply-build-metadata.js';
 import { getCommitsSinceLastRelease } from './conventional-commits/get-commits-since-last-release.js';
@@ -226,7 +226,7 @@ export class VersionCommand extends Command<VersionCommandOption> {
 
       if (
         this.options.allowBranch &&
-        !([] as string[]).concat(this.options.allowBranch).some((x) => minimatch(this.currentBranch, x))
+        !([] as string[]).concat(this.options.allowBranch).some((x) => zeptomatch(x, this.currentBranch))
       ) {
         throw new ValidationError(
           'ENOTALLOWED',

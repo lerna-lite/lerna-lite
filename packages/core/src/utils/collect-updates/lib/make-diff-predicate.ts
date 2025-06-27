@@ -1,10 +1,10 @@
 import { existsSync, readFileSync } from 'node:fs';
-import { dirname, join, relative } from 'node:path';
+import { basename, dirname, join, relative } from 'node:path';
 
 import { log } from '@lerna-lite/npmlog';
-import { filter as minimatchFilter } from 'minimatch';
 import slash from 'slash';
 import { globSync } from 'tinyglobby';
+import zeptomatch from 'zeptomatch';
 
 import { execSync } from '../../../child-process.js';
 import type { ExecOpts, NpmClient } from '../../../models/interfaces.js';
@@ -15,6 +15,43 @@ import {
   extractCatalogConfigFromPkg,
   extractCatalogConfigFromYaml,
 } from '../../catalog-utils.js';
+
+/**
+ * Matches a file path against a glob pattern that may contain a globstar (**).
+ * The globstar matches zero or more directories in the file path.
+ * Custom function similar and to previous implementation of minimatch's `filter` function, but also supports globstar matching.
+ * @param {string} pattern - The glob pattern to match against.
+ * @param {string} filePath - The file path to check.
+ * @returns {boolean} - Returns true if the file path matches the pattern, false otherwise.
+ */
+function matchGlobstar(pattern: string, filePath: string): boolean {
+  const patternParts = pattern.split('**/');
+  const filePathParts = filePath.split('/');
+
+  function matchPattern(patternParts: string[], filePathParts: string[]): boolean {
+    if (patternParts.length === 0) {
+      return true;
+    }
+    if (patternParts.length > filePathParts.length) {
+      return false;
+    }
+
+    const patternPart = patternParts[0];
+    const filePathPart = filePathParts[0];
+
+    if (patternPart === '') {
+      return matchPattern(patternParts.slice(1), filePathParts);
+    }
+
+    if (zeptomatch(patternPart, filePathPart)) {
+      return matchPattern(patternParts.slice(1), filePathParts.slice(1));
+    }
+
+    return matchPattern(patternParts, filePathParts.slice(1));
+  }
+
+  return matchPattern(patternParts, filePathParts);
+}
 
 /**
  * @param {string} committish
@@ -32,13 +69,12 @@ export function makeDiffPredicate(
   diffOpts: { independentSubpackages?: boolean }
 ) {
   const ignoreFilters = new Set(
-    ignorePatterns.map((p) =>
-      minimatchFilter(`!${p}`, {
-        matchBase: true,
-        // dotfiles inside ignored directories should also match
-        dot: true,
-      })
-    )
+    ignorePatterns.map((p) => (str) => {
+      if (p.includes('**/')) {
+        return !matchGlobstar(p, str);
+      }
+      return !zeptomatch(p, basename(str));
+    })
   );
 
   if (ignoreFilters.size) {
@@ -59,9 +95,14 @@ export function makeDiffPredicate(
       let changedFiles = diff.split('\n');
 
       if (ignoreFilters.size) {
-        for (const ignored of ignoreFilters) {
-          changedFiles = changedFiles.filter(ignored);
-        }
+        changedFiles = changedFiles.filter((file) => {
+          for (const ignored of ignoreFilters) {
+            if (!ignored(file)) {
+              return false;
+            }
+          }
+          return true;
+        });
       }
 
       hasDiff = changedFiles.length > 0;

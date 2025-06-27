@@ -45,9 +45,6 @@ catalogs:
     load-json-file:
       specifier: ^7.0.1
       version: 7.0.1
-    minimatch:
-      specifier: ^10.0.3
-      version: 10.0.3
     normalize-path:
       specifier: ^3.0.0
       version: 3.0.0
@@ -93,6 +90,9 @@ catalogs:
     yargs-parser:
       specifier: ^22.0.0
       version: 22.0.0
+    zeptomatch:
+      specifier: ^2.0.2
+      version: 2.0.2
 
 importers:
 
@@ -331,9 +331,6 @@ importers:
       load-json-file:
         specifier: 'catalog:'
         version: 7.0.1
-      minimatch:
-        specifier: 'catalog:'
-        version: 10.0.3
       multimatch:
         specifier: ^7.0.0
         version: 7.0.0
@@ -416,6 +413,9 @@ importers:
       yargs-parser:
         specifier: 'catalog:'
         version: 22.0.0
+      zeptomatch:
+        specifier: 'catalog:'
+        version: 2.0.2
 
   packages/diff:
     dependencies:
@@ -770,9 +770,6 @@ importers:
       load-json-file:
         specifier: 'catalog:'
         version: 7.0.1
-      minimatch:
-        specifier: 'catalog:'
-        version: 10.0.3
       new-github-release-url:
         specifier: ^2.0.0
         version: 2.0.0
@@ -843,6 +840,9 @@ importers:
       yargs-parser:
         specifier: 'catalog:'
         version: 22.0.0
+      zeptomatch:
+        specifier: 'catalog:'
+        version: 2.0.2
 
   packages/watch:
     dependencies:
@@ -1172,14 +1172,6 @@ packages:
     peerDependenciesMeta:
       '@types/node':
         optional: true
-
-  '@isaacs/balanced-match@4.0.1':
-    resolution: {integrity: sha512-yzMTt9lEb8Gv7zRioUilSglI0c0smZ9k5D65677DLWLtWJaXIS3CqcGyUFByYKlnUj6TkjLVs54fBl6+TiGQDQ==}
-    engines: {node: 20 || >=22}
-
-  '@isaacs/brace-expansion@5.0.0':
-    resolution: {integrity: sha512-ZT55BDLV0yv0RBm2czMiZ+SqCGO7AvmOM3G/w2xhVPH+te0aKgFjmBvGlL1dH+ql2tgGO3MVrbb3jCKyvpgnxA==}
-    engines: {node: 20 || >=22}
 
   '@isaacs/cliui@8.0.2':
     resolution: {integrity: sha512-O8jcjabXaleOG9DQ0+ARXWZBTfnP4WNAqzuiJK7ll44AmxGKv/J2M4TPjxjY3znBCfvBXFzucm1twdyFybFqEA==}
@@ -2344,6 +2336,9 @@ packages:
   graceful-fs@4.2.11:
     resolution: {integrity: sha512-RbJ5/jmFcNNCcDV5o9eTnBLJ/HszWV0P73bc+Ff4nS/rJj+YaS6IGyiOL0VoBYX+l1Wrl3k63h/KrH+nhJ0XvQ==}
 
+  grammex@3.1.10:
+    resolution: {integrity: sha512-UCfMsV/sfqk4TN1+m5ehSOXuADyLUgSuwMI2vCVlbN/REoSmTl4eagswC9DzzVxtsKv7Yp2CmIJNn4fMk8PaQA==}
+
   graphemer@1.4.0:
     resolution: {integrity: sha512-EtKwoO6kxCL9WO5xipiHTZlSzBm7WLT627TqC/uVRd0HKmq8NXyebnNYxDoBi7wt8eTWrUrKXCOVaFq9x1kgag==}
 
@@ -2654,10 +2649,6 @@ packages:
 
   minimatch@10.0.1:
     resolution: {integrity: sha512-ethXTt3SGGR+95gudmqJ1eNhRO7eGEGIgYA9vnPatK4/etz2MEVDno5GMCibdMTuBMyElzIlgxMna3K94XDIDQ==}
-    engines: {node: 20 || >=22}
-
-  minimatch@10.0.3:
-    resolution: {integrity: sha512-IPZ167aShDZZUMdRk66cyQAW3qr0WzbHkPdMYa8bzZhlHhO3jALbKdxcaak7W9FfT2rZNpQuUu4Od7ILEpXSaw==}
     engines: {node: 20 || >=22}
 
   minimatch@3.1.2:
@@ -3609,6 +3600,9 @@ packages:
     resolution: {integrity: sha512-GQHQqAopRhwU8Kt1DDM8NjibDXHC8eoh1erhGAJPEyveY9qqVeXvVikNKrDz69sHowPMorbPUrH/mx8c50eiBQ==}
     engines: {node: '>=18'}
 
+  zeptomatch@2.0.2:
+    resolution: {integrity: sha512-H33jtSKf8Ijtb5BW6wua3G5DhnFjbFML36eFu+VdOoVY4HD9e7ggjqdM6639B+L87rjnR6Y+XeRzBXZdy52B/g==}
+
 snapshots:
 
   '@ampproject/remapping@2.3.0':
@@ -3825,12 +3819,6 @@ snapshots:
   '@inquirer/type@3.0.7(@types/node@22.15.31)':
     optionalDependencies:
       '@types/node': 22.15.31
-
-  '@isaacs/balanced-match@4.0.1': {}
-
-  '@isaacs/brace-expansion@5.0.0':
-    dependencies:
-      '@isaacs/balanced-match': 4.0.1
 
   '@isaacs/cliui@8.0.2':
     dependencies:
@@ -5123,6 +5111,8 @@ snapshots:
 
   graceful-fs@4.2.11: {}
 
+  grammex@3.1.10: {}
+
   graphemer@1.4.0: {}
 
   handlebars@4.7.8:
@@ -5417,10 +5407,6 @@ snapshots:
   minimatch@10.0.1:
     dependencies:
       brace-expansion: 2.0.1
-
-  minimatch@10.0.3:
-    dependencies:
-      '@isaacs/brace-expansion': 5.0.0
 
   minimatch@3.1.2:
     dependencies:
@@ -6368,3 +6354,7 @@ snapshots:
   yoctocolors-cjs@2.1.2: {}
 
   yoctocolors@2.1.1: {}
+
+  zeptomatch@2.0.2:
+    dependencies:
+      grammex: 3.1.10
