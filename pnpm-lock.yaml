@@ -31,8 +31,8 @@ catalogs:
       specifier: ^1.6.0
       version: 1.6.0
     dotenv:
-      specifier: ^16.6.1
-      version: 16.6.1
+      specifier: ^17.0.0
+      version: 17.0.0
     execa:
       specifier: ^9.6.0
       version: 9.6.0
@@ -269,7 +269,7 @@ importers:
         version: 1.6.0
       dotenv:
         specifier: 'catalog:'
-        version: 16.6.1
+        version: 17.0.0
       import-local:
         specifier: ^3.2.0
         version: 3.2.0
@@ -455,7 +455,7 @@ importers:
         version: link:../profiler
       dotenv:
         specifier: 'catalog:'
-        version: 16.6.1
+        version: 17.0.0
       p-map:
         specifier: 'catalog:'
         version: 7.0.3
@@ -2082,8 +2082,8 @@ packages:
     resolution: {integrity: sha512-QM8q3zDe58hqUqjraQOmzZ1LIH9SWQJTlEKCH4kJ2oQvLZk7RbQXvtDM2XEq3fwkV9CCvvH4LA0AV+ogFsBM2Q==}
     engines: {node: '>=8'}
 
-  dotenv@16.6.1:
-    resolution: {integrity: sha512-uBq4egWHTcTt33a72vpSG0z3HnPuIl6NqYcTrKEg2azoEyl2hpW0zqlxysq2pK9HlDIHyHyakeYaYnSAwd8bow==}
+  dotenv@17.0.0:
+    resolution: {integrity: sha512-A0BJ5lrpJVSfnMMXjmeO0xUnoxqsBHWCoqqTnGwGYVdnctqXXUEhJOO7LxmgxJon9tEZFGpe0xPRX0h2v3AANQ==}
     engines: {node: '>=12'}
 
   duplexer@0.1.2:
@@ -4856,7 +4856,7 @@ snapshots:
     dependencies:
       is-obj: 2.0.0
 
-  dotenv@16.6.1: {}
+  dotenv@17.0.0: {}
 
   duplexer@0.1.2: {}
 
