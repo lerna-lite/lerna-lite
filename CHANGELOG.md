@@ -4,6 +4,12 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [4.5.1](https://github.com/lerna-lite/lerna-lite/compare/v4.5.0...v4.5.1) (2025-06-29)
+
+### Bug Fixes
+
+* zeptomatch should be install as dependency not devDeps, fix [#1076](https://github.com/lerna-lite/lerna-lite/issues/1076) ([#1078](https://github.com/lerna-lite/lerna-lite/issues/1078)) ([c18aaea](https://github.com/lerna-lite/lerna-lite/commit/c18aaeaaf2744e1b00351d5ab2b63a3d62cbc346)) - by @ghiscoding
+
 ## [4.5.0](https://github.com/lerna-lite/lerna-lite/compare/v4.4.1...v4.5.0) (2025-06-27)
 
 ### Features
