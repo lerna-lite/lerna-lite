@@ -53,7 +53,7 @@ export function runLifecycle(pkg: Package, stage: string, options: LifecycleConf
     ...flattenOptions(options),
   };
   const dir = pkg.location;
-  const id = `${pkg.name}@${pkg.version}`;
+  const id = `${pkg.name}@${pkg.version || ''}`;
   const config = {} as LifecycleConfig;
 
   if (opts.ignoreScripts) {
