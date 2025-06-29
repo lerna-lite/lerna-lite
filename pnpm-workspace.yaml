@@ -16,7 +16,7 @@ catalog:
   "@types/semver": ^7.7.0
   columnify: ^1.6.0
   dedent: ^1.6.0
-  dotenv: ^16.6.1
+  dotenv: ^17.0.0
   execa: ^9.6.0
   fs-extra: ^11.3.0
   has-unicode: ^2.0.1
