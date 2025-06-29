@@ -373,6 +373,9 @@ importers:
       yaml:
         specifier: 'catalog:'
         version: 2.8.0
+      zeptomatch:
+        specifier: 'catalog:'
+        version: 2.0.2
     devDependencies:
       '@types/clone-deep':
         specifier: ^4.0.4
@@ -413,9 +416,6 @@ importers:
       yargs-parser:
         specifier: 'catalog:'
         version: 22.0.0
-      zeptomatch:
-        specifier: 'catalog:'
-        version: 2.0.2
 
   packages/diff:
     dependencies:
@@ -806,6 +806,9 @@ importers:
       write-json-file:
         specifier: 'catalog:'
         version: 6.0.0
+      zeptomatch:
+        specifier: 'catalog:'
+        version: 2.0.2
     devDependencies:
       '@npm/types':
         specifier: ^2.1.0
@@ -840,9 +843,6 @@ importers:
       yargs-parser:
         specifier: 'catalog:'
         version: 22.0.0
-      zeptomatch:
-        specifier: 'catalog:'
-        version: 2.0.2
 
   packages/watch:
     dependencies:

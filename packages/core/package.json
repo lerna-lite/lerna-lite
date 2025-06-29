@@ -64,7 +64,8 @@
     "write-file-atomic": "^6.0.0",
     "write-json-file": "catalog:",
     "write-package": "catalog:",
-    "yaml": "catalog:"
+    "yaml": "catalog:",
+    "zeptomatch": "catalog:"
   },
   "devDependencies": {
     "@types/clone-deep": "^4.0.4",
@@ -79,8 +80,7 @@
     "@types/write-file-atomic": "^4.0.3",
     "npm-registry-fetch": "catalog:",
     "yargs": "catalog:",
-    "yargs-parser": "catalog:",
-    "zeptomatch": "catalog:"
+    "yargs-parser": "catalog:"
   },
   "funding": {
     "type": "ko_fi",
