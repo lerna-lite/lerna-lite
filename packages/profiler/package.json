@@ -15,7 +15,7 @@
     "import": "./dist/index.js"
   },
   "scripts": {
-    "prebuild": "rimraf dist",
+    "prebuild": "remove dist",
     "build": "tsc",
     "build:incremental": "tsc --incremental --sourceMap false --excludeDirectories dist",
     "echo:test": "echo \"Lerna-Lite profiler package\"",
