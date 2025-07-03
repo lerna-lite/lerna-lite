@@ -71,7 +71,6 @@
     "@npm/types": "^2.1.0",
     "@types/dedent": "catalog:",
     "@types/fs-extra": "catalog:",
-    "@types/minimatch": "catalog:",
     "@types/npm-package-arg": "catalog:",
     "@types/semver": "catalog:",
     "execa": "catalog:",

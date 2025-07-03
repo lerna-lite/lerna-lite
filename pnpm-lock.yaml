@@ -12,9 +12,6 @@ catalogs:
     '@types/fs-extra':
       specifier: ^11.0.4
       version: 11.0.4
-    '@types/minimatch':
-      specifier: ^5.1.2
-      version: 5.1.2
     '@types/node':
       specifier: ^22.15.34
       version: 22.15.34
@@ -392,9 +389,6 @@ importers:
       '@types/inquirer':
         specifier: ^9.0.8
         version: 9.0.8
-      '@types/minimatch':
-        specifier: 'catalog:'
-        version: 5.1.2
       '@types/npm-package-arg':
         specifier: 'catalog:'
         version: 6.1.4
@@ -819,9 +813,6 @@ importers:
       '@types/fs-extra':
         specifier: 'catalog:'
         version: 11.0.4
-      '@types/minimatch':
-        specifier: 'catalog:'
-        version: 5.1.2
       '@types/npm-package-arg':
         specifier: 'catalog:'
         version: 6.1.4
@@ -1537,9 +1528,6 @@ packages:
 
   '@types/jsonfile@6.1.4':
     resolution: {integrity: sha512-D5qGUYwjvnNNextdU59/+fI+spnwtTFmyQP0h+PfIOSkNfpU6AOICUOkm4i0OnSk+NyjdPJrxCDro0sJsWlRpQ==}
-
-  '@types/minimatch@5.1.2':
-    resolution: {integrity: sha512-K0VQKziLUWkVKiRVrx4a40iPaxTUefQmjtkQofBkYRcoaaL/8rhwDWww9qWbrgicNOgnpIsMxyNIUM4+n6dUIA==}
 
   '@types/node@22.15.17':
     resolution: {integrity: sha512-wIX2aSZL5FE+MR0JlvF87BNVrtFWf6AE6rxSE9X7OwnVvoyCQjpzSRJ+M87se/4QCkCiebQAqrJ0y6fwIyi7nw==}
@@ -4258,8 +4246,6 @@ snapshots:
   '@types/jsonfile@6.1.4':
     dependencies:
       '@types/node': 22.15.33
-
-  '@types/minimatch@5.1.2': {}
 
   '@types/node@22.15.17':
     dependencies:
