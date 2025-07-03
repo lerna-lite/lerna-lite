@@ -10,7 +10,7 @@ packages:
 catalog:
   "@types/dedent": ^0.7.2
   "@types/fs-extra": ^11.0.4
-  "@types/minimatch": ^5.1.2
+  "@types/minimatch": ^6.0.0
   "@types/node": ^22.15.34
   "@types/npm-package-arg": ^6.1.4
   "@types/semver": ^7.7.0
