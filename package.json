@@ -6,7 +6,7 @@
   "type": "module",
   "scripts": {
     "local-lerna": "node ./packages/cli/dist/cli.js",
-    "clean": "remove --glob packages/*/dist --glob packages/*/tsconfig.tsbuildinfo --stat",
+    "clean": "remove --glob=\"packages/*/dist\" --glob=\"packages/*/tsconfig.tsbuildinfo\" --stat",
     "clean:tarball": "remove --glob packages/**/*.tgz --stat",
     "clean:temp": "node scripts/cleanup-temp-files.mjs",
     "build": "tsc --build ./tsconfig.packages.json",
