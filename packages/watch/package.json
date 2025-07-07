@@ -39,7 +39,7 @@
     "@lerna-lite/cli": "workspace:*",
     "@lerna-lite/core": "workspace:*",
     "chokidar": "^4.0.3",
-    "picomatch": "^4.0.2",
+    "picomatch": "catalog:",
     "tinyglobby": "catalog:"
   },
   "devDependencies": {
