@@ -57,9 +57,12 @@ catalogs:
     p-pipe:
       specifier: ^4.0.0
       version: 4.0.0
+    picomatch:
+      specifier: ^4.0.2
+      version: 4.0.2
     remove-glob:
-      specifier: ^0.3.0
-      version: 0.3.0
+      specifier: ^0.3.2
+      version: 0.3.2
     semver:
       specifier: ^7.7.2
       version: 7.7.2
@@ -202,7 +205,7 @@ importers:
         version: 3.6.2
       remove-glob:
         specifier: 'catalog:'
-        version: 0.3.0
+        version: 0.3.2
       semver:
         specifier: 'catalog:'
         version: 7.7.2
@@ -331,9 +334,6 @@ importers:
       load-json-file:
         specifier: 'catalog:'
         version: 7.0.1
-      multimatch:
-        specifier: ^7.0.0
-        version: 7.0.0
       npm-package-arg:
         specifier: 'catalog:'
         version: 12.0.2
@@ -343,6 +343,9 @@ importers:
       p-queue:
         specifier: ^8.1.0
         version: 8.1.0
+      picomatch:
+        specifier: 'catalog:'
+        version: 4.0.2
       resolve-from:
         specifier: ^5.0.0
         version: 5.0.0
@@ -850,7 +853,7 @@ importers:
         specifier: ^4.0.3
         version: 4.0.3
       picomatch:
-        specifier: ^4.0.2
+        specifier: 'catalog:'
         version: 4.0.2
       tinyglobby:
         specifier: 'catalog:'
@@ -1819,16 +1822,8 @@ packages:
   argparse@2.0.1:
     resolution: {integrity: sha512-8+9WqebbFzpX9OR+Wa6O29asIogeRMzcGtAINdpMHHyAg10f05aSFVBbcEqGf/PXw1EjAZ+q2/bEBg3DvurK3Q==}
 
-  array-differ@4.0.0:
-    resolution: {integrity: sha512-Q6VPTLMsmXZ47ENG3V+wQyZS1ZxXMxFyYzA+Z/GMrJ6yIutAIEf9wTyroTzmGjNfox9/h3GdGBCVh43GVFx4Uw==}
-    engines: {node: ^12.20.0 || ^14.13.1 || >=16.0.0}
-
   array-ify@1.0.0:
     resolution: {integrity: sha512-c5AMf34bKdvPhQ7tBGhqkgKNUzMr4WUs+WDtC2ZUGOUncbxKMTvqxYctiseW3+L4bA8ec+GcZ6/A/FW4m8ukng==}
-
-  array-union@3.0.1:
-    resolution: {integrity: sha512-1OvF9IbWwaeiM9VhzYXVQacMibxpXOMYVNIvMtKRyX9SImBXpKcFr8XvFDeEslCyuH/t6KRt7HEO94AlP8Iatw==}
-    engines: {node: '>=12'}
 
   assertion-error@2.0.1:
     resolution: {integrity: sha512-Izi8RQcffqCeNVgFigKli1ssklIbpHnCYc6AknXGYoB6grJqyeby7jv12JUQgmTAnIDnbck1uxksT4dzN3PWBA==}
@@ -1916,9 +1911,9 @@ packages:
     resolution: {integrity: sha512-cYY9mypksY8NRqgDB1XD1RiJL338v/551niynFTGkZOO2LHuB2OmOYxDIe/ttN9AHwrqdum1360G3ald0W9kCg==}
     engines: {node: '>=8'}
 
-  cli-nano@1.0.2:
-    resolution: {integrity: sha512-FU52dTZU3mCing9+rdFnwKaLhaG55hZiXifq7lf0eNCr82FI9Ngz+FWHcTsbrC9+SIprlWrSxYXVvMaB6I3V1w==}
-    engines: {node: '>=20.0.0'}
+  cli-nano@1.1.3:
+    resolution: {integrity: sha512-CkPQNUt4jHvxL8bbDrtn3zbAdRxTa1EXl9LuBIkP8vIXktd0mLSvXwQMck21PH6d5fQTgxHDMfcUxRvS4Qub6A==}
+    engines: {node: ^20.0.0 || >=22.0.0}
 
   cli-width@4.1.0:
     resolution: {integrity: sha512-ouuZd4/dm2Sw5Gmqy6bGyNNNe1qt9RpmxveLSO7KcgsTnU7RXfsw+/bukWGo1abgBiMAic068rclZsO4IWmmxQ==}
@@ -2735,10 +2730,6 @@ packages:
   ms@2.1.3:
     resolution: {integrity: sha512-6FlzubTLZG3J2a/NVCAleEhjzq5oxgHyaCU9yYXvcLsvoVaHJq/s5xXI6/XXP6tz7R9xAOtHnSO/tXtF3WRTlA==}
 
-  multimatch@7.0.0:
-    resolution: {integrity: sha512-SYU3HBAdF4psHEL/+jXDKHO95/m5P2RvboHT2Y0WtTttvJLP4H/2WS9WlQPFvF6C8d6SpLw8vjCnQOnVIVOSJQ==}
-    engines: {node: '>=18'}
-
   mute-stream@2.0.0:
     resolution: {integrity: sha512-WWdIxpyjEn+FhQJQQv9aQAYlHoNVdzIzUySNV1gHUPDSdZJ3yZn7pAAbQcV7B56Mvu881q9FZV+0Vx2xC44VWA==}
     engines: {node: ^18.17.0 || >=20.5.0}
@@ -3047,9 +3038,9 @@ packages:
     resolution: {integrity: sha512-GDhwkLfywWL2s6vEjyhri+eXmfH6j1L7JE27WhqLeYzoh/A3DBaYGEj2H/HFZCn/kMfim73FXxEJTw06WtxQwg==}
     engines: {node: '>= 14.18.0'}
 
-  remove-glob@0.3.0:
-    resolution: {integrity: sha512-QwwAFg/NXERgDF6im1pFWXxwyQquf0NXa7ziCSy/eqw47xKK4Mo3sKrdIKLlvbUQrhYj6TbUYpnI+w0KJMDDhg==}
-    engines: {node: '>=20.0.0'}
+  remove-glob@0.3.2:
+    resolution: {integrity: sha512-y+b3Ry+0dn0ZLvJSqTnGORfituzAigAC0rHF85DMglDSBUPXXTlf+njqHawmmqxATXuHYmjkyBulbdE/6bdmRg==}
+    engines: {node: ^20.0.0 || >=22.0.0}
     hasBin: true
 
   replace-buffer@1.2.1:
@@ -4591,11 +4582,7 @@ snapshots:
 
   argparse@2.0.1: {}
 
-  array-differ@4.0.0: {}
-
   array-ify@1.0.0: {}
-
-  array-union@3.0.1: {}
 
   assertion-error@2.0.1: {}
 
@@ -4685,7 +4672,7 @@ snapshots:
 
   ci-info@4.2.0: {}
 
-  cli-nano@1.0.2: {}
+  cli-nano@1.1.3: {}
 
   cli-width@4.1.0: {}
 
@@ -5515,12 +5502,6 @@ snapshots:
 
   ms@2.1.3: {}
 
-  multimatch@7.0.0:
-    dependencies:
-      array-differ: 4.0.0
-      array-union: 3.0.1
-      minimatch: 9.0.5
-
   mute-stream@2.0.0: {}
 
   nanoid@3.3.11: {}
@@ -5831,9 +5812,9 @@ snapshots:
 
   readdirp@4.1.2: {}
 
-  remove-glob@0.3.0:
+  remove-glob@0.3.2:
     dependencies:
-      cli-nano: 1.0.2
+      cli-nano: 1.1.3
       tinyglobby: 0.2.14
 
   replace-buffer@1.2.1: {}

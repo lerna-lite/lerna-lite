@@ -3,7 +3,7 @@ import util from 'node:util';
 import type { Package } from '@lerna-lite/core';
 import { ValidationError } from '@lerna-lite/core';
 import { log } from '@lerna-lite/npmlog';
-import multimatch from 'multimatch';
+import picomatch from 'picomatch';
 
 /**
  * Filters a list of packages, returning all packages that match the `include` glob[s]
@@ -44,7 +44,22 @@ export function filterPackages(
     }
 
     const pnames = Array.from(filtered).map((pkg) => pkg?.name ?? '');
-    const chosen = new Set(multimatch(pnames, patterns));
+    const chosen = new Set();
+
+    for (const pattern of patterns) {
+      const isNegation = pattern[0] === '!';
+      const matcher = picomatch(isNegation ? pattern.slice(1) : pattern);
+
+      for (const name of pnames) {
+        if (matcher(name)) {
+          if (isNegation) {
+            chosen.delete(name);
+          } else {
+            chosen.add(name);
+          }
+        }
+      }
+    }
 
     for (const pkg of filtered) {
       if (!chosen.has(pkg?.name ?? '')) {
