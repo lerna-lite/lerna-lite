@@ -3,10 +3,10 @@ import { constants } from 'node:os';
 import { log } from '@lerna-lite/npmlog';
 import type { Options as ExecaOptions, ResultPromise, SyncOptions as ExacaSyncOptions } from 'execa';
 import { execa, execaSync } from 'execa';
-import logTransformer from 'strong-log-transformer';
 import c from 'tinyrainbow';
 
 import type { Package } from './package.js';
+import { addPrefixTransformer } from './utils/log-prefix-transformer.js';
 
 // bookkeeping for spawned processes
 const children = new Set();
@@ -100,8 +100,8 @@ export function spawnStreaming(
     process.stderr.setMaxListeners(children.size);
   }
 
-  spawned.stdout?.pipe(logTransformer(stdoutOpts)).pipe(process.stdout);
-  spawned.stderr?.pipe(logTransformer(stderrOpts)).pipe(process.stderr);
+  spawned.stdout?.pipe(addPrefixTransformer(stdoutOpts)).pipe(process.stdout);
+  spawned.stderr?.pipe(addPrefixTransformer(stderrOpts)).pipe(process.stderr);
 
   return wrapError(spawned);
 }
