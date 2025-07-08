@@ -3,7 +3,7 @@ import c from 'tinyrainbow';
 import { describe, expect, it, vi } from 'vitest';
 
 // file under test
-import {  exec, execSync, getChildProcessCount, getExitCode, spawn, spawnStreaming } from '../child-process.js';
+import { exec, execSync, getChildProcessCount, getExitCode, spawn, spawnStreaming } from '../child-process.js';
 import { Package } from '../package.js';
 
 describe('childProcess', () => {
