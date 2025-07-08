@@ -4,6 +4,12 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [4.6.0](https://github.com/lerna-lite/lerna-lite/compare/v4.5.1...v4.6.0) (2025-07-08)
+
+### Features
+
+* **deps:** replace `multimatch` with `picomatch` ([#1084](https://github.com/lerna-lite/lerna-lite/issues/1084)) ([0855731](https://github.com/lerna-lite/lerna-lite/commit/0855731435d2217c053074b7a5720b7b8d618c2a)) - by @ghiscoding
+
 ## [4.5.1](https://github.com/lerna-lite/lerna-lite/compare/v4.5.0...v4.5.1) (2025-06-29)
 
 **Note:** Version bump only for package @lerna-lite/watch

@@ -1,7 +1,7 @@
 {
   "name": "@lerna-lite/diff",
   "description": "Lerna-Lite diff commmand - Diff all packages or a single package since the last release",
-  "version": "4.5.1",
+  "version": "4.6.0",
   "files": [
     "/dist"
   ],

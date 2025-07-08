@@ -4,6 +4,19 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [4.6.0](https://github.com/lerna-lite/lerna-lite/compare/v4.5.1...v4.6.0) (2025-07-08)
+
+### Features
+
+* **deps:** drop `strong-log-transformer` dependency ([#1085](https://github.com/lerna-lite/lerna-lite/issues/1085)) ([b0d8adb](https://github.com/lerna-lite/lerna-lite/commit/b0d8adb074c833c7afabed6bc850a6fdbba2f06a)) - by @ghiscoding
+* **deps:** replace `multimatch` with `picomatch` ([#1084](https://github.com/lerna-lite/lerna-lite/issues/1084)) ([0855731](https://github.com/lerna-lite/lerna-lite/commit/0855731435d2217c053074b7a5720b7b8d618c2a)) - by @ghiscoding
+
+### Bug Fixes
+
+* **core:** root pkg might not have version to show in lifecycle scripts ([d8c54c5](https://github.com/lerna-lite/lerna-lite/commit/d8c54c5042d6a1081f5a2e8cb68de55020ad1e6b)) - by @ghiscoding
+* **deps:** update all non-major dependencies ([#1080](https://github.com/lerna-lite/lerna-lite/issues/1080)) ([8b4ff06](https://github.com/lerna-lite/lerna-lite/commit/8b4ff069a5b41ec0be39774c1aa9c960b70f63c7)) - by @renovate[bot]
+* **deps:** update inquirer packages ([#1081](https://github.com/lerna-lite/lerna-lite/issues/1081)) ([a223df2](https://github.com/lerna-lite/lerna-lite/commit/a223df27f19a0445b56dfdde9ad9011945a393ce)) - by @renovate[bot]
+
 ## [4.5.1](https://github.com/lerna-lite/lerna-lite/compare/v4.5.0...v4.5.1) (2025-06-29)
 
 ### Bug Fixes
