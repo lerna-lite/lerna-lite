@@ -1,9 +1,9 @@
 import { constants } from 'node:os';
+import { Transform } from 'node:stream';
 
 import { log } from '@lerna-lite/npmlog';
 import type { Options as ExecaOptions, ResultPromise, SyncOptions as ExacaSyncOptions } from 'execa';
 import { execa, execaSync } from 'execa';
-import logTransformer from 'strong-log-transformer';
 import c from 'tinyrainbow';
 
 import type { Package } from './package.js';
@@ -100,8 +100,8 @@ export function spawnStreaming(
     process.stderr.setMaxListeners(children.size);
   }
 
-  spawned.stdout?.pipe(logTransformer(stdoutOpts)).pipe(process.stdout);
-  spawned.stderr?.pipe(logTransformer(stderrOpts)).pipe(process.stderr);
+  spawned.stdout?.pipe(addPrefixTransformer(stdoutOpts)).pipe(process.stdout);
+  spawned.stderr?.pipe(addPrefixTransformer(stderrOpts)).pipe(process.stderr);
 
   return wrapError(spawned);
 }
@@ -194,4 +194,16 @@ export function logExecCommand(command: string, args?: string[]): string {
 
   log.info(c.bold(c.magenta('[dry-run] >')), cmdList.join(' '));
   return '';
+}
+
+// Add the new addPrefixTransformer function
+function addPrefixTransformer(prefix?: string) {
+  const newLineSeparator = process.platform.startsWith('win') ? '\r\n' : '\n';
+  return new Transform({
+    transform(chunk, _encoding, callback) {
+      const list = chunk.toString().split(/\r\n|[\n\v\f\r\x85\u2028\u2029]/g);
+      list.filter(Boolean).forEach((m) => this.push(prefix ? prefix + ' ' + m + newLineSeparator : m + newLineSeparator));
+      callback();
+    },
+  });
 }
