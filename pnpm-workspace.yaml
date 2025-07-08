@@ -10,12 +10,12 @@ packages:
 catalog:
   "@types/dedent": ^0.7.2
   "@types/fs-extra": ^11.0.4
-  "@types/node": ^22.15.34
+  "@types/node": ^22.16.0
   "@types/npm-package-arg": ^6.1.4
   "@types/semver": ^7.7.0
   columnify: ^1.6.0
   dedent: ^1.6.0
-  dotenv: ^17.0.0
+  dotenv: ^17.1.0
   execa: ^9.6.0
   fs-extra: ^11.3.0
   has-unicode: ^2.0.1
