@@ -6,7 +6,7 @@
   "command": {
     "publish": {
       "cleanupTempFiles": true,
-      "removePackageFields": [
+      "stripPackageKeys": [
         "devDependencies",
         "scripts"
       ]
