@@ -1247,14 +1247,14 @@
           "items": {
             "type": "string"
           },
-          "description": "Remove fields from each package.json before publishing them to the registry, removing fields from a complex object is also supported via the dot notation (ie 'scripts.build')"
+          "description": "@deprecated @use `stripPackageKeys` instead. Remove fields from each package.json before publishing them to the registry, removing fields from a complex object is also supported via the dot notation (ie 'scripts.build')"
         },
         "stripPackageKeys": {
           "type": "array",
           "items": {
             "type": "string"
           },
-          "description": "@deprecated @use `stripPackageKeys` instead. Remove fields from each package.json before publishing them to the registry, removing fields from a complex object is also supported via the dot notation (ie 'scripts.build')"
+          "description": "Strip defined keys from each monorepo `package.json` before publishing them to the registry, stripping keys from a complex object key is also supported via the dot notation (ie 'scripts.build')"
         },
         "noGitReset": {
           "type": "boolean",
