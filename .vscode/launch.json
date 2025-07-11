@@ -53,7 +53,7 @@
       "type": "node",
       "request": "launch",
       "runtimeExecutable": "node",
-      "args": ["packages/cli/dist/cli.js", "run", "pack-tarball", "--stream", "--no-bail"],
+      "args": ["packages/cli/dist/cli.js", "run", "build", "--stream", "--include-dependents", "--scope=@lerna-lite/list"],
       "cwd": "${workspaceRoot}",
       "console": "integratedTerminal",
       "internalConsoleOptions": "openOnSessionStart",
