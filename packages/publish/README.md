@@ -94,7 +94,8 @@ $ lerna publish --scope my-component test
     - [`--otp`](#--otp)
     - [`--preid`](#--preid)
     - [`--pre-dist-tag <tag>`](#--pre-dist-tag-tag)
-    - [`--remove-package-fields <fields>`](#--remove-package-fields-fields)
+    - [`--remove-package-fields <fields>`](#--remove-package-fields-fields) (`@deprecated` and renamed to `--strip-package-keys`)
+    - [`--strip-package-keys <keys>`](#--strip-package-keys-keys)
     - [`--registry <url>`](#--registry-url)
     - [`--tag-version-prefix`](#--tag-version-prefix)
     - [`--temp-tag`](#--temp-tag)
@@ -309,22 +310,25 @@ lerna publish --pre-dist-tag next
 Works the same as [`--dist-tag`](#--dist-tag-tag), except only applies to packages being released with a prerelease version.
 
 ### `--remove-package-fields <fields>`
+`@deprecated` and renamed as `strip-package-keys` (see below)
 
-Remove certain fields from every package before publishing them to the registry, we can also remove fields from a complex object structure via the dot notation (ie "scripts.build"). In summary this option is helpful in cleaning each "package.json" of every packages, it allows us to remove any extra fields that do not have any usage outside of the project itself (for example "devDependencies", "scripts", ...).
+### `--strip-package-keys <keys>`
+
+Strip (remove) certain keys from every package before publishing them to the registry, we can also strip keys from a complex object structure via the dot notation (e.g. "scripts.build"). This option is helpful in cleaning up each "package.json" of every packages, it allows us to strip and remove any keys that do not have any usage outside of the project itself (e.g. "devDependencies", "scripts", ...).
 
 ```sh
-# remove "devDepencies" and "scripts" fields from all packages
-lerna version --remove-package-fields 'devDependencies' 'scripts'
+# strip "devDepencies" and "scripts" fields from all packages
+lerna version --strip-package-keys 'devDependencies' 'scripts'
 ```
 
-> **Note** lifecycle scripts (`prepublish`, `prepublishOnly`, `prepack`, `postpack`) are executed after the field removal process and for that reason if any of these scripts are found, it will leave them in place and skip the removal whenever found.
+> **Note** lifecycle scripts (`prepublish`, `prepublishOnly`, `prepack`, `postpack`) are executed after the field removal process and for that reason, if any of these scripts are found, it will leave them in place and skip the removal whenever found.
 
-> **Note** this option will actually temporarily modify the actual `package.json` just before the publish process starts and will then revert the change after the publish process is completed. If for whatever reason, your publish process fails, it is possible that your each package, are now in an invalid state (e.g. `scripts` could be removed), so it very important to review your `package.json` after a publish failure.
+> **Note** this option will actually temporarily modify the actual `package.json` just before the publish process starts and will then revert the changes after the publish process is completed. If for whatever reason, your publish process fails, it is possible that your packages are transformed into an invalid state (e.g. `scripts` could be stripped), so it very important to review your `package.json` after a publish failure.
 
 Removal of complex object value(s) are also supported via the dot notation as shown below.
 
 ```sh
-lerna version --remove-package-fields 'scripts.build'
+lerna version --strip-package-keys 'scripts.build'
 ```
 
 ##### output
@@ -338,13 +342,13 @@ lerna version --remove-package-fields 'scripts.build'
 }
 ```
 
-This option is probably best specified in `lerna.json` configuration
+This option might be better defined via `lerna.json` configuration
 
 ```json
 {
   "command": {
     "publish": {
-      "removePackageFields": ["devDependencies", "scripts"]
+      "stripPackageKeys": ["devDependencies", "scripts"]
     }
   }
 }

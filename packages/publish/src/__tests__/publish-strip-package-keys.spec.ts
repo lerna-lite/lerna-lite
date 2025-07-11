@@ -61,13 +61,13 @@ describe('publish --remove-package-fields', () => {
     await gitCommit(cwd, 'setup');
   };
 
-  describe('use --remove-package-fields flag from CLI', () => {
-    it('should be able to remove a field from all packages by providing it in CLI', async () => {
-      const cwd = await initFixture('remove-fields');
+  describe('use --strip-package-keys flag from CLI', () => {
+    it('should be able to strip a field from all packages by providing it in CLI', async () => {
+      const cwd = await initFixture('strip-pkg-keys');
 
       await gitTag(cwd, 'v1.0.0');
       await setupChanges(cwd);
-      await lernaPublish(cwd)('--remove-package-fields', 'browser');
+      await lernaPublish(cwd)('--strip-package-keys', 'browser');
 
       const publishPkg1 = (writePkg as any).updatedManifest('package-1');
       const publishPkg2 = (writePkg as any).updatedManifest('package-2');
@@ -83,27 +83,35 @@ describe('publish --remove-package-fields', () => {
     });
 
     it('should skip configuring --remove-package-fields and work normally without touching t', async () => {
-      const cwd = await initFixture('remove-fields');
+      const cwd = await initFixture('strip-pkg-keys');
       await lernaPublish(cwd)();
 
       const devDeps = (writePkg as any).updatedManifest('package-5').devDependencies;
       expect(devDeps).toEqual({ jest: '^29.0.0', 'tiny-tarball': '^1.0.0' });
     });
 
-    it('should configure a simple --remove-package-fields to remove a single package child field', async () => {
-      const cwd = await initFixture('remove-fields');
-      await lernaPublish(cwd)('--remove-package-fields', 'devDependencies.jest');
+    it('should skip configuring --strip-package-keys and work normally without touching t', async () => {
+      const cwd = await initFixture('strip-pkg-keys');
+      await lernaPublish(cwd)();
+
+      const devDeps = (writePkg as any).updatedManifest('package-5').devDependencies;
+      expect(devDeps).toEqual({ jest: '^29.0.0', 'tiny-tarball': '^1.0.0' });
+    });
+
+    it('should configure a simple --strip-package-keys to strip a single package child field', async () => {
+      const cwd = await initFixture('strip-pkg-keys');
+      await lernaPublish(cwd)('--strip-package-keys', 'devDependencies.jest');
 
       const devDeps = (writePkg as any).updatedManifest('package-5').devDependencies;
       expect(devDeps).toEqual({ 'tiny-tarball': '^1.0.0' });
     });
 
-    it('should be able to remove multiple different child fields using the dot notation and by passing multiple CLI arguments', async () => {
-      const cwd = await initFixture('remove-fields');
+    it('should be able to strip multiple different child fields using the dot notation and by passing multiple CLI arguments', async () => {
+      const cwd = await initFixture('strip-pkg-keys');
 
       await gitTag(cwd, 'v1.0.0');
       await setupChanges(cwd);
-      await lernaPublish(cwd)('--remove-package-fields', 'devDependencies.jest', 'scripts.build:dev', 'exports.index.types');
+      await lernaPublish(cwd)('--strip-package-keys', 'devDependencies.jest', 'scripts.build:dev', 'exports.index.types');
 
       const publishPkg5 = (writePkg as any).updatedManifest('package-5');
       expect(publishPkg5.devDependencies).toEqual({ 'tiny-tarball': '^1.0.0' });
@@ -117,11 +125,11 @@ describe('publish --remove-package-fields', () => {
     });
 
     it('should expect any lifecycle script (prepack, prepublish, ...postpack) to never be deleted even when user defines the entire scripts for deletion', async () => {
-      const cwd = await initFixture('remove-fields');
+      const cwd = await initFixture('strip-pkg-keys');
 
       await gitTag(cwd, 'v1.0.0');
       await setupChanges(cwd);
-      await lernaPublish(cwd)('--remove-package-fields', 'scripts');
+      await lernaPublish(cwd)('--strip-package-keys', 'scripts');
 
       const publishPkg1 = (writePkg as any).updatedManifest('package-1');
       const publishPkg2 = (writePkg as any).updatedManifest('package-2');
@@ -145,9 +153,10 @@ describe('publish --remove-package-fields', () => {
     });
   });
 
-  describe('use "removePackageFields" from Lerna config', () => {
+  describe('use "stripPackageKeys" from Lerna config', () => {
+    // @deprecated renamed as `stripPackageKeys`
     it('should be able to remove a field from all packages by defining it in Lerna config', async () => {
-      const cwd = await initFixture('remove-fields');
+      const cwd = await initFixture('strip-pkg-keys');
 
       await updateLernaConfig(cwd, {
         command: {
@@ -174,13 +183,41 @@ describe('publish --remove-package-fields', () => {
       expect(publishPkg5.browser).toBeUndefined();
     });
 
-    it('should be able to remove an entire array "devDependencies" field and also remove a child field using the dot notation in Lerna config', async () => {
-      const cwd = await initFixture('remove-fields');
+    it('should be able to strip a field from all packages by defining it in Lerna config', async () => {
+      const cwd = await initFixture('strip-pkg-keys');
 
       await updateLernaConfig(cwd, {
         command: {
           publish: {
-            removePackageFields: ['devDependencies', 'scripts.build', 'exports.index.types'],
+            stripPackageKeys: ['browser'],
+          },
+        },
+      });
+
+      await gitTag(cwd, 'v1.0.0');
+      await setupChanges(cwd);
+      await lernaPublish(cwd)();
+
+      const publishPkg1 = (writePkg as any).updatedManifest('package-1');
+      const publishPkg2 = (writePkg as any).updatedManifest('package-2');
+      const publishPkg3 = (writePkg as any).updatedManifest('package-3');
+      const publishPkg4 = (writePkg as any).updatedManifest('package-4');
+      const publishPkg5 = (writePkg as any).updatedManifest('package-5');
+
+      expect(publishPkg1.browser).toBeUndefined();
+      expect(publishPkg2.browser).toBeUndefined();
+      expect(publishPkg3.browser).toBeUndefined();
+      expect(publishPkg4.browser).toBeUndefined();
+      expect(publishPkg5.browser).toBeUndefined();
+    });
+
+    it('should be able to remove an entire array "devDependencies" field and also remove a child field using the dot notation in Lerna config', async () => {
+      const cwd = await initFixture('strip-pkg-keys');
+
+      await updateLernaConfig(cwd, {
+        command: {
+          publish: {
+            stripPackageKeys: ['devDependencies', 'scripts.build', 'exports.index.types'],
           },
         },
       });

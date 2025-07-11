@@ -277,7 +277,7 @@ export class PublishCommand extends Command<PublishCommandOption> {
     await this.resolveDependencyWithCatalogProtocols();
     await this.resolveLocalDependencyWorkspaceProtocols();
 
-    if (this.options.removePackageFields) {
+    if (this.options.removePackageFields || this.options.stripPackageKeys) {
       await this.removePackageProperties();
     }
 
@@ -764,12 +764,18 @@ export class PublishCommand extends Command<PublishCommandOption> {
   }
 
   removePackageProperties() {
-    const { removePackageFields } = this.options;
+    const stripPackageKeys = this.options.removePackageFields || this.options.stripPackageKeys;
+    if (this.options.removePackageFields) {
+      this.logger.warn(
+        'DEPRECATION',
+        '"--remove-package-fields" was renamed to "--strip-package-keys" and will be removed in the next major release.'
+      );
+    }
 
     return pMap(this.packagesToPublish, (node: Package) => {
-      if (Array.isArray(removePackageFields)) {
-        for (const removeField of removePackageFields) {
-          if (removeField === 'scripts') {
+      if (Array.isArray(stripPackageKeys)) {
+        for (const fieldToStrip of stripPackageKeys) {
+          if (fieldToStrip === 'scripts') {
             // when deleting field "scripts", we need to keep any lifecycle script(s) to avoid failure when packing tarball
             const scriptNames = Object.keys(node.pkg['scripts'] ?? {});
             const remainingScripts = excludeValuesFromArray(scriptNames, ['prepublish', 'prepublishOnly', 'prepack', 'postpack']);
@@ -780,7 +786,7 @@ export class PublishCommand extends Command<PublishCommandOption> {
               continue; // to next package
             }
           }
-          deleteComplexObjectProp(node.pkg, removeField, `"${node.pkg.name}" package`);
+          deleteComplexObjectProp(node.pkg, fieldToStrip, `"${node.pkg.name}" package`);
         }
       }
     });
