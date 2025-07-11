@@ -4,6 +4,12 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [4.6.1](https://github.com/lerna-lite/lerna-lite/compare/v4.6.0...v4.6.1) (2025-07-11)
+
+### Bug Fixes
+
+* **publish:** deprecate/rename removePackageFields to stripPackageKeys ([#1088](https://github.com/lerna-lite/lerna-lite/issues/1088)) ([a4d8772](https://github.com/lerna-lite/lerna-lite/commit/a4d877266b8e6627e15547672de7ec938869c631)) - by @ghiscoding
+
 ## [4.6.0](https://github.com/lerna-lite/lerna-lite/compare/v4.5.1...v4.6.0) (2025-07-08)
 
 **Note:** Version bump only for package @lerna-lite/publish

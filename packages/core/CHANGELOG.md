@@ -4,6 +4,13 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [4.6.1](https://github.com/lerna-lite/lerna-lite/compare/v4.6.0...v4.6.1) (2025-07-11)
+
+### Bug Fixes
+
+* **core:** reimplement custom strong-log-transformer, fixes [#1089](https://github.com/lerna-lite/lerna-lite/issues/1089) ([#1090](https://github.com/lerna-lite/lerna-lite/issues/1090)) ([f225fff](https://github.com/lerna-lite/lerna-lite/commit/f225fff755f07c2a870ef7b3d5df4d247ce095f2)) - by @ghiscoding
+* **publish:** deprecate/rename removePackageFields to stripPackageKeys ([#1088](https://github.com/lerna-lite/lerna-lite/issues/1088)) ([a4d8772](https://github.com/lerna-lite/lerna-lite/commit/a4d877266b8e6627e15547672de7ec938869c631)) - by @ghiscoding
+
 ## [4.6.0](https://github.com/lerna-lite/lerna-lite/compare/v4.5.1...v4.6.0) (2025-07-08)
 
 ### Features
