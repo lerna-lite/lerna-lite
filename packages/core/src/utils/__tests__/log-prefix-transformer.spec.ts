@@ -3,7 +3,7 @@ import { describe, expect, it, test } from 'vitest';
 import { addPrefixTransformer } from '../log-prefix-transformer.js';
 
 describe('addPrefixTransformer', () => {
-  const newLineSeparator = '\n'; // process.platform.startsWith('win') ? '\r\n' : '\n';
+  const newLineSeparator = '\n';
 
   it('should add a prefix to each line of output', () =>
     new Promise((done: any) => {
