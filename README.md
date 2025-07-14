@@ -83,9 +83,9 @@ Here are some of the largest projects using Lerna-Lite
   <img src="https://avatars.githubusercontent.com/u/303157?s=48&v=4" width="28" height="28">
   Blueprint
 </a>&nbsp; | &nbsp;
-<a href="https://github.com/sanity-io/sanity" title="Sanity">
-  <img src="https://avatars.githubusercontent.com/u/17177659?s=48&v=4" width="28" height="28">
-   Sanity
+<a href="https://github.com/wundergraph" title="Wundergraph">
+  <img src="https://avatars.githubusercontent.com/u/64281914" width="28" height="28">
+   Wundergraph
 </a>
 
 ## License
