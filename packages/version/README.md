@@ -598,6 +598,9 @@ lerna version --force-publish=package-2,package-4
 
 # force all packages to be versioned
 lerna version --force-publish "*"
+
+# Force all packages to a specific version (e.g., 1.0.1)
+lerna version 1.0.1 --force-publish "*"
 ```
 
 When run with this flag, `lerna version` will force publish the specified packages (comma-separated) or all packages using `*`.
