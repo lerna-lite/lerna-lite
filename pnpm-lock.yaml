@@ -46,8 +46,8 @@ catalogs:
       specifier: ^3.0.0
       version: 3.0.0
     npm-package-arg:
-      specifier: ^12.0.2
-      version: 12.0.2
+      specifier: ^13.0.0
+      version: 13.0.0
     npm-registry-fetch:
       specifier: ^18.0.2
       version: 18.0.2
@@ -336,7 +336,7 @@ importers:
         version: 7.0.1
       npm-package-arg:
         specifier: 'catalog:'
-        version: 12.0.2
+        version: 13.0.0
       p-map:
         specifier: 'catalog:'
         version: 7.0.3
@@ -620,7 +620,7 @@ importers:
         version: 3.0.0
       npm-package-arg:
         specifier: 'catalog:'
-        version: 12.0.2
+        version: 13.0.0
       npm-packlist:
         specifier: ^10.0.0
         version: 10.0.0
@@ -769,7 +769,7 @@ importers:
         version: 2.0.0
       npm-package-arg:
         specifier: 'catalog:'
-        version: 12.0.2
+        version: 13.0.0
       p-limit:
         specifier: ^6.2.0
         version: 6.2.0
@@ -2333,6 +2333,10 @@ packages:
     resolution: {integrity: sha512-sYKnA7eGln5ov8T8gnYlkSOxFJvywzEx9BueN6xo/GKO8PGiI6uK6xx+DIGe45T3bdVjLAQDQW1aicT8z8JwQg==}
     engines: {node: ^18.17.0 || >=20.5.0}
 
+  hosted-git-info@9.0.0:
+    resolution: {integrity: sha512-gEf705MZLrDPkbbhi8PnoO4ZwYgKoNL+ISZ3AjZMht2r3N5tuTwncyDi6Fv2/qDnMmZxgs0yI8WDOyR8q3G+SQ==}
+    engines: {node: ^20.17.0 || >=22.9.0}
+
   html-escaper@2.0.2:
     resolution: {integrity: sha512-H2iMtd0I4Mt5eYiapRdIDjp+XzelXQ0tFE4JS7YFwFevXXMmOp9myNrUvCg0D6ws8iqkRPBfKHgbwig1SmlLfg==}
 
@@ -2584,6 +2588,10 @@ packages:
   lru-cache@10.4.3:
     resolution: {integrity: sha512-JNAzZcXrCt42VGLuYz0zfAzDfAvJWW6AfYlDBQyDV5DClI2m5sAmK+OIO7s59XfsRsWHp02jAJrRadPRGTt6SQ==}
 
+  lru-cache@11.1.0:
+    resolution: {integrity: sha512-QIXZUBJUx+2zHUdQujWejBkcD9+cs94tLn0+YL8UrCh+D5sCXZ4c7LaEH48pNwRY3MLDgqUFyhlCyjJPf1WP0A==}
+    engines: {node: 20 || >=22}
+
   magic-string@0.30.17:
     resolution: {integrity: sha512-sNPKHvyjVf7gyjwS4xGTaW/mCnF8wnjtifKBEhxfZ7E/S8tQ0rssrwGNn6q8JH/ohItJfSQp9mBtQYuTlH5QnA==}
 
@@ -2747,6 +2755,10 @@ packages:
   npm-package-arg@12.0.2:
     resolution: {integrity: sha512-f1NpFjNI9O4VbKMOlA5QoBq/vSQPORHcTZ2feJpFkTHJ9eQkdlmZEKSjcAhxTGInC7RlEyScT9ui67NaOsjFWA==}
     engines: {node: ^18.17.0 || >=20.5.0}
+
+  npm-package-arg@13.0.0:
+    resolution: {integrity: sha512-+t2etZAGcB7TbbLHfDwooV9ppB2LhhcT6A+L9cahsf9mEUAoQ6CktLEVvEnpD0N5CkX7zJqnPGaFtoQDy9EkHQ==}
+    engines: {node: ^20.17.0 || >=22.9.0}
 
   npm-packlist@10.0.0:
     resolution: {integrity: sha512-rht9U6nS8WOBDc53eipZNPo5qkAV4X2rhKE2Oj1DYUQ3DieXfj0mKkVmjnf3iuNdtMd8WfLdi2L6ASkD/8a+Kg==}
@@ -5056,6 +5068,10 @@ snapshots:
     dependencies:
       lru-cache: 10.4.3
 
+  hosted-git-info@9.0.0:
+    dependencies:
+      lru-cache: 11.1.0
+
   html-escaper@2.0.2: {}
 
   http-cache-semantics@4.1.1: {}
@@ -5279,6 +5295,8 @@ snapshots:
 
   lru-cache@10.4.3: {}
 
+  lru-cache@11.1.0: {}
+
   magic-string@0.30.17:
     dependencies:
       '@jridgewell/sourcemap-codec': 1.5.0
@@ -5448,6 +5466,13 @@ snapshots:
   npm-package-arg@12.0.2:
     dependencies:
       hosted-git-info: 8.0.2
+      proc-log: 5.0.0
+      semver: 7.7.2
+      validate-npm-package-name: 6.0.0
+
+  npm-package-arg@13.0.0:
+    dependencies:
+      hosted-git-info: 9.0.0
       proc-log: 5.0.0
       semver: 7.7.2
       validate-npm-package-name: 6.0.0
