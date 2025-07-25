@@ -168,7 +168,7 @@ importers:
         specifier: ^7.0.3
         version: 7.0.3
       eslint:
-        specifier: ^9.31.0
+        specifier: ^9.32.0
         version: 9.32.0
       eslint-config-prettier:
         specifier: ^10.1.8
