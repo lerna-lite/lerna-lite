@@ -22,7 +22,7 @@ catalog:
   load-json-file: ^7.0.1
   normalize-path: ^3.0.0
   npm-package-arg: ^13.0.0
-  npm-registry-fetch: ^18.0.2
+  npm-registry-fetch: ^19.0.0
   p-map: ^7.0.3
   p-pipe: ^4.0.0
   picomatch: ^4.0.3
