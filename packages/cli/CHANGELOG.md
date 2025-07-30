@@ -4,6 +4,12 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [4.6.2](https://github.com/lerna-lite/lerna-lite/compare/v4.6.1...v4.6.2) (2025-07-25)
+
+### Bug Fixes
+
+* **schema:** move deprecation warning to the correct JSON Schema key ([e60e6a4](https://github.com/lerna-lite/lerna-lite/commit/e60e6a46078286b60847a93ad2ffb7959d20718b)) - by @ghiscoding
+
 ## [4.6.1](https://github.com/lerna-lite/lerna-lite/compare/v4.6.0...v4.6.1) (2025-07-11)
 
 ### Bug Fixes

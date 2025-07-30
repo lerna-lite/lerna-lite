@@ -1,7 +1,7 @@
 {
   "name": "@lerna-lite/core",
   "description": "Lerna-Lite core implementation module",
-  "version": "4.6.1",
+  "version": "4.6.2",
   "publishConfig": {
     "access": "public"
   },
@@ -36,9 +36,9 @@
     "node": "^20.17.0 || >=22.9.0"
   },
   "dependencies": {
-    "@inquirer/expand": "^4.0.16",
-    "@inquirer/input": "^4.2.0",
-    "@inquirer/select": "^4.2.4",
+    "@inquirer/expand": "^4.0.17",
+    "@inquirer/input": "^4.2.1",
+    "@inquirer/select": "^4.3.1",
     "@lerna-lite/npmlog": "workspace:*",
     "@npmcli/run-script": "^9.1.0",
     "ci-info": "^4.3.0",
