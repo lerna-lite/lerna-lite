@@ -24,6 +24,8 @@ export default defineConfig({
         '**/__mocks__/**',
         '**/__tests__/**',
         '**/index.ts',
+        '**/interface{s}.ts',
+        '**/model{s}.ts',
       ],
       provider: 'v8',
     },
