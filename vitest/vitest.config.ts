@@ -16,6 +16,7 @@ export default defineConfig({
       include: ['packages/**/*.ts'],
       exclude: [
         ...configDefaults.exclude,
+        '**/dist/**',
         '**/helpers/**',
         '**/models/**',
         '**/__fixtures__/**',
