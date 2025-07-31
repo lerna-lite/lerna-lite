@@ -106,5 +106,10 @@
     "uuid": "catalog:",
     "vitest": "^4.0.0-beta.4",
     "write-json-file": "catalog:"
+  },
+  "pnpm": {
+    "overrides": {
+      "vite": "npm:rolldown-vite@latest"
+    }
   }
 }
