@@ -25,7 +25,7 @@ export class TrackerStream extends stream.Transform {
     cb();
   }
 
-  /* v8 ignore next 4 */
+  /* v8 ignore next */
   override _flush(cb: () => void) {
     this.tracker.finish();
     cb();

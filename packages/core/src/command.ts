@@ -154,7 +154,7 @@ export class Command<T extends AvailableCommandOption> {
     return this.runner?.then(onResolved, onRejected);
   }
 
-  /* v8 ignore next 3 */
+  /* v8 ignore next */
   catch(onRejected: typeof Promise.reject) {
     return this.runner?.catch(onRejected);
   }
@@ -173,7 +173,7 @@ export class Command<T extends AvailableCommandOption> {
     let loglevel;
     let progress;
 
-    /* v8 ignore next 4 */
+    /* v8 ignore next if */
     if (isCI || !process.stderr.isTTY || process.env.TERM === 'dumb') {
       log.disableColor();
       progress = false;
@@ -250,7 +250,7 @@ export class Command<T extends AvailableCommandOption> {
   }
 
   enableProgressBar() {
-    /* v8 ignore next 3 */
+    /* v8 ignore next if */
     if (this.options.progress !== false) {
       log.enableProgress();
     }

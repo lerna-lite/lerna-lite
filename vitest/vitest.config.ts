@@ -16,6 +16,7 @@ export default defineConfig({
       include: ['packages/**/*.ts'],
       exclude: [
         ...configDefaults.exclude,
+        '**/dist/**',
         '**/helpers/**',
         '**/models/**',
         '**/__fixtures__/**',
@@ -23,6 +24,8 @@ export default defineConfig({
         '**/__mocks__/**',
         '**/__tests__/**',
         '**/index.ts',
+        '**/interfaces.ts',
+        '**/models.ts',
       ],
       provider: 'v8',
     },
