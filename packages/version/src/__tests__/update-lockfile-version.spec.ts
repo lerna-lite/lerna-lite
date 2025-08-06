@@ -234,7 +234,7 @@ describe('bun client', () => {
   it(`should update project root lockfile by calling client script "bun install --lockfile-only --ignore-scripts"`, async () => {
     vi.spyOn(fsPromises, 'access').mockResolvedValue(true as any);
     (execPackageManager as Mock).mockImplementationOnce(() => true);
-    const cwd = await initFixture('lockfile-version2');
+    const cwd = await initFixture('lockfile-bun');
 
     const lockFileOutput = await runInstallLockFileOnly('bun', cwd, { npmClientArgs: [] });
 
@@ -245,7 +245,7 @@ describe('bun client', () => {
   it(`should update project root lockfile by calling client script "bun install --lockfile-only --ignore-scripts" with extra npm client arguments when provided`, async () => {
     vi.spyOn(fsPromises, 'access').mockResolvedValue(true as any);
     (execPackageManager as Mock).mockImplementationOnce(() => true);
-    const cwd = await initFixture('lockfile-version2');
+    const cwd = await initFixture('lockfile-bun');
 
     const lockFileOutput = await runInstallLockFileOnly('bun', cwd, { npmClientArgs: ['--frozen-lockfile'] });
 

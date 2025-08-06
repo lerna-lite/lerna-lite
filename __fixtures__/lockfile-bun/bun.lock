@@ -1,0 +1,55 @@
+{
+  "lockfileVersion": 1,
+  "workspaces": {
+    "": {
+      "name": "my-workspace",
+    },
+    "packages/package-1": {
+      "name": "@my-workspace/package-1",
+      "version": "2.3.4",
+      "dependencies": {
+        "tiny-tarball": "^1.0.0",
+      },
+    },
+    "packages/package-2": {
+      "name": "@my-workspace/package-2",
+      "version": "2.3.4",
+      "dependencies": {
+        "@my-workspace/package-1": "workspace:^2.3.4",
+      },
+      "peerDependencies": {
+        "@my-workspace/package-1": "workspace:^2.3.4",
+      },
+    },
+    "packages/package-3": {
+      "name": "@my-workspace/package-3",
+      "version": "2.3.4",
+      "dependencies": {
+        "@my-workspace/package-1": "workspace:^",
+        "@my-workspace/package-2": "workspace:*",
+      },
+    },
+    "packages/package-4": {
+      "name": "@my-workspace/package-4",
+      "version": "2.3.4",
+      "dependencies": {
+        "@my-workspace/package-1": "workspace:2.3.4",
+        "@my-workspace/package-2": "workspace:~",
+      },
+      "peerDependencies": {
+        "@my-workspace/package-1": "workspace:>=2.0.0",
+      },
+    },
+  },
+  "packages": {
+    "@my-workspace/package-1": ["@my-workspace/package-1@workspace:packages/package-1"],
+
+    "@my-workspace/package-2": ["@my-workspace/package-2@workspace:packages/package-2"],
+
+    "@my-workspace/package-3": ["@my-workspace/package-3@workspace:packages/package-3"],
+
+    "@my-workspace/package-4": ["@my-workspace/package-4@workspace:packages/package-4"],
+
+    "tiny-tarball": ["tiny-tarball@1.0.0", "", {}, "sha512-SxmEuEiq4d9L2UjUCyP7g3KHND65MJnsFbEwCbaoMp9NYjHjufAzIUCRaRHB+FNTwzZ1e2xjBoYobBB8pqB5IQ=="],
+  }
+}
