@@ -217,6 +217,10 @@ describe('pnpm client', () => {
 });
 
 describe('bun client', () => {
+  beforeEach(() => {
+    vi.resetAllMocks();
+  });
+
   it('should log an error when lockfile is not located under project root', async () => {
     (execPackageManager as Mock).mockImplementationOnce(() => false);
     const logSpy = vi.spyOn(log, 'error');
