@@ -1,0 +1,8 @@
+{
+  "name": "my-workspace",
+  "version": "0.0.0-lerna",
+  "workspaces": [
+    "packages/*"
+  ],
+  "private": true
+}

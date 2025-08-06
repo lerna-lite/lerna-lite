@@ -216,6 +216,49 @@ describe('pnpm client', () => {
   });
 });
 
+describe('bun client', () => {
+  beforeEach(() => {
+    vi.resetAllMocks();
+  });
+
+  it('should log an error when lockfile is not located under project root', async () => {
+    (execPackageManager as Mock).mockImplementationOnce(() => false);
+    const logSpy = vi.spyOn(log, 'error');
+    const cwd = await initFixture('lockfile-version2');
+
+    const lockFileOutput = await runInstallLockFileOnly('bun', cwd, { npmClientArgs: [] });
+
+    expect(logSpy).toHaveBeenCalledWith(
+      'lock',
+      expect.stringContaining(`we could not sync neither locate "bun.lock" by using "bun" client at location ${cwd}`)
+    );
+    expect(lockFileOutput).toBe(undefined);
+  });
+
+  it(`should update project root lockfile by calling client script "bun install --lockfile-only --ignore-scripts"`, async () => {
+    vi.spyOn(fsPromises, 'access').mockResolvedValue(true as any);
+    (execPackageManager as Mock).mockImplementationOnce(() => true);
+    const cwd = await initFixture('lockfile-bun');
+
+    const lockFileOutput = await runInstallLockFileOnly('bun', cwd, { npmClientArgs: [] });
+
+    expect(execPackageManager).toHaveBeenCalledWith('bun', ['install', '--lockfile-only', '--ignore-scripts'], { cwd });
+    expect(lockFileOutput).toBe('bun.lock');
+  });
+
+  it(`should update project root lockfile by calling client script "bun install --lockfile-only --ignore-scripts" with extra npm client arguments when provided`, async () => {
+    vi.spyOn(fsPromises, 'access').mockResolvedValue(true as any);
+    (execPackageManager as Mock).mockImplementationOnce(() => true);
+    const cwd = await initFixture('lockfile-bun');
+
+    const lockFileOutput = await runInstallLockFileOnly('bun', cwd, { npmClientArgs: ['--frozen-lockfile'] });
+
+    expect(execPackageManager).toHaveBeenCalled();
+    expect(execPackageManager).toHaveBeenCalledWith('bun', ['install', '--lockfile-only', '--ignore-scripts', '--frozen-lockfile'], { cwd });
+    expect(lockFileOutput).toBe('bun.lock');
+  });
+});
+
 describe('run install lockfile-only', () => {
   describe('npm client', () => {
     it(`should update project root lockfile by calling npm script "npm install --package-lock-only --ignore-scripts"`, async () => {
