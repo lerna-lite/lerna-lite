@@ -138,6 +138,14 @@ export async function runInstallLockFileOnly(
   const npmClientArgs: string[] = npmClientArgsRaw.reduce((args, arg) => args.concat(arg.split(/\s|,/)), [] as string[]);
 
   switch (npmClient) {
+    case 'bun':
+      inputLockfileName = 'bun.lock';
+      if (await validateFileExists(join(cwd, inputLockfileName))) {
+        log.verbose('lock', `updating lock file via "bun install --lockfile-only --ignore-scripts"`);
+        await execPackageManager('bun', ['install', '--lockfile-only', '--ignore-scripts', ...npmClientArgs], { cwd });
+        outputLockfileName = inputLockfileName;
+      }
+      break;
     case 'pnpm':
       inputLockfileName = 'pnpm-lock.yaml';
       if (await validateFileExists(join(cwd, inputLockfileName))) {
