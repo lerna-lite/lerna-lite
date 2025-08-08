@@ -4,6 +4,16 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [4.7.0](https://github.com/lerna-lite/lerna-lite/compare/v4.6.2...v4.7.0) (2025-08-08)
+
+### Features
+
+* add `syncWorkspaceLock` support for bun ([#1101](https://github.com/lerna-lite/lerna-lite/issues/1101)) ([c0639c9](https://github.com/lerna-lite/lerna-lite/commit/c0639c9008feac5876d00389e706481a4248c04a)) - by @ayZagen
+
+### Bug Fixes
+
+* **publish:** ensure README file names are populated on package.json ([#1103](https://github.com/lerna-lite/lerna-lite/issues/1103)) ([5904aca](https://github.com/lerna-lite/lerna-lite/commit/5904aca93126747d3af6f12b4b1e12e98e41e213)) - by @ghiscoding
+
 ## [4.6.2](https://github.com/lerna-lite/lerna-lite/compare/v4.6.1...v4.6.2) (2025-07-25)
 
 ### Bug Fixes
