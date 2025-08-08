@@ -10,14 +10,14 @@ packages:
 catalog:
   "@types/dedent": ^0.7.2
   "@types/fs-extra": ^11.0.4
-  "@types/node": ^22.16.5
+  "@types/node": ^22.17.0
   "@types/npm-package-arg": ^6.1.4
   "@types/semver": ^7.7.0
   columnify: ^1.6.0
   dedent: ^1.6.0
   dotenv: ^17.2.1
   execa: ^9.6.0
-  fs-extra: ^11.3.0
+  fs-extra: ^11.3.1
   has-unicode: ^2.0.1
   load-json-file: ^7.0.1
   normalize-path: ^3.0.0
@@ -34,7 +34,7 @@ catalog:
   uuid: ^11.1.0
   write-json-file: ^6.0.0
   write-package: ^7.1.0
-  yaml: ^2.8.0
+  yaml: ^2.8.1
   yargs: ^18.0.0
   yargs-parser: ^22.0.0
   zeptomatch: ^2.0.2

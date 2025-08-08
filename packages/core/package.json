@@ -71,7 +71,7 @@
     "@types/dedent": "catalog:",
     "@types/fs-extra": "catalog:",
     "@types/glob-parent": "^5.1.3",
-    "@types/inquirer": "^9.0.8",
+    "@types/inquirer": "^9.0.9",
     "@types/npm-package-arg": "catalog:",
     "@types/semver": "catalog:",
     "@types/write-file-atomic": "^4.0.3",
