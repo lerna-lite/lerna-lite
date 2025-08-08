@@ -6,24 +6,6 @@ settings:
 
 catalogs:
   default:
-    '@types/dedent':
-      specifier: ^0.7.2
-      version: 0.7.2
-    '@types/fs-extra':
-      specifier: ^11.0.4
-      version: 11.0.4
-    '@types/node':
-      specifier: ^22.17.0
-      version: 22.17.0
-    '@types/npm-package-arg':
-      specifier: ^6.1.4
-      version: 6.1.4
-    '@types/semver':
-      specifier: ^7.7.0
-      version: 7.7.0
-    columnify:
-      specifier: ^1.6.0
-      version: 1.6.0
     dedent:
       specifier: ^1.6.0
       version: 1.6.0
@@ -39,9 +21,6 @@ catalogs:
     has-unicode:
       specifier: ^2.0.1
       version: 2.0.1
-    load-json-file:
-      specifier: ^7.0.1
-      version: 7.0.1
     normalize-path:
       specifier: ^3.0.0
       version: 3.0.0
@@ -57,18 +36,22 @@ catalogs:
     p-pipe:
       specifier: ^4.0.0
       version: 4.0.0
-    picomatch:
-      specifier: ^4.0.3
-      version: 4.0.3
-    remove-glob:
-      specifier: ^0.3.5
-      version: 0.3.5
     semver:
       specifier: ^7.7.2
       version: 7.7.2
     slash:
       specifier: ^5.1.0
       version: 5.1.0
+  dependencies:
+    columnify:
+      specifier: ^1.6.0
+      version: 1.6.0
+    load-json-file:
+      specifier: ^7.0.1
+      version: 7.0.1
+    picomatch:
+      specifier: ^4.0.3
+      version: 4.0.3
     tinyglobby:
       specifier: ^0.2.14
       version: 0.2.14
@@ -90,12 +73,28 @@ catalogs:
     yargs:
       specifier: ^18.0.0
       version: 18.0.0
-    yargs-parser:
-      specifier: ^22.0.0
-      version: 22.0.0
     zeptomatch:
       specifier: ^2.0.2
       version: 2.0.2
+  devDependencies:
+    '@types/dedent':
+      specifier: ^0.7.2
+      version: 0.7.2
+    '@types/fs-extra':
+      specifier: ^11.0.4
+      version: 11.0.4
+    '@types/node':
+      specifier: ^22.17.0
+      version: 22.17.0
+    '@types/npm-package-arg':
+      specifier: ^6.1.4
+      version: 6.1.4
+    '@types/semver':
+      specifier: ^7.7.0
+      version: 7.7.0
+    yargs-parser:
+      specifier: ^22.0.0
+      version: 22.0.0
 
 overrides:
   vite: npm:rolldown-vite@latest
@@ -150,10 +149,10 @@ importers:
         specifier: link:helpers
         version: link:helpers
       '@types/fs-extra':
-        specifier: 'catalog:'
+        specifier: catalog:devDependencies
         version: 11.0.4
       '@types/node':
-        specifier: 'catalog:'
+        specifier: catalog:devDependencies
         version: 22.17.0
       '@types/yargs':
         specifier: ^17.0.33
@@ -195,7 +194,7 @@ importers:
         specifier: 'catalog:'
         version: 11.3.1
       load-json-file:
-        specifier: 'catalog:'
+        specifier: catalog:dependencies
         version: 7.0.1
       normalize-newline:
         specifier: ^4.1.0
@@ -207,7 +206,7 @@ importers:
         specifier: ^3.6.2
         version: 3.6.2
       remove-glob:
-        specifier: 'catalog:'
+        specifier: ^0.3.5
         version: 0.3.5
       semver:
         specifier: 'catalog:'
@@ -216,7 +215,7 @@ importers:
         specifier: 1.2.6
         version: 1.2.6
       tinyglobby:
-        specifier: 'catalog:'
+        specifier: catalog:dependencies
         version: 0.2.14
       ts-node:
         specifier: ^10.9.2
@@ -231,13 +230,13 @@ importers:
         specifier: ^8.39.0
         version: 8.39.0(eslint@9.32.0)(typescript@5.9.2)
       uuid:
-        specifier: 'catalog:'
+        specifier: catalog:dependencies
         version: 11.1.0
       vitest:
         specifier: ^4.0.0-beta.6
         version: 4.0.0-beta.6(@types/node@22.17.0)(esbuild@0.25.1)(yaml@2.8.1)
       write-json-file:
-        specifier: 'catalog:'
+        specifier: catalog:dependencies
         version: 6.0.0
 
   packages/changed:
@@ -256,7 +255,7 @@ importers:
         version: link:../listable
     devDependencies:
       yargs-parser:
-        specifier: 'catalog:'
+        specifier: catalog:devDependencies
         version: 22.0.0
 
   packages/cli:
@@ -280,14 +279,14 @@ importers:
         specifier: ^3.2.0
         version: 3.2.0
       load-json-file:
-        specifier: 'catalog:'
+        specifier: catalog:dependencies
         version: 7.0.1
       yargs:
-        specifier: 'catalog:'
+        specifier: catalog:dependencies
         version: 18.0.0
     devDependencies:
       yargs-parser:
-        specifier: 'catalog:'
+        specifier: catalog:devDependencies
         version: 22.0.0
 
   packages/core:
@@ -335,7 +334,7 @@ importers:
         specifier: ^3.1.3
         version: 3.1.3
       load-json-file:
-        specifier: 'catalog:'
+        specifier: catalog:dependencies
         version: 7.0.1
       npm-package-arg:
         specifier: 'catalog:'
@@ -347,7 +346,7 @@ importers:
         specifier: ^8.1.0
         version: 8.1.0
       picomatch:
-        specifier: 'catalog:'
+        specifier: catalog:dependencies
         version: 4.0.3
       resolve-from:
         specifier: ^5.0.0
@@ -359,35 +358,35 @@ importers:
         specifier: 'catalog:'
         version: 5.1.0
       tinyglobby:
-        specifier: 'catalog:'
+        specifier: catalog:dependencies
         version: 0.2.14
       tinyrainbow:
-        specifier: 'catalog:'
+        specifier: catalog:dependencies
         version: 2.0.0
       write-file-atomic:
         specifier: ^6.0.0
         version: 6.0.0
       write-json-file:
-        specifier: 'catalog:'
+        specifier: catalog:dependencies
         version: 6.0.0
       write-package:
-        specifier: 'catalog:'
+        specifier: catalog:dependencies
         version: 7.1.0
       yaml:
-        specifier: 'catalog:'
+        specifier: catalog:dependencies
         version: 2.8.1
       zeptomatch:
-        specifier: 'catalog:'
+        specifier: catalog:dependencies
         version: 2.0.2
     devDependencies:
       '@types/clone-deep':
         specifier: ^4.0.4
         version: 4.0.4
       '@types/dedent':
-        specifier: 'catalog:'
+        specifier: catalog:devDependencies
         version: 0.7.2
       '@types/fs-extra':
-        specifier: 'catalog:'
+        specifier: catalog:devDependencies
         version: 11.0.4
       '@types/glob-parent':
         specifier: ^5.1.3
@@ -396,10 +395,10 @@ importers:
         specifier: ^9.0.9
         version: 9.0.9
       '@types/npm-package-arg':
-        specifier: 'catalog:'
+        specifier: catalog:devDependencies
         version: 6.1.4
       '@types/semver':
-        specifier: 'catalog:'
+        specifier: catalog:devDependencies
         version: 7.7.0
       '@types/write-file-atomic':
         specifier: ^4.0.3
@@ -408,10 +407,10 @@ importers:
         specifier: 'catalog:'
         version: 19.0.0
       yargs:
-        specifier: 'catalog:'
+        specifier: catalog:dependencies
         version: 18.0.0
       yargs-parser:
-        specifier: 'catalog:'
+        specifier: catalog:devDependencies
         version: 22.0.0
 
   packages/diff:
@@ -427,7 +426,7 @@ importers:
         version: link:../npmlog
     devDependencies:
       '@types/fs-extra':
-        specifier: 'catalog:'
+        specifier: catalog:devDependencies
         version: 11.0.4
       execa:
         specifier: 'catalog:'
@@ -436,7 +435,7 @@ importers:
         specifier: 'catalog:'
         version: 11.3.1
       yargs-parser:
-        specifier: 'catalog:'
+        specifier: catalog:devDependencies
         version: 22.0.0
 
   packages/exec:
@@ -457,23 +456,23 @@ importers:
         specifier: 'catalog:'
         version: 7.0.3
       tinyrainbow:
-        specifier: 'catalog:'
+        specifier: catalog:dependencies
         version: 2.0.0
     devDependencies:
       '@types/fs-extra':
-        specifier: 'catalog:'
+        specifier: catalog:devDependencies
         version: 11.0.4
       fs-extra:
         specifier: 'catalog:'
         version: 11.3.1
       tinyglobby:
-        specifier: 'catalog:'
+        specifier: catalog:dependencies
         version: 0.2.14
       yargs:
-        specifier: 'catalog:'
+        specifier: catalog:dependencies
         version: 18.0.0
       yargs-parser:
-        specifier: 'catalog:'
+        specifier: catalog:devDependencies
         version: 22.0.0
 
   packages/init:
@@ -488,11 +487,11 @@ importers:
         specifier: 'catalog:'
         version: 7.0.3
       write-json-file:
-        specifier: 'catalog:'
+        specifier: catalog:dependencies
         version: 6.0.0
     devDependencies:
       yargs-parser:
-        specifier: 'catalog:'
+        specifier: catalog:devDependencies
         version: 22.0.0
 
   packages/list:
@@ -508,7 +507,7 @@ importers:
         version: link:../listable
     devDependencies:
       yargs-parser:
-        specifier: 'catalog:'
+        specifier: catalog:devDependencies
         version: 22.0.0
 
   packages/listable:
@@ -517,14 +516,14 @@ importers:
         specifier: workspace:*
         version: link:../core
       columnify:
-        specifier: 'catalog:'
+        specifier: catalog:dependencies
         version: 1.6.0
       tinyrainbow:
-        specifier: 'catalog:'
+        specifier: catalog:dependencies
         version: 2.0.0
     devDependencies:
       yargs:
-        specifier: 'catalog:'
+        specifier: catalog:dependencies
         version: 18.0.0
 
   packages/npmlog:
@@ -574,10 +573,10 @@ importers:
         version: 2.0.1
     devDependencies:
       '@types/node':
-        specifier: 'catalog:'
+        specifier: catalog:devDependencies
         version: 22.17.0
       yargs:
-        specifier: 'catalog:'
+        specifier: catalog:dependencies
         version: 18.0.0
 
   packages/publish:
@@ -604,7 +603,7 @@ importers:
         specifier: ^9.0.1
         version: 9.0.1
       columnify:
-        specifier: 'catalog:'
+        specifier: catalog:dependencies
         version: 1.6.0
       fs-extra:
         specifier: 'catalog:'
@@ -649,29 +648,29 @@ importers:
         specifier: ^7.4.3
         version: 7.4.3
       tinyglobby:
-        specifier: 'catalog:'
+        specifier: catalog:dependencies
         version: 0.2.14
       tinyrainbow:
-        specifier: 'catalog:'
+        specifier: catalog:dependencies
         version: 2.0.0
     devDependencies:
       '@types/fs-extra':
-        specifier: 'catalog:'
+        specifier: catalog:devDependencies
         version: 11.0.4
       '@types/semver':
-        specifier: 'catalog:'
+        specifier: catalog:devDependencies
         version: 7.7.0
       load-json-file:
-        specifier: 'catalog:'
+        specifier: catalog:dependencies
         version: 7.0.1
       write-package:
-        specifier: 'catalog:'
+        specifier: catalog:dependencies
         version: 7.1.0
       yargs:
-        specifier: 'catalog:'
+        specifier: catalog:dependencies
         version: 18.0.0
       yargs-parser:
-        specifier: 'catalog:'
+        specifier: catalog:devDependencies
         version: 22.0.0
 
   packages/run:
@@ -695,23 +694,23 @@ importers:
         specifier: 'catalog:'
         version: 7.0.3
       tinyrainbow:
-        specifier: 'catalog:'
+        specifier: catalog:dependencies
         version: 2.0.0
     devDependencies:
       '@types/fs-extra':
-        specifier: 'catalog:'
+        specifier: catalog:devDependencies
         version: 11.0.4
       perf_hooks:
         specifier: ^0.0.1
         version: 0.0.1
       tinyglobby:
-        specifier: 'catalog:'
+        specifier: catalog:dependencies
         version: 0.2.14
       yargs:
-        specifier: 'catalog:'
+        specifier: catalog:dependencies
         version: 18.0.0
       yargs-parser:
-        specifier: 'catalog:'
+        specifier: catalog:devDependencies
         version: 22.0.0
 
   packages/version:
@@ -765,7 +764,7 @@ importers:
         specifier: ^4.0.1
         version: 4.0.1
       load-json-file:
-        specifier: 'catalog:'
+        specifier: catalog:dependencies
         version: 7.0.1
       new-github-release-url:
         specifier: ^2.0.0
@@ -795,47 +794,47 @@ importers:
         specifier: 'catalog:'
         version: 5.1.0
       tinyrainbow:
-        specifier: 'catalog:'
+        specifier: catalog:dependencies
         version: 2.0.0
       uuid:
-        specifier: 'catalog:'
+        specifier: catalog:dependencies
         version: 11.1.0
       write-json-file:
-        specifier: 'catalog:'
+        specifier: catalog:dependencies
         version: 6.0.0
       zeptomatch:
-        specifier: 'catalog:'
+        specifier: catalog:dependencies
         version: 2.0.2
     devDependencies:
       '@npm/types':
         specifier: ^2.1.0
         version: 2.1.0
       '@types/dedent':
-        specifier: 'catalog:'
+        specifier: catalog:devDependencies
         version: 0.7.2
       '@types/fs-extra':
-        specifier: 'catalog:'
+        specifier: catalog:devDependencies
         version: 11.0.4
       '@types/npm-package-arg':
-        specifier: 'catalog:'
+        specifier: catalog:devDependencies
         version: 6.1.4
       '@types/semver':
-        specifier: 'catalog:'
+        specifier: catalog:devDependencies
         version: 7.7.0
       execa:
         specifier: 'catalog:'
         version: 9.6.0
       write-package:
-        specifier: 'catalog:'
+        specifier: catalog:dependencies
         version: 7.1.0
       yaml:
-        specifier: 'catalog:'
+        specifier: catalog:dependencies
         version: 2.8.1
       yargs:
-        specifier: 'catalog:'
+        specifier: catalog:dependencies
         version: 18.0.0
       yargs-parser:
-        specifier: 'catalog:'
+        specifier: catalog:devDependencies
         version: 22.0.0
 
   packages/watch:
@@ -850,17 +849,17 @@ importers:
         specifier: ^4.0.3
         version: 4.0.3
       picomatch:
-        specifier: 'catalog:'
+        specifier: catalog:dependencies
         version: 4.0.3
       tinyglobby:
-        specifier: 'catalog:'
+        specifier: catalog:dependencies
         version: 0.2.14
     devDependencies:
       mock-stdin:
         specifier: ^1.0.0
         version: 1.0.0
       yargs-parser:
-        specifier: 'catalog:'
+        specifier: catalog:devDependencies
         version: 22.0.0
 
 packages:
@@ -1521,9 +1520,6 @@ packages:
 
   '@types/node@22.15.17':
     resolution: {integrity: sha512-wIX2aSZL5FE+MR0JlvF87BNVrtFWf6AE6rxSE9X7OwnVvoyCQjpzSRJ+M87se/4QCkCiebQAqrJ0y6fwIyi7nw==}
-
-  '@types/node@22.15.21':
-    resolution: {integrity: sha512-EV/37Td6c+MgKAbkcLG6vqZ2zEYHD7bvSrzqqs2RIhbA6w3x+Dqz8MZM3sP6kGTeLrdoOgKZe+Xja7tUB2DNkQ==}
 
   '@types/node@22.17.0':
     resolution: {integrity: sha512-bbAKTCqX5aNVryi7qXVMi+OkB3w/OyblodicMbvE38blyAz7GxXf6XYhklokijuPwwVg9sDLKRxt0ZHXQwZVfQ==}
@@ -2202,14 +2198,6 @@ packages:
 
   fd-package-json@2.0.0:
     resolution: {integrity: sha512-jKmm9YtsNXN789RS/0mSzOC1NUq9mkVd65vbSSVsKdjGvYXBuE4oWe2QOEoFeRmJg+lPuZxpmrfFclNhoRMneQ==}
-
-  fdir@6.4.4:
-    resolution: {integrity: sha512-1NZP+GK4GfuAv3PqKvxQRDMjdSRZjnkq7KfhlNrCNNlZ0ygQFpebfrnfnq/W7fpUnAv9aGWmY1zKx7FYL3gwhg==}
-    peerDependencies:
-      picomatch: ^3 || ^4
-    peerDependenciesMeta:
-      picomatch:
-        optional: true
 
   fdir@6.4.6:
     resolution: {integrity: sha512-hiFoqpyZcfNm1yc4u8oWCf9A2c4D3QjCrks3zmoVKVxpQRzmPNar1hUJcBG2RQHvEVGDN+Jm81ZheVLAQMK6+w==}
@@ -4269,7 +4257,7 @@ snapshots:
   '@types/fs-extra@11.0.4':
     dependencies:
       '@types/jsonfile': 6.1.4
-      '@types/node': 22.15.21
+      '@types/node': 22.17.0
 
   '@types/glob-parent@5.1.3': {}
 
@@ -4285,10 +4273,6 @@ snapshots:
       '@types/node': 22.17.0
 
   '@types/node@22.15.17':
-    dependencies:
-      undici-types: 6.21.0
-
-  '@types/node@22.15.21':
     dependencies:
       undici-types: 6.21.0
 
@@ -5053,10 +5037,6 @@ snapshots:
   fd-package-json@2.0.0:
     dependencies:
       walk-up-path: 4.0.0
-
-  fdir@6.4.4(picomatch@4.0.3):
-    optionalDependencies:
-      picomatch: 4.0.3
 
   fdir@6.4.6(picomatch@4.0.3):
     optionalDependencies:
@@ -6192,7 +6172,7 @@ snapshots:
 
   tinyglobby@0.2.14:
     dependencies:
-      fdir: 6.4.4(picomatch@4.0.3)
+      fdir: 6.4.6(picomatch@4.0.3)
       picomatch: 4.0.3
 
   tinypool@1.1.1: {}

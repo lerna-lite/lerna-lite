@@ -41,6 +41,6 @@
     "@lerna-lite/listable": "workspace:*"
   },
   "devDependencies": {
-    "yargs-parser": "catalog:"
+    "yargs-parser": "catalog:devDependencies"
   }
 }

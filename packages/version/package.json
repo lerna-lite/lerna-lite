@@ -52,7 +52,7 @@
     "git-url-parse": "^16.1.0",
     "graceful-fs": "^4.2.11",
     "is-stream": "^4.0.1",
-    "load-json-file": "catalog:",
+    "load-json-file": "catalog:dependencies",
     "new-github-release-url": "^2.0.0",
     "npm-package-arg": "catalog:",
     "p-limit": "^6.2.0",
@@ -62,21 +62,21 @@
     "pify": "^6.1.0",
     "semver": "catalog:",
     "slash": "catalog:",
-    "tinyrainbow": "catalog:",
-    "uuid": "catalog:",
-    "write-json-file": "catalog:",
-    "zeptomatch": "catalog:"
+    "tinyrainbow": "catalog:dependencies",
+    "uuid": "catalog:dependencies",
+    "write-json-file": "catalog:dependencies",
+    "zeptomatch": "catalog:dependencies"
   },
   "devDependencies": {
     "@npm/types": "^2.1.0",
-    "@types/dedent": "catalog:",
-    "@types/fs-extra": "catalog:",
-    "@types/npm-package-arg": "catalog:",
-    "@types/semver": "catalog:",
+    "@types/dedent": "catalog:devDependencies",
+    "@types/fs-extra": "catalog:devDependencies",
+    "@types/npm-package-arg": "catalog:devDependencies",
+    "@types/semver": "catalog:devDependencies",
     "execa": "catalog:",
-    "write-package": "catalog:",
-    "yaml": "catalog:",
-    "yargs": "catalog:",
-    "yargs-parser": "catalog:"
+    "write-package": "catalog:dependencies",
+    "yaml": "catalog:dependencies",
+    "yargs": "catalog:dependencies",
+    "yargs-parser": "catalog:devDependencies"
   }
 }

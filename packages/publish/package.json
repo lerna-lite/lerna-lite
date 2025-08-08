@@ -43,7 +43,7 @@
     "@npmcli/arborist": "^9.1.3",
     "@npmcli/package-json": "^6.2.0",
     "byte-size": "^9.0.1",
-    "columnify": "catalog:",
+    "columnify": "catalog:dependencies",
     "fs-extra": "catalog:",
     "has-unicode": "catalog:",
     "libnpmaccess": "^10.0.1",
@@ -58,15 +58,15 @@
     "semver": "catalog:",
     "ssri": "^12.0.0",
     "tar": "^7.4.3",
-    "tinyglobby": "catalog:",
-    "tinyrainbow": "catalog:"
+    "tinyglobby": "catalog:dependencies",
+    "tinyrainbow": "catalog:dependencies"
   },
   "devDependencies": {
-    "@types/fs-extra": "catalog:",
-    "@types/semver": "catalog:",
-    "load-json-file": "catalog:",
-    "write-package": "catalog:",
-    "yargs": "catalog:",
-    "yargs-parser": "catalog:"
+    "@types/fs-extra": "catalog:devDependencies",
+    "@types/semver": "catalog:devDependencies",
+    "load-json-file": "catalog:dependencies",
+    "write-package": "catalog:dependencies",
+    "yargs": "catalog:dependencies",
+    "yargs-parser": "catalog:devDependencies"
   }
 }

@@ -42,13 +42,13 @@
     "@lerna-lite/profiler": "workspace:*",
     "fs-extra": "catalog:",
     "p-map": "catalog:",
-    "tinyrainbow": "catalog:"
+    "tinyrainbow": "catalog:dependencies"
   },
   "devDependencies": {
-    "@types/fs-extra": "catalog:",
+    "@types/fs-extra": "catalog:devDependencies",
     "perf_hooks": "^0.0.1",
-    "tinyglobby": "catalog:",
-    "yargs": "catalog:",
-    "yargs-parser": "catalog:"
+    "tinyglobby": "catalog:dependencies",
+    "yargs": "catalog:dependencies",
+    "yargs-parser": "catalog:devDependencies"
   }
 }

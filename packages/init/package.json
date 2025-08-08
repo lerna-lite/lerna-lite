@@ -39,9 +39,9 @@
     "@lerna-lite/core": "workspace:*",
     "fs-extra": "catalog:",
     "p-map": "catalog:",
-    "write-json-file": "catalog:"
+    "write-json-file": "catalog:dependencies"
   },
   "devDependencies": {
-    "yargs-parser": "catalog:"
+    "yargs-parser": "catalog:devDependencies"
   }
 }
