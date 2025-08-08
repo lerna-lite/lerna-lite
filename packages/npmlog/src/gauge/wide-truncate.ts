@@ -4,7 +4,7 @@
 
 import { stripVTControlCharacters } from 'node:util';
 
-import stringWidth from 'string-width';
+import stringWidth from 'fast-string-width';
 
 export function wideTruncate(str: string, target: number) {
   if (stringWidth(str) === 0) {
