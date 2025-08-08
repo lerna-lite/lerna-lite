@@ -3,7 +3,6 @@ import { cpus } from 'node:os';
 import type { Logger } from '@lerna-lite/npmlog';
 import { log } from '@lerna-lite/npmlog';
 import { isCI } from 'ci-info';
-import cloneDeep from 'clone-deep';
 import dedent from 'dedent';
 import type { SyncOptions } from 'execa';
 import { execaSync } from 'execa';
@@ -65,7 +64,7 @@ export class Command<T extends AvailableCommandOption> {
     log.pause();
     log.heading = 'lerna-lite';
 
-    const argv = cloneDeep(_argv) as ProjectConfig;
+    const argv = structuredClone(_argv) as ProjectConfig;
     log.silly('argv', argv.toString());
 
     // 'FooCommand' => 'foo'

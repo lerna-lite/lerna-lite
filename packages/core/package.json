@@ -42,7 +42,6 @@
     "@lerna-lite/npmlog": "workspace:*",
     "@npmcli/run-script": "^9.1.0",
     "ci-info": "^4.3.0",
-    "clone-deep": "^4.0.1",
     "config-chain": "^1.1.13",
     "dedent": "catalog:",
     "execa": "catalog:",
@@ -67,7 +66,6 @@
     "zeptomatch": "catalog:"
   },
   "devDependencies": {
-    "@types/clone-deep": "^4.0.4",
     "@types/dedent": "catalog:",
     "@types/fs-extra": "catalog:",
     "@types/glob-parent": "^5.1.3",
