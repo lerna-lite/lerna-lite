@@ -42,7 +42,7 @@
     "upath": "^2.0.1"
   },
   "devDependencies": {
-    "@types/node": "catalog:",
-    "yargs": "catalog:"
+    "@types/node": "catalog:devDependencies",
+    "yargs": "catalog:dependencies"
   }
 }

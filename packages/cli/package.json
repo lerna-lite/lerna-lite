@@ -46,11 +46,11 @@
     "dedent": "catalog:",
     "dotenv": "catalog:",
     "import-local": "^3.2.0",
-    "load-json-file": "catalog:",
-    "yargs": "catalog:"
+    "load-json-file": "catalog:dependencies",
+    "yargs": "catalog:dependencies"
   },
   "devDependencies": {
-    "yargs-parser": "catalog:"
+    "yargs-parser": "catalog:devDependencies"
   },
   "peerDependenciesMeta": {
     "@lerna-lite/exec": {

@@ -41,9 +41,9 @@
     "@lerna-lite/npmlog": "workspace:^"
   },
   "devDependencies": {
-    "@types/fs-extra": "catalog:",
+    "@types/fs-extra": "catalog:devDependencies",
     "execa": "catalog:",
     "fs-extra": "catalog:",
-    "yargs-parser": "catalog:"
+    "yargs-parser": "catalog:devDependencies"
   }
 }

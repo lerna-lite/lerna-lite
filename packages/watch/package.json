@@ -39,12 +39,12 @@
     "@lerna-lite/cli": "workspace:*",
     "@lerna-lite/core": "workspace:*",
     "chokidar": "^4.0.3",
-    "picomatch": "catalog:",
-    "tinyglobby": "catalog:"
+    "picomatch": "catalog:dependencies",
+    "tinyglobby": "catalog:dependencies"
   },
   "devDependencies": {
     "mock-stdin": "^1.0.0",
-    "yargs-parser": "catalog:"
+    "yargs-parser": "catalog:devDependencies"
   },
   "overrides": {
     "braces": "^3.0.3"
