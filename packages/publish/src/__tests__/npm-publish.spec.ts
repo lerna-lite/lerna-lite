@@ -25,11 +25,11 @@ import { npmPublish } from '../lib/npm-publish.js';
 
 describe('npm-publish', () => {
   const mockTarData = Buffer.from('MOCK');
-  const mockManifest = { _normalized: true };
+  const mockManifest = { _prepared: true, readmeFilename: 'README.md', _normalized: true };
 
   (readFile as Mock).mockName('readFile').mockResolvedValue(mockTarData);
   (publish as Mock).mockName('libnpmpublish').mockResolvedValue(null);
-  (PackageJson.load as unknown as Mock).mockImplementation(() => ({ content: mockManifest }));
+  (PackageJson.prepare as unknown as Mock).mockImplementation(() => ({ content: mockManifest }));
   (runLifecycle as Mock).mockName('@lerna-lite/core').mockResolvedValue(null);
 
   const tarFilePath = '/tmp/test-1.10.100.tgz';
@@ -42,7 +42,7 @@ describe('npm-publish', () => {
     await npmPublish(pkg, tarFilePath, opts);
 
     expect(readFile).toHaveBeenCalledWith(tarFilePath);
-    expect(PackageJson.load).toHaveBeenCalledWith(dirname(pkg.manifestLocation));
+    expect(PackageJson.prepare).toHaveBeenCalledWith(dirname(pkg.manifestLocation));
     expect(publish).toHaveBeenCalledWith(
       mockManifest,
       mockTarData,
@@ -66,7 +66,7 @@ describe('npm-publish', () => {
   });
 
   it('overrides pkg.publishConfig.tag when opts.tag is explicitly configured', async () => {
-    (PackageJson.load as Mock).mockImplementationOnce(() => ({
+    (PackageJson.prepare as Mock).mockImplementationOnce(() => ({
       content: {
         publishConfig: {
           tag: 'beta',
@@ -91,7 +91,7 @@ describe('npm-publish', () => {
   });
 
   it('respects pkg.publishConfig.tag when opts.defaultTag matches default', async () => {
-    (PackageJson.load as Mock).mockImplementationOnce(() => ({
+    (PackageJson.prepare as Mock).mockImplementationOnce(() => ({
       content: {
         publishConfig: {
           tag: 'beta',
@@ -127,7 +127,7 @@ describe('npm-publish', () => {
       rootPath
     );
 
-    (PackageJson.load as Mock).mockImplementationOnce(() => ({
+    (PackageJson.prepare as Mock).mockImplementationOnce(() => ({
       content: {
         name: 'fancy-fancy',
         version: '1.10.100',
@@ -136,7 +136,7 @@ describe('npm-publish', () => {
 
     await npmPublish(fancyPkg, tarFilePath);
 
-    expect(PackageJson.load).toHaveBeenCalledWith(join(fancyPkg.location, 'dist'));
+    expect(PackageJson.prepare).toHaveBeenCalledWith(join(fancyPkg.location, 'dist'));
     expect(publish).toHaveBeenCalledWith(
       expect.objectContaining({
         name: 'fancy-fancy',
@@ -149,7 +149,7 @@ describe('npm-publish', () => {
   });
 
   it('merges pkg.publishConfig.registry into options', async () => {
-    (PackageJson.load as Mock).mockImplementationOnce(() => ({
+    (PackageJson.prepare as Mock).mockImplementationOnce(() => ({
       content: {
         publishConfig: {
           registry: 'http://pkg-registry.com',
@@ -205,5 +205,18 @@ describe('npm-publish', () => {
 
     expect(runLifecycle).toHaveBeenCalledWith(pkg, 'publish', options);
     expect(runLifecycle).toHaveBeenLastCalledWith(pkg, 'postpublish', options);
+  });
+
+  it('ensures package.json is prepared and has readmeFilename added to it', async () => {
+    await npmPublish(pkg, tarFilePath);
+
+    expect(publish).toHaveBeenCalledWith(
+      expect.objectContaining({
+        _prepared: true,
+        readmeFilename: 'README.md',
+      }),
+      expect.anything(),
+      expect.anything()
+    );
   });
 });
