@@ -233,10 +233,7 @@ export class Gauge {
   }
 
   hide(cb?: () => void) {
-    if (this._disabled) {
-      return cb && process.nextTick(cb);
-    }
-    if (!this._showing) {
+    if (this._disabled || !this._showing) {
       return cb && process.nextTick(cb);
     }
     this._showing = false;
