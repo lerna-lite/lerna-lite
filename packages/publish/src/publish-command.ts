@@ -320,6 +320,7 @@ export class PublishCommand extends Command<PublishCommandOption> {
         outputFileSync(filePath, JSON.stringify(jsonObject));
         logOutput('Publish summary created: ', filePath);
       } catch (error) {
+        /* v8 ignore next */
         logOutput('Failed to create the summary report', error);
       }
     } else {

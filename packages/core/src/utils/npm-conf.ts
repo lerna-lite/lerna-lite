@@ -26,10 +26,10 @@ function npmConf(opts: any) {
   const projectConf = pathResolve(conf.localPrefix, '.npmrc');
   const userConf = conf.get('userconfig');
 
+  /* v8 ignore else */
   if (!conf.get('global') && projectConf !== userConf) {
     conf.addFile(projectConf, 'project');
   } else {
-    /* v8 ignore next */
     conf.add({}, 'project');
   }
 
