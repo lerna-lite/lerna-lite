@@ -1,5 +1,4 @@
 import { log } from '@lerna-lite/npmlog';
-import cloneDeep from 'clone-deep';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 
 import { deleteComplexObjectProp, getComplexObjectValue, isEmpty } from '../object-utils.js';
@@ -11,13 +10,13 @@ describe('deleteComplexObjectProp method', () => {
   });
 
   it('should expect the same object as the original object when no path is provided', () => {
-    const originalObj = cloneDeep(obj);
+    const originalObj = structuredClone(obj);
     deleteComplexObjectProp(obj, undefined as any);
     expect(originalObj).toEqual(obj);
   });
 
   it('should expect the same object as the original object when search argument is not part of the input object', () => {
-    const originalObj = cloneDeep(obj);
+    const originalObj = structuredClone(obj);
     deleteComplexObjectProp(obj, 'users');
     expect(originalObj).toEqual(obj as any);
   });
