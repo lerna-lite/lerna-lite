@@ -146,7 +146,7 @@ export class Project {
       });
     } catch (err: any) {
       // redecorate JSON syntax errors, avoid debug dump
-      /* v8 ignore next 3 */
+      /* v8 ignore next if */
       if (err.name === 'JSONError') {
         throw new ValidationError(err.name, err.message);
       }
@@ -229,7 +229,7 @@ export class Project {
   }
 
   json5Loader(filepath: string, content: any) {
-    /* v8 ignore next 4 */
+    /* v8 ignore next if */
     if (!/.*lerna\.json[c|5]?$/gi.test(filepath)) {
       // For other .json files, use the default JSON.parse
       return JSON.parse(content);

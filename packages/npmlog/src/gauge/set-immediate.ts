@@ -1,4 +1,4 @@
-/* v8 ignore start */
+/* v8 ignore next */
 export function setImmediateFn(...args: any) {
   try {
     return window.setImmediate(args);
@@ -6,4 +6,3 @@ export function setImmediateFn(...args: any) {
     return process.nextTick(args);
   }
 }
-/* v8 ignore stop */

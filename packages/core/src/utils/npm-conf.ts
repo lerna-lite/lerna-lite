@@ -26,10 +26,10 @@ function npmConf(opts: any) {
   const projectConf = pathResolve(conf.localPrefix, '.npmrc');
   const userConf = conf.get('userconfig');
 
+  /* v8 ignore else */
   if (!conf.get('global') && projectConf !== userConf) {
     conf.addFile(projectConf, 'project');
   } else {
-    /* v8 ignore next */
     conf.add({}, 'project');
   }
 
@@ -46,7 +46,7 @@ function npmConf(opts: any) {
 
   const caFile = conf.get('cafile');
 
-  /* v8 ignore next 3 */
+  /* v8 ignore next if */
   if (caFile) {
     conf.loadCAFile(caFile);
   }

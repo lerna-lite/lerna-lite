@@ -162,8 +162,8 @@ export class WatchCommand extends Command<WatchCommandOption & FilterOptions> {
       process.once('SIGINT', () => this.handleTermination(128 + 2));
       process.once('SIGTERM', () => this.handleTermination(128 + 15));
       process.stdin.on('end', () => this.handleTermination());
-      /* v8 ignore next 3 */
     } catch (err) {
+      /* v8 ignore next */
       this.onError(err);
     }
   }

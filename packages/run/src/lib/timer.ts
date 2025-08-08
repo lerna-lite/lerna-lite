@@ -1,5 +1,5 @@
 export function timer() {
-  /* v8 ignore next 3 */
+  /* v8 ignore next if */
   if (process.env.LERNA_INTEGRATION) {
     return () => 0;
   }
