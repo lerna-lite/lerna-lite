@@ -319,7 +319,7 @@ export class PublishCommand extends Command<PublishCommandOption> {
       try {
         outputFileSync(filePath, JSON.stringify(jsonObject));
         logOutput('Publish summary created: ', filePath);
-      } catch (error) /* v8 ignore next */ {
+      } /* v8 ignore next */ catch (error) {
         logOutput('Failed to create the summary report', error);
       }
     } else {
