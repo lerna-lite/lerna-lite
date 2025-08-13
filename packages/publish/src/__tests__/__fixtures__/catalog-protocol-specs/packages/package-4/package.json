@@ -6,7 +6,9 @@
     "p-map": "catalog:"
   },
   "peerDependencies": {
-    "fs-extra": "^11.2.0",
+    "fs-extra": "^11.2.0"
+  },
+  "devDependencies": {
     "react": "catalog:react17",
     "react-dom": "catalog:react17"
   }

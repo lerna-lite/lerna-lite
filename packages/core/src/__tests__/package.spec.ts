@@ -741,6 +741,69 @@ describe('Package', () => {
       });
     });
 
+    describe('Version with `catalog:` protocol', () => {
+      it('works with `catalog:` protocol', () => {
+        const pkg = factory({
+          dependencies: {
+            a: 'catalog:^1.0.0',
+            b: '^2.2.0',
+          },
+        });
+
+        const resolved: NpaResolveResult = npa.resolve('a', '^1.0.0', '.');
+        resolved.catalogSpec = 'catalog:';
+
+        pkg.updateDependencyCatalogProtocol(resolved);
+
+        expect(pkg.toJSON()).toMatchInlineSnapshot(`
+          {
+            "dependencies": {
+              "a": "^1.0.0",
+              "b": "^2.2.0",
+            },
+          }
+        `);
+      });
+
+      it('works with `catalog:` protocol in multiple location like dependencies and peerDependencies', () => {
+        const pkg = factory({
+          dependencies: {
+            a: 'catalog:',
+            b: 'catalog:devDependencies',
+            c: 'file:./foo',
+            d: '^1.0.0',
+          },
+          peerDependencies: {
+            a: 'catalog:',
+            b: '>=2.0.0',
+          },
+        });
+
+        const resolvedA: NpaResolveResult = npa.resolve('a', '^1.0.0', '.');
+        resolvedA.catalogSpec = 'catalog:';
+        const resolvedB: NpaResolveResult = npa.resolve('b', '^2.2.0', '.');
+        resolvedB.catalogSpec = 'catalog:devDependencies';
+
+        pkg.updateDependencyCatalogProtocol(resolvedA);
+        pkg.updateDependencyCatalogProtocol(resolvedB);
+
+        expect(pkg.toJSON()).toMatchInlineSnapshot(`
+          {
+            "dependencies": {
+              "a": "^1.0.0",
+              "b": "^2.2.0",
+              "c": "file:./foo",
+              "d": "^1.0.0",
+            },
+            "peerDependencies": {
+              "a": "^1.0.0",
+              "b": ">=2.0.0",
+            },
+          }
+        `);
+      });
+    });
+
     describe('Publish with `workspace:` protocol', () => {
       it('should transform `workspace:*` protocol to exact range when calling a publish', () => {
         const pkg = factory({
@@ -879,6 +942,42 @@ describe('Package', () => {
             },
             "peerDependencies": {
               "b": "^2.2.4",
+            },
+          }
+        `);
+      });
+    });
+
+    describe('Publish with `catalog:` protocol', () => {
+      it('should replace `catalog:` protocol with what it found in npa', () => {
+        const pkg = factory({
+          dependencies: {
+            a: 'catalog:',
+            b: 'catalog:devDependencies',
+          },
+          peerDependencies: {
+            a: 'catalog:',
+            b: 'catalog:devDependencies',
+          },
+        });
+
+        const resolvedA: NpaResolveResult = npa.resolve('a', '1.0.0', '.');
+        resolvedA.catalogSpec = 'catalog:';
+        const resolvedB: NpaResolveResult = npa.resolve('b', '^2.2.0', '.');
+        resolvedB.catalogSpec = 'catalog:devDependencies';
+
+        pkg.updateDependencyCatalogProtocol(resolvedA);
+        pkg.updateDependencyCatalogProtocol(resolvedB);
+
+        expect(pkg.toJSON()).toMatchInlineSnapshot(`
+          {
+            "dependencies": {
+              "a": "1.0.0",
+              "b": "^2.2.0",
+            },
+            "peerDependencies": {
+              "a": "1.0.0",
+              "b": "^2.2.0",
             },
           }
         `);

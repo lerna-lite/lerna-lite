@@ -11,7 +11,7 @@
     "allowSyntheticDefaultImports": true,
     "composite": true,
     "declaration": true,
-    "declarationMap": true,
+    "declarationMap": false,
     "emitDecoratorMetadata": true,
     "esModuleInterop": true,
     "experimentalDecorators": true,
@@ -34,7 +34,7 @@
     "skipDefaultLibCheck": true,
     "stripInternal": true,
     "strictNullChecks": true,
-    "sourceMap": false,
+    "sourceMap": true,
     "strict": true
   },
   "include": ["**/*.ts"],

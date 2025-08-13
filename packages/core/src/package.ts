@@ -269,11 +269,6 @@ export class Package {
       'peerDependencies',
     ]);
 
-    // package could be found in both a local dependencies and peerDependencies, so we need to include it when found
-    if (this.peerDependencies?.[depName]) {
-      inspectDependencies.push(this.peerDependencies);
-    }
-
     for (const depCollection of inspectDependencies) {
       if (depCollection && (resolved.registry || resolved.type === 'directory') && /^(workspace:)+(.*)$/.test(workspaceSpec)) {
         if (workspaceSpec && (resolved.fetchSpec === 'latest' || resolved.fetchSpec === '')) {
@@ -292,7 +287,7 @@ export class Package {
   }
 
   /**
-   * Mutate given dependency and anywhere a `catalog:` spec is found, we'll replace them with their resolved fetchSpec coming from the global catalog version
+   * Mutate any given dependency that have a `catalog:` spec, we'll replace them with their resolved fetchSpec coming from the global catalog version
    * @param {Object} resolved npa metadata
    */
   updateDependencyCatalogProtocol(resolved: NpaResolveResult) {
@@ -308,7 +303,12 @@ export class Package {
 
     // loop through all dependencies collections and replace any `catalog:` protocol with the resolved fetchSpec (from global catalog)
     for (const depCollection of inspectDependencies) {
-      if (depCollection && (resolved.registry || resolved.type === 'directory') && resolved?.catalogSpec) {
+      if (
+        depCollection &&
+        depCollection[depName].startsWith('catalog') &&
+        (resolved.registry || resolved.type === 'directory') &&
+        resolved?.catalogSpec
+      ) {
         depCollection[depName] = resolved.fetchSpec as string;
       }
     }

@@ -5,6 +5,6 @@
     "tinyrainbow": "catalog:"
   },
   "peerDependencies": {
-    "tinyrainbow": "catalog:"
+    "tinyrainbow": "2.0.0"
   }
 }
