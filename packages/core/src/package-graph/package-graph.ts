@@ -3,7 +3,7 @@ import npa from 'npm-package-arg';
 
 import type { NpaResolveResult, NpmClient } from '../models/interfaces.js';
 import type { Package } from '../package.js';
-import { extractCatalogConfigFromPkg, extractCatalogConfigFromYaml } from '../utils/catalog-utils.js';
+import { readWorkspaceCatalogConfig } from '../utils/catalog-utils.js';
 import { ValidationError } from '../validation-error.js';
 import { CyclicPackageGraphNode } from './lib/cyclic-package-graph-node.js';
 import { PackageGraphNode } from './lib/package-graph-node.js';
@@ -75,11 +75,82 @@ export class PackageGraph extends Map<string, PackageGraphNode> {
     }
 
     this.npmClient = client;
-    const { catalog, catalogs } = this.readWorkspaceCatalogConfig(this.npmClient);
+    const { catalog, catalogs } = readWorkspaceCatalogConfig(this.npmClient);
 
     if (Object.keys(catalog).length > 0 || Object.keys(catalogs).length > 0) {
       this.hasWorkspaceCatalog = true;
     }
+
+    const resolveNpaSpec = (currentNode: PackageGraphNode, currentName: string, depName: string, graphDependencies: any) => {
+      const depNode = this.get(depName);
+      // Yarn decided to ignore https://github.com/npm/npm/pull/15900 and implemented "link:"
+      // As they apparently have no intention of being compatible, we have to do it for them.
+      // @see https://github.com/yarnpkg/yarn/issues/4212
+      let spec = graphDependencies[depName]?.replace(/^link:/, 'file:') || '';
+
+      // Yarn patch protocol handling: We swap out the patch URL with the regular semantic version.
+      if (spec.startsWith('patch:')) {
+        spec = spec.replace(YARN_PATCH_PROTOCOL_REG_EXP, '$2');
+      }
+
+      // handle catalog: protocol supported by pnpm
+      const isCatalogSpec = /^catalog:/.test(spec);
+      let originalCatalogSpec: string | undefined;
+      if (isCatalogSpec) {
+        originalCatalogSpec = spec;
+        spec = spec.replace(/^catalog:/, '');
+        const catalogVersion = spec === '' || spec === 'default' ? catalog[depName] : catalogs[spec]?.[depName];
+
+        if (catalogVersion) {
+          spec = catalogVersion;
+        } else {
+          log.warn('graph', `No version found in "${spec || 'default'}" catalog for "${depName}"`);
+        }
+      }
+
+      // npa doesn't support the explicit workspace: protocol, supported by
+      // pnpm and Yarn.
+      const isWorkspaceSpec = /^workspace:/.test(spec);
+      let originalWorkspaceSpec: string | undefined;
+      if (isWorkspaceSpec) {
+        originalWorkspaceSpec = spec;
+        spec = spec.replace(/^workspace:/, '');
+
+        // when dependency is defined as target workspace, like `workspace:*`,
+        // we'll have to pull the version from its parent package version property
+        // example with `1.5.0`, ws:* => "1.5.0", ws:^ => "^1.5.0", ws:~ => "~1.5.0", ws:^1.5.0 => "^1.5.0"
+        if (spec === '*' || spec === '^' || spec === '~') {
+          const depPkg = packages.find((pkg) => pkg.name === depName);
+          const version = depPkg?.version;
+          const specTarget = spec === '*' ? '' : spec;
+          spec = depPkg ? `${specTarget}${version}` : '';
+        }
+      }
+
+      const resolved: NpaResolveResult = npa.resolve(depName, spec, currentNode.location);
+      resolved.catalogSpec = originalCatalogSpec;
+      resolved.workspaceSpec = originalWorkspaceSpec;
+
+      if (!depNode) {
+        // it's an external dependency, store the resolution and bail
+        return currentNode.externalDependencies.set(depName, resolved);
+      }
+
+      if (
+        isCatalogSpec ||
+        isWorkspaceSpec ||
+        localDependencies === 'force' ||
+        resolved.fetchSpec === depNode.location ||
+        (localDependencies !== 'explicit' && depNode.satisfies(resolved))
+      ) {
+        // could be a local `file:` specifier, a matching semver, a `catalog:` or a `workspace:` protocols
+        currentNode.localDependencies.set(depName, resolved);
+        depNode.localDependents.set(currentName, currentNode);
+      } else {
+        // non-matching semver of a local dependency
+        currentNode.externalDependencies.set(depName, resolved);
+      }
+    };
 
     this.forEach((currentNode: PackageGraphNode, currentName: string) => {
       const graphDependencies =
@@ -89,80 +160,18 @@ export class PackageGraph extends Map<string, PackageGraphNode> {
               {},
               currentNode.pkg.devDependencies,
               currentNode.pkg.optionalDependencies,
-              currentNode.pkg.peerDependencies,
               currentNode.pkg.dependencies
             );
 
-      Object.keys(graphDependencies).forEach((depName) => {
-        const depNode = this.get(depName);
-        // Yarn decided to ignore https://github.com/npm/npm/pull/15900 and implemented "link:"
-        // As they apparently have no intention of being compatible, we have to do it for them.
-        // @see https://github.com/yarnpkg/yarn/issues/4212
-        let spec = graphDependencies[depName].replace(/^link:/, 'file:');
+      Object.keys(graphDependencies).forEach((depName) => resolveNpaSpec(currentNode, currentName, depName, graphDependencies));
 
-        // Yarn patch protocol handling: We swap out the patch URL with the regular semantic version.
-        if (spec.startsWith('patch:')) {
-          spec = spec.replace(YARN_PATCH_PROTOCOL_REG_EXP, '$2');
-        }
-
-        // handle catalog: protocol supported by pnpm
-        const isCatalogSpec = /^catalog:/.test(spec);
-        let originalCatalogSpec: string | undefined;
-        if (isCatalogSpec) {
-          originalCatalogSpec = spec;
-          spec = spec.replace(/^catalog:/, '');
-          const catalogVersion = spec === '' || spec === 'default' ? catalog[depName] : catalogs[spec]?.[depName];
-
-          if (catalogVersion) {
-            spec = catalogVersion;
-          } else {
-            log.warn('graph', `No version found in "${spec || 'default'}" catalog for "${depName}"`);
-          }
-        }
-
-        // npa doesn't support the explicit workspace: protocol, supported by
-        // pnpm and Yarn.
-        const isWorkspaceSpec = /^workspace:/.test(spec);
-        let originalWorkspaceSpec: string | undefined;
-        if (isWorkspaceSpec) {
-          originalWorkspaceSpec = spec;
-          spec = spec.replace(/^workspace:/, '');
-
-          // when dependency is defined as target workspace, like `workspace:*`,
-          // we'll have to pull the version from its parent package version property
-          // example with `1.5.0`, ws:* => "1.5.0", ws:^ => "^1.5.0", ws:~ => "~1.5.0", ws:^1.5.0 => "^1.5.0"
-          if (spec === '*' || spec === '^' || spec === '~') {
-            const depPkg = packages.find((pkg) => pkg.name === depName);
-            const version = depPkg?.version;
-            const specTarget = spec === '*' ? '' : spec;
-            spec = depPkg ? `${specTarget}${version}` : '';
-          }
-        }
-
-        const resolved: NpaResolveResult = npa.resolve(depName, spec, currentNode.location);
-        resolved.catalogSpec = originalCatalogSpec;
-        resolved.workspaceSpec = originalWorkspaceSpec;
-
-        if (!depNode) {
-          // it's an external dependency, store the resolution and bail
-          return currentNode.externalDependencies.set(depName, resolved);
-        }
-
-        if (
-          isCatalogSpec ||
-          isWorkspaceSpec ||
-          localDependencies === 'force' ||
-          resolved.fetchSpec === depNode.location ||
-          (localDependencies !== 'explicit' && depNode.satisfies(resolved))
-        ) {
-          // could be a local `file:` specifier, a matching semver, a `catalog:` or a `workspace:` protocols
-          currentNode.localDependencies.set(depName, resolved);
-          depNode.localDependents.set(currentName, currentNode);
-        } else {
-          // non-matching semver of a local dependency
-          currentNode.externalDependencies.set(depName, resolved);
-        }
-      });
+      // transform and peer dependencies in a separate loop since we can't merge them with the rest of the other deps
+      // and they might have different semver ranges
+      if (graphType === 'allDependencies' && currentNode.pkg.peerDependencies) {
+        Object.keys(currentNode.pkg.peerDependencies).forEach((depName) =>
+          resolveNpaSpec(currentNode, currentName, depName, graphDependencies)
+        );
+      }
     });
   }
 
@@ -190,17 +199,6 @@ export class PackageGraph extends Map<string, PackageGraphNode> {
    */
   addDependents(filteredPackages: Package[]) {
     return this.extendList(filteredPackages, 'localDependents');
-  }
-
-  /** read the workspaces catalog depending on the npm client (currently support 'pnpm' and 'bun') */
-  readWorkspaceCatalogConfig(npmClient: NpmClient) {
-    if (npmClient === 'pnpm') {
-      return extractCatalogConfigFromYaml();
-    } else if (npmClient === 'bun') {
-      return extractCatalogConfigFromPkg();
-    }
-
-    return { catalog: {}, catalogs: {} };
   }
 
   /**

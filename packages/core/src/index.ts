@@ -16,6 +16,7 @@ export * from './project/lib/make-file-finder.js';
 export * from './project/lib/shallow-extend.js';
 export * from './project/project.js';
 export * from './prompt.js';
+export * from './utils/catalog-utils.js';
 export * from './utils/check-working-tree.js';
 export * from './utils/clean-stack.js';
 export * from './utils/collect-uncommitted.js';

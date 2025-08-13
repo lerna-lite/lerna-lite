@@ -3,6 +3,7 @@ import { join } from 'node:path';
 
 import { parse as yamlParse } from 'yaml';
 
+import type { NpmClient } from '../models/interfaces.js';
 import { looselyJsonParse } from './object-utils.js';
 
 export type CatalogConfig = {
@@ -86,4 +87,15 @@ export function diffCatalogs(prev: CatalogConfig, curr: CatalogConfig): Set<stri
   }
 
   return changed;
+}
+
+/** read the workspaces catalog depending on the npm client (currently support 'pnpm' and 'bun') */
+export function readWorkspaceCatalogConfig(npmClient: NpmClient) {
+  if (npmClient === 'pnpm') {
+    return extractCatalogConfigFromYaml();
+  } else if (npmClient === 'bun') {
+    return extractCatalogConfigFromPkg();
+  }
+
+  return { catalog: {}, catalogs: {} };
 }

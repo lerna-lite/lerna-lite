@@ -5,9 +5,11 @@ import { afterEach, beforeAll, describe, expect, it, vi } from 'vitest';
 
 import { RawManifest } from '../../models/interfaces.js';
 import { Package } from '../../package.js';
+import { readWorkspaceCatalogConfig } from '../../utils/catalog-utils.js';
 import { PackageGraphNode } from '../lib/package-graph-node.js';
 // file under test
 import { PackageGraph } from '../package-graph.js';
+
 const initFixture = initFixtureFactory(__dirname);
 
 describe('PackageGraph', () => {
@@ -190,10 +192,7 @@ describe('PackageGraph', () => {
     });
 
     it('can read catalog & catalogs from "pnpm-workspace.yaml" file', () => {
-      const pkgs = [];
-      const graph = new PackageGraph(pkgs);
-
-      expect(graph.readWorkspaceCatalogConfig('pnpm')).toEqual({
+      expect(readWorkspaceCatalogConfig('pnpm')).toEqual({
         catalog: {
           'package-1': '2.3.4',
           'fs-extra': '^11.2.0',
@@ -276,6 +275,72 @@ describe('PackageGraph', () => {
       expect(pkg4.localDependencies.get('pkg-2').fetchSpec).toBe(''); // not found in global catalog so it will show warning below
       expect(logWarnSpy).toHaveBeenCalledWith('graph', 'No version found in "default" catalog for "pkg-2"');
     });
+
+    it('only resolves semver range from global catalog: when defined as catalog and does not override same dependencies name unless defined as catalog:', () => {
+      const logWarnSpy = vi.spyOn(log, 'warn');
+      const pkgs = [
+        new Package(
+          {
+            name: 'pkg-1',
+            version: '1.3.0',
+          } as unknown as RawManifest,
+          '/test/pkg-1'
+        ),
+        new Package(
+          {
+            name: 'pkg-2',
+            version: '1.0.0',
+            dependencies: {
+              'pkg-1': '^1.3.0',
+            },
+          } as unknown as RawManifest,
+          '/test/pkg-2'
+        ),
+        new Package(
+          {
+            name: 'pkg-3',
+            version: '1.0.0',
+            dependencies: {
+              'pkg-1': 'catalog:',
+              react: 'catalog:react18',
+            },
+            peerDependencies: {
+              'pkg-1': '>=1.0.0',
+              react: '^18.0.0',
+            },
+          } as unknown as RawManifest,
+          '/test/pkg-3'
+        ),
+        new Package(
+          {
+            name: 'pkg-4',
+            version: '1.0.0',
+            dependencies: {
+              'pkg-2': 'catalog:',
+            },
+          } as unknown as RawManifest,
+          '/test/pkg-4'
+        ),
+      ];
+
+      const graph = new PackageGraph(pkgs, 'allDependencies', 'explicit', 'pnpm');
+      const [pkg1, pkg2, pkg3, pkg4] = graph.values();
+
+      expect(pkg1.localDependents.has('pkg-2')).toBe(false);
+      expect(pkg2.localDependencies.has('pkg-1')).toBe(false);
+      expect(pkg1.localDependents.has('pkg-3')).toBe(true);
+      expect(pkg3.localDependencies.has('pkg-1')).toBe(true);
+      expect(pkg4.localDependencies.has('pkg-1')).toBe(false);
+      expect(pkg3.localDependencies.get('pkg-1').catalogSpec).toBe('catalog:');
+      expect(pkg3.localDependencies.get('pkg-1').fetchSpec).toBe('1.0.0');
+      expect(pkg3.externalDependencies.get('react').catalogSpec).toBe('catalog:react18'); // named catalog
+      expect(pkg3.externalDependencies.get('react').fetchSpec).toBe('^18.2.0');
+      expect(pkg3.pkg.peerDependencies['pkg-1']).toBe('>=1.0.0');
+      expect(pkg3.pkg.peerDependencies['react']).toBe('^18.0.0');
+      expect(pkg4.localDependencies.get('pkg-2').catalogSpec).toBe('catalog:');
+      expect(pkg4.localDependencies.get('pkg-2').fetchSpec).toBe(''); // not found in global catalog so it will show warning below
+      expect(logWarnSpy).toHaveBeenCalledWith('graph', 'No version found in "default" catalog for "pkg-2"');
+    });
   });
 
   describe('package.json workspace catalog', () => {
@@ -284,10 +349,7 @@ describe('PackageGraph', () => {
     });
 
     it('can read catalog & catalogs from "package.json" file', () => {
-      const pkgs = [];
-      const graph = new PackageGraph(pkgs);
-
-      expect(graph.readWorkspaceCatalogConfig('bun')).toEqual({
+      expect(readWorkspaceCatalogConfig('bun')).toEqual({
         catalog: {
           'package-1': '2.3.4',
           'fs-extra': '^11.2.0',
