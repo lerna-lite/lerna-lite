@@ -6,7 +6,11 @@
     "tinyrainbow": "catalog:"
   },
   "peerDependencies": {
-    "package-1": "catalog:",
+    "package-1": "^2.0.0",
+    "react": "^18.0.0",
+    "react-dom": "^18.0.0"
+  },
+  "devDependencies": {
     "react": "catalog:react18",
     "react-dom": "catalog:react18",
     "tinyrainbow": "catalog:"

@@ -94,11 +94,15 @@ describe("catalog protocol 'catalog:' specifiers", () => {
       'tiny-tarball': '^1.0.0',
     });
     expect((writePkg as any).updatedManifest('package-2').dependencies).toMatchObject({
-      'package-1': '2.3.4', // catalog:
+      'package-1': '^2.0.0', // catalog:
       tinyrainbow: '^2.0.0',
     });
     expect((writePkg as any).updatedManifest('package-2').peerDependencies).toMatchObject({
-      'package-1': '2.3.4', // catalog:
+      'package-1': '^2.0.0',
+      react: '^18.0.0',
+      'react-dom': '^18.0.0',
+    });
+    expect((writePkg as any).updatedManifest('package-2').devDependencies).toMatchObject({
       react: '^18.2.0',
       'react-dom': '^18.2.0',
       tinyrainbow: '^2.0.0',
@@ -114,6 +118,8 @@ describe("catalog protocol 'catalog:' specifiers", () => {
     });
     expect((writePkg as any).updatedManifest('package-4').peerDependencies).toMatchObject({
       'fs-extra': '^11.2.0',
+    });
+    expect((writePkg as any).updatedManifest('package-4').devDependencies).toMatchObject({
       react: '^17.0.2',
       'react-dom': '^17.0.2',
     });
@@ -121,7 +127,7 @@ describe("catalog protocol 'catalog:' specifiers", () => {
       tinyrainbow: '^2.0.0', // catalog:
     });
     expect((writePkg as any).updatedManifest('package-5').peerDependencies).toMatchObject({
-      tinyrainbow: '^2.0.0', // catalog:
+      tinyrainbow: '2.0.0',
     });
   });
 });
