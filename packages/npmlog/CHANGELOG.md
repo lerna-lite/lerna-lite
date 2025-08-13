@@ -4,6 +4,12 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [4.7.1](https://github.com/lerna-lite/lerna-lite/compare/v4.7.0...v4.7.1) (2025-08-13)
+
+### Bug Fixes
+
+* **deps:** replace `string-width` with `fast-string-width` ([#1107](https://github.com/lerna-lite/lerna-lite/issues/1107)) ([8d00d2f](https://github.com/lerna-lite/lerna-lite/commit/8d00d2f5e71dc831ac5341597925146328c44304)) - by @ghiscoding
+
 ## [4.7.0](https://github.com/lerna-lite/lerna-lite/compare/v4.6.2...v4.7.0) (2025-08-08)
 
 **Note:** Version bump only for package @lerna-lite/npmlog
