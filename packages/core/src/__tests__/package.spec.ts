@@ -743,7 +743,7 @@ describe('Package', () => {
 
     describe('Version with `catalog:` protocol', () => {
       it('works with `catalog:` protocol', () => {
-        const pkg = factory({
+        const node = factory({
           dependencies: {
             a: 'catalog:^1.0.0',
             b: '^2.2.0',
@@ -753,9 +753,9 @@ describe('Package', () => {
         const resolved: NpaResolveResult = npa.resolve('a', '^1.0.0', '.');
         resolved.catalogSpec = 'catalog:';
 
-        pkg.updateDependencyCatalogProtocol(resolved);
+        node.resolveDependencyCatalogProtocol(node.pkg, { catalog: { a: '^1.0.0' }, catalogs: {} });
 
-        expect(pkg.toJSON()).toMatchInlineSnapshot(`
+        expect(node.toJSON()).toMatchInlineSnapshot(`
           {
             "dependencies": {
               "a": "^1.0.0",
@@ -766,7 +766,7 @@ describe('Package', () => {
       });
 
       it('works with `catalog:` protocol in multiple location like dependencies and peerDependencies', () => {
-        const pkg = factory({
+        const node = factory({
           dependencies: {
             a: 'catalog:',
             b: 'catalog:devDependencies',
@@ -779,15 +779,10 @@ describe('Package', () => {
           },
         });
 
-        const resolvedA: NpaResolveResult = npa.resolve('a', '^1.0.0', '.');
-        resolvedA.catalogSpec = 'catalog:';
-        const resolvedB: NpaResolveResult = npa.resolve('b', '^2.2.0', '.');
-        resolvedB.catalogSpec = 'catalog:devDependencies';
+        node.resolveDependencyCatalogProtocol(node.pkg, { catalog: { a: '^1.0.0' }, catalogs: { devDependencies: { b: '^2.2.0' } } });
+        node.resolveDependencyCatalogProtocol(node.pkg, { catalog: { a: '^1.0.0' }, catalogs: { devDependencies: { b: '^2.2.0' } } });
 
-        pkg.updateDependencyCatalogProtocol(resolvedA);
-        pkg.updateDependencyCatalogProtocol(resolvedB);
-
-        expect(pkg.toJSON()).toMatchInlineSnapshot(`
+        expect(node.toJSON()).toMatchInlineSnapshot(`
           {
             "dependencies": {
               "a": "^1.0.0",
@@ -950,7 +945,7 @@ describe('Package', () => {
 
     describe('Publish with `catalog:` protocol', () => {
       it('should replace `catalog:` protocol with what it found in npa', () => {
-        const pkg = factory({
+        const node = factory({
           dependencies: {
             a: 'catalog:',
             b: 'catalog:devDependencies',
@@ -961,15 +956,10 @@ describe('Package', () => {
           },
         });
 
-        const resolvedA: NpaResolveResult = npa.resolve('a', '1.0.0', '.');
-        resolvedA.catalogSpec = 'catalog:';
-        const resolvedB: NpaResolveResult = npa.resolve('b', '^2.2.0', '.');
-        resolvedB.catalogSpec = 'catalog:devDependencies';
+        node.resolveDependencyCatalogProtocol(node.pkg, { catalog: { a: '1.0.0' }, catalogs: { devDependencies: { b: '^2.2.0' } } });
+        node.resolveDependencyCatalogProtocol(node.pkg, { catalog: { a: '1.0.0' }, catalogs: { devDependencies: { b: '^2.2.0' } } });
 
-        pkg.updateDependencyCatalogProtocol(resolvedA);
-        pkg.updateDependencyCatalogProtocol(resolvedB);
-
-        expect(pkg.toJSON()).toMatchInlineSnapshot(`
+        expect(node.toJSON()).toMatchInlineSnapshot(`
           {
             "dependencies": {
               "a": "1.0.0",

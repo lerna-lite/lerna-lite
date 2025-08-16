@@ -24,6 +24,7 @@ import {
   prereleaseIdFromVersion,
   promptConfirmation,
   pulseTillDone,
+  readWorkspaceCatalogConfig,
   runTopologically,
   throwIfUncommitted,
   ValidationError,
@@ -665,27 +666,13 @@ export class PublishCommand extends Command<PublishCommandOption> {
 
   // resolve `catalog:` protocol from both local/external dependencies and translates them to their actual version target/range
   resolveDependencyWithCatalogProtocols() {
+    const { catalog, catalogs } = readWorkspaceCatalogConfig(this.options.npmClient || 'npm');
+
     // detect if any of the packages to publish have `catalog:` protocol in their dependencies
-    const publishingPackagesWithCatalogs = this.updates.filter(
-      (node: PackageGraphNode) =>
-        Array.from<NpaResolveResult>(node.externalDependencies.values()).some((resolved) => resolved.catalogSpec) ||
-        Array.from<NpaResolveResult>(node.localDependencies.values()).some((resolved) => resolved.catalogSpec)
-    );
-
-    return pMap(publishingPackagesWithCatalogs, (node: PackageGraphNode) => {
-      // regardless of where the version comes from, we can't publish 'catalog:' specs, it has to be transformed for any dependencies
-      // e.g. considering version is `^1.2.3` and we have a global `catalog:` it will be converted to version "^1.2.3" with strict match
-
-      // update catalog version with global catalog version of external dependencies
-      const externalDeps = Array.from<NpaResolveResult>(node.externalDependencies.values()).filter((node) => node.catalogSpec);
-      const localDeps = Array.from<NpaResolveResult>(node.localDependencies.values()).filter((node) => node.catalogSpec);
-      for (const deps of [externalDeps, localDeps]) {
-        for (const resolved of deps) {
-          // it no longer matters if we mutate the shared Package instance
-          node.pkg.updateDependencyCatalogProtocol(resolved);
-        }
-      }
-
+    // regardless of where the version comes from, we can't publish 'catalog:' specs, it has to be transformed for any dependencies
+    // e.g. considering version is `^1.2.3` and we have a global `catalog:` it will be converted to version "^1.2.3" with strict match
+    return pMap(this.updates, (node: PackageGraphNode) => {
+      node.pkg.resolveDependencyCatalogProtocol(node.pkg, { catalog, catalogs });
       // writing changes to disk handled in serializeChanges()
     });
   }
