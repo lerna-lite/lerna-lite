@@ -6,6 +6,7 @@ import npa from 'npm-package-arg';
 import { writePackage } from 'write-package';
 
 import type { CommandType, DependenciesType, NpaResolveResult, RawManifest } from './models/interfaces.js';
+import type { CatalogConfig } from './utils/catalog-utils.js';
 
 // symbol used to 'hide' internal state
 const PKG = Symbol('pkg');
@@ -287,29 +288,33 @@ export class Package {
   }
 
   /**
-   * Mutate any given dependency that have a `catalog:` spec, we'll replace them with their resolved fetchSpec coming from the global catalog version
+   * Mutate any given dependency that have a `catalog:` spec, we'll replace them with their spec range coming from the global catalog version
    * @param {Object} resolved npa metadata
    */
-  updateDependencyCatalogProtocol(resolved: NpaResolveResult) {
+  resolveDependencyCatalogProtocol(pkg: Package, { catalog, catalogs }: CatalogConfig) {
     // find all dependencies collections that could have `catalog:` protocol
     // most `catalog:` refs will be found in externalDependencies, but we need to check and replace all types
-    const depName = resolved.name as string;
-    const inspectDependencies = this.retrieveAllDependenciesWithName(depName, [
-      'dependencies',
-      'devDependencies',
-      'optionalDependencies',
-      'peerDependencies',
-    ]);
+    for (const depType of ['dependencies', 'devDependencies', 'optionalDependencies', 'peerDependencies']) {
+      const updatedPkgDep = pkg[depType] as Record<string, string>;
+      if (updatedPkgDep) {
+        for (const [depName, depRange] of Object.entries(updatedPkgDep)) {
+          if (depRange.startsWith('catalog:')) {
+            let replaced = false;
 
-    // loop through all dependencies collections and replace any `catalog:` protocol with the resolved fetchSpec (from global catalog)
-    for (const depCollection of inspectDependencies) {
-      if (
-        depCollection &&
-        depCollection[depName].startsWith('catalog') &&
-        (resolved.registry || resolved.type === 'directory') &&
-        resolved?.catalogSpec
-      ) {
-        depCollection[depName] = resolved.fetchSpec as string;
+            // when named catalog is found (e.g: "catalog:react19")
+            if (catalogs) {
+              const catalogName = updatedPkgDep[depName].replace(/^catalog:/, '');
+              if (catalogs[catalogName]?.[depName]) {
+                updatedPkgDep[depName] = catalogs[catalogName][depName];
+                replaced = true;
+              }
+            }
+            // otherwise when global catalog is found (e.g.: "catalog:")
+            if (!replaced && catalog[depName]) {
+              updatedPkgDep[depName] = catalog[depName];
+            }
+          }
+        }
       }
     }
   }
