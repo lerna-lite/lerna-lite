@@ -4,6 +4,12 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [4.7.2](https://github.com/lerna-lite/lerna-lite/compare/v4.7.1...v4.7.2) (2025-08-16)
+
+### Bug Fixes
+
+* all dependencies with Catalog protocol should be replaced ([#1115](https://github.com/lerna-lite/lerna-lite/issues/1115)) ([922c228](https://github.com/lerna-lite/lerna-lite/commit/922c228f473c96593fe68b9f6392178d904b9fef)) - by @ghiscoding
+
 ## [4.7.1](https://github.com/lerna-lite/lerna-lite/compare/v4.7.0...v4.7.1) (2025-08-13)
 
 ### Bug Fixes

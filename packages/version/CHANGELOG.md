@@ -4,6 +4,12 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [4.7.2](https://github.com/lerna-lite/lerna-lite/compare/v4.7.1...v4.7.2) (2025-08-16)
+
+### Bug Fixes
+
+* **deps:** update dependency p-limit to v7 ([#1114](https://github.com/lerna-lite/lerna-lite/issues/1114)) ([d49dee9](https://github.com/lerna-lite/lerna-lite/commit/d49dee94be71bf654e3c67796ff9b0a8c10ff1ae)) - by @renovate[bot]
+
 ## [4.7.1](https://github.com/lerna-lite/lerna-lite/compare/v4.7.0...v4.7.1) (2025-08-13)
 
 **Note:** Version bump only for package @lerna-lite/version
