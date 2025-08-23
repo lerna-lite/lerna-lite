@@ -16,6 +16,8 @@
     "init-cmd": "lerna init --independent --exact --use-workspaces",
     "changed-cmd": "lerna changed --all",
     "lerna-init": "lerna init --use-workspaces",
+    "lerna-graph": "lerna ls --graph",
+    "lerna-toposort": "lerna ls --toposort",
     "diff-cmd": "lerna diff",
     "list-cmd": "lerna list --all",
     "exec-win": "lerna exec --scope {@lerna-lite/cli,@lerna-lite/core} -- cross-env-shell echo hello from package: $LERNA_PACKAGE_NAME",

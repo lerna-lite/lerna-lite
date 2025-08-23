@@ -81,7 +81,12 @@ export class PackageGraph extends Map<string, PackageGraphNode> {
       this.hasWorkspaceCatalog = true;
     }
 
-    const resolveNpaSpec = (currentNode: PackageGraphNode, currentName: string, depName: string, graphDependencies: any) => {
+    const resolveNpaSpec = (
+      currentNode: PackageGraphNode,
+      currentName: string,
+      depName: string,
+      graphDependencies: Record<string, string>
+    ) => {
       const depNode = this.get(depName);
       // Yarn decided to ignore https://github.com/npm/npm/pull/15900 and implemented "link:"
       // As they apparently have no intention of being compatible, we have to do it for them.
