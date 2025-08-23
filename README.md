@@ -162,7 +162,7 @@ On a final note, I would think that the best feature of Lerna-Lite (compare to L
 
 Let's start by installing Lerna-Lite CLI as a dev dependency to your project and then run the `init` command to get started (see [init#readme](https://github.com/lerna-lite/lerna-lite/tree/main/packages/init#readme) for all options). Note that the CLI must be installed at all time, then proceed by installing any other optional commands (the CLI is only including the `init` command), refer to the **[Available Commands](#available-commands) table** for more info.
 
-> ![NOTE]
+> [!NOTE]
 > You can see and clone a very basic [Lerna-Lite boilerplate](https://github.com/lerna-lite/lerna-lite-boilerplate) project repository.
 
 ```sh
