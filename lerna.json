@@ -12,7 +12,6 @@
       ]
     },
     "version": {
-      "allowPeerDependenciesUpdate": false,
       "conventionalCommits": true,
       "createRelease": "github",
       "changelogIncludeCommitsClientLogin": " - by @%l",
