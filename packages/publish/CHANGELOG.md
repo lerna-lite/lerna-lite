@@ -4,6 +4,13 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [4.7.3](https://github.com/lerna-lite/lerna-lite/compare/v4.7.2...v4.7.3) (2025-08-29)
+
+### Bug Fixes
+
+* **deps:** update dependency @npmcli/package-json to v7 ([#1121](https://github.com/lerna-lite/lerna-lite/issues/1121)) ([8520bf9](https://github.com/lerna-lite/lerna-lite/commit/8520bf9a71dc8e4f2a240c68954610f843851931)) - by @renovate[bot]
+* peer deps with `workspace:` shouldn't duplicate version to devDeps ([#1119](https://github.com/lerna-lite/lerna-lite/issues/1119)) ([089becf](https://github.com/lerna-lite/lerna-lite/commit/089becf649d9791cc3927d56c7bb4bf755153bab)) - by @ghiscoding
+
 ## [4.7.2](https://github.com/lerna-lite/lerna-lite/compare/v4.7.1...v4.7.2) (2025-08-16)
 
 ### Bug Fixes

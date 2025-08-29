@@ -4,6 +4,12 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [4.7.3](https://github.com/lerna-lite/lerna-lite/compare/v4.7.2...v4.7.3) (2025-08-29)
+
+### Bug Fixes
+
+* **deps:** update dependency fast-string-width to v3 ([#1120](https://github.com/lerna-lite/lerna-lite/issues/1120)) ([0c5fd00](https://github.com/lerna-lite/lerna-lite/commit/0c5fd0097d906663e6abc2ccfdae47b588323b05)) - by @renovate[bot]
+
 ## [4.7.1](https://github.com/lerna-lite/lerna-lite/compare/v4.7.0...v4.7.1) (2025-08-13)
 
 ### Bug Fixes
