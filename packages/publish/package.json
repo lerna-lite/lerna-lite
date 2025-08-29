@@ -41,7 +41,7 @@
     "@lerna-lite/npmlog": "workspace:*",
     "@lerna-lite/version": "workspace:*",
     "@npmcli/arborist": "^9.1.3",
-    "@npmcli/package-json": "^6.2.0",
+    "@npmcli/package-json": "^7.0.0",
     "byte-size": "^9.0.1",
     "columnify": "catalog:dependencies",
     "fs-extra": "catalog:",
