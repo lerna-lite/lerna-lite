@@ -39,7 +39,7 @@ catalogs:
     load-json-file: ^7.0.1
     picomatch: ^4.0.3
     tinyglobby: ^0.2.14
-    tinyrainbow: ^2.0.0
+    tinyrainbow: ^3.0.2
     uuid: ^11.1.0
     write-json-file: ^6.0.0
     write-package: ^7.1.0

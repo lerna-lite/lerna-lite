@@ -56,8 +56,8 @@ catalogs:
       specifier: ^0.2.14
       version: 0.2.14
     tinyrainbow:
-      specifier: ^2.0.0
-      version: 2.0.0
+      specifier: ^3.0.2
+      version: 3.0.2
     uuid:
       specifier: ^11.1.0
       version: 11.1.0
@@ -368,7 +368,7 @@ importers:
         version: 0.2.14
       tinyrainbow:
         specifier: catalog:dependencies
-        version: 2.0.0
+        version: 3.0.2
       write-file-atomic:
         specifier: ^6.0.0
         version: 6.0.0
@@ -466,7 +466,7 @@ importers:
         version: 7.0.3
       tinyrainbow:
         specifier: catalog:dependencies
-        version: 2.0.0
+        version: 3.0.2
     devDependencies:
       '@types/fs-extra':
         specifier: catalog:devDependencies
@@ -538,7 +538,7 @@ importers:
         version: 1.6.0
       tinyrainbow:
         specifier: catalog:dependencies
-        version: 2.0.0
+        version: 3.0.2
     devDependencies:
       yargs:
         specifier: catalog:dependencies
@@ -670,7 +670,7 @@ importers:
         version: 0.2.14
       tinyrainbow:
         specifier: catalog:dependencies
-        version: 2.0.0
+        version: 3.0.2
     devDependencies:
       '@types/fs-extra':
         specifier: catalog:devDependencies
@@ -716,7 +716,7 @@ importers:
         version: 7.0.3
       tinyrainbow:
         specifier: catalog:dependencies
-        version: 2.0.0
+        version: 3.0.2
     devDependencies:
       '@types/fs-extra':
         specifier: catalog:devDependencies
@@ -819,7 +819,7 @@ importers:
         version: 5.1.0
       tinyrainbow:
         specifier: catalog:dependencies
-        version: 2.0.0
+        version: 3.0.2
       uuid:
         specifier: catalog:dependencies
         version: 11.1.0
@@ -3150,6 +3150,10 @@ packages:
 
   tinyrainbow@2.0.0:
     resolution: {integrity: sha512-op4nsTR47R6p0vMUUoYl/a+ljLFVtlfaXkLQmqfLR1qHma1h/ysYk4hEXZ880bf2CYgTskvTa/e196Vd5dDQXw==}
+    engines: {node: '>=14.0.0'}
+
+  tinyrainbow@3.0.2:
+    resolution: {integrity: sha512-QJahpHgvaMhezn7tZFTyPHGyApas4fFnOS/hJA7PBUUlvlp9CxBuiY2OwhcE5CbMUIcU8XQKjDAb28VIJv/rdg==}
     engines: {node: '>=14.0.0'}
 
   to-regex-range@5.0.1:
@@ -5772,6 +5776,8 @@ snapshots:
   tinypool@1.1.1: {}
 
   tinyrainbow@2.0.0: {}
+
+  tinyrainbow@3.0.2: {}
 
   to-regex-range@5.0.1:
     dependencies:
