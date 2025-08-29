@@ -27,7 +27,7 @@ catalogs:
   devDependencies:
     "@types/dedent": ^0.7.2
     "@types/fs-extra": ^11.0.4
-    "@types/node": ^22.17.1
+    "@types/node": ^22.18.0
     "@types/yargs-parser": ^21.0.3
     "@types/npm-package-arg": ^6.1.4
     "@types/semver": ^7.7.0
