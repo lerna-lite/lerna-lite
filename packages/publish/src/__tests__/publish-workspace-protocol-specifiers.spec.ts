@@ -56,7 +56,7 @@ import yargParser from 'yargs-parser';
 
 import { PublishCommand } from '../index.js';
 
-const createArgv = (cwd, ...args) => {
+const createArgv = (cwd: string, ...args: string[]) => {
   args.unshift('publish');
   if (args.length > 0 && args[1]?.length > 0 && !args[1].startsWith('-')) {
     args[1] = `--bump=${args[1]}`;
@@ -68,7 +68,7 @@ const createArgv = (cwd, ...args) => {
 };
 
 describe("workspace protocol 'workspace:' specifiers", () => {
-  const setupChanges = async (cwd, pkgRoot = 'packages') => {
+  const setupChanges = async (cwd: string, pkgRoot = 'packages') => {
     await outputFile(join(cwd, `${pkgRoot}/package-1/hello.js`), 'world');
     await gitAdd(cwd, '.');
     await gitCommit(cwd, 'setup');
@@ -154,6 +154,9 @@ describe("workspace protocol 'workspace:' specifiers", () => {
 
     // notably missing is package-1, which has no relative file: dependencies
     expect((writePkg as any).updatedManifest('package-2').dependencies).toMatchObject({
+      'package-1': '2.0.0', // workspace:*
+    });
+    expect((writePkg as any).updatedManifest('package-2').peerDependencies).toMatchObject({
       'package-1': '2.0.0', // workspace:*
     });
     expect((writePkg as any).updatedManifest('package-3').dependencies).toMatchObject({

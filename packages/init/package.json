@@ -42,6 +42,7 @@
     "write-json-file": "catalog:dependencies"
   },
   "devDependencies": {
+    "@types/yargs-parser": "catalog:devDependencies",
     "yargs-parser": "catalog:devDependencies"
   }
 }

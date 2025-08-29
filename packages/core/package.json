@@ -73,6 +73,7 @@
     "@types/npm-package-arg": "catalog:devDependencies",
     "@types/semver": "catalog:devDependencies",
     "@types/write-file-atomic": "^4.0.3",
+    "@types/yargs-parser": "catalog:devDependencies",
     "npm-registry-fetch": "catalog:",
     "yargs": "catalog:dependencies",
     "yargs-parser": "catalog:devDependencies"

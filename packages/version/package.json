@@ -73,6 +73,7 @@
     "@types/fs-extra": "catalog:devDependencies",
     "@types/npm-package-arg": "catalog:devDependencies",
     "@types/semver": "catalog:devDependencies",
+    "@types/yargs-parser": "catalog:devDependencies",
     "execa": "catalog:",
     "write-package": "catalog:dependencies",
     "yaml": "catalog:dependencies",
