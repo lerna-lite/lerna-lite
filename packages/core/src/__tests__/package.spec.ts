@@ -30,25 +30,25 @@ expect.addSnapshotSerializer({
 });
 
 describe('Package', () => {
-  const factory = (json) => new Package(json, normalize(`/root/path/to/${json.name || 'package'}`), normalize('/root'));
+  const factory = (json: RawManifest) => new Package(json, normalize(`/root/path/to/${json.name || 'package'}`), normalize('/root'));
 
   describe('get .name', () => {
     it('should return the name', () => {
-      const pkg = factory({ name: 'get-name' });
+      const pkg = factory({ name: 'get-name' } as RawManifest);
       expect(pkg.name).toBe('get-name');
     });
   });
 
   describe('get .location', () => {
     it('should return the location', () => {
-      const pkg = factory({ name: 'get-location' });
+      const pkg = factory({ name: 'get-location' } as RawManifest);
       expect(pkg.location).toBe(normalize('/root/path/to/get-location'));
     });
   });
 
   describe('get .workspaces', () => {
     it('should return the workspaces', () => {
-      const pkg = factory({ name: 'get-workspaces' });
+      const pkg = factory({ name: 'get-workspaces' } as RawManifest);
       expect(pkg.workspaces).toBe(undefined);
 
       pkg.workspaces = ['modules/*'];
@@ -58,7 +58,7 @@ describe('Package', () => {
 
   describe('get .resolved', () => {
     it('returns npa.Result relative to rootPath, always posix', () => {
-      const pkg = factory({ name: 'get-resolved' });
+      const pkg = factory({ name: 'get-resolved' } as RawManifest);
 
       let homeDir = homedir();
 
@@ -79,21 +79,21 @@ describe('Package', () => {
 
   describe('get .rootPath', () => {
     it('should return the rootPath', () => {
-      const pkg = factory({ name: 'get-rootPath' });
+      const pkg = factory({ name: 'get-rootPath' } as RawManifest);
       expect(pkg.rootPath).toBe(normalize('/root'));
     });
   });
 
   describe('get .version', () => {
     it('should return the version', () => {
-      const pkg = factory({ version: '1.0.0' });
+      const pkg = factory({ version: '1.0.0' } as RawManifest);
       expect(pkg.version).toBe('1.0.0');
     });
   });
 
   describe('set .version', () => {
     it('should set the version', () => {
-      const pkg = factory({ version: '1.0.0' });
+      const pkg = factory({ version: '1.0.0' } as RawManifest);
       pkg.version = '2.0.0';
       expect(pkg.version).toBe('2.0.0');
     });
@@ -101,7 +101,7 @@ describe('Package', () => {
 
   describe('get .contents', () => {
     it('returns pkg.location by default', () => {
-      const pkg = factory({ version: '1.0.0' });
+      const pkg = factory({ version: '1.0.0' } as RawManifest);
       expect(pkg.contents).toBe(normalize('/root/path/to/package'));
     });
 
@@ -111,7 +111,7 @@ describe('Package', () => {
         publishConfig: {
           directory: 'dist',
         },
-      });
+      } as RawManifest);
       expect(pkg.contents).toBe(normalize('/root/path/to/package/dist'));
     });
 
@@ -121,14 +121,14 @@ describe('Package', () => {
         publishConfig: {
           tag: 'next',
         },
-      });
+      } as RawManifest);
       expect(pkg.contents).toBe(normalize('/root/path/to/package'));
     });
   });
 
   describe('set .contents', () => {
     it('sets pkg.contents to joined value', () => {
-      const pkg = factory({ version: '1.0.0' });
+      const pkg = factory({ version: '1.0.0' } as RawManifest);
       pkg.contents = 'dist';
       expect(pkg.contents).toBe(normalize('/root/path/to/package/dist'));
     });
@@ -139,7 +139,7 @@ describe('Package', () => {
       const pkg = factory({
         name: 'obj-bin',
         bin: { 'custom-bin': 'bin.js' },
-      });
+      } as RawManifest);
       expect(pkg.pkg.name).toBe('obj-bin');
     });
   });
@@ -149,7 +149,7 @@ describe('Package', () => {
       const pkg = factory({
         name: 'obj-bin',
         bin: { 'custom-bin': 'bin.js' },
-      });
+      } as RawManifest);
       expect(pkg.bin).toEqual({ 'custom-bin': 'bin.js' });
     });
 
@@ -157,7 +157,7 @@ describe('Package', () => {
       const pkg = factory({
         name: 'string-bin',
         bin: 'bin.js',
-      });
+      } as RawManifest);
       expect(pkg.bin).toEqual({ 'string-bin': 'bin.js' });
     });
 
@@ -165,7 +165,7 @@ describe('Package', () => {
       const pkg = factory({
         name: '@scoped/string-bin',
         bin: 'bin.js',
-      });
+      } as RawManifest);
       expect(pkg.bin).toEqual({ 'string-bin': 'bin.js' });
     });
   });
@@ -175,7 +175,7 @@ describe('Package', () => {
       const pkg = factory({
         name: 'obj-bin',
         bin: { 'custom-bin': 'bin.js' },
-      });
+      } as RawManifest);
       expect(pkg.binLocation.includes('obj-bin')).toBeTruthy();
     });
   });
@@ -185,7 +185,7 @@ describe('Package', () => {
       const pkg = factory({
         name: 'obj-bin',
         bin: { 'custom-bin': 'bin.js' },
-      });
+      } as RawManifest);
       expect(pkg.nodeModulesLocation.includes('node_modules')).toBeTruthy();
     });
   });
@@ -194,7 +194,7 @@ describe('Package', () => {
     it('should return the dependencies', () => {
       const pkg = factory({
         dependencies: { 'my-dependency': '^1.0.0' },
-      });
+      } as unknown as RawManifest);
       expect(pkg.dependencies).toEqual({ 'my-dependency': '^1.0.0' });
     });
   });
@@ -203,7 +203,7 @@ describe('Package', () => {
     it('should return the devDependencies', () => {
       const pkg = factory({
         devDependencies: { 'my-dev-dependency': '^1.0.0' },
-      });
+      } as unknown as RawManifest);
       expect(pkg.devDependencies).toEqual({ 'my-dev-dependency': '^1.0.0' });
     });
   });
@@ -212,7 +212,7 @@ describe('Package', () => {
     it('should return the optionalDependencies', () => {
       const pkg = factory({
         optionalDependencies: { 'my-optional-dependency': '^1.0.0' },
-      });
+      } as unknown as RawManifest);
       expect(pkg.optionalDependencies).toEqual({ 'my-optional-dependency': '^1.0.0' });
     });
   });
@@ -221,7 +221,7 @@ describe('Package', () => {
     it('should return the peerDependencies', () => {
       const pkg = factory({
         peerDependencies: { 'my-peer-dependency': '>=1.0.0' },
-      });
+      } as unknown as RawManifest);
       expect(pkg.peerDependencies).toEqual({ 'my-peer-dependency': '>=1.0.0' });
     });
   });
@@ -230,7 +230,7 @@ describe('Package', () => {
     it('should return the scripts', () => {
       const pkg = factory({
         scripts: { 'my-script': 'echo "hello world"' },
-      });
+      } as RawManifest);
       expect(pkg.scripts).toEqual({
         'my-script': 'echo "hello world"',
       });
@@ -239,7 +239,7 @@ describe('Package', () => {
     it('preserves immutability of the input', () => {
       const json = {
         scripts: { 'my-script': 'keep' },
-      };
+      } as RawManifest;
       const pkg = factory(json);
 
       pkg.scripts['my-script'] = 'tweaked';
@@ -251,14 +251,14 @@ describe('Package', () => {
 
   describe('get .private', () => {
     it('should indicate if the package is private', () => {
-      const pkg = factory({ name: 'not-private' });
+      const pkg = factory({ name: 'not-private' } as RawManifest);
       expect(pkg.private).toBe(false);
     });
   });
 
   describe('.get()', () => {
     it('retrieves arbitrary values from manifest', () => {
-      const pkg = factory({ name: 'gettable', 'my-value': 'foo' });
+      const pkg = factory({ name: 'gettable', 'my-value': 'foo' } as unknown as RawManifest);
 
       expect(pkg.get('missing')).toBe(undefined);
       expect(pkg.get('my-value')).toBe('foo');
@@ -267,7 +267,7 @@ describe('Package', () => {
 
   describe('.set()', () => {
     it('stores arbitrary values on manifest', () => {
-      const pkg = factory({ name: 'settable' });
+      const pkg = factory({ name: 'settable' } as RawManifest);
 
       pkg.set('foo', 'bar');
 
@@ -278,7 +278,7 @@ describe('Package', () => {
     });
 
     it('is chainable', () => {
-      const pkg = factory({ name: 'chainable' });
+      const pkg = factory({ name: 'chainable' } as RawManifest);
 
       expect(pkg.set('foo', true).set('bar', false).get('foo')).toBe(true);
     });
@@ -288,7 +288,7 @@ describe('Package', () => {
     it('should return clone of internal package for serialization', () => {
       const json = {
         name: 'is-cloned',
-      };
+      } as RawManifest;
       const pkg = factory(json);
 
       expect(pkg.toJSON()).not.toBe(json);
@@ -305,7 +305,7 @@ describe('Package', () => {
     it('reloads private state from disk', async () => {
       (loadJsonFile as any).mockImplementationOnce(() => Promise.resolve({ name: 'ignored', mutated: true }));
 
-      const pkg = factory({ name: 'refresh' });
+      const pkg = factory({ name: 'refresh' } as RawManifest);
       const result = await pkg.refresh();
 
       expect(result).toBe(pkg);
@@ -320,7 +320,7 @@ describe('Package', () => {
     it('writes changes to disk', async () => {
       (writePackage as any).mockImplementation(() => Promise.resolve());
 
-      const pkg = factory({ name: 'serialize-me' });
+      const pkg = factory({ name: 'serialize-me' } as RawManifest);
       const result = await pkg.set('woo', 'hoo').serialize();
 
       expect(result).toBe(pkg);
@@ -342,7 +342,7 @@ describe('Package', () => {
             a: '^1.0.0',
             b: '^1.0.0',
           },
-        });
+        } as unknown as RawManifest);
 
         const resolved: NpaResolveResult = npa.resolve('a', '^1.0.0', '.');
         resolved.type = undefined as any;
@@ -369,7 +369,7 @@ describe('Package', () => {
             a: '^1.0.0',
             b: '^1.0.0',
           },
-        });
+        } as unknown as RawManifest);
 
         const resolved: NpaResolveResult = npa.resolve('a', '^1.0.0', '.');
         resolved.type = undefined as any;
@@ -394,7 +394,7 @@ describe('Package', () => {
             a: '^1.0.0',
             b: '^1.0.0',
           },
-        });
+        } as unknown as RawManifest);
 
         const resolved: NpaResolveResult = npa.resolve('a', '^1.0.0', '.');
 
@@ -416,7 +416,7 @@ describe('Package', () => {
             a: '^1.0.0',
             b: '>=1.0.0', // range will not be bumped
           },
-        });
+        } as unknown as RawManifest);
 
         const resolvedA: NpaResolveResult = npa.resolve('a', '^1.0.0', '.');
         const resolvedB: NpaResolveResult = npa.resolve('b', '^1.0.0', '.');
@@ -440,7 +440,7 @@ describe('Package', () => {
             a: '^1.0.0-alpha.0',
             b: '>=1.0.0-alpha.0', // range will not be bumped
           },
-        });
+        } as unknown as RawManifest);
 
         const resolvedA: NpaResolveResult = npa.resolve('a', '^1.0.0-alpha.0', '.');
         const resolvedB: NpaResolveResult = npa.resolve('b', '^1.0.0-alpha.0', '.');
@@ -464,7 +464,7 @@ describe('Package', () => {
             a: '^1.0.0-alpha.0.SHA',
             b: '>=1.0.0-alpha.0.SHA', // range will not be bumped
           },
-        });
+        } as unknown as RawManifest);
 
         const resolvedA: NpaResolveResult = npa.resolve('a', '^1.0.0-alpha.0.SHA', '.');
         const resolvedB: NpaResolveResult = npa.resolve('b', '^1.0.0-alpha.0.SHA', '.');
@@ -493,7 +493,7 @@ describe('Package', () => {
             d: 'file:./foo',
             e: '^1.0.0',
           },
-        });
+        } as unknown as RawManifest);
 
         const resolved: NpaResolveResult = npa.resolve('a', '^1.0.0', '.');
         resolved.workspaceSpec = 'workspace:^1.0.0';
@@ -526,7 +526,7 @@ describe('Package', () => {
             a: 'workspace:^1.0.0',
             b: 'workspace:>=1.0.0',
           },
-        });
+        } as unknown as RawManifest);
 
         const resolvedA: NpaResolveResult = npa.resolve('a', '^1.0.0', '.');
         resolvedA.workspaceSpec = 'workspace:^1.0.0';
@@ -565,7 +565,7 @@ describe('Package', () => {
           peerDependencies: {
             a: 'workspace:^1.0.0',
           },
-        });
+        } as unknown as RawManifest);
 
         const resolved: NpaResolveResult = npa.resolve('a', '^1.0.0', '.');
         resolved.workspaceSpec = 'workspace:^1.0.0';
@@ -599,7 +599,7 @@ describe('Package', () => {
           peerDependencies: {
             a: 'workspace:>=1.0.0 < 2.0.0', // ranges will not be bumped
           },
-        });
+        } as unknown as RawManifest);
 
         const resolved: NpaResolveResult = npa.resolve('a', '^1.0.0', '.');
         resolved.workspaceSpec = 'workspace:>=1.0.0 < 2.0.0';
@@ -627,7 +627,7 @@ describe('Package', () => {
             a: 'workspace:*',
             b: 'workspace:^1.0.0',
           },
-        });
+        } as unknown as RawManifest);
 
         const resolved: NpaResolveResult = npa.resolve('a', '^1.0.0', '.');
         resolved.workspaceSpec = 'workspace:*';
@@ -650,7 +650,7 @@ describe('Package', () => {
             a: 'workspace:^',
             b: 'workspace:^1.0.0',
           },
-        });
+        } as unknown as RawManifest);
 
         const resolved: NpaResolveResult = npa.resolve('a', '^1.0.0', '.');
         resolved.workspaceSpec = 'workspace:^';
@@ -673,7 +673,7 @@ describe('Package', () => {
             a: 'workspace:~',
             b: 'workspace:^1.0.0',
           },
-        });
+        } as unknown as RawManifest);
 
         const resolved: NpaResolveResult = npa.resolve('a', '^1.0.0', '.');
         resolved.workspaceSpec = 'workspace:~';
@@ -698,7 +698,7 @@ describe('Package', () => {
           peerDependencies: {
             a: 'workspace:1.0.0',
           },
-        });
+        } as unknown as RawManifest);
 
         const resolved: NpaResolveResult = npa.resolve('a', '^1.0.0', '.');
         resolved.workspaceSpec = 'workspace:1.0.0';
@@ -723,7 +723,7 @@ describe('Package', () => {
             a: 'workspace:>=1.2.0',
             b: 'workspace:^1.0.0',
           },
-        });
+        } as unknown as RawManifest);
 
         const resolved: NpaResolveResult = npa.resolve('a', '^1.0.0', '.');
         resolved.workspaceSpec = 'workspace:>=1.2.0';
@@ -748,7 +748,7 @@ describe('Package', () => {
             a: 'catalog:^1.0.0',
             b: '^2.2.0',
           },
-        });
+        } as unknown as RawManifest);
 
         const resolved: NpaResolveResult = npa.resolve('a', '^1.0.0', '.');
         resolved.catalogSpec = 'catalog:';
@@ -777,7 +777,7 @@ describe('Package', () => {
             a: 'catalog:',
             b: '>=2.0.0',
           },
-        });
+        } as unknown as RawManifest);
 
         node.resolveDependencyCatalogProtocol(node.pkg, { catalog: { a: '^1.0.0' }, catalogs: { devDependencies: { b: '^2.2.0' } } });
         node.resolveDependencyCatalogProtocol(node.pkg, { catalog: { a: '^1.0.0' }, catalogs: { devDependencies: { b: '^2.2.0' } } });
@@ -810,7 +810,7 @@ describe('Package', () => {
             a: '>=1.0.0', // range will not be bumped
             b: 'workspace:^1.0.0', // will be bumped
           },
-        });
+        } as unknown as RawManifest);
 
         const resolvedA: NpaResolveResult = npa.resolve('a', '^1.0.0', '.');
         resolvedA.workspaceSpec = 'workspace:*';
@@ -844,7 +844,7 @@ describe('Package', () => {
             a: 'workspace:^',
             b: 'workspace:~1.0.0', // will be bumped
           },
-        });
+        } as unknown as RawManifest);
 
         const resolvedA: NpaResolveResult = npa.resolve('a', '^1.0.0', '.');
         resolvedA.workspaceSpec = 'workspace:^';
@@ -878,7 +878,7 @@ describe('Package', () => {
             a: 'workspace:>=1.0.0',
             b: '~1.0.0',
           },
-        });
+        } as unknown as RawManifest);
 
         const resolvedA: NpaResolveResult = npa.resolve('a', '^1.0.0', '.');
         resolvedA.workspaceSpec = 'workspace:>=1.0.0';
@@ -911,7 +911,7 @@ describe('Package', () => {
           peerDependencies: {
             b: 'workspace:>=2.0.0',
           },
-        });
+        } as unknown as RawManifest);
 
         const resolvedA: NpaResolveResult = npa.resolve('a', '^1.0.0', '.');
         resolvedA.workspaceSpec = 'workspace:*';
@@ -954,7 +954,7 @@ describe('Package', () => {
             a: 'catalog:',
             b: 'catalog:devDependencies',
           },
-        });
+        } as unknown as RawManifest);
 
         node.resolveDependencyCatalogProtocol(node.pkg, { catalog: { a: '1.0.0' }, catalogs: { devDependencies: { b: '^2.2.0' } } });
         node.resolveDependencyCatalogProtocol(node.pkg, { catalog: { a: '1.0.0' }, catalogs: { devDependencies: { b: '^2.2.0' } } });

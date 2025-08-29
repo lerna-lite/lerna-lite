@@ -45,6 +45,7 @@
   },
   "devDependencies": {
     "@types/fs-extra": "catalog:devDependencies",
+    "@types/yargs-parser": "catalog:devDependencies",
     "fs-extra": "catalog:",
     "tinyglobby": "catalog:dependencies",
     "yargs": "catalog:dependencies",

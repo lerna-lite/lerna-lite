@@ -341,11 +341,11 @@ export class Package {
     // however, we still need to inspect them to avoid publishing peer deps with `workspace:` protocol
     if (this.peerDependencies?.[depName]) {
       // when user allows peer bump and is a regular semver version, we'll push it to the array of dependencies to potentially bump
-      // however we won't when the semver has a range with operator, ie this would bump ("^2.0.0") but the following would not (">=2.0.0", "14 || 15" or "workspace:<2.0.0")
+      // however we won't when the semver has a range with operator, e.g. this would bump ("^2.0.0") but the following would not (">=2.0.0", "14 || 15" or "workspace:<2.0.0")
       // prettier-ignore
       if (
-        allowPeerDependenciesUpdate && /^(workspace:)?[~^*]?[\d.]*([-]+[\w.\-+]+)*$/i.test(this.peerDependencies[depName] || '') ||
-        (updatedByCommand !== 'publish' &&this.peerDependencies[depName].startsWith('workspace:'))
+        (allowPeerDependenciesUpdate && /^(workspace:)?[~^*]?[\d.]*([-]+[\w.\-+]+)*$/i.test(this.peerDependencies[depName] || '')) ||
+        (updatedByCommand !== 'publish' && this.peerDependencies[depName].startsWith('workspace:'))
       ) {
         updatingDependencies.push(this.peerDependencies);
       }
@@ -354,16 +354,16 @@ export class Package {
       else if (updatedByCommand === 'publish' && this.peerDependencies[depName].startsWith('workspace:')) {
         this.peerDependencies[depName] = this.peerDependencies[depName].replace('workspace:', '');
 
-        // when it's only 1 char left "^" or "~", we'll assume that the version is invalid (note that "*" is valid)
+        // when it's only 1 char left "^", "~" or "*", we'll assume that the version is invalid
         // so reassigning the resolved package version seems like the best action to do in this case
-        if (/^[~^]$/.test(this.peerDependencies[depName])) {
+        if (/^[~^*]$/.test(this.peerDependencies[depName])) {
           this.peerDependencies[depName] = resolved.fetchSpec || '';
         }
       }
     }
 
     for (const depCollection of updatingDependencies) {
-      if (depCollection && (resolved.registry || resolved.type === 'directory')) {
+      if (depCollection && (resolved.registry || resolved.type === 'directory') && depName in depCollection) {
         // a version (1.2.3) OR range (^1.2.3) OR directory (file:../foo-pkg)
         depCollection[depName] = `${savePrefix}${depVersion}`;
 

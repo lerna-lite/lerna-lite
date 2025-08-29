@@ -64,6 +64,7 @@
   "devDependencies": {
     "@types/fs-extra": "catalog:devDependencies",
     "@types/semver": "catalog:devDependencies",
+    "@types/yargs-parser": "catalog:devDependencies",
     "load-json-file": "catalog:dependencies",
     "write-package": "catalog:dependencies",
     "yargs": "catalog:dependencies",

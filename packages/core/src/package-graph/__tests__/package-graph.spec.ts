@@ -610,10 +610,10 @@ describe('PackageGraph', () => {
       ].map((json) => new Package(json as unknown as RawManifest, `/test/${json.name}`, '/test'));
       const graph = new PackageGraph(pkgs);
 
-      const search = filtered.map((name) => graph.get(name)!.pkg);
-      const result = graph[method](search);
+      const search = filtered.map((name: string) => graph.get(name)!.pkg);
+      const result = (graph as any)[method](search);
 
-      expect(result.map((pkg) => pkg.name)).toEqual(expected);
+      expect(result.map((pkg: Package) => pkg.name)).toEqual(expected);
     });
   });
 });

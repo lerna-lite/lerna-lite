@@ -43,6 +43,7 @@
     "tinyglobby": "catalog:dependencies"
   },
   "devDependencies": {
+    "@types/yargs-parser": "catalog:devDependencies",
     "mock-stdin": "^1.0.0",
     "yargs-parser": "catalog:devDependencies"
   },
