@@ -35,7 +35,7 @@ jobs:
           version: 10
 
       - name: Set NodeJS
-        uses: actions/setup-node@v4
+        uses: actions/setup-node@v5
         with:
           node-version: 22
           cache: 'pnpm'
@@ -89,7 +89,7 @@ jobs:
           version: 10
 
       - name: Set NodeJS
-        uses: actions/setup-node@v4
+        uses: actions/setup-node@v5
         with:
           node-version: ${{ matrix.node }}
           cache: 'pnpm'
