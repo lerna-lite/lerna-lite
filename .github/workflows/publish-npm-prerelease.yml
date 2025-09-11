@@ -53,7 +53,7 @@ jobs:
           exit 1
 
       - name: Set NodeJS
-        uses: actions/setup-node@v4
+        uses: actions/setup-node@v5
         with:
           registry-url: 'https://registry.npmjs.org/'
           node-version: 22
