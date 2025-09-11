@@ -38,29 +38,19 @@ jobs:
           echo "Error: Your GitHub username (${{ github.actor }}) is not on the allowed list of admins for this workflow"
           exit 1
 
-      - name: Set NodeJS
-        uses: actions/setup-node@v5
-        with:
-          registry-url: 'https://registry.npmjs.org/'
-          node-version: 22
-          scope: "@lerna-lite"
-
-      - name: Install pnpm
+      - name: Install pnpm itself
         uses: pnpm/action-setup@v3
         with:
           version: 10
           run_install: false
 
-      - name: Get pnpm store directory
-        run: echo "STORE_PATH=$(pnpm store path --silent)" >> $GITHUB_ENV
-
-      - name: Setup pnpm cache
-        uses: actions/cache@v4
+      - name: Set NodeJS
+        uses: actions/setup-node@v5
         with:
-          path: ${{ env.STORE_PATH }}
-          key: ${{ runner.os }}-pnpm-store-${{ hashFiles('**/pnpm-lock.yaml') }}
-          restore-keys: |
-            ${{ runner.os }}-pnpm-store-
+          registry-url: 'https://registry.npmjs.org/'
+          node-version: 22
+          cache: 'pnpm'
+          scope: "@lerna-lite"
 
       - name: Run pnpm install dependencies
         run: pnpm install
