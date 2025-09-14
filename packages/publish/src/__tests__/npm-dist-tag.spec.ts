@@ -7,6 +7,7 @@ vi.mock('@lerna-lite/core', async () => ({
 }));
 
 // mocked modules
+// @ts-ignore
 import fetch from 'npm-registry-fetch';
 
 // file under test

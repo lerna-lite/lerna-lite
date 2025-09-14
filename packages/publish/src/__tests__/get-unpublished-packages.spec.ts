@@ -18,7 +18,7 @@ const initFixture = initFixtureFactory(__dirname);
 // file under test
 import { getUnpublishedPackages } from '../lib/get-unpublished-packages.js';
 
-(pacote as any).packument.mockImplementation(async (pkg) => {
+(pacote as any).packument.mockImplementation(async (pkg: string) => {
   if (pkg === 'package-1') {
     return {
       versions: {},

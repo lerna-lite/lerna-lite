@@ -55,7 +55,7 @@ import yargParser from 'yargs-parser';
 
 import { PublishCommand } from '../index.js';
 
-const createArgv = (cwd, ...args) => {
+const createArgv = (cwd: string, ...args: string[]) => {
   args.unshift('publish');
   if (args.length > 0 && args[1]?.length > 0 && !args[1].startsWith('-')) {
     args[1] = `--bump=${args[1]}`;
@@ -67,7 +67,7 @@ const createArgv = (cwd, ...args) => {
 };
 
 describe("catalog protocol 'catalog:' specifiers", () => {
-  const setupChanges = async (cwd, pkgRoot = 'packages') => {
+  const setupChanges = async (cwd: string, pkgRoot = 'packages') => {
     await outputFile(join(cwd, `${pkgRoot}/package-1/hello.js`), 'world');
     await gitAdd(cwd, '.');
     await gitCommit(cwd, 'setup');

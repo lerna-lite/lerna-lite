@@ -63,6 +63,8 @@
   },
   "devDependencies": {
     "@types/fs-extra": "catalog:devDependencies",
+    "@types/npmcli__package-json": "catalog:devDependencies",
+    "@types/pacote": "catalog:devDependencies",
     "@types/semver": "catalog:devDependencies",
     "@types/yargs-parser": "catalog:devDependencies",
     "load-json-file": "catalog:dependencies",

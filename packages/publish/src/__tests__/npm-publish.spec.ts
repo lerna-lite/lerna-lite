@@ -17,6 +17,7 @@ import { dirname, join, normalize } from 'node:path';
 import { Package, RawManifest, runLifecycle } from '@lerna-lite/core';
 import PackageJson from '@npmcli/package-json';
 import { readFile } from 'fs/promises';
+// @ts-ignore
 import { publish } from 'libnpmpublish';
 
 import { LibNpmPublishOptions } from '../interfaces.js';
