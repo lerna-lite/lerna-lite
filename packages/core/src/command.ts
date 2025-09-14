@@ -12,6 +12,7 @@ import type { FilterOptions } from './filter-packages/index.js';
 import { getFilteredPackages } from './filter-packages/index.js';
 import type {
   ChangedCommandOption,
+  CleanCommandOption,
   DiffCommandOption,
   ExecCommandOption,
   InitCommandOption,
@@ -35,6 +36,7 @@ const DEFAULT_CONCURRENCY = cpus().length;
 
 type AvailableCommandOption =
   | ChangedCommandOption
+  | CleanCommandOption
   | DiffCommandOption
   | ExecCommandOption
   | InitCommandOption

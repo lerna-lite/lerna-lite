@@ -1,0 +1,49 @@
+{
+  "name": "@lerna-lite/clean",
+  "description": "Lerna-Lite clean commmand - Remove the node_modules directory from all packages",
+  "version": "4.7.3",
+  "files": [
+    "/dist"
+  ],
+  "type": "module",
+  "publishConfig": {
+    "access": "public"
+  },
+  "types": "./dist/index.d.ts",
+  "exports": {
+    "types": "./dist/index.d.ts",
+    "import": "./dist/index.js"
+  },
+  "scripts": {
+    "prebuild": "remove dist",
+    "build": "tsc",
+    "build:incremental": "tsc --incremental --sourceMap false --excludeDirectories dist",
+    "echo:test": "echo \"Lerna-Lite clean package\"",
+    "pack-tarball": "npm pack"
+  },
+  "license": "MIT",
+  "author": "Ghislain B.",
+  "homepage": "https://github.com/lerna-lite/lerna-lite",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/lerna-lite/lerna-lite.git",
+    "directory": "packages/clean"
+  },
+  "bugs": {
+    "url": "https://github.com/lerna-lite/lerna-lite/issues"
+  },
+  "engines": {
+    "node": "^20.17.0 || >=22.9.0"
+  },
+  "dependencies": {
+    "@lerna-lite/cli": "workspace:*",
+    "@lerna-lite/core": "workspace:*",
+    "@lerna-lite/npmlog": "workspace:*",
+    "p-map": "catalog:"
+  },
+  "devDependencies": {
+    "@types/yargs-parser": "catalog:devDependencies",
+    "remove-glob": "^0.3.7",
+    "yargs-parser": "catalog:devDependencies"
+  }
+}

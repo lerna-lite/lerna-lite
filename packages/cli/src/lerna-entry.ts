@@ -5,6 +5,7 @@ import type { JsonValue } from '@lerna-lite/core';
 import { loadJsonFileSync } from 'load-json-file';
 
 import changedCmd from './cli-commands/cli-changed-commands.js';
+import cleanCmd from './cli-commands/cli-clean-commands.js';
 import diffCmd from './cli-commands/cli-diff-commands.js';
 import execCmd from './cli-commands/cli-exec-commands.js';
 import initCmd from './cli-commands/cli-init-commands.js';
@@ -25,6 +26,7 @@ export function lerna(argv: any[]) {
 
   return cli()
     .command(changedCmd as any)
+    .command(cleanCmd as any)
     .command(diffCmd as any)
     .command(execCmd as any)
     .command(initCmd as any)

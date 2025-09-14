@@ -20,6 +20,14 @@ export interface ChangedCommandOption {
   includeMergedTags?: boolean;
 }
 
+export interface CleanCommandOption {
+  /** Displays the execution command that would be performed without executing it. */
+  dryRun?: boolean;
+
+  /** Skip all confirmation prompts */
+  yes?: boolean;
+}
+
 export interface DiffCommandOption {
   /** ignore changes in files matched by glob(s) when detecting changed packages. Pass `--no-ignore-changes` to completely disable. */
   ignoreChanges: string[];

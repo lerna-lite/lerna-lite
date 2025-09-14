@@ -104,6 +104,18 @@
             }
           }
         },
+        "clean": {
+          "type": "object",
+          "description": "Options for the `clean` command.",
+          "properties": {
+            "dryRun": {
+              "$ref": "#/$defs/commandOptions/clean/dryRun"
+            },
+            "yes": {
+              "$ref": "#/$defs/globals/yes"
+            }
+          }
+        },
         "diff": {
           "type": "object",
           "description": "Options for the `diff` command.",
@@ -1178,6 +1190,12 @@
       }
     },
     "commandOptions": {
+      "clean": {
+        "dryRun": {
+          "type": "boolean",
+          "description": "During `lerna clean`, displays the process command that would be performed without executing it."
+        }
+      },
       "exec": {
         "dryRun": {
           "type": "boolean",
