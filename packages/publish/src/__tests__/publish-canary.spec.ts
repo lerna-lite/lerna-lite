@@ -72,7 +72,7 @@ const createArgv = (cwd: string, ...args: string[]) => {
   return argv as unknown as PublishCommandOption;
 };
 
-async function initTaggedFixture(fixtureName, tagVersionPrefix = 'v') {
+async function initTaggedFixture(fixtureName: string, tagVersionPrefix = 'v') {
   const cwd = await initFixture(fixtureName);
 
   if (fixtureName.indexOf('independent') > -1) {
@@ -97,7 +97,7 @@ async function initTaggedFixture(fixtureName, tagVersionPrefix = 'v') {
  * @param {String} cwd Current working directory
  * @param {Array[String]..} tuples Any number of [filePath, fileContent] configs
  */
-async function setupChanges(cwd, ...tuples) {
+async function setupChanges(cwd: string, ...tuples: [string, string][]) {
   await Promise.all(tuples.map(([filePath, content]) => outputFile(join(cwd, filePath), content, 'utf8')));
   await gitAdd(cwd, '.');
   await gitCommit(cwd, 'setup');
@@ -290,7 +290,7 @@ describe('publish --canary differential', () => {
 });
 
 describe('publish --canary sequential', () => {
-  let cwd;
+  let cwd: string;
 
   beforeAll(async () => {
     cwd = await initTaggedFixture('snake-independent');

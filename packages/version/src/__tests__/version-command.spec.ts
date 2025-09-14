@@ -62,7 +62,7 @@ const initFixture = initFixtureFactory(pathResolve(__dirname, '../../../publish/
 // file under test
 import yargParser from 'yargs-parser';
 
-const createArgv = (cwd, ...args) => {
+const createArgv = (cwd: string, ...args: string[]) => {
   args.unshift('version');
   if (args.length > 0 && args[1]?.length > 0 && !args[1].startsWith('-')) {
     args[1] = `--bump=${args[1]}`;
@@ -87,7 +87,7 @@ async function loadYamlFile<T>(filePath: string) {
 const collectUpdatesActual = (await vi.importActual<any>('@lerna-lite/core')).collectUpdates;
 
 // assertion helpers
-const listDirty = (cwd) =>
+const listDirty = (cwd: string) =>
   // git ls-files --exclude-standard --modified --others
   execa('git', ['ls-files', '--exclude-standard', '--modified', '--others'], { cwd }).then((result) => result.stdout.split('\n').filter(Boolean));
 
@@ -409,7 +409,7 @@ describe('VersionCommand', () => {
   });
 
   describe('--no-commit-hooks', () => {
-    const setupPreCommitHook = (cwd) => outputFile(join(cwd, '.git/hooks/pre-commit'), '#!/bin/sh\nexit 1\n', { mode: 0o755 });
+    const setupPreCommitHook = (cwd: string) => outputFile(join(cwd, '.git/hooks/pre-commit'), '#!/bin/sh\nexit 1\n', { mode: 0o755 });
 
     it('passes --no-verify to git commit execution', async () => {
       const cwd = await initFixture('normal');
@@ -519,7 +519,7 @@ describe('VersionCommand', () => {
 
   // TODO: (major) make --no-granular-pathspec the default
   describe('--no-granular-pathspec', () => {
-    const getLeftover = (cwd) => execa('git', ['ls-files', '--others'], { cwd }).then((result) => result.stdout);
+    const getLeftover = (cwd: string) => execa('git', ['ls-files', '--others'], { cwd }).then((result) => result.stdout);
 
     it('adds changed files globally', async () => {
       const cwd = await initFixture('normal');
@@ -951,7 +951,7 @@ describe('VersionCommand', () => {
   });
 
   describe('with relative file: specifiers', () => {
-    const setupChanges = async (cwd, pkgRoot = 'packages') => {
+    const setupChanges = async (cwd: string, pkgRoot = 'packages') => {
       await gitTag(cwd, 'v1.0.0');
       await outputFile(join(cwd, `${pkgRoot}/package-1/hello.js`), 'world');
       await gitAdd(cwd, '.');

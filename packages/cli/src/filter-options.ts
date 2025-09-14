@@ -1,9 +1,23 @@
+import { type log } from '@lerna-lite/npmlog';
 import dedent from 'dedent';
-import type { Argv } from 'yargs';
+import type { Argv, Options } from 'yargs';
 
-export function filterOptions(yargs: Argv<any>) {
+export interface FilterOptions {
+  scope?: string;
+  ignore?: string;
+  private?: boolean;
+  since?: string;
+  continueIfNoMatch?: boolean;
+  excludeDependents?: boolean;
+  includeDependents?: boolean;
+  includeDependencies?: boolean;
+  includeMergedTags?: boolean;
+  log: typeof log;
+}
+
+export function filterOptions<T extends FilterOptions>(yargs: Argv<object>): Argv<T> {
   // Only for `exec` and 'run' commands
-  const opts: any = {
+  const opts: { [name: string]: Options } = {
     scope: {
       describe: 'Include only packages with names matching the given glob.',
       type: 'string',
@@ -64,5 +78,5 @@ export function filterOptions(yargs: Argv<any>) {
     },
   };
 
-  return yargs.options(opts).group(Object.keys(opts), 'Filter Options:');
+  return yargs.options(opts).group(Object.keys(opts), 'Filter Options:') as Argv<T>;
 }

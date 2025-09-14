@@ -62,7 +62,7 @@ import serializeTempdir from '@lerna-test/helpers/serializers/serialize-tempdir.
 expect.addSnapshotSerializer(serializeTempdir);
 
 describe('Changed Command', () => {
-  let cwd;
+  let cwd: string;
 
   beforeAll(async () => {
     vi.resetModules();

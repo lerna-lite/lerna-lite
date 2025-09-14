@@ -51,7 +51,7 @@ import serializeWindowsPaths from '@lerna-test/helpers/serializers/serialize-win
 expect.addSnapshotSerializer(serializeWindowsPaths);
 expect.addSnapshotSerializer(serializeTempdir);
 
-const createArgv = (cwd, ...args) => {
+const createArgv = (cwd: string, ...args: string[]) => {
   args.unshift('version');
   if (args.length > 0 && args[1]?.length > 0 && !args[1].startsWith('-')) {
     args[1] = `--bump=${args[1]}`;
@@ -63,7 +63,7 @@ const createArgv = (cwd, ...args) => {
 };
 
 describe('version --include-merged-tags', () => {
-  const setupGitChangesWithBranch = async (cwd, mainPaths, branchPaths) => {
+  const setupGitChangesWithBranch = async (cwd: string, mainPaths: string[], branchPaths: string[]) => {
     await gitTag(cwd, 'v1.0.0');
     await Promise.all(mainPaths.map((fp) => appendFileSync(join(cwd, fp), '1')));
     await gitAdd(cwd, '-A');

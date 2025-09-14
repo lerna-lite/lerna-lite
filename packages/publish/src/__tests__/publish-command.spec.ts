@@ -86,7 +86,7 @@ expect.addSnapshotSerializer({
   },
 });
 
-const createArgv = (cwd, ...args) => {
+const createArgv = (cwd: string, ...args: any[]) => {
   args.unshift('publish');
   if (args.length > 0 && args[1]?.length > 0 && !args[1].startsWith('-')) {
     args[1] = `--bump=${args[1]}`;
@@ -103,7 +103,7 @@ const createArgv = (cwd, ...args) => {
 
 describe('PublishCommand', () => {
   describe('cli validation', () => {
-    let cwd;
+    let cwd: string;
 
     beforeAll(async () => {
       cwd = await initFixture('normal');

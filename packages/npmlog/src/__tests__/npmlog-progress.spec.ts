@@ -48,15 +48,15 @@ describe('log module', () => {
     log.gauge = {
       enabled: false,
       enable() {
-        this.enabled = true;
+        (this as any).enabled = true;
         actions.push(['enable']);
       },
       disable() {
-        this.enabled = false;
+        (this as any).enabled = false;
         actions.push(['disable']);
       },
       isEnabled() {
-        return this.enabled;
+        return (this as any).enabled;
       },
       hide() {
         actions.push(['hide']);

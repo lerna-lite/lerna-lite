@@ -25,17 +25,17 @@ import { PackageGraph } from '../../package-graph/package-graph.js';
 import { Project } from '../../project/project.js';
 import { getFilteredPackages } from '../lib/get-filtered-packages.js';
 
-async function buildGraph(cwd) {
+async function buildGraph(cwd: string) {
   const packages = await Project.getPackages(cwd);
   return new PackageGraph(packages);
 }
 
-function parseOptions(...args) {
+function parseOptions(...args: string[]) {
   return filterOptions(yargs().locale('en').exitProcess(false).showHelpOnFail(false)).parse(args);
 }
 
 // working dir is never mutated
-let cwd;
+let cwd: string;
 
 beforeAll(async () => {
   cwd = await initFixture('filtering');
@@ -70,7 +70,7 @@ test.each`
   options.log = { notice: mockNotice };
 
   const result = await getFilteredPackages(packageGraph, execOpts, options);
-  expect(result.map((node) => node.name)).toEqual(matched.map((n) => `package-${n}`));
+  expect(result.map((node) => node.name)).toEqual(matched.map((n: number) => `package-${n}`));
 });
 
 test.each`

@@ -33,7 +33,7 @@ import yargParser from 'yargs-parser';
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
 const initFixture = initFixtureFactory(pathResolve(__dirname, '../../../publish/src/__tests__'));
-
+// @ts-ignore
 import Tacks from 'tacks';
 
 const { File, Dir } = Tacks;
@@ -58,7 +58,7 @@ expect.addSnapshotSerializer({
 import serializeChangelog from '@lerna-test/helpers/serializers/serialize-changelog.js';
 expect.addSnapshotSerializer(serializeChangelog);
 
-const createArgv = (cwd, ...args) => {
+const createArgv = (cwd: string, ...args: string[]) => {
   args.unshift('version');
   if (args.length > 0 && args[1]?.length > 0 && !args[1].startsWith('-')) {
     args[1] = `--bump=${args[1]}`;
@@ -69,7 +69,7 @@ const createArgv = (cwd, ...args) => {
   return argv as unknown as VersionCommandOption;
 };
 
-const setupChanges = async (cwd) => {
+const setupChanges = async (cwd: string) => {
   await gitTag(cwd, 'v1.0.1-beta.3');
   await outputFile(join(cwd, 'packages/package-3/hello.js'), 'world');
   await gitAdd(cwd, '.');

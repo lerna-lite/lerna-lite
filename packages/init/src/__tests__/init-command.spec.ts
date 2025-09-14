@@ -2,6 +2,7 @@ import { dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
 
 // helpers
+import { type InitCommandOption } from '@lerna-lite/core';
 import { commandRunner, initFixtureFactory, temporaryDirectory } from '@lerna-test/helpers';
 import { ensureDir, outputJson, pathExists, readJson } from 'fs-extra/esm';
 import { describe, expect, it, vi } from 'vitest';
@@ -36,7 +37,7 @@ describe('Init Command', () => {
     const ensureLernaConfSpy = vi.spyOn(InitCommand.prototype, 'ensureLernaConfig');
     const ensurePkgDirSpy = vi.spyOn(InitCommand.prototype, 'ensurePackagesDir');
 
-    const cmd = new InitCommand(createArgv(testDir, ''));
+    const cmd = new InitCommand(createArgv(testDir, '') as InitCommandOption);
     await cmd;
 
     expect(cmd.requiresGit).toBe(false);
@@ -50,7 +51,7 @@ describe('Init Command', () => {
     const ensurePkgJsonSpy = vi.spyOn(InitCommand.prototype, 'ensurePackageJSON');
     const ensureLernaConfSpy = vi.spyOn(InitCommand.prototype, 'ensureLernaConfig');
     const ensurePkgDirSpy = vi.spyOn(InitCommand.prototype, 'ensurePackagesDir');
-    await factory(createArgv(testDir, ''));
+    await factory(createArgv(testDir, '') as InitCommandOption);
 
     expect(ensurePkgJsonSpy).toHaveBeenCalled();
     expect(ensureLernaConfSpy).toHaveBeenCalled();
@@ -60,7 +61,7 @@ describe('Init Command', () => {
   it('should ensure lerna config changes to "independent" when provided as argument', async () => {
     const testDir = await initFixture('empty');
 
-    const cmd = new InitCommand(createArgv(testDir, '--independent'));
+    const cmd = new InitCommand(createArgv(testDir, '--independent') as InitCommandOption);
     await cmd;
 
     expect(cmd.project.config.version).toEqual('independent');
@@ -69,7 +70,7 @@ describe('Init Command', () => {
   it('should ensure manifest includes "workspaces" when "--use-workspaces" provided as argument', async () => {
     const testDir = await initFixture('empty');
 
-    const cmd = new InitCommand(createArgv(testDir, '--use-workspaces'));
+    const cmd = new InitCommand(createArgv(testDir, '--use-workspaces') as InitCommandOption);
     await cmd;
 
     expect(cmd.project.manifest.workspaces).toEqual(['packages/*']);
@@ -81,7 +82,7 @@ describe('Init Command', () => {
   it('should ensure lerna config changes version to "0.0.0" when no version found in project package', async () => {
     const testDir = await initFixture('empty');
 
-    const cmd = new InitCommand(createArgv(testDir, ''));
+    const cmd = new InitCommand(createArgv(testDir, '') as InitCommandOption);
     await cmd;
 
     expect(cmd.project.config.version).toEqual('0.0.0');
@@ -91,7 +92,7 @@ describe('Init Command', () => {
     vi.spyOn(InitCommand.prototype, 'gitInitialized').mockReturnValue(false);
     const testDir = await initFixture('empty');
 
-    const cmd = new InitCommand(createArgv(testDir, ''));
+    const cmd = new InitCommand(createArgv(testDir, '') as InitCommandOption);
     await cmd;
     const loggerSpy = vi.spyOn(cmd.logger, 'info');
     cmd.initialize();
@@ -103,7 +104,7 @@ describe('Init Command', () => {
   it('should ensure lerna config changes version to what is found in project package version', async () => {
     const testDir = await initFixture('updates');
 
-    const cmd = new InitCommand(createArgv(testDir, '--exact'));
+    const cmd = new InitCommand(createArgv(testDir, '--exact') as InitCommandOption);
     await cmd;
 
     expect(cmd.project.config.version).toEqual('1.0.0');

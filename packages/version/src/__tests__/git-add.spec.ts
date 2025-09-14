@@ -12,7 +12,7 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
 const initFixture = initFixtureFactory(__dirname);
 
-const getStagedFile = async (cwd) => execa('git', ['diff', '--cached', '--name-only'], { cwd }).then((result) => slash(result.stdout));
+const getStagedFile = async (cwd: string) => execa('git', ['diff', '--cached', '--name-only'], { cwd }).then((result) => slash(result.stdout));
 
 test('relative files', async () => {
   const cwd = await initFixture('root-manifest-only');

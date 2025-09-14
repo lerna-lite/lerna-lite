@@ -11,18 +11,18 @@ vi.mock('@lerna-lite/core', async () => ({
   QueryGraph: (await vi.importActual<any>('../../../core/src/utils/query-graph')).QueryGraph,
 }));
 
-let watchAddHandler;
-let watchAddDirHandler;
-let watchUnlinkHandler;
-let watchUnlinkDirHandler;
-let watchChangeHandler;
-let watchErrorHandler;
+let watchAddHandler: any;
+let watchAddDirHandler: any;
+let watchUnlinkHandler: any;
+let watchUnlinkDirHandler: any;
+let watchChangeHandler: any;
+let watchErrorHandler: any;
 const { closeMock } = vi.hoisted(() => ({ closeMock: vi.fn() }));
 
 vi.mock('chokidar', () => ({
   watch: vi.fn().mockImplementation(() => ({
     close: closeMock,
-    on: vi.fn().mockImplementation(function (this, event, handler) {
+    on: vi.fn().mockImplementation(function (this: any, event: string, handler: Function) {
       switch (event) {
         case 'error':
           watchErrorHandler = handler;
@@ -69,7 +69,7 @@ const initFixture = initFixtureFactory(__dirname);
 
 // assertion helpers
 const calledInPackages = () => (spawn as Mock).mock.calls.map(([, , opts]) => basename(opts.cwd));
-const watchInPackagesStreaming = (testDir) =>
+const watchInPackagesStreaming = (testDir: string) =>
   (spawnStreaming as Mock).mock.calls.reduce((arr, [command, params, opts, prefix]) => {
     const dir = normalizeRelativeDir(testDir, opts.cwd);
     arr.push([dir, command, `(prefix: ${prefix})`].concat(params).join(' '));
@@ -89,7 +89,7 @@ const createArgv = (cwd: string, ...args: string[]) => {
       argv.command = args[idx + 1];
     }
   });
-  args['logLevel'] = 'silent';
+  (args as any)['logLevel'] = 'silent';
   return argv as any;
 };
 
@@ -100,7 +100,7 @@ describe('Watch Command', () => {
 
   describe('in a basic repo', () => {
     // working dir is never mutated
-    let testDir;
+    let testDir: string;
 
     beforeAll(async () => {
       testDir = await initFixture('basic');

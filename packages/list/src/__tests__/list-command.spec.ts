@@ -66,7 +66,7 @@ expect.addSnapshotSerializer(serializeTempdir);
 
 describe('List Command', () => {
   describe('in a basic repo', () => {
-    let testDir;
+    let testDir: string;
 
     beforeAll(async () => {
       testDir = await initFixture('basic');

@@ -43,7 +43,7 @@ const initFixture = initFixtureFactory(__dirname);
 // assertion helpers
 const calledInPackages = () => (spawn as Mock).mock.calls.map(([, , opts]) => basename(opts.cwd));
 
-const execInPackagesStreaming = (testDir) =>
+const execInPackagesStreaming = (testDir: string) =>
   (spawnStreaming as Mock).mock.calls.reduce((arr, [command, params, opts, prefix]) => {
     const dir = normalizeRelativeDir(testDir, opts.cwd);
     arr.push([dir, command, `(prefix: ${prefix})`].concat(params).join(' '));
@@ -58,7 +58,7 @@ const createArgv = (cwd: string, ...args: string[]) => {
   const parserArgs = args.join(' ');
   const argv = yargParser(parserArgs);
   argv['$0'] = cwd;
-  args['logLevel'] = 'silent';
+  (args as any)['logLevel'] = 'silent';
   return argv;
 };
 
@@ -69,7 +69,7 @@ describe('ExecCommand', () => {
 
   describe('in a basic repo', () => {
     // working dir is never mutated
-    let testDir;
+    let testDir: string;
 
     beforeAll(async () => {
       testDir = await initFixture('basic');

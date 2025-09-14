@@ -39,7 +39,7 @@ expect.addSnapshotSerializer({
 });
 
 const resolvePrereleaseId = vi.fn(() => 'alpha');
-const versionPrompt = (buildMetadata) => makePromptVersion(resolvePrereleaseId, buildMetadata);
+const versionPrompt = (buildMetadata: string) => makePromptVersion(resolvePrereleaseId, buildMetadata);
 
 // helpers
 import { fileURLToPath } from 'node:url';
@@ -54,7 +54,7 @@ import cliCommands from '../../../cli/src/cli-commands/cli-version-commands.js';
 import { VersionCommand } from '../version-command.js';
 const lernaVersion = commandRunner(cliCommands);
 
-const createArgv = (cwd, ...args) => {
+const createArgv = (cwd: string, ...args: string[]) => {
   args.unshift('version');
   if (args.length > 0 && args[1]?.length > 0 && !args[1].startsWith('-')) {
     args[1] = `--bump=${args[1]}`;
@@ -231,7 +231,7 @@ describe('--build-metadata in version prompt', () => {
   });
 
   it('accepts build metadata for prompted prerelease version', async () => {
-    let inputFilter;
+    let inputFilter: any;
 
     (promptSelectOne as any).chooseBump('PRERELEASE');
     (promptTextInput as Mock).mockImplementationOnce((msg, cfg) => {
@@ -251,8 +251,8 @@ describe('--build-metadata in version prompt', () => {
   });
 
   it('accepts build metadata for prompted custom version', async () => {
-    let inputFilter;
-    let inputValidate;
+    let inputFilter: any;
+    let inputValidate: any;
 
     (promptSelectOne as any).chooseBump('CUSTOM');
     (promptTextInput as Mock).mockImplementationOnce((msg, cfg) => {

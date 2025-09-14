@@ -182,7 +182,7 @@ describe('@lerna/otplease', () => {
       throw err;
     });
 
-    process[pipe].isTTY = false;
+    (process as any)[pipe].isTTY = false;
 
     await expect(otplease(fn, null as any, null as any)).rejects.toThrow(`non-interactive ${pipe}`);
   });
@@ -202,8 +202,8 @@ describe('@lerna/otplease', () => {
   });
 });
 
-function makeTestCallback(otp, result) {
-  return (opts) => {
+function makeTestCallback(otp: string, result: any) {
+  return (opts: any) => {
     if (opts.otp !== otp) {
       const err: any = new Error(`oops, received otp ${opts.otp}`);
       err.code = 'EOTP';

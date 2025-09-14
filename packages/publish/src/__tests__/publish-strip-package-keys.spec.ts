@@ -55,7 +55,7 @@ import cliCommands from '../../../cli/src/cli-commands/cli-publish-commands.js';
 const lernaPublish = commandRunner(cliCommands);
 
 describe('publish --remove-package-fields', () => {
-  const setupChanges = async (cwd, pkgRoot = 'packages') => {
+  const setupChanges = async (cwd: string, pkgRoot = 'packages') => {
     await outputFile(join(cwd, `${pkgRoot}/package-1/hello.js`), 'world');
     await gitAdd(cwd, '.');
     await gitCommit(cwd, 'setup');

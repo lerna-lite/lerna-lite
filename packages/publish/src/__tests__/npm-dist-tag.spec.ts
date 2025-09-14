@@ -3,15 +3,15 @@ import { describe, expect, it, Mock, vi } from 'vitest';
 vi.mock('npm-registry-fetch');
 vi.mock('@lerna-lite/core', async () => ({
   ...(await vi.importActual<any>('@lerna-lite/core')), // return the other real methods, below we'll mock only 2 of the methods
-  otplease: (cb, opts) => Promise.resolve(cb(opts)),
+  otplease: (cb: (opts: any) => Promise<any>, opts: any) => Promise.resolve(cb(opts)),
 }));
 
 // mocked modules
 import fetch from 'npm-registry-fetch';
 
 // file under test
+import { DistTagOptions } from '../interfaces.js';
 import * as npmDistTag from '../lib/npm-dist-tag.js';
-import { DistTagOptions } from '../models/index.js';
 
 const stubLog = {
   verbose: vi.fn(),

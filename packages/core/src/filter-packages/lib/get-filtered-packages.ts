@@ -14,7 +14,11 @@ import type { FilterOptions } from './interfaces.js';
  * @param {Partial<FilterOptions>} opts
  * @returns {Promise<import('@lerna/package').Package[]>}
  */
-export async function getFilteredPackages(packageGraph: PackageGraph, execOpts: ExecOpts, opts: FilterOptions) {
+export async function getFilteredPackages(
+  packageGraph: PackageGraph,
+  execOpts: ExecOpts,
+  opts: FilterOptions
+): Promise<Package[]> {
   // @ts-ignore
   const options: FilterOptions = { log, ...opts };
 

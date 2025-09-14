@@ -69,7 +69,7 @@ const createArgv = (cwd: string, script?: string, ...args: any[]) => {
   if (script) {
     argv.script = script;
   }
-  args['logLevel'] = 'silent';
+  (args as any)['logLevel'] = 'silent';
   return argv as unknown as RunCommandOption;
 };
 
@@ -83,7 +83,7 @@ describe('RunCommand', () => {
 
   describe('in a basic repo', () => {
     // working dir is never mutated
-    let testDir;
+    let testDir: string;
 
     beforeAll(async () => {
       testDir = await initFixture('basic');

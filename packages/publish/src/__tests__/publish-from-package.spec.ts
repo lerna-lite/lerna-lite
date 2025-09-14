@@ -33,7 +33,7 @@ vi.mock('../lib/npm-publish', async () => await vi.importActual('../lib/__mocks_
 import { dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
 
-import { logOutput, promptConfirmation, PublishCommandOption, throwIfUncommitted } from '@lerna-lite/core';
+import { logOutput, PackageGraphNode, promptConfirmation, PublishCommandOption, throwIfUncommitted } from '@lerna-lite/core';
 import { remove } from 'fs-extra/esm';
 // mocked or stubbed modules
 import * as writePkg from 'write-package';
@@ -53,7 +53,7 @@ const initFixture = initFixtureFactory(__dirname);
 // file under test
 import { PublishCommand } from '../publish-command.js';
 
-const createArgv = (cwd, ...args) => {
+const createArgv = (cwd: string, ...args: string[]) => {
   args.unshift('publish');
   if (args.length > 0 && args[1] && args[1].length > 0 && !args[1].startsWith('-')) {
     args[1] = `--bump=${args[1]}`;
@@ -70,7 +70,7 @@ describe('publish from-package', () => {
 
     (getUnpublishedPackages as Mock).mockImplementationOnce((packageGraph) => {
       const pkgs = packageGraph.rawPackageList.slice(1, 3);
-      return pkgs.map((pkg) => packageGraph.get(pkg.name));
+      return pkgs.map((pkg: PackageGraphNode) => packageGraph.get(pkg.name));
     });
 
     await new PublishCommand(createArgv(cwd, '--bump', 'from-package'));
@@ -85,7 +85,7 @@ describe('publish from-package', () => {
 
     (getUnpublishedPackages as Mock).mockImplementationOnce((packageGraph) => {
       const pkgs = packageGraph.rawPackageList.slice(1, 3);
-      return pkgs.map((pkg) => packageGraph.get(pkg.name));
+      return pkgs.map((pkg: PackageGraphNode) => packageGraph.get(pkg.name));
     });
 
     await new PublishCommand(createArgv(cwd, '--bump', 'from-package', '--dry-run'));

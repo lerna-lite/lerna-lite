@@ -44,7 +44,7 @@ describe('utils/temp-write', () => {
         })),
       })),
       unpipe: vi.fn(),
-      on: vi.fn().mockImplementation(function (this, event, handler) {
+      on: vi.fn().mockImplementation(function (this: any, event: string, handler: Function) {
         if (event === 'error') {
           handler('some error');
         }

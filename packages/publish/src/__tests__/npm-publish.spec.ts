@@ -6,7 +6,7 @@ vi.mock('@npmcli/package-json');
 
 vi.mock('@lerna-lite/core', async () => ({
   ...(await vi.importActual<any>('@lerna-lite/core')),
-  otplease: (cb, opts) => Promise.resolve(cb(opts)),
+  otplease: (cb: (opts: any) => Promise<any>, opts: any) => Promise.resolve(cb(opts)),
   runLifecycle: (await vi.importActual<any>('../../../core/src/__mocks__/run-lifecycle')).runLifecycle,
 }));
 

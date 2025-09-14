@@ -56,7 +56,7 @@ import yargParser from 'yargs-parser';
 
 import { VersionCommand } from '../version-command.js';
 
-const createArgv = (cwd, ...args) => {
+const createArgv = (cwd: string, ...args: any[]) => {
   args.unshift('version');
   if (args.length > 0 && args[1]?.length > 0 && !args[1].startsWith('-')) {
     args[1] = `--bump=${args[1]}`;

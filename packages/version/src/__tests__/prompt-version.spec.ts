@@ -65,13 +65,13 @@ describe('select', () => {
 });
 
 describe('custom version', () => {
-  let inputFilter;
-  let inputValidate;
+  let inputFilter: any;
+  let inputValidate: any;
 
   beforeEach(() => {
     (promptSelectOne as any).chooseBump('CUSTOM');
 
-    (promptTextInput as any).mockImplementationOnce((msg, cfg) => {
+    (promptTextInput as any).mockImplementationOnce((msg: string, cfg: any) => {
       inputFilter = cfg.filter;
       inputValidate = cfg.validate;
 
@@ -104,12 +104,12 @@ describe('custom version', () => {
  * here be dragons
  */
 describe('custom prerelease', () => {
-  let inputFilter;
+  let inputFilter: any;
 
   beforeEach(() => {
     (promptSelectOne as any).chooseBump('PRERELEASE');
 
-    (promptTextInput as any).mockImplementationOnce((msg, cfg) => {
+    (promptTextInput as any).mockImplementationOnce((msg: string, cfg: any) => {
       inputFilter = cfg.filter;
 
       return Promise.resolve(msg);

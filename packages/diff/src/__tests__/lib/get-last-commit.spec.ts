@@ -51,7 +51,7 @@ describe('get-last-commit', () => {
 
     try {
       getLastCommit({ cwd: 'test' });
-    } catch (e) {
+    } catch (e: any) {
       expect(e.message).toBe('some error');
       expect(warnSpy).toHaveBeenCalledWith('ENOTAGS', 'No git tags were reachable from this branch!');
       expect(verboseSpy).toHaveBeenCalledWith('hasTags error', someError);

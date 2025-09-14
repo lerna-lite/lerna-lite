@@ -58,7 +58,7 @@ const lernaPublish = commandRunner(cliCommands);
 import { PublishCommandOption } from '@lerna-lite/core';
 import yargParser from 'yargs-parser';
 
-const createArgv = (cwd, ...args) => {
+const createArgv = (cwd: string, ...args: string[]) => {
   args.unshift('publish');
   if (args.length > 0 && args[1]?.length > 0 && !args[1].startsWith('-')) {
     args[1] = `--bump=${args[1]}`;

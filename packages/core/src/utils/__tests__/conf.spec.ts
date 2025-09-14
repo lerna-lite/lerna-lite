@@ -5,7 +5,7 @@ import * as defaults from '../defaults.js';
 
 describe('conf', () => {
   describe('loadPrefix()', () => {
-    let cli;
+    let cli: any;
 
     beforeEach(() => {
       const conf = new Conf(Object.assign({}, defaults));

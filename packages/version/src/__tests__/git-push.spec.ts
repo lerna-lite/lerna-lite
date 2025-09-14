@@ -11,7 +11,7 @@ import { cloneFixtureFactory } from '@lerna-test/helpers';
 import { gitPush, gitPushSingleTag } from '../lib/git-push.js';
 const cloneFixture = cloneFixtureFactory(__dirname);
 
-async function listRemoteTags(cwd) {
+async function listRemoteTags(cwd: string) {
   return execa('git', ['ls-remote', '--tags', '--refs', '--quiet'], { cwd }).then((result) => result.stdout);
 }
 

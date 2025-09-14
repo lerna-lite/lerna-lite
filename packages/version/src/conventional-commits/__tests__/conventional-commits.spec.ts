@@ -356,17 +356,17 @@ describe('conventional-commits', () => {
     });
 
     describe('prerelease bumps', () => {
-      let cwd;
-      let pkg;
-      let opts;
-      let recommend;
+      let cwd: string;
+      let pkg: Package;
+      let opts: any;
+      let recommend: any;
 
       beforeEach(async () => {
         let value = 0;
         cwd = await initFixture('independent');
         [pkg] = await Project.getPackages(cwd);
         opts = { changelogPreset: 'angular' };
-        recommend = async (commitMessage, { initVersion } = {} as any) => {
+        recommend = async (commitMessage: string, { initVersion } = {} as any) => {
           if (initVersion) {
             await pkg.set('version', initVersion).serialize();
             await gitAdd(cwd, pkg.manifestLocation);
@@ -407,7 +407,7 @@ describe('conventional-commits', () => {
   });
 
   describe('updateChangelog()', () => {
-    const getFileContent = ({ logPath }) => readFile(logPath, 'utf8');
+    const getFileContent = ({ logPath }: { logPath: string }) => readFile(logPath, 'utf8');
 
     it('creates files if they do not exist', async () => {
       const cwd = (await initFixture('changelog-missing')) as string;

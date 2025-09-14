@@ -6,8 +6,9 @@ vi.mock('@lerna-lite/core', async () => ({
   QueryGraph: (await vi.importActual<any>('../../../core/src/utils/query-graph')).QueryGraph,
 }));
 
-import { Project } from '@lerna-lite/core';
+import { ListCommandOption, Package, Project } from '@lerna-lite/core';
 import { loggingOutput, temporaryDirectory } from '@lerna-test/helpers';
+// @ts-ignore
 import Tacks from 'tacks';
 
 import { listable } from '../index.js';
@@ -32,9 +33,9 @@ expect.addSnapshotSerializer(serializeWindowsPaths);
 expect.addSnapshotSerializer(serializeTempdir);
 
 describe('listable.format()', () => {
-  let packages;
+  let packages: Package[];
 
-  const formatWithOptions = (opts) => listable.format(packages, Object.assign({ _: ['ls'] }, opts));
+  const formatWithOptions = (opts: ListCommandOption) => listable.format(packages, Object.assign({ _: ['ls'] }, opts));
 
   const fixture = new Tacks(
     Dir({
@@ -241,7 +242,7 @@ __TEST_ROOTDIR__/pkgs/pkg-3:pkg-3:3.0.0:PRIVATE
 
   describe('aliases', () => {
     test('la => ls -la', () => {
-      const { text } = formatWithOptions({ _: ['la'] });
+      const { text } = formatWithOptions({ _: ['la'] } as ListCommandOption);
 
       expect(text).toMatchInlineSnapshot(`
 pkg-1  v1.0.0 pkgs/pkg-1
@@ -251,7 +252,7 @@ pkg-3  v3.0.0 pkgs/pkg-3 (PRIVATE)
     });
 
     test('ll => ls -l', () => {
-      const { text } = formatWithOptions({ _: ['ll'] });
+      const { text } = formatWithOptions({ _: ['ll'] } as ListCommandOption);
 
       expect(text).toMatchInlineSnapshot(`
 pkg-1  v1.0.0 pkgs/pkg-1

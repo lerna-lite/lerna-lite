@@ -50,7 +50,7 @@ const createArgv = (cwd: string, ...args: string[]) => {
 };
 
 describe('version --allow-branch', () => {
-  const changeBranch = (cwd, name) => execa('git', ['checkout', '-B', name], { cwd });
+  const changeBranch = (cwd: string, name: string) => execa('git', ['checkout', '-B', name], { cwd });
 
   describe('cli', () => {
     it('rejects a non matching branch', async () => {

@@ -61,7 +61,7 @@ describe('getComplexObjectValue method', () => {
 
   it('should return the object descendant even when path given is not a dot notation', () => {
     const output = getComplexObjectValue(obj, 'user');
-    expect(output).toEqual(obj['user']);
+    expect(output).toEqual((obj as any)['user']);
   });
 
   it('should return the object descendant when using dot notation', () => {

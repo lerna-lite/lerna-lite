@@ -54,7 +54,7 @@ const lernaPublish = commandRunner(cliCommands);
 import { PublishCommandOption } from '@lerna-lite/core';
 import yargParser from 'yargs-parser';
 
-const createArgv = (cwd, ...args) => {
+const createArgv = (cwd: string, ...args: string[]) => {
   args.unshift('publish');
   if (args.length > 0 && args[1] && args[1].length > 0 && !args[1].startsWith('-')) {
     args[1] = `--bump=${args[1]}`;
@@ -66,7 +66,7 @@ const createArgv = (cwd, ...args) => {
 };
 
 describe("relative 'file:' specifiers", () => {
-  const setupChanges = async (cwd, pkgRoot = 'packages') => {
+  const setupChanges = async (cwd: string, pkgRoot = 'packages') => {
     await outputFile(join(cwd, `${pkgRoot}/package-1/hello.js`), 'world');
     await gitAdd(cwd, '.');
     await gitCommit(cwd, 'setup');
