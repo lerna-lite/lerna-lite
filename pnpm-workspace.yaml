@@ -42,7 +42,7 @@ catalogs:
     picomatch: ^4.0.3
     tinyglobby: ^0.2.15
     tinyrainbow: ^3.0.3
-    uuid: ^11.1.0
+    uuid: ^13.0.0
     write-json-file: ^7.0.0
     write-package: ^7.2.0
     yaml: ^2.8.1
