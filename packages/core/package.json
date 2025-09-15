@@ -52,7 +52,7 @@
     "load-json-file": "catalog:dependencies",
     "npm-package-arg": "catalog:",
     "p-map": "catalog:",
-    "p-queue": "^8.1.0",
+    "p-queue": "^8.1.1",
     "picomatch": "catalog:dependencies",
     "resolve-from": "^5.0.0",
     "semver": "catalog:",
