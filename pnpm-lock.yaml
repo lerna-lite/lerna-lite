@@ -62,8 +62,8 @@ catalogs:
       specifier: ^11.1.0
       version: 11.1.0
     write-json-file:
-      specifier: ^6.0.0
-      version: 6.0.0
+      specifier: ^7.0.0
+      version: 7.0.0
     write-package:
       specifier: ^7.2.0
       version: 7.2.0
@@ -246,7 +246,7 @@ importers:
         version: 4.0.0-beta.11(@types/node@22.18.4)(yaml@2.8.1)
       write-json-file:
         specifier: catalog:dependencies
-        version: 6.0.0
+        version: 7.0.0
 
   packages/changed:
     dependencies:
@@ -380,7 +380,7 @@ importers:
         version: 6.0.0
       write-json-file:
         specifier: catalog:dependencies
-        version: 6.0.0
+        version: 7.0.0
       write-package:
         specifier: catalog:dependencies
         version: 7.2.0
@@ -506,7 +506,7 @@ importers:
         version: 7.0.3
       write-json-file:
         specifier: catalog:dependencies
-        version: 6.0.0
+        version: 7.0.0
     devDependencies:
       '@types/yargs-parser':
         specifier: catalog:devDependencies
@@ -837,7 +837,7 @@ importers:
         version: 11.1.0
       write-json-file:
         specifier: catalog:dependencies
-        version: 6.0.0
+        version: 7.0.0
       zeptomatch:
         specifier: catalog:dependencies
         version: 2.0.2
@@ -3206,6 +3206,10 @@ packages:
     resolution: {integrity: sha512-aSbHV0DaBcr7u0PVHXzM6NbZNAtrr9sF6+Qfs9UUVG7Ll3jQ6hHi8F/xqIIcn2rvIVbr0v/2zyjSdwSV47AgLQ==}
     engines: {node: '>=12'}
 
+  sort-keys@6.0.0:
+    resolution: {integrity: sha512-ueSlHJMwpIw42CJ4B11Uxzh/S0p0AlOyiNktlv2KOu5e1JpUE6DlC4AAUjXqesHdBRv/g0wC9Q4vwq0NP2pA9w==}
+    engines: {node: '>=20'}
+
   source-map-js@1.2.1:
     resolution: {integrity: sha512-UXWMKhLOwVKb728IUtQPXxfYU+usdybtUrK/8uGE8CQMvrhOpwvzDBwj0QhSL7MQc7vIsISBG8VQ8+IDQxpfQA==}
     engines: {node: '>=0.10.0'}
@@ -3538,6 +3542,10 @@ packages:
   write-json-file@6.0.0:
     resolution: {integrity: sha512-MNHcU3f9WxnNyR6MxsYSj64Jz0+dwIpisWKWq9gqLj/GwmA9INg3BZ3vt70/HB3GEwrnDQWr4RPrywnhNzmUFA==}
     engines: {node: '>=18'}
+
+  write-json-file@7.0.0:
+    resolution: {integrity: sha512-rj8As6LkachKauGxvZkFzCEd6hIRTi9FKtCNKOa4SaH5vPOiACbGcmPUEJXgkhTHwzNsYmcSbD3C9a6whBfyOg==}
+    engines: {node: '>=20'}
 
   write-package@7.2.0:
     resolution: {integrity: sha512-uMQTubF/vcu+Wd0b5BGtDmiXePd/+44hUWQz2nZPbs92/BnxRo74tqs+hqDo12RLiEd+CXFKUwxvvIZvtt34Jw==}
@@ -6016,6 +6024,10 @@ snapshots:
     dependencies:
       is-plain-obj: 4.1.0
 
+  sort-keys@6.0.0:
+    dependencies:
+      is-plain-obj: 4.1.0
+
   source-map-js@1.2.1: {}
 
   source-map@0.6.1: {}
@@ -6352,6 +6364,13 @@ snapshots:
       is-plain-obj: 4.1.0
       sort-keys: 5.1.0
       write-file-atomic: 5.0.1
+
+  write-json-file@7.0.0:
+    dependencies:
+      detect-indent: 7.0.1
+      is-plain-obj: 4.1.0
+      sort-keys: 6.0.0
+      write-file-atomic: 6.0.0
 
   write-package@7.2.0:
     dependencies:
