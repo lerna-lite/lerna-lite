@@ -1,4 +1,6 @@
-export const whatBump = function (commits) {
+import { type Commit } from 'conventional-commits-parser';
+
+export const whatBump = function (commits: Commit[]) {
   let level = 2;
   let breakings = 0;
   let features = 0;

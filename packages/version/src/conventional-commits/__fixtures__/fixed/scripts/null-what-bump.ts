@@ -1,4 +1,6 @@
-export default function whatBump(commits) {
+import { type Commit } from 'conventional-commits-parser';
+
+export default function whatBump(commits: Commit[]) {
   let level: null | number = null;
   let breakings = 0;
   let features = 0;
