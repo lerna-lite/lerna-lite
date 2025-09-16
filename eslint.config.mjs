@@ -1,11 +1,12 @@
 import eslint from '@eslint/js';
-import tseslint from 'typescript-eslint';
-import n from 'eslint-plugin-n';
-import eslintPrettier from 'eslint-config-prettier';
-import simpleImportSort from 'eslint-plugin-simple-import-sort';
 import vitest from '@vitest/eslint-plugin';
+import { defineConfig } from 'eslint/config';
+import n from 'eslint-plugin-n';
+import simpleImportSort from 'eslint-plugin-simple-import-sort';
+import eslintPrettier from 'eslint-config-prettier';
+import tseslint from 'typescript-eslint';
 
-export default tseslint.config(
+export default defineConfig(
   {
     ignores: ['**/*.{js,mjs,json,md}', '**/*/*.d.ts', '**/dist/*', '**/__helpers__/**/*.*', '**/__mocks__/**/*.*'],
   },
