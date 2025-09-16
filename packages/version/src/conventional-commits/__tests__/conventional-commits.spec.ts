@@ -693,62 +693,6 @@ describe('conventional-commits', () => {
       `);
     });
 
-    it('supports old preset API', async () => {
-      const cwd = await initFixture('fixed');
-
-      await gitTag(cwd, 'v1.0.0');
-
-      const [pkg1] = await Project.getPackages(cwd);
-
-      // make a change in package-1
-      await pkg1.set('changed', 1).serialize();
-      await gitAdd(cwd, pkg1.manifestLocation);
-      await gitCommit(cwd, 'fix(pkg1): A commit using the old preset API');
-
-      // update version
-      await pkg1.set('version', '1.0.1').serialize();
-
-      const leafChangelog = await updateChangelog(pkg1, 'fixed', {
-        changelogPreset: './scripts/old-api-preset',
-      });
-
-      expect(leafChangelog.newEntry).toMatchInlineSnapshot(`
-        <a name="1.0.1"></a>
-        ## <small>1.0.1 (YYYY-MM-DD)</small>
-
-        * fix(pkg1): A commit using the old preset API ([SHA](https://github.com/lerna/conventional-commits-fixed/commit/GIT_HEAD))
-
-      `);
-    });
-
-    it('supports legacy callback presets', async () => {
-      const cwd = await initFixture('fixed');
-
-      await gitTag(cwd, 'v1.0.0');
-
-      const [, pkg2] = await Project.getPackages(cwd);
-
-      // make a change in package-2
-      await pkg2.set('changed', 1).serialize();
-      await gitAdd(cwd, pkg2.manifestLocation);
-      await gitCommit(cwd, 'fix(pkg2): A commit using a legacy callback preset');
-
-      // update version
-      await pkg2.set('version', '1.0.1').serialize();
-
-      const leafChangelog = await updateChangelog(pkg2, 'fixed', {
-        changelogPreset: './scripts/legacy-callback-preset.js',
-      });
-
-      expect(leafChangelog.newEntry).toMatchInlineSnapshot(`
-        <a name="1.0.1"></a>
-        ## <small>1.0.1 (YYYY-MM-DD)</small>
-
-        * fix(pkg2): A commit using a legacy callback preset ([SHA](https://github.com/lerna/conventional-commits-fixed/commit/GIT_HEAD))
-
-      `);
-    });
-
     it('supports config builder presets', async () => {
       const cwd = await initFixture('fixed');
 

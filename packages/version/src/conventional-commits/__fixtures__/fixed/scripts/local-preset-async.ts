@@ -3,7 +3,7 @@ import parser from './parser-opts.js';
 import whatBump from './what-bump.js';
 import writer from './writer-opts.js';
 
-export default async function createPreset(_config) {
+export default async function createPreset(_config: any) {
   return {
     parser: parser,
     writer: writer,

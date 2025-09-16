@@ -1,9 +1,11 @@
-export const whatBump = function (commits) {
+import { type Commit } from 'conventional-commits-parser';
+
+export const whatBump = function (commits: Commit[]) {
   let level = 2;
   let breakings = 0;
   let features = 0;
 
-  commits.forEach((commit) => {
+  commits.forEach((commit: Commit) => {
     if (commit.notes.length > 0) {
       breakings += commit.notes.length;
       level = 0;

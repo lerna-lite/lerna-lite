@@ -5,15 +5,6 @@ import pify from 'pify';
 
 import type { ChangelogConfig, ChangelogPresetConfig } from '../interfaces.js';
 
-/** @deprecated this is a temporary workaround until `config?.conventionalChangelog`, `parserOpts` and `writerOpts` are officially removed */
-function flattenConfigResult(config: any): ChangelogConfig {
-  const flatConfig = config?.conventionalChangelog || config;
-  flatConfig.parser = flatConfig.parserOpts || flatConfig.parser;
-  flatConfig.writer = flatConfig.writerOpts || flatConfig.writer;
-
-  return flatConfig;
-}
-
 export class GetChangelogConfig {
   static cfgCache = new Map<string, any>();
 
@@ -91,7 +82,6 @@ export class GetChangelogConfig {
       // Maybe it doesn't need an implicit 'conventional-changelog-' prefix?
       try {
         config = await this.resolveConfigPromise(presetPackageName, presetConfig);
-        config = flattenConfigResult(config);
 
         GetChangelogConfig.cfgCache.set(cacheKey, config);
 
@@ -120,7 +110,6 @@ export class GetChangelogConfig {
 
       try {
         config = await this.resolveConfigPromise(presetPackageName, presetConfig);
-        config = flattenConfigResult(config);
         GetChangelogConfig.cfgCache.set(cacheKey, config);
       } catch (err: any) {
         log.warn('getChangelogConfig', err.message);
@@ -134,6 +123,6 @@ export class GetChangelogConfig {
       }
     }
 
-    return Promise.resolve(flattenConfigResult(config));
+    return Promise.resolve(config);
   }
 }

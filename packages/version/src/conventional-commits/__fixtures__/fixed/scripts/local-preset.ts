@@ -5,9 +5,7 @@ import whatBump from './what-bump.js';
 import writerOpts from './writer-opts.js';
 
 export default {
-  conventionalChangelog: {
-    parser: parserOpts,
-    writer: writerOpts,
-    whatBump,
-  },
+  parser: parserOpts,
+  writer: writerOpts,
+  whatBump,
 };
