@@ -188,9 +188,9 @@ lerna-repo/
   lerna.json
 ```
 
-**Note** Lerna-Lite now supports 3 file extension types (`.json`, `.jsonc` and `.json5`), however please note that not all code editors support [JSON Schema](https://json-schema.org/) with `.json5`, so `lerna.json` might still be the preferred file extension (all formats support inline comments, even `.json`). 
+**Note** Lerna-Lite now supports 3 file extension types (`.json`, `.jsonc` and `.json5`), however please note that not all code editors support [JSON Schema](https://json-schema.org/) (e.g. `.json5`), so `lerna.json` might still be the preferred file extension. Also note all formats support inline comments, even the default `lerna.json`.
 
-Note that `package-a` show above will not be created, it is only shown here to help clarify the structure. For more info and full details about the `lerna.json` file, please read the [lerna.json](https://github.com/lerna-lite/lerna-lite/wiki/lerna.json) Wiki. Also note that you can optionally add comments to your `lerna.json` config file since it is also able to parse JSON5 file format.
+Note that `package-a` shown above will not be created, it is only shown here to help clarify the structure. For more info and full details about the `lerna.json` file, please read the [lerna.json](https://github.com/lerna-lite/lerna-lite/wiki/lerna.json) Wiki. Also note that you can optionally add comments to your `lerna.json` config file since it is also able to parse JSON5 file format.
 
 The final step will be to install the commands that are of interest to you (`publish`, `version`, `run`, `exec`, ...)
 
@@ -264,12 +264,12 @@ _Click on any command below to see documentation of all available options_
 
 | Command | Install | Description |
 | --------| --------| ----------- |
-| ☁️ [publish](https://github.com/lerna-lite/lerna-lite/tree/main/packages/publish#readme) | `npm i @lerna-lite/publish -D` | publish each workspace package |
-| 📑 [version](https://github.com/lerna-lite/lerna-lite/tree/main/packages/version#readme) | `npm i @lerna-lite/version -D` | create new version for each workspace package |
 | 🕜 [changed](https://github.com/lerna-lite/lerna-lite/tree/main/packages/changed#readme) | `npm i @lerna-lite/changed -D` | list local packages changed since last release |
 | 🌓 [diff](https://github.com/lerna-lite/lerna-lite/tree/main/packages/diff#readme)       | `npm i @lerna-lite/diff -D`    | git diff all packages since the last release   |
 | 👷 [exec](https://github.com/lerna-lite/lerna-lite/tree/main/packages/exec#readme)       | `npm i @lerna-lite/exec -D`    | execute an command in each workspace package       |
 | 📖 [list](https://github.com/lerna-lite/lerna-lite/tree/main/packages/list#readme)       | `npm i @lerna-lite/list -D`    | list local packages                            |
+| ☁️ [publish](https://github.com/lerna-lite/lerna-lite/tree/main/packages/publish#readme) | `npm i @lerna-lite/publish -D` | publish each workspace package |
+| 📑 [version](https://github.com/lerna-lite/lerna-lite/tree/main/packages/version#readme) | `npm i @lerna-lite/version -D` | create new version for each workspace package |
 | 🏃 [run](https://github.com/lerna-lite/lerna-lite/tree/main/packages/run#readme)         | `npm i @lerna-lite/run -D`      | run npm script in each workspace package           |
 | 👓 [watch](https://github.com/lerna-lite/lerna-lite/tree/main/packages/watch#readme)     | `npm i @lerna-lite/watch -D`    | watch for changes & execute commands when fired |
 
