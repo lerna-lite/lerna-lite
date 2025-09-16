@@ -3,6 +3,7 @@
   labels: ['dependencies'],
   ignorePaths: ['helpers', '**/__fixtures__/**', '**/__tests__/**'],
   lockFileMaintenance: { enabled: false },
+  minimumReleaseAge: '3 days',
   pin: false,
   rangeStrategy: 'bump',
   packageRules: [
