@@ -4,7 +4,7 @@
  * Embedded here into lerna directly because we cannot yet migrate to ESM only, and we needed to bump outdated deps.
  */
 
-import { createWriteStream, mkdirSync, type PathOrFileDescriptor, realpathSync, writeFile, writeFileSync } from 'node:fs';
+import { createWriteStream, mkdirSync, realpathSync, writeFile, writeFileSync } from 'node:fs';
 import { mkdir } from 'node:fs/promises';
 import { tmpdir } from 'node:os';
 import { dirname, join } from 'node:path';
@@ -35,7 +35,7 @@ const writeStream = async (filePath: string, fileContent: Readable) =>
       .on('finish', resolve as () => void);
   });
 
-export async function tempWrite(fileContent: Readable | PathOrFileDescriptor, filePath?: string) {
+export async function tempWrite(fileContent: any, filePath?: string) {
   const tempPath = tempfileSync(filePath);
   const write = isStream(fileContent) ? writeStream : writeFileP;
 
