@@ -111,7 +111,8 @@ export class PackageGraph extends Map<string, PackageGraphNode> {
         if (isCatalogSpec) {
           originalCatalogSpec = spec;
           spec = spec.replace(/^catalog:/, '');
-          const catalogVersion = spec === '' || spec === 'default' ? catalog[depName] : catalogs[spec]?.[depName];
+          const catalogVersion =
+            spec === '' || spec === 'default' ? (catalog[depName] ?? catalogs?.default?.[depName]) : catalogs[spec]?.[depName];
 
           if (catalogVersion) {
             spec = catalogVersion;

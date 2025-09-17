@@ -6,10 +6,18 @@ import { parse as yamlParse } from 'yaml';
 import type { NpmClient } from '../models/interfaces.js';
 import { looselyJsonParse } from './object-utils.js';
 
-export type CatalogConfig = {
-  catalog: Record<string, string>;
-  catalogs: Record<string, Record<string, string>>;
-};
+export type CatalogConfig =
+  | {
+      catalog: Record<string, string>;
+      catalogs: Record<string, Record<string, string>>;
+    }
+  | {
+      catalog: Record<string, never>;
+      catalogs: {
+        default: Record<string, string>;
+        [key: string]: Record<string, string>;
+      };
+    };
 
 /**
  * Extract catalog config from `pnpm-workspace.yaml` located in the project root.
