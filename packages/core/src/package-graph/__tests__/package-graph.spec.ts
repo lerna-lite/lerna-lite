@@ -5,12 +5,13 @@ import { afterEach, beforeAll, describe, expect, it, vi } from 'vitest';
 
 import { RawManifest } from '../../models/interfaces.js';
 import { Package } from '../../package.js';
-import { readWorkspaceCatalogConfig } from '../../utils/catalog-utils.js';
+import * as CatalogUtils from '../../utils/catalog-utils.js';
 import { PackageGraphNode } from '../lib/package-graph-node.js';
 // file under test
 import { PackageGraph } from '../package-graph.js';
 
 const initFixture = initFixtureFactory(__dirname);
+const readWorkspaceCatalogConfig = vi.spyOn(CatalogUtils, 'readWorkspaceCatalogConfig');
 
 describe('PackageGraph', () => {
   let testDir = '';
@@ -341,6 +342,101 @@ describe('PackageGraph', () => {
       expect(pkg4.localDependencies.get('pkg-2').fetchSpec).toBe(''); // not found in global catalog so it will show warning below
       expect(logWarnSpy).toHaveBeenCalledWith('graph', 'No version found in "default" catalog for "pkg-2"');
     });
+
+    it('resolves dependencies from catalogs.default when not found in main catalog', () => {
+      readWorkspaceCatalogConfig.mockReturnValueOnce({
+        catalog: {},
+        catalogs: {
+          default: {
+            'pkg-1': '1.0.0',
+            'pkg-2': '2.0.0',
+            'external-pkg': '^3.0.0',
+          },
+        },
+      });
+
+      const pkgs = [
+        new Package(
+          {
+            name: 'pkg-1',
+            version: '1.0.0',
+          } as unknown as RawManifest,
+          '/test/pkg-1'
+        ),
+        new Package(
+          {
+            name: 'pkg-2',
+            version: '2.0.0',
+          } as unknown as RawManifest,
+          '/test/pkg-2'
+        ),
+        new Package(
+          {
+            name: 'pkg-3',
+            version: '1.0.0',
+            dependencies: {
+              'pkg-1': 'catalog:', // should resolve from main catalog
+              'pkg-2': 'catalog:', // should resolve from catalogs.default
+              'external-pkg': 'catalog:', // should resolve from catalogs.default
+            },
+          } as unknown as RawManifest,
+          '/test/pkg-3'
+        ),
+      ];
+
+      const graph = new PackageGraph(pkgs, 'allDependencies', 'explicit', 'pnpm');
+      const pkg3 = graph.get('pkg-3');
+
+      expect(pkg3.localDependencies.get('pkg-1').fetchSpec).toBe('1.0.0');
+      expect(pkg3.localDependencies.get('pkg-2').fetchSpec).toBe('2.0.0');
+      expect(pkg3.externalDependencies.get('external-pkg').fetchSpec).toBe('^3.0.0');
+    });
+
+    it('resolves dependencies using explicit catalog:default specification', () => {
+      readWorkspaceCatalogConfig.mockReturnValueOnce({
+        catalog: {},
+        catalogs: {
+          default: {
+            'pkg-1': '1.0.0',
+            'pkg-2': '2.0.0',
+          },
+        },
+      });
+
+      const pkgs = [
+        new Package(
+          {
+            name: 'pkg-1',
+            version: '1.0.0',
+          } as unknown as RawManifest,
+          '/test/pkg-1'
+        ),
+        new Package(
+          {
+            name: 'pkg-2',
+            version: '2.0.0',
+          } as unknown as RawManifest,
+          '/test/pkg-2'
+        ),
+        new Package(
+          {
+            name: 'pkg-3',
+            version: '1.0.0',
+            dependencies: {
+              'pkg-1': 'catalog:default', // should resolve from catalogs.default explicitly
+              'pkg-2': 'catalog:default', // should resolve from catalogs.default
+            },
+          } as unknown as RawManifest,
+          '/test/pkg-3'
+        ),
+      ];
+
+      const graph = new PackageGraph(pkgs, 'allDependencies', 'explicit', 'pnpm');
+      const pkg3 = graph.get('pkg-3');
+
+      expect(pkg3.localDependencies.get('pkg-1').fetchSpec).toBe('1.0.0');
+      expect(pkg3.localDependencies.get('pkg-2').fetchSpec).toBe('2.0.0');
+    });
   });
 
   describe('package.json workspace catalog', () => {
@@ -431,6 +527,102 @@ describe('PackageGraph', () => {
       expect(pkg4.localDependencies.get('pkg-2').catalogSpec).toBe('catalog:');
       expect(pkg4.localDependencies.get('pkg-2').fetchSpec).toBe(''); // not found in global catalog so it will show warning below
       expect(logWarnSpy).toHaveBeenCalledWith('graph', 'No version found in "default" catalog for "pkg-2"');
+    });
+
+    it('resolves dependencies from catalogs.default when not found in main catalog using bun', () => {
+      readWorkspaceCatalogConfig.mockReturnValueOnce({
+        catalog: {},
+        catalogs: {
+          default: {
+            'pkg-1': '1.0.0',
+            'pkg-2': '2.0.0',
+            'external-pkg': '^3.0.0',
+          },
+        },
+      });
+
+      const pkgs = [
+        new Package(
+          {
+            name: 'pkg-1',
+            version: '1.0.0',
+          } as unknown as RawManifest,
+          '/test/pkg-1'
+        ),
+        new Package(
+          {
+            name: 'pkg-2',
+            version: '2.0.0',
+          } as unknown as RawManifest,
+          '/test/pkg-2'
+        ),
+        new Package(
+          {
+            name: 'pkg-3',
+            version: '1.0.0',
+            dependencies: {
+              'pkg-1': 'catalog:', // should resolve from main catalog
+              'pkg-2': 'catalog:', // should resolve from catalogs.default
+              'external-pkg': 'catalog:', // should resolve from catalogs.default
+            },
+          } as unknown as RawManifest,
+          '/test/pkg-3'
+        ),
+      ];
+
+      const graph = new PackageGraph(pkgs, 'allDependencies', 'explicit', 'bun');
+      const pkg3 = graph.get('pkg-3');
+
+      expect(pkg3.localDependencies.get('pkg-1').fetchSpec).toBe('1.0.0');
+      expect(pkg3.localDependencies.get('pkg-2').fetchSpec).toBe('2.0.0');
+      expect(pkg3.externalDependencies.get('external-pkg').fetchSpec).toBe('^3.0.0');
+    });
+
+    it('resolves dependencies using explicit catalog:default specification using bun', () => {
+      readWorkspaceCatalogConfig.mockReturnValueOnce({
+        catalog: {},
+        catalogs: {
+          default: {
+            'pkg-1': '1.0.0',
+            'pkg-2': '2.0.0',
+          },
+        },
+      });
+
+      const pkgs = [
+        new Package(
+          {
+            name: 'pkg-1',
+            version: '1.0.0',
+          } as unknown as RawManifest,
+          '/test/pkg-1'
+        ),
+        new Package(
+          {
+            name: 'pkg-2',
+            version: '2.0.0',
+          } as unknown as RawManifest,
+          '/test/pkg-2'
+        ),
+        new Package(
+          {
+            name: 'pkg-3',
+            version: '1.0.0',
+            dependencies: {
+              'pkg-1': 'catalog:default', // should resolve from catalogs.default explicitly
+              'pkg-2': 'catalog:default', // should resolve from catalogs.default
+            },
+          } as unknown as RawManifest,
+          '/test/pkg-3'
+        ),
+      ];
+
+      const graph = new PackageGraph(pkgs, 'allDependencies', 'explicit', 'bun');
+      const pkg3 = graph.get('pkg-3');
+
+      // pkg-1 should resolve to 1.5.0 from catalogs.default, not 1.0.0 from main catalog
+      expect(pkg3.localDependencies.get('pkg-1').fetchSpec).toBe('1.0.0');
+      expect(pkg3.localDependencies.get('pkg-2').fetchSpec).toBe('2.0.0');
     });
   });
 
