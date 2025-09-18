@@ -203,8 +203,8 @@ importers:
         specifier: catalog:dependencies
         version: 7.0.1
       normalize-newline:
-        specifier: ^4.1.0
-        version: 4.1.0
+        specifier: ^5.0.0
+        version: 5.0.0
       normalize-path:
         specifier: 'catalog:'
         version: 3.0.0
@@ -2768,9 +2768,9 @@ packages:
     engines: {node: ^18.17.0 || >=20.5.0}
     hasBin: true
 
-  normalize-newline@4.1.0:
-    resolution: {integrity: sha512-ff4jKqMI8Xl50/4Mms/9jPobzAV/UK+kXG2XJ/7AqOmxIx8mqfqTIHYxuAnEgJ2AQeBbLnlbmZ5+38Y9A0w/YA==}
-    engines: {node: '>=12'}
+  normalize-newline@5.0.0:
+    resolution: {integrity: sha512-pOL2BbzV4kuopIEK91m7lfn3GISx+yT0N4Nq7jH4YzNMXNkpS7d7WYW11EfH1k9U1YZ7yxJoGfBLXFHc5v2uPQ==}
+    engines: {node: '>=20'}
 
   normalize-package-data@6.0.2:
     resolution: {integrity: sha512-V6gygoYb/5EmNI+MEGrWkC+e6+Rr7mTmfHrxDbLzxQogBkgzo76rkok0Am6thgSF7Mv2nLOajAJj5vDJZEFn7g==}
@@ -3051,10 +3051,6 @@ packages:
     resolution: {integrity: sha512-5bVeJyP0nzAf4yWE5V0ClRfVbrM8pBguv+UWuvFPe9otA0FZKXwAtEPcawv0pBfM0ZCFh+pMZmt73JAvWd/c2Q==}
     engines: {node: ^20.0.0 || >=22.0.0}
     hasBin: true
-
-  replace-buffer@1.2.1:
-    resolution: {integrity: sha512-ly3OKwKu+3T55DjP5PjIMzxgz9lFx6dQnBmAIxryZyRKl8f22juy12ShOyuq8WrQE5UlFOseZgQZDua0iF9DHw==}
-    engines: {node: '>=4'}
 
   resolve-cwd@3.0.0:
     resolution: {integrity: sha512-OrZaX2Mb+rJCpH/6CpSqt9xFVpN++x01XnN2ie9g6P5/3xelLAkXWVADpdz1IHD/KFfEXyE6V0U01OQ3UO2rEg==}
@@ -5571,9 +5567,7 @@ snapshots:
     dependencies:
       abbrev: 3.0.1
 
-  normalize-newline@4.1.0:
-    dependencies:
-      replace-buffer: 1.2.1
+  normalize-newline@5.0.0: {}
 
   normalize-package-data@6.0.2:
     dependencies:
@@ -5873,8 +5867,6 @@ snapshots:
     dependencies:
       cli-nano: 1.2.1
       tinyglobby: 0.2.15
-
-  replace-buffer@1.2.1: {}
 
   resolve-cwd@3.0.0:
     dependencies:
