@@ -1,8 +1,8 @@
 import { join } from 'node:path';
 import { pathToFileURL } from 'node:url';
 
+import { up } from 'empathic/find';
 import { execa } from 'execa';
-import { findUp } from 'find-up';
 import { copy, ensureDir } from 'fs-extra/esm';
 
 import { gitAdd, gitCommit, gitInit } from './git/index.js';
@@ -29,8 +29,7 @@ export function cloneFixtureFactory(startDir: string) {
 }
 
 export function findFixture(cwd: string, fixtureName: string) {
-  // @ts-ignore
-  return findUp(join('__fixtures__', fixtureName), { cwd, type: 'directory' }).then((fixturePath) => {
+  return Promise.resolve(up(join('__fixtures__', fixtureName), { cwd })).then((fixturePath) => {
     if (fixturePath === undefined) {
       throw new Error(`Could not find fixture with name "${fixtureName}"`);
     }
