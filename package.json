@@ -90,7 +90,7 @@
     "eslint-plugin-n": "^17.23.0",
     "eslint-plugin-simple-import-sort": "^12.1.1",
     "execa": "catalog:",
-    "find-up": "^7.0.0",
+    "find-up": "^8.0.0",
     "fs-extra": "catalog:",
     "load-json-file": "catalog:dependencies",
     "normalize-newline": "^4.1.0",
