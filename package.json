@@ -93,7 +93,7 @@
     "find-up": "^8.0.0",
     "fs-extra": "catalog:",
     "load-json-file": "catalog:dependencies",
-    "normalize-newline": "^4.1.0",
+    "normalize-newline": "^5.0.0",
     "normalize-path": "catalog:",
     "prettier": "^3.6.2",
     "remove-glob": "^0.3.7",
