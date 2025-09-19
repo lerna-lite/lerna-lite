@@ -20,16 +20,16 @@ export type CatalogConfig =
     };
 
 /**
- * Extract catalog config from `pnpm-workspace.yaml` located in the project root.
- * From a file content that is either provided as input or read from the 'pnpm-workspace.yaml',
+ * Extract catalog config from package manager (pnpm/yarn) config files located in the project root.
+ * From a file content that is either provided as input or read from project root,
  * it will then parse that file content and return pnpm catalog(s) config
  * @param {String} [yamlContent] - optional yaml file content
  * @returns
  */
-export function extractCatalogConfigFromYaml(yamlContent?: string): CatalogConfig {
+export function extractCatalogConfigFromYaml(npmClient: NpmClient = 'pnpm', yamlContent?: string): CatalogConfig {
   let fileContent = yamlContent || '';
   if (!yamlContent) {
-    const yamlPath = join(process.cwd(), 'pnpm-workspace.yaml');
+    const yamlPath = join(process.cwd(), getConfigFilenameByClient(npmClient));
     if (existsSync(yamlPath)) {
       fileContent = readFileSync(yamlPath, 'utf8');
     }
@@ -40,6 +40,16 @@ export function extractCatalogConfigFromYaml(yamlContent?: string): CatalogConfi
     catalog: config.catalog || {},
     catalogs: config.catalogs || {},
   };
+}
+
+export function getConfigFilenameByClient(npmClient: NpmClient): string {
+  if (npmClient === 'pnpm') {
+    return 'pnpm-workspace.yaml';
+  } else if (npmClient === 'yarn') {
+    return '.yarnrc.yml';
+  }
+  /* @v8 ignore next */
+  return 'unknown-config';
 }
 
 /**
@@ -99,8 +109,8 @@ export function diffCatalogs(prev: CatalogConfig, curr: CatalogConfig): Set<stri
 
 /** read the workspaces catalog depending on the npm client (currently support 'pnpm' and 'bun') */
 export function readWorkspaceCatalogConfig(npmClient: NpmClient) {
-  if (npmClient === 'pnpm') {
-    return extractCatalogConfigFromYaml();
+  if (npmClient === 'pnpm' || npmClient === 'yarn') {
+    return extractCatalogConfigFromYaml(npmClient);
   } else if (npmClient === 'bun') {
     return extractCatalogConfigFromPkg();
   }

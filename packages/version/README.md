@@ -1000,14 +1000,14 @@ lerna will run [npm lifecycle scripts](https://docs.npmjs.com/cli/v8/using-npm/s
 
 # `catalog:` protocol
 
-The `catalog:` protocol ([pnpm catalogs](https://pnpm.io/catalogs), [Bun catalogs](https://bun.sh/docs/install/catalogs)) is also supported by Lerna-Lite, here's a quote from pnpm docs that best describes the feature.
+The `catalog:` protocol ([pnpm catalogs](https://pnpm.io/catalogs), [Bun catalogs](https://bun.sh/docs/install/catalogs) or [Yarn catalogs](https://github.com/yarnpkg/berry/tree/master/packages/plugin-catalog)) is also supported by Lerna-Lite, here's a quote from pnpm docs that best describes the feature.
 
 > "Catalogs" are a [workspace feature](https://pnpm.io/workspaces) for defining dependency version ranges as reusable constants. Constants defined in catalogs can later be referenced in `package.json` files.
 
-Lerna-Lite will replace all `catalog:` protocol with the version ranges pulled from the `pnpm-workspace.yaml` or `package.json > workspaces` global catalog(s) while executing lerna version or publish commands.
+Lerna-Lite will replace all `catalog:` protocol with the version ranges from your global catalog(s), it wil search for them in your root config dependending on your package manager (e.g. `npmClient: 'pnpm'` => Catalogs located in `pnpm-workspace.yaml`, or for Bun which located in `package.json > workspaces`), then once it found all Catalog versions, it will execute the lerna version or publish commands.
 
 > [!NOTE]
-> Lerna-Lite only has a read access to the catalog and will pull all dependency versions it finds from your `pnpm-workspace.yaml` (or `package.json`) catalog, but it will **never write** back to that file. If you want version bump while running lerna version/publish commands, then you should use `workspace:` for local dependencies. A side note though, it does work with local dependencies but only if the local dependency version changed in a previous git commit **before** lerna commands are executed (since again Lerna-Lite will never write or update the catalog).
+> Lerna-Lite only has a read access to the catalog and will pull all dependency versions it finds from your config file catalog (e.g `pnpm-workspace.yaml`), but it will **never write** back to that file. If for whatever reasons, you wish them to be bumped automatically, then we strongly suggest that you rather use the [`workspace:`](#workspace-protocol) protocol instead of catalog which is better suited for local workspace dependencies. A side note though, it does work with local dependencies but only if the local dependency version changed in a previous git commit **before** lerna commands are executed (since again Lerna-Lite will never write or update any of the catalog dependencies).
 
 For more details about how Catalog works in Lerna-Lite, take a look at the [`lerna publish#catalog`](../publish/README.md#catalog-protocol) documentation.
 

@@ -14,6 +14,7 @@ import {
   diffCatalogs,
   extractCatalogConfigFromPkg,
   extractCatalogConfigFromYaml,
+  getConfigFilenameByClient,
 } from '../../catalog-utils.js';
 
 /**
@@ -159,29 +160,31 @@ function diffSinceIn(committish: string, location: string, execOpts: ExecOpts, d
 }
 
 /**
- * Returns dependencies whose semver ranges changed, were added, or removed
- * in pnpm-workspace.yaml
- * or package.json catalog(s) since prevTag.
+ * Returns associated Catalog dependencies references from either package manager config files (e.g. `pnpm-workspace.yaml`)
+ * or from `package.json` catalog(s) since prevTag.
  */
 export function diffWorkspaceCatalog(prevTag: string, npmClient: NpmClient): string[] {
   try {
     const cwd = process.cwd();
-    const yamlPath = join(cwd, 'pnpm-workspace.yaml');
-    const jsonPath = join(cwd, 'package.json');
+    const rootPkgPath = join(cwd, 'package.json');
 
     let prevConfig: CatalogConfig = { catalog: {}, catalogs: {} };
     let currConfig: CatalogConfig = { catalog: {}, catalogs: {} };
 
-    if (npmClient === 'pnpm' && existsSync(yamlPath)) {
-      // pnpm workspace
-      const prevYamlStr = execSync(`git show ${prevTag}:pnpm-workspace.yaml`);
-      const currYamlStr = readFileSync(yamlPath, 'utf8');
-      prevConfig = extractCatalogConfigFromYaml(prevYamlStr);
-      currConfig = extractCatalogConfigFromYaml(currYamlStr);
-    } else if (npmClient === 'bun' && existsSync(jsonPath)) {
+    if (npmClient === 'pnpm' || npmClient === 'yarn') {
+      // pnpm or yarn workspace
+      const yamlFilename = getConfigFilenameByClient(npmClient);
+      const yamlPath = join(cwd, yamlFilename);
+      if (existsSync(yamlPath)) {
+        const prevYamlStr = execSync(`git show ${prevTag}:${yamlFilename}`);
+        const currYamlStr = readFileSync(yamlPath, 'utf8');
+        prevConfig = extractCatalogConfigFromYaml(npmClient, prevYamlStr);
+        currConfig = extractCatalogConfigFromYaml(npmClient, currYamlStr);
+      }
+    } else if (npmClient === 'bun' && existsSync(rootPkgPath)) {
       // Bun workspace
       const prevJsonStr = execSync(`git show ${prevTag}:package.json`);
-      const currJsonStr = readFileSync(jsonPath, 'utf8');
+      const currJsonStr = readFileSync(rootPkgPath, 'utf8');
       prevConfig = extractCatalogConfigFromPkg(prevJsonStr);
       currConfig = extractCatalogConfigFromPkg(currJsonStr);
     } else {
