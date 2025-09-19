@@ -1,6 +1,7 @@
 import { expect, test, vi } from 'vitest';
 
 import { Package } from '../../../package.js';
+import { PackageGraphNode } from '../../../package-graph/lib/package-graph-node.js';
 // helpers
 import buildGraph from '../__helpers__/build-graph.js';
 // file under test
@@ -30,7 +31,7 @@ test('returns all packages', () => {
 test('filters packages through isCandidate, passing node and name', () => {
   const graph = buildGraph();
   const packagesToInclude = ['package-cycle-1'];
-  const isCandidate = (node, name) => {
+  const isCandidate = (node: PackageGraphNode, name: string) => {
     return packagesToInclude.includes(node.name) && node.name === name;
   };
   const result = collectPackages(graph, { isCandidate });
@@ -48,7 +49,7 @@ test('filters packages through isCandidate, passing node and name', () => {
 test('calls onInclude with included package name', () => {
   const graph = buildGraph();
   const packagesToInclude = ['package-standalone'];
-  const isCandidate = (_node, name) => packagesToInclude.includes(name);
+  const isCandidate = (_node: PackageGraphNode, name: string) => packagesToInclude.includes(name);
   const onInclude = vi.fn();
   collectPackages(graph, { isCandidate, onInclude });
 

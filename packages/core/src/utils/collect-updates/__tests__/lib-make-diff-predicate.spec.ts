@@ -22,8 +22,8 @@ vi.mock('node:fs', async () => ({
 import { PackageGraphNode } from '../../../../dist/index.js';
 import { diffWorkspaceCatalog, makeDiffPredicate } from '../lib/make-diff-predicate.js';
 
-function setup(changes) {
-  (childProcesses.execSync as Mock).mockReturnValueOnce([].concat(changes).join('\n'));
+function setup(changes: string | string[]) {
+  (childProcesses.execSync as Mock).mockReturnValueOnce(([] as string[]).concat(changes).join('\n'));
 }
 
 beforeEach(() => {
@@ -285,7 +285,150 @@ describe('pnpm workspace catalog', () => {
   });
 });
 
-describe('package.json workspaces catalog', () => {
+describe('yarn workspace catalog', () => {
+  test('diffWorkspaceCatalog with external dependency changes in yarn workspace catalog', () => {
+    setup([]);
+
+    const hasDiff = makeDiffPredicate('v1.0.0', { cwd: '/test' }, undefined, ['vite'], {});
+    const result = hasDiff({
+      location: '/test/packages/pkg-1',
+      localDependencies: new Map([]),
+      externalDependencies: new Map([['vite', {}]]),
+    } as PackageGraphNode);
+
+    expect(result).toBe(true);
+    expect(childProcesses.execSync).toHaveBeenLastCalledWith('git', ['diff', '--name-only', 'v1.0.0', '--', 'packages/pkg-1'], { cwd: '/test' });
+  });
+
+  test('diffWorkspaceCatalog with local dependency changes in yarn workspace catalog', () => {
+    setup([]);
+
+    const hasDiff = makeDiffPredicate('v1.0.0', { cwd: '/test' }, undefined, ['@mono/pkg-1'], {});
+    const result = hasDiff({
+      location: '/test/packages/pkg-1',
+      localDependencies: new Map([['@mono/pkg-1', {}]]),
+      externalDependencies: new Map([]),
+    } as PackageGraphNode);
+
+    expect(result).toBe(true);
+    expect(childProcesses.execSync).toHaveBeenLastCalledWith('git', ['diff', '--name-only', 'v1.0.0', '--', 'packages/pkg-1'], { cwd: '/test' });
+  });
+
+  test('diff yarn workspace catalog returning dependencies that changed in the catalog', () => {
+    // make a diff on the catalog for the "execa" dependency
+    const prevFileContent = 'packages:\n  - packages/**\n\ncatalog:\n  execa: ^8.0.1\n  fs-extra: ^11.3.0';
+    const newFileContent = 'packages:\n  - packages/**\n\ncatalog:\n  execa: ^9.5.2\n  fs-extra: ^11.3.0';
+
+    existsFileMock.mockReturnValueOnce(true);
+    readFileMock.mockReturnValueOnce(newFileContent);
+    (childProcesses.execSync as Mock).mockReturnValueOnce(prevFileContent); // first call is to get previous catalog commit
+
+    const changes = diffWorkspaceCatalog('v1.0.0', 'yarn');
+    expect(changes).toEqual(['execa']);
+  });
+
+  test('diff yarn workspace catalogs returning dependencies that changed in the catalog', () => {
+    // make a diff on the catalog for the "execa" dependency
+    const prevFileContent = 'packages:\n  - packages/**\n\ncatalogs:\n  build:\n    execa: ^8.0.1\n    fs-extra: ^11.3.0';
+    const newFileContent = 'packages:\n  - packages/**\n\ncatalogs:\n  build:\n    execa: ^9.5.2\n    fs-extra: ^11.3.0';
+
+    existsFileMock.mockReturnValueOnce(true);
+    readFileMock.mockReturnValueOnce(newFileContent);
+    (childProcesses.execSync as Mock).mockReturnValueOnce(prevFileContent); // first call is to get previous catalog commit
+
+    const changes = diffWorkspaceCatalog('v1.0.0', 'yarn');
+    expect(changes).toEqual(['execa']);
+  });
+
+  test('diff yarn workspace catalog returns changed external dependencies when catalog values differ', () => {
+    const prev = 'packages:\n  - packages/**\n\ncatalog:\n  execa: ^8.0.0\n  fs-extra: ^11.3.0';
+    const curr = 'packages:\n  - packages/**\n\ncatalog:\n  execa: ^9.5.2\n  fs-extra: ^11.3.0';
+
+    existsFileMock.mockReturnValueOnce(true);
+    readFileMock.mockReturnValueOnce(curr);
+    (childProcesses.execSync as Mock).mockReturnValueOnce(prev);
+
+    const changes = diffWorkspaceCatalog('v1.0.0', 'yarn');
+    expect(changes).toEqual(['execa']);
+  });
+
+  test('diff yarn workspace catalog returns changed local dependencies when catalog values differ', () => {
+    const prev = 'packages:\n  - packages/**\n\ncatalog:\n  "@mono/pkg-1": ^8.0.0\n  fs-extra: ^11.3.0';
+    const curr = 'packages:\n  - packages/**\n\ncatalog:\n  "@mono/pkg-1": ^9.5.2\n  fs-extra: ^11.3.0';
+
+    existsFileMock.mockReturnValueOnce(true);
+    readFileMock.mockReturnValueOnce(curr);
+    (childProcesses.execSync as Mock).mockReturnValueOnce(prev);
+
+    const changes = diffWorkspaceCatalog('v1.0.0', 'yarn');
+    expect(changes).toEqual(['@mono/pkg-1']);
+  });
+
+  test('diff yarn workspace catalog returns multiple changed dependencies', () => {
+    const prev = 'packages:\n  - packages/**\n\ncatalog:\n  execa: ^8.0.0\n  fs-extra: ^10.0.0';
+    const curr = 'packages:\n  - packages/**\n\ncatalog:\n  execa: ^9.5.2\n  fs-extra: ^11.3.0';
+
+    existsFileMock.mockReturnValueOnce(true);
+    readFileMock.mockReturnValueOnce(curr);
+    (childProcesses.execSync as Mock).mockReturnValueOnce(prev);
+
+    const changes = diffWorkspaceCatalog('v1.0.0', 'yarn');
+    expect(changes.sort()).toEqual(['execa', 'fs-extra']);
+  });
+
+  test('diff yarn workspace catalog returns empty array if no changes', () => {
+    const prev = 'packages:\n  - packages/**\n\ncatalog:\n  execa: ^9.5.2\n  fs-extra: ^11.3.0';
+    const curr = prev;
+
+    existsFileMock.mockReturnValueOnce(true);
+    readFileMock.mockReturnValueOnce(curr);
+    (childProcesses.execSync as Mock).mockReturnValueOnce(prev);
+
+    const changes = diffWorkspaceCatalog('v1.0.0', 'yarn');
+    expect(changes).toEqual([]);
+  });
+
+  test('diff yarn workspace catalog returns empty array if catalog key is missing', () => {
+    const prev = 'packages:\n  - packages/**\n\n';
+    const curr = 'packages:\n  - packages/**\n\n';
+
+    existsFileMock.mockReturnValueOnce(true);
+    readFileMock.mockReturnValueOnce(curr);
+    (childProcesses.execSync as Mock).mockReturnValueOnce(prev);
+
+    const changes = diffWorkspaceCatalog('v1.0.0', 'yarn');
+    expect(changes).toEqual([]);
+  });
+
+  test('diff yarn workspace catalog returns empty array if all methods fail', () => {
+    readFileMock.mockImplementationOnce(() => {
+      throw new Error('fail');
+    });
+    (childProcesses.execSync as Mock)
+      .mockImplementationOnce(() => {
+        throw new Error('fail');
+      }) // fail YAML parse
+      .mockImplementationOnce(() => {
+        throw new Error('fail');
+      }); // fail git diff
+
+    const changes = diffWorkspaceCatalog('v1.0.0', 'yarn');
+    expect(changes).toEqual([]);
+  });
+
+  test('diff yarn workspace catalog adds dependency from indented diff line when YAML shows no changes', () => {
+    const prev = 'packages:\n  - packages/**\n\ncatalog:\n  foo: ^1.0.0';
+    const curr = 'packages:\n  - packages/**\n\ncatalog:\n  foo: ^1.0.0\n  bar: ^2.0.0';
+    existsFileMock.mockReturnValueOnce(true);
+    readFileMock.mockReturnValueOnce(curr);
+    (childProcesses.execSync as Mock).mockReturnValueOnce(prev); // previous YAML
+
+    const changes = diffWorkspaceCatalog('v1.0.0', 'yarn');
+    expect(changes).toEqual(['bar']);
+  });
+});
+
+describe('Bun workspaces catalog in package.json', () => {
   test('diff package workspace catalogs returning dependencies that changed in the catalog', () => {
     // make a diff on the catalog for the "execa" dependency
     const prevFileContent = `{"name":"monorepo","workspaces":{"packages":["packages/**"],"catalogs":{"build":{"react":"^18.0.0","react-dom":"^18.0.0"}}}}`;
