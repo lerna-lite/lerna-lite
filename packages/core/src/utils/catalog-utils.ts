@@ -48,7 +48,7 @@ export function getConfigFilenameByClient(npmClient: NpmClient): string {
   } else if (npmClient === 'yarn') {
     return '.yarnrc.yml';
   }
-  /* @v8 ignore next */
+  /* v8 ignore next */
   return 'unknown-config';
 }
 
