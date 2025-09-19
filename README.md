@@ -67,9 +67,13 @@ Here are some of the largest projects using Lerna-Lite
   <img src="https://jestjs.io/img/jest.png" width="28" height="28">
   Jest
 </a>&nbsp; | &nbsp;
+<a href="https://github.com/vuetifyjs/vuetify">
+  <img src="https://avatars.githubusercontent.com/u/22138497?s=28&v=4" width="28" height="28">
+  Vuetify
+</a>&nbsp; | &nbsp;
 <a href="https://github.com/react-navigation/react-navigation">
   <img src="https://avatars.githubusercontent.com/u/29647600?s=64&v=4" width="28" height="28">
-  React Navigation
+  React Nav
 </a>&nbsp; | &nbsp;
 <a href="https://github.com/formatjs/formatjs">
   <img src="https://avatars.githubusercontent.com/u/50559490" width="28" height="28">
