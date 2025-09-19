@@ -14,7 +14,7 @@ import {
   diffCatalogs,
   extractCatalogConfigFromPkg,
   extractCatalogConfigFromYaml,
-  getConfigFilenameByClient,
+  getClientConfigFilename,
 } from '../../catalog-utils.js';
 
 /**
@@ -160,8 +160,8 @@ function diffSinceIn(committish: string, location: string, execOpts: ExecOpts, d
 }
 
 /**
- * Returns associated Catalog dependencies references from either package manager config files (e.g. `pnpm-workspace.yaml`)
- * or from `package.json` catalog(s) since prevTag.
+ * Returns associated Catalog dependencies references from a package manager (pnpm,yarn) config file (e.g. `pnpm-workspace.yaml`)
+ * or from `package.json` (Bun), it will then return catalog(s) diffs since the previous git tag.
  */
 export function diffWorkspaceCatalog(prevTag: string, npmClient: NpmClient): string[] {
   try {
@@ -172,8 +172,8 @@ export function diffWorkspaceCatalog(prevTag: string, npmClient: NpmClient): str
     let currConfig: CatalogConfig = { catalog: {}, catalogs: {} };
 
     if (npmClient === 'pnpm' || npmClient === 'yarn') {
-      // pnpm or yarn workspace
-      const yamlFilename = getConfigFilenameByClient(npmClient);
+      // pnpm or yarn catalogs
+      const yamlFilename = getClientConfigFilename(npmClient);
       const yamlPath = join(cwd, yamlFilename);
       if (existsSync(yamlPath)) {
         const prevYamlStr = execSync(`git show ${prevTag}:${yamlFilename}`);
@@ -182,7 +182,7 @@ export function diffWorkspaceCatalog(prevTag: string, npmClient: NpmClient): str
         currConfig = extractCatalogConfigFromYaml(npmClient, currYamlStr);
       }
     } else if (npmClient === 'bun' && existsSync(rootPkgPath)) {
-      // Bun workspace
+      // Bun catalogs
       const prevJsonStr = execSync(`git show ${prevTag}:package.json`);
       const currJsonStr = readFileSync(rootPkgPath, 'utf8');
       prevConfig = extractCatalogConfigFromPkg(prevJsonStr);

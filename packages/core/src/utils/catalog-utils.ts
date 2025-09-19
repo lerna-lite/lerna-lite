@@ -21,15 +21,15 @@ export type CatalogConfig =
 
 /**
  * Extract catalog config from package manager (pnpm/yarn) config files located in the project root.
- * From a file content that is either provided as input or read from project root,
- * it will then parse that file content and return pnpm catalog(s) config
+ * From a file content that is either provided as argument or read it from the project root config when null,
+ * it will then parse that file content and return all pnpm catalog(s) config
  * @param {String} [yamlContent] - optional yaml file content
  * @returns
  */
 export function extractCatalogConfigFromYaml(npmClient: NpmClient = 'pnpm', yamlContent?: string): CatalogConfig {
   let fileContent = yamlContent || '';
   if (!yamlContent) {
-    const yamlPath = join(process.cwd(), getConfigFilenameByClient(npmClient));
+    const yamlPath = join(process.cwd(), getClientConfigFilename(npmClient));
     if (existsSync(yamlPath)) {
       fileContent = readFileSync(yamlPath, 'utf8');
     }
@@ -42,7 +42,8 @@ export function extractCatalogConfigFromYaml(npmClient: NpmClient = 'pnpm', yaml
   };
 }
 
-export function getConfigFilenameByClient(npmClient: NpmClient): string {
+/** Get the root config filename depending on the package manager client name */
+export function getClientConfigFilename(npmClient: NpmClient): string {
   if (npmClient === 'pnpm') {
     return 'pnpm-workspace.yaml';
   } else if (npmClient === 'yarn') {
@@ -54,8 +55,8 @@ export function getConfigFilenameByClient(npmClient: NpmClient): string {
 
 /**
  * Extract catalog config from the `workspaces` located in the project root `package.json`.
- * From a file content that is either provided as input or read from the 'package.json',
- * it will then parse that file content and return pnpm catalog(s) config
+ * From a file content that is either provided as argument or read it from the 'package.json' when null,
+ * it will then parse that file content and return all pnpm catalog(s) config
  * @param {String} [pkgContent] - optional JSON stringified package file content
  * @returns
  */
