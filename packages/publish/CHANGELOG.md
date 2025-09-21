@@ -4,6 +4,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [4.8.0](https://github.com/lerna-lite/lerna-lite/compare/v4.7.3...v4.8.0) (2025-09-20)
+
+### Features
+
+* support Yarn Catalogs, fixes [#1146](https://github.com/lerna-lite/lerna-lite/issues/1146) ([#1148](https://github.com/lerna-lite/lerna-lite/issues/1148)) ([64a48b1](https://github.com/lerna-lite/lerna-lite/commit/64a48b1f30a769da9569ea7b826d719e41416ea4)) - by @ghiscoding
+
+### Bug Fixes
+
+* **deps:** update all non-major dependencies ([#1126](https://github.com/lerna-lite/lerna-lite/issues/1126)) ([a9728f7](https://github.com/lerna-lite/lerna-lite/commit/a9728f71ffe82553e33b3c7ee0b3cacdc804112f)) - by @renovate[bot]
+* **deps:** update all non-major dependencies ([#1147](https://github.com/lerna-lite/lerna-lite/issues/1147)) ([7ad495f](https://github.com/lerna-lite/lerna-lite/commit/7ad495f2d1fbe02f1a440c504b3ca0d6dfb2a37e)) - by @renovate[bot]
+
 ## [4.7.3](https://github.com/lerna-lite/lerna-lite/compare/v4.7.2...v4.7.3) (2025-08-29)
 
 ### Bug Fixes

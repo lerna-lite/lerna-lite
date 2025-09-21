@@ -20,16 +20,16 @@ export type CatalogConfig =
     };
 
 /**
- * Extract catalog config from `pnpm-workspace.yaml` located in the project root.
- * From a file content that is either provided as input or read from the 'pnpm-workspace.yaml',
- * it will then parse that file content and return pnpm catalog(s) config
+ * Extract catalog config from package manager (pnpm/yarn) config files located in the project root.
+ * From a file content that is either provided as argument or read it from the project root config when null,
+ * it will then parse that file content and return all pnpm catalog(s) config
  * @param {String} [yamlContent] - optional yaml file content
  * @returns
  */
-export function extractCatalogConfigFromYaml(yamlContent?: string): CatalogConfig {
+export function extractCatalogConfigFromYaml(npmClient: NpmClient = 'pnpm', yamlContent?: string): CatalogConfig {
   let fileContent = yamlContent || '';
   if (!yamlContent) {
-    const yamlPath = join(process.cwd(), 'pnpm-workspace.yaml');
+    const yamlPath = join(process.cwd(), getClientConfigFilename(npmClient));
     if (existsSync(yamlPath)) {
       fileContent = readFileSync(yamlPath, 'utf8');
     }
@@ -42,10 +42,21 @@ export function extractCatalogConfigFromYaml(yamlContent?: string): CatalogConfi
   };
 }
 
+/** Get the root config filename depending on the package manager client name */
+export function getClientConfigFilename(npmClient: NpmClient): string {
+  if (npmClient === 'pnpm') {
+    return 'pnpm-workspace.yaml';
+  } else if (npmClient === 'yarn') {
+    return '.yarnrc.yml';
+  }
+  /* v8 ignore next */
+  return 'unknown-config';
+}
+
 /**
  * Extract catalog config from the `workspaces` located in the project root `package.json`.
- * From a file content that is either provided as input or read from the 'package.json',
- * it will then parse that file content and return pnpm catalog(s) config
+ * From a file content that is either provided as argument or read it from the 'package.json' when null,
+ * it will then parse that file content and return all pnpm catalog(s) config
  * @param {String} [pkgContent] - optional JSON stringified package file content
  * @returns
  */
@@ -99,8 +110,8 @@ export function diffCatalogs(prev: CatalogConfig, curr: CatalogConfig): Set<stri
 
 /** read the workspaces catalog depending on the npm client (currently support 'pnpm' and 'bun') */
 export function readWorkspaceCatalogConfig(npmClient: NpmClient) {
-  if (npmClient === 'pnpm') {
-    return extractCatalogConfigFromYaml();
+  if (npmClient === 'pnpm' || npmClient === 'yarn') {
+    return extractCatalogConfigFromYaml(npmClient);
   } else if (npmClient === 'bun') {
     return extractCatalogConfigFromPkg();
   }

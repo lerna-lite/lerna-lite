@@ -51,11 +51,11 @@ _Click on any command show below to see their associated documentations_
 
 ---
 
-## 📢 Lerna-Lite supports pnpm/yarn `workspace:` protocol and pnpm `catalog:` protocol
+## 📢 Lerna-Lite supports `catalog:` and `workspace:` protocols for all clients that support them (pnpm/bun/yarn).
 
 Take 30sec. to complete this 1 question [poll survey 🔘](https://github.com/lerna-lite/lerna-lite/discussions/156) if you are using this feature. It's a simple poll to find out which package manager is the most popular with `workspace:` protocol (so far, about 60% pnpm and 40% yarn).
 
-Lerna-Lite itself is also using both [pnpm catalogs](https://pnpm.io/catalogs) and [pnpm workspaces](https://pnpm.io/workspaces) 🎉
+Lerna-Lite itself is also using both [pnpm catalogs](https://pnpm.io/catalogs) and [pnpm workspaces](https://pnpm.io/workspaces) internally. 🎉
 
 ---
 
@@ -67,9 +67,13 @@ Here are some of the largest projects using Lerna-Lite
   <img src="https://jestjs.io/img/jest.png" width="28" height="28">
   Jest
 </a>&nbsp; | &nbsp;
+<a href="https://github.com/vuetifyjs/vuetify">
+  <img src="https://avatars.githubusercontent.com/u/22138497?s=28&v=4" width="28" height="28">
+  Vuetify
+</a>&nbsp; | &nbsp;
 <a href="https://github.com/react-navigation/react-navigation">
   <img src="https://avatars.githubusercontent.com/u/29647600?s=64&v=4" width="28" height="28">
-  React Navigation
+  React Nav
 </a>&nbsp; | &nbsp;
 <a href="https://github.com/formatjs/formatjs">
   <img src="https://avatars.githubusercontent.com/u/50559490" width="28" height="28">
@@ -115,7 +119,7 @@ Below are the main reasons as to why this fork was created:
    - note, if you already use `Nx` then it's probably better to use Lerna, otherwise Lerna-Lite is a better alternative
    - if you use tools like TurboRepo and install the original Lerna, you end up installing 2 similar tools (not good)
 5. in Lerna-Lite we also added a few unique features that are not available in the original Lerna:
-   - [`catalog:` protocol](https://github.com/lerna-lite/lerna-lite/tree/main/packages/version#catalog-protocol) support for both `version` and `publish` commands (new)
+   - [`catalog:` protocol](https://github.com/lerna-lite/lerna-lite/tree/main/packages/version#catalog-protocol) support (pnpm/bun/yarn) for both `version` and `publish` commands (new 🍬)
    - [`workspace:` protocol](https://github.com/lerna-lite/lerna-lite/tree/main/packages/version#workspace-protocol) support
      * _Lerna added support for the same feature 6 months later in their v6.0 release_
    - [--dry-run](https://github.com/lerna-lite/lerna-lite/tree/main/packages/version#--dry-run) to preview version/publish & changelogs locally (shows git changes without committing them)

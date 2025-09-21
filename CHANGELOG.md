@@ -4,6 +4,20 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [4.8.0](https://github.com/lerna-lite/lerna-lite/compare/v4.7.3...v4.8.0) (2025-09-20)
+
+### Features
+
+* support Yarn Catalogs, fixes [#1146](https://github.com/lerna-lite/lerna-lite/issues/1146) ([#1148](https://github.com/lerna-lite/lerna-lite/issues/1148)) ([64a48b1](https://github.com/lerna-lite/lerna-lite/commit/64a48b1f30a769da9569ea7b826d719e41416ea4)) - by @ghiscoding
+
+### Bug Fixes
+
+* **deps:** update all non-major dependencies ([#1126](https://github.com/lerna-lite/lerna-lite/issues/1126)) ([a9728f7](https://github.com/lerna-lite/lerna-lite/commit/a9728f71ffe82553e33b3c7ee0b3cacdc804112f)) - by @renovate[bot]
+* **deps:** update all non-major dependencies ([#1147](https://github.com/lerna-lite/lerna-lite/issues/1147)) ([7ad495f](https://github.com/lerna-lite/lerna-lite/commit/7ad495f2d1fbe02f1a440c504b3ca0d6dfb2a37e)) - by @renovate[bot]
+* **deps:** update dependency @npmcli/run-script to v10 ([#1135](https://github.com/lerna-lite/lerna-lite/issues/1135)) ([480837b](https://github.com/lerna-lite/lerna-lite/commit/480837b9660e7903ceac10301ff2db1d8981fd8b)) - by @renovate[bot]
+* **deps:** update inquirer packages ([#1138](https://github.com/lerna-lite/lerna-lite/issues/1138)) ([9ae13cd](https://github.com/lerna-lite/lerna-lite/commit/9ae13cd35e30c714abd88b3d9832c0b6bd663e20)) - by @renovate[bot]
+* supports catalogs.default ([#1141](https://github.com/lerna-lite/lerna-lite/issues/1141)) ([ba5f5ec](https://github.com/lerna-lite/lerna-lite/commit/ba5f5ec110e5b28186f883e34858233215fe9c74)) - by @dvcolomban
+
 ## [4.7.3](https://github.com/lerna-lite/lerna-lite/compare/v4.7.2...v4.7.3) (2025-08-29)
 
 ### Bug Fixes
