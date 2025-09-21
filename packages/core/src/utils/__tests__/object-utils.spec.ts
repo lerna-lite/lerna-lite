@@ -25,21 +25,21 @@ describe('deleteComplexObjectProp method', () => {
     const logSpy = vi.spyOn(log, 'verbose');
     deleteComplexObjectProp(obj, 'user', 'some object name');
     expect(obj).toEqual({ id: 1 });
-    expect(logSpy).toHaveBeenCalledWith('pack', 'Removed "user" field from some object name.');
+    expect(logSpy).toHaveBeenCalledWith('pack', 'Stripped "user" field from some object name.');
   });
 
-  it('should expect the object descendant to be removed when path is using dot notation', () => {
+  it('should expect the object descendant to be Stripped when path is using dot notation', () => {
     const logSpy = vi.spyOn(log, 'verbose');
     deleteComplexObjectProp(obj, 'user.firstName');
     expect(obj).toEqual({ id: 1, user: { lastName: 'Doe', address: { number: 123, street: 'Broadway' } } });
-    expect(logSpy).toHaveBeenCalledWith('pack', 'Removed "user.firstName" field from n/a.');
+    expect(logSpy).toHaveBeenCalledWith('pack', 'Stripped "user.firstName" field from n/a.');
   });
 
-  it('should expect the object last descendant to be removed when using multiple levels of dot notation', () => {
+  it('should expect the object last descendant to be Stripped when using multiple levels of dot notation', () => {
     const logSpy = vi.spyOn(log, 'verbose');
     deleteComplexObjectProp(obj, 'user.address.street', '"@workspace/pkg-1" package');
     expect(obj).toEqual({ id: 1, user: { firstName: 'John', lastName: 'Doe', address: { number: 123 } } });
-    expect(logSpy).toHaveBeenCalledWith('pack', 'Removed "user.address.street" field from "@workspace/pkg-1" package.');
+    expect(logSpy).toHaveBeenCalledWith('pack', 'Stripped "user.address.street" field from "@workspace/pkg-1" package.');
   });
 });
 
