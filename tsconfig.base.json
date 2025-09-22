@@ -1,7 +1,6 @@
 {
   "compileOnSave": false,
   "compilerOptions": {
-    "baseUrl": "./",
     "module": "ESNext",
     "moduleResolution": "bundler",
     "target": "ES2021",
