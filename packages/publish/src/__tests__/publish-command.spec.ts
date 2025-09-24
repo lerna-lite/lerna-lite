@@ -362,6 +362,7 @@ describe('PublishCommand', () => {
         expect.objectContaining({ name: 'package-1' }),
         '/TEMP_DIR/package-1-MOCKED.tgz',
         expect.objectContaining({ otp }),
+        expect.objectContaining({ root: expect.any(Object) }),
         expect.objectContaining({ otp })
       );
       expect(getOneTimePassword).not.toHaveBeenCalled();
@@ -382,6 +383,7 @@ describe('PublishCommand', () => {
         expect.objectContaining({ name: 'package-1' }),
         '/TEMP_DIR/package-1-MOCKED.tgz',
         expect.objectContaining({ otp: undefined }),
+        expect.objectContaining({ root: expect.any(Object) }),
         expect.objectContaining({ otp: '654321' })
       );
       expect(getOneTimePassword).toHaveBeenCalledTimes(1);
@@ -398,6 +400,7 @@ describe('PublishCommand', () => {
         expect.objectContaining({ name: 'package-1' }),
         '/TEMP_DIR/package-1-MOCKED.tgz',
         expect.objectContaining({ otp: undefined }),
+        expect.objectContaining({ root: expect.any(Object) }),
         expect.objectContaining({ otp: '654321' })
       );
       expect(getOneTimePassword).toHaveBeenLastCalledWith('Enter OTP:');
@@ -425,6 +428,7 @@ describe('PublishCommand', () => {
         expect.objectContaining({ name: 'package-1' }),
         '/TEMP_DIR/package-1-MOCKED.tgz',
         expect.objectContaining({ otp: undefined }),
+        expect.objectContaining({ root: expect.any(Object) }),
         expect.objectContaining({ otp: undefined })
       );
       expect(getOneTimePassword).not.toHaveBeenCalled();
@@ -550,6 +554,7 @@ describe('PublishCommand', () => {
         expect.objectContaining({ name: 'package-1' }),
         '/TEMP_DIR/package-1-MOCKED.tgz',
         expect.objectContaining({ 'auth-type': 'legacy', _auth: auth }),
+        expect.objectContaining({ root: expect.any(Object) }),
         expect.objectContaining({ otp: undefined })
       );
     });
@@ -570,6 +575,7 @@ describe('PublishCommand', () => {
         expect.objectContaining({ name: '@my-workspace/package-1' }),
         '/TEMP_DIR/@my-workspace/package-1-MOCKED.tgz',
         expect.objectContaining({ registry }),
+        expect.objectContaining({ root: expect.any(Object) }),
         expect.objectContaining({ otp: undefined })
       );
     });
@@ -585,6 +591,7 @@ describe('PublishCommand', () => {
         expect.objectContaining({ name: 'package-1' }),
         '/TEMP_DIR/package-1-MOCKED.tgz',
         expect.objectContaining({ registry: 'https://registry.npmjs.org/' }),
+        expect.objectContaining({ root: expect.any(Object) }),
         expect.objectContaining({ otp: undefined })
       );
 

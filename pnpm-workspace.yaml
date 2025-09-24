@@ -8,6 +8,7 @@ packages:
 
 # Define a catalog of version ranges.
 catalog:
+  ci-info: ^4.3.0
   dedent: ^1.7.0
   dotenv: ^17.2.2
   execa: ^9.6.0

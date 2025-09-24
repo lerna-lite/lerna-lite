@@ -25,6 +25,7 @@ export interface LibNpmPublishOptions extends KebabCase<fetch.FetchOptions> {
   strictSSL?: boolean | 'true' | 'false';
   /* Passed to libnpmpublish as `opts.defaultTag` to preserve npm v6 back-compat */
   tag?: string;
+  registry?: string;
 }
 
 export interface PackagePublishConfig {

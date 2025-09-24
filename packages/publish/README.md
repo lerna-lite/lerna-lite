@@ -104,6 +104,7 @@ $ lerna publish --scope my-component test
     - [`--verify-access`](#--verify-access)
     - [`--yes`](#--yes)
   - [NPM Provenance](#npm-provenance)
+  - [OIDC](#oidc)
   - [`publishConfig` Overrides](#publishconfig-overrides)
   - [`catalog:` protocol](#catalog-protocol)
   - [`workspace:` protocol](#workspace-protocol)
@@ -521,6 +522,21 @@ You can enable Provenance via `.npmrc` or within the workflow
 For more detailed informations on how to enable the feature and use this in a CI environment like GitHub Action Workflow, you can read this article that I wrote:
 - [How to publish on npm with `--provenance` using Lerna-Lite](https://dev.to/ghiscoding/how-to-publish-on-npm-with-provenance-using-lerna-lite-3cjf)
 
+## OIDC
+
+# Using OIDC trusted publishing with Lerna-Lite
+
+Lerna-Lite adds support for OIDC trusted publishing, which is a solution developed by npm to secure the publishing process and not use traditional tokens or other fixed credentials.
+
+The key idea is that your package(s) can be configured on the npm side to be required to be published from within a specific trusted environment such as GitHub Actions or GitLab CI.
+
+Within these supported environments, the OIDC token is retrieved and used to publish the package instead of a user or automation token.
+
+If you follow the official guidance from npm on how to configure your pipelines, then it will also just work for Lerna-Lite, no additional configuration is needed.
+
+https://docs.npmjs.com/trusted-publishers
+
+You can see a fully working example repo here: https://github.com/JamesHenry/lerna-v9-oidc-publishing-example
 
 ## `publishConfig` Overrides
 Certain fields defined in `publishConfig` can be used to override other fields in the manifest before the package gets published. As per pnpm [`publishConfig`](https://pnpm.io/package_json#publishconfig) documentation, you can override any of these fields:
