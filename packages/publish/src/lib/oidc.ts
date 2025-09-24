@@ -6,9 +6,10 @@ import type { Conf } from '@lerna-lite/core';
 import { log } from '@lerna-lite/npmlog';
 import ciInfo from 'ci-info';
 import libaccess from 'libnpmaccess';
-import fetch from 'make-fetch-happen';
 import npa from 'npm-package-arg';
 import npmFetch from 'npm-registry-fetch';
+
+import { fetchWithRetry } from './fetch-retry.js';
 
 // Minimally deferred as sadly no types in the npm codebase...
 interface OidcOptions {
@@ -88,7 +89,7 @@ export async function oidc({ packageName, registry, opts, config }: OidcOptions)
       const url = new URL(process.env['ACTIONS_ID_TOKEN_REQUEST_URL']);
       url.searchParams.append('audience', audience);
       const startTime = Date.now();
-      const response = await fetch(url.href, {
+      const response = await fetchWithRetry(url.href, {
         retry: opts.retry,
         headers: {
           Accept: 'application/json',

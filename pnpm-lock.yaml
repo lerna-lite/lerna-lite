@@ -644,9 +644,6 @@ importers:
       libnpmpublish:
         specifier: ^11.1.0
         version: 11.1.0
-      make-fetch-happen:
-        specifier: ^15.0.2
-        version: 15.0.2
       normalize-path:
         specifier: 'catalog:'
         version: 3.0.0

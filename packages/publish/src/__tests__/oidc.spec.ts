@@ -21,8 +21,8 @@ vi.mock('ci-info', () => ({
   },
 }));
 
-vi.mock('make-fetch-happen', () => ({
-  default: vi.fn(),
+vi.mock('../lib/fetch-retry.js', () => ({
+  fetchWithRetry: vi.fn(),
 }));
 
 vi.mock('npm-registry-fetch', () => ({
@@ -85,8 +85,8 @@ describe('oidc', () => {
     process.env.ACTIONS_ID_TOKEN_REQUEST_URL = 'https://actions.example.com/token';
     process.env.ACTIONS_ID_TOKEN_REQUEST_TOKEN = 'GH_TOKEN';
 
-    const fetch = await import('make-fetch-happen');
-    (fetch.default as any).mockResolvedValue(mockFetchResponse({ value: 'HEADER.PAYLOAD.SIGNATURE' }));
+    const { fetchWithRetry } = await import('../lib/fetch-retry.js');
+    (fetchWithRetry as any).mockResolvedValue(mockFetchResponse({ value: 'HEADER.PAYLOAD.SIGNATURE' }));
 
     const npmFetch = await import('npm-registry-fetch');
     (npmFetch.default.json as any).mockResolvedValue({ token: 'FAKE_NPM_TOKEN' });
@@ -123,8 +123,8 @@ describe('oidc', () => {
 
     // Simulate a JWT with public repo
     const payload = Buffer.from(JSON.stringify({ repository_visibility: 'public' })).toString('base64');
-    const fetch = await import('make-fetch-happen');
-    (fetch.default as any).mockResolvedValue(mockFetchResponse({ value: `HEADER.${payload}.SIGNATURE` }));
+    const { fetchWithRetry } = await import('../lib/fetch-retry.js');
+    (fetchWithRetry as any).mockResolvedValue(mockFetchResponse({ value: `HEADER.${payload}.SIGNATURE` }));
 
     const npmFetch = await import('npm-registry-fetch');
     (npmFetch.default.json as any).mockResolvedValue({ token: 'FAKE_NPM_TOKEN' });
@@ -155,8 +155,8 @@ describe('oidc', () => {
     // Simulate a JWT with public repo
     const payload = Buffer.from(JSON.stringify({ project_visibility: 'public' })).toString('base64');
     process.env.NPM_ID_TOKEN = `HEADER.${payload}.SIGNATURE`;
-    const fetch = await import('make-fetch-happen');
-    (fetch.default as any).mockResolvedValue(mockFetchResponse({ value: `HEADER.${payload}.SIGNATURE` }));
+    const { fetchWithRetry } = await import('../lib/fetch-retry.js');
+    (fetchWithRetry as any).mockResolvedValue(mockFetchResponse({ value: `HEADER.${payload}.SIGNATURE` }));
 
     const npmFetch = await import('npm-registry-fetch');
     (npmFetch.default.json as any).mockResolvedValue({ token: 'FAKE_NPM_TOKEN' });
@@ -182,8 +182,8 @@ describe('oidc', () => {
     process.env.ACTIONS_ID_TOKEN_REQUEST_URL = 'https://actions.example.com/token';
     process.env.ACTIONS_ID_TOKEN_REQUEST_TOKEN = 'GH_TOKEN';
 
-    const fetch = await import('make-fetch-happen');
-    (fetch.default as any).mockResolvedValue(mockFetchResponse({ value: 'token' }, false, 403));
+    const { fetchWithRetry } = await import('../lib/fetch-retry.js');
+    (fetchWithRetry as any).mockResolvedValue(mockFetchResponse({ value: 'token' }, false, 403));
 
     const result = await oidc({
       packageName: 'test-pkg',
@@ -200,8 +200,8 @@ describe('oidc', () => {
     process.env.ACTIONS_ID_TOKEN_REQUEST_URL = 'https://actions.example.com/token';
     process.env.ACTIONS_ID_TOKEN_REQUEST_TOKEN = 'GH_TOKEN';
 
-    const fetch = await import('make-fetch-happen');
-    (fetch.default as any).mockResolvedValue(mockFetchResponse({}, true, 200));
+    const { fetchWithRetry } = await import('../lib/fetch-retry.js');
+    (fetchWithRetry as any).mockResolvedValue(mockFetchResponse({}, true, 200));
 
     const result = await oidc({
       packageName: 'test-pkg',
