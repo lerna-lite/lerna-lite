@@ -197,6 +197,23 @@ describe('oidc', () => {
     expect(result).toBeUndefined();
   });
 
+  it('throws when token exchange request failed', async () => {
+    const ciInfo = await import('ci-info');
+    ciInfo.default.GITHUB_ACTIONS = true;
+    process.env.NPM_ID_TOKEN = 'FAKE_ID_TOKEN';
+
+    const npmFetch = await import('npm-registry-fetch');
+    (npmFetch.default.json as any).mockRejectedValue({});
+
+    const result = await oidc({
+      packageName: 'test-pkg',
+      registry: 'https://registry.npmjs.org/',
+      opts: {},
+      config: mockConfig,
+    });
+    expect(result).toBeUndefined();
+  });
+
   it('skips provenance if JWT payload is not valid base64', async () => {
     const ciInfo = await import('ci-info');
     ciInfo.default.GITHUB_ACTIONS = true;
