@@ -144,6 +144,38 @@ describe('oidc', () => {
     expect(mockConfig.set).toHaveBeenCalledWith('provenance', true, 'user');
   });
 
+  it('sets provenance for GitLab with project visibility and public repo', async () => {
+    const ciInfo = await import('ci-info');
+    ciInfo.default.GITHUB_ACTIONS = false;
+    ciInfo.default.GITLAB = true;
+    process.env.SIGSTORE_ID_TOKEN = 'FAKE_SIGSTORE_ID_TOKEN';
+    process.env.ACTIONS_ID_TOKEN_REQUEST_URL = 'https://actions.example.com/token';
+    process.env.ACTIONS_ID_TOKEN_REQUEST_TOKEN = 'GH_TOKEN';
+
+    // Simulate a JWT with public repo
+    const payload = Buffer.from(JSON.stringify({ project_visibility: 'public' })).toString('base64');
+    process.env.NPM_ID_TOKEN = `HEADER.${payload}.SIGNATURE`;
+    const fetch = await import('make-fetch-happen');
+    (fetch.default as any).mockResolvedValue(mockFetchResponse({ value: `HEADER.${payload}.SIGNATURE` }));
+
+    const npmFetch = await import('npm-registry-fetch');
+    (npmFetch.default.json as any).mockResolvedValue({ token: 'FAKE_NPM_TOKEN' });
+
+    const libaccess = await import('libnpmaccess');
+    (libaccess.default.getVisibility as any).mockResolvedValue({ public: true });
+
+    const opts: any = {};
+    await oidc({
+      packageName: 'test-pkg',
+      registry: 'https://registry.npmjs.org/',
+      opts,
+      config: mockConfig,
+    });
+
+    expect(opts.provenance).toBe(true);
+    expect(mockConfig.set).toHaveBeenCalledWith('provenance', true, 'user');
+  });
+
   it('logs and returns undefined if `response.ok` is false', async () => {
     const ciInfo = await import('ci-info');
     ciInfo.default.GITHUB_ACTIONS = true;
