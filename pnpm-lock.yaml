@@ -116,7 +116,7 @@ importers:
   .:
     devDependencies:
       '@eslint/js':
-        specifier: ^9.36.0
+        specifier: ^9.35.0
         version: 9.36.0
       '@lerna-lite/changed':
         specifier: workspace:*
@@ -170,7 +170,7 @@ importers:
         specifier: ^17.0.33
         version: 17.0.33
       '@vitest/coverage-v8':
-        specifier: ^4.0.0-beta.12
+        specifier: ^4.0.0-beta.11
         version: 4.0.0-beta.13(vitest@4.0.0-beta.13(@types/node@22.18.6)(yaml@2.8.1))
       '@vitest/eslint-plugin':
         specifier: ^1.3.12
@@ -215,8 +215,8 @@ importers:
         specifier: ^3.6.2
         version: 3.6.2
       remove-glob:
-        specifier: ^0.4.0
-        version: 0.4.0
+        specifier: ^0.4.4
+        version: 0.4.4
       semver:
         specifier: 'catalog:'
         version: 7.7.2
@@ -242,7 +242,7 @@ importers:
         specifier: catalog:dependencies
         version: 13.0.0
       vitest:
-        specifier: ^4.0.0-beta.12
+        specifier: ^4.0.0-beta.11
         version: 4.0.0-beta.13(@types/node@22.18.6)(yaml@2.8.1)
       write-json-file:
         specifier: catalog:dependencies
@@ -3063,8 +3063,8 @@ packages:
     resolution: {integrity: sha512-GDhwkLfywWL2s6vEjyhri+eXmfH6j1L7JE27WhqLeYzoh/A3DBaYGEj2H/HFZCn/kMfim73FXxEJTw06WtxQwg==}
     engines: {node: '>= 14.18.0'}
 
-  remove-glob@0.4.0:
-    resolution: {integrity: sha512-Bif50/UjTK2iUFgOyiG6zl6qguoKM59u7HV3Plv7DyVppFGhxQRAd9mLEgjwhtEsc9jwKfwFjoDK7h52NDf3fA==}
+  remove-glob@0.4.4:
+    resolution: {integrity: sha512-V9UN8+x6ZPHddHuO16H+ARY5Rs+DE1TJX/iE/hUlM0rFPzC7GiD0252ZFx2sO+8aAbhREN1dbROxagClY7H+PQ==}
     engines: {node: ^20.0.0 || >=22.0.0}
     hasBin: true
 
@@ -3662,7 +3662,7 @@ snapshots:
   '@eslint/config-array@0.21.0':
     dependencies:
       '@eslint/object-schema': 2.1.6
-      debug: 4.4.1
+      debug: 4.4.3
       minimatch: 3.1.2
     transitivePeerDependencies:
       - supports-color
@@ -3676,7 +3676,7 @@ snapshots:
   '@eslint/eslintrc@3.3.1':
     dependencies:
       ajv: 6.12.6
-      debug: 4.4.1
+      debug: 4.4.3
       espree: 10.4.0
       globals: 14.0.0
       ignore: 5.3.2
@@ -4320,7 +4320,7 @@ snapshots:
       '@typescript-eslint/types': 8.44.1
       '@typescript-eslint/typescript-estree': 8.44.1(typescript@5.9.2)
       '@typescript-eslint/visitor-keys': 8.44.1
-      debug: 4.4.1
+      debug: 4.4.3
       eslint: 9.36.0
       typescript: 5.9.2
     transitivePeerDependencies:
@@ -4330,7 +4330,7 @@ snapshots:
     dependencies:
       '@typescript-eslint/tsconfig-utils': 8.44.0(typescript@5.9.2)
       '@typescript-eslint/types': 8.44.0
-      debug: 4.4.1
+      debug: 4.4.3
       typescript: 5.9.2
     transitivePeerDependencies:
       - supports-color
@@ -4339,7 +4339,7 @@ snapshots:
     dependencies:
       '@typescript-eslint/tsconfig-utils': 8.44.1(typescript@5.9.2)
       '@typescript-eslint/types': 8.44.1
-      debug: 4.4.1
+      debug: 4.4.3
       typescript: 5.9.2
     transitivePeerDependencies:
       - supports-color
@@ -4367,7 +4367,7 @@ snapshots:
       '@typescript-eslint/types': 8.44.1
       '@typescript-eslint/typescript-estree': 8.44.1(typescript@5.9.2)
       '@typescript-eslint/utils': 8.44.1(eslint@9.36.0)(typescript@5.9.2)
-      debug: 4.4.1
+      debug: 4.4.3
       eslint: 9.36.0
       ts-api-utils: 2.1.0(typescript@5.9.2)
       typescript: 5.9.2
@@ -4384,7 +4384,7 @@ snapshots:
       '@typescript-eslint/tsconfig-utils': 8.44.0(typescript@5.9.2)
       '@typescript-eslint/types': 8.44.0
       '@typescript-eslint/visitor-keys': 8.44.0
-      debug: 4.4.1
+      debug: 4.4.3
       fast-glob: 3.3.3
       is-glob: 4.0.3
       minimatch: 9.0.5
@@ -4400,7 +4400,7 @@ snapshots:
       '@typescript-eslint/tsconfig-utils': 8.44.1(typescript@5.9.2)
       '@typescript-eslint/types': 8.44.1
       '@typescript-eslint/visitor-keys': 8.44.1
-      debug: 4.4.1
+      debug: 4.4.3
       fast-glob: 3.3.3
       is-glob: 4.0.3
       minimatch: 9.0.5
@@ -5204,14 +5204,14 @@ snapshots:
   http-proxy-agent@7.0.2:
     dependencies:
       agent-base: 7.1.4
-      debug: 4.4.1
+      debug: 4.4.3
     transitivePeerDependencies:
       - supports-color
 
   https-proxy-agent@7.0.6:
     dependencies:
       agent-base: 7.1.4
-      debug: 4.4.1
+      debug: 4.4.3
     transitivePeerDependencies:
       - supports-color
 
@@ -5906,7 +5906,7 @@ snapshots:
 
   readdirp@4.1.2: {}
 
-  remove-glob@0.4.0:
+  remove-glob@0.4.4:
     dependencies:
       cli-nano: 1.2.1
       tinyglobby: 0.2.15
@@ -6020,7 +6020,7 @@ snapshots:
   socks-proxy-agent@8.0.5:
     dependencies:
       agent-base: 7.1.4
-      debug: 4.4.1
+      debug: 4.4.3
       socks: 2.8.7
     transitivePeerDependencies:
       - supports-color
@@ -6180,7 +6180,7 @@ snapshots:
   tuf-js@3.1.0:
     dependencies:
       '@tufjs/models': 3.0.1
-      debug: 4.4.1
+      debug: 4.4.3
       make-fetch-happen: 14.0.3
     transitivePeerDependencies:
       - supports-color
@@ -6188,7 +6188,7 @@ snapshots:
   tuf-js@4.0.0:
     dependencies:
       '@tufjs/models': 4.0.0
-      debug: 4.4.1
+      debug: 4.4.3
       make-fetch-happen: 15.0.2
     transitivePeerDependencies:
       - supports-color
