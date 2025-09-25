@@ -536,7 +536,7 @@ If you follow the official guidance from npm on how to configure your pipelines,
 
 https://docs.npmjs.com/trusted-publishers
 
-You can see a fully working example repo here: https://github.com/JamesHenry/lerna-v9-oidc-publishing-example
+You can see a fully working example repo here: https://github.com/lerna-lite-test/oidc
 
 ## `publishConfig` Overrides
 Certain fields defined in `publishConfig` can be used to override other fields in the manifest before the package gets published. As per pnpm [`publishConfig`](https://pnpm.io/package_json#publishconfig) documentation, you can override any of these fields:
