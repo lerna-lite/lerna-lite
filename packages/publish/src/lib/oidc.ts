@@ -81,6 +81,8 @@ export async function oidc({ packageName, registry, opts, config }: OidcOptions)
         return undefined;
       }
 
+      log.silly('oidc', 'Proceeding to fetch id_token from GitHub Actions');
+
       /**
        * The specification for an audience is `npm:registry.npmjs.org`,
        * where "registry.npmjs.org" can be any supported registry.
