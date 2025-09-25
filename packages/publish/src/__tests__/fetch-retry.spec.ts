@@ -76,4 +76,34 @@ describe('fetchWithRetry', () => {
     global.fetch = vi.fn();
     await expect(fetchWithRetry('http://test', { retry: -1 })).rejects.toThrow('Unexpected fetch failure');
   });
+
+  it('passes headers to fetch', async () => {
+    fetchMock.mockResolvedValue(createResponse(true));
+    const headers = {
+      Accept: 'application/json',
+      Authorization: 'Bearer test-token',
+    };
+    await fetchWithRetry('http://test', { headers });
+    expect(fetchMock).toHaveBeenCalledWith(
+      'http://test',
+      expect.objectContaining({
+        headers: expect.objectContaining({
+          Accept: 'application/json',
+          Authorization: 'Bearer test-token',
+        }),
+      })
+    );
+  });
+
+  it('does not retry POST requests on response not ok', async () => {
+    fetchMock.mockResolvedValue({ ok: false, status: 500, json: () => Promise.resolve({}) });
+    await expect(fetchWithRetry('http://test', { method: 'POST', retry: 3 })).rejects.toThrow('Failed after 1 attempt (POST requests are not retried)');
+    expect(fetchMock).toHaveBeenCalledTimes(1);
+  });
+
+  it('does not retry POST requests on network error', async () => {
+    fetchMock.mockRejectedValue(new Error('network error'));
+    await expect(fetchWithRetry('http://test', { method: 'POST', retry: 3 })).rejects.toThrow('network error');
+    expect(fetchMock).toHaveBeenCalledTimes(1);
+  });
 });

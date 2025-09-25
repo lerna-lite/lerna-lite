@@ -10,9 +10,6 @@ interface FetchRetryOptions extends RequestInit {
 
   /** Custom function to determine if a response should trigger a retry. */
   retryCondition?: (response: Response) => boolean;
-
-  /** HTTP headers to send with the request. */
-  headers?: HeadersInit;
 }
 
 /**
@@ -28,39 +25,34 @@ export async function fetchWithRetry(url: string | URL, options: FetchRetryOptio
     retry = 3, // Default retry count
     retryDelay = 1000, // Default delay between retries
     retryCondition = (response: Response) => !response.ok,
-    headers,
-    ...fetchOptions // Spread remaining fetch options
+    ...fetchOptions // Spread remaining native Fetch options, including headers
   } = options;
 
   for (let attempt = 0; attempt < retry + 1; attempt++) {
     try {
       const response = await fetch(url, {
-        ...fetchOptions, // Spread other fetch options like method, body, etc.
-        headers: {
-          ...headers, // Spread headers to allow full customization
-        },
+        ...fetchOptions,
       });
 
       // Check if the response meets the retry condition
       if (retryCondition(response)) {
+        // Do not retry if method is POST
+        if (fetchOptions.method?.toUpperCase() === 'POST') {
+          throw new Error(`Failed after 1 attempt (POST requests are not retried)`);
+        }
         if (attempt < retry) {
-          // Wait before retrying with exponential backoff
           await new Promise((resolve) => setTimeout(resolve, retryDelay * Math.pow(2, attempt)));
           continue;
         }
-        // If max retries reached, throw an error
         throw new Error(`Failed after ${retry + 1} attempts`);
       }
 
-      // Return successful response
       return response;
     } catch (error) {
-      // Handle network errors
-      if (attempt === retry) {
-        throw error; // Rethrow on last attempt
+      // Do not retry if method is POST
+      if (fetchOptions.method?.toUpperCase() === 'POST' || attempt === retry) {
+        throw error;
       }
-
-      // Wait before retrying with exponential backoff
       await new Promise((resolve) => setTimeout(resolve, retryDelay * Math.pow(2, attempt)));
     }
   }
