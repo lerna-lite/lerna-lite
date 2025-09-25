@@ -107,6 +107,7 @@ describe('publish from-git', () => {
       expect.objectContaining({ name: '@my-workspace/package-1', version: '1.0.0' }),
       expect.stringContaining('my-workspace-package-1-1.0.0.tgz'),
       expect.any(Object),
+      expect.any(Object),
       expect.any(Object)
     );
   });

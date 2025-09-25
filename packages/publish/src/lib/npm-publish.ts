@@ -1,6 +1,6 @@
 import { dirname, join } from 'node:path';
 
-import { type LifecycleConfig, type Package, runLifecycle } from '@lerna-lite/core';
+import { type Conf, type LifecycleConfig, type Package, runLifecycle } from '@lerna-lite/core';
 import { log } from '@lerna-lite/npmlog';
 import { type OneTimePasswordCache, otplease } from '@lerna-lite/version';
 import PackageJson from '@npmcli/package-json';
@@ -9,6 +9,7 @@ import { publish } from 'libnpmpublish';
 import npa from 'npm-package-arg';
 
 import type { LibNpmPublishOptions, PackagePublishConfig } from '../interfaces.js';
+import { oidc } from './oidc.js';
 
 /**
  * Alias dash-cased npmConf to camelCase
@@ -36,6 +37,7 @@ export async function npmPublish(
   pkg: Package,
   tarFilePath: string,
   options: Omit<LibNpmPublishOptions, 'defaultTag'> = {},
+  conf: Conf,
   otpCache?: OneTimePasswordCache
 ): Promise<void | Response> {
   const { dryRun, ...remainingOptions } = flattenOptions(options);
@@ -81,6 +83,14 @@ export async function npmPublish(
     if (manifestContent.publishConfig) {
       Object.assign(opts, publishConfigToOpts(manifestContent.publishConfig));
     }
+
+    // OIDC trusted publishing
+    await oidc({
+      packageName: pkg.name,
+      registry: opts.registry ?? 'https://registry.npmjs.org/',
+      opts,
+      config: conf,
+    });
 
     result = await otplease((innerOpts) => publish(manifestContent, tarData, innerOpts), opts, otpCache as OneTimePasswordCache);
   }

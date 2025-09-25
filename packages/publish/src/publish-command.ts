@@ -924,8 +924,8 @@ export class PublishCommand extends Command<PublishCommandOption> {
       try {
         const publishResult = await pulseTillDone(
           queue
-            ? queue.queue(() => npmPublish(pkg, pkg.packed.tarFilePath, pkgOpts, this.otpCache))
-            : npmPublish(pkg, pkg.packed.tarFilePath, pkgOpts, this.otpCache)
+            ? queue.queue(() => npmPublish(pkg, pkg.packed.tarFilePath, pkgOpts, this.conf, this.otpCache))
+            : npmPublish(pkg, pkg.packed.tarFilePath, pkgOpts, this.conf, this.otpCache)
         );
         this.publishedPackages.push(pkg);
 
@@ -946,8 +946,8 @@ export class PublishCommand extends Command<PublishCommandOption> {
           await this.requestOneTimePassword(); // Re-request OTP
           return pulseTillDone(
             queue
-              ? queue.queue(() => npmPublish(pkg, pkg.packed.tarFilePath, pkgOpts, this.otpCache))
-              : npmPublish(pkg, pkg.packed.tarFilePath, pkgOpts, this.otpCache)
+              ? queue.queue(() => npmPublish(pkg, pkg.packed.tarFilePath, pkgOpts, this.conf, this.otpCache))
+              : npmPublish(pkg, pkg.packed.tarFilePath, pkgOpts, this.conf, this.otpCache)
           ); // Retry publish
         }
 

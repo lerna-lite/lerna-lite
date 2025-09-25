@@ -43,6 +43,7 @@
     "@npmcli/arborist": "^9.1.4",
     "@npmcli/package-json": "^7.0.1",
     "byte-size": "^9.0.1",
+    "ci-info": "catalog:",
     "columnify": "catalog:dependencies",
     "fs-extra": "catalog:",
     "has-unicode": "catalog:",
