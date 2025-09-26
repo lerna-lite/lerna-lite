@@ -1,4 +1,4 @@
-name: 🏷️ Publish NPM Latest
+name: 🏷️ Release to NPM
 
 on:
   workflow_dispatch:
