@@ -755,7 +755,7 @@ export class PublishCommand extends Command<PublishCommandOption> {
     if (this.options.removePackageFields) {
       this.logger.warn(
         'DEPRECATION',
-        '"--remove-package-fields" was renamed to "--strip-package-keys" and will be removed in the next major release.'
+        '"--remove-package-fields" was renamed to "--strip-package-keys" and the previous option name will be removed in the next major release.'
       );
     }
 
