@@ -95,4 +95,4 @@ jobs:
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
-          pnpm run local-lerna publish from-package --force-publish --yes --otp ${{ steps.wait-for-secrets.outputs.OTP }}
+          pnpm run local-lerna publish from-package --force-publish --yes
