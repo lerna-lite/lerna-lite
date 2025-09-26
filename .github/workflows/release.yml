@@ -83,6 +83,8 @@ jobs:
         run: echo "${{ env.LERNA_VERSION_QUERY }}"
 
       - name: Lerna Version 🏷️
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
           git config --global user.name "${{ github.actor }}"
           git config --global user.email "${{ github.actor }}@users.noreply.github.com"
@@ -90,5 +92,7 @@ jobs:
 
       - name: Lerna Publish 📦
         if: ${{ inputs.dryrun != true }}
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
           pnpm run local-lerna publish from-package --force-publish --yes --otp ${{ steps.wait-for-secrets.outputs.OTP }}
