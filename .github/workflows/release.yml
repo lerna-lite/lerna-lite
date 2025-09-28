@@ -49,8 +49,9 @@ jobs:
         with:
           registry-url: 'https://registry.npmjs.org/'
           node-version: 24
-          cache: 'pnpm'
-          scope: "@lerna-lite"
+
+      - run: node --version
+      - run: npm --version
 
       - name: Run pnpm install dependencies
         run: pnpm install
