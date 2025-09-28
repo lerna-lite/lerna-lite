@@ -4,6 +4,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [4.9.0](https://github.com/lerna-lite/lerna-lite/compare/v4.8.0...v4.9.0) (2025-09-26)
+
+### Features
+
+* support OIDC trusted publishing ([#1150](https://github.com/lerna-lite/lerna-lite/issues/1150)) ([0cd23a8](https://github.com/lerna-lite/lerna-lite/commit/0cd23a87fb2b9198d6b9e4f488ff7915d0580db2)) - by @ghiscoding
+
+### Bug Fixes
+
+* **deps:** update all non-major dependencies ([#1151](https://github.com/lerna-lite/lerna-lite/issues/1151)) ([913e145](https://github.com/lerna-lite/lerna-lite/commit/913e145df171f2f3de5fa1f27941e5a0e946b798)) - by @renovate[bot]
+* **deps:** update all non-major dependencies ([#1153](https://github.com/lerna-lite/lerna-lite/issues/1153)) ([8ec2de9](https://github.com/lerna-lite/lerna-lite/commit/8ec2de99a0fe1424756f37c33e51770646600718)) - by @renovate[bot]
+
 ## [4.8.0](https://github.com/lerna-lite/lerna-lite/compare/v4.7.3...v4.8.0) (2025-09-20)
 
 ### Features
