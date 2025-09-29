@@ -58,7 +58,7 @@ Take 30sec. to complete this 1 question [poll survey 🔘](https://github.com/le
 Lerna-Lite itself is also using both [pnpm catalogs](https://pnpm.io/catalogs) and [pnpm workspaces](https://pnpm.io/workspaces) internally. 🎉
 
 ## OIDC Trusted Publishing
-As of [v4.9.0](https://github.com/lerna-lite/lerna-lite/releases/tag/v4.9.0) of Lerna-Lite, OIDC Trusted Publishing is now supported. GitHub and GitLab CI workflows can now use npm's [Trusted Publishing](https://docs.npmjs.com/trusted-publishers) OpenID Connect (OIDC) integration for secure, token-free publishing from CI/CD. This eliminates long-lived tokens and automatically generates provenance attestations. You can see a fully working example repo here: https://github.com/lerna-lite-test/oidc
+OIDC Trusted Publishing is now supported as of [v4.9.0](https://github.com/lerna-lite/lerna-lite/releases/tag/v4.9.0). GitHub and GitLab CI workflows can now use npm's [Trusted Publishing](https://docs.npmjs.com/trusted-publishers) OpenID Connect (OIDC) integration for secure, token-free publishing from CI/CD. This eliminates long-lived tokens and automatically generates provenance attestations. A quick repo is available here: https://github.com/lerna-lite-test/oidc
 
 ---
 
