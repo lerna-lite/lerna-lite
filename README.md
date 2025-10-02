@@ -49,11 +49,11 @@ _Click on any command show below to see their associated documentations_
 
 > **Note** since the `publish` package depends on the `version` package, you could install `@lerna-lite/publish` to get access to both commands.
 
----
-
 ## License
 
 [MIT License](LICENSE)
+
+---
 
 ## 📢 Lerna-Lite supports `catalog:` and `workspace:` protocols for all clients that support them (pnpm/bun/yarn).
 
