@@ -1,7 +1,6 @@
 import { EventEmitter } from 'node:events';
 import { Writable } from 'node:stream';
 
-import stream from 'readable-stream';
 import { describe, expect, it } from 'vitest';
 
 import { Gauge } from '../index.js';
