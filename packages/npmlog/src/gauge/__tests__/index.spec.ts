@@ -1,6 +1,5 @@
 import { EventEmitter } from 'node:events';
 import { Writable } from 'node:stream';
-import util from 'node:util';
 
 import stream from 'readable-stream';
 import { describe, expect, it } from 'vitest';
