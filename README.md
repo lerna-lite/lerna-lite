@@ -35,7 +35,7 @@
 
 ### Available Commands
 
-_Click on any command show below to see their associated documentations_
+_Click on any command shown below to see their associated documentations_
 
 - 🛠️ **[`init`](https://github.com/lerna-lite/lerna-lite/tree/main/packages/init#readme)** - creates a new Lerna-Lite workspace structure and adds `lerna.json`
 - 🕜 **[changed](https://github.com/lerna-lite/lerna-lite/tree/main/packages/changed#readme)** - list local packages changed since last release | `npm i @lerna-lite/changed -D`

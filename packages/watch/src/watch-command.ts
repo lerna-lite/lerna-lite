@@ -13,8 +13,8 @@ import {
   type WatchCommandOption,
 } from '@lerna-lite/core';
 import { type ChokidarOptions, type FSWatcher, watch } from 'chokidar';
-import picomatch from 'picomatch';
 import { globSync } from 'tinyglobby';
+import zeptomatch from 'zeptomatch';
 
 import { CHOKIDAR_AVAILABLE_OPTIONS, DEBOUNCE_DELAY, FILE_DELIMITER } from './constants.js';
 import type { ChangesStructure } from './models.js';
@@ -117,11 +117,10 @@ export class WatchCommand extends Command<WatchCommandOption & FilterOptions> {
         }
       }
 
-      // convert strings to picomatch pattern functions for chokidar compat
+      // convert strings to match pattern functions for chokidar compat
       const ignoredMatchers = this._ignoredGlobs.map((pattern) => {
         if (typeof pattern === 'string') {
-          const matcher = picomatch(pattern, { dot: true });
-          return (path: string) => matcher(path);
+          return (path: string) => (pattern === '**' ? true : zeptomatch(pattern, path));
         }
         /* v8 ignore next */
         return pattern;
