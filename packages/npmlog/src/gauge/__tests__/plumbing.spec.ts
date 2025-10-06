@@ -11,15 +11,32 @@ vi.mock('../render-template.js', () => ({
     return 'w:' + width + ', t:' + JSON.stringify(template) + ', v:' + JSON.stringify(values);
   },
 }));
-vi.mock('console-control-strings', () => ({
+vi.mock('tinyrainbow', () => ({
   default: {
-    eraseLine: () => 'ERASE',
-    gotoSOL: () => 'CR',
-    color: (to: string) => 'COLOR:' + to,
-    hideCursor: () => 'HIDE',
-    showCursor: () => 'SHOW',
+    reset: () => 'COLOR:reset',
   },
 }));
+
+// Mock console control codes
+vi.mock('../plumbing.js', async (importOriginal) => {
+  const actual = await importOriginal<typeof import('../plumbing.js')>();
+  return {
+    ...actual,
+    Plumbing: class extends actual.Plumbing {
+      hideCursor() {
+        return 'HIDE';
+      }
+
+      showCursor() {
+        return 'SHOW';
+      }
+
+      hide() {
+        return 'CRERASE';
+      }
+    },
+  };
+});
 
 const template = [{ type: 'name' }];
 const theme = {};
