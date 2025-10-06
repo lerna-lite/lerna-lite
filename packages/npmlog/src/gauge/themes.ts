@@ -2,7 +2,7 @@
  * Inlined from deprecated package https://github.com/npm/gauge/blob/f8092518a47ac6a96027ae3ad97d0251ffe7643b
  */
 
-import { color } from 'console-control-strings';
+import c from 'tinyrainbow';
 
 import ThemeSet from './theme-set.js';
 
@@ -21,12 +21,12 @@ themes.addTheme('ASCII', {
 
 themes.addTheme('colorASCII', themes.getTheme('ASCII'), {
   progressbarTheme: {
-    preComplete: color('bgBrightWhite', 'brightWhite'),
+    preComplete: c.bgWhite(c.white('')),
     complete: '#',
-    postComplete: color('reset'),
-    preRemaining: color('bgBrightBlack', 'brightBlack'),
+    postComplete: c.reset(),
+    preRemaining: c.bgBlack(c.black('')),
     remaining: '.',
-    postRemaining: color('reset'),
+    postRemaining: c.reset(),
   },
 });
 
@@ -43,12 +43,12 @@ themes.addTheme('brailleSpinner', {
 
 themes.addTheme('colorBrailleSpinner', themes.getTheme('brailleSpinner'), {
   progressbarTheme: {
-    preComplete: color('bgBrightWhite', 'brightWhite'),
+    preComplete: c.bgWhite(c.white('')),
     complete: '#',
-    postComplete: color('reset'),
-    preRemaining: color('bgBrightBlack', 'brightBlack'),
+    postComplete: c.reset(),
+    preRemaining: c.bgBlack(c.black('')),
     remaining: '⠂',
-    postRemaining: color('reset'),
+    postRemaining: c.reset(),
   },
 });
 
