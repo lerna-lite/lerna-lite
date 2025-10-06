@@ -1,16 +1,15 @@
 import { EventEmitter } from 'node:events';
-import util from 'node:util';
+import { Writable } from 'node:stream';
 
-import stream from 'readable-stream';
 import { describe, expect, it } from 'vitest';
 
 import { Gauge } from '../index.js';
 
 function Sink(this: any) {
-  // eslint-disable-next-line prefer-rest-params
-  stream.Writable.call(this, arguments);
+  Writable.call(this, {});
 }
-util.inherits(Sink, stream.Writable);
+Sink.prototype = Object.create(Writable.prototype);
+Sink.prototype.constructor = Sink;
 Sink.prototype._write = function (data: any, enc: any, cb: () => void) {
   cb();
 };
