@@ -353,7 +353,7 @@ Below is a full demo of how you can use a preset with full configuration
 > ```json
 > {
 >   "overrides": {
->     "conventional-changelog-conventionalcommits": "8.0.0"
+>     "conventional-changelog-conventionalcommits": "9.0.0"
 >   }
 > }
 > ```
