@@ -6,8 +6,8 @@ import { EventEmitter } from 'node:events';
 import type { WriteStream } from 'node:tty';
 import { format } from 'node:util';
 
-import c from 'tinyrainbow';
 import setBlocking from 'set-blocking';
+import c from 'tinyrainbow';
 
 import { TrackerGroup } from './are-we-there-yet/tracker-group.js';
 import { Gauge } from './gauge/index.js';
@@ -292,34 +292,45 @@ export class Logger extends EventEmitter {
     }
     let output = '';
     if (this.useColor()) {
-      style = style || {};
-      const settings: Array<boolean | string> = [];
-      if (style.fg) {
-        settings.push(style.fg);
+      const parts: string[] = [];
+      if (style?.fg) {
+        parts.push(style.fg); // e.g. 'red'
       }
-      if (style.bg) {
-        settings.push('bg' + style.bg[0].toUpperCase() + style.bg.slice(1));
+      if (style?.bg) {
+        parts.push('bg' + style.bg[0].toUpperCase() + style.bg.slice(1)); // 'bgBlue'
       }
-      if (style.bold) {
-        settings.push('bold');
+      if (style?.bold) {
+        parts.push('bold');
       }
-      if (style.underline) {
-        settings.push('underline');
+      if (style?.underline) {
+        parts.push('underline');
       }
-      if (style.inverse) {
-        settings.push('inverse');
+      if (style?.inverse) {
+        parts.push('inverse');
       }
-      if (settings.length) {
-        output += consoleControl.color(settings);
+
+      if (parts.length) {
+        // tinyrainbow works like: c.red.bold.bgBlue('text')
+        // we create a wrapper that applies the chain to the message later
+        // build the chain, then call it with an empty string
+        const styledFn = parts.reduce((fn, code) => (fn as any)[code] ?? fn, c as any) as (s: string) => string;
+
+        output += styledFn('');
       }
-      if (style.beep) {
-        output += consoleControl.beep();
+
+      if (style?.beep) {
+        output += '\x07'; // same as consoleControl.beep()
       }
     }
+
+    // ---------- message ----------
     output += msg;
+
+    // ---------- reset ----------
     if (this.useColor()) {
-      output += consoleControl.color('reset');
+      output += c.reset('');
     }
+
     return output;
   }
 

@@ -64,9 +64,8 @@ export class Plumbing {
     return (
       renderTemplate(this.width, this.template, values).trim() +
       c.reset() +
-      '\x1B[K' +  // Erase line (equivalent to consoleControl.eraseLine())
-      '\x1B[G'    // Go to start of line (equivalent to consoleControl.gotoSOL())
+      '\x1B[K' + // Erase line (equivalent to consoleControl.eraseLine())
+      '\x1B[G' // Go to start of line (equivalent to consoleControl.gotoSOL())
     );
   }
 }
-
