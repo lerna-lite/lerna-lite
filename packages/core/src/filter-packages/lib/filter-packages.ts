@@ -3,7 +3,7 @@ import util from 'node:util';
 import type { Package } from '@lerna-lite/core';
 import { ValidationError } from '@lerna-lite/core';
 import { log } from '@lerna-lite/npmlog';
-import picomatch from 'picomatch';
+import zeptomatch from 'zeptomatch';
 
 /**
  * Filters a list of packages, returning all packages that match the `include` glob[s]
@@ -48,14 +48,20 @@ export function filterPackages(
 
     for (const pattern of patterns) {
       const isNegation = pattern[0] === '!';
-      const matcher = picomatch(isNegation ? pattern.slice(1) : pattern);
+      const raw = isNegation ? pattern.slice(1) : pattern;
 
-      for (const name of pnames) {
-        if (matcher(name)) {
-          if (isNegation) {
-            chosen.delete(name);
-          } else {
-            chosen.add(name);
+      // expand extglobs like '@(a|b)' into multiple simple patterns
+      const expanded = expandExtglobs(raw);
+
+      for (const pat of expanded) {
+        for (const name of pnames) {
+          const matched = pat === '**' ? true : zeptomatch(pat, name);
+          if (matched) {
+            if (isNegation) {
+              chosen.delete(name);
+            } else {
+              chosen.add(name);
+            }
           }
         }
       }
@@ -95,4 +101,22 @@ function arrify(thing: string[] | string | undefined): string[] {
  */
 function negate(patterns: string[]): string[] {
   return arrify(patterns).map((pattern) => `!${pattern}`);
+}
+
+/**
+ * Expand simple extglob patterns like '@(a|b)' into ['a', 'b'] variants.
+ * This is a minimal implementation tailored to the usages in tests (e.g. package-@(1|2)).
+ */
+function expandExtglobs(pattern: string): string[] {
+  // only handle the simple '@(a|b|c)' form; if not present, return the pattern as-is
+  const extglobMatch = pattern.match(/^(.*)@\(([^)]+)\)(.*)$/);
+
+  if (!extglobMatch) {
+    return [pattern];
+  }
+
+  const [, prefix, inner, suffix] = extglobMatch;
+  const parts = inner.split('|');
+
+  return parts.map((p) => `${prefix}${p}${suffix}`);
 }

@@ -39,8 +39,8 @@
     "@lerna-lite/cli": "workspace:*",
     "@lerna-lite/core": "workspace:*",
     "chokidar": "^4.0.3",
-    "picomatch": "catalog:dependencies",
-    "tinyglobby": "catalog:dependencies"
+    "tinyglobby": "catalog:dependencies",
+    "zeptomatch": "catalog:dependencies"
   },
   "devDependencies": {
     "@types/yargs-parser": "catalog:devDependencies",
