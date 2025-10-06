@@ -8,7 +8,7 @@ export function writeLogFile(cwd: string) {
   let logOutput = '';
 
   log.record.forEach((m) => {
-    let pref: any = [m.id, m.level];
+    let pref: string | string[] = [m.id, m.level];
     if (m.prefix) {
       pref.push(m.prefix);
     }

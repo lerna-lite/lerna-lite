@@ -354,9 +354,6 @@ importers:
       p-queue:
         specifier: ^8.1.1
         version: 8.1.1
-      resolve-from:
-        specifier: ^5.0.0
-        version: 5.0.0
       semver:
         specifier: 'catalog:'
         version: 7.7.2

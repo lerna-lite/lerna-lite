@@ -53,7 +53,6 @@
     "npm-package-arg": "catalog:",
     "p-map": "catalog:",
     "p-queue": "^8.1.1",
-    "resolve-from": "^5.0.0",
     "semver": "catalog:",
     "slash": "catalog:",
     "tinyglobby": "catalog:dependencies",
