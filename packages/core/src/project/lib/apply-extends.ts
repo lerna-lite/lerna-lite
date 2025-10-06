@@ -1,7 +1,7 @@
+import { createRequire } from 'node:module';
 import { dirname } from 'node:path';
 
 import { readJsonSync } from 'fs-extra/esm';
-import resolveFrom from 'resolve-from';
 
 import { ValidationError } from '../../validation-error.js';
 import { shallowExtend } from './shallow-extend.js';
@@ -18,7 +18,9 @@ export function applyExtends(config: { [key: string]: any }, cwd: string, seen =
     let pathToDefault;
 
     try {
-      pathToDefault = resolveFrom(cwd, config.extends);
+      // resolve-from resolves modules relative to a given directory; emulate using createRequire
+      const requireFrom = createRequire(cwd + '/');
+      pathToDefault = requireFrom.resolve(config.extends);
     } catch (err: any) {
       throw new ValidationError('ERESOLVED', 'Config .extends must be locally-resolvable', err);
     }
