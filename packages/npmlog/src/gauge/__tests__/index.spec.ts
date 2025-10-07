@@ -5,14 +5,19 @@ import { describe, expect, it } from 'vitest';
 
 import { Gauge } from '../index.js';
 
-function Sink(this: any) {
-  Writable.call(this, {});
+class Sink extends Writable {
+  isTTY: boolean = false;
+  columns: number = 80;
+
+  constructor() {
+    super({});
+  }
+
+  // `_write` just acknowledges the chunk
+  _write(_data: any, _enc: any, cb: () => void): void {
+    cb();
+  }
 }
-Sink.prototype = Object.create(Writable.prototype);
-Sink.prototype.constructor = Sink;
-Sink.prototype._write = function (data: any, enc: any, cb: () => void) {
-  cb();
-};
 
 const results: any = new EventEmitter();
 function MockPlumbing(theme: any, template: any, columns: any) {
@@ -50,7 +55,7 @@ describe('defaults', () => {
     }
     gauge.disable();
 
-    gauge = new Gauge(new Sink());
+    gauge = new (Gauge as any)(new Sink() as any);
     expect(gauge._tty).toBeUndefined();
     gauge.disable();
   });

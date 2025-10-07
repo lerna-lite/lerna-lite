@@ -1,6 +1,16 @@
+import { stripVTControlCharacters } from 'node:util';
+
+import c from 'tinyrainbow';
 import { describe, expect, it, vi } from 'vitest';
 
 import { Plumbing } from '../plumbing.js';
+
+function normalizeAnsi(str: string) {
+  if (c.isColorSupported) {
+    return str;
+  }
+  return stripVTControlCharacters(str);
+}
 
 vi.mock('../render-template.js', () => ({
   default: (width: string, template: any, values: { x: any }) => {
@@ -11,15 +21,6 @@ vi.mock('../render-template.js', () => ({
     return 'w:' + width + ', t:' + JSON.stringify(template) + ', v:' + JSON.stringify(values);
   },
 }));
-vi.mock('console-control-strings', () => ({
-  default: {
-    eraseLine: () => 'ERASE',
-    gotoSOL: () => 'CR',
-    color: (to: string) => 'COLOR:' + to,
-    hideCursor: () => 'HIDE',
-    showCursor: () => 'SHOW',
-  },
-}));
 
 const template = [{ type: 'name' }];
 const theme = {};
@@ -27,38 +28,51 @@ const plumbing = new Plumbing(theme, template, 10);
 
 describe('Plumbing static methods', () => {
   it('showCursor', () => {
-    expect(plumbing.showCursor()).toBe('SHOW');
+    const expected = '\x1b[?25h';
+    expect(plumbing.showCursor()).toBe(expected);
   });
 
   it('hideCursor', () => {
-    expect(plumbing.hideCursor()).toBe('HIDE');
+    const expected = '\x1b[?25l';
+    expect(plumbing.hideCursor()).toBe(expected);
   });
 
   it('hide', () => {
-    expect(plumbing.hide()).toBe('CRERASE');
+    const expected = '\x1b[0G\x1b[2K';
+    expect(plumbing.hide()).toBe(expected);
   });
 
   it('show', () => {
-    expect(plumbing.show({ name: 'test' })).toBe('w:10, t:[{"type":"name"}], v:{"name":"test"}COLOR:resetERASECR');
+    const output = plumbing.show({ name: 'test' });
+    const result = normalizeAnsi('w:10, t:[{"type":"name"}], v:{"name":"test"}\x1b[0m\x1b[0m\x1b[2K\x1b[0G');
+    expect(output).toEqual(result);
   });
 
   it('width', () => {
     const defaultWidth = new Plumbing(theme, template);
-    expect(defaultWidth.show({ name: 'test' })).toBe('w:80, t:[{"type":"name"}], v:{"name":"test"}COLOR:resetERASECR');
+    const output = defaultWidth.show({ name: 'test' });
+    const result = normalizeAnsi('w:80, t:[{"type":"name"}], v:{"name":"test"}\x1b[0m\x1b[0m\x1b[2K\x1b[0G');
+    expect(output).toEqual(result);
   });
 
   it('setTheme', () => {
     plumbing.setTheme({ x: 'abc' });
-    expect(plumbing.show({ name: 'test' })).toBe('w:10, t:[{"type":"name"}], v:{"name":"test","x":"abc"}COLOR:resetERASECR');
+    const output = plumbing.show({ name: 'test' });
+    const result = normalizeAnsi('w:10, t:[{"type":"name"}], v:{"name":"test","x":"abc"}\x1b[0m\x1b[0m\x1b[2K\x1b[0G');
+    expect(output).toEqual(result);
   });
 
   it('setTemplate', () => {
     plumbing.setTemplate([{ type: 'name' }, { type: 'x' }]);
-    expect(plumbing.show({ name: 'test' })).toBe('w:10, t:[{"type":"name"},{"type":"x"}], v:{"name":"test","x":"abc"}COLOR:resetERASECR');
+    const output = plumbing.show({ name: 'test' });
+    const result = normalizeAnsi('w:10, t:[{"type":"name"},{"type":"x"}], v:{"name":"test","x":"abc"}\x1b[0m\x1b[0m\x1b[2K\x1b[0G');
+    expect(output).toEqual(result);
   });
 
   it('setWidth', () => {
     plumbing.setWidth(20);
-    expect(plumbing.show({ name: 'test' })).toBe('w:20, t:[{"type":"name"},{"type":"x"}], v:{"name":"test","x":"abc"}COLOR:resetERASECR');
+    const output = plumbing.show({ name: 'test' });
+    const result = normalizeAnsi('w:20, t:[{"type":"name"},{"type":"x"}], v:{"name":"test","x":"abc"}\x1b[0m\x1b[0m\x1b[2K\x1b[0G');
+    expect(output).toEqual(result);
   });
 });

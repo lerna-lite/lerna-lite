@@ -3,7 +3,7 @@
  */
 
 import validate from 'aproba';
-import consoleControl from 'console-control-strings';
+import c from 'tinyrainbow';
 
 import renderTemplate from './render-template.js';
 
@@ -39,15 +39,18 @@ export class Plumbing {
   }
 
   hideCursor() {
-    return consoleControl.hideCursor();
+    // ANSI: Hide cursor
+    return '\x1b[?25l';
   }
 
   showCursor() {
-    return consoleControl.showCursor();
+    // ANSI: Show cursor
+    return '\x1b[?25h';
   }
 
   hide() {
-    return consoleControl.gotoSOL() + consoleControl.eraseLine();
+    // ANSI: Move to SOL and erase line
+    return '\x1b[0G\x1b[2K';
   }
 
   show(status) {
@@ -56,11 +59,10 @@ export class Plumbing {
       values[key] = status[key];
     }
 
-    return (
-      renderTemplate(this.width, this.template, values).trim() +
-      consoleControl.color('reset') +
-      consoleControl.eraseLine() +
-      consoleControl.gotoSOL()
-    );
+    let out = renderTemplate(this.width, this.template, values).trim() + c.reset('');
+    if (c.isColorSupported) {
+      out += '\x1b[2K' + '\x1b[0G';
+    }
+    return out;
   }
 }
