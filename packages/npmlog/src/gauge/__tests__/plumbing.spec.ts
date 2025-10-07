@@ -21,70 +21,57 @@ vi.mock('../render-template.js', () => ({
   },
 }));
 
-// Mock console control codes
-vi.mock('../plumbing.js', async (importOriginal) => {
-  const actual = await importOriginal<typeof import('../plumbing.js')>();
-  return {
-    ...actual,
-    Plumbing: class extends actual.Plumbing {
-      hideCursor() {
-        return 'HIDE';
-      }
-
-      showCursor() {
-        return 'SHOW';
-      }
-
-      hide() {
-        return 'CRERASE';
-      }
-    },
-  };
-});
-
 const template = [{ type: 'name' }];
 const theme = {};
 const plumbing = new Plumbing(theme, template, 10);
 
 describe('Plumbing static methods', () => {
   it('showCursor', () => {
-    expect(plumbing.showCursor()).toBe('SHOW');
+    const expected = '\x1b[?25h';
+    expect(plumbing.showCursor()).toBe(expected);
   });
 
   it('hideCursor', () => {
-    expect(plumbing.hideCursor()).toBe('HIDE');
+    const expected = '\x1b[?25l';
+    expect(plumbing.hideCursor()).toBe(expected);
   });
 
   it('hide', () => {
-    expect(plumbing.hide()).toBe('CRERASE');
+    const expected = '\x1b[0G\x1b[2K';
+    expect(plumbing.hide()).toBe(expected);
   });
 
   it('show', () => {
     const output = plumbing.show({ name: 'test' });
-    expect(output).toBe(normalizeAnsi('w:10, t:[{"type":"name"}], v:{"name":"test"}\x1b[0m\x1b[0m\x1b[2K\x1b[0G'));
+    const result = normalizeAnsi('w:10, t:[{"type":"name"}], v:{"name":"test"}\x1b[0m\x1b[0m\x1b[2K\x1b[0G')
+    expect(output).toEqual(result);
   });
 
   it('width', () => {
     const defaultWidth = new Plumbing(theme, template);
     const output = defaultWidth.show({ name: 'test' });
-    expect(output).toBe(normalizeAnsi('w:80, t:[{"type":"name"}], v:{"name":"test"}\x1b[0m\x1b[0m\x1b[2K\x1b[0G'));
+    const result = normalizeAnsi('w:80, t:[{"type":"name"}], v:{"name":"test"}\x1b[0m\x1b[0m\x1b[2K\x1b[0G');
+    expect(output).toEqual(result);
   });
 
   it('setTheme', () => {
     plumbing.setTheme({ x: 'abc' });
     const output = plumbing.show({ name: 'test' });
-    expect(output).toBe(normalizeAnsi('w:10, t:[{"type":"name"}], v:{"name":"test","x":"abc"}\x1b[0m\x1b[0m\x1b[2K\x1b[0G'));
+    const result = normalizeAnsi('w:10, t:[{"type":"name"}], v:{"name":"test","x":"abc"}\x1b[0m\x1b[0m\x1b[2K\x1b[0G');
+    expect(output).toEqual(result);
   });
 
   it('setTemplate', () => {
     plumbing.setTemplate([{ type: 'name' }, { type: 'x' }]);
     const output = plumbing.show({ name: 'test' });
-    expect(output).toBe(normalizeAnsi('w:10, t:[{"type":"name"},{"type":"x"}], v:{"name":"test","x":"abc"}\x1b[0m\x1b[0m\x1b[2K\x1b[0G'));
+    const result = normalizeAnsi('w:10, t:[{"type":"name"},{"type":"x"}], v:{"name":"test","x":"abc"}\x1b[0m\x1b[0m\x1b[2K\x1b[0G');
+    expect(output).toEqual(result);
   });
 
   it('setWidth', () => {
     plumbing.setWidth(20);
     const output = plumbing.show({ name: 'test' });
-    expect(output).toBe(normalizeAnsi('w:20, t:[{"type":"name"},{"type":"x"}], v:{"name":"test","x":"abc"}\x1b[0m\x1b[0m\x1b[2K\x1b[0G'));
+    const result = normalizeAnsi('w:20, t:[{"type":"name"},{"type":"x"}], v:{"name":"test","x":"abc"}\x1b[0m\x1b[0m\x1b[2K\x1b[0G');
+    expect(output).toEqual(result);
   });
 });

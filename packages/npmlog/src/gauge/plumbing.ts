@@ -59,11 +59,10 @@ export class Plumbing {
       values[key] = status[key];
     }
 
-    return (
-      renderTemplate(this.width, this.template, values).trim() +
-      c.reset('') +
-      '\x1b[2K' + // Erase line
-      '\x1b[0G' // Move to SOL
-    );
+    let out = renderTemplate(this.width, this.template, values).trim() + c.reset('');
+    if (c.isColorSupported) {
+      out += '\x1b[2K' + '\x1b[0G';
+    }
+    return out;
   }
 }
