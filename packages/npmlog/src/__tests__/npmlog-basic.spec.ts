@@ -570,7 +570,7 @@ describe('Basic Tests', () => {
 
     test('no style', () => {
       const o = log._format('test message');
-      expect(o).toBe('test message\x1b[0m\x1b[0m'); // text + reset
+      expect(o).toBe(normalizeAnsi('test message\x1b[0m\x1b[0m')); // text + reset
     });
 
     test('fg', () => {
