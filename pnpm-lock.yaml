@@ -564,10 +564,6 @@ importers:
       wide-align:
         specifier: ^1.1.5
         version: 1.1.5
-    devDependencies:
-      strip-ansi:
-        specifier: ^7.1.2
-        version: 7.1.2
 
   packages/profiler:
     dependencies:
@@ -3134,10 +3130,6 @@ packages:
 
   strip-ansi@7.1.0:
     resolution: {integrity: sha512-iq6eVVI64nQQTRYq2KtEg2d2uU7LElhTJwsH4YzIHZshxlgZms/wIc4VoDQTlG/IvVIrBKG06CrZnp0qv7hkcQ==}
-    engines: {node: '>=12'}
-
-  strip-ansi@7.1.2:
-    resolution: {integrity: sha512-gmBGslpoQJtgnMAvOVqGZpEz9dyoKTCzy2nfz/n8aIFhN/jCE/rCmcxabB6jOOHV+0WNnylOxaxBQPSvcWklhA==}
     engines: {node: '>=12'}
 
   strip-final-newline@4.0.0:
@@ -5795,10 +5787,6 @@ snapshots:
       ansi-regex: 5.0.1
 
   strip-ansi@7.1.0:
-    dependencies:
-      ansi-regex: 6.2.0
-
-  strip-ansi@7.1.2:
     dependencies:
       ansi-regex: 6.2.0
 

@@ -43,8 +43,5 @@
     "signal-exit": "^4.1.0",
     "tinyrainbow": "catalog:dependencies",
     "wide-align": "^1.1.5"
-  },
-  "devDependencies": {
-    "strip-ansi": "^7.1.2"
   }
 }

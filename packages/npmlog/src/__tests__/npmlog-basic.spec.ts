@@ -2,8 +2,8 @@
  * Adapted from https://github.com/npm/npmlog/blob/756bd05d01e7e4841fba25204d6b85dfcffeba3c/test/basic.js
  */
 import { Stream, Writable } from 'node:stream';
+import { stripVTControlCharacters } from 'node:util';
 
-import stripAnsi from 'strip-ansi';
 import c from 'tinyrainbow';
 import { afterAll, afterEach, beforeEach, describe, expect, test, vi } from 'vitest';
 
@@ -14,7 +14,7 @@ function normalizeAnsi(str: string) {
   if (c.isColorSupported) {
     return str;
   }
-  return stripAnsi(str);
+  return stripVTControlCharacters(str);
 }
 
 const result: any[] = [];

@@ -1,4 +1,5 @@
-import stripAnsi from 'strip-ansi';
+import { stripVTControlCharacters } from 'node:util';
+
 import c from 'tinyrainbow';
 import { describe, expect, it, vi } from 'vitest';
 
@@ -8,7 +9,7 @@ function normalizeAnsi(str: string) {
   if (c.isColorSupported) {
     return str;
   }
-  return stripAnsi(str);
+  return stripVTControlCharacters(str);
 }
 
 vi.mock('../render-template.js', () => ({
@@ -43,7 +44,7 @@ describe('Plumbing static methods', () => {
 
   it('show', () => {
     const output = plumbing.show({ name: 'test' });
-    const result = normalizeAnsi('w:10, t:[{"type":"name"}], v:{"name":"test"}\x1b[0m\x1b[0m\x1b[2K\x1b[0G')
+    const result = normalizeAnsi('w:10, t:[{"type":"name"}], v:{"name":"test"}\x1b[0m\x1b[0m\x1b[2K\x1b[0G');
     expect(output).toEqual(result);
   });
 
