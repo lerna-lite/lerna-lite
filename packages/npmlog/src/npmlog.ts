@@ -284,51 +284,59 @@ export class Logger extends EventEmitter {
       bold?: boolean;
       underline?: boolean;
       inverse?: boolean;
-      beep?: boolean;
     }
   ): string | void {
     if (!this._stream) {
       return;
     }
-    let output = '';
-    if (this.useColor()) {
-      const parts: string[] = [];
-      if (style?.fg) {
-        parts.push(style.fg); // e.g. 'red'
-      }
-      if (style?.bg) {
-        parts.push('bg' + style.bg[0].toUpperCase() + style.bg.slice(1)); // 'bgBlue'
-      }
-      if (style?.bold) {
-        parts.push('bold');
-      }
-      if (style?.underline) {
-        parts.push('underline');
-      }
-      if (style?.inverse) {
-        parts.push('inverse');
-      }
 
-      if (parts.length) {
-        // tinyrainbow works like: c.red.bold.bgBlue('text')
-        // we create a wrapper that applies the chain to the message later
-        // build the chain, then call it with an empty string
-        const styledFn = parts.reduce((fn, code) => (fn as any)[code] ?? fn, c as any) as (s: string) => string;
-
-        output += styledFn('');
-      }
-
-      if (style?.beep) {
-        output += '\x07'; // same as consoleControl.beep()
-      }
+    // If color is not enabled, return the original message
+    if (!this.useColor()) {
+      return msg;
     }
 
-    // ---------- message ----------
-    output += msg;
+    // Start with the original message
+    let output = msg;
 
-    // ---------- reset ----------
-    if (this.useColor()) {
-      output += c.reset('');
+    // Apply styling step by step
+    if (style) {
+      // Apply foreground color first
+      if (style.fg) {
+        const colorMethodName = style.fg as keyof typeof c;
+        const colorMethod = c[colorMethodName];
+        if (typeof colorMethod === 'function') {
+          output = colorMethod(output);
+        }
+      }
+
+      // Apply background color (if supported)
+      if (style.bg) {
+        const bgColorMethodName = `bg${style.bg[0].toUpperCase() + style.bg.slice(1)}` as keyof typeof c;
+        const bgColorMethod = c[bgColorMethodName];
+        if (typeof bgColorMethod === 'function') {
+          output = bgColorMethod(output);
+        }
+      }
+
+      // Apply bold
+      if (style.bold) {
+        output = c.bold(output);
+      }
+
+      // Apply underline
+      if (style.underline) {
+        output = c.underline(output);
+      }
+
+      // Apply inverse
+      if (style.inverse) {
+        output = c.inverse(output);
+      }
+
+      // ---------- reset ----------
+      if (this.useColor()) {
+        output += c.reset('');
+      }
     }
 
     return output;
@@ -342,7 +350,6 @@ export class Logger extends EventEmitter {
       bold?: boolean;
       underline?: boolean;
       inverse?: boolean;
-      beep?: boolean;
     }
   ): void {
     if (!this._stream) {

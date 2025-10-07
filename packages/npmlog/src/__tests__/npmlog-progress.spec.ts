@@ -70,7 +70,7 @@ describe('log module', () => {
       },
     } as unknown as Gauge;
 
-    // In the original implementation, the tests were performed using tap which does not set color, so force disable it in jest too to keep assertions consistent
+    // In the original implementation, the tests were performed using tap which does not set color, so force disable it in vitest too to keep assertions consistent
     log.useColor = () => false;
     log.disableProgress();
     log.resume();
