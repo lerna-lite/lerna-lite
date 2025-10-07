@@ -1,6 +1,15 @@
+import stripAnsi from 'strip-ansi';
+import c from 'tinyrainbow';
 import { describe, expect, it, vi } from 'vitest';
 
 import { Plumbing } from '../plumbing.js';
+
+function normalizeAnsi(str: string) {
+  if (c.isColorSupported) {
+    return str;
+  }
+  return stripAnsi(str);
+}
 
 vi.mock('../render-template.js', () => ({
   default: (width: string, template: any, values: { x: any }) => {
@@ -9,11 +18,6 @@ vi.mock('../render-template.js', () => ({
       values.x = values.x;
     } // pull in from parent object for stringify
     return 'w:' + width + ', t:' + JSON.stringify(template) + ', v:' + JSON.stringify(values);
-  },
-}));
-vi.mock('tinyrainbow', () => ({
-  default: {
-    reset: () => 'COLOR:reset',
   },
 }));
 
@@ -56,26 +60,31 @@ describe('Plumbing static methods', () => {
   });
 
   it('show', () => {
-    expect(plumbing.show({ name: 'test' })).toBe('w:10, t:[{"type":"name"}], v:{"name":"test"}COLOR:resetERASECR');
+    const output = plumbing.show({ name: 'test' });
+    expect(output).toBe(normalizeAnsi('w:10, t:[{"type":"name"}], v:{"name":"test"}\x1b[0m\x1b[0m\x1b[2K\x1b[0G'));
   });
 
   it('width', () => {
     const defaultWidth = new Plumbing(theme, template);
-    expect(defaultWidth.show({ name: 'test' })).toBe('w:80, t:[{"type":"name"}], v:{"name":"test"}COLOR:resetERASECR');
+    const output = defaultWidth.show({ name: 'test' });
+    expect(output).toBe(normalizeAnsi('w:80, t:[{"type":"name"}], v:{"name":"test"}\x1b[0m\x1b[0m\x1b[2K\x1b[0G'));
   });
 
   it('setTheme', () => {
     plumbing.setTheme({ x: 'abc' });
-    expect(plumbing.show({ name: 'test' })).toBe('w:10, t:[{"type":"name"}], v:{"name":"test","x":"abc"}COLOR:resetERASECR');
+    const output = plumbing.show({ name: 'test' });
+    expect(output).toBe(normalizeAnsi('w:10, t:[{"type":"name"}], v:{"name":"test","x":"abc"}\x1b[0m\x1b[0m\x1b[2K\x1b[0G'));
   });
 
   it('setTemplate', () => {
     plumbing.setTemplate([{ type: 'name' }, { type: 'x' }]);
-    expect(plumbing.show({ name: 'test' })).toBe('w:10, t:[{"type":"name"},{"type":"x"}], v:{"name":"test","x":"abc"}COLOR:resetERASECR');
+    const output = plumbing.show({ name: 'test' });
+    expect(output).toBe(normalizeAnsi('w:10, t:[{"type":"name"},{"type":"x"}], v:{"name":"test","x":"abc"}\x1b[0m\x1b[0m\x1b[2K\x1b[0G'));
   });
 
   it('setWidth', () => {
     plumbing.setWidth(20);
-    expect(plumbing.show({ name: 'test' })).toBe('w:20, t:[{"type":"name"},{"type":"x"}], v:{"name":"test","x":"abc"}COLOR:resetERASECR');
+    const output = plumbing.show({ name: 'test' });
+    expect(output).toBe(normalizeAnsi('w:20, t:[{"type":"name"},{"type":"x"}], v:{"name":"test","x":"abc"}\x1b[0m\x1b[0m\x1b[2K\x1b[0G'));
   });
 });

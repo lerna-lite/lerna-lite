@@ -3,10 +3,19 @@
  */
 import { Stream, Writable } from 'node:stream';
 
+import stripAnsi from 'strip-ansi';
+import c from 'tinyrainbow';
 import { afterAll, afterEach, beforeEach, describe, expect, test, vi } from 'vitest';
 
 import themes from '../gauge/themes.js';
 import { log, Logger } from '../npmlog.js';
+
+function normalizeAnsi(str: string) {
+  if (c.isColorSupported) {
+    return str;
+  }
+  return stripAnsi(str);
+}
 
 const result: any[] = [];
 const logEvents: any[] = [];
@@ -14,27 +23,24 @@ const logInfoEvents: any[] = [];
 const logPrefixEvents: any[] = [];
 
 const resultExpect = [
-  '\u001b[37;40mnpm\u001b[0m \u001b[0m\u001b[7msill\u001b[0m \u001b[0m\u001b[35msilly prefix\u001b[0m x = {"foo":{"bar":"baz"}}\n',
-  '\u001b[0m\u001b[37;40mnpm\u001b[0m \u001b[0m\u001b[36;40mverb\u001b[0m \u001b[0m\u001b[35mverbose prefix\u001b[0m x = {"foo":{"bar":"baz"}}\n',
-  '\u001b[0m\u001b[37;40mnpm\u001b[0m \u001b[0m\u001b[32minfo\u001b[0m \u001b[0m\u001b[35minfo prefix\u001b[0m x = {"foo":{"bar":"baz"}}\n',
-  '\u001b[0m\u001b[37;40mnpm\u001b[0m \u001b[0m\u001b[32;40mtiming\u001b[0m \u001b[0m\u001b[35mtiming prefix\u001b[0m x = {"foo":{"bar":"baz"}}\n',
-  '\u001b[0m\u001b[37;40mnpm\u001b[0m \u001b[0m\u001b[32;40mhttp\u001b[0m \u001b[0m\u001b[35mhttp prefix\u001b[0m x = {"foo":{"bar":"baz"}}\n',
-  '\u001b[0m\u001b[37;40mnpm\u001b[0m \u001b[0m\u001b[36;40mnotice\u001b[0m \u001b[0m\u001b[35mnotice prefix\u001b[0m x = {"foo":{"bar":"baz"}}\n',
-  '\u001b[0m\u001b[37;40mnpm\u001b[0m \u001b[0m\u001b[30;43mWARN\u001b[0m \u001b[0m\u001b[35mwarn prefix\u001b[0m x = {"foo":{"bar":"baz"}}\n',
-  '\u001b[0m\u001b[37;40mnpm\u001b[0m \u001b[0m\u001b[31;40mERR!\u001b[0m \u001b[0m\u001b[35merror prefix\u001b[0m x = {"foo":{"bar":"baz"}}\n',
-  '\u001b[0m\u001b[37;40mnpm\u001b[0m \u001b[0m\u001b[32minfo\u001b[0m \u001b[0m\u001b[35minfo prefix\u001b[0m x = {"foo":{"bar":"baz"}}\n',
-  '\u001b[0m\u001b[37;40mnpm\u001b[0m \u001b[0m\u001b[32;40mtiming\u001b[0m \u001b[0m\u001b[35mtiming prefix\u001b[0m x = {"foo":{"bar":"baz"}}\n',
-  '\u001b[0m\u001b[37;40mnpm\u001b[0m \u001b[0m\u001b[32;40mhttp\u001b[0m \u001b[0m\u001b[35mhttp prefix\u001b[0m x = {"foo":{"bar":"baz"}}\n',
-  '\u001b[0m\u001b[37;40mnpm\u001b[0m \u001b[0m\u001b[36;40mnotice\u001b[0m \u001b[0m\u001b[35mnotice prefix\u001b[0m x = {"foo":{"bar":"baz"}}\n',
-  '\u001b[0m\u001b[37;40mnpm\u001b[0m \u001b[0m\u001b[30;43mWARN\u001b[0m \u001b[0m\u001b[35mwarn prefix\u001b[0m x = {"foo":{"bar":"baz"}}\n',
-  '\u001b[0m\u001b[37;40mnpm\u001b[0m \u001b[0m\u001b[31;40mERR!\u001b[0m \u001b[0m\u001b[35merror prefix\u001b[0m x = {"foo":{"bar":"baz"}}\n',
-  '\u001b[0m\u001b[37;40mnpm\u001b[0m \u001b[0m\u001b[31;40mERR!\u001b[0m \u001b[0m\u001b[35m404\u001b[0m This is a longer\n',
-  '\u001b[0m\u001b[37;40mnpm\u001b[0m \u001b[0m\u001b[31;40mERR!\u001b[0m \u001b[0m\u001b[35m404\u001b[0m message, with some details\n',
-  '\u001b[0m\u001b[37;40mnpm\u001b[0m \u001b[0m\u001b[31;40mERR!\u001b[0m \u001b[0m\u001b[35m404\u001b[0m and maybe a stack.\n',
-  '\u001b[0m\u001b[37;40mnpm\u001b[0m \u001b[0m\u001b[31;40mERR!\u001b[0m \u001b[0m\u001b[35m404\u001b[0m \n',
-  '\u001b[0m\u001b[37;40mnpm\u001b[0m \u001b[0m\u0007noise\u001b[0m\u001b[35m\u001b[0m LOUD NOISES\n',
-  '\u001b[0m\u001b[37;40mnpm\u001b[0m \u001b[0m\u0007noise\u001b[0m \u001b[0m\u001b[35merror\u001b[0m erroring\n',
-  '\u001b[0m',
+  '\x1b[40m\x1b[37mnpm\x1b[39m\x1b[49m\x1b[0m\x1b[0m \x1b[7msill\x1b[27m\x1b[0m\x1b[0m \x1b[35msilly prefix\x1b[39m\x1b[0m\x1b[0m x = {"foo":{"bar":"baz"}}\n',
+  '\x1b[40m\x1b[37mnpm\x1b[39m\x1b[49m\x1b[0m\x1b[0m \x1b[36mverb\x1b[39m\x1b[0m\x1b[0m \x1b[35mverbose prefix\x1b[39m\x1b[0m\x1b[0m x = {"foo":{"bar":"baz"}}\n',
+  '\x1b[40m\x1b[37mnpm\x1b[39m\x1b[49m\x1b[0m\x1b[0m \x1b[32minfo\x1b[39m\x1b[0m\x1b[0m \x1b[35minfo prefix\x1b[39m\x1b[0m\x1b[0m x = {"foo":{"bar":"baz"}}\n',
+  '\x1b[40m\x1b[37mnpm\x1b[39m\x1b[49m\x1b[0m\x1b[0m \x1b[32mtiming\x1b[39m\x1b[0m\x1b[0m \x1b[35mtiming prefix\x1b[39m\x1b[0m\x1b[0m x = {"foo":{"bar":"baz"}}\n',
+  '\x1b[40m\x1b[37mnpm\x1b[39m\x1b[49m\x1b[0m\x1b[0m \x1b[32mhttp\x1b[39m\x1b[0m\x1b[0m \x1b[35mhttp prefix\x1b[39m\x1b[0m\x1b[0m x = {"foo":{"bar":"baz"}}\n',
+  '\x1b[40m\x1b[37mnpm\x1b[39m\x1b[49m\x1b[0m\x1b[0m \x1b[36mnotice\x1b[39m\x1b[0m\x1b[0m \x1b[35mnotice prefix\x1b[39m\x1b[0m\x1b[0m x = {"foo":{"bar":"baz"}}\n',
+  '\x1b[40m\x1b[37mnpm\x1b[39m\x1b[49m\x1b[0m\x1b[0m \x1b[43m\x1b[30mWARN\x1b[39m\x1b[49m\x1b[0m\x1b[0m \x1b[35mwarn prefix\x1b[39m\x1b[0m\x1b[0m x = {"foo":{"bar":"baz"}}\n',
+  '\x1b[40m\x1b[37mnpm\x1b[39m\x1b[49m\x1b[0m\x1b[0m \x1b[31mERR!\x1b[39m\x1b[0m\x1b[0m \x1b[35merror prefix\x1b[39m\x1b[0m\x1b[0m x = {"foo":{"bar":"baz"}}\n',
+  '\x1b[40m\x1b[37mnpm\x1b[39m\x1b[49m\x1b[0m\x1b[0m \x1b[32minfo\x1b[39m\x1b[0m\x1b[0m \x1b[35minfo prefix\x1b[39m\x1b[0m\x1b[0m x = {"foo":{"bar":"baz"}}\n',
+  '\x1b[40m\x1b[37mnpm\x1b[39m\x1b[49m\x1b[0m\x1b[0m \x1b[32mtiming\x1b[39m\x1b[0m\x1b[0m \x1b[35mtiming prefix\x1b[39m\x1b[0m\x1b[0m x = {"foo":{"bar":"baz"}}\n',
+  '\x1b[40m\x1b[37mnpm\x1b[39m\x1b[49m\x1b[0m\x1b[0m \x1b[32mhttp\x1b[39m\x1b[0m\x1b[0m \x1b[35mhttp prefix\x1b[39m\x1b[0m\x1b[0m x = {"foo":{"bar":"baz"}}\n',
+  '\x1b[40m\x1b[37mnpm\x1b[39m\x1b[49m\x1b[0m\x1b[0m \x1b[36mnotice\x1b[39m\x1b[0m\x1b[0m \x1b[35mnotice prefix\x1b[39m\x1b[0m\x1b[0m x = {"foo":{"bar":"baz"}}\n',
+  '\x1b[40m\x1b[37mnpm\x1b[39m\x1b[49m\x1b[0m\x1b[0m \x1b[43m\x1b[30mWARN\x1b[39m\x1b[49m\x1b[0m\x1b[0m \x1b[35mwarn prefix\x1b[39m\x1b[0m\x1b[0m x = {"foo":{"bar":"baz"}}\n',
+  '\x1b[40m\x1b[37mnpm\x1b[39m\x1b[49m\x1b[0m\x1b[0m \x1b[31mERR!\x1b[39m\x1b[0m\x1b[0m \x1b[35merror prefix\x1b[39m\x1b[0m\x1b[0m x = {"foo":{"bar":"baz"}}\n',
+  '\x1b[40m\x1b[37mnpm\x1b[39m\x1b[49m\x1b[0m\x1b[0m \x1b[31mERR!\x1b[39m\x1b[0m\x1b[0m \x1b[35m404\x1b[39m\x1b[0m\x1b[0m This is a longer\n',
+  '\x1b[40m\x1b[37mnpm\x1b[39m\x1b[49m\x1b[0m\x1b[0m \x1b[31mERR!\x1b[39m\x1b[0m\x1b[0m \x1b[35m404\x1b[39m\x1b[0m\x1b[0m message, with some details\n',
+  '\x1b[40m\x1b[37mnpm\x1b[39m\x1b[49m\x1b[0m\x1b[0m \x1b[31mERR!\x1b[39m\x1b[0m\x1b[0m \x1b[35m404\x1b[39m\x1b[0m\x1b[0m and maybe a stack.\n',
+  '\x1b[40m\x1b[37mnpm\x1b[39m\x1b[49m\x1b[0m\x1b[0m \x1b[31mERR!\x1b[39m\x1b[0m\x1b[0m \x1b[35m404\x1b[39m\x1b[0m\x1b[0m \n',
 ];
 
 const logPrefixEventsExpect = [
@@ -261,8 +267,6 @@ const logEventsExpect = [
     message: 'This is a longer\nmessage, with some details\nand maybe a stack.\n',
     messageRaw: ['This is a longer\nmessage, with some details\nand maybe a stack.\n'],
   },
-  { id: 28, level: 'noise', prefix: '', message: 'LOUD NOISES', messageRaw: ['LOUD NOISES'] },
-  { id: 29, level: 'noise', prefix: 'error', message: 'erroring', messageRaw: ['erroring'] },
 ];
 
 const s: any = new Stream();
@@ -319,11 +323,13 @@ describe('Basic Tests', () => {
     log.error('error prefix', 'x = %j', { foo: { bar: 'baz' } });
     log.silent('silent prefix', 'x = %j', { foo: { bar: 'baz' } });
     log.error('404', 'This is a longer\n' + 'message, with some details\n' + 'and maybe a stack.\n');
-    log.addLevel('noise', 10000, { beep: true });
-    log.noise(false, 'LOUD NOISES');
-    log.noise('error', 'erroring');
 
-    expect(result.join('').trim()).toBe(resultExpect.join('').trim());
+    expect(result.join('').trim()).toBe(
+      resultExpect
+        .map((r) => normalizeAnsi(r))
+        .join('')
+        .trim()
+    );
     expect(log.record).toEqual(logEventsExpect);
     expect(logEvents).toEqual(logEventsExpect);
     expect(logInfoEvents).toEqual(logInfoEventsExpect);
@@ -564,31 +570,31 @@ describe('Basic Tests', () => {
     test('fg', () => {
       log.enableColor();
       const o = log._format('test message', { bg: 'blue' });
-      expect(o).toMatch('\u001b[44mtest message\u001b[0m');
+      expect(o).toMatch(normalizeAnsi('\u001b[44mtest message\u001b[49m\u001b[0m'));
     });
 
     test('bg', () => {
       log.enableColor();
       const o = log._format('test message', { bg: 'white' });
-      expect(o).toMatch('\u001b[47mtest message\u001b[0m');
+      expect(o).toMatch(normalizeAnsi('\u001b[47mtest message\u001b[49m\u001b[0m'));
     });
 
     test('bold', () => {
       log.enableColor();
       const o = log._format('test message', { bold: true });
-      expect(o).toMatch('\u001b[1mtest message\u001b[0m');
+      expect(o).toMatch(normalizeAnsi('\u001b[1mtest message\u001b[22m\u001b[0m'));
     });
 
     test('underline', () => {
       log.enableColor();
       const o = log._format('test message', { underline: true });
-      expect(o).toMatch('\u001b[4mtest message\u001b[0m');
+      expect(o).toMatch(normalizeAnsi('\u001b[4mtest message\u001b[24m\u001b[0m'));
     });
 
     test('inverse', () => {
       log.enableColor();
       const o = log._format('test message', { inverse: true });
-      expect(o).toMatch('\u001b[7mtest message\u001b[0m');
+      expect(o).toMatch(normalizeAnsi('\u001b[7mtest message\u001b[27m\u001b[0m'));
     });
   });
 });

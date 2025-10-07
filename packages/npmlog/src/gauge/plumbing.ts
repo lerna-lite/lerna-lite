@@ -23,7 +23,6 @@ export class Plumbing {
     this.width = width;
     this.template = template;
   }
-
   setTheme(theme) {
     validate('O', [theme]);
     this.theme = theme;
@@ -40,19 +39,18 @@ export class Plumbing {
   }
 
   hideCursor() {
-    // Note: tinyrainbow doesn't have direct console control methods
-    // You might need to use process.stdout.write or a separate library for cursor control
-    return '\x1B[?25l';
+    // ANSI: Hide cursor
+    return '\x1b[?25l';
   }
 
   showCursor() {
-    // Corresponding show cursor ANSI escape code
-    return '\x1B[?25h';
+    // ANSI: Show cursor
+    return '\x1b[?25h';
   }
 
   hide() {
-    // Go to start of line and erase line
-    return '\x1B[G\x1B[K';
+    // ANSI: Move to SOL and erase line
+    return '\x1b[0G\x1b[2K';
   }
 
   show(status) {
@@ -63,9 +61,9 @@ export class Plumbing {
 
     return (
       renderTemplate(this.width, this.template, values).trim() +
-      c.reset() +
-      '\x1B[K' + // Erase line (equivalent to consoleControl.eraseLine())
-      '\x1B[G' // Go to start of line (equivalent to consoleControl.gotoSOL())
+      c.reset('') +
+      '\x1b[2K' + // Erase line
+      '\x1b[0G' // Move to SOL
     );
   }
 }
