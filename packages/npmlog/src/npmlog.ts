@@ -81,13 +81,13 @@ export class Logger extends EventEmitter {
     this.progressEnabled = this.gauge.isEnabled();
 
     this.addLevel('silly', -Infinity, { inverse: true }, 'sill');
-    this.addLevel('verbose', 1000, { fg: 'cyan' }, 'verb');
+    this.addLevel('verbose', 1000, { fg: 'cyan', bg: 'black' }, 'verb');
     this.addLevel('info', 2000, { fg: 'green' });
-    this.addLevel('timing', 2500, { fg: 'green' });
-    this.addLevel('http', 3000, { fg: 'green' });
-    this.addLevel('notice', 3500, { fg: 'cyan' });
+    this.addLevel('timing', 2500, { fg: 'green', bg: 'black' });
+    this.addLevel('http', 3000, { fg: 'green', bg: 'black' });
+    this.addLevel('notice', 3500, { fg: 'cyan', bg: 'black' });
     this.addLevel('warn', 4000, { fg: 'black', bg: 'yellow' }, 'WARN');
-    this.addLevel('error', 5000, { fg: 'red' }, 'ERR!');
+    this.addLevel('error', 5000, { fg: 'red', bg: 'black' }, 'ERR!');
     this.addLevel('silent', Infinity);
 
     this.on('error', () => {});

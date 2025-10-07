@@ -23,24 +23,25 @@ const logInfoEvents: any[] = [];
 const logPrefixEvents: any[] = [];
 
 const resultExpect = [
-  '\x1b[40m\x1b[37mnpm\x1b[39m\x1b[49m\x1b[0m\x1b[0m \x1b[7msill\x1b[27m\x1b[0m\x1b[0m \x1b[35msilly prefix\x1b[39m\x1b[0m\x1b[0m x = {"foo":{"bar":"baz"}}\n',
-  '\x1b[40m\x1b[37mnpm\x1b[39m\x1b[49m\x1b[0m\x1b[0m \x1b[36mverb\x1b[39m\x1b[0m\x1b[0m \x1b[35mverbose prefix\x1b[39m\x1b[0m\x1b[0m x = {"foo":{"bar":"baz"}}\n',
-  '\x1b[40m\x1b[37mnpm\x1b[39m\x1b[49m\x1b[0m\x1b[0m \x1b[32minfo\x1b[39m\x1b[0m\x1b[0m \x1b[35minfo prefix\x1b[39m\x1b[0m\x1b[0m x = {"foo":{"bar":"baz"}}\n',
-  '\x1b[40m\x1b[37mnpm\x1b[39m\x1b[49m\x1b[0m\x1b[0m \x1b[32mtiming\x1b[39m\x1b[0m\x1b[0m \x1b[35mtiming prefix\x1b[39m\x1b[0m\x1b[0m x = {"foo":{"bar":"baz"}}\n',
-  '\x1b[40m\x1b[37mnpm\x1b[39m\x1b[49m\x1b[0m\x1b[0m \x1b[32mhttp\x1b[39m\x1b[0m\x1b[0m \x1b[35mhttp prefix\x1b[39m\x1b[0m\x1b[0m x = {"foo":{"bar":"baz"}}\n',
-  '\x1b[40m\x1b[37mnpm\x1b[39m\x1b[49m\x1b[0m\x1b[0m \x1b[36mnotice\x1b[39m\x1b[0m\x1b[0m \x1b[35mnotice prefix\x1b[39m\x1b[0m\x1b[0m x = {"foo":{"bar":"baz"}}\n',
-  '\x1b[40m\x1b[37mnpm\x1b[39m\x1b[49m\x1b[0m\x1b[0m \x1b[43m\x1b[30mWARN\x1b[39m\x1b[49m\x1b[0m\x1b[0m \x1b[35mwarn prefix\x1b[39m\x1b[0m\x1b[0m x = {"foo":{"bar":"baz"}}\n',
-  '\x1b[40m\x1b[37mnpm\x1b[39m\x1b[49m\x1b[0m\x1b[0m \x1b[31mERR!\x1b[39m\x1b[0m\x1b[0m \x1b[35merror prefix\x1b[39m\x1b[0m\x1b[0m x = {"foo":{"bar":"baz"}}\n',
-  '\x1b[40m\x1b[37mnpm\x1b[39m\x1b[49m\x1b[0m\x1b[0m \x1b[32minfo\x1b[39m\x1b[0m\x1b[0m \x1b[35minfo prefix\x1b[39m\x1b[0m\x1b[0m x = {"foo":{"bar":"baz"}}\n',
-  '\x1b[40m\x1b[37mnpm\x1b[39m\x1b[49m\x1b[0m\x1b[0m \x1b[32mtiming\x1b[39m\x1b[0m\x1b[0m \x1b[35mtiming prefix\x1b[39m\x1b[0m\x1b[0m x = {"foo":{"bar":"baz"}}\n',
-  '\x1b[40m\x1b[37mnpm\x1b[39m\x1b[49m\x1b[0m\x1b[0m \x1b[32mhttp\x1b[39m\x1b[0m\x1b[0m \x1b[35mhttp prefix\x1b[39m\x1b[0m\x1b[0m x = {"foo":{"bar":"baz"}}\n',
-  '\x1b[40m\x1b[37mnpm\x1b[39m\x1b[49m\x1b[0m\x1b[0m \x1b[36mnotice\x1b[39m\x1b[0m\x1b[0m \x1b[35mnotice prefix\x1b[39m\x1b[0m\x1b[0m x = {"foo":{"bar":"baz"}}\n',
-  '\x1b[40m\x1b[37mnpm\x1b[39m\x1b[49m\x1b[0m\x1b[0m \x1b[43m\x1b[30mWARN\x1b[39m\x1b[49m\x1b[0m\x1b[0m \x1b[35mwarn prefix\x1b[39m\x1b[0m\x1b[0m x = {"foo":{"bar":"baz"}}\n',
-  '\x1b[40m\x1b[37mnpm\x1b[39m\x1b[49m\x1b[0m\x1b[0m \x1b[31mERR!\x1b[39m\x1b[0m\x1b[0m \x1b[35merror prefix\x1b[39m\x1b[0m\x1b[0m x = {"foo":{"bar":"baz"}}\n',
-  '\x1b[40m\x1b[37mnpm\x1b[39m\x1b[49m\x1b[0m\x1b[0m \x1b[31mERR!\x1b[39m\x1b[0m\x1b[0m \x1b[35m404\x1b[39m\x1b[0m\x1b[0m This is a longer\n',
-  '\x1b[40m\x1b[37mnpm\x1b[39m\x1b[49m\x1b[0m\x1b[0m \x1b[31mERR!\x1b[39m\x1b[0m\x1b[0m \x1b[35m404\x1b[39m\x1b[0m\x1b[0m message, with some details\n',
-  '\x1b[40m\x1b[37mnpm\x1b[39m\x1b[49m\x1b[0m\x1b[0m \x1b[31mERR!\x1b[39m\x1b[0m\x1b[0m \x1b[35m404\x1b[39m\x1b[0m\x1b[0m and maybe a stack.\n',
-  '\x1b[40m\x1b[37mnpm\x1b[39m\x1b[49m\x1b[0m\x1b[0m \x1b[31mERR!\x1b[39m\x1b[0m\x1b[0m \x1b[35m404\x1b[39m\x1b[0m\x1b[0m \n',
+  '\x1b[40m\x1b[37mnpm\x1b[39m\x1b[49m\x1b[0m\x1b[0m \x1b[0m\x1b[0m\x1b[7msill\x1b[27m\x1b[0m\x1b[0m \x1b[0m\x1b[0m\x1b[35msilly prefix\x1b[39m\x1b[0m\x1b[0m x = {"foo":{"bar":"baz"}}\n',
+  '\x1b[0m\x1b[0m\x1b[40m\x1b[37mnpm\x1b[39m\x1b[49m\x1b[0m\x1b[0m \x1b[0m\x1b[0m\x1b[40m\x1b[36mverb\x1b[39m\x1b[49m\x1b[0m\x1b[0m \x1b[0m\x1b[0m\x1b[35mverbose prefix\x1b[39m\x1b[0m\x1b[0m x = {"foo":{"bar":"baz"}}\n',
+  '\x1b[0m\x1b[0m\x1b[40m\x1b[37mnpm\x1b[39m\x1b[49m\x1b[0m\x1b[0m \x1b[0m\x1b[0m\x1b[32minfo\x1b[39m\x1b[0m\x1b[0m \x1b[0m\x1b[0m\x1b[35minfo prefix\x1b[39m\x1b[0m\x1b[0m x = {"foo":{"bar":"baz"}}\n',
+  '\x1b[0m\x1b[0m\x1b[40m\x1b[37mnpm\x1b[39m\x1b[49m\x1b[0m\x1b[0m \x1b[0m\x1b[0m\x1b[40m\x1b[32mtiming\x1b[39m\x1b[49m\x1b[0m\x1b[0m \x1b[0m\x1b[0m\x1b[35mtiming prefix\x1b[39m\x1b[0m\x1b[0m x = {"foo":{"bar":"baz"}}\n',
+  '\x1b[0m\x1b[0m\x1b[40m\x1b[37mnpm\x1b[39m\x1b[49m\x1b[0m\x1b[0m \x1b[0m\x1b[0m\x1b[40m\x1b[32mhttp\x1b[39m\x1b[49m\x1b[0m\x1b[0m \x1b[0m\x1b[0m\x1b[35mhttp prefix\x1b[39m\x1b[0m\x1b[0m x = {"foo":{"bar":"baz"}}\n',
+  '\x1b[0m\x1b[0m\x1b[40m\x1b[37mnpm\x1b[39m\x1b[49m\x1b[0m\x1b[0m \x1b[0m\x1b[0m\x1b[40m\x1b[36mnotice\x1b[39m\x1b[49m\x1b[0m\x1b[0m \x1b[0m\x1b[0m\x1b[35mnotice prefix\x1b[39m\x1b[0m\x1b[0m x = {"foo":{"bar":"baz"}}\n',
+  '\x1b[0m\x1b[0m\x1b[40m\x1b[37mnpm\x1b[39m\x1b[49m\x1b[0m\x1b[0m \x1b[0m\x1b[0m\x1b[43m\x1b[30mWARN\x1b[39m\x1b[49m\x1b[0m\x1b[0m \x1b[0m\x1b[0m\x1b[35mwarn prefix\x1b[39m\x1b[0m\x1b[0m x = {"foo":{"bar":"baz"}}\n',
+  '\x1b[0m\x1b[0m\x1b[40m\x1b[37mnpm\x1b[39m\x1b[49m\x1b[0m\x1b[0m \x1b[0m\x1b[0m\x1b[40m\x1b[31mERR!\x1b[39m\x1b[49m\x1b[0m\x1b[0m \x1b[0m\x1b[0m\x1b[35merror prefix\x1b[39m\x1b[0m\x1b[0m x = {"foo":{"bar":"baz"}}\n',
+  '\x1b[0m\x1b[0m\x1b[40m\x1b[37mnpm\x1b[39m\x1b[49m\x1b[0m\x1b[0m \x1b[0m\x1b[0m\x1b[32minfo\x1b[39m\x1b[0m\x1b[0m \x1b[0m\x1b[0m\x1b[35minfo prefix\x1b[39m\x1b[0m\x1b[0m x = {"foo":{"bar":"baz"}}\n',
+  '\x1b[0m\x1b[0m\x1b[40m\x1b[37mnpm\x1b[39m\x1b[49m\x1b[0m\x1b[0m \x1b[0m\x1b[0m\x1b[40m\x1b[32mtiming\x1b[39m\x1b[49m\x1b[0m\x1b[0m \x1b[0m\x1b[0m\x1b[35mtiming prefix\x1b[39m\x1b[0m\x1b[0m x = {"foo":{"bar":"baz"}}\n',
+  '\x1b[0m\x1b[0m\x1b[40m\x1b[37mnpm\x1b[39m\x1b[49m\x1b[0m\x1b[0m \x1b[0m\x1b[0m\x1b[40m\x1b[32mhttp\x1b[39m\x1b[49m\x1b[0m\x1b[0m \x1b[0m\x1b[0m\x1b[35mhttp prefix\x1b[39m\x1b[0m\x1b[0m x = {"foo":{"bar":"baz"}}\n',
+  '\x1b[0m\x1b[0m\x1b[40m\x1b[37mnpm\x1b[39m\x1b[49m\x1b[0m\x1b[0m \x1b[0m\x1b[0m\x1b[40m\x1b[36mnotice\x1b[39m\x1b[49m\x1b[0m\x1b[0m \x1b[0m\x1b[0m\x1b[35mnotice prefix\x1b[39m\x1b[0m\x1b[0m x = {"foo":{"bar":"baz"}}\n',
+  '\x1b[0m\x1b[0m\x1b[40m\x1b[37mnpm\x1b[39m\x1b[49m\x1b[0m\x1b[0m \x1b[0m\x1b[0m\x1b[43m\x1b[30mWARN\x1b[39m\x1b[49m\x1b[0m\x1b[0m \x1b[0m\x1b[0m\x1b[35mwarn prefix\x1b[39m\x1b[0m\x1b[0m x = {"foo":{"bar":"baz"}}\n',
+  '\x1b[0m\x1b[0m\x1b[40m\x1b[37mnpm\x1b[39m\x1b[49m\x1b[0m\x1b[0m \x1b[0m\x1b[0m\x1b[40m\x1b[31mERR!\x1b[39m\x1b[49m\x1b[0m\x1b[0m \x1b[0m\x1b[0m\x1b[35merror prefix\x1b[39m\x1b[0m\x1b[0m x = {"foo":{"bar":"baz"}}\n',
+  '\x1b[0m\x1b[0m\x1b[40m\x1b[37mnpm\x1b[39m\x1b[49m\x1b[0m\x1b[0m \x1b[0m\x1b[0m\x1b[40m\x1b[31mERR!\x1b[39m\x1b[49m\x1b[0m\x1b[0m \x1b[0m\x1b[0m\x1b[35m404\x1b[39m\x1b[0m\x1b[0m This is a longer\n',
+  '\x1b[0m\x1b[0m\x1b[40m\x1b[37mnpm\x1b[39m\x1b[49m\x1b[0m\x1b[0m \x1b[0m\x1b[0m\x1b[40m\x1b[31mERR!\x1b[39m\x1b[49m\x1b[0m\x1b[0m \x1b[0m\x1b[0m\x1b[35m404\x1b[39m\x1b[0m\x1b[0m message, with some details\n',
+  '\x1b[0m\x1b[0m\x1b[40m\x1b[37mnpm\x1b[39m\x1b[49m\x1b[0m\x1b[0m \x1b[0m\x1b[0m\x1b[40m\x1b[31mERR!\x1b[39m\x1b[49m\x1b[0m\x1b[0m \x1b[0m\x1b[0m\x1b[35m404\x1b[39m\x1b[0m\x1b[0m and maybe a stack.\n',
+  '\x1b[0m\x1b[0m\x1b[40m\x1b[37mnpm\x1b[39m\x1b[49m\x1b[0m\x1b[0m \x1b[0m\x1b[0m\x1b[40m\x1b[31mERR!\x1b[39m\x1b[49m\x1b[0m\x1b[0m \x1b[0m\x1b[0m\x1b[35m404\x1b[39m\x1b[0m\x1b[0m \n',
+  '\x1b[0m\x1b[0m',
 ];
 
 const logPrefixEventsExpect = [
@@ -569,7 +570,7 @@ describe('Basic Tests', () => {
 
     test('no style', () => {
       const o = log._format('test message');
-      expect(o).toBe('test message');
+      expect(o).toBe('test message\x1b[0m\x1b[0m'); // text + reset
     });
 
     test('fg', () => {
