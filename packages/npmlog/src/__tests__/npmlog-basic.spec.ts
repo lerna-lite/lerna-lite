@@ -567,6 +567,11 @@ describe('Basic Tests', () => {
       log.stream = s;
     });
 
+    test('no style', () => {
+      const o = log._format('test message');
+      expect(o).toBe('test message');
+    });
+
     test('fg', () => {
       log.enableColor();
       const o = log._format('test message', { bg: 'blue' });

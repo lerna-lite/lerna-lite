@@ -299,44 +299,44 @@ export class Logger extends EventEmitter {
     let output = msg;
 
     // Apply styling step by step
-    if (style) {
-      // Apply foreground color first
-      if (style.fg) {
-        const colorMethodName = style.fg as keyof typeof c;
-        const colorMethod = c[colorMethodName];
-        if (typeof colorMethod === 'function') {
-          output = colorMethod(output);
-        }
-      }
+    style ??= {};
 
-      // Apply background color (if supported)
-      if (style.bg) {
-        const bgColorMethodName = `bg${style.bg[0].toUpperCase() + style.bg.slice(1)}` as keyof typeof c;
-        const bgColorMethod = c[bgColorMethodName];
-        if (typeof bgColorMethod === 'function') {
-          output = bgColorMethod(output);
-        }
+    // Apply foreground color first
+    if (style.fg) {
+      const colorMethodName = style.fg as keyof typeof c;
+      const colorMethod = c[colorMethodName];
+      if (typeof colorMethod === 'function') {
+        output = colorMethod(output);
       }
+    }
 
-      // Apply bold
-      if (style.bold) {
-        output = c.bold(output);
+    // Apply background color (if supported)
+    if (style.bg) {
+      const bgColorMethodName = `bg${style.bg[0].toUpperCase() + style.bg.slice(1)}` as keyof typeof c;
+      const bgColorMethod = c[bgColorMethodName];
+      if (typeof bgColorMethod === 'function') {
+        output = bgColorMethod(output);
       }
+    }
 
-      // Apply underline
-      if (style.underline) {
-        output = c.underline(output);
-      }
+    // Apply bold
+    if (style.bold) {
+      output = c.bold(output);
+    }
 
-      // Apply inverse
-      if (style.inverse) {
-        output = c.inverse(output);
-      }
+    // Apply underline
+    if (style.underline) {
+      output = c.underline(output);
+    }
 
-      // ---------- reset ----------
-      if (this.useColor()) {
-        output += c.reset('');
-      }
+    // Apply inverse
+    if (style.inverse) {
+      output = c.inverse(output);
+    }
+
+    // ---------- reset ----------
+    if (this.useColor()) {
+      output += c.reset('');
     }
 
     return output;
