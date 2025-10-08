@@ -46,7 +46,7 @@ function npmConf(opts: any) {
 
   const caFile = conf.get('cafile');
 
-  /* v8 ignore next if */
+  /* v8 ignore if */
   if (caFile) {
     conf.loadCAFile(caFile);
   }

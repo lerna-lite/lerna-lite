@@ -69,7 +69,7 @@ function prepareItems(width, template, values) {
     const type = cloned.type;
     if (cloned.value == null) {
       if (!(type in values)) {
-        /* v8 ignore next if */
+        /* v8 ignore if */
         if (cloned == null) {
           throw MissingTemplateValue(cloned, values);
         } else {
@@ -106,11 +106,11 @@ function prepareItems(width, template, values) {
   }
 
   function finishSizing(item: any, length?: number) {
-    /* v8 ignore next if */
+    /* v8 ignore if */
     if (item.finished) {
       throw Internal('Tried to finish template item that was already finished');
     }
-    /* v8 ignore next if */
+    /* v8 ignore if */
     if (length === Infinity) {
       throw Internal('Length of template item cannot be infinity');
     }
@@ -124,7 +124,7 @@ function prepareItems(width, template, values) {
     if (item.length == null) {
       item.length = item.getBaseLength();
     }
-    /* v8 ignore next if */
+    /* v8 ignore if */
     if (item.length == null) {
       throw Internal('Finished template items must have a length');
     }
@@ -172,7 +172,7 @@ function prepareItems(width, template, values) {
     });
   } while (resizing && resized++ < output.length);
 
-  /* v8 ignore next if */
+  /* v8 ignore if */
   if (resizing) {
     throw Internal('Resize loop iterated too many times while determining maxLength');
   }
@@ -195,7 +195,7 @@ function prepareItems(width, template, values) {
     });
   } while (resizing && resized++ < output.length);
 
-  /* v8 ignore next if */
+  /* v8 ignore if */
   if (resizing) {
     throw Internal('Resize loop iterated too many times while determining minLength');
   }

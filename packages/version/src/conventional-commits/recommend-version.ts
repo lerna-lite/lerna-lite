@@ -67,7 +67,7 @@ export async function recommendVersion(
       return changelogConfig.whatBump;
     }
 
-    /* v8 ignore next if */
+    /* v8 ignore if */
     if (!changelogConfig) {
       return () => ({ releaseType: null });
     }

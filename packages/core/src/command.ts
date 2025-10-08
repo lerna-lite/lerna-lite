@@ -172,7 +172,7 @@ export class Command<T extends AvailableCommandOption> {
     let loglevel;
     let progress;
 
-    /* v8 ignore next if */
+    /* v8 ignore if */
     if (isCI || !process.stderr.isTTY || process.env.TERM === 'dumb') {
       log.disableColor();
       progress = false;
@@ -249,7 +249,7 @@ export class Command<T extends AvailableCommandOption> {
   }
 
   enableProgressBar() {
-    /* v8 ignore next if */
+    /* v8 ignore if */
     if (this.options.progress !== false) {
       log.enableProgress();
     }
