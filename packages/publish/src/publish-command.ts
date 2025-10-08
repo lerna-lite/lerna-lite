@@ -554,7 +554,6 @@ export class PublishCommand extends Command<PublishCommandOption> {
             // prettier-ignore
             names.length > 1
               ? `${names.slice(0, -1).join(', ')}${names.length > 2 ? ',' : ''} and ${names[names.length - 1] /* oxford commas _are_ that important */}`
-              /* v8 ignore next */
               : names[0];
 
           this.logger.warn(
