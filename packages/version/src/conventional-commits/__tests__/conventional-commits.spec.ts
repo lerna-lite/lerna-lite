@@ -496,8 +496,13 @@ describe('conventional-commits', () => {
 
       const [leafChangelogContent, rootChangelogContent] = await Promise.all([getFileContent(leafChangelog), getFileContent(rootChangelog)]);
 
-      expect(leafChangelogContent).toMatchSnapshot('leaf');
-      expect(rootChangelogContent).toMatchSnapshot('root');
+      // the snapshot test is a little flaky, it could be either (`# 1.1.0 (YYYY-MM-DD)` or `## 1.1.0 (YYYY-MM-DD)`)
+      // so let's normalize this version header line
+      const normalizedLeafContent = leafChangelogContent.replace(/^# (1\.1\.0 $\d{4}-\d{2}-\d{2}$)/m, '## $1');
+      const normalizedRootContent = rootChangelogContent.replace(/^# (1\.1\.0 $\d{4}-\d{2}-\d{2}$)/m, '## $1');
+
+      expect(normalizedLeafContent).toMatchSnapshot('leaf');
+      expect(normalizedRootContent).toMatchSnapshot('root');
     });
 
     it('updates fixed changelogs', async () => {
