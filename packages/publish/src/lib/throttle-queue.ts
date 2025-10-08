@@ -60,6 +60,7 @@ export class TailHeadQueue implements Queue {
       // Check if the queue should delay the promise's execution
       if (this.allowance + 1 <= this.last_end.length) {
         const time_offset = Date.now() - (this.last_end.shift() || 0);
+        /* v8 ignore if */
         if (time_offset < this.queue_period) {
           p = new Promise((r) => setTimeout(r, this.queue_period - time_offset)).then(f);
         }

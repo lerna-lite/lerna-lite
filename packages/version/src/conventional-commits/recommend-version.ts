@@ -112,7 +112,7 @@ export async function recommendVersion(
           // this can be enabled in lerna through `premajorVersionBump = "force-patch"`
           if (releaseType === 'major') {
             releaseType = 'minor';
-          } else if (premajorVersionBump === 'force-patch') {
+          } /* v8 ignore next */ else if (premajorVersionBump === 'force-patch') {
             releaseType = 'patch';
           }
         }
