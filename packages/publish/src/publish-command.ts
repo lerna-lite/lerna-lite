@@ -551,9 +551,10 @@ export class PublishCommand extends Command<PublishCommandOption> {
           const noun = names.length > 1 ? 'Packages' : 'Package';
           const verb = names.length > 1 ? 'are' : 'is';
           const list =
-            // v8 ignore else - prettier-ignore
+            // prettier-ignore
             names.length > 1
               ? `${names.slice(0, -1).join(', ')}${names.length > 2 ? ',' : ''} and ${names[names.length - 1] /* oxford commas _are_ that important */}`
+              /* v8 ignore next */
               : names[0];
 
           this.logger.warn(
