@@ -110,9 +110,10 @@ export async function recommendVersion(
           // "Many authors treat a 0.x version as if the x were the major "breaking-change" indicator."
           // and all other features or bug fixes as semver-patch bumps
           // this can be enabled in lerna through `premajorVersionBump = "force-patch"`
+          /* v8 ignore else */
           if (releaseType === 'major') {
             releaseType = 'minor';
-          } /* v8 ignore else */ else if (premajorVersionBump === 'force-patch') {
+          } else if (premajorVersionBump === 'force-patch') {
             releaseType = 'patch';
           }
         }
