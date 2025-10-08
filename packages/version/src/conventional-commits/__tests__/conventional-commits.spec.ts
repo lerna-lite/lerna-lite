@@ -498,8 +498,8 @@ describe('conventional-commits', () => {
 
       // the snapshot test is a little flaky, it could be either (`# 1.1.0 (YYYY-MM-DD)` or `## 1.1.0 (YYYY-MM-DD)`)
       // so let's normalize this version header line
-      const normalizedLeafContent = leafChangelogContent.replace(/^# 1\.1\.0 \([0-9Y]{4}-[0-9M]{2}-[0-9D]{2}\)/m, '## $1');
-      const normalizedRootContent = rootChangelogContent.replace(/^# 1\.1\.0 \([0-9Y]{4}-[0-9M]{2}-[0-9D]{2}\)/m, '## $1');
+      const normalizedLeafContent = leafChangelogContent.replace(/^# (1\.1\.0 \([0-9Y]{4}-[0-9M]{2}-[0-9D]{2}\))/m, '## $1');
+      const normalizedRootContent = rootChangelogContent.replace(/^# (1\.1\.0 \([0-9Y]{4}-[0-9M]{2}-[0-9D]{2}\))/m, '## $1');
 
       expect(normalizedLeafContent).toMatchSnapshot('leaf');
       expect(normalizedRootContent).toMatchSnapshot('root');
