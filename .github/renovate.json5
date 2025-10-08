@@ -22,16 +22,6 @@
       groupName: 'Inquirer packages',
     },
     {
-      // Group dev dependencies
-      depTypeList: ['devDependencies'],
-      groupName: 'Dev Dependencies',
-    },
-    {
-      // Group regular dependencies
-      depTypeList: ['dependencies'],
-      groupName: 'Package Dependencies',
-    },
-    {
       // npm security audit seems to prefer 1.2.6 for some reason
       packageNames: ['tacks'],
       allowedVersions: '1.2.6',
