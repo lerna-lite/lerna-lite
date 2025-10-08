@@ -435,6 +435,7 @@ export class PublishCommand extends Command<PublishCommandOption> {
       .then(() => this.verifyWorkingTreeClean())
       .catch((err: any) => {
         // an execa error is thrown when git suffers a fatal error (such as no git repository present)
+        /* v8 ignore if */
         if (err.failed && /git describe/.test(err.command)) {
           // (we tried)
           this.logger.silly('EWORKINGTREE', err.message);
@@ -552,7 +553,7 @@ export class PublishCommand extends Command<PublishCommandOption> {
           const list =
             // prettier-ignore
             names.length > 1
-              ? `${names.slice(0, -1).join(', ')}${names.length > 2 ? ',' : ''} and ${names[names.length - 1] /* oxford commas _are_ that important */ }`
+              ? `${names.slice(0, -1).join(', ')}${names.length > 2 ? ',' : ''} and ${names[names.length - 1] /* oxford commas _are_ that important */}`
               : names[0];
 
           this.logger.warn(

@@ -26,6 +26,7 @@ export class GitLabClient implements GitClient {
         'Content-Type': 'application/json',
       },
     }).then(({ ok, status, statusText }) => {
+      /* v8 ignore if */
       if (!ok) {
         log.error('gitlab', `Failed to create release\nRequest returned ${status} ${statusText}`);
       } else {
