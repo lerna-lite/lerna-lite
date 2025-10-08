@@ -25,7 +25,7 @@ export function add(spec: string, tag = '', options: DistTagOptions, otpCache: O
 
   opts.log.verbose('dist-tag', `adding "${cleanTag}" to ${name}@${version}`);
 
-  /* v8 ignore next if */
+  /* v8 ignore if */
   if (opts.dryRun) {
     opts.log.silly('dist-tag', 'dry-run configured, bailing now');
     return Promise.resolve();
@@ -77,7 +77,7 @@ export function remove(spec: string, tag: string, options: DistTagOptions, otpCa
 
   opts.log.verbose('dist-tag', `removing "${tag}" from ${opts.spec.name}`);
 
-  /* v8 ignore next if */
+  /* v8 ignore if */
   if (opts.dryRun) {
     opts.log.silly('dist-tag', 'dry-run configured, bailing now');
     return Promise.resolve();
@@ -121,7 +121,7 @@ export function list(spec: string, options: DistTagOptions) {
     spec: npa(spec),
   };
 
-  /* v8 ignore next if */
+  /* v8 ignore if */
   if (opts.dryRun) {
     opts.log.silly('dist-tag', 'dry-run configured, bailing now');
     return Promise.resolve();

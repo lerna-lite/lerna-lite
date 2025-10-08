@@ -580,7 +580,7 @@ export class PublishCommand extends Command<PublishCommandOption> {
       return chain;
     }
 
-    /* v8 ignore next if */
+    /* v8 ignore if */
     if (process.env.LERNA_INTEGRATION) {
       return chain;
     }
@@ -967,7 +967,7 @@ export class PublishCommand extends Command<PublishCommandOption> {
         // avoid dumping logs, this isn't a lerna problem
         err.name = 'ValidationError';
         // ensure process exits non-zero
-        /* v8 ignore next if */
+        /* v8 ignore if */
         if ('errno' in err && typeof err.errno === 'number' && Number.isFinite(err.errno)) {
           process.exitCode = err.errno;
         } else {
@@ -1067,7 +1067,7 @@ export class PublishCommand extends Command<PublishCommandOption> {
   }
 
   private getSummaryFilePath(): string {
-    /* v8 ignore next if */
+    /* v8 ignore if */
     if (this.options.summaryFile === undefined) {
       throw new Error('summaryFile options is not defined. Unable to get path.');
     }
@@ -1078,7 +1078,7 @@ export class PublishCommand extends Command<PublishCommandOption> {
 
     const normalizedPath = normalize(this.options.summaryFile);
 
-    /* v8 ignore next if */
+    /* v8 ignore if */
     if (normalizedPath === '') {
       throw new Error('summaryFile is not a valid path.');
     }

@@ -24,7 +24,7 @@ export function getPacked(pkg: Package, tarFilePath: string): Promise<Tarball> {
 
       const p = entry.path;
 
-      /* v8 ignore next if */
+      /* v8 ignore if */
       if (p.startsWith('package/node_modules/')) {
         const name: string = p.match(/^package\/node_modules\/((?:@[^/]+\/)?[^/]+)/)![1];
 

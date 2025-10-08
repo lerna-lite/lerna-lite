@@ -249,7 +249,7 @@ export class Command<T extends AvailableCommandOption> {
   }
 
   enableProgressBar() {
-    /* v8 ignore next if */
+    /* v8 ignore if */
     if (this.options.progress !== false) {
       log.enableProgress();
     }

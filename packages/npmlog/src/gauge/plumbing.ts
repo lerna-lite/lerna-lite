@@ -60,6 +60,7 @@ export class Plumbing {
     }
 
     let out = renderTemplate(this.width, this.template, values).trim() + c.reset('');
+    /* v8 ignore if */
     if (c.isColorSupported) {
       out += '\x1b[2K' + '\x1b[0G';
     }
