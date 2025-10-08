@@ -3,8 +3,8 @@
  */
 import hasUnicode from 'has-unicode';
 import { onExit } from 'signal-exit';
+import c from 'tinyrainbow';
 
-import hasColor from './has-color.js';
 import { Plumbing } from './plumbing.js';
 import { setImmediateFn } from './set-immediate.js';
 import defaultThemes from './themes.js';
@@ -130,7 +130,7 @@ export class Gauge {
       theme = this._themes.getTheme(theme);
     } else if (Object.keys(theme).length === 0 || theme.hasUnicode != null || theme.hasColor != null) {
       const useUnicode = theme.hasUnicode == null ? hasUnicode() : theme.hasUnicode;
-      const useColor = theme.hasColor == null ? hasColor : theme.hasColor;
+      const useColor = theme.hasColor == null ? c.isColorSupported : theme.hasColor;
       theme = this._themes.getDefault({
         hasUnicode: useUnicode,
         hasColor: useColor,
