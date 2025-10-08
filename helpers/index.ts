@@ -1,6 +1,7 @@
 import { mkdirSync, realpathSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import { join as pathJoin, relative } from 'node:path';
+import { stripVTControlCharacters } from 'node:util';
 
 import normalizeNewline from 'normalize-newline';
 import normalizePath from 'normalize-path';
@@ -31,6 +32,10 @@ export function multiLineTrimRight(str) {
 
 export function normalizeRelativeDir(testDir, filePath) {
   return normalizePath(relative(testDir, filePath));
+}
+
+export function stripAnsi(s: string, strip = true) {
+  return strip ? stripVTControlCharacters(s) : s;
 }
 
 /**

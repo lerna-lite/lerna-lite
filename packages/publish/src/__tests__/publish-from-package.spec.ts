@@ -46,7 +46,7 @@ import { npmPublish } from '../lib/npm-publish.js';
 // helpers
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
-import { initFixtureFactory } from '@lerna-test/helpers';
+import { initFixtureFactory, stripAnsi } from '@lerna-test/helpers';
 import { loggingOutput } from '@lerna-test/helpers/logging-output.js';
 const initFixture = initFixtureFactory(__dirname);
 
@@ -90,7 +90,7 @@ describe('publish from-package', () => {
 
     await new PublishCommand(createArgv(cwd, '--bump', 'from-package', '--dry-run'));
 
-    expect(promptConfirmation).toHaveBeenLastCalledWith('[dry-run] Are you sure you want to publish these packages?');
+    expect(stripAnsi((promptConfirmation as Mock).mock.lastCall![0])).toBe('[dry-run] Are you sure you want to publish these packages?');
     expect((logOutput as any).logged()).toMatch('Found 2 packages to publish:');
     expect((npmPublish as typeof npmPublishMock).order()).toEqual(['package-2', 'package-3']);
   });

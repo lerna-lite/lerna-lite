@@ -47,9 +47,7 @@
     "test": "vitest --coverage --config ./vitest/vitest.config.ts",
     "test:watch": "vitest --watch --config ./vitest/vitest.config.ts",
     "posttest": "pnpm clean:temp",
-    "test:coverage:update": "vitest --coverage --update --config ./vitest/vitest.config.ts",
-    "test:npmlog-color": "vitest run packages/npmlog/src/__tests__/npmlog-basic.spec.ts --config ./vitest/vitest.color.config.ts",
-    "test:npmlog-plumbing": "vitest run packages/npmlog/src/gauge/__tests__/plumbing.spec.ts --config ./vitest/vitest.color.config.ts"
+    "test:coverage:update": "vitest --coverage --update --config ./vitest/vitest.config.ts"
   },
   "homepage": "https://github.com/lerna-lite/lerna-lite",
   "repository": {
