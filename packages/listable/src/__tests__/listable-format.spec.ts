@@ -7,7 +7,7 @@ vi.mock('@lerna-lite/core', async () => ({
 }));
 
 import { ListCommandOption, Package, Project } from '@lerna-lite/core';
-import { loggingOutput, temporaryDirectory } from '@lerna-test/helpers';
+import { loggingOutput, stripAnsi, temporaryDirectory } from '@lerna-test/helpers';
 // @ts-ignore
 import Tacks from 'tacks';
 
@@ -35,7 +35,10 @@ expect.addSnapshotSerializer(serializeTempdir);
 describe('listable.format()', () => {
   let packages: Package[];
 
-  const formatWithOptions = (opts: ListCommandOption) => listable.format(packages, Object.assign({ _: ['ls'] }, opts));
+  const formatWithOptions = (opts: ListCommandOption) => {
+    const { count, text } = listable.format(packages, Object.assign({ _: ['ls'] }, opts));
+    return { count, text: stripAnsi(text) };
+  };
 
   const fixture = new Tacks(
     Dir({

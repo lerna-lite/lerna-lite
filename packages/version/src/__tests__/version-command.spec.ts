@@ -35,7 +35,7 @@ import { dirname, join, resolve as pathResolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
 
 import { checkWorkingTree, collectUpdates, logOutput, promptConfirmation, promptSelectOne, throwIfUncommitted, VersionCommandOption } from '@lerna-lite/core';
-import { commandRunner, getCommitMessage, gitAdd, gitCommit, gitTag, initFixtureFactory, showCommit } from '@lerna-test/helpers';
+import { commandRunner, getCommitMessage, gitAdd, gitCommit, gitTag, initFixtureFactory, showCommit, stripAnsi } from '@lerna-test/helpers';
 // helpers
 import { loggingOutput } from '@lerna-test/helpers/logging-output.js';
 import { execa } from 'execa';
@@ -133,7 +133,7 @@ describe('VersionCommand', () => {
       expect(checkWorkingTree).toHaveBeenCalled();
 
       expect((promptSelectOne as any).mock.calls).toMatchSnapshot('prompt');
-      expect(promptConfirmation).toHaveBeenLastCalledWith('[dry-run] Are you sure you want to create these versions?');
+      expect(stripAnsi((promptConfirmation as Mock).mock.lastCall![0])).toBe('[dry-run] Are you sure you want to create these versions?');
 
       expect((writePkg as any).updatedManifest('package-1')).toMatchSnapshot('gitHead');
 
@@ -187,7 +187,7 @@ describe('VersionCommand', () => {
       expect(checkWorkingTree).toHaveBeenCalled();
 
       expect((promptSelectOne as Mock).mock.calls).toMatchSnapshot('prompt');
-      expect(promptConfirmation).toHaveBeenLastCalledWith('[dry-run] Are you sure you want to publish these packages?');
+      expect(stripAnsi((promptConfirmation as Mock).mock.lastCall![0])).toBe('[dry-run] Are you sure you want to publish these packages?');
 
       expect((writePkg as any).updatedManifest('package-1')).toMatchSnapshot('gitHead');
 

@@ -35,7 +35,7 @@ import { dirname } from 'node:path';
 import { fileURLToPath } from 'node:url';
 
 import { logOutput, promptConfirmation, PublishCommandOption, throwIfUncommitted } from '@lerna-lite/core';
-import { gitTag } from '@lerna-test/helpers';
+import { gitTag, stripAnsi } from '@lerna-test/helpers';
 import { initFixtureFactory } from '@lerna-test/helpers';
 import { loggingOutput } from '@lerna-test/helpers/logging-output.js';
 
@@ -121,7 +121,7 @@ describe('publish from-git', () => {
     // called from chained describeRef()
     expect(throwIfUncommitted).toHaveBeenCalled();
 
-    expect(promptConfirmation).toHaveBeenLastCalledWith('[dry-run] Are you sure you want to publish these packages?');
+    expect(stripAnsi((promptConfirmation as Mock).mock.lastCall![0])).toBe('[dry-run] Are you sure you want to publish these packages?');
     expect((logOutput as any).logged()).toMatch('Found 4 packages to publish:');
     expect((npmPublish as typeof npmPublishMock).order()).toEqual([
       'package-1',

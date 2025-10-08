@@ -4,25 +4,11 @@
     {
       "name": "Vitest - Debug Current Test File",
       "type": "node",
-      "env": {
-        "NO_COLOR": "true"
-      },
       "request": "launch",
       "autoAttachChildProcesses": true,
       "skipFiles": ["<node_internals>/**", "**/node_modules/**"],
       "program": "${workspaceRoot}/node_modules/vitest/vitest.mjs",
       "args": ["run", "${relativeFile}", "--pool", "forks", "--no-watch", "--config", "./vitest/vitest.config.ts"],
-      "smartStep": true,
-      "console": "integratedTerminal"
-    },
-    {
-      "name": "Vitest with Color (npmlog) - Debug Current Test File",
-      "type": "node",
-      "request": "launch",
-      "autoAttachChildProcesses": true,
-      "skipFiles": ["<node_internals>/**", "**/node_modules/**"],
-      "program": "${workspaceRoot}/node_modules/vitest/vitest.mjs",
-      "args": ["run", "${relativeFile}", "--pool", "forks", "--no-watch", "--config", "./vitest/vitest.color.config.ts"],
       "smartStep": true,
       "console": "integratedTerminal"
     },

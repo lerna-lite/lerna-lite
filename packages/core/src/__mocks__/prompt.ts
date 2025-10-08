@@ -5,7 +5,7 @@ afterEach(() => {
   choiceIndices = [];
 });
 
-const mockConfirm = vi.fn(() => Promise.resolve(true));
+const mockConfirm = vi.fn((question: string) => Promise.resolve(true));
 const mockSelect = vi.fn((_, { choices }) => {
   // default selection is "patch"
   const idx = choiceIndices.shift() || 0;
