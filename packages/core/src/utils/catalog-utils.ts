@@ -54,8 +54,8 @@ export function getClientConfigFilename(npmClient: NpmClient): string {
 }
 
 /**
- * Extract catalog config from the `workspaces` located in the project root `package.json`.
- * From a file content that is either provided as argument or read it from the 'package.json' when null,
+ * Extract catalog config from the `workspaces` located in the project root `package.json` (it also works at the top-level `package.json`).
+ * From a file content that is either provided as argument or read it from the `package.json` when null,
  * it will then parse that file content and return all pnpm catalog(s) config
  * @param {String} [pkgContent] - optional JSON stringified package file content
  * @returns
@@ -70,10 +70,11 @@ export function extractCatalogConfigFromPkg(pkgContent?: string): CatalogConfig 
   }
 
   const pkg = looselyJsonParse(fileContent) || {};
-  const ws = pkg.workspaces || {};
+
+  // get catalog(s) from `workspaces` field and/or from top-level `package.json`
   return {
-    catalog: ws.catalog || {},
-    catalogs: ws.catalogs || {},
+    catalog: pkg.workspaces?.catalog ?? pkg.catalog ?? {},
+    catalogs: pkg.workspaces?.catalogs ?? pkg.catalogs ?? {},
   };
 }
 
