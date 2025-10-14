@@ -62,8 +62,7 @@ const lernaPublish = commandRunner(cliCommands);
 
 // mocked or stubbed modules
 import { collectUpdates } from '@lerna-lite/core';
-import type { PublishCommandOption } from '@lerna-lite/core';
-import { logOutput, promptConfirmation } from '@lerna-lite/core';
+import { logOutput, promptConfirmation, type PublishCommandOption } from '@lerna-lite/core';
 import { getOneTimePassword } from '@lerna-lite/version';
 import yargParser from 'yargs-parser';
 
