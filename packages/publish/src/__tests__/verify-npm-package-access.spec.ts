@@ -1,5 +1,4 @@
-import type { Mock } from 'vitest';
-import { afterEach, beforeAll, beforeEach, describe, expect, test, vi } from 'vitest';
+import { afterEach, beforeAll, beforeEach, describe, expect, type Mock, test, vi } from 'vitest';
 
 vi.mock('libnpmaccess');
 
