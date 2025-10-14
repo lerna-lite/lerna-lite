@@ -1,4 +1,4 @@
-import { describe, expect, it, Mock, vi } from 'vitest';
+import { describe, expect, it, type Mock, vi } from 'vitest';
 
 vi.mock('write-package', async () => await vi.importActual('../../../version/src/lib/__mocks__/write-package'));
 
@@ -33,13 +33,13 @@ vi.mock('../lib/npm-publish', async () => await vi.importActual('../lib/__mocks_
 import { dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
 
-import { logOutput, PackageGraphNode, promptConfirmation, PublishCommandOption, throwIfUncommitted } from '@lerna-lite/core';
+import { logOutput, type PackageGraphNode, promptConfirmation, type PublishCommandOption, throwIfUncommitted } from '@lerna-lite/core';
 import { remove } from 'fs-extra/esm';
 // mocked or stubbed modules
 import * as writePkg from 'write-package';
 import yargParser from 'yargs-parser';
 
-import { npmPublish as npmPublishMock } from '../lib/__mocks__/npm-publish.js';
+import type { npmPublish as npmPublishMock } from '../lib/__mocks__/npm-publish.js';
 import { getUnpublishedPackages } from '../lib/get-unpublished-packages.js';
 import { npmPublish } from '../lib/npm-publish.js';
 

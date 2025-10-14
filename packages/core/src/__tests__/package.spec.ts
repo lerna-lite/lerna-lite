@@ -5,14 +5,14 @@ import { fileURLToPath } from 'node:url';
 import { log } from '@lerna-lite/npmlog';
 import { loadJsonFile, loadJsonFileSync } from 'load-json-file';
 import npa from 'npm-package-arg';
-import { describe, expect, it, Mock, vi } from 'vitest';
+import { describe, expect, it, type Mock, vi } from 'vitest';
 import { writePackage } from 'write-package';
 
 vi.mock('load-json-file');
 vi.mock('write-package');
 
 // file under test
-import { NpaResolveResult, RawManifest } from '../models/interfaces.js';
+import type { NpaResolveResult, RawManifest } from '../models/interfaces.js';
 import { Package } from '../package.js';
 
 const __filename = fileURLToPath(import.meta.url);

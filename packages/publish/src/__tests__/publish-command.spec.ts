@@ -1,4 +1,4 @@
-import { beforeAll, beforeEach, describe, expect, it, Mock, vi } from 'vitest';
+import { beforeAll, beforeEach, describe, expect, it, type Mock, vi } from 'vitest';
 
 // FIXME: better mock for version command
 vi.mock('../../../version/src/lib/git-push', async () => await vi.importActual('../../../version/src/lib/__mocks__/git-push'));
@@ -62,11 +62,12 @@ const lernaPublish = commandRunner(cliCommands);
 
 // mocked or stubbed modules
 import { collectUpdates } from '@lerna-lite/core';
-import { logOutput, promptConfirmation, PublishCommandOption } from '@lerna-lite/core';
+import type { PublishCommandOption } from '@lerna-lite/core';
+import { logOutput, promptConfirmation } from '@lerna-lite/core';
 import { getOneTimePassword } from '@lerna-lite/version';
 import yargParser from 'yargs-parser';
 
-import { npmPublish as npmPublishMock } from '../lib/__mocks__/npm-publish.js';
+import type { npmPublish as npmPublishMock } from '../lib/__mocks__/npm-publish.js';
 import { getNpmUsername } from '../lib/get-npm-username.js';
 import { getTwoFactorAuthRequired } from '../lib/get-two-factor-auth-required.js';
 import { gitCheckout } from '../lib/git-checkout.js';

@@ -1,4 +1,4 @@
-import { beforeEach, describe, expect, it, Mock, vi } from 'vitest';
+import { beforeEach, describe, expect, it, type Mock, vi } from 'vitest';
 
 vi.mock('@lerna-lite/core', async () => ({
   ...(await vi.importActual<any>('@lerna-lite/core')),
@@ -13,7 +13,7 @@ import { dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
 
 // mocked modules
-import { DiffCommandOption } from '@lerna-lite/core';
+import type { DiffCommandOption } from '@lerna-lite/core';
 import { spawn } from '@lerna-lite/core';
 // helpers
 import { commandRunner, initFixtureFactory } from '@lerna-test/helpers';

@@ -1,7 +1,7 @@
 import { join } from 'node:path';
 
 import { outputFile } from 'fs-extra/esm';
-import { beforeEach, describe, expect, it, Mock, vi } from 'vitest';
+import { beforeEach, describe, expect, it, type Mock, vi } from 'vitest';
 
 // local modules _must_ be explicitly mocked
 vi.mock('../lib/git-add', async () => await vi.importActual('../lib/__mocks__/git-add'));
@@ -42,7 +42,7 @@ import { dirname } from 'node:path';
 import { fileURLToPath } from 'node:url';
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
-import { logOutput, VersionCommandOption } from '@lerna-lite/core';
+import { logOutput, type VersionCommandOption } from '@lerna-lite/core';
 // helpers
 import { commandRunner, initFixtureFactory } from '@lerna-test/helpers';
 

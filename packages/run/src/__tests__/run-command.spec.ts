@@ -1,4 +1,4 @@
-import { afterEach, beforeAll, describe, expect, it, Mock, vi } from 'vitest';
+import { afterEach, beforeAll, describe, expect, it, type Mock, vi } from 'vitest';
 
 vi.mock('../lib/npm-run-script');
 
@@ -19,7 +19,7 @@ import { dirname } from 'node:path';
 import { fileURLToPath } from 'node:url';
 
 // make sure to import the output mock
-import { logOutput, RunCommandOption } from '@lerna-lite/core';
+import { logOutput, type RunCommandOption } from '@lerna-lite/core';
 import { pathExists, readJson } from 'fs-extra/esm';
 import { glob } from 'tinyglobby';
 import yargParser from 'yargs-parser';

@@ -1,6 +1,6 @@
-import { beforeEach, describe, expect, it, Mock, vi } from 'vitest';
+import { beforeEach, describe, expect, it, type Mock, vi } from 'vitest';
 
-import { Package } from '../../../package.js';
+import type { Package } from '../../../package.js';
 
 vi.mock('../../describe-ref');
 vi.mock('../lib/has-tags');

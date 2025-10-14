@@ -3,7 +3,7 @@ import { fileURLToPath } from 'node:url';
 
 import { initFixtureFactory } from '@lerna-test/helpers';
 import { outputFile, remove, writeJson } from 'fs-extra/esm';
-import { afterEach, beforeAll, beforeEach, describe, expect, it, Mock, vi } from 'vitest';
+import { afterEach, beforeAll, beforeEach, describe, expect, it, type Mock, vi } from 'vitest';
 
 const { writeFileMock } = vi.hoisted(() => ({ writeFileMock: vi.fn() }));
 vi.mock('node:fs', async () => ({
@@ -200,6 +200,7 @@ describe('Project', () => {
     });
 
     // TODO investigate why the following 2 tests fail on CI but pass locally
+    // oxlint-disable-next-line no-disabled-tests
     it.skip('extends local shared config', async () => {
       const cwd = await initFixture('extends');
       const project = new Project(cwd);
@@ -210,6 +211,7 @@ describe('Project', () => {
       });
     });
 
+    // oxlint-disable-next-line no-disabled-tests
     it.skip('extends local shared config subpath', async () => {
       const cwd = await initFixture('extends');
 

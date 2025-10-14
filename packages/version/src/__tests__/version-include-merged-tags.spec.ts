@@ -17,7 +17,7 @@ import { dirname as pathDirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
 
 // mocked modules
-import { logOutput, VersionCommandOption } from '@lerna-lite/core';
+import { logOutput, type VersionCommandOption } from '@lerna-lite/core';
 import yargParser from 'yargs-parser';
 
 // helpers

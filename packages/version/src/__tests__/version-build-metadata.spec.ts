@@ -1,4 +1,4 @@
-import { describe, expect, it, Mock, test, vi } from 'vitest';
+import { describe, expect, it, type Mock, test, vi } from 'vitest';
 
 // local modules _must_ be explicitly mocked
 vi.mock('../lib/git-push', async () => await vi.importActual('../lib/__mocks__/git-push'));
@@ -23,7 +23,7 @@ vi.mock('@lerna-lite/version', async () => vi.importActual('../version-command')
 
 import { dirname, resolve as pathResolve } from 'node:path';
 
-import { PackageGraphNode, promptSelectOne, promptTextInput, VersionCommandOption } from '@lerna-lite/core';
+import { type PackageGraphNode, promptSelectOne, promptTextInput, type VersionCommandOption } from '@lerna-lite/core';
 import yargParser from 'yargs-parser';
 
 import { makePromptVersion } from '../lib/prompt-version.js';

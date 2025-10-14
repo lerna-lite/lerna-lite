@@ -23,7 +23,7 @@ import { dirname } from 'node:path';
 // helpers
 import { fileURLToPath } from 'node:url';
 
-import { collectUpdates, ListCommandOption, logOutput } from '@lerna-lite/core';
+import { collectUpdates, type ListCommandOption, logOutput } from '@lerna-lite/core';
 import { commandRunner, initFixtureFactory } from '@lerna-test/helpers';
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
@@ -304,6 +304,7 @@ package-5
 `);
     });
 
+    // oxlint-disable-next-line no-disabled-tests
     it.skip('lists packages under explicitly configured node_modules directories', async () => {
       const testDir = await initFixture('explicit-node-modules');
       await lernaList(testDir)();

@@ -1,4 +1,4 @@
-import { describe, expect, it, Mock, vi } from 'vitest';
+import { describe, expect, it, type Mock, vi } from 'vitest';
 
 // FIXME: better mock for version command
 vi.mock('../../../version/src/lib/git-push', async () => await vi.importActual('../../../version/src/lib/__mocks__/git-push'));
@@ -55,7 +55,7 @@ import cliCommands from '../../../cli/src/cli-commands/cli-publish-commands.js';
 import { PublishCommand } from '../index.js';
 const lernaPublish = commandRunner(cliCommands);
 
-import { PublishCommandOption } from '@lerna-lite/core';
+import type { PublishCommandOption } from '@lerna-lite/core';
 import yargParser from 'yargs-parser';
 
 const createArgv = (cwd: string, ...args: string[]) => {
@@ -120,6 +120,7 @@ describe('licenses', () => {
   });
 
   // TODO: fix the next 2 tests
+  // oxlint-disable-next-line no-disabled-tests
   it.skip('warns when one package needs a license', async () => {
     const cwd = await initFixture('licenses');
 
@@ -132,6 +133,7 @@ describe('licenses', () => {
     expect(warning).toMatch('Package package-1 is missing a license.');
   });
 
+  // oxlint-disable-next-line no-disabled-tests
   it.skip('warns when multiple packages need a license', async () => {
     const cwd = await initFixture('licenses-missing');
 

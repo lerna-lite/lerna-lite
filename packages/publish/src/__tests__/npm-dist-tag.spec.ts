@@ -1,4 +1,4 @@
-import { describe, expect, it, Mock, vi } from 'vitest';
+import { describe, expect, it, type Mock, vi } from 'vitest';
 
 vi.mock('npm-registry-fetch');
 vi.mock('@lerna-lite/core', async () => ({
@@ -11,7 +11,7 @@ vi.mock('@lerna-lite/core', async () => ({
 import fetch from 'npm-registry-fetch';
 
 // file under test
-import { DistTagOptions } from '../interfaces.js';
+import type { DistTagOptions } from '../interfaces.js';
 import * as npmDistTag from '../lib/npm-dist-tag.js';
 
 const stubLog = {

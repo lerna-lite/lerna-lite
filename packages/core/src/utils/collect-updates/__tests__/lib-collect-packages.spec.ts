@@ -1,7 +1,7 @@
 import { expect, test, vi } from 'vitest';
 
-import { Package } from '../../../package.js';
-import { PackageGraphNode } from '../../../package-graph/lib/package-graph-node.js';
+import type { Package } from '../../../package.js';
+import type { PackageGraphNode } from '../../../package-graph/lib/package-graph-node.js';
 // helpers
 import buildGraph from '../__helpers__/build-graph.js';
 // file under test

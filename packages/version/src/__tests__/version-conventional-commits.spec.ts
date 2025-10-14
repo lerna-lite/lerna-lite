@@ -1,4 +1,4 @@
-import { describe, expect, it, Mock, vi } from 'vitest';
+import { describe, expect, it, type Mock, vi } from 'vitest';
 
 // local modules _must_ be explicitly mocked
 vi.mock('../lib/git-push', async () => await vi.importActual('../lib/__mocks__/git-push'));
@@ -42,7 +42,7 @@ expect.addSnapshotSerializer({
 // mocked modules
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
-import { collectUpdates, VersionCommandOption } from '@lerna-lite/core';
+import { collectUpdates, type VersionCommandOption } from '@lerna-lite/core';
 // helpers
 import { initFixtureFactory, showCommit } from '@lerna-test/helpers';
 import * as writePkg from 'write-package';

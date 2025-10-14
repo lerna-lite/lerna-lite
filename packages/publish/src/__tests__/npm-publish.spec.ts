@@ -1,4 +1,4 @@
-import { describe, expect, it, Mock, vi } from 'vitest';
+import { describe, expect, it, type Mock, vi } from 'vitest';
 
 vi.mock('fs/promises');
 vi.mock('libnpmpublish');
@@ -15,13 +15,13 @@ vi.mock('@lerna-lite/core', async () => ({
 // helpers
 import { dirname, join, normalize } from 'node:path';
 
-import { Conf, Package, RawManifest, runLifecycle } from '@lerna-lite/core';
+import { Conf, Package, type RawManifest, runLifecycle } from '@lerna-lite/core';
 import PackageJson from '@npmcli/package-json';
 import { readFile } from 'fs/promises';
 // @ts-ignore
 import { publish } from 'libnpmpublish';
 
-import { LibNpmPublishOptions } from '../interfaces.js';
+import type { LibNpmPublishOptions } from '../interfaces.js';
 // file under test
 import { npmPublish } from '../lib/npm-publish.js';
 

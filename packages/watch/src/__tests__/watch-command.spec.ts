@@ -1,4 +1,4 @@
-import { afterEach, beforeAll, describe, expect, it, Mock, vi } from 'vitest';
+import { afterEach, beforeAll, describe, expect, it, type Mock, vi } from 'vitest';
 
 // mocked modules
 vi.mock('@lerna-lite/core', async () => ({
@@ -49,7 +49,7 @@ import { basename, dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
 
 // make sure to import the output mock
-import { WatchCommandOption } from '@lerna-lite/core';
+import type { WatchCommandOption } from '@lerna-lite/core';
 // mocked modules
 import { spawn, spawnStreaming } from '@lerna-lite/core';
 import { watch as chokidarWatch } from 'chokidar';

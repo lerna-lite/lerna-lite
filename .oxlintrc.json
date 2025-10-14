@@ -1,0 +1,63 @@
+{
+  "$schema": "./node_modules/oxlint/configuration_schema.json",
+  "plugins": ["import", "oxc", "regex", "typescript", "vitest"],
+  "extends": ["recommended", "recommended-module"],
+  "env": {
+    "es2025": true,
+    "node": true,
+    "shared-node-browser": true
+  },
+  "ignorePatterns": ["**/*.{js,mjs,json,md}", "**/*/*.d.ts", "**/dist/*", "**/__helpers__/**/*.*", "**/__mocks__/**/*.*"],
+  "rules": {
+    // typescript-eslint rules are not all implemented yet, see https://github.com/oxc-project/oxc/issues/2180
+    "typescript/ban-ts-comment": "off",
+    "typescript/consistent-type-definitions": "error",
+    "typescript/consistent-type-exports": "error",
+    "typescript/consistent-type-imports": "error",
+    "typescript/member-ordering": "error",
+    "typescript/no-empty-function": "off",
+    "typescript/no-empty-object-type": ["error", { "allowInterfaces": "with-single-extends" }],
+    "typescript/no-explicit-any": "off",
+    "typescript/no-inferrable-types": "error",
+    "typescript/no-unsafe-function-type": "off",
+    "typescript/no-non-null-assertion": "off",
+    "typescript/no-unused-expressions": "off",
+    "typescript/no-unused-vars": [
+      "error",
+      {
+        "argsIgnorePattern": "^_",
+        "destructuredArrayIgnorePattern": "^_",
+        "caughtErrors": "none"
+      }
+    ],
+    "import/extensions": [
+      "error",
+      "ignorePackages",
+      {
+        "js": "always",
+        "mjs": "always",
+        "jsx": "never",
+        "ts": "never",
+        "tsx": "never",
+        "json": "always",
+        "pathGroups": [
+          {
+            "pattern": "rxjs/**",
+            "patternOptions": { "matchBase": true },
+            "group": "external",
+            "position": "after"
+          }
+        ]
+      }
+    ],
+
+    // vitest rules
+    "vitest/no-conditional-expect": "off",
+    "vitest/no-standalone-expect": "off",
+
+    // Additional rules
+    "no-async-promise-executor": "off",
+    "oxc/erasing-op": "off",
+    "object-shorthand": "error"
+  }
+}

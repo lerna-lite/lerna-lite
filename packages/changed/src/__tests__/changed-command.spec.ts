@@ -20,7 +20,7 @@ import { dirname } from 'node:path';
 // helpers
 import { fileURLToPath } from 'node:url';
 
-import { ChangedCommandOption, collectUpdates, logOutput } from '@lerna-lite/core';
+import { type ChangedCommandOption, collectUpdates, logOutput } from '@lerna-lite/core';
 import { commandRunner, initFixtureFactory } from '@lerna-test/helpers';
 import { updateLernaConfig } from '@lerna-test/helpers';
 import { loggingOutput } from '@lerna-test/helpers/logging-output.js';

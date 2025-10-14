@@ -51,7 +51,7 @@ import cliCommands from '../../../cli/src/cli-commands/cli-publish-commands.js';
 import { PublishCommand } from '../index.js';
 const lernaPublish = commandRunner(cliCommands);
 
-import { PublishCommandOption } from '@lerna-lite/core';
+import type { PublishCommandOption } from '@lerna-lite/core';
 import yargParser from 'yargs-parser';
 
 const createArgv = (cwd: string, ...args: string[]) => {
@@ -110,6 +110,7 @@ describe("relative 'file:' specifiers", () => {
     });
   });
 
+  // oxlint-disable-next-line no-disabled-tests
   it.skip('falls back to existing relative version when it is not updated', async () => {
     const cwd = await initFixture('relative-independent');
 
@@ -132,6 +133,7 @@ describe("relative 'file:' specifiers", () => {
     });
   });
 
+  // oxlint-disable-next-line no-disabled-tests
   it.skip('respects --exact', async () => {
     const cwd = await initFixture('relative-independent');
 

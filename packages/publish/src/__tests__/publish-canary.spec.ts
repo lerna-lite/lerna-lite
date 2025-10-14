@@ -1,4 +1,4 @@
-import { beforeAll, describe, expect, Mock, test, vi } from 'vitest';
+import { beforeAll, describe, expect, type Mock, test, vi } from 'vitest';
 
 vi.mock('write-package', async () => await vi.importActual('../../../version/src/lib/__mocks__/write-package'));
 
@@ -25,7 +25,7 @@ vi.mock('../lib/npm-publish', async () => await vi.importActual('../lib/__mocks_
 import { dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
 
-import { describeRef, promptConfirmation, PublishCommandOption, throwIfUncommitted } from '@lerna-lite/core';
+import { describeRef, promptConfirmation, type PublishCommandOption, throwIfUncommitted } from '@lerna-lite/core';
 // helpers
 import { commandRunner, gitAdd, gitCommit, gitTag, initFixtureFactory, loggingOutput } from '@lerna-test/helpers';
 import { outputFile } from 'fs-extra/esm';
@@ -33,7 +33,7 @@ import { outputFile } from 'fs-extra/esm';
 import * as writePkg from 'write-package';
 import yargParser from 'yargs-parser';
 
-import { npmPublish as npmPublishMock } from '../lib/__mocks__/npm-publish.js';
+import type { npmPublish as npmPublishMock } from '../lib/__mocks__/npm-publish.js';
 import { npmPublish } from '../lib/npm-publish.js';
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);

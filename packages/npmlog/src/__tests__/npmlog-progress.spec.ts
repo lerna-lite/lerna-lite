@@ -1,7 +1,7 @@
 import { afterEach, beforeEach, describe, expect, it } from 'vitest';
 
 import { TrackerGroup } from '../are-we-there-yet/tracker-group.js';
-import { Gauge } from '../gauge/index.js';
+import type { Gauge } from '../gauge/index.js';
 import { log } from '../npmlog.js';
 
 let actions: any[] = [];

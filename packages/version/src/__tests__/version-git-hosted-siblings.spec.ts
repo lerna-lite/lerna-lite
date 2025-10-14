@@ -34,7 +34,7 @@ import { initFixtureFactory } from '@lerna-test/helpers';
 const initFixture = initFixtureFactory(pathResolve(__dirname, '../../../publish/src/__tests__'));
 
 // test command
-import { VersionCommandOption } from '@lerna-lite/core';
+import type { VersionCommandOption } from '@lerna-lite/core';
 
 import { VersionCommand } from '../version-command.js';
 

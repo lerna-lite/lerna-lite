@@ -1,3 +1,4 @@
+// oxlint-disable-next-line extensions
 import { configDefaults, defineConfig } from 'vitest/config';
 
 export default defineConfig({

@@ -11,7 +11,7 @@ const __dirname = dirname(__filename);
 const initFixture = initFixtureFactory(__dirname);
 
 // file under test
-import { Package } from '@lerna-lite/core';
+import type { Package } from '@lerna-lite/core';
 // stabilize changelog commit SHA and datestamp
 import serializeChangelog from '@lerna-test/helpers/serializers/serialize-changelog.js';
 
