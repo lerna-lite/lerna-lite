@@ -4,7 +4,20 @@
   "printWidth": 130,
   "singleQuote": true,
   "trailingComma": "es5",
+  "plugins": ["@prettier/plugin-oxc"],
   "overrides": [
+    {
+      "files": ["**/*.{js,mjs,cjs,jsx}"],
+      "options": {
+        "parser": "oxc"
+      }
+    },
+    {
+      "files": ["**/*.{ts,mts,cts,tsx}"],
+      "options": {
+        "parser": "oxc-ts"
+      }
+    },
     {
       "files": ["**/*.spec.ts"],
       "options": {
