@@ -1,4 +1,4 @@
-import { afterEach, beforeAll, describe, expect, it, Mock, vi } from 'vitest';
+import { afterEach, beforeAll, describe, expect, it, type Mock, vi } from 'vitest';
 
 // mocked modules
 vi.mock('@lerna-lite/core', async () => ({
@@ -21,7 +21,7 @@ import { basename, dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
 
 // make sure to import the output mock
-import { ExecCommandOption, logOutput } from '@lerna-lite/core';
+import { type ExecCommandOption, logOutput } from '@lerna-lite/core';
 // mocked modules
 import { spawn, spawnStreaming } from '@lerna-lite/core';
 import { pathExists, readJson } from 'fs-extra/esm';

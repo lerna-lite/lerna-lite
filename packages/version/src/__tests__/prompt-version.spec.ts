@@ -11,7 +11,7 @@ vi.mock('@lerna-lite/core', async (coreOriginal) => {
   };
 });
 
-import { PackageGraphNode, prereleaseIdFromVersion, promptSelectOne, promptTextInput } from '@lerna-lite/core';
+import { type PackageGraphNode, prereleaseIdFromVersion, promptSelectOne, promptTextInput } from '@lerna-lite/core';
 
 import { makePromptVersion } from '../lib/prompt-version.js';
 

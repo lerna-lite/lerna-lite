@@ -1,4 +1,4 @@
-import { beforeEach, describe, expect, it, Mock, test, vi } from 'vitest';
+import { beforeEach, describe, expect, it, type Mock, test, vi } from 'vitest';
 
 vi.mock('load-json-file', async () => await vi.importActual('../lib/__mocks__/load-json-file'));
 vi.mock('@lerna-lite/core', async () => {
@@ -15,7 +15,7 @@ import { dirname as pathDirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { stripVTControlCharacters } from 'node:util';
 
-import { Package } from '@lerna-lite/core';
+import type { Package } from '@lerna-lite/core';
 import { log } from '@lerna-lite/npmlog';
 import { pathExistsSync, readJsonSync } from 'fs-extra/esm';
 // mocked or stubbed modules

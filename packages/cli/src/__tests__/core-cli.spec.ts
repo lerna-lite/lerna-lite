@@ -1,7 +1,7 @@
 import { dirname } from 'node:path';
 import { fileURLToPath } from 'node:url';
 
-import { Package, ValidationError } from '@lerna-lite/core';
+import { type Package, ValidationError } from '@lerna-lite/core';
 import { initFixtureFactory } from '@lerna-test/helpers';
 import { loggingOutput } from '@lerna-test/helpers/logging-output.js';
 import { beforeAll, describe, expect, it, vi } from 'vitest';
@@ -18,7 +18,7 @@ function prepare(cwd: string) {
 
 async function parse(instance: any, args: any): Promise<any> {
   return new Promise((resolve, reject) => {
-    instance.parse(args, (exitError, argv, output) => {
+    instance.parse(args, (exitError: any, argv: string, output: string) => {
       if (exitError) {
         // parity with synchronous errors
         Object.assign(exitError, { argv, output });
@@ -31,7 +31,7 @@ async function parse(instance: any, args: any): Promise<any> {
 }
 
 describe('core-cli', () => {
-  let cwd;
+  let cwd: string;
 
   beforeAll(async () => {
     cwd = await initFixture('toposort');
@@ -99,7 +99,7 @@ describe('core-cli', () => {
       await parse(cli, ['boom']);
 
       expect(loggingOutput('error')).toEqual(['...boom']);
-    } catch (e) {
+    } catch (e: any) {
       expect(e.prefix).toBe('test');
       expect(e.message).toBe('...boom');
     }
@@ -140,7 +140,7 @@ describe('core-cli', () => {
           message: 'yikes',
         })
       );
-    } catch (e) {
+    } catch (e: any) {
       expect(e.message).toBe('yikes');
     }
   });
@@ -165,7 +165,7 @@ describe('core-cli', () => {
           message: 'fancy fancy',
         })
       );
-    } catch (e) {
+    } catch (e: any) {
       expect(e.message).toBe('fancy fancy');
     }
   });

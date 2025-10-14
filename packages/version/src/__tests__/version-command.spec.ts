@@ -1,4 +1,4 @@
-import { describe, expect, it, Mock, vi } from 'vitest';
+import { describe, expect, it, type Mock, vi } from 'vitest';
 
 // local modules _must_ be explicitly mocked
 vi.mock('../lib/git-push', async () => await vi.importActual('../lib/__mocks__/git-push'));
@@ -34,7 +34,15 @@ import { promises as fsPromises } from 'node:fs';
 import { dirname, join, resolve as pathResolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
 
-import { checkWorkingTree, collectUpdates, logOutput, promptConfirmation, promptSelectOne, throwIfUncommitted, VersionCommandOption } from '@lerna-lite/core';
+import {
+  checkWorkingTree,
+  collectUpdates,
+  logOutput,
+  promptConfirmation,
+  promptSelectOne,
+  throwIfUncommitted,
+  type VersionCommandOption,
+} from '@lerna-lite/core';
 import { commandRunner, getCommitMessage, gitAdd, gitCommit, gitTag, initFixtureFactory, showCommit, stripAnsi } from '@lerna-test/helpers';
 // helpers
 import { loggingOutput } from '@lerna-test/helpers/logging-output.js';

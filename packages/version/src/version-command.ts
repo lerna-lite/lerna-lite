@@ -674,7 +674,8 @@ export class VersionCommand extends Command<VersionCommandOption> {
         pkg.set('version', this.updatesVersions?.get(pkg.name ?? ''));
 
         // update pkg dependencies
-        for (const [depName, resolved] of this.packageGraph?.get(pkg.name)!.localDependencies) {
+        const localDependencies = this.packageGraph?.get(pkg.name)?.localDependencies ?? new Map<string, any>();
+        for (const [depName, resolved] of localDependencies) {
           const depVersion = this.updatesVersions?.get(depName);
 
           if (depVersion && resolved.type !== 'directory') {

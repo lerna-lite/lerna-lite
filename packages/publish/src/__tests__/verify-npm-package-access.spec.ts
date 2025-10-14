@@ -1,13 +1,14 @@
-import { afterEach, beforeAll, beforeEach, describe, expect, Mock, test, vi } from 'vitest';
+import { afterEach, beforeAll, beforeEach, describe, expect, type Mock, test, vi } from 'vitest';
 
 vi.mock('libnpmaccess');
 
 import { dirname } from 'node:path';
 import { fileURLToPath } from 'node:url';
 
-import { FetchConfig, Project } from '@lerna-lite/core';
+import { type FetchConfig, Project } from '@lerna-lite/core';
 import { initFixtureFactory } from '@lerna-test/helpers';
 import { loggingOutput } from '@lerna-test/helpers/logging-output.js';
+// @ts-ignore
 import access from 'libnpmaccess';
 
 import { verifyNpmPackageAccess } from '../lib/verify-npm-package-access.js';
@@ -26,7 +27,7 @@ const initFixture = initFixtureFactory(__dirname);
 describe('verifyNpmPackageAccess', () => {
   const origConsoleError = console.error;
 
-  let cwd;
+  let cwd = '';
 
   beforeAll(async () => {
     cwd = await initFixture('lifecycle');

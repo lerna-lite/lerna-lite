@@ -1,4 +1,4 @@
-import { beforeEach, describe, expect, Mock, test, vi } from 'vitest';
+import { beforeEach, describe, expect, type Mock, test, vi } from 'vitest';
 
 vi.mock('../../../child-process');
 
@@ -19,7 +19,7 @@ vi.mock('node:fs', async () => ({
 }));
 
 // file under test
-import { PackageGraphNode } from '../../../../dist/index.js';
+import type { PackageGraphNode } from '../../../../dist/index.js';
 import { diffWorkspaceCatalog, makeDiffPredicate } from '../lib/make-diff-predicate.js';
 
 function setup(changes: string | string[]) {

@@ -6,7 +6,7 @@ vi.mock('@lerna-lite/core', async () => ({
   QueryGraph: (await vi.importActual<any>('../../../core/src/utils/query-graph')).QueryGraph,
 }));
 
-import { ListCommandOption, Package, Project } from '@lerna-lite/core';
+import { type ListCommandOption, type Package, Project } from '@lerna-lite/core';
 import { loggingOutput, stripAnsi, temporaryDirectory } from '@lerna-test/helpers';
 // @ts-ignore
 import Tacks from 'tacks';

@@ -44,8 +44,11 @@ jobs:
       - name: Run pnpm install dependencies
         run: pnpm install
 
-      - run: pnpm run prettier:check
-      - run: pnpm run ci:lint
+      - name: Prettier Formatting
+        run: pnpm prettier:check
+
+      - name: OXC Linting
+        run: pnpm lint
 
   tests:
     strategy:

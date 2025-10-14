@@ -27,7 +27,7 @@ import { dirname, resolve as pathResolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
 
 // mocked modules
-import { promptSelectOne, VersionCommandOption } from '@lerna-lite/core';
+import { promptSelectOne, type VersionCommandOption } from '@lerna-lite/core';
 import yargParser from 'yargs-parser';
 
 // helpers
@@ -85,6 +85,7 @@ describe('version bump', () => {
     expect(message).toBe('v1.1.0');
   });
 
+  // oxlint-disable-next-line no-disabled-tests
   it.skip('throws an error when an invalid semver keyword is used', async () => {
     const testDir = await initFixture('normal');
     // const command = await new VersionCommand(createArgv(testDir, "--bump", "poopypants"));

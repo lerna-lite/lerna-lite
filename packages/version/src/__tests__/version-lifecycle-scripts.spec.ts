@@ -23,7 +23,7 @@ vi.mock('@lerna-lite/core', async () => ({
 import { dirname } from 'node:path';
 import { fileURLToPath } from 'node:url';
 
-import { runLifecycle, VersionCommandOption } from '@lerna-lite/core';
+import { runLifecycle, type VersionCommandOption } from '@lerna-lite/core';
 import { loadJsonFile } from 'load-json-file';
 import yargParser from 'yargs-parser';
 

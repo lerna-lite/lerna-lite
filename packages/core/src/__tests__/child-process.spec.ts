@@ -4,7 +4,7 @@ import { describe, expect, it, vi } from 'vitest';
 
 // file under test
 import { exec, execSync, getChildProcessCount, getExitCode, spawn, spawnStreaming } from '../child-process.js';
-import { Package } from '../package.js';
+import type { Package } from '../package.js';
 
 describe('childProcess', () => {
   it('should throw type error on weird but rare error structure', () => {

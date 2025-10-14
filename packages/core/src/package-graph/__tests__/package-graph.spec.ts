@@ -3,10 +3,10 @@ import { log } from '@lerna-lite/npmlog';
 import { initFixtureFactory } from '@lerna-test/helpers';
 import { afterEach, beforeAll, describe, expect, it, vi } from 'vitest';
 
-import { RawManifest } from '../../models/interfaces.js';
+import type { RawManifest } from '../../models/interfaces.js';
 import { Package } from '../../package.js';
 import * as CatalogUtils from '../../utils/catalog-utils.js';
-import { PackageGraphNode } from '../lib/package-graph-node.js';
+import type { PackageGraphNode } from '../lib/package-graph-node.js';
 // file under test
 import { PackageGraph } from '../package-graph.js';
 

@@ -1,9 +1,10 @@
-import { afterEach, beforeEach, describe, expect, Mock, test, vi } from 'vitest';
+import { afterEach, beforeEach, describe, expect, type Mock, test, vi } from 'vitest';
 
 vi.mock('npm-registry-fetch');
 
-import { FetchConfig } from '@lerna-lite/core';
+import type { FetchConfig } from '@lerna-lite/core';
 import { loggingOutput } from '@lerna-test/helpers/logging-output.js';
+// @ts-ignore
 import fetch from 'npm-registry-fetch';
 
 import { getNpmUsername } from '../lib/get-npm-username.js';

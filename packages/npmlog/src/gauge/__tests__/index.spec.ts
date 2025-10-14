@@ -6,8 +6,8 @@ import { describe, expect, it } from 'vitest';
 import { Gauge } from '../index.js';
 
 class Sink extends Writable {
-  isTTY: boolean = false;
-  columns: number = 80;
+  isTTY = false;
+  columns = 80;
 
   constructor() {
     super({});

@@ -1,4 +1,4 @@
-import { expect, Mock, test, vi } from 'vitest';
+import { expect, type Mock, test, vi } from 'vitest';
 
 // local modules _must_ be explicitly mocked
 vi.mock('../lib/git-push', async () => await vi.importActual('../lib/__mocks__/git-push'));
@@ -25,7 +25,7 @@ import { dirname, join, resolve as pathResolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
 
 // mocked modules
-import { promptSelectOne, promptTextInput, VersionCommandOption } from '@lerna-lite/core';
+import { promptSelectOne, promptTextInput, type VersionCommandOption } from '@lerna-lite/core';
 // helpers
 import { commandRunner, getCommitMessage, gitAdd, gitCommit, gitInit, gitTag, initFixtureFactory, showCommit, temporaryDirectory } from '@lerna-test/helpers';
 import { outputFile } from 'fs-extra/esm';

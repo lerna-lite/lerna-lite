@@ -40,7 +40,7 @@ vi.mock('@lerna-lite/version', async () => await vi.importActual('../../../versi
 import { dirname } from 'node:path';
 import { fileURLToPath } from 'node:url';
 
-import { collectUpdates, PublishCommandOption } from '@lerna-lite/core';
+import { collectUpdates, type PublishCommandOption } from '@lerna-lite/core';
 
 import { add, remove } from '../lib/npm-dist-tag.js';
 import { npmPublish } from '../lib/npm-publish.js';

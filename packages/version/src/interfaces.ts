@@ -64,7 +64,7 @@ export interface ReleaseNote {
   pkg?: Package;
 }
 
-export type RemoteCommit = {
+export interface RemoteCommit {
   /** git commit author name */
   authorName: string;
 
@@ -79,7 +79,7 @@ export type RemoteCommit = {
 
   /** short commit hash (7 chars long) */
   shortHash: string;
-};
+}
 
 export interface UpdateChangelogOption {
   changelogHeaderMessage?: string;

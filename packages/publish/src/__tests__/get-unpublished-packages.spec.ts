@@ -7,7 +7,7 @@ import { dirname } from 'node:path';
 // helpers
 import { fileURLToPath } from 'node:url';
 
-import { FetchConfig, PackageGraph, Project } from '@lerna-lite/core';
+import { type FetchConfig, PackageGraph, Project } from '@lerna-lite/core';
 import { initFixtureFactory } from '@lerna-test/helpers';
 import pacote from 'pacote';
 
