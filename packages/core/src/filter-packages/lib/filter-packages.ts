@@ -84,6 +84,7 @@ export function filterPackages(
  * @param {string[]|string|undefined} thing
  */
 function arrify(thing: string[] | string | undefined): string[] {
+  /* v8 ignore if - probably unreachable */
   if (!thing) {
     return [];
   }

@@ -3,7 +3,7 @@ import { describe, expect, it, type Mock, vi } from 'vitest';
 vi.mock('../describe-ref');
 vi.mock('../collect-uncommitted');
 
-import { checkWorkingTree } from '../check-working-tree.js';
+import { checkWorkingTree, throwIfUncommitted } from '../check-working-tree.js';
 import { collectUncommitted } from '../collect-uncommitted.js';
 import { describeRef } from '../describe-ref.js';
 
@@ -37,5 +37,9 @@ describe('check-working-tree', () => {
     await expect(checkWorkingTree({ cwd: 'foo' })).rejects.toThrow('Working tree has uncommitted changes');
 
     expect(collectUncommitted).toHaveBeenLastCalledWith({ cwd: 'foo' }, false);
+  });
+
+  it('should call mkThrowIfUncommitted when calling throwIfUncommitted', async () => {
+    expect(throwIfUncommitted()).toBeTruthy();
   });
 });
