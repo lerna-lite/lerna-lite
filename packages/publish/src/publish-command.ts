@@ -550,8 +550,8 @@ export class PublishCommand extends Command<PublishCommandOption> {
           const names = packagesWithoutLicense.map((pkg) => pkg.name);
           const noun = names.length > 1 ? 'Packages' : 'Package';
           const verb = names.length > 1 ? 'are' : 'is';
+          /* v8 ignore next */
           const list =
-            // prettier-ignore
             names.length > 1
               ? `${names.slice(0, -1).join(', ')}${names.length > 2 ? ',' : ''} and ${names[names.length - 1] /* oxford commas _are_ that important */}`
               : names[0];
