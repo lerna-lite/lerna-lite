@@ -1,6 +1,5 @@
 import { describe, expect, it } from 'vitest';
 import yargs from 'yargs/yargs';
-
 import { listableOptions } from '../listable-options.js';
 
 describe('listable.options()', () => {

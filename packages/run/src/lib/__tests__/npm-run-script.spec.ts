@@ -1,13 +1,11 @@
-import { describe, expect, it, type Mock, vi } from 'vitest';
-
-// mocked modules
-vi.mock('@lerna-lite/core');
-
 import { execPackageManager, spawnStreaming } from '@lerna-lite/core';
-
+import { describe, expect, it, vi, type Mock } from 'vitest';
 import type { RunScriptOption, ScriptStreamingOption } from '../../interfaces.js';
 // file under test
 import { npmRunScript, npmRunScriptStreaming } from '../npm-run-script.js';
+
+// mocked modules
+vi.mock('@lerna-lite/core');
 
 describe('npm-run-script', () => {
   (execPackageManager as Mock).mockResolvedValue(null);

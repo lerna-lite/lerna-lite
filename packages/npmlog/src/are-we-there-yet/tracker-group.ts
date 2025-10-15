@@ -1,6 +1,6 @@
-import { Tracker } from './tracker.js';
 import { TrackerBase } from './tracker-base.js';
 import { TrackerStream } from './tracker-stream.js';
+import { Tracker } from './tracker.js';
 
 export class TrackerGroup extends TrackerBase {
   parentGroup = null;

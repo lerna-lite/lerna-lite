@@ -1,10 +1,8 @@
 import { dirname } from 'node:path';
 import { fileURLToPath } from 'node:url';
-
 import { cloneFixtureFactory } from '@lerna-test/helpers';
 import { execa } from 'execa';
 import { expect, test } from 'vitest';
-
 import { isBehindUpstream } from '../lib/is-behind-upstream.js';
 
 const __filename = fileURLToPath(import.meta.url);

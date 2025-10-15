@@ -1,6 +1,5 @@
 import { writeFileSync } from 'node:fs';
 import { basename, dirname, join, normalize, resolve as pathResolve } from 'node:path';
-
 import { log } from '@lerna-lite/npmlog';
 import dedent from 'dedent';
 import globParent from 'glob-parent';
@@ -10,7 +9,6 @@ import { loadJsonFile, loadJsonFileSync } from 'load-json-file';
 import pMap from 'p-map';
 import { globSync } from 'tinyglobby';
 import { writeJsonFile } from 'write-json-file';
-
 import type { ProjectConfig, RawManifest } from '../models/interfaces.js';
 import { Package } from '../package.js';
 import { looselyJsonParse } from '../utils/object-utils.js';

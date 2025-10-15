@@ -1,5 +1,4 @@
 import type { PublishCommandOption } from '@lerna-lite/core';
-
 import { filterOptions } from '../filter-options.js';
 import cliVersionCmd, { addBumpPositional } from './cli-version-commands.js';
 

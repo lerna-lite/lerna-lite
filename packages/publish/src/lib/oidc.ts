@@ -8,7 +8,6 @@ import ciInfo from 'ci-info';
 import libaccess from 'libnpmaccess';
 import npa from 'npm-package-arg';
 import npmFetch from 'npm-registry-fetch';
-
 import { fetchWithRetry } from './fetch-retry.js';
 
 // Minimally deferred as sadly no types in the npm codebase...

@@ -1,5 +1,5 @@
-import { type Mock, vi } from 'vitest';
 import { multiLineTrimRight, stripAnsi } from '@lerna-test/helpers';
+import { vi, type Mock } from 'vitest';
 
 // @lerna/output is just a wrapper around console.log
 const mockOutput = vi.fn();

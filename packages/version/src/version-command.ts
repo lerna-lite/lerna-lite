@@ -1,23 +1,22 @@
 import { EOL as OS_EOL } from 'node:os';
-
 import {
-  type ChangelogPresetOptions,
   checkWorkingTree,
   collectPackages,
   collectUpdates,
   Command,
-  type CommandType,
   createRunner,
   EOL,
   logOutput,
-  type Package,
-  type PackageGraphNode,
-  type ProjectConfig,
   promptConfirmation,
   runTopologically,
   throwIfUncommitted,
-  type UpdateCollectorOptions,
   ValidationError,
+  type ChangelogPresetOptions,
+  type CommandType,
+  type Package,
+  type PackageGraphNode,
+  type ProjectConfig,
+  type UpdateCollectorOptions,
   type VersionCommandOption,
 } from '@lerna-lite/core';
 import dedent from 'dedent';
@@ -28,7 +27,6 @@ import pReduce from 'p-reduce';
 import semver from 'semver';
 import c from 'tinyrainbow';
 import zeptomatch from 'zeptomatch';
-
 import { applyBuildMetadata } from './conventional-commits/apply-build-metadata.js';
 import { getCommitsSinceLastRelease } from './conventional-commits/get-commits-since-last-release.js';
 import { recommendVersion } from './conventional-commits/recommend-version.js';

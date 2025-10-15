@@ -1,5 +1,4 @@
 import { describe, expect, it, test } from 'vitest';
-
 import { addPrefixTransformer } from '../log-prefix-transformer.js';
 
 describe('addPrefixTransformer', () => {

@@ -1,6 +1,6 @@
-import { afterEach, vi } from 'vitest';
 import { dirname } from 'node:path';
 import normalizePath from 'normalize-path';
+import { afterEach, vi } from 'vitest';
 
 const { loadJsonFile: actualLoadJsonFile, loadJsonFileSync: loadJsonFileSyncActual } =
   await vi.importActual<any>('load-json-file');

@@ -1,4 +1,19 @@
+// mocked modules
+import { dirname } from 'node:path';
+// helpers
+import { fileURLToPath } from 'node:url';
+import { collectUpdates, logOutput, type ListCommandOption } from '@lerna-lite/core';
+import { commandRunner, initFixtureFactory } from '@lerna-test/helpers';
+// normalize temp directory paths in snapshots
+import serializeTempdir from '@lerna-test/helpers/serializers/serialize-tempdir.js';
+import serializeWindowsPaths from '@lerna-test/helpers/serializers/serialize-windows-paths.js';
 import { beforeAll, describe, expect, it, vi } from 'vitest';
+// file under test
+import yargParser from 'yargs-parser';
+// file under test
+import cliListCommands from '../../../cli/src/cli-commands/cli-list-commands.js';
+import { ListCommand } from '../index.js';
+import { factory } from '../list-command.js';
 
 vi.mock('@lerna-lite/core', async () => ({
   ...(await vi.importActual<any>('@lerna-lite/core')),
@@ -18,25 +33,11 @@ vi.mock('@lerna-lite/core', async () => ({
 vi.mock('../../../core/src/utils/collect-updates/collect-updates.js', async () => await vi.importActual('../../../core/src/__mocks__/collect-updates'));
 vi.mock('@lerna-lite/list', async () => await vi.importActual<any>('../list-command'));
 
-// mocked modules
-import { dirname } from 'node:path';
-// helpers
-import { fileURLToPath } from 'node:url';
-
-import { collectUpdates, type ListCommandOption, logOutput } from '@lerna-lite/core';
-import { commandRunner, initFixtureFactory } from '@lerna-test/helpers';
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
 const initFixture = initFixtureFactory(__dirname);
 
-// file under test
-import cliListCommands from '../../../cli/src/cli-commands/cli-list-commands.js';
-import { ListCommand } from '../index.js';
-import { factory } from '../list-command.js';
 const lernaList = commandRunner(cliListCommands);
-
-// file under test
-import yargParser from 'yargs-parser';
 
 const createArgv = (cwd: string, ...args: string[]) => {
   args.unshift('list');
@@ -58,9 +59,6 @@ expect.addSnapshotSerializer({
   },
 });
 
-// normalize temp directory paths in snapshots
-import serializeTempdir from '@lerna-test/helpers/serializers/serialize-tempdir.js';
-import serializeWindowsPaths from '@lerna-test/helpers/serializers/serialize-windows-paths.js';
 expect.addSnapshotSerializer(serializeWindowsPaths);
 expect.addSnapshotSerializer(serializeTempdir);
 

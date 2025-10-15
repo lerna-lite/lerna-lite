@@ -1,5 +1,5 @@
 // helpers
-import { type NpmClient, Package, PackageGraph } from '../../../index.js';
+import { Package, PackageGraph, type NpmClient } from '../../../index.js';
 
 function buildGraph(mapPackages = (pkg: any) => pkg, npmClient: NpmClient = 'npm') {
   // cat __fixtures__/toposort/packages/*/package.json

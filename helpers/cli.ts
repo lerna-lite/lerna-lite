@@ -1,8 +1,6 @@
 import { dirname, resolve as pathResolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
-
 import { execa } from 'execa';
-
 import lernaCLI from '../packages/cli/dist/lerna-cli.js';
 
 const __filename = fileURLToPath(import.meta.url);

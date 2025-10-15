@@ -1,4 +1,12 @@
+import { dirname } from 'node:path';
+import { fileURLToPath } from 'node:url';
+import { runLifecycle, type VersionCommandOption } from '@lerna-lite/core';
+import { initFixtureFactory } from '@lerna-test/helpers';
+import { loadJsonFile } from 'load-json-file';
 import { afterEach, describe, expect, it, vi } from 'vitest';
+import yargParser from 'yargs-parser';
+// test command
+import { VersionCommand } from '../version-command.js';
 
 vi.mock('load-json-file', async () => vi.importActual('../lib/__mocks__/load-json-file'));
 
@@ -20,21 +28,12 @@ vi.mock('@lerna-lite/core', async () => ({
   runLifecycle: (await vi.importActual<any>('../../../core/src/__mocks__/run-lifecycle')).runLifecycle,
   throwIfUncommitted: (await vi.importActual<any>('../../../core/src/__mocks__/check-working-tree')).throwIfUncommitted,
 }));
-import { dirname } from 'node:path';
-import { fileURLToPath } from 'node:url';
-
-import { runLifecycle, type VersionCommandOption } from '@lerna-lite/core';
-import { loadJsonFile } from 'load-json-file';
-import yargParser from 'yargs-parser';
 
 // helpers
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
-import { initFixtureFactory } from '@lerna-test/helpers';
-const initFixture = initFixtureFactory(__dirname);
 
-// test command
-import { VersionCommand } from '../version-command.js';
+const initFixture = initFixtureFactory(__dirname);
 
 const createArgv = (cwd: string, ...args: string[]) => {
   args.unshift('version');

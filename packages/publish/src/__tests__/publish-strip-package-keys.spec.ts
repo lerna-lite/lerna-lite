@@ -1,4 +1,13 @@
+import { dirname, join } from 'node:path';
+// helpers
+import { fileURLToPath } from 'node:url';
+// test command
+import { commandRunner, gitAdd, gitCommit, gitTag, initFixtureFactory, updateLernaConfig } from '@lerna-test/helpers';
+import { outputFile } from 'fs-extra/esm';
 import { describe, expect, it, vi } from 'vitest';
+// mocked modules
+import * as writePkg from 'write-package';
+import cliCommands from '../../../cli/src/cli-commands/cli-publish-commands.js';
 
 vi.mock('write-package', async () => await vi.importActual('../../../version/src/lib/__mocks__/write-package'));
 
@@ -33,25 +42,10 @@ vi.mock('../lib/get-two-factor-auth-required', async () => await vi.importActual
 vi.mock('../lib/pack-directory', async () => await vi.importActual('../lib/__mocks__/pack-directory'));
 vi.mock('../lib/npm-publish', async () => await vi.importActual('../lib/__mocks__/npm-publish'));
 
-import { dirname, join } from 'node:path';
-// helpers
-import { fileURLToPath } from 'node:url';
-
-import { gitAdd } from '@lerna-test/helpers';
-import { gitTag } from '@lerna-test/helpers';
-import { gitCommit } from '@lerna-test/helpers';
-import { commandRunner, initFixtureFactory } from '@lerna-test/helpers';
-import { outputFile } from 'fs-extra/esm';
-// mocked modules
-import * as writePkg from 'write-package';
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
 const initFixture = initFixtureFactory(__dirname);
 
-// test command
-import { updateLernaConfig } from '@lerna-test/helpers';
-
-import cliCommands from '../../../cli/src/cli-commands/cli-publish-commands.js';
 const lernaPublish = commandRunner(cliCommands);
 
 describe('publish --remove-package-fields', () => {

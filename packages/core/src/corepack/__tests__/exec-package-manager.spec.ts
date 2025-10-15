@@ -1,7 +1,6 @@
 import { log } from '@lerna-lite/npmlog';
 import c from 'tinyrainbow';
-import { beforeEach, describe, expect, it, type Mock, vi } from 'vitest';
-
+import { beforeEach, describe, expect, it, vi, type Mock } from 'vitest';
 import { exec, execSync, getChildProcessCount } from '../../child-process.js';
 import type { Package } from '../../package.js';
 import { execPackageManager, execPackageManagerSync } from '../exec-package-manager.js';

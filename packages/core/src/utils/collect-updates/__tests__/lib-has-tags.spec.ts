@@ -1,11 +1,10 @@
-import { describe, expect, it, type Mock, vi } from 'vitest';
-
-vi.mock('../../../child-process');
-
+import { describe, expect, it, vi, type Mock } from 'vitest';
 // mocked modules
 import * as childProcess from '../../../child-process.js';
 // file under test
 import { hasTags } from '../lib/has-tags.js';
+
+vi.mock('../../../child-process');
 
 describe('hasTags()', () => {
   (childProcess.execSync as Mock).mockImplementation(() => 'v1.0.0\nv1.0.1');

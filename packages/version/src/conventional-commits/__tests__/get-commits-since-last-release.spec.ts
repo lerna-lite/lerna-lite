@@ -1,4 +1,7 @@
-import { afterEach, beforeEach, describe, expect, it, type Mock, vi } from 'vitest';
+import { describeRefSync, execSync } from '@lerna-lite/core';
+import { afterEach, beforeEach, describe, expect, it, vi, type Mock } from 'vitest';
+import { getCommitsSinceLastRelease, getOldestCommitSinceLastTag } from '../get-commits-since-last-release.js';
+import { getGithubCommits } from '../get-github-commits.js';
 
 vi.mock('@lerna-lite/core');
 vi.mock('../get-github-commits');
@@ -9,11 +12,6 @@ vi.mock('@lerna-lite/core', async () => ({
   execSync: execSyncMock,
   describeRefSync: describeRefSyncMock,
 }));
-
-import { describeRefSync, execSync } from '@lerna-lite/core';
-
-import { getCommitsSinceLastRelease, getOldestCommitSinceLastTag } from '../get-commits-since-last-release.js';
-import { getGithubCommits } from '../get-github-commits.js';
 
 const execOpts = { cwd: '/test' };
 const tagStub = {

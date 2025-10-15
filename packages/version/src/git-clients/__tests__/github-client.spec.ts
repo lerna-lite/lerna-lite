@@ -1,11 +1,10 @@
-import { beforeEach, describe, expect, it, type Mock, vi } from 'vitest';
-vi.mock('@octokit/rest');
-vi.mock('@lerna-lite/core');
-
 import { execSync } from '@lerna-lite/core';
 import { Octokit } from '@octokit/rest';
-
+import { beforeEach, describe, expect, it, vi, type Mock } from 'vitest';
 import { createGitHubClient, parseGitRepo } from '../github-client.js';
+
+vi.mock('@octokit/rest');
+vi.mock('@lerna-lite/core');
 
 (execSync as Mock).mockReturnValue('5.6.0');
 

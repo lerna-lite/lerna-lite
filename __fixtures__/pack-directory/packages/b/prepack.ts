@@ -1,4 +1,4 @@
-import { readFileSync, mkdirSync, writeFileSync } from 'node:fs';
+import { mkdirSync, readFileSync, writeFileSync } from 'node:fs';
 import { join, resolve as pathResolve } from 'node:path';
 
 const distDir = pathResolve('dist');

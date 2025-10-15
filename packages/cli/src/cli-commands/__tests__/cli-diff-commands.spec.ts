@@ -1,7 +1,7 @@
 import { describe, expect, it, vi } from 'vitest';
+import cliDiff from '../cli-diff-commands.js';
 
 vi.mock('@lerna-lite/diff', () => null);
-import cliDiff from '../cli-diff-commands.js';
 
 describe('DiffCommand CLI options', () => {
   it('should log a console error when DiffCommand is not provided', async () => {

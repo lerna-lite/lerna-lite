@@ -1,5 +1,4 @@
 import { describe, expect, it } from 'vitest';
-
 import { wideTruncate } from '../wide-truncate.js';
 
 describe('wideTruncate', () => {

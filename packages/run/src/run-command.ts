@@ -3,7 +3,6 @@ import { Command, getFilteredPackages, logOutput, runTopologically, ValidationEr
 import { Profiler } from '@lerna-lite/profiler';
 import pMap from 'p-map';
 import c from 'tinyrainbow';
-
 import type { ScriptStreamingOption } from './interfaces.js';
 import { npmRunScript, npmRunScriptStreaming } from './lib/npm-run-script.js';
 import { timer } from './lib/timer.js';

@@ -1,6 +1,5 @@
 import util from 'node:util';
-
-import { type Package, ValidationError } from '@lerna-lite/core';
+import { ValidationError, type Package } from '@lerna-lite/core';
 import { log } from '@lerna-lite/npmlog';
 import zeptomatch from 'zeptomatch';
 

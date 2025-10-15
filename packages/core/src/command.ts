@@ -1,12 +1,10 @@
 import { cpus } from 'node:os';
-
 import type { Logger } from '@lerna-lite/npmlog';
 import { log } from '@lerna-lite/npmlog';
 import { isCI } from 'ci-info';
 import dedent from 'dedent';
 import type { SyncOptions } from 'execa';
 import { execaSync } from 'execa';
-
 import { logExecCommand } from './child-process.js';
 import type { FilterOptions } from './filter-packages/index.js';
 import { getFilteredPackages } from './filter-packages/index.js';
@@ -21,8 +19,8 @@ import type {
   WatchCommandOption,
 } from './models/command-options.js';
 import type { CommandType, ExecOpts, ProjectConfig } from './models/interfaces.js';
-import type { Package } from './package.js';
 import { PackageGraph } from './package-graph/package-graph.js';
+import type { Package } from './package.js';
 import { Project } from './project/project.js';
 import { cleanStack } from './utils/clean-stack.js';
 import { logPackageError } from './utils/log-package-error.js';

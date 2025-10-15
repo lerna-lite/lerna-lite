@@ -1,5 +1,4 @@
 import { describe, expect, it } from 'vitest';
-
 import ThemeSet from '../theme-set.js';
 
 const themes = ThemeSet();

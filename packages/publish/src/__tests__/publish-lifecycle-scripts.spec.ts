@@ -1,4 +1,14 @@
+// mocked modules
+// helpers
+import { dirname, join } from 'node:path';
+import { fileURLToPath } from 'node:url';
+import { runLifecycle } from '@lerna-lite/core';
+import { commandRunner, initFixtureFactory } from '@lerna-test/helpers';
+import { loadJsonFile } from 'load-json-file';
 import { afterEach, describe, expect, it, vi } from 'vitest';
+// test command
+import cliCommands from '../../../cli/src/cli-commands/cli-publish-commands.js';
+import { packDirectory } from '../lib/pack-directory.js';
 
 vi.mock('load-json-file', async () => await vi.importActual('../../../version/src/lib/__mocks__/load-json-file'));
 
@@ -36,23 +46,10 @@ vi.mock('../lib/get-two-factor-auth-required', async () => await vi.importActual
 vi.mock('../lib/pack-directory', async () => await vi.importActual('../lib/__mocks__/pack-directory'));
 vi.mock('../lib/npm-publish', async () => await vi.importActual('../lib/__mocks__/npm-publish'));
 
-// mocked modules
-// helpers
-import { dirname, join } from 'node:path';
-import { fileURLToPath } from 'node:url';
-
-import { runLifecycle } from '@lerna-lite/core';
-import { commandRunner, initFixtureFactory } from '@lerna-test/helpers';
-import { loadJsonFile } from 'load-json-file';
-
-import { packDirectory } from '../lib/pack-directory.js';
-
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
 const initFixture = initFixtureFactory(__dirname);
 
-// test command
-import cliCommands from '../../../cli/src/cli-commands/cli-publish-commands.js';
 const lernaPublish = commandRunner(cliCommands);
 
 describe('lifecycle scripts', () => {

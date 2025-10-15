@@ -1,9 +1,11 @@
-import { beforeEach, describe, expect, type Mock, test, vi } from 'vitest';
-
-vi.mock('../../../child-process');
-
+import { beforeEach, describe, expect, test, vi, type Mock } from 'vitest';
+// file under test
+import type { PackageGraphNode } from '../../../../dist/index.js';
 // mocked modules
 import * as childProcesses from '../../../child-process.js';
+import { diffWorkspaceCatalog, makeDiffPredicate } from '../lib/make-diff-predicate.js';
+
+vi.mock('../../../child-process');
 
 const { globMock } = vi.hoisted(() => ({ globMock: vi.fn() }));
 vi.mock('tinyglobby', async () => ({
@@ -17,10 +19,6 @@ vi.mock('node:fs', async () => ({
   existsSync: existsFileMock,
   readFileSync: readFileMock,
 }));
-
-// file under test
-import type { PackageGraphNode } from '../../../../dist/index.js';
-import { diffWorkspaceCatalog, makeDiffPredicate } from '../lib/make-diff-predicate.js';
 
 function setup(changes: string | string[]) {
   (childProcesses.execSync as Mock).mockReturnValueOnce(([] as string[]).concat(changes).join('\n'));

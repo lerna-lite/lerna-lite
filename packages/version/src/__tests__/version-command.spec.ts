@@ -1,4 +1,36 @@
-import { describe, expect, it, type Mock, vi } from 'vitest';
+import { promises as fsPromises } from 'node:fs';
+import { dirname, join, resolve as pathResolve } from 'node:path';
+import { fileURLToPath } from 'node:url';
+import {
+  checkWorkingTree,
+  collectUpdates,
+  logOutput,
+  promptConfirmation,
+  promptSelectOne,
+  throwIfUncommitted,
+  type VersionCommandOption,
+} from '@lerna-lite/core';
+import { commandRunner, getCommitMessage, gitAdd, gitCommit, gitTag, initFixtureFactory, showCommit, stripAnsi } from '@lerna-test/helpers';
+// helpers
+import { loggingOutput } from '@lerna-test/helpers/logging-output.js';
+// stabilize commit SHA
+import gitSHA from '@lerna-test/helpers/serializers/serialize-git-sha.js';
+import { execa } from 'execa';
+import { outputFile, outputJson } from 'fs-extra/esm';
+import { describe, expect, it, vi, type Mock } from 'vitest';
+// mocked or stubbed modules
+import * as writePkg from 'write-package';
+import { parse } from 'yaml';
+// file under test
+import yargParser from 'yargs-parser';
+import cliCommands from '../../../cli/src/cli-commands/cli-version-commands.js';
+import { getCommitsSinceLastRelease } from '../conventional-commits/get-commits-since-last-release.js';
+import { gitPush as libPush, gitPushSingleTag as libPushSingleTag } from '../lib/git-push.js';
+import { isAnythingCommitted } from '../lib/is-anything-committed.js';
+import { isBehindUpstream } from '../lib/is-behind-upstream.js';
+import { remoteBranchExists } from '../lib/remote-branch-exists.js';
+import { loadPackageLockFileWhenExists } from '../lib/update-lockfile-version.js';
+import { VersionCommand } from '../version-command.js';
 
 // local modules _must_ be explicitly mocked
 vi.mock('../lib/git-push', async () => await vi.importActual('../lib/__mocks__/git-push'));
@@ -30,45 +62,12 @@ vi.mock('@lerna-lite/core', async (coreOriginal) => ({
 }));
 vi.mock('write-package', async () => await vi.importActual('../lib/__mocks__/write-package'));
 
-import { promises as fsPromises } from 'node:fs';
-import { dirname, join, resolve as pathResolve } from 'node:path';
-import { fileURLToPath } from 'node:url';
-
-import {
-  checkWorkingTree,
-  collectUpdates,
-  logOutput,
-  promptConfirmation,
-  promptSelectOne,
-  throwIfUncommitted,
-  type VersionCommandOption,
-} from '@lerna-lite/core';
-import { commandRunner, getCommitMessage, gitAdd, gitCommit, gitTag, initFixtureFactory, showCommit, stripAnsi } from '@lerna-test/helpers';
-// helpers
-import { loggingOutput } from '@lerna-test/helpers/logging-output.js';
-import { execa } from 'execa';
-import { outputFile, outputJson } from 'fs-extra/esm';
-// mocked or stubbed modules
-import * as writePkg from 'write-package';
-import { parse } from 'yaml';
-
-import { getCommitsSinceLastRelease } from '../conventional-commits/get-commits-since-last-release.js';
-import { gitPush as libPush, gitPushSingleTag as libPushSingleTag } from '../lib/git-push.js';
-import { isAnythingCommitted } from '../lib/is-anything-committed.js';
-import { isBehindUpstream } from '../lib/is-behind-upstream.js';
-import { remoteBranchExists } from '../lib/remote-branch-exists.js';
-
 // test command
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
-import cliCommands from '../../../cli/src/cli-commands/cli-version-commands.js';
-import { loadPackageLockFileWhenExists } from '../lib/update-lockfile-version.js';
-import { VersionCommand } from '../version-command.js';
+
 const lernaVersion = commandRunner(cliCommands);
 const initFixture = initFixtureFactory(pathResolve(__dirname, '../../../publish/src/__tests__'));
-
-// file under test
-import yargParser from 'yargs-parser';
 
 const createArgv = (cwd: string, ...args: string[]) => {
   args.unshift('version');
@@ -99,8 +98,6 @@ const listDirty = (cwd: string) =>
   // git ls-files --exclude-standard --modified --others
   execa('git', ['ls-files', '--exclude-standard', '--modified', '--others'], { cwd }).then((result) => result.stdout.split('\n').filter(Boolean));
 
-// stabilize commit SHA
-import gitSHA from '@lerna-test/helpers/serializers/serialize-git-sha.js';
 expect.addSnapshotSerializer(gitSHA);
 
 describe('VersionCommand', () => {

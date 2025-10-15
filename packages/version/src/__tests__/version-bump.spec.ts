@@ -1,6 +1,15 @@
 import nodeFs from 'node:fs';
-
+import { dirname, resolve as pathResolve } from 'node:path';
+import { fileURLToPath } from 'node:url';
+// mocked modules
+import { promptSelectOne, type VersionCommandOption } from '@lerna-lite/core';
+import { commandRunner, getCommitMessage, initFixtureFactory } from '@lerna-test/helpers';
 import { describe, expect, it, test, vi } from 'vitest';
+import yargParser from 'yargs-parser';
+import cliCommands from '../../../cli/src/cli-commands/cli-version-commands.js';
+// test command
+import { factory, VersionCommand } from '../version-command.js';
+
 vi.spyOn(nodeFs, 'renameSync');
 
 // local modules _must_ be explicitly mocked
@@ -23,23 +32,12 @@ vi.mock('@lerna-lite/core', async () => ({
 // also point to the local version command so that all mocks are properly used even by the command-runner
 vi.mock('@lerna-lite/version', async () => await vi.importActual('../version-command'));
 
-import { dirname, resolve as pathResolve } from 'node:path';
-import { fileURLToPath } from 'node:url';
-
-// mocked modules
-import { promptSelectOne, type VersionCommandOption } from '@lerna-lite/core';
-import yargParser from 'yargs-parser';
-
 // helpers
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
-import { commandRunner, initFixtureFactory } from '@lerna-test/helpers';
-const initFixture = initFixtureFactory(pathResolve(__dirname, '../../../publish/src/__tests__'));
-import { getCommitMessage } from '@lerna-test/helpers';
 
-import cliCommands from '../../../cli/src/cli-commands/cli-version-commands.js';
-// test command
-import { factory, VersionCommand } from '../version-command.js';
+const initFixture = initFixtureFactory(pathResolve(__dirname, '../../../publish/src/__tests__'));
+
 const lernaVersion = commandRunner(cliCommands);
 
 const createArgv = (cwd: string, ...args: string[]) => {

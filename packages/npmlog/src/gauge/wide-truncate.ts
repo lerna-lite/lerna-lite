@@ -3,7 +3,6 @@
  */
 
 import { stripVTControlCharacters } from 'node:util';
-
 import stringWidth from 'fast-string-width';
 
 export function wideTruncate(str: string, target: number) {

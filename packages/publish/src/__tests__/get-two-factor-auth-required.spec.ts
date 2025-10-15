@@ -1,12 +1,10 @@
-import { afterEach, beforeEach, describe, expect, it, type Mock, vi } from 'vitest';
-
-vi.mock('../lib/get-profile-data');
-
 import type { FetchConfig } from '@lerna-lite/core';
 import { loggingOutput } from '@lerna-test/helpers/logging-output.js';
-
+import { afterEach, beforeEach, describe, expect, it, vi, type Mock } from 'vitest';
 import { getProfileData } from '../lib/get-profile-data.js';
 import { getTwoFactorAuthRequired } from '../lib/get-two-factor-auth-required.js';
+
+vi.mock('../lib/get-profile-data');
 
 (getProfileData as Mock).mockImplementation(() => Promise.resolve({ tfa: {} }));
 

@@ -1,4 +1,16 @@
+import { appendFileSync } from 'node:fs';
+import { join, dirname as pathDirname } from 'node:path';
+import { fileURLToPath } from 'node:url';
+// mocked modules
+import { logOutput, type VersionCommandOption } from '@lerna-lite/core';
+import { gitAdd, gitCheckout, gitCommit, gitMerge, gitTag, initFixtureFactory } from '@lerna-test/helpers';
+// normalize temp directory paths in snapshots
+import serializeTempdir from '@lerna-test/helpers/serializers/serialize-tempdir.js';
+import serializeWindowsPaths from '@lerna-test/helpers/serializers/serialize-windows-paths.js';
 import { describe, expect, it, vi } from 'vitest';
+import yargParser from 'yargs-parser';
+// file under test
+import { VersionCommand } from '../version-command.js';
 
 // mocked modules of @lerna-lite/core
 vi.mock('@lerna-lite/core', async () => ({
@@ -12,27 +24,11 @@ vi.mock('@lerna-lite/core', async () => ({
   throwIfUncommitted: (await vi.importActual<any>('../../../core/src/__mocks__/check-working-tree')).throwIfUncommitted,
 }));
 
-import { appendFileSync } from 'node:fs';
-import { dirname as pathDirname, join } from 'node:path';
-import { fileURLToPath } from 'node:url';
-
-// mocked modules
-import { logOutput, type VersionCommandOption } from '@lerna-lite/core';
-import yargParser from 'yargs-parser';
-
 // helpers
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = pathDirname(__filename);
-import { gitCheckout } from '@lerna-test/helpers';
-import { gitCommit } from '@lerna-test/helpers';
-import { gitMerge } from '@lerna-test/helpers';
-import { gitTag } from '@lerna-test/helpers';
-import { gitAdd } from '@lerna-test/helpers';
-import { initFixtureFactory } from '@lerna-test/helpers';
-const initFixture = initFixtureFactory(__dirname);
 
-// file under test
-import { VersionCommand } from '../version-command.js';
+const initFixture = initFixtureFactory(__dirname);
 
 // remove quotes around top-level strings
 expect.addSnapshotSerializer({
@@ -45,9 +41,6 @@ expect.addSnapshotSerializer({
   },
 });
 
-// normalize temp directory paths in snapshots
-import serializeTempdir from '@lerna-test/helpers/serializers/serialize-tempdir.js';
-import serializeWindowsPaths from '@lerna-test/helpers/serializers/serialize-windows-paths.js';
 expect.addSnapshotSerializer(serializeWindowsPaths);
 expect.addSnapshotSerializer(serializeTempdir);
 

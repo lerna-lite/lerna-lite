@@ -2,7 +2,6 @@ import { log } from '@lerna-lite/npmlog';
 // helpers
 import { initFixtureFactory } from '@lerna-test/helpers';
 import { afterEach, beforeAll, describe, expect, it, vi } from 'vitest';
-
 import type { RawManifest } from '../../models/interfaces.js';
 import { Package } from '../../package.js';
 import * as CatalogUtils from '../../utils/catalog-utils.js';

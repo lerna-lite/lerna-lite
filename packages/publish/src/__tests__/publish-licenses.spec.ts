@@ -1,4 +1,18 @@
-import { describe, expect, it, type Mock, vi } from 'vitest';
+import { dirname, join } from 'node:path';
+import { fileURLToPath } from 'node:url';
+import type { PublishCommandOption } from '@lerna-lite/core';
+import { commandRunner, initFixtureFactory } from '@lerna-test/helpers';
+import { loggingOutput } from '@lerna-test/helpers/logging-output.js';
+import { remove } from 'fs-extra/esm';
+import { describe, expect, it, vi, type Mock } from 'vitest';
+import yargParser from 'yargs-parser';
+import cliCommands from '../../../cli/src/cli-commands/cli-publish-commands.js';
+// test command
+import { PublishCommand } from '../index.js';
+import { createTempLicenses } from '../lib/create-temp-licenses.js';
+// mocked modules
+import { packDirectory } from '../lib/pack-directory.js';
+import { removeTempLicenses } from '../lib/remove-temp-licenses.js';
 
 // FIXME: better mock for version command
 vi.mock('../../../version/src/lib/git-push', async () => await vi.importActual('../../../version/src/lib/__mocks__/git-push'));
@@ -33,30 +47,13 @@ vi.mock('../lib/remove-temp-licenses', () => ({ removeTempLicenses: vi.fn(() => 
 vi.mock('../lib/pack-directory', async () => await vi.importActual('../lib/__mocks__/pack-directory'));
 vi.mock('../lib/npm-publish', async () => await vi.importActual('../lib/__mocks__/npm-publish'));
 
-import { dirname, join } from 'node:path';
-import { fileURLToPath } from 'node:url';
-
-import { remove } from 'fs-extra/esm';
-
-import { createTempLicenses } from '../lib/create-temp-licenses.js';
-// mocked modules
-import { packDirectory } from '../lib/pack-directory.js';
-import { removeTempLicenses } from '../lib/remove-temp-licenses.js';
-
 // helpers
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
-import { commandRunner, initFixtureFactory } from '@lerna-test/helpers';
+
 const initFixture = initFixtureFactory(__dirname);
-import { loggingOutput } from '@lerna-test/helpers/logging-output.js';
 
-import cliCommands from '../../../cli/src/cli-commands/cli-publish-commands.js';
-// test command
-import { PublishCommand } from '../index.js';
 const lernaPublish = commandRunner(cliCommands);
-
-import type { PublishCommandOption } from '@lerna-lite/core';
-import yargParser from 'yargs-parser';
 
 const createArgv = (cwd: string, ...args: string[]) => {
   args.unshift('publish');

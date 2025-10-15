@@ -1,10 +1,8 @@
 import { dirname } from 'node:path';
 import { fileURLToPath } from 'node:url';
-
 import { Project } from '@lerna-lite/core';
 import { initFixtureFactory } from '@lerna-test/helpers';
 import { expect, test } from 'vitest';
-
 import { getPackagesWithoutLicense } from '../lib/get-packages-without-license.js';
 
 const __filename = fileURLToPath(import.meta.url);

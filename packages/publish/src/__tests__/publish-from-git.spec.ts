@@ -1,4 +1,16 @@
-import { describe, expect, it, type Mock, vi } from 'vitest';
+// mocked modules
+// helpers
+import { dirname } from 'node:path';
+import { fileURLToPath } from 'node:url';
+import { logOutput, promptConfirmation, throwIfUncommitted, type PublishCommandOption } from '@lerna-lite/core';
+import { gitTag, initFixtureFactory, stripAnsi } from '@lerna-test/helpers';
+import { loggingOutput } from '@lerna-test/helpers/logging-output.js';
+import { describe, expect, it, vi, type Mock } from 'vitest';
+// test command
+import yargParser from 'yargs-parser';
+import type { npmPublish as npmPublishMock } from '../lib/__mocks__/npm-publish.js';
+import { npmPublish } from '../lib/npm-publish.js';
+import { PublishCommand } from '../publish-command.js';
 
 vi.mock('write-package', async () => await vi.importActual('../../../version/src/lib/__mocks__/write-package'));
 
@@ -29,27 +41,9 @@ vi.mock('../lib/get-two-factor-auth-required', async () => await vi.importActual
 vi.mock('../lib/get-unpublished-packages', async () => await vi.importActual('../lib/__mocks__/get-unpublished-packages'));
 vi.mock('../lib/npm-publish', async () => await vi.importActual('../lib/__mocks__/npm-publish'));
 
-// mocked modules
-// helpers
-import { dirname } from 'node:path';
-import { fileURLToPath } from 'node:url';
-
-import { logOutput, promptConfirmation, type PublishCommandOption, throwIfUncommitted } from '@lerna-lite/core';
-import { gitTag, stripAnsi } from '@lerna-test/helpers';
-import { initFixtureFactory } from '@lerna-test/helpers';
-import { loggingOutput } from '@lerna-test/helpers/logging-output.js';
-
-import type { npmPublish as npmPublishMock } from '../lib/__mocks__/npm-publish.js';
-import { npmPublish } from '../lib/npm-publish.js';
-
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
 const initFixture = initFixtureFactory(__dirname);
-
-// test command
-import yargParser from 'yargs-parser';
-
-import { PublishCommand } from '../publish-command.js';
 
 const createArgv = (cwd: string, ...args: string[]) => {
   args.unshift('publish');

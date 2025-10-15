@@ -1,4 +1,13 @@
+import { dirname, resolve as pathResolve } from 'node:path';
+import { fileURLToPath } from 'node:url';
+// test command
+import type { VersionCommandOption } from '@lerna-lite/core';
+import { initFixtureFactory } from '@lerna-test/helpers';
 import { describe, expect, test, vi } from 'vitest';
+// mocked module(s)
+import * as writePkg from 'write-package';
+import yargParser from 'yargs-parser';
+import { VersionCommand } from '../version-command.js';
 
 // local modules _must_ be explicitly mocked
 vi.mock('../lib/git-push', async () => await vi.importActual('../lib/__mocks__/git-push'));
@@ -20,23 +29,11 @@ vi.mock('@lerna-lite/core', async () => ({
 }));
 vi.mock('write-package', async () => await vi.importActual('../lib/__mocks__/write-package'));
 
-import { dirname, resolve as pathResolve } from 'node:path';
-import { fileURLToPath } from 'node:url';
-
-// mocked module(s)
-import * as writePkg from 'write-package';
-import yargParser from 'yargs-parser';
-
 // helpers
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
-import { initFixtureFactory } from '@lerna-test/helpers';
+
 const initFixture = initFixtureFactory(pathResolve(__dirname, '../../../publish/src/__tests__'));
-
-// test command
-import type { VersionCommandOption } from '@lerna-lite/core';
-
-import { VersionCommand } from '../version-command.js';
 
 const createArgv = (cwd: string, ...args: string[]) => {
   args.unshift('version');

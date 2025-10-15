@@ -1,4 +1,5 @@
 import { describe, expect, it, vi } from 'vitest';
+import { lerna } from '../lerna-entry.js';
 
 vi.mock('../cli-commands/cli-changed-commands');
 vi.mock('../cli-commands/cli-diff-commands');
@@ -14,8 +15,6 @@ vi.mock('@lerna-lite/core', async () => ({
   ...(await vi.importActual<any>('@lerna-lite/core')),
   logOutput: (await vi.importActual<any>('../../../core/src/__mocks__/output')).logOutput,
 }));
-
-import { lerna } from '../lerna-entry.js';
 
 describe('cli lerna-entry', () => {
   it('should execute lerna changed', async () => {

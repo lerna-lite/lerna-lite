@@ -1,8 +1,7 @@
 import * as fs from 'node:fs';
 import * as path from 'node:path';
-import { afterEach, describe, it, expect, type Mock, vi } from 'vitest';
-
-import { findPrefix, find } from '../find-prefix.js';
+import { afterEach, describe, expect, it, vi, type Mock } from 'vitest';
+import { find, findPrefix } from '../find-prefix.js';
 
 // Mock the entire module
 vi.mock('node:fs', () => ({

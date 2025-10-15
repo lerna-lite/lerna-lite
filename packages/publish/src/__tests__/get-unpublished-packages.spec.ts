@@ -1,22 +1,19 @@
-import { expect, test, vi } from 'vitest';
-
-vi.mock('pacote');
-
 // mocked module(s)
 import { dirname } from 'node:path';
 // helpers
 import { fileURLToPath } from 'node:url';
-
-import { type FetchConfig, PackageGraph, Project } from '@lerna-lite/core';
+import { PackageGraph, Project, type FetchConfig } from '@lerna-lite/core';
 import { initFixtureFactory } from '@lerna-test/helpers';
 import pacote from 'pacote';
+import { expect, test, vi } from 'vitest';
+// file under test
+import { getUnpublishedPackages } from '../lib/get-unpublished-packages.js';
+
+vi.mock('pacote');
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
 const initFixture = initFixtureFactory(__dirname);
-
-// file under test
-import { getUnpublishedPackages } from '../lib/get-unpublished-packages.js';
 
 (pacote as any).packument.mockImplementation(async (pkg: string) => {
   if (pkg === 'package-1') {

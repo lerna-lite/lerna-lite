@@ -1,4 +1,15 @@
+import { dirname, resolve as pathResolve } from 'node:path';
+import { fileURLToPath } from 'node:url';
+// helpers
+import { initFixtureFactory } from '@lerna-test/helpers';
 import { beforeAll, expect, test, vi } from 'vitest';
+import yargs from 'yargs/yargs';
+import { filterOptions } from '../../../../cli/src/filter-options.js';
+import { PackageGraph } from '../../package-graph/package-graph.js';
+import { Project } from '../../project/project.js';
+// mocked modules
+import { collectUpdates } from '../../utils/collect-updates/collect-updates.js';
+import { getFilteredPackages } from '../lib/get-filtered-packages.js';
 
 const { mockNotice } = vi.hoisted(() => ({ mockNotice: vi.fn() }));
 
@@ -7,23 +18,9 @@ vi.mock('../../utils/output', async () => await vi.importActual('../../__mocks__
 vi.mock('../../utils/check-working-tree', async () => await vi.importActual('../../__mocks__/check-working-tree'));
 vi.mock('../../utils/collect-updates/collect-updates.js', async () => await vi.importActual('../../__mocks__/collect-updates'));
 
-import { dirname, resolve as pathResolve } from 'node:path';
-import { fileURLToPath } from 'node:url';
-
-// helpers
-import { initFixtureFactory } from '@lerna-test/helpers';
-import yargs from 'yargs/yargs';
-
-// mocked modules
-import { collectUpdates } from '../../utils/collect-updates/collect-updates.js';
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
 const initFixture = initFixtureFactory(pathResolve(__dirname, '../'));
-
-import { filterOptions } from '../../../../cli/src/filter-options.js';
-import { PackageGraph } from '../../package-graph/package-graph.js';
-import { Project } from '../../project/project.js';
-import { getFilteredPackages } from '../lib/get-filtered-packages.js';
 
 async function buildGraph(cwd: string) {
   const packages = await Project.getPackages(cwd);

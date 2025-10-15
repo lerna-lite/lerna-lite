@@ -1,7 +1,6 @@
 import type { Logger } from '@lerna-lite/npmlog';
 import { log as npmlog } from '@lerna-lite/npmlog';
 import c from 'tinyrainbow';
-
 import { exec, execSync } from '../child-process.js';
 
 export interface UncommittedConfig {

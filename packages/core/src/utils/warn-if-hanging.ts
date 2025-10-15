@@ -1,5 +1,4 @@
 import { log } from '@lerna-lite/npmlog';
-
 import { getChildProcessCount } from '../child-process.js';
 
 export function warnIfHanging() {

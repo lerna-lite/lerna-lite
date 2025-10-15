@@ -1,11 +1,10 @@
-import { describe, expect, it, type Mock, vi } from 'vitest';
-
-vi.mock('../describe-ref');
-vi.mock('../collect-uncommitted');
-
+import { describe, expect, it, vi, type Mock } from 'vitest';
 import { checkWorkingTree, throwIfUncommitted } from '../check-working-tree.js';
 import { collectUncommitted } from '../collect-uncommitted.js';
 import { describeRef } from '../describe-ref.js';
+
+vi.mock('../describe-ref');
+vi.mock('../collect-uncommitted');
 
 describe('check-working-tree', () => {
   it('resolves on a clean tree with no release tags', async () => {

@@ -1,21 +1,19 @@
 import { join, relative } from 'node:path';
-
 import {
   Command,
-  type FilterOptions,
   getFilteredPackages,
-  type Package,
   pluralize,
-  type ProjectConfig,
   spawn,
   spawnStreaming,
   ValidationError,
+  type FilterOptions,
+  type Package,
+  type ProjectConfig,
   type WatchCommandOption,
 } from '@lerna-lite/core';
-import { type ChokidarOptions, type FSWatcher, watch } from 'chokidar';
+import { watch, type ChokidarOptions, type FSWatcher } from 'chokidar';
 import { globSync } from 'tinyglobby';
 import zeptomatch from 'zeptomatch';
-
 import { CHOKIDAR_AVAILABLE_OPTIONS, DEBOUNCE_DELAY, FILE_DELIMITER } from './constants.js';
 import type { ChangesStructure } from './models.js';
 

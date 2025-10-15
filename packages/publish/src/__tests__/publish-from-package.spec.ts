@@ -1,4 +1,18 @@
-import { describe, expect, it, type Mock, vi } from 'vitest';
+import { dirname, join } from 'node:path';
+import { fileURLToPath } from 'node:url';
+import { logOutput, promptConfirmation, throwIfUncommitted, type PackageGraphNode, type PublishCommandOption } from '@lerna-lite/core';
+import { initFixtureFactory, stripAnsi } from '@lerna-test/helpers';
+import { loggingOutput } from '@lerna-test/helpers/logging-output.js';
+import { remove } from 'fs-extra/esm';
+import { describe, expect, it, vi, type Mock } from 'vitest';
+// mocked or stubbed modules
+import * as writePkg from 'write-package';
+import yargParser from 'yargs-parser';
+import type { npmPublish as npmPublishMock } from '../lib/__mocks__/npm-publish.js';
+import { getUnpublishedPackages } from '../lib/get-unpublished-packages.js';
+import { npmPublish } from '../lib/npm-publish.js';
+// file under test
+import { PublishCommand } from '../publish-command.js';
 
 vi.mock('write-package', async () => await vi.importActual('../../../version/src/lib/__mocks__/write-package'));
 
@@ -30,28 +44,11 @@ vi.mock('../lib/get-unpublished-packages', async () => await vi.importActual('..
 vi.mock('../lib/pack-directory', async () => await vi.importActual('../lib/__mocks__/pack-directory'));
 vi.mock('../lib/npm-publish', async () => await vi.importActual('../lib/__mocks__/npm-publish'));
 
-import { dirname, join } from 'node:path';
-import { fileURLToPath } from 'node:url';
-
-import { logOutput, type PackageGraphNode, promptConfirmation, type PublishCommandOption, throwIfUncommitted } from '@lerna-lite/core';
-import { remove } from 'fs-extra/esm';
-// mocked or stubbed modules
-import * as writePkg from 'write-package';
-import yargParser from 'yargs-parser';
-
-import type { npmPublish as npmPublishMock } from '../lib/__mocks__/npm-publish.js';
-import { getUnpublishedPackages } from '../lib/get-unpublished-packages.js';
-import { npmPublish } from '../lib/npm-publish.js';
-
 // helpers
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
-import { initFixtureFactory, stripAnsi } from '@lerna-test/helpers';
-import { loggingOutput } from '@lerna-test/helpers/logging-output.js';
-const initFixture = initFixtureFactory(__dirname);
 
-// file under test
-import { PublishCommand } from '../publish-command.js';
+const initFixture = initFixtureFactory(__dirname);
 
 const createArgv = (cwd: string, ...args: string[]) => {
   args.unshift('publish');

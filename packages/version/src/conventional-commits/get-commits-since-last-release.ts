@@ -1,7 +1,6 @@
 import type { DescribeRefOptions, ExecOpts, RemoteClientType } from '@lerna-lite/core';
 import { describeRefSync, execSync, ValidationError } from '@lerna-lite/core';
 import { log } from '@lerna-lite/npmlog';
-
 import type { RemoteCommit } from '../interfaces.js';
 import { getGithubCommits } from './get-github-commits.js';
 

@@ -1,8 +1,6 @@
 import { existsSync, readFileSync } from 'node:fs';
 import { join } from 'node:path';
-
 import { parse as yamlParse } from 'yaml';
-
 import type { NpmClient } from '../models/interfaces.js';
 import { looselyJsonParse } from './object-utils.js';
 

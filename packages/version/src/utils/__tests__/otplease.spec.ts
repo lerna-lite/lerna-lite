@@ -1,15 +1,14 @@
 // mocked modules of @lerna-lite/core
-import { afterEach, beforeEach, describe, expect, it, type Mock, vi } from 'vitest';
+
+// file under test
+import { promptTextInput } from '@lerna-lite/core';
+import { afterEach, beforeEach, describe, expect, it, vi, type Mock } from 'vitest';
+import { getOneTimePassword, otplease } from '../otplease.js';
 
 vi.mock('@lerna-lite/core', async () => ({
   ...(await vi.importActual<any>('@lerna-lite/core')), // return the other real methods, below we'll mock only 2 of the methods
   promptTextInput: (await vi.importActual<any>('../../../../core/src/__mocks__/prompt')).promptTextInput,
 }));
-
-// file under test
-import { promptTextInput } from '@lerna-lite/core';
-
-import { getOneTimePassword, otplease } from '../otplease.js';
 
 // global mock setup
 (promptTextInput as Mock).mockResolvedValue('123456');

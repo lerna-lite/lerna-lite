@@ -1,19 +1,17 @@
 import { homedir } from 'node:os';
 import { dirname, normalize, resolve as pathResolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
-
 import { log } from '@lerna-lite/npmlog';
 import { loadJsonFile, loadJsonFileSync } from 'load-json-file';
 import npa from 'npm-package-arg';
-import { describe, expect, it, type Mock, vi } from 'vitest';
+import { describe, expect, it, vi, type Mock } from 'vitest';
 import { writePackage } from 'write-package';
-
-vi.mock('load-json-file');
-vi.mock('write-package');
-
 // file under test
 import type { NpaResolveResult, RawManifest } from '../models/interfaces.js';
 import { Package } from '../package.js';
+
+vi.mock('load-json-file');
+vi.mock('write-package');
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);

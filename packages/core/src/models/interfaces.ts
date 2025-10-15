@@ -1,6 +1,5 @@
 import type { Logger } from '@lerna-lite/npmlog';
 import type npa from 'npm-package-arg';
-
 import type { Package } from '../package.js';
 import type { InitCommandOption, PublishCommandOption, RunCommandOption, VersionCommandOption } from './command-options.js';
 

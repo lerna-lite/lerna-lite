@@ -39,17 +39,11 @@
         "jsx": "never",
         "ts": "never",
         "tsx": "never",
-        "json": "always",
-        "pathGroups": [
-          {
-            "pattern": "rxjs/**",
-            "patternOptions": { "matchBase": true },
-            "group": "external",
-            "position": "after"
-          }
-        ]
+        "json": "always"
       }
     ],
+    "import/no-self-import": "error",
+    "import/no-useless-path-segments": ["error", { "noUselessIndex": true }],
 
     // vitest rules
     "vitest/no-conditional-expect": "off",

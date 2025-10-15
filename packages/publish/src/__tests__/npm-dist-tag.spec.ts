@@ -1,18 +1,16 @@
-import { describe, expect, it, type Mock, vi } from 'vitest';
+// mocked modules
+// @ts-ignore
+import fetch from 'npm-registry-fetch';
+import { describe, expect, it, vi, type Mock } from 'vitest';
+// file under test
+import type { DistTagOptions } from '../interfaces.js';
+import * as npmDistTag from '../lib/npm-dist-tag.js';
 
 vi.mock('npm-registry-fetch');
 vi.mock('@lerna-lite/core', async () => ({
   ...(await vi.importActual<any>('@lerna-lite/core')), // return the other real methods, below we'll mock only 2 of the methods
   otplease: (cb: (opts: any) => Promise<any>, opts: any) => Promise.resolve(cb(opts)),
 }));
-
-// mocked modules
-// @ts-ignore
-import fetch from 'npm-registry-fetch';
-
-// file under test
-import type { DistTagOptions } from '../interfaces.js';
-import * as npmDistTag from '../lib/npm-dist-tag.js';
 
 const stubLog = {
   verbose: vi.fn(),

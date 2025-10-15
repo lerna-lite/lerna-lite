@@ -1,4 +1,20 @@
-import { beforeEach, describe, expect, it, type Mock, vi } from 'vitest';
+import { dirname, join } from 'node:path';
+import { fileURLToPath } from 'node:url';
+// mocked modules
+import type { DiffCommandOption } from '@lerna-lite/core';
+import { Project, spawn } from '@lerna-lite/core';
+// helpers
+import { commandRunner, gitAdd, gitCommit, gitInit, gitTag, initFixtureFactory } from '@lerna-test/helpers';
+// stabilize commit SHA
+import gitSHA from '@lerna-test/helpers/serializers/serialize-git-sha.js';
+import { execa } from 'execa';
+import { outputFile, remove } from 'fs-extra/esm';
+import { beforeEach, describe, expect, it, vi, type Mock } from 'vitest';
+import yargParser from 'yargs-parser';
+import cliDiffCommands from '../../../cli/src/cli-commands/cli-diff-commands.js';
+import { factory } from '../diff-command.js';
+// file under test
+import { DiffCommand } from '../index.js';
 
 vi.mock('@lerna-lite/core', async () => ({
   ...(await vi.importActual<any>('@lerna-lite/core')),
@@ -9,30 +25,10 @@ vi.mock('@lerna-lite/core', async () => ({
   spawn: vi.fn(),
 }));
 
-import { dirname, join } from 'node:path';
-import { fileURLToPath } from 'node:url';
-
-// mocked modules
-import type { DiffCommandOption } from '@lerna-lite/core';
-import { spawn } from '@lerna-lite/core';
-// helpers
-import { commandRunner, initFixtureFactory } from '@lerna-test/helpers';
-import { execa } from 'execa';
-import { outputFile, remove } from 'fs-extra/esm';
-import yargParser from 'yargs-parser';
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
 const initFixture = initFixtureFactory(__dirname);
-import { Project } from '@lerna-lite/core';
-import { gitAdd } from '@lerna-test/helpers';
-import { gitCommit } from '@lerna-test/helpers';
-import { gitInit } from '@lerna-test/helpers';
-import { gitTag } from '@lerna-test/helpers';
 
-import cliDiffCommands from '../../../cli/src/cli-commands/cli-diff-commands.js';
-import { factory } from '../diff-command.js';
-// file under test
-import { DiffCommand } from '../index.js';
 const lernaDiff = commandRunner(cliDiffCommands);
 
 const createArgv = (cwd: string, ...args: string[]) => {
@@ -47,8 +43,6 @@ const createArgv = (cwd: string, ...args: string[]) => {
   return argv as unknown as DiffCommandOption;
 };
 
-// stabilize commit SHA
-import gitSHA from '@lerna-test/helpers/serializers/serialize-git-sha.js';
 expect.addSnapshotSerializer(gitSHA);
 
 describe('Diff Command with Error Exit Code', () => {

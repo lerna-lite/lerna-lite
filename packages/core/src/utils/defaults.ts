@@ -1,5 +1,5 @@
 /* v8 ignore file */
-import { homedir, tmpdir, type as osType } from 'node:os';
+import { homedir, type as osType, tmpdir } from 'node:os';
 import { dirname, join, resolve as pathResolve } from 'node:path';
 
 const temp = tmpdir();

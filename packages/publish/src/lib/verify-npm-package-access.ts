@@ -1,7 +1,6 @@
 import type { FetchConfig, Package } from '@lerna-lite/core';
 import { pulseTillDone, ValidationError } from '@lerna-lite/core';
 import access from 'libnpmaccess';
-
 import { getFetchConfig } from './fetch-config.js';
 
 /**

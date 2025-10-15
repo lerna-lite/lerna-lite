@@ -1,4 +1,14 @@
-import { describe, expect, it, type Mock, test, vi } from 'vitest';
+import { dirname, resolve as pathResolve } from 'node:path';
+// helpers
+import { fileURLToPath } from 'node:url';
+import { promptSelectOne, promptTextInput, type PackageGraphNode, type VersionCommandOption } from '@lerna-lite/core';
+import { commandRunner, initFixtureFactory, showCommit } from '@lerna-test/helpers';
+import { describe, expect, it, test, vi, type Mock } from 'vitest';
+import yargParser from 'yargs-parser';
+import cliCommands from '../../../cli/src/cli-commands/cli-version-commands.js';
+import { makePromptVersion } from '../lib/prompt-version.js';
+// test command
+import { VersionCommand } from '../version-command.js';
 
 // local modules _must_ be explicitly mocked
 vi.mock('../lib/git-push', async () => await vi.importActual('../lib/__mocks__/git-push'));
@@ -21,13 +31,6 @@ vi.mock('@lerna-lite/core', async () => ({
 // also point to the local version command so that all mocks are properly used even by the command-runner
 vi.mock('@lerna-lite/version', async () => vi.importActual('../version-command'));
 
-import { dirname, resolve as pathResolve } from 'node:path';
-
-import { type PackageGraphNode, promptSelectOne, promptTextInput, type VersionCommandOption } from '@lerna-lite/core';
-import yargParser from 'yargs-parser';
-
-import { makePromptVersion } from '../lib/prompt-version.js';
-
 expect.addSnapshotSerializer({
   test(val) {
     return typeof val === 'string';
@@ -41,17 +44,11 @@ expect.addSnapshotSerializer({
 const resolvePrereleaseId = vi.fn(() => 'alpha');
 const versionPrompt = (buildMetadata: string) => makePromptVersion(resolvePrereleaseId, buildMetadata);
 
-// helpers
-import { fileURLToPath } from 'node:url';
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
-import { commandRunner, initFixtureFactory } from '@lerna-test/helpers';
-const initFixture = initFixtureFactory(pathResolve(__dirname, '../../../publish/src/__tests__'));
-import { showCommit } from '@lerna-test/helpers';
 
-import cliCommands from '../../../cli/src/cli-commands/cli-version-commands.js';
-// test command
-import { VersionCommand } from '../version-command.js';
+const initFixture = initFixtureFactory(pathResolve(__dirname, '../../../publish/src/__tests__'));
+
 const lernaVersion = commandRunner(cliCommands);
 
 const createArgv = (cwd: string, ...args: string[]) => {

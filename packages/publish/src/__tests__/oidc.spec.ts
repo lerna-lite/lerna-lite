@@ -1,5 +1,4 @@
 import { beforeEach, describe, expect, it, vi } from 'vitest';
-
 import { oidc } from '../lib/oidc.js';
 
 const mockConfig = {

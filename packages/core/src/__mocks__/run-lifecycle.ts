@@ -1,5 +1,4 @@
-import { type Mock, vi } from 'vitest';
-
+import { vi, type Mock } from 'vitest';
 import { type Package } from '../../src/package';
 
 const mockRunLifecycle = vi.fn((pkg) => Promise.resolve(pkg));

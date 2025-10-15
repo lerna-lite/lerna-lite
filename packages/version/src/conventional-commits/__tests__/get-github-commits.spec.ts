@@ -1,13 +1,12 @@
 import { log } from '@lerna-lite/npmlog';
 import { describe, expect, it, vi } from 'vitest';
+import { getGithubCommits } from '../get-github-commits.js';
 
 vi.mock('../../git-clients/github-client', async () => ({
   ...(await vi.importActual<any>('../../git-clients/github-client')),
   createGitHubClient: (await vi.importActual<any>('../../__mocks__/github-client')).createGitHubClient,
   parseGitRepo: (await vi.importActual<any>('../../__mocks__/github-client')).parseGitRepo,
 }));
-
-import { getGithubCommits } from '../get-github-commits.js';
 
 const execOpts = { cwd: '/test' };
 
