@@ -320,7 +320,7 @@ export class VersionCommand extends Command<VersionCommandOption> {
     } as UpdateCollectorOptions).filter((node) => {
       // --no-private completely removes private packages from consideration
       if (node.pkg.private && this.options.private === false) {
-        // TODO: (major) make --no-private the default
+        /* v8 ignore next - TODO: (major) make --no-private the default */
         return false;
       }
 
