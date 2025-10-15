@@ -15,7 +15,6 @@ const LERNA_BIN = pathResolve(__dirname, '../packages/cli/src/cli.ts');
  * @return {Function} with partially-applied yargs config
  */
 export function commandRunner(commandModule: any) {
-  /* eslint-disable global-require */
   const cmd = commandModule.command.split(' ')[0];
 
   return (cwd: string) => {

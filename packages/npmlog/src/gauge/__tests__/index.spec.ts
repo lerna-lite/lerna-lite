@@ -28,7 +28,6 @@ MockPlumbing.prototype = {};
 
 function RecordCall(name: string) {
   return function () {
-    // eslint-disable-next-line prefer-rest-params
     const args = Array.prototype.slice.call(arguments);
     results.emit('called', [name, args]);
     results.emit('called:' + name, args);

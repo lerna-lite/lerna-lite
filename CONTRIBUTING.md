@@ -25,10 +25,12 @@ corepack prepare pnpm@latest --activate
 2. install with **pnpm** from the root:
    - `pnpm install` OR `npx pnpm install`
 3. run Lint script
+  - `pnpm lint`
+4. run Formatter script
   - `pnpm prettier:write`
-4. run a full TypeScript (TSC) build
+5. run a full TypeScript (TSC) build
    - `pnpm build` OR `npx pnpm build`
-5. add/run Vitest unit tests (make sure to run the previous steps first):
+6. add/run Vitest unit tests (make sure to run the previous steps first):
    - `pnpm test:watch` (watch mode)
    - `pnpm test` (full test coverage)
-6. after achieving step 2 to 5, then the final step would be to create the Pull Request...
+7. after achieving step 2 to 5, then the final step would be to create the Pull Request...

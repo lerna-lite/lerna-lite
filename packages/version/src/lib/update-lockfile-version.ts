@@ -24,7 +24,7 @@ export async function loadPackageLockFileWhenExists<T = any>(lockFileFolderPath:
       json: pkgLockFileObj,
       lockfileVersion,
     };
-  } catch (error) {} // eslint-disable-line
+  } catch (error) {}
 }
 
 /**
@@ -59,7 +59,7 @@ export async function updateClassicLockfileVersion(pkg: Package): Promise<string
       });
       return lockFilePath;
     }
-  } catch (error) {} // eslint-disable-line
+  } catch (error) {}
 }
 
 /**
@@ -89,7 +89,7 @@ export async function saveUpdatedLockJsonFile(filePath: string, updateLockFileOb
       indent: 2,
     });
     return filePath;
-  } catch (error) {} // eslint-disable-line
+  } catch (error) {}
 }
 
 /**

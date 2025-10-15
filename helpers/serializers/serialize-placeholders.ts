@@ -63,7 +63,6 @@ const serializePlaceholders = {
     }
 
     // object properties only contain versions
-    // eslint-disable-next-line no-param-reassign
     thing.lerna = stableVersion(thing.lerna);
 
     return printer(thing, config, indentation, depth, refs);

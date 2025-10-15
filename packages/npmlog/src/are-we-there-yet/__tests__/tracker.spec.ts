@@ -30,7 +30,6 @@ describe('Tracker', () => {
       }
     });
 
-    // eslint-disable-next-line vitest/no-test-return-statement
     return promise;
   });
 
@@ -47,7 +46,6 @@ describe('Tracker', () => {
       }
     });
 
-    // eslint-disable-next-line vitest/no-test-return-statement
     return promise;
   });
 

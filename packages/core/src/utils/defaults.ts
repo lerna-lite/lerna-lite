@@ -13,8 +13,7 @@ const osenv = {
 };
 
 const umask = {
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  fromString: (inputStr?: string) => process.umask(),
+  fromString: (_inputStr?: string) => process.umask(),
 };
 
 let home = homedir();

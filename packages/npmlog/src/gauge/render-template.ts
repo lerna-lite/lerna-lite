@@ -51,7 +51,7 @@ function generatePreAndPost(baseItem, parentValues) {
   item.length = null;
   item.maxLength = null;
   template.push(item);
-  // eslint-disable-next-line no-self-assign
+  // oxlint-disable-next-line no-self-assign
   values[item.type] = values[item.type];
   if (values[post]) {
     template.push({ value: values[post] });
@@ -211,7 +211,6 @@ function prepareItems(width, template, values) {
 }
 
 function renderFunction(item, values, length) {
-  // eslint-disable-next-line prefer-rest-params
   validate('OON', arguments);
   if (item.type) {
     return item.value(values, values[item.type + 'Theme'] || {}, length);
