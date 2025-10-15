@@ -13,7 +13,7 @@ function normalizeAnsi(str: string) {
 vi.mock('../render-template.js', () => ({
   default: (width: string, template: any, values: { x: any }) => {
     if (values.x) {
-      // eslint-disable-next-line no-self-assign
+      // oxlint-disable-next-line no-self-assign
       values.x = values.x;
     } // pull in from parent object for stringify
     return 'w:' + width + ', t:' + JSON.stringify(template) + ', v:' + JSON.stringify(values);

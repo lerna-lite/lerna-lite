@@ -365,7 +365,6 @@ export class Logger extends EventEmitter {
     if (!this[lvl]) {
       this[lvl] = (...args: any[]) => {
         const a: any = [lvl, ...args];
-        // eslint-disable-next-line prefer-spread
         return this.log.apply(this, a);
       };
     }
@@ -403,7 +402,6 @@ const mixinLog = function (tracker: { [x: string]: () => any }) {
 
     const func = log[P];
     tracker[P] = function () {
-      // eslint-disable-next-line prefer-rest-params
       return func.apply(log, arguments);
     };
   });
@@ -413,7 +411,6 @@ const mixinLog = function (tracker: { [x: string]: () => any }) {
     trackerConstructors.forEach(function (C) {
       const func = tracker[C];
       tracker[C] = function () {
-        // eslint-disable-next-line prefer-rest-params
         return mixinLog(func.apply(tracker, arguments as any));
       };
     });
@@ -424,7 +421,6 @@ const mixinLog = function (tracker: { [x: string]: () => any }) {
 // Add tracker constructors to the top level log object
 trackerConstructors.forEach(function (C) {
   log[C] = function () {
-    // eslint-disable-next-line prefer-spread, prefer-rest-params
     return mixinLog(this.tracker[C].apply(this.tracker, arguments));
   };
 });

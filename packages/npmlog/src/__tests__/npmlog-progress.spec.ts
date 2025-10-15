@@ -61,7 +61,6 @@ describe('log module', () => {
         actions.push(['hide']);
       },
       show() {
-        // eslint-disable-next-line prefer-rest-params
         actions.push(['show'].concat(Array.prototype.slice.call(arguments)));
       },
       pulse(name: any) {

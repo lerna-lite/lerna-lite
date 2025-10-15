@@ -151,7 +151,6 @@ export function toHaveExecutables(received, ...files) {
   const expectedAction = 'to be executable';
   const expectation = `${expectedFiles} ${expectedAction}`;
 
-  // eslint-disable-next-line prefer-destructuring
   const X_OK = constants.X_OK;
   const failed = files.filter((file) => {
     try {

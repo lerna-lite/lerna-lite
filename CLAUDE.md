@@ -50,10 +50,10 @@ All command implementations (cli, changed, diff, exec, init, list, publish, run,
 - **Module system**: Modern Node.js compatibility
 - **Node.js version**: 20.17.0 OR >=22.9.0
 
-### ESLint Configuration
+### OXLint Configuration
 
-- Uses **flat config** format (`eslint.config.mjs`)
-- TypeScript ESLint for type-aware linting
+- Uses `.oxlintrc.json` for its configuration
+- TypeScript with OXLint for type-aware linting
 
 ### File Naming and Structure
 
@@ -120,10 +120,10 @@ pnpm run build
 # Run all tests with coverage
 npm run test
 
-# Format code
-npm run format:write
+# Lint code
+npm run lint
 
-# Lint and Format Code
+# Format Code
 pnpm run prettier:write
 ```
 

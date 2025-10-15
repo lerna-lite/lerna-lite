@@ -13,7 +13,7 @@ export class TrackerGroup extends TrackerBase {
 
   nameInTree() {
     const names: string[] = [];
-    // eslint-disable-next-line @typescript-eslint/no-this-alias
+    // oxlint-disable-next-line
     let from: this | null = this;
     while (from) {
       names.unshift(from.name);
@@ -24,7 +24,7 @@ export class TrackerGroup extends TrackerBase {
 
   addUnit(unit: any, weight = 0) {
     if (unit.addUnit) {
-      // eslint-disable-next-line @typescript-eslint/no-this-alias
+      // oxlint-disable-next-line
       let toTest: this | null = this;
       while (toTest) {
         if (unit === toTest) {

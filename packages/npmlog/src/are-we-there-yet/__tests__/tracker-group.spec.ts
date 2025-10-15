@@ -29,7 +29,6 @@ describe('TrackerGroup', () => {
       }
     });
 
-    // eslint-disable-next-line vitest/no-test-return-statement
     return promise.then(() => {
       const track = new TrackerGroup(name);
       const a = track.newItem('a', 10, 1);
@@ -88,7 +87,6 @@ describe('TrackerGroup', () => {
       }
     });
 
-    // eslint-disable-next-line vitest/no-test-return-statement
     return promise.then(() => {
       const promise = new Promise<void>((resolve) => {
         testEvent(track, 'change', afterWeightedFinishAll);
@@ -131,7 +129,6 @@ describe('TrackerGroup', () => {
       }
     });
 
-    // eslint-disable-next-line vitest/no-test-return-statement
     return promise;
   });
 
