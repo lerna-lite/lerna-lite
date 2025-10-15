@@ -42,5 +42,5 @@ export function mkThrowIfUncommitted(options: Partial<UncommittedConfig> = {}, d
 }
 
 export function throwIfUncommitted() {
-  mkThrowIfUncommitted();
+  return mkThrowIfUncommitted();
 }

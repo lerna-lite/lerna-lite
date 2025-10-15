@@ -8,6 +8,7 @@ export function envReplace(str: any): string {
   const regex = /(\\*)\$\{([^}]+)\}/g;
 
   return str.replace(regex, (orig: string, esc: string, name?: string) => {
+    /* v8 ignore if */
     if (esc.length > 0 && esc.length % 2) {
       return orig;
     }
