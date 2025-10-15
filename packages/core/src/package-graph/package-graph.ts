@@ -1,6 +1,5 @@
 import { log } from '@lerna-lite/npmlog';
 import npa from 'npm-package-arg';
-
 import type { NpaResolveResult, NpmClient } from '../models/interfaces.js';
 import type { Package } from '../package.js';
 import { readWorkspaceCatalogConfig } from '../utils/catalog-utils.js';

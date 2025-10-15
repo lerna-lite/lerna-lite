@@ -1,4 +1,19 @@
-import { expect, type Mock, test, vi } from 'vitest';
+import { dirname, join, resolve as pathResolve } from 'node:path';
+import { fileURLToPath } from 'node:url';
+// mocked modules
+import { promptSelectOne, promptTextInput, type VersionCommandOption } from '@lerna-lite/core';
+// helpers
+import { commandRunner, getCommitMessage, gitAdd, gitCommit, gitInit, gitTag, initFixtureFactory, showCommit, temporaryDirectory } from '@lerna-test/helpers';
+// stabilize commit SHA
+import serializeChangelog from '@lerna-test/helpers/serializers/serialize-changelog.js';
+import { outputFile } from 'fs-extra/esm';
+// @ts-ignore
+import Tacks from 'tacks';
+import { expect, test, vi, type Mock } from 'vitest';
+import yargParser from 'yargs-parser';
+// test command
+import cliCommands from '../../../cli/src/cli-commands/cli-version-commands.js';
+import { VersionCommand } from '../version-command.js';
 
 // local modules _must_ be explicitly mocked
 vi.mock('../lib/git-push', async () => await vi.importActual('../lib/__mocks__/git-push'));
@@ -21,26 +36,12 @@ vi.mock('@lerna-lite/core', async () => ({
 // also point to the local version command so that all mocks are properly used even by the command-runner
 vi.mock('@lerna-lite/version', async () => await vi.importActual('../version-command'));
 
-import { dirname, join, resolve as pathResolve } from 'node:path';
-import { fileURLToPath } from 'node:url';
-
-// mocked modules
-import { promptSelectOne, promptTextInput, type VersionCommandOption } from '@lerna-lite/core';
-// helpers
-import { commandRunner, getCommitMessage, gitAdd, gitCommit, gitInit, gitTag, initFixtureFactory, showCommit, temporaryDirectory } from '@lerna-test/helpers';
-import { outputFile } from 'fs-extra/esm';
-import yargParser from 'yargs-parser';
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
 const initFixture = initFixtureFactory(pathResolve(__dirname, '../../../publish/src/__tests__'));
-// @ts-ignore
-import Tacks from 'tacks';
 
 const { File, Dir } = Tacks;
 
-// test command
-import cliCommands from '../../../cli/src/cli-commands/cli-version-commands.js';
-import { VersionCommand } from '../version-command.js';
 const lernaVersion = commandRunner(cliCommands);
 
 // remove quotes around top-level strings
@@ -54,8 +55,6 @@ expect.addSnapshotSerializer({
   },
 });
 
-// stabilize commit SHA
-import serializeChangelog from '@lerna-test/helpers/serializers/serialize-changelog.js';
 expect.addSnapshotSerializer(serializeChangelog);
 
 const createArgv = (cwd: string, ...args: string[]) => {

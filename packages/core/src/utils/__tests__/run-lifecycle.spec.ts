@@ -1,18 +1,16 @@
-import { beforeEach, describe, expect, it, type Mock, vi } from 'vitest';
-
-vi.mock('@npmcli/run-script', () => ({
-  default: vi.fn(() => Promise.resolve({ stdout: '' })),
-}));
-
 import { log } from '@lerna-lite/npmlog';
 import { loggingOutput } from '@lerna-test/helpers/logging-output.js';
 // @ts-ignore
 import runScript from '@npmcli/run-script';
-
+import { beforeEach, describe, expect, it, vi, type Mock } from 'vitest';
 import type { LifecycleConfig } from '../../models/interfaces.js';
 import { Package } from '../../package.js';
 import { npmConf } from '../npm-conf.js';
 import { createRunner, runLifecycle } from '../run-lifecycle.js';
+
+vi.mock('@npmcli/run-script', () => ({
+  default: vi.fn(() => Promise.resolve({ stdout: '' })),
+}));
 
 describe('runLifecycle()', () => {
   beforeEach(() => {

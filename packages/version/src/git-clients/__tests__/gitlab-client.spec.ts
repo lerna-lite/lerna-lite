@@ -1,9 +1,8 @@
 import { afterEach, describe, expect, it, vi } from 'vitest';
-
-vi.mock('../GitLabClient');
-
 import { createGitLabClient } from '../gitlab-client.js';
 import { GitLabClient } from '../GitLabClient.js';
+
+vi.mock('../GitLabClient');
 
 describe('createGitLabClient', () => {
   const oldEnv = Object.assign({}, process.env);

@@ -1,10 +1,8 @@
 import { join } from 'node:path';
 import { pathToFileURL } from 'node:url';
-
 import { up } from 'empathic/find';
 import { execa } from 'execa';
 import { copy, ensureDir } from 'fs-extra/esm';
-
 import { gitAdd, gitCommit, gitInit } from './git/index.js';
 import { temporaryDirectory } from './index.js';
 

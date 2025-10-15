@@ -4,7 +4,6 @@
 
 import validate from 'aproba';
 import c from 'tinyrainbow';
-
 import renderTemplate from './render-template.js';
 
 export class Plumbing {

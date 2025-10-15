@@ -1,4 +1,17 @@
-import { afterEach, beforeAll, describe, expect, it, type Mock, vi } from 'vitest';
+import { dirname } from 'node:path';
+// mocked modules
+import { fileURLToPath } from 'node:url';
+// make sure to import the output mock
+import { logOutput, type RunCommandOption } from '@lerna-lite/core';
+import { commandRunner, initFixtureFactory, loggingOutput, normalizeRelativeDir } from '@lerna-test/helpers';
+import { pathExists, readJson } from 'fs-extra/esm';
+import { glob } from 'tinyglobby';
+import { afterEach, beforeAll, describe, expect, it, vi, type Mock } from 'vitest';
+import yargParser from 'yargs-parser';
+import cliRunCommands from '../../../cli/src/cli-commands/cli-run-commands.js';
+// helpers
+import { factory, RunCommand } from '../index.js';
+import { npmRunScript, npmRunScriptStreaming } from '../lib/npm-run-script.js';
 
 vi.mock('../lib/npm-run-script');
 
@@ -14,23 +27,9 @@ vi.mock('@lerna-lite/core', async () => ({
 // also point to the local run command so that all mocks are properly used even by the command-runner
 vi.mock('@lerna-lite/run', () => vi.importActual<any>('../run-command'));
 
-import { dirname } from 'node:path';
-// mocked modules
-import { fileURLToPath } from 'node:url';
-
-// make sure to import the output mock
-import { logOutput, type RunCommandOption } from '@lerna-lite/core';
-import { pathExists, readJson } from 'fs-extra/esm';
-import { glob } from 'tinyglobby';
-import yargParser from 'yargs-parser';
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
-import { commandRunner, initFixtureFactory, loggingOutput, normalizeRelativeDir } from '@lerna-test/helpers';
 
-import cliRunCommands from '../../../cli/src/cli-commands/cli-run-commands.js';
-// helpers
-import { factory, RunCommand } from '../index.js';
-import { npmRunScript, npmRunScriptStreaming } from '../lib/npm-run-script.js';
 const lernaRun = commandRunner(cliRunCommands);
 const initFixture = initFixtureFactory(__dirname);
 

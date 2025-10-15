@@ -1,6 +1,13 @@
-import { beforeEach, describe, expect, it, type Mock, vi } from 'vitest';
-
+import { beforeEach, describe, expect, it, vi, type Mock } from 'vitest';
+// helpers
+import buildGraph from '../__helpers__/build-graph.js';
 import type { Package } from '../../../package.js';
+// mocked modules
+import { describeRefSync } from '../../describe-ref.js';
+// file under test
+import { collectUpdates } from '../collect-updates.js';
+import { hasTags } from '../lib/has-tags.js';
+import { diffWorkspaceCatalog, makeDiffPredicate } from '../lib/make-diff-predicate.js';
 
 vi.mock('../../describe-ref');
 vi.mock('../lib/has-tags');
@@ -11,15 +18,6 @@ vi.mock('glob', async () => ({
   ...(await vi.importActual('tinyglobby')),
   globSync: globMock,
 }));
-
-// mocked modules
-import { describeRefSync } from '../../describe-ref.js';
-// helpers
-import buildGraph from '../__helpers__/build-graph.js';
-// file under test
-import { collectUpdates } from '../collect-updates.js';
-import { hasTags } from '../lib/has-tags.js';
-import { diffWorkspaceCatalog, makeDiffPredicate } from '../lib/make-diff-predicate.js';
 
 // default mock implementations
 (describeRefSync as Mock).mockReturnValue({

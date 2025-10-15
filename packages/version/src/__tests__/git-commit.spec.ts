@@ -1,14 +1,12 @@
-import { describe, expect, test, vi } from 'vitest';
-
-vi.mock('@lerna-lite/core');
-vi.mock('../utils/temp-write');
 import { EOL } from 'node:os';
-
 import { exec } from '@lerna-lite/core';
-
+import { describe, expect, test, vi } from 'vitest';
 import type { GitCommitOption } from '../interfaces.js';
 import { gitCommit } from '../lib/git-commit.js';
 import { tempWrite } from '../utils/temp-write.js';
+
+vi.mock('@lerna-lite/core');
+vi.mock('../utils/temp-write');
 
 describe('git commit', () => {
   (exec as any).mockResolvedValue(null);

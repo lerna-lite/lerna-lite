@@ -1,5 +1,4 @@
 import type { ExecCommandOption } from '@lerna-lite/core';
-
 import { filterOptions } from '../filter-options.js';
 
 /**

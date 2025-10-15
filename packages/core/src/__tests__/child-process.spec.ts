@@ -1,7 +1,6 @@
 import { log } from '@lerna-lite/npmlog';
 import c from 'tinyrainbow';
 import { describe, expect, it, vi } from 'vitest';
-
 // file under test
 import { exec, execSync, getChildProcessCount, getExitCode, spawn, spawnStreaming } from '../child-process.js';
 import type { Package } from '../package.js';

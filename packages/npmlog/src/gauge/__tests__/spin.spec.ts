@@ -1,5 +1,4 @@
 import { describe, expect, it } from 'vitest';
-
 import spin from '../spin.js';
 
 describe('spin', () => {

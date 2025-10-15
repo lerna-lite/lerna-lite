@@ -1,4 +1,16 @@
-import { describe, expect, it, type Mock, vi } from 'vitest';
+import { dirname, join, resolve as pathResolve } from 'node:path';
+import { fileURLToPath } from 'node:url';
+import { collectUpdates, type VersionCommandOption } from '@lerna-lite/core';
+// helpers
+import { initFixtureFactory, showCommit } from '@lerna-test/helpers';
+import semver from 'semver';
+import { describe, expect, it, vi, type Mock } from 'vitest';
+import * as writePkg from 'write-package';
+// test command
+import yargParser from 'yargs-parser';
+import { recommendVersion } from '../conventional-commits/recommend-version.js';
+import { updateChangelog } from '../conventional-commits/update-changelog.js';
+import { VersionCommand } from '../version-command.js';
 
 // local modules _must_ be explicitly mocked
 vi.mock('../lib/git-push', async () => await vi.importActual('../lib/__mocks__/git-push'));
@@ -24,11 +36,6 @@ vi.mock('@lerna-lite/core', async () => ({
   throwIfUncommitted: (await vi.importActual<any>('../../../core/src/__mocks__/check-working-tree')).throwIfUncommitted,
 }));
 
-import { dirname, join, resolve as pathResolve } from 'node:path';
-import { fileURLToPath } from 'node:url';
-
-import semver from 'semver';
-
 expect.addSnapshotSerializer({
   test(val) {
     return typeof val === 'string';
@@ -42,19 +49,8 @@ expect.addSnapshotSerializer({
 // mocked modules
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
-import { collectUpdates, type VersionCommandOption } from '@lerna-lite/core';
-// helpers
-import { initFixtureFactory, showCommit } from '@lerna-test/helpers';
-import * as writePkg from 'write-package';
 
-import { recommendVersion } from '../conventional-commits/recommend-version.js';
-import { updateChangelog } from '../conventional-commits/update-changelog.js';
 const initFixture = initFixtureFactory(pathResolve(__dirname, '../../../publish/src/__tests__'));
-
-// test command
-import yargParser from 'yargs-parser';
-
-import { VersionCommand } from '../version-command.js';
 
 const createArgv = (cwd: string, ...args: any[]) => {
   args.unshift('version');

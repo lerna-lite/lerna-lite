@@ -5,10 +5,8 @@
 import { EventEmitter } from 'node:events';
 import type { WriteStream } from 'node:tty';
 import { format } from 'node:util';
-
 import setBlocking from 'set-blocking';
 import c from 'tinyrainbow';
-
 import { TrackerGroup } from './are-we-there-yet/tracker-group.js';
 import { Gauge } from './gauge/index.js';
 

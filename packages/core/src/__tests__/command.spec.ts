@@ -1,4 +1,15 @@
-import { afterEach, beforeAll, beforeEach, describe, expect, it, type Mock, vi } from 'vitest';
+import { dirname, join } from 'node:path';
+import { fileURLToPath } from 'node:url';
+import { log } from '@lerna-lite/npmlog';
+// helpers
+import { initFixtureFactory, temporaryDirectory, updateLernaConfig } from '@lerna-test/helpers';
+import { loggingOutput } from '@lerna-test/helpers/logging-output.js';
+import { outputFile, readJson, remove, writeJson } from 'fs-extra/esm';
+import { afterEach, beforeAll, beforeEach, describe, expect, it, vi, type Mock } from 'vitest';
+// partially mocked
+import { getChildProcessCount } from '../child-process.js';
+// file under test
+import { Command } from '../command.js';
 
 const cpuCount = vi.hoisted(() => 42);
 
@@ -11,23 +22,9 @@ vi.mock('node:os', async () => ({
   cpus: () => new Array(cpuCount),
 }));
 
-import { dirname, join } from 'node:path';
-import { fileURLToPath } from 'node:url';
-
-import { log } from '@lerna-lite/npmlog';
-// helpers
-import { initFixtureFactory, temporaryDirectory, updateLernaConfig } from '@lerna-test/helpers';
-import { loggingOutput } from '@lerna-test/helpers/logging-output.js';
-import { outputFile, readJson, remove, writeJson } from 'fs-extra/esm';
-
-// partially mocked
-import { getChildProcessCount } from '../child-process.js';
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
 const initFixture = initFixtureFactory(__dirname);
-
-// file under test
-import { Command } from '../command.js';
 
 describe('core-command', () => {
   let testDir = '';

@@ -1,14 +1,14 @@
 import { dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
-
 import { Project } from '@lerna-lite/core';
 import { initFixtureFactory } from '@lerna-test/helpers';
 import { move, pathExists } from 'fs-extra/esm';
 import { describe, expect, it } from 'vitest';
+import { createTempLicenses } from '../lib/create-temp-licenses.js';
+
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
 const initFixture = initFixtureFactory(__dirname);
-import { createTempLicenses } from '../lib/create-temp-licenses.js';
 
 describe('createTempLicenses', () => {
   it('copies root license into package location', async () => {

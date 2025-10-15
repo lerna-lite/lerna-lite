@@ -1,5 +1,9 @@
+// mocked modules
+import { execSync } from '@lerna-lite/core';
 import { log } from '@lerna-lite/npmlog';
-import { describe, expect, it, type Mock, vi } from 'vitest';
+import { describe, expect, it, vi, type Mock } from 'vitest';
+// file under test
+import { getLastCommit } from '../../lib/get-last-commit.js';
 
 const { execSyncMock } = vi.hoisted(() => ({ execSyncMock: vi.fn() }));
 vi.mock('@lerna-lite/core', async () => ({
@@ -8,12 +12,6 @@ vi.mock('@lerna-lite/core', async () => ({
   logOutput: (await vi.importActual<any>('../../../../core/src/__mocks__/output')).logOutput,
   collectUpdates: (await vi.importActual<any>('../../../../core/src/__mocks__/collect-updates')).collectUpdates,
 }));
-
-// mocked modules
-import { execSync } from '@lerna-lite/core';
-
-// file under test
-import { getLastCommit } from '../../lib/get-last-commit.js';
 
 describe('get-last-commit', () => {
   (execSync as Mock).mockImplementation(() => 'v1.0.0\nv1.0.1');

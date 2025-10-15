@@ -1,5 +1,4 @@
 import { beforeEach, describe, expect, it } from 'vitest';
-
 import { Conf } from '../conf.js';
 import * as defaults from '../defaults.js';
 

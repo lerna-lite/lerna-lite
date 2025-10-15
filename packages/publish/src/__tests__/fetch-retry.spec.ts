@@ -1,5 +1,4 @@
 import { beforeEach, describe, expect, it, vi } from 'vitest';
-
 import { fetchWithRetry } from '../lib/fetch-retry.js';
 
 function createResponse(ok: boolean, status = 200) {

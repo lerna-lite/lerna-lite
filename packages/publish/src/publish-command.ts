@@ -1,7 +1,7 @@
+import crypto from 'crypto';
 import { realpathSync } from 'node:fs';
 import { EOL, tmpdir } from 'node:os';
-import { join as pathJoin, normalize, relative } from 'node:path';
-
+import { normalize, join as pathJoin, relative } from 'node:path';
 import type {
   CommandType,
   Conf,
@@ -31,7 +31,6 @@ import {
 } from '@lerna-lite/core';
 import type { OneTimePasswordCache } from '@lerna-lite/version';
 import { getOneTimePassword, VersionCommand } from '@lerna-lite/version';
-import crypto from 'crypto';
 import { outputFileSync, removeSync } from 'fs-extra/esm';
 import normalizePath from 'normalize-path';
 import pMap from 'p-map';
@@ -39,7 +38,6 @@ import pPipe, { type UnaryFunction } from 'p-pipe';
 import semver from 'semver';
 import { glob } from 'tinyglobby';
 import c from 'tinyrainbow';
-
 import type { Tarball } from './interfaces.js';
 import { createTempLicenses } from './lib/create-temp-licenses.js';
 import { getCurrentSHA } from './lib/get-current-sha.js';

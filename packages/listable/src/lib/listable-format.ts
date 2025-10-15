@@ -1,5 +1,4 @@
 import { relative } from 'node:path';
-
 import type { ListableOption, Package } from '@lerna-lite/core';
 import { QueryGraph } from '@lerna-lite/core';
 import columnify from 'columnify';

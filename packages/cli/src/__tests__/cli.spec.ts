@@ -1,4 +1,6 @@
-import { afterEach, beforeEach, describe, expect, it, type Mock, vi } from 'vitest';
+import { log } from '@lerna-lite/npmlog';
+import importLocal from 'import-local';
+import { afterEach, beforeEach, describe, expect, it, vi, type Mock } from 'vitest';
 
 vi.mock('import-local');
 
@@ -7,9 +9,6 @@ vi.mock('../lerna-entry.js', () => ({
   constructor: vi.fn(),
   lerna: lernaMock,
 }));
-
-import { log } from '@lerna-lite/npmlog';
-import importLocal from 'import-local';
 
 describe('CLI', () => {
   afterEach(() => {

@@ -1,4 +1,24 @@
-import { beforeAll, beforeEach, describe, expect, it, type Mock, vi } from 'vitest';
+import { dirname, join as pathJoin } from 'node:path';
+import { fileURLToPath } from 'node:url';
+// mocked or stubbed modules
+import { collectUpdates, logOutput, promptConfirmation, type PublishCommandOption } from '@lerna-lite/core';
+import { getOneTimePassword } from '@lerna-lite/version';
+import { commandRunner, commitChangeToPackage, initFixtureFactory } from '@lerna-test/helpers';
+import { loggingOutput } from '@lerna-test/helpers/logging-output.js';
+import { outputFileSync, outputJson } from 'fs-extra/esm';
+import { beforeAll, beforeEach, describe, expect, it, vi, type Mock } from 'vitest';
+import yargParser from 'yargs-parser';
+// test command
+import cliCommands from '../../../cli/src/cli-commands/cli-publish-commands.js';
+import { PublishCommand } from '../index.js';
+import type { npmPublish as npmPublishMock } from '../lib/__mocks__/npm-publish.js';
+import { getNpmUsername } from '../lib/get-npm-username.js';
+import { getTwoFactorAuthRequired } from '../lib/get-two-factor-auth-required.js';
+import { gitCheckout } from '../lib/git-checkout.js';
+import * as npmDistTag from '../lib/npm-dist-tag.js';
+import { npmPublish } from '../lib/npm-publish.js';
+import { packDirectory } from '../lib/pack-directory.js';
+import { verifyNpmPackageAccess } from '../lib/verify-npm-package-access.js';
 
 // FIXME: better mock for version command
 vi.mock('../../../version/src/lib/git-push', async () => await vi.importActual('../../../version/src/lib/__mocks__/git-push'));
@@ -42,37 +62,13 @@ vi.mock('fs-extra/esm', async () => ({
   outputFileSync: vi.fn(),
 }));
 
-import { dirname, join as pathJoin } from 'node:path';
-import { fileURLToPath } from 'node:url';
-
-import { outputFileSync, outputJson } from 'fs-extra/esm';
-
 // helpers
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
-import { commitChangeToPackage } from '@lerna-test/helpers';
-import { commandRunner, initFixtureFactory } from '@lerna-test/helpers';
-import { loggingOutput } from '@lerna-test/helpers/logging-output.js';
+
 const initFixture = initFixtureFactory(__dirname);
 
-// test command
-import cliCommands from '../../../cli/src/cli-commands/cli-publish-commands.js';
-import { PublishCommand } from '../index.js';
 const lernaPublish = commandRunner(cliCommands);
-
-// mocked or stubbed modules
-import { collectUpdates, logOutput, promptConfirmation, type PublishCommandOption } from '@lerna-lite/core';
-import { getOneTimePassword } from '@lerna-lite/version';
-import yargParser from 'yargs-parser';
-
-import type { npmPublish as npmPublishMock } from '../lib/__mocks__/npm-publish.js';
-import { getNpmUsername } from '../lib/get-npm-username.js';
-import { getTwoFactorAuthRequired } from '../lib/get-two-factor-auth-required.js';
-import { gitCheckout } from '../lib/git-checkout.js';
-import * as npmDistTag from '../lib/npm-dist-tag.js';
-import { npmPublish } from '../lib/npm-publish.js';
-import { packDirectory } from '../lib/pack-directory.js';
-import { verifyNpmPackageAccess } from '../lib/verify-npm-package-access.js';
 
 // remove quotes around top-level strings
 expect.addSnapshotSerializer({

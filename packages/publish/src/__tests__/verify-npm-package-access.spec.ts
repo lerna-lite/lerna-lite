@@ -1,17 +1,14 @@
-import { afterEach, beforeAll, beforeEach, describe, expect, type Mock, test, vi } from 'vitest';
-
-vi.mock('libnpmaccess');
-
 import { dirname } from 'node:path';
 import { fileURLToPath } from 'node:url';
-
-import { type FetchConfig, Project } from '@lerna-lite/core';
+import { Project, type FetchConfig } from '@lerna-lite/core';
 import { initFixtureFactory } from '@lerna-test/helpers';
 import { loggingOutput } from '@lerna-test/helpers/logging-output.js';
 // @ts-ignore
 import access from 'libnpmaccess';
-
+import { afterEach, beforeAll, beforeEach, describe, expect, test, vi, type Mock } from 'vitest';
 import { verifyNpmPackageAccess } from '../lib/verify-npm-package-access.js';
+
+vi.mock('libnpmaccess');
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);

@@ -1,4 +1,4 @@
-import { afterEach, type Mock, vi } from 'vitest';
+import { afterEach, vi, type Mock } from 'vitest';
 
 const registry = new Set();
 

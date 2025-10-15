@@ -1,5 +1,4 @@
 import { describe, expect, test } from 'vitest';
-
 import * as throttling from '../lib/throttle-queue.js';
 
 describe('verifyTailHeadQueueBehavior', () => {

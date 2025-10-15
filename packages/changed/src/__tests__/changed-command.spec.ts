@@ -1,4 +1,18 @@
+// mocked modules
+import { dirname } from 'node:path';
+// helpers
+import { fileURLToPath } from 'node:url';
+import { collectUpdates, logOutput, type ChangedCommandOption } from '@lerna-lite/core';
+import { commandRunner, initFixtureFactory, updateLernaConfig } from '@lerna-test/helpers';
+import { loggingOutput } from '@lerna-test/helpers/logging-output.js';
+// normalize temp directory paths in snapshots
+import serializeTempdir from '@lerna-test/helpers/serializers/serialize-tempdir.js';
 import { beforeAll, describe, expect, it, vi } from 'vitest';
+// file under test
+import yargParser from 'yargs-parser';
+import cliChangedCommands from '../../../cli/src/cli-commands/cli-changed-commands.js';
+import { factory } from '../changed-command.js';
+import { ChangedCommand } from '../index.js';
 
 vi.mock('@lerna-lite/core', async () => ({
   ...(await vi.importActual<any>('@lerna-lite/core')),
@@ -15,26 +29,10 @@ vi.mock('@lerna-lite/core', async () => ({
 // also point to the local version command so that all mocks are properly used even by the command-runner
 vi.mock('@lerna-lite/changed', async () => await vi.importActual('../changed-command'));
 
-// mocked modules
-import { dirname } from 'node:path';
-// helpers
-import { fileURLToPath } from 'node:url';
-
-import { type ChangedCommandOption, collectUpdates, logOutput } from '@lerna-lite/core';
-import { commandRunner, initFixtureFactory } from '@lerna-test/helpers';
-import { updateLernaConfig } from '@lerna-test/helpers';
-import { loggingOutput } from '@lerna-test/helpers/logging-output.js';
-
-import cliChangedCommands from '../../../cli/src/cli-commands/cli-changed-commands.js';
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
 const initFixture = initFixtureFactory(__dirname);
 
-// file under test
-import yargParser from 'yargs-parser';
-
-import { factory } from '../changed-command.js';
-import { ChangedCommand } from '../index.js';
 const lernaChanged = commandRunner(cliChangedCommands);
 
 const createArgv = (cwd: string, ...args: string[]) => {
@@ -57,8 +55,6 @@ expect.addSnapshotSerializer({
   },
 });
 
-// normalize temp directory paths in snapshots
-import serializeTempdir from '@lerna-test/helpers/serializers/serialize-tempdir.js';
 expect.addSnapshotSerializer(serializeTempdir);
 
 describe('Changed Command', () => {

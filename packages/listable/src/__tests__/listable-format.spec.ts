@@ -1,17 +1,19 @@
+import { Project, type ListCommandOption, type Package } from '@lerna-lite/core';
+import { loggingOutput, stripAnsi, temporaryDirectory } from '@lerna-test/helpers';
+// normalize temp directory paths in snapshots
+import serializeTempdir from '@lerna-test/helpers/serializers/serialize-tempdir.js';
+import serializeWindowsPaths from '@lerna-test/helpers/serializers/serialize-windows-paths.js';
+// @ts-ignore
+import Tacks from 'tacks';
 import { beforeAll, describe, expect, test, vi } from 'vitest';
+import { listable } from '../index.js';
+
 vi.mock('@lerna-lite/core', async () => ({
   ...(await vi.importActual<any>('@lerna-lite/core')), // return the other real methods, below we'll mock only 2 of the methods
   Command: (await vi.importActual<any>('../../../core/src/command')).Command,
   conf: (await vi.importActual<any>('../../../core/src/command')).conf,
   QueryGraph: (await vi.importActual<any>('../../../core/src/utils/query-graph')).QueryGraph,
 }));
-
-import { type ListCommandOption, type Package, Project } from '@lerna-lite/core';
-import { loggingOutput, stripAnsi, temporaryDirectory } from '@lerna-test/helpers';
-// @ts-ignore
-import Tacks from 'tacks';
-
-import { listable } from '../index.js';
 
 const { File, Dir } = Tacks;
 
@@ -26,9 +28,6 @@ expect.addSnapshotSerializer({
   },
 });
 
-// normalize temp directory paths in snapshots
-import serializeTempdir from '@lerna-test/helpers/serializers/serialize-tempdir.js';
-import serializeWindowsPaths from '@lerna-test/helpers/serializers/serialize-windows-paths.js';
 expect.addSnapshotSerializer(serializeWindowsPaths);
 expect.addSnapshotSerializer(serializeTempdir);
 

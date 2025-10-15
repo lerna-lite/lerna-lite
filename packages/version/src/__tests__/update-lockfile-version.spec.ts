@@ -1,4 +1,23 @@
-import { beforeEach, describe, expect, it, type Mock, test, vi } from 'vitest';
+import { promises as fsPromises } from 'node:fs';
+import { join, dirname as pathDirname } from 'node:path';
+import { fileURLToPath } from 'node:url';
+import { stripVTControlCharacters } from 'node:util';
+import type { Package } from '@lerna-lite/core';
+import { execPackageManager, execPackageManagerSync, Project } from '@lerna-lite/core';
+import { log } from '@lerna-lite/npmlog';
+import { initFixtureFactory } from '@lerna-test/helpers';
+import { pathExistsSync, readJsonSync } from 'fs-extra/esm';
+// mocked or stubbed modules
+import { loadJsonFile } from 'load-json-file';
+import { beforeEach, describe, expect, it, test, vi, type Mock } from 'vitest';
+import {
+  loadPackageLockFileWhenExists,
+  runInstallLockFileOnly,
+  saveUpdatedLockJsonFile,
+  updateClassicLockfileVersion,
+  updateTempModernLockfileVersion,
+  validateFileExists,
+} from '../lib/update-lockfile-version.js';
 
 vi.mock('load-json-file', async () => await vi.importActual('../lib/__mocks__/load-json-file'));
 vi.mock('@lerna-lite/core', async () => {
@@ -10,32 +29,11 @@ vi.mock('@lerna-lite/core', async () => {
   };
 });
 
-import { promises as fsPromises } from 'node:fs';
-import { dirname as pathDirname, join } from 'node:path';
-import { fileURLToPath } from 'node:url';
-import { stripVTControlCharacters } from 'node:util';
-
-import type { Package } from '@lerna-lite/core';
-import { log } from '@lerna-lite/npmlog';
-import { pathExistsSync, readJsonSync } from 'fs-extra/esm';
-// mocked or stubbed modules
-import { loadJsonFile } from 'load-json-file';
-
 // helpers
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = pathDirname(__filename);
-import { execPackageManager, execPackageManagerSync, Project } from '@lerna-lite/core';
-import { initFixtureFactory } from '@lerna-test/helpers';
-const initFixture = initFixtureFactory(__dirname);
 
-import {
-  loadPackageLockFileWhenExists,
-  runInstallLockFileOnly,
-  saveUpdatedLockJsonFile,
-  updateClassicLockfileVersion,
-  updateTempModernLockfileVersion,
-  validateFileExists,
-} from '../lib/update-lockfile-version.js';
+const initFixture = initFixtureFactory(__dirname);
 
 // Serialize the JSONError output to be more human readable
 expect.addSnapshotSerializer({

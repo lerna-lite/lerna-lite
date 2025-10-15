@@ -1,5 +1,4 @@
 import { relative } from 'node:path';
-
 import type { ArboristLoadOption, LifecycleConfig, PackConfig } from '@lerna-lite/core';
 import { Package, runLifecycle } from '@lerna-lite/core';
 import { log } from '@lerna-lite/npmlog';
@@ -7,7 +6,6 @@ import { tempWrite } from '@lerna-lite/version';
 import Arborist from '@npmcli/arborist';
 import packlist from 'npm-packlist';
 import { create } from 'tar';
-
 import { getPacked } from './get-packed.js';
 
 /**

@@ -1,7 +1,23 @@
-import { join } from 'node:path';
-
+// mocked modules
+import { dirname, join } from 'node:path';
+import { fileURLToPath } from 'node:url';
+import { logOutput, type VersionCommandOption } from '@lerna-lite/core';
+import { log } from '@lerna-lite/npmlog';
+// helpers
+import { commandRunner, initFixtureFactory } from '@lerna-test/helpers';
+import dedent from 'dedent';
 import { outputFile } from 'fs-extra/esm';
-import { beforeEach, describe, expect, it, type Mock, vi } from 'vitest';
+import c from 'tinyrainbow';
+import { beforeEach, describe, expect, it, vi, type Mock } from 'vitest';
+import yargParser from 'yargs-parser';
+// test command
+import cliCommands from '../../../cli/src/cli-commands/cli-version-commands.js';
+import { recommendVersion } from '../conventional-commits/recommend-version.js';
+import { updateChangelog } from '../conventional-commits/update-changelog.js';
+import { createGitHubClient } from '../git-clients/github-client.js';
+import { createGitLabClient } from '../git-clients/gitlab-client.js';
+import { createRelease, createReleaseClient } from '../lib/create-release.js';
+import { VersionCommand } from '../version-command.js';
 
 // local modules _must_ be explicitly mocked
 vi.mock('../lib/git-add', async () => await vi.importActual('../lib/__mocks__/git-add'));
@@ -37,31 +53,12 @@ vi.mock('@lerna-lite/core', async () => ({
 // also point to the local version command so that all mocks are properly used even by the command-runner
 vi.mock('@lerna-lite/version', async () => await vi.importActual('../version-command'));
 
-// mocked modules
-import { dirname } from 'node:path';
-import { fileURLToPath } from 'node:url';
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
-import { logOutput, type VersionCommandOption } from '@lerna-lite/core';
-// helpers
-import { commandRunner, initFixtureFactory } from '@lerna-test/helpers';
 
-import { recommendVersion } from '../conventional-commits/recommend-version.js';
-import { updateChangelog } from '../conventional-commits/update-changelog.js';
-import { createGitHubClient } from '../git-clients/github-client.js';
-import { createGitLabClient } from '../git-clients/gitlab-client.js';
-import { createRelease, createReleaseClient } from '../lib/create-release.js';
 const initFixture = initFixtureFactory(__dirname);
 
-// test command
-import cliCommands from '../../../cli/src/cli-commands/cli-version-commands.js';
-import { VersionCommand } from '../version-command.js';
 const lernaVersion = commandRunner(cliCommands);
-
-import { log } from '@lerna-lite/npmlog';
-import dedent from 'dedent';
-import c from 'tinyrainbow';
-import yargParser from 'yargs-parser';
 
 const createArgv = (cwd: string, ...args: any[]) => {
   args.unshift('version');

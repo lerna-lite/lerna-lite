@@ -4,7 +4,6 @@
 
 import validate from 'aproba';
 import stringWidth from 'fast-string-width';
-
 import renderTemplate from './render-template.js';
 import { wideTruncate } from './wide-truncate.js';
 

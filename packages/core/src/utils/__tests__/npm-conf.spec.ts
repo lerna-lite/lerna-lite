@@ -1,5 +1,4 @@
 import { describe, expect, it } from 'vitest';
-
 import * as npmConfModule from '../npm-conf.js';
 import { Conf, npmConf, toNerfDart } from '../npm-conf.js';
 

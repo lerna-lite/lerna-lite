@@ -1,4 +1,20 @@
-import { beforeAll, describe, expect, type Mock, test, vi } from 'vitest';
+import { dirname, join } from 'node:path';
+import { fileURLToPath } from 'node:url';
+import { describeRef, promptConfirmation, throwIfUncommitted, type PublishCommandOption } from '@lerna-lite/core';
+// helpers
+import { commandRunner, gitAdd, gitCommit, gitTag, initFixtureFactory, loggingOutput } from '@lerna-test/helpers';
+// stabilize commit SHA
+import gitSHA from '@lerna-test/helpers/serializers/serialize-git-sha.js';
+import { outputFile } from 'fs-extra/esm';
+import { beforeAll, describe, expect, test, vi, type Mock } from 'vitest';
+// mocked modules
+import * as writePkg from 'write-package';
+import yargParser from 'yargs-parser';
+// test command
+import cliCommands from '../../../cli/src/cli-commands/cli-publish-commands.js';
+import { factory, PublishCommand } from '../index.js';
+import type { npmPublish as npmPublishMock } from '../lib/__mocks__/npm-publish.js';
+import { npmPublish } from '../lib/npm-publish.js';
 
 vi.mock('write-package', async () => await vi.importActual('../../../version/src/lib/__mocks__/write-package'));
 
@@ -22,26 +38,11 @@ vi.mock('../lib/verify-npm-package-access', async () => await vi.importActual('.
 vi.mock('../lib/get-npm-username', async () => await vi.importActual('../lib/__mocks__/get-npm-username'));
 vi.mock('../lib/get-two-factor-auth-required', async () => await vi.importActual('../lib/__mocks__/get-two-factor-auth-required'));
 vi.mock('../lib/npm-publish', async () => await vi.importActual('../lib/__mocks__/npm-publish'));
-import { dirname, join } from 'node:path';
-import { fileURLToPath } from 'node:url';
 
-import { describeRef, promptConfirmation, type PublishCommandOption, throwIfUncommitted } from '@lerna-lite/core';
-// helpers
-import { commandRunner, gitAdd, gitCommit, gitTag, initFixtureFactory, loggingOutput } from '@lerna-test/helpers';
-import { outputFile } from 'fs-extra/esm';
-// mocked modules
-import * as writePkg from 'write-package';
-import yargParser from 'yargs-parser';
-
-import type { npmPublish as npmPublishMock } from '../lib/__mocks__/npm-publish.js';
-import { npmPublish } from '../lib/npm-publish.js';
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
 const initFixture = initFixtureFactory(__dirname);
 
-// test command
-import cliCommands from '../../../cli/src/cli-commands/cli-publish-commands.js';
-import { factory, PublishCommand } from '../index.js';
 const lernaPublish = commandRunner(cliCommands);
 
 // remove quotes around top-level strings
@@ -55,8 +56,6 @@ expect.addSnapshotSerializer({
   },
 });
 
-// stabilize commit SHA
-import gitSHA from '@lerna-test/helpers/serializers/serialize-git-sha.js';
 expect.addSnapshotSerializer(gitSHA);
 
 const createArgv = (cwd: string, ...args: string[]) => {

@@ -1,6 +1,5 @@
 import { log } from '@lerna-lite/npmlog';
 import { afterEach } from 'vitest';
-
 import { multiLineTrimRight, stripAnsi } from './index.js';
 
 // clear logs between tests

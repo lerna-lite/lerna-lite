@@ -1,5 +1,5 @@
-import { vi } from 'vitest';
 import semver from 'semver';
+import { vi } from 'vitest';
 
 const mockRecommendVersion = vi.fn().mockName('recommendVersion');
 

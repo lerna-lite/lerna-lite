@@ -3,7 +3,6 @@ import { log as npmlog } from '@lerna-lite/npmlog';
 import { outputJson } from 'fs-extra/esm';
 // @ts-ignore
 import upath from 'upath';
-
 import type { ProfilerConfig, TraceEvent } from './models.js';
 
 const getTimeBasedFilename = () => {

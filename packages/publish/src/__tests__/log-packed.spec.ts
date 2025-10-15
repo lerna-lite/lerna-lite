@@ -2,7 +2,6 @@ import type { Package } from '@lerna-lite/core';
 import { log } from '@lerna-lite/npmlog';
 import c from 'tinyrainbow';
 import { describe, expect, it, vi } from 'vitest';
-
 import type { Tarball } from '../interfaces.js';
 import { logPacked } from '../lib/log-packed.js';
 

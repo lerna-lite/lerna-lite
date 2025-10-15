@@ -4,7 +4,6 @@ import byteSize from 'byte-size';
 import columnify from 'columnify';
 import hasUnicode from 'has-unicode';
 import c from 'tinyrainbow';
-
 import type { Tarball } from '../interfaces.js';
 
 export function logPacked(pkg: Package & { packed: Tarball }, dryRun = false) {

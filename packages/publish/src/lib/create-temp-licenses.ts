@@ -1,5 +1,4 @@
 import { basename, join } from 'node:path';
-
 import type { Package } from '@lerna-lite/core';
 import { copy } from 'fs-extra/esm';
 import pMap from 'p-map';

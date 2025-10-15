@@ -1,4 +1,15 @@
-import { describe, expect, it, type Mock, vi } from 'vitest';
+import { readFile } from 'fs/promises';
+// mocked modules
+// helpers
+import { dirname, join, normalize } from 'node:path';
+import { Conf, Package, runLifecycle, type RawManifest } from '@lerna-lite/core';
+import PackageJson from '@npmcli/package-json';
+// @ts-ignore
+import { publish } from 'libnpmpublish';
+import { describe, expect, it, vi, type Mock } from 'vitest';
+import type { LibNpmPublishOptions } from '../interfaces.js';
+// file under test
+import { npmPublish } from '../lib/npm-publish.js';
 
 vi.mock('fs/promises');
 vi.mock('libnpmpublish');
@@ -10,20 +21,6 @@ vi.mock('@lerna-lite/core', async () => ({
   otplease: (cb: (opts: any) => Promise<any>, opts: any) => Promise.resolve(cb(opts)),
   runLifecycle: (await vi.importActual<any>('../../../core/src/__mocks__/run-lifecycle')).runLifecycle,
 }));
-
-// mocked modules
-// helpers
-import { dirname, join, normalize } from 'node:path';
-
-import { Conf, Package, type RawManifest, runLifecycle } from '@lerna-lite/core';
-import PackageJson from '@npmcli/package-json';
-import { readFile } from 'fs/promises';
-// @ts-ignore
-import { publish } from 'libnpmpublish';
-
-import type { LibNpmPublishOptions } from '../interfaces.js';
-// file under test
-import { npmPublish } from '../lib/npm-publish.js';
 
 describe('npm-publish', () => {
   const mockTarData = Buffer.from('MOCK');

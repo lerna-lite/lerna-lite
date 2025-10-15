@@ -1,5 +1,4 @@
 import { join } from 'node:path';
-
 import normalizePath from 'normalize-path';
 
 // tempy creates subdirectories with hexadecimal names that are 32 characters long

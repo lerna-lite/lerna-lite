@@ -1,6 +1,5 @@
 import type { Result } from 'npm-package-arg';
 import semver from 'semver';
-
 import type { Package } from '../../package.js';
 import { prereleaseIdFromVersion } from '../../utils/prerelease-id-from-version.js';
 

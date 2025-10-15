@@ -1,13 +1,11 @@
-import { afterEach, beforeEach, describe, expect, type Mock, test, vi } from 'vitest';
-
-vi.mock('npm-registry-fetch');
-
 import type { FetchConfig } from '@lerna-lite/core';
 import { loggingOutput } from '@lerna-test/helpers/logging-output.js';
 // @ts-ignore
 import fetch from 'npm-registry-fetch';
-
+import { afterEach, beforeEach, describe, expect, test, vi, type Mock } from 'vitest';
 import { getNpmUsername } from '../lib/get-npm-username.js';
+
+vi.mock('npm-registry-fetch');
 
 (fetch.json as unknown as Mock).mockImplementation(() => Promise.resolve({ username: 'lerna-test' }));
 

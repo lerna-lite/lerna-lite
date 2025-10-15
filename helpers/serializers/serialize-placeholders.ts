@@ -1,9 +1,7 @@
 import { dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
-
 import { loadJsonFileSync } from 'load-json-file';
 import normalizeNewline from 'normalize-newline';
-
 import serializeTempdir from './serialize-tempdir.js';
 import serializeWindowsPaths from './serialize-windows-paths.js';
 

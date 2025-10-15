@@ -1,20 +1,17 @@
 import { dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
-
-import { gitAdd } from '@lerna-test/helpers';
-import { initFixtureFactory } from '@lerna-test/helpers';
+import { gitAdd, initFixtureFactory } from '@lerna-test/helpers';
 import { outputFile, remove } from 'fs-extra/esm';
 import c from 'tinyrainbow';
 import { describe, expect, it, vi } from 'vitest';
-
 // helpers
 import { Project } from '../../project/project.js';
+// file under test
+import { collectUncommitted, collectUncommittedSync } from '../collect-uncommitted.js';
+
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
 const initFixture = initFixtureFactory(__dirname);
-
-// file under test
-import { collectUncommitted, collectUncommittedSync } from '../collect-uncommitted.js';
 
 // primary assertion setup
 const GREEN_A = c.green('A');

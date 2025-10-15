@@ -1,5 +1,4 @@
 import { resolve as pathResolve } from 'node:path';
-
 import { Conf } from '../utils/conf.js';
 import { Defaults } from './defaults.js';
 import { toNerfDart } from './nerf-dart.js';

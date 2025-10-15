@@ -1,4 +1,17 @@
-import { afterEach, beforeAll, describe, expect, it, type Mock, vi } from 'vitest';
+import { basename, dirname, join } from 'node:path';
+import { fileURLToPath } from 'node:url';
+// make sure to import the output mock
+
+// mocked modules
+import { logOutput, spawn, spawnStreaming, type ExecCommandOption } from '@lerna-lite/core';
+import { commandRunner, initFixtureFactory, normalizeRelativeDir } from '@lerna-test/helpers';
+import { loggingOutput } from '@lerna-test/helpers/logging-output.js';
+import { pathExists, readJson } from 'fs-extra/esm';
+import { glob } from 'tinyglobby';
+import { afterEach, beforeAll, describe, expect, it, vi, type Mock } from 'vitest';
+import yargParser from 'yargs-parser';
+import cliExecCommands from '../../../cli/src/cli-commands/cli-exec-commands.js';
+import { ExecCommand, factory } from '../index.js';
 
 // mocked modules
 vi.mock('@lerna-lite/core', async () => ({
@@ -17,26 +30,10 @@ vi.mock('@lerna-lite/profiler', async () => await vi.importActual<any>('../../..
 // also point to the local exec command so that all mocks are properly used even by the command-runner
 vi.mock('@lerna-lite/exec', async () => await vi.importActual<any>('../exec-command'));
 
-import { basename, dirname, join } from 'node:path';
-import { fileURLToPath } from 'node:url';
-
-// make sure to import the output mock
-import { type ExecCommandOption, logOutput } from '@lerna-lite/core';
-// mocked modules
-import { spawn, spawnStreaming } from '@lerna-lite/core';
-import { pathExists, readJson } from 'fs-extra/esm';
-import { glob } from 'tinyglobby';
-import yargParser from 'yargs-parser';
-
 // helpers
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
-import { commandRunner, initFixtureFactory } from '@lerna-test/helpers';
-import { normalizeRelativeDir } from '@lerna-test/helpers';
-import { loggingOutput } from '@lerna-test/helpers/logging-output.js';
 
-import cliExecCommands from '../../../cli/src/cli-commands/cli-exec-commands.js';
-import { ExecCommand, factory } from '../index.js';
 const lernaExec = commandRunner(cliExecCommands);
 const initFixture = initFixtureFactory(__dirname);
 

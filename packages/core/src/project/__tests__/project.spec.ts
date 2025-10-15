@@ -1,9 +1,11 @@
 import { basename, dirname, join, resolve as pathResolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
-
 import { initFixtureFactory } from '@lerna-test/helpers';
 import { outputFile, remove, writeJson } from 'fs-extra/esm';
-import { afterEach, beforeAll, beforeEach, describe, expect, it, type Mock, vi } from 'vitest';
+import { afterEach, beforeAll, beforeEach, describe, expect, it, vi, type Mock } from 'vitest';
+import { writeJsonFile } from 'write-json-file';
+// file under test
+import { Project } from '../project.js';
 
 const { writeFileMock } = vi.hoisted(() => ({ writeFileMock: vi.fn() }));
 vi.mock('node:fs', async () => ({
@@ -12,7 +14,6 @@ vi.mock('node:fs', async () => ({
 }));
 
 vi.mock('write-json-file');
-import { writeJsonFile } from 'write-json-file';
 
 // remove quotes around top-level strings
 expect.addSnapshotSerializer({
@@ -29,9 +30,6 @@ expect.addSnapshotSerializer({
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
 const initFixture = initFixtureFactory(__dirname);
-
-// file under test
-import { Project } from '../project.js';
 
 describe('Project', () => {
   let testDir = '';

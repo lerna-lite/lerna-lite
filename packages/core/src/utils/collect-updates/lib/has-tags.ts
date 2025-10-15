@@ -1,5 +1,4 @@
 import { log } from '@lerna-lite/npmlog';
-
 import { execSync } from '../../../child-process.js';
 import type { ExecOpts } from '../../../models/interfaces.js';
 

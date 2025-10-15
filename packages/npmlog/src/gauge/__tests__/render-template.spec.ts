@@ -1,5 +1,4 @@
 import { describe, expect, it } from 'vitest';
-
 import renderTemplate from '../render-template.js';
 
 describe('renderTemplate', () => {

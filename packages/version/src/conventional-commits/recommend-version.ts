@@ -5,7 +5,6 @@ import type { BumperRecommendation } from 'conventional-recommended-bump';
 import { Bumper, packagePrefix } from 'conventional-recommended-bump';
 import type { ReleaseType } from 'semver';
 import semver from 'semver';
-
 import type { BaseChangelogOptions, VersioningStrategy } from '../interfaces.js';
 import { applyBuildMetadata } from './apply-build-metadata.js';
 import { GetChangelogConfig } from './get-changelog-config.js';

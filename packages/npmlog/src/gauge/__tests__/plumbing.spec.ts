@@ -1,8 +1,6 @@
 import { stripVTControlCharacters } from 'node:util';
-
 import c from 'tinyrainbow';
 import { describe, expect, it, vi } from 'vitest';
-
 import { Plumbing } from '../plumbing.js';
 
 function normalizeAnsi(str: string) {
