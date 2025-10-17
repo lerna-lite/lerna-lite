@@ -4,6 +4,12 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [4.9.1](https://github.com/lerna-lite/lerna-lite/compare/v4.9.0...v4.9.1) (2025-10-17)
+
+### Bug Fixes
+
+* **deps:** update all non-major dependencies ([#1173](https://github.com/lerna-lite/lerna-lite/issues/1173)) ([c644fb1](https://github.com/lerna-lite/lerna-lite/commit/c644fb1868908e983d342d72d1ff1f50d4d2b76c)) - by @renovate[bot]
+
 ## [4.9.0](https://github.com/lerna-lite/lerna-lite/compare/v4.8.0...v4.9.0) (2025-09-26)
 
 ### Features

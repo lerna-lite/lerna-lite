@@ -4,6 +4,12 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [4.9.1](https://github.com/lerna-lite/lerna-lite/compare/v4.9.0...v4.9.1) (2025-10-17)
+
+### Bug Fixes
+
+* **deps:** migrate from picomatch to zeptomatch to filter packages ([#1155](https://github.com/lerna-lite/lerna-lite/issues/1155)) ([09588f8](https://github.com/lerna-lite/lerna-lite/commit/09588f805c46484e70522e769883cefdf81bbffe)) - by @ghiscoding
+
 ## [4.9.0](https://github.com/lerna-lite/lerna-lite/compare/v4.8.0...v4.9.0) (2025-09-26)
 
 **Note:** Version bump only for package @lerna-lite/watch

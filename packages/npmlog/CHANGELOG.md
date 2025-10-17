@@ -4,6 +4,13 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [4.9.1](https://github.com/lerna-lite/lerna-lite/compare/v4.9.0...v4.9.1) (2025-10-17)
+
+### Bug Fixes
+
+* **deps:** replace console-control-strings/color-support w/tinyrainbow in npmlog ([#1159](https://github.com/lerna-lite/lerna-lite/issues/1159)) ([b553861](https://github.com/lerna-lite/lerna-lite/commit/b55386119ca2f3ba71ae1f6e9a65c2e5020feb1a)) - by @ghiscoding
+* **deps:** update all non-major dependencies ([#1173](https://github.com/lerna-lite/lerna-lite/issues/1173)) ([c644fb1](https://github.com/lerna-lite/lerna-lite/commit/c644fb1868908e983d342d72d1ff1f50d4d2b76c)) - by @renovate[bot]
+
 ## [4.7.3](https://github.com/lerna-lite/lerna-lite/compare/v4.7.2...v4.7.3) (2025-08-29)
 
 ### Bug Fixes

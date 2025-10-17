@@ -4,6 +4,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [4.9.1](https://github.com/lerna-lite/lerna-lite/compare/v4.9.0...v4.9.1) (2025-10-17)
+
+### Bug Fixes
+
+* allow Bun "catalog" and "catalogs" in top-level `package.json` ([#1165](https://github.com/lerna-lite/lerna-lite/issues/1165)) ([2e3cf4b](https://github.com/lerna-lite/lerna-lite/commit/2e3cf4bdf186961eda5d8243fc5e32173bc168ab)) - by @ghiscoding
+* **deps:** migrate from picomatch to zeptomatch to filter packages ([#1155](https://github.com/lerna-lite/lerna-lite/issues/1155)) ([09588f8](https://github.com/lerna-lite/lerna-lite/commit/09588f805c46484e70522e769883cefdf81bbffe)) - by @ghiscoding
+* **deps:** replace `resolve-from` with native code ([#1156](https://github.com/lerna-lite/lerna-lite/issues/1156)) ([433cdb5](https://github.com/lerna-lite/lerna-lite/commit/433cdb532109bcfb4c9bd26ea6c1f3cf1e5523b8)) - by @ghiscoding
+* **deps:** replace console-control-strings/color-support w/tinyrainbow in npmlog ([#1159](https://github.com/lerna-lite/lerna-lite/issues/1159)) ([b553861](https://github.com/lerna-lite/lerna-lite/commit/b55386119ca2f3ba71ae1f6e9a65c2e5020feb1a)) - by @ghiscoding
+* **deps:** update dependency p-queue to v9 ([#1162](https://github.com/lerna-lite/lerna-lite/issues/1162)) ([a70688b](https://github.com/lerna-lite/lerna-lite/commit/a70688b7324db11c69d61b11f8389c0eef89d22b)) - by @renovate[bot]
+* **deps:** update inquirer packages ([#1172](https://github.com/lerna-lite/lerna-lite/issues/1172)) ([b51e654](https://github.com/lerna-lite/lerna-lite/commit/b51e654bc0e7d2e5b4aba4aab224e1b471329ea9)) - by @renovate[bot]
+
 ## [4.9.0](https://github.com/lerna-lite/lerna-lite/compare/v4.8.0...v4.9.0) (2025-09-26)
 
 ### Features
