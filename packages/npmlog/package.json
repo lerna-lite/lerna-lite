@@ -37,7 +37,7 @@
   },
   "dependencies": {
     "aproba": "^2.1.0",
-    "fast-string-width": "^3.0.1",
+    "fast-string-width": "^3.0.2",
     "has-unicode": "catalog:",
     "set-blocking": "^2.0.0",
     "signal-exit": "^4.1.0",
