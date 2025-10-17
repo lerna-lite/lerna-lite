@@ -35,7 +35,7 @@ jobs:
       - if: ${{ github.event.pull_request.merged != true && contains('["ghiscoding"]', github.actor) != true }}
         name: Exit early when current actor is not allowed to push new release
         run: |
-          echo "Error: Your GitHub username (${{ github.actor }}) is not on the allowed list of admins for this workflow"
+          echo "Error: Your GitHub username (${{ github.actor }}) is not on the allowed list of Admins that can run this workflow"
           exit 1
 
       - name: Install pnpm itself
@@ -56,7 +56,7 @@ jobs:
       - name: Run pnpm install dependencies
         run: pnpm install
 
-      - name: Run all workspace TSC builds
+      - name: Run project build (tsc)
         run: pnpm build:full
 
       - name: Lerna Version (build query)
@@ -80,7 +80,7 @@ jobs:
               echo "LERNA_VERSION_QUERY=pnpm run local-lerna version --yes" >> $GITHUB_ENV
           fi
 
-      - name: Final version query type - ${{ env.LERNA_VERSION_TYPE }}
+      - name: Final version type → ${{ env.LERNA_VERSION_TYPE }}
         run: echo "${{ env.LERNA_VERSION_QUERY }}"
 
       - name: Lerna Version 🏷️
@@ -95,5 +95,4 @@ jobs:
         if: ${{ inputs.dryrun != true }}
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        run: |
-          pnpm run local-lerna publish from-package --force-publish --yes
+        run: pnpm run local-lerna publish from-package --force-publish --yes
