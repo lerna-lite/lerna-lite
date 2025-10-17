@@ -45,7 +45,7 @@ jobs:
           run_install: false
 
       - name: Set NodeJS
-        uses: actions/setup-node@v5
+        uses: actions/setup-node@v6
         with:
           registry-url: 'https://registry.npmjs.org/'
           node-version: 24
