@@ -111,6 +111,12 @@ export class Command<T extends AvailableCommandOption> {
             writeLogFile(this.project.rootPath);
           }
 
+          if (err.name === 'ExitPromptError' && !err.pkg) {
+            // Suppress ExitPromptError when terminating the prompt
+            // (sending SIGINT)
+            return;
+          }
+
           warnIfHanging();
 
           // error code is handled by cli.fail()
