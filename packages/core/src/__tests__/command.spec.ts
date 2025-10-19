@@ -236,6 +236,34 @@ describe('core-command', () => {
       await expect(command).rejects.toThrow('message');
       expect(console.error).not.toHaveBeenCalled();
     });
+
+    it('does log when Prompt terminates', async () => {
+      class ExitPromptError extends Error {
+        override name = 'ExitPromptError';
+      }
+
+      class PkgErrorCommand extends Command<any> {
+        initialize() {
+          return true;
+        }
+
+        execute() {
+          const err: any = new ExitPromptError('ExitPromptError');
+
+          err.command = 'test-pkg-err';
+          err.stdout = 'pkg-err-stdout';
+          err.stderr = 'pkg-err-stderr';
+          err.pkg = undefined;
+
+          throw err;
+        }
+      }
+
+      const command = new PkgErrorCommand({ cwd: testDir, stream: true } as any);
+
+      await expect(command).resolves.toBeNull();
+      expect(console.error).toHaveBeenCalled();
+    });
   });
 
   describe('loglevel', () => {
