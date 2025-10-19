@@ -109,12 +109,13 @@ export class Command<T extends AvailableCommandOption> {
           // ValidationError does not trigger a log dump, nor do external package errors
           if (err.name !== 'ValidationError' && !err.pkg) {
             writeLogFile(this.project.rootPath);
-          }
 
-          if (err.name === 'ExitPromptError' && !err.pkg) {
-            // Suppress ExitPromptError when terminating the prompt
-            // (sending SIGINT)
-            return;
+            // Suppress ExitPromptError when terminating the prompt (sending SIGINT)
+            if (err.name === 'ExitPromptError') {
+              console.error('Termination call detected, exiting command');
+              resolve(null);
+              return;
+            }
           }
 
           warnIfHanging();
