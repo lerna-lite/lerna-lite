@@ -1,4 +1,4 @@
-import { describeRefSync, execSync } from '@lerna-lite/core';
+import { describeRefSync, execSync, ValidationError } from '@lerna-lite/core';
 import { afterEach, beforeEach, describe, expect, it, vi, type Mock } from 'vitest';
 import { getCommitsSinceLastRelease, getOldestCommitSinceLastTag } from '../get-commits-since-last-release.js';
 import { getGithubCommits } from '../get-github-commits.js';
@@ -35,11 +35,30 @@ describe('getCommitsSinceLastRelease', () => {
     (describeRefSync as Mock).mockReturnValue(tagStub);
   });
 
-  it('throws an error if used with a remote client other than "github"', async () => {
+  it('throws a ValidationError if used with a remote client other than "github"', async () => {
+    // Mocking any necessary dependencies
     (execSync as Mock).mockReturnValue('"deadbeef 2022-07-01T00:01:02-04:00"');
-    await expect(getCommitsSinceLastRelease('gitlab', 'durable', 'main', false, execOpts)).rejects.toThrow(
-      'Invalid remote client type, "github" is currently the only supported client with the option --changelog-include-commits-client-login.'
-    );
+
+    await expect(getCommitsSinceLastRelease('gitlab', 'durable', 'main', false, execOpts)).rejects.toThrow(ValidationError);
+
+    try {
+      await getCommitsSinceLastRelease('gitlab', 'durable', 'main', false, execOpts);
+    } catch (error: any) {
+      expect(error).toBeInstanceOf(ValidationError);
+      expect(error.message).toBe(
+        'Invalid remote client type, "github" is currently the only supported client with the option --changelog-include-commits-client-login.'
+      );
+    }
+  });
+
+  it('throws a ValidationError for null or undefined client', async () => {
+    await expect(getCommitsSinceLastRelease(null as any, 'durable', 'main', false, execOpts)).rejects.toThrow(ValidationError);
+    await expect(getCommitsSinceLastRelease(undefined as any, 'durable', 'main', false, execOpts)).rejects.toThrow(ValidationError);
+  });
+
+  it('throws a ValidationError for case-insensitive non-github clients', async () => {
+    await expect(getCommitsSinceLastRelease('GITHUB' as any, 'durable', 'main', false, execOpts)).rejects.toThrow(ValidationError);
+    await expect(getCommitsSinceLastRelease('GiTlAb' as any, 'durable', 'main', false, execOpts)).rejects.toThrow(ValidationError);
   });
 
   it('should expect commits returned when using "github" when a valid tag is returned', async () => {
