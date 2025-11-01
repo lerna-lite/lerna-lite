@@ -1,5 +1,7 @@
 {
+  $schema: 'https://docs.renovatebot.com/renovate-schema.json',
   extends: ['config:base', 'group:allNonMajor'],
+  dependencyDashboard: true,
   labels: ['dependencies'],
   ignorePaths: ['helpers', '**/__fixtures__/**', '**/__tests__/**'],
   lockFileMaintenance: { enabled: false },
