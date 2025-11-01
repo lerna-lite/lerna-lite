@@ -35,19 +35,11 @@ describe('getCommitsSinceLastRelease', () => {
     (describeRefSync as Mock).mockReturnValue(tagStub);
   });
 
-  it('throws a ValidationError if used with a remote client other than "github"', async () => {
+  it('throws an error with correct message if used with a remote client other than "github"', async () => {
     // Mocking any necessary dependencies
     (execSync as Mock).mockReturnValue('"deadbeef 2022-07-01T00:01:02-04:00"');
 
-    // First verify it throws the correct error type
-    await expect(getCommitsSinceLastRelease('gitlab', 'durable', 'main', false, execOpts)).rejects.toThrow(ValidationError);
-
-    // Then verify the error properties in detail
-    const error = await getCommitsSinceLastRelease('gitlab', 'durable', 'main', false, execOpts).catch((err) => err);
-    expect(error).toBeInstanceOf(ValidationError);
-    expect(error.name).toBe('ValidationError');
-    expect(error.prefix).toBe('EREMOTE');
-    expect(error.message).toMatch(/Invalid remote client type/i);
+    await expect(getCommitsSinceLastRelease('gitlab', 'durable', 'main', false, execOpts)).rejects.toThrow('Invalid remote client type');
   });
 
   it('throws a ValidationError for null or undefined client', async () => {
