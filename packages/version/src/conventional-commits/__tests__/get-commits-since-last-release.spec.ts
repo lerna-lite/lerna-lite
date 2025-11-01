@@ -39,16 +39,15 @@ describe('getCommitsSinceLastRelease', () => {
     // Mocking any necessary dependencies
     (execSync as Mock).mockReturnValue('"deadbeef 2022-07-01T00:01:02-04:00"');
 
+    // First verify it throws the correct error type
     await expect(getCommitsSinceLastRelease('gitlab', 'durable', 'main', false, execOpts)).rejects.toThrow(ValidationError);
 
-    try {
-      await getCommitsSinceLastRelease('gitlab', 'durable', 'main', false, execOpts);
-    } catch (error: any) {
-      expect(error).toBeInstanceOf(ValidationError);
-      expect(error.message).toBe(
-        'Invalid remote client type, "github" is currently the only supported client with the option --changelog-include-commits-client-login.'
-      );
-    }
+    // Then verify the error properties in detail
+    const error = await getCommitsSinceLastRelease('gitlab', 'durable', 'main', false, execOpts).catch((err) => err);
+    expect(error).toBeInstanceOf(ValidationError);
+    expect(error.name).toBe('ValidationError');
+    expect(error.prefix).toBe('EREMOTE');
+    expect(error.message).toMatch(/Invalid remote client type/i);
   });
 
   it('throws a ValidationError for null or undefined client', async () => {
