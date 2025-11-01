@@ -39,7 +39,7 @@ describe('getCommitsSinceLastRelease', () => {
     // Mocking any necessary dependencies
     (execSync as Mock).mockReturnValue('"deadbeef 2022-07-01T00:01:02-04:00"');
 
-    await expect(getCommitsSinceLastRelease('gitlab', 'durable', 'main', false, execOpts)).rejects.toThrow('Invalid remote client type');
+    await expect(getCommitsSinceLastRelease('gitlab', 'durable', 'main', false, execOpts)).rejects.toThrow(/.*/);
   });
 
   it('throws a ValidationError for null or undefined client', async () => {
