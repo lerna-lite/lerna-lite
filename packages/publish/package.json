@@ -57,7 +57,7 @@
     "p-pipe": "catalog:",
     "pacote": "^21.0.3",
     "semver": "catalog:",
-    "ssri": "^12.0.0",
+    "ssri": "^13.0.0",
     "tar": "^7.5.1",
     "tinyglobby": "catalog:dependencies",
     "tinyrainbow": "catalog:dependencies"
