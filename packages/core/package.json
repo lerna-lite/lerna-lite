@@ -57,7 +57,7 @@
     "slash": "catalog:",
     "tinyglobby": "catalog:dependencies",
     "tinyrainbow": "catalog:dependencies",
-    "write-file-atomic": "^6.0.0",
+    "write-file-atomic": "^7.0.0",
     "write-json-file": "catalog:dependencies",
     "write-package": "catalog:dependencies",
     "yaml": "catalog:dependencies",
