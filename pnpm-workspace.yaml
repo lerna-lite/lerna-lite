@@ -16,7 +16,7 @@ catalog:
   has-unicode: ^2.0.1
   normalize-path: ^3.0.0
   npm-package-arg: ^13.0.1
-  npm-registry-fetch: ^19.0.0
+  npm-registry-fetch: ^19.1.0
   p-map: ^7.0.3
   p-pipe: ^4.0.0
   semver: ^7.7.3
@@ -28,7 +28,7 @@ catalogs:
   devDependencies:
     "@types/dedent": ^0.7.2
     "@types/fs-extra": ^11.0.4
-    "@types/node": ^22.18.10
+    "@types/node": ^22.18.13
     "@types/npm-package-arg": ^6.1.4
     "@types/npmcli__package-json": ^4.0.4
     "@types/pacote": ^11.1.8
@@ -47,4 +47,4 @@ catalogs:
     write-package: ^7.2.0
     yaml: ^2.8.1
     yargs: ^18.0.0
-    zeptomatch: ^2.0.2
+    zeptomatch: ^2.1.0

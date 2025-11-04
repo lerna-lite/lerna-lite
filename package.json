@@ -79,8 +79,8 @@
     "@prettier/plugin-oxc": "^0.0.4",
     "@types/fs-extra": "catalog:devDependencies",
     "@types/node": "catalog:devDependencies",
-    "@types/yargs": "^17.0.33",
-    "@vitest/coverage-v8": "^4.0.0-beta.18",
+    "@types/yargs": "^17.0.34",
+    "@vitest/coverage-v8": "^4.0.6",
     "conventional-changelog-conventionalcommits": "^9.1.0",
     "cross-env": "^10.1.0",
     "empathic": "^2.0.0",
@@ -89,7 +89,7 @@
     "load-json-file": "catalog:dependencies",
     "normalize-newline": "^5.0.0",
     "normalize-path": "catalog:",
-    "oxlint": "^1.23.0",
+    "oxlint": "^1.25.0",
     "prettier": "^3.6.2",
     "remove-glob": "^0.4.4",
     "semver": "catalog:",
@@ -99,7 +99,7 @@
     "tslib": "^2.8.1",
     "typescript": "^5.9.3",
     "uuid": "catalog:dependencies",
-    "vitest": "^4.0.0-beta.18",
+    "vitest": "^4.0.6",
     "write-json-file": "catalog:dependencies"
   },
   "pnpm": {
