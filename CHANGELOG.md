@@ -4,6 +4,18 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [4.9.2](https://github.com/lerna-lite/lerna-lite/compare/v4.9.1...v4.9.2) (2025-11-04)
+
+### Bug Fixes
+
+* **deps:** update all non-major dependencies ([#1183](https://github.com/lerna-lite/lerna-lite/issues/1183)) ([d28556c](https://github.com/lerna-lite/lerna-lite/commit/d28556ce6713a049fee697299541f00a9f1805a4)) - by @renovate[bot]
+* **deps:** update conventional-changelog packages ([#1180](https://github.com/lerna-lite/lerna-lite/issues/1180)) ([38877f2](https://github.com/lerna-lite/lerna-lite/commit/38877f24b3cbd22fddd6fb4983760c0a23827e65)) - by @renovate[bot]
+* **deps:** update dependency ssri to v13 ([#1178](https://github.com/lerna-lite/lerna-lite/issues/1178)) ([97ac7b7](https://github.com/lerna-lite/lerna-lite/commit/97ac7b76f675a80a16af76901d18e93b40073287)) - by @renovate[bot]
+* **deps:** update dependency tar to v7.5.2 [security] ([#1182](https://github.com/lerna-lite/lerna-lite/issues/1182)) ([e5f47bc](https://github.com/lerna-lite/lerna-lite/commit/e5f47bc44ff935cc67e25f90b817f6348d6b5833)) - by @ghiscoding
+* **deps:** update dependency write-file-atomic to v7 ([#1179](https://github.com/lerna-lite/lerna-lite/issues/1179)) ([1610903](https://github.com/lerna-lite/lerna-lite/commit/1610903d35cf027358574b81d4607f561eb7d145)) - by @renovate[bot]
+* Suppress ExitPromptError when leaving the prompt ([#1174](https://github.com/lerna-lite/lerna-lite/issues/1174)) ([d8223a6](https://github.com/lerna-lite/lerna-lite/commit/d8223a61b358788f132db91cbe5d38086efd7007)) - by @heavenshell
+* supress log file generation when terminating the prompt ([#1176](https://github.com/lerna-lite/lerna-lite/issues/1176)) ([0ef1b71](https://github.com/lerna-lite/lerna-lite/commit/0ef1b719cff50c7ab15d5d962f2da12b8220a1bc)) - by @heavenshell
+
 ## [4.9.1](https://github.com/lerna-lite/lerna-lite/compare/v4.9.0...v4.9.1) (2025-10-17)
 
 ### Bug Fixes
