@@ -1,4 +1,5 @@
 import { describe, expect, it } from 'vitest';
+
 import { TemplateItem } from '../template-item.js';
 
 const width = 200;

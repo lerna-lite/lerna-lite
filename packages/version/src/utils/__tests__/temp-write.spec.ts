@@ -2,6 +2,7 @@ import { readFileSync } from 'node:fs';
 import { basename } from 'node:path';
 import { Readable } from 'node:stream';
 import { describe, expect, it, vi } from 'vitest';
+
 import { tempWrite } from '../temp-write.js';
 
 describe('utils/temp-write', () => {

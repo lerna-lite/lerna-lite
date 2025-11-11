@@ -1,8 +1,9 @@
-import type { GetCommitsParams, GetSemverTagsParams } from '@conventional-changelog/git-client';
-import type { ChangelogPresetOptions, ExecOpts, Package } from '@lerna-lite/core';
 import type { Options as WriterOptions } from 'conventional-changelog-writer';
 import type { Commit, ParserOptions, ParserStreamOptions } from 'conventional-commits-parser';
 import type { BumperRecommendation } from 'conventional-recommended-bump';
+
+import type { GetCommitsParams, GetSemverTagsParams } from '@conventional-changelog/git-client';
+import type { ChangelogPresetOptions, ExecOpts, Package } from '@lerna-lite/core';
 
 export interface GitCommitOption {
   amend: boolean;

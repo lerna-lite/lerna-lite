@@ -1,13 +1,12 @@
+import { ensureDir, outputJson, pathExists, readJson } from 'fs-extra/esm';
 import { dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
-// helpers
+import { describe, expect, it, vi } from 'vitest';
+import yargParser from 'yargs-parser';
+
 import { type InitCommandOption } from '@lerna-lite/core';
 import { commandRunner, initFixtureFactory, temporaryDirectory } from '@lerna-test/helpers';
-import { ensureDir, outputJson, pathExists, readJson } from 'fs-extra/esm';
-import { describe, expect, it, vi } from 'vitest';
-// file under test
-import yargParser from 'yargs-parser';
-// file under test
+
 import cliCommands from '../../../cli/src/cli-commands/cli-init-commands.js';
 import { InitCommand } from '../index.js';
 import { factory } from '../init-command.js';

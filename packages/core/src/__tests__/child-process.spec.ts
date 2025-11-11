@@ -1,9 +1,12 @@
-import { log } from '@lerna-lite/npmlog';
 import c from 'tinyrainbow';
 import { describe, expect, it, vi } from 'vitest';
+
+import { log } from '@lerna-lite/npmlog';
+
+import type { Package } from '../package.js';
+
 // file under test
 import { exec, execSync, getChildProcessCount, getExitCode, spawn, spawnStreaming } from '../child-process.js';
-import type { Package } from '../package.js';
 
 describe('childProcess', () => {
   it('should throw type error on weird but rare error structure', () => {

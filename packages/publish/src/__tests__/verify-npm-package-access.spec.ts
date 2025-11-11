@@ -1,11 +1,13 @@
+// @ts-ignore
+import access from 'libnpmaccess';
 import { dirname } from 'node:path';
 import { fileURLToPath } from 'node:url';
+import { afterEach, beforeAll, beforeEach, describe, expect, test, vi, type Mock } from 'vitest';
+
 import { Project, type FetchConfig } from '@lerna-lite/core';
 import { initFixtureFactory } from '@lerna-test/helpers';
 import { loggingOutput } from '@lerna-test/helpers/logging-output.js';
-// @ts-ignore
-import access from 'libnpmaccess';
-import { afterEach, beforeAll, beforeEach, describe, expect, test, vi, type Mock } from 'vitest';
+
 import { verifyNpmPackageAccess } from '../lib/verify-npm-package-access.js';
 
 vi.mock('libnpmaccess');
@@ -115,7 +117,9 @@ describe('verifyNpmPackageAccess', () => {
     await verifyNpmPackageAccess(packages, 'lerna-test', opts as FetchConfig);
 
     const [logMessage] = loggingOutput('warn');
-    expect(logMessage).toMatch(`Registry "${registry}" does not support \`npm access ls-packages\`, skipping permission checks...`);
+    expect(logMessage).toMatch(
+      `Registry "${registry}" does not support \`npm access ls-packages\`, skipping permission checks...`
+    );
     expect(console.error).not.toHaveBeenCalled();
   });
 
@@ -133,7 +137,9 @@ describe('verifyNpmPackageAccess', () => {
     await verifyNpmPackageAccess(packages, 'lerna-test', opts as FetchConfig);
 
     const [logMessage] = loggingOutput('warn');
-    expect(logMessage).toMatch(`Registry "${registry}" does not support \`npm access ls-packages\`, skipping permission checks...`);
+    expect(logMessage).toMatch(
+      `Registry "${registry}" does not support \`npm access ls-packages\`, skipping permission checks...`
+    );
     expect(console.error).not.toHaveBeenCalled();
   });
 

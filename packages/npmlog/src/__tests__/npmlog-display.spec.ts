@@ -1,4 +1,5 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
+
 import { log } from '../npmlog.js';
 
 describe('log level display', () => {

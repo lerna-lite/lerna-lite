@@ -1,13 +1,13 @@
 import { dirname, resolve as pathResolve } from 'node:path';
-// helpers
 import { fileURLToPath } from 'node:url';
-import { promptSelectOne, promptTextInput, type PackageGraphNode, type VersionCommandOption } from '@lerna-lite/core';
-import { commandRunner, initFixtureFactory, showCommit } from '@lerna-test/helpers';
 import { describe, expect, it, test, vi, type Mock } from 'vitest';
 import yargParser from 'yargs-parser';
+
+import { promptSelectOne, promptTextInput, type PackageGraphNode, type VersionCommandOption } from '@lerna-lite/core';
+import { commandRunner, initFixtureFactory, showCommit } from '@lerna-test/helpers';
+
 import cliCommands from '../../../cli/src/cli-commands/cli-version-commands.js';
 import { makePromptVersion } from '../lib/prompt-version.js';
-// test command
 import { VersionCommand } from '../version-command.js';
 
 // local modules _must_ be explicitly mocked

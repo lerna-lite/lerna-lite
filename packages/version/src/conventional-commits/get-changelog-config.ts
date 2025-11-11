@@ -1,7 +1,9 @@
-import { ValidationError } from '@lerna-lite/core';
-import { log } from '@lerna-lite/npmlog';
 import npa from 'npm-package-arg';
 import pify from 'pify';
+
+import { ValidationError } from '@lerna-lite/core';
+import { log } from '@lerna-lite/npmlog';
+
 import type { ChangelogConfig, ChangelogPresetConfig } from '../interfaces.js';
 
 /** @deprecated this is a temporary workaround until `config?.conventionalChangelog`, `parserOpts` and `writerOpts` are officially removed */

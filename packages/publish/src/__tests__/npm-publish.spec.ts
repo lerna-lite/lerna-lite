@@ -1,14 +1,14 @@
 import { readFile } from 'fs/promises';
-// mocked modules
-// helpers
-import { dirname, join, normalize } from 'node:path';
-import { Conf, Package, runLifecycle, type RawManifest } from '@lerna-lite/core';
-import PackageJson from '@npmcli/package-json';
 // @ts-ignore
 import { publish } from 'libnpmpublish';
+import { dirname, join, normalize } from 'node:path';
 import { describe, expect, it, vi, type Mock } from 'vitest';
+
+import { Conf, Package, runLifecycle, type RawManifest } from '@lerna-lite/core';
+import PackageJson from '@npmcli/package-json';
+
 import type { LibNpmPublishOptions } from '../interfaces.js';
-// file under test
+
 import { npmPublish } from '../lib/npm-publish.js';
 
 vi.mock('fs/promises');
@@ -33,7 +33,11 @@ describe('npm-publish', () => {
 
   const tarFilePath = '/tmp/test-1.10.100.tgz';
   const rootPath = normalize('/test');
-  const pkg = new Package({ name: '@scope/test', version: '1.10.100' } as RawManifest, join(rootPath, 'npmPublish/test'), rootPath);
+  const pkg = new Package(
+    { name: '@scope/test', version: '1.10.100' } as RawManifest,
+    join(rootPath, 'npmPublish/test'),
+    rootPath
+  );
   const conf = new Conf({});
 
   it('calls external libraries with correct arguments', async () => {

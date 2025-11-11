@@ -1,13 +1,14 @@
+import { execa } from 'execa';
 import { dirname, resolve as pathResolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
-// test command
-import type { VersionCommandOption } from '@lerna-lite/core';
-import { initFixtureFactory } from '@lerna-test/helpers';
-// stabilize commit SHA
-import gitSHA from '@lerna-test/helpers/serializers/serialize-git-sha.js';
-import { execa } from 'execa';
 import { describe, expect, it, vi } from 'vitest';
 import yargParser from 'yargs-parser';
+
+import type { VersionCommandOption } from '@lerna-lite/core';
+
+import { initFixtureFactory } from '@lerna-test/helpers';
+import gitSHA from '@lerna-test/helpers/serializers/serialize-git-sha.js';
+
 import { VersionCommand } from '../index.js';
 
 // local modules _must_ be explicitly mocked

@@ -1,7 +1,6 @@
 import { expect, test } from 'vitest';
-// helpers
+
 import buildGraph from '../__helpers__/build-graph.js';
-// file under test
 import { collectDependents } from '../lib/collect-dependents.js';
 
 test('source node (dag)', () => {

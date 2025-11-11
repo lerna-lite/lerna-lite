@@ -1,12 +1,15 @@
 import { dirname, resolve as pathResolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
+import { expect, test, vi } from 'vitest';
+import yargParser from 'yargs-parser';
+
 // test command
 import type { VersionCommandOption } from '@lerna-lite/core';
+
 import { getCommitMessage, initFixtureFactory } from '@lerna-test/helpers';
 // stabilize commit SHA
 import gitSHA from '@lerna-test/helpers/serializers/serialize-git-sha.js';
-import { expect, test, vi } from 'vitest';
-import yargParser from 'yargs-parser';
+
 import { VersionCommand } from '../version-command.js';
 
 // local modules _must_ be explicitly mocked

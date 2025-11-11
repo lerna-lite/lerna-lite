@@ -1,9 +1,11 @@
 import { dirname } from 'node:path';
 import { fileURLToPath } from 'node:url';
+import { beforeAll, describe, expect, it, vi } from 'vitest';
+
 import { ValidationError, type Package } from '@lerna-lite/core';
 import { initFixtureFactory } from '@lerna-test/helpers';
 import { loggingOutput } from '@lerna-test/helpers/logging-output.js';
-import { beforeAll, describe, expect, it, vi } from 'vitest';
+
 import lernaCLI from '../lerna-cli.js';
 
 const __filename = fileURLToPath(import.meta.url);
@@ -41,7 +43,14 @@ describe('core-cli', () => {
 
     cli.command('test-cmd', 'will pass');
 
-    const { argv } = await parse(cli, ['test-cmd', '--loglevel=warn', '--concurrency=10', '--no-progress', '--no-sort', '--max-buffer=1024']);
+    const { argv } = await parse(cli, [
+      'test-cmd',
+      '--loglevel=warn',
+      '--concurrency=10',
+      '--no-progress',
+      '--no-sort',
+      '--max-buffer=1024',
+    ]);
 
     expect(argv).toMatchObject({
       loglevel: 'warn',

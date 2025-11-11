@@ -1,8 +1,10 @@
+import { describe, expect, it, vi, type Mock } from 'vitest';
+
 import expand from '@inquirer/expand';
 import input from '@inquirer/input';
 import select from '@inquirer/select';
 import { log } from '@lerna-lite/npmlog';
-import { describe, expect, it, vi, type Mock } from 'vitest';
+
 import { promptConfirmation, promptSelectOne, promptTextInput } from '../prompt.js';
 
 vi.mock('@inquirer/expand');

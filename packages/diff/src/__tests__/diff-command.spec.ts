@@ -1,19 +1,18 @@
-import { dirname, join } from 'node:path';
-import { fileURLToPath } from 'node:url';
-// mocked modules
-import type { DiffCommandOption } from '@lerna-lite/core';
-import { Project, spawn } from '@lerna-lite/core';
-// helpers
-import { commandRunner, gitAdd, gitCommit, gitInit, gitTag, initFixtureFactory } from '@lerna-test/helpers';
-// stabilize commit SHA
-import gitSHA from '@lerna-test/helpers/serializers/serialize-git-sha.js';
 import { execa } from 'execa';
 import { outputFile, remove } from 'fs-extra/esm';
+import { dirname, join } from 'node:path';
+import { fileURLToPath } from 'node:url';
 import { beforeEach, describe, expect, it, vi, type Mock } from 'vitest';
 import yargParser from 'yargs-parser';
+
+import type { DiffCommandOption } from '@lerna-lite/core';
+
+import { Project, spawn } from '@lerna-lite/core';
+import { commandRunner, gitAdd, gitCommit, gitInit, gitTag, initFixtureFactory } from '@lerna-test/helpers';
+import gitSHA from '@lerna-test/helpers/serializers/serialize-git-sha.js';
+
 import cliDiffCommands from '../../../cli/src/cli-commands/cli-diff-commands.js';
 import { factory } from '../diff-command.js';
-// file under test
 import { DiffCommand } from '../index.js';
 
 vi.mock('@lerna-lite/core', async () => ({

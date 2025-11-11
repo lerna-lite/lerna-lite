@@ -1,11 +1,13 @@
+// @ts-ignore
+import Tacks from 'tacks';
+import { beforeAll, describe, expect, test, vi } from 'vitest';
+
 import { Project, type ListCommandOption, type Package } from '@lerna-lite/core';
 import { loggingOutput, stripAnsi, temporaryDirectory } from '@lerna-test/helpers';
 // normalize temp directory paths in snapshots
 import serializeTempdir from '@lerna-test/helpers/serializers/serialize-tempdir.js';
 import serializeWindowsPaths from '@lerna-test/helpers/serializers/serialize-windows-paths.js';
-// @ts-ignore
-import Tacks from 'tacks';
-import { beforeAll, describe, expect, test, vi } from 'vitest';
+
 import { listable } from '../index.js';
 
 vi.mock('@lerna-lite/core', async () => ({

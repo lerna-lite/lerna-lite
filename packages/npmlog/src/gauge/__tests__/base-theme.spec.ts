@@ -1,4 +1,5 @@
 import { describe, expect, it, vi } from 'vitest';
+
 import baseTheme from '../base-theme.js';
 
 vi.mock('../spin.js', () => ({ default: (theme: any, spun: any) => [theme, spun] }));

@@ -3,6 +3,7 @@
  */
 
 import c from 'tinyrainbow';
+
 import ThemeSet from './theme-set.js';
 
 const themes = ThemeSet();

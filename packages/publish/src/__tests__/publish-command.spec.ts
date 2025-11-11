@@ -1,17 +1,18 @@
+import { outputFileSync, outputJson } from 'fs-extra/esm';
 import { dirname, join as pathJoin } from 'node:path';
 import { fileURLToPath } from 'node:url';
-// mocked or stubbed modules
+import { beforeAll, beforeEach, describe, expect, it, vi, type Mock } from 'vitest';
+import yargParser from 'yargs-parser';
+
 import { collectUpdates, logOutput, promptConfirmation, type PublishCommandOption } from '@lerna-lite/core';
 import { getOneTimePassword } from '@lerna-lite/version';
 import { commandRunner, commitChangeToPackage, initFixtureFactory } from '@lerna-test/helpers';
 import { loggingOutput } from '@lerna-test/helpers/logging-output.js';
-import { outputFileSync, outputJson } from 'fs-extra/esm';
-import { beforeAll, beforeEach, describe, expect, it, vi, type Mock } from 'vitest';
-import yargParser from 'yargs-parser';
-// test command
+
+import type { npmPublish as npmPublishMock } from '../lib/__mocks__/npm-publish.js';
+
 import cliCommands from '../../../cli/src/cli-commands/cli-publish-commands.js';
 import { PublishCommand } from '../index.js';
-import type { npmPublish as npmPublishMock } from '../lib/__mocks__/npm-publish.js';
 import { getNpmUsername } from '../lib/get-npm-username.js';
 import { getTwoFactorAuthRequired } from '../lib/get-two-factor-auth-required.js';
 import { gitCheckout } from '../lib/git-checkout.js';
@@ -22,9 +23,18 @@ import { verifyNpmPackageAccess } from '../lib/verify-npm-package-access.js';
 
 // FIXME: better mock for version command
 vi.mock('../../../version/src/lib/git-push', async () => await vi.importActual('../../../version/src/lib/__mocks__/git-push'));
-vi.mock('../../../version/src/lib/is-anything-committed', async () => await vi.importActual('../../../version/src/lib/__mocks__/is-anything-committed'));
-vi.mock('../../../version/src/lib/is-behind-upstream', async () => await vi.importActual('../../../version/src/lib/__mocks__/is-behind-upstream'));
-vi.mock('../../../version/src/lib/remote-branch-exists', async () => await vi.importActual('../../../version/src/lib/__mocks__/remote-branch-exists'));
+vi.mock(
+  '../../../version/src/lib/is-anything-committed',
+  async () => await vi.importActual('../../../version/src/lib/__mocks__/is-anything-committed')
+);
+vi.mock(
+  '../../../version/src/lib/is-behind-upstream',
+  async () => await vi.importActual('../../../version/src/lib/__mocks__/is-behind-upstream')
+);
+vi.mock(
+  '../../../version/src/lib/remote-branch-exists',
+  async () => await vi.importActual('../../../version/src/lib/__mocks__/remote-branch-exists')
+);
 
 // mocked modules of @lerna-lite/version
 vi.mock('@lerna-lite/version', async () => ({
@@ -47,10 +57,16 @@ vi.mock('@lerna-lite/core', async () => ({
 vi.mock('@lerna-lite/publish', async () => await vi.importActual('../publish-command'));
 
 // local modules _must_ be explicitly mocked
-vi.mock('../lib/get-packages-without-license', async () => await vi.importActual('../lib/__mocks__/get-packages-without-license'));
+vi.mock(
+  '../lib/get-packages-without-license',
+  async () => await vi.importActual('../lib/__mocks__/get-packages-without-license')
+);
 vi.mock('../lib/verify-npm-package-access', async () => await vi.importActual('../lib/__mocks__/verify-npm-package-access'));
 vi.mock('../lib/get-npm-username', async () => await vi.importActual('../lib/__mocks__/get-npm-username'));
-vi.mock('../lib/get-two-factor-auth-required', async () => await vi.importActual('../lib/__mocks__/get-two-factor-auth-required'));
+vi.mock(
+  '../lib/get-two-factor-auth-required',
+  async () => await vi.importActual('../lib/__mocks__/get-two-factor-auth-required')
+);
 vi.mock('../lib/get-unpublished-packages', async () => await vi.importActual('../lib/__mocks__/get-unpublished-packages'));
 vi.mock('../lib/npm-publish', async () => await vi.importActual('../lib/__mocks__/npm-publish'));
 vi.mock('../lib/npm-dist-tag', async () => await vi.importActual('../lib/__mocks__/npm-dist-tag'));
@@ -626,7 +642,10 @@ describe('PublishCommand', () => {
         { packageName: 'package-3', version: '1.0.1' },
         { packageName: 'package-4', version: '1.0.1' },
       ];
-      expect(outputFileSync).toHaveBeenCalledWith(pathJoin(process.cwd(), 'outputs/lerna-publish-summary.json'), JSON.stringify(expectedJsonResponse));
+      expect(outputFileSync).toHaveBeenCalledWith(
+        pathJoin(process.cwd(), 'outputs/lerna-publish-summary.json'),
+        JSON.stringify(expectedJsonResponse)
+      );
     });
 
     it('creates the summary file at the root when no custom directory is provided', async () => {
@@ -640,7 +659,10 @@ describe('PublishCommand', () => {
         { packageName: 'package-4', version: '1.0.1' },
       ];
 
-      expect(outputFileSync).toHaveBeenCalledWith(pathJoin(process.cwd(), './lerna-publish-summary.json'), JSON.stringify(expectedJsonResponse));
+      expect(outputFileSync).toHaveBeenCalledWith(
+        pathJoin(process.cwd(), './lerna-publish-summary.json'),
+        JSON.stringify(expectedJsonResponse)
+      );
     });
 
     it('creates the summary file in the provided file path', async () => {
@@ -653,7 +675,10 @@ describe('PublishCommand', () => {
         { packageName: 'package-3', version: '1.0.1' },
         { packageName: 'package-4', version: '1.0.1' },
       ];
-      expect(outputFileSync).toHaveBeenCalledWith(pathJoin(process.cwd(), 'outputs/lerna-publish-summary.json'), JSON.stringify(expectedJsonResponse));
+      expect(outputFileSync).toHaveBeenCalledWith(
+        pathJoin(process.cwd(), 'outputs/lerna-publish-summary.json'),
+        JSON.stringify(expectedJsonResponse)
+      );
     });
   });
 
@@ -895,7 +920,9 @@ describe('PublishCommand', () => {
 
       await new PublishCommand(createArgv(cwd));
 
-      expect(logOutput).not.toHaveBeenCalledWith('The following Provenance transparency log entries were created during publishing:');
+      expect(logOutput).not.toHaveBeenCalledWith(
+        'The following Provenance transparency log entries were created during publishing:'
+      );
       expect(logOutput).not.toHaveBeenCalledWith(expect.stringContaining('package-1: https://search.sigstore.dev/?logIndex=111'));
     });
   });

@@ -2,12 +2,15 @@
  * Adapted from https://github.com/npm/cli/blob/latest/lib/utils/oidc.js
  */
 
-import type { Conf } from '@lerna-lite/core';
-import { log } from '@lerna-lite/npmlog';
 import ciInfo from 'ci-info';
 import libaccess from 'libnpmaccess';
 import npa from 'npm-package-arg';
 import npmFetch from 'npm-registry-fetch';
+
+import type { Conf } from '@lerna-lite/core';
+
+import { log } from '@lerna-lite/npmlog';
+
 import { fetchWithRetry } from './fetch-retry.js';
 
 // Minimally deferred as sadly no types in the npm codebase...

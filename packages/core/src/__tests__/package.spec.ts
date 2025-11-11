@@ -1,13 +1,16 @@
+import { loadJsonFile, loadJsonFileSync } from 'load-json-file';
 import { homedir } from 'node:os';
 import { dirname, normalize, resolve as pathResolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
-import { log } from '@lerna-lite/npmlog';
-import { loadJsonFile, loadJsonFileSync } from 'load-json-file';
 import npa from 'npm-package-arg';
 import { describe, expect, it, vi, type Mock } from 'vitest';
 import { writePackage } from 'write-package';
+
+import { log } from '@lerna-lite/npmlog';
+
 // file under test
 import type { NpaResolveResult, RawManifest } from '../models/interfaces.js';
+
 import { Package } from '../package.js';
 
 vi.mock('load-json-file');
@@ -28,7 +31,8 @@ expect.addSnapshotSerializer({
 });
 
 describe('Package', () => {
-  const factory = (json: RawManifest) => new Package(json, normalize(`/root/path/to/${json.name || 'package'}`), normalize('/root'));
+  const factory = (json: RawManifest) =>
+    new Package(json, normalize(`/root/path/to/${json.name || 'package'}`), normalize('/root'));
 
   describe('get .name', () => {
     it('should return the name', () => {
@@ -777,8 +781,14 @@ describe('Package', () => {
           },
         } as unknown as RawManifest);
 
-        node.resolveDependencyCatalogProtocol(node.pkg, { catalog: { a: '^1.0.0' }, catalogs: { devDependencies: { b: '^2.2.0' } } });
-        node.resolveDependencyCatalogProtocol(node.pkg, { catalog: { a: '^1.0.0' }, catalogs: { devDependencies: { b: '^2.2.0' } } });
+        node.resolveDependencyCatalogProtocol(node.pkg, {
+          catalog: { a: '^1.0.0' },
+          catalogs: { devDependencies: { b: '^2.2.0' } },
+        });
+        node.resolveDependencyCatalogProtocol(node.pkg, {
+          catalog: { a: '^1.0.0' },
+          catalogs: { devDependencies: { b: '^2.2.0' } },
+        });
 
         expect(node.toJSON()).toMatchInlineSnapshot(`
           {
@@ -954,8 +964,14 @@ describe('Package', () => {
           },
         } as unknown as RawManifest);
 
-        node.resolveDependencyCatalogProtocol(node.pkg, { catalog: { a: '1.0.0' }, catalogs: { devDependencies: { b: '^2.2.0' } } });
-        node.resolveDependencyCatalogProtocol(node.pkg, { catalog: { a: '1.0.0' }, catalogs: { devDependencies: { b: '^2.2.0' } } });
+        node.resolveDependencyCatalogProtocol(node.pkg, {
+          catalog: { a: '1.0.0' },
+          catalogs: { devDependencies: { b: '^2.2.0' } },
+        });
+        node.resolveDependencyCatalogProtocol(node.pkg, {
+          catalog: { a: '1.0.0' },
+          catalogs: { devDependencies: { b: '^2.2.0' } },
+        });
 
         expect(node.toJSON()).toMatchInlineSnapshot(`
           {

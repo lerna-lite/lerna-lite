@@ -1,6 +1,8 @@
 import { log } from '@lerna-lite/npmlog';
-import { execSync } from '../../../child-process.js';
+
 import type { ExecOpts } from '../../../models/interfaces.js';
+
+import { execSync } from '../../../child-process.js';
 
 /**
  * Determine if any git tags are reachable.

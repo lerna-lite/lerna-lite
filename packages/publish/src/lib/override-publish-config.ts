@@ -1,4 +1,5 @@
 import type { JsonValue, RawManifest } from '@lerna-lite/core';
+
 import { isEmpty } from '@lerna-lite/core';
 
 // manifest fields that may make sense to overwrite

@@ -1,12 +1,13 @@
-import { log } from '@lerna-lite/npmlog';
-// helpers
-import { initFixtureFactory } from '@lerna-test/helpers';
 import { afterEach, beforeAll, describe, expect, it, vi } from 'vitest';
+
+import { log } from '@lerna-lite/npmlog';
+import { initFixtureFactory } from '@lerna-test/helpers';
+
 import type { RawManifest } from '../../models/interfaces.js';
+import type { PackageGraphNode } from '../lib/package-graph-node.js';
+
 import { Package } from '../../package.js';
 import * as CatalogUtils from '../../utils/catalog-utils.js';
-import type { PackageGraphNode } from '../lib/package-graph-node.js';
-// file under test
 import { PackageGraph } from '../package-graph.js';
 
 const initFixture = initFixtureFactory(__dirname);
@@ -35,7 +36,9 @@ describe('PackageGraph', () => {
         new Package({ name: 'pkg-2', version: '3.0.0' } as Package, '/test/pkg-3', '/test'),
       ];
 
-      expect(() => new PackageGraph(pkgs)).toThrowError('Package name "pkg-2" used in multiple packages:\n\t/test/pkg-2\n\t/test/pkg-3');
+      expect(() => new PackageGraph(pkgs)).toThrowError(
+        'Package name "pkg-2" used in multiple packages:\n\t/test/pkg-2\n\t/test/pkg-3'
+      );
     });
 
     it('externalizes non-satisfied semver of local sibling', () => {
@@ -1079,7 +1082,9 @@ describe('PackageGraph', () => {
     });
 
     it('exposes graph-specific Map properties', () => {
-      const node = new PackageGraph([new Package({ name: 'my-pkg', version: '4.5.6' } as unknown as RawManifest, '/path/to/my-pkg')]).get('my-pkg');
+      const node = new PackageGraph([
+        new Package({ name: 'my-pkg', version: '4.5.6' } as unknown as RawManifest, '/path/to/my-pkg'),
+      ]).get('my-pkg');
 
       expect(node).toHaveProperty('externalDependencies', expect.any(Map));
       expect(node).toHaveProperty('localDependencies', expect.any(Map));
@@ -1107,18 +1112,18 @@ describe('PackageGraph', () => {
     });
 
     it('computes prereleaseId from prerelease version', () => {
-      const node = new PackageGraph([new Package({ name: 'my-pkg', version: '1.2.3-rc.4' } as unknown as RawManifest, '/path/to/my-pkg')]).get(
-        'my-pkg'
-      ) as PackageGraphNode;
+      const node = new PackageGraph([
+        new Package({ name: 'my-pkg', version: '1.2.3-rc.4' } as unknown as RawManifest, '/path/to/my-pkg'),
+      ]).get('my-pkg') as PackageGraphNode;
 
       expect(node.prereleaseId).toBe('rc');
     });
 
     describe('.toString()', () => {
       it("returns the node's name", () => {
-        const node = new PackageGraph([new Package({ name: 'pkg-name', version: '0.1.2' } as unknown as RawManifest, '/path/to/pkg-name')]).get(
-          'pkg-name'
-        ) as PackageGraphNode;
+        const node = new PackageGraph([
+          new Package({ name: 'pkg-name', version: '0.1.2' } as unknown as RawManifest, '/path/to/pkg-name'),
+        ]).get('pkg-name') as PackageGraphNode;
 
         expect(node.toString()).toBe('pkg-name');
       });

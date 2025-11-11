@@ -1,8 +1,10 @@
-import { relative } from 'node:path';
-import type { ListableOption, Package } from '@lerna-lite/core';
-import { QueryGraph } from '@lerna-lite/core';
 import columnify from 'columnify';
+import { relative } from 'node:path';
 import c from 'tinyrainbow';
+
+import type { ListableOption, Package } from '@lerna-lite/core';
+
+import { QueryGraph } from '@lerna-lite/core';
 
 /**
  * Format a list of packages according to specified options.

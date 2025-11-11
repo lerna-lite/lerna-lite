@@ -1,4 +1,5 @@
 import { describe, expect, it } from 'vitest';
+
 import { envReplace } from '../env-replace.js';
 
 describe('env-replace()', () => {

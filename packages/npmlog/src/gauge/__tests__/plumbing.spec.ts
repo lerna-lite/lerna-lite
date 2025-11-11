@@ -1,6 +1,7 @@
 import { stripVTControlCharacters } from 'node:util';
 import c from 'tinyrainbow';
 import { describe, expect, it, vi } from 'vitest';
+
 import { Plumbing } from '../plumbing.js';
 
 function normalizeAnsi(str: string) {
@@ -63,14 +64,18 @@ describe('Plumbing static methods', () => {
   it('setTemplate', () => {
     plumbing.setTemplate([{ type: 'name' }, { type: 'x' }]);
     const output = plumbing.show({ name: 'test' });
-    const result = normalizeAnsi('w:10, t:[{"type":"name"},{"type":"x"}], v:{"name":"test","x":"abc"}\x1b[0m\x1b[0m\x1b[2K\x1b[0G');
+    const result = normalizeAnsi(
+      'w:10, t:[{"type":"name"},{"type":"x"}], v:{"name":"test","x":"abc"}\x1b[0m\x1b[0m\x1b[2K\x1b[0G'
+    );
     expect(output).toEqual(result);
   });
 
   it('setWidth', () => {
     plumbing.setWidth(20);
     const output = plumbing.show({ name: 'test' });
-    const result = normalizeAnsi('w:20, t:[{"type":"name"},{"type":"x"}], v:{"name":"test","x":"abc"}\x1b[0m\x1b[0m\x1b[2K\x1b[0G');
+    const result = normalizeAnsi(
+      'w:20, t:[{"type":"name"},{"type":"x"}], v:{"name":"test","x":"abc"}\x1b[0m\x1b[0m\x1b[2K\x1b[0G'
+    );
     expect(output).toEqual(result);
   });
 });

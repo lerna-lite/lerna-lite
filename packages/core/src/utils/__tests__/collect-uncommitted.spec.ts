@@ -1,12 +1,12 @@
+import { outputFile, remove } from 'fs-extra/esm';
 import { dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
-import { gitAdd, initFixtureFactory } from '@lerna-test/helpers';
-import { outputFile, remove } from 'fs-extra/esm';
 import c from 'tinyrainbow';
 import { describe, expect, it, vi } from 'vitest';
-// helpers
+
+import { gitAdd, initFixtureFactory } from '@lerna-test/helpers';
+
 import { Project } from '../../project/project.js';
-// file under test
 import { collectUncommitted, collectUncommittedSync } from '../collect-uncommitted.js';
 
 const __filename = fileURLToPath(import.meta.url);

@@ -1,4 +1,5 @@
 import { describe, expect, it } from 'vitest';
+
 import { TrackerGroup } from '../tracker-group.js';
 import testEvent from './test-event.js';
 

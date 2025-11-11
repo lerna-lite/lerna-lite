@@ -1,14 +1,14 @@
-// mocked modules
-// helpers
 import { dirname } from 'node:path';
 import { fileURLToPath } from 'node:url';
+import { describe, expect, it, vi, type Mock } from 'vitest';
+import yargParser from 'yargs-parser';
+
 import { logOutput, promptConfirmation, throwIfUncommitted, type PublishCommandOption } from '@lerna-lite/core';
 import { gitTag, initFixtureFactory, stripAnsi } from '@lerna-test/helpers';
 import { loggingOutput } from '@lerna-test/helpers/logging-output.js';
-import { describe, expect, it, vi, type Mock } from 'vitest';
-// test command
-import yargParser from 'yargs-parser';
+
 import type { npmPublish as npmPublishMock } from '../lib/__mocks__/npm-publish.js';
+
 import { npmPublish } from '../lib/npm-publish.js';
 import { PublishCommand } from '../publish-command.js';
 
@@ -16,9 +16,18 @@ vi.mock('write-package', async () => await vi.importActual('../../../version/src
 
 // FIXME: better mock for version command
 vi.mock('../../../version/src/lib/git-push', async () => await vi.importActual('../../../version/src/lib/__mocks__/git-push'));
-vi.mock('../../../version/src/lib/is-anything-committed', async () => await vi.importActual('../../../version/src/lib/__mocks__/is-anything-committed'));
-vi.mock('../../../version/src/lib/is-behind-upstream', async () => await vi.importActual('../../../version/src/lib/__mocks__/is-behind-upstream'));
-vi.mock('../../../version/src/lib/remote-branch-exists', async () => await vi.importActual('../../../version/src/lib/__mocks__/remote-branch-exists'));
+vi.mock(
+  '../../../version/src/lib/is-anything-committed',
+  async () => await vi.importActual('../../../version/src/lib/__mocks__/is-anything-committed')
+);
+vi.mock(
+  '../../../version/src/lib/is-behind-upstream',
+  async () => await vi.importActual('../../../version/src/lib/__mocks__/is-behind-upstream')
+);
+vi.mock(
+  '../../../version/src/lib/remote-branch-exists',
+  async () => await vi.importActual('../../../version/src/lib/__mocks__/remote-branch-exists')
+);
 
 // mocked modules of @lerna-lite/core
 vi.mock('@lerna-lite/core', async () => ({
@@ -34,10 +43,16 @@ vi.mock('@lerna-lite/core', async () => ({
 }));
 
 // local modules _must_ be explicitly mocked
-vi.mock('../lib/get-packages-without-license', async () => await vi.importActual('../lib/__mocks__/get-packages-without-license'));
+vi.mock(
+  '../lib/get-packages-without-license',
+  async () => await vi.importActual('../lib/__mocks__/get-packages-without-license')
+);
 vi.mock('../lib/verify-npm-package-access', async () => await vi.importActual('../lib/__mocks__/verify-npm-package-access'));
 vi.mock('../lib/get-npm-username', async () => await vi.importActual('../lib/__mocks__/get-npm-username'));
-vi.mock('../lib/get-two-factor-auth-required', async () => await vi.importActual('../lib/__mocks__/get-two-factor-auth-required'));
+vi.mock(
+  '../lib/get-two-factor-auth-required',
+  async () => await vi.importActual('../lib/__mocks__/get-two-factor-auth-required')
+);
 vi.mock('../lib/get-unpublished-packages', async () => await vi.importActual('../lib/__mocks__/get-unpublished-packages'));
 vi.mock('../lib/npm-publish', async () => await vi.importActual('../lib/__mocks__/npm-publish'));
 
@@ -115,7 +130,9 @@ describe('publish from-git', () => {
     // called from chained describeRef()
     expect(throwIfUncommitted).toHaveBeenCalled();
 
-    expect(stripAnsi((promptConfirmation as Mock).mock.lastCall![0])).toBe('[dry-run] Are you sure you want to publish these packages?');
+    expect(stripAnsi((promptConfirmation as Mock).mock.lastCall![0])).toBe(
+      '[dry-run] Are you sure you want to publish these packages?'
+    );
     expect((logOutput as any).logged()).toMatch('Found 4 packages to publish:');
     expect((npmPublish as typeof npmPublishMock).order()).toEqual([
       'package-1',
@@ -367,7 +384,9 @@ describe('publish from-git', () => {
 
   it('should not throw and assume package is already published on GitHub npm Registry when npm publish throws "Cannot publish over existing version" from a previous half publish process', async () => {
     (npmPublish as Mock).mockImplementation(() => {
-      const ex = new Error('some unrelated error message because we want detection based on ex.body.error') as Error & { body: { error: string } };
+      const ex = new Error('some unrelated error message because we want detection based on ex.body.error') as Error & {
+        body: { error: string };
+      };
       ex.body = { error: 'Cannot publish over existing version' };
       return Promise.reject(ex);
     });

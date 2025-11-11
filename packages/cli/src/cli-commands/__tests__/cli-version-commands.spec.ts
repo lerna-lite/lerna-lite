@@ -1,5 +1,6 @@
 import { describe, expect, it, vi } from 'vitest';
 import yargs from 'yargs/yargs';
+
 import cliVersion from '../cli-version-commands.js';
 
 vi.mock('@lerna-lite/version', () => {
@@ -8,7 +9,9 @@ vi.mock('@lerna-lite/version', () => {
 
 describe('Version Command CLI options', () => {
   it('should log a console error when versionCommand is not provided', async () => {
-    await expect(cliVersion.handler(undefined as any)).rejects.toThrow(new RegExp('"@lerna-lite/version" is optional and was not found.'));
+    await expect(cliVersion.handler(undefined as any)).rejects.toThrow(
+      new RegExp('"@lerna-lite/version" is optional and was not found.')
+    );
   });
 
   const patchedVersionCommand = {

@@ -1,5 +1,7 @@
-import { log } from '@lerna-lite/npmlog';
 import { describe, expect, it, vi } from 'vitest';
+
+import { log } from '@lerna-lite/npmlog';
+
 import { logOutput } from '../output.js';
 
 describe('logOutput method', () => {

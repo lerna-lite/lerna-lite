@@ -1,7 +1,8 @@
 import util from 'node:util';
+import zeptomatch from 'zeptomatch';
+
 import { ValidationError, type Package } from '@lerna-lite/core';
 import { log } from '@lerna-lite/npmlog';
-import zeptomatch from 'zeptomatch';
 
 /**
  * Filters a list of packages, returning all packages that match the `include` glob[s]

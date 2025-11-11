@@ -1,24 +1,34 @@
+import { remove } from 'fs-extra/esm';
 import { dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
-import type { PublishCommandOption } from '@lerna-lite/core';
-import { commandRunner, initFixtureFactory } from '@lerna-test/helpers';
-import { loggingOutput } from '@lerna-test/helpers/logging-output.js';
-import { remove } from 'fs-extra/esm';
 import { describe, expect, it, vi, type Mock } from 'vitest';
 import yargParser from 'yargs-parser';
+
+import type { PublishCommandOption } from '@lerna-lite/core';
+
+import { commandRunner, initFixtureFactory } from '@lerna-test/helpers';
+import { loggingOutput } from '@lerna-test/helpers/logging-output.js';
+
 import cliCommands from '../../../cli/src/cli-commands/cli-publish-commands.js';
-// test command
 import { PublishCommand } from '../index.js';
 import { createTempLicenses } from '../lib/create-temp-licenses.js';
-// mocked modules
 import { packDirectory } from '../lib/pack-directory.js';
 import { removeTempLicenses } from '../lib/remove-temp-licenses.js';
 
 // FIXME: better mock for version command
 vi.mock('../../../version/src/lib/git-push', async () => await vi.importActual('../../../version/src/lib/__mocks__/git-push'));
-vi.mock('../../../version/src/lib/is-anything-committed', async () => await vi.importActual('../../../version/src/lib/__mocks__/is-anything-committed'));
-vi.mock('../../../version/src/lib/is-behind-upstream', async () => await vi.importActual('../../../version/src/lib/__mocks__/is-behind-upstream'));
-vi.mock('../../../version/src/lib/remote-branch-exists', async () => await vi.importActual('../../../version/src/lib/__mocks__/remote-branch-exists'));
+vi.mock(
+  '../../../version/src/lib/is-anything-committed',
+  async () => await vi.importActual('../../../version/src/lib/__mocks__/is-anything-committed')
+);
+vi.mock(
+  '../../../version/src/lib/is-behind-upstream',
+  async () => await vi.importActual('../../../version/src/lib/__mocks__/is-behind-upstream')
+);
+vi.mock(
+  '../../../version/src/lib/remote-branch-exists',
+  async () => await vi.importActual('../../../version/src/lib/__mocks__/remote-branch-exists')
+);
 
 // mocked modules of @lerna-lite/core
 vi.mock('@lerna-lite/core', async () => ({
@@ -41,7 +51,10 @@ vi.mock('@lerna-lite/version', async () => await vi.importActual('../../../versi
 // local modules _must_ be explicitly mocked
 vi.mock('../lib/verify-npm-package-access', async () => await vi.importActual('../lib/__mocks__/verify-npm-package-access'));
 vi.mock('../lib/get-npm-username', async () => await vi.importActual('../lib/__mocks__/get-npm-username'));
-vi.mock('../lib/get-two-factor-auth-required', async () => await vi.importActual('../lib/__mocks__/get-two-factor-auth-required'));
+vi.mock(
+  '../lib/get-two-factor-auth-required',
+  async () => await vi.importActual('../lib/__mocks__/get-two-factor-auth-required')
+);
 vi.mock('../lib/create-temp-licenses', () => ({ createTempLicenses: vi.fn(() => Promise.resolve()) }));
 vi.mock('../lib/remove-temp-licenses', () => ({ removeTempLicenses: vi.fn(() => Promise.resolve()) }));
 vi.mock('../lib/pack-directory', async () => await vi.importActual('../lib/__mocks__/pack-directory'));

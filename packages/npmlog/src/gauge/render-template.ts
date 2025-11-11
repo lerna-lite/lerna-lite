@@ -4,6 +4,7 @@
 
 import validate from 'aproba';
 import align from 'wide-align';
+
 import { Internal, MissingTemplateValue } from './error.js';
 import { TemplateItem } from './template-item.js';
 import { wideTruncate } from './wide-truncate.js';

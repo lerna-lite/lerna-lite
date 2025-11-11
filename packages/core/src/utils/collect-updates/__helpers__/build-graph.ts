@@ -1,4 +1,3 @@
-// helpers
 import { Package, PackageGraph, type NpmClient } from '../../../index.js';
 
 function buildGraph(mapPackages = (pkg: any) => pkg, npmClient: NpmClient = 'npm') {

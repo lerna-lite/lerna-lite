@@ -1,7 +1,6 @@
 import { describe, expect, it, vi, type Mock } from 'vitest';
-// mocked modules
+
 import * as childProcess from '../../../child-process.js';
-// file under test
 import { hasTags } from '../lib/has-tags.js';
 
 vi.mock('../../../child-process');

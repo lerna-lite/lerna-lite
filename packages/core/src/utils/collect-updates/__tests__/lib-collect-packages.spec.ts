@@ -1,9 +1,9 @@
 import { expect, test, vi } from 'vitest';
-// helpers
-import buildGraph from '../__helpers__/build-graph.js';
+
 import type { PackageGraphNode } from '../../../package-graph/lib/package-graph-node.js';
 import type { Package } from '../../../package.js';
-// file under test
+
+import buildGraph from '../__helpers__/build-graph.js';
 import { collectPackages } from '../lib/collect-packages.js';
 
 const toNamesList = (collection: any[]) => Array.from(collection as Package[]).map((pkg) => pkg.name);

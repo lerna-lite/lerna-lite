@@ -1,7 +1,9 @@
 import PQueue from 'p-queue';
+
 import type { TopologicalConfig } from '../models/interfaces.js';
 import type { PackageGraphNode } from '../package-graph/lib/package-graph-node.js';
 import type { Package } from '../package.js';
+
 import { QueryGraph } from './query-graph.js';
 
 /**

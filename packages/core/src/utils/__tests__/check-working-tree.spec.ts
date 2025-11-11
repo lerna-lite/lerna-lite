@@ -1,4 +1,5 @@
 import { describe, expect, it, vi, type Mock } from 'vitest';
+
 import { checkWorkingTree, throwIfUncommitted } from '../check-working-tree.js';
 import { collectUncommitted } from '../collect-uncommitted.js';
 import { describeRef } from '../describe-ref.js';

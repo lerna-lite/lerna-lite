@@ -1,5 +1,6 @@
 import { Writable } from 'stream';
 import { describe, expect, it } from 'vitest';
+
 import { TrackerStream } from '../tracker-stream.js';
 import testEvent from './test-event.js';
 

@@ -1,4 +1,5 @@
 import { describe, expect, it } from 'vitest';
+
 import error, { Internal, MissingTemplateValue } from '../error.js';
 
 describe('User', () => {

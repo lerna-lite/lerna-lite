@@ -1,5 +1,7 @@
 import { join } from 'node:path';
+
 import { log } from '@lerna-lite/npmlog';
+
 import type { GitClient, GitClientReleaseOption } from '../interfaces.js';
 
 export class GitLabClient implements GitClient {

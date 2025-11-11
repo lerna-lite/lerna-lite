@@ -1,6 +1,8 @@
-import { log } from '@lerna-lite/npmlog';
 import dedent from 'dedent';
 import yargs from 'yargs/yargs';
+
+import { log } from '@lerna-lite/npmlog';
+
 import { globalOptions } from './global-options.js';
 
 /**

@@ -1,7 +1,9 @@
+import npa from 'npm-package-arg';
+
 import type { ExecOpts } from '@lerna-lite/core';
+
 import { exec } from '@lerna-lite/core';
 import { log } from '@lerna-lite/npmlog';
-import npa from 'npm-package-arg';
 
 /**
  * Retrieve a list of git tags pointing to the current HEAD that match the provided pattern.
