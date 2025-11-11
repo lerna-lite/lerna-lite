@@ -1,4 +1,5 @@
 import { afterEach, beforeEach, describe, expect, it, vi, type Mock } from 'vitest';
+
 import { GitLabClient } from '../GitLabClient.js';
 
 describe('GitLabClient', () => {

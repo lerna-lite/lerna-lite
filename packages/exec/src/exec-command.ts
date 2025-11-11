@@ -1,5 +1,9 @@
 import 'dotenv/config';
+import pMap from 'p-map';
+import c from 'tinyrainbow';
+
 import type { CommandType, ExecCommandOption, FilterOptions, Package, ProjectConfig } from '@lerna-lite/core';
+
 import {
   Command,
   getFilteredPackages,
@@ -10,8 +14,7 @@ import {
   ValidationError,
 } from '@lerna-lite/core';
 import { Profiler } from '@lerna-lite/profiler';
-import pMap from 'p-map';
-import c from 'tinyrainbow';
+
 import type { ExecStreamingOption } from './interfaces.js';
 
 export function factory(argv: ExecCommandOption) {

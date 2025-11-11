@@ -1,4 +1,5 @@
 import stream from 'node:stream';
+
 import { Tracker } from './tracker.js';
 
 export class TrackerStream extends stream.Transform {

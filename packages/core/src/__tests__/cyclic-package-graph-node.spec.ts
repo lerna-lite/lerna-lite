@@ -1,7 +1,9 @@
 import { dirname } from 'node:path';
 import { fileURLToPath } from 'node:url';
-import { initFixtureFactory } from '@lerna-test/helpers';
 import { describe, expect, it } from 'vitest';
+
+import { initFixtureFactory } from '@lerna-test/helpers';
+
 import { CyclicPackageGraphNode } from '../package-graph/lib/cyclic-package-graph-node.js';
 import { PackageGraphNode } from '../package-graph/lib/package-graph-node.js';
 import { Project } from '../project/project.js';

@@ -1,4 +1,5 @@
 import { describe, expect, it, test } from 'vitest';
+
 import { addPrefixTransformer } from '../log-prefix-transformer.js';
 
 describe('addPrefixTransformer', () => {
@@ -272,7 +273,8 @@ describe('addPrefixTransformer', () => {
     test('merge multiline logs', () =>
       new Promise((done: any) => {
         const slt = addPrefixTransformer({ mergeMultiline: true });
-        const input = 'Error: something bad happened\n    at Object.<anonymous> (/path/to/file.js:1:1)\n    at Module._compile (module.js:456:26)\nnext line\n';
+        const input =
+          'Error: something bad happened\n    at Object.<anonymous> (/path/to/file.js:1:1)\n    at Module._compile (module.js:456:26)\nnext line\n';
         let received = '';
 
         slt.on('data', (buf: any) => {

@@ -1,12 +1,13 @@
 import { dirname, resolve as pathResolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
-// test command
-import type { VersionCommandOption } from '@lerna-lite/core';
-import { initFixtureFactory } from '@lerna-test/helpers';
 import { describe, expect, test, vi } from 'vitest';
-// mocked module(s)
 import * as writePkg from 'write-package';
 import yargParser from 'yargs-parser';
+
+import type { VersionCommandOption } from '@lerna-lite/core';
+
+import { initFixtureFactory } from '@lerna-test/helpers';
+
 import { VersionCommand } from '../version-command.js';
 
 // local modules _must_ be explicitly mocked

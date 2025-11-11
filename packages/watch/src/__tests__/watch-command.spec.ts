@@ -1,14 +1,15 @@
-import { basename, dirname, join } from 'node:path';
-import { fileURLToPath } from 'node:url';
-// make sure to import the output mock
-import type { WatchCommandOption } from '@lerna-lite/core';
-// mocked modules
-import { spawn, spawnStreaming } from '@lerna-lite/core';
-import { commandRunner, initFixtureFactory, normalizeRelativeDir } from '@lerna-test/helpers';
 import { watch as chokidarWatch } from 'chokidar';
 import mockStdin from 'mock-stdin';
+import { basename, dirname, join } from 'node:path';
+import { fileURLToPath } from 'node:url';
 import { afterEach, beforeAll, describe, expect, it, vi, type Mock } from 'vitest';
 import yargParser from 'yargs-parser';
+
+import type { WatchCommandOption } from '@lerna-lite/core';
+
+import { spawn, spawnStreaming } from '@lerna-lite/core';
+import { commandRunner, initFixtureFactory, normalizeRelativeDir } from '@lerna-test/helpers';
+
 import cliWatchCommands from '../../../cli/src/cli-commands/cli-watch-commands.js';
 import { factory, WatchCommand } from '../index.js';
 
@@ -153,7 +154,9 @@ describe('Watch Command', () => {
     });
 
     it('should take glob input option, without slash prefix, and expect it to be watched by chokidar', async () => {
-      const command = new WatchCommand(createArgv(testDir, '--debounce', '0', '--glob', '**/*.{ts,tsx}', '--', 'lerna run build'));
+      const command = new WatchCommand(
+        createArgv(testDir, '--debounce', '0', '--glob', '**/*.{ts,tsx}', '--', 'lerna run build')
+      );
       await command;
 
       expect(chokidarWatch).toHaveBeenCalledWith(['packages/package-1/', 'packages/package-2/'], {
@@ -171,7 +174,9 @@ describe('Watch Command', () => {
     });
 
     it('should take glob input option, with slash prefix, and still expect it to be watched by chokidar', async () => {
-      const command = new WatchCommand(createArgv(testDir, '--debounce', '0', '--glob', '/**/*.{ts,tsx}', '--', 'lerna run build'));
+      const command = new WatchCommand(
+        createArgv(testDir, '--debounce', '0', '--glob', '/**/*.{ts,tsx}', '--', 'lerna run build')
+      );
       await command;
 
       expect(chokidarWatch).toHaveBeenCalledWith(['packages/package-1/', 'packages/package-2/'], {
@@ -288,7 +293,10 @@ describe('Watch Command', () => {
         }),
         env: expect.objectContaining({
           LERNA_PACKAGE_NAME: 'package-2',
-          LERNA_FILE_CHANGES: [join(testDir, 'packages/package-2/package.json'), join(testDir, 'packages/package-2/file-2.ts')].join(' '),
+          LERNA_FILE_CHANGES: [
+            join(testDir, 'packages/package-2/package.json'),
+            join(testDir, 'packages/package-2/file-2.ts'),
+          ].join(' '),
         }),
         extendEnv: false,
         reject: true,
@@ -297,7 +305,14 @@ describe('Watch Command', () => {
     });
 
     it('should execute change watch callback with custom file delimiter when defined', async () => {
-      await lernaWatch(testDir)('--debounce', '0', '--file-delimiter', ';;', '--', 'echo $LERNA_PACKAGE_NAME $LERNA_FILE_CHANGES');
+      await lernaWatch(testDir)(
+        '--debounce',
+        '0',
+        '--file-delimiter',
+        ';;',
+        '--',
+        'echo $LERNA_PACKAGE_NAME $LERNA_FILE_CHANGES'
+      );
       watchChangeHandler('change', join(testDir, 'packages/package-2/package.json'));
       await watchChangeHandler('change', join(testDir, 'packages/package-2/file-2.ts'));
 
@@ -310,7 +325,10 @@ describe('Watch Command', () => {
         }),
         env: expect.objectContaining({
           LERNA_PACKAGE_NAME: 'package-2',
-          LERNA_FILE_CHANGES: [join(testDir, 'packages/package-2/package.json'), join(testDir, 'packages/package-2/file-2.ts')].join(';;'),
+          LERNA_FILE_CHANGES: [
+            join(testDir, 'packages/package-2/package.json'),
+            join(testDir, 'packages/package-2/file-2.ts'),
+          ].join(';;'),
         }),
         extendEnv: false,
         reject: true,
@@ -319,7 +337,14 @@ describe('Watch Command', () => {
     });
 
     it('should ignore files defined via --ignored glob pattern while still executing watch callback for other changes', async () => {
-      await lernaWatch(testDir)('--debounce', '0', '--ignored', '**/*.json', '--', 'echo $LERNA_PACKAGE_NAME $LERNA_FILE_CHANGES');
+      await lernaWatch(testDir)(
+        '--debounce',
+        '0',
+        '--ignored',
+        '**/*.json',
+        '--',
+        'echo $LERNA_PACKAGE_NAME $LERNA_FILE_CHANGES'
+      );
       watchChangeHandler('change', join(testDir, 'packages/package-2/package.json'));
       await watchChangeHandler('change', join(testDir, 'packages/package-2/file-2.ts'));
 
@@ -374,7 +399,10 @@ describe('Watch Command', () => {
         pkg: expect.objectContaining({ name: 'package-2' }),
         env: expect.objectContaining({
           LERNA_PACKAGE_NAME: 'package-2',
-          LERNA_FILE_CHANGES: [join(testDir, 'packages/package-2/file-2.ts'), join(testDir, 'packages/package-2/package.json')].join(' '),
+          LERNA_FILE_CHANGES: [
+            join(testDir, 'packages/package-2/file-2.ts'),
+            join(testDir, 'packages/package-2/package.json'),
+          ].join(' '),
         }),
         extendEnv: false,
         reject: true,
@@ -412,7 +440,10 @@ describe('Watch Command', () => {
         pkg: expect.objectContaining({ name: 'package-1' }),
         env: expect.objectContaining({
           LERNA_PACKAGE_NAME: 'package-1',
-          LERNA_FILE_CHANGES: [join(testDir, 'packages/package-1/package.json'), join(testDir, 'packages/package-1/file-1.ts')].join(' '),
+          LERNA_FILE_CHANGES: [
+            join(testDir, 'packages/package-1/package.json'),
+            join(testDir, 'packages/package-1/file-1.ts'),
+          ].join(' '),
         }),
         extendEnv: false,
         reject: true,

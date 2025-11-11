@@ -1,6 +1,8 @@
-import type { FetchConfig } from '@lerna-lite/core';
-import { pulseTillDone } from '@lerna-lite/core';
 import fetch from 'npm-registry-fetch';
+
+import type { FetchConfig } from '@lerna-lite/core';
+
+import { pulseTillDone } from '@lerna-lite/core';
 
 interface WhoIAm {
   username: string;

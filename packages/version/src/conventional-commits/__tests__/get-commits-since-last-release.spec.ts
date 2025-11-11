@@ -1,5 +1,7 @@
-import { describeRefSync, execSync, ValidationError } from '@lerna-lite/core';
 import { afterEach, beforeEach, describe, expect, it, vi, type Mock } from 'vitest';
+
+import { describeRefSync, execSync, ValidationError } from '@lerna-lite/core';
+
 import { getCommitsSinceLastRelease, getOldestCommitSinceLastTag } from '../get-commits-since-last-release.js';
 import { getGithubCommits } from '../get-github-commits.js';
 
@@ -44,12 +46,18 @@ describe('getCommitsSinceLastRelease', () => {
 
   it('throws a ValidationError for null or undefined client', async () => {
     await expect(getCommitsSinceLastRelease(null as any, 'durable', 'main', false, execOpts)).rejects.toThrow(ValidationError);
-    await expect(getCommitsSinceLastRelease(undefined as any, 'durable', 'main', false, execOpts)).rejects.toThrow(ValidationError);
+    await expect(getCommitsSinceLastRelease(undefined as any, 'durable', 'main', false, execOpts)).rejects.toThrow(
+      ValidationError
+    );
   });
 
   it('throws a ValidationError for case-insensitive non-github clients', async () => {
-    await expect(getCommitsSinceLastRelease('GITHUB' as any, 'durable', 'main', false, execOpts)).rejects.toThrow(ValidationError);
-    await expect(getCommitsSinceLastRelease('GiTlAb' as any, 'durable', 'main', false, execOpts)).rejects.toThrow(ValidationError);
+    await expect(getCommitsSinceLastRelease('GITHUB' as any, 'durable', 'main', false, execOpts)).rejects.toThrow(
+      ValidationError
+    );
+    await expect(getCommitsSinceLastRelease('GiTlAb' as any, 'durable', 'main', false, execOpts)).rejects.toThrow(
+      ValidationError
+    );
   });
 
   it('should expect commits returned when using "github" when a valid tag is returned', async () => {
@@ -88,7 +96,11 @@ describe('getOldestCommitSinceLastTag', () => {
       const execSpy = (execSync as Mock).mockReturnValueOnce('"abcbeef 2022-07-01T00:01:02-04:00"');
       const result = getOldestCommitSinceLastTag(execOpts);
 
-      expect(execSpy).toHaveBeenCalledWith('git', ['log', '--oneline', '--format="%h %aI"', '--reverse', '--max-parents=0', 'HEAD'], execOpts);
+      expect(execSpy).toHaveBeenCalledWith(
+        'git',
+        ['log', '--oneline', '--format="%h %aI"', '--reverse', '--max-parents=0', 'HEAD'],
+        execOpts
+      );
       expect(result).toEqual({ commitDate: '2022-07-01T00:01:02-04:00', commitHash: 'abcbeef' });
     });
 
@@ -96,7 +108,11 @@ describe('getOldestCommitSinceLastTag', () => {
       const execSpy = (execSync as Mock).mockReturnValueOnce('"abcbeef 2024-05-16T10:37:42Z"');
       const result = getOldestCommitSinceLastTag(execOpts);
 
-      expect(execSpy).toHaveBeenCalledWith('git', ['log', '--oneline', '--format="%h %aI"', '--reverse', '--max-parents=0', 'HEAD'], execOpts);
+      expect(execSpy).toHaveBeenCalledWith(
+        'git',
+        ['log', '--oneline', '--format="%h %aI"', '--reverse', '--max-parents=0', 'HEAD'],
+        execOpts
+      );
       expect(result).toEqual({ commitDate: '2024-05-16T10:37:42Z', commitHash: 'abcbeef' });
     });
 
@@ -104,7 +120,11 @@ describe('getOldestCommitSinceLastTag', () => {
       const execSpy = (execSync as Mock).mockReturnValueOnce('"abcbeef 2024-05-16T10:37:42.234Z"');
       const result = getOldestCommitSinceLastTag(execOpts);
 
-      expect(execSpy).toHaveBeenCalledWith('git', ['log', '--oneline', '--format="%h %aI"', '--reverse', '--max-parents=0', 'HEAD'], execOpts);
+      expect(execSpy).toHaveBeenCalledWith(
+        'git',
+        ['log', '--oneline', '--format="%h %aI"', '--reverse', '--max-parents=0', 'HEAD'],
+        execOpts
+      );
       expect(result).toEqual({ commitDate: '2024-05-16T10:37:42.234Z', commitHash: 'abcbeef' });
     });
   });
@@ -130,7 +150,11 @@ describe('getOldestCommitSinceLastTag', () => {
       const execSpy = (execSync as Mock).mockReturnValueOnce(mockExecSyncResult);
 
       expect(describeRefSync).toHaveBeenCalledWith({ cwd: '/test', match: '*@*' }, false);
-      expect(execSpy).toHaveBeenCalledWith('git', ['log', '@my-workspace/pkg-a@2.0.3..HEAD', '--format="%h %aI"', '--reverse'], execOpts);
+      expect(execSpy).toHaveBeenCalledWith(
+        'git',
+        ['log', '@my-workspace/pkg-a@2.0.3..HEAD', '--format="%h %aI"', '--reverse'],
+        execOpts
+      );
       expect(result).toEqual({ commitDate: '2022-07-01T00:01:02-06:00', commitHash: 'deadabcd' });
     });
 
@@ -141,7 +165,11 @@ describe('getOldestCommitSinceLastTag', () => {
       const execSpy = (execSync as Mock).mockReturnValueOnce('"deadbeef 2022-07-01T00:01:02+01:00"');
 
       expect(describeRefSync).toHaveBeenCalledWith({ cwd: '/test', match: '*@*' }, false);
-      expect(execSpy).toHaveBeenCalledWith('git', ['log', '@my-workspace/pkg-a@2.0.3..HEAD', '--format="%h %aI"', '--reverse'], execOpts);
+      expect(execSpy).toHaveBeenCalledWith(
+        'git',
+        ['log', '@my-workspace/pkg-a@2.0.3..HEAD', '--format="%h %aI"', '--reverse'],
+        execOpts
+      );
       expect(result).toEqual({ commitDate: '2022-07-01T00:01:02+01:00', commitHash: 'deadbeef' });
     });
   });

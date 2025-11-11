@@ -1,7 +1,10 @@
 import type { Package } from '@lerna-lite/core';
+
 import { execPackageManager, spawnStreaming } from '@lerna-lite/core';
 import { log } from '@lerna-lite/npmlog';
+
 import type { RunScriptOption, ScriptStreamingOption } from '../interfaces.js';
+
 import { getNpmExecOpts } from './get-npm-exec-opts.js';
 
 export function npmRunScript(script: string, { args, npmClient, pkg, reject = true }: RunScriptOption, dryRun = false) {

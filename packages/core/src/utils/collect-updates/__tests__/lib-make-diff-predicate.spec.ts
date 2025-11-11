@@ -1,7 +1,7 @@
 import { beforeEach, describe, expect, test, vi, type Mock } from 'vitest';
-// file under test
+
 import type { PackageGraphNode } from '../../../../dist/index.js';
-// mocked modules
+
 import * as childProcesses from '../../../child-process.js';
 import { diffWorkspaceCatalog, makeDiffPredicate } from '../lib/make-diff-predicate.js';
 
@@ -30,7 +30,12 @@ beforeEach(() => {
 });
 
 test('git diff call', () => {
-  setup(['packages/pkg-1/__tests__/index.test.js', 'packages/pkg-1/index.js', 'packages/pkg-1/package.json', 'packages/pkg-1/README.md']);
+  setup([
+    'packages/pkg-1/__tests__/index.test.js',
+    'packages/pkg-1/index.js',
+    'packages/pkg-1/package.json',
+    'packages/pkg-1/README.md',
+  ]);
 
   const hasDiff = makeDiffPredicate('v1.0.0', { cwd: '/test' }, undefined, [], {});
   const result = hasDiff({
@@ -39,7 +44,9 @@ test('git diff call', () => {
   } as PackageGraphNode);
 
   expect(result).toBe(true);
-  expect(childProcesses.execSync).toHaveBeenLastCalledWith('git', ['diff', '--name-only', 'v1.0.0', '--', 'packages/pkg-1'], { cwd: '/test' });
+  expect(childProcesses.execSync).toHaveBeenLastCalledWith('git', ['diff', '--name-only', 'v1.0.0', '--', 'packages/pkg-1'], {
+    cwd: '/test',
+  });
 });
 
 test('empty diff', () => {
@@ -71,7 +78,11 @@ test('rooted package', () => {
 });
 
 test('ignore changes (globstars)', () => {
-  setup(['packages/pkg-2/examples/.eslintrc.yaml', 'packages/pkg-2/examples/do-a-thing/index.js', 'packages/pkg-2/examples/and-another-thing/package.json']);
+  setup([
+    'packages/pkg-2/examples/.eslintrc.yaml',
+    'packages/pkg-2/examples/do-a-thing/index.js',
+    'packages/pkg-2/examples/and-another-thing/package.json',
+  ]);
 
   const hasDiff = makeDiffPredicate('v1.0.0', { cwd: '/test' }, ['**/examples/**', '*.md'], [], {});
   const result = hasDiff({
@@ -152,7 +163,9 @@ describe('pnpm workspace catalog', () => {
     } as PackageGraphNode);
 
     expect(result).toBe(true);
-    expect(childProcesses.execSync).toHaveBeenLastCalledWith('git', ['diff', '--name-only', 'v1.0.0', '--', 'packages/pkg-1'], { cwd: '/test' });
+    expect(childProcesses.execSync).toHaveBeenLastCalledWith('git', ['diff', '--name-only', 'v1.0.0', '--', 'packages/pkg-1'], {
+      cwd: '/test',
+    });
   });
 
   test('diffWorkspaceCatalog with local dependency changes in pnpm workspace catalog', () => {
@@ -166,7 +179,9 @@ describe('pnpm workspace catalog', () => {
     } as PackageGraphNode);
 
     expect(result).toBe(true);
-    expect(childProcesses.execSync).toHaveBeenLastCalledWith('git', ['diff', '--name-only', 'v1.0.0', '--', 'packages/pkg-1'], { cwd: '/test' });
+    expect(childProcesses.execSync).toHaveBeenLastCalledWith('git', ['diff', '--name-only', 'v1.0.0', '--', 'packages/pkg-1'], {
+      cwd: '/test',
+    });
   });
 
   test('diff pnpm workspace catalog returning dependencies that changed in the catalog', () => {
@@ -295,7 +310,9 @@ describe('yarn workspace catalog', () => {
     } as PackageGraphNode);
 
     expect(result).toBe(true);
-    expect(childProcesses.execSync).toHaveBeenLastCalledWith('git', ['diff', '--name-only', 'v1.0.0', '--', 'packages/pkg-1'], { cwd: '/test' });
+    expect(childProcesses.execSync).toHaveBeenLastCalledWith('git', ['diff', '--name-only', 'v1.0.0', '--', 'packages/pkg-1'], {
+      cwd: '/test',
+    });
   });
 
   test('diffWorkspaceCatalog with local dependency changes in yarn workspace catalog', () => {
@@ -309,7 +326,9 @@ describe('yarn workspace catalog', () => {
     } as PackageGraphNode);
 
     expect(result).toBe(true);
-    expect(childProcesses.execSync).toHaveBeenLastCalledWith('git', ['diff', '--name-only', 'v1.0.0', '--', 'packages/pkg-1'], { cwd: '/test' });
+    expect(childProcesses.execSync).toHaveBeenLastCalledWith('git', ['diff', '--name-only', 'v1.0.0', '--', 'packages/pkg-1'], {
+      cwd: '/test',
+    });
   });
 
   test('diff yarn workspace catalog returning dependencies that changed in the catalog', () => {

@@ -1,12 +1,11 @@
-// mocked module(s)
 import { dirname } from 'node:path';
-// helpers
 import { fileURLToPath } from 'node:url';
-import { PackageGraph, Project, type FetchConfig } from '@lerna-lite/core';
-import { initFixtureFactory } from '@lerna-test/helpers';
 import pacote from 'pacote';
 import { expect, test, vi } from 'vitest';
-// file under test
+
+import { PackageGraph, Project, type FetchConfig } from '@lerna-lite/core';
+import { initFixtureFactory } from '@lerna-test/helpers';
+
 import { getUnpublishedPackages } from '../lib/get-unpublished-packages.js';
 
 vi.mock('pacote');

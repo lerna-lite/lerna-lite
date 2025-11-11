@@ -1,4 +1,5 @@
 import { describe, expect, it } from 'vitest';
+
 import { excludeValuesFromArray, pluralize } from '../string-utils.js';
 
 describe('String Utils', () => {

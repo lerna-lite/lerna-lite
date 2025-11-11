@@ -1,14 +1,22 @@
+import { remove } from 'fs-extra/esm';
 import { dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
-import { logOutput, promptConfirmation, throwIfUncommitted, type PackageGraphNode, type PublishCommandOption } from '@lerna-lite/core';
-import { initFixtureFactory, stripAnsi } from '@lerna-test/helpers';
-import { loggingOutput } from '@lerna-test/helpers/logging-output.js';
-import { remove } from 'fs-extra/esm';
 import { describe, expect, it, vi, type Mock } from 'vitest';
-// mocked or stubbed modules
 import * as writePkg from 'write-package';
 import yargParser from 'yargs-parser';
+
+import {
+  logOutput,
+  promptConfirmation,
+  throwIfUncommitted,
+  type PackageGraphNode,
+  type PublishCommandOption,
+} from '@lerna-lite/core';
+import { initFixtureFactory, stripAnsi } from '@lerna-test/helpers';
+import { loggingOutput } from '@lerna-test/helpers/logging-output.js';
+
 import type { npmPublish as npmPublishMock } from '../lib/__mocks__/npm-publish.js';
+
 import { getUnpublishedPackages } from '../lib/get-unpublished-packages.js';
 import { npmPublish } from '../lib/npm-publish.js';
 // file under test
@@ -18,9 +26,18 @@ vi.mock('write-package', async () => await vi.importActual('../../../version/src
 
 // FIXME: better mock for version command
 vi.mock('../../../version/src/lib/git-push', async () => await vi.importActual('../../../version/src/lib/__mocks__/git-push'));
-vi.mock('../../../version/src/lib/is-anything-committed', async () => await vi.importActual('../../../version/src/lib/__mocks__/is-anything-committed'));
-vi.mock('../../../version/src/lib/is-behind-upstream', async () => await vi.importActual('../../../version/src/lib/__mocks__/is-behind-upstream'));
-vi.mock('../../../version/src/lib/remote-branch-exists', async () => await vi.importActual('../../../version/src/lib/__mocks__/remote-branch-exists'));
+vi.mock(
+  '../../../version/src/lib/is-anything-committed',
+  async () => await vi.importActual('../../../version/src/lib/__mocks__/is-anything-committed')
+);
+vi.mock(
+  '../../../version/src/lib/is-behind-upstream',
+  async () => await vi.importActual('../../../version/src/lib/__mocks__/is-behind-upstream')
+);
+vi.mock(
+  '../../../version/src/lib/remote-branch-exists',
+  async () => await vi.importActual('../../../version/src/lib/__mocks__/remote-branch-exists')
+);
 
 // mocked modules, mock only certain methods from core
 vi.mock('@lerna-lite/core', async () => ({
@@ -36,10 +53,16 @@ vi.mock('@lerna-lite/core', async () => ({
 vi.mock('@lerna-lite/version', async () => await vi.importActual('../../../version/src/version-command'));
 
 // local modules _must_ be explicitly mocked
-vi.mock('../lib/get-packages-without-license', async () => await vi.importActual('../lib/__mocks__/get-packages-without-license'));
+vi.mock(
+  '../lib/get-packages-without-license',
+  async () => await vi.importActual('../lib/__mocks__/get-packages-without-license')
+);
 vi.mock('../lib/verify-npm-package-access', async () => await vi.importActual('../lib/__mocks__/verify-npm-package-access'));
 vi.mock('../lib/get-npm-username', async () => await vi.importActual('../lib/__mocks__/get-npm-username'));
-vi.mock('../lib/get-two-factor-auth-required', async () => await vi.importActual('../lib/__mocks__/get-two-factor-auth-required'));
+vi.mock(
+  '../lib/get-two-factor-auth-required',
+  async () => await vi.importActual('../lib/__mocks__/get-two-factor-auth-required')
+);
 vi.mock('../lib/get-unpublished-packages', async () => await vi.importActual('../lib/__mocks__/get-unpublished-packages'));
 vi.mock('../lib/pack-directory', async () => await vi.importActual('../lib/__mocks__/pack-directory'));
 vi.mock('../lib/npm-publish', async () => await vi.importActual('../lib/__mocks__/npm-publish'));
@@ -87,7 +110,9 @@ describe('publish from-package', () => {
 
     await new PublishCommand(createArgv(cwd, '--bump', 'from-package', '--dry-run'));
 
-    expect(stripAnsi((promptConfirmation as Mock).mock.lastCall![0])).toBe('[dry-run] Are you sure you want to publish these packages?');
+    expect(stripAnsi((promptConfirmation as Mock).mock.lastCall![0])).toBe(
+      '[dry-run] Are you sure you want to publish these packages?'
+    );
     expect((logOutput as any).logged()).toMatch('Found 2 packages to publish:');
     expect((npmPublish as typeof npmPublishMock).order()).toEqual(['package-2', 'package-3']);
   });

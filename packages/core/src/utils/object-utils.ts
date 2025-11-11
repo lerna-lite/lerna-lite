@@ -1,5 +1,6 @@
-import { log } from '@lerna-lite/npmlog';
 import JSON5 from 'json5';
+
+import { log } from '@lerna-lite/npmlog';
 
 /**
  * From a dot (.) notation path, find and delete a property within an object if found given a complex object path

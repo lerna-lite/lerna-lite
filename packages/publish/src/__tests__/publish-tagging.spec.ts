@@ -1,21 +1,29 @@
-// mocked modules
-// helpers
 import { dirname } from 'node:path';
 import { fileURLToPath } from 'node:url';
+import { expect, test, vi } from 'vitest';
+import yargParser from 'yargs-parser';
+
 import { collectUpdates, type PublishCommandOption } from '@lerna-lite/core';
 import { initFixtureFactory } from '@lerna-test/helpers';
-import { expect, test, vi } from 'vitest';
-// test command
-import yargParser from 'yargs-parser';
+
 import { PublishCommand } from '../index.js';
 import { add, remove } from '../lib/npm-dist-tag.js';
 import { npmPublish } from '../lib/npm-publish.js';
 
 // FIXME: better mock for version command
 vi.mock('../../../version/src/lib/git-push', async () => await vi.importActual('../../../version/src/lib/__mocks__/git-push'));
-vi.mock('../../../version/src/lib/is-anything-committed', async () => await vi.importActual('../../../version/src/lib/__mocks__/is-anything-committed'));
-vi.mock('../../../version/src/lib/is-behind-upstream', async () => await vi.importActual('../../../version/src/lib/__mocks__/is-behind-upstream'));
-vi.mock('../../../version/src/lib/remote-branch-exists', async () => await vi.importActual('../../../version/src/lib/__mocks__/remote-branch-exists'));
+vi.mock(
+  '../../../version/src/lib/is-anything-committed',
+  async () => await vi.importActual('../../../version/src/lib/__mocks__/is-anything-committed')
+);
+vi.mock(
+  '../../../version/src/lib/is-behind-upstream',
+  async () => await vi.importActual('../../../version/src/lib/__mocks__/is-behind-upstream')
+);
+vi.mock(
+  '../../../version/src/lib/remote-branch-exists',
+  async () => await vi.importActual('../../../version/src/lib/__mocks__/remote-branch-exists')
+);
 
 // mocked modules of @lerna-lite/core
 vi.mock('@lerna-lite/core', async () => ({
@@ -32,10 +40,16 @@ vi.mock('@lerna-lite/core', async () => ({
 }));
 
 // local modules _must_ be explicitly mocked
-vi.mock('../lib/get-packages-without-license', async () => await vi.importActual('../lib/__mocks__/get-packages-without-license'));
+vi.mock(
+  '../lib/get-packages-without-license',
+  async () => await vi.importActual('../lib/__mocks__/get-packages-without-license')
+);
 vi.mock('../lib/verify-npm-package-access', async () => await vi.importActual('../lib/__mocks__/verify-npm-package-access'));
 vi.mock('../lib/get-npm-username', async () => await vi.importActual('../lib/__mocks__/get-npm-username'));
-vi.mock('../lib/get-two-factor-auth-required', async () => await vi.importActual('../lib/__mocks__/get-two-factor-auth-required'));
+vi.mock(
+  '../lib/get-two-factor-auth-required',
+  async () => await vi.importActual('../lib/__mocks__/get-two-factor-auth-required')
+);
 vi.mock('../lib/create-temp-licenses', () => ({ createTempLicenses: vi.fn(() => Promise.resolve()) }));
 vi.mock('../lib/remove-temp-licenses', () => ({ removeTempLicenses: vi.fn(() => Promise.resolve()) }));
 vi.mock('../lib/pack-directory', async () => await vi.importActual('../lib/__mocks__/pack-directory'));
@@ -170,7 +184,9 @@ test('publish non-prerelease --dist-tag next --pre-dist-tag beta', async () => {
 test('publish --pre-dist-tag beta --temp-tag', async () => {
   const cwd = await initFixture('integration');
 
-  await new PublishCommand(createArgv(cwd, '--bump', 'prerelease', '--dist-tag', 'next', '--preid', 'beta', '--pre-dist-tag', 'beta', '--temp-tag'));
+  await new PublishCommand(
+    createArgv(cwd, '--bump', 'prerelease', '--dist-tag', 'next', '--preid', 'beta', '--pre-dist-tag', 'beta', '--temp-tag')
+  );
 
   expect((npmPublish as any).registry).toEqual(
     new Map([

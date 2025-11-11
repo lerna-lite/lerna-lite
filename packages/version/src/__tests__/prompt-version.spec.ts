@@ -1,6 +1,8 @@
-import { prereleaseIdFromVersion, promptSelectOne, promptTextInput, type PackageGraphNode } from '@lerna-lite/core';
 import semver from 'semver';
 import { beforeEach, describe, expect, test, vi } from 'vitest';
+
+import { prereleaseIdFromVersion, promptSelectOne, promptTextInput, type PackageGraphNode } from '@lerna-lite/core';
+
 import { makePromptVersion } from '../lib/prompt-version.js';
 
 // mocked modules of @lerna-lite/core
@@ -37,7 +39,10 @@ describe('select', () => {
         name: 'my-package',
       } as PackageGraphNode);
 
-      expect(promptSelectOne).toHaveBeenLastCalledWith('Select a new version for my-package (currently 3.2.1)', expect.any(Object));
+      expect(promptSelectOne).toHaveBeenLastCalledWith(
+        'Select a new version for my-package (currently 3.2.1)',
+        expect.any(Object)
+      );
     });
   });
 

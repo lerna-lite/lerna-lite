@@ -1,13 +1,13 @@
 import nodeFs from 'node:fs';
 import { dirname, resolve as pathResolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
-// mocked modules
-import { promptSelectOne, type VersionCommandOption } from '@lerna-lite/core';
-import { commandRunner, getCommitMessage, initFixtureFactory } from '@lerna-test/helpers';
 import { describe, expect, it, test, vi } from 'vitest';
 import yargParser from 'yargs-parser';
+
+import { promptSelectOne, type VersionCommandOption } from '@lerna-lite/core';
+import { commandRunner, getCommitMessage, initFixtureFactory } from '@lerna-test/helpers';
+
 import cliCommands from '../../../cli/src/cli-commands/cli-version-commands.js';
-// test command
 import { factory, VersionCommand } from '../version-command.js';
 
 vi.spyOn(nodeFs, 'renameSync');
@@ -90,7 +90,7 @@ describe('version bump', () => {
     const command = lernaVersion(testDir)('poopypants');
 
     await expect(command).rejects.toThrow(
-      'bump must be an explicit version string _or_ one of: ' + "'major', 'minor', 'patch', 'premajor', 'preminor', 'prepatch', or 'prerelease'."
+      `bump must be an explicit version string _or_ one of: 'major', 'minor', 'patch', 'premajor', 'preminor', 'prepatch', or 'prerelease'.`
     );
   });
 

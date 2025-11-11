@@ -1,5 +1,7 @@
-import { type GetCommitsParams } from '@conventional-changelog/git-client';
 import type { Options as WriterOptions } from 'conventional-changelog-writer';
+
+import { type GetCommitsParams } from '@conventional-changelog/git-client';
+
 import type { ChangelogConfig, RemoteCommit } from '../interfaces.js';
 
 // available formats can be found at Git's url: https://git-scm.com/docs/git-log#_pretty_formats

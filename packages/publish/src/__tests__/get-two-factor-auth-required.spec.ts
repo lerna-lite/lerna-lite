@@ -1,6 +1,9 @@
-import type { FetchConfig } from '@lerna-lite/core';
-import { loggingOutput } from '@lerna-test/helpers/logging-output.js';
 import { afterEach, beforeEach, describe, expect, it, vi, type Mock } from 'vitest';
+
+import type { FetchConfig } from '@lerna-lite/core';
+
+import { loggingOutput } from '@lerna-test/helpers/logging-output.js';
+
 import { getProfileData } from '../lib/get-profile-data.js';
 import { getTwoFactorAuthRequired } from '../lib/get-two-factor-auth-required.js';
 
@@ -82,7 +85,9 @@ describe('getTwoFactorAuthRequired', () => {
     const result = await getTwoFactorAuthRequired(opts as FetchConfig);
 
     expect(result).toBe(false);
-    expect(loggingOutput('warn')).toContain(`Registry "${opts.registry}" does not support 'npm profile get', skipping two-factor auth check...`);
+    expect(loggingOutput('warn')).toContain(
+      `Registry "${opts.registry}" does not support 'npm profile get', skipping two-factor auth check...`
+    );
   });
 
   it('logs unexpected failure message before throwing validation error', async () => {

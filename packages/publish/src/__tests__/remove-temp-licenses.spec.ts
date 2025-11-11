@@ -1,9 +1,11 @@
+import { pathExists } from 'fs-extra/esm';
 import { dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
+import { describe, expect, it } from 'vitest';
+
 import { Project } from '@lerna-lite/core';
 import { initFixtureFactory } from '@lerna-test/helpers';
-import { pathExists } from 'fs-extra/esm';
-import { describe, expect, it } from 'vitest';
+
 import { removeTempLicenses } from '../lib/remove-temp-licenses.js';
 
 const __filename = fileURLToPath(import.meta.url);

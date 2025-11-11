@@ -1,7 +1,15 @@
 import crypto from 'crypto';
+import { outputFileSync, removeSync } from 'fs-extra/esm';
 import { realpathSync } from 'node:fs';
 import { EOL, tmpdir } from 'node:os';
 import { normalize, join as pathJoin, relative } from 'node:path';
+import normalizePath from 'normalize-path';
+import pMap from 'p-map';
+import pPipe, { type UnaryFunction } from 'p-pipe';
+import semver from 'semver';
+import { glob } from 'tinyglobby';
+import c from 'tinyrainbow';
+
 import type {
   CommandType,
   Conf,
@@ -12,6 +20,8 @@ import type {
   PublishCommandOption,
   UpdateCollectorOptions,
 } from '@lerna-lite/core';
+import type { OneTimePasswordCache } from '@lerna-lite/version';
+
 import {
   collectUpdates,
   Command,
@@ -29,16 +39,11 @@ import {
   throwIfUncommitted,
   ValidationError,
 } from '@lerna-lite/core';
-import type { OneTimePasswordCache } from '@lerna-lite/version';
 import { getOneTimePassword, VersionCommand } from '@lerna-lite/version';
-import { outputFileSync, removeSync } from 'fs-extra/esm';
-import normalizePath from 'normalize-path';
-import pMap from 'p-map';
-import pPipe, { type UnaryFunction } from 'p-pipe';
-import semver from 'semver';
-import { glob } from 'tinyglobby';
-import c from 'tinyrainbow';
+
 import type { Tarball } from './interfaces.js';
+import type { Queue } from './lib/throttle-queue.js';
+
 import { createTempLicenses } from './lib/create-temp-licenses.js';
 import { getCurrentSHA } from './lib/get-current-sha.js';
 import { getCurrentTags } from './lib/get-current-tags.js';
@@ -56,7 +61,6 @@ import { npmPublish } from './lib/npm-publish.js';
 import { overridePublishConfig } from './lib/override-publish-config.js';
 import { packDirectory } from './lib/pack-directory.js';
 import { removeTempLicenses } from './lib/remove-temp-licenses.js';
-import type { Queue } from './lib/throttle-queue.js';
 import { TailHeadQueue } from './lib/throttle-queue.js';
 import { verifyNpmPackageAccess } from './lib/verify-npm-package-access.js';
 

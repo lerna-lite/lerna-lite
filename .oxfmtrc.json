@@ -1,0 +1,24 @@
+{
+  "$schema": "./node_modules/oxfmt/configuration_schema.json",
+  "printWidth": 130,
+  "endOfLine": "lf",
+  "singleQuote": true,
+  "bracketSpacing": true,
+  "bracketSameLine": false,
+  "trailingComma": "es5",
+  "experimentalSortImports": {
+    "partitionByNewline": false,
+    "partitionByComment": false,
+    "sortSideEffects": false,
+    "order": "asc",
+    "ignoreCase": true
+  },
+  "overrides": [
+    {
+      "files": ["**/*.spec.ts"],
+      "options": {
+        "printWidth": 160
+      }
+    }
+  ]
+}

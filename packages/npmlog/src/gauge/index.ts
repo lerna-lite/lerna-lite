@@ -4,6 +4,7 @@
 import hasUnicode from 'has-unicode';
 import { onExit } from 'signal-exit';
 import c from 'tinyrainbow';
+
 import { Plumbing } from './plumbing.js';
 import { setImmediateFn } from './set-immediate.js';
 import defaultThemes from './themes.js';

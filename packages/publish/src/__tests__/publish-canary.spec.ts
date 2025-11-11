@@ -1,19 +1,18 @@
+import { outputFile } from 'fs-extra/esm';
 import { dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
-import { describeRef, promptConfirmation, throwIfUncommitted, type PublishCommandOption } from '@lerna-lite/core';
-// helpers
-import { commandRunner, gitAdd, gitCommit, gitTag, initFixtureFactory, loggingOutput } from '@lerna-test/helpers';
-// stabilize commit SHA
-import gitSHA from '@lerna-test/helpers/serializers/serialize-git-sha.js';
-import { outputFile } from 'fs-extra/esm';
 import { beforeAll, describe, expect, test, vi, type Mock } from 'vitest';
-// mocked modules
 import * as writePkg from 'write-package';
 import yargParser from 'yargs-parser';
-// test command
+
+import { describeRef, promptConfirmation, throwIfUncommitted, type PublishCommandOption } from '@lerna-lite/core';
+import { commandRunner, gitAdd, gitCommit, gitTag, initFixtureFactory, loggingOutput } from '@lerna-test/helpers';
+import gitSHA from '@lerna-test/helpers/serializers/serialize-git-sha.js';
+
+import type { npmPublish as npmPublishMock } from '../lib/__mocks__/npm-publish.js';
+
 import cliCommands from '../../../cli/src/cli-commands/cli-publish-commands.js';
 import { factory, PublishCommand } from '../index.js';
-import type { npmPublish as npmPublishMock } from '../lib/__mocks__/npm-publish.js';
 import { npmPublish } from '../lib/npm-publish.js';
 
 vi.mock('write-package', async () => await vi.importActual('../../../version/src/lib/__mocks__/write-package'));
@@ -33,10 +32,16 @@ vi.mock('@lerna-lite/core', async () => ({
 // also point to the local publish command so that all mocks are properly used even by the command-runner
 vi.mock('@lerna-lite/publish', async () => await vi.importActual('../publish-command'));
 
-vi.mock('../lib/get-packages-without-license', async () => await vi.importActual('../lib/__mocks__/get-packages-without-license'));
+vi.mock(
+  '../lib/get-packages-without-license',
+  async () => await vi.importActual('../lib/__mocks__/get-packages-without-license')
+);
 vi.mock('../lib/verify-npm-package-access', async () => await vi.importActual('../lib/__mocks__/verify-npm-package-access'));
 vi.mock('../lib/get-npm-username', async () => await vi.importActual('../lib/__mocks__/get-npm-username'));
-vi.mock('../lib/get-two-factor-auth-required', async () => await vi.importActual('../lib/__mocks__/get-two-factor-auth-required'));
+vi.mock(
+  '../lib/get-two-factor-auth-required',
+  async () => await vi.importActual('../lib/__mocks__/get-two-factor-auth-required')
+);
 vi.mock('../lib/npm-publish', async () => await vi.importActual('../lib/__mocks__/npm-publish'));
 
 const __filename = fileURLToPath(import.meta.url);
@@ -105,7 +110,11 @@ async function setupChanges(cwd: string, ...tuples: [string, string][]) {
 test('publish --canary', async () => {
   const cwd = await initTaggedFixture('normal');
 
-  await setupChanges(cwd, ['packages/package-1/all-your-base.js', 'belong to us'], ['packages/package-4/non-matching-semver.js', 'senpai noticed me']);
+  await setupChanges(
+    cwd,
+    ['packages/package-1/all-your-base.js', 'belong to us'],
+    ['packages/package-4/non-matching-semver.js', 'senpai noticed me']
+  );
   await new PublishCommand(createArgv(cwd, '--canary'));
 
   expect(promptConfirmation).toHaveBeenLastCalledWith('Are you sure you want to publish these packages?');
@@ -130,7 +139,11 @@ test('publish --canary', async () => {
 test('publish --canary with auto-confirm --yes', async () => {
   const cwd = await initTaggedFixture('normal');
 
-  await setupChanges(cwd, ['packages/package-1/all-your-base.js', 'belong to us'], ['packages/package-4/non-matching-semver.js', 'senpai noticed me']);
+  await setupChanges(
+    cwd,
+    ['packages/package-1/all-your-base.js', 'belong to us'],
+    ['packages/package-4/non-matching-semver.js', 'senpai noticed me']
+  );
   await new PublishCommand(createArgv(cwd, '--canary', '--yes'));
 
   expect(promptConfirmation).not.toHaveBeenCalled();

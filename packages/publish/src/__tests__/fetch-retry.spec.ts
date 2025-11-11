@@ -1,4 +1,5 @@
 import { beforeEach, describe, expect, it, vi } from 'vitest';
+
 import { fetchWithRetry } from '../lib/fetch-retry.js';
 
 function createResponse(ok: boolean, status = 200) {
@@ -96,7 +97,9 @@ describe('fetchWithRetry', () => {
 
   it('does not retry POST requests on response not ok', async () => {
     fetchMock.mockResolvedValue({ ok: false, status: 500, json: () => Promise.resolve({}) });
-    await expect(fetchWithRetry('http://test', { method: 'POST', retry: 3 })).rejects.toThrow('Failed after 1 attempt (POST requests are not retried)');
+    await expect(fetchWithRetry('http://test', { method: 'POST', retry: 3 })).rejects.toThrow(
+      'Failed after 1 attempt (POST requests are not retried)'
+    );
     expect(fetchMock).toHaveBeenCalledTimes(1);
   });
 

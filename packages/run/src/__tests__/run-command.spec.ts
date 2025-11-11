@@ -1,15 +1,14 @@
-import { dirname } from 'node:path';
-// mocked modules
-import { fileURLToPath } from 'node:url';
-// make sure to import the output mock
-import { logOutput, type RunCommandOption } from '@lerna-lite/core';
-import { commandRunner, initFixtureFactory, loggingOutput, normalizeRelativeDir } from '@lerna-test/helpers';
 import { pathExists, readJson } from 'fs-extra/esm';
+import { dirname } from 'node:path';
+import { fileURLToPath } from 'node:url';
 import { glob } from 'tinyglobby';
 import { afterEach, beforeAll, describe, expect, it, vi, type Mock } from 'vitest';
 import yargParser from 'yargs-parser';
+
+import { logOutput, type RunCommandOption } from '@lerna-lite/core';
+import { commandRunner, initFixtureFactory, loggingOutput, normalizeRelativeDir } from '@lerna-test/helpers';
+
 import cliRunCommands from '../../../cli/src/cli-commands/cli-run-commands.js';
-// helpers
 import { factory, RunCommand } from '../index.js';
 import { npmRunScript, npmRunScriptStreaming } from '../lib/npm-run-script.js';
 

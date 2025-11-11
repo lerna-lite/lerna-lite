@@ -1,6 +1,7 @@
 {
-  "editor.defaultFormatter": "esbenp.prettier-vscode",
   "editor.formatOnSave": true,
   "editor.formatOnPaste": false,
+  "editor.defaultFormatter": "oxc.oxc-vscode",
+  "oxc.fmt.experimental": true,
   "typescript.tsdk": "node_modules\\typescript\\lib"
 }

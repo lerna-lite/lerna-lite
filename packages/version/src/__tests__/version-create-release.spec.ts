@@ -1,16 +1,15 @@
-// mocked modules
-import { dirname, join } from 'node:path';
-import { fileURLToPath } from 'node:url';
-import { logOutput, type VersionCommandOption } from '@lerna-lite/core';
-import { log } from '@lerna-lite/npmlog';
-// helpers
-import { commandRunner, initFixtureFactory } from '@lerna-test/helpers';
 import dedent from 'dedent';
 import { outputFile } from 'fs-extra/esm';
+import { dirname, join } from 'node:path';
+import { fileURLToPath } from 'node:url';
 import c from 'tinyrainbow';
 import { beforeEach, describe, expect, it, vi, type Mock } from 'vitest';
 import yargParser from 'yargs-parser';
-// test command
+
+import { logOutput, type VersionCommandOption } from '@lerna-lite/core';
+import { log } from '@lerna-lite/npmlog';
+import { commandRunner, initFixtureFactory } from '@lerna-test/helpers';
+
 import cliCommands from '../../../cli/src/cli-commands/cli-version-commands.js';
 import { recommendVersion } from '../conventional-commits/recommend-version.js';
 import { updateChangelog } from '../conventional-commits/update-changelog.js';
@@ -27,8 +26,14 @@ vi.mock('../lib/git-tag', async () => await vi.importActual('../lib/__mocks__/gi
 vi.mock('../lib/is-anything-committed', async () => await vi.importActual('../lib/__mocks__/is-anything-committed'));
 vi.mock('../lib/is-behind-upstream', async () => await vi.importActual('../lib/__mocks__/is-behind-upstream'));
 vi.mock('../lib/remote-branch-exists', async () => await vi.importActual('../lib/__mocks__/remote-branch-exists'));
-vi.mock('../conventional-commits/recommend-version', async () => await vi.importActual('../__mocks__/conventional-commits/recommend-version'));
-vi.mock('../conventional-commits/update-changelog', async () => await vi.importActual('../__mocks__/conventional-commits/update-changelog'));
+vi.mock(
+  '../conventional-commits/recommend-version',
+  async () => await vi.importActual('../__mocks__/conventional-commits/recommend-version')
+);
+vi.mock(
+  '../conventional-commits/update-changelog',
+  async () => await vi.importActual('../__mocks__/conventional-commits/update-changelog')
+);
 vi.mock('../git-clients/gitlab-client', async () => await vi.importActual('../__mocks__/gitlab-client'));
 vi.mock('../git-clients/github-client', async () => await vi.importActual('../__mocks__/github-client'));
 vi.mock('../lib/create-release', async () => {
@@ -120,7 +125,9 @@ describe.each([
     const cwd = await initFixture('independent');
     const command = lernaVersion(cwd)('--create-release', type, '--conventional-commits', '--create-release-discussion');
 
-    await expect(command).rejects.toThrow('A discussion category name must be provided to the --create-release-discussion option.');
+    await expect(command).rejects.toThrow(
+      'A discussion category name must be provided to the --create-release-discussion option.'
+    );
 
     expect(client.releases.size).toBe(0);
   });
@@ -240,7 +247,11 @@ describe.each([
 
     await new VersionCommand(createArgv(cwd, '--create-release', type, '--conventional-commits', '--dry-run'));
 
-    expect(logSpy).toHaveBeenCalledWith(c.bold(c.magenta('[dry-run] >')), `Create Release with repo options: `, expect.anything());
+    expect(logSpy).toHaveBeenCalledWith(
+      c.bold(c.magenta('[dry-run] >')),
+      `Create Release with repo options: `,
+      expect.anything()
+    );
   });
 
   it('creates a single fixed release in git dry-run mode', async () => {
@@ -385,7 +396,9 @@ it('should create a github release discussion when enabled', async () => {
 
   (recommendVersion as Mock).mockResolvedValueOnce('1.1.0');
 
-  const command = new VersionCommand(createArgv(cwd, '--create-release', 'github', '--conventional-commits', '--create-release-discussion', 'some-discussion'));
+  const command = new VersionCommand(
+    createArgv(cwd, '--create-release', 'github', '--conventional-commits', '--create-release-discussion', 'some-discussion')
+  );
   await command;
   await command.execute();
 
@@ -410,7 +423,9 @@ it('should create a github release and generate release notes with changelog', a
 
   (recommendVersion as Mock).mockResolvedValueOnce('1.1.0');
 
-  const command = new VersionCommand(createArgv(cwd, '--create-release', 'github', '--conventional-commits', '--generate-release-notes'));
+  const command = new VersionCommand(
+    createArgv(cwd, '--create-release', 'github', '--conventional-commits', '--generate-release-notes')
+  );
   await command;
   await command.execute();
 
@@ -433,7 +448,9 @@ it('should create a github release and generate release notes with --no-changelo
 
   (recommendVersion as Mock).mockResolvedValueOnce('1.1.0');
 
-  const command = new VersionCommand(createArgv(cwd, '--create-release', 'github', '--conventional-commits', '--generate-release-notes', '--no-changelog'));
+  const command = new VersionCommand(
+    createArgv(cwd, '--create-release', 'github', '--conventional-commits', '--generate-release-notes', '--no-changelog')
+  );
   await command;
   await command.execute();
 
@@ -449,12 +466,16 @@ it('should create a github release and generate release notes with --no-changelo
 
 it('should log an error when createRelease throws', async () => {
   process.env.GITHUB_TOKEN = 'TOKEN';
-  (createReleaseClient as Mock).mockImplementation(() => Promise.resolve({ repos: { createRelease: vi.fn(() => Promise.reject('some error')) } }));
+  (createReleaseClient as Mock).mockImplementation(() =>
+    Promise.resolve({ repos: { createRelease: vi.fn(() => Promise.reject('some error')) } })
+  );
   (createRelease as Mock).mockImplementationOnce(() => {
     throw new Error('some error');
   });
   const cwd = await initFixture('normal');
-  const command = new VersionCommand(createArgv(cwd, '--conventional-commits', '--create-release', 'github', '--create-release-discussion', 'some-discussion'));
+  const command = new VersionCommand(
+    createArgv(cwd, '--conventional-commits', '--create-release', 'github', '--create-release-discussion', 'some-discussion')
+  );
   await command;
   const loggerSpy = vi.spyOn(command.logger, 'error');
   await command.execute();

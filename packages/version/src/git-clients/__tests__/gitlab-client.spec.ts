@@ -1,4 +1,5 @@
 import { afterEach, describe, expect, it, vi } from 'vitest';
+
 import { createGitLabClient } from '../gitlab-client.js';
 import { GitLabClient } from '../GitLabClient.js';
 

@@ -1,19 +1,17 @@
+import { pathExists, readJson } from 'fs-extra/esm';
 import { basename, dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
-// make sure to import the output mock
-
-// mocked modules
-import { logOutput, spawn, spawnStreaming, type ExecCommandOption } from '@lerna-lite/core';
-import { commandRunner, initFixtureFactory, normalizeRelativeDir } from '@lerna-test/helpers';
-import { loggingOutput } from '@lerna-test/helpers/logging-output.js';
-import { pathExists, readJson } from 'fs-extra/esm';
 import { glob } from 'tinyglobby';
 import { afterEach, beforeAll, describe, expect, it, vi, type Mock } from 'vitest';
 import yargParser from 'yargs-parser';
+
+import { logOutput, spawn, spawnStreaming, type ExecCommandOption } from '@lerna-lite/core';
+import { commandRunner, initFixtureFactory, normalizeRelativeDir } from '@lerna-test/helpers';
+import { loggingOutput } from '@lerna-test/helpers/logging-output.js';
+
 import cliExecCommands from '../../../cli/src/cli-commands/cli-exec-commands.js';
 import { ExecCommand, factory } from '../index.js';
 
-// mocked modules
 vi.mock('@lerna-lite/core', async () => ({
   ...(await vi.importActual<any>('@lerna-lite/core')), // return the other real methods, below we'll mock only 2 of the methods
   Command: (await vi.importActual<any>('../../../core/src/command')).Command,
@@ -202,19 +200,28 @@ describe('ExecCommand', () => {
     it('executes a command in all packages with --parallel', async () => {
       await lernaExec(testDir)('--parallel', 'ls');
 
-      expect(execInPackagesStreaming(testDir)).toEqual(['packages/package-1 ls (prefix: package-1)', 'packages/package-2 ls (prefix: package-2)']);
+      expect(execInPackagesStreaming(testDir)).toEqual([
+        'packages/package-1 ls (prefix: package-1)',
+        'packages/package-2 ls (prefix: package-2)',
+      ]);
     });
 
     it('omits package prefix with --parallel --no-prefix', async () => {
       await lernaExec(testDir)('--parallel', '--no-prefix', 'ls');
 
-      expect(execInPackagesStreaming(testDir)).toEqual(['packages/package-1 ls (prefix: false)', 'packages/package-2 ls (prefix: false)']);
+      expect(execInPackagesStreaming(testDir)).toEqual([
+        'packages/package-1 ls (prefix: false)',
+        'packages/package-2 ls (prefix: false)',
+      ]);
     });
 
     it('executes a command in all packages with --stream', async () => {
       await lernaExec(testDir)('--stream', 'ls');
 
-      expect(execInPackagesStreaming(testDir)).toEqual(['packages/package-1 ls (prefix: package-1)', 'packages/package-2 ls (prefix: package-2)']);
+      expect(execInPackagesStreaming(testDir)).toEqual([
+        'packages/package-1 ls (prefix: package-1)',
+        'packages/package-2 ls (prefix: package-2)',
+      ]);
     });
 
     it('executes a command in all packages with --stream in dry-run mode and expect them all to be logged', async () => {
@@ -228,11 +235,21 @@ describe('ExecCommand', () => {
     it('omits package prefix with --stream --no-prefix', async () => {
       await lernaExec(testDir)('--stream', '--no-prefix', 'ls');
 
-      expect(execInPackagesStreaming(testDir)).toEqual(['packages/package-1 ls (prefix: false)', 'packages/package-2 ls (prefix: false)']);
+      expect(execInPackagesStreaming(testDir)).toEqual([
+        'packages/package-1 ls (prefix: false)',
+        'packages/package-2 ls (prefix: false)',
+      ]);
     });
 
     it('does not explode with filter flags', async () => {
-      await lernaExec(testDir)('ls', '--no-private', '--since', '--include-merged-tags', '--exclude-dependents', '--include-dependencies');
+      await lernaExec(testDir)(
+        'ls',
+        '--no-private',
+        '--since',
+        '--include-merged-tags',
+        '--exclude-dependents',
+        '--include-dependencies'
+      );
 
       expect(calledInPackages()).toEqual(['package-1', 'package-2']);
     });

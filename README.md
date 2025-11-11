@@ -123,8 +123,7 @@ Below are the main reasons as to why this fork was created:
    - if you use tools like TurboRepo and install the original Lerna, you end up installing 2 similar tools (not good)
 5. in Lerna-Lite we also added a few unique features that are not available in the original Lerna:
    - [`catalog:` protocol](https://github.com/lerna-lite/lerna-lite/tree/main/packages/version#catalog-protocol) support (pnpm/bun/yarn) for both `version` and `publish` commands (new 🍬)
-   - [`workspace:` protocol](https://github.com/lerna-lite/lerna-lite/tree/main/packages/version#workspace-protocol) support
-     * _Lerna added support for the same feature 6 months later in their v6.0 release_
+   - [`workspace:` protocol](https://github.com/lerna-lite/lerna-lite/tree/main/packages/version#workspace-protocol) support (Lerna also brought support v6)
    - [--dry-run](https://github.com/lerna-lite/lerna-lite/tree/main/packages/version#--dry-run) to preview version/publish & changelogs locally (shows git changes without committing them)
    - [lerna version --allow-peer-dependencies-update](https://github.com/lerna-lite/lerna-lite/tree/main/packages/version#--allow-peer-dependencies-update) to also update your peer dependencies
    - [lerna version --changelog-header-message "msg"](https://github.com/lerna-lite/lerna-lite/tree/main/packages/version#--changelog-header-message-msg) for showing banner or sponsors in your changelogs

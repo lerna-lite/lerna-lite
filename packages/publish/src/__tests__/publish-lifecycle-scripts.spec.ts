@@ -1,12 +1,11 @@
-// mocked modules
-// helpers
+import { loadJsonFile } from 'load-json-file';
 import { dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
+import { afterEach, describe, expect, it, vi } from 'vitest';
+
 import { runLifecycle } from '@lerna-lite/core';
 import { commandRunner, initFixtureFactory } from '@lerna-test/helpers';
-import { loadJsonFile } from 'load-json-file';
-import { afterEach, describe, expect, it, vi } from 'vitest';
-// test command
+
 import cliCommands from '../../../cli/src/cli-commands/cli-publish-commands.js';
 import { packDirectory } from '../lib/pack-directory.js';
 
@@ -14,9 +13,18 @@ vi.mock('load-json-file', async () => await vi.importActual('../../../version/sr
 
 // FIXME: better mock for version command
 vi.mock('../../../version/src/lib/git-push', async () => await vi.importActual('../../../version/src/lib/__mocks__/git-push'));
-vi.mock('../../../version/src/lib/is-anything-committed', async () => await vi.importActual('../../../version/src/lib/__mocks__/is-anything-committed'));
-vi.mock('../../../version/src/lib/is-behind-upstream', async () => await vi.importActual('../../../version/src/lib/__mocks__/is-behind-upstream'));
-vi.mock('../../../version/src/lib/remote-branch-exists', async () => await vi.importActual('../../../version/src/lib/__mocks__/remote-branch-exists'));
+vi.mock(
+  '../../../version/src/lib/is-anything-committed',
+  async () => await vi.importActual('../../../version/src/lib/__mocks__/is-anything-committed')
+);
+vi.mock(
+  '../../../version/src/lib/is-behind-upstream',
+  async () => await vi.importActual('../../../version/src/lib/__mocks__/is-behind-upstream')
+);
+vi.mock(
+  '../../../version/src/lib/remote-branch-exists',
+  async () => await vi.importActual('../../../version/src/lib/__mocks__/remote-branch-exists')
+);
 
 // mocked modules of @lerna-lite/core
 vi.mock('@lerna-lite/core', async () => ({
@@ -39,10 +47,16 @@ vi.mock('@lerna-lite/publish', async () => await vi.importActual('../publish-com
 vi.mock('@lerna-lite/version', async () => await vi.importActual('../../../version/src/version-command'));
 
 // local modules _must_ be explicitly mocked
-vi.mock('../lib/get-packages-without-license', async () => await vi.importActual('../lib/__mocks__/get-packages-without-license'));
+vi.mock(
+  '../lib/get-packages-without-license',
+  async () => await vi.importActual('../lib/__mocks__/get-packages-without-license')
+);
 vi.mock('../lib/verify-npm-package-access', async () => await vi.importActual('../lib/__mocks__/verify-npm-package-access'));
 vi.mock('../lib/get-npm-username', async () => await vi.importActual('../lib/__mocks__/get-npm-username'));
-vi.mock('../lib/get-two-factor-auth-required', async () => await vi.importActual('../lib/__mocks__/get-two-factor-auth-required'));
+vi.mock(
+  '../lib/get-two-factor-auth-required',
+  async () => await vi.importActual('../lib/__mocks__/get-two-factor-auth-required')
+);
 vi.mock('../lib/pack-directory', async () => await vi.importActual('../lib/__mocks__/pack-directory'));
 vi.mock('../lib/npm-publish', async () => await vi.importActual('../lib/__mocks__/npm-publish'));
 

@@ -1,15 +1,17 @@
+import { pathExistsSync, readJsonSync } from 'fs-extra/esm';
+import { loadJsonFile } from 'load-json-file';
 import { promises as fsPromises } from 'node:fs';
 import { join, dirname as pathDirname } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { stripVTControlCharacters } from 'node:util';
+import { beforeEach, describe, expect, it, test, vi, type Mock } from 'vitest';
+
 import type { Package } from '@lerna-lite/core';
+
 import { execPackageManager, execPackageManagerSync, Project } from '@lerna-lite/core';
 import { log } from '@lerna-lite/npmlog';
 import { initFixtureFactory } from '@lerna-test/helpers';
-import { pathExistsSync, readJsonSync } from 'fs-extra/esm';
-// mocked or stubbed modules
-import { loadJsonFile } from 'load-json-file';
-import { beforeEach, describe, expect, it, test, vi, type Mock } from 'vitest';
+
 import {
   loadPackageLockFileWhenExists,
   runInstallLockFileOnly,
@@ -209,7 +211,11 @@ describe('pnpm client', () => {
     const lockFileOutput = await runInstallLockFileOnly('pnpm', cwd, { npmClientArgs: ['--frozen-lockfile'] });
 
     expect(execPackageManager).toHaveBeenCalled();
-    expect(execPackageManager).toHaveBeenCalledWith('pnpm', ['install', '--lockfile-only', '--ignore-scripts', '--frozen-lockfile'], { cwd });
+    expect(execPackageManager).toHaveBeenCalledWith(
+      'pnpm',
+      ['install', '--lockfile-only', '--ignore-scripts', '--frozen-lockfile'],
+      { cwd }
+    );
     expect(lockFileOutput).toBe('pnpm-lock.yaml');
   });
 });
@@ -252,7 +258,11 @@ describe('bun client', () => {
     const lockFileOutput = await runInstallLockFileOnly('bun', cwd, { npmClientArgs: ['--frozen-lockfile'] });
 
     expect(execPackageManager).toHaveBeenCalled();
-    expect(execPackageManager).toHaveBeenCalledWith('bun', ['install', '--lockfile-only', '--ignore-scripts', '--frozen-lockfile'], { cwd });
+    expect(execPackageManager).toHaveBeenCalledWith(
+      'bun',
+      ['install', '--lockfile-only', '--ignore-scripts', '--frozen-lockfile'],
+      { cwd }
+    );
     expect(lockFileOutput).toBe('bun.lock');
   });
 });
@@ -288,10 +298,17 @@ describe('run install lockfile-only', () => {
       (execPackageManager as Mock).mockImplementationOnce(() => true);
       const cwd = await initFixture('lockfile-version2');
 
-      const lockFileOutput = await runInstallLockFileOnly('npm', cwd, { npmClientArgs: ['--legacy-peer-deps'], runScriptsOnLockfileUpdate: false });
+      const lockFileOutput = await runInstallLockFileOnly('npm', cwd, {
+        npmClientArgs: ['--legacy-peer-deps'],
+        runScriptsOnLockfileUpdate: false,
+      });
 
       expect(execPackageManagerSync).toHaveBeenCalledWith('npm', ['--version']);
-      expect(execPackageManager).toHaveBeenCalledWith('npm', ['install', '--package-lock-only', '--ignore-scripts', '--legacy-peer-deps'], { cwd });
+      expect(execPackageManager).toHaveBeenCalledWith(
+        'npm',
+        ['install', '--package-lock-only', '--ignore-scripts', '--legacy-peer-deps'],
+        { cwd }
+      );
       expect(lockFileOutput).toBe('package-lock.json');
     });
 
@@ -301,9 +318,13 @@ describe('run install lockfile-only', () => {
       const lockFileOutput = await runInstallLockFileOnly('npm', cwd, { npmClientArgs: ['--legacy-peer-deps,--force'] });
 
       expect(execPackageManagerSync).toHaveBeenCalledWith('npm', ['--version']);
-      expect(execPackageManager).toHaveBeenCalledWith('npm', ['install', '--package-lock-only', '--ignore-scripts', '--legacy-peer-deps', '--force'], {
-        cwd,
-      });
+      expect(execPackageManager).toHaveBeenCalledWith(
+        'npm',
+        ['install', '--package-lock-only', '--ignore-scripts', '--legacy-peer-deps', '--force'],
+        {
+          cwd,
+        }
+      );
       expect(lockFileOutput).toBe('package-lock.json');
     });
   });

@@ -1,4 +1,5 @@
 import { expect, test } from 'vitest';
+
 // file under test
 import { getPackagesForOption } from '../lib/get-packages-for-option.js';
 

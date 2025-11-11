@@ -1,9 +1,11 @@
+import { execa } from 'execa';
 import { dirname } from 'node:path';
 import { fileURLToPath } from 'node:url';
+import { expect, test, vi } from 'vitest';
+
 import { execSync } from '@lerna-lite/core';
 import { initFixtureFactory } from '@lerna-test/helpers';
-import { execa } from 'execa';
-import { expect, test, vi } from 'vitest';
+
 import { isAnythingCommitted } from '../lib/is-anything-committed.js';
 
 const __filename = fileURLToPath(import.meta.url);
@@ -29,7 +31,12 @@ test('dry-run of isAnythingCommitted', async () => {
   const cwd = await initFixture('root-manifest-only');
 
   expect(isAnythingCommitted({ cwd }, true)).toBe(true);
-  expect(execSync).toHaveBeenCalledWith('git', ['rev-list', '--count', '--all', '--max-count=1'], { cwd: expect.any(String) }, true);
+  expect(execSync).toHaveBeenCalledWith(
+    'git',
+    ['rev-list', '--count', '--all', '--max-count=1'],
+    { cwd: expect.any(String) },
+    true
+  );
 });
 
 test('isAnythingCommitted without and with a commit', async () => {

@@ -1,8 +1,10 @@
-import { basename, dirname, join, resolve as pathResolve, relative } from 'node:path';
-import { log } from '@lerna-lite/npmlog';
 import { loadJsonFile, loadJsonFileSync } from 'load-json-file';
+import { basename, dirname, join, resolve as pathResolve, relative } from 'node:path';
 import npa from 'npm-package-arg';
 import { writePackage } from 'write-package';
+
+import { log } from '@lerna-lite/npmlog';
+
 import type { CommandType, DependenciesType, NpaResolveResult, RawManifest } from './models/interfaces.js';
 import type { CatalogConfig } from './utils/catalog-utils.js';
 

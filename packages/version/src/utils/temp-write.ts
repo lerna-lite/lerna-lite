@@ -4,13 +4,14 @@
  * Embedded here into lerna directly because we cannot yet migrate to ESM only, and we needed to bump outdated deps.
  */
 
+import type { Readable } from 'node:stream';
+
+import { isStream } from 'is-stream';
 import { createWriteStream, mkdirSync, realpathSync, writeFile, writeFileSync } from 'node:fs';
 import { mkdir } from 'node:fs/promises';
 import { tmpdir } from 'node:os';
 import { dirname, join } from 'node:path';
-import type { Readable } from 'node:stream';
 import { promisify } from 'node:util';
-import { isStream } from 'is-stream';
 import { v4 as uuidv4 } from 'uuid';
 
 const writeFileP = promisify(writeFile);

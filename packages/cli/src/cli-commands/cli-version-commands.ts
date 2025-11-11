@@ -1,5 +1,7 @@
 import type { VersionCommandOption } from '@lerna-lite/core';
+
 import { log } from '@lerna-lite/npmlog';
+
 import { filterOptions } from '../filter-options.js';
 
 /**

@@ -27,7 +27,7 @@ corepack prepare pnpm@latest --activate
 3. run Lint script
   - `pnpm lint`
 4. run Formatter script
-  - `pnpm prettier:write`
+  - `pnpm format`
 5. run a full TypeScript (TSC) build
    - `pnpm build` OR `npx pnpm build`
 6. add/run Vitest unit tests (make sure to run the previous steps first):

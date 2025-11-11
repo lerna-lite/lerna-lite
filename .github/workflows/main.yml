@@ -44,11 +44,11 @@ jobs:
       - name: Run pnpm install dependencies
         run: pnpm install
 
-      - name: Prettier Formatting
-        run: pnpm prettier:check
-
-      - name: OXC Linting
+      - name: Linting (oxlint)
         run: pnpm lint
+
+      - name: Formatting (oxfmt)
+        run: pnpm format:check
 
   tests:
     strategy:

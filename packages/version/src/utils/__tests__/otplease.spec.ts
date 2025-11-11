@@ -1,8 +1,7 @@
-// mocked modules of @lerna-lite/core
-
-// file under test
-import { promptTextInput } from '@lerna-lite/core';
 import { afterEach, beforeEach, describe, expect, it, vi, type Mock } from 'vitest';
+
+import { promptTextInput } from '@lerna-lite/core';
+
 import { getOneTimePassword, otplease } from '../otplease.js';
 
 vi.mock('@lerna-lite/core', async () => ({
@@ -135,7 +134,9 @@ describe('@lerna/otplease', () => {
   });
 
   it('validates OTP prompt response', async () => {
-    (promptTextInput as Mock).mockImplementationOnce((msg, opts) => Promise.resolve(opts.validate('i am the very model of a modern major general')));
+    (promptTextInput as Mock).mockImplementationOnce((msg, opts) =>
+      Promise.resolve(opts.validate('i am the very model of a modern major general'))
+    );
 
     const obj = {};
     const fn = vi.fn(makeTestCallback('343434', obj));

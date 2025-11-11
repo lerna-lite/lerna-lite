@@ -1,8 +1,8 @@
-// mocked modules
+import { describe, expect, it, vi, type Mock } from 'vitest';
+
 import { execSync } from '@lerna-lite/core';
 import { log } from '@lerna-lite/npmlog';
-import { describe, expect, it, vi, type Mock } from 'vitest';
-// file under test
+
 import { getLastCommit } from '../../lib/get-last-commit.js';
 
 const { execSyncMock } = vi.hoisted(() => ({ execSyncMock: vi.fn() }));

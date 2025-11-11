@@ -1,16 +1,13 @@
-// mocked modules
 import { dirname } from 'node:path';
-// helpers
 import { fileURLToPath } from 'node:url';
+import { beforeAll, describe, expect, it, vi } from 'vitest';
+import yargParser from 'yargs-parser';
+
 import { collectUpdates, logOutput, type ListCommandOption } from '@lerna-lite/core';
 import { commandRunner, initFixtureFactory } from '@lerna-test/helpers';
-// normalize temp directory paths in snapshots
 import serializeTempdir from '@lerna-test/helpers/serializers/serialize-tempdir.js';
 import serializeWindowsPaths from '@lerna-test/helpers/serializers/serialize-windows-paths.js';
-import { beforeAll, describe, expect, it, vi } from 'vitest';
-// file under test
-import yargParser from 'yargs-parser';
-// file under test
+
 import cliListCommands from '../../../cli/src/cli-commands/cli-list-commands.js';
 import { ListCommand } from '../index.js';
 import { factory } from '../list-command.js';
@@ -30,7 +27,10 @@ vi.mock('@lerna-lite/core', async () => ({
   getFilteredPackages: (await vi.importActual<any>('../../../core/src/filter-packages')).getFilteredPackages,
 }));
 
-vi.mock('../../../core/src/utils/collect-updates/collect-updates.js', async () => await vi.importActual('../../../core/src/__mocks__/collect-updates'));
+vi.mock(
+  '../../../core/src/utils/collect-updates/collect-updates.js',
+  async () => await vi.importActual('../../../core/src/__mocks__/collect-updates')
+);
 vi.mock('@lerna-lite/list', async () => await vi.importActual<any>('../list-command'));
 
 const __filename = fileURLToPath(import.meta.url);
@@ -174,7 +174,12 @@ __TEST_ROOTDIR__/packages/package-5:package-5:1.0.0:PRIVATE
       (collectUpdates as any).setUpdated(testDir);
       await lernaList(testDir)('--since', 'deadbeef');
       expect(logOutput).not.toHaveBeenCalled();
-      expect(collectUpdates).toHaveBeenLastCalledWith(expect.any(Array), expect.any(Map), expect.any(Object), expect.objectContaining({ since: 'deadbeef' }));
+      expect(collectUpdates).toHaveBeenLastCalledWith(
+        expect.any(Array),
+        expect.any(Map),
+        expect.any(Object),
+        expect.objectContaining({ since: 'deadbeef' })
+      );
     });
   });
 

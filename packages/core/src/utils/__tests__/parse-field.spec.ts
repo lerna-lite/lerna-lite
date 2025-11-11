@@ -1,4 +1,5 @@
 import { describe, expect, it } from 'vitest';
+
 import { parseField } from '../parse-field.js';
 
 describe('parseField()', () => {

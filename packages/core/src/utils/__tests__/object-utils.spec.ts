@@ -1,5 +1,7 @@
-import { log } from '@lerna-lite/npmlog';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
+
+import { log } from '@lerna-lite/npmlog';
+
 import { deleteComplexObjectProp, getComplexObjectValue, isEmpty } from '../object-utils.js';
 
 describe('deleteComplexObjectProp method', () => {

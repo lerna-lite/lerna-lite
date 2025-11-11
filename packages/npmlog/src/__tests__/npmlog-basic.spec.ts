@@ -5,6 +5,7 @@ import { Stream, Writable } from 'node:stream';
 import { stripVTControlCharacters } from 'node:util';
 import c from 'tinyrainbow';
 import { afterAll, afterEach, beforeEach, describe, expect, test, vi } from 'vitest';
+
 import themes from '../gauge/themes.js';
 import { log, Logger } from '../npmlog.js';
 

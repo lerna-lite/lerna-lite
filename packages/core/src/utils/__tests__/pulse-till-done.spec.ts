@@ -1,5 +1,6 @@
 import { json } from 'npm-registry-fetch';
 import { describe, expect, it } from 'vitest';
+
 import { pulseTillDone } from '../pulse-till-done.js';
 
 describe('pulse-till-done()', () => {
@@ -16,6 +17,8 @@ describe('pulse-till-done()', () => {
   });
 
   it('throws when an invalid file is provided to pulse', async () => {
-    await expect(pulseTillDone(json('../../../invalid-file.json', { name: '@lerna-lite/core' }))).rejects.toThrow('404 Not Found');
+    await expect(pulseTillDone(json('../../../invalid-file.json', { name: '@lerna-lite/core' }))).rejects.toThrow(
+      '404 Not Found'
+    );
   });
 });

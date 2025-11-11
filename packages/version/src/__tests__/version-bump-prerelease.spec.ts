@@ -1,17 +1,25 @@
+import { outputFile } from 'fs-extra/esm';
 import { dirname, join, resolve as pathResolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
-// mocked modules
-import { promptSelectOne, promptTextInput, type VersionCommandOption } from '@lerna-lite/core';
-// helpers
-import { commandRunner, getCommitMessage, gitAdd, gitCommit, gitInit, gitTag, initFixtureFactory, showCommit, temporaryDirectory } from '@lerna-test/helpers';
-// stabilize commit SHA
-import serializeChangelog from '@lerna-test/helpers/serializers/serialize-changelog.js';
-import { outputFile } from 'fs-extra/esm';
 // @ts-ignore
 import Tacks from 'tacks';
 import { expect, test, vi, type Mock } from 'vitest';
 import yargParser from 'yargs-parser';
-// test command
+
+import { promptSelectOne, promptTextInput, type VersionCommandOption } from '@lerna-lite/core';
+import {
+  commandRunner,
+  getCommitMessage,
+  gitAdd,
+  gitCommit,
+  gitInit,
+  gitTag,
+  initFixtureFactory,
+  showCommit,
+  temporaryDirectory,
+} from '@lerna-test/helpers';
+import serializeChangelog from '@lerna-test/helpers/serializers/serialize-changelog.js';
+
 import cliCommands from '../../../cli/src/cli-commands/cli-version-commands.js';
 import { VersionCommand } from '../version-command.js';
 

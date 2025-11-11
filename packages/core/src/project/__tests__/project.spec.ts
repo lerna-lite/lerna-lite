@@ -1,10 +1,11 @@
+import { outputFile, remove, writeJson } from 'fs-extra/esm';
 import { basename, dirname, join, resolve as pathResolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
-import { initFixtureFactory } from '@lerna-test/helpers';
-import { outputFile, remove, writeJson } from 'fs-extra/esm';
 import { afterEach, beforeAll, beforeEach, describe, expect, it, vi, type Mock } from 'vitest';
 import { writeJsonFile } from 'write-json-file';
-// file under test
+
+import { initFixtureFactory } from '@lerna-test/helpers';
+
 import { Project } from '../project.js';
 
 const { writeFileMock } = vi.hoisted(() => ({ writeFileMock: vi.fn() }));
@@ -155,7 +156,10 @@ describe('Project', () => {
 
       (writeFileMock as Mock).mockName('writeFileSync');
 
-      expect(writeFileMock).toHaveBeenCalledWith(expect.stringContaining('lerna.json5'), expect.stringContaining(`version: '1.0.0'`));
+      expect(writeFileMock).toHaveBeenCalledWith(
+        expect.stringContaining('lerna.json5'),
+        expect.stringContaining(`version: '1.0.0'`)
+      );
     });
 
     it('errors when lerna.json is irrecoverably invalid JSON', async () => {
@@ -300,7 +304,12 @@ describe('Project', () => {
     it('returns a list of package parent directories', () => {
       const project = new Project(testDir);
       project.config.packages = ['.', 'packages/*', 'dir/nested/*', 'globstar/**'];
-      expect(project.packageParentDirs).toEqual([testDir, join(testDir, 'packages'), join(testDir, 'dir/nested'), join(testDir, 'globstar')]);
+      expect(project.packageParentDirs).toEqual([
+        testDir,
+        join(testDir, 'packages'),
+        join(testDir, 'dir/nested'),
+        join(testDir, 'globstar'),
+      ]);
     });
   });
 

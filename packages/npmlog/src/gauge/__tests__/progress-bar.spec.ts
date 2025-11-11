@@ -1,4 +1,5 @@
 import { describe, expect, it } from 'vitest';
+
 import progressBar from '../progress-bar.js';
 
 describe('progressBar', () => {

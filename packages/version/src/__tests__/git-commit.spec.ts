@@ -1,7 +1,10 @@
 import { EOL } from 'node:os';
-import { exec } from '@lerna-lite/core';
 import { describe, expect, test, vi } from 'vitest';
+
+import { exec } from '@lerna-lite/core';
+
 import type { GitCommitOption } from '../interfaces.js';
+
 import { gitCommit } from '../lib/git-commit.js';
 import { tempWrite } from '../utils/temp-write.js';
 

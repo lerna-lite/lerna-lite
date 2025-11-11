@@ -1,7 +1,9 @@
-import type { FetchConfig, PackageGraph, PackageGraphNode } from '@lerna-lite/core';
-import { log } from '@lerna-lite/npmlog';
 import pMap from 'p-map';
 import pacote from 'pacote';
+
+import type { FetchConfig, PackageGraph, PackageGraphNode } from '@lerna-lite/core';
+
+import { log } from '@lerna-lite/npmlog';
 
 /**
  * Retrieve a list of graph nodes for packages that need to be published.

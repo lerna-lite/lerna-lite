@@ -1,17 +1,20 @@
-import { dirname, join } from 'node:path';
-import { fileURLToPath } from 'node:url';
-import { initFixtureFactory } from '@lerna-test/helpers';
 import { execa } from 'execa';
 import { outputFile, outputJson } from 'fs-extra/esm';
+import { dirname, join } from 'node:path';
+import { fileURLToPath } from 'node:url';
 import slash from 'slash';
 import { expect, test } from 'vitest';
+
+import { initFixtureFactory } from '@lerna-test/helpers';
+
 import { gitAdd } from '../lib/git-add.js';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
 const initFixture = initFixtureFactory(__dirname);
 
-const getStagedFile = async (cwd: string) => execa('git', ['diff', '--cached', '--name-only'], { cwd }).then((result) => slash(result.stdout));
+const getStagedFile = async (cwd: string) =>
+  execa('git', ['diff', '--cached', '--name-only'], { cwd }).then((result) => slash(result.stdout));
 
 test('relative files', async () => {
   const cwd = await initFixture('root-manifest-only');

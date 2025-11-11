@@ -1,12 +1,14 @@
+import { loadJsonFile } from 'load-json-file';
 import { promises } from 'node:fs';
 import { EOL } from 'node:os';
 import { join } from 'node:path';
-import type { NpmClient, Package } from '@lerna-lite/core';
-import { execPackageManager, execPackageManagerSync } from '@lerna-lite/core';
-import { log } from '@lerna-lite/npmlog';
-import { loadJsonFile } from 'load-json-file';
 import semver from 'semver';
 import { writeJsonFile } from 'write-json-file';
+
+import type { NpmClient, Package } from '@lerna-lite/core';
+
+import { execPackageManager, execPackageManagerSync } from '@lerna-lite/core';
+import { log } from '@lerna-lite/npmlog';
 
 /**
  * From a folder path provided, try to load a `package-lock.json` file if it exists.
