@@ -13,7 +13,8 @@ This project uses **pnpm** as the package manager to install the project.
 When modifying core Lerna-Lite functionality, commands, or documentation, run the following commands and ensure they pass:
 
 ```bash
-pnpm prettier:write # Prettier formatting/linting
+pnpm lint # linting with oxlint (OXC)
+pnpm format # formatting with oxfmt (OXC)
 pnpm build # build the entire project
 pnpm test # run all unit tests or use `pnpm test:watch`
 ```
@@ -124,7 +125,7 @@ npm run test
 npm run lint
 
 # Format Code
-pnpm run prettier:write
+pnpm run format
 ```
 
 ## Claude Restrictions
