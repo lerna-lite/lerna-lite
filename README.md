@@ -86,6 +86,10 @@ Here are some of the largest projects using Lerna-Lite
   <img src="https://avatars.githubusercontent.com/u/50559490" width="28" height="28">
   Format.JS
 </a>&nbsp; | &nbsp;
+<a href="https://github.com/SBoudrias/Inquirer.js" title="Inquirer.js">
+  <img src="https://raw.githubusercontent.com/SBoudrias/Inquirer.js/main/assets/inquirer_readme.svg" width="28" height="28">
+   Inquirer
+</a>&nbsp; | &nbsp;
 <a href="https://github.com/johnsoncodehk/volar">
   <img src="https://raw.githubusercontent.com/johnsoncodehk/sponsors/master/logos/Vue.svg" width="28" height="28">
   Volar
@@ -93,10 +97,19 @@ Here are some of the largest projects using Lerna-Lite
 <a href="https://github.com/palantir/blueprint">
   <img src="https://avatars.githubusercontent.com/u/303157?s=48&v=4" width="28" height="28">
   Blueprint
-</a>&nbsp; | &nbsp;
+</a>
+<br><br>
 <a href="https://github.com/wundergraph" title="Wundergraph">
   <img src="https://avatars.githubusercontent.com/u/64281914" width="28" height="28">
    Wundergraph
+</a>&nbsp; | &nbsp;
+<a href="https://github.com/sanity-io/sanity" title="Sanity">
+  <img src="https://avatars.githubusercontent.com/u/17177659?s=48&v=4" width="28" height="28">
+   Sanity
+</a>&nbsp; | &nbsp;
+<a href="https://github.com/nativescript-community" title="NativeScript Community">
+  <img src="https://avatars.githubusercontent.com/u/50633791?s=200&v=4" width="25" height="25">
+   NativeScript
 </a>
 
 ## About Lerna-Lite
