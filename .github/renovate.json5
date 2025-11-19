@@ -28,6 +28,11 @@
       packageNames: ['tacks'],
       allowedVersions: '1.2.6',
     },
+    {
+      // wait to upgrade until our next major version
+      packageNames: ['@inquirer/expand', '@inquirer/input', '@inquirer/select'],
+      allowedVersions: '<5.0.0',
+    },
   ],
   ignoreDeps: ['lee-dohm/no-response', 'node', 'pnpm'],
   schedule: ['every 2 months on Thursday'],
