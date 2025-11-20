@@ -40,7 +40,7 @@
     "@inquirer/input": "^4.3.1",
     "@inquirer/select": "^4.4.2",
     "@lerna-lite/npmlog": "workspace:*",
-    "@npmcli/run-script": "^10.0.2",
+    "@npmcli/run-script": "^10.0.3",
     "ci-info": "catalog:",
     "config-chain": "^1.1.13",
     "dedent": "catalog:",
