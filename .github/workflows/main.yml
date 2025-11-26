@@ -27,7 +27,7 @@ jobs:
         run: echo ${{ env.START_TIME }}
 
       - name: Checkout
-        uses: actions/checkout@v5
+        uses: actions/checkout@v6
 
       - name: Install pnpm itself
         uses: pnpm/action-setup@v3
@@ -70,7 +70,7 @@ jobs:
         run: echo ${{ env.START_TIME }}
 
       - name: Checkout
-        uses: actions/checkout@v5
+        uses: actions/checkout@v6
         with:
           fetch-depth: 2 # codecov-bash seems to require this
 
