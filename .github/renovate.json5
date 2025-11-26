@@ -33,6 +33,11 @@
       packageNames: ['@inquirer/expand', '@inquirer/input', '@inquirer/select'],
       allowedVersions: '<5.0.0',
     },
+    {
+      // wait to upgrade until our next major version since v5 now requires Node 20.19 or higher
+      packageNames: ['chokidar'],
+      allowedVersions: '<5.0.0',
+    },
   ],
   ignoreDeps: ['lee-dohm/no-response', 'node', 'pnpm'],
   schedule: ['every 2 months on Thursday'],
