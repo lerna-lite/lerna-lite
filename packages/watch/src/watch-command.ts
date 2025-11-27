@@ -164,7 +164,7 @@ export class WatchCommand extends Command<WatchCommandOption & FilterOptions> {
       process.stdin.on('end', () => this.handleTermination());
     } catch (err) {
       /* v8 ignore next */
-      await this.onError(err);
+      this.onError(err);
     }
   }
 
@@ -271,13 +271,14 @@ export class WatchCommand extends Command<WatchCommandOption & FilterOptions> {
     return filePath.replace(/\\/g, '/');
   }
 
-  protected async onError(error: any) {
+  protected onError(error: any) {
     const exitCode = error?.exitCode ?? error?.code;
 
     if (this._bail) {
       // only the first error is caught
       process.exitCode = exitCode as number;
-      await this.handleTermination(process.exitCode);
+      // oxlint-disable-next-line no-floating-promises
+      this.handleTermination(process.exitCode);
 
       // rethrow to halt chain and log properly
       throw error;
