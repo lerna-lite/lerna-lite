@@ -90,7 +90,7 @@
     "normalize-path": "catalog:",
     "oxfmt": "^0.15.0",
     "oxlint": "^1.30.0",
-    "oxlint-tsgolint": "^0.8.2",
+    "oxlint-tsgolint": "^0.8.3",
     "remove-glob": "^0.4.4",
     "semver": "catalog:",
     "tacks": "1.2.6",
