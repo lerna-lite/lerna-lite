@@ -220,6 +220,7 @@ export class WatchCommand extends Command<WatchCommandOption & FilterOptions> {
 
               // we might still have other packages that have changes though, so re-execute command callback process if any were found
               if (this.hasQueuedChanges()) {
+                // oxlint-disable-next-line no-floating-promises
                 this.executeCommandCallback();
               }
 
@@ -243,7 +244,7 @@ export class WatchCommand extends Command<WatchCommandOption & FilterOptions> {
       this.logger.silly('watch', `Watch process terminated with exit code: ${exitCode}`);
       process.off('SIGINT', () => this.handleTermination(128 + 2));
       process.off('SIGTERM', () => this.handleTermination(128 + 15));
-      process.stdin.off('end', this.handleTermination);
+      process.stdin.off('end', () => this.handleTermination());
 
       await this._watcher?.close();
     } finally {
@@ -276,6 +277,7 @@ export class WatchCommand extends Command<WatchCommandOption & FilterOptions> {
     if (this._bail) {
       // only the first error is caught
       process.exitCode = exitCode as number;
+      // oxlint-disable-next-line no-floating-promises
       this.handleTermination(process.exitCode);
 
       // rethrow to halt chain and log properly

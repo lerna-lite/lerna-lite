@@ -827,11 +827,15 @@ export class VersionCommand extends Command<VersionCommandOption> {
           })
         );
       } else if (this.options.generateReleaseNotes && !changelog) {
-        chain.then(() => {
-          this.releaseNotes.push({
-            name: 'fixed',
+        chain
+          .then(() => {
+            this.releaseNotes.push({
+              name: 'fixed',
+            });
+          })
+          .catch(() => {
+            /* v8 ignore next - no-op */
           });
-        });
       }
 
       chain = chain.then(() =>

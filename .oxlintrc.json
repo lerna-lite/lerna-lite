@@ -52,6 +52,11 @@
     // Additional rules
     "no-async-promise-executor": "off",
     "oxc/erasing-op": "off",
-    "object-shorthand": "error"
+    "object-shorthand": "error",
+
+    // type aware rules
+    "typescript/no-array-delete": "off",
+    "typescript/no-misused-spread": "off",
+    "typescript/require-array-sort-compare": "off",
   }
 }

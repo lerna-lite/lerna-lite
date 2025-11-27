@@ -334,11 +334,15 @@ export class PublishCommand extends Command<PublishCommandOption> {
     if (this.options.cleanupTempFiles) {
       const tempDirPath = realpathSync(tmpdir());
       const normalizedLernaPath = normalizePath(pathJoin(tempDirPath, 'lerna-*'));
-      glob(normalizedLernaPath, { absolute: true, cwd: tempDirPath, onlyDirectories: true }).then((deleteFolders) => {
-        // silently delete all files/folders that startsWith "lerna-"
-        deleteFolders.forEach((folder) => removeSync(folder));
-        this.logger.verbose('publish', `Found ${deleteFolders.length} temp folders to cleanup after publish.`);
-      });
+      glob(normalizedLernaPath, { absolute: true, cwd: tempDirPath, onlyDirectories: true })
+        .then((deleteFolders) => {
+          // silently delete all files/folders that startsWith "lerna-"
+          deleteFolders.forEach((folder) => removeSync(folder));
+          this.logger.verbose('publish', `Found ${deleteFolders.length} temp folders to cleanup after publish.`);
+        })
+        .catch(() => {
+          /* v8 ignore next - do nothing */
+        });
     }
 
     this.logger.success('published', `%d %s ${logPrefix}`, count, count === 1 ? 'package' : 'packages');

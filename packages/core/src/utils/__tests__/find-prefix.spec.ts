@@ -22,24 +22,26 @@ describe('findPrefix function', () => {
 
   it('should handle a path inside node_modules', () => {
     // Mock path.resolve to return a specific path
+    const resolveSpy = vi.spyOn(path, 'resolve');
     (path.resolve as Mock).mockReturnValueOnce('/some/path/to/node_modules/package');
     (fs.readdirSync as Mock).mockReturnValueOnce([]);
 
     const result = findPrefix('/some/path/to/node_modules/package');
 
     expect(result).toBe('/some/path/to/node_modules/package');
-    expect(path.resolve).toHaveBeenCalledWith('/some/path/to/node_modules/package');
+    expect(resolveSpy).toHaveBeenCalledWith('/some/path/to/node_modules/package');
   });
 
   it('should return original directory if not in node_modules', () => {
     // Mock path.resolve to return a specific path
+    const resolveSpy = vi.spyOn(path, 'resolve');
     (path.resolve as Mock).mockReturnValueOnce('/some/project/path');
     (fs.readdirSync as Mock).mockReturnValueOnce([]);
 
     const result = findPrefix('/some/project/path');
 
     expect(result).toBe('/some/project/path');
-    expect(path.resolve).toHaveBeenCalledWith('/some/project/path');
+    expect(resolveSpy).toHaveBeenCalledWith('/some/project/path');
   });
 });
 

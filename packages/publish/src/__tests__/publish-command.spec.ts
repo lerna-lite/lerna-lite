@@ -627,7 +627,7 @@ describe('PublishCommand', () => {
     it('skips creating the summary file', async () => {
       (outputFileSync as any).mockImplementationOnce(() => true);
       const cwd = await initFixture('normal');
-      await lernaPublish(cwd);
+      lernaPublish(cwd);
 
       expect(outputFileSync).not.toHaveBeenCalled();
     });

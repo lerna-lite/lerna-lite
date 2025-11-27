@@ -137,7 +137,8 @@ describe('Project', () => {
       const cwd = await initFixture('lerna-jsonc-config');
       const project = new Project(cwd);
 
-      project.serializeConfig();
+      await project.serializeConfig();
+
       expect(writeJsonFile).toHaveBeenCalledWith(
         expect.stringContaining('lerna.jsonc'),
         { version: '1.0.0' },
@@ -152,7 +153,7 @@ describe('Project', () => {
       const cwd = await initFixture('lerna-json5-config');
       const project = new Project(cwd);
 
-      project.serializeConfig();
+      await project.serializeConfig();
 
       (writeFileMock as Mock).mockName('writeFileSync');
 

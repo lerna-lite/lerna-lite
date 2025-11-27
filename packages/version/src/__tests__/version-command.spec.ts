@@ -94,7 +94,7 @@ const createArgv = (cwd: string, ...args: string[]) => {
 async function loadYamlFile<T>(filePath: string) {
   try {
     const file = await fsPromises.readFile(filePath);
-    return (await parse(`${file}`)) as T;
+    return (await parse(`${file.toString()}`)) as T;
   } catch (e) {
     return undefined;
   }

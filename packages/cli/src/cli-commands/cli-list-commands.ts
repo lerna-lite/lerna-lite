@@ -21,7 +21,7 @@ export default {
       // @ts-ignore
       const { ListCommand } = await import('@lerna-lite/list');
       new ListCommand(argv);
-    } catch (err: unknown) {
+    } catch (err: any) {
       throw new Error(
         `"@lerna-lite/list" is optional and was not found. Please install it with "npm install @lerna-lite/list -D". ${err}`
       );

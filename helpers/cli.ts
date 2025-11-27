@@ -23,7 +23,7 @@ export function commandRunner(commandModule: any) {
     const cli = lernaCLI([], cwd).exitProcess(false).detectLocale(false).showHelpOnFail(false).wrap(null).command(commandModule);
 
     return (...args: string[]) =>
-      new Promise((resolve, reject) => {
+      new Promise(async (resolve, reject) => {
         const yargsMeta: any = {};
         const context = {
           cwd,
@@ -47,7 +47,7 @@ export function commandRunner(commandModule: any) {
           Object.assign(yargsMeta, { parsedArgv, yargsOutput });
         };
 
-        cli
+        await cli
           .fail((msg: string, err: Error) => {
             // since yargs 10.1.0, this is the only way to catch handler rejection
             // _and_ yargs validation exceptions when using async command handlers

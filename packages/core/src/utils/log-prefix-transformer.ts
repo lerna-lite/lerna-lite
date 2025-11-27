@@ -89,7 +89,7 @@ function formatLogEvent(logEvent, options) {
   return line.replace(/\n/g, '\\n') + '\n'; // Replace newlines with escaped newlines
 }
 
-function formatTag(tag) {
+function formatTag(tag: string | Record<string, string>): string {
   if (typeof tag === 'object') {
     return Object.entries(tag)
       .map(([key, value]) => `${key}:${value}`) // No space after the colon

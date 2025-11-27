@@ -68,7 +68,7 @@ export class Command<T extends AvailableCommandOption> {
     log.heading = 'lerna-lite';
 
     const argv = { ..._argv } as ProjectConfig;
-    log.silly('argv', argv.toString());
+    log.silly('argv', JSON.stringify(argv));
 
     // 'FooCommand' => 'foo'
     this.commandName = this.constructor.name.replace(/Command$/, '').toLowerCase() as CommandType;
@@ -359,11 +359,11 @@ export class Command<T extends AvailableCommandOption> {
       });
   }
 
-  initialize(): any | Promise<any> {
+  initialize(): any {
     throw new ValidationError(this.commandName, 'initialize() needs to be implemented.');
   }
 
-  execute(): any | Promise<any> {
+  execute(): any {
     throw new ValidationError(this.commandName, 'execute() needs to be implemented.');
   }
 }

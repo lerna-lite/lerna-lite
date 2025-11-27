@@ -83,7 +83,7 @@ export default {
       // @ts-ignore
       const { RunCommand } = await import('@lerna-lite/run');
       new RunCommand(argv);
-    } catch (err: unknown) {
+    } catch (err: any) {
       throw new Error(
         `"@lerna-lite/run" is optional and was not found. Please install it with "npm install @lerna-lite/run -D". ${err}`
       );

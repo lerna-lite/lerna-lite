@@ -41,9 +41,9 @@ describe('childProcess', () => {
       expect(stdout).toContain(`foo`);
     });
 
-    it('should execute a command in dry-run and log the command', () => {
+    it('should execute a command in dry-run and log the command', async () => {
       const logSpy = vi.spyOn(log, 'info');
-      exec('echo', ['exec'], undefined, true);
+      await exec('echo', ['exec'], undefined, true);
       expect(logSpy).toHaveBeenCalledWith(c.bold(c.magenta('[dry-run] >')), 'echo exec');
     });
 
@@ -89,9 +89,9 @@ describe('childProcess', () => {
       expect(signal).toBe(undefined);
     });
 
-    it('should execute a command in dry-run and log the command', () => {
+    it('should execute a command in dry-run and log the command', async () => {
       const logSpy = vi.spyOn(log, 'info');
-      spawn('echo', ['-n'], undefined, true);
+      await spawn('echo', ['-n'], undefined, true);
       expect(logSpy).toHaveBeenCalledWith(c.bold(c.magenta('[dry-run] >')), 'echo -n');
     });
 

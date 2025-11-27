@@ -40,7 +40,7 @@ describe('GitLabClient', () => {
   });
 
   describe('createRelease', () => {
-    it('requests releases api with release', () => {
+    it('requests releases api with release', async () => {
       const client = new GitLabClient('TOKEN', 'http://some/host');
       fetchMock.mockResolvedValue({ ok: true });
       const release = {
@@ -51,7 +51,7 @@ describe('GitLabClient', () => {
         body: 'the-body',
       };
 
-      client.createRelease(release);
+      await client.createRelease(release);
 
       expect(fetchMock).toHaveBeenCalledWith('http://some/host/projects/the-owner%2Fthe-repo/releases', {
         method: 'post',

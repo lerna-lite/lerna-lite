@@ -13,10 +13,11 @@ This project uses **pnpm** as the package manager to install the project.
 When modifying core Lerna-Lite functionality, commands, or documentation, run the following commands and ensure they pass:
 
 ```bash
-pnpm lint # linting with oxlint (OXC)
-pnpm format # formatting with oxfmt (OXC)
-pnpm build # build the entire project
-pnpm test # run all unit tests or use `pnpm test:watch`
+pnpm lint       # linting with oxlint (OXC) but without type aware
+pnpm format     # formatting with oxfmt (OXC)
+pnpm build      # build the entire project
+pnpm lint-type  # oxc linting with type aware
+pnpm test       # run all unit tests or use `pnpm test:watch`
 ```
 
 When working on a specific Lerna command, you can troubleshoot your code by using the debugger available in `launch.json`, a few of these commands have a debugger defined for them and often use the `--dry-run` argument for a dry-run mode.
@@ -115,17 +116,20 @@ For any changes that only update tests, use `test` or `chore` as the commit/PR t
 # Install dependencies
 pnpm install
 
-# Build all packages
-pnpm run build
-
-# Run all tests with coverage
-npm run test
-
 # Lint code
 npm run lint
 
 # Format Code
 pnpm run format
+
+# Build all packages
+pnpm run build
+
+# OXC Lint Type Aware
+pnpm run lint-type
+
+# Run all tests with coverage
+npm run test
 ```
 
 ## Claude Restrictions

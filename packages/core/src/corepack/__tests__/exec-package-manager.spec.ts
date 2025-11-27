@@ -66,16 +66,16 @@ describe('.execPackageManager()', () => {
   });
 
   describe('mock child processes', () => {
-    it('calls exec without corepack when disabled', () => {
-      execPackageManager('echo', ['execPackageManager']);
+    it('calls exec without corepack when disabled', async () => {
+      await execPackageManager('echo', ['execPackageManager']);
 
       expect(exec).toHaveBeenCalledWith('echo', ['execPackageManager'], undefined, false);
     });
 
-    it('calls exec with corepack when enabled', () => {
+    it('calls exec with corepack when enabled', async () => {
       process.env.COREPACK_ROOT = 'pnpm';
 
-      execPackageManager('echo', ['execPackageManager']);
+      await execPackageManager('echo', ['execPackageManager']);
 
       expect(exec).toHaveBeenCalledWith('corepack', ['echo', 'execPackageManager'], undefined, false);
     });
@@ -93,9 +93,9 @@ describe('.execPackageManager()', () => {
       expect(stdout).toContain(`foo`);
     });
 
-    it('should execute a command in dry-run and log the command', () => {
+    it('should execute a command in dry-run and log the command', async () => {
       const logSpy = vi.spyOn(log, 'info');
-      execPackageManager('echo', ['exec'], undefined, true);
+      await execPackageManager('echo', ['exec'], undefined, true);
       expect(logSpy).toHaveBeenCalledWith(c.bold(c.magenta('[dry-run] >')), 'echo exec');
     });
 

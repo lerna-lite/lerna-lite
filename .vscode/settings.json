@@ -3,5 +3,6 @@
   "editor.formatOnPaste": false,
   "editor.defaultFormatter": "oxc.oxc-vscode",
   "oxc.fmt.experimental": true,
+  "oxc.typeAware": true,
   "typescript.tsdk": "node_modules\\typescript\\lib"
 }
