@@ -4,6 +4,12 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [4.9.4](https://github.com/lerna-lite/lerna-lite/compare/v4.9.3...v4.9.4) (2025-11-27)
+
+### Bug Fixes
+
+* **deps:** update all non-major dependencies ([#1192](https://github.com/lerna-lite/lerna-lite/issues/1192)) ([2a6b79c](https://github.com/lerna-lite/lerna-lite/commit/2a6b79c0b9ebb7166b30d419b358247ef6eaf02c)) - by @ghiscoding
+
 ## [4.9.3](https://github.com/lerna-lite/lerna-lite/compare/v4.9.2...v4.9.3) (2025-11-20)
 
 **Note:** Version bump only for package @lerna-lite/npmlog
