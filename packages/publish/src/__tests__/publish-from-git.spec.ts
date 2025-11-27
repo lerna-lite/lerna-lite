@@ -281,7 +281,7 @@ describe('publish from-git', () => {
     expect(throwIfUncommitted).toHaveBeenCalled();
 
     // since all packages rejected with publish conflict, we should have the "All published" message when recalling execute()
-    command.initialize();
+    await command.initialize();
     const loggerSpy = vi.spyOn(command.logger, 'success');
     await command.execute();
     expect(loggerSpy).toHaveBeenCalledWith('All packages have already been published.');
@@ -305,7 +305,7 @@ describe('publish from-git', () => {
     expect(throwIfUncommitted).toHaveBeenCalled();
 
     // since all packages rejected with publish conflict, we should have the "All published" message when recalling execute()
-    command.initialize();
+    await command.initialize();
     const loggerSpy = vi.spyOn(command.logger, 'success');
     await command.execute();
     expect(loggerSpy).toHaveBeenCalledWith('All packages have already been published.');
@@ -329,7 +329,7 @@ describe('publish from-git', () => {
     expect(throwIfUncommitted).toHaveBeenCalled();
 
     // since all packages rejected with publish conflict, we should have the "All published" message when recalling execute()
-    command.initialize();
+    await command.initialize();
     const loggerSpy = vi.spyOn(command.logger, 'success');
     await command.execute();
     expect(loggerSpy).toHaveBeenCalledWith('All packages have already been published.');
@@ -353,7 +353,7 @@ describe('publish from-git', () => {
     expect(throwIfUncommitted).toHaveBeenCalled();
 
     // since all packages rejected with publish conflict, we should have the "All published" message when recalling execute()
-    command.initialize();
+    await command.initialize();
     const loggerSpy = vi.spyOn(command.logger, 'success');
     await command.execute();
     expect(loggerSpy).toHaveBeenCalledWith('All packages have already been published.');
@@ -376,7 +376,7 @@ describe('publish from-git', () => {
     expect(throwIfUncommitted).toHaveBeenCalled();
 
     // since all packages rejected with publish conflict, we should have the "All published" message when recalling execute()
-    command.initialize();
+    await command.initialize();
     const loggerSpy = vi.spyOn(command.logger, 'success');
     await command.execute();
     expect(loggerSpy).toHaveBeenCalledWith('All packages have already been published.');
@@ -402,7 +402,7 @@ describe('publish from-git', () => {
     expect(throwIfUncommitted).toHaveBeenCalled();
 
     // since all packages rejected with publish conflict, we should have the "All published" message when recalling execute()
-    command.initialize();
+    await command.initialize();
     const loggerSpy = vi.spyOn(command.logger, 'success');
     await command.execute();
     expect(loggerSpy).toHaveBeenCalledWith('All packages have already been published.');

@@ -47,6 +47,12 @@ jobs:
       - name: Linting (oxlint)
         run: pnpm lint
 
+      - name: Run full TypeScript build
+        run: pnpm build:full
+
+      - name: Type-aware Linting (oxlint)
+        run: pnpm lint-type
+
       - name: Formatting (oxfmt)
         run: pnpm format:check
 
@@ -101,7 +107,7 @@ jobs:
           key: vitest-${{ matrix.platform }}-${{ matrix.node }}-${{ github.run_id }}
           restore-keys: vitest-${{ matrix.platform }}-${{ matrix.node }}-
 
-      - name: Run all workspace TSC builds
+      - name: Run full TypeScript build
         run: pnpm build:full
 
       - name: Run Vitest unit tests

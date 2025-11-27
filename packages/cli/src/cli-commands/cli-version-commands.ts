@@ -342,7 +342,7 @@ export default {
       // @ts-ignore
       const { VersionCommand } = await import('@lerna-lite/version');
       new VersionCommand(argv);
-    } catch (err: unknown) {
+    } catch (err: any) {
       throw new Error(
         `"@lerna-lite/version" is optional and was not found. Please install it with "npm install @lerna-lite/version -D". ${err}`
       );

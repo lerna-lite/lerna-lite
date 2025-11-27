@@ -261,7 +261,7 @@ describe('RunCommand', () => {
       await new RunCommand(createArgv(cwd, 'my-script', '--profile', '--profile-location', 'foo/bar'));
 
       const [profileLocation] = await glob('foo/bar/Lerna-Profile-*.json', { cwd, absolute: true });
-      const isExists = await pathExists(profileLocation, null as any);
+      const isExists = await pathExists(profileLocation);
 
       expect(isExists).toBe(true);
     });

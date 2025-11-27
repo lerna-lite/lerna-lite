@@ -35,21 +35,23 @@ describe('createGitHubClient', () => {
   });
 
   it('initializes GHE plugin when GHE_VERSION env var is set', async () => {
+    const pluginSpy = vi.spyOn(Octokit, 'plugin');
     process.env.GH_TOKEN = 'TOKEN';
     process.env.GHE_VERSION = '2.18';
 
     await createGitHubClient();
 
-    expect(Octokit.plugin).toHaveBeenCalledWith(expect.anything());
+    expect(pluginSpy).toHaveBeenCalledWith(expect.anything());
   });
 
   it('initializes GHE plugin when GHE_VERSION env var is set with GITHUB_TOKEN', async () => {
+    const pluginSpy = vi.spyOn(Octokit, 'plugin');
     process.env.GITHUB_TOKEN = 'TOKEN';
     process.env.GHE_VERSION = '2.18';
 
     await createGitHubClient();
 
-    expect(Octokit.plugin).toHaveBeenCalledWith(expect.anything());
+    expect(pluginSpy).toHaveBeenCalledWith(expect.anything());
   });
 
   it('sets octokit `baseUrl` when GHE_API_URL is set', async () => {

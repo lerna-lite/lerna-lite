@@ -155,7 +155,7 @@ describe('Changed Command', () => {
     const cmd = new ChangedCommand(createArgv(cwd, '--conventional-graduate', 'foo', '--force-publish', 'bar'));
     await cmd;
     const loggerSpy = vi.spyOn(cmd.logger, 'warn');
-    cmd.initialize();
+    await cmd.initialize();
 
     expect(loggerSpy).toHaveBeenCalledWith('option', '--force-publish superseded by --conventional-graduate');
   });

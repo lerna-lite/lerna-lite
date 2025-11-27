@@ -88,15 +88,21 @@ describe('@lerna/otplease', () => {
     const obj = {};
     const fn = vi.fn(makeTestCallback('654321', obj));
 
-    // enqueue a promise resolution to update the otp at the start of the next turn.
-    Promise.resolve().then(() => {
+    // Create a promise that resolves in the next microtask
+    const cacheUpdatePromise = Promise.resolve().then(() => {
       otpCache.otp = '654321';
     });
 
-    // start intial otplease call, 'catch' will happen in next turn *after* the cache is set.
-    const result = await otplease(fn as any, {}, otpCache as any);
+    // Start the otplease call
+    const otpleasePromise = otplease(fn as any, {}, otpCache as any);
+
+    // Await both promises to ensure proper sequencing
+    await Promise.all([cacheUpdatePromise, otpleasePromise]);
+
     expect(fn).toHaveBeenCalledTimes(2);
     expect(promptTextInput).not.toHaveBeenCalled();
+
+    const result = await otpleasePromise;
     expect(result).toBe(obj);
   });
 

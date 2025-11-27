@@ -93,7 +93,7 @@ describe('Init Command', () => {
     const cmd = new InitCommand(createArgv(testDir, '') as InitCommandOption);
     await cmd;
     const loggerSpy = vi.spyOn(cmd.logger, 'info');
-    cmd.initialize();
+    await cmd.initialize();
 
     expect(loggerSpy).toHaveBeenCalledWith('', 'Initializing Git repository');
     expect(cmd.project.config.version).toEqual('0.0.0');

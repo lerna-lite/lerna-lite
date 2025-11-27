@@ -21,7 +21,7 @@ export function getTwoFactorAuthRequired(options?: FetchConfig) {
   return getProfileData(opts).then(success, failure);
 
   function success(result: { tfa: { pending: boolean; mode: string } }) {
-    opts.log.silly('2FA', result.tfa.toString());
+    opts.log.silly('2FA', JSON.stringify(result.tfa));
 
     if (result.tfa.pending) {
       // if 2FA is pending, it is disabled

@@ -151,7 +151,7 @@ export default {
       // @ts-ignore
       const { WatchCommand } = await import('@lerna-lite/watch');
       new WatchCommand(argv);
-    } catch (err: unknown) {
+    } catch (err: any) {
       throw new Error(
         `"@lerna-lite/watch" is optional and was not found. Please install it with "npm install @lerna-lite/watch -D". ${err}`
       );
