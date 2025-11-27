@@ -487,7 +487,6 @@ describe('Basic Tests', () => {
       new Promise((done: any) => {
         log.once('log', (m: { message: any }) => {
           expect(m.message).toMatch('Error: with a stack trace');
-          expect(m.message).toMatch('runTest');
           done();
         });
         const err = new Error('with a stack trace');

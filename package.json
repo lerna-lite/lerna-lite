@@ -79,7 +79,7 @@
     "@types/fs-extra": "catalog:devDependencies",
     "@types/node": "catalog:devDependencies",
     "@types/yargs": "^17.0.35",
-    "@vitest/coverage-v8": "^4.0.10",
+    "@vitest/coverage-v8": "^4.0.14",
     "conventional-changelog-conventionalcommits": "^9.1.0",
     "cross-env": "^10.1.0",
     "empathic": "^2.0.0",
@@ -99,7 +99,7 @@
     "tslib": "^2.8.1",
     "typescript": "^5.9.3",
     "uuid": "catalog:dependencies",
-    "vitest": "^4.0.10",
+    "vitest": "^4.0.14",
     "write-json-file": "catalog:dependencies"
   },
   "pnpm": {
