@@ -19,6 +19,8 @@ npm install @lerna-lite/exec -D
 
 # then use it (see usage below)
 lerna exec <command>
+# or via pnpm
+pnpm exec lerna exec <command>
 ```
 
 ## Usage

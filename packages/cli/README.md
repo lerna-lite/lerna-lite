@@ -19,9 +19,13 @@ CLI will only provide the `init` command by default, all other commands are enti
 # simple install or install it globally with -g
 npm install @lerna-lite/cli -D
 
-# then use it `lerna <command>`
+# then use as `lerna <command>`
 lerna version
 lerna publish
+
+# then use as `lerna <command>` with pnpm
+pnpm exec lerna version
+pnpm exec lerna publish
 ```
 
 ## Usage

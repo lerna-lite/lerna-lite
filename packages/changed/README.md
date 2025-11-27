@@ -17,6 +17,8 @@ npm install @lerna-lite/changed -D
 
 # then use it (see usage below)
 lerna changed
+# or via pnpm
+pnpm exec lerna changed
 ```
 
 ## Usage

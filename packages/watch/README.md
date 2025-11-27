@@ -20,6 +20,8 @@ npm install @lerna-lite/watch -D
 
 # then use it (see usage below), sure yeah why not
 lerna watch
+# or via pnpm
+pnpm exec lerna watch
 ```
 
 ## Usage

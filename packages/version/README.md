@@ -17,6 +17,8 @@ npm install @lerna-lite/version -D
 
 # then use it (see usage below)
 lerna version
+# or via pnpm
+pnpm exec lerna version
 ```
 
 > **Note** please make sure that you have a `lerna.json` config file and a `version` property defined with either a fixed or independent mode (for example: `"version": "independent"`). An error will be thrown if you're missing any of them.
@@ -24,9 +26,10 @@ lerna version
 ## Usage
 
 ```sh
-lerna version 1.0.1   # explicit
-lerna version patch   # semver keyword
-lerna version         # select from prompt(s)
+lerna version 1.0.1     # explicit
+lerna version patch     # semver keyword
+lerna version           # select from prompt(s)
+pnpm exec lerna version # select from prompt(s) using pnpm
 ```
 
 When run, this command does the following:

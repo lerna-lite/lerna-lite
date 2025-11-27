@@ -17,6 +17,8 @@ npm install @lerna-lite/publish -D
 
 # then use it (see usage below)
 lerna publish
+# or via pnpm
+pnpm exec lerna publish
 ```
 
 ## Usage
@@ -25,6 +27,8 @@ lerna publish
 lerna publish               # publish packages that have changed since the last release
 lerna publish from-git      # explicitly publish packages tagged in the current commit
 lerna publish from-package  # explicitly publish packages where the latest version is not present in the registry
+
+pnpm exec lerna publish     # when using pnpm
 ```
 
 When run, this command does one of the following things:

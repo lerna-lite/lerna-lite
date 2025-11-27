@@ -19,6 +19,8 @@ npm install @lerna-lite/run -D
 
 # then use it (see usage below)
 lerna run <script>
+# or via pnpm
+pnpm exec lerna run <script>
 ```
 
 ## Usage
@@ -27,6 +29,7 @@ lerna run <script>
 $ lerna run <script> -- [..args]  # runs npm run my-script in all packages that have it
 $ lerna run test
 $ lerna run build
+$ pnpm exec lerna run build # when using pnpm
 
 # watch all packages and transpile on change, streaming prefixed output
 $ lerna run --parallel watch
