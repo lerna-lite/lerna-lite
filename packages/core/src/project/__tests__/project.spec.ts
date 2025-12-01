@@ -1,10 +1,10 @@
-import { outputFile, remove, writeJson } from 'fs-extra/esm';
 import { basename, dirname, join, resolve as pathResolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
-import { afterEach, beforeAll, beforeEach, describe, expect, it, vi, type Mock } from 'vitest';
-import { writeJsonFile } from 'write-json-file';
 
 import { initFixtureFactory } from '@lerna-test/helpers';
+import { outputFile, remove, writeJson } from 'fs-extra/esm';
+import { afterEach, beforeAll, beforeEach, describe, expect, it, vi, type Mock } from 'vitest';
+import { writeJsonFile } from 'write-json-file';
 
 import { Project } from '../project.js';
 

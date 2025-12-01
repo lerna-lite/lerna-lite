@@ -1,10 +1,8 @@
+import type { FetchConfig } from '@lerna-lite/core';
+import { loggingOutput } from '@lerna-test/helpers/logging-output.js';
 // @ts-ignore
 import fetch from 'npm-registry-fetch';
 import { afterEach, beforeEach, describe, expect, test, vi, type Mock } from 'vitest';
-
-import type { FetchConfig } from '@lerna-lite/core';
-
-import { loggingOutput } from '@lerna-test/helpers/logging-output.js';
 
 import { getNpmUsername } from '../lib/get-npm-username.js';
 

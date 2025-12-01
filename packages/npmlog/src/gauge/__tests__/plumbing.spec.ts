@@ -1,4 +1,5 @@
 import { stripVTControlCharacters } from 'node:util';
+
 import c from 'tinyrainbow';
 import { describe, expect, it, vi } from 'vitest';
 

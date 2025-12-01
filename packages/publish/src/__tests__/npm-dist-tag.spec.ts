@@ -3,7 +3,6 @@ import fetch from 'npm-registry-fetch';
 import { describe, expect, it, vi, type Mock } from 'vitest';
 
 import type { DistTagOptions } from '../interfaces.js';
-
 import * as npmDistTag from '../lib/npm-dist-tag.js';
 
 vi.mock('npm-registry-fetch');

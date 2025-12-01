@@ -1,8 +1,7 @@
 import { beforeEach, describe, expect, it, vi, type Mock } from 'vitest';
 
-import type { DescribeRefDetailedResult } from '../../models/interfaces.js';
-
 import * as childProcess from '../../child-process.js';
+import type { DescribeRefDetailedResult } from '../../models/interfaces.js';
 import { describeRef, describeRefSync } from '../describe-ref.js';
 
 vi.mock('../../child-process');

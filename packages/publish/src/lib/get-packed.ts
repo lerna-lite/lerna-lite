@@ -1,10 +1,10 @@
-import { stat } from 'fs/promises';
 import { createReadStream } from 'node:fs';
 import { basename } from 'node:path';
-import ssri from 'ssri';
-import { list } from 'tar';
 
 import type { Package } from '@lerna-lite/core';
+import { stat } from 'fs/promises';
+import ssri from 'ssri';
+import { list } from 'tar';
 
 import type { Tarball } from '../interfaces.js';
 

@@ -1,6 +1,5 @@
-import { afterEach, beforeEach, describe, expect, it, vi, type Mock } from 'vitest';
-
 import { describeRefSync, execSync, ValidationError } from '@lerna-lite/core';
+import { afterEach, beforeEach, describe, expect, it, vi, type Mock } from 'vitest';
 
 import { getCommitsSinceLastRelease, getOldestCommitSinceLastTag } from '../get-commits-since-last-release.js';
 import { getGithubCommits } from '../get-github-commits.js';

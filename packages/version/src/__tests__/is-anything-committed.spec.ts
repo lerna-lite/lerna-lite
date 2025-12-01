@@ -1,10 +1,10 @@
-import { execa } from 'execa';
 import { dirname } from 'node:path';
 import { fileURLToPath } from 'node:url';
-import { expect, test, vi } from 'vitest';
 
 import { execSync } from '@lerna-lite/core';
 import { initFixtureFactory } from '@lerna-test/helpers';
+import { execa } from 'execa';
+import { expect, test, vi } from 'vitest';
 
 import { isAnythingCommitted } from '../lib/is-anything-committed.js';
 

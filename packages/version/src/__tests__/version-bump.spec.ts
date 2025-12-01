@@ -1,11 +1,11 @@
 import nodeFs from 'node:fs';
 import { dirname, resolve as pathResolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
-import { describe, expect, it, test, vi } from 'vitest';
-import yargParser from 'yargs-parser';
 
 import { promptSelectOne, type VersionCommandOption } from '@lerna-lite/core';
 import { commandRunner, getCommitMessage, initFixtureFactory } from '@lerna-test/helpers';
+import { describe, expect, it, test, vi } from 'vitest';
+import yargParser from 'yargs-parser';
 
 import cliCommands from '../../../cli/src/cli-commands/cli-version-commands.js';
 import { factory, VersionCommand } from '../version-command.js';

@@ -1,14 +1,14 @@
-import dedent from 'dedent';
-import { outputFile } from 'fs-extra/esm';
 import { dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
-import c from 'tinyrainbow';
-import { beforeEach, describe, expect, it, vi, type Mock } from 'vitest';
-import yargParser from 'yargs-parser';
 
 import { logOutput, type VersionCommandOption } from '@lerna-lite/core';
 import { log } from '@lerna-lite/npmlog';
 import { commandRunner, initFixtureFactory } from '@lerna-test/helpers';
+import dedent from 'dedent';
+import { outputFile } from 'fs-extra/esm';
+import c from 'tinyrainbow';
+import { beforeEach, describe, expect, it, vi, type Mock } from 'vitest';
+import yargParser from 'yargs-parser';
 
 import cliCommands from '../../../cli/src/cli-commands/cli-version-commands.js';
 import { recommendVersion } from '../conventional-commits/recommend-version.js';

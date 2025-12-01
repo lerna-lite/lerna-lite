@@ -1,10 +1,5 @@
-import { outputFile } from 'fs-extra/esm';
 import { dirname, join, resolve as pathResolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
-// @ts-ignore
-import Tacks from 'tacks';
-import { expect, test, vi, type Mock } from 'vitest';
-import yargParser from 'yargs-parser';
 
 import { promptSelectOne, promptTextInput, type VersionCommandOption } from '@lerna-lite/core';
 import {
@@ -19,6 +14,11 @@ import {
   temporaryDirectory,
 } from '@lerna-test/helpers';
 import serializeChangelog from '@lerna-test/helpers/serializers/serialize-changelog.js';
+import { outputFile } from 'fs-extra/esm';
+// @ts-ignore
+import Tacks from 'tacks';
+import { expect, test, vi, type Mock } from 'vitest';
+import yargParser from 'yargs-parser';
 
 import cliCommands from '../../../cli/src/cli-commands/cli-version-commands.js';
 import { VersionCommand } from '../version-command.js';

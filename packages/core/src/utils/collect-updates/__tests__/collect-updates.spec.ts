@@ -1,7 +1,6 @@
 import { beforeEach, describe, expect, it, vi, type Mock } from 'vitest';
 
 import type { Package } from '../../../package.js';
-
 import { describeRefSync } from '../../describe-ref.js';
 import buildGraph from '../__helpers__/build-graph.js';
 import { collectUpdates } from '../collect-updates.js';

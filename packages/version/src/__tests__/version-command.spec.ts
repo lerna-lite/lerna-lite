@@ -1,12 +1,6 @@
-import { execa } from 'execa';
-import { outputFile, outputJson } from 'fs-extra/esm';
 import { promises as fsPromises } from 'node:fs';
 import { dirname, join, resolve as pathResolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
-import { describe, expect, it, vi, type Mock } from 'vitest';
-import * as writePkg from 'write-package';
-import { parse } from 'yaml';
-import yargParser from 'yargs-parser';
 
 import {
   checkWorkingTree,
@@ -29,6 +23,12 @@ import {
 } from '@lerna-test/helpers';
 import { loggingOutput } from '@lerna-test/helpers/logging-output.js';
 import gitSHA from '@lerna-test/helpers/serializers/serialize-git-sha.js';
+import { execa } from 'execa';
+import { outputFile, outputJson } from 'fs-extra/esm';
+import { describe, expect, it, vi, type Mock } from 'vitest';
+import * as writePkg from 'write-package';
+import { parse } from 'yaml';
+import yargParser from 'yargs-parser';
 
 import cliCommands from '../../../cli/src/cli-commands/cli-version-commands.js';
 import { getCommitsSinceLastRelease } from '../conventional-commits/get-commits-since-last-release.js';

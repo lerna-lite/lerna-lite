@@ -1,6 +1,5 @@
-import { vi } from 'vitest';
-
 import { log } from '@lerna-lite/npmlog';
+import { vi } from 'vitest';
 
 // silence logs
 log.level = 'silent';

@@ -1,18 +1,17 @@
-import { outputFile } from 'fs-extra/esm';
 import { dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
-import { beforeAll, describe, expect, test, vi, type Mock } from 'vitest';
-import * as writePkg from 'write-package';
-import yargParser from 'yargs-parser';
 
 import { describeRef, promptConfirmation, throwIfUncommitted, type PublishCommandOption } from '@lerna-lite/core';
 import { commandRunner, gitAdd, gitCommit, gitTag, initFixtureFactory, loggingOutput } from '@lerna-test/helpers';
 import gitSHA from '@lerna-test/helpers/serializers/serialize-git-sha.js';
-
-import type { npmPublish as npmPublishMock } from '../lib/__mocks__/npm-publish.js';
+import { outputFile } from 'fs-extra/esm';
+import { beforeAll, describe, expect, test, vi, type Mock } from 'vitest';
+import * as writePkg from 'write-package';
+import yargParser from 'yargs-parser';
 
 import cliCommands from '../../../cli/src/cli-commands/cli-publish-commands.js';
 import { factory, PublishCommand } from '../index.js';
+import type { npmPublish as npmPublishMock } from '../lib/__mocks__/npm-publish.js';
 import { npmPublish } from '../lib/npm-publish.js';
 
 vi.mock('write-package', async () => await vi.importActual('../../../version/src/lib/__mocks__/write-package'));

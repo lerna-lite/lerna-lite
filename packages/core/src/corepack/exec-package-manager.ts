@@ -1,8 +1,7 @@
 import type { SyncOptions as ExacaSyncOptions, Options as ExecaOptions } from 'execa';
 
-import type { Package } from '../package.js';
-
 import { exec, execSync } from '../child-process.js';
+import type { Package } from '../package.js';
 import { isCorepackEnabled } from './is-corepack-enabled.js';
 
 function createCommandAndArgs(npmClient: string, args: string[]) {

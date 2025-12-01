@@ -1,7 +1,8 @@
-import { removeSync } from 'fs-extra/esm';
 import { realpathSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import { join as pathJoin } from 'node:path';
+
+import { removeSync } from 'fs-extra/esm';
 import normalizePath from 'normalize-path';
 import { glob } from 'tinyglobby';
 

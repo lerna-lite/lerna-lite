@@ -1,8 +1,8 @@
 import { EOL } from 'node:os';
 import { join } from 'node:path';
-import writeFileAtomic from 'write-file-atomic';
 
 import { log } from '@lerna-lite/npmlog';
+import writeFileAtomic from 'write-file-atomic';
 
 export function writeLogFile(cwd: string) {
   let logOutput = '';

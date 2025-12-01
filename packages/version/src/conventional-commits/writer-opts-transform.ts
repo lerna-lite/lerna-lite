@@ -1,6 +1,5 @@
-import type { Options as WriterOptions } from 'conventional-changelog-writer';
-
 import { type GetCommitsParams } from '@conventional-changelog/git-client';
+import type { Options as WriterOptions } from 'conventional-changelog-writer';
 
 import type { ChangelogConfig, RemoteCommit } from '../interfaces.js';
 

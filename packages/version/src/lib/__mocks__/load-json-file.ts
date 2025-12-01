@@ -1,4 +1,5 @@
 import { dirname } from 'node:path';
+
 import normalizePath from 'normalize-path';
 import { afterEach, vi } from 'vitest';
 

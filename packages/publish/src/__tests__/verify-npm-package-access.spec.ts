@@ -1,12 +1,12 @@
-// @ts-ignore
-import access from 'libnpmaccess';
 import { dirname } from 'node:path';
 import { fileURLToPath } from 'node:url';
-import { afterEach, beforeAll, beforeEach, describe, expect, test, vi, type Mock } from 'vitest';
 
 import { Project, type FetchConfig } from '@lerna-lite/core';
 import { initFixtureFactory } from '@lerna-test/helpers';
 import { loggingOutput } from '@lerna-test/helpers/logging-output.js';
+// @ts-ignore
+import access from 'libnpmaccess';
+import { afterEach, beforeAll, beforeEach, describe, expect, test, vi, type Mock } from 'vitest';
 
 import { verifyNpmPackageAccess } from '../lib/verify-npm-package-access.js';
 

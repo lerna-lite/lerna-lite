@@ -1,10 +1,10 @@
 import { dirname } from 'node:path';
 import { fileURLToPath } from 'node:url';
-import { expect, test, vi } from 'vitest';
-import yargParser from 'yargs-parser';
 
 import { collectUpdates, type PublishCommandOption } from '@lerna-lite/core';
 import { initFixtureFactory } from '@lerna-test/helpers';
+import { expect, test, vi } from 'vitest';
+import yargParser from 'yargs-parser';
 
 import { PublishCommand } from '../index.js';
 import { add, remove } from '../lib/npm-dist-tag.js';

@@ -1,10 +1,8 @@
-import npa from 'npm-package-arg';
-
 import { log } from '@lerna-lite/npmlog';
+import npa from 'npm-package-arg';
 
 import type { NpaResolveResult, NpmClient } from '../models/interfaces.js';
 import type { Package } from '../package.js';
-
 import { readWorkspaceCatalogConfig } from '../utils/catalog-utils.js';
 import { ValidationError } from '../validation-error.js';
 import { CyclicPackageGraphNode } from './lib/cyclic-package-graph-node.js';

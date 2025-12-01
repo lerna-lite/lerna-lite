@@ -1,13 +1,11 @@
-import type { SyncOptions as ExacaSyncOptions, Options as ExecaOptions, ResultPromise } from 'execa';
-
-import { execa, execaSync } from 'execa';
 import { constants } from 'node:os';
-import c from 'tinyrainbow';
 
 import { log } from '@lerna-lite/npmlog';
+import type { SyncOptions as ExacaSyncOptions, Options as ExecaOptions, ResultPromise } from 'execa';
+import { execa, execaSync } from 'execa';
+import c from 'tinyrainbow';
 
 import type { Package } from './package.js';
-
 import { addPrefixTransformer } from './utils/log-prefix-transformer.js';
 
 // bookkeeping for spawned processes

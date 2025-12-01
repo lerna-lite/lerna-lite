@@ -1,10 +1,10 @@
 import { dirname, resolve as pathResolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
-import { describe, expect, it, test, vi, type Mock } from 'vitest';
-import yargParser from 'yargs-parser';
 
 import { promptSelectOne, promptTextInput, type PackageGraphNode, type VersionCommandOption } from '@lerna-lite/core';
 import { commandRunner, initFixtureFactory, showCommit } from '@lerna-test/helpers';
+import { describe, expect, it, test, vi, type Mock } from 'vitest';
+import yargParser from 'yargs-parser';
 
 import cliCommands from '../../../cli/src/cli-commands/cli-version-commands.js';
 import { makePromptVersion } from '../lib/prompt-version.js';

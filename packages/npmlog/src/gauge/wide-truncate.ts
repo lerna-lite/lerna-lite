@@ -2,8 +2,9 @@
  * Inlined from deprecated package https://github.com/npm/gauge/blob/f8092518a47ac6a96027ae3ad97d0251ffe7643b
  */
 
-import stringWidth from 'fast-string-width';
 import { stripVTControlCharacters } from 'node:util';
+
+import stringWidth from 'fast-string-width';
 
 export function wideTruncate(str: string, target: number) {
   if (stringWidth(str) === 0) {

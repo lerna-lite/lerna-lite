@@ -1,18 +1,17 @@
-import { outputFileSync, outputJson } from 'fs-extra/esm';
 import { dirname, join as pathJoin } from 'node:path';
 import { fileURLToPath } from 'node:url';
-import { beforeAll, beforeEach, describe, expect, it, vi, type Mock } from 'vitest';
-import yargParser from 'yargs-parser';
 
 import { collectUpdates, logOutput, promptConfirmation, type PublishCommandOption } from '@lerna-lite/core';
 import { getOneTimePassword } from '@lerna-lite/version';
 import { commandRunner, commitChangeToPackage, initFixtureFactory } from '@lerna-test/helpers';
 import { loggingOutput } from '@lerna-test/helpers/logging-output.js';
-
-import type { npmPublish as npmPublishMock } from '../lib/__mocks__/npm-publish.js';
+import { outputFileSync, outputJson } from 'fs-extra/esm';
+import { beforeAll, beforeEach, describe, expect, it, vi, type Mock } from 'vitest';
+import yargParser from 'yargs-parser';
 
 import cliCommands from '../../../cli/src/cli-commands/cli-publish-commands.js';
 import { PublishCommand } from '../index.js';
+import type { npmPublish as npmPublishMock } from '../lib/__mocks__/npm-publish.js';
 import { getNpmUsername } from '../lib/get-npm-username.js';
 import { getTwoFactorAuthRequired } from '../lib/get-two-factor-auth-required.js';
 import { gitCheckout } from '../lib/git-checkout.js';

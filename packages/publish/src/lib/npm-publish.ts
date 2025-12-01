@@ -1,15 +1,14 @@
-import { readFile } from 'fs/promises';
-import { publish } from 'libnpmpublish';
 import { dirname, join } from 'node:path';
-import npa from 'npm-package-arg';
 
 import { runLifecycle, type Conf, type LifecycleConfig, type Package } from '@lerna-lite/core';
 import { log } from '@lerna-lite/npmlog';
 import { otplease, type OneTimePasswordCache } from '@lerna-lite/version';
 import PackageJson from '@npmcli/package-json';
+import { readFile } from 'fs/promises';
+import { publish } from 'libnpmpublish';
+import npa from 'npm-package-arg';
 
 import type { LibNpmPublishOptions, PackagePublishConfig } from '../interfaces.js';
-
 import { oidc } from './oidc.js';
 
 /**
