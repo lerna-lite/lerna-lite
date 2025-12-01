@@ -19,8 +19,7 @@
     "import": "./dist/index.js"
   },
   "scripts": {
-    "prebuild": "remove dist",
-    "build": "tsc",
+    "build": "remove dist && tsc",
     "build:incremental": "tsc --incremental --sourceMap false --excludeDirectories dist",
     "echo:test": "echo \"Lerna-Lite CLI package\"",
     "pack-tarball": "npm pack"
