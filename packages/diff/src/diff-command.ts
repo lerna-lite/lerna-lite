@@ -1,5 +1,4 @@
 import type { CommandType, DiffCommandOption, PackageGraphNode, ProjectConfig } from '@lerna-lite/core';
-
 import { Command, spawn, ValidationError } from '@lerna-lite/core';
 
 import { getLastCommit } from './lib/get-last-commit.js';

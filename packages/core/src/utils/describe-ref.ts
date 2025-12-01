@@ -1,8 +1,7 @@
 import { log } from '@lerna-lite/npmlog';
 
-import type { DescribeRefDetailedResult, DescribeRefFallbackResult, DescribeRefOptions } from '../models/interfaces.js';
-
 import { exec, execSync } from '../child-process.js';
+import type { DescribeRefDetailedResult, DescribeRefFallbackResult, DescribeRefOptions } from '../models/interfaces.js';
 
 /**
  * Build `git describe` args.

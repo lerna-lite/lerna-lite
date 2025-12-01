@@ -1,8 +1,8 @@
 import { dirname } from 'node:path';
 import { fileURLToPath } from 'node:url';
-import { expect, test } from 'vitest';
 
 import { initFixtureFactory } from '@lerna-test/helpers';
+import { expect, test } from 'vitest';
 
 import { getCurrentSHA } from '../lib/get-current-sha.js';
 

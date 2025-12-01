@@ -11,7 +11,8 @@
     "partitionByComment": false,
     "sortSideEffects": false,
     "order": "asc",
-    "ignoreCase": true
+    "ignoreCase": true,
+    "groups": ["builtin", "external"]
   },
   "overrides": [
     {

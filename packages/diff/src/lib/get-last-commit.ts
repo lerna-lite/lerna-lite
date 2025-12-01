@@ -1,5 +1,4 @@
 import type { ExecOpts } from '@lerna-lite/core';
-
 import { execSync } from '@lerna-lite/core';
 import { log } from '@lerna-lite/npmlog';
 

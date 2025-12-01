@@ -1,7 +1,6 @@
+import { prereleaseIdFromVersion, promptSelectOne, promptTextInput, type PackageGraphNode } from '@lerna-lite/core';
 import semver from 'semver';
 import { beforeEach, describe, expect, test, vi } from 'vitest';
-
-import { prereleaseIdFromVersion, promptSelectOne, promptTextInput, type PackageGraphNode } from '@lerna-lite/core';
 
 import { makePromptVersion } from '../lib/prompt-version.js';
 

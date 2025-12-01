@@ -1,11 +1,11 @@
-import { outputFile, readJson, remove, writeJson } from 'fs-extra/esm';
 import { dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
-import { afterEach, beforeAll, beforeEach, describe, expect, it, vi, type Mock } from 'vitest';
 
 import { log } from '@lerna-lite/npmlog';
 import { initFixtureFactory, temporaryDirectory, updateLernaConfig } from '@lerna-test/helpers';
 import { loggingOutput } from '@lerna-test/helpers/logging-output.js';
+import { outputFile, readJson, remove, writeJson } from 'fs-extra/esm';
+import { afterEach, beforeAll, beforeEach, describe, expect, it, vi, type Mock } from 'vitest';
 
 import { getChildProcessCount } from '../child-process.js';
 import { Command } from '../command.js';

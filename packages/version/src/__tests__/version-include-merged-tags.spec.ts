@@ -1,13 +1,13 @@
 import { appendFileSync } from 'node:fs';
 import { join, dirname as pathDirname } from 'node:path';
 import { fileURLToPath } from 'node:url';
-import { describe, expect, it, vi } from 'vitest';
-import yargParser from 'yargs-parser';
 
 import { logOutput, type VersionCommandOption } from '@lerna-lite/core';
 import { gitAdd, gitCheckout, gitCommit, gitMerge, gitTag, initFixtureFactory } from '@lerna-test/helpers';
 import serializeTempdir from '@lerna-test/helpers/serializers/serialize-tempdir.js';
 import serializeWindowsPaths from '@lerna-test/helpers/serializers/serialize-windows-paths.js';
+import { describe, expect, it, vi } from 'vitest';
+import yargParser from 'yargs-parser';
 
 import { VersionCommand } from '../version-command.js';
 

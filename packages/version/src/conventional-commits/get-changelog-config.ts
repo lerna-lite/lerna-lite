@@ -1,8 +1,7 @@
-import npa from 'npm-package-arg';
-import pify from 'pify';
-
 import { ValidationError } from '@lerna-lite/core';
 import { log } from '@lerna-lite/npmlog';
+import npa from 'npm-package-arg';
+import pify from 'pify';
 
 import type { ChangelogConfig, ChangelogPresetConfig } from '../interfaces.js';
 

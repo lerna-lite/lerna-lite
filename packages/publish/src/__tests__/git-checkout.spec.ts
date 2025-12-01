@@ -1,10 +1,10 @@
-import { execa } from 'execa';
-import { outputFile, outputJson, writeJson } from 'fs-extra/esm';
 import { dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
-import { expect, test } from 'vitest';
 
 import { initFixtureFactory } from '@lerna-test/helpers';
+import { execa } from 'execa';
+import { outputFile, outputJson, writeJson } from 'fs-extra/esm';
+import { expect, test } from 'vitest';
 
 import { gitCheckout } from '../lib/git-checkout.js';
 

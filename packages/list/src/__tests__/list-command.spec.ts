@@ -1,12 +1,12 @@
 import { dirname } from 'node:path';
 import { fileURLToPath } from 'node:url';
-import { beforeAll, describe, expect, it, vi } from 'vitest';
-import yargParser from 'yargs-parser';
 
 import { collectUpdates, logOutput, type ListCommandOption } from '@lerna-lite/core';
 import { commandRunner, initFixtureFactory } from '@lerna-test/helpers';
 import serializeTempdir from '@lerna-test/helpers/serializers/serialize-tempdir.js';
 import serializeWindowsPaths from '@lerna-test/helpers/serializers/serialize-windows-paths.js';
+import { beforeAll, describe, expect, it, vi } from 'vitest';
+import yargParser from 'yargs-parser';
 
 import cliListCommands from '../../../cli/src/cli-commands/cli-list-commands.js';
 import { ListCommand } from '../index.js';

@@ -1,6 +1,5 @@
-import { afterEach, beforeEach, describe, expect, it, vi, type Mock } from 'vitest';
-
 import { promptTextInput } from '@lerna-lite/core';
+import { afterEach, beforeEach, describe, expect, it, vi, type Mock } from 'vitest';
 
 import { getOneTimePassword, otplease } from '../otplease.js';
 

@@ -1,14 +1,13 @@
-import { outputFile } from 'fs-extra/esm';
 import nodeFs from 'node:fs';
 import { dirname, join, resolve as pathResolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
-import { describe, expect, it, vi } from 'vitest';
-import yargParser from 'yargs-parser';
 
 import type { VersionCommandOption } from '@lerna-lite/core';
-
 import { gitAdd, gitCommit, gitTag, initFixtureFactory, showCommit } from '@lerna-test/helpers';
 import gitSHA from '@lerna-test/helpers/serializers/serialize-git-sha.js';
+import { outputFile } from 'fs-extra/esm';
+import { describe, expect, it, vi } from 'vitest';
+import yargParser from 'yargs-parser';
 
 import { VersionCommand } from '../version-command.js';
 

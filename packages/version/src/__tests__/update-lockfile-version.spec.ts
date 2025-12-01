@@ -1,16 +1,15 @@
-import { pathExistsSync, readJsonSync } from 'fs-extra/esm';
-import { loadJsonFile } from 'load-json-file';
 import { promises as fsPromises } from 'node:fs';
 import { join, dirname as pathDirname } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { stripVTControlCharacters } from 'node:util';
-import { beforeEach, describe, expect, it, test, vi, type Mock } from 'vitest';
 
 import type { Package } from '@lerna-lite/core';
-
 import { execPackageManager, execPackageManagerSync, Project } from '@lerna-lite/core';
 import { log } from '@lerna-lite/npmlog';
 import { initFixtureFactory } from '@lerna-test/helpers';
+import { pathExistsSync, readJsonSync } from 'fs-extra/esm';
+import { loadJsonFile } from 'load-json-file';
+import { beforeEach, describe, expect, it, test, vi, type Mock } from 'vitest';
 
 import {
   loadPackageLockFileWhenExists,

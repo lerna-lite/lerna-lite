@@ -1,10 +1,10 @@
-import { outputFile } from 'fs-extra/esm';
 import { dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
-import { describe, expect, it, vi } from 'vitest';
-import * as writePkg from 'write-package';
 
 import { commandRunner, gitAdd, gitCommit, gitTag, initFixtureFactory, updateLernaConfig } from '@lerna-test/helpers';
+import { outputFile } from 'fs-extra/esm';
+import { describe, expect, it, vi } from 'vitest';
+import * as writePkg from 'write-package';
 
 import cliCommands from '../../../cli/src/cli-commands/cli-publish-commands.js';
 

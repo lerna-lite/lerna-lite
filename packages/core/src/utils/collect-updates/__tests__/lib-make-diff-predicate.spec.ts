@@ -1,7 +1,6 @@
 import { beforeEach, describe, expect, test, vi, type Mock } from 'vitest';
 
 import type { PackageGraphNode } from '../../../../dist/index.js';
-
 import * as childProcesses from '../../../child-process.js';
 import { diffWorkspaceCatalog, makeDiffPredicate } from '../lib/make-diff-predicate.js';
 

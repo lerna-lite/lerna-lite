@@ -1,10 +1,10 @@
-import { loadJsonFile } from 'load-json-file';
 import { dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
-import { afterEach, describe, expect, it, vi } from 'vitest';
 
 import { runLifecycle } from '@lerna-lite/core';
 import { commandRunner, initFixtureFactory } from '@lerna-test/helpers';
+import { loadJsonFile } from 'load-json-file';
+import { afterEach, describe, expect, it, vi } from 'vitest';
 
 import cliCommands from '../../../cli/src/cli-commands/cli-publish-commands.js';
 import { packDirectory } from '../lib/pack-directory.js';

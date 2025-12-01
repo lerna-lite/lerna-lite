@@ -1,4 +1,5 @@
 import { join } from 'node:path';
+
 import { vi } from 'vitest';
 
 const { outputFile } = await vi.importActual<any>('fs-extra/esm');

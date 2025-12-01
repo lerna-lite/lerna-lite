@@ -1,7 +1,4 @@
-import { watch, type ChokidarOptions, type FSWatcher } from 'chokidar';
 import { join, relative } from 'node:path';
-import { globSync } from 'tinyglobby';
-import zeptomatch from 'zeptomatch';
 
 import {
   Command,
@@ -15,10 +12,12 @@ import {
   type ProjectConfig,
   type WatchCommandOption,
 } from '@lerna-lite/core';
-
-import type { ChangesStructure } from './models.js';
+import { watch, type ChokidarOptions, type FSWatcher } from 'chokidar';
+import { globSync } from 'tinyglobby';
+import zeptomatch from 'zeptomatch';
 
 import { CHOKIDAR_AVAILABLE_OPTIONS, DEBOUNCE_DELAY, FILE_DELIMITER } from './constants.js';
+import type { ChangesStructure } from './models.js';
 
 export function factory(argv: WatchCommandOption) {
   return new WatchCommand(argv);

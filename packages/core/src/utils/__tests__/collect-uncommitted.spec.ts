@@ -1,10 +1,10 @@
-import { outputFile, remove } from 'fs-extra/esm';
 import { dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
-import c from 'tinyrainbow';
-import { describe, expect, it, vi } from 'vitest';
 
 import { gitAdd, initFixtureFactory } from '@lerna-test/helpers';
+import { outputFile, remove } from 'fs-extra/esm';
+import c from 'tinyrainbow';
+import { describe, expect, it, vi } from 'vitest';
 
 import { Project } from '../../project/project.js';
 import { collectUncommitted, collectUncommittedSync } from '../collect-uncommitted.js';

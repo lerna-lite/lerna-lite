@@ -1,4 +1,5 @@
 import { join } from 'node:path';
+
 import normalizePath from 'normalize-path';
 
 const WHACK_WACK = /(\\)([\S]*)/g;

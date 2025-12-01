@@ -1,14 +1,13 @@
 import { dirname } from 'node:path';
 import { fileURLToPath } from 'node:url';
-import { describe, expect, it, vi, type Mock } from 'vitest';
-import yargParser from 'yargs-parser';
 
 import { logOutput, promptConfirmation, throwIfUncommitted, type PublishCommandOption } from '@lerna-lite/core';
 import { gitTag, initFixtureFactory, stripAnsi } from '@lerna-test/helpers';
 import { loggingOutput } from '@lerna-test/helpers/logging-output.js';
+import { describe, expect, it, vi, type Mock } from 'vitest';
+import yargParser from 'yargs-parser';
 
 import type { npmPublish as npmPublishMock } from '../lib/__mocks__/npm-publish.js';
-
 import { npmPublish } from '../lib/npm-publish.js';
 import { PublishCommand } from '../publish-command.js';
 

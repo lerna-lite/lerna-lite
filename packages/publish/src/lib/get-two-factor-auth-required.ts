@@ -1,5 +1,4 @@
 import type { FetchConfig } from '@lerna-lite/core';
-
 import { ValidationError } from '@lerna-lite/core';
 
 import { getFetchConfig } from './fetch-config.js';

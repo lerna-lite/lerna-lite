@@ -1,10 +1,7 @@
+import { execPackageManager, spawnStreaming } from '@lerna-lite/core';
 import { describe, expect, it, vi, type Mock } from 'vitest';
 
-import { execPackageManager, spawnStreaming } from '@lerna-lite/core';
-
 import type { RunScriptOption, ScriptStreamingOption } from '../../interfaces.js';
-
-// file under test
 import { npmRunScript, npmRunScriptStreaming } from '../npm-run-script.js';
 
 // mocked modules

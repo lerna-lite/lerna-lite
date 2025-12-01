@@ -2,6 +2,7 @@ import { mkdirSync, realpathSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import { join as pathJoin, relative } from 'node:path';
 import { stripVTControlCharacters } from 'node:util';
+
 import normalizeNewline from 'normalize-newline';
 import normalizePath from 'normalize-path';
 import { v4 as uuidv4 } from 'uuid';

@@ -1,14 +1,13 @@
-import { watch as chokidarWatch } from 'chokidar';
-import mockStdin from 'mock-stdin';
 import { basename, dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
-import { afterEach, beforeAll, describe, expect, it, vi, type Mock } from 'vitest';
-import yargParser from 'yargs-parser';
 
 import type { WatchCommandOption } from '@lerna-lite/core';
-
 import { spawn, spawnStreaming } from '@lerna-lite/core';
 import { commandRunner, initFixtureFactory, normalizeRelativeDir } from '@lerna-test/helpers';
+import { watch as chokidarWatch } from 'chokidar';
+import mockStdin from 'mock-stdin';
+import { afterEach, beforeAll, describe, expect, it, vi, type Mock } from 'vitest';
+import yargParser from 'yargs-parser';
 
 import cliWatchCommands from '../../../cli/src/cli-commands/cli-watch-commands.js';
 import { factory, WatchCommand } from '../index.js';

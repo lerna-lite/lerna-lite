@@ -1,13 +1,12 @@
-import { execa } from 'execa';
 import { dirname, resolve as pathResolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
-import { describe, expect, it, vi } from 'vitest';
-import yargParser from 'yargs-parser';
 
 import type { VersionCommandOption } from '@lerna-lite/core';
-
 import { initFixtureFactory } from '@lerna-test/helpers';
 import gitSHA from '@lerna-test/helpers/serializers/serialize-git-sha.js';
+import { execa } from 'execa';
+import { describe, expect, it, vi } from 'vitest';
+import yargParser from 'yargs-parser';
 
 import { VersionCommand } from '../index.js';
 

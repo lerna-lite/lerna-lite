@@ -1,5 +1,6 @@
 import * as fs from 'node:fs';
 import * as path from 'node:path';
+
 import { afterEach, describe, expect, it, vi, type Mock } from 'vitest';
 
 import { find, findPrefix } from '../find-prefix.js';

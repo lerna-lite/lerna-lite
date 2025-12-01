@@ -1,11 +1,11 @@
-import { loadJsonFile } from 'load-json-file';
 import { dirname } from 'node:path';
 import { fileURLToPath } from 'node:url';
-import { afterEach, describe, expect, it, vi } from 'vitest';
-import yargParser from 'yargs-parser';
 
 import { runLifecycle, type VersionCommandOption } from '@lerna-lite/core';
 import { initFixtureFactory } from '@lerna-test/helpers';
+import { loadJsonFile } from 'load-json-file';
+import { afterEach, describe, expect, it, vi } from 'vitest';
+import yargParser from 'yargs-parser';
 
 // test command
 import { VersionCommand } from '../version-command.js';

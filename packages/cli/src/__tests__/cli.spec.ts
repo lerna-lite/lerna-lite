@@ -1,7 +1,6 @@
+import { log } from '@lerna-lite/npmlog';
 import importLocal from 'import-local';
 import { afterEach, beforeEach, describe, expect, it, vi, type Mock } from 'vitest';
-
-import { log } from '@lerna-lite/npmlog';
 
 vi.mock('import-local');
 
