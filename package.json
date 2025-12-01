@@ -43,9 +43,8 @@
     "format": "oxfmt .",
     "format:check": "oxfmt . --check",
     "outdated:ws": "pnpm -r --stream outdated",
-    "test": "vitest --coverage --config ./vitest/vitest.config.ts",
+    "test": "vitest --coverage --config ./vitest/vitest.config.ts && pnpm clean:temp",
     "test:watch": "vitest --watch --config ./vitest/vitest.config.ts",
-    "posttest": "pnpm clean:temp",
     "test:coverage:update": "vitest --coverage --update --config ./vitest/vitest.config.ts"
   },
   "homepage": "https://github.com/lerna-lite/lerna-lite",
