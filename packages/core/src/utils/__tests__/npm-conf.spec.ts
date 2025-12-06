@@ -1,9 +1,16 @@
-import { describe, expect, it } from 'vitest';
+import { beforeEach, describe, expect, it, vi } from 'vitest';
 
 import * as npmConfModule from '../npm-conf.js';
 import { Conf, npmConf, toNerfDart } from '../npm-conf.js';
 
 describe('@lerna/npm-conf', () => {
+  beforeEach(() => {
+    // Prevent Conf from loading real npm config files during tests
+    vi.spyOn(Conf.prototype, 'addFile').mockReturnValue({} as any);
+    vi.spyOn(Conf.prototype, 'addEnv').mockReturnValue({} as any);
+    vi.spyOn(Conf.prototype, 'loadCAFile').mockReturnValue(undefined);
+  });
+
   it('exports default factory', () => {
     expect(npmConfModule).toBeDefined();
     expect(Conf).toBeDefined();

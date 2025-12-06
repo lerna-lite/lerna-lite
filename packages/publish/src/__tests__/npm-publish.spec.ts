@@ -5,18 +5,19 @@ import PackageJson from '@npmcli/package-json';
 import { readFile } from 'fs/promises';
 // @ts-ignore
 import { publish } from 'libnpmpublish';
-import { describe, expect, it, vi, type Mock } from 'vitest';
+import { beforeEach, describe, expect, it, vi, type Mock } from 'vitest';
 
 import type { LibNpmPublishOptions } from '../interfaces.js';
 import { npmPublish } from '../lib/npm-publish.js';
+import { oidc } from '../lib/oidc.js';
 
 vi.mock('fs/promises');
 vi.mock('libnpmpublish');
 vi.mock('@npmcli/package-json');
+vi.mock('../lib/oidc.js');
 
 vi.mock('@lerna-lite/core', async () => ({
   ...(await vi.importActual<any>('@lerna-lite/core')),
-  oidc: vi.fn().mockResolvedValue(undefined),
   otplease: (cb: (opts: any) => Promise<any>, opts: any) => Promise.resolve(cb(opts)),
   runLifecycle: (await vi.importActual<any>('../../../core/src/__mocks__/run-lifecycle')).runLifecycle,
 }));
@@ -29,6 +30,11 @@ describe('npm-publish', () => {
   (publish as Mock).mockName('libnpmpublish').mockResolvedValue(null);
   (PackageJson.prepare as unknown as Mock).mockImplementation(() => ({ content: mockManifest }));
   (runLifecycle as Mock).mockName('@lerna-lite/core').mockResolvedValue(null);
+  (oidc as Mock).mockName('oidc').mockResolvedValue(undefined);
+
+  beforeEach(() => {
+    vi.clearAllMocks();
+  });
 
   const tarFilePath = '/tmp/test-1.10.100.tgz';
   const rootPath = normalize('/test');
@@ -183,6 +189,38 @@ describe('npm-publish', () => {
 
     expect(publish).not.toHaveBeenCalled();
     expect(runLifecycle).toHaveBeenCalledTimes(2);
+  });
+
+  it('calls oidc authentication during dry-run', async () => {
+    const opts = { dryRun: true };
+
+    await npmPublish(pkg, tarFilePath, opts, conf);
+
+    expect(oidc).toHaveBeenCalledWith({
+      packageName: pkg.name,
+      registry: 'https://registry.npmjs.org/',
+      opts: expect.objectContaining({
+        projectScope: '@scope',
+      }),
+      config: conf,
+    });
+    expect(publish).not.toHaveBeenCalled();
+  });
+
+  it('calls oidc authentication during normal publish', async () => {
+    const opts = {};
+
+    await npmPublish(pkg, tarFilePath, opts, conf);
+
+    expect(oidc).toHaveBeenCalledWith({
+      packageName: pkg.name,
+      registry: 'https://registry.npmjs.org/',
+      opts: expect.objectContaining({
+        projectScope: '@scope',
+      }),
+      config: conf,
+    });
+    expect(publish).toHaveBeenCalled();
   });
 
   it.each([['true'], [true], ['false'], [false]])('aliases strict-ssl to strictSSL', async (strictSSLValue) => {
