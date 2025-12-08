@@ -1,7 +1,7 @@
 import { dirname, join as pathJoin } from 'node:path';
 import { fileURLToPath } from 'node:url';
 
-import { collectUpdates, logOutput, promptConfirmation, type PublishCommandOption } from '@lerna-lite/core';
+import { Conf, collectUpdates, logOutput, promptConfirmation, type PublishCommandOption } from '@lerna-lite/core';
 import { getOneTimePassword } from '@lerna-lite/version';
 import { commandRunner, commitChangeToPackage, initFixtureFactory } from '@lerna-test/helpers';
 import { loggingOutput } from '@lerna-test/helpers/logging-output.js';
@@ -112,6 +112,13 @@ const createArgv = (cwd: string, ...args: any[]) => {
 (gitCheckout as Mock).mockImplementation(() => Promise.resolve());
 
 describe('PublishCommand', () => {
+  beforeEach(() => {
+    // Prevent Conf from loading real npm config files during tests
+    vi.spyOn(Conf.prototype, 'addFile').mockReturnValue({} as any);
+    vi.spyOn(Conf.prototype, 'addEnv').mockReturnValue({} as any);
+    vi.spyOn(Conf.prototype, 'loadCAFile').mockReturnValue(undefined);
+  });
+
   describe('cli validation', () => {
     let cwd: string;
 

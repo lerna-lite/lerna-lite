@@ -53,6 +53,14 @@ export async function npmPublish(
 
   let result: undefined | Response;
 
+  // OIDC trusted publishing
+  await oidc({
+    packageName: pkg.name,
+    registry: opts.registry ?? 'https://registry.npmjs.org/',
+    opts,
+    config: conf,
+  });
+
   if (!dryRun) {
     let { manifestLocation } = pkg;
 
@@ -83,14 +91,6 @@ export async function npmPublish(
     if (manifestContent.publishConfig) {
       Object.assign(opts, publishConfigToOpts(manifestContent.publishConfig));
     }
-
-    // OIDC trusted publishing
-    await oidc({
-      packageName: pkg.name,
-      registry: opts.registry ?? 'https://registry.npmjs.org/',
-      opts,
-      config: conf,
-    });
 
     result = await otplease((innerOpts) => publish(manifestContent, tarData, innerOpts), opts, otpCache as OneTimePasswordCache);
   }
