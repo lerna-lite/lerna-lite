@@ -451,6 +451,9 @@ Specify if we want to include commit remote client login (ie GitHub login userna
 > [!NOTE]
 > If you're only interested in using `%a` and `%e`, you should consider using [`--changelog-include-commits-git-author`](#--changelog-include-commits-git-author-msg) instead because `--changelog-include-commits-client-login` makes an API call to GitHub (via their GraphQL API) to fetch remote client logins. On the other hand, `--changelog-include-commits-git-author` simply reads your local Git and doesn't need any API fetching. So make sure to use the correct option depending on your use case.
 
+> [!NOTE]
+> GitHub is the only supported client at the moment.
+
 This option is only available when using `--conventional-commits` with changelogs enabled. You must also provide 1 of these 2 options [`--create-release <type>`](#--create-release-type) or [`--remote-client <type>`](#--remote-client-type)
 
 > **Note** this will execute one or more client remote API calls (GH is limited to 100 per query), which at the moment is only supporting the GitHub client type. This option will also require a valid `GH_TOKEN` (or `GITHUB_TOKEN`) with read access permissions to the GitHub API so that it can execute the query to fetch all commit details since the last release, for more info refer to the [`Remote Client Auth Tokens`](#remote-client-auth-tokens) below.
@@ -871,7 +874,7 @@ This option will push all git tags one by one to overcome a GitHub limitation, w
 
 ### `--remote-client <type>`
 
-Define which remote client type is used, this option is only useful with the option [`--changelog-include-commits-client-login [msg]`](#--changelog-include-commits-client-login-msg)
+Define which remote client type is used, this option can be used with [`--changelog-include-commits-client-login [msg]`](#--changelog-include-commits-client-login-msg) and [`publish --comment-issue [msg]`](../publish/README.md#--comment-issue-msg) and [`publish --comment-pull-request [msg]`](../publish/README.md#--comment-pull-request-msg)
 
 ```sh
 lerna version --conventional-commits --remote-client github

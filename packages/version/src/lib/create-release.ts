@@ -7,9 +7,9 @@ import c from 'tinyrainbow';
 
 import { createGitHubClient, parseGitRepo } from '../git-clients/github-client.js';
 import { createGitLabClient } from '../git-clients/gitlab-client.js';
-import type { GitClientReleaseOption, GitCreateReleaseClientOutput, ReleaseCommandProps, ReleaseOptions } from '../interfaces.js';
+import type { GitClientReleaseOption, OctokitClientOutput, ReleaseCommandProps, ReleaseOptions } from '../interfaces.js';
 
-export async function createReleaseClient(type: 'github' | 'gitlab'): Promise<GitCreateReleaseClientOutput> {
+export async function createReleaseClient(type: 'github' | 'gitlab'): Promise<OctokitClientOutput> {
   switch (type) {
     case 'gitlab':
       return createGitLabClient();
@@ -29,7 +29,7 @@ export function createRelease(
     generateReleaseNotes,
     releaseDiscussion,
   }: {
-    client: GitCreateReleaseClientOutput;
+    client: OctokitClientOutput;
     type: 'github' | 'gitlab';
     generateReleaseNotes?: boolean;
     releaseDiscussion?: string;

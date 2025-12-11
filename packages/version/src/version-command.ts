@@ -33,7 +33,7 @@ import { applyBuildMetadata } from './conventional-commits/apply-build-metadata.
 import { getCommitsSinceLastRelease } from './conventional-commits/get-commits-since-last-release.js';
 import { recommendVersion } from './conventional-commits/recommend-version.js';
 import { updateChangelog } from './conventional-commits/update-changelog.js';
-import type { GitCreateReleaseClientOutput, ReleaseNote, RemoteCommit } from './interfaces.js';
+import type { OctokitClientOutput, ReleaseNote, RemoteCommit } from './interfaces.js';
 import { createRelease, createReleaseClient } from './lib/create-release.js';
 import { getCurrentBranch } from './lib/get-current-branch.js';
 import { gitAdd } from './lib/git-add.js';
@@ -71,7 +71,7 @@ export class VersionCommand extends Command<VersionCommandOption> {
   commitAndTag = true;
   pushToRemote = true;
   hasRootedLeaf = false;
-  releaseClient?: GitCreateReleaseClientOutput;
+  releaseClient?: OctokitClientOutput;
   releaseNotes: ReleaseNote[] = [];
   gitOpts: any;
   runPackageLifecycle: any;

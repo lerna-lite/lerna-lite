@@ -12,6 +12,7 @@ import yargParser from 'yargs-parser';
 import cliCommands from '../../../cli/src/cli-commands/cli-publish-commands.js';
 import { PublishCommand } from '../index.js';
 import type { npmPublish as npmPublishMock } from '../lib/__mocks__/npm-publish.js';
+import { commentResolvedItems } from '../lib/comment-resolved-items.js';
 import { getNpmUsername } from '../lib/get-npm-username.js';
 import { getTwoFactorAuthRequired } from '../lib/get-two-factor-auth-required.js';
 import { gitCheckout } from '../lib/git-checkout.js';
@@ -34,10 +35,18 @@ vi.mock(
   '../../../version/src/lib/remote-branch-exists',
   async () => await vi.importActual('../../../version/src/lib/__mocks__/remote-branch-exists')
 );
+vi.mock('../lib/comment-resolved-items.js', () => ({
+  commentResolvedItems: vi.fn(),
+}));
 
 // mocked modules of @lerna-lite/version
 vi.mock('@lerna-lite/version', async () => ({
   ...(await vi.importActual<any>('../../../version/src/version-command')),
+  createReleaseClient: vi.fn().mockResolvedValue({
+    issues: { createComment: vi.fn() },
+    repos: { createRelease: vi.fn() },
+    search: { issuesAndPullRequests: vi.fn() },
+  }),
   getOneTimePassword: vi.fn(),
 }));
 
@@ -494,6 +503,148 @@ describe('PublishCommand', () => {
 
       expect(getOneTimePassword).toHaveBeenCalledTimes(1);
       expect(npmPublish).toHaveBeenCalledTimes(3); // Only 3 calls before aborting
+    });
+  });
+
+  describe('Comments on Remote issues/PRs', () => {
+    beforeEach(() => {
+      vi.clearAllMocks();
+    });
+
+    it('calls commentResolvedItems() with default comment issues template when --comment-issues is enabled without arguments', async () => {
+      const cwd = await initFixture('normal');
+
+      await new PublishCommand(createArgv(cwd, '--remote-client', 'github', '--comment-issues'));
+
+      const logMessages = loggingOutput('info');
+      expect(logMessages).toContain('[start] Comments on remote client...');
+      expect(commentResolvedItems).toHaveBeenCalledWith(
+        expect.objectContaining({
+          client: expect.anything(),
+          commentFilterKeywords: ['fix', 'feat', 'perf'],
+          dryRun: undefined,
+          gitRemote: 'origin',
+          execOpts: { cwd, maxBuffer: undefined },
+          independent: false,
+          logger: expect.anything(),
+          tag: 'v1.0.0',
+          version: '1.0.0',
+          templates: {
+            issue: '🎉 _This issue has been resolved in %v. See [%s](%u) for release notes._',
+            pullRequest: '',
+          },
+        })
+      );
+      expect(logMessages).toContain('[end] Comments on remote client...');
+    });
+
+    it('calls commentResolvedItems() with default comment pull requests template when --comment-pull-requests is enabled without arguments', async () => {
+      const cwd = await initFixture('normal');
+
+      await new PublishCommand(createArgv(cwd, '--remote-client', 'github', '--comment-pull-requests', '--dry-run'));
+
+      expect(commentResolvedItems).toHaveBeenCalledWith(
+        expect.objectContaining({
+          client: expect.anything(),
+          commentFilterKeywords: ['fix', 'feat', 'perf'],
+          dryRun: true,
+          gitRemote: 'origin',
+          execOpts: { cwd, maxBuffer: undefined },
+          independent: false,
+          logger: expect.anything(),
+          tag: 'v1.0.0',
+          version: '1.0.0',
+          templates: {
+            issue: '',
+            pullRequest: '📦 _This pull request is included in %v. See [%s](%u) for release notes._',
+          },
+        })
+      );
+    });
+
+    it('calls commentResolvedItems() with custom comment issues template when --comment-issues is provided with text', async () => {
+      const cwd = await initFixture('normal');
+
+      await new PublishCommand(createArgv(cwd, '--remote-client', 'github', '--comment-issues', '"My custom message"'));
+
+      const logMessages = loggingOutput('info');
+      expect(logMessages).toContain('[start] Comments on remote client...');
+      expect(commentResolvedItems).toHaveBeenCalledWith(
+        expect.objectContaining({
+          client: expect.anything(),
+          commentFilterKeywords: ['fix', 'feat', 'perf'],
+          dryRun: undefined,
+          gitRemote: 'origin',
+          execOpts: { cwd, maxBuffer: undefined },
+          independent: false,
+          logger: expect.anything(),
+          tag: 'v1.0.0',
+          version: '1.0.0',
+          templates: {
+            issue: 'My custom message',
+            pullRequest: '',
+          },
+        })
+      );
+      expect(logMessages).toContain('[end] Comments on remote client...');
+    });
+
+    it('calls commentResolvedItems() with custom comment pull requests template when --comment-pull-requests is provided with text', async () => {
+      const cwd = await initFixture('normal');
+
+      await new PublishCommand(createArgv(cwd, '--remote-client', 'github', '--comment-pull-requests', '"My custom message"'));
+
+      expect(commentResolvedItems).toHaveBeenCalledWith(
+        expect.objectContaining({
+          client: expect.anything(),
+          commentFilterKeywords: ['fix', 'feat', 'perf'],
+          dryRun: undefined,
+          gitRemote: 'origin',
+          execOpts: { cwd, maxBuffer: undefined },
+          independent: false,
+          logger: expect.anything(),
+          tag: 'v1.0.0',
+          version: '1.0.0',
+          templates: {
+            issue: '',
+            pullRequest: 'My custom message',
+          },
+        })
+      );
+    });
+
+    it('calls commentResolvedItems() with custom comment pull requests template and filter keywords when --comment-pull-requests and --comment-filter-keywords are both provided with text', async () => {
+      const cwd = await initFixture('normal');
+
+      await new PublishCommand(
+        createArgv(
+          cwd,
+          '--remote-client',
+          'github',
+          '--comment-pull-requests',
+          '"My custom message"',
+          '--comment-filter-keywords',
+          '"fix,feat,chore"'
+        )
+      );
+
+      expect(commentResolvedItems).toHaveBeenCalledWith(
+        expect.objectContaining({
+          client: expect.anything(),
+          commentFilterKeywords: ['fix', 'feat', 'chore'],
+          dryRun: undefined,
+          gitRemote: 'origin',
+          execOpts: { cwd, maxBuffer: undefined },
+          independent: false,
+          logger: expect.anything(),
+          tag: 'v1.0.0',
+          version: '1.0.0',
+          templates: {
+            issue: '',
+            pullRequest: 'My custom message',
+          },
+        })
+      );
     });
   });
 

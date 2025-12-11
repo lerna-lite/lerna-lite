@@ -31,7 +31,7 @@ import {
   ValidationError,
 } from '@lerna-lite/core';
 import type { OneTimePasswordCache } from '@lerna-lite/version';
-import { getOneTimePassword, VersionCommand } from '@lerna-lite/version';
+import { createReleaseClient, getOneTimePassword, VersionCommand } from '@lerna-lite/version';
 import { outputFileSync, removeSync } from 'fs-extra/esm';
 import normalizePath from 'normalize-path';
 import pMap from 'p-map';
@@ -40,7 +40,9 @@ import semver from 'semver';
 import { glob } from 'tinyglobby';
 import c from 'tinyrainbow';
 
+import { COMMENT_FILTER_KEYWORDS_CSV, COMMENT_ISSUE, COMMENT_PULL_REQUEST } from './constant.js';
 import type { Tarball } from './interfaces.js';
+import { commentResolvedItems } from './lib/comment-resolved-items.js';
 import { createTempLicenses } from './lib/create-temp-licenses.js';
 import { getCurrentSHA } from './lib/get-current-sha.js';
 import { getCurrentTags } from './lib/get-current-tags.js';
@@ -328,6 +330,11 @@ export class PublishCommand extends Command<PublishCommandOption> {
       logOutput(message.join(EOL));
     }
 
+    this.logger.success('published', `%d %s ${logPrefix}`, count, count === 1 ? 'package' : 'packages');
+
+    // comment on remote issues/PRs
+    await this.commentOnRemote();
+
     // optionally cleanup temp packed files after publish, opt-in option
     if (this.options.cleanupTempFiles) {
       const tempDirPath = realpathSync(tmpdir());
@@ -338,12 +345,8 @@ export class PublishCommand extends Command<PublishCommandOption> {
           deleteFolders.forEach((folder) => removeSync(folder));
           this.logger.verbose('publish', `Found ${deleteFolders.length} temp folders to cleanup after publish.`);
         })
-        .catch(() => {
-          /* v8 ignore next - do nothing */
-        });
+        .catch(/* v8 ignore next - do nothing */ () => {});
     }
-
-    this.logger.success('published', `%d %s ${logPrefix}`, count, count === 1 ? 'package' : 'packages');
   }
 
   verifyWorkingTreeClean() {
@@ -908,11 +911,11 @@ export class PublishCommand extends Command<PublishCommandOption> {
       'git-dry-run': this.options.dryRun || false,
     });
 
-    let queue: Queue | undefined = undefined;
+    let q: Queue | undefined = undefined;
     if (this.options.throttle) {
       const DEFAULT_QUEUE_THROTTLE_SIZE = 25;
       const DEFAULT_QUEUE_THROTTLE_DELAY = 30;
-      queue = new TailHeadQueue(
+      q = new TailHeadQueue(
         this.options.throttleSize !== undefined ? this.options.throttleSize : DEFAULT_QUEUE_THROTTLE_SIZE,
         (this.options.throttleDelay !== undefined ? this.options.throttleDelay : DEFAULT_QUEUE_THROTTLE_DELAY) * 1000
       );
@@ -928,8 +931,8 @@ export class PublishCommand extends Command<PublishCommandOption> {
 
       try {
         const publishResult = await pulseTillDone(
-          queue
-            ? queue.queue(() => npmPublish(pkg, pkg.packed.tarFilePath, pkgOpts, this.conf, this.otpCache))
+          q
+            ? q.queue(() => npmPublish(pkg, pkg.packed.tarFilePath, pkgOpts, this.conf, this.otpCache))
             : npmPublish(pkg, pkg.packed.tarFilePath, pkgOpts, this.conf, this.otpCache)
         );
         this.publishedPackages.push(pkg);
@@ -950,8 +953,8 @@ export class PublishCommand extends Command<PublishCommandOption> {
           this.logger.warn('OTP expired, requesting a new OTP...');
           await this.requestOneTimePassword(); // Re-request OTP
           return pulseTillDone(
-            queue
-              ? queue.queue(() => npmPublish(pkg, pkg.packed.tarFilePath, pkgOpts, this.conf, this.otpCache))
+            q
+              ? q.queue(() => npmPublish(pkg, pkg.packed.tarFilePath, pkgOpts, this.conf, this.otpCache))
               : npmPublish(pkg, pkg.packed.tarFilePath, pkgOpts, this.conf, this.otpCache)
           ); // Retry publish
         }
@@ -1006,6 +1009,45 @@ export class PublishCommand extends Command<PublishCommandOption> {
       }
       tracker.finish();
     });
+  }
+
+  /** Comment on resolved issues and/or merged PRs */
+  async commentOnRemote() {
+    const remoteClient = this.options.createRelease || this.options.remoteClient;
+    if (remoteClient && (this.options.commentIssues || this.options.commentPullRequests)) {
+      const {
+        dryRun,
+        gitRemote = 'origin',
+        tagVersionPrefix = 'v',
+        version,
+        commentIssues,
+        commentPullRequests,
+        commentFilterKeywords: keywordsCSV = COMMENT_FILTER_KEYWORDS_CSV,
+      } = this.options;
+
+      const logPrefix = dryRun ? c.bgMagenta('[dry-run] ') : '';
+      this.logger.info('comments', `${logPrefix}[start] Comments on remote client...`);
+
+      const releaseClient = await createReleaseClient(remoteClient);
+      await commentResolvedItems({
+        client: releaseClient,
+        commentFilterKeywords: keywordsCSV.split(','),
+        dryRun,
+        gitRemote,
+        execOpts: this.execOpts,
+        independent: this.project.isIndependent(),
+        logger: this.logger,
+        tag: `${tagVersionPrefix}${version}`,
+        version,
+        templates: {
+          // use custom template when provided by the user or use default template when enabled via boolean (empty when false or undefined)
+          issue: (commentIssues === true ? COMMENT_ISSUE : commentIssues) || '',
+          pullRequest: (commentPullRequests === true ? COMMENT_PULL_REQUEST : commentPullRequests) || '',
+        },
+      });
+
+      this.logger.info('comments', '[end] Comments on remote client...');
+    }
   }
 
   npmUpdateAsLatest() {

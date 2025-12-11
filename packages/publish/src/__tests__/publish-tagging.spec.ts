@@ -128,7 +128,7 @@ test('publish --temp-tag', async () => {
 test('publish --dist-tag beta --temp-tag', async () => {
   const cwd = await initFixture('integration');
 
-  await new PublishCommand(createArgv(cwd, '--dist-tag', 'beta', '--temp-tag'));
+  await new PublishCommand(createArgv(cwd, '--dist-tag', 'beta', '--temp-tag', '--no-sort'));
 
   expect((npmPublish as any).registry).toEqual(
     new Map([
