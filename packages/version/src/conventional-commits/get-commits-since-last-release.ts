@@ -71,7 +71,7 @@ export function getOldestCommitSinceLastTag(execOpts?: ExecOpts, isIndependent?:
 
   const [, commitHash, commitDate] = /^"?([0-9a-f]+)\s([0-9\-Z.|+T:]*)"?$/.exec(commitResult) || [];
   // prettier-ignore
-  log.info('oldestCommitSinceLastTag', `commit found since last tag: ${lastTagName} - (SHA) ${commitHash} - ${commitDate}`);
+  log.verbose('oldestCommitSinceLastTag', `commit found since last tag: ${lastTagName} - (SHA) ${commitHash} - ${commitDate}`);
 
   return { commitHash, commitDate };
 }

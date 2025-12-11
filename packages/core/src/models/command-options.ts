@@ -353,6 +353,15 @@ export interface PublishCommandOption extends VersionCommandOption {
   /** Cleanup packed temp files/folders after publish process is finished, defaults to false. */
   cleanupTempFiles?: boolean;
 
+  /** Comment issue template (requires either `createRelease` or `remoteClient`), when `true` is provided we'll use the default template: "🎉 _This issue has been resolved in %v. See [%s](%u) for release notes._" */
+  commentIssues?: boolean | string;
+
+  /** Comment issue template (requires either `createRelease` or `remoteClient`), when `true` is provided we'll use the default template: "📦 _This pull request is included in %v. See [%s](%u) for release notes._" */
+  commentPullRequests?: boolean | string;
+
+  /** Keywords to use when retrieving Pull Requests by filtering using Starts With and provided via a CSV string, defaults to `"fix,feat,perf"` */
+  commentFilterKeywords?: string;
+
   /** Specify the prerelease identifier when publishing a prerelease */
   preid?: string;
 
