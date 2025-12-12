@@ -70,7 +70,10 @@ export function getOldestCommitSinceLastTag(execOpts?: ExecOpts, isIndependent?:
   }
 
   // get the date of the last tag
-  const tagDateArgs = ['log', '-1', '--format=%cd', '--date=iso-strict', lastTagName || ''];
+  const tagDateArgs = ['log', '-1', '--format=%cd', '--date=iso-strict'];
+  if (lastTagName) {
+    tagDateArgs.push(lastTagName);
+  }
   const tagDate = execSync('git', tagDateArgs, execOpts);
 
   const [, commitHash, commitDate] = /^"?([0-9a-f]+)\s([0-9\-Z.|+T:]*)"?$/.exec(commitResult) || [];

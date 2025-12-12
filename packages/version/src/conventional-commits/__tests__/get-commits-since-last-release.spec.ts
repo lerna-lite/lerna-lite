@@ -92,7 +92,9 @@ describe('getOldestCommitSinceLastTag', () => {
     });
 
     it('should return first commit date format as ISO+offset when describeRefSync() did not return a tag date', () => {
-      const execSpy = (execSync as Mock).mockReturnValueOnce('"abcbeef 2022-07-01T00:01:02-04:00"');
+      const execSpy = (execSync as Mock)
+        .mockReturnValueOnce('"abcbeef 2022-07-01T00:01:02-04:00"')
+        .mockReturnValueOnce('2025-12-12T01:02:03-05:00');
       const result = getOldestCommitSinceLastTag(execOpts);
 
       expect(execSpy).toHaveBeenCalledWith(
@@ -100,11 +102,17 @@ describe('getOldestCommitSinceLastTag', () => {
         ['log', '--oneline', '--format="%h %aI"', '--reverse', '--max-parents=0', 'HEAD'],
         execOpts
       );
-      expect(result).toEqual({ commitDate: '2022-07-01T00:01:02-04:00', commitHash: 'abcbeef' });
+      expect(result).toEqual({
+        commitDate: '2022-07-01T00:01:02-04:00',
+        commitHash: 'abcbeef',
+        tagDate: '2025-12-12T01:02:03-05:00',
+      });
     });
 
     it('should return first commit date with a TZ format when describeRefSync() did not return a tag date', () => {
-      const execSpy = (execSync as Mock).mockReturnValueOnce('"abcbeef 2024-05-16T10:37:42Z"');
+      const execSpy = (execSync as Mock)
+        .mockReturnValueOnce('"abcbeef 2024-05-16T10:37:42Z"')
+        .mockReturnValueOnce('2025-12-12T01:02:03-05:00');
       const result = getOldestCommitSinceLastTag(execOpts);
 
       expect(execSpy).toHaveBeenCalledWith(
@@ -112,11 +120,13 @@ describe('getOldestCommitSinceLastTag', () => {
         ['log', '--oneline', '--format="%h %aI"', '--reverse', '--max-parents=0', 'HEAD'],
         execOpts
       );
-      expect(result).toEqual({ commitDate: '2024-05-16T10:37:42Z', commitHash: 'abcbeef' });
+      expect(result).toEqual({ commitDate: '2024-05-16T10:37:42Z', commitHash: 'abcbeef', tagDate: '2025-12-12T01:02:03-05:00' });
     });
 
     it('should return first commit date with a TZ and microsecond format when describeRefSync() did not return a tag date', () => {
-      const execSpy = (execSync as Mock).mockReturnValueOnce('"abcbeef 2024-05-16T10:37:42.234Z"');
+      const execSpy = (execSync as Mock)
+        .mockReturnValueOnce('"abcbeef 2024-05-16T10:37:42.234Z"')
+        .mockReturnValueOnce('2025-12-12T01:02:03-05:00');
       const result = getOldestCommitSinceLastTag(execOpts);
 
       expect(execSpy).toHaveBeenCalledWith(
@@ -124,7 +134,11 @@ describe('getOldestCommitSinceLastTag', () => {
         ['log', '--oneline', '--format="%h %aI"', '--reverse', '--max-parents=0', 'HEAD'],
         execOpts
       );
-      expect(result).toEqual({ commitDate: '2024-05-16T10:37:42.234Z', commitHash: 'abcbeef' });
+      expect(result).toEqual({
+        commitDate: '2024-05-16T10:37:42.234Z',
+        commitHash: 'abcbeef',
+        tagDate: '2025-12-12T01:02:03-05:00',
+      });
     });
   });
 
@@ -144,7 +158,7 @@ describe('getOldestCommitSinceLastTag', () => {
     it('should expect a tag date & hash but queried with a particular tag match pattern when using independent mode', () => {
       const isIndependent = true;
       const mockExecSyncResult = '"deadabcd 2022-07-01T00:01:02-06:00"';
-      (execSync as Mock).mockReturnValue(mockExecSyncResult);
+      (execSync as Mock).mockReturnValueOnce(mockExecSyncResult).mockReturnValueOnce('2025-12-12T01:02:03-05:00');
       const result = getOldestCommitSinceLastTag(execOpts, isIndependent, false);
       const execSpy = (execSync as Mock).mockReturnValueOnce(mockExecSyncResult);
 
@@ -154,12 +168,18 @@ describe('getOldestCommitSinceLastTag', () => {
         ['log', '@my-workspace/pkg-a@2.0.3..HEAD', '--format="%h %aI"', '--reverse'],
         execOpts
       );
-      expect(result).toEqual({ commitDate: '2022-07-01T00:01:02-06:00', commitHash: 'deadabcd' });
+      expect(result).toEqual({
+        commitDate: '2022-07-01T00:01:02-06:00',
+        commitHash: 'deadabcd',
+        tagDate: '2025-12-12T01:02:03-05:00',
+      });
     });
 
     it('should expect a commit date and hash when using different time zone', () => {
       const isIndependent = true;
-      (execSync as Mock).mockReturnValue('"deadbeef 2022-07-01T00:01:02+01:00"');
+      (execSync as Mock)
+        .mockReturnValueOnce('"deadbeef 2022-07-01T00:01:02+01:00"')
+        .mockReturnValueOnce('2025-12-12T01:02:03-05:00');
       const result = getOldestCommitSinceLastTag(execOpts, isIndependent, false);
       const execSpy = (execSync as Mock).mockReturnValueOnce('"deadbeef 2022-07-01T00:01:02+01:00"');
 
@@ -169,7 +189,11 @@ describe('getOldestCommitSinceLastTag', () => {
         ['log', '@my-workspace/pkg-a@2.0.3..HEAD', '--format="%h %aI"', '--reverse'],
         execOpts
       );
-      expect(result).toEqual({ commitDate: '2022-07-01T00:01:02+01:00', commitHash: 'deadbeef' });
+      expect(result).toEqual({
+        commitDate: '2022-07-01T00:01:02+01:00',
+        commitHash: 'deadbeef',
+        tagDate: '2025-12-12T01:02:03-05:00',
+      });
     });
   });
 
