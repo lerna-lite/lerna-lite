@@ -930,7 +930,9 @@ export class VersionCommand extends Command<VersionCommandOption> {
 
   /** Comment on resolved issues and/or merged PRs */
   async commentOnRemote() {
-    if (this.releaseClient) {
+    const remoteClient = this.options.createRelease || this.options.remoteClient;
+    if (remoteClient && (this.options.commentIssues || this.options.commentPullRequests)) {
+      const client = this.releaseClient || (await createReleaseClient(remoteClient));
       const {
         dryRun,
         gitRemote = 'origin',
@@ -945,7 +947,7 @@ export class VersionCommand extends Command<VersionCommandOption> {
       this.logger.info('comments', `${logPrefix}[start] Comments on remote client...`);
 
       await commentResolvedItems({
-        client: this.releaseClient,
+        client,
         commentFilterKeywords: keywordsCSV.split(','),
         dryRun,
         gitRemote,
