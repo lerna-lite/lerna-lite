@@ -1,8 +1,9 @@
 import { type Logger } from '@lerna-lite/npmlog';
-import { describe, expect, it, vi } from 'vitest';
+import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 
 import type { CommentResolvedOptions, OctokitClientOutput } from '../interfaces.js';
 import { commentResolvedItems, remoteSearchBy, getReleaseUrlFallback } from '../lib/comment-resolved-items.js';
+import { RateLimiter } from '../lib/rate-limiter.js';
 
 vi.mock('../../git-clients/github-client', async () => ({
   ...(await vi.importActual<any>('../../git-clients/github-client')),
@@ -108,6 +109,7 @@ describe('commentResolvedItems', () => {
       verbose: vi.fn(),
       info: vi.fn(),
       silly: vi.fn(),
+      warn: vi.fn(),
     } as unknown as Logger;
 
     const mockClient = {
@@ -143,8 +145,17 @@ describe('commentResolvedItems', () => {
     return { mockLogger, mockClient, mockOptions };
   };
 
+  // Mock RateLimiter to avoid actual throttling during tests
+  beforeEach(() => {
+    vi.spyOn(RateLimiter.prototype, 'throttle').mockImplementation(async (fn) => fn());
+  });
+
+  afterEach(() => {
+    vi.restoreAllMocks();
+  });
+
   it('should create comments for issues and PRs when not in dry run mode', async () => {
-    const { mockClient, mockOptions } = createMockDependencies();
+    const { mockLogger, mockClient, mockOptions } = createMockDependencies();
 
     // Mock search results for both issues and PRs
     mockClient.search.issuesAndPullRequests
@@ -161,10 +172,50 @@ describe('commentResolvedItems', () => {
         },
       });
 
-    await commentResolvedItems(mockOptions);
+    const results = await commentResolvedItems(mockOptions);
 
     // Verify comment creation
     expect(mockClient.issues.createComment).toHaveBeenCalledTimes(2);
+
+    // Verify logging
+    expect(mockLogger.info).toHaveBeenCalledWith('comments', expect.stringContaining('● Commented on'));
+
+    // Verify results
+    expect(results).toHaveLength(2);
+    expect(results.every((r) => r.success)).toBe(true);
+  });
+
+  it('should handle comment creation failures', async () => {
+    const { mockLogger, mockClient, mockOptions } = createMockDependencies();
+
+    // Mock a failed comment creation
+    mockClient.issues.createComment.mockRejectedValueOnce(new Error('API Error'));
+
+    // Mock search results
+    mockClient.search.issuesAndPullRequests
+      .mockResolvedValueOnce({
+        data: {
+          items: [{ number: 123, title: 'Linked issue', pull_request: {} }],
+        },
+      })
+      .mockResolvedValueOnce({
+        data: {
+          items: [{ number: 456, title: 'feature: test PR' }],
+        },
+      });
+
+    const results = await commentResolvedItems(mockOptions);
+
+    // Verify comment creation attempt
+    expect(mockClient.issues.createComment).toHaveBeenCalledTimes(2);
+
+    // Verify logging for failure
+    expect(mockLogger.info).toHaveBeenCalledWith('comments', expect.stringContaining('✕ Failed to comment on'));
+
+    // Verify results
+    expect(results).toHaveLength(2);
+    expect(results.some((r) => !r.success)).toBe(true);
+    expect(results.filter((r) => !r.success)).toHaveLength(1);
   });
 
   it('should not create comments in dry run mode', async () => {
@@ -188,22 +239,13 @@ describe('commentResolvedItems', () => {
     // Override dryRun to true
     mockOptions.dryRun = true;
 
-    // Mock parseGitRepo
-    vi.mock('@lerna-lite/version', () => ({
-      parseGitRepo: vi.fn().mockReturnValue({
-        owner: 'owner',
-        name: 'repo',
-        host: 'github.com',
-      }),
-    }));
-
     await commentResolvedItems(mockOptions);
 
     // Verify no comment creation
     expect(mockClient.issues.createComment).not.toHaveBeenCalled();
 
     // Verify logging for dry run
-    expect(mockLogger.info).toHaveBeenCalledWith('comments', expect.stringContaining('● Commented on issue'));
+    expect(mockLogger.info).toHaveBeenCalledWith('comments', expect.stringContaining('● Would comment on'));
   });
 
   it('should filter PRs based on PR title keywords', async () => {
@@ -230,7 +272,7 @@ describe('commentResolvedItems', () => {
     // Reset mock call counts
     mockClient.issues.createComment.mockClear();
 
-    await commentResolvedItems(mockOptions);
+    const results = await commentResolvedItems(mockOptions);
 
     // Verify only PRs starting with 'feature' were processed
     expect(mockClient.issues.createComment).toHaveBeenCalledTimes(2);
@@ -238,6 +280,11 @@ describe('commentResolvedItems', () => {
     // Verify the comments were created for the correct PR numbers
     const calledWithNumbers = mockClient.issues.createComment.mock.calls.map((call) => call[0].issue_number);
     expect(calledWithNumbers).toEqual([101, 103]);
+
+    // Verify results match
+    expect(results).toHaveLength(2);
+    expect(results.every((r) => r.success)).toBe(true);
+    expect(results.map((r) => r.number)).toEqual([101, 103]);
   });
 
   it('should filter PRs and add to issues when PR title includes "fix #[number]"', async () => {
@@ -261,10 +308,115 @@ describe('commentResolvedItems', () => {
     // Reset mock call counts
     mockClient.issues.createComment.mockClear();
 
-    await commentResolvedItems(mockOptions);
+    const results = await commentResolvedItems(mockOptions);
 
     // Verify the comments were created for the correct PR numbers
     const calledWithNumbers = mockClient.issues.createComment.mock.calls.map((call) => call[0].issue_number);
     expect(calledWithNumbers).toEqual([123, 101, 102, 103]);
+
+    // Verify results
+    expect(results).toHaveLength(4);
+    expect(results.every((r) => r.success)).toBe(true);
+    expect(results.map((r) => r.number)).toEqual([123, 101, 102, 103]);
+  });
+
+  it('should handle empty search results gracefully', async () => {
+    const { mockLogger, mockClient, mockOptions } = createMockDependencies();
+
+    // Mock empty search results for both issues and PRs
+    mockClient.search.issuesAndPullRequests
+      .mockResolvedValueOnce({
+        data: { items: [] },
+      })
+      .mockResolvedValueOnce({
+        data: { items: [] },
+      });
+
+    const results = await commentResolvedItems(mockOptions);
+
+    // Verify no comment creation
+    expect(mockClient.issues.createComment).not.toHaveBeenCalled();
+
+    // Verify results
+    expect(results).toHaveLength(0);
+
+    // Verify logging
+    expect(mockLogger.verbose).toHaveBeenCalledWith('comments', 'Merged Pull Requests: ');
+    expect(mockLogger.verbose).toHaveBeenCalledWith('comments', 'Closed linked issues: ');
+  });
+
+  it('should respect template substitution for comments', async () => {
+    const { mockClient, mockOptions } = createMockDependencies();
+
+    // Mock search results
+    mockClient.search.issuesAndPullRequests
+      .mockResolvedValueOnce({
+        data: {
+          items: [{ number: 123, title: 'Linked issue', pull_request: {} }],
+        },
+      })
+      .mockResolvedValueOnce({
+        data: {
+          items: [{ number: 456, title: 'feature: test PR' }],
+        },
+      });
+
+    // Verify comment templates are used correctly
+    const results = await commentResolvedItems(mockOptions);
+
+    // Check comment creation calls
+    const commentCalls = mockClient.issues.createComment.mock.calls;
+    expect(commentCalls).toHaveLength(2);
+
+    // Verify template substitution
+    commentCalls.forEach((call) => {
+      const commentBody = call[0].body;
+      expect(commentBody).toContain('v1.2.3');
+      expect(commentBody).toContain('v1.2.3');
+      // expect(commentBody).toMatch(/https:\/\/github\.com\/owner\/repo\/releases\/tag\/v1\.2\.3/);
+    });
+
+    // Verify results
+    expect(results).toHaveLength(2);
+    expect(results.every((r) => r.success)).toBe(true);
+  });
+
+  it('should handle multiple comment templates', async () => {
+    const { mockClient, mockOptions } = createMockDependencies();
+
+    // Modify options to have different templates for issues and PRs
+    mockOptions.templates = {
+      issue: 'Issue specific template for %s',
+      pullRequest: 'PR specific template for %s',
+    };
+
+    // Mock search results
+    mockClient.search.issuesAndPullRequests
+      .mockResolvedValueOnce({
+        data: {
+          items: [{ number: 123, title: 'Linked issue', pull_request: {} }],
+        },
+      })
+      .mockResolvedValueOnce({
+        data: {
+          items: [{ number: 456, title: 'feature: test PR' }],
+        },
+      });
+
+    const results = await commentResolvedItems(mockOptions);
+
+    // Check comment creation calls
+    const commentCalls = mockClient.issues.createComment.mock.calls;
+    expect(commentCalls).toHaveLength(2);
+
+    // Verify different templates are used
+    const [issueComment, prComment] = commentCalls;
+
+    expect(issueComment[0].body).toContain('Issue specific template for v1.2.3');
+    expect(prComment[0].body).toContain('PR specific template for v1.2.3');
+
+    // Verify results
+    expect(results).toHaveLength(2);
+    expect(results.every((r) => r.success)).toBe(true);
   });
 });

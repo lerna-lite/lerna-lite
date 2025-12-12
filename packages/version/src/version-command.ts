@@ -439,7 +439,9 @@ export class VersionCommand extends Command<VersionCommandOption> {
     }
 
     // comment on remote issues/PRs
-    await this.commentOnRemote();
+    if (this.options.commentIssues || this.options.commentPullRequests) {
+      await this.commentOnRemote();
+    }
 
     return {
       updates: this.updates,
@@ -930,14 +932,16 @@ export class VersionCommand extends Command<VersionCommandOption> {
 
   /** Comment on resolved issues and/or merged PRs */
   async commentOnRemote() {
-    const remoteClient = this.options.createRelease || this.options.remoteClient;
-    if (remoteClient && (this.options.commentIssues || this.options.commentPullRequests)) {
-      const client = this.releaseClient || (await createReleaseClient(remoteClient));
+    const clientType = this.options.createRelease || this.options.remoteClient;
+    if (clientType === 'gitlab') {
+      this.logger.warn('comments', 'GitLab is not currently supported to comment on issues/PRs.');
+      return Promise.resolve();
+    } else if (clientType === 'github') {
+      const client = this.releaseClient || (await createReleaseClient(clientType));
       const {
-        dryRun,
+        dryRun = false,
         gitRemote = 'origin',
         tagVersionPrefix = 'v',
-        version,
         commentIssues,
         commentPullRequests,
         commentFilterKeywords: keywordsCSV = COMMENT_FILTER_KEYWORDS_CSV,
@@ -952,10 +956,10 @@ export class VersionCommand extends Command<VersionCommandOption> {
         dryRun,
         gitRemote,
         execOpts: this.execOpts,
-        lastTagCommit: this.lastTagCommit,
+        prevTagDate: this.lastTagCommit?.tagDate,
         logger: this.logger,
-        tag: `${tagVersionPrefix}${version}`,
-        version,
+        tag: `${tagVersionPrefix}${this.globalVersion}`,
+        version: this.globalVersion,
         templates: {
           // use custom template when provided by the user or use default template when enabled via boolean (empty when false or undefined)
           issue: (commentIssues === true ? COMMENT_ISSUE : commentIssues) || '',

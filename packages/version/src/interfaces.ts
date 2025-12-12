@@ -252,11 +252,11 @@ export interface CommitData {
 export interface CommentResolvedOptions {
   client: OctokitClientOutput;
   commentFilterKeywords: string[];
-  gitRemote: string;
-  execOpts: ExecOpts;
-  lastTagCommit?: { commitHash: string; commitDate: string; tagDate: string };
   dryRun?: boolean;
+  execOpts: ExecOpts;
+  gitRemote: string;
   logger: Logger;
+  prevTagDate?: string;
   version: string;
   tag: string;
   templates: {

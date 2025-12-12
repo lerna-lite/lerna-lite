@@ -265,7 +265,10 @@ Build metadata must be [SemVer compatible](https://semver.org/#spec-item-10). Wh
 
 ### Comments on issues/pull requests
 
-When enabled, it will insert Comments on all the closed linked issues and/or merged pull requests that were included in the release (currently only GitHub is supported). You could also provide a custom format by using any of these tokens (`%s`, `%v`, `%u`), see examples below.
+> [!NOTE]
+> GitHub is the only supported client at the moment and you must provide 1 of these 2 options [`--create-release <type>`](../version/README.md#--create-release-type) or [`--remote-client <type>`](../version/README.md#--remote-client-type).
+
+When enabled, it will insert comments on all the closed linked issues and/or merged pull requests that were included in the release (currently only GitHub is supported). You could also provide a custom format by using any of these tokens (`%s`, `%v`, `%u`), see examples below.
 
 - `%s`: git tag - (e.g. "v1.0.2")
 - `%v`: version number only - (e.g. "1.0.2")
@@ -274,22 +277,16 @@ When enabled, it will insert Comments on all the closed linked issues and/or mer
 When running in a GitHub CI environment, you will also need these permissions:
 ```yaml
 permissions:
-  contents: write # to be able to publish a GitHub release
-  issues: write # to be able to comment on released issues
+  contents: write      # to be able to publish a GitHub release
+  issues: write        # to be able to comment on released issues
   pull-requests: write # to be able to comment on released pull requests
-  id-token: write # to enable use of OIDC for npm provenance
+  id-token: write      # to enable use of OIDC for npm provenance
 ```
 
-> [!NOTE]
-> You must provide 1 of these 2 options [`--create-release <type>`](../version/README.md#--create-release-type) or [`--remote-client <type>`](../version/README.md#--remote-client-type).
+> **Note** this will possibly execute many API calls and this option will also require a valid `GH_TOKEN` (or `GITHUB_TOKEN`) with write access permissions to the GitHub API so that it can execute the query to fetch all commit details and insert comments, for more info refer to the [`Remote Client Auth Tokens`](#remote-client-auth-tokens) below.
 
 > [!NOTE]
-> GitHub is the only supported client at the moment.
-
-> **Note** this will execute one or more client remote API calls (GH is limited to 100 per query), which at the moment is only supporting the GitHub client type. This option will also require a valid `GH_TOKEN` (or `GITHUB_TOKEN`) with write access permissions to the GitHub API so that it can execute the query to fetch all commit details and insert comments, for more info refer to the [`Remote Client Auth Tokens`](#remote-client-auth-tokens) below.
-
-> [!NOTE]
-> This feature works best with fixed global version and might not work as expected with `independent` mode because at the moment there are no easy ways of detecting which issue/PR belongs to which package. You could still use it with `independent` but none of the tokens shown above won't be available, in that case using a generic message is totally fine and ideal.
+> This feature works best with a single global version and might not work as expected with `independent` mode, there is just no easy ways to detect which issues/PRs belongs to which package. You could still use it with `independent` but none of the tokens shown above will be available (or at least won't provide the correct info) and so in that case using a generic message is the only suggestion we have (e.g.: `"This PR is included in latest [release](http://release-url)"`).
 
 ##### `--comment-issue [msg]`
 

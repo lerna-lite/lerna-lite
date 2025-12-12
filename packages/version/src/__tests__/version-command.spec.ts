@@ -930,6 +930,15 @@ describe('VersionCommand', () => {
   });
 
   describe('Comments on Remote issues/PRs', () => {
+    it('warns when enabling --comment-issues with gitlab client', async () => {
+      const cwd = await initFixture('normal');
+
+      await new VersionCommand(createArgv(cwd, '--remote-client', 'gitlab', '--comment-issues'));
+
+      const logMessages = loggingOutput('warn');
+      expect(logMessages).toContain('GitLab is not currently supported to comment on issues/PRs.');
+    });
+
     it('calls commentResolvedItems() with default comment issues template when --comment-issues is enabled without arguments', async () => {
       const cwd = await initFixture('normal');
 
@@ -941,13 +950,13 @@ describe('VersionCommand', () => {
         expect.objectContaining({
           client: expect.anything(),
           commentFilterKeywords: ['fix', 'feat', 'perf'],
-          dryRun: undefined,
+          dryRun: false,
           gitRemote: 'origin',
           execOpts: { cwd, maxBuffer: undefined },
-          lastTagCommit: undefined,
+          prevTagDate: undefined,
           logger: expect.anything(),
-          tag: 'v1.0.0',
-          version: '1.0.0',
+          tag: 'v1.0.1',
+          version: '1.0.1',
           templates: {
             issue: '🎉 _This issue has been resolved in %v. See [%s](%u) for release notes._',
             pullRequest: '',
@@ -969,10 +978,10 @@ describe('VersionCommand', () => {
           dryRun: true,
           gitRemote: 'origin',
           execOpts: { cwd, maxBuffer: undefined },
-          lastTagCommit: undefined,
+          prevTagDate: undefined,
           logger: expect.anything(),
-          tag: 'v1.0.0',
-          version: '1.0.0',
+          tag: 'v1.0.1',
+          version: '1.0.1',
           templates: {
             issue: '',
             pullRequest: '📦 _This pull request is included in %v. See [%s](%u) for release notes._',
@@ -992,13 +1001,13 @@ describe('VersionCommand', () => {
         expect.objectContaining({
           client: expect.anything(),
           commentFilterKeywords: ['fix', 'feat', 'perf'],
-          dryRun: undefined,
+          dryRun: false,
           gitRemote: 'origin',
           execOpts: { cwd, maxBuffer: undefined },
-          lastTagCommit: undefined,
+          prevTagDate: undefined,
           logger: expect.anything(),
-          tag: 'v1.0.0',
-          version: '1.0.0',
+          tag: 'v1.0.1',
+          version: '1.0.1',
           templates: {
             issue: 'My custom message',
             pullRequest: '',
@@ -1017,13 +1026,13 @@ describe('VersionCommand', () => {
         expect.objectContaining({
           client: expect.anything(),
           commentFilterKeywords: ['fix', 'feat', 'perf'],
-          dryRun: undefined,
+          dryRun: false,
           gitRemote: 'origin',
           execOpts: { cwd, maxBuffer: undefined },
-          lastTagCommit: undefined,
+          prevTagDate: undefined,
           logger: expect.anything(),
-          tag: 'v1.0.0',
-          version: '1.0.0',
+          tag: 'v1.0.1',
+          version: '1.0.1',
           templates: {
             issue: '',
             pullRequest: 'My custom message',
@@ -1051,13 +1060,13 @@ describe('VersionCommand', () => {
         expect.objectContaining({
           client: expect.anything(),
           commentFilterKeywords: ['fix', 'feat', 'chore'],
-          dryRun: undefined,
+          dryRun: false,
           gitRemote: 'origin',
           execOpts: { cwd, maxBuffer: undefined },
-          lastTagCommit: undefined,
+          prevTagDate: undefined,
           logger: expect.anything(),
-          tag: 'v1.0.0',
-          version: '1.0.0',
+          tag: 'v1.0.1',
+          version: '1.0.1',
           templates: {
             issue: '',
             pullRequest: 'My custom message',
