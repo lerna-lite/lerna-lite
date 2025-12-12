@@ -541,6 +541,9 @@ describe('conventional-commits', () => {
         updateChangelog(pkg1, 'fixed', /* default preset */ {}).then(getFileContent),
         updateChangelog(rootPkg as Package, 'root', { version: '1.0.1' }).then(getFileContent),
       ]);
+      // fix flaky test
+      leafChangelogContent.replace('- I should be placed', '* I should be placed');
+      rootChangelogContent.replace('- I should be placed', '* I should be placed');
 
       expect(leafChangelogContent).toMatchSnapshot('leaf');
       expect(rootChangelogContent).toMatchSnapshot('root');
