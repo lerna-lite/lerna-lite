@@ -9,12 +9,12 @@
       "createRelease": "github",
       "changelogIncludeCommitsClientLogin": " - by @%l",
       "changelogHeaderMessage": "## Automate your Workspace Versioning, Publishing & Changelogs with [Lerna-Lite](https://github.com/lerna-lite/lerna-lite) 📦🚀",
+      "commentIssues": "✅ This issue has been resolved and included in version %v.<br>🎉 See [%s](%u) for release notes. 🎉",
+      "commentPullRequests": "📦 This pull request is included in version %v.<br>🎉 See [%s](%u) for release notes. 🎉",
       "message": "chore(release): publish new version %s"
     },
     "publish": {
       "cleanupTempFiles": true,
-      "commentIssues": "✅ This issue has been resolved and included in version %v.<br>🎉 See [%s](%u) for release notes. 🎉",
-      "commentPullRequests": "📦 This pull request is included in version %v.<br>🎉 See [%s](%u) for release notes. 🎉",
       "stripPackageKeys": [
         "devDependencies",
         "scripts"
