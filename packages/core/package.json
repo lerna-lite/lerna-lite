@@ -1,7 +1,7 @@
 {
   "name": "@lerna-lite/core",
   "description": "Lerna-Lite core implementation module",
-  "version": "4.10.0",
+  "version": "4.10.1",
   "publishConfig": {
     "access": "public"
   },
