@@ -6,6 +6,7 @@
   "bracketSpacing": true,
   "bracketSameLine": false,
   "trailingComma": "es5",
+  "ignorePatterns": ["**/*.{md}", "**/__fixtures__/**/*.*", "**/__mocks__/**/*.*"],
   "experimentalSortImports": {
     "partitionByNewline": false,
     "partitionByComment": false,
