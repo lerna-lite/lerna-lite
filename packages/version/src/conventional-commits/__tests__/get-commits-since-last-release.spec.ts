@@ -100,7 +100,10 @@ describe('getOldestCommitSinceLastTag', () => {
         ['log', '--oneline', '--format="%h %aI"', '--reverse', '--max-parents=0', 'HEAD'],
         execOpts
       );
-      expect(result).toEqual({ commitDate: '2022-07-01T00:01:02-04:00', commitHash: 'abcbeef' });
+      expect(result).toEqual({
+        commitDate: '2022-07-01T00:01:02-04:00',
+        commitHash: 'abcbeef',
+      });
     });
 
     it('should return first commit date with a TZ format when describeRefSync() did not return a tag date', () => {
@@ -124,7 +127,10 @@ describe('getOldestCommitSinceLastTag', () => {
         ['log', '--oneline', '--format="%h %aI"', '--reverse', '--max-parents=0', 'HEAD'],
         execOpts
       );
-      expect(result).toEqual({ commitDate: '2024-05-16T10:37:42.234Z', commitHash: 'abcbeef' });
+      expect(result).toEqual({
+        commitDate: '2024-05-16T10:37:42.234Z',
+        commitHash: 'abcbeef',
+      });
     });
   });
 
@@ -144,7 +150,7 @@ describe('getOldestCommitSinceLastTag', () => {
     it('should expect a tag date & hash but queried with a particular tag match pattern when using independent mode', () => {
       const isIndependent = true;
       const mockExecSyncResult = '"deadabcd 2022-07-01T00:01:02-06:00"';
-      (execSync as Mock).mockReturnValue(mockExecSyncResult);
+      (execSync as Mock).mockReturnValueOnce(mockExecSyncResult);
       const result = getOldestCommitSinceLastTag(execOpts, isIndependent, false);
       const execSpy = (execSync as Mock).mockReturnValueOnce(mockExecSyncResult);
 
@@ -154,12 +160,15 @@ describe('getOldestCommitSinceLastTag', () => {
         ['log', '@my-workspace/pkg-a@2.0.3..HEAD', '--format="%h %aI"', '--reverse'],
         execOpts
       );
-      expect(result).toEqual({ commitDate: '2022-07-01T00:01:02-06:00', commitHash: 'deadabcd' });
+      expect(result).toEqual({
+        commitDate: '2022-07-01T00:01:02-06:00',
+        commitHash: 'deadabcd',
+      });
     });
 
     it('should expect a commit date and hash when using different time zone', () => {
       const isIndependent = true;
-      (execSync as Mock).mockReturnValue('"deadbeef 2022-07-01T00:01:02+01:00"');
+      (execSync as Mock).mockReturnValueOnce('"deadbeef 2022-07-01T00:01:02+01:00"');
       const result = getOldestCommitSinceLastTag(execOpts, isIndependent, false);
       const execSpy = (execSync as Mock).mockReturnValueOnce('"deadbeef 2022-07-01T00:01:02+01:00"');
 
@@ -169,7 +178,10 @@ describe('getOldestCommitSinceLastTag', () => {
         ['log', '@my-workspace/pkg-a@2.0.3..HEAD', '--format="%h %aI"', '--reverse'],
         execOpts
       );
-      expect(result).toEqual({ commitDate: '2022-07-01T00:01:02+01:00', commitHash: 'deadbeef' });
+      expect(result).toEqual({
+        commitDate: '2022-07-01T00:01:02+01:00',
+        commitHash: 'deadbeef',
+      });
     });
   });
 

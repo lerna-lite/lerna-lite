@@ -337,6 +337,9 @@
             "preid": {
               "$ref": "#/$defs/commandOptions/shared/preid"
             },
+            "cleanupTempFiles": {
+              "$ref": "#/$defs/commandOptions/publish/cleanupTempFiles"
+            },
             "contents": {
               "$ref": "#/$defs/commandOptions/shared/contents"
             },
@@ -561,6 +564,15 @@
             },
             "buildMetadata": {
               "$ref": "#/$defs/commandOptions/version/buildMetadata"
+            },
+            "commentIssues": {
+              "$ref": "#/$defs/commandOptions/version/commentIssues"
+            },
+            "commentPullRequests": {
+              "$ref": "#/$defs/commandOptions/version/commentPullRequests"
+            },
+            "commentFilterKeywords": {
+              "$ref": "#/$defs/commandOptions/version/commentFilterKeywords"
             },
             "conventionalCommits": {
               "$ref": "#/$defs/commandOptions/shared/conventionalCommits"
@@ -1326,6 +1338,17 @@
           "describe": "Apply semver-compatible build metadata to the release",
           "requiresArg": true,
           "type": "string"
+        },
+        "commentIssues": {
+          "anyOf": [{ "type": "string" }, { "type": "boolean" }],
+          "description": "After `lerna version`, specify if we want to also update the issues that were included in the latest release (requires either `createRelease` or `remoteClient`)."
+        },
+        "commentPullRequests": {
+          "anyOf": [{ "type": "string" }, { "type": "boolean" }],
+          "description": "After `lerna version`, specify if we want to also update the pull requests that were included in the latest release (requires either `createRelease` or `remoteClient`)."
+        },
+        "commentFilterKeywords": {
+          "type": "Keywords to use when retrieving Pull Requests by filtering using Starts With and provided via a CSV string, defaults to: 'fix,feat,perf'"
         },
         "conventionalBumpPrerelease": {
           "type": "boolean",

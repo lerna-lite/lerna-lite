@@ -1,9 +1,9 @@
 import { log } from '@lerna-lite/npmlog';
 
-import type { GitCreateReleaseClientOutput } from '../interfaces.js';
+import type { OctokitClientOutput } from '../interfaces.js';
 import { GitLabClient } from './GitLabClient.js';
 
-function OcktokitAdapter(client): GitCreateReleaseClientOutput {
+function OcktokitAdapter(client): OctokitClientOutput {
   return { repos: { createRelease: client.createRelease.bind(client) } };
 }
 

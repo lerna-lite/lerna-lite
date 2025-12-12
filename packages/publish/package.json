@@ -1,7 +1,7 @@
 {
   "name": "@lerna-lite/publish",
   "description": "Publish packages in the current workspace",
-  "version": "4.9.4",
+  "version": "4.10.1",
   "files": [
     "/dist"
   ],
@@ -39,7 +39,7 @@
     "@lerna-lite/core": "workspace:*",
     "@lerna-lite/npmlog": "workspace:*",
     "@lerna-lite/version": "workspace:*",
-    "@npmcli/arborist": "^9.1.8",
+    "@npmcli/arborist": "^9.1.9",
     "@npmcli/package-json": "^7.0.4",
     "byte-size": "^9.0.1",
     "ci-info": "catalog:",

@@ -328,6 +328,8 @@ export class PublishCommand extends Command<PublishCommandOption> {
       logOutput(message.join(EOL));
     }
 
+    this.logger.success('published', `%d %s ${logPrefix}`, count, count === 1 ? 'package' : 'packages');
+
     // optionally cleanup temp packed files after publish, opt-in option
     if (this.options.cleanupTempFiles) {
       const tempDirPath = realpathSync(tmpdir());
@@ -338,12 +340,8 @@ export class PublishCommand extends Command<PublishCommandOption> {
           deleteFolders.forEach((folder) => removeSync(folder));
           this.logger.verbose('publish', `Found ${deleteFolders.length} temp folders to cleanup after publish.`);
         })
-        .catch(() => {
-          /* v8 ignore next - do nothing */
-        });
+        .catch(/* v8 ignore next - do nothing */ () => {});
     }
-
-    this.logger.success('published', `%d %s ${logPrefix}`, count, count === 1 ? 'package' : 'packages');
   }
 
   verifyWorkingTreeClean() {
@@ -908,11 +906,11 @@ export class PublishCommand extends Command<PublishCommandOption> {
       'git-dry-run': this.options.dryRun || false,
     });
 
-    let queue: Queue | undefined = undefined;
+    let q: Queue | undefined = undefined;
     if (this.options.throttle) {
       const DEFAULT_QUEUE_THROTTLE_SIZE = 25;
       const DEFAULT_QUEUE_THROTTLE_DELAY = 30;
-      queue = new TailHeadQueue(
+      q = new TailHeadQueue(
         this.options.throttleSize !== undefined ? this.options.throttleSize : DEFAULT_QUEUE_THROTTLE_SIZE,
         (this.options.throttleDelay !== undefined ? this.options.throttleDelay : DEFAULT_QUEUE_THROTTLE_DELAY) * 1000
       );
@@ -928,8 +926,8 @@ export class PublishCommand extends Command<PublishCommandOption> {
 
       try {
         const publishResult = await pulseTillDone(
-          queue
-            ? queue.queue(() => npmPublish(pkg, pkg.packed.tarFilePath, pkgOpts, this.conf, this.otpCache))
+          q
+            ? q.queue(() => npmPublish(pkg, pkg.packed.tarFilePath, pkgOpts, this.conf, this.otpCache))
             : npmPublish(pkg, pkg.packed.tarFilePath, pkgOpts, this.conf, this.otpCache)
         );
         this.publishedPackages.push(pkg);
@@ -950,8 +948,8 @@ export class PublishCommand extends Command<PublishCommandOption> {
           this.logger.warn('OTP expired, requesting a new OTP...');
           await this.requestOneTimePassword(); // Re-request OTP
           return pulseTillDone(
-            queue
-              ? queue.queue(() => npmPublish(pkg, pkg.packed.tarFilePath, pkgOpts, this.conf, this.otpCache))
+            q
+              ? q.queue(() => npmPublish(pkg, pkg.packed.tarFilePath, pkgOpts, this.conf, this.otpCache))
               : npmPublish(pkg, pkg.packed.tarFilePath, pkgOpts, this.conf, this.otpCache)
           ); // Retry publish
         }

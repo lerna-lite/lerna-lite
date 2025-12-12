@@ -4,6 +4,18 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [4.10.1](https://github.com/lerna-lite/lerna-lite/compare/v4.10.0...v4.10.1) (2025-12-12)
+
+### Bug Fixes
+
+* move Comments on Issues/PRs from lerna publish to version ([#1208](https://github.com/lerna-lite/lerna-lite/issues/1208)) ([c2d8e7a](https://github.com/lerna-lite/lerna-lite/commit/c2d8e7ae71ee58fccd6ff5213c309b7c2b954569)) - by @ghiscoding
+
+## [4.10.0](https://github.com/lerna-lite/lerna-lite/compare/v4.9.4...v4.10.0) (2025-12-12)
+
+### Features
+
+* **publish:** Comment on issues/PRs resolved by release, fix [#1198](https://github.com/lerna-lite/lerna-lite/issues/1198) ([#1200](https://github.com/lerna-lite/lerna-lite/issues/1200)) ([5b0cef9](https://github.com/lerna-lite/lerna-lite/commit/5b0cef9f86cf3c798927dcd2cdb73444e9d00b80)) - by @ghiscoding
+
 ## [4.9.4](https://github.com/lerna-lite/lerna-lite/compare/v4.9.3...v4.9.4) (2025-11-27)
 
 **Note:** Version bump only for package @lerna-lite/cli

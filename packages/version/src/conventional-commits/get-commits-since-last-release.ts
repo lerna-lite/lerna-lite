@@ -38,7 +38,7 @@ export async function getCommitsSinceLastRelease(
 }
 
 /**
- * Find the oldest commit details since the last release tag or else if not tag exists then return first commit info
+ * Find the oldest commit details since the last release tag or else if no tag exists then return first commit info
  * @param {ExecOpts} [execOpts]
  * @param {Boolean} [includeMergedTags]
  * @param {Boolean} [isIndependent]
@@ -71,7 +71,7 @@ export function getOldestCommitSinceLastTag(execOpts?: ExecOpts, isIndependent?:
 
   const [, commitHash, commitDate] = /^"?([0-9a-f]+)\s([0-9\-Z.|+T:]*)"?$/.exec(commitResult) || [];
   // prettier-ignore
-  log.info('oldestCommitSinceLastTag', `commit found since last tag: ${lastTagName} - (SHA) ${commitHash} - ${commitDate}`);
+  log.verbose('oldestCommitSinceLastTag', `commit found since last tag: ${lastTagName} - (SHA) ${commitHash} - ${commitDate} - last`);
 
   return { commitHash, commitDate };
 }

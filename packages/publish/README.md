@@ -84,7 +84,7 @@ $ lerna publish --scope my-component test
   - [Options](#options)
     - [`--arborist-load-options`](#--arborist-load-options)
     - [`--canary`](#--canary)
-    - [`--cleanup-temp-files`](#--cleanup-temp-files)
+    - [`--cleanup-temp-files`](#--cleanup-temp-files)    
     - [`--contents <dir>`](#--contents-dir)
     - [`--dist-tag <tag>`](#--dist-tag-tag)
     - [`--force-publish`](#--force-publish)

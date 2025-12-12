@@ -81,6 +81,9 @@ $ lerna version --scope my-component test
     - [`--allow-peer-dependencies-update`](#--allow-peer-dependencies-update)
     - [`--amend`](#--amend)
     - [`--build-metadata <buildMetadata>`](#--build-metadata)
+    - [Comments on issues/pull requests](#comments-on-issuespull-requests)
+        - [`--comment-issue [msg]`](#--comment-issue-msg)
+        - [`--comment-pull-request [msg]`](#--comment-pull-request-msg)
     - [`--changelog-preset`](#--changelog-preset)
     - [`--conventional-commits`](#--conventional-commits)
     - [`--conventional-graduate`](#--conventional-graduate)
@@ -259,6 +262,59 @@ lerna version --build-metadata 001
 ```
 
 Build metadata must be [SemVer compatible](https://semver.org/#spec-item-10). When provided it will apply to all updated packages, irrespective of whether independent or fixed versioning is utilised. If prompted to choose package version bumps, you can request a custom version to alter or remove build metadata for specific packages.
+
+### Comments on issues/pull requests
+
+> [!NOTE]
+> GitHub is the only supported client at the moment and you must provide 1 of these 2 options [`--create-release <type>`](../version/README.md#--create-release-type) or [`--remote-client <type>`](../version/README.md#--remote-client-type).
+
+When enabled, it will insert comments on all the closed linked issues and/or merged pull requests that were included in the release (currently only GitHub is supported). You could also provide a custom format by using any of these tokens (`%s`, `%v`, `%u`), see examples below.
+
+- `%s`: git tag - (e.g. "v1.0.2")
+- `%v`: version number only - (e.g. "1.0.2")
+- `%u`: release URL - (e.g. "https://github.com/lerna-lite/lerna-lite/releases/tag/v4.11.0")
+
+When running in a GitHub CI environment, you will also need these permissions:
+```yaml
+permissions:
+  contents: write      # to be able to publish a GitHub release
+  issues: write        # to be able to comment on released issues
+  pull-requests: write # to be able to comment on released pull requests
+  id-token: write      # to enable use of OIDC for npm provenance
+```
+
+> **Note** this will possibly execute many API calls and this option will also require a valid `GH_TOKEN` (or `GITHUB_TOKEN`) with write access permissions to the GitHub API so that it can execute the query to fetch all commit details and insert comments, for more info refer to the [`Remote Client Auth Tokens`](#remote-client-auth-tokens) below.
+
+> [!NOTE]
+> This feature works best with a single global version and might not work as expected with `independent` mode, there is just no easy ways to detect which issues/PRs belongs to which package. You could still use it with `independent` but none of the tokens shown above will be available (or at least won't provide the correct info) and so in that case using a generic message is the only suggestion we have (e.g.: `"This PR is included in latest [release](http://release-url)"`).
+
+##### `--comment-issue [msg]`
+
+Insert Comments on all the closed linked issues that were included in the release. The issue must be been linked through a PR when it detects fix keywords in its PR title and/or description (like `"fix #123"` or `"fixes #123"`)
+
+```sh
+# enable it and use default template
+lerna publish --comment-issue
+# you could also provide a custom message
+lerna publish --comment-issue "This issue has been resolved in %s."
+```
+
+> The default message is: `"🎉 _This issue has been resolved in %v. See [%s](%u) for release notes._"`
+
+##### `--comment-pull-request [msg]`
+
+Insert Comments on all the merged Pull Requests that were included in the release. You can customize the message and also the PR keywords to search for (the default are "fix,feat,perf", it must be a CSV string and it will search as "Starts With [keywords]")
+
+```sh
+# enable it and use default template
+lerna publish --comment-pull-request
+# you could also provide a custom message
+lerna publish --comment-pull-request "This pull request is included in %s."
+# you can configure the PR search keywords as CSV, defaults to "fix,feat,perf"
+lerna publish --comment-pull-request "This pull request is included in %s." --comment-filter-keywords "fix,feat"
+```
+
+> The default message is: `"📦 _This pull request is included in %v. See [%s](%u) for release notes._"`
 
 ### `--changelog-preset`
 
@@ -450,6 +506,9 @@ Specify if we want to include commit remote client login (ie GitHub login userna
 
 > [!NOTE]
 > If you're only interested in using `%a` and `%e`, you should consider using [`--changelog-include-commits-git-author`](#--changelog-include-commits-git-author-msg) instead because `--changelog-include-commits-client-login` makes an API call to GitHub (via their GraphQL API) to fetch remote client logins. On the other hand, `--changelog-include-commits-git-author` simply reads your local Git and doesn't need any API fetching. So make sure to use the correct option depending on your use case.
+
+> [!NOTE]
+> GitHub is the only supported client at the moment.
 
 This option is only available when using `--conventional-commits` with changelogs enabled. You must also provide 1 of these 2 options [`--create-release <type>`](#--create-release-type) or [`--remote-client <type>`](#--remote-client-type)
 
@@ -871,7 +930,7 @@ This option will push all git tags one by one to overcome a GitHub limitation, w
 
 ### `--remote-client <type>`
 
-Define which remote client type is used, this option is only useful with the option [`--changelog-include-commits-client-login [msg]`](#--changelog-include-commits-client-login-msg)
+Define which remote client type is used, this option can be used with [`--changelog-include-commits-client-login [msg]`](#--changelog-include-commits-client-login-msg) and [`publish --comment-issue [msg]`](../publish/README.md#--comment-issue-msg) and [`publish --comment-pull-request [msg]`](../publish/README.md#--comment-pull-request-msg)
 
 ```sh
 lerna version --conventional-commits --remote-client github

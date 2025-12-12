@@ -1,5 +1,6 @@
 import type { GetCommitsParams, GetSemverTagsParams } from '@conventional-changelog/git-client';
 import type { ChangelogPresetOptions, ExecOpts, Package } from '@lerna-lite/core';
+import { type Logger } from '@lerna-lite/npmlog';
 import type { Options as WriterOptions } from 'conventional-changelog-writer';
 import type { Commit, ParserOptions, ParserStreamOptions } from 'conventional-commits-parser';
 import type { BumperRecommendation } from 'conventional-recommended-bump';
@@ -112,10 +113,17 @@ export type GitCreateReleaseFn = (options: GitClientReleaseOption) => Promise<{
 
 export interface GitClient {
   createRelease: (opts: GitClientReleaseOption) => Promise<void>;
+  compareCommits?: (opts: { owner: string; repo: string; base: string; head: string }) => Promise<{ data: CommitData }>;
 }
 
-export interface GitCreateReleaseClientOutput {
+export interface OctokitClientOutput {
+  issues?: {
+    createComment: (options: { owner: string; repo: string; issue_number: number; body: string }) => Promise<any>;
+  };
   repos: GitClient;
+  search?: {
+    issuesAndPullRequests: (options: { q; advanced_search: true }) => Promise<{ data: { items: any[] } }>;
+  };
 }
 
 /** Passed between concurrent executions */
@@ -140,4 +148,119 @@ export interface ReleaseOptions {
   gitRemote: string;
   execOpts: ExecOpts;
   skipBumpOnlyReleases?: boolean;
+}
+
+export interface ClientCommit {
+  sha: string;
+  node_id: string;
+  commit: {
+    author: {
+      name: string;
+      email: string;
+      date: string;
+    };
+    committer: {
+      name: string;
+      email: string;
+      date: string;
+    };
+    message: string;
+    tree: {
+      sha: string;
+      url: string;
+    };
+    url: string;
+    comment_count: number;
+    verification: {
+      verified: boolean;
+      reason: string;
+      signature: any;
+      payload: any;
+      verified_at: any;
+    };
+  };
+  url: string;
+  html_url: string;
+  comments_url: string;
+  author: {
+    login: string;
+    id: number;
+    node_id: string;
+    avatar_url: string;
+    gravatar_id: string;
+    url: string;
+    html_url: string;
+    followers_url: string;
+    following_url: string;
+    gists_url: string;
+    starred_url: string;
+    subscriptions_url: string;
+    organizations_url: string;
+    repos_url: string;
+    events_url: string;
+    received_events_url: string;
+    type: string;
+    user_view_type: string;
+    site_admin: boolean;
+  };
+  committer: {
+    login: string;
+    id: number;
+    node_id: string;
+    avatar_url: string;
+    gravatar_id: string;
+    url: string;
+    html_url: string;
+    followers_url: string;
+    following_url: string;
+    gists_url: string;
+    starred_url: string;
+    subscriptions_url: string;
+    organizations_url: string;
+    repos_url: string;
+    events_url: string;
+    received_events_url: string;
+    type: string;
+    user_view_type: string;
+    site_admin: boolean;
+  };
+  parents: [
+    {
+      sha: string;
+      url: string;
+      html_url: string;
+    },
+  ];
+}
+
+export interface CommitData {
+  ahead_by: number;
+  base_commit: ClientCommit;
+  behind_by: number;
+  commits: ClientCommit[];
+  diff_url: string;
+  files: any[];
+  html_url: string;
+  merge_base_commit: ClientCommit;
+  patch_url: string;
+  permalink_url: string;
+  status: string;
+  total_commits: number;
+  url: string;
+}
+
+export interface CommentResolvedOptions {
+  client: OctokitClientOutput;
+  commentFilterKeywords: string[];
+  dryRun?: boolean;
+  execOpts: ExecOpts;
+  gitRemote: string;
+  logger: Logger;
+  prevTagDate?: string;
+  version: string;
+  tag: string;
+  templates: {
+    issue?: string;
+    pullRequest?: string;
+  };
 }

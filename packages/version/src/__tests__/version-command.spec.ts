@@ -32,6 +32,7 @@ import yargParser from 'yargs-parser';
 
 import cliCommands from '../../../cli/src/cli-commands/cli-version-commands.js';
 import { getCommitsSinceLastRelease } from '../conventional-commits/get-commits-since-last-release.js';
+import { commentResolvedItems } from '../lib/comment-resolved-items.js';
 import { gitPush as libPush, gitPushSingleTag as libPushSingleTag } from '../lib/git-push.js';
 import { isAnythingCommitted } from '../lib/is-anything-committed.js';
 import { isBehindUpstream } from '../lib/is-behind-upstream.js';
@@ -49,6 +50,9 @@ vi.mock(
   '../conventional-commits/get-commits-since-last-release',
   async () => await vi.importActual('../__mocks__/get-commits-since-last-release')
 );
+vi.mock('../lib/comment-resolved-items.js', () => ({
+  commentResolvedItems: vi.fn(),
+}));
 
 // also point to the local version command so that all mocks are properly used even by the command-runner
 vi.mock('@lerna-lite/version', async () => await vi.importActual('../version-command'));
@@ -922,6 +926,153 @@ describe('VersionCommand', () => {
       const command = new VersionCommand(createArgv(cwd, '--no-git-tag-version', '--allow-branch', 'main'));
 
       await expect(command).rejects.toThrow('Detached git HEAD, please checkout a branch to choose versions.');
+    });
+  });
+
+  describe('Comments on Remote issues/PRs', () => {
+    it('warns when enabling --comment-issues with gitlab client', async () => {
+      const cwd = await initFixture('normal');
+
+      await new VersionCommand(createArgv(cwd, '--remote-client', 'gitlab', '--comment-issues'));
+
+      const logMessages = loggingOutput('warn');
+      expect(logMessages).toContain('GitLab is not currently supported to comment on issues/PRs.');
+    });
+
+    it('calls commentResolvedItems() with default comment issues template when --comment-issues is enabled without arguments', async () => {
+      const cwd = await initFixture('normal');
+
+      await new VersionCommand(createArgv(cwd, '--remote-client', 'github', '--comment-issues'));
+
+      const logMessages = loggingOutput('info');
+      expect(logMessages).toContain('[start] Comments on remote client...');
+      expect(commentResolvedItems).toHaveBeenCalledWith(
+        expect.objectContaining({
+          client: expect.anything(),
+          commentFilterKeywords: ['fix', 'feat', 'perf'],
+          dryRun: false,
+          gitRemote: 'origin',
+          execOpts: { cwd, maxBuffer: undefined },
+          prevTagDate: '',
+          logger: expect.anything(),
+          tag: 'v1.0.1',
+          version: '1.0.1',
+          templates: {
+            issue: '🎉 _This issue has been resolved in %v. See [%s](%u) for release notes._',
+            pullRequest: '',
+          },
+        })
+      );
+      expect(logMessages).toContain('[end] Comments on remote client...');
+    });
+
+    it('calls commentResolvedItems() with default comment pull requests template when --comment-pull-requests is enabled without arguments', async () => {
+      const cwd = await initFixture('normal');
+
+      await new VersionCommand(createArgv(cwd, '--remote-client', 'github', '--comment-pull-requests', '--dry-run'));
+
+      expect(commentResolvedItems).toHaveBeenCalledWith(
+        expect.objectContaining({
+          client: expect.anything(),
+          commentFilterKeywords: ['fix', 'feat', 'perf'],
+          dryRun: true,
+          gitRemote: 'origin',
+          execOpts: { cwd, maxBuffer: undefined },
+          prevTagDate: '',
+          logger: expect.anything(),
+          tag: 'v1.0.1',
+          version: '1.0.1',
+          templates: {
+            issue: '',
+            pullRequest: '📦 _This pull request is included in %v. See [%s](%u) for release notes._',
+          },
+        })
+      );
+    });
+
+    it('calls commentResolvedItems() with custom comment issues template when --comment-issues is provided with text', async () => {
+      const cwd = await initFixture('normal');
+
+      await new VersionCommand(createArgv(cwd, '--remote-client', 'github', '--comment-issues', 'My custom message'));
+
+      const logMessages = loggingOutput('info');
+      expect(logMessages).toContain('[start] Comments on remote client...');
+      expect(commentResolvedItems).toHaveBeenCalledWith(
+        expect.objectContaining({
+          client: expect.anything(),
+          commentFilterKeywords: ['fix', 'feat', 'perf'],
+          dryRun: false,
+          gitRemote: 'origin',
+          execOpts: { cwd, maxBuffer: undefined },
+          prevTagDate: '',
+          logger: expect.anything(),
+          tag: 'v1.0.1',
+          version: '1.0.1',
+          templates: {
+            issue: 'My custom message',
+            pullRequest: '',
+          },
+        })
+      );
+      expect(logMessages).toContain('[end] Comments on remote client...');
+    });
+
+    it('calls commentResolvedItems() with custom comment pull requests template when --comment-pull-requests is provided with text', async () => {
+      const cwd = await initFixture('normal');
+
+      await new VersionCommand(createArgv(cwd, '--remote-client', 'github', '--comment-pull-requests', 'My custom message'));
+
+      expect(commentResolvedItems).toHaveBeenCalledWith(
+        expect.objectContaining({
+          client: expect.anything(),
+          commentFilterKeywords: ['fix', 'feat', 'perf'],
+          dryRun: false,
+          gitRemote: 'origin',
+          execOpts: { cwd, maxBuffer: undefined },
+          prevTagDate: '',
+          logger: expect.anything(),
+          tag: 'v1.0.1',
+          version: '1.0.1',
+          templates: {
+            issue: '',
+            pullRequest: 'My custom message',
+          },
+        })
+      );
+    });
+
+    it('calls commentResolvedItems() with custom comment pull requests template and filter keywords when --comment-pull-requests and --comment-filter-keywords are both provided with text', async () => {
+      const cwd = await initFixture('normal');
+
+      await new VersionCommand(
+        createArgv(
+          cwd,
+          '--remote-client',
+          'github',
+          '--comment-pull-requests',
+          'My custom message',
+          '--comment-filter-keywords',
+          'fix,feat,chore'
+        )
+      );
+
+      expect(commentResolvedItems).toHaveBeenCalledWith(
+        expect.objectContaining({
+          client: expect.anything(),
+          commentFilterKeywords: ['fix', 'feat', 'chore'],
+          dryRun: false,
+          gitRemote: 'origin',
+          execOpts: { cwd, maxBuffer: undefined },
+          prevTagDate: '',
+          logger: expect.anything(),
+          tag: 'v1.0.1',
+          version: '1.0.1',
+          templates: {
+            issue: '',
+            pullRequest: 'My custom message',
+          },
+        })
+      );
     });
   });
 

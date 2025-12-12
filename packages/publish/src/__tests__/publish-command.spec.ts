@@ -34,10 +34,18 @@ vi.mock(
   '../../../version/src/lib/remote-branch-exists',
   async () => await vi.importActual('../../../version/src/lib/__mocks__/remote-branch-exists')
 );
+vi.mock('../lib/comment-resolved-items.js', () => ({
+  commentResolvedItems: vi.fn(),
+}));
 
 // mocked modules of @lerna-lite/version
 vi.mock('@lerna-lite/version', async () => ({
   ...(await vi.importActual<any>('../../../version/src/version-command')),
+  createReleaseClient: vi.fn().mockResolvedValue({
+    issues: { createComment: vi.fn() },
+    repos: { createRelease: vi.fn() },
+    search: { issuesAndPullRequests: vi.fn() },
+  }),
   getOneTimePassword: vi.fn(),
 }));
 
