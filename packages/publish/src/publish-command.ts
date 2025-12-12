@@ -31,7 +31,7 @@ import {
   ValidationError,
 } from '@lerna-lite/core';
 import type { OneTimePasswordCache } from '@lerna-lite/version';
-import { createReleaseClient, getOneTimePassword, VersionCommand } from '@lerna-lite/version';
+import { createReleaseClient, getOldestCommitSinceLastTag, getOneTimePassword, VersionCommand } from '@lerna-lite/version';
 import { outputFileSync, removeSync } from 'fs-extra/esm';
 import normalizePath from 'normalize-path';
 import pMap from 'p-map';
@@ -198,6 +198,9 @@ export class PublishCommand extends Command<PublishCommandOption> {
     if (distTag) {
       this.conf.set('tag', distTag.trim(), 'cli');
     }
+
+    // get previous tag commit
+    this.project.lastTagOldestCommit ??= getOldestCommitSinceLastTag(this.execOpts, this.project.isIndependent(), false);
 
     // a 'rooted leaf' is the regrettable pattern of adding '.' to the 'packages' config in lerna.json
     this.hasRootedLeaf = this.packageGraph.has(this.project.manifest.name);
@@ -1020,7 +1023,6 @@ export class PublishCommand extends Command<PublishCommandOption> {
         gitRemote = 'origin',
         tagVersionPrefix = 'v',
         version,
-        lastTagOldestCommit,
         commentIssues,
         commentPullRequests,
         commentFilterKeywords: keywordsCSV = COMMENT_FILTER_KEYWORDS_CSV,
@@ -1037,7 +1039,7 @@ export class PublishCommand extends Command<PublishCommandOption> {
         gitRemote,
         execOpts: this.execOpts,
         independent: this.project.isIndependent(),
-        lastTagOldestCommit,
+        lastTagOldestCommit: this.project.lastTagOldestCommit,
         logger: this.logger,
         tag: `${tagVersionPrefix}${version}`,
         version,

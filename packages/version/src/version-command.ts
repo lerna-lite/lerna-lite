@@ -296,7 +296,7 @@ export class VersionCommand extends Command<VersionCommandOption> {
     }
 
     // keep last tag oldest commit details as reference
-    this.options.lastTagOldestCommit = getOldestCommitSinceLastTag(this.execOpts, isIndependent, false);
+    this.project.lastTagOldestCommit = getOldestCommitSinceLastTag(this.execOpts, isIndependent, false);
 
     // fetch all commits from remote server of the last release when user wants to include client login associated to each commits
     const remoteClient = this.options.createRelease || this.options.remoteClient;

@@ -29,6 +29,7 @@ export class Project {
   configNotFound: boolean;
   rootConfigLocation: string;
   rootPath: string;
+  lastTagOldestCommit?: { commitHash: string; commitDate: string };
   static PACKAGE_GLOB = 'packages/*';
   static LICENSE_GLOB = 'LICEN{S,C}E{,.*}';
 

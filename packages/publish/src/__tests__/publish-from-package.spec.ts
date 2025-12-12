@@ -49,7 +49,10 @@ vi.mock('@lerna-lite/core', async () => ({
   promptConfirmation: (await vi.importActual<any>('../../../core/src/__mocks__/prompt')).promptConfirmation,
   throwIfUncommitted: (await vi.importActual<any>('../../../core/src/__mocks__/check-working-tree')).throwIfUncommitted,
 }));
-vi.mock('@lerna-lite/version', async () => await vi.importActual('../../../version/src/version-command'));
+vi.mock('@lerna-lite/version', async () => ({
+  ...(await vi.importActual<any>('../../../version/src/version-command')),
+  getOldestCommitSinceLastTag: vi.fn(),
+}));
 
 // local modules _must_ be explicitly mocked
 vi.mock(

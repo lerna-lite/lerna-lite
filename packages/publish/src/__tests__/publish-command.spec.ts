@@ -48,6 +48,7 @@ vi.mock('@lerna-lite/version', async () => ({
     search: { issuesAndPullRequests: vi.fn() },
   }),
   getOneTimePassword: vi.fn(),
+  getOldestCommitSinceLastTag: vi.fn(),
 }));
 
 // mocked modules of @lerna-lite/core

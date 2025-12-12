@@ -17,7 +17,6 @@ import { npmPublish } from '../lib/npm-publish.js';
 vi.mock('write-package', async () => await vi.importActual('../../../version/src/lib/__mocks__/write-package'));
 
 // mocked modules of @lerna-lite/core
-// vi.fn()
 vi.mock('@lerna-lite/core', async () => ({
   ...(await vi.importActual<any>('../../../core/src/index')),
   describeRef: vi.fn((await vi.importActual<any>('../../../core/src/utils/describe-ref')).describeRef),

@@ -58,7 +58,10 @@ vi.mock('../lib/npm-dist-tag', async () => await vi.importActual('../lib/__mocks
 
 // also point to the local publish command so that all mocks are properly used even by the command-runner
 vi.mock('@lerna-lite/publish', async () => await vi.importActual('../publish-command'));
-vi.mock('@lerna-lite/version', async () => await vi.importActual('../../../version/src/version-command'));
+vi.mock('@lerna-lite/version', async () => ({
+  ...(await vi.importActual<any>('../../../version/src/version-command')),
+  getOldestCommitSinceLastTag: vi.fn(),
+}));
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
