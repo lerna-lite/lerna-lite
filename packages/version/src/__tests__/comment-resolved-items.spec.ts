@@ -1,8 +1,7 @@
 import { type Logger } from '@lerna-lite/npmlog';
-import { type OctokitClientOutput } from '@lerna-lite/version';
 import { describe, expect, it, vi } from 'vitest';
 
-import type { CommentResolvedOptions } from '../interfaces.js';
+import type { CommentResolvedOptions, OctokitClientOutput } from '../interfaces.js';
 import { commentResolvedItems, remoteSearchBy, getReleaseUrlFallback } from '../lib/comment-resolved-items.js';
 
 vi.mock('../../git-clients/github-client', async () => ({
@@ -18,15 +17,12 @@ vi.mock('@lerna-lite/npmlog', () => ({
   },
 }));
 
-// Mock parseGitRepo and getOldestCommitSinceLastTag
+// Mock parseGitRepo
 vi.mock('@lerna-lite/version', () => ({
   parseGitRepo: vi.fn().mockReturnValue({
     owner: 'owner',
     name: 'repo',
     host: 'github.com',
-  }),
-  getOldestCommitSinceLastTag: vi.fn().mockReturnValue({
-    commitDate: '2023-01-01',
   }),
 }));
 
@@ -192,15 +188,12 @@ describe('commentResolvedItems', () => {
     // Override dryRun to true
     mockOptions.dryRun = true;
 
-    // Mock parseGitRepo and getOldestCommitSinceLastTag
+    // Mock parseGitRepo
     vi.mock('@lerna-lite/version', () => ({
       parseGitRepo: vi.fn().mockReturnValue({
         owner: 'owner',
         name: 'repo',
         host: 'github.com',
-      }),
-      getOldestCommitSinceLastTag: vi.fn().mockReturnValue({
-        commitDate: '2023-01-01',
       }),
     }));
 

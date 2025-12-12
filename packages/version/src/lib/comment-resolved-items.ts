@@ -1,5 +1,5 @@
 import { type Logger } from '@lerna-lite/npmlog';
-import { getOldestCommitSinceLastTag, type OctokitClientOutput, parseGitRepo } from '@lerna-lite/version';
+import { type OctokitClientOutput, parseGitRepo } from '@lerna-lite/version';
 import c from 'tinyrainbow';
 
 import type { CommentResolvedOptions } from '../interfaces';
@@ -22,13 +22,14 @@ export async function remoteSearchBy(
   type: 'issue' | 'pr',
   owner: string,
   repo: string,
-  startDate: string,
+  startDate = '',
   logger: Logger
 ) {
+  const dateCondition = startDate ? `:>${startDate}` : '';
   const q =
     type === 'issue'
-      ? `repo:${owner}/${repo}+is:issue+linked:pr+closed:>${startDate}`
-      : `repo:${owner}/${repo}+type:pr+merged:>${startDate}`;
+      ? `repo:${owner}/${repo}+is:issue+linked:pr+closed${dateCondition}`
+      : `repo:${owner}/${repo}+type:pr+merged${dateCondition}`;
   logger.verbose('comments', `remote PR search query: ${q}`);
   return (await client.search!.issuesAndPullRequests({ q, advanced_search: true })).data.items;
 }
@@ -39,30 +40,28 @@ export async function commentResolvedItems({
   gitRemote,
   execOpts,
   dryRun,
-  independent,
+  lastTagCommit,
   logger,
   version,
   tag,
   templates,
 }: CommentResolvedOptions) {
   const repo: any = parseGitRepo(gitRemote, execOpts);
-  const previousTagLastCommit = getOldestCommitSinceLastTag(execOpts, independent, false);
   const logPrefix = dryRun ? c.magenta('[dry-run] > ') : '';
-  const filterStartDate = previousTagLastCommit.commitDate;
 
   // closed linked issues and/or merged pull requests
   let closedLinkedIssues = new Set<TypeNumberPair>();
   let mergedPullRequests = new Set<TypeNumberPair>();
 
   if (templates.issue) {
-    const issues = await remoteSearchBy(client, 'issue', repo.owner, repo.name, filterStartDate, logger);
+    const issues = await remoteSearchBy(client, 'issue', repo.owner, repo.name, lastTagCommit?.commitDate || '', logger);
     issues.forEach((item) => closedLinkedIssues.add({ type: 'issue', number: item.number }));
   }
 
   if (templates.pullRequest) {
-    const pullRequests = (await remoteSearchBy(client, 'pr', repo.owner, repo.name, filterStartDate, logger)).filter((item) =>
-      commentFilterKeywords.some((startWord) => item.title.toLowerCase().startsWith(startWord.toLowerCase()))
-    );
+    const pullRequests = (
+      await remoteSearchBy(client, 'pr', repo.owner, repo.name, lastTagCommit?.commitDate || '', logger)
+    ).filter((item) => commentFilterKeywords.some((startWord) => item.title.toLowerCase().startsWith(startWord.toLowerCase())));
     pullRequests.forEach((item) => mergedPullRequests.add({ type: 'pr', number: item.number }));
     logger.verbose(
       'comments',

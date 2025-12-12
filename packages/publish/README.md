@@ -84,10 +84,7 @@ $ lerna publish --scope my-component test
   - [Options](#options)
     - [`--arborist-load-options`](#--arborist-load-options)
     - [`--canary`](#--canary)
-    - [`--cleanup-temp-files`](#--cleanup-temp-files)
-    - [Comments on issues/pull requests](#comments-on-issuespull-requests)
-      - [`--comment-issue [msg]`](#--comment-issue-msg)
-      - [`--comment-pull-request [msg]`](#--comment-pull-request-msg)
+    - [`--cleanup-temp-files`](#--cleanup-temp-files)    
     - [`--contents <dir>`](#--contents-dir)
     - [`--dist-tag <tag>`](#--dist-tag-tag)
     - [`--force-publish`](#--force-publish)
@@ -166,53 +163,6 @@ lerna publish --cleanup-temp-files
 ```
 
 > **Note** Lerna-Lite is prefixing the temp folders containing each package tarball with "lerna-", we then use a glob pattern to delete every folders starting with this prefix. Also note that it is entirely possible that this cleanup misses some extra temp files created by the publish process.
-
-### Comments on issues/pull requests
-
-When enabled, it will insert Comments on all the closed linked issues and/or merged pull requests that were included in the release (currently only GitHub is supported). You could also provide a custom format by using any of these tokens (`%s`, `%v`, `%u`), see examples below.
-
-- `%s`: git tag - (e.g. "v1.0.2")
-- `%v`: version number only - (e.g. "1.0.2")
-- `%u`: release URL - (e.g. "https://github.com/lerna-lite/lerna-lite/releases/tag/v4.11.0")
-
-> [!NOTE]
-> You must provide 1 of these 2 options [`--create-release <type>`](../version/README.md#--create-release-type) or [`--remote-client <type>`](../version/README.md#--remote-client-type).
-
-> [!NOTE]
-> GitHub is the only supported client at the moment.
-
-> **Note** this will execute one or more client remote API calls (GH is limited to 100 per query), which at the moment is only supporting the GitHub client type. This option will also require a valid `GH_TOKEN` (or `GITHUB_TOKEN`) with write access permissions to the GitHub API so that it can execute the query to fetch all commit details and insert comments, for more info refer to the [`Remote Client Auth Tokens`](#remote-client-auth-tokens) below.
-
-> [!NOTE]
-> This feature works best with fixed global version and might not work as expected with `independent` mode because at the moment there are no easy ways of detecting which issue/PR belongs to which package. You could still use it with `independent` but none of the tokens shown above won't be available, in that case using a generic message is totally fine and ideal.
-
-##### `--comment-issue [msg]`
-
-Insert Comments on all the closed linked issues that were included in the release. The issue must be been linked through a PR when it detects fix keywords in its PR title and/or description (like `"fix #123"` or `"fixes #123"`)
-
-```sh
-# enable it and use default template
-lerna publish --comment-issue
-# you could also provide a custom message
-lerna publish --comment-issue "This issue has been resolved in %s."
-```
-
-> The default message is: `"🎉 _This issue has been resolved in %v. See [%s](%u) for release notes._"`
-
-##### `--comment-pull-request [msg]`
-
-Insert Comments on all the merged Pull Requests that were included in the release. You can customize the message and also the PR keywords to search for (the default are "fix,feat,perf", it must be a CSV string and it will search as "Starts With [keywords]")
-
-```sh
-# enable it and use default template
-lerna publish --comment-pull-request
-# you could also provide a custom message
-lerna publish --comment-pull-request "This pull request is included in %s."
-# you can configure the PR search keywords as CSV, defaults to "fix,feat,perf"
-lerna publish --comment-pull-request "This pull request is included in %s." --comment-filter-keywords "fix,feat"
-```
-
-> The default message is: `"📦 _This pull request is included in %v. See [%s](%u) for release notes._"`
 
 ### `--contents <dir>`
 

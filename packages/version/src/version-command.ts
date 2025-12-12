@@ -29,11 +29,13 @@ import semver from 'semver';
 import c from 'tinyrainbow';
 import zeptomatch from 'zeptomatch';
 
+import { COMMENT_FILTER_KEYWORDS_CSV, COMMENT_ISSUE, COMMENT_PULL_REQUEST } from './constant.js';
 import { applyBuildMetadata } from './conventional-commits/apply-build-metadata.js';
-import { getCommitsSinceLastRelease } from './conventional-commits/get-commits-since-last-release.js';
+import { getCommitsSinceLastRelease, getLastTagCommit } from './conventional-commits/get-commits-since-last-release.js';
 import { recommendVersion } from './conventional-commits/recommend-version.js';
 import { updateChangelog } from './conventional-commits/update-changelog.js';
 import type { OctokitClientOutput, ReleaseNote, RemoteCommit } from './interfaces.js';
+import { commentResolvedItems } from './lib/comment-resolved-items.js';
 import { createRelease, createReleaseClient } from './lib/create-release.js';
 import { getCurrentBranch } from './lib/get-current-branch.js';
 import { gitAdd } from './lib/git-add.js';
@@ -74,6 +76,7 @@ export class VersionCommand extends Command<VersionCommandOption> {
   releaseClient?: OctokitClientOutput;
   releaseNotes: ReleaseNote[] = [];
   gitOpts: any;
+  lastTagCommit?: { commitHash: string; commitDate: string };
   runPackageLifecycle: any;
   runRootLifecycle!: (stage: string) => Promise<void> | void;
   savePrefix = '';
@@ -292,6 +295,9 @@ export class VersionCommand extends Command<VersionCommandOption> {
       );
     }
 
+    // keep last tag oldest commit details as reference
+    this.lastTagCommit = getLastTagCommit(this.execOpts, isIndependent, false);
+
     // fetch all commits from remote server of the last release when user wants to include client login associated to each commits
     const remoteClient = this.options.createRelease || this.options.remoteClient;
     if (this.options.conventionalCommits && this.changelogIncludeCommitsClientLogin) {
@@ -428,6 +434,9 @@ export class VersionCommand extends Command<VersionCommandOption> {
     if (!this.composed) {
       this.logger.success('version', 'finished');
     }
+
+    // comment on remote issues/PRs
+    await this.commentOnRemote();
 
     return {
       updates: this.updates,
@@ -914,6 +923,45 @@ export class VersionCommand extends Command<VersionCommandOption> {
     // or push all tags by using followTags
     this.logger.info('git', 'Pushing tags...');
     return gitPush(this.gitRemote, this.currentBranch, this.execOpts, this.options.dryRun);
+  }
+
+  /** Comment on resolved issues and/or merged PRs */
+  async commentOnRemote() {
+    const remoteClient = this.options.createRelease || this.options.remoteClient;
+    if (remoteClient && (this.options.commentIssues || this.options.commentPullRequests)) {
+      const {
+        dryRun,
+        gitRemote = 'origin',
+        tagVersionPrefix = 'v',
+        version,
+        commentIssues,
+        commentPullRequests,
+        commentFilterKeywords: keywordsCSV = COMMENT_FILTER_KEYWORDS_CSV,
+      } = this.options;
+
+      const logPrefix = dryRun ? c.bgMagenta('[dry-run] ') : '';
+      this.logger.info('comments', `${logPrefix}[start] Comments on remote client...`);
+
+      const releaseClient = await createReleaseClient(remoteClient);
+      await commentResolvedItems({
+        client: releaseClient,
+        commentFilterKeywords: keywordsCSV.split(','),
+        dryRun,
+        gitRemote,
+        execOpts: this.execOpts,
+        lastTagCommit: this.lastTagCommit,
+        logger: this.logger,
+        tag: `${tagVersionPrefix}${version}`,
+        version,
+        templates: {
+          // use custom template when provided by the user or use default template when enabled via boolean (empty when false or undefined)
+          issue: (commentIssues === true ? COMMENT_ISSUE : commentIssues) || '',
+          pullRequest: (commentPullRequests === true ? COMMENT_PULL_REQUEST : commentPullRequests) || '',
+        },
+      });
+
+      this.logger.info('comments', '[end] Comments on remote client...');
+    }
   }
 
   setGlobalVersionFloor() {
