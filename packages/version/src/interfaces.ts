@@ -254,7 +254,7 @@ export interface CommentResolvedOptions {
   commentFilterKeywords: string[];
   gitRemote: string;
   execOpts: ExecOpts;
-  lastTagCommit?: { commitHash: string; commitDate: string };
+  lastTagCommit?: { commitHash: string; commitDate: string; tagDate: string };
   dryRun?: boolean;
   logger: Logger;
   version: string;

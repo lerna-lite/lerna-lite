@@ -48,20 +48,21 @@ export async function commentResolvedItems({
 }: CommentResolvedOptions) {
   const repo: any = parseGitRepo(gitRemote, execOpts);
   const logPrefix = dryRun ? c.magenta('[dry-run] > ') : '';
+  const lastTagDate = lastTagCommit?.tagDate || '';
 
   // closed linked issues and/or merged pull requests
   let closedLinkedIssues = new Set<TypeNumberPair>();
   let mergedPullRequests = new Set<TypeNumberPair>();
 
   if (templates.issue) {
-    const issues = await remoteSearchBy(client, 'issue', repo.owner, repo.name, lastTagCommit?.commitDate || '', logger);
+    const issues = await remoteSearchBy(client, 'issue', repo.owner, repo.name, lastTagDate, logger);
     issues.forEach((item) => closedLinkedIssues.add({ type: 'issue', number: item.number }));
   }
 
   if (templates.pullRequest) {
-    const pullRequests = (
-      await remoteSearchBy(client, 'pr', repo.owner, repo.name, lastTagCommit?.commitDate || '', logger)
-    ).filter((item) => commentFilterKeywords.some((startWord) => item.title.toLowerCase().startsWith(startWord.toLowerCase())));
+    const pullRequests = (await remoteSearchBy(client, 'pr', repo.owner, repo.name, lastTagDate, logger)).filter((item) =>
+      commentFilterKeywords.some((startWord) => item.title.toLowerCase().startsWith(startWord.toLowerCase()))
+    );
     pullRequests.forEach((item) => mergedPullRequests.add({ type: 'pr', number: item.number }));
     logger.verbose(
       'comments',

@@ -23,7 +23,7 @@ export async function getCommitsSinceLastRelease(
   execOpts?: ExecOpts
 ): Promise<RemoteCommit[]> {
   // get the last release tag date or the first commit date if no release tag found
-  const { commitDate } = getLastTagCommit(execOpts, isIndependent, false);
+  const { commitDate } = getOldestCommitSinceLastTag(execOpts, isIndependent, false);
 
   switch (client) {
     case 'github':
@@ -38,13 +38,13 @@ export async function getCommitsSinceLastRelease(
 }
 
 /**
- * Find the oldest commit details since the last release tag or else if not tag exists then return first commit info
+ * Find the oldest commit details since the last release tag or else if no tag exists then return first commit info
  * @param {ExecOpts} [execOpts]
  * @param {Boolean} [includeMergedTags]
  * @param {Boolean} [isIndependent]
  * @returns {*} - oldest commit detail (hash, date)
  */
-export function getLastTagCommit(execOpts?: ExecOpts, isIndependent?: boolean, includeMergedTags?: boolean) {
+export function getOldestCommitSinceLastTag(execOpts?: ExecOpts, isIndependent?: boolean, includeMergedTags?: boolean) {
   let commitResult = '';
   const describeOptions: DescribeRefOptions = { ...execOpts };
   if (isIndependent) {
@@ -69,9 +69,13 @@ export function getLastTagCommit(execOpts?: ExecOpts, isIndependent?: boolean, i
     commitResult = execSync('git', gitCommandArgs, execOpts);
   }
 
+  // get the date of the last tag
+  const tagDateArgs = ['log', '-1', '--format=%cd', '--date=iso-strict', lastTagName || ''];
+  const tagDate = execSync('git', tagDateArgs, execOpts);
+
   const [, commitHash, commitDate] = /^"?([0-9a-f]+)\s([0-9\-Z.|+T:]*)"?$/.exec(commitResult) || [];
   // prettier-ignore
-  log.verbose('oldestCommitSinceLastTag', `commit found since last tag: ${lastTagName} - (SHA) ${commitHash} - ${commitDate}`);
+  log.verbose('oldestCommitSinceLastTag', `commit found since last tag: ${lastTagName} and date ${tagDate} - (SHA) ${commitHash} - ${commitDate} - last`);
 
-  return { commitHash, commitDate };
+  return { commitHash, commitDate, tagDate };
 }

@@ -31,7 +31,10 @@ import zeptomatch from 'zeptomatch';
 
 import { COMMENT_FILTER_KEYWORDS_CSV, COMMENT_ISSUE, COMMENT_PULL_REQUEST } from './constant.js';
 import { applyBuildMetadata } from './conventional-commits/apply-build-metadata.js';
-import { getCommitsSinceLastRelease, getLastTagCommit } from './conventional-commits/get-commits-since-last-release.js';
+import {
+  getCommitsSinceLastRelease,
+  getOldestCommitSinceLastTag,
+} from './conventional-commits/get-commits-since-last-release.js';
 import { recommendVersion } from './conventional-commits/recommend-version.js';
 import { updateChangelog } from './conventional-commits/update-changelog.js';
 import type { OctokitClientOutput, ReleaseNote, RemoteCommit } from './interfaces.js';
@@ -76,7 +79,7 @@ export class VersionCommand extends Command<VersionCommandOption> {
   releaseClient?: OctokitClientOutput;
   releaseNotes: ReleaseNote[] = [];
   gitOpts: any;
-  lastTagCommit?: { commitHash: string; commitDate: string };
+  lastTagCommit?: { commitHash: string; commitDate: string; tagDate: string };
   runPackageLifecycle: any;
   runRootLifecycle!: (stage: string) => Promise<void> | void;
   savePrefix = '';
@@ -296,7 +299,7 @@ export class VersionCommand extends Command<VersionCommandOption> {
     }
 
     // keep last tag oldest commit details as reference
-    this.lastTagCommit = getLastTagCommit(this.execOpts, isIndependent, false);
+    this.lastTagCommit = getOldestCommitSinceLastTag(this.execOpts, isIndependent, false);
 
     // fetch all commits from remote server of the last release when user wants to include client login associated to each commits
     const remoteClient = this.options.createRelease || this.options.remoteClient;
@@ -927,8 +930,7 @@ export class VersionCommand extends Command<VersionCommandOption> {
 
   /** Comment on resolved issues and/or merged PRs */
   async commentOnRemote() {
-    const remoteClient = this.options.createRelease || this.options.remoteClient;
-    if (remoteClient && (this.options.commentIssues || this.options.commentPullRequests)) {
+    if (this.releaseClient) {
       const {
         dryRun,
         gitRemote = 'origin',
@@ -942,9 +944,8 @@ export class VersionCommand extends Command<VersionCommandOption> {
       const logPrefix = dryRun ? c.bgMagenta('[dry-run] ') : '';
       this.logger.info('comments', `${logPrefix}[start] Comments on remote client...`);
 
-      const releaseClient = await createReleaseClient(remoteClient);
       await commentResolvedItems({
-        client: releaseClient,
+        client: this.releaseClient,
         commentFilterKeywords: keywordsCSV.split(','),
         dryRun,
         gitRemote,
