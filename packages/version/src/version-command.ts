@@ -30,7 +30,10 @@ import c from 'tinyrainbow';
 import zeptomatch from 'zeptomatch';
 
 import { applyBuildMetadata } from './conventional-commits/apply-build-metadata.js';
-import { getCommitsSinceLastRelease } from './conventional-commits/get-commits-since-last-release.js';
+import {
+  getCommitsSinceLastRelease,
+  getOldestCommitSinceLastTag,
+} from './conventional-commits/get-commits-since-last-release.js';
 import { recommendVersion } from './conventional-commits/recommend-version.js';
 import { updateChangelog } from './conventional-commits/update-changelog.js';
 import type { OctokitClientOutput, ReleaseNote, RemoteCommit } from './interfaces.js';
@@ -291,6 +294,9 @@ export class VersionCommand extends Command<VersionCommandOption> {
         `
       );
     }
+
+    // keep last tag oldest commit details as reference
+    this.options.lastTagOldestCommit = getOldestCommitSinceLastTag(this.execOpts, isIndependent, false);
 
     // fetch all commits from remote server of the last release when user wants to include client login associated to each commits
     const remoteClient = this.options.createRelease || this.options.remoteClient;
