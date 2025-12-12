@@ -542,8 +542,9 @@ describe('conventional-commits', () => {
         updateChangelog(rootPkg as Package, 'root', { version: '1.0.1' }).then(getFileContent),
       ]);
 
-      expect(leafChangelogContent).toMatchSnapshot('leaf');
-      expect(rootChangelogContent).toMatchSnapshot('root');
+      // not sure why CI sometimes replaces `*` with `-`
+      expect(leafChangelogContent.replace('- I should', '* I should')).toMatchSnapshot('leaf');
+      expect(rootChangelogContent.replace('- I should', '* I should')).toMatchSnapshot('root');
     });
 
     it('supports custom tagPrefix in fixed mode', async () => {

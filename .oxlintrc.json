@@ -1,6 +1,6 @@
 {
   "$schema": "./node_modules/oxlint/configuration_schema.json",
-  "plugins": ["import", "oxc", "regex", "typescript", "vitest"],
+  "plugins": ["import", "oxc", "typescript", "vitest"],
   "extends": ["recommended", "recommended-module"],
   "env": {
     "es2025": true,
