@@ -31,16 +31,14 @@ import zeptomatch from 'zeptomatch';
 
 import { COMMENT_FILTER_KEYWORDS_CSV, COMMENT_ISSUE, COMMENT_PULL_REQUEST } from './constant.js';
 import { applyBuildMetadata } from './conventional-commits/apply-build-metadata.js';
-import {
-  getCommitsSinceLastRelease,
-  getOldestCommitSinceLastTag,
-} from './conventional-commits/get-commits-since-last-release.js';
+import { getCommitsSinceLastRelease } from './conventional-commits/get-commits-since-last-release.js';
 import { recommendVersion } from './conventional-commits/recommend-version.js';
 import { updateChangelog } from './conventional-commits/update-changelog.js';
 import type { OctokitClientOutput, ReleaseNote, RemoteCommit } from './interfaces.js';
 import { commentResolvedItems } from './lib/comment-resolved-items.js';
 import { createRelease, createReleaseClient } from './lib/create-release.js';
 import { getCurrentBranch } from './lib/get-current-branch.js';
+import { getPreviousTag, type PreviousTag } from './lib/get-tag.js';
 import { gitAdd } from './lib/git-add.js';
 import { gitCommit } from './lib/git-commit.js';
 import { gitPush, gitPushSingleTag } from './lib/git-push.js';
@@ -79,7 +77,7 @@ export class VersionCommand extends Command<VersionCommandOption> {
   releaseClient?: OctokitClientOutput;
   releaseNotes: ReleaseNote[] = [];
   gitOpts: any;
-  lastTagCommit?: { commitHash: string; commitDate: string; tagDate: string };
+  lastTagCommit?: PreviousTag;
   runPackageLifecycle: any;
   runRootLifecycle!: (stage: string) => Promise<void> | void;
   savePrefix = '';
@@ -299,7 +297,7 @@ export class VersionCommand extends Command<VersionCommandOption> {
     }
 
     // keep last tag oldest commit details as reference
-    this.lastTagCommit = getOldestCommitSinceLastTag(this.execOpts, isIndependent, false);
+    this.lastTagCommit = getPreviousTag(this.execOpts, isIndependent);
 
     // fetch all commits from remote server of the last release when user wants to include client login associated to each commits
     const remoteClient = this.options.createRelease || this.options.remoteClient;
@@ -956,7 +954,7 @@ export class VersionCommand extends Command<VersionCommandOption> {
         dryRun,
         gitRemote,
         execOpts: this.execOpts,
-        prevTagDate: this.lastTagCommit?.tagDate,
+        prevTagDate: this.lastTagCommit?.date || '',
         logger: this.logger,
         tag: `${tagVersionPrefix}${this.globalVersion}`,
         version: this.globalVersion,
