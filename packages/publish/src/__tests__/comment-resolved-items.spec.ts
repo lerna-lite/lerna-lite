@@ -18,15 +18,12 @@ vi.mock('@lerna-lite/npmlog', () => ({
   },
 }));
 
-// Mock parseGitRepo and getOldestCommitSinceLastTag
+// Mock parseGitRepo
 vi.mock('@lerna-lite/version', () => ({
   parseGitRepo: vi.fn().mockReturnValue({
     owner: 'owner',
     name: 'repo',
     host: 'github.com',
-  }),
-  getOldestCommitSinceLastTag: vi.fn().mockReturnValue({
-    commitDate: '2023-01-01',
   }),
 }));
 
@@ -192,15 +189,12 @@ describe('commentResolvedItems', () => {
     // Override dryRun to true
     mockOptions.dryRun = true;
 
-    // Mock parseGitRepo and getOldestCommitSinceLastTag
+    // Mock parseGitRepo
     vi.mock('@lerna-lite/version', () => ({
       parseGitRepo: vi.fn().mockReturnValue({
         owner: 'owner',
         name: 'repo',
         host: 'github.com',
-      }),
-      getOldestCommitSinceLastTag: vi.fn().mockReturnValue({
-        commitDate: '2023-01-01',
       }),
     }));
 
