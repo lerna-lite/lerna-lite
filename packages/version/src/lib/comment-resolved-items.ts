@@ -2,7 +2,8 @@ import { type Logger } from '@lerna-lite/npmlog';
 import { type OctokitClientOutput, parseGitRepo } from '@lerna-lite/version';
 import c from 'tinyrainbow';
 
-import type { CommentResolvedOptions } from '../interfaces';
+import type { CommentResolvedOptions } from '../interfaces.js';
+import { RateLimiter } from './rate-limiter.js';
 
 interface TypeNumberPair {
   type: 'issue' | 'pr';
@@ -40,7 +41,7 @@ export async function commentResolvedItems({
   gitRemote,
   execOpts,
   dryRun,
-  lastTagCommit,
+  prevTagDate = '',
   logger,
   version,
   tag,
@@ -48,19 +49,18 @@ export async function commentResolvedItems({
 }: CommentResolvedOptions) {
   const repo: any = parseGitRepo(gitRemote, execOpts);
   const logPrefix = dryRun ? c.magenta('[dry-run] > ') : '';
-  const lastTagDate = lastTagCommit?.tagDate || '';
 
   // closed linked issues and/or merged pull requests
   let closedLinkedIssues = new Set<TypeNumberPair>();
   let mergedPullRequests = new Set<TypeNumberPair>();
 
   if (templates.issue) {
-    const issues = await remoteSearchBy(client, 'issue', repo.owner, repo.name, lastTagDate, logger);
+    const issues = await remoteSearchBy(client, 'issue', repo.owner, repo.name, prevTagDate, logger);
     issues.forEach((item) => closedLinkedIssues.add({ type: 'issue', number: item.number }));
   }
 
   if (templates.pullRequest) {
-    const pullRequests = (await remoteSearchBy(client, 'pr', repo.owner, repo.name, lastTagDate, logger)).filter((item) =>
+    const pullRequests = (await remoteSearchBy(client, 'pr', repo.owner, repo.name, prevTagDate, logger)).filter((item) =>
       commentFilterKeywords.some((startWord) => item.title.toLowerCase().startsWith(startWord.toLowerCase()))
     );
     pullRequests.forEach((item) => mergedPullRequests.add({ type: 'pr', number: item.number }));
@@ -98,7 +98,20 @@ export async function commentResolvedItems({
   const hostURL = `https://${repo.host}/${repository}`;
   const releaseUrl = getReleaseUrlFallback(repo.host, repository, tag);
 
-  const promises: Promise<any>[] = [];
+  // Create a rate limiter for GitHub API
+  const rateLimiter = new RateLimiter({
+    maxCalls: 30, // 30 calls per minute
+    perMilliseconds: 60000, // per minute
+  });
+
+  const commentResults: Promise<{
+    type: 'issue' | 'pr';
+    number: number;
+    url: string;
+    comment: string;
+    success: boolean;
+  }>[] = [];
+
   for (const item of [...closedLinkedIssues, ...mergedPullRequests]) {
     const { type, number } = item;
     const url = `${hostURL}/${type === 'pr' ? 'pull' : 'issues'}/${number}`;
@@ -108,31 +121,45 @@ export async function commentResolvedItems({
       .replace(/%v/g, version || '')
       .replace(/%u/g, releaseUrl);
 
-    try {
-      if (!dryRun) {
-        promises.push(
-          new Promise((resolve) => {
-            setTimeout(() => {
-              resolve(
-                client.issues!.createComment({
-                  owner: repo.owner,
-                  repo: repo.name,
-                  issue_number: number,
-                  body: comment,
-                })
-              );
-            }, 10000); // delay by 10sec. between each calls to avoid hitting GitHub rate limit
-          })
-        );
-      }
-      const commentType = type === 'pr' ? 'PR' : 'issue';
-      logger.info('comments', `${logPrefix}● Commented on ${commentType} ${url}`);
+    if (!dryRun) {
+      commentResults.push(
+        rateLimiter.throttle(async () => {
+          try {
+            await client.issues!.createComment({
+              owner: repo.owner,
+              repo: repo.name,
+              issue_number: number,
+              body: comment,
+            });
+
+            logger.info('comments', `${logPrefix}● Commented on ${type === 'pr' ? 'PR' : 'issue'} ${url}`);
+            logger.silly('comments', `${logPrefix}${comment}`);
+
+            return { type, number, url, comment, success: true };
+          } catch (error) {
+            logger.info('comments', `${logPrefix}✕ Failed to comment on ${url}`);
+            return { type, number, url, comment, success: false };
+          }
+        })
+      );
+    } else {
+      // For dry run, still log the intention
+      logger.info('comments', `${logPrefix}● Would comment on ${type === 'pr' ? 'PR' : 'issue'} ${url}`);
       logger.silly('comments', `${logPrefix}${comment}`);
-    } catch (_e) {
-      /** v8 ignore next */
-      logger.info('comments', `${logPrefix}✕ Failed to comment on ${url}`);
     }
   }
 
-  await Promise.all(promises);
+  // If you want to handle the results
+  const results = await Promise.all(commentResults);
+
+  // Optional: Log summary of comments
+  const successfulComments = results.filter((r) => r.success);
+  const failedComments = results.filter((r) => !r.success);
+
+  logger.info('comments', `Successful comments: ${successfulComments.length}`);
+  if (failedComments.length > 0) {
+    logger.warn('comments', `Failed comments: ${failedComments.length}`);
+  }
+
+  return results;
 }
