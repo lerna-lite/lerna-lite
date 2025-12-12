@@ -18,9 +18,16 @@ vi.mock('@lerna-lite/npmlog', () => ({
   },
 }));
 
+// Mock parseGitRepo and getOldestCommitSinceLastTag
 vi.mock('@lerna-lite/version', () => ({
-  getOldestCommitSinceLastTag: vi.fn(),
-  parseGitRepo: vi.fn(),
+  parseGitRepo: vi.fn().mockReturnValue({
+    owner: 'owner',
+    name: 'repo',
+    host: 'github.com',
+  }),
+  getOldestCommitSinceLastTag: vi.fn().mockReturnValue({
+    commitDate: '2023-01-01',
+  }),
 }));
 
 describe('remoteSearchBy', () => {
@@ -158,18 +165,6 @@ describe('commentResolvedItems', () => {
         },
       });
 
-    // Mock parseGitRepo and getOldestCommitSinceLastTag
-    vi.mock('@lerna-lite/version', () => ({
-      parseGitRepo: vi.fn().mockReturnValue({
-        owner: 'owner',
-        name: 'repo',
-        host: 'github.com',
-      }),
-      getOldestCommitSinceLastTag: vi.fn().mockReturnValue({
-        commitDate: '2023-01-01',
-      }),
-    }));
-
     await commentResolvedItems(mockOptions);
 
     // Verify comment creation
@@ -236,18 +231,6 @@ describe('commentResolvedItems', () => {
         },
       });
 
-    // Mock parseGitRepo and getOldestCommitSinceLastTag
-    vi.mock('@lerna-lite/version', () => ({
-      parseGitRepo: vi.fn().mockReturnValue({
-        owner: 'owner',
-        name: 'repo',
-        host: 'github.com',
-      }),
-      getOldestCommitSinceLastTag: vi.fn().mockReturnValue({
-        commitDate: '2023-01-01',
-      }),
-    }));
-
     // Set filter keywords to only include PRs starting with 'feature'
     mockOptions.commentFilterKeywords = ['feature'];
 
@@ -281,18 +264,6 @@ describe('commentResolvedItems', () => {
           ],
         },
       });
-
-    // Mock parseGitRepo and getOldestCommitSinceLastTag
-    vi.mock('@lerna-lite/version', () => ({
-      parseGitRepo: vi.fn().mockReturnValue({
-        owner: 'owner',
-        name: 'repo',
-        host: 'github.com',
-      }),
-      getOldestCommitSinceLastTag: vi.fn().mockReturnValue({
-        commitDate: '2023-01-01',
-      }),
-    }));
 
     // Reset mock call counts
     mockClient.issues.createComment.mockClear();
