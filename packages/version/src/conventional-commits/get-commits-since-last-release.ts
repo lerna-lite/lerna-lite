@@ -69,16 +69,9 @@ export function getOldestCommitSinceLastTag(execOpts?: ExecOpts, isIndependent?:
     commitResult = execSync('git', gitCommandArgs, execOpts);
   }
 
-  // get the date of the last tag
-  const tagDateArgs = ['log', '-1', '--format=%cd', '--date=iso-strict'];
-  if (lastTagName) {
-    tagDateArgs.push(lastTagName);
-  }
-  const tagDate = execSync('git', tagDateArgs, execOpts);
-
   const [, commitHash, commitDate] = /^"?([0-9a-f]+)\s([0-9\-Z.|+T:]*)"?$/.exec(commitResult) || [];
   // prettier-ignore
-  log.verbose('oldestCommitSinceLastTag', `commit found since last tag: ${lastTagName} and date ${tagDate} - (SHA) ${commitHash} - ${commitDate} - last`);
+  log.verbose('oldestCommitSinceLastTag', `commit found since last tag: ${lastTagName} - (SHA) ${commitHash} - ${commitDate} - last`);
 
-  return { commitHash, commitDate, tagDate };
+  return { commitHash, commitDate };
 }
