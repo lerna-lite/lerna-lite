@@ -188,7 +188,7 @@ When enabled, it will insert Comments on all the closed linked issues and/or mer
 
 ##### `--comment-issue [msg]`
 
-Insert Comments on all the closed linked issues that were included in the release.
+Insert Comments on all the closed linked issues that were included in the release. The issue must be been linked through a PR when it detects fix keywords in its PR title and/or description (like `"fix #123"` or `"fixes #123"`)
 
 ```sh
 # enable it and use default template

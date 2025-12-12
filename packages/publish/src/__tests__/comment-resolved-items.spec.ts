@@ -48,7 +48,7 @@ describe('remoteSearchBy', () => {
     const result = await remoteSearchBy(mockClient as any, 'issue', 'owner', 'repo', '2023-01-01', mockLogger as any);
 
     expect(mockClient.search.issuesAndPullRequests).toHaveBeenCalledWith({
-      q: 'repo:owner/repo+is:issue+state:closed+linked:pr+updated:>2023-01-01',
+      q: 'repo:owner/repo+is:issue+linked:pr+closed:>2023-01-01',
       advanced_search: true,
     });
     expect(result).toHaveLength(1);
@@ -121,7 +121,7 @@ describe('commentResolvedItems', () => {
 
     const mockOptions = {
       client: mockClient as OctokitClientOutput,
-      commentFilterKeywords: ['feature'],
+      commentFilterKeywords: ['fix', 'feat', 'perf'],
       gitRemote: 'https://github.com/owner/repo.git',
       execOpts: {
         cwd: process.cwd(),
@@ -218,19 +218,23 @@ describe('commentResolvedItems', () => {
     expect(mockLogger.info).toHaveBeenCalledWith('comments', expect.stringContaining('● Commented on issue'));
   });
 
-  it('should filter PRs based on comment keywords', async () => {
+  it('should filter PRs based on PR title keywords', async () => {
     const { mockClient, mockOptions } = createMockDependencies();
 
     // Mock search to return multiple PRs with different titles
-    mockClient.search.issuesAndPullRequests.mockResolvedValue({
-      data: {
-        items: [
-          { number: 101, title: 'feature: add new functionality', pull_request: {} },
-          { number: 102, title: 'fix: some bug', pull_request: {} },
-          { number: 103, title: 'feature: improve performance', pull_request: {} },
-        ],
-      },
-    });
+    mockClient.search.issuesAndPullRequests
+      .mockResolvedValueOnce({
+        data: { items: [] },
+      })
+      .mockResolvedValueOnce({
+        data: {
+          items: [
+            { number: 101, title: 'feature: add new functionality', pull_request: {} },
+            { number: 102, title: 'fix: some bug', pull_request: {} },
+            { number: 103, title: 'feature: improve performance', pull_request: {} },
+          ],
+        },
+      });
 
     // Mock parseGitRepo and getOldestCommitSinceLastTag
     vi.mock('@lerna-lite/version', () => ({
@@ -253,10 +257,50 @@ describe('commentResolvedItems', () => {
     await commentResolvedItems(mockOptions);
 
     // Verify only PRs starting with 'feature' were processed
-    expect(mockClient.issues.createComment).toHaveBeenCalledTimes(5);
+    expect(mockClient.issues.createComment).toHaveBeenCalledTimes(2);
 
     // Verify the comments were created for the correct PR numbers
     const calledWithNumbers = mockClient.issues.createComment.mock.calls.map((call) => call[0].issue_number);
-    expect(calledWithNumbers).toEqual(expect.arrayContaining([101, 103]));
+    expect(calledWithNumbers).toEqual([101, 103]);
+  });
+
+  it('should filter PRs and add to issues when PR title includes "fix #[number]"', async () => {
+    const { mockClient, mockOptions } = createMockDependencies();
+
+    // Mock search to return multiple PRs with different titles
+    mockClient.search.issuesAndPullRequests
+      .mockResolvedValueOnce({
+        data: { items: [] },
+      })
+      .mockResolvedValueOnce({
+        data: {
+          items: [
+            { number: 101, title: 'feat: add new functionality', pull_request: {} },
+            { number: 102, title: 'fix: some bug, fix #123', pull_request: {} },
+            { number: 103, title: 'feat: improve performance', pull_request: {} },
+          ],
+        },
+      });
+
+    // Mock parseGitRepo and getOldestCommitSinceLastTag
+    vi.mock('@lerna-lite/version', () => ({
+      parseGitRepo: vi.fn().mockReturnValue({
+        owner: 'owner',
+        name: 'repo',
+        host: 'github.com',
+      }),
+      getOldestCommitSinceLastTag: vi.fn().mockReturnValue({
+        commitDate: '2023-01-01',
+      }),
+    }));
+
+    // Reset mock call counts
+    mockClient.issues.createComment.mockClear();
+
+    await commentResolvedItems(mockOptions);
+
+    // Verify the comments were created for the correct PR numbers
+    const calledWithNumbers = mockClient.issues.createComment.mock.calls.map((call) => call[0].issue_number);
+    expect(calledWithNumbers).toEqual([123, 101, 102, 103]);
   });
 });
