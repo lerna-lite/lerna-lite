@@ -112,15 +112,17 @@ export async function commentResolvedItems({
       if (!dryRun) {
         promises.push(
           new Promise((resolve) => {
-            resolve(
-              client.issues!.createComment({
-                owner: repo.owner,
-                repo: repo.name,
-                issue_number: number,
-                body: comment,
-              })
-            );
-          }, 10000) // delay by 10sec. between each calls to avoid hitting GitHub rate limit
+            setTimeout(() => {
+              resolve(
+                client.issues!.createComment({
+                  owner: repo.owner,
+                  repo: repo.name,
+                  issue_number: number,
+                  body: comment,
+                })
+              );
+            }, 10000); // delay by 10sec. between each calls to avoid hitting GitHub rate limit
+          })
         );
       }
       const commentType = type === 'pr' ? 'PR' : 'issue';
