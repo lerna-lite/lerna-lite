@@ -23,7 +23,7 @@ export async function getCommitsSinceLastRelease(
   execOpts?: ExecOpts
 ): Promise<RemoteCommit[]> {
   // get the last release tag date or the first commit date if no release tag found
-  const { commitDate } = getOldestCommitSinceLastTag(execOpts, isIndependent, false);
+  const { commitDate } = getLastTagCommit(execOpts, isIndependent, false);
 
   switch (client) {
     case 'github':
@@ -44,7 +44,7 @@ export async function getCommitsSinceLastRelease(
  * @param {Boolean} [isIndependent]
  * @returns {*} - oldest commit detail (hash, date)
  */
-export function getOldestCommitSinceLastTag(execOpts?: ExecOpts, isIndependent?: boolean, includeMergedTags?: boolean) {
+export function getLastTagCommit(execOpts?: ExecOpts, isIndependent?: boolean, includeMergedTags?: boolean) {
   let commitResult = '';
   const describeOptions: DescribeRefOptions = { ...execOpts };
   if (isIndependent) {

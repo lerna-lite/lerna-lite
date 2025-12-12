@@ -1,6 +1,3 @@
-import type { ExecOpts } from '@lerna-lite/core';
-import type { Logger } from '@lerna-lite/npmlog';
-import type { OctokitClientOutput } from '@lerna-lite/version';
 import type fetch from 'npm-registry-fetch';
 
 export interface DistTagOptions extends fetch.FetchOptions {
@@ -50,20 +47,4 @@ export interface Tarball {
   integrity: boolean;
   entryCount: number;
   tarFilePath: string;
-}
-
-export interface CommentResolvedOptions {
-  client: OctokitClientOutput;
-  commentFilterKeywords: string[];
-  gitRemote: string;
-  execOpts: ExecOpts;
-  independent: boolean;
-  dryRun?: boolean;
-  logger: Logger;
-  version: string;
-  tag: string;
-  templates: {
-    issue?: string;
-    pullRequest?: string;
-  };
 }

@@ -1,7 +1,7 @@
 import { describeRefSync, execSync, ValidationError } from '@lerna-lite/core';
 import { afterEach, beforeEach, describe, expect, it, vi, type Mock } from 'vitest';
 
-import { getCommitsSinceLastRelease, getOldestCommitSinceLastTag } from '../get-commits-since-last-release.js';
+import { getCommitsSinceLastRelease, getLastTagCommit } from '../get-commits-since-last-release.js';
 import { getGithubCommits } from '../get-github-commits.js';
 
 vi.mock('@lerna-lite/core');
@@ -79,7 +79,7 @@ describe('getCommitsSinceLastRelease', () => {
   });
 });
 
-describe('getOldestCommitSinceLastTag', () => {
+describe('getLastTagCommit', () => {
   describe('without tag', () => {
     beforeEach(() => {
       (describeRefSync as Mock).mockReturnValue({
@@ -93,7 +93,7 @@ describe('getOldestCommitSinceLastTag', () => {
 
     it('should return first commit date format as ISO+offset when describeRefSync() did not return a tag date', () => {
       const execSpy = (execSync as Mock).mockReturnValueOnce('"abcbeef 2022-07-01T00:01:02-04:00"');
-      const result = getOldestCommitSinceLastTag(execOpts);
+      const result = getLastTagCommit(execOpts);
 
       expect(execSpy).toHaveBeenCalledWith(
         'git',
@@ -105,7 +105,7 @@ describe('getOldestCommitSinceLastTag', () => {
 
     it('should return first commit date with a TZ format when describeRefSync() did not return a tag date', () => {
       const execSpy = (execSync as Mock).mockReturnValueOnce('"abcbeef 2024-05-16T10:37:42Z"');
-      const result = getOldestCommitSinceLastTag(execOpts);
+      const result = getLastTagCommit(execOpts);
 
       expect(execSpy).toHaveBeenCalledWith(
         'git',
@@ -117,7 +117,7 @@ describe('getOldestCommitSinceLastTag', () => {
 
     it('should return first commit date with a TZ and microsecond format when describeRefSync() did not return a tag date', () => {
       const execSpy = (execSync as Mock).mockReturnValueOnce('"abcbeef 2024-05-16T10:37:42.234Z"');
-      const result = getOldestCommitSinceLastTag(execOpts);
+      const result = getLastTagCommit(execOpts);
 
       expect(execSpy).toHaveBeenCalledWith(
         'git',
@@ -145,7 +145,7 @@ describe('getOldestCommitSinceLastTag', () => {
       const isIndependent = true;
       const mockExecSyncResult = '"deadabcd 2022-07-01T00:01:02-06:00"';
       (execSync as Mock).mockReturnValue(mockExecSyncResult);
-      const result = getOldestCommitSinceLastTag(execOpts, isIndependent, false);
+      const result = getLastTagCommit(execOpts, isIndependent, false);
       const execSpy = (execSync as Mock).mockReturnValueOnce(mockExecSyncResult);
 
       expect(describeRefSync).toHaveBeenCalledWith({ cwd: '/test', match: '*@*' }, false);
@@ -160,7 +160,7 @@ describe('getOldestCommitSinceLastTag', () => {
     it('should expect a commit date and hash when using different time zone', () => {
       const isIndependent = true;
       (execSync as Mock).mockReturnValue('"deadbeef 2022-07-01T00:01:02+01:00"');
-      const result = getOldestCommitSinceLastTag(execOpts, isIndependent, false);
+      const result = getLastTagCommit(execOpts, isIndependent, false);
       const execSpy = (execSync as Mock).mockReturnValueOnce('"deadbeef 2022-07-01T00:01:02+01:00"');
 
       expect(describeRefSync).toHaveBeenCalledWith({ cwd: '/test', match: '*@*' }, false);
@@ -181,7 +181,7 @@ describe('getOldestCommitSinceLastTag', () => {
     it('should return first commit date and hash when last tag is not found', () => {
       const execSpy = (execSync as Mock).mockReturnValueOnce('').mockReturnValueOnce('"deedbeaf 2022-07-01T00:01:02-04:00"');
 
-      const result = getOldestCommitSinceLastTag(execOpts);
+      const result = getLastTagCommit(execOpts);
 
       expect(execSpy).toHaveBeenCalledWith('git', ['log', 'v1.0.0..HEAD', '--format="%h %aI"', '--reverse'], execOpts);
       expect(execSpy).toHaveBeenCalledWith('git', ['log', '-1', '--format="%h %aI"', 'v1.0.0'], execOpts);
@@ -190,7 +190,7 @@ describe('getOldestCommitSinceLastTag', () => {
 
     it('should expect a result with a tag date, hash and ref count when last tag is found', () => {
       const execSpy = (execSync as Mock).mockReturnValueOnce('"deadbeef 2022-07-01T00:01:02-04:00"');
-      const result = getOldestCommitSinceLastTag(execOpts, false, false);
+      const result = getLastTagCommit(execOpts, false, false);
 
       expect(describeRefSync).toHaveBeenCalledWith({ cwd: '/test' }, false);
       expect(execSpy).toHaveBeenCalledWith('git', ['log', 'v1.0.0..HEAD', '--format="%h %aI"', '--reverse'], execOpts);

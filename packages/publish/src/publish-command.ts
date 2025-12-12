@@ -31,7 +31,7 @@ import {
   ValidationError,
 } from '@lerna-lite/core';
 import type { OneTimePasswordCache } from '@lerna-lite/version';
-import { createReleaseClient, getOneTimePassword, VersionCommand } from '@lerna-lite/version';
+import { getOneTimePassword, VersionCommand } from '@lerna-lite/version';
 import { outputFileSync, removeSync } from 'fs-extra/esm';
 import normalizePath from 'normalize-path';
 import pMap from 'p-map';
@@ -40,9 +40,7 @@ import semver from 'semver';
 import { glob } from 'tinyglobby';
 import c from 'tinyrainbow';
 
-import { COMMENT_FILTER_KEYWORDS_CSV, COMMENT_ISSUE, COMMENT_PULL_REQUEST } from './constant.js';
 import type { Tarball } from './interfaces.js';
-import { commentResolvedItems } from './lib/comment-resolved-items.js';
 import { createTempLicenses } from './lib/create-temp-licenses.js';
 import { getCurrentSHA } from './lib/get-current-sha.js';
 import { getCurrentTags } from './lib/get-current-tags.js';
@@ -331,9 +329,6 @@ export class PublishCommand extends Command<PublishCommandOption> {
     }
 
     this.logger.success('published', `%d %s ${logPrefix}`, count, count === 1 ? 'package' : 'packages');
-
-    // comment on remote issues/PRs
-    await this.commentOnRemote();
 
     // optionally cleanup temp packed files after publish, opt-in option
     if (this.options.cleanupTempFiles) {
@@ -1009,45 +1004,6 @@ export class PublishCommand extends Command<PublishCommandOption> {
       }
       tracker.finish();
     });
-  }
-
-  /** Comment on resolved issues and/or merged PRs */
-  async commentOnRemote() {
-    const remoteClient = this.options.createRelease || this.options.remoteClient;
-    if (remoteClient && (this.options.commentIssues || this.options.commentPullRequests)) {
-      const {
-        dryRun,
-        gitRemote = 'origin',
-        tagVersionPrefix = 'v',
-        version,
-        commentIssues,
-        commentPullRequests,
-        commentFilterKeywords: keywordsCSV = COMMENT_FILTER_KEYWORDS_CSV,
-      } = this.options;
-
-      const logPrefix = dryRun ? c.bgMagenta('[dry-run] ') : '';
-      this.logger.info('comments', `${logPrefix}[start] Comments on remote client...`);
-
-      const releaseClient = await createReleaseClient(remoteClient);
-      await commentResolvedItems({
-        client: releaseClient,
-        commentFilterKeywords: keywordsCSV.split(','),
-        dryRun,
-        gitRemote,
-        execOpts: this.execOpts,
-        independent: this.project.isIndependent(),
-        logger: this.logger,
-        tag: `${tagVersionPrefix}${version}`,
-        version,
-        templates: {
-          // use custom template when provided by the user or use default template when enabled via boolean (empty when false or undefined)
-          issue: (commentIssues === true ? COMMENT_ISSUE : commentIssues) || '',
-          pullRequest: (commentPullRequests === true ? COMMENT_PULL_REQUEST : commentPullRequests) || '',
-        },
-      });
-
-      this.logger.info('comments', '[end] Comments on remote client...');
-    }
   }
 
   npmUpdateAsLatest() {

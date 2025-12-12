@@ -1,5 +1,6 @@
 import type { GetCommitsParams, GetSemverTagsParams } from '@conventional-changelog/git-client';
 import type { ChangelogPresetOptions, ExecOpts, Package } from '@lerna-lite/core';
+import { type Logger } from '@lerna-lite/npmlog';
 import type { Options as WriterOptions } from 'conventional-changelog-writer';
 import type { Commit, ParserOptions, ParserStreamOptions } from 'conventional-commits-parser';
 import type { BumperRecommendation } from 'conventional-recommended-bump';
@@ -246,4 +247,20 @@ export interface CommitData {
   status: string;
   total_commits: number;
   url: string;
+}
+
+export interface CommentResolvedOptions {
+  client: OctokitClientOutput;
+  commentFilterKeywords: string[];
+  gitRemote: string;
+  execOpts: ExecOpts;
+  lastTagCommit?: { commitHash: string; commitDate: string };
+  dryRun?: boolean;
+  logger: Logger;
+  version: string;
+  tag: string;
+  templates: {
+    issue?: string;
+    pullRequest?: string;
+  };
 }
