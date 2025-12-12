@@ -271,6 +271,15 @@ When enabled, it will insert Comments on all the closed linked issues and/or mer
 - `%v`: version number only - (e.g. "1.0.2")
 - `%u`: release URL - (e.g. "https://github.com/lerna-lite/lerna-lite/releases/tag/v4.11.0")
 
+When running in a GitHub CI environment, you will also need these permissions:
+```yaml
+permissions:
+  contents: write # to be able to publish a GitHub release
+  issues: write # to be able to comment on released issues
+  pull-requests: write # to be able to comment on released pull requests
+  id-token: write # to enable use of OIDC for npm provenance
+```
+
 > [!NOTE]
 > You must provide 1 of these 2 options [`--create-release <type>`](../version/README.md#--create-release-type) or [`--remote-client <type>`](../version/README.md#--remote-client-type).
 
