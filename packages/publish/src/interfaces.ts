@@ -60,6 +60,7 @@ export interface CommentResolvedOptions {
   independent: boolean;
   dryRun?: boolean;
   logger: Logger;
+  lastTagOldestCommit?: { commitHash: string; commitDate: string };
   version: string;
   tag: string;
   templates: {

@@ -173,6 +173,7 @@ export interface LernaConfig {
   /** enables integration with Yarn or other package manager that use `workspaces` property in `package.json` */
   useWorkspaces?: boolean;
   version: string;
+  lastTagOldestCommit?: { commitHash: string; commitDate: string };
 }
 
 export interface ProjectConfig extends LernaConfig, QueryGraphConfig {
