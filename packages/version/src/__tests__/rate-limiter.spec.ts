@@ -1,8 +1,20 @@
-import { describe, it, expect, vi } from 'vitest';
+import { afterEach, beforeAll, beforeEach, describe, expect, it, vi } from 'vitest';
 
 import { RateLimiter } from '../lib/rate-limiter.js';
 
 describe('RateLimiter', () => {
+  // Avoid Node reporting PromiseRejectionHandledWarning during retry tests in CI
+  beforeAll(() => {
+    process.on('unhandledRejection', () => {});
+    process.on('rejectionHandled', () => {});
+  });
+  // Use fake timers to accelerate timer-based flows in tests
+  beforeEach(() => {
+    vi.useFakeTimers({ toFake: ['setTimeout', 'clearTimeout', 'Date'] });
+  });
+  afterEach(() => {
+    vi.useRealTimers();
+  });
   // Helper function to create a mock task
   const createMockTask = (duration = 10) => {
     return () =>
@@ -46,12 +58,14 @@ describe('RateLimiter', () => {
 
     const tasks = [createMockTask(), createMockTask(), createMockTask(), createMockTask()];
 
-    const results = await Promise.all([
+    const pending = Promise.all([
       limiter.throttle(tasks[0]),
       limiter.throttle(tasks[1]),
       limiter.throttle(tasks[2]),
       limiter.throttle(tasks[3]),
     ]);
+    await vi.runAllTimersAsync();
+    const results = await pending;
 
     // Verify results are returned
     expect(results).toHaveLength(4);
@@ -75,12 +89,14 @@ describe('RateLimiter', () => {
 
     const mockTask = vi.fn(() => Promise.resolve(Date.now()));
 
-    await Promise.all([
+    const done = Promise.all([
       limiter.throttle(mockTask),
       limiter.throttle(mockTask),
       limiter.throttle(mockTask),
       limiter.throttle(mockTask),
     ]);
+    await vi.runAllTimersAsync();
+    await done;
 
     // First two tasks should execute immediately
     expect(mockTask).toHaveBeenCalledTimes(4);
@@ -98,7 +114,9 @@ describe('RateLimiter', () => {
 
       const tasks = [createMockTask(), createMockTask(), createMockTask()];
 
-      const results = await Promise.all([limiter.throttle(tasks[0]), limiter.throttle(tasks[1]), limiter.throttle(tasks[2])]);
+      const p = Promise.all([limiter.throttle(tasks[0]), limiter.throttle(tasks[1]), limiter.throttle(tasks[2])]);
+      await vi.runAllTimersAsync();
+      const results = await p;
 
       // Verify results are returned
       expect(results).toHaveLength(3);
@@ -130,7 +148,9 @@ describe('RateLimiter', () => {
     const taskCount = 20;
     const tasks = Array.from({ length: taskCount }, () => createMockTask());
 
-    const results = await Promise.all(tasks.map((task) => limiter.throttle(task)));
+    const p = Promise.all(tasks.map((task) => limiter.throttle(task)));
+    await vi.runAllTimersAsync();
+    const results = await p;
 
     // Verify all tasks are completed
     expect(results).toHaveLength(taskCount);
@@ -157,12 +177,14 @@ describe('RateLimiter', () => {
       vi.fn(() => Promise.resolve(4)),
     ];
 
-    const results = await Promise.all([
+    const p = Promise.all([
       limiter.throttle(tasks[0]),
       limiter.throttle(tasks[1]),
       limiter.throttle(tasks[2]),
       limiter.throttle(tasks[3]),
     ]);
+    await vi.runAllTimersAsync();
+    const results = await p;
 
     // Verify task order
     expect(results).toEqual([1, 2, 3, 4]);
@@ -192,7 +214,9 @@ describe('RateLimiter', () => {
 
     const tasks = createConcurrentTasks(10);
 
-    const results = await Promise.all(tasks.map((task) => limiter.throttle(task)));
+    const p = Promise.all(tasks.map((task) => limiter.throttle(task)));
+    await vi.runAllTimersAsync();
+    const results = await p;
 
     // Verify all tasks are completed
     expect(results).toHaveLength(10);
@@ -232,13 +256,17 @@ describe('RateLimiter', () => {
     const secondBatchTasks = [createTask(4), createTask(5), createTask(6)];
 
     // Execute first batch
-    const firstBatchResults = await Promise.all(firstBatchTasks.map((task) => limiter.throttle(task)));
+    const firstBatchPromise = Promise.all(firstBatchTasks.map((task) => limiter.throttle(task)));
+    await vi.runAllTimersAsync();
+    const firstBatchResults = await firstBatchPromise;
 
-    // Wait for the time window to reset
-    await new Promise((resolve) => setTimeout(resolve, 600));
+    // Advance timers instead of waiting for the window to reset
+    await vi.advanceTimersByTimeAsync(600);
 
     // Execute second batch
-    const secondBatchResults = await Promise.all(secondBatchTasks.map((task) => limiter.throttle(task)));
+    const secondBatchPromise = Promise.all(secondBatchTasks.map((task) => limiter.throttle(task)));
+    await vi.runAllTimersAsync();
+    const secondBatchResults = await secondBatchPromise;
 
     // Verify first batch execution
     expect(firstBatchResults).toHaveLength(3);
@@ -262,7 +290,9 @@ describe('RateLimiter', () => {
     const tasks = [vi.fn(() => Promise.resolve(1)), vi.fn(() => Promise.resolve(2)), vi.fn(() => Promise.resolve(3))];
 
     const startTime = Date.now();
-    const results = await Promise.all(tasks.map((task) => limiter.throttle(task)));
+    const p = Promise.all(tasks.map((task) => limiter.throttle(task)));
+    await vi.runAllTimersAsync();
+    const results = await p;
 
     // Verify all tasks are completed
     expect(results).toEqual([1, 2, 3]);
@@ -303,7 +333,9 @@ describe('RateLimiter', () => {
     ];
 
     const startTime = Date.now();
-    const results = await Promise.all(tasks.map((task) => limiter.throttle(task)));
+    const p = Promise.all(tasks.map((task) => limiter.throttle(task)));
+    await vi.runAllTimersAsync();
+    const results = await p;
 
     // Verify all tasks are completed
     expect(results).toHaveLength(4);
@@ -338,7 +370,9 @@ describe('RateLimiter', () => {
       });
 
     // Simultaneously trigger multiple tasks
-    await Promise.all([limiter.throttle(slowTask), limiter.throttle(slowTask), limiter.throttle(slowTask)]);
+    const p = Promise.all([limiter.throttle(slowTask), limiter.throttle(slowTask), limiter.throttle(slowTask)]);
+    await vi.runAllTimersAsync();
+    await p;
 
     // Verify processQueue was called only once during concurrent calls
     expect(processQueueSpy).toHaveBeenCalledTimes(1);
@@ -373,7 +407,10 @@ describe('RateLimiter', () => {
       return Promise.resolve('Success');
     };
 
-    const result = await limiter.throttle(unreliableTask, 3);
+    const pending = limiter.throttle(unreliableTask, 3);
+    await vi.runAllTimersAsync();
+    await Promise.resolve();
+    const result = await pending;
     expect(result).toBe('Success');
     expect(attemptCount).toBe(3);
   });
@@ -388,7 +425,15 @@ describe('RateLimiter', () => {
     const alwaysFailingTask = vi.fn(() => Promise.reject(new Error('Always fails')));
 
     // Expect the task to throw after max retries
-    await expect(limiter.throttle(alwaysFailingTask, 3)).rejects.toThrow('Max retries exceeded');
+    const pending = limiter.throttle(alwaysFailingTask, 3);
+    await vi.runAllTimersAsync();
+    await Promise.resolve();
+    try {
+      await pending;
+      throw new Error('Expected rejection, but resolved');
+    } catch (err: any) {
+      expect(err?.message).toBe('Max retries exceeded');
+    }
 
     // Verify the task was called the expected number of times
     expect(alwaysFailingTask).toHaveBeenCalledTimes(3);
@@ -406,7 +451,10 @@ describe('RateLimiter', () => {
 
     const tasks = [longRunningTask(500), longRunningTask(600), longRunningTask(700)];
 
-    const results = await Promise.all(tasks.map((task) => limiter.throttle(task)));
+    const p = Promise.all(tasks.map((task) => limiter.throttle(task)));
+    await vi.runAllTimersAsync();
+    await Promise.resolve();
+    const results = await p;
 
     expect(results).toHaveLength(3);
     expect(results).toEqual(expect.arrayContaining([500, 600, 700]));
@@ -423,7 +471,10 @@ describe('RateLimiter', () => {
     const taskCount = 20;
     const tasks = Array.from({ length: taskCount }, (_, i) => createStressTask(i));
 
-    const results = await Promise.all(tasks.map((task) => limiter.throttle(task)));
+    const p = Promise.all(tasks.map((task) => limiter.throttle(task)));
+    await vi.runAllTimersAsync();
+    await Promise.resolve();
+    const results = await p;
 
     // Verify all tasks are processed
     expect(results).toHaveLength(taskCount);
@@ -439,7 +490,15 @@ describe('RateLimiter', () => {
     const failingTask = vi.fn(() => Promise.reject(new Error('Simulated failure')));
 
     // Expect to throw max retries error after exhausting attempts
-    await expect(limiter.throttle(failingTask, 2)).rejects.toThrow('Max retries exceeded');
+    const pending = limiter.throttle(failingTask, 2);
+    await vi.runAllTimersAsync();
+    await Promise.resolve();
+    try {
+      await pending;
+      throw new Error('Expected rejection, but resolved');
+    } catch (err: any) {
+      expect(err?.message).toBe('Max retries exceeded');
+    }
 
     // Verify the task was called the expected number of times
     expect(failingTask).toHaveBeenCalledTimes(2);
@@ -460,7 +519,10 @@ describe('RateLimiter', () => {
       return Promise.resolve('Success');
     });
 
-    const result = await limiter.throttle(unreliableTask, 3);
+    const pending = limiter.throttle(unreliableTask, 3);
+    await vi.runAllTimersAsync();
+    await Promise.resolve();
+    const result = await pending;
 
     expect(result).toBe('Success');
     expect(attemptCount).toBe(3);

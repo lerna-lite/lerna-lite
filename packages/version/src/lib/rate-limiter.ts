@@ -76,16 +76,15 @@ export class RateLimiter {
               const result = await fn();
               resolve(result);
             } catch (error) {
-              // Explicitly reject the promise
               reject(error);
             }
           };
 
           this.queue.push(wrappedTask);
 
-          // Start processing if not already in progress
           if (!this.isProcessing) {
-            this.processQueue();
+            // Start processing; attach catch to avoid background unhandled rejection
+            this.processQueue().catch(/* v8 ignore next */ () => {});
           }
         });
       } catch (error) {
