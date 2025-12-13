@@ -518,3 +518,16 @@ test('publish throws error when --build-metadata and --canary are both applied',
     })
   );
 });
+
+test('publish --canary --yes logs auto-confirmed after listing changes', async () => {
+  const cwd = await initTaggedFixture('normal');
+  await setupChanges(cwd, ['packages/package-1/all-your-base.js', 'belong to us']);
+
+  await new PublishCommand(createArgv(cwd, '--canary', '--yes'));
+  const logMessages = loggingOutput('info');
+
+  // Ensure we await the deferred logger.info call
+  await new Promise((resolve) => process.nextTick(resolve));
+
+  expect(logMessages).toContain('auto-confirmed');
+});
