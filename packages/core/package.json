@@ -16,7 +16,7 @@
   },
   "scripts": {
     "build": "remove dist && tsc",
-    "build:incremental": "tsc --incremental --sourceMap false --excludeDirectories dist",
+    "build:incremental": "tsgo --incremental --sourceMap false --excludeDirectories dist",
     "echo:test": "echo \"Lerna-Lite core package\"",
     "pack-tarball": "npm pack"
   },
@@ -41,7 +41,6 @@
     "@lerna-lite/npmlog": "workspace:*",
     "@npmcli/run-script": "^10.0.3",
     "ci-info": "catalog:",
-    "config-chain": "^1.1.13",
     "dedent": "catalog:",
     "execa": "catalog:",
     "fs-extra": "catalog:",

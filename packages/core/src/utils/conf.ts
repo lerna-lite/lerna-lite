@@ -3,35 +3,54 @@ import assert from 'node:assert';
 import { readFileSync, statSync } from 'node:fs';
 import { resolve as pathResolve } from 'node:path';
 
-// @ts-ignore
-import { ConfigChain } from 'config-chain';
-
 import { envReplace } from './env-replace.js';
 import { findPrefix } from './find-prefix.js';
 import { toNerfDart } from './nerf-dart.js';
 import { parseField } from './parse-field.js';
 
-export class Conf extends ConfigChain {
-  _await: any;
-  addString: any;
-  del: any;
-  get: any;
-  set: any;
+export class Conf {
   globalPrefix = '';
   localPrefix = '';
   root: any;
-  sources: any;
-  push: any;
-  list: any;
+  sources: Record<string, { path: string; type: string }> = {};
+  list: Array<any> = [];
+  private config: Record<string, any> = {};
 
   // https://github.com/npm/npm/blob/latest/lib/config/core.js#L208-L222
   constructor(base: any) {
-    super(base);
     this.root = base;
+    this.config = { ...base };
+    // emulate cli layer at list[0]
+    this.list = [this.config];
+  }
+
+  // provide a plain object snapshot compatible with existing callers
+  get snapshot() {
+    return { ...this.config };
+  }
+
+  get(key: string) {
+    return this.config[key];
+  }
+
+  set(key: string, value: any, source?: string) {
+    this.config[key] = value;
+    if (source) {
+      this.list.push({ [key]: value, __source__: source });
+    }
+    return this;
+  }
+
+  del(key: string, source?: string) {
+    delete this.config[key];
+    if (source) {
+      this.list.push({ [key]: undefined, __source__: source });
+    }
+    return this;
   }
 
   // https://github.com/npm/npm/blob/latest/lib/config/core.js#L332-L342
-  add(data: any, marker: any) {
+  add(data: any, marker?: any) {
     for (const x of Object.keys(data)) {
       // https://github.com/npm/npm/commit/f0e998d
       const newKey = envReplace(x);
@@ -41,24 +60,38 @@ export class Conf extends ConfigChain {
       data[newKey] = newField;
     }
 
-    return super.add(data, marker);
+    Object.assign(this.config, data);
+    if (marker) {
+      const sourceName = typeof marker === 'string' ? marker : marker.__source__;
+      this.list.push({ ...data, __source__: marker });
+      if (sourceName) {
+        const existing = this.sources[sourceName] || ({} as any);
+        this.sources[sourceName] = { ...existing, data } as any;
+      }
+    }
+    return this;
   }
 
   // https://github.com/npm/npm/blob/latest/lib/config/core.js#L312-L325
   addFile(file: string, name: string = file) {
     const marker = { __source__: name };
-
     this.sources[name] = { path: file, type: 'ini' };
-    this.push(marker);
-    this._await();
-
     try {
       const contents = readFileSync(file, 'utf8');
-      this.addString(contents, file, 'ini', marker);
+      // minimal ini parser: key=value per line
+      const parsed: Record<string, any> = {};
+      contents.split(/\r?\n/).forEach((line) => {
+        const m = line.match(/^\s*([^#;][^=]+)\s*=\s*(.*)\s*$/);
+        if (m) {
+          const key = m[1].trim();
+          const val = m[2].trim();
+          parsed[key] = val;
+        }
+      });
+      this.add(parsed, marker);
     } catch (err: any) {
       this.add({}, marker);
     }
-
     return this;
   }
 
@@ -83,12 +116,13 @@ export class Conf extends ConfigChain {
         conf[p] = env[x];
       });
 
-    return super.addEnv('', conf, 'env');
+    this.add(conf, 'env');
+    return this;
   }
 
   // https://github.com/npm/npm/blob/latest/lib/config/load-prefix.js
   loadPrefix() {
-    const cli = this.list[0];
+    const cli = this.list[0] ?? {};
 
     Object.defineProperty(this, 'prefix', {
       enumerable: true,
@@ -259,28 +293,28 @@ export class Conf extends ConfigChain {
     const nerfed = toNerfDart(uri);
 
     if (c.token) {
-      this.set(`${nerfed}:_authToken`, c.token, 'user');
-      this.del(`${nerfed}:_password`, 'user');
-      this.del(`${nerfed}:username`, 'user');
-      this.del(`${nerfed}:email`, 'user');
-      this.del(`${nerfed}:always-auth`, 'user');
+      this.set(`${nerfed}:_authToken`, c.token);
+      this.del(`${nerfed}:_password`);
+      this.del(`${nerfed}:username`);
+      this.del(`${nerfed}:email`);
+      this.del(`${nerfed}:always-auth`);
     } else if (c.username || c.password || c.email) {
       assert(c.username, 'must include username');
       assert(c.password, 'must include password');
       assert(c.email, 'must include email address');
 
-      this.del(`${nerfed}:_authToken`, 'user');
+      this.del(`${nerfed}:_authToken`);
 
       const encoded = Buffer.from(c.password, 'utf8').toString('base64');
 
-      this.set(`${nerfed}:_password`, encoded, 'user');
-      this.set(`${nerfed}:username`, c.username, 'user');
-      this.set(`${nerfed}:email`, c.email, 'user');
+      this.set(`${nerfed}:_password`, encoded);
+      this.set(`${nerfed}:username`, c.username);
+      this.set(`${nerfed}:email`, c.email);
 
       if (c.alwaysAuth !== undefined) {
-        this.set(`${nerfed}:always-auth`, c.alwaysAuth, 'user');
+        this.set(`${nerfed}:always-auth`, c.alwaysAuth);
       } else {
-        this.del(`${nerfed}:always-auth`, 'user');
+        this.del(`${nerfed}:always-auth`);
       }
     } else {
       throw new Error('No credentials to set.');

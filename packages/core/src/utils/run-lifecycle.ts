@@ -41,10 +41,12 @@ function printCommandBanner(id: string, event: string, cmd: string, path: string
  */
 export function runLifecycle(pkg: Package, stage: string, options: LifecycleConfig): Promise<void> {
   // back-compat for @lerna/npm-conf instances
-  // https://github.com/isaacs/proto-list/blob/27764cd/proto-list.js#L14
-  if ('root' in options) {
-    options = options.snapshot;
+  // unwrap Conf -> plain options when present
+  if (options && typeof (options as any).snapshot !== 'undefined') {
+    options = (options as any).snapshot;
   }
+  // ensure options is a usable object
+  options = (options || {}) as LifecycleConfig;
 
   const opts = {
     // @ts-ignore
@@ -146,7 +148,7 @@ export function runLifecycle(pkg: Package, stage: string, options: LifecycleConf
 }
 
 export function createRunner(commandOptions: any) {
-  const cfg = (npmConf(commandOptions) as any).snapshot;
+  const cfg = npmConf(commandOptions) as any; // pass Conf instance
 
   return (pkg: Package, stage: string) => runLifecycle(pkg, stage, cfg);
 }

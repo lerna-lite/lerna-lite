@@ -16,7 +16,7 @@
   },
   "scripts": {
     "build": "remove dist && tsc",
-    "build:incremental": "tsc --incremental --sourceMap false --excludeDirectories dist",
+    "build:incremental": "tsgo --incremental --sourceMap false --excludeDirectories dist",
     "echo:test": "echo \"Lerna-Lite run package\"",
     "pack-tarball": "npm pack"
   },
