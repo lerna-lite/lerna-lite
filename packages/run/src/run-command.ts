@@ -212,9 +212,7 @@ export class RunCommand extends Command<RunCommandOption & FilterOptions> {
     if (!this.bail) {
       chain
         .then((result: { exitCode: number; failed?: boolean; pkg: Package; stderr: any }) => ({ ...result, pkg }))
-        .catch(() => {
-          /* v8 ignore next - no-op */
-        });
+        .catch(/* v8 ignore next - no-op */ () => {});
     }
     return chain;
   }
