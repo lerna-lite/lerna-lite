@@ -844,9 +844,7 @@ export class VersionCommand extends Command<VersionCommandOption> {
               name: 'fixed',
             });
           })
-          .catch(() => {
-            /* v8 ignore next - no-op */
-          });
+          .catch(/* v8 ignore next - do nothing */ () => {});
       }
 
       chain = chain.then(() =>
