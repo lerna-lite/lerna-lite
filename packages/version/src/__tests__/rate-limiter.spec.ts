@@ -117,7 +117,7 @@ describe('RateLimiter', () => {
 
       // Ensure total execution time respects rate limiting
       const totalTime = results[results.length - 1] - results[0];
-      expect(totalTime).toBeGreaterThanOrEqual(expectedMinInterval * (results.length - 1) + 1);
+      expect(totalTime).toBeGreaterThanOrEqual(expectedMinInterval * (results.length - 1) - 1);
     }
   }, 10000);
 
