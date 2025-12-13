@@ -719,6 +719,22 @@ describe('VersionCommand', () => {
       const message = await getCommitMessage(testDir);
       expect(message).toBe('v1.0.1');
     });
+
+    it('logs auto-confirmed after listing changes', async () => {
+      const testDir = await initFixture('normal');
+      await new VersionCommand(createArgv(testDir, '--bump', 'patch', '--yes'));
+
+      // Ensure we await the deferred logger.info call
+      await new Promise((resolve) => process.nextTick(resolve));
+
+      // npmlog info should include auto-confirmed
+      const infoLogs = loggingOutput('info');
+      expect(infoLogs).toContain('auto-confirmed');
+
+      // npmlog info should include auto-confirmed
+      const consoleOut = (logOutput as any).logged();
+      expect(consoleOut).toMatch(/Changes \(\d+ packages\):/);
+    });
   });
 
   describe('--exact', () => {

@@ -522,7 +522,7 @@ export class PublishCommand extends Command<PublishCommandOption> {
     }));
   }
 
-  confirmPublish() {
+  confirmPublish(): Promise<boolean> {
     const logPrefix = this.options.dryRun ? c.bgMagenta('[dry-run]') : '';
     const count = this.packagesToPublish?.length;
     const message = this.packagesToPublish?.map((pkg) => ` - ${pkg.name} => ${this.updatesVersions?.get(pkg.name)}`) ?? [];
@@ -533,8 +533,11 @@ export class PublishCommand extends Command<PublishCommandOption> {
     logOutput('');
 
     if (this.options.yes) {
-      this.logger.info('auto-confirmed', '');
-      return true;
+      // Defer the info log to the next microtask to avoid interleaving the auto-confirm log with all changes shown above
+      return Promise.resolve().then(() => {
+        this.logger.info('auto-confirmed', '');
+        return true;
+      });
     }
 
     let confirmMessage = this.options.dryRun ? c.bgMagenta('[dry-run]') : '';

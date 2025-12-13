@@ -630,7 +630,7 @@ export class VersionCommand extends Command<VersionCommandOption> {
     return versions;
   }
 
-  confirmVersions(): Promise<boolean> | boolean {
+  confirmVersions(): Promise<boolean> {
     const changes = this.packagesToVersion.map((pkg) => {
       let line = ` - ${pkg.name ?? '[n/a]'}: ${pkg.version} => ${c.cyan(this.updatesVersions?.get(pkg.name ?? ''))}`;
       if (pkg.private) {
@@ -645,8 +645,11 @@ export class VersionCommand extends Command<VersionCommandOption> {
     logOutput('');
 
     if (this.options.yes) {
-      this.logger.info('auto-confirmed', '');
-      return true;
+      // Defer the info log to the next microtask to avoid interleaving the auto-confirm log with all changes shown above
+      return Promise.resolve().then(() => {
+        this.logger.info('auto-confirmed', '');
+        return true;
+      });
     }
 
     // When composed from `lerna publish`, use this opportunity to confirm publishing
