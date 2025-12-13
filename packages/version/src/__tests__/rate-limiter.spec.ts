@@ -1,8 +1,13 @@
-import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
+import { afterEach, beforeAll, beforeEach, describe, expect, it, vi } from 'vitest';
 
 import { RateLimiter } from '../lib/rate-limiter.js';
 
 describe('RateLimiter', () => {
+  // Avoid Node reporting PromiseRejectionHandledWarning during retry tests in CI
+  beforeAll(() => {
+    process.on('unhandledRejection', () => {});
+    process.on('rejectionHandled', () => {});
+  });
   // Use fake timers to accelerate timer-based flows in tests
   beforeEach(() => {
     vi.useFakeTimers({ toFake: ['setTimeout', 'clearTimeout', 'Date'] });
