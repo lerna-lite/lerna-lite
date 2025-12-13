@@ -278,9 +278,9 @@ When running in a GitHub CI environment, you will also need these permissions:
 ```yaml
 permissions:
   contents: write      # to be able to publish a GitHub release
+  id-token: write      # to enable use of OIDC for npm provenance
   issues: write        # to be able to comment on released issues
   pull-requests: write # to be able to comment on released pull requests
-  id-token: write      # to enable use of OIDC for npm provenance
 ```
 
 > **Note** this will possibly execute many API calls and this option will also require a valid `GH_TOKEN` (or `GITHUB_TOKEN`) with write access permissions to the GitHub API so that it can execute the query to fetch all commit details and insert comments, for more info refer to the [`Remote Client Auth Tokens`](#remote-client-auth-tokens) below.
