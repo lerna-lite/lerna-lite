@@ -145,6 +145,7 @@ Below are the main reasons as to why this fork was created:
      - e.g.: we use it in here to publish Lerna-Lite without any `scripts` or `devDependencies`
    - [lerna version --skip-bump-only-releases](https://github.com/lerna-lite/lerna-lite/tree/main/packages/version#--skip-bump-only-releases), avoid cluttering your GitHub releases when using `independent`
    - [lerna version --sync-workspace-lock](https://github.com/lerna-lite/lerna-lite/tree/main/packages/version#--sync-workspace-lock) to sync lock file before publishing (not needed w/`workspace:` protocol)
+   - [lerna version --comment-issues/pull requests](https://github.com/lerna-lite/lerna-lite/tree/main/packages/version#comments-on-issuespull-requests), comment on issues/PRs resolved by new release
    - Bun is now mostly supported as well (including support for `syncWorkspaceLock` and `catalog:` protocol)
 
 On a final note, I would imagine that the best feature of Lerna-Lite (versus Lerna) would be its modularity. A large portion of the users are only interested in `version`/`publish` commands, but on the other hand, a small minority might want other commands like `lerna run`/`exec`. Lerna-Lite offers this kind of flexibility by allowing the user to choose only what you want to install (see [installation](#cli-installation) below) which helps keep your download to the bare minimum.
