@@ -1,14 +1,19 @@
-// oxlint-disable no-floating-promises
 interface RateLimitOptions {
+  /** Maximum number of calls allowed within the specified time window. */
   maxCalls: number;
+  /** Time window in milliseconds for rate limiting. */
   perMilliseconds: number;
+  /** Optional global delay between task executions. */
   globalDelay?: number;
+  /** Number of calls allowed during the first iteration before applying standard rate limiting. */
+  firstRunMaxCalls?: number;
 }
 
 export class RateLimiter {
   private queue: Array<() => Promise<any>> = [];
   private lastCallTimes: number[] = [];
-  private options: RateLimitOptions;
+  private options: Required<RateLimitOptions>;
+  private isFirstIteration = true;
   private isProcessing = false;
   private nextAllowedTime = 0;
 
@@ -17,6 +22,7 @@ export class RateLimiter {
       maxCalls: options.maxCalls,
       perMilliseconds: options.perMilliseconds,
       globalDelay: options.globalDelay || 0,
+      firstRunMaxCalls: options.firstRunMaxCalls || options.maxCalls, // Default to maxCalls if not specified
     };
   }
 
@@ -36,8 +42,11 @@ export class RateLimiter {
         // Clean up old call times
         this.lastCallTimes = this.lastCallTimes.filter((time) => now - time < this.options.perMilliseconds);
 
+        // Determine max allowed calls based on first iteration
+        const maxAllowedCalls = this.isFirstIteration ? this.options.firstRunMaxCalls : this.options.maxCalls;
+
         // If we've reached max calls, calculate wait time
-        if (this.lastCallTimes.length >= this.options.maxCalls) {
+        if (this.lastCallTimes.length >= maxAllowedCalls) {
           const oldestCallTime = this.lastCallTimes[0];
           const timeToNextSlot = this.options.perMilliseconds - (now - oldestCallTime);
 
@@ -52,11 +61,14 @@ export class RateLimiter {
           this.lastCallTimes.push(startTime);
 
           // Calculate next allowed time to enforce rate limit
-          this.nextAllowedTime = startTime + this.options.perMilliseconds / this.options.maxCalls;
+          this.nextAllowedTime = startTime + this.options.perMilliseconds / maxAllowedCalls;
 
           await nextTask();
         }
       }
+
+      // Reset first iteration flag after processing the queue
+      this.isFirstIteration = false;
     } /* v8 ignore next */ catch (error) {
       console.error('Rate limited task failed:', error);
       throw error;

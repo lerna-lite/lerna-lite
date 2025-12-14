@@ -102,6 +102,29 @@ describe('RateLimiter', () => {
     expect(mockTask).toHaveBeenCalledTimes(4);
   }, 5000);
 
+  it('should respect startCount on first iteration', async () => {
+    const limiter = new RateLimiter({
+      maxCalls: 30,
+      firstRunMaxCalls: 3,
+      perMilliseconds: 1000,
+    });
+
+    const mockTask = vi.fn(() => Promise.resolve(Date.now()));
+
+    // Create more tasks than startCount to test the limit
+    const tasks = Array(10)
+      .fill(0)
+      .map(() => mockTask);
+
+    const done = Promise.all(tasks.map((task) => limiter.throttle(task)));
+    await vi.runAllTimersAsync();
+    await done;
+
+    // First iteration should only allow 3 calls
+    // Subsequent iterations should allow 30 calls
+    expect(mockTask).toHaveBeenCalledTimes(10);
+  });
+
   it('should work with different rate limit configurations', async () => {
     const testCases = [
       { maxCalls: 1, perMilliseconds: 500 },

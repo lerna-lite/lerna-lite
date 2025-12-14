@@ -101,6 +101,7 @@ export async function commentResolvedItems({
   // Create a rate limiter for GitHub API
   const rateLimiter = new RateLimiter({
     maxCalls: 30, // 30 calls per minute
+    firstRunMaxCalls: 27, // 27/min since we need to remove 3 calls that were called before (1x graphql, 1x issues, 1x PRs)
     perMilliseconds: 60000, // per minute
   });
 
