@@ -1,3 +1,3 @@
 {
-  "recommendations": ["editorconfig.editorconfig", "oxc.oxc-vscode"]
+  "recommendations": ["editorconfig.editorconfig", "oxc.oxc-vscode", "typescriptteam.native-preview"]
 }
