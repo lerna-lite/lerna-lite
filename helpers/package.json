@@ -1,16 +1,16 @@
 {
   "name": "@lerna-test/helpers",
   "version": "0.0.0-test-only",
+  "private": true,
   "description": "Private test helpers for the lerna-lite monorepo",
-  "main": "index.js",
+  "license": "MIT",
   "type": "module",
+  "main": "index.js",
   "exports": {
     ".": {
       "import": "./index.js",
       "default": "./index.js"
     },
     "./*": "./*"
-  },
-  "private": true,
-  "license": "MIT"
+  }
 }

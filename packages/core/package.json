@@ -1,38 +1,36 @@
 {
   "name": "@lerna-lite/core",
-  "description": "Lerna-Lite core implementation module",
   "version": "4.10.2",
-  "publishConfig": {
-    "access": "public"
-  },
-  "type": "module",
-  "files": [
-    "/dist"
-  ],
-  "types": "./dist/index.d.ts",
-  "exports": {
-    "types": "./dist/index.d.ts",
-    "import": "./dist/index.js"
-  },
-  "scripts": {
-    "build": "remove dist && tsc",
-    "build:incremental": "tsgo --incremental --sourceMap false --excludeDirectories dist",
-    "echo:test": "echo \"Lerna-Lite core package\"",
-    "pack-tarball": "npm pack"
-  },
-  "license": "MIT",
-  "author": "Ghislain B.",
+  "description": "Lerna-Lite core implementation module",
   "homepage": "https://github.com/lerna-lite/lerna-lite",
+  "bugs": {
+    "url": "https://github.com/lerna-lite/lerna-lite/issues"
+  },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/lerna-lite/lerna-lite.git",
     "directory": "packages/core"
   },
-  "bugs": {
-    "url": "https://github.com/lerna-lite/lerna-lite/issues"
+  "author": "Ghislain B.",
+  "funding": {
+    "type": "ko_fi",
+    "url": "https://ko-fi.com/ghiscoding"
   },
-  "engines": {
-    "node": "^20.17.0 || >=22.9.0"
+  "license": "MIT",
+  "type": "module",
+  "exports": {
+    "types": "./dist/index.d.ts",
+    "import": "./dist/index.js"
+  },
+  "types": "./dist/index.d.ts",
+  "files": [
+    "/dist"
+  ],
+  "scripts": {
+    "build": "remove dist && tsc",
+    "build:incremental": "tsgo --incremental --sourceMap false --excludeDirectories dist",
+    "echo:test": "echo \"Lerna-Lite core package\"",
+    "pack-tarball": "npm pack"
   },
   "dependencies": {
     "@inquirer/expand": "^4.0.23",
@@ -74,8 +72,10 @@
     "yargs": "catalog:dependencies",
     "yargs-parser": "catalog:devDependencies"
   },
-  "funding": {
-    "type": "ko_fi",
-    "url": "https://ko-fi.com/ghiscoding"
+  "engines": {
+    "node": "^20.17.0 || >=22.9.0"
+  },
+  "publishConfig": {
+    "access": "public"
   }
 }
