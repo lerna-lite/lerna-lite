@@ -176,14 +176,14 @@ export function diffWorkspaceCatalog(prevTag: string, npmClient: NpmClient): str
       const yamlFilename = getClientConfigFilename(npmClient);
       const yamlPath = join(cwd, yamlFilename);
       if (existsSync(yamlPath)) {
-        const prevYamlStr = execSync(`git show ${prevTag}:${yamlFilename}`);
+        const prevYamlStr = execSync('git', ['show', `${prevTag}:${yamlFilename}`]);
         const currYamlStr = readFileSync(yamlPath, 'utf8');
         prevConfig = extractCatalogConfigFromYaml(npmClient, prevYamlStr);
         currConfig = extractCatalogConfigFromYaml(npmClient, currYamlStr);
       }
     } else if (npmClient === 'bun' && existsSync(rootPkgPath)) {
       // Bun catalogs
-      const prevJsonStr = execSync(`git show ${prevTag}:package.json`);
+      const prevJsonStr = execSync('git', ['show', `${prevTag}:package.json`]);
       const currJsonStr = readFileSync(rootPkgPath, 'utf8');
       prevConfig = extractCatalogConfigFromPkg(prevJsonStr);
       currConfig = extractCatalogConfigFromPkg(currJsonStr);
