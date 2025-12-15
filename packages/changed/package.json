@@ -1,38 +1,32 @@
 {
   "name": "@lerna-lite/changed",
-  "description": "Lerna-Lite changed commmand - List local packages that have changed since the last tagged release",
   "version": "4.10.2",
-  "files": [
-    "/dist"
-  ],
-  "type": "module",
-  "publishConfig": {
-    "access": "public"
-  },
-  "types": "./dist/index.d.ts",
-  "exports": {
-    "types": "./dist/index.d.ts",
-    "import": "./dist/index.js"
-  },
-  "scripts": {
-    "build": "remove dist && tsc",
-    "build:incremental": "tsgo --incremental --sourceMap false --excludeDirectories dist",
-    "echo:test": "echo \"Lerna-Lite changed package\"",
-    "pack-tarball": "npm pack"
-  },
-  "license": "MIT",
-  "author": "Ghislain B.",
+  "description": "Lerna-Lite changed commmand - List local packages that have changed since the last tagged release",
   "homepage": "https://github.com/lerna-lite/lerna-lite",
+  "bugs": {
+    "url": "https://github.com/lerna-lite/lerna-lite/issues"
+  },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/lerna-lite/lerna-lite.git",
     "directory": "packages/changed"
   },
-  "bugs": {
-    "url": "https://github.com/lerna-lite/lerna-lite/issues"
+  "author": "Ghislain B.",
+  "license": "MIT",
+  "type": "module",
+  "exports": {
+    "types": "./dist/index.d.ts",
+    "import": "./dist/index.js"
   },
-  "engines": {
-    "node": "^20.17.0 || >=22.9.0"
+  "types": "./dist/index.d.ts",
+  "files": [
+    "/dist"
+  ],
+  "scripts": {
+    "build": "remove dist && tsc",
+    "build:incremental": "tsgo --incremental --sourceMap false --excludeDirectories dist",
+    "echo:test": "echo \"Lerna-Lite changed package\"",
+    "pack-tarball": "npm pack"
   },
   "dependencies": {
     "@lerna-lite/cli": "workspace:*",
@@ -43,5 +37,11 @@
   "devDependencies": {
     "@types/yargs-parser": "catalog:devDependencies",
     "yargs-parser": "catalog:devDependencies"
+  },
+  "engines": {
+    "node": "^20.17.0 || >=22.9.0"
+  },
+  "publishConfig": {
+    "access": "public"
   }
 }

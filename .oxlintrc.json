@@ -57,6 +57,6 @@
     // type aware rules
     "typescript/no-array-delete": "off",
     "typescript/no-misused-spread": "off",
-    "typescript/require-array-sort-compare": "off",
+    "typescript/require-array-sort-compare": "off"
   }
 }

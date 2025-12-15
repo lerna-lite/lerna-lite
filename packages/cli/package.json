@@ -1,7 +1,24 @@
 {
   "name": "@lerna-lite/cli",
-  "description": "Lerna-Lite CLI for the Version/Publish commands",
   "version": "4.10.2",
+  "description": "Lerna-Lite CLI for the Version/Publish commands",
+  "homepage": "https://github.com/lerna-lite/lerna-lite",
+  "bugs": {
+    "url": "https://github.com/lerna-lite/lerna-lite/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/lerna-lite/lerna-lite.git",
+    "directory": "packages/cli"
+  },
+  "author": "Ghislain B.",
+  "license": "MIT",
+  "type": "module",
+  "exports": {
+    "types": "./dist/index.d.ts",
+    "import": "./dist/index.js"
+  },
+  "types": "./dist/index.d.ts",
   "bin": {
     "lerna": "dist/cli.js"
   },
@@ -9,34 +26,11 @@
     "/dist",
     "schemas/lerna-schema.json"
   ],
-  "type": "module",
-  "publishConfig": {
-    "access": "public"
-  },
-  "types": "./dist/index.d.ts",
-  "exports": {
-    "types": "./dist/index.d.ts",
-    "import": "./dist/index.js"
-  },
   "scripts": {
     "build": "remove dist && tsc",
     "build:incremental": "tsgo --incremental --sourceMap false --excludeDirectories dist",
     "echo:test": "echo \"Lerna-Lite CLI package\"",
     "pack-tarball": "npm pack"
-  },
-  "license": "MIT",
-  "author": "Ghislain B.",
-  "homepage": "https://github.com/lerna-lite/lerna-lite",
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/lerna-lite/lerna-lite.git",
-    "directory": "packages/cli"
-  },
-  "bugs": {
-    "url": "https://github.com/lerna-lite/lerna-lite/issues"
-  },
-  "engines": {
-    "node": "^20.17.0 || >=22.9.0"
   },
   "dependencies": {
     "@lerna-lite/core": "workspace:*",
@@ -71,5 +65,11 @@
     "@lerna-lite/watch": {
       "optional": true
     }
+  },
+  "engines": {
+    "node": "^20.17.0 || >=22.9.0"
+  },
+  "publishConfig": {
+    "access": "public"
   }
 }

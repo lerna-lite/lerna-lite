@@ -1,38 +1,35 @@
 {
   "name": "@lerna-lite/watch",
-  "description": "Lerna-Lite watch commmand - Runs a command whenever packages or their dependents change",
   "version": "4.10.2",
-  "files": [
-    "/dist"
-  ],
-  "type": "module",
-  "publishConfig": {
-    "access": "public"
+  "description": "Lerna-Lite watch commmand - Runs a command whenever packages or their dependents change",
+  "homepage": "https://github.com/lerna-lite/lerna-lite",
+  "bugs": {
+    "url": "https://github.com/lerna-lite/lerna-lite/issues"
   },
-  "types": "./dist/index.d.ts",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/lerna-lite/lerna-lite.git",
+    "directory": "packages/watch"
+  },
+  "author": "Ghislain B.",
+  "license": "MIT",
+  "type": "module",
   "exports": {
     "types": "./dist/index.d.ts",
     "import": "./dist/index.js"
   },
+  "types": "./dist/index.d.ts",
+  "files": [
+    "/dist"
+  ],
   "scripts": {
     "build": "remove dist && tsc",
     "build:incremental": "tsgo --incremental --sourceMap false --excludeDirectories dist",
     "echo:test": "echo \"Lerna-Lite watch package\"",
     "pack-tarball": "npm pack"
   },
-  "license": "MIT",
-  "author": "Ghislain B.",
-  "homepage": "https://github.com/lerna-lite/lerna-lite",
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/lerna-lite/lerna-lite.git",
-    "directory": "packages/watch"
-  },
-  "bugs": {
-    "url": "https://github.com/lerna-lite/lerna-lite/issues"
-  },
-  "engines": {
-    "node": "^20.17.0 || >=22.9.0"
+  "overrides": {
+    "braces": "^3.0.3"
   },
   "dependencies": {
     "@lerna-lite/cli": "workspace:*",
@@ -46,7 +43,10 @@
     "mock-stdin": "^1.0.0",
     "yargs-parser": "catalog:devDependencies"
   },
-  "overrides": {
-    "braces": "^3.0.3"
+  "engines": {
+    "node": "^20.17.0 || >=22.9.0"
+  },
+  "publishConfig": {
+    "access": "public"
   }
 }
