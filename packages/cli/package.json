@@ -6,19 +6,13 @@
   "bugs": {
     "url": "https://github.com/lerna-lite/lerna-lite/issues"
   },
+  "license": "MIT",
+  "author": "Ghislain B.",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/lerna-lite/lerna-lite.git",
     "directory": "packages/cli"
   },
-  "author": "Ghislain B.",
-  "license": "MIT",
-  "type": "module",
-  "exports": {
-    "types": "./dist/index.d.ts",
-    "import": "./dist/index.js"
-  },
-  "types": "./dist/index.d.ts",
   "bin": {
     "lerna": "dist/cli.js"
   },
@@ -26,6 +20,15 @@
     "/dist",
     "schemas/lerna-schema.json"
   ],
+  "type": "module",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    "types": "./dist/index.d.ts",
+    "import": "./dist/index.js"
+  },
+  "publishConfig": {
+    "access": "public"
+  },
   "scripts": {
     "build": "remove dist && tsc",
     "build:incremental": "tsgo --incremental --sourceMap false --excludeDirectories dist",
@@ -68,8 +71,5 @@
   },
   "engines": {
     "node": "^20.17.0 || >=22.9.0"
-  },
-  "publishConfig": {
-    "access": "public"
   }
 }

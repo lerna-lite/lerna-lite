@@ -6,30 +6,30 @@
   "bugs": {
     "url": "https://github.com/lerna-lite/lerna-lite/issues"
   },
+  "license": "MIT",
+  "author": "Ghislain B.",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/lerna-lite/lerna-lite.git",
     "directory": "packages/watch"
   },
-  "author": "Ghislain B.",
-  "license": "MIT",
+  "files": [
+    "/dist"
+  ],
   "type": "module",
+  "types": "./dist/index.d.ts",
   "exports": {
     "types": "./dist/index.d.ts",
     "import": "./dist/index.js"
   },
-  "types": "./dist/index.d.ts",
-  "files": [
-    "/dist"
-  ],
+  "publishConfig": {
+    "access": "public"
+  },
   "scripts": {
     "build": "remove dist && tsc",
     "build:incremental": "tsgo --incremental --sourceMap false --excludeDirectories dist",
     "echo:test": "echo \"Lerna-Lite watch package\"",
     "pack-tarball": "npm pack"
-  },
-  "overrides": {
-    "braces": "^3.0.3"
   },
   "dependencies": {
     "@lerna-lite/cli": "workspace:*",
@@ -43,10 +43,10 @@
     "mock-stdin": "^1.0.0",
     "yargs-parser": "catalog:devDependencies"
   },
+  "overrides": {
+    "braces": "^3.0.3"
+  },
   "engines": {
     "node": "^20.17.0 || >=22.9.0"
-  },
-  "publishConfig": {
-    "access": "public"
   }
 }
