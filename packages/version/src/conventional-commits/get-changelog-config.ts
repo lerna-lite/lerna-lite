@@ -7,7 +7,7 @@ import type { ChangelogConfig, ChangelogPresetConfig } from '../interfaces.js';
 
 /** @deprecated this is a temporary workaround until `config?.conventionalChangelog`, `parserOpts` and `writerOpts` are officially removed */
 function flattenConfigResult(config: any): ChangelogConfig {
-  const flatConfig = config?.conventionalChangelog || config;
+  const flatConfig = config?.recommendedBumpOpts ?? config?.conventionalChangelog ?? config;
   flatConfig.parser = flatConfig.parserOpts || flatConfig.parser;
   flatConfig.writer = flatConfig.writerOpts || flatConfig.writer;
 
