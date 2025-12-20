@@ -50,23 +50,27 @@ export async function commentResolvedItems({
   const repo: any = parseGitRepo(gitRemote, execOpts);
   const logPrefix = dryRun ? c.magenta('[dry-run] > ') : '';
 
-  // closed linked issues and/or merged pull requests
-  let closedLinkedIssues = new Set<TypeNumberPair>();
-  let mergedPullRequests = new Set<TypeNumberPair>();
+  // Use a Map to ensure uniqueness
+  const closedLinkedIssues = new Map<number, TypeNumberPair>();
+  const mergedPullRequests = new Map<number, TypeNumberPair>();
 
   if (templates.issue) {
     const issues = await remoteSearchBy(client, 'issue', repo.owner, repo.name, prevTagDate, logger);
-    issues.forEach((item) => closedLinkedIssues.add({ type: 'issue', number: item.number }));
+    issues.forEach((item) => {
+      closedLinkedIssues.set(item.number, { type: 'issue', number: item.number });
+    });
   }
 
   if (templates.pullRequest) {
     const pullRequests = (await remoteSearchBy(client, 'pr', repo.owner, repo.name, prevTagDate, logger)).filter((item) =>
       commentFilterKeywords.some((startWord) => item.title.toLowerCase().startsWith(startWord.toLowerCase()))
     );
-    pullRequests.forEach((item) => mergedPullRequests.add({ type: 'pr', number: item.number }));
+    pullRequests.forEach((item) => {
+      mergedPullRequests.set(item.number, { type: 'pr', number: item.number });
+    });
     logger.verbose(
       'comments',
-      `Merged Pull Requests: ${Array.from(mergedPullRequests)
+      `Merged Pull Requests: ${Array.from(mergedPullRequests.values())
         .map((c) => c.number)
         .join(', ')}`
     );
@@ -78,7 +82,10 @@ export async function commentResolvedItems({
         const match = p.title.match(/\b(fix|fixes)\s*#(\d+)/) || [];
         if (match.length >= 2) {
           const issueNumber = parseInt(match[2], 10);
-          closedLinkedIssues.add({ type: 'issue', number: issueNumber });
+          // Only add if not already present
+          if (!closedLinkedIssues.has(issueNumber)) {
+            closedLinkedIssues.set(issueNumber, { type: 'issue', number: issueNumber });
+          }
         }
       });
     }
@@ -88,7 +95,7 @@ export async function commentResolvedItems({
   if (templates.issue) {
     logger.verbose(
       'comments',
-      `Closed linked issues: ${Array.from(closedLinkedIssues)
+      `Closed linked issues: ${Array.from(closedLinkedIssues.values())
         .map((c) => c.number)
         .join(', ')}`
     );
@@ -113,7 +120,7 @@ export async function commentResolvedItems({
     success: boolean;
   }>[] = [];
 
-  for (const item of [...closedLinkedIssues, ...mergedPullRequests]) {
+  for (const item of [...closedLinkedIssues.values(), ...mergedPullRequests.values()]) {
     const { type, number } = item;
     const url = `${hostURL}/${type === 'pr' ? 'pull' : 'issues'}/${number}`;
     let template = (type === 'pr' ? templates.pullRequest : templates.issue) || '';

@@ -419,4 +419,106 @@ describe('commentResolvedItems', () => {
     expect(results).toHaveLength(2);
     expect(results.every((r) => r.success)).toBe(true);
   });
+
+  it('should prevent duplicate comments on the same issue or PR', async () => {
+    const { mockLogger, mockClient, mockOptions } = createMockDependencies();
+
+    // Mock search results with duplicate issue number
+    mockClient.search.issuesAndPullRequests
+      .mockResolvedValueOnce({
+        // First call for issues - duplicate issue
+        data: {
+          items: [
+            { number: 123, title: 'Linked issue 1', pull_request: {} },
+            { number: 123, title: 'Linked issue 2', pull_request: {} },
+          ],
+        },
+      })
+      .mockResolvedValueOnce({
+        // Second call for PRs - duplicate PR
+        data: {
+          items: [
+            { number: 456, title: 'feature: test PR 1' },
+            { number: 456, title: 'feature: test PR 2' },
+          ],
+        },
+      });
+
+    const results = await commentResolvedItems(mockOptions);
+
+    // Verify comment creation happened only once for each unique number
+    expect(mockClient.issues.createComment).toHaveBeenCalledTimes(2);
+
+    // Verify logging
+    expect(mockLogger.verbose).toHaveBeenCalledWith('comments', expect.stringContaining('Closed linked issues: 123'));
+    expect(mockLogger.verbose).toHaveBeenCalledWith('comments', expect.stringContaining('Merged Pull Requests: 456'));
+
+    // Verify results
+    expect(results).toHaveLength(2);
+    expect(results.every((r) => r.success)).toBe(true);
+
+    // Verify unique numbers in results
+    const uniqueNumbers = new Set(results.map((r) => r.number));
+    expect(uniqueNumbers.size).toBe(2);
+    expect(uniqueNumbers).toContain(123);
+    expect(uniqueNumbers).toContain(456);
+  });
+
+  it('should handle mixed duplicate and unique issues/PRs', async () => {
+    const { mockLogger, mockClient, mockOptions } = createMockDependencies();
+
+    // Mock search results with mix of duplicate and unique numbers
+    mockClient.search.issuesAndPullRequests
+      .mockResolvedValueOnce({
+        // First call for issues - mix of numbers
+        data: {
+          items: [
+            { number: 123, title: 'Linked issue 1', pull_request: {} },
+            { number: 124, title: 'Linked issue 2', pull_request: {} },
+            { number: 123, title: 'Linked issue 3', pull_request: {} },
+          ],
+        },
+      })
+      .mockResolvedValueOnce({
+        // Second call for PRs - mix of numbers
+        data: {
+          items: [
+            { number: 456, title: 'feature: test PR 1' },
+            { number: 457, title: 'feature: test PR 2' },
+            { number: 456, title: 'feature: test PR 3' },
+          ],
+        },
+      });
+
+    const results = await commentResolvedItems(mockOptions);
+
+    // Verify comment creation happened only once for each unique number
+    expect(mockClient.issues.createComment).toHaveBeenCalledTimes(4);
+
+    // Verify logging
+    expect(mockLogger.verbose).toHaveBeenCalledWith('comments', expect.stringContaining('Closed linked issues: 123, 124'));
+    expect(mockLogger.verbose).toHaveBeenCalledWith('comments', expect.stringContaining('Merged Pull Requests: 456, 457'));
+
+    // Verify results
+    expect(results).toHaveLength(4);
+    expect(results.every((r) => r.success)).toBe(true);
+
+    // Verify unique numbers in results
+    const uniqueNumbers = new Set(results.map((r) => r.number));
+    expect(uniqueNumbers.size).toBe(4);
+    expect(uniqueNumbers).toContain(123);
+    expect(uniqueNumbers).toContain(124);
+    expect(uniqueNumbers).toContain(456);
+    expect(uniqueNumbers).toContain(457);
+
+    // Verify that each unique number appears only once in the results
+    const numberCounts = results.reduce((acc, result) => {
+      acc[result.number] = (acc[result.number] || 0) + 1;
+      return acc;
+    }, {});
+
+    Object.entries(numberCounts).forEach(([_number, count]) => {
+      expect(count).toBe(1);
+    });
+  });
 });
