@@ -4,6 +4,15 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [4.10.3](https://github.com/lerna-lite/lerna-lite/compare/v4.10.2...v4.10.3) (2025-12-27)
+
+### 🐞 Bug Fixes
+
+* use args to run git show command ([#1216](https://github.com/lerna-lite/lerna-lite/issues/1216)) ([9c255e5](https://github.com/lerna-lite/lerna-lite/commit/9c255e5ac1903c2234886487b72793593c49b8ad)) - by @ghoullier
+* Version/Publish --yes log should show only after all Changes logged ([#1214](https://github.com/lerna-lite/lerna-lite/issues/1214)) ([cd1e474](https://github.com/lerna-lite/lerna-lite/commit/cd1e47462c16f2cec74d7aef9fce470dc54a3b51)) - by @ghiscoding
+* **version:** `whatBump` must be a function, fixes [#1217](https://github.com/lerna-lite/lerna-lite/issues/1217) ([#1219](https://github.com/lerna-lite/lerna-lite/issues/1219)) ([c87336c](https://github.com/lerna-lite/lerna-lite/commit/c87336c512a74f5f3f8f96a5d0cc7397f1e936b9)) - by @ghiscoding
+* **version:** avoid duplicate issue/PR comments ([#1222](https://github.com/lerna-lite/lerna-lite/issues/1222)) ([4835ba9](https://github.com/lerna-lite/lerna-lite/commit/4835ba94d287a0e465ee74bcf6b2b5acc4a5d75a)) - by @ghiscoding
+
 ## [4.10.2](https://github.com/lerna-lite/lerna-lite/compare/v4.10.1...v4.10.2) (2025-12-13)
 
 ### Bug Fixes

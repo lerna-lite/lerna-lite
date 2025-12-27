@@ -1,6 +1,6 @@
 {
   "name": "@lerna-lite/core",
-  "version": "4.10.2",
+  "version": "4.10.3",
   "description": "Lerna-Lite core implementation module",
   "homepage": "https://github.com/lerna-lite/lerna-lite",
   "bugs": {

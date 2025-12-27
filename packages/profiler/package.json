@@ -1,6 +1,6 @@
 {
   "name": "@lerna-lite/profiler",
-  "version": "4.10.2",
+  "version": "4.10.3",
   "description": "Lerna-Lite Profiler used by certain optional commands (Run/Exec)",
   "homepage": "https://github.com/lerna-lite/lerna-lite",
   "bugs": {

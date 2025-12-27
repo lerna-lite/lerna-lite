@@ -4,6 +4,10 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [4.10.3](https://github.com/lerna-lite/lerna-lite/compare/v4.10.2...v4.10.3) (2025-12-27)
+
+**Note:** Version bump only for package @lerna-lite/watch
+
 ## [4.10.2](https://github.com/lerna-lite/lerna-lite/compare/v4.10.1...v4.10.2) (2025-12-13)
 
 **Note:** Version bump only for package @lerna-lite/watch
