@@ -58,8 +58,14 @@ jobs:
       - name: Run pnpm install dependencies
         run: pnpm install
 
-      - name: Run project build (tsc)
-        run: pnpm build:full
+      - name: Linting (oxlint)
+        run: pnpm lint
+
+      - name: Formatting (oxfmt)
+        run: pnpm format:check
+
+      - name: Run TypeScript build only (no linting)
+        run: pnpm build
 
       - name: Lerna Version (build query)
         shell: bash

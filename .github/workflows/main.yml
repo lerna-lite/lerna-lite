@@ -47,14 +47,14 @@ jobs:
       - name: Linting (oxlint)
         run: pnpm lint
 
-      - name: Run full TypeScript build
-        run: pnpm build:full
-
       - name: Type-aware Linting (oxlint)
         run: pnpm lint-type
 
       - name: Formatting (oxfmt)
         run: pnpm format:check
+
+      - name: Run TypeScript build only (no linting)
+        run: pnpm build
 
   tests:
     strategy:
