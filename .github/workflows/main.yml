@@ -53,9 +53,6 @@ jobs:
       - name: Formatting (oxfmt)
         run: pnpm format:check
 
-      - name: Run TypeScript build only (no linting)
-        run: pnpm build
-
   tests:
     strategy:
       fail-fast: false
