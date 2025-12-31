@@ -5,6 +5,7 @@
   "singleQuote": true,
   "bracketSpacing": true,
   "bracketSameLine": false,
+  "insertFinalNewline": true,
   "trailingComma": "es5",
   "ignorePatterns": ["**/*.{md}", "**/__fixtures__/**/*.*", "**/__mocks__/**/*.*"],
   "experimentalSortImports": {
