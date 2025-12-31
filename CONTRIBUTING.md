@@ -60,4 +60,4 @@ This project follows [GitHub's standard forking model](https://guides.github.com
    - `pnpm test` (full test coverage)
 8. after executing steps 2 through 5 on your machine, you are ready to make changes and create a Pull Request...
 
-> **Note**: The Github CI runs the testing suite on the 3 most recent NodeJS stable versions (LTS and Current), so make sure to use one of those versions when running tests locally.
+> **Note**: The Github CI runs the testing suite on the 3 most recent NodeJS stable versions (LTS and Actives), so make sure to use one of those versions when running tests locally.
