@@ -81,7 +81,7 @@ $ lerna version --scope my-component test
     - [`--allow-peer-dependencies-update`](#--allow-peer-dependencies-update)
     - [`--amend`](#--amend)
     - [`--build-metadata <buildMetadata>`](#--build-metadata)
-    - [Comments on issues/pull requests](#comments-on-issuespull-requests)
+    - [Comments on resolved issues/pull requests](#comments-on-resolved-issuespull-requests)
         - [`--comment-issue [msg]`](#--comment-issue-msg)
         - [`--comment-pull-request [msg]`](#--comment-pull-request-msg)
     - [`--changelog-preset`](#--changelog-preset)
@@ -263,7 +263,7 @@ lerna version --build-metadata 001
 
 Build metadata must be [SemVer compatible](https://semver.org/#spec-item-10). When provided it will apply to all updated packages, irrespective of whether independent or fixed versioning is utilised. If prompted to choose package version bumps, you can request a custom version to alter or remove build metadata for specific packages.
 
-### Comments on issues/pull requests
+### Comments on resolved issues/pull requests
 
 > [!NOTE]
 > GitHub is the only supported client at the moment and you must provide 1 of these 2 options [`--create-release <type>`](../version/README.md#--create-release-type) or [`--remote-client <type>`](../version/README.md#--remote-client-type).

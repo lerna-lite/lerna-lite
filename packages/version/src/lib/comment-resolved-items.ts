@@ -164,7 +164,7 @@ export async function commentResolvedItems({
   const successfulComments = results.filter((r) => r.success);
   const failedComments = results.filter((r) => !r.success);
 
-  logger.info('comments', `Successful comments: ${successfulComments.length}`);
+  logger.info('comments', `Successful count: ${successfulComments.length}`);
   if (failedComments.length > 0) {
     logger.warn('comments', `Failed comments: ${failedComments.length}`);
   }
