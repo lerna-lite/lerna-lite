@@ -2,7 +2,6 @@
   "editor.formatOnSave": true,
   "editor.formatOnPaste": false,
   "editor.defaultFormatter": "oxc.oxc-vscode",
-  "oxc.fmt.experimental": true,
   "oxc.typeAware": true,
   "typescript.experimental.useTsgo": true
 }
