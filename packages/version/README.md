@@ -283,7 +283,7 @@ permissions:
   pull-requests: write # to be able to comment on released pull requests
 ```
 
-> **Note** this will possibly execute many API calls and this option will also require a valid `GH_TOKEN` (or `GITHUB_TOKEN`) with write access permissions to the GitHub API so that it can execute the query to fetch all commit details and insert comments, for more info refer to the [`Remote Client Auth Tokens`](#remote-client-auth-tokens) below.
+> **Note** this will possibly execute many API calls and this option will also require a valid `GH_TOKEN` (or `GITHUB_TOKEN`) with write access permissions to the GitHub API so that it can execute the query to fetch all commit details and insert comments, for more info refer to the [`Remote Client Auth Tokens`](#remote-client-auth-tokens) below. Also note that it will only fetch a maximum of 100 issues/PRs (max handled by octokit API) and I think that is more than enough.
 
 > [!NOTE]
 > This feature works best with a single global version and might not work as expected with `independent` mode, there is just no easy ways to detect which issues/PRs belongs to which package. You could still use it with `independent` but none of the tokens shown above will be available (or at least won't provide the correct info) and so in that case using a generic message is the only suggestion we have (e.g.: `"This PR is included in latest [release](http://release-url)"`).

@@ -24,15 +24,17 @@ export async function remoteSearchBy(
   owner: string,
   repo: string,
   startDate = '',
+  searchKeywords: string[] = [],
   logger: Logger
 ) {
   const dateCondition = startDate ? `:>${startDate}` : '';
+  const keywordCondition = searchKeywords.length ? `+${searchKeywords.join('+OR+')}+in:title` : '';
   const q =
     type === 'issue'
       ? `repo:${owner}/${repo}+is:issue+linked:pr+closed${dateCondition}`
-      : `repo:${owner}/${repo}+type:pr+merged${dateCondition}`;
+      : `repo:${owner}/${repo}${keywordCondition}+type:pr+merged${dateCondition}`;
   logger.verbose('comments', `remote PR search query: ${q}`);
-  return (await client.search!.issuesAndPullRequests({ q, advanced_search: true })).data.items;
+  return (await client.search!.issuesAndPullRequests({ q, per_page: 100 })).data.items;
 }
 
 export async function commentResolvedItems({
@@ -55,21 +57,23 @@ export async function commentResolvedItems({
   const mergedPullRequests = new Map<number, TypeNumberPair>();
 
   if (templates.issue) {
-    const issues = await remoteSearchBy(client, 'issue', repo.owner, repo.name, prevTagDate, logger);
+    const issues = await remoteSearchBy(client, 'issue', repo.owner, repo.name, prevTagDate, [], logger);
     issues.forEach((item) => {
       closedLinkedIssues.set(item.number, { type: 'issue', number: item.number });
     });
-    logger.verbose('comments', `All unfiltered issues: ${issues.map((i) => i.number).join(', ')}`);
   }
 
   if (templates.pullRequest) {
-    const pullRequests = (await remoteSearchBy(client, 'pr', repo.owner, repo.name, prevTagDate, logger)).filter((item) =>
+    const unfilteredPRs = await remoteSearchBy(client, 'pr', repo.owner, repo.name, prevTagDate, commentFilterKeywords, logger);
+    logger.verbose('comments', `All unfiltered Pull Requests: ${unfilteredPRs.map((p) => p.number).join(', ')}`);
+
+    // filter PRs by keywords in title and make sure that they starts with one of the keywords
+    const pullRequests = unfilteredPRs.filter((item) =>
       commentFilterKeywords.some((startWord) => item.title.toLowerCase().startsWith(startWord.toLowerCase()))
     );
     pullRequests.forEach((item) => {
       mergedPullRequests.set(item.number, { type: 'pr', number: item.number });
     });
-    logger.verbose('comments', `All unfiltered Pull Requests: ${pullRequests.map((p) => p.number).join(', ')}`);
     logger.info(
       'comments',
       `Merged Pull Requests: ${Array.from(mergedPullRequests.values())

@@ -25,12 +25,14 @@ export function getPreviousTag(execOpts?: ExecOpts, isIndependent?: boolean) {
     const tagShaArgs = ['rev-list', '-n', '1', name];
     const sha = execSync('git', tagShaArgs, execOpts);
 
-    // Get the date of the last tag
-    const tagDateArgs = ['log', '-1', '--format=%cd', '--date=iso-strict'];
+    // Get the date of the last tag with Z (UTC) format, converting from local time
+    const tagDateArgs = ['log', '-1', '--format=%cd', '--date=format-local:%Y-%m-%dT%H:%M:%SZ'];
     if (name) {
       tagDateArgs.push(name);
     }
-    const date = execSync('git', tagDateArgs, execOpts);
+
+    // Use TZ=UTC to ensure correct UTC conversion
+    const date = execSync('git', tagDateArgs, { ...execOpts, env: { ...process.env, TZ: 'UTC' } });
 
     return { name, date, sha };
   } catch (error) {
