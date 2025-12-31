@@ -46,6 +46,7 @@ describe('remoteSearchBy', () => {
     };
 
     const mockLogger = {
+      info: vi.fn(),
       verbose: vi.fn(),
     };
 
@@ -77,6 +78,7 @@ describe('remoteSearchBy', () => {
     };
 
     const mockLogger = {
+      info: vi.fn(),
       verbose: vi.fn(),
     };
 
@@ -106,9 +108,9 @@ describe('getReleaseUrlFallback', () => {
 describe('commentResolvedItems', () => {
   const createMockDependencies = () => {
     const mockLogger = {
-      verbose: vi.fn(),
       info: vi.fn(),
       silly: vi.fn(),
+      verbose: vi.fn(),
       warn: vi.fn(),
     } as unknown as Logger;
 
@@ -341,8 +343,8 @@ describe('commentResolvedItems', () => {
     expect(results).toHaveLength(0);
 
     // Verify logging
-    expect(mockLogger.verbose).toHaveBeenCalledWith('comments', 'Merged Pull Requests: ');
-    expect(mockLogger.verbose).toHaveBeenCalledWith('comments', 'Closed linked issues: ');
+    expect(mockLogger.info).toHaveBeenCalledWith('comments', 'Merged Pull Requests: ');
+    expect(mockLogger.info).toHaveBeenCalledWith('comments', 'Closed linked issues: ');
   });
 
   it('should respect template substitution for comments', async () => {
@@ -450,8 +452,8 @@ describe('commentResolvedItems', () => {
     expect(mockClient.issues.createComment).toHaveBeenCalledTimes(2);
 
     // Verify logging
-    expect(mockLogger.verbose).toHaveBeenCalledWith('comments', expect.stringContaining('Closed linked issues: 123'));
-    expect(mockLogger.verbose).toHaveBeenCalledWith('comments', expect.stringContaining('Merged Pull Requests: 456'));
+    expect(mockLogger.info).toHaveBeenCalledWith('comments', expect.stringContaining('Closed linked issues: 123'));
+    expect(mockLogger.info).toHaveBeenCalledWith('comments', expect.stringContaining('Merged Pull Requests: 456'));
 
     // Verify results
     expect(results).toHaveLength(2);
@@ -496,8 +498,8 @@ describe('commentResolvedItems', () => {
     expect(mockClient.issues.createComment).toHaveBeenCalledTimes(4);
 
     // Verify logging
-    expect(mockLogger.verbose).toHaveBeenCalledWith('comments', expect.stringContaining('Closed linked issues: 123, 124'));
-    expect(mockLogger.verbose).toHaveBeenCalledWith('comments', expect.stringContaining('Merged Pull Requests: 456, 457'));
+    expect(mockLogger.info).toHaveBeenCalledWith('comments', expect.stringContaining('Closed linked issues: 123, 124'));
+    expect(mockLogger.info).toHaveBeenCalledWith('comments', expect.stringContaining('Merged Pull Requests: 456, 457'));
 
     // Verify results
     expect(results).toHaveLength(4);
