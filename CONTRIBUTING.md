@@ -31,9 +31,13 @@ corepack enable
 corepack prepare pnpm@latest --activate
 ```
 
+### <a name="submit-pr"></a> Submitting a PR
+
+This project follows [GitHub's standard forking model](https://guides.github.com/activities/forking/). Please fork the project to submit pull requests.
+
 ### Manual Setup Steps
 
-1. clone the lib:
+1. clone the lib (or your own fork copy):
    - `git clone https://github.com/lerna-lite/lerna-lite`
 
 2. install with **pnpm** from the root:
@@ -54,7 +58,6 @@ corepack prepare pnpm@latest --activate
 7. add/run Vitest unit tests (make sure to run the previous steps first):
    - `pnpm test:watch` (watch mode)
    - `pnpm test` (full test coverage)
-
-**Note**: The Github CI runs the testing suite on Node 20, 22, and 24, so be sure to use one of those versions when running tests locally.
-
 8. after executing steps 2 through 5 on your machine, you are ready to make changes and create a Pull Request...
+
+> **Note**: The Github CI runs the testing suite on the 3 most recent NodeJS stable versions (LTS and Current), so make sure to use one of those versions when running tests locally.
