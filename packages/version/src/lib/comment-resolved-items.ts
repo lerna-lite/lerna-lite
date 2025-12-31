@@ -59,6 +59,7 @@ export async function commentResolvedItems({
     issues.forEach((item) => {
       closedLinkedIssues.set(item.number, { type: 'issue', number: item.number });
     });
+    logger.verbose('comments', `All unfiltered issues: ${issues.map((i) => i.number).join(', ')}`);
   }
 
   if (templates.pullRequest) {
@@ -68,7 +69,8 @@ export async function commentResolvedItems({
     pullRequests.forEach((item) => {
       mergedPullRequests.set(item.number, { type: 'pr', number: item.number });
     });
-    logger.verbose(
+    logger.verbose('comments', `All unfiltered Pull Requests: ${pullRequests.map((p) => p.number).join(', ')}`);
+    logger.info(
       'comments',
       `Merged Pull Requests: ${Array.from(mergedPullRequests.values())
         .map((c) => c.number)
@@ -93,7 +95,7 @@ export async function commentResolvedItems({
 
   // issues could be added in 2 places, so let's log them here
   if (templates.issue) {
-    logger.verbose(
+    logger.info(
       'comments',
       `Closed linked issues: ${Array.from(closedLinkedIssues.values())
         .map((c) => c.number)
