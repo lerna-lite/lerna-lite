@@ -122,7 +122,12 @@ export interface OctokitClientOutput {
   };
   repos: GitClient;
   search?: {
-    issuesAndPullRequests: (options: { q; advanced_search: true }) => Promise<{ data: { items: any[] } }>;
+    issuesAndPullRequests: (options: {
+      q: string;
+      advanced_search?: boolean;
+      per_page?: number;
+      page?: number;
+    }) => Promise<{ data: { items: any[] } }>;
   };
 }
 

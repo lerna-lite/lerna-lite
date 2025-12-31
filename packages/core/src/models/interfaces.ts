@@ -71,6 +71,7 @@ export interface DescribeRefDetailedResult {
 export interface ExecOpts {
   cwd: string;
   maxBuffer?: number;
+  env?: NodeJS.ProcessEnv;
 }
 
 export interface LifecycleConfig {

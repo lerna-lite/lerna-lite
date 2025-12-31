@@ -50,11 +50,11 @@ describe('remoteSearchBy', () => {
       verbose: vi.fn(),
     };
 
-    const result = await remoteSearchBy(mockClient as any, 'issue', 'owner', 'repo', '2023-01-01', mockLogger as any);
+    const result = await remoteSearchBy(mockClient as any, 'issue', 'owner', 'repo', '2023-01-01', [], mockLogger as any);
 
     expect(mockClient.search.issuesAndPullRequests).toHaveBeenCalledWith({
       q: 'repo:owner/repo+is:issue+linked:pr+closed:>2023-01-01',
-      advanced_search: true,
+      per_page: 100,
     });
     expect(result).toHaveLength(1);
     expect(result[0].number).toBe(123);
@@ -82,11 +82,51 @@ describe('remoteSearchBy', () => {
       verbose: vi.fn(),
     };
 
-    const result = await remoteSearchBy(mockClient as any, 'pr', 'owner', 'repo', '2023-01-01', mockLogger as any);
+    const result = await remoteSearchBy(mockClient as any, 'pr', 'owner', 'repo', '2023-01-01', [], mockLogger as any);
 
     expect(mockClient.search.issuesAndPullRequests).toHaveBeenCalledWith({
       q: 'repo:owner/repo+type:pr+merged:>2023-01-01',
-      advanced_search: true,
+      per_page: 100,
+    });
+    expect(result).toHaveLength(1);
+    expect(result[0].number).toBe(456);
+  });
+
+  it('should construct query for pull requests with filter keywords', async () => {
+    const mockClient = {
+      search: {
+        issuesAndPullRequests: vi.fn().mockResolvedValue({
+          data: {
+            items: [
+              {
+                number: 456,
+                title: 'Test PR',
+                merged_at: '2023-02-01',
+              },
+            ],
+          },
+        }),
+      },
+    };
+
+    const mockLogger = {
+      info: vi.fn(),
+      verbose: vi.fn(),
+    };
+
+    const result = await remoteSearchBy(
+      mockClient as any,
+      'pr',
+      'owner',
+      'repo',
+      '2023-01-01',
+      ['fix', 'feat'],
+      mockLogger as any
+    );
+
+    expect(mockClient.search.issuesAndPullRequests).toHaveBeenCalledWith({
+      q: 'repo:owner/repo+fix+OR+feat+in:title+type:pr+merged:>2023-01-01',
+      per_page: 100,
     });
     expect(result).toHaveLength(1);
     expect(result[0].number).toBe(456);
@@ -264,6 +304,7 @@ describe('commentResolvedItems', () => {
             { number: 101, title: 'feature: add new functionality', pull_request: {} },
             { number: 102, title: 'fix: some bug', pull_request: {} },
             { number: 103, title: 'feature: improve performance', pull_request: {} },
+            { number: 104, title: 'add some new features', pull_request: {} },
           ],
         },
       });
