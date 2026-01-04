@@ -134,9 +134,9 @@ Below are the main reasons as to why this fork was created:
 4. The original Lerna version v5.5+ now requires **[Nx](https://nx.dev/)** (want it or not), but that is not the case in Lerna-Lite
    - note, if you already use `Nx` then it's probably better to use Lerna, otherwise Lerna-Lite is a better alternative
    - if you use tools like TurboRepo and install the original Lerna, you end up installing 2 similar tools (not good)
-5. in Lerna-Lite we also added a few unique features that are not available in the original Lerna:
-   - [`catalog:` protocol](https://github.com/lerna-lite/lerna-lite/tree/main/packages/version#catalog-protocol) support (pnpm/bun/yarn) for both `version` and `publish` commands (new 🍬)
-   - [`workspace:` protocol](https://github.com/lerna-lite/lerna-lite/tree/main/packages/version#workspace-protocol) support (Lerna also brought support v6)
+5. in Lerna-Lite a few unique features were also added which are not available in the original Lerna:
+   - [`catalog:` protocol](https://github.com/lerna-lite/lerna-lite/tree/main/packages/version#catalog-protocol) support (pnpm/bun/yarn) for both `version` and `publish` commands
+   - [`workspace:` protocol](https://github.com/lerna-lite/lerna-lite/tree/main/packages/version#workspace-protocol) support (Lerna also brought support in v6)
    - [--dry-run](https://github.com/lerna-lite/lerna-lite/tree/main/packages/version#--dry-run) to preview version/publish & changelogs locally (shows git changes without committing them)
    - [lerna version --allow-peer-dependencies-update](https://github.com/lerna-lite/lerna-lite/tree/main/packages/version#--allow-peer-dependencies-update) to also update your peer dependencies
    - [lerna version --changelog-header-message "msg"](https://github.com/lerna-lite/lerna-lite/tree/main/packages/version#--changelog-header-message-msg) for showing banner or sponsors in your changelogs
@@ -145,10 +145,10 @@ Below are the main reasons as to why this fork was created:
      - e.g.: we use it in here to publish Lerna-Lite without any `scripts` or `devDependencies`
    - [lerna version --skip-bump-only-releases](https://github.com/lerna-lite/lerna-lite/tree/main/packages/version#--skip-bump-only-releases), avoid cluttering your GitHub releases when using `independent`
    - [lerna version --sync-workspace-lock](https://github.com/lerna-lite/lerna-lite/tree/main/packages/version#--sync-workspace-lock) to sync lock file before publishing (not needed w/`workspace:` protocol)
-   - [lerna version --comment-issues/pull requests](https://github.com/lerna-lite/lerna-lite/tree/main/packages/version#comments-on-issuespull-requests), comment on issues/PRs resolved by new release
+   - [lerna version --comment-issues/pull requests](https://github.com/lerna-lite/lerna-lite/tree/main/packages/version#comments-on-issuespull-requests), comment on issues/PRs resolved by a new release (new 🍬)
    - Bun is now mostly supported as well (including support for `syncWorkspaceLock` and `catalog:` protocol)
 
-On a final note, I would imagine that the best feature of Lerna-Lite (versus Lerna) would be its modularity. A large portion of the users are only interested in `version`/`publish` commands, but on the other hand, a small minority might want other commands like `lerna run`/`exec`. Lerna-Lite offers this kind of flexibility by allowing the user to choose only what you want to install (see [installation](#cli-installation) below) which helps keep your download to the bare minimum.
+On a final note, I would imagine that the best feature of Lerna-Lite (versus Lerna) would be its modularity. A large portion of the users are only interested in `version`/`publish` commands, but on the other hand, a small minority might want other commands like `lerna run`/`exec`. Lerna-Lite offers this kind of flexibility by allowing the user to choose and install the minimal (see [installation](#cli-installation) below) which helps keep your download to the bare minimum.
 
 ### Lerna-Lite will help you with the following:
 
@@ -180,7 +180,7 @@ On a final note, I would imagine that the best feature of Lerna-Lite (versus Ler
 
 ## Getting Started
 
-Let's start by installing Lerna-Lite CLI as a dev dependency to your project and then run the `init` command to get started (see [init#readme](https://github.com/lerna-lite/lerna-lite/tree/main/packages/init#readme) for all options). Note that the CLI must be installed at all time, then proceed by installing any other optional commands (the CLI is only including the `init` command), refer to the **[Available Commands](#available-commands) table** for more info.
+Let's start by installing Lerna-Lite CLI as a dev dependency in your project and then run the `init` command to get started (see [init#readme](https://github.com/lerna-lite/lerna-lite/tree/main/packages/init#readme) for all options). Note that the CLI must be installed at all time, then proceed by installing any other optional commands (the CLI is only including the `init` command), refer to the **[Available Commands](#available-commands) table** for more info.
 
 > [!NOTE]
 > You can see and clone a very basic [Lerna-Lite boilerplate](https://github.com/lerna-lite/lerna-lite-boilerplate) project repository.
@@ -208,11 +208,11 @@ lerna-repo/
   lerna.json
 ```
 
-**Note** Lerna-Lite now supports 3 file extension types (`.json`, `.jsonc` or `.json5`), however please note that not all code editors support [JSON Schema](https://json-schema.org/) (e.g. `.json5`), so `lerna.json` might still be the preferred file extension. Also note that all formats support inline comments, even the default `lerna.json`.
+**Note** Lerna-Lite now supports 3 config extensions (`.json`, `.jsonc` or `.json5`), however please note that not all code editors support [JSON Schema](https://json-schema.org/) (e.g. `.json5`), so `lerna.json` might still be the preferred file extension. Also note that all formats support inline comments, even the default `lerna.json`.
 
-Note that `package-a` shown above will not be created, it is only shown here to help clarify the structure. For more info and full details about the `lerna.json` file, please read the [lerna.json](https://github.com/lerna-lite/lerna-lite/wiki/lerna.json) Wiki. Also note that you can optionally add comments to your `lerna.json` config file since it is also able to parse JSON5 file format.
+Note that `package-a` shown above will not be created, it is only shown here to help clarify the structure. For more info and full details about the `lerna.json` config file, please read the [lerna.json](https://github.com/lerna-lite/lerna-lite/wiki/lerna.json) Wiki. Also note that you can optionally add comments to your `lerna.json` file since all formats are parsed as a JSON5 file format.
 
-The final step will be to install the commands that are of interest to you (`publish`, `version`, `run`, `exec`, ...)
+The final step is to install the commands that are of interest to you (`publish`, `version`, `run`, `exec`, ...)
 
 ```sh
 $ npm i @lerna-lite/publish -D
@@ -224,11 +224,11 @@ Lerna allows you to manage your project using one of two modes: Fixed or Indepen
 
 ### Fixed/Locked mode (default)
 
-Fixed mode Lerna projects operate on a single version line. The version is kept in the `lerna.json` file at the root of your project under the `version` key. When you run `lerna publish`, if a module has been updated since the last time a release was made, it will be updated to the new version you're releasing. This means that you only publish a new version of a package when you need to.
+Fixed mode Lerna projects operate on a single version line. The version is kept in the `lerna.json` config file at the root of your project under the `version` key. When you run `lerna publish`, if a module has been updated since the last time a release was made, it will be updated to the new version you're releasing. This means that you only publish a new version of a package when you need to.
 
 > Note: If you have a major version zero, all updates are [considered breaking](https://semver.org/#spec-item-4). Because of that, running `lerna publish` with a major version zero and choosing any non-prerelease version number will cause new versions to be published for all packages, even if not all packages have changed since the last release.
 
-This is the mode that [Jest](https://github.com/jestjs/jest)) is currently using. Use this if you want to automatically tie all package versions together. One issue with this approach is that a major change in any package will result in all packages having a new major version.
+This is the mode that [Jest](https://github.com/jestjs/jest), for example, is currently using. Use this if you want to automatically tie all package versions together. One issue with this approach is that a major change in any package will result in all packages having a new major version.
 
 ### Independent mode
 
@@ -244,9 +244,9 @@ Independent mode allows you to more specifically update versions for each packag
 
 > Lerna-Lite is entirely modular, as opposed to Lerna, and installing the CLI locally or globally will only provide you the `init` command. Please make sure to install other commands that you are interested in (see table below).
 
-If you are new to Lerna-Lite, you could also run the [lerna init](https://github.com/lerna-lite/lerna-lite/tree/main/packages/init#readme) command, which will create the `lerna.json` for you with a minimal structure setup. If you are using a client other than npm, then make sure to update the `npmClient` property in `lerna.json` (for example: `"npmClient": "yarn"` or `"pnpm"`).
+If you are new to Lerna-Lite, you could also run the [lerna init](https://github.com/lerna-lite/lerna-lite/tree/main/packages/init#readme) command, which will create the `lerna.json` for you with a minimal structure setup. If you are using a client other than npm, then make sure to update the `npmClient` property in `lerna.json` (for example: `"npmClient": "yarn"`, `"pnpm"` or `"bun"`).
 
-> **Note** please make sure that you have a `lerna.json` config file in your project root and in it a `version` property defined with either a fixed or `independent` mode. Otherwise, an error will be thrown if you're missing any of them.
+> **Note** please make sure that you have a `lerna.json` config file in your project root and also make sure to have a `version` property defined with either a fixed or `independent` version. Otherwise, an error will be thrown if you're missing the minimal config.
 
 ### Usage
 
@@ -260,6 +260,15 @@ The basic usage is to add either custom NPM scripts or simply run the commands i
   "preview:new-version": "lerna version --dry-run",
   "run-tests": "lerna run test",
 }
+```
+
+or use the CLI in your favorite shell and package manager:
+
+```sh
+$ npx lerna version
+$ pnpm exec lerna version
+$ yarn lerna version
+$ bun x lerna version
 ```
 
 ### JSON Schema
@@ -367,7 +376,7 @@ To contribute to the project, please follow the steps shown in the [Contributing
 
 ## Troubleshooting
 
-If you have problems running the project and your problems are related to Git commands that were executed, we then suggest to first try with the `--dry-run` option to see if it helps in finding the error(s) that you may have. Another great, and possibly much more useful suggestion, is to search in the original Lerna [issues](https://github.com/lerna/lerna/issues) list and see if any solution could help you (remember that Lerna-Lite is a fork of the original code from Lerna and it works the same way). Lastly, if that is not enough and you wish to troubleshoot yourself, then read this [Troubleshooting - Wiki](https://github.com/lerna-lite/lerna-lite/wiki/Troubleshooting) to possibly troubleshoot yourself the execution in your own environment.
+If you have problems running the project and your problems are related to Git commands that were executed, we then suggest to first try with the `--dry-run` option to see if it helps in finding the error(s) that you may have. Another great, and possibly much more useful suggestion, is to search in the original Lerna [issues](https://github.com/lerna/lerna/issues) list and see if any solution could help you (remember that Lerna-Lite is a fork of the original code from Lerna and it works the same way). Lastly, if that is not enough and you wish to troubleshoot it yourself, then read this [Troubleshooting - Wiki](https://github.com/lerna-lite/lerna-lite/wiki/Troubleshooting) to possibly troubleshoot yourself the execution in your own environment.
 
 ## Published Packages
 
