@@ -228,12 +228,12 @@ export class ConfigChain {
 
   /**
    * Get a snapshot of all merged configuration
-   * 
+   *
    * The list order after initialization:
    * - Index 0: base (defaults) - LOWEST priority
-   * - Index 1: CLI options - HIGHEST priority  
+   * - Index 1: CLI options - HIGHEST priority
    * - Index 2+: env, project, user, global - medium to low priority
-   * 
+   *
    * Merge strategy: base first, then [global...env] in reverse, then CLI last
    */
   get snapshot(): Record<string, any> {
