@@ -153,6 +153,45 @@ describe('ConfigChain', () => {
     });
   });
 
+  describe('del', () => {
+    it('should delete value from specified source', () => {
+      cc.add({ foo: 'bar', baz: 'qux' }, 'test');
+      cc.del('foo', 'test');
+      expect(cc.get('foo', 'test')).toBeUndefined();
+      expect(cc.get('baz', 'test')).toBe('qux');
+    });
+
+    it('should throw error if source does not exist', () => {
+      expect(() => cc.del('foo', 'newsource')).toThrow('not found newsource');
+    });
+
+    it('should delete from all layers when no source specified', () => {
+      cc.add({ foo: 'bar1', shared: 'value1' }, 'layer1');
+      cc.add({ foo: 'bar2', shared: 'value2' }, 'layer2');
+      cc.add({ foo: 'bar3', shared: 'value3' }, 'layer3');
+
+      cc.del('foo');
+
+      // foo should be deleted from all layers
+      expect(cc.get('foo')).toBeUndefined();
+      // shared should still exist (gets first non-deleted value based on priority)
+      expect(cc.get('shared')).toBeDefined();
+    });
+
+    it('should handle deleting auth tokens (like Conf uses it)', () => {
+      cc.add({ '//registry.npmjs.org/:_password': 'secret', '//registry.npmjs.org/:username': 'user' }, 'test');
+      cc.del('//registry.npmjs.org/:_password', 'test');
+      expect(cc.get('//registry.npmjs.org/:_password', 'test')).toBeUndefined();
+      expect(cc.get('//registry.npmjs.org/:username', 'test')).toBe('user');
+    });
+
+    it('should return this for chaining', () => {
+      cc.add({ foo: 'bar' }, 'test');
+      const result = cc.del('foo', 'test');
+      expect(result).toBe(cc);
+    });
+  });
+
   describe('snapshot', () => {
     it('should return empty object for empty config', () => {
       expect(cc.snapshot).toEqual({});
@@ -281,6 +320,23 @@ describe('ConfigChain', () => {
       expect(cc.get('test')).toBe(true);
     });
 
+    it('should parse as INI when type is explicitly ini', () => {
+      vi.mocked(existsSync).mockReturnValue(true);
+      vi.mocked(readFileSync).mockReturnValue('test=value\nfoo=bar');
+
+      cc.addFile('/tmp/test', 'ini', 'inifile');
+      expect(cc.get('test')).toBe('value');
+      expect(cc.get('foo')).toBe('bar');
+    });
+
+    it('should fall back to INI when JSON parse fails during auto-detect', () => {
+      vi.mocked(existsSync).mockReturnValue(true);
+      vi.mocked(readFileSync).mockReturnValue('not-json=but-ini');
+
+      cc.addFile('/tmp/test', undefined, 'auto');
+      expect(cc.get('not-json')).toBe('but-ini');
+    });
+
     it('should ignore INI section headers', () => {
       vi.mocked(existsSync).mockReturnValue(true);
       vi.mocked(readFileSync).mockReturnValue(`
@@ -356,6 +412,16 @@ bar='single quoted'
       vi.mocked(existsSync).mockReturnValue(false);
       const result = cc.addFile('/path/to/file', 'ini', 'test');
       expect(result).toBe(cc);
+    });
+  });
+
+  describe('push', () => {
+    it('should push config to end of list', () => {
+      cc.add({ a: '1' }, 'first');
+      const initialLength = cc.list.length;
+      cc.push({ b: '2' });
+      expect(cc.list.length).toBe(initialLength + 1);
+      expect(cc.list[cc.list.length - 1]).toEqual({ b: '2' });
     });
   });
 
