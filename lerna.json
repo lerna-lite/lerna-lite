@@ -1,16 +1,13 @@
 {
   "$schema": "node_modules/@lerna-lite/cli/schemas/lerna-schema.json",
-  "version": "4.10.3",
+  "version": "4.10.4",
   "loglevel": "verbose",
   "npmClient": "pnpm",
   "command": {
     "version": {
       "conventionalCommits": true,
       "createRelease": "github",
-      "changelogIncludeCommitsClientLogin": " - by @%l",
       "changelogHeaderMessage": "## Automate your Workspace Versioning, Publishing & Changelogs with [Lerna-Lite](https://github.com/lerna-lite/lerna-lite) 📦🚀",
-      "commentIssues": "✅ This issue has been resolved and included in version %v 📦<br>🔗 The release is available on: [GitHub release](%u) 🚀",
-      "commentPullRequests": "🎉 This pull request is included in version %v 📦<br>🔗 The release is available on: [GitHub release](%u) 🚀",
       "message": "chore(release): publish new version %s"
     },
     "publish": {

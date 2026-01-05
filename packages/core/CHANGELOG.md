@@ -4,6 +4,12 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [4.10.4](https://github.com/lerna-lite/lerna-lite/compare/v4.10.3...v4.10.4) (2026-01-05)
+
+### 🐞 Bug Fixes
+
+* **version:** comment on issues/PRs should work on Windows ([#1227](https://github.com/lerna-lite/lerna-lite/issues/1227)) ([f7e18da](https://github.com/lerna-lite/lerna-lite/commit/f7e18daa205c3877da19c44f654396db9454e302))
+
 ## [4.10.3](https://github.com/lerna-lite/lerna-lite/compare/v4.10.2...v4.10.3) (2025-12-27)
 
 ### 🐞 Bug Fixes
