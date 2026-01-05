@@ -56,7 +56,7 @@ export class ConfigChain {
 
   /**
    * Get a configuration value from the chain
-   * Searches from the beginning (highest priority) to end (lowest priority)
+   * Searches for the key prioritizing CLI (index 1) over base (index 0)
    */
   get(key: string, where?: string): any {
     if (where) {
@@ -67,12 +67,24 @@ export class ConfigChain {
       return undefined;
     }
 
-    // Search through the chain from highest to lowest priority
-    for (const config of this.list) {
+    // Search CLI first (index 1 - highest priority)
+    if (this.list[1] && Object.hasOwnProperty.call(this.list[1], key)) {
+      return this.list[1][key];
+    }
+
+    // Then search rest of chain (env, project, user, global)
+    for (let i = 2; i < this.list.length; i++) {
+      const config = this.list[i];
       if (config && Object.hasOwnProperty.call(config, key)) {
         return config[key];
       }
     }
+
+    // Finally fall back to base (index 0 - lowest priority)
+    if (this.list[0] && Object.hasOwnProperty.call(this.list[0], key)) {
+      return this.list[0][key];
+    }
+
     return undefined;
   }
 
@@ -137,8 +149,8 @@ export class ConfigChain {
         }
       }
     } else {
-      // Add new configuration layer
-      this.list.unshift(data); // Add to beginning (highest priority)
+      // Add new configuration layer to END (like original push behavior)
+      this.list.push(data);
       if (sourceName) {
         this.sources[sourceName] = this.sources[sourceName] || {};
         this.sources[sourceName].data = data;
@@ -216,16 +228,34 @@ export class ConfigChain {
 
   /**
    * Get a snapshot of all merged configuration
+   * 
+   * The list order after initialization:
+   * - Index 0: base (defaults) - LOWEST priority
+   * - Index 1: CLI options - HIGHEST priority  
+   * - Index 2+: env, project, user, global - medium to low priority
+   * 
+   * Merge strategy: base first, then [global...env] in reverse, then CLI last
    */
   get snapshot(): Record<string, any> {
     const result: Record<string, any> = {};
 
-    // Merge from lowest to highest priority (reverse order)
-    for (let i = this.list.length - 1; i >= 0; i--) {
+    // Start with base (defaults) - index 0
+    if (this.list[0] && typeof this.list[0] === 'object' && !('__source__' in this.list[0])) {
+      Object.assign(result, this.list[0]);
+    }
+
+    // Apply items from end to start (skipping base and CLI)
+    // This gives: global > user > project > env
+    for (let i = this.list.length - 1; i >= 2; i--) {
       const config = this.list[i];
       if (config && typeof config === 'object' && !('__source__' in config)) {
         Object.assign(result, config);
       }
+    }
+
+    // Finally apply CLI (index 1) - highest priority
+    if (this.list[1] && typeof this.list[1] === 'object' && !('__source__' in this.list[1])) {
+      Object.assign(result, this.list[1]);
     }
 
     return result;
