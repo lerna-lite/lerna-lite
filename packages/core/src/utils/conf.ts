@@ -51,22 +51,22 @@ export class Conf {
 
   // https://github.com/npm/npm/blob/latest/lib/config/core.js#L332-L342
   add(data: any, marker?: any) {
+    const transformed: Record<string, any> = {};
     for (const x of Object.keys(data)) {
       // https://github.com/npm/npm/commit/f0e998d
       const newKey = envReplace(x);
       const newField = parseField(data[x], newKey);
 
-      delete data[x];
-      data[newKey] = newField;
+      transformed[newKey] = newField;
     }
 
-    Object.assign(this.config, data);
+    Object.assign(this.config, transformed);
     if (marker) {
       const sourceName = typeof marker === 'string' ? marker : marker.__source__;
-      this.list.push({ ...data, __source__: marker });
+      this.list.push({ ...transformed, __source__: marker });
       if (sourceName) {
         const existing = this.sources[sourceName] || ({} as any);
-        this.sources[sourceName] = { ...existing, data } as any;
+        this.sources[sourceName] = { ...existing, data: transformed } as any;
       }
     }
     return this;
