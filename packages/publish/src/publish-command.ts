@@ -907,7 +907,6 @@ export class PublishCommand extends Command<PublishCommandOption> {
       // if we skip temp tags we should tag with the proper value immediately
       tag: this.options.tempTag ? 'lerna-temp' : this.conf.get('tag'),
       'git-dry-run': this.options.dryRun || false,
-      ...(this.options.registry && { registry: this.options.registry }),
     });
 
     let q: Queue | undefined = undefined;
