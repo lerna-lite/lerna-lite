@@ -61,3 +61,68 @@ This project follows [GitHub's standard forking model](https://guides.github.com
 8. after executing steps 2 through 5 on your machine, you are ready to make changes and create a Pull Request...
 
 > **Note**: The Github CI runs the testing suite on the 3 most recent NodeJS stable versions (LTS and Actives), so make sure to use one of those versions when running tests locally.
+
+## Local CLI Testing with Verdaccio
+
+If you want to test Lerna-Lite commands against a local npm registry, you can use Verdaccio. This is useful for testing publish workflows and custom registry configurations without affecting the real npm registry.
+
+You will need two terminal windows:
+
+### Terminal 1 - Start Verdaccio
+
+```sh
+node scripts/test-verdaccio.mjs
+```
+
+This will start a local npm registry on `http://localhost:4873/`. Keep this terminal running.
+
+### Terminal 2 - Publish and Test
+
+The Verdaccio instance is pre-configured with a test user (`test/test`). You can publish packages using either:
+
+**Option 1: Using the `--registry` flag (recommended)**
+
+```sh
+# Build the project first
+pnpm build
+
+# Publish to local registry
+pnpm run test-verdaccio
+```
+
+**Option 2: Using a custom `.npmrc` file**
+
+Create a `.npmrc` file in the project root:
+
+```
+registry=http://localhost:4873/
+//localhost:4873/:_auth=dGVzdDp0ZXN0
+//localhost:4873/:always-auth=true
+```
+
+Then run:
+
+```sh
+pnpm build
+lerna publish from-package --yes --no-git-tag-version --no-push
+```
+
+### Testing Published Packages
+
+After publishing, you can install and test your local packages:
+
+```sh
+cd /some/path/to/test-project
+npm --registry=http://localhost:4873/ install @lerna-lite/cli
+npx lerna --version
+```
+
+### Cleanup
+
+When finished testing:
+1. Stop Verdaccio (Ctrl+C in Terminal 1)
+2. Remove the custom `.npmrc` if you created one
+3. The local registry storage is in `.verdaccio/storage/` and is git-ignored
+
+**NOTE:** The Verdaccio configuration is stored in `.verdaccio/config.yaml`. The storage folder and credentials file are git-ignored, but the config file is tracked so all contributors can use the same setup.
+
