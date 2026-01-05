@@ -41,6 +41,7 @@ function parseIni(content: string): Record<string, any> {
 }
 
 /**
+ * Reimplementation of deprecated config-chain: https://www.npmjs.com/package/config-chain
  * A simplified TypeScript reimplementation of config-chain's core functionality
  * Manages a chain of configuration objects with priority (first wins)
  */
