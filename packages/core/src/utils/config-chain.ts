@@ -1,4 +1,3 @@
-/* v8 ignore file */
 import { readFileSync } from 'node:fs';
 
 /**
