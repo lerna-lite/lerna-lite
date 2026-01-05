@@ -102,6 +102,7 @@ export class ConfigChain {
       target = source.data;
     } else {
       target = this.list[0];
+      /* v8 ignore if */
       if (!target) {
         throw new Error('cannot set, no confs!');
       }
