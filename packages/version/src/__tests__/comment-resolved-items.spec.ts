@@ -370,6 +370,41 @@ describe('commentResolvedItems', () => {
     expect(results.map((r) => r.number)).toEqual([123, 101, 102, 103]);
   });
 
+  it('should add issue from PR title "fix #[number]" if not already in search results', async () => {
+    const { mockClient, mockOptions } = createMockDependencies();
+
+    // Mock search to return PRs first, then issues (issue #999 NOT in search results)
+    mockClient.search.issuesAndPullRequests
+      .mockResolvedValueOnce({
+        // First call for PRs - includes fix #999 which is NOT in issue search
+        data: {
+          items: [
+            { number: 101, title: 'feat: add new functionality' },
+            { number: 102, title: 'fix: bug fixes #999' },
+          ],
+        },
+      })
+      .mockResolvedValueOnce({
+        // Second call for issues - issue #999 is NOT returned
+        data: {
+          items: [],
+        },
+      });
+
+    // Reset mock call counts
+    mockClient.issues.createComment.mockClear();
+
+    const results = await commentResolvedItems(mockOptions);
+
+    // Verify issue #999 was added from PR title even though it wasn't in search results
+    const calledWithNumbers = mockClient.issues.createComment.mock.calls.map((call) => call[0].issue_number);
+    expect(calledWithNumbers).toEqual([999, 101, 102]);
+
+    // Verify results
+    expect(results).toHaveLength(3);
+    expect(results.every((r) => r.success)).toBe(true);
+  });
+
   it('should handle empty search results gracefully', async () => {
     const { mockLogger, mockClient, mockOptions } = createMockDependencies();
 
