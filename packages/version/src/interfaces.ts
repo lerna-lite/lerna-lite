@@ -257,6 +257,7 @@ export interface CommitData {
 export interface CommentResolvedOptions {
   client: OctokitClientOutput;
   commentFilterKeywords: string[];
+  currentBranch: string;
   dryRun?: boolean;
   execOpts: ExecOpts;
   gitRemote: string;
