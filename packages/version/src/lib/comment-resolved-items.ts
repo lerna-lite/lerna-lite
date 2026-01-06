@@ -10,6 +10,12 @@ interface TypeNumberPair {
   number: number;
 }
 
+interface GitHubSearchItem {
+  number: number;
+  title: string;
+  body?: string;
+}
+
 export function getReleaseUrlFallback(host: string, repository: string, tagName?: string) {
   let url = `https://${host}/${repository}/releases`;
   if (tagName) {
@@ -25,14 +31,16 @@ export async function remoteSearchBy(
   repo: string,
   startDate = '',
   searchKeywords: string[] = [],
-  logger: Logger
-) {
+  logger: Logger,
+  baseBranch?: string
+): Promise<GitHubSearchItem[]> {
   const dateCondition = startDate ? `:>${startDate}` : '';
   const keywordCondition = searchKeywords.length ? `+${searchKeywords.join('+OR+')}+in:title` : '';
+  const baseBranchCondition = baseBranch ? `+base:${encodeURIComponent(baseBranch)}` : '';
   const q =
     type === 'issue'
       ? `repo:${owner}/${repo}+is:issue+linked:pr+closed${dateCondition}`
-      : `repo:${owner}/${repo}${keywordCondition}+type:pr+merged${dateCondition}`;
+      : `repo:${owner}/${repo}${keywordCondition}+type:pr+merged${dateCondition}${baseBranchCondition}`;
   logger.verbose('comments', `remote PR search query: ${q}`);
   return (await client.search!.issuesAndPullRequests({ q, per_page: 100 })).data.items;
 }
@@ -40,6 +48,7 @@ export async function remoteSearchBy(
 export async function commentResolvedItems({
   client,
   commentFilterKeywords,
+  currentBranch,
   gitRemote,
   execOpts,
   dryRun,
@@ -56,17 +65,39 @@ export async function commentResolvedItems({
   const closedLinkedIssues = new Map<number, TypeNumberPair>();
   const mergedPullRequests = new Map<number, TypeNumberPair>();
 
+  // Fetch merged PRs first to determine which linked issues to include by branch
+  const unfilteredPRs: GitHubSearchItem[] = await remoteSearchBy(
+    client,
+    'pr',
+    repo.owner,
+    repo.name,
+    prevTagDate,
+    commentFilterKeywords,
+    logger,
+    currentBranch
+  );
+  logger.verbose('comments', `All unfiltered Pull Requests: ${unfilteredPRs.map((p) => p.number).join(', ')}`);
+
   if (templates.issue) {
-    const issues = await remoteSearchBy(client, 'issue', repo.owner, repo.name, prevTagDate, [], logger);
+    const issues: GitHubSearchItem[] = await remoteSearchBy(client, 'issue', repo.owner, repo.name, prevTagDate, [], logger);
+
+    // Only include issues if the issue number appears in a PR's title or body with GitHub linking syntax
+    const issueKeywords = ['fix', 'fixes', 'close', 'closes', 'resolve', 'resolves'];
+    const keywordPattern = issueKeywords.join('|');
+
     issues.forEach((item) => {
-      closedLinkedIssues.set(item.number, { type: 'issue', number: item.number });
+      const issueFound = unfilteredPRs.some((pr) => {
+        const text = `${pr.title} ${pr.body || ''}`;
+        return new RegExp(`\\b(?:${keywordPattern})\\s+#${item.number}\\b`, 'i').test(text);
+      });
+
+      if (issueFound) {
+        closedLinkedIssues.set(item.number, { type: 'issue', number: item.number });
+      }
     });
   }
 
   if (templates.pullRequest) {
-    const unfilteredPRs = await remoteSearchBy(client, 'pr', repo.owner, repo.name, prevTagDate, commentFilterKeywords, logger);
-    logger.verbose('comments', `All unfiltered Pull Requests: ${unfilteredPRs.map((p) => p.number).join(', ')}`);
-
     // filter PRs by keywords in title and make sure that they starts with one of the keywords
     const pullRequests = unfilteredPRs.filter((item) =>
       commentFilterKeywords.some((startWord) => item.title.toLowerCase().startsWith(startWord.toLowerCase()))

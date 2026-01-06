@@ -169,6 +169,7 @@ describe('commentResolvedItems', () => {
     const mockOptions = {
       client: mockClient as OctokitClientOutput,
       commentFilterKeywords: ['fix', 'feat', 'perf'],
+      currentBranch: 'main',
       gitRemote: 'https://github.com/owner/repo.git',
       execOpts: {
         cwd: process.cwd(),
@@ -199,18 +200,18 @@ describe('commentResolvedItems', () => {
   it('should create comments for issues and PRs when not in dry run mode', async () => {
     const { mockLogger, mockClient, mockOptions } = createMockDependencies();
 
-    // Mock search results for both issues and PRs
+    // Mock search results: PRs first, then issues
     mockClient.search.issuesAndPullRequests
       .mockResolvedValueOnce({
-        // First call for issues
+        // First call for PRs
         data: {
-          items: [{ number: 123, title: 'Linked issue', pull_request: {} }],
+          items: [{ number: 456, title: 'feature: test PR that fixes #123' }],
         },
       })
       .mockResolvedValueOnce({
-        // Second call for PRs
+        // Second call for issues
         data: {
-          items: [{ number: 456, title: 'feature: test PR' }],
+          items: [{ number: 123, title: 'Linked issue' }],
         },
       });
 
@@ -233,16 +234,16 @@ describe('commentResolvedItems', () => {
     // Mock a failed comment creation
     mockClient.issues.createComment.mockRejectedValueOnce(new Error('API Error'));
 
-    // Mock search results
+    // Mock search results: PRs first, then issues
     mockClient.search.issuesAndPullRequests
       .mockResolvedValueOnce({
         data: {
-          items: [{ number: 123, title: 'Linked issue', pull_request: {} }],
+          items: [{ number: 456, title: 'feature: test PR that fixes #123' }],
         },
       })
       .mockResolvedValueOnce({
         data: {
-          items: [{ number: 456, title: 'feature: test PR' }],
+          items: [{ number: 123, title: 'Linked issue' }],
         },
       });
 
@@ -263,18 +264,18 @@ describe('commentResolvedItems', () => {
   it('should not create comments in dry run mode', async () => {
     const { mockLogger, mockClient, mockOptions } = createMockDependencies();
 
-    // Setup mock search results
+    // Setup mock search results: PRs first, then issues
     mockClient.search.issuesAndPullRequests
       .mockResolvedValueOnce({
-        // First call for issues
+        // First call for PRs
         data: {
-          items: [{ number: 123, title: 'Linked issue', pull_request: {} }],
+          items: [{ number: 456, title: 'feature: test PR that fixes #123' }],
         },
       })
       .mockResolvedValueOnce({
-        // Second call for PRs
+        // Second call for issues
         data: {
-          items: [{ number: 456, title: 'Another issue', pull_request: {} }],
+          items: [{ number: 123, title: 'Linked issue' }],
         },
       });
 
@@ -293,20 +294,22 @@ describe('commentResolvedItems', () => {
   it('should filter PRs based on PR title keywords', async () => {
     const { mockClient, mockOptions } = createMockDependencies();
 
-    // Mock search to return multiple PRs with different titles
+    // Mock search to return PRs first, then no issues
     mockClient.search.issuesAndPullRequests
       .mockResolvedValueOnce({
-        data: { items: [] },
-      })
-      .mockResolvedValueOnce({
+        // First call for PRs
         data: {
           items: [
-            { number: 101, title: 'feature: add new functionality', pull_request: {} },
-            { number: 102, title: 'fix: some bug', pull_request: {} },
-            { number: 103, title: 'feature: improve performance', pull_request: {} },
-            { number: 104, title: 'add some new features', pull_request: {} },
+            { number: 101, title: 'feature: add new functionality' },
+            { number: 102, title: 'fix: some bug' },
+            { number: 103, title: 'feature: improve performance' },
+            { number: 104, title: 'add some new features' },
           ],
         },
+      })
+      .mockResolvedValueOnce({
+        // Second call for issues
+        data: { items: [] },
       });
 
     // Set filter keywords to only include PRs starting with 'feature'
@@ -333,18 +336,22 @@ describe('commentResolvedItems', () => {
   it('should filter PRs and add to issues when PR title includes "fix #[number]"', async () => {
     const { mockClient, mockOptions } = createMockDependencies();
 
-    // Mock search to return multiple PRs with different titles
+    // Mock search to return PRs first, then issues
     mockClient.search.issuesAndPullRequests
       .mockResolvedValueOnce({
-        data: { items: [] },
-      })
-      .mockResolvedValueOnce({
+        // First call for PRs
         data: {
           items: [
-            { number: 101, title: 'feat: add new functionality', pull_request: {} },
-            { number: 102, title: 'fix: some bug, fix #123', pull_request: {} },
-            { number: 103, title: 'feat: improve performance', pull_request: {} },
+            { number: 101, title: 'feat: add new functionality' },
+            { number: 102, title: 'fix: some bug, fix #123' },
+            { number: 103, title: 'feat: improve performance' },
           ],
+        },
+      })
+      .mockResolvedValueOnce({
+        // Second call for issues
+        data: {
+          items: [{ number: 123, title: 'Issue that was fixed' }],
         },
       });
 
@@ -361,6 +368,41 @@ describe('commentResolvedItems', () => {
     expect(results).toHaveLength(4);
     expect(results.every((r) => r.success)).toBe(true);
     expect(results.map((r) => r.number)).toEqual([123, 101, 102, 103]);
+  });
+
+  it('should add issue from PR title "fix #[number]" if not already in search results', async () => {
+    const { mockClient, mockOptions } = createMockDependencies();
+
+    // Mock search to return PRs first, then issues (issue #999 NOT in search results)
+    mockClient.search.issuesAndPullRequests
+      .mockResolvedValueOnce({
+        // First call for PRs - includes fix #999 which is NOT in issue search
+        data: {
+          items: [
+            { number: 101, title: 'feat: add new functionality' },
+            { number: 102, title: 'fix: bug fixes #999' },
+          ],
+        },
+      })
+      .mockResolvedValueOnce({
+        // Second call for issues - issue #999 is NOT returned
+        data: {
+          items: [],
+        },
+      });
+
+    // Reset mock call counts
+    mockClient.issues.createComment.mockClear();
+
+    const results = await commentResolvedItems(mockOptions);
+
+    // Verify issue #999 was added from PR title even though it wasn't in search results
+    const calledWithNumbers = mockClient.issues.createComment.mock.calls.map((call) => call[0].issue_number);
+    expect(calledWithNumbers).toEqual([999, 101, 102]);
+
+    // Verify results
+    expect(results).toHaveLength(3);
+    expect(results.every((r) => r.success)).toBe(true);
   });
 
   it('should handle empty search results gracefully', async () => {
@@ -391,16 +433,18 @@ describe('commentResolvedItems', () => {
   it('should respect template substitution for comments', async () => {
     const { mockClient, mockOptions } = createMockDependencies();
 
-    // Mock search results
+    // Mock search results: PRs first, then issues
     mockClient.search.issuesAndPullRequests
       .mockResolvedValueOnce({
+        // First call for PRs
         data: {
-          items: [{ number: 123, title: 'Linked issue', pull_request: {} }],
+          items: [{ number: 456, title: 'feature: test PR that fixes #123' }],
         },
       })
       .mockResolvedValueOnce({
+        // Second call for issues
         data: {
-          items: [{ number: 456, title: 'feature: test PR' }],
+          items: [{ number: 123, title: 'Linked issue' }],
         },
       });
 
@@ -433,16 +477,18 @@ describe('commentResolvedItems', () => {
       pullRequest: 'PR specific template for %s',
     };
 
-    // Mock search results
+    // Mock search results: PRs first, then issues
     mockClient.search.issuesAndPullRequests
       .mockResolvedValueOnce({
+        // First call for PRs
         data: {
-          items: [{ number: 123, title: 'Linked issue', pull_request: {} }],
+          items: [{ number: 456, title: 'feature: test PR that fixes #123' }],
         },
       })
       .mockResolvedValueOnce({
+        // Second call for issues
         data: {
-          items: [{ number: 456, title: 'feature: test PR' }],
+          items: [{ number: 123, title: 'Linked issue' }],
         },
       });
 
@@ -469,20 +515,20 @@ describe('commentResolvedItems', () => {
     // Mock search results with duplicate issue number
     mockClient.search.issuesAndPullRequests
       .mockResolvedValueOnce({
-        // First call for issues - duplicate issue
+        // First call for PRs
         data: {
           items: [
-            { number: 123, title: 'Linked issue 1', pull_request: {} },
-            { number: 123, title: 'Linked issue 2', pull_request: {} },
+            { number: 456, title: 'feature: test PR 1 that fixes #123' },
+            { number: 456, title: 'feature: test PR 2 that fixes #123' },
           ],
         },
       })
       .mockResolvedValueOnce({
-        // Second call for PRs - duplicate PR
+        // Second call for issues - duplicate issue
         data: {
           items: [
-            { number: 456, title: 'feature: test PR 1' },
-            { number: 456, title: 'feature: test PR 2' },
+            { number: 123, title: 'Linked issue 1' },
+            { number: 123, title: 'Linked issue 2' },
           ],
         },
       });
@@ -513,22 +559,22 @@ describe('commentResolvedItems', () => {
     // Mock search results with mix of duplicate and unique numbers
     mockClient.search.issuesAndPullRequests
       .mockResolvedValueOnce({
-        // First call for issues - mix of numbers
+        // First call for PRs - mix of numbers
         data: {
           items: [
-            { number: 123, title: 'Linked issue 1', pull_request: {} },
-            { number: 124, title: 'Linked issue 2', pull_request: {} },
-            { number: 123, title: 'Linked issue 3', pull_request: {} },
+            { number: 456, title: 'feature: test PR 1 that fixes #123' },
+            { number: 457, title: 'feature: test PR 2 that fixes #124' },
+            { number: 456, title: 'feature: test PR 3 that fixes #123' },
           ],
         },
       })
       .mockResolvedValueOnce({
-        // Second call for PRs - mix of numbers
+        // Second call for issues - mix of numbers
         data: {
           items: [
-            { number: 456, title: 'feature: test PR 1' },
-            { number: 457, title: 'feature: test PR 2' },
-            { number: 456, title: 'feature: test PR 3' },
+            { number: 123, title: 'Linked issue 1' },
+            { number: 124, title: 'Linked issue 2' },
+            { number: 123, title: 'Linked issue 3' },
           ],
         },
       });

@@ -954,6 +954,7 @@ export class VersionCommand extends Command<VersionCommandOption> {
       await commentResolvedItems({
         client,
         commentFilterKeywords: keywordsCSV.split(','),
+        currentBranch: this.currentBranch,
         dryRun,
         gitRemote,
         execOpts: this.execOpts,
