@@ -4,6 +4,15 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [4.10.4](https://github.com/lerna-lite/lerna-lite/compare/v4.10.3...v4.10.4) (2026-01-06)
+
+### 🐞 Bug Fixes
+
+* add delay to log Version --yes auto-confirm ([#1223](https://github.com/lerna-lite/lerna-lite/issues/1223)) ([fe6be74](https://github.com/lerna-lite/lerna-lite/commit/fe6be748fa0f9ac581c446def4a2bdf8271fe6d9)) - by @ghiscoding
+* comment on issues/PRs only related to current branch ([#1231](https://github.com/lerna-lite/lerna-lite/issues/1231)) ([c4e81d3](https://github.com/lerna-lite/lerna-lite/commit/c4e81d31f80ba0ffd822811b3cdfedfaf2a76944)) - by @ghiscoding
+* custom registry authentication failure, fixes [#1229](https://github.com/lerna-lite/lerna-lite/issues/1229) ([#1230](https://github.com/lerna-lite/lerna-lite/issues/1230)) ([551a56f](https://github.com/lerna-lite/lerna-lite/commit/551a56f50515d2a84d6cad73198c77a09faa1da7)) - by @ghiscoding
+* **version:** comment on issues/PRs should work on Windows ([#1227](https://github.com/lerna-lite/lerna-lite/issues/1227)) ([f7e18da](https://github.com/lerna-lite/lerna-lite/commit/f7e18daa205c3877da19c44f654396db9454e302)) - by @ghiscoding
+
 ## [4.10.3](https://github.com/lerna-lite/lerna-lite/compare/v4.10.2...v4.10.3) (2025-12-27)
 
 ### 🐞 Bug Fixes
