@@ -265,16 +265,13 @@ Build metadata must be [SemVer compatible](https://semver.org/#spec-item-10). Wh
 
 ### Comments on resolved issues/pull requests
 
-> [!NOTE]
-> GitHub is the only supported client at the moment and you must provide 1 of these 2 options [`--create-release <type>`](../version/README.md#--create-release-type) or [`--remote-client <type>`](../version/README.md#--remote-client-type).
-
 When enabled, it will insert comments on all the closed linked issues and/or merged pull requests that were included in the release (currently only GitHub is supported). You could also provide a custom format by using any of these tokens (`%s`, `%v`, `%u`), see examples below.
 
 - `%s`: git tag - (e.g. "v1.0.2")
 - `%v`: version number only - (e.g. "1.0.2")
 - `%u`: release URL - (e.g. "https://github.com/lerna-lite/lerna-lite/releases/tag/v4.11.0")
 
-When running in a GitHub CI environment, you will also need these permissions:
+When running in a GitHub CI environment, you will also need the following permissions (and a valid GitHub token):
 ```yaml
 permissions:
   contents: write      # to be able to publish a GitHub release
@@ -283,7 +280,8 @@ permissions:
   pull-requests: write # to be able to comment on released pull requests
 ```
 
-> **Note** this will possibly execute many API calls and this option will also require a valid `GH_TOKEN` (or `GITHUB_TOKEN`) with write access permissions to the GitHub API so that it can execute the query to fetch all commit details and insert comments, for more info refer to the [`Remote Client Auth Tokens`](#remote-client-auth-tokens) below. Also note that it will only fetch a maximum of 100 issues/PRs (max handled by octokit API) and I think that is more than enough.
+> [!NOTE]
+> GitHub is the only supported client at the moment and you must provide 1 of these 2 options [`--create-release <type>`](../version/README.md#--create-release-type) or [`--remote-client <type>`](../version/README.md#--remote-client-type). Also note that it will only fetch a maximum of 100 issues/PRs (max handled by octokit API) and I think that is more than enough.
 
 > [!NOTE]
 > This feature works best with a single global version and might not work as expected with `independent` mode, there is just no easy ways to detect which issues/PRs belongs to which package. You could still use it with `independent` but none of the tokens shown above will be available (or at least won't provide the correct info) and so in that case using a generic message is the only suggestion we have (e.g.: `"This PR is included in latest [release](http://release-url)"`).
