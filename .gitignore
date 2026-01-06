@@ -40,3 +40,8 @@ tsconfig.*.tsbuildinfo
 
 # tarball
 **/*.tgz
+
+# Verdaccio local registry (for testing)
+.verdaccio/storage
+.verdaccio/htpasswd
+.npmrc.backup

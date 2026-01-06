@@ -45,6 +45,7 @@
     "new-version": "lerna version",
     "new-publish": "lerna publish from-package",
     "roll-new-release": "pnpm build:full && pnpm new-version && pnpm new-publish",
+    "test-verdaccio": "lerna publish from-package --registry http://localhost:4873/ --yes --no-git-tag-version --no-push",
     "lint": "oxlint .",
     "lint:fix": "oxlint . --fix",
     "lint-type": "oxlint . --type-aware",

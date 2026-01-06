@@ -1,0 +1,39 @@
+# path to a directory with all packages
+storage: ./storage
+
+auth:
+  htpasswd:
+    file: ./htpasswd
+    # Maximum amount of users allowed to register, defaults to "+infinity".
+    # You can set this to -1 to disable registration.
+    max_users: 1000
+
+# a list of other known repositories we can talk to
+uplinks:
+  npmjs:
+    url: https://registry.npmjs.org/
+
+packages:
+  "@*/*":
+    # scoped packages
+    access: $all
+    publish: $all
+    unpublish: $all
+    proxy: npmjs
+
+  "**":
+    # allow all users (including anonymous) to read and publish packages
+    access: $all
+    publish: $all
+    unpublish: $all
+    # if package is not available locally, proxy requests to 'npmjs' registry
+    proxy: npmjs
+
+# log settings
+logs:
+  type: stdout
+  format: pretty
+  level: http
+
+# Listen on localhost only
+listen: 127.0.0.1:4873

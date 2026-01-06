@@ -3,126 +3,76 @@ import assert from 'node:assert';
 import { readFileSync, statSync } from 'node:fs';
 import { resolve as pathResolve } from 'node:path';
 
+import { ConfigChain } from './config-chain.js';
 import { envReplace } from './env-replace.js';
 import { findPrefix } from './find-prefix.js';
 import { toNerfDart } from './nerf-dart.js';
 import { parseField } from './parse-field.js';
 
-export class Conf {
+export class Conf extends ConfigChain {
   globalPrefix = '';
   localPrefix = '';
   root: any;
-  sources: Record<string, { path: string; type: string }> = {};
-  list: Array<any> = [];
-  private config: Record<string, any> = {};
 
   // https://github.com/npm/npm/blob/latest/lib/config/core.js#L208-L222
   constructor(base: any) {
+    super(base);
     this.root = base;
-    this.config = { ...base };
-    // emulate cli layer at list[0]
-    this.list = [this.config];
-  }
-
-  // provide a plain object snapshot compatible with existing callers
-  get snapshot() {
-    return { ...this.config };
-  }
-
-  get(key: string) {
-    return this.config[key];
-  }
-
-  set(key: string, value: any, source?: string) {
-    this.config[key] = value;
-    if (source) {
-      this.list.push({ [key]: value, __source__: source });
-    }
-    return this;
-  }
-
-  del(key: string, source?: string) {
-    delete this.config[key];
-    if (source) {
-      this.list.push({ [key]: undefined, __source__: source });
-    }
-    return this;
   }
 
   // https://github.com/npm/npm/blob/latest/lib/config/core.js#L332-L342
-  add(data: any, marker?: any) {
+  add(data: any, marker: any) {
+    const transformed: Record<string, any> = {};
     for (const x of Object.keys(data)) {
       // https://github.com/npm/npm/commit/f0e998d
       const newKey = envReplace(x);
       const newField = parseField(data[x], newKey);
 
-      delete data[x];
-      data[newKey] = newField;
+      transformed[newKey] = newField;
     }
 
-    Object.assign(this.config, data);
-    if (marker) {
-      const sourceName = typeof marker === 'string' ? marker : marker.__source__;
-      this.list.push({ ...data, __source__: marker });
-      if (sourceName) {
-        const existing = this.sources[sourceName] || ({} as any);
-        this.sources[sourceName] = { ...existing, data } as any;
-      }
-    }
-    return this;
+    return super.add(transformed, marker);
   }
 
   // https://github.com/npm/npm/blob/latest/lib/config/core.js#L312-L325
   addFile(file: string, name: string = file) {
-    const marker = { __source__: name };
-    this.sources[name] = { path: file, type: 'ini' };
-    try {
-      const contents = readFileSync(file, 'utf8');
-      // minimal ini parser: key=value per line
-      const parsed: Record<string, any> = {};
-      contents.split(/\r?\n/).forEach((line) => {
-        const m = line.match(/^\s*([^#;][^=]+)\s*=\s*(.*)\s*$/);
-        if (m) {
-          const key = m[1].trim();
-          const val = m[2].trim();
-          parsed[key] = val;
-        }
-      });
-      this.add(parsed, marker);
-    } catch (err: any) {
-      this.add({}, marker);
-    }
-    return this;
+    return super.addFile(file, 'ini', name);
   }
 
   // https://github.com/npm/npm/blob/latest/lib/config/core.js#L344-L360
-  addEnv(env: { [key: string]: string | undefined } = process.env) {
-    const conf = {};
+  // Override to handle npm_config_ environment variables specifically
+  addEnv(prefix?: string, env: { [key: string]: string | undefined } = process.env, name?: string) {
+    // When called without arguments (npm use case), filter npm_config_ vars
+    if (prefix === undefined) {
+      const conf = {};
 
-    Object.keys(env)
-      .filter((x) => /^npm_config_/i.test(x))
-      .forEach((x) => {
-        if (!env[x]) {
-          return;
-        }
+      Object.keys(env)
+        .filter((x) => /^npm_config_/i.test(x))
+        .forEach((x) => {
+          if (!env[x]) {
+            return;
+          }
 
-        // leave first char untouched, even if it is a '_'
-        // convert all other '_' to '-'
-        const p = x
-          .toLowerCase()
-          .replace(/^npm_config_/, '')
-          .replace(/(?!^)_/g, '-');
+          // leave first char untouched, even if it is a '_'
+          // convert all other '_' to '-'
+          const p = x
+            .toLowerCase()
+            .replace(/^npm_config_/, '')
+            .replace(/(?!^)_/g, '-');
 
-        conf[p] = env[x];
-      });
+          conf[p] = env[x];
+        });
 
-    this.add(conf, 'env');
-    return this;
+      return super.addEnv('', conf, 'env');
+    }
+
+    // Otherwise, delegate to parent
+    return super.addEnv(prefix, env, name);
   }
 
   // https://github.com/npm/npm/blob/latest/lib/config/load-prefix.js
   loadPrefix() {
-    const cli = this.list[0] ?? {};
+    const cli = this.list[0];
 
     Object.defineProperty(this, 'prefix', {
       enumerable: true,
