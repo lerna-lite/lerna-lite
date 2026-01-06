@@ -969,7 +969,7 @@ export class VersionCommand extends Command<VersionCommandOption> {
         },
       });
 
-      this.logger.info('comments', '[end] Comments on remote client...');
+      this.logger.info('comments', '[end] Comments on remote client.');
     }
   }
 

@@ -979,7 +979,7 @@ describe('VersionCommand', () => {
           },
         })
       );
-      expect(logMessages).toContain('[end] Comments on remote client...');
+      expect(logMessages).toContain('[end] Comments on remote client.');
     });
 
     it('calls commentResolvedItems() with default comment pull requests template when --comment-pull-requests is enabled without arguments', async () => {
@@ -1030,7 +1030,7 @@ describe('VersionCommand', () => {
           },
         })
       );
-      expect(logMessages).toContain('[end] Comments on remote client...');
+      expect(logMessages).toContain('[end] Comments on remote client.');
     });
 
     it('calls commentResolvedItems() with custom comment pull requests template when --comment-pull-requests is provided with text', async () => {
