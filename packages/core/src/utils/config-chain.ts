@@ -130,6 +130,7 @@ export class ConfigChain {
         }
       }
     }
+
     return this;
   }
 
@@ -215,9 +216,9 @@ export class ConfigChain {
       }
     } else if (type === 'json') {
       return JSON.parse(content);
-    } else {
-      return parseIni(content);
     }
+
+    return parseIni(content);
   }
 
   /**
