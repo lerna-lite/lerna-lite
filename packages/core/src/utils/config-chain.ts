@@ -41,22 +41,21 @@ function parseIni(content: string): Record<string, any> {
 
 /**
  * Reimplementation of deprecated config-chain: https://www.npmjs.com/package/config-chain
- * A simplified TypeScript reimplementation of config-chain's core functionality
- * Manages a chain of configuration objects with priority (first wins)
+ * Mimics ProtoList behavior where list[0] has highest priority via prototype chain
  */
 export class ConfigChain {
   list: Array<Record<string, any>> = [];
+  base: Record<string, any> = {};
   sources: Record<string, { path?: string; type?: string; data?: Record<string, any> }> = {};
 
   constructor(base?: Record<string, any>) {
     if (base) {
-      this.list.push(base);
+      this.base = base;
     }
   }
 
   /**
    * Get a configuration value from the chain
-   * Searches for the key prioritizing CLI (index 1) over base (index 0)
    */
   get(key: string, where?: string): any {
     if (where) {
@@ -67,22 +66,15 @@ export class ConfigChain {
       return undefined;
     }
 
-    // Search CLI first (index 1 - highest priority)
-    if (this.list[1] && Object.hasOwnProperty.call(this.list[1], key)) {
-      return this.list[1][key];
-    }
-
-    // Then search rest of chain (env, project, user, global)
-    for (let i = 2; i < this.list.length; i++) {
+    for (let i = 0; i < this.list.length; i++) {
       const config = this.list[i];
       if (config && Object.hasOwnProperty.call(config, key)) {
         return config[key];
       }
     }
 
-    // Finally fall back to base (index 0 - lowest priority)
-    if (this.list[0] && Object.hasOwnProperty.call(this.list[0], key)) {
-      return this.list[0][key];
+    if (this.base && Object.hasOwnProperty.call(this.base, key)) {
+      return this.base[key];
     }
 
     return undefined;
@@ -151,7 +143,6 @@ export class ConfigChain {
         }
       }
     } else {
-      // Add new configuration layer to END (like original push behavior)
       this.list.push(data);
       if (sourceName) {
         this.sources[sourceName] = this.sources[sourceName] || {};
@@ -187,13 +178,13 @@ export class ConfigChain {
   /**
    * Add environment variables with a prefix to the chain
    */
-  addEnv(prefix: string, env: Record<string, string | undefined> = process.env, name = 'env'): this {
-    const data: Record<string, string> = {};
+  addEnv(prefix: string, env: Record<string, any> = process.env, name = 'env'): this {
+    const data: Record<string, any> = {};
     const prefixLength = prefix.length;
 
     for (const key in env) {
-      if (key.indexOf(prefix) === 0 && env[key]) {
-        data[key.substring(prefixLength)] = env[key]!;
+      if (key.indexOf(prefix) === 0 && env[key] !== undefined) {
+        data[key.substring(prefixLength)] = env[key];
       }
     }
 
@@ -222,7 +213,7 @@ export class ConfigChain {
   }
 
   /**
-   * Push a configuration object onto the end of the chain (lowest priority)
+   * Push a configuration object onto the chain
    */
   push(config: Record<string, any>): void {
     this.list.push(config);
@@ -230,34 +221,19 @@ export class ConfigChain {
 
   /**
    * Get a snapshot of all merged configuration
-   *
-   * The list order after initialization:
-   * - Index 0: base (defaults) - LOWEST priority
-   * - Index 1: CLI options - HIGHEST priority
-   * - Index 2+: env, project, user, global - medium to low priority
-   *
-   * Merge strategy: base first, then [global...env] in reverse, then CLI last
    */
   get snapshot(): Record<string, any> {
     const result: Record<string, any> = {};
 
-    // Start with base (defaults) - index 0
-    if (this.list[0] && typeof this.list[0] === 'object' && !('__source__' in this.list[0])) {
-      Object.assign(result, this.list[0]);
+    if (this.base) {
+      Object.assign(result, this.base);
     }
 
-    // Apply items from end to start (skipping base and CLI)
-    // This gives: global > user > project > env
-    for (let i = this.list.length - 1; i >= 2; i--) {
+    for (let i = this.list.length - 1; i >= 0; i--) {
       const config = this.list[i];
       if (config && typeof config === 'object' && !('__source__' in config)) {
         Object.assign(result, config);
       }
-    }
-
-    // Finally apply CLI (index 1) - highest priority
-    if (this.list[1] && typeof this.list[1] === 'object' && !('__source__' in this.list[1])) {
-      Object.assign(result, this.list[1]);
     }
 
     return result;
