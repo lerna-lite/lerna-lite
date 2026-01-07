@@ -30,18 +30,20 @@
         "caughtErrors": "none"
       }
     ],
-    "import/extensions": [
-      "error",
-      "ignorePackages",
-      {
-        "js": "always",
-        "mjs": "always",
-        "jsx": "never",
-        "ts": "never",
-        "tsx": "never",
-        "json": "always"
-      }
-    ],
+    // disable next rule until oxlint issue is resolved: https://github.com/oxc-project/oxc/issues/17693
+    "import/extensions": "off",
+    // "import/extensions": [
+    //   "error",
+    //   "ignorePackages",
+    //   {
+    //     "js": "always",
+    //     "mjs": "always",
+    //     "jsx": "never",
+    //     "ts": "never",
+    //     "tsx": "never",
+    //     "json": "always"
+    //   }
+    // ],
     "import/no-self-import": "error",
     "import/no-useless-path-segments": ["error", { "noUselessIndex": true }],
 
