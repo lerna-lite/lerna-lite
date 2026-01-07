@@ -1,7 +1,8 @@
 #!/usr/bin/env node
+import { resolve } from 'node:path';
+
 import { Conf } from '../packages/core/dist/utils/conf.js';
 import { Defaults } from '../packages/core/dist/utils/defaults.js';
-import { resolve } from 'node:path';
 
 // Set environment variable
 process.env.VERDACCIO_TOKEN = 'my-test-token-12345';

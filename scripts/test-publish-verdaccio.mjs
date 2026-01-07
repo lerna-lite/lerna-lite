@@ -37,11 +37,11 @@ console.log('Testing lerna configuration...\n');
 
 try {
   // This should read .npmrc with ${VERDACCIO_TOKEN} and expand it
-  execSync('node packages/cli/dist/cli.js list', { 
+  execSync('node packages/cli/dist/cli.js list', {
     stdio: 'inherit',
-    env: { ...process.env }
+    env: { ...process.env },
   });
-  
+
   console.log('\n✅ Lerna successfully loaded configuration with environment variables!');
   console.log('   The .npmrc file with ${VERDACCIO_TOKEN} was properly expanded.');
 } catch (err) {

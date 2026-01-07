@@ -1,6 +1,7 @@
 #!/usr/bin/env node
-import { npmConf } from '../packages/core/dist/utils/npm-conf.js';
 import { resolve } from 'node:path';
+
+import { npmConf } from '../packages/core/dist/utils/npm-conf.js';
 
 // Set environment variable
 process.env.VERDACCIO_TOKEN = 'my-test-token-12345';
