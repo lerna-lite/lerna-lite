@@ -4,6 +4,12 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [4.10.5](https://github.com/lerna-lite/lerna-lite/compare/v4.10.4...v4.10.5) (2026-01-07)
+
+### 🐞 Bug Fixes
+
+* auth token provided from `.npmrc` should still work, fixes [#1229](https://github.com/lerna-lite/lerna-lite/issues/1229) ([#1232](https://github.com/lerna-lite/lerna-lite/issues/1232)) ([81338cf](https://github.com/lerna-lite/lerna-lite/commit/81338cfbd210f646a71e6c971bccc6c531984289)) - by @ghiscoding
+
 ## [4.10.4](https://github.com/lerna-lite/lerna-lite/compare/v4.10.3...v4.10.4) (2026-01-06)
 
 ### 🐞 Bug Fixes
