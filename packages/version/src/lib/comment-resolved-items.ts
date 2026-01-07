@@ -76,7 +76,7 @@ export async function commentResolvedItems({
     logger,
     currentBranch
   );
-  logger.verbose('comments', `All unfiltered Pull Requests: ${unfilteredPRs.map((p) => p.number).join(', ')}`);
+  logger.silly('comments', `All unfiltered Pull Requests: ${unfilteredPRs.map((p) => p.number).join(', ')}`);
 
   if (templates.issue) {
     const issues: GitHubSearchItem[] = await remoteSearchBy(client, 'issue', repo.owner, repo.name, prevTagDate, [], logger);
