@@ -41,7 +41,7 @@ export async function remoteSearchBy(
     type === 'issue'
       ? `repo:${owner}/${repo}+is:issue+linked:pr+closed${dateCondition}`
       : `repo:${owner}/${repo}${keywordCondition}+type:pr+merged${dateCondition}${baseBranchCondition}`;
-  logger.verbose('comments', `remote ${type} search query: ${q}`);
+  logger.verbose('comments', `remote ${type === 'pr' ? 'PR' : 'issue'} search query: ${q}`);
   return (await client.search!.issuesAndPullRequests({ q, per_page: 100 })).data.items;
 }
 
