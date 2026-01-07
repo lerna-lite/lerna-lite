@@ -14,6 +14,11 @@ export class Conf extends ConfigChain {
   localPrefix = '';
   root: any;
 
+  // Declare methods/properties from ConfigChain to avoid type errors
+  declare push: (config: Record<string, any>) => void;
+  declare sources: Record<string, { path?: string; type?: string; data?: Record<string, any> }>;
+  declare parse: (content: string, file?: string, type?: string) => Record<string, any>;
+
   // https://github.com/npm/npm/blob/latest/lib/config/core.js#L208-L222
   constructor(base: any) {
     super(base);
@@ -22,52 +27,59 @@ export class Conf extends ConfigChain {
 
   // https://github.com/npm/npm/blob/latest/lib/config/core.js#L332-L342
   add(data: any, marker: any) {
-    const transformed: Record<string, any> = {};
     for (const x of Object.keys(data)) {
       // https://github.com/npm/npm/commit/f0e998d
       const newKey = envReplace(x);
       const newField = parseField(data[x], newKey);
 
-      transformed[newKey] = newField;
+      delete data[x];
+      data[newKey] = newField;
     }
 
-    return super.add(transformed, marker);
+    return super.add(data, marker);
   }
 
   // https://github.com/npm/npm/blob/latest/lib/config/core.js#L312-L325
   addFile(file: string, name: string = file) {
-    return super.addFile(file, 'ini', name);
+    const marker = { __source__: name };
+
+    this.sources[name] = { path: file, type: 'ini' };
+    this.push(marker);
+
+    try {
+      const contents = readFileSync(file, 'utf8');
+      const data = this.parse(contents, file, 'ini');
+      this.add(data, marker);
+    } catch (err: any) {
+      this.add({}, marker);
+    }
+
+    return this;
   }
 
   // https://github.com/npm/npm/blob/latest/lib/config/core.js#L344-L360
-  // Override to handle npm_config_ environment variables specifically
-  addEnv(prefix?: string, env: { [key: string]: string | undefined } = process.env, name?: string) {
-    // When called without arguments (npm use case), filter npm_config_ vars
-    if (prefix === undefined) {
-      const conf = {};
+  // @ts-expect-error - Override with different signature than parent
+  addEnv(env: { [key: string]: string | undefined } = process.env) {
+    const conf = {};
 
-      Object.keys(env)
-        .filter((x) => /^npm_config_/i.test(x))
-        .forEach((x) => {
-          if (!env[x]) {
-            return;
-          }
+    Object.keys(env)
+      .filter((x) => /^npm_config_/i.test(x))
+      .forEach((x) => {
+        if (!env[x]) {
+          return;
+        }
 
-          // leave first char untouched, even if it is a '_'
-          // convert all other '_' to '-'
-          const p = x
-            .toLowerCase()
-            .replace(/^npm_config_/, '')
-            .replace(/(?!^)_/g, '-');
+        // leave first char untouched, even if it is a '_'
+        // convert all other '_' to '-'
+        const p = x
+          .toLowerCase()
+          .replace(/^npm_config_/, '')
+          .replace(/(?!^)_/g, '-');
 
-          conf[p] = env[x];
-        });
+        conf[p] = env[x];
+      });
 
-      return super.addEnv('', conf, 'env');
-    }
-
-    // Otherwise, delegate to parent
-    return super.addEnv(prefix, env, name);
+    return super.addEnv('', conf, 'env');
   }
 
   // https://github.com/npm/npm/blob/latest/lib/config/load-prefix.js
@@ -243,28 +255,28 @@ export class Conf extends ConfigChain {
     const nerfed = toNerfDart(uri);
 
     if (c.token) {
-      this.set(`${nerfed}:_authToken`, c.token);
-      this.del(`${nerfed}:_password`);
-      this.del(`${nerfed}:username`);
-      this.del(`${nerfed}:email`);
-      this.del(`${nerfed}:always-auth`);
+      this.set(`${nerfed}:_authToken`, c.token, 'user');
+      this.del(`${nerfed}:_password`, 'user');
+      this.del(`${nerfed}:username`, 'user');
+      this.del(`${nerfed}:email`, 'user');
+      this.del(`${nerfed}:always-auth`, 'user');
     } else if (c.username || c.password || c.email) {
       assert(c.username, 'must include username');
       assert(c.password, 'must include password');
       assert(c.email, 'must include email address');
 
-      this.del(`${nerfed}:_authToken`);
+      this.del(`${nerfed}:_authToken`, 'user');
 
       const encoded = Buffer.from(c.password, 'utf8').toString('base64');
 
-      this.set(`${nerfed}:_password`, encoded);
-      this.set(`${nerfed}:username`, c.username);
-      this.set(`${nerfed}:email`, c.email);
+      this.set(`${nerfed}:_password`, encoded, 'user');
+      this.set(`${nerfed}:username`, c.username, 'user');
+      this.set(`${nerfed}:email`, c.email, 'user');
 
       if (c.alwaysAuth !== undefined) {
-        this.set(`${nerfed}:always-auth`, c.alwaysAuth);
+        this.set(`${nerfed}:always-auth`, c.alwaysAuth, 'user');
       } else {
-        this.del(`${nerfed}:always-auth`);
+        this.del(`${nerfed}:always-auth`, 'user');
       }
     } else {
       throw new Error('No credentials to set.');

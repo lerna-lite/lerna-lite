@@ -45,3 +45,6 @@ tsconfig.*.tsbuildinfo
 .verdaccio/storage
 .verdaccio/htpasswd
 .npmrc.backup
+verdaccio.log
+verdaccio-error.log
+.verdaccio

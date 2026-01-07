@@ -27,8 +27,8 @@ describe('ConfigChain', () => {
     it('should initialize with base config', () => {
       const base = { foo: 'bar' };
       const chain = new ConfigChain(base);
-      expect(chain.list).toEqual([base]);
-      expect(chain.get('foo')).toBe('bar');
+      expect(chain.list).toEqual([]); // Base is stored separately, not in list
+      expect(chain.get('foo')).toBe('bar'); // But still accessible via get()
     });
   });
 
@@ -80,23 +80,23 @@ describe('ConfigChain', () => {
     });
 
     it('should prioritize CLI config over base defaults', () => {
-      cc.add({ registry: 'https://registry.npmjs.org/' }, 'defaults'); // base at index 0
-      cc.add({ registry: 'http://localhost:4873/' }, 'cli'); // CLI at index 1
+      cc = new ConfigChain({ registry: 'https://registry.npmjs.org/' }); // base in constructor
+      cc.add({ registry: 'http://localhost:4873/' }, 'cli'); // CLI at list[0] - highest priority
       expect(cc.get('registry')).toBe('http://localhost:4873/');
     });
 
     it('should prioritize CLI over environment variables', () => {
-      cc.add({ foo: 'base' }, 'defaults');
-      cc.add({ foo: 'cli-value' }, 'cli');
-      cc.add({ foo: 'env-value' }, 'env');
+      cc = new ConfigChain({ foo: 'base' }); // base in constructor
+      cc.add({ foo: 'cli-value' }, 'cli'); // list[0] - highest priority
+      cc.add({ foo: 'env-value' }, 'env'); // list[1]
       expect(cc.get('foo')).toBe('cli-value');
     });
 
     it('should fall back to base when key not in CLI', () => {
-      cc.add({ foo: 'base-value', bar: 'base-bar' }, 'defaults');
-      cc.add({ foo: 'cli-value' }, 'cli');
-      expect(cc.get('foo')).toBe('cli-value');
-      expect(cc.get('bar')).toBe('base-bar');
+      cc = new ConfigChain({ foo: 'base-value', bar: 'base-bar' }); // base in constructor
+      cc.add({ foo: 'cli-value' }, 'cli'); // list[0]
+      expect(cc.get('foo')).toBe('cli-value'); // Found in list[0]
+      expect(cc.get('bar')).toBe('base-bar'); // Falls back to base
     });
 
     it('should support getting value from specific source', () => {
@@ -112,24 +112,24 @@ describe('ConfigChain', () => {
     });
 
     it('should handle complex priority order', () => {
-      cc.add({ key: 'base' }, 'defaults'); // index 0
-      cc.add({ key: 'cli' }, 'cli'); // index 1
-      cc.addEnv('test'); // index 2
-      cc.add({ key: 'project' }, 'project'); // index 3
-      cc.add({ key: 'user' }, 'user'); // index 4
-      cc.add({ key: 'global' }, 'global'); // index 5
+      cc = new ConfigChain({ key: 'base' }); // base in constructor (lowest priority)
+      cc.add({ key: 'cli' }, 'cli'); // list[0] - highest priority
+      cc.addEnv('test'); // list[1]
+      cc.add({ key: 'project' }, 'project'); // list[2]
+      cc.add({ key: 'user' }, 'user'); // list[3]
+      cc.add({ key: 'global' }, 'global'); // list[4]
 
-      // CLI should win
+      // CLI (list[0]) should win
       expect(cc.get('key')).toBe('cli');
     });
 
     it('should search in correct order when CLI is empty', () => {
-      cc.add({ key: 'base' }, 'defaults'); // index 0
-      cc.add({}, 'cli'); // index 1 - empty
-      cc.add({ key: 'env' }, 'env'); // index 2
-      cc.add({ key: 'project' }, 'project'); // index 3
+      cc = new ConfigChain({ key: 'base' }); // base stored separately
+      cc.add({}, 'cli'); // list[0] - empty
+      cc.add({ key: 'env' }, 'env'); // list[1]
+      cc.add({ key: 'project' }, 'project'); // list[2]
 
-      // Should skip empty CLI and use env
+      // Should skip empty CLI (list[0]) and use env (list[1])
       expect(cc.get('key')).toBe('env');
     });
   });
@@ -206,21 +206,21 @@ describe('ConfigChain', () => {
     });
 
     it('should prioritize CLI in snapshot', () => {
-      cc.add({ registry: 'base' }, 'defaults');
-      cc.add({ registry: 'cli' }, 'cli');
-      cc.add({ registry: 'env' }, 'env');
+      cc = new ConfigChain({ registry: 'base' }); // base in constructor
+      cc.add({ registry: 'cli' }, 'cli'); // list[0] - wins in snapshot
+      cc.add({ registry: 'env' }, 'env'); // list[1]
       expect(cc.snapshot.registry).toBe('cli');
     });
 
     it('should apply configs in correct order: base < global < user < project < env < CLI', () => {
-      cc.add({ key: 'base' }, 'defaults');
-      cc.add({ key: 'cli' }, 'cli');
-      cc.add({ key: 'env' }, 'env');
-      cc.add({ key: 'project' }, 'project');
-      cc.add({ key: 'user' }, 'user');
-      cc.add({ key: 'global' }, 'global');
+      cc = new ConfigChain({ key: 'base' }); // base in constructor (lowest priority)
+      cc.add({ key: 'cli' }, 'cli'); // list[0] - highest priority
+      cc.add({ key: 'env' }, 'env'); // list[1]
+      cc.add({ key: 'project' }, 'project'); // list[2]
+      cc.add({ key: 'user' }, 'user'); // list[3]
+      cc.add({ key: 'global' }, 'global'); // list[4]
 
-      // CLI should be final value in snapshot
+      // CLI (list[0]) should be final value in snapshot
       expect(cc.snapshot.key).toBe('cli');
     });
 
@@ -269,15 +269,17 @@ describe('ConfigChain', () => {
 
     it('should match original library behavior from env.js test', () => {
       // Test case from original: cc.env('test_', { test_hello: true, ignore_this: 4, ignore_test_this_too: [] })
+      // Original test: https://github.com/dawsbot/config-chain/blob/master/test/env.js
       const env = {
-        test_hello: 'true',
-        ignore_this: '4',
-        ignore_test_this_too: '[]',
+        test_hello: true,
+        ignore_this: 4,
+        ignore_test_this_too: [],
       };
 
       cc.addEnv('test_', env);
-      expect(cc.get('hello')).toBe('true');
+      expect(cc.get('hello')).toBe(true);
       expect(cc.get('ignore_this')).toBeUndefined();
+      expect(cc.get('ignore_test_this_too')).toBeUndefined();
     });
 
     it('should return this for chaining', () => {
