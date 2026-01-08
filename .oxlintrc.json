@@ -30,7 +30,7 @@
         "caughtErrors": "none"
       }
     ],
-    "import/extensions": ["error", "always", { "ts": "never", "ignorePackages": true }],
+    "import/extensions": ["error", "always", { "ignorePackages": true }],
     "import/no-self-import": "error",
     "import/no-useless-path-segments": ["error", { "noUselessIndex": true }],
 
