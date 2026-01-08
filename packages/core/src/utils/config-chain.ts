@@ -167,7 +167,7 @@ export class ConfigChain {
       const contents = readFileSync(file, 'utf8');
       const data = this.parse(contents, file, type);
       this.add(data, marker);
-    } catch (err) {
+    } /* v8 ignore next */ catch (err) {
       // File doesn't exist or can't be read, add empty config
       this.add({}, marker);
     }
