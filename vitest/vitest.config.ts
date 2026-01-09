@@ -27,6 +27,7 @@ export default defineConfig({
         '**/index.ts',
         '**/interfaces.ts',
         '**/models.ts',
+        '**/types.ts',
       ],
       provider: 'v8',
     },

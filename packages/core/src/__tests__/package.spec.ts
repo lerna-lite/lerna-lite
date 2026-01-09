@@ -936,7 +936,7 @@ describe('Package', () => {
         `);
       });
 
-      it('should remove \`workspace:\` prefix on external dependencies without any version bump applied', () => {
+      it('should remove "workspace:" prefix on external dependencies without any version bump applied', () => {
         const logErrorSpy = vi.spyOn(log, 'error');
         const pkg = factory({
           dependencies: {
