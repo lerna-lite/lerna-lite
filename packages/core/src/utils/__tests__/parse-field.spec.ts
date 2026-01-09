@@ -58,4 +58,36 @@ describe('parseField()', () => {
 
     expect(output).toBe(123);
   });
+
+  it('should return true for empty string when field is boolean and not string type', () => {
+    const input = '';
+    const output = parseField(input, 'optional'); // optional is defined as Boolean in types
+
+    expect(output).toBe(true);
+  });
+
+  it('should resolve home directory path on Windows when field starts with ~\\ and HOME is set', () => {
+    const originalPlatform = process.platform;
+    const originalHome = process.env.HOME;
+
+    try {
+      // Mock Windows platform
+      Object.defineProperty(process, 'platform', { value: 'win32', writable: true });
+      process.env.HOME = 'C:\\Users\\TestUser';
+
+      const input = '~\\Documents\\config';
+      const output = parseField(input, 'prefix'); // prefix is a path type
+
+      expect(output).toContain('Documents');
+      expect(output).toContain('config');
+    } finally {
+      // Restore original values
+      Object.defineProperty(process, 'platform', { value: originalPlatform, writable: true });
+      if (originalHome !== undefined) {
+        process.env.HOME = originalHome;
+      } else {
+        delete process.env.HOME;
+      }
+    }
+  });
 });

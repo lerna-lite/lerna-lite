@@ -546,4 +546,17 @@ describe('Bun workspaces catalog in package.json', () => {
     const changes = diffWorkspaceCatalog('v1.0.0', 'bun');
     expect(changes).toEqual(['bar']);
   });
+
+  test('diff workspace catalog returns empty array when workspace file does not exist', () => {
+    // Mock pnpm-workspace.yaml file not existing
+    existsFileMock.mockReturnValueOnce(false);
+
+    const changes = diffWorkspaceCatalog('v1.0.0', 'pnpm');
+    expect(changes).toEqual([]);
+  });
+
+  test('diff workspace catalog returns empty array for unsupported npm client', () => {
+    const changes = diffWorkspaceCatalog('v1.0.0', 'npm' as any);
+    expect(changes).toEqual([]);
+  });
 });

@@ -539,4 +539,25 @@ describe('collectUpdates()', () => {
     });
     expect(describeRefSync).toHaveBeenCalledWith({ cwd: '/test', match: '*@*' }, true);
   });
+
+  it('includes prereleased packages when bump option is set to non-prerelease value', () => {
+    const graph = buildGraph(toPrereleaseMapper(['package-dag-2a', 'package-standalone']));
+    const pkgs = graph.rawPackageList;
+    const execOpts = { cwd: '/test' };
+
+    // Packages now have prerelease versions (e.g., "1.0.0-alpha.0")
+    // which means their prereleaseId getter will return "alpha"
+
+    const updates = collectUpdates(pkgs, graph, execOpts, {
+      bump: 'major', // non-prerelease bump
+    });
+
+    // Should include packages with prereleaseId
+    expect(updates).toEqual(
+      expect.arrayContaining([
+        expect.objectContaining({ name: 'package-dag-2a' }),
+        expect.objectContaining({ name: 'package-standalone' }),
+      ])
+    );
+  });
 });
