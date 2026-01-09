@@ -40,6 +40,7 @@ export function find(name: string, original: string) {
   } catch (err: any) {
     if (name === original) {
       if (err.code === 'ENOENT') {
+        /* v8 ignore next */
         return original;
       }
 

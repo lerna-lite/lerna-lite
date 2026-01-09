@@ -1,4 +1,3 @@
-/* v8 ignore file */
 import assert from 'node:assert';
 import { readFileSync, statSync } from 'node:fs';
 import { resolve as pathResolve } from 'node:path';
@@ -172,6 +171,7 @@ export class Conf extends ConfigChain {
         return;
       }
 
+      /* v8 ignore next */
       throw err;
     }
   }

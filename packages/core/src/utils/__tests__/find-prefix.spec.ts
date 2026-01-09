@@ -44,6 +44,43 @@ describe('findPrefix function', () => {
     expect(result).toBe('/some/project/path');
     expect(resolveSpy).toHaveBeenCalledWith('/some/project/path');
   });
+
+  it('should walk up from nested node_modules directories', () => {
+    // Mock path.resolve to return a path inside nested node_modules
+    (path.resolve as Mock).mockReturnValueOnce('/some/path/node_modules/package/node_modules/nested');
+
+    // Mock basename to return 'node_modules' twice, then something else
+    (path.basename as Mock).mockReturnValueOnce('node_modules').mockReturnValueOnce('node_modules').mockReturnValueOnce('path');
+
+    // Mock dirname to simulate walking up the directory tree
+    (path.dirname as Mock)
+      .mockReturnValueOnce('/some/path/node_modules/package/node_modules')
+      .mockReturnValueOnce('/some/path/node_modules/package')
+      .mockReturnValueOnce('/some/path/node_modules')
+      .mockReturnValueOnce('/some/path');
+
+    (fs.readdirSync as Mock).mockReturnValueOnce(['package.json']);
+
+    const result = findPrefix('/some/path/node_modules/package/node_modules/nested');
+
+    expect(result).toBe('/some/path/node_modules/package');
+  });
+
+  it('should return parent directory after walking up from node_modules', () => {
+    // Mock path.resolve to return a path that ends with node_modules
+    (path.resolve as Mock).mockReturnValueOnce('/some/path/node_modules');
+
+    // Mock basename to return 'node_modules' once, then 'path'
+    (path.basename as Mock).mockReturnValueOnce('node_modules').mockReturnValueOnce('path');
+
+    // Mock dirname to return the parent directory
+    (path.dirname as Mock).mockReturnValueOnce('/some/path');
+
+    const result = findPrefix('/some/path/node_modules');
+
+    // Should return the parent directory after walking up
+    expect(result).toBe('/some/path');
+  });
 });
 
 describe('find function', () => {

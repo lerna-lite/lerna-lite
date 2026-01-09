@@ -120,8 +120,7 @@ export function collectUpdates(
   const needsBump =
     !commandOptions.bump || commandOptions.bump.startsWith('pre')
       ? () => false
-      : /* skip packages that have not been previously prereleased */
-        (node) => node.prereleaseId;
+      : (node) => node.prereleaseId; /* skip packages that have not been previously prereleased */
   const isForced = (node, name) =>
     (forced.has('*') || forced.has(name)) && ((useConventionalGraduate ? node.prereleaseId : true) || forceConventionalGraduate);
 

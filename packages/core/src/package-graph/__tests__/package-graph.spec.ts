@@ -1249,4 +1249,90 @@ describe('PackageGraph', () => {
       expect(result.map((pkg: Package) => pkg.name)).toEqual(expected);
     });
   });
+
+  describe('.prune()', () => {
+    it('removes all nodes when candidates equal graph size', () => {
+      const pkgs = [
+        new Package({ name: 'pkg-1', version: '1.0.0' } as unknown as RawManifest, '/test/pkg-1', '/test'),
+        new Package({ name: 'pkg-2', version: '2.0.0' } as unknown as RawManifest, '/test/pkg-2', '/test'),
+      ];
+      const graph = new PackageGraph(pkgs);
+
+      expect(graph.size).toBe(2);
+
+      const node1 = graph.get('pkg-1')!;
+      const node2 = graph.get('pkg-2')!;
+      graph.prune(node1, node2);
+
+      expect(graph.size).toBe(0);
+    });
+
+    it('removes subset of nodes and cleans up references', () => {
+      const pkgs = [
+        new Package(
+          {
+            name: 'pkg-a',
+            version: '1.0.0',
+            dependencies: { 'pkg-b': '1.0.0' },
+          } as unknown as RawManifest,
+          '/test/pkg-a',
+          '/test'
+        ),
+        new Package(
+          {
+            name: 'pkg-b',
+            version: '1.0.0',
+            dependencies: {},
+          } as unknown as RawManifest,
+          '/test/pkg-b',
+          '/test'
+        ),
+        new Package(
+          {
+            name: 'pkg-c',
+            version: '1.0.0',
+            dependencies: { 'pkg-a': '1.0.0' },
+          } as unknown as RawManifest,
+          '/test/pkg-c',
+          '/test'
+        ),
+      ];
+      const graph = new PackageGraph(pkgs);
+
+      expect(graph.size).toBe(3);
+      expect(graph.get('pkg-c')!.localDependencies.has('pkg-a')).toBe(true);
+      expect(graph.get('pkg-a')!.localDependents.has('pkg-c')).toBe(true);
+
+      const nodeToRemove = graph.get('pkg-a')!;
+      graph.prune(nodeToRemove);
+
+      expect(graph.size).toBe(2);
+      expect(graph.has('pkg-a')).toBe(false);
+      expect(graph.has('pkg-b')).toBe(true);
+      expect(graph.has('pkg-c')).toBe(true);
+      expect(graph.get('pkg-c')!.localDependencies.has('pkg-a')).toBe(false);
+    });
+
+    it('can remove multiple nodes in one call', () => {
+      const pkgs = [
+        new Package({ name: 'pkg-1', version: '1.0.0' } as unknown as RawManifest, '/test/pkg-1', '/test'),
+        new Package({ name: 'pkg-2', version: '2.0.0' } as unknown as RawManifest, '/test/pkg-2', '/test'),
+        new Package({ name: 'pkg-3', version: '3.0.0' } as unknown as RawManifest, '/test/pkg-3', '/test'),
+        new Package({ name: 'pkg-4', version: '4.0.0' } as unknown as RawManifest, '/test/pkg-4', '/test'),
+      ];
+      const graph = new PackageGraph(pkgs);
+
+      expect(graph.size).toBe(4);
+
+      const node2 = graph.get('pkg-2')!;
+      const node3 = graph.get('pkg-3')!;
+      graph.prune(node2, node3);
+
+      expect(graph.size).toBe(2);
+      expect(graph.has('pkg-1')).toBe(true);
+      expect(graph.has('pkg-2')).toBe(false);
+      expect(graph.has('pkg-3')).toBe(false);
+      expect(graph.has('pkg-4')).toBe(true);
+    });
+  });
 });

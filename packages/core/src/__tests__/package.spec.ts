@@ -907,7 +907,36 @@ describe('Package', () => {
         `);
       });
 
-      it('should remove `workspace:` prefix on external dependencies without any version bump applied', () => {
+      it('removes workspace: prefix from peerDependencies during publish and fallback to empty string when fetchSpec is undefined', () => {
+        const pkg = factory({
+          dependencies: {
+            a: 'workspace:^1.0.0',
+          },
+          peerDependencies: {
+            a: 'workspace:^', // After removing prefix, only '^' remains
+          },
+        } as unknown as RawManifest);
+
+        const resolved: NpaResolveResult = npa.resolve('a', '^1.0.0', '.');
+        resolved.workspaceSpec = 'workspace:^';
+        // @ts-ignore Don't set fetchSpec to simulate undefined case
+        delete resolved.fetchSpec;
+
+        pkg.updateLocalDependency(resolved, '2.0.0', '^', false, 'publish');
+
+        expect(pkg.toJSON()).toMatchInlineSnapshot(`
+          {
+            "dependencies": {
+              "a": "^2.0.0",
+            },
+            "peerDependencies": {
+              "a": "",
+            },
+          }
+        `);
+      });
+
+      it('should remove "workspace:" prefix on external dependencies without any version bump applied', () => {
         const logErrorSpy = vi.spyOn(log, 'error');
         const pkg = factory({
           dependencies: {

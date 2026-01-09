@@ -52,7 +52,7 @@ export class Project {
       if (err.name === 'JSONError' || err.name === 'SyntaxError') {
         throw new ValidationError('JSONError', err.message);
       }
-      // re-throw other errors, could be ours or third-party
+      // v8 ignore next - re-throw other errors, could be ours or third-party
       throw err;
     }
 
