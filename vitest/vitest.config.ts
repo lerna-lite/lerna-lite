@@ -24,6 +24,7 @@ export default defineConfig({
         '**/__helpers__/**',
         '**/__mocks__/**',
         '**/__tests__/**',
+        '**/defaults.ts',
         '**/index.ts',
         '**/interfaces.ts',
         '**/models.ts',

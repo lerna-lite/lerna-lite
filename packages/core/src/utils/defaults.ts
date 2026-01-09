@@ -1,4 +1,3 @@
-/* v8 ignore file */
 import { homedir, type as osType, tmpdir } from 'node:os';
 import { dirname, join, resolve as pathResolve } from 'node:path';
 
