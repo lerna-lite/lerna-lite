@@ -54,24 +54,25 @@ e2e/
 ├── vitest.config.ts         # Vitest configuration for e2e tests
 ├── setup.ts                 # Global test setup
 ├── tsconfig.json            # TypeScript config for e2e tests
-├── publish/                 # E2E tests for publish command
-│   ├── publish-verdaccio.spec.ts
-│   ├── publish-dry-run.spec.ts
-│   └── publish-npmrc-auth.spec.ts
-├── version/                 # E2E tests for version command
-│   └── version.spec.ts
-├── exec/                    # E2E tests for exec command
-│   └── exec.spec.ts
-├── diff/                    # E2E tests for diff command
-│   └── diff.spec.ts
 ├── changed/                 # E2E tests for changed command
 │   └── changed.spec.ts
+├── diff/                    # E2E tests for diff command
+│   └── diff.spec.ts
+├── exec/                    # E2E tests for exec command
+│   └── exec.spec.ts
+├── list/                    # E2E tests for list command
+    └── list.spec.ts
+├── publish/                 # E2E tests for publish command
+│   ├── publish-dry-run.spec.ts
+│   ├── publish-npmrc-auth.spec.ts
+│   └── publish-verdaccio.spec.ts
 ├── run/                     # E2E tests for run command
 │   └── run.spec.ts
-├── watch/                   # E2E tests for watch command
-│   └── watch.spec.ts
-└── list/                    # E2E tests for list command
-    └── list.spec.ts
+├── version/                 # E2E tests for version command
+│   └── version.spec.ts
+└── watch/                   # E2E tests for watch command
+    └── watch.spec.ts
+
 
 e2e-utils/
 ├── src/
