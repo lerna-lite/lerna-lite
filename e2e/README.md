@@ -1,10 +1,10 @@
 # E2E Testing for Lerna-Lite
 
-This directory contains end-to-end (e2e) tests for lerna-lite, inspired by [Lerna's e2e test infrastructure](https://github.com/lerna/lerna/tree/main/e2e) but adapted for Vitest.
+This directory contains end-to-end (e2e) tests for Lerna-Lite, inspired by [Lerna's e2e test infrastructure](https://github.com/lerna/lerna/tree/main/e2e) but adapted for Vitest.
 
 ## Overview
 
-E2E tests verify the complete functionality of lerna-lite commands by:
+E2E tests verify the complete functionality of Lerna-Lite commands by:
 - Creating temporary test workspaces
 - Executing real lerna commands (list, version, run, watch, exec, diff, changed, publish)
 - Testing against a local Verdaccio registry for publish operations
@@ -12,16 +12,16 @@ E2E tests verify the complete functionality of lerna-lite commands by:
 
 ## Test Suites
 
-- ✅ List command (5 tests)
-- ✅ Version command (6 tests)  
-- ✅ Run command (12 tests)
-- ✅ Watch command (11 tests)
-- ✅ Exec command (11 tests)
-- ✅ Diff command (2 tests)
-- ✅ Changed command (14 tests)
-- ✅ Publish dry-run (2 tests)
-- ✅ Publish Verdaccio (3 tests)
-- ✅ Publish .npmrc authentication (4 tests)
+- ✅ List command
+- ✅ Version command
+- ✅ Run command
+- ✅ Watch command
+- ✅ Exec command
+- ✅ Diff command
+- ✅ Changed command
+- ✅ Publish dry-run
+- ✅ Publish Verdaccio
+- ✅ Publish .npmrc authentication
 
 All tests run automatically in CI with Verdaccio.
 
@@ -275,7 +275,7 @@ Example GitHub Actions workflow:
 
 ## Contributing
 
-When adding new e2e tests:
+When adding new E2E tests:
 
 1. Create a new directory under `e2e/` for the command being tested
 2. Write tests using the Fixture class
