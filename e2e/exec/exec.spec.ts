@@ -23,7 +23,7 @@ describe('lerna-exec', () => {
       packageManager: 'npm',
       initializeGit: true,
       lernaInit: true,
-      installDependencies: true,
+      installDependencies: false,
       /**
        * Because lerna exec involves spawning further child processes, the tests would be too flaky
        * if we didn't force deterministic terminal output by appending stderr to stdout instead
@@ -65,9 +65,9 @@ describe('lerna-exec', () => {
     expect(output.combinedOutput).toContain('test-package-1');
     expect(output.combinedOutput).toContain('test-package-2');
     expect(output.combinedOutput).toContain('test-package-3');
-    expect(output.combinedOutput).toContain('lerna notice cli');
-    expect(output.combinedOutput).toContain('lerna info Executing command in 3 packages');
-    expect(output.combinedOutput).toContain('lerna success exec Executed command in 3 packages');
+    expect(output.combinedOutput).toContain('lerna-lite notice cli');
+    expect(output.combinedOutput).toContain('lerna-lite info Executing command in 3 packages');
+    expect(output.combinedOutput).toContain('lerna-lite success exec Executed command in 3 packages');
   });
 
   it('should run command on all child packages and suppress npm output', async () => {
@@ -76,28 +76,30 @@ describe('lerna-exec', () => {
     expect(output.combinedOutput).toContain('test-package-1');
     expect(output.combinedOutput).toContain('test-package-2');
     expect(output.combinedOutput).toContain('test-package-3');
-    expect(output.combinedOutput).toContain('lerna success exec Executed command in 3 packages');
+    expect(output.combinedOutput).toContain('lerna-lite success exec Executed command in 3 packages');
   });
 
   describe('--stream', () => {
     it('should run command on all child packages with output streaming', async () => {
       const output = await fixture.lerna('exec --stream npm run print-name -- --silent');
+      const normalized = normalizeCommandOutput(output.combinedOutput);
 
-      expect(output.combinedOutput).toContain('package-1: test-package-1');
-      expect(output.combinedOutput).toContain('package-2: test-package-2');
-      expect(output.combinedOutput).toContain('package-3: test-package-3');
-      expect(output.combinedOutput).toContain('lerna success exec');
+      expect(normalized).toContain('package-1: test-package-1');
+      expect(normalized).toContain('package-2: test-package-2');
+      expect(normalized).toContain('package-3: test-package-3');
+      expect(normalized).toContain('lerna-lite success exec');
     });
   });
 
   describe('--parallel', () => {
     it('should run command on all child packages in parallel', async () => {
       const output = await fixture.lerna('exec --parallel npm run print-name -- --silent');
+      const normalized = normalizeCommandOutput(output.combinedOutput);
 
-      expect(output.combinedOutput).toContain('package-1: test-package-1');
-      expect(output.combinedOutput).toContain('package-2: test-package-2');
-      expect(output.combinedOutput).toContain('package-3: test-package-3');
-      expect(output.combinedOutput).toContain('lerna success exec');
+      expect(normalized).toContain('package-1: test-package-1');
+      expect(normalized).toContain('package-2: test-package-2');
+      expect(normalized).toContain('package-3: test-package-3');
+      expect(normalized).toContain('lerna-lite success exec');
     });
   });
 
@@ -138,7 +140,7 @@ describe('lerna-exec', () => {
       expect(output.combinedOutput).toContain('test-package-1');
       expect(output.combinedOutput).toContain('test-package-2');
       expect(output.combinedOutput).toContain('test-package-3');
-      expect(output.combinedOutput).toMatch(/lerna info profiler Performance profile saved to/);
+      expect(output.combinedOutput).toMatch(/lerna-lite info profiler Performance profile saved to/);
 
       // Extract profile file name from output
       const profileMatch = output.combinedOutput.match(/Performance profile saved to .*(Lerna-Profile-\w+\.json)/);
@@ -156,7 +158,7 @@ describe('lerna-exec', () => {
       expect(output.combinedOutput).toContain('test-package-1');
       expect(output.combinedOutput).toContain('test-package-2');
       expect(output.combinedOutput).toContain('test-package-3');
-      expect(output.combinedOutput).toMatch(/lerna info profiler Performance profile saved to.*profiles/);
+      expect(output.combinedOutput).toMatch(/lerna-lite info profiler Performance profile saved to.*profiles/);
 
       // Extract profile file name from output
       const profileMatch = output.combinedOutput.match(/Performance profile saved to .*(profiles\/Lerna-Profile-\w+\.json)/);
@@ -174,7 +176,7 @@ describe('lerna-exec', () => {
       expect(output.combinedOutput).toContain('test-package-1');
       expect(output.combinedOutput).not.toContain('test-package-2');
       expect(output.combinedOutput).not.toContain('test-package-3');
-      expect(output.combinedOutput).toContain('lerna success exec Executed command in 1 package');
+      expect(output.combinedOutput).toContain('lerna-lite success exec Executed command in 1 package');
     });
   });
 
@@ -187,7 +189,7 @@ describe('lerna-exec', () => {
       expect(output.combinedOutput).not.toContain('test-package-1');
       expect(output.combinedOutput).not.toContain('test-package-2');
       expect(output.combinedOutput).toContain('test-package-3');
-      expect(output.combinedOutput).toContain('lerna success exec Executed command in 1 package');
+      expect(output.combinedOutput).toContain('lerna-lite success exec Executed command in 1 package');
     });
   });
 });
@@ -202,7 +204,7 @@ describe('lerna exec --no-bail', () => {
       packageManager: 'npm',
       initializeGit: true,
       lernaInit: true,
-      installDependencies: true,
+      installDependencies: false,
       forceDeterministicTerminalOutput: true,
     });
 
