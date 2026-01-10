@@ -37,8 +37,12 @@ export interface RunCommandResult {
 }
 
 const noopWriteStream = {
-  write(..._x: unknown[]) { return true; },
-  end() { return this as unknown as WriteStream; },
+  write(..._x: unknown[]) {
+    return true;
+  },
+  end() {
+    return this as unknown as WriteStream;
+  },
 } satisfies Partial<WriteStream> as WriteStream;
 
 let fixtureCounter = 0;
@@ -189,10 +193,7 @@ export class Fixture {
   }
 
   private async initializeNpmEnvironment(): Promise<void> {
-    if (
-      this.packageManager !== 'npm' &&
-      await this.fileExists(join(this.fixtureWorkspacePath, 'lerna.json'))
-    ) {
+    if (this.packageManager !== 'npm' && (await this.fileExists(join(this.fixtureWorkspacePath, 'lerna.json')))) {
       await this.overrideLernaConfig({ npmClient: this.packageManager });
     }
   }
@@ -216,9 +217,7 @@ export class Fixture {
   }
 
   async overrideLernaConfig(lernaConfig: Record<string, unknown>): Promise<void> {
-    this.debugWriteStream.write(
-      `\n> Fixture.overrideLernaConfig() -> ${JSON.stringify(lernaConfig)}\n`
-    );
+    this.debugWriteStream.write(`\n> Fixture.overrideLernaConfig() -> ${JSON.stringify(lernaConfig)}\n`);
     await this.updateJson('lerna.json', (json) => ({
       ...json,
       ...lernaConfig,
@@ -242,10 +241,7 @@ export class Fixture {
   /**
    * Execute a command using the locally built lerna CLI
    */
-  async lerna(
-    args: string,
-    opts: { silenceError?: true; allowNetworkRequests?: true } = {}
-  ): Promise<RunCommandResult> {
+  async lerna(args: string, opts: { silenceError?: true; allowNetworkRequests?: true } = {}): Promise<RunCommandResult> {
     this.debugWriteStream.write(`\n> Fixture.lerna("${args}")\n`);
     const lernaPath = join(process.cwd(), 'packages', 'cli', 'dist', 'cli.js');
     return this.exec(`node ${lernaPath} ${args}`, opts);
@@ -254,10 +250,7 @@ export class Fixture {
   /**
    * Execute a generic command within the fixture workspace
    */
-  async exec(
-    command: string,
-    opts: RunCommandOptions = {}
-  ): Promise<RunCommandResult> {
+  async exec(command: string, opts: RunCommandOptions = {}): Promise<RunCommandResult> {
     this.debugWriteStream.write(`\n> Fixture.exec("${command}")\n`);
 
     const cwd = opts.cwd || this.fixtureWorkspacePath;
@@ -294,18 +287,14 @@ export class Fixture {
     } catch (error: any) {
       const stdout = error.stdout || '';
       const stderr = error.stderr || '';
-      const combinedOutput = this.forceDeterministicTerminalOutput
-        ? stdout + stderr
-        : stdout + '\n' + stderr;
+      const combinedOutput = this.forceDeterministicTerminalOutput ? stdout + stderr : stdout + '\n' + stderr;
 
       this.debugWriteStream.write(`Error executing command: ${error.message}\n`);
       this.debugWriteStream.write(`stdout: ${stdout}\n`);
       this.debugWriteStream.write(`stderr: ${stderr}\n`);
 
       if (!opts.silenceError) {
-        throw new Error(
-          `Command failed: ${command}\nExit code: ${error.code || 'unknown'}\n${combinedOutput}`
-        );
+        throw new Error(`Command failed: ${command}\nExit code: ${error.code || 'unknown'}\n${combinedOutput}`);
       }
 
       return {
@@ -321,10 +310,7 @@ export class Fixture {
     return readFile(join(this.fixtureWorkspacePath, relativePath), 'utf8');
   }
 
-  async updateJson(
-    relativePath: string,
-    updateFn: (json: any) => any
-  ): Promise<void> {
+  async updateJson(relativePath: string, updateFn: (json: any) => any): Promise<void> {
     const filePath = join(this.fixtureWorkspacePath, relativePath);
     const content = await readFile(filePath, 'utf8');
     const json = JSON.parse(content);
@@ -337,13 +323,7 @@ export class Fixture {
     await this.exec('git commit -m "initial commit"');
   }
 
-  async addScriptsToPackage({
-    packagePath,
-    scripts,
-  }: {
-    packagePath: string;
-    scripts: Record<string, string>;
-  }): Promise<void> {
+  async addScriptsToPackage({ packagePath, scripts }: { packagePath: string; scripts: Record<string, string> }): Promise<void> {
     await this.updateJson(`${packagePath}/package.json`, (json) => ({
       ...json,
       scripts: {
@@ -353,13 +333,7 @@ export class Fixture {
     }));
   }
 
-  async updatePackageVersion({
-    packagePath,
-    newVersion,
-  }: {
-    packagePath: string;
-    newVersion: string;
-  }): Promise<void> {
+  async updatePackageVersion({ packagePath, newVersion }: { packagePath: string; newVersion: string }): Promise<void> {
     await this.updateJson(`${packagePath}/package.json`, (json) => ({
       ...json,
       version: newVersion,
@@ -396,10 +370,7 @@ export class Fixture {
    * Read output files written during test execution (similar to Lerna's approach)
    */
   async readOutput(fileName: string): Promise<string> {
-    return readFile(
-      join(this.fixtureWorkspacePath, 'node_modules/.lerna-test-outputs', `${fileName}.txt`),
-      'utf8'
-    );
+    return readFile(join(this.fixtureWorkspacePath, 'node_modules/.lerna-test-outputs', `${fileName}.txt`), 'utf8');
   }
 
   /**
@@ -418,25 +389,131 @@ export class Fixture {
   }): Promise<void> {
     const packagePath = join(this.fixtureWorkspacePath, 'packages', name);
     await mkdir(packagePath, { recursive: true });
-    
+
     const packageJson: any = {
       name,
       version,
     };
-    
+
     if (isPrivate) {
       packageJson.private = true;
     }
-    
+
     if (dependencies) {
       packageJson.dependencies = dependencies;
     }
-    
-    await writeFile(
-      join(packagePath, 'package.json'),
-      JSON.stringify(packageJson, null, 2) + '\n',
-      'utf8'
-    );
+
+    await writeFile(join(packagePath, 'package.json'), JSON.stringify(packageJson, null, 2) + '\n', 'utf8');
+  }
+
+  /**
+   * Execute lerna watch command and return a function to get results after a timeout
+   * Since watch runs indefinitely, this spawns the process in the background
+   * and returns a function that kills it and returns the captured output.
+   */
+  async lernaWatch(args: string): Promise<(timeoutMs?: number) => Promise<RunCommandResult>> {
+    this.debugWriteStream.write(`\n> Fixture.lernaWatch("${args}")\n`);
+
+    return new Promise((resolve, reject) => {
+      const lernaPath = join(process.cwd(), 'packages', 'cli', 'dist', 'cli.js');
+
+      let stdout = '';
+      let stderr = '';
+      let combinedOutput = '';
+      let error: Error | null = null;
+      let processKilled = false;
+
+      const env = {
+        ...process.env,
+        NO_UPDATE_NOTIFIER: '1',
+        npm_config_update_notifier: 'false',
+      };
+
+      const createResult = (): RunCommandResult => ({
+        stdout: this.stripConsoleColors(stdout),
+        stderr: this.stripConsoleColors(stderr),
+        combinedOutput: this.stripConsoleColors(combinedOutput),
+      });
+
+      // Use spawn instead of exec to handle long-running process
+      const { spawn } = require('node:child_process');
+      const childProcess = spawn('node', [lernaPath, 'watch', ...args.split(' ')], {
+        cwd: this.fixtureWorkspacePath,
+        env,
+        shell: process.platform === 'win32',
+        detached: false,
+      });
+
+      childProcess.stdout.on('data', (data: Buffer) => {
+        const output = data.toString();
+        stdout += output;
+        combinedOutput += output;
+        this.debugWriteStream.write(`[watch stdout] ${output}`);
+      });
+
+      childProcess.stderr.on('data', (data: Buffer) => {
+        const output = data.toString();
+        stderr += output;
+        combinedOutput += output;
+        this.debugWriteStream.write(`[watch stderr] ${output}`);
+      });
+
+      childProcess.on('error', (err) => {
+        error = err;
+        this.debugWriteStream.write(`[watch error] ${err.message}\n`);
+      });
+
+      // Give the watch process a moment to start up
+      setTimeout(() => {
+        resolve(async (timeoutMs = 1000) => {
+          return new Promise((resolveInner) => {
+            setTimeout(() => {
+              if (!processKilled) {
+                processKilled = true;
+
+                // Force kill on Windows due to shell spawning issues
+                if (process.platform === 'win32') {
+                  try {
+                    // Use taskkill to forcefully terminate on Windows
+                    const { execSync } = require('node:child_process');
+                    execSync(`taskkill /pid ${childProcess.pid} /T /F`, { stdio: 'ignore' });
+                  } catch (killError: any) {
+                    // Process might already be dead
+                    this.debugWriteStream.write(`[watch] Kill error (expected): ${killError.message}\n`);
+                  }
+                } else {
+                  childProcess.kill('SIGTERM');
+                }
+
+                // Give it more time to flush output and clean up
+                setTimeout(() => {
+                  if (error) {
+                    this.debugWriteStream.write(`[watch] Error occurred: ${error.message}\n`);
+                  }
+                  resolveInner(createResult());
+                }, 500);
+              }
+            }, timeoutMs);
+          });
+        });
+      }, 1000);
+
+      childProcess.on('close', (code) => {
+        this.debugWriteStream.write(`[watch] Process exited with code ${code}\n`);
+        if (!processKilled && error) {
+          reject(error);
+        } else if (!processKilled && stderr.includes('lerna ERR!')) {
+          reject(new Error(stderr));
+        }
+      });
+    });
+  }
+
+  /**
+   * Strip ANSI color codes from output for cleaner test comparisons
+   */
+  private stripConsoleColors(str: string): string {
+    // eslint-disable-next-line no-control-regex
+    return str.replace(/\x1B\[[0-9;]*m/g, '');
   }
 }
-

@@ -90,8 +90,10 @@ This will:
 1. Build the project
 2. Start Verdaccio automatically
 3. Wait for Verdaccio to be ready
-4. Run all e2e tests (including publish tests)
+4. Run all e2e tests
 5. Stop Verdaccio when done
+
+**Current test status: 25/39 passing** (watch tests are experimental and need refinement)
 
 ### Alternative: Without Verdaccio
 

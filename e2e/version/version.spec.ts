@@ -1,4 +1,5 @@
 import { describe, it, expect, beforeEach, afterEach } from 'vitest';
+
 import { Fixture } from '../../e2e-utils/src/index.js';
 
 describe('lerna-version', () => {
@@ -34,7 +35,7 @@ describe('lerna-version', () => {
       const output = await fixture.lerna('version patch -y --no-push');
 
       expect(output.combinedOutput).toContain('lerna-lite');
-      
+
       // Check that version was bumped
       const packageJson = await fixture.readWorkspaceFile('packages/package-a/package.json');
       const version = JSON.parse(packageJson).version;
@@ -124,10 +125,10 @@ describe('lerna-version', () => {
   describe('with dependencies', () => {
     it('should update dependent package versions', async () => {
       await fixture.createPackage({ name: 'package-base', version: '0.0.0' });
-      await fixture.createPackage({ 
-        name: 'package-dep', 
+      await fixture.createPackage({
+        name: 'package-dep',
         version: '0.0.0',
-        dependencies: { 'package-base': '0.0.0' }
+        dependencies: { 'package-base': '0.0.0' },
       });
       await fixture.createInitialGitCommit();
 

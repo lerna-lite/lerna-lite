@@ -1,8 +1,8 @@
 {
   "name": "@lerna-lite/e2e-utils",
   "version": "1.0.0",
-  "description": "E2E testing utilities for lerna-lite",
   "private": true,
+  "description": "E2E testing utilities for lerna-lite",
   "type": "module",
   "main": "./src/index.ts",
   "types": "./src/index.ts",

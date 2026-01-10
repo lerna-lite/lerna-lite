@@ -1,6 +1,8 @@
-import { describe, it, expect, beforeAll, afterAll } from 'vitest';
-import { Fixture } from '../../e2e-utils/src/index.js';
 import { existsSync } from 'node:fs';
+
+import { describe, it, expect, beforeAll, afterAll } from 'vitest';
+
+import { Fixture } from '../../e2e-utils/src/index.js';
 
 describe('lerna-run', () => {
   let fixture: Fixture;

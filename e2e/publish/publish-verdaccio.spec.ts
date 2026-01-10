@@ -1,4 +1,5 @@
 import { describe, it, expect, beforeEach, afterEach } from 'vitest';
+
 import { Fixture } from '../../e2e-utils/src/index.js';
 
 // Helper to generate random version to avoid conflicts
@@ -35,7 +36,7 @@ describe('lerna-publish with verdaccio', () => {
       const output = await fixture.lerna('publish from-git --registry=http://localhost:4873/ -y');
 
       expect(output.combinedOutput).toContain('lerna');
-      
+
       // Cleanup: unpublish the package
       await fixture.exec('npm unpublish --force test-1@1.0.0 --registry=http://localhost:4873/', {
         silenceError: true,
@@ -49,7 +50,7 @@ describe('lerna-publish with verdaccio', () => {
       await fixture.createInitialGitCommit();
 
       const version = randomVersion();
-      
+
       // Update package version manually
       await fixture.updatePackageVersion({
         packagePath: 'packages/test-1',

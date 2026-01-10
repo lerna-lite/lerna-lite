@@ -1,4 +1,5 @@
 import { describe, it, expect, beforeEach, afterEach } from 'vitest';
+
 import { Fixture } from '../../e2e-utils/src/index.js';
 
 describe('lerna-list', () => {
@@ -66,9 +67,9 @@ describe('lerna-list', () => {
 
   it('should show package graph with --graph', async () => {
     await fixture.createPackage({ name: 'package-x' });
-    await fixture.createPackage({ 
-      name: 'package-y', 
-      dependencies: { 'package-x': '1.0.0' }
+    await fixture.createPackage({
+      name: 'package-y',
+      dependencies: { 'package-x': '1.0.0' },
     });
 
     const output = await fixture.lerna('list --graph');

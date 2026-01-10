@@ -1,4 +1,5 @@
 import { beforeAll, afterAll } from 'vitest';
+
 import { getE2eRoot } from '../e2e-utils/src/index.js';
 
 let E2E_ROOT: string;
