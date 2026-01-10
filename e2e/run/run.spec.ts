@@ -1,5 +1,5 @@
 import { describe, it, expect, beforeAll, afterAll } from 'vitest';
-import { Fixture, normalizeEnvironment } from '../../e2e-utils/src/index.js';
+import { Fixture } from '../../e2e-utils/src/index.js';
 import { existsSync } from 'node:fs';
 
 describe('lerna-run', () => {
