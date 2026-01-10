@@ -7,7 +7,7 @@ on:
       - main
   pull_request:
     branches:
-      - '**'
+      - "**"
 
 concurrency:
   group: ${{ github.workflow }}-${{ github.event.number || github.ref }}
@@ -15,7 +15,7 @@ concurrency:
 
 jobs:
   lint:
-    name: 'Lint on Ubuntu'
+    name: "Lint on Ubuntu"
     runs-on: ubuntu-latest
 
     steps:
@@ -39,7 +39,7 @@ jobs:
         uses: actions/setup-node@v6
         with:
           node-version: 22
-          cache: 'pnpm'
+          cache: "pnpm"
 
       - name: Run pnpm install dependencies
         run: pnpm install
@@ -63,7 +63,7 @@ jobs:
         node: [20, 22, 24]
         platform: [ubuntu-latest]
 
-    name: 'Run on Ubuntu / Node${{ matrix.node }}'
+    name: "Run on Ubuntu / Node${{ matrix.node }}"
     runs-on: ${{matrix.platform}}
     if: ${{ !startsWith(github.event.head_commit.message, 'docs:') }}
 
@@ -89,7 +89,7 @@ jobs:
         uses: actions/setup-node@v6
         with:
           node-version: ${{ matrix.node }}
-          cache: 'pnpm'
+          cache: "pnpm"
 
       - run: node --version
       - run: pnpm --version
@@ -124,3 +124,55 @@ jobs:
         if: |
           contains(matrix.node, 20) &&
           !contains(github.event.head_commit.message, 'chore(release)')
+
+  e2e:
+    name: "E2E Tests on Ubuntu / Node 22"
+    runs-on: ubuntu-latest
+    if: ${{ !startsWith(github.event.head_commit.message, 'docs:') }}
+
+    steps:
+      - name: Retrieve current Date Time in EST
+        shell: bash
+        run: echo "START_TIME=$(TZ=":America/New_York" date -R|sed 's/.....$//')" >> $GITHUB_ENV
+
+      - name: Current datetime - ${{ env.START_TIME }}
+        run: echo ${{ env.START_TIME }}
+
+      - name: Checkout
+        uses: actions/checkout@v6
+
+      - name: Install pnpm itself
+        uses: pnpm/action-setup@v3
+        with:
+          version: 10
+
+      - name: Set NodeJS
+        uses: actions/setup-node@v6
+        with:
+          node-version: 22
+          cache: "pnpm"
+
+      - run: node --version
+      - run: pnpm --version
+
+      - name: Run pnpm install dependencies
+        run: pnpm install
+
+      - name: Cache TypeScript build
+        uses: actions/cache@v5
+        with:
+          path: |
+            packages/*/lib
+            packages/*/tsconfig.tsbuildinfo
+          key: e2e-build-${{ github.run_id }}
+          restore-keys: e2e-build-
+
+      - name: Run full TypeScript build
+        run: pnpm build:full
+
+      - name: Run E2E tests
+        if: |
+          !contains(github.event.head_commit.message, 'chore(release)')
+        env:
+          NO_COLOR: true
+        run: pnpm test:e2e

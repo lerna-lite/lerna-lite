@@ -13,6 +13,8 @@ export default defineConfig({
     testTimeout: 60000,
     setupFiles: ['./vitest/silence-logging.ts', './helpers/npm/set-npm-userconfig.ts'],
     watch: false,
+    // Exclude e2e tests from unit test runs
+    exclude: [...configDefaults.exclude, 'e2e/**', 'e2e-utils/**'],
     coverage: {
       include: ['packages/**/*.ts'],
       exclude: [
