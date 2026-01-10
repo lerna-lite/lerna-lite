@@ -58,7 +58,12 @@ This project follows [GitHub's standard forking model](https://guides.github.com
 7. add/run Vitest unit tests (make sure to run the previous steps first):
    - `pnpm test:watch` (watch mode)
    - `pnpm test` (full test coverage)
-8. after executing steps 2 through 5 on your machine, you are ready to make changes and create a Pull Request...
+
+8. optionally, run E2E tests (end-to-end tests, requires build first):
+   - `pnpm test:e2e` (run all e2e tests)
+   - `pnpm test:e2e:watch` (watch mode for e2e tests)
+
+9. after executing steps 2 through 5 on your machine, you are ready to make changes and create a Pull Request...
 
 > **Note**: The Github CI runs the testing suite on the 3 most recent NodeJS stable versions (LTS and Actives), so make sure to use one of those versions when running tests locally.
 
@@ -125,4 +130,73 @@ When finished testing:
 3. The local registry storage is in `.verdaccio/storage/` and is git-ignored
 
 **NOTE:** The Verdaccio configuration is stored in `.verdaccio/config.yaml`. The storage folder and credentials file are git-ignored, but the config file is tracked so all contributors can use the same setup.
+
+## Testing Strategy
+
+Lerna-lite uses a **two-tier testing approach**:
+
+1. **Unit Tests** (`packages/*/src/**/__tests__/*.spec.ts`) - Fast, isolated tests for individual functions and classes. These run on every change and provide quick feedback.
+
+2. **E2E Tests** (`e2e/**/*.spec.ts`) - End-to-end tests that run the actual `lerna` CLI commands as close to how a user would as possible. These are the most valuable tests because they verify the complete user experience.
+
+### Why E2E Tests?
+
+Following [Lerna's own recommendation](https://github.com/lerna/lerna/tree/main/integration#readme), we prefer e2e tests over integration tests for CLI tools because:
+
+- They test the actual user interface (CLI commands)
+- They catch issues that unit tests miss (e.g., argument parsing, command composition)
+- They provide higher confidence that features work as users expect
+- They are more resilient to internal refactoring
+
+### Running E2E Tests
+
+E2E tests are slower than unit tests because they:
+- Build the entire project
+- Create temporary git repositories
+- Install npm packages
+- Run actual CLI commands
+
+```sh
+# Run all e2e tests (builds first)
+pnpm test:e2e
+
+# Run e2e tests in watch mode (assumes you've built already)
+pnpm test:e2e:watch
+
+# Run a specific e2e test file
+pnpm exec vitest run --config ./e2e/vitest.config.ts e2e/list/list.spec.ts
+```
+
+### Writing E2E Tests
+
+E2E tests use the `Fixture` class from `e2e-utils` to create isolated test workspaces:
+
+```typescript
+import { Fixture } from 'e2e-utils';
+
+describe('lerna my-command', () => {
+  let fixture: Fixture;
+
+  beforeEach(async () => {
+    fixture = await Fixture.create({
+      name: 'my-command',
+      packageManager: 'npm',
+      lernaInit: true,
+      installDependencies: true,
+    });
+    
+    // Customize the workspace
+    await fixture.updateJson('lerna.json', { packages: ['packages/*'] });
+  });
+
+  afterEach(() => fixture.destroy());
+
+  it('should do something', async () => {
+    const result = await fixture.lerna('my-command --some-flag');
+    expect(result.combinedOutput).toMatch(/expected output/);
+  });
+});
+```
+
+See [e2e/README.md](e2e/README.md) for comprehensive documentation on writing e2e tests.
 

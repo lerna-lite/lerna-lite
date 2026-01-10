@@ -1,6 +1,9 @@
 packages:
   # workspace packages
   - packages/**
+  
+  # e2e utilities (not published)
+  - e2e-utils
 
   # exclude packages that are inside test directories
   - "!**/__fixtures__/**"

@@ -54,7 +54,12 @@
     "outdated:ws": "pnpm -r --stream outdated",
     "test": "vitest --coverage --config ./vitest/vitest.config.ts && pnpm clean:temp",
     "test:watch": "vitest --watch --config ./vitest/vitest.config.ts",
-    "test:coverage:update": "vitest --coverage --update --config ./vitest/vitest.config.ts"
+    "test:coverage:update": "vitest --coverage --update --config ./vitest/vitest.config.ts",
+    "test:e2e": "node scripts/run-e2e-with-verdaccio.mjs",
+    "test:e2e:no-verdaccio": "pnpm build && vitest run --config ./e2e/vitest.config.ts",
+    "test:e2e:watch": "vitest watch --config ./e2e/vitest.config.ts",
+    "verdaccio:start": "node scripts/test-verdaccio.mjs",
+    "verdaccio:publish": "node scripts/test-publish-verdaccio.mjs"
   },
   "devDependencies": {
     "@lerna-lite/changed": "workspace:*",
