@@ -1,6 +1,6 @@
 # Testing Guide for Lerna-Lite
 
-This document provides an overview of the testing infrastructure in lerna-lite.
+This document provides an overview of the testing infrastructure in Lerna-Lite.
 
 ## Testing Strategy
 
@@ -9,7 +9,7 @@ Lerna-lite uses a **two-tier testing approach**:
 1. **Unit Tests** (`packages/*/src/**/__tests__/*.spec.ts`) - Fast, isolated tests for individual functions and classes
 2. **E2E Tests** (`e2e/**/*.spec.ts`) - Complete CLI workflow tests that verify the actual user experience
 
-This follows [Lerna's recommendation](https://github.com/lerna/lerna/blob/main/integration/README.md) to prefer e2e tests over integration tests for CLI tools, as they provide the highest value by testing what users actually interact with.
+This follows [Lerna's recommendation](https://github.com/lerna/lerna/blob/main/integration/README.md) to prefer E2E tests over integration tests for CLI tools, as they provide the highest value by testing what users actually interact with.
 
 ## Quick Start
 
@@ -38,7 +38,7 @@ See [e2e/README.md](./e2e/README.md) for comprehensive e2e testing documentation
 ## Project Structure
 
 ```
-packages/*/src/**/__tests__/*.spec.ts   # Unit tests (co-located with source)
+packages/*/src/**/__tests__/*.spec.ts    # Unit tests (co-located with source)
 e2e/                                     # E2E tests
 e2e-utils/                               # E2E testing utilities
 ```
