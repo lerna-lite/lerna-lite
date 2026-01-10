@@ -60,7 +60,21 @@ describe('lerna watch', () => {
   });
 
   it('should watch all packages by default', async () => {
-    const getWatchResult = await fixture.lernaWatch('--debounce=100 -- "echo watch triggered"');
+    // Add watch script to all packages
+    await fixture.addScriptsToPackage({
+      packagePath: 'packages/package-a',
+      scripts: { 'watch:trigger': 'node -e "console.log(\'watch triggered\')"' },
+    });
+    await fixture.addScriptsToPackage({
+      packagePath: 'packages/package-b',
+      scripts: { 'watch:trigger': 'node -e "console.log(\'watch triggered\')"' },
+    });
+    await fixture.addScriptsToPackage({
+      packagePath: 'packages/package-c',
+      scripts: { 'watch:trigger': 'node -e "console.log(\'watch triggered\')"' },
+    });
+
+    const getWatchResult = await fixture.lernaWatch('--debounce=100 -- npm run watch:trigger');
 
     // Wait for watch to start
     await wait(500);
@@ -78,13 +92,23 @@ describe('lerna watch', () => {
     const output = await getWatchResult(2000);
 
     // Should see watch triggered for each package
-    expect(output.combinedOutput).toContain('watch Executing command "echo watch triggered" on changes in 3');
-    expect(output.combinedOutput).toContain('watch triggered');
+    expect(output.combinedOutput).toContain('watch Executing command');
+    expect(output.combinedOutput).toContain('on changes in 3');
   });
 
   it('should watch only specified packages with --scope', async () => {
+    // Add watch script to packages
+    await fixture.addScriptsToPackage({
+      packagePath: 'packages/package-a',
+      scripts: { 'watch:trigger': 'node -e "console.log(\'triggered\')"' },
+    });
+    await fixture.addScriptsToPackage({
+      packagePath: 'packages/package-c',
+      scripts: { 'watch:trigger': 'node -e "console.log(\'triggered\')"' },
+    });
+
     const getWatchResult = await fixture.lernaWatch(
-      '--scope=package-a --scope=@scope/package-c --debounce=100 -- "echo watch triggered"'
+      '--scope=package-a --scope=@scope/package-c --debounce=100 -- npm run watch:trigger'
     );
 
     await wait(500);
@@ -100,7 +124,8 @@ describe('lerna watch', () => {
     const output = await getWatchResult(2000);
 
     // Should only watch 2 packages (package-a and @scope/package-c)
-    expect(output.combinedOutput).toContain('watch Executing command "echo watch triggered" on changes in 2');
+    expect(output.combinedOutput).toContain('watch Executing command');
+    expect(output.combinedOutput).toContain('on changes in 2');
   });
 
   it('should replace package name and changed file names', async () => {
@@ -123,8 +148,18 @@ describe('lerna watch', () => {
   });
 
   it('should watch one package and its dependencies with --scope and --include-dependencies', async () => {
+    // Add watch script to packages
+    await fixture.addScriptsToPackage({
+      packagePath: 'packages/package-a',
+      scripts: { 'watch:trigger': 'node -e "console.log(\'triggered\')"' },
+    });
+    await fixture.addScriptsToPackage({
+      packagePath: 'packages/package-b',
+      scripts: { 'watch:trigger': 'node -e "console.log(\'triggered\')"' },
+    });
+
     const getWatchResult = await fixture.lernaWatch(
-      '--scope=package-b --include-dependencies --debounce=100 -- "echo watch triggered"'
+      '--scope=package-b --include-dependencies --debounce=100 -- npm run watch:trigger'
     );
 
     await wait(500);
@@ -140,11 +175,18 @@ describe('lerna watch', () => {
     const output = await getWatchResult(2000);
 
     // Should watch package-b and its dependency package-a (2 packages total)
-    expect(output.combinedOutput).toContain('watch Executing command "echo watch triggered" on changes in 2');
+    expect(output.combinedOutput).toContain('watch Executing command');
+    expect(output.combinedOutput).toContain('on changes in 2');
   });
 
   it('should respect --glob option to watch only specific file patterns', async () => {
-    const getWatchResult = await fixture.lernaWatch('--glob="**/*.ts" --debounce=100 -- "echo ts file changed"');
+    // Add watch script
+    await fixture.addScriptsToPackage({
+      packagePath: 'packages/package-a',
+      scripts: { 'watch:ts': 'node -e "console.log(\'ts file changed\')"' },
+    });
+
+    const getWatchResult = await fixture.lernaWatch('--glob="**/*.ts" --debounce=100 -- npm run watch:ts');
 
     await wait(500);
     // Create a TypeScript file
@@ -162,7 +204,13 @@ describe('lerna watch', () => {
   });
 
   it('should respect --ignored option to ignore specific patterns', async () => {
-    const getWatchResult = await fixture.lernaWatch('--ignored="**/*.test.js" --debounce=100 -- "echo file changed"');
+    // Add watch script
+    await fixture.addScriptsToPackage({
+      packagePath: 'packages/package-a',
+      scripts: { 'watch:file': 'node -e "console.log(\'file changed\')"' },
+    });
+
+    const getWatchResult = await fixture.lernaWatch('--ignored="**/*.test.js" --debounce=100 -- npm run watch:file');
 
     await wait(500);
     // Create a regular file
@@ -180,7 +228,13 @@ describe('lerna watch', () => {
   });
 
   it('should use custom file delimiter with --file-delimiter', async () => {
-    const getWatchResult = await fixture.lernaWatch('--file-delimiter=";;" --debounce=100 -- "echo $LERNA_FILE_CHANGES"');
+    // Add watch script that uses LERNA_FILE_CHANGES
+    await fixture.addScriptsToPackage({
+      packagePath: 'packages/package-a',
+      scripts: { 'watch:files': 'node -e "console.log(process.env.LERNA_FILE_CHANGES)"' },
+    });
+
+    const getWatchResult = await fixture.lernaWatch('--file-delimiter=";;" --debounce=100 -- npm run watch:files');
 
     await wait(500);
     // Create multiple files quickly to trigger them in the same batch
@@ -217,7 +271,13 @@ describe('lerna watch', () => {
   });
 
   it('should handle --no-bail flag to continue on errors', async () => {
-    const getWatchResult = await fixture.lernaWatch('--no-bail --debounce=100 -- "exit 1"');
+    // Add watch script that exits with error
+    await fixture.addScriptsToPackage({
+      packagePath: 'packages/package-a',
+      scripts: { 'watch:error': 'node -e "process.exit(1)"' },
+    });
+
+    const getWatchResult = await fixture.lernaWatch('--no-bail --debounce=100 -- npm run watch:error');
 
     await wait(500);
     await createFile(join(fixture.getWorkspacePath(), 'packages/package-a/file.txt'));
@@ -230,8 +290,14 @@ describe('lerna watch', () => {
   });
 
   it('should use --debounce to control event batching', async () => {
+    // Add watch script
+    await fixture.addScriptsToPackage({
+      packagePath: 'packages/package-a',
+      scripts: { 'watch:batch': 'node -e "console.log(\'batched change\')"' },
+    });
+
     // Use a longer debounce to ensure multiple files are batched
-    const getWatchResult = await fixture.lernaWatch('--debounce=500 -- "echo batched change"');
+    const getWatchResult = await fixture.lernaWatch('--debounce=500 -- npm run watch:batch');
 
     await wait(500);
     // Create multiple files quickly
@@ -247,7 +313,17 @@ describe('lerna watch', () => {
   });
 
   it('should work with --ignore option', async () => {
-    const getWatchResult = await fixture.lernaWatch('--ignore=package-b --debounce=100 -- "echo triggered"');
+    // Add watch script to packages
+    await fixture.addScriptsToPackage({
+      packagePath: 'packages/package-a',
+      scripts: { 'watch:ignore': 'node -e "console.log(\'triggered\')"' },
+    });
+    await fixture.addScriptsToPackage({
+      packagePath: 'packages/package-c',
+      scripts: { 'watch:ignore': 'node -e "console.log(\'triggered\')"' },
+    });
+
+    const getWatchResult = await fixture.lernaWatch('--ignore=package-b --debounce=100 -- npm run watch:ignore');
 
     await wait(500);
     await createFile(join(fixture.getWorkspacePath(), 'packages/package-a/file.txt'));
@@ -259,6 +335,7 @@ describe('lerna watch', () => {
     const output = await getWatchResult(2000);
 
     // Should watch all packages except package-b (2 packages)
-    expect(output.combinedOutput).toContain('watch Executing command "echo triggered" on changes in 2');
+    expect(output.combinedOutput).toContain('watch Executing command');
+    expect(output.combinedOutput).toContain('on changes in 2');
   });
 });

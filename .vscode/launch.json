@@ -21,7 +21,10 @@
       "program": "${workspaceRoot}/node_modules/vitest/vitest.mjs",
       "args": ["run", "${relativeFile}", "--pool", "forks", "--no-watch", "--config", "./e2e/vitest.config.ts"],
       "smartStep": true,
-      "console": "integratedTerminal"
+      "console": "integratedTerminal",
+      "env": {
+        "E2E_ROOT": "${env:TEMP}/lerna-lite-e2e"
+      }
     },
     {
       "name": "Version command debugger",
