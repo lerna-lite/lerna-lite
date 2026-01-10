@@ -4,29 +4,27 @@ This directory contains end-to-end (e2e) tests for lerna-lite, inspired by [Lern
 
 ## Current Test Status
 
-✅ **25 tests passing** when Verdaccio is not running | ✅ **28 tests passing** with Verdaccio
+✅ **All 72 tests passing** (10 test suites)
 
 ### Test Suites
-- ✅ List command (5 tests) - All passing
-- ✅ Version command (6 tests) - All passing  
-- ✅ Run command (12 tests) - All passing
-- ✅ Publish tests (2 tests) - All passing
-  - Publish from-git --dry-run
-  - Publish with --canary flag
+- ✅ List command (5 tests)
+- ✅ Version command (6 tests)  
+- ✅ Run command (12 tests)
+- ✅ Watch command (11 tests)
+- ✅ Exec command (12 tests)
+- ✅ Diff command (2 tests)
+- ✅ Changed command (15 tests)
+- ✅ Publish dry-run tests (2 tests)
+- ✅ Publish Verdaccio tests (3 tests)
+- ✅ Publish .npmrc authentication tests (4 tests)
 
-### Verdaccio-Dependent Tests (3 tests)
-These tests require Verdaccio registry running on `http://localhost:4873`:
-- `publish from-git` - Publishes tagged packages to Verdaccio
-- `publish from-package` - Publishes packages with updated versions
-- `publish --canary` - Publishes canary versions with commit SHA
-
-**To run these tests:** Start Verdaccio first with `npx verdaccio`
+All tests run automatically in CI with Verdaccio. The test suite executes in ~60-100 seconds.
 
 ## Overview
 
 E2E tests verify the complete functionality of lerna-lite commands by:
 - Creating temporary test workspaces
-- Executing real lerna commands
+- Executing real lerna commands (list, version, run, watch, exec, diff, changed, publish)
 - Testing against a local Verdaccio registry for publish operations
 - Validating outputs and file system changes
 
@@ -61,9 +59,20 @@ e2e/
 ├── tsconfig.json            # TypeScript config for e2e tests
 ├── publish/                 # E2E tests for publish command
 │   ├── publish-verdaccio.spec.ts
-│   └── publish-dry-run.spec.ts
+│   ├── publish-dry-run.spec.ts
+│   └── publish-npmrc-auth.spec.ts
 ├── version/                 # E2E tests for version command
 │   └── version.spec.ts
+├── exec/                    # E2E tests for exec command
+│   └── exec.spec.ts
+├── diff/                    # E2E tests for diff command
+│   └── diff.spec.ts
+├── changed/                 # E2E tests for changed command
+│   └── changed.spec.ts
+├── run/                     # E2E tests for run command
+│   └── run.spec.ts
+├── watch/                   # E2E tests for watch command
+│   └── watch.spec.ts
 └── list/                    # E2E tests for list command
     └── list.spec.ts
 
@@ -93,7 +102,7 @@ This will:
 4. Run all e2e tests
 5. Stop Verdaccio when done
 
-**Current test status: 25/39 passing** (watch tests are experimental and need refinement)
+**Current test status: ✅ 72/72 passing**
 
 ### Alternative: Without Verdaccio
 
@@ -190,7 +199,7 @@ describe('my-feature', () => {
 
   it('should do something', async () => {
     // Create packages
-    await fixture.lerna('create my-package -y');
+    await fixture.createPackage({ name: 'my-package' });
     
     // Run lerna commands
     const output = await fixture.lerna('list');
@@ -205,7 +214,7 @@ describe('my-feature', () => {
 
 ```typescript
 // Create a new package
-await fixture.lerna('create package-name -y');
+await fixture.createPackage({ name: 'package-name' });
 
 // Execute arbitrary commands
 await fixture.exec('git add .');
@@ -239,7 +248,7 @@ const path = fixture.getWorkspacePath('packages/my-pkg');
 
 ```typescript
 it('should publish to verdaccio', async () => {
-  await fixture.lerna('create test-pkg -y');
+  await fixture.createPackage({ name: 'test-pkg', version: '1.0.0' });
   await fixture.createInitialGitCommit();
   await fixture.exec('git push origin main');
 
@@ -276,29 +285,6 @@ it('should match snapshot', async () => {
   ).toMatchSnapshot();
 });
 ```
-
-## Differences from Lerna's E2E Tests
-
-Our implementation differs from Lerna's in several ways:
-
-1. **Vitest instead of Jest**
-   - Uses Vitest's native test runner and assertions
-   - No Jest-specific matchers or configuration
-
-2. **Simplified Approach**
-   - We don't use bash scripts (exec.sh/utils.sh) for test initialization
-   - Everything is written in TypeScript for better type safety
-
-3. **Local CLI Usage**
-   - Tests use the locally built CLI directly instead of publishing to a registry first
-   - Faster test execution and easier debugging
-
-4. **Windows-Friendly**
-   - All operations use Node.js APIs rather than shell commands where possible
-   - PowerShell-compatible scripts
-
-5. **No Nx Integration**
-   - Lerna-lite doesn't include Nx, so we don't test Nx-specific features
 
 ## Troubleshooting
 
@@ -373,3 +359,14 @@ When adding new e2e tests:
 - [Lerna E2E Tests](https://github.com/lerna/lerna/tree/main/e2e) - Original inspiration
 - [Vitest Documentation](https://vitest.dev/) - Testing framework docs
 - [Verdaccio](https://verdaccio.org/) - Local npm registry for testing
+
+### Current Approach
+
+The current testing strategy is optimal:
+- **Unit tests** → Measure code coverage (lines, branches, functions)
+- **E2E tests** → Verify end-to-end functionality and real-world usage
+
+This separation ensures:
+- Fast feedback from unit tests with coverage metrics
+- Confidence from E2E tests that the entire system works together
+- Clear distinction between white-box (unit) and black-box (E2E) testing

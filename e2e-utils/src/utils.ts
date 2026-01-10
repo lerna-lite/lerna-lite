@@ -30,6 +30,9 @@ export function normalizeEnvironment(str: string): string {
       .replace(/\\d{4}-\\d{2}-\\d{2}T\\d{2}:\\d{2}:\\d{2}\\.\\d{3}Z/g, 'TIMESTAMP')
       // Normalize duration
       .replace(/\\d+(\\.\\d+)?(ms|s)/g, 'XXms')
+      // Remove ANSI color codes
+      // eslint-disable-next-line no-control-regex
+      .replace(/\u001b\[\d+m/g, '')
   );
 }
 
