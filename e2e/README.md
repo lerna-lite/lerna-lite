@@ -1,24 +1,6 @@
 # E2E Testing for Lerna-Lite
 
-This directory contains end-to-end (e2e) tests for lerna-lite, inspired by [Lerna's e2e test infrastructure](https://github.com/lerna/lerna/tree/main/e2e) but adapted for Vitest instead of Jest.
-
-## Current Test Status
-
-✅ **All 72 tests passing** (10 test suites)
-
-### Test Suites
-- ✅ List command (5 tests)
-- ✅ Version command (6 tests)  
-- ✅ Run command (12 tests)
-- ✅ Watch command (11 tests)
-- ✅ Exec command (12 tests)
-- ✅ Diff command (2 tests)
-- ✅ Changed command (15 tests)
-- ✅ Publish dry-run tests (2 tests)
-- ✅ Publish Verdaccio tests (3 tests)
-- ✅ Publish .npmrc authentication tests (4 tests)
-
-All tests run automatically in CI with Verdaccio. The test suite executes in ~60-100 seconds.
+This directory contains end-to-end (e2e) tests for lerna-lite, inspired by [Lerna's e2e test infrastructure](https://github.com/lerna/lerna/tree/main/e2e) but adapted for Vitest.
 
 ## Overview
 
@@ -27,6 +9,21 @@ E2E tests verify the complete functionality of lerna-lite commands by:
 - Executing real lerna commands (list, version, run, watch, exec, diff, changed, publish)
 - Testing against a local Verdaccio registry for publish operations
 - Validating outputs and file system changes
+
+## Test Suites
+
+- ✅ List command (5 tests)
+- ✅ Version command (6 tests)  
+- ✅ Run command (12 tests)
+- ✅ Watch command (11 tests)
+- ✅ Exec command (11 tests)
+- ✅ Diff command (2 tests)
+- ✅ Changed command (14 tests)
+- ✅ Publish dry-run (2 tests)
+- ✅ Publish Verdaccio (3 tests)
+- ✅ Publish .npmrc authentication (4 tests)
+
+All tests run automatically in CI with Verdaccio.
 
 ## Architecture
 
@@ -87,65 +84,27 @@ e2e-utils/
 
 ## Running E2E Tests
 
-### Quick Start
+### Run All Tests
 
-Run all e2e tests including Verdaccio-dependent tests (recommended):
-
-```powershell
+```bash
 pnpm test:e2e
 ```
 
 This will:
 1. Build the project
 2. Start Verdaccio automatically
-3. Wait for Verdaccio to be ready
-4. Run all e2e tests
-5. Stop Verdaccio when done
+3. Run all e2e tests
+4. Stop Verdaccio when done
 
-**Current test status: ✅ 72/72 passing**
+### Run Tests in Watch Mode
 
-### Alternative: Without Verdaccio
-
-To run tests without Verdaccio (3 publish tests will fail):
-
-```powershell
-pnpm test:e2e:no-verdaccio
-```
-
-### Prerequisites (for Manual Runs)
-
-1. **Build the project first:**
-   ```powershell
-   pnpm build
-   ```
-
-2. **(Optional) Start Verdaccio for publish tests:**
-   
-   If you're running tests manually with `vitest`, you can start Verdaccio:
-   
-   ```powershell
-   pnpm verdaccio:start
-   ```
-
-### Run E2E Tests in Watch Mode
-
-```powershell
+```bash
 pnpm test:e2e:watch
 ```
 
-Note: In watch mode, you need to start Verdaccio manually if you want to run publish tests:
+### Run Specific Test Suite
 
-```powershell
-# In one terminal:
-pnpm verdaccio:start
-
-# In another terminal:
-pnpm test:e2e:watch
-```
-
-### Run Specific Test Suites
-
-```powershell
+```bash
 # Run only publish tests
 vitest run --config ./e2e/vitest.config.ts e2e/publish
 
@@ -153,12 +112,15 @@ vitest run --config ./e2e/vitest.config.ts e2e/publish
 vitest run --config ./e2e/vitest.config.ts e2e/version
 ```
 
-### Debug E2E Tests
+### Debug Mode
 
 Enable debug mode to keep test fixtures and see detailed logs:
 
-```powershell
-$env:LERNA_E2E_DEBUG = "true"
+```bash
+export LERNA_E2E_DEBUG=true  # Linux/macOS
+# or
+$env:LERNA_E2E_DEBUG = "true"  # PowerShell
+
 pnpm test:e2e
 ```
 
@@ -176,24 +138,24 @@ Test fixtures are created in:
 ### Basic Test Structure
 
 ```typescript
-import { describe, it, expect, beforeEach, afterEach } from 'vitest';
-import { Fixture, normalizeEnvironment } from '../../e2e-utils/src/index.js';
+import { describe, it, expect, beforeAll, afterAll } from 'vitest';
+import { Fixture } from '../../e2e-utils/src/index.js';
 
 describe('my-feature', () => {
   let fixture: Fixture;
 
-  beforeEach(async () => {
+  beforeAll(async () => {
     fixture = await Fixture.create({
       e2eRoot: process.env.E2E_ROOT!,
       name: 'my-feature-test',
-      packageManager: 'npm', // or 'pnpm'
+      packageManager: 'npm',
       initializeGit: true,
-      lernaInit: { args: ['--packages="packages/*"'] },
-      installDependencies: true,
+      lernaInit: true,
+      installDependencies: false,
     });
   });
 
-  afterEach(async () => {
+  afterAll(async () => {
     await fixture.destroy();
   });
 
@@ -250,25 +212,16 @@ const path = fixture.getWorkspacePath('packages/my-pkg');
 it('should publish to verdaccio', async () => {
   await fixture.createPackage({ name: 'test-pkg', version: '1.0.0' });
   await fixture.createInitialGitCommit();
-  await fixture.exec('git push origin main');
+  await fixture.exec('git tag test-pkg@1.0.0 -m "test-pkg@1.0.0"');
 
-  const version = '1.0.0';
-  await fixture.lerna(`version ${version} -y`);
-
-  // Configure npm to use verdaccio
-  await fixture.exec('echo "registry=http://localhost:4873" > .npmrc');
+  // Configure npm to use Verdaccio
+  await fixture.exec('echo "registry=http://localhost:4873/" > .npmrc');
 
   const output = await fixture.lerna(
-    'publish from-git --registry=http://localhost:4873 -y'
+    'publish from-git --registry=http://localhost:4873/ -y'
   );
 
   expect(output.combinedOutput).toContain('Successfully published');
-
-  // Clean up
-  await fixture.exec(
-    `npm unpublish --force test-pkg@${version} --registry=http://localhost:4873`,
-    { silenceError: true }
-  );
 });
 ```
 
@@ -290,53 +243,30 @@ it('should match snapshot', async () => {
 
 ### Tests Failing with Timeout
 
-Increase the timeout in `e2e/vitest.config.ts`:
-
-```typescript
-export default defineConfig({
-  test: {
-    testTimeout: 180000, // 3 minutes
-  },
-});
-```
-
-### Verdaccio Connection Errors
-
-1. Make sure Verdaccio is running: `pnpm verdaccio:start`
-2. Check if port 4873 is available: `netstat -ano | findstr :4873`
-3. Authenticate with Verdaccio: `npm adduser --registry http://localhost:4873`
+If tests timeout, the default timeout is 2 minutes per test. For slower systems, you can increase the timeout in `e2e/vitest.config.ts`.
 
 ### Fixture Cleanup Issues
 
-If fixtures aren't being cleaned up:
+If fixtures aren't being cleaned up properly:
 
-```powershell
-# Manually remove old fixtures
+```bash
+# Linux/macOS
+rm -rf /tmp/lerna-lite-e2e
+
+# Windows PowerShell
 Remove-Item -Recurse -Force "$env:TEMP\lerna-lite-e2e"
-```
-
-### Debug Mode Not Working
-
-Make sure to set the environment variable before running tests:
-
-```powershell
-$env:LERNA_E2E_DEBUG = "true"
-pnpm test:e2e
 ```
 
 ## CI/CD Integration
 
-For CI environments, e2e tests will:
+E2E tests are designed to run in CI environments and will automatically:
+- Start and stop Verdaccio
 - Use temporary directories that are cleaned up automatically
 - Retry flaky tests (2 retries by default)
-- Run without Verdaccio (only dry-run tests)
 
 Example GitHub Actions workflow:
 
 ```yaml
-- name: Build Project
-  run: pnpm build
-
 - name: Run E2E Tests
   run: pnpm test:e2e
   env:
@@ -350,23 +280,12 @@ When adding new e2e tests:
 1. Create a new directory under `e2e/` for the command being tested
 2. Write tests using the Fixture class
 3. Use meaningful test names that describe the behavior
-4. Normalize output for snapshots to avoid flaky tests
-5. Clean up resources (e.g., unpublish from Verdaccio)
-6. Add appropriate assertions - don't just check for absence of errors
+4. Normalize output for assertions to avoid platform-specific issues
+5. Use `beforeAll`/`afterAll` for fixture setup/teardown
+6. Add appropriate assertions - verify the actual behavior, not just absence of errors
 
 ## Resources
 
 - [Lerna E2E Tests](https://github.com/lerna/lerna/tree/main/e2e) - Original inspiration
-- [Vitest Documentation](https://vitest.dev/) - Testing framework docs
+- [Vitest Documentation](https://vitest.dev/) - Testing framework
 - [Verdaccio](https://verdaccio.org/) - Local npm registry for testing
-
-### Current Approach
-
-The current testing strategy is optimal:
-- **Unit tests** → Measure code coverage (lines, branches, functions)
-- **E2E tests** → Verify end-to-end functionality and real-world usage
-
-This separation ensures:
-- Fast feedback from unit tests with coverage metrics
-- Confidence from E2E tests that the entire system works together
-- Clear distinction between white-box (unit) and black-box (E2E) testing

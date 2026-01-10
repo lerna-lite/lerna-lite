@@ -71,6 +71,8 @@ This project follows [GitHub's standard forking model](https://guides.github.com
 
 If you want to test Lerna-Lite commands against a local npm registry, you can use Verdaccio. This is useful for testing publish workflows and custom registry configurations without affecting the real npm registry.
 
+> **Note:** When running E2E tests with `pnpm test:e2e`, Verdaccio is started and stopped automatically. The instructions below are for manual testing only.
+
 You will need two terminal windows:
 
 ### Terminal 1 - Start Verdaccio
@@ -172,24 +174,26 @@ pnpm exec vitest run --config ./e2e/vitest.config.ts e2e/list/list.spec.ts
 E2E tests use the `Fixture` class from `e2e-utils` to create isolated test workspaces:
 
 ```typescript
-import { Fixture } from 'e2e-utils';
+import { Fixture } from '../../e2e-utils/src/index.js';
 
 describe('lerna my-command', () => {
   let fixture: Fixture;
 
-  beforeEach(async () => {
+  beforeAll(async () => {
     fixture = await Fixture.create({
+      e2eRoot: process.env.E2E_ROOT!,
       name: 'my-command',
       packageManager: 'npm',
+      initializeGit: true,
       lernaInit: true,
-      installDependencies: true,
+      installDependencies: false,
     });
     
-    // Customize the workspace
-    await fixture.updateJson('lerna.json', { packages: ['packages/*'] });
+    // Create packages and customize the workspace
+    await fixture.createPackage({ name: 'my-package' });
   });
 
-  afterEach(() => fixture.destroy());
+  afterAll(() => fixture.destroy());
 
   it('should do something', async () => {
     const result = await fixture.lerna('my-command --some-flag');
