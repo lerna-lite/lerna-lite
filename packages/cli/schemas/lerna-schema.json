@@ -267,6 +267,27 @@
           "type": "object",
           "description": "Options for the `list` command.",
           "properties": {
+            "json": {
+              "$ref": "#/$defs/commandOptions/list/json"
+            },
+            "ndjson": {
+              "$ref": "#/$defs/commandOptions/list/ndjson"
+            },
+            "all": {
+              "$ref": "#/$defs/commandOptions/list/all"
+            },
+            "long": {
+              "$ref": "#/$defs/commandOptions/list/long"
+            },
+            "parseable": {
+              "$ref": "#/$defs/commandOptions/list/parseable"
+            },
+            "toposort": {
+              "$ref": "#/$defs/commandOptions/list/toposort"
+            },
+            "graph": {
+              "$ref": "#/$defs/commandOptions/list/graph"
+            },
             "npmClient": {
               "$ref": "#/$defs/globals/npmClient"
             },
@@ -625,6 +646,12 @@
             "createReleaseDiscussion": {
               "$ref": "#/$defs/commandOptions/version/createReleaseDiscussion"
             },
+            "generateReleaseNotes": {
+              "$ref": "#/$defs/commandOptions/version/generateReleaseNotes"
+            },
+            "remoteClient": {
+              "$ref": "#/$defs/commandOptions/version/remoteClient"
+            },
             "ignoreChanges": {
               "$ref": "#/$defs/commandOptions/shared/ignoreChanges"
             },
@@ -667,6 +694,9 @@
             "push": {
               "$ref": "#/$defs/commandOptions/version/push"
             },
+            "pushTagsOneByOne": {
+              "$ref": "#/$defs/commandOptions/version/pushTagsOneByOne"
+            },
             "preid": {
               "$ref": "#/$defs/commandOptions/shared/preid"
             },
@@ -691,8 +721,14 @@
             "syncWorkspaceLock": {
               "$ref": "#/$defs/commandOptions/version/syncWorkspaceLock"
             },
+            "noManuallyUpdateRootLockfile": {
+              "$ref": "#/$defs/commandOptions/version/noManuallyUpdateRootLockfile"
+            },
             "tagVersionPrefix": {
               "$ref": "#/$defs/commandOptions/version/tagVersionPrefix"
+            },
+            "tagVersionSeparator": {
+              "$ref": "#/$defs/commandOptions/version/tagVersionSeparator"
             },
             "premajorVersionBump": {
               "$ref": "#/$defs/commandOptions/version/premajorVersionBump"
@@ -774,6 +810,12 @@
             "bail": {
               "$ref": "#/$defs/commandOptions/shared/bail"
             },
+            "debounce": {
+              "$ref": "#/$defs/commandOptions/watch/debounce"
+            },
+            "fileDelimiter": {
+              "$ref": "#/$defs/commandOptions/watch/fileDelimiter"
+            },
             "awaitWriteFinish": {
               "$ref": "#/$defs/commandOptions/watch/awaitWriteFinish"
             },
@@ -797,6 +839,9 @@
             },
             "ignored": {
               "$ref": "#/$defs/commandOptions/watch/ignored"
+            },
+            "ignoreInitial": {
+              "$ref": "#/$defs/commandOptions/watch/ignoreInitial"
             },
             "ignorePermissionErrors": {
               "$ref": "#/$defs/commandOptions/watch/ignorePermissionErrors"
@@ -1206,6 +1251,36 @@
           "description": "During `lerna init`, enables integration with Yarn or other package manager that use `workspaces` property in `package.json`."
         }
       },
+      "list": {
+        "json": {
+          "type": "boolean",
+          "description": "Show information as a JSON array."
+        },
+        "ndjson": {
+          "type": "boolean",
+          "description": "Show information as newline-delimited JSON."
+        },
+        "all": {
+          "type": "boolean",
+          "description": "Show private packages that are hidden by default."
+        },
+        "long": {
+          "type": "boolean",
+          "description": "Show extended information."
+        },
+        "parseable": {
+          "type": "boolean",
+          "description": "Show parseable output instead of columnified view."
+        },
+        "toposort": {
+          "type": "boolean",
+          "description": "Sort packages in topological order (dependencies before dependents) instead of lexical by directory."
+        },
+        "graph": {
+          "type": "boolean",
+          "description": "Show dependency graph as a JSON-formatted adjacency list."
+        }
+      },
       "publish": {
         "arboristLoadOptions": {
           "type": "object",
@@ -1399,6 +1474,15 @@
         "generateReleaseNotes": {
           "type": "boolean",
           "description": "Provides an alternative to create a GitHub release by letting GitHub automatically generate the name and body for the new release."
+        },
+        "remoteClient": {
+          "type": "string",
+          "description": "Type of remote client to use for creating releases and fetching commit information.",
+          "enum": ["github", "gitlab"]
+        },
+        "noManuallyUpdateRootLockfile": {
+          "type": "boolean",
+          "description": "When enabled, Lerna-Lite will not manually update the npm package-lock.json. You should use --sync-workspace-lock instead."
         },
         "message": {
           "type": "string",
