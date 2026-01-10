@@ -34,6 +34,12 @@ All command implementations (cli, changed, diff, exec, init, list, publish, run,
 
 - a bunch of helpers used by unit tests, mocks and fixtures
 
+### `/e2e/` - End-to-End Tests
+
+- Individual test suites for each Lerna command (changed, diff, exec, list, publish, run, version, watch)
+
+### `/e2e-utils/` - Utilities for end-to-end testing
+
 ### `/__fixtures__/` - Test Fixtures
 
 - Various test scenarios and generic sample monorepo structures that can be used bt multiple command tests
@@ -79,6 +85,7 @@ When creating or modifying Lerna commands:
 ### Testing Conventions
 
 - **Vitest**: Primary testing framework
+- **E2E tests**: Test full command execution in realistic monorepo scenarios
 - **Fixtures**: Predefined test scenarios for consistent testing
 
 ### Build and Release
@@ -129,7 +136,10 @@ pnpm run build
 pnpm run lint-type
 
 # Run all tests with coverage
-npm run test
+pnpm run test
+
+# Run E2E tests which will also start Verdaccio by itself
+pnpm run test:e2e
 ```
 
 ## Claude Restrictions
