@@ -6,22 +6,22 @@ This directory contains end-to-end (e2e) tests for Lerna-Lite, inspired by [Lern
 
 E2E tests verify the complete functionality of Lerna-Lite commands by:
 - Creating temporary test workspaces
-- Executing real lerna commands (list, version, run, watch, exec, diff, changed, publish)
+- Executing real lerna commands (changed, diff, exec, list, publish, run, version, watch)
 - Testing against a local Verdaccio registry for publish operations
 - Validating outputs and file system changes
 
 ## Test Suites
 
-- ✅ List command
-- ✅ Version command
-- ✅ Run command
-- ✅ Watch command
-- ✅ Exec command
-- ✅ Diff command
 - ✅ Changed command
+- ✅ Diff command
+- ✅ Exec command
+- ✅ List command
 - ✅ Publish dry-run
 - ✅ Publish Verdaccio
 - ✅ Publish .npmrc authentication
+- ✅ Run command
+- ✅ Version command
+- ✅ Watch command
 
 All tests run automatically in CI with Verdaccio.
 
@@ -72,7 +72,6 @@ e2e/
 │   └── version.spec.ts
 └── watch/                   # E2E tests for watch command
     └── watch.spec.ts
-
 
 e2e-utils/
 ├── src/
