@@ -304,7 +304,8 @@ export class Package {
 
             // when named catalog is found (e.g: "catalog:react19")
             if (catalogs) {
-              const catalogName = updatedPkgDep[depName].replace(/^catalog:/, '');
+              // fallback to 'default' catalog when no name is provided after "catalog:" https://pnpm.io/catalogs#default-catalog
+              const catalogName = updatedPkgDep[depName].replace(/^catalog:/, '') || 'default';
               if (catalogs[catalogName]?.[depName]) {
                 updatedPkgDep[depName] = catalogs[catalogName][depName];
                 replaced = true;

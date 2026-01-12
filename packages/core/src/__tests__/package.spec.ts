@@ -1013,6 +1013,26 @@ describe('Package', () => {
           }
         `);
       });
+      it('should replace `catalog:` protocol with the default what it found in npa', () => {
+        const node = factory({
+          dependencies: {
+            a: 'catalog:',
+          },
+        } as unknown as RawManifest);
+
+        node.resolveDependencyCatalogProtocol(node.pkg, {
+          catalog: {},
+          catalogs: { default: { a: '1.0.0' } },
+        });
+
+        expect(node.toJSON()).toMatchInlineSnapshot(`
+          {
+            "dependencies": {
+              "a": "1.0.0",
+            },
+          }
+        `);
+      });
     });
   });
 });
