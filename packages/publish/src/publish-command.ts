@@ -533,10 +533,12 @@ export class PublishCommand extends Command<PublishCommandOption> {
     logOutput('');
 
     if (this.options.yes) {
-      // Defer the info log to the next microtask to avoid interleaving the auto-confirm log with all changes shown above
-      return Promise.resolve().then(() => {
-        this.logger.info('auto-confirmed', '');
-        return true;
+      // Defer the info log to the next tick to avoid interleaving the auto-confirm log with all changes shown above
+      return new Promise<boolean>((resolve) => {
+        setTimeout(() => {
+          this.logger.info('auto-confirmed', '');
+          resolve(true);
+        }, 0);
       });
     }
 
