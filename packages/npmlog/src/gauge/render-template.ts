@@ -79,6 +79,7 @@ function prepareItems(width, template, values) {
         cloned.value = values[type];
       }
     }
+    // oxlint-disable-next-line typescript/prefer-optional-chain
     if (cloned.value == null || cloned.value === '') {
       return null;
     }

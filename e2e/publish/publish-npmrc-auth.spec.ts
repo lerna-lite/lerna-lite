@@ -1,6 +1,6 @@
+import { writeFile } from 'node:fs/promises';
 import { join } from 'node:path';
 
-import { writeFile } from 'fs/promises';
 import { describe, it, expect, beforeEach, afterEach } from 'vitest';
 
 import { Fixture } from '../../e2e-utils/src/index.js';

@@ -46,6 +46,7 @@
     // type aware rules
     "typescript/no-array-delete": "off",
     "typescript/no-misused-spread": "off",
+    "typescript/prefer-optional-chain": "error",
     "typescript/require-array-sort-compare": "off"
   }
 }

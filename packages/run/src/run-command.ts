@@ -58,8 +58,7 @@ export class RunCommand extends Command<RunCommandOption & FilterOptions> {
 
     chain = chain.then(() => getFilteredPackages(this.packageGraph!, this.execOpts, this.options));
     chain = chain.then((filteredPackages: Package[]) => {
-      this.packagesWithScript =
-        script === 'env' ? filteredPackages : filteredPackages.filter((pkg) => pkg.scripts && pkg.scripts[script]);
+      this.packagesWithScript = script === 'env' ? filteredPackages : filteredPackages.filter((pkg) => pkg.scripts?.[script]);
     });
 
     return chain.then(() => {

@@ -19,6 +19,7 @@ export class GetChangelogConfig {
 
   static isFunction(config: ChangelogConfig) {
     return (
+      // oxlint-disable-next-line typescript/prefer-optional-chain
       Object.prototype.toString.call(config) === '[object Function]' ||
       Object.prototype.toString.call(config) === '[object AsyncFunction]'
     );
@@ -83,7 +84,7 @@ export class GetChangelogConfig {
         } else {
           presetPackageName = parsed.fetchSpec;
         }
-      } else if (parsed.type === 'git' && parsed.hosted && parsed.hosted.default === 'shortcut') {
+      } else if (parsed.type === 'git' && parsed.hosted?.default === 'shortcut') {
         // probably a shorthand subpath, e.g. 'foo/bar'
         parsed.name = parsed.raw;
       }

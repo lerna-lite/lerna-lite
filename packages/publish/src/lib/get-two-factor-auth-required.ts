@@ -30,9 +30,9 @@ export function getTwoFactorAuthRequired(options?: FetchConfig) {
     return result.tfa.mode === 'auth-and-writes';
   }
 
-  function failure(err: any) {
+  function failure(err: { code: string; message: string }) {
     // pass if registry does not support profile endpoint
-    if (err.code === 'E500' || err.code === 'E404') {
+    if (['E500', 'E404'].includes(err.code)) {
       // most likely a private registry (npm Enterprise, verdaccio, etc)
       opts.log.warn(
         'EREGISTRY',

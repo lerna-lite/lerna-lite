@@ -1,3 +1,4 @@
+import { readFile } from 'node:fs/promises';
 import { dirname, join, resolve as pathResolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
 
@@ -5,7 +6,6 @@ import type { Package } from '@lerna-lite/core';
 import { Project } from '@lerna-lite/core';
 import { gitAdd, gitCommit, gitTag, initFixtureFactory } from '@lerna-test/helpers';
 import serializeChangelog from '@lerna-test/helpers/serializers/serialize-changelog.js';
-import { readFile } from 'fs/promises';
 import { beforeEach, describe, expect, it, test } from 'vitest';
 
 import { applyBuildMetadata } from '../../conventional-commits/apply-build-metadata.js';

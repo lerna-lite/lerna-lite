@@ -37,7 +37,7 @@ export function verifyNpmPackageAccess(packages: Package[], username: string, op
 
   function failure(err: any) {
     // pass if registry does not support ls-packages endpoint
-    if (err.code === 'E500' || err.code === 'E404') {
+    if (['E500', 'E404'].includes(err.code)) {
       // most likely a private registry (npm Enterprise, verdaccio, etc)
       opts.log.warn(
         'EREGISTRY',

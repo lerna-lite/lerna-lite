@@ -125,7 +125,7 @@ export class Command<T extends AvailableCommandOption> {
           reject(err);
 
           if (err.name === 'ValidationError') {
-            log.error(err.code, (err.body && err.body.error) || err.message);
+            log.error(err.code, err.body?.error || err.message);
           }
         }
       );

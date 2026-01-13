@@ -60,10 +60,10 @@ export class Gauge {
 
   constructor(arg1?: any, arg2?: any) {
     let options: GaugeOptions, writeTo: any;
-    if (arg1 && arg1.write) {
+    if (arg1?.write) {
       writeTo = arg1;
       options = arg2 || {};
-    } else if (arg2 && arg2.write) {
+    } else if (arg2?.write) {
       writeTo = arg2;
       options = arg1 || {};
     } else {
@@ -105,7 +105,7 @@ export class Gauge {
     this._cleanupOnExit = options.cleanupOnExit == null || options.cleanupOnExit;
     this._removeOnExit = null;
 
-    if (options.enabled || (options.enabled == null && this._tty && this._tty.isTTY)) {
+    if (options.enabled || (options.enabled == null && this._tty?.isTTY)) {
       this.enable();
     } else {
       this.disable();
@@ -162,7 +162,7 @@ export class Gauge {
   }
 
   getWidth(): number {
-    return ((this._tty && this._tty.columns) || 80) - 1;
+    return (this._tty?.columns || 80) - 1;
   }
 
   setWriteTo(writeTo: any, tty: any) {

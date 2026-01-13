@@ -1,8 +1,8 @@
 import { createReadStream } from 'node:fs';
+import { stat } from 'node:fs/promises';
 import { basename } from 'node:path';
 
 import type { Package } from '@lerna-lite/core';
-import { stat } from 'fs/promises';
 import ssri from 'ssri';
 import { list } from 'tar';
 

@@ -1,6 +1,6 @@
 import { log } from '@lerna-lite/npmlog';
 import importLocal from 'import-local';
-import { afterEach, beforeEach, describe, expect, it, vi, type Mock } from 'vitest';
+import { afterEach, describe, expect, it, vi, type Mock } from 'vitest';
 
 vi.mock('import-local');
 
@@ -13,10 +13,6 @@ vi.mock('../lerna-entry.js', () => ({
 describe('CLI', () => {
   afterEach(() => {
     vi.resetModules();
-  });
-
-  beforeEach(() => {
-    vi.mock('import-local');
   });
 
   it('should log a message when using local version', async () => {

@@ -1,8 +1,8 @@
+import { readFile } from 'node:fs/promises';
 import { dirname, join, normalize } from 'node:path';
 
 import { Conf, Package, runLifecycle, type RawManifest } from '@lerna-lite/core';
 import PackageJson from '@npmcli/package-json';
-import { readFile } from 'fs/promises';
 // @ts-ignore
 import { publish } from 'libnpmpublish';
 import { beforeEach, describe, expect, it, vi, type Mock } from 'vitest';

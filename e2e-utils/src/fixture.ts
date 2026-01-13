@@ -10,7 +10,7 @@ const REGISTRY = 'http://localhost:4873/';
 const PNPM_STORE = 'pnpm.store';
 const ORIGIN_GIT = 'origin.git';
 
-type PackageManager = 'npm' | 'pnpm';
+type PackageManager = 'npm' | 'pnpm' | 'yarn';
 
 interface RunCommandOptions {
   silenceError?: boolean;

@@ -27,7 +27,7 @@ function createDependencyMatcher(dependencyType) {
     const pkg = Package.lazy(received);
     const noDeps = typeof pkg[dependencyType] !== 'object';
     const id = [name, range].filter(Boolean).join('@');
-    const exact = options && options.exact;
+    const exact = options?.exact;
 
     const expectedName = `expected ${pkg.name}`;
     const expectedAction = `to ${verb} on ${id}`;
