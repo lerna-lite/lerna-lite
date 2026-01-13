@@ -1013,7 +1013,7 @@ describe('Package', () => {
           }
         `);
       });
-      
+
       it('should replace `catalog:` protocol with the default catalog with what it found in npa', () => {
         const node = factory({
           dependencies: {
