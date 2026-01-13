@@ -55,14 +55,12 @@ _Click on any command shown below to see their associated documentations_
 
 ---
 
-## 📢 Lerna-Lite supports `catalog:` and `workspace:` protocols for all clients that support them (pnpm/bun/yarn).
-
-Take 30sec. to complete this 1 question [poll survey 🔘](https://github.com/lerna-lite/lerna-lite/discussions/156) if you are using this feature. It's a simple poll to find out which package manager is the most popular with `workspace:` protocol (so far, about 65% pnpm and 35% yarn).
+## 📢 Lerna-Lite supports `catalog:` and `workspace:` protocols (pnpm/bun/yarn)
 
 Lerna-Lite itself is also using both [pnpm catalogs](https://pnpm.io/catalogs) and [pnpm workspaces](https://pnpm.io/workspaces) internally. 🎉
 
 ## OIDC Trusted Publishing
-OIDC Trusted Publishing is now supported as of [v4.9.0](https://github.com/lerna-lite/lerna-lite/releases/tag/v4.9.0). GitHub and GitLab CI workflows can now use npm's [Trusted Publishing](https://docs.npmjs.com/trusted-publishers) OpenID Connect (OIDC) integration for secure, token-free publishing from CI/CD. This eliminates long-lived tokens and automatically generates [Provenance](https://github.blog/security/supply-chain-security/introducing-npm-package-provenance/) attestations. A basic test repo is available here: https://github.com/lerna-lite-test/oidc
+OIDC Trusted Publishing is now supported with [v4.9.0](https://github.com/lerna-lite/lerna-lite/releases/tag/v4.9.0) and higher. GitHub and GitLab CI workflows can now use npm's [Trusted Publishing](https://docs.npmjs.com/trusted-publishers) OpenID Connect (OIDC) integration for secure, token-free publishing from CI/CD. This eliminates long-lived tokens and automatically generates [Provenance](https://github.blog/security/supply-chain-security/introducing-npm-package-provenance/) attestations. A basic test repo is available here: https://github.com/lerna-lite-test/oidc
 
 ---
 
@@ -78,6 +76,10 @@ Here are some of the largest projects using Lerna-Lite
   <img src="https://avatars.githubusercontent.com/u/22138497?s=28&v=4" width="28" height="28">
   Vuetify
 </a>&nbsp; | &nbsp;
+<a href="https://github.com/SBoudrias/Inquirer.js" title="Inquirer.js">
+  <img src="https://raw.githubusercontent.com/SBoudrias/Inquirer.js/main/assets/inquirer_readme.svg" width="28" height="28">
+   Inquirer
+</a>&nbsp; | &nbsp;
 <a href="https://github.com/react-navigation/react-navigation">
   <img src="https://avatars.githubusercontent.com/u/29647600?s=64&v=4" width="28" height="28">
   React Nav
@@ -85,10 +87,6 @@ Here are some of the largest projects using Lerna-Lite
 <a href="https://github.com/formatjs/formatjs">
   <img src="https://avatars.githubusercontent.com/u/50559490" width="28" height="28">
   Format.JS
-</a>&nbsp; | &nbsp;
-<a href="https://github.com/SBoudrias/Inquirer.js" title="Inquirer.js">
-  <img src="https://raw.githubusercontent.com/SBoudrias/Inquirer.js/main/assets/inquirer_readme.svg" width="28" height="28">
-   Inquirer
 </a>&nbsp; | &nbsp;
 <a href="https://github.com/johnsoncodehk/volar">
   <img src="https://raw.githubusercontent.com/johnsoncodehk/sponsors/master/logos/Vue.svg" width="28" height="28">
@@ -129,7 +127,7 @@ Below are the main reasons as to why this fork was created:
         - please note that Lerna-Lite fork was created couple months **before** Nx took over Lerna
         - most of Lerna's PRs are also replicated here when possible (except for `Nx` changes, which are ignored)
 2. A desire to create a smaller and lighter alternative compared to the original all-in-one (large) Lerna tool
-    - Lerna-Lite is entirely modular, each command are totally optional (install only what you want).
+    - Lerna-Lite is entirely modular, every commands are totally optional (install only what you need).
 3. The project was rewritten in TypeScript with ESM-only since v2.0 (you can still use it in a CJS environment)
 4. The original Lerna version v5.5+ now requires **[Nx](https://nx.dev/)** (want it or not), but that is not the case in Lerna-Lite
    - note, if you already use `Nx` then it's probably better to use Lerna, otherwise Lerna-Lite is a better alternative
@@ -145,14 +143,14 @@ Below are the main reasons as to why this fork was created:
      - e.g.: we use it in here to publish Lerna-Lite without any `scripts` or `devDependencies`
    - [lerna version --skip-bump-only-releases](https://github.com/lerna-lite/lerna-lite/tree/main/packages/version#--skip-bump-only-releases), avoid cluttering your GitHub releases when using `independent`
    - [lerna version --sync-workspace-lock](https://github.com/lerna-lite/lerna-lite/tree/main/packages/version#--sync-workspace-lock) to sync lock file before publishing (not needed w/`workspace:` protocol)
-   - [lerna version --comment-issues/pull requests](https://github.com/lerna-lite/lerna-lite/tree/main/packages/version#comments-on-issuespull-requests), comment on issues/PRs resolved by a new release (new 🍬)
+   - [lerna version --comment-issues/pull requests](https://github.com/lerna-lite/lerna-lite/tree/main/packages/version#comments-on-issuespull-requests), comment on issues/PRs resolved by a new release (new ✨)
    - Bun is now mostly supported as well (including support for `syncWorkspaceLock` and `catalog:` protocol)
 
-On a final note, I would imagine that the best feature of Lerna-Lite (versus Lerna) would be its modularity. A large portion of the users are only interested in `version`/`publish` commands, but on the other hand, a small minority might want other commands like `lerna run`/`exec`. Lerna-Lite offers this kind of flexibility by allowing the user to choose and install the minimal (see [installation](#cli-installation) below) which helps keep your download to the bare minimum.
+On a final note, I would imagine that the best feature of Lerna-Lite (versus Lerna) would be its modularity. A large portion of the users are only interested in `version`/`publish` commands, but on the other hand, a small minority might want other commands like `lerna run`/`exec`. Lerna-Lite offers this kind of flexibility by allowing the user to choose and install the minimal setup (see [installation](#cli-installation) below) which helps keep your download to the bare minimum.
 
 ### Lerna-Lite will help you with the following:
 
-> **Note** all commands are optional in Lerna-Lite, refer to the [Available Commands](#available-commands) table for more info
+> **Note** that all commands in Lerna-Lite are optionals, refer to the [Available Commands](#available-commands) table for more info
 
 #### [Version](https://github.com/lerna-lite/lerna-lite/tree/main/packages/version) and [Publish](https://github.com/lerna-lite/lerna-lite/tree/main/packages/publish) commands
 
@@ -308,7 +306,8 @@ _Click on any command below to see documentation of all available options_
 
 Migrating from the original Lerna, should be fairly easy since you simply need to replace your Lerna dependency with Lerna-Lite `@lerna-lite/cli`, and also install the command(s) that you are interested in and that's about it. The CLI commands and options are nearly identical. The biggest difference compared to Lerna is that you need to manually choose and install the commands that you are interested in, as shown below:
 
-> **Note** as opposed to Lerna v7 and higher, the `useWorkspace` is **not** enabled by default in Lerna-Lite and we still recommend to use either `useWorkspaces` for Yarn/NPM or use the default `packages` in `lerna.json` for pnpm users. The `useWorkspaces` has some drawback since some of the packages could be unrelated to the project releases (ie: website, examples) and for this use case the `packages/*` defined in `lerna.json` is a better approach (e.g. [Jest](https://github.com/facebook/jest) uses this approach).
+> [!NOTE]
+> as opposed to Lerna v7 and higher, the `useWorkspace` is **not** enabled in Lerna-Lite and we still recommend to use either `useWorkspaces` for Yarn/NPM or use the default `packages` in `lerna.json` for pnpm users. The `useWorkspaces` has some drawback since some of the packages could be unrelated to the project releases (e.g.: "website", "examples") and for that use case, defining `packages/*` in your `lerna.json` config is a better approach (e.g. [Jest](https://github.com/facebook/jest) uses this approach).
 
 1. remove Lerna from your local & global dependencies
 
@@ -394,7 +393,7 @@ If you have problems running the project and your problems are related to Git co
 | [@lerna-lite/listable](https://github.com/lerna-lite/lerna-lite/tree/main/packages/listable) | Listable utils for `list`, `changed` | [![npm](https://img.shields.io/npm/v/@lerna-lite/listable.svg)](https://www.npmjs.com/package/@lerna-lite/listable) | [![npm](https://img.shields.io/npm/dy/@lerna-lite/listable?color=forest)](https://www.npmjs.com/package/@lerna-lite/listable) | [changelog](https://github.com/lerna-lite/lerna-lite/blob/main/packages/listable/CHANGELOG.md) |
 | [@lerna-lite/npmlog](https://github.com/lerna-lite/lerna-lite/tree/main/packages/npmlog) | inline version of `npmlog` util | [![npm](https://img.shields.io/npm/v/@lerna-lite/npmlog.svg)](https://www.npmjs.com/package/@lerna-lite/npmlog) | [![npm](https://img.shields.io/npm/dy/@lerna-lite/npmlog?color=forest)](https://www.npmjs.com/package/@lerna-lite/npmlog) | [changelog](https://github.com/lerna-lite/lerna-lite/blob/main/packages/npmlog/CHANGELOG.md) |
 | [@lerna-lite/profiler](https://github.com/lerna-lite/lerna-lite/tree/main/packages/profiler) | internal profiler | [![npm](https://img.shields.io/npm/v/@lerna-lite/profiler.svg)](https://www.npmjs.com/package/@lerna-lite/profiler) | [![npm](https://img.shields.io/npm/dy/@lerna-lite/profiler?color=forest)](https://www.npmjs.com/package/@lerna-lite/profiler) | [changelog](https://github.com/lerna-lite/lerna-lite/blob/main/packages/profiler/CHANGELOG.md) |
-| [@lerna-lite/run](https://github.com/lerna-lite/lerna-lite/tree/main/packages/run) | Run npm scripts in workspace | [![npm](https://img.shields.io/npm/v/@lerna-lite/run.svg)](https://www.npmjs.com/package/@lerna-lite/run) | [![npm](https://img.shields.io/npm/dy/@lerna-lite/run?color=forest)](https://www.npmjs.com/package/@lerna-lite/run) | [changelog](https://github.com/lerna-lite/lerna-lite/blob/main/packages/run/CHANGELOG.md) |
+| [@lerna-lite/run](https://github.com/lerna-lite/lerna-lite/tree/main/packages/run) | Run npm scripts in your workspace | [![npm](https://img.shields.io/npm/v/@lerna-lite/run.svg)](https://www.npmjs.com/package/@lerna-lite/run) | [![npm](https://img.shields.io/npm/dy/@lerna-lite/run?color=forest)](https://www.npmjs.com/package/@lerna-lite/run) | [changelog](https://github.com/lerna-lite/lerna-lite/blob/main/packages/run/CHANGELOG.md) |
 | [@lerna-lite/watch](https://github.com/lerna-lite/lerna-lite/tree/main/packages/watch) | Watch changes in workspace | [![npm](https://img.shields.io/npm/v/@lerna-lite/watch.svg)](https://www.npmjs.com/package/@lerna-lite/watch) | [![npm](https://img.shields.io/npm/dy/@lerna-lite/watch?color=forest)](https://www.npmjs.com/package/@lerna-lite/watch) | [changelog](https://github.com/lerna-lite/lerna-lite/blob/main/packages/watch/CHANGELOG.md) |
 
 ## Sponsors
