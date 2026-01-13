@@ -1,10 +1,10 @@
+import { readFile } from 'node:fs/promises';
 import { dirname, join } from 'node:path';
 
 import { runLifecycle, type Conf, type LifecycleConfig, type Package } from '@lerna-lite/core';
 import { log } from '@lerna-lite/npmlog';
 import { otplease, type OneTimePasswordCache } from '@lerna-lite/version';
 import PackageJson from '@npmcli/package-json';
-import { readFile } from 'fs/promises';
 import { publish } from 'libnpmpublish';
 import npa from 'npm-package-arg';
 
@@ -80,8 +80,7 @@ export async function npmPublish(
     // which is merged into opts below if necessary
     if (
       opts.defaultTag !== 'latest' &&
-      manifestContent.publishConfig &&
-      manifestContent.publishConfig.tag &&
+      manifestContent.publishConfig?.tag &&
       manifestContent.publishConfig.tag !== opts.defaultTag
     ) {
       manifestContent.publishConfig.tag = opts.defaultTag as string;

@@ -174,7 +174,7 @@ export class WatchCommand extends Command<WatchCommandOption & FilterOptions> {
 
     if (pkg) {
       // changes structure sample: { '@lerna-lite/watch': { pkg: Package, changeFiles: ['path1', 'path2'] }
-      if (!this._changes[pkg.name] || !this._changes[pkg.name].changeFiles) {
+      if (!this._changes[pkg.name]?.changeFiles) {
         this._changes[pkg.name] = { pkg, changeFiles: new Set<string>(), timestamp: Date.now() }; // use Set to avoid duplicate entries
       }
       this._changes[pkg.name].changeFiles.add(relativeFilePath);

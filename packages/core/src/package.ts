@@ -272,6 +272,7 @@ export class Package {
 
     for (const depCollection of inspectDependencies) {
       if (depCollection && (resolved.registry || resolved.type === 'directory') && /^(workspace:)+(.*)$/.test(workspaceSpec)) {
+        // oxlint-disable-next-line typescript/prefer-optional-chain
         if (workspaceSpec && (resolved.fetchSpec === 'latest' || resolved.fetchSpec === '')) {
           log.error(
             `publish`,
@@ -450,12 +451,12 @@ export class Package {
     let depCollection = this.dependencies;
 
     // try optionalDependencies if that didn't work
-    if (!depCollection || !depCollection[depName]) {
+    if (!depCollection?.[depName]) {
       depCollection = this.optionalDependencies;
     }
 
     // fall back to devDependencies
-    if (!depCollection || !depCollection[depName]) {
+    if (!depCollection?.[depName]) {
       depCollection = this.devDependencies;
     }
 

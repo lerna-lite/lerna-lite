@@ -49,7 +49,7 @@ export class Project {
       loaded = explorer.search(cwd);
     } catch (err: any) {
       // redecorate JSON syntax errors, avoid debug dump
-      if (err.name === 'JSONError' || err.name === 'SyntaxError') {
+      if (['JSONError', 'SyntaxError'].includes(err.name)) {
         throw new ValidationError('JSONError', err.message);
       }
       // v8 ignore next - re-throw other errors, could be ours or third-party

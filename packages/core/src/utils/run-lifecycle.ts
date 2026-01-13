@@ -42,8 +42,8 @@ function printCommandBanner(id: string, event: string, cmd: string, path: string
 export function runLifecycle(pkg: Package, stage: string, options: LifecycleConfig): Promise<void> {
   // back-compat for @lerna/npm-conf instances
   // unwrap Conf -> plain options when present
-  if (options && typeof (options as any).snapshot !== 'undefined') {
-    options = (options as any).snapshot;
+  if (options?.snapshot !== undefined) {
+    options = options.snapshot;
   }
   // ensure options is a usable object
   options = (options || {}) as LifecycleConfig;
@@ -64,7 +64,7 @@ export function runLifecycle(pkg: Package, stage: string, options: LifecycleConf
     return Promise.resolve();
   }
 
-  if (!pkg.scripts || !pkg.scripts[stage]) {
+  if (!pkg.scripts?.[stage]) {
     opts.log.silly('lifecycle', 'No script for %j in %j, continuing', stage, pkg.name);
 
     return Promise.resolve();

@@ -23,7 +23,7 @@ export function getUnpublishedPackages(packageGraph: PackageGraph, opts: FetchCo
     opts['strictSSL'] = opts['strict-ssl'];
     return pacote.packument(pkg?.name ?? '', opts).then(
       (packument) => {
-        if (packument.versions === undefined || packument.versions[pkg.version] === undefined) {
+        if (packument.versions?.[pkg.version] === undefined) {
           return pkg;
         }
       },

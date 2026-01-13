@@ -1,7 +1,7 @@
+import { readFile } from 'node:fs/promises';
 import { join } from 'node:path';
 
 import type { Package } from '@lerna-lite/core';
-import { readFile } from 'fs/promises';
 
 import { BLANK_LINE, COMMIT_GUIDELINE } from './constants.js';
 

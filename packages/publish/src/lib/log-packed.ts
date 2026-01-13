@@ -12,7 +12,7 @@ export function logPacked(pkg: Package & { packed: Tarball }, dryRun = false) {
   log.notice('', dryRun ? c.bgMagenta('[dry-run]') : '');
   log.notice('', `${hasUnicode() ? '📦 ' : 'package:'} ${tarball.name}@${tarball.version}`);
 
-  if (tarball.files && tarball.files.length) {
+  if (tarball.files?.length) {
     log.notice('=== Tarball Contents ===', '');
     log.notice(
       '',
@@ -32,7 +32,7 @@ export function logPacked(pkg: Package & { packed: Tarball }, dryRun = false) {
     );
   }
 
-  if (tarball.bundled && tarball.bundled.length) {
+  if (tarball.bundled?.length) {
     log.notice('=== Bundled Dependencies ===', '');
     tarball.bundled.forEach((name) => log.notice('', name));
   }

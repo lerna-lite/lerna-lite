@@ -89,7 +89,7 @@ export class Defaults {
       global: false,
       globalconfig: pathResolve(globalPrefix, 'etc', 'npmrc'),
       'global-style': false,
-      group: process.platform === 'win32' ? 0 : process.env.SUDO_GID || (process.getgid && process.getgid()),
+      group: process.platform === 'win32' ? 0 : process.env.SUDO_GID || process.getgid?.(),
       'ham-it-up': false,
       heading: 'npm',
       'if-present': false,
@@ -165,8 +165,7 @@ export class Defaults {
       tmp: temp,
       unicode: hasUnicode(),
       'unsafe-perm':
-        process.platform === 'win32' ||
-        process.platform === 'cygwin' ||
+        ['win32', 'cygwin'].includes(process?.platform) ||
         // @ts-ignore
         !(process.getuid && process.setuid && process.getgid && process.setgid) ||
         process.getuid() !== 0,

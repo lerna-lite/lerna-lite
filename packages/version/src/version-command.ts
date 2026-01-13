@@ -786,6 +786,7 @@ export class VersionCommand extends Command<VersionCommandOption> {
       chain = chain.then(() =>
         // update modern lockfile (version 2 or higher) when exist in the project root
         loadPackageLockFileWhenExists(rootPath).then((lockFileResponse) => {
+          // oxlint-disable-next-line typescript/prefer-optional-chain
           if (lockFileResponse && lockFileResponse.lockfileVersion >= 2) {
             this.logger.verbose(`lock`, `start process loop of manually updating npm lock file`);
 

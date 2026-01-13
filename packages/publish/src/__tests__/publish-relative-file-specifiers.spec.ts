@@ -69,7 +69,7 @@ const lernaPublish = commandRunner(cliCommands);
 
 const createArgv = (cwd: string, ...args: string[]) => {
   args.unshift('publish');
-  if (args.length > 0 && args[1] && args[1].length > 0 && !args[1].startsWith('-')) {
+  if (args.length > 0 && args[1]?.length > 0 && !args[1].startsWith('-')) {
     args[1] = `--bump=${args[1]}`;
   }
   const parserArgs = args.join(' ');

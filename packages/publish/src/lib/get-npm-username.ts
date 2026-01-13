@@ -22,7 +22,7 @@ export function getNpmUsername(options: FetchConfig): Promise<string | undefined
     .catch((err: any) => {
       // Many third-party registries do not implement the user endpoint
       // Legacy npm Enterprise returns E500 instead of E404
-      if (err.code === 'E500' || err.code === 'E404') {
+      if (['E500', 'E404'].includes(err.code)) {
         return getWhoAmI(opts);
       }
 
