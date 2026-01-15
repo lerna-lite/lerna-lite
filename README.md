@@ -145,6 +145,7 @@ Below are the main reasons as to why this fork was created:
    - [lerna version --sync-workspace-lock](https://github.com/lerna-lite/lerna-lite/tree/main/packages/version#--sync-workspace-lock) to sync lock file before publishing (not needed w/`workspace:` protocol)
    - [lerna version --comment-issues/pull requests](https://github.com/lerna-lite/lerna-lite/tree/main/packages/version#comments-on-issuespull-requests), comment on issues/PRs resolved by a new release (new ✨)
    - Bun is now mostly supported as well (including support for `syncWorkspaceLock` and `catalog:` protocol)
+   - [lerna version --release-header-message](https://github.com/lerna-lite/lerna-lite/tree/main/packages/version#--release-header-message-msg), customize GitHub/GitLab Release Header and/or Footer
 
 On a final note, I would imagine that the best feature of Lerna-Lite (versus Lerna) would be its modularity. A large portion of the users are only interested in `version`/`publish` commands, but on the other hand, a small minority might want other commands like `lerna run`/`exec`. Lerna-Lite offers this kind of flexibility by allowing the user to choose and install the minimal setup (see [installation](#cli-installation) below) which helps keep your download to the bare minimum.
 
