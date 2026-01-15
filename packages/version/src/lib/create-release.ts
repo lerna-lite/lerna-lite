@@ -100,6 +100,7 @@ export function createRelease(
       if (dryRun) {
         const releaseUrl = createGithubReleaseUrl(repo, tag, body, prereleaseParts);
         log.info(c.bold(c.magenta('[dry-run] >')), 'github', `🏷️ (GitHub Release web interface) - 🔗 ${releaseUrl}`);
+        return Promise.resolve();
       }
 
       return client.repos.createRelease(releaseOptions);
