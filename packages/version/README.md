@@ -614,7 +614,7 @@ Add a custom header message to the top of the GitHub/GitLab Release body when us
 lerna version --create-release github --release-header-message "### Visit our website for more details."
 ```
 
-Or via lerna.json:
+Or via `lerna.json`:
 ```json
 {
   "command": {
@@ -626,7 +626,7 @@ Or via lerna.json:
 ```
 
 > [!NOTE]
-> The header/footer messages are only added to the GitHub/GitLab Releases, if you wish to add messages to your changelogs, then look take a look at [`--changelog-header-message <msg>`](#--changelog-header-message-msg)
+> The header/footer messages are only added to the GitHub/GitLab Releases, if you wish to add messages to your changelogs, then look take a look at [`--changelog-header-message`](#--changelog-header-message-msg)
 
 ### `--release-footer-message <msg>`
 
@@ -636,7 +636,7 @@ Add a custom footer message to the bottom of the GitHub/GitLab Release body when
 lerna version --create-release github --release-footer-message "#### _🚀 Sponsored by XYZ_"
 ```
 
-Or via lerna.json:
+Or via `lerna.json`:
 ```json
 {
   "command": {
