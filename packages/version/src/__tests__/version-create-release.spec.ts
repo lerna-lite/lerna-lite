@@ -249,8 +249,8 @@ describe.each([
 
     expect(logSpy).toHaveBeenCalledWith(
       c.bold(c.magenta('[dry-run] >')),
-      `Create Release with repo options: `,
-      expect.anything()
+      'github',
+      `🏷️ (GitHub Release web interface) - 🔗 https://github.com/lerna/lerna/releases/new?tag=v1.1.0&title=v1.1.0&body=normal&prerelease=false`
     );
   });
 

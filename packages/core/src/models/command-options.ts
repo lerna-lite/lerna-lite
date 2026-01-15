@@ -292,6 +292,12 @@ export interface VersionCommandOption {
   /** Remote git client, which client is used when reading commits from remote which is useful when associating client login for each changelog entry. */
   remoteClient?: RemoteClientType;
 
+  /** Custom header message for GitHub/GitLab Release body */
+  releaseHeaderMessage?: string;
+
+  /** Custom footer message for GitHub/GitLab Release body */
+  releaseFooterMessage?: string;
+
   /** Pass the `--gpg-sign` flag to `git commit`. */
   signGitCommit?: boolean;
 

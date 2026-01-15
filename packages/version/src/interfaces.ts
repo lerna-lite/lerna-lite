@@ -153,6 +153,10 @@ export interface ReleaseOptions {
   gitRemote: string;
   execOpts: ExecOpts;
   skipBumpOnlyReleases?: boolean;
+  /** Custom header message for GitHub/GitLab release body */
+  releaseHeaderMessage?: string;
+  /** Custom footer message for GitHub/GitLab release body */
+  releaseFooterMessage?: string;
 }
 
 export interface ClientCommit {
