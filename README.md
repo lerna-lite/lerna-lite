@@ -135,17 +135,17 @@ Below are the main reasons as to why this fork was created:
 5. in Lerna-Lite a few unique features were also added which are not available in the original Lerna:
    - [`catalog:` protocol](https://github.com/lerna-lite/lerna-lite/tree/main/packages/version#catalog-protocol) support (pnpm/bun/yarn) for both `version` and `publish` commands
    - [`workspace:` protocol](https://github.com/lerna-lite/lerna-lite/tree/main/packages/version#workspace-protocol) support (Lerna also brought support in v6)
-   - [--dry-run](https://github.com/lerna-lite/lerna-lite/tree/main/packages/version#--dry-run) to preview version/publish & changelogs locally (shows git changes without committing them)
+   - Bun is now mostly supported as well (including support for `syncWorkspaceLock` and `catalog:` protocol)
+   - [lerna [cmd] --dry-run](https://github.com/lerna-lite/lerna-lite/tree/main/packages/version#--dry-run) to preview version/publish & changelogs locally (shows git changes without committing them)
    - [lerna version --allow-peer-dependencies-update](https://github.com/lerna-lite/lerna-lite/tree/main/packages/version#--allow-peer-dependencies-update) to also update your peer dependencies
-   - [lerna version --changelog-header-message "msg"](https://github.com/lerna-lite/lerna-lite/tree/main/packages/version#--changelog-header-message-msg) for showing banner or sponsors in your changelogs
+   - [lerna version --changelog-header-message](https://github.com/lerna-lite/lerna-lite/tree/main/packages/version#--changelog-header-message-msg) for showing banner or sponsors in your changelogs
    - [lerna version --changelog-include-commits-client-login](https://github.com/lerna-lite/lerna-lite/tree/main/packages/version#--changelog-include-commits-client-login-msg) to add PR contributors to GitHub releases
    - [lerna publish --strip-package-keys](https://github.com/lerna-lite/lerna-lite/tree/main/packages/publish#--strip-package-keys-keys) (strip certain keys from `package.json` before publishing)
      - e.g.: we use it in here to publish Lerna-Lite without any `scripts` or `devDependencies`
-   - [lerna version --skip-bump-only-releases](https://github.com/lerna-lite/lerna-lite/tree/main/packages/version#--skip-bump-only-releases), avoid cluttering your GitHub releases when using `independent`
+   - [lerna version --skip-bump-only-releases](https://github.com/lerna-lite/lerna-lite/tree/main/packages/version#--skip-bump-only-releases) avoid cluttering your GitHub releases when using `independent`
    - [lerna version --sync-workspace-lock](https://github.com/lerna-lite/lerna-lite/tree/main/packages/version#--sync-workspace-lock) to sync lock file before publishing (not needed w/`workspace:` protocol)
-   - [lerna version --comment-issues/pull requests](https://github.com/lerna-lite/lerna-lite/tree/main/packages/version#comments-on-issuespull-requests), comment on issues/PRs resolved by a new release (new ✨)
-   - Bun is now mostly supported as well (including support for `syncWorkspaceLock` and `catalog:` protocol)
-   - [lerna version --release-header-message](https://github.com/lerna-lite/lerna-lite/tree/main/packages/version#--release-header-message-msg), customize GitHub/GitLab Release Header and/or Footer
+   - [lerna version --comment-issues/pull requests](https://github.com/lerna-lite/lerna-lite/tree/main/packages/version#comments-on-issuespull-requests) to comment on issues/PRs resolved by a new release (new ✨)
+   - [lerna version --release-header-message](https://github.com/lerna-lite/lerna-lite/tree/main/packages/version#--release-header-message-msg) to add custom Header/Footer to GitHub/GitLab Release (new ✨)
 
 On a final note, I would imagine that the best feature of Lerna-Lite (versus Lerna) would be its modularity. A large portion of the users are only interested in `version`/`publish` commands, but on the other hand, a small minority might want other commands like `lerna run`/`exec`. Lerna-Lite offers this kind of flexibility by allowing the user to choose and install the minimal setup (see [installation](#cli-installation) below) which helps keep your download to the bare minimum.
 
