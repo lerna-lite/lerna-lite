@@ -715,6 +715,12 @@
             "skipBumpOnlyReleases": {
               "$ref": "#/$defs/commandOptions/version/skipBumpOnlyReleases"
             },
+            "releaseHeaderMessage": {
+              "$ref": "#/$defs/commandOptions/version/releaseHeaderMessage"
+            },
+            "releaseFooterMessage": {
+              "$ref": "#/$defs/commandOptions/version/releaseFooterMessage"
+            },
             "runScriptsOnLockfileUpdate": {
               "$ref": "#/$defs/commandOptions/version/runScriptsOnLockfileUpdate"
             },
@@ -1547,6 +1553,14 @@
         "forceGitTag": {
           "type": "boolean",
           "description": "During `lerna version`, when true, pass the `--force` flag to `git tag`."
+        },
+        "releaseHeaderMessage": {
+          "type": "string",
+          "description": "During `lerna version`, add a custom header message to the GitHub/GitLab release body."
+        },
+        "releaseFooterMessage": {
+          "type": "string",
+          "description": "During `lerna version`, add a custom footer message to the GitHub/GitLab release body."
         },
         "runScriptsOnLockfileUpdate": {
           "type": "boolean",

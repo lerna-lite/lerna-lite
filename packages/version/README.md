@@ -97,6 +97,8 @@ $ lerna version --scope my-component test
     - [`--create-release-discussion <name>`](#--create-release-discussion-name)
     - [`--generate-release-notes`](#--generate-release-notes)
     - [`--skip-bump-only-releases`](#--skip-bump-only-releases)
+    - [`--release-header-message <msg>`](#--release-header-message-msg)
+    - [`--release-footer-message <msg>`](#--release-footer-message-msg)
     - [`--describe-tag <pattern>`](#--describe-tag-pattern)
     - [`--exact`](#--exact)
     - [`--independent-subpackages`](#--independent-subpackages)
@@ -603,6 +605,47 @@ lerna version --create-release gitlab --skip-bump-only-releases
 ```
 
 > **Note** this option is only useful and can only be used with independent mode. Also please note that each changelogs are still going to be updated with the "version bump only" text and only the releases will be skipped.
+
+### `--release-header-message <msg>`
+
+Add a custom header message to the top of the GitHub/GitLab Release body when using `--create-release`. You can use the following tokens (`%s`: git tag, `%v`: version number only). This can be useful to add links to your website and/or show sponsors.
+
+```sh
+lerna version --create-release github --release-header-message "### Visit our website for more details."
+```
+
+Or via `lerna.json`:
+```json
+{
+  "command": {
+    "version": {
+      "releaseHeaderMessage": "### Visit our website for more details."
+    }
+  }
+}
+```
+
+> [!NOTE]
+> The header/footer messages are only added to the GitHub/GitLab Releases, if you wish to add messages to your changelogs, then look take a look at [`--changelog-header-message`](#--changelog-header-message-msg)
+
+### `--release-footer-message <msg>`
+
+Add a custom footer message to the bottom of the GitHub/GitLab Release body when using `--create-release`. You can use the following tokens (`%s`: git tag, `%v`: version number only). This can be useful to add links to your website and/or show sponsors.
+
+```sh
+lerna version --create-release github --release-footer-message "#### _🚀 Sponsored by XYZ_"
+```
+
+Or via `lerna.json`:
+```json
+{
+  "command": {
+    "version": {
+      "releaseFooterMessage": "#### _🚀 Sponsored by XYZ_"
+    }
+  }
+}
+```
 
 ### `--describe-tag <pattern>`
 When `lerna version` is executed, it will identifies packages that have been updated since the previous tagged release. The rules it identifies are based on describe tag pattern (excuted `git describe --match` behind the scenes).

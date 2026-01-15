@@ -1,6 +1,7 @@
 import type { RemoteClientType } from '@lerna-lite/core';
 import { ValidationError } from '@lerna-lite/core';
 import { log } from '@lerna-lite/npmlog';
+import type parseGitUrl from 'git-url-parse';
 import newGithubReleaseUrl from 'new-github-release-url';
 import semver from 'semver';
 import c from 'tinyrainbow';
@@ -35,7 +36,7 @@ export function createRelease(
     releaseDiscussion?: string;
   },
   { tags, releaseNotes, tagVersionSeparator }: ReleaseCommandProps,
-  { gitRemote, execOpts, skipBumpOnlyReleases }: ReleaseOptions,
+  { gitRemote, execOpts, releaseFooterMessage, releaseHeaderMessage, skipBumpOnlyReleases }: ReleaseOptions,
   dryRun = false
 ) {
   const { GH_TOKEN, GITHUB_TOKEN } = process.env;
@@ -52,19 +53,23 @@ export function createRelease(
       }
 
       const prereleaseParts = semver.prerelease(tag.replace(`${name}${tagVersionSeparator}`, '')) || [];
-      const body = truncateReleaseBody(notes || '', type);
+      // Compose body with optional header/footer and support tokens
+      const versionOnly = pkg?.version || tag.replace(/^v/, '');
+      const formatTokens = (str: string) => str.replace(/%s/g, tag).replace(/%v/g, versionOnly);
+
+      let composedBody = notes || '';
+      if (releaseHeaderMessage) {
+        composedBody = `${formatTokens(releaseHeaderMessage)}\n\n${composedBody}`;
+      }
+      if (releaseFooterMessage) {
+        composedBody = `${composedBody}\n\n${formatTokens(releaseFooterMessage)}`;
+      }
+      const body = truncateReleaseBody(composedBody, type);
 
       // when the `GH_TOKEN` (or `GITHUB_TOKEN`) environment variable is not set,
       // we'll create a link to GitHub web interface form with the fields pre-populated
       if (type === 'github' && !GH_TOKEN && !GITHUB_TOKEN) {
-        const releaseUrl = newGithubReleaseUrl({
-          user: repo.owner,
-          repo: repo.name,
-          tag,
-          isPrerelease: prereleaseParts.length > 0,
-          title: tag,
-          body,
-        });
+        const releaseUrl = createGithubReleaseUrl(repo, tag, body, prereleaseParts);
         log.verbose('github', 'GH_TOKEN (or GITHUB_TOKEN) environment variable could not be found');
         log.info('github', `🏷️ (GitHub Release web interface) - 🔗 ${releaseUrl}`);
         return Promise.resolve();
@@ -93,13 +98,31 @@ export function createRelease(
       }
 
       if (dryRun) {
-        log.info(c.bold(c.magenta('[dry-run] >')), `Create Release with repo options: `, JSON.stringify(releaseOptions));
+        const releaseUrl = createGithubReleaseUrl(repo, tag, body, prereleaseParts);
+        log.info(c.bold(c.magenta('[dry-run] >')), 'github', `🏷️ (GitHub Release web interface) - 🔗 ${releaseUrl}`);
         return Promise.resolve();
       }
 
       return client.repos.createRelease(releaseOptions);
     })
   );
+}
+
+function createGithubReleaseUrl(
+  repo: parseGitUrl.GitUrl,
+  tag: string,
+  body: string,
+  prereleaseParts: readonly (string | number)[]
+) {
+  const releaseUrl = newGithubReleaseUrl({
+    user: repo.owner,
+    repo: repo.name,
+    tag,
+    isPrerelease: prereleaseParts.length > 0,
+    title: tag,
+    body,
+  });
+  return releaseUrl;
 }
 
 export function truncateReleaseBody(body: string, type?: RemoteClientType) {

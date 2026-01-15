@@ -418,6 +418,8 @@ export class VersionCommand extends Command<VersionCommandOption> {
           {
             gitRemote: this.options.gitRemote,
             execOpts: this.execOpts,
+            releaseFooterMessage: this.options.releaseFooterMessage,
+            releaseHeaderMessage: this.options.releaseHeaderMessage,
             skipBumpOnlyReleases: this.options.skipBumpOnlyReleases,
           },
           this.options.dryRun

@@ -235,6 +235,18 @@ export default {
         type: 'string',
         choices: ['gitlab', 'github'],
       },
+      'release-footer-message': {
+        describe: 'Add a custom footer message to the GitHub/GitLab Release body.',
+        group: 'Version Command Options:',
+        requiresArg: true,
+        type: 'string',
+      },
+      'release-header-message': {
+        describe: 'Add a custom header message to the GitHub/GitLab Release body.',
+        group: 'Version Command Options:',
+        requiresArg: true,
+        type: 'string',
+      },
       'sign-git-commit': {
         describe: 'Pass the `--gpg-sign` flag to `git commit`.',
         type: 'boolean',
