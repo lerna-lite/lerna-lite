@@ -1,6 +1,6 @@
 {
   "name": "@lerna-lite/version",
-  "version": "4.10.5",
+  "version": "4.11.0",
   "description": "Bump version & write changelog of packages changed since the last release",
   "homepage": "https://github.com/lerna-lite/lerna-lite",
   "bugs": {

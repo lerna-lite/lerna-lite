@@ -4,6 +4,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [4.11.0](https://github.com/lerna-lite/lerna-lite/compare/v4.10.5...v4.11.0) (2026-01-16)
+
+### ✨ Features
+
+* add customizable remote Release Header & Footer messages ([#1243](https://github.com/lerna-lite/lerna-lite/issues/1243)) ([5ad8425](https://github.com/lerna-lite/lerna-lite/commit/5ad8425ca9c3539a9548d88aa6d311a3bd64578e)) - by @ghiscoding
+
+### 🐞 Bug Fixes
+
+* **deps:** update all non-major dependencies ([#1228](https://github.com/lerna-lite/lerna-lite/issues/1228)) ([1af11c7](https://github.com/lerna-lite/lerna-lite/commit/1af11c706479569228a34498cb2a48599e21b301)) - by @renovate[bot]
+* support `catalogs.default` if provided in `resolveDependencyCatalogProtocol` ([#1241](https://github.com/lerna-lite/lerna-lite/issues/1241)) ([0bf2248](https://github.com/lerna-lite/lerna-lite/commit/0bf2248333b50741e50b24e185757d3350e76fe4)) - by @ghoullier
+
 ## [4.10.5](https://github.com/lerna-lite/lerna-lite/compare/v4.10.4...v4.10.5) (2026-01-07)
 
 ### 🐞 Bug Fixes

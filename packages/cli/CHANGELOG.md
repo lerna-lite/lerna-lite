@@ -4,6 +4,12 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [4.11.0](https://github.com/lerna-lite/lerna-lite/compare/v4.10.5...v4.11.0) (2026-01-16)
+
+### ✨ Features
+
+* add customizable remote Release Header & Footer messages ([#1243](https://github.com/lerna-lite/lerna-lite/issues/1243)) ([5ad8425](https://github.com/lerna-lite/lerna-lite/commit/5ad8425ca9c3539a9548d88aa6d311a3bd64578e)) - by @ghiscoding
+
 ## [4.10.5](https://github.com/lerna-lite/lerna-lite/compare/v4.10.4...v4.10.5) (2026-01-07)
 
 **Note:** Version bump only for package @lerna-lite/cli
