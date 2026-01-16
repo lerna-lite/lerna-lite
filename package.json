@@ -96,7 +96,6 @@
     "semver": "catalog:",
     "tacks": "1.2.6",
     "tinyglobby": "catalog:dependencies",
-    "ts-node": "^10.9.2",
     "tslib": "^2.8.1",
     "uuid": "catalog:dependencies",
     "vitest": "^4.0.16",
