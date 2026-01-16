@@ -40,11 +40,6 @@
     },
   ],
   ignoreDeps: ['lee-dohm/no-response', 'node', 'pnpm'],
-  ignorePaths: [
-    '**/__fixtures__/**',
-    '**/__mocks__/**',
-    '**/fixtures/**',
-    '**/mocks/**'
-  ],
+  ignorePaths: ['**/__fixtures__/**', '**/__mocks__/**', '**/fixtures/**', '**/mocks/**'],
   schedule: ['every 2 months on Thursday'],
 }
