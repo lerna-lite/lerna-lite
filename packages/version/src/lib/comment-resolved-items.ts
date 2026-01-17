@@ -48,13 +48,14 @@ export async function remoteSearchBy(
   } else {
     // not entirely sure why but GitHub search in UI is a bit different compare to octokit API query
     // e.g: in GitHub UI it's "((fix in:title) OR (feat in:title))" but with oktokit it's "fix in:title OR feat:title"
+    const baseBranchCondition = baseBranch ? `+base:${encodeURIComponent(baseBranch)}` : '';
     const titleConditions: string[] = [];
     searchKeywords.forEach((k) => titleConditions.push(`(${k}+in:title)`));
-    const uiFiltrs = titleConditions.length ? `(${titleConditions.join('+OR+')})` : '';
-    logger.info('comments', `GitHub PR search filters: ${uiFiltrs.replace(/\+/gi, ' ')}`);
+    let uiFilters = titleConditions.length ? `(${titleConditions.join('+OR+')})` : '';
+    uiFilters += `+type:pr+merged${dateCondition}${baseBranchCondition}`;
+    logger.info('comments', `GitHub PR search filters: ${uiFilters.replace(/\+/gi, ' ')}`);
 
     const keywordCondition = searchKeywords.length ? `+${searchKeywords.join('+OR+')}+in:title` : '';
-    const baseBranchCondition = baseBranch ? `+base:${encodeURIComponent(baseBranch)}` : '';
     q = `repo:${owner}/${repo}${keywordCondition}+type:pr+merged${dateCondition}${baseBranchCondition}`;
     logger.silly('comments', `octokit PR search query: ${q}`);
   }
