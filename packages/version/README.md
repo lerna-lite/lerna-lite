@@ -290,7 +290,7 @@ permissions:
 
 ##### `--comment-issue [msg]`
 
-Insert Comments on all the closed linked issues that were included in the release. The issue must be been linked through a PR when it detects fix keywords in its PR title and/or description (like `"fix #123"` or `"fixes #123"`)
+Insert Comments on all the closed issues that were included in the release. The issues could be linked to PRs (when issue is referenced in PR body) or could also be found in the PR title/subject (like `"fix: some bug, fix #123"`, or `"fixes #123"` or `"closes #123"`, ...)
 
 ```sh
 # enable it and use default template

@@ -26,7 +26,7 @@ export function getReleaseUrlFallback(host: string, repository: string, tagName?
 
 export async function remoteSearchBy(
   client: OctokitClientOutput,
-  type: 'issue' | 'pr',
+  type: 'linked_issue' | 'issue' | 'pr',
   owner: string,
   repo: string,
   startDate = '',
@@ -35,13 +35,20 @@ export async function remoteSearchBy(
   baseBranch?: string
 ): Promise<GitHubSearchItem[]> {
   const dateCondition = startDate ? `:>${startDate}` : '';
-  const keywordCondition = searchKeywords.length ? `+${searchKeywords.join('+OR+')}+in:title` : '';
-  const baseBranchCondition = baseBranch ? `+base:${encodeURIComponent(baseBranch)}` : '';
-  const q =
-    type === 'issue'
-      ? `repo:${owner}/${repo}+is:issue+linked:pr+closed${dateCondition}`
-      : `repo:${owner}/${repo}${keywordCondition}+type:pr+merged${dateCondition}${baseBranchCondition}`;
-  logger.verbose('comments', `remote ${type === 'pr' ? 'PR' : 'issue'} search query: ${q}`);
+
+  let q = '';
+  if (type === 'linked_issue') {
+    q = `repo:${owner}/${repo}+is:issue+linked:pr+closed${dateCondition}`;
+    logger.verbose('comments', `remote issue search query: ${q}`);
+  } else if (type === 'issue') {
+    q = `repo:${owner}/${repo}+is:issue+closed${dateCondition}`;
+  } else {
+    const keywordCondition = searchKeywords.length ? `+${searchKeywords.join('+OR+')}+in:title` : '';
+    const baseBranchCondition = baseBranch ? `+base:${encodeURIComponent(baseBranch)}` : '';
+    q = `repo:${owner}/${repo}${keywordCondition}+type:pr+merged${dateCondition}${baseBranchCondition}`;
+    logger.verbose('comments', `remote PR search query: ${q}`);
+  }
+
   return (await client.search!.issuesAndPullRequests({ q, per_page: 100 })).data.items;
 }
 
@@ -66,7 +73,7 @@ export async function commentResolvedItems({
   const mergedPullRequests = new Map<number, TypeNumberPair>();
 
   // Fetch merged PRs first to determine which linked issues to include by branch
-  const unfilteredPRs: GitHubSearchItem[] = await remoteSearchBy(
+  const unfilteredPRs = await remoteSearchBy(
     client,
     'pr',
     repo.owner,
@@ -78,22 +85,17 @@ export async function commentResolvedItems({
   );
   logger.silly('comments', `All unfiltered Pull Requests: ${unfilteredPRs.map((p) => p.number).join(', ')}`);
 
+  const linkedIssues = await remoteSearchBy(client, 'linked_issue', repo.owner, repo.name, prevTagDate, [], logger);
+  const allIssues = await remoteSearchBy(client, 'issue', repo.owner, repo.name, prevTagDate, [], logger);
+
+  // Only include issues if the issue number appears in a PR's title or body with GitHub linking syntax
+  const issueKeywords = ['fix', 'fixes', 'close', 'closes', 'resolve', 'resolves'];
+  const keywordPattern = issueKeywords.join('|');
+
+  // all closed issues already linked to a PR should automatically be considered
   if (templates.issue) {
-    const issues: GitHubSearchItem[] = await remoteSearchBy(client, 'issue', repo.owner, repo.name, prevTagDate, [], logger);
-
-    // Only include issues if the issue number appears in a PR's title or body with GitHub linking syntax
-    const issueKeywords = ['fix', 'fixes', 'close', 'closes', 'resolve', 'resolves'];
-    const keywordPattern = issueKeywords.join('|');
-
-    issues.forEach((item) => {
-      const issueFound = unfilteredPRs.some((pr) => {
-        const text = `${pr.title} ${pr.body || ''}`;
-        return new RegExp(`\\b(?:${keywordPattern})\\s+#${item.number}\\b`, 'i').test(text);
-      });
-
-      if (issueFound) {
-        closedLinkedIssues.set(item.number, { type: 'issue', number: item.number });
-      }
+    linkedIssues.forEach((issue) => {
+      closedLinkedIssues.set(issue.number, { type: 'issue', number: issue.number });
     });
   }
 
@@ -102,8 +104,8 @@ export async function commentResolvedItems({
     const pullRequests = unfilteredPRs.filter((item) =>
       commentFilterKeywords.some((startWord) => item.title.toLowerCase().startsWith(startWord.toLowerCase()))
     );
-    pullRequests.forEach((item) => {
-      mergedPullRequests.set(item.number, { type: 'pr', number: item.number });
+    pullRequests.forEach((pr) => {
+      mergedPullRequests.set(pr.number, { type: 'pr', number: pr.number });
     });
     logger.info(
       'comments',
@@ -112,20 +114,18 @@ export async function commentResolvedItems({
         .join(', ')}`
     );
 
-    // issues might not be linked (fix keyword via description),
-    // but the fix keyword might be in the PR title so let's add those as issues if they're not yet included
-    if (templates.issue) {
-      pullRequests.forEach((p) => {
-        const match = p.title.match(/\b(fix|fixes)\s*#(\d+)/) || [];
-        if (match.length >= 2) {
-          const issueNumber = parseInt(match[2], 10);
-          // Only add if not already present
-          if (!closedLinkedIssues.has(issueNumber)) {
-            closedLinkedIssues.set(issueNumber, { type: 'issue', number: issueNumber });
-          }
+    // some issues might not be linked to PR directly but should still be included when fix is found in the PR title (subject)
+    pullRequests.forEach((pr) => {
+      const regex = new RegExp(`\\b(?:${keywordPattern})\\s+#(\\d*).*`, 'i');
+      const [_, issueNo] = pr.title.match(regex) || [];
+      if (issueNo !== undefined) {
+        const issueNumber = parseInt(issueNo, 10);
+        // Only add if not already present
+        if (!closedLinkedIssues.has(issueNumber) && allIssues.some((i) => i.number === issueNumber)) {
+          closedLinkedIssues.set(issueNumber, { type: 'issue', number: issueNumber });
         }
-      });
-    }
+      }
+    });
   }
 
   // issues could be added in 2 places, so let's log them here
@@ -145,7 +145,7 @@ export async function commentResolvedItems({
   // Create a rate limiter for GitHub API
   const rateLimiter = new RateLimiter({
     maxCalls: 30, // 30 calls per minute
-    firstRunMaxCalls: 27, // 27/min since we need to remove 3 calls that were called before (1x graphql, 1x issues, 1x PRs)
+    firstRunMaxCalls: 26, // call/min since we need to remove 4 calls that were called earlier (1x graphql, 1x linked issues, 1x all isssues, 1x PRs)
     perMilliseconds: 60000, // per minute
   });
 

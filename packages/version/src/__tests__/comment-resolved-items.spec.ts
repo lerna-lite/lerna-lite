@@ -50,7 +50,7 @@ describe('remoteSearchBy', () => {
       verbose: vi.fn(),
     };
 
-    const result = await remoteSearchBy(mockClient as any, 'issue', 'owner', 'repo', '2023-01-01', [], mockLogger as any);
+    const result = await remoteSearchBy(mockClient as any, 'linked_issue', 'owner', 'repo', '2023-01-01', [], mockLogger as any);
 
     expect(mockClient.search.issuesAndPullRequests).toHaveBeenCalledWith({
       q: 'repo:owner/repo+is:issue+linked:pr+closed:>2023-01-01',
@@ -209,9 +209,18 @@ describe('commentResolvedItems', () => {
         },
       })
       .mockResolvedValueOnce({
-        // Second call for issues
+        // Second call for linked issues
         data: {
           items: [{ number: 123, title: 'Linked issue' }],
+        },
+      })
+      .mockResolvedValueOnce({
+        // last call for all issues
+        data: {
+          items: [
+            { number: 123, title: 'Linked issue' },
+            { number: 333, title: 'unlinked issue' },
+          ],
         },
       });
 
@@ -245,6 +254,15 @@ describe('commentResolvedItems', () => {
         data: {
           items: [{ number: 123, title: 'Linked issue' }],
         },
+      })
+      .mockResolvedValueOnce({
+        // last call for all issues
+        data: {
+          items: [
+            { number: 123, title: 'Linked issue' },
+            { number: 333, title: 'unlinked issue' },
+          ],
+        },
       });
 
     const results = await commentResolvedItems(mockOptions);
@@ -276,6 +294,15 @@ describe('commentResolvedItems', () => {
         // Second call for issues
         data: {
           items: [{ number: 123, title: 'Linked issue' }],
+        },
+      })
+      .mockResolvedValueOnce({
+        // last call for all issues
+        data: {
+          items: [
+            { number: 123, title: 'Linked issue' },
+            { number: 333, title: 'unlinked issue' },
+          ],
         },
       });
 
@@ -310,6 +337,12 @@ describe('commentResolvedItems', () => {
       .mockResolvedValueOnce({
         // Second call for issues
         data: { items: [] },
+      })
+      .mockResolvedValueOnce({
+        // last call for all issues
+        data: {
+          items: [{ number: 333, title: 'unlinked issue' }],
+        },
       });
 
     // Set filter keywords to only include PRs starting with 'feature'
@@ -353,6 +386,15 @@ describe('commentResolvedItems', () => {
         data: {
           items: [{ number: 123, title: 'Issue that was fixed' }],
         },
+      })
+      .mockResolvedValueOnce({
+        // last call for all issues
+        data: {
+          items: [
+            { number: 123, title: 'Linked issue' },
+            { number: 333, title: 'unlinked issue' },
+          ],
+        },
       });
 
     // Reset mock call counts
@@ -389,6 +431,15 @@ describe('commentResolvedItems', () => {
         data: {
           items: [],
         },
+      })
+      .mockResolvedValueOnce({
+        // last call for all issues
+        data: {
+          items: [
+            { number: 333, title: 'unlinked issue' },
+            { number: 999, title: 'unlinked issue' }, // unlinked issue #999 but must exists and not be closed yet
+          ],
+        },
       });
 
     // Reset mock call counts
@@ -415,6 +466,12 @@ describe('commentResolvedItems', () => {
       })
       .mockResolvedValueOnce({
         data: { items: [] },
+      })
+      .mockResolvedValueOnce({
+        // last call for all issues
+        data: {
+          items: [],
+        },
       });
 
     const results = await commentResolvedItems(mockOptions);
@@ -445,6 +502,15 @@ describe('commentResolvedItems', () => {
         // Second call for issues
         data: {
           items: [{ number: 123, title: 'Linked issue' }],
+        },
+      })
+      .mockResolvedValueOnce({
+        // last call for all issues
+        data: {
+          items: [
+            { number: 123, title: 'Linked issue' },
+            { number: 333, title: 'unlinked issue' },
+          ],
         },
       });
 
@@ -490,6 +556,15 @@ describe('commentResolvedItems', () => {
         data: {
           items: [{ number: 123, title: 'Linked issue' }],
         },
+      })
+      .mockResolvedValueOnce({
+        // last call for all issues
+        data: {
+          items: [
+            { number: 123, title: 'Linked issue' },
+            { number: 333, title: 'unlinked issue' },
+          ],
+        },
       });
 
     const results = await commentResolvedItems(mockOptions);
@@ -529,6 +604,15 @@ describe('commentResolvedItems', () => {
           items: [
             { number: 123, title: 'Linked issue 1' },
             { number: 123, title: 'Linked issue 2' },
+          ],
+        },
+      })
+      .mockResolvedValueOnce({
+        // last call for all issues
+        data: {
+          items: [
+            { number: 123, title: 'Linked issue' },
+            { number: 333, title: 'unlinked issue' },
           ],
         },
       });
@@ -575,6 +659,17 @@ describe('commentResolvedItems', () => {
             { number: 123, title: 'Linked issue 1' },
             { number: 124, title: 'Linked issue 2' },
             { number: 123, title: 'Linked issue 3' },
+          ],
+        },
+      })
+      .mockResolvedValueOnce({
+        // last call for all issues
+        data: {
+          items: [
+            { number: 123, title: 'Linked issue 1' },
+            { number: 124, title: 'Linked issue 2' },
+            { number: 123, title: 'Linked issue 3' },
+            { number: 333, title: 'unlinked issue' },
           ],
         },
       });
