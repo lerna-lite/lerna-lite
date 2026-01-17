@@ -40,7 +40,7 @@ export async function remoteSearchBy(
   if (type === 'linked_issue') {
     const filters = `is:issue+linked:pr+closed${dateCondition}`;
     q = `repo:${owner}/${repo}+${filters}`;
-    logger.info('comments', `GitHub issue search filters: ${filters.replace(/\+/gi, ' ')}`);
+    logger.verbose('comments', `GitHub issue search filters: ${filters.replace(/\+/gi, ' ')}`);
     logger.silly('comments', `octokit linked issues search query: ${q}`);
   } else if (type === 'issue') {
     q = `repo:${owner}/${repo}+is:issue+closed${dateCondition}`;
@@ -53,7 +53,7 @@ export async function remoteSearchBy(
     searchKeywords.forEach((k) => titleConditions.push(`(${k}+in:title)`));
     let uiFilters = titleConditions.length ? `(${titleConditions.join('+OR+')})` : '';
     uiFilters += `+type:pr+merged${dateCondition}${baseBranchCondition}`;
-    logger.info('comments', `GitHub PR search filters: ${uiFilters.replace(/\+/gi, ' ')}`);
+    logger.verbose('comments', `GitHub PR search filters: ${uiFilters.replace(/\+/gi, ' ')}`);
 
     const keywordCondition = searchKeywords.length ? `+${searchKeywords.join('+OR+')}+in:title` : '';
     q = `repo:${owner}/${repo}${keywordCondition}+type:pr+merged${dateCondition}${baseBranchCondition}`;
