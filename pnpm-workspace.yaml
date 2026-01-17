@@ -31,7 +31,7 @@ catalogs:
   devDependencies:
     "@types/dedent": ^0.7.2
     "@types/fs-extra": ^11.0.4
-    "@types/node": ^24.10.8
+    "@types/node": ^24.10.9
     "@types/npm-package-arg": ^6.1.4
     "@types/npmcli__package-json": ^4.0.4
     "@types/pacote": ^11.1.8
