@@ -38,15 +38,25 @@ export async function remoteSearchBy(
 
   let q = '';
   if (type === 'linked_issue') {
-    q = `repo:${owner}/${repo}+is:issue+linked:pr+closed${dateCondition}`;
-    logger.verbose('comments', `remote issue search query: ${q}`);
+    const filters = `is:issue+linked:pr+closed${dateCondition}`;
+    q = `repo:${owner}/${repo}+${filters}`;
+    logger.info('comments', `GitHub issue search filters: ${filters.replace(/\+/gi, ' ')}`);
+    logger.silly('comments', `octokit linked issues search query: ${q}`);
   } else if (type === 'issue') {
     q = `repo:${owner}/${repo}+is:issue+closed${dateCondition}`;
+    logger.silly('comments', `octokit all issues search query: ${q}`);
   } else {
+    // not entirely sure why but GitHub search in UI is a bit different compare to octokit API query
+    // e.g: in GitHub UI it's "((fix in:title) OR (feat in:title))" but with oktokit it's "fix in:title OR feat:title"
+    const titleConditions: string[] = [];
+    searchKeywords.forEach((k) => titleConditions.push(`(${k}+in:title)`));
+    const uiFiltrs = titleConditions.length ? `(${titleConditions.join('+OR+')})` : '';
+    logger.info('comments', `GitHub PR search filters: ${uiFiltrs.replace(/\+/gi, ' ')}`);
+
     const keywordCondition = searchKeywords.length ? `+${searchKeywords.join('+OR+')}+in:title` : '';
     const baseBranchCondition = baseBranch ? `+base:${encodeURIComponent(baseBranch)}` : '';
     q = `repo:${owner}/${repo}${keywordCondition}+type:pr+merged${dateCondition}${baseBranchCondition}`;
-    logger.verbose('comments', `remote PR search query: ${q}`);
+    logger.silly('comments', `octokit PR search query: ${q}`);
   }
 
   return (await client.search!.issuesAndPullRequests({ q, per_page: 100 })).data.items;

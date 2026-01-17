@@ -47,6 +47,7 @@ describe('remoteSearchBy', () => {
 
     const mockLogger = {
       info: vi.fn(),
+      silly: vi.fn(),
       verbose: vi.fn(),
     };
 
@@ -79,6 +80,7 @@ describe('remoteSearchBy', () => {
 
     const mockLogger = {
       info: vi.fn(),
+      silly: vi.fn(),
       verbose: vi.fn(),
     };
 
@@ -111,6 +113,7 @@ describe('remoteSearchBy', () => {
 
     const mockLogger = {
       info: vi.fn(),
+      silly: vi.fn(),
       verbose: vi.fn(),
     };
 
