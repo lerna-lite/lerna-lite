@@ -164,7 +164,7 @@ importers:
         specifier: ^17.0.35
         version: 17.0.35
       '@typescript/native-preview':
-        specifier: ^7.0.0-dev.20260115.1
+        specifier: ^7.0.0-dev.20260117.1
         version: 7.0.0-dev.20260117.1
       '@vitest/coverage-v8':
         specifier: ^4.0.17
@@ -637,7 +637,7 @@ importers:
         specifier: ^13.0.0
         version: 13.0.0
       tar:
-        specifier: ^7.5.2
+        specifier: ^7.5.3
         version: 7.5.3
       tinyglobby:
         specifier: catalog:dependencies
