@@ -105,10 +105,5 @@
     "node": "^20.17.0 || >=22.9.0",
     "pnpm": "10.x"
   },
-  "packageManager": "pnpm@10.10.0",
-  "pnpm": {
-    "overrides": {
-      "vite": "8.0.0-beta.8"
-    }
-  }
+  "packageManager": "pnpm@10.10.0"
 }
