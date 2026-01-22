@@ -29,12 +29,7 @@ beforeEach(() => {
 });
 
 test('git diff call', () => {
-  setup([
-    'packages/pkg-1/__tests__/index.test.js',
-    'packages/pkg-1/index.js',
-    'packages/pkg-1/package.json',
-    'packages/pkg-1/README.md',
-  ]);
+  setup(['packages/pkg-1/__tests__/index.test.js', 'packages/pkg-1/index.js', 'packages/pkg-1/package.json', 'packages/pkg-1/README.md']);
 
   const hasDiff = makeDiffPredicate('v1.0.0', { cwd: '/test' }, undefined, [], {});
   const result = hasDiff({

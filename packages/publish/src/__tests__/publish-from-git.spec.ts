@@ -19,10 +19,7 @@ vi.mock(
   '../../../version/src/lib/is-anything-committed',
   async () => await vi.importActual('../../../version/src/lib/__mocks__/is-anything-committed')
 );
-vi.mock(
-  '../../../version/src/lib/is-behind-upstream',
-  async () => await vi.importActual('../../../version/src/lib/__mocks__/is-behind-upstream')
-);
+vi.mock('../../../version/src/lib/is-behind-upstream', async () => await vi.importActual('../../../version/src/lib/__mocks__/is-behind-upstream'));
 vi.mock(
   '../../../version/src/lib/remote-branch-exists',
   async () => await vi.importActual('../../../version/src/lib/__mocks__/remote-branch-exists')
@@ -42,16 +39,10 @@ vi.mock('@lerna-lite/core', async () => ({
 }));
 
 // local modules _must_ be explicitly mocked
-vi.mock(
-  '../lib/get-packages-without-license',
-  async () => await vi.importActual('../lib/__mocks__/get-packages-without-license')
-);
+vi.mock('../lib/get-packages-without-license', async () => await vi.importActual('../lib/__mocks__/get-packages-without-license'));
 vi.mock('../lib/verify-npm-package-access', async () => await vi.importActual('../lib/__mocks__/verify-npm-package-access'));
 vi.mock('../lib/get-npm-username', async () => await vi.importActual('../lib/__mocks__/get-npm-username'));
-vi.mock(
-  '../lib/get-two-factor-auth-required',
-  async () => await vi.importActual('../lib/__mocks__/get-two-factor-auth-required')
-);
+vi.mock('../lib/get-two-factor-auth-required', async () => await vi.importActual('../lib/__mocks__/get-two-factor-auth-required'));
 vi.mock('../lib/get-unpublished-packages', async () => await vi.importActual('../lib/__mocks__/get-unpublished-packages'));
 vi.mock('../lib/npm-publish', async () => await vi.importActual('../lib/__mocks__/npm-publish'));
 
@@ -129,9 +120,7 @@ describe('publish from-git', () => {
     // called from chained describeRef()
     expect(throwIfUncommitted).toHaveBeenCalled();
 
-    expect(stripAnsi((promptConfirmation as Mock).mock.lastCall![0])).toBe(
-      '[dry-run] Are you sure you want to publish these packages?'
-    );
+    expect(stripAnsi((promptConfirmation as Mock).mock.lastCall![0])).toBe('[dry-run] Are you sure you want to publish these packages?');
     expect((logOutput as any).logged()).toMatch('Found 4 packages to publish:');
     expect((npmPublish as typeof npmPublishMock).order()).toEqual([
       'package-1',

@@ -99,8 +99,6 @@ describe('getNpmUsername', () => {
     const username = await getNpmUsername(opts as FetchConfig);
 
     expect(username).toBeUndefined();
-    expect(loggingOutput('warn')).toContain(
-      'Unable to determine npm username from third-party registry, this command will likely fail soon!'
-    );
+    expect(loggingOutput('warn')).toContain('Unable to determine npm username from third-party registry, this command will likely fail soon!');
   });
 });

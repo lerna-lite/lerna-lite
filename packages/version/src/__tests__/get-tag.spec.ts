@@ -60,10 +60,7 @@ describe('getPreviousTag()', () => {
     const mockExecOpts = { cwd: '/custom/path' };
 
     // Simulate tag retrieval with custom options
-    vi.mocked(execSync)
-      .mockReturnValueOnce('v1.2.3')
-      .mockReturnValueOnce('abc123sha')
-      .mockReturnValueOnce('2023-12-12T10:30:00+00:00');
+    vi.mocked(execSync).mockReturnValueOnce('v1.2.3').mockReturnValueOnce('abc123sha').mockReturnValueOnce('2023-12-12T10:30:00+00:00');
 
     getPreviousTag(mockExecOpts);
 

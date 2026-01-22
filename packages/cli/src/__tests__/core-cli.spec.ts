@@ -43,14 +43,7 @@ describe('core-cli', () => {
 
     cli.command('test-cmd', 'will pass');
 
-    const { argv } = await parse(cli, [
-      'test-cmd',
-      '--loglevel=warn',
-      '--concurrency=10',
-      '--no-progress',
-      '--no-sort',
-      '--max-buffer=1024',
-    ]);
+    const { argv } = await parse(cli, ['test-cmd', '--loglevel=warn', '--concurrency=10', '--no-progress', '--no-sort', '--max-buffer=1024']);
 
     expect(argv).toMatchObject({
       loglevel: 'warn',

@@ -18,14 +18,8 @@ vi.mock('../lib/is-anything-committed', async () => await vi.importActual('../li
 vi.mock('../lib/is-behind-upstream', async () => await vi.importActual('../lib/__mocks__/is-behind-upstream'));
 vi.mock('../lib/remote-branch-exists', async () => await vi.importActual('../lib/__mocks__/remote-branch-exists'));
 vi.mock('../git-clients/gitlab-client', async () => await vi.importActual<any>('../__mocks__/gitlab-client'));
-vi.mock(
-  '../conventional-commits/recommend-version',
-  async () => await vi.importActual('../__mocks__/conventional-commits/recommend-version')
-);
-vi.mock(
-  '../conventional-commits/update-changelog',
-  async () => await vi.importActual('../__mocks__/conventional-commits/update-changelog')
-);
+vi.mock('../conventional-commits/recommend-version', async () => await vi.importActual('../__mocks__/conventional-commits/recommend-version'));
+vi.mock('../conventional-commits/update-changelog', async () => await vi.importActual('../__mocks__/conventional-commits/update-changelog'));
 vi.mock('write-package', async () => await vi.importActual('../lib/__mocks__/write-package'));
 
 vi.mock('@lerna-lite/core', async () => ({
@@ -174,9 +168,7 @@ describe('version --conventional-commits', () => {
       prereleaseVersionBumps.forEach((bump) => (recommendVersion as Mock).mockResolvedValueOnce(bump));
       const cwd = await initFixture('prerelease-independent');
 
-      await new VersionCommand(
-        createArgv(cwd, '--conventional-commits', '--conventional-prerelease', '--conventional-bump-prerelease')
-      );
+      await new VersionCommand(createArgv(cwd, '--conventional-commits', '--conventional-prerelease', '--conventional-bump-prerelease'));
 
       prereleaseVersionBumps.forEach((version, name) => {
         const prereleaseId = (semver as any).prerelease(version)[0];
@@ -204,9 +196,7 @@ describe('version --conventional-commits', () => {
       prereleaseVersionBumps.forEach((bump) => (recommendVersion as Mock).mockResolvedValueOnce(bump));
       const cwd = await initFixture('prerelease-independent');
 
-      await new VersionCommand(
-        createArgv(cwd, '--conventional-commits', '--conventional-prerelease', '*', '--conventional-bump-prerelease')
-      );
+      await new VersionCommand(createArgv(cwd, '--conventional-commits', '--conventional-prerelease', '*', '--conventional-bump-prerelease'));
 
       prereleaseVersionBumps.forEach((version, name) => {
         const prereleaseId = (semver as any).prerelease(version)[0];

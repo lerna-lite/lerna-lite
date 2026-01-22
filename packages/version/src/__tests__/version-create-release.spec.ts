@@ -26,14 +26,8 @@ vi.mock('../lib/git-tag', async () => await vi.importActual('../lib/__mocks__/gi
 vi.mock('../lib/is-anything-committed', async () => await vi.importActual('../lib/__mocks__/is-anything-committed'));
 vi.mock('../lib/is-behind-upstream', async () => await vi.importActual('../lib/__mocks__/is-behind-upstream'));
 vi.mock('../lib/remote-branch-exists', async () => await vi.importActual('../lib/__mocks__/remote-branch-exists'));
-vi.mock(
-  '../conventional-commits/recommend-version',
-  async () => await vi.importActual('../__mocks__/conventional-commits/recommend-version')
-);
-vi.mock(
-  '../conventional-commits/update-changelog',
-  async () => await vi.importActual('../__mocks__/conventional-commits/update-changelog')
-);
+vi.mock('../conventional-commits/recommend-version', async () => await vi.importActual('../__mocks__/conventional-commits/recommend-version'));
+vi.mock('../conventional-commits/update-changelog', async () => await vi.importActual('../__mocks__/conventional-commits/update-changelog'));
 vi.mock('../git-clients/gitlab-client', async () => await vi.importActual('../__mocks__/gitlab-client'));
 vi.mock('../git-clients/github-client', async () => await vi.importActual('../__mocks__/github-client'));
 vi.mock('../lib/create-release', async () => {
@@ -125,9 +119,7 @@ describe.each([
     const cwd = await initFixture('independent');
     const command = lernaVersion(cwd)('--create-release', type, '--conventional-commits', '--create-release-discussion');
 
-    await expect(command).rejects.toThrow(
-      'A discussion category name must be provided to the --create-release-discussion option.'
-    );
+    await expect(command).rejects.toThrow('A discussion category name must be provided to the --create-release-discussion option.');
 
     expect(client.releases.size).toBe(0);
   });
@@ -423,9 +415,7 @@ it('should create a github release and generate release notes with changelog', a
 
   (recommendVersion as Mock).mockResolvedValueOnce('1.1.0');
 
-  const command = new VersionCommand(
-    createArgv(cwd, '--create-release', 'github', '--conventional-commits', '--generate-release-notes')
-  );
+  const command = new VersionCommand(createArgv(cwd, '--create-release', 'github', '--conventional-commits', '--generate-release-notes'));
   await command;
   await command.execute();
 
@@ -466,9 +456,7 @@ it('should create a github release and generate release notes with --no-changelo
 
 it('should log an error when createRelease throws', async () => {
   process.env.GITHUB_TOKEN = 'TOKEN';
-  (createReleaseClient as Mock).mockImplementation(() =>
-    Promise.resolve({ repos: { createRelease: vi.fn(() => Promise.reject('some error')) } })
-  );
+  (createReleaseClient as Mock).mockImplementation(() => Promise.resolve({ repos: { createRelease: vi.fn(() => Promise.reject('some error')) } }));
   (createRelease as Mock).mockImplementationOnce(() => {
     throw new Error('some error');
   });

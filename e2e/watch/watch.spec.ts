@@ -107,9 +107,7 @@ describe('lerna watch', () => {
       scripts: { 'watch:trigger': 'node -e "console.log(\'triggered\')"' },
     });
 
-    const getWatchResult = await fixture.lernaWatch(
-      '--scope=package-a --scope=@scope/package-c --debounce=100 -- npm run watch:trigger'
-    );
+    const getWatchResult = await fixture.lernaWatch('--scope=package-a --scope=@scope/package-c --debounce=100 -- npm run watch:trigger');
 
     await wait(500);
     await createFile(join(fixture.getWorkspacePath(), 'packages/package-a/my-file.txt'));
@@ -158,9 +156,7 @@ describe('lerna watch', () => {
       scripts: { 'watch:trigger': 'node -e "console.log(\'triggered\')"' },
     });
 
-    const getWatchResult = await fixture.lernaWatch(
-      '--scope=package-b --include-dependencies --debounce=100 -- npm run watch:trigger'
-    );
+    const getWatchResult = await fixture.lernaWatch('--scope=package-b --include-dependencies --debounce=100 -- npm run watch:trigger');
 
     await wait(500);
     await createFile(join(fixture.getWorkspacePath(), 'packages/package-a/my-file.txt'));
@@ -257,9 +253,7 @@ describe('lerna watch', () => {
       },
     });
 
-    const getWatchResult = await fixture.lernaWatch(
-      '--scope=package-a --stream --debounce=100 -- lerna run watch --scope=$LERNA_PACKAGE_NAME'
-    );
+    const getWatchResult = await fixture.lernaWatch('--scope=package-a --stream --debounce=100 -- lerna run watch --scope=$LERNA_PACKAGE_NAME');
 
     await wait(500);
     await createFile(join(fixture.getWorkspacePath(), 'packages/package-a/trigger.txt'));

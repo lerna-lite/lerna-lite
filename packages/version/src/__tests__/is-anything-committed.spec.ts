@@ -31,12 +31,7 @@ test('dry-run of isAnythingCommitted', async () => {
   const cwd = await initFixture('root-manifest-only');
 
   expect(isAnythingCommitted({ cwd }, true)).toBe(true);
-  expect(execSync).toHaveBeenCalledWith(
-    'git',
-    ['rev-list', '--count', '--all', '--max-count=1'],
-    { cwd: expect.any(String) },
-    true
-  );
+  expect(execSync).toHaveBeenCalledWith('git', ['rev-list', '--count', '--all', '--max-count=1'], { cwd: expect.any(String) }, true);
 });
 
 test('isAnythingCommitted without and with a commit', async () => {

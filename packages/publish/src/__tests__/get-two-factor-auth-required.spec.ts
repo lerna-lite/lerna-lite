@@ -83,9 +83,7 @@ describe('getTwoFactorAuthRequired', () => {
     const result = await getTwoFactorAuthRequired(opts as FetchConfig);
 
     expect(result).toBe(false);
-    expect(loggingOutput('warn')).toContain(
-      `Registry "${opts.registry}" does not support 'npm profile get', skipping two-factor auth check...`
-    );
+    expect(loggingOutput('warn')).toContain(`Registry "${opts.registry}" does not support 'npm profile get', skipping two-factor auth check...`);
   });
 
   it('logs unexpected failure message before throwing validation error', async () => {

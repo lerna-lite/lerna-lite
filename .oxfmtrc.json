@@ -20,7 +20,7 @@
     {
       "files": ["**/*.spec.ts"],
       "options": {
-        "printWidth": 160
+        "printWidth": 150
       }
     }
   ]
