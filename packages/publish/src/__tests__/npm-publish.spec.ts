@@ -38,11 +38,7 @@ describe('npm-publish', () => {
 
   const tarFilePath = '/tmp/test-1.10.100.tgz';
   const rootPath = normalize('/test');
-  const pkg = new Package(
-    { name: '@scope/test', version: '1.10.100' } as RawManifest,
-    join(rootPath, 'npmPublish/test'),
-    rootPath
-  );
+  const pkg = new Package({ name: '@scope/test', version: '1.10.100' } as RawManifest, join(rootPath, 'npmPublish/test'), rootPath);
   const conf = new Conf({});
 
   it('calls external libraries with correct arguments', async () => {

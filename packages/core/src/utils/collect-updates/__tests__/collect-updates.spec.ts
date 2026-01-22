@@ -234,10 +234,7 @@ describe('collectUpdates()', () => {
       forcePublish: 'package-standalone',
     });
 
-    expect(updates).toEqual([
-      expect.objectContaining({ name: 'package-dag-3' }),
-      expect.objectContaining({ name: 'package-standalone' }),
-    ]);
+    expect(updates).toEqual([expect.objectContaining({ name: 'package-dag-3' }), expect.objectContaining({ name: 'package-standalone' })]);
   });
 
   it('always includes nodes targeted by --force-publish <pkg>,<pkg>', () => {
@@ -314,10 +311,7 @@ describe('collectUpdates()', () => {
       conventionalGraduate: 'package-standalone',
     });
 
-    expect(updates).toEqual([
-      expect.objectContaining({ name: 'package-dag-3' }),
-      expect.objectContaining({ name: 'package-standalone' }),
-    ]);
+    expect(updates).toEqual([expect.objectContaining({ name: 'package-dag-3' }), expect.objectContaining({ name: 'package-standalone' })]);
   });
 
   it('always includes prereleased nodes targeted by --conventional-graduate <pkg>,<pkg>', () => {
@@ -369,10 +363,7 @@ describe('collectUpdates()', () => {
       conventionalGraduate: 'package-dag-2b,package-dag-3',
     });
 
-    expect(updates).toEqual([
-      expect.objectContaining({ name: 'package-dag-2b' }),
-      expect.objectContaining({ name: 'package-dag-3' }),
-    ]);
+    expect(updates).toEqual([expect.objectContaining({ name: 'package-dag-2b' }), expect.objectContaining({ name: 'package-dag-3' })]);
   });
 
   it('always includes all nodes targeted by --conventional-graduate = * despite having no prerelease version when having --force-convention-graduate set', () => {
@@ -402,10 +393,7 @@ describe('collectUpdates()', () => {
       canary: true,
     });
 
-    expect(updates).toEqual([
-      expect.objectContaining({ name: 'package-dag-2a' }),
-      expect.objectContaining({ name: 'package-dag-3' }),
-    ]);
+    expect(updates).toEqual([expect.objectContaining({ name: 'package-dag-2a' }), expect.objectContaining({ name: 'package-dag-3' })]);
     expect(makeDiffPredicate).toHaveBeenLastCalledWith('deadbeef^..deadbeef', execOpts, undefined, [], {
       independentSubpackages: undefined,
     });
@@ -554,10 +542,7 @@ describe('collectUpdates()', () => {
 
     // Should include packages with prereleaseId
     expect(updates).toEqual(
-      expect.arrayContaining([
-        expect.objectContaining({ name: 'package-dag-2a' }),
-        expect.objectContaining({ name: 'package-standalone' }),
-      ])
+      expect.arrayContaining([expect.objectContaining({ name: 'package-dag-2a' }), expect.objectContaining({ name: 'package-standalone' })])
     );
   });
 });

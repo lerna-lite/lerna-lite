@@ -182,9 +182,7 @@ describe('lerna-exec', () => {
 
   describe('--ignore', () => {
     it('should not run command on ignored packages', async () => {
-      const output = await fixture.lerna(
-        'exec --ignore package-1 --ignore package-2 --concurrency 1 npm run print-name -- --silent'
-      );
+      const output = await fixture.lerna('exec --ignore package-1 --ignore package-2 --concurrency 1 npm run print-name -- --silent');
 
       expect(output.combinedOutput).not.toContain('test-package-1');
       expect(output.combinedOutput).not.toContain('test-package-2');

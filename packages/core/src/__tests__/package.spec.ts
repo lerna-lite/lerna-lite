@@ -29,8 +29,7 @@ expect.addSnapshotSerializer({
 });
 
 describe('Package', () => {
-  const factory = (json: RawManifest) =>
-    new Package(json, normalize(`/root/path/to/${json.name || 'package'}`), normalize('/root'));
+  const factory = (json: RawManifest) => new Package(json, normalize(`/root/path/to/${json.name || 'package'}`), normalize('/root'));
 
   describe('get .name', () => {
     it('should return the name', () => {

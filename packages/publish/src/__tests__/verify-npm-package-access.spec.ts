@@ -117,9 +117,7 @@ describe('verifyNpmPackageAccess', () => {
     await verifyNpmPackageAccess(packages, 'lerna-test', opts as FetchConfig);
 
     const [logMessage] = loggingOutput('warn');
-    expect(logMessage).toMatch(
-      `Registry "${registry}" does not support \`npm access ls-packages\`, skipping permission checks...`
-    );
+    expect(logMessage).toMatch(`Registry "${registry}" does not support \`npm access ls-packages\`, skipping permission checks...`);
     expect(console.error).not.toHaveBeenCalled();
   });
 
@@ -137,9 +135,7 @@ describe('verifyNpmPackageAccess', () => {
     await verifyNpmPackageAccess(packages, 'lerna-test', opts as FetchConfig);
 
     const [logMessage] = loggingOutput('warn');
-    expect(logMessage).toMatch(
-      `Registry "${registry}" does not support \`npm access ls-packages\`, skipping permission checks...`
-    );
+    expect(logMessage).toMatch(`Registry "${registry}" does not support \`npm access ls-packages\`, skipping permission checks...`);
     expect(console.error).not.toHaveBeenCalled();
   });
 

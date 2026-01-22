@@ -157,10 +157,7 @@ describe('Project', () => {
 
       (writeFileMock as Mock).mockName('writeFileSync');
 
-      expect(writeFileMock).toHaveBeenCalledWith(
-        expect.stringContaining('lerna.json5'),
-        expect.stringContaining(`version: '1.0.0'`)
-      );
+      expect(writeFileMock).toHaveBeenCalledWith(expect.stringContaining('lerna.json5'), expect.stringContaining(`version: '1.0.0'`));
     });
 
     it('errors when lerna.json is irrecoverably invalid JSON', async () => {
@@ -305,12 +302,7 @@ describe('Project', () => {
     it('returns a list of package parent directories', () => {
       const project = new Project(testDir);
       project.config.packages = ['.', 'packages/*', 'dir/nested/*', 'globstar/**'];
-      expect(project.packageParentDirs).toEqual([
-        testDir,
-        join(testDir, 'packages'),
-        join(testDir, 'dir/nested'),
-        join(testDir, 'globstar'),
-      ]);
+      expect(project.packageParentDirs).toEqual([testDir, join(testDir, 'packages'), join(testDir, 'dir/nested'), join(testDir, 'globstar')]);
     });
   });
 

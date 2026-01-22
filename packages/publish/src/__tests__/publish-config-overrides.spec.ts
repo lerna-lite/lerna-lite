@@ -13,10 +13,7 @@ import { PublishCommand } from '../index.js';
 vi.mock('write-package', async () => await vi.importActual('../../../version/src/lib/__mocks__/write-package'));
 
 // FIXME: better mock for version command
-vi.mock(
-  '../../../version/src/lib/git-push',
-  async () => await vi.importActual<any>('../../../version/src/lib/__mocks__/git-push')
-);
+vi.mock('../../../version/src/lib/git-push', async () => await vi.importActual<any>('../../../version/src/lib/__mocks__/git-push'));
 vi.mock(
   '../../../version/src/lib/is-anything-committed',
   async () => await vi.importActual<any>('../../../version/src/lib/__mocks__/is-anything-committed')
@@ -49,16 +46,10 @@ vi.mock('@lerna-lite/publish', async () => await vi.importActual('../publish-com
 vi.mock('@lerna-lite/version', async () => await vi.importActual('../../../version/src/version-command'));
 
 // local modules _must_ be explicitly mocked
-vi.mock(
-  '../lib/get-packages-without-license',
-  async () => await vi.importActual<any>('../lib/__mocks__/get-packages-without-license')
-);
+vi.mock('../lib/get-packages-without-license', async () => await vi.importActual<any>('../lib/__mocks__/get-packages-without-license'));
 vi.mock('../lib/verify-npm-package-access', async () => await vi.importActual<any>('../lib/__mocks__/verify-npm-package-access'));
 vi.mock('../lib/get-npm-username', async () => await vi.importActual<any>('../lib/__mocks__/get-npm-username'));
-vi.mock(
-  '../lib/get-two-factor-auth-required',
-  async () => await vi.importActual<any>('../lib/__mocks__/get-two-factor-auth-required')
-);
+vi.mock('../lib/get-two-factor-auth-required', async () => await vi.importActual<any>('../lib/__mocks__/get-two-factor-auth-required'));
 vi.mock('../lib/pack-directory', async () => await vi.importActual<any>('../lib/__mocks__/pack-directory'));
 vi.mock('../lib/npm-publish', async () => await vi.importActual<any>('../lib/__mocks__/npm-publish'));
 
@@ -128,9 +119,7 @@ describe('publishConfig overrides', () => {
       version: '1.0.1',
     });
     // publishConfig should be removed from package-2 since every fields were used as overrides
-    expect((writePkg as any).updatedManifest('package-2')).not.toEqual(
-      expect.objectContaining({ publishConfig: expect.anything() })
-    );
+    expect((writePkg as any).updatedManifest('package-2')).not.toEqual(expect.objectContaining({ publishConfig: expect.anything() }));
 
     expect((writePkg as any).updatedManifest('package-3').publishConfig).toBeUndefined();
   });

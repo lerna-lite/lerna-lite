@@ -91,10 +91,7 @@ describe('conventional-commits', () => {
       await gitAdd(cwd, pkg2.manifestLocation);
       await gitCommit(cwd, 'feat: changed 2');
 
-      const [bump1, bump2] = await Promise.all([
-        recommendVersion(pkg1, 'independent', opts),
-        recommendVersion(pkg2, 'independent', opts),
-      ]);
+      const [bump1, bump2] = await Promise.all([recommendVersion(pkg1, 'independent', opts), recommendVersion(pkg2, 'independent', opts)]);
       expect(bump1).toBe('1.0.1');
       expect(bump2).toBe('1.1.0');
     });
@@ -114,10 +111,7 @@ describe('conventional-commits', () => {
       await gitAdd(cwd, pkg2.manifestLocation);
       await gitCommit(cwd, 'feat: changed 2');
 
-      const [bump1, bump2] = await Promise.all([
-        recommendVersion(pkg1, 'independent', opts),
-        recommendVersion(pkg2, 'independent', opts),
-      ]);
+      const [bump1, bump2] = await Promise.all([recommendVersion(pkg1, 'independent', opts), recommendVersion(pkg2, 'independent', opts)]);
       expect(bump1).toBe('1.0.1+20130313144700');
       expect(bump2).toBe('1.1.0+20130313144700');
     });
@@ -225,10 +219,7 @@ describe('conventional-commits', () => {
       await gitAdd(cwd, pkg2.manifestLocation);
       await gitCommit(cwd, 'chore: changed 2');
 
-      const [bump1, bump2] = await Promise.all([
-        recommendVersion(pkg1, 'independent', opts),
-        recommendVersion(pkg2, 'independent', opts),
-      ]);
+      const [bump1, bump2] = await Promise.all([recommendVersion(pkg1, 'independent', opts), recommendVersion(pkg2, 'independent', opts)]);
       expect(bump1).toBe('1.0.1');
       expect(bump2).toBe('1.0.1');
     });
@@ -441,10 +432,7 @@ describe('conventional-commits', () => {
       expect(leafChangelog.logPath).toBe(join(pkg1.location, 'CHANGELOG.md'));
       expect(rootChangelog.logPath).toBe(join(rootPkg.location, 'CHANGELOG.md'));
 
-      const [leafChangelogContent, rootChangelogContent] = await Promise.all([
-        getFileContent(leafChangelog),
-        getFileContent(rootChangelog),
-      ]);
+      const [leafChangelogContent, rootChangelogContent] = await Promise.all([getFileContent(leafChangelog), getFileContent(rootChangelog)]);
 
       expect(leafChangelogContent).toMatchSnapshot('leaf');
       expect(rootChangelogContent).toMatchSnapshot('root');
@@ -504,10 +492,7 @@ describe('conventional-commits', () => {
       expect(leafChangelog.logPath).toBe(join(pkg1.location, 'CHANGELOG.md'));
       expect(rootChangelog.logPath).toBe(join(rootPkg.location, 'CHANGELOG.md'));
 
-      const [leafChangelogContent, rootChangelogContent] = await Promise.all([
-        getFileContent(leafChangelog),
-        getFileContent(rootChangelog),
-      ]);
+      const [leafChangelogContent, rootChangelogContent] = await Promise.all([getFileContent(leafChangelog), getFileContent(rootChangelog)]);
 
       // the snapshot test is a little flaky, it could be either (`# 1.1.0 (YYYY-MM-DD)` or `## 1.1.0 (YYYY-MM-DD)`)
       // so let's normalize this version header line
@@ -1074,16 +1059,13 @@ describe('conventional-commits', () => {
       expect(applyBuildMetadata('1.0.0', undefined)).toEqual('1.0.0');
     });
 
-    test.each([[' '], ['&'], ['a.'], ['a. '], ['a.%'], ['a..1']])(
-      'throws error given invalid build metadata %s',
-      (buildMetadata) => {
-        expect(() => applyBuildMetadata('1.0.0', buildMetadata)).toThrow(
-          expect.objectContaining({
-            name: 'ValidationError',
-            message: 'Build metadata does not satisfy SemVer specification.',
-          })
-        );
-      }
-    );
+    test.each([[' '], ['&'], ['a.'], ['a. '], ['a.%'], ['a..1']])('throws error given invalid build metadata %s', (buildMetadata) => {
+      expect(() => applyBuildMetadata('1.0.0', buildMetadata)).toThrow(
+        expect.objectContaining({
+          name: 'ValidationError',
+          message: 'Build metadata does not satisfy SemVer specification.',
+        })
+      );
+    });
   });
 });

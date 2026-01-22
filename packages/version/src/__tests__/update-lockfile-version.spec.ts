@@ -210,11 +210,7 @@ describe('pnpm client', () => {
     const lockFileOutput = await runInstallLockFileOnly('pnpm', cwd, { npmClientArgs: ['--frozen-lockfile'] });
 
     expect(execPackageManager).toHaveBeenCalled();
-    expect(execPackageManager).toHaveBeenCalledWith(
-      'pnpm',
-      ['install', '--lockfile-only', '--ignore-scripts', '--frozen-lockfile'],
-      { cwd }
-    );
+    expect(execPackageManager).toHaveBeenCalledWith('pnpm', ['install', '--lockfile-only', '--ignore-scripts', '--frozen-lockfile'], { cwd });
     expect(lockFileOutput).toBe('pnpm-lock.yaml');
   });
 });
@@ -257,11 +253,7 @@ describe('bun client', () => {
     const lockFileOutput = await runInstallLockFileOnly('bun', cwd, { npmClientArgs: ['--frozen-lockfile'] });
 
     expect(execPackageManager).toHaveBeenCalled();
-    expect(execPackageManager).toHaveBeenCalledWith(
-      'bun',
-      ['install', '--lockfile-only', '--ignore-scripts', '--frozen-lockfile'],
-      { cwd }
-    );
+    expect(execPackageManager).toHaveBeenCalledWith('bun', ['install', '--lockfile-only', '--ignore-scripts', '--frozen-lockfile'], { cwd });
     expect(lockFileOutput).toBe('bun.lock');
   });
 });
@@ -303,11 +295,7 @@ describe('run install lockfile-only', () => {
       });
 
       expect(execPackageManagerSync).toHaveBeenCalledWith('npm', ['--version']);
-      expect(execPackageManager).toHaveBeenCalledWith(
-        'npm',
-        ['install', '--package-lock-only', '--ignore-scripts', '--legacy-peer-deps'],
-        { cwd }
-      );
+      expect(execPackageManager).toHaveBeenCalledWith('npm', ['install', '--package-lock-only', '--ignore-scripts', '--legacy-peer-deps'], { cwd });
       expect(lockFileOutput).toBe('package-lock.json');
     });
 

@@ -38,10 +38,7 @@ describe('select', () => {
         name: 'my-package',
       } as PackageGraphNode);
 
-      expect(promptSelectOne).toHaveBeenLastCalledWith(
-        'Select a new version for my-package (currently 3.2.1)',
-        expect.any(Object)
-      );
+      expect(promptSelectOne).toHaveBeenLastCalledWith('Select a new version for my-package (currently 3.2.1)', expect.any(Object));
     });
   });
 

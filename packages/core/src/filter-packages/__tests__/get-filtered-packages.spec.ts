@@ -108,12 +108,7 @@ test('--since returns all packages if no tag is found', async () => {
   const result = await getFilteredPackages(packageGraph, execOpts, options);
 
   expect(result).toHaveLength(5);
-  expect(collectUpdates).toHaveBeenLastCalledWith(
-    expect.any(Array),
-    packageGraph,
-    execOpts,
-    expect.objectContaining({ since: '' })
-  );
+  expect(collectUpdates).toHaveBeenLastCalledWith(expect.any(Array), packageGraph, execOpts, expect.objectContaining({ since: '' }));
 });
 
 test('--include-merged-tags returns all packages if no tag is found', async () => {
@@ -125,12 +120,7 @@ test('--include-merged-tags returns all packages if no tag is found', async () =
   const result = await getFilteredPackages(packageGraph, execOpts, options);
 
   expect(result).toHaveLength(5);
-  expect(collectUpdates).toHaveBeenLastCalledWith(
-    expect.any(Array),
-    packageGraph,
-    execOpts,
-    expect.objectContaining({ since: '' })
-  );
+  expect(collectUpdates).toHaveBeenLastCalledWith(expect.any(Array), packageGraph, execOpts, expect.objectContaining({ since: '' }));
   expect(mockNotice).toHaveBeenCalledWith('filter', 'including merged tags');
 });
 
@@ -158,12 +148,7 @@ test('--since <ref> should return packages updated since <ref>', async () => {
   const result = await getFilteredPackages(packageGraph, execOpts, options);
 
   expect(result.map((node) => node.name)).toEqual(['package-1', 'package-2', 'package-3']);
-  expect(collectUpdates).toHaveBeenLastCalledWith(
-    expect.any(Array),
-    packageGraph,
-    execOpts,
-    expect.objectContaining({ since: 'deadbeef' })
-  );
+  expect(collectUpdates).toHaveBeenLastCalledWith(expect.any(Array), packageGraph, execOpts, expect.objectContaining({ since: 'deadbeef' }));
 });
 
 test('--scope package-{2,3,4} --since main', async () => {
@@ -194,12 +179,7 @@ test('--exclude-dependents', async () => {
 
   await getFilteredPackages(packageGraph, execOpts, options);
 
-  expect(collectUpdates).toHaveBeenLastCalledWith(
-    expect.any(Array),
-    packageGraph,
-    execOpts,
-    expect.objectContaining({ excludeDependents: true })
-  );
+  expect(collectUpdates).toHaveBeenLastCalledWith(expect.any(Array), packageGraph, execOpts, expect.objectContaining({ excludeDependents: true }));
 });
 
 test('--exclude-dependents conflicts with --include-dependents', async () => {

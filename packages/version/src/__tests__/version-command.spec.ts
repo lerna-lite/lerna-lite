@@ -11,16 +11,7 @@ import {
   throwIfUncommitted,
   type VersionCommandOption,
 } from '@lerna-lite/core';
-import {
-  commandRunner,
-  getCommitMessage,
-  gitAdd,
-  gitCommit,
-  gitTag,
-  initFixtureFactory,
-  showCommit,
-  stripAnsi,
-} from '@lerna-test/helpers';
+import { commandRunner, getCommitMessage, gitAdd, gitCommit, gitTag, initFixtureFactory, showCommit, stripAnsi } from '@lerna-test/helpers';
 import { loggingOutput } from '@lerna-test/helpers/logging-output.js';
 import gitSHA from '@lerna-test/helpers/serializers/serialize-git-sha.js';
 import { execa } from 'execa';
@@ -46,10 +37,7 @@ vi.mock('../lib/is-anything-committed', async () => await vi.importActual('../li
 vi.mock('../lib/is-behind-upstream', async () => await vi.importActual('../lib/__mocks__/is-behind-upstream'));
 vi.mock('../lib/remote-branch-exists', async () => await vi.importActual('../lib/__mocks__/remote-branch-exists'));
 vi.mock('../git-clients/gitlab-client', async () => await vi.importActual('../__mocks__/gitlab-client'));
-vi.mock(
-  '../conventional-commits/get-commits-since-last-release',
-  async () => await vi.importActual('../__mocks__/get-commits-since-last-release')
-);
+vi.mock('../conventional-commits/get-commits-since-last-release', async () => await vi.importActual('../__mocks__/get-commits-since-last-release'));
 vi.mock('../lib/comment-resolved-items.js', () => ({
   commentResolvedItems: vi.fn(),
 }));
@@ -110,9 +98,7 @@ const collectUpdatesActual = (await vi.importActual<any>('@lerna-lite/core')).co
 // assertion helpers
 const listDirty = (cwd: string) =>
   // git ls-files --exclude-standard --modified --others
-  execa('git', ['ls-files', '--exclude-standard', '--modified', '--others'], { cwd }).then((result) =>
-    result.stdout.split('\n').filter(Boolean)
-  );
+  execa('git', ['ls-files', '--exclude-standard', '--modified', '--others'], { cwd }).then((result) => result.stdout.split('\n').filter(Boolean));
 
 expect.addSnapshotSerializer(gitSHA);
 
@@ -154,9 +140,7 @@ describe('VersionCommand', () => {
       expect(checkWorkingTree).toHaveBeenCalled();
 
       expect((promptSelectOne as any).mock.calls).toMatchSnapshot('prompt');
-      expect(stripAnsi((promptConfirmation as Mock).mock.lastCall![0])).toBe(
-        '[dry-run] Are you sure you want to create these versions?'
-      );
+      expect(stripAnsi((promptConfirmation as Mock).mock.lastCall![0])).toBe('[dry-run] Are you sure you want to create these versions?');
 
       expect((writePkg as any).updatedManifest('package-1')).toMatchSnapshot('gitHead');
 
@@ -210,9 +194,7 @@ describe('VersionCommand', () => {
       expect(checkWorkingTree).toHaveBeenCalled();
 
       expect((promptSelectOne as Mock).mock.calls).toMatchSnapshot('prompt');
-      expect(stripAnsi((promptConfirmation as Mock).mock.lastCall![0])).toBe(
-        '[dry-run] Are you sure you want to publish these packages?'
-      );
+      expect(stripAnsi((promptConfirmation as Mock).mock.lastCall![0])).toBe('[dry-run] Are you sure you want to publish these packages?');
 
       expect((writePkg as any).updatedManifest('package-1')).toMatchSnapshot('gitHead');
 
@@ -253,9 +235,7 @@ describe('VersionCommand', () => {
 
     it('throws an error if --changelog-include-commits-client-login and --changelog-include-commits-git-author flags are both passed', async () => {
       const testDir = await initFixture('normal');
-      const command = new VersionCommand(
-        createArgv(testDir, '--changelog-include-commits-client-login', '--changelog-include-commits-git-author')
-      );
+      const command = new VersionCommand(createArgv(testDir, '--changelog-include-commits-client-login', '--changelog-include-commits-git-author'));
 
       await expect(command).rejects.toThrow(
         '--changelog-include-commits-client-login cannot be combined with --changelog-include-commits-git-author.'
@@ -344,9 +324,7 @@ describe('VersionCommand', () => {
 
     it('throws an error if --changelog-include-commits-client-login without providing --create-release or --remote-client', async () => {
       const testDir = await initFixture('normal');
-      const command = new VersionCommand(
-        createArgv(testDir, '--changelog-include-commits-client-login', '--conventional-commits')
-      );
+      const command = new VersionCommand(createArgv(testDir, '--changelog-include-commits-client-login', '--conventional-commits'));
 
       await expect(command).rejects.toThrow(
         '--changelog-include-commits-client-login requires one of these two option --remote-client or --create-release to be defined.'
@@ -440,8 +418,7 @@ describe('VersionCommand', () => {
   });
 
   describe('--no-commit-hooks', () => {
-    const setupPreCommitHook = (cwd: string) =>
-      outputFile(join(cwd, '.git/hooks/pre-commit'), '#!/bin/sh\nexit 1\n', { mode: 0o755 });
+    const setupPreCommitHook = (cwd: string) => outputFile(join(cwd, '.git/hooks/pre-commit'), '#!/bin/sh\nexit 1\n', { mode: 0o755 });
 
     it('passes --no-verify to git commit execution', async () => {
       const cwd = await initFixture('normal');
@@ -1061,15 +1038,7 @@ describe('VersionCommand', () => {
       const cwd = await initFixture('normal');
 
       await new VersionCommand(
-        createArgv(
-          cwd,
-          '--remote-client',
-          'github',
-          '--comment-pull-requests',
-          'My custom message',
-          '--comment-filter-keywords',
-          'fix,feat,chore'
-        )
+        createArgv(cwd, '--remote-client', 'github', '--comment-pull-requests', 'My custom message', '--comment-filter-keywords', 'fix,feat,chore')
       );
 
       expect(commentResolvedItems).toHaveBeenCalledWith(
@@ -1242,9 +1211,7 @@ describe('VersionCommand', () => {
     describe('pnpm client', () => {
       it(`should NOT call runInstallLockFileOnly() when --no-sync-workspace-lock & --no-manually-update-root-lockfile are provided`, async () => {
         const cwd = await initFixture('lockfile-version2');
-        await new VersionCommand(
-          createArgv(cwd, '--bump', 'major', '--yes', '--no-sync-workspace-lock', '--no-manually-update-root-lockfile')
-        );
+        await new VersionCommand(createArgv(cwd, '--bump', 'major', '--yes', '--no-sync-workspace-lock', '--no-manually-update-root-lockfile'));
 
         const changedFiles = await showCommit(cwd, '--name-only');
         expect(changedFiles).not.toContain('package-lock.json');
@@ -1253,16 +1220,7 @@ describe('VersionCommand', () => {
       it(`should call runInstallLockFileOnly() when --sync-workspace-lock is provided and expect lockfile to be added to git`, async () => {
         const cwd = await initFixture('lockfile-pnpm');
         await new VersionCommand(
-          createArgv(
-            cwd,
-            '--bump',
-            'major',
-            '--yes',
-            '--allow-peer-dependencies-update',
-            '--sync-workspace-lock',
-            '--npm-client',
-            'pnpm'
-          )
+          createArgv(cwd, '--bump', 'major', '--yes', '--allow-peer-dependencies-update', '--sync-workspace-lock', '--npm-client', 'pnpm')
         );
 
         const changedFiles = await showCommit(cwd, '--name-only');
@@ -1280,9 +1238,7 @@ describe('VersionCommand', () => {
 
       it(`should call runInstallLockFileOnly() when --sync-workspace-lock is provided and expect lockfile to be added to git even without npmClient`, async () => {
         const cwd = await initFixture('lockfile-pnpm');
-        await new VersionCommand(
-          createArgv(cwd, '--bump', 'minor', '--allow-peer-dependencies-update', '--yes', '--sync-workspace-lock')
-        );
+        await new VersionCommand(createArgv(cwd, '--bump', 'minor', '--allow-peer-dependencies-update', '--yes', '--sync-workspace-lock'));
 
         const changedFiles = await showCommit(cwd, '--name-only');
         expect(changedFiles).toContain('pnpm-lock.yaml');

@@ -58,12 +58,7 @@ describe('RateLimiter', () => {
 
     const tasks = [createMockTask(), createMockTask(), createMockTask(), createMockTask()];
 
-    const pending = Promise.all([
-      limiter.throttle(tasks[0]),
-      limiter.throttle(tasks[1]),
-      limiter.throttle(tasks[2]),
-      limiter.throttle(tasks[3]),
-    ]);
+    const pending = Promise.all([limiter.throttle(tasks[0]), limiter.throttle(tasks[1]), limiter.throttle(tasks[2]), limiter.throttle(tasks[3])]);
     await vi.runAllTimersAsync();
     const results = await pending;
 
@@ -89,12 +84,7 @@ describe('RateLimiter', () => {
 
     const mockTask = vi.fn(() => Promise.resolve(Date.now()));
 
-    const done = Promise.all([
-      limiter.throttle(mockTask),
-      limiter.throttle(mockTask),
-      limiter.throttle(mockTask),
-      limiter.throttle(mockTask),
-    ]);
+    const done = Promise.all([limiter.throttle(mockTask), limiter.throttle(mockTask), limiter.throttle(mockTask), limiter.throttle(mockTask)]);
     await vi.runAllTimersAsync();
     await done;
 
@@ -200,12 +190,7 @@ describe('RateLimiter', () => {
       vi.fn(() => Promise.resolve(4)),
     ];
 
-    const p = Promise.all([
-      limiter.throttle(tasks[0]),
-      limiter.throttle(tasks[1]),
-      limiter.throttle(tasks[2]),
-      limiter.throttle(tasks[3]),
-    ]);
+    const p = Promise.all([limiter.throttle(tasks[0]), limiter.throttle(tasks[1]), limiter.throttle(tasks[2]), limiter.throttle(tasks[3])]);
     await vi.runAllTimersAsync();
     const results = await p;
 
@@ -348,12 +333,7 @@ describe('RateLimiter', () => {
       );
     };
 
-    const tasks = [
-      createVariableDurationTask(100),
-      createVariableDurationTask(200),
-      createVariableDurationTask(50),
-      createVariableDurationTask(300),
-    ];
+    const tasks = [createVariableDurationTask(100), createVariableDurationTask(200), createVariableDurationTask(50), createVariableDurationTask(300)];
 
     const startTime = Date.now();
     const p = Promise.all(tasks.map((task) => limiter.throttle(task)));

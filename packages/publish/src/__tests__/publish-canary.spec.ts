@@ -31,16 +31,10 @@ vi.mock('@lerna-lite/core', async () => ({
 // also point to the local publish command so that all mocks are properly used even by the command-runner
 vi.mock('@lerna-lite/publish', async () => await vi.importActual('../publish-command'));
 
-vi.mock(
-  '../lib/get-packages-without-license',
-  async () => await vi.importActual('../lib/__mocks__/get-packages-without-license')
-);
+vi.mock('../lib/get-packages-without-license', async () => await vi.importActual('../lib/__mocks__/get-packages-without-license'));
 vi.mock('../lib/verify-npm-package-access', async () => await vi.importActual('../lib/__mocks__/verify-npm-package-access'));
 vi.mock('../lib/get-npm-username', async () => await vi.importActual('../lib/__mocks__/get-npm-username'));
-vi.mock(
-  '../lib/get-two-factor-auth-required',
-  async () => await vi.importActual('../lib/__mocks__/get-two-factor-auth-required')
-);
+vi.mock('../lib/get-two-factor-auth-required', async () => await vi.importActual('../lib/__mocks__/get-two-factor-auth-required'));
 vi.mock('../lib/npm-publish', async () => await vi.importActual('../lib/__mocks__/npm-publish'));
 
 const __filename = fileURLToPath(import.meta.url);

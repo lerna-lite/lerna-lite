@@ -200,28 +200,19 @@ describe('ExecCommand', () => {
     it('executes a command in all packages with --parallel', async () => {
       await lernaExec(testDir)('--parallel', 'ls');
 
-      expect(execInPackagesStreaming(testDir)).toEqual([
-        'packages/package-1 ls (prefix: package-1)',
-        'packages/package-2 ls (prefix: package-2)',
-      ]);
+      expect(execInPackagesStreaming(testDir)).toEqual(['packages/package-1 ls (prefix: package-1)', 'packages/package-2 ls (prefix: package-2)']);
     });
 
     it('omits package prefix with --parallel --no-prefix', async () => {
       await lernaExec(testDir)('--parallel', '--no-prefix', 'ls');
 
-      expect(execInPackagesStreaming(testDir)).toEqual([
-        'packages/package-1 ls (prefix: false)',
-        'packages/package-2 ls (prefix: false)',
-      ]);
+      expect(execInPackagesStreaming(testDir)).toEqual(['packages/package-1 ls (prefix: false)', 'packages/package-2 ls (prefix: false)']);
     });
 
     it('executes a command in all packages with --stream', async () => {
       await lernaExec(testDir)('--stream', 'ls');
 
-      expect(execInPackagesStreaming(testDir)).toEqual([
-        'packages/package-1 ls (prefix: package-1)',
-        'packages/package-2 ls (prefix: package-2)',
-      ]);
+      expect(execInPackagesStreaming(testDir)).toEqual(['packages/package-1 ls (prefix: package-1)', 'packages/package-2 ls (prefix: package-2)']);
     });
 
     it('executes a command in all packages with --stream in dry-run mode and expect them all to be logged', async () => {
@@ -235,21 +226,11 @@ describe('ExecCommand', () => {
     it('omits package prefix with --stream --no-prefix', async () => {
       await lernaExec(testDir)('--stream', '--no-prefix', 'ls');
 
-      expect(execInPackagesStreaming(testDir)).toEqual([
-        'packages/package-1 ls (prefix: false)',
-        'packages/package-2 ls (prefix: false)',
-      ]);
+      expect(execInPackagesStreaming(testDir)).toEqual(['packages/package-1 ls (prefix: false)', 'packages/package-2 ls (prefix: false)']);
     });
 
     it('does not explode with filter flags', async () => {
-      await lernaExec(testDir)(
-        'ls',
-        '--no-private',
-        '--since',
-        '--include-merged-tags',
-        '--exclude-dependents',
-        '--include-dependencies'
-      );
+      await lernaExec(testDir)('ls', '--no-private', '--since', '--include-merged-tags', '--exclude-dependents', '--include-dependencies');
 
       expect(calledInPackages()).toEqual(['package-1', 'package-2']);
     });

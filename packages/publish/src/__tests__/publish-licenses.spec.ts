@@ -20,10 +20,7 @@ vi.mock(
   '../../../version/src/lib/is-anything-committed',
   async () => await vi.importActual('../../../version/src/lib/__mocks__/is-anything-committed')
 );
-vi.mock(
-  '../../../version/src/lib/is-behind-upstream',
-  async () => await vi.importActual('../../../version/src/lib/__mocks__/is-behind-upstream')
-);
+vi.mock('../../../version/src/lib/is-behind-upstream', async () => await vi.importActual('../../../version/src/lib/__mocks__/is-behind-upstream'));
 vi.mock(
   '../../../version/src/lib/remote-branch-exists',
   async () => await vi.importActual('../../../version/src/lib/__mocks__/remote-branch-exists')
@@ -50,10 +47,7 @@ vi.mock('@lerna-lite/version', async () => await vi.importActual('../../../versi
 // local modules _must_ be explicitly mocked
 vi.mock('../lib/verify-npm-package-access', async () => await vi.importActual('../lib/__mocks__/verify-npm-package-access'));
 vi.mock('../lib/get-npm-username', async () => await vi.importActual('../lib/__mocks__/get-npm-username'));
-vi.mock(
-  '../lib/get-two-factor-auth-required',
-  async () => await vi.importActual('../lib/__mocks__/get-two-factor-auth-required')
-);
+vi.mock('../lib/get-two-factor-auth-required', async () => await vi.importActual('../lib/__mocks__/get-two-factor-auth-required'));
 vi.mock('../lib/create-temp-licenses', () => ({ createTempLicenses: vi.fn(() => Promise.resolve()) }));
 vi.mock('../lib/remove-temp-licenses', () => ({ removeTempLicenses: vi.fn(() => Promise.resolve()) }));
 vi.mock('../lib/pack-directory', async () => await vi.importActual('../lib/__mocks__/pack-directory'));

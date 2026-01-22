@@ -41,12 +41,7 @@ describe('gitPush', () => {
     await gitPush('origin', 'main', { cwd });
 
     expect(exec).toHaveBeenCalled();
-    expect(exec).toHaveBeenLastCalledWith(
-      'git',
-      ['push', '--follow-tags', '--no-verify', '--atomic', 'origin', 'main'],
-      { cwd },
-      false
-    );
+    expect(exec).toHaveBeenLastCalledWith('git', ['push', '--follow-tags', '--no-verify', '--atomic', 'origin', 'main'], { cwd }, false);
 
     const list = await listRemoteTags(cwd);
     expect(list).toMatch('v1.2.3');
@@ -63,9 +58,7 @@ describe('gitPush', () => {
     // the first time the command is executed, simulate remote error
     (exec as any).mockImplementationOnce(async () => {
       const stderr = 'fatal: the receiving end does not support --atomic push';
-      const error: any = new Error(
-        ['Command failed: git push --follow-tags --atomic --no-verify origin main', stderr].join('\n')
-      );
+      const error: any = new Error(['Command failed: git push --follow-tags --atomic --no-verify origin main', stderr].join('\n'));
 
       error.stderr = stderr;
 
@@ -93,9 +86,7 @@ describe('gitPush', () => {
     // the first time the command is executed, simulate remote error
     (exec as any).mockImplementationOnce(async () => {
       const stdout = 'fatal: the receiving end does not support --atomic push';
-      const error: any = new Error(
-        ['Command failed: git push --follow-tags --atomic --no-verify origin main', stdout].join('\n')
-      );
+      const error: any = new Error(['Command failed: git push --follow-tags --atomic --no-verify origin main', stdout].join('\n'));
 
       error.stdout = stdout;
 
@@ -106,12 +97,7 @@ describe('gitPush', () => {
     await gitPush('origin', 'main', { cwd });
 
     expect(exec as any).toHaveBeenCalledTimes(2);
-    expect(exec as any).toHaveBeenLastCalledWith(
-      'git',
-      ['push', '--follow-tags', '--no-verify', 'origin', 'main'],
-      { cwd },
-      false
-    );
+    expect(exec as any).toHaveBeenLastCalledWith('git', ['push', '--follow-tags', '--no-verify', 'origin', 'main'], { cwd }, false);
 
     const list = await listRemoteTags(cwd);
     expect(list).toMatch('v4.5.6');
@@ -145,9 +131,7 @@ describe('gitPush', () => {
 
     (exec as any).mockImplementationOnce(async () => {
       const stderr = 'fatal: some unexpected error';
-      const error: any = new Error(
-        ['Command failed: git push --follow-tags --atomic --no-verify origin main', stderr].join('\n')
-      );
+      const error: any = new Error(['Command failed: git push --follow-tags --atomic --no-verify origin main', stderr].join('\n'));
 
       error.stderr = stderr;
 
@@ -170,12 +154,7 @@ describe('gitPushSingleTag', () => {
     await gitPushSingleTag('origin', 'main', 'foo@2.3.1', { cwd });
 
     expect(exec).toHaveBeenCalled();
-    expect(exec).toHaveBeenLastCalledWith(
-      'git',
-      ['push', '--no-verify', '--atomic', 'origin', 'foo@2.3.1', 'main'],
-      { cwd },
-      false
-    );
+    expect(exec).toHaveBeenLastCalledWith('git', ['push', '--no-verify', '--atomic', 'origin', 'foo@2.3.1', 'main'], { cwd }, false);
 
     const list = await listRemoteTags(cwd);
     expect(list).toMatch('foo@2.3.1');
