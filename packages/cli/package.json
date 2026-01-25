@@ -21,10 +21,10 @@
     "schemas/lerna-schema.json"
   ],
   "type": "module",
-  "types": "./dist/index.d.ts",
+  "types": "./dist/cli.d.ts",
   "exports": {
-    "types": "./dist/index.d.ts",
-    "import": "./dist/index.js"
+    "types": "./dist/cli.d.ts",
+    "import": "./dist/cli.js"
   },
   "publishConfig": {
     "access": "public"
