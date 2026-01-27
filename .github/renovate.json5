@@ -37,6 +37,11 @@
       packageNames: ['chokidar'],
       allowedVersions: '<5.0.0',
     },
+    {
+      // wait to upgrade until our next major version since it requires Node 22.17 or higher
+      packageNames: ['remove-glob'],
+      allowedVersions: '<1.0.0',
+    },
   ],
   ignoreDeps: ['lee-dohm/no-response', 'node', 'pnpm'],
   ignorePaths: ['helpers', '**/__fixtures__/**', '**/__mocks__/**', '**/fixtures/**', '**/mocks/**'],
