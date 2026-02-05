@@ -168,6 +168,7 @@ export async function commentResolvedItems({
     success: boolean;
   }>[] = [];
 
+  let dryRunCount = 0;
   for (const item of [...closedLinkedIssues.values(), ...mergedPullRequests.values()]) {
     const { type, number } = item;
     const url = `${hostURL}/${type === 'pr' ? 'pull' : 'issues'}/${number}`;
@@ -199,22 +200,20 @@ export async function commentResolvedItems({
         })
       );
     } else {
-      // For dry run, still log the intention
+      // For dry run, still log the intention and count as successful
       logger.info('comments', `${logPrefix}● Would comment on ${type === 'pr' ? 'PR' : 'issue'} ${url}`);
       logger.silly('comments', `${logPrefix}${comment}`);
+      dryRunCount++;
     }
   }
 
-  // If you want to handle the results
-  const results = await Promise.all(commentResults);
+  // Log summary of comments and results
+  const results = dryRun ? [] : await Promise.all(commentResults);
+  logger.info('comments', `Successful count: ${dryRun ? dryRunCount : results.filter((r) => r.success).length}`);
 
-  // Optional: Log summary of comments
-  const successfulComments = results.filter((r) => r.success);
-  const failedComments = results.filter((r) => !r.success);
-
-  logger.info('comments', `Successful count: ${successfulComments.length}`);
-  if (failedComments.length > 0) {
-    logger.warn('comments', `Failed comments: ${failedComments.length}`);
+  const failedCount = dryRun ? 0 : results.filter((r) => !r.success).length;
+  if (failedCount > 0) {
+    logger.warn('comments', `Failed comments: ${failedCount}`);
   }
 
   return results;

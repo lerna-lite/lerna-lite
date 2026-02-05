@@ -304,13 +304,15 @@ describe('commentResolvedItems', () => {
     // Override dryRun to true
     mockOptions.dryRun = true;
 
-    await commentResolvedItems(mockOptions);
+    const results = await commentResolvedItems(mockOptions);
 
     // Verify no comment creation
     expect(mockClient.issues.createComment).not.toHaveBeenCalled();
 
     // Verify logging for dry run
     expect(mockLogger.info).toHaveBeenCalledWith('comments', expect.stringContaining('● Would comment on'));
+    expect(mockLogger.info).toHaveBeenCalledWith('comments', 'Successful count: 2');
+    expect(results).toHaveLength(0);
   });
 
   it('should filter PRs based on PR title keywords', async () => {
