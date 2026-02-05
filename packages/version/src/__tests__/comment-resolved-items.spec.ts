@@ -117,15 +117,7 @@ describe('remoteSearchBy', () => {
       verbose: vi.fn(),
     };
 
-    const result = await remoteSearchBy(
-      mockClient as any,
-      'pr',
-      'owner',
-      'repo',
-      '2023-01-01',
-      ['fix', 'feat'],
-      mockLogger as any
-    );
+    const result = await remoteSearchBy(mockClient as any, 'pr', 'owner', 'repo', '2023-01-01', ['fix', 'feat'], mockLogger as any);
 
     expect(mockClient.search.issuesAndPullRequests).toHaveBeenCalledWith({
       q: 'repo:owner/repo+fix+OR+feat+in:title+type:pr+merged:>2023-01-01',
