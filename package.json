@@ -89,7 +89,7 @@
     "load-json-file": "catalog:dependencies",
     "normalize-newline": "^5.0.0",
     "normalize-path": "catalog:",
-    "oxfmt": "^0.26.0",
+    "oxfmt": "^0.28.0",
     "oxlint": "^1.41.0",
     "oxlint-tsgolint": "^0.11.1",
     "remove-glob": "^0.4.10",
