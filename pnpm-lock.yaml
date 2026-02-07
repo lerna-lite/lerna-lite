@@ -13,8 +13,8 @@ catalogs:
       specifier: ^1.7.1
       version: 1.7.1
     dotenv:
-      specifier: ^17.2.3
-      version: 17.2.3
+      specifier: ^17.2.4
+      version: 17.2.4
     execa:
       specifier: ^9.6.1
       version: 9.6.1
@@ -164,7 +164,7 @@ importers:
         specifier: ^17.0.35
         version: 17.0.35
       '@typescript/native-preview':
-        specifier: ^7.0.0-dev.20260205.1
+        specifier: ^7.0.0-dev.20260207.1
         version: 7.0.0-dev.20260207.1
       '@vitest/coverage-v8':
         specifier: ^4.0.18
@@ -267,7 +267,7 @@ importers:
         version: 1.7.1
       dotenv:
         specifier: 'catalog:'
-        version: 17.2.3
+        version: 17.2.4
       import-local:
         specifier: ^3.2.0
         version: 3.2.0
@@ -438,7 +438,7 @@ importers:
         version: link:../profiler
       dotenv:
         specifier: 'catalog:'
-        version: 17.2.3
+        version: 17.2.4
       p-map:
         specifier: 'catalog:'
         version: 7.0.4
@@ -628,7 +628,7 @@ importers:
         specifier: 'catalog:'
         version: 4.0.0
       pacote:
-        specifier: ^21.1.0
+        specifier: ^21.2.0
         version: 21.2.0
       semver:
         specifier: 'catalog:'
@@ -1784,8 +1784,8 @@ packages:
     resolution: {integrity: sha512-QM8q3zDe58hqUqjraQOmzZ1LIH9SWQJTlEKCH4kJ2oQvLZk7RbQXvtDM2XEq3fwkV9CCvvH4LA0AV+ogFsBM2Q==}
     engines: {node: '>=8'}
 
-  dotenv@17.2.3:
-    resolution: {integrity: sha512-JVUnt+DUIzu87TABbhPmNfVdBDt18BLOWjMUFJMSi/Qqg7NTYtabbvSNJGOJ7afbRuv9D/lngizHtP7QyLQ+9w==}
+  dotenv@17.2.4:
+    resolution: {integrity: sha512-mudtfb4zRB4bVvdj0xRo+e6duH1csJRM8IukBqfTRvHotn9+LBXB8ynAidP9zHqoRC/fsllXgk4kCKlR21fIhw==}
     engines: {node: '>=12'}
 
   dunder-proto@1.0.1:
@@ -3984,7 +3984,7 @@ snapshots:
     dependencies:
       is-obj: 2.0.0
 
-  dotenv@17.2.3: {}
+  dotenv@17.2.4: {}
 
   dunder-proto@1.0.1:
     dependencies:
