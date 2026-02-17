@@ -43,9 +43,6 @@
     "mock-stdin": "^1.0.0",
     "yargs-parser": "catalog:devDependencies"
   },
-  "overrides": {
-    "braces": "^3.0.3"
-  },
   "engines": {
     "node": "^20.17.0 || >=22.9.0"
   }
