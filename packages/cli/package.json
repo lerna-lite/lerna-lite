@@ -30,7 +30,7 @@
     "access": "public"
   },
   "scripts": {
-    "build": "remove dist && tsc",
+    "build": "remove dist && tsgo",
     "build:incremental": "tsgo --incremental --sourceMap false --excludeDirectories dist",
     "echo:test": "echo \"Lerna-Lite CLI package\"",
     "pack-tarball": "npm pack"

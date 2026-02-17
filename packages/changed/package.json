@@ -26,7 +26,7 @@
     "access": "public"
   },
   "scripts": {
-    "build": "remove dist && tsc",
+    "build": "remove dist && tsgo",
     "build:incremental": "tsgo --incremental --sourceMap false --excludeDirectories dist",
     "echo:test": "echo \"Lerna-Lite changed package\"",
     "pack-tarball": "npm pack"
