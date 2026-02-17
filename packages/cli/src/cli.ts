@@ -1,7 +1,11 @@
 #!/usr/bin/env node
 import 'dotenv/config';
+import { createRequire } from 'node:module';
+
 import { log } from '@lerna-lite/npmlog';
-import importLocal from 'import-local';
+
+const require = createRequire(import.meta.url);
+const importLocal = require('import-local');
 
 import { lerna } from './lerna-entry.js';
 
