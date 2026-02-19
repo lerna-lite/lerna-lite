@@ -164,7 +164,7 @@ importers:
         specifier: ^17.0.35
         version: 17.0.35
       '@typescript/native-preview':
-        specifier: ^7.0.0-dev.20260217.1
+        specifier: ^7.0.0-dev.20260219.1
         version: 7.0.0-dev.20260219.1
       '@vitest/coverage-v8':
         specifier: ^4.0.18
@@ -586,7 +586,7 @@ importers:
         specifier: ^9.3.0
         version: 9.3.0
       '@npmcli/package-json':
-        specifier: ^7.0.4
+        specifier: ^7.0.5
         version: 7.0.5
       byte-size:
         specifier: ^9.0.1
