@@ -1,6 +1,6 @@
 {
   "name": "@lerna-lite/init",
-  "version": "4.11.2",
+  "version": "4.11.3",
   "description": "Lerna-Lite init commmand - Create a new Lerna repo or upgrade an existing repo to the current version of Lerna",
   "homepage": "https://github.com/lerna-lite/lerna-lite",
   "bugs": {
