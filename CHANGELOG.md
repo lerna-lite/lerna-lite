@@ -10,6 +10,8 @@ See [Conventional Commits](https://conventionalcommits.org) for commit guideline
 
 * **deps:** update all non-major dependencies ([#1266](https://github.com/lerna-lite/lerna-lite/issues/1266)) ([9cbf1c5](https://github.com/lerna-lite/lerna-lite/commit/9cbf1c57096c268af724cd9057c5bfa9848d5ea4)) - by @renovate[bot]
 * **deps:** update all non-major dependencies ([#1267](https://github.com/lerna-lite/lerna-lite/issues/1267)) ([28b1984](https://github.com/lerna-lite/lerna-lite/commit/28b198425f572ac00b8dd68e62eddb03ebb4f986)) - by @renovate[bot]
+* **deps** fix(deps): update dependency tar to v7.5.8 [security] ([#1264](https://github.com/lerna-lite/lerna-lite/issues/1264)) ([0b694f7](https://github.com/lerna-lite/lerna-lite/commit/0b694f7b3557d45516345a08b0b7cbfce9ce909a)) - by @renovate[bot]
+
 
 ## [4.11.2](https://github.com/lerna-lite/lerna-lite/compare/v4.11.1...v4.11.2) (2026-02-07)
 
