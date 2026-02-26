@@ -1,6 +1,6 @@
 {
   "name": "@lerna-lite/npmlog",
-  "version": "4.11.0",
+  "version": "4.11.3",
   "description": "Lerna-Lite npmlog reimplementation of the now deprecated npm/npmlog",
   "homepage": "https://github.com/lerna-lite/lerna-lite",
   "bugs": {
@@ -26,7 +26,7 @@
     "access": "public"
   },
   "scripts": {
-    "build": "remove dist && tsc",
+    "build": "remove dist && tsgo",
     "build:incremental": "tsgo --incremental --sourceMap false --excludeDirectories dist",
     "echo:test": "echo \"Lerna-Lite npmlog package\"",
     "pack-tarball": "npm pack"

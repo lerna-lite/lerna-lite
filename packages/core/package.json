@@ -1,6 +1,6 @@
 {
   "name": "@lerna-lite/core",
-  "version": "4.11.2",
+  "version": "4.11.3",
   "description": "Lerna-Lite core implementation module",
   "homepage": "https://github.com/lerna-lite/lerna-lite",
   "bugs": {
@@ -30,7 +30,7 @@
     "access": "public"
   },
   "scripts": {
-    "build": "remove dist && tsc",
+    "build": "remove dist && tsgo",
     "build:incremental": "tsgo --incremental --sourceMap false --excludeDirectories dist",
     "echo:test": "echo \"Lerna-Lite core package\"",
     "pack-tarball": "npm pack"

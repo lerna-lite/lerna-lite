@@ -1,6 +1,6 @@
 {
   "name": "@lerna-lite/publish",
-  "version": "4.11.2",
+  "version": "4.11.3",
   "description": "Publish packages in the current workspace",
   "homepage": "https://github.com/lerna-lite/lerna-lite",
   "bugs": {
@@ -26,7 +26,7 @@
     "access": "public"
   },
   "scripts": {
-    "build": "remove dist && tsc",
+    "build": "remove dist && tsgo",
     "build:incremental": "tsgo --incremental --sourceMap false --excludeDirectories dist",
     "echo:test": "echo \"Lerna-Lite publish package\"",
     "pack-tarball": "npm pack"
@@ -36,8 +36,8 @@
     "@lerna-lite/core": "workspace:*",
     "@lerna-lite/npmlog": "workspace:*",
     "@lerna-lite/version": "workspace:*",
-    "@npmcli/arborist": "^9.2.0",
-    "@npmcli/package-json": "^7.0.4",
+    "@npmcli/arborist": "^9.3.0",
+    "@npmcli/package-json": "^7.0.5",
     "byte-size": "^9.0.1",
     "ci-info": "catalog:",
     "columnify": "catalog:dependencies",
@@ -51,10 +51,10 @@
     "npm-registry-fetch": "catalog:",
     "p-map": "catalog:",
     "p-pipe": "catalog:",
-    "pacote": "^21.2.0",
+    "pacote": "^21.3.1",
     "semver": "catalog:",
-    "ssri": "^13.0.0",
-    "tar": "^7.5.7",
+    "ssri": "^13.0.1",
+    "tar": "^7.5.9",
     "tinyglobby": "catalog:dependencies",
     "tinyrainbow": "catalog:dependencies"
   },
