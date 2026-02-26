@@ -53,4 +53,5 @@ catalogs:
     zeptomatch: ^2.1.0
 
 overrides:
-  vite: 8.0.0-beta.8
+  minimatch: ^10.2.4
+  vite: ^8.0.0-beta.15
