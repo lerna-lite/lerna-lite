@@ -1,8 +1,8 @@
+import { join, resolve } from 'node:path';
+
 import type { Logger } from '@lerna-lite/npmlog';
 import { log as npmlog } from '@lerna-lite/npmlog';
 import { outputJson } from 'fs-extra/esm';
-// @ts-ignore
-import upath from 'upath';
 
 import type { ProfilerConfig, TraceEvent } from './models.js';
 
@@ -13,7 +13,7 @@ const getTimeBasedFilename = () => {
   return `Lerna-Profile-${datetimeNormalized}.json`;
 };
 
-const hrtimeToMicroseconds = (hrtime: any) => {
+const hrtimeToMicroseconds = (hrtime: [number, number]) => {
   return (hrtime[0] * 1e9 + hrtime[1]) / 1000;
 };
 
@@ -41,12 +41,12 @@ export class Profiler {
   constructor({ concurrency, log = npmlog, outputDirectory }: ProfilerConfig) {
     this.events = [];
     this.logger = log;
-    this.outputPath = upath.join(upath.resolve(outputDirectory || '.'), getTimeBasedFilename());
+    this.outputPath = join(resolve(outputDirectory || '.'), getTimeBasedFilename());
     this.threads = range(concurrency);
   }
 
   run(fn: () => void, name: string) {
-    let startTime: any;
+    let startTime: [number, number];
     let threadId!: number;
 
     return Promise.resolve()
