@@ -1,4 +1,4 @@
-import path from 'node:path';
+import { join, resolve } from 'node:path';
 
 import type { Logger } from '@lerna-lite/npmlog';
 import { log as npmlog } from '@lerna-lite/npmlog';
@@ -41,7 +41,7 @@ export class Profiler {
   constructor({ concurrency, log = npmlog, outputDirectory }: ProfilerConfig) {
     this.events = [];
     this.logger = log;
-    this.outputPath = path.join(path.resolve(outputDirectory || '.'), getTimeBasedFilename());
+    this.outputPath = join(resolve(outputDirectory || '.'), getTimeBasedFilename());
     this.threads = range(concurrency);
   }
 
