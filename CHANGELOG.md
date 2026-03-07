@@ -4,6 +4,15 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [4.11.4](https://github.com/lerna-lite/lerna-lite/compare/v4.11.3...v4.11.4) (2026-03-07)
+
+### Bug Fixes
+
+* **deps:** replace `upath` with native code ([#1271](https://github.com/lerna-lite/lerna-lite/issues/1271)) ([6e97115](https://github.com/lerna-lite/lerna-lite/commit/6e9711590b83d624699bcfbb752096a73c91d09e)) - by @ghiscoding
+* **deps:** update all non-major dependencies ([#1269](https://github.com/lerna-lite/lerna-lite/issues/1269)) ([6c82fab](https://github.com/lerna-lite/lerna-lite/commit/6c82fabb25b273b4cdd2b4e0b7870eb80ad52cb5)) - by @renovate[bot]
+* **deps:** update conventional-changelog packages ([#1270](https://github.com/lerna-lite/lerna-lite/issues/1270)) ([dcd5910](https://github.com/lerna-lite/lerna-lite/commit/dcd5910954e383f3933e8f0baaabd7006cb0bbf9)) - by @renovate[bot]
+* **deps:** update dependency tar to v7.5.10 [security] ([#1272](https://github.com/lerna-lite/lerna-lite/issues/1272)) ([f2e9bbf](https://github.com/lerna-lite/lerna-lite/commit/f2e9bbfe4d19ff628287ef2d37049c2bc3095767)) - by @renovate[bot]
+
 ## [4.11.3](https://github.com/lerna-lite/lerna-lite/compare/v4.11.2...v4.11.3) (2026-02-19)
 
 ### Bug Fixes
@@ -11,7 +20,6 @@ See [Conventional Commits](https://conventionalcommits.org) for commit guideline
 * **deps:** update all non-major dependencies ([#1266](https://github.com/lerna-lite/lerna-lite/issues/1266)) ([9cbf1c5](https://github.com/lerna-lite/lerna-lite/commit/9cbf1c57096c268af724cd9057c5bfa9848d5ea4)) - by @renovate[bot]
 * **deps:** update all non-major dependencies ([#1267](https://github.com/lerna-lite/lerna-lite/issues/1267)) ([28b1984](https://github.com/lerna-lite/lerna-lite/commit/28b198425f572ac00b8dd68e62eddb03ebb4f986)) - by @renovate[bot]
 * **deps** fix(deps): update dependency tar to v7.5.8 [security] ([#1264](https://github.com/lerna-lite/lerna-lite/issues/1264)) ([0b694f7](https://github.com/lerna-lite/lerna-lite/commit/0b694f7b3557d45516345a08b0b7cbfce9ce909a)) - by @renovate[bot]
-
 
 ## [4.11.2](https://github.com/lerna-lite/lerna-lite/compare/v4.11.1...v4.11.2) (2026-02-07)
 

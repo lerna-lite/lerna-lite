@@ -4,6 +4,12 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [4.11.4](https://github.com/lerna-lite/lerna-lite/compare/v4.11.3...v4.11.4) (2026-03-07)
+
+### Bug Fixes
+
+* **deps:** replace `upath` with native code ([#1271](https://github.com/lerna-lite/lerna-lite/issues/1271)) ([6e97115](https://github.com/lerna-lite/lerna-lite/commit/6e9711590b83d624699bcfbb752096a73c91d09e)) - by @ghiscoding
+
 ## [4.11.3](https://github.com/lerna-lite/lerna-lite/compare/v4.11.2...v4.11.3) (2026-02-19)
 
 **Note:** Version bump only for package @lerna-lite/profiler
