@@ -5,16 +5,11 @@
  */
 
 import { randomUUID } from 'node:crypto';
-import { createWriteStream, mkdirSync, realpathSync, writeFile, writeFileSync } from 'node:fs';
-import { mkdir } from 'node:fs/promises';
+import { createWriteStream, mkdirSync, promises, realpathSync, writeFileSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import { dirname, join } from 'node:path';
 import type { Readable } from 'node:stream';
-import { promisify } from 'node:util';
 
-import { isStream } from 'is-stream';
-
-const writeFileP = promisify(writeFile);
 const tempfileSync = (filePath?: string) => join(realpathSync(tmpdir()), `lerna-${randomUUID()}`, filePath || '');
 
 const writeStream = async (filePath: string, fileContent: Readable) =>
@@ -37,9 +32,13 @@ const writeStream = async (filePath: string, fileContent: Readable) =>
 
 export async function tempWrite(fileContent: any, filePath?: string) {
   const tempPath = tempfileSync(filePath);
-  const write = isStream(fileContent) ? writeStream : writeFileP;
+  // const write = isStream(fileContent) ? writeStream : writeFileP;
+  const write =
+    fileContent !== null && typeof fileContent === 'object' && typeof fileContent.pipe === 'function'
+      ? writeStream
+      : promises.writeFile;
 
-  await mkdir(dirname(tempPath), { recursive: true });
+  await promises.mkdir(dirname(tempPath), { recursive: true });
   await write(tempPath, fileContent as DataView & Readable);
 
   return tempPath;
