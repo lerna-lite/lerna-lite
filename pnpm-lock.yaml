@@ -58,9 +58,6 @@ catalogs:
     tinyrainbow:
       specifier: ^3.0.3
       version: 3.0.3
-    uuid:
-      specifier: ^13.0.0
-      version: 13.0.0
     write-json-file:
       specifier: ^7.0.0
       version: 7.0.0
@@ -218,9 +215,6 @@ importers:
       tslib:
         specifier: ^2.8.1
         version: 2.8.1
-      uuid:
-        specifier: catalog:dependencies
-        version: 13.0.0
       vitest:
         specifier: ^4.0.18
         version: 4.0.18(@types/node@24.12.0)(yaml@2.8.2)
@@ -783,9 +777,6 @@ importers:
       p-reduce:
         specifier: ^3.0.0
         version: 3.0.0
-      pify:
-        specifier: ^6.1.0
-        version: 6.1.0
       semver:
         specifier: 'catalog:'
         version: 7.7.4
@@ -795,9 +786,6 @@ importers:
       tinyrainbow:
         specifier: catalog:dependencies
         version: 3.0.3
-      uuid:
-        specifier: catalog:dependencies
-        version: 13.0.0
       write-json-file:
         specifier: catalog:dependencies
         version: 7.0.0
@@ -2702,10 +2690,6 @@ packages:
     resolution: {integrity: sha512-5gTmgEY/sqK6gFXLIsQNH19lWb4ebPDLA4SdLP7dsWkIXHWlG66oPuVvXSGFPppYZz8ZDZq0dYYrbHfBCVUb1Q==}
     engines: {node: '>=12'}
 
-  pify@6.1.0:
-    resolution: {integrity: sha512-KocF8ve28eFjjuBKKGvzOBGzG8ew2OqOOSxTTZhirkzH7h3BI1vyzqlR0qbfcDBve1Yzo3FVlWUAtCRrbVN8Fw==}
-    engines: {node: '>=14.16'}
-
   pkg-dir@4.2.0:
     resolution: {integrity: sha512-HRDzbaKjC+AOWVXxAU/x54COGeIv9eb+6CkDSQoNTt4XyWoIJvuPsXizxu/Fr23EiekbtZwmh1IcIG/l/a10GQ==}
     engines: {node: '>=8'}
@@ -3005,10 +2989,6 @@ packages:
 
   util-deprecate@1.0.2:
     resolution: {integrity: sha512-EPD5q1uXyFxJpCrLnCc1nHnq3gOa6DZBocAIiI2TaSCA7VCJ1UJDMagCzIkXNsUYfD1daK//LTEQ8xiIbrHtcw==}
-
-  uuid@13.0.0:
-    resolution: {integrity: sha512-XQegIaBTVUjSHliKqcnFqYypAd4S+WCYt5NIeRs6w/UAry7z8Y9j5ZwRRL4kzq9U3sD6v+85er9FvkEaBpji2w==}
-    hasBin: true
 
   validate-npm-package-license@3.0.4:
     resolution: {integrity: sha512-DpKm2Ui/xN7/HQKCtpZxoRWBhZ9Z0kqtygG8XCgNQ8ZlDnxuQmWhj566j8fN4Cu3/JmbhsDo7fcAJq4s9h27Ew==}
@@ -4975,8 +4955,6 @@ snapshots:
 
   picomatch@4.0.3: {}
 
-  pify@6.1.0: {}
-
   pkg-dir@4.2.0:
     dependencies:
       find-up: 4.1.0
@@ -5267,8 +5245,6 @@ snapshots:
   universalify@2.0.1: {}
 
   util-deprecate@1.0.2: {}
-
-  uuid@13.0.0: {}
 
   validate-npm-package-license@3.0.4:
     dependencies:
