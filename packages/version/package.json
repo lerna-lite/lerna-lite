@@ -54,11 +54,9 @@
     "p-map": "catalog:",
     "p-pipe": "catalog:",
     "p-reduce": "^3.0.0",
-    "pify": "^6.1.0",
     "semver": "catalog:",
     "slash": "catalog:",
     "tinyrainbow": "catalog:dependencies",
-    "uuid": "catalog:dependencies",
     "write-json-file": "catalog:dependencies",
     "zeptomatch": "catalog:dependencies"
   },

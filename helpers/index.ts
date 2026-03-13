@@ -1,3 +1,4 @@
+import { randomUUID } from 'node:crypto';
 import { mkdirSync, realpathSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import { join as pathJoin, relative } from 'node:path';
@@ -5,7 +6,6 @@ import { stripVTControlCharacters } from 'node:util';
 
 import normalizeNewline from 'normalize-newline';
 import normalizePath from 'normalize-path';
-import { v4 as uuidv4 } from 'uuid';
 
 import { Project } from '../packages/core/dist/project/project.js';
 
@@ -46,7 +46,7 @@ export function stripAnsi(s: string, strip = true) {
  */
 export function temporaryDirectory(prefix?: string): string {
   try {
-    const tempDirPath = pathJoin(realpathSync(tmpdir()), `${prefix || ''}${uuidv4()}`);
+    const tempDirPath = pathJoin(realpathSync(tmpdir()), `${prefix || ''}${randomUUID()}`);
     mkdirSync(tempDirPath, { recursive: true });
     return tempDirPath;
   } catch (error) {

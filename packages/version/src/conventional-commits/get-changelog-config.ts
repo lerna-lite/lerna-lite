@@ -1,7 +1,8 @@
+import { promisify } from 'node:util';
+
 import { ValidationError } from '@lerna-lite/core';
 import { log } from '@lerna-lite/npmlog';
 import npa from 'npm-package-arg';
-import pify from 'pify';
 
 import type { ChangelogConfig, ChangelogPresetConfig } from '../interfaces.js';
 
@@ -46,7 +47,7 @@ export class GetChangelogConfig {
         config = config(presetConfig);
       } catch (_) {
         // legacy presets export an errback function instead of Q.all()
-        config = (pify(config) as Function)();
+        config = (promisify(config) as Function)();
       }
     }
 

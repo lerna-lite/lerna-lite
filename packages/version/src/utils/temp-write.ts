@@ -4,6 +4,7 @@
  * Embedded here into lerna directly because we cannot yet migrate to ESM only, and we needed to bump outdated deps.
  */
 
+import { randomUUID } from 'node:crypto';
 import { createWriteStream, mkdirSync, realpathSync, writeFile, writeFileSync } from 'node:fs';
 import { mkdir } from 'node:fs/promises';
 import { tmpdir } from 'node:os';
@@ -12,10 +13,9 @@ import type { Readable } from 'node:stream';
 import { promisify } from 'node:util';
 
 import { isStream } from 'is-stream';
-import { v4 as uuidv4 } from 'uuid';
 
 const writeFileP = promisify(writeFile);
-const tempfileSync = (filePath?: string) => join(realpathSync(tmpdir()), `lerna-${uuidv4()}`, filePath || '');
+const tempfileSync = (filePath?: string) => join(realpathSync(tmpdir()), `lerna-${randomUUID()}`, filePath || '');
 
 const writeStream = async (filePath: string, fileContent: Readable) =>
   new Promise((resolve, reject) => {
