@@ -6,12 +6,12 @@ const updated = new Map();
 
 export const collectUpdates: any = vi.fn((filteredPackages, packageGraph, { cwd }) => {
   const targets = updated.get(cwd);
-  const updates = targets ? new Map(targets.map((name) => [name, packageGraph.get(name)])) : packageGraph;
+  const updates = targets ? new Map(targets.map((name: string) => [name, packageGraph.get(name)])) : packageGraph;
 
   return Array.from(updates.values());
 });
 
-const setUpdated = (cwd, ...names) => updated.set(cwd, names);
+const setUpdated = (cwd: string, ...names: string[]) => updated.set(cwd, names);
 
 // isolate tests
 afterEach(() => {

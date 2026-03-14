@@ -44,4 +44,5 @@ export * from './utils/string-utils.js';
 export * from './utils/types.js';
 export * from './utils/warn-if-hanging.js';
 export * from './utils/write-log-file.js';
+export * from './utils/write-package.js';
 export * from './validation-error.js';

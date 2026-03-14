@@ -1,12 +1,11 @@
 import { dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
 
-import { logOutput, promptConfirmation, throwIfUncommitted, type PackageGraphNode, type PublishCommandOption } from '@lerna-lite/core';
+import { logOutput, promptConfirmation, throwIfUncommitted, writePackage, type PackageGraphNode, type PublishCommandOption } from '@lerna-lite/core';
 import { initFixtureFactory, stripAnsi } from '@lerna-test/helpers';
 import { loggingOutput } from '@lerna-test/helpers/logging-output.js';
 import { remove } from 'fs-extra/esm';
 import { describe, expect, it, vi, type Mock } from 'vitest';
-import * as writePkg from 'write-package';
 import yargParser from 'yargs-parser';
 
 import type { npmPublish as npmPublishMock } from '../lib/__mocks__/npm-publish.js';
@@ -14,8 +13,6 @@ import { getUnpublishedPackages } from '../lib/get-unpublished-packages.js';
 import { npmPublish } from '../lib/npm-publish.js';
 // file under test
 import { PublishCommand } from '../publish-command.js';
-
-vi.mock('write-package', async () => await vi.importActual('../../../version/src/lib/__mocks__/write-package'));
 
 // FIXME: better mock for version command
 vi.mock('../../../version/src/lib/git-push', async () => await vi.importActual('../../../version/src/lib/__mocks__/git-push'));
@@ -39,6 +36,7 @@ vi.mock('@lerna-lite/core', async () => ({
   logOutput: (await vi.importActual<any>('../../../core/src/__mocks__/output')).logOutput,
   promptConfirmation: (await vi.importActual<any>('../../../core/src/__mocks__/prompt')).promptConfirmation,
   throwIfUncommitted: (await vi.importActual<any>('../../../core/src/__mocks__/check-working-tree')).throwIfUncommitted,
+  writePackage: (await vi.importActual<any>('../../../core/src/__mocks__/write-package')).writePackage,
 }));
 vi.mock('@lerna-lite/version', async () => await vi.importActual('../../../version/src/version-command'));
 
@@ -166,7 +164,7 @@ describe('publish from-package', () => {
     await new PublishCommand(createArgv(cwd, 'from-package'));
 
     expect(npmPublish).toHaveBeenCalled();
-    expect((writePkg as any).updatedManifest('package-1')).not.toHaveProperty('gitHead');
+    expect((writePackage as any).updatedManifest('package-1')).not.toHaveProperty('gitHead');
 
     const logMessages = loggingOutput('notice');
     expect(logMessages).toContain('Unable to verify working tree, proceed at your own risk');
@@ -182,6 +180,6 @@ describe('publish from-package', () => {
     await new PublishCommand(createArgv(cwd, 'from-package', '--git-head', 'deadbeef'));
 
     expect(npmPublish).toHaveBeenCalled();
-    expect((writePkg as any).updatedManifest('package-1').gitHead).toBe('deadbeef');
+    expect((writePackage as any).updatedManifest('package-1').gitHead).toBe('deadbeef');
   });
 });

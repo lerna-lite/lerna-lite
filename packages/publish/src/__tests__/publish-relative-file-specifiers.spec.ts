@@ -1,17 +1,14 @@
 import { dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
 
-import type { PublishCommandOption } from '@lerna-lite/core';
+import { writePackage, type PublishCommandOption } from '@lerna-lite/core';
 import { commandRunner, gitAdd, gitCommit, gitTag, initFixtureFactory } from '@lerna-test/helpers';
 import { outputFile } from 'fs-extra/esm';
 import { describe, expect, it, vi } from 'vitest';
-import * as writePkg from 'write-package';
 import yargParser from 'yargs-parser';
 
 import cliCommands from '../../../cli/src/cli-commands/cli-publish-commands.js';
 import { PublishCommand } from '../index.js';
-
-vi.mock('write-package', async () => await vi.importActual('../../../version/src/lib/__mocks__/write-package'));
 
 // FIXME: better mock for version command
 vi.mock('../../../version/src/lib/git-push', async () => await vi.importActual('../../../version/src/lib/__mocks__/git-push'));
@@ -37,6 +34,7 @@ vi.mock('@lerna-lite/core', async () => ({
   promptConfirmation: (await vi.importActual<any>('../../../core/src/__mocks__/prompt')).promptConfirmation,
   promptSelectOne: (await vi.importActual<any>('../../../core/src/__mocks__/prompt')).promptSelectOne,
   promptTextInput: (await vi.importActual<any>('../../../core/src/__mocks__/prompt')).promptTextInput,
+  writePackage: (await vi.importActual<any>('../../../core/src/__mocks__/write-package')).writePackage,
 }));
 
 // also point to the local publish command so that all mocks are properly used even by the command-runner
@@ -83,7 +81,7 @@ describe("relative 'file:' specifiers", () => {
     await setupChanges(cwd);
     await new PublishCommand(createArgv(cwd, '--bump', 'major', '--yes'));
 
-    expect((writePkg as any).updatedVersions()).toEqual({
+    expect((writePackage as any).updatedVersions()).toEqual({
       'package-1': '2.0.0',
       'package-2': '2.0.0',
       'package-3': '2.0.0',
@@ -94,22 +92,22 @@ describe("relative 'file:' specifiers", () => {
     });
 
     // notably missing is package-1, which has no relative file: dependencies
-    expect((writePkg as any).updatedManifest('package-2').dependencies).toMatchObject({
+    expect((writePackage as any).updatedManifest('package-2').dependencies).toMatchObject({
       'package-1': '^2.0.0',
     });
-    expect((writePkg as any).updatedManifest('package-3').dependencies).toMatchObject({
+    expect((writePackage as any).updatedManifest('package-3').dependencies).toMatchObject({
       'package-2': '^2.0.0',
     });
-    expect((writePkg as any).updatedManifest('package-4').optionalDependencies).toMatchObject({
+    expect((writePackage as any).updatedManifest('package-4').optionalDependencies).toMatchObject({
       'package-3': '^2.0.0',
     });
-    expect((writePkg as any).updatedManifest('package-5').dependencies).toMatchObject({
+    expect((writePackage as any).updatedManifest('package-5').dependencies).toMatchObject({
       'package-4': '^2.0.0',
       // all fixed versions are bumped when major
       'package-6': '^2.0.0',
     });
     // private packages do not need local version resolution
-    expect((writePkg as any).updatedManifest('package-7').dependencies).toMatchObject({
+    expect((writePackage as any).updatedManifest('package-7').dependencies).toMatchObject({
       'package-1': 'file:../package-1',
     });
   });
@@ -122,7 +120,7 @@ describe("relative 'file:' specifiers", () => {
     await setupChanges(cwd);
     await lernaPublish(cwd)('minor', '--yes');
 
-    expect((writePkg as any).updatedVersions()).toEqual({
+    expect((writePackage as any).updatedVersions()).toEqual({
       'package-1': '1.1.0',
       'package-2': '2.1.0',
       'package-3': '3.1.0',
@@ -131,7 +129,7 @@ describe("relative 'file:' specifiers", () => {
     });
 
     // package-4 was updated, but package-6 was not
-    expect((writePkg as any).updatedManifest('package-5').dependencies).toMatchObject({
+    expect((writePackage as any).updatedManifest('package-5').dependencies).toMatchObject({
       'package-4': '^4.1.0',
       'package-6': '^6.0.0',
     });
@@ -146,7 +144,7 @@ describe("relative 'file:' specifiers", () => {
     await lernaPublish(cwd)('patch', '--yes', '--exact');
 
     // package-4 was updated, but package-6 was not
-    expect((writePkg as any).updatedManifest('package-5').dependencies).toMatchObject({
+    expect((writePackage as any).updatedManifest('package-5').dependencies).toMatchObject({
       'package-4': '4.0.1',
       'package-6': '6.0.0',
     });
@@ -159,7 +157,7 @@ describe("relative 'file:' specifiers", () => {
     await setupChanges(cwd, 'workspaces');
     await lernaPublish(cwd)('major', '--yes');
 
-    expect((writePkg as any).updatedManifest('package-2').dependencies).toMatchObject({
+    expect((writePackage as any).updatedManifest('package-2').dependencies).toMatchObject({
       'package-1': '^2.0.0',
     });
   });
