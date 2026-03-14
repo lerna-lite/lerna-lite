@@ -2,10 +2,9 @@
  * Inlined from deprecated package https://github.com/npm/gauge/blob/f8092518a47ac6a96027ae3ad97d0251ffe7643b
  */
 
-import validate from 'aproba';
-
 import { Internal, MissingTemplateValue } from './error.js';
 import { TemplateItem } from './template-item.js';
+import validate from './validate.js';
 import align from './wide-align.js';
 import { wideTruncate } from './wide-truncate.js';
 
