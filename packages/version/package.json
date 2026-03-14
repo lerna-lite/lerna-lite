@@ -51,8 +51,6 @@
     "npm-package-arg": "catalog:",
     "p-limit": "^7.3.0",
     "p-map": "catalog:",
-    "p-pipe": "catalog:",
-    "p-reduce": "^3.0.0",
     "semver": "catalog:",
     "tinyrainbow": "catalog:dependencies",
     "write-json-file": "catalog:dependencies",
