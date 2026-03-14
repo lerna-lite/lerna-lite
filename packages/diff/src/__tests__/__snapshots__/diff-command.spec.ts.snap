@@ -11,8 +11,9 @@ index SHA..SHA 100644
 -  "changed": 0,
 +  "changed": 1,
    "version": "1.0.0"
- }
+-}
 \\ No newline at end of file
++}
 `;
 
 exports[`Diff Command > should diff a specific package 1`] = `
@@ -20,7 +21,7 @@ diff --git a/packages/package-2/package.json b/packages/package-2/package.json
 index SHA..SHA 100644
 --- a/packages/package-2/package.json
 +++ b/packages/package-2/package.json
-@@ -1,6 +1,6 @@
+@@ -1,8 +1,8 @@
  {
    "name": "package-2",
 -  "changed": 0,
@@ -28,6 +29,10 @@ index SHA..SHA 100644
    "version": "1.0.0",
    "dependencies": {
      "package-1": "^1.0.0"
+   }
+-}
+\\ No newline at end of file
++}
 `;
 
 exports[`Diff Command > should diff packages from the first commit 1`] = `
@@ -41,8 +46,9 @@ index SHA..SHA 100644
 -  "changed": 0,
 +  "changed": 1,
    "version": "1.0.0"
- }
+-}
 \\ No newline at end of file
++}
 `;
 
 exports[`Diff Command > should diff packages from the first commit from DiffCommand class 1`] = `
@@ -56,8 +62,9 @@ index SHA..SHA 100644
 -  "changed": 0,
 +  "changed": 1,
    "version": "1.0.0"
- }
+-}
 \\ No newline at end of file
++}
 `;
 
 exports[`Diff Command > should diff packages from the first commit from factory 1`] = `
@@ -71,8 +78,9 @@ index SHA..SHA 100644
 -  "changed": 0,
 +  "changed": 1,
    "version": "1.0.0"
- }
+-}
 \\ No newline at end of file
++}
 `;
 
 exports[`Diff Command > should diff packages from the most recent tag 1`] = `
@@ -88,5 +96,4 @@ index SHA..SHA 100644
 +  "version": "1.0.0",
 +  "sinceLastTag": true
  }
-\\ No newline at end of file
 `;

@@ -20,6 +20,7 @@ vi.mock('@lerna-lite/core', async () => ({
   conf: (await vi.importActual<any>('../../../core/src/command')).conf,
   logOutput: (await vi.importActual<any>('../../../core/src/__mocks__/output')).logOutput,
   collectUpdates: (await vi.importActual<any>('../../../core/src/__mocks__/collect-updates')).collectUpdates,
+  writePackage: (await vi.importActual<any>('../../../core/src/__mocks__/write-package')).writePackage,
   spawn: vi.fn(),
 }));
 
