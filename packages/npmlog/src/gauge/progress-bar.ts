@@ -2,10 +2,10 @@
  * Inlined from deprecated package https://github.com/npm/gauge/blob/f8092518a47ac6a96027ae3ad97d0251ffe7643b
  */
 
-import validate from 'aproba';
 import stringWidth from 'fast-string-width';
 
 import renderTemplate from './render-template.js';
+import validate from './validate.js';
 import { wideTruncate } from './wide-truncate.js';
 
 export default function progressBar(theme: any, width: number, completed: number) {

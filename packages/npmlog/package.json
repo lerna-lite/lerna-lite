@@ -32,7 +32,6 @@
     "pack-tarball": "npm pack"
   },
   "dependencies": {
-    "aproba": "^2.1.0",
     "fast-string-width": "^3.0.2",
     "signal-exit": "^4.1.0",
     "tinyrainbow": "catalog:dependencies"
