@@ -1,11 +1,11 @@
+import { onExit } from 'signal-exit';
+import c from 'tinyrainbow';
+
 // oxlint-disable unbound-method
 /**
  * Inlined from deprecated package https://github.com/npm/gauge/blob/f8092518a47ac6a96027ae3ad97d0251ffe7643b/lib/index.js
  */
-import hasUnicode from 'has-unicode';
-import { onExit } from 'signal-exit';
-import c from 'tinyrainbow';
-
+import { hasUnicode } from './has-unicode.js';
 import { Plumbing } from './plumbing.js';
 import { setImmediateFn } from './set-immediate.js';
 import defaultThemes from './themes.js';

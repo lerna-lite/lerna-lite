@@ -41,7 +41,6 @@
     "ci-info": "catalog:",
     "columnify": "catalog:dependencies",
     "fs-extra": "catalog:",
-    "has-unicode": "catalog:",
     "libnpmaccess": "^10.0.3",
     "libnpmpublish": "^11.1.3",
     "normalize-path": "catalog:",
