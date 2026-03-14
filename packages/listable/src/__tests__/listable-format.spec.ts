@@ -1,10 +1,10 @@
+import { mkdirSync, writeFileSync } from 'node:fs';
+import { join } from 'node:path';
+
 import { Project, type ListCommandOption, type Package } from '@lerna-lite/core';
 import { loggingOutput, stripAnsi, temporaryDirectory } from '@lerna-test/helpers';
-// normalize temp directory paths in snapshots
 import serializeTempdir from '@lerna-test/helpers/serializers/serialize-tempdir.js';
 import serializeWindowsPaths from '@lerna-test/helpers/serializers/serialize-windows-paths.js';
-// @ts-ignore
-import Tacks from 'tacks';
 import { beforeAll, describe, expect, test, vi } from 'vitest';
 
 import { listable } from '../index.js';
@@ -15,8 +15,6 @@ vi.mock('@lerna-lite/core', async () => ({
   conf: (await vi.importActual<any>('../../../core/src/command')).conf,
   QueryGraph: (await vi.importActual<any>('../../../core/src/utils/query-graph')).QueryGraph,
 }));
-
-const { File, Dir } = Tacks;
 
 // remove quotes around top-level strings
 expect.addSnapshotSerializer({
@@ -40,49 +38,29 @@ describe('listable.format()', () => {
     return { count, text: stripAnsi(text) };
   };
 
-  const fixture = new Tacks(
-    Dir({
-      'lerna.json': File({
-        version: 'independent',
-        packages: ['pkgs/*'],
-      }),
-      'package.json': File({
-        name: 'listable-format-test',
-      }),
-      pkgs: Dir({
-        'pkg-1': Dir({
-          'package.json': File({
-            name: 'pkg-1',
-            version: '1.0.0',
-            dependencies: { 'pkg-2': 'file:../pkg-2' },
-          }),
-        }),
-        'pkg-2': Dir({
-          'package.json': File({
-            name: 'pkg-2',
-            // version: '2.0.0',
-            devDependencies: { 'pkg-3': 'file:../pkg-3' },
-          }),
-        }),
-        'pkg-3': Dir({
-          'package.json': File({
-            name: 'pkg-3',
-            version: '3.0.0',
-            dependencies: { 'pkg-2': 'file:../pkg-2' },
-            private: true,
-          }),
-        }),
-      }),
-    })
+  const cwd = temporaryDirectory(); // Create a temporary directory
+
+  // Manually create directory structure instead of Tacks
+  mkdirSync(join(cwd, 'pkgs'), { recursive: true });
+  mkdirSync(join(cwd, 'pkgs', 'pkg-1'), { recursive: true });
+  mkdirSync(join(cwd, 'pkgs', 'pkg-2'), { recursive: true });
+  mkdirSync(join(cwd, 'pkgs', 'pkg-3'), { recursive: true });
+
+  writeFileSync(join(cwd, 'lerna.json'), JSON.stringify({ version: 'independent', packages: ['pkgs/*'] }));
+  writeFileSync(join(cwd, 'package.json'), JSON.stringify({ name: 'listable-format-test' }));
+  writeFileSync(
+    join(cwd, 'pkgs', 'pkg-1', 'package.json'),
+    JSON.stringify({ name: 'pkg-1', version: '1.0.0', dependencies: { 'pkg-2': 'file:../pkg-2' } })
+  );
+  writeFileSync(join(cwd, 'pkgs', 'pkg-2', 'package.json'), JSON.stringify({ name: 'pkg-2', devDependencies: { 'pkg-3': 'file:../pkg-3' } }));
+  writeFileSync(
+    join(cwd, 'pkgs', 'pkg-3', 'package.json'),
+    JSON.stringify({ name: 'pkg-3', version: '3.0.0', dependencies: { 'pkg-2': 'file:../pkg-2' }, private: true })
   );
 
   beforeAll(async () => {
-    const cwd = temporaryDirectory();
-
-    fixture.create(cwd);
-    process.chdir(cwd);
-
-    packages = await Project.getPackages(cwd);
+    process.chdir(cwd); // Change to the temporary directory
+    packages = await Project.getPackages(cwd); // Retrieve the packages from the temporary directory
   });
 
   describe('renders', () => {

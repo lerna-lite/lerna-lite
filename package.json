@@ -94,7 +94,6 @@
     "oxlint-tsgolint": "^0.16.0",
     "remove-glob": "^0.4.10",
     "semver": "catalog:",
-    "tacks": "1.2.6",
     "tinyglobby": "catalog:dependencies",
     "tslib": "^2.8.1",
     "vitest": "^4.0.18",

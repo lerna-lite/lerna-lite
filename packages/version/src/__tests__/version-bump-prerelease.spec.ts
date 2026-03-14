@@ -1,22 +1,12 @@
+import { mkdirSync, mkdtempSync, realpathSync, writeFileSync } from 'node:fs';
+import { tmpdir } from 'node:os';
 import { dirname, join, resolve as pathResolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
 
 import { promptSelectOne, promptTextInput, type VersionCommandOption } from '@lerna-lite/core';
-import {
-  commandRunner,
-  getCommitMessage,
-  gitAdd,
-  gitCommit,
-  gitInit,
-  gitTag,
-  initFixtureFactory,
-  showCommit,
-  temporaryDirectory,
-} from '@lerna-test/helpers';
+import { commandRunner, getCommitMessage, gitAdd, gitCommit, gitInit, gitTag, initFixtureFactory, showCommit } from '@lerna-test/helpers';
 import serializeChangelog from '@lerna-test/helpers/serializers/serialize-changelog.js';
 import { outputFile } from 'fs-extra/esm';
-// @ts-ignore
-import Tacks from 'tacks';
 import { expect, test, vi, type Mock } from 'vitest';
 import yargParser from 'yargs-parser';
 
@@ -47,8 +37,6 @@ vi.mock('@lerna-lite/version', async () => await vi.importActual('../version-com
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
 const initFixture = initFixtureFactory(pathResolve(__dirname, '../../../publish/src/__tests__'));
-
-const { File, Dir } = Tacks;
 
 const lernaVersion = commandRunner(cliCommands);
 
@@ -147,35 +135,18 @@ test('version prerelease with immediate graduation', async () => {
 });
 
 test('independent version prerelease does not bump on every unrelated change', async () => {
-  const cwd = temporaryDirectory();
-  const fixture = new Tacks(
-    Dir({
-      'lerna.json': File({
-        version: 'independent',
-      }),
-      'package.json': File({
-        name: 'unrelated-bumps',
-      }),
-      packages: Dir({
-        'pkg-a': Dir({
-          'package.json': File({
-            name: 'pkg-a',
-            version: '1.0.0',
-          }),
-        }),
-        'pkg-b': Dir({
-          'package.json': File({
-            name: 'pkg-b',
-            version: '1.0.0-bumps.1',
-            // TODO: (major) make --no-private the default
-            private: true,
-          }),
-        }),
-      }),
-    })
-  );
+  const cwd = mkdtempSync(join(realpathSync(tmpdir()), 'lerna-test-'));
 
-  fixture.create(cwd);
+  mkdirSync(join(cwd, 'packages', 'pkg-a'), { recursive: true });
+  mkdirSync(join(cwd, 'packages', 'pkg-b'), { recursive: true });
+  writeFileSync(join(cwd, 'lerna.json'), JSON.stringify({ version: 'independent', packages: ['packages/*'] }));
+  writeFileSync(join(cwd, 'package.json'), JSON.stringify({ name: 'unrelated-bumps' }));
+  writeFileSync(join(cwd, 'packages', 'pkg-a', 'package.json'), JSON.stringify({ name: 'pkg-a', version: '1.0.0' }));
+  writeFileSync(
+    join(cwd, 'packages', 'pkg-b', 'package.json'),
+    // TODO: (major) make --no-private the default
+    JSON.stringify({ name: 'pkg-b', version: '1.0.0-bumps.1', private: true })
+  );
 
   await gitInit(cwd, '.');
   await gitAdd(cwd, '-A');
@@ -215,36 +186,17 @@ chore: Publish new release
 });
 
 test('independent version prerelease respects --no-private', async () => {
-  const cwd = temporaryDirectory();
-  const fixture = new Tacks(
-    Dir({
-      'lerna.json': File({
-        version: 'independent',
-      }),
-      'package.json': File({
-        name: 'no-private-versioning',
-      }),
-      packages: Dir({
-        'pkg-1': Dir({
-          'package.json': File({
-            name: 'pkg-1',
-            version: '1.0.0',
-            devDependencies: {
-              'pkg-2': '^2.0.0',
-            },
-          }),
-        }),
-        'pkg-2': Dir({
-          'package.json': File({
-            name: 'pkg-2',
-            version: '2.0.0',
-            private: true,
-          }),
-        }),
-      }),
-    })
+  const cwd = mkdtempSync(join(realpathSync(tmpdir()), 'lerna-test-'));
+
+  mkdirSync(join(cwd, 'packages', 'pkg-1'), { recursive: true });
+  mkdirSync(join(cwd, 'packages', 'pkg-2'), { recursive: true });
+  writeFileSync(join(cwd, 'lerna.json'), JSON.stringify({ version: 'independent', packages: ['packages/*'] }));
+  writeFileSync(join(cwd, 'package.json'), JSON.stringify({ name: 'no-private-versioning' }));
+  writeFileSync(
+    join(cwd, 'packages', 'pkg-1', 'package.json'),
+    JSON.stringify({ name: 'pkg-1', version: '1.0.0', devDependencies: { 'pkg-2': '^2.0.0' } })
   );
-  fixture.create(cwd);
+  writeFileSync(join(cwd, 'packages', 'pkg-2', 'package.json'), JSON.stringify({ name: 'pkg-2', version: '2.0.0', private: true }));
 
   await gitInit(cwd, '.');
   await gitAdd(cwd, '-A');
