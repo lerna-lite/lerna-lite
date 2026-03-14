@@ -21,9 +21,6 @@ catalogs:
     fs-extra:
       specifier: ^11.3.4
       version: 11.3.4
-    has-unicode:
-      specifier: ^2.0.1
-      version: 2.0.1
     normalize-path:
       specifier: ^3.0.0
       version: 3.0.0
@@ -501,9 +498,6 @@ importers:
       fast-string-width:
         specifier: ^3.0.2
         version: 3.0.2
-      has-unicode:
-        specifier: 'catalog:'
-        version: 2.0.1
       signal-exit:
         specifier: ^4.1.0
         version: 4.1.0
@@ -559,9 +553,6 @@ importers:
       fs-extra:
         specifier: 'catalog:'
         version: 11.3.4
-      has-unicode:
-        specifier: 'catalog:'
-        version: 2.0.1
       libnpmaccess:
         specifier: ^10.0.3
         version: 10.0.3
@@ -2009,9 +2000,6 @@ packages:
   has-tostringtag@1.0.2:
     resolution: {integrity: sha512-NqADB8VjPFLM2V0VvHUewwwsw0ZWBaIdgo+ieHtK3hasLz4qeCRjYcqfB6AQrBggRKppKF8L52/VqdVsO47Dlw==}
     engines: {node: '>= 0.4'}
-
-  has-unicode@2.0.1:
-    resolution: {integrity: sha512-8Rf9Y83NBReMnx0gFzA8JImQACstCYWUplepDa9xprwwtmgEZUF0h/i5xSA625zB/I37EtrswSST6OXxwaaIJQ==}
 
   hasown@2.0.2:
     resolution: {integrity: sha512-0hJU9SCPvmMzIBdZFqNPXWa6dqh7WdH0cII9y+CyS8rG3nL48Bclra9HmKhVVUHyPWNH5Y7xDwAB7bfgSjkUMQ==}
@@ -4073,8 +4061,6 @@ snapshots:
   has-tostringtag@1.0.2:
     dependencies:
       has-symbols: 1.1.0
-
-  has-unicode@2.0.1: {}
 
   hasown@2.0.2:
     dependencies:

@@ -1,7 +1,7 @@
 import type { Package } from '@lerna-lite/core';
 import { log } from '@lerna-lite/npmlog';
+import { hasUnicode } from '@lerna-lite/npmlog';
 import columnify from 'columnify';
-import hasUnicode from 'has-unicode';
 import c from 'tinyrainbow';
 
 import type { Tarball } from '../interfaces.js';

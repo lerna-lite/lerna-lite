@@ -34,7 +34,6 @@
   "dependencies": {
     "aproba": "^2.1.0",
     "fast-string-width": "^3.0.2",
-    "has-unicode": "catalog:",
     "signal-exit": "^4.1.0",
     "tinyrainbow": "catalog:dependencies"
   },
