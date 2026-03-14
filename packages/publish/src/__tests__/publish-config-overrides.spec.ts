@@ -1,16 +1,13 @@
 import { dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
 
-import type { PublishCommandOption } from '@lerna-lite/core';
+import { writePackage, type PublishCommandOption } from '@lerna-lite/core';
 import { gitAdd, gitCommit, gitTag, initFixtureFactory } from '@lerna-test/helpers';
 import { outputFile } from 'fs-extra/esm';
 import { describe, expect, it, vi } from 'vitest';
-import * as writePkg from 'write-package';
 import yargParser from 'yargs-parser';
 
 import { PublishCommand } from '../index.js';
-
-vi.mock('write-package', async () => await vi.importActual('../../../version/src/lib/__mocks__/write-package'));
 
 // FIXME: better mock for version command
 vi.mock('../../../version/src/lib/git-push', async () => await vi.importActual<any>('../../../version/src/lib/__mocks__/git-push'));
@@ -39,6 +36,7 @@ vi.mock('@lerna-lite/core', async () => ({
   promptConfirmation: (await vi.importActual<any>('../../../core/src/__mocks__/prompt')).promptConfirmation,
   promptSelectOne: (await vi.importActual<any>('../../../core/src/__mocks__/prompt')).promptSelectOne,
   promptTextInput: (await vi.importActual<any>('../../../core/src/__mocks__/prompt')).promptTextInput,
+  writePackage: (await vi.importActual<any>('../../../core/src/__mocks__/write-package')).writePackage,
 }));
 
 // also point to the local publish command so that all mocks are properly used even by the command-runner
@@ -84,13 +82,13 @@ describe('publishConfig overrides', () => {
     await setupChanges(cwd);
     await new PublishCommand(createArgv(cwd, '--bump', 'patch', '--yes'));
 
-    expect((writePkg as any).updatedVersions()).toEqual({
+    expect((writePackage as any).updatedVersions()).toEqual({
       'package-1': '1.0.1',
       'package-2': '1.0.1',
       'package-3': '1.0.1',
     });
 
-    expect((writePkg as any).updatedManifest('package-1')).toEqual({
+    expect((writePackage as any).updatedManifest('package-1')).toEqual({
       gitHead: expect.any(String),
       name: 'package-1',
       main: 'dist/index.js',
@@ -99,7 +97,7 @@ describe('publishConfig overrides', () => {
       version: '1.0.1',
     });
 
-    expect((writePkg as any).updatedManifest('package-2')).toEqual({
+    expect((writePackage as any).updatedManifest('package-2')).toEqual({
       gitHead: expect.any(String),
       name: 'package-2',
       bin: './build/bin.js',
@@ -119,9 +117,9 @@ describe('publishConfig overrides', () => {
       version: '1.0.1',
     });
     // publishConfig should be removed from package-2 since every fields were used as overrides
-    expect((writePkg as any).updatedManifest('package-2')).not.toEqual(expect.objectContaining({ publishConfig: expect.anything() }));
+    expect((writePackage as any).updatedManifest('package-2')).not.toEqual(expect.objectContaining({ publishConfig: expect.anything() }));
 
-    expect((writePkg as any).updatedManifest('package-3').publishConfig).toBeUndefined();
+    expect((writePackage as any).updatedManifest('package-3').publishConfig).toBeUndefined();
   });
 
   it('should not override anything and leave publishConfig untouched when --no-publish-config-overrides is provided', async () => {
@@ -131,13 +129,13 @@ describe('publishConfig overrides', () => {
     await setupChanges(cwd);
     await new PublishCommand(createArgv(cwd, '--bump', 'patch', '--yes', '--no-publish-config-overrides'));
 
-    expect((writePkg as any).updatedVersions()).toEqual({
+    expect((writePackage as any).updatedVersions()).toEqual({
       'package-1': '1.0.1',
       'package-2': '1.0.1',
       'package-3': '1.0.1',
     });
 
-    expect((writePkg as any).updatedManifest('package-1')).toEqual({
+    expect((writePackage as any).updatedManifest('package-1')).toEqual({
       gitHead: expect.any(String),
       name: 'package-1',
       main: './src/index.ts',
@@ -149,7 +147,7 @@ describe('publishConfig overrides', () => {
       typings: './src/index.d.ts',
       version: '1.0.1',
     });
-    expect((writePkg as any).updatedManifest('package-2')).toEqual({
+    expect((writePackage as any).updatedManifest('package-2')).toEqual({
       gitHead: expect.any(String),
       name: 'package-2',
       dependencies: {

@@ -58,7 +58,6 @@
     "tinyrainbow": "catalog:dependencies",
     "write-file-atomic": "^7.0.1",
     "write-json-file": "catalog:dependencies",
-    "write-package": "catalog:dependencies",
     "yaml": "catalog:dependencies",
     "zeptomatch": "catalog:dependencies"
   },

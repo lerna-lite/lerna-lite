@@ -1,14 +1,12 @@
 import { dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
 
+import { writePackage } from '@lerna-lite/core';
 import { commandRunner, gitAdd, gitCommit, gitTag, initFixtureFactory, updateLernaConfig } from '@lerna-test/helpers';
 import { outputFile } from 'fs-extra/esm';
 import { describe, expect, it, vi } from 'vitest';
-import * as writePkg from 'write-package';
 
 import cliCommands from '../../../cli/src/cli-commands/cli-publish-commands.js';
-
-vi.mock('write-package', async () => await vi.importActual('../../../version/src/lib/__mocks__/write-package'));
 
 // FIXME: better mock for version command
 vi.mock('../../../version/src/lib/git-push', async () => await vi.importActual('../../../version/src/lib/__mocks__/git-push'));
@@ -33,6 +31,7 @@ vi.mock('@lerna-lite/core', async () => ({
   promptSelectOne: (await vi.importActual<any>('../../../core/src/__mocks__/prompt')).promptSelectOne,
   promptTextInput: (await vi.importActual<any>('../../../core/src/__mocks__/prompt')).promptTextInput,
   throwIfUncommitted: (await vi.importActual<any>('../../../core/src/__mocks__/check-working-tree')).throwIfUncommitted,
+  writePackage: (await vi.importActual<any>('../../../core/src/__mocks__/write-package')).writePackage,
 }));
 
 // also point to the local publish command so that all mocks are properly used even by the command-runner
@@ -68,11 +67,11 @@ describe('publish --remove-package-fields', () => {
       await setupChanges(cwd);
       await lernaPublish(cwd)('--strip-package-keys', 'browser');
 
-      const publishPkg1 = (writePkg as any).updatedManifest('package-1');
-      const publishPkg2 = (writePkg as any).updatedManifest('package-2');
-      const publishPkg3 = (writePkg as any).updatedManifest('package-3');
-      const publishPkg4 = (writePkg as any).updatedManifest('package-4');
-      const publishPkg5 = (writePkg as any).updatedManifest('package-5');
+      const publishPkg1 = (writePackage as any).updatedManifest('package-1');
+      const publishPkg2 = (writePackage as any).updatedManifest('package-2');
+      const publishPkg3 = (writePackage as any).updatedManifest('package-3');
+      const publishPkg4 = (writePackage as any).updatedManifest('package-4');
+      const publishPkg5 = (writePackage as any).updatedManifest('package-5');
 
       expect(publishPkg1.browser).toBeUndefined();
       expect(publishPkg2.browser).toBeUndefined();
@@ -85,7 +84,7 @@ describe('publish --remove-package-fields', () => {
       const cwd = await initFixture('strip-pkg-keys');
       await lernaPublish(cwd)();
 
-      const devDeps = (writePkg as any).updatedManifest('package-5').devDependencies;
+      const devDeps = (writePackage as any).updatedManifest('package-5').devDependencies;
       expect(devDeps).toEqual({ jest: '^29.0.0', 'tiny-tarball': '^1.0.0' });
     });
 
@@ -93,7 +92,7 @@ describe('publish --remove-package-fields', () => {
       const cwd = await initFixture('strip-pkg-keys');
       await lernaPublish(cwd)();
 
-      const devDeps = (writePkg as any).updatedManifest('package-5').devDependencies;
+      const devDeps = (writePackage as any).updatedManifest('package-5').devDependencies;
       expect(devDeps).toEqual({ jest: '^29.0.0', 'tiny-tarball': '^1.0.0' });
     });
 
@@ -101,7 +100,7 @@ describe('publish --remove-package-fields', () => {
       const cwd = await initFixture('strip-pkg-keys');
       await lernaPublish(cwd)('--strip-package-keys', 'devDependencies.jest');
 
-      const devDeps = (writePkg as any).updatedManifest('package-5').devDependencies;
+      const devDeps = (writePackage as any).updatedManifest('package-5').devDependencies;
       expect(devDeps).toEqual({ 'tiny-tarball': '^1.0.0' });
     });
 
@@ -112,7 +111,7 @@ describe('publish --remove-package-fields', () => {
       await setupChanges(cwd);
       await lernaPublish(cwd)('--strip-package-keys', 'devDependencies.jest', 'scripts.build:dev', 'exports.index.types');
 
-      const publishPkg5 = (writePkg as any).updatedManifest('package-5');
+      const publishPkg5 = (writePackage as any).updatedManifest('package-5');
       expect(publishPkg5.devDependencies).toEqual({ 'tiny-tarball': '^1.0.0' });
       expect(publishPkg5.scripts).toEqual({ build: 'tsc --project tsconfig.json' });
       expect(publishPkg5.exports).toEqual({
@@ -130,12 +129,12 @@ describe('publish --remove-package-fields', () => {
       await setupChanges(cwd);
       await lernaPublish(cwd)('--strip-package-keys', 'scripts');
 
-      const publishPkg1 = (writePkg as any).updatedManifest('package-1');
-      const publishPkg2 = (writePkg as any).updatedManifest('package-2');
-      const publishPkg3 = (writePkg as any).updatedManifest('package-3');
-      const publishPkg4 = (writePkg as any).updatedManifest('package-4');
-      const publishPkg5 = (writePkg as any).updatedManifest('package-5');
-      const publishPkg6 = (writePkg as any).updatedManifest('package-6');
+      const publishPkg1 = (writePackage as any).updatedManifest('package-1');
+      const publishPkg2 = (writePackage as any).updatedManifest('package-2');
+      const publishPkg3 = (writePackage as any).updatedManifest('package-3');
+      const publishPkg4 = (writePackage as any).updatedManifest('package-4');
+      const publishPkg5 = (writePackage as any).updatedManifest('package-5');
+      const publishPkg6 = (writePackage as any).updatedManifest('package-6');
 
       expect(publishPkg1.scripts).toEqual({
         prepack: 'echo from prepack-1',
@@ -169,11 +168,11 @@ describe('publish --remove-package-fields', () => {
       await setupChanges(cwd);
       await lernaPublish(cwd)();
 
-      const publishPkg1 = (writePkg as any).updatedManifest('package-1');
-      const publishPkg2 = (writePkg as any).updatedManifest('package-2');
-      const publishPkg3 = (writePkg as any).updatedManifest('package-3');
-      const publishPkg4 = (writePkg as any).updatedManifest('package-4');
-      const publishPkg5 = (writePkg as any).updatedManifest('package-5');
+      const publishPkg1 = (writePackage as any).updatedManifest('package-1');
+      const publishPkg2 = (writePackage as any).updatedManifest('package-2');
+      const publishPkg3 = (writePackage as any).updatedManifest('package-3');
+      const publishPkg4 = (writePackage as any).updatedManifest('package-4');
+      const publishPkg5 = (writePackage as any).updatedManifest('package-5');
 
       expect(publishPkg1.browser).toBeUndefined();
       expect(publishPkg2.browser).toBeUndefined();
@@ -197,11 +196,11 @@ describe('publish --remove-package-fields', () => {
       await setupChanges(cwd);
       await lernaPublish(cwd)();
 
-      const publishPkg1 = (writePkg as any).updatedManifest('package-1');
-      const publishPkg2 = (writePkg as any).updatedManifest('package-2');
-      const publishPkg3 = (writePkg as any).updatedManifest('package-3');
-      const publishPkg4 = (writePkg as any).updatedManifest('package-4');
-      const publishPkg5 = (writePkg as any).updatedManifest('package-5');
+      const publishPkg1 = (writePackage as any).updatedManifest('package-1');
+      const publishPkg2 = (writePackage as any).updatedManifest('package-2');
+      const publishPkg3 = (writePackage as any).updatedManifest('package-3');
+      const publishPkg4 = (writePackage as any).updatedManifest('package-4');
+      const publishPkg5 = (writePackage as any).updatedManifest('package-5');
 
       expect(publishPkg1.browser).toBeUndefined();
       expect(publishPkg2.browser).toBeUndefined();
@@ -225,11 +224,11 @@ describe('publish --remove-package-fields', () => {
       await setupChanges(cwd);
       await lernaPublish(cwd)();
 
-      const publishPkg1 = (writePkg as any).updatedManifest('package-1');
-      const publishPkg2 = (writePkg as any).updatedManifest('package-2');
-      const publishPkg3 = (writePkg as any).updatedManifest('package-3');
-      const publishPkg4 = (writePkg as any).updatedManifest('package-4');
-      const publishPkg5 = (writePkg as any).updatedManifest('package-5');
+      const publishPkg1 = (writePackage as any).updatedManifest('package-1');
+      const publishPkg2 = (writePackage as any).updatedManifest('package-2');
+      const publishPkg3 = (writePackage as any).updatedManifest('package-3');
+      const publishPkg4 = (writePackage as any).updatedManifest('package-4');
+      const publishPkg5 = (writePackage as any).updatedManifest('package-5');
 
       expect(publishPkg1.devDependencies).toBeUndefined();
       expect(publishPkg1.scripts).toEqual({

@@ -6,13 +6,13 @@ import { log } from '@lerna-lite/npmlog';
 import { loadJsonFile, loadJsonFileSync } from 'load-json-file';
 import npa from 'npm-package-arg';
 import { describe, expect, it, vi, type Mock } from 'vitest';
-import { writePackage } from 'write-package';
 
 import type { NpaResolveResult, RawManifest } from '../models/interfaces.js';
 import { Package } from '../package.js';
+import { writePackage } from '../utils/write-package.js';
 
 vi.mock('load-json-file');
-vi.mock('write-package');
+vi.mock('../utils/write-package.js');
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);

@@ -67,7 +67,6 @@
     "@types/semver": "catalog:devDependencies",
     "@types/yargs-parser": "catalog:devDependencies",
     "execa": "catalog:",
-    "write-package": "catalog:dependencies",
     "yaml": "catalog:dependencies",
     "yargs": "catalog:dependencies",
     "yargs-parser": "catalog:devDependencies"

@@ -11,8 +11,6 @@ import type { npmPublish as npmPublishMock } from '../lib/__mocks__/npm-publish.
 import { npmPublish } from '../lib/npm-publish.js';
 import { PublishCommand } from '../publish-command.js';
 
-vi.mock('write-package', async () => await vi.importActual('../../../version/src/lib/__mocks__/write-package'));
-
 // FIXME: better mock for version command
 vi.mock('../../../version/src/lib/git-push', async () => await vi.importActual('../../../version/src/lib/__mocks__/git-push'));
 vi.mock(
@@ -36,6 +34,7 @@ vi.mock('@lerna-lite/core', async () => ({
   logOutput: (await vi.importActual<any>('../../../core/src/__mocks__/output')).logOutput,
   promptConfirmation: (await vi.importActual<any>('../../../core/src/__mocks__/prompt')).promptConfirmation,
   throwIfUncommitted: (await vi.importActual<any>('../../../core/src/__mocks__/check-working-tree')).throwIfUncommitted,
+  writePackage: (await vi.importActual<any>('../../../core/src/__mocks__/write-package')).writePackage,
 }));
 
 // local modules _must_ be explicitly mocked

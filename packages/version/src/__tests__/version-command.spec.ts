@@ -9,6 +9,7 @@ import {
   promptConfirmation,
   promptSelectOne,
   throwIfUncommitted,
+  writePackage,
   type VersionCommandOption,
 } from '@lerna-lite/core';
 import { commandRunner, getCommitMessage, gitAdd, gitCommit, gitTag, initFixtureFactory, showCommit, stripAnsi } from '@lerna-test/helpers';
@@ -17,7 +18,6 @@ import gitSHA from '@lerna-test/helpers/serializers/serialize-git-sha.js';
 import { execa } from 'execa';
 import { outputFile, outputJson } from 'fs-extra/esm';
 import { describe, expect, it, vi, type Mock } from 'vitest';
-import * as writePkg from 'write-package';
 import { parse } from 'yaml';
 import yargParser from 'yargs-parser';
 
@@ -60,9 +60,9 @@ vi.mock('@lerna-lite/core', async (coreOriginal) => ({
   throwIfUncommitted: (await vi.importActual<any>('../../../core/src/__mocks__/check-working-tree')).throwIfUncommitted,
   npmConf: (await vi.importActual<any>('../../../core/src/utils/npm-conf')).npmConf,
   writeLogFile: (await vi.importActual<any>('../../../core/src/utils/write-log-file')).writeLogFile,
+  writePackage: (await vi.importActual<any>('../../../core/src/__mocks__/write-package')).writePackage,
   QueryGraph: (await vi.importActual<any>('../../../core/src/utils/query-graph')).QueryGraph,
 }));
-vi.mock('write-package', async () => await vi.importActual('../lib/__mocks__/write-package'));
 
 // test command
 const __filename = fileURLToPath(import.meta.url);
@@ -115,7 +115,7 @@ describe('VersionCommand', () => {
       expect((promptSelectOne as Mock).mock.calls).toMatchSnapshot('prompt');
       expect(promptConfirmation).toHaveBeenLastCalledWith('Are you sure you want to create these versions?');
 
-      expect((writePkg as any).updatedManifest('package-1')).toMatchSnapshot('gitHead');
+      expect((writePackage as any).updatedManifest('package-1')).toMatchSnapshot('gitHead');
 
       const patch = await showCommit(testDir);
       expect(patch).toMatchSnapshot('commit');
@@ -142,7 +142,7 @@ describe('VersionCommand', () => {
       expect((promptSelectOne as any).mock.calls).toMatchSnapshot('prompt');
       expect(stripAnsi((promptConfirmation as Mock).mock.lastCall![0])).toBe('[dry-run] Are you sure you want to create these versions?');
 
-      expect((writePkg as any).updatedManifest('package-1')).toMatchSnapshot('gitHead');
+      expect((writePackage as any).updatedManifest('package-1')).toMatchSnapshot('gitHead');
 
       const patch = await showCommit(testDir);
       expect(patch).toMatchSnapshot('commit');
@@ -169,7 +169,7 @@ describe('VersionCommand', () => {
       expect((promptSelectOne as Mock).mock.calls).toMatchSnapshot('prompt');
       expect(promptConfirmation).toHaveBeenLastCalledWith('Are you sure you want to publish these packages?');
 
-      expect((writePkg as any).updatedManifest('package-1')).toMatchSnapshot('gitHead');
+      expect((writePackage as any).updatedManifest('package-1')).toMatchSnapshot('gitHead');
 
       const patch = await showCommit(testDir);
       expect(patch).toMatchSnapshot('commit');
@@ -196,7 +196,7 @@ describe('VersionCommand', () => {
       expect((promptSelectOne as Mock).mock.calls).toMatchSnapshot('prompt');
       expect(stripAnsi((promptConfirmation as Mock).mock.lastCall![0])).toBe('[dry-run] Are you sure you want to publish these packages?');
 
-      expect((writePkg as any).updatedManifest('package-1')).toMatchSnapshot('gitHead');
+      expect((writePackage as any).updatedManifest('package-1')).toMatchSnapshot('gitHead');
 
       const patch = await showCommit(testDir);
       expect(patch).toMatchSnapshot('commit');
@@ -369,7 +369,7 @@ describe('VersionCommand', () => {
 
       expect(promptConfirmation).toHaveBeenCalled();
 
-      expect((writePkg as any).updatedManifest('package-1')).toMatchSnapshot('gitHead');
+      expect((writePackage as any).updatedManifest('package-1')).toMatchSnapshot('gitHead');
 
       const patch = await showCommit(testDir);
       expect(patch).toMatchSnapshot('commit');
@@ -399,7 +399,7 @@ describe('VersionCommand', () => {
 
       expect(promptConfirmation).toHaveBeenCalled();
 
-      expect((writePkg as any).updatedManifest('package-1')).toMatchSnapshot('gitHead');
+      expect((writePackage as any).updatedManifest('package-1')).toMatchSnapshot('gitHead');
 
       const patch = await showCommit(testDir);
       expect(patch).toMatchSnapshot('commit');
@@ -454,7 +454,7 @@ describe('VersionCommand', () => {
       const testDir = await initFixture('normal');
       await new VersionCommand(createArgv(testDir, '--no-git-tag-version'));
 
-      expect((writePkg as any).updatedManifest('package-1')).toMatchSnapshot('gitHead');
+      expect((writePackage as any).updatedManifest('package-1')).toMatchSnapshot('gitHead');
 
       expect(libPush).not.toHaveBeenCalled();
 
@@ -476,7 +476,7 @@ describe('VersionCommand', () => {
       const testDir = await initFixture('normal');
       await new VersionCommand(createArgv(testDir, '--no-git-tag-version', '--push-tags-one-by-one'));
 
-      expect((writePkg as any).updatedManifest('package-1')).toMatchSnapshot('gitHead');
+      expect((writePackage as any).updatedManifest('package-1')).toMatchSnapshot('gitHead');
 
       expect(libPushSingleTag).not.toHaveBeenCalled();
 
@@ -874,7 +874,7 @@ describe('VersionCommand', () => {
     it('ignores private packages with no version', async () => {
       const testDir = await initFixture('not-versioned-private');
       await new VersionCommand(createArgv(testDir));
-      expect(Object.keys((writePkg as any).updatedVersions())).not.toContain('package-4');
+      expect(Object.keys((writePackage as any).updatedVersions())).not.toContain('package-4');
     });
   });
 
@@ -1128,7 +1128,7 @@ describe('VersionCommand', () => {
       await setupChanges(testDir);
       await new VersionCommand(createArgv(testDir, '--bump', 'major', '--yes'));
 
-      expect((writePkg as any).updatedVersions()).toEqual({
+      expect((writePackage as any).updatedVersions()).toEqual({
         'package-1': '2.0.0',
         'package-2': '2.0.0',
         'package-3': '2.0.0',
@@ -1139,16 +1139,16 @@ describe('VersionCommand', () => {
       });
 
       // package-1 has no relative file: dependencies
-      expect((writePkg as any).updatedManifest('package-2').dependencies).toMatchObject({
+      expect((writePackage as any).updatedManifest('package-2').dependencies).toMatchObject({
         'package-1': 'file:../package-1',
       });
-      expect((writePkg as any).updatedManifest('package-3').dependencies).toMatchObject({
+      expect((writePackage as any).updatedManifest('package-3').dependencies).toMatchObject({
         'package-2': 'file:../package-2',
       });
-      expect((writePkg as any).updatedManifest('package-4').optionalDependencies).toMatchObject({
+      expect((writePackage as any).updatedManifest('package-4').optionalDependencies).toMatchObject({
         'package-3': 'file:../package-3',
       });
-      expect((writePkg as any).updatedManifest('package-5').dependencies).toMatchObject({
+      expect((writePackage as any).updatedManifest('package-5').dependencies).toMatchObject({
         'package-4': 'file:../package-4',
         'package-6': 'file:../package-6',
       });
@@ -1185,7 +1185,7 @@ describe('VersionCommand', () => {
 
       const changedFiles = await showCommit(cwd, '--name-only');
       expect(changedFiles).toContain('package-lock.json');
-      expect((writePkg as any).updatedVersions()).toEqual({
+      expect((writePackage as any).updatedVersions()).toEqual({
         '@my-workspace/package-1': '3.0.0',
         '@my-workspace/package-2': '3.0.0',
       });
@@ -1242,7 +1242,7 @@ describe('VersionCommand', () => {
 
         const changedFiles = await showCommit(cwd, '--name-only');
         expect(changedFiles).toContain('pnpm-lock.yaml');
-        expect((writePkg as any).updatedVersions()).toEqual({
+        expect((writePackage as any).updatedVersions()).toEqual({
           '@my-workspace/package-1': '2.4.0',
           '@my-workspace/package-2': '2.4.0',
           '@my-workspace/package-3': '2.4.0',

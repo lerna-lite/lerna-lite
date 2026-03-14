@@ -1,11 +1,10 @@
 import { dirname, join, resolve as pathResolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
 
-import { collectUpdates, type VersionCommandOption } from '@lerna-lite/core';
+import { collectUpdates, writePackage, type VersionCommandOption } from '@lerna-lite/core';
 import { initFixtureFactory, showCommit } from '@lerna-test/helpers';
 import semver from 'semver';
 import { describe, expect, it, vi, type Mock } from 'vitest';
-import * as writePkg from 'write-package';
 import yargParser from 'yargs-parser';
 
 import { recommendVersion } from '../conventional-commits/recommend-version.js';
@@ -20,7 +19,6 @@ vi.mock('../lib/remote-branch-exists', async () => await vi.importActual('../lib
 vi.mock('../git-clients/gitlab-client', async () => await vi.importActual<any>('../__mocks__/gitlab-client'));
 vi.mock('../conventional-commits/recommend-version', async () => await vi.importActual('../__mocks__/conventional-commits/recommend-version'));
 vi.mock('../conventional-commits/update-changelog', async () => await vi.importActual('../__mocks__/conventional-commits/update-changelog'));
-vi.mock('write-package', async () => await vi.importActual('../lib/__mocks__/write-package'));
 
 vi.mock('@lerna-lite/core', async () => ({
   ...(await vi.importActual<any>('@lerna-lite/core')),
@@ -34,6 +32,7 @@ vi.mock('@lerna-lite/core', async () => ({
   checkWorkingTree: (await vi.importActual<any>('../../../core/src/__mocks__/check-working-tree')).checkWorkingTree,
   throwIfReleased: (await vi.importActual<any>('../../../core/src/__mocks__/check-working-tree')).throwIfReleased,
   throwIfUncommitted: (await vi.importActual<any>('../../../core/src/__mocks__/check-working-tree')).throwIfUncommitted,
+  writePackage: (await vi.importActual<any>('../../../core/src/__mocks__/write-package')).writePackage,
 }));
 
 expect.addSnapshotSerializer({
@@ -554,20 +553,20 @@ describe('version --conventional-commits', () => {
 
     await new VersionCommand(createArgv(cwd, '--conventional-commits'));
 
-    expect((writePkg as any).updatedVersions()).toEqual({
+    expect((writePackage as any).updatedVersions()).toEqual({
       'package-1': '1.1.0',
     });
 
     // clear previous publish mock records
     vi.clearAllMocks();
-    (writePkg as any).registry.clear();
+    (writePackage as any).registry.clear();
 
     (collectUpdates as any).setUpdated(cwd, 'package-2');
     (recommendVersion as Mock).mockImplementationOnce((pkg) => Promise.resolve((semver as any).inc(pkg.version, 'patch')));
 
     await new VersionCommand(createArgv(cwd, '--conventional-commits'));
 
-    expect((writePkg as any).updatedVersions()).toEqual({
+    expect((writePackage as any).updatedVersions()).toEqual({
       'package-2': '1.1.1',
     });
   });

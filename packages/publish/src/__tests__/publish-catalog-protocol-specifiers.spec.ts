@@ -1,16 +1,13 @@
 import { dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
 
-import type { PublishCommandOption } from '@lerna-lite/core';
+import { writePackage, type PublishCommandOption } from '@lerna-lite/core';
 import { gitAdd, gitCommit, gitTag, initFixtureFactory } from '@lerna-test/helpers';
 import { outputFile } from 'fs-extra/esm';
 import { describe, expect, it, vi } from 'vitest';
-import * as writePkg from 'write-package';
 import yargParser from 'yargs-parser';
 
 import { PublishCommand } from '../index.js';
-
-vi.mock('write-package', async () => await vi.importActual('../../../version/src/lib/__mocks__/write-package'));
 
 // FIXME: better mock for version command
 vi.mock('../../../version/src/lib/git-push', async () => await vi.importActual<any>('../../../version/src/lib/__mocks__/git-push'));
@@ -39,6 +36,7 @@ vi.mock('@lerna-lite/core', async () => ({
   promptConfirmation: (await vi.importActual<any>('../../../core/src/__mocks__/prompt')).promptConfirmation,
   promptSelectOne: (await vi.importActual<any>('../../../core/src/__mocks__/prompt')).promptSelectOne,
   promptTextInput: (await vi.importActual<any>('../../../core/src/__mocks__/prompt')).promptTextInput,
+  writePackage: (await vi.importActual<any>('../../../core/src/__mocks__/write-package')).writePackage,
 }));
 
 // also point to the local publish command so that all mocks are properly used even by the command-runner
@@ -83,7 +81,7 @@ describe("catalog protocol 'catalog:' specifiers", () => {
     await setupChanges(cwd);
     await new PublishCommand(createArgv(cwd, '--bump', 'major', '--yes'));
 
-    expect((writePkg as any).updatedVersions()).toEqual({
+    expect((writePackage as any).updatedVersions()).toEqual({
       'package-1': '2.0.0',
       'package-2': '2.0.0',
       'package-3': '2.0.0',
@@ -91,45 +89,45 @@ describe("catalog protocol 'catalog:' specifiers", () => {
       'package-5': '2.0.0',
     });
 
-    expect((writePkg as any).updatedManifest('package-1').dependencies).toMatchObject({
+    expect((writePackage as any).updatedManifest('package-1').dependencies).toMatchObject({
       'fs-extra': '^11.2.0', // catalog:
       tinyrainbow: '^2.0.0', // catalog:
       'tiny-tarball': '^1.0.0',
     });
-    expect((writePkg as any).updatedManifest('package-2').dependencies).toMatchObject({
+    expect((writePackage as any).updatedManifest('package-2').dependencies).toMatchObject({
       'package-1': '^2.0.0', // catalog:
       tinyrainbow: '^2.0.0',
     });
-    expect((writePkg as any).updatedManifest('package-2').peerDependencies).toMatchObject({
+    expect((writePackage as any).updatedManifest('package-2').peerDependencies).toMatchObject({
       'package-1': '^2.0.0',
       react: '^18.0.0',
       'react-dom': '^18.0.0',
     });
-    expect((writePkg as any).updatedManifest('package-2').devDependencies).toMatchObject({
+    expect((writePackage as any).updatedManifest('package-2').devDependencies).toMatchObject({
       react: '^18.2.0',
       'react-dom': '^18.2.0',
       tinyrainbow: '^2.0.0',
     });
-    expect((writePkg as any).updatedManifest('package-3').dependencies).toMatchObject({
+    expect((writePackage as any).updatedManifest('package-3').dependencies).toMatchObject({
       'fs-extra': '^11.2.0', // catalog:
       'p-map': '^7.0.3', // catalog:
       tinyrainbow: '^2.0.0',
     });
-    expect((writePkg as any).updatedManifest('package-4').dependencies).toMatchObject({
+    expect((writePackage as any).updatedManifest('package-4').dependencies).toMatchObject({
       'fs-extra': '^11.2.0', // catalog:
       'p-map': '^7.0.3', // catalog:
     });
-    expect((writePkg as any).updatedManifest('package-4').peerDependencies).toMatchObject({
+    expect((writePackage as any).updatedManifest('package-4').peerDependencies).toMatchObject({
       'fs-extra': '^11.2.0',
     });
-    expect((writePkg as any).updatedManifest('package-4').devDependencies).toMatchObject({
+    expect((writePackage as any).updatedManifest('package-4').devDependencies).toMatchObject({
       react: '^17.0.2',
       'react-dom': '^17.0.2',
     });
-    expect((writePkg as any).updatedManifest('package-5').dependencies).toMatchObject({
+    expect((writePackage as any).updatedManifest('package-5').dependencies).toMatchObject({
       tinyrainbow: '^2.0.0', // catalog:
     });
-    expect((writePkg as any).updatedManifest('package-5').peerDependencies).toMatchObject({
+    expect((writePackage as any).updatedManifest('package-5').peerDependencies).toMatchObject({
       tinyrainbow: '2.0.0',
     });
   });

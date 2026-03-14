@@ -1,17 +1,14 @@
 import { dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
 
-import type { PublishCommandOption } from '@lerna-lite/core';
+import { writePackage, type PublishCommandOption } from '@lerna-lite/core';
 import { log } from '@lerna-lite/npmlog';
 import { gitAdd, gitCommit, gitTag, initFixtureFactory } from '@lerna-test/helpers';
 import { outputFile } from 'fs-extra/esm';
 import { describe, expect, it, vi } from 'vitest';
-import * as writePkg from 'write-package';
 import yargParser from 'yargs-parser';
 
 import { PublishCommand } from '../index.js';
-
-vi.mock('write-package', async () => await vi.importActual('../../../version/src/lib/__mocks__/write-package'));
 
 // FIXME: better mock for version command
 vi.mock('../../../version/src/lib/git-push', async () => await vi.importActual<any>('../../../version/src/lib/__mocks__/git-push'));
@@ -40,6 +37,7 @@ vi.mock('@lerna-lite/core', async () => ({
   promptConfirmation: (await vi.importActual<any>('../../../core/src/__mocks__/prompt')).promptConfirmation,
   promptSelectOne: (await vi.importActual<any>('../../../core/src/__mocks__/prompt')).promptSelectOne,
   promptTextInput: (await vi.importActual<any>('../../../core/src/__mocks__/prompt')).promptTextInput,
+  writePackage: (await vi.importActual<any>('../../../core/src/__mocks__/write-package')).writePackage,
 }));
 
 // also point to the local publish command so that all mocks are properly used even by the command-runner
@@ -84,7 +82,7 @@ describe("workspace protocol 'workspace:' specifiers", () => {
     await setupChanges(cwd);
     await new PublishCommand(createArgv(cwd, '--bump', 'minor', '--yes', '--allow-peer-dependencies-update'));
 
-    expect((writePkg as any).updatedVersions()).toEqual({
+    expect((writePackage as any).updatedVersions()).toEqual({
       'package-1': '1.1.0',
       'package-2': '1.1.0',
       'package-3': '1.1.0',
@@ -95,44 +93,44 @@ describe("workspace protocol 'workspace:' specifiers", () => {
     });
 
     // notably missing is package-1, which has no relative file: dependencies
-    expect((writePkg as any).updatedManifest('package-2').dependencies).toMatchObject({
+    expect((writePackage as any).updatedManifest('package-2').dependencies).toMatchObject({
       'package-1': '1.1.0', // workspace:*
     });
-    expect((writePkg as any).updatedManifest('package-2').peerDependencies).toMatchObject({
+    expect((writePackage as any).updatedManifest('package-2').peerDependencies).toMatchObject({
       // peer deps should be bumped to a fixed minor version
       'package-1': '1.1.0', // workspace:*
     });
-    expect((writePkg as any).updatedManifest('package-3').dependencies).toMatchObject({
+    expect((writePackage as any).updatedManifest('package-3').dependencies).toMatchObject({
       'package-2': '^1.1.0', // workspace:^
     });
-    expect((writePkg as any).updatedManifest('package-3').peerDependencies).toMatchObject({
+    expect((writePackage as any).updatedManifest('package-3').peerDependencies).toMatchObject({
       // peer deps should be bumped to a minor with ^ spec
       'package-2': '^1.1.0', // workspace:^
     });
-    expect((writePkg as any).updatedManifest('package-4').optionalDependencies).toMatchObject({
+    expect((writePackage as any).updatedManifest('package-4').optionalDependencies).toMatchObject({
       'package-3': '~1.1.0', // workspace:~
     });
-    expect((writePkg as any).updatedManifest('package-5').dependencies).toMatchObject({
+    expect((writePackage as any).updatedManifest('package-5').dependencies).toMatchObject({
       // all fixed versions are bumped when minor
       'package-4': '>=1.0.0', // workspace:>=1.0.0, semver range are never bumped
       'package-6': '~1.1.0', // workspace:~1.0.0
     });
-    expect((writePkg as any).updatedManifest('package-5').peerDependencies).toMatchObject({
+    expect((writePackage as any).updatedManifest('package-5').peerDependencies).toMatchObject({
       // peer dependencies without operator range will be bumped with the flag enabled
       'package-4': '>=1.0.0', // workspace:>=1.0.0, range shouldn't be bumped
       'package-6': '~1.1.0', // workspace:~1.0.0
     });
-    expect((writePkg as any).updatedManifest('package-6').dependencies).toMatchObject({
+    expect((writePackage as any).updatedManifest('package-6').dependencies).toMatchObject({
       'package-1': '>=1.0.0', // workspace:>=1.0.0, range shouldn't be bumped
     });
-    expect((writePkg as any).updatedManifest('package-6').peerDependencies).toMatchObject({
+    expect((writePackage as any).updatedManifest('package-6').peerDependencies).toMatchObject({
       'package-1': '>=1.0.0', // workspace:>=1.0.0
     });
     // private packages do not need local version resolution
-    expect((writePkg as any).updatedManifest('package-7').dependencies).toMatchObject({
+    expect((writePackage as any).updatedManifest('package-7').dependencies).toMatchObject({
       'package-1': '^1.1.0',
     });
-    expect((writePkg as any).updatedManifest('package-7').peerDependencies).toMatchObject({
+    expect((writePackage as any).updatedManifest('package-7').peerDependencies).toMatchObject({
       'package-2': '^1.1.0',
       'package-3': '>=1.0.0',
     });
@@ -145,7 +143,7 @@ describe("workspace protocol 'workspace:' specifiers", () => {
     await setupChanges(cwd);
     await new PublishCommand(createArgv(cwd, '--bump', 'major', '--yes', '--allow-peer-dependencies-update'));
 
-    expect((writePkg as any).updatedVersions()).toEqual({
+    expect((writePackage as any).updatedVersions()).toEqual({
       'package-1': '2.0.0',
       'package-2': '2.0.0',
       'package-3': '2.0.0',
@@ -156,42 +154,42 @@ describe("workspace protocol 'workspace:' specifiers", () => {
     });
 
     // notably missing is package-1, which has no relative file: dependencies
-    expect((writePkg as any).updatedManifest('package-2').dependencies).toMatchObject({
+    expect((writePackage as any).updatedManifest('package-2').dependencies).toMatchObject({
       'package-1': '2.0.0', // workspace:*
     });
-    expect((writePkg as any).updatedManifest('package-2').peerDependencies).toMatchObject({
+    expect((writePackage as any).updatedManifest('package-2').peerDependencies).toMatchObject({
       'package-1': '2.0.0', // workspace:*
     });
-    expect((writePkg as any).updatedManifest('package-3').dependencies).toMatchObject({
+    expect((writePackage as any).updatedManifest('package-3').dependencies).toMatchObject({
       'package-2': '^2.0.0', // workspace:^
     });
-    expect((writePkg as any).updatedManifest('package-3').peerDependencies).toMatchObject({
+    expect((writePackage as any).updatedManifest('package-3').peerDependencies).toMatchObject({
       'package-2': '^2.0.0', // workspace:^
     });
-    expect((writePkg as any).updatedManifest('package-4').optionalDependencies).toMatchObject({
+    expect((writePackage as any).updatedManifest('package-4').optionalDependencies).toMatchObject({
       'package-3': '~2.0.0', // workspace:~
     });
-    expect((writePkg as any).updatedManifest('package-5').dependencies).toMatchObject({
+    expect((writePackage as any).updatedManifest('package-5').dependencies).toMatchObject({
       // all fixed versions are bumped when major
       'package-4': '>=1.0.0', // workspace:>=1.0.0, semver range are never bumped
       'package-6': '~2.0.0', // workspace:~1.0.0
     });
-    expect((writePkg as any).updatedManifest('package-5').peerDependencies).toMatchObject({
+    expect((writePackage as any).updatedManifest('package-5').peerDependencies).toMatchObject({
       // peer dependencies will not be bumped by default without a flag
       'package-4': '>=1.0.0', // workspace:>=1.0.0, range shouldn't be bumped
       'package-6': '~2.0.0', // workspace:~1.0.0
     });
-    expect((writePkg as any).updatedManifest('package-6').dependencies).toMatchObject({
+    expect((writePackage as any).updatedManifest('package-6').dependencies).toMatchObject({
       'package-1': '>=1.0.0', // workspace:>=1.0.0, range shouldn't be bumped
     });
-    expect((writePkg as any).updatedManifest('package-6').peerDependencies).toMatchObject({
+    expect((writePackage as any).updatedManifest('package-6').peerDependencies).toMatchObject({
       'package-1': '>=1.0.0', // workspace:>=1.0.0, not bumped without a flag
     });
     // private packages do not need local version resolution
-    expect((writePkg as any).updatedManifest('package-7').dependencies).toMatchObject({
+    expect((writePackage as any).updatedManifest('package-7').dependencies).toMatchObject({
       'package-1': '^2.0.0', // ^1.0.0
     });
-    expect((writePkg as any).updatedManifest('package-7').peerDependencies).toMatchObject({
+    expect((writePackage as any).updatedManifest('package-7').peerDependencies).toMatchObject({
       'package-2': '^2.0.0',
       'package-3': '>=1.0.0', // workspace:>=1.0.0, range shouldn't be bumped
     });
@@ -212,7 +210,7 @@ describe("workspace protocol 'workspace:' specifiers", () => {
         `we recommend using defined versions with "workspace:" protocol. Your dependency is currently being published with "tiny-registry": "".`,
       ].join('')
     );
-    expect((writePkg as any).updatedManifest('package-6').dependencies).toMatchObject({
+    expect((writePackage as any).updatedManifest('package-6').dependencies).toMatchObject({
       'package-1': '>=1.0.0', // workspace:>=1.0.0 will not be bumped without a flag
       'tiny-registry': '', // workspace:*
       'tiny-tarball': '^2.3.4', // workspace:^2.3.4
