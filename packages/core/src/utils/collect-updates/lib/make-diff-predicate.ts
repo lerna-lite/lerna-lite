@@ -2,7 +2,6 @@ import { existsSync, readFileSync } from 'node:fs';
 import { basename, dirname, join, relative } from 'node:path';
 
 import { log } from '@lerna-lite/npmlog';
-import slash from 'slash';
 import { globSync } from 'tinyglobby';
 import zeptomatch from 'zeptomatch';
 
@@ -16,6 +15,7 @@ import {
   getClientConfigFilename,
   type CatalogConfig,
 } from '../../catalog-utils.js';
+import { slash } from '../../slash.js';
 
 /**
  * Matches a file path against a glob pattern that may contain a globstar (**).

@@ -54,7 +54,6 @@
     "p-pipe": "catalog:",
     "p-reduce": "^3.0.0",
     "semver": "catalog:",
-    "slash": "catalog:",
     "tinyrainbow": "catalog:dependencies",
     "write-json-file": "catalog:dependencies",
     "zeptomatch": "catalog:dependencies"

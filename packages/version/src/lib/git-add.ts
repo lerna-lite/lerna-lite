@@ -1,9 +1,8 @@
 import { resolve as pathResolve, relative } from 'node:path';
 
 import type { ExecOpts } from '@lerna-lite/core';
-import { exec } from '@lerna-lite/core';
+import { exec, slash } from '@lerna-lite/core';
 import { log } from '@lerna-lite/npmlog';
-import slash from 'slash';
 
 /**
  * @param {string[]} changedFiles

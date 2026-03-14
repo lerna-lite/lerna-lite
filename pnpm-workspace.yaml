@@ -23,7 +23,6 @@ catalog:
   p-map: ^7.0.4
   p-pipe: ^4.0.0
   semver: ^7.7.4
-  slash: ^5.1.0
 
 # add a few named catalog: for Lerna-Lite to test its own code with real projects
 catalogs:

@@ -40,6 +40,7 @@ export * from './utils/pulse-till-done.js';
 export * from './utils/query-graph.js';
 export * from './utils/run-lifecycle.js';
 export * from './utils/run-topologically.js';
+export * from './utils/slash.js';
 export * from './utils/string-utils.js';
 export * from './utils/types.js';
 export * from './utils/warn-if-hanging.js';
