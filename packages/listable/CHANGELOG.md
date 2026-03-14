@@ -4,6 +4,10 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [4.11.5](https://github.com/lerna-lite/lerna-lite/compare/v4.11.4...v4.11.5) (2026-03-14)
+
+**Note:** Version bump only for package @lerna-lite/listable
+
 ## [4.11.4](https://github.com/lerna-lite/lerna-lite/compare/v4.11.3...v4.11.4) (2026-03-07)
 
 **Note:** Version bump only for package @lerna-lite/listable

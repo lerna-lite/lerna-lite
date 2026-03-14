@@ -4,6 +4,12 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [4.11.5](https://github.com/lerna-lite/lerna-lite/compare/v4.11.4...v4.11.5) (2026-03-14)
+
+### Bug Fixes
+
+* **deps:** remove set-blocking, is-stream ([#1276](https://github.com/lerna-lite/lerna-lite/issues/1276)) ([8f0d1e3](https://github.com/lerna-lite/lerna-lite/commit/8f0d1e3e7aa0a1c972609c8a0f964c3fec4251fd)) - by @ghiscoding
+
 ## [4.11.3](https://github.com/lerna-lite/lerna-lite/compare/v4.11.2...v4.11.3) (2026-02-19)
 
 **Note:** Version bump only for package @lerna-lite/npmlog

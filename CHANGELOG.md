@@ -4,6 +4,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [4.11.5](https://github.com/lerna-lite/lerna-lite/compare/v4.11.4...v4.11.5) (2026-03-14)
+
+### Bug Fixes
+
+* **core:** remove p-pipe, p-reduce ([#1280](https://github.com/lerna-lite/lerna-lite/issues/1280)) ([d298ef1](https://github.com/lerna-lite/lerna-lite/commit/d298ef1dd6a197c55b11896b5f6b290d7608d845)) - by @ghiscoding
+* **deps:** remove set-blocking, is-stream ([#1276](https://github.com/lerna-lite/lerna-lite/issues/1276)) ([8f0d1e3](https://github.com/lerna-lite/lerna-lite/commit/8f0d1e3e7aa0a1c972609c8a0f964c3fec4251fd)) - by @ghiscoding
+* **deps:** replace uuid, pify with native Node.js APIs ([#1275](https://github.com/lerna-lite/lerna-lite/issues/1275)) ([7bd09e2](https://github.com/lerna-lite/lerna-lite/commit/7bd09e28d8b3dd8bae57cccb5a7a27f10c3a67e0)) - by @ghiscoding
+* **deps:** replace write-pkg with internal writePackage utility ([#1277](https://github.com/lerna-lite/lerna-lite/issues/1277)) ([819c5c9](https://github.com/lerna-lite/lerna-lite/commit/819c5c9500b155bf152222ba90de6b7747615e99)) - by @ghiscoding
+* **deps:** update all non-major dependencies ([#1274](https://github.com/lerna-lite/lerna-lite/issues/1274)) ([9351be2](https://github.com/lerna-lite/lerna-lite/commit/9351be2b47e26addf90dd42e2cd52603b42f6ece)) - by @renovate[bot]
+* **deps:** update dependency tar to v7.5.11 [security] ([#1273](https://github.com/lerna-lite/lerna-lite/issues/1273)) ([6ac77a9](https://github.com/lerna-lite/lerna-lite/commit/6ac77a957a39d1c330c0bc9380b0299f312c0b5e)) - by @ghiscoding
+
 ## [4.11.4](https://github.com/lerna-lite/lerna-lite/compare/v4.11.3...v4.11.4) (2026-03-07)
 
 ### Bug Fixes
