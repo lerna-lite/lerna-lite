@@ -42,9 +42,6 @@ catalogs:
     semver:
       specifier: ^7.7.4
       version: 7.7.4
-    slash:
-      specifier: ^5.1.0
-      version: 5.1.0
   dependencies:
     columnify:
       specifier: ^1.6.0
@@ -327,9 +324,6 @@ importers:
       semver:
         specifier: 'catalog:'
         version: 7.7.4
-      slash:
-        specifier: 'catalog:'
-        version: 5.1.0
       tinyglobby:
         specifier: catalog:dependencies
         version: 0.2.15
@@ -762,9 +756,6 @@ importers:
       semver:
         specifier: 'catalog:'
         version: 7.7.4
-      slash:
-        specifier: 'catalog:'
-        version: 5.1.0
       tinyrainbow:
         specifier: catalog:dependencies
         version: 3.0.3
@@ -2682,10 +2673,6 @@ packages:
   sigstore@4.0.0:
     resolution: {integrity: sha512-Gw/FgHtrLM9WP8P5lLcSGh9OQcrTruWCELAiS48ik1QbL0cH+dfjomiRTUE9zzz+D1N6rOLkwXUvVmXZAsNE0Q==}
     engines: {node: ^20.17.0 || >=22.9.0}
-
-  slash@5.1.0:
-    resolution: {integrity: sha512-ZA6oR3T/pEyuqwMgAKT0/hAv8oAXckzbkmR0UkUosQ+Mc4RxGoJkRmwHgHufaenlyAgE1Mxgpdcrf75y6XcnDg==}
-    engines: {node: '>=14.16'}
 
   smart-buffer@4.2.0:
     resolution: {integrity: sha512-94hK0Hh8rPqQl2xXc3HsaBoOXKV20MToPkcXvwbISWLEs+64sBq5kFgn2kJDHb1Pry9yrP0dxrCI9RRci7RXKg==}
@@ -4794,8 +4781,6 @@ snapshots:
       '@sigstore/verify': 3.0.0
     transitivePeerDependencies:
       - supports-color
-
-  slash@5.1.0: {}
 
   smart-buffer@4.2.0: {}
 

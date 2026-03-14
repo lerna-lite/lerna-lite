@@ -53,7 +53,6 @@
     "p-map": "catalog:",
     "p-queue": "^9.1.0",
     "semver": "catalog:",
-    "slash": "catalog:",
     "tinyglobby": "catalog:dependencies",
     "tinyrainbow": "catalog:dependencies",
     "write-file-atomic": "^7.0.1",

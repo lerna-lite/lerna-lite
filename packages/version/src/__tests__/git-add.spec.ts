@@ -1,10 +1,10 @@
 import { dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
 
+import { slash } from '@lerna-lite/core';
 import { initFixtureFactory } from '@lerna-test/helpers';
 import { execa } from 'execa';
 import { outputFile, outputJson } from 'fs-extra/esm';
-import slash from 'slash';
 import { expect, test } from 'vitest';
 
 import { gitAdd } from '../lib/git-add.js';
