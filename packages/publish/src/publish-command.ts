@@ -35,7 +35,6 @@ import { getOneTimePassword, VersionCommand } from '@lerna-lite/version';
 import { outputFileSync, removeSync } from 'fs-extra/esm';
 import normalizePath from 'normalize-path';
 import pMap from 'p-map';
-import pPipe, { type UnaryFunction } from 'p-pipe';
 import semver from 'semver';
 import { glob } from 'tinyglobby';
 import c from 'tinyrainbow';
@@ -855,23 +854,27 @@ export class PublishCommand extends Command<PublishCommandOption> {
     }
 
     const opts = this.conf.snapshot;
-    const mapper = pPipe(
-      ...(
-        [
-          (pkg: Package & { packed: Tarball }) =>
-            pulseTillDone(packDirectory(pkg, pkg.location, opts, this.options.arboristLoadOptions)).then((packed: Tarball) => {
-              tracker.verbose('packed', relative(this.project.rootPath ?? '', pkg.contents));
-              tracker.completeWork(1);
+    const packSteps = [
+      (pkg: Package & { packed: Tarball }) =>
+        pulseTillDone(packDirectory(pkg, pkg.location, opts, this.options.arboristLoadOptions)).then((packed: Tarball) => {
+          tracker.verbose('packed', relative(this.project.rootPath ?? '', pkg.contents));
+          tracker.completeWork(1);
 
-              // store metadata for use in this.publishPacked()
-              pkg.packed = packed;
+          // store metadata for use in this.publishPacked()
+          pkg.packed = packed;
 
-              // manifest may be mutated by any previous lifecycle
-              return pkg.refresh();
-            }),
-        ] as UnaryFunction<any, unknown>[]
-      ).filter(Boolean)
-    );
+          // manifest may be mutated by any previous lifecycle
+          return pkg.refresh();
+        }),
+    ].filter(Boolean) as ((pkg: Package) => Promise<Package & { packed: Tarball }>)[];
+
+    const mapper = async (pkg: Package) => {
+      let result = pkg;
+      for (const step of packSteps) {
+        result = await step(result);
+      }
+      return result;
+    };
 
     chain = chain.then(() => {
       if (this.toposort) {

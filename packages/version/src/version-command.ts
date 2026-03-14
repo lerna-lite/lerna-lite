@@ -23,8 +23,6 @@ import {
 import dedent from 'dedent';
 import pLimit from 'p-limit';
 import pMap from 'p-map';
-import pPipe from 'p-pipe';
-import pReduce from 'p-reduce';
 import semver from 'semver';
 import c from 'tinyrainbow';
 import zeptomatch from 'zeptomatch';
@@ -502,11 +500,13 @@ export class VersionCommand extends Command<VersionCommandOption> {
     return Promise.resolve(predicate).then((getVersion: (s: PackageGraphNode) => string) => this.reduceVersions(getVersion));
   }
 
-  reduceVersions(getVersion: (s: PackageGraphNode) => string) {
-    const iterator = (versionMap: Map<string, string>, node: PackageGraphNode) =>
-      Promise.resolve(getVersion(node)).then((version: string) => versionMap.set(node.name, version));
-
-    return pReduce(this.updates, iterator, new Map());
+  async reduceVersions(getVersion: (node: PackageGraphNode) => string | Promise<string>) {
+    const versionMap = new Map<string, string>();
+    for (const node of this.updates) {
+      const version = await Promise.resolve(getVersion(node));
+      versionMap.set(node.name, version);
+    }
+    return versionMap;
   }
 
   setUpdatesForVersions(versions: Map<string, string>) {
@@ -762,7 +762,13 @@ export class VersionCommand extends Command<VersionCommandOption> {
       });
     }
 
-    const mapUpdate = pPipe(...actions);
+    const mapUpdate = async (node: Package) => {
+      let result: any = node;
+      for (const action of actions) {
+        result = await action(result);
+      }
+      return result;
+    };
 
     chain = chain.then(() =>
       runTopologically(this.packagesToVersion, mapUpdate, {

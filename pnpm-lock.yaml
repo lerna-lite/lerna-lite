@@ -36,9 +36,6 @@ catalogs:
     p-map:
       specifier: ^7.0.4
       version: 7.0.4
-    p-pipe:
-      specifier: ^4.0.0
-      version: 4.0.0
     semver:
       specifier: ^7.7.4
       version: 7.7.4
@@ -598,9 +595,6 @@ importers:
       p-map:
         specifier: 'catalog:'
         version: 7.0.4
-      p-pipe:
-        specifier: 'catalog:'
-        version: 4.0.0
       pacote:
         specifier: ^21.4.0
         version: 21.4.0
@@ -747,12 +741,6 @@ importers:
       p-map:
         specifier: 'catalog:'
         version: 7.0.4
-      p-pipe:
-        specifier: 'catalog:'
-        version: 4.0.0
-      p-reduce:
-        specifier: ^3.0.0
-        version: 3.0.0
       semver:
         specifier: 'catalog:'
         version: 7.7.4
@@ -2497,17 +2485,9 @@ packages:
     resolution: {integrity: sha512-tkAQEw8ysMzmkhgw8k+1U/iPhWNhykKnSk4Rd5zLoPJCuJaGRPo6YposrZgaxHKzDHdDWWZvE/Sk7hsL2X/CpQ==}
     engines: {node: '>=18'}
 
-  p-pipe@4.0.0:
-    resolution: {integrity: sha512-HkPfFklpZQPUKBFXzKFB6ihLriIHxnmuQdK9WmLDwe4hf2PdhhfWT/FJa+pc3bA1ywvKXtedxIRmd4Y7BTXE4w==}
-    engines: {node: '>=12'}
-
   p-queue@9.1.0:
     resolution: {integrity: sha512-O/ZPaXuQV29uSLbxWBGGZO1mCQXV2BLIwUr59JUU9SoH76mnYvtms7aafH/isNSNGwuEfP6W/4xD0/TJXxrizw==}
     engines: {node: '>=20'}
-
-  p-reduce@3.0.0:
-    resolution: {integrity: sha512-xsrIUgI0Kn6iyDYm9StOpOeK29XM1aboGji26+QEortiFST1hGZaUQOLhtEbqHErPpGW/aSz6allwK2qcptp0Q==}
-    engines: {node: '>=12'}
 
   p-timeout@7.0.1:
     resolution: {integrity: sha512-AxTM2wDGORHGEkPCt8yqxOTMgpfbEHqF51f/5fJCmwFC3C/zNcGT63SymH2ttOAaiIws2zVg4+izQCjrakcwHg==}
@@ -4605,14 +4585,10 @@ snapshots:
 
   p-map@7.0.4: {}
 
-  p-pipe@4.0.0: {}
-
   p-queue@9.1.0:
     dependencies:
       eventemitter3: 5.0.1
       p-timeout: 7.0.1
-
-  p-reduce@3.0.0: {}
 
   p-timeout@7.0.1: {}
 

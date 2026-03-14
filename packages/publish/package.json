@@ -50,7 +50,6 @@
     "npm-packlist": "^10.0.4",
     "npm-registry-fetch": "catalog:",
     "p-map": "catalog:",
-    "p-pipe": "catalog:",
     "pacote": "^21.4.0",
     "semver": "catalog:",
     "ssri": "^13.0.1",
