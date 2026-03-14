@@ -550,9 +550,6 @@ importers:
       '@npmcli/package-json':
         specifier: ^7.0.5
         version: 7.0.5
-      byte-size:
-        specifier: ^9.0.1
-        version: 9.0.1
       ci-info:
         specifier: 'catalog:'
         version: 4.4.0
@@ -1667,15 +1664,6 @@ packages:
   brace-expansion@5.0.3:
     resolution: {integrity: sha512-fy6KJm2RawA5RcHkLa1z/ScpBeA762UF9KmZQxwIbDtRJrgLzM10depAiEQ+CXYcoiqW1/m96OAAoke2nE9EeA==}
     engines: {node: 18 || 20 || >=22}
-
-  byte-size@9.0.1:
-    resolution: {integrity: sha512-YLe9x3rabBrcI0cueCdLS2l5ONUKywcRpTs02B8KP9/Cimhj7o3ZccGrPnRvcbyHMbb7W79/3MUJl7iGgTXKEw==}
-    engines: {node: '>=12.17'}
-    peerDependencies:
-      '@75lb/nature': latest
-    peerDependenciesMeta:
-      '@75lb/nature':
-        optional: true
 
   cacache@20.0.1:
     resolution: {integrity: sha512-+7LYcYGBYoNqTp1Rv7Ny1YjUo5E0/ftkQtraH3vkfAGgVHc+ouWdC8okAwQgQR7EVIdW6JTzTmhKFwzb+4okAQ==}
@@ -3740,8 +3728,6 @@ snapshots:
   brace-expansion@5.0.3:
     dependencies:
       balanced-match: 4.0.4
-
-  byte-size@9.0.1: {}
 
   cacache@20.0.1:
     dependencies:
