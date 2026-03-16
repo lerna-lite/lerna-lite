@@ -3,9 +3,9 @@
   "editor.formatOnSave": true,
   "editor.formatOnSaveMode": "file", // oxfmt can only format whole files
   "editor.codeActionsOnSave": {
-    "source.organizeImports": "never" // let oxfmt handle import organization
+    "source.organizeImports": "never", // let oxfmt handle import organization
   },
   "editor.defaultFormatter": "oxc.oxc-vscode",
   "oxc.typeAware": true,
-  "typescript.experimental.useTsgo": true
+  "js/ts.experimental.useTsgo": true,
 }
