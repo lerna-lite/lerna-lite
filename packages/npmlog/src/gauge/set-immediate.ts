@@ -1,4 +1,3 @@
-/* v8 ignore next */
 export function setImmediateFn(...args: any) {
   try {
     // oxlint-disable-next-line no-implied-eval

@@ -29,6 +29,7 @@ export default defineConfig({
         '**/defaults.ts',
         '**/index.ts',
         '**/interfaces.ts',
+        '**/set-immediate.ts',
         '**/models.ts',
         '**/types.ts',
       ],
