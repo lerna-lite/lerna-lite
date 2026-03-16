@@ -406,19 +406,6 @@ Below is a full demo of how you can use a preset with full configuration
 }
 ```
 
-> [!WARNING] 
-> When using `conventional-changelog-conventionalcommits` with other tools for example [`@commitlint/config-conventional`](https://www.npmjs.com/package/@commitlint/config-conventional), you may need to override the version of the transitive `conventional-changelog-conventionalcommits` dependency, like so:
->
-> ```json
-> {
->   "overrides": {
->     "conventional-changelog-conventionalcommits": "9.0.0"
->   }
-> }
-> ```
->
-> Use `"resolutions"` for pnpm or Yarn.
-
 ### `--conventional-commits`
 
 ```sh
