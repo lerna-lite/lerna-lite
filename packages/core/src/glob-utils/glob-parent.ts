@@ -17,6 +17,7 @@ const escaped = /\\([!*?|[\](){}])/g;
 export function globParent(str: string): string {
   const isWin32 = os.platform() === 'win32';
 
+  /* v8 ignore if */
   if (isWin32 && !str.includes(slash)) {
     str = str.replace(backslash, slash);
   }

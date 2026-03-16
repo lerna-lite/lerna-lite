@@ -19,6 +19,7 @@ import { Gauge } from './gauge/index.js';
 [process.stdout, process.stderr].forEach((stream) => {
   // _handle is an internal Node.js property not exposed in TypeScript types
   const s = stream as typeof stream & { _handle?: { setBlocking?: (blocking: boolean) => void } };
+  /* v8 ignore if */
   if (s._handle && stream.isTTY && typeof s._handle.setBlocking === 'function') {
     s._handle.setBlocking(true);
   }
