@@ -44,7 +44,7 @@ catalogs:
     tinyglobby: ^0.2.15
     tinyrainbow: ^3.0.3
     write-json-file: ^7.0.0
-    yaml: ^2.8.2
+    yaml: ^2.8.3
     yargs: ^18.0.0
     zeptomatch: ^2.1.0
 
