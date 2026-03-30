@@ -2,7 +2,7 @@ import { log } from '@lerna-lite/npmlog';
 import { loggingOutput } from '@lerna-test/helpers/logging-output.js';
 // @ts-ignore
 import runScript from '@npmcli/run-script';
-import { beforeEach, describe, expect, it, vi, type Mock } from 'vitest';
+import { afterAll, beforeAll, beforeEach, describe, expect, it, vi, type Mock } from 'vitest';
 
 import type { LifecycleConfig } from '../../models/interfaces.js';
 import { Package } from '../../package.js';
@@ -12,6 +12,15 @@ import { createRunner, runLifecycle } from '../run-lifecycle.js';
 vi.mock('@npmcli/run-script', () => ({
   default: vi.fn(() => Promise.resolve({ stdout: '' })),
 }));
+
+// Silence all console and process output for this test file
+beforeAll(() => {
+  vi.spyOn(console, 'log').mockImplementation(() => {});
+  vi.spyOn(process.stdout, 'write').mockImplementation(() => true);
+});
+afterAll(() => {
+  vi.restoreAllMocks();
+});
 
 describe('runLifecycle()', () => {
   beforeEach(() => {
