@@ -1,12 +1,9 @@
 /**
  * Adapted from https://github.com/npm/npmlog/blob/756bd05d01e7e4841fba25204d6b85dfcffeba3c/lib/log.js
  */
-
 import { EventEmitter } from 'node:events';
 import type { WriteStream } from 'node:tty';
-import { format } from 'node:util';
-
-import c from 'tinyrainbow';
+import { format, styleText } from 'node:util';
 
 import { TrackerGroup } from './are-we-there-yet/tracker-group.js';
 import { Gauge } from './gauge/index.js';
@@ -312,42 +309,74 @@ export class Logger extends EventEmitter {
     // Apply styling step by step
     style ??= {};
 
-    // Apply foreground color first
-    if (style.fg) {
-      const colorMethodName = style.fg as keyof typeof c;
-      const colorMethod = c[colorMethodName];
-      if (typeof colorMethod === 'function') {
-        output = colorMethod(output);
-      }
-    }
+    // Collect style options for util.styleText
+    const allowedFg = new Set([
+      'black',
+      'blackBright',
+      'blue',
+      'blueBright',
+      'cyan',
+      'cyanBright',
+      'gray',
+      'green',
+      'greenBright',
+      'grey',
+      'magenta',
+      'magentaBright',
+      'red',
+      'redBright',
+      'white',
+      'whiteBright',
+      'yellow',
+      'yellowBright',
+    ]);
+    const allowedBg = new Set([
+      'bgBlack',
+      'bgBlackBright',
+      'bgBlue',
+      'bgBlueBright',
+      'bgCyan',
+      'bgCyanBright',
+      'bgGray',
+      'bgGreen',
+      'bgGreenBright',
+      'bgGrey',
+      'bgMagenta',
+      'bgMagentaBright',
+      'bgRed',
+      'bgRedBright',
+      'bgWhite',
+      'bgWhiteBright',
+      'bgYellow',
+      'bgYellowBright',
+    ]);
 
+    const styleArr: string[] = [];
+    if (style.fg && allowedFg.has(style.fg)) {
+      styleArr.push(style.fg);
+    }
     // Apply background color (if supported)
     if (style.bg) {
-      const bgColorMethodName = `bg${style.bg[0].toUpperCase() + style.bg.slice(1)}` as keyof typeof c;
-      const bgColorMethod = c[bgColorMethodName];
-      if (typeof bgColorMethod === 'function') {
-        output = bgColorMethod(output);
+      const bg = 'bg' + style.bg[0].toUpperCase() + style.bg.slice(1);
+      if (allowedBg.has(bg)) {
+        styleArr.push(bg);
       }
     }
-
     // Apply bold
     if (style.bold) {
-      output = c.bold(output);
+      styleArr.push('bold');
     }
-
     // Apply underline
     if (style.underline) {
-      output = c.underline(output);
+      styleArr.push('underline');
     }
-
     // Apply inverse
     if (style.inverse) {
-      output = c.inverse(output);
+      styleArr.push('inverse');
     }
-
     // ---------- reset ----------
-    if (this.useColor()) {
-      output += c.reset('');
+    if (styleArr.length > 0 && this.useColor()) {
+      output = styleText(styleArr as Parameters<typeof styleText>[0], output);
     }
 
     return output;

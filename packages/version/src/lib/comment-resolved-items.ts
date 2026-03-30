@@ -1,6 +1,6 @@
+import { colorize } from '@lerna-lite/core';
 import { type Logger } from '@lerna-lite/npmlog';
 import { type OctokitClientOutput, parseGitRepo } from '@lerna-lite/version';
-import c from 'tinyrainbow';
 
 import type { CommentResolvedOptions } from '../interfaces.js';
 import { RateLimiter } from './rate-limiter.js';
@@ -77,7 +77,7 @@ export async function commentResolvedItems({
   templates,
 }: CommentResolvedOptions) {
   const repo: any = parseGitRepo(gitRemote, execOpts);
-  const logPrefix = dryRun ? c.magenta('[dry-run] > ') : '';
+  const logPrefix = dryRun ? colorize('magenta', '[dry-run] > ') : '';
 
   // Use a Map to ensure uniqueness
   const closedLinkedIssues = new Map<number, TypeNumberPair>();

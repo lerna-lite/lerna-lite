@@ -3,16 +3,16 @@ import { constants } from 'node:os';
 import { log } from '@lerna-lite/npmlog';
 import type { SyncOptions as ExacaSyncOptions, Options as ExecaOptions, ResultPromise } from 'execa';
 import { execa, execaSync } from 'execa';
-import c from 'tinyrainbow';
 
 import type { Package } from './package.js';
+import { colorize } from './utils/colorize.js';
 import { addPrefixTransformer } from './utils/log-prefix-transformer.js';
 
 // bookkeeping for spawned processes
 const children = new Set();
 
 // when streaming processes are spawned, use this color for prefix
-const colorWheel = ['cyan', 'magenta', 'blue', 'yellow', 'green', 'red'];
+const colorWheel = ['cyan', 'magenta', 'blue', 'yellow', 'green', 'red'] as const;
 const NUM_COLORS = colorWheel.length;
 
 // ever-increasing index ensures colors are always sequential
@@ -86,12 +86,9 @@ export function spawnStreaming(
 
   if (prefix) {
     const colorName = colorWheel[currentColor % NUM_COLORS];
-    const color = c[colorName];
-
     currentColor += 1;
-
-    stdoutOpts.tag = `${c.bold(color(prefix))}:`;
-    stderrOpts.tag = `${color(prefix)}:`;
+    stdoutOpts.tag = `${colorize(['bold', colorName], String(prefix))}:`;
+    stderrOpts.tag = `${colorize([colorName], String(prefix))}:`;
   }
 
   // Avoid 'Possible EventEmitter memory leak detected' warning due to piped stdio
@@ -192,6 +189,6 @@ export function logExecCommand(command: string, args?: string[]): string {
     cmdList.push(Array.isArray(c) ? c.join(' ') : c);
   }
 
-  log.info(c.bold(c.magenta('[dry-run] >')), cmdList.join(' '));
+  log.info(colorize(['bold', 'magenta'], '[dry-run] >'), cmdList.join(' '));
   return '';
 }

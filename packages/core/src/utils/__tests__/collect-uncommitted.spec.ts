@@ -3,23 +3,30 @@ import { fileURLToPath } from 'node:url';
 
 import { gitAdd, initFixtureFactory } from '@lerna-test/helpers';
 import { outputFile, remove } from 'fs-extra/esm';
-import c from 'tinyrainbow';
-import { describe, expect, it, vi } from 'vitest';
+import { afterAll, beforeAll, describe, expect, it, vi } from 'vitest';
 
 import { Project } from '../../project/project.js';
 import { collectUncommitted, collectUncommittedSync } from '../collect-uncommitted.js';
+import { colorize } from '../colorize.js';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
 const initFixture = initFixtureFactory(__dirname);
 
-// primary assertion setup
-const GREEN_A = c.green('A');
-const GREEN_M = c.green('M');
-const GREEN_D = c.green('D');
-const RED_D = c.red('D');
-const RED_M = c.red('M');
-const RED_QQ = c.red('??');
+// Disable colorize so expected values are plain characters
+beforeAll(() => {
+  colorize.disable();
+});
+afterAll(() => {
+  colorize.enable();
+});
+
+const GREEN_A = 'A';
+const GREEN_M = 'M';
+const GREEN_D = 'D';
+const RED_D = 'D';
+const RED_M = 'M';
+const RED_QQ = '??';
 
 const colorizedAry = [
   `${GREEN_D}  package.json`,

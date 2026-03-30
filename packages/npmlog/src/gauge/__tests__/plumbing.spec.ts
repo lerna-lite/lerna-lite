@@ -1,12 +1,12 @@
 import { stripVTControlCharacters } from 'node:util';
 
-import c from 'tinyrainbow';
-import { describe, expect, it, vi } from 'vitest';
+import { afterAll, beforeAll, describe, expect, it, vi } from 'vitest';
 
+import { isColorSupported } from '../is-color-supported.js';
 import { Plumbing } from '../plumbing.js';
 
 function normalizeAnsi(str: string) {
-  if (c.isColorSupported) {
+  if (isColorSupported()) {
     return str;
   }
   return stripVTControlCharacters(str);
@@ -27,6 +27,22 @@ const theme = {};
 const plumbing = new Plumbing(theme, template, 10);
 
 describe('Plumbing static methods', () => {
+  let originalForceColor: string | undefined;
+
+  beforeAll(() => {
+    // Force color output for all tests in this file
+    originalForceColor = process.env.FORCE_COLOR;
+    process.env.FORCE_COLOR = '1';
+  });
+
+  afterAll(() => {
+    // Restore FORCE_COLOR to its original value
+    if (originalForceColor === undefined) {
+      delete process.env.FORCE_COLOR;
+    } else {
+      process.env.FORCE_COLOR = originalForceColor;
+    }
+  });
   it('showCursor', () => {
     const expected = '\x1b[?25h';
     expect(plumbing.showCursor()).toBe(expected);

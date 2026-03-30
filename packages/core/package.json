@@ -53,7 +53,6 @@
     "p-queue": "^9.1.0",
     "semver": "catalog:",
     "tinyglobby": "catalog:dependencies",
-    "tinyrainbow": "catalog:dependencies",
     "write-file-atomic": "^7.0.1",
     "write-json-file": "catalog:dependencies",
     "yaml": "catalog:dependencies",

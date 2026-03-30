@@ -1,12 +1,11 @@
 import { dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
 
-import { logOutput, type VersionCommandOption } from '@lerna-lite/core';
+import { colorize, logOutput, type VersionCommandOption } from '@lerna-lite/core';
 import { log } from '@lerna-lite/npmlog';
 import { commandRunner, initFixtureFactory } from '@lerna-test/helpers';
 import dedent from 'dedent';
 import { outputFile } from 'fs-extra/esm';
-import c from 'tinyrainbow';
 import { beforeEach, describe, expect, it, vi, type Mock } from 'vitest';
 import yargParser from 'yargs-parser';
 
@@ -240,7 +239,7 @@ describe.each([
     await new VersionCommand(createArgv(cwd, '--create-release', type, '--conventional-commits', '--dry-run'));
 
     expect(logSpy).toHaveBeenCalledWith(
-      c.bold(c.magenta('[dry-run] >')),
+      colorize(['bold', 'magenta'], '[dry-run] >'),
       'github',
       `🏷️ (GitHub Release web interface) - 🔗 https://github.com/lerna/lerna/releases/new?tag=v1.1.0&title=v1.1.0&body=normal&prerelease=false`
     );

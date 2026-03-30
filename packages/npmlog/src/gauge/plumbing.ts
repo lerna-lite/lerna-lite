@@ -1,9 +1,9 @@
 /**
  * Inlined from deprecated package https://github.com/npm/gauge/blob/f8092518a47ac6a96027ae3ad97d0251ffe7643b
  */
+import { styleText } from 'node:util';
 
-import c from 'tinyrainbow';
-
+import { isColorSupported } from './is-color-supported.js';
 import renderTemplate from './render-template.js';
 import validate from './validate.js';
 
@@ -59,9 +59,9 @@ export class Plumbing {
       values[key] = status[key];
     }
 
-    let out = renderTemplate(this.width, this.template, values).trim() + c.reset('');
+    let out = renderTemplate(this.width, this.template, values).trim() + styleText('reset', '');
     /* v8 ignore if */
-    if (c.isColorSupported) {
+    if (isColorSupported()) {
       out += '\x1b[2K' + '\x1b[0G';
     }
     return out;

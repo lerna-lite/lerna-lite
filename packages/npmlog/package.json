@@ -33,8 +33,7 @@
   },
   "dependencies": {
     "fast-string-width": "^3.0.2",
-    "signal-exit": "^4.1.0",
-    "tinyrainbow": "catalog:dependencies"
+    "signal-exit": "^4.1.0"
   },
   "engines": {
     "node": "^20.17.0 || >=22.9.0"

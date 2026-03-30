@@ -1,15 +1,15 @@
 import type { Package } from '@lerna-lite/core';
+import { colorize } from '@lerna-lite/core';
 import { log } from '@lerna-lite/npmlog';
 import { hasUnicode } from '@lerna-lite/npmlog';
 import columnify from 'columnify';
-import c from 'tinyrainbow';
 
 import type { Tarball } from '../interfaces.js';
 import byteSize from './byte-size.js';
 
 export function logPacked(pkg: Package & { packed: Tarball }, dryRun = false) {
   const tarball = pkg.packed;
-  log.notice('', dryRun ? c.bgMagenta('[dry-run]') : '');
+  log.notice('', dryRun ? colorize(['bgMagenta'], '[dry-run]') : '');
   log.notice('', `${hasUnicode() ? '📦 ' : 'package:'} ${tarball.name}@${tarball.version}`);
 
   if (tarball.files?.length) {
@@ -63,7 +63,7 @@ export function logPacked(pkg: Package & { packed: Tarball }, dryRun = false) {
 
   // in dry-run mode, show tarball temp location and dependencies, devDependencies and/or peerDependencies
   if (dryRun) {
-    log.notice('', `--- ${c.bgMagenta('DRY-RUN')} details ---`);
+    log.notice('', `--- ${colorize(['bgMagenta'], 'DRY-RUN')} details ---`);
     log.notice('', `temp location: ${tarball.tarFilePath}`);
     log.notice('', `package name: ${pkg.name}`);
     if (pkg.dependencies) {
