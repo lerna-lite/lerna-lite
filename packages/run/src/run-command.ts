@@ -1,8 +1,7 @@
 import type { CommandType, FilterOptions, Package, ProjectConfig, RunCommandOption } from '@lerna-lite/core';
-import { Command, getFilteredPackages, logOutput, runTopologically, ValidationError } from '@lerna-lite/core';
+import { colorize, Command, getFilteredPackages, logOutput, runTopologically, ValidationError } from '@lerna-lite/core';
 import { Profiler } from '@lerna-lite/profiler';
 import pMap from 'p-map';
-import c from 'tinyrainbow';
 
 import type { ScriptStreamingOption } from './interfaces.js';
 import { npmRunScript, npmRunScriptStreaming } from './lib/npm-run-script.js';
@@ -236,8 +235,8 @@ export class RunCommand extends Command<RunCommandOption & FilterOptions> {
   }
 
   dryRunScript(scriptName: string, pkgName: string): Promise<any> {
-    this.logger.info(c.bold(c.magenta('[dry-run] >')), `Run npm script '%s' in '%s'`, scriptName, pkgName);
-    logOutput(`${c.bold(c.magenta('[dry-run] >'))} ${pkgName}`);
+    this.logger.info(colorize(['bold', 'magenta'], '[dry-run] >'), `Run npm script '%s' in '%s'`, scriptName, pkgName);
+    logOutput(`${colorize(['bold', 'magenta'], '[dry-run] >')} ${pkgName}`);
     return Promise.resolve();
   }
 }

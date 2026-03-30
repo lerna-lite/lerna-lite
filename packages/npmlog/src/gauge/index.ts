@@ -1,14 +1,15 @@
 import { onExit } from 'signal-exit';
-import c from 'tinyrainbow';
 
 // oxlint-disable unbound-method
 /**
  * Inlined from deprecated package https://github.com/npm/gauge/blob/f8092518a47ac6a96027ae3ad97d0251ffe7643b/lib/index.js
  */
 import { hasUnicode } from './has-unicode.js';
+import { isColorSupported } from './is-color-supported.js';
 import { Plumbing } from './plumbing.js';
 import { setImmediateFn } from './set-immediate.js';
-import defaultThemes from './themes.js';
+import { createThemes } from './themes.js';
+const defaultThemes = createThemes();
 
 function callWith(obj: any, method: any) {
   return function () {
@@ -131,7 +132,7 @@ export class Gauge {
       theme = this._themes.getTheme(theme);
     } else if (Object.keys(theme).length === 0 || theme.hasUnicode != null || theme.hasColor != null) {
       const useUnicode = theme.hasUnicode == null ? hasUnicode() : theme.hasUnicode;
-      const useColor = theme.hasColor == null ? c.isColorSupported : theme.hasColor;
+      const useColor = theme.hasColor == null ? isColorSupported() : theme.hasColor;
       theme = this._themes.getDefault({
         hasUnicode: useUnicode,
         hasColor: useColor,

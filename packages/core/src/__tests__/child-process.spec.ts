@@ -1,8 +1,8 @@
 import { log } from '@lerna-lite/npmlog';
-import c from 'tinyrainbow';
 import { describe, expect, it, vi } from 'vitest';
 
 import { exec, execSync, getChildProcessCount, getExitCode, spawn, spawnStreaming } from '../child-process.js';
+import { colorize } from '../index.js';
 import type { Package } from '../package.js';
 
 describe('childProcess', () => {
@@ -22,7 +22,7 @@ describe('childProcess', () => {
     it('should execute a command in dry-run and log the command', () => {
       const logSpy = vi.spyOn(log, 'info');
       execSync('echo', ['execSync'], undefined, true);
-      expect(logSpy).toHaveBeenCalledWith(c.bold(c.magenta('[dry-run] >')), 'echo execSync');
+      expect(logSpy).toHaveBeenCalledWith(colorize(['bold', 'magenta'], '[dry-run] >'), 'echo execSync');
     });
 
     it('does not error when stdout is ignored', () => {
@@ -41,7 +41,7 @@ describe('childProcess', () => {
     it('should execute a command in dry-run and log the command', async () => {
       const logSpy = vi.spyOn(log, 'info');
       await exec('echo', ['exec'], undefined, true);
-      expect(logSpy).toHaveBeenCalledWith(c.bold(c.magenta('[dry-run] >')), 'echo exec');
+      expect(logSpy).toHaveBeenCalledWith(colorize(['bold', 'magenta'], '[dry-run] >'), 'echo exec');
     });
 
     it('rejects on undefined command', async () => {
@@ -89,7 +89,7 @@ describe('childProcess', () => {
     it('should execute a command in dry-run and log the command', async () => {
       const logSpy = vi.spyOn(log, 'info');
       await spawn('echo', ['-n'], undefined, true);
-      expect(logSpy).toHaveBeenCalledWith(c.bold(c.magenta('[dry-run] >')), 'echo -n');
+      expect(logSpy).toHaveBeenCalledWith(colorize(['bold', 'magenta'], '[dry-run] >'), 'echo -n');
     });
 
     it('decorates opts.pkg on error if caught', async () => {
@@ -122,7 +122,7 @@ describe('childProcess', () => {
 
       await spawnStreaming('echo', ['-n'], { stdio: 'inherit' }, 'my-prefix', true);
 
-      expect(logSpy).toHaveBeenCalledWith(c.bold(c.magenta('[dry-run] >')), 'echo -n');
+      expect(logSpy).toHaveBeenCalledWith(colorize(['bold', 'magenta'], '[dry-run] >'), 'echo -n');
     });
 
     it('decorates opts.pkg on error if caught', async () => {

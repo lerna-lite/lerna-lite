@@ -1,10 +1,9 @@
 import type { RemoteClientType } from '@lerna-lite/core';
-import { ValidationError } from '@lerna-lite/core';
+import { colorize, ValidationError } from '@lerna-lite/core';
 import { log } from '@lerna-lite/npmlog';
 import type parseGitUrl from 'git-url-parse';
 import newGithubReleaseUrl from 'new-github-release-url';
 import semver from 'semver';
-import c from 'tinyrainbow';
 
 import { createGitHubClient, parseGitRepo } from '../git-clients/github-client.js';
 import { createGitLabClient } from '../git-clients/gitlab-client.js';
@@ -99,7 +98,7 @@ export function createRelease(
 
       if (dryRun) {
         const releaseUrl = createGithubReleaseUrl(repo, tag, body, prereleaseParts);
-        log.info(c.bold(c.magenta('[dry-run] >')), 'github', `🏷️ (GitHub Release web interface) - 🔗 ${releaseUrl}`);
+        log.info(colorize(['bold', 'magenta'], '[dry-run] >'), 'github', `🏷️ (GitHub Release web interface) - 🔗 ${releaseUrl}`);
         return Promise.resolve();
       }
 

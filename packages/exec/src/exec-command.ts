@@ -1,6 +1,7 @@
 import 'dotenv/config';
 import type { CommandType, ExecCommandOption, FilterOptions, Package, ProjectConfig } from '@lerna-lite/core';
 import {
+  colorize,
   Command,
   getFilteredPackages,
   logOutput,
@@ -11,7 +12,6 @@ import {
 } from '@lerna-lite/core';
 import { Profiler } from '@lerna-lite/profiler';
 import pMap from 'p-map';
-import c from 'tinyrainbow';
 
 import type { ExecStreamingOption } from './interfaces.js';
 
@@ -189,8 +189,8 @@ export class ExecCommand extends Command<ExecCommandOption & FilterOptions> {
   }
 
   dryRunExec(commandName: string, pkgName: string): Promise<any> {
-    this.logger.info(c.bold(c.magenta('[dry-run] >')), `Exec command '%s' in '%s'`, commandName, pkgName);
-    logOutput(`${c.bold(c.magenta('[dry-run] >'))} ${pkgName}`);
+    this.logger.info(colorize(['bold', 'magenta'], '[dry-run] >'), `Exec command '%s' in '%s'`, commandName, pkgName);
+    logOutput(`${colorize(['bold', 'magenta'], '[dry-run] >')} ${pkgName}`);
     return Promise.resolve();
   }
 }

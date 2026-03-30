@@ -52,7 +52,6 @@
     "p-limit": "^7.3.0",
     "p-map": "catalog:",
     "semver": "catalog:",
-    "tinyrainbow": "catalog:dependencies",
     "write-json-file": "catalog:dependencies",
     "zeptomatch": "catalog:dependencies"
   },

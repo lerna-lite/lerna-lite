@@ -46,9 +46,6 @@ catalogs:
     tinyglobby:
       specifier: ^0.2.15
       version: 0.2.15
-    tinyrainbow:
-      specifier: ^3.0.3
-      version: 3.0.3
     write-json-file:
       specifier: ^7.0.0
       version: 7.0.0
@@ -318,9 +315,6 @@ importers:
       tinyglobby:
         specifier: catalog:dependencies
         version: 0.2.15
-      tinyrainbow:
-        specifier: catalog:dependencies
-        version: 3.0.3
       write-file-atomic:
         specifier: ^7.0.1
         version: 7.0.1
@@ -410,9 +404,6 @@ importers:
       p-map:
         specifier: 'catalog:'
         version: 7.0.4
-      tinyrainbow:
-        specifier: catalog:dependencies
-        version: 3.0.3
     devDependencies:
       '@types/fs-extra':
         specifier: catalog:devDependencies
@@ -482,9 +473,6 @@ importers:
       columnify:
         specifier: catalog:dependencies
         version: 1.6.0
-      tinyrainbow:
-        specifier: catalog:dependencies
-        version: 3.0.3
     devDependencies:
       yargs:
         specifier: catalog:dependencies
@@ -498,9 +486,6 @@ importers:
       signal-exit:
         specifier: ^4.1.0
         version: 4.1.0
-      tinyrainbow:
-        specifier: catalog:dependencies
-        version: 3.0.3
 
   packages/profiler:
     dependencies:
@@ -586,9 +571,6 @@ importers:
       tinyglobby:
         specifier: catalog:dependencies
         version: 0.2.15
-      tinyrainbow:
-        specifier: catalog:dependencies
-        version: 3.0.3
     devDependencies:
       '@types/fs-extra':
         specifier: catalog:devDependencies
@@ -635,9 +617,6 @@ importers:
       p-map:
         specifier: 'catalog:'
         version: 7.0.4
-      tinyrainbow:
-        specifier: catalog:dependencies
-        version: 3.0.3
     devDependencies:
       '@types/fs-extra':
         specifier: catalog:devDependencies
@@ -720,9 +699,6 @@ importers:
       semver:
         specifier: 'catalog:'
         version: 7.7.4
-      tinyrainbow:
-        specifier: catalog:dependencies
-        version: 3.0.3
       write-json-file:
         specifier: catalog:dependencies
         version: 7.0.0

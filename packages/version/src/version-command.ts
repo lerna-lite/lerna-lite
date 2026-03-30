@@ -4,6 +4,7 @@ import {
   checkWorkingTree,
   collectPackages,
   collectUpdates,
+  colorize,
   Command,
   createRunner,
   EOL,
@@ -24,7 +25,6 @@ import dedent from 'dedent';
 import pLimit from 'p-limit';
 import pMap from 'p-map';
 import semver from 'semver';
-import c from 'tinyrainbow';
 import zeptomatch from 'zeptomatch';
 
 import { COMMENT_FILTER_KEYWORDS_CSV, COMMENT_ISSUE, COMMENT_PULL_REQUEST } from './constant.js';
@@ -634,9 +634,9 @@ export class VersionCommand extends Command<VersionCommandOption> {
 
   confirmVersions(): Promise<boolean> {
     const changes = this.packagesToVersion.map((pkg) => {
-      let line = ` - ${pkg.name ?? '[n/a]'}: ${pkg.version} => ${c.cyan(this.updatesVersions?.get(pkg.name ?? ''))}`;
+      let line = ` - ${pkg.name ?? '[n/a]'}: ${pkg.version} => ${colorize(['cyan'], this.updatesVersions?.get(pkg.name ?? '') ?? '')}`;
       if (pkg.private) {
-        line += ` (${c.red('private')})`;
+        line += ` (${colorize(['red'], 'private')})`;
       }
       return line;
     });
@@ -657,7 +657,7 @@ export class VersionCommand extends Command<VersionCommandOption> {
     }
 
     // When composed from `lerna publish`, use this opportunity to confirm publishing
-    let confirmMessage = this.options.dryRun ? c.bgMagenta('[dry-run]') : '';
+    let confirmMessage = this.options.dryRun ? colorize(['bgMagenta'], '[dry-run]') : '';
     confirmMessage += this.composed
       ? ' Are you sure you want to publish these packages?'
       : ' Are you sure you want to create these versions?';
@@ -957,7 +957,7 @@ export class VersionCommand extends Command<VersionCommandOption> {
         commentFilterKeywords: keywordsCSV = COMMENT_FILTER_KEYWORDS_CSV,
       } = this.options;
 
-      const logPrefix = dryRun ? c.bgMagenta('[dry-run] ') : '';
+      const logPrefix = dryRun ? colorize(['bgMagenta'], '[dry-run] ') : '';
       this.logger.info('comments', `${logPrefix}[start] Comments on remote client...`);
 
       await commentResolvedItems({

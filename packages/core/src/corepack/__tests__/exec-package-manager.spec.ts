@@ -1,9 +1,9 @@
 import { log } from '@lerna-lite/npmlog';
-import c from 'tinyrainbow';
 import { beforeEach, describe, expect, it, vi, type Mock } from 'vitest';
 
 import { exec, execSync, getChildProcessCount } from '../../child-process.js';
 import type { Package } from '../../package.js';
+import { colorize } from '../../utils/colorize.js';
 import { execPackageManager, execPackageManagerSync } from '../exec-package-manager.js';
 
 vi.mock('../../child-process', async () => ({
@@ -49,7 +49,7 @@ describe('.execPackageManagerSync()', () => {
     it('should execute a command in dry-run and log the command', () => {
       const logSpy = vi.spyOn(log, 'info');
       execPackageManagerSync('echo', ['execPackageManagerSync'], undefined, true);
-      expect(logSpy).toHaveBeenCalledWith(c.bold(c.magenta('[dry-run] >')), 'echo execPackageManagerSync');
+      expect(logSpy).toHaveBeenCalledWith(colorize(['bold', 'magenta'], '[dry-run] >'), 'echo execPackageManagerSync');
     });
 
     it('does not error when stdout is ignored', () => {
@@ -94,7 +94,7 @@ describe('.execPackageManager()', () => {
     it('should execute a command in dry-run and log the command', async () => {
       const logSpy = vi.spyOn(log, 'info');
       await execPackageManager('echo', ['exec'], undefined, true);
-      expect(logSpy).toHaveBeenCalledWith(c.bold(c.magenta('[dry-run] >')), 'echo exec');
+      expect(logSpy).toHaveBeenCalledWith(colorize(['bold', 'magenta'], '[dry-run] >'), 'echo exec');
     });
 
     it('rejects on undefined command', async () => {

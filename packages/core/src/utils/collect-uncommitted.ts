@@ -1,20 +1,20 @@
 import type { Logger } from '@lerna-lite/npmlog';
 import { log as npmlog } from '@lerna-lite/npmlog';
-import c from 'tinyrainbow';
 
 import { exec, execSync } from '../child-process.js';
+import { colorize, type StyleFormat } from './colorize.js';
 
 export interface UncommittedConfig {
   cwd: string;
   log?: Logger;
 }
 
-const maybeColorize = (colorize: (color?: string) => string) => (s?: string) => (s !== ' ' ? colorize(s) : s);
-const cRed = maybeColorize(c.red);
-const cGreen = maybeColorize(c.green);
-const replaceStatus = (_, maybeGreen?: string, maybeRed?: string) => `${cGreen(maybeGreen)}${cRed(maybeRed)}`;
+const maybeColor = (format: StyleFormat) => (s?: string) => (s !== ' ' ? colorize(format, s ?? '') : (s ?? ''));
+const cRed = maybeColor(['red']);
+const cGreen = maybeColor(['green']);
+const replaceStatus = (_: any, maybeGreen?: string, maybeRed?: string) => `${cGreen(maybeGreen)}${cRed(maybeRed)}`;
 const colorizeStats = (stats: string) =>
-  stats.replace(/^([^U]| )([A-Z]| )/gm, replaceStatus).replace(/^\?{2}|U{2}/gm, cRed('$&'));
+  stats.replace(/^([^U]| )([A-Z]| )/gm, replaceStatus).replace(/^(\?{2}|U{2})/gm, cRed('$&'));
 const splitOnNewLine = (str: string) => str.split('\n');
 const filterEmpty = (lines: string[]) => lines.filter((line) => line.length);
 const o = (l: any, r: any) => (x) => l(r(x));

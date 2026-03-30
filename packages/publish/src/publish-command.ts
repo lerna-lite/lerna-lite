@@ -15,6 +15,7 @@ import type {
 } from '@lerna-lite/core';
 import {
   collectUpdates,
+  colorize,
   Command,
   createRunner,
   deleteComplexObjectProp,
@@ -37,7 +38,6 @@ import normalizePath from 'normalize-path';
 import pMap from 'p-map';
 import semver from 'semver';
 import { glob } from 'tinyglobby';
-import c from 'tinyrainbow';
 
 import type { Tarball } from './interfaces.js';
 import { createTempLicenses } from './lib/create-temp-licenses.js';
@@ -262,7 +262,7 @@ export class PublishCommand extends Command<PublishCommandOption> {
   }
 
   async execute() {
-    const logPrefix = this.options.dryRun ? c.bgMagenta('[dry-run]') : '';
+    const logPrefix = this.options.dryRun ? colorize('bgMagenta', '[dry-run]') : '';
     this.enableProgressBar();
     this.logger.info('publish', `Publishing packages to npm... ${logPrefix}`);
 
@@ -522,7 +522,7 @@ export class PublishCommand extends Command<PublishCommandOption> {
   }
 
   confirmPublish(): Promise<boolean> {
-    const logPrefix = this.options.dryRun ? c.bgMagenta('[dry-run]') : '';
+    const logPrefix = this.options.dryRun ? colorize('bgMagenta', '[dry-run]') : '';
     const count = this.packagesToPublish?.length;
     const message = this.packagesToPublish?.map((pkg) => ` - ${pkg.name} => ${this.updatesVersions?.get(pkg.name)}`) ?? [];
 
@@ -541,7 +541,7 @@ export class PublishCommand extends Command<PublishCommandOption> {
       });
     }
 
-    let confirmMessage = this.options.dryRun ? c.bgMagenta('[dry-run]') : '';
+    let confirmMessage = this.options.dryRun ? colorize('bgMagenta', '[dry-run]') : '';
     confirmMessage += ' Are you sure you want to publish these packages?';
     return promptConfirmation(confirmMessage.trim());
   }
@@ -801,7 +801,7 @@ export class PublishCommand extends Command<PublishCommandOption> {
 
   requestOneTimePassword() {
     if (this.options.dryRun) {
-      this.logger.info(c.bold(c.magenta('[dry-run] >')), 'will ask OTP');
+      this.logger.info(colorize(['bold', 'magenta'], '[dry-run] >'), 'will ask OTP');
       return;
     }
 

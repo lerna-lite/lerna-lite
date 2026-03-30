@@ -1,3 +1,4 @@
+export * from './utils/colorize.js';
 export * from './child-process.js';
 export * from './command.js';
 export * from './constants.js';

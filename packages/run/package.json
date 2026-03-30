@@ -37,8 +37,7 @@
     "@lerna-lite/npmlog": "workspace:*",
     "@lerna-lite/profiler": "workspace:*",
     "fs-extra": "catalog:",
-    "p-map": "catalog:",
-    "tinyrainbow": "catalog:dependencies"
+    "p-map": "catalog:"
   },
   "devDependencies": {
     "@types/fs-extra": "catalog:devDependencies",
