@@ -34,7 +34,7 @@
   "dependencies": {
     "@lerna-lite/cli": "workspace:*",
     "@lerna-lite/core": "workspace:*",
-    "chokidar": "^4.0.3",
+    "chokidar": "^5.0.0",
     "tinyglobby": "catalog:dependencies",
     "zeptomatch": "catalog:dependencies"
   },
