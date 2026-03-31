@@ -1,6 +1,5 @@
 import { homedir } from 'node:os';
-import { dirname, normalize, resolve as pathResolve } from 'node:path';
-import { fileURLToPath } from 'node:url';
+import { normalize, resolve as pathResolve } from 'node:path';
 
 import { log } from '@lerna-lite/npmlog';
 import { loadJsonFile, loadJsonFileSync } from 'load-json-file';
@@ -13,9 +12,6 @@ import { writePackage } from '../utils/write-package.js';
 
 vi.mock('load-json-file');
 vi.mock('../utils/write-package.js');
-
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = dirname(__filename);
 
 // remove quotes around top-level strings
 expect.addSnapshotSerializer({
@@ -62,8 +58,8 @@ describe('Package', () => {
       let homeDir = homedir();
 
       // on Windows, make sure to use same drive letter
-      if (/([A-Z]:\\).*/i.test(__dirname)) {
-        homeDir = __dirname.substring(0, 1); // ie D:\\
+      if (/([A-Z]:\\).*/i.test(import.meta.dirname)) {
+        homeDir = import.meta.dirname.substring(0, 1); // ie D:\\
       }
 
       expect(pkg.resolved).toMatchObject({

@@ -1,6 +1,3 @@
-import { dirname } from 'node:path';
-import { fileURLToPath } from 'node:url';
-
 import { initFixtureFactory } from '@lerna-test/helpers';
 import { describe, expect, it } from 'vitest';
 
@@ -8,9 +5,7 @@ import { CyclicPackageGraphNode } from '../package-graph/lib/cyclic-package-grap
 import { PackageGraphNode } from '../package-graph/lib/package-graph-node.js';
 import { Project } from '../project/project.js';
 
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = dirname(__filename);
-const initFixture = initFixtureFactory(__dirname);
+const initFixture = initFixtureFactory(import.meta.dirname);
 
 describe('CyclicPackageGraphNode class', () => {
   it('should return the Cyclic Package Graph Node name to be cycle 1', async () => {

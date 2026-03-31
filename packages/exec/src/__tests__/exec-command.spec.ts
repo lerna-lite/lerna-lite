@@ -1,5 +1,4 @@
-import { basename, dirname, join } from 'node:path';
-import { fileURLToPath } from 'node:url';
+import { basename, join } from 'node:path';
 
 import { logOutput, spawn, spawnStreaming, type ExecCommandOption } from '@lerna-lite/core';
 import { commandRunner, initFixtureFactory, normalizeRelativeDir } from '@lerna-test/helpers';
@@ -29,11 +28,9 @@ vi.mock('@lerna-lite/profiler', async () => await vi.importActual<any>('../../..
 vi.mock('@lerna-lite/exec', async () => await vi.importActual<any>('../exec-command'));
 
 // helpers
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = dirname(__filename);
 
 const lernaExec = commandRunner(cliExecCommands);
-const initFixture = initFixtureFactory(__dirname);
+const initFixture = initFixtureFactory(import.meta.dirname);
 
 // assertion helpers
 const calledInPackages = () => (spawn as Mock).mock.calls.map(([, , opts]) => basename(opts.cwd));

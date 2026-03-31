@@ -1,6 +1,5 @@
 import { promises as fsPromises } from 'node:fs';
-import { dirname, join, resolve as pathResolve } from 'node:path';
-import { fileURLToPath } from 'node:url';
+import { join, resolve as pathResolve } from 'node:path';
 
 import {
   checkWorkingTree,
@@ -65,11 +64,8 @@ vi.mock('@lerna-lite/core', async (coreOriginal) => ({
 }));
 
 // test command
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = dirname(__filename);
-
 const lernaVersion = commandRunner(cliCommands);
-const initFixture = initFixtureFactory(pathResolve(__dirname, '../../../publish/src/__tests__'));
+const initFixture = initFixtureFactory(pathResolve(import.meta.dirname, '../../../publish/src/__tests__'));
 
 const createArgv = (cwd: string, ...args: string[]) => {
   args.unshift('version');

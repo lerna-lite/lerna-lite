@@ -1,6 +1,5 @@
 import nodeFs from 'node:fs';
-import { dirname, resolve as pathResolve } from 'node:path';
-import { fileURLToPath } from 'node:url';
+import { resolve as pathResolve } from 'node:path';
 
 import { promptSelectOne, type VersionCommandOption } from '@lerna-lite/core';
 import { commandRunner, getCommitMessage, initFixtureFactory } from '@lerna-test/helpers';
@@ -33,10 +32,7 @@ vi.mock('@lerna-lite/core', async () => ({
 vi.mock('@lerna-lite/version', async () => await vi.importActual('../version-command'));
 
 // helpers
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = dirname(__filename);
-
-const initFixture = initFixtureFactory(pathResolve(__dirname, '../../../publish/src/__tests__'));
+const initFixture = initFixtureFactory(pathResolve(import.meta.dirname, '../../../publish/src/__tests__'));
 
 const lernaVersion = commandRunner(cliCommands);
 

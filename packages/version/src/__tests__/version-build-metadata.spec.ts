@@ -1,5 +1,4 @@
-import { dirname, resolve as pathResolve } from 'node:path';
-import { fileURLToPath } from 'node:url';
+import { resolve as pathResolve } from 'node:path';
 
 import { promptSelectOne, promptTextInput, type PackageGraphNode, type VersionCommandOption } from '@lerna-lite/core';
 import { commandRunner, initFixtureFactory, showCommit } from '@lerna-test/helpers';
@@ -44,10 +43,7 @@ expect.addSnapshotSerializer({
 const resolvePrereleaseId = vi.fn(() => 'alpha');
 const versionPrompt = (buildMetadata: string) => makePromptVersion(resolvePrereleaseId, buildMetadata);
 
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = dirname(__filename);
-
-const initFixture = initFixtureFactory(pathResolve(__dirname, '../../../publish/src/__tests__'));
+const initFixture = initFixtureFactory(pathResolve(import.meta.dirname, '../../../publish/src/__tests__'));
 
 const lernaVersion = commandRunner(cliCommands);
 

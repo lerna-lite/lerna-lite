@@ -1,5 +1,4 @@
-import { dirname, join } from 'node:path';
-import { fileURLToPath } from 'node:url';
+import { join } from 'node:path';
 
 import type { DiffCommandOption } from '@lerna-lite/core';
 import { Project, spawn } from '@lerna-lite/core';
@@ -24,9 +23,7 @@ vi.mock('@lerna-lite/core', async () => ({
   spawn: vi.fn(),
 }));
 
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = dirname(__filename);
-const initFixture = initFixtureFactory(__dirname);
+const initFixture = initFixtureFactory(import.meta.dirname);
 
 const lernaDiff = commandRunner(cliDiffCommands);
 

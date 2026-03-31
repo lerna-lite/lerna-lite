@@ -1,15 +1,10 @@
-import { dirname } from 'node:path';
-import { fileURLToPath } from 'node:url';
-
 import { cloneFixtureFactory } from '@lerna-test/helpers';
 import { execa } from 'execa';
 import { expect, test } from 'vitest';
 
 import { isBehindUpstream } from '../lib/is-behind-upstream.js';
 
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = dirname(__filename);
-const cloneFixture = cloneFixtureFactory(__dirname);
+const cloneFixture = cloneFixtureFactory(import.meta.dirname);
 
 test('isBehindUpstream', async () => {
   const { cwd } = await cloneFixture('root-manifest-only');

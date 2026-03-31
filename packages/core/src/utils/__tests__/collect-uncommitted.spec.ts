@@ -1,5 +1,4 @@
-import { dirname, join } from 'node:path';
-import { fileURLToPath } from 'node:url';
+import { join } from 'node:path';
 
 import { gitAdd, initFixtureFactory } from '@lerna-test/helpers';
 import { outputFile, remove } from 'fs-extra/esm';
@@ -9,9 +8,7 @@ import { Project } from '../../project/project.js';
 import { collectUncommitted, collectUncommittedSync } from '../collect-uncommitted.js';
 import { colorize } from '../colorize.js';
 
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = dirname(__filename);
-const initFixture = initFixtureFactory(__dirname);
+const initFixture = initFixtureFactory(import.meta.dirname);
 
 // Disable colorize so expected values are plain characters
 beforeAll(() => {

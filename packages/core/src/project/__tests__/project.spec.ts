@@ -1,5 +1,4 @@
-import { basename, dirname, join, resolve as pathResolve } from 'node:path';
-import { fileURLToPath } from 'node:url';
+import { basename, join, resolve as pathResolve } from 'node:path';
 
 import { initFixtureFactory } from '@lerna-test/helpers';
 import { outputFile, remove, writeJson } from 'fs-extra/esm';
@@ -28,9 +27,7 @@ expect.addSnapshotSerializer({
 });
 
 // helpers
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = dirname(__filename);
-const initFixture = initFixtureFactory(__dirname);
+const initFixture = initFixtureFactory(import.meta.dirname);
 
 describe('Project', () => {
   let testDir = '';

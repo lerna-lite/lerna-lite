@@ -1,5 +1,4 @@
-import { dirname, join as pathJoin } from 'node:path';
-import { fileURLToPath } from 'node:url';
+import { join as pathJoin } from 'node:path';
 
 import { Conf, collectUpdates, logOutput, promptConfirmation, type PublishCommandOption } from '@lerna-lite/core';
 import { getOneTimePassword } from '@lerna-lite/version';
@@ -77,10 +76,7 @@ vi.mock('fs-extra/esm', async () => ({
 }));
 
 // helpers
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = dirname(__filename);
-
-const initFixture = initFixtureFactory(__dirname);
+const initFixture = initFixtureFactory(import.meta.dirname);
 
 const lernaPublish = commandRunner(cliCommands);
 

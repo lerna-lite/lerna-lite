@@ -1,6 +1,3 @@
-import { dirname } from 'node:path';
-import { fileURLToPath } from 'node:url';
-
 import { runLifecycle, type VersionCommandOption } from '@lerna-lite/core';
 import { initFixtureFactory } from '@lerna-test/helpers';
 import { loadJsonFile } from 'load-json-file';
@@ -32,10 +29,7 @@ vi.mock('@lerna-lite/core', async () => ({
 }));
 
 // helpers
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = dirname(__filename);
-
-const initFixture = initFixtureFactory(__dirname);
+const initFixture = initFixtureFactory(import.meta.dirname);
 
 const createArgv = (cwd: string, ...args: string[]) => {
   args.unshift('version');

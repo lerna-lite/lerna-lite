@@ -1,7 +1,6 @@
 import cp from 'node:child_process';
 import { EOL } from 'node:os';
-import { dirname, join, resolve as pathResolve } from 'node:path';
-import { fileURLToPath } from 'node:url';
+import { join, resolve as pathResolve } from 'node:path';
 
 import { execa } from 'execa';
 import { loadJsonFile } from 'load-json-file';
@@ -11,9 +10,7 @@ import { tempWrite } from '../../packages/version/dist/utils/temp-write.js';
 import gitSHA from '../serializers/serialize-git-sha.js';
 
 // Contains all relevant git config (user, commit.gpgSign, etc)
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = dirname(__filename);
-const TEMPLATE = pathResolve(__dirname, 'template');
+const TEMPLATE = pathResolve(import.meta.dirname, 'template');
 
 export function getCommitMessage(cwd, format = '%B') {
   return execa('git', ['log', '-1', `--pretty=format:${format}`], { cwd }).then((result) => result.stdout);

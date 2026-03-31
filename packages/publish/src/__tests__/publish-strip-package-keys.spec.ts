@@ -1,5 +1,4 @@
-import { dirname, join } from 'node:path';
-import { fileURLToPath } from 'node:url';
+import { join } from 'node:path';
 
 import { writePackage } from '@lerna-lite/core';
 import { commandRunner, gitAdd, gitCommit, gitTag, initFixtureFactory, updateLernaConfig } from '@lerna-test/helpers';
@@ -46,9 +45,7 @@ vi.mock('../lib/get-two-factor-auth-required', async () => await vi.importActual
 vi.mock('../lib/pack-directory', async () => await vi.importActual('../lib/__mocks__/pack-directory'));
 vi.mock('../lib/npm-publish', async () => await vi.importActual('../lib/__mocks__/npm-publish'));
 
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = dirname(__filename);
-const initFixture = initFixtureFactory(__dirname);
+const initFixture = initFixtureFactory(import.meta.dirname);
 
 const lernaPublish = commandRunner(cliCommands);
 

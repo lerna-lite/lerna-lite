@@ -1,6 +1,3 @@
-import { dirname } from 'node:path';
-import { fileURLToPath } from 'node:url';
-
 import { PackageGraph, Project, type FetchConfig } from '@lerna-lite/core';
 import { initFixtureFactory } from '@lerna-test/helpers';
 import pacote from 'pacote';
@@ -10,9 +7,7 @@ import { getUnpublishedPackages } from '../lib/get-unpublished-packages.js';
 
 vi.mock('pacote');
 
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = dirname(__filename);
-const initFixture = initFixtureFactory(__dirname);
+const initFixture = initFixtureFactory(import.meta.dirname);
 
 (pacote as any).packument.mockImplementation(async (pkg: string) => {
   if (pkg === 'package-1') {

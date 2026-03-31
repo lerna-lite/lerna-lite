@@ -1,5 +1,4 @@
-import { basename, dirname, join } from 'node:path';
-import { fileURLToPath } from 'node:url';
+import { basename, join } from 'node:path';
 
 import type { WatchCommandOption } from '@lerna-lite/core';
 import { spawn, spawnStreaming } from '@lerna-lite/core';
@@ -58,11 +57,8 @@ vi.mock('chokidar', () => ({
 vi.mock('@lerna-lite/watch', async () => await vi.importActual<any>('../watch-command.js'));
 
 // helpers
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = dirname(__filename);
-
 const lernaWatch = commandRunner(cliWatchCommands);
-const initFixture = initFixtureFactory(__dirname);
+const initFixture = initFixtureFactory(import.meta.dirname);
 
 // assertion helpers
 const calledInPackages = () => (spawn as Mock).mock.calls.map(([, , opts]) => basename(opts.cwd));

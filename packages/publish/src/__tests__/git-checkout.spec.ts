@@ -1,5 +1,4 @@
-import { dirname, join } from 'node:path';
-import { fileURLToPath } from 'node:url';
+import { join } from 'node:path';
 
 import { initFixtureFactory } from '@lerna-test/helpers';
 import { execa } from 'execa';
@@ -8,9 +7,7 @@ import { expect, test } from 'vitest';
 
 import { gitCheckout } from '../lib/git-checkout.js';
 
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = dirname(__filename);
-const initFixture = initFixtureFactory(__dirname);
+const initFixture = initFixtureFactory(import.meta.dirname);
 
 test('gitCheckout files', async () => {
   const cwd = await initFixture('no-interdependencies');

@@ -7,10 +7,7 @@
 
 import { spawn } from 'node:child_process';
 import { join, dirname } from 'node:path';
-import { fileURLToPath } from 'node:url';
-
-const __dirname = dirname(fileURLToPath(import.meta.url));
-const PROJECT_ROOT = join(__dirname, '..');
+const PROJECT_ROOT = join(import.meta.dirname, '..');
 const VERDACCIO_CONFIG = join(PROJECT_ROOT, '.verdaccio', 'config.yaml');
 const VERDACCIO_PORT = 4873;
 const VERDACCIO_URL = `http://localhost:${VERDACCIO_PORT}`;

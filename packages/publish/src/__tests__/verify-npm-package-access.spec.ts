@@ -1,6 +1,3 @@
-import { dirname } from 'node:path';
-import { fileURLToPath } from 'node:url';
-
 import { Project, type FetchConfig } from '@lerna-lite/core';
 import { initFixtureFactory } from '@lerna-test/helpers';
 import { loggingOutput } from '@lerna-test/helpers/logging-output.js';
@@ -12,9 +9,7 @@ import { verifyNpmPackageAccess } from '../lib/verify-npm-package-access.js';
 
 vi.mock('libnpmaccess');
 
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = dirname(__filename);
-const initFixture = initFixtureFactory(__dirname);
+const initFixture = initFixtureFactory(import.meta.dirname);
 
 (access.getPackages as unknown as Mock).mockImplementation(() =>
   Promise.resolve({

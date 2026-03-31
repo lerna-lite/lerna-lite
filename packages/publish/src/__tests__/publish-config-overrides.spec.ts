@@ -1,5 +1,4 @@
-import { dirname, join } from 'node:path';
-import { fileURLToPath } from 'node:url';
+import { join } from 'node:path';
 
 import { writePackage, type PublishCommandOption } from '@lerna-lite/core';
 import { gitAdd, gitCommit, gitTag, initFixtureFactory } from '@lerna-test/helpers';
@@ -52,10 +51,7 @@ vi.mock('../lib/pack-directory', async () => await vi.importActual<any>('../lib/
 vi.mock('../lib/npm-publish', async () => await vi.importActual<any>('../lib/__mocks__/npm-publish'));
 
 // helpers
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = dirname(__filename);
-
-const initFixture = initFixtureFactory(__dirname);
+const initFixture = initFixtureFactory(import.meta.dirname);
 
 const createArgv = (cwd: string, ...args: string[]) => {
   args.unshift('publish');

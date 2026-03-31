@@ -1,6 +1,3 @@
-import { dirname } from 'node:path';
-import { fileURLToPath } from 'node:url';
-
 import { collectUpdates, logOutput, type ChangedCommandOption } from '@lerna-lite/core';
 import { commandRunner, initFixtureFactory, updateLernaConfig } from '@lerna-test/helpers';
 import { loggingOutput } from '@lerna-test/helpers/logging-output.js';
@@ -27,9 +24,7 @@ vi.mock('@lerna-lite/core', async () => ({
 // also point to the local version command so that all mocks are properly used even by the command-runner
 vi.mock('@lerna-lite/changed', async () => await vi.importActual('../changed-command'));
 
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = dirname(__filename);
-const initFixture = initFixtureFactory(__dirname);
+const initFixture = initFixtureFactory(import.meta.dirname);
 
 const lernaChanged = commandRunner(cliChangedCommands);
 
