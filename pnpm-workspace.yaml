@@ -46,7 +46,3 @@ catalogs:
     yaml: ^2.8.3
     yargs: ^18.0.0
     zeptomatch: ^2.1.0
-
-overrides:
-  minimatch: ^10.2.4
-  vite: ^8.0.0
