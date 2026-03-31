@@ -60,7 +60,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        node: [20, 22, 24]
+        node: [22, 24]
         platform: [ubuntu-latest]
 
     name: "Unit Tests on Ubuntu / Node${{ matrix.node }}"
@@ -122,14 +122,14 @@ jobs:
         env:
           CODECOV_TOKEN: ${{ secrets.CODECOV_TOKEN }}
         if: |
-          contains(matrix.node, 20) &&
+          contains(matrix.node, 24) &&
           !contains(github.event.head_commit.message, 'chore(release)')
 
   e2e:
     strategy:
       fail-fast: false
       matrix:
-        node: [20, 22, 24]
+        node: [22, 24]
         platform: [ubuntu-latest]
         
     name: "E2E Tests on Ubuntu / Node${{ matrix.node }}"
