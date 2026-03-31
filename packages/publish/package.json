@@ -36,7 +36,7 @@
     "@lerna-lite/core": "workspace:*",
     "@lerna-lite/npmlog": "workspace:*",
     "@lerna-lite/version": "workspace:*",
-    "@npmcli/arborist": "^9.4.1",
+    "@npmcli/arborist": "^9.4.2",
     "@npmcli/package-json": "^7.0.5",
     "ci-info": "catalog:",
     "columnify": "catalog:dependencies",
@@ -51,7 +51,7 @@
     "pacote": "^21.5.0",
     "semver": "catalog:",
     "ssri": "^13.0.1",
-    "tar": "^7.5.11",
+    "tar": "^7.5.13",
     "tinyglobby": "catalog:dependencies"
   },
   "devDependencies": {
