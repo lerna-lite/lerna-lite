@@ -277,7 +277,7 @@ export class PublishCommand extends Command<PublishCommandOption> {
     await this.resolveDependencyWithCatalogProtocols();
     await this.resolveLocalDependencyWorkspaceProtocols();
 
-    if (this.options.removePackageFields || this.options.stripPackageKeys) {
+    if (this.options.stripPackageKeys) {
       await this.removePackageProperties();
     }
 
@@ -758,13 +758,7 @@ export class PublishCommand extends Command<PublishCommandOption> {
   }
 
   removePackageProperties() {
-    const stripPackageKeys = this.options.removePackageFields || this.options.stripPackageKeys;
-    if (this.options.removePackageFields) {
-      this.logger.warn(
-        'DEPRECATION',
-        '"--remove-package-fields" was renamed to "--strip-package-keys" and the previous option name will be removed in the next major release.'
-      );
-    }
+    const stripPackageKeys = this.options.stripPackageKeys;
 
     return pMap(this.packagesToPublish, (node: Package) => {
       if (Array.isArray(stripPackageKeys)) {
