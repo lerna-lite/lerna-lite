@@ -60,7 +60,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        node: [22, 24]
+        node: [22, 24, 25]
         platform: [ubuntu-latest]
 
     name: "Unit Tests on Ubuntu / Node${{ matrix.node }}"
@@ -129,7 +129,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        node: [22, 24]
+        node: [22, 24, 25]
         platform: [ubuntu-latest]
         
     name: "E2E Tests on Ubuntu / Node${{ matrix.node }}"
