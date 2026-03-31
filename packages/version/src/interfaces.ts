@@ -34,13 +34,6 @@ export interface BaseChangelogOptions {
   tagPrefix?: string;
 }
 
-/** @deprecated @use ChangelogBumperOption interface */
-export interface OldChangelogBumperOption {
-  parserOpts: ParserOptions;
-  writerOpts: WriterOptions;
-  whatBump: (commits: Commit[]) => Promise<BumperRecommendation | null | undefined>;
-}
-
 export interface ChangelogBumperOption {
   parser: ParserOptions;
   writer: WriterOptions;
@@ -48,8 +41,6 @@ export interface ChangelogBumperOption {
 }
 
 export interface ChangelogConfig {
-  /** @deprecated to be removed in next major */
-  conventionalChangelog?: ChangelogBumperOption | OldChangelogBumperOption;
   name?: string;
   key?: string;
   tags?: GetSemverTagsParams;

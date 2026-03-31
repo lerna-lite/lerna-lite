@@ -5,7 +5,7 @@ export const whatBump = function (commits: Commit[]) {
   let breakings = 0;
   let features = 0;
 
-  commits.forEach((commit) => {
+  commits.forEach((commit: Commit) => {
     if (commit.notes.length > 0) {
       breakings += commit.notes.length;
       level = 0;
