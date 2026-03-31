@@ -8,8 +8,8 @@ vi.mock('@lerna-lite/npmlog', () => ({
 }));
 
 describe('CLI', () => {
-  let lernaMock;
-  let exitSpy;
+  let lernaMock: any;
+  let exitSpy: any;
 
   beforeEach(() => {
     vi.resetModules();

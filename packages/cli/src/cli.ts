@@ -1,5 +1,5 @@
 #!/usr/bin/env node
-
+import 'dotenv/config';
 import { log } from '@lerna-lite/npmlog';
 
 import { importLocal } from './import-local-shim.js';
@@ -13,7 +13,5 @@ export async function main() {
   }
 }
 
-// Only run main if this file is executed directly (not imported)
-if (import.meta.url === `file://${process.argv[1]}` || import.meta.url === process.argv[1]) {
-  void main();
-}
+// Always run main for CLI entrypoint compatibility
+void main();
