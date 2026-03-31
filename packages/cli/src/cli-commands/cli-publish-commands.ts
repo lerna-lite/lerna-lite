@@ -103,11 +103,6 @@ export default {
         type: 'string',
         requiresArg: true,
       },
-      'remove-package-fields': {
-        describe:
-          '@deprecated: Remove fields from each package.json before publishing them to the registry, removing fields from a complex object is also supported via the dot notation (ie "scripts.build").',
-        type: 'array',
-      },
       'strip-package-keys': {
         describe:
           'Strip fields from each package.json before publishing them to the registry, removing fields from a complex object is also supported via the dot notation (ie "scripts.build").',

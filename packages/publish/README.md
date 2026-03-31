@@ -98,7 +98,6 @@ $ lerna publish --scope my-component test
     - [`--otp`](#--otp)
     - [`--preid`](#--preid)
     - [`--pre-dist-tag <tag>`](#--pre-dist-tag-tag)
-    - [`--remove-package-fields <fields>`](#--remove-package-fields-fields) (`@deprecated` and renamed to `--strip-package-keys`)
     - [`--strip-package-keys <keys>`](#--strip-package-keys-keys)
     - [`--registry <url>`](#--registry-url)
     - [`--tag-version-prefix`](#--tag-version-prefix)
@@ -313,9 +312,6 @@ lerna publish --pre-dist-tag next
 ```
 
 Works the same as [`--dist-tag`](#--dist-tag-tag), except only applies to packages being released with a prerelease version.
-
-### `--remove-package-fields <fields>`
-`@deprecated` and renamed as `strip-package-keys` (see below)
 
 ### `--strip-package-keys <keys>`
 

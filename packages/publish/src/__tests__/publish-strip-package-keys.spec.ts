@@ -52,7 +52,7 @@ const initFixture = initFixtureFactory(__dirname);
 
 const lernaPublish = commandRunner(cliCommands);
 
-describe('publish --remove-package-fields', () => {
+describe('publish --strip-package-keys', () => {
   const setupChanges = async (cwd: string, pkgRoot = 'packages') => {
     await outputFile(join(cwd, `${pkgRoot}/package-1/hello.js`), 'world');
     await gitAdd(cwd, '.');
@@ -78,14 +78,6 @@ describe('publish --remove-package-fields', () => {
       expect(publishPkg3.browser).toBeUndefined();
       expect(publishPkg4.browser).toBeUndefined();
       expect(publishPkg5.browser).toBeUndefined();
-    });
-
-    it('should skip configuring --remove-package-fields and work normally without touching t', async () => {
-      const cwd = await initFixture('strip-pkg-keys');
-      await lernaPublish(cwd)();
-
-      const devDeps = (writePackage as any).updatedManifest('package-5').devDependencies;
-      expect(devDeps).toEqual({ jest: '^29.0.0', 'tiny-tarball': '^1.0.0' });
     });
 
     it('should skip configuring --strip-package-keys and work normally without touching t', async () => {
@@ -152,35 +144,6 @@ describe('publish --remove-package-fields', () => {
   });
 
   describe('use "stripPackageKeys" from Lerna config', () => {
-    // @deprecated renamed as `stripPackageKeys`
-    it('should be able to remove a field from all packages by defining it in Lerna config', async () => {
-      const cwd = await initFixture('strip-pkg-keys');
-
-      await updateLernaConfig(cwd, {
-        command: {
-          publish: {
-            removePackageFields: ['browser'],
-          },
-        },
-      });
-
-      await gitTag(cwd, 'v1.0.0');
-      await setupChanges(cwd);
-      await lernaPublish(cwd)();
-
-      const publishPkg1 = (writePackage as any).updatedManifest('package-1');
-      const publishPkg2 = (writePackage as any).updatedManifest('package-2');
-      const publishPkg3 = (writePackage as any).updatedManifest('package-3');
-      const publishPkg4 = (writePackage as any).updatedManifest('package-4');
-      const publishPkg5 = (writePackage as any).updatedManifest('package-5');
-
-      expect(publishPkg1.browser).toBeUndefined();
-      expect(publishPkg2.browser).toBeUndefined();
-      expect(publishPkg3.browser).toBeUndefined();
-      expect(publishPkg4.browser).toBeUndefined();
-      expect(publishPkg5.browser).toBeUndefined();
-    });
-
     it('should be able to strip a field from all packages by defining it in Lerna config', async () => {
       const cwd = await initFixture('strip-pkg-keys');
 
