@@ -1,5 +1,4 @@
-import { dirname, resolve as pathResolve } from 'node:path';
-import { fileURLToPath } from 'node:url';
+import { resolve as pathResolve } from 'node:path';
 
 import type { VersionCommandOption } from '@lerna-lite/core';
 import { initFixtureFactory } from '@lerna-test/helpers';
@@ -29,10 +28,7 @@ vi.mock('@lerna-lite/core', async () => ({
 }));
 
 // helpers
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = dirname(__filename);
-
-const initFixture = initFixtureFactory(pathResolve(__dirname, '../../../publish/src/__tests__'));
+const initFixture = initFixtureFactory(pathResolve(import.meta.dirname, '../../../publish/src/__tests__'));
 
 expect.addSnapshotSerializer(gitSHA);
 

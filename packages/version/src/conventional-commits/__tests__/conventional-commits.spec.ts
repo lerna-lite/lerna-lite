@@ -1,6 +1,5 @@
 import { readFile } from 'node:fs/promises';
-import { dirname, join, resolve as pathResolve } from 'node:path';
-import { fileURLToPath } from 'node:url';
+import { join, resolve as pathResolve } from 'node:path';
 
 import type { Package } from '@lerna-lite/core';
 import { Project } from '@lerna-lite/core';
@@ -13,9 +12,7 @@ import { recommendVersion } from '../../conventional-commits/recommend-version.j
 import { updateChangelog } from '../../conventional-commits/update-changelog.js';
 import { GetChangelogConfig } from '../get-changelog-config.js';
 
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = dirname(__filename);
-const initFixture = initFixtureFactory(__dirname);
+const initFixture = initFixtureFactory(import.meta.dirname);
 
 expect.addSnapshotSerializer(serializeChangelog);
 

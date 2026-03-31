@@ -1,5 +1,4 @@
-import { dirname, join } from 'node:path';
-import { fileURLToPath } from 'node:url';
+import { join } from 'node:path';
 
 import { colorize, logOutput, type VersionCommandOption } from '@lerna-lite/core';
 import { log } from '@lerna-lite/npmlog';
@@ -51,11 +50,7 @@ vi.mock('@lerna-lite/core', async () => ({
 // also point to the local version command so that all mocks are properly used even by the command-runner
 vi.mock('@lerna-lite/version', async () => await vi.importActual('../version-command'));
 
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = dirname(__filename);
-
-const initFixture = initFixtureFactory(__dirname);
-
+const initFixture = initFixtureFactory(import.meta.dirname);
 const lernaVersion = commandRunner(cliCommands);
 
 const createArgv = (cwd: string, ...args: any[]) => {

@@ -1,6 +1,5 @@
 import { promises as fsPromises } from 'node:fs';
-import { join, dirname as pathDirname } from 'node:path';
-import { fileURLToPath } from 'node:url';
+import { join } from 'node:path';
 import { stripVTControlCharacters } from 'node:util';
 
 import type { Package } from '@lerna-lite/core';
@@ -31,10 +30,7 @@ vi.mock('@lerna-lite/core', async () => {
 });
 
 // helpers
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = pathDirname(__filename);
-
-const initFixture = initFixtureFactory(__dirname);
+const initFixture = initFixtureFactory(import.meta.dirname);
 
 // Serialize the JSONError output to be more human readable
 expect.addSnapshotSerializer({

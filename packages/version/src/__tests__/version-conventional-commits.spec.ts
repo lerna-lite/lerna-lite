@@ -1,5 +1,4 @@
-import { dirname, join, resolve as pathResolve } from 'node:path';
-import { fileURLToPath } from 'node:url';
+import { join, resolve as pathResolve } from 'node:path';
 
 import { collectUpdates, writePackage, type VersionCommandOption } from '@lerna-lite/core';
 import { initFixtureFactory, showCommit } from '@lerna-test/helpers';
@@ -46,10 +45,7 @@ expect.addSnapshotSerializer({
 });
 
 // mocked modules
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = dirname(__filename);
-
-const initFixture = initFixtureFactory(pathResolve(__dirname, '../../../publish/src/__tests__'));
+const initFixture = initFixtureFactory(pathResolve(import.meta.dirname, '../../../publish/src/__tests__'));
 
 const createArgv = (cwd: string, ...args: any[]) => {
   args.unshift('version');

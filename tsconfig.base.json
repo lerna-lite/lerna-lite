@@ -3,8 +3,8 @@
   "compilerOptions": {
     "module": "nodenext",
     "moduleResolution": "nodenext",
-    "target": "ES2021",
-    "lib": ["es2021", "dom"],
+    "target": "ES2022",
+    "lib": ["es2022", "dom"],
     "types": ["node"],
     "typeRoots": ["node_modules/@types"],
     "allowSyntheticDefaultImports": true,

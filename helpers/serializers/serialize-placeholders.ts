@@ -1,5 +1,4 @@
-import { dirname, join } from 'node:path';
-import { fileURLToPath } from 'node:url';
+import { join } from 'node:path';
 
 import { loadJsonFileSync } from 'load-json-file';
 import normalizeNewline from 'normalize-newline';
@@ -7,9 +6,7 @@ import normalizeNewline from 'normalize-newline';
 import serializeTempdir from './serialize-tempdir.js';
 import serializeWindowsPaths from './serialize-windows-paths.js';
 
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = dirname(__filename);
-const pkgJson = loadJsonFileSync(join(__dirname, '../../core/lerna/', 'package.json')) as any;
+const pkgJson = loadJsonFileSync(join(import.meta.dirname, '..', '..', 'core', 'lerna', 'package.json')) as any;
 const LERNA_VERSION = pkgJson.version as string;
 
 const VERSION_REGEX = new RegExp(`^((?:.*?notice cli )|\\^?)v?${LERNA_VERSION}`, 'g');

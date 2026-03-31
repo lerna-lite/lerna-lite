@@ -1,5 +1,4 @@
-import { dirname, join } from 'node:path';
-import { fileURLToPath } from 'node:url';
+import { join } from 'node:path';
 
 import { slash } from '@lerna-lite/core';
 import { initFixtureFactory } from '@lerna-test/helpers';
@@ -9,9 +8,7 @@ import { expect, test } from 'vitest';
 
 import { gitAdd } from '../lib/git-add.js';
 
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = dirname(__filename);
-const initFixture = initFixtureFactory(__dirname);
+const initFixture = initFixtureFactory(import.meta.dirname);
 
 const getStagedFile = async (cwd: string) => execa('git', ['diff', '--cached', '--name-only'], { cwd }).then((result) => slash(result.stdout));
 

@@ -1,6 +1,3 @@
-import { dirname } from 'node:path';
-import { fileURLToPath } from 'node:url';
-
 import { execSync } from '@lerna-lite/core';
 import { initFixtureFactory } from '@lerna-test/helpers';
 import { execa } from 'execa';
@@ -8,10 +5,7 @@ import { expect, test, vi } from 'vitest';
 
 import { isAnythingCommitted } from '../lib/is-anything-committed.js';
 
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = dirname(__filename);
-
-const initFixture = initFixtureFactory(__dirname);
+const initFixture = initFixtureFactory(import.meta.dirname);
 
 vi.mock('@lerna-lite/core', async () => {
   const { execSync } = await vi.importActual<any>('@lerna-lite/core');

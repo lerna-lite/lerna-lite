@@ -1,6 +1,5 @@
 import { appendFileSync } from 'node:fs';
-import { join, dirname as pathDirname } from 'node:path';
-import { fileURLToPath } from 'node:url';
+import { join } from 'node:path';
 
 import { logOutput, type VersionCommandOption } from '@lerna-lite/core';
 import { gitAdd, gitCheckout, gitCommit, gitMerge, gitTag, initFixtureFactory } from '@lerna-test/helpers';
@@ -24,10 +23,7 @@ vi.mock('@lerna-lite/core', async () => ({
 }));
 
 // helpers
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = pathDirname(__filename);
-
-const initFixture = initFixtureFactory(__dirname);
+const initFixture = initFixtureFactory(import.meta.dirname);
 
 // remove quotes around top-level strings
 expect.addSnapshotSerializer({

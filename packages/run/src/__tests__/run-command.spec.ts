@@ -1,6 +1,3 @@
-import { dirname } from 'node:path';
-import { fileURLToPath } from 'node:url';
-
 import { logOutput, type RunCommandOption } from '@lerna-lite/core';
 import { commandRunner, initFixtureFactory, loggingOutput, normalizeRelativeDir } from '@lerna-test/helpers';
 import { pathExists, readJson } from 'fs-extra/esm';
@@ -26,11 +23,8 @@ vi.mock('@lerna-lite/core', async () => ({
 // also point to the local run command so that all mocks are properly used even by the command-runner
 vi.mock('@lerna-lite/run', () => vi.importActual<any>('../run-command'));
 
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = dirname(__filename);
-
 const lernaRun = commandRunner(cliRunCommands);
-const initFixture = initFixtureFactory(__dirname);
+const initFixture = initFixtureFactory(import.meta.dirname);
 
 // assertion helpers
 const ranInPackagesCapturing = (testDir: string) =>

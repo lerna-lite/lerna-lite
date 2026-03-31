@@ -1,13 +1,10 @@
-import { dirname, resolve as pathResolve } from 'node:path';
-import { fileURLToPath } from 'node:url';
+import { resolve as pathResolve } from 'node:path';
 
 import { execa } from 'execa';
 
 import lernaCLI from '../packages/cli/dist/lerna-cli.js';
 
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = dirname(__filename);
-const LERNA_BIN = pathResolve(__dirname, '../packages/cli/src/cli.ts');
+const LERNA_BIN = pathResolve(import.meta.dirname, '../packages/cli/src/cli.ts');
 
 /**
  * A higher-order function to help with passing _actual_ yargs-parsed argv

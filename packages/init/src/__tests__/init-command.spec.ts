@@ -1,5 +1,4 @@
-import { dirname, join } from 'node:path';
-import { fileURLToPath } from 'node:url';
+import { join } from 'node:path';
 
 import { type InitCommandOption } from '@lerna-lite/core';
 import { commandRunner, initFixtureFactory, temporaryDirectory } from '@lerna-test/helpers';
@@ -11,9 +10,7 @@ import cliCommands from '../../../cli/src/cli-commands/cli-init-commands.js';
 import { InitCommand } from '../index.js';
 import { factory } from '../init-command.js';
 
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = dirname(__filename);
-const initFixture = initFixtureFactory(__dirname);
+const initFixture = initFixtureFactory(import.meta.dirname);
 
 const lernaInit = commandRunner(cliCommands);
 

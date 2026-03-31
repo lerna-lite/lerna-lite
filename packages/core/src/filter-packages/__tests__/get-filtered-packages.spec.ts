@@ -1,5 +1,4 @@
-import { dirname, resolve as pathResolve } from 'node:path';
-import { fileURLToPath } from 'node:url';
+import { resolve as pathResolve } from 'node:path';
 
 import { initFixtureFactory } from '@lerna-test/helpers';
 import { beforeAll, expect, test, vi } from 'vitest';
@@ -18,9 +17,7 @@ vi.mock('../../utils/output', async () => await vi.importActual('../../__mocks__
 vi.mock('../../utils/check-working-tree', async () => await vi.importActual('../../__mocks__/check-working-tree'));
 vi.mock('../../utils/collect-updates/collect-updates.js', async () => await vi.importActual('../../__mocks__/collect-updates'));
 
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = dirname(__filename);
-const initFixture = initFixtureFactory(pathResolve(__dirname, '../'));
+const initFixture = initFixtureFactory(pathResolve(import.meta.dirname, '../'));
 
 async function buildGraph(cwd: string) {
   const packages = await Project.getPackages(cwd);

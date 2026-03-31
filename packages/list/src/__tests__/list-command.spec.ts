@@ -1,6 +1,3 @@
-import { dirname } from 'node:path';
-import { fileURLToPath } from 'node:url';
-
 import { collectUpdates, logOutput, type ListCommandOption } from '@lerna-lite/core';
 import { commandRunner, initFixtureFactory } from '@lerna-test/helpers';
 import serializeTempdir from '@lerna-test/helpers/serializers/serialize-tempdir.js';
@@ -33,9 +30,7 @@ vi.mock(
 );
 vi.mock('@lerna-lite/list', async () => await vi.importActual<any>('../list-command'));
 
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = dirname(__filename);
-const initFixture = initFixtureFactory(__dirname);
+const initFixture = initFixtureFactory(import.meta.dirname);
 
 const lernaList = commandRunner(cliListCommands);
 

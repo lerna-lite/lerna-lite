@@ -1,5 +1,4 @@
-import { dirname, join } from 'node:path';
-import { fileURLToPath } from 'node:url';
+import { join } from 'node:path';
 
 import { log } from '@lerna-lite/npmlog';
 import { initFixtureFactory, temporaryDirectory, updateLernaConfig } from '@lerna-test/helpers';
@@ -21,9 +20,7 @@ vi.mock('node:os', async () => ({
   cpus: () => new Array(cpuCount),
 }));
 
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = dirname(__filename);
-const initFixture = initFixtureFactory(__dirname);
+const initFixture = initFixtureFactory(import.meta.dirname);
 
 describe('core-command', () => {
   let testDir = '';
