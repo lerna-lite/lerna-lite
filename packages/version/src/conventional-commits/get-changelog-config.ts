@@ -36,7 +36,7 @@ export class GetChangelogConfig {
       try {
         // try assuming config builder function first
         config = config(presetConfig);
-      } catch (_) {
+      } /* v8 ignore next */ catch (_) {
         // legacy presets export an errback function instead of Q.all()
         config = (promisify(config) as Function)();
       }
