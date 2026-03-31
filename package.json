@@ -81,7 +81,7 @@
     "@types/yargs": "^17.0.35",
     "@typescript/native-preview": "^7.0.0-dev.20260329.1",
     "@vitest/coverage-v8": "^4.1.2",
-    "conventional-changelog-conventionalcommits": "^9.3.0",
+    "conventional-changelog-conventionalcommits": "^9.3.1",
     "cross-env": "^10.1.0",
     "empathic": "^2.0.0",
     "execa": "catalog:",
