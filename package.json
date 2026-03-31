@@ -100,7 +100,7 @@
     "write-json-file": "catalog:dependencies"
   },
   "engines": {
-    "node": "^20.17.0 || >=22.9.0",
+    "node": "^22.17.0 || >=24.0.0",
     "pnpm": "10.x"
   },
   "packageManager": "pnpm@10.10.0"
