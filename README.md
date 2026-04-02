@@ -101,9 +101,13 @@ Here are some of the largest projects using Lerna-Lite
   <img src="https://avatars.githubusercontent.com/u/64281914" width="28" height="28">
    Wundergraph
 </a>&nbsp; | &nbsp;
-<a href="https://github.com/sanity-io/sanity" title="Sanity">
-  <img src="https://avatars.githubusercontent.com/u/17177659?s=48&v=4" width="28" height="28">
-   Sanity
+<a href="https://github.com/jscad/OpenJSCAD.org" title="JSCAD">
+  <img src="https://avatars.githubusercontent.com/u/24420885?s=48&v=4" width="28" height="28">
+   JSCAD
+</a>&nbsp; | &nbsp;
+<a href="https://github.com/standardnotes/app" title="Standard Notees">
+  <img src="https://avatars.githubusercontent.com/u/24537496?s=48&v=4" width="28" height="28">
+   Standard Notes
 </a>&nbsp; | &nbsp;
 <a href="https://github.com/nativescript-community" title="NativeScript Community">
   <img src="https://avatars.githubusercontent.com/u/50633791?s=200&v=4" width="25" height="25">
