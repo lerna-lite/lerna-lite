@@ -4,6 +4,23 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [5.0.0](https://github.com/lerna-lite/lerna-lite/compare/v4.11.5...v5.0.0) (2026-04-02)
+
+### ⚠ BREAKING CHANGES
+
+* use native import.meta.dirname/filename (#1302)
+* bump NodeJS requirement to Node v22.17 (#1299)
+* **deps:** upgrade Chokidar dependency to new major (#1298)
+
+### Miscellaneous Chores
+
+* **deps:** upgrade Chokidar dependency to new major ([#1298](https://github.com/lerna-lite/lerna-lite/issues/1298)) ([b48ab6a](https://github.com/lerna-lite/lerna-lite/commit/b48ab6a7f8ca055c484189a6e20a96aaf15ae89c)) - by @ghiscoding
+
+### Code Refactoring
+
+* bump NodeJS requirement to Node v22.17 ([#1299](https://github.com/lerna-lite/lerna-lite/issues/1299)) ([91ca715](https://github.com/lerna-lite/lerna-lite/commit/91ca715121915d64a0e08dca28758268eba0de77)) - by @ghiscoding
+* use native import.meta.dirname/filename ([#1302](https://github.com/lerna-lite/lerna-lite/issues/1302)) ([9a4f686](https://github.com/lerna-lite/lerna-lite/commit/9a4f6867faada0611f8fd2f5097eb01f8f83eb9d)) - by @ghiscoding
+
 ## [4.11.5](https://github.com/lerna-lite/lerna-lite/compare/v4.11.4...v4.11.5) (2026-03-14)
 
 **Note:** Version bump only for package @lerna-lite/watch

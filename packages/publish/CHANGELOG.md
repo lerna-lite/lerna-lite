@@ -4,6 +4,29 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [5.0.0](https://github.com/lerna-lite/lerna-lite/compare/v4.11.5...v5.0.0) (2026-04-02)
+
+### ⚠ BREAKING CHANGES
+
+* use native import.meta.dirname/filename (#1302)
+* bump NodeJS requirement to Node v22.17 (#1299)
+* remove deprecated code `--remove-package-fields` (#1295)
+* **core:** replace tinyrainbow with native `util.styleText()` (#1293)
+
+### Bug Fixes
+
+* **deps:** update all non-major dependencies ([#1289](https://github.com/lerna-lite/lerna-lite/issues/1289)) ([530905f](https://github.com/lerna-lite/lerna-lite/commit/530905f5a2553d066098d674f82a544375193d0b)) - by @renovate[bot]
+* **npmlog:** replace `has-unicode` with internal implementation ([#1284](https://github.com/lerna-lite/lerna-lite/issues/1284)) ([c729652](https://github.com/lerna-lite/lerna-lite/commit/c729652bd73f170164894a846a00810295c11be0)) - by @ghiscoding
+* **publish:** replace `byte-size` with internal implementation ([#1283](https://github.com/lerna-lite/lerna-lite/issues/1283)) ([ae8867d](https://github.com/lerna-lite/lerna-lite/commit/ae8867d1e241bea2f5d22c8add5fc6c14240255c)) - by @ghiscoding
+* **publish:** show output from publish and postpublish lifecycle scripts ([#1287](https://github.com/lerna-lite/lerna-lite/issues/1287)) ([d5faf1b](https://github.com/lerna-lite/lerna-lite/commit/d5faf1b5893efa05b25088016ee7c954565509d2)) - by @ghiscoding
+
+### Code Refactoring
+
+* bump NodeJS requirement to Node v22.17 ([#1299](https://github.com/lerna-lite/lerna-lite/issues/1299)) ([91ca715](https://github.com/lerna-lite/lerna-lite/commit/91ca715121915d64a0e08dca28758268eba0de77)) - by @ghiscoding
+* **core:** replace tinyrainbow with native `util.styleText()` ([#1293](https://github.com/lerna-lite/lerna-lite/issues/1293)) ([1d36057](https://github.com/lerna-lite/lerna-lite/commit/1d360571668a99fb30dac1b4877c2ee0d4453773)) - by @ghiscoding
+* remove deprecated code `--remove-package-fields` ([#1295](https://github.com/lerna-lite/lerna-lite/issues/1295)) ([072c863](https://github.com/lerna-lite/lerna-lite/commit/072c8635401be56f7e9d8a04645bc9923688c7d2)) - by @ghiscoding
+* use native import.meta.dirname/filename ([#1302](https://github.com/lerna-lite/lerna-lite/issues/1302)) ([9a4f686](https://github.com/lerna-lite/lerna-lite/commit/9a4f6867faada0611f8fd2f5097eb01f8f83eb9d)) - by @ghiscoding
+
 ## [4.11.5](https://github.com/lerna-lite/lerna-lite/compare/v4.11.4...v4.11.5) (2026-03-14)
 
 ### Bug Fixes

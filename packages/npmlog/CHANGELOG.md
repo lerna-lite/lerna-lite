@@ -4,6 +4,26 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [5.0.0](https://github.com/lerna-lite/lerna-lite/compare/v4.11.5...v5.0.0) (2026-04-02)
+
+### ⚠ BREAKING CHANGES
+
+* **build:** use `module --nodenext` instead of bundler/esnext (#1301)
+* bump NodeJS requirement to Node v22.17 (#1299)
+* **core:** replace tinyrainbow with native `util.styleText()` (#1293)
+
+### Bug Fixes
+
+* **core:** replace `aproba` with internal `validate` implementation ([#1285](https://github.com/lerna-lite/lerna-lite/issues/1285)) ([d4494f3](https://github.com/lerna-lite/lerna-lite/commit/d4494f33d22059705fd002c2d96a11d5a4005d81)) - by @ghiscoding
+* **npmlog:** replace `has-unicode` with internal implementation ([#1284](https://github.com/lerna-lite/lerna-lite/issues/1284)) ([c729652](https://github.com/lerna-lite/lerna-lite/commit/c729652bd73f170164894a846a00810295c11be0)) - by @ghiscoding
+* **npmlog:** replace wide-align with internal implementation ([#1281](https://github.com/lerna-lite/lerna-lite/issues/1281)) ([615d2f4](https://github.com/lerna-lite/lerna-lite/commit/615d2f445f0f9db9f0c20c16c7f7588897134769)) - by @ghiscoding
+
+### Code Refactoring
+
+* **build:** use `module --nodenext` instead of bundler/esnext ([#1301](https://github.com/lerna-lite/lerna-lite/issues/1301)) ([14990ba](https://github.com/lerna-lite/lerna-lite/commit/14990bae3a6c3d300d8c0fd46a05d44a8b726cdf)) - by @ghiscoding
+* bump NodeJS requirement to Node v22.17 ([#1299](https://github.com/lerna-lite/lerna-lite/issues/1299)) ([91ca715](https://github.com/lerna-lite/lerna-lite/commit/91ca715121915d64a0e08dca28758268eba0de77)) - by @ghiscoding
+* **core:** replace tinyrainbow with native `util.styleText()` ([#1293](https://github.com/lerna-lite/lerna-lite/issues/1293)) ([1d36057](https://github.com/lerna-lite/lerna-lite/commit/1d360571668a99fb30dac1b4877c2ee0d4453773)) - by @ghiscoding
+
 ## [4.11.5](https://github.com/lerna-lite/lerna-lite/compare/v4.11.4...v4.11.5) (2026-03-14)
 
 ### Bug Fixes
