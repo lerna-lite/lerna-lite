@@ -4,6 +4,22 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [5.0.0](https://github.com/lerna-lite/lerna-lite/compare/v4.11.5...v5.0.0) (2026-04-02)
+
+### ⚠ BREAKING CHANGES
+
+* use native import.meta.dirname/filename (#1302)
+* **build:** use `module --nodenext` instead of bundler/esnext (#1301)
+* bump NodeJS requirement to Node v22.17 (#1299)
+* remove deprecated code `--remove-package-fields` (#1295)
+
+### Code Refactoring
+
+* **build:** use `module --nodenext` instead of bundler/esnext ([#1301](https://github.com/lerna-lite/lerna-lite/issues/1301)) ([14990ba](https://github.com/lerna-lite/lerna-lite/commit/14990bae3a6c3d300d8c0fd46a05d44a8b726cdf)) - by @ghiscoding
+* bump NodeJS requirement to Node v22.17 ([#1299](https://github.com/lerna-lite/lerna-lite/issues/1299)) ([91ca715](https://github.com/lerna-lite/lerna-lite/commit/91ca715121915d64a0e08dca28758268eba0de77)) - by @ghiscoding
+* remove deprecated code `--remove-package-fields` ([#1295](https://github.com/lerna-lite/lerna-lite/issues/1295)) ([072c863](https://github.com/lerna-lite/lerna-lite/commit/072c8635401be56f7e9d8a04645bc9923688c7d2)) - by @ghiscoding
+* use native import.meta.dirname/filename ([#1302](https://github.com/lerna-lite/lerna-lite/issues/1302)) ([9a4f686](https://github.com/lerna-lite/lerna-lite/commit/9a4f6867faada0611f8fd2f5097eb01f8f83eb9d)) - by @ghiscoding
+
 ## [4.11.5](https://github.com/lerna-lite/lerna-lite/compare/v4.11.4...v4.11.5) (2026-03-14)
 
 **Note:** Version bump only for package @lerna-lite/cli

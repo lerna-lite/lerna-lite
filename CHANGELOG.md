@@ -4,6 +4,44 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [5.0.0](https://github.com/lerna-lite/lerna-lite/compare/v4.11.5...v5.0.0) (2026-04-02)
+
+### ⚠ BREAKING CHANGES
+
+* use native import.meta.dirname/filename (#1302)
+* **build:** use `module --nodenext` instead of bundler/esnext (#1301)
+* bump NodeJS requirement to Node v22.17 (#1299)
+* **deps:** upgrade Chokidar dependency to new major (#1298)
+* **deps:** upgrade all Inquirer dependencies to new major (#1297)
+* drop conventional-changelog legacy API for local preset file (#1296)
+* remove deprecated code `--remove-package-fields` (#1295)
+* **core:** replace tinyrainbow with native `util.styleText()` (#1293)
+
+### Bug Fixes
+
+* **core:** replace `aproba` with internal `validate` implementation ([#1285](https://github.com/lerna-lite/lerna-lite/issues/1285)) ([d4494f3](https://github.com/lerna-lite/lerna-lite/commit/d4494f33d22059705fd002c2d96a11d5a4005d81)) - by @ghiscoding
+* **core:** replace `glob-parent` with internal implementation ([#1282](https://github.com/lerna-lite/lerna-lite/issues/1282)) ([b1ebb59](https://github.com/lerna-lite/lerna-lite/commit/b1ebb597c41b7fc523cf6ed798eaac299acd11f2)) - by @ghiscoding
+* **deps:** update all non-major dependencies ([#1289](https://github.com/lerna-lite/lerna-lite/issues/1289)) ([530905f](https://github.com/lerna-lite/lerna-lite/commit/530905f5a2553d066098d674f82a544375193d0b)) - by @renovate[bot]
+* **deps:** update conventional-changelog packages ([#1304](https://github.com/lerna-lite/lerna-lite/issues/1304)) ([ee684a7](https://github.com/lerna-lite/lerna-lite/commit/ee684a7ad14989bd0b84d8bc5cc035d5fa755af4)) - by @renovate[bot]
+* **npmlog:** replace `has-unicode` with internal implementation ([#1284](https://github.com/lerna-lite/lerna-lite/issues/1284)) ([c729652](https://github.com/lerna-lite/lerna-lite/commit/c729652bd73f170164894a846a00810295c11be0)) - by @ghiscoding
+* **npmlog:** replace wide-align with internal implementation ([#1281](https://github.com/lerna-lite/lerna-lite/issues/1281)) ([615d2f4](https://github.com/lerna-lite/lerna-lite/commit/615d2f445f0f9db9f0c20c16c7f7588897134769)) - by @ghiscoding
+* **publish:** replace `byte-size` with internal implementation ([#1283](https://github.com/lerna-lite/lerna-lite/issues/1283)) ([ae8867d](https://github.com/lerna-lite/lerna-lite/commit/ae8867d1e241bea2f5d22c8add5fc6c14240255c)) - by @ghiscoding
+* **publish:** show output from publish and postpublish lifecycle scripts ([#1287](https://github.com/lerna-lite/lerna-lite/issues/1287)) ([d5faf1b](https://github.com/lerna-lite/lerna-lite/commit/d5faf1b5893efa05b25088016ee7c954565509d2)) - by @ghiscoding
+
+### Miscellaneous Chores
+
+* **deps:** upgrade all Inquirer dependencies to new major ([#1297](https://github.com/lerna-lite/lerna-lite/issues/1297)) ([9180bc7](https://github.com/lerna-lite/lerna-lite/commit/9180bc7d0588cc5fe8db62633122a0ebc381850a)) - by @ghiscoding
+* **deps:** upgrade Chokidar dependency to new major ([#1298](https://github.com/lerna-lite/lerna-lite/issues/1298)) ([b48ab6a](https://github.com/lerna-lite/lerna-lite/commit/b48ab6a7f8ca055c484189a6e20a96aaf15ae89c)) - by @ghiscoding
+
+### Code Refactoring
+
+* **build:** use `module --nodenext` instead of bundler/esnext ([#1301](https://github.com/lerna-lite/lerna-lite/issues/1301)) ([14990ba](https://github.com/lerna-lite/lerna-lite/commit/14990bae3a6c3d300d8c0fd46a05d44a8b726cdf)) - by @ghiscoding
+* bump NodeJS requirement to Node v22.17 ([#1299](https://github.com/lerna-lite/lerna-lite/issues/1299)) ([91ca715](https://github.com/lerna-lite/lerna-lite/commit/91ca715121915d64a0e08dca28758268eba0de77)) - by @ghiscoding
+* **core:** replace tinyrainbow with native `util.styleText()` ([#1293](https://github.com/lerna-lite/lerna-lite/issues/1293)) ([1d36057](https://github.com/lerna-lite/lerna-lite/commit/1d360571668a99fb30dac1b4877c2ee0d4453773)) - by @ghiscoding
+* drop conventional-changelog legacy API for local preset file ([#1296](https://github.com/lerna-lite/lerna-lite/issues/1296)) ([c299059](https://github.com/lerna-lite/lerna-lite/commit/c2990595c7398b486c4be7fcc66b846745687b78)) - by @ghiscoding
+* remove deprecated code `--remove-package-fields` ([#1295](https://github.com/lerna-lite/lerna-lite/issues/1295)) ([072c863](https://github.com/lerna-lite/lerna-lite/commit/072c8635401be56f7e9d8a04645bc9923688c7d2)) - by @ghiscoding
+* use native import.meta.dirname/filename ([#1302](https://github.com/lerna-lite/lerna-lite/issues/1302)) ([9a4f686](https://github.com/lerna-lite/lerna-lite/commit/9a4f6867faada0611f8fd2f5097eb01f8f83eb9d)) - by @ghiscoding
+
 ## [4.11.5](https://github.com/lerna-lite/lerna-lite/compare/v4.11.4...v4.11.5) (2026-03-14)
 
 ### Bug Fixes

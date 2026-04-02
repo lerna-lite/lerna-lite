@@ -1,6 +1,6 @@
 {
   "name": "@lerna-lite/publish",
-  "version": "4.11.5",
+  "version": "5.0.0",
   "description": "Publish packages in the current workspace",
   "homepage": "https://github.com/lerna-lite/lerna-lite",
   "bugs": {

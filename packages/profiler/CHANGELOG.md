@@ -4,6 +4,16 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [5.0.0](https://github.com/lerna-lite/lerna-lite/compare/v4.11.5...v5.0.0) (2026-04-02)
+
+### ⚠ BREAKING CHANGES
+
+* bump NodeJS requirement to Node v22.17 (#1299)
+
+### Code Refactoring
+
+* bump NodeJS requirement to Node v22.17 ([#1299](https://github.com/lerna-lite/lerna-lite/issues/1299)) ([91ca715](https://github.com/lerna-lite/lerna-lite/commit/91ca715121915d64a0e08dca28758268eba0de77)) - by @ghiscoding
+
 ## [4.11.5](https://github.com/lerna-lite/lerna-lite/compare/v4.11.4...v4.11.5) (2026-03-14)
 
 **Note:** Version bump only for package @lerna-lite/profiler
