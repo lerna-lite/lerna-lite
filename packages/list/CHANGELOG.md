@@ -6,6 +6,9 @@ See [Conventional Commits](https://conventionalcommits.org) for commit guideline
 
 ## [5.0.0](https://github.com/lerna-lite/lerna-lite/compare/v4.11.5...v5.0.0) (2026-04-02)
 
+> [!NOTE]
+> Please visit the [v5.0.0](https://github.com/lerna-lite/lerna-lite/releases/tag/v5.0.0) release for more details about the migration.
+
 ### ⚠ BREAKING CHANGES
 
 * use native import.meta.dirname/filename (#1302)
