@@ -1,4 +1,4 @@
-# Lerna-Lite <img class="avatar" src="https://avatars.githubusercontent.com/u/120162016?s=96&amp;v=4" alt="@lerna-lite" height="55" width="55">
+# <img class="avatar" src="https://avatars.githubusercontent.com/u/120162016?s=96&amp;v=4" alt="@lerna-lite" height="55" width="55"> Lerna-Lite
 
 
 <p>
@@ -68,51 +68,10 @@ OIDC Trusted Publishing is now supported with [v4.9.0](https://github.com/lerna-
 
 Here are some of the largest projects using Lerna-Lite
 
-<a href="https://github.com/facebook/jest">
-  <img src="https://jestjs.io/img/jest.png" width="28" height="28">
-  Jest
-</a>&nbsp; | &nbsp;
-<a href="https://github.com/vuetifyjs/vuetify">
-  <img src="https://avatars.githubusercontent.com/u/22138497?s=28&v=4" width="28" height="28">
-  Vuetify
-</a>&nbsp; | &nbsp;
-<a href="https://github.com/SBoudrias/Inquirer.js" title="Inquirer.js">
-  <img src="https://raw.githubusercontent.com/SBoudrias/Inquirer.js/main/assets/inquirer_readme.svg" width="28" height="28">
-   Inquirer
-</a>&nbsp; | &nbsp;
-<a href="https://github.com/react-navigation/react-navigation">
-  <img src="https://avatars.githubusercontent.com/u/29647600?s=64&v=4" width="28" height="28">
-  React Nav
-</a>&nbsp; | &nbsp;
-<a href="https://github.com/formatjs/formatjs">
-  <img src="https://avatars.githubusercontent.com/u/50559490" width="28" height="28">
-  Format.JS
-</a>&nbsp; | &nbsp;
-<a href="https://github.com/johnsoncodehk/volar">
-  <img src="https://raw.githubusercontent.com/johnsoncodehk/sponsors/master/logos/Vue.svg" width="28" height="28">
-  Volar
-</a>&nbsp; | &nbsp;
-<a href="https://github.com/palantir/blueprint">
-  <img src="https://avatars.githubusercontent.com/u/303157?s=48&v=4" width="28" height="28">
-  Blueprint
-</a>
-<br><br>
-<a href="https://github.com/wundergraph" title="Wundergraph">
-  <img src="https://avatars.githubusercontent.com/u/64281914" width="28" height="28">
-   Wundergraph
-</a>&nbsp; | &nbsp;
-<a href="https://github.com/jscad/OpenJSCAD.org" title="JSCAD">
-  <img src="https://avatars.githubusercontent.com/u/24420885?s=48&v=4" width="28" height="28">
-   JSCAD
-</a>&nbsp; | &nbsp;
-<a href="https://github.com/standardnotes/app" title="Standard Notees">
-  <img src="https://avatars.githubusercontent.com/u/24537496?s=48&v=4" width="28" height="28">
-   Standard Notes
-</a>&nbsp; | &nbsp;
-<a href="https://github.com/nativescript-community" title="NativeScript Community">
-  <img src="https://avatars.githubusercontent.com/u/50633791?s=200&v=4" width="25" height="25">
-   NativeScript
-</a>
+| | | | | | | |
+| -- | -- | -- | -- | -- | -- | -- |
+| <a href="https://github.com/facebook/jest"><img src="https://jestjs.io/img/jest.png" width="28" height="28">Jest </a> | <a href="https://github.com/vuetifyjs/vuetify"><img src="https://avatars.githubusercontent.com/u/22138497?s=28&v=4" width="28" height="28">Vuetify</a> | <a href="https://github.com/SBoudrias/Inquirer.js" title="Inquirer.js"><img src="https://raw.githubusercontent.com/SBoudrias/Inquirer.js/main/assets/inquirer_readme.svg" width="28" height="28">Inquirer</a> | <a href="https://github.com/react-navigation/react-navigation"><img src="https://avatars.githubusercontent.com/u/29647600?s=64&v=4" width="28" height="28">React Nav</a> | <a href="https://github.com/formatjs/formatjs"><img src="https://avatars.githubusercontent.com/u/50559490" width="28" height="28">Format.JS</a> |<a href="https://github.com/johnsoncodehk/volar"><img src="https://raw.githubusercontent.com/johnsoncodehk/sponsors/master/logos/Vue.svg" width="28" height="28">Volar</a> | <a href="https://github.com/palantir/blueprint"><img src="https://avatars.githubusercontent.com/u/303157?s=48&v=4" width="28" height="28">Blueprint</a> |
+| <a href="https://github.com/wundergraph" title="Wundergraph"><img src="https://avatars.githubusercontent.com/u/64281914" width="28" height="28">Wundergraph</a> | <a href="https://github.com/jscad/OpenJSCAD.org" title="JSCAD"><img src="https://avatars.githubusercontent.com/u/24420885?s=48&v=4" width="28" height="28">JSCAD</a> | <a href="https://github.com/standardnotes/app" title="Standard Notees"><img src="https://avatars.githubusercontent.com/u/24537496?s=48&v=4" width="28" height="28">Standard Notes</a> | <a href="https://github.com/nativescript-community" title="NativeScript Community"><img src="https://avatars.githubusercontent.com/u/50633791?s=200&v=4" width="25" height="25">NativeScript</a>
 
 ## About Lerna-Lite
 
@@ -295,7 +254,7 @@ You can add the `$schema` property into your `lerna.json` to take advantage of L
 _Click on any command below to see documentation of all available options_
 
 | Command | Install | Description |
-| --------| --------| ----------- |
+| ------- | ------- | ----------- |
 | 🕜 [changed](https://github.com/lerna-lite/lerna-lite/tree/main/packages/changed#readme) | `npm i @lerna-lite/changed -D` | list local packages changed since last release |
 | 🌓 [diff](https://github.com/lerna-lite/lerna-lite/tree/main/packages/diff#readme)       | `npm i @lerna-lite/diff -D`    | git diff all packages since the last release   |
 | 👷 [exec](https://github.com/lerna-lite/lerna-lite/tree/main/packages/exec#readme)       | `npm i @lerna-lite/exec -D`    | execute an command in each workspace package       |
@@ -405,24 +364,24 @@ If you have problems running the project and your problems are related to Git co
 
 Thanks to all my sponsors!
 
-<div>
-  <span>
-    <a href="https://github.com/wundergraph" class="Link" title="Wundergraph" target="_blank"><img src="https://avatars.githubusercontent.com/u/64281914" width="50" height="50" valign="middle" /></a>
-  </span>
-  &nbsp;
-  <span>
-    <a href="https://github.com/johnsoncodehk" class="Link" title="johnsoncodehk (Volar)" target="_blank"><img src="https://avatars.githubusercontent.com/u/16279759" width="50" height="50" valign="middle" /></a>
-  </span>
-   &nbsp;
-  <span>
-    <a href="https://github.com/kevinburkett" class="Link" title="kevinburkett" target="_blank"><img class="circle avatar-user" src="https://avatars.githubusercontent.com/u/48218815?s=52&amp;v=4" width="45" height="45" valign="middle" /></a>
-  </span>
-  &nbsp;
-  <span>
-    <a href="https://github.com/anton-gustafsson" class="Link" title="anton-gustafsson" target="_blank"><img src="https://avatars.githubusercontent.com/u/22906905?s=52&v=4" width="50" height="50" valign="middle" /></a>
-  </span>
-  &nbsp;
-  <span>
-    <a href="https://github.com/gibson552" class="Link" title="gibson552" target="_blank"><img src="https://avatars.githubusercontent.com/u/84058359?s=52&v=4" width="50" height="50" valign="middle" /></a>
-  </span>
-</div>
+<table>
+  <tbody>
+    <tr>
+      <td>
+        <a href="https://github.com/wundergraph" class="Link" title="Wundergraph" target="_blank"><img src="https://avatars.githubusercontent.com/u/64281914" width="50" height="50" valign="middle" /></a>    
+      </td>
+      <td>
+        <a href="https://github.com/johnsoncodehk" class="Link" title="johnsoncodehk (Volar)" target="_blank"><img src="https://avatars.githubusercontent.com/u/16279759" width="50" height="50" valign="middle" /></a>
+      </td>
+      <td>
+        <a href="https://github.com/kevinburkett" class="Link" title="kevinburkett" target="_blank"><img class="circle avatar-user" src="https://avatars.githubusercontent.com/u/48218815?s=52&amp;v=4" width="45" height="45" valign="middle" /></a>        
+      </td>
+      <td>
+        <a href="https://github.com/anton-gustafsson" class="Link" title="anton-gustafsson" target="_blank"><img src="https://avatars.githubusercontent.com/u/22906905?s=52&v=4" width="50" height="50" valign="middle" /></a>
+      </td>
+      <td>
+        <a href="https://github.com/gibson552" class="Link" title="gibson552" target="_blank"><img src="https://avatars.githubusercontent.com/u/84058359?s=52&v=4" width="50" height="50" valign="middle" /></a>        
+      </td>
+    </tr>
+  </tbody>
+</table>
