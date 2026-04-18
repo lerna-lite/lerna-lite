@@ -13,19 +13,19 @@
       enabled: false,
     },
     {
+      // group all Conventional-Changelog dependencies
       matchPackagePatterns: ['^conventional-', '^@conventional-changelog/'],
       groupName: 'Conventional-Changelog packages',
-      description: group all Conventional-Changelog dependencies
     },
     {
+      // group all Inquirer dependencies
       matchPackagePatterns: ['^@inquirer/'],
       groupName: 'Inquirer packages',
-      description: group all Inquirer dependencies
     },
     {
+      // blocked by oxlint issue: https://github.com/oxc-project/oxc/issues/19431
       packageNames: ['oxlint'],
       allowedVersions: '1.47.0',
-      description: blocked by oxlint issue: https://github.com/oxc-project/oxc/issues/19431
     },
     {
       matchManagers: ['github-actions'],
