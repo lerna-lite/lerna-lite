@@ -7,7 +7,7 @@ import columnify from 'columnify';
 /**
  * Format a list of packages according to specified options.
  * @param {import("@lerna/package").Package[]} pkgList
- * @param {import("./listable-options").ListableOption} options
+ * @param {import("@lerna-lite/core").ListableOption} options
  */
 export function listableFormat(pkgList, options) {
   const viewOptions = parseViewOptions(options);

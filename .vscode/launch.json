@@ -60,6 +60,25 @@
       "skipFiles": ["<node_internals>/**", "node_modules/**"]
     },
     {
+      "name": "Exec PKG Name command debugger",
+      "type": "node",
+      "request": "launch",
+      "runtimeExecutable": "/home/ghislainb/.nvm/versions/node/v24.14.1/bin/node",
+      "args": [
+        "packages/cli/dist/cli.js",
+        "exec",
+        "--scope",
+        "{@lerna-lite/cli,@lerna-lite/core}",
+        "--",
+        "echo",
+        "hello from package: $LERNA_PACKAGE_NAME"
+      ],
+      "cwd": "${workspaceRoot}",
+      "console": "integratedTerminal",
+      "internalConsoleOptions": "openOnSessionStart",
+      "skipFiles": ["<node_internals>/**", "node_modules/**"]
+    },
+    {
       "name": "Run command debugger",
       "type": "node",
       "request": "launch",
