@@ -185,6 +185,12 @@
             "bail": {
               "$ref": "#/$defs/commandOptions/shared/bail"
             },
+            "noShell": {
+              "$ref": "#/$defs/commandOptions/shared/noShell"
+            },
+            "shell": {
+              "$ref": "#/$defs/commandOptions/shared/shell"
+            },
             "noPrefix": {
               "$ref": "#/$defs/commandOptions/shared/noPrefix"
             },
@@ -812,6 +818,12 @@
             },
             "bail": {
               "$ref": "#/$defs/commandOptions/shared/bail"
+            },
+            "noShell": {
+              "$ref": "#/$defs/commandOptions/shared/noShell"
+            },
+            "shell": {
+              "$ref": "#/$defs/commandOptions/shared/shell"
             },
             "debounce": {
               "$ref": "#/$defs/commandOptions/watch/debounce"
@@ -1680,6 +1692,14 @@
         "bail": {
           "type": "boolean",
           "description": "During `lerna exec`, `lerna run` and `lerna watch`, exit with non-zero status if any command fails."
+        },
+        "noShell": {
+          "type": "boolean",
+          "description": "During `lerna exec` or `lerna watch`, when true, do not run the command within a shell (spawns the executable directly)."
+        },
+        "shell": {
+          "type": "boolean",
+          "description": "During `lerna exec` or `lerna watch`, run the command within a shell."
         },
         "noPrefix": {
           "type": "boolean",
