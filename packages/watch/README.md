@@ -106,6 +106,28 @@ Below are basic samples added directly in Lerna-Lite which are used (manually) t
 
 https://github.com/lerna-lite/lerna-lite/blob/ab731935f452c79deb668a76e41814eee812b772/package.json#L25-L27
 
+---
+
+## ⚠️ Windows: Double "Terminate batch job (Y/N)?" Prompt
+
+> **Note for Windows users:**
+> When stopping `lerna watch` (or any Node.js CLI run via npm/pnpm/yarn scripts) with <kbd>Ctrl+C</kbd>, you may see the `Terminate batch job (Y/N)?` prompt **twice**.
+> This is a limitation of the Windows shell (`cmd.exe`) when running batch files (`.cmd`).
+> - The prompt is not caused by Lerna Lite or Node.js, but by how Windows handles batch jobs.
+> - There is no way to suppress this prompt from within Node.js or your scripts.
+> - **VS Code users:** You can auto-answer the first prompt by adding this to your `.vscode/settings.json`:
+>   ```json
+>   "terminal.integrated.autoReplies": {
+>     "Terminate batch job (Y/N)": "Y\r"
+>   }
+>   ```
+>   This will auto-confirm the first prompt, but you may still see a second prompt in some cases.
+> - The double prompt does **not** occur on macOS or Linux.
+
+For more details, see [npm issue #4603](https://github.com/npm/npm/issues/4603) and [Stack Overflow](https://stackoverflow.com/questions/23303756/why-does-windows-ask-twice-to-terminate-batch-jobs).
+
+---
+
 ## Options
 
 `lerna watch` accepts all [filter flags](https://github.com/lerna-lite/lerna-lite/blob/main/packages/core/README.md#options). Filter flags can be used to select specific packages to watch. See the [examples](#examples) above.
