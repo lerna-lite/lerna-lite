@@ -6,6 +6,7 @@ import { beforeEach, describe, expect, it } from 'vitest';
 
 import { Conf } from '../conf.js';
 import * as defaults from '../defaults.js';
+import { toNerfDart } from '../npm-conf.js';
 
 describe('conf', () => {
   describe('loadPrefix()', () => {
@@ -348,5 +349,10 @@ MIIBkTCB+wIJAKHHCgVZU3KhMA0GCSqGSIb3DQEBBAUAMA0xCzAJBgNVBAYTAlVT
         })
       ).toThrow('must include email address');
     });
+  });
+
+  it('should add trailing slash for URLs without one (toNerfDart)', () => {
+    expect(toNerfDart('https://npm.example.com')).toBe('//npm.example.com/');
+    expect(toNerfDart('https://npm.example.com/some-path')).toBe('//npm.example.com/some-path/');
   });
 });

@@ -1,14 +1,15 @@
-import url from 'node:url';
-
 // https://github.com/npm/npm/blob/0cc9d89/lib/config/nerf-dart.js
+// Use WHATWG URL API to normalize and strip sensitive parts
+// Normalize and strip sensitive parts from a registry URL, returning //host/path
 export function toNerfDart(uri) {
-  const parsed = url.parse(uri) as any;
-
-  delete parsed.protocol;
-  delete parsed.auth;
-  delete parsed.query;
-  delete parsed.search;
-  delete parsed.hash;
-
-  return url.resolve(url.format(parsed), '.');
+  const u = new URL(uri);
+  u.username = '';
+  u.password = '';
+  u.search = '';
+  u.hash = '';
+  let result = '//' + u.host + u.pathname;
+  if (!result.endsWith('/')) {
+    result += '/';
+  }
+  return result;
 }
