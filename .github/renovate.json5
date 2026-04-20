@@ -5,7 +5,6 @@
   labels: ['📦 dependencies', '🤖 bot'],
   lockFileMaintenance: { enabled: false },
   minimumReleaseAge: '2 days',
-  pin: false,
   rangeStrategy: 'bump',
   packageRules: [
     {
@@ -36,5 +35,5 @@
   ],
   ignoreDeps: ['node', 'pnpm'],
   ignorePaths: ['helpers', '**/__fixtures__/**', '**/__mocks__/**', '**/fixtures/**', '**/mocks/**'],
-  schedule: ['every 2 months on Thursday'],
+  // schedule: ['every 2 months on Thursday'],
 }
