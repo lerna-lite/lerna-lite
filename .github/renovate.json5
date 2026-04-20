@@ -33,8 +33,12 @@
       allowedVersions: '< 6.0.0',
       description: 'Keep pnpm action at v5 until we migrate to pnpm v11',
     },
+    {
+      packageNames: ['tinyglobby'],
+      allowedVersions: '0.2.15',
+    },
   ],
-  ignoreDeps: ['node', 'pnpm', '@typescript/native-preview'],
+  ignoreDeps: ['node', 'pnpm'],
   ignorePaths: ['helpers', '**/__fixtures__/**', '**/__mocks__/**', '**/fixtures/**', '**/mocks/**'],
   schedule: ['every 2 months on Thursday'],
 }
