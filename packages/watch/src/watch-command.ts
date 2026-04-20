@@ -247,7 +247,8 @@ export class WatchCommand extends Command<WatchCommandOption & FilterOptions> {
 
       await this._watcher?.close();
     } finally {
-      process.exit(exitCode);
+      process.exitCode ??= exitCode ? 128 + exitCode : undefined;
+      process.exit();
     }
   }
 
