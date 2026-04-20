@@ -114,8 +114,8 @@ describe('Init Command', () => {
       const [lernaJson, pkgJson, packagesDirExists, gitDirExists] = await Promise.all([
         readJson(join(testDir, 'lerna.json')),
         readJson(join(testDir, 'package.json')),
-        pathExists(join(testDir, 'packages'), null as any),
-        pathExists(join(testDir, '.git'), null as any),
+        Promise.resolve(pathExists(join(testDir, 'packages'))),
+        Promise.resolve(pathExists(join(testDir, '.git'))),
       ]);
 
       expect(lernaJson).toMatchObject({
@@ -218,7 +218,7 @@ describe('Init Command', () => {
       const [lernaJson, pkgJson, packagesDirExists] = await Promise.all([
         readJson(join(testDir, 'lerna.json')),
         readJson(join(testDir, 'package.json')),
-        pathExists(join(testDir, 'packages'), null as any),
+        Promise.resolve(pathExists(join(testDir, 'packages'))),
       ]);
 
       expect(lernaJson).toMatchObject({

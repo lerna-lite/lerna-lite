@@ -6,7 +6,7 @@
     "target": "ES2022",
     "lib": ["es2022", "dom"],
     "types": ["node", "vitest/globals"],
-    "typeRoots": ["node_modules/@types"],
+    "typeRoots": ["./node_modules/@types", "./node_modules"],
     "allowSyntheticDefaultImports": true,
     "composite": true,
     "declaration": true,
