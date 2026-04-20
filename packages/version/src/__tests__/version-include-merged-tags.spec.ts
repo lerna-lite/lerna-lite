@@ -53,20 +53,26 @@ const createArgv = (cwd: string, ...args: string[]) => {
 describe('version --include-merged-tags', () => {
   const setupGitChangesWithBranch = async (cwd: string, mainPaths: string[], branchPaths: string[]) => {
     await gitTag(cwd, 'v1.0.0');
-    await Promise.all(mainPaths.map((fp) => appendFileSync(join(cwd, fp), '1')));
+    for (const fp of mainPaths) {
+      appendFileSync(join(cwd, fp), '1');
+    }
     await gitAdd(cwd, '-A');
     await gitCommit(cwd, 'Commit');
     // Create release branch
     await gitCheckout(cwd, ['-b', 'release/v1.0.1']);
     // Switch into release branch
-    await Promise.all(branchPaths.map((fp) => appendFileSync(join(cwd, fp), '1')));
+    for (const fp of branchPaths) {
+      appendFileSync(join(cwd, fp), '1');
+    }
     await gitAdd(cwd, '-A');
     await gitCommit(cwd, 'Bump');
     await gitTag(cwd, 'v1.0.1');
     await gitCheckout(cwd, ['main']);
     await gitMerge(cwd, ['--no-ff', 'release/v1.0.1']);
     // Commit after merge
-    await Promise.all(mainPaths.map((fp) => appendFileSync(join(cwd, fp), '1')));
+    for (const fp of mainPaths) {
+      appendFileSync(join(cwd, fp), '1');
+    }
     await gitAdd(cwd, '-A');
     await gitCommit(cwd, 'Commit2');
   };
