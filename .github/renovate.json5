@@ -3,7 +3,6 @@
   extends: ['config:base', 'group:allNonMajor'],
   dependencyDashboard: true,
   labels: ['📦 dependencies', '🤖 bot'],
-  lockFileMaintenance: { enabled: false },
   minimumReleaseAge: '2 days',
   rangeStrategy: 'bump',
   packageRules: [
