@@ -1,6 +1,6 @@
 {
   "name": "@lerna-lite/list",
-  "version": "5.0.0",
+  "version": "5.1.0",
   "description": "Lerna-Lite list commmand - List local packages",
   "homepage": "https://github.com/lerna-lite/lerna-lite",
   "bugs": {

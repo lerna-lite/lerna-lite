@@ -4,6 +4,12 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [5.1.0](https://github.com/lerna-lite/lerna-lite/compare/v5.0.0...v5.1.0) (2026-04-20)
+
+### Features
+
+* add `--no-shell` for lerna exec/watch to avoid DEP0190 warning ([#1309](https://github.com/lerna-lite/lerna-lite/issues/1309)) ([7b7e61c](https://github.com/lerna-lite/lerna-lite/commit/7b7e61c4a384b8e0a4cde8e709c944b80abb8113)) - by @ghiscoding
+
 ## [5.0.0](https://github.com/lerna-lite/lerna-lite/compare/v4.11.5...v5.0.0) (2026-04-02)
 
 > [!NOTE]

@@ -1,6 +1,6 @@
 {
   "name": "@lerna-lite/listable",
-  "version": "5.0.0",
+  "version": "5.1.0",
   "description": "Lerna-Lite listable utils",
   "homepage": "https://github.com/lerna-lite/lerna-lite",
   "bugs": {

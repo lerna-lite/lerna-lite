@@ -4,6 +4,19 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [5.1.0](https://github.com/lerna-lite/lerna-lite/compare/v5.0.0...v5.1.0) (2026-04-20)
+
+### Features
+
+* add `--no-shell` for lerna exec/watch to avoid DEP0190 warning ([#1309](https://github.com/lerna-lite/lerna-lite/issues/1309)) ([7b7e61c](https://github.com/lerna-lite/lerna-lite/commit/7b7e61c4a384b8e0a4cde8e709c944b80abb8113)) - by @ghiscoding
+
+### Bug Fixes
+
+* **deps:** update all non-major dependencies ([#1310](https://github.com/lerna-lite/lerna-lite/issues/1310)) ([d8fcd69](https://github.com/lerna-lite/lerna-lite/commit/d8fcd69f60d7dd14b8bda2ec969e1ee91f3f02fa)) - by @renovate[bot]
+* **deps:** update dependency @conventional-changelog/git-client to ^2.7.0 ([#1312](https://github.com/lerna-lite/lerna-lite/issues/1312)) ([d6689fb](https://github.com/lerna-lite/lerna-lite/commit/d6689fba640bedef6fa573c222b0e3de23787cdb)) - by @renovate[bot]
+* **deps:** update inquirer packages ([#1311](https://github.com/lerna-lite/lerna-lite/issues/1311)) ([1f96daf](https://github.com/lerna-lite/lerna-lite/commit/1f96daf7eecbaaa4a3bb2664f1db8d15f91df03a)) - by @renovate[bot]
+* **watch:** always set cwd for tinyglobby to support latest version ([#1314](https://github.com/lerna-lite/lerna-lite/issues/1314)) ([99d42c5](https://github.com/lerna-lite/lerna-lite/commit/99d42c5bcc91f4831eab6a4628144e5f74a76393)) - by @ghiscoding
+
 ## [5.0.0](https://github.com/lerna-lite/lerna-lite/compare/v4.11.5...v5.0.0) (2026-04-02)
 
 > [!NOTE]

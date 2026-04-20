@@ -1,6 +1,6 @@
 {
   "name": "@lerna-lite/exec",
-  "version": "5.0.0",
+  "version": "5.1.0",
   "description": "Lerna-Lite Exec command will execute an arbitrary command in each package",
   "homepage": "https://github.com/lerna-lite/lerna-lite",
   "bugs": {
