@@ -126,10 +126,17 @@ export class WatchCommand extends Command<WatchCommandOption & FilterOptions> {
         return pattern;
       });
 
-      // initialize chokidar watcher by adding all package folders to the watcher,
-      // we'll use all directories so that when new files are being added, they will also be inspected
-      const pkgFolders = this._filteredPackages.map((pkg) => this.posixifyPath(pkg.location));
-      const foldersToWatch = globSync(pkgFolders, { onlyDirectories: true, ignore: this._ignoredGlobs });
+      // Initialize chokidar watcher by adding all package folders to the watcher.
+      // We'll use all directories so that when new files are being added, they will also be inspected.
+      let pkgFolders = this._filteredPackages.map((pkg) => this.posixifyPath(pkg.location));
+      // Filter out any empty/undefined globs.
+      pkgFolders = pkgFolders.filter(Boolean);
+
+      const globOptions: any = { onlyDirectories: true, cwd: process.cwd() };
+      if (this._ignoredGlobs && this._ignoredGlobs.length > 0) {
+        globOptions.ignore = this._ignoredGlobs;
+      }
+      const foldersToWatch = pkgFolders.length > 0 ? globSync(pkgFolders, globOptions) : [];
       this._watcher = watch(foldersToWatch, {
         ...chokidarOptions,
         cwd: process.cwd(),
@@ -322,7 +329,7 @@ export class WatchCommand extends Command<WatchCommandOption & FilterOptions> {
       patterns.push(unixPath);
     });
 
-    this._watchedFiles = new Set(globSync(patterns, { ignore: this._ignoredGlobs }));
+    this._watchedFiles = new Set(globSync(patterns, { cwd: process.cwd(), ignore: this._ignoredGlobs }));
   }
 
   protected runCommandInPackageStreaming(pkg: Package, changedFile: string) {
