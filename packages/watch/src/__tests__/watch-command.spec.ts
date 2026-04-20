@@ -148,6 +148,30 @@ describe('Watch Command', () => {
       process.exitCode = undefined;
     });
 
+    it('should set shell=true by default', async () => {
+      await lernaWatch(testDir)('--debounce', '0', '--', 'echo $LERNA_PACKAGE_NAME');
+      await watchChangeHandler('change', join(testDir, 'packages/package-2/file-2.ts'));
+      expect(spawn).toHaveBeenLastCalledWith(
+        'echo $LERNA_PACKAGE_NAME',
+        [],
+        expect.objectContaining({
+          shell: true,
+        })
+      );
+    });
+
+    it('should set shell=false with --no-shell', async () => {
+      await lernaWatch(testDir)('--debounce', '0', '--no-shell', '--', 'echo $LERNA_PACKAGE_NAME');
+      await watchChangeHandler('change', join(testDir, 'packages/package-2/file-2.ts'));
+      expect(spawn).toHaveBeenLastCalledWith(
+        'echo $LERNA_PACKAGE_NAME',
+        [],
+        expect.objectContaining({
+          shell: false,
+        })
+      );
+    });
+
     it('should take glob input option, without slash prefix, and expect it to be watched by chokidar', async () => {
       const command = new WatchCommand(createArgv(testDir, '--debounce', '0', '--glob', '**/*.{ts,tsx}', '--', 'lerna run build'));
       await command;

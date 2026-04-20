@@ -231,6 +231,28 @@ describe('ExecCommand', () => {
 
       expect(calledInPackages()).toEqual(['package-1', 'package-2']);
     });
+
+    it('should set shell=true by default', async () => {
+      await lernaExec(testDir)('ls');
+      expect(spawn).toHaveBeenCalledWith(
+        'ls',
+        [],
+        expect.objectContaining({
+          shell: true,
+        })
+      );
+    });
+
+    it('should set shell=false with --no-shell', async () => {
+      await lernaExec(testDir)('ls', '--no-shell');
+      expect(spawn).toHaveBeenCalledWith(
+        'ls',
+        [],
+        expect.objectContaining({
+          shell: false,
+        })
+      );
+    });
   });
 
   describe('with --profile', () => {
