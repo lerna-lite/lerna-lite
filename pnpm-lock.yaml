@@ -636,8 +636,8 @@ importers:
   packages/version:
     dependencies:
       '@conventional-changelog/git-client':
-        specifier: ^2.6.0
-        version: 2.6.0(conventional-commits-filter@5.0.0)(conventional-commits-parser@6.4.0)
+        specifier: ^2.7.0
+        version: 2.7.0(conventional-commits-filter@5.0.0)(conventional-commits-parser@6.4.0)
       '@lerna-lite/cli':
         specifier: workspace:*
         version: link:../cli
@@ -784,12 +784,12 @@ packages:
     resolution: {integrity: sha512-6zABk/ECA/QYSCQ1NGiVwwbQerUCZ+TQbp64Q3AgmfNvurHH0j8TtXa1qbShXA6qqkpAj4V5W8pP6mLe1mcMqA==}
     engines: {node: '>=18'}
 
-  '@conventional-changelog/git-client@2.6.0':
-    resolution: {integrity: sha512-T+uPDciKf0/ioNNDpMGc8FDsehJClZP0yR3Q5MN6wE/Y/1QZ7F+80OgznnTCOlMEG4AV0LvH2UJi3C/nBnaBUg==}
+  '@conventional-changelog/git-client@2.7.0':
+    resolution: {integrity: sha512-j7A8/LBEQ+3rugMzPXoKYzyUPpw/0CBQCyvtTR7Lmu4olG4yRC/Tfkq79Mr3yuPs0SUitlO2HwGP3gitMJnRFw==}
     engines: {node: '>=18'}
     peerDependencies:
       conventional-commits-filter: ^5.0.0
-      conventional-commits-parser: ^6.3.0
+      conventional-commits-parser: ^6.4.0
     peerDependenciesMeta:
       conventional-commits-filter:
         optional: true
@@ -2931,7 +2931,7 @@ snapshots:
 
   '@bcoe/v8-coverage@1.0.2': {}
 
-  '@conventional-changelog/git-client@2.6.0(conventional-commits-filter@5.0.0)(conventional-commits-parser@6.4.0)':
+  '@conventional-changelog/git-client@2.7.0(conventional-commits-filter@5.0.0)(conventional-commits-parser@6.4.0)':
     dependencies:
       '@simple-libs/child-process-utils': 1.0.1
       '@simple-libs/stream-utils': 1.2.0
@@ -3780,7 +3780,7 @@ snapshots:
 
   conventional-changelog@7.2.0(conventional-commits-filter@5.0.0):
     dependencies:
-      '@conventional-changelog/git-client': 2.6.0(conventional-commits-filter@5.0.0)(conventional-commits-parser@6.4.0)
+      '@conventional-changelog/git-client': 2.7.0(conventional-commits-filter@5.0.0)(conventional-commits-parser@6.4.0)
       '@simple-libs/hosted-git-info': 1.0.2
       '@types/normalize-package-data': 2.4.4
       conventional-changelog-preset-loader: 5.0.0
@@ -3801,7 +3801,7 @@ snapshots:
 
   conventional-recommended-bump@11.2.0:
     dependencies:
-      '@conventional-changelog/git-client': 2.6.0(conventional-commits-filter@5.0.0)(conventional-commits-parser@6.4.0)
+      '@conventional-changelog/git-client': 2.7.0(conventional-commits-filter@5.0.0)(conventional-commits-parser@6.4.0)
       conventional-changelog-preset-loader: 5.0.0
       conventional-commits-filter: 5.0.0
       conventional-commits-parser: 6.4.0
