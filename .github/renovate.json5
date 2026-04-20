@@ -34,7 +34,7 @@
       description: 'Keep pnpm action at v5 until we migrate to pnpm v11',
     },
   ],
-  ignoreDeps: ['node', 'pnpm'],
+  ignoreDeps: ['node', 'pnpm', '@typescript/native-preview'],
   ignorePaths: ['helpers', '**/__fixtures__/**', '**/__mocks__/**', '**/fixtures/**', '**/mocks/**'],
   schedule: ['every 2 months on Thursday'],
 }
