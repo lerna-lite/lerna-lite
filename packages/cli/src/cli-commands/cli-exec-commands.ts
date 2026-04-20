@@ -44,6 +44,17 @@ export default {
           hidden: true,
           type: 'boolean',
         },
+        'no-shell': {
+          group: 'Command Options:',
+          describe: 'Do not run the command within a shell (spawns the executable directly).',
+          type: 'boolean',
+        },
+        shell: {
+          // proxy for --no-shell
+          hidden: true,
+          type: 'boolean',
+          default: true,
+        },
         // This option controls prefix for stream output so that it can be disabled to be friendly
         // to tools like Visual Studio Code to highlight the raw results
         'no-prefix': {

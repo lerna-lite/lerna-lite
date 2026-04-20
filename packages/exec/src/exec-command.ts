@@ -119,7 +119,7 @@ export class ExecCommand extends Command<ExecCommandOption & FilterOptions> {
     // these options are passed _directly_ to execa
     return {
       cwd: pkg.location,
-      shell: true,
+      shell: this.options.shell !== false, // Defaults to true if undefined
       extendEnv: false,
       env: Object.assign({}, this.env, {
         LERNA_PACKAGE_NAME: pkg.name,

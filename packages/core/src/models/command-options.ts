@@ -50,6 +50,12 @@ export interface ExecCommandOption {
   /** proxy for `--no-bail` */
   bail?: boolean;
 
+  /** Do not run the command within a shell (spawns the executable directly). */
+  noShell?: boolean;
+
+  /** Run the command within a shell. */
+  shell?: boolean;
+
   // This option controls prefix for stream output so that it can be disabled to be friendly
   // to tools like Visual Studio Code to highlight the raw results
   /** Do not prefix streaming output. */
@@ -496,6 +502,12 @@ export interface WatchCommandOption {
 
   /** proxy for `--no-bail` */
   bail?: boolean;
+
+  /** Do not run the command within a shell (spawns the executable directly). */
+  noShell?: boolean;
+
+  /** Run the command within a shell. */
+  shell?: boolean;
 
   /**
    * Defaults to 200, time to wait in milliseconds before emitting all the file changes into a single event.

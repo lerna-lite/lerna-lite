@@ -64,6 +64,7 @@ $ lerna exec --scope my-component -- ls -la
     - [`--parallel`](#--parallel)
     - [`--no-bail`](#--no-bail)
     - [`--no-prefix`](#--no-prefix)
+    - [`--no-shell`](#--no-shell)
     - [`--profile`](#--profile)
     - [`--profile-location <location>`](#--profile-location-location)
 
@@ -119,6 +120,22 @@ Pass `--no-bail` to disable this behavior, executing in _all_ packages regardles
 
 Disable package name prefixing when output is streaming (`--stream` _or_ `--parallel`).
 This option can be useful when piping results to other processes, such as editor plugins.
+
+### `--no-shell`
+
+By default, `lerna exec` runs the given command within a system shell (e.g., `/bin/sh` on Unix or `cmd.exe` on Windows). Pass `--no-shell` to disable this behavior and spawn the process directly.
+
+```sh
+# Execute cross-env-shell without the overhead of an extra system shell
+$ lerna exec --no-shell -- cross-env-shell 'echo hello from $LERNA_PACKAGE_NAME'
+```
+
+This option is particularly useful for:
+
+- **Silencing `DEP0190` Warnings**: Modern Node.js versions (v20+) emit the [`DEP0190` DeprecationWarning](https://nodejs.org/api/deprecations.html#dep0190-passing-args-to-nodechild-process-execfilespawn-with-shell-option) when passing raw strings containing environment variables to a shell. Disabling the shell wrapper resolves this warning.
+- **Cross-Platform Reliability**: When using shell-agnostic tools like `cross-env-shell`, bypassing the system shell prevents inconsistent variable expansion or escaping issues between different environments (e.g., Bash vs. Dash on Linux).
+
+> **Note**: When `--no-shell` is active, native shell operators such as `&&`, `|`, and `>` will not work, as no shell is present to interpret them.
 
 ### `--profile`
 

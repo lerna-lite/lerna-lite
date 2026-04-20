@@ -291,7 +291,7 @@ export class WatchCommand extends Command<WatchCommandOption & FilterOptions> {
   protected getOpts(pkg: Package, changedFile: string) {
     return {
       cwd: pkg.location,
-      shell: true,
+      shell: this.options.shell !== false, // Defaults to true if undefined
       extendEnv: false,
       env: Object.assign({}, this._env, {
         LERNA_PACKAGE_NAME: pkg.name,

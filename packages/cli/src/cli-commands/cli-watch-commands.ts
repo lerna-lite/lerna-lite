@@ -34,6 +34,17 @@ export default {
           hidden: true,
           type: 'boolean',
         },
+        'no-shell': {
+          group: 'Command Options:',
+          describe: 'Do not run the command within a shell (spawns the executable directly).',
+          type: 'boolean',
+        },
+        shell: {
+          // proxy for --no-shell
+          hidden: true,
+          type: 'boolean',
+          default: true,
+        },
         debounce: {
           group: 'Command Options:',
           describe: 'Time to wait in milliseconds before emitting all the file changes into a single event, defaults to 200',
