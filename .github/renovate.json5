@@ -4,6 +4,8 @@
   dependencyDashboard: true,
   labels: ['📦 dependencies', '🤖 bot'],
   minimumReleaseAge: '2 days',
+  // since all PRs touches the pnpm lock file, let's open not more than 2 PRs at the same time
+  prConcurrentLimit: 2,
   rangeStrategy: 'bump',
   packageRules: [
     {
@@ -34,5 +36,5 @@
   ],
   ignoreDeps: ['node', 'pnpm'],
   ignorePaths: ['helpers', '**/__fixtures__/**', '**/__mocks__/**', '**/fixtures/**', '**/mocks/**'],
-  // schedule: ['every 2 months on Thursday'],
+  schedule: ['every 2 months on Thursday'],
 }
