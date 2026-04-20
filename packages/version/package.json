@@ -32,7 +32,7 @@
     "pack-tarball": "npm pack"
   },
   "dependencies": {
-    "@conventional-changelog/git-client": "^2.6.0",
+    "@conventional-changelog/git-client": "^2.7.0",
     "@lerna-lite/cli": "workspace:*",
     "@lerna-lite/core": "workspace:*",
     "@lerna-lite/npmlog": "workspace:*",
