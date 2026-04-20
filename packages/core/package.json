@@ -50,7 +50,7 @@
     "load-json-file": "catalog:dependencies",
     "npm-package-arg": "catalog:",
     "p-map": "catalog:",
-    "p-queue": "^9.1.0",
+    "p-queue": "^9.1.2",
     "semver": "catalog:",
     "tinyglobby": "catalog:dependencies",
     "write-file-atomic": "^7.0.1",
