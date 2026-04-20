@@ -33,11 +33,6 @@
       allowedVersions: '< 6.0.0',
       description: 'Keep pnpm action at v5 until we migrate to pnpm v11',
     },
-    {
-      // blocked by oxlint issue: https://github.com/oxc-project/oxc/issues/19431
-      packageNames: ['@vitest/coverage-v8', 'vitest'],
-      allowedVersions: '4.1.2',
-    },
   ],
   ignoreDeps: ['node', 'pnpm'],
   ignorePaths: ['helpers', '**/__fixtures__/**', '**/__mocks__/**', '**/fixtures/**', '**/mocks/**'],
