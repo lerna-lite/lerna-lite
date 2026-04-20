@@ -5,7 +5,7 @@
     "moduleResolution": "nodenext",
     "target": "ES2022",
     "lib": ["es2022", "dom"],
-    "types": ["node"],
+    "types": ["node", "vitest/globals"],
     "typeRoots": ["node_modules/@types"],
     "allowSyntheticDefaultImports": true,
     "composite": true,
