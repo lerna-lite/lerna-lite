@@ -29,52 +29,6 @@ let currentColor = 0;
 
 const stripFinalNewline = (str: any) => (typeof str === 'string' ? str.replace(/\r?\n$/, '').trim() : str);
 
-function createEnhancedError(result: any, command: string, args: string[] = []) {
-  const exitCode = getExitCode(result);
-  const fullCommand = `${command} ${args.join(' ')}`.trim();
-  const stdout = stripFinalNewline(result.stdout || '');
-  const stderr = stripFinalNewline(result.stderr || '');
-
-  const message = `Command failed: ${fullCommand}\n${stderr || `Process exited with status ${exitCode}`}`;
-
-  const newErr: any = new Error(message);
-
-  // Direct assignment to ensure maximum visibility to Lerna's catch blocks
-  newErr.message = message;
-  newErr.exitCode = exitCode;
-  newErr.stdout = stdout;
-  newErr.stderr = stderr;
-  newErr.all = stderr || stdout;
-  newErr.shortMessage = `Command failed: ${fullCommand}`;
-  newErr.command = fullCommand;
-  newErr.failed = true;
-  newErr.timedOut = false;
-  newErr.isCanceled = false;
-  newErr.killed = false;
-
-  return newErr;
-}
-
-function mapOptions(command: string, opts?: TinyExecOptions): Options {
-  const { cwd, env, nodeOptions, ...rest } = opts || {};
-
-  // Only use shell for the 'exit' command (used in status tests)
-  // Using shell: true for 'git commit' causes arguments with spaces to break.
-  const useShell = command === 'exit' || rest.shell === true;
-
-  return {
-    ...rest,
-    throwOnError: false,
-    collect: true,
-    nodeOptions: {
-      cwd,
-      env,
-      shell: useShell,
-      ...nodeOptions,
-    },
-  } as any;
-}
-
 /**
  * Execute a command asynchronously, piping stdio by default.
  * @param {string} command
@@ -103,10 +57,10 @@ export function execSync(command: string, args: string[] = [], opts?: TinyExecOp
     return logExecCommand(command, args);
   }
 
-  const result = xSync(command, args, mapOptions(command, opts));
+  const result = xSync(command, args, _mapOptions(command, opts));
 
   if (result.exitCode !== 0) {
-    throw createEnhancedError(result, command, args);
+    throw _createEnhancedError(result, command, args);
   }
 
   return typeof result.stdout === 'string' ? stripFinalNewline(result.stdout) : result.stdout;
@@ -210,9 +164,10 @@ export function spawnProcess(command: string, args: string[], opts: TinyExecOpti
   if (dryRun) {
     return logExecCommand(command, args);
   }
-  const child = x(command, args, mapOptions(command, opts));
+  const child = x(command, args, _mapOptions(command, opts)) as TinyExecResult;
   const nodeProcess = child.process;
 
+  // Cleans up the child from the children set when the process exits or errors
   const drain = (_code?: number, signal?: string) => {
     children.delete(child);
     // don't run repeatedly if this is the error event
@@ -225,7 +180,7 @@ export function spawnProcess(command: string, args: string[], opts: TinyExecOpti
   nodeProcess?.once('error', drain);
 
   if (opts.pkg) {
-    (child as any).pkg = opts.pkg;
+    child.pkg = opts.pkg;
   }
   children.add(child);
   return child;
@@ -241,7 +196,7 @@ export function wrapError(spawned: any) {
   const promise = Promise.resolve(spawned)
     .then((result: any) => {
       if (result && result.exitCode !== 0 && result.exitCode !== undefined) {
-        throw createEnhancedError(result, spawned.commandName || '', spawned.args || []);
+        throw _createEnhancedError(result, spawned.commandName || '', spawned.args || []);
       }
       if (result && typeof result.stdout === 'string') {
         result.stdout = stripFinalNewline(result.stdout);
@@ -251,7 +206,7 @@ export function wrapError(spawned: any) {
     .catch((err: any) => {
       // Re-wrap if it's already an error from tinyexec's own rejection (though throwOnError is false)
       if (err.exitCode !== undefined || err.code !== undefined) {
-        const enhanced = createEnhancedError(err, spawned.commandName || '', spawned.args || []);
+        const enhanced = _createEnhancedError(err, spawned.commandName || '', spawned.args || []);
         if (spawned.pkg) (enhanced as any).pkg = spawned.pkg;
         throw enhanced;
       }
@@ -280,4 +235,58 @@ export function logExecCommand(command: string, args?: string[]): string {
 
   log.info(colorize(['bold', 'magenta'], '[dry-run] >'), cmdList.join(' '));
   return '';
+}
+
+// --
+// private helpers
+
+/** Creates an enhanced error object with extra process details */
+function _createEnhancedError(result: any, command: string, args: string[] = []) {
+  const exitCode = getExitCode(result);
+  const fullCommand = `${command} ${args.join(' ')}`.trim();
+  const stdout = stripFinalNewline(result.stdout || '');
+  const stderr = stripFinalNewline(result.stderr || '');
+
+  const message = `Command failed: ${fullCommand}\n${stderr || `Process exited with status ${exitCode}`}`;
+
+  const newErr: any = new Error(message);
+
+  // Direct assignment to ensure maximum visibility to Lerna's catch blocks
+  newErr.message = message;
+  newErr.exitCode = exitCode;
+  newErr.stdout = stdout;
+  newErr.stderr = stderr;
+  newErr.all = stderr || stdout;
+  newErr.shortMessage = `Command failed: ${fullCommand}`;
+  newErr.command = fullCommand;
+  newErr.failed = true;
+  newErr.timedOut = false;
+  newErr.isCanceled = false;
+  newErr.killed = false;
+
+  return newErr;
+}
+
+/** Maps Lerna/TinyExec options to tinyexec Options format */
+function _mapOptions(command: string, opts?: TinyExecOptions): Options {
+  const { cwd, env, nodeOptions, ...rest } = opts || {};
+
+  // Only use shell for the 'exit' command (used in status tests)
+  // Using shell: true for 'git commit' causes arguments with spaces to break.
+  const useShell = command === 'exit' || rest.shell === true;
+
+  // 'collect: true' tells tinyexec to collect stdout/stderr as strings (like execa),
+  // so we can access them on the result object. The 'as any' cast is used because
+  // our merged options may not exactly match the Options type, but tinyexec accepts it.
+  return {
+    ...rest,
+    throwOnError: false,
+    collect: true, // collect output as string (like execa)
+    nodeOptions: {
+      cwd,
+      env,
+      shell: useShell,
+      ...nodeOptions,
+    },
+  } as any;
 }
