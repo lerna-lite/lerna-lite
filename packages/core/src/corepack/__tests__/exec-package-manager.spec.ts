@@ -84,11 +84,11 @@ describe('.execPackageManager()', () => {
       (exec as Mock).mockImplementationOnce(execActual);
     });
 
-    it('returns an execa Promise', async () => {
+    it('returns a tinyexec Promise', async () => {
       const { stderr, stdout } = (await execPackageManager('echo', ['foo'])) as any;
 
       expect(stderr).toBe('');
-      expect(stdout).toContain(`foo`);
+      expect(stdout).toContain('foo');
     });
 
     it('should execute a command in dry-run and log the command', async () => {

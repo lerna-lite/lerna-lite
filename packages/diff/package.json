@@ -39,8 +39,8 @@
   "devDependencies": {
     "@types/fs-extra": "catalog:devDependencies",
     "@types/yargs-parser": "catalog:devDependencies",
-    "execa": "catalog:",
     "fs-extra": "catalog:",
+    "tinyexec": "catalog:dependencies",
     "yargs-parser": "catalog:devDependencies"
   },
   "engines": {

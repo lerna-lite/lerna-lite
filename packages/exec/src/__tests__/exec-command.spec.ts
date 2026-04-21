@@ -120,7 +120,7 @@ describe('ExecCommand', () => {
         boom.exitCode = 456;
         boom.cmd = [cmd].concat(args).join(' ');
 
-        // --no-bail passes { reject: false } to execa, so throwing is inappropriate
+        // --no-bail passes { reject: false } to tinyexec, so throwing is inappropriate
         return Promise.resolve(boom);
       });
 

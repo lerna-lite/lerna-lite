@@ -116,7 +116,7 @@ export class ExecCommand extends Command<ExecCommandOption & FilterOptions> {
   }
 
   getOpts(pkg: Package): ExecStreamingOption {
-    // these options are passed _directly_ to execa
+    // these options are passed _directly_ to tinyexec
     return {
       cwd: pkg.location,
       shell: this.options.shell !== false, // Defaults to true if undefined

@@ -4,8 +4,8 @@ import type { DiffCommandOption } from '@lerna-lite/core';
 import { Project, spawn } from '@lerna-lite/core';
 import { commandRunner, gitAdd, gitCommit, gitInit, gitTag, initFixtureFactory } from '@lerna-test/helpers';
 import gitSHA from '@lerna-test/helpers/serializers/serialize-git-sha.js';
-import { execa } from 'execa';
 import { outputFile, remove } from 'fs-extra/esm';
+import { x } from 'tinyexec';
 import { beforeEach, describe, expect, it, vi, type Mock } from 'vitest';
 import yargParser from 'yargs-parser';
 
@@ -60,9 +60,9 @@ describe('Diff Command with Error Exit Code', () => {
 
 describe('Diff Command', () => {
   beforeEach(() => {
-    (spawn as Mock).mockImplementationOnce((...args) => {
+    (spawn as Mock).mockImplementationOnce((...args: any[]) => {
       // @ts-ignore
-      return execa(...args);
+      return x(...args);
     });
   });
 

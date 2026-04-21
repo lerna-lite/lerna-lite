@@ -1,8 +1,8 @@
 /**
- * @param {import("execa").ExecaError} err
+ * @param {*} err
  * @param {string} className
  */
-export function cleanStack(err, className) {
+export function cleanStack(err: any, className: string) {
   const lines = err.stack ? err.stack.split('\n') : String(err).split('\n');
   const cutoff = new RegExp(`^    at ${className}.runCommand .*$`);
   const relevantIndex = lines.findIndex((line) => cutoff.test(line));

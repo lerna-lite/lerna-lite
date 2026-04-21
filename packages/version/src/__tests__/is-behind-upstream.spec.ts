@@ -1,5 +1,5 @@
 import { cloneFixtureFactory } from '@lerna-test/helpers';
-import { execa } from 'execa';
+import { x } from 'tinyexec';
 import { expect, test } from 'vitest';
 
 import { isBehindUpstream } from '../lib/is-behind-upstream.js';
@@ -11,9 +11,9 @@ test('isBehindUpstream', async () => {
 
   expect(isBehindUpstream('origin', 'main', { cwd })).toBe(false);
 
-  await execa('git', ['commit', '--allow-empty', '-m', 'change'], { cwd });
-  await execa('git', ['push', 'origin', 'main'], { cwd });
-  await execa('git', ['reset', '--hard', 'HEAD^'], { cwd });
+  await x('git', ['commit', '--allow-empty', '-m', 'change'], { nodeOptions: { cwd } });
+  await x('git', ['push', 'origin', 'main'], { nodeOptions: { cwd } });
+  await x('git', ['reset', '--hard', 'HEAD^'], { nodeOptions: { cwd } });
 
   expect(isBehindUpstream('origin', 'main', { cwd })).toBe(true);
 });

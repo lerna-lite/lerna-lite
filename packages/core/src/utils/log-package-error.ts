@@ -1,7 +1,7 @@
 import { log } from '@lerna-lite/npmlog';
 
 /**
- * @param {import('execa').ExecaError & { pkg: import('@lerna/package').Package }} err
+ * @param {*} err
  * @param {boolean} stream
  */
 export function logPackageError(err: any, stream = false) {

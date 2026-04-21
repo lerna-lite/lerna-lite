@@ -14,8 +14,8 @@ import {
 import { commandRunner, getCommitMessage, gitAdd, gitCommit, gitTag, initFixtureFactory, showCommit, stripAnsi } from '@lerna-test/helpers';
 import { loggingOutput } from '@lerna-test/helpers/logging-output.js';
 import gitSHA from '@lerna-test/helpers/serializers/serialize-git-sha.js';
-import { execa } from 'execa';
 import { outputFile, outputJson } from 'fs-extra/esm';
+import { x } from 'tinyexec';
 import { describe, expect, it, vi, type Mock } from 'vitest';
 import { parse } from 'yaml';
 import yargParser from 'yargs-parser';
@@ -67,6 +67,9 @@ vi.mock('@lerna-lite/core', async (coreOriginal) => ({
 const lernaVersion = commandRunner(cliCommands);
 const initFixture = initFixtureFactory(pathResolve(import.meta.dirname, '../../../publish/src/__tests__'));
 
+// Helper to mimic Execa's default behavior
+const strip = (str: string) => str.replace(/\r?\n$/, '');
+
 const createArgv = (cwd: string, ...args: string[]) => {
   args.unshift('version');
   if (args.length > 0 && args[1]?.length > 0 && !args[1].startsWith('-')) {
@@ -93,8 +96,14 @@ const collectUpdatesActual = (await vi.importActual<any>('@lerna-lite/core')).co
 
 // assertion helpers
 const listDirty = (cwd: string) =>
-  // git ls-files --exclude-standard --modified --others
-  execa('git', ['ls-files', '--exclude-standard', '--modified', '--others'], { cwd }).then((result) => result.stdout.split('\n').filter(Boolean));
+  x('git', ['ls-files', '--exclude-standard', '--modified', '--others'], {
+    nodeOptions: { cwd },
+  }).then((result) =>
+    result.stdout
+      .replace(/\r?\n$/, '') // Strip the final newline first
+      .split('\n')
+      .filter(Boolean)
+  );
 
 expect.addSnapshotSerializer(gitSHA);
 
@@ -524,7 +533,7 @@ describe('VersionCommand', () => {
 
   // TODO: (major) make --no-granular-pathspec the default
   describe('--no-granular-pathspec', () => {
-    const getLeftover = (cwd: string) => execa('git', ['ls-files', '--others'], { cwd }).then((result) => result.stdout);
+    const getLeftover = (cwd: string) => x('git', ['ls-files', '--others'], { nodeOptions: { cwd } }).then((result) => strip(result.stdout));
 
     it('adds changed files globally', async () => {
       const cwd = await initFixture('normal');
@@ -877,8 +886,14 @@ describe('VersionCommand', () => {
   describe('working on a detached HEAD', () => {
     const detachedHEAD = async (fixture = 'normal') => {
       const cwd = await initFixture(fixture);
-      const { stdout: sha } = await execa('git', ['rev-parse', 'HEAD'], { cwd });
-      await execa('git', ['checkout', sha], { cwd });
+
+      // Get the SHA and strip the newline immediately
+      const { stdout: rawSha } = await x('git', ['rev-parse', 'HEAD'], { nodeOptions: { cwd } });
+      const sha = strip(rawSha);
+
+      // Checkout the clean SHA string
+      await x('git', ['checkout', sha], { nodeOptions: { cwd } });
+
       return cwd;
     };
 

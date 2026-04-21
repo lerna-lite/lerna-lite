@@ -2,77 +2,69 @@ import cp from 'node:child_process';
 import { EOL } from 'node:os';
 import { join, resolve as pathResolve } from 'node:path';
 
-import { execa } from 'execa';
 import { loadJsonFile } from 'load-json-file';
+import { x } from 'tinyexec';
 import { writeJsonFile } from 'write-json-file';
 
 import { tempWrite } from '../../packages/version/dist/utils/temp-write.js';
 import gitSHA from '../serializers/serialize-git-sha.js';
 
-// Contains all relevant git config (user, commit.gpgSign, etc)
 const TEMPLATE = pathResolve(import.meta.dirname, 'template');
 
+/**
+ * Replicates Execa's stripFinalNewline: true behavior.
+ */
+const strip = (str: string) => str.replace(/\r?\n$/, '');
+
 export function getCommitMessage(cwd, format = '%B') {
-  return execa('git', ['log', '-1', `--pretty=format:${format}`], { cwd }).then((result) => result.stdout);
+  return x('git', ['log', '-1', `--pretty=format:${format}`], { nodeOptions: { cwd } }).then((result) => strip(result.stdout));
 }
 
 export function gitAdd(cwd, ...files) {
-  return execa('git', ['add', ...files], { cwd });
+  return x('git', ['add', ...files], { nodeOptions: { cwd } });
 }
 
 export function gitCheckout(cwd, args) {
-  return execa('git', ['checkout', ...args], { cwd });
+  return x('git', ['checkout', ...args], { nodeOptions: { cwd } });
 }
 
 export function gitCommit(cwd, message) {
   if (message.indexOf(EOL) > -1) {
-    // Use tempfile to allow multi\nline strings.
-    return tempWrite(message).then((fp) => execa('git', ['commit', '-F', fp], { cwd }));
+    return tempWrite(message).then((fp) => x('git', ['commit', '-F', fp], { nodeOptions: { cwd } }));
   }
 
-  return execa('git', ['commit', '-m', message], { cwd });
+  return x('git', ['commit', '-m', message], { nodeOptions: { cwd } });
 }
 
 export function gitInit(cwd, ...args) {
-  return execa('git', ['init', '--template', TEMPLATE, ...args], { cwd }).then(() =>
-    execa('git', ['checkout', '-B', 'main'], { cwd })
+  return x('git', ['init', '--template', TEMPLATE, ...args], { nodeOptions: { cwd } }).then(() =>
+    x('git', ['checkout', '-B', 'main'], { nodeOptions: { cwd } })
   );
 }
 
 export function gitMerge(cwd, args) {
-  return execa('git', ['merge', ...args], { cwd });
+  return x('git', ['merge', ...args], { nodeOptions: { cwd } });
 }
 
 export function gitStatus(cwd) {
+  // Keeping spawnSync for now as it returns a structured result that porcelain expects
   return cp.spawnSync('git', ['status', '--porcelain'], { cwd, encoding: 'utf8' });
 }
 
 export function gitTag(cwd, tagName) {
-  return execa('git', ['tag', tagName, '-m', tagName], { cwd });
+  return x('git', ['tag', tagName, '-m', tagName], { nodeOptions: { cwd } });
 }
 
 export function showCommit(cwd, ...args) {
-  return execa(
+  return x(
     'git',
-    [
-      'show',
-      '--unified=0',
-      '--ignore-space-at-eol',
-      '--pretty=%B%+D',
-      // make absolutely certain that no OS localization
-      // changes the expected value of the path prefixes
-      '--src-prefix=a/',
-      '--dst-prefix=b/',
-      ...args,
-    ],
-    { cwd }
-  ).then((result) => gitSHA.serialize(result.stdout));
+    ['show', '--unified=0', '--ignore-space-at-eol', '--pretty=%B%+D', '--src-prefix=a/', '--dst-prefix=b/', ...args],
+    { nodeOptions: { cwd } }
+  ).then((result) => gitSHA.serialize(strip(result.stdout)));
 }
 
 export function commitChangeToPackage(cwd, packageName, commitMsg, data) {
   const packageJSONPath = join(cwd, 'packages', packageName, 'package.json');
-
-  // QQ no async/await yet...
   let chain: Promise<any> = Promise.resolve();
 
   chain = chain.then(() => loadJsonFile(packageJSONPath));

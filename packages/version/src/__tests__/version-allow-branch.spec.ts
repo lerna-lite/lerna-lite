@@ -3,7 +3,7 @@ import { resolve as pathResolve } from 'node:path';
 import type { VersionCommandOption } from '@lerna-lite/core';
 import { initFixtureFactory } from '@lerna-test/helpers';
 import gitSHA from '@lerna-test/helpers/serializers/serialize-git-sha.js';
-import { execa } from 'execa';
+import { x } from 'tinyexec';
 import { describe, expect, it, vi } from 'vitest';
 import yargParser from 'yargs-parser';
 
@@ -44,7 +44,7 @@ const createArgv = (cwd: string, ...args: string[]) => {
 };
 
 describe('version --allow-branch', () => {
-  const changeBranch = (cwd: string, name: string) => execa('git', ['checkout', '-B', name], { cwd });
+  const changeBranch = (cwd: string, name: string) => x('git', ['checkout', '-B', name], { nodeOptions: { cwd } });
 
   describe('cli', () => {
     it('rejects a non matching branch', async () => {

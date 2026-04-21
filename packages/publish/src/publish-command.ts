@@ -390,7 +390,7 @@ export class PublishCommand extends Command<PublishCommandOption> {
     chain = chain
       .then(() => this.verifyWorkingTreeClean())
       .catch((err: any) => {
-        // an execa error is thrown when git suffers a fatal error (such as no git repository present)
+        // a tinyexec error is thrown when git suffers a fatal error (such as no git repository present)
         if (err.failed && /git describe/.test(err.command)) {
           // (we tried)
           this.logger.silly('EWORKINGTREE', err.message);
@@ -435,7 +435,7 @@ export class PublishCommand extends Command<PublishCommandOption> {
     chain = chain
       .then(() => this.verifyWorkingTreeClean())
       .catch((err: any) => {
-        // an execa error is thrown when git suffers a fatal error (such as no git repository present)
+        // a tinyexec error is thrown when git suffers a fatal error (such as no git repository present)
         /* v8 ignore if */
         if (err.failed && /git describe/.test(err.command)) {
           // (we tried)

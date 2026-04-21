@@ -4,8 +4,7 @@ import type { Logger } from '@lerna-lite/npmlog';
 import { log } from '@lerna-lite/npmlog';
 import { isCI } from 'ci-info';
 import dedent from 'dedent';
-import type { SyncOptions } from 'execa';
-import { execaSync } from 'execa';
+import { xSync } from 'tinyexec';
 
 import { logExecCommand } from './child-process.js';
 import type { FilterOptions } from './filter-packages/index.js';
@@ -262,13 +261,6 @@ export class Command<T extends AvailableCommandOption> {
   }
 
   gitInitialized() {
-    const opts: SyncOptions = {
-      cwd: this.project.rootPath ?? '',
-      // don't throw, just want boolean
-      reject: false,
-      // only return code, no stdio needed
-      stdio: 'ignore',
-    };
     const gitCommand = 'git';
     const gitArgs = ['rev-parse'];
 
@@ -276,7 +268,17 @@ export class Command<T extends AvailableCommandOption> {
       logExecCommand(gitCommand, gitArgs);
       return true;
     }
-    return execaSync(gitCommand, gitArgs, opts).exitCode === 0;
+
+    // xSync options do not have 'collect'
+    const result = xSync(gitCommand, gitArgs, {
+      nodeOptions: {
+        cwd: this.project.rootPath ?? '',
+        // only return code, no stdio needed
+        stdio: 'ignore',
+      },
+    });
+
+    return result.exitCode === 0;
   }
 
   runValidations() {
