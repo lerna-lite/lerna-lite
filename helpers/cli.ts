@@ -64,7 +64,7 @@ export function cliRunner(cwd: string, env: { [key: string]: string }) {
     cwd,
     env: {
       CI: 'true',
-      NO_COLOR: 'true', // env values must be strings
+      NO_COLOR: 'true', // disable colors for easier snapshot testing
       ...env,
     },
   };

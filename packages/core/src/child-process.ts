@@ -18,6 +18,7 @@ export type TinyExecOptions = Omit<Partial<Options>, 'stdin' | 'nodeOptions'> & 
 
 type TinyExecResult = ReturnType<typeof x> & { pkg?: Package; stdio?: any[]; commandName?: string; args?: string[] };
 
+// bookkeeping for spawned processes
 const children = new Set<any>();
 
 // when streaming processes are spawned, use this color for prefix
@@ -208,7 +209,9 @@ export function wrapError(spawned: any) {
       // Re-wrap if it's already an error from tinyexec's own rejection (though throwOnError is false)
       if (err.exitCode !== undefined || err.code !== undefined) {
         const enhanced = _createEnhancedError(err, spawned.commandName || '', spawned.args || []);
-        if (spawned.pkg) (enhanced as any).pkg = spawned.pkg;
+        if (spawned.pkg) {
+          (enhanced as any).pkg = spawned.pkg;
+        }
         throw enhanced;
       }
       throw err;

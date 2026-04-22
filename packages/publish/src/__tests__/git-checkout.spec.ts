@@ -29,6 +29,7 @@ test('gitCheckout files with .gitignored files', async () => {
   const cwd = await initFixture('no-interdependencies');
   const files = ['package-1', 'package-2', 'package-3'].map((name) => join('packages', name, 'package.json'));
 
+  // simulate a "dynamic", intentionally unversioned package by gitignoring it
   await outputFile(join(cwd, '.gitignore'), 'packages/package-3/*', 'utf8');
 
   await Promise.all(files.map((fp) => outputJson(join(cwd, fp), { foo: 'bar' })));

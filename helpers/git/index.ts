@@ -9,6 +9,7 @@ import { writeJsonFile } from 'write-json-file';
 import { tempWrite } from '../../packages/version/dist/utils/temp-write.js';
 import gitSHA from '../serializers/serialize-git-sha.js';
 
+// Contains all relevant git config (user, commit.gpgSign, etc)
 const TEMPLATE = pathResolve(import.meta.dirname, 'template');
 
 /** Replicates Execa's stripFinalNewline: true behavior. */
@@ -28,6 +29,7 @@ export function gitCheckout(cwd: string, args: any[]) {
 
 export function gitCommit(cwd: string, message: string) {
   if (message.indexOf(EOL) > -1) {
+    // Use tempfile to allow multi\nline strings.
     return tempWrite(message).then((fp) => x('git', ['commit', '-F', fp], { nodeOptions: { cwd } }));
   }
 
@@ -56,7 +58,17 @@ export function gitTag(cwd: string, tagName: string) {
 export function showCommit(cwd: string, ...args: any[]) {
   return x(
     'git',
-    ['show', '--unified=0', '--ignore-space-at-eol', '--pretty=%B%+D', '--src-prefix=a/', '--dst-prefix=b/', ...args],
+    [
+      'show',
+      '--unified=0',
+      '--ignore-space-at-eol',
+      '--pretty=%B%+D',
+      // make absolutely certain that no OS localization
+      // changes the expected value of the path prefixes
+      '--src-prefix=a/',
+      '--dst-prefix=b/',
+      ...args,
+    ],
     { nodeOptions: { cwd } }
   ).then((result) => gitSHA.serialize(strip(result.stdout)));
 }

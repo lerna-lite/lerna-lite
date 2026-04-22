@@ -1,4 +1,4 @@
-import { execSync, type TinyExecOptions } from '@lerna-lite/core'; // Update import
+import { execSync, type TinyExecOptions } from '@lerna-lite/core';
 import { log } from '@lerna-lite/npmlog';
 import { Octokit } from '@octokit/rest';
 import parseGitUrl from 'git-url-parse';
@@ -27,14 +27,14 @@ export async function createGitHubClient() {
 
 /**
  * @param {string} remote
- * @param {TinyExecOptions} [opts] // Use the custom type
+ * @param {TinyExecOptions} [opts]
  */
 export function parseGitRepo(remote = 'origin', opts?: TinyExecOptions): parseGitUrl.GitUrl {
   log.silly('parseGitRepo', '');
   const args = ['config', '--get', `remote.${remote}.url`];
   log.verbose('git', args.join(' '));
 
-  // Our new execSync already handles trimming and errors
+  // execute with error handling, trimming and errors
   const url = execSync('git', args, opts);
 
   if (!url) {

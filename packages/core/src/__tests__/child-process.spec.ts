@@ -118,7 +118,6 @@ describe('childProcess', () => {
     });
 
     it('should cover the prefix block when prefix is provided', async () => {
-      // This will trigger the prefix block (logs will show [coverage] prefix block entered)
       const child = spawnStreaming('node', ['-e', 'console.log("prefix test")'], undefined, 'my-prefix');
       const { exitCode } = await child;
       expect(exitCode).toBe(0);
