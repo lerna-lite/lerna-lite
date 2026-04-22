@@ -19,6 +19,11 @@ export default {
         type: 'string',
       })
       .options({
+        'aggregate-output': {
+          group: 'Command Options:',
+          describe: 'Aggregate output from child processes run in parallel and print after each finishes.',
+          type: 'boolean',
+        },
         'dry-run': {
           group: 'Command Options:',
           describe: 'Displays the process command that would be performed without executing it.',

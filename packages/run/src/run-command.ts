@@ -1,3 +1,5 @@
+import { spawn } from 'node:child_process';
+
 import type { CommandType, FilterOptions, Package, ProjectConfig, RunCommandOption } from '@lerna-lite/core';
 import { colorize, Command, getFilteredPackages, logOutput, runTopologically, ValidationError } from '@lerna-lite/core';
 import { Profiler } from '@lerna-lite/profiler';
@@ -194,6 +196,25 @@ export class RunCommand extends Command<RunCommandOption & FilterOptions> {
   }
 
   runScriptInPackagesParallel() {
+    if (this.options.aggregateOutput) {
+      // Buffer output for each package, print after process ends
+      return pMap(
+        this.packagesWithScript,
+        async (pkg: Package) => {
+          const buffers: string[] = [];
+          const cmd = this.npmClient || 'npm';
+          const args = ['run', this.script, ...this.args];
+          const proc = spawn(cmd, args, { cwd: pkg.location, env: process.env });
+          proc.stdout.on('data', (chunk) => buffers.push(chunk.toString()));
+          proc.stderr.on('data', (chunk) => buffers.push(chunk.toString()));
+          await new Promise((resolve) => proc.on('close', resolve));
+          // Print after process ends
+          logOutput(`\n[${pkg.name}]\n${buffers.join('')}`);
+          return { pkg, exitCode: proc.exitCode, failed: proc.exitCode !== 0, stderr: buffers.join('') };
+        },
+        { concurrency: this.concurrency }
+      );
+    }
     return pMap(this.packagesWithScript, (pkg: Package) => this.runScriptInPackageStreaming(pkg));
   }
 

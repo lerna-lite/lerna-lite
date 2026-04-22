@@ -455,6 +455,9 @@ export interface PublishCommandOption extends VersionCommandOption {
 }
 
 export interface RunCommandOption {
+  /** Aggregate output from child processes run in parallel and print after each finishes. */
+  aggregateOutput?: boolean;
+
   /** Displays the process command that would be performed without executing it. */
   dryRun?: boolean;
 

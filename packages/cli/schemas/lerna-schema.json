@@ -489,6 +489,9 @@
           "type": "object",
           "description": "Options for the `run` command.",
           "properties": {
+            "aggregateOutput": {
+              "$ref": "#/$defs/commandOptions/run/aggregateOutput"
+            },
             "dryRun": {
               "$ref": "#/$defs/commandOptions/run/dryRun"
             },
@@ -1386,6 +1389,10 @@
         }
       },
       "run": {
+        "aggregateOutput": {
+          "type": "boolean",
+          "description": "Aggregate output from child processes run in parallel and print after each finishes."
+        },
         "dryRun": {
           "type": "boolean",
           "description": "During `lerna run`, when true, displays the process command that would be performed without executing it."
