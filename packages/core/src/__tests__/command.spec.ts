@@ -544,3 +544,30 @@ describe('core-command', () => {
     });
   });
 });
+
+describe('gitInitialized catch block', () => {
+  it('returns false when xSync from tinyexec throws', async () => {
+    // 1. Locally mock tinyexec only for this test
+    vi.doMock('tinyexec', () => ({
+      xSync: vi.fn(() => {
+        throw new Error('Git not found');
+      }),
+    }));
+
+    // 2. Dynamically import the class AFTER the mock is defined
+    class TestCommand extends Command<any> {
+      options: { cwd: string; dryRun: boolean } = { cwd: process.cwd(), dryRun: false };
+      initialize() {}
+      execute() {}
+    }
+
+    // Pass a valid options object (at least { cwd })
+    const instance = new TestCommand({ cwd: process.cwd(), dryRun: false });
+    const result = instance.gitInitialized();
+
+    expect(result).toBe(false);
+
+    // 3. Clean up so other tests aren't affected
+    vi.doUnmock('tinyexec');
+  });
+});

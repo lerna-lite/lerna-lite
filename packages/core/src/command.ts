@@ -269,16 +269,18 @@ export class Command<T extends AvailableCommandOption> {
       return true;
     }
 
-    // xSync options do not have 'collect'
-    const result = xSync(gitCommand, gitArgs, {
-      nodeOptions: {
-        cwd: this.project.rootPath ?? '',
-        // only return code, no stdio needed
-        stdio: 'ignore',
-      },
-    });
-
-    return result.exitCode === 0;
+    try {
+      const result = xSync(gitCommand, gitArgs, {
+        nodeOptions: {
+          cwd: this.project.rootPath ?? '',
+          stdio: 'ignore',
+        },
+      });
+      return result.exitCode === 0;
+    } catch (err) {
+      // don't throw, just want boolean result
+      return false;
+    }
   }
 
   runValidations() {
