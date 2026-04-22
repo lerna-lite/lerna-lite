@@ -27,6 +27,7 @@ const NUM_COLORS = colorWheel.length;
 // ever-increasing index ensures colors are always sequential
 let currentColor = 0;
 
+/** Replicates Execa's stripFinalNewline: true behavior. */
 const stripFinalNewline = (str: any) => (typeof str === 'string' ? str.replace(/\r?\n$/, '').trim() : str);
 
 /**
@@ -139,15 +140,15 @@ export function getChildProcessCount(): number {
   return children.size;
 }
 
-export function getExitCode(result: any) {
+export function getExitCode(result: any): number | TypeError {
   // https://nodejs.org/docs/latest-v6.x/api/child_process.html#child_process_event_close
   if (typeof result.code === 'number' || typeof result.exitCode === 'number') {
-    return result.code ?? result.exitCode;
+    return (result.code ?? result.exitCode) as number;
   }
 
   // https://nodejs.org/docs/latest-v6.x/api/errors.html#errors_error_code
   if (typeof result.code === 'string' || typeof result.exitCode === 'string') {
-    return constants.errno[result.code ?? result.exitCode];
+    return constants.errno[(result.code ?? result.exitCode) as number] as number;
   }
 
   /* v8 ignore next : extremely weird */

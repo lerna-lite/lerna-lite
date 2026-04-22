@@ -11,24 +11,22 @@ import gitSHA from '../serializers/serialize-git-sha.js';
 
 const TEMPLATE = pathResolve(import.meta.dirname, 'template');
 
-/**
- * Replicates Execa's stripFinalNewline: true behavior.
- */
+/** Replicates Execa's stripFinalNewline: true behavior. */
 const strip = (str: string) => str.replace(/\r?\n$/, '');
 
-export function getCommitMessage(cwd, format = '%B') {
+export function getCommitMessage(cwd: string, format = '%B') {
   return x('git', ['log', '-1', `--pretty=format:${format}`], { nodeOptions: { cwd } }).then((result) => strip(result.stdout));
 }
 
-export function gitAdd(cwd, ...files) {
+export function gitAdd(cwd: string, ...files: string[]) {
   return x('git', ['add', ...files], { nodeOptions: { cwd } });
 }
 
-export function gitCheckout(cwd, args) {
+export function gitCheckout(cwd: string, args: any[]) {
   return x('git', ['checkout', ...args], { nodeOptions: { cwd } });
 }
 
-export function gitCommit(cwd, message) {
+export function gitCommit(cwd: string, message: string) {
   if (message.indexOf(EOL) > -1) {
     return tempWrite(message).then((fp) => x('git', ['commit', '-F', fp], { nodeOptions: { cwd } }));
   }
@@ -36,26 +34,26 @@ export function gitCommit(cwd, message) {
   return x('git', ['commit', '-m', message], { nodeOptions: { cwd } });
 }
 
-export function gitInit(cwd, ...args) {
+export function gitInit(cwd: string, ...args: any[]) {
   return x('git', ['init', '--template', TEMPLATE, ...args], { nodeOptions: { cwd } }).then(() =>
     x('git', ['checkout', '-B', 'main'], { nodeOptions: { cwd } })
   );
 }
 
-export function gitMerge(cwd, args) {
+export function gitMerge(cwd: string, args: any[]) {
   return x('git', ['merge', ...args], { nodeOptions: { cwd } });
 }
 
-export function gitStatus(cwd) {
+export function gitStatus(cwd: string) {
   // Keeping spawnSync for now as it returns a structured result that porcelain expects
   return cp.spawnSync('git', ['status', '--porcelain'], { cwd, encoding: 'utf8' });
 }
 
-export function gitTag(cwd, tagName) {
+export function gitTag(cwd: string, tagName: string) {
   return x('git', ['tag', tagName, '-m', tagName], { nodeOptions: { cwd } });
 }
 
-export function showCommit(cwd, ...args) {
+export function showCommit(cwd: string, ...args: any[]) {
   return x(
     'git',
     ['show', '--unified=0', '--ignore-space-at-eol', '--pretty=%B%+D', '--src-prefix=a/', '--dst-prefix=b/', ...args],
@@ -63,14 +61,10 @@ export function showCommit(cwd, ...args) {
   ).then((result) => gitSHA.serialize(strip(result.stdout)));
 }
 
-export function commitChangeToPackage(cwd, packageName, commitMsg, data) {
+export async function commitChangeToPackage(cwd: string, packageName: string, commitMsg: string, data: any) {
   const packageJSONPath = join(cwd, 'packages', packageName, 'package.json');
-  let chain: Promise<any> = Promise.resolve();
-
-  chain = chain.then(() => loadJsonFile(packageJSONPath));
-  chain = chain.then((pkg) => writeJsonFile(packageJSONPath, Object.assign(pkg, data)));
-  chain = chain.then(() => gitAdd(cwd, packageJSONPath));
-  chain = chain.then(() => gitCommit(cwd, commitMsg));
-
-  return chain;
+  const pkg = await loadJsonFile(packageJSONPath);
+  await writeJsonFile(packageJSONPath, Object.assign({}, pkg, data));
+  await gitAdd(cwd, packageJSONPath);
+  return await gitCommit(cwd, commitMsg);
 }
