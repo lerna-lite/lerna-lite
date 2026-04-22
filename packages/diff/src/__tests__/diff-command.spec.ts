@@ -25,6 +25,9 @@ vi.mock('@lerna-lite/core', async () => ({
 
 const initFixture = initFixtureFactory(import.meta.dirname);
 
+// Helper to match Execa's default stripFinalNewline behavior
+const strip = (str: string) => str.replace(/\r?\n$/, '');
+
 const lernaDiff = commandRunner(cliDiffCommands);
 
 const createArgv = (cwd: string, ...args: string[]) => {
@@ -77,8 +80,9 @@ describe('Diff Command', () => {
     await gitCommit(cwd, 'changed');
 
     // @ts-ignore
+    // Apply strip() to remove the trailing newline from Git output
     const { stdout } = await new DiffCommand(createArgv(cwd, ''));
-    expect(stdout).toMatchSnapshot();
+    expect(strip(stdout)).toMatchSnapshot();
   });
 
   it('should diff packages from the first commit from factory', async () => {
@@ -93,7 +97,7 @@ describe('Diff Command', () => {
 
     // @ts-ignore
     const { stdout } = await factory(createArgv(cwd, ''));
-    expect(stdout).toMatchSnapshot();
+    expect(strip(stdout)).toMatchSnapshot();
   });
 
   it('should diff packages from the first commit', async () => {
@@ -108,7 +112,7 @@ describe('Diff Command', () => {
 
     // @ts-ignore
     const { stdout } = await new DiffCommand(createArgv(cwd, ''));
-    expect(stdout).toMatchSnapshot();
+    expect(strip(stdout)).toMatchSnapshot();
   });
 
   it('should diff packages from the most recent tag', async () => {
@@ -126,7 +130,7 @@ describe('Diff Command', () => {
 
     // @ts-ignore
     const { stdout } = await new DiffCommand(createArgv(cwd, ''));
-    expect(stdout).toMatchSnapshot();
+    expect(strip(stdout)).toMatchSnapshot();
   });
 
   it('should diff a specific package', async () => {
@@ -140,7 +144,7 @@ describe('Diff Command', () => {
 
     // @ts-ignore
     const { stdout } = await new DiffCommand(createArgv(cwd, 'package-2'));
-    expect(stdout).toMatchSnapshot();
+    expect(strip(stdout)).toMatchSnapshot();
   });
 
   it('passes diff exclude globs configured with --ignore-changes', async () => {
@@ -154,7 +158,7 @@ describe('Diff Command', () => {
 
     // @ts-ignore
     const { stdout } = await new DiffCommand(createArgv(cwd, '--ignore-changes', '**/README.md'));
-    expect(stdout).toMatchSnapshot();
+    expect(strip(stdout)).toMatchSnapshot();
   });
 
   it("should error when attempting to diff a package that doesn't exist from CLI", async () => {
