@@ -196,8 +196,10 @@ export class RunCommand extends Command<RunCommandOption & FilterOptions> {
   }
 
   runScriptInPackagesParallel() {
-    if (this.options.aggregateOutput) {
-      // Buffer output for each package, print after process ends
+    // Hybrid: boolean (pnpm-like) by default, or string value 'failures-only' for CI-focused output
+    const aggregateOutput = this.options.aggregateOutput;
+    const failuresOnly = aggregateOutput === 'failures-only';
+    if (aggregateOutput) {
       return pMap(
         this.packagesWithScript,
         async (pkg: Package) => {
@@ -207,10 +209,16 @@ export class RunCommand extends Command<RunCommandOption & FilterOptions> {
           const proc = spawn(cmd, args, { cwd: pkg.location, env: process.env });
           proc.stdout.on('data', (chunk) => buffers.push(chunk.toString()));
           proc.stderr.on('data', (chunk) => buffers.push(chunk.toString()));
+
           await new Promise((resolve) => proc.on('close', resolve));
-          // Print after process ends
-          logOutput(`\n[${pkg.name}]\n${buffers.join('')}`);
-          return { pkg, exitCode: proc.exitCode, failed: proc.exitCode !== 0, stderr: buffers.join('') };
+          const output = `\n[${pkg.name}]\n${buffers.join('')}`;
+          const failed = proc.exitCode !== 0;
+
+          // Print buffered output for each package in [package-name] block format
+          if (!failuresOnly || failed) {
+            logOutput(output);
+          }
+          return { pkg, exitCode: proc.exitCode, failed, stderr: buffers.join('') };
         },
         { concurrency: this.concurrency }
       );

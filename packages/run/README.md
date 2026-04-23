@@ -76,15 +76,22 @@ $ lerna run --scope my-component test
 
 ### `--aggregate-output`
 
-Aggregate output from child processes that are run in parallel, and only print output when the child process is finished. This makes reading large logs after running `lerna run <script> --parallel --aggregate-output` much easier (especially on CI). Inspired by [pnpm's --aggregate-output](https://pnpm.io/cli/run#--aggregate-output).
 
-Only applies when used with `--parallel`.
+Aggregate output from child processes that are run in parallel. By default, each package's output is buffered and printed as a block after the process finishes (pnpm-like). Only applies with `--parallel`.
 
 ```sh
 $ lerna run build --parallel --aggregate-output
 ```
 
-Each package's output will be buffered and printed as a block after the process finishes, rather than interleaved with other packages.
+To only print output for failed packages (CI-friendly), just assign "failures-only":
+
+```sh
+$ lerna run build --parallel --aggregate-output=failures-only
+```
+
+> **CI Use Case:** In large monorepos, this mode hides all output for succeeded packages—no success messages or logs—so you can quickly find failed packages in CI logs without scrolling through hundreds of successes.
+
+Inspired by [pnpm's --aggregate-output](https://pnpm.io/cli/run#--aggregate-output).
 
 ### `--dry-run`
 

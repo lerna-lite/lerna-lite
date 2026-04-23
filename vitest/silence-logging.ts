@@ -27,8 +27,8 @@ beforeAll(async () => {
   log.enableProgress = vi.fn(() => {});
 
   // Silence console and process output
-  vi.spyOn(console, 'log').mockImplementation(() => {});
-  vi.spyOn(process.stdout, 'write').mockImplementation(() => true);
+  // vi.spyOn(console, 'log').mockImplementation(() => {});
+  // vi.spyOn(process.stdout, 'write').mockImplementation(() => true);
 });
 
 afterAll(() => {

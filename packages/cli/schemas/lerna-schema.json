@@ -1390,8 +1390,8 @@
       },
       "run": {
         "aggregateOutput": {
-          "type": "boolean",
-          "description": "Aggregate output from child processes run in parallel and print after each finishes."
+          "oneOf": [{ "type": "boolean" }, { "type": "string", "enum": ["failures-only"] }],
+          "description": "Aggregate output from parallel child processes. Use 'failures-only' to only print failed packages."
         },
         "dryRun": {
           "type": "boolean",
