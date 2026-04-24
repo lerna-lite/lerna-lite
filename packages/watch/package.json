@@ -1,6 +1,6 @@
 {
   "name": "@lerna-lite/watch",
-  "version": "5.1.0",
+  "version": "5.2.0",
   "description": "Lerna-Lite watch commmand - Runs a command whenever packages or their dependents change",
   "homepage": "https://github.com/lerna-lite/lerna-lite",
   "bugs": {

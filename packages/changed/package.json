@@ -1,6 +1,6 @@
 {
   "name": "@lerna-lite/changed",
-  "version": "5.1.0",
+  "version": "5.2.0",
   "description": "Lerna-Lite changed commmand - List local packages that have changed since the last tagged release",
   "homepage": "https://github.com/lerna-lite/lerna-lite",
   "bugs": {

@@ -4,6 +4,12 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [5.2.0](https://github.com/lerna-lite/lerna-lite/compare/v5.1.0...v5.2.0) (2026-04-24)
+
+### Features
+
+* **run:** add --aggregate-output for child processes in large monorepo ([#1317](https://github.com/lerna-lite/lerna-lite/issues/1317)) ([bd1f908](https://github.com/lerna-lite/lerna-lite/commit/bd1f90818df972f4314217ce6f2ee57625a65b22)) - by @ghiscoding
+
 ## [5.1.0](https://github.com/lerna-lite/lerna-lite/compare/v5.0.0...v5.1.0) (2026-04-20)
 
 ### Features

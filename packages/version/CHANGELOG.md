@@ -4,6 +4,12 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [5.2.0](https://github.com/lerna-lite/lerna-lite/compare/v5.1.0...v5.2.0) (2026-04-24)
+
+### Features
+
+* **deps:** migrate from execa to tinyexec ([#1316](https://github.com/lerna-lite/lerna-lite/issues/1316)) ([b3de36d](https://github.com/lerna-lite/lerna-lite/commit/b3de36d5d5a8d3ee2c6dec6aec8063c6b5ab6986)) - by @ghiscoding
+
 ## [5.1.0](https://github.com/lerna-lite/lerna-lite/compare/v5.0.0...v5.1.0) (2026-04-20)
 
 ### Bug Fixes
