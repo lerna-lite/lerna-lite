@@ -2,8 +2,8 @@ import { join } from 'node:path';
 import { pathToFileURL } from 'node:url';
 
 import { up } from 'empathic/find';
-import { execa } from 'execa';
 import { copy, ensureDir } from 'fs-extra/esm';
+import { x } from 'tinyexec';
 
 import { gitAdd, gitCommit, gitInit } from './git/index.js';
 import { temporaryDirectory } from './index.js';
@@ -17,10 +17,10 @@ export function cloneFixtureFactory(startDir: string) {
       const repoDir = temporaryDirectory();
       const repoUrl = pathToFileURL(repoDir).toString();
 
-      return execa('git', ['init', '--bare'], { cwd: repoDir })
-        .then(() => execa('git', ['checkout', '-B', 'main'], { cwd }))
-        .then(() => execa('git', ['remote', 'add', 'origin', repoUrl], { cwd }))
-        .then(() => execa('git', ['push', '-u', 'origin', 'main'], { cwd }))
+      return x('git', ['init', '--bare'], { nodeOptions: { cwd: repoDir } })
+        .then(() => x('git', ['checkout', '-B', 'main'], { nodeOptions: { cwd } }))
+        .then(() => x('git', ['remote', 'add', 'origin', repoUrl], { nodeOptions: { cwd } }))
+        .then(() => x('git', ['push', '-u', 'origin', 'main'], { nodeOptions: { cwd } }))
         .then(() => ({
           cwd,
           repository: repoUrl,

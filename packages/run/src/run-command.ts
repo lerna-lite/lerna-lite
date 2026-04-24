@@ -147,7 +147,7 @@ export class RunCommand extends Command<RunCommandOption & FilterOptions> {
   }
 
   getOpts(pkg: Package): ScriptStreamingOption {
-    // these options are NOT passed directly to execa, they are composed in npm-run-script
+    // these options are NOT passed directly to tinyexec, they are composed in npm-run-script
     return {
       args: this.args,
       npmClient: this.npmClient,

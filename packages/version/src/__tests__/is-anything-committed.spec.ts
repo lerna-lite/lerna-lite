@@ -1,6 +1,6 @@
 import { execSync } from '@lerna-lite/core';
 import { initFixtureFactory } from '@lerna-test/helpers';
-import { execa } from 'execa';
+import { x } from 'tinyexec';
 import { expect, test, vi } from 'vitest';
 
 import { isAnythingCommitted } from '../lib/is-anything-committed.js';
@@ -33,7 +33,7 @@ test('isAnythingCommitted without and with a commit', async () => {
 
   expect(isAnythingCommitted({ cwd })).toBe(false);
 
-  await execa('git', ['commit', '--allow-empty', '-m', 'change'], { cwd });
+  await x('git', ['commit', '--allow-empty', '-m', 'change'], { nodeOptions: { cwd } });
 
   expect(isAnythingCommitted({ cwd })).toBe(true);
 });

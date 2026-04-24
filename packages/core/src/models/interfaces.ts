@@ -67,7 +67,7 @@ export interface DescribeRefDetailedResult {
   sha: string;
 }
 
-/** Provided to any execa-based call */
+/** Provided to any tinyexec-based call */
 export interface ExecOpts {
   cwd: string;
   maxBuffer?: number;

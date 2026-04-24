@@ -1,6 +1,6 @@
 import { resolve as pathResolve } from 'node:path';
 
-import { execa } from 'execa';
+import { x } from 'tinyexec';
 
 import lernaCLI from '../packages/cli/dist/lerna-cli.js';
 
@@ -60,19 +60,20 @@ export function commandRunner(commandModule: any) {
 }
 
 export function cliRunner(cwd: string, env: { [key: string]: string }) {
-  const opts = {
+  const nodeOptions = {
     cwd,
-    env: Object.assign(
-      {
-        CI: 'true',
-        // always turn off tinyrainbow
-        NO_COLOR: true,
-      },
-      env
-    ),
-    // when debugging integration test snapshots, uncomment next line
-    // stdio: ["ignore", "inherit", "inherit"],
+    env: {
+      CI: 'true',
+      NO_COLOR: 'true', // disable colors for easier snapshot testing
+      ...env,
+    },
   };
 
-  return (...args: string[]) => execa('node', [LERNA_BIN].concat(args), opts);
+  /**
+   * We return x() which is Promise-like.
+   * Note: If your integration tests expect this to reject on non-zero exit,
+   * you may need to wrap this call with your custom wrapError helper
+   * from child-process.ts.
+   */
+  return (...args: string[]) => x('node', [LERNA_BIN, ...args], { nodeOptions });
 }

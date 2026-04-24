@@ -2,15 +2,19 @@ import { join } from 'node:path';
 
 import { slash } from '@lerna-lite/core';
 import { initFixtureFactory } from '@lerna-test/helpers';
-import { execa } from 'execa';
 import { outputFile, outputJson } from 'fs-extra/esm';
+import { x } from 'tinyexec';
 import { expect, test } from 'vitest';
 
 import { gitAdd } from '../lib/git-add.js';
 
 const initFixture = initFixtureFactory(import.meta.dirname);
 
-const getStagedFile = async (cwd: string) => execa('git', ['diff', '--cached', '--name-only'], { cwd }).then((result) => slash(result.stdout));
+// Helper to match Execa's default stripFinalNewline behavior
+const strip = (str: string) => str.replace(/\r?\n$/, '');
+
+const getStagedFile = async (cwd: string) =>
+  x('git', ['diff', '--cached', '--name-only'], { nodeOptions: { cwd } }).then((result) => slash(strip(result.stdout)));
 
 test('relative files', async () => {
   const cwd = await initFixture('root-manifest-only');

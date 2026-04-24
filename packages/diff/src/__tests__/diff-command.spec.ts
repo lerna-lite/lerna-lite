@@ -4,8 +4,8 @@ import type { DiffCommandOption } from '@lerna-lite/core';
 import { Project, spawn } from '@lerna-lite/core';
 import { commandRunner, gitAdd, gitCommit, gitInit, gitTag, initFixtureFactory } from '@lerna-test/helpers';
 import gitSHA from '@lerna-test/helpers/serializers/serialize-git-sha.js';
-import { execa } from 'execa';
 import { outputFile, remove } from 'fs-extra/esm';
+import { x } from 'tinyexec';
 import { beforeEach, describe, expect, it, vi, type Mock } from 'vitest';
 import yargParser from 'yargs-parser';
 
@@ -24,6 +24,9 @@ vi.mock('@lerna-lite/core', async () => ({
 }));
 
 const initFixture = initFixtureFactory(import.meta.dirname);
+
+// Helper to match Execa's default stripFinalNewline behavior
+const strip = (str: string) => str.replace(/\r?\n$/, '');
 
 const lernaDiff = commandRunner(cliDiffCommands);
 
@@ -60,9 +63,9 @@ describe('Diff Command with Error Exit Code', () => {
 
 describe('Diff Command', () => {
   beforeEach(() => {
-    (spawn as Mock).mockImplementationOnce((...args) => {
+    (spawn as Mock).mockImplementationOnce((...args: any[]) => {
       // @ts-ignore
-      return execa(...args);
+      return x(...args);
     });
   });
 
@@ -77,8 +80,9 @@ describe('Diff Command', () => {
     await gitCommit(cwd, 'changed');
 
     // @ts-ignore
+    // Apply strip() to remove the trailing newline from Git output
     const { stdout } = await new DiffCommand(createArgv(cwd, ''));
-    expect(stdout).toMatchSnapshot();
+    expect(strip(stdout)).toMatchSnapshot();
   });
 
   it('should diff packages from the first commit from factory', async () => {
@@ -93,7 +97,7 @@ describe('Diff Command', () => {
 
     // @ts-ignore
     const { stdout } = await factory(createArgv(cwd, ''));
-    expect(stdout).toMatchSnapshot();
+    expect(strip(stdout)).toMatchSnapshot();
   });
 
   it('should diff packages from the first commit', async () => {
@@ -108,7 +112,7 @@ describe('Diff Command', () => {
 
     // @ts-ignore
     const { stdout } = await new DiffCommand(createArgv(cwd, ''));
-    expect(stdout).toMatchSnapshot();
+    expect(strip(stdout)).toMatchSnapshot();
   });
 
   it('should diff packages from the most recent tag', async () => {
@@ -126,7 +130,7 @@ describe('Diff Command', () => {
 
     // @ts-ignore
     const { stdout } = await new DiffCommand(createArgv(cwd, ''));
-    expect(stdout).toMatchSnapshot();
+    expect(strip(stdout)).toMatchSnapshot();
   });
 
   it('should diff a specific package', async () => {
@@ -140,7 +144,7 @@ describe('Diff Command', () => {
 
     // @ts-ignore
     const { stdout } = await new DiffCommand(createArgv(cwd, 'package-2'));
-    expect(stdout).toMatchSnapshot();
+    expect(strip(stdout)).toMatchSnapshot();
   });
 
   it('passes diff exclude globs configured with --ignore-changes', async () => {
@@ -154,7 +158,7 @@ describe('Diff Command', () => {
 
     // @ts-ignore
     const { stdout } = await new DiffCommand(createArgv(cwd, '--ignore-changes', '**/README.md'));
-    expect(stdout).toMatchSnapshot();
+    expect(strip(stdout)).toMatchSnapshot();
   });
 
   it("should error when attempting to diff a package that doesn't exist from CLI", async () => {

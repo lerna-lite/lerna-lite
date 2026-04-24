@@ -1,14 +1,17 @@
 import { exec } from '@lerna-lite/core';
 import { cloneFixtureFactory } from '@lerna-test/helpers';
-import { execa } from 'execa';
+import { x } from 'tinyexec';
 import { afterEach, describe, expect, test, vi } from 'vitest';
 
 import { gitPush, gitPushSingleTag } from '../lib/git-push.js';
 
 const cloneFixture = cloneFixtureFactory(import.meta.dirname);
 
+// Helper to match Execa's default stripFinalNewline behavior
+const strip = (str: string) => str.replace(/\r?\n$/, '');
+
 async function listRemoteTags(cwd: string) {
-  return execa('git', ['ls-remote', '--tags', '--refs', '--quiet'], { cwd }).then((result) => result.stdout);
+  return x('git', ['ls-remote', '--tags', '--refs', '--quiet'], { nodeOptions: { cwd } }).then((result) => strip(result.stdout));
 }
 
 vi.mock('@lerna-lite/core', async () => {
@@ -27,10 +30,10 @@ describe('gitPush', () => {
   test('gitPush', async () => {
     const { cwd } = await cloneFixture('root-manifest-only');
 
-    await execa('git', ['commit', '--allow-empty', '-m', 'change'], { cwd });
-    await execa('git', ['tag', 'v1.2.3', '-m', 'v1.2.3'], { cwd });
-    await execa('git', ['tag', 'foo@2.3.1', '-m', 'foo@2.3.1'], { cwd });
-    await execa('git', ['tag', 'bar@3.2.1', '-m', 'bar@3.2.1'], { cwd });
+    await x('git', ['commit', '--allow-empty', '-m', 'change'], { nodeOptions: { cwd } });
+    await x('git', ['tag', 'v1.2.3', '-m', 'v1.2.3'], { nodeOptions: { cwd } });
+    await x('git', ['tag', 'foo@2.3.1', '-m', 'foo@2.3.1'], { nodeOptions: { cwd } });
+    await x('git', ['tag', 'bar@3.2.1', '-m', 'bar@3.2.1'], { nodeOptions: { cwd } });
 
     await gitPush('origin', 'main', { cwd });
 
@@ -46,8 +49,8 @@ describe('gitPush', () => {
   test('remote that does not support --atomic', async () => {
     const { cwd } = await cloneFixture('root-manifest-only');
 
-    await execa('git', ['commit', '--allow-empty', '-m', 'change'], { cwd });
-    await execa('git', ['tag', 'v4.5.6', '-m', 'v4.5.6'], { cwd });
+    await x('git', ['commit', '--allow-empty', '-m', 'change'], { nodeOptions: { cwd } });
+    await x('git', ['tag', 'v4.5.6', '-m', 'v4.5.6'], { nodeOptions: { cwd } });
 
     // the first time the command is executed, simulate remote error
     (exec as any).mockImplementationOnce(async () => {
@@ -74,8 +77,8 @@ describe('gitPush', () => {
 
     process.env.GIT_REDIRECT_STDERR = '2>&1';
 
-    await execa('git', ['commit', '--allow-empty', '-m', 'change'], { cwd });
-    await execa('git', ['tag', 'v4.5.6', '-m', 'v4.5.6'], { cwd });
+    await x('git', ['commit', '--allow-empty', '-m', 'change'], { nodeOptions: { cwd } });
+    await x('git', ['tag', 'v4.5.6', '-m', 'v4.5.6'], { nodeOptions: { cwd } });
 
     // the first time the command is executed, simulate remote error
     (exec as any).mockImplementationOnce(async () => {
@@ -100,8 +103,8 @@ describe('gitPush', () => {
   test('git cli that does not support --atomic', async () => {
     const { cwd } = await cloneFixture('root-manifest-only');
 
-    await execa('git', ['commit', '--allow-empty', '-m', 'change'], { cwd });
-    await execa('git', ['tag', 'v7.8.9', '-m', 'v7.8.9'], { cwd });
+    await x('git', ['commit', '--allow-empty', '-m', 'change'], { nodeOptions: { cwd } });
+    await x('git', ['tag', 'v7.8.9', '-m', 'v7.8.9'], { nodeOptions: { cwd } });
 
     // the first time the command is executed, simulate remote error
     // (exec as any).mockImplementationOnce(async () => {
@@ -140,10 +143,10 @@ describe('gitPushSingleTag', () => {
   test('gitPushSingleTag', async () => {
     const { cwd } = await cloneFixture('root-manifest-only');
 
-    await execa('git', ['commit', '--allow-empty', '-m', 'change'], { cwd });
-    await execa('git', ['tag', 'v1.2.3', '-m', 'v1.2.3'], { cwd });
-    await execa('git', ['tag', 'foo@2.3.1', '-m', 'foo@2.3.1'], { cwd });
-    await execa('git', ['tag', 'bar@3.2.1', '-m', 'bar@3.2.1'], { cwd });
+    await x('git', ['commit', '--allow-empty', '-m', 'change'], { nodeOptions: { cwd } });
+    await x('git', ['tag', 'v1.2.3', '-m', 'v1.2.3'], { nodeOptions: { cwd } });
+    await x('git', ['tag', 'foo@2.3.1', '-m', 'foo@2.3.1'], { nodeOptions: { cwd } });
+    await x('git', ['tag', 'bar@3.2.1', '-m', 'bar@3.2.1'], { nodeOptions: { cwd } });
 
     await gitPushSingleTag('origin', 'main', 'foo@2.3.1', { cwd });
 
@@ -157,8 +160,8 @@ describe('gitPushSingleTag', () => {
   test('remote that does not support --atomic', async () => {
     const { cwd } = await cloneFixture('root-manifest-only');
 
-    await execa('git', ['commit', '--allow-empty', '-m', 'change'], { cwd });
-    await execa('git', ['tag', 'v4.5.6', '-m', 'v4.5.6'], { cwd });
+    await x('git', ['commit', '--allow-empty', '-m', 'change'], { nodeOptions: { cwd } });
+    await x('git', ['tag', 'v4.5.6', '-m', 'v4.5.6'], { nodeOptions: { cwd } });
 
     // the first time the command is executed, simulate remote error
     (exec as any).mockImplementationOnce(async () => {
@@ -185,8 +188,8 @@ describe('gitPushSingleTag', () => {
 
     process.env.GIT_REDIRECT_STDERR = '2>&1';
 
-    await execa('git', ['commit', '--allow-empty', '-m', 'change'], { cwd });
-    await execa('git', ['tag', 'v4.5.6', '-m', 'v4.5.6'], { cwd });
+    await x('git', ['commit', '--allow-empty', '-m', 'change'], { nodeOptions: { cwd } });
+    await x('git', ['tag', 'v4.5.6', '-m', 'v4.5.6'], { nodeOptions: { cwd } });
 
     // the first time the command is executed, simulate remote error
     (exec as any).mockImplementationOnce(async () => {
@@ -211,8 +214,8 @@ describe('gitPushSingleTag', () => {
   test('git cli that does not support --atomic', async () => {
     const { cwd } = await cloneFixture('root-manifest-only');
 
-    await execa('git', ['commit', '--allow-empty', '-m', 'change'], { cwd });
-    await execa('git', ['tag', 'v7.8.9', '-m', 'v7.8.9'], { cwd });
+    await x('git', ['commit', '--allow-empty', '-m', 'change'], { nodeOptions: { cwd } });
+    await x('git', ['tag', 'v7.8.9', '-m', 'v7.8.9'], { nodeOptions: { cwd } });
 
     await gitPushSingleTag('origin', 'main', 'v7.8.9', { cwd });
 

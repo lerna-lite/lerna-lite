@@ -21,7 +21,8 @@ export function checkWorkingTree({ cwd } = {} as UncommittedConfig, dryRun = fal
 }
 
 export function throwIfReleased({ refCount }: { refCount: number | string }) {
-  if (refCount === '0') {
+  // Use == to match '0' or 0, or cast to String
+  if (String(refCount) === '0') {
     throw new ValidationError(
       'ERELEASED',
       'The current commit has already been released. Please make new commits before continuing.'
