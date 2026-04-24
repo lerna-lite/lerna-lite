@@ -33,6 +33,8 @@
     "exec-common": "lerna exec --scope \"{@lerna-lite/cli,@lerna-lite/core}\" -- cross-env-shell 'echo hello from package: $LERNA_PACKAGE_NAME'",
     "exec:preview": "lerna exec -- git log -p -2",
     "pack-tarball": "lerna run pack-tarball",
+    "preview:pnpm-run-pack-tarball:aggregate": "pnpm run -r --parallel --aggregate-output pack-tarball",
+    "preview:pack-tarball:aggregate": "lerna run pack-tarball --parallel --aggregate-output",
     "preview:build": "lerna run build --stream --include-dependents --scope=@lerna-lite/list",
     "preview:watch:build": "lerna watch --no-bail --scope=@lerna-lite/listable --include-dependents -- cross-env-shell 'lerna run echo:test --stream --include-dependents --scope=$LERNA_PACKAGE_NAME'",
     "preview:watch:build:pnpm": "lerna watch --no-bail --scope=@lerna-lite/listable --include-dependents -- cross-env-shell 'pnpm run --stream --filter ...$LERNA_PACKAGE_NAME echo:test'",

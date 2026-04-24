@@ -11,10 +11,15 @@ describe('lerna-run', () => {
     fixture = await Fixture.create({
       e2eRoot: process.env.E2E_ROOT!,
       name: 'lerna-run',
-      packageManager: 'npm',
+      packageManager: 'pnpm',
       initializeGit: true,
       lernaInit: true,
       installDependencies: false,
+    });
+
+    // Set npmClient to pnpm for robust cross-platform execution
+    await fixture.overrideLernaConfig({
+      npmClient: 'pnpm',
     });
 
     // Create test packages with scripts
@@ -54,6 +59,9 @@ describe('lerna-run', () => {
     });
 
     await fixture.createInitialGitCommit();
+
+    // Install dependencies with pnpm
+    await fixture.exec('pnpm install', { cwd: fixture.getWorkspacePath() });
   });
 
   afterAll(async () => {
@@ -186,5 +194,59 @@ describe('lerna-run', () => {
 
     expect(output.combinedOutput).toContain('lerna-lite');
     expect(output.combinedOutput).toContain('ci enabled');
+  });
+
+  it('should buffer and print output after each parallel process finishes with --aggregate-output', async () => {
+    const output = await fixture.lerna('run print-name --parallel --aggregate-output');
+
+    expect(output.combinedOutput).toContain('lerna-lite');
+    expect(output.combinedOutput).toContain('test-package-1');
+    expect(output.combinedOutput).toContain('test-package-2');
+    expect(output.combinedOutput).toContain('test-package-3');
+    // Should not be interleaved as with --stream, but buffered per package
+    // Optionally, check for block output per package (pnpm prefixes with package-x:)
+    const pkg1Block = output.combinedOutput.match(/package-1:.*test-package-1/);
+    const pkg2Block = output.combinedOutput.match(/package-2:.*test-package-2/);
+    const pkg3Block = output.combinedOutput.match(/package-3:.*test-package-3/);
+    expect(pkg1Block).toBeTruthy();
+    expect(pkg2Block).toBeTruthy();
+    expect(pkg3Block).toBeTruthy();
+  });
+
+  it('should only print output for failed packages with --aggregate-output=failures-only', async () => {
+    // Add a package with a script that fails
+    await fixture.createPackage({
+      name: 'package-fail',
+      version: '1.0.0',
+    });
+    await fixture.addScriptsToPackage({
+      packagePath: 'packages/package-fail',
+      scripts: {
+        'fail-script': 'node -e "process.exit(1)"',
+      },
+    });
+
+    // Add a package with a script that succeeds
+    await fixture.createPackage({
+      name: 'package-success',
+      version: '1.0.0',
+    });
+    await fixture.addScriptsToPackage({
+      packagePath: 'packages/package-success',
+      scripts: {
+        'fail-script': 'echo should-not-print',
+      },
+    });
+
+    await fixture.createInitialGitCommit();
+    await fixture.exec('pnpm install', { cwd: fixture.getWorkspacePath() });
+
+    const output = await fixture.lerna('run fail-script --parallel --aggregate-output=failures-only');
+
+    // Should only print output for the failed package
+    expect(output.combinedOutput).toContain('[package-fail]');
+    expect(output.combinedOutput).toMatch(/fail-script/);
+    expect(output.combinedOutput).not.toContain('should-not-print');
+    expect(output.combinedOutput).not.toContain('[package-success]');
   });
 });

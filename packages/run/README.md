@@ -62,14 +62,44 @@ $ lerna run --scope my-component test
 - [`@lerna/run`](#lernarun)
   - [Usage](#usage)
   - [Options](#options)
-    - [`--npm-client <client>`](#--npm-client-client)
+    - [`--aggregate-output`](#--aggregate-output)
     - [`--dry-run`](#--dry-run)
+    - [`--npm-client <client>`](#--npm-client-client)
     - [`--stream`](#--stream)
     - [`--parallel`](#--parallel)
     - [`--no-bail`](#--no-bail)
     - [`--no-prefix`](#--no-prefix)
     - [`--profile`](#--profile)
     - [`--profile-location <location>`](#--profile-location-location)
+
+---
+
+### `--aggregate-output`
+
+
+Aggregate output from child processes that are run in parallel. By default, each package's output is buffered and printed as a block after the process finishes (pnpm-like). Only applies with `--parallel`.
+
+```sh
+$ lerna run build --parallel --aggregate-output
+```
+
+To only print output for failed packages (CI-friendly), just assign "failures-only":
+
+```sh
+$ lerna run build --parallel --aggregate-output=failures-only
+```
+
+> **CI Use Case:** In large monorepos, this mode hides all output for succeeded packages—no success messages or logs—so you can quickly find failed packages in CI logs without scrolling through hundreds of successes.
+
+Inspired by [pnpm's --aggregate-output](https://pnpm.io/cli/run#--aggregate-output).
+
+### `--dry-run`
+
+Displays the process command that would be performed without actually executing it. This could be helpful for troubleshooting.
+
+```sh
+$ lerna run test:coverage --dry-run
+```
 
 ### `--npm-client <client>`
 
@@ -90,14 +120,6 @@ May also be configured in `lerna.json`:
     }
   }
 }
-```
-
-### `--dry-run`
-
-Displays the process command that would be performed without actually executing it. This could be helpful for troubleshooting.
-
-```sh
-$ lerna run test:coverage --dry-run
 ```
 
 ### `--stream`

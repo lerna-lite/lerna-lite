@@ -1,3 +1,5 @@
+import { spawn } from 'node:child_process';
+
 import type { CommandType, FilterOptions, Package, ProjectConfig, RunCommandOption } from '@lerna-lite/core';
 import { colorize, Command, getFilteredPackages, logOutput, runTopologically, ValidationError } from '@lerna-lite/core';
 import { Profiler } from '@lerna-lite/profiler';
@@ -194,6 +196,33 @@ export class RunCommand extends Command<RunCommandOption & FilterOptions> {
   }
 
   runScriptInPackagesParallel() {
+    // Hybrid: boolean (pnpm-like) by default, or string value 'failures-only' for CI-focused output
+    const aggregateOutput = this.options.aggregateOutput;
+    const failuresOnly = aggregateOutput === 'failures-only';
+    if (aggregateOutput) {
+      return pMap(
+        this.packagesWithScript,
+        async (pkg: Package) => {
+          const buffers: string[] = [];
+          const cmd = this.npmClient || 'npm';
+          const args = ['run', this.script, ...this.args];
+          const proc = spawn(cmd, args, { cwd: pkg.location, env: process.env });
+          proc.stdout.on('data', (chunk) => buffers.push(chunk.toString()));
+          proc.stderr.on('data', (chunk) => buffers.push(chunk.toString()));
+
+          await new Promise((resolve) => proc.on('close', resolve));
+          const output = `\n[${pkg.name}]\n${buffers.join('')}`;
+          const failed = proc.exitCode !== 0;
+
+          // Print buffered output for each package in [package-name] block format
+          if (!failuresOnly || failed) {
+            logOutput(output);
+          }
+          return { pkg, exitCode: proc.exitCode, failed, stderr: buffers.join('') };
+        },
+        { concurrency: this.concurrency }
+      );
+    }
     return pMap(this.packagesWithScript, (pkg: Package) => this.runScriptInPackageStreaming(pkg));
   }
 

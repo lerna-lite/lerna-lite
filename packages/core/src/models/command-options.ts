@@ -455,6 +455,9 @@ export interface PublishCommandOption extends VersionCommandOption {
 }
 
 export interface RunCommandOption {
+  /** Aggregate output per package (pnpm-like), or only for failures if 'failures-only'. */
+  aggregateOutput?: boolean | 'failures-only';
+
   /** Displays the process command that would be performed without executing it. */
   dryRun?: boolean;
 

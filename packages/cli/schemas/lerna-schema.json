@@ -489,6 +489,9 @@
           "type": "object",
           "description": "Options for the `run` command.",
           "properties": {
+            "aggregateOutput": {
+              "$ref": "#/$defs/commandOptions/run/aggregateOutput"
+            },
             "dryRun": {
               "$ref": "#/$defs/commandOptions/run/dryRun"
             },
@@ -1386,6 +1389,10 @@
         }
       },
       "run": {
+        "aggregateOutput": {
+          "oneOf": [{ "type": "boolean" }, { "type": "string", "enum": ["failures-only"] }],
+          "description": "Aggregate output from parallel child processes. Use 'failures-only' to only print failed packages."
+        },
         "dryRun": {
           "type": "boolean",
           "description": "During `lerna run`, when true, displays the process command that would be performed without executing it."

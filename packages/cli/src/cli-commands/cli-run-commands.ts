@@ -19,6 +19,11 @@ export default {
         type: 'string',
       })
       .options({
+        'aggregate-output': {
+          group: 'Command Options:',
+          describe: "Aggregate output from parallel child processes. Use 'failures-only' to only print failed packages.",
+          type: 'string',
+        },
         'dry-run': {
           group: 'Command Options:',
           describe: 'Displays the process command that would be performed without executing it.',
