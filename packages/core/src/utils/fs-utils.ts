@@ -28,6 +28,7 @@ export async function move(src: string, dest: string) {
   try {
     await rename(src, dest);
   } catch (err: any) {
+    /* v8 ignore if */
     if (err.code === 'EXDEV') {
       await cp(src, dest, { recursive: true });
       await rm(src, { recursive: true, force: true });
@@ -42,6 +43,7 @@ export function moveSync(src: string, dest: string) {
   try {
     renameSync(src, dest);
   } catch (err: any) {
+    /* v8 ignore if */
     if (err.code === 'EXDEV') {
       cpSync(src, dest, { recursive: true });
       rmSync(src, { recursive: true, force: true });

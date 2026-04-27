@@ -152,7 +152,7 @@ describe('fs-utils', () => {
   it('readJsonSync throws on parse error', () => {
     const file = join(testDir, 'bad.json');
     outputFileSync(file, '{notjson');
-    expect(() => readJsonSync(file)).toThrow();
+    expect(() => readJsonSync(file)).toThrow("Expected property name or '}' in JSON at position 1");
   });
 
   it('writeJsonSync and writeJson', async () => {
