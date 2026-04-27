@@ -1,9 +1,16 @@
 import { join } from 'node:path';
 
-import { logOutput, promptConfirmation, throwIfUncommitted, writePackage, type PackageGraphNode, type PublishCommandOption } from '@lerna-lite/core';
+import {
+  logOutput,
+  promptConfirmation,
+  throwIfUncommitted,
+  writePackage,
+  type PackageGraphNode,
+  type PublishCommandOption,
+  remove,
+} from '@lerna-lite/core';
 import { initFixtureFactory, stripAnsi } from '@lerna-test/helpers';
 import { loggingOutput } from '@lerna-test/helpers/logging-output.js';
-import { remove } from 'fs-extra/esm';
 import { describe, expect, it, vi, type Mock } from 'vitest';
 import yargParser from 'yargs-parser';
 

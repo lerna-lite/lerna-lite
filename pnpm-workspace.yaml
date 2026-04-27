@@ -14,7 +14,6 @@ catalog:
   ci-info: ^4.4.0
   dedent: ^1.7.2
   dotenv: ^17.4.2
-  fs-extra: ^11.3.4
   has-unicode: ^2.0.1
   normalize-path: ^3.0.0
   npm-package-arg: ^13.0.2
@@ -27,7 +26,6 @@ catalogs:
   # Can be referenced through "catalog:devDependencies"
   devDependencies:
     "@types/dedent": ^0.7.2
-    "@types/fs-extra": ^11.0.4
     "@types/node": ^24.12.2
     "@types/npm-package-arg": ^6.1.4
     "@types/npmcli__package-json": ^4.0.4

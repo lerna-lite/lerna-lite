@@ -2,9 +2,9 @@ import { join } from 'node:path';
 import { pathToFileURL } from 'node:url';
 
 import { up } from 'empathic/find';
-import { copy, ensureDir } from 'fs-extra/esm';
 import { x } from 'tinyexec';
 
+import { copy, ensureDir } from '../packages/core/dist/utils/fs-utils.js';
 import { gitAdd, gitCommit, gitInit } from './git/index.js';
 import { temporaryDirectory } from './index.js';
 

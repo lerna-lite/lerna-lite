@@ -1,7 +1,7 @@
 import { join } from 'node:path';
 
+import { outputFile, outputJson, writeJson } from '@lerna-lite/core';
 import { initFixtureFactory } from '@lerna-test/helpers';
-import { outputFile, outputJson, writeJson } from 'fs-extra/esm';
 import { x } from 'tinyexec';
 import { expect, test } from 'vitest';
 

@@ -1,8 +1,7 @@
 import { join } from 'node:path';
 
 import type { CommandType, InitCommandOption, ProjectConfig } from '@lerna-lite/core';
-import { Command, exec } from '@lerna-lite/core';
-import { mkdirp } from 'fs-extra/esm';
+import { Command, ensureDir, exec } from '@lerna-lite/core';
 import pMap from 'p-map';
 import { writeJsonFile } from 'write-json-file';
 
@@ -132,7 +131,6 @@ export class InitCommand extends Command<InitCommandOption> {
 
   ensurePackagesDir() {
     this.logger.info('', 'Creating packages directory');
-
-    return pMap(this.project.packageParentDirs, (dir) => mkdirp(dir));
+    return pMap(this.project.packageParentDirs, (dir) => ensureDir(dir));
   }
 }

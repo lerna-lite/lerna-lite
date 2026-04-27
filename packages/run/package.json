@@ -36,11 +36,9 @@
     "@lerna-lite/core": "workspace:*",
     "@lerna-lite/npmlog": "workspace:*",
     "@lerna-lite/profiler": "workspace:*",
-    "fs-extra": "catalog:",
     "p-map": "catalog:"
   },
   "devDependencies": {
-    "@types/fs-extra": "catalog:devDependencies",
     "@types/yargs-parser": "catalog:devDependencies",
     "perf_hooks": "^0.0.1",
     "tinyglobby": "catalog:dependencies",
