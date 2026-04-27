@@ -33,8 +33,7 @@
   },
   "dependencies": {
     "@lerna-lite/core": "workspace:*",
-    "@lerna-lite/npmlog": "workspace:*",
-    "fs-extra": "catalog:"
+    "@lerna-lite/npmlog": "workspace:*"
   },
   "devDependencies": {
     "@types/node": "catalog:devDependencies",

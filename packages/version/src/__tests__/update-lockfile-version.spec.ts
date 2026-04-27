@@ -2,11 +2,9 @@ import { promises as fsPromises } from 'node:fs';
 import { join } from 'node:path';
 import { stripVTControlCharacters } from 'node:util';
 
-import type { Package } from '@lerna-lite/core';
-import { execPackageManager, execPackageManagerSync, Project } from '@lerna-lite/core';
+import { type Package, execPackageManager, execPackageManagerSync, Project, pathExistsSync, readJsonSync } from '@lerna-lite/core';
 import { log } from '@lerna-lite/npmlog';
 import { initFixtureFactory } from '@lerna-test/helpers';
-import { pathExistsSync, readJsonSync } from 'fs-extra/esm';
 import { loadJsonFile } from 'load-json-file';
 import { beforeEach, describe, expect, it, test, vi, type Mock } from 'vitest';
 

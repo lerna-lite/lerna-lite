@@ -1,10 +1,10 @@
 import { basename, join, resolve as pathResolve } from 'node:path';
 
 import { initFixtureFactory } from '@lerna-test/helpers';
-import { outputFile, remove, writeJson } from 'fs-extra/esm';
 import { afterEach, beforeAll, beforeEach, describe, expect, it, vi, type Mock } from 'vitest';
 import { writeJsonFile } from 'write-json-file';
 
+import { outputFile, remove, writeJson } from '../../utils/fs-utils.js';
 import { Project } from '../project.js';
 
 const { writeFileMock } = vi.hoisted(() => ({ writeFileMock: vi.fn() }));

@@ -1,10 +1,9 @@
 import { join as pathJoin } from 'node:path';
 
-import { Conf, collectUpdates, logOutput, promptConfirmation, type PublishCommandOption } from '@lerna-lite/core';
+import { Conf, collectUpdates, logOutput, promptConfirmation, type PublishCommandOption, outputFileSync, outputJson } from '@lerna-lite/core';
 import { getOneTimePassword } from '@lerna-lite/version';
 import { commandRunner, commitChangeToPackage, initFixtureFactory } from '@lerna-test/helpers';
 import { loggingOutput } from '@lerna-test/helpers/logging-output.js';
-import { outputFileSync, outputJson } from 'fs-extra/esm';
 import { beforeAll, beforeEach, describe, expect, it, vi, type Mock } from 'vitest';
 import yargParser from 'yargs-parser';
 
@@ -54,6 +53,7 @@ vi.mock('@lerna-lite/core', async () => ({
   promptConfirmation: (await vi.importActual<any>('../../../core/src/__mocks__/prompt')).promptConfirmation,
   promptSelectOne: (await vi.importActual<any>('../../../core/src/__mocks__/prompt')).promptSelectOne,
   promptTextInput: (await vi.importActual<any>('../../../core/src/__mocks__/prompt')).promptTextInput,
+  outputFileSync: vi.fn(),
 }));
 
 // also point to the local publish command so that all mocks are properly used even by the command-runner
@@ -69,11 +69,6 @@ vi.mock('../lib/npm-publish', async () => await vi.importActual('../lib/__mocks_
 vi.mock('../lib/npm-dist-tag', async () => await vi.importActual('../lib/__mocks__/npm-dist-tag'));
 vi.mock('../lib/pack-directory', async () => await vi.importActual('../lib/__mocks__/pack-directory'));
 vi.mock('../lib/git-checkout');
-
-vi.mock('fs-extra/esm', async () => ({
-  ...(await vi.importActual<any>('fs-extra/esm')),
-  outputFileSync: vi.fn(),
-}));
 
 // helpers
 const initFixture = initFixtureFactory(import.meta.dirname);

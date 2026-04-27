@@ -2,10 +2,9 @@ import { mkdirSync, mkdtempSync, realpathSync, writeFileSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import { join, resolve as pathResolve } from 'node:path';
 
-import { promptSelectOne, promptTextInput, type VersionCommandOption } from '@lerna-lite/core';
+import { promptSelectOne, promptTextInput, type VersionCommandOption, outputFile } from '@lerna-lite/core';
 import { commandRunner, getCommitMessage, gitAdd, gitCommit, gitInit, gitTag, initFixtureFactory, showCommit } from '@lerna-test/helpers';
 import serializeChangelog from '@lerna-test/helpers/serializers/serialize-changelog.js';
-import { outputFile } from 'fs-extra/esm';
 import { expect, test, vi, type Mock } from 'vitest';
 import yargParser from 'yargs-parser';
 

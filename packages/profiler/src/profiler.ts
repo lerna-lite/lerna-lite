@@ -1,8 +1,8 @@
 import { join, resolve } from 'node:path';
 
+import { outputJson } from '@lerna-lite/core';
 import type { Logger } from '@lerna-lite/npmlog';
 import { log as npmlog } from '@lerna-lite/npmlog';
-import { outputJson } from 'fs-extra/esm';
 
 import type { ProfilerConfig, TraceEvent } from './models.js';
 

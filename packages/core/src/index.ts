@@ -31,6 +31,7 @@ export * from './utils/defaults.js';
 export * from './utils/describe-ref.js';
 export * from './utils/env-replace.js';
 export * from './utils/find-prefix.js';
+export * from './utils/fs-utils.js';
 export * from './utils/log-package-error.js';
 export * from './utils/npm-conf.js';
 export * from './utils/object-utils.js';

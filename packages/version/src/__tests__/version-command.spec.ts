@@ -10,11 +10,12 @@ import {
   throwIfUncommitted,
   writePackage,
   type VersionCommandOption,
+  outputFile,
+  outputJson,
 } from '@lerna-lite/core';
 import { commandRunner, getCommitMessage, gitAdd, gitCommit, gitTag, initFixtureFactory, showCommit, stripAnsi } from '@lerna-test/helpers';
 import { loggingOutput } from '@lerna-test/helpers/logging-output.js';
 import gitSHA from '@lerna-test/helpers/serializers/serialize-git-sha.js';
-import { outputFile, outputJson } from 'fs-extra/esm';
 import { x } from 'tinyexec';
 import { describe, expect, it, vi, type Mock } from 'vitest';
 import { parse } from 'yaml';
