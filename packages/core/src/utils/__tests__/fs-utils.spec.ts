@@ -97,6 +97,12 @@ describe('fs-utils', () => {
     expect(readFileSync(dest, 'utf8')).toBe('move');
   });
 
+  it('moveSync throws on non-EXDEV error', () => {
+    const src = join(testDir, 'notfound.txt');
+    const dest = join(testDir, 'shouldnotexist.txt');
+    expect(() => moveSync(src, dest)).toThrow('ENOENT: no such file or directory');
+  });
+
   it('move moves file', async () => {
     const src = join(testDir, 'k.txt');
     const dest = join(testDir, 'l.txt');
@@ -104,6 +110,12 @@ describe('fs-utils', () => {
     await move(src, dest);
     expect(existsSync(src)).toBe(false);
     expect(readFileSync(dest, 'utf8')).toBe('move');
+  });
+
+  it('move throws on non-EXDEV error', async () => {
+    const src = join(testDir, 'notfound-async.txt');
+    const dest = join(testDir, 'shouldnotexist-async.txt');
+    await expect(move(src, dest)).rejects.toThrow();
   });
 
   it('copySync copies file', () => {
@@ -135,6 +147,12 @@ describe('fs-utils', () => {
   it('readJsonSync with throws: false', () => {
     const file = join(testDir, 'notfound.json');
     expect(readJsonSync(file, { throws: false })).toBeUndefined();
+  });
+
+  it('readJsonSync throws on parse error', () => {
+    const file = join(testDir, 'bad.json');
+    outputFileSync(file, '{notjson');
+    expect(() => readJsonSync(file)).toThrow();
   });
 
   it('writeJsonSync and writeJson', async () => {
