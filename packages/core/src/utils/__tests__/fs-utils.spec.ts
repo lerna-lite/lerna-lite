@@ -115,7 +115,7 @@ describe('fs-utils', () => {
   it('move throws on non-EXDEV error', async () => {
     const src = join(testDir, 'notfound-async.txt');
     const dest = join(testDir, 'shouldnotexist-async.txt');
-    await expect(move(src, dest)).rejects.toThrow();
+    await expect(move(src, dest)).rejects.toThrow('ENOENT: no such file or directory');
   });
 
   it('copySync copies file', () => {
