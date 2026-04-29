@@ -22,15 +22,16 @@ interface OidcOptions {
 /**
  * Handles OpenID Connect (OIDC) token retrieval and exchange for CI environments.
  *
- * This function is designed to work in Continuous Integration (CI) environments such as GitHub Actions
- * and GitLab. It retrieves an OIDC token from the CI environment, exchanges it for an npm token, and
- * sets the token in the provided configuration for authentication with the npm registry.
+ * This function is designed to work in Continuous Integration (CI) environments such as GitHub Actions,
+ * GitLab, and CircleCI. It retrieves an OIDC token from the CI environment, exchanges it for an npm token,
+ * and sets the token in the provided configuration for authentication with the npm registry.
  *
  * This function is intended to never throw, as it mutates the state of the `opts` and `config` objects on success.
  * OIDC is always an optional feature, and the function should not throw if OIDC is not configured by the registry.
  *
  * @see https://github.com/watson/ci-info for CI environment detection.
  * @see https://docs.github.com/en/actions/deployment/security-hardening-your-deployments/about-security-hardening-with-openid-connect for GitHub Actions OIDC.
+ * @see https://circleci.com/docs/openid-connect-tokens/ for CircleCI OIDC.
  */
 export async function oidc({ packageName, registry, opts, config }: OidcOptions) {
   /*
@@ -45,7 +46,9 @@ export async function oidc({ packageName, registry, opts, config }: OidcOptions)
         (
           ciInfo.GITHUB_ACTIONS ||
           /** @see https://github.com/watson/ci-info/blob/v4.2.0/vendors.json#L161C13-L161C22 */
-          ciInfo.GITLAB
+          ciInfo.GITLAB ||
+          /** @see https://github.com/watson/ci-info/blob/v4.2.0/vendors.json#L78 */
+          ciInfo.CIRCLE
         )
       )
     ) {
@@ -144,7 +147,7 @@ export async function oidc({ packageName, registry, opts, config }: OidcOptions)
       return undefined;
     }
 
-    if (!response?.['token']) {
+    if (!response?.token) {
       log.verbose('oidc', 'Failed because token exchange was missing the token in the response body');
       return undefined;
     }
@@ -155,34 +158,37 @@ export async function oidc({ packageName, registry, opts, config }: OidcOptions)
      * it must be directly attached to the `opts` object.
      * Additionally, the token is required by the "live" configuration or getters within `config`.
      */
-    opts[authTokenKey] = response['token'];
-    config['set'](authTokenKey, response['token'], 'user');
+    opts[authTokenKey] = response.token;
+    config['set'](authTokenKey, response.token, 'user');
     log.verbose('oidc', 'Successfully retrieved and set token');
 
     try {
       // `isDefault` exists in the modern `@npmcli/config` but not in lerna's historical Conf class,
       // which is based on our older npm utils.
-      //
-      // const isDefaultProvenance = config.isDefault("provenance");
-      // if (isDefaultProvenance) {
-      const [headerB64, payloadB64] = idToken.split('.');
-      if (headerB64 && payloadB64) {
-        const payloadJson = Buffer.from(payloadB64, 'base64').toString('utf8');
-        const payload = JSON.parse(payloadJson);
-        if (
-          (ciInfo.GITHUB_ACTIONS && payload.repository_visibility === 'public') ||
-          // only set provenance for gitlab if the repo is public and SIGSTORE_ID_TOKEN is available
-          (ciInfo.GITLAB && payload.project_visibility === 'public' && process.env['SIGSTORE_ID_TOKEN'])
-        ) {
-          const visibility = await libaccess.getVisibility(packageName, opts);
-          if (visibility?.public) {
-            log.verbose('oidc', 'Enabling provenance');
-            opts.provenance = true;
-            config['set']('provenance', true, 'user');
+      // npm/cli uses:
+      //   const isDefaultProvenance = config.isDefault("provenance");
+      //   if (isDefaultProvenance && !ciInfo.CIRCLE) { ... }
+      // Lerna-Lite always enables provenance unless running in CircleCI, to match legacy behavior
+      // and avoid breaking changes for users who expect provenance by default.
+      if (!ciInfo.CIRCLE) {
+        const [headerB64, payloadB64] = idToken.split('.');
+        if (headerB64 && payloadB64) {
+          const payloadJson = Buffer.from(payloadB64, 'base64').toString('utf8');
+          const payload = JSON.parse(payloadJson);
+          if (
+            (ciInfo.GITHUB_ACTIONS && payload.repository_visibility === 'public') ||
+            // only set provenance for gitlab if the repo is public and SIGSTORE_ID_TOKEN is available
+            (ciInfo.GITLAB && payload.project_visibility === 'public' && process.env['SIGSTORE_ID_TOKEN'])
+          ) {
+            const visibility = await libaccess.getVisibility(packageName, opts);
+            if (visibility?.public) {
+              log.verbose('oidc', 'Enabling provenance');
+              opts.provenance = true;
+              config['set']('provenance', true, 'user');
+            }
           }
         }
       }
-      // }
     } catch (error: any) {
       log.verbose('oidc', `Failed to set provenance with message: ${error?.message || 'Unknown error'}`);
     }
