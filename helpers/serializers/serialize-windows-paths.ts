@@ -1,6 +1,6 @@
 import { join } from 'node:path';
 
-import normalizePath from 'normalize-path';
+import { normalizePath } from '../index.js';
 
 const WHACK_WACK = /(\\)([\S]*)/g;
 

@@ -1,8 +1,8 @@
 import { join } from 'node:path';
 
 import { loadJsonFileSync } from 'load-json-file';
-import normalizeNewline from 'normalize-newline';
 
+import { normalizeNewline } from '../index.js';
 import serializeTempdir from './serialize-tempdir.js';
 import serializeWindowsPaths from './serialize-windows-paths.js';
 
