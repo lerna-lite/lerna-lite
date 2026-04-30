@@ -261,13 +261,13 @@ importers:
   packages/core:
     dependencies:
       '@inquirer/expand':
-        specifier: ^5.0.12
+        specifier: ^5.0.13
         version: 5.0.13(@types/node@24.12.2)
       '@inquirer/input':
-        specifier: ^5.0.11
+        specifier: ^5.0.12
         version: 5.0.12(@types/node@24.12.2)
       '@inquirer/select':
-        specifier: ^5.1.3
+        specifier: ^5.1.4
         version: 5.1.4(@types/node@24.12.2)
       '@lerna-lite/npmlog':
         specifier: workspace:*
