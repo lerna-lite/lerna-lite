@@ -48,7 +48,7 @@
     "load-json-file": "catalog:dependencies",
     "npm-package-arg": "catalog:",
     "p-map": "catalog:",
-    "p-queue": "^9.1.2",
+    "p-queue": "^9.2.0",
     "semver": "catalog:",
     "tinyexec": "catalog:dependencies",
     "tinyglobby": "catalog:dependencies",
