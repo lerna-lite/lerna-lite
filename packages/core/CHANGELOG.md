@@ -4,6 +4,14 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [5.2.1](https://github.com/lerna-lite/lerna-lite/compare/v5.2.0...v5.2.1) (2026-05-01)
+
+### Bug Fixes
+
+* **deps:** replace `fs-extra` with native Node.js APIs ([#1318](https://github.com/lerna-lite/lerna-lite/issues/1318)) ([b1cd7f1](https://github.com/lerna-lite/lerna-lite/commit/b1cd7f176100a7dafc78b78db4ac34491f23b64d)) - by @ghiscoding
+* **deps:** update all non-major dependencies ([#1322](https://github.com/lerna-lite/lerna-lite/issues/1322)) ([d1e80e5](https://github.com/lerna-lite/lerna-lite/commit/d1e80e57ee344b910917006c28b8bbec5ea19eda)) - by @renovate[bot]
+* **deps:** update inquirer packages ([#1321](https://github.com/lerna-lite/lerna-lite/issues/1321)) ([940af9a](https://github.com/lerna-lite/lerna-lite/commit/940af9add499af1ee5b7fb1c6908a8a7fe3ac3f1)) - by @renovate[bot]
+
 ## [5.2.0](https://github.com/lerna-lite/lerna-lite/compare/v5.1.0...v5.2.0) (2026-04-24)
 
 ### Features

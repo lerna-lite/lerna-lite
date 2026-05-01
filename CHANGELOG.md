@@ -4,6 +4,16 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [5.2.1](https://github.com/lerna-lite/lerna-lite/compare/v5.2.0...v5.2.1) (2026-05-01)
+
+### Bug Fixes
+
+* **deps:** drop normalize-path and normalize-newline dependencies ([#1319](https://github.com/lerna-lite/lerna-lite/issues/1319)) ([4d39d12](https://github.com/lerna-lite/lerna-lite/commit/4d39d125f8a200d2bde30834e610449deb2a0589)) - by @ghiscoding
+* **deps:** replace `fs-extra` with native Node.js APIs ([#1318](https://github.com/lerna-lite/lerna-lite/issues/1318)) ([b1cd7f1](https://github.com/lerna-lite/lerna-lite/commit/b1cd7f176100a7dafc78b78db4ac34491f23b64d)) - by @ghiscoding
+* **deps:** update all non-major dependencies ([#1322](https://github.com/lerna-lite/lerna-lite/issues/1322)) ([d1e80e5](https://github.com/lerna-lite/lerna-lite/commit/d1e80e57ee344b910917006c28b8bbec5ea19eda)) - by @renovate[bot]
+* **deps:** update inquirer packages ([#1321](https://github.com/lerna-lite/lerna-lite/issues/1321)) ([940af9a](https://github.com/lerna-lite/lerna-lite/commit/940af9add499af1ee5b7fb1c6908a8a7fe3ac3f1)) - by @renovate[bot]
+* **publish:** align OIDC logic/tests with npm/cli & add CircleCI support ([#1320](https://github.com/lerna-lite/lerna-lite/issues/1320)) ([da2a4cc](https://github.com/lerna-lite/lerna-lite/commit/da2a4cc0f1b41cba6cf500d58a9704162c4a373f)) - by @ghiscoding
+
 ## [5.2.0](https://github.com/lerna-lite/lerna-lite/compare/v5.1.0...v5.2.0) (2026-04-24)
 
 ### Features

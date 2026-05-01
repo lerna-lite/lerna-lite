@@ -4,6 +4,13 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [5.2.1](https://github.com/lerna-lite/lerna-lite/compare/v5.2.0...v5.2.1) (2026-05-01)
+
+### Bug Fixes
+
+* **deps:** drop normalize-path and normalize-newline dependencies ([#1319](https://github.com/lerna-lite/lerna-lite/issues/1319)) ([4d39d12](https://github.com/lerna-lite/lerna-lite/commit/4d39d125f8a200d2bde30834e610449deb2a0589)) - by @ghiscoding
+* **deps:** replace `fs-extra` with native Node.js APIs ([#1318](https://github.com/lerna-lite/lerna-lite/issues/1318)) ([b1cd7f1](https://github.com/lerna-lite/lerna-lite/commit/b1cd7f176100a7dafc78b78db4ac34491f23b64d)) - by @ghiscoding
+
 ## [5.2.0](https://github.com/lerna-lite/lerna-lite/compare/v5.1.0...v5.2.0) (2026-04-24)
 
 ### Features
