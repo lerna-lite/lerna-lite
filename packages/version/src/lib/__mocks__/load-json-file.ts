@@ -1,6 +1,5 @@
 import { dirname } from 'node:path';
 
-import normalizePath from 'normalize-path';
 import { afterEach, vi } from 'vitest';
 
 const { loadJsonFile: actualLoadJsonFile, loadJsonFileSync: loadJsonFileSyncActual } =
@@ -12,7 +11,8 @@ const syncRegistry = new Map();
 function incrementCalled(registry: Map<string, number>, manifestLocation = '') {
   // `temporaryDirectory()` creates dirnames with a UUID that are 36 characters long, but we want a readable key
   const subPath = manifestLocation.split(/(lerna-)?[0-9a-f-]{36}/).pop();
-  const key = normalizePath(dirname(subPath||''));
+  // Use Node's dirname and replace backslashes for cross-platform compatibility
+  const key = dirname(subPath || '').replace(/\\/g, '/');
 
   // keyed off directory subpath, _not_ pkg.name (we don't know it yet)
   registry.set(key, (registry.get(key) || 0) + 1);

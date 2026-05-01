@@ -88,8 +88,6 @@
     "cross-env": "^10.1.0",
     "empathic": "^2.0.0",
     "load-json-file": "catalog:dependencies",
-    "normalize-newline": "^5.0.0",
-    "normalize-path": "catalog:",
     "oxfmt": "^0.45.0",
     "oxlint": "~1.47.0",
     "oxlint-tsgolint": "^0.21.1",

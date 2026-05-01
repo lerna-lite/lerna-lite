@@ -42,7 +42,6 @@
     "columnify": "catalog:dependencies",
     "libnpmaccess": "^10.0.3",
     "libnpmpublish": "^11.1.3",
-    "normalize-path": "catalog:",
     "npm-package-arg": "catalog:",
     "npm-packlist": "^10.0.4",
     "npm-registry-fetch": "catalog:",

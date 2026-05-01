@@ -35,7 +35,6 @@ import {
 } from '@lerna-lite/core';
 import type { OneTimePasswordCache } from '@lerna-lite/version';
 import { getOneTimePassword, VersionCommand } from '@lerna-lite/version';
-import normalizePath from 'normalize-path';
 import pMap from 'p-map';
 import semver from 'semver';
 import { glob } from 'tinyglobby';
@@ -333,7 +332,7 @@ export class PublishCommand extends Command<PublishCommandOption> {
     // optionally cleanup temp packed files after publish, opt-in option
     if (this.options.cleanupTempFiles) {
       const tempDirPath = realpathSync(tmpdir());
-      const normalizedLernaPath = normalizePath(pathJoin(tempDirPath, 'lerna-*'));
+      const normalizedLernaPath = pathJoin(tempDirPath, 'lerna-*').replace(/\\/g, '/');
       glob(normalizedLernaPath, { absolute: true, cwd: tempDirPath, onlyDirectories: true })
         .then((deleteFolders) => {
           // silently delete all files/folders that startsWith "lerna-"

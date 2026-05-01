@@ -4,10 +4,17 @@ import { tmpdir } from 'node:os';
 import { join as pathJoin, relative } from 'node:path';
 import { stripVTControlCharacters } from 'node:util';
 
-import normalizeNewline from 'normalize-newline';
-import normalizePath from 'normalize-path';
-
 import { Project } from '../packages/core/dist/project/project.js';
+
+// Simple normalizeNewline implementation: replaces CRLF/CR with LF
+export function normalizeNewline(str: string): string {
+  return str.replace(/\r\n?/g, '\n');
+}
+
+// Simple normalizePath implementation: replaces backslashes with forward slashes
+export function normalizePath(str: string): string {
+  return str.replace(/\\/g, '/');
+}
 
 /**
  * Update lerna config inside a test case.
