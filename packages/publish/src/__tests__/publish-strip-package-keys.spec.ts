@@ -1,8 +1,7 @@
 import { join } from 'node:path';
 
-import { writePackage } from '@lerna-lite/core';
+import { outputFile, writePackage } from '@lerna-lite/core';
 import { commandRunner, gitAdd, gitCommit, gitTag, initFixtureFactory, updateLernaConfig } from '@lerna-test/helpers';
-import { outputFile } from 'fs-extra/esm';
 import { describe, expect, it, vi } from 'vitest';
 
 import cliCommands from '../../../cli/src/cli-commands/cli-publish-commands.js';

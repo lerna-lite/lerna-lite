@@ -1,6 +1,5 @@
-import { logOutput, type RunCommandOption } from '@lerna-lite/core';
+import { logOutput, type RunCommandOption, pathExists, readJson } from '@lerna-lite/core';
 import { commandRunner, initFixtureFactory, loggingOutput, normalizeRelativeDir } from '@lerna-test/helpers';
-import { pathExists, readJson } from 'fs-extra/esm';
 import { glob } from 'tinyglobby';
 import { afterEach, beforeAll, describe, expect, it, vi, type Mock } from 'vitest';
 import yargParser from 'yargs-parser';

@@ -1,9 +1,8 @@
 import { join } from 'node:path';
 
-import { describeRef, promptConfirmation, throwIfUncommitted, writePackage, type PublishCommandOption } from '@lerna-lite/core';
+import { describeRef, outputFile, promptConfirmation, throwIfUncommitted, writePackage, type PublishCommandOption } from '@lerna-lite/core';
 import { commandRunner, gitAdd, gitCommit, gitTag, initFixtureFactory, loggingOutput } from '@lerna-test/helpers';
 import gitSHA from '@lerna-test/helpers/serializers/serialize-git-sha.js';
-import { outputFile } from 'fs-extra/esm';
 import { beforeAll, describe, expect, test, vi, type Mock } from 'vitest';
 import yargParser from 'yargs-parser';
 

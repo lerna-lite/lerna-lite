@@ -1,9 +1,12 @@
-import { realpathSync } from 'node:fs';
+import { realpathSync, rmSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import { join as pathJoin } from 'node:path';
 
-import { removeSync } from 'fs-extra/esm';
 import { glob } from 'tinyglobby';
+
+export function removeSync(path) {
+  rmSync(path, { recursive: true, force: true });
+}
 
 const tempDirPath = realpathSync(tmpdir());
 const normalizedLernaPath = pathJoin(tempDirPath, 'lerna-*').replace(/\\/g, '/');

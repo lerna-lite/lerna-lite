@@ -1,10 +1,9 @@
 import { join } from 'node:path';
 
-import { colorize, logOutput, type VersionCommandOption } from '@lerna-lite/core';
+import { colorize, logOutput, type VersionCommandOption, outputFile } from '@lerna-lite/core';
 import { log } from '@lerna-lite/npmlog';
 import { commandRunner, initFixtureFactory } from '@lerna-test/helpers';
 import dedent from 'dedent';
-import { outputFile } from 'fs-extra/esm';
 import { beforeEach, describe, expect, it, vi, type Mock } from 'vitest';
 import yargParser from 'yargs-parser';
 
