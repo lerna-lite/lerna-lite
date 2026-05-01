@@ -133,11 +133,16 @@ describe('oidc', () => {
     (libaccess.default.getVisibility as any).mockResolvedValue({ public: true });
 
     const opts: any = {};
+    // Provide a config mock with isDefault returning true for provenance
+    const configWithIsDefault = {
+      ...mockConfig,
+      isDefault: (key: string) => key === 'provenance',
+    };
     await oidc({
       packageName: 'test-pkg',
       registry: 'https://registry.npmjs.org/',
       opts,
-      config: mockConfig,
+      config: configWithIsDefault,
     });
 
     expect(opts.provenance).toBe(true);
@@ -165,11 +170,16 @@ describe('oidc', () => {
     (libaccess.default.getVisibility as any).mockResolvedValue({ public: true });
 
     const opts: any = {};
+    // Provide a config mock with isDefault returning true for provenance
+    const configWithIsDefault = {
+      ...mockConfig,
+      isDefault: (key: string) => key === 'provenance',
+    };
     await oidc({
       packageName: 'test-pkg',
       registry: 'https://registry.npmjs.org/',
       opts,
-      config: mockConfig,
+      config: configWithIsDefault,
     });
 
     expect(opts.provenance).toBe(true);
@@ -297,5 +307,40 @@ describe('oidc', () => {
       config: mockConfig,
     });
     expect(result).toBeUndefined();
+  });
+
+  it('does not set provenance for CircleCI even if isDefault returns true', async () => {
+    const ciInfo = await import('ci-info');
+    ciInfo.default.GITHUB_ACTIONS = false;
+    ciInfo.default.GITLAB = false;
+    ciInfo.default.CIRCLE = true;
+    process.env.NPM_ID_TOKEN = 'FAKE_ID_TOKEN';
+
+    // Simulate a JWT with public repo
+    const payload = Buffer.from(JSON.stringify({ repository_visibility: 'public' })).toString('base64');
+    const { fetchWithRetry } = await import('../lib/fetch-retry.js');
+    (fetchWithRetry as any).mockResolvedValue({ ok: true, status: 200, json: () => Promise.resolve({ value: `HEADER.${payload}.SIGNATURE` }) });
+
+    const npmFetch = await import('npm-registry-fetch');
+    (npmFetch.default.json as any).mockResolvedValue({ token: 'FAKE_NPM_TOKEN' });
+
+    const libaccess = await import('libnpmaccess');
+    (libaccess.default.getVisibility as any).mockResolvedValue({ public: true });
+
+    const opts: any = {};
+    // Provide a config mock with isDefault returning true for provenance
+    const configWithIsDefault = {
+      ...mockConfig,
+      isDefault: (key: string) => key === 'provenance',
+    };
+    await oidc({
+      packageName: 'test-pkg',
+      registry: 'https://registry.npmjs.org/',
+      opts,
+      config: configWithIsDefault,
+    });
+
+    expect(opts.provenance).toBeUndefined();
+    expect(mockConfig.set).not.toHaveBeenCalledWith('provenance', true, 'user');
   });
 });
