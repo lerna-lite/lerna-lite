@@ -21,6 +21,8 @@ import {
   deleteComplexObjectProp,
   describeRef,
   excludeValuesFromArray,
+  outputFileSync,
+  removeSync,
   logOutput,
   npmConf,
   prereleaseIdFromVersion,
@@ -33,7 +35,6 @@ import {
 } from '@lerna-lite/core';
 import type { OneTimePasswordCache } from '@lerna-lite/version';
 import { getOneTimePassword, VersionCommand } from '@lerna-lite/version';
-import { outputFileSync, removeSync } from 'fs-extra/esm';
 import normalizePath from 'normalize-path';
 import pMap from 'p-map';
 import semver from 'semver';

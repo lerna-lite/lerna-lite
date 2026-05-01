@@ -1,9 +1,8 @@
 import { join } from 'node:path';
 
-import { writePackage, type PublishCommandOption } from '@lerna-lite/core';
+import { writePackage, type PublishCommandOption, outputFile } from '@lerna-lite/core';
 import { log } from '@lerna-lite/npmlog';
 import { gitAdd, gitCommit, gitTag, initFixtureFactory } from '@lerna-test/helpers';
-import { outputFile } from 'fs-extra/esm';
 import { describe, expect, it, vi } from 'vitest';
 import yargParser from 'yargs-parser';
 

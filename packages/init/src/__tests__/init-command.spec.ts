@@ -1,8 +1,7 @@
 import { join } from 'node:path';
 
-import { type InitCommandOption } from '@lerna-lite/core';
+import { type InitCommandOption, ensureDir, outputJson, pathExists, readJson } from '@lerna-lite/core';
 import { commandRunner, initFixtureFactory, temporaryDirectory } from '@lerna-test/helpers';
-import { ensureDir, outputJson, pathExists, readJson } from 'fs-extra/esm';
 import { describe, expect, it, vi } from 'vitest';
 import yargParser from 'yargs-parser';
 

@@ -32,6 +32,7 @@ vi.mock('@lerna-lite/core', async () => ({
   throwIfReleased: (await vi.importActual<any>('../../../core/src/__mocks__/check-working-tree')).throwIfReleased,
   throwIfUncommitted: (await vi.importActual<any>('../../../core/src/__mocks__/check-working-tree')).throwIfUncommitted,
   writePackage: (await vi.importActual<any>('../../../core/src/__mocks__/write-package')).writePackage,
+  outputFile: vi.fn().mockResolvedValue(undefined),
 }));
 
 expect.addSnapshotSerializer({

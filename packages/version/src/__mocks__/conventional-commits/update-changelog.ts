@@ -2,7 +2,7 @@ import { join } from 'node:path';
 
 import { vi } from 'vitest';
 
-const { outputFile } = await vi.importActual<any>('fs-extra/esm');
+const { outputFile } = await vi.importActual<any>('@lerna-lite/core');
 
 const mockUpdateChangelog = vi.fn().mockName('updateChangelog');
 

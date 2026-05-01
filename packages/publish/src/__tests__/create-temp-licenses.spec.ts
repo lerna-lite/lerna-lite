@@ -1,8 +1,7 @@
 import { join } from 'node:path';
 
-import { Project } from '@lerna-lite/core';
+import { Project, move, pathExists } from '@lerna-lite/core';
 import { initFixtureFactory } from '@lerna-test/helpers';
-import { move, pathExists } from 'fs-extra/esm';
 import { describe, expect, it } from 'vitest';
 
 import { createTempLicenses } from '../lib/create-temp-licenses.js';

@@ -1,10 +1,10 @@
 import { join } from 'node:path';
 
 import { gitAdd, initFixtureFactory } from '@lerna-test/helpers';
-import { outputFile, remove } from 'fs-extra/esm';
 import { afterAll, beforeAll, describe, expect, it, vi } from 'vitest';
 
 import { Project } from '../../project/project.js';
+import { outputFile, remove } from '../../utils/fs-utils.js';
 import { collectUncommitted, collectUncommittedSync } from '../collect-uncommitted.js';
 import { colorize } from '../colorize.js';
 

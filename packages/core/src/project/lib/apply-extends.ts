@@ -1,8 +1,7 @@
 import { createRequire } from 'node:module';
 import { dirname } from 'node:path';
 
-import { readJsonSync } from 'fs-extra/esm';
-
+import { readJsonSync } from '../../utils/fs-utils.js';
 import { ValidationError } from '../../validation-error.js';
 import { shallowExtend } from './shallow-extend.js';
 

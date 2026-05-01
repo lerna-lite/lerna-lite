@@ -1,5 +1,4 @@
-import type { Package } from '@lerna-lite/core';
-import { remove } from 'fs-extra/esm';
+import { remove, type Package } from '@lerna-lite/core';
 import pMap from 'p-map';
 
 /**

@@ -3,7 +3,6 @@ import { join } from 'node:path';
 import type { PublishCommandOption } from '@lerna-lite/core';
 import { commandRunner, initFixtureFactory } from '@lerna-test/helpers';
 import { loggingOutput } from '@lerna-test/helpers/logging-output.js';
-import { remove } from 'fs-extra/esm';
 import { describe, expect, it, vi, type Mock } from 'vitest';
 import yargParser from 'yargs-parser';
 
@@ -116,32 +115,5 @@ describe('licenses', () => {
 
     expect(createTempLicenses).toHaveBeenLastCalledWith(undefined, []);
     expect(removeTempLicenses).toHaveBeenLastCalledWith([]);
-  });
-
-  // TODO: fix the next 2 tests
-  // oxlint-disable-next-line no-disabled-tests
-  it.skip('warns when one package needs a license', async () => {
-    const cwd = await initFixture('licenses');
-
-    // remove root license so warning is triggered
-    await remove(join(cwd, 'LICENSE'));
-
-    await lernaPublish(cwd)();
-
-    const [warning] = loggingOutput('warn');
-    expect(warning).toMatch('Package package-1 is missing a license.');
-  });
-
-  // oxlint-disable-next-line no-disabled-tests
-  it.skip('warns when multiple packages need a license', async () => {
-    const cwd = await initFixture('licenses-missing');
-
-    // simulate _all_ packages missing a license
-    await remove(join(cwd, 'packages/package-2/LICENSE'));
-
-    await lernaPublish(cwd)();
-
-    const [warning] = loggingOutput('warn');
-    expect(warning).toMatch('Packages package-1, package-2, and package-3 are missing a license.');
   });
 });
