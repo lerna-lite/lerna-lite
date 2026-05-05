@@ -5,8 +5,8 @@ import { styleText } from 'node:util';
 // temp script to check for missing ".js" extensions in relative local imports
 // related oxlint issue: https://github.com/oxc-project/oxc/issues/19431
 
-const roots = ['frameworks', 'frameworks-plugins', 'packages'];
-const excludedFolders = ['frameworks/angular-slickgrid'];
+const roots = ['e2e', 'helpers', 'packages'];
+const excludedFolders = [];
 const allowedExtPattern = /\.(js|json|mjs|vue)$/;
 const fromPattern = /from\s+['\"](\.\.?\/[^'\"]+)['\"]/g;
 
