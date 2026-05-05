@@ -1,7 +1,6 @@
 {
   "$schema": "./node_modules/oxlint/configuration_schema.json",
   "plugins": ["import", "oxc", "typescript", "vitest"],
-  "extends": ["recommended", "recommended-module"],
   "env": {
     "es2025": true,
     "node": true,
@@ -14,7 +13,6 @@
     "typescript/consistent-type-definitions": "error",
     "typescript/consistent-type-exports": "error",
     "typescript/consistent-type-imports": "error",
-    "typescript/member-ordering": "error",
     "typescript/no-empty-function": "off",
     "typescript/no-empty-object-type": ["error", { "allowInterfaces": "with-single-extends" }],
     "typescript/no-explicit-any": "off",
@@ -30,13 +28,13 @@
         "caughtErrors": "none"
       }
     ],
-    "import/extensions": ["error", "always", { "ignorePackages": true }],
     "import/no-self-import": "error",
-    "import/no-useless-path-segments": ["error", { "noUselessIndex": true }],
 
     // vitest rules
+    "vitest/prefer-snapshot-hint": "off",
     "vitest/no-conditional-expect": "off",
     "vitest/no-standalone-expect": "off",
+    "vitest/require-mock-type-parameters": "off",
 
     // Additional rules
     "no-async-promise-executor": "off",

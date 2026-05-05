@@ -50,9 +50,10 @@
     "new-publish": "lerna publish from-package",
     "roll-new-release": "pnpm build:full && pnpm new-version && pnpm new-publish",
     "test-verdaccio": "lerna publish from-package --registry http://localhost:4873/ --yes --no-git-tag-version --no-push",
-    "lint": "oxlint .",
+    "lint": "oxlint . && pnpm lint:local-js-imports",
     "lint:fix": "oxlint . --fix",
     "lint-type": "oxlint . --type-aware",
+    "lint:local-js-imports": "node ./scripts/lint-local-js-imports.mjs",
     "format": "oxfmt .",
     "format:check": "oxfmt . --check",
     "outdated:ws": "pnpm -r --stream outdated",
@@ -89,7 +90,7 @@
     "empathic": "^2.0.0",
     "load-json-file": "catalog:dependencies",
     "oxfmt": "^0.47.0",
-    "oxlint": "~1.47.0",
+    "oxlint": "^1.62.0",
     "oxlint-tsgolint": "^0.22.1",
     "remove-glob": "^1.2.0",
     "semver": "catalog:",
@@ -103,5 +104,5 @@
     "node": "^22.17.0 || >=24.0.0",
     "pnpm": "10.x"
   },
-  "packageManager": "pnpm@10.10.0"
+  "packageManager": "pnpm@10.30.0"
 }
