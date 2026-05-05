@@ -23,11 +23,6 @@
       groupName: 'Inquirer packages',
     },
     {
-      // blocked by oxlint issue: https://github.com/oxc-project/oxc/issues/19431
-      packageNames: ['oxlint'],
-      allowedVersions: '1.47.0',
-    },
-    {
       matchManagers: ['github-actions'],
       matchDepNames: ['pnpm/action-setup'],
       allowedVersions: '< 6.0.0',

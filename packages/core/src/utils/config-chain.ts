@@ -160,7 +160,7 @@ export class ConfigChain {
     name = name || file;
     const marker = { __source__: name };
 
-    this.sources[name] = { path: file, type: type };
+    this.sources[name] = { path: file, type };
     this.list.push(marker as any);
 
     try {

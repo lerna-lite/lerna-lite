@@ -311,7 +311,7 @@ export class VersionCommand extends Command<VersionCommandOption> {
 
       this.commitsSinceLastRelease = await getCommitsSinceLastRelease(
         remoteClient,
-        this.options.gitRemote,
+        this.options.gitRemote || 'origin',
         this.currentBranch,
         isIndependent,
         this.execOpts
@@ -414,7 +414,7 @@ export class VersionCommand extends Command<VersionCommandOption> {
             releaseNotes: this.releaseNotes,
           },
           {
-            gitRemote: this.options.gitRemote,
+            gitRemote: this.options.gitRemote || 'origin',
             execOpts: this.execOpts,
             releaseFooterMessage: this.options.releaseFooterMessage,
             releaseHeaderMessage: this.options.releaseHeaderMessage,

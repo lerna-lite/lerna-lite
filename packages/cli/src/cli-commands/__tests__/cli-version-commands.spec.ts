@@ -14,7 +14,7 @@ describe('Version Command CLI options', () => {
 
   const patchedVersionCommand = {
     ...cliVersion,
-    handler: function (...args: any[]) {
+    handler: (...args: any[]) => {
       // @ts-ignore
       return cliVersion.handler.call(this, ...args).catch(() => {});
     },

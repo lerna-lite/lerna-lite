@@ -1,6 +1,6 @@
 import { vi, type Mock } from 'vitest';
 
-import { type Package } from '../../src/package';
+import { type Package } from '../../src/package.js';
 
 const mockRunLifecycle = vi.fn((pkg) => Promise.resolve(pkg));
 const mockCreateRunner = vi.fn((opts) => (pkg: Package, stage: string) => {

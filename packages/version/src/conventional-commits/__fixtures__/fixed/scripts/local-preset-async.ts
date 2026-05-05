@@ -5,8 +5,8 @@ import writer from './writer-opts.js';
 
 export default async function createPreset(_config: any) {
   return {
-    parser: parser,
-    writer: writer,
+    parser,
+    writer,
     whatBump,
   };
 }
