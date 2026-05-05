@@ -114,7 +114,7 @@ export class VersionCommand extends Command<VersionCommandOption> {
       changelogIncludeCommitsClientLogin,
       changelogIncludeCommitsGitAuthor,
       commitHooks = true,
-      gitRemote = 'origin',
+      gitRemote,
       gitTagVersion = true,
       granularPathspec = true,
       push = true,
@@ -950,7 +950,7 @@ export class VersionCommand extends Command<VersionCommandOption> {
       const client = this.releaseClient || (await createReleaseClient(clientType));
       const {
         dryRun = false,
-        gitRemote = 'origin',
+        gitRemote,
         tagVersionPrefix = 'v',
         commentIssues,
         commentPullRequests,
