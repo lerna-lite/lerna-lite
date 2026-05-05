@@ -230,7 +230,7 @@ export interface VersionCommandOption {
   gitTagCommand?: string;
 
   /** Defaults to 'origin', push git changes to the specified remote. */
-  gitRemote: string;
+  gitRemote?: string;
 
   /**
    * Ignore changes in files matched by glob(s) when detecting changed packages.
