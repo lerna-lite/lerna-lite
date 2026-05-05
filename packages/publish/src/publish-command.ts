@@ -425,7 +425,7 @@ export class PublishCommand extends Command<PublishCommandOption> {
 
   detectCanaryVersions() {
     const { cwd } = this.execOpts;
-    const { bump = 'prepatch', preid = 'alpha', ignoreChanges, forcePublish, includeMergedTags } = this.options;
+    const { bump, preid = 'alpha', ignoreChanges, forcePublish, includeMergedTags } = this.options;
     // 'prerelease' and 'prepatch' are identical, for our purposes
     const release = bump.startsWith('pre') ? bump.replace('release', 'patch') : `pre${bump}`;
 

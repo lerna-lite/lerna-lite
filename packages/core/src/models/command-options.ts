@@ -158,7 +158,7 @@ export interface VersionCommandOption {
 
   /** conventional commit version bump type */
   // prettier-ignore
-  bump?: 'major' | 'minor' | 'patch' | 'premajor' | 'preminor' | 'prepatch' | 'prerelease' | 'from-git' | 'from-package';
+  bump: 'major' | 'minor' | 'patch' | 'premajor' | 'preminor' | 'prepatch' | 'prerelease' | 'from-git' | 'from-package';
 
   /** Comment issue template (requires either `createRelease` or `remoteClient`), when `true` is provided we'll use the default template: "🎉 _This issue has been resolved in %v. See [%s](%u) for release notes._" */
   commentIssues?: boolean | string;
