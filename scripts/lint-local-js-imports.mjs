@@ -88,7 +88,9 @@ const endTime = performance.now();
 const elapsedTime = ((endTime - startTime) / 1000).toFixed(1);
 
 if (errors.length > 0) {
-  console.error(color(`Found ${errors.length} relative imports missing a file extension (.js, .json, .mjs, or .vue).`, ['red', 'bold']));
+  console.error(
+    color(`Found ${errors.length} relative imports missing a file extension (.js, .json, .mjs, or .vue).`, ['red', 'bold'])
+  );
   console.error(color('Add the appropriate extension to the import path in the following lines:', 'yellow'));
   console.error('');
 
