@@ -85,7 +85,8 @@ for (const filePath of scopedFiles) {
 }
 
 const endTime = performance.now();
-const elapsedTime = ((endTime - startTime) / 1000).toFixed(1);
+const elapsedMs = endTime - startTime;
+const elapsedTime = elapsedMs < 1000 ? `${elapsedMs.toFixed(0)}ms` : `${(elapsedMs / 1000).toFixed(1)}s`;
 
 if (errors.length > 0) {
   console.error(
@@ -102,11 +103,11 @@ if (errors.length > 0) {
 
   console.error('');
   console.error(color(`Total violations: ${errors.length}`, ['red', 'bold']));
-  console.error(`Finished in ${elapsedTime}s on ${scopedFiles.length} files.`);
+  console.error(`Finished in ${elapsedTime} on ${scopedFiles.length} files.`);
   process.exit(1);
 } else {
   console.log('Found 0 violations.');
-  console.log(`Finished in ${elapsedTime}s on ${scopedFiles.length} files.`);
+  console.log(`Finished in ${elapsedTime} on ${scopedFiles.length} files.`);
 }
 
 console.log(color('All relative imports have file extensions.', 'green'));
