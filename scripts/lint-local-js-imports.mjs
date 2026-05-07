@@ -1,9 +1,9 @@
+// temp script to check for missing ".js" extensions in relative local imports
+// related oxlint issue: https://github.com/oxc-project/oxc/issues/19431
+
 import fs from 'node:fs';
 import path from 'node:path';
 import { styleText } from 'node:util';
-
-// temp script to check for missing ".js" extensions in relative local imports
-// related oxlint issue: https://github.com/oxc-project/oxc/issues/19431
 
 const roots = ['e2e', 'helpers', 'packages'];
 const excludedFolders = [];
@@ -49,6 +49,7 @@ function walk(dir, acc) {
   }
 }
 
+const startTime = performance.now();
 const files = [];
 for (const root of roots) {
   walk(root, files);
@@ -83,10 +84,11 @@ for (const filePath of scopedFiles) {
   }
 }
 
+const endTime = performance.now();
+const elapsedTime = ((endTime - startTime) / 1000).toFixed(1);
+
 if (errors.length > 0) {
-  console.error(
-    color(`Found ${errors.length} relative imports missing a file extension (.js, .json, .mjs, or .vue).`, ['red', 'bold'])
-  );
+  console.error(color(`Found ${errors.length} relative imports missing a file extension (.js, .json, .mjs, or .vue).`, ['red', 'bold']));
   console.error(color('Add the appropriate extension to the import path in the following lines:', 'yellow'));
   console.error('');
 
@@ -98,7 +100,11 @@ if (errors.length > 0) {
 
   console.error('');
   console.error(color(`Total violations: ${errors.length}`, ['red', 'bold']));
+  console.error(`Finished in ${elapsedTime}s on ${scopedFiles.length} files.`);
   process.exit(1);
+} else {
+  console.log('Found 0 violations.');
+  console.log(`Finished in ${elapsedTime}s on ${scopedFiles.length} files.`);
 }
 
 console.log(color('All relative imports have file extensions.', 'green'));
