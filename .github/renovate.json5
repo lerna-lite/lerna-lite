@@ -28,6 +28,16 @@
       allowedVersions: '< 6.0.0',
       description: 'Keep pnpm action at v5 until we migrate to pnpm v11',
     },
+    {
+      // write-file-atomic and ssri now require NodeJS: ^22.22.2 || ^24.15.0 || >=26.0.0
+      packageNames: ['write-file-atomic'],
+      allowedVersions: '< 8.0.0',
+    },
+    {
+      // write-file-atomic and ssri now require NodeJS: ^22.22.2 || ^24.15.0 || >=26.0.0
+      packageNames: ['write-file-atomic', 'ssri'],
+      allowedVersions: '< 14.0.0',
+    },
   ],
   ignoreDeps: ['node', 'pnpm'],
   ignorePaths: ['helpers', '**/__fixtures__/**', '**/__mocks__/**', '**/fixtures/**', '**/mocks/**'],
