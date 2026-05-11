@@ -35,7 +35,7 @@
     },
     {
       // write-file-atomic and ssri now require NodeJS: ^22.22.2 || ^24.15.0 || >=26.0.0
-      packageNames: ['write-file-atomic', 'ssri'],
+      packageNames: ['ssri'],
       allowedVersions: '< 14.0.0',
     },
   ],
