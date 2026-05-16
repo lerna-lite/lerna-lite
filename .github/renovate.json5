@@ -28,13 +28,24 @@
       allowedVersions: '< 6.0.0',
       description: 'Keep pnpm action at v5 until we migrate to pnpm v11',
     },
+    // postponed the following npm packages to next major, since they now require NodeJS: ^22.22.2 || ^24.15.0 || >=26.0.0
     {
-      // write-file-atomic and ssri now require NodeJS: ^22.22.2 || ^24.15.0 || >=26.0.0
+      packageNames: ['npm-package-arg'],
+      allowedVersions: '< 14.0.0',
+    },
+    {
+      packageNames: ['npm-packlist'],
+      allowedVersions: '< 11.0.0',
+    },
+    {
       packageNames: ['write-file-atomic'],
       allowedVersions: '< 8.0.0',
     },
     {
-      // write-file-atomic and ssri now require NodeJS: ^22.22.2 || ^24.15.0 || >=26.0.0
+      packageNames: ['ssri'],
+      allowedVersions: '< 14.0.0',
+    },
+    {
       packageNames: ['ssri'],
       allowedVersions: '< 14.0.0',
     },
