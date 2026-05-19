@@ -7,7 +7,7 @@ import { styleText } from 'node:util';
 
 const roots = ['e2e', 'helpers', 'packages'];
 const excludedFolders = [];
-const allowedExtPattern = /\.(js|json|mjs|vue)$/;
+const allowedExtPattern = /\.(js|json|mjs)$/;
 const fromPattern = /from\s+['\"](\.\.?\/[^'\"]+)['\"]/g;
 
 function color(text, format) {
@@ -110,4 +110,4 @@ if (errors.length > 0) {
   console.log(`Finished in ${elapsedTime} on ${scopedFiles.length} files.`);
 }
 
-console.log(color('All relative imports have file extensions.', 'green'));
+console.log('All relative imports have file extensions.');
