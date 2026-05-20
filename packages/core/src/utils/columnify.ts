@@ -1,4 +1,4 @@
-import stringWidth from 'fast-string-width';
+import { stripAnsi, stringWidth } from '@lerna-lite/npmlog';
 
 export function columnify(data: any, options: any = {}): string {
   const opts = Object.assign(
@@ -41,9 +41,6 @@ export function columnify(data: any, options: any = {}): string {
 
   // compute widths
   const widths: Record<string, number> = {};
-  // build an ANSI-regex without embedding control characters in source
-  const esc = String.fromCharCode(27);
-  const ansiRegex = new RegExp(esc + '\\[[0-9;]*m', 'g');
 
   for (const col of columns) {
     let w = 0;
@@ -51,7 +48,7 @@ export function columnify(data: any, options: any = {}): string {
     for (const row of rows) {
       const cell = row[col] ?? '';
       const raw = String(cell);
-      const visible = raw.replace(ansiRegex, '');
+      const visible = stripAnsi(raw);
       w = Math.max(w, stringWidth(visible));
     }
     widths[col] = w;
@@ -63,7 +60,7 @@ export function columnify(data: any, options: any = {}): string {
     const align = cfg?.align === 'right' ? 'right' : 'left';
     const width = widths[col] || 0;
     const raw = String(val);
-    const visible = raw.replace(ansiRegex, '');
+    const visible = stripAnsi(raw);
     const visibleWidth = stringWidth(visible);
     // compute target code-unit length to pad to. raw.length includes ANSI
     // sequences, so add the delta between desired visible width and actual

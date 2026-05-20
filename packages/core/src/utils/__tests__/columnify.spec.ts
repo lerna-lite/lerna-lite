@@ -38,6 +38,17 @@ b 2
 `);
   });
 
+  test('formats plain object with empty columnSplitter (fallback spacer)', () => {
+    const map = { a: 1, b: 2 } as Record<string, number>;
+
+    const out = columnify(map, { columnSplitter: '' });
+
+    expect(out).toMatchInlineSnapshot(`
+a 1
+b 2
+`);
+  });
+
   test('accounts for ANSI color codes when measuring width', () => {
     const redFoo = '\u001b[31mfoo\u001b[0m';
     const items = [
