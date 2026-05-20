@@ -57,4 +57,22 @@ foo   1
 long 10
 `);
   });
+
+  test('accounts for wide (CJK) characters when measuring width', () => {
+    const items = [
+      { name: '界', version: '1' },
+      { name: 'x', version: '10' },
+    ];
+
+    const out = columnify(items, {
+      columns: ['name', 'version'],
+      config: { version: { align: 'right' } },
+      showHeaders: false,
+    });
+
+    expect(out).toMatchInlineSnapshot(`
+界  1
+x  10
+`);
+  });
 });

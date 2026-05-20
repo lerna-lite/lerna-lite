@@ -1,3 +1,5 @@
+import stringWidth from 'fast-string-width';
+
 export function columnify(data: any, options: any = {}): string {
   const opts = Object.assign(
     {
@@ -13,16 +15,14 @@ export function columnify(data: any, options: any = {}): string {
   // If input is a plain object (e.g., dependencies map), format as key + splitter + value per line
   if (data && typeof data === 'object' && !Array.isArray(data)) {
     const entries = Object.entries(data);
-    return (
-      entries
-        .map(([k, v]) => {
-          if (opts.columnSplitter) {
-            return `${k}${opts.columnSplitter}${String(v)}`;
-          }
-          return `${k} ${String(v)}`;
-        })
-        .join('\n') + '\n'
-    );
+    return entries
+      .map(([k, v]) => {
+        if (opts.columnSplitter) {
+          return `${k}${opts.columnSplitter}${String(v)}`;
+        }
+        return `${k} ${String(v)}`;
+      })
+      .join('\n');
   }
 
   const rows: Record<string, string>[] = (Array.isArray(data) ? data : []).map((r) => {
@@ -52,7 +52,7 @@ export function columnify(data: any, options: any = {}): string {
       const cell = row[col] ?? '';
       const raw = String(cell);
       const visible = raw.replace(ansiRegex, '');
-      w = Math.max(w, visible.length);
+      w = Math.max(w, stringWidth(visible));
     }
     widths[col] = w;
   }
@@ -64,8 +64,13 @@ export function columnify(data: any, options: any = {}): string {
     const width = widths[col] || 0;
     const raw = String(val);
     const visible = raw.replace(ansiRegex, '');
-    const extra = raw.length - visible.length; // ansi length
-    const target = width + extra;
+    const visibleWidth = stringWidth(visible);
+    // compute target code-unit length to pad to. raw.length includes ANSI
+    // sequences, so add the delta between desired visible width and actual
+    // visible width to raw.length to get the proper pad target.
+    const delta = width - visibleWidth;
+    const target = raw.length + (delta > 0 ? delta : 0);
+    if (target <= raw.length) return raw;
     if (align === 'right') return raw.padStart(target, ' ');
     return raw.padEnd(target, ' ');
   };
@@ -82,7 +87,7 @@ export function columnify(data: any, options: any = {}): string {
     lines.push(parts.join(opts.columnSplitter));
   }
 
-  return lines.join('\n') + '\n';
+  return lines.join('\n');
 }
 
 export default columnify;

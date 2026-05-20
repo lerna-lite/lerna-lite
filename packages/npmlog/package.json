@@ -32,7 +32,7 @@
     "pack-tarball": "npm pack"
   },
   "dependencies": {
-    "fast-string-width": "^3.0.2",
+    "fast-string-width": "catalog:dependencies",
     "signal-exit": "^4.1.0"
   },
   "engines": {

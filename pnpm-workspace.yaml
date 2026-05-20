@@ -35,6 +35,7 @@ catalogs:
 
   # Can be referenced through "catalog:dependencies"
   dependencies:
+    fast-string-width: "^3.0.2"
     load-json-file: ^7.0.1
     tinyexec: ^1.1.2
     tinyglobby: ^0.2.16

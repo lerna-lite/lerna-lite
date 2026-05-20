@@ -28,6 +28,9 @@ catalogs:
       specifier: ^7.7.4
       version: 7.7.4
   dependencies:
+    fast-string-width:
+      specifier: ^3.0.2
+      version: 3.0.2
     load-json-file:
       specifier: ^7.0.1
       version: 7.0.1
@@ -257,6 +260,9 @@ importers:
       dedent:
         specifier: 'catalog:'
         version: 1.7.2
+      fast-string-width:
+        specifier: catalog:dependencies
+        version: 3.0.2
       json5:
         specifier: ^2.2.3
         version: 2.2.3
@@ -429,7 +435,7 @@ importers:
   packages/npmlog:
     dependencies:
       fast-string-width:
-        specifier: ^3.0.2
+        specifier: catalog:dependencies
         version: 3.0.2
       signal-exit:
         specifier: ^4.1.0
