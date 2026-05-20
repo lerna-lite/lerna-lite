@@ -27,7 +27,7 @@ export function logPacked(pkg: Package & { packed: Tarball }, dryRun = false) {
           include: ['size', 'path'],
           showHeaders: false,
         }
-      )
+      ).trimEnd()
     );
   }
 
@@ -57,7 +57,7 @@ export function logPacked(pkg: Package & { packed: Tarball }, dryRun = false) {
         include: ['name', 'value'],
         showHeaders: false,
       }
-    )
+    ).trimEnd()
   );
 
   // in dry-run mode, show tarball temp location and dependencies, devDependencies and/or peerDependencies
@@ -67,15 +67,15 @@ export function logPacked(pkg: Package & { packed: Tarball }, dryRun = false) {
     log.notice('', `package name: ${pkg.name}`);
     if (pkg.dependencies) {
       log.notice('dependencies:', '');
-      log.notice('', columnify(pkg.dependencies, { columnSplitter: ' | ', showHeaders: false }));
+      log.notice('', columnify(pkg.dependencies, { columnSplitter: ' | ', showHeaders: false }).trimEnd());
     }
     if (pkg.devDependencies) {
       log.notice('devDependencies:', '');
-      log.notice('', columnify(pkg.devDependencies, { columnSplitter: ' | ', showHeaders: false }));
+      log.notice('', columnify(pkg.devDependencies, { columnSplitter: ' | ', showHeaders: false }).trimEnd());
     }
     if (pkg.peerDependencies) {
       log.notice('peerDependencies:', '');
-      log.notice('', columnify(pkg.peerDependencies, { columnSplitter: ' | ', showHeaders: false }));
+      log.notice('', columnify(pkg.peerDependencies, { columnSplitter: ' | ', showHeaders: false }).trimEnd());
     }
   }
 
