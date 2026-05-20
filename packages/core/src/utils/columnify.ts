@@ -1,4 +1,7 @@
-import { stripAnsi, stringWidth } from '@lerna-lite/npmlog';
+// replaces columnify package with a custom implementation to avoid a dependency and allow for better control over formatting, especially ANSI handling
+// https://github.com/timoxley/columnify/blob/master/index.js
+
+import { stripAnsi, stringWidth, alignLeft, alignRight } from '@lerna-lite/npmlog';
 
 export function columnify(data: any, options: any = {}): string {
   const opts = Object.assign(
@@ -60,16 +63,14 @@ export function columnify(data: any, options: any = {}): string {
     const align = cfg?.align === 'right' ? 'right' : 'left';
     const width = widths[col] || 0;
     const raw = String(val);
-    const visible = stripAnsi(raw);
-    const visibleWidth = stringWidth(visible);
-    // compute target code-unit length to pad to. raw.length includes ANSI
-    // sequences, so add the delta between desired visible width and actual
-    // visible width to raw.length to get the proper pad target.
-    const delta = width - visibleWidth;
-    const target = raw.length + (delta > 0 ? delta : 0);
-    if (target <= raw.length) return raw;
-    if (align === 'right') return raw.padStart(target, ' ');
-    return raw.padEnd(target, ' ');
+
+    // Delegate alignment to npmlog's wideAlign helpers which
+    // correctly account for ANSI sequences and wide characters.
+    if (align === 'right') {
+      return alignRight(raw, width);
+    }
+
+    return alignLeft(raw, width);
   };
 
   const lines: string[] = [];
