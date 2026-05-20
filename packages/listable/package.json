@@ -32,8 +32,7 @@
     "pack-tarball": "npm pack"
   },
   "dependencies": {
-    "@lerna-lite/core": "workspace:*",
-    "columnify": "catalog:dependencies"
+    "@lerna-lite/core": "workspace:*"
   },
   "devDependencies": {
     "yargs": "catalog:dependencies"

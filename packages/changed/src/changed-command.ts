@@ -53,7 +53,9 @@ export class ChangedCommand extends Command<ChangedCommandOption & ListCommandOp
   }
 
   execute() {
-    logOutput(this.result?.text);
+    // ensure single-line outputs do not include a trailing newline
+    const out = this.result?.text;
+    logOutput(out && typeof out === 'string' ? out.replace(/\n$/, '') : out);
 
     this.logger.success('found', '%d %s ready to publish', this.result?.count, this.result?.count === 1 ? 'package' : 'packages');
   }
