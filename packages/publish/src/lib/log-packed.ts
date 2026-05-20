@@ -1,8 +1,7 @@
 import type { Package } from '@lerna-lite/core';
-import { colorize } from '@lerna-lite/core';
+import { colorize, columnify } from '@lerna-lite/core';
 import { log } from '@lerna-lite/npmlog';
 import { hasUnicode } from '@lerna-lite/npmlog';
-import columnify from 'columnify';
 
 import type { Tarball } from '../interfaces.js';
 import byteSize from './byte-size.js';

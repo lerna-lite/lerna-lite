@@ -35,7 +35,6 @@ catalogs:
 
   # Can be referenced through "catalog:dependencies"
   dependencies:
-    columnify: ^1.6.0
     load-json-file: ^7.0.1
     tinyexec: ^1.1.2
     tinyglobby: ^0.2.16

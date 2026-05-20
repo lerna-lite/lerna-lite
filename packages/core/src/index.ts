@@ -44,6 +44,7 @@ export * from './utils/run-lifecycle.js';
 export * from './utils/run-topologically.js';
 export * from './utils/slash.js';
 export * from './utils/string-utils.js';
+export * from './utils/columnify.js';
 export * from './utils/types.js';
 export * from './utils/warn-if-hanging.js';
 export * from './utils/write-log-file.js';
