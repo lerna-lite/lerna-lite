@@ -1,7 +1,7 @@
 // replaces columnify package with a custom implementation to avoid a dependency and allow for better control over formatting, especially ANSI handling
 // https://github.com/timoxley/columnify/blob/master/index.js
 
-import { stripAnsi, stringWidth, alignLeft, alignRight } from '@lerna-lite/npmlog';
+import { alignLeft, alignRight, stripAnsi, stringWidth } from '@lerna-lite/npmlog';
 
 export function columnify(data: any, options: any = {}): string {
   const opts = Object.assign(

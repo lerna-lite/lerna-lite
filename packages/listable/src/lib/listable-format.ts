@@ -1,7 +1,6 @@
 import { relative } from 'node:path';
 
-import type { ListableOption, Package } from '@lerna-lite/core';
-import { colorize, QueryGraph, columnify } from '@lerna-lite/core';
+import { colorize, QueryGraph, columnify, type ListableOption, type Package } from '@lerna-lite/core';
 
 /**
  * Format a list of packages according to specified options.

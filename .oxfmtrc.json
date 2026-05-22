@@ -8,12 +8,9 @@
   "insertFinalNewline": true,
   "trailingComma": "es5",
   "ignorePatterns": ["**/*.{md}", "**/__fixtures__/**/*.*", "**/__mocks__/**/*.*"],
-  "experimentalSortImports": {
+  "sortImports": {
     "partitionByNewline": false,
     "partitionByComment": false,
-    "sortSideEffects": false,
-    "order": "asc",
-    "ignoreCase": true,
     "groups": ["builtin", "external"]
   },
   "overrides": [
