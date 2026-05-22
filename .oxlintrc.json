@@ -29,6 +29,10 @@
         "caughtErrors": "none"
       }
     ],
+
+    // JS extensions rule, blocked by https://github.com/oxc-project/oxc/issues/19431
+    // use "lint:local-js-imports" npm script in the meantime to catch any missing local JS imports
+    "import/extensions": "off",
     "import/no-self-import": "error",
 
     // "import/extensions" rule is blocked by https://github.com/oxc-project/oxc/issues/19431
@@ -48,6 +52,7 @@
     "vitest/no-conditional-expect": "off",
     "vitest/no-standalone-expect": "off",
     "vitest/require-mock-type-parameters": "off",
+    "vitest/valid-expect": "error",
 
     // Additional rules
     "no-async-promise-executor": "off",
