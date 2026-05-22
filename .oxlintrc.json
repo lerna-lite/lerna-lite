@@ -1,6 +1,7 @@
 {
   "$schema": "./node_modules/oxlint/configuration_schema.json",
   "plugins": ["import", "oxc", "typescript", "vitest"],
+  "jsPlugins": ["eslint-plugin-local-import-ext"],
   "env": {
     "es2025": true,
     "node": true,
@@ -29,6 +30,18 @@
       }
     ],
     "import/no-self-import": "error",
+
+    // "import/extensions" rule is blocked by https://github.com/oxc-project/oxc/issues/19431
+    // use custom "eslint-plugin-import-ext" custom eslint plugin in the meantime to catch any missing local import file extensions
+    "import/extensions": "off",
+    "local-import-ext/require-local-extension": [
+      "error",
+      {
+        "js": "always",
+        "ts": "never",
+        "excludedFolders": ["demos/aurelia/test", "demos/react/test", "demos/vue/test", "frameworks/angular-slickgrid", "test"]
+      }
+    ],
 
     // vitest rules
     "vitest/prefer-snapshot-hint": "off",

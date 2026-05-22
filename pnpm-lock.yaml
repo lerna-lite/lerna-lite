@@ -145,6 +145,9 @@ importers:
       empathic:
         specifier: ^2.0.1
         version: 2.0.1
+      eslint-plugin-local-import-ext:
+        specifier: 0.1.1
+        version: 0.1.1
       load-json-file:
         specifier: catalog:dependencies
         version: 7.0.1
@@ -1782,6 +1785,10 @@ packages:
   escalade@3.2.0:
     resolution: {integrity: sha512-WUj2qlxaQtO4g6Pq5c29GTcWGDyd8itL8zTlipgECz3JesAiiOKotd8JU6otB3PACgG6xkJUyVhboMS+bje/jA==}
     engines: {node: '>=6'}
+
+  eslint-plugin-local-import-ext@0.1.1:
+    resolution: {integrity: sha512-BwdF84UADLirpNmviVEuo3yEllyifcnMWovxnwVPJhK39vHOraovipg0P/BRLvk0ZGSIyR7BuCr7x4FqwvGeVw==}
+    engines: {node: ^20.0.0 || >=22.0.0}
 
   estree-walker@3.0.3:
     resolution: {integrity: sha512-7RUKfXgSMMkzt6ZuXmqapOurLGPPfgj6l9uRZ7lRGolvk0y2yocc35LdcxKC5PQZdn2DMqioAQ2NoWcrTKmm6g==}
@@ -3747,6 +3754,8 @@ snapshots:
       hasown: 2.0.2
 
   escalade@3.2.0: {}
+
+  eslint-plugin-local-import-ext@0.1.1: {}
 
   estree-walker@3.0.3:
     dependencies:
