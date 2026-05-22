@@ -9,11 +9,14 @@ on:
       graduate:
         type: boolean
         description: Force Conventional Graduate
+      skip_version_retry_publish:
+        type: boolean
+        description: "Skip running `lerna version` and run publish-only retry (useful to retry failed publish)"
 
 permissions:
-  contents: write      # to be able to publish a GitHub release
-  id-token: write      # to enable use of OIDC for npm provenance
-  issues: write        # to be able to comment on released issues
+  contents: write # to be able to publish a GitHub release
+  id-token: write # to enable use of OIDC for npm provenance
+  issues: write # to be able to comment on released issues
   pull-requests: write # to be able to comment on released pull requests
 
 jobs:
@@ -48,7 +51,7 @@ jobs:
       - name: Set NodeJS
         uses: actions/setup-node@v6
         with:
-          registry-url: 'https://registry.npmjs.org/'
+          registry-url: "https://registry.npmjs.org/"
           node-version: 24
 
       - run: node --version
@@ -66,7 +69,8 @@ jobs:
       - name: Run TypeScript build only (no linting)
         run: pnpm build
 
-      - name: Lerna Version (build query)
+      - if: ${{ inputs.skip_version_retry_publish != true }}
+        name: Lerna Version (build query)
         shell: bash
         run: |
           if ${{inputs.dryrun == true && inputs.graduate != true}}
@@ -90,13 +94,19 @@ jobs:
       - name: Final version type → ${{ env.LERNA_VERSION_TYPE }}
         run: echo "${{ env.LERNA_VERSION_QUERY }}"
 
-      - name: Lerna Version 🏷️
+      - if: ${{ inputs.skip_version_retry_publish != true }}
+        name: Lerna Version 🏷️
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
           git config --global user.name "${{ github.actor }}"
           git config --global user.email "${{ github.actor }}@users.noreply.github.com"
           pnpm exec ${{ env.LERNA_VERSION_QUERY }}
+
+      - name: Skip Lerna Version Notice
+        if: ${{ inputs.skip_version_retry_publish == true }}
+        run: |
+          echo "skip_version_retry_publish=true — lerna version is skipped; proceeding to publish-only run."
 
       - name: Lerna Publish 📦
         if: ${{ inputs.dryrun != true }}
