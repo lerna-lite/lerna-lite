@@ -4,6 +4,12 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [5.2.2](https://github.com/lerna-lite/lerna-lite/compare/v5.2.1...v5.2.2) (2026-05-25)
+
+### Bug Fixes
+
+* **deps:** replace `columnify` with native implementation ([#1330](https://github.com/lerna-lite/lerna-lite/issues/1330)) ([1887f43](https://github.com/lerna-lite/lerna-lite/commit/1887f437d763d4ff7d451b63d846321d8d7467a8)) - by @ghiscoding
+
 ## [5.1.0](https://github.com/lerna-lite/lerna-lite/compare/v5.0.0...v5.1.0) (2026-04-20)
 
 **Note:** Version bump only for package @lerna-lite/npmlog

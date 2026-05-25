@@ -4,6 +4,14 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [5.2.2](https://github.com/lerna-lite/lerna-lite/compare/v5.2.1...v5.2.2) (2026-05-25)
+
+### Bug Fixes
+
+* **deps:** replace `columnify` with native implementation ([#1330](https://github.com/lerna-lite/lerna-lite/issues/1330)) ([1887f43](https://github.com/lerna-lite/lerna-lite/commit/1887f437d763d4ff7d451b63d846321d8d7467a8)) - by @ghiscoding
+* **deps:** update all non-major dependencies ([#1332](https://github.com/lerna-lite/lerna-lite/issues/1332)) ([9b980fe](https://github.com/lerna-lite/lerna-lite/commit/9b980fe4742400d72d6c7b2aa4900600ee95f26f)) - by @renovate[bot]
+* **deps:** update inquirer packages ([#1329](https://github.com/lerna-lite/lerna-lite/issues/1329)) ([f5e9829](https://github.com/lerna-lite/lerna-lite/commit/f5e9829e34651862793f926e9a56b12982af83b5)) - by @renovate[bot]
+
 ## [5.2.1](https://github.com/lerna-lite/lerna-lite/compare/v5.2.0...v5.2.1) (2026-05-01)
 
 ### Bug Fixes
