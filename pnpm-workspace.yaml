@@ -9,10 +9,8 @@ packages:
   - "!**/__fixtures__/**"
   - "!**/__test__/**"
 
-minimumReleaseAge: 2880 # 2 days in minutes
-minimumReleaseAgeExclude:
-  # exclude packages that I personally maintain and are safe to use on the same day
-  - 'eslint-plugin-local-import-ext'
+# min age of 2 days in minutes
+minimumReleaseAge: 2880
 
 # Define a catalog of version ranges.
 catalog:
