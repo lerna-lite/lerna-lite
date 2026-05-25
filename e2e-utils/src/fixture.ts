@@ -189,6 +189,11 @@ export class Fixture {
       await this.exec(
         `echo "registry=${REGISTRY}\nstore-dir=${this.fixturePnpmStorePath}\nverify-store-integrity=false" > .npmrc`
       );
+
+      // Ensure pnpm respects minimumReleaseAge exclusions for local packages
+      // so tests that install @lerna-lite/* do not fail due to recency checks.
+      const pnpmWorkspaceYaml = `minimumReleaseAge: 2880\nminimumReleaseAgeExclude:\n  - '@lerna-lite/*'\n`;
+      await writeFile(join(this.fixtureWorkspacePath, 'pnpm-workspace.yaml'), pnpmWorkspaceYaml, 'utf8');
     }
   }
 
