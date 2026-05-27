@@ -435,7 +435,9 @@ describe('VersionCommand', () => {
       command.logger = { info: vi.fn(), verbose: vi.fn(), warn: vi.fn() };
 
       // make first push fail and second succeed
-      (libPushSingleTag as Mock).mockImplementationOnce(() => Promise.reject(new Error('push-failed'))).mockImplementationOnce(() => Promise.resolve());
+      (libPushSingleTag as Mock)
+        .mockImplementationOnce(() => Promise.reject(new Error('push-failed')))
+        .mockImplementationOnce(() => Promise.resolve());
 
       const results = await VersionCommand.prototype.gitPushToRemote.call(command);
 
