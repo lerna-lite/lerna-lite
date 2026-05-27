@@ -421,6 +421,29 @@ describe('VersionCommand', () => {
       );
       expect((logOutput as any).logged()).toMatchSnapshot('console output');
     });
+
+    it('handles gitPushSingleTag rejection and returns rejected result entries', async () => {
+      const testDir = await initFixture('independent');
+
+      // prepare a bare command-like object to call the helper directly
+      const command: any = Object.create(VersionCommand.prototype);
+      command.gitRemote = 'origin';
+      command.currentBranch = 'main';
+      command.execOpts = { cwd: testDir };
+      command.options = { pushTagsOneByOne: true, dryRun: undefined };
+      command.tags = ['package-6@0.2.0', 'package-7@0.3.0'];
+      command.logger = { info: vi.fn(), verbose: vi.fn(), warn: vi.fn() };
+
+      // make first push fail and second succeed
+      (libPushSingleTag as Mock).mockImplementationOnce(() => Promise.reject(new Error('push-failed'))).mockImplementationOnce(() => Promise.resolve());
+
+      const results = await VersionCommand.prototype.gitPushToRemote.call(command);
+
+      expect(results).toBeInstanceOf(Array);
+      expect(results[0]).toHaveProperty('status', 'rejected');
+      expect(results[0]).toHaveProperty('reason');
+      expect(results[1]).toHaveProperty('status', 'fulfilled');
+    });
   });
 
   describe('--no-commit-hooks', () => {
