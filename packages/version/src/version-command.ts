@@ -9,6 +9,7 @@ import {
   createRunner,
   EOL,
   logOutput,
+  pMap,
   promptConfirmation,
   runTopologically,
   throwIfUncommitted,
@@ -22,8 +23,6 @@ import {
   type VersionCommandOption,
 } from '@lerna-lite/core';
 import dedent from 'dedent';
-import pLimit from 'p-limit';
-import pMap from 'p-map';
 import semver from 'semver';
 import zeptomatch from 'zeptomatch';
 
@@ -922,17 +921,21 @@ export class VersionCommand extends Command<VersionCommandOption> {
     return [tag];
   }
 
-  gitPushToRemote() {
+  async gitPushToRemote() {
     // we could push tags one by one (to avoid GitHub limit)
     if (this.options.pushTagsOneByOne) {
       this.logger.info('git', 'Pushing tags one by one...');
-      const promises: Promise<void>[] = [];
-      const limit = pLimit(1);
-      this.tags.forEach((tag) => {
+      const results: PromiseSettledResult<void>[] = [];
+      for (const tag of this.tags) {
         this.logger.verbose('git', `Pushing tag: ${tag}`);
-        promises.push(limit(() => gitPushSingleTag(this.gitRemote, this.currentBranch, tag, this.execOpts, this.options.dryRun)));
-      });
-      return Promise.allSettled(promises);
+        try {
+          await gitPushSingleTag(this.gitRemote, this.currentBranch, tag, this.execOpts, this.options.dryRun);
+          results.push({ status: 'fulfilled', value: undefined });
+        } catch (reason) {
+          results.push({ status: 'rejected', reason });
+        }
+      }
+      return results;
     }
 
     // or push all tags by using followTags

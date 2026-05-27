@@ -33,9 +33,9 @@ import {
   throwIfUncommitted,
   ValidationError,
 } from '@lerna-lite/core';
+import { pMap } from '@lerna-lite/core';
 import type { OneTimePasswordCache } from '@lerna-lite/version';
 import { getOneTimePassword, VersionCommand } from '@lerna-lite/version';
-import pMap from 'p-map';
 import semver from 'semver';
 import { glob } from 'tinyglobby';
 

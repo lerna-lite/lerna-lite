@@ -1,5 +1,4 @@
-import { remove, type Package } from '@lerna-lite/core';
-import pMap from 'p-map';
+import { pMap, remove, type Package } from '@lerna-lite/core';
 
 /**
  * Remove temporary license files.

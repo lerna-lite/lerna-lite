@@ -21,9 +21,6 @@ catalogs:
     npm-registry-fetch:
       specifier: ^19.1.1
       version: 19.1.1
-    p-map:
-      specifier: ^7.0.4
-      version: 7.0.4
     semver:
       specifier: ^7.8.1
       version: 7.8.1
@@ -272,12 +269,6 @@ importers:
       npm-package-arg:
         specifier: 'catalog:'
         version: 13.0.2
-      p-map:
-        specifier: 'catalog:'
-        version: 7.0.4
-      p-queue:
-        specifier: ^9.3.0
-        version: 9.3.0
       semver:
         specifier: 'catalog:'
         version: 7.8.1
@@ -364,9 +355,6 @@ importers:
       dotenv:
         specifier: 'catalog:'
         version: 17.4.2
-      p-map:
-        specifier: 'catalog:'
-        version: 7.0.4
     devDependencies:
       '@types/yargs-parser':
         specifier: catalog:devDependencies
@@ -386,9 +374,6 @@ importers:
       '@lerna-lite/core':
         specifier: workspace:*
         version: link:../core
-      p-map:
-        specifier: 'catalog:'
-        version: 7.0.4
       write-json-file:
         specifier: catalog:dependencies
         version: 7.0.0
@@ -492,9 +477,6 @@ importers:
       npm-registry-fetch:
         specifier: 'catalog:'
         version: 19.1.1
-      p-map:
-        specifier: 'catalog:'
-        version: 7.0.4
       pacote:
         specifier: ^21.5.0
         version: 21.5.0
@@ -547,9 +529,6 @@ importers:
       '@lerna-lite/profiler':
         specifier: workspace:*
         version: link:../profiler
-      p-map:
-        specifier: 'catalog:'
-        version: 7.0.4
     devDependencies:
       '@types/yargs-parser':
         specifier: catalog:devDependencies
@@ -617,12 +596,6 @@ importers:
       npm-package-arg:
         specifier: 'catalog:'
         version: 13.0.2
-      p-limit:
-        specifier: ^7.3.0
-        version: 7.3.0
-      p-map:
-        specifier: 'catalog:'
-        version: 7.0.4
       semver:
         specifier: 'catalog:'
         version: 7.8.1
@@ -1773,9 +1746,6 @@ packages:
   estree-walker@3.0.3:
     resolution: {integrity: sha512-7RUKfXgSMMkzt6ZuXmqapOurLGPPfgj6l9uRZ7lRGolvk0y2yocc35LdcxKC5PQZdn2DMqioAQ2NoWcrTKmm6g==}
 
-  eventemitter3@5.0.4:
-    resolution: {integrity: sha512-mlsTRyGaPBjPedk6Bvw+aqbsXDtoAyAzm5MO7JgU+yVRyMQ5O8bD4Kcci7BS85f93veegeCPkL8R4GLClnjLFw==}
-
   expect-type@1.3.0:
     resolution: {integrity: sha512-knvyeauYhqjOYvQ66MznSMs83wmHrCycNEN6Ao+2AeYEfxUIkuiVxdEa1qlGEPK+We3n0THiDciYSsCcgW/DoA==}
     engines: {node: '>=12.0.0'}
@@ -2300,10 +2270,6 @@ packages:
     resolution: {integrity: sha512-//88mFWSJx8lxCzwdAABTJL2MyWB12+eIY7MDL2SqLmAkeKU9qxRvWuSyTjm3FUmpBEMuFfckAIqEaVGUDxb6w==}
     engines: {node: '>=6'}
 
-  p-limit@7.3.0:
-    resolution: {integrity: sha512-7cIXg/Z0M5WZRblrsOla88S4wAK+zOQQWeBYfV3qJuJXMr+LnbYjaadrFaS0JILfEDPVqHyKnZ1Z/1d6J9VVUw==}
-    engines: {node: '>=20'}
-
   p-locate@4.1.0:
     resolution: {integrity: sha512-R79ZZ/0wAxKGu3oYMlz8jy/kbhsNrS7SKZ7PxEHBgJ5+F2mtFW2fK2cOtBh1cHYkQsbzFV7I+EoRKe6Yt0oK7A==}
     engines: {node: '>=8'}
@@ -2311,14 +2277,6 @@ packages:
   p-map@7.0.4:
     resolution: {integrity: sha512-tkAQEw8ysMzmkhgw8k+1U/iPhWNhykKnSk4Rd5zLoPJCuJaGRPo6YposrZgaxHKzDHdDWWZvE/Sk7hsL2X/CpQ==}
     engines: {node: '>=18'}
-
-  p-queue@9.3.0:
-    resolution: {integrity: sha512-7NED7xhQ74Ngp4JP/2e0VZHp7vSWfJfqeiR92jPgxsz6m0Se4P03YoTKa9dDXyZ3r6P616gUXttrB6nnHYKang==}
-    engines: {node: '>=20'}
-
-  p-timeout@7.0.1:
-    resolution: {integrity: sha512-AxTM2wDGORHGEkPCt8yqxOTMgpfbEHqF51f/5fJCmwFC3C/zNcGT63SymH2ttOAaiIws2zVg4+izQCjrakcwHg==}
-    engines: {node: '>=20'}
 
   p-try@2.2.0:
     resolution: {integrity: sha512-R4nPAVTAU0B9D35/Gk3uJf/7XYbQcyohSKdvAxIRSNghFl4e71hVoGnBNQz9cWaXxO2I10KTC+3jMdvvoKw6dQ==}
@@ -2777,10 +2735,6 @@ packages:
   yargs@18.0.0:
     resolution: {integrity: sha512-4UEqdc2RYGHZc7Doyqkrqiln3p9X2DZVxaGbwhn2pi7MrRagKaOcIKe8L3OxYcbhXLgLFUS3zAYuQjKBQgmuNg==}
     engines: {node: ^20.19.0 || ^22.12.0 || >=23}
-
-  yocto-queue@1.2.1:
-    resolution: {integrity: sha512-AyeEbWOu/TAXdxlV9wmGcR0+yh2j3vYPGOECcIj2S7MkrLyC7ne+oye2BKTItt0ii2PHk4cDy+95+LshzbXnGg==}
-    engines: {node: '>=12.20'}
 
   zeptomatch@2.1.0:
     resolution: {integrity: sha512-KiGErG2J0G82LSpniV0CtIzjlJ10E04j02VOudJsPyPwNZgGnRKQy7I1R7GMyg/QswnE4l7ohSGrQbQbjXPPDA==}
@@ -3727,8 +3681,6 @@ snapshots:
     dependencies:
       '@types/estree': 1.0.8
 
-  eventemitter3@5.0.4: {}
-
   expect-type@1.3.0: {}
 
   exponential-backoff@3.1.2: {}
@@ -4274,22 +4226,11 @@ snapshots:
     dependencies:
       p-try: 2.2.0
 
-  p-limit@7.3.0:
-    dependencies:
-      yocto-queue: 1.2.1
-
   p-locate@4.1.0:
     dependencies:
       p-limit: 2.3.0
 
   p-map@7.0.4: {}
-
-  p-queue@9.3.0:
-    dependencies:
-      eventemitter3: 5.0.4
-      p-timeout: 7.0.1
-
-  p-timeout@7.0.1: {}
 
   p-try@2.2.0: {}
 
@@ -4709,8 +4650,6 @@ snapshots:
       string-width: 7.2.0
       y18n: 5.0.8
       yargs-parser: 22.0.0
-
-  yocto-queue@1.2.1: {}
 
   zeptomatch@2.1.0:
     dependencies:

@@ -10,8 +10,8 @@ import {
   spawnStreaming,
   ValidationError,
 } from '@lerna-lite/core';
+import { pMap } from '@lerna-lite/core';
 import { Profiler } from '@lerna-lite/profiler';
-import pMap from 'p-map';
 
 import type { ExecStreamingOption } from './interfaces.js';
 

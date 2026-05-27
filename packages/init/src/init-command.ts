@@ -2,7 +2,7 @@ import { join } from 'node:path';
 
 import type { CommandType, InitCommandOption, ProjectConfig } from '@lerna-lite/core';
 import { Command, ensureDir, exec } from '@lerna-lite/core';
-import pMap from 'p-map';
+import { pMap } from '@lerna-lite/core';
 import { writeJsonFile } from 'write-json-file';
 
 const LERNA_CLI_PKG_NAME = '@lerna-lite/cli';

@@ -1,12 +1,20 @@
 import { log } from '@lerna-lite/npmlog';
 import runScript from '@npmcli/run-script';
-import PQueue from 'p-queue';
 
 import type { LifecycleConfig } from '../models/interfaces.js';
 import type { Package } from '../package.js';
 import { npmConf } from '../utils/npm-conf.js';
 
-const queue = new PQueue({ concurrency: 1 });
+// Serial queue: each lifecycle script runs after the previous one completes.
+let _serialQueue: Promise<void> = Promise.resolve();
+function addToSerialQueue<T>(fn: () => Promise<T>): Promise<T> {
+  const p = _serialQueue.then(() => fn());
+  _serialQueue = p.then(
+    () => {},
+    () => {}
+  ) as Promise<void>;
+  return p;
+}
 
 /**
  * Alias dash-cased npmConf to camelCase
@@ -107,7 +115,7 @@ export function runLifecycle(pkg: Package, stage: string, options: LifecycleConf
     printCommandBanner(id, stage, pkg.scripts[stage], dir);
   }
 
-  return queue.add(async () => {
+  return addToSerialQueue(async () => {
     try {
       const { stdout } = await runScript({
         event: stage,

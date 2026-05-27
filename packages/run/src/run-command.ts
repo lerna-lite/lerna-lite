@@ -2,8 +2,8 @@ import { spawn } from 'node:child_process';
 
 import type { CommandType, FilterOptions, Package, ProjectConfig, RunCommandOption } from '@lerna-lite/core';
 import { colorize, Command, getFilteredPackages, logOutput, runTopologically, ValidationError } from '@lerna-lite/core';
+import { pMap } from '@lerna-lite/core';
 import { Profiler } from '@lerna-lite/profiler';
-import pMap from 'p-map';
 
 import type { ScriptStreamingOption } from './interfaces.js';
 import { npmRunScript, npmRunScriptStreaming } from './lib/npm-run-script.js';
