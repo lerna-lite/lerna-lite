@@ -36,6 +36,7 @@ export * from './utils/log-package-error.js';
 export * from './utils/npm-conf.js';
 export * from './utils/object-utils.js';
 export * from './utils/output.js';
+export * from './utils/p-map.js';
 export * from './utils/parse-field.js';
 export * from './utils/prerelease-id-from-version.js';
 export * from './utils/pulse-till-done.js';

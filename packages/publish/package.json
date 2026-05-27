@@ -44,7 +44,6 @@
     "npm-package-arg": "catalog:",
     "npm-packlist": "^10.0.4",
     "npm-registry-fetch": "catalog:",
-    "p-map": "catalog:",
     "pacote": "^21.5.0",
     "semver": "catalog:",
     "ssri": "^13.0.1",

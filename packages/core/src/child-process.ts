@@ -149,6 +149,7 @@ export function getExitCode(result: any): number | TypeError {
 
   // https://nodejs.org/docs/latest-v6.x/api/errors.html#errors_error_code
   if (typeof result.code === 'string' || typeof result.exitCode === 'string') {
+    /* v8 ignore next */
     return constants.errno[(result.code ?? result.exitCode) as number] as number;
   }
 

@@ -1,7 +1,6 @@
 import { basename, join } from 'node:path';
 
-import { copy, type Package } from '@lerna-lite/core';
-import pMap from 'p-map';
+import { copy, pMap, type Package } from '@lerna-lite/core';
 
 /**
  * Create temporary license files.

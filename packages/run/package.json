@@ -35,8 +35,7 @@
     "@lerna-lite/cli": "workspace:*",
     "@lerna-lite/core": "workspace:*",
     "@lerna-lite/npmlog": "workspace:*",
-    "@lerna-lite/profiler": "workspace:*",
-    "p-map": "catalog:"
+    "@lerna-lite/profiler": "workspace:*"
   },
   "devDependencies": {
     "@types/yargs-parser": "catalog:devDependencies",

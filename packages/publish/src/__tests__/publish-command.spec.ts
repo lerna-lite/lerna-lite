@@ -483,7 +483,7 @@ describe('PublishCommand', () => {
       await expect(command).rejects.toThrow('User canceled OTP input');
 
       expect(getOneTimePassword).toHaveBeenCalledTimes(1);
-      expect(npmPublish).toHaveBeenCalledTimes(3); // Only 3 calls before aborting
+      expect(npmPublish).toHaveBeenCalledTimes(4); // All 4 packages attempt publish concurrently before OTP failure aborts
     });
 
     it('retries publishing a package after OTP expiration with throttle enabled', async () => {

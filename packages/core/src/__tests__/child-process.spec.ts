@@ -1,3 +1,5 @@
+import { constants } from 'node:os';
+
 import { log } from '@lerna-lite/npmlog';
 import { describe, expect, it, vi } from 'vitest';
 
@@ -245,6 +247,24 @@ describe('childProcess', () => {
       const { stdout } = await exec('echo $SHELL_TEST', [], { shell: true, env: { ...process.env, SHELL_TEST: 'ok' } });
       // On Windows, shell variable expansion may not work, so just check for no error
       expect(typeof stdout).toBe('string');
+    });
+  });
+
+  describe('getExitCode()', () => {
+    it('returns numeric `code` when present', () => {
+      expect(getExitCode({ code: 0 })).toBe(0);
+      expect(getExitCode({ exitCode: 2 })).toBe(2);
+    });
+
+    it('resolves string error codes to errno numeric values', () => {
+      // Use a common errno name that exists on Node's constants.errno map
+      const name = 'EACCES';
+      const expected = constants.errno[name];
+      expect(getExitCode({ code: name })).toBe(expected);
+    });
+
+    it('throws TypeError for unexpected exit code values', () => {
+      expect(() => getExitCode({} as any)).toThrow(TypeError);
     });
   });
 });
