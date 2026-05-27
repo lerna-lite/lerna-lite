@@ -2,9 +2,9 @@ import { resolve as pathResolve } from 'node:path';
 
 import { initFixtureFactory } from '@lerna-test/helpers';
 import { beforeAll, expect, test, vi } from 'vitest';
-import yargs from 'yargs/yargs';
 
 import { filterOptions } from '../../../../cli/src/filter-options.js';
+import yargs from '../../../../cli/src/yargs-compat.js';
 import { PackageGraph } from '../../package-graph/package-graph.js';
 import { Project } from '../../project/project.js';
 import { collectUpdates } from '../../utils/collect-updates/collect-updates.js';

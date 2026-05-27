@@ -3,8 +3,8 @@ import { join } from 'node:path';
 import { writePackage, type PublishCommandOption, outputFile } from '@lerna-lite/core';
 import { log } from '@lerna-lite/npmlog';
 import { gitAdd, gitCommit, gitTag, initFixtureFactory } from '@lerna-test/helpers';
+import yargParser from '@lerna-test/helpers/yargs-parser.js';
 import { describe, expect, it, vi } from 'vitest';
-import yargParser from 'yargs-parser';
 
 import { PublishCommand } from '../index.js';
 

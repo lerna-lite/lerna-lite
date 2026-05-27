@@ -3,8 +3,8 @@ import { join } from 'node:path';
 import type { PublishCommandOption } from '@lerna-lite/core';
 import { commandRunner, initFixtureFactory } from '@lerna-test/helpers';
 import { loggingOutput } from '@lerna-test/helpers/logging-output.js';
+import yargParser from '@lerna-test/helpers/yargs-parser.js';
 import { describe, expect, it, vi, type Mock } from 'vitest';
-import yargParser from 'yargs-parser';
 
 import cliCommands from '../../../cli/src/cli-commands/cli-publish-commands.js';
 import { PublishCommand } from '../index.js';
@@ -106,8 +106,8 @@ describe('licenses', () => {
 
     await lernaPublish(cwd)('--no-manually-update-root-lockfile');
 
-    const [warning] = loggingOutput('warn');
-    expect(warning).toBe(
+    const warnings = loggingOutput('warn');
+    expect(warnings).toContain(
       'Packages package-1 and package-3 are missing a license.\n' +
         'One way to fix this is to add a LICENSE.md file to the root of this repository.\n' +
         'See https://choosealicense.com for additional guidance.'

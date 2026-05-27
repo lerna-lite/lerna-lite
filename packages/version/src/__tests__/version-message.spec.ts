@@ -4,8 +4,8 @@ import type { VersionCommandOption } from '@lerna-lite/core';
 import { getCommitMessage, initFixtureFactory } from '@lerna-test/helpers';
 // stabilize commit SHA
 import gitSHA from '@lerna-test/helpers/serializers/serialize-git-sha.js';
+import yargParser from '@lerna-test/helpers/yargs-parser.js';
 import { expect, test, vi } from 'vitest';
-import yargParser from 'yargs-parser';
 
 import { VersionCommand } from '../version-command.js';
 

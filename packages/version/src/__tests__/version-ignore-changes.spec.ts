@@ -4,8 +4,8 @@ import { join, resolve as pathResolve } from 'node:path';
 import { outputFile, type VersionCommandOption } from '@lerna-lite/core';
 import { gitAdd, gitCommit, gitTag, initFixtureFactory, showCommit } from '@lerna-test/helpers';
 import gitSHA from '@lerna-test/helpers/serializers/serialize-git-sha.js';
+import yargParser from '@lerna-test/helpers/yargs-parser.js';
 import { describe, expect, it, vi } from 'vitest';
-import yargParser from 'yargs-parser';
 
 import { VersionCommand } from '../version-command.js';
 

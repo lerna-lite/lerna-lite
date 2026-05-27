@@ -2,8 +2,8 @@ import { collectUpdates, logOutput, type ChangedCommandOption } from '@lerna-lit
 import { commandRunner, initFixtureFactory, updateLernaConfig } from '@lerna-test/helpers';
 import { loggingOutput } from '@lerna-test/helpers/logging-output.js';
 import serializeTempdir from '@lerna-test/helpers/serializers/serialize-tempdir.js';
+import yargParser from '@lerna-test/helpers/yargs-parser.js';
 import { beforeAll, describe, expect, it, vi } from 'vitest';
-import yargParser from 'yargs-parser';
 
 import cliChangedCommands from '../../../cli/src/cli-commands/cli-changed-commands.js';
 import { factory } from '../changed-command.js';

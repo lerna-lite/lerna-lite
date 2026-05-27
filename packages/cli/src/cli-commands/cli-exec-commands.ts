@@ -1,11 +1,13 @@
 import type { ExecCommandOption } from '@lerna-lite/core';
+// parsing delegated to parseSubcommand from yargs-compat
 
 import { filterOptions } from '../filter-options.js';
+import { parseSubcommand } from '../yargs-compat.js';
 
 /**
  * @see https://github.com/yargs/yargs/blob/master/docs/advanced.md#providing-a-command-module
  */
-export default {
+const mod = {
   command: 'exec [cmd] [args..]',
   describe: 'Execute an arbitrary command in each package',
   builder: (yargs: any) => {
@@ -91,7 +93,8 @@ export default {
     try {
       // @ts-ignore
       const { ExecCommand } = await import('@lerna-lite/exec');
-      new ExecCommand(argv);
+      // return the command instance (thenable) so callers can await its lifecycle
+      return new ExecCommand(argv);
     } catch (err: any) {
       throw new Error(
         `"@lerna-lite/exec" is optional and was not found. Please install it with "npm install @lerna-lite/exec -D". ${err}`
@@ -99,3 +102,53 @@ export default {
     }
   },
 };
+
+// cli-nano pilot config for this command
+export const cliNanoConfig = {
+  command: {
+    name: 'exec',
+    positionals: [
+      { name: 'cmd', type: 'string' },
+      { name: 'args', variadic: true, type: 'string' },
+    ] as any[],
+  },
+  options: {
+    stream: { type: 'boolean' },
+    parallel: { type: 'boolean' },
+    bail: { type: 'boolean', default: true },
+    shell: { type: 'boolean', default: true },
+    prefix: { type: 'boolean', default: true },
+    profile: { type: 'boolean' },
+    'profile-location': { type: 'string' },
+    'dry-run': { type: 'boolean' },
+    concurrency: { type: 'number' },
+    'reject-cycles': { type: 'boolean' },
+    // filterOptions (used by many commands)
+    scope: { type: 'string' },
+    ignore: { type: 'string' },
+    'no-private': { type: 'boolean' },
+    private: { type: 'boolean' },
+    since: { type: 'string' },
+    'exclude-dependents': { type: 'boolean' },
+    'include-dependents': { type: 'boolean' },
+    'include-dependencies': { type: 'boolean' },
+    'include-merged-tags': { type: 'boolean' },
+    'continue-if-no-match': { type: 'boolean' },
+  },
+} as const;
+
+// attach pilots to the module export
+(mod as any).runWithCliNano = runWithCliNano;
+(mod as any).cliNanoConfig = cliNanoConfig;
+
+export default mod;
+
+// Pilot runner: parse with cli-nano and call existing handler
+export async function runWithCliNano(rawArgs?: string[], context?: any) {
+  // Delegate parsing/normalization to `parseSubcommand`, which already
+  // handles short-flag expansion, injection/stripping of the subcommand
+  // token, positional mapping, defaults, and validation.
+  const parsed: any = parseSubcommand(cliNanoConfig as any, rawArgs, context, { sort: { type: 'boolean' } });
+
+  return await (mod.handler as any)(parsed as ExecCommandOption);
+}

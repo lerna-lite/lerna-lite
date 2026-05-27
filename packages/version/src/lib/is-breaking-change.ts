@@ -1,7 +1,17 @@
 import semver from 'semver';
 
 export function isBreakingChange(currentVersion: string, nextVersion: string): boolean {
-  const releaseType = semver.diff(currentVersion, nextVersion);
+  if (!nextVersion || typeof nextVersion !== 'string') {
+    return false;
+  }
+
+  // ensure nextVersion is a valid semver string; if not, treat as non-breaking
+  const validNext = semver.valid(nextVersion);
+  if (!validNext) {
+    return false;
+  }
+
+  const releaseType = semver.diff(currentVersion, validNext);
   let breaking;
 
   if (releaseType === 'major') {

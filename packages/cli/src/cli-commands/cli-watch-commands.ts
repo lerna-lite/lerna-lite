@@ -1,11 +1,12 @@
 import type { WatchCommandOption } from '@lerna-lite/core';
 
 import { filterOptions } from '../filter-options.js';
+import { parseSubcommand } from '../yargs-compat.js';
 
 /**
  * @see https://github.com/yargs/yargs/blob/master/docs/advanced.md#providing-a-command-module
  */
-export default {
+const mod = {
   command: 'watch',
   describe: 'Runs a command whenever packages or their dependents change.',
   builder: (yargs: any) => {
@@ -161,7 +162,7 @@ export default {
     try {
       // @ts-ignore
       const { WatchCommand } = await import('@lerna-lite/watch');
-      new WatchCommand(argv);
+      return new WatchCommand(argv);
     } catch (err: any) {
       throw new Error(
         `"@lerna-lite/watch" is optional and was not found. Please install it with "npm install @lerna-lite/watch -D". ${err}`
@@ -169,3 +170,63 @@ export default {
     }
   },
 };
+
+// cli-nano pilot config for this command
+export const cliNanoConfig = {
+  command: { name: 'watch', positionals: [] as any[] },
+  options: {
+    command: { type: 'string' },
+    'no-bail': { type: 'boolean' },
+    bail: { type: 'boolean' },
+    'no-shell': { type: 'boolean' },
+    shell: { type: 'boolean', default: true },
+    debounce: { type: 'number' },
+    'file-delimiter': { type: 'string' },
+    glob: { type: 'string' },
+    'no-prefix': { type: 'boolean' },
+    prefix: { type: 'boolean' },
+    stream: { type: 'boolean' },
+    'await-write-finish': { type: 'boolean' },
+    'awf-stability-threshold': { type: 'number' },
+    'awf-poll-interval': { type: 'number' },
+    atomic: { type: 'boolean' },
+    depth: { type: 'number' },
+    'disable-globbing': { type: 'boolean' },
+    'follow-symlinks': { type: 'boolean' },
+    ignored: { type: 'string' },
+    'ignore-initial': { type: 'boolean' },
+    'ignore-permission-errors': { type: 'boolean' },
+    interval: { type: 'number' },
+    'use-polling': { type: 'boolean' },
+    // filterOptions (used by many commands)
+    scope: { type: 'string' },
+    ignore: { type: 'string' },
+    'no-private': { type: 'boolean' },
+    private: { type: 'boolean' },
+    since: { type: 'string' },
+    'exclude-dependents': { type: 'boolean' },
+    'include-dependents': { type: 'boolean' },
+    'include-dependencies': { type: 'boolean' },
+    'include-merged-tags': { type: 'boolean' },
+    'continue-if-no-match': { type: 'boolean' },
+  },
+} as const;
+
+// attach pilots to the module export
+(mod as any).runWithCliNano = runWithCliNano;
+(mod as any).cliNanoConfig = cliNanoConfig;
+
+export default mod;
+
+// Pilot runner: parse with cli-nano and call existing handler
+export async function runWithCliNano(rawArgs?: string[], context?: any) {
+  const parsed: any = parseSubcommand(cliNanoConfig as any, rawArgs, context);
+
+  // yargs builder used a middleware to populate `args.command` from `--`;
+  // mirror that behavior for the pilot so the command string is available.
+  if (!parsed.command && Array.isArray(parsed['--']) && parsed['--'].length) {
+    parsed.command = parsed['--'].join(' ');
+  }
+
+  return await (mod.handler as any)(parsed as WatchCommandOption);
+}

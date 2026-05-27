@@ -11,15 +11,16 @@ import {
   writePackage,
   type VersionCommandOption,
   outputFile,
+  outputFileSync,
   outputJson,
 } from '@lerna-lite/core';
 import { commandRunner, getCommitMessage, gitAdd, gitCommit, gitTag, initFixtureFactory, showCommit, stripAnsi } from '@lerna-test/helpers';
 import { loggingOutput } from '@lerna-test/helpers/logging-output.js';
 import gitSHA from '@lerna-test/helpers/serializers/serialize-git-sha.js';
+import yargParser from '@lerna-test/helpers/yargs-parser.js';
 import { x } from 'tinyexec';
 import { describe, expect, it, vi, type Mock } from 'vitest';
 import { parse } from 'yaml';
-import yargParser from 'yargs-parser';
 
 import cliCommands from '../../../cli/src/cli-commands/cli-version-commands.js';
 import { getCommitsSinceLastRelease } from '../conventional-commits/get-commits-since-last-release.js';
@@ -424,12 +425,12 @@ describe('VersionCommand', () => {
   });
 
   describe('--no-commit-hooks', () => {
-    const setupPreCommitHook = (cwd: string) => outputFile(join(cwd, '.git/hooks/pre-commit'), '#!/bin/sh\nexit 1\n', { mode: 0o755 });
+    const setupPreCommitHook = (cwd: string) => outputFileSync(join(cwd, '.git/hooks/pre-commit'), '#!/bin/sh\nexit 1\n', { mode: 0o755 });
 
     it('passes --no-verify to git commit execution', async () => {
       const cwd = await initFixture('normal');
 
-      await setupPreCommitHook(cwd);
+      setupPreCommitHook(cwd);
       await new VersionCommand(createArgv(cwd, '--no-commit-hooks'));
 
       const message = await getCommitMessage(cwd);
@@ -439,7 +440,7 @@ describe('VersionCommand', () => {
     it('consumes configuration from lerna.json', async () => {
       const cwd = await initFixture('normal');
 
-      await setupPreCommitHook(cwd);
+      setupPreCommitHook(cwd);
       await outputJson(join(cwd, 'lerna.json'), {
         version: '1.0.0',
         command: {

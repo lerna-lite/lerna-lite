@@ -1,7 +1,7 @@
 import { collectUpdates, type PublishCommandOption } from '@lerna-lite/core';
 import { initFixtureFactory } from '@lerna-test/helpers';
+import yargParser from '@lerna-test/helpers/yargs-parser.js';
 import { expect, test, vi } from 'vitest';
-import yargParser from 'yargs-parser';
 
 import { PublishCommand } from '../index.js';
 import { add, remove } from '../lib/npm-dist-tag.js';

@@ -1,6 +1,7 @@
 import { type log } from '@lerna-lite/npmlog';
 import dedent from 'dedent';
-import type { Argv, Options } from 'yargs';
+
+import type { Argv, Options } from './yargs-compat.js';
 
 export interface FilterOptions {
   scope?: string;

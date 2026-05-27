@@ -39,15 +39,11 @@
     "@lerna-lite/core": "workspace:*",
     "@lerna-lite/init": "workspace:*",
     "@lerna-lite/npmlog": "workspace:*",
+    "cli-nano": "catalog:",
     "dedent": "catalog:",
     "dotenv": "catalog:",
     "import-local": "^3.2.0",
-    "load-json-file": "catalog:dependencies",
-    "yargs": "catalog:dependencies"
-  },
-  "devDependencies": {
-    "@types/yargs-parser": "catalog:devDependencies",
-    "yargs-parser": "catalog:devDependencies"
+    "load-json-file": "catalog:dependencies"
   },
   "peerDependenciesMeta": {
     "@lerna-lite/exec": {

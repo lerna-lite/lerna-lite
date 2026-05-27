@@ -1,8 +1,8 @@
 import { runLifecycle, type VersionCommandOption } from '@lerna-lite/core';
 import { initFixtureFactory } from '@lerna-test/helpers';
+import yargParser from '@lerna-test/helpers/yargs-parser.js';
 import { loadJsonFile } from 'load-json-file';
 import { afterEach, describe, expect, it, vi } from 'vitest';
-import yargParser from 'yargs-parser';
 
 // test command
 import { VersionCommand } from '../version-command.js';

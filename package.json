@@ -84,6 +84,7 @@
     "@types/yargs": "^17.0.35",
     "@typescript/native-preview": "^7.0.0-dev.20260523.1",
     "@vitest/coverage-v8": "^5.0.0-beta.3",
+    "cli-nano": "catalog:",
     "conventional-changelog-conventionalcommits": "^9.3.1",
     "cross-env": "^10.1.0",
     "empathic": "^2.0.1",
@@ -98,7 +99,8 @@
     "tinyglobby": "catalog:dependencies",
     "tslib": "^2.8.1",
     "vitest": "^5.0.0-beta.3",
-    "write-json-file": "catalog:dependencies"
+    "write-json-file": "catalog:dependencies",
+    "yargs-parser": "workspace:*"
   },
   "engines": {
     "node": "^22.17.0 || >=24.0.0",

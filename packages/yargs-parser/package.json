@@ -1,0 +1,8 @@
+{
+  "name": "yargs-parser",
+  "version": "0.0.0-local",
+  "description": "Tiny local replacement for yargs-parser for tests",
+  "license": "MIT",
+  "type": "module",
+  "main": "index.js"
+}

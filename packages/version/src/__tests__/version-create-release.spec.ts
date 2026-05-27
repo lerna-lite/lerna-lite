@@ -3,9 +3,9 @@ import { join } from 'node:path';
 import { colorize, logOutput, type VersionCommandOption, outputFile } from '@lerna-lite/core';
 import { log } from '@lerna-lite/npmlog';
 import { commandRunner, initFixtureFactory } from '@lerna-test/helpers';
+import yargParser from '@lerna-test/helpers/yargs-parser.js';
 import dedent from 'dedent';
 import { beforeEach, describe, expect, it, vi, type Mock } from 'vitest';
-import yargParser from 'yargs-parser';
 
 import cliCommands from '../../../cli/src/cli-commands/cli-version-commands.js';
 import { recommendVersion } from '../conventional-commits/recommend-version.js';

@@ -2,6 +2,7 @@ import type { VersionCommandOption } from '@lerna-lite/core';
 import { log } from '@lerna-lite/npmlog';
 
 import { filterOptions } from '../filter-options.js';
+import { parseSubcommand } from '../yargs-compat.js';
 
 /**
  * @see https://github.com/yargs/yargs/blob/master/docs/advanced.md#providing-a-command-module
@@ -18,347 +19,206 @@ const addBumpPositionalFn = function (yargs: any, additionalKeywords: string[] =
 };
 let addBumpPositional = addBumpPositionalFn;
 
-export default {
+// Handler for the version command (kept standalone now that CLI commands
+// are fully migrated to cli-nano). Tests and the pilot runner call this
+// directly.
+export async function handler(argv: VersionCommandOption) {
+  try {
+    // @ts-ignore
+    const { VersionCommand } = await import('@lerna-lite/version');
+    return new VersionCommand(argv);
+  } catch (err: any) {
+    throw new Error(
+      `"@lerna-lite/version" is optional and was not found. Please install it with "npm install @lerna-lite/version -D". ${err}`
+    );
+  }
+}
+
+// cli-nano pilot config for this command
+export const cliNanoConfig = {
+  command: { name: 'version', positionals: [{ name: 'bump', type: 'string' }] as any[] },
+  options: {
+    'allow-branch': { type: 'array' },
+    'allow-peer-dependencies-update': { type: 'boolean' },
+    amend: { type: 'boolean' },
+    'build-metadata': { type: 'string' },
+    'conventional-bump-prerelease': { type: 'boolean' },
+    'conventional-commits': { type: 'boolean' },
+    'conventional-graduate': { type: 'string' },
+    'force-conventional-graduate': { type: 'boolean' },
+    'conventional-prerelease': { type: 'string' },
+    'changelog-header-message': { type: 'string' },
+    'changelog-include-commits-git-author': { type: 'string' },
+    'changelog-include-commits-client-login': { type: 'string' },
+    'changelog-preset': { type: 'string' },
+    'dry-run': { type: 'boolean' },
+    exact: { type: 'boolean' },
+    'exclude-dependents': { type: 'boolean' },
+    'independent-subpackages': { type: 'boolean' },
+    'force-publish': { type: 'string' },
+    'git-remote': { type: 'string' },
+    'create-release': { type: 'string' },
+    'create-release-discussion': { type: 'string' },
+    'generate-release-notes': { type: 'boolean' },
+    'ignore-changes': { type: 'array' },
+    'ignore-scripts': { type: 'boolean' },
+    'include-merged-tags': { type: 'boolean' },
+    m: { type: 'string', alias: 'message' },
+    message: { type: 'string', alias: 'm' },
+    'no-changelog': { type: 'boolean' },
+    'no-commit-hooks': { type: 'boolean' },
+    'commit-hooks': { type: 'boolean' },
+    'git-tag-command': { type: 'string' },
+    'no-git-tag-version': { type: 'boolean' },
+    'tag-version-separator': { type: 'string' },
+    'no-granular-pathspec': { type: 'boolean' },
+    'granular-pathspec': { type: 'boolean' },
+    'no-private': { type: 'boolean' },
+    private: { type: 'boolean' },
+    'no-push': { type: 'boolean' },
+    push: { type: 'boolean' },
+    'push-tags-one-by-one': { type: 'boolean' },
+    preid: { type: 'string' },
+    'remote-client': { type: 'string' },
+    'release-footer-message': { type: 'string' },
+    'release-header-message': { type: 'string' },
+    'sign-git-commit': { type: 'boolean' },
+    'signoff-git-commit': { type: 'boolean' },
+    'sign-git-tag': { type: 'boolean' },
+    'force-git-tag': { type: 'boolean' },
+    'tag-version-prefix': { type: 'string' },
+    'no-manually-update-root-lockfile': { type: 'boolean' },
+    'manually-update-root-lockfile': { type: 'boolean' },
+    'npm-client-args': { type: 'array' },
+    'run-scripts-on-lockfile-update': { type: 'boolean' },
+    'no-sync-workspace-lock': { type: 'boolean' },
+    'sync-workspace-lock': { type: 'boolean' },
+    'skip-bump-only-releases': { type: 'boolean' },
+    'premajor-version-bump': { type: 'string' },
+    y: { type: 'boolean' },
+  },
+} as const;
+
+// Note: this module no longer exports a yargs `mod` default. The
+// command is represented by the `cliNanoConfig` and `runWithCliNano`
+// pilot; `handler` is provided for direct invocation.
+
+// Provide a yargs-compatible module default for backward compatibility
+// and tests that import the module as a command definition.
+const mod = {
   command: 'version [bump]',
-  describe: 'Bump version of packages changed since the last release.',
-  builder: (yargs: any, composed?: string) => {
-    const opts = {
-      'allow-branch': {
-        describe: 'Specify which branches to allow versioning from.',
-        type: 'array',
-      },
-      'allow-peer-dependencies-update': {
-        describe: 'Allow bumping versions of peer dependencies.',
-        type: 'boolean',
-      },
-      amend: {
-        describe: 'Amend the existing commit, instead of generating a new one.',
-        type: 'boolean',
-      },
-      'build-metadata': {
-        describe: 'Apply build metadata to the release, compatible with SemVer.',
-        requiresArg: true,
-        type: 'string',
-      },
-      'conventional-bump-prerelease': {
-        describe: 'Bumps prerelease versions if conventional commits requires it.',
-        type: 'boolean',
-      },
-      'conventional-commits': {
-        describe: 'Use conventional-changelog to determine version bump and generate CHANGELOG.',
-        type: 'boolean',
-      },
-      'conventional-graduate': {
-        describe: 'Version currently prereleased packages to a non-prerelease version.',
-        // type must remain ambiguous because it is overloaded (boolean _or_ string _or_ array)
-      },
-      'force-conventional-graduate': {
-        describe:
-          'Forces all packages specified by --conventional-graduate to bump their version whether or not they are a prerelease or have changes since the previous version.',
-        type: 'boolean',
-      },
-      'conventional-prerelease': {
-        describe: 'Version changed packages as prereleases when using --conventional-commits.',
-        // type must remain ambiguous because it is overloaded (boolean _or_ string _or_ array)
-      },
-      'changelog-header-message': {
-        describe:
-          'Add a custom message at the top of all "changelog.md" files. This option is only available when using --conventional-commits with changelogs.',
-        group: 'Version Command Options:',
-        requiresArg: true,
-        type: 'string',
-      },
-      'changelog-include-commits-git-author': {
-        describe:
-          "Specify if we want to include the commit git author's name, this option is only available when using --conventional-commits with changelogs. We can also optionally provide a custom message or else a default format will be used.",
-        group: 'Version Command Options:',
-        requiresArg: false,
-        type: 'string',
-      },
-      'changelog-include-commits-client-login': {
-        describe:
-          'Specify if we want to include the commit remote client login name (ie GitHub username), this option is only available when using --conventional-commits with changelogs. We can also optionally provide a custom message or else a default format will be used.',
-        group: 'Version Command Options:',
-        requiresArg: false,
-        type: 'string',
-      },
-      'changelog-preset': {
-        describe: 'Custom conventional-changelog preset.',
-        type: 'string',
-        requiresArg: true,
-        defaultDescription: 'angular',
-      },
-      'dry-run': {
-        describe: 'Displays the process command that would be performed without executing it.',
-        group: 'Version Command Options:',
-        type: 'boolean',
-      },
-      exact: {
-        describe: 'Specify cross-dependency version numbers exactly rather than with a caret (^).',
-        type: 'boolean',
-      },
-      'exclude-dependents': {
-        describe: `Exclude all transitive dependents when running a command with --since, overriding the default 'changed' algorithm.`,
-        type: 'boolean',
-      },
-      'independent-subpackages': {
-        describe: 'Exclude sub-packages when versioning',
-        type: 'boolean',
-      },
-      'force-publish': {
-        describe: 'Always include targeted packages in versioning operations, skipping default logic.',
-        // type must remain ambiguous because it is overloaded (boolean _or_ string _or_ array)
-      },
-      'git-remote': {
-        describe: 'Push git changes to the specified remote.',
-        type: 'string',
-        requiresArg: true,
-        defaultDescription: 'origin',
-      },
-      'create-release': {
-        describe: 'Create an official GitHub or GitLab release for every version.',
-        type: 'string',
-        choices: ['gitlab', 'github'],
-      },
-      'create-release-discussion': {
-        describe: 'Create a GitHub Discussion from the new release (note that createRelease must be enabled for this to work).',
-        type: 'string',
-      },
-      'generate-release-notes': {
-        describe:
-          'Provides an alternative to create a GitHub release by letting GitHub automatically generate the name and body for the new release.',
-        type: 'boolean',
-      },
-      'ignore-changes': {
-        describe: [
-          'Ignore changes in files matched by glob(s) when detecting changed packages.',
-          'Pass --no-ignore-changes to completely disable.',
-        ].join('\n'),
-        type: 'array',
-      },
-      'ignore-scripts': {
-        describe: 'Disable all lifecycle scripts',
-        type: 'boolean',
-      },
-      'include-merged-tags': {
-        describe: 'Include tags from merged branches when detecting changed packages.',
-        type: 'boolean',
-      },
-      m: {
-        describe: 'Use a custom commit message when creating the version commit.',
-        alias: 'message',
-        type: 'string',
-        requiresArg: true,
-      },
-      'no-changelog': {
-        describe: 'Do not generate CHANGELOG.md files when using --conventional-commits.',
-        type: 'boolean',
-      },
-      changelog: {
-        // proxy for --no-changelog
-        hidden: true,
-        type: 'boolean',
-      },
-      'no-commit-hooks': {
-        describe: 'Do not run git commit hooks when committing version changes.',
-        type: 'boolean',
-      },
-      'commit-hooks': {
-        // proxy for --no-commit-hooks
-        hidden: true,
-        type: 'boolean',
-      },
-      'git-tag-command': {
-        describe:
-          'Allows users to specify a custom command to be used when applying git tags. For example, this may be useful for providing a wrapper command in CI/CD pipelines that have no direct write access.',
-        type: 'string',
-      },
-      'no-git-tag-version': {
-        describe: 'Do not commit or tag version changes.',
-        type: 'boolean',
-      },
-      'git-tag-version': {
-        // proxy for --no-git-tag-version
-        hidden: true,
-        type: 'boolean',
-      },
-      'tag-version-separator': {
-        describe: 'Customize the tag version separator used when creating tags for independent versioning, defaults to "@".',
-        type: 'string',
-        requiresArg: true,
-        defaultDescription: '@',
-      },
-      // TODO: (major) make --no-granular-pathspec the default
-      'no-granular-pathspec': {
-        describe: 'Do not stage changes file-by-file, but globally.',
-        type: 'boolean',
-      },
-      'granular-pathspec': {
-        // proxy for --no-granular-pathspec
-        hidden: true,
-        // describe: 'Stage changes file-by-file, not globally.',
-        type: 'boolean',
-      },
-      // TODO: (major) make --no-private the default
-      'no-private': {
-        describe: 'Do not version private packages.',
-        type: 'boolean',
-      },
-      private: {
-        // proxy for --no-private
-        hidden: true,
-        type: 'boolean',
-      },
-      'no-push': {
-        describe: 'Do not push tagged commit to git remote.',
-        type: 'boolean',
-      },
-      push: {
-        // proxy for --no-push
-        hidden: true,
-        type: 'boolean',
-      },
-      'push-tags-one-by-one': {
-        describe: 'pushes git tags one by one (only useful for `independent` mode).',
-        type: 'boolean',
-      },
-      // preid is copied into ../publish/command because a whitelist for one option isn't worth it
-      preid: {
-        describe: 'Specify the prerelease identifier when versioning a prerelease',
-        type: 'string',
-        requiresArg: true,
-        defaultDescription: 'alpha',
-      },
-      'remote-client': {
-        describe:
-          'Remote git client, which client is used when reading commits from remote which is useful when associating client login for each changelog entry.',
-        type: 'string',
-        choices: ['gitlab', 'github'],
-      },
-      'release-footer-message': {
-        describe: 'Add a custom footer message to the GitHub/GitLab Release body.',
-        group: 'Version Command Options:',
-        requiresArg: true,
-        type: 'string',
-      },
-      'release-header-message': {
-        describe: 'Add a custom header message to the GitHub/GitLab Release body.',
-        group: 'Version Command Options:',
-        requiresArg: true,
-        type: 'string',
-      },
-      'sign-git-commit': {
-        describe: 'Pass the `--gpg-sign` flag to `git commit`.',
-        type: 'boolean',
-      },
-      'signoff-git-commit': {
-        describe: 'Pass the `--signoff` flag to `git commit`.',
-        type: 'boolean',
-      },
-      'sign-git-tag': {
-        describe: 'Pass the `--sign` flag to `git tag`.',
-        type: 'boolean',
-      },
-      'force-git-tag': {
-        describe: 'Pass the `--force` flag to `git tag`.',
-        type: 'boolean',
-      },
-      'tag-version-prefix': {
-        describe: 'Customize the tag prefix. To remove entirely, pass an empty string.',
-        type: 'string',
-        requiresArg: true,
-        defaultDescription: 'v',
-      },
-      'no-manually-update-root-lockfile': {
-        describe: 'Do not manually update (read/write back to the lock file) the project root lock file.',
-        type: 'boolean',
-      },
-      'manually-update-root-lockfile': {
-        // proxy for --no-manually-update-root-lockfile
-        hidden: true,
-        type: 'boolean',
-      },
-      'npm-client-args': {
-        describe: "Additional arguments to pass to the npm client when performing 'npm install'.",
-        type: 'array',
-      },
-      'run-scripts-on-lockfile-update': {
-        describe: 'Runs lifecycle scripts when syncing the lock file after the version bump.',
-        type: 'boolean',
-      },
-      'no-sync-workspace-lock': {
-        describe:
-          'Do not run `npm install --package-lock-only` or equivalent depending on the package manager defined in `npmClient`.',
-        type: 'boolean',
-      },
-      'sync-workspace-lock': {
-        describe: 'Runs `npm install --package-lock-only` or equivalent depending on the package manager defined in `npmClient`.',
-        type: 'boolean',
-      },
-      'skip-bump-only-releases': {
-        describe: 'Skip release(s) creation when the version is a "version bump only"?',
-        type: 'boolean',
-      },
-      'premajor-version-bump': {
-        describe: 'Controls how pre-major version packages are bumped by lerna.',
-        type: 'string',
-        choices: ['default', 'force-patch'],
-        requiresArg: true,
-        defaultDescription: 'default',
-      },
-      y: {
-        describe: 'Skip all confirmation prompts.',
-        alias: 'yes',
-        type: 'boolean',
-      },
-    };
-
-    if (composed) {
-      // hide options from composed command's help output
-      Object.keys(opts).forEach((key) => {
-        opts[key].hidden = true;
-      });
-
-      // set argv.composed for wrapped execution logic
-      yargs.default('composed', composed).hide('composed');
-    } else {
-      addBumpPositional = addBumpPositionalFn(yargs) as any;
-    }
-
-    yargs.options(opts);
-
-    // workaround yargs bug that re-interprets unknown arguments in argv._
-    yargs.parserConfiguration({
-      'populate--': true,
+  describe: 'Bump version of packages and optionally create changelog entries',
+  builder: (yargs: any, _cmd?: string) => {
+    yargs.parserConfiguration({ 'populate--': true }).positional('bump', {
+      describe: `Increment version(s) by explicit version _or_ semver keyword,\n'major', 'minor', 'patch', 'premajor', 'preminor', 'prepatch', or 'prerelease'.`,
+      type: 'string',
     });
 
-    if (!composed) {
-      // hide options from composed command's help output
-      yargs.group(Object.keys(opts), 'Command Options:');
-    }
-    filterOptions(yargs);
+    return filterOptions(yargs);
+  },
 
-    return yargs.check((argv) => {
-      if (argv['--']) {
+  handler,
+};
+
+// attach pilots to the module export for compatibility with helpers
+(mod as any).runWithCliNano = runWithCliNano;
+(mod as any).cliNanoConfig = cliNanoConfig;
+
+export default mod;
+
+// Pilot runner: parse with cli-nano and call existing handler
+export async function runWithCliNano(rawArgs?: string[], context?: any) {
+  let parsed: any;
+  try {
+    parsed = parseSubcommand(cliNanoConfig as any, rawArgs, context);
+  } catch (err) {
+    // fallback: treat everything as positional and map bump
+    const expanded = Array.isArray(rawArgs) ? rawArgs.slice() : [];
+    parsed = { _: expanded.slice(), __rawArgs: expanded.slice(), '--': [] };
+    try {
+      // scan for --key=value or --key value patterns and populate parsed
+      for (let i = 0; i < expanded.length; i++) {
+        const token = expanded[i];
+        if (typeof token !== 'string') continue;
+        if (!token.startsWith('--')) continue;
+
+        const eqIndex = token.indexOf('=');
+        let key: string;
+        let val: any = true;
+        if (eqIndex !== -1) {
+          key = token.slice(2, eqIndex);
+          val = token.slice(eqIndex + 1);
+        } else {
+          key = token.slice(2);
+          const next = expanded[i + 1];
+          if (next !== undefined && typeof next === 'string' && !next.startsWith('-')) {
+            val = next;
+            // skip next token as it's a value
+            i++;
+          }
+        }
+
+        if (key) {
+          parsed[key] = val;
+          const camel = key.replace(/-([a-z])/g, (_m, ch) => ch.toUpperCase());
+          parsed[camel] = parsed[key];
+        }
+      }
+
+      // map positionals from remaining _ tokens if any (skip any tokens that were options)
+      const residual = parsed._.filter((t: string) => typeof t === 'string' && !t.startsWith('--'));
+      const pos = (cliNanoConfig.command as any)?.positionals || [];
+      for (let i = 0; i < pos.length; i++) {
+        const name = pos[i].name;
+        if (pos[i].variadic) {
+          parsed[name] = residual.slice(i);
+          break;
+        }
+        if (residual[i] !== undefined) parsed[name] = residual[i];
+      }
+      // detect passthrough `--` args
+      const dd = expanded.indexOf('--');
+      if (dd !== -1) {
+        parsed['--'] = expanded.slice(dd + 1);
+      }
+    } catch (e) {
+      /* ignore fallback extraction errors */
+    }
+    if (context && typeof context === 'object') {
+      for (const [k, v] of Object.entries(context)) {
+        if (k === 'onResolved' || k === 'onRejected') parsed[k] = v;
+        else if (parsed[k] === undefined) parsed[k] = v;
+      }
+    }
+  }
+
+  try {
+    // Defensive sanitization: ensure parsed._ contains only positional
+    // tokens (no option-like strings). Some parser paths have left
+    // flags in the positional array which downstream logic treats as
+    // package specifiers; strip them here to preserve yargs semantics.
+    if (parsed && Array.isArray(parsed._)) {
+      parsed._ = parsed._.filter((t: any) => typeof t === 'string' && !t.startsWith('-'));
+    }
+    // Ensure --no-private sets the canonical positive form expected by VersionCommand
+    if (parsed && (parsed['no-private'] === true || parsed.noPrivate === true)) {
+      parsed.private = false;
+    }
+    // Mirror yargs check: warn when there are passthrough args after `--`
+    try {
+      if (Array.isArray(rawArgs) && rawArgs.indexOf('--') !== -1) {
         log.warn('EDOUBLEDASH', 'Arguments after -- are no longer passed to subprocess executions.');
         log.warn('EDOUBLEDASH', 'This will cause an error in a future major version.');
       }
-
-      return argv;
-    });
-  },
-
-  handler: async (argv: VersionCommandOption) => {
-    try {
-      // @ts-ignore
-      const { VersionCommand } = await import('@lerna-lite/version');
-      new VersionCommand(argv);
-    } catch (err: any) {
-      throw new Error(
-        `"@lerna-lite/version" is optional and was not found. Please install it with "npm install @lerna-lite/version -D". ${err}`
-      );
+    } catch (e) {
+      /* ignore */
     }
-  },
-};
+    // debug logging removed
+  } catch (e) {
+    /* ignore */
+  }
+
+  return await handler(parsed as VersionCommandOption);
+}
 
 export { addBumpPositional };

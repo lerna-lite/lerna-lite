@@ -1,8 +1,8 @@
 import { log } from '@lerna-lite/npmlog';
 import dedent from 'dedent';
-import yargs from 'yargs/yargs';
 
 import { globalOptions } from './global-options.js';
+import yargs from './yargs-compat.js';
 
 /**
  * A factory that returns a yargs() instance configured with everything except commands.

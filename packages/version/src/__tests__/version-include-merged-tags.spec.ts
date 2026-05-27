@@ -5,8 +5,8 @@ import { logOutput, type VersionCommandOption } from '@lerna-lite/core';
 import { gitAdd, gitCheckout, gitCommit, gitMerge, gitTag, initFixtureFactory } from '@lerna-test/helpers';
 import serializeTempdir from '@lerna-test/helpers/serializers/serialize-tempdir.js';
 import serializeWindowsPaths from '@lerna-test/helpers/serializers/serialize-windows-paths.js';
+import yargParser from '@lerna-test/helpers/yargs-parser.js';
 import { describe, expect, it, vi } from 'vitest';
-import yargParser from 'yargs-parser';
 
 import { VersionCommand } from '../version-command.js';
 

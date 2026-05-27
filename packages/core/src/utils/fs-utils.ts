@@ -1,5 +1,5 @@
 // JSON and move utilities
-import { cpSync, existsSync, mkdirSync, readFileSync, renameSync, rmSync, writeFileSync } from 'node:fs';
+import { cpSync, existsSync, mkdirSync, readFileSync, renameSync, rmSync, writeFileSync, type WriteFileOptions } from 'node:fs';
 import { access, cp, mkdir, readFile, rename, rm, writeFile } from 'node:fs/promises';
 import { dirname } from 'node:path';
 
@@ -54,15 +54,15 @@ export function moveSync(src: string, dest: string) {
 }
 
 /** Writes data to a file, creating parent directories if needed (async). */
-export async function outputFile(file: string, data: string | Buffer) {
+export async function outputFile(file: string, data: string | Buffer, options?: BufferEncoding) {
   await mkdir(dirname(file), { recursive: true });
-  await writeFile(file, data);
+  await writeFile(file, data, options);
 }
 
 /** Writes data to a file, creating parent directories if needed (sync). */
-export function outputFileSync(file: string, data: string | Buffer) {
+export function outputFileSync(file: string, data: string | Buffer, options?: WriteFileOptions) {
   mkdirSync(dirname(file), { recursive: true });
-  writeFileSync(file, data);
+  writeFileSync(file, data, options);
 }
 
 /** Writes a JSON object to a file, creating parent directories if needed (async). */

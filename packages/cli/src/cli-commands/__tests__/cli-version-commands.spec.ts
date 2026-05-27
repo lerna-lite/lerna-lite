@@ -1,6 +1,6 @@
 import { describe, expect, it, vi } from 'vitest';
-import yargs from 'yargs/yargs';
 
+import yargs from '../../yargs-compat.js';
 import cliVersion from '../cli-version-commands.js';
 
 vi.mock('@lerna-lite/version', () => {

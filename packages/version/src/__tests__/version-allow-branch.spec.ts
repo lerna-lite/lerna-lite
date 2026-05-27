@@ -3,9 +3,9 @@ import { resolve as pathResolve } from 'node:path';
 import type { VersionCommandOption } from '@lerna-lite/core';
 import { initFixtureFactory } from '@lerna-test/helpers';
 import gitSHA from '@lerna-test/helpers/serializers/serialize-git-sha.js';
+import yargParser from '@lerna-test/helpers/yargs-parser.js';
 import { x } from 'tinyexec';
 import { describe, expect, it, vi } from 'vitest';
-import yargParser from 'yargs-parser';
 
 import { VersionCommand } from '../index.js';
 

@@ -3,9 +3,9 @@ import { basename, join } from 'node:path';
 import { logOutput, spawn, spawnStreaming, type ExecCommandOption, pathExists, readJson } from '@lerna-lite/core';
 import { commandRunner, initFixtureFactory, normalizeRelativeDir } from '@lerna-test/helpers';
 import { loggingOutput } from '@lerna-test/helpers/logging-output.js';
+import yargParser from '@lerna-test/helpers/yargs-parser.js';
 import { glob } from 'tinyglobby';
 import { afterEach, beforeAll, describe, expect, it, vi, type Mock } from 'vitest';
-import yargParser from 'yargs-parser';
 
 import cliExecCommands from '../../../cli/src/cli-commands/cli-exec-commands.js';
 import { ExecCommand, factory } from '../index.js';
@@ -195,6 +195,12 @@ describe('ExecCommand', () => {
 
     it('executes a command in all packages with --parallel', async () => {
       await lernaExec(testDir)('--parallel', 'ls');
+
+      expect(execInPackagesStreaming(testDir)).toEqual(['packages/package-1 ls (prefix: package-1)', 'packages/package-2 ls (prefix: package-2)']);
+    });
+
+    it('executes a command in all packages with inversed ls and --parallel', async () => {
+      await lernaExec(testDir)('ls', '--parallel');
 
       expect(execInPackagesStreaming(testDir)).toEqual(['packages/package-1 ls (prefix: package-1)', 'packages/package-2 ls (prefix: package-2)']);
     });

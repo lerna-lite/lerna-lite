@@ -2,9 +2,9 @@ import { join, resolve as pathResolve } from 'node:path';
 
 import { collectUpdates, writePackage, type VersionCommandOption } from '@lerna-lite/core';
 import { initFixtureFactory, showCommit } from '@lerna-test/helpers';
+import yargParser from '@lerna-test/helpers/yargs-parser.js';
 import semver from 'semver';
 import { describe, expect, it, vi, type Mock } from 'vitest';
-import yargParser from 'yargs-parser';
 
 import { recommendVersion } from '../conventional-commits/recommend-version.js';
 import { updateChangelog } from '../conventional-commits/update-changelog.js';

@@ -5,8 +5,8 @@ import { join, resolve as pathResolve } from 'node:path';
 import { promptSelectOne, promptTextInput, type VersionCommandOption, outputFile } from '@lerna-lite/core';
 import { commandRunner, getCommitMessage, gitAdd, gitCommit, gitInit, gitTag, initFixtureFactory, showCommit } from '@lerna-test/helpers';
 import serializeChangelog from '@lerna-test/helpers/serializers/serialize-changelog.js';
+import yargParser from '@lerna-test/helpers/yargs-parser.js';
 import { expect, test, vi, type Mock } from 'vitest';
-import yargParser from 'yargs-parser';
 
 import cliCommands from '../../../cli/src/cli-commands/cli-version-commands.js';
 import { VersionCommand } from '../version-command.js';

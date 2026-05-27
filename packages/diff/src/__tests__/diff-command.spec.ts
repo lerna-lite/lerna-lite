@@ -4,9 +4,9 @@ import type { DiffCommandOption } from '@lerna-lite/core';
 import { Project, spawn, outputFile, remove } from '@lerna-lite/core';
 import { commandRunner, gitAdd, gitCommit, gitInit, gitTag, initFixtureFactory } from '@lerna-test/helpers';
 import gitSHA from '@lerna-test/helpers/serializers/serialize-git-sha.js';
+import yargParser from '@lerna-test/helpers/yargs-parser.js';
 import { x } from 'tinyexec';
 import { beforeEach, describe, expect, it, vi, type Mock } from 'vitest';
-import yargParser from 'yargs-parser';
 
 import cliDiffCommands from '../../../cli/src/cli-commands/cli-diff-commands.js';
 import { factory } from '../diff-command.js';

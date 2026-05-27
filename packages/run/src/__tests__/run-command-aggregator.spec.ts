@@ -1,7 +1,7 @@
 import { logOutput, type RunCommandOption } from '@lerna-lite/core';
 import { initFixtureFactory } from '@lerna-test/helpers';
+import yargParser from '@lerna-test/helpers/yargs-parser.js';
 import { afterEach, beforeEach, describe, expect, it, vi, type Mock } from 'vitest';
-import yargParser from 'yargs-parser';
 
 import { RunCommand } from '../index.js';
 import { npmRunScript, npmRunScriptStreaming } from '../lib/npm-run-script.js';

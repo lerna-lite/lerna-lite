@@ -4,8 +4,8 @@ import { Conf, collectUpdates, logOutput, promptConfirmation, type PublishComman
 import { getOneTimePassword } from '@lerna-lite/version';
 import { commandRunner, commitChangeToPackage, initFixtureFactory } from '@lerna-test/helpers';
 import { loggingOutput } from '@lerna-test/helpers/logging-output.js';
+import yargParser from '@lerna-test/helpers/yargs-parser.js';
 import { beforeAll, beforeEach, describe, expect, it, vi, type Mock } from 'vitest';
-import yargParser from 'yargs-parser';
 
 import cliCommands from '../../../cli/src/cli-commands/cli-publish-commands.js';
 import { PublishCommand } from '../index.js';

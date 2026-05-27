@@ -3,10 +3,10 @@ import { basename, join } from 'node:path';
 import type { WatchCommandOption } from '@lerna-lite/core';
 import { spawn, spawnStreaming } from '@lerna-lite/core';
 import { commandRunner, initFixtureFactory, normalizeRelativeDir } from '@lerna-test/helpers';
+import yargParser from '@lerna-test/helpers/yargs-parser.js';
 import { watch as chokidarWatch } from 'chokidar';
 import mockStdin from 'mock-stdin';
 import { afterEach, beforeAll, describe, expect, it, vi, type Mock } from 'vitest';
-import yargParser from 'yargs-parser';
 
 import cliWatchCommands from '../../../cli/src/cli-commands/cli-watch-commands.js';
 import { factory, WatchCommand } from '../index.js';

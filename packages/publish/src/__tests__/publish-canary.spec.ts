@@ -3,8 +3,8 @@ import { join } from 'node:path';
 import { describeRef, outputFile, promptConfirmation, throwIfUncommitted, writePackage, type PublishCommandOption } from '@lerna-lite/core';
 import { commandRunner, gitAdd, gitCommit, gitTag, initFixtureFactory, loggingOutput } from '@lerna-test/helpers';
 import gitSHA from '@lerna-test/helpers/serializers/serialize-git-sha.js';
+import yargParser from '@lerna-test/helpers/yargs-parser.js';
 import { beforeAll, describe, expect, test, vi, type Mock } from 'vitest';
-import yargParser from 'yargs-parser';
 
 import cliCommands from '../../../cli/src/cli-commands/cli-publish-commands.js';
 import { factory, PublishCommand } from '../index.js';

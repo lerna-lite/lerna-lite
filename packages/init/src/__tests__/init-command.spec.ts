@@ -2,8 +2,8 @@ import { join } from 'node:path';
 
 import { type InitCommandOption, ensureDir, outputJson, pathExists, readJson } from '@lerna-lite/core';
 import { commandRunner, initFixtureFactory, temporaryDirectory } from '@lerna-test/helpers';
+import yargParser from '@lerna-test/helpers/yargs-parser.js';
 import { describe, expect, it, vi } from 'vitest';
-import yargParser from 'yargs-parser';
 
 import cliCommands from '../../../cli/src/cli-commands/cli-init-commands.js';
 import { InitCommand } from '../index.js';

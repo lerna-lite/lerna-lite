@@ -11,8 +11,8 @@ import {
 } from '@lerna-lite/core';
 import { initFixtureFactory, stripAnsi } from '@lerna-test/helpers';
 import { loggingOutput } from '@lerna-test/helpers/logging-output.js';
+import yargParser from '@lerna-test/helpers/yargs-parser.js';
 import { describe, expect, it, vi, type Mock } from 'vitest';
-import yargParser from 'yargs-parser';
 
 import type { npmPublish as npmPublishMock } from '../lib/__mocks__/npm-publish.js';
 import { getUnpublishedPackages } from '../lib/get-unpublished-packages.js';

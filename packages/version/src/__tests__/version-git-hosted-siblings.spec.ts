@@ -2,8 +2,8 @@ import { resolve as pathResolve } from 'node:path';
 
 import { writePackage, type VersionCommandOption } from '@lerna-lite/core';
 import { initFixtureFactory } from '@lerna-test/helpers';
+import yargParser from '@lerna-test/helpers/yargs-parser.js';
 import { describe, expect, test, vi } from 'vitest';
-import yargParser from 'yargs-parser';
 
 import { VersionCommand } from '../version-command.js';
 

@@ -2,8 +2,8 @@ import { collectUpdates, logOutput, type ListCommandOption } from '@lerna-lite/c
 import { commandRunner, initFixtureFactory } from '@lerna-test/helpers';
 import serializeTempdir from '@lerna-test/helpers/serializers/serialize-tempdir.js';
 import serializeWindowsPaths from '@lerna-test/helpers/serializers/serialize-windows-paths.js';
+import yargParser from '@lerna-test/helpers/yargs-parser.js';
 import { beforeAll, describe, expect, it, vi } from 'vitest';
-import yargParser from 'yargs-parser';
 
 import cliListCommands from '../../../cli/src/cli-commands/cli-list-commands.js';
 import { ListCommand } from '../index.js';

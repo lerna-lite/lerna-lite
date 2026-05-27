@@ -15,10 +15,12 @@ minimumReleaseAge: 2880
 # exclude Lerna-Lite itself in order to run E2E tests without failures
 minimumReleaseAgeExclude:
   - '@lerna-lite/*'
+  - 'cli-nano'
 
 # Define a catalog of version ranges.
 catalog:
   ci-info: ^4.4.0
+  cli-nano: ^1.4.0
   dedent: ^1.7.2
   dotenv: ^17.4.2
   has-unicode: ^2.0.1
@@ -37,8 +39,6 @@ catalogs:
     "@types/npmcli__package-json": ^4.0.4
     "@types/pacote": ^11.1.8
     "@types/semver": ^7.7.1
-    "@types/yargs-parser": ^21.0.3
-    yargs-parser: ^22.0.0
 
   # Can be referenced through "catalog:dependencies"
   dependencies:
@@ -47,5 +47,4 @@ catalogs:
     tinyglobby: ^0.2.16
     write-json-file: ^7.0.0
     yaml: ^2.9.0
-    yargs: ^18.0.0
     zeptomatch: ^2.1.0
