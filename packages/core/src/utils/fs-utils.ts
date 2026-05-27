@@ -1,5 +1,5 @@
 // JSON and move utilities
-import { cpSync, existsSync, mkdirSync, readFileSync, renameSync, rmSync, writeFileSync } from 'node:fs';
+import { cpSync, existsSync, mkdirSync, readFileSync, renameSync, rmSync, type WriteFileOptions, writeFileSync } from 'node:fs';
 import { access, cp, mkdir, readFile, rename, rm, writeFile } from 'node:fs/promises';
 import { dirname } from 'node:path';
 
@@ -54,15 +54,15 @@ export function moveSync(src: string, dest: string) {
 }
 
 /** Writes data to a file, creating parent directories if needed (async). */
-export async function outputFile(file: string, data: string | Buffer) {
+export async function outputFile(file: string, data: string | Buffer, options?: BufferEncoding) {
   await mkdir(dirname(file), { recursive: true });
-  await writeFile(file, data);
+  await writeFile(file, data, options);
 }
 
 /** Writes data to a file, creating parent directories if needed (sync). */
-export function outputFileSync(file: string, data: string | Buffer) {
+export function outputFileSync(file: string, data: string | Buffer, options?: WriteFileOptions) {
   mkdirSync(dirname(file), { recursive: true });
-  writeFileSync(file, data);
+  writeFileSync(file, data, options);
 }
 
 /** Writes a JSON object to a file, creating parent directories if needed (async). */
@@ -121,12 +121,48 @@ export async function remove(path: string) {
   await rm(path, { recursive: true, force: true });
 }
 
-/** Writes a JSON object to a file (async). */
-export async function writeJson(file: string, obj: any) {
-  await writeFile(file, JSON.stringify(obj, null, 2));
+/**
+ * Writes a JSON object to a file (async). 
+ * @param file The path to the file to write.
+ * @param obj The JSON object to write.
+ * @param options Options for writing the JSON file. Can include:
+  - `spaces` `<Number> | <String>` Number of spaces to indent; or a string to use for indentation (i.e. pass `'\t'` for tab indentation). See [the docs](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/JSON/stringify#The_space_argument) for more info.
+  - `EOL` `<String>` Set EOL character. Default is `\n`.
+  - `replacer` [JSON replacer](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/JSON/stringify#The_replacer_parameter)
+  - Also accepts [`fs.writeFileSync()` options](https://nodejs.org/api/fs.html#fs_fs_writefilesync_file_data_options)
+ */
+export async function writeJson(
+  file: string,
+  obj: any,
+  options?: {
+    spaces?: number | string;
+    EOL?: string;
+    replacer?: (this: any, key: string, value: any) => any;
+  } & WriteFileOptions
+) {
+  const jsonString = JSON.stringify(obj, options?.replacer, options?.spaces ?? 2);
+  await writeFile(file, jsonString.replace(/\n/g, options?.EOL ?? '\n'), options);
 }
 
-/** Writes a JSON object to a file (sync). */
-export function writeJsonSync(file: string, obj: any) {
-  writeFileSync(file, JSON.stringify(obj, null, 2));
+/**
+ * Writes a JSON object to a file (sync).
+ * @param file The path to the file to write.
+ * @param obj The JSON object to write.
+ * @param options Options for writing the JSON file. Can include:
+  - `spaces` `<Number> | <String>` Number of spaces to indent; or a string to use for indentation (i.e. pass `'\t'` for tab indentation). See [the docs](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/JSON/stringify#The_space_argument) for more info.
+  - `EOL` `<String>` Set EOL character. Default is `\n`.
+  - `replacer` [JSON replacer](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/JSON/stringify#The_replacer_parameter)
+  - Also accepts [`fs.writeFileSync()` options](https://nodejs.org/api/fs.html#fs_fs_writefilesync_file_data_options)
+ */
+export function writeJsonSync(
+  file: string,
+  obj: any,
+  options?: {
+    spaces?: number | string;
+    EOL?: string;
+    replacer?: (this: any, key: string, value: any) => any;
+  } & WriteFileOptions
+) {
+  const jsonString = JSON.stringify(obj, options?.replacer, options?.spaces ?? 2);
+  writeFileSync(file, jsonString.replace(/\n/g, options?.EOL ?? '\n'), options);
 }
