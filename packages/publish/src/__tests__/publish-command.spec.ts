@@ -485,6 +485,26 @@ describe('PublishCommand', () => {
       expect(getOneTimePassword).toHaveBeenCalledTimes(1);
       expect(npmPublish).toHaveBeenCalledTimes(3); // Only 3 calls before aborting
     });
+
+    it('retries publishing a package after OTP expiration with throttle enabled', async () => {
+      const testDir = await initFixture('normal');
+
+      // Simulate OTP expiration on the first publish attempt
+      (npmPublish as Mock).mockImplementationOnce(() => {
+        const error = new Error('OTP expired') as any;
+        error.code = 'EOTP';
+        throw error;
+      });
+
+      // Simulate successful OTP re-request
+      (getOneTimePassword as Mock).mockResolvedValueOnce('123456');
+
+      // Use throttle to ensure q.queue() path is executed on retry
+      await new PublishCommand(createArgv(testDir, '--throttle'));
+
+      expect(getOneTimePassword).toHaveBeenCalledTimes(1);
+      expect(npmPublish).toHaveBeenCalledTimes(5); // 4 initial calls + 1 retry for package-1
+    });
   });
 
   describe('Version Conflict Handling', () => {
