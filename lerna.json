@@ -12,7 +12,7 @@
       "commentIssues": "✅ This issue has been resolved and included in version %v 📦<br>🔗 The release notes are available at: [GitHub Release](%u) 🚀<br><br>_commented by latest Lerna-Lite release workflow_ 🤖",
       "commentPullRequests": "🎉 This pull request is included in version %v 📦<br>🔗  The release notes are available at: [GitHub Release](%u) 🚀<br><br>_commented by latest Lerna-Lite release workflow_ 🤖",
       "message": "chore(release): publish new version %s",
-      "releaseFooterMessage": "<br>Released by [Lerna-Lite](https://github.com/lerna-lite/lerna-lite) 🤖 Is the project useful? Give our repo a star ⭐"
+      "releaseFooterMessage": "<br>Released by [Lerna-Lite](https://github.com/lerna-lite/lerna-lite) 🤖 Is the project useful? Give it a star ⭐"
     },
     "publish": {
       "cleanupTempFiles": true,
