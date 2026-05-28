@@ -26,7 +26,9 @@ class ConcurrentQueue {
               this.pending.shift()!();
             } else if (this.running === 0) {
               const resolvers = this.idleResolvers.splice(0);
-              for (const r of resolvers) r();
+              for (const r of resolvers) {
+                r();
+              }
             }
           });
       };

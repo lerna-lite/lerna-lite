@@ -53,6 +53,7 @@
     // Additional rules
     "no-async-promise-executor": "off",
     "oxc/erasing-op": "off",
+    "curly": ["error", "all"],
     "object-shorthand": "error",
 
     // type aware rules
@@ -60,5 +61,13 @@
     "typescript/no-misused-spread": "off",
     "typescript/prefer-optional-chain": "error",
     "typescript/require-array-sort-compare": "off"
-  }
+  },
+  "overrides": [
+    {
+      "files": ["**/*.spec.*", "**/__tests__/**", "**/__mocks__/**", "**/__fixtures__/**"],
+      "rules": {
+        "curly": "off"
+      }
+    }
+  ]
 }
