@@ -491,3 +491,26 @@ bar='single quoted'
     });
   });
 });
+
+describe('ConfigChain.parse (INI)', () => {
+  it('parses boolean, null, undefined and numeric values correctly', () => {
+    const cc = new ConfigChain();
+    const ini = `
+a=true
+b=false
+c=null
+d=undefined
+e=123
+f=1.23
+`;
+
+    const parsed = cc.parse(ini, 'test.ini');
+
+    expect(parsed.a).toBe(true);
+    expect(parsed.b).toBe(false);
+    expect(parsed.c).toBeNull();
+    expect(parsed.d).toBeUndefined();
+    expect(parsed.e).toBe(123);
+    expect(parsed.f).toBeCloseTo(1.23);
+  });
+});

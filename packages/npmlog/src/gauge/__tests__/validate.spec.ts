@@ -5,69 +5,69 @@ import validate from '../validate.js';
 describe('validate', () => {
   describe('basic type checks', () => {
     it('accepts a string with S schema', () => {
-      expect(() => validate('S', ['hello'])).not.toThrow();
+      expect(() => validate('S', ['hello'])).not.toThrow('');
     });
 
     it('accepts a number with N schema', () => {
-      expect(() => validate('N', [42])).not.toThrow();
+      expect(() => validate('N', [42])).not.toThrow('');
     });
 
     it('accepts a boolean with B schema', () => {
-      expect(() => validate('B', [true])).not.toThrow();
-      expect(() => validate('B', [false])).not.toThrow();
+      expect(() => validate('B', [true])).not.toThrow('');
+      expect(() => validate('B', [false])).not.toThrow('');
     });
 
     it('accepts a function with F schema', () => {
-      expect(() => validate('F', [() => {}])).not.toThrow();
+      expect(() => validate('F', [() => {}])).not.toThrow('');
     });
 
     it('accepts an object with O schema', () => {
-      expect(() => validate('O', [{ a: 1 }])).not.toThrow();
+      expect(() => validate('O', [{ a: 1 }])).not.toThrow('');
     });
 
     it('accepts an array with A schema', () => {
-      expect(() => validate('A', [[1, 2, 3]])).not.toThrow();
+      expect(() => validate('A', [[1, 2, 3]])).not.toThrow('');
     });
 
     it('accepts an error with E schema', () => {
-      expect(() => validate('E', [new Error('test')])).not.toThrow();
+      expect(() => validate('E', [new Error('test')])).not.toThrow('');
     });
 
     it('accepts null with Z schema', () => {
-      expect(() => validate('Z', [null])).not.toThrow();
+      expect(() => validate('Z', [null])).not.toThrow('');
     });
 
     it('accepts undefined with Z schema', () => {
-      expect(() => validate('Z', [undefined])).not.toThrow();
+      expect(() => validate('Z', [undefined])).not.toThrow('');
     });
 
     it('accepts anything with * schema', () => {
-      expect(() => validate('*', ['hello'])).not.toThrow();
-      expect(() => validate('*', [42])).not.toThrow();
-      expect(() => validate('*', [null])).not.toThrow();
-      expect(() => validate('*', [undefined])).not.toThrow();
-      expect(() => validate('*', [{}])).not.toThrow();
+      expect(() => validate('*', ['hello'])).not.toThrow('');
+      expect(() => validate('*', [42])).not.toThrow('');
+      expect(() => validate('*', [null])).not.toThrow('');
+      expect(() => validate('*', [undefined])).not.toThrow('');
+      expect(() => validate('*', [{}])).not.toThrow('');
     });
   });
 
   describe('multi-argument schemas', () => {
     it('validates OAN (object, array, number)', () => {
-      expect(() => validate('OAN', [{}, [1], 5])).not.toThrow();
+      expect(() => validate('OAN', [{}, [1], 5])).not.toThrow('');
     });
 
     it('validates ONN (object, number, number)', () => {
-      expect(() => validate('ONN', [{}, 1, 2])).not.toThrow();
+      expect(() => validate('ONN', [{}, 1, 2])).not.toThrow('');
     });
 
     it('validates OON (object, object, number)', () => {
-      expect(() => validate('OON', [{}, {}, 3])).not.toThrow();
+      expect(() => validate('OON', [{}, {}, 3])).not.toThrow('');
     });
   });
 
   describe('pipe-separated multi-schema', () => {
     it('accepts either schema separated by pipe', () => {
-      expect(() => validate('SO|N', ['hello', {}])).not.toThrow();
-      expect(() => validate('SO|N', [42])).not.toThrow();
+      expect(() => validate('SO|N', ['hello', {}])).not.toThrow('');
+      expect(() => validate('SO|N', [42])).not.toThrow('');
     });
 
     it('rejects values matching neither schema', () => {
@@ -77,27 +77,27 @@ describe('validate', () => {
 
   describe('error type expansion', () => {
     it('accepts Error with E schema', () => {
-      expect(() => validate('SE', ['test', new Error()])).not.toThrow();
+      expect(() => validate('SE', ['test', new Error()])).not.toThrow('');
     });
 
     it('accepts null in place of Error (Z expansion)', () => {
-      expect(() => validate('SE', ['test', null])).not.toThrow();
+      expect(() => validate('SE', ['test', null])).not.toThrow('');
     });
 
     it('allows E schema with zero args when schema length is 1', () => {
-      expect(() => validate('E', [])).not.toThrow();
+      expect(() => validate('E', [])).not.toThrow('');
     });
 
     it('allows truncated form (just E) for longer schemas', () => {
-      expect(() => validate('SE', ['test', new Error()])).not.toThrow();
-      expect(() => validate('SE', ['test', null])).not.toThrow();
+      expect(() => validate('SE', ['test', new Error()])).not.toThrow('');
+      expect(() => validate('SE', ['test', null])).not.toThrow('');
     });
   });
 
   describe('isArguments detection', () => {
     it('accepts an arguments-like object with A schema', () => {
       const argsLike = { 0: 'a', 1: 'b', length: 2, callee: () => {} };
-      expect(() => validate('A', [argsLike])).not.toThrow();
+      expect(() => validate('A', [argsLike])).not.toThrow('');
     });
 
     it('does not treat a regular object as arguments', () => {
@@ -128,6 +128,16 @@ describe('validate', () => {
       }
     });
 
+    it('throws EWRONGARGCOUNT when called with missing function arguments', () => {
+      // calling validate with only one function argument should trigger the early argument-length check
+      expect(() => (validate as any)('S')).toThrow('');
+      try {
+        (validate as any)('S');
+      } catch (err: any) {
+        expect(err.code).toBe('EWRONGARGCOUNT');
+      }
+    });
+
     it('throws EUNKNOWNTYPE for unknown type codes', () => {
       expect(() => validate('X', ['hello'])).toThrow('Unknown type X in argument #1');
       try {
@@ -155,6 +165,35 @@ describe('validate', () => {
       } catch (err: any) {
         expect(err.code).toBe('EMISSINGARG');
         expect(err.message).toMatch(/Missing required argument #1/);
+      }
+    });
+
+    it('throws EMISSINGARG when args parameter is missing (undefined)', () => {
+      // call with explicit undefined for args to exercise the second missing-arg check
+      expect(() => (validate as any)('S', undefined)).toThrow('Missing required argument #2');
+      try {
+        (validate as any)('S', undefined);
+      } catch (err: any) {
+        expect(err.code).toBe('EMISSINGARG');
+        expect(err.message).toMatch(/Missing required argument #2/);
+      }
+    });
+
+    it('throws EINVALIDTYPE when rawSchemas is not a string', () => {
+      expect(() => (validate as any)(42, ['hello'])).toThrow('');
+      try {
+        (validate as any)(42, ['hello']);
+      } catch (err: any) {
+        expect(err.code).toBe('EINVALIDTYPE');
+      }
+    });
+
+    it('throws EINVALIDTYPE when args is not an array', () => {
+      expect(() => (validate as any)('S', {})).toThrow('');
+      try {
+        (validate as any)('S', {});
+      } catch (err: any) {
+        expect(err.code).toBe('EINVALIDTYPE');
       }
     });
 
