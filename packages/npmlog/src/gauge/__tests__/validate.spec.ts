@@ -128,6 +128,16 @@ describe('validate', () => {
       }
     });
 
+    it('throws EWRONGARGCOUNT when called with missing function arguments', () => {
+      // calling validate with only one function argument should trigger the early argument-length check
+      expect(() => (validate as any)('S')).toThrow();
+      try {
+        (validate as any)('S');
+      } catch (err: any) {
+        expect(err.code).toBe('EWRONGARGCOUNT');
+      }
+    });
+
     it('throws EUNKNOWNTYPE for unknown type codes', () => {
       expect(() => validate('X', ['hello'])).toThrow('Unknown type X in argument #1');
       try {
@@ -155,6 +165,35 @@ describe('validate', () => {
       } catch (err: any) {
         expect(err.code).toBe('EMISSINGARG');
         expect(err.message).toMatch(/Missing required argument #1/);
+      }
+    });
+
+    it('throws EMISSINGARG when args parameter is missing (undefined)', () => {
+      // call with explicit undefined for args to exercise the second missing-arg check
+      expect(() => (validate as any)('S', undefined)).toThrow('Missing required argument #2');
+      try {
+        (validate as any)('S', undefined);
+      } catch (err: any) {
+        expect(err.code).toBe('EMISSINGARG');
+        expect(err.message).toMatch(/Missing required argument #2/);
+      }
+    });
+
+    it('throws EINVALIDTYPE when rawSchemas is not a string', () => {
+      expect(() => (validate as any)(42, ['hello'])).toThrow();
+      try {
+        (validate as any)(42, ['hello']);
+      } catch (err: any) {
+        expect(err.code).toBe('EINVALIDTYPE');
+      }
+    });
+
+    it('throws EINVALIDTYPE when args is not an array', () => {
+      expect(() => (validate as any)('S', {})).toThrow();
+      try {
+        (validate as any)('S', {});
+      } catch (err: any) {
+        expect(err.code).toBe('EINVALIDTYPE');
       }
     });
 

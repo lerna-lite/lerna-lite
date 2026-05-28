@@ -1,5 +1,5 @@
 import { stripAnsi } from '@lerna-test/helpers';
-import { describe, expect, test } from 'vitest';
+import { describe, expect, it, test } from 'vitest';
 
 import { columnify } from '../../index.js';
 
@@ -85,5 +85,12 @@ long 10
 界  1
 x  10
 `);
+  });
+
+  describe('columnify', () => {
+    it('returns empty string when rows are empty', () => {
+      expect(columnify([])).toBe('');
+      expect(columnify(undefined as any)).toBe('');
+    });
   });
 });
