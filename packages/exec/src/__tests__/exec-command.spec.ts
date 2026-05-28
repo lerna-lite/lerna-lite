@@ -1,9 +1,9 @@
-import { basename, join } from 'node:path';
+import { glob } from 'node:fs/promises';
+import { basename, join, resolve as pathResolve } from 'node:path';
 
 import { logOutput, spawn, spawnStreaming, type ExecCommandOption, pathExists, readJson } from '@lerna-lite/core';
 import { commandRunner, initFixtureFactory, normalizeRelativeDir } from '@lerna-test/helpers';
 import { loggingOutput } from '@lerna-test/helpers/logging-output.js';
-import { glob } from 'tinyglobby';
 import { afterEach, beforeAll, describe, expect, it, vi, type Mock } from 'vitest';
 import yargParser from 'yargs-parser';
 
@@ -260,7 +260,12 @@ describe('ExecCommand', () => {
 
       await lernaExec(cwd)('--profile', '--', 'ls');
 
-      const [profileLocation] = await glob('Lerna-Profile-*.json', { cwd, absolute: true });
+      // Convert async iterable to array
+      const files: string[] = [];
+      for await (const file of glob('Lerna-Profile-*.json', { cwd })) {
+        files.push(file);
+      }
+      const profileLocation = pathResolve(cwd, files[0]);
       const json = await readJson(profileLocation);
 
       expect(json).toMatchObject([
@@ -283,7 +288,12 @@ describe('ExecCommand', () => {
 
       await lernaExec(cwd)('--profile', '--profile-location', 'foo/bar', '--', 'ls');
 
-      const [profileLocation] = await glob('foo/bar/Lerna-Profile-*.json', { cwd, absolute: true });
+      // FIX: Added 'foo/bar/' directory mapping to match the custom output location
+      const files: string[] = [];
+      for await (const file of glob('foo/bar/Lerna-Profile-*.json', { cwd })) {
+        files.push(file);
+      }
+      const profileLocation = pathResolve(cwd, files[0]);
       const isExists = await pathExists(profileLocation);
 
       expect(isExists).toBe(true);

@@ -1,6 +1,7 @@
 import { basename, join } from 'node:path';
 
 import type { WatchCommandOption } from '@lerna-lite/core';
+import * as core from '@lerna-lite/core';
 import { spawn, spawnStreaming } from '@lerna-lite/core';
 import { commandRunner, initFixtureFactory, normalizeRelativeDir } from '@lerna-test/helpers';
 import { watch as chokidarWatch } from 'chokidar';
@@ -206,6 +207,20 @@ describe('Watch Command', () => {
       expect(command.watchedFiles.has('packages/package-2/file-2.ts')).toBeTruthy();
       expect(command.watchedFiles.has('packages/package-1/package.json')).toBeFalsy();
       expect(command.watchedFiles.has('packages/package-2/package.json')).toBeFalsy();
+    });
+
+    it('should handle no packages to watch (empty package list)', async () => {
+      // construct command directly and simulate no filtered packages
+      const command = new WatchCommand(createArgv(testDir, '--debounce', '0', '--', 'echo') as WatchCommandOption);
+      (command as any).project = { rootPath: testDir };
+      // ensure getFilteredPackages returns an empty array so initialize() doesn't override our value
+      vi.spyOn(core as any, 'getFilteredPackages').mockResolvedValueOnce([]);
+      (command as any)._filteredPackages = [];
+
+      await command;
+
+      expect(chokidarWatch).toHaveBeenCalledWith([], expect.objectContaining({ cwd: testDir }));
+      expect(command.watchedFiles.size).toBe(0);
     });
 
     it('should be able to take --await-write-finish options as a boolean', async () => {

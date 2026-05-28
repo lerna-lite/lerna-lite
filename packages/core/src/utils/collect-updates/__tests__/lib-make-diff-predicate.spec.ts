@@ -6,15 +6,12 @@ import { diffWorkspaceCatalog, makeDiffPredicate } from '../lib/make-diff-predic
 
 vi.mock('../../../child-process');
 
-const { globMock } = vi.hoisted(() => ({ globMock: vi.fn() }));
-vi.mock('tinyglobby', async () => ({
-  ...(await vi.importActual('tinyglobby')),
-  globSync: globMock,
-}));
+const { globSyncMock } = vi.hoisted(() => ({ globSyncMock: vi.fn() }));
 const { existsFileMock } = vi.hoisted(() => ({ existsFileMock: vi.fn() }));
 const { readFileMock } = vi.hoisted(() => ({ readFileMock: vi.fn() }));
 vi.mock('node:fs', async () => ({
   ...(await vi.importActual('node:fs')),
+  globSync: globSyncMock,
   existsSync: existsFileMock,
   readFileSync: readFileMock,
 }));
@@ -24,6 +21,7 @@ function setup(changes: string | string[]) {
 }
 
 beforeEach(() => {
+  globSyncMock.mockReset();
   readFileMock.mockReset();
   (childProcesses.execSync as Mock).mockReset();
 });
@@ -102,7 +100,7 @@ test('ignore changes (match base)', () => {
 });
 
 test('exclude subpackages when --independent-subpackages option is enabled and nested package.json is found', () => {
-  globMock.mockReturnValueOnce(['packages/pkg-2/and-another-thing/package.json']);
+  globSyncMock.mockReturnValueOnce(['packages/pkg-2/and-another-thing/package.json']);
 
   setup(['packages/pkg-2/package.json', 'packages/pkg-2/do-a-thing/index.js', 'packages/pkg-2/and-another-thing/package.json']);
 
@@ -126,7 +124,7 @@ test('exclude subpackages when --independent-subpackages option is enabled and n
 });
 
 test('not exclude any subpackages when --independent-subpackages option is enabled but no nested package.json are found', () => {
-  globMock.mockReturnValueOnce([]);
+  globSyncMock.mockReturnValueOnce([]);
 
   setup(['packages/pkg-2/package.json', 'packages/pkg-2/do-a-thing/index.js', 'packages/pkg-2/and-another-thing/method.js']);
 

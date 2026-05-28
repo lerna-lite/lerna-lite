@@ -40,7 +40,6 @@
   "devDependencies": {
     "@types/yargs-parser": "catalog:devDependencies",
     "perf_hooks": "^0.0.1",
-    "tinyglobby": "catalog:dependencies",
     "yargs": "catalog:dependencies",
     "yargs-parser": "catalog:devDependencies"
   },

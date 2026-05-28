@@ -13,7 +13,7 @@ vi.mock('../lib/make-diff-predicate');
 
 const { globMock } = vi.hoisted(() => ({ globMock: vi.fn() }));
 vi.mock('glob', async () => ({
-  ...(await vi.importActual('tinyglobby')),
+  ...(await vi.importActual('node:fs')),
   globSync: globMock,
 }));
 

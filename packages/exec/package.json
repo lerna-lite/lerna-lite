@@ -39,7 +39,6 @@
   },
   "devDependencies": {
     "@types/yargs-parser": "catalog:devDependencies",
-    "tinyglobby": "catalog:dependencies",
     "yargs": "catalog:dependencies",
     "yargs-parser": "catalog:devDependencies"
   },

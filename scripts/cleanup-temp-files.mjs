@@ -1,22 +1,21 @@
-import { realpathSync, rmSync } from 'node:fs';
+import { realpathSync, rmSync, statSync, globSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import { join as pathJoin } from 'node:path';
-
-import { glob } from 'tinyglobby';
 
 export function removeSync(path) {
   rmSync(path, { recursive: true, force: true });
 }
 
 const tempDirPath = realpathSync(tmpdir());
-const normalizedLernaPath = pathJoin(tempDirPath, 'lerna-*').replace(/\\/g, '/');
-console.log('cleanup Lerna temp folders from', normalizedLernaPath);
-glob(normalizedLernaPath, { absolute: true, cwd: tempDirPath, onlyDirectories: true })
-  .then((deleteFolders) => {
-    // silently delete all files/folders that startsWith "lerna-"
-    console.log(`Found ${deleteFolders.length} temp folders to cleanup.`);
-    deleteFolders.forEach((folder) => removeSync(folder));
-  })
-  .catch((error) => {
-    console.error('Error occurred while cleaning up temp folders:', error);
-  });
+console.log('cleanup Lerna temp folders from', pathJoin(tempDirPath, 'lerna-*'));
+const deleteFolders = globSync('lerna-*', { cwd: tempDirPath }).map((f) => pathJoin(tempDirPath, f));
+const directoryFolders = deleteFolders.filter((folder) => {
+  try {
+    return statSync(folder).isDirectory();
+  } catch {
+    return false;
+  }
+});
+
+console.log(`Found ${directoryFolders.length} temp folders to cleanup.`);
+directoryFolders.forEach((folder) => removeSync(folder));

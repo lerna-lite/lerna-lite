@@ -47,8 +47,7 @@
     "pacote": "^21.5.0",
     "semver": "catalog:",
     "ssri": "^13.0.1",
-    "tar": "^7.5.15",
-    "tinyglobby": "catalog:dependencies"
+    "tar": "^7.5.15"
   },
   "devDependencies": {
     "@types/npmcli__package-json": "catalog:devDependencies",
