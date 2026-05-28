@@ -1,8 +1,8 @@
 import cp from 'node:child_process';
+import { readFile } from 'node:fs/promises';
 import { EOL } from 'node:os';
 import { join, resolve as pathResolve } from 'node:path';
 
-import { loadJsonFile } from 'load-json-file';
 import { x } from 'tinyexec';
 import { writeJsonFile } from 'write-json-file';
 
@@ -75,7 +75,7 @@ export function showCommit(cwd: string, ...args: any[]) {
 
 export async function commitChangeToPackage(cwd: string, packageName: string, commitMsg: string, data: any) {
   const packageJSONPath = join(cwd, 'packages', packageName, 'package.json');
-  const pkg = await loadJsonFile(packageJSONPath);
+  const pkg = JSON.parse(await readFile(packageJSONPath, 'utf8'));
   await writeJsonFile(packageJSONPath, Object.assign({}, pkg, data));
   await gitAdd(cwd, packageJSONPath);
   return await gitCommit(cwd, commitMsg);

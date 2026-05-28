@@ -1,7 +1,6 @@
 import { globSync, lstatSync } from 'node:fs';
+import { readFile } from 'node:fs/promises';
 import { resolve as pathResolve } from 'node:path';
-
-import { loadJsonFile } from 'load-json-file';
 
 export function loadManifests(cwd) {
   const patterns = [
@@ -28,5 +27,5 @@ export function loadManifests(cwd) {
     }
   });
 
-  return Promise.all(files.sort().map((fp) => loadJsonFile(pathResolve(cwd, fp))));
+  return Promise.all(files.sort().map((fp) => readFile(pathResolve(cwd, fp), 'utf8').then(JSON.parse)));
 }

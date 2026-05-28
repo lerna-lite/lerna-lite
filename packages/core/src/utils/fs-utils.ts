@@ -93,16 +93,16 @@ export function pathExistsSync(path: string) {
 }
 
 /** Reads and parses a JSON file (async). */
-export async function readJson(file: string) {
+export async function readJson<T = any>(file: string): Promise<T> {
   const data = await readFile(file, 'utf8');
-  return JSON.parse(data);
+  return JSON.parse(data) as T;
 }
 
 /** Reads and parses a JSON file (sync). Returns undefined if not found and options.throws is false. */
-export function readJsonSync(file: string, options?: { throws?: boolean }) {
+export function readJsonSync<T = any>(file: string, options?: { throws?: boolean }): T | undefined {
   try {
     const data = readFileSync(file, 'utf8');
-    return JSON.parse(data);
+    return JSON.parse(data) as T;
   } catch (err) {
     if (options?.throws === false) {
       return undefined;

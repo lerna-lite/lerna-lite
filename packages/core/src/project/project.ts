@@ -5,12 +5,12 @@ import { log } from '@lerna-lite/npmlog';
 import dedent from 'dedent';
 import JSON5 from 'json5';
 import { lilconfigSync } from 'lilconfig';
-import { loadJsonFile, loadJsonFileSync } from 'load-json-file';
 import { writeJsonFile } from 'write-json-file';
 
 import { globParent } from '../glob-utils/glob-parent.js';
 import type { ProjectConfig, RawManifest } from '../models/interfaces.js';
 import { Package } from '../package.js';
+import { readJson, readJsonSync } from '../utils/fs-utils.js';
 import { looselyJsonParse } from '../utils/object-utils.js';
 import { pMap } from '../utils/p-map.js';
 import { ValidationError } from '../validation-error.js';
@@ -130,7 +130,7 @@ export class Project {
 
     try {
       const manifestLocation = join(this.rootPath, 'package.json');
-      const packageJson = loadJsonFileSync(manifestLocation) as RawManifest;
+      const packageJson = readJsonSync(manifestLocation) as RawManifest;
 
       if (!packageJson.name) {
         // npm-lifecycle chokes if this is missing, so default like npm init does
@@ -199,7 +199,7 @@ export class Project {
    */
   getPackages(): Promise<Package[]> {
     const mapper = (packageConfigPath: string) =>
-      loadJsonFile(packageConfigPath)?.then(
+      readJson(packageConfigPath)?.then(
         (packageJson: any) => new Package(packageJson, dirname(packageConfigPath), this.rootPath)
       );
 
@@ -211,7 +211,7 @@ export class Project {
    */
   getPackagesSync() {
     return makeSyncFileFinder(this.rootPath, this.packageConfigs)('package.json', (packageConfigPath: string) => {
-      return new Package(loadJsonFileSync(packageConfigPath), dirname(packageConfigPath), this.rootPath);
+      return new Package(readJsonSync<RawManifest>(packageConfigPath)!, dirname(packageConfigPath), this.rootPath);
     }) as string[];
   }
 

@@ -42,7 +42,6 @@
     "dedent": "catalog:",
     "dotenv": "catalog:",
     "import-local": "^3.2.0",
-    "load-json-file": "catalog:dependencies",
     "yargs": "catalog:dependencies"
   },
   "devDependencies": {

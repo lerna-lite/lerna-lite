@@ -1,12 +1,11 @@
+import { readFileSync } from 'node:fs';
 import { join } from 'node:path';
-
-import { loadJsonFileSync } from 'load-json-file';
 
 import { normalizeNewline } from '../index.js';
 import serializeTempdir from './serialize-tempdir.js';
 import serializeWindowsPaths from './serialize-windows-paths.js';
 
-const pkgJson = loadJsonFileSync(join(import.meta.dirname, '..', '..', 'core', 'lerna', 'package.json')) as any;
+const pkgJson = JSON.parse(readFileSync(join(import.meta.dirname, '..', '..', 'core', 'lerna', 'package.json'), 'utf8')) as any;
 const LERNA_VERSION = pkgJson.version as string;
 
 const VERSION_REGEX = new RegExp(`^((?:.*?notice cli )|\\^?)v?${LERNA_VERSION}`, 'g');
