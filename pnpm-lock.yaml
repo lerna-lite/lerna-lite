@@ -554,9 +554,6 @@ importers:
       git-url-parse:
         specifier: ^16.1.0
         version: 16.1.0
-      new-github-release-url:
-        specifier: ^2.0.0
-        version: 2.0.0
       npm-package-arg:
         specifier: 'catalog:'
         version: 13.0.2
@@ -2142,10 +2139,6 @@ packages:
   neo-async@2.6.2:
     resolution: {integrity: sha512-Yd3UES5mWCSqR+qNT93S3UoYUkqAZ9lLg8a7g9rimsWmYGK8cVToA4/sF3RrshdyV3sAGMXVUmpMYOw+dLpOuw==}
 
-  new-github-release-url@2.0.0:
-    resolution: {integrity: sha512-NHDDGYudnvRutt/VhKFlX26IotXe1w0cmkDm6JGquh5bz/bDTw0LufSmH/GxTjEdpHEO+bVKFTwdrcGa/9XlKQ==}
-    engines: {node: ^12.20.0 || ^14.13.1 || >=16.0.0}
-
   node-gyp@12.1.0:
     resolution: {integrity: sha512-W+RYA8jBnhSr2vrTtlPYPc1K+CSjGpVDRZxcqJcERZ8ND3A1ThWPHRwctTx3qC3oW99jt726jhdz3Y6ky87J4g==}
     engines: {node: ^20.17.0 || >=22.9.0}
@@ -2494,10 +2487,6 @@ packages:
   tuf-js@4.0.0:
     resolution: {integrity: sha512-Lq7ieeGvXDXwpoSmOSgLWVdsGGV9J4a77oDTAPe/Ltrqnnm/ETaRlBAQTH5JatEh8KXuE6sddf9qAv1Q2282Hg==}
     engines: {node: ^20.17.0 || >=22.9.0}
-
-  type-fest@2.19.0:
-    resolution: {integrity: sha512-RAH822pAdBgcNMAfWnCBU3CFZcfZ/i1eZjwFU/dsLKumyuuP3niueg2UAukXYF0E2AAoc82ZSSf9J0WQBinzHA==}
-    engines: {node: '>=12.20'}
 
   uglify-js@3.19.3:
     resolution: {integrity: sha512-v3Xu+yuwBXisp6QYTcH4UbH+xYJXqnq2m/LtQVWKWzYc1iehYnLixoQDN9FH6/j9/oybfd6W9Ghwkl8+UMKTKQ==}
@@ -4042,10 +4031,6 @@ snapshots:
 
   neo-async@2.6.2: {}
 
-  new-github-release-url@2.0.0:
-    dependencies:
-      type-fest: 2.19.0
-
   node-gyp@12.1.0:
     dependencies:
       env-paths: 2.2.1
@@ -4460,8 +4445,6 @@ snapshots:
       make-fetch-happen: 15.0.2
     transitivePeerDependencies:
       - supports-color
-
-  type-fest@2.19.0: {}
 
   uglify-js@3.19.3:
     optional: true

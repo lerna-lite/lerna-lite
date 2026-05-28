@@ -2,12 +2,12 @@ import type { RemoteClientType } from '@lerna-lite/core';
 import { colorize, ValidationError } from '@lerna-lite/core';
 import { log } from '@lerna-lite/npmlog';
 import type parseGitUrl from 'git-url-parse';
-import newGithubReleaseUrl from 'new-github-release-url';
 import semver from 'semver';
 
 import { createGitHubClient, parseGitRepo } from '../git-clients/github-client.js';
 import { createGitLabClient } from '../git-clients/gitlab-client.js';
 import type { GitClientReleaseOption, OctokitClientOutput, ReleaseCommandProps, ReleaseOptions } from '../interfaces.js';
+import newGithubReleaseUrl from './new-github-release-url.js';
 
 export async function createReleaseClient(type: 'github' | 'gitlab'): Promise<OctokitClientOutput> {
   switch (type) {
