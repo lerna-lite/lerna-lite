@@ -6,7 +6,9 @@ import stringWidth from 'fast-string-width';
 
 export function alignLeft(str: string, width: number): string {
   var trimmed = str.trimEnd();
-  if (trimmed.length === 0 && str.length >= width) return str;
+  if (trimmed.length === 0 && str.length >= width) {
+    return str;
+  }
   var strWidth = stringWidth(trimmed);
 
   if (strWidth < width) {
@@ -18,7 +20,9 @@ export function alignLeft(str: string, width: number): string {
 
 export function alignRight(str: string, width: number): string {
   var trimmed = str.trimStart();
-  if (trimmed.length === 0 && str.length >= width) return str;
+  if (trimmed.length === 0 && str.length >= width) {
+    return str;
+  }
   var strWidth = stringWidth(trimmed);
 
   if (strWidth < width) {
@@ -30,7 +34,9 @@ export function alignRight(str: string, width: number): string {
 
 export function alignCenter(str: string, width: number): string {
   var trimmed = str.trim();
-  if (trimmed.length === 0 && str.length >= width) return str;
+  if (trimmed.length === 0 && str.length >= width) {
+    return str;
+  }
   var strWidth = stringWidth(trimmed);
 
   if (strWidth < width) {

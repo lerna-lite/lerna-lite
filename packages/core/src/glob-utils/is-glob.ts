@@ -9,8 +9,12 @@ import { isExtglob } from './is-extglob.js';
 const strictRegex = /\\(.)|(^!|[*?]|[\].+)]\?|\[[^\\\]]+\]|\{[^\\}]+\}|\(\?[:!=][^\\)]+\))/;
 
 export function isGlob(str: string): boolean {
-  if (str === '') return false;
-  if (isExtglob(str)) return true;
+  if (str === '') {
+    return false;
+  }
+  if (isExtglob(str)) {
+    return true;
+  }
   const match = strictRegex.exec(str);
   if (match) {
     return !match[1];

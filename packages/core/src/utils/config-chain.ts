@@ -25,12 +25,19 @@ function parseIni(content: string): Record<string, any> {
       }
 
       // Try to parse as JSON types
-      if (value === 'true') value = true;
-      else if (value === 'false') value = false;
-      else if (value === 'null') value = null;
-      else if (value === 'undefined') value = undefined;
-      else if (/^\d+$/.test(value)) value = parseInt(value, 10);
-      else if (/^\d+\.\d+$/.test(value)) value = parseFloat(value);
+      if (value === 'true') {
+        value = true;
+      } else if (value === 'false') {
+        value = false;
+      } else if (value === 'null') {
+        value = null;
+      } else if (value === 'undefined') {
+        value = undefined;
+      } else if (/^\d+$/.test(value)) {
+        value = parseInt(value, 10);
+      } else if (/^\d+\.\d+$/.test(value)) {
+        value = parseFloat(value);
+      }
 
       result[key] = value;
     }

@@ -27,7 +27,9 @@ export class RateLimiter {
   }
 
   private async processQueue() {
-    if (this.isProcessing) return;
+    if (this.isProcessing) {
+      return;
+    }
     this.isProcessing = true;
 
     try {

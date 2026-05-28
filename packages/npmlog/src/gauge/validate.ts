@@ -38,29 +38,47 @@ const types: TypeMap = {
 
 function addSchema(schema: string, arity: { [key: number]: string[] }): void {
   const group = (arity[schema.length] = arity[schema.length] || []);
-  if (group.indexOf(schema) === -1) group.push(schema);
+  if (group.indexOf(schema) === -1) {
+    group.push(schema);
+  }
 }
 
 function validate(rawSchemas: string, args: any[] | IArguments): void {
-  if (arguments.length !== 2) throw wrongNumberOfArgs(['SA'], arguments.length);
-  if (!rawSchemas) throw missingRequiredArg(0);
-  if (!args) throw missingRequiredArg(1);
-  if (!types.S.check(rawSchemas)) throw invalidType(0, ['string'], rawSchemas);
-  if (!types.A.check(args)) throw invalidType(1, ['array'], args);
+  if (arguments.length !== 2) {
+    throw wrongNumberOfArgs(['SA'], arguments.length);
+  }
+  if (!rawSchemas) {
+    throw missingRequiredArg(0);
+  }
+  if (!args) {
+    throw missingRequiredArg(1);
+  }
+  if (!types.S.check(rawSchemas)) {
+    throw invalidType(0, ['string'], rawSchemas);
+  }
+  if (!types.A.check(args)) {
+    throw invalidType(1, ['array'], args);
+  }
   const schemas = rawSchemas.split('|');
   const arity: { [key: number]: string[] } = {};
 
   schemas.forEach((schema) => {
     for (let ii = 0; ii < schema.length; ++ii) {
       const type = schema[ii];
-      if (!types[type]) throw unknownType(ii, type);
+      if (!types[type]) {
+        throw unknownType(ii, type);
+      }
     }
-    if (/E.*E/.test(schema)) throw moreThanOneError(schema);
+    if (/E.*E/.test(schema)) {
+      throw moreThanOneError(schema);
+    }
     addSchema(schema, arity);
     if (/E/.test(schema)) {
       addSchema(schema.replace(/E.*$/, 'E'), arity);
       addSchema(schema.replace(/E/, 'Z'), arity);
-      if (schema.length === 1) addSchema('', arity);
+      if (schema.length === 1) {
+        addSchema('', arity);
+      }
     }
   });
   let matching = arity[args.length];
@@ -92,7 +110,9 @@ function unknownType(num: number, type: string): ValidateError {
 function invalidType(num: number, expectedTypes: (string | number)[], value: any): ValidateError {
   let valueType: string | undefined;
   Object.keys(types).forEach((typeCode) => {
-    if (types[typeCode].check(value)) valueType = types[typeCode].label;
+    if (types[typeCode].check(value)) {
+      valueType = types[typeCode].label;
+    }
   });
   return newException(
     'EINVALIDTYPE',
@@ -120,7 +140,9 @@ function moreThanOneError(schema: string): ValidateError {
 function newException(code: string, msg: string): ValidateError {
   const err = new Error(msg) as ValidateError;
   err.code = code;
-  if (Error.captureStackTrace) Error.captureStackTrace(err, validate);
+  if (Error.captureStackTrace) {
+    Error.captureStackTrace(err, validate);
+  }
   return err;
 }
 

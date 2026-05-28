@@ -37,7 +37,9 @@ export function columnify(data: any, options: any = {}): string {
     return obj;
   });
 
-  if (!rows.length) return '';
+  if (!rows.length) {
+    return '';
+  }
 
   // determine column order
   const columns: string[] = opts.columns || opts.include || Object.keys(rows[0]);
@@ -47,7 +49,9 @@ export function columnify(data: any, options: any = {}): string {
 
   for (const col of columns) {
     let w = 0;
-    if (opts.showHeaders) w = Math.max(w, String(col).length);
+    if (opts.showHeaders) {
+      w = Math.max(w, String(col).length);
+    }
     for (const row of rows) {
       const cell = row[col] ?? '';
       const raw = String(cell);
