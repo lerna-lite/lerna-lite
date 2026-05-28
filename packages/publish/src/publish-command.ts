@@ -759,6 +759,9 @@ export class PublishCommand extends Command<PublishCommandOption> {
 
   removePackageProperties() {
     const stripPackageKeys = this.options.stripPackageKeys;
+    if (Array.isArray(stripPackageKeys)) {
+      this.logger.info('pack', `Stripping some fields from "package.json" before publish: ["${stripPackageKeys.join('", "')}"]`);
+    }
 
     return pMap(this.packagesToPublish, (node: Package) => {
       if (Array.isArray(stripPackageKeys)) {
