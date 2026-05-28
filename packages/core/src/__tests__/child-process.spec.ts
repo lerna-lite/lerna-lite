@@ -3,7 +3,7 @@ import { constants } from 'node:os';
 import { log } from '@lerna-lite/npmlog';
 import { describe, expect, it, vi } from 'vitest';
 
-import { exec, execSync, getChildProcessCount, getExitCode, spawn, spawnStreaming } from '../child-process.js';
+import { exec, execSync, getChildProcessCount, getExitCode, spawn, spawnStreaming, logExecCommand } from '../child-process.js';
 import { colorize } from '../index.js';
 import type { Package } from '../package.js';
 
@@ -265,6 +265,15 @@ describe('childProcess', () => {
 
     it('throws TypeError for unexpected exit code values', () => {
       expect(() => getExitCode({} as any)).toThrow(TypeError);
+    });
+  });
+
+  describe('logExecCommand()', () => {
+    it('handles array command/args gracefully', () => {
+      const logSpy = vi.spyOn(log, 'info');
+      // call with array command to hit Array.isArray branch
+      (logExecCommand as any)(['echo', '-n'], ['one', 'two']);
+      expect(logSpy).toHaveBeenCalled();
     });
   });
 });

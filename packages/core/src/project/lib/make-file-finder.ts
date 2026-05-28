@@ -2,6 +2,7 @@ import type { GlobOptions as NativeGlobOptions } from 'node:fs';
 import { globSync, lstatSync, statSync } from 'node:fs';
 import { normalize as pathNormalize, posix, resolve } from 'node:path';
 
+import { tryOrFalse } from '../../utils/fs-utils.js';
 import { pMap } from '../../utils/p-map.js';
 import { ValidationError } from '../../validation-error.js';
 
@@ -71,11 +72,7 @@ function globFiles(pattern: string | readonly string[], options: any) {
     .filter((result) => {
       const absolutePath = resolve(cwd, result);
       if (options.followSymbolicLinks === false) {
-        try {
-          return !lstatSync(absolutePath).isSymbolicLink();
-        } catch {
-          return false;
-        }
+        return tryOrFalse(() => !lstatSync(absolutePath).isSymbolicLink());
       }
       return true;
     })
@@ -84,11 +81,7 @@ function globFiles(pattern: string | readonly string[], options: any) {
         return true;
       }
 
-      try {
-        return statSync(resolve(cwd, result)).isDirectory();
-      } catch {
-        return false;
-      }
+      return tryOrFalse(() => statSync(resolve(cwd, result)).isDirectory());
     })
     .map((result) => (options.absolute ? resolve(cwd, result) : result));
 }
@@ -97,7 +90,7 @@ export function makeFileFinder(rootPath: string, packageConfigs: string[]) {
   const globOpts = getGlobOpts(rootPath, packageConfigs);
 
   return (fileName: string, fileMapper: any, customGlobOpts?: any) => {
-    const options = Object.assign({}, customGlobOpts, globOpts);
+    const options = Object.assign({}, globOpts, customGlobOpts);
     const promise = pMap(
       Array.from(packageConfigs).sort(),
       (globPath: string) => {
@@ -131,7 +124,7 @@ export function makeSyncFileFinder(rootPath: string, packageConfigs: string[]) {
     fileMapper: (value: string, index: number, array: string[]) => any,
     customGlobOpts?: NativeGlobOptions
   ) => {
-    const options: any = Object.assign({}, customGlobOpts, globOpts);
+    const options: any = Object.assign({}, globOpts, customGlobOpts);
     const patterns = packageConfigs.map((globPath) => posix.join(globPath, fileName)).sort();
 
     let results: string[] = globFiles(patterns, options);

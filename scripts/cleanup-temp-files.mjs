@@ -7,9 +7,8 @@ export function removeSync(path) {
 }
 
 const tempDirPath = realpathSync(tmpdir());
-const normalizedLernaPath = pathJoin(tempDirPath, 'lerna-*').replace(/\\/g, '/');
-console.log('cleanup Lerna temp folders from', normalizedLernaPath);
-const deleteFolders = globSync('lerna-*', { cwd: tempDirPath, absolute: true });
+console.log('cleanup Lerna temp folders from', pathJoin(tempDirPath, 'lerna-*'));
+const deleteFolders = globSync('lerna-*', { cwd: tempDirPath }).map((f) => pathJoin(tempDirPath, f));
 const directoryFolders = deleteFolders.filter((folder) => {
   try {
     return statSync(folder).isDirectory();

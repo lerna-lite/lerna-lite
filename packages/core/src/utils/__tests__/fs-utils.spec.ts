@@ -23,6 +23,7 @@ import {
   writeJsonSync,
   pathExists,
   pathExistsSync,
+  tryOrFalse,
 } from '../fs-utils.js';
 
 const TEST_DIR_PREFIX = join(tmpdir(), 'fs-utils-test-');
@@ -162,5 +163,18 @@ describe('fs-utils', () => {
     await writeJson(file2, { b: 2 });
     expect(readJsonSync(file1)).toEqual({ a: 1 });
     expect(await readJson(file2)).toEqual({ b: 2 });
+  });
+
+  it('tryOrFalse returns predicate result when predicate succeeds', () => {
+    expect(tryOrFalse(() => true)).toBe(true);
+    expect(tryOrFalse(() => false)).toBe(false);
+  });
+
+  it('tryOrFalse returns false when predicate throws', () => {
+    expect(
+      tryOrFalse(() => {
+        throw new Error('boom');
+      })
+    ).toBe(false);
   });
 });

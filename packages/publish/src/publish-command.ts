@@ -31,6 +31,7 @@ import {
   readWorkspaceCatalogConfig,
   runTopologically,
   throwIfUncommitted,
+  tryOrFalse,
   ValidationError,
 } from '@lerna-lite/core';
 import { pMap } from '@lerna-lite/core';
@@ -332,13 +333,9 @@ export class PublishCommand extends Command<PublishCommandOption> {
     if (this.options.cleanupTempFiles) {
       const tempDirPath = realpathSync(tmpdir());
       const normalizedLernaPath = pathJoin(tempDirPath, 'lerna-*').replace(/\\/g, '/');
-      const deleteFolders = globSync(normalizedLernaPath, { withFileTypes: false }).filter((folder) => {
-        try {
-          return statSync(folder).isDirectory();
-        } catch {
-          return false;
-        }
-      });
+      const deleteFolders = globSync(normalizedLernaPath, { withFileTypes: false }).filter((folder) =>
+        tryOrFalse(() => statSync(folder).isDirectory())
+      );
 
       deleteFolders.forEach((folder) => removeSync(folder));
       this.logger.verbose('publish', `Found ${deleteFolders.length} temp folders to cleanup after publish.`);

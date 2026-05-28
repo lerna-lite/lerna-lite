@@ -122,6 +122,23 @@ export async function remove(path: string) {
 }
 
 /**
+ * Executes a boolean predicate callback and returns its result.
+ * Returns `false` if the callback throws any error, allowing safe use
+ * in filter predicates where file-system operations may fail (e.g. on
+ * missing or inaccessible paths).
+ *
+ * @param predicate - A callback that returns a boolean value.
+ * @returns The boolean result of the callback, or `false` if it throws.
+ */
+export function tryOrFalse(predicate: () => boolean): boolean {
+  try {
+    return predicate();
+  } catch {
+    return false;
+  }
+}
+
+/**
  * Writes a JSON object to a file (async). 
  * @param file The path to the file to write.
  * @param obj The JSON object to write.

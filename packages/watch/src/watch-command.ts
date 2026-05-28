@@ -7,6 +7,7 @@ import {
   pluralize,
   spawn,
   spawnStreaming,
+  tryOrFalse,
   ValidationError,
   type FilterOptions,
   type Package,
@@ -129,7 +130,9 @@ export class WatchCommand extends Command<WatchCommandOption & FilterOptions> {
       // Initialize chokidar watcher by adding all package folders to the watcher.
       // We'll use all directories so that when new files are being added, they will also be inspected.
       const rootPath = this.project.rootPath;
-      let pkgFolders = this._filteredPackages.map((pkg) => this.posixifyPath(pkg.location));
+      // Use native package locations for filesystem-relative calculations,
+      // then normalize to POSIX only for pattern building/matching.
+      let pkgFolders = this._filteredPackages.map((pkg) => pkg.location);
       // Filter out any empty/undefined globs.
       pkgFolders = pkgFolders.filter(Boolean);
       const relativePkgFolders = pkgFolders.map((folder) => this.posixifyPath(relative(rootPath, folder))).filter(Boolean);
@@ -141,14 +144,8 @@ export class WatchCommand extends Command<WatchCommandOption & FilterOptions> {
       const foldersToWatch =
         relativePkgFolders.length > 0
           ? (globSync(relativePkgFolders, globOptions) as unknown as string[])
-              .filter((folder) => {
-                try {
-                  return statSync(join(rootPath, folder)).isDirectory();
-                } catch {
-                  return false;
-                }
-              })
-              .map((folder) => folder.replace(/\/?$/, '/'))
+              .filter((folder) => tryOrFalse(() => statSync(join(rootPath, folder)).isDirectory()))
+              .map((folder) => this.posixifyPath(folder.replace(/\/?$/, '/')))
           : [];
       this._watcher = watch(foldersToWatch, {
         ...chokidarOptions,
@@ -171,8 +168,10 @@ export class WatchCommand extends Command<WatchCommandOption & FilterOptions> {
           }
 
           // make sure that the file is in the watch before calling the callback
-          if (this._watchedFiles.has(this.posixifyPath(relativeFilePath))) {
-            return this.changeEventListener(relativeFilePath);
+          // posixify once here and reuse in changeEventListener to avoid double normalization
+          const posixRelativeFilePath = this.posixifyPath(relativeFilePath);
+          if (this._watchedFiles.has(posixRelativeFilePath)) {
+            return this.changeEventListener(posixRelativeFilePath);
           }
         })
         .on('error', (error) => this.onError(error));
@@ -190,14 +189,16 @@ export class WatchCommand extends Command<WatchCommandOption & FilterOptions> {
   protected changeEventListener(relativeFilePath: string) {
     // find the package that the filepath is associated to
     const rootPath = this.project.rootPath;
-    const pkg = this._filteredPackages.find((p) => relativeFilePath.includes(relative(rootPath, p.location)));
+    const posixRelative = this.posixifyPath(relativeFilePath);
+    const pkg = this._filteredPackages.find((p) => posixRelative.includes(this.posixifyPath(relative(rootPath, p.location))));
 
     if (pkg) {
       // changes structure sample: { '@lerna-lite/watch': { pkg: Package, changeFiles: ['path1', 'path2'] }
       if (!this._changes[pkg.name]?.changeFiles) {
         this._changes[pkg.name] = { pkg, changeFiles: new Set<string>(), timestamp: Date.now() }; // use Set to avoid duplicate entries
       }
-      this._changes[pkg.name].changeFiles.add(relativeFilePath);
+      // store POSIX-normalized relative path to match `_watchedFiles` entries
+      this._changes[pkg.name].changeFiles.add(posixRelative);
 
       return this.executeCommandCallback();
     }
@@ -331,12 +332,13 @@ export class WatchCommand extends Command<WatchCommandOption & FilterOptions> {
   protected regenerateWatchGlobPaths() {
     const rootPath = this.project.rootPath;
     const patterns: string[] = [];
+    const opts = this.options || {};
 
     this._filteredPackages.forEach((pkg) => {
       // does user have a glob defined, if so append it to the pkg location. Glob example for TS files: /**/*.ts
       let watchingPath = pkg.location;
-      if (this.options.glob) {
-        const globPattern = this.options.glob.replace(/^\/+/, '');
+      if (opts.glob) {
+        const globPattern = opts.glob.replace(/^\/+/, '');
         watchingPath = join(pkg.location, '/', globPattern); // append glob to pkg location
       } else {
         watchingPath = join(pkg.location, '/**/*');
@@ -350,14 +352,10 @@ export class WatchCommand extends Command<WatchCommandOption & FilterOptions> {
       if (this._ignoredGlobs.some((pattern) => pattern !== '**' && zeptomatch(pattern, normalized))) {
         return false;
       }
-      try {
-        return statSync(join(rootPath, path)).isFile();
-      } catch {
-        return false;
-      }
+      return tryOrFalse(() => statSync(join(rootPath, path)).isFile());
     });
 
-    this._watchedFiles = new Set(pathsToWatch);
+    this._watchedFiles = new Set(pathsToWatch.map((p) => this.posixifyPath(p)));
   }
 
   protected runCommandInPackageStreaming(pkg: Package, changedFile: string) {
