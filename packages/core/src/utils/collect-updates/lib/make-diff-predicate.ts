@@ -1,8 +1,8 @@
 import { existsSync, readFileSync } from 'node:fs';
+import { globSync } from 'node:fs';
 import { basename, dirname, join, relative } from 'node:path';
 
 import { log } from '@lerna-lite/npmlog';
-import { globSync } from 'tinyglobby';
 import zeptomatch from 'zeptomatch';
 
 import { execSync } from '../../../child-process.js';
@@ -146,8 +146,7 @@ function diffSinceIn(committish: string, location: string, execOpts: ExecOpts, d
     if (diffOpts?.independentSubpackages) {
       independentSubpackages = globSync('**/*/package.json', {
         cwd: formattedLocation,
-        onlyDirectories: false,
-        ignore: ['**/node_modules/**'],
+        exclude: ['**/node_modules/**'],
       }).map((file) => `:^${formattedLocation}/${dirname(file)}`);
     }
 

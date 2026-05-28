@@ -1,5 +1,5 @@
 import crypto from 'crypto';
-import { realpathSync } from 'node:fs';
+import { globSync, realpathSync, statSync } from 'node:fs';
 import { EOL, tmpdir } from 'node:os';
 import { normalize, join as pathJoin, relative } from 'node:path';
 
@@ -37,7 +37,6 @@ import { pMap } from '@lerna-lite/core';
 import type { OneTimePasswordCache } from '@lerna-lite/version';
 import { getOneTimePassword, VersionCommand } from '@lerna-lite/version';
 import semver from 'semver';
-import { glob } from 'tinyglobby';
 
 import type { Tarball } from './interfaces.js';
 import { createTempLicenses } from './lib/create-temp-licenses.js';
@@ -333,13 +332,16 @@ export class PublishCommand extends Command<PublishCommandOption> {
     if (this.options.cleanupTempFiles) {
       const tempDirPath = realpathSync(tmpdir());
       const normalizedLernaPath = pathJoin(tempDirPath, 'lerna-*').replace(/\\/g, '/');
-      glob(normalizedLernaPath, { absolute: true, cwd: tempDirPath, onlyDirectories: true })
-        .then((deleteFolders) => {
-          // silently delete all files/folders that startsWith "lerna-"
-          deleteFolders.forEach((folder) => removeSync(folder));
-          this.logger.verbose('publish', `Found ${deleteFolders.length} temp folders to cleanup after publish.`);
-        })
-        .catch(/* v8 ignore next - do nothing */ () => {});
+      const deleteFolders = globSync(normalizedLernaPath, { withFileTypes: false }).filter((folder) => {
+        try {
+          return statSync(folder).isDirectory();
+        } catch {
+          return false;
+        }
+      });
+
+      deleteFolders.forEach((folder) => removeSync(folder));
+      this.logger.verbose('publish', `Found ${deleteFolders.length} temp folders to cleanup after publish.`);
     }
   }
 

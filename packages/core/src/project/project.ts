@@ -1,4 +1,4 @@
-import { writeFileSync } from 'node:fs';
+import { globSync, writeFileSync } from 'node:fs';
 import { basename, dirname, join, normalize, resolve as pathResolve } from 'node:path';
 
 import { log } from '@lerna-lite/npmlog';
@@ -6,7 +6,6 @@ import dedent from 'dedent';
 import JSON5 from 'json5';
 import { lilconfigSync } from 'lilconfig';
 import { loadJsonFile, loadJsonFileSync } from 'load-json-file';
-import { globSync } from 'tinyglobby';
 import { writeJsonFile } from 'write-json-file';
 
 import { globParent } from '../glob-utils/glob-parent.js';
@@ -31,6 +30,7 @@ export class Project {
   rootPath: string;
   static PACKAGE_GLOB = 'packages/*';
   static LICENSE_GLOB = 'LICEN{S,C}E{,.*}';
+  static LICENSE_FILE_RE = /^licen[sc]e(?:\..*)?$/i;
 
   /**
    * @param {string} [cwd] Defaults to process.cwd()
@@ -161,19 +161,14 @@ export class Project {
     let licensePath: string | undefined;
 
     try {
-      const search = globSync(Project.LICENSE_GLOB, {
+      const search = globSync('*', {
         cwd: this.rootPath,
-        absolute: true,
-        caseSensitiveMatch: false,
-        // Project license is always a sibling of the root manifest
-        deep: 0,
-      });
+      }).filter((file) => Project.LICENSE_FILE_RE.test(file));
 
       licensePath = search.shift();
 
       if (licensePath) {
-        // POSIX results always need to be normalized
-        licensePath = normalize(licensePath);
+        licensePath = normalize(pathResolve(this.rootPath, licensePath));
 
         // redefine getter to lazy-loaded value
         Object.defineProperty(this, 'licensePath', {
@@ -221,7 +216,9 @@ export class Project {
   }
 
   getPackageLicensePaths(): Promise<string[]> {
-    return this.fileFinder(Project.LICENSE_GLOB, null, { caseSensitiveMatch: false });
+    return this.fileFinder('*', null).then((paths: string[]) =>
+      paths.filter((path) => Project.LICENSE_FILE_RE.test(path.replace(/^.*[\\/]/, '')))
+    );
   }
 
   isIndependent() {

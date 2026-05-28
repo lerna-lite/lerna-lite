@@ -1,3 +1,5 @@
+import { resolve } from 'node:path';
+
 import 'dotenv/config';
 import type { CommandType, ExecCommandOption, FilterOptions, Package, ProjectConfig } from '@lerna-lite/core';
 import {
@@ -144,7 +146,9 @@ export class ExecCommand extends Command<ExecCommandOption & FilterOptions> {
       profiler = new Profiler({
         concurrency: this.concurrency,
         log: this.logger,
-        outputDirectory: this.options.profileLocation || this.project.rootPath,
+        outputDirectory: this.options.profileLocation
+          ? resolve(this.project.rootPath, this.options.profileLocation)
+          : this.project.rootPath,
       });
 
       const callback = this.getRunner();

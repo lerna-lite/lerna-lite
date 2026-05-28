@@ -49,7 +49,6 @@
     "npm-package-arg": "catalog:",
     "semver": "catalog:",
     "tinyexec": "catalog:dependencies",
-    "tinyglobby": "catalog:dependencies",
     "write-file-atomic": "^7.0.1",
     "write-json-file": "catalog:dependencies",
     "yaml": "catalog:dependencies",

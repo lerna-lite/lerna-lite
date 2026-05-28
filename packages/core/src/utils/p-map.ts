@@ -1,5 +1,6 @@
 /**
  * Native Node.js replacement for the `p-map` package.
+ * https://github.com/sindresorhus/p-map
  * Maps over an iterable with an optional concurrency limit.
  */
 export async function pMap<T, R>(
@@ -16,7 +17,7 @@ export async function pMap<T, R>(
     return Promise.all(items.map((item, i) => mapper(item, i)));
   }
 
-  const results = new Array<R>(items.length);
+  const results: R[] = Array.from({ length: items.length });
   let nextIndex = 0;
   let activeCount = 0;
   let settled = false;
