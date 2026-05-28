@@ -45,7 +45,6 @@
     "conventional-recommended-bump": "^11.2.0",
     "dedent": "catalog:",
     "git-url-parse": "^16.1.0",
-    "new-github-release-url": "^2.0.0",
     "npm-package-arg": "catalog:",
     "semver": "catalog:",
     "write-json-file": "catalog:dependencies",
