@@ -1,4 +1,4 @@
-import { resolve } from 'node:path';
+import { resolve as pathResolve } from 'node:path';
 
 import 'dotenv/config';
 import type { CommandType, ExecCommandOption, FilterOptions, Package, ProjectConfig } from '@lerna-lite/core';
@@ -147,7 +147,7 @@ export class ExecCommand extends Command<ExecCommandOption & FilterOptions> {
         concurrency: this.concurrency,
         log: this.logger,
         outputDirectory: this.options.profileLocation
-          ? resolve(this.project.rootPath, this.options.profileLocation)
+          ? pathResolve(this.project.rootPath, this.options.profileLocation)
           : this.project.rootPath,
       });
 

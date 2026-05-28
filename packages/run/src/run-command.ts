@@ -1,5 +1,5 @@
 import { spawn } from 'node:child_process';
-import { resolve } from 'node:path';
+import { resolve as pathResolve } from 'node:path';
 
 import type { CommandType, FilterOptions, Package, ProjectConfig, RunCommandOption } from '@lerna-lite/core';
 import { colorize, Command, getFilteredPackages, logOutput, runTopologically, ValidationError } from '@lerna-lite/core';
@@ -175,7 +175,7 @@ export class RunCommand extends Command<RunCommandOption & FilterOptions> {
         concurrency: this.concurrency,
         log: this.logger,
         outputDirectory: this.options.profileLocation
-          ? resolve(this.project.rootPath, this.options.profileLocation)
+          ? pathResolve(this.project.rootPath, this.options.profileLocation)
           : this.project.rootPath,
       });
 

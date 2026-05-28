@@ -1,5 +1,5 @@
 import { globSync, lstatSync } from 'node:fs';
-import { resolve } from 'node:path';
+import { resolve as pathResolve } from 'node:path';
 
 import { loadJsonFile } from 'load-json-file';
 
@@ -22,11 +22,11 @@ export function loadManifests(cwd) {
     withFileTypes: false,
   }).filter((file) => {
     try {
-      return !lstatSync(resolve(cwd, file)).isSymbolicLink();
+      return !lstatSync(pathResolve(cwd, file)).isSymbolicLink();
     } catch {
       return false;
     }
   });
 
-  return Promise.all(files.sort().map((fp) => loadJsonFile(resolve(cwd, fp))));
+  return Promise.all(files.sort().map((fp) => loadJsonFile(pathResolve(cwd, fp))));
 }
