@@ -54,7 +54,6 @@
     "@types/pacote": "catalog:devDependencies",
     "@types/semver": "catalog:devDependencies",
     "@types/yargs-parser": "catalog:devDependencies",
-    "load-json-file": "catalog:dependencies",
     "yargs": "catalog:dependencies",
     "yargs-parser": "catalog:devDependencies"
   },

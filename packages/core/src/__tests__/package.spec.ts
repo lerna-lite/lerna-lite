@@ -2,15 +2,23 @@ import { homedir } from 'node:os';
 import { normalize, resolve as pathResolve } from 'node:path';
 
 import { log } from '@lerna-lite/npmlog';
-import { loadJsonFile, loadJsonFileSync } from 'load-json-file';
 import npa from 'npm-package-arg';
 import { describe, expect, it, vi, type Mock } from 'vitest';
 
 import type { NpaResolveResult, RawManifest } from '../models/interfaces.js';
 import { Package } from '../package.js';
+import type * as FsUtils from '../utils/fs-utils.js';
+import { readJson, readJsonSync } from '../utils/fs-utils.js';
 import { writePackage } from '../utils/write-package.js';
 
-vi.mock('load-json-file');
+vi.mock('../utils/fs-utils.js', async (importOriginal) => {
+  const original = await importOriginal();
+  return {
+    ...(original as typeof FsUtils),
+    readJson: vi.fn(),
+    readJsonSync: vi.fn(),
+  };
+});
 vi.mock('../utils/write-package.js');
 
 // remove quotes around top-level strings
@@ -298,7 +306,7 @@ describe('Package', () => {
 
   describe('.refresh()', () => {
     it('reloads private state from disk', async () => {
-      (loadJsonFile as any).mockImplementationOnce(() => Promise.resolve({ name: 'ignored', mutated: true }));
+      (readJson as any).mockImplementationOnce(() => Promise.resolve({ name: 'ignored', mutated: true }));
 
       const pkg = factory({ name: 'refresh' } as RawManifest);
       const result = await pkg.refresh();
@@ -307,7 +315,7 @@ describe('Package', () => {
       // a package's name never changes
       expect(pkg.name).toBe('refresh');
       expect(pkg.get('mutated')).toBe(true);
-      expect(loadJsonFile).toHaveBeenLastCalledWith(pkg.manifestLocation);
+      expect(readJson).toHaveBeenLastCalledWith(pkg.manifestLocation);
     });
   });
 
@@ -1034,7 +1042,7 @@ describe('Package', () => {
 });
 
 describe('Package.lazy()', () => {
-  (loadJsonFileSync as Mock).mockImplementation(() => ({ name: 'bar', version: '1.0.0' }));
+  (readJsonSync as Mock).mockImplementation(() => ({ name: 'bar', version: '1.0.0' }));
 
   it('returns package instance from string directory argument', () => {
     const pkg = Package.lazy('/foo/bar');

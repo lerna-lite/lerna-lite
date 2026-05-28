@@ -2,11 +2,10 @@ import { promises as fsPromises } from 'node:fs';
 import { join } from 'node:path';
 import { stripVTControlCharacters } from 'node:util';
 
-import { type Package, execPackageManager, execPackageManagerSync, Project, pathExistsSync, readJsonSync } from '@lerna-lite/core';
+import { type Package, execPackageManager, execPackageManagerSync, Project, pathExistsSync, readJson, readJsonSync } from '@lerna-lite/core';
 import { log } from '@lerna-lite/npmlog';
 import { initFixtureFactory } from '@lerna-test/helpers';
-import { loadJsonFile } from 'load-json-file';
-import { beforeEach, describe, expect, it, test, vi, type Mock } from 'vitest';
+import { beforeEach, afterEach, describe, expect, it, test, vi, type Mock } from 'vitest';
 
 import {
   loadPackageLockFileWhenExists,
@@ -17,14 +16,39 @@ import {
   validateFileExists,
 } from '../lib/update-lockfile-version.js';
 
-vi.mock('load-json-file', async () => await vi.importActual('../lib/__mocks__/load-json-file'));
+// test-only registry for files read via readJson/readJsonSync
+const readRegistry = new Set<string>();
+
 vi.mock('@lerna-lite/core', async () => {
-  const { execPackageManager, execPackageManagerSync } = await vi.importActual<any>('@lerna-lite/core');
+  const actualCore = await vi.importActual<any>('@lerna-lite/core');
+  const { execPackageManager, execPackageManagerSync } = actualCore;
+
+  const origReadJson = actualCore.readJson?.bind(actualCore);
+  const origReadJsonSync = actualCore.readJsonSync?.bind(actualCore);
+
+  const wrappedReadJson = vi.fn(async (file: string, ...args: any[]) => {
+    readRegistry.add(String(file));
+    return origReadJson ? await origReadJson(file, ...args) : undefined;
+  });
+
+  const wrappedReadJsonSync = vi.fn((file: string, ...args: any[]) => {
+    readRegistry.add(String(file));
+    return origReadJsonSync ? origReadJsonSync(file, ...args) : undefined;
+  });
+
   return {
     ...(await vi.importActual<any>('@lerna-lite/core')),
     execPackageManager: vi.fn(execPackageManager),
     execPackageManagerSync: vi.fn(execPackageManagerSync),
+    readJson: wrappedReadJson,
+    readJsonSync: wrappedReadJsonSync,
   };
+});
+
+afterEach(() => {
+  readRegistry.clear();
+  if ((readJson as any)?.mock?.clear) (readJson as any).mock.clear();
+  if ((readJsonSync as any)?.mock?.clear) (readJsonSync as any).mock.clear();
 });
 
 // helpers
@@ -50,7 +74,18 @@ describe('npm classic lock file', () => {
     const returnedLockfilePath = await updateClassicLockfileVersion(pkg as unknown as Package);
 
     expect(returnedLockfilePath).toBe(join(pkg.location, 'package-lock.json'));
-    expect(Array.from((loadJsonFile as any).registry.keys())).toStrictEqual(['/packages/package-1']);
+    // ensure we read the package manifest(s) during the flow (path-based)
+    const mapped = new Set<string>();
+    for (const p of Array.from(readRegistry)) {
+      const rel = p.split(/\\|\//).filter(Boolean);
+      const idx = rel.indexOf('packages');
+      if (idx !== -1 && rel[idx + 1]) {
+        mapped.add(`/packages/${rel[idx + 1]}`);
+      } else {
+        mapped.add('/');
+      }
+    }
+    expect(Array.from(mapped).sort()).toStrictEqual(['/packages/package-1']);
     expect(readJsonSync(returnedLockfilePath as string)).toHaveProperty('version', '2.0.0');
   });
 
@@ -66,7 +101,18 @@ describe('npm classic lock file', () => {
 
     const updatedLockfile = readJsonSync(returnedLockfilePath as string);
     expect(returnedLockfilePath).toBe(join(pkg.location, 'package-lock.json'));
-    expect(Array.from((loadJsonFile as any).registry.keys())).toStrictEqual(['/packages/package-1']);
+    // ensure we read the package manifest(s) during the flow (path-based)
+    const mapped = new Set<string>();
+    for (const p of Array.from(readRegistry)) {
+      const rel = p.split(/\\|\//).filter(Boolean);
+      const idx = rel.indexOf('packages');
+      if (idx !== -1 && rel[idx + 1]) {
+        mapped.add(`/packages/${rel[idx + 1]}`);
+      } else {
+        mapped.add('/');
+      }
+    }
+    expect(Array.from(mapped).sort()).toStrictEqual(['/packages/package-1']);
     expect(updatedLockfile).toHaveProperty('version', '2.0.0');
     expect(updatedLockfile.packages[''].dependencies['package-1']).toBe('^2.0.0');
     expect(updatedLockfile.packages[''].dependencies['tiny-tarball']).toBe('^1.0.0');
@@ -79,7 +125,8 @@ describe('npm classic lock file', () => {
 
     pkg.version = '1.1.0';
 
-    (loadJsonFile as any).mockImplementationOnce(() => Promise.reject(new Error('file not found')));
+    // simulate missing sibling lockfile by making readJson reject
+    (readJson as any).mockImplementationOnce(() => Promise.reject(new Error('file not found')));
 
     const returnedLockfilePath = await updateClassicLockfileVersion(pkg as unknown as Package);
 
@@ -104,7 +151,6 @@ describe('npm modern lock file', () => {
       await saveUpdatedLockJsonFile(lockFileOutput!.path, lockFileOutput!.json);
     }
 
-    // expect(Array.from((loadJsonFile as any).registry.keys())).toStrictEqual(['/packages/package-1', '/packages/package-2', '/']);
     expect(readJsonSync(rootLockFilePath)).toEqual({
       dependencies: {
         '@my-workspace/package-1': {

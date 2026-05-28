@@ -41,7 +41,6 @@ catalogs:
 
   # Can be referenced through "catalog:dependencies"
   dependencies:
-    load-json-file: ^7.0.1
     tinyexec: ^1.2.2
     write-json-file: ^7.0.0
     yaml: ^2.9.0

@@ -30,7 +30,7 @@ export function applyExtends(config: { [key: string]: any }, cwd: string, seen =
 
     seen.add(pathToDefault);
 
-    defaultConfig = readJsonSync(pathToDefault, { throws: false });
+    defaultConfig = readJsonSync(pathToDefault, { throws: false }) ?? {};
     delete config.extends;
 
     // deprecateConfig(defaultConfig, pathToDefault);

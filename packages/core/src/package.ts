@@ -1,11 +1,11 @@
 import { basename, dirname, join, resolve as pathResolve, relative } from 'node:path';
 
 import { log } from '@lerna-lite/npmlog';
-import { loadJsonFile, loadJsonFileSync } from 'load-json-file';
 import npa from 'npm-package-arg';
 
 import type { CommandType, DependenciesType, NpaResolveResult, RawManifest } from './models/interfaces.js';
 import type { CatalogConfig } from './utils/catalog-utils.js';
+import { readJson, readJsonSync } from './utils/fs-utils.js';
 import { writePackage } from './utils/write-package.js';
 
 // symbol used to 'hide' internal state
@@ -63,7 +63,7 @@ export class Package {
   static lazy(ref: string | Package | RawManifest, dir = '.'): Package {
     if (typeof ref === 'string') {
       const location = pathResolve(basename(ref) === 'package.json' ? dirname(ref) : ref);
-      const manifest = loadJsonFileSync<RawManifest>(join(location, 'package.json'));
+      const manifest = readJsonSync(join(location, 'package.json')) as RawManifest;
 
       return new Package(manifest, location);
     }
@@ -240,7 +240,7 @@ export class Package {
    * Refresh internal state from disk (e.g., changed by external lifecycles)
    */
   refresh() {
-    return loadJsonFile(this.manifestLocation).then((pkg) => {
+    return readJson(this.manifestLocation).then((pkg) => {
       this[PKG] = pkg;
 
       return this;

@@ -88,7 +88,6 @@
     "cross-env": "^10.1.0",
     "empathic": "^2.0.1",
     "eslint-plugin-local-import-ext": "0.2.0",
-    "load-json-file": "catalog:dependencies",
     "oxfmt": "^0.51.0",
     "oxlint": "^1.66.0",
     "oxlint-tsgolint": "^0.23.0",

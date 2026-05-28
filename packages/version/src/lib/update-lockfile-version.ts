@@ -3,9 +3,8 @@ import { EOL } from 'node:os';
 import { join } from 'node:path';
 
 import type { NpmClient, Package } from '@lerna-lite/core';
-import { execPackageManager, execPackageManagerSync } from '@lerna-lite/core';
+import { execPackageManager, execPackageManagerSync, readJson } from '@lerna-lite/core';
 import { log } from '@lerna-lite/npmlog';
-import { loadJsonFile } from 'load-json-file';
 import semver from 'semver';
 import { writeJsonFile } from 'write-json-file';
 
@@ -17,7 +16,7 @@ import { writeJsonFile } from 'write-json-file';
 export async function loadPackageLockFileWhenExists<T = any>(lockFileFolderPath: string) {
   try {
     const lockFilePath = join(lockFileFolderPath, 'package-lock.json');
-    const pkgLockFileObj = await loadJsonFile<T>(lockFilePath);
+    const pkgLockFileObj = await readJson<T>(lockFilePath);
     const lockfileVersion = +(pkgLockFileObj?.['lockfileVersion'] ?? 1);
 
     return {
@@ -38,7 +37,7 @@ export async function updateClassicLockfileVersion(pkg: Package): Promise<string
   try {
     // "lockfileVersion" = 1, package lock file might be located in the package folder
     const lockFilePath = join(pkg.location, 'package-lock.json');
-    const pkgLockFileObj: any = await loadJsonFile(lockFilePath);
+    const pkgLockFileObj: any = await readJson(lockFilePath);
 
     if (pkgLockFileObj) {
       pkgLockFileObj.version = pkg.version;
