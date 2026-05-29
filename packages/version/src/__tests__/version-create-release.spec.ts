@@ -3,7 +3,6 @@ import { join } from 'node:path';
 import { colorize, logOutput, type VersionCommandOption, outputFile } from '@lerna-lite/core';
 import { log } from '@lerna-lite/npmlog';
 import { commandRunner, initFixtureFactory } from '@lerna-test/helpers';
-import dedent from 'dedent';
 import { beforeEach, describe, expect, it, vi, type Mock } from 'vitest';
 import yargParser from 'yargs-parser';
 
@@ -246,14 +245,16 @@ describe.each([
 
     await new VersionCommand(createArgv(cwd, '--create-release', type, '--conventional-commits', '--dry-run'));
 
-    expect((logOutput as any).logged()).toMatch(dedent`
-    Changes (5 packages):
-     - package-1: 1.0.0 => 1.1.0
-     - package-2: 1.0.0 => 1.1.0
-     - package-3: 1.0.0 => 1.1.0
-     - package-4: 1.0.0 => 1.1.0
-     - package-5: 1.0.0 => 1.1.0 (private)
-    `);
+    expect((logOutput as any).logged()).toMatch(
+      `
+Changes (5 packages):
+ - package-1: 1.0.0 => 1.1.0
+ - package-2: 1.0.0 => 1.1.0
+ - package-3: 1.0.0 => 1.1.0
+ - package-4: 1.0.0 => 1.1.0
+ - package-5: 1.0.0 => 1.1.0 (private)
+`.trim()
+    );
   });
 });
 

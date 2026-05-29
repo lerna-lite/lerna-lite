@@ -22,7 +22,6 @@ import {
   type UpdateCollectorOptions,
   type VersionCommandOption,
 } from '@lerna-lite/core';
-import dedent from 'dedent';
 import semver from 'semver';
 import zeptomatch from 'zeptomatch';
 
@@ -218,10 +217,8 @@ export class VersionCommand extends Command<VersionCommandOption> {
       if (this.pushToRemote && !remoteBranchExists(this.gitRemote, this.currentBranch, this.execOpts, this.options.dryRun)) {
         throw new ValidationError(
           'ENOREMOTEBRANCH',
-          dedent`
-            Branch "${this.currentBranch}" doesn't exist in remote "${this.gitRemote}".
-            If this is a new branch, please make sure you push it to the remote first.
-          `
+          `Branch "${this.currentBranch}" doesn't exist in remote "${this.gitRemote}".\n` +
+            'If this is a new branch, please make sure you push it to the remote first.'
         );
       }
 
@@ -231,10 +228,8 @@ export class VersionCommand extends Command<VersionCommandOption> {
       ) {
         throw new ValidationError(
           'ENOTALLOWED',
-          dedent`
-            Branch "${this.currentBranch}" is restricted from versioning due to allowBranch config.
-            Please consider the reasons for this restriction before overriding the option.
-          `
+          `Branch "${this.currentBranch}" is restricted from versioning due to allowBranch config.\n` +
+            'Please consider the reasons for this restriction before overriding the option.'
         );
       }
 
@@ -249,10 +244,7 @@ export class VersionCommand extends Command<VersionCommandOption> {
           // interrupt interactive execution
           throw new ValidationError(
             'EBEHIND',
-            dedent`
-              ${message}
-              Please merge remote changes into "${this.currentBranch}" with "git pull"
-            `
+            `${message}\nPlease merge remote changes into "${this.currentBranch}" with "git pull"`
           );
         }
 
@@ -267,29 +259,17 @@ export class VersionCommand extends Command<VersionCommandOption> {
     }
 
     if (this.options.conventionalPrerelease && this.options.conventionalGraduate) {
-      throw new ValidationError(
-        'ENOTALLOWED',
-        dedent`
-          --conventional-prerelease cannot be combined with --conventional-graduate.
-        `
-      );
+      throw new ValidationError('ENOTALLOWED', '--conventional-prerelease cannot be combined with --conventional-graduate.');
     }
 
     if (this.options.manuallyUpdateRootLockfile && this.options.syncWorkspaceLock) {
-      throw new ValidationError(
-        'ENOTALLOWED',
-        dedent`
-          --manually-update-root-lockfile cannot be combined with --sync-workspace-lock.
-        `
-      );
+      throw new ValidationError('ENOTALLOWED', '--manually-update-root-lockfile cannot be combined with --sync-workspace-lock.');
     }
 
     if (this.changelogIncludeCommitsClientLogin && this.changelogIncludeCommitsGitAuthor) {
       throw new ValidationError(
         'ENOTALLOWED',
-        dedent`
-          --changelog-include-commits-client-login cannot be combined with --changelog-include-commits-git-author.
-        `
+        '--changelog-include-commits-client-login cannot be combined with --changelog-include-commits-git-author.'
       );
     }
 
@@ -302,9 +282,7 @@ export class VersionCommand extends Command<VersionCommandOption> {
       if (!remoteClient) {
         throw new ValidationError(
           'EMISSINGCLIENT',
-          dedent`
-            --changelog-include-commits-client-login requires one of these two option --remote-client or --create-release to be defined.
-          `
+          '--changelog-include-commits-client-login requires one of these two option --remote-client or --create-release to be defined.'
         );
       }
 
@@ -335,10 +313,8 @@ export class VersionCommand extends Command<VersionCommandOption> {
         } else {
           throw new ValidationError(
             'ENOVERSION',
-            dedent`
-              A version field is required in ${node.name}'s package.json file.
-              If you wish to keep the package unversioned, it must be made private.
-            `
+            `A version field is required in ${node.name}'s package.json file.\n` +
+              'If you wish to keep the package unversioned, it must be made private.'
           );
         }
       }

@@ -2,7 +2,6 @@ import { globSync, writeFileSync } from 'node:fs';
 import { basename, dirname, join, normalize, resolve as pathResolve } from 'node:path';
 
 import { log } from '@lerna-lite/npmlog';
-import dedent from 'dedent';
 import JSON5 from 'json5';
 import { lilconfigSync } from 'lilconfig';
 import { writeJsonFile } from 'write-json-file';
@@ -105,10 +104,8 @@ export class Project {
       if (!workspaces) {
         throw new ValidationError(
           'EWORKSPACES',
-          dedent`
-            Yarn workspaces need to be defined in the root package.json.
-            See: https://github.com/lerna/lerna/blob/master/commands/bootstrap/README.md#--use-workspaces
-          `
+          'Yarn workspaces need to be defined in the root package.json.\n' +
+            'See: https://github.com/lerna/lerna/blob/master/commands/bootstrap/README.md#--use-workspaces'
         );
       }
 

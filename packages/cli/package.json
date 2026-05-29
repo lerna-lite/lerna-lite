@@ -39,7 +39,6 @@
     "@lerna-lite/core": "workspace:*",
     "@lerna-lite/init": "workspace:*",
     "@lerna-lite/npmlog": "workspace:*",
-    "dedent": "catalog:",
     "dotenv": "catalog:",
     "import-local": "^3.2.0",
     "yargs": "catalog:dependencies"

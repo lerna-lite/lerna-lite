@@ -43,7 +43,6 @@
     "conventional-changelog-writer": "^8.4.0",
     "conventional-commits-parser": "^6.4.0",
     "conventional-recommended-bump": "^11.2.0",
-    "dedent": "catalog:",
     "git-url-parse": "^16.1.0",
     "npm-package-arg": "catalog:",
     "semver": "catalog:",
@@ -52,7 +51,6 @@
   },
   "devDependencies": {
     "@npm/types": "^2.1.0",
-    "@types/dedent": "catalog:devDependencies",
     "@types/npm-package-arg": "catalog:devDependencies",
     "@types/semver": "catalog:devDependencies",
     "@types/yargs-parser": "catalog:devDependencies",
