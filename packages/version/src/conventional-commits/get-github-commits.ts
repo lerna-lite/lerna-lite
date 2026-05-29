@@ -1,7 +1,6 @@
 import type { ExecOpts } from '@lerna-lite/core';
 import { getComplexObjectValue } from '@lerna-lite/core';
 import { log } from '@lerna-lite/npmlog';
-import dedent from 'dedent';
 
 import { createGitHubClient, parseGitRepo } from '../git-clients/github-client.js';
 import type { RemoteCommit } from '../interfaces.js';
@@ -54,16 +53,20 @@ export async function getGithubCommits(
 
   do {
     const afterCursorStr = afterCursor ? `, after: "${afterCursor}"` : '';
-    const queryStr = dedent`
-      query getCommits($repo: String!, $owner: String!, $branchName: String!, $pageSize: Int!, $since: GitTimestamp!) {
-          repository(name: $repo, owner: $owner) {
-            ref(qualifiedName: $branchName) {
-              target { ... on Commit {
-                  history(first: $pageSize, since: $since ${afterCursorStr}) {
-                    nodes { oid, message, author { name, user { login }}}
-                    pageInfo { hasNextPage, endCursor }
-        }}}}}}
-        `.trim();
+    const queryStr = `
+query getCommits($repo: String!, $owner: String!, $branchName: String!, $pageSize: Int!, $since: GitTimestamp!) {
+  repository(name: $repo, owner: $owner) {
+    ref(qualifiedName: $branchName) {
+      target { ... on Commit {
+        history(first: $pageSize, since: $since ${afterCursorStr}) {
+          nodes { oid, message, author { name, user { login }}}
+          pageInfo { hasNextPage, endCursor }
+        }
+      }}
+    }
+  }
+}
+`.trim();
 
     const response: GraphqlCommitClientData = await octokit.graphql(queryStr, {
       owner: repo.owner,

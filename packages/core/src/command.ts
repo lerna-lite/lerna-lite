@@ -3,7 +3,6 @@ import { cpus } from 'node:os';
 import type { Logger } from '@lerna-lite/npmlog';
 import { log } from '@lerna-lite/npmlog';
 import { isCI } from 'ci-info';
-import dedent from 'dedent';
 import { xSync } from 'tinyexec';
 
 import { logExecCommand } from './child-process.js';
@@ -309,11 +308,9 @@ export class Command<T extends AvailableCommandOption> {
     if ((this.options as InitCommandOption).independent && !this.project.isIndependent()) {
       throw new ValidationError(
         'EVERSIONMODE',
-        dedent`
-          You ran lerna-lite with --independent or -i, but the repository is not set to independent mode.
-          To use independent mode you need to set lerna.json's "version" property to "independent".
-          Then you won't need to pass the --independent or -i flags.
-        `
+        'You ran lerna-lite with --independent or -i, but the repository is not set to independent mode.\n' +
+          'To use independent mode you need to set lerna.json\'s "version" property to "independent".\n' +
+          "Then you won't need to pass the --independent or -i flags."
       );
     }
   }

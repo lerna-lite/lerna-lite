@@ -1,5 +1,4 @@
 import { log } from '@lerna-lite/npmlog';
-import dedent from 'dedent';
 import yargs from 'yargs/yargs';
 
 import { globalOptions } from './global-options.js';
@@ -38,11 +37,11 @@ function lernaCLI(argv?: any[], cwd?: string) {
     })
     .alias('h', 'help')
     .alias('v', 'version')
-    .wrap(cli.terminalWidth()).epilogue(dedent`
-      When a command fails, all logs are written to lerna-debug.log in the current working directory.
-
-      For more information, find our manual at https://github.com/lerna/lerna
-    `);
+    .wrap(cli.terminalWidth())
+    .epilogue(
+      'When a command fails, all logs are written to lerna-debug.log in the current working directory.\n\n' +
+        'For more information, find our manual at https://github.com/lerna/lerna'
+    );
 }
 
 export default lernaCLI;
