@@ -108,14 +108,21 @@ jobs:
         run: |
           echo "skip_version_retry_publish=true — lerna version is skipped; proceeding to publish-only run."
 
+      - name: Lerna Publish (build query) 
+        shell: bash
+        run: | 
+          if ${{ inputs.dryrun == true }}
+          then 
+            echo "LERNA_PUBLISH_TYPE=🧪 Dry-Run" >> $GITHUB_ENV 
+            echo "LERNA_PUBLISH_QUERY=pnpm run local-lerna publish from-package --force-publish --yes --dry-run" >> $GITHUB_ENV 
+          else 
+            echo "LERNA_PUBLISH_TYPE=🚀 Production" >> $GITHUB_ENV
+            echo "LERNA_PUBLISH_QUERY=pnpm run local-lerna publish from-package --force-publish --yes" >> $GITHUB_ENV 
+          fi
+
       - name: Lerna Publish 📦
-        if: ${{ inputs.dryrun != true }}
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
-          pnpm run local-lerna publish from-package --force-publish --yes
-
-      - name: Lerna Publish 📦 → 🧪 Dry-Run
-        if: ${{ inputs.dryrun == true }}
-        run: |
-          pnpm run local-lerna publish from-package --force-publish --yes --dry-run
+          echo "Running: ${LERNA_PUBLISH_TYPE}"
+          pnpm exec ${{ env.LERNA_PUBLISH_QUERY }}
