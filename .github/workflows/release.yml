@@ -92,7 +92,7 @@ jobs:
           fi
 
       - if: ${{ inputs.skip_version_retry_publish != true }}
-        name: Lerna Version 🏷️ → ${{ env.LERNA_VERSION_TYPE }}
+        name: Lerna Version 🏷️ ➜ ${{ env.LERNA_VERSION_TYPE }}
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
@@ -117,9 +117,9 @@ jobs:
             echo "LERNA_PUBLISH_QUERY=pnpm run local-lerna publish from-package --force-publish --yes" >> $GITHUB_ENV 
           fi
 
-      - name: Lerna Publish 📦 → ${{ env.LERNA_PUBLISH_TYPE }}
+      - name: Lerna Publish 📦 ➜ ${{ env.LERNA_PUBLISH_TYPE }}
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
-          echo "Running: ${LERNA_PUBLISH_TYPE}"
+          echo "Running: ${{ env.LERNA_PUBLISH_TYPE }}"
           pnpm exec ${{ env.LERNA_PUBLISH_QUERY }}
