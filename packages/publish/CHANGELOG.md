@@ -4,6 +4,18 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [5.3.0](https://github.com/lerna-lite/lerna-lite/compare/v5.2.2...v5.3.0) (2026-06-04)
+
+### Features
+
+* **deps:** drop load-json-file replace with native code ([#1341](https://github.com/lerna-lite/lerna-lite/issues/1341)) ([272050d](https://github.com/lerna-lite/lerna-lite/commit/272050d4a9b80b789008c04a0296a3ac94c81467)) - by @ghiscoding
+* **deps:** drop tinyglobby replace with native code ([#1340](https://github.com/lerna-lite/lerna-lite/issues/1340)) ([56ac4d4](https://github.com/lerna-lite/lerna-lite/commit/56ac4d45dc0ee7bbfd9b2789eb321b07f2dc6bee)) - by @ghiscoding
+* **deps:** replace p-map, p-list and p-queue with native code ([#1337](https://github.com/lerna-lite/lerna-lite/issues/1337)) ([d661044](https://github.com/lerna-lite/lerna-lite/commit/d6610445c6ad16558540fc91c064dbbc5a68d89e)) - by @ghiscoding
+
+### Bug Fixes
+
+* **deps:** update all non-major dependencies ([#1338](https://github.com/lerna-lite/lerna-lite/issues/1338)) ([adc39c5](https://github.com/lerna-lite/lerna-lite/commit/adc39c5b3b29d30eaba15767f7bf69c21277a492)) - by @renovate[bot]
+
 ## [5.2.2](https://github.com/lerna-lite/lerna-lite/compare/v5.2.1...v5.2.2) (2026-05-25)
 
 ### Bug Fixes

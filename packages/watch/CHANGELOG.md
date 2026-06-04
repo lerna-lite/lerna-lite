@@ -4,6 +4,12 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [5.3.0](https://github.com/lerna-lite/lerna-lite/compare/v5.2.2...v5.3.0) (2026-06-04)
+
+### Features
+
+* **deps:** drop tinyglobby replace with native code ([#1340](https://github.com/lerna-lite/lerna-lite/issues/1340)) ([56ac4d4](https://github.com/lerna-lite/lerna-lite/commit/56ac4d45dc0ee7bbfd9b2789eb321b07f2dc6bee)) - by @ghiscoding
+
 ## [5.2.2](https://github.com/lerna-lite/lerna-lite/compare/v5.2.1...v5.2.2) (2026-05-25)
 
 **Note:** Version bump only for package @lerna-lite/watch

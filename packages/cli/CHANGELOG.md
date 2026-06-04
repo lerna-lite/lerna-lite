@@ -4,6 +4,13 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [5.3.0](https://github.com/lerna-lite/lerna-lite/compare/v5.2.2...v5.3.0) (2026-06-04)
+
+### Features
+
+* **deps:** drop dedent replace with native code ([#1345](https://github.com/lerna-lite/lerna-lite/issues/1345)) ([9e8e9e7](https://github.com/lerna-lite/lerna-lite/commit/9e8e9e7c65390b57cabbe2ab59ecebba37cca878)) - by @ghiscoding
+* **deps:** drop load-json-file replace with native code ([#1341](https://github.com/lerna-lite/lerna-lite/issues/1341)) ([272050d](https://github.com/lerna-lite/lerna-lite/commit/272050d4a9b80b789008c04a0296a3ac94c81467)) - by @ghiscoding
+
 ## [5.2.2](https://github.com/lerna-lite/lerna-lite/compare/v5.2.1...v5.2.2) (2026-05-25)
 
 **Note:** Version bump only for package @lerna-lite/cli

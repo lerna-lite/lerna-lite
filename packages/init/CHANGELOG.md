@@ -4,6 +4,12 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [5.3.0](https://github.com/lerna-lite/lerna-lite/compare/v5.2.2...v5.3.0) (2026-06-04)
+
+### Features
+
+* **deps:** replace p-map, p-list and p-queue with native code ([#1337](https://github.com/lerna-lite/lerna-lite/issues/1337)) ([d661044](https://github.com/lerna-lite/lerna-lite/commit/d6610445c6ad16558540fc91c064dbbc5a68d89e)) - by @ghiscoding
+
 ## [5.2.2](https://github.com/lerna-lite/lerna-lite/compare/v5.2.1...v5.2.2) (2026-05-25)
 
 **Note:** Version bump only for package @lerna-lite/init
