@@ -109,7 +109,12 @@ jobs:
           echo "skip_version_retry_publish=true — lerna version is skipped; proceeding to publish-only run."
 
       - name: Lerna Publish 📦
-        if: ${{ inputs.dryrun != true }}
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        run: pnpm run local-lerna publish from-package --force-publish --yes
+        run: |
+          if ${{inputs.dryrun == true }}
+          then
+            pnpm run local-lerna publish from-package --force-publish --yes --dry-run
+          else
+            pnpm run local-lerna publish from-package --force-publish --yes
+          fi
