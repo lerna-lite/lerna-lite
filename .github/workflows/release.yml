@@ -91,11 +91,8 @@ jobs:
               echo "LERNA_VERSION_QUERY=pnpm run local-lerna version --yes" >> $GITHUB_ENV
           fi
 
-      - name: Final version type → ${{ env.LERNA_VERSION_TYPE }}
-        run: echo "${{ env.LERNA_VERSION_QUERY }}"
-
       - if: ${{ inputs.skip_version_retry_publish != true }}
-        name: Lerna Version 🏷️
+        name: Lerna Version 🏷️ → ${{ env.LERNA_VERSION_TYPE }}
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
@@ -120,7 +117,7 @@ jobs:
             echo "LERNA_PUBLISH_QUERY=pnpm run local-lerna publish from-package --force-publish --yes" >> $GITHUB_ENV 
           fi
 
-      - name: Lerna Publish 📦
+      - name: Lerna Publish 📦 → ${{ env.LERNA_PUBLISH_TYPE }}
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
