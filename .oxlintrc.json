@@ -44,7 +44,6 @@
     "import/no-self-import": "error",
 
     // Unicorn rules
-    "unicorn/no-empty-file": "off",
     "unicorn/no-new-array": "off",
     "unicorn/prefer-node-protocol": "error",
 
@@ -71,7 +70,8 @@
     {
       "files": ["**/*.spec.*", "**/__tests__/**", "**/__mocks__/**", "**/__fixtures__/**"],
       "rules": {
-        "curly": "off"
+        "curly": "off",
+        "unicorn/no-empty-file": "off"
       }
     }
   ]
