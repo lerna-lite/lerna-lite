@@ -1,6 +1,6 @@
 {
   "$schema": "./node_modules/oxlint/configuration_schema.json",
-  "plugins": ["import", "oxc", "typescript", "vitest"],
+  "plugins": ["import", "oxc", "typescript", "vitest", "unicorn"],
   "jsPlugins": ["eslint-plugin-local-import-ext"],
   "env": {
     "es2025": true,
@@ -42,6 +42,11 @@
       }
     ],
     "import/no-self-import": "error",
+
+    // Unicorn rules
+    "unicorn/no-empty-file": "off",
+    "unicorn/no-new-array": "off",
+    "unicorn/prefer-node-protocol": "error",
 
     // vitest rules
     "vitest/prefer-snapshot-hint": "off",

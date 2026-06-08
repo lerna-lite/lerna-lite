@@ -153,6 +153,7 @@ export class Command<T extends AvailableCommandOption> {
   }
 
   // proxy 'Promise' methods to 'private' instance
+  // eslint-disable-next-line unicorn/no-thenable -- intentionally creating a thenable
   then(onResolved: typeof Promise.resolve, onRejected: typeof Promise.reject) {
     return this.runner?.then(onResolved, onRejected);
   }

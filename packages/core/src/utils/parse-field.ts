@@ -1,4 +1,4 @@
-import path from 'path';
+import path from 'node:path';
 
 import { envReplace } from './env-replace.js';
 import { types } from './types.js';

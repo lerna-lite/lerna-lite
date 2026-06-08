@@ -137,7 +137,7 @@ export class Fixture {
     // Check for pnpm-workspace.yaml
     try {
       const pnpmWorkspace = join(fixtureRootPath, 'lerna-workspace', 'pnpm-workspace.yaml');
-      if (require('fs').existsSync(pnpmWorkspace)) {
+      if (require('node:fs').existsSync(pnpmWorkspace)) {
         return 'pnpm';
       }
     } catch {
