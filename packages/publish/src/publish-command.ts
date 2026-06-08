@@ -1,4 +1,4 @@
-import crypto from 'crypto';
+import crypto from 'node:crypto';
 import { globSync, realpathSync, statSync } from 'node:fs';
 import { EOL, tmpdir } from 'node:os';
 import { normalize, join as pathJoin, relative } from 'node:path';

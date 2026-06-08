@@ -1,4 +1,4 @@
-import os from 'os';
+import os from 'node:os';
 
 import { afterEach, beforeEach, describe, expect, it, vi, type Mock } from 'vitest';
 

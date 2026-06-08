@@ -1,5 +1,5 @@
 import { readFile, writeFile } from 'node:fs/promises';
-import path from 'path';
+import path from 'node:path';
 
 const dependencyKeys = new Set(['dependencies', 'devDependencies', 'optionalDependencies', 'peerDependencies']);
 

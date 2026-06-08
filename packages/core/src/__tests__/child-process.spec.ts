@@ -191,6 +191,7 @@ describe('childProcess', () => {
       // Simulate a spawned object that rejects with a plain error, using a custom thenable
       const { wrapError } = await import('../child-process.js');
       const error = new Error('plain error');
+      // eslint-disable-next-line unicorn/no-thenable -- intentionally creating a thenable to simulate rejected spawn
       const dummy = { then: (_res: any, rej: any) => rej(error) } as any;
       await expect(wrapError(dummy)).rejects.toThrow('plain error');
     });
