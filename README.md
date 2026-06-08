@@ -32,6 +32,7 @@
 - [Contributions](#contributions)
 - [Troubleshooting](https://github.com/lerna-lite/lerna-lite/wiki/Troubleshooting)
 - [Sponsors](#sponsors)
+- [Repositories](docs/REPOSITORIES.md)
 
 ### Available Commands
 
