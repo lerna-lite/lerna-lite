@@ -32,7 +32,7 @@ catalogs:
 
   # Can be referenced through "catalog:dependencies"
   dependencies:
-    tinyexec: ^1.2.2
+    tinyexec: ^1.2.4
     write-json-file: ^7.0.0
     yaml: ^2.9.0
     yargs: ^18.0.0

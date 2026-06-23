@@ -83,7 +83,7 @@ export class Gauge {
     this._onScreen = false;
     this._needsRedraw = false;
     this._hideCursor = options.hideCursor == null ? true : options.hideCursor;
-    this._fixedFramerate = options.fixedFramerate == null ? !/^v0\.8\./.test(process.version) : options.fixedFramerate;
+    this._fixedFramerate = options.fixedFramerate == null ? !process.version.startsWith('v0.8.') : options.fixedFramerate;
     this._lastUpdateAt = null;
     this._updateInterval = options.updateInterval == null ? 50 : options.updateInterval;
 

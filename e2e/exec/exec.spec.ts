@@ -1,4 +1,4 @@
-import { existsSync } from 'fs';
+import { existsSync } from 'node:fs';
 
 import { describe, it, expect, beforeAll, afterAll } from 'vitest';
 

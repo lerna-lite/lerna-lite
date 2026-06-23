@@ -3,7 +3,7 @@
  * Inlined from deprecated package https://github.com/iarna/has-unicode
  */
 
-import os from 'os';
+import os from 'node:os';
 
 export function hasUnicode(): boolean {
   if (os.type() === 'Windows_NT') {

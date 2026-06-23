@@ -3,8 +3,8 @@
   "compilerOptions": {
     "outDir": "./dist",
     "rootDir": ".",
-    "types": ["vitest/globals", "node"]
+    "types": ["node", "vitest/globals"]
   },
   "include": ["**/*.ts"],
-  "exclude": ["node_modules", "dist"]
+  "exclude": ["dist", "node_modules", "**/*.spec.ts"]
 }

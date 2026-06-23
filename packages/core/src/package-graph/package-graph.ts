@@ -106,7 +106,7 @@ export class PackageGraph extends Map<string, PackageGraphNode> {
         }
 
         // handle catalog: protocol supported by pnpm
-        const isCatalogSpec = /^catalog:/.test(spec);
+        const isCatalogSpec = spec.startsWith('catalog:');
         let originalCatalogSpec: string | undefined;
         if (isCatalogSpec) {
           originalCatalogSpec = spec;
@@ -123,7 +123,7 @@ export class PackageGraph extends Map<string, PackageGraphNode> {
 
         // npa doesn't support the explicit workspace: protocol, supported by
         // pnpm and Yarn.
-        const isWorkspaceSpec = /^workspace:/.test(spec);
+        const isWorkspaceSpec = spec.startsWith('workspace:');
         let originalWorkspaceSpec: string | undefined;
         if (isWorkspaceSpec) {
           originalWorkspaceSpec = spec;

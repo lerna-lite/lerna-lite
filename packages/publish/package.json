@@ -1,6 +1,6 @@
 {
   "name": "@lerna-lite/publish",
-  "version": "5.2.2",
+  "version": "5.3.0",
   "description": "Publish packages in the current workspace",
   "homepage": "https://github.com/lerna-lite/lerna-lite",
   "bugs": {
@@ -36,7 +36,7 @@
     "@lerna-lite/core": "workspace:*",
     "@lerna-lite/npmlog": "workspace:*",
     "@lerna-lite/version": "workspace:*",
-    "@npmcli/arborist": "^9.6.0",
+    "@npmcli/arborist": "^9.7.0",
     "@npmcli/package-json": "^7.0.5",
     "ci-info": "catalog:",
     "libnpmaccess": "^10.0.3",
@@ -47,7 +47,7 @@
     "pacote": "^21.5.0",
     "semver": "catalog:",
     "ssri": "^13.0.1",
-    "tar": "^7.5.15"
+    "tar": "^7.5.16"
   },
   "devDependencies": {
     "@types/npmcli__package-json": "catalog:devDependencies",

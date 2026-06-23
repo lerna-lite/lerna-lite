@@ -75,27 +75,24 @@ jobs:
         run: |
           if ${{inputs.dryrun == true && inputs.graduate != true}}
           then
-              echo "LERNA_VERSION_TYPE=🧪 Dry-Run" >> $GITHUB_ENV
+              echo "LERNA_VERSION_TYPE=Dry-Run 🧪" >> $GITHUB_ENV
               echo "LERNA_VERSION_QUERY=pnpm run local-lerna version --yes --dry-run" >> $GITHUB_ENV
           elif ${{inputs.dryrun == true && inputs.graduate == true}}
           then
-              echo "LERNA_VERSION_TYPE=🧪 Dry-Run w/Graduate" >> $GITHUB_ENV
+              echo "LERNA_VERSION_TYPE=Dry-Run 🧪 w/Graduate" >> $GITHUB_ENV
               echo "LERNA_VERSION_QUERY=pnpm run local-lerna version --yes --dry-run --conventional-graduate" >> $GITHUB_ENV
           elif ${{inputs.dryrun != true && inputs.graduate == true}}
           then
-              echo "LERNA_VERSION_TYPE=🚀 Prod Version w/Graduate" >> $GITHUB_ENV
+              echo "LERNA_VERSION_TYPE=Production 🚀 w/Graduate" >> $GITHUB_ENV
               echo "LERNA_VERSION_QUERY=pnpm run local-lerna version --yes --conventional-graduate" >> $GITHUB_ENV
           elif ${{inputs.dryrun != true && inputs.graduate != true}}
           then
-              echo "LERNA_VERSION_TYPE=🚀 Prod Version" >> $GITHUB_ENV
+              echo "LERNA_VERSION_TYPE=Production 🚀" >> $GITHUB_ENV
               echo "LERNA_VERSION_QUERY=pnpm run local-lerna version --yes" >> $GITHUB_ENV
           fi
 
-      - name: Final version type → ${{ env.LERNA_VERSION_TYPE }}
-        run: echo "${{ env.LERNA_VERSION_QUERY }}"
-
       - if: ${{ inputs.skip_version_retry_publish != true }}
-        name: Lerna Version 🏷️
+        name: Lerna Version 🏷️ ➜ ${{ env.LERNA_VERSION_TYPE }}
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
@@ -108,8 +105,21 @@ jobs:
         run: |
           echo "skip_version_retry_publish=true — lerna version is skipped; proceeding to publish-only run."
 
-      - name: Lerna Publish 📦
-        if: ${{ inputs.dryrun != true }}
+      - name: Lerna Publish (build query) 
+        shell: bash
+        run: | 
+          if ${{ inputs.dryrun == true }}
+          then 
+            echo "LERNA_PUBLISH_TYPE=Dry-Run 🧪" >> $GITHUB_ENV 
+            echo "LERNA_PUBLISH_QUERY=pnpm run local-lerna publish from-package --force-publish --yes --dry-run" >> $GITHUB_ENV 
+          else 
+            echo "LERNA_PUBLISH_TYPE=Production 🚀" >> $GITHUB_ENV
+            echo "LERNA_PUBLISH_QUERY=pnpm run local-lerna publish from-package --force-publish --yes" >> $GITHUB_ENV 
+          fi
+
+      - name: Lerna Publish 📦 ➜ ${{ env.LERNA_PUBLISH_TYPE }}
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        run: pnpm run local-lerna publish from-package --force-publish --yes
+        run: |
+          echo "Running: ${{ env.LERNA_PUBLISH_TYPE }}"
+          pnpm exec ${{ env.LERNA_PUBLISH_QUERY }}
