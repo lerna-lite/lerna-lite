@@ -9,13 +9,6 @@ packages:
   - "!**/__fixtures__/**"
   - "!**/__test__/**"
 
-# min age of 2 days in minutes
-minimumReleaseAge: 2880
-
-# exclude Lerna-Lite itself in order to run E2E tests without failures
-minimumReleaseAgeExclude:
-  - '@lerna-lite/*'
-
 # Define a catalog of version ranges.
 catalog:
   ci-info: ^4.4.0
@@ -44,3 +37,10 @@ catalogs:
     yaml: ^2.9.0
     yargs: ^18.0.0
     zeptomatch: ^2.1.0
+
+# min age of 2 days in minutes
+minimumReleaseAge: 2880
+
+# exclude Lerna-Lite itself in order to run E2E tests without failures
+minimumReleaseAgeExclude:
+  - '@lerna-lite/*'
