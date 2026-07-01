@@ -203,7 +203,7 @@ describe('conventional-commits', () => {
       const [pkg1, pkg2] = await Project.getPackages(cwd);
       const opts = {
         // sometimes presets return null for the level, with no actual releaseType...
-        changelogPreset: pathResolve(__dirname, '../__fixtures__/fixed/scripts/null-preset.ts'),
+        changelogPreset: pathResolve(import.meta.dirname, '../__fixtures__/fixed/scripts/null-preset.ts'),
       };
 
       // make a change in package-1 and package-2
@@ -500,6 +500,54 @@ describe('conventional-commits', () => {
       expect(normalizedRootContent).toMatchSnapshot('root');
     });
 
+    it('supports preset writer partials defined as strings', async () => {
+      const cwd = (await initFixture('fixed')) as string;
+
+      const [pkg1] = await Project.getPackages(cwd);
+
+      await gitTag(cwd, 'v1.0.0');
+
+      await pkg1.set('changed', 1).serialize();
+      await gitAdd(cwd, pkg1.manifestLocation);
+      await gitCommit(cwd, 'feat: support old preset writer partials');
+
+      await pkg1.set('version', '1.0.1').serialize();
+
+      const changelog = await updateChangelog(pkg1, 'fixed', {
+        changelogPreset: pathResolve(import.meta.dirname, '../__fixtures__/fixed/scripts/local-preset.ts'),
+      });
+
+      const changelogContent = await getFileContent(changelog);
+
+      expect(changelogContent).toContain('feat: support old preset writer partials');
+      expect(changelogContent).toContain('<a name="1.0.1"></a>');
+    });
+
+    it('supports preset writer partials defined as functions mixed with a string mainTemplate', async () => {
+      const cwd = (await initFixture('fixed')) as string;
+
+      const [pkg1] = await Project.getPackages(cwd);
+
+      await gitTag(cwd, 'v1.0.0');
+
+      await pkg1.set('changed', 1).serialize();
+      await gitAdd(cwd, pkg1.manifestLocation);
+      await gitCommit(cwd, 'feat: support function-based preset writer partials');
+
+      await pkg1.set('version', '1.0.1').serialize();
+
+      const changelog = await updateChangelog(pkg1, 'fixed', {
+        changelogPreset: pathResolve(import.meta.dirname, '../__fixtures__/fixed/scripts/local-preset-fn-partials.ts'),
+      });
+
+      const changelogContent = await getFileContent(changelog);
+
+      // headerPartial is a function – verify its output appears in the changelog.
+      expect(changelogContent).toContain('<a name="1.0.1"></a>');
+      // commitPartial is a function – verify the commit message is rendered.
+      expect(changelogContent).toContain('feat: support function-based preset writer partials');
+    });
+
     it('updates fixed changelogs', async () => {
       const cwd = await initFixture('fixed');
       const rootPkg = {
@@ -556,14 +604,12 @@ describe('conventional-commits', () => {
       expect(leafChangelog.newEntry.trimEnd()).toMatchInlineSnapshot(`
         ## [1.0.1](/compare/dragons-are-awesome1.0.0...dragons-are-awesome1.0.1) (YYYY-MM-DD)
 
-
         ### Bug Fixes
 
         * A second commit for our CHANGELOG ([SHA](https://github.com/lerna/conventional-commits-fixed/commit/GIT_HEAD))
       `);
       expect(rootChangelog.newEntry.trimEnd()).toMatchInlineSnapshot(`
         ## [1.0.1](/compare/dragons-are-awesome1.0.0...dragons-are-awesome1.0.1) (YYYY-MM-DD)
-
 
         ### Bug Fixes
 
@@ -587,7 +633,6 @@ describe('conventional-commits', () => {
       // second commit should not show up again
       expect(lastRootChangelog.newEntry.trimEnd()).toMatchInlineSnapshot(`
         ## [1.0.2](/compare/dragons-are-awesome1.0.1...dragons-are-awesome1.0.2) (YYYY-MM-DD)
-
 
         ### Bug Fixes
 
@@ -625,14 +670,12 @@ describe('conventional-commits', () => {
       expect(leafChangelog.newEntry.trimEnd()).toMatchInlineSnapshot(`
         ## [1.0.1](/compare/dragons-are-awesome1.0.0...dragons-are-awesome1.0.1) (YYYY-MM-DD)
 
-
         ### Bug Fixes
 
         * A second commit for our CHANGELOG ([SHA](https://github.com/lerna/conventional-commits-fixed/commit/GIT_HEAD)) (Tester McPerson)
       `);
       expect(rootChangelog.newEntry.trimEnd()).toMatchInlineSnapshot(`
         ## [1.0.1](/compare/dragons-are-awesome1.0.0...dragons-are-awesome1.0.1) (YYYY-MM-DD)
-
 
         ### Bug Fixes
 
@@ -657,7 +700,6 @@ describe('conventional-commits', () => {
       // second commit should not show up again
       expect(lastRootChangelog.newEntry.trimEnd()).toMatchInlineSnapshot(`
         ## [1.0.2](/compare/dragons-are-awesome1.0.1...dragons-are-awesome1.0.2) (YYYY-MM-DD)
-
 
         ### Bug Fixes
 
@@ -759,16 +801,14 @@ describe('conventional-commits', () => {
       ]);
 
       expect(changelogOne.newEntry.trimEnd()).toMatchInlineSnapshot(`
-        ## [1.0.1](/compare/package-1@1.0.0...package-1@1.0.1) (YYYY-MM-DD)
-
+        ## [1.0.1](/compare/package-1%401.0.0...package-1%401.0.1) (YYYY-MM-DD)
 
         ### Bug Fixes
 
         * **stuff:** changed ([SHA](https://github.com/lerna/conventional-commits-independent/commit/GIT_HEAD))
       `);
       expect(changelogTwo.newEntry.trimEnd()).toMatchInlineSnapshot(`
-        # [1.1.0](/compare/package-2@1.0.0...package-2@1.1.0) (YYYY-MM-DD)
-
+        # [1.1.0](/compare/package-2%401.0.0...package-2%401.1.0) (YYYY-MM-DD)
 
         ### Features
 
@@ -809,8 +849,7 @@ describe('conventional-commits', () => {
       ]);
 
       expect(changelogOne.newEntry.trimEnd()).toMatchInlineSnapshot(`
-        ## [1.0.1](/compare/package-1@1.0.0...package-1@1.0.1) (YYYY-MM-DD)
-
+        ## [1.0.1](/compare/package-1%401.0.0...package-1%401.0.1) (YYYY-MM-DD)
 
         ### Bug Fixes
 
@@ -823,15 +862,14 @@ describe('conventional-commits', () => {
         All notable changes to this project will be documented in this file.
         See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
-        ## [1.0.1](/compare/package-1@1.0.0...package-1@1.0.1) (YYYY-MM-DD)
+        ## [1.0.1](/compare/package-1%401.0.0...package-1%401.0.1) (YYYY-MM-DD)
 
         ### Bug Fixes
 
         * **stuff:** changed ([SHA](https://github.com/lerna/conventional-commits-independent/commit/GIT_HEAD)) (Tester McPerson)
       `);
       expect(changelogTwo.newEntry.trimEnd()).toMatchInlineSnapshot(`
-        # [1.1.0](/compare/package-2@1.0.0...package-2@1.1.0) (YYYY-MM-DD)
-
+        # [1.1.0](/compare/package-2%401.0.0...package-2%401.1.0) (YYYY-MM-DD)
 
         ### Features
 
@@ -871,16 +909,14 @@ describe('conventional-commits', () => {
       ]);
 
       expect(changelogOne.newEntry.trimEnd()).toMatchInlineSnapshot(`
-        ## [1.0.1](/compare/package-1@1.0.0...package-1@1.0.1) (YYYY-MM-DD)
-
+        ## [1.0.1](/compare/package-1%401.0.0...package-1%401.0.1) (YYYY-MM-DD)
 
         ### Bug Fixes
 
         * **stuff:** changed ([SHA](https://github.com/lerna/conventional-commits-independent/commit/GIT_HEAD)) by **Tester McPerson** (test@example.com)
       `);
       expect(changelogTwo.newEntry.trimEnd()).toMatchInlineSnapshot(`
-        # [1.1.0](/compare/package-2@1.0.0...package-2@1.1.0) (YYYY-MM-DD)
-
+        # [1.1.0](/compare/package-2%401.0.0...package-2%401.1.0) (YYYY-MM-DD)
 
         ### Features
 
@@ -955,16 +991,14 @@ describe('conventional-commits', () => {
       const changelog3 = await updateChangelog(pkg2, 'independent', opt3s);
 
       expect(changelog1.newEntry.trimEnd()).toMatchInlineSnapshot(`
-        ## [1.0.1](/compare/package-1@1.0.0...package-1@1.0.1) (YYYY-MM-DD)
-
+        ## [1.0.1](/compare/package-1%401.0.0...package-1%401.0.1) (YYYY-MM-DD)
 
         ### Bug Fixes
 
         * **stuff:** changed ([SHA](https://github.com/lerna/conventional-commits-independent/commit/GIT_HEAD)) (@tester-mcperson)
       `);
       expect(changelog2.newEntry.trimEnd()).toMatchInlineSnapshot(`
-        # [1.1.0](/compare/package-2@1.0.0...package-2@1.1.0) (YYYY-MM-DD)
-
+        # [1.1.0](/compare/package-2%401.0.0...package-2%401.1.0) (YYYY-MM-DD)
 
         ### Features
 
@@ -973,8 +1007,7 @@ describe('conventional-commits', () => {
 
       // when SHA isn't found, it will still try to format the message but without a user @
       expect(changelog3.newEntry.trimEnd()).toMatchInlineSnapshot(`
-        # [1.1.0](/compare/package-2@1.0.0...package-2@1.1.0) (YYYY-MM-DD)
-
+        # [1.1.0](/compare/package-2%401.0.0...package-2%401.1.0) (YYYY-MM-DD)
 
         ### Features
 

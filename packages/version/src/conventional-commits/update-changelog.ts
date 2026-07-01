@@ -5,7 +5,7 @@ import type { ChangelogPresetOptions, Package } from '@lerna-lite/core';
 import { EOL } from '@lerna-lite/core';
 import { log } from '@lerna-lite/npmlog';
 import { ConventionalChangelog, type Options as ChangelogCoreOptions } from 'conventional-changelog';
-import type { Context, Options as WriterOptions } from 'conventional-changelog-writer';
+import type { Options as WriterOptions } from 'conventional-changelog-writer';
 
 import type { ChangelogConfig, ChangelogType, UpdateChangelogOption } from '../interfaces.js';
 import { BLANK_LINE, CHANGELOG_HEADER } from './constants.js';
@@ -13,6 +13,8 @@ import { GetChangelogConfig } from './get-changelog-config.js';
 import { makeBumpOnlyFilter } from './make-bump-only-filter.js';
 import { readExistingChangelog } from './read-existing-changelog.js';
 import { setConfigChangelogCommitClientLogin, setConfigChangelogCommitGitAuthor } from './writer-opts-transform.js';
+
+type WriterContext = Parameters<NonNullable<WriterOptions['commitPartial']>>[0];
 
 /**
  * Update changelog with the commits of the new release
@@ -37,7 +39,7 @@ export async function updateChangelog(pkg: Package, type: ChangelogType, updateO
   const config = await GetChangelogConfig.getChangelogConfig(changelogPreset, rootPath);
   const ccOptions = {} as ChangelogCoreOptions;
   const tagOptions = {} as GetSemverTagsParams;
-  const writerContext = {} as Context; // pass as positional because cc-core's merge-config is wack
+  const writerContext = {} as WriterContext; // pass as positional because cc-core's merge-config is wack
   const writerOpts = {} as WriterOptions;
   let changelogConfig = {} as ChangelogConfig;
 

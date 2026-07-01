@@ -84,7 +84,7 @@
     "@types/yargs": "^17.0.35",
     "@typescript/native-preview": "^7.0.0-dev.20260601.1",
     "@vitest/coverage-v8": "^5.0.0-beta.4",
-    "conventional-changelog-conventionalcommits": "^9.3.1",
+    "conventional-changelog-conventionalcommits": "^10.2.0",
     "cross-env": "^10.1.0",
     "empathic": "^2.0.1",
     "eslint-plugin-local-import-ext": "0.2.0",
