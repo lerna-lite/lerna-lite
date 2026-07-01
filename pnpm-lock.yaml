@@ -60,6 +60,9 @@ catalogs:
       specifier: ^22.0.0
       version: 22.0.0
 
+overrides:
+  '@sigstore/core': ^4.0.1
+
 importers:
 
   .:
@@ -1238,9 +1241,9 @@ packages:
     resolution: {integrity: sha512-NwCl5Y0V6Di0NexvkTqdoVfmjTaQwoLM236r89KEojGmq/jMls8S+zb7yOwAPdXvbwfKDlP+lmXgAL4vKSQT+A==}
     engines: {node: ^20.17.0 || >=22.9.0}
 
-  '@sigstore/core@3.2.1':
-    resolution: {integrity: sha512-qRsxPnCrbC/puegGxKuynfnxgLiHqWStrSjxkoB4YKqq3Z3s4cyZyj42ZdWFAEblNP65C+rBH8EuREHIXoi83g==}
-    engines: {node: ^20.17.0 || >=22.9.0}
+  '@sigstore/core@4.0.1':
+    resolution: {integrity: sha512-9v5hRjujn5NXq8o7XFEUgLyAtdr5Iisb4pzM05u3K61IS5q3hP3luWAndk0RkPPLTUFoTbg7Vb84UQ1ZQeajWQ==}
+    engines: {node: ^22.22.2 || ^24.15.0 || >=26.0.0}
 
   '@sigstore/protobuf-specs@0.5.0':
     resolution: {integrity: sha512-MM8XIwUjN2bwvCg1QvrMtbBmpcSHrkhFSCu1D11NyPvDQ25HEc4oG5/OcQfd/Tlf/OxmKWERDj0zGE23jQaMwA==}
@@ -3142,14 +3145,14 @@ snapshots:
     dependencies:
       '@sigstore/protobuf-specs': 0.5.0
 
-  '@sigstore/core@3.2.1': {}
+  '@sigstore/core@4.0.1': {}
 
   '@sigstore/protobuf-specs@0.5.0': {}
 
   '@sigstore/sign@4.0.0':
     dependencies:
       '@sigstore/bundle': 4.0.0
-      '@sigstore/core': 3.2.1
+      '@sigstore/core': 4.0.1
       '@sigstore/protobuf-specs': 0.5.0
       make-fetch-happen: 15.0.2
       proc-log: 5.0.0
@@ -3167,7 +3170,7 @@ snapshots:
   '@sigstore/verify@3.0.0':
     dependencies:
       '@sigstore/bundle': 4.0.0
-      '@sigstore/core': 3.2.1
+      '@sigstore/core': 4.0.1
       '@sigstore/protobuf-specs': 0.5.0
 
   '@simple-libs/child-process-utils@2.0.0':
@@ -4249,7 +4252,7 @@ snapshots:
   sigstore@4.0.0:
     dependencies:
       '@sigstore/bundle': 4.0.0
-      '@sigstore/core': 3.2.1
+      '@sigstore/core': 4.0.1
       '@sigstore/protobuf-specs': 0.5.0
       '@sigstore/sign': 4.0.0
       '@sigstore/tuf': 4.0.0
