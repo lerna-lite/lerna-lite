@@ -57,9 +57,8 @@ export function setConfigChangelogCommitGitAuthor(
       .replace(/\{\{authorName\}\}/g, authorName)
       .replace(/\{\{authorEmail\}\}/g, authorEmail);
 
-    const extraCommitSuffix = renderedExtraCommitMsg
-      ? `${renderedExtraCommitMsg.startsWith(' ') ? '' : ' '}${renderedExtraCommitMsg}`
-      : '';
+    // prettier-ignore
+    const extraCommitSuffix = renderedExtraCommitMsg ? `${renderedExtraCommitMsg.startsWith(' ') ? '' : ' '}${renderedExtraCommitMsg}` : '';
 
     return commitPartial.replace(/\n*$/, '') + (context.linkReferences ? extraCommitSuffix : '') + '\n';
   }) as CommitPartialFunction;
@@ -101,9 +100,8 @@ export function setConfigChangelogCommitClientLogin(
       .replace(/\{\{authorEmail\}\}/g, commit.authorEmail || '')
       .replace(/\{\{userLogin\}\}/g, commit.userLogin || '');
 
-    const extraCommitSuffix = renderedExtraCommitMsg
-      ? `${renderedExtraCommitMsg.startsWith(' ') ? '' : ' '}${renderedExtraCommitMsg}`
-      : '';
+    // prettier-ignore
+    const extraCommitSuffix = renderedExtraCommitMsg ? `${renderedExtraCommitMsg.startsWith(' ') ? '' : ' '}${renderedExtraCommitMsg}` : '';
 
     return commitPartial.replace(/\n*$/, '') + (context.linkReferences ? extraCommitSuffix : '') + '\n';
   }) as CommitPartialFunction;
