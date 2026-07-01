@@ -566,7 +566,7 @@ lerna version --conventional-commits --create-release github --create-release-di
 
 ### `--generate-release-notes`
 
-When run with this flag, `lerna version` will create an official GitHub release by automatically generating the name and body for the new release. Conventional commits is required for this option to work.
+When run with this flag, `lerna version` will let GitHub automatically generate the release notes (more info can be found in this GitHub documentation page [Automatically generated release notes](https://docs.github.com/en/repositories/releasing-projects-on-github/automatically-generated-release-notes)). Conventional commits is required for this option to work.
 
 ```sh
 lerna version --conventional-commits --create-release github --generate-release-notes

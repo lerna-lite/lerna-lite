@@ -34,7 +34,7 @@
       allowedVersions: '< 14.0.0',
     },
     {
-      packageNames: ['npm-packlist'],
+      packageNames: ['@npmcli/run-script', 'npm-packlist'],
       allowedVersions: '< 11.0.0',
     },
     {
@@ -44,6 +44,10 @@
     {
       packageNames: ['@npmcli/package-json', 'write-file-atomic'],
       allowedVersions: '< 8.0.0',
+    },
+    {
+      packageNames: ['pacote'],
+      allowedVersions: '< 22.0.0',
     },
   ],
   ignoreDeps: ['node', 'pnpm'],
