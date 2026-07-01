@@ -37,7 +37,7 @@ jobs:
           fetch-depth: 0
           token: ${{ secrets.GITHUB_TOKEN }}
 
-      - if: ${{ github.event.pull_request.merged != true && contains('["ghiscoding"]', github.actor) != true }}
+      - if: ${{ !contains(fromJSON('["ghiscoding"]'), github.actor) }}
         name: Exit early when current actor is not allowed to push new release
         run: |
           echo "Error: Your GitHub username (${{ github.actor }}) is not on the allowed list of Admins that can run this workflow"
@@ -105,9 +105,9 @@ jobs:
         run: |
           echo "skip_version_retry_publish=true — lerna version is skipped; proceeding to publish-only run."
 
-      - name: Lerna Publish (build query) 
+      - name: Lerna Publish (build query)
         shell: bash
-        run: | 
+        run: |
           if ${{ inputs.dryrun == true }}
           then 
             echo "LERNA_PUBLISH_TYPE=Dry-Run 🧪" >> $GITHUB_ENV 
