@@ -1,7 +1,22 @@
 import { type GetCommitsParams } from '@conventional-changelog/git-client';
-import type { Options as WriterOptions } from 'conventional-changelog-writer';
+import type {
+  CommitKnownProps,
+  FinalTemplateContext,
+  Options as WriterOptions,
+  TransformedCommit,
+} from 'conventional-changelog-writer';
 
 import type { ChangelogConfig, RemoteCommit } from '../interfaces.js';
+
+type AugmentedCommit = TransformedCommit<CommitKnownProps> & {
+  authorEmail?: string;
+  authorName?: string;
+  userLogin?: string;
+};
+
+// Legacy preset compatibility: remove these widened commit helpers when we no longer support older preset shapes.
+type CommitPartialFunction = NonNullable<WriterOptions<AugmentedCommit>['commitPartial']>;
+type CommitTransformFunction = NonNullable<WriterOptions<AugmentedCommit>['transform']>;
 
 // available formats can be found at Git's url: https://git-scm.com/docs/git-log#_pretty_formats
 const GIT_COMMIT_WITH_AUTHOR_FORMAT =
@@ -21,17 +36,33 @@ const GIT_COMMIT_WITH_AUTHOR_FORMAT =
 export function setConfigChangelogCommitGitAuthor(
   config: ChangelogConfig,
   gitRawCommitsOpts: GetCommitsParams,
-  writerOpts: WriterOptions,
+  writerOpts: WriterOptions<AugmentedCommit>,
   commitCustomFormat?: string | boolean
 ) {
   gitRawCommitsOpts.format = GIT_COMMIT_WITH_AUTHOR_FORMAT;
   const extraCommitMsg =
-    typeof commitCustomFormat === 'string' && commitCustomFormat !== ''
-      ? commitCustomFormat.replace(/%a/g, '{{authorName}}').replace(/%e/g, '{{authorEmail}}')
-      : `({{authorName}})`;
+    typeof commitCustomFormat === 'string' && commitCustomFormat !== '' ? commitCustomFormat : '({{authorName}})';
+  const originalCommitPartial = config.writer?.commitPartial;
 
-  const commitPartial = config.writer?.commitPartial || '';
-  writerOpts.commitPartial = commitPartial.replace(/\n*$/, '') + ` {{#if @root.linkReferences~}}${extraCommitMsg}{{~/if}}\n`;
+  // Legacy preset compatibility: keep string-based partials working until we drop v9-era preset support.
+  writerOpts.commitPartial = ((context: FinalTemplateContext<AugmentedCommit>, commit: AugmentedCommit) => {
+    const commitPartial =
+      typeof originalCommitPartial === 'function' ? originalCommitPartial(context, commit) : originalCommitPartial || '';
+
+    const authorName = commit.authorName || '';
+    const authorEmail = commit.authorEmail || '';
+    const renderedExtraCommitMsg = extraCommitMsg
+      .replace(/%a/g, authorName)
+      .replace(/%e/g, authorEmail)
+      .replace(/\{\{authorName\}\}/g, authorName)
+      .replace(/\{\{authorEmail\}\}/g, authorEmail);
+
+    const extraCommitSuffix = renderedExtraCommitMsg
+      ? `${renderedExtraCommitMsg.startsWith(' ') ? '' : ' '}${renderedExtraCommitMsg}`
+      : '';
+
+    return commitPartial.replace(/\n*$/, '') + (context.linkReferences ? extraCommitSuffix : '') + '\n';
+  }) as CommitPartialFunction;
 }
 
 /**
@@ -48,22 +79,38 @@ export function setConfigChangelogCommitGitAuthor(
 export function setConfigChangelogCommitClientLogin(
   config: ChangelogConfig,
   gitRawCommitsOpts: GetCommitsParams,
-  writerOpts: WriterOptions,
+  writerOpts: WriterOptions<AugmentedCommit>,
   commitsSinceLastRelease: RemoteCommit[],
   commitCustomFormat?: string | boolean
 ) {
   gitRawCommitsOpts.format = GIT_COMMIT_WITH_AUTHOR_FORMAT;
   const extraCommitMsg =
-    typeof commitCustomFormat === 'string' && commitCustomFormat !== ''
-      ? commitCustomFormat.replace(/%a/g, '{{authorName}}').replace(/%e/g, '{{authorEmail}}').replace(/%l/g, '{{userLogin}}')
-      : ` (@{{userLogin}})`;
+    typeof commitCustomFormat === 'string' && commitCustomFormat !== '' ? commitCustomFormat : ' (@{{userLogin}})';
+  const originalCommitPartial = config.writer?.commitPartial;
 
-  const commitPartial = config.writer?.commitPartial || '';
-  writerOpts.commitPartial = commitPartial.replace(/\n*$/, '') + `${extraCommitMsg}\n`;
+  // Legacy preset compatibility: keep string-based partials working until we drop v9-era preset support.
+  writerOpts.commitPartial = ((context: FinalTemplateContext<AugmentedCommit>, commit: AugmentedCommit) => {
+    const commitPartial =
+      typeof originalCommitPartial === 'function' ? originalCommitPartial(context, commit) : originalCommitPartial || '';
 
-  // add commits since last release into the transform function
+    const renderedExtraCommitMsg = extraCommitMsg
+      .replace(/%a/g, commit.authorName || '')
+      .replace(/%e/g, commit.authorEmail || '')
+      .replace(/%l/g, commit.userLogin || '')
+      .replace(/\{\{authorName\}\}/g, commit.authorName || '')
+      .replace(/\{\{authorEmail\}\}/g, commit.authorEmail || '')
+      .replace(/\{\{userLogin\}\}/g, commit.userLogin || '');
+
+    const extraCommitSuffix = renderedExtraCommitMsg
+      ? `${renderedExtraCommitMsg.startsWith(' ') ? '' : ' '}${renderedExtraCommitMsg}`
+      : '';
+
+    return commitPartial.replace(/\n*$/, '') + (context.linkReferences ? extraCommitSuffix : '') + '\n';
+  }) as CommitPartialFunction;
+
+  // Legacy preset compatibility: enrich transformed commits with remote login data until the next major removes this path.
   const originalTransform = config.writer?.transform;
-  writerOpts.transform = (commit, context, options) => {
+  writerOpts.transform = ((commit, context, options) => {
     const transCommit = originalTransform?.(commit, context, options) || null;
 
     // add remote client detail (user login) when found
@@ -75,5 +122,5 @@ export function setConfigChangelogCommitClientLogin(
     }
 
     return transCommit;
-  };
+  }) as CommitTransformFunction;
 }

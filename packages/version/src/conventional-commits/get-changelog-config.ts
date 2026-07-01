@@ -2,9 +2,60 @@ import { promisify } from 'node:util';
 
 import { ValidationError } from '@lerna-lite/core';
 import { log } from '@lerna-lite/npmlog';
+import Handlebars from 'handlebars';
 import npa from 'npm-package-arg';
 
 import type { ChangelogConfig, ChangelogPresetConfig } from '../interfaces.js';
+
+function normalizeWriterConfig(config: ChangelogConfig): ChangelogConfig {
+  const writer = config.writer as any;
+
+  if (!writer) {
+    return config;
+  }
+
+  // Legacy preset compatibility shim.
+  // Remove this entire branch in the next major when we require function-based templates only.
+  const legacyTemplateSource =
+    typeof writer.template === 'string' ? writer.template : typeof writer.mainTemplate === 'string' ? writer.mainTemplate : '';
+
+  if (legacyTemplateSource) {
+    const handlebars = Handlebars.create();
+    const compilePartial = (partial: unknown): Handlebars.TemplateDelegate<any> => {
+      if (typeof partial === 'string') {
+        return handlebars.compile(partial);
+      }
+
+      if (typeof partial === 'function') {
+        return partial as Handlebars.TemplateDelegate<any>;
+      }
+
+      return handlebars.compile('');
+    };
+
+    const partials: Record<string, Handlebars.TemplateDelegate<any>> = {
+      header: compilePartial(writer.headerPartial),
+      preamble: compilePartial(writer.preamblePartial),
+      commit: compilePartial(writer.commitPartial),
+      footer: compilePartial(writer.footerPartial),
+    };
+
+    // Compile once here rather than inside the template closure to avoid
+    // recompiling on every changelog render call.
+    // Remove this adapter in the next major when presets ship a real template() function.
+    const compiledTemplate = handlebars.compile(legacyTemplateSource);
+
+    return {
+      ...config,
+      writer: {
+        ...writer,
+        template: (context: any) => compiledTemplate(context, { partials }),
+      },
+    };
+  }
+
+  return config;
+}
 
 export class GetChangelogConfig {
   static cfgCache = new Map<string, any>();
@@ -42,7 +93,11 @@ export class GetChangelogConfig {
       }
     }
 
-    return config;
+    if (typeof (config as Promise<ChangelogConfig>)?.then === 'function') {
+      config = await config;
+    }
+
+    return normalizeWriterConfig(config);
   }
 
   /**

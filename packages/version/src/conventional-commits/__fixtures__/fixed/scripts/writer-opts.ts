@@ -1,8 +1,8 @@
-import { type Context } from 'conventional-changelog-writer';
+import { type TemplateContext } from 'conventional-changelog-writer';
 import { type Commit } from 'conventional-commits-parser';
 
 export default {
-  transform: (commit: Commit, context: Context) => {
+  transform: (commit: Commit, context: TemplateContext) => {
     const clonedCommit = { ...commit };
     let discard = true;
     const issues: string[] = [];
