@@ -16,13 +16,13 @@ catalog:
   has-unicode: ^2.0.1
   npm-package-arg: ^13.0.2
   npm-registry-fetch: ^19.1.1
-  semver: ^7.8.1
+  semver: ^7.8.5
 
 # add a few named catalog: for Lerna-Lite to test its own code with real projects
 catalogs:
   # Can be referenced through "catalog:devDependencies"
   devDependencies:
-    "@types/node": ^24.12.4
+    "@types/node": ^24.13.2
     "@types/npm-package-arg": ^6.1.4
     "@types/npmcli__package-json": ^4.0.4
     "@types/pacote": ^11.1.8

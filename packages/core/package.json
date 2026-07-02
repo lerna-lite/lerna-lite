@@ -53,7 +53,7 @@
     "zeptomatch": "catalog:dependencies"
   },
   "devDependencies": {
-    "@types/inquirer": "^9.0.9",
+    "@types/inquirer": "^9.0.10",
     "@types/npm-package-arg": "catalog:devDependencies",
     "@types/semver": "catalog:devDependencies",
     "@types/write-file-atomic": "^4.0.3",
