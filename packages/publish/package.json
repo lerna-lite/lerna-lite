@@ -36,7 +36,7 @@
     "@lerna-lite/core": "workspace:*",
     "@lerna-lite/npmlog": "workspace:*",
     "@lerna-lite/version": "workspace:*",
-    "@npmcli/arborist": "^9.7.0",
+    "@npmcli/arborist": "^9.9.0",
     "@npmcli/package-json": "^7.0.5",
     "ci-info": "catalog:",
     "libnpmaccess": "^10.0.3",
@@ -44,10 +44,10 @@
     "npm-package-arg": "catalog:",
     "npm-packlist": "^10.0.4",
     "npm-registry-fetch": "catalog:",
-    "pacote": "^21.5.0",
+    "pacote": "^21.5.1",
     "semver": "catalog:",
     "ssri": "^13.0.1",
-    "tar": "^7.5.16"
+    "tar": "^7.5.19"
   },
   "devDependencies": {
     "@types/npmcli__package-json": "catalog:devDependencies",
