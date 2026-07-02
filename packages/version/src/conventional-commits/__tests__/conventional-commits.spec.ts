@@ -348,6 +348,43 @@ describe('conventional-commits', () => {
         const bump = await recommendVersion(pkg0, 'independent', {});
         expect(bump).toBe('0.2.0');
       });
+
+      it('keeps breaking changes in prerelease series by default when prereleaseId is set', async () => {
+        const cwd = await initFixture('major-zero');
+        const [pkg0] = await Project.getPackages(cwd);
+
+        await pkg0.set('version', '0.1.0-alpha.0').serialize();
+        await gitAdd(cwd, pkg0.manifestLocation);
+        await gitCommit(cwd, 'chore: set prerelease version');
+
+        // make a change in package-0
+        await pkg0.set('changed', 1).serialize();
+        await gitAdd(cwd, pkg0.manifestLocation);
+        await gitCommit(cwd, 'feat: changed\n\nBREAKING CHANGE: changed');
+
+        const bump = await recommendVersion(pkg0, 'independent', { prereleaseId: 'alpha' });
+        expect(bump).toBe('0.1.0-alpha.1');
+      });
+
+      it('treats breaking changes as preminor when prereleaseId is set and conventionalBumpPrerelease is enabled', async () => {
+        const cwd = await initFixture('major-zero');
+        const [pkg0] = await Project.getPackages(cwd);
+
+        await pkg0.set('version', '0.1.0-alpha.0').serialize();
+        await gitAdd(cwd, pkg0.manifestLocation);
+        await gitCommit(cwd, 'chore: set prerelease version');
+
+        // make a change in package-0
+        await pkg0.set('changed', 1).serialize();
+        await gitAdd(cwd, pkg0.manifestLocation);
+        await gitCommit(cwd, 'feat: changed\n\nBREAKING CHANGE: changed');
+
+        const bump = await recommendVersion(pkg0, 'independent', {
+          prereleaseId: 'alpha',
+          conventionalBumpPrerelease: true,
+        });
+        expect(bump).toBe('0.2.0-alpha.0');
+      });
     });
 
     describe('prerelease bumps', () => {
