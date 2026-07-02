@@ -90,7 +90,7 @@
     "eslint-plugin-local-import-ext": "0.2.0",
     "oxfmt": "^0.57.0",
     "oxlint": "^1.72.0",
-    "oxlint-tsgolint": "^0.23.0",
+    "oxlint-tsgolint": "^0.24.0",
     "remove-glob": "^1.2.1",
     "semver": "catalog:",
     "tinyexec": "catalog:dependencies",
