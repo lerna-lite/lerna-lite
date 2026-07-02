@@ -4,6 +4,10 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [5.4.0](https://github.com/lerna-lite/lerna-lite/compare/v5.3.0...v5.4.0) (2026-07-02)
+
+**Note:** Version bump only for package @lerna-lite/init
+
 ## [5.3.0](https://github.com/lerna-lite/lerna-lite/compare/v5.2.2...v5.3.0) (2026-06-04)
 
 ### Features
