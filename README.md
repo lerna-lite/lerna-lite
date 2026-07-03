@@ -311,6 +311,10 @@ npm install @lerna-lite/publish -D
     }
 }
 ```
+
+> [!NOTE]
+> If you are using NPM, you should use the [--sync-workspace-lock](https://github.com/lerna-lite/lerna-lite/tree/main/packages/version#--sync-workspace-lock) in your lerna config. This flag will leverage your package manager client to update the project lock file (e.g. `npm install --package-lock-only`) it relies heavily on the `npmClient` defined in your `lerna.json` config (pnpm, yarn or npm which is default) so make sure you have it configured correctly, this process will also include the lock file as part of your git change history once processed.
+
 > **Note** after switching to Lerna-Lite and publishing your next release with conventional-changelog, you will probably see a lot of diff changes across your `changelog.md` files, a lot of empty lines will be deleted, and that is totally expected since Lerna-Lite has code in place to remove these unnecessary empty lines.
 
 ## Project Demo?
