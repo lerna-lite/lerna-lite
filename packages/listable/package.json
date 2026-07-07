@@ -26,8 +26,8 @@
     "access": "public"
   },
   "scripts": {
-    "build": "remove dist && tsgo",
-    "build:incremental": "tsgo --incremental --sourceMap false --excludeDirectories dist",
+    "build": "remove dist && tsc",
+    "build:incremental": "tsc --incremental --sourceMap false --excludeDirectories dist",
     "echo:test": "echo \"Lerna-Lite listable package\"",
     "pack-tarball": "npm pack"
   },
