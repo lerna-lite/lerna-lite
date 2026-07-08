@@ -34,8 +34,16 @@
       allowedVersions: '< 14.0.0',
     },
     {
-      packageNames: ['@npmcli/run-script', 'npm-packlist'],
+      packageNames: ['@npmcli/arborist'],
+      allowedVersions: '< 10.0.0',
+    },
+    {
+      packageNames: ['@npmcli/run-script', 'libnpmaccess', 'npm-packlist'],
       allowedVersions: '< 11.0.0',
+    },
+    {
+      packageNames: ['libnpmpublish'],
+      allowedVersions: '< 12.0.0',
     },
     {
       packageNames: ['npm-registry-fetch'],
