@@ -96,8 +96,8 @@ Below are the main reasons as to why this fork was created:
    - note, if you already use `Nx` then it's probably better to use Lerna, otherwise Lerna-Lite is a better alternative
    - if you use tools like TurboRepo and install the original Lerna, you end up installing 2 similar tools (not good)
 4. Lerna-Lite is much smaller with a lot less dependencies (install only what you use)
-   - newer version of Lerna-Lite also dropped a lot of dependencies to use as much native code as possible
-6. in Lerna-Lite a few unique features were also added which are not available in the original Lerna:
+   - newer versions of Lerna-Lite also dropped a lot of dependencies by focusing on using more native code
+6. Lerna-Lite also added a few unique features that are not available in the original Lerna:
    - [`catalog:` protocol](https://github.com/lerna-lite/lerna-lite/tree/main/packages/version#catalog-protocol) support (pnpm/bun/yarn) for both `version` and `publish` commands
    - [`workspace:` protocol](https://github.com/lerna-lite/lerna-lite/tree/main/packages/version#workspace-protocol) support (Lerna also brought support in v6)
    - Bun is now mostly supported as well (including support for `syncWorkspaceLock` and `catalog:` protocol)
@@ -173,14 +173,14 @@ lerna-repo/
   lerna.json
 ```
 
-**Note** Lerna-Lite now supports 3 config extensions (`.json`, `.jsonc` or `.json5`), however please note that not all code editors support [JSON Schema](https://json-schema.org/) (e.g. `.json5`), so `lerna.json` might still be the preferred file extension. Also note that all formats support inline comments, even the default `lerna.json`.
+**Note** Lerna-Lite now supports 3 config extensions (`.json`, `.jsonc` or `.json5`), however please note that not all code editors support [JSON Schema](https://json-schema.org/) (e.g. `.json5`), so `lerna.json` might still be the preferred file extension. Also please note that all formats support inline comments, even the default `lerna.json` filename.
 
-Note that `package-a` shown above will not be created, it is only shown here to help clarify the structure. For more info and full details about the `lerna.json` config file, please read the [lerna.json](https://github.com/lerna-lite/lerna-lite/wiki/lerna.json) Wiki. Also note that you can optionally add comments to your `lerna.json` file since all formats are parsed as a JSON5 file format.
+Note that `package-a` shown above will not be created, it is only shown here to help clarify the structure. For more details about the `lerna.json` config file, please read the [lerna.json](https://github.com/lerna-lite/lerna-lite/wiki/lerna.json) Wiki. Also again note that you can optionally add comments to your `lerna.json` file since all formats are parsed using the JSON5 parser.
 
-The final step is to install the commands that are of interest to you (`publish`, `version`, `run`, `exec`, ...)
+The final step is to install the command(s) that are of interest to you (`publish`, `version`, `run`, `exec`, ...)
 
 ```sh
-$ npm i @lerna-lite/publish -D
+$ npm i @lerna-lite/publish -D -w
 ```
 
 ## How It Works
@@ -191,9 +191,9 @@ Lerna allows you to manage your project using one of two modes: Fixed or Indepen
 
 Fixed mode Lerna projects operate on a single version line. The version is kept in the `lerna.json` config file at the root of your project under the `version` key. When you run `lerna publish`, if a module has been updated since the last time a release was made, it will be updated to the new version you're releasing. This means that you only publish a new version of a package when you need to.
 
-> Note: If you have a major version zero, all updates are [considered breaking](https://semver.org/#spec-item-4). Because of that, running `lerna publish` with a major version zero and choosing any non-prerelease version number will cause new versions to be published for all packages, even if not all packages have changed since the last release.
+This is the mode that [Jest](https://github.com/jestjs/jest) and Lerna-Lite itself, are currently using. Use this if you want to automatically tie all package versions together. One issue with this approach is that a major change in any package will result in all packages incrementing to a new major version.
 
-This is the mode that [Jest](https://github.com/jestjs/jest), for example, is currently using. Use this if you want to automatically tie all package versions together. One issue with this approach is that a major change in any package will result in all packages having a new major version.
+> Note: If you have a major version zero, all updates are [considered breaking](https://semver.org/#spec-item-4) and because of that, running `lerna publish` with a major zero version and choosing any non-prerelease version number will end up causing new versions to be published on **all packages**, even if not all packages had changes since the last release.
 
 ### Independent mode
 
@@ -203,19 +203,19 @@ Independent mode Lerna projects allows maintainers to increment package versions
 
 Independent mode allows you to more specifically update versions for each package and makes sense for a group of components. Combining this mode with something like [semantic-release](https://github.com/semantic-release/semantic-release) would make it less painful. (There is work on this already at [atlassian/lerna-semantic-release](https://github.com/atlassian/lerna-semantic-release)).
 
-> Set the `version` key in `lerna.json` to `independent` to run in independent mode.
+> You must set the `version` key in your `lerna.json` to `independent` to run in independent mode.
 
 ## Installation
 
 > Lerna-Lite is entirely modular, as opposed to Lerna, and installing the CLI locally or globally will only provide you the `init` command. Please make sure to install other commands that you are interested in (see table below).
 
-If you are new to Lerna-Lite, you could also run the [lerna init](https://github.com/lerna-lite/lerna-lite/tree/main/packages/init#readme) command, which will create the `lerna.json` for you with a minimal structure setup. If you are using a client other than npm, then make sure to update the `npmClient` property in `lerna.json` (for example: `"npmClient": "yarn"`, `"pnpm"` or `"bun"`).
+If you are new to Lerna-Lite, you could also run the [lerna init](https://github.com/lerna-lite/lerna-lite/tree/main/packages/init#readme) command, which will create the `lerna.json` for you with a minimal structure setup. If you are using a client other than npm, then please make sure to update the `npmClient` property in your `lerna.json` (for example: `"npmClient": "yarn"`, `"pnpm"` or `"bun"`).
 
-> **Note** please make sure that you have a `lerna.json` config file in your project root and also make sure to have a `version` property defined with either a fixed or `independent` version. Otherwise, an error will be thrown if you're missing the minimal config.
+> **Note** please make sure that you have a `lerna.json` config file in your project root and also make sure to have a `version` properly defined with either a fixed (any number) or `"independent"` version. Otherwise, an error will be thrown if you're missing the minimal config expectation.
 
 ### Usage
 
-The basic usage is to add either custom NPM scripts or simply run the commands in your shell with the Lerna-Lite CLI. See below for basic Lerna npm script samples.
+The basic usage is to add custom NPM scripts or simply run the commands in your shell with the Lerna-Lite CLI. See below for basic Lerna NPM script samples.
 
 ```js
 // package.json / npm scripts
@@ -237,7 +237,7 @@ $ bun x lerna version
 ```
 
 ### JSON Schema
-You can add the `$schema` property into your `lerna.json` to take advantage of Lerna-Lite [JSON Schema](https://json-schema.org/) (`lerna init` can help to set it up for you). This will help with the developer experience, users will be able to see what properties are valid with their types and a brief description of what each option does (descriptions are pulled from their associated lerna command options documentation).
+You can add the `$schema` property into your `lerna.json` to take advantage of Lerna-Lite [JSON Schema](https://json-schema.org/) (`lerna init` can help to set it up for you). This will help with the developer experience, users will be able to see what properties are valid with their types and a brief description of what each option can do (descriptions are pulled from their associated lerna command options documentation).
 
 ##### `lerna.json`
 ```js
@@ -250,7 +250,7 @@ You can add the `$schema` property into your `lerna.json` to take advantage of L
 }
 ```
 
-> **Note** JSON Schema might not be well supported by all code editors with `.json5`, just use `lerna.json` if that is a problem for you.
+> **Note** `.json5` might not support JSON Schema in all code editors, if so then just use the default `lerna.json` filename
 
 ### Separate / Optional Installs
 
@@ -314,7 +314,7 @@ npm install @lerna-lite/publish -D
 ```
 
 > [!NOTE]
-> If you are using NPM or Bun Workspaces, then you should also enable the [--sync-workspace-lock](https://github.com/lerna-lite/lerna-lite/tree/main/packages/version#--sync-workspace-lock) opyion in your lerna config. This flag will leverage your package manager client to update the project lock file (e.g. `npm install --package-lock-only`) it relies heavily on the `npmClient` defined in your `lerna.json` config (pnpm, yarn, bun or npm which is the default) so make sure that you have it configured correctly, this process will also include the lock file as part of your git change history after execution.
+> If you are using NPM or Bun Workspaces, then you should also enable the [--sync-workspace-lock](https://github.com/lerna-lite/lerna-lite/tree/main/packages/version#--sync-workspace-lock) option in your lerna config. This flag will leverage your package manager client to update the project lock file (e.g. `npm install --package-lock-only`) it relies heavily on the `npmClient` defined in your `lerna.json` config (`pnpm`, `yarn`, `bun` or the default being `npm`) so make sure that you have it configured correctly. This process will also add the lock file to your git changes history while executing.
 
 > **Note** after switching to Lerna-Lite and publishing your next release with conventional-changelog, you will probably see a lot of diff changes across your `changelog.md` files, a lot of empty lines will be deleted, and that is totally expected since Lerna-Lite has code in place to remove these unnecessary empty lines.
 
@@ -355,11 +355,11 @@ If you have problems running the project and your problems are related to Git co
 | [@lerna-lite/cli](https://github.com/lerna-lite/lerna-lite/tree/main/packages/cli) | Lerna-Lite CLI | [![npm](https://img.shields.io/npm/v/@lerna-lite/cli.svg)](https://www.npmjs.com/package/@lerna-lite/cli) | [![npm](https://img.shields.io/npm/dy/@lerna-lite/cli?color=forest)](https://www.npmjs.com/package/@lerna-lite/cli) | [changelog](https://github.com/lerna-lite/lerna-lite/blob/main/packages/cli/CHANGELOG.md) |
 | [@lerna-lite/core](https://github.com/lerna-lite/lerna-lite/tree/main/packages/core) | Lerna-Lite core functions | [![npm](https://img.shields.io/npm/v/@lerna-lite/core.svg)](https://www.npmjs.com/package/@lerna-lite/core) | [![npm](https://img.shields.io/npm/dy/@lerna-lite/core?color=forest)](https://www.npmjs.com/package/@lerna-lite/core) | [changelog](https://github.com/lerna-lite/lerna-lite/blob/main/packages/core/CHANGELOG.md) |
 | [@lerna-lite/init](https://github.com/lerna-lite/lerna-lite/tree/main/packages/init) | Lerna-Lite setup | [![npm](https://img.shields.io/npm/v/@lerna-lite/init.svg)](https://www.npmjs.com/package/@lerna-lite/init) | [![npm](https://img.shields.io/npm/dy/@lerna-lite/init?color=forest)](https://www.npmjs.com/package/@lerna-lite/init) | [changelog](https://github.com/lerna-lite/lerna-lite/blob/main/packages/init/CHANGELOG.md) |
-| [@lerna-lite/publish](https://github.com/lerna-lite/lerna-lite/tree/main/packages/publish) | Publish workspace packages | [![npm](https://img.shields.io/npm/v/@lerna-lite/publish.svg)](https://www.npmjs.com/package/@lerna-lite/publish) | [![npm](https://img.shields.io/npm/dy/@lerna-lite/publish?color=forest)](https://www.npmjs.com/package/@lerna-lite/publish) | [changelog](https://github.com/lerna-lite/lerna-lite/blob/main/packages/publish/CHANGELOG.md)             |
 | [@lerna-lite/version](https://github.com/lerna-lite/lerna-lite/tree/main/packages/version) | Bump Version & Changelogs | [![npm](https://img.shields.io/npm/v/@lerna-lite/version.svg)](https://www.npmjs.com/package/@lerna-lite/version) | [![npm](https://img.shields.io/npm/dy/@lerna-lite/version?color=forest)](https://www.npmjs.com/package/@lerna-lite/version) | [changelog](https://github.com/lerna-lite/lerna-lite/blob/main/packages/version/CHANGELOG.md) |
-| [@lerna-lite/exec](https://github.com/lerna-lite/lerna-lite/tree/main/packages/exec) | Execute shell commands in repo | [![npm](https://img.shields.io/npm/v/@lerna-lite/exec.svg)](https://www.npmjs.com/package/@lerna-lite/exec) | [![npm](https://img.shields.io/npm/dy/@lerna-lite/exec?color=forest)](https://www.npmjs.com/package/@lerna-lite/exec) | [changelog](https://github.com/lerna-lite/lerna-lite/blob/main/packages/exec/CHANGELOG.md) |
+| [@lerna-lite/publish](https://github.com/lerna-lite/lerna-lite/tree/main/packages/publish) | Publish workspace packages | [![npm](https://img.shields.io/npm/v/@lerna-lite/publish.svg)](https://www.npmjs.com/package/@lerna-lite/publish) | [![npm](https://img.shields.io/npm/dy/@lerna-lite/publish?color=forest)](https://www.npmjs.com/package/@lerna-lite/publish) | [changelog](https://github.com/lerna-lite/lerna-lite/blob/main/packages/publish/CHANGELOG.md) |
 | [@lerna-lite/changed](https://github.com/lerna-lite/lerna-lite/tree/main/packages/changed) | List changes since last release | [![npm](https://img.shields.io/npm/v/@lerna-lite/changed.svg)](https://www.npmjs.com/package/@lerna-lite/changed) | [![npm](https://img.shields.io/npm/dy/@lerna-lite/changed?color=forest)](https://www.npmjs.com/package/@lerna-lite/changed) | [changelog](https://github.com/lerna-lite/lerna-lite/blob/main/packages/changed/CHANGELOG.md) |
 | [@lerna-lite/diff](https://github.com/lerna-lite/lerna-lite/tree/main/packages/diff) | Diff changes since last release | [![npm](https://img.shields.io/npm/v/@lerna-lite/diff.svg)](https://www.npmjs.com/package/@lerna-lite/diff) | [![npm](https://img.shields.io/npm/dy/@lerna-lite/diff?color=forest)](https://www.npmjs.com/package/@lerna-lite/diff) | [changelog](https://github.com/lerna-lite/lerna-lite/blob/main/packages/diff/CHANGELOG.md) |
+| [@lerna-lite/exec](https://github.com/lerna-lite/lerna-lite/tree/main/packages/exec) | Execute shell commands in repo | [![npm](https://img.shields.io/npm/v/@lerna-lite/exec.svg)](https://www.npmjs.com/package/@lerna-lite/exec) | [![npm](https://img.shields.io/npm/dy/@lerna-lite/exec?color=forest)](https://www.npmjs.com/package/@lerna-lite/exec) | [changelog](https://github.com/lerna-lite/lerna-lite/blob/main/packages/exec/CHANGELOG.md) |
 | [@lerna-lite/list](https://github.com/lerna-lite/lerna-lite/tree/main/packages/list) | List local packages | [![npm](https://img.shields.io/npm/v/@lerna-lite/list.svg)](https://www.npmjs.com/package/@lerna-lite/list) | [![npm](https://img.shields.io/npm/dy/@lerna-lite/list?color=forest)](https://www.npmjs.com/package/@lerna-lite/list) | [changelog](https://github.com/lerna-lite/lerna-lite/blob/main/packages/list/CHANGELOG.md) |
 | [@lerna-lite/listable](https://github.com/lerna-lite/lerna-lite/tree/main/packages/listable) | Listable utils for `list`, `changed` | [![npm](https://img.shields.io/npm/v/@lerna-lite/listable.svg)](https://www.npmjs.com/package/@lerna-lite/listable) | [![npm](https://img.shields.io/npm/dy/@lerna-lite/listable?color=forest)](https://www.npmjs.com/package/@lerna-lite/listable) | [changelog](https://github.com/lerna-lite/lerna-lite/blob/main/packages/listable/CHANGELOG.md) |
 | [@lerna-lite/npmlog](https://github.com/lerna-lite/lerna-lite/tree/main/packages/npmlog) | inline version of `npmlog` util | [![npm](https://img.shields.io/npm/v/@lerna-lite/npmlog.svg)](https://www.npmjs.com/package/@lerna-lite/npmlog) | [![npm](https://img.shields.io/npm/dy/@lerna-lite/npmlog?color=forest)](https://www.npmjs.com/package/@lerna-lite/npmlog) | [changelog](https://github.com/lerna-lite/lerna-lite/blob/main/packages/npmlog/CHANGELOG.md) |
