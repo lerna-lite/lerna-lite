@@ -58,7 +58,7 @@ fi
 
 if ! command_exists pnpm; then
   print_status "task" "Installing PNPM via Corepack"
-  corepack prepare pnpm@10.10.0 --activate
+  corepack prepare pnpm@11.11.0 --activate
   print_status "success" "PNPM installed via Corepack successfully"
 else
   print_status "success" "PNPM already installed"

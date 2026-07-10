@@ -74,17 +74,60 @@ function startVerdaccio() {
   });
 }
 
-function stopVerdaccio() {
-  if (verdaccioProcess) {
-    console.log('\n🧹 Stopping Verdaccio...');
-    verdaccioProcess.kill('SIGTERM');
-    // Give it time to clean up
-    setTimeout(() => {
-      if (verdaccioProcess) {
-        verdaccioProcess.kill('SIGKILL');
+function waitForProcessExit(processRef, timeoutMs = 3000) {
+  return new Promise((resolve) => {
+    let finished = false;
+
+    const done = () => {
+      if (!finished) {
+        finished = true;
+        resolve();
       }
-    }, 2000);
-    verdaccioProcess = null;
+    };
+
+    processRef.once('close', done);
+    processRef.once('exit', done);
+    setTimeout(done, timeoutMs);
+  });
+}
+
+function killProcessTreeWindows(pid) {
+  return new Promise((resolve) => {
+    const killer = spawn('taskkill', ['/PID', String(pid), '/T', '/F'], {
+      stdio: 'ignore',
+      shell: true,
+      windowsHide: true,
+    });
+
+    killer.once('close', () => resolve());
+    killer.once('error', () => resolve());
+  });
+}
+
+async function stopVerdaccio() {
+  if (!verdaccioProcess) {
+    return;
+  }
+
+  const processRef = verdaccioProcess;
+  verdaccioProcess = null;
+
+  console.log('\n🧹 Stopping Verdaccio...');
+
+  if (process.platform === 'win32') {
+    if (processRef.pid) {
+      await killProcessTreeWindows(processRef.pid);
+    }
+    await waitForProcessExit(processRef, 5000);
+    return;
+  }
+
+  processRef.kill('SIGTERM');
+  await waitForProcessExit(processRef, 2000);
+
+  if (processRef.exitCode === null && processRef.signalCode === null) {
+    processRef.kill('SIGKILL');
+    await waitForProcessExit(processRef, 2000);
   }
 }
 
@@ -128,24 +171,22 @@ async function main() {
     await waitForVerdaccio();
     await runTests();
     console.log('\n✅ All tests completed successfully!');
-    stopVerdaccio();
+    await stopVerdaccio();
     process.exit(0);
   } catch (error) {
     console.error('\n❌ Error:', error.message);
-    stopVerdaccio();
+    await stopVerdaccio();
     process.exit(1);
   }
 }
 
 // Handle cleanup on exit
 process.on('SIGINT', () => {
-  stopVerdaccio();
-  process.exit(0);
+  void stopVerdaccio().finally(() => process.exit(0));
 });
 
 process.on('SIGTERM', () => {
-  stopVerdaccio();
-  process.exit(0);
+  void stopVerdaccio().finally(() => process.exit(0));
 });
 
 main();

@@ -22,12 +22,6 @@
       matchPackagePatterns: ['^@inquirer/'],
       groupName: 'Inquirer packages',
     },
-    {
-      matchManagers: ['github-actions'],
-      matchDepNames: ['pnpm/action-setup'],
-      allowedVersions: '< 6.0.0',
-      description: 'Keep pnpm action at v5 until we migrate to pnpm v11',
-    },
     // postponed the following npm packages to next major, since they now require NodeJS: ^22.22.2 || ^24.15.0 || >=26.0.0
     {
       packageNames: ['npm-package-arg', 'ssri'],

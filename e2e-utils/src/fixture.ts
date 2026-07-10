@@ -186,9 +186,10 @@ export class Fixture {
   private async setNpmRegistry(): Promise<void> {
     if (this.packageManager === 'pnpm') {
       await this.exec(`mkdir ${this.fixturePnpmStorePath}`);
-      await this.exec(
-        `echo "registry=${REGISTRY}\nstore-dir=${this.fixturePnpmStorePath}\nverify-store-integrity=false" > .npmrc`
-      );
+      // Keep pnpm storage deterministic for tests, but do not force Verdaccio as
+      // the default registry because some scoped packages (e.g. @lerna-lite/*)
+      // are intentionally not proxied by the test registry.
+      await this.exec(`echo "store-dir=${this.fixturePnpmStorePath}\nverify-store-integrity=false" > .npmrc`);
 
       // Ensure pnpm respects minimumReleaseAge exclusions for local packages
       // so tests that install @lerna-lite/* do not fail due to recency checks.
