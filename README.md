@@ -36,7 +36,7 @@
 
 ### Available Commands
 
-_Click on any command shown below to see their associated documentations_
+_Click on any command shown below to open their associated documentations_
 
 - 🛠️ **[`init`](https://github.com/lerna-lite/lerna-lite/tree/main/packages/init#readme)** - creates a new Lerna-Lite workspace structure and adds `lerna.json`
 - 🕜 **[changed](https://github.com/lerna-lite/lerna-lite/tree/main/packages/changed#readme)** - list local packages changed since last release | `npm i @lerna-lite/changed -D`
@@ -48,7 +48,7 @@ _Click on any command shown below to see their associated documentations_
 - 🏃 **[run](https://github.com/lerna-lite/lerna-lite/tree/main/packages/run#readme)** - run npm script in each workspace package | `npm i @lerna-lite/run -D`
 - 👓 **[watch](https://github.com/lerna-lite/lerna-lite/tree/main/packages/watch#readme)** - watch for changes & execute commands when fired | `npm i @lerna-lite/watch -D`
 
-> **Note** since the `publish` package depends on the `version` package, you could install `@lerna-lite/publish` to get access to both commands.
+> **Note** since the `publish` package depends on the `version` package, you could install `@lerna-lite/publish` to automatically get access to both commands.
 
 ## License
 
@@ -56,12 +56,12 @@ _Click on any command shown below to see their associated documentations_
 
 ---
 
-## 📢 Lerna-Lite supports `catalog:` and `workspace:` protocols (pnpm/bun/yarn)
+## 📢 Lerna-Lite supports `catalog:` and `workspace:` protocols (pnpm/yarn/bun)
 
 Lerna-Lite itself is also using both [pnpm catalogs](https://pnpm.io/catalogs) and [pnpm workspaces](https://pnpm.io/workspaces) internally. 🎉
 
 ## OIDC Trusted Publishing
-OIDC Trusted Publishing is supported since [v4.9.0](https://github.com/lerna-lite/lerna-lite/releases/tag/v4.9.0) and higher. GitHub and GitLab CI workflows can now use npm's [Trusted Publishing](https://docs.npmjs.com/trusted-publishers) OpenID Connect (OIDC) integration for secure, token-free publishing from CI/CD. This eliminates long-lived tokens and automatically generates [Provenance](https://github.blog/security/supply-chain-security/introducing-npm-package-provenance/) attestations. A basic test repo is available here: https://github.com/lerna-lite-test/oidc
+OIDC Trusted Publishing is supported with [v4.9.0](https://github.com/lerna-lite/lerna-lite/releases/tag/v4.9.0) and higher. GitHub, GitLab and Circle CI workflows can now use npm's [Trusted Publishing](https://docs.npmjs.com/trusted-publishers) OpenID Connect (OIDC) integration for secure, token-free publishing from CI/CD. This eliminates long-lived tokens and automatically generates [Provenance](https://github.blog/security/supply-chain-security/introducing-npm-package-provenance/) attestations. A basic test repo is available here: https://github.com/lerna-lite-test/oidc
 
 ---
 
@@ -76,11 +76,11 @@ Here are some of the largest projects using Lerna-Lite
 
 ## About Lerna-Lite
 
-Lerna-Lite differs from the original [Lerna](https://github.com/lerna/lerna) which itself is now installing & requiring [Nx](https://github.com/nrwl/nx) (which is large) and it has 15 built-in commands. On the other hand, Lerna-Lite (this project) doesn't require Nx and has a limited subset of the original commands (9 out of 15 commands). The major difference in Lerna-Lite is that commands are **all optional**, making its install footprint a lot smaller. Lerna was originally built, and still is, an all-in-one tool, but nowadays Workspaces are available in all package managers and the need for an all-in-one tool including built-in workspaces functionalities (like `bootstrap`), is no longer necessary. Lerna-Lite was updated around this new reality and is now only providing commands that package managers do not yet provide or are less efficient. To summarize, Lerna-Lite is much more modular than the original Lerna and you'll end up installing a lot less dependencies while also making it more versatile to use with other tools like TurboRepo, pnpm and any other tools...
+Lerna-Lite differs from the original [Lerna](https://github.com/lerna/lerna) which itself is now installing & requiring [Nx](https://github.com/nrwl/nx) (which is large) and it also includes 15 built-in commands. On the other hand, Lerna-Lite (this project) doesn't require Nx at all and has a limited subset of the original commands (9 out of 15 commands). The other major difference in Lerna-Lite is that all commands are **totally optionals**, making its install footprint a lot smaller. Lerna was originally built, and still is, as an all-in-one tool, but nowadays Workspaces are available in all package managers and the need for an all-in-one tool including built-in workspaces functionalities (like `bootstrap`), are no longer necessary. Lerna-Lite was built around this new reality and is only providing commands that package managers do not yet provide or are less efficient. To summarize, Lerna-Lite is much more modular than the original Lerna and you'll end up installing a lot less dependencies while also making it more versatile to use with other tools like TurboRepo, pnpm and any other tools...
 
 Lerna-Lite assumes, and requires that you pre-setup your Workspace through your favorite package manager (npm, pnpm, yarn, bun) which will take care of all symlinks. Lerna-Lite does **not include** Lerna's `bootstrap`, `add`, `create` or `link` commands hence the need for you to properly set up your workspace prior to installing Lerna-Lite.
 
-According to your needs, choose the best option to set up a Workspace: [npm 7+](https://docs.npmjs.com/cli/v8/using-npm/workspaces) | [Yarn classic](https://classic.yarnpkg.com/en/docs/workspaces) | [Yarn 2+](https://yarnpkg.com/features/workspaces) | [pnpm](https://pnpm.io/workspaces) | [Bun](https://bun.com/docs/install/workspaces)
+Depending on your needs, choose the best option to set up a Workspace: [npm 7+](https://docs.npmjs.com/cli/v8/using-npm/workspaces) | [Yarn classic](https://classic.yarnpkg.com/en/docs/workspaces) | [Yarn 2+](https://yarnpkg.com/features/workspaces) | [pnpm](https://pnpm.io/workspaces) | [Bun](https://bun.com/docs/install/workspaces)
 
 ## Why create this lib/fork?
 
@@ -89,14 +89,15 @@ Below are the main reasons as to why this fork was created:
 1. Lerna's repo was unmaintained for nearly 2 years (in early 2022, Lerna's dependencies were really out of date)
     - Lerna (original) was later transferred to the Nx Team and are now the current maintainers
         - please note that Lerna-Lite fork was created couple months **before** Nx took over Lerna
-        - most of Lerna's PRs are also replicated here when possible (except for `Nx` changes, which are ignored)
+        - most of Lerna's PRs are replicated whenever possible (except for `Nx` changes, which are ignored)
 2. A desire to create a smaller and lighter alternative compared to the original all-in-one (large) Lerna tool
-    - Lerna-Lite is entirely modular, every commands are totally optional (install only what you need).
-3. The project was rewritten in TypeScript with ESM-only since v2.0 (you can still use it in a CJS environment)
-4. The original Lerna version v5.5+ now requires **[Nx](https://nx.dev/)** (want it or not), but that is not the case in Lerna-Lite
+    - Lerna-Lite is entirely modular, all commands are totally optionals (install only what you need).
+3. The original Lerna version v5.5+ now requires **[Nx](https://nx.dev/)** (want it or not), but that is not the case in Lerna-Lite
    - note, if you already use `Nx` then it's probably better to use Lerna, otherwise Lerna-Lite is a better alternative
    - if you use tools like TurboRepo and install the original Lerna, you end up installing 2 similar tools (not good)
-5. in Lerna-Lite a few unique features were also added which are not available in the original Lerna:
+4. Lerna-Lite is much smaller with a lot less dependencies (install only what you use)
+   - newer version of Lerna-Lite also dropped a lot of dependencies to use as much native code as possible
+6. in Lerna-Lite a few unique features were also added which are not available in the original Lerna:
    - [`catalog:` protocol](https://github.com/lerna-lite/lerna-lite/tree/main/packages/version#catalog-protocol) support (pnpm/bun/yarn) for both `version` and `publish` commands
    - [`workspace:` protocol](https://github.com/lerna-lite/lerna-lite/tree/main/packages/version#workspace-protocol) support (Lerna also brought support in v6)
    - Bun is now mostly supported as well (including support for `syncWorkspaceLock` and `catalog:` protocol)
@@ -112,7 +113,7 @@ Below are the main reasons as to why this fork was created:
    - [lerna version --release-header-message](https://github.com/lerna-lite/lerna-lite/tree/main/packages/version#--release-header-message-msg) to add custom Header/Footer to GitHub/GitLab Release (new ✨)
    - [lerna run --aggregate-output](https://github.com/lerna-lite/lerna-lite/tree/main/packages/run#--aggregate-output) aggregate output and failures, easier to read in CI (new ✨)
 
-On a final note, I would imagine that the best feature of Lerna-Lite (versus Lerna) would be its modularity. A large portion of the users are only interested in `version`/`publish` commands, but on the other hand, a small minority might want other commands like `lerna run`/`exec`. Lerna-Lite offers this kind of flexibility by allowing the user to choose and install the minimal setup (see [installation](#installation) below) which helps keep your download to the bare minimum.
+On a final note, I would imagine that the best feature of Lerna-Lite (versus Lerna) would be its modularity. A large portion of the users are only interested in `version`/`publish` commands, but a small minority might want other commands like `lerna run`/`exec`. Lerna-Lite offers this kind of flexibility by allowing the user to choose and install the minimal setup (see [installation](#installation) below) which helps keep your download to the bare minimum.
 
 ### Lerna-Lite will help you with the following:
 
@@ -313,7 +314,7 @@ npm install @lerna-lite/publish -D
 ```
 
 > [!NOTE]
-> If you are using NPM, you should use the [--sync-workspace-lock](https://github.com/lerna-lite/lerna-lite/tree/main/packages/version#--sync-workspace-lock) in your lerna config. This flag will leverage your package manager client to update the project lock file (e.g. `npm install --package-lock-only`) it relies heavily on the `npmClient` defined in your `lerna.json` config (pnpm, yarn or npm which is default) so make sure you have it configured correctly, this process will also include the lock file as part of your git change history once processed.
+> If you are using NPM or Bun Workspaces, then you should also enable the [--sync-workspace-lock](https://github.com/lerna-lite/lerna-lite/tree/main/packages/version#--sync-workspace-lock) opyion in your lerna config. This flag will leverage your package manager client to update the project lock file (e.g. `npm install --package-lock-only`) it relies heavily on the `npmClient` defined in your `lerna.json` config (pnpm, yarn, bun or npm which is the default) so make sure that you have it configured correctly, this process will also include the lock file as part of your git change history after execution.
 
 > **Note** after switching to Lerna-Lite and publishing your next release with conventional-changelog, you will probably see a lot of diff changes across your `changelog.md` files, a lot of empty lines will be deleted, and that is totally expected since Lerna-Lite has code in place to remove these unnecessary empty lines.
 
