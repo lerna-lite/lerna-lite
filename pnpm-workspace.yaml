@@ -44,3 +44,8 @@ minimumReleaseAge: 2880
 # exclude Lerna-Lite itself in order to run E2E tests without failures
 minimumReleaseAgeExclude:
   - '@lerna-lite/*'
+
+overrides:
+  js-yaml: ^4.3.0
+  qs: ^6.15.3
+  uuid: ^14.0.1
