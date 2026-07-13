@@ -4,6 +4,14 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [5.4.1](https://github.com/lerna-lite/lerna-lite/compare/v5.4.0...v5.4.1) (2026-07-13)
+
+### Bug Fixes
+
+* **deps:** update conventional-changelog packages ([#1361](https://github.com/lerna-lite/lerna-lite/issues/1361)) ([59c3f63](https://github.com/lerna-lite/lerna-lite/commit/59c3f63ba0daeac648f9d43155085a190b03ccf1)) - by @renovate[bot]
+* **deps:** update conventional-changelog packages ([#1366](https://github.com/lerna-lite/lerna-lite/issues/1366)) ([fd47eae](https://github.com/lerna-lite/lerna-lite/commit/fd47eae2855ec01246d9355d2256959e7bc4d20c)) - by @renovate[bot]
+* **version:** honor 0.x major-to-minor in prerelease bumps ([#1358](https://github.com/lerna-lite/lerna-lite/issues/1358)) ([3f44f59](https://github.com/lerna-lite/lerna-lite/commit/3f44f5911393588e96d5a33e0bdfdbcd2fbe3cc5)) - by @ghiscoding
+
 ## [5.4.0](https://github.com/lerna-lite/lerna-lite/compare/v5.3.0...v5.4.0) (2026-07-02)
 
 ### Features
