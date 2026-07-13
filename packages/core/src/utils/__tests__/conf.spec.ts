@@ -9,6 +9,25 @@ import * as defaults from '../defaults.js';
 import { toNerfDart } from '../npm-conf.js';
 
 describe('conf', () => {
+  describe('addEnv()', () => {
+    it('should skip npm_config_ env variables with empty/falsy values', () => {
+      const conf = new Conf(Object.assign({}, defaults));
+      conf.add({}, 'cli');
+
+      const env = {
+        npm_config_registry: 'https://registry.npmjs.org/',
+        npm_config_cache: '', // falsy — should be skipped
+        npm_config_loglevel: undefined, // falsy — should be skipped
+      } as Record<string, string | undefined>;
+
+      conf.addEnv(env);
+
+      expect(conf.get('registry')).toBe('https://registry.npmjs.org/');
+      expect(conf.get('cache')).toBeUndefined();
+      expect(conf.get('loglevel')).toBeUndefined();
+    });
+  });
+
   describe('loadPrefix()', () => {
     let cli: any;
 
