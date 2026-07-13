@@ -22,7 +22,7 @@ catalog:
 catalogs:
   # Can be referenced through "catalog:devDependencies"
   devDependencies:
-    "@types/node": ^24.13.2
+    "@types/node": ^24.13.3
     "@types/npm-package-arg": ^6.1.4
     "@types/npmcli__package-json": ^4.0.4
     "@types/pacote": ^11.1.8
