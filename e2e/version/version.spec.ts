@@ -100,6 +100,23 @@ describe('lerna-version', () => {
       const version = JSON.parse(packageJson).version;
       expect(version).toMatch(/0\.0\.1/);
     });
+
+    it('should generate a changelog entry for conventional commits', async () => {
+      await fixture.createPackage({ name: 'package-conv-changelog', version: '0.0.0' });
+      await fixture.createInitialGitCommit();
+
+      await fixture.exec('echo "fix" > packages/package-conv-changelog/fix.txt');
+      await fixture.exec('git add .');
+      await fixture.exec('git commit -m "fix: bug fix"');
+
+      const output = await fixture.lerna('version --conventional-commits -y --no-push');
+
+      expect(output.combinedOutput).toContain('lerna');
+
+      const changelog = await fixture.readWorkspaceFile('CHANGELOG.md');
+      expect(changelog).toContain('bug fix');
+      expect(changelog).toContain('0.0.1');
+    });
   });
 
   describe('--no-git-tag-version', () => {
