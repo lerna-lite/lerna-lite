@@ -177,26 +177,9 @@ jobs:
       - name: Run full TypeScript build
         run: pnpm build:full
 
-      - name: Run E2E tests (JUnit)
+      - name: Run E2E tests
         if: |
           !contains(github.event.head_commit.message, 'chore(release)')
         env:
           NO_COLOR: true
         run: pnpm test:e2e -- --reporter=junit --outputFile=e2e-test-report.junit.xml
-
-      - name: Debug - list E2E JUnit XML file
-        if: |
-          !contains(github.event.head_commit.message, 'chore(release)')
-        run: |
-          echo "Expected e2e junit file:"
-          ls -la e2e-test-report.junit.xml || true
-
-      - name: Upload E2E test results to Codecov (JUnit)
-        if: |
-          !cancelled() &&
-          !contains(github.event.head_commit.message, 'chore(release)')
-        uses: codecov/codecov-action@v5
-        with:
-          token: ${{ secrets.CODECOV_TOKEN }}
-          report_type: test_results
-          files: ./e2e-test-report.junit.xml
