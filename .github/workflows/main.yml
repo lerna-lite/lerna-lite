@@ -105,33 +105,28 @@ jobs:
       - name: Run full TypeScript build
         run: pnpm build:full
 
-      - name: Run Vitest unit tests (JUnit)
+      - name: Run Vitest unit tests
         if: |
           !contains(github.event.head_commit.message, 'chore(release)')
         env:
           NO_COLOR: true
-        run: pnpm test -- --reporter=junit --outputFile=test-report.junit.xml
+        run: pnpm test
 
-      - name: Debug - list JUnit XML file
-        if: |
-          !contains(github.event.head_commit.message, 'chore(release)')
-        run: |
-          echo "Repo root:"
-          ls -la
-          echo "Expected junit file:"
-          ls -la test-report.junit.xml || true
-          echo "Any junit.xml files (max depth 4):"
-          find . -maxdepth 4 -name "*junit*.xml" -print || true
-
-      - name: Upload test results to Codecov (JUnit)
-        if: |
-          !cancelled() &&
-          !contains(github.event.head_commit.message, 'chore(release)')
+      - name: Upload test results to Codecov
+        if: ${{ !cancelled() && !contains(github.event.head_commit.message, 'chore(release)') }}
         uses: codecov/codecov-action@v5
         with:
           token: ${{ secrets.CODECOV_TOKEN }}
           report_type: test_results
           files: ./test-report.junit.xml
+
+      - name: Upload test coverage to Codecov
+        uses: codecov/codecov-action@v7
+        env:
+          CODECOV_TOKEN: ${{ secrets.CODECOV_TOKEN }}
+        if: |
+          contains(matrix.node, 24) &&
+          !contains(github.event.head_commit.message, 'chore(release)')
 
   e2e:
     strategy:
