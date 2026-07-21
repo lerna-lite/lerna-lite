@@ -34,6 +34,7 @@ tsconfig.*.tsbuildinfo
 **/coverage
 **/.jest-cache
 **/jest-coverage
+test-report.junit.xml
 
 # Environment variables
 .env
