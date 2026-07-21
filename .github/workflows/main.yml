@@ -63,7 +63,7 @@ jobs:
         platform: [ubuntu-latest]
 
     name: "Unit Tests on Ubuntu / Node${{ matrix.node }}"
-    runs-on: ${{matrix.platform}}
+    runs-on: ${{ matrix.platform }}
     if: ${{ !startsWith(github.event.head_commit.message, 'docs:') }}
 
     steps:
@@ -107,20 +107,18 @@ jobs:
       - name: Run full TypeScript build
         run: pnpm build:full
 
-      - name: Run Vitest unit tests
+      - name: Run Vitest unit tests (JUnit)
         if: |
           !contains(github.event.head_commit.message, 'chore(release)')
         env:
           NO_COLOR: true
-        run: pnpm test
+        run: pnpm test -- --reporter=junit --outputFile=test-report.junit.xml
 
-      - name: Upload test coverage to Codecov
-        uses: codecov/codecov-action@v7
-        env:
-          CODECOV_TOKEN: ${{ secrets.CODECOV_TOKEN }}
-        if: |
-          contains(matrix.node, 24) &&
-          !contains(github.event.head_commit.message, 'chore(release)')
+      - name: Upload test results to Codecov (JUnit)
+        if: ${{ !cancelled() }}
+        uses: codecov/test-results-action@v1
+        with:
+          token: ${{ secrets.CODECOV_TOKEN }}
 
   e2e:
     strategy:
@@ -128,9 +126,9 @@ jobs:
       matrix:
         node: [22, 24, 26]
         platform: [ubuntu-latest]
-        
+
     name: "E2E Tests on Ubuntu / Node${{ matrix.node }}"
-    runs-on: ${{matrix.platform}}
+    runs-on: ${{ matrix.platform }}
     if: ${{ !startsWith(github.event.head_commit.message, 'docs:') }}
 
     steps:
@@ -171,9 +169,15 @@ jobs:
       - name: Run full TypeScript build
         run: pnpm build:full
 
-      - name: Run E2E tests
+      - name: Run E2E tests (JUnit)
         if: |
           !contains(github.event.head_commit.message, 'chore(release)')
         env:
           NO_COLOR: true
-        run: pnpm test:e2e
+        run: pnpm test:e2e -- --reporter=junit --outputFile=e2e-test-report.junit.xml
+
+      - name: Upload E2E test results to Codecov (JUnit)
+        if: ${{ !cancelled() }}
+        uses: codecov/test-results-action@v1
+        with:
+          token: ${{ secrets.CODECOV_TOKEN }}
