@@ -1,7 +1,5 @@
 name: CI
 on:
-  # Trigger the workflow on push or pull request,
-  # but only for the main branch on Push and any branches on PR
   push:
     branches:
       - main
@@ -114,11 +112,26 @@ jobs:
           NO_COLOR: true
         run: pnpm test -- --reporter=junit --outputFile=test-report.junit.xml
 
+      - name: Debug - list JUnit XML file
+        if: |
+          !contains(github.event.head_commit.message, 'chore(release)')
+        run: |
+          echo "Repo root:"
+          ls -la
+          echo "Expected junit file:"
+          ls -la test-report.junit.xml || true
+          echo "Any junit.xml files (max depth 4):"
+          find . -maxdepth 4 -name "*junit*.xml" -print || true
+
       - name: Upload test results to Codecov (JUnit)
-        if: ${{ !cancelled() }}
-        uses: codecov/test-results-action@v1
+        if: |
+          !cancelled() &&
+          !contains(github.event.head_commit.message, 'chore(release)')
+        uses: codecov/codecov-action@v5
         with:
           token: ${{ secrets.CODECOV_TOKEN }}
+          report_type: test_results
+          files: ./test-report.junit.xml
 
   e2e:
     strategy:
@@ -176,8 +189,19 @@ jobs:
           NO_COLOR: true
         run: pnpm test:e2e -- --reporter=junit --outputFile=e2e-test-report.junit.xml
 
+      - name: Debug - list E2E JUnit XML file
+        if: |
+          !contains(github.event.head_commit.message, 'chore(release)')
+        run: |
+          echo "Expected e2e junit file:"
+          ls -la e2e-test-report.junit.xml || true
+
       - name: Upload E2E test results to Codecov (JUnit)
-        if: ${{ !cancelled() }}
-        uses: codecov/test-results-action@v1
+        if: |
+          !cancelled() &&
+          !contains(github.event.head_commit.message, 'chore(release)')
+        uses: codecov/codecov-action@v5
         with:
           token: ${{ secrets.CODECOV_TOKEN }}
+          report_type: test_results
+          files: ./e2e-test-report.junit.xml
