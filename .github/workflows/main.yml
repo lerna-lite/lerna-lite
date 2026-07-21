@@ -182,4 +182,4 @@ jobs:
           !contains(github.event.head_commit.message, 'chore(release)')
         env:
           NO_COLOR: true
-        run: pnpm test:e2e -- --reporter=junit --outputFile=e2e-test-report.junit.xml
+        run: pnpm test:e2e
