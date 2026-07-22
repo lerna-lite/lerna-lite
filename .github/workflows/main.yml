@@ -128,7 +128,6 @@ jobs:
           files: ./coverage/lcov.info
           disable_search: true
           fail_ci_if_error: true
-          verbose: true
         if: |
           contains(matrix.node, 24) &&
           !contains(github.event.head_commit.message, 'chore(release)')
