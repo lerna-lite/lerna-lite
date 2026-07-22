@@ -34,6 +34,7 @@ export default defineConfig({
         '**/types.ts',
       ],
       provider: 'v8',
+      reporter: ['text', 'html', 'json', 'clover', 'lcovonly'],
     },
     reporters: ['default', 'junit'],
     outputFile: {
