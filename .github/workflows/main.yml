@@ -118,7 +118,7 @@ jobs:
         with:
           token: ${{ secrets.CODECOV_TOKEN }}
           report_type: test_results
-          files: ./test-report.junit.xml
+          files: ./coverage/test-report.junit.xml
 
       - name: Upload test coverage to Codecov
         uses: codecov/codecov-action@v7

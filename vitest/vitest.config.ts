@@ -33,11 +33,11 @@ export default defineConfig({
         '**/models.ts',
         '**/types.ts',
       ],
-      reporters: ['default', 'junit'],
-      outputFile: {
-        junit: './test-report.junit.xml',
-      },
       provider: 'v8',
+    },
+    reporters: ['default', 'junit'],
+    outputFile: {
+      junit: './coverage/test-report.junit.xml',
     },
   },
 });
