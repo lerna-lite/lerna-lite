@@ -76,6 +76,25 @@ describe('childProcess', () => {
         })
       );
     });
+
+    it('supports large stdout without explicit maxBuffer override (async regression for #1373)', async () => {
+      const size = 2 * 1024 * 1024; // 2MB, larger than Node's default 1MB spawnSync buffer
+      const { stdout } = (await exec('node', ['-e', `process.stdout.write('x'.repeat(${size}))`])) as any;
+
+      expect(typeof stdout).toBe('string');
+      expect(stdout.length).toBe(size);
+    });
+
+    it('supports explicit maxBuffer option for large async stdout', async () => {
+      const size = 2 * 1024 * 1024;
+
+      const { stdout } = (await exec('node', ['-e', `process.stdout.write('x'.repeat(${size}))`], {
+        maxBuffer: 128 * 1024,
+      })) as any;
+
+      expect(typeof stdout).toBe('string');
+      expect(stdout.length).toBe(size);
+    });
   });
 
   describe('.spawn()', () => {
@@ -230,6 +249,24 @@ describe('childProcess', () => {
       // Use node for cross-platform output
       const out = execSync('node', ['-e', "process.stdout.write('trimmed\\n')"]);
       expect(out).toBe('trimmed');
+    });
+
+    it('supports large stdout without explicit maxBuffer override (regression for #1373)', () => {
+      const size = 2 * 1024 * 1024; // 2MB, larger than Node's default 1MB spawnSync buffer
+      const out = execSync('node', ['-e', `process.stdout.write('x'.repeat(${size}))`]);
+
+      expect(typeof out).toBe('string');
+      expect((out as string).length).toBe(size);
+    });
+
+    it('honors maxBuffer override by forwarding it to nodeOptions', () => {
+      const size = 2 * 1024 * 1024;
+
+      expect(() =>
+        execSync('node', ['-e', `process.stdout.write('x'.repeat(${size}))`], {
+          maxBuffer: 128 * 1024,
+        })
+      ).toThrow(/ENOBUFS|maxBuffer|stdout maxBuffer/i);
     });
   });
 

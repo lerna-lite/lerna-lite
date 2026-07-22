@@ -124,6 +124,10 @@ jobs:
         uses: codecov/codecov-action@v7
         env:
           CODECOV_TOKEN: ${{ secrets.CODECOV_TOKEN }}
+        with:
+          files: ./coverage/clover.xml,./coverage/coverage-final.json
+          disable_search: true
+          fail_ci_if_error: true
         if: |
           contains(matrix.node, 24) &&
           !contains(github.event.head_commit.message, 'chore(release)')
