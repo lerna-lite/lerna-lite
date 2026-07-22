@@ -125,7 +125,7 @@ jobs:
         env:
           CODECOV_TOKEN: ${{ secrets.CODECOV_TOKEN }}
         with:
-          files: ./coverage/lcov.info
+          files: ./coverage/clover.xml,./coverage/coverage-final.json
           disable_search: true
           fail_ci_if_error: true
         if: |
