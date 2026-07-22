@@ -76,6 +76,25 @@ describe('childProcess', () => {
         })
       );
     });
+
+    it('supports large stdout without explicit maxBuffer override (async regression for #1373)', async () => {
+      const size = 2 * 1024 * 1024; // 2MB, larger than Node's default 1MB spawnSync buffer
+      const { stdout } = (await exec('node', ['-e', `process.stdout.write('x'.repeat(${size}))`])) as any;
+
+      expect(typeof stdout).toBe('string');
+      expect(stdout.length).toBe(size);
+    });
+
+    it('supports explicit maxBuffer option for large async stdout', async () => {
+      const size = 2 * 1024 * 1024;
+
+      const { stdout } = (await exec('node', ['-e', `process.stdout.write('x'.repeat(${size}))`], {
+        maxBuffer: 128 * 1024,
+      })) as any;
+
+      expect(typeof stdout).toBe('string');
+      expect(stdout.length).toBe(size);
+    });
   });
 
   describe('.spawn()', () => {
