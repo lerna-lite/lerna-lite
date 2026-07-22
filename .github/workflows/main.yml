@@ -1,7 +1,5 @@
 name: CI
 on:
-  # Trigger the workflow on push or pull request,
-  # but only for the main branch on Push and any branches on PR
   push:
     branches:
       - main
@@ -35,7 +33,7 @@ jobs:
           run_install: false
 
       - name: Set NodeJS
-        uses: actions/setup-node@v6
+        uses: actions/setup-node@v7
         with:
           node-version: 24
           cache: "pnpm"
@@ -63,7 +61,7 @@ jobs:
         platform: [ubuntu-latest]
 
     name: "Unit Tests on Ubuntu / Node${{ matrix.node }}"
-    runs-on: ${{matrix.platform}}
+    runs-on: ${{ matrix.platform }}
     if: ${{ !startsWith(github.event.head_commit.message, 'docs:') }}
 
     steps:
@@ -83,7 +81,7 @@ jobs:
         uses: pnpm/action-setup@v6
 
       - name: Set NodeJS
-        uses: actions/setup-node@v6
+        uses: actions/setup-node@v7
         with:
           node-version: ${{ matrix.node }}
           cache: "pnpm"
@@ -114,6 +112,14 @@ jobs:
           NO_COLOR: true
         run: pnpm test
 
+      - name: Upload test results to Codecov
+        if: ${{ !cancelled() && contains(matrix.node, 24) && !contains(github.event.head_commit.message, 'chore(release)') }}
+        uses: codecov/codecov-action@v5
+        with:
+          token: ${{ secrets.CODECOV_TOKEN }}
+          report_type: test_results
+          files: ./test-report.junit.xml
+
       - name: Upload test coverage to Codecov
         uses: codecov/codecov-action@v7
         env:
@@ -128,9 +134,9 @@ jobs:
       matrix:
         node: [22, 24, 26]
         platform: [ubuntu-latest]
-        
+
     name: "E2E Tests on Ubuntu / Node${{ matrix.node }}"
-    runs-on: ${{matrix.platform}}
+    runs-on: ${{ matrix.platform }}
     if: ${{ !startsWith(github.event.head_commit.message, 'docs:') }}
 
     steps:
@@ -148,7 +154,7 @@ jobs:
         uses: pnpm/action-setup@v6
 
       - name: Set NodeJS
-        uses: actions/setup-node@v6
+        uses: actions/setup-node@v7
         with:
           node-version: ${{ matrix.node }}
           cache: "pnpm"
