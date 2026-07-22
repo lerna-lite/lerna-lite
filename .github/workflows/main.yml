@@ -114,7 +114,7 @@ jobs:
 
       - name: Upload test results to Codecov
         if: ${{ !cancelled() && contains(matrix.node, 24) && !contains(github.event.head_commit.message, 'chore(release)') }}
-        uses: codecov/codecov-action@v5
+        uses: codecov/codecov-action@v7
         with:
           token: ${{ secrets.CODECOV_TOKEN }}
           report_type: test_results
