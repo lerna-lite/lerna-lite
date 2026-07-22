@@ -274,7 +274,7 @@ function _createEnhancedError(result: any, command: string, args: string[] = [])
 
 /** Maps Lerna/TinyExec options to tinyexec Options format */
 function _mapOptions(command: string, opts?: TinyExecOptions): Options {
-  const { cwd, env, nodeOptions, ...rest } = opts || {};
+  const { cwd, env, nodeOptions, maxBuffer, ...rest } = opts || {};
 
   // Only use shell for the 'exit' command (used in status tests)
   // Using shell: true for 'git commit' causes arguments with spaces to break.
@@ -291,6 +291,14 @@ function _mapOptions(command: string, opts?: TinyExecOptions): Options {
       cwd,
       env,
       shell: useShell,
+      // tinyexec only forwards maxBuffer to Node's spawn/spawnSync through nodeOptions,
+      // so it must live here rather than at the top level (where the `--max-buffer`
+      // option currently lands, silently ignored). Without a large default, sync git
+      // calls that emit big output overflow Node's 1MB default and throw ENOBUFS —
+      // e.g. `git tag --list '*@*'` in independent mode on repos with tens of thousands
+      // of tags, which hasTags swallows as ENOTAGS -> "Assuming all packages changed".
+      // Default to 100MB to match the pre-tinyexec (execa) behavior.
+      maxBuffer: maxBuffer ?? 100 * 1024 * 1024,
       ...nodeOptions,
     },
   } as any;
