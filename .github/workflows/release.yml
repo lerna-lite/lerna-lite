@@ -44,7 +44,7 @@ jobs:
           exit 1
 
       - name: Install pnpm itself
-        uses: pnpm/action-setup@v6
+        uses: pnpm/action-setup@0ebf47130e4866e96fce0953f49152a61190b271  # v6
         with:
           run_install: false
 
