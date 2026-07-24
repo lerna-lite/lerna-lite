@@ -1,6 +1,6 @@
 {
   "name": "@lerna-lite/diff",
-  "version": "5.4.1",
+  "version": "5.4.2",
   "description": "Lerna-Lite diff commmand - Diff all packages or a single package since the last release",
   "homepage": "https://github.com/lerna-lite/lerna-lite",
   "bugs": {

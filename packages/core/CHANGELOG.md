@@ -4,6 +4,12 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [5.4.2](https://github.com/lerna-lite/lerna-lite/compare/v5.4.1...v5.4.2) (2026-07-24)
+
+### Bug Fixes
+
+* **core:** forward maxBuffer through nodeOptions so large git output doesn't throw ENOBUFS ([#1374](https://github.com/lerna-lite/lerna-lite/issues/1374)) ([51970e9](https://github.com/lerna-lite/lerna-lite/commit/51970e991e7e88310139a58bc64ee02217e117a9)) - by @LoicEvenium
+
 ## [5.4.1](https://github.com/lerna-lite/lerna-lite/compare/v5.4.0...v5.4.1) (2026-07-13)
 
 **Note:** Version bump only for package @lerna-lite/core
