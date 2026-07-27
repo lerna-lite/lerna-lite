@@ -2,7 +2,7 @@ import { mkdirSync, mkdtempSync, realpathSync, writeFileSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import { join, resolve as pathResolve } from 'node:path';
 
-import { promptSelectOne, promptTextInput, type VersionCommandOption, outputFile } from '@lerna-lite/core';
+import { promptSelectOne, promptTextInput, type VersionCommandOption, outputFile, readJson, writeJson } from '@lerna-lite/core';
 import { commandRunner, getCommitMessage, gitAdd, gitCommit, gitInit, gitTag, initFixtureFactory, showCommit } from '@lerna-test/helpers';
 import serializeChangelog from '@lerna-test/helpers/serializers/serialize-changelog.js';
 import { expect, test, vi, type Mock } from 'vitest';
@@ -111,6 +111,26 @@ test('version prerelease with existing preid bumps with the preid provide as arg
 
   const message = await getCommitMessage(testDir);
   expect(message).toBe('v1.0.1-rc.0');
+});
+
+test('version prerelease interpolates configured message placeholders', async () => {
+  const testDir = await initFixture('republish-prereleased');
+  const lernaConfigPath = join(testDir, 'lerna.json');
+  const lernaConfig = await readJson(lernaConfigPath);
+
+  await writeJson(lernaConfigPath, {
+    ...lernaConfig,
+    command: {
+      version: {
+        message: 'chore(release): version %s',
+      },
+    },
+  });
+  await setupChanges(testDir);
+  await lernaVersion(testDir)('prerelease', '--preid', 'rc');
+
+  const message = await getCommitMessage(testDir);
+  expect(message).toBe('chore(release): version v1.0.1-rc.0');
 });
 
 test('version prerelease with immediate graduation', async () => {
