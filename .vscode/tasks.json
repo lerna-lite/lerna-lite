@@ -4,43 +4,43 @@
     {
       "label": "Build Library",
       "type": "shell",
-      "command": "npm run build",
+      "command": "pnpm run build",
       "problemMatcher": []
     },
     {
       "label": "Full Build Library",
       "type": "shell",
-      "command": "npm run build:full",
+      "command": "pnpm run build:full",
       "problemMatcher": []
     },
     {
       "label": "Run Vitest Unit Tests (watch)",
       "type": "shell",
-      "command": "npm run test:watch",
+      "command": "pnpm run test:watch",
       "problemMatcher": []
     },
     {
       "label": "Run Vitest with Test Coverage",
       "type": "shell",
-      "command": "npm run test",
+      "command": "pnpm run test",
       "problemMatcher": []
     },
     {
       "label": "[dry-run] new Version (from dist)",
       "type": "shell",
-      "command": "npm run dist-roll-version-dry-run",
+      "command": "pnpm run dist-roll-version-dry-run",
       "problemMatcher": []
     },
     {
       "label": "Roll new Version (from dist)",
       "type": "shell",
-      "command": "npm run dist-roll-version",
+      "command": "pnpm run dist-roll-version",
       "problemMatcher": []
     },
     {
       "label": "Roll Publish Version (from dist)",
       "type": "shell",
-      "command": "npm run dist-roll-publish",
+      "command": "pnpm run dist-roll-publish",
       "problemMatcher": []
     }
   ]
