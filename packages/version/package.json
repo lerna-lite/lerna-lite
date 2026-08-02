@@ -42,7 +42,7 @@
     "conventional-changelog": "^8.1.0",
     "conventional-changelog-angular": "^9.2.1",
     "conventional-changelog-writer": "^9.2.0",
-    "conventional-commits-parser": "^7.1.0",
+    "conventional-commits-parser": "^7.1.2",
     "conventional-recommended-bump": "^12.1.0",
     "git-url-parse": "^16.1.0",
     "handlebars": "^4.7.9",
