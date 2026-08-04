@@ -144,6 +144,7 @@ describe('custom prerelease', () => {
       expect(message).toMatch(`yielding ${increment(version, 'prerelease', { identifier: defaultIdentifier })}`);
 
       expect(inputFilter(null)).toBe(`1.0.1-${defaultIdentifier}.0`);
+      expect(inputFilter('')).toBe(`1.0.1-${defaultIdentifier}.0`);
       expect(inputFilter('rc')).toBe('1.0.1-rc.0');
     });
 
@@ -161,6 +162,8 @@ describe('custom prerelease', () => {
       expect(message).toMatch(`yielding ${increment(version, 'prerelease', { identifier: defaultIdentifier })}`);
 
       expect(inputFilter('beta')).toBe('1.0.1-beta.2');
+      const expectedDefault = defaultIdentifier === 'beta' ? '1.0.1-beta.2' : `1.0.1-${defaultIdentifier}.0`;
+      expect(inputFilter('')).toBe(expectedDefault);
       expect(inputFilter('rc')).toBe('1.0.1-rc.0');
     });
   });

@@ -68,6 +68,14 @@ describe('version bump', () => {
     expect(message).toBe('v1.2.0-beta.1');
   });
 
+  it('drops build metadata from explicit release bump values', async () => {
+    const testDir = await initFixture('normal');
+    await lernaVersion(testDir)('v1.2.0+deadbeef');
+
+    const message = await getCommitMessage(testDir);
+    expect(message).toBe('v1.2.0');
+  });
+
   it('accepts semver keywords', async () => {
     const testDir = await initFixture('normal');
     // await new VersionCommand(createArgv(testDir, "--bump", "minor"));
