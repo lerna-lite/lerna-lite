@@ -47,6 +47,9 @@ minimumReleaseAgeExclude:
 
 overrides:
   brace-expansion: ^5.0.9
+  fast-uri: ^3.1.5
+  ip-address: ^10.3.1
   js-yaml: ^5.2.3
+  postcss: ^8.5.25
   qs: ^6.15.3
   uuid: ^14.0.1
