@@ -1,7 +1,7 @@
-import semver from 'semver';
+import { difference, isLess } from 'verkit';
 
 export function isBreakingChange(currentVersion: string, nextVersion: string): boolean {
-  const releaseType = semver.diff(currentVersion, nextVersion);
+  const releaseType = difference(currentVersion, nextVersion);
   let breaking;
 
   if (releaseType === 'major') {
@@ -9,10 +9,10 @@ export function isBreakingChange(currentVersion: string, nextVersion: string): b
     breaking = true;
   } else if (releaseType === 'minor') {
     // 0.1.9 => 0.2.0 is breaking
-    breaking = semver.lt(currentVersion, '1.0.0');
+    breaking = isLess(currentVersion, '1.0.0');
   } else if (releaseType === 'patch') {
     // 0.0.1 => 0.0.2 is breaking(?)
-    breaking = semver.lt(currentVersion, '0.1.0');
+    breaking = isLess(currentVersion, '0.1.0');
   } else {
     // versions are equal, or any prerelease
     breaking = false;

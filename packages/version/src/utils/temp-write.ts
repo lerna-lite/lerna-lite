@@ -5,12 +5,12 @@
  */
 
 import { randomUUID } from 'node:crypto';
-import { createWriteStream, mkdirSync, promises, realpathSync, writeFileSync } from 'node:fs';
+import { createWriteStream, mkdirSync, promises, writeFileSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import { dirname, join } from 'node:path';
 import type { Readable } from 'node:stream';
 
-const tempfileSync = (filePath?: string) => join(realpathSync(tmpdir()), `lerna-${randomUUID()}`, filePath || '');
+const tempfileSync = (filePath?: string) => join(tmpdir(), `lerna-${randomUUID()}`, filePath || '');
 
 const writeStream = async (filePath: string, fileContent: Readable) =>
   new Promise((resolve, reject) => {

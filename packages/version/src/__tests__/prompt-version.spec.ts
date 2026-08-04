@@ -1,5 +1,5 @@
 import { prereleaseIdFromVersion, promptSelectOne, promptTextInput, type PackageGraphNode } from '@lerna-lite/core';
-import semver from 'semver';
+import { increment, normalize } from 'verkit';
 import { beforeEach, describe, expect, test, vi } from 'vitest';
 
 import { makePromptVersion } from '../lib/prompt-version.js';
@@ -84,7 +84,7 @@ describe('custom version', () => {
     } as PackageGraphNode);
 
     expect(message).toBe('Enter a custom version');
-    expect(inputFilter).toBe(semver.valid);
+    expect(inputFilter).toBe(normalize);
   });
 
   test.each([
@@ -141,7 +141,7 @@ describe('custom prerelease', () => {
 
       expect(message).toMatch('Enter a prerelease identifier');
       expect(message).toMatch(`default: "${defaultIdentifier}"`);
-      expect(message).toMatch(`yielding ${semver.inc(version, 'prerelease', defaultIdentifier)}`);
+      expect(message).toMatch(`yielding ${increment(version, 'prerelease', { identifier: defaultIdentifier })}`);
 
       expect(inputFilter(null)).toBe(`1.0.1-${defaultIdentifier}.0`);
       expect(inputFilter('rc')).toBe('1.0.1-rc.0');
@@ -158,7 +158,7 @@ describe('custom prerelease', () => {
 
       expect(message).toMatch('Enter a prerelease identifier');
       expect(message).toMatch(`default: "${defaultIdentifier}"`);
-      expect(message).toMatch(`yielding ${semver.inc(version, 'prerelease', defaultIdentifier)}`);
+      expect(message).toMatch(`yielding ${increment(version, 'prerelease', { identifier: defaultIdentifier })}`);
 
       expect(inputFilter('beta')).toBe('1.0.1-beta.2');
       expect(inputFilter('rc')).toBe('1.0.1-rc.0');

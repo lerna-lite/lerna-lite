@@ -2,7 +2,7 @@ import type { RemoteClientType } from '@lerna-lite/core';
 import { colorize, ValidationError } from '@lerna-lite/core';
 import { log } from '@lerna-lite/npmlog';
 import type parseGitUrl from 'git-url-parse';
-import semver from 'semver';
+import { getPrerelease } from 'verkit';
 
 import { createGitHubClient, parseGitRepo } from '../git-clients/github-client.js';
 import { createGitLabClient } from '../git-clients/gitlab-client.js';
@@ -51,7 +51,7 @@ export function createRelease(
         return Promise.resolve();
       }
 
-      const prereleaseParts = semver.prerelease(tag.replace(`${name}${tagVersionSeparator}`, '')) || [];
+      const prereleaseParts = getPrerelease(tag.replace(`${name}${tagVersionSeparator}`, '')) || [];
       // Compose body with optional header/footer and support tokens
       const versionOnly = pkg?.version || tag.replace(/^v/, '');
       const formatTokens = (str: string) => str.replace(/%s/g, tag).replace(/%v/g, versionOnly);

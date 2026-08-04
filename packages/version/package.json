@@ -47,7 +47,7 @@
     "git-url-parse": "^16.1.0",
     "handlebars": "^4.7.9",
     "npm-package-arg": "catalog:",
-    "semver": "catalog:",
+    "verkit": "catalog:",
     "write-json-file": "catalog:dependencies",
     "zeptomatch": "catalog:dependencies"
   },
@@ -55,7 +55,6 @@
     "@npm/types": "^2.1.0",
     "@types/node": "catalog:devDependencies",
     "@types/npm-package-arg": "catalog:devDependencies",
-    "@types/semver": "catalog:devDependencies",
     "@types/yargs-parser": "catalog:devDependencies",
     "tinyexec": "catalog:dependencies",
     "yaml": "catalog:dependencies",

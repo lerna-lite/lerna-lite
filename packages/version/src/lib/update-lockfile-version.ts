@@ -5,7 +5,7 @@ import { join } from 'node:path';
 import type { NpmClient, Package } from '@lerna-lite/core';
 import { execPackageManager, execPackageManagerSync, readJson } from '@lerna-lite/core';
 import { log } from '@lerna-lite/npmlog';
-import semver from 'semver';
+import { isGreaterOrEqual } from 'verkit';
 import { writeJsonFile } from 'write-json-file';
 
 /**
@@ -156,7 +156,7 @@ export async function runInstallLockFileOnly(
     case 'yarn':
       inputLockfileName = 'yarn.lock';
       const yarnVersion = execPackageManagerSync('yarn', ['--version']);
-      if (semver.gte(yarnVersion, '2.0.0') && (await validateFileExists(join(cwd, inputLockfileName)))) {
+      if (isGreaterOrEqual(yarnVersion, '2.0.0') && (await validateFileExists(join(cwd, inputLockfileName)))) {
         log.verbose('lock', `updating lock file via "yarn install --mode update-lockfile"`);
         await execPackageManager('yarn', ['install', '--mode', 'update-lockfile', ...npmClientArgs], {
           cwd,

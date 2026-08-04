@@ -1,7 +1,7 @@
 import { accessSync, constants, readdirSync } from 'node:fs';
 import { join as pathJoin } from 'node:path';
 
-import semver from 'semver';
+import { isEqual, normalize } from 'verkit';
 
 import { Package } from '../packages/core/dist/package.js';
 
@@ -64,15 +64,14 @@ function createDependencyMatcher(dependencyType) {
     }
 
     if (exact) {
-      if (!semver.valid(version)) {
+      if (!normalize(version)) {
         return {
           message: () => `${expectation} but ${version} is not an exact version\n${json}`,
           pass: false,
         };
       }
 
-      // semver.eq will throw a TypeError if range is not a valid exact version
-      if (!semver.eq(version, range)) {
+      if (!isEqual(version, range)) {
         return {
           message: () => `${expectation} but ${version} is not ${range}\n${json}`,
           pass: false,
