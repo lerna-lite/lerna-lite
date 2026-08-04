@@ -1,7 +1,7 @@
 import { mkdtempSync, readFileSync, rmSync, writeFileSync } from 'node:fs';
 import { EOL } from 'node:os';
-import { join, isAbsolute } from 'node:path';
 import { tmpdir } from 'node:os';
+import { join, isAbsolute } from 'node:path';
 
 import { exec } from '@lerna-lite/core';
 import { describe, expect, test, vi } from 'vitest';
