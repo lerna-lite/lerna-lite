@@ -466,7 +466,6 @@ export class PublishCommand extends Command<PublishCommandOption> {
     // prettier-ignore
     const makeVersion = (fallback: string) => ({ lastVersion = fallback, refCount, sha }) => {
       // the next version is bumped without concern for preid or current index
-      // prettier-ignore
       const nextVersion = increment(lastVersion.replace(this.tagPrefix, ''), release.replace('pre', '') as any);
 
       // semver.inc() starts a new prerelease at .0, git describe starts at .1
