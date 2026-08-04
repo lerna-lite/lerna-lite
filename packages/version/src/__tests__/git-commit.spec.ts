@@ -1,4 +1,7 @@
+import { mkdtempSync, readFileSync, rmSync, writeFileSync } from 'node:fs';
 import { EOL } from 'node:os';
+import { join, isAbsolute } from 'node:path';
+import { tmpdir } from 'node:os';
 
 import { exec } from '@lerna-lite/core';
 import { describe, expect, test, vi } from 'vitest';
@@ -26,6 +29,31 @@ describe('git commit', () => {
     await gitCommit(message, {} as GitCommitOption, opts);
     expect(tempWrite.sync).toHaveBeenLastCalledWith(message, 'lerna-commit.txt');
     expect(exec).toHaveBeenLastCalledWith('git', ['commit', '-F', 'temp-file-path'], opts, false);
+  });
+
+  test('--message <multiline> uses an absolute, readable temp file at exec time', async () => {
+    const message = `subject${EOL}${EOL}body`;
+    const opts = { cwd: 'multi-line-absolute' };
+    const tempRoot = mkdtempSync(join(tmpdir(), 'lerna-commit-test-'));
+    const commitFile = join(tempRoot, 'lerna-commit.txt');
+
+    (tempWrite.sync as any).mockImplementationOnce((content: string, filename: string) => {
+      expect(filename).toBe('lerna-commit.txt');
+      writeFileSync(commitFile, content);
+      return commitFile;
+    });
+
+    (exec as any).mockImplementationOnce((_bin, args) => {
+      const tempPath = args[2];
+      expect(isAbsolute(tempPath)).toBe(true);
+      expect(readFileSync(tempPath, 'utf8')).toBe(message);
+      return Promise.resolve(null);
+    });
+
+    await gitCommit(message, {} as GitCommitOption, opts);
+
+    expect(exec).toHaveBeenLastCalledWith('git', ['commit', '-F', commitFile], opts, false);
+    rmSync(tempRoot, { recursive: true, force: true });
   });
 
   test('--amend', async () => {
