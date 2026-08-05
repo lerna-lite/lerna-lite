@@ -43,7 +43,7 @@ describe('git commit', () => {
       return commitFile;
     });
 
-    (exec as any).mockImplementationOnce((_bin, args) => {
+    (exec as any).mockImplementationOnce((_bin: string, args: string[]) => {
       const tempPath = args[2];
       expect(isAbsolute(tempPath)).toBe(true);
       expect(readFileSync(tempPath, 'utf8')).toBe(message);
