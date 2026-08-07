@@ -44,9 +44,9 @@ jobs:
           exit 1
 
       - name: Install pnpm itself
-        uses: pnpm/action-setup@0ebf47130e4866e96fce0953f49152a61190b271 # v6
+        uses: pnpm/setup@4700d737c3d7a2e7199f3d42a920f0bf7f34e411 # v2
         with:
-          run_install: false
+          install: false
 
       - name: Set NodeJS
         uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7
