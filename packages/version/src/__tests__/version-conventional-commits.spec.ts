@@ -2,7 +2,7 @@ import { join, resolve as pathResolve } from 'node:path';
 
 import { collectUpdates, writePackage, type VersionCommandOption } from '@lerna-lite/core';
 import { initFixtureFactory, showCommit } from '@lerna-test/helpers';
-import semver from 'semver';
+import { getPrerelease, increment } from 'verkit';
 import { describe, expect, it, vi, type Mock } from 'vitest';
 import yargParser from 'yargs-parser';
 
@@ -139,7 +139,7 @@ describe('version --conventional-commits', () => {
       expect(changedFiles).toMatchSnapshot();
 
       prereleaseVersionBumps.forEach((version, name) => {
-        const prereleaseId = (semver as any).prerelease(version)[0];
+        const prereleaseId = (getPrerelease(version) as any)[0];
         expect(recommendVersion).toHaveBeenCalledWith(
           expect.objectContaining({ name }),
           'independent',
@@ -167,7 +167,7 @@ describe('version --conventional-commits', () => {
       await new VersionCommand(createArgv(cwd, '--conventional-commits', '--conventional-prerelease', '--conventional-bump-prerelease'));
 
       prereleaseVersionBumps.forEach((version, name) => {
-        const prereleaseId = (semver as any).prerelease(version)[0];
+        const prereleaseId = (getPrerelease(version) as any)[0];
         expect(recommendVersion).toHaveBeenCalledWith(
           expect.objectContaining({ name }),
           'independent',
@@ -195,7 +195,7 @@ describe('version --conventional-commits', () => {
       await new VersionCommand(createArgv(cwd, '--conventional-commits', '--conventional-prerelease', '*', '--conventional-bump-prerelease'));
 
       prereleaseVersionBumps.forEach((version, name) => {
-        const prereleaseId = (semver as any).prerelease(version)[0];
+        const prereleaseId = (getPrerelease(version) as any)[0];
         expect(recommendVersion).toHaveBeenCalledWith(
           expect.objectContaining({ name }),
           'independent',
@@ -559,7 +559,7 @@ describe('version --conventional-commits', () => {
     (writePackage as any).registry.clear();
 
     (collectUpdates as any).setUpdated(cwd, 'package-2');
-    (recommendVersion as Mock).mockImplementationOnce((pkg) => Promise.resolve((semver as any).inc(pkg.version, 'patch')));
+    (recommendVersion as Mock).mockImplementationOnce((pkg) => Promise.resolve(increment(pkg.version, 'patch')));
 
     await new VersionCommand(createArgv(cwd, '--conventional-commits'));
 

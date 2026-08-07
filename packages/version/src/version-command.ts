@@ -22,7 +22,7 @@ import {
   type UpdateCollectorOptions,
   type VersionCommandOption,
 } from '@lerna-lite/core';
-import semver from 'semver';
+import { clean, getPrerelease, increment, isGreater, isLess, normalize } from 'verkit';
 import zeptomatch from 'zeptomatch';
 
 import { COMMENT_FILTER_KEYWORDS_CSV, COMMENT_ISSUE, COMMENT_PULL_REQUEST } from './constant.js';
@@ -55,6 +55,8 @@ import {
 export function factory(argv: VersionCommandOption) {
   return new VersionCommand(argv);
 }
+
+type ReleaseType = 'major' | 'minor' | 'patch' | 'premajor' | 'preminor' | 'prepatch' | 'prerelease';
 
 export class VersionCommand extends Command<VersionCommandOption> {
   /** command name */
@@ -425,8 +427,8 @@ export class VersionCommand extends Command<VersionCommandOption> {
   getVersionsForUpdates() {
     const independentVersions = this.project.isIndependent();
     const { bump, conventionalCommits, preid } = this.options;
-    const repoVersion = (bump ? semver.clean(bump) : '') as string;
-    const increment = (bump && !semver.valid(bump) ? bump : '') as semver.ReleaseType;
+    const repoVersion = (bump ? clean(bump) : '') as string;
+    const incrementVersion = (bump && !normalize(bump) ? bump : '') as ReleaseType;
 
     const resolvePrereleaseId = (existingPreid?: string) => preid || existingPreid || 'alpha';
 
@@ -441,18 +443,18 @@ export class VersionCommand extends Command<VersionCommandOption> {
 
     if (repoVersion) {
       predicate = makeGlobalVersionPredicate(applyBuildMetadata(repoVersion, this.options.buildMetadata));
-    } else if (increment && independentVersions) {
+    } else if (incrementVersion && independentVersions) {
       // compute potential prerelease ID for each independent update
       predicate = (node: { version: string; prereleaseId: string }) =>
         applyBuildMetadata(
-          semver.inc(node.version, increment, resolvePrereleaseId(node.prereleaseId)),
+          increment(node.version, incrementVersion, { identifier: resolvePrereleaseId(node.prereleaseId) }),
           this.options.buildMetadata
         );
-    } else if (increment) {
+    } else if (incrementVersion) {
       // compute potential prerelease ID once for all fixed updates
       const prereleaseId = prereleaseIdFromVersion(this.project.version);
       const nextVersion = applyBuildMetadata(
-        semver.inc(this.project.version, increment, resolvePrereleaseId(prereleaseId)),
+        increment(this.project.version, incrementVersion, { identifier: resolvePrereleaseId(prereleaseId) }),
         this.options.buildMetadata
       );
 
@@ -965,7 +967,7 @@ export class VersionCommand extends Command<VersionCommandOption> {
     const globalVersion = this.project.version;
 
     for (const node of this.updates) {
-      if (semver.lt(node.version, globalVersion)) {
+      if (isLess(node.version, globalVersion)) {
         this.logger.verbose('version', `Overriding version of ${node.name} from ${node.version} to ${globalVersion}`);
 
         node.pkg.version = globalVersion;
@@ -977,7 +979,7 @@ export class VersionCommand extends Command<VersionCommandOption> {
     let highestVersion = this.project.version;
 
     versions.forEach((bump: string) => {
-      if (bump && semver.gt(bump, highestVersion)) {
+      if (bump && isGreater(bump, highestVersion)) {
         highestVersion = bump;
       }
     });
@@ -993,5 +995,5 @@ export class VersionCommand extends Command<VersionCommandOption> {
  * @returns {string|undefined}
  */
 function prereleaseIdFromVersion(version) {
-  return ((semver.prerelease(version) || []) as string[]).shift();
+  return ((getPrerelease(version) || []) as string[]).shift();
 }

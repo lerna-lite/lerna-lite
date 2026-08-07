@@ -3,12 +3,13 @@ import { log } from '@lerna-lite/npmlog';
 import type { Commit } from 'conventional-commits-parser';
 import type { BumperRecommendation } from 'conventional-recommended-bump';
 import { Bumper, packagePrefix } from 'conventional-recommended-bump';
-import type { ReleaseType } from 'semver';
-import semver from 'semver';
+import { getMajor, getMinor, getPatch, getPrerelease, increment } from 'verkit';
 
 import type { BaseChangelogOptions, VersioningStrategy } from '../interfaces.js';
 import { applyBuildMetadata } from './apply-build-metadata.js';
 import { GetChangelogConfig } from './get-changelog-config.js';
+
+type ReleaseType = 'major' | 'minor' | 'patch' | 'premajor' | 'preminor' | 'prepatch' | 'prerelease';
 
 /**
  * @param {import('@lerna/package').Package} pkg
@@ -49,14 +50,15 @@ export async function recommendVersion(
   }
 
   const shouldBumpPrerelease = (releaseType: ReleaseType, version: string) => {
-    if (!semver.prerelease(version)) {
+    const prerelease = getPrerelease(version);
+    if (!prerelease || prerelease.length === 0) {
       return true;
     }
     switch (releaseType) {
       case 'major':
-        return semver.minor(version) !== 0 || semver.patch(version) !== 0;
+        return getMinor(version) !== 0 || getPatch(version) !== 0;
       case 'minor':
-        return semver.patch(version) !== 0;
+        return getPatch(version) !== 0;
       default:
         return false;
     }
@@ -84,7 +86,7 @@ export async function recommendVersion(
       const bumpResult = (await bumper.bump(whatBumpFn)) as BumperRecommendation;
       let releaseType = (bumpResult?.releaseType || 'patch') as ReleaseType;
 
-      if (semver.major(pkg.version) === 0) {
+      if (getMajor(pkg.version) === 0) {
         // According to semver, major version zero (0.y.z) is for initial
         // development. Anything MAY change at any time. The public API
         // SHOULD NOT be considered stable. The version 1.0.0 defines
@@ -116,10 +118,10 @@ export async function recommendVersion(
         const shouldBump = conventionalBumpPrerelease || shouldBumpPrerelease(releaseType, pkg.version);
         const prereleaseType = (shouldBump ? `pre${releaseType}` : 'prerelease') as ReleaseType;
         log.verbose(type, 'increment %s by %s - %s', pkg.version, prereleaseType, pkg.name);
-        resolve(applyBuildMetadata(semver.inc(pkg.version, prereleaseType, prereleaseId), buildMetadata));
+        resolve(applyBuildMetadata(increment(pkg.version, prereleaseType, { identifier: prereleaseId }), buildMetadata));
       } else {
         log.verbose(type, 'increment %s by %s - %s', pkg.version, releaseType, pkg.name);
-        resolve(applyBuildMetadata(semver.inc(pkg.version, releaseType), buildMetadata));
+        resolve(applyBuildMetadata(increment(pkg.version, releaseType), buildMetadata));
       }
     } catch (err) {
       reject(err);

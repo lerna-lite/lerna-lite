@@ -1,6 +1,6 @@
 import type { PackageGraphNode } from '@lerna-lite/core';
 import { promptSelectOne, promptTextInput } from '@lerna-lite/core';
-import semver from 'semver';
+import { increment, normalize } from 'verkit';
 
 import { applyBuildMetadata } from '../conventional-commits/apply-build-metadata.js';
 
@@ -29,12 +29,21 @@ export async function promptVersion(
   prereleaseId?: string,
   buildMetadata?: string
 ): Promise<string> {
-  const patch = applyBuildMetadata(semver.inc(currentVersion, 'patch'), buildMetadata);
-  const minor = applyBuildMetadata(semver.inc(currentVersion, 'minor'), buildMetadata);
-  const major = applyBuildMetadata(semver.inc(currentVersion, 'major'), buildMetadata);
-  const prepatch = applyBuildMetadata(semver.inc(currentVersion, 'prepatch', prereleaseId || ''), buildMetadata);
-  const preminor = applyBuildMetadata(semver.inc(currentVersion, 'preminor', prereleaseId || ''), buildMetadata);
-  const premajor = applyBuildMetadata(semver.inc(currentVersion, 'premajor', prereleaseId || ''), buildMetadata);
+  const patch = applyBuildMetadata(increment(currentVersion, 'patch'), buildMetadata);
+  const minor = applyBuildMetadata(increment(currentVersion, 'minor'), buildMetadata);
+  const major = applyBuildMetadata(increment(currentVersion, 'major'), buildMetadata);
+  const prepatch = applyBuildMetadata(
+    increment(currentVersion, 'prepatch', prereleaseId ? { identifier: prereleaseId } : undefined),
+    buildMetadata
+  );
+  const preminor = applyBuildMetadata(
+    increment(currentVersion, 'preminor', prereleaseId ? { identifier: prereleaseId } : undefined),
+    buildMetadata
+  );
+  const premajor = applyBuildMetadata(
+    increment(currentVersion, 'premajor', prereleaseId ? { identifier: prereleaseId } : undefined),
+    buildMetadata
+  );
 
   const message = `Select a new version ${name ? `for ${name} ` : ''}(currently ${currentVersion})`;
 
@@ -53,18 +62,22 @@ export async function promptVersion(
 
   if (choice === 'CUSTOM') {
     return promptTextInput('Enter a custom version', {
-      filter: semver.valid,
-      // semver.valid() always returns null with invalid input
+      filter: normalize,
+      // normalize() always returns null with invalid input
       validate: (v) => v !== null || 'Must be a valid semver version',
     });
   }
 
   if (choice === 'PRERELEASE') {
-    const defaultVersion = semver.inc(currentVersion, 'prerelease', prereleaseId || '');
+    const defaultVersion = increment(currentVersion, 'prerelease', prereleaseId ? { identifier: prereleaseId } : undefined);
     const prompt = `(default: "${prereleaseId}", yielding ${defaultVersion})`;
 
     return promptTextInput(`Enter a prerelease identifier ${prompt}`, {
-      filter: (v) => applyBuildMetadata(semver.inc(currentVersion, 'prerelease', v || prereleaseId || ''), buildMetadata),
+      filter: (v) =>
+        applyBuildMetadata(
+          increment(currentVersion, 'prerelease', v || prereleaseId ? { identifier: v || prereleaseId } : undefined),
+          buildMetadata
+        ),
     });
   }
 

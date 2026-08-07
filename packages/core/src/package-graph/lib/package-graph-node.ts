@@ -1,5 +1,5 @@
 import type { Result } from 'npm-package-arg';
-import semver from 'semver';
+import { satisfies } from 'verkit';
 
 import type { Package } from '../../package.js';
 import { prereleaseIdFromVersion } from '../../utils/prerelease-id-from-version.js';
@@ -54,7 +54,7 @@ export class PackageGraphNode {
    * @returns {Boolean}
    */
   satisfies({ gitCommittish, gitRange, fetchSpec }: Partial<Result>): boolean {
-    return semver.satisfies(this.version, (gitCommittish || gitRange || fetchSpec) as string | semver.Range);
+    return satisfies(this.version, (gitCommittish || gitRange || fetchSpec) as string);
   }
 
   /**

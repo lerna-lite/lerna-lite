@@ -37,7 +37,7 @@ import {
 import { pMap } from '@lerna-lite/core';
 import type { OneTimePasswordCache } from '@lerna-lite/version';
 import { getOneTimePassword, VersionCommand } from '@lerna-lite/version';
-import semver from 'semver';
+import { increment } from 'verkit';
 
 import type { Tarball } from './interfaces.js';
 import { createTempLicenses } from './lib/create-temp-licenses.js';
@@ -466,8 +466,7 @@ export class PublishCommand extends Command<PublishCommandOption> {
     // prettier-ignore
     const makeVersion = (fallback: string) => ({ lastVersion = fallback, refCount, sha }) => {
       // the next version is bumped without concern for preid or current index
-      // prettier-ignore
-      const nextVersion = semver.inc(lastVersion.replace(this.tagPrefix, ''), release.replace('pre', '') as semver.ReleaseType);
+      const nextVersion = increment(lastVersion.replace(this.tagPrefix, ''), release.replace('pre', '') as any);
 
       // semver.inc() starts a new prerelease at .0, git describe starts at .1
       // and build metadata is always ignored when comparing dependency ranges

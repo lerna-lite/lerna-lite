@@ -79,6 +79,60 @@ describe('PackageGraph', () => {
       expect(graph.get('pkg-3')!.localDependencies.has('pkg-2')).toBe(true);
     });
 
+    it('localizes local siblings when build metadata is present but range is otherwise satisfied', () => {
+      const pkgs = [
+        new Package(
+          {
+            name: 'pkg-1',
+            version: '1.0.0+build.1',
+          } as unknown as RawManifest,
+          '/test/pkg-1'
+        ),
+        new Package(
+          {
+            name: 'pkg-2',
+            version: '2.0.0',
+            dependencies: {
+              'pkg-1': '^1.0.0',
+            },
+          } as unknown as RawManifest,
+          '/test/pkg-2'
+        ),
+      ];
+
+      const graph = new PackageGraph(pkgs);
+
+      expect(graph.get('pkg-2')!.localDependencies.has('pkg-1')).toBe(true);
+      expect(graph.get('pkg-2')!.externalDependencies.has('pkg-1')).toBe(false);
+    });
+
+    it('externalizes prerelease local siblings when range does not include prereleases', () => {
+      const pkgs = [
+        new Package(
+          {
+            name: 'pkg-1',
+            version: '1.1.0-beta.0',
+          } as unknown as RawManifest,
+          '/test/pkg-1'
+        ),
+        new Package(
+          {
+            name: 'pkg-2',
+            version: '2.0.0',
+            dependencies: {
+              'pkg-1': '^1.0.0',
+            },
+          } as unknown as RawManifest,
+          '/test/pkg-2'
+        ),
+      ];
+
+      const graph = new PackageGraph(pkgs);
+
+      expect(graph.get('pkg-2')!.localDependencies.has('pkg-1')).toBe(false);
+      expect(graph.get('pkg-2')!.externalDependencies.has('pkg-1')).toBe(true);
+    });
+
     it('localizes all non-satisfied siblings when forced', () => {
       const pkgs = [
         new Package(
