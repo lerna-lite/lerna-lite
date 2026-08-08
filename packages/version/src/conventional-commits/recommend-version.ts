@@ -3,7 +3,7 @@ import { log } from '@lerna-lite/npmlog';
 import type { Commit } from 'conventional-commits-parser';
 import type { BumperRecommendation } from 'conventional-recommended-bump';
 import { Bumper, packagePrefix } from 'conventional-recommended-bump';
-import { getMajor, getMinor, getPatch, getPrerelease, increment } from 'verkit';
+import { getMajor, getMinor, getPatch, increment, isStable } from 'verkit';
 
 import type { BaseChangelogOptions, VersioningStrategy } from '../interfaces.js';
 import { applyBuildMetadata } from './apply-build-metadata.js';
@@ -50,8 +50,7 @@ export async function recommendVersion(
   }
 
   const shouldBumpPrerelease = (releaseType: ReleaseType, version: string) => {
-    const prerelease = getPrerelease(version);
-    if (!prerelease || prerelease.length === 0) {
+    if (isStable(version)) {
       return true;
     }
     switch (releaseType) {
