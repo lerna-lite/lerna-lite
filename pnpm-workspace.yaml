@@ -1,7 +1,7 @@
 packages:
   # workspace packages
   - packages/**
-  
+
   # e2e utilities (not published)
   - e2e-utils
 
@@ -43,6 +43,10 @@ minimumReleaseAge: 2880
 # exclude Lerna-Lite itself in order to run E2E tests without failures
 minimumReleaseAgeExclude:
   - '@lerna-lite/*'
+  # temporary exclude conventional-changelog min age to validate latest versions
+  - '@conventional-changelog/*'
+  - conventional-changelog
+  - conventional-changelog-writer
 
 overrides:
   fast-uri: ^4.1.2
