@@ -32,14 +32,14 @@
     "pack-tarball": "npm pack"
   },
   "dependencies": {
-    "@conventional-changelog/git-client": "^3.1.0",
+    "@conventional-changelog/git-client": "3.1.0",
     "@conventional-changelog/template": "^1.2.1",
     "@lerna-lite/cli": "workspace:*",
     "@lerna-lite/core": "workspace:*",
     "@lerna-lite/npmlog": "workspace:*",
     "@octokit/plugin-enterprise-rest": "^6.0.1",
     "@octokit/rest": "^22.0.1",
-    "conventional-changelog": "^8.1.0",
+    "conventional-changelog": "8.1.0",
     "conventional-changelog-angular": "^9.2.1",
     "conventional-changelog-writer": "^9.2.0",
     "conventional-commits-parser": "^7.1.2",

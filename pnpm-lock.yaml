@@ -499,7 +499,7 @@ importers:
   packages/version:
     dependencies:
       '@conventional-changelog/git-client':
-        specifier: ^3.1.0
+        specifier: 3.1.0
         version: 3.1.0(conventional-commits-filter@6.0.1)(conventional-commits-parser@7.1.2)
       '@conventional-changelog/template':
         specifier: ^1.2.1
@@ -520,7 +520,7 @@ importers:
         specifier: ^22.0.1
         version: 22.0.1
       conventional-changelog:
-        specifier: ^8.1.0
+        specifier: 8.1.0
         version: 8.1.0(conventional-commits-filter@6.0.1)
       conventional-changelog-angular:
         specifier: ^9.2.1
