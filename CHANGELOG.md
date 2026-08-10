@@ -4,6 +4,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [5.5.0](https://github.com/lerna-lite/lerna-lite/compare/v5.4.2...v5.5.0) (2026-08-10)
+
+### Features
+
+* **version:** migrate from `semver` to `verkit` ([#1388](https://github.com/lerna-lite/lerna-lite/issues/1388)) ([343abae](https://github.com/lerna-lite/lerna-lite/commit/343abaed8299399e5cd80dedd66bf25790c44e51)) - by @ghiscoding
+
+### Bug Fixes
+
+* **deps:** update all non-major dependencies ([#1384](https://github.com/lerna-lite/lerna-lite/issues/1384)) ([58f22a6](https://github.com/lerna-lite/lerna-lite/commit/58f22a6b07a7d30ba60db48eea8ac017190c85d4)) - by @renovate[bot]
+* **deps:** update dependency conventional-commits-parser to ^7.1.2 ([#1385](https://github.com/lerna-lite/lerna-lite/issues/1385)) ([c15c2ba](https://github.com/lerna-lite/lerna-lite/commit/c15c2ba658b903c9d61520ab4a0a93cb2c74d722)) - by @renovate[bot]
+
 ## [5.4.2](https://github.com/lerna-lite/lerna-lite/compare/v5.4.1...v5.4.2) (2026-07-24)
 
 ### Bug Fixes
