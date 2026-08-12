@@ -16,7 +16,13 @@ export type TinyExecOptions = Omit<Partial<Options>, 'stdin' | 'nodeOptions'> & 
   [key: string]: any;
 };
 
-type TinyExecResult = ReturnType<typeof x> & { pkg?: Package; stdio?: any[]; commandName?: string; args?: string[] };
+type TinyExecResult = ReturnType<typeof x> & {
+  pkg?: Package;
+  stdio?: any[];
+  commandName?: string;
+  args?: string[];
+  reject?: boolean;
+};
 
 // bookkeeping for spawned processes
 const children = new Set<any>();
@@ -185,6 +191,10 @@ export function spawnProcess(command: string, args: string[], opts: TinyExecOpti
   if (opts.pkg) {
     child.pkg = opts.pkg;
   }
+  // Preserve the reject option for wrapError to use
+  if (opts.reject !== undefined) {
+    child.reject = opts.reject;
+  }
   children.add(child);
   return child;
 }
@@ -198,7 +208,9 @@ export function spawnProcess(command: string, args: string[], opts: TinyExecOpti
 export function wrapError(spawned: any) {
   const promise = Promise.resolve(spawned)
     .then((result: any) => {
-      if (result && result.exitCode !== 0 && result.exitCode !== undefined) {
+      // Only throw for non-zero exit codes if reject is not explicitly false (--no-bail)
+      // When reject is false, return the result with the non-zero exit code instead
+      if (result && result.exitCode !== 0 && result.exitCode !== undefined && spawned.reject !== false) {
         throw _createEnhancedError(result, spawned.commandName || '', spawned.args || []);
       }
       if (result && typeof result.stdout === 'string') {
@@ -208,6 +220,7 @@ export function wrapError(spawned: any) {
     })
     .catch((err: any) => {
       // Re-wrap if it's already an error from tinyexec's own rejection (though throwOnError is false)
+      // These are spawn-level errors like ENOENT and should always be converted to controlled errors
       if (err.exitCode !== undefined || err.code !== undefined) {
         const enhanced = _createEnhancedError(err, spawned.commandName || '', spawned.args || []);
         if (spawned.pkg) {

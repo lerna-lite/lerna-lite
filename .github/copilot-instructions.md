@@ -17,7 +17,10 @@ This repository is a monorepo for **Lerna-Lite**, a lightweight fork of the Lern
 - Format code with `pnpm format`.
 - Build the repository with `pnpm build`.
 - Run type-aware linting with `pnpm lint-type`.
-- Run tests with `pnpm test`.
+- **Run tests**: Always use **specific test files** with filters, not the entire suite
+  - Single file: `rtk vitest run packages/core/src/__tests__/foo.spec.ts`
+  - With filter: `rtk vitest run packages/watch/__tests__/watch-command.spec.ts -t "no-bail"`
+  - Use `-- --run` flag to run in CI mode (no watch)
 - E2E tests may use Verdaccio and are under `/e2e/`.
 
 ## Safety rules
