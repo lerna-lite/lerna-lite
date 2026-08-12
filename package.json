@@ -39,6 +39,7 @@
     "preview:watch:build": "lerna watch --no-bail --scope=@lerna-lite/listable --include-dependents -- cross-env-shell 'lerna run echo:test --stream --include-dependents --scope=$LERNA_PACKAGE_NAME'",
     "preview:watch:build:pnpm": "lerna watch --no-bail --scope=@lerna-lite/listable --include-dependents -- cross-env-shell 'pnpm run --stream --filter ...$LERNA_PACKAGE_NAME echo:test'",
     "preview:watch:files": "lerna watch --glob=\"src/**/*.ts\" --scope=@lerna-lite/listable --include-dependents -- cross-env-shell 'echo $LERNA_FILE_CHANGES in package $LERNA_PACKAGE_NAME'",
+    "preview:watch:no-bail-test": "lerna watch --no-bail --scope=@lerna-lite/listable --include-dependents -- cross-env-shell 'echo Testing --no-bail exit code 1 && exit 1'",
     "preview:publish-alpha-dry-run": "lerna publish --dry-run --exact --include-merged-tags --preid alpha --dist-tag next prerelease",
     "preview:publish": "lerna publish from-package --dry-run --yes",
     "preview:version": "lerna version --dry-run --yes",
