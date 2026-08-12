@@ -208,10 +208,15 @@ export function spawnProcess(command: string, args: string[], opts: TinyExecOpti
 export function wrapError(spawned: any) {
   const promise = Promise.resolve(spawned)
     .then((result: any) => {
-      // Only throw for non-zero exit codes if reject is not explicitly false (--no-bail)
-      // When reject is false, return the result with the non-zero exit code instead
-      if (result && result.exitCode !== 0 && result.exitCode !== undefined && spawned.reject !== false) {
-        throw _createEnhancedError(result, spawned.commandName || '', spawned.args || []);
+      // Handle non-zero exit codes based on reject option
+      if (result && result.exitCode !== 0 && result.exitCode !== undefined) {
+        if (spawned.reject !== false) {
+          // Default behavior: throw the error
+          throw _createEnhancedError(result, spawned.commandName || '', spawned.args || []);
+        }
+        // When reject is false (--no-bail), mark result as failed and return it
+        // This allows commands like exec/run to detect the failure and set process.exitCode
+        result.failed = true;
       }
       if (result && typeof result.stdout === 'string') {
         result.stdout = stripFinalNewline(result.stdout);
