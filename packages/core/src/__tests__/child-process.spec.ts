@@ -95,6 +95,18 @@ describe('childProcess', () => {
       expect(typeof stdout).toBe('string');
       expect(stdout.length).toBe(size);
     });
+
+    it('respects reject: false option to avoid throwing on non-zero exit code', async () => {
+      const result = await exec('exit', ['99'], {
+        reject: false,
+        shell: true,
+      });
+
+      // Should not throw and should mark result as failed
+      expect(result).toBeDefined();
+      expect((result as any).exitCode).toBe(99);
+      expect((result as any).failed).toBe(true);
+    });
   });
 
   describe('.spawn()', () => {
@@ -125,6 +137,27 @@ describe('childProcess', () => {
           pkg: { name: 'shelled' },
         })
       );
+    });
+
+    it('respects reject: false option to avoid throwing on non-zero exit code', async () => {
+      const result = await spawn('exit', ['42'], {
+        reject: false,
+        shell: true,
+      });
+
+      // Should not throw and should mark result as failed
+      expect(result).toBeDefined();
+      expect(result.exitCode).toBe(42);
+      expect(result.failed).toBe(true);
+    });
+
+    it('preserves reject option on spawned object for wrapError to use', async () => {
+      const result = await spawn('node', ['-e', 'process.exit(5)'], {
+        reject: false,
+      });
+
+      expect(result.exitCode).toBe(5);
+      expect(result.failed).toBe(true);
     });
   });
 
