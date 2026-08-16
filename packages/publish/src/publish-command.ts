@@ -78,6 +78,8 @@ export class PublishCommand extends Command<PublishCommandOption> {
   packagesToPublish: Package[] = [];
   publishedPackages: Package[] = [];
   packagesToBeLicensed?: Package[] = [];
+  /** Map of package name to npm staging `stageId` (UUID) when `--stage` is used */
+  stageIds = new Map<string, string>();
   runPackageLifecycle!: (pkg: Package, stage: string) => Promise<void>;
   runRootLifecycle!: (stage: string) => Promise<void> | void;
   verifyAccess?: boolean = false;
@@ -161,6 +163,13 @@ export class PublishCommand extends Command<PublishCommandOption> {
       throw new ValidationError('ENOTSATISFIED', 'Cannot use --build-metadata in conjunction with --canary option.');
     } else if (this.options.canary) {
       this.logger.info('canary', 'enabled');
+    }
+
+    if (this.options.stage && this.options.tempTag) {
+      this.logger.warn(
+        'stage',
+        '--stage is not compatible with --temp-tag: staged dist-tags are immutable and the temporary tag will not be moved to the configured dist-tag after approval. Publishing will proceed with the staged tag.'
+      );
     }
 
     // npmSession and user-agent are consumed by npm-registry-fetch (via libnpmpublish)
@@ -293,7 +302,7 @@ export class PublishCommand extends Command<PublishCommandOption> {
       await this.resetChanges();
     }
 
-    if (this.options.tempTag) {
+    if (this.options.tempTag && !this.options.stage) {
       await this.npmUpdateAsLatest();
     }
 
@@ -310,10 +319,16 @@ export class PublishCommand extends Command<PublishCommandOption> {
     if (this.options.summaryFile !== undefined) {
       const filePath = this.getSummaryFilePath();
       const jsonObject = publishedPackagesSorted.map((pkg) => {
-        return {
+        const summary: { packageName: string; version: string; stageId?: string } = {
           packageName: pkg.name,
           version: pkg.version,
         };
+        // include the npm staging `stageId` when staged publishing is enabled
+        const stageId = this.stageIds.get(pkg.name);
+        if (stageId) {
+          summary.stageId = stageId;
+        }
+        return summary;
       });
       logOutput(jsonObject);
       try {
@@ -907,6 +922,8 @@ export class PublishCommand extends Command<PublishCommandOption> {
       // if we skip temp tags we should tag with the proper value immediately
       tag: this.options.tempTag ? 'lerna-temp' : this.conf.get('tag'),
       'git-dry-run': this.options.dryRun || false,
+      // npm staged publishing: upload tarballs to the staging area instead of publishing immediately
+      stage: this.options.stage || false,
     });
 
     let q: Queue | undefined = undefined;
@@ -938,6 +955,11 @@ export class PublishCommand extends Command<PublishCommandOption> {
         // Collect provenance URL if present
         if (publishResult?.transparencyLogUrl) {
           provenanceUrls.set(pkg.name, publishResult.transparencyLogUrl);
+        }
+
+        // Collect npm staging `stageId` when staged publishing is enabled
+        if (publishResult?.stageId) {
+          this.stageIds.set(pkg.name, publishResult.stageId);
         }
 
         tracker.success('published', pkg.name, pkg.version);
@@ -1003,6 +1025,12 @@ export class PublishCommand extends Command<PublishCommandOption> {
       if (provenanceUrls.size > 0) {
         logOutput('The following Provenance transparency log entries were created during publishing:');
         const message = Array.from(provenanceUrls.entries()).map(([pkg, url]) => ` - ${pkg}: ${url}`);
+        logOutput(message.join(EOL));
+      }
+      // print npm staging `stageId`(s) when staged publishing is enabled
+      if (this.stageIds.size > 0) {
+        logOutput('The following packages were staged for npm staged publishing (approve them with `npm stage approve`):');
+        const message = Array.from(this.stageIds.entries()).map(([pkg, stageId]) => ` - ${pkg}: ${stageId}`);
         logOutput(message.join(EOL));
       }
       tracker.finish();
