@@ -16,7 +16,7 @@ catalog:
   has-unicode: ^2.0.1
   npm-package-arg: ^13.0.2
   npm-registry-fetch: ^19.1.1
-  verkit: ~0.3.2
+  verkit: ^0.4.0
 
 # add a few named catalog: for Lerna-Lite to test its own code with real projects
 catalogs:
@@ -46,4 +46,4 @@ minimumReleaseAgeExclude:
 
 overrides:
   fast-uri: ^4.1.2
-  js-yaml: ^5.2.3
+  js-yaml: ^5.3.0
