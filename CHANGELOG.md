@@ -4,6 +4,18 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [5.6.0](https://github.com/lerna-lite/lerna-lite/compare/v5.5.0...v5.6.0) (2026-08-17)
+
+### Features
+
+* **publish:** support npm staged publishing via `--stage` ([#1399](https://github.com/lerna-lite/lerna-lite/issues/1399)) ([c6b5d74](https://github.com/lerna-lite/lerna-lite/commit/c6b5d749055db0d779dcac56c73500c24b5b4f96)) - by @SBoudrias
+
+### Bug Fixes
+
+* **core:** respect reject option in tinyexec adapter for --no-bail ([#1395](https://github.com/lerna-lite/lerna-lite/issues/1395)) ([0393a55](https://github.com/lerna-lite/lerna-lite/commit/0393a551f5292fb30b9bc95cdf0071c8c314f831)) - by @ghiscoding
+* **deps:** update conventional-changelog packages ([#1393](https://github.com/lerna-lite/lerna-lite/issues/1393)) ([6dc0a68](https://github.com/lerna-lite/lerna-lite/commit/6dc0a6894aeed57b0333ebd6fb0ea6b135074a7f)) - by @renovate[bot]
+* **deps:** update js-yaml and verkit dependencies ([#1401](https://github.com/lerna-lite/lerna-lite/issues/1401)) ([c0db76f](https://github.com/lerna-lite/lerna-lite/commit/c0db76f38dde02cca23d048a4d5032ce4c30a2b0)) - by @ghiscoding
+
 ## [5.5.0](https://github.com/lerna-lite/lerna-lite/compare/v5.4.2...v5.5.0) (2026-08-10)
 
 ### Features

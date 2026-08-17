@@ -4,6 +4,10 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [5.6.0](https://github.com/lerna-lite/lerna-lite/compare/v5.5.0...v5.6.0) (2026-08-17)
+
+**Note:** Version bump only for package @lerna-lite/watch
+
 ## [5.5.0](https://github.com/lerna-lite/lerna-lite/compare/v5.4.2...v5.5.0) (2026-08-10)
 
 **Note:** Version bump only for package @lerna-lite/watch
