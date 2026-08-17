@@ -438,6 +438,13 @@ export interface PublishCommandOption extends VersionCommandOption {
   /** Create a temporary tag while publishing. */
   tempTag?: boolean;
 
+  /**
+   * Publish packages to the npm staging area (npm staged publishing) instead of making them immediately available.
+   * The staged versions must later be approved by a maintainer (via `npm stage approve`) before becoming publicly installable.
+   * Note: this option is incompatible with `--temp-tag` since staged dist-tags are immutable.
+   */
+  stage?: boolean;
+
   /** Do not verify package read-write access for current npm user. */
   noVerifyAccess?: boolean;
 

@@ -26,6 +26,12 @@ export interface LibNpmPublishOptions extends KebabCase<fetch.FetchOptions> {
   /* Passed to libnpmpublish as `opts.defaultTag` to preserve npm v6 back-compat */
   tag?: string;
   registry?: string;
+  /**
+   * When true, publishes the package to the npm staging area instead of making it immediately available.
+   * The registry response will include a `stageId` (UUID) that can be used to approve or reject the staged version later.
+   * @see https://docs.npmjs.com/staged-publishing/
+   */
+  stage?: boolean;
 }
 
 export interface PackagePublishConfig {

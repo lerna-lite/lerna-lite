@@ -695,6 +695,95 @@ describe('PublishCommand', () => {
     });
   });
 
+  describe('--stage', () => {
+    it('passes stage: true to npmPublish for every package', async () => {
+      const cwd = await initFixture('normal');
+
+      await new PublishCommand(createArgv(cwd, '--stage'));
+
+      expect(npmPublish).toHaveBeenCalledTimes(4);
+      for (const call of (npmPublish as Mock).mock.calls) {
+        expect(call[2]).toEqual(expect.objectContaining({ stage: true }));
+      }
+    });
+
+    it('does not set stage when the option is not provided', async () => {
+      const cwd = await initFixture('normal');
+
+      await new PublishCommand(createArgv(cwd));
+
+      expect(npmPublish).toHaveBeenCalledTimes(4);
+      for (const call of (npmPublish as Mock).mock.calls) {
+        expect(call[2]).toEqual(expect.not.objectContaining({ stage: true }));
+      }
+    });
+
+    it('prints the stageId returned by npmPublish', async () => {
+      const cwd = await initFixture('normal');
+      (npmPublish as typeof npmPublishMock)
+        .mockResolvedValueOnce({ stageId: 'stage-111' })
+        .mockResolvedValueOnce({ stageId: 'stage-222' })
+        .mockResolvedValueOnce({ stageId: 'stage-333' })
+        .mockResolvedValueOnce({ stageId: 'stage-444' });
+
+      await new PublishCommand(createArgv(cwd, '--stage'));
+
+      expect(logOutput).toHaveBeenCalledWith(
+        'The following packages were staged for npm staged publishing. Approve each one with `npm stage approve <stageId>` (or review them on npmjs.com):'
+      );
+      expect(logOutput).toHaveBeenCalledWith(expect.stringContaining('package-1: stage-111'));
+      expect(logOutput).toHaveBeenCalledWith(expect.stringContaining('package-2: stage-333'));
+      expect(logOutput).toHaveBeenCalledWith(expect.stringContaining('package-3: stage-444'));
+      expect(logOutput).toHaveBeenCalledWith(expect.stringContaining('package-4: stage-222'));
+    });
+
+    it('prints the npmjs.com staged-packages web UI URL when the npm username is known', async () => {
+      const cwd = await initFixture('normal');
+      (npmPublish as typeof npmPublishMock)
+        .mockResolvedValueOnce({ stageId: 'stage-111' })
+        .mockResolvedValueOnce({ stageId: 'stage-222' })
+        .mockResolvedValueOnce({ stageId: 'stage-333' })
+        .mockResolvedValueOnce({ stageId: 'stage-444' });
+
+      await new PublishCommand(createArgv(cwd, '--stage'));
+
+      expect(logOutput).toHaveBeenCalledWith('Review & approve them at: https://www.npmjs.com/settings/lerna-test/staged-packages');
+    });
+
+    it('includes the stageId in the summary file', async () => {
+      const cwd = await initFixture('normal');
+      (npmPublish as typeof npmPublishMock)
+        .mockResolvedValueOnce({ stageId: 'stage-111' })
+        .mockResolvedValueOnce({ stageId: 'stage-222' })
+        .mockResolvedValueOnce({ stageId: 'stage-333' })
+        .mockResolvedValueOnce({ stageId: 'stage-444' });
+
+      await new PublishCommand(createArgv(cwd, '--stage', '--summary-file', './outputs'));
+
+      const expectedJsonResponse = [
+        { packageName: 'package-1', version: '1.0.1', stageId: 'stage-111' },
+        { packageName: 'package-2', version: '1.0.1', stageId: 'stage-333' },
+        { packageName: 'package-3', version: '1.0.1', stageId: 'stage-444' },
+        { packageName: 'package-4', version: '1.0.1', stageId: 'stage-222' },
+      ];
+      expect(outputFileSync).toHaveBeenCalledWith(
+        pathJoin(process.cwd(), 'outputs/lerna-publish-summary.json'),
+        JSON.stringify(expectedJsonResponse)
+      );
+    });
+
+    it('warns when combined with --temp-tag', async () => {
+      const cwd = await initFixture('normal');
+
+      await new PublishCommand(createArgv(cwd, '--stage', '--temp-tag'));
+
+      const logMessages = loggingOutput('warn');
+      expect(logMessages).toContain(
+        '--stage is not compatible with --temp-tag: staged dist-tags are immutable and the temporary tag will not be moved to the configured dist-tag after approval. Publishing will proceed with the staged tag.'
+      );
+    });
+  });
+
   describe('--verify-access', () => {
     beforeEach(() => {
       vi.clearAllMocks();

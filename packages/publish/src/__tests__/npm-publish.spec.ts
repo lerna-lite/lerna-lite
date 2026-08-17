@@ -233,6 +233,32 @@ describe('npm-publish', () => {
     );
   });
 
+  it('passes stage option through to libnpmpublish', async () => {
+    const opts = { stage: true };
+
+    await npmPublish(pkg, tarFilePath, opts, conf);
+
+    expect(publish).toHaveBeenCalledWith(
+      mockManifest,
+      mockTarData,
+      expect.objectContaining({
+        stage: true,
+      })
+    );
+  });
+
+  it('defaults stage to undefined when not provided', async () => {
+    await npmPublish(pkg, tarFilePath, {}, conf);
+
+    expect(publish).toHaveBeenCalledWith(
+      mockManifest,
+      mockTarData,
+      expect.not.objectContaining({
+        stage: true,
+      })
+    );
+  });
+
   it('calls publish lifecycles with stdio inherit', async () => {
     const options = expect.objectContaining({
       projectScope: '@scope',

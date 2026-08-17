@@ -102,6 +102,7 @@ $ lerna publish --scope my-component test
     - [`--registry <url>`](#--registry-url)
     - [`--tag-version-prefix`](#--tag-version-prefix)
     - [`--temp-tag`](#--temp-tag)
+    - [`--stage`](#--stage)
     - [`--throttle`](#--throttle)
     - [`--summary-file <dir>`](#--summary-file)
     - [`--verify-access`](#--verify-access)
@@ -396,6 +397,38 @@ new version(s) to the dist-tag configured by [`--dist-tag`](#--dist-tag-tag) (de
 This is not generally necessary, as lerna will publish packages in topological
 order (all dependencies before dependents) by default.
 
+### `--stage`
+
+When passed, this flag will publish all changed packages to the npm staging
+area instead of making them immediately available. This is equivalent to
+running `npm stage publish` for each packed package while still applying
+lerna-lite's `publishConfig` manifest overrides, lifecycle scripts, provenance
+and OIDC pipeline.
+
+```sh
+lerna publish --stage
+lerna publish from-package --stage
+lerna publish from-git --stage
+```
+
+This is the recommended secure flow for CI/OIDC publishing: CI can stage
+tarballs without an interactive 2FA prompt, while final release approval still
+requires maintainer proof-of-presence. The staged versions must later be
+approved by a maintainer before becoming publicly installable:
+
+```sh
+npm stage approve <stageId>
+```
+
+You can also list or reject staged versions with `npm stage list` and
+`npm stage reject`. When `--stage` is used, lerna-lite prints the `stageId` of
+each staged package as well as a link to the npmjs.com **Staged Packages** page
+(where you can review and approve them with 2FA). When `--summary-file` is used,
+the generated summary will include the `stageId` for each staged package.
+
+> **Note:** `--stage` is not compatible with `--temp-tag` since staged
+dist-tags are immutable. A warning will be shown if both options are combined.
+
 ### `--summary-file`
 
 ```sh
@@ -418,6 +451,18 @@ When run with this flag, a json summary report will be generated after all packa
   {
     "packageName": "package2",
     "version": "v2.0.1-alpha"
+  }
+]
+```
+
+When [`--stage`](#--stage) is also used, the summary will include the `stageId` of each staged package:
+
+```json
+[
+  {
+    "packageName": "package1",
+    "version": "v1.0.1-alpha",
+    "stageId": "123e4567-e89b-12d3-a456-426614174000"
   }
 ]
 ```

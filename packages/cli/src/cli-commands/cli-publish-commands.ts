@@ -121,6 +121,11 @@ export default {
         describe: 'Create a temporary tag while publishing.',
         type: 'boolean',
       },
+      stage: {
+        describe:
+          'Publish packages to the npm staging area instead of making them immediately available. The staged versions must later be approved by a maintainer (via `npm stage approve`) before becoming publicly installable.',
+        type: 'boolean',
+      },
       'no-verify-access': {
         // proxy for --verify-access
         describe: 'Do not verify package read-write access for current npm user.',
