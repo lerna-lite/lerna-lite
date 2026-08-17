@@ -80,6 +80,8 @@ export class PublishCommand extends Command<PublishCommandOption> {
   packagesToBeLicensed?: Package[] = [];
   /** Map of package name to npm staging `stageId` (UUID) when `--stage` is used */
   stageIds = new Map<string, string>();
+  /** npm username used to build the npmjs.com staged-packages web UI URL when `--stage` is used */
+  npmUsername?: string;
   runPackageLifecycle!: (pkg: Package, stage: string) => Promise<void>;
   runRootLifecycle!: (stage: string) => Promise<void> | void;
   verifyAccess?: boolean = false;
@@ -605,11 +607,22 @@ export class PublishCommand extends Command<PublishCommandOption> {
       return chain;
     }
 
+    // when staged publishing is enabled, fetch the npm username (best-effort) so we
+    // can build the npmjs.com staged-packages web UI URL shown in the publish output
+    if (this.options.stage && !this.options.dryRun && !this.verifyAccess) {
+      chain = chain.then(() => getNpmUsername(this.conf.snapshot).catch(() => undefined));
+      chain = chain.then((username: string | undefined) => {
+        this.npmUsername = username;
+      });
+    }
+
     if (this.verifyAccess) {
       // validate user has valid npm credentials first,
       // by far the most common form of failed execution
       chain = chain.then(() => getNpmUsername(this.conf.snapshot));
       chain = chain.then((username: string) => {
+        // keep the username around to build the staged-packages web UI URL when `--stage` is used
+        this.npmUsername = username;
         // if no username was retrieved, don't bother validating
         if (username) {
           return verifyNpmPackageAccess(this.packagesToPublish ?? [], username, this.conf.snapshot);
@@ -1029,9 +1042,15 @@ export class PublishCommand extends Command<PublishCommandOption> {
       }
       // print npm staging `stageId`(s) when staged publishing is enabled
       if (this.stageIds.size > 0) {
-        logOutput('The following packages were staged for npm staged publishing (approve them with `npm stage approve`):');
+        logOutput(
+          'The following packages were staged for npm staged publishing. Approve each one with `npm stage approve <stageId>` (or review them on npmjs.com):'
+        );
         const message = Array.from(this.stageIds.entries()).map(([pkg, stageId]) => ` - ${pkg}: ${stageId}`);
         logOutput(message.join(EOL));
+        // a single actionable link to the npmjs.com staged-packages web UI when we know the username
+        if (this.npmUsername && this.conf.get('registry') === 'https://registry.npmjs.org/') {
+          logOutput(`Review & approve them at: https://www.npmjs.com/settings/${this.npmUsername}/staged-packages`);
+        }
       }
       tracker.finish();
     });

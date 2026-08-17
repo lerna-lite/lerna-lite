@@ -421,8 +421,10 @@ npm stage approve <stageId>
 ```
 
 You can also list or reject staged versions with `npm stage list` and
-`npm stage reject`. When `--summary-file` is used, the generated summary will
-include the `stageId` for each staged package.
+`npm stage reject`. When `--stage` is used, lerna-lite prints the `stageId` of
+each staged package as well as a link to the npmjs.com **Staged Packages** page
+(where you can review and approve them with 2FA). When `--summary-file` is used,
+the generated summary will include the `stageId` for each staged package.
 
 > **Note:** `--stage` is not compatible with `--temp-tag` since staged
 dist-tags are immutable. A warning will be shown if both options are combined.

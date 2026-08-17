@@ -728,11 +728,26 @@ describe('PublishCommand', () => {
 
       await new PublishCommand(createArgv(cwd, '--stage'));
 
-      expect(logOutput).toHaveBeenCalledWith('The following packages were staged for npm staged publishing (approve them with `npm stage approve`):');
+      expect(logOutput).toHaveBeenCalledWith(
+        'The following packages were staged for npm staged publishing. Approve each one with `npm stage approve <stageId>` (or review them on npmjs.com):'
+      );
       expect(logOutput).toHaveBeenCalledWith(expect.stringContaining('package-1: stage-111'));
       expect(logOutput).toHaveBeenCalledWith(expect.stringContaining('package-2: stage-333'));
       expect(logOutput).toHaveBeenCalledWith(expect.stringContaining('package-3: stage-444'));
       expect(logOutput).toHaveBeenCalledWith(expect.stringContaining('package-4: stage-222'));
+    });
+
+    it('prints the npmjs.com staged-packages web UI URL when the npm username is known', async () => {
+      const cwd = await initFixture('normal');
+      (npmPublish as typeof npmPublishMock)
+        .mockResolvedValueOnce({ stageId: 'stage-111' })
+        .mockResolvedValueOnce({ stageId: 'stage-222' })
+        .mockResolvedValueOnce({ stageId: 'stage-333' })
+        .mockResolvedValueOnce({ stageId: 'stage-444' });
+
+      await new PublishCommand(createArgv(cwd, '--stage'));
+
+      expect(logOutput).toHaveBeenCalledWith('Review & approve them at: https://www.npmjs.com/settings/lerna-test/staged-packages');
     });
 
     it('includes the stageId in the summary file', async () => {
