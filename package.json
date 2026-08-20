@@ -97,7 +97,7 @@
     "typescript": "^7.0.2",
     "verdaccio": "^6.9.2",
     "verkit": "catalog:",
-    "vitest": "https://pkg.pr.new/vitest@d826044",
+    "vitest": "^5.0.0-rc.2",
     "write-json-file": "catalog:dependencies"
   },
   "engines": {

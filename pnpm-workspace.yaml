@@ -37,7 +37,6 @@ catalogs:
     yargs: ^18.1.0
     zeptomatch: ^2.1.0
 
-blockExoticSubdeps: false
 # min age of 2 days in minutes
 minimumReleaseAge: 2880
 
