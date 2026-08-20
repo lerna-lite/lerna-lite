@@ -15,8 +15,14 @@ log.disableProgress();
 log.enableProgress = vi.fn(() => {});
 
 // Aggressively silence all output at the process level
-process.stdout.write = (() => true) as any;
-process.stderr.write = (() => true) as any;
+process.stdout.write = ((_text: string, callback: () => boolean) => {
+  callback?.();
+  return true;
+}) as any;
+process.stderr.write = ((_text: string, callback: () => boolean) => {
+  callback?.();
+  return true;
+}) as any;
 
 // Globally silence console.log and process.stdout.write for all tests
 beforeAll(async () => {

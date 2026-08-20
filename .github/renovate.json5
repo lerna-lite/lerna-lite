@@ -22,10 +22,6 @@
       matchPackagePatterns: ['^@inquirer/'],
       groupName: 'Inquirer packages',
     },
-    {
-      packageNames: ['@vitest/coverage-v8', 'vitest'],
-      allowedVersions: '< 5.0.0-rc.0',
-    },
     // postponed the following npm packages to next major, since they now require NodeJS: ^22.22.2 || ^24.15.0 || >=26.0.0
     {
       packageNames: ['npm-package-arg', 'ssri'],
