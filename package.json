@@ -83,7 +83,7 @@
     "@lerna-test/helpers": "link:helpers",
     "@types/node": "catalog:devDependencies",
     "@types/yargs": "^17.0.35",
-    "@vitest/coverage-v8": "^5.0.0-beta.7",
+    "@vitest/coverage-v8": "^5.0.0-rc.2",
     "conventional-changelog-conventionalcommits": "^10.3.0",
     "cross-env": "^10.1.0",
     "empathic": "^2.0.1",
@@ -97,7 +97,7 @@
     "typescript": "^7.0.2",
     "verdaccio": "^6.9.2",
     "verkit": "catalog:",
-    "vitest": "^5.0.0-beta.7",
+    "vitest": "https://pkg.pr.new/vitest@d826044",
     "write-json-file": "catalog:dependencies"
   },
   "engines": {
