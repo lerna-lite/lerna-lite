@@ -560,6 +560,20 @@ describe('conventional-commits', () => {
       expect(changelogContent).toContain('<a name="1.0.1"></a>');
     });
 
+    it('supports preset writer templates defined as strings', async () => {
+      const cwd = await initFixture('fixed');
+      const config = await GetChangelogConfig.getChangelogConfig('./scripts/local-preset-template', cwd);
+
+      expect(config.writer?.template).toBeTypeOf('function');
+    });
+
+    it('supports preset writers without a template', async () => {
+      const cwd = await initFixture('fixed');
+      const config = await GetChangelogConfig.getChangelogConfig('./scripts/preset-without-template', cwd);
+
+      expect(config.writer).toMatchObject({ groupBy: 'type' });
+    });
+
     it('supports preset writer partials defined as functions mixed with a string mainTemplate', async () => {
       const cwd = (await initFixture('fixed')) as string;
 
