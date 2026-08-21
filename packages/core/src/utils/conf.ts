@@ -32,7 +32,12 @@ export class Conf extends ConfigChain {
       const newField = parseField(data[x], newKey);
 
       delete data[x];
-      data[newKey] = newField;
+      Object.defineProperty(data, newKey, {
+        configurable: true,
+        enumerable: true,
+        value: newField,
+        writable: true,
+      });
     }
 
     return super.add(data, marker);
