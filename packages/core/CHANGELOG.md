@@ -4,6 +4,12 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [5.6.1](https://github.com/lerna-lite/lerna-lite/compare/v5.6.0...v5.6.1) (2026-08-21)
+
+### Bug Fixes
+
+* **core:** prevent prototype pollution in config handling ([#1404](https://github.com/lerna-lite/lerna-lite/issues/1404)) ([03e614d](https://github.com/lerna-lite/lerna-lite/commit/03e614daa92c0e225019216841bc0a24037b9a47)) - by @ghiscoding
+
 ## [5.6.0](https://github.com/lerna-lite/lerna-lite/compare/v5.5.0...v5.6.0) (2026-08-17)
 
 ### Features
