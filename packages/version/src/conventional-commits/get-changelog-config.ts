@@ -17,7 +17,13 @@ function normalizeWriterConfig(config: ChangelogConfig): ChangelogConfig {
   // Legacy preset compatibility shim.
   // Remove this entire branch in the next major when we require function-based templates only.
   const legacyTemplateSource =
-    typeof writer.template === 'string' ? writer.template : typeof writer.mainTemplate === 'string' ? writer.mainTemplate : '';
+    typeof writer.template === 'string'
+      ? writer.template
+      : typeof writer.template === 'function'
+        ? ''
+        : typeof writer.mainTemplate === 'string'
+          ? writer.mainTemplate
+          : '';
 
   if (legacyTemplateSource) {
     const handlebars = Handlebars.create();

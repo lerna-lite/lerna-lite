@@ -560,6 +560,20 @@ describe('conventional-commits', () => {
       expect(changelogContent).toContain('<a name="1.0.1"></a>');
     });
 
+    it('supports preset writer templates defined as strings', async () => {
+      const cwd = await initFixture('fixed');
+      const config = await GetChangelogConfig.getChangelogConfig('./scripts/local-preset-template', cwd);
+
+      expect(config.writer?.template).toBeTypeOf('function');
+    });
+
+    it('supports preset writers without a template', async () => {
+      const cwd = await initFixture('fixed');
+      const config = await GetChangelogConfig.getChangelogConfig('./scripts/preset-without-template', cwd);
+
+      expect(config.writer).toMatchObject({ groupBy: 'type' });
+    });
+
     it('supports preset writer partials defined as functions mixed with a string mainTemplate', async () => {
       const cwd = (await initFixture('fixed')) as string;
 
@@ -583,6 +597,25 @@ describe('conventional-commits', () => {
       expect(changelogContent).toContain('<a name="1.0.1"></a>');
       // commitPartial is a function – verify the commit message is rendered.
       expect(changelogContent).toContain('feat: support function-based preset writer partials');
+    });
+
+    it('supports modern presets with a legacy writer guard', async () => {
+      const cwd = (await initFixture('fixed')) as string;
+      const [pkg1] = await Project.getPackages(cwd);
+
+      await gitTag(cwd, 'v1.0.0');
+
+      await pkg1.set('changed', 1).serialize();
+      await gitAdd(cwd, pkg1.manifestLocation);
+      await gitCommit(cwd, 'feat: support modern preset writer guards');
+
+      await pkg1.set('version', '1.0.1').serialize();
+
+      const changelog = await updateChangelog(pkg1, 'fixed', {
+        changelogPreset: 'conventionalcommits',
+      });
+
+      expect(changelog.newEntry).toContain('support modern preset writer guards');
     });
 
     it('updates fixed changelogs', async () => {
