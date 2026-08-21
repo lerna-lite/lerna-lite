@@ -95,7 +95,7 @@
     "tinyexec": "catalog:dependencies",
     "tslib": "^2.8.1",
     "typescript": "^7.0.2",
-    "verdaccio": "^6.9.2",
+    "verdaccio": "^6.10.0",
     "verkit": "catalog:",
     "vitest": "^5.0.0-rc.2",
     "write-json-file": "catalog:dependencies"
