@@ -9,6 +9,18 @@ import * as defaults from '../defaults.js';
 import { toNerfDart } from '../npm-conf.js';
 
 describe('conf', () => {
+  describe('add()', () => {
+    it.each(['__proto__', 'constructor', 'toString'])('should preserve the special key %s as an own config property', (key) => {
+      const conf = new Conf(Object.assign({}, defaults));
+      const data = JSON.parse(`{"${key}":{"enabled":true}}`);
+
+      conf.add(data, 'cli');
+
+      expect(Object.hasOwn(data, key)).toBe(true);
+      expect(conf.get(key, 'cli')).toEqual({ enabled: true });
+    });
+  });
+
   describe('addEnv()', () => {
     it('should skip npm_config_ env variables with empty/falsy values', () => {
       const conf = new Conf(Object.assign({}, defaults));

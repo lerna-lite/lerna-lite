@@ -39,7 +39,7 @@ function parseIni(content: string): Record<string, any> {
         value = parseFloat(value);
       }
 
-      result[key] = value;
+      defineOwnProperty(result, key, value);
     }
   }
 
@@ -53,7 +53,7 @@ function parseIni(content: string): Record<string, any> {
 export class ConfigChain {
   list: Array<Record<string, any>> = [];
   base: Record<string, any> = {};
-  sources: Record<string, { path?: string; type?: string; data?: Record<string, any> }> = {};
+  sources: Record<string, { path?: string; type?: string; data?: Record<string, any> }> = Object.create(null);
 
   constructor(base?: Record<string, any>) {
     if (base) {
@@ -107,7 +107,7 @@ export class ConfigChain {
       }
     }
 
-    target[key] = value;
+    defineOwnProperty(target, key, value);
     return this;
   }
 
@@ -139,7 +139,7 @@ export class ConfigChain {
   add(data: Record<string, any>, marker?: string | { __source__: string }): this {
     const sourceName = typeof marker === 'string' ? marker : marker?.__source__;
 
-    if (marker && typeof marker === 'object' && '__source__' in marker) {
+    if (marker && typeof marker === 'object' && Object.hasOwn(marker, '__source__')) {
       // Replace placeholder marker with actual data
       const i = this.list.indexOf(marker as any);
       if (i !== -1) {
@@ -190,8 +190,8 @@ export class ConfigChain {
     const prefixLength = prefix.length;
 
     for (const key in env) {
-      if (key.indexOf(prefix) === 0 && env[key] !== undefined) {
-        data[key.substring(prefixLength)] = env[key];
+      if (Object.hasOwn(env, key) && key.indexOf(prefix) === 0 && env[key] !== undefined) {
+        defineOwnProperty(data, key.substring(prefixLength), env[key]);
       }
     }
 
@@ -233,16 +233,31 @@ export class ConfigChain {
     const result: Record<string, any> = {};
 
     if (this.base) {
-      Object.assign(result, this.base);
+      assignOwnProperties(result, this.base);
     }
 
     for (let i = this.list.length - 1; i >= 0; i--) {
       const config = this.list[i];
-      if (config && typeof config === 'object' && !('__source__' in config)) {
-        Object.assign(result, config);
+      if (config && typeof config === 'object' && !Object.hasOwn(config, '__source__')) {
+        assignOwnProperties(result, config);
       }
     }
 
     return result;
   }
+}
+
+function assignOwnProperties(target: Record<string, any>, source: Record<string, any>) {
+  for (const key of Object.keys(source)) {
+    defineOwnProperty(target, key, source[key]);
+  }
+}
+
+function defineOwnProperty(target: Record<string, any>, key: string, value: any) {
+  Object.defineProperty(target, key, {
+    configurable: true,
+    enumerable: true,
+    value,
+    writable: true,
+  });
 }

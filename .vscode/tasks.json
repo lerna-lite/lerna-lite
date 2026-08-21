@@ -26,6 +26,12 @@
       "problemMatcher": []
     },
     {
+      "label": "Run Vitest E2E tests",
+      "type": "shell",
+      "command": "pnpm run test:e2e",
+      "problemMatcher": []
+    },
+    {
       "label": "[dry-run] new Version (from dist)",
       "type": "shell",
       "command": "pnpm run dist-roll-version-dry-run",

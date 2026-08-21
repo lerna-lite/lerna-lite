@@ -15,6 +15,9 @@ describe('ConfigChain', () => {
   });
 
   afterEach(() => {
+    delete (Object.prototype as any).data;
+    delete (Object as any).data;
+    delete (Object.prototype.toString as any).data;
     vi.clearAllMocks();
   });
 
@@ -53,6 +56,21 @@ describe('ConfigChain', () => {
     it('should return this for chaining', () => {
       const result = cc.add({ foo: 'bar' }, 'test');
       expect(result).toBe(cc);
+    });
+
+    it.each([
+      ['__proto__', Object.prototype],
+      ['constructor', Object],
+      ['toString', Object.prototype.toString],
+    ])('should store the special source name %s without modifying its inherited built-in', (sourceName, builtIn) => {
+      const data = { foo: 'bar' };
+
+      cc.add(data, sourceName as string);
+
+      expect(Object.getPrototypeOf(cc.sources)).toBeNull();
+      expect(Object.hasOwn(cc.sources, sourceName)).toBe(true);
+      expect(cc.sources[sourceName].data).toBe(data);
+      expect(Object.hasOwn(builtIn, 'data')).toBe(false);
     });
 
     it('should replace marker placeholder with data (like addFile pattern)', () => {
@@ -151,6 +169,15 @@ describe('ConfigChain', () => {
     it('should throw error if source does not exist', () => {
       expect(() => cc.set('foo', 'bar', 'newsource')).toThrow('not found newsource');
     });
+
+    it.each(['__proto__', 'constructor', 'toString'])('should store the special key %s as an own property', (key) => {
+      cc.add({}, 'test');
+
+      cc.set(key, 'value', 'test');
+
+      expect(cc.get(key, 'test')).toBe('value');
+      expect(Object.hasOwn(cc.sources.test.data!, key)).toBe(true);
+    });
   });
 
   describe('del', () => {
@@ -242,6 +269,16 @@ describe('ConfigChain', () => {
       expect(snap.__source__).toBeUndefined();
       expect(snap.foo).toBe('bar'); // Regular data comes through
     });
+
+    it('should copy __proto__ as an own property without changing the snapshot prototype', () => {
+      cc.add(JSON.parse('{"__proto__":{"polluted":true}}'), 'test');
+
+      const snap = cc.snapshot;
+
+      expect(Object.getPrototypeOf(snap)).toBe(Object.prototype);
+      expect(Object.getOwnPropertyDescriptor(snap, '__proto__')?.value).toEqual({ polluted: true });
+      expect((Object.prototype as any).polluted).toBeUndefined();
+    });
   });
 
   describe('addEnv', () => {
@@ -285,6 +322,25 @@ describe('ConfigChain', () => {
     it('should return this for chaining', () => {
       const result = cc.addEnv('test_', {});
       expect(result).toBe(cc);
+    });
+
+    it('should ignore inherited environment properties', () => {
+      const env = Object.create({ test_inherited: 'ignored' });
+      env.test_own = 'included';
+
+      cc.addEnv('test_', env);
+
+      expect(cc.get('own')).toBe('included');
+      expect(cc.get('inherited')).toBeUndefined();
+    });
+
+    it('should preserve __proto__ from the environment as an own config property', () => {
+      const env = JSON.parse('{"test___proto__":"value"}');
+
+      cc.addEnv('test_', env);
+
+      expect(cc.get('__proto__')).toBe('value');
+      expect(Object.hasOwn(cc.sources.env.data!, '__proto__')).toBe(true);
     });
   });
 
@@ -512,5 +568,14 @@ f=1.23
     expect(parsed.d).toBeUndefined();
     expect(parsed.e).toBe(123);
     expect(parsed.f).toBeCloseTo(1.23);
+  });
+
+  it.each(['__proto__', 'constructor', 'toString'])('parses the special key %s as an own property', (key) => {
+    const cc = new ConfigChain();
+
+    const parsed = cc.parse(`${key}=value`, 'test.ini');
+
+    expect(Object.hasOwn(parsed, key)).toBe(true);
+    expect(parsed[key]).toBe('value');
   });
 });
