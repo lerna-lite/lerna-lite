@@ -422,6 +422,8 @@ If you want your versions bumped according to a different spec, such as [Convent
 
 Passing [`--no-changelog`](#--no-changelog) will disable the generation (or updating) of `CHANGELOG.md` files.
 
+> **Pull request references:** Conventional changelog entries render references such as `(#123)` from the commit message being processed. Lerna-Lite does not infer a PR number from a separate `Merge pull request #123` commit, and `changelogIncludeCommitsClientLogin` only adds the remote client login. To include PR numbers consistently, use GitHub's **Squash and merge** workflow with the PR title and number included in the resulting commit message, and keep PR titles in Conventional Commit format. See [GitHub's squash merge settings](https://docs.github.com/en/repositories/configuring-branches-and-merges-in-your-repository/configuring-pull-request-merges/configuring-commit-squashing-for-pull-requests).
+
 ### `--conventional-graduate`
 
 ```sh
