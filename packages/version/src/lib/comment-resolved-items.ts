@@ -153,10 +153,10 @@ export async function commentResolvedItems({
   const hostURL = `https://${repo.host}/${repository}`;
   const releaseUrl = getReleaseUrlFallback(repo.host, repository, tag);
 
-  // Create a rate limiter for GitHub API
+  // Keep a healthy buffer below GitHub's documented content-creation guidance
+  // while avoiding the much more restrictive Search API pacing.
   const rateLimiter = new RateLimiter({
-    maxCalls: 30, // 30 calls per minute
-    firstRunMaxCalls: 26, // call/min since we need to remove 4 calls that were called earlier (1x graphql, 1x linked issues, 1x all isssues, 1x PRs)
+    maxCalls: 50, // 50 comment creations per minute leaves margin below GitHub's documented 80/minute guidance
     perMilliseconds: 60000, // per minute
   });
 

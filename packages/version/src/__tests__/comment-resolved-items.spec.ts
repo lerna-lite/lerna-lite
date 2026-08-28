@@ -693,7 +693,7 @@ describe('commentResolvedItems', () => {
     expect(uniqueNumbers).toContain(457);
 
     // Verify that each unique number appears only once in the results
-    const numberCounts = results.reduce((acc, result) => {
+    const numberCounts = results.reduce((acc: { [key: number]: number }, result) => {
       acc[result.number] = (acc[result.number] || 0) + 1;
       return acc;
     }, {});
