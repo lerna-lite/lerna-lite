@@ -365,6 +365,9 @@ export interface PublishCommandOption extends VersionCommandOption {
    */
   arboristLoadOptions?: ArboristLoadOption;
 
+  /** Authentication flow to use for npm registry requests. */
+  authType?: 'legacy' | 'web';
+
   /** alias to `--canary` */
   c?: boolean;
 

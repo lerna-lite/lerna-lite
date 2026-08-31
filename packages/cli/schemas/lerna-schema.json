@@ -355,6 +355,9 @@
             "arboristLoadOptions": {
               "$ref": "#/$defs/commandOptions/publish/arboristLoadOptions"
             },
+            "authType": {
+              "$ref": "#/$defs/commandOptions/publish/authType"
+            },
             "canary": {
               "$ref": "#/$defs/commandOptions/publish/canary"
             },
@@ -992,6 +995,9 @@
     "canary": {
       "$ref": "#/$defs/commandOptions/publish/canary"
     },
+    "authType": {
+      "$ref": "#/$defs/commandOptions/publish/authType"
+    },
     "distTag": {
       "$ref": "#/$defs/commandOptions/publish/distTag"
     },
@@ -1306,6 +1312,12 @@
         "arboristLoadOptions": {
           "type": "object",
           "description": "During `lerna publish`, Arborist options associated to the `arborist.loadActual(options)` method."
+        },
+        "authType": {
+          "type": "string",
+          "enum": ["legacy", "web"],
+          "description": "During `lerna publish`, authentication flow to use for npm registry requests.",
+          "default": "legacy"
         },
         "canary": {
           "type": "boolean",
