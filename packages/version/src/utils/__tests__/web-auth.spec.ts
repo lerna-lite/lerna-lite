@@ -11,12 +11,16 @@ vi.mock('npm-registry-fetch');
 
 const mockedFetch = fetch as unknown as Mock;
 
-type FakeChild = EventEmitter & { unref: Mock };
+interface FakeChild {
+  on: (event: string, listener: (...args: unknown[]) => void) => FakeChild;
+  emit: (event: string, ...args: unknown[]) => boolean;
+  unref: Mock;
+}
 let spawnSpy: ReturnType<typeof vi.spyOn>;
 let spawnedChildren: FakeChild[];
 
 function fakeChild(): FakeChild {
-  const child = new EventEmitter() as FakeChild;
+  const child = new EventEmitter() as unknown as FakeChild;
   child.unref = vi.fn();
   spawnedChildren.push(child);
   return child;
@@ -57,6 +61,7 @@ describe('web-auth', () => {
     it('rejects incomplete, unsafe, and non-EOTP challenges', () => {
       expect(getWebAuthChallenge({ code: 'EOTP', body: { authUrl } })).toBeUndefined();
       expect(getWebAuthChallenge({ code: 'EOTP', body: { authUrl: 'javascript:alert(1)', doneUrl } })).toBeUndefined();
+      expect(getWebAuthChallenge({ code: 'EOTP', body: { authUrl: 'https://[invalid', doneUrl } })).toBeUndefined();
       expect(getWebAuthChallenge({ code: 'E404', body: { authUrl, doneUrl } })).toBeUndefined();
       expect(getWebAuthChallenge(undefined)).toBeUndefined();
     });
@@ -101,6 +106,24 @@ describe('web-auth', () => {
       expect(spawnSpy).toHaveBeenCalledWith('firefox', [challenge.authUrl], expect.objectContaining({ stdio: 'ignore', windowsHide: true }));
     });
 
+    it('uses the Windows start command when running on Windows', async () => {
+      const platform = process.platform;
+      Object.defineProperty(process, 'platform', { value: 'win32' });
+      mockedFetch.mockResolvedValueOnce(response(200, { token: 'web-otp-token' }));
+
+      try {
+        await getWebAuthOneTimePassword(challenge, opts);
+      } finally {
+        Object.defineProperty(process, 'platform', { value: platform });
+      }
+
+      expect(spawnSpy).toHaveBeenCalledWith(
+        'start',
+        ['""', `"${challenge.authUrl}"`],
+        expect.objectContaining({ shell: true, stdio: 'ignore', windowsHide: true })
+      );
+    });
+
     it('does not fail or change the exit code when the browser opener fails', async () => {
       const verbose = vi.spyOn(log, 'verbose').mockImplementation(() => log);
       const exitCode = process.exitCode;
@@ -112,6 +135,17 @@ describe('web-auth', () => {
       await expect(pending).resolves.toBe('web-otp-token');
       expect(process.exitCode).toBe(exitCode);
       expect(verbose).toHaveBeenCalledWith('web-auth', expect.stringContaining('ENOENT'));
+    });
+
+    it('does not fail when the browser opener exits unsuccessfully', async () => {
+      const verbose = vi.spyOn(log, 'verbose').mockImplementation(() => log);
+      mockedFetch.mockResolvedValueOnce(response(200, { token: 'web-otp-token' }));
+
+      const pending = getWebAuthOneTimePassword(challenge, opts);
+      spawnedChildren[0].emit('exit', 127);
+
+      await expect(pending).resolves.toBe('web-otp-token');
+      expect(verbose).toHaveBeenCalledWith('web-auth', expect.stringContaining('exited with code 127'));
     });
 
     it('does not fail when spawning the browser throws synchronously', async () => {
