@@ -300,6 +300,10 @@ describe('bun client', () => {
 
 describe('run install lockfile-only', () => {
   describe('npm client', () => {
+    beforeEach(() => {
+      (execPackageManagerSync as Mock).mockReturnValue('10.0.0');
+    });
+
     it(`should update project root lockfile by calling npm script "npm install --package-lock-only --ignore-scripts"`, async () => {
       vi.spyOn(fsPromises, 'access').mockResolvedValue(true as any);
       (execPackageManager as Mock).mockImplementationOnce(() => true);
@@ -340,6 +344,8 @@ describe('run install lockfile-only', () => {
     });
 
     it(`should update project root lockfile by calling npm script "npm install --legacy-peer-deps,--force" with multiple npm client arguments provided as CSV`, async () => {
+      vi.spyOn(fsPromises, 'access').mockResolvedValue(true as any);
+      (execPackageManager as Mock).mockImplementationOnce(() => true);
       const cwd = await initFixture('lockfile-version2');
 
       const lockFileOutput = await runInstallLockFileOnly('npm', cwd, { npmClientArgs: ['--legacy-peer-deps,--force'] });
