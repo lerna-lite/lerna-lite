@@ -543,6 +543,9 @@ importers:
       npm-package-arg:
         specifier: 'catalog:'
         version: 13.0.2
+      npm-registry-fetch:
+        specifier: 'catalog:'
+        version: 19.1.1(supports-color@7.2.0)
       verkit:
         specifier: 'catalog:'
         version: 0.4.0
