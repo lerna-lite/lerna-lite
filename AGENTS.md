@@ -8,7 +8,7 @@ This repository is **Lerna-Lite**, a fork of Lerna for managing JavaScript monor
 
 ## Package Manager
 
-Use `pnpm` for dependency and workspace management.
+Use `pnpm` for dependency and workspace management. Install dependencies with `pnpm install`.
 
 For local setup, prefer `corepack enable` or the project setup script:
 
@@ -30,11 +30,15 @@ pnpm lint-type
 pnpm test
 ```
 
+Use `pnpm format` (instead of `pnpm format:check`) to auto-fix formatting issues.
+
 For command behavior and end-to-end CLI changes, also run:
 
 ```bash
 pnpm test:e2e
 ```
+
+E2E tests may use Verdaccio (a local npm registry) and live under `/e2e/`.
 
 For docs-only or narrowly scoped test-only changes, use judgment and run only the relevant checks.
 
@@ -69,7 +73,10 @@ When creating or modifying Lerna commands:
 - Use Vitest for unit tests.
 - Use e2e suites for realistic command execution scenarios.
 - Reuse fixtures when possible instead of creating ad hoc test setups.
-- Prefer targeted Vitest runs while iterating, then broaden verification before finalizing.
+- Prefer targeted Vitest runs while iterating, then broaden verification before finalizing. Always run **specific test files** with filters rather than the entire suite:
+  - Single file: `rtk vitest run packages/core/src/__tests__/foo.spec.ts`
+  - With a test-name filter: `rtk vitest run packages/watch/__tests__/watch-command.spec.ts -t "no-bail"`
+  - Add `-- --run` to run in CI mode (no watch)
 - Use `pnpm exec vitest run --config ./e2e/vitest.config.ts <path>` for focused e2e runs when needed.
 
 ## Build and Release
@@ -110,3 +117,35 @@ When drafting a pull request, follow `.github/PULL_REQUEST_TEMPLATE.md`, includi
 The repository includes a `lerna.json` configuration that defines command behavior, conventional commits, GitHub releases integration, and ignored files for change detection.
 
 Note: this repository uses `version.changelogIncludeCommitsClientLogin` to format changelog commit entries with remote client login information. That feature relies on the GitHub GraphQL API and may not work behind some proxies.
+
+## When in Doubt
+
+- Ask for clarification before making large architectural changes.
+- Prefer small, conservative changes over broad rewrites.
+- After edits, run relevant formatting/linting and add or update tests for behavior changes.
+- Avoid breaking the existing workspace structure or package build graph.
+
+<!-- rtk-instructions v2 -->
+
+## RTK — Token-Optimized CLI
+
+**rtk** is a CLI proxy that filters and compresses command outputs, saving 60-90% tokens. Always prefix shell commands with `rtk`:
+
+```bash
+# Instead of:              Use:
+git status                 rtk git status
+git log -10                rtk git log -10
+pnpm test                  rtk pnpm test
+pnpm vitest run <file>      rtk vitest run <file>
+```
+
+Meta commands (use directly, no prefix needed):
+
+```bash
+rtk gain              # Token savings dashboard
+rtk gain --history    # Per-command savings history
+rtk discover          # Find missed rtk opportunities
+rtk proxy <cmd>       # Run raw (no filtering) but track usage
+```
+
+<!-- /rtk-instructions -->
