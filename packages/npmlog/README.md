@@ -1,6 +1,6 @@
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
-[![npm](https://img.shields.io/npm/dy/@lerna-lite/list?color=forest)](https://www.npmjs.com/package/@lerna-lite/list)
-[![npm](https://img.shields.io/npm/v/@lerna-lite/list.svg?logo=npm&logoColor=fff)](https://www.npmjs.com/package/@lerna-lite/list)
+[![npm](https://img.shields.io/npm/dy/@lerna-lite/npmlog?color=forest)](https://www.npmjs.com/package/@lerna-lite/npmlog)
+[![npm](https://img.shields.io/npm/v/@lerna-lite/npmlog.svg?logo=npm&logoColor=fff)](https://www.npmjs.com/package/@lerna-lite/npmlog)
 
 # @lerna-lite/npmlog
 
