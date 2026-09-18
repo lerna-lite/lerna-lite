@@ -368,7 +368,7 @@ describe('PublishCommand', () => {
       expect(npmPublish).toHaveBeenCalledWith(
         expect.objectContaining({ name: 'package-1' }),
         '/TEMP_DIR/package-1-MOCKED.tgz',
-        expect.objectContaining({ otp }),
+        expect.objectContaining({ authType: 'legacy', otp }),
         expect.objectContaining({ root: expect.any(Object) }),
         expect.objectContaining({ otp })
       );
@@ -439,6 +439,68 @@ describe('PublishCommand', () => {
         expect.objectContaining({ otp: undefined })
       );
       expect(getOneTimePassword).not.toHaveBeenCalled();
+    });
+  });
+
+  describe('--auth-type', () => {
+    beforeEach(() => {
+      vi.clearAllMocks();
+    });
+
+    it('keeps legacy registry authentication as the default', async () => {
+      const testDir = await initFixture('normal');
+
+      await new PublishCommand(createArgv(testDir));
+
+      expect(npmPublish).toHaveBeenCalledWith(
+        expect.objectContaining({ name: 'package-1' }),
+        '/TEMP_DIR/package-1-MOCKED.tgz',
+        expect.objectContaining({
+          'auth-type': 'legacy',
+          authType: 'legacy',
+          npmCommand: 'publish',
+          userAgent: expect.stringMatching(/^lerna\//),
+        }),
+        expect.objectContaining({ root: expect.any(Object) }),
+        expect.objectContaining({ otp: undefined })
+      );
+    });
+
+    it('advertises web authentication when explicitly requested', async () => {
+      const testDir = await initFixture('normal');
+
+      await new PublishCommand(createArgv(testDir, '--auth-type', 'web'));
+
+      expect(npmPublish).toHaveBeenCalledWith(
+        expect.objectContaining({ name: 'package-1' }),
+        '/TEMP_DIR/package-1-MOCKED.tgz',
+        expect.objectContaining({ 'auth-type': 'web', authType: 'web', npmCommand: 'publish' }),
+        expect.objectContaining({ root: expect.any(Object) }),
+        expect.objectContaining({ otp: undefined })
+      );
+    });
+
+    it('does not preemptively request a typed OTP in web mode', async () => {
+      const testDir = await initFixture('normal');
+      (getTwoFactorAuthRequired as Mock).mockResolvedValueOnce(true);
+
+      await new PublishCommand(createArgv(testDir, '--auth-type', 'web', '--verify-access'));
+
+      expect(getOneTimePassword).not.toHaveBeenCalled();
+    });
+
+    it('forces legacy authentication when an OTP is supplied', async () => {
+      const testDir = await initFixture('normal');
+
+      await new PublishCommand(createArgv(testDir, '--auth-type', 'web', '--otp', '123456'));
+
+      expect(npmPublish).toHaveBeenCalledWith(
+        expect.objectContaining({ name: 'package-1' }),
+        '/TEMP_DIR/package-1-MOCKED.tgz',
+        expect.objectContaining({ 'auth-type': 'legacy', authType: 'legacy', otp: 123456 }),
+        expect.objectContaining({ root: expect.any(Object) }),
+        expect.objectContaining({ otp: 123456 })
+      );
     });
   });
 
@@ -575,12 +637,12 @@ describe('PublishCommand', () => {
       const auth = Buffer.from(data).toString('base64');
 
       // await lernaPublish(testDir)("--legacy-auth", auth);
-      await new PublishCommand(createArgv(testDir, '--legacy-auth', auth));
+      await new PublishCommand(createArgv(testDir, '--legacy-auth', auth, '--auth-type', 'web'));
 
       expect(npmPublish).toHaveBeenCalledWith(
         expect.objectContaining({ name: 'package-1' }),
         '/TEMP_DIR/package-1-MOCKED.tgz',
-        expect.objectContaining({ 'auth-type': 'legacy', _auth: auth }),
+        expect.objectContaining({ 'auth-type': 'web', authType: 'web', _auth: auth }),
         expect.objectContaining({ root: expect.any(Object) }),
         expect.objectContaining({ otp: undefined })
       );

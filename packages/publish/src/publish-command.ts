@@ -174,15 +174,19 @@ export class PublishCommand extends Command<PublishCommandOption> {
       );
     }
 
-    // npmSession and user-agent are consumed by npm-registry-fetch (via libnpmpublish)
+    // npmSession, npmCommand, and userAgent are consumed by npm-registry-fetch
+    // (via libnpmpublish) and sent as request headers.
     this.logger.verbose('session', this.npmSession);
     this.logger.verbose('user-agent', this.userAgent);
 
     this.conf = npmConf({
       lernaCommand: 'publish',
       _auth: this.options.legacyAuth,
+      'auth-type': this.options.authType,
       npmSession: this.npmSession,
+      npmCommand: 'publish',
       npmVersion: this.userAgent,
+      userAgent: this.userAgent,
       otp: this.options.otp,
       registry: this.options.registry,
       'ignore-prepublish': this.options.ignorePrepublish,
@@ -191,6 +195,14 @@ export class PublishCommand extends Command<PublishCommandOption> {
 
     // cache to hold a one-time-password across publishes
     this.otpCache = { otp: this.conf.get('otp') };
+
+    // Keep browser-based authentication opt-in for backwards compatibility.
+    // An explicit OTP always uses the classic authentication flow.
+    if (this.otpCache.otp) {
+      this.conf.set('auth-type', 'legacy', 'cli');
+    }
+    const authType = this.conf.get('auth-type') === 'web' ? 'web' : 'legacy';
+    this.conf.set('authType', authType, 'cli');
 
     this.conf.set('user-agent', this.userAgent, 'cli');
 
@@ -926,7 +938,7 @@ export class PublishCommand extends Command<PublishCommandOption> {
     let chain: Promise<any> = Promise.resolve();
 
     // if account-level 2FA is enabled, prime the OTP cache
-    if (this.twoFactorAuthRequired) {
+    if (this.twoFactorAuthRequired && this.conf.get('authType') !== 'web') {
       chain = chain.then(() => this.requestOneTimePassword());
     }
 
@@ -982,7 +994,7 @@ export class PublishCommand extends Command<PublishCommandOption> {
 
         return pkg;
       } catch (err: any) {
-        if (err.code === 'EOTP') {
+        if (err.code === 'EOTP' && this.conf.get('authType') !== 'web') {
           this.logger.warn('OTP expired, requesting a new OTP...');
           await this.requestOneTimePassword(); // Re-request OTP
           return pulseTillDone(
