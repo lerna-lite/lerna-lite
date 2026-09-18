@@ -3,7 +3,7 @@
   extends: ['config:base', 'group:allNonMajor'],
   dependencyDashboard: true,
   labels: ['📦 dependencies', '🤖 bot'],
-  minimumReleaseAge: '2 days',
+  minimumReleaseAge: '4 days',
   // since all PRs touches the pnpm lock file, let's open not more than 2 PRs at the same time
   prConcurrentLimit: 2,
   rangeStrategy: 'bump',
