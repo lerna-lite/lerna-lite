@@ -22,7 +22,7 @@ import {
   type UpdateCollectorOptions,
   type VersionCommandOption,
 } from '@lerna-lite/core';
-import { clean, getPrerelease, increment, isGreater, isLess, normalize } from 'verkit';
+import { clean, getPrerelease, increment, isGreaterThan, isLessThan, normalize } from 'verkit';
 import zeptomatch from 'zeptomatch';
 
 import { COMMENT_FILTER_KEYWORDS_CSV, COMMENT_ISSUE, COMMENT_PULL_REQUEST } from './constant.js';
@@ -967,7 +967,7 @@ export class VersionCommand extends Command<VersionCommandOption> {
     const globalVersion = this.project.version;
 
     for (const node of this.updates) {
-      if (isLess(node.version, globalVersion)) {
+      if (isLessThan(node.version, globalVersion)) {
         this.logger.verbose('version', `Overriding version of ${node.name} from ${node.version} to ${globalVersion}`);
 
         node.pkg.version = globalVersion;
@@ -979,7 +979,7 @@ export class VersionCommand extends Command<VersionCommandOption> {
     let highestVersion = this.project.version;
 
     versions.forEach((bump: string) => {
-      if (bump && isGreater(bump, highestVersion)) {
+      if (bump && isGreaterThan(bump, highestVersion)) {
         highestVersion = bump;
       }
     });
