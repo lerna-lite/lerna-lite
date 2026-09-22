@@ -43,7 +43,6 @@ minimumReleaseAge: 2880
 # exclude Lerna-Lite itself in order to run E2E tests without failures
 minimumReleaseAgeExclude:
   - '@lerna-lite/*'
-  - verkit@0.5.0
 
 overrides:
   fast-uri: ^4.1.3
