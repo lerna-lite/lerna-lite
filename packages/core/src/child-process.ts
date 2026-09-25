@@ -65,7 +65,8 @@ export function execSync(command: string, args: string[] = [], opts?: TinyExecOp
     return logExecCommand(command, args);
   }
 
-  const result = xSync(command, args, _mapOptions(command, opts));
+  const { command: shellCommand, args: shellArgs } = _prepareShellCommand(command, args, _isShellEnabled(command, opts));
+  const result = xSync(shellCommand, shellArgs, _mapOptions(command, opts));
 
   if (result.exitCode !== 0) {
     throw _createEnhancedError(result, command, args);
@@ -173,7 +174,8 @@ export function spawnProcess(command: string, args: string[], opts: TinyExecOpti
   if (dryRun) {
     return logExecCommand(command, args);
   }
-  const child = x(command, args, _mapOptions(command, opts)) as TinyExecResult;
+  const { command: shellCommand, args: shellArgs } = _prepareShellCommand(command, args, _isShellEnabled(command, opts));
+  const child = x(shellCommand, shellArgs, _mapOptions(command, opts)) as TinyExecResult;
   const nodeProcess = child.process;
 
   // Cleans up the child from the children set when the process exits or errors
@@ -290,13 +292,30 @@ function _createEnhancedError(result: any, command: string, args: string[] = [])
   return newErr;
 }
 
+/** Determines whether the command should run through a shell */
+function _isShellEnabled(command: string, opts?: TinyExecOptions): boolean {
+  // Only use shell for the 'exit' command (used in status tests)
+  // Using shell: true for 'git commit' causes arguments with spaces to break.
+  return command === 'exit' || opts?.shell === true;
+}
+
+/**
+ * When running with `shell: true`, Node's `child_process.spawn()` refuses to safely combine a
+ * separate `command` and `args` array (see DEP0190) and instead just concatenates them, unescaped.
+ * To avoid that deprecation warning and match the pre-tinyexec (execa) behavior, pre-join the
+ * command and its args into a single string and hand the shell an empty args array.
+ */
+function _prepareShellCommand(command: string, args: string[], useShell: boolean): { command: string; args: string[] } {
+  if (!useShell || args.length === 0) {
+    return { command, args };
+  }
+  return { command: [command, ...args].join(' '), args: [] };
+}
+
 /** Maps Lerna/TinyExec options to tinyexec Options format */
 function _mapOptions(command: string, opts?: TinyExecOptions): Options {
   const { cwd, env, nodeOptions, maxBuffer, ...rest } = opts || {};
-
-  // Only use shell for the 'exit' command (used in status tests)
-  // Using shell: true for 'git commit' causes arguments with spaces to break.
-  const useShell = command === 'exit' || rest.shell === true;
+  const useShell = _isShellEnabled(command, opts);
 
   // 'collect: true' tells tinyexec to collect stdout/stderr as strings (like execa),
   // so we can access them on the result object. The 'as any' cast is used because
@@ -305,6 +324,12 @@ function _mapOptions(command: string, opts?: TinyExecOptions): Options {
     ...rest,
     throwOnError: false,
     collect: true, // collect output as string (like execa)
+    // tinyexec defaults to prepending node_modules/.bin *and* the running Node executable's
+    // own directory to PATH for every spawn. Unlike execa's opt-in `preferLocal`, this is
+    // silently on by default and can shadow the user's real PATH resolution (e.g. a stale
+    // pnpm/node shim living next to the Node binary winning over the correct one on PATH).
+    // Preserve the pre-tinyexec (execa) behavior of leaving PATH untouched unless requested.
+    nodePath: rest.nodePath ?? false,
     nodeOptions: {
       cwd,
       env,
