@@ -31,6 +31,7 @@ tsconfig.tsbuildinfo
 tsconfig.*.tsbuildinfo
 
 # Tests Report & Coverage
+.vitest
 **/coverage
 **/.jest-cache
 **/jest-coverage

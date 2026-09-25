@@ -1,7 +1,7 @@
 import { constants } from 'node:os';
 
 import { log } from '@lerna-lite/npmlog';
-import { describe, expect, it, vi } from 'vitest';
+import { describe, expect, it, vi, afterEach } from 'vitest';
 
 import { exec, execSync, getChildProcessCount, getExitCode, spawn, spawnStreaming, logExecCommand } from '../child-process.js';
 import { colorize } from '../index.js';
@@ -346,5 +346,75 @@ describe('childProcess', () => {
       (logExecCommand as any)(['echo', '-n'], ['one', 'two']);
       expect(logSpy).toHaveBeenCalled();
     });
+  });
+});
+
+describe('shell command joining (DEP0190 avoidance)', () => {
+  afterEach(() => {
+    vi.doUnmock('tinyexec');
+    vi.resetModules();
+  });
+
+  it('joins command and args into a single string with empty args when shell is true', async () => {
+    const xMock = vi.fn(() => Promise.resolve({ exitCode: 0, stdout: '', stderr: '' }));
+    vi.doMock('tinyexec', () => ({ x: xMock, xSync: vi.fn() }));
+    vi.resetModules();
+
+    const { spawnProcess } = await import('../child-process.js');
+    spawnProcess('pnpm', ['run', '-r', '--filter', '$LERNA_PACKAGE_NAME', 'dev'], { shell: true });
+
+    expect(xMock).toHaveBeenCalledWith(
+      'pnpm run -r --filter $LERNA_PACKAGE_NAME dev',
+      [],
+      expect.objectContaining({ nodeOptions: expect.objectContaining({ shell: true }) })
+    );
+  });
+
+  it('leaves command and args untouched when shell is not enabled', async () => {
+    const xMock = vi.fn(() => Promise.resolve({ exitCode: 0, stdout: '', stderr: '' }));
+    vi.doMock('tinyexec', () => ({ x: xMock, xSync: vi.fn() }));
+    vi.resetModules();
+
+    const { spawnProcess } = await import('../child-process.js');
+    spawnProcess('git', ['commit', '-m', 'message with spaces']);
+
+    expect(xMock).toHaveBeenCalledWith(
+      'git',
+      ['commit', '-m', 'message with spaces'],
+      expect.objectContaining({ nodeOptions: expect.objectContaining({ shell: false }) })
+    );
+  });
+
+  it('joins command and args for xSync when shell is true (execSync)', async () => {
+    const xSyncMock = vi.fn(() => ({ exitCode: 0, stdout: '', stderr: '' }));
+    vi.doMock('tinyexec', () => ({ x: vi.fn(), xSync: xSyncMock }));
+    vi.resetModules();
+
+    const { execSync } = await import('../child-process.js');
+    execSync('echo', ['$FOO', 'bar'], { shell: true });
+
+    expect(xSyncMock).toHaveBeenCalledWith('echo $FOO bar', [], expect.objectContaining({ nodeOptions: expect.objectContaining({ shell: true }) }));
+  });
+
+  it('disables tinyexec nodePath (PATH prepending) by default to avoid shadowing the real PATH', async () => {
+    const xMock = vi.fn(() => Promise.resolve({ exitCode: 0, stdout: '', stderr: '' }));
+    vi.doMock('tinyexec', () => ({ x: xMock, xSync: vi.fn() }));
+    vi.resetModules();
+
+    const { spawnProcess } = await import('../child-process.js');
+    spawnProcess('git', ['status']);
+
+    expect(xMock).toHaveBeenCalledWith('git', ['status'], expect.objectContaining({ nodePath: false }));
+  });
+
+  it('allows opting back into tinyexec nodePath when explicitly requested', async () => {
+    const xMock = vi.fn(() => Promise.resolve({ exitCode: 0, stdout: '', stderr: '' }));
+    vi.doMock('tinyexec', () => ({ x: xMock, xSync: vi.fn() }));
+    vi.resetModules();
+
+    const { spawnProcess } = await import('../child-process.js');
+    spawnProcess('git', ['status'], { nodePath: true });
+
+    expect(xMock).toHaveBeenCalledWith('git', ['status'], expect.objectContaining({ nodePath: true }));
   });
 });
