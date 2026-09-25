@@ -4,6 +4,16 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [5.6.2](https://github.com/lerna-lite/lerna-lite/compare/v5.6.1...v5.6.2) (2026-09-25)
+
+### Bug Fixes
+
+* **core:** correct shell command handling and PATH resolution in child-process spawn (tinyexec) ([#1411](https://github.com/lerna-lite/lerna-lite/issues/1411)) ([a6c7a82](https://github.com/lerna-lite/lerna-lite/commit/a6c7a82c81e0c862713fe737ba3b2db431f20e62)) - by @ghiscoding
+* **deps:** update conventional-changelog packages ([#1413](https://github.com/lerna-lite/lerna-lite/issues/1413)) ([09e057c](https://github.com/lerna-lite/lerna-lite/commit/09e057cbc12c195d8d89999492c5ffceb1897d55)) - by @renovate[bot]
+* **deps:** update inquirer packages ([#1408](https://github.com/lerna-lite/lerna-lite/issues/1408)) ([778c5bb](https://github.com/lerna-lite/lerna-lite/commit/778c5bbd9b3bf7ecb0702cf026918bc04920f3e7)) - by @renovate[bot]
+* **deps:** upgrade verkit to v0.5.0 ([#1409](https://github.com/lerna-lite/lerna-lite/issues/1409)) ([26a22b7](https://github.com/lerna-lite/lerna-lite/commit/26a22b7ed2046918efb277464e7971381126cc34)) - by @ghiscoding
+* **version:** relax GitHub comment rate limiting ([#1405](https://github.com/lerna-lite/lerna-lite/issues/1405)) ([5b78e65](https://github.com/lerna-lite/lerna-lite/commit/5b78e6546bf7d0cb56cf6e7cd94c4668c9c5c3ec)) - by @ghiscoding
+
 ## [5.6.1](https://github.com/lerna-lite/lerna-lite/compare/v5.6.0...v5.6.1) (2026-08-21)
 
 ### Bug Fixes
