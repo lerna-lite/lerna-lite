@@ -37,8 +37,8 @@ catalogs:
     yargs: ^18.2.0
     zeptomatch: ^2.1.0
 
-# min age of 2 days in minutes
-minimumReleaseAge: 2880
+# min age of 4 days in minutes (x * 24 * 60)
+minimumReleaseAge: 5760
 
 # exclude Lerna-Lite itself in order to run E2E tests without failures
 minimumReleaseAgeExclude:
