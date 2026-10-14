@@ -36,9 +36,9 @@
     "pack-tarball": "npm pack"
   },
   "dependencies": {
-    "@inquirer/expand": "^5.1.5",
-    "@inquirer/input": "^5.1.6",
-    "@inquirer/select": "^5.2.5",
+    "@inquirer/expand": "^5.1.6",
+    "@inquirer/input": "^5.1.7",
+    "@inquirer/select": "^5.2.6",
     "@lerna-lite/npmlog": "workspace:*",
     "@npmcli/run-script": "^10.0.4",
     "ci-info": "catalog:",
