@@ -22,7 +22,7 @@ catalog:
 catalogs:
   # Can be referenced through "catalog:devDependencies"
   devDependencies:
-    "@types/node": ^24.13.6
+    "@types/node": ^24.19.2
     "@types/npm-package-arg": ^6.1.4
     "@types/npmcli__package-json": ^4.0.4
     "@types/pacote": ^11.1.8
@@ -45,5 +45,5 @@ minimumReleaseAgeExclude:
   - '@lerna-lite/*'
 
 overrides:
-  fast-uri: ^4.2.1
-  js-yaml: ^5.4.2
+  fast-uri: ^4.2.2
+  js-yaml: ^5.4.3
