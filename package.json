@@ -84,7 +84,7 @@
     "@types/node": "catalog:devDependencies",
     "@types/yargs": "^17.0.35",
     "@vitest/coverage-v8": "^5.0.1",
-    "conventional-changelog-conventionalcommits": "^10.4.0",
+    "conventional-changelog-conventionalcommits": "^10.4.1",
     "cross-env": "^10.1.0",
     "empathic": "^2.1.0",
     "eslint-plugin-local-import-ext": "0.2.0",
