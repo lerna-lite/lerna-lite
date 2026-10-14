@@ -10,8 +10,8 @@ catalogs:
       specifier: ^4.4.0
       version: 4.4.0
     dotenv:
-      specifier: ^17.4.2
-      version: 17.4.2
+      specifier: ^18.0.7
+      version: 18.0.7
     npm-package-arg:
       specifier: ^13.0.2
       version: 13.0.2
@@ -199,7 +199,7 @@ importers:
         version: link:../npmlog
       dotenv:
         specifier: 'catalog:'
-        version: 17.4.2
+        version: 18.0.7
       import-local:
         specifier: ^3.2.0
         version: 3.2.0
@@ -319,7 +319,7 @@ importers:
         version: link:../profiler
       dotenv:
         specifier: 'catalog:'
-        version: 17.4.2
+        version: 18.0.7
     devDependencies:
       '@types/yargs-parser':
         specifier: catalog:devDependencies
@@ -2010,9 +2010,10 @@ packages:
     resolution: {integrity: sha512-WkrWp9GR4KXfKGYzOLmTuGVi1UWFfws377n9cc55/tb6DuqyF6pcQ5AbiHEshaDpY9v6oaSr2XCDidGmMwdzIA==}
     engines: {node: '>=8'}
 
-  dotenv@17.4.2:
-    resolution: {integrity: sha512-nI4U3TottKAcAD9LLud4Cb7b2QztQMUEfHbvhTH09bqXTxnSie8WnjPALV/WMCrJZ6UV/qHJ6L03OqO3LcdYZw==}
+  dotenv@18.0.7:
+    resolution: {integrity: sha512-QEvMEF8ca3GNZJJnAbOgxpj5ULhBvnMcURp+XKrtvqFNPgjBvYoswQ0Jl2cO7JzCjxZjJhr9ZuIEhlrRxMft/Q==}
     engines: {node: '>=12'}
+    hasBin: true
 
   dunder-proto@1.0.1:
     resolution: {integrity: sha512-KIN/nDJBQRcXw0MLVhZE9iQHmG68qAVIBg9CqmUYjmQIhgij9U5MFvrqkUL5FbtyyzZuOeOt0zdeRe4UY7ct+A==}
@@ -5009,7 +5010,7 @@ snapshots:
     dependencies:
       path-type: 4.0.0
 
-  dotenv@17.4.2: {}
+  dotenv@18.0.7: {}
 
   dunder-proto@1.0.1:
     dependencies:
