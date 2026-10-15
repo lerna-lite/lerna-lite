@@ -1,6 +1,8 @@
 import { promptTextInput } from '@lerna-lite/core';
+import { log } from '@lerna-lite/npmlog';
 
 import type { OneTimePasswordCache } from '../interfaces.js';
+import { getWebAuthChallenge, getWebAuthOneTimePassword } from './web-auth.js';
 
 // basic single-entry semaphore
 const semaphore: any = {
@@ -30,7 +32,9 @@ const semaphore: any = {
 };
 
 /**
- * Attempt to execute Promise callback, prompting for OTP if necessary.
+ * Attempt to execute Promise callback, obtaining an OTP if necessary.
+ * Security key and passkey challenges are completed in a browser, while
+ * classic authenticator challenges prompt for a one-time password.
  * @template {Record<string, unknown>} T
  * @param {(opts: T) => Promise<unknown>} fn
  * @param {T} _opts The options to be passed to `fn`
@@ -72,7 +76,7 @@ function attempt<T extends Record<string, unknown>>(
           semaphore.release();
           return attempt(fn, { ...opts, ...otpCache }, otpCache);
         }
-        return getOneTimePassword()
+        return requestOneTimePassword(err, opts)
           .then(
             (otp) => {
               // update the otp and release the lock so that waiting
@@ -95,6 +99,17 @@ function attempt<T extends Record<string, unknown>>(
       });
     }
   });
+}
+
+function requestOneTimePassword(error: unknown, opts: Record<string, unknown>): Promise<string> {
+  const challenge = getWebAuthChallenge(error);
+
+  if (challenge) {
+    return getWebAuthOneTimePassword(challenge, opts);
+  }
+
+  log.silly('otplease', 'registry did not offer a web-auth challenge, prompting for a one-time password');
+  return getOneTimePassword();
 }
 
 /**

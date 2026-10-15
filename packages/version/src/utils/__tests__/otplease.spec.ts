@@ -2,10 +2,15 @@ import { promptTextInput } from '@lerna-lite/core';
 import { afterEach, beforeEach, describe, expect, it, vi, type Mock } from 'vitest';
 
 import { getOneTimePassword, otplease } from '../otplease.js';
+import { getWebAuthOneTimePassword } from '../web-auth.js';
 
 vi.mock('@lerna-lite/core', async () => ({
   ...(await vi.importActual<any>('@lerna-lite/core')), // return the other real methods, below we'll mock only 2 of the methods
   promptTextInput: (await vi.importActual<any>('../../../../core/src/__mocks__/prompt')).promptTextInput,
+}));
+vi.mock('../web-auth.js', async () => ({
+  ...(await vi.importActual('../web-auth.js')),
+  getWebAuthOneTimePassword: vi.fn(),
 }));
 
 // global mock setup
@@ -55,6 +60,30 @@ describe('@lerna/otplease', () => {
     expect(promptTextInput).toHaveBeenCalled();
     expect(result).toBe(obj);
     expect(otpCache.otp).toBe('123456');
+  });
+
+  it('completes a web authentication challenge and caches its token', async () => {
+    const otpCache = { otp: undefined };
+    const result = {};
+    const authUrl = 'https://www.npmjs.com/auth/cli/abc123';
+    const doneUrl = 'https://registry.npmjs.org/-/v1/done?sessionId=abc123';
+    const opts = { registry: 'https://registry.npmjs.org/' };
+    const fn = vi.fn((requestOpts: { otp?: string }) => {
+      if (requestOpts.otp === 'web-otp-token') {
+        return result;
+      }
+      throw Object.assign(new Error('OTP required for authentication'), {
+        code: 'EOTP',
+        body: { authUrl, doneUrl },
+      });
+    });
+
+    (getWebAuthOneTimePassword as Mock).mockResolvedValueOnce('web-otp-token');
+
+    await expect(otplease(fn as any, opts, otpCache)).resolves.toBe(result);
+    expect(getWebAuthOneTimePassword).toHaveBeenCalledWith({ authUrl, doneUrl }, expect.objectContaining(opts));
+    expect(promptTextInput).not.toHaveBeenCalled();
+    expect(otpCache.otp).toBe('web-otp-token');
   });
 
   it('uses cache if opts does not have own otp', async () => {

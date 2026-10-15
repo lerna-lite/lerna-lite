@@ -82,6 +82,7 @@ $ lerna publish --scope my-component test
     - [semver `--bump from-git`](#semver---bump-from-git)
     - [semver `--bump from-package`](#semver---bump-from-package)
   - [Options](#options)
+    - [`--auth-type`](#--auth-type)
     - [`--arborist-load-options`](#--arborist-load-options)
     - [`--canary`](#--canary)
     - [`--cleanup-temp-files`](#--cleanup-temp-files)    
@@ -236,6 +237,22 @@ Configured via `lerna.json`:
 }
 ```
 
+### `--auth-type`
+
+Lerna-Lite uses the `legacy` npm authentication flow by default. Accounts that use a security key or passkey for two-factor authentication can opt into browser-based authentication:
+
+```sh
+lerna publish --auth-type web
+```
+
+When the npm registry requests two-factor authentication, Lerna-Lite prints the authentication URL, opens it in the configured browser, and waits for the challenge to complete before retrying the publish. Set npm's `browser` config to `false` to print the URL without opening a browser:
+
+```sh
+npm_config_browser=false lerna publish --auth-type web
+```
+
+The option can also be configured as `authType: "web"` under `command.publish` in `lerna.json`, or as `auth-type=web` in `.npmrc`. Supplying `--otp` always selects the legacy flow.
+
 ### `--ignore-scripts`
 
 When passed, this flag will disable running [lifecycle scripts](#lifecycle-scripts) during `lerna publish`.
@@ -288,6 +305,8 @@ lerna publish --otp 123456
 ```
 
 > Please keep in mind that one-time passwords expire within 30 seconds of their generation. If it expires during publish operations, a prompt will request a refreshed value before continuing.
+
+Security keys and passkeys do not provide a code to enter. Use [`--auth-type web`](#--auth-type) for those accounts.
 
 ### `--preid`
 

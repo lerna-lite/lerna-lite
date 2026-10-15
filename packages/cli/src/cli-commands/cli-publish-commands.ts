@@ -19,6 +19,12 @@ export default {
   describe: 'Publish packages in the current project.',
   builder: (yargs: any) => {
     const opts = {
+      'auth-type': {
+        choices: ['legacy', 'web'],
+        defaultDescription: 'legacy',
+        describe: 'Authentication flow to use for npm registry requests.',
+        type: 'string',
+      },
       c: {
         describe: 'Publish packages after every successful merge using the sha as part of the tag.',
         alias: 'canary',
