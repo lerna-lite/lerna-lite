@@ -11,6 +11,34 @@ import npa from 'npm-package-arg';
 import type { LibNpmPublishOptions, PackagePublishConfig } from '../interfaces.js';
 import { oidc } from './oidc.js';
 
+const TLOG_CONFLICT_MAX_ATTEMPTS = 3;
+const TLOG_CONFLICT_RETRY_DELAY = 2000;
+
+/**
+ * Sigstore's internal HTTP retry can re-POST an entry that Rekor already stored, which then fails with a 409.
+ * Provenance is generated before the registry PUT, so retrying is safe and produces a fresh (non-duplicate) signature.
+ */
+function isTlogConflictError(err: any): boolean {
+  return err?.code === 'TLOG_CREATE_ENTRY_ERROR' && err?.cause?.statusCode === 409;
+}
+
+async function publishWithTlogRetry<T>(pkgName: string, publishFn: () => Promise<T>): Promise<T> {
+  for (let attempt = 1; ; attempt++) {
+    try {
+      return await publishFn();
+    } catch (err: any) {
+      if (!isTlogConflictError(err) || attempt >= TLOG_CONFLICT_MAX_ATTEMPTS) {
+        throw err;
+      }
+      log.warn(
+        'publish',
+        `Sigstore transparency log conflict (409) for ${pkgName}, retrying provenance signing (attempt ${attempt + 1}/${TLOG_CONFLICT_MAX_ATTEMPTS})`
+      );
+      await new Promise((resolve) => setTimeout(resolve, TLOG_CONFLICT_RETRY_DELAY * attempt));
+    }
+  }
+}
+
 /**
  * Alias dash-cased npmConf to camelCase
  * @param {NpmPublishOptions} obj
@@ -91,7 +119,9 @@ export async function npmPublish(
       Object.assign(opts, publishConfigToOpts(manifestContent.publishConfig));
     }
 
-    result = await otplease((innerOpts) => publish(manifestContent, tarData, innerOpts), opts, otpCache as OneTimePasswordCache);
+    result = await publishWithTlogRetry(pkg.name, () =>
+      otplease((innerOpts) => publish(manifestContent, tarData, innerOpts), opts, otpCache as OneTimePasswordCache)
+    );
   }
 
   // ensure lifecycle script output is visible on the terminal,

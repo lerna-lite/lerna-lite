@@ -5,7 +5,7 @@ import { Conf, Package, runLifecycle, type RawManifest } from '@lerna-lite/core'
 import PackageJson from '@npmcli/package-json';
 // @ts-ignore
 import { publish } from 'libnpmpublish';
-import { beforeEach, describe, expect, it, vi, type Mock } from 'vitest';
+import { afterEach, beforeEach, describe, expect, it, vi, type Mock } from 'vitest';
 
 import type { LibNpmPublishOptions } from '../interfaces.js';
 import { npmPublish } from '../lib/npm-publish.js';
@@ -282,5 +282,48 @@ describe('npm-publish', () => {
       expect.anything(),
       expect.anything()
     );
+  });
+
+  describe('Sigstore transparency log conflict', () => {
+    const tlogConflictError = Object.assign(new Error('error creating tlog entry'), {
+      code: 'TLOG_CREATE_ENTRY_ERROR',
+      cause: { statusCode: 409 },
+    });
+
+    afterEach(() => {
+      vi.useRealTimers();
+    });
+
+    it('retries publish when a tlog 409 conflict error occurs', async () => {
+      vi.useFakeTimers();
+      (publish as Mock).mockRejectedValueOnce(tlogConflictError).mockResolvedValueOnce(null);
+
+      const promise = npmPublish(pkg, tarFilePath, {}, conf);
+      await vi.runAllTimersAsync();
+      await promise;
+
+      expect(publish).toHaveBeenCalledTimes(2);
+      expect(runLifecycle).toHaveBeenCalledWith(pkg, 'postpublish', expect.anything());
+    });
+
+    it('throws after reaching max retry attempts on repeated tlog 409 conflict errors', async () => {
+      vi.useFakeTimers();
+      (publish as Mock).mockRejectedValue(tlogConflictError);
+
+      const promise = npmPublish(pkg, tarFilePath, {}, conf).catch((err) => err);
+      await vi.runAllTimersAsync();
+      const error = await promise;
+
+      expect(error).toBe(tlogConflictError);
+      expect(publish).toHaveBeenCalledTimes(3);
+      (publish as Mock).mockReset().mockResolvedValue(null);
+    });
+
+    it('does not retry on other publish errors', async () => {
+      (publish as Mock).mockRejectedValueOnce(Object.assign(new Error('forbidden'), { code: 'E403' }));
+
+      await expect(npmPublish(pkg, tarFilePath, {}, conf)).rejects.toThrow('forbidden');
+      expect(publish).toHaveBeenCalledTimes(1);
+    });
   });
 });
