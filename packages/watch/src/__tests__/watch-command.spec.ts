@@ -1,3 +1,4 @@
+import { readdirSync } from 'node:fs';
 import { basename, join } from 'node:path';
 
 import type { WatchCommandOption } from '@lerna-lite/core';
@@ -5,7 +6,6 @@ import * as core from '@lerna-lite/core';
 import { spawn, spawnStreaming } from '@lerna-lite/core';
 import { commandRunner, initFixtureFactory, normalizeRelativeDir } from '@lerna-test/helpers';
 import { watch as chokidarWatch } from 'chokidar';
-import mockStdin from 'mock-stdin';
 import { afterEach, beforeAll, describe, expect, it, vi, type Mock } from 'vitest';
 import yargParser from 'yargs-parser';
 
@@ -32,7 +32,7 @@ let watchErrorHandler: any;
 const { closeMock } = vi.hoisted(() => ({ closeMock: vi.fn() }));
 
 vi.mock('chokidar', () => ({
-  watch: vi.fn().mockImplementation(() => ({
+  watch: vi.fn().mockImplementation((folders: string[]) => ({
     close: closeMock,
     on: vi.fn().mockImplementation(function (this: any, event: string, handler: Function) {
       switch (event) {
@@ -48,6 +48,21 @@ vi.mock('chokidar', () => ({
           watchChangeHandler = handler;
           watchErrorHandler = handler;
           break;
+      }
+      return this;
+    }),
+    once: vi.fn().mockImplementation(function (this: any, event: string, handler: Function) {
+      if (event === 'ready') {
+        queueMicrotask(() => {
+          for (const folder of folders) {
+            for (const entry of readdirSync(folder, { recursive: true, withFileTypes: true })) {
+              if (entry.isFile()) {
+                watchAddHandler('add', join(entry.parentPath, entry.name));
+              }
+            }
+          }
+          handler();
+        });
       }
       return this;
     }),
@@ -88,7 +103,22 @@ const createArgv = (cwd: string, ...args: string[]) => {
 };
 
 describe('Watch Command', () => {
+  const signalListeners = process.listeners('SIGINT');
+  const termListeners = process.listeners('SIGTERM');
+  const endListeners = process.stdin.listeners('end');
   afterEach(() => {
+    for (const listener of process.listeners('SIGINT')) {
+      if (!signalListeners.includes(listener)) process.off('SIGINT', listener);
+    }
+    for (const listener of process.listeners('SIGTERM')) {
+      if (!termListeners.includes(listener)) process.off('SIGTERM', listener);
+    }
+    for (const listener of process.stdin.listeners('end')) {
+      if (!endListeners.includes(listener)) process.stdin.off('end', listener);
+    }
+    vi.restoreAllMocks();
+    vi.mocked(spawn).mockReset().mockResolvedValue({ exitCode: 0 });
+    vi.mocked(spawnStreaming).mockReset().mockResolvedValue({ exitCode: 0 });
     process.exitCode = undefined;
   });
 
@@ -122,27 +152,19 @@ describe('Watch Command', () => {
       await expect(command).rejects.toThrow('A command to execute is required');
     });
 
-    it('rejects with execution error when calling chokidar on change event', async () => {
-      vi.spyOn(process, 'exit').mockImplementation((() => {}) as any);
-
-      try {
-        await lernaWatch(testDir)('--bail', '--', '--shaka', '--lakka');
-        const nonZero = new Error('An actual non-zero, not git diff pager SIGPIPE');
-        (nonZero as any).exitCode = 1;
-        watchErrorHandler(nonZero);
-      } catch (err: any) {
-        expect(err.message).toBe('An actual non-zero, not git diff pager SIGPIPE');
-      }
+    it('closes the watcher on filesystem errors without throwing from the event callback', async () => {
+      await lernaWatch(testDir)('--bail', '--', 'echo');
+      watchErrorHandler(Object.assign(new Error('watch failed'), { code: 'ENOSPC' }));
+      await vi.waitFor(() => expect(closeMock).toHaveBeenCalledOnce());
+      expect(process.exitCode).toBe(1);
     });
 
-    it('should ignore execution errors with --no-bail', async () => {
-      vi.spyOn(process, 'exit').mockImplementationOnce((() => {}) as any);
-
+    it('closes on filesystem errors even with --no-bail', async () => {
       await lernaWatch(testDir)('--no-bail', '--', 'lerna run --shaka', '--lakka');
       const nonZero = new Error('An actual non-zero, not git diff pager SIGPIPE');
       (nonZero as any).exitCode = 1;
       watchErrorHandler(nonZero);
-
+      await vi.waitFor(() => expect(closeMock).toHaveBeenCalledOnce());
       expect(process.exitCode).toBe(1);
 
       // reset exit code
@@ -177,10 +199,10 @@ describe('Watch Command', () => {
       const command = new WatchCommand(createArgv(testDir, '--debounce', '0', '--glob', '**/*.{ts,tsx}', '--', 'lerna run build'));
       await command;
 
-      expect(chokidarWatch).toHaveBeenCalledWith(['packages/package-1/', 'packages/package-2/'], {
+      expect(chokidarWatch).toHaveBeenCalledWith([join(testDir, 'packages/package-1'), join(testDir, 'packages/package-2')], {
         cwd: testDir,
-        ignored: [expect.any(Function), expect.any(Function), expect.any(Function)],
-        ignoreInitial: true,
+        ignored: [expect.any(Function)],
+        ignoreInitial: false,
         ignorePermissionErrors: true,
         persistent: true,
       });
@@ -195,10 +217,10 @@ describe('Watch Command', () => {
       const command = new WatchCommand(createArgv(testDir, '--debounce', '0', '--glob', '/**/*.{ts,tsx}', '--', 'lerna run build'));
       await command;
 
-      expect(chokidarWatch).toHaveBeenCalledWith(['packages/package-1/', 'packages/package-2/'], {
+      expect(chokidarWatch).toHaveBeenCalledWith([join(testDir, 'packages/package-1'), join(testDir, 'packages/package-2')], {
         cwd: testDir,
-        ignored: [expect.any(Function), expect.any(Function), expect.any(Function)],
-        ignoreInitial: true,
+        ignored: [expect.any(Function)],
+        ignoreInitial: false,
         ignorePermissionErrors: true,
         persistent: true,
       });
@@ -219,17 +241,17 @@ describe('Watch Command', () => {
 
       await command;
 
-      expect(chokidarWatch).toHaveBeenCalledWith([], expect.objectContaining({ cwd: testDir }));
+      expect(chokidarWatch).not.toHaveBeenCalled();
       expect(command.watchedFiles.size).toBe(0);
     });
 
     it('should be able to take --await-write-finish options as a boolean', async () => {
       await lernaWatch(testDir)('--debounce', '0', '--await-write-finish', '--', 'lerna run build');
 
-      expect(chokidarWatch).toHaveBeenCalledWith(['packages/package-1/', 'packages/package-2/'], {
+      expect(chokidarWatch).toHaveBeenCalledWith([join(testDir, 'packages/package-1'), join(testDir, 'packages/package-2')], {
         cwd: testDir,
-        ignored: [expect.any(Function), expect.any(Function), expect.any(Function)],
-        ignoreInitial: true,
+        ignored: [expect.any(Function)],
+        ignoreInitial: false,
         ignorePermissionErrors: true,
         persistent: true,
         awaitWriteFinish: true,
@@ -239,10 +261,10 @@ describe('Watch Command', () => {
     it('should take options prefixed with "awf" (awfPollInterval) and transform them into a valid chokidar "awaitWriteFinish" option', async () => {
       await lernaWatch(testDir)('--debounce', '0', '--awf-poll-interval', '500', '--', 'lerna run build');
 
-      expect(chokidarWatch).toHaveBeenCalledWith(['packages/package-1/', 'packages/package-2/'], {
+      expect(chokidarWatch).toHaveBeenCalledWith([join(testDir, 'packages/package-1'), join(testDir, 'packages/package-2')], {
         cwd: testDir,
-        ignored: [expect.any(Function), expect.any(Function), expect.any(Function)],
-        ignoreInitial: true,
+        ignored: [expect.any(Function)],
+        ignoreInitial: false,
         ignorePermissionErrors: true,
         persistent: true,
         awaitWriteFinish: { pollInterval: 500 },
@@ -252,10 +274,10 @@ describe('Watch Command', () => {
     it('should take options prefixed with "awf" (awfStabilityThreshold) and transform them into a valid chokidar "awaitWriteFinish" option', async () => {
       await lernaWatch(testDir)('--debounce', '0', '--awf-stability-threshold', '275', '--', 'lerna run build');
 
-      expect(chokidarWatch).toHaveBeenCalledWith(['packages/package-1/', 'packages/package-2/'], {
+      expect(chokidarWatch).toHaveBeenCalledWith([join(testDir, 'packages/package-1'), join(testDir, 'packages/package-2')], {
         cwd: testDir,
-        ignored: [expect.any(Function), expect.any(Function), expect.any(Function)],
-        ignoreInitial: true,
+        ignored: [expect.any(Function)],
+        ignoreInitial: false,
         ignorePermissionErrors: true,
         persistent: true,
         awaitWriteFinish: { stabilityThreshold: 275 },
@@ -280,6 +302,7 @@ describe('Watch Command', () => {
         extendEnv: false,
         reject: true,
         shell: true,
+        nodeOptions: { detached: process.platform !== 'win32', windowsHide: true },
       });
     });
 
@@ -304,6 +327,8 @@ describe('Watch Command', () => {
           extendEnv: false,
           reject: true,
           shell: true,
+          buffer: false,
+          nodeOptions: { detached: process.platform !== 'win32', windowsHide: true },
         },
         'package-2'
       );
@@ -328,6 +353,7 @@ describe('Watch Command', () => {
         extendEnv: false,
         reject: true,
         shell: true,
+        nodeOptions: { detached: process.platform !== 'win32', windowsHide: true },
       });
     });
 
@@ -350,6 +376,7 @@ describe('Watch Command', () => {
         extendEnv: false,
         reject: true,
         shell: true,
+        nodeOptions: { detached: process.platform !== 'win32', windowsHide: true },
       });
     });
 
@@ -370,6 +397,7 @@ describe('Watch Command', () => {
         extendEnv: false,
         reject: true,
         shell: true,
+        nodeOptions: { detached: process.platform !== 'win32', windowsHide: true },
       });
     });
 
@@ -391,6 +419,7 @@ describe('Watch Command', () => {
         extendEnv: false,
         reject: true,
         shell: true,
+        nodeOptions: { detached: process.platform !== 'win32', windowsHide: true },
       });
     });
 
@@ -414,6 +443,7 @@ describe('Watch Command', () => {
         extendEnv: false,
         reject: true,
         shell: true,
+        nodeOptions: { detached: process.platform !== 'win32', windowsHide: true },
       });
     });
 
@@ -436,11 +466,12 @@ describe('Watch Command', () => {
         pkg: expect.objectContaining({ name: 'package-2' }),
         env: expect.objectContaining({
           LERNA_PACKAGE_NAME: 'package-2',
-          LERNA_FILE_CHANGES: join(testDir, 'packages/package-2/file-2.ts'),
+          LERNA_FILE_CHANGES: [join(testDir, 'packages/package-2/new-file-1.ts'), join(testDir, 'packages/package-2/file-2.ts')].join(' '),
         }),
         extendEnv: false,
         reject: true,
         shell: true,
+        nodeOptions: { detached: process.platform !== 'win32', windowsHide: true },
       });
       expect(spawn).toHaveBeenCalledWith('echo $LERNA_PACKAGE_NAME', [], {
         cwd: join(testDir, 'packages/package-1'),
@@ -452,20 +483,161 @@ describe('Watch Command', () => {
         extendEnv: false,
         reject: true,
         shell: true,
+        nodeOptions: { detached: process.platform !== 'win32', windowsHide: true },
       });
     });
 
-    it('should execute watch add callback and stop the watch process when ending the process (Ctrl+C) in the shell', async () => {
-      const stdin = mockStdin.stdin();
-      const mockExit = vi.spyOn(process, 'exit').mockImplementation((() => {}) as any);
+    it('cancels pending work and removes its listeners on SIGINT', async () => {
+      await lernaWatch(testDir)('--debounce', '100', '--scope', 'package-2', '--', 'echo');
+      const pending = watchChangeHandler('change', 'packages/package-2/file-2.ts');
+      const onSigint = process.listeners('SIGINT').find((fn) => !signalListeners.includes(fn))!;
+      onSigint('SIGINT');
+      await pending;
+      expect(process.exitCode).toBe(130);
+      expect(closeMock).toHaveBeenCalledOnce();
+      expect(spawn).not.toHaveBeenCalled();
+      expect(process.listeners('SIGINT')).toEqual(signalListeners);
+      expect(process.listeners('SIGTERM')).toEqual(termListeners);
+      expect(process.stdin.listeners('end')).toEqual(endListeners);
+    });
 
-      await lernaWatch(testDir)('--debounce', '0', '--scope', 'package-2', '--', 'echo $LERNA_PACKAGE_NAME');
-      const promise = watchAddHandler('add', join(testDir, 'packages/package-2/file-2.ts'));
-      stdin.end();
-      await promise;
+    it('handles a rejected child command and stops with its exit code', async () => {
+      vi.mocked(spawn).mockRejectedValueOnce(Object.assign(new Error('build failed'), { exitCode: 7 }));
+      await lernaWatch(testDir)('--debounce', '0', '--', 'echo');
+      await watchChangeHandler('change', 'packages/package-2/file-2.ts');
+      expect(process.exitCode).toBe(7);
+      expect(closeMock).toHaveBeenCalledOnce();
+      await watchChangeHandler('change', 'packages/package-1/file-1.ts');
+      expect(spawn).toHaveBeenCalledOnce();
+    });
 
-      expect(mockExit).toHaveBeenCalled();
-      mockExit.mockRestore();
+    it('records failed results with --no-bail and continues processing later changes', async () => {
+      vi.mocked(spawn).mockResolvedValueOnce({ failed: true, exitCode: 7 });
+      await lernaWatch(testDir)('--no-bail', '--debounce', '0', '--', 'echo');
+      await watchChangeHandler('change', 'packages/package-2/file-2.ts');
+      expect(process.exitCode).toBe(7);
+      await watchChangeHandler('change', 'packages/package-1/file-1.ts');
+      expect(calledInPackages()).toEqual(['package-2', 'package-1']);
+      expect(closeMock).not.toHaveBeenCalled();
+      expect(process.exitCode).toBe(7);
+    });
+
+    it('continues after a spawn error with --no-bail', async () => {
+      vi.mocked(spawn).mockRejectedValueOnce(Object.assign(new Error('not found'), { code: 'ENOENT' }));
+      await lernaWatch(testDir)('--no-bail', '--debounce', '0', '--', 'echo');
+      await watchChangeHandler('change', 'packages/package-2/file-2.ts');
+      expect(process.exitCode).toBe(1);
+      await watchChangeHandler('change', 'packages/package-1/file-1.ts');
+      expect(spawn).toHaveBeenCalledTimes(2);
+      expect(closeMock).not.toHaveBeenCalled();
+    });
+
+    it('merges debounce promises and serializes changes received while a command runs', async () => {
+      let finish!: (result: any) => void;
+      vi.mocked(spawn).mockImplementationOnce(
+        () =>
+          new Promise((resolve) => {
+            finish = resolve;
+          })
+      );
+      await lernaWatch(testDir)('--debounce', '0', '--', 'echo');
+      const first = watchChangeHandler('change', 'packages/package-2/file-2.ts');
+      await vi.waitFor(() => expect(spawn).toHaveBeenCalledOnce());
+      const second = watchChangeHandler('change', 'packages/package-2/file-2.ts');
+      const third = watchChangeHandler('change', 'packages/package-1/file-1.ts');
+      expect(first).toBe(second);
+      expect(second).toBe(third);
+      expect(spawn).toHaveBeenCalledOnce();
+      finish({ exitCode: 0 });
+      await Promise.all([first, second, third]);
+      expect(calledInPackages()).toEqual(['package-2', 'package-2', 'package-1']);
+    });
+
+    it('uses directory boundaries and gives nested packages ownership of their files', async () => {
+      const command: any = new WatchCommand(createArgv(testDir, '--debounce', '0', '--', 'echo'));
+      await command;
+      command._filteredPackages = [
+        { name: 'nested', location: join(testDir, 'packages/foo/nested') },
+        { name: 'foo', location: join(testDir, 'packages/foo') },
+        { name: 'foobar', location: join(testDir, 'packages/foobar') },
+      ];
+      await watchChangeHandler('change', 'packages/foobar/new.ts');
+      await watchChangeHandler('change', 'packages/foo/nested/new.ts');
+      expect(calledInPackages()).toEqual(['foobar', 'nested']);
+    });
+
+    it('queues packages whose names also exist on Object.prototype', async () => {
+      const command: any = new WatchCommand(createArgv(testDir, '--debounce', '0', '--', 'echo'));
+      await command;
+      command._filteredPackages = [{ name: 'constructor', location: join(testDir, 'packages/package-2') }];
+      await watchChangeHandler('change', 'packages/package-2/file-2.ts');
+      expect(vi.mocked(spawn).mock.calls[0][2]!.env!.LERNA_PACKAGE_NAME).toBe('constructor');
+    });
+
+    it('keeps both sides of a rename and removes deleted files from the inventory', async () => {
+      const command = new WatchCommand(createArgv(testDir, '--debounce', '0', '--', 'echo'));
+      await command;
+      const added = watchAddHandler('add', 'packages/package-2/renamed.ts');
+      const removed = watchUnlinkHandler('unlink', 'packages/package-2/file-2.ts');
+      await Promise.all([added, removed]);
+      const changes = vi.mocked(spawn).mock.calls[0][2]!.env!.LERNA_FILE_CHANGES;
+      expect(changes).toBe([join(testDir, 'packages/package-2/renamed.ts'), join(testDir, 'packages/package-2/file-2.ts')].join(' '));
+      expect(command.watchedFiles.has('packages/package-2/renamed.ts')).toBe(true);
+      expect(command.watchedFiles.has('packages/package-2/file-2.ts')).toBe(false);
+    });
+
+    it('watches new dotfiles and drops inventory entries when a directory disappears', async () => {
+      const command = new WatchCommand(createArgv(testDir, '--debounce', '0', '--', 'echo'));
+      await command;
+      await watchAddHandler('add', 'packages/package-2/new/.env');
+      expect(command.watchedFiles.has('packages/package-2/new/.env')).toBe(true);
+      watchUnlinkDirHandler('unlinkDir', 'packages/package-2/new');
+      expect(command.watchedFiles.has('packages/package-2/new/.env')).toBe(false);
+      expect(spawn).toHaveBeenCalledOnce();
+    });
+
+    it('prunes ignored folders and allows explicit overrides of the defaults', async () => {
+      await lernaWatch(testDir)('--ignored', '!**/dist/**', '--debounce', '0', '--', 'echo');
+      const options = vi.mocked(chokidarWatch).mock.calls[0][1]!;
+      const ignored = (options.ignored as Function[])[0];
+      expect(ignored(join(testDir, 'packages/package-2/node_modules'))).toBe(true);
+      expect(ignored(join(testDir, 'packages/package-2/dist'))).toBe(false);
+      await watchAddHandler('add', 'packages/package-2/dist/output.js');
+      await watchAddHandler('add', 'packages/package-2/node_modules/dep/output.js');
+      expect(spawn).toHaveBeenCalledOnce();
+    });
+
+    it('does not execute commands for the initial inventory by default', async () => {
+      await lernaWatch(testDir)('--debounce', '0', '--', 'echo');
+      expect(spawn).not.toHaveBeenCalled();
+    });
+
+    it('can execute commands for the initial inventory when requested', async () => {
+      await lernaWatch(testDir)('--no-ignore-initial', '--debounce', '0', '--', 'echo');
+      // Await the shared batch without adding another file change.
+      await vi.waitFor(() => expect(spawn).toHaveBeenCalledTimes(2));
+    });
+
+    it('makes repeated termination calls share cleanup and reports SIGTERM as 143', async () => {
+      const command: any = new WatchCommand(createArgv(testDir, '--debounce', '0', '--', 'echo'));
+      await command;
+      const first = command.handleTermination(143);
+      const second = command.handleTermination(130, 'SIGINT');
+      expect(first).toBe(second);
+      await first;
+      expect(closeMock).toHaveBeenCalledOnce();
+      expect(process.exitCode).toBe(143);
+    });
+
+    it('settles queued work and reports a watcher close failure', async () => {
+      const command: any = new WatchCommand(createArgv(testDir, '--debounce', '100', '--', 'echo'));
+      await command;
+      closeMock.mockRejectedValueOnce(new Error('close failed'));
+      const queued = watchChangeHandler('change', 'packages/package-2/file-2.ts');
+      await command.handleTermination();
+      await queued;
+      expect(process.exitCode).toBe(1);
+      expect(spawn).not.toHaveBeenCalled();
     });
   });
 });

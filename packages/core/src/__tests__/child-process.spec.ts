@@ -110,6 +110,18 @@ describe('childProcess', () => {
   });
 
   describe('.spawn()', () => {
+    it('treats signal termination as a failure with a numeric exit status', async () => {
+      const child = spawn(process.execPath, ['-e', 'setInterval(() => {}, 1000)'], { reject: false });
+      child.process!.kill('SIGTERM');
+      const result = await child;
+      expect(result.failed).toBe(true);
+      expect(result.exitCode).toBe(143);
+    });
+    it('exposes the native child process for lifecycle management', async () => {
+      const child = spawn(process.execPath, ['-e', 'process.exit(0)']);
+      expect(child.process?.pid).toEqual(expect.any(Number));
+      await child;
+    });
     it('should spawn a command in a child process that always inherits stdio', async () => {
       const child = spawn('echo', ['-n'], { shell: true }) as any;
       expect(child.stdio).toEqual([null, null, null]);
@@ -162,6 +174,29 @@ describe('childProcess', () => {
   });
 
   describe('.spawnStreaming()', () => {
+    it('streams repeated commands without retaining their output or ending the parent streams', async () => {
+      for (let i = 0; i < 2; i++) {
+        const child = spawnStreaming(process.execPath, ['-e', 'console.log("streamed"); console.error("error output")'], { buffer: false });
+        expect(child.process?.pid).toEqual(expect.any(Number));
+        const result = await child;
+        expect(result).toEqual({ exitCode: 0, stdout: '', stderr: '' });
+        expect(process.stdout.writableEnded).toBe(false);
+        expect(process.stderr.writableEnded).toBe(false);
+      }
+      expect(getChildProcessCount()).toBe(0);
+    });
+
+    it('preserves failures when streaming without buffering', async () => {
+      await expect(spawnStreaming(process.execPath, ['-e', 'process.exit(7)'], { buffer: false })).rejects.toMatchObject({ exitCode: 7 });
+      const result = await spawnStreaming(process.execPath, ['-e', 'process.exit(7)'], { buffer: false, reject: false });
+      expect(result.failed).toBe(true);
+      expect(result.exitCode).toBe(7);
+    });
+
+    it('reports spawn errors when streaming without buffering', async () => {
+      await expect(spawnStreaming('nonexistent-lerna-watch-command', [], { buffer: false })).rejects.toThrow(/nonexistent-lerna-watch-command/);
+      expect(getChildProcessCount()).toBe(0);
+    });
     it('should spawn a command in a child process that always inherits stdio', async () => {
       const child = spawnStreaming('echo', ['-n'], { shell: true }) as any;
       expect(child.stdio).toEqual([null, expect.anything(), expect.anything()]);
@@ -201,40 +236,35 @@ describe('childProcess', () => {
   });
 
   describe('maxListeners logic', () => {
-    it('should call setMaxListeners when many streaming children are spawned (force coverage)', async () => {
-      const origStdout = process.stdout.setMaxListeners.bind(process.stdout);
-      const origStderr = process.stderr.setMaxListeners.bind(process.stderr);
-      const origStdoutGet = process.stdout.getMaxListeners.bind(process.stdout);
-      const origStderrGet = process.stderr.getMaxListeners.bind(process.stderr);
-      let stdoutCalled = false;
-      let stderrCalled = false;
-      process.stdout.setMaxListeners = function (n) {
-        stdoutCalled = true;
-        return origStdout(n);
-      };
-      process.stderr.setMaxListeners = function (n) {
-        stderrCalled = true;
-        return origStderr(n);
-      };
-      // Force getMaxListeners to return 1 so children.size > getMaxListeners is always true
-      process.stdout.getMaxListeners = () => 1;
-      process.stderr.getMaxListeners = () => 1;
-      // Add fake children to the real children set
-      const core = await import('../child-process.js');
-      const childrenSet = (core as any).children || (core as any).default?.children;
-      for (let i = 0; i < 5; i++) {
-        childrenSet?.add({ id: 'fake' + i });
+    it('raises listener limits for concurrent streams without lowering existing limits', async () => {
+      const stdoutLimit = process.stdout.getMaxListeners();
+      const stderrLimit = process.stderr.getMaxListeners();
+      const stdoutSet = vi.spyOn(process.stdout, 'setMaxListeners');
+      const stderrSet = vi.spyOn(process.stderr, 'setMaxListeners');
+      const stdoutGet = vi.spyOn(process.stdout, 'getMaxListeners').mockReturnValue(1);
+      const stderrGet = vi.spyOn(process.stderr, 'getMaxListeners').mockReturnValue(1);
+      try {
+        await Promise.all([
+          spawnStreaming(process.execPath, ['-e', 'setTimeout(() => {}, 50)']),
+          spawnStreaming(process.execPath, ['-e', 'setTimeout(() => {}, 50)']),
+        ]);
+        expect(stdoutSet).toHaveBeenCalled();
+        expect(stderrSet).toHaveBeenCalled();
+        stdoutGet.mockReturnValue(100);
+        stderrGet.mockReturnValue(100);
+        stdoutSet.mockClear();
+        stderrSet.mockClear();
+        await spawnStreaming(process.execPath, ['-e', 'process.exit(0)']);
+        expect(stdoutSet).not.toHaveBeenCalled();
+        expect(stderrSet).not.toHaveBeenCalled();
+      } finally {
+        stdoutGet.mockRestore();
+        stderrGet.mockRestore();
+        stdoutSet.mockRestore();
+        stderrSet.mockRestore();
+        process.stdout.setMaxListeners(stdoutLimit);
+        process.stderr.setMaxListeners(stderrLimit);
       }
-      await spawnStreaming('node', ['-e', 'console.log(42)']);
-      expect(stdoutCalled || stderrCalled).toBe(true);
-      // Clean up
-      childrenSet?.forEach((c: any) => {
-        if (c.id?.startsWith('fake')) childrenSet.delete(c);
-      });
-      process.stdout.setMaxListeners = origStdout;
-      process.stderr.setMaxListeners = origStderr;
-      process.stdout.getMaxListeners = origStdoutGet;
-      process.stderr.getMaxListeners = origStderrGet;
     });
   });
 
