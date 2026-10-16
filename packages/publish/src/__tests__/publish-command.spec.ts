@@ -156,12 +156,17 @@ describe('PublishCommand', () => {
   });
 
   describe('with implied versioning', () => {
-    it.each(['normal', 'independent'])('cleans only this run’s tarball directories in %s mode', async (fixture) => {
+    it.each(['normal', 'independent'])('cleans this run’s tarball directories and skips missing metadata in %s mode', async (fixture) => {
       const cwd = await initFixture(fixture);
       const owned = await mkdtemp(pathJoin(tmpdir(), 'lerna-audit-owned-'));
       const concurrent = await mkdtemp(pathJoin(tmpdir(), 'lerna-audit-concurrent-'));
       try {
         const command = new PublishCommand(createArgv(cwd, '--cleanup-temp-files'));
+        const publishPacked = command.publishPacked.bind(command);
+        vi.spyOn(command, 'publishPacked').mockImplementation(async () => {
+          await publishPacked();
+          Reflect.deleteProperty(command.packagesToPublish[0], 'packed');
+        });
         vi.spyOn(command, 'packUpdated').mockImplementation(async () => {
           for (const pkg of command.packagesToPublish) {
             Object.assign(pkg, { packed: { tarFilePath: pathJoin(owned, 'package.tgz') } });
