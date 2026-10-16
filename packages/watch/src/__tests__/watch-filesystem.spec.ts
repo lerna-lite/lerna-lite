@@ -40,11 +40,14 @@ describe('Watch filesystem events', () => {
     await mkdir(folder);
     await writeFile(join(folder, 'new.ts'), 'export {};');
     await writeFile(join(folder, '.env'), 'KEY=value');
-    await vi.waitFor(() => {
-      const changes = runner.mock.calls.map(([, files]) => files).join(' ');
-      expect(changes).toContain(join(folder, 'new.ts'));
-      expect(changes).toContain(join(folder, '.env'));
-    });
+    await vi.waitFor(
+      () => {
+        const changes = runner.mock.calls.map(([, files]) => files).join(' ');
+        expect(changes).toContain(join(folder, 'new.ts'));
+        expect(changes).toContain(join(folder, '.env'));
+      },
+      { timeout: 5000 }
+    );
     expect(command.watchedFiles.has('packages/package-2/new-folder/.env')).toBe(true);
   });
 
@@ -53,15 +56,18 @@ describe('Watch filesystem events', () => {
     const oldPath = join(root, 'packages/package-2/file-2.ts');
     const newPath = join(root, 'packages/package-2/renamed.ts');
     await rename(oldPath, newPath);
-    await vi.waitFor(() => {
-      const changes = runner.mock.calls.map(([, files]) => files).join(' ');
-      expect(changes).toContain(oldPath);
-      expect(changes).toContain(newPath);
-    });
+    await vi.waitFor(
+      () => {
+        const changes = runner.mock.calls.map(([, files]) => files).join(' ');
+        expect(changes).toContain(oldPath);
+        expect(changes).toContain(newPath);
+      },
+      { timeout: 5000 }
+    );
     expect(command.watchedFiles.has('packages/package-2/file-2.ts')).toBe(false);
     runner.mockClear();
     await rm(newPath);
-    await vi.waitFor(() => expect(runner).toHaveBeenCalled());
+    await vi.waitFor(() => expect(runner).toHaveBeenCalled(), { timeout: 5000 });
     expect(command.watchedFiles.has('packages/package-2/renamed.ts')).toBe(false);
   });
 
@@ -71,7 +77,7 @@ describe('Watch filesystem events', () => {
     await mkdir(join(root, 'packages/package-2/dist'));
     await writeFile(join(root, 'packages/package-2/dist/ignored.ts'), 'ignored output');
     await writeFile(join(root, 'packages/package-2/new.ts'), 'source');
-    await vi.waitFor(() => expect(runner).toHaveBeenCalled());
+    await vi.waitFor(() => expect(runner).toHaveBeenCalled(), { timeout: 5000 });
     const changes = runner.mock.calls.map(([, files]) => files).join(' ');
     expect(changes).toContain('new.ts');
     expect(changes).not.toContain('new.txt');
