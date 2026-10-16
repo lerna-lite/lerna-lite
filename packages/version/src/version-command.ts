@@ -8,7 +8,7 @@ import {
   Command,
   createRunner,
   EOL,
-  getPackagesForOption,
+  getPackagesForOption as parsePackageNamesForOption,
   logOutput,
   pMap,
   promptConfirmation,
@@ -545,7 +545,7 @@ export class VersionCommand extends Command<VersionCommandOption> {
    * @returns {Set<string>} A set of package names (or wildcard) derived from option value.
    */
   getPackagesForOption(option?: boolean | string | string[]) {
-    return getPackagesForOption(option);
+    return parsePackageNamesForOption(option);
   }
 
   async recommendVersions(resolvePrereleaseId) {
