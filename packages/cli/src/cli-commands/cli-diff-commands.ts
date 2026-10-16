@@ -17,7 +17,7 @@ export default {
     try {
       // @ts-ignore
       const { DiffCommand } = await import('@lerna-lite/diff');
-      new DiffCommand(argv);
+      return new DiffCommand(argv).runner;
     } catch (err: any) {
       throw new Error(
         `"@lerna-lite/diff" is optional and was not found. Please install it with "npm install @lerna-lite/diff -D". ${err}`

@@ -57,7 +57,7 @@ function matchGlobstar(pattern: string, filePath: string): boolean {
 /**
  * @param {string} committish
  * @param {ExecOpts} execOpts
- * @param {string[]} ignorePatterns - package patterns to ignore
+ * @param {string[] | false} ignorePatterns - package patterns to ignore, or false to disable ignores
  * @param {string[]} changedCatalogDeps - dependencies that changed in the workspace catalog
  * @param {object} diffOpts - options for diff
  * @param {boolean} diffOpts.independentSubpackages - whether to include independent subpackages in the diff
@@ -65,10 +65,12 @@ function matchGlobstar(pattern: string, filePath: string): boolean {
 export function makeDiffPredicate(
   committish: string,
   execOpts: ExecOpts,
-  ignorePatterns: string[] = [],
+  ignorePatterns: string[] | false = [],
   changedCatalogDeps: string[] = [],
   diffOpts: { independentSubpackages?: boolean }
 ) {
+  // Yargs represents --no-ignore-changes as [false] for array options.
+  ignorePatterns = ignorePatterns ? ignorePatterns.filter((pattern) => typeof pattern === 'string') : [];
   const ignoreFilters = new Set(
     ignorePatterns.map((p) => (str) => {
       if (p.includes('**/')) {

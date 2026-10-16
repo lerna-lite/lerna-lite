@@ -10,7 +10,7 @@ export function hasCommit(opts: ExecOpts) {
   let retVal;
 
   try {
-    execSync('git', ['log'], opts);
+    execSync('git', ['rev-parse', '--verify', 'HEAD'], opts);
     retVal = true;
   } catch (e) {
     retVal = false;

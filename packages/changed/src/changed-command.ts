@@ -21,6 +21,7 @@ export class ChangedCommand extends Command<ChangedCommandOption & ListCommandOp
   }
 
   async initialize() {
+    this.options.isIndependent = this.project.isIndependent();
     if (this.options.conventionalGraduate) {
       // provide artificial --conventional-commits so --conventional-graduate works
       this.options.conventionalCommits = true;

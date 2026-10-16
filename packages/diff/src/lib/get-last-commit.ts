@@ -23,7 +23,7 @@ function hasTags(opts: ExecOpts) {
   let result: boolean | string = false;
 
   try {
-    result = !!execSync('git', ['tag'], opts);
+    result = !!execSync('git', ['tag', '--merged', 'HEAD'], opts);
   } catch (err: any) {
     log.warn('ENOTAGS', 'No git tags were reachable from this branch!');
     log.verbose('hasTags error', err);

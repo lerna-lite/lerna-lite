@@ -97,6 +97,21 @@ describe('Changed Command', () => {
     );
   });
 
+  it('passes independent mode to the update collector', async () => {
+    await updateLernaConfig(cwd, { version: 'independent' });
+    try {
+      await new ChangedCommand(createArgv(cwd));
+      expect(collectUpdates).toHaveBeenLastCalledWith(
+        expect.any(Array),
+        expect.any(Object),
+        expect.any(Object),
+        expect.objectContaining({ isIndependent: true })
+      );
+    } finally {
+      await updateLernaConfig(cwd, { version: '1.0.0' });
+    }
+  });
+
   it('reads durable ignoreChanges config from version namespace', async () => {
     await updateLernaConfig(cwd, {
       command: {
