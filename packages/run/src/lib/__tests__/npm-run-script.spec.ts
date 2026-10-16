@@ -144,6 +144,7 @@ describe('npm-run-script', () => {
           pkg: config.pkg,
           reject: true,
           windowsHide: false,
+          buffer: false,
         },
         config.pkg.name,
         false
@@ -175,6 +176,7 @@ describe('npm-run-script', () => {
           pkg: config.pkg,
           reject: true,
           windowsHide: false,
+          buffer: false,
         },
         config.pkg.name,
         true
@@ -207,6 +209,7 @@ describe('npm-run-script', () => {
           pkg: config.pkg,
           reject: false,
           windowsHide: false,
+          buffer: false,
         },
         undefined,
         false

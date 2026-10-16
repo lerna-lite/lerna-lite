@@ -88,6 +88,7 @@ $ lerna exec echo hello world --dry-run
 
 Stream output from child processes immediately, prefixed with the originating
 package name. This allows output from different packages to be interleaved.
+Streamed output is not retained in memory after it is printed.
 
 ```sh
 $ lerna exec --stream -- babel src -d lib

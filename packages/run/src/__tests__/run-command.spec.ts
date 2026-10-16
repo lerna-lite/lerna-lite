@@ -123,6 +123,13 @@ describe('RunCommand', () => {
       expect(logLines).toEqual(['[dry-run] > package-1', '[dry-run] > package-3']);
     });
 
+    it.each(['', '--stream', '--parallel'])('supports --dry-run --no-bail with %s', async (flag) => {
+      await lernaRun(testDir)('my-script', '--dry-run', '--no-bail', ...(flag ? [flag] : []));
+      expect(npmRunScript).not.toHaveBeenCalled();
+      expect(npmRunScriptStreaming).not.toHaveBeenCalled();
+      expect(process.exitCode).toBeUndefined();
+    });
+
     it('runs package prefix with --stream and expect it to be prefixed', async () => {
       await new RunCommand(createArgv(testDir, 'my-script', '--stream'));
 

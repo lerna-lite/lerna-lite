@@ -269,6 +269,6 @@ export class RunCommand extends Command<RunCommandOption & FilterOptions> {
   dryRunScript(scriptName: string, pkgName: string): Promise<any> {
     this.logger.info(colorize(['bold', 'magenta'], '[dry-run] >'), `Run npm script '%s' in '%s'`, scriptName, pkgName);
     logOutput(`${colorize(['bold', 'magenta'], '[dry-run] >')} ${pkgName}`);
-    return Promise.resolve();
+    return Promise.resolve({ exitCode: 0 });
   }
 }
