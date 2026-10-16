@@ -1,9 +1,11 @@
-import { constants } from 'node:os';
+import { EventEmitter } from 'node:events';
+import { constants, tmpdir } from 'node:os';
+import { join } from 'node:path';
 
 import { log } from '@lerna-lite/npmlog';
 import { describe, expect, it, vi, afterEach } from 'vitest';
 
-import { exec, execSync, getChildProcessCount, getExitCode, spawn, spawnStreaming, logExecCommand } from '../child-process.js';
+import { exec, execSync, getChildProcessCount, getExitCode, spawn, spawnStreaming, logExecCommand, wrapError } from '../child-process.js';
 import { colorize } from '../index.js';
 import type { Package } from '../package.js';
 
@@ -53,6 +55,13 @@ describe('childProcess', () => {
       expect(getChildProcessCount()).toBe(0);
     });
 
+    it('cleans up after a child spawn error', async () => {
+      const result = exec(process.execPath, ['-e', ''], { cwd: join(tmpdir(), 'missing-lerna-lite-child-cwd') });
+
+      await expect(result).rejects.toThrow(/Process exited with status 2/);
+      expect(getChildProcessCount()).toBe(0);
+    });
+
     it('registers child processes that are created', async () => {
       const echoOne = exec('echo', ['one'], { shell: true });
       expect(getChildProcessCount()).toBe(1);
@@ -94,6 +103,19 @@ describe('childProcess', () => {
 
       expect(typeof stdout).toBe('string');
       expect(stdout.length).toBe(size);
+    });
+
+    it('preserves leading spaces and extra newlines in captured stdout', async () => {
+      const code = `process.stdout.write(${JSON.stringify('  keep  \n\n')})`;
+      expect((await exec(process.execPath, ['-e', code])).stdout).toBe('  keep  \n');
+      expect(execSync(process.execPath, ['-e', code])).toBe('  keep  \n');
+    });
+
+    it('decodes UTF-8 characters split across output chunks', async () => {
+      const code = 'process.stdout.write(Buffer.from([0xe2])); setTimeout(() => process.stdout.write(Buffer.from([0x82, 0xac])), 25);';
+      const result = await exec(process.execPath, ['-e', code]);
+
+      expect(result.stdout).toBe(String.fromCodePoint(0x20ac));
     });
 
     it('respects reject: false option to avoid throwing on non-zero exit code', async () => {
@@ -269,6 +291,23 @@ describe('childProcess', () => {
   });
 
   describe('wrapError error propagation', () => {
+    it('settles the unbuffered wrapper when the child closes', async () => {
+      const child = new EventEmitter();
+      const promise = wrapError({ process: child }, false);
+      child.emit('close', 0, null);
+
+      await expect(promise).resolves.toMatchObject({ exitCode: 0, stdout: '', stderr: '' });
+    });
+
+    it('rejects the unbuffered wrapper when the child emits an error', async () => {
+      const child = new EventEmitter();
+      const error = new Error('spawn failed');
+      const promise = wrapError({ process: child }, false);
+      child.emit('error', error);
+
+      await expect(promise).rejects.toBe(error);
+    });
+
     it('should throw original error if no exitCode or code', async () => {
       // Simulate a spawned object that rejects with a plain error, using a custom thenable
       const { wrapError } = await import('../child-process.js');

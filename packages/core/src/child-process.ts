@@ -40,7 +40,7 @@ const NUM_COLORS = colorWheel.length;
 let currentColor = 0;
 
 /** Replicates Execa's stripFinalNewline: true behavior. */
-const stripFinalNewline = (str: any) => (typeof str === 'string' ? str.replace(/\r?\n$/, '').trim() : str);
+const stripFinalNewline = (str: any) => (typeof str === 'string' ? str.replace(/\r?\n$/, '') : str);
 
 /**
  * Execute a command asynchronously, piping stdio by default.
@@ -184,6 +184,8 @@ export function spawnProcess(command: string, args: string[], opts: TinyExecOpti
   const { command: shellCommand, args: shellArgs } = _prepareShellCommand(command, args, _isShellEnabled(command, opts));
   const child = x(shellCommand, shellArgs, _mapOptions(command, opts)) as TinyExecResult;
   const nodeProcess = child.process;
+  nodeProcess?.stdout?.setEncoding('utf8');
+  nodeProcess?.stderr?.setEncoding('utf8');
 
   // Cleans up the child from the children set when the process exits or errors
   const drain = (_code?: number, signal?: string) => {
@@ -362,6 +364,7 @@ function _mapOptions(command: string, opts?: TinyExecOptions): Options {
       cwd,
       env,
       shell: useShell,
+      windowsHide: opts?.windowsHide ?? true,
       // tinyexec only forwards maxBuffer to Node's spawn/spawnSync through nodeOptions,
       // so it must live here rather than at the top level (where the `--max-buffer`
       // option currently lands, silently ignored). Without a large default, sync git

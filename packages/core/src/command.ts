@@ -271,6 +271,7 @@ export class Command<T extends AvailableCommandOption> {
 
     try {
       const result = xSync(gitCommand, gitArgs, {
+        nodePath: false,
         nodeOptions: {
           cwd: this.project.rootPath ?? '',
           stdio: 'ignore',

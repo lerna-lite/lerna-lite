@@ -159,6 +159,16 @@ describe('Watch Command', () => {
       expect(process.exitCode).toBe(1);
     });
 
+    it('handles watcher creation failures through the command error handler', async () => {
+      vi.mocked(chokidarWatch).mockImplementationOnce(() => {
+        throw new Error('watch creation failed');
+      });
+
+      await new WatchCommand(createArgv(testDir, '--debounce', '0', '--', 'echo'));
+
+      expect(process.exitCode).toBe(1);
+    });
+
     it('closes on filesystem errors even with --no-bail', async () => {
       await lernaWatch(testDir)('--no-bail', '--', 'lerna run --shaka', '--lakka');
       const nonZero = new Error('An actual non-zero, not git diff pager SIGPIPE');
@@ -626,6 +636,20 @@ describe('Watch Command', () => {
       expect(first).toBe(second);
       await first;
       expect(closeMock).toHaveBeenCalledOnce();
+      expect(process.exitCode).toBe(143);
+    });
+
+    it('runs signal and stdin shutdown handlers and ignores errors after shutdown', async () => {
+      const command: any = new WatchCommand(createArgv(testDir, '--debounce', '0', '--', 'echo'));
+      await command;
+
+      await command.changeEventListener('unknown/path');
+      command._onSigterm();
+      await vi.waitFor(() => expect(closeMock).toHaveBeenCalledOnce());
+      command._onStdinEnd();
+      await command.changeEventListener('packages/package-2/file-2.ts');
+      await command.onError(new Error('late watcher error'), true);
+
       expect(process.exitCode).toBe(143);
     });
 
