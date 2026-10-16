@@ -136,7 +136,7 @@ export class PackageGraph extends Map<string, PackageGraphNode> {
           // we'll have to pull the version from its parent package version property
           // example with `1.5.0`, ws:* => "1.5.0", ws:^ => "^1.5.0", ws:~ => "~1.5.0", ws:^1.5.0 => "^1.5.0"
           if (spec === '*' || spec === '^' || spec === '~') {
-            const depPkg = packages.find((pkg) => pkg.name === depName);
+            const depPkg = depNode?.pkg;
             const version = depPkg?.version;
             const specTarget = spec === '*' ? '' : spec;
             spec = depPkg ? `${specTarget}${version}` : '';

@@ -303,25 +303,12 @@ export class Package {
       if (updatedPkgDep) {
         for (const [depName, depRange] of Object.entries(updatedPkgDep)) {
           if (depRange.startsWith('catalog:')) {
-            let replaced = false;
             const catalogName = depRange.replace(/^catalog:/, '') || 'default';
-
-            // when named catalog is found (e.g: "catalog:react19")
-            if (catalogs) {
-              // fallback to 'default' catalog when no name is provided after "catalog:" https://pnpm.io/catalogs#default-catalog
-              if (catalogs[catalogName]?.[depName]) {
-                updatedPkgDep[depName] = catalogs[catalogName][depName];
-                replaced = true;
-              }
-            }
-            // otherwise when global catalog is found (e.g.: "catalog:")
-            if (!replaced && catalogName === 'default' && catalog[depName]) {
-              updatedPkgDep[depName] = catalog[depName];
-              replaced = true;
-            }
-            if (!replaced) {
+            const range = catalogs?.[catalogName]?.[depName] || (catalogName === 'default' ? catalog[depName] : undefined);
+            if (!range) {
               throw new ValidationError('ECATALOG', `No version found in "${catalogName}" catalog for "${depName}"`);
             }
+            updatedPkgDep[depName] = range;
           }
         }
       }
@@ -452,27 +439,5 @@ export class Package {
     });
 
     return inspectDependencies;
-  }
-
-  /**
-   * Retrieve the first dependencies collection which includes the dependency name inside it, we'll search in all type of dependencies/devDependencies/...
-   * @param {String} depName - dependency name
-   * @returns {Object | undefined} First matching runtime, optional, or development dependency collection.
-   */
-  retrieveDependenciesWithName(depName: string): { [depName: string]: string } {
-    // first, try runtime dependencies
-    let depCollection = this.dependencies;
-
-    // try optionalDependencies if that didn't work
-    if (!depCollection?.[depName]) {
-      depCollection = this.optionalDependencies;
-    }
-
-    // fall back to devDependencies
-    if (!depCollection?.[depName]) {
-      depCollection = this.devDependencies;
-    }
-
-    return depCollection;
   }
 }
