@@ -54,7 +54,7 @@ export default {
     try {
       // @ts-ignore
       const { ChangedCommand } = await import('@lerna-lite/changed');
-      new ChangedCommand(argv);
+      return new ChangedCommand(argv).runner;
     } catch (err: any) {
       throw new Error(
         `"@lerna-lite/changed" is optional and was not found. Please install it with "npm install @lerna-lite/changed -D". ${err}`

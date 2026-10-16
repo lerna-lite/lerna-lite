@@ -2,7 +2,7 @@ import { join } from 'node:path';
 
 import type { DiffCommandOption } from '@lerna-lite/core';
 import { Project, spawn, outputFile, remove } from '@lerna-lite/core';
-import { commandRunner, gitAdd, gitCommit, gitInit, gitTag, initFixtureFactory } from '@lerna-test/helpers';
+import { commandRunner, gitAdd, gitCheckout, gitCommit, gitInit, gitTag, initFixtureFactory } from '@lerna-test/helpers';
 import gitSHA from '@lerna-test/helpers/serializers/serialize-git-sha.js';
 import { x } from 'tinyexec';
 import { beforeEach, describe, expect, it, vi, type Mock } from 'vitest';
@@ -144,6 +144,20 @@ describe('Diff Command', () => {
     // @ts-ignore
     const { stdout } = await new DiffCommand(createArgv(cwd, 'package-2'));
     expect(strip(stdout)).toMatchSnapshot();
+  });
+
+  it('falls back to the first commit when tags exist only on another branch', async () => {
+    const cwd = await initFixture('basic');
+    await gitCheckout(cwd, ['-b', 'side']);
+    await outputFile(join(cwd, 'side.txt'), 'side branch');
+    await gitAdd(cwd, '-A');
+    await gitCommit(cwd, 'side branch');
+    await gitTag(cwd, 'v1.0.0');
+    await gitCheckout(cwd, ['-']);
+    const [pkg] = await Project.getPackages(cwd);
+    await pkg.set('changed', true).serialize();
+    const result = await new DiffCommand(createArgv(cwd, pkg.name));
+    expect(result.stdout).toContain('"changed": true');
   });
 
   it('passes diff exclude globs configured with --ignore-changes', async () => {

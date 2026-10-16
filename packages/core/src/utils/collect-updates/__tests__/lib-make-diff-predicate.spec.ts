@@ -54,6 +54,12 @@ test('empty diff', () => {
   expect(result).toBe(false);
 });
 
+test.each([{ patterns: false }, { patterns: [false] }])('accepts disabled ignore patterns from --no-ignore-changes (%j)', ({ patterns }) => {
+  setup('packages/pkg-1/README.md');
+  const hasDiff = makeDiffPredicate('v1.0.0', { cwd: '/test' }, patterns as any, [], {});
+  expect(hasDiff({ location: '/test/packages/pkg-1' } as PackageGraphNode)).toBe(true);
+});
+
 test('rooted package', () => {
   setup('package.json');
 
