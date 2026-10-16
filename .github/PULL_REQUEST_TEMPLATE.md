@@ -34,3 +34,5 @@
 - [ ] I have updated the documentation accordingly.
 - [ ] I have added tests to cover my changes.
 - [ ] All new and existing tests passed.
+- [ ] This PR was assisted by AI.
+   - AI model(s) used (if applicable): <!-- e.g. GPT-6, Claude Sonnet; enter "unknown" if unavailable -->
