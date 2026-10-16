@@ -1,9 +1,21 @@
 import { spawn, type ChildProcess } from 'node:child_process';
+import { EventEmitter } from 'node:events';
 import { readFileSync } from 'node:fs';
 
-import { describe, expect, it, vi } from 'vitest';
+import { beforeEach, describe, expect, it, vi } from 'vitest';
 
 import { terminateChildProcess } from '../terminate-child-process.js';
+
+const { spawnMock } = vi.hoisted(() => ({ spawnMock: vi.fn() }));
+
+vi.mock('node:child_process', async (importOriginal) => ({
+  ...(await importOriginal()),
+  spawn: spawnMock,
+}));
+
+beforeEach(async () => {
+  spawnMock.mockImplementation((await vi.importActual<any>('node:child_process')).spawn);
+});
 
 function isRunning(pid: number) {
   try {
@@ -71,6 +83,34 @@ describe('Watch child process termination', () => {
     }
   });
 
+  it('uses taskkill to stop a Windows process tree', async () => {
+    const platform = Object.getOwnPropertyDescriptor(process, 'platform')!;
+    Object.defineProperty(process, 'platform', { value: 'win32' });
+    const killer = new EventEmitter();
+    spawnMock.mockReturnValueOnce(killer);
+    try {
+      const stopping = terminateChildProcess({ pid: 12345, exitCode: null, signalCode: null } as ChildProcess);
+      killer.emit('close', 0);
+      await expect(stopping).resolves.toBeUndefined();
+      expect(spawnMock).toHaveBeenCalledWith('taskkill', ['/pid', '12345', '/T', '/F'], expect.objectContaining({ windowsHide: true }));
+    } finally {
+      Object.defineProperty(process, 'platform', platform);
+    }
+  });
+
+  it('reports a taskkill failure for a still-running Windows process', async () => {
+    const platform = Object.getOwnPropertyDescriptor(process, 'platform')!;
+    Object.defineProperty(process, 'platform', { value: 'win32' });
+    spawnMock.mockReturnValueOnce(new EventEmitter());
+    try {
+      const stopping = terminateChildProcess({ pid: 12345, exitCode: null, signalCode: null } as ChildProcess);
+      spawnMock.mock.results[0].value.emit('close', 1);
+      await expect(stopping).rejects.toThrow('taskkill exited 1');
+    } finally {
+      Object.defineProperty(process, 'platform', platform);
+    }
+  });
+
   it.skipIf(process.platform === 'win32')('escalates when a command ignores SIGTERM', async () => {
     const { parent, grandchildPid } = await startTree(true);
     try {
@@ -105,6 +145,29 @@ describe('Watch child process termination', () => {
       Object.defineProperty(process, 'platform', platform);
       kill.mockRestore();
       now.mockRestore();
+    }
+  });
+
+  it('waits for a POSIX process group that is shutting down', async () => {
+    const platform = Object.getOwnPropertyDescriptor(process, 'platform')!;
+    Object.defineProperty(process, 'platform', { value: 'linux' });
+    let livenessChecks = 0;
+    const kill = vi.spyOn(process, 'kill').mockImplementation((_pid, signal) => {
+      if (signal === 0 && ++livenessChecks === 2) {
+        throw Object.assign(new Error('group exited'), { code: 'ESRCH' });
+      }
+      return true;
+    });
+    try {
+      await terminateChildProcess({ pid: 12345 } as ChildProcess);
+      expect(kill.mock.calls).toEqual([
+        [-12345, 'SIGTERM'],
+        [-12345, 0],
+        [-12345, 0],
+      ]);
+    } finally {
+      Object.defineProperty(process, 'platform', platform);
+      kill.mockRestore();
     }
   });
 
