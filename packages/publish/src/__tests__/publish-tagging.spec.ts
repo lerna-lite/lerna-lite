@@ -110,6 +110,13 @@ test('publish --temp-tag', async () => {
   expect(add).toHaveBeenCalledWith('@integration/package-2@1.0.1', 'latest', conf, cache);
 });
 
+test('publish --dry-run --temp-tag passes dry-run to both dist-tag operations', async () => {
+  const cwd = await initFixture('integration');
+  await new PublishCommand(createArgv(cwd, '--dry-run', '--temp-tag'));
+  expect(remove).toHaveBeenCalledWith(expect.any(String), 'lerna-temp', expect.objectContaining({ dryRun: true }), expect.any(Object));
+  expect(add).toHaveBeenCalledWith(expect.any(String), expect.any(String), expect.objectContaining({ dryRun: true }), expect.any(Object));
+});
+
 test('publish --dist-tag beta --temp-tag', async () => {
   const cwd = await initFixture('integration');
 

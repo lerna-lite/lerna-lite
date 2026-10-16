@@ -162,7 +162,7 @@ Cleanup the temp folders used by the publish process once the execution is over,
 lerna publish --cleanup-temp-files
 ```
 
-> **Note** Lerna-Lite is prefixing the temp folders containing each package tarball with "lerna-", we then use a glob pattern to delete every folders starting with this prefix. Also note that it is entirely possible that this cleanup misses some extra temp files created by the publish process.
+> **Note** Cleanup removes only the `lerna-` temporary folders containing tarballs from the current publish run. Temporary folders from other runs are preserved. Other temporary files created during publishing may remain.
 
 ### `--contents <dir>`
 

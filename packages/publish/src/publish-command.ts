@@ -1,7 +1,6 @@
 import crypto from 'node:crypto';
-import { globSync, realpathSync, statSync } from 'node:fs';
 import { EOL, tmpdir } from 'node:os';
-import { normalize, join as pathJoin, relative } from 'node:path';
+import { dirname, normalize, join as pathJoin, relative } from 'node:path';
 
 import type {
   CommandType,
@@ -31,7 +30,6 @@ import {
   readWorkspaceCatalogConfig,
   runTopologically,
   throwIfUncommitted,
-  tryOrFalse,
   ValidationError,
 } from '@lerna-lite/core';
 import { pMap } from '@lerna-lite/core';
@@ -106,6 +104,14 @@ export class PublishCommand extends Command<PublishCommandOption> {
 
   configureProperties() {
     super.configureProperties();
+
+    if (
+      this.options.throttle &&
+      this.options.throttleSize !== undefined &&
+      (!Number.isFinite(this.options.throttleSize) || this.options.throttleSize < 1)
+    ) {
+      throw new ValidationError('ETHROTTLE', '--throttle-size must be a finite number greater than or equal to 1.');
+    }
 
     // For publish we want to enable topological sorting by default, but allow users to override with --no-sort
     this.toposort = this.options.sort !== false;
@@ -348,14 +354,17 @@ export class PublishCommand extends Command<PublishCommandOption> {
 
     // optionally cleanup temp packed files after publish, opt-in option
     if (this.options.cleanupTempFiles) {
-      const tempDirPath = realpathSync(tmpdir());
-      const normalizedLernaPath = pathJoin(tempDirPath, 'lerna-*').replace(/\\/g, '/');
-      const deleteFolders = globSync(normalizedLernaPath, { withFileTypes: false }).filter((folder) =>
-        tryOrFalse(() => statSync(folder).isDirectory())
+      const deleteFolders = new Set(
+        this.packagesToPublish.flatMap((pkg: Package & { packed?: Tarball }) => {
+          if (!pkg.packed?.tarFilePath) {
+            return [];
+          }
+          const folder = dirname(pkg.packed.tarFilePath);
+          return /^lerna-[^/\\]+$/.test(relative(tmpdir(), folder)) ? [folder] : [];
+        })
       );
-
       deleteFolders.forEach((folder) => removeSync(folder));
-      this.logger.verbose('publish', `Found ${deleteFolders.length} temp folders to cleanup after publish.`);
+      this.logger.verbose('publish', `Found ${deleteFolders.size} temp folders to cleanup after publish.`);
     }
   }
 
@@ -956,13 +965,24 @@ export class PublishCommand extends Command<PublishCommandOption> {
       const preDistTag = this.getPreDistTag(pkg);
       const tag = !this.options.tempTag && preDistTag ? preDistTag : opts.tag;
       const pkgOpts = Object.assign({}, opts, { tag });
-
-      try {
-        const publishResult = await pulseTillDone(
+      const publish = async () =>
+        pulseTillDone(
           q
             ? q.queue(() => npmPublish(pkg, pkg.packed.tarFilePath, pkgOpts, this.conf, this.otpCache))
             : npmPublish(pkg, pkg.packed.tarFilePath, pkgOpts, this.conf, this.otpCache)
         );
+
+      try {
+        const publishResult = await publish().catch(async (err) => {
+          if (err.code !== 'EOTP') {
+            throw err;
+          }
+          this.logger.warn('OTP expired, requesting a new OTP...');
+          this.otpCache.otp = undefined;
+          await this.requestOneTimePassword();
+          pkgOpts.otp = this.otpCache.otp;
+          return publish();
+        });
         this.publishedPackages.push(pkg);
 
         // Collect provenance URL if present
@@ -982,16 +1002,6 @@ export class PublishCommand extends Command<PublishCommandOption> {
 
         return pkg;
       } catch (err: any) {
-        if (err.code === 'EOTP') {
-          this.logger.warn('OTP expired, requesting a new OTP...');
-          await this.requestOneTimePassword(); // Re-request OTP
-          return pulseTillDone(
-            q
-              ? q.queue(() => npmPublish(pkg, pkg.packed.tarFilePath, pkgOpts, this.conf, this.otpCache))
-              : npmPublish(pkg, pkg.packed.tarFilePath, pkgOpts, this.conf, this.otpCache)
-          ); // Retry publish
-        }
-
         const isNpmJsComConflict = isNpmJsPublishVersionConflict(err);
         const isNpmPkgGitHubComConflict = isNpmPkgGitHubPublishVersionConflict(err);
 
@@ -1064,7 +1074,7 @@ export class PublishCommand extends Command<PublishCommandOption> {
 
     let chain: Promise<any> = Promise.resolve();
 
-    const opts = this.conf.snapshot;
+    const opts = { ...this.conf.snapshot, dryRun: this.options.dryRun || false };
     const getDistTag = (publishConfig) => {
       if (opts.tag === 'latest' && publishConfig?.tag) {
         return publishConfig.tag;

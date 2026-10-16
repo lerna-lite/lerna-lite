@@ -12,6 +12,7 @@ vi.mock('@lerna-lite/core', async () => ({
 }));
 
 const stubLog = {
+  silly: vi.fn(),
   verbose: vi.fn(),
   info: vi.fn(),
   warn: vi.fn(),
@@ -23,6 +24,14 @@ const baseOptions = Object.freeze({
 
 (fetch as unknown as Mock).mockImplementation(() => Promise.resolve());
 (fetch as any).json.mockImplementation(() => Promise.resolve({}));
+
+it('does not read or change registry tags during a dry-run', async () => {
+  const opts = { ...baseOptions, dryRun: true } as unknown as DistTagOptions;
+  await npmDistTag.remove('some-pkg@1.0.0', 'lerna-temp', opts, {});
+  await npmDistTag.add('some-pkg@1.0.0', 'latest', opts, {});
+  expect(fetch).not.toHaveBeenCalled();
+  expect((fetch as any).json).not.toHaveBeenCalled();
+});
 
 describe('npmDistTag.add()', () => {
   it('adds a dist-tag for a given package@version', async () => {

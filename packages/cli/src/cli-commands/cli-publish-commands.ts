@@ -180,7 +180,7 @@ export default {
     try {
       // @ts-ignore
       const { PublishCommand } = await import('@lerna-lite/publish');
-      new PublishCommand(argv);
+      return new PublishCommand(argv).runner;
     } catch (err: any) {
       throw new Error(
         `"@lerna-lite/publish" is optional and was not found. Please install it with "npm install @lerna-lite/publish -D". ${err}`
