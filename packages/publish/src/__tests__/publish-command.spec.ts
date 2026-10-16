@@ -1,6 +1,17 @@
+import { mkdtemp, rm } from 'node:fs/promises';
+import { tmpdir } from 'node:os';
 import { join as pathJoin } from 'node:path';
 
-import { Conf, collectUpdates, logOutput, promptConfirmation, type PublishCommandOption, outputFileSync, outputJson } from '@lerna-lite/core';
+import {
+  Conf,
+  collectUpdates,
+  logOutput,
+  promptConfirmation,
+  type PublishCommandOption,
+  outputFileSync,
+  outputJson,
+  pathExistsSync,
+} from '@lerna-lite/core';
 import { getOneTimePassword } from '@lerna-lite/version';
 import { commandRunner, commitChangeToPackage, initFixtureFactory } from '@lerna-test/helpers';
 import { loggingOutput } from '@lerna-test/helpers/logging-output.js';
@@ -116,6 +127,11 @@ describe('PublishCommand', () => {
       cwd = await initFixture('normal');
     });
 
+    it.each([0, -1, 0.5, NaN, Infinity])('rejects throttle size %s before publishing', async (size) => {
+      await expect(new PublishCommand(createArgv(cwd, '--throttle', '--throttle-size', size))).rejects.toThrow('--throttle-size must be');
+      expect(npmPublish).not.toHaveBeenCalled();
+    });
+
     it('exits early when no changes found', async () => {
       (collectUpdates as any).setUpdated(cwd);
 
@@ -140,6 +156,31 @@ describe('PublishCommand', () => {
   });
 
   describe('with implied versioning', () => {
+    it.each(['normal', 'independent'])('cleans this run’s tarball directories and skips missing metadata in %s mode', async (fixture) => {
+      const cwd = await initFixture(fixture);
+      const owned = await mkdtemp(pathJoin(tmpdir(), 'lerna-audit-owned-'));
+      const concurrent = await mkdtemp(pathJoin(tmpdir(), 'lerna-audit-concurrent-'));
+      try {
+        const command = new PublishCommand(createArgv(cwd, '--cleanup-temp-files'));
+        const publishPacked = command.publishPacked.bind(command);
+        vi.spyOn(command, 'publishPacked').mockImplementation(async () => {
+          await publishPacked();
+          Reflect.deleteProperty(command.packagesToPublish[0], 'packed');
+        });
+        vi.spyOn(command, 'packUpdated').mockImplementation(async () => {
+          for (const pkg of command.packagesToPublish) {
+            Object.assign(pkg, { packed: { tarFilePath: pathJoin(owned, 'package.tgz') } });
+          }
+        });
+        await command;
+        expect(pathExistsSync(owned)).toBe(false);
+        expect(pathExistsSync(concurrent)).toBe(true);
+      } finally {
+        await rm(owned, { recursive: true, force: true });
+        await rm(concurrent, { recursive: true, force: true });
+      }
+    });
+
     it('publishes changed packages', async () => {
       const testDir = await initFixture('normal');
 
@@ -459,11 +500,16 @@ describe('PublishCommand', () => {
 
       // Simulate successful OTP re-request
       (getOneTimePassword as Mock).mockResolvedValueOnce('123456');
+      (npmPublish as Mock).mockResolvedValueOnce({ stageId: 'retry-stage' });
 
-      await new PublishCommand(createArgv(testDir));
+      const command = new PublishCommand(createArgv(testDir, '--otp', 'expired', '--concurrency', 1));
+      await command;
 
       expect(getOneTimePassword).toHaveBeenCalledTimes(1);
       expect(npmPublish).toHaveBeenCalledTimes(5); // 4 initial calls + 1 retry for package-1
+      expect((npmPublish as Mock).mock.calls[1][2].otp).toBe('123456');
+      expect(command.publishedPackages.map((pkg) => pkg.name)).toContain('package-1');
+      expect(command.stageIds.get('package-1')).toBe('retry-stage');
     });
 
     it('fails the process if OTP is not provided after expiration', async () => {
