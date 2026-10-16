@@ -886,26 +886,16 @@ export class PublishCommand extends Command<PublishCommandOption> {
     }
 
     const opts = this.conf.snapshot;
-    const packSteps = [
-      (pkg: Package & { packed: Tarball }) =>
-        pulseTillDone(packDirectory(pkg, pkg.location, opts, this.options.arboristLoadOptions)).then((packed: Tarball) => {
-          tracker.verbose('packed', relative(this.project.rootPath ?? '', pkg.contents));
-          tracker.completeWork(1);
-
-          // store metadata for use in this.publishPacked()
-          pkg.packed = packed;
-
-          // manifest may be mutated by any previous lifecycle
-          return pkg.refresh();
-        }),
-    ].filter(Boolean) as ((pkg: Package) => Promise<Package & { packed: Tarball }>)[];
-
     const mapper = async (pkg: Package) => {
-      let result = pkg;
-      for (const step of packSteps) {
-        result = await step(result);
-      }
-      return result;
+      const packed = await pulseTillDone(packDirectory(pkg, pkg.location, opts, this.options.arboristLoadOptions));
+      tracker.verbose('packed', relative(this.project.rootPath ?? '', pkg.contents));
+      tracker.completeWork(1);
+
+      // store metadata for use in this.publishPacked()
+      (pkg as Package & { packed: Tarball }).packed = packed;
+
+      // manifest may be mutated by any previous lifecycle
+      return pkg.refresh();
     };
 
     chain = chain.then(() => {
