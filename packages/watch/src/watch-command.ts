@@ -1,5 +1,4 @@
-import { globSync, statSync } from 'node:fs';
-import { join, relative } from 'node:path';
+import { isAbsolute, join, relative } from 'node:path';
 
 import {
   Command,
@@ -7,8 +6,8 @@ import {
   pluralize,
   spawn,
   spawnStreaming,
-  tryOrFalse,
   ValidationError,
+  type ChildProcessPromise,
   type FilterOptions,
   type Package,
   type ProjectConfig,
@@ -19,6 +18,7 @@ import zeptomatch from 'zeptomatch';
 
 import { CHOKIDAR_AVAILABLE_OPTIONS, DEBOUNCE_DELAY, FILE_DELIMITER } from './constants.js';
 import type { ChangesStructure } from './models.js';
+import { terminateChildProcess } from './terminate-child-process.js';
 
 export function factory(argv: WatchCommandOption) {
   return new WatchCommand(argv);
@@ -29,7 +29,7 @@ export class WatchCommand extends Command<WatchCommandOption & FilterOptions> {
   protected _bail = false;
   protected _command = '';
   protected _count = 0;
-  protected _changes: ChangesStructure = {};
+  protected _changes: ChangesStructure = Object.create(null);
   protected _env: { [key: string]: string | undefined } = {};
   protected _filteredPackages: Package[] = [];
   protected _fileDelimiter = '';
@@ -39,7 +39,23 @@ export class WatchCommand extends Command<WatchCommandOption & FilterOptions> {
   protected _ignoredGlobs: string[] = [];
   protected _timerChange?: NodeJS.Timeout;
   protected _watcher?: FSWatcher;
-  protected _watchedFiles: Set<string> = new Set();
+  protected _watchedFiles = new Set<string>();
+  protected _ready = false;
+  protected _stopping = false;
+  protected _termination?: Promise<void>;
+  protected _runningCommand?: ChildProcessPromise;
+  protected _pendingChanges?: Promise<void>;
+  protected _resolveChanges?: () => void;
+  protected _resolveReady?: () => void;
+  protected _onSigint = () => {
+    void this.handleTermination(130, 'SIGINT');
+  };
+  protected _onSigterm = () => {
+    void this.handleTermination(143);
+  };
+  protected _onStdinEnd = () => {
+    void this.handleTermination();
+  };
 
   get requiresGit() {
     return false;
@@ -58,21 +74,16 @@ export class WatchCommand extends Command<WatchCommandOption & FilterOptions> {
       throw new ValidationError('ENOCOMMAND', 'A command to execute is required');
     }
 
-    const dashedArgs = this.options['--'] || [];
+    const dashedArgs = [...(this.options['--'] || [])];
     this._command = this.options.cmd || dashedArgs.shift();
     this._args = (this.options.args || []).concat(dashedArgs);
-    this._fileDelimiter = this.options?.fileDelimiter ?? FILE_DELIMITER;
-
-    // inverted boolean options
+    this._fileDelimiter = this.options.fileDelimiter ?? FILE_DELIMITER;
     this._bail = this.options.bail !== false;
     this._prefix = this.options.prefix !== false;
-
-    // accessing properties of process.env can be expensive,
-    // so cache it here to reduce churn during tighter loops
     this._env = Object.assign({}, process.env);
-
     this._filteredPackages = await getFilteredPackages(this.packageGraph, this.execOpts, this.options);
-
+    // A nested workspace owns its files ahead of any enclosing workspace.
+    this._filteredPackages.sort((a, b) => b.location.length - a.location.length);
     this._count = this._filteredPackages.length;
     this._packagePlural = this._count === 1 ? 'package' : 'packages';
   }
@@ -86,21 +97,19 @@ export class WatchCommand extends Command<WatchCommandOption & FilterOptions> {
       this._packagePlural
     );
 
+    if (!this._count) {
+      return;
+    }
+
     try {
       const { ignored = [], ...otherOptions } = this.options;
       this._ignoredGlobs = ['**/.git/**', '**/dist/**', '**/node_modules/**', ...(Array.isArray(ignored) ? ignored : [ignored])];
-
       const chokidarOptions: ChokidarOptions = {
-        // we should ignore certain folders by default, we could use nearly the same implementation as ViteJS
-        // https://github.com/vitejs/vite/blob/c747a3f289183b3640a6d4a1410acb5eafd11129/packages/vite/src/node/watch.ts
-        ignoreInitial: true,
         ignorePermissionErrors: true,
         persistent: true,
         ...otherOptions,
       };
 
-      // the `awaitWriteFinish` option can be a complex object but in order to provide these options from the CLI, we'll prefix them with "awf"
-      // when these prefix are found, we'll build the appropriate complex object, ie: awfPollInterval: 200 => { awaitWriteFinish: { pollInterval: 200 }}
       if (this.options.awfPollInterval !== undefined || this.options.awfStabilityThreshold !== undefined) {
         chokidarOptions.awaitWriteFinish = {};
         if (this.options.awfPollInterval !== undefined) {
@@ -111,208 +120,250 @@ export class WatchCommand extends Command<WatchCommandOption & FilterOptions> {
         }
       }
 
-      // remove any watch command options that don't belong to chokidar
       for (const key of Object.keys(chokidarOptions)) {
         if (!CHOKIDAR_AVAILABLE_OPTIONS.includes(key)) {
           delete chokidarOptions[key];
         }
       }
 
-      // convert strings to match pattern functions for chokidar compat
-      const ignoredMatchers = this._ignoredGlobs.map((pattern) => {
-        if (typeof pattern === 'string') {
-          return (path: string) => (pattern === '**' ? true : zeptomatch(pattern, path));
+      // Chokidar performs the initial inventory, including dotfiles, and prunes
+      // ignored directories. Later events update this inventory without rescanning.
+      this._watcher = watch(
+        this._filteredPackages.map((pkg) => pkg.location),
+        {
+          ...chokidarOptions,
+          cwd: this.project.rootPath,
+          ignoreInitial: false,
+          ignored: [(path) => this.isIgnored(this.relativePath(path))],
         }
-        /* v8 ignore next */
-        return pattern;
-      });
+      );
 
-      // Initialize chokidar watcher by adding all package folders to the watcher.
-      // We'll use all directories so that when new files are being added, they will also be inspected.
-      const rootPath = this.project.rootPath;
-      // Use native package locations for filesystem-relative calculations,
-      // then normalize to POSIX only for pattern building/matching.
-      let pkgFolders = this._filteredPackages.map((pkg) => pkg.location);
-      // Filter out any empty/undefined globs.
-      pkgFolders = pkgFolders.filter(Boolean);
-      const relativePkgFolders = pkgFolders.map((folder) => this.posixifyPath(relative(rootPath, folder))).filter(Boolean);
-
-      const globOptions: any = { cwd: rootPath };
-      if (this._ignoredGlobs && this._ignoredGlobs.length > 0) {
-        globOptions.exclude = this._ignoredGlobs;
-      }
-      const foldersToWatch =
-        relativePkgFolders.length > 0
-          ? (globSync(relativePkgFolders, globOptions) as unknown as string[])
-              .filter((folder) => tryOrFalse(() => statSync(join(rootPath, folder)).isDirectory()))
-              .map((folder) => this.posixifyPath(folder.replace(/\/?$/, '/')))
-          : [];
-      this._watcher = watch(foldersToWatch, {
-        ...chokidarOptions,
-        cwd: rootPath,
-        ignored: ignoredMatchers,
-      });
-
-      // also generate the full list of files to watch so that we can inspect it before calling the handler
-      this.regenerateWatchGlobPaths();
-
-      // add Chokidar watcher and watch for all events (add, addDir, unlink, unlinkDir)
-      this._watcher
-        .on('all', (event, filePath) => {
-          const rootPath = process.cwd();
-          const relativeFilePath = relative(rootPath, filePath);
-
-          // when a file(s) are being added, we'll regenerate the list of paths that are watched
-          if (event === 'add') {
-            this.regenerateWatchGlobPaths();
-          }
-
-          // make sure that the file is in the watch before calling the callback
-          // posixify once here and reuse in changeEventListener to avoid double normalization
-          const posixRelativeFilePath = this.posixifyPath(relativeFilePath);
-          if (this._watchedFiles.has(posixRelativeFilePath)) {
-            return this.changeEventListener(posixRelativeFilePath);
-          }
-        })
-        .on('error', (error) => this.onError(error));
-
-      // also watch for any Signal termination to cleanly exit the watch command
-      process.once('SIGINT', () => this.handleTermination(128 + 2));
-      process.once('SIGTERM', () => this.handleTermination(128 + 15));
-      process.stdin.on('end', () => this.handleTermination());
-    } catch (err) {
-      /* v8 ignore next */
-      this.onError(err);
-    }
-  }
-
-  protected changeEventListener(relativeFilePath: string) {
-    // find the package that the filepath is associated to
-    const rootPath = this.project.rootPath;
-    const posixRelative = this.posixifyPath(relativeFilePath);
-    const pkg = this._filteredPackages.find((p) => posixRelative.includes(this.posixifyPath(relative(rootPath, p.location))));
-
-    if (pkg) {
-      // changes structure sample: { '@lerna-lite/watch': { pkg: Package, changeFiles: ['path1', 'path2'] }
-      if (!this._changes[pkg.name]?.changeFiles) {
-        this._changes[pkg.name] = { pkg, changeFiles: new Set<string>(), timestamp: Date.now() }; // use Set to avoid duplicate entries
-      }
-      // store POSIX-normalized relative path to match `_watchedFiles` entries
-      this._changes[pkg.name].changeFiles.add(posixRelative);
-
-      return this.executeCommandCallback();
-    }
-  }
-
-  protected executeCommandCallback() {
-    const debounceDelay = this.options.debounce ?? DEBOUNCE_DELAY;
-
-    return new Promise((resolve) => {
-      // once we reached emit change stability threshold, we'll fire events for each packages & events while the file paths array will be merged
-      if (this._timerChange) {
-        clearTimeout(this._timerChange as NodeJS.Timeout);
+      process.once('SIGINT', this._onSigint);
+      process.once('SIGTERM', this._onSigterm);
+      process.stdin.on('end', this._onStdinEnd);
+      if (!process.stdin.isTTY) {
+        process.stdin.resume();
       }
 
-      // chokidar triggers events for every single file change (add, unlink, ...),
-      // so in order for us to merge all changes and return them under a single lerna watch event we need to wait a certain delay
-      this._timerChange = setTimeout(async () => {
-        // sort the changes by their timestamp to make sure that we execute them by queued time of entry
-        const sortedChanges = Object.values(this._changes).sort((a, b) => a.timestamp - b.timestamp);
-
-        // destructuring the changes object, it could include multiple packages and files to loop through (1 change for each package)
-        for (const change of sortedChanges) {
-          const changedPkg = change.pkg;
-
-          // execute command callback when file changes are found
-          if (change.changeFiles?.size > 0) {
-            const changedFiles = Array.from<string>(change.changeFiles).map((f) => join(this.project.rootPath, f));
-            const changedFilesCsv = changedFiles.join(this._fileDelimiter);
-
-            // make sure there's nothing in progress before executing the next callback
-            if (!this._processing) {
-              this._processing = true;
-              // prettier-ignore
-              this.logger.info('watch', 'Detected %d %s changed in %j.', changedFiles.length, pluralize('file', changedFiles.length), changedPkg.name );
-              change.changeFiles.clear();
-              delete this._changes[changedPkg.name];
-              await this.getRunner(changedPkg, changedFilesCsv);
-              this._processing = false;
-
-              // we might still have other packages that have changes though, so re-execute command callback process if any were found
-              if (this.hasQueuedChanges()) {
-                // oxlint-disable-next-line no-floating-promises
-                this.executeCommandCallback();
-              }
-
-              const pkgLn = Object.keys(this._changes || {}).length;
-              this.logger.verbose('watch', `Found %d ${pluralize('package', pkgLn)} left in the queue.`, pkgLn);
-              if (pkgLn === 0) {
-                this.logger.info('watch', 'All commands completed, waiting for next change...');
-              }
+      await new Promise<void>((resolve) => {
+        this._resolveReady = resolve;
+        this._watcher!.on('all', (event, filePath) => this.handleFileEvent(event, filePath))
+          .on('error', (error) => {
+            void this.onError(error, true);
+          })
+          .once('ready', () => {
+            this._ready = true;
+            if (!this._stopping) {
+              this.logger.info('watch', 'Watching for changes...');
             }
-            // resolving the promise is only useful for unit tests
-            resolve({ changedPkg, mergedFiles: changedFilesCsv });
-          }
+            this._resolveReady?.();
+            this._resolveReady = undefined;
+          });
+      });
+    } catch (error) {
+      await this.onError(error, true);
+    }
+  }
+
+  protected handleFileEvent(event: string, filePath: string) {
+    if (this._stopping) {
+      return;
+    }
+    const path = this.relativePath(filePath);
+    if (event === 'unlinkDir') {
+      for (const file of this._watchedFiles) {
+        if (file.startsWith(`${path}/`)) {
+          this._watchedFiles.delete(file);
         }
-      }, debounceDelay);
+      }
+      return;
+    }
+    if (event !== 'add' && event !== 'change' && event !== 'unlink') {
+      return;
+    }
+    const pkg = this.findPackage(path);
+    if (!pkg || this.isIgnored(path)) {
+      return;
+    }
+    const packagePath = this.posixifyPath(relative(pkg.location, join(this.project.rootPath, path)));
+    const pattern = this.posixifyPath(this.options.glob || '**/*').replace(/^\/+/, '');
+    if (!zeptomatch(pattern, packagePath)) {
+      return;
+    }
+
+    if (event === 'unlink') {
+      this._watchedFiles.delete(path);
+    } else {
+      this._watchedFiles.add(path);
+    }
+    if (this._ready || this.options.ignoreInitial === false) {
+      return this.changeEventListener(path);
+    }
+  }
+
+  protected findPackage(path: string) {
+    return this._filteredPackages.find((pkg) => {
+      const packagePath = this.posixifyPath(relative(this.project.rootPath, pkg.location));
+      return packagePath === '' || path.startsWith(`${packagePath}/`);
     });
   }
 
-  protected async handleTermination(exitCode?: number) {
-    try {
-      this.logger.info('watch', 'Termination call detected, exiting the Watch');
-      this.logger.silly('watch', `Watch process terminated with exit code: ${exitCode}`);
-      process.off('SIGINT', () => this.handleTermination(128 + 2));
-      process.off('SIGTERM', () => this.handleTermination(128 + 15));
-      process.stdin.off('end', () => this.handleTermination());
-
-      await this._watcher?.close();
-    } finally {
-      process.exitCode ??= exitCode ? 128 + exitCode : undefined;
-      process.exit();
-    }
-  }
-
-  protected hasQueuedChanges() {
-    for (const pkgName of Object.keys(this._changes)) {
-      if (this._changes[pkgName].changeFiles.size > 0) {
-        return true;
+  protected isIgnored(path: string) {
+    let ignored = false;
+    for (const pattern of this._ignoredGlobs) {
+      const negated = pattern.startsWith('!');
+      const glob = this.posixifyPath(negated ? pattern.slice(1) : pattern);
+      if (zeptomatch(glob, path) || zeptomatch(glob, `${path}/`)) {
+        ignored = !negated;
       }
     }
-
-    return false;
+    return ignored;
   }
 
-  /**
-   * take any path (windows/posix) and normalize it as a posix path,
-   * note that we use normalized paths for consistent matching across platforms.
-   */
+  protected relativePath(path: string) {
+    return this.posixifyPath(isAbsolute(path) ? relative(this.project.rootPath, path) : path);
+  }
+
+  protected changeEventListener(path: string) {
+    if (this._stopping) {
+      return Promise.resolve();
+    }
+    const pkg = this.findPackage(path);
+    if (!pkg) {
+      return Promise.resolve();
+    }
+    this._changes[pkg.name] ??= { pkg, changeFiles: new Set<string>(), timestamp: Date.now() };
+    this._changes[pkg.name].changeFiles.add(path);
+    return this.executeCommandCallback();
+  }
+
+  protected executeCommandCallback() {
+    // Share one completion promise across the batch, including events received
+    // while a command is running. Resetting debounce never abandons a promise.
+    this._pendingChanges ??= new Promise<void>((resolve) => {
+      this._resolveChanges = resolve;
+    });
+    clearTimeout(this._timerChange);
+    this._timerChange = setTimeout(() => {
+      this._timerChange = undefined;
+      if (!this._processing) {
+        void this.processChanges().catch((error) => this.onError(error, true));
+      }
+    }, this.options.debounce ?? DEBOUNCE_DELAY);
+    return this._pendingChanges;
+  }
+
+  protected async processChanges() {
+    this._processing = true;
+    try {
+      while (!this._stopping && !this._timerChange) {
+        const change = Object.values(this._changes).sort((a, b) => a.timestamp - b.timestamp)[0];
+        if (!change) {
+          break;
+        }
+        delete this._changes[change.pkg.name];
+        const files = Array.from(change.changeFiles, (file) => join(this.project.rootPath, file));
+        this.logger.info(
+          'watch',
+          'Detected %d %s changed in %j.',
+          files.length,
+          pluralize('file', files.length),
+          change.pkg.name
+        );
+        try {
+          this._runningCommand = this.getRunner(change.pkg, files.join(this._fileDelimiter));
+          const result = await this._runningCommand;
+          if (result?.failed || (typeof result?.exitCode === 'number' && result.exitCode !== 0)) {
+            await this.onError(result);
+          }
+        } catch (error) {
+          await this.onError(error);
+        } finally {
+          this._runningCommand = undefined;
+        }
+      }
+    } finally {
+      this._processing = false;
+      if (!this._timerChange && !Object.keys(this._changes).length) {
+        this.resolveChanges();
+        if (!this._stopping) {
+          this.logger.info('watch', 'All commands completed, waiting for next change...');
+        }
+      }
+    }
+  }
+
+  protected resolveChanges() {
+    this._resolveChanges?.();
+    this._resolveChanges = undefined;
+    this._pendingChanges = undefined;
+  }
+
+  protected handleTermination(exitCode?: number, signal: NodeJS.Signals = 'SIGTERM') {
+    if (!this._termination) {
+      this._stopping = true;
+      clearTimeout(this._timerChange);
+      this._timerChange = undefined;
+      this._changes = Object.create(null);
+      process.off('SIGINT', this._onSigint);
+      process.off('SIGTERM', this._onSigterm);
+      process.stdin.off('end', this._onStdinEnd);
+      if (!process.stdin.isTTY) {
+        process.stdin.pause();
+      }
+      if (exitCode !== undefined) {
+        process.exitCode = exitCode;
+      }
+      this._termination = this.terminate(signal);
+    }
+    return this._termination;
+  }
+
+  protected async terminate(signal: NodeJS.Signals) {
+    this.logger.info('watch', 'Termination call detected, exiting the Watch');
+    const results = await Promise.allSettled([
+      terminateChildProcess(this._runningCommand?.process, signal),
+      Promise.resolve().then(() => this._watcher?.close()),
+    ]);
+    for (const result of results) {
+      if (result.status === 'rejected') {
+        this.logger.error('watch', 'Failed to clean up: %s', result.reason?.message ?? result.reason);
+        process.exitCode ||= 1;
+      }
+    }
+    this._watchedFiles.clear();
+    this._resolveReady?.();
+    this._resolveReady = undefined;
+    this.resolveChanges();
+    // Let Node flush output and leave once the watcher and children have closed.
+  }
+
   protected posixifyPath(filePath: string) {
     return filePath.replace(/\\/g, '/');
   }
 
-  protected onError(error: any) {
-    const exitCode = error?.exitCode ?? error?.code;
-
-    if (this._bail) {
-      // only the first error is caught
-      process.exitCode = exitCode as number;
-      // oxlint-disable-next-line no-floating-promises
-      this.handleTermination(process.exitCode);
-
-      // rethrow to halt chain and log properly
-      throw error;
-    } else {
-      // propagate "highest" error code, it's probably the most useful, but keep watch process alive
-      this.logger.error('', 'Received non-zero exit code %d during file watch', exitCode);
-      process.exitCode = exitCode as number;
+  protected async onError(error: any, fatal = false) {
+    if (this._stopping) {
+      return;
+    }
+    const code = error?.exitCode ?? error?.code;
+    const exitCode = typeof code === 'number' && Number.isInteger(code) && code > 0 && code <= 255 ? code : 1;
+    process.exitCode = Math.max(Number(process.exitCode) || 0, exitCode);
+    this.logger.error(
+      'watch',
+      'Command or watcher failed (exit %d): %s',
+      exitCode,
+      error?.message ?? error?.code ?? this._command
+    );
+    if (fatal || this._bail) {
+      await this.handleTermination(Number(process.exitCode));
     }
   }
 
   protected getOpts(pkg: Package, changedFile: string) {
     return {
       cwd: pkg.location,
-      shell: this.options.shell !== false, // Defaults to true if undefined
+      shell: this.options.shell !== false,
       extendEnv: false,
       env: Object.assign({}, this._env, {
         LERNA_PACKAGE_NAME: pkg.name,
@@ -320,49 +371,27 @@ export class WatchCommand extends Command<WatchCommandOption & FilterOptions> {
       }),
       pkg,
       reject: this._bail,
+      // A separate POSIX process group lets shutdown reach shell grandchildren.
+      nodeOptions: { detached: process.platform !== 'win32', windowsHide: true },
     };
   }
 
-  protected getRunner(pkg: Package, changedFile: string) {
+  protected getRunner(pkg: Package, changedFile: string): ChildProcessPromise {
     return this.options.stream
       ? this.runCommandInPackageStreaming(pkg, changedFile)
       : this.runCommandInPackageCapturing(pkg, changedFile);
   }
 
-  protected regenerateWatchGlobPaths() {
-    const rootPath = this.project.rootPath;
-    const patterns: string[] = [];
-    const opts = this.options || {};
-
-    this._filteredPackages.forEach((pkg) => {
-      // does user have a glob defined, if so append it to the pkg location. Glob example for TS files: /**/*.ts
-      let watchingPath = pkg.location;
-      if (opts.glob) {
-        const globPattern = opts.glob.replace(/^\/+/, '');
-        watchingPath = join(pkg.location, '/', globPattern); // append glob to pkg location
-      } else {
-        watchingPath = join(pkg.location, '/**/*');
-      }
-      const unixPath = this.posixifyPath(relative(rootPath, watchingPath));
-      patterns.push(unixPath);
-    });
-
-    const pathsToWatch = (globSync(patterns, { cwd: rootPath }) as unknown as string[]).filter((path) => {
-      const normalized = this.posixifyPath(path);
-      if (this._ignoredGlobs.some((pattern) => pattern !== '**' && zeptomatch(pattern, normalized))) {
-        return false;
-      }
-      return tryOrFalse(() => statSync(join(rootPath, path)).isFile());
-    });
-
-    this._watchedFiles = new Set(pathsToWatch.map((p) => this.posixifyPath(p)));
+  protected runCommandInPackageStreaming(pkg: Package, changedFile: string): ChildProcessPromise {
+    return spawnStreaming(
+      this._command,
+      this._args,
+      { ...this.getOpts(pkg, changedFile), buffer: false },
+      this._prefix && pkg.name
+    );
   }
 
-  protected runCommandInPackageStreaming(pkg: Package, changedFile: string) {
-    return spawnStreaming(this._command, this._args, this.getOpts(pkg, changedFile), this._prefix && pkg.name);
-  }
-
-  protected runCommandInPackageCapturing(pkg: Package, changedFile: string) {
+  protected runCommandInPackageCapturing(pkg: Package, changedFile: string): ChildProcessPromise {
     return spawn(this._command, this._args, this.getOpts(pkg, changedFile));
   }
 }

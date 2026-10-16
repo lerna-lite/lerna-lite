@@ -6,7 +6,7 @@
 
 ## (`lerna watch`) - Watch command [optional] 👓
 
-Watch for changes within packages and execute commands from the root of the repository, for example, trigger a rebuild of packages when any of its files change.
+Watch for changes within packages and execute commands from the directory of the changed package, for example, trigger a rebuild of packages when any of its files change.
 
 > **Note** the `watch` command also exists in the original [Lerna](https://github.com/lerna/lerna), however their implementation uses Nx (no surprises) to watch for file changes. Since we want to keep Lerna-Lite well... light, we opted to use [`Chokidar`](https://github.com/paulmillr/chokidar), it is used by millions of packages (even ViteJS uses it), so chances are that you already have it installed directly or indirectly. Even though Lerna and Lerna-Lite differs in their internal implementations, their usage are nearly identical (apart from the [Chokidar options](#chokidar-options) that we also provide).
 >
@@ -31,6 +31,12 @@ $ lerna watch -- <command>
 ```
 
 The values `$LERNA_PACKAGE_NAME` and `$LERNA_FILE_CHANGES` will be replaced with the package name, the file that changed respectively. If multiple file changes are detected, they will all be listed and separated by a whitespace (unless a custom file delimiter is provided).
+
+New files and directories inside the selected packages are detected without restarting Watch, including dotfiles such as `.env`. File deletions and both sides of a rename are included in file changes. Restart Watch after adding or moving workspace packages, or changing the workspace configuration; the selected package list is determined at startup.
+
+Commands run one at a time. Changes received during a command are queued and merged for the next execution. By default, a command failure stops Watch with the command's exit status. With `--no-bail`, Watch logs failures and continues, retaining the highest failure status for a later normal exit. Filesystem watcher failures stop Watch even with `--no-bail`.
+
+Ctrl+C (`SIGINT`), `SIGTERM`, or the end of piped stdin closes the watcher and cancels queued commands. Watch terminates the active command and its descendants. On POSIX, it forwards the signal to the command's process group and allows up to five seconds before escalating to `SIGKILL`. On Windows, it uses `taskkill /T /F` to terminate the process tree. Signal exits use status `130` for `SIGINT` and `143` for `SIGTERM`.
 
 > **Note** When using these environment variables in the shell, you will need to escape the dollar symbol with a backslash (`\$`). See the [examples](#examples) below.
 
@@ -176,7 +182,7 @@ $ lerna watch --file-delimiter=\";;\" -- <command>
 
 ### `--glob`
 
-Provide a Glob pattern to target specifically which files/paths to watch, note that this will be appended to the package file path that will be provided to the watch. For example, if our package is located under `/home/user/monorepo/packages/pkg-1` and we define a `"glob": "/src/**/*.{ts,tsx}"`, it will provide the following pattern  `/home/user/monorepo/packages/pkg-1/src/**/*.{ts,tsx}` to Chokidar watch.
+Provide a glob pattern to filter file events relative to each selected package. For example, `--glob="src/**/*.{ts,tsx}"` matches TypeScript files inside each package's `src` directory. A leading slash is optional. Chokidar watches package directories so that new matching files are detected automatically.
 
 ```sh
 # glob pattern will be appended to package path that Chokidar watches
@@ -198,7 +204,7 @@ $ lerna watch --ignored=\"/(^|[/\\])\../\" -- <command>
 > **Note** the `lerna watch` command skips `.git/`, `dist/` and `node_modules/` directories by default. If you want to watch files inside any of these directories, you can pass a negated glob pattern, that is `lerna watch --ignored=\"!**/node_modules/**\"`
 
 > [!NOTE]
-> The watch `ignored` option accepts glob patterns (string or array of strings). Lerna-Lite expands those globs using Node's built-in glob functionality (`fs.globSync`) to compute the list of files to watch or ignore. Note that this behavior differs from Chokidar@4's `ignored` option, which no longer accepts globs directly.
+> The watch `ignored` option accepts glob patterns (string or array of strings), matched relative to the repository root. Ignored directories are pruned during traversal. Patterns are applied in order; a matching negated pattern can override an earlier ignore. Lerna-Lite uses the same matcher for the initial inventory and subsequent file events.
 
 ### `--stream`
 
@@ -267,7 +273,7 @@ Defaults to `false`, if set to `true` then the strings passed to Chokidar `.watc
 $ lerna watch --disable-globbing -- <command>
 ```
 
-> **Note** when this flag is enabled, it would cancel the [`--glob`](#--glob) option.
+> **Note** this legacy Chokidar option has no effect with current Chokidar versions. Use `--glob` to filter file events.
 
 ### `--follow-symlinks`
 

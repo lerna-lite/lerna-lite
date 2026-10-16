@@ -1,3 +1,4 @@
+import type { ChildProcess } from 'node:child_process';
 import { constants } from 'node:os';
 
 import { log } from '@lerna-lite/npmlog';
@@ -13,8 +14,12 @@ export type TinyExecOptions = Omit<Partial<Options>, 'stdin' | 'nodeOptions'> & 
   env?: NodeJS.ProcessEnv;
   stdin?: any;
   nodeOptions?: any;
+  /** Retain streamed output in the result. Defaults to true. */
+  buffer?: boolean;
   [key: string]: any;
 };
+
+export type ChildProcessPromise = Promise<any> & { process?: ChildProcess };
 
 type TinyExecResult = ReturnType<typeof x> & {
   pkg?: Package;
@@ -35,7 +40,7 @@ const NUM_COLORS = colorWheel.length;
 let currentColor = 0;
 
 /** Replicates Execa's stripFinalNewline: true behavior. */
-const stripFinalNewline = (str: any) => (typeof str === 'string' ? str.replace(/\r?\n$/, '').trim() : str);
+const stripFinalNewline = (str: any) => (typeof str === 'string' ? str.replace(/\r?\n$/, '') : str);
 
 /**
  * Execute a command asynchronously, piping stdio by default.
@@ -82,7 +87,7 @@ export function execSync(command: string, args: string[] = [], opts?: TinyExecOp
  * @param {TinyExecOptions} [opts]
  * @param {boolean} [dryRun]
  */
-export function spawn(command: string, args: string[], opts?: TinyExecOptions, dryRun = false): Promise<any> {
+export function spawn(command: string, args: string[], opts?: TinyExecOptions, dryRun = false): ChildProcessPromise {
   const options = { ...opts, nodeOptions: { ...opts?.nodeOptions, stdio: 'inherit' } };
   const child = spawnProcess(command, args, options, dryRun) as TinyExecResult;
 
@@ -108,7 +113,7 @@ export function spawnStreaming(
   opts?: TinyExecOptions,
   prefix?: string | boolean,
   dryRun = false
-): Promise<any> {
+): ChildProcessPromise {
   const options = { ...opts, nodeOptions: { ...opts?.nodeOptions, stdio: ['ignore', 'pipe', 'pipe'] } };
   const spawned = spawnProcess(command, args, options, dryRun) as TinyExecResult;
 
@@ -133,15 +138,17 @@ export function spawnStreaming(
   }
 
   // Avoid 'Possible EventEmitter memory leak detected' warning due to piped stdio
-  if (children.size > process.stdout.listenerCount('close')) {
-    process.stdout.setMaxListeners(children.size);
-    process.stderr.setMaxListeners(children.size);
+  for (const output of [process.stdout, process.stderr]) {
+    const needed = children.size + output.listenerCount('close');
+    if (output.getMaxListeners() > 0 && needed > output.getMaxListeners()) {
+      output.setMaxListeners(needed);
+    }
   }
 
-  spawned.process?.stdout?.pipe(addPrefixTransformer(stdoutOpts)).pipe(process.stdout);
-  spawned.process?.stderr?.pipe(addPrefixTransformer(stderrOpts)).pipe(process.stderr);
+  spawned.process?.stdout?.pipe(addPrefixTransformer(stdoutOpts)).pipe(process.stdout, { end: false });
+  spawned.process?.stderr?.pipe(addPrefixTransformer(stderrOpts)).pipe(process.stderr, { end: false });
 
-  return wrapError(spawned);
+  return wrapError(spawned, opts?.buffer !== false);
 }
 
 export function getChildProcessCount(): number {
@@ -177,6 +184,8 @@ export function spawnProcess(command: string, args: string[], opts: TinyExecOpti
   const { command: shellCommand, args: shellArgs } = _prepareShellCommand(command, args, _isShellEnabled(command, opts));
   const child = x(shellCommand, shellArgs, _mapOptions(command, opts)) as TinyExecResult;
   const nodeProcess = child.process;
+  nodeProcess?.stdout?.setEncoding('utf8');
+  nodeProcess?.stderr?.setEncoding('utf8');
 
   // Cleans up the child from the children set when the process exits or errors
   const drain = (_code?: number, signal?: string) => {
@@ -202,14 +211,37 @@ export function spawnProcess(command: string, args: string[], opts: TinyExecOpti
 }
 
 /**
- * Spawn a command asynchronously, _always_ inheriting stdio.
- * @param {string} command
- * @param {string[]} args
- * @param {TinyExecOptions} [opts]
+ * Wrap a spawned process with consistent exit statuses and enhanced errors.
+ * @param {TinyExecResult} spawned The spawned process and its command metadata. Set reject to false to return failed results instead of throwing on non-zero exits.
+ * @param {boolean} [buffer=true] Collect stdout and stderr in the result. When false, wait for the native process to close without retaining streamed output.
+ * @returns {ChildProcessPromise} The completion promise, preserving the native process handle and available stdio streams.
  */
-export function wrapError(spawned: any) {
-  const promise = Promise.resolve(spawned)
+export function wrapError(spawned: any, buffer = true): ChildProcessPromise {
+  // Awaiting tinyexec's thenable collects all output. Streaming watchers can instead
+  // wait for the native process, allowing their output to be released as it is piped.
+  const completion =
+    !buffer && spawned.process
+      ? new Promise((resolve, reject) => {
+          const child: ChildProcess = spawned.process;
+          const onError = (error: Error) => {
+            child.off('close', onClose);
+            reject(error);
+          };
+          const onClose = (code: number | null, signal: NodeJS.Signals | null) => {
+            child.off('error', onError);
+            resolve({ exitCode: code ?? (signal ? 128 + constants.signals[signal] : 1), stdout: '', stderr: '' });
+          };
+          child.once('error', onError);
+          child.once('close', onClose);
+        })
+      : Promise.resolve(spawned);
+  const promise: ChildProcessPromise = completion
     .then((result: any) => {
+      // tinyexec omits exitCode when the native process was killed by a signal.
+      const signal = spawned.process?.signalCode as NodeJS.Signals | null | undefined;
+      if (result && result.exitCode === undefined && signal) {
+        result.exitCode = 128 + constants.signals[signal];
+      }
       // Handle non-zero exit codes based on reject option
       if (result && result.exitCode !== 0 && result.exitCode !== undefined) {
         if (spawned.reject !== false) {
@@ -241,6 +273,7 @@ export function wrapError(spawned: any) {
   if (spawned.stdio) {
     (promise as any).stdio = spawned.stdio;
   }
+  promise.process = spawned.process;
   return promise;
 }
 
@@ -315,15 +348,12 @@ function _prepareShellCommand(command: string, args: string[], useShell: boolean
 /** Maps Lerna/TinyExec options to tinyexec Options format */
 function _mapOptions(command: string, opts?: TinyExecOptions): Options {
   const { cwd, env, nodeOptions, maxBuffer, ...rest } = opts || {};
+  delete rest.buffer;
   const useShell = _isShellEnabled(command, opts);
 
-  // 'collect: true' tells tinyexec to collect stdout/stderr as strings (like execa),
-  // so we can access them on the result object. The 'as any' cast is used because
-  // our merged options may not exactly match the Options type, but tinyexec accepts it.
   return {
     ...rest,
     throwOnError: false,
-    collect: true, // collect output as string (like execa)
     // tinyexec defaults to prepending node_modules/.bin *and* the running Node executable's
     // own directory to PATH for every spawn. Unlike execa's opt-in `preferLocal`, this is
     // silently on by default and can shadow the user's real PATH resolution (e.g. a stale
@@ -334,6 +364,7 @@ function _mapOptions(command: string, opts?: TinyExecOptions): Options {
       cwd,
       env,
       shell: useShell,
+      windowsHide: opts?.windowsHide ?? true,
       // tinyexec only forwards maxBuffer to Node's spawn/spawnSync through nodeOptions,
       // so it must live here rather than at the top level (where the `--max-buffer`
       // option currently lands, silently ignored). Without a large default, sync git

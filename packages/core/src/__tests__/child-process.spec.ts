@@ -1,9 +1,11 @@
-import { constants } from 'node:os';
+import { EventEmitter } from 'node:events';
+import { constants, tmpdir } from 'node:os';
+import { join } from 'node:path';
 
 import { log } from '@lerna-lite/npmlog';
 import { describe, expect, it, vi, afterEach } from 'vitest';
 
-import { exec, execSync, getChildProcessCount, getExitCode, spawn, spawnStreaming, logExecCommand } from '../child-process.js';
+import { exec, execSync, getChildProcessCount, getExitCode, spawn, spawnStreaming, logExecCommand, wrapError } from '../child-process.js';
 import { colorize } from '../index.js';
 import type { Package } from '../package.js';
 
@@ -53,6 +55,13 @@ describe('childProcess', () => {
       expect(getChildProcessCount()).toBe(0);
     });
 
+    it('cleans up after a child spawn error', async () => {
+      const result = exec(process.execPath, ['-e', ''], { cwd: join(tmpdir(), 'missing-lerna-lite-child-cwd') });
+
+      await expect(result).rejects.toThrow(/Process exited with status 2/);
+      expect(getChildProcessCount()).toBe(0);
+    });
+
     it('registers child processes that are created', async () => {
       const echoOne = exec('echo', ['one'], { shell: true });
       expect(getChildProcessCount()).toBe(1);
@@ -96,6 +105,19 @@ describe('childProcess', () => {
       expect(stdout.length).toBe(size);
     });
 
+    it('preserves leading spaces and extra newlines in captured stdout', async () => {
+      const code = `process.stdout.write(${JSON.stringify('  keep  \n\n')})`;
+      expect((await exec(process.execPath, ['-e', code])).stdout).toBe('  keep  \n');
+      expect(execSync(process.execPath, ['-e', code])).toBe('  keep  \n');
+    });
+
+    it('decodes UTF-8 characters split across output chunks', async () => {
+      const code = 'process.stdout.write(Buffer.from([0xe2])); setTimeout(() => process.stdout.write(Buffer.from([0x82, 0xac])), 25);';
+      const result = await exec(process.execPath, ['-e', code]);
+
+      expect(result.stdout).toBe(String.fromCodePoint(0x20ac));
+    });
+
     it('respects reject: false option to avoid throwing on non-zero exit code', async () => {
       const result = await exec('exit', ['99'], {
         reject: false,
@@ -110,6 +132,18 @@ describe('childProcess', () => {
   });
 
   describe('.spawn()', () => {
+    it('treats signal termination as a failure with a numeric exit status', async () => {
+      const child = spawn(process.execPath, ['-e', 'setInterval(() => {}, 1000)'], { reject: false });
+      child.process!.kill('SIGTERM');
+      const result = await child;
+      expect(result.failed).toBe(true);
+      expect(result.exitCode).toBe(143);
+    });
+    it('exposes the native child process for lifecycle management', async () => {
+      const child = spawn(process.execPath, ['-e', 'process.exit(0)']);
+      expect(child.process?.pid).toEqual(expect.any(Number));
+      await child;
+    });
     it('should spawn a command in a child process that always inherits stdio', async () => {
       const child = spawn('echo', ['-n'], { shell: true }) as any;
       expect(child.stdio).toEqual([null, null, null]);
@@ -162,6 +196,29 @@ describe('childProcess', () => {
   });
 
   describe('.spawnStreaming()', () => {
+    it('streams repeated commands without retaining their output or ending the parent streams', async () => {
+      for (let i = 0; i < 2; i++) {
+        const child = spawnStreaming(process.execPath, ['-e', 'console.log("streamed"); console.error("error output")'], { buffer: false });
+        expect(child.process?.pid).toEqual(expect.any(Number));
+        const result = await child;
+        expect(result).toEqual({ exitCode: 0, stdout: '', stderr: '' });
+        expect(process.stdout.writableEnded).toBe(false);
+        expect(process.stderr.writableEnded).toBe(false);
+      }
+      expect(getChildProcessCount()).toBe(0);
+    });
+
+    it('preserves failures when streaming without buffering', async () => {
+      await expect(spawnStreaming(process.execPath, ['-e', 'process.exit(7)'], { buffer: false })).rejects.toMatchObject({ exitCode: 7 });
+      const result = await spawnStreaming(process.execPath, ['-e', 'process.exit(7)'], { buffer: false, reject: false });
+      expect(result.failed).toBe(true);
+      expect(result.exitCode).toBe(7);
+    });
+
+    it('reports spawn errors when streaming without buffering', async () => {
+      await expect(spawnStreaming('nonexistent-lerna-watch-command', [], { buffer: false })).rejects.toThrow(/nonexistent-lerna-watch-command/);
+      expect(getChildProcessCount()).toBe(0);
+    });
     it('should spawn a command in a child process that always inherits stdio', async () => {
       const child = spawnStreaming('echo', ['-n'], { shell: true }) as any;
       expect(child.stdio).toEqual([null, expect.anything(), expect.anything()]);
@@ -201,44 +258,56 @@ describe('childProcess', () => {
   });
 
   describe('maxListeners logic', () => {
-    it('should call setMaxListeners when many streaming children are spawned (force coverage)', async () => {
-      const origStdout = process.stdout.setMaxListeners.bind(process.stdout);
-      const origStderr = process.stderr.setMaxListeners.bind(process.stderr);
-      const origStdoutGet = process.stdout.getMaxListeners.bind(process.stdout);
-      const origStderrGet = process.stderr.getMaxListeners.bind(process.stderr);
-      let stdoutCalled = false;
-      let stderrCalled = false;
-      process.stdout.setMaxListeners = function (n) {
-        stdoutCalled = true;
-        return origStdout(n);
-      };
-      process.stderr.setMaxListeners = function (n) {
-        stderrCalled = true;
-        return origStderr(n);
-      };
-      // Force getMaxListeners to return 1 so children.size > getMaxListeners is always true
-      process.stdout.getMaxListeners = () => 1;
-      process.stderr.getMaxListeners = () => 1;
-      // Add fake children to the real children set
-      const core = await import('../child-process.js');
-      const childrenSet = (core as any).children || (core as any).default?.children;
-      for (let i = 0; i < 5; i++) {
-        childrenSet?.add({ id: 'fake' + i });
+    it('raises listener limits for concurrent streams without lowering existing limits', async () => {
+      const stdoutLimit = process.stdout.getMaxListeners();
+      const stderrLimit = process.stderr.getMaxListeners();
+      const stdoutSet = vi.spyOn(process.stdout, 'setMaxListeners');
+      const stderrSet = vi.spyOn(process.stderr, 'setMaxListeners');
+      const stdoutGet = vi.spyOn(process.stdout, 'getMaxListeners').mockReturnValue(1);
+      const stderrGet = vi.spyOn(process.stderr, 'getMaxListeners').mockReturnValue(1);
+      try {
+        await Promise.all([
+          spawnStreaming(process.execPath, ['-e', 'setTimeout(() => {}, 50)']),
+          spawnStreaming(process.execPath, ['-e', 'setTimeout(() => {}, 50)']),
+        ]);
+        expect(stdoutSet).toHaveBeenCalled();
+        expect(stderrSet).toHaveBeenCalled();
+        stdoutGet.mockReturnValue(100);
+        stderrGet.mockReturnValue(100);
+        stdoutSet.mockClear();
+        stderrSet.mockClear();
+        await spawnStreaming(process.execPath, ['-e', 'process.exit(0)']);
+        expect(stdoutSet).not.toHaveBeenCalled();
+        expect(stderrSet).not.toHaveBeenCalled();
+      } finally {
+        stdoutGet.mockRestore();
+        stderrGet.mockRestore();
+        stdoutSet.mockRestore();
+        stderrSet.mockRestore();
+        process.stdout.setMaxListeners(stdoutLimit);
+        process.stderr.setMaxListeners(stderrLimit);
       }
-      await spawnStreaming('node', ['-e', 'console.log(42)']);
-      expect(stdoutCalled || stderrCalled).toBe(true);
-      // Clean up
-      childrenSet?.forEach((c: any) => {
-        if (c.id?.startsWith('fake')) childrenSet.delete(c);
-      });
-      process.stdout.setMaxListeners = origStdout;
-      process.stderr.setMaxListeners = origStderr;
-      process.stdout.getMaxListeners = origStdoutGet;
-      process.stderr.getMaxListeners = origStderrGet;
     });
   });
 
   describe('wrapError error propagation', () => {
+    it('settles the unbuffered wrapper when the child closes', async () => {
+      const child = new EventEmitter();
+      const promise = wrapError({ process: child }, false);
+      child.emit('close', 0, null);
+
+      await expect(promise).resolves.toMatchObject({ exitCode: 0, stdout: '', stderr: '' });
+    });
+
+    it('rejects the unbuffered wrapper when the child emits an error', async () => {
+      const child = new EventEmitter();
+      const error = new Error('spawn failed');
+      const promise = wrapError({ process: child }, false);
+      child.emit('error', error);
+
+      await expect(promise).rejects.toBe(error);
+    });
+
     it('should throw original error if no exitCode or code', async () => {
       // Simulate a spawned object that rejects with a plain error, using a custom thenable
       const { wrapError } = await import('../child-process.js');

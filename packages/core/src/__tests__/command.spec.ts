@@ -1,3 +1,4 @@
+import { chmodSync } from 'node:fs';
 import { join } from 'node:path';
 
 import { log } from '@lerna-lite/npmlog';
@@ -52,6 +53,19 @@ describe('core-command', () => {
 
   // convenience to avoid silly 'not implemented errors'
   const testFactory = (argv = {}) => new OkCommand(Object.assign({ cwd: testDir } as any, argv));
+
+  it('does not let a local Git shim shadow the Git binary during validation', async () => {
+    const shim = join(testDir, 'node_modules', '.bin', process.platform === 'win32' ? 'git.cmd' : 'git');
+    await outputFile(shim, process.platform === 'win32' ? '@echo off\r\nexit /b 42\r\n' : '#!/bin/sh\nexit 42\n');
+    if (process.platform !== 'win32') {
+      chmodSync(shim, 0o755);
+    }
+    try {
+      expect(Command.prototype.gitInitialized.call({ options: {}, project: { rootPath: testDir } } as any)).toBe(true);
+    } finally {
+      await remove(shim);
+    }
+  });
 
   describe('.logger', () => {
     it('should be added to the instance', async () => {
