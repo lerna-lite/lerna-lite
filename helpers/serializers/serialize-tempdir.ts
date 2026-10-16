@@ -2,8 +2,8 @@ import { join } from 'node:path';
 
 import { normalizePath } from '../index.js';
 
-// tempy creates subdirectories with hexadecimal names that are 32 characters long
-const TEMP_DIR_REGEXP = /([^\s"]*[\\/][0-9a-f-]{36})([^\s"]*)/g;
+// Match current fixture directories and legacy unprefixed UUID directories.
+const TEMP_DIR_REGEXP = /([^\s"]*[\\/](?:lerna-test-)?[0-9a-f-]{36})([^\s"]*)/g;
 // the excluded quotes are due to other snapshot serializers mutating the raw input
 
 const serializeTempdir = {

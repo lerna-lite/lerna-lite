@@ -47,13 +47,14 @@ export function stripAnsi(s: string, strip = true) {
 
 /**
  * Create a temporary directory using UUID as a unique name.
- * A prefix can be provided to help identify the directory.
+ * Defaults to the lerna-test- prefix so clean:temp can remove fixture directories.
+ * A custom prefix can be provided to help identify the directory.
  * @param {String} [prefix]
  * @returns
  */
 export function temporaryDirectory(prefix?: string): string {
   try {
-    const tempDirPath = pathJoin(realpathSync(tmpdir()), `${prefix || ''}${randomUUID()}`);
+    const tempDirPath = pathJoin(realpathSync(tmpdir()), `${prefix || 'lerna-test-'}${randomUUID()}`);
     mkdirSync(tempDirPath, { recursive: true });
     return tempDirPath;
   } catch (error) {
