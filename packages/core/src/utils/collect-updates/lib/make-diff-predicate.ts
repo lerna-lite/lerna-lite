@@ -120,8 +120,19 @@ export function makeDiffPredicate(
     // last check, user might use pnpm catalog, if so check if current node package has changes found in catalog
     if (
       !hasDiff &&
-      (Array.from(node.externalDependencies).some(([depName]) => changedCatalogDeps.includes(depName)) ||
-        Array.from(node.localDependencies).some(([depName]) => changedCatalogDeps.includes(depName)))
+      [...node.externalDependencies, ...node.localDependencies].some(
+        ([depName, resolved]) =>
+          changedCatalogDeps.includes(depName) &&
+          (resolved.catalogSpec ||
+            node.pkg
+              ?.retrieveAllDependenciesWithName(depName, [
+                'dependencies',
+                'devDependencies',
+                'optionalDependencies',
+                'peerDependencies',
+              ])
+              .some((collection) => collection[depName].startsWith('catalog:')))
+      )
     ) {
       log.silly('', 'diff found in catalog dependencies on package %s', node.name);
       hasDiff = true;
@@ -164,9 +175,8 @@ function diffSinceIn(committish: string, location: string, execOpts: ExecOpts, d
  * Returns associated Catalog dependencies references from a package manager (pnpm,yarn) config file (e.g. `pnpm-workspace.yaml`)
  * or from `package.json` (Bun), it will then return catalog(s) diffs since the previous git tag.
  */
-export function diffWorkspaceCatalog(prevTag: string, npmClient: NpmClient): string[] {
+export function diffWorkspaceCatalog(prevTag: string, npmClient: NpmClient, cwd = process.cwd()): string[] {
   try {
-    const cwd = process.cwd();
     const rootPkgPath = join(cwd, 'package.json');
 
     let prevConfig: CatalogConfig = { catalog: {}, catalogs: {} };
@@ -177,14 +187,14 @@ export function diffWorkspaceCatalog(prevTag: string, npmClient: NpmClient): str
       const yamlFilename = getClientConfigFilename(npmClient);
       const yamlPath = join(cwd, yamlFilename);
       if (existsSync(yamlPath)) {
-        const prevYamlStr = execSync('git', ['show', `${prevTag}:${yamlFilename}`]);
+        const prevYamlStr = execSync('git', ['show', `${prevTag}:${yamlFilename}`], { cwd });
         const currYamlStr = readFileSync(yamlPath, 'utf8');
         prevConfig = extractCatalogConfigFromYaml(npmClient, prevYamlStr);
         currConfig = extractCatalogConfigFromYaml(npmClient, currYamlStr);
       }
     } else if (npmClient === 'bun' && existsSync(rootPkgPath)) {
       // Bun catalogs
-      const prevJsonStr = execSync('git', ['show', `${prevTag}:package.json`]);
+      const prevJsonStr = execSync('git', ['show', `${prevTag}:package.json`], { cwd });
       const currJsonStr = readFileSync(rootPkgPath, 'utf8');
       prevConfig = extractCatalogConfigFromPkg(prevJsonStr);
       currConfig = extractCatalogConfigFromPkg(currJsonStr);

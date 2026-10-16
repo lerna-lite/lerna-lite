@@ -7,6 +7,7 @@ import type { CommandType, DependenciesType, NpaResolveResult, RawManifest } fro
 import type { CatalogConfig } from './utils/catalog-utils.js';
 import { readJson, readJsonSync } from './utils/fs-utils.js';
 import { writePackage } from './utils/write-package.js';
+import { ValidationError } from './validation-error.js';
 
 // symbol used to 'hide' internal state
 const PKG = Symbol('pkg');
@@ -256,13 +257,12 @@ export class Package {
   }
 
   /**
-   * Remove any given dependencies collections which contains a `workspace:` spec is found and replace them with their resolved fetchSpec
+   * Replace workspace specs for an external dependency in each manifest collection.
    * @param {String} pkgName - package name
    * @param {Object} resolved npa metadata
    */
   removeDependencyWorkspaceProtocolPrefix(pkgName: string, resolved: NpaResolveResult) {
     const depName = resolved.name as string;
-    const workspaceSpec = resolved.workspaceSpec ?? '';
     const inspectDependencies = this.retrieveAllDependenciesWithName(depName, [
       'dependencies',
       'devDependencies',
@@ -271,6 +271,7 @@ export class Package {
     ]);
 
     for (const depCollection of inspectDependencies) {
+      const workspaceSpec = depCollection[depName];
       if (depCollection && (resolved.registry || resolved.type === 'directory') && /^(workspace:)+(.*)$/.test(workspaceSpec)) {
         // oxlint-disable-next-line typescript/prefer-optional-chain
         if (workspaceSpec && (resolved.fetchSpec === 'latest' || resolved.fetchSpec === '')) {
@@ -283,14 +284,16 @@ export class Package {
             ].join('')
           );
         }
-        depCollection[depName] = resolved.fetchSpec as string;
+        const range = workspaceSpec.replace(/^workspace:/, '');
+        depCollection[depName] = /^[*~^]$/.test(range) ? (resolved.fetchSpec as string) : range;
       }
     }
   }
 
   /**
-   * Mutate any given dependency that have a `catalog:` spec, we'll replace them with their spec range coming from the global catalog version
-   * @param {Object} resolved npa metadata
+   * Replace catalog specs in all dependency collections with their configured ranges.
+   * @param {Package} pkg - package manifest to update
+   * @param {CatalogConfig} config - default and named catalog definitions
    */
   resolveDependencyCatalogProtocol(pkg: Package, { catalog, catalogs }: CatalogConfig) {
     // find all dependencies collections that could have `catalog:` protocol
@@ -301,19 +304,23 @@ export class Package {
         for (const [depName, depRange] of Object.entries(updatedPkgDep)) {
           if (depRange.startsWith('catalog:')) {
             let replaced = false;
+            const catalogName = depRange.replace(/^catalog:/, '') || 'default';
 
             // when named catalog is found (e.g: "catalog:react19")
             if (catalogs) {
               // fallback to 'default' catalog when no name is provided after "catalog:" https://pnpm.io/catalogs#default-catalog
-              const catalogName = updatedPkgDep[depName].replace(/^catalog:/, '') || 'default';
               if (catalogs[catalogName]?.[depName]) {
                 updatedPkgDep[depName] = catalogs[catalogName][depName];
                 replaced = true;
               }
             }
             // otherwise when global catalog is found (e.g.: "catalog:")
-            if (!replaced && catalog[depName]) {
+            if (!replaced && catalogName === 'default' && catalog[depName]) {
               updatedPkgDep[depName] = catalog[depName];
+              replaced = true;
+            }
+            if (!replaced) {
+              throw new ValidationError('ECATALOG', `No version found in "${catalogName}" catalog for "${depName}"`);
             }
           }
         }
@@ -326,6 +333,7 @@ export class Package {
    * @param {Object} resolved npa metadata
    * @param {String} depVersion semver
    * @param {String} savePrefix npm_config_save_prefix
+   * @param {boolean} [allowPeerDependenciesUpdate] - whether to bump eligible peer dependency ranges
    * @param {String} [updatedByCommand] - which command called this update?
    */
   updateLocalDependency(
@@ -336,8 +344,11 @@ export class Package {
     updatedByCommand?: CommandType
   ) {
     const depName = resolved.name as string;
-    const localDependencies = this.retrieveDependenciesWithName(depName);
-    const updatingDependencies = [localDependencies];
+    const updatingDependencies = this.retrieveAllDependenciesWithName(depName, [
+      'dependencies',
+      'optionalDependencies',
+      'devDependencies',
+    ]).filter((collection, index) => index === 0 || collection[depName].startsWith('workspace:'));
 
     // peer dependencies will not be bumped by default unless we use allowPeerDependenciesUpdate
     // however, we still need to inspect them to avoid publishing peer deps with `workspace:` protocol
@@ -359,19 +370,20 @@ export class Package {
         // when it's only 1 char left "^", "~" or "*", we'll assume that the version is invalid
         // so reassigning the resolved package version seems like the best action to do in this case
         if (/^[~^*]$/.test(this.peerDependencies[depName])) {
-          this.peerDependencies[depName] = resolved.fetchSpec || '';
+          const prefix = this.peerDependencies[depName];
+          this.peerDependencies[depName] = prefix === '*' ? depVersion : `${prefix}${depVersion}`;
         }
       }
     }
 
     for (const depCollection of updatingDependencies) {
       if (depCollection && (resolved.registry || resolved.type === 'directory') && depName in depCollection) {
+        const workspaceSpec = depCollection[depName].startsWith('workspace:') ? depCollection[depName] : undefined;
         // a version (1.2.3) OR range (^1.2.3) OR directory (file:../foo-pkg)
         depCollection[depName] = `${savePrefix}${depVersion}`;
 
         // when using explicit `workspace:` protocol
-        if (resolved.workspaceSpec) {
-          const workspaceSpec = resolved.workspaceSpec ?? '';
+        if (workspaceSpec) {
           const [_, _wsTxt, operatorPrefix, rangePrefix, semver] =
             workspaceSpec.match(/^(workspace:)?([<>=]{0,2})?([*~^])?(.*)$/) || [];
 
@@ -399,7 +411,7 @@ export class Package {
             // any other workspace will remain the same in `package.json` file, for example `workspace:^`
             // keep target workspace or bump when it's a workspace semver range (like `workspace:^1.2.3`)
             depCollection[depName] = /^workspace:[*~^]{1}$/.test(workspaceSpec)
-              ? (resolved.workspaceSpec as string) // target like `workspace:^` => `workspace:^` (remains untouched in package.json)
+              ? workspaceSpec // target like `workspace:^` => `workspace:^` (remains untouched in package.json)
               : `workspace:${depCollection[depName]}`; // range like `workspace:^1.2.3` => `workspace:^1.3.3` (bump minor example)
           }
         }
@@ -445,7 +457,7 @@ export class Package {
   /**
    * Retrieve the first dependencies collection which includes the dependency name inside it, we'll search in all type of dependencies/devDependencies/...
    * @param {String} depName - dependency name
-   * @returns {Array<String>} - array of dependencies that contains the dependency name provided
+   * @returns {Object | undefined} First matching runtime, optional, or development dependency collection.
    */
   retrieveDependenciesWithName(depName: string): { [depName: string]: string } {
     // first, try runtime dependencies

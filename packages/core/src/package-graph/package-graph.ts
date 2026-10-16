@@ -29,7 +29,7 @@ export const YARN_PATCH_PROTOCOL_REG_EXP = new RegExp(`patch:(.*)@npm%3A(.*)#~\\
  * @extends {Map<string, PackageGraphNode>}
  */
 export class PackageGraph extends Map<string, PackageGraphNode> {
-  /** does the workspace project use pnpm catalog? */
+  /** Whether the project defines catalog configuration. */
   hasWorkspaceCatalog = false;
 
   /** npm client being used */
@@ -41,12 +41,15 @@ export class PackageGraph extends Map<string, PackageGraphNode> {
    *    Pass "dependencies" to create a graph of only dependencies,
    *    excluding the devDependencies that would normally be included.
    * @param {boolean|'auto'|'force'|'explicit'} [localDependencies] Treatment of local sibling dependencies, default "auto"
+   * @param {NpmClient} [client] Package manager used to load catalog configuration.
+   * @param {string} [cwd] Project root containing the catalog configuration.
    */
   constructor(
     packages: Package[],
     graphType: 'allDependencies' | 'dependencies' = 'allDependencies',
     localDependencies: boolean | 'auto' | 'force' | 'explicit' | 'forceLocal' = 'auto',
-    client: NpmClient = 'npm'
+    client: NpmClient = 'npm',
+    cwd = process.cwd()
   ) {
     // For backward compatibility
     if (localDependencies === true || localDependencies === 'forceLocal') {
@@ -75,7 +78,7 @@ export class PackageGraph extends Map<string, PackageGraphNode> {
     }
 
     this.npmClient = client;
-    const { catalog, catalogs } = readWorkspaceCatalogConfig(this.npmClient);
+    const { catalog, catalogs } = readWorkspaceCatalogConfig(this.npmClient, cwd);
 
     if (Object.keys(catalog).length > 0 || Object.keys(catalogs).length > 0) {
       this.hasWorkspaceCatalog = true;
@@ -150,7 +153,7 @@ export class PackageGraph extends Map<string, PackageGraphNode> {
         }
 
         if (
-          isCatalogSpec ||
+          (isCatalogSpec && depNode.satisfies(resolved)) ||
           isWorkspaceSpec ||
           localDependencies === 'force' ||
           resolved.fetchSpec === depNode.location ||

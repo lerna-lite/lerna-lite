@@ -97,6 +97,8 @@ Use [Conventional Commits](https://www.conventionalcommits.org/) for commit mess
 
 When drafting a pull request, follow `.github/PULL_REQUEST_TEMPLATE.md`, including its conventional-commit title requirement and applicable sections and checklist items.
 
+Always return PR titles and descriptions in separate fenced `markdown` code blocks so they can be copied directly into GitHub. Keep labels and explanatory text outside the code blocks.
+
 ## Tooling
 
 - Node.js engines: `^22.17.0 || >=24.0.0`

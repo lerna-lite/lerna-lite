@@ -748,7 +748,7 @@ describe('Package', () => {
       it('works with `catalog:` protocol', () => {
         const node = factory({
           dependencies: {
-            a: 'catalog:^1.0.0',
+            a: 'catalog:',
             b: '^2.2.0',
           },
         } as unknown as RawManifest);
@@ -910,7 +910,7 @@ describe('Package', () => {
         `);
       });
 
-      it('removes workspace: prefix from peerDependencies during publish and fallback to empty string when fetchSpec is undefined', () => {
+      it('resolves peer workspace shorthand using the target version even without fetchSpec', () => {
         const pkg = factory({
           dependencies: {
             a: 'workspace:^1.0.0',
@@ -933,7 +933,7 @@ describe('Package', () => {
               "a": "^2.0.0",
             },
             "peerDependencies": {
-              "a": "",
+              "a": "^2.0.0",
             },
           }
         `);
@@ -974,7 +974,7 @@ describe('Package', () => {
               "b": "^2.2.4",
             },
             "peerDependencies": {
-              "b": "^2.2.4",
+              "b": ">=2.0.0",
             },
           }
         `);
