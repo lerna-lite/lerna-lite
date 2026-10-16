@@ -24,7 +24,7 @@ export function npmRunScriptStreaming(
   const argv = ['run', script, ...args];
   const opts = makeOpts(pkg, reject);
 
-  return spawnStreaming(npmClient, argv, opts, prefix && pkg.name, dryRun);
+  return spawnStreaming(npmClient, argv, { ...opts, buffer: false }, prefix && pkg.name, dryRun);
 }
 
 function makeOpts(pkg: Package, reject: boolean) {

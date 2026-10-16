@@ -91,7 +91,8 @@ export default {
     try {
       // @ts-ignore
       const { ExecCommand } = await import('@lerna-lite/exec');
-      new ExecCommand(argv);
+      // Return the command outside the import catch so execution errors retain their details.
+      return new ExecCommand(argv).runner;
     } catch (err: any) {
       throw new Error(
         `"@lerna-lite/exec" is optional and was not found. Please install it with "npm install @lerna-lite/exec -D". ${err}`

@@ -182,7 +182,7 @@ export class ExecCommand extends Command<ExecCommandOption & FilterOptions> {
     if (this.options.dryRun) {
       return this.dryRunExec(this.command, pkg.name);
     }
-    return spawnStreaming(this.command, this.args, this.getOpts(pkg), this.prefix && pkg.name);
+    return spawnStreaming(this.command, this.args, { ...this.getOpts(pkg), buffer: false }, this.prefix && pkg.name);
   }
 
   runCommandInPackageCapturing(pkg: Package) {
@@ -195,6 +195,6 @@ export class ExecCommand extends Command<ExecCommandOption & FilterOptions> {
   dryRunExec(commandName: string, pkgName: string): Promise<any> {
     this.logger.info(colorize(['bold', 'magenta'], '[dry-run] >'), `Exec command '%s' in '%s'`, commandName, pkgName);
     logOutput(`${colorize(['bold', 'magenta'], '[dry-run] >')} ${pkgName}`);
-    return Promise.resolve();
+    return Promise.resolve({ exitCode: 0 });
   }
 }

@@ -181,6 +181,13 @@ describe('ExecCommand', () => {
       expect(spawn).toHaveBeenLastCalledWith('ls', ['-la'], expect.any(Object));
     });
 
+    it.each(['', '--stream', '--parallel'])('supports --dry-run --no-bail with %s', async (flag) => {
+      await lernaExec(testDir)('echo', '--dry-run', '--no-bail', ...(flag ? [flag] : []));
+      expect(spawn).not.toHaveBeenCalled();
+      expect(spawnStreaming).not.toHaveBeenCalled();
+      expect(process.exitCode).toBeUndefined();
+    });
+
     it('runs a command for a given scope', async () => {
       await lernaExec(testDir)('ls', '--scope', 'package-1');
 
@@ -209,6 +216,7 @@ describe('ExecCommand', () => {
       await lernaExec(testDir)('--stream', 'ls');
 
       expect(execInPackagesStreaming(testDir)).toEqual(['packages/package-1 ls (prefix: package-1)', 'packages/package-2 ls (prefix: package-2)']);
+      expect(spawnStreaming).toHaveBeenCalledWith('ls', [], expect.objectContaining({ buffer: false }), expect.any(String));
     });
 
     it('executes a command in all packages with --stream in dry-run mode and expect them all to be logged', async () => {
