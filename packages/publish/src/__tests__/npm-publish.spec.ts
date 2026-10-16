@@ -296,19 +296,22 @@ describe('npm-publish', () => {
 
     it('retries publish when a tlog 409 conflict error occurs', async () => {
       vi.useFakeTimers();
-      (publish as Mock).mockRejectedValueOnce(tlogConflictError).mockResolvedValueOnce(null);
+      const result = { stageId: 'stage-after-retry', transparencyLogUrl: 'https://example.test/log' };
+      (publish as Mock).mockRejectedValueOnce(tlogConflictError).mockResolvedValueOnce(result);
 
       const promise = npmPublish(pkg, tarFilePath, {}, conf);
       await vi.runAllTimersAsync();
-      await promise;
+      expect(await promise).toBe(result);
 
       expect(publish).toHaveBeenCalledTimes(2);
+      expect(runLifecycle).toHaveBeenCalledTimes(2);
       expect(runLifecycle).toHaveBeenCalledWith(pkg, 'postpublish', expect.anything());
     });
 
     it('throws after reaching max retry attempts on repeated tlog 409 conflict errors', async () => {
       vi.useFakeTimers();
       (publish as Mock).mockRejectedValue(tlogConflictError);
+      const startedAt = Date.now();
 
       const promise = npmPublish(pkg, tarFilePath, {}, conf).catch((err) => err);
       await vi.runAllTimersAsync();
@@ -316,13 +319,21 @@ describe('npm-publish', () => {
 
       expect(error).toBe(tlogConflictError);
       expect(publish).toHaveBeenCalledTimes(3);
+      expect(Date.now() - startedAt).toBe(6000);
+      expect(runLifecycle).not.toHaveBeenCalled();
       (publish as Mock).mockReset().mockResolvedValue(null);
     });
 
-    it('does not retry on other publish errors', async () => {
-      (publish as Mock).mockRejectedValueOnce(Object.assign(new Error('forbidden'), { code: 'E403' }));
+    it.each([
+      { code: 'E403' },
+      { code: 'E409', cause: { statusCode: 409 } },
+      { code: 'TLOG_CREATE_ENTRY_ERROR', cause: { statusCode: 500 } },
+      { code: 'TLOG_CREATE_ENTRY_ERROR' },
+    ])('does not retry other publish errors: %j', async (details) => {
+      const error = Object.assign(new Error('publish failed'), details);
+      (publish as Mock).mockRejectedValueOnce(error);
 
-      await expect(npmPublish(pkg, tarFilePath, {}, conf)).rejects.toThrow('forbidden');
+      await expect(npmPublish(pkg, tarFilePath, {}, conf)).rejects.toBe(error);
       expect(publish).toHaveBeenCalledTimes(1);
     });
   });
