@@ -422,7 +422,7 @@ describe('VersionCommand', () => {
       expect((logOutput as any).logged()).toMatchSnapshot('console output');
     });
 
-    it('handles gitPushSingleTag rejection and returns rejected result entries', async () => {
+    it('stops pushing tags and rejects when a single tag push fails', async () => {
       const testDir = await initFixture('independent');
 
       // prepare a bare command-like object to call the helper directly
@@ -434,22 +434,19 @@ describe('VersionCommand', () => {
       command.tags = ['package-6@0.2.0', 'package-7@0.3.0'];
       command.logger = { info: vi.fn(), verbose: vi.fn(), warn: vi.fn() };
 
-      // make first push fail and second succeed
-      (libPushSingleTag as Mock)
-        .mockImplementationOnce(() => Promise.reject(new Error('push-failed')))
-        .mockImplementationOnce(() => Promise.resolve());
+      const error = new Error('push-failed');
+      (libPushSingleTag as Mock).mockRejectedValueOnce(error);
 
-      const results = await VersionCommand.prototype.gitPushToRemote.call(command);
-
-      expect(results).toBeInstanceOf(Array);
-      expect(results[0]).toHaveProperty('status', 'rejected');
-      expect(results[0]).toHaveProperty('reason');
-      expect(results[1]).toHaveProperty('status', 'fulfilled');
+      await expect(command.gitPushToRemote()).rejects.toBe(error);
+      expect(libPushSingleTag).toHaveBeenCalledTimes(1);
     });
   });
 
   describe('--no-commit-hooks', () => {
-    const setupPreCommitHook = (cwd: string) => outputFile(join(cwd, '.git/hooks/pre-commit'), '#!/bin/sh\nexit 1\n', { mode: 0o755 });
+    const setupPreCommitHook = async (cwd: string) => {
+      await fsPromises.mkdir(join(cwd, '.git/hooks'), { recursive: true });
+      await fsPromises.writeFile(join(cwd, '.git/hooks/pre-commit'), '#!/bin/sh\nexit 1\n', { mode: 0o755 });
+    };
 
     it('passes --no-verify to git commit execution', async () => {
       const cwd = await initFixture('normal');

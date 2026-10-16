@@ -903,17 +903,11 @@ export class VersionCommand extends Command<VersionCommandOption> {
     // we could push tags one by one (to avoid GitHub limit)
     if (this.options.pushTagsOneByOne) {
       this.logger.info('git', 'Pushing tags one by one...');
-      const results: PromiseSettledResult<void>[] = [];
       for (const tag of this.tags) {
         this.logger.verbose('git', `Pushing tag: ${tag}`);
-        try {
-          await gitPushSingleTag(this.gitRemote, this.currentBranch, tag, this.execOpts, this.options.dryRun);
-          results.push({ status: 'fulfilled', value: undefined });
-        } catch (reason) {
-          results.push({ status: 'rejected', reason });
-        }
+        await gitPushSingleTag(this.gitRemote, this.currentBranch, tag, this.execOpts, this.options.dryRun);
       }
-      return results;
+      return;
     }
 
     // or push all tags by using followTags

@@ -24,7 +24,11 @@ export async function loadPackageLockFileWhenExists<T = any>(lockFileFolderPath:
       json: pkgLockFileObj,
       lockfileVersion,
     };
-  } catch (error) {}
+  } catch (error: any) {
+    if (error.code !== 'ENOENT') {
+      throw error;
+    }
+  }
 }
 
 /**
@@ -34,10 +38,10 @@ export async function loadPackageLockFileWhenExists<T = any>(lockFileFolderPath:
  * @returns Promise<string>
  */
 export async function updateClassicLockfileVersion(pkg: Package): Promise<string | undefined> {
-  try {
+  const lockfile = await loadPackageLockFileWhenExists(pkg.location);
+  if (lockfile) {
     // "lockfileVersion" = 1, package lock file might be located in the package folder
-    const lockFilePath = join(pkg.location, 'package-lock.json');
-    const pkgLockFileObj: any = await readJson(lockFilePath);
+    const { path: lockFilePath, json: pkgLockFileObj } = lockfile;
 
     if (pkgLockFileObj) {
       pkgLockFileObj.version = pkg.version;
@@ -59,7 +63,7 @@ export async function updateClassicLockfileVersion(pkg: Package): Promise<string
       });
       return lockFilePath;
     }
-  } catch (error) {}
+  }
 }
 
 /**
@@ -83,13 +87,11 @@ export function updateTempModernLockfileVersion(pkg: Package, projLockFileObj: a
  * @returns Promise<String | undefined> - file path will be returned when it was found and updated
  */
 export async function saveUpdatedLockJsonFile(filePath: string, updateLockFileObj: any): Promise<string | undefined> {
-  try {
-    await writeJsonFile(filePath, updateLockFileObj, {
-      detectIndent: true,
-      indent: 2,
-    });
-    return filePath;
-  } catch (error) {}
+  await writeJsonFile(filePath, updateLockFileObj, {
+    detectIndent: true,
+    indent: 2,
+  });
+  return filePath;
 }
 
 /**
@@ -106,7 +108,7 @@ export function updateNpmLockFileVersion2(obj: any, pkgName: string, newVersion:
       } else {
         if (k === pkgName) {
           // e.g.: "@lerna-lite/core": "^0.1.2",
-          const [_, versionPrefix, _versionStr] = obj[k].match(/^([\^~])?(.*)$/) || [];
+          const [_, versionPrefix = '', _versionStr] = obj[k].match(/^([\^~])?(.*)$/) || [];
           obj[k] = `${versionPrefix}${newVersion}`;
         } else if (k === 'name' && obj[k] === pkgName && obj['version'] !== undefined) {
           // e.g. "packages/version": { "name": "@lerna-lite/version", "version": "0.1.2" }

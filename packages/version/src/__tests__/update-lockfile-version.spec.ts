@@ -6,6 +6,7 @@ import { type Package, execPackageManager, execPackageManagerSync, Project, path
 import { log } from '@lerna-lite/npmlog';
 import { initFixtureFactory } from '@lerna-test/helpers';
 import { beforeEach, afterEach, describe, expect, it, test, vi, type Mock } from 'vitest';
+import { writeJsonFile } from 'write-json-file';
 
 import {
   loadPackageLockFileWhenExists,
@@ -13,11 +14,17 @@ import {
   saveUpdatedLockJsonFile,
   updateClassicLockfileVersion,
   updateTempModernLockfileVersion,
+  updateNpmLockFileVersion2,
   validateFileExists,
 } from '../lib/update-lockfile-version.js';
 
 // test-only registry for files read via readJson/readJsonSync
 const readRegistry = new Set<string>();
+
+vi.mock('write-json-file', async (importOriginal) => {
+  const actual = await importOriginal<{ writeJsonFile: typeof writeJsonFile }>();
+  return { ...actual, writeJsonFile: vi.fn(actual.writeJsonFile) };
+});
 
 vi.mock('@lerna-lite/core', async () => {
   const actualCore = await vi.importActual<any>('@lerna-lite/core');
@@ -126,7 +133,7 @@ describe('npm classic lock file', () => {
     pkg.version = '1.1.0';
 
     // simulate missing sibling lockfile by making readJson reject
-    (readJson as any).mockImplementationOnce(() => Promise.reject(new Error('file not found')));
+    (readJson as Mock).mockRejectedValueOnce(Object.assign(new Error('file not found'), { code: 'ENOENT' }));
 
     const returnedLockfilePath = await updateClassicLockfileVersion(pkg as unknown as Package);
 
@@ -136,6 +143,12 @@ describe('npm classic lock file', () => {
 });
 
 describe('npm modern lock file', () => {
+  it.each(['', '^', '~'])('preserves the %j dependency prefix', (prefix) => {
+    const lockfile = { dependencies: { local: `${prefix}1.0.0` } };
+    updateNpmLockFileVersion2(lockfile, 'local', '2.0.0');
+    expect(lockfile.dependencies.local).toBe(`${prefix}2.0.0`);
+  });
+
   test('updateModernLockfileVersion v2 in project root', async () => {
     const mockVersion = '2.4.0';
     const cwd = await initFixture('lockfile-version2');
@@ -197,6 +210,30 @@ describe('npm modern lock file', () => {
       },
       requires: true,
     });
+  });
+});
+
+describe('lockfile errors', () => {
+  it.each(['EACCES', 'EJSONPARSE'])('propagates %s when reading root and package lockfiles', async (code) => {
+    const error = Object.assign(new Error('cannot read lockfile'), { code });
+    (readJson as Mock).mockRejectedValueOnce(error);
+    await expect(loadPackageLockFileWhenExists('.')).rejects.toBe(error);
+    (readJson as Mock).mockRejectedValueOnce(error);
+    await expect(updateClassicLockfileVersion({ location: '.' } as Package)).rejects.toBe(error);
+  });
+
+  it('allows a missing root lockfile', async () => {
+    (readJson as Mock).mockRejectedValueOnce(Object.assign(new Error('missing'), { code: 'ENOENT' }));
+    await expect(loadPackageLockFileWhenExists('.')).resolves.toBeUndefined();
+  });
+
+  it('propagates failed writes for root and package lockfiles', async () => {
+    const error = Object.assign(new Error('cannot write lockfile'), { code: 'EACCES' });
+    (writeJsonFile as Mock).mockRejectedValueOnce(error);
+    await expect(saveUpdatedLockJsonFile('package-lock.json', {})).rejects.toBe(error);
+    (readJson as Mock).mockResolvedValueOnce({ version: '1.0.0' });
+    (writeJsonFile as Mock).mockRejectedValueOnce(error);
+    await expect(updateClassicLockfileVersion({ location: '.', version: '2.0.0' } as Package)).rejects.toBe(error);
   });
 });
 
