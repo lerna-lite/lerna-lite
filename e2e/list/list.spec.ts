@@ -1,3 +1,6 @@
+import { writeFile } from 'node:fs/promises';
+import { resolve } from 'node:path';
+
 import { describe, it, expect, beforeEach, afterEach } from 'vitest';
 
 import { Fixture } from '../../e2e-utils/src/index.js';
@@ -76,5 +79,15 @@ describe('lerna-list', () => {
 
     expect(output.combinedOutput).toContain('package-x');
     expect(output.combinedOutput).toContain('package-y');
+  });
+
+  it('resolves root catalogs when invoked from a workspace package', async () => {
+    await fixture.createPackage({ name: 'package-a' });
+    await fixture.createPackage({ name: 'package-b', dependencies: { 'package-a': 'catalog:stable' } });
+    await fixture.updateJson('lerna.json', (json) => ({ ...json, npmClient: 'pnpm' }));
+    await writeFile(fixture.getWorkspacePath('pnpm-workspace.yaml'), 'catalogs:\n  stable:\n    package-a: ^1.0.0\n');
+    const cli = resolve(import.meta.dirname, '../../packages/cli/dist/cli.js');
+    const output = await fixture.exec(`node "${cli}" list --graph`, { cwd: fixture.getWorkspacePath('packages/package-b') });
+    expect(JSON.parse(output.stdout)['package-b']).toContain('package-a');
   });
 });

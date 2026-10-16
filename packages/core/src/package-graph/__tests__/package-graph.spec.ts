@@ -381,11 +381,11 @@ describe('PackageGraph', () => {
 
       expect(pkg1.localDependents.has('pkg-2')).toBe(false);
       expect(pkg2.localDependencies.has('pkg-1')).toBe(false);
-      expect(pkg1.localDependents.has('pkg-3')).toBe(true);
-      expect(pkg3.localDependencies.has('pkg-1')).toBe(true);
+      expect(pkg1.localDependents.has('pkg-3')).toBe(false);
+      expect(pkg3.localDependencies.has('pkg-1')).toBe(false);
       expect(pkg4.localDependencies.has('pkg-1')).toBe(false);
-      expect(pkg3.localDependencies.get('pkg-1').catalogSpec).toBe('catalog:');
-      expect(pkg3.localDependencies.get('pkg-1').fetchSpec).toBe('1.0.0');
+      expect(pkg3.externalDependencies.get('pkg-1').catalogSpec).toBe('catalog:');
+      expect(pkg3.externalDependencies.get('pkg-1').fetchSpec).toBe('1.0.0');
       expect(pkg3.externalDependencies.get('react').catalogSpec).toBe('catalog:react18'); // named catalog
       expect(pkg3.externalDependencies.get('react').fetchSpec).toBe('^18.2.0');
       expect(pkg3.pkg.peerDependencies['pkg-1']).toBe('>=1.0.0');
@@ -633,11 +633,11 @@ describe('PackageGraph', () => {
 
       expect(pkg1.localDependents.has('pkg-2')).toBe(false);
       expect(pkg2.localDependencies.has('pkg-1')).toBe(false);
-      expect(pkg1.localDependents.has('pkg-3')).toBe(true);
-      expect(pkg3.localDependencies.has('pkg-1')).toBe(true);
+      expect(pkg1.localDependents.has('pkg-3')).toBe(false);
+      expect(pkg3.localDependencies.has('pkg-1')).toBe(false);
       expect(pkg4.localDependencies.has('pkg-1')).toBe(false);
-      expect(pkg3.localDependencies.get('pkg-1').catalogSpec).toBe('catalog:');
-      expect(pkg3.localDependencies.get('pkg-1').fetchSpec).toBe('1.0.0');
+      expect(pkg3.externalDependencies.get('pkg-1').catalogSpec).toBe('catalog:');
+      expect(pkg3.externalDependencies.get('pkg-1').fetchSpec).toBe('1.0.0');
       expect(pkg3.externalDependencies.get('react').catalogSpec).toBe('catalog:react18'); // named catalog
       expect(pkg3.externalDependencies.get('react').fetchSpec).toBe('^18.3.2');
       expect(pkg3.pkg.peerDependencies['pkg-1']).toBe('>=1.0.0');

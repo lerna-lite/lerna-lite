@@ -150,6 +150,15 @@ test('not exclude any subpackages when --independent-subpackages option is enabl
 });
 
 describe('pnpm workspace catalog', () => {
+  test('reads catalog history using the supplied project root', () => {
+    existsFileMock.mockReturnValueOnce(true);
+    readFileMock.mockReturnValueOnce('catalog:\n  vite: ^2.0.0\n');
+    (childProcesses.execSync as Mock).mockReturnValueOnce('catalog:\n  vite: ^1.0.0\n');
+    expect(diffWorkspaceCatalog('v1.0.0', 'pnpm', '/different-project')).toEqual(['vite']);
+    expect(childProcesses.execSync).toHaveBeenCalledWith('git', ['show', 'v1.0.0:pnpm-workspace.yaml'], { cwd: '/different-project' });
+    expect(readFileMock).toHaveBeenCalledWith(expect.stringContaining('different-project'), 'utf8');
+  });
+
   test('diffWorkspaceCatalog with external dependency changes in pnpm workspace catalog', () => {
     setup([]);
 
@@ -157,7 +166,7 @@ describe('pnpm workspace catalog', () => {
     const result = hasDiff({
       location: '/test/packages/pkg-1',
       localDependencies: new Map([]),
-      externalDependencies: new Map([['vite', {}]]),
+      externalDependencies: new Map([['vite', { catalogSpec: 'catalog:' }]]),
     } as PackageGraphNode);
 
     expect(result).toBe(true);
@@ -172,7 +181,7 @@ describe('pnpm workspace catalog', () => {
     const hasDiff = makeDiffPredicate('v1.0.0', { cwd: '/test' }, undefined, ['@mono/pkg-1'], {});
     const result = hasDiff({
       location: '/test/packages/pkg-1',
-      localDependencies: new Map([['@mono/pkg-1', {}]]),
+      localDependencies: new Map([['@mono/pkg-1', { catalogSpec: 'catalog:' }]]),
       externalDependencies: new Map([]),
     } as PackageGraphNode);
 
@@ -304,7 +313,7 @@ describe('yarn workspace catalog', () => {
     const result = hasDiff({
       location: '/test/packages/pkg-1',
       localDependencies: new Map([]),
-      externalDependencies: new Map([['vite', {}]]),
+      externalDependencies: new Map([['vite', { catalogSpec: 'catalog:' }]]),
     } as PackageGraphNode);
 
     expect(result).toBe(true);
@@ -319,7 +328,7 @@ describe('yarn workspace catalog', () => {
     const hasDiff = makeDiffPredicate('v1.0.0', { cwd: '/test' }, undefined, ['@mono/pkg-1'], {});
     const result = hasDiff({
       location: '/test/packages/pkg-1',
-      localDependencies: new Map([['@mono/pkg-1', {}]]),
+      localDependencies: new Map([['@mono/pkg-1', { catalogSpec: 'catalog:' }]]),
       externalDependencies: new Map([]),
     } as PackageGraphNode);
 

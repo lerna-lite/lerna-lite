@@ -105,7 +105,7 @@ export function collectUpdates(
 
   const changedCatalogDeps: string[] = [];
   if (prevTag && packageGraph.hasWorkspaceCatalog) {
-    changedCatalogDeps.push(...diffWorkspaceCatalog(prevTag, packageGraph.npmClient));
+    changedCatalogDeps.push(...diffWorkspaceCatalog(prevTag, packageGraph.npmClient, execOpts.cwd));
   }
 
   const hasDiff = makeDiffPredicate(

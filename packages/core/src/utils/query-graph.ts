@@ -47,7 +47,13 @@ export class QueryGraph {
     { graphType = 'allDependencies', localDependencies = 'auto', rejectCycles, npmClient } = {} as QueryGraphConfig
   ) {
     // Create dependency graph
-    this.graph = new PackageGraph(packages, graphType as 'allDependencies' | 'dependencies', localDependencies, npmClient);
+    this.graph = new PackageGraph(
+      packages,
+      graphType as 'allDependencies' | 'dependencies',
+      localDependencies,
+      npmClient,
+      packages[0]?.rootPath
+    );
 
     // Evaluate cycles
     this.cycles = this.graph.collapseCycles(rejectCycles);

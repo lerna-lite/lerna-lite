@@ -708,7 +708,7 @@ export class PublishCommand extends Command<PublishCommandOption> {
 
   // resolve `catalog:` protocol from both local/external dependencies and translates them to their actual version target/range
   resolveDependencyWithCatalogProtocols() {
-    const { catalog, catalogs } = readWorkspaceCatalogConfig(this.options.npmClient || 'npm');
+    const { catalog, catalogs } = readWorkspaceCatalogConfig(this.options.npmClient || 'npm', this.project.rootPath);
 
     // detect if any of the packages to publish have `catalog:` protocol in their dependencies
     // regardless of where the version comes from, we can't publish 'catalog:' specs, it has to be transformed for any dependencies
