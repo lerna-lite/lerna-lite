@@ -1,15 +1,25 @@
-import { describe, expect, it, vi } from 'vitest';
+import { VersionCommand } from '@lerna-lite/version';
+import { describe, expect, it, vi, type Mock } from 'vitest';
 import yargs from 'yargs/yargs';
 
 import cliVersion from '../cli-version-commands.js';
 
-vi.mock('@lerna-lite/version', () => {
-  return { VersionCommand: null };
-});
+vi.mock('@lerna-lite/version', () => ({ VersionCommand: vi.fn(function () {}) }));
 
 describe('Version Command CLI options', () => {
   it('should log a console error when versionCommand is not provided', async () => {
+    (VersionCommand as unknown as Mock).mockImplementationOnce(function () {
+      throw new Error('missing command');
+    });
     await expect(cliVersion.handler(undefined as any)).rejects.toThrow(new RegExp('"@lerna-lite/version" is optional and was not found.'));
+  });
+
+  it('preserves command failures and their exit codes', async () => {
+    const error = Object.assign(new Error('version failed'), { exitCode: 7 });
+    (VersionCommand as unknown as Mock).mockImplementationOnce(function () {
+      return { runner: Promise.reject(error) };
+    });
+    await expect(cliVersion.handler({} as any)).rejects.toBe(error);
   });
 
   const patchedVersionCommand = {
