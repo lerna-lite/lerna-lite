@@ -98,6 +98,17 @@ describe('Watch child process termination', () => {
     }
   });
 
+  it('does not taskkill an already exited Windows child', async () => {
+    const platform = Object.getOwnPropertyDescriptor(process, 'platform')!;
+    Object.defineProperty(process, 'platform', { value: 'win32' });
+    try {
+      await expect(terminateChildProcess({ pid: 12345, exitCode: 0, signalCode: null } as ChildProcess)).resolves.toBeUndefined();
+      expect(spawnMock).not.toHaveBeenCalled();
+    } finally {
+      Object.defineProperty(process, 'platform', platform);
+    }
+  });
+
   it('reports a taskkill failure for a still-running Windows process', async () => {
     const platform = Object.getOwnPropertyDescriptor(process, 'platform')!;
     Object.defineProperty(process, 'platform', { value: 'win32' });
