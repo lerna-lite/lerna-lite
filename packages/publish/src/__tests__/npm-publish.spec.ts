@@ -5,7 +5,7 @@ import { Conf, Package, runLifecycle, type RawManifest } from '@lerna-lite/core'
 import PackageJson from '@npmcli/package-json';
 // @ts-ignore
 import { publish } from 'libnpmpublish';
-import { beforeEach, describe, expect, it, vi, type Mock } from 'vitest';
+import { afterEach, beforeEach, describe, expect, it, vi, type Mock } from 'vitest';
 
 import type { LibNpmPublishOptions } from '../interfaces.js';
 import { npmPublish } from '../lib/npm-publish.js';
@@ -282,5 +282,59 @@ describe('npm-publish', () => {
       expect.anything(),
       expect.anything()
     );
+  });
+
+  describe('Sigstore transparency log conflict', () => {
+    const tlogConflictError = Object.assign(new Error('error creating tlog entry'), {
+      code: 'TLOG_CREATE_ENTRY_ERROR',
+      cause: { statusCode: 409 },
+    });
+
+    afterEach(() => {
+      vi.useRealTimers();
+    });
+
+    it('retries publish when a tlog 409 conflict error occurs', async () => {
+      vi.useFakeTimers();
+      const result = { stageId: 'stage-after-retry', transparencyLogUrl: 'https://example.test/log' };
+      (publish as Mock).mockRejectedValueOnce(tlogConflictError).mockResolvedValueOnce(result);
+
+      const promise = npmPublish(pkg, tarFilePath, {}, conf);
+      await vi.runAllTimersAsync();
+      expect(await promise).toBe(result);
+
+      expect(publish).toHaveBeenCalledTimes(2);
+      expect(runLifecycle).toHaveBeenCalledTimes(2);
+      expect(runLifecycle).toHaveBeenCalledWith(pkg, 'postpublish', expect.anything());
+    });
+
+    it('throws after reaching max retry attempts on repeated tlog 409 conflict errors', async () => {
+      vi.useFakeTimers();
+      (publish as Mock).mockRejectedValue(tlogConflictError);
+      const startedAt = Date.now();
+
+      const promise = npmPublish(pkg, tarFilePath, {}, conf).catch((err) => err);
+      await vi.runAllTimersAsync();
+      const error = await promise;
+
+      expect(error).toBe(tlogConflictError);
+      expect(publish).toHaveBeenCalledTimes(3);
+      expect(Date.now() - startedAt).toBe(6000);
+      expect(runLifecycle).not.toHaveBeenCalled();
+      (publish as Mock).mockReset().mockResolvedValue(null);
+    });
+
+    it.each([
+      { code: 'E403' },
+      { code: 'E409', cause: { statusCode: 409 } },
+      { code: 'TLOG_CREATE_ENTRY_ERROR', cause: { statusCode: 500 } },
+      { code: 'TLOG_CREATE_ENTRY_ERROR' },
+    ])('does not retry other publish errors: %j', async (details) => {
+      const error = Object.assign(new Error('publish failed'), details);
+      (publish as Mock).mockRejectedValueOnce(error);
+
+      await expect(npmPublish(pkg, tarFilePath, {}, conf)).rejects.toBe(error);
+      expect(publish).toHaveBeenCalledTimes(1);
+    });
   });
 });

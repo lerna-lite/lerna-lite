@@ -120,24 +120,6 @@ jobs:
       - name: Lerna Publish 📦 ➜ ${{ env.LERNA_PUBLISH_TYPE }}
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        shell: bash
         run: |
           echo "Running: ${{ env.LERNA_PUBLISH_TYPE }}"
-          log_file=$(mktemp)
-          for attempt in 1 2 3; do
-            if pnpm exec ${{ env.LERNA_PUBLISH_QUERY }} 2>&1 | tee "$log_file"; [ "${PIPESTATUS[0]}" -eq 0 ]; then
-              exit 0
-            fi
-
-            if ! grep -q 'TLOG_CREATE_ENTRY_ERROR' "$log_file"; then
-              exit 1
-            fi
-
-            if [ "$attempt" -lt 3 ]; then
-              echo "Sigstore transparency-log conflict on attempt $attempt; retrying in 20 seconds."
-              sleep 20
-            fi
-          done
-
-          echo "Lerna publish failed after 3 Sigstore transparency-log retries." >&2
-          exit 1
+          pnpm exec ${{ env.LERNA_PUBLISH_QUERY }}
