@@ -440,26 +440,4 @@ export class Package {
 
     return inspectDependencies;
   }
-
-  /**
-   * Retrieve the first dependencies collection which includes the dependency name inside it, we'll search in all type of dependencies/devDependencies/...
-   * @param {String} depName - dependency name
-   * @returns {Object | undefined} First matching runtime, optional, or development dependency collection.
-   */
-  retrieveDependenciesWithName(depName: string): { [depName: string]: string } {
-    // first, try runtime dependencies
-    let depCollection = this.dependencies;
-
-    // try optionalDependencies if that didn't work
-    if (!depCollection?.[depName]) {
-      depCollection = this.optionalDependencies;
-    }
-
-    // fall back to devDependencies
-    if (!depCollection?.[depName]) {
-      depCollection = this.devDependencies;
-    }
-
-    return depCollection;
-  }
 }
