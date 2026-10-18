@@ -55,3 +55,4 @@ overrides:
   postcss-selector-parser: ^7.1.6
   proxy-addr: ^2.0.8
   source-map-js: ^1.2.2
+  parse-url>@types/parse-path: '-'
