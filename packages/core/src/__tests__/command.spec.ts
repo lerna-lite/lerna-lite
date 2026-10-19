@@ -1,4 +1,5 @@
 import { chmodSync } from 'node:fs';
+import { readFile } from 'node:fs/promises';
 import { join } from 'node:path';
 
 import { log } from '@lerna-lite/npmlog';
@@ -273,6 +274,87 @@ describe('core-command', () => {
 
       await expect(command).resolves.toBeNull();
       expect(console.error).toHaveBeenCalled();
+    });
+  });
+
+  describe('forbidden PUT response body', () => {
+    function failCommand(overrides: Record<string, unknown> = {}) {
+      const error = Object.assign(new Error('403 Forbidden'), {
+        code: 'E403',
+        statusCode: 403,
+        method: 'PUT',
+        uri: 'https://registry.example.test/package',
+        body: Buffer.from('proxy denied the request'),
+        ...overrides,
+      });
+
+      class ForbiddenPutCommand extends OkCommand {
+        execute(): never {
+          throw error;
+        }
+      }
+
+      return { command: new ForbiddenPutCommand({ cwd: testDir } as any), error };
+    }
+
+    it('includes the response body in the saved debug log and preserves the original error', async () => {
+      const { command, error } = failCommand();
+
+      await expect(command).rejects.toBe(error);
+
+      const debugLog = await readFile(join(testDir, 'lerna-debug.log'), 'utf8');
+      expect(debugLog).toContain('response body for PUT https://registry.example.test/package:');
+      expect(debugLog).toContain('proxy denied the request');
+    });
+
+    it('logs the body once for ValidationError without suppressing its message', async () => {
+      const { command, error } = failCommand({ name: 'ValidationError' });
+
+      await expect(command).rejects.toBe(error);
+
+      const messages = loggingOutput('error');
+      expect(messages.filter((message) => message.includes('response body for PUT'))).toEqual([
+        'response body for PUT https://registry.example.test/package:\nproxy denied the request',
+      ]);
+      expect(messages).toContain('403 Forbidden');
+    });
+
+    it.each([
+      ['a non-403 status', { statusCode: 500 }],
+      ['a non-PUT method', { method: 'GET' }],
+      ['a JSON body', { body: { error: 'registry error' } }],
+      ['a string body', { body: 'proxy denied the request' }],
+      ['a missing body', { body: undefined }],
+    ])('does not add a response diagnostic for %s', async (_label, overrides) => {
+      const { command, error } = failCommand(overrides);
+
+      await expect(command).rejects.toBe(error);
+
+      const debugLog = await readFile(join(testDir, 'lerna-debug.log'), 'utf8');
+      expect(debugLog).not.toContain('response body for PUT');
+    });
+
+    it.each([4_000, 4_001])('limits a body of %i characters', async (length) => {
+      const { command, error } = failCommand({ name: 'ValidationError', body: Buffer.from('x'.repeat(length)) });
+
+      await expect(command).rejects.toBe(error);
+
+      expect(loggingOutput('error')).toContain(
+        `response body for PUT https://registry.example.test/package:\n${'x'.repeat(4_000)}${length > 4_000 ? '\n[response body truncated]' : ''}`
+      );
+    });
+
+    it('decodes UTF-8 bodies and handles missing error metadata', async () => {
+      const { command, error } = failCommand({
+        name: 'ValidationError',
+        code: undefined,
+        uri: undefined,
+        body: Buffer.from('Accès refusé'),
+      });
+
+      await expect(command).rejects.toBe(error);
+
+      expect(loggingOutput('error')).toContain('response body for PUT (unknown URI):\nAccès refusé');
     });
   });
 

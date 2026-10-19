@@ -28,6 +28,8 @@ import { warnIfHanging } from './utils/warn-if-hanging.js';
 import { writeLogFile } from './utils/write-log-file.js';
 import { ValidationError } from './validation-error.js';
 
+const MAX_FORBIDDEN_PUT_BODY_LENGTH = 4_000;
+
 // maxBuffer value for running exec
 const DEFAULT_CONCURRENCY = cpus().length;
 
@@ -105,6 +107,8 @@ export class Command<T extends AvailableCommandOption> {
             // so pass it directly to avoid duplication.
             log.error('', cleanStack(err, this.constructor.name));
           }
+
+          logForbiddenPutBody(err);
 
           // ValidationError does not trigger a log dump, nor do external package errors
           if (err.name !== 'ValidationError' && !err.pkg) {
@@ -392,4 +396,19 @@ function defaultOptions(...sources: any) {
   }
 
   return options;
+}
+
+function logForbiddenPutBody(err: any) {
+  if (err?.statusCode !== 403 || err?.method !== 'PUT' || !Buffer.isBuffer(err.body)) {
+    return;
+  }
+
+  // Registry proxies can return a raw HTML body instead of a JSON error.
+  const body = err.body.toString('utf8');
+  const truncatedBody =
+    body.length > MAX_FORBIDDEN_PUT_BODY_LENGTH
+      ? `${body.slice(0, MAX_FORBIDDEN_PUT_BODY_LENGTH)}\n[response body truncated]`
+      : body;
+
+  log.error(err.code || '403', `response body for PUT ${err.uri || '(unknown URI)'}:\n${truncatedBody}`);
 }
