@@ -4,6 +4,12 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [5.6.4](https://github.com/lerna-lite/lerna-lite/compare/v5.6.3...v5.6.4) (2026-10-19)
+
+### Bug Fixes
+
+* **watch:** improve file detection and subprocess cleanup ([#1423](https://github.com/lerna-lite/lerna-lite/issues/1423)) ([a92e4a5](https://github.com/lerna-lite/lerna-lite/commit/a92e4a5c7265f880365dce738c9aabe8b7298023)) - by @ghiscoding
+
 ## [5.6.3](https://github.com/lerna-lite/lerna-lite/compare/v5.6.2...v5.6.3) (2026-10-14)
 
 **Note:** Version bump only for package @lerna-lite/watch

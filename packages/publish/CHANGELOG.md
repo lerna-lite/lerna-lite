@@ -4,6 +4,14 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [5.6.4](https://github.com/lerna-lite/lerna-lite/compare/v5.6.3...v5.6.4) (2026-10-19)
+
+### Bug Fixes
+
+* correct workspace and catalog dependency resolution ([#1430](https://github.com/lerna-lite/lerna-lite/issues/1430)) ([19777e2](https://github.com/lerna-lite/lerna-lite/commit/19777e2aec89246a59dbb5a815ca1136ee8950fc)) - by @ghiscoding
+* **publish:** respect dry-run and correct OTP retry and cleanup handling ([#1429](https://github.com/lerna-lite/lerna-lite/issues/1429)) ([567f2ad](https://github.com/lerna-lite/lerna-lite/commit/567f2add649fd3a3ee5d2e4d8e2aefaebeab09fb)) - by @ghiscoding
+* **publish:** retry provenance signing on Sigstore tlog 409 conflict ([#1422](https://github.com/lerna-lite/lerna-lite/issues/1422)) ([5fe200d](https://github.com/lerna-lite/lerna-lite/commit/5fe200d392c6ed54f50afd0c68c732c41266d039)) - by @ghiscoding
+
 ## [5.6.3](https://github.com/lerna-lite/lerna-lite/compare/v5.6.2...v5.6.3) (2026-10-14)
 
 ### Bug Fixes

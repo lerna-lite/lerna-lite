@@ -4,6 +4,21 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [5.6.4](https://github.com/lerna-lite/lerna-lite/compare/v5.6.3...v5.6.4) (2026-10-19)
+
+### Bug Fixes
+
+* **core:** log response bodies for forbidden PUT requests ([#1433](https://github.com/lerna-lite/lerna-lite/issues/1433)) ([a2935c4](https://github.com/lerna-lite/lerna-lite/commit/a2935c4968b36a685f66eb18e6915521b4f954e4)) - by @ghiscoding
+* correct changed and diff detection and handle CLI failures ([#1425](https://github.com/lerna-lite/lerna-lite/issues/1425)) ([0f4c7ab](https://github.com/lerna-lite/lerna-lite/commit/0f4c7ab5dcefac7b16c015c148c8872d9013644b)) - by @ghiscoding
+* correct workspace and catalog dependency resolution ([#1430](https://github.com/lerna-lite/lerna-lite/issues/1430)) ([19777e2](https://github.com/lerna-lite/lerna-lite/commit/19777e2aec89246a59dbb5a815ca1136ee8950fc)) - by @ghiscoding
+* exclude transitive `@types/parse-path` stub ([#1432](https://github.com/lerna-lite/lerna-lite/issues/1432)) ([5b70731](https://github.com/lerna-lite/lerna-lite/commit/5b70731ba430dc69e46f1faf91efc357859e0ae4)) - by @ghiscoding
+* handle exec and run failures and avoid buffering streamed output ([#1424](https://github.com/lerna-lite/lerna-lite/issues/1424)) ([972b154](https://github.com/lerna-lite/lerna-lite/commit/972b15448e58ff8345766fd7b432bc6014df62ba)) - by @ghiscoding
+* **publish:** respect dry-run and correct OTP retry and cleanup handling ([#1429](https://github.com/lerna-lite/lerna-lite/issues/1429)) ([567f2ad](https://github.com/lerna-lite/lerna-lite/commit/567f2add649fd3a3ee5d2e4d8e2aefaebeab09fb)) - by @ghiscoding
+* **publish:** retry provenance signing on Sigstore tlog 409 conflict ([#1422](https://github.com/lerna-lite/lerna-lite/issues/1422)) ([5fe200d](https://github.com/lerna-lite/lerna-lite/commit/5fe200d392c6ed54f50afd0c68c732c41266d039)) - by @ghiscoding
+* **version:** preserve lockfile versions and propagate command failures ([#1427](https://github.com/lerna-lite/lerna-lite/issues/1427)) ([c7f0366](https://github.com/lerna-lite/lerna-lite/commit/c7f0366e18f1d924dc475fe42ac056ad8946d141)) - by @ghiscoding
+* **watch:** improve file detection and subprocess cleanup ([#1423](https://github.com/lerna-lite/lerna-lite/issues/1423)) ([a92e4a5](https://github.com/lerna-lite/lerna-lite/commit/a92e4a5c7265f880365dce738c9aabe8b7298023)) - by @ghiscoding
+* **watch:** propagate initialization errors to the CLI ([#1426](https://github.com/lerna-lite/lerna-lite/issues/1426)) ([8ca4e83](https://github.com/lerna-lite/lerna-lite/commit/8ca4e831102686106519684dd988b8d0306424c6)) - by @ghiscoding
+
 ## [5.6.3](https://github.com/lerna-lite/lerna-lite/compare/v5.6.2...v5.6.3) (2026-10-14)
 
 ### Bug Fixes

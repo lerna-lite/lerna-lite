@@ -4,6 +4,12 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [5.6.4](https://github.com/lerna-lite/lerna-lite/compare/v5.6.3...v5.6.4) (2026-10-19)
+
+### Bug Fixes
+
+* **version:** preserve lockfile versions and propagate command failures ([#1427](https://github.com/lerna-lite/lerna-lite/issues/1427)) ([c7f0366](https://github.com/lerna-lite/lerna-lite/commit/c7f0366e18f1d924dc475fe42ac056ad8946d141)) - by @ghiscoding
+
 ## [5.6.3](https://github.com/lerna-lite/lerna-lite/compare/v5.6.2...v5.6.3) (2026-10-14)
 
 ### Bug Fixes

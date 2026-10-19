@@ -4,6 +4,16 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [5.6.4](https://github.com/lerna-lite/lerna-lite/compare/v5.6.3...v5.6.4) (2026-10-19)
+
+### Bug Fixes
+
+* correct changed and diff detection and handle CLI failures ([#1425](https://github.com/lerna-lite/lerna-lite/issues/1425)) ([0f4c7ab](https://github.com/lerna-lite/lerna-lite/commit/0f4c7ab5dcefac7b16c015c148c8872d9013644b)) - by @ghiscoding
+* handle exec and run failures and avoid buffering streamed output ([#1424](https://github.com/lerna-lite/lerna-lite/issues/1424)) ([972b154](https://github.com/lerna-lite/lerna-lite/commit/972b15448e58ff8345766fd7b432bc6014df62ba)) - by @ghiscoding
+* **publish:** respect dry-run and correct OTP retry and cleanup handling ([#1429](https://github.com/lerna-lite/lerna-lite/issues/1429)) ([567f2ad](https://github.com/lerna-lite/lerna-lite/commit/567f2add649fd3a3ee5d2e4d8e2aefaebeab09fb)) - by @ghiscoding
+* **version:** preserve lockfile versions and propagate command failures ([#1427](https://github.com/lerna-lite/lerna-lite/issues/1427)) ([c7f0366](https://github.com/lerna-lite/lerna-lite/commit/c7f0366e18f1d924dc475fe42ac056ad8946d141)) - by @ghiscoding
+* **watch:** propagate initialization errors to the CLI ([#1426](https://github.com/lerna-lite/lerna-lite/issues/1426)) ([8ca4e83](https://github.com/lerna-lite/lerna-lite/commit/8ca4e831102686106519684dd988b8d0306424c6)) - by @ghiscoding
+
 ## [5.6.3](https://github.com/lerna-lite/lerna-lite/compare/v5.6.2...v5.6.3) (2026-10-14)
 
 **Note:** Version bump only for package @lerna-lite/cli

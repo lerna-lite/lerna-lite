@@ -4,6 +4,15 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [5.6.4](https://github.com/lerna-lite/lerna-lite/compare/v5.6.3...v5.6.4) (2026-10-19)
+
+### Bug Fixes
+
+* **core:** log response bodies for forbidden PUT requests ([#1433](https://github.com/lerna-lite/lerna-lite/issues/1433)) ([a2935c4](https://github.com/lerna-lite/lerna-lite/commit/a2935c4968b36a685f66eb18e6915521b4f954e4)) - by @ghiscoding
+* correct changed and diff detection and handle CLI failures ([#1425](https://github.com/lerna-lite/lerna-lite/issues/1425)) ([0f4c7ab](https://github.com/lerna-lite/lerna-lite/commit/0f4c7ab5dcefac7b16c015c148c8872d9013644b)) - by @ghiscoding
+* correct workspace and catalog dependency resolution ([#1430](https://github.com/lerna-lite/lerna-lite/issues/1430)) ([19777e2](https://github.com/lerna-lite/lerna-lite/commit/19777e2aec89246a59dbb5a815ca1136ee8950fc)) - by @ghiscoding
+* **watch:** improve file detection and subprocess cleanup ([#1423](https://github.com/lerna-lite/lerna-lite/issues/1423)) ([a92e4a5](https://github.com/lerna-lite/lerna-lite/commit/a92e4a5c7265f880365dce738c9aabe8b7298023)) - by @ghiscoding
+
 ## [5.6.3](https://github.com/lerna-lite/lerna-lite/compare/v5.6.2...v5.6.3) (2026-10-14)
 
 ### Bug Fixes

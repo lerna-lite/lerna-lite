@@ -4,6 +4,12 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [5.6.4](https://github.com/lerna-lite/lerna-lite/compare/v5.6.3...v5.6.4) (2026-10-19)
+
+### Bug Fixes
+
+* handle exec and run failures and avoid buffering streamed output ([#1424](https://github.com/lerna-lite/lerna-lite/issues/1424)) ([972b154](https://github.com/lerna-lite/lerna-lite/commit/972b15448e58ff8345766fd7b432bc6014df62ba)) - by @ghiscoding
+
 ## [5.6.3](https://github.com/lerna-lite/lerna-lite/compare/v5.6.2...v5.6.3) (2026-10-14)
 
 **Note:** Version bump only for package @lerna-lite/exec
