@@ -51,6 +51,11 @@
       packageNames: ['pacote'],
       allowedVersions: '< 22.0.0',
     },
+    // postponed to next major since chokidar 6 requires NodeJS 22.22
+    {
+      packageNames: ['chokidar'],
+      allowedVersions: '< 6.0.0',
+    },
   ],
   ignoreDeps: ['node', 'pnpm'],
   ignorePaths: ['helpers', '**/__fixtures__/**', '**/__mocks__/**', '**/fixtures/**', '**/mocks/**'],
