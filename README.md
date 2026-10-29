@@ -112,6 +112,7 @@ Below are the main reasons as to why this fork was created:
    - [lerna version --comment-issues/pull requests](https://github.com/lerna-lite/lerna-lite/tree/main/packages/version#comments-on-issuespull-requests) to comment on issues/PRs resolved by a new release (new ✨)
    - [lerna version --release-header-message](https://github.com/lerna-lite/lerna-lite/tree/main/packages/version#--release-header-message-msg) to add custom Header/Footer to GitHub/GitLab Release (new ✨)
    - [lerna run --aggregate-output](https://github.com/lerna-lite/lerna-lite/tree/main/packages/run#--aggregate-output) aggregate output and failures, easier to read in CI (new ✨)
+   - [lerna publish --stage](https://docs.npmjs.com/staged-publishing) which extend [`npm --stage](https://docs.npmjs.com/staged-publishing) publishing for the workspace (new ✨)
 
 On a final note, I would imagine that the best feature of Lerna-Lite (versus Lerna) would be its modularity. A large portion of the users are only interested in `version`/`publish` commands, but a small minority might want other commands like `lerna run`/`exec`. Lerna-Lite offers this kind of flexibility by allowing the user to choose and install the minimal setup (see [installation](#installation) below) which helps keep your download to the bare minimum.
 
