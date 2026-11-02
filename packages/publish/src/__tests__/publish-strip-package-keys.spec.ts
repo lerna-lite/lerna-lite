@@ -1,6 +1,7 @@
+import { readFile } from 'node:fs/promises';
 import { join } from 'node:path';
 
-import { outputFile, writePackage } from '@lerna-lite/core';
+import { outputFile, outputJson, readJson, writePackage } from '@lerna-lite/core';
 import { commandRunner, gitAdd, gitCommit, gitTag, initFixtureFactory, updateLernaConfig } from '@lerna-test/helpers';
 import { describe, expect, it, vi } from 'vitest';
 
@@ -56,6 +57,26 @@ describe('publish --strip-package-keys', () => {
   };
 
   describe('use --strip-package-keys flag from CLI', () => {
+    it('keeps package scripts available to root build hooks before stripping them', async () => {
+      const cwd = await initFixture('strip-pkg-keys');
+      const rootManifest = await readJson(join(cwd, 'package.json'));
+      rootManifest.scripts = { ...rootManifest.scripts, prepublish: 'node build.cjs' };
+      await outputJson(join(cwd, 'package.json'), rootManifest);
+      await outputFile(
+        join(cwd, 'build.cjs'),
+        `const fs = require('node:fs');
+const manifest = JSON.parse(fs.readFileSync('packages/package-5/package.json', 'utf8'));
+if (!manifest.scripts?.build) throw new Error('package build script is missing');
+fs.writeFileSync('build-ran', 'yes');`
+      );
+      await setupChanges(cwd);
+
+      await lernaPublish(cwd)('--strip-package-keys', 'scripts');
+
+      expect(await readFile(join(cwd, 'build-ran'), 'utf8')).toBe('yes');
+      expect((writePackage as any).updatedManifest('package-5').scripts).toBeUndefined();
+    });
+
     it('should be able to strip a field from all packages by providing it in CLI', async () => {
       const cwd = await initFixture('strip-pkg-keys');
 

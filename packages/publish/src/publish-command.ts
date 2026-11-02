@@ -294,14 +294,13 @@ export class PublishCommand extends Command<PublishCommandOption> {
     await this.resolveDependencyWithCatalogProtocols();
     await this.resolveLocalDependencyWorkspaceProtocols();
 
-    if (this.options.stripPackageKeys) {
-      await this.removePackageProperties();
+    // When stripping fields, defer these transformations too so stripping still runs first.
+    if (!this.options.stripPackageKeys) {
+      if (this.options.publishConfigOverrides !== false) {
+        await this.applyPublishConfigOverrides();
+      }
+      this.annotateGitHead();
     }
-
-    if (this.options.publishConfigOverrides !== false) {
-      await this.applyPublishConfigOverrides();
-    }
-    this.annotateGitHead();
     await this.serializeChanges();
     await this.packUpdated();
     await this.publishPacked();
@@ -883,6 +882,18 @@ export class PublishCommand extends Command<PublishCommandOption> {
       chain = chain.then(() => this.runPackageLifecycle(this.project.manifest, 'prepare'));
       chain = chain.then(() => this.runPackageLifecycle(this.project.manifest, 'prepublishOnly'));
       chain = chain.then(() => this.runPackageLifecycle(this.project.manifest, 'prepack'));
+    }
+
+    if (this.options.stripPackageKeys) {
+      // Root lifecycle scripts may need the original package fields to build the workspace.
+      // Reload manifests first so changes made by those scripts are preserved.
+      chain = chain.then(() => pMap(this.packagesToPublish, (pkg) => pkg.refresh()));
+      chain = chain.then(() => this.removePackageProperties());
+      if (this.options.publishConfigOverrides !== false) {
+        chain = chain.then(() => this.applyPublishConfigOverrides());
+      }
+      chain = chain.then(() => this.annotateGitHead());
+      chain = chain.then(() => this.serializeChanges());
     }
 
     const opts = this.conf.snapshot;

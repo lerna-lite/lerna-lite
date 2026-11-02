@@ -70,6 +70,35 @@ describe('publishConfig overrides', () => {
     await gitCommit(cwd, 'setup');
   };
 
+  it.each([
+    ['main', 'dist/index.js'],
+    ['publishConfig.main', './src/index.ts'],
+    ['publishConfig', './src/index.ts'],
+  ])('strips %s before applying publishConfig overrides', async (field, expectedMain) => {
+    const cwd = await initFixture('normal-publish-config');
+    await gitTag(cwd, 'v1.0.0');
+    await setupChanges(cwd);
+
+    await new PublishCommand({ ...createArgv(cwd, '--bump', 'patch', '--yes'), stripPackageKeys: [field] });
+
+    expect((writePackage as any).updatedManifest('package-1').main).toBe(expectedMain);
+  });
+
+  it('does not apply publishConfig overrides after stripping when explicitly disabled', async () => {
+    const cwd = await initFixture('normal-publish-config');
+    await gitTag(cwd, 'v1.0.0');
+    await setupChanges(cwd);
+
+    await new PublishCommand({
+      ...createArgv(cwd, '--bump', 'patch', '--yes', '--no-publish-config-overrides'),
+      stripPackageKeys: ['main'],
+    });
+
+    const manifest = (writePackage as any).updatedManifest('package-1');
+    expect(manifest.main).toBeUndefined();
+    expect(manifest.publishConfig.main).toBe('dist/index.js');
+  });
+
   it('overrides npm publish with publishConfig that are valid and leave fields that are not in the whitelist to be untouched and remain in publishConfig', async () => {
     const cwd = await initFixture('normal-publish-config');
 
