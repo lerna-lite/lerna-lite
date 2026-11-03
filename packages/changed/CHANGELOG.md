@@ -4,6 +4,10 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [5.7.0](https://github.com/lerna-lite/lerna-lite/compare/v5.6.4...v5.7.0) (2026-11-03)
+
+**Note:** Version bump only for package @lerna-lite/changed
+
 ## [5.6.4](https://github.com/lerna-lite/lerna-lite/compare/v5.6.3...v5.6.4) (2026-10-19)
 
 ### Bug Fixes

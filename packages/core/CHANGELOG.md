@@ -4,6 +4,14 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [5.7.0](https://github.com/lerna-lite/lerna-lite/compare/v5.6.4...v5.7.0) (2026-11-03)
+
+### Bug Fixes
+
+* **deps:** update all non-major dependencies ([#1446](https://github.com/lerna-lite/lerna-lite/issues/1446)) ([589a9a9](https://github.com/lerna-lite/lerna-lite/commit/589a9a9bdded85bcddb47348f9bd3befa1c16e18)) - by @renovate[bot]
+* enforce working tree checks before publishing and versioning ([#1440](https://github.com/lerna-lite/lerna-lite/issues/1440)) ([a16ba4d](https://github.com/lerna-lite/lerna-lite/commit/a16ba4d8fed6fe61ce4a7247343889dc2658e9da)) - by @ghiscoding
+* **publish:** honor fetch timeout and handle numeric canary hashes ([#1437](https://github.com/lerna-lite/lerna-lite/issues/1437)) ([cff24c6](https://github.com/lerna-lite/lerna-lite/commit/cff24c619406b45f5282cbf70e5ef840f8c5a269)) - by @ghiscoding
+
 ## [5.6.4](https://github.com/lerna-lite/lerna-lite/compare/v5.6.3...v5.6.4) (2026-10-19)
 
 ### Bug Fixes

@@ -4,6 +4,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [5.7.0](https://github.com/lerna-lite/lerna-lite/compare/v5.6.4...v5.7.0) (2026-11-03)
+
+### Features
+
+* **version:** allow GitHub-generated release notes without conventional commits ([#1444](https://github.com/lerna-lite/lerna-lite/issues/1444)) ([f62bdba](https://github.com/lerna-lite/lerna-lite/commit/f62bdba7d69c982a0557bf93b6a35b6f2df03403)) - by @ghiscoding
+
+### Bug Fixes
+
+* enforce working tree checks before publishing and versioning ([#1440](https://github.com/lerna-lite/lerna-lite/issues/1440)) ([a16ba4d](https://github.com/lerna-lite/lerna-lite/commit/a16ba4d8fed6fe61ce4a7247343889dc2658e9da)) - by @ghiscoding
+* **version:** fail when remote release creation fails ([#1445](https://github.com/lerna-lite/lerna-lite/issues/1445)) ([7c0beae](https://github.com/lerna-lite/lerna-lite/commit/7c0beaeff1dc867e8b47845aa24d608332ea4921)) - by @ghiscoding
+
 ## [5.6.4](https://github.com/lerna-lite/lerna-lite/compare/v5.6.3...v5.6.4) (2026-10-19)
 
 ### Bug Fixes

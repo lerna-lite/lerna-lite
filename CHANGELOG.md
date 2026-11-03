@@ -4,6 +4,23 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [5.7.0](https://github.com/lerna-lite/lerna-lite/compare/v5.6.4...v5.7.0) (2026-11-03)
+
+### Features
+
+* **version:** allow GitHub-generated release notes without conventional commits ([#1444](https://github.com/lerna-lite/lerna-lite/issues/1444)) ([f62bdba](https://github.com/lerna-lite/lerna-lite/commit/f62bdba7d69c982a0557bf93b6a35b6f2df03403)) - by @ghiscoding
+
+### Bug Fixes
+
+* **deps:** update all non-major dependencies ([#1446](https://github.com/lerna-lite/lerna-lite/issues/1446)) ([589a9a9](https://github.com/lerna-lite/lerna-lite/commit/589a9a9bdded85bcddb47348f9bd3befa1c16e18)) - by @renovate[bot]
+* enforce working tree checks before publishing and versioning ([#1440](https://github.com/lerna-lite/lerna-lite/issues/1440)) ([a16ba4d](https://github.com/lerna-lite/lerna-lite/commit/a16ba4d8fed6fe61ce4a7247343889dc2658e9da)) - by @ghiscoding
+* **publish:** defer package field stripping until after root build hooks ([#1436](https://github.com/lerna-lite/lerna-lite/issues/1436)) ([5c42138](https://github.com/lerna-lite/lerna-lite/commit/5c4213824f48601ebcbc171901e87dbbc2a74ce8)) - by @ghiscoding
+* **publish:** honor fetch timeout and handle numeric canary hashes ([#1437](https://github.com/lerna-lite/lerna-lite/issues/1437)) ([cff24c6](https://github.com/lerna-lite/lerna-lite/commit/cff24c619406b45f5282cbf70e5ef840f8c5a269)) - by @ghiscoding
+* **publish:** preserve temporary tags when promotion fails ([#1441](https://github.com/lerna-lite/lerna-lite/issues/1441)) ([7a82806](https://github.com/lerna-lite/lerna-lite/commit/7a82806cdf3764d89a320e586ea6e9552d730d7c)) - by @ghiscoding
+* **publish:** reject ambiguous registry conflicts ([#1439](https://github.com/lerna-lite/lerna-lite/issues/1439)) ([3b6ce88](https://github.com/lerna-lite/lerna-lite/commit/3b6ce88b8d70b144dec744841374277fb0e0cde1)) - by @ghiscoding
+* **publish:** retry provenance signing with a fresh key ([#1438](https://github.com/lerna-lite/lerna-lite/issues/1438)) ([2a4b1de](https://github.com/lerna-lite/lerna-lite/commit/2a4b1de2b0b3a23b6f52c48c5e38ddef83f99583)) - by @ghiscoding
+* **version:** fail when remote release creation fails ([#1445](https://github.com/lerna-lite/lerna-lite/issues/1445)) ([7c0beae](https://github.com/lerna-lite/lerna-lite/commit/7c0beaeff1dc867e8b47845aa24d608332ea4921)) - by @ghiscoding
+
 ## [5.6.4](https://github.com/lerna-lite/lerna-lite/compare/v5.6.3...v5.6.4) (2026-10-19)
 
 ### Bug Fixes
