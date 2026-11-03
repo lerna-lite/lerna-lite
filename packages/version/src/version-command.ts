@@ -7,6 +7,7 @@ import {
   colorize,
   Command,
   createRunner,
+  describeRef,
   EOL,
   getPackagesForOption as parsePackageNamesForOption,
   logOutput,
@@ -350,8 +351,13 @@ export class VersionCommand extends Command<VersionCommandOption> {
     if (this.commitAndTag && this.gitOpts.amend !== true) {
       const { forcePublish, conventionalCommits, conventionalGraduate } = this.options;
       const checkUncommittedOnly = forcePublish || (conventionalCommits && conventionalGraduate);
-      const check = checkUncommittedOnly ? throwIfUncommitted : checkWorkingTree;
-      await check(this.execOpts, this.options.dryRun);
+      if (checkUncommittedOnly) {
+        await describeRef(this.execOpts, undefined, this.options.dryRun).then(
+          throwIfUncommitted(this.execOpts, this.options.dryRun)
+        );
+      } else {
+        await checkWorkingTree(this.execOpts, this.options.dryRun);
+      }
     } else {
       this.logger.warn('version', 'Skipping working tree validation, proceed at your own risk');
     }

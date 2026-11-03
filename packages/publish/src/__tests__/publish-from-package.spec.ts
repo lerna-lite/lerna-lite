@@ -146,12 +146,12 @@ describe('publish from-package', () => {
   });
 
   it('throws an error when uncommitted changes are present', async () => {
-    (throwIfUncommitted as Mock).mockImplementationOnce(() => {
+    (throwIfUncommitted as Mock).mockImplementationOnce(() => () => {
       throw new Error('uncommitted');
     });
 
     const cwd = await initFixture('normal');
-    const command = new PublishCommand(createArgv(cwd, 'from-package'));
+    const command = new PublishCommand(createArgv(cwd, 'from-package', '--dry-run'));
 
     await expect(command).rejects.toThrow('uncommitted');
     // notably different than the actual message, but good enough here

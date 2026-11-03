@@ -203,12 +203,12 @@ describe('publish from-git', () => {
   });
 
   it('throws an error when uncommitted changes are present', async () => {
-    (throwIfUncommitted as Mock).mockImplementationOnce(() => {
+    (throwIfUncommitted as Mock).mockImplementationOnce(() => () => {
       throw new Error('uncommitted');
     });
 
     const cwd = await initFixture('normal');
-    const command = new PublishCommand(createArgv(cwd, '--bump', 'from-git'));
+    const command = new PublishCommand(createArgv(cwd, '--bump', 'from-git', '--dry-run'));
 
     await expect(command).rejects.toThrow('uncommitted');
     // notably different than the actual message, but good enough here

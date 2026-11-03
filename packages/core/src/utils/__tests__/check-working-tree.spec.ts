@@ -39,7 +39,17 @@ describe('check-working-tree', () => {
     expect(collectUncommitted).toHaveBeenLastCalledWith({ cwd: 'foo' }, false);
   });
 
-  it('should call mkThrowIfUncommitted when calling throwIfUncommitted', async () => {
-    expect(throwIfUncommitted()).toBeTruthy();
+  it('checks a described dirty tree in the supplied repository', async () => {
+    (collectUncommitted as Mock).mockResolvedValueOnce([' M packages/example/package.json']);
+
+    await expect(throwIfUncommitted({ cwd: 'fixture' })({ isDirty: true })).rejects.toThrow('packages/example/package.json');
+    expect(collectUncommitted).toHaveBeenLastCalledWith({ cwd: 'fixture' }, false);
+  });
+
+  it('does not collect changes for a clean tree', () => {
+    const collect = vi.mocked(collectUncommitted);
+    collect.mockClear();
+    expect(throwIfUncommitted({ cwd: 'fixture' })({ isDirty: false })).toBeUndefined();
+    expect(collect).not.toHaveBeenCalled();
   });
 });

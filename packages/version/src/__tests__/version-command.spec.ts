@@ -284,9 +284,16 @@ describe('VersionCommand', () => {
     it('calls `throwIfUncommitted` when using --force-publish', async () => {
       const testDir = await initFixture('normal');
 
-      await new VersionCommand(createArgv(testDir, '--force-publish'));
+      await new VersionCommand(createArgv(testDir, '--force-publish', '--dry-run'));
 
       expect(throwIfUncommitted).toHaveBeenCalled();
+    });
+
+    it('awaits the working-tree validation when using --force-publish', async () => {
+      (throwIfUncommitted as Mock).mockReturnValueOnce(() => Promise.reject(new Error('uncommitted')));
+      const testDir = await initFixture('normal');
+
+      await expect(new VersionCommand(createArgv(testDir, '--force-publish', '--dry-run'))).rejects.toThrow('uncommitted');
     });
 
     it('only bumps changed packages when non-major version selected', async () => {
