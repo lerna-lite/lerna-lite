@@ -314,6 +314,53 @@ describe('npm-publish', () => {
 
     afterEach(() => {
       vi.useRealTimers();
+      (publish as Mock).mockReset().mockResolvedValue(null);
+    });
+
+    it('disables Sigstore request retries for generated provenance without changing registry retry settings', async () => {
+      await npmPublish(pkg, tarFilePath, { provenance: true, fetchRetries: 4 }, conf);
+
+      expect(vi.mocked(publish).mock.lastCall?.[2]).toEqual(expect.objectContaining({ provenance: true, retry: 0, fetchRetries: 4 }));
+    });
+
+    it('leaves explicit retry settings and non-provenance publishes unchanged', async () => {
+      await npmPublish(pkg, tarFilePath, { provenance: true, retry: 5 }, conf);
+      expect(vi.mocked(publish).mock.lastCall?.[2].retry).toBe(5);
+
+      await npmPublish(pkg, tarFilePath, {}, conf);
+      expect(vi.mocked(publish).mock.lastCall?.[2].retry).toBeUndefined();
+    });
+
+    it.each([
+      { code: 'TLOG_CREATE_ENTRY_ERROR', cause: { code: 'FETCH_ERROR', type: 'request-timeout' } },
+      { code: 'TLOG_CREATE_ENTRY_ERROR', cause: { code: 'ECONNRESET' } },
+      { code: 'TLOG_CREATE_ENTRY_ERROR', cause: { statusCode: 503 } },
+      { code: 'CA_CREATE_SIGNING_CERTIFICATE_ERROR', cause: { statusCode: 429 } },
+    ])('retries transient provenance errors before publication: %j', async (details) => {
+      vi.useFakeTimers();
+      const error = Object.assign(new Error('signing failed'), details);
+      (publish as Mock).mockRejectedValueOnce(error).mockResolvedValueOnce(null);
+
+      const promise = npmPublish(pkg, tarFilePath, { provenance: true }, conf).catch((err) => err);
+      await vi.runAllTimersAsync();
+      await expect(promise).resolves.toBeNull();
+      expect(publish).toHaveBeenCalledTimes(2);
+      expect(runLifecycle).toHaveBeenCalledTimes(2);
+    });
+
+    it('stops after three transient signing failures without running publish lifecycle scripts', async () => {
+      vi.useFakeTimers();
+      const error = Object.assign(new Error('signing timed out'), {
+        code: 'TLOG_CREATE_ENTRY_ERROR',
+        cause: { type: 'request-timeout' },
+      });
+      (publish as Mock).mockRejectedValue(error);
+
+      const promise = npmPublish(pkg, tarFilePath, { provenance: true }, conf).catch((err) => err);
+      await vi.runAllTimersAsync();
+      expect(await promise).toBe(error);
+      expect(publish).toHaveBeenCalledTimes(3);
+      expect(runLifecycle).not.toHaveBeenCalled();
     });
 
     it('retries publish when a tlog 409 conflict error occurs', async () => {
@@ -349,7 +396,9 @@ describe('npm-publish', () => {
     it.each([
       { code: 'E403' },
       { code: 'E409', cause: { statusCode: 409 } },
-      { code: 'TLOG_CREATE_ENTRY_ERROR', cause: { statusCode: 500 } },
+      { code: 'TLOG_CREATE_ENTRY_ERROR', cause: { statusCode: 400 } },
+      { code: 'CA_CREATE_SIGNING_CERTIFICATE_ERROR', cause: { statusCode: 403 } },
+      { code: 'E500', statusCode: 500 },
       { code: 'TLOG_CREATE_ENTRY_ERROR' },
     ])('does not retry other publish errors: %j', async (details) => {
       const error = Object.assign(new Error('publish failed'), details);
