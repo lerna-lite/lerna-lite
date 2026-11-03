@@ -1095,8 +1095,12 @@ export class PublishCommand extends Command<PublishCommandOption> {
       const distTag = preDistTag || getDistTag(pkg.get('publishConfig'));
 
       return Promise.resolve()
-        .then(() => pulseTillDone(remove(spec, 'lerna-temp', opts, this.otpCache)))
         .then(() => pulseTillDone(add(spec, distTag, opts, this.otpCache)))
+        .then(() => {
+          if (distTag?.trim() !== 'lerna-temp') {
+            return pulseTillDone(remove(spec, 'lerna-temp', opts, this.otpCache, pkg.version));
+          }
+        })
         .then(() => {
           tracker.success('dist-tag', '%s@%s => %j', pkg.name, pkg.version, distTag);
           tracker.completeWork(1);
