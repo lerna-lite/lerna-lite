@@ -323,7 +323,9 @@ Strip (remove) certain keys from every package before publishing them to the reg
 lerna version --strip-package-keys 'devDependencies' 'scripts'
 ```
 
-> **Note** lifecycle scripts (`prepublish`, `prepublishOnly`, `prepack`, `postpack`) are executed after the field removal process and for that reason, if any of these scripts are found, it will leave them in place and skip the removal whenever found.
+Root pre-pack lifecycle scripts run before fields are stripped, so workspace builds can still use package scripts. Fields are stripped before `publishConfig` overrides are applied.
+
+> **Note** package lifecycle scripts (`prepublish`, `prepublishOnly`, `prepack`, `postpack`) are executed after the field removal process and for that reason, if any of these scripts are found, it will leave them in place and skip the removal whenever found.
 
 > **Note** this option will actually temporarily modify the actual `package.json` just before the publish process starts and will then revert the changes after the publish process is completed. If for whatever reason, your publish process fails, it is possible that your packages are transformed into an invalid state (e.g. `scripts` could be stripped), so it very important to review your `package.json` after a publish failure.
 
