@@ -147,6 +147,8 @@ lerna publish --canary preminor
 When run with this flag, `lerna publish` publishes packages in a more granular way (per commit).
 Before publishing to npm, it creates the new `version` tag by taking the current `version`, bumping it to the next _minor_ version, adding the provided meta suffix (defaults to `alpha`) and appending the current git sha (ex: `1.0.0` becomes `1.1.0-alpha.0+81e3b443`).
 
+If the abbreviated Git SHA contains only digits, it is prefixed with `g` (for example, `1.0.1-alpha.0.g0123456`) so leading zeros remain valid in the prerelease identifier.
+
 If you have publish canary releases from multiple active development branches in CI,
 it is recommended to customize the [`--preid`](#--preid) and [`--dist-tag <tag>`](#--dist-tag-tag) on a per-branch basis to avoid clashing versions.
 
@@ -565,6 +567,8 @@ NPM provenance is a security feature that creates a verifiable connection betwee
 You can enable Provenance via `.npmrc` or within the workflow
 - in `.npmrc` via `provenance=true`
 - or in the workflow via `env: NPM_CONFIG_PROVENANCE: true`
+
+Publishing and provenance signing use npm's `fetch-timeout` setting, which defaults to 300000 milliseconds (five minutes). Configure it in `.npmrc` (for example, `fetch-timeout=60000`) or with `NPM_CONFIG_FETCH_TIMEOUT`. This avoids Sigstore's shorter default timeout, which can cause duplicate-entry conflicts when a slow transparency-log request is retried. Lerna-Lite still retries a transparency-log conflict up to three total attempts; persistent failures stop publishing.
 
 For more detailed informations on how to enable the feature and use this in a CI environment like GitHub Action Workflow, you can read this article that I wrote:
 - [How to publish on npm with `--provenance` using Lerna-Lite](https://dev.to/ghiscoding/how-to-publish-on-npm-with-provenance-using-lerna-lite-3cjf)

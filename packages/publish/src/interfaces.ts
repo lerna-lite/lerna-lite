@@ -23,6 +23,8 @@ export interface LibNpmPublishOptions extends KebabCase<fetch.FetchOptions> {
   dryRun?: boolean;
   // libnpmpublish / npm-registry-fetch check strictSSL rather than strict-ssl
   strictSSL?: boolean | 'true' | 'false';
+  /** Request timeout in milliseconds, shared by registry requests and provenance signing. */
+  timeout?: number;
   /* Passed to libnpmpublish as `opts.defaultTag` to preserve npm v6 back-compat */
   tag?: string;
   registry?: string;

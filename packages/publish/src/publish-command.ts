@@ -493,9 +493,12 @@ export class PublishCommand extends Command<PublishCommandOption> {
       // the next version is bumped without concern for preid or current index
       const nextVersion = increment(lastVersion.replace(this.tagPrefix, ''), release.replace('pre', '') as any);
 
+      // Numeric prerelease identifiers cannot contain leading zeros. Keep numeric Git hashes alphanumeric.
+      const shaIdentifier = /^\d+$/.test(sha) ? `g${sha}` : sha;
+
       // semver.inc() starts a new prerelease at .0, git describe starts at .1
       // and build metadata is always ignored when comparing dependency ranges
-      return `${nextVersion}-${preid}.${Math.max(0, refCount - 1)}.${sha}`;
+      return `${nextVersion}-${preid}.${Math.max(0, refCount - 1)}.${shaIdentifier}`;
     };
 
     if (isIndependent) {
