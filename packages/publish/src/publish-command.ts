@@ -1,5 +1,6 @@
 import crypto from 'node:crypto';
 import { EOL, tmpdir } from 'node:os';
+import { resolve } from 'node:path';
 import { dirname, normalize, join as pathJoin, relative } from 'node:path';
 
 import type {
@@ -35,6 +36,9 @@ import {
 import { pMap } from '@lerna-lite/core';
 import type { OneTimePasswordCache } from '@lerna-lite/version';
 import { getOneTimePassword, VersionCommand } from '@lerna-lite/version';
+import PackageJson from '@npmcli/package-json';
+import npa from 'npm-package-arg';
+import npmFetch from 'npm-registry-fetch';
 import { increment } from 'verkit';
 
 import type { Tarball } from './interfaces.js';
@@ -43,6 +47,7 @@ import { getCurrentSHA } from './lib/get-current-sha.js';
 import { getCurrentTags } from './lib/get-current-tags.js';
 import { getNpmUsername } from './lib/get-npm-username.js';
 import { getPackagesWithoutLicense } from './lib/get-packages-without-license.js';
+import { getPacked } from './lib/get-packed.js';
 import { getTaggedPackages } from './lib/get-tagged-packages.js';
 import { getTwoFactorAuthRequired } from './lib/get-two-factor-auth-required.js';
 import { getUnpublishedPackages } from './lib/get-unpublished-packages.js';
@@ -52,8 +57,22 @@ import { isNpmPkgGitHubPublishVersionConflict } from './lib/is-npm-pkg-github-pu
 import { logPacked } from './lib/log-packed.js';
 import { add, remove } from './lib/npm-dist-tag.js';
 import { npmPublish } from './lib/npm-publish.js';
+import { oidc } from './lib/oidc.js';
 import { overridePublishConfig } from './lib/override-publish-config.js';
 import { packDirectory } from './lib/pack-directory.js';
+import {
+  assertReleaseTags,
+  archiveTarball,
+  archivedTarballPath,
+  manifestHash,
+  readRegistryState,
+  readReleasePlan,
+  recoveryError,
+  registryUrl,
+  tarballHash,
+  writeReleasePlan,
+  type ReleasePlan,
+} from './lib/release-plan.js';
 import { removeTempLicenses } from './lib/remove-temp-licenses.js';
 import type { Queue } from './lib/throttle-queue.js';
 import { TailHeadQueue } from './lib/throttle-queue.js';
@@ -75,6 +94,10 @@ export class PublishCommand extends Command<PublishCommandOption> {
   npmSession = '';
   packagesToPublish: Package[] = [];
   publishedPackages: Package[] = [];
+  releasePlan?: ReleasePlan;
+  releaseCommit?: string;
+  alreadyPublished = new Set<string>();
+  acceptedExisting = new Set<string>();
   packagesToBeLicensed?: Package[] = [];
   /** Map of package name to npm staging `stageId` (UUID) when `--stage` is used */
   stageIds = new Map<string, string>();
@@ -95,7 +118,7 @@ export class PublishCommand extends Command<PublishCommandOption> {
 
   get requiresGit() {
     // `lerna publish from-package` doesn't _need_ git, per se
-    return this.options.bump !== 'from-package';
+    return Boolean(this.options.releasePlan || this.options.resume) || this.options.bump !== 'from-package';
   }
 
   constructor(argv: PublishCommandOption | ProjectConfig) {
@@ -153,6 +176,18 @@ export class PublishCommand extends Command<PublishCommandOption> {
   }
 
   initialize() {
+    if (this.options.resumeAllowExisting?.length && !this.options.resume) {
+      recoveryError('--resume-allow-existing requires --resume.');
+    }
+    if (
+      (this.options.releasePlan || this.options.resume) &&
+      (this.options.canary || this.options.stage || this.options.gitHead)
+    ) {
+      recoveryError('Release plans support stable, non-staged releases with the current Git commit.');
+    }
+    if (this.options.resume && (this.options.releasePlan || this.options.bump)) {
+      recoveryError('--resume cannot be combined with a version bump, from-git, from-package, or --release-plan.');
+    }
     if (this.options.verifyAccess === false) {
       this.logger.warn(
         'verify-access',
@@ -229,7 +264,9 @@ export class PublishCommand extends Command<PublishCommandOption> {
 
     let chain: Promise<any> = Promise.resolve();
 
-    if (this.options.bump === 'from-git') {
+    if (this.options.resume) {
+      chain = chain.then(() => this.detectResume());
+    } else if (this.options.bump === 'from-git') {
       chain = chain.then(() => this.detectFromGit());
     } else if (this.options.bump === 'from-package') {
       chain = chain.then(() => this.detectFromPackage());
@@ -279,6 +316,12 @@ export class PublishCommand extends Command<PublishCommandOption> {
   }
 
   async execute() {
+    if (this.options.releasePlan || this.options.resume) {
+      this.releaseCommit = getCurrentSHA(this.execOpts);
+      if (!this.options.dryRun) {
+        await describeRef(this.execOpts).then(throwIfUncommitted(this.execOpts));
+      }
+    }
     const logPrefix = this.options.dryRun ? colorize('bgMagenta', '[dry-run]') : '';
     this.enableProgressBar();
     this.logger.info('publish', `Publishing packages to npm... ${logPrefix}`);
@@ -303,13 +346,18 @@ export class PublishCommand extends Command<PublishCommandOption> {
     }
     await this.serializeChanges();
     await this.packUpdated();
+    if (this.options.releasePlan || this.options.resume) {
+      await this.prepareReleasePlan();
+    }
     await this.publishPacked();
 
     if (this.gitReset) {
       await this.resetChanges();
     }
 
-    if (this.options.tempTag && !this.options.stage) {
+    if (this.releasePlan) {
+      await this.promoteReleasePlan();
+    } else if (this.options.tempTag && !this.options.stage) {
       await this.npmUpdateAsLatest();
     }
 
@@ -371,6 +419,181 @@ export class PublishCommand extends Command<PublishCommandOption> {
     return describeRef(this.execOpts, undefined, this.options.dryRun).then(
       throwIfUncommitted(this.execOpts, this.options.dryRun)
     );
+  }
+
+  async detectResume() {
+    const plan = await readReleasePlan(resolve(this.project.rootPath, this.options.resume!));
+    if (getCurrentSHA(this.execOpts) !== plan.gitHead) {
+      recoveryError("Check out the release plan's Git commit before resuming.");
+    }
+    // This read-only check is also required for a resume dry run.
+    await describeRef(this.execOpts).then(throwIfUncommitted(this.execOpts));
+    const updates = plan.packages.map(({ name, version }) => {
+      const node = this.packageGraph.get(name);
+      if (!node || node.pkg.private || node.version !== version) {
+        recoveryError(`Release plan does not match ${name}@${version} in this checkout.`);
+      }
+      return node;
+    });
+    for (const value of this.options.resumeAllowExisting ?? []) {
+      const spec = npa(value);
+      if (spec.type !== 'version' || !plan.packages.some((pkg) => pkg.name === spec.name && pkg.version === spec.rawSpec)) {
+        recoveryError(`--resume-allow-existing entry ${value} must exactly match a package and version in the release plan.`);
+      }
+      this.acceptedExisting.add(spec.name!);
+      this.logger.warn('resume', `Accepting ${value} without verifying that its published contents match the release plan.`);
+    }
+    this.releasePlan = plan;
+    this.options.tempTag = plan.tempTag;
+    return { updates, updatesVersions: updates.map((node) => [node.name, node.version]), needsConfirmation: true };
+  }
+
+  async prepareReleasePlan() {
+    this.alreadyPublished.clear();
+    const gitHead = getCurrentSHA(this.execOpts);
+    if (this.releaseCommit && this.releaseCommit !== gitHead) {
+      recoveryError('Git HEAD changed during release preparation.');
+    }
+    if (this.releasePlan && this.releasePlan.gitHead !== gitHead) {
+      recoveryError('Git HEAD changed during release preparation.');
+    }
+    const plan: ReleasePlan = this.releasePlan ?? {
+      schemaVersion: 1,
+      gitHead,
+      tempTag: Boolean(this.options.tempTag),
+      packages: [],
+    };
+    const checked = await pMap(
+      this.packagesToPublish,
+      async (pkg) => {
+        const manifest = (await PackageJson.prepare(pkg.contents)).content;
+        if (manifest.name !== pkg.name || manifest.version !== pkg.version) {
+          recoveryError(`Prepared manifest differs from ${pkg.name}@${pkg.version}.`);
+        }
+        const opts = { ...this.conf.snapshot, ...manifest.publishConfig };
+        const registry = registryUrl(npmFetch.pickRegistry(npa(pkg.name), opts));
+        opts.registry = registry;
+        if (!this.options.dryRun) {
+          await oidc({ packageName: pkg.name, registry, opts, config: { set() {} } as unknown as Conf });
+        }
+        const tag = (
+          this.getPreDistTag(pkg) ||
+          (this.conf.get('tag') !== 'latest' ? this.conf.get('tag') : manifest.publishConfig?.tag || this.conf.get('tag'))
+        ).trim();
+        const packed = pkg as Package & { packed: Tarball };
+        let sha256 = await tarballHash(packed.packed.tarFilePath);
+        const manifestSha256 = manifestHash(manifest);
+        const recorded = this.releasePlan?.packages.find((entry) => entry.name === pkg.name);
+        if (recorded && (recorded.registry !== registry || recorded.manifestSha256 !== manifestSha256 || recorded.tag !== tag)) {
+          recoveryError(
+            `Registry, dist-tag, or rebuilt tarball differs from the release plan for ${pkg.name}. Use the original publish options and build inputs.`
+          );
+        }
+        if (recorded && recorded.sha256 !== sha256) {
+          const archive = archivedTarballPath(resolve(this.project.rootPath, this.options.resume!), recorded.sha256);
+          let archivedHash: string;
+          try {
+            archivedHash = await tarballHash(archive);
+          } catch (error: any) {
+            if (error.code !== 'ENOENT') {
+              throw error;
+            }
+            recoveryError(
+              `Rebuilt tarball differs from the release plan for ${pkg.name}, and the original archived tarball is missing.`
+            );
+          }
+          if (archivedHash !== recorded.sha256) {
+            recoveryError(`Archived tarball differs from the release plan for ${pkg.name}.`);
+          }
+          this.logger.notice('resume', `Using the archived tarball for ${pkg.name}; the rebuilt artifact differs.`);
+          packed.packed = await getPacked(pkg, archive);
+          sha256 = archivedHash;
+        }
+        const state = await readRegistryState(
+          { name: pkg.name, version: pkg.version, registry },
+          opts,
+          this.acceptedExisting.has(pkg.name) ? undefined : (pkg as Package & { packed: Tarball }).packed.tarFilePath
+        );
+        if (recorded) {
+          if (this.acceptedExisting.has(pkg.name) && !state.published) {
+            recoveryError(`--resume-allow-existing requires ${pkg.name}@${pkg.version} to exist in the registry.`);
+          }
+          assertReleaseTags(recorded, state.tags, plan.tempTag);
+          return { name: pkg.name, published: state.published };
+        } else {
+          return {
+            name: pkg.name,
+            published: false,
+            entry: {
+              name: pkg.name,
+              version: pkg.version,
+              registry,
+              tag,
+              sha256,
+              manifestSha256,
+              previousTag: state.tags[tag] ?? null,
+              previousTemporaryTag: state.tags['lerna-temp'] ?? null,
+            },
+          };
+        }
+      },
+      { concurrency: Math.min(this.concurrency || 4, 4) }
+    );
+    for (const result of checked) {
+      if (result.published) {
+        this.alreadyPublished.add(result.name);
+      }
+      if (result.entry) {
+        plan.packages.push(result.entry);
+      }
+    }
+    if (!this.options.resume && !this.options.dryRun) {
+      const path = resolve(this.project.rootPath, this.options.releasePlan!);
+      await writeReleasePlan(path, plan);
+      for (const pkg of this.packagesToPublish) {
+        const record = plan.packages.find((entry) => entry.name === pkg.name)!;
+        await archiveTarball(path, record.sha256, (pkg as Package & { packed: Tarball }).packed.tarFilePath);
+      }
+    }
+    this.releasePlan = plan;
+  }
+
+  async promoteReleasePlan() {
+    if (this.options.dryRun) {
+      return;
+    }
+    // Check the whole release before making tag changes. Registry operations are not atomic.
+    const entries = await pMap(
+      this.releasePlan!.packages,
+      async (pkg) => {
+        const opts = { ...this.conf.snapshot, registry: pkg.registry };
+        const scope = npa(pkg.name).scope;
+        if (scope) {
+          opts[`${scope}:registry`] = pkg.registry;
+        }
+        // OIDC exchange tokens are package-scoped: never put them in the shared configuration.
+        await oidc({ packageName: pkg.name, registry: pkg.registry, opts, config: { set() {} } as unknown as Conf });
+        const artifact = this.packagesToPublish.find((candidate) => candidate.name === pkg.name) as Package & { packed: Tarball };
+        const state = await readRegistryState(
+          pkg,
+          opts,
+          this.acceptedExisting.has(pkg.name) ? undefined : artifact.packed.tarFilePath
+        );
+        if (!state.published) {
+          recoveryError(`Registry has not confirmed ${pkg.name}@${pkg.version}; retry when it is available.`);
+        }
+        assertReleaseTags(pkg, state.tags, this.releasePlan!.tempTag);
+        return { pkg, opts };
+      },
+      { concurrency: 4 }
+    );
+    for (const { pkg, opts } of entries) {
+      const spec = `${pkg.name}@${pkg.version}`;
+      await add(spec, pkg.tag, opts, this.otpCache, (tags) => assertReleaseTags(pkg, tags, this.releasePlan!.tempTag));
+      if (this.releasePlan!.tempTag && pkg.tag !== 'lerna-temp') {
+        await remove(spec, 'lerna-temp', opts, this.otpCache, pkg.version);
+      }
+    }
   }
 
   detectFromGit() {
@@ -968,17 +1191,37 @@ export class PublishCommand extends Command<PublishCommandOption> {
     const provenanceUrls = new Map();
 
     const mapper = async (pkg: Package & { packed: Tarball }) => {
+      if (this.alreadyPublished.has(pkg.name)) {
+        tracker.info('resume', `Already published: ${pkg.name}@${pkg.version}`);
+        tracker.completeWork(1);
+        return pkg;
+      }
       const preDistTag = this.getPreDistTag(pkg);
       const tag = !this.options.tempTag && preDistTag ? preDistTag : opts.tag;
       const pkgOpts = Object.assign({}, opts, { tag });
-      const publish = async () =>
-        pulseTillDone(
-          q
-            ? q.queue(() => npmPublish(pkg, pkg.packed.tarFilePath, pkgOpts, this.conf, this.otpCache))
-            : npmPublish(pkg, pkg.packed.tarFilePath, pkgOpts, this.conf, this.otpCache)
-        );
+      const planned = this.releasePlan?.packages.find((entry) => entry.name === pkg.name);
+      if (planned) {
+        pkgOpts.registry = planned.registry;
+        pkgOpts.tag = this.releasePlan!.tempTag ? 'lerna-temp' : planned.tag;
+      }
+      const publishConf = this.releasePlan ? ({ set() {} } as unknown as Conf) : this.conf;
+      const upload = () =>
+        planned
+          ? npmPublish(pkg, pkg.packed.tarFilePath, pkgOpts, publishConf, this.otpCache, { ...planned, tag: pkgOpts.tag })
+          : npmPublish(pkg, pkg.packed.tarFilePath, pkgOpts, publishConf, this.otpCache);
+      const publish = async () => pulseTillDone(q ? q.queue(upload) : upload());
 
       try {
+        if (planned && !this.options.dryRun) {
+          await oidc({ packageName: pkg.name, registry: planned.registry, opts: pkgOpts, config: publishConf });
+          const state = await readRegistryState(planned, pkgOpts, pkg.packed.tarFilePath);
+          assertReleaseTags(planned, state.tags, this.releasePlan!.tempTag);
+          if (state.published) {
+            tracker.info('resume', `Already published: ${pkg.name}@${pkg.version}`);
+            tracker.completeWork(1);
+            return pkg;
+          }
+        }
         const publishResult = await publish().catch(async (err) => {
           if (err.code !== 'EOTP') {
             throw err;

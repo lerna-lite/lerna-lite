@@ -121,6 +121,22 @@ export default {
         describe: 'Create a temporary tag while publishing.',
         type: 'boolean',
       },
+      'release-plan': {
+        describe: 'Write a stable-release recovery plan before uploading packages.',
+        type: 'string',
+        requiresArg: true,
+      },
+      resume: {
+        describe: 'Resume the stable release described by a recovery plan, without versioning.',
+        type: 'string',
+        requiresArg: true,
+      },
+      'resume-allow-existing': {
+        describe: 'Accept specified existing package@version entries without matching their published integrity.',
+        type: 'array',
+        string: true,
+        requiresArg: true,
+      },
       stage: {
         describe:
           'Publish packages to the npm staging area instead of making them immediately available. The staged versions must later be approved by a maintainer (via `npm stage approve`) before becoming publicly installable.',

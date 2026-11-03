@@ -13,7 +13,13 @@ import type { DistTagOptions } from '../interfaces.js';
  * @param {DistTagOptions} options
  * @param {import("@lerna/otplease").OneTimePasswordCache} otpCache
  */
-export function add(spec: string, tag = '', options: DistTagOptions, otpCache: OneTimePasswordCache) {
+export function add(
+  spec: string,
+  tag = '',
+  options: DistTagOptions,
+  otpCache: OneTimePasswordCache,
+  validateTags?: (tags: Record<string, string>) => void
+) {
   const opts = {
     log,
     ...options,
@@ -32,6 +38,7 @@ export function add(spec: string, tag = '', options: DistTagOptions, otpCache: O
   }
 
   return fetchTags(opts).then((tags) => {
+    validateTags?.(tags);
     if (tags[cleanTag] === version) {
       opts.log.warn('dist-tag', `${name}@${cleanTag} already set to ${version}`);
       return tags;

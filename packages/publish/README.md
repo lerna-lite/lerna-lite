@@ -102,6 +102,7 @@ $ lerna publish --scope my-component test
     - [`--registry <url>`](#--registry-url)
     - [`--tag-version-prefix`](#--tag-version-prefix)
     - [`--temp-tag`](#--temp-tag)
+    - [`--release-plan <file>` / `--resume <file>`](#--release-plan-file--resume-file)
     - [`--stage`](#--stage)
     - [`--throttle`](#--throttle)
     - [`--summary-file <dir>`](#--summary-file)
@@ -391,6 +392,34 @@ You could also configure this at the root level of `lerna.json`, applying to bot
   "version": "independent"
 }
 ```
+
+### `--release-plan <file>` / `--resume <file>`
+
+Use `--release-plan` to opt into recovery for a versioned, non-staged release:
+
+```sh
+lerna publish from-git --release-plan release.json --temp-tag
+# After fixing a failure, in a clean checkout of the same release commit:
+lerna publish --resume release.json
+```
+
+The first command packs the selected packages, reads their publishing registries, and writes the plan and original tarballs **before uploading any package**. The plan records the Git commit, exact package versions, effective registries, destination tags and their prior values, and hashes of the tarballs and prepared manifests. It contains no authentication configuration and is never overwritten. Tarballs are stored alongside the plan in `release.json.artifacts/` and contain the package contents. With a combined version-and-publish command, versioning and its Git pushes still happen before the plan is written.
+
+Retain **both** the plan and its `.artifacts` directory as CI artifacts even when publishing fails (for example, upload them in a workflow step with `if: always()`). Restore both beside each other when retrying in a fresh checkout of the recorded commit. Keep them outside published package directories and do not commit them as a new release commit. Only resume plans and artifacts from trusted release jobs.
+
+Resume selects only packages recorded in the plan and does not run versioning. Repeat the original build, registry, and dist-tag options, and supply current credentials; credentials are not recovered from the plan. The temporary-tag setting is restored automatically. Lifecycle scripts run again, so they must be safe to repeat. If a rebuilt tarball differs, resume verifies and uses the archived original; if the archive is unavailable, the rebuild must match. Prepared manifests must still match their recorded hashes. A changed manifest, package version, Git commit, registry, or target tag stops the retry before uploads.
+
+Versions already present in the registry are skipped after their published integrity or shasum is checked against the verified tarball. Missing integrity metadata or different published contents stops recovery. After all versions are confirmed, the command completes destination-tag updates and temporary-tag cleanup for every recorded package, even if no new uploads were needed. It checks for unexpected tag changes from another release immediately before updating each destination tag. These registry operations are not atomic: serialize releases for the same packages. Registry authentication and network errors remain failures. A registry 404 is treated as an absent package; some registries also use 404 to conceal inaccessible private packages, so ensure the retry has the original read and publish permissions.
+
+If you manually published a package from the release and its tarball differs (for example, an initial npm publish needed to configure trusted publishing), inspect the published contents first. You can explicitly accept that exact existing version while resuming:
+
+```sh
+lerna publish --resume release.json --resume-allow-existing package-name@1.2.3
+```
+
+This bypasses published-byte verification only for the specified package and version. The entry must exist in the plan and in the registry; other packages still require integrity verification. The artifact, prepared manifest, commit, registries, and tags must still match the plan. Repeat the option for each manually verified package.
+
+`--resume` cannot be combined with a version bump, `from-git`, `from-package`, or `--release-plan`. Canary publishes, staged uploads, and an explicit `--git-head` are unsupported. A dry run validates and packs but does not write a plan, upload packages, or modify registry tags. Resume requires a clean tracked working tree; it does not automatically clean changes left by a failed run or resume GitHub release creation.
 
 ### `--temp-tag`
 

@@ -1,3 +1,4 @@
+import { createHash } from 'node:crypto';
 import { readFile } from 'node:fs/promises';
 import { dirname, join, normalize } from 'node:path';
 
@@ -11,6 +12,7 @@ import { afterEach, beforeEach, describe, expect, it, vi, type Mock } from 'vite
 import type { LibNpmPublishOptions } from '../interfaces.js';
 import { npmPublish } from '../lib/npm-publish.js';
 import { oidc } from '../lib/oidc.js';
+import { manifestHash, type ReleasePlanPackage } from '../lib/release-plan.js';
 
 vi.mock('fs/promises');
 vi.mock('libnpmpublish');
@@ -41,6 +43,58 @@ describe('npm-publish', () => {
   const rootPath = normalize('/test');
   const pkg = new Package({ name: '@scope/test', version: '1.10.100' } as RawManifest, join(rootPath, 'npmPublish/test'), rootPath);
   const conf = new Conf({});
+
+  it('rejects publication that changes after recovery validation', async () => {
+    const manifest = { name: pkg.name, version: pkg.version };
+    const planned: ReleasePlanPackage = {
+      name: pkg.name,
+      version: pkg.version,
+      registry: 'https://registry.npmjs.org/',
+      tag: 'latest',
+      previousTag: null,
+      previousTemporaryTag: null,
+      sha256: createHash('sha256').update(mockTarData).digest('hex'),
+      manifestSha256: manifestHash(manifest),
+    };
+    (PackageJson.prepare as Mock).mockResolvedValueOnce({ content: { ...manifest, dependencies: { changed: '1.0.0' } } });
+    await expect(npmPublish(pkg, tarFilePath, {}, conf, {}, planned)).rejects.toThrow('changed after release validation');
+    expect(publish).not.toHaveBeenCalled();
+  });
+
+  it('publishes an unchanged recovery artifact to the recorded registry and tag', async () => {
+    const manifest = { name: pkg.name, version: pkg.version };
+    const planned: ReleasePlanPackage = {
+      name: pkg.name,
+      version: pkg.version,
+      registry: 'https://registry.npmjs.org/',
+      tag: 'latest',
+      previousTag: null,
+      previousTemporaryTag: null,
+      sha256: createHash('sha256').update(mockTarData).digest('hex'),
+      manifestSha256: manifestHash(manifest),
+    };
+    (PackageJson.prepare as Mock).mockResolvedValueOnce({ content: manifest });
+    await npmPublish(pkg, tarFilePath, {}, conf, {}, planned);
+    expect(publish).toHaveBeenCalledWith(manifest, mockTarData, expect.objectContaining({ defaultTag: 'latest' }));
+  });
+
+  it('rejects a tarball modified after recovery validation', async () => {
+    const manifest = { name: pkg.name, version: pkg.version };
+    const planned: ReleasePlanPackage = {
+      name: pkg.name,
+      version: pkg.version,
+      registry: 'https://registry.npmjs.org/',
+      tag: 'latest',
+      previousTag: null,
+      previousTemporaryTag: null,
+      sha256: createHash('sha256').update(mockTarData).digest('hex'),
+      manifestSha256: manifestHash(manifest),
+    };
+    (PackageJson.prepare as Mock).mockResolvedValueOnce({ content: manifest });
+    (readFile as Mock).mockResolvedValueOnce(Buffer.from('changed'));
+    await expect(npmPublish(pkg, tarFilePath, {}, conf, {}, planned)).rejects.toThrow('changed after release validation');
+    expect(publish).not.toHaveBeenCalled();
+  });
 
   it('calls external libraries with correct arguments', async () => {
     const opts = { tag: 'published-tag' };

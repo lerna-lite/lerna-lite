@@ -204,3 +204,5 @@ describe('lerna my-command', () => {
 
 See [e2e/README.md](e2e/README.md) for comprehensive documentation on writing e2e tests.
 
+Maintainers can find release and recovery instructions in [docs/RELEASING.md](docs/RELEASING.md).
+

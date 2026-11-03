@@ -1,3 +1,4 @@
+import { createHash } from 'node:crypto';
 import { readFile } from 'node:fs/promises';
 import { dirname, join } from 'node:path';
 
@@ -7,10 +8,12 @@ import { otplease, type OneTimePasswordCache } from '@lerna-lite/version';
 import PackageJson from '@npmcli/package-json';
 import { publish } from 'libnpmpublish';
 import npa from 'npm-package-arg';
+import npmFetch from 'npm-registry-fetch';
 
 import type { LibNpmPublishOptions, PackagePublishConfig } from '../interfaces.js';
 import { isRegistryPublishVersionConflict } from './is-registry-publish-version-conflict.js';
 import { oidc } from './oidc.js';
+import { manifestHash, recoveryError, registryUrl, type ReleasePlanPackage } from './release-plan.js';
 
 const SIGNING_MAX_ATTEMPTS = 3;
 const SIGNING_RETRY_DELAY = 2000;
@@ -88,7 +91,8 @@ export async function npmPublish(
   tarFilePath: string,
   options: Omit<LibNpmPublishOptions, 'defaultTag'> = {},
   conf: Conf,
-  otpCache?: OneTimePasswordCache
+  otpCache?: OneTimePasswordCache,
+  planned?: ReleasePlanPackage
 ): Promise<void | Response> {
   const { dryRun, ...remainingOptions } = flattenOptions(options);
   const { scope } = npa(pkg.name ?? '');
@@ -125,6 +129,15 @@ export async function npmPublish(
     ]);
 
     const manifestContent = npmCliPackageJson.content;
+    if (
+      planned &&
+      (manifestContent.name !== planned.name ||
+        manifestContent.version !== planned.version ||
+        manifestHash(manifestContent) !== planned.manifestSha256 ||
+        createHash('sha256').update(tarData).digest('hex') !== planned.sha256)
+    ) {
+      recoveryError(`Prepared publication changed after release validation for ${pkg.name}.`);
+    }
 
     // non-default tag needs to override publishConfig.tag,
     // which is merged into opts below if necessary
@@ -139,6 +152,12 @@ export async function npmPublish(
     // publishConfig is no longer consumed in n-r-f, so merge here
     if (manifestContent.publishConfig) {
       Object.assign(opts, publishConfigToOpts(manifestContent.publishConfig));
+    }
+    if (
+      planned &&
+      (registryUrl(npmFetch.pickRegistry(npa(planned.name), opts)) !== planned.registry || opts.defaultTag !== planned.tag)
+    ) {
+      recoveryError(`Publishing registry or dist-tag changed after release validation for ${pkg.name}.`);
     }
 
     // Sigstore retries POSTs with the same signature after timeouts, which can

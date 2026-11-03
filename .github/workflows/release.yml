@@ -12,8 +12,17 @@ on:
       skip_version_retry_publish:
         type: boolean
         description: "Skip running `lerna version` and run publish-only retry (useful to retry failed publish)"
+      release_plan_run_id:
+        type: string
+        required: false
+        description: "Workflow run ID containing a release plan to resume (skips versioning)"
+      resume_allow_existing:
+        type: string
+        required: false
+        description: "Manually verified existing package@versions, comma-separated (requires a recovery run ID)"
 
 permissions:
+  actions: read # download a recovery artifact from a previous workflow run
   contents: write # to be able to publish a GitHub release
   id-token: write # to enable use of OIDC for npm provenance
   issues: write # to be able to comment on released issues
@@ -43,6 +52,45 @@ jobs:
           echo "Error: Your GitHub username (${{ github.actor }}) is not on the allowed list of Admins that can run this workflow"
           exit 1
 
+      - name: Validate recovery inputs
+        shell: bash
+        env:
+          RECOVERY_RUN_ID: ${{ inputs.release_plan_run_id }}
+          ALLOW_EXISTING: ${{ inputs.resume_allow_existing }}
+        run: |
+          if [[ -n "$RECOVERY_RUN_ID" && ! "$RECOVERY_RUN_ID" =~ ^[0-9]+$ ]]; then
+            echo "The recovery run ID must contain only digits."
+            exit 1
+          fi
+          if [[ -n "$ALLOW_EXISTING" && -z "$RECOVERY_RUN_ID" ]]; then
+            echo "Manually accepted versions require a recovery run ID."
+            exit 1
+          fi
+
+      - name: Download release recovery artifact
+        if: ${{ inputs.release_plan_run_id != '' }}
+        uses: actions/download-artifact@d3f86a106a0bac45b974a628896c90dbdf5c8093 # v4.3.0
+        with:
+          name: lerna-release-recovery
+          path: ${{ runner.temp }}/lerna-release-recovery
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          run-id: ${{ inputs.release_plan_run_id }}
+
+      - name: Verify release commit and workflow ref
+        if: ${{ inputs.release_plan_run_id != '' }}
+        shell: bash
+        run: |
+          release_sha=$(node -p 'JSON.parse(require("node:fs").readFileSync(process.env.RUNNER_TEMP + "/lerna-release-recovery/release.json", "utf8")).gitHead')
+          if [[ ! "$release_sha" =~ ^([a-f0-9]{40}|[a-f0-9]{64})$ ]]; then
+            echo "Invalid Git commit in recovery plan."
+            exit 1
+          fi
+          if [[ "$release_sha" != "$GITHUB_SHA" ]]; then
+            echo "Dispatch this workflow on a tag or branch at the release commit so npm provenance identifies the correct source."
+            exit 1
+          fi
+          git cat-file -e "$release_sha^{commit}"
+
       - name: Install pnpm itself
         uses: pnpm/setup@a0881977cd8ea73b1ed212236c99ca10dcc80cf4 # v3
         with:
@@ -69,7 +117,7 @@ jobs:
       - name: Run TypeScript build only (no linting)
         run: pnpm build
 
-      - if: ${{ inputs.skip_version_retry_publish != true }}
+      - if: ${{ inputs.skip_version_retry_publish != true && inputs.release_plan_run_id == '' }}
         name: Lerna Version (build query)
         shell: bash
         run: |
@@ -91,7 +139,7 @@ jobs:
               echo "LERNA_VERSION_QUERY=pnpm run local-lerna version --yes" >> $GITHUB_ENV
           fi
 
-      - if: ${{ inputs.skip_version_retry_publish != true }}
+      - if: ${{ inputs.skip_version_retry_publish != true && inputs.release_plan_run_id == '' }}
         name: Lerna Version 🏷️ ➜ ${{ env.LERNA_VERSION_TYPE }}
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
@@ -107,19 +155,56 @@ jobs:
 
       - name: Lerna Publish (build query)
         shell: bash
+        env:
+          RECOVERY_RUN_ID: ${{ inputs.release_plan_run_id }}
         run: |
-          if ${{ inputs.dryrun == true }}
+          if [[ -n "$RECOVERY_RUN_ID" ]]; then
+            echo "LERNA_PUBLISH_TYPE=Resume from release plan" >> $GITHUB_ENV
+          elif ${{ inputs.dryrun == true }}
           then 
             echo "LERNA_PUBLISH_TYPE=Dry-Run 🧪" >> $GITHUB_ENV 
-            echo "LERNA_PUBLISH_QUERY=pnpm run local-lerna publish from-package --force-publish --yes --dry-run" >> $GITHUB_ENV 
           else 
             echo "LERNA_PUBLISH_TYPE=Production 🚀" >> $GITHUB_ENV
-            echo "LERNA_PUBLISH_QUERY=pnpm run local-lerna publish from-package --force-publish --yes" >> $GITHUB_ENV 
+            mkdir -p "$RUNNER_TEMP/lerna-release-recovery"
           fi
 
       - name: Lerna Publish 📦 ➜ ${{ env.LERNA_PUBLISH_TYPE }}
+        id: publish
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          ALLOW_EXISTING: ${{ inputs.resume_allow_existing }}
+          RECOVERY_RUN_ID: ${{ inputs.release_plan_run_id }}
+          DRY_RUN: ${{ inputs.dryrun }}
         run: |
           echo "Running: ${{ env.LERNA_PUBLISH_TYPE }}"
-          pnpm exec ${{ env.LERNA_PUBLISH_QUERY }}
+          arguments=(publish)
+          if [[ -n "$RECOVERY_RUN_ID" ]]; then
+            arguments+=(--resume "$RUNNER_TEMP/lerna-release-recovery/release.json")
+          else
+            arguments+=(from-package --force-publish --release-plan "$RUNNER_TEMP/lerna-release-recovery/release.json")
+          fi
+          if [[ "$DRY_RUN" == "true" ]]; then
+            arguments+=(--dry-run)
+          fi
+          arguments+=(--yes)
+          if [[ -n "$ALLOW_EXISTING" ]]; then
+            IFS=',' read -r -a accepted_versions <<< "$ALLOW_EXISTING"
+            for index in "${!accepted_versions[@]}"; do
+              accepted_versions[$index]="${accepted_versions[$index]//[[:space:]]/}"
+              if [[ -z "${accepted_versions[$index]}" ]]; then
+                echo "Each manually accepted package must include a name and version."
+                exit 1
+              fi
+            done
+            arguments+=(--resume-allow-existing "${accepted_versions[@]}")
+          fi
+          pnpm run local-lerna "${arguments[@]}"
+
+      - name: Retain release recovery files
+        if: ${{ always() && steps.publish.outcome != '' && steps.publish.outcome != 'skipped' && inputs.dryrun != true && inputs.release_plan_run_id == '' }}
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
+        with:
+          name: lerna-release-recovery
+          path: ${{ runner.temp }}/lerna-release-recovery/
+          if-no-files-found: warn
+          compression-level: 0

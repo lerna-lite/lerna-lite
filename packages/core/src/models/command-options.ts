@@ -451,6 +451,15 @@ export interface PublishCommandOption extends VersionCommandOption {
   /** Generate a json summary report after all packages have been successfully published, you can pass an optional path for where to save the file. */
   summaryFile?: string;
 
+  /** Write an immutable stable-release recovery plan before uploading packages. */
+  releasePlan?: string;
+
+  /** Resume the exact stable release described by a recovery plan. */
+  resume?: string;
+
+  /** Explicitly accept specific already-published versions whose bytes differ from the plan. */
+  resumeAllowExisting?: string[];
+
   /** proxy for `--no-verify-access` */
   verifyAccess?: boolean;
 

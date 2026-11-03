@@ -485,6 +485,15 @@
             },
             "summaryFile": {
               "$ref": "#/$defs/commandOptions/publish/summaryFile"
+            },
+            "releasePlan": {
+              "$ref": "#/$defs/commandOptions/publish/releasePlan"
+            },
+            "resume": {
+              "$ref": "#/$defs/commandOptions/publish/resume"
+            },
+            "resumeAllowExisting": {
+              "$ref": "#/$defs/commandOptions/publish/resumeAllowExisting"
             }
           }
         },
@@ -1380,6 +1389,19 @@
         "summaryFile": {
           "anyOf": [{ "type": "string" }, { "type": "boolean" }],
           "description": "Generate a json summary report after all packages have been successfully published, you can pass an optional path for where to save the file."
+        },
+        "releasePlan": {
+          "type": "string",
+          "description": "Write an immutable stable-release recovery plan before uploading packages."
+        },
+        "resume": {
+          "type": "string",
+          "description": "Resume the stable release described by a recovery plan without versioning."
+        },
+        "resumeAllowExisting": {
+          "type": "array",
+          "items": { "type": "string" },
+          "description": "Explicitly accept specific already-published package@version entries without matching their published integrity."
         },
         "throttle": {
           "type": "boolean",

@@ -30,6 +30,7 @@ Thumbs.db
 dist
 tsconfig.tsbuildinfo
 tsconfig.*.tsbuildinfo
+/.release-recovery/
 
 # Tests Report & Coverage
 .vitest

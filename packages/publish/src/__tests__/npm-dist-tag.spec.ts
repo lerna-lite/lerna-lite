@@ -4,6 +4,7 @@ import { describe, expect, it, vi, type Mock } from 'vitest';
 
 import type { DistTagOptions } from '../interfaces.js';
 import * as npmDistTag from '../lib/npm-dist-tag.js';
+import { assertReleaseTags, type ReleasePlanPackage } from '../lib/release-plan.js';
 
 vi.mock('npm-registry-fetch');
 vi.mock('@lerna-lite/core', async () => ({
@@ -34,6 +35,25 @@ it('does not read or change registry tags during a dry-run', async () => {
 });
 
 describe('npmDistTag.add()', () => {
+  it('does not move a destination tag that changed after recovery checked the registry', async () => {
+    (fetch as any).json.mockResolvedValueOnce({ latest: '2.0.0' });
+    const plan: ReleasePlanPackage = {
+      name: 'some-pkg',
+      version: '1.0.1',
+      registry: 'https://registry.example.test/',
+      tag: 'latest',
+      previousTag: '1.0.0',
+      previousTemporaryTag: null,
+      sha256: 'a'.repeat(64),
+      manifestSha256: 'b'.repeat(64),
+    };
+    const opts = { ...baseOptions } as unknown as DistTagOptions;
+    await expect(npmDistTag.add('some-pkg@1.0.1', 'latest', opts, {}, (tags) => assertReleaseTags(plan, tags, false))).rejects.toThrow(
+      'Refusing to overwrite'
+    );
+    expect(fetch).not.toHaveBeenCalled();
+  });
+
   it('adds a dist-tag for a given package@version', async () => {
     const opts = { ...baseOptions } as unknown as DistTagOptions;
     const tags = await npmDistTag.add('@scope/some-pkg@1.0.1', 'added-tag', opts, null as any);
