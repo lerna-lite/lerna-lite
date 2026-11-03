@@ -568,7 +568,7 @@ You can enable Provenance via `.npmrc` or within the workflow
 - in `.npmrc` via `provenance=true`
 - or in the workflow via `env: NPM_CONFIG_PROVENANCE: true`
 
-Publishing and provenance signing use npm's `fetch-timeout` setting, which defaults to 300000 milliseconds (five minutes). Configure it in `.npmrc` (for example, `fetch-timeout=60000`) or with `NPM_CONFIG_FETCH_TIMEOUT`. This avoids Sigstore's shorter default timeout, which can cause duplicate-entry conflicts when a slow transparency-log request is retried. Lerna-Lite still retries a transparency-log conflict up to three total attempts; persistent failures stop publishing.
+Publishing and provenance signing use npm's `fetch-timeout` setting, which defaults to 300000 milliseconds (five minutes). Configure it in `.npmrc` (for example, `fetch-timeout=60000`) or with `NPM_CONFIG_FETCH_TIMEOUT`. To avoid submitting the same transparency-log entry twice after a timeout, Lerna-Lite retries transient signing failures with a fresh signature, up to three total attempts. Persistent failures stop publishing.
 
 For more detailed informations on how to enable the feature and use this in a CI environment like GitHub Action Workflow, you can read this article that I wrote:
 - [How to publish on npm with `--provenance` using Lerna-Lite](https://dev.to/ghiscoding/how-to-publish-on-npm-with-provenance-using-lerna-lite-3cjf)

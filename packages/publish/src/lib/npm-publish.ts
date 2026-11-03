@@ -11,30 +11,48 @@ import npa from 'npm-package-arg';
 import type { LibNpmPublishOptions, PackagePublishConfig } from '../interfaces.js';
 import { oidc } from './oidc.js';
 
-const TLOG_CONFLICT_MAX_ATTEMPTS = 3;
-const TLOG_CONFLICT_RETRY_DELAY = 2000;
+const SIGNING_MAX_ATTEMPTS = 3;
+const SIGNING_RETRY_DELAY = 2000;
+const RETRYABLE_NETWORK_CODES = new Set(['ECONNRESET', 'ECONNREFUSED', 'ETIMEDOUT', 'ESOCKETTIMEDOUT', 'EAI_AGAIN']);
 
 /**
- * Sigstore's internal HTTP retry can re-POST an entry that Rekor already stored, which then fails with a 409.
- * Provenance is generated before the registry PUT, so retrying is safe and produces a fresh (non-duplicate) signature.
+ * Sigstore signs before the registry PUT. Retrying only its known signing errors
+ * creates a fresh signature without retrying an ambiguous registry publish.
  */
-function isTlogConflictError(err: any): boolean {
-  return err?.code === 'TLOG_CREATE_ENTRY_ERROR' && err?.cause?.statusCode === 409;
+function isRetryableSigningError(err: any, provenance: boolean): boolean {
+  const { code, cause } = err ?? {};
+  if (code === 'TLOG_CREATE_ENTRY_ERROR' && cause?.statusCode === 409) {
+    return true;
+  }
+  if (
+    !provenance ||
+    !['TLOG_CREATE_ENTRY_ERROR', 'CA_CREATE_SIGNING_CERTIFICATE_ERROR', 'TSA_CREATE_TIMESTAMP_ERROR'].includes(code)
+  ) {
+    return false;
+  }
+  const status = cause?.statusCode;
+  return (
+    status === 408 ||
+    status === 429 ||
+    (status >= 500 && status <= 599) ||
+    cause?.type === 'request-timeout' ||
+    RETRYABLE_NETWORK_CODES.has(cause?.code)
+  );
 }
 
-async function publishWithTlogRetry<T>(pkgName: string, publishFn: () => Promise<T>): Promise<T> {
+async function publishWithSigningRetry<T>(pkgName: string, provenance: boolean, publishFn: () => Promise<T>): Promise<T> {
   for (let attempt = 1; ; attempt++) {
     try {
       return await publishFn();
     } catch (err: any) {
-      if (!isTlogConflictError(err) || attempt >= TLOG_CONFLICT_MAX_ATTEMPTS) {
+      if (!isRetryableSigningError(err, provenance) || attempt >= SIGNING_MAX_ATTEMPTS) {
         throw err;
       }
       log.warn(
         'publish',
-        `Sigstore transparency log conflict (409) for ${pkgName}, retrying provenance signing (attempt ${attempt + 1}/${TLOG_CONFLICT_MAX_ATTEMPTS})`
+        `Sigstore signing failed for ${pkgName} (${err.code}), retrying provenance signing (attempt ${attempt + 1}/${SIGNING_MAX_ATTEMPTS})`
       );
-      await new Promise((resolve) => setTimeout(resolve, TLOG_CONFLICT_RETRY_DELAY * attempt));
+      await new Promise((resolve) => setTimeout(resolve, SIGNING_RETRY_DELAY * attempt));
     }
   }
 }
@@ -122,8 +140,13 @@ export async function npmPublish(
       Object.assign(opts, publishConfigToOpts(manifestContent.publishConfig));
     }
 
-    result = await publishWithTlogRetry(pkg.name, () =>
-      otplease((innerOpts) => publish(manifestContent, tarData, innerOpts), opts, otpCache as OneTimePasswordCache)
+    // Sigstore retries POSTs with the same signature after timeouts, which can
+    // produce a duplicate Rekor entry. Retry the signing operation instead so
+    // each attempt creates a fresh key. npm-registry-fetch treats retry: 0 as
+    // unset and continues to use its fetchRetries configuration.
+    const publishOpts = opts.provenance === true && opts.retry == null ? { ...opts, retry: 0 } : opts;
+    result = await publishWithSigningRetry(pkg.name, opts.provenance === true, () =>
+      otplease((innerOpts) => publish(manifestContent, tarData, innerOpts), publishOpts, otpCache as OneTimePasswordCache)
     );
   }
 

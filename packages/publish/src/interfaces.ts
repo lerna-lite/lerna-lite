@@ -25,6 +25,8 @@ export interface LibNpmPublishOptions extends KebabCase<fetch.FetchOptions> {
   strictSSL?: boolean | 'true' | 'false';
   /** Request timeout in milliseconds, shared by registry requests and provenance signing. */
   timeout?: number;
+  provenance?: boolean;
+  retry?: fetch.FetchOptions['retry'];
   /* Passed to libnpmpublish as `opts.defaultTag` to preserve npm v6 back-compat */
   tag?: string;
   registry?: string;
