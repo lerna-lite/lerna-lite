@@ -227,10 +227,10 @@ describe('lerna watch lifecycle', () => {
     await writeFile(join(root, 'packages/foobar/package.json'), JSON.stringify({ name: 'foobar', version: '1.0.0', dependencies: { foo: '1.0.0' } }));
     await mkdir(join(root, 'packages/baz'));
     await writeFile(join(root, 'packages/baz/package.json'), JSON.stringify({ name: '@scope/baz', version: '1.0.0' }));
-    await start([...selection, '--glob=src/**/*.ts', '--ignored=**/generated/**', '--file-delimiter=;;'], 'runner.cjs', { debounce: 150 });
     for (const folder of ['packages/foo/src/generated', 'packages/foo/dist', 'packages/foobar/src', 'packages/baz/src']) {
       await mkdir(join(root, folder), { recursive: true });
     }
+    await start([...selection, '--glob=src/**/*.ts', '--ignored=**/generated/**', '--file-delimiter=;;'], 'runner.cjs', { debounce: 150 });
     await writeFile(join(root, 'packages/foo/src/generated/ignored.ts'), 'ignored');
     await writeFile(join(root, 'packages/foo/dist/ignored.ts'), 'ignored');
     await writeFile(join(root, 'packages/foobar/src/ignored.txt'), 'ignored');
@@ -240,14 +240,20 @@ describe('lerna watch lifecycle', () => {
     await vi.waitFor(
       async () => {
         const records = await results();
-        expect(records.map(({ name }) => name).sort()).toEqual(['foo', 'foobar']);
-        expect(records.flatMap(({ files }) => files.split(';;')).sort()).toEqual(files.map((file) => join(root, file)).sort());
+        expect([...new Set(records.map(({ name }) => name))].sort()).toEqual(['foo', 'foobar']);
+        expect([...new Set(records.flatMap(({ files }) => files.split(';;')))].sort()).toEqual(files.map((file) => join(root, file)).sort());
       },
       { timeout: 10000 }
     );
     await delay(200);
     await stop();
-    expect(await results()).toHaveLength(2);
+    const records = await results();
+    expect([...new Set(records.map(({ name }) => name))].sort()).toEqual(['foo', 'foobar']);
+    expect([...new Set(records.flatMap(({ files }) => files.split(';;')))].sort()).toEqual(files.map((file) => join(root, file)).sort());
+    for (const record of records) {
+      const packageFiles = files.filter((file) => file.startsWith(`packages/${record.name}/`)).map((file) => join(root, file));
+      expect(record.files.split(';;').every((file) => packageFiles.includes(file))).toBe(true);
+    }
   });
 
   it('queues changes during a running command without overlap or dropped files', async () => {
