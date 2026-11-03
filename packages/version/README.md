@@ -554,6 +554,8 @@ lerna version --conventional-commits --create-release gitlab
 
 When run with this flag, `lerna version` will create an official GitHub or GitLab release based on the changed packages. This requires `--conventional-commits` to generate changelogs, unless GitHub is generating the release notes with `--generate-release-notes`.
 
+If release creation fails, the command fails. The release commit and tags may already have been pushed, and some releases may already have been created in independent mode. Check the remote before retrying. When invoked by `lerna publish`, a release creation failure stops the command before packages are published.
+
 > **Note** to avoid creating too many "Version bump only for package x" when using independent mode, you could enable the option `--skip-bump-only-releases`
 
 ### `--create-release-discussion <name>`

@@ -411,9 +411,9 @@ export class VersionCommand extends Command<VersionCommandOption> {
           this.options.dryRun
         );
       } catch (err: any) {
-        this.logger.error(
+        throw new ValidationError(
           'ERELEASE',
-          `Something went wrong when creating the ${this.options.createRelease} release. Error:: ${err?.message ?? err}`
+          `Failed to create the ${this.options.createRelease} release: ${err?.message ?? err}. The release commit and tags may already have been pushed; check the remote before retrying.`
         );
       }
     } else {

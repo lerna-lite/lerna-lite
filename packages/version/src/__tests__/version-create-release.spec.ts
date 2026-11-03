@@ -470,21 +470,37 @@ it('should create a github release and generate release notes with --no-changelo
   });
 });
 
-it('should log an error when createRelease throws', async () => {
-  process.env.GITHUB_TOKEN = 'TOKEN';
-  (createReleaseClient as Mock).mockImplementation(() => Promise.resolve({ repos: { createRelease: vi.fn(() => Promise.reject('some error')) } }));
-  (createRelease as Mock).mockImplementationOnce(() => {
-    throw new Error('some error');
-  });
-  const cwd = await initFixture('normal');
-  const command = new VersionCommand(
-    createArgv(cwd, '--conventional-commits', '--create-release', 'github', '--create-release-discussion', 'some-discussion')
-  );
-  await command;
-  const loggerSpy = vi.spyOn(command.logger, 'error');
-  await command.execute();
+it.each(['github', 'gitlab'])('fails when %s release creation rejects after pushing', async (type) => {
+  (createRelease as Mock).mockRejectedValueOnce(new Error('service unavailable'));
+  const gitPushToRemote = vi.fn().mockResolvedValue(undefined);
+  const command = {
+    updatePackageVersions: vi.fn().mockResolvedValue(undefined),
+    commitAndTag: true,
+    commitAndTagUpdates: vi.fn().mockResolvedValue(undefined),
+    pushToRemote: true,
+    gitPushToRemote,
+    releaseClient: {},
+    options: { createRelease: type, dryRun: true },
+    tags: ['v1.1.0'],
+    releaseNotes: [],
+    logger: { info: vi.fn(), success: vi.fn() },
+  } as unknown as VersionCommand;
 
-  expect(loggerSpy).toHaveBeenCalledWith('ERELEASE', 'Something went wrong when creating the github release. Error:: some error');
-  expect((createGitHubClient as any).releases.size).toBe(0);
-  expect((createGitLabClient as any).releases.size).toBe(0);
+  await expect(VersionCommand.prototype.execute.call(command)).rejects.toMatchObject({
+    name: 'ValidationError',
+    prefix: 'ERELEASE',
+    message: `Failed to create the ${type} release: service unavailable. The release commit and tags may already have been pushed; check the remote before retrying.`,
+  });
+  expect(gitPushToRemote).toHaveBeenCalled();
+  expect(command.logger.success).not.toHaveBeenCalled();
+});
+
+it('rejects the version command when release creation fails in dry-run mode', async () => {
+  const cwd = await initFixture('normal');
+  (recommendVersion as Mock).mockResolvedValueOnce('1.1.0');
+  (createRelease as Mock).mockRejectedValueOnce(new Error('service unavailable'));
+
+  const command = new VersionCommand(createArgv(cwd, '--conventional-commits', '--create-release', 'github', '--dry-run'));
+
+  await expect(command).rejects.toThrow('Failed to create the github release: service unavailable');
 });
