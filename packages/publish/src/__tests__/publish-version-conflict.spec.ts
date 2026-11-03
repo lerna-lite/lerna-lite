@@ -7,6 +7,7 @@ describe('publish version conflicts', () => {
   it.each([
     Object.assign(new Error('Conflict'), { code: 'E409' }),
     Object.assign(new Error('Failed to save packument'), { code: 'E409' }),
+    Object.assign(new Error('Conflict'), { code: 'E409', body: null }),
     new Error('409 Conflict - PUT https://npm.pkg.github.com/package - conflicting request'),
   ])('does not treat an ambiguous conflict as an existing version: %s', (error) => {
     expect(isNpmJsPublishVersionConflict(error)).toBe(false);

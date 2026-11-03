@@ -311,7 +311,7 @@ describe('publish from-git', () => {
 
   it('does not treat an unrelated 409 as a published package', async () => {
     (npmPublish as Mock).mockImplementation(() => {
-      const error = Object.assign(new Error('Registry is processing another request'), { code: 'E409' });
+      const error = Object.assign(new Error('Registry is processing another request'), { code: 'E409', body: null });
       return Promise.reject(error);
     });
 
@@ -327,7 +327,20 @@ describe('publish from-git', () => {
     }
   });
 
-  it('should not throw when GitHub npm Registry reports an existing version', async () => {
+  it('skips a registry conflict after npmPublish has verified the version', async () => {
+    const conflict = Object.assign(new Error('verified version'), {
+      code: 'EPUBLISHCONFLICT',
+      cause: Object.assign(new Error('registry conflict'), { code: 'E409' }),
+    });
+    (npmPublish as Mock).mockRejectedValue(conflict);
+    const cwd = await initFixture('normal');
+    await gitTag(cwd, 'v1.0.0');
+
+    await expect(new PublishCommand(createArgv(cwd, 'from-git', '--no-sort', '--dry-run'))).resolves.toBeUndefined();
+    expect(loggingOutput('success')).toContain('All packages have already been published.');
+  });
+
+  it('rethrows an unverified 409 even when its message reports an existing version', async () => {
     (npmPublish as Mock).mockImplementation(() => {
       const ex = new Error('Cannot publish over existing version') as Error & { code: string };
       ex.code = 'E409';
@@ -337,18 +350,13 @@ describe('publish from-git', () => {
     const cwd = await initFixture('normal');
 
     await gitTag(cwd, 'v1.0.0');
-    const command = new PublishCommand(createArgv(cwd, 'from-git', '--no-sort'));
+    const command = new PublishCommand(createArgv(cwd, 'from-git', '--no-sort', '--dry-run'));
 
-    await expect(command).resolves.toBeUndefined();
-
-    // called from chained describeRef()
-    expect(throwIfUncommitted).toHaveBeenCalled();
-
-    // since all packages rejected with publish conflict, we should have the "All published" message when recalling execute()
-    await command.initialize();
-    const loggerSpy = vi.spyOn(command.logger, 'success');
-    await command.execute();
-    expect(loggerSpy).toHaveBeenCalledWith('All packages have already been published.');
+    try {
+      await expect(command).rejects.toThrow('Cannot publish over existing version');
+    } finally {
+      process.exitCode = undefined;
+    }
   });
 
   it('should not throw when a GitHub npm Registry 409 identifies an existing version', async () => {

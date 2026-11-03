@@ -29,6 +29,7 @@ export function isNpmPkgGitHubPublishVersionConflict(ex: unknown): boolean {
     return false;
   } else if (
     'body' in ex &&
+    ex.body !== null &&
     typeof ex.body === 'object' &&
     (ex.body as Record<string, unknown>).error === 'Cannot publish over existing version'
   ) {

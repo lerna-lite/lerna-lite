@@ -5,6 +5,7 @@ import { Conf, Defaults, Package, runLifecycle, type RawManifest } from '@lerna-
 import PackageJson from '@npmcli/package-json';
 // @ts-ignore
 import { publish } from 'libnpmpublish';
+import npmFetch from 'npm-registry-fetch';
 import { afterEach, beforeEach, describe, expect, it, vi, type Mock } from 'vitest';
 
 import type { LibNpmPublishOptions } from '../interfaces.js';
@@ -304,6 +305,57 @@ describe('npm-publish', () => {
       expect.anything(),
       expect.anything()
     );
+  });
+
+  describe('registry conflict verification', () => {
+    const manifest = { name: '@scope/prepared-package', version: '2.0.0', publishConfig: { registry: 'https://publish.example.test/' } };
+
+    beforeEach(() => {
+      vi.spyOn(npmFetch, 'json').mockResolvedValue({ versions: { '2.0.0': manifest } });
+      vi.mocked(PackageJson.prepare).mockResolvedValueOnce({ content: manifest } as never);
+    });
+
+    afterEach(() => vi.restoreAllMocks());
+
+    it('verifies with the prepared manifest, publishConfig registry and publishing credentials', async () => {
+      const error = Object.assign(new Error('Conflict'), { code: 'E409', method: 'PUT' });
+      vi.mocked(publish).mockRejectedValueOnce(error);
+      vi.mocked(oidc).mockImplementationOnce(async ({ opts }) => {
+        opts['//publish.example.test/:_authToken'] = 'oidc-test-token';
+      });
+
+      await expect(npmPublish(pkg, tarFilePath, { registry: 'https://default.example.test/' }, conf)).rejects.toMatchObject({
+        code: 'EPUBLISHCONFLICT',
+        cause: error,
+      });
+      expect(npmFetch.json).toHaveBeenCalledWith(
+        '@scope%2fprepared-package',
+        expect.objectContaining({
+          registry: 'https://publish.example.test/',
+          '//publish.example.test/:_authToken': 'oidc-test-token',
+        })
+      );
+      expect(runLifecycle).not.toHaveBeenCalled();
+      expect(publish).toHaveBeenCalledTimes(1);
+    });
+
+    it.each(['missing', 'unavailable'])('preserves the original 409 when the version is %s', async (scenario) => {
+      const error = Object.assign(new Error('original registry conflict'), { code: 'E409', method: 'PUT', body: null });
+      vi.mocked(publish).mockRejectedValueOnce(error);
+      if (scenario === 'missing') vi.mocked(npmFetch.json).mockResolvedValue({ versions: {} });
+      else vi.mocked(npmFetch.json).mockRejectedValue(new Error('verification failed'));
+
+      await expect(npmPublish(pkg, tarFilePath, {}, conf)).rejects.toBe(error);
+      expect(runLifecycle).not.toHaveBeenCalled();
+    });
+
+    it('does not turn a publish lifecycle error into an existing-version skip', async () => {
+      const error = Object.assign(new Error('lifecycle failed'), { code: 'E409' });
+      vi.mocked(runLifecycle).mockRejectedValueOnce(error);
+
+      await expect(npmPublish(pkg, tarFilePath, {}, conf)).rejects.toBe(error);
+      expect(npmFetch.json).not.toHaveBeenCalled();
+    });
   });
 
   describe('Sigstore transparency log conflict', () => {
