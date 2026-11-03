@@ -427,12 +427,12 @@ test('publish --canary --force-publish <arg> on tagged release avoids early exit
 });
 
 test('publish --canary with dirty tree throws error', async () => {
-  (throwIfUncommitted as Mock).mockImplementationOnce(() => {
+  (throwIfUncommitted as Mock).mockImplementationOnce(() => () => {
     throw new Error('uncommitted');
   });
 
   const cwd = await initTaggedFixture('normal');
-  const command = lernaPublish(cwd)('--canary');
+  const command = lernaPublish(cwd)('--canary', '--dry-run');
 
   await expect(command).rejects.toThrow('uncommitted');
   // notably different than the actual message, but good enough here

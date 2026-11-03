@@ -368,7 +368,9 @@ export class PublishCommand extends Command<PublishCommandOption> {
   }
 
   verifyWorkingTreeClean() {
-    return describeRef(this.execOpts, undefined, this.options.dryRun).then(throwIfUncommitted);
+    return describeRef(this.execOpts, undefined, this.options.dryRun).then(
+      throwIfUncommitted(this.execOpts, this.options.dryRun)
+    );
   }
 
   detectFromGit() {

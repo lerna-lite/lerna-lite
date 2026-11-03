@@ -800,4 +800,6 @@ In the case that some packages were successfully published and others were not, 
 
 If you used the `lerna publish` command without positional arguments to select a new version for the packages, then you can run `lerna publish from-git` to retry publishing that same already-tagged version instead of having to bump the version again while retrying.
 
+For `from-git`, `from-package`, and canary publishes, Lerna-Lite rejects tracked working-tree changes before publishing. Check and preserve any changes you need before cleaning the tree; untracked files are not covered by this check. A dry run logs the Git check without executing it, so it does not verify that the tree is clean.
+
 When a registry publish returns HTTP 409, Lerna-Lite checks that registry for the exact package version before skipping it as already published. This check uses the publishing registry and authentication settings and does not depend on registry-specific error messages. If the version is absent or the check fails, the original publish error is reported. Signing errors, lifecycle errors, and staged uploads are not resolved by this check.

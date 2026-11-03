@@ -72,6 +72,8 @@ describe('lerna-publish with verdaccio', () => {
         packagePath: `packages/${packageName}`,
         newVersion: version,
       });
+      await fixture.exec(`git add packages/${packageName}/package.json`);
+      await fixture.exec('git commit -m "update package version"');
 
       // Configure registry
       await fixture.exec('echo "registry=http://localhost:4873/" > .npmrc');
