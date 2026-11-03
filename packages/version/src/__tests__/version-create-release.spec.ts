@@ -63,6 +63,28 @@ const createArgv = (cwd: string, ...args: any[]) => {
   return argv as unknown as VersionCommandOption;
 };
 
+describe.each(['normal', 'independent'])('GitHub generated notes without conventional commits in %s mode', (fixture) => {
+  it.each([false, true])('prepares release notes in dry-run mode with no-changelog=%s', async (noChangelog) => {
+    const cwd = await initFixture(fixture);
+    (createRelease as Mock).mockClear();
+
+    const command = new VersionCommand(
+      createArgv(cwd, '1.1.0', '--create-release', 'github', '--generate-release-notes', '--dry-run', ...(noChangelog ? ['--no-changelog'] : []))
+    );
+    await command;
+
+    expect(createRelease).toHaveBeenCalled();
+    const [, release] = (createRelease as Mock).mock.calls.at(-1)!;
+    expect(release.tags.length).toBeGreaterThan(0);
+    expect(release.releaseNotes.length).toBeGreaterThan(0);
+    if (fixture === 'normal') {
+      expect(release.releaseNotes).toContainEqual({ name: 'fixed' });
+    } else {
+      expect(release.releaseNotes.every(({ name }: { name: string }) => release.tags.some((tag: string) => tag.startsWith(`${name}@`)))).toBe(true);
+    }
+  });
+});
+
 describe.each([
   ['github', createGitHubClient],
   ['gitlab', createGitLabClient],
