@@ -1,0 +1,10 @@
+{
+  "extends": "./tsconfig.base.json",
+  "compilerOptions": {
+    "composite": false,
+    "noEmit": true,
+    "preserveSymlinks": false
+  },
+  "include": ["packages/**/__tests__/**/*.ts", "e2e/**/*.spec.ts", "vitest/**/*.ts"],
+  "exclude": ["node_modules", "**/dist/**", "**/__fixtures__/**"]
+}
