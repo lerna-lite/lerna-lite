@@ -103,8 +103,8 @@ test('publish --temp-tag', async () => {
     otp: undefined,
   });
 
-  expect(remove).toHaveBeenCalledWith('@integration/package-1@1.0.1', 'lerna-temp', conf, cache);
-  expect(remove).toHaveBeenCalledWith('@integration/package-2@1.0.1', 'lerna-temp', conf, cache);
+  expect(remove).toHaveBeenCalledWith('@integration/package-1@1.0.1', 'lerna-temp', conf, cache, '1.0.1');
+  expect(remove).toHaveBeenCalledWith('@integration/package-2@1.0.1', 'lerna-temp', conf, cache, '1.0.1');
 
   expect(add).toHaveBeenCalledWith('@integration/package-1@1.0.1', 'CUSTOM', conf, cache); // <--
   expect(add).toHaveBeenCalledWith('@integration/package-2@1.0.1', 'latest', conf, cache);
@@ -113,7 +113,13 @@ test('publish --temp-tag', async () => {
 test('publish --dry-run --temp-tag passes dry-run to both dist-tag operations', async () => {
   const cwd = await initFixture('integration');
   await new PublishCommand(createArgv(cwd, '--dry-run', '--temp-tag'));
-  expect(remove).toHaveBeenCalledWith(expect.any(String), 'lerna-temp', expect.objectContaining({ dryRun: true }), expect.any(Object));
+  expect(remove).toHaveBeenCalledWith(
+    expect.any(String),
+    'lerna-temp',
+    expect.objectContaining({ dryRun: true }),
+    expect.any(Object),
+    expect.any(String)
+  );
   expect(add).toHaveBeenCalledWith(expect.any(String), expect.any(String), expect.objectContaining({ dryRun: true }), expect.any(Object));
 });
 
