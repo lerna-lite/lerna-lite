@@ -145,7 +145,11 @@ export class VersionCommand extends Command<VersionCommandOption> {
     }
     this.releaseNotes = [];
 
-    if (this.releaseClient && this.options.conventionalCommits !== true) {
+    if (
+      this.releaseClient &&
+      this.options.conventionalCommits !== true &&
+      !(this.options.createRelease === 'github' && this.options.generateReleaseNotes)
+    ) {
       throw new ValidationError('ERELEASE', 'To create a release, you must enable --conventional-commits');
     }
 
@@ -718,7 +722,7 @@ export class VersionCommand extends Command<VersionCommandOption> {
           return pkg;
         })
       );
-    } else if (this.options.generateReleaseNotes && !changelog) {
+    } else if (this.options.generateReleaseNotes && (!conventionalCommits || !changelog)) {
       actions.push((pkg: Package) => {
         this.releaseNotes.push({
           name: pkg.name,
@@ -816,14 +820,12 @@ export class VersionCommand extends Command<VersionCommandOption> {
             });
           })
         );
-      } else if (this.options.generateReleaseNotes && !changelog) {
-        chain
-          .then(() => {
-            this.releaseNotes.push({
-              name: 'fixed',
-            });
-          })
-          .catch(/* v8 ignore next - do nothing */ () => {});
+      } else if (this.options.generateReleaseNotes && (!conventionalCommits || !changelog)) {
+        chain = chain.then(() => {
+          this.releaseNotes.push({
+            name: 'fixed',
+          });
+        });
       }
 
       chain = chain.then(() =>

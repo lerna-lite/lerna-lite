@@ -552,13 +552,13 @@ lerna version --conventional-commits --create-release github
 lerna version --conventional-commits --create-release gitlab
 ```
 
-When run with this flag, `lerna version` will create an official GitHub or GitLab release based on the changed packages. Requires `--conventional-commits` to be passed so that changelogs can be generated.
+When run with this flag, `lerna version` will create an official GitHub or GitLab release based on the changed packages. This requires `--conventional-commits` to generate changelogs, unless GitHub is generating the release notes with `--generate-release-notes`.
 
 > **Note** to avoid creating too many "Version bump only for package x" when using independent mode, you could enable the option `--skip-bump-only-releases`
 
 ### `--create-release-discussion <name>`
 
-Create a discussion for this release, this will create both a Release and a Discussion. Conventional commits is required for this option to work.
+Create a discussion for this release, this will create both a Release and a Discussion. Conventional commits are required unless GitHub generates the release notes.
 
 ```sh
 lerna version --conventional-commits --create-release github --create-release-discussion announcement
@@ -568,10 +568,11 @@ lerna version --conventional-commits --create-release github --create-release-di
 
 ### `--generate-release-notes`
 
-When run with this flag, `lerna version` will let GitHub automatically generate the release notes (more info can be found in this GitHub documentation page [Automatically generated release notes](https://docs.github.com/en/repositories/releasing-projects-on-github/automatically-generated-release-notes)). Conventional commits is required for this option to work.
+When run with this flag, `lerna version` will let GitHub automatically generate the release notes (more info can be found in this GitHub documentation page [Automatically generated release notes](https://docs.github.com/en/repositories/releasing-projects-on-github/automatically-generated-release-notes)). Conventional commits are optional; supply an explicit version or bump when not using them.
 
 ```sh
 lerna version --conventional-commits --create-release github --generate-release-notes
+lerna version patch --create-release github --generate-release-notes
 ```
 
 Since GitHub automatically generates the name and body for the new release, you could skip the changelog creation if you wish.
