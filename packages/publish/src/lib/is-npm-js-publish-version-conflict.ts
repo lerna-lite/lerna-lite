@@ -31,8 +31,8 @@ export function isNpmJsPublishVersionConflict(ex: unknown): boolean {
     return true;
   } else if (
     'code' in ex &&
-    ((ex.code === 'E409' && ex.message?.includes('Failed to save packument')) ||
-      (ex.code === 'E403' && ex.message?.includes('You cannot publish over the previously published versions')))
+    ex.code === 'E403' &&
+    ex.message?.includes('You cannot publish over the previously published versions')
   ) {
     return true;
   }
