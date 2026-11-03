@@ -68,7 +68,13 @@ export function add(spec: string, tag = '', options: DistTagOptions, otpCache: O
  * @param {DistTagOptions} options
  * @param {import("@lerna/otplease").OneTimePasswordCache} otpCache
  */
-export function remove(spec: string, tag: string, options: DistTagOptions, otpCache: OneTimePasswordCache) {
+export function remove(
+  spec: string,
+  tag: string,
+  options: DistTagOptions,
+  otpCache: OneTimePasswordCache,
+  expectedVersion?: string
+) {
   const opts = {
     log,
     ...options,
@@ -88,6 +94,11 @@ export function remove(spec: string, tag: string, options: DistTagOptions, otpCa
 
     if (!version) {
       opts.log.info('dist-tag', `"${tag}" is not a dist-tag on ${opts.spec.name}`);
+      return tags;
+    }
+
+    if (expectedVersion && version !== expectedVersion) {
+      opts.log.warn('dist-tag', `Leaving "${tag}" on ${opts.spec.name}@${version}; expected ${expectedVersion}`);
       return tags;
     }
 

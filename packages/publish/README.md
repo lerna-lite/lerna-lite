@@ -794,11 +794,17 @@ The library is doing a strict match and it will transform and publish the follow
 
 ## FAQ
 
-### Recovering from a network error
+### Recovering from a failed publish
 
-In the case that some packages were successfully published and others were not, `lerna publish` may have left the repository in an inconsistent state with some changed files. To recover from this, reset any extraneous local changes from the failed run to get back to a clean working tree. Then, retry the same `lerna publish` command. Lerna will attempt to publish all of the packages again, but will recognize those that have already been published and skip over them with a warning.
+If publishing fails, some versions may already be on the registry, and the version commit and tags may already have been pushed. First fix the underlying error (for example, configure npm trusted publishing for the affected package). Inspect and preserve any local changes, including changes made by lifecycle scripts: Lerna-Lite may have modified manifests before the failure.
 
-If you used the `lerna publish` command without positional arguments to select a new version for the packages, then you can run `lerna publish from-git` to retry publishing that same already-tagged version instead of having to bump the version again while retrying.
+Use a clean checkout of the original release commit, with the same registry, authentication, and publish options. You can also review and restore the changes from the failed run in the original checkout. For a release tagged at that commit, fetch the release tags and run `lerna publish from-git` to retry those tagged packages. Alternatively, run `lerna publish from-package` to select package versions missing from the registry; this checks all non-private packages in the checkout, not just packages in the failed release. Review the selected packages before confirming.
+
+If the failed run used `--temp-tag`, retrying with `from-package` skips versions already on the registry, so their `lerna-temp` tags may not be promoted. A retry can also fail while moving tags. After publishing the missing versions, inspect the dist-tags for **every** package in the release, including those published before the failure. For each affected package, use the appropriate registry and credentials to add the intended dist-tag to the release version (for example, `npm dist-tag add package-name@1.2.3 latest`). Then remove `lerna-temp` if it still points to that release version (`npm dist-tag rm package-name lerna-temp`). Check the tag first so you do not remove a tag belonging to another release. Use the intended tag for each package; it may differ from `latest`.
+
+Temporary-tag promotion adds the destination dist-tag before removing `lerna-temp`, so a failed addition leaves the temporary tag intact. Cleanup leaves `lerna-temp` in place if it points to a different version or is itself the intended destination tag. These operations are not atomic; avoid running releases for the same packages concurrently.
+
+For a newly published package that needs trusted-publisher configuration, an initial manual publish may be necessary before configuring trust. Once the missing package is registered and trust is configured, retry from the release commit as above. Check the registry and any lifecycle side effects before retrying: a publish error does not necessarily mean the registry rejected the package. This procedure does not move Git tags, undo the release commit, or automatically resume release creation.
 
 For `from-git`, `from-package`, and canary publishes, Lerna-Lite rejects tracked working-tree changes before publishing. Check and preserve any changes you need before cleaning the tree; untracked files are not covered by this check. A dry run logs the Git check without executing it, so it does not verify that the tree is clean.
 

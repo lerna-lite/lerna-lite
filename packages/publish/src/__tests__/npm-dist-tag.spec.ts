@@ -104,6 +104,25 @@ describe('npmDistTag.add()', () => {
 });
 
 describe('npmDistTag.remove()', () => {
+  it('does not remove a temporary tag pointing to a different version', async () => {
+    (fetch as any).json.mockResolvedValueOnce({ 'lerna-temp': '2.0.0' });
+    const opts = { ...baseOptions } as unknown as DistTagOptions;
+
+    const tags = await npmDistTag.remove('some-pkg@1.0.0', 'lerna-temp', opts, null as any, '1.0.0');
+
+    expect(tags).toEqual({ 'lerna-temp': '2.0.0' });
+    expect(fetch).not.toHaveBeenCalled();
+  });
+
+  it('removes a temporary tag pointing to the expected version', async () => {
+    (fetch as any).json.mockResolvedValueOnce({ 'lerna-temp': '1.0.0' });
+    const opts = { ...baseOptions } as unknown as DistTagOptions;
+
+    await npmDistTag.remove('some-pkg@1.0.0', 'lerna-temp', opts, null as any, '1.0.0');
+
+    expect(fetch).toHaveBeenCalledWith(expect.stringContaining('/lerna-temp'), expect.objectContaining({ method: 'DELETE' }));
+  });
+
   it('removes an existing dist-tag for a given package', async () => {
     (fetch as any).json.mockImplementationOnce(() =>
       Promise.resolve({
