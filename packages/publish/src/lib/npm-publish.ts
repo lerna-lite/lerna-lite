@@ -9,6 +9,7 @@ import { publish } from 'libnpmpublish';
 import npa from 'npm-package-arg';
 
 import type { LibNpmPublishOptions, PackagePublishConfig } from '../interfaces.js';
+import { isRegistryPublishVersionConflict } from './is-registry-publish-version-conflict.js';
 import { oidc } from './oidc.js';
 
 const SIGNING_MAX_ATTEMPTS = 3;
@@ -146,7 +147,26 @@ export async function npmPublish(
     // unset and continues to use its fetchRetries configuration.
     const publishOpts = opts.provenance === true && opts.retry == null ? { ...opts, retry: 0 } : opts;
     result = await publishWithSigningRetry(pkg.name, opts.provenance === true, () =>
-      otplease((innerOpts) => publish(manifestContent, tarData, innerOpts), publishOpts, otpCache as OneTimePasswordCache)
+      otplease(
+        async (innerOpts) => {
+          try {
+            return await publish(manifestContent, tarData, innerOpts);
+          } catch (err) {
+            if (await isRegistryPublishVersionConflict(err, manifestContent, innerOpts)) {
+              // Use the existing explicit conflict signal so the command skips this version.
+              throw Object.assign(
+                new Error(`Package is already published: ${manifestContent.name}@${manifestContent.version}`, { cause: err }),
+                {
+                  code: 'EPUBLISHCONFLICT',
+                }
+              );
+            }
+            throw err;
+          }
+        },
+        publishOpts,
+        otpCache as OneTimePasswordCache
+      )
     );
   }
 

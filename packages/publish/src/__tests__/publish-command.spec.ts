@@ -563,8 +563,8 @@ describe('PublishCommand', () => {
 
       // Simulate a version conflict error
       (npmPublish as Mock).mockImplementationOnce(() => {
-        const error = new Error('Version conflict') as any;
-        error.code = 'E409';
+        const error = new Error('You cannot publish over the previously published versions') as any;
+        error.code = 'E403';
         throw error;
       });
 
@@ -596,8 +596,8 @@ describe('PublishCommand', () => {
 
       // Simulate a version conflict on the second package
       (npmPublish as Mock).mockImplementationOnce(() => {
-        const error = new Error('Version conflict') as any;
-        error.code = 'E409';
+        const error = new Error('You cannot publish over the previously published versions') as any;
+        error.code = 'E403';
         throw error;
       });
 

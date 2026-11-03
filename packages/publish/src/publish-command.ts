@@ -1009,7 +1009,9 @@ export class PublishCommand extends Command<PublishCommandOption> {
         const isNpmJsComConflict = isNpmJsPublishVersionConflict(err);
         const isNpmPkgGitHubComConflict = isNpmPkgGitHubPublishVersionConflict(err);
 
-        if (isNpmJsComConflict || isNpmPkgGitHubComConflict) {
+        // npmPublish converts verified registry 409s to EPUBLISHCONFLICT.
+        // An unverified 409 must remain a failure, even if its message resembles a duplicate.
+        if (err.code !== 'E409' && (isNpmJsComConflict || isNpmPkgGitHubComConflict)) {
           tracker.warn('publish', `Package is already published: ${pkg.name}@${pkg.version}`);
           tracker.completeWork(1);
           return pkg;

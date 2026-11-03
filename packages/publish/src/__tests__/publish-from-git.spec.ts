@@ -293,7 +293,7 @@ describe('publish from-git', () => {
     expect(loggerSpy).toHaveBeenCalledWith('All packages have already been published.');
   });
 
-  it('should not throw and assume package is already published on npmjs.com registry when npm publish throws error E409 with message "Failed to save packument"', async () => {
+  it('rethrows an ambiguous npm packument conflict', async () => {
     (npmPublish as Mock).mockImplementation(() => {
       const ex = new Error('Failed to save packument') as Error & { code: string };
       ex.code = 'E409';
@@ -305,21 +305,44 @@ describe('publish from-git', () => {
     await gitTag(cwd, 'v1.0.0');
     const command = new PublishCommand(createArgv(cwd, 'from-git', '--no-sort'));
 
-    await expect(command).resolves.toBeUndefined();
-
-    // called from chained describeRef()
-    expect(throwIfUncommitted).toHaveBeenCalled();
-
-    // since all packages rejected with publish conflict, we should have the "All published" message when recalling execute()
-    await command.initialize();
-    const loggerSpy = vi.spyOn(command.logger, 'success');
-    await command.execute();
-    expect(loggerSpy).toHaveBeenCalledWith('All packages have already been published.');
+    await expect(command).rejects.toThrow('Failed to save packument');
+    process.exitCode = undefined;
   });
 
-  it('should not throw and assume package is already published on GitHub npm Registry when npm publish throws E409 from a previous half publish process', async () => {
+  it('does not treat an unrelated 409 as a published package', async () => {
     (npmPublish as Mock).mockImplementation(() => {
-      const ex = new Error('Mocked npm publish fail') as Error & { code: string };
+      const error = Object.assign(new Error('Registry is processing another request'), { code: 'E409', body: null });
+      return Promise.reject(error);
+    });
+
+    const cwd = await initFixture('normal');
+    await gitTag(cwd, 'v1.0.0');
+
+    try {
+      await expect(new PublishCommand(createArgv(cwd, 'from-git', '--no-sort', '--dry-run'))).rejects.toThrow(
+        'Registry is processing another request'
+      );
+    } finally {
+      process.exitCode = undefined;
+    }
+  });
+
+  it('skips a registry conflict after npmPublish has verified the version', async () => {
+    const conflict = Object.assign(new Error('verified version'), {
+      code: 'EPUBLISHCONFLICT',
+      cause: Object.assign(new Error('registry conflict'), { code: 'E409' }),
+    });
+    (npmPublish as Mock).mockRejectedValue(conflict);
+    const cwd = await initFixture('normal');
+    await gitTag(cwd, 'v1.0.0');
+
+    await expect(new PublishCommand(createArgv(cwd, 'from-git', '--no-sort', '--dry-run'))).resolves.toBeUndefined();
+    expect(loggingOutput('success')).toContain('All packages have already been published.');
+  });
+
+  it('rethrows an unverified 409 even when its message reports an existing version', async () => {
+    (npmPublish as Mock).mockImplementation(() => {
+      const ex = new Error('Cannot publish over existing version') as Error & { code: string };
       ex.code = 'E409';
       return Promise.reject(ex);
     });
@@ -327,23 +350,18 @@ describe('publish from-git', () => {
     const cwd = await initFixture('normal');
 
     await gitTag(cwd, 'v1.0.0');
-    const command = new PublishCommand(createArgv(cwd, 'from-git', '--no-sort'));
+    const command = new PublishCommand(createArgv(cwd, 'from-git', '--no-sort', '--dry-run'));
 
-    await expect(command).resolves.toBeUndefined();
-
-    // called from chained describeRef()
-    expect(throwIfUncommitted).toHaveBeenCalled();
-
-    // since all packages rejected with publish conflict, we should have the "All published" message when recalling execute()
-    await command.initialize();
-    const loggerSpy = vi.spyOn(command.logger, 'success');
-    await command.execute();
-    expect(loggerSpy).toHaveBeenCalledWith('All packages have already been published.');
+    try {
+      await expect(command).rejects.toThrow('Cannot publish over existing version');
+    } finally {
+      process.exitCode = undefined;
+    }
   });
 
-  it('should not throw and assume package is already published on GitHub npm Registry when npm publish throws "409 Conflict - PUT https://npm.pkg.github.com" from a previous half publish process', async () => {
+  it('should not throw when a GitHub npm Registry 409 identifies an existing version', async () => {
     (npmPublish as Mock).mockImplementation(() => {
-      const ex = new Error('409 Conflict - PUT https://npm.pkg.github.com/');
+      const ex = new Error('409 Conflict - PUT https://npm.pkg.github.com/ - Cannot publish over existing version');
       return Promise.reject(ex);
     });
 
