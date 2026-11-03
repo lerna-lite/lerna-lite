@@ -56,6 +56,11 @@
       packageNames: ['chokidar'],
       allowedVersions: '< 6.0.0',
     },
+    // postponed to next major since verdaccio requires Node.js 24
+    {
+      packageNames: ['verdaccio'],
+      allowedVersions: '< 7.0.0',
+    },
   ],
   ignoreDeps: ['node', 'pnpm'],
   ignorePaths: ['helpers', '**/__fixtures__/**', '**/__mocks__/**', '**/fixtures/**', '**/mocks/**'],
