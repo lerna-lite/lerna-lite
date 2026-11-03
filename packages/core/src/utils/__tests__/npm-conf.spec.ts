@@ -44,6 +44,14 @@ describe('@lerna/npm-conf', () => {
     expect(conf.get('registry')).toBe('https://npm.example.com');
   });
 
+  it('defaults fetch-timeout to five minutes', () => {
+    expect(npmConf({}).get('fetch-timeout')).toBe(300000);
+  });
+
+  it('parses fetch-timeout as a number', () => {
+    expect(npmConf({ 'fetch-timeout': '60000' }).get('fetch-timeout')).toBe(60000);
+  });
+
   it('does not overwrite default with undefined cli key', () => {
     const conf = npmConf({ registry: undefined });
 

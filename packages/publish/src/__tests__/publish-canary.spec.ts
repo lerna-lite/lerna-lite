@@ -148,6 +148,26 @@ test('publish --canary with auto-confirm --yes', async () => {
   `);
 });
 
+test.each([
+  ['normal', '0123456', 'g0123456'],
+  ['normal', '1234567', 'g1234567'],
+  ['normal', '0abc123', '0abc123'],
+  ['independent', '0123456', 'g0123456'],
+])('publish --canary keeps %s versions valid for Git hash %s', async (fixture, sha, expectedSuffix) => {
+  const cwd = await initTaggedFixture(fixture);
+  await setupChanges(cwd, ['packages/package-1/all-your-base.js', 'belong to us']);
+  const actualDescribeRef = (await vi.importActual<{ describeRef: typeof describeRef }>('../../../core/src/utils/describe-ref')).describeRef;
+  vi.mocked(describeRef).mockImplementation(async (...args) => ({ ...(await actualDescribeRef(...args)), sha }));
+
+  try {
+    await new PublishCommand(createArgv(cwd, '--canary', '--yes'));
+
+    expect((writePackage as any).updatedVersions()['package-1']).toBe(`1.0.1-alpha.0.${expectedSuffix}`);
+  } finally {
+    vi.mocked(describeRef).mockImplementation(actualDescribeRef);
+  }
+});
+
 test('publish --canary --preid beta', async () => {
   const cwd = await initTaggedFixture('normal');
 

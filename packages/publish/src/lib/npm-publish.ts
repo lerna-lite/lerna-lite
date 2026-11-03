@@ -50,6 +50,9 @@ function flattenOptions(obj: Omit<LibNpmPublishOptions, 'defaultTag'>): LibNpmPu
     dryRun: obj['dry-run'] || obj['git-dry-run'],
     // libnpmpublish / npm-registry-fetch check strictSSL rather than strict-ssl
     strictSSL: obj['strict-ssl'],
+    // Both npm-registry-fetch and Sigstore expect `timeout`, not npm's config key.
+    // Without this mapping, Sigstore falls back to a five-second request timeout.
+    timeout: obj['fetch-timeout'],
     ...obj,
   };
 }

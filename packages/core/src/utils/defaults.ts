@@ -82,6 +82,7 @@ export class Defaults {
       'fetch-retry-factor': 10,
       'fetch-retry-mintimeout': 10000,
       'fetch-retry-maxtimeout': 60000,
+      'fetch-timeout': 300000,
       git: 'git',
       'git-dry-run': false,
       'git-tag-version': true,

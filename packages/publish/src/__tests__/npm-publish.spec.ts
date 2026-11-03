@@ -1,7 +1,7 @@
 import { readFile } from 'node:fs/promises';
 import { dirname, join, normalize } from 'node:path';
 
-import { Conf, Package, runLifecycle, type RawManifest } from '@lerna-lite/core';
+import { Conf, Defaults, Package, runLifecycle, type RawManifest } from '@lerna-lite/core';
 import PackageJson from '@npmcli/package-json';
 // @ts-ignore
 import { publish } from 'libnpmpublish';
@@ -68,6 +68,28 @@ describe('npm-publish', () => {
         defaultTag: 'latest',
       })
     );
+  });
+
+  it.each([
+    [{ 'fetch-timeout': 60000 }, 60000],
+    [{ 'fetch-timeout': 300000 }, 300000],
+    [{ 'fetch-timeout': 60000, timeout: 45000 }, 45000],
+  ])('passes the configured timeout to registry publishing and provenance signing: %j', async (options, timeout) => {
+    await npmPublish(pkg, tarFilePath, options, conf);
+
+    expect(publish).toHaveBeenCalledWith(mockManifest, mockTarData, expect.objectContaining({ timeout }));
+  });
+
+  it.each([
+    [{}, 300000],
+    [{ NPM_CONFIG_FETCH_TIMEOUT: '60000' }, 60000],
+  ])('uses the npm timeout configuration when publishing: %j', async (env, timeout) => {
+    const publishConf = new Conf(new Defaults().defaults);
+    publishConf.addEnv(env);
+
+    await npmPublish(pkg, tarFilePath, publishConf.snapshot, publishConf);
+
+    expect(vi.mocked(publish).mock.lastCall?.[2].timeout).toBe(timeout);
   });
 
   it('overrides pkg.publishConfig.tag when opts.tag is explicitly configured', async () => {
