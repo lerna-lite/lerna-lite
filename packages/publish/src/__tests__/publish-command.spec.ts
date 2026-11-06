@@ -153,6 +153,17 @@ describe('PublishCommand', () => {
         })
       );
     });
+
+    it('errors when --allow-dirty is passed without from-package positional', async () => {
+      const command = new PublishCommand(createArgv(cwd, '--allow-dirty'));
+
+      await expect(command).rejects.toThrow(
+        expect.objectContaining({
+          name: 'ValidationError',
+          message: `--allow-dirty is only allowed with "from-package" positional`,
+        })
+      );
+    });
   });
 
   describe('with implied versioning', () => {
