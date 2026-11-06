@@ -175,6 +175,18 @@ describe('publish from-package', () => {
     expect(logMessages).toContain("Unable to reset working tree changes, this probably isn't a git repo.");
   });
 
+  it('skips working-tree validation with --allow-dirty and preserves the git-head override', async () => {
+    (getUnpublishedPackages as Mock).mockImplementationOnce((packageGraph) => [packageGraph.get('package-1')]);
+    const cwd = await initFixture('normal');
+
+    await new PublishCommand(createArgv(cwd, 'from-package', '--allow-dirty', '--git-head', 'deadbeef', '--dry-run'));
+
+    expect(throwIfUncommitted).not.toHaveBeenCalled();
+    expect(npmPublish).toHaveBeenCalled();
+    expect((writePackage as any).updatedManifest('package-1').gitHead).toBe('deadbeef');
+    expect(loggingOutput('warn')).toContain('Skipping working-tree validation; published packages may include uncommitted changes.');
+  });
+
   it('accepts --git-head override', async () => {
     (getUnpublishedPackages as Mock).mockImplementationOnce((packageGraph) => [packageGraph.get('package-1')]);
 

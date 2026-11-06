@@ -131,6 +131,10 @@ export class PublishCommand extends Command<PublishCommandOption> {
       throw new ValidationError('EGITHEAD', '--git-head is only allowed with "from-package" positional');
     }
 
+    if (this.options.allowDirty && this.options.bump !== 'from-package') {
+      throw new ValidationError('EALLOWDIRTY', '--allow-dirty is only allowed with "from-package" positional');
+    }
+
     // https://docs.npmjs.com/misc/config#save-prefix
     this.savePrefix = exact ? '' : '^';
 
@@ -368,6 +372,11 @@ export class PublishCommand extends Command<PublishCommandOption> {
   }
 
   verifyWorkingTreeClean() {
+    if (this.options.allowDirty) {
+      this.logger.warn('allow-dirty', 'Skipping working-tree validation; published packages may include uncommitted changes.');
+      return Promise.resolve();
+    }
+
     return describeRef(this.execOpts, undefined, this.options.dryRun).then(
       throwIfUncommitted(this.execOpts, this.options.dryRun)
     );

@@ -19,6 +19,10 @@ export default {
   describe: 'Publish packages in the current project.',
   builder: (yargs: any) => {
     const opts = {
+      'allow-dirty': {
+        describe: 'Allow uncommitted changes when publishing, only allowed with "from-package" positional.',
+        type: 'boolean',
+      },
       c: {
         describe: 'Publish packages after every successful merge using the sha as part of the tag.',
         alias: 'canary',
