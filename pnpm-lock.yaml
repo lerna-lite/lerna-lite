@@ -506,10 +506,10 @@ importers:
     dependencies:
       '@conventional-changelog/git-client':
         specifier: ^3.2.0
-        version: 3.2.0(conventional-commits-filter@6.0.1)(conventional-commits-parser@7.1.3)
+        version: 3.2.0(conventional-commits-filter@6.0.1)(conventional-commits-parser@7.1.4)
       '@conventional-changelog/template':
-        specifier: ^1.4.0
-        version: 1.4.0
+        specifier: ^1.4.1
+        version: 1.4.1
       '@lerna-lite/cli':
         specifier: workspace:*
         version: link:../cli
@@ -535,11 +535,11 @@ importers:
         specifier: ^9.3.0
         version: 9.3.0
       conventional-commits-parser:
-        specifier: ^7.1.3
-        version: 7.1.3
+        specifier: ^7.1.4
+        version: 7.1.4
       conventional-recommended-bump:
-        specifier: ^12.1.0
-        version: 12.1.0
+        specifier: ^12.1.1
+        version: 12.1.1
       git-url-parse:
         specifier: ^16.1.0
         version: 16.1.0
@@ -646,6 +646,10 @@ packages:
 
   '@conventional-changelog/template@1.4.0':
     resolution: {integrity: sha512-aalGyl7dbB5PArRebDIX43ZvBlXrYm9uWzGJ26t+4SzJVPsOuvfILGGbw5X4yX7i50YEmJ8zvbiWnqH/AAnZqg==}
+    engines: {node: '>=22'}
+
+  '@conventional-changelog/template@1.4.1':
+    resolution: {integrity: sha512-mHyyEL0eIEqJ6+aF24+AdZRo4bu4W5GdUiCiCx5X7kfDY51ye8GQJ264uOINObrRSKxtSRCOWPpl9hbOy4UzxQ==}
     engines: {node: '>=22'}
 
   '@cypress/request@4.0.1':
@@ -1896,13 +1900,13 @@ packages:
     resolution: {integrity: sha512-cs+LadpH7Kpw0M3k8wurk+sOVVDAENA0iK4OBOrkL94j5lEVYRJ4j3zd2bhY9qgzyrPqthdcYT3axzRN7AliMg==}
     engines: {node: '>=22'}
 
-  conventional-commits-parser@7.1.3:
-    resolution: {integrity: sha512-Q9oWm1o9uy/oEsZQIraoFMZ4RuPD+79KgwWj6mJVP356tazolCB0piRLZ5Kz9te9p027uSEcUW+Gu44Eh+X79g==}
+  conventional-commits-parser@7.1.4:
+    resolution: {integrity: sha512-TW3PZHi6hwF4cyu7KKc4kNqD1cgg8AkkK5ge9+zsEfpjaSXOeeIQyNWBr7kx5hR2wFuKVmr0be37RzcpmACQIA==}
     engines: {node: '>=22'}
     hasBin: true
 
-  conventional-recommended-bump@12.1.0:
-    resolution: {integrity: sha512-HTNG3kEZXOOfKwrEx54ljURU9bG4nVPQzXMyCSeUcA/PE8EpNpQNujSrbXNBI8QZyN35zM+pVw+FuQk4KqHSHg==}
+  conventional-recommended-bump@12.1.1:
+    resolution: {integrity: sha512-73tca4vG9rlrB/+DkjtJPVaSJRpValcqI5obhAEcepaKC4MLcubxWJCS9lf12F8hFMuAyX1Ji1AGYIisGroqAw==}
     engines: {node: '>=22'}
     hasBin: true
 
@@ -3701,16 +3705,18 @@ snapshots:
 
   '@bcoe/v8-coverage@1.0.2': {}
 
-  '@conventional-changelog/git-client@3.2.0(conventional-commits-filter@6.0.1)(conventional-commits-parser@7.1.3)':
+  '@conventional-changelog/git-client@3.2.0(conventional-commits-filter@6.0.1)(conventional-commits-parser@7.1.4)':
     dependencies:
       '@simple-libs/child-process-utils': 2.0.0
       '@simple-libs/stream-utils': 2.0.0
       verkit: 0.5.0
     optionalDependencies:
       conventional-commits-filter: 6.0.1
-      conventional-commits-parser: 7.1.3
+      conventional-commits-parser: 7.1.4
 
   '@conventional-changelog/template@1.4.0': {}
+
+  '@conventional-changelog/template@1.4.1': {}
 
   '@cypress/request@4.0.1':
     dependencies:
@@ -4837,7 +4843,7 @@ snapshots:
 
   conventional-changelog-angular@9.4.0:
     dependencies:
-      '@conventional-changelog/template': 1.4.0
+      '@conventional-changelog/template': 1.4.1
 
   conventional-changelog-conventionalcommits@10.4.1:
     dependencies:
@@ -4847,7 +4853,7 @@ snapshots:
 
   conventional-changelog-writer@9.3.0:
     dependencies:
-      '@conventional-changelog/template': 1.4.0
+      '@conventional-changelog/template': 1.4.1
       '@simple-libs/stream-utils': 2.0.0
       argue-cli: 3.1.0
       conventional-commits-filter: 6.0.1
@@ -4855,30 +4861,30 @@ snapshots:
 
   conventional-changelog@8.1.3:
     dependencies:
-      '@conventional-changelog/git-client': 3.2.0(conventional-commits-filter@6.0.1)(conventional-commits-parser@7.1.3)
+      '@conventional-changelog/git-client': 3.2.0(conventional-commits-filter@6.0.1)(conventional-commits-parser@7.1.4)
       '@simple-libs/hosted-git-info': 2.0.0
       '@simple-libs/normalize-package-data': 1.0.0
       argue-cli: 3.1.0
       conventional-changelog-preset-loader: 6.0.1
       conventional-changelog-writer: 9.3.0
       conventional-commits-filter: 6.0.1
-      conventional-commits-parser: 7.1.3
+      conventional-commits-parser: 7.1.4
       fd-package-json: 2.0.0
 
   conventional-commits-filter@6.0.1: {}
 
-  conventional-commits-parser@7.1.3:
+  conventional-commits-parser@7.1.4:
     dependencies:
       '@simple-libs/stream-utils': 2.0.0
       argue-cli: 3.1.0
 
-  conventional-recommended-bump@12.1.0:
+  conventional-recommended-bump@12.1.1:
     dependencies:
-      '@conventional-changelog/git-client': 3.2.0(conventional-commits-filter@6.0.1)(conventional-commits-parser@7.1.3)
+      '@conventional-changelog/git-client': 3.2.0(conventional-commits-filter@6.0.1)(conventional-commits-parser@7.1.4)
       argue-cli: 3.1.0
       conventional-changelog-preset-loader: 6.0.1
       conventional-commits-filter: 6.0.1
-      conventional-commits-parser: 7.1.3
+      conventional-commits-parser: 7.1.4
 
   cookie-signature@1.0.7: {}
 
