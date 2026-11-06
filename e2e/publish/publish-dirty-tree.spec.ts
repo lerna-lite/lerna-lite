@@ -32,13 +32,16 @@ describe('lerna publish with tracked changes', () => {
     expect(result.combinedOutput).toContain('packages/example-package/package.json');
   });
 
-  it.each(['', 'from-git', '--canary'])('rejects --allow-dirty with %s before reaching the registry', async (mode) => {
-    const result = await fixture.lerna(`publish ${mode} --allow-dirty --dry-run -y`, { silenceError: true });
+  it.each(['', 'from-git', '--canary', 'from-git --no-allow-dirty --allow-dirty=**/*.md'])(
+    'rejects --allow-dirty with %s before reaching the registry',
+    async (mode) => {
+      const result = await fixture.lerna(`publish ${mode} --allow-dirty --dry-run -y`, { silenceError: true });
 
-    expect(result.exitCode).not.toBe(0);
-    expect(result.combinedOutput).toContain('EALLOWDIRTY');
-    expect(result.combinedOutput).toContain('--allow-dirty is only allowed with "from-package" positional');
-  });
+      expect(result.exitCode).not.toBe(0);
+      expect(result.combinedOutput).toContain('EALLOWDIRTY');
+      expect(result.combinedOutput).toContain('--allow-dirty is only allowed with "from-package" positional');
+    }
+  );
 
   it.each(['CLI', 'configuration'])('accepts --allow-dirty from %s for from-package', async (source) => {
     // Private packages avoid registry requests; real dirty-file validation is covered by unit tests.
@@ -52,5 +55,18 @@ describe('lerna publish with tracked changes', () => {
     expect(result.exitCode).toBe(0);
     expect(result.combinedOutput).toContain('Skipping working-tree validation; published packages may include uncommitted changes.');
     expect(result.combinedOutput).toContain('No unpublished release found');
+  });
+
+  it.each(['CLI', 'configuration'])('accepts allow-dirty glob patterns from %s', async (source) => {
+    await fixture.updateJson('packages/example-package/package.json', (json) => ({ ...json, private: true }));
+    if (source === 'configuration') {
+      await fixture.updateJson('lerna.json', (json) => ({ ...json, command: { publish: { allowDirty: ['**/*.md'] } } }));
+    }
+
+    const result = await fixture.lerna(`publish from-package --dry-run -y ${source === 'CLI' ? "--allow-dirty='**/*.md'" : ''}`);
+
+    expect(result.exitCode).toBe(0);
+    expect(result.combinedOutput).toContain('No unpublished release found');
+    expect(result.combinedOutput).not.toContain('Skipping working-tree validation');
   });
 });

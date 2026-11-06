@@ -372,7 +372,7 @@ export interface PublishCommandOption extends VersionCommandOption {
   canary?: boolean;
 
   /** Allow uncommitted changes when publishing, only allowed with "from-package" positional. */
-  allowDirty?: boolean;
+  allowDirty?: boolean | string | string[];
 
   /** Cleanup packed temp files/folders after publish process is finished, defaults to false. */
   cleanupTempFiles?: boolean;

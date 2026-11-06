@@ -116,15 +116,21 @@ $ lerna publish --scope my-component test
 
 ### `--allow-dirty`
 
-Skip the initial working-tree validation for `lerna publish from-package`. By default, tracked files must have no uncommitted changes. This option is only supported with `from-package`; versioning, `from-git`, and canary publishing retain their clean-tree requirement.
+Allow tracked working-tree changes for `lerna publish from-package`. By default, tracked files must have no uncommitted changes. This option is only supported with `from-package`; versioning, `from-git`, and canary publishing retain their clean-tree requirement.
 
 Use this when intentionally modifying package contents before publishing, such as adding npm-specific sponsor information to a README. Lerna-Lite logs a warning because the published contents may differ from the recorded Git commit.
 
 ```sh
 lerna publish from-package --allow-dirty
+lerna publish from-package --allow-dirty='**/*.md'
+lerna publish from-package --allow-dirty='**/*.md' --allow-dirty='**/*.txt'
 ```
 
-It can also be configured with `command.publish.allowDirty` in `lerna.json`. It does not change post-publish cleanup: package manifests are still reset unless `--no-git-reset` is passed. Preserve any manifest changes you need before publishing, or disable that reset explicitly.
+Without a pattern, the flag allows all tracked changes. With patterns, only matching tracked files are allowed and listed in a warning; other tracked changes still cause `EUNCOMMIT`. Patterns match paths relative to the repository root. Both paths of a rename must match. Set `command.publish.allowDirty` to `true`, a glob string, or an array of glob strings in `lerna.json`.
+
+Pass `--no-allow-dirty` to disable an existing configuration. Explicit values such as `--allow-dirty=false` are interpreted as patterns, consistent with other boolean-or-string options.
+
+It does not change post-publish cleanup: package manifests are still reset unless `--no-git-reset` is passed. Preserve any manifest changes you need before publishing, or disable that reset explicitly.
 
 `ignoreChanges` only affects package change detection; it does not exclude files from working-tree validation. `--no-git-reset` controls cleanup after publishing and does not bypass initial validation either.
 

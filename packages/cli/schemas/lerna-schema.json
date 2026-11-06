@@ -1310,8 +1310,8 @@
       },
       "publish": {
         "allowDirty": {
-          "type": "boolean",
-          "description": "Allow uncommitted changes when publishing, only allowed with 'from-package' positional. Defaults to false."
+          "oneOf": [{ "type": "boolean" }, { "type": "string" }, { "type": "array", "items": { "type": "string" } }],
+          "description": "Allow all uncommitted changes or only paths matching glob patterns with 'from-package'. Defaults to false."
         },
         "arboristLoadOptions": {
           "type": "object",
