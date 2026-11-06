@@ -1,6 +1,6 @@
 import crypto from 'node:crypto';
 import { EOL, tmpdir } from 'node:os';
-import { dirname, normalize, join as pathJoin, relative } from 'node:path';
+import { dirname, matchesGlob, normalize, join as pathJoin, relative } from 'node:path';
 
 import type {
   CommandType,
@@ -20,6 +20,7 @@ import {
   deleteComplexObjectProp,
   describeRef,
   excludeValuesFromArray,
+  exec,
   outputFileSync,
   removeSync,
   logOutput,
@@ -129,6 +130,14 @@ export class PublishCommand extends Command<PublishCommandOption> {
 
     if (this.requiresGit && gitHead) {
       throw new ValidationError('EGITHEAD', '--git-head is only allowed with "from-package" positional');
+    }
+
+    if (
+      this.options.allowDirty &&
+      !(Array.isArray(this.options.allowDirty) && this.options.allowDirty.length === 0) &&
+      this.options.bump !== 'from-package'
+    ) {
+      throw new ValidationError('EALLOWDIRTY', '--allow-dirty is only allowed with "from-package" positional');
     }
 
     // https://docs.npmjs.com/misc/config#save-prefix
@@ -368,6 +377,51 @@ export class PublishCommand extends Command<PublishCommandOption> {
   }
 
   verifyWorkingTreeClean() {
+    const option = this.options.allowDirty;
+    if (option === true) {
+      this.logger.warn('allow-dirty', 'Skipping working-tree validation; published packages may include uncommitted changes.');
+      return Promise.resolve();
+    }
+
+    const patterns =
+      typeof option === 'string' ? [option] : Array.isArray(option) ? option.filter((value) => typeof value === 'string') : [];
+    if (patterns.length) {
+      return describeRef(this.execOpts, undefined, this.options.dryRun).then(async ({ isDirty }) => {
+        if (!isDirty) {
+          return;
+        }
+        const { stdout } = await exec('git', ['status', '--porcelain', '-z', '--untracked-files=no'], this.execOpts);
+        const entries = stdout.split('\0');
+        const allowed: string[] = [];
+        const rejected: string[] = [];
+        for (let i = 0; i < entries.length; i++) {
+          const entry = entries[i];
+          if (!entry) {
+            continue;
+          }
+          const status = entry.slice(0, 2);
+          const paths = [entry.slice(3)];
+          if (/[RC]/.test(status)) {
+            paths.push(entries[++i]);
+          }
+          const display = `${status} ${paths.join(' <- ')}`;
+          (paths.every((path) => patterns.some((pattern) => matchesGlob(path, pattern))) ? allowed : rejected).push(display);
+        }
+        if (allowed.length) {
+          this.logger.warn('allow-dirty', `Allowing uncommitted changes:\n${allowed.join('\n')}`);
+        }
+        if (!allowed.length && !rejected.length) {
+          return throwIfUncommitted(this.execOpts, this.options.dryRun)({ isDirty: true });
+        }
+        if (rejected.length) {
+          throw new ValidationError(
+            'EUNCOMMIT',
+            `Working tree has uncommitted changes, please commit or remove the following changes before continuing:\n${rejected.join('\n')}`
+          );
+        }
+      });
+    }
+
     return describeRef(this.execOpts, undefined, this.options.dryRun).then(
       throwIfUncommitted(this.execOpts, this.options.dryRun)
     );

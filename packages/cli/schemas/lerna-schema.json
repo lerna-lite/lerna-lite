@@ -352,6 +352,9 @@
           "type": "object",
           "description": "Options for the `publish` command.",
           "properties": {
+            "allowDirty": {
+              "$ref": "#/$defs/commandOptions/publish/allowDirty"
+            },
             "arboristLoadOptions": {
               "$ref": "#/$defs/commandOptions/publish/arboristLoadOptions"
             },
@@ -989,6 +992,9 @@
       "$ref": "#/$defs/commandOptions/init/independent"
     },
 
+    "allowDirty": {
+      "$ref": "#/$defs/commandOptions/publish/allowDirty"
+    },
     "canary": {
       "$ref": "#/$defs/commandOptions/publish/canary"
     },
@@ -1303,6 +1309,10 @@
         }
       },
       "publish": {
+        "allowDirty": {
+          "oneOf": [{ "type": "boolean" }, { "type": "string" }, { "type": "array", "items": { "type": "string" } }],
+          "description": "Allow all uncommitted changes or only paths matching glob patterns with 'from-package'. Defaults to false."
+        },
         "arboristLoadOptions": {
           "type": "object",
           "description": "During `lerna publish`, Arborist options associated to the `arborist.loadActual(options)` method."

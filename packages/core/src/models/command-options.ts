@@ -371,6 +371,9 @@ export interface PublishCommandOption extends VersionCommandOption {
   /** Publish packages after every successful merge using the sha as part of the tag. */
   canary?: boolean;
 
+  /** Allow uncommitted changes when publishing, only allowed with "from-package" positional. */
+  allowDirty?: boolean | string | string[];
+
   /** Cleanup packed temp files/folders after publish process is finished, defaults to false. */
   cleanupTempFiles?: boolean;
 
