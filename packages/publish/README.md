@@ -82,6 +82,7 @@ $ lerna publish --scope my-component test
     - [semver `--bump from-git`](#semver---bump-from-git)
     - [semver `--bump from-package`](#semver---bump-from-package)
   - [Options](#options)
+    - [`--allow-dirty`](#--allow-dirty)
     - [`--arborist-load-options`](#--arborist-load-options)
     - [`--canary`](#--canary)
     - [`--cleanup-temp-files`](#--cleanup-temp-files)    
@@ -112,6 +113,31 @@ $ lerna publish --scope my-component test
   - [`publishConfig` Overrides](#publishconfig-overrides)
   - [`catalog:` protocol](#catalog-protocol)
   - [`workspace:` protocol](#workspace-protocol)
+
+### `--allow-dirty`
+
+Allow tracked working-tree changes for `lerna publish from-package`. By default, tracked files must have no uncommitted changes. This option is only supported with `from-package`; versioning, `from-git`, and canary publishing retain their clean-tree requirement.
+
+Use this when intentionally modifying package contents before publishing, such as adding npm-specific sponsor information to a README. Lerna-Lite logs a warning because the published contents may differ from the recorded Git commit.
+
+```sh
+lerna publish from-package --allow-dirty
+lerna publish from-package --allow-dirty='**/*.md'
+lerna publish from-package --allow-dirty='**/*.md' --allow-dirty='**/*.txt'
+```
+
+Without a pattern, the flag allows all tracked changes. With patterns, only matching tracked files are allowed and listed in a warning; other tracked changes still cause `EUNCOMMIT`. Patterns match paths relative to the repository root. Both paths of a rename must match. Set `command.publish.allowDirty` to `true`, a glob string, or an array of glob strings in `lerna.json`.
+
+Pass `--no-allow-dirty` to disable an existing configuration. Explicit values such as `--allow-dirty=false` are interpreted as patterns, consistent with other boolean-or-string options.
+
+It does not change post-publish cleanup: package manifests are still reset unless `--no-git-reset` is passed. Preserve any manifest changes you need before publishing, or disable that reset explicitly.
+
+`ignoreChanges` only affects package change detection; it does not exclude files from working-tree validation. `--no-git-reset` controls cleanup after publishing and does not bypass initial validation either.
+
+Alternatives that keep initial validation enabled:
+
+- Generate publishing-specific content in a `prepack` lifecycle script, which runs after initial validation and before packing. Ensure lifecycle scripts are enabled.
+- Commit the adjustments locally on the CI runner without pushing the commit. For `from-package`, capture the original release SHA before creating that local commit and pass it with `--git-head <sha>` to retain the release SHA in package metadata. That SHA identifies the source release; the published adjustments will not be present in that commit.
 
 ### `--arborist-load-options`
 Arborist options that can be provided in your `lerna.json` config which are options associated to the `arborist.loadActual(options)` method. This option exists because in some rare occasions Arborist could be extremely slow to parse the entire tree from a project repository. The slowness was found to be caused by Arborist and a potential way to speedup the process is to ignore the missing edges when parsing the tree (which is the config example shown below). It was provided as an opt-in option because we don't know if ignoring missing edges has any negative side effect (we think it's ok but still, to be safe we've made it as opt-in with below option)
@@ -808,6 +834,6 @@ Temporary-tag promotion adds the destination dist-tag before removing `lerna-tem
 
 For a newly published package that needs trusted-publisher configuration, an initial manual publish may be necessary before configuring trust. Once the missing package is registered and trust is configured, retry from the release commit as above. Check the registry and any lifecycle side effects before retrying: a publish error does not necessarily mean the registry rejected the package. This procedure does not move Git tags, undo the release commit, or automatically resume release creation.
 
-For `from-git`, `from-package`, and canary publishes, Lerna-Lite rejects tracked working-tree changes before publishing. Check and preserve any changes you need before cleaning the tree; untracked files are not covered by this check. A dry run logs the Git check without executing it, so it does not verify that the tree is clean.
+For `from-git`, `from-package`, and canary publishes, Lerna-Lite rejects tracked working-tree changes before publishing. Check and preserve any changes you need before cleaning the tree; untracked files are not covered by this check. For intentional publishing adjustments with `from-package`, see [`--allow-dirty`](#--allow-dirty) and its alternatives. A dry run logs the Git check without executing it, so it does not verify that the tree is clean.
 
 When a registry publish returns HTTP 409, Lerna-Lite checks that registry for the exact package version before skipping it as already published. This check uses the publishing registry and authentication settings and does not depend on registry-specific error messages. If the version is absent or the check fails, the original publish error is reported. Signing errors, lifecycle errors, and staged uploads are not resolved by this check.

@@ -19,6 +19,10 @@ export default {
   describe: 'Publish packages in the current project.',
   builder: (yargs: any) => {
     const opts = {
+      'allow-dirty': {
+        describe: 'Allow all uncommitted changes or only paths matching the given glob patterns, with "from-package".',
+        // type must remain ambiguous because it is overloaded (boolean _or_ string _or_ array)
+      },
       c: {
         describe: 'Publish packages after every successful merge using the sha as part of the tag.',
         alias: 'canary',
