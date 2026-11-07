@@ -4,6 +4,12 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [5.8.0](https://github.com/lerna-lite/lerna-lite/compare/v5.7.0...v5.8.0) (2026-11-07)
+
+### Features
+
+* **publish:** allow intentional working-tree changes with from-package ([#1449](https://github.com/lerna-lite/lerna-lite/issues/1449)) ([5e223a3](https://github.com/lerna-lite/lerna-lite/commit/5e223a3b14912350acac75b70f9bcaa88ecf7474)) - by @ghiscoding
+
 ## [5.7.0](https://github.com/lerna-lite/lerna-lite/compare/v5.6.4...v5.7.0) (2026-11-03)
 
 **Note:** Version bump only for package @lerna-lite/cli
