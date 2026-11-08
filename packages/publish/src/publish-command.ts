@@ -1024,7 +1024,8 @@ export class PublishCommand extends Command<PublishCommandOption> {
     const mapper = async (pkg: Package & { packed: Tarball }) => {
       const preDistTag = this.getPreDistTag(pkg);
       const tag = !this.options.tempTag && preDistTag ? preDistTag : opts.tag;
-      const pkgOpts = Object.assign({}, opts, { tag });
+      const explicitTag = !!(this.options.tempTag || preDistTag || this.options.distTag);
+      const pkgOpts = Object.assign({}, opts, { tag, explicitTag });
       const publish = async () =>
         pulseTillDone(
           q
@@ -1138,7 +1139,7 @@ export class PublishCommand extends Command<PublishCommandOption> {
 
     const opts = { ...this.conf.snapshot, dryRun: this.options.dryRun || false };
     const getDistTag = (publishConfig) => {
-      if (opts.tag === 'latest' && publishConfig?.tag) {
+      if (!this.options.distTag && opts.tag === 'latest' && publishConfig?.tag) {
         return publishConfig.tag;
       }
       return opts.tag;
