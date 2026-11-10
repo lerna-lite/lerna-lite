@@ -86,11 +86,12 @@ function flattenOptions(obj: Omit<LibNpmPublishOptions, 'defaultTag'>): LibNpmPu
 export async function npmPublish(
   pkg: Package,
   tarFilePath: string,
-  options: Omit<LibNpmPublishOptions, 'defaultTag'> = {},
+  options: Omit<LibNpmPublishOptions, 'defaultTag'> & { explicitTag?: boolean } = {},
   conf: Conf,
   otpCache?: OneTimePasswordCache
 ): Promise<void | Response> {
-  const { dryRun, ...remainingOptions } = flattenOptions(options);
+  const { explicitTag, ...publishOptions } = options;
+  const { dryRun, ...remainingOptions } = flattenOptions(publishOptions);
   const { scope } = npa(pkg.name ?? '');
   // pass only the package scope to libnpmpublish
   const opts = {
@@ -126,10 +127,10 @@ export async function npmPublish(
 
     const manifestContent = npmCliPackageJson.content;
 
-    // non-default tag needs to override publishConfig.tag,
+    // an explicit or non-default tag needs to override publishConfig.tag,
     // which is merged into opts below if necessary
     if (
-      opts.defaultTag !== 'latest' &&
+      (explicitTag || opts.defaultTag !== 'latest') &&
       manifestContent.publishConfig?.tag &&
       manifestContent.publishConfig.tag !== opts.defaultTag
     ) {
