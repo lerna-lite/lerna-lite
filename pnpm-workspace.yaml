@@ -53,7 +53,6 @@ overrides:
   http-cache-semantics: ^4.3.0
   ip-address: ^10.7.5
   js-yaml: ^5.5.0
-  minimatch: ^11.0.4
   postcss-selector-parser: ^7.1.7
   proxy-addr: ^2.0.8
   qs: ^6.16.1
