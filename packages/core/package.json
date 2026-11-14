@@ -43,7 +43,7 @@
     "@npmcli/run-script": "^10.0.4",
     "ci-info": "catalog:",
     "json5": "^2.2.3",
-    "lilconfig": "^3.1.4",
+    "lilconfig": "^3.1.5",
     "npm-package-arg": "catalog:",
     "tinyexec": "catalog:dependencies",
     "verkit": "catalog:",
