@@ -1,4 +1,4 @@
-import { mkdtemp, rm } from 'node:fs/promises';
+import { mkdtemp, readFile, rm } from 'node:fs/promises';
 import { tmpdir } from 'node:os';
 import { join as pathJoin } from 'node:path';
 
@@ -8,12 +8,13 @@ import {
   logOutput,
   promptConfirmation,
   type PublishCommandOption,
+  outputFile,
   outputFileSync,
   outputJson,
   pathExistsSync,
 } from '@lerna-lite/core';
 import { getOneTimePassword } from '@lerna-lite/version';
-import { commandRunner, commitChangeToPackage, initFixtureFactory } from '@lerna-test/helpers';
+import { commandRunner, commitChangeToPackage, gitAdd, gitCommit, initFixtureFactory } from '@lerna-test/helpers';
 import { loggingOutput } from '@lerna-test/helpers/logging-output.js';
 import { beforeAll, beforeEach, describe, expect, it, vi, type Mock } from 'vitest';
 import yargParser from 'yargs-parser';
@@ -1020,6 +1021,97 @@ describe('PublishCommand', () => {
         expect.any(Object),
         { ignoreMissing: true }
       );
+    });
+  });
+
+  describe('output manifest sync', () => {
+    it.each([false, true])('synchronizes only version and protocols in a generated output manifest (dry run: %s)', async (dryRun) => {
+      const cwd = await initFixture('lifecycle');
+
+      await outputJson(pathJoin(cwd, 'lerna.json'), {
+        version: '1.0.0',
+        npmClient: 'pnpm',
+        command: {
+          publish: {
+            stripPackageKeys: ['devDependencies', 'scripts'],
+          },
+        },
+      });
+      await outputFile(pathJoin(cwd, 'pnpm-workspace.yaml'), 'catalog:\n  fs-extra: ^11.2.0\n  optional-dep: ~3.0.0\n  tooling-dep: ^4.0.0\n');
+      await gitAdd(cwd, 'lerna.json');
+      await gitAdd(cwd, 'pnpm-workspace.yaml');
+      await gitCommit(cwd, 'chore: configure pnpm catalog');
+      await commitChangeToPackage(cwd, 'package-2', 'chore: configure output manifest sync', {
+        publishConfig: { directory: 'dist' },
+        dependencies: {
+          'fs-extra': 'catalog:',
+          'package-1': 'workspace:*',
+        },
+        lerna: {
+          command: {
+            publish: {
+              syncOutputManifest: true,
+            },
+          },
+        },
+      });
+      await outputJson(pathJoin(cwd, 'packages/package-2/dist/package.json'), {
+        name: 'package-2',
+        version: '0.0.0',
+        main: './fesm2022/package-2.mjs',
+        module: './fesm2022/package-2.mjs',
+        types: './index.d.ts',
+        exports: {
+          '.': {
+            default: './fesm2022/package-2.mjs',
+            types: './index.d.ts',
+          },
+        },
+        dependencies: {
+          'fs-extra': 'catalog:',
+          'package-1': 'workspace:*',
+        },
+        peerDependencies: {
+          'package-1': 'workspace:^',
+        },
+        optionalDependencies: {
+          'optional-dep': 'catalog:',
+        },
+        devDependencies: {
+          'tooling-dep': 'catalog:',
+        },
+      });
+      await gitAdd(cwd, 'packages/package-2/dist/package.json');
+      await gitCommit(cwd, 'chore: add generated package manifest');
+
+      await new PublishCommand(createArgv(cwd, ...(dryRun ? ['--dry-run'] : [])));
+
+      const publishedManifest = JSON.parse(await readFile(pathJoin(cwd, 'packages/package-2/dist/package.json'), 'utf8'));
+      expect(publishedManifest).toMatchObject({
+        main: './fesm2022/package-2.mjs',
+        module: './fesm2022/package-2.mjs',
+        types: './index.d.ts',
+        exports: {
+          '.': {
+            default: './fesm2022/package-2.mjs',
+            types: './index.d.ts',
+          },
+        },
+      });
+      expect(publishedManifest).not.toHaveProperty('scripts');
+      expect(publishedManifest.dependencies).toMatchObject({
+        'fs-extra': '^11.2.0',
+        'package-1': publishedManifest.version,
+      });
+      expect(publishedManifest.peerDependencies).toMatchObject({
+        'package-1': `^${publishedManifest.version}`,
+      });
+      expect(publishedManifest.optionalDependencies).toMatchObject({
+        'optional-dep': '~3.0.0',
+      });
+      expect(publishedManifest.devDependencies).toMatchObject({
+        'tooling-dep': '^4.0.0',
+      });
     });
   });
 
