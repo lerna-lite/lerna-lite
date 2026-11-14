@@ -45,6 +45,11 @@ export default {
         requiresArg: true,
         defaultDescription: '.',
       },
+      directory: {
+        describe: 'Publish directory, supporting {workspaceRoot}, {projectRoot}, and {projectName} placeholders.',
+        type: 'string',
+        requiresArg: true,
+      },
       'dist-tag': {
         describe: 'Publish packages with the specified npm dist-tag',
         type: 'string',

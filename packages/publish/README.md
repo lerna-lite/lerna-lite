@@ -87,6 +87,7 @@ $ lerna publish --scope my-component test
     - [`--canary`](#--canary)
     - [`--cleanup-temp-files`](#--cleanup-temp-files)    
     - [`--contents <dir>`](#--contents-dir)
+    - [`--directory <dir>`](#--directory-dir)
     - [`--dist-tag <tag>`](#--dist-tag-tag)
     - [`--force-publish`](#--force-publish)
     - [`--git-head <sha>`](#--git-head-sha)
@@ -198,7 +199,7 @@ Subdirectory to publish. Must apply to ALL packages, and MUST contain a package.
 Package lifecycles will still be run in the original leaf directory.
 You should probably use one of those lifecycles (`prepare`, `prepublishOnly`, or `prepack`) to _create_ the subdirectory and whatnot.
 
-If you're into unnecessarily complicated publishing, this will give you joy.
+For per-package output paths and placeholders, see [`--directory`](#--directory-dir).
 
 ```sh
 lerna publish --contents dist
@@ -207,6 +208,22 @@ lerna publish --contents dist
 
 **NOTE:** You should wait until the `postpublish` lifecycle phase (root or leaf) to clean up this generated subdirectory,
 as the generated package.json is used during package upload (_after_ `postpack`).
+
+### `--directory <dir>`
+
+Select the directory to publish. Set `command.publish.directory` in `lerna.json`, pass `--directory`, or set `lerna.command.publish.directory` in an individual package's `package.json`. Package configuration takes precedence over the CLI or root setting, which takes precedence over `--contents` and `publishConfig.directory`.
+
+Paths support `{workspaceRoot}`, `{projectRoot}` (relative to the workspace root), and `{projectName}`. Relative paths are resolved from each package directory; `{workspaceRoot}` supports an absolute output path. For example:
+
+```json
+{
+  "command": {
+    "publish": { "directory": "{workspaceRoot}/dist/{projectRoot}" }
+  }
+}
+```
+
+The output directory must contain a publish-ready `package.json`. This option does not copy assets or update a generated manifest. Package lifecycles still run in the source directory; retain the output directory until `postpublish`.
 
 ### `--dist-tag <tag>`
 

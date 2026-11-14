@@ -223,6 +223,7 @@ export interface ProjectConfig extends LernaConfig, QueryGraphConfig {
 /** The subset of package.json properties that Lerna-Lite uses */
 export interface RawManifest extends Package {
   publishConfig?: Record<'directory' | 'registry' | 'tag', string>;
+  lerna?: { command?: { publish?: { directory?: string } } };
 }
 
 export interface UpdateCollectorOptions {

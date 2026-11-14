@@ -13,7 +13,7 @@ import {
   pathExistsSync,
 } from '@lerna-lite/core';
 import { getOneTimePassword } from '@lerna-lite/version';
-import { commandRunner, commitChangeToPackage, initFixtureFactory } from '@lerna-test/helpers';
+import { commandRunner, commitChangeToPackage, gitAdd, gitCommit, initFixtureFactory } from '@lerna-test/helpers';
 import { loggingOutput } from '@lerna-test/helpers/logging-output.js';
 import { beforeAll, beforeEach, describe, expect, it, vi, type Mock } from 'vitest';
 import yargParser from 'yargs-parser';
@@ -1016,6 +1016,41 @@ describe('PublishCommand', () => {
           name: 'package-2',
           contents: pathJoin(cwd, 'packages/package-2'),
         }),
+        pathJoin(cwd, 'packages/package-2'),
+        expect.any(Object),
+        { ignoreMissing: true }
+      );
+    });
+  });
+
+  describe('configured publish directory', () => {
+    beforeEach(() => vi.clearAllMocks());
+    it('interpolates root paths and lets package configuration override the CLI', async () => {
+      const cwd = await initFixture('lifecycle');
+      await commitChangeToPackage(cwd, 'package-1', 'chore: configure output', {
+        lerna: { command: { publish: { directory: 'build/{projectName}' } } },
+      });
+
+      await new PublishCommand(createArgv(cwd, '--contents', 'legacy', '--directory', '{workspaceRoot}/dist/{projectRoot}'));
+
+      const directories = Object.fromEntries((packDirectory as Mock).mock.calls.map(([pkg]) => [pkg.name, pkg.contents]));
+      expect(directories).toMatchObject({
+        'package-1': pathJoin(cwd, 'packages/package-1/build/package-1'),
+        'package-2': pathJoin(cwd, 'dist/packages/package-2'),
+      });
+    });
+
+    it('reads the root directory from lerna.json', async () => {
+      const cwd = await initFixture('lifecycle');
+      await outputJson(pathJoin(cwd, 'lerna.json'), {
+        version: '1.0.0',
+        command: { publish: { directory: 'build/{projectName}', arboristLoadOptions: { ignoreMissing: true } } },
+      });
+      await gitAdd(cwd, 'lerna.json');
+      await gitCommit(cwd, 'chore: configure publish directory');
+      await new PublishCommand(createArgv(cwd));
+      expect(packDirectory).toHaveBeenCalledWith(
+        expect.objectContaining({ name: 'package-2', contents: pathJoin(cwd, 'packages/package-2/build/package-2') }),
         pathJoin(cwd, 'packages/package-2'),
         expect.any(Object),
         { ignoreMissing: true }
