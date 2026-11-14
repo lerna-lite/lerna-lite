@@ -1,4 +1,4 @@
-import { basename, dirname, join, resolve as pathResolve, relative } from 'node:path';
+import { basename, dirname, isAbsolute, join, normalize, resolve as pathResolve, relative } from 'node:path';
 
 import { log } from '@lerna-lite/npmlog';
 import npa from 'npm-package-arg';
@@ -182,7 +182,7 @@ export class Package {
   }
 
   set contents(subDirectory: string) {
-    this[_contents] = join(this.location, subDirectory);
+    this[_contents] = isAbsolute(subDirectory) ? normalize(subDirectory) : join(this.location, subDirectory);
   }
 
   // 'live' collections

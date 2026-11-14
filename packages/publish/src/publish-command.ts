@@ -275,6 +275,16 @@ export class PublishCommand extends Command<PublishCommandOption> {
           }
         }
 
+        for (const pkg of this.packagesToPublish) {
+          const directory = pkg.manifest.lerna?.command?.publish?.directory || this.options.directory;
+          if (directory) {
+            pkg.contents = directory
+              .replaceAll('{workspaceRoot}', this.project.rootPath)
+              .replaceAll('{projectRoot}', relative(this.project.rootPath, pkg.location))
+              .replaceAll('{projectName}', pkg.name);
+          }
+        }
+
         if (result.needsConfirmation) {
           // only confirm for --canary, bump === 'from-git',
           // or bump === 'from-package', as VersionCommand

@@ -373,6 +373,9 @@
             "contents": {
               "$ref": "#/$defs/commandOptions/shared/contents"
             },
+            "directory": {
+              "$ref": "#/$defs/commandOptions/publish/directory"
+            },
             "describeTag": {
               "$ref": "#/$defs/globals/describeTag"
             },
@@ -1309,6 +1312,10 @@
         }
       },
       "publish": {
+        "directory": {
+          "type": "string",
+          "description": "Publish directory supporting {workspaceRoot}, {projectRoot}, and {projectName} placeholders."
+        },
         "allowDirty": {
           "oneOf": [{ "type": "boolean" }, { "type": "string" }, { "type": "array", "items": { "type": "string" } }],
           "description": "Allow all uncommitted changes or only paths matching glob patterns with 'from-package'. Defaults to false."
