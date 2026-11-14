@@ -1025,6 +1025,46 @@ describe('PublishCommand', () => {
   });
 
   describe('output manifest sync', () => {
+    it('skips synchronization when publishing from the source directory', async () => {
+      const cwd = await initFixture('lifecycle');
+      await commitChangeToPackage(cwd, 'package-2', 'chore: enable sync', {
+        lerna: { command: { publish: { syncOutputManifest: true } } },
+      });
+      await new PublishCommand(createArgv(cwd, '--dry-run'));
+      expect(packDirectory).toHaveBeenCalledWith(
+        expect.objectContaining({ name: 'package-2' }),
+        expect.any(String),
+        expect.any(Object),
+        expect.anything(),
+        expect.any(Function)
+      );
+    });
+
+    it('reports a missing output manifest', async () => {
+      const cwd = await initFixture('lifecycle');
+      await commitChangeToPackage(cwd, 'package-2', 'chore: enable sync', {
+        publishConfig: { directory: 'missing-output' },
+        lerna: { command: { publish: { syncOutputManifest: true } } },
+      });
+      await expect(new PublishCommand(createArgv(cwd, '--dry-run'))).rejects.toThrow('No package.json found in configured publish directory');
+    });
+
+    it('reports an unresolved workspace dependency in the output manifest', async () => {
+      const cwd = await initFixture('lifecycle');
+      await commitChangeToPackage(cwd, 'package-2', 'chore: enable sync', {
+        publishConfig: { directory: 'dist' },
+        lerna: { command: { publish: { syncOutputManifest: true } } },
+      });
+      await outputJson(pathJoin(cwd, 'packages/package-2/dist/package.json'), {
+        name: 'package-2',
+        version: '1.0.0',
+        dependencies: { 'missing-package': 'workspace:^' },
+      });
+      await gitAdd(cwd, 'packages/package-2/dist/package.json');
+      await gitCommit(cwd, 'chore: add output manifest');
+      await expect(new PublishCommand(createArgv(cwd, '--dry-run'))).rejects.toThrow('Cannot resolve missing-package@workspace:^');
+    });
+
     it.each([false, true])('synchronizes only version and protocols in a generated output manifest (dry run: %s)', async (dryRun) => {
       const cwd = await initFixture('lifecycle');
 
