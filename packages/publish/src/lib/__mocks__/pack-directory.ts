@@ -2,7 +2,8 @@ import { afterEach, vi, type Mock } from 'vitest';
 
 const registry = new Set();
 
-const mockPackDirectory = vi.fn((pkg) => {
+const mockPackDirectory = vi.fn(async (pkg, _dir, _options, _arboristOptions, beforePack?: () => Promise<void>) => {
+  await beforePack?.();
   registry.add(pkg.name);
 
   return Promise.resolve({

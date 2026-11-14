@@ -383,6 +383,9 @@ export interface PublishCommandOption extends VersionCommandOption {
   /** Subdirectory to publish. Must apply to ALL packages. */
   contents?: string;
 
+  /** Synchronize the generated package.json in the publish directory before packing. */
+  syncOutputManifest?: boolean;
+
   /** Publish packages with the specified npm dist-tag */
   distTag?: string;
 

@@ -185,6 +185,14 @@ export class Package {
     this[_contents] = join(this.location, subDirectory);
   }
 
+  get lernaConfig() {
+    return this[PKG].lerna;
+  }
+
+  set lernaConfig(config) {
+    this[PKG].lerna = config;
+  }
+
   // 'live' collections
   get dependencies(): { [depName: string]: string } {
     return this[PKG].dependencies;

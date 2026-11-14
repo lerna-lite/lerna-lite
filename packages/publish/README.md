@@ -108,6 +108,7 @@ $ lerna publish --scope my-component test
     - [`--summary-file <dir>`](#--summary-file)
     - [`--verify-access`](#--verify-access)
     - [`--yes`](#--yes)
+  - [Output manifest sync](#output-manifest-sync)
   - [NPM Provenance](#npm-provenance)
   - [OIDC](#oidc)
   - [`publishConfig` Overrides](#publishconfig-overrides)
@@ -198,7 +199,7 @@ Subdirectory to publish. Must apply to ALL packages, and MUST contain a package.
 Package lifecycles will still be run in the original leaf directory.
 You should probably use one of those lifecycles (`prepare`, `prepublishOnly`, or `prepack`) to _create_ the subdirectory and whatnot.
 
-If you're into unnecessarily complicated publishing, this will give you joy.
+For a different output directory in only one package, use [`publishConfig.directory`](#publishconfigdirectory). If a build generates its own package.json, see [output manifest sync](#output-manifest-sync) to resolve its version and dependency protocols before packing.
 
 ```sh
 lerna publish --contents dist
@@ -586,6 +587,23 @@ This _non-standard_ field allows you to customize the published subdirectory jus
   }
 ```
 
+## Output manifest sync
+
+For build tools such as ng-packagr, enable this in the source package.json:
+
+```json
+{
+  "publishConfig": { "directory": "dist" },
+  "lerna": { "command": { "publish": { "syncOutputManifest": true } } }
+}
+```
+
+After package prepack scripts and before packing, Lerna-Lite updates the generated manifest's version and resolves workspace/catalog protocols in its existing dependency sections. Other generated fields and ordinary dependency ranges are preserved.
+
+The option defaults to false. Set command.publish.syncOutputManifest in lerna.json for a root default; a package-level false overrides it. It also works with --contents. Lifecycle scripts run in the source directory and must create the output manifest by the end of prepack. Keep the output directory until postpublish: upload reads its manifest after postpack.
+
+Dry-run performs the same local manifest update without uploading a release. The output manifest remains modified afterward. This sync runs during Lerna publish, not standalone npm pack or Lerna version.
+
 ## NPM Provenance
 
 NPM provenance is a security feature that creates a verifiable connection between a published package and its source code repository. When enabled, it provides cryptographic proof that a package was built from a specific GitHub repository commit using GitHub Actions or Gitlab runners. This helps prevent supply chain attacks where malicious actors could publish compromised versions of popular packages.
@@ -675,7 +693,7 @@ lerna will run [npm lifecycle scripts](https://docs.npmjs.com/cli/v8/using-npm/s
    2. Run `prepare` lifecycle
    3. Run `prepublishOnly` lifecycle
    4. Run `prepack` lifecycle
-   5. Create package tarball in temp directory via [JS API](https://github.com/lerna-lite/lerna-lite/blob/main/packages/publish/src/lib/pack-directory.ts)
+   5. Synchronize the generated output manifest when `syncOutputManifest` is enabled, then create the package tarball in a temp directory via [JS API](https://github.com/lerna-lite/lerna-lite/blob/main/packages/publish/src/lib/pack-directory.ts)
    6. Run `postpack` lifecycle
 7. Run `postpack` lifecycle in root
 8. For each changed package, in topological order (all dependencies before dependents):
