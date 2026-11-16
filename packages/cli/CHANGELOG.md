@@ -4,6 +4,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [5.9.0](https://github.com/lerna-lite/lerna-lite/compare/v5.8.0...v5.9.0) (2026-11-16)
+
+### Features
+
+* **publish:** support configurable publish directories ([#1457](https://github.com/lerna-lite/lerna-lite/issues/1457)) ([e03b548](https://github.com/lerna-lite/lerna-lite/commit/e03b5482017f5cd3be641106c29e8b65ce341096)) - by @ghiscoding
+* **publish:** sync generated package manifests before packing ([#1456](https://github.com/lerna-lite/lerna-lite/issues/1456)) ([4503659](https://github.com/lerna-lite/lerna-lite/commit/4503659a451724d340662e53c16e14baa6aa715c)) - by @ghiscoding
+
+### Bug Fixes
+
+* **version:** show version options in `lerna version --help` ([#1452](https://github.com/lerna-lite/lerna-lite/issues/1452)) ([f65b49c](https://github.com/lerna-lite/lerna-lite/commit/f65b49c8c9ad0808e21294c9729bde99fcb9dd5f)) - by @SBoudrias
+
 ## [5.8.0](https://github.com/lerna-lite/lerna-lite/compare/v5.7.0...v5.8.0) (2026-11-07)
 
 ### Features
