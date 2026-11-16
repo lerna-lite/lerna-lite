@@ -46,6 +46,86 @@ describe('lerna-publish dry-run', () => {
     expect(output.combinedOutput).toContain('lerna');
   });
 
+  it('packs a configured directory with workspace and project placeholders', async () => {
+    await fixture.createPackage({ name: 'package-a', version: '1.0.0' });
+    await fixture.updateJson('lerna.json', (json) => ({
+      ...json,
+      command: { publish: { directory: '{workspaceRoot}/dist/{projectRoot}' } },
+    }));
+    const outputDir = fixture.getWorkspacePath('dist/packages/package-a');
+    await mkdir(outputDir, { recursive: true });
+    await writeFile(join(outputDir, 'package.json'), JSON.stringify({ name: 'package-a', version: '1.0.0' }));
+    await writeFile(join(outputDir, 'built.txt'), 'generated output');
+    await fixture.createInitialGitCommit();
+    await fixture.exec('git tag v1.0.0');
+
+    const tempDir = fixture.getWorkspacePath('test-temp');
+    await mkdir(tempDir);
+    const cli = join(process.cwd(), 'packages/cli/dist/cli.js');
+    const result = await fixture.exec(`node "${cli}" publish from-git --dry-run --yes`, {
+      env: { TMPDIR: tempDir, TMP: tempDir, TEMP: tempDir },
+    });
+    expect(result.exitCode).toBe(0);
+    const tarballDirs = (await readdir(tempDir)).filter((entry) => entry.startsWith('lerna-'));
+    expect(tarballDirs).toHaveLength(1);
+    const extractDir = join(tempDir, 'extracted');
+    await mkdir(extractDir);
+    const require = createRequire(join(process.cwd(), 'packages/publish/package.json'));
+    const tar = require('tar') as { extract: (options: { file: string; cwd: string }) => Promise<void> };
+    await tar.extract({ file: join(tempDir, tarballDirs[0], 'package-a-1.0.0.tgz'), cwd: extractDir });
+    expect(await readFile(join(extractDir, 'package/built.txt'), 'utf8')).toBe('generated output');
+  });
+
+  it('packs each package from its configured directory when a package overrides the root', async () => {
+    await fixture.createPackage({ name: 'package-a', version: '1.0.0' });
+    await fixture.createPackage({ name: 'package-b', version: '1.0.0' });
+    await fixture.updateJson('lerna.json', (json) => ({
+      ...json,
+      command: { publish: { directory: '{workspaceRoot}/dist/{projectRoot}' } },
+    }));
+    await fixture.updateJson('packages/package-b/package.json', (json) => ({
+      ...json,
+      lerna: { command: { publish: { directory: '.' } } },
+    }));
+    await writeFile(fixture.getWorkspacePath('packages/package-a/source-only.txt'), 'source');
+    await writeFile(fixture.getWorkspacePath('packages/package-b/source-only.txt'), 'package b source');
+    const outputDir = fixture.getWorkspacePath('dist/packages/package-a');
+    await mkdir(outputDir, { recursive: true });
+    await writeFile(join(outputDir, 'package.json'), JSON.stringify({ name: 'package-a', version: '1.0.0', description: 'generated manifest' }));
+    await writeFile(join(outputDir, 'built.txt'), 'package a build');
+    await fixture.createInitialGitCommit();
+    await fixture.exec('git tag v1.0.0');
+
+    const tempDir = fixture.getWorkspacePath('test-temp');
+    await mkdir(tempDir);
+    const cli = join(process.cwd(), 'packages/cli/dist/cli.js');
+    const result = await fixture.exec(`node "${cli}" publish from-git --dry-run --yes`, {
+      env: { TMPDIR: tempDir, TMP: tempDir, TEMP: tempDir },
+    });
+    expect(result.exitCode).toBe(0);
+    const tarballDirs = (await readdir(tempDir)).filter((entry) => entry.startsWith('lerna-'));
+    const require = createRequire(join(process.cwd(), 'packages/publish/package.json'));
+    const tar = require('tar') as { extract: (options: { file: string; cwd: string }) => Promise<void> };
+    const extracted = new Map<string, string>();
+    for (const dir of tarballDirs) {
+      for (const file of await readdir(join(tempDir, dir))) {
+        if (file.endsWith('.tgz')) {
+          const extractDir = join(tempDir, `extracted-${file}`);
+          await mkdir(extractDir);
+          await tar.extract({ file: join(tempDir, dir, file), cwd: extractDir });
+          extracted.set(file, join(extractDir, 'package'));
+        }
+      }
+    }
+    expect([...extracted.keys()].sort()).toEqual(['package-a-1.0.0.tgz', 'package-b-1.0.0.tgz']);
+    const packageA = extracted.get('package-a-1.0.0.tgz')!;
+    const packageB = extracted.get('package-b-1.0.0.tgz')!;
+    expect(await readFile(join(packageA, 'built.txt'), 'utf8')).toBe('package a build');
+    expect(await readdir(packageA)).not.toContain('source-only.txt');
+    expect(JSON.parse(await readFile(join(packageA, 'package.json'), 'utf8')).description).toBe('generated manifest');
+    expect(await readFile(join(packageB, 'source-only.txt'), 'utf8')).toBe('package b source');
+  });
+
   it('builds from package scripts before stripping them from the packed manifest', async () => {
     await fixture.createPackage({ name: 'package-a', version: '1.0.0' });
     await fixture.updateJson('package.json', (json) => ({

@@ -223,6 +223,7 @@ export interface ProjectConfig extends LernaConfig, QueryGraphConfig {
 export interface RawManifestLernaConfig {
   command?: {
     publish?: {
+      directory?: string;
       syncOutputManifest?: boolean;
     };
   };

@@ -377,6 +377,9 @@ export interface PublishCommandOption extends VersionCommandOption {
   /** Cleanup packed temp files/folders after publish process is finished, defaults to false. */
   cleanupTempFiles?: boolean;
 
+  /** Publish directory supporting {workspaceRoot}, {projectRoot}, and {projectName}. */
+  directory?: string;
+
   /** Specify the prerelease identifier when publishing a prerelease */
   preid?: string;
 
