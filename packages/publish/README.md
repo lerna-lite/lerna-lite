@@ -200,7 +200,7 @@ Subdirectory to publish. Must apply to ALL packages, and MUST contain a package.
 Package lifecycles will still be run in the original leaf directory.
 You should probably use one of those lifecycles (`prepare`, `prepublishOnly`, or `prepack`) to _create_ the subdirectory and whatnot.
 
-For per-package output paths and placeholders, see [`--directory`](#--directory-dir). If a build generates its own package.json, see [output manifest sync](#output-manifest-sync) to resolve its version and dependency protocols before packing.
+For per-package output paths and placeholders, prefer [`--directory`](#--directory-dir), which is more flexible than `--contents`. If a build generates its own package.json, see [output manifest sync](#output-manifest-sync) to resolve its version and dependency protocols before packing.
 
 ```sh
 lerna publish --contents dist
@@ -212,19 +212,99 @@ as the generated package.json is used during package upload (_after_ `postpack`)
 
 ### `--directory <dir>`
 
-Select the directory to publish. Set `command.publish.directory` in `lerna.json`, pass `--directory`, or set `lerna.command.publish.directory` in an individual package's `package.json`. Package configuration takes precedence over the CLI or root setting, which takes precedence over `--contents` and `publishConfig.directory`. Like Lerna, a root `directory` therefore overrides a package's `publishConfig.directory`; set `lerna.command.publish.directory` in that package to override it (use `"."` to publish from source).
+Select the directory to publish for each package. Unlike [`--contents`](#--contents-dir), which must be the same subdirectory in every package, `directory` supports dynamic placeholders and per-package overrides, which makes it the preferred option when packages are built to a different location than their source (for example a centralized `dist` folder at the workspace root).
 
-Paths support `{workspaceRoot}`, `{projectRoot}` (relative to the workspace root), and `{projectName}`. Relative paths are resolved from each package directory; `{workspaceRoot}` supports an absolute output path. For example:
+It can be set in three places:
+
+- `command.publish.directory` in `lerna.json` (root default for all packages)
+- `--directory` on the command line (same level as the root default)
+- `lerna.command.publish.directory` in a package's `package.json` (package override)
+
+#### Placeholders
+
+The following placeholders are replaced for each package at publish time:
+
+| Placeholder       | Replaced with                                                    | Example (`packages/package-a`)  |
+| ----------------- | ---------------------------------------------------------------- | ------------------------------- |
+| `{workspaceRoot}` | Absolute path of the workspace root                              | `/home/me/my-repo`              |
+| `{projectRoot}`   | Package location, relative to the workspace root                 | `packages/package-a`            |
+| `{projectName}`   | Package name from its `package.json` (scoped names keep `@scope/`) | `package-a`                   |
+
+Relative paths are resolved from each package directory, while paths starting with `{workspaceRoot}` resolve to an absolute location.
+
+#### Root configuration
+
+Let's say every package writes its build output to a centralized folder: `packages/package-a` builds to `dist/packages/package-a` and `packages/package-b` builds to `dist/packages/package-b`. The paths differ, but they follow the same pattern, which can be expressed once in `lerna.json`:
 
 ```json
+// lerna.json
 {
+  "version": "1.0.0",
   "command": {
-    "publish": { "directory": "{workspaceRoot}/dist/{projectRoot}" }
+    "publish": {
+      "directory": "{workspaceRoot}/dist/{projectRoot}"
+    }
   }
 }
 ```
 
-The output directory must contain a publish-ready `package.json`. This option does not copy assets; to update a generated manifest's version and protocols, see [output manifest sync](#output-manifest-sync). Package lifecycles still run in the source directory; retain the output directory until `postpublish`.
+The same pattern can also be provided from the command line:
+
+```sh
+lerna publish --directory "{workspaceRoot}/dist/{projectRoot}"
+```
+
+#### Package configuration
+
+A package can set or override the publish directory in its own `package.json`, for example to publish from a `dist/packages/foo` folder at the workspace root:
+
+```json
+// packages/foo/package.json
+{
+  "name": "foo",
+  "version": "1.0.0",
+  "lerna": {
+    "command": {
+      "publish": {
+        "directory": "../../dist/packages/foo"
+      }
+    }
+  }
+}
+```
+
+To make a single package publish from its source directory while a root `directory` is configured, set its `directory` to `"."`.
+
+#### Precedence
+
+From highest to lowest (same order as Lerna):
+
+1. `lerna.command.publish.directory` in the package's `package.json`
+2. `--directory` or `command.publish.directory` in `lerna.json`
+3. [`--contents`](#--contents-dir)
+4. [`publishConfig.directory`](#publishconfigdirectory) in the package's `package.json`
+
+This means that a root `directory` overrides a package's `publishConfig.directory`; use the package-level `lerna.command.publish.directory` instead when a package needs its own location.
+
+#### Output `package.json`
+
+The selected directory must contain a publish-ready `package.json`, since that is the manifest packed and uploaded to the registry. You can create it with your build tool or with a lifecycle script such as `prepare`, `prepublishOnly`, or `prepack`. Package lifecycles still run in the source directory, and the output directory must be kept until `postpublish`, because the generated `package.json` is read during upload (_after_ `postpack`).
+
+When the generated `package.json` is created before versioning (for example by ng-packagr), enable [output manifest sync](#output-manifest-sync) to update its version and resolve its `workspace:` and `catalog:` protocols before packing:
+
+```json
+// lerna.json
+{
+  "command": {
+    "publish": {
+      "directory": "{workspaceRoot}/dist/{projectRoot}",
+      "syncOutputManifest": true
+    }
+  }
+}
+```
+
+> **Note** Unlike Lerna, Lerna-Lite does not provide an `assets` option to copy additional files into the publish directory. Copy files such as `README.md` or `LICENSE` as part of your build or a lifecycle script instead.
 
 ### `--dist-tag <tag>`
 
