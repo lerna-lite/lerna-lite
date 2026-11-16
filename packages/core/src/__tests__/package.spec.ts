@@ -137,6 +137,12 @@ describe('Package', () => {
     });
   });
 
+  it('returns the package lerna config', () => {
+    const config = { command: { publish: { syncOutputManifest: true } } };
+    const pkg = factory({ name: 'example', lerna: config } as RawManifest);
+    expect(pkg.lernaConfig).toEqual(config);
+  });
+
   describe('get .pkg', () => {
     it('should return the same package name', () => {
       const pkg = factory({
