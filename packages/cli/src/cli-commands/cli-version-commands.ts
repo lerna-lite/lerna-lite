@@ -313,7 +313,10 @@ export default {
       },
     };
 
-    if (composed) {
+    // `composed` is only ever the string 'publish' (passed by the publish command's builder);
+    // yargs >=17 passes a boolean as the second builder argument, which must not be
+    // mistaken for the composed marker (it previously hid every option from `lerna version --help`).
+    if (typeof composed === 'string') {
       // hide options from composed command's help output
       Object.keys(opts).forEach((key) => {
         opts[key].hidden = true;
@@ -332,8 +335,8 @@ export default {
       'populate--': true,
     });
 
-    if (!composed) {
-      // hide options from composed command's help output
+    if (typeof composed !== 'string') {
+      // show options in this command's help output
       yargs.group(Object.keys(opts), 'Command Options:');
     }
     filterOptions(yargs);

@@ -73,6 +73,26 @@ test('publish --dist-tag next', async () => {
   expect(remove).not.toHaveBeenCalled();
 });
 
+test.each([
+  { args: [], tag: 'latest', explicitTag: false },
+  { args: ['--dist-tag', 'latest'], tag: 'latest', explicitTag: true },
+  { args: ['--pre-dist-tag', 'latest'], tag: 'latest', explicitTag: false },
+  { args: ['--bump', 'prerelease', '--pre-dist-tag', 'latest'], tag: 'latest', explicitTag: true },
+  { args: ['--temp-tag'], tag: 'lerna-temp', explicitTag: true },
+])('publish sets explicit tag based on $args', async ({ args, tag, explicitTag }) => {
+  const cwd = await initFixture('integration');
+
+  await new PublishCommand(createArgv(cwd, ...args));
+
+  expect(npmPublish).toHaveBeenCalledWith(
+    expect.objectContaining({ name: '@integration/package-1' }),
+    expect.anything(),
+    expect.objectContaining({ tag, explicitTag }),
+    expect.anything(),
+    expect.anything()
+  );
+});
+
 test('publish --dist-tag nightly --canary', async () => {
   const cwd = await initFixture('normal');
 
@@ -144,6 +164,15 @@ test('publish --dist-tag beta --temp-tag', async () => {
 
   expect(add).toHaveBeenCalledWith('@integration/package-1@1.0.1', 'beta', conf, cache); // <--
   expect(add).toHaveBeenCalledWith('@integration/package-2@1.0.1', 'beta', conf, cache);
+});
+
+test('publish --dist-tag latest --temp-tag overrides publishConfig.tag', async () => {
+  const cwd = await initFixture('integration');
+
+  await new PublishCommand(createArgv(cwd, '--dist-tag', 'latest', '--temp-tag'));
+
+  expect(add).toHaveBeenCalledWith('@integration/package-1@1.0.1', 'latest', expect.anything(), expect.anything());
+  expect(remove).toHaveBeenCalledWith('@integration/package-1@1.0.1', 'lerna-temp', expect.anything(), expect.anything(), '1.0.1');
 });
 
 test('publish prerelease --pre-dist-tag beta', async () => {

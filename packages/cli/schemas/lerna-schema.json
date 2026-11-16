@@ -376,6 +376,9 @@
             "directory": {
               "$ref": "#/$defs/commandOptions/publish/directory"
             },
+            "syncOutputManifest": {
+              "$ref": "#/$defs/commandOptions/publish/syncOutputManifest"
+            },
             "describeTag": {
               "$ref": "#/$defs/globals/describeTag"
             },
@@ -1385,6 +1388,10 @@
         "tempTag": {
           "type": "boolean",
           "description": "During `lerna publish`, when true, create a temporary tag while publishing."
+        },
+        "syncOutputManifest": {
+          "type": "boolean",
+          "description": "Update the package.json generated in the configured publish directory with the release version and resolved workspace/catalog protocols before packing"
         },
         "stage": {
           "type": "boolean",

@@ -142,6 +142,22 @@ describe('npm-publish', () => {
     );
   });
 
+  it.each([
+    { explicitTag: true, expectedTag: 'latest' },
+    { explicitTag: false, expectedTag: 'beta' },
+  ])('uses $expectedTag when latest has explicitTag=$explicitTag', async ({ explicitTag, expectedTag }) => {
+    (PackageJson.prepare as Mock).mockImplementationOnce(() => ({ content: { publishConfig: { tag: 'beta' } } }));
+
+    await npmPublish(pkg, tarFilePath, { tag: 'latest', explicitTag }, conf);
+
+    expect(publish).toHaveBeenCalledWith(
+      expect.objectContaining({ publishConfig: { tag: expectedTag } }),
+      mockTarData,
+      expect.objectContaining({ defaultTag: expectedTag })
+    );
+    expect(vi.mocked(publish).mock.lastCall?.[2]).not.toHaveProperty('explicitTag');
+  });
+
   it('uses pkg.contents manifest when pkg.publishConfig.directory is defined', async () => {
     const fancyPkg = new Package(
       {

@@ -137,6 +137,19 @@ describe('Package', () => {
     });
   });
 
+  it('returns the package lerna config', () => {
+    const config = { command: { publish: { syncOutputManifest: true } } };
+    const pkg = factory({ name: 'example', lerna: config } as RawManifest);
+    expect(pkg.lernaConfig).toEqual(config);
+  });
+
+  it('keeps an absolute contents path instead of joining it to the package location', () => {
+    const pkg = factory({ name: 'example' } as RawManifest);
+    const absolute = pathResolve('/abs/output/example');
+    pkg.contents = absolute;
+    expect(pkg.contents).toBe(normalize(absolute));
+  });
+
   describe('get .pkg', () => {
     it('should return the same package name', () => {
       const pkg = factory({

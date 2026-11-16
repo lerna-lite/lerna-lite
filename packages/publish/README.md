@@ -109,6 +109,7 @@ $ lerna publish --scope my-component test
     - [`--summary-file <dir>`](#--summary-file)
     - [`--verify-access`](#--verify-access)
     - [`--yes`](#--yes)
+  - [Output manifest sync](#output-manifest-sync)
   - [NPM Provenance](#npm-provenance)
   - [OIDC](#oidc)
   - [`publishConfig` Overrides](#publishconfig-overrides)
@@ -199,7 +200,7 @@ Subdirectory to publish. Must apply to ALL packages, and MUST contain a package.
 Package lifecycles will still be run in the original leaf directory.
 You should probably use one of those lifecycles (`prepare`, `prepublishOnly`, or `prepack`) to _create_ the subdirectory and whatnot.
 
-For per-package output paths and placeholders, see [`--directory`](#--directory-dir).
+For per-package output paths and placeholders, see [`--directory`](#--directory-dir). If a build generates its own package.json, see [output manifest sync](#output-manifest-sync) to resolve its version and dependency protocols before packing.
 
 ```sh
 lerna publish --contents dist
@@ -211,7 +212,7 @@ as the generated package.json is used during package upload (_after_ `postpack`)
 
 ### `--directory <dir>`
 
-Select the directory to publish. Set `command.publish.directory` in `lerna.json`, pass `--directory`, or set `lerna.command.publish.directory` in an individual package's `package.json`. Package configuration takes precedence over the CLI or root setting, which takes precedence over `--contents` and `publishConfig.directory`.
+Select the directory to publish. Set `command.publish.directory` in `lerna.json`, pass `--directory`, or set `lerna.command.publish.directory` in an individual package's `package.json`. Package configuration takes precedence over the CLI or root setting, which takes precedence over `--contents` and `publishConfig.directory`. Like Lerna, a root `directory` therefore overrides a package's `publishConfig.directory`; set `lerna.command.publish.directory` in that package to override it (use `"."` to publish from source).
 
 Paths support `{workspaceRoot}`, `{projectRoot}` (relative to the workspace root), and `{projectName}`. Relative paths are resolved from each package directory; `{workspaceRoot}` supports an absolute output path. For example:
 
@@ -223,7 +224,7 @@ Paths support `{workspaceRoot}`, `{projectRoot}` (relative to the workspace root
 }
 ```
 
-The output directory must contain a publish-ready `package.json`. This option does not copy assets or update a generated manifest. Package lifecycles still run in the source directory; retain the output directory until `postpublish`.
+The output directory must contain a publish-ready `package.json`. This option does not copy assets; to update a generated manifest's version and protocols, see [output manifest sync](#output-manifest-sync). Package lifecycles still run in the source directory; retain the output directory until `postpublish`.
 
 ### `--dist-tag <tag>`
 
@@ -590,7 +591,7 @@ You can customize the dist-tag on a per-package basis by setting [`tag`](https:/
   }
 ```
 
-- Passing [`--dist-tag`](#--dist-tag-tag) will _overwrite_ this value.
+- Passing [`--dist-tag`](#--dist-tag-tag) will _overwrite_ this value, including when the tag is `latest`.
 - This value is _always_ ignored when [`--canary`](#--canary) is passed.
 
 ### `publishConfig.directory`
@@ -602,6 +603,23 @@ This _non-standard_ field allows you to customize the published subdirectory jus
     "directory": "dist"
   }
 ```
+
+## Output manifest sync
+
+For build tools such as ng-packagr, enable this in the source package.json:
+
+```json
+{
+  "publishConfig": { "directory": "dist" },
+  "lerna": { "command": { "publish": { "syncOutputManifest": true } } }
+}
+```
+
+After package `prepack` scripts and before packing, Lerna-Lite updates the generated manifest's version and resolves `workspace:`/`catalog:` protocols in its existing dependency sections. Other generated fields and ordinary dependency ranges are preserved.
+
+The option defaults to `false`. Set `command.publish.syncOutputManifest` in `lerna.json` for a root default; a package-level `false` overrides it. It also works with `--contents` and `--directory`. Lifecycle scripts run in the source directory and must create the output manifest by the end of `prepack`. Keep the output directory until `postpublish`: upload reads its manifest after `postpack`.
+
+Dry-run performs the same local manifest update without uploading a release. The output manifest remains modified afterward. This sync runs during Lerna publish, not standalone npm pack or Lerna version.
 
 ## NPM Provenance
 
@@ -692,7 +710,7 @@ lerna will run [npm lifecycle scripts](https://docs.npmjs.com/cli/v8/using-npm/s
    2. Run `prepare` lifecycle
    3. Run `prepublishOnly` lifecycle
    4. Run `prepack` lifecycle
-   5. Create package tarball in temp directory via [JS API](https://github.com/lerna-lite/lerna-lite/blob/main/packages/publish/src/lib/pack-directory.ts)
+   5. Synchronize the generated output manifest when `syncOutputManifest` is enabled, then create the package tarball in a temp directory via [JS API](https://github.com/lerna-lite/lerna-lite/blob/main/packages/publish/src/lib/pack-directory.ts)
    6. Run `postpack` lifecycle
 7. Run `postpack` lifecycle in root
 8. For each changed package, in topological order (all dependencies before dependents):
