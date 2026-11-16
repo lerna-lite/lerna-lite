@@ -268,7 +268,9 @@ export class PublishCommand extends Command<PublishCommandOption> {
         this.updatesVersions = new Map(result.updatesVersions);
 
         this.packagesToPublish = this.updates.map((node) => node.pkg);
+
         if (this.options.contents) {
+          // globally override directory to publish
           for (const pkg of this.packagesToPublish) {
             pkg.contents = this.options.contents;
           }
@@ -956,8 +958,7 @@ export class PublishCommand extends Command<PublishCommandOption> {
 
     const opts = this.conf.snapshot;
     const mapper = async (pkg: Package) => {
-      const sync =
-        pkg.lernaConfig?.command?.publish?.syncOutputManifest ?? this.project.config.command?.publish?.syncOutputManifest;
+      const sync = pkg.lernaConfig?.command?.publish?.syncOutputManifest ?? this.options.syncOutputManifest;
       const packed = await pulseTillDone(
         sync
           ? packDirectory(pkg, pkg.location, opts, this.options.arboristLoadOptions, () => this.syncOutputManifest(pkg))
@@ -1011,22 +1012,30 @@ export class PublishCommand extends Command<PublishCommandOption> {
     const { catalog, catalogs } = readWorkspaceCatalogConfig(this.options.npmClient || 'npm', this.project.rootPath);
     outputPkg.resolveDependencyCatalogProtocol(outputPkg, { catalog, catalogs });
 
-    for (const deps of [
-      outputPkg.dependencies,
-      outputPkg.peerDependencies,
-      outputPkg.optionalDependencies,
-      outputPkg.devDependencies,
-    ]) {
+    for (const depType of ['dependencies', 'peerDependencies', 'optionalDependencies', 'devDependencies'] as const) {
+      const deps = outputPkg[depType];
       for (const [name, spec] of Object.entries(deps || {})) {
         if (!spec.startsWith('workspace:')) {
           continue;
         }
+        // reuse the source spec already resolved by the regular publish flow, so both stay consistent
+        const sourceSpec = pkg[depType]?.[name];
+        if (sourceSpec && !sourceSpec.startsWith('workspace:')) {
+          deps[name] = sourceSpec;
+          continue;
+        }
         const range = spec.slice('workspace:'.length);
         const version = this.updatesVersions?.get(name) || this.packageGraph.get(name)?.pkg.version;
-        if (/^[*~^]$/.test(range) && !version) {
-          throw new ValidationError('EOUTPUTMANIFEST', `Cannot resolve ${name}@${spec} in ${manifestPath}`);
+        if (/^[*~^]$/.test(range)) {
+          if (!version) {
+            throw new ValidationError('EOUTPUTMANIFEST', `Cannot resolve ${name}@${spec} in ${manifestPath}`);
+          }
+          deps[name] = `${range === '*' ? '' : range}${version}`;
+        } else if (version && depType !== 'peerDependencies' && /^[~^]?\d/.test(range)) {
+          deps[name] = `${range.match(/^[~^]?/)![0]}${version}`;
+        } else {
+          deps[name] = range;
         }
-        deps[name] = /^[*~^]$/.test(range) ? `${range === '*' ? '' : range}${version}` : range;
       }
     }
 

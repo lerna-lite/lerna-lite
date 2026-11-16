@@ -598,9 +598,9 @@ For build tools such as ng-packagr, enable this in the source package.json:
 }
 ```
 
-After package prepack scripts and before packing, Lerna-Lite updates the generated manifest's version and resolves workspace/catalog protocols in its existing dependency sections. Other generated fields and ordinary dependency ranges are preserved.
+After package `prepack` scripts and before packing, Lerna-Lite updates the generated manifest's version and resolves `workspace:`/`catalog:` protocols in its existing dependency sections. Other generated fields and ordinary dependency ranges are preserved.
 
-The option defaults to false. Set command.publish.syncOutputManifest in lerna.json for a root default; a package-level false overrides it. It also works with --contents. Lifecycle scripts run in the source directory and must create the output manifest by the end of prepack. Keep the output directory until postpublish: upload reads its manifest after postpack.
+The option defaults to `false`. Set `command.publish.syncOutputManifest` in `lerna.json` for a root default; a package-level `false` overrides it. It also works with `--contents`. Lifecycle scripts run in the source directory and must create the output manifest by the end of `prepack`. Keep the output directory until `postpublish`: upload reads its manifest after `postpack`.
 
 Dry-run performs the same local manifest update without uploading a release. The output manifest remains modified afterward. This sync runs during Lerna publish, not standalone npm pack or Lerna version.
 

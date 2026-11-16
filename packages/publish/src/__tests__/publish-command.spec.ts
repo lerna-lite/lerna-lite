@@ -1153,6 +1153,36 @@ describe('PublishCommand', () => {
         'tooling-dep': '^4.0.0',
       });
     });
+
+    it('bumps stale workspace ranges in a generated output manifest', async () => {
+      const cwd = await initFixture('lifecycle');
+      await commitChangeToPackage(cwd, 'package-2', 'chore: configure output manifest sync', {
+        publishConfig: { directory: 'dist' },
+        dependencies: { 'package-1': 'workspace:^1.0.0' },
+        lerna: { command: { publish: { syncOutputManifest: true } } },
+      });
+      await outputJson(pathJoin(cwd, 'packages/package-2/dist/package.json'), {
+        name: 'package-2',
+        version: '1.0.0',
+        dependencies: { 'package-1': 'workspace:^1.0.0' },
+        optionalDependencies: { 'package-1': 'workspace:~1.0.0' },
+        peerDependencies: { 'package-1': 'workspace:^1.0.0' },
+        devDependencies: { 'package-1': 'workspace:>=1.0.0' },
+      });
+      await gitAdd(cwd, 'packages/package-2/dist/package.json');
+      await gitCommit(cwd, 'chore: add generated package manifest');
+
+      await new PublishCommand(createArgv(cwd, '--bump', 'major', '--yes', '--dry-run'));
+
+      const publishedManifest = JSON.parse(await readFile(pathJoin(cwd, 'packages/package-2/dist/package.json'), 'utf8'));
+      expect(publishedManifest).toMatchObject({
+        version: '2.0.0',
+        dependencies: { 'package-1': '^2.0.0' },
+        optionalDependencies: { 'package-1': '~2.0.0' },
+        peerDependencies: { 'package-1': '^1.0.0' },
+        devDependencies: { 'package-1': '>=1.0.0' },
+      });
+    });
   });
 
   describe('in a cyclical repo', () => {

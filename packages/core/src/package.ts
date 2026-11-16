@@ -189,10 +189,6 @@ export class Package {
     return this[PKG].lerna;
   }
 
-  set lernaConfig(config) {
-    this[PKG].lerna = config;
-  }
-
   // 'live' collections
   get dependencies(): { [depName: string]: string } {
     return this[PKG].dependencies;
