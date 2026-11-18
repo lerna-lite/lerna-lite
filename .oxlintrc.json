@@ -38,7 +38,7 @@
       {
         "js": "always",
         "ts": "never",
-        "excludedFolders": ["demos/aurelia/test", "demos/react/test", "demos/vue/test", "frameworks/angular-slickgrid", "test"]
+        "excludedFolders": ["test"]
       }
     ],
     "import/no-self-import": "error",
